@@ -52,7 +52,6 @@
     };
 
     this.addRow = function(target) {
-
       var row = $(this.new_row());
       row.data('action', 'add');
 
@@ -103,6 +102,29 @@
 
     Handlebars.registerPartial("email-edit-row", $("#email-edit-row").html());
 
+    var self = this;
+
+    var protocolSynchronizer = new global.Synchronizer(
+      { target: "#mail-form input", triggers: ["input"] });
+
+    protocolSynchronizer.observe();
+    protocolSynchronizer.onSync(function(target){
+      $('.save-edit-form').addClass('disabled');
+      var row = target.closest('li');
+
+      self.request(self.outlet.data('validate-url'), {
+        data: {label: $('input[name="label"]', row).val(),
+               address: $('input[name="email"]', row).val()}
+      }).fail(function(data){
+        $(row).addClass('error');
+        $(row).children('.validation-error').html(data.messages[0].message);
+      }).done(function(){
+        $('.save-edit-form').removeClass('disabled');
+        $(row).children('.validation-error').html('')
+        $(row).removeClass('error');
+      })
+    });
+
     BaseContactController.call(
       this,
       $('#emailTemplate').html(),
@@ -110,45 +132,24 @@
       options,
       $('#email-edit-row', this.outlet).html());
 
-    var self = this;
-
     this.saveEditForm = function(target) {
       var rows = $('.editableRow', this.outlet);
       var self = this;
+      var data = []
 
-      rows.each(function() {
-        var mailLabel = $('input[name="label"]', this);
-        var mailAddress = $('input[name="email"]', this);
-
-        var state = $(this).data('action');
-
-        if (state === 'update') {
-          self.request($(this).data('update-url'), {
-            method: "POST",
-            data: {
-              label: mailLabel.val(),
-              mailaddress: mailAddress.val(),
-            }
-          });
-        }
-
-        else if (state === 'add') {
-          self.request(self.outlet.data('create-url'), {
-            method: "POST",
-            data: {
-              label: mailLabel.val(),
-              mailaddress: mailAddress.val()
-            }
-          });
-        }
-
-        else if (state === 'remove') {
-          return $.post($(this).data('delete-url'));
-        }
-
+      rows.each(function(e) {
+        data.push({id: $(this).data('id'),
+                   method: $(this).data('action'),
+                   values: {label: $('input[name="label"]', this).val(),
+                            address: $('input[name="email"]', this).val()}
+                  });
       });
 
-      this.editEnabled = false;
+      self.request(self.outlet.data('set_all-url'), {
+        method: "POST",
+        data: {'objects': JSON.stringify(data)},
+      })
+
     };
 
     this.fetch = function() { return $.get(this.outlet.data('fetch-url')); };

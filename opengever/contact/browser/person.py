@@ -40,7 +40,7 @@ EMAIL_TEMPLATE = '''
                           data-action="update"
                           data-update-url="{{update_url}}"
                           data-delete-url="{{delete_url}}">
-
+      <div class="validation-error" />
       <input type="text" name="label" value="{{label}}" />
       <input type="email" name="email" value="{{address}}" />
       <a class="remove-row action fa fa-trash"></a>
@@ -98,6 +98,12 @@ class PersonView(BrowserView):
 
     def get_create_url(self):
         return self.context.model.get_url('mails/add')
+
+    def get_set_all_url(self):
+        return self.context.model.get_url('mails/set_all')
+
+    def get_validate_url(self):
+        return self.context.model.get_url('mails/validate')
 
     def render_handlebars_email_template(self):
         return EMAIL_TEMPLATE
