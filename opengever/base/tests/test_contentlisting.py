@@ -178,7 +178,7 @@ class TestBrainContentListingRenderLink(FunctionalTestCase):
         dossier = create(Builder('dossier').titled(u'Dossier A'))
 
         self.assertEquals(
-            '<a href="http://nohost/plone/dossier-1" alt="Dossier A" class="contenttype-opengever-dossier-businesscasedossier">Dossier A</a>',
+            '<a href="http://nohost/plone/dossier-1" alt="Dossier A" class="contenttype-opengever-dossier-businesscasedossier">Dossier A</a>\n',
             IContentListingObject(obj2brain(dossier)).render_link())
 
 

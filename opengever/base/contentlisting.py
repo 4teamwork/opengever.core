@@ -7,6 +7,7 @@ from opengever.document.document import Document
 from opengever.document.widgets.document_link import DocumentLinkWidget
 from opengever.mail.mail import OGMail
 from plone.app.contentlisting.catalog import CatalogContentListingObject
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import getMultiAdapter
 
 
@@ -17,6 +18,7 @@ class OpengeverCatalogContentListingObject(CatalogContentListingObject):
     Description methods.
     """
 
+    simple_link_template = ViewPageTemplateFile('templates/simple_link.pt')
     documentish_types = ['opengever.document.document', 'ftw.mail.mail']
 
     @property
@@ -116,7 +118,8 @@ class OpengeverCatalogContentListingObject(CatalogContentListingObject):
         if self.is_documentish:
             return DocumentLinkWidget(self).render()
 
-        structure = '<a href="{url}" alt="{title}" class="{css_class}">{title}</a>'
-        return structure.format(
-            url=self.getURL(), title=self.Title(),
-            css_class=self.ContentTypeClass())
+        return self._render_simplelink()
+
+    def _render_simplelink(self):
+        self.context = self
+        return self.simple_link_template(self, self.request)
