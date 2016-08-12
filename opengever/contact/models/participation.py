@@ -1,6 +1,9 @@
 from opengever.base.model import Base
+from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
+from opengever.contact.models.participation_role import ParticipationRole
 from opengever.ogds.models import UNIT_ID_LENGTH
+from opengever.ogds.models.query import BaseQuery
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
@@ -8,6 +11,16 @@ from sqlalchemy import String
 from sqlalchemy.orm import composite
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
+
+
+class ParticipationQuery(BaseQuery):
+
+    def by_oguid(self, oguid):
+        return self.filter(Participation.dossier_oguid == oguid)
+
+    def by_oguid_and_contact(self, oguid, contact):
+        return self.by_oguid(oguid=oguid).filter(
+            Participation.contact == contact)
 
 
 class Participation(Base):
@@ -27,3 +40,11 @@ class Participation(Base):
 
     def resolve_dossier(self):
         return self.dossier_oguid.resolve_object()
+
+    def add_roles(self, roles):
+        for role_title in roles:
+            role = ParticipationRole(participation=self, role=role_title)
+            create_session().add(role)
+
+
+Participation.query_cls = ParticipationQuery
