@@ -28,5 +28,5 @@ class Organization(Contact):
         return '{}/{}/{}'.format(
             get_contactfolder_url(), self.wrapper_id, view)
 
-    def get_title(self, view='view'):
+    def get_title(self):
         return self.name
