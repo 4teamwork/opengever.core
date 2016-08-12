@@ -297,18 +297,8 @@
                     <tal:results repeat="item batch">
                       <div class="search-item-wrapper">
                         <div class="searchItem">
-                          <dt tal:attributes="class item/ContentTypeClass">
-                            <img tal:replace="structure item/getIcon" />
-                              <a href="#"
-                                 tal:define="item_url item/getURL;
-                                             item_type item/portal_type"
-                                 tal:attributes="href python:item_type in use_view_action and (item_url + '/view') or item_url;
-                                                 class item/get_css_classes;
-                                                 title item/Title;
-                                                 data-showroom-id item/UID;
-                                                 data-showroom-target item/get_overlay_url;
-                                                 data-showroom-title item/get_overlay_title;"
-                                 tal:content="item/CroppedTitle" />
+                          <dt>
+                            <a tal:replace="structure item/render_link" />
                           </dt>
                           <dd>
                             <div class="main_dossier">
@@ -350,9 +340,11 @@
                           </dd>
                         </div>
                         <div class="searchImage" tal:condition="item/is_bumblebeeable">
-                          <img class="showroom-reference bumblebeeSearchPreview"
-                                 tal:attributes="src item/get_preview_image_url;
-                                                 data-showroom-target-item item/UID;" />
+                          <img class="showroom-item bumblebeeSearchPreview"
+                               tal:attributes="src item/get_preview_image_url;
+                                               data-showroom-id item/UID;
+                                               data-showroom-target item/get_overlay_url;
+                                               data-showroom-title item/get_overlay_title;" />
                         </div>
                       </div>
                       <div class="visualClear"><!-- --></div>

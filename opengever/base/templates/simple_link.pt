@@ -1,0 +1,4 @@
+<a  href="#" tal:content="context/Title"
+    tal:attributes="href context/getURL;
+                    class context/ContentTypeClass;
+                    alt context/Title" />
