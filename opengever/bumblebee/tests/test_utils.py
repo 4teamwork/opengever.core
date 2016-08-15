@@ -41,7 +41,7 @@ class TestGetRepresentationUrlByObject(FunctionalTestCase):
         document = create(Builder('document'))
 
         self.assertIn(
-            'fallback_not_digitally_available.png',
+            'fallback_not_digitally_available.svg',
             bumblebee.get_service_v3().get_representation_url(document, 'thumbnail'))
 
 
@@ -65,7 +65,7 @@ class TestGetRepresentationUrlByBrain(FunctionalTestCase):
         brain = obj2brain(document)
 
         self.assertIn(
-            'fallback_not_digitally_available.png',
+            'fallback_not_digitally_available.svg',
             bumblebee.get_service_v3().get_representation_url(brain, 'thumbnail'))
 
 

@@ -1,11 +1,13 @@
-<aside class="sidebar" i18n:domain="opengever.bumblebee">
+<aside class="sidebar"
+       i18n:domain="opengever.bumblebee"
+       tal:define="file_size view/overlay/get_file_size">
   <header>
     <span tal:attributes="class string:file-mimetype ${view/overlay/get_mime_type_css_class}" />
     <div>
       <a class="title"
          tal:attributes="href context/absolute_url"
          tal:content="view/overlay/get_title" />
-      <span class="filesize" tal:content="string:${view/overlay/get_file_size} KB" />
+      <span class="filesize" tal:condition="file_size" tal:content="string:${file_size} KB" />
     </div>
   </header>
   <main>
@@ -91,6 +93,9 @@
     </div>
   </footer>
 </aside>
-<article id="file-preview">
-  <iframe tal:attributes="src view/overlay/get_preview_pdf_url"></iframe>
+<article id="file-preview"
+         tal:define="pdf_url view/overlay/get_preview_pdf_url;
+                     has_file view/overlay/has_file">
+  <iframe tal:condition="has_file" tal:attributes="src pdf_url" />
+  <img class="bumblebee-thumbnail" tal:condition="not:has_file" tal:attributes="src pdf_url" />
 </article>

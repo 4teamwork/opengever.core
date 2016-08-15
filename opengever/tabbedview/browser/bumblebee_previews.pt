@@ -6,8 +6,7 @@
     <span tal:attributes="class string:file-mimetype ${preview/mime_type_css_class}"></span>
 
     <img tal:attributes="src preview/preview_image_url; alt preview/title"
-         width="200"
-         class="file-preview" />
+         class="file-preview bumblebee-thumbnail" />
 
     <div class="bumblebeeTitle">
         <span tal:content="preview/title" />

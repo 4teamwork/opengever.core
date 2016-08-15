@@ -41,7 +41,7 @@ class TestGetPreviewPdfUrl(FunctionalTestCase):
 
         adapter = getMultiAdapter((document, self.request), IBumblebeeOverlay)
 
-        self.assertIn('not_digitally_available.png', adapter.get_preview_pdf_url())
+        self.assertIn('not_digitally_available.svg', adapter.get_preview_pdf_url())
 
 
 class TestGetOpenAsPdfLink(FunctionalTestCase):
