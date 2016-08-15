@@ -5,6 +5,9 @@ Changelog
 4.10.0 (unreleased)
 -------------------
 
+- Fix a bug where a proposal would "disappear" when moving its parent dossier.
+  [deiferni]
+
 - Conditionally display iframe for bumblebee document preview
   [Kevin Bieri]
 

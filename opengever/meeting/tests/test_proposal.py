@@ -286,6 +286,30 @@ class TestProposal(FunctionalTestCase):
         submitted_mail = submitted_proposal.get_documents()[0]
         self.assertSubmittedDocumentCreated(proposal, mail, submitted_mail)
 
+    def test_proposal_paths_remain_in_sync_when_dossier_is_moved(self):
+        committee = create(Builder('committee').titled('My committee'))
+        mail = create(Builder('mail')
+                      .within(self.dossier)
+                      .with_dummy_message())
+        proposal = create(Builder('proposal')
+                          .within(self.dossier)
+                          .titled(u'My Proposal')
+                          .having(committee=committee.load_model())
+                          .relate_to(mail))
+        new_repo_folder = create(Builder('repository')
+                                 .within(self.repo)
+                                 .titled(u'New'))
+
+        moved_dossier = api.content.move(
+            source=self.dossier, target=new_repo_folder)
+        moved_proposal = moved_dossier['proposal-1']
+        model = moved_proposal.load_model()
+        self.assertEqual(
+            'opengever-repository-repositoryroot/new/dossier-1/proposal-1',
+            model.physical_path)
+        self.assertEqual(u'New', model.repository_folder_title)
+        self.assertEqual(u'Client1 2', model.dossier_reference_number)
+
     @browsing
     def test_proposal_submission_works_correctly(self, browser):
         committee = create(Builder('committee').titled('My committee'))
