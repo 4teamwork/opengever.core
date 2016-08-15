@@ -313,7 +313,7 @@ class SubmittedProposal(ProposalBase):
             id=cls.generate_submitted_proposal_id(proposal),
             container=container)
 
-        submitted_proposal.sync_model(proposal)
+        submitted_proposal.sync_model(proposal_model=proposal)
         return submitted_proposal
 
     @classmethod
@@ -327,7 +327,9 @@ class SubmittedProposal(ProposalBase):
     def load_proposal(self, oguid):
         return ProposalModel.query.get_by_oguid(oguid)
 
-    def sync_model(self, proposal_model):
+    def sync_model(self, proposal_model=None):
+        proposal_model = proposal_model or self.load_model()
+
         proposal_model.submitted_oguid = Oguid.for_object(self)
         proposal_model.submitted_physical_path = self.get_physical_path()
         proposal_model.submitted_admin_unit_id = get_current_admin_unit().id()
@@ -460,6 +462,18 @@ class Proposal(ProposalBase):
             committee = str(committee.committee_id)
             values['committee'] = committee
         return values
+
+    def sync_model(self, proposal_model=None):
+        proposal_model = proposal_model or self.load_model()
+
+        reference_number = IReferenceNumber(
+            self.get_containing_dossier().get_main_dossier()).get_number()
+        repository_folder_title = self.get_repository_folder_title(
+            proposal_model.language)
+
+        proposal_model.physical_path = self.get_physical_path()
+        proposal_model.dossier_reference_number = reference_number
+        proposal_model.repository_folder_title = repository_folder_title
 
     def is_submit_additional_documents_allowed(self):
         return self.load_model().is_submit_additional_documents_allowed()

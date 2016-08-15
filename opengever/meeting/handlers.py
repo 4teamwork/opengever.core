@@ -9,10 +9,12 @@ from opengever.meeting.command import UpdateExcerptInDossierCommand
 from opengever.meeting.model import GeneratedExcerpt
 from opengever.meeting.model import Proposal
 from opengever.meeting.model import SubmittedDocument
+from opengever.meeting.proposal import IProposal
 from zope.component import getUtility
 from zope.component.interfaces import ComponentLookupError
 from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
+from zope.lifecycleevent.interfaces import IObjectMovedEvent
 
 
 @grok.subscribe(IDocumentSchema, IObjectWillBeRemovedEvent)
@@ -56,3 +58,12 @@ def _sync_excerpt(document):
         return
 
     UpdateExcerptInDossierCommand(proposal).execute()
+
+
+@grok.subscribe(IProposal, IObjectMovedEvent)
+def sync_moved_proposal(obj, event):
+    # make sure obj wasn't just created or deleted
+    if not event.oldParent or not event.newParent:
+        return
+
+    obj.sync_model()
