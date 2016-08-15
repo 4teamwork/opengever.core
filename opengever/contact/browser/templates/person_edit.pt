@@ -13,46 +13,6 @@
             <!-- Main Form -->
             <metal:block use-macro="context/@@ploneform-macros/titlelessform" />
 
-            <!-- Email form-->
-            <!-- TODO: Render this in a handlebars-template as soon as the other tables are implemented. -->
-            <tal:content content="structure view/render_handlebars_email_template"></tal:content>
-            <div class="overlay" id="confirm_delete">
-              <div class="close">
-                <a href="#" class="hiddenStructure" title="Close this box">Close this box.</a>
-              </div>
-              <h2 i18n:translate="">Delete mailaddress</h2>
-              <p i18n:translate="label_delete_mail_address_confirm_text">Are you sure you want to delete this mail address?</p>
-              <div class="button-group">
-                <button class="button confirm destructive"
-                i18n:translate="">Delete</button>
-                <button class="button decline"
-                i18n:translate="label_cancel">Cancel</button>
-              </div>
-            </div>
-            <div id="mails-list" tal:attributes="data-fetch-url view/get_fetch_url">
-              <h2 i18n:translate="">Emailaddresses</h2>
-              <table class="listing">
-                <thead>
-                  <tr>
-                    <th i18n:translate="">Label</th>
-                    <th i18n:translate="">Emailadddress</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody></tbody>
-                <tfoot>
-                  <tr>
-                    <td><input id="email-label" type="text" name="label" /></td>
-                    <td><input id="email-mailaddress" type="email" name="email" /></td>
-                    <td class="actions">
-                      <button class="button add-email fa fa-plus" tal:attributes="data-create-url view/get_create_mail_url"></button>
-                    </td>
-                  </tr>
-                </tfoot>
-              </table>
-            </div>
-
-
         </div>
 
     </metal:block>

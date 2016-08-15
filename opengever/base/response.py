@@ -69,6 +69,9 @@ class JSONResponse(object):
         self.response['proceed'] = True
         return self
 
+    def is_proceed(self):
+        return self.response.get('proceed', False)
+
     def remain(self):
         """
         Set the proceed flag to False to say the client that something went wrong.

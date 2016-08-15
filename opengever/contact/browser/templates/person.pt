@@ -17,6 +17,21 @@
                         tal:define="person view/model;">
 
       <h3 i18n:translate="label_personal_information">Personal information:</h3>
+
+      <div class="overlay" id="confirm_delete">
+        <div class="close">
+          <a href="#" class="hiddenStructure" title="Close this box">Close this box.</a>
+        </div>
+        <h2 i18n:translate="">Delete mailaddress</h2>
+        <p i18n:translate="label_delete_mail_address_confirm_text">Are you sure you want to delete this mail address?</p>
+        <div class="button-group">
+          <button class="button confirm destructive"
+          i18n:translate="">Delete</button>
+          <button class="button decline"
+          i18n:translate="label_cancel">Cancel</button>
+        </div>
+      </div>
+
       <table class="contact_details">
         <tr>
           <th i18n:translate="label_name">Name</th>
@@ -47,38 +62,34 @@
             </dl>
           </td>
         </tr>
+      </table>
 
-        <tr>
-          <th i18n:translate="label_mail">Mail Addresses</th>
-          <td>
-            <dl class="mail">
-              <tal:repeat tal:repeat="mail person/mail_addresses">
-                <dt tal:content="mail/label" />
-                <dd>
-                  <span tal:content="mail/address" />
-                </dd>
-              </tal:repeat>
-            </dl>
-          </td>
-        </tr>
+      <tal:content content="structure view/render_handlebars_form_toggler_partial" />
 
+      <table>
         <tr>
           <th i18n:translate="label_phone_numbers">Phone numbers</th>
           <td>
             <dl class="phone_number">
-              <tal:repeat tal:repeat="phone person/phonenumbers">
-                <dt tal:content="phone/label" />
-                <dd>
-                  <span tal:content="phone/phone_number" />
-                </dd>
+                <tal:repeat tal:repeat="phone person/phonenumbers">
+                  <dt tal:content="phone/label" />
+                  <dd>
+                    <span tal:content="phone/phone_number" />
+                  </dd>
               </tal:repeat>
             </dl>
           </td>
         </tr>
-
       </table>
 
-      <h3 i18n:translate="label_organizations">Organizations</h3>
+      <div id="mail-form" tal:attributes="data-fetch-url view/get_fetch_url;
+                                          data-create-url view/get_create_url;
+                                          data-validate-url view/get_validate_url;
+                                          data-set_all-url view/get_set_all_url">
+        <tal:content content="structure view/render_handlebars_email_template" />
+      </div>
+
+      <h3 i18n:translate="label_organizations">Organizations:</h3>
       <ul class="organizations orgrole_listing">
         <li tal:repeat="org_role person/organizations">
           <p>
