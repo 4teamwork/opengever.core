@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import error_messages
+from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.base.oguid import Oguid
 from opengever.contact.models.participation import Participation
 from opengever.testing import FunctionalTestCase
@@ -14,17 +15,18 @@ class TestParticipation(unittest2.TestCase):
 
     layer = MEMORY_DB_LAYER
 
-    def test_adding(self):
-        contact = create(Builder('person').having(
+    def setUp(self):
+        super(TestParticipation, self).setUp()
+        self.contact = create(Builder('person').having(
             firstname=u'peter', lastname=u'hans'))
+
+    def test_adding(self):
         create(Builder('participation')
-               .having(contact=contact, dossier_oguid=Oguid('foo', 1234)))
+               .having(contact=self.contact, dossier_oguid=Oguid('foo', 1234)))
 
     def test_participation_can_have_multiple_roles(self):
-        contact = create(Builder('person').having(
-            firstname=u'peter', lastname=u'hans'))
         participation = create(Builder('participation').having(
-            contact=contact,
+            contact=self.contact,
             dossier_oguid=Oguid('foo', 1234)))
         role1 = create(Builder('participation_role').having(
             participation=participation,
@@ -34,6 +36,39 @@ class TestParticipation(unittest2.TestCase):
             role=u'Hanswutscht'))
 
         self.assertEquals([role1, role2], participation.roles)
+
+    def test_update_roles_removes_existing_no_longer_used_roles(self):
+        participation = create(Builder('participation').having(
+            contact=self.contact,
+            dossier_oguid=Oguid('foo', 1234)))
+        role1 = create(Builder('participation_role').having(
+            participation=participation,
+            role=u'final-drawing'))
+        role2 = create(Builder('participation_role').having(
+            participation=participation,
+            role=u'regard'))
+
+        participation.update_roles(['regard'])
+        self.assertEquals(['regard'],
+                          [role.role for role in participation.roles])
+
+    def test_update_roles_add_new_roles(self):
+        contact = create(Builder('person').having(
+            firstname=u'peter', lastname=u'hans'))
+        participation = create(Builder('participation').having(
+            contact=contact,
+            dossier_oguid=Oguid('foo', 1234)))
+        role1 = create(Builder('participation_role').having(
+            participation=participation,
+            role=u'final-drawing'))
+        role2 = create(Builder('participation_role').having(
+            participation=participation,
+            role=u'regard'))
+
+        participation.update_roles(['regard', 'participation'])
+
+        self.assertEquals(['regard', 'participation'],
+                          [role.role for role in participation.roles])
 
 
 class TestDossierParticipation(FunctionalTestCase):
@@ -108,3 +143,51 @@ class TestAddForm(FunctionalTestCase):
         self.assertEquals(
             ['There already exists a participation for this contact.'],
             browser.css('div.error').text),
+
+
+class TestEditForm(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestEditForm, self).setUp()
+        self.contactfolder = create(Builder('contactfolder'))
+        self.dossier = create(Builder('dossier'))
+        self.peter = create(Builder('person')
+                            .having(firstname=u'Peter', lastname=u'M\xfcller'))
+        self.meier_ag = create(Builder('organization').named(u'Meier AG'))
+        self.participation = create(Builder('participation')
+                                    .for_dossier(self.dossier)
+                                    .for_contact(self.peter))
+        create(Builder('participation_role').having(
+            participation=self.participation, role=u'regard'))
+        create(Builder('participation_role').having(
+            participation=self.participation, role=u'final-drawing'))
+
+    @browsing
+    def test_edit_particpation_roles(self, browser):
+        browser.login().open(self.dossier,
+                             view=u'tabbedview_view-participations')
+        browser.click_on('Edit')
+
+        field = browser.forms['form'].find_field('Roles')
+        self.assertEquals(['Final drawing', 'Participation', 'Regard'],
+                          field.options)
+
+        browser.fill({'Roles': ['Participation', 'Regard']})
+        browser.click_on('Save')
+
+        self.assertEquals(['Participation updated'], info_messages())
+        self.assertEquals(
+            'http://nohost/plone/dossier-1#participations', browser.url)
+        self.assertEquals(
+            ['regard', 'participation'],
+            [role.role for role in Participation.query.first().roles])
+
+    @browsing
+    def test_cancel_redirects_to_participations_tab(self, browser):
+        browser.login().open(self.dossier,
+                             view=u'tabbedview_view-participations')
+        browser.click_on('Edit')
+
+        browser.click_on('Cancel')
+        self.assertEquals(
+            'http://nohost/plone/dossier-1#participations', browser.url)

@@ -41,10 +41,33 @@ class Participation(Base):
     def resolve_dossier(self):
         return self.dossier_oguid.resolve_object()
 
-    def add_roles(self, roles):
-        for role_title in roles:
-            role = ParticipationRole(participation=self, role=role_title)
+    def add_roles(self, role_names):
+        for name in role_names:
+            role = ParticipationRole(participation=self, role=name)
             create_session().add(role)
 
+    def update_roles(self, role_names):
+        """Update the ParticipationRoles of the Participation:
+         - Removes existing roles wich are not part of the given `role_names`
+         - Keep existing roles wich are part of the given `role_names`
+         - Add new roles from `role_names`
+        """
+
+        session = create_session()
+        new_roles = []
+
+        for existing_role in self.roles:
+            if existing_role.role not in role_names:
+                session.delete(existing_role)
+            else:
+                new_roles.append(existing_role)
+                role_names.remove(existing_role.role)
+
+        for name in role_names:
+            role = ParticipationRole(role=name)
+            create_session().add(role)
+            new_roles.append(role)
+
+        self.roles = new_roles
 
 Participation.query_cls = ParticipationQuery
