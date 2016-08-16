@@ -1,11 +1,13 @@
 from opengever.base.model import Base
 from opengever.base.model import CONTENT_TITLE_LENGTH
+from plone import api
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
+from zope.schema.vocabulary import getVocabularyRegistry
 
 
 class ParticipationRole(Base):
@@ -24,3 +26,16 @@ class ParticipationRole(Base):
 
     def __repr__(self):
         return u'<ParticipationRole {} >'.format(self.role)
+
+    def get_label(self):
+        vocabulary_registry = getVocabularyRegistry()
+        vocab = vocabulary_registry.get(
+            api.portal.get(),
+            'opengever.dossier.participation_roles')
+
+        try:
+            term = vocab.getTerm(self.role)
+        except LookupError:
+            return self.role
+        else:
+            return term.title

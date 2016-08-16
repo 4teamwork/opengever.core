@@ -8,7 +8,7 @@
     </div>
     <ul class="roles">
       <li tal:repeat="role participation/roles">
-        <span tal:content="role/role" />
+        <span tal:content="role/get_label" />
       </li>
     </ul>
     <ul class="actions">

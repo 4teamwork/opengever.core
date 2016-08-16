@@ -20,7 +20,7 @@ class ParticipationTab(FunctionalTestCase):
         create(Builder('participation')
                .for_contact(self.hans)
                .for_dossier(self.dossier)
-               .with_roles(['regard, final-drawing']))
+               .with_roles(['regard', 'final-drawing']))
         create(Builder('participation')
                .for_contact(self.peter_ag)
                .for_dossier(self.dossier)
@@ -59,17 +59,17 @@ class ParticipationTab(FunctionalTestCase):
             browser.css('#participation_listing .contact').text)
 
     @browsing
-    def test_roles_of_each_participation_is_visible(self, browser):
+    def test_roles_of_each_participation_is_visible_and_translated(self, browser):
         browser.login().open(self.dossier,
                              view=u'tabbedview_view-participations')
 
         row1, row2 = browser.css('#participation_listing > li')
 
         self.assertEquals([u'Hans M\xfcller'], row1.css('.contact').text)
-        self.assertEquals(['regard, final-drawing'], row1.css('.roles').text)
+        self.assertEquals(['Regard', 'Final drawing'], row1.css('.roles li').text)
 
         self.assertEquals([u'Peter AG'], row2.css('.contact').text)
-        self.assertEquals(['participation'], row2.css('.roles').text)
+        self.assertEquals(['Participation'], row2.css('.roles li').text)
 
     @browsing
     def test_edit_action_is_available(self, browser):
