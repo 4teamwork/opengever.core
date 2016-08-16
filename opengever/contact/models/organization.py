@@ -30,3 +30,6 @@ class Organization(Contact):
 
     def get_title(self):
         return self.name
+
+    def get_css_class(self):
+        return 'contenttype-organization'

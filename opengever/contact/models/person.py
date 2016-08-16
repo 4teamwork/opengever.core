@@ -39,3 +39,6 @@ class Person(Contact):
 
     def get_title(self):
         return self.fullname
+
+    def get_css_class(self):
+        return 'contenttype-person'

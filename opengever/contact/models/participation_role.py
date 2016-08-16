@@ -21,3 +21,6 @@ class ParticipationRole(Base):
                               nullable=False)
     participation = relationship('Participation', back_populates='roles')
     role = Column(String(CONTENT_TITLE_LENGTH), nullable=False)
+
+    def __repr__(self):
+        return u'<ParticipationRole {} >'.format(self.role)
