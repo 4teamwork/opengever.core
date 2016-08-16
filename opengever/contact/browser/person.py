@@ -3,6 +3,7 @@ from opengever.base.browser.modelforms import ModelEditForm
 from opengever.base.model import CONTENT_TITLE_LENGTH
 from opengever.contact import _
 from opengever.contact.models.person import Person
+from opengever.ogds.base.actor import Actor
 from opengever.ogds.models import FIRSTNAME_LENGTH
 from opengever.ogds.models import LASTNAME_LENGTH
 from plone.directives import form
@@ -64,6 +65,9 @@ class PersonView(BrowserView):
 
         return viewlet.prepare_edit_tab(
             self.model.get_edit_url(self.context.parent))
+
+    def get_actor_link(self, archive):
+        return Actor.lookup(archive.actor_id).get_link()
 
 
 class IPersonModel(form.Schema):

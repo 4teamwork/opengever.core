@@ -58,8 +58,13 @@ class ExampleContactCreator(object):
             self.add_archived_organizations(organization, items)
             organizations.append(organization)
 
-            self.add_address(item, organization, ['Hauptsitz', None])
-            self.add_mail(item, organization, ['Info', 'Support', None])
+            address_labels = ['Hauptsitz', None]
+            mail_labels = ['Info', 'Support', None]
+
+            self.add_address(item, organization, address_labels)
+            self.add_archived_addresses(items, organization, address_labels)
+            self.add_mail(item, organization, mail_labels)
+            self.add_archived_mails(items, organization, mail_labels)
 
         return organizations
 

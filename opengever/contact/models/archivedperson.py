@@ -21,3 +21,7 @@ class ArchivedPerson(ArchivedContact):
     lastname = Column(String(LASTNAME_LENGTH), nullable=False)
 
     __mapper_args__ = {'polymorphic_identity': 'archived_person'}
+
+    @property
+    def fullname(self):
+        return u'{} {}'.format(self.firstname, self.lastname)
