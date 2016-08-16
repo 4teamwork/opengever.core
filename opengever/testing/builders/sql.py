@@ -483,6 +483,14 @@ class ParticipationBuilder(SqlObjectBuilder):
     mapped_class = Participation
     id_argument_name = 'participation_id'
 
+    def for_dossier(self, obj):
+        self.arguments['dossier_oguid'] = Oguid.for_object(obj)
+        return self
+
+    def for_contact(self, contact):
+        self.arguments['contact'] = contact
+        return self
+
 builder_registry.register('participation', ParticipationBuilder)
 
 
