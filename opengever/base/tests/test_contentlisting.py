@@ -175,10 +175,10 @@ class TestBrainContentListingRenderLink(FunctionalTestCase):
             IContentListingObject(obj2brain(mail)).render_link())
 
     def test_uses_simple_renderer_for_dossiers(self):
-        dossier = create(Builder('dossier').titled(u'Dossier A'))
+        dossier = create(Builder('dossier').titled(u'D\xf6ssier A'))
 
         self.assertEquals(
-            '<a href="http://nohost/plone/dossier-1" alt="Dossier A" class="contenttype-opengever-dossier-businesscasedossier">Dossier A</a>\n',
+            u'<a href="http://nohost/plone/dossier-1" alt="D\xf6ssier A" class="contenttype-opengever-dossier-businesscasedossier">D\xf6ssier A</a>\n',
             IContentListingObject(obj2brain(dossier)).render_link())
 
 
