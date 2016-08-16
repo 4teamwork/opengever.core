@@ -5,6 +5,9 @@ Changelog
 4.10.0 (unreleased)
 -------------------
 
+- Fix UnicodeDecodeError in contentlisting render_link method.
+  [phgross]
+
 - Fix a bug where a proposal would "disappear" when moving its parent dossier.
   [deiferni]
 
