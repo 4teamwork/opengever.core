@@ -33,7 +33,7 @@ class AddArchivedContact(SchemaMigration):
             Column('actor_id', String(USER_ID_LENGTH), nullable=False),
             Column('created', DateTime(timezone=True)),
             Column('description', Text),
-            Column('archived_contact_type', String(20), nullable=False),
+            Column('archived_contact_type', String(30), nullable=False),
         )
 
     def add_archived_organization_table(self):

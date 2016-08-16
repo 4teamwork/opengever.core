@@ -18,6 +18,6 @@ class ArchivedContact(ArchiveMixin, Base):
     contact = relationship("Contact", back_populates="archived_contacts")
     description = Column(UnicodeCoercingText)
 
-    archived_contact_type = Column(String(20), nullable=False)
+    archived_contact_type = Column(String(30), nullable=False)
     __mapper_args__ = {'polymorphic_on': archived_contact_type,
                        'with_polymorphic': '*'}
