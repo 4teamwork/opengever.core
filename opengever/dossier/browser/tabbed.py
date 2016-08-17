@@ -1,4 +1,5 @@
 from ftw.tabbedview.browser.tabbed import TabbedView
+from opengever.contact import is_contact_feature_enabled
 from opengever.dossier import _
 from opengever.meeting import is_meeting_feature_enabled
 
@@ -22,13 +23,6 @@ class DossierTabbedView(TabbedView):
     tasks_tab = {
         'id': 'tasks',
         'title': _(u'label_tasks', default=u'Tasks'),
-        'icon': None,
-        'url': '#',
-        'class': None}
-
-    participants_tab = {
-        'id': 'participants',
-        'title': _(u'label_participants', default=u'Participants'),
         'icon': None,
         'url': '#',
         'class': None}
@@ -76,13 +70,30 @@ class DossierTabbedView(TabbedView):
 
         return None
 
+    @property
+    def participations_tab(self):
+        if is_contact_feature_enabled():
+            return {
+                'id': 'participations',
+                'title': _(u'label_participations', default=u'Participations'),
+                'icon': None,
+                'url': '#',
+                'class': None}
+
+        return {
+            'id': 'participants',
+            'title': _(u'label_participants', default=u'Participants'),
+            'icon': None,
+            'url': '#',
+            'class': None}
+
     def get_tabs(self):
         tabs = [self.overview_tab,
                 self.subdossiers_tab,
                 self.documents_tab,
                 self.tasks_tab,
                 self.proposals_tab,
-                self.participants_tab,
+                self.participations_tab,
                 self.trash_tab,
                 self.journal_tab,
                 self.info_tab]
