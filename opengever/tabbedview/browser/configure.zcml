@@ -8,7 +8,7 @@
         name="personal_overview"
         class=".personal_overview.PersonalOverview"
         permission="zope2.View"
-        allowed_attributes="listing select_all user_is_allowed_to_view"
+        allowed_interface="ftw.tabbedview.interfaces.ITabbedViewEndpoints"
         />
 
     <browser:resourceDirectory

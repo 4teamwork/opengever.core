@@ -21,7 +21,7 @@
       name="tabbed_view"
       class=".tabbed.ContactFolderTabbedView"
       permission="zope2.View"
-      allowed_attributes="listing select_all reorder setgridstate set_default_tab msg_unknownresponse"
+      allowed_interface="ftw.tabbedview.interfaces.ITabbedViewEndpoints"
       />
 
   <browser:page
