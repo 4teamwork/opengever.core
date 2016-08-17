@@ -34,6 +34,7 @@ from optparse import OptionParser
 from zope.component import getUtility
 import logging
 import sys
+import transaction
 
 # Set global logger to info - this is necessary for the log-outbut with
 # bin/instance run.
@@ -89,7 +90,8 @@ def main(app, argv=sys.argv[1:]):
 
     if mode == 'reindex':
         LOG.info("Start indexing objects...")
-        return converter.reindex()
+        converter.reindex()
+        return transaction.commit()
 
     elif mode == 'store':
         LOG.info("Start storing objects...")
