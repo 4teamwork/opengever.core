@@ -25,4 +25,20 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      name="tabbed_view"
+      class=".tabbed.DossierTabbedView"
+      permission="zope2.View"
+      allowed_attributes="listing select_all reorder setgridstate set_default_tab msg_unknownresponse"
+      />
+
+  <browser:page
+      for="opengever.dossier.templatedossier.ITemplateDossier"
+      name="tabbed_view"
+      class=".tabbed.TemplateDossierTabbedView"
+      permission="zope2.View"
+      allowed_attributes="listing select_all reorder setgridstate set_default_tab msg_unknownresponse"
+      />
+
 </configure>

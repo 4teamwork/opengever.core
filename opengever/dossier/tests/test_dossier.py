@@ -1,6 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.contentmenu.menu import FactoriesMenu
+from ftw.testbrowser import browsing
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.mail.behaviors import ISendableDocsContainer
 from opengever.testing import FunctionalTestCase
@@ -43,17 +44,6 @@ class TestDossier(FunctionalTestCase):
                .in_state('dossier-state-resolved'))
         self.assertTrue(self.dossier.has_subdossiers())
 
-    def _get_active_tabbedview_tab_titles(self, obj):
-        types_tool = getToolByName(self.portal, 'portal_types')
-        actions = types_tool.listActionInfos(
-            object=obj, category='tabbedview-tabs')
-        tabs = [action['title'] for action in actions]
-        return tabs
-
-    def assert_tabbedview_tabs_for_obj(self, expected_tabs, obj):
-        self.assertEquals(expected_tabs,
-                          self._get_active_tabbedview_tab_titles(obj))
-
     def assert_searchable_text(self, expected, dossier):
         values = index_data_for(dossier).get('SearchableText')
         values.sort()
@@ -65,11 +55,13 @@ class TestDossier(FunctionalTestCase):
             ISendableDocsContainer.providedBy(self.dossier),
             'The dossier is not marked with the ISendableDocsContainer')
 
-    def test_tabbedview_tabs(self):
+    @browsing
+    def test_tabbedview_tabs(self, browser):
         expected_tabs = ['Overview', 'Subdossiers', 'Documents', 'Tasks',
-                         'Participants', 'Trash', 'Journal', 'Sharing', ]
+                         'Participants', 'Trash', 'Journal', 'Info']
 
-        self.assert_tabbedview_tabs_for_obj(expected_tabs, self.dossier)
+        browser.login().open(self.dossier, view='tabbed_view')
+        self.assertEquals(expected_tabs, browser.css('li.formTab').text)
 
     def test_use_the_dossier_workflow(self):
         wf_tool = getToolByName(self.portal, 'portal_workflow')
