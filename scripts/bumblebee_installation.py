@@ -48,13 +48,16 @@ root_logger.addHandler(handler)
 
 LOG = logging.getLogger('bumblebee-installation')
 
+
 parser = OptionParser()
 
-parser.add_option("-m", "--mode", dest="mode",
+parser.add_option("-m", "--mode", dest="mode", type="choice",
                   help="REQUIRED: Specify the upgrade-mode.",
+                  choices=['reindex', 'store'],
                   metavar="reindex|store")
 
 parser.add_option("-r", "--reset-timestamp", dest="reset", default=False,
+                  action="store_true",
                   help="If set to true, all objects will be reindexed again. "
                        "Otherwise it wont update already stored objects if "
                        "you restart the script",
