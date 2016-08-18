@@ -5,6 +5,9 @@ Changelog
 4.10.0 (unreleased)
 -------------------
 
+- Fix showroom CSS loading order
+  [Kevin Bieri]
+
 - Fix UnicodeDecodeError in contentlisting render_link method.
   [phgross]
 
