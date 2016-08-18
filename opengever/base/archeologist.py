@@ -3,14 +3,15 @@ from Products.CMFEditions.utilities import dereference
 
 
 class Archeologist(object):
-    """Dig out an archived version of an object.
+    """Dig up a mutable, archived version of an object.
+    Warning: Returned object may be incomplete!
 
     Parameters:
     obj - the current plone object for which you want to access the archived
           object
     version_data - a VersionData instance as returned by `portal_repository`
 
-    The layers of abstraction that are involded (in order of appearance):
+    The layers of abstraction that are involved (in order of appearance):
 
     CopyModifyMergeRepositoryTool - `portal_repository`:
     Stores versions in `portal_archivist`. Data is associated with an object
@@ -42,7 +43,7 @@ class Archeologist(object):
         """Return a reference to the archived object.
 
         Bypass all the copies made by the different layers of abstraction and
-        dig out a reference to the archived object.
+        dig up a reference to the archived object.
 
         Warning: objects returned by excavate may be incomplete and may
         not contain all their attributes/references. Use at your own risk.

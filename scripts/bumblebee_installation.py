@@ -36,6 +36,7 @@ from ftw.bumblebee.interfaces import IBumblebeeConverter
 from ftw.bumblebee.interfaces import IBumblebeeDocument
 from ftw.upgrade.progresslogger import ProgressLogger
 from opengever.base.archeologist import Archeologist
+from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
 from opengever.core.debughelpers import get_first_plone_site
 from opengever.core.debughelpers import setup_plone
 from optparse import OptionParser
@@ -47,7 +48,7 @@ import sys
 import transaction
 
 
-# Set global logger to info - this is necessary for the log-outbut with
+# Set global logger to info - this is necessary for the log-output with
 # bin/instance run.
 root_logger = logging.getLogger()
 root_logger.setLevel(logging.INFO)
@@ -64,8 +65,8 @@ parser = OptionParser()
 
 parser.add_option("-m", "--mode", dest="mode", type="choice",
                   help="REQUIRED: Specify the upgrade-mode.",
-                  choices=['reindex', 'history', 'store'],
-                  metavar="reindex|history|store")
+                  choices=['reindex', 'history', 'store', 'activate'],
+                  metavar="reindex|history|store|activate")
 
 parser.add_option("-r", "--reset-timestamp", dest="reset", default=False,
                   action="store_true",
@@ -90,7 +91,7 @@ def main(app, argv=sys.argv[1:]):
         parser.print_help()
         parser.error(
             'Please specify the "mode" with "bin/instance run <yourscript> -m '
-            'reindex | history | store"\n'
+            'reindex | history | store | activate"\n'
             )
 
     if options.plone_path:
@@ -107,8 +108,8 @@ def main(app, argv=sys.argv[1:]):
         converter.reindex()
         return transaction.commit()
 
-    if mode == 'history':
-        LOG.info("Start creating cehcksums for portal repository ...")
+    elif mode == 'history':
+        LOG.info("Start creating checksums for portal repository ...")
         repository = api.portal.get_tool('portal_repository')
         catalog = api.portal.get_tool('portal_catalog')
 
@@ -141,6 +142,12 @@ def main(app, argv=sys.argv[1:]):
                 "Already converted objects will be skipped.")
 
         return converter.store(deferred=True, reset_timestamp=options.reset)
+
+    elif mode == 'activate':
+        api.portal.set_registry_record(
+            'is_feature_enabled', True, interface=IGeverBumblebeeSettings)
+        LOG.info("activating bumblebee feature in registry.")
+        return transaction.commit()
 
     else:
         parser.print_help()
