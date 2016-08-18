@@ -11,7 +11,6 @@ from plone.formwidget.autocomplete import AutocompleteFieldWidget
 from plone.z3cform import layout
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from z3c.form.interfaces import ActionExecutionError
-from z3c.form.interfaces import DISPLAY_MODE
 from z3c.form.interfaces import HIDDEN_MODE
 from z3c.form.interfaces import IDataConverter
 from zExceptions import Unauthorized
@@ -57,7 +56,6 @@ class ParticipationAddForm(z3c.form.form.Form):
 
     fields['contact'].widgetFactory = AutocompleteFieldWidget
     fields['roles'].widgetFactory = CheckBoxFieldWidget
-    fields['participation_id'].mode = HIDDEN_MODE
 
     @z3c.form.button.buttonAndHandler(_(u'button_add', default=u'Add'))
     def handle_add(self, action):
@@ -103,28 +101,25 @@ class ParticipationAddFormView(layout.FormWrapper, grok.View):
 
 class ParticipationEditForm(z3c.form.form.EditForm):
     ignoreContext = True
-    label = _(u'label_edit_participation', default=u'Edit Participation')
-    fields = z3c.form.field.Fields(IParticipation)
+    fields = z3c.form.field.Fields(IParticipation).omit('contact')
     participation = None
 
-    fields['contact'].mode = DISPLAY_MODE
     fields['participation_id'].mode = HIDDEN_MODE
     fields['roles'].widgetFactory = CheckBoxFieldWidget
+
+    @property
+    def label(self):
+        return _(u'label_edit_participation',
+                 default=u'Edit Participation of ${title}',
+                 mapping={'title': self.get_participation().contact.get_title()})
 
     def get_participation(self):
         participation_id = self.request.get('participation_id')
         if not participation_id:
-            return None
+            data, errors = self.widgets.extract()
+            participation_id = data.get('participation_id')
+
         return Participation.query.get(participation_id)
-
-    def update(self):
-        participation = self.get_participation()
-        if participation:
-            if not self.request.get('form.widgets.contact', None):
-                self.request.set('form.widgets.contact',
-                                 [participation.contact.contact_id])
-
-        super(ParticipationEditForm, self).update()
 
     def updateWidgets(self):
         super(ParticipationEditForm, self).updateWidgets()

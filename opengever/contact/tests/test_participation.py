@@ -183,6 +183,15 @@ class TestEditForm(FunctionalTestCase):
             [role.role for role in Participation.query.first().roles])
 
     @browsing
+    def test_label_contains_participation_contact_title(self, browser):
+        browser.login().open(self.dossier,
+                             view=u'tabbedview_view-participations')
+        browser.click_on('Edit')
+
+        self.assertEquals([u'Edit Participation of Peter M\xfcller'],
+                          browser.css('h1').text)
+
+    @browsing
     def test_cancel_redirects_to_participations_tab(self, browser):
         browser.login().open(self.dossier,
                              view=u'tabbedview_view-participations')
