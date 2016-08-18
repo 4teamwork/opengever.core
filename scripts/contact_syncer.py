@@ -1,25 +1,16 @@
 """
-Script to import contacts and its related tables (i.e. mails, numbers...)
+Script to sync or import contacts and its related tables (i.e. mails, numbers...)
 from csv.
 
-To run the import you need to run the import by the following command:
+To run the import just type in the following command:
 
-    bin/instance run ./scripts/contacts_import.py -p /path/to/contact.csv -t contact
-
-The script will automatically search for a table with the name of the file.
-In your example case, it will import all the content of 'contact.csv' into
-the 'contact'-table of the sql-db.
-
-It will raise an error if the table does not exists.
+    bin/instance run ./scripts/contact_syncer.py -p /path/to/contact.csv -t [person, url, mail...]
 
 For help-information type in the following:
 
-    bin/instance run ./scripts/contacts_import.py -h
+    bin/instance run ./scripts/contact_syncer.py -h
 
 """
-# from ftw.bumblebee.interfaces import IBumblebeeConverter
-# from opengever.core.debughelpers import get_first_plone_site
-# from opengever.core.debughelpers import setup_plone
 from collections import OrderedDict
 from opengever.base.model import create_session
 from opengever.contact.models import Address
