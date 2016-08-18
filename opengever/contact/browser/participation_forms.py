@@ -173,3 +173,71 @@ class ParticipationEditFormView(layout.FormWrapper, grok.View):
     def __init__(self, *args, **kwargs):
         layout.FormWrapper.__init__(self, *args, **kwargs)
         grok.View.__init__(self, *args, **kwargs)
+
+
+class ParticipationRemoveForm(z3c.form.form.Form):
+    ignoreContext = True
+    fields = z3c.form.field.Fields(IParticipation).select('participation_id')
+    participation = None
+
+    fields['participation_id'].mode = HIDDEN_MODE
+
+    @property
+    def label(self):
+        return _(u'label_remove_participation',
+                 default=u'Remove Participation of ${title}',
+                 mapping={'title': self.get_participation().contact.get_title()})
+
+    def get_participation(self):
+        participation_id = self.request.get('participation_id')
+        if not participation_id:
+            data, errors = self.widgets.extract()
+            participation_id = data.get('participation_id')
+
+        return Participation.query.get(participation_id)
+
+    def updateWidgets(self):
+        super(ParticipationRemoveForm, self).updateWidgets()
+        if self.request.method != 'GET':
+            return
+
+        widget = self.widgets['participation_id']
+        widget.value = IDataConverter(widget).toWidgetValue(
+            self.request.get('participation_id'))
+        self.widgets.update()
+
+    @z3c.form.button.buttonAndHandler(_(u'Remove'), name='remove')
+    def handleApply(self, action):
+        data, errors = self.extractData()
+
+        oguid = Oguid.for_object(self.context)
+        participation = Participation.query.get(data.get('participation_id'))
+        if participation.dossier_oguid != oguid:
+            raise Unauthorized
+
+        if not errors:
+            participation.delete()
+            msg = _(u'info_participation_removed', u'Participation removed')
+            api.portal.show_message(
+                message=msg, request=self.request, type='info')
+
+            return self.redirect_to_participants_tab()
+
+    @z3c.form.button.buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
+    def handle_cancel(self, action):
+        return self.redirect_to_participants_tab()
+
+    def redirect_to_participants_tab(self):
+        return self.request.RESPONSE.redirect(
+            '{}#participations'.format(self.context.absolute_url()))
+
+
+class ParticipationRemoveFormView(layout.FormWrapper, grok.View):
+    grok.context(Interface)
+    grok.name('remove-contact-participation')
+    grok.require('cmf.AddPortalContent')
+    form = ParticipationRemoveForm
+
+    def __init__(self, *args, **kwargs):
+        layout.FormWrapper.__init__(self, *args, **kwargs)
+        grok.View.__init__(self, *args, **kwargs)

@@ -200,3 +200,52 @@ class TestEditForm(FunctionalTestCase):
         browser.click_on('Cancel')
         self.assertEquals(
             'http://nohost/plone/dossier-1#participations', browser.url)
+
+
+class TestRemoveForm(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestRemoveForm, self).setUp()
+        self.contactfolder = create(Builder('contactfolder'))
+        self.dossier = create(Builder('dossier'))
+        self.peter = create(Builder('person')
+                            .having(firstname=u'Peter', lastname=u'M\xfcller'))
+        self.meier_ag = create(Builder('organization').named(u'Meier AG'))
+        self.participation = create(Builder('participation')
+                                    .for_dossier(self.dossier)
+                                    .for_contact(self.peter))
+        create(Builder('participation_role').having(
+            participation=self.participation, role=u'regard'))
+        create(Builder('participation_role').having(
+            participation=self.participation, role=u'final-drawing'))
+
+    @browsing
+    def test_remove_particpation_role(self, browser):
+        browser.login().open(self.dossier,
+                             view=u'tabbedview_view-participations')
+        browser.click_on('Remove')
+
+        browser.click_on('Remove')
+        self.assertEquals(['Participation removed'], info_messages())
+        self.assertEquals(
+            'http://nohost/plone/dossier-1#participations', browser.url)
+        self.assertEquals(0, Participation.query.count())
+
+    @browsing
+    def test_label_contains_participation_contact_title(self, browser):
+        browser.login().open(self.dossier,
+                             view=u'tabbedview_view-participations')
+        browser.click_on('Remove')
+
+        self.assertEquals([u'Remove Participation of Peter M\xfcller'],
+                          browser.css('h1').text)
+
+    @browsing
+    def test_cancel_redirects_to_participations_tab(self, browser):
+        browser.login().open(self.dossier,
+                             view=u'tabbedview_view-participations')
+        browser.click_on('Remove')
+
+        browser.click_on('Cancel')
+        self.assertEquals(
+            'http://nohost/plone/dossier-1#participations', browser.url)

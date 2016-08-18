@@ -21,7 +21,7 @@
       </li>
       <li>
       <a class="remove-action"
-         tal:attributes="href string:${context/absolute_url}/remove_participation?participation_id=${participation/participation_id}"
+         tal:attributes="href string:${context/absolute_url}/remove-contact-participation?participation_id=${participation/participation_id}"
          i18n:translate="button_remove">
         Remove
       </a>

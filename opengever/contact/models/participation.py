@@ -70,4 +70,12 @@ class Participation(Base):
 
         self.roles = new_roles
 
+    def delete(self):
+        session = create_session()
+        for role in self.roles:
+            session.delete(role)
+
+        session.delete(self)
+
+
 Participation.query_cls = ParticipationQuery
