@@ -333,6 +333,41 @@ class PhoneNumberSyncer(ObjectSyncer):
             label=self.decode_text(csv_row.get('label')))
 
 
+class AddressSyncer(ObjectSyncer):
+
+    type_name = "Addresses"
+
+    def update_rows_mapping(self):
+        self.rows_mapping['contact_id'] = 'contact_id'
+        self.rows_mapping['label'] = 'label'
+        self.rows_mapping['street'] = 'street'
+        self.rows_mapping['zip'] = 'zip_code'
+        self.rows_mapping['city'] = 'city'
+
+        # HINT: This field does not exists on sql and will be ignored
+        self.rows_mapping['country'] = 'country'
+
+    def handle_objects_to_remove(self):
+        pass
+
+    def get_sql_obj(self, csv_row):
+        return None
+
+    def get_csv_obj(self, csv_row):
+        contact_id = self.get_contact_id_by_former_contact_id(
+            csv_row.get('contact_id'))
+
+        if not contact_id:
+            return None
+
+        return Address(
+            contact_id=contact_id,
+            label=self.decode_text(csv_row.get('label')),
+            street=self.decode_text(csv_row.get('street')),
+            zip_code=self.decode_text(csv_row.get('zip')),
+            city=self.decode_text(csv_row.get('city')),)
+
+
 class CSVContactImporter(object):
     """Object to handle the bin/instance run parameters and
     run the correct sync-objects.
@@ -344,6 +379,7 @@ class CSVContactImporter(object):
         'mail': MailSyncer,
         'url': UrlSyncer,
         'phonenumber': PhoneNumberSyncer,
+        'address': AddressSyncer,
     }
 
     def __init__(self):
