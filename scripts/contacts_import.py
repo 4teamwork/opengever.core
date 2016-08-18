@@ -23,6 +23,7 @@ For help-information type in the following:
 from collections import OrderedDict
 from opengever.base.model import create_session
 from opengever.contact.models import Address
+from opengever.contact.models import Contact
 from opengever.contact.models import MailAddress
 from opengever.contact.models import Organization
 from opengever.contact.models import OrgRole
@@ -66,7 +67,7 @@ class CSVContactImporter(object):
     run the correct sync-objects.
     """
 
-    allowed_object_types = ['person']
+    allowed_object_types = ['person', 'mail']
 
     def __init__(self):
         self.parser = OptionParser()
@@ -124,8 +125,11 @@ class CSVContactImporter(object):
 
         getattr(self, 'import_{}'.format(object_type))(path)
 
-    def import_person(self, path, update=True):
+    def import_person(self, path):
         PersonSyncer(path)()
+
+    def import_mail(self, path):
+        MailSyncer(path)()
 
     def print_parser_error(self, msg):
         self.parser.print_help()
@@ -168,6 +172,9 @@ class ObjectSyncer(object):
 
             sql_object = self.get_sql_obj(row)
             csv_object = self.get_csv_obj(row)
+
+            if not csv_object:
+                continue
 
             if sql_object:
                 self.update_object(csv_object, sql_object)
@@ -255,6 +262,18 @@ class ObjectSyncer(object):
             "Skipped: {}\n".format(
                 self.stat_total, self.stat_added, self.stat_updated, self.stat_removed, skipped))
 
+    def decode_text(self, text):
+        if not text:
+            return text
+
+        return text.decode('utf-8')
+
+    def get_contact_id_by_former_contact_id(self, former_contact_id):
+        contact = Contact.query.filter(
+            Contact.former_contact_id == former_contact_id).first()
+
+        return contact.contact_id if contact else None
+
 
 class PersonSyncer(ObjectSyncer):
 
@@ -275,65 +294,39 @@ class PersonSyncer(ObjectSyncer):
             Person.former_contact_id == csv_row.get('contact_id')).first()
 
     def get_csv_obj(self, csv_row):
-        return Person(salutation=csv_row.get('salutation').decode('utf-8'),
-                      academic_title=csv_row.get('title').decode('utf-8'),
-                      firstname=csv_row.get('firstname').decode('utf-8'),
-                      lastname=csv_row.get('lastname').decode('utf-8'),
-                      former_contact_id=int(csv_row.get('contact_id')))
+        return Person(salutation=self.decode_text(csv_row.get('salutation')),
+                      academic_title=self.decode_text(csv_row.get('title')),
+                      firstname=self.decode_text(csv_row.get('firstname')),
+                      lastname=self.decode_text(csv_row.get('lastname')),
+                      former_contact_id=int(self.decode_text(csv_row.get('contact_id'))))
 
 
-    # def create_organizations(self):
-    #     organizations = []
-    #     items = self.load_organizations()
-    #     for item in items:
-    #         organization = Organization(name=item['name'])
-    #         self.db_session.add(organization)
-    #         organizations.append(organization)
+class MailSyncer(ObjectSyncer):
 
-    #         self.add_address(item, organization, ['Hauptsitz', None])
-    #         self.add_mail(item, organization, ['Info', 'Support', None])
+    type_name = "Mails"
 
-    #     return organizations
+    def update_rows_mapping(self):
+        self.rows_mapping['contact_id'] = 'contact_id'
+        self.rows_mapping['mail_address'] = 'address'
+        self.rows_mapping['label'] = 'label'
 
-    # def create_contacts(self, organizations=[]):
-    #     items = self.load_persons()
-    #     for item in items:
+    def handle_objects_to_remove(self):
+        pass
 
-    #         person = Person(salutation=item['salutation'],
-    #                         firstname=item['firstname'],
-    #                         lastname=item['lastname'])
-    #         self.db_session.add(person)
+    def get_sql_obj(self, csv_row):
+        return None
 
-    #         self.add_address(item, person, ADDRESS_LABELS)
-    #         self.add_phonenumber(item, person, PHONENUMBER_LABELS)
-    #         self.add_mail(item, person, ADDRESS_LABELS)
+    def get_csv_obj(self, csv_row):
+        contact_id = self.get_contact_id_by_former_contact_id(
+            csv_row.get('contact_id'))
 
-    #         org_role = OrgRole(person=person,
-    #                            organization=random.choice(organizations))
-    #         self.db_session.add(org_role)
+        if not contact_id:
+            return None
 
-    # def add_address(self, item, contact, labels):
-    #     address = Address(label=random.choice(labels),
-    #                       street=item['street'],
-    #                       zip_code=item['zip_code'],
-    #                       city=item['city'],
-    #                       contact=contact)
-    #     self.db_session.add(address)
-
-    # def add_phonenumber(self, item, contact, labels):
-    #     phonenumber = PhoneNumber(label=random.choice(labels),
-    #                               phone_number=item['phonenumber'],
-    #                               contact=contact)
-    #     self.db_session.add(phonenumber)
-
-    # def add_mail(self, item, contact, labels):
-    #     mail = MailAddress(label=random.choice(labels),
-    #                        address=item['mail'],
-    #                        contact=contact)
-    #     self.db_session.add(mail)
-
-
-# importer = CSVContactImporter()
+        return MailAddress(
+            contact_id=contact_id,
+            address=self.decode_text(csv_row.get('mail_address')),
+            label=self.decode_text(csv_row.get('label')))
 
 
 if __name__ == '__main__':
