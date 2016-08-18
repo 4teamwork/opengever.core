@@ -305,6 +305,34 @@ class UrlSyncer(ObjectSyncer):
             label=self.decode_text(csv_row.get('label')))
 
 
+class PhoneNumberSyncer(ObjectSyncer):
+
+    type_name = "Phonenumbers"
+
+    def update_rows_mapping(self):
+        self.rows_mapping['contact_id'] = 'contact_id'
+        self.rows_mapping['number'] = 'phone_number'
+        self.rows_mapping['label'] = 'label'
+
+    def handle_objects_to_remove(self):
+        pass
+
+    def get_sql_obj(self, csv_row):
+        return None
+
+    def get_csv_obj(self, csv_row):
+        contact_id = self.get_contact_id_by_former_contact_id(
+            csv_row.get('contact_id'))
+
+        if not contact_id:
+            return None
+
+        return PhoneNumber(
+            contact_id=contact_id,
+            phone_number=self.decode_text(csv_row.get('number')),
+            label=self.decode_text(csv_row.get('label')))
+
+
 class CSVContactImporter(object):
     """Object to handle the bin/instance run parameters and
     run the correct sync-objects.
@@ -315,6 +343,7 @@ class CSVContactImporter(object):
         'person': PersonSyncer,
         'mail': MailSyncer,
         'url': UrlSyncer,
+        'phonenumber': PhoneNumberSyncer,
     }
 
     def __init__(self):
