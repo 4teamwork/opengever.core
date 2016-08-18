@@ -3,9 +3,9 @@ from collective.elephantvocabulary import wrap_vocabulary
 from opengever.base.browser.modelforms import ModelAddForm
 from opengever.base.browser.modelforms import ModelEditForm
 from opengever.base.oguid import Oguid
+from opengever.contact import _
 from opengever.contact.models import Contact
 from opengever.contact.models import Participation
-from opengever.dossier import _
 from plone import api
 from plone.directives import form
 from plone.formwidget.autocomplete import AutocompleteFieldWidget
@@ -24,7 +24,6 @@ class IParticipation(form.Schema):
 
     contact = schema.Choice(
         title=_(u'label_contact', default=u'Contact'),
-        description=_(u'help_contact', default=u''),
         vocabulary=u'opengever.contact.ContactsVocabulary',
         required=True,
     )

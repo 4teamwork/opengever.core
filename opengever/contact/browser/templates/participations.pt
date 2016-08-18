@@ -1,4 +1,4 @@
-<ul id="participation_listing">
+<ul id="participation_listing" i18n:domain="opengever.contact">
   <li tal:repeat="participation view/get_participations">
     <div class="contact">
       <a href="#"
