@@ -63,91 +63,6 @@ class BadCSVFormatException(AttributeError):
     pass
 
 
-class CSVContactImporter(object):
-    """Object to handle the bin/instance run parameters and
-    run the correct sync-objects.
-    """
-
-    allowed_object_types = [
-        'organization',
-        'person',
-        'mail',
-        'url',
-    ]
-
-    def __init__(self):
-        self.parser = OptionParser()
-        self.parser.add_option(
-            "-p", "--path", dest="path",
-            help="REQUIRED: Specify the path to a csv-file which "
-                 "you want to import.")
-
-        self.parser.add_option(
-            "-t", "--object_type", dest="object_type",
-            help="REQUIRED: Set the object type name you want to create.\n"
-                 "Available types: {}".format(
-                     ', '.join(self.allowed_object_types)))
-
-        self.parser.add_option(
-            "-c", "--config", dest="config",
-            help="Zope-Config (do not use this)")
-
-    def __call__(self, app, argv=sys.argv[1:]):
-        options, args = self.parser.parse_args()
-
-        path = options.path if options.path else None
-        if not path:
-            self.print_parser_error('Please specify the "path" with "-p path/to/csv"\n')
-
-        object_type = options.object_type if options.object_type else None
-        if not object_type:
-            self.print_parser_error(
-                'Please specify a "object_type" with "-t object_type"\n')
-
-        try:
-            self.run_import(path, object_type)
-        except BadPathException:
-            self.print_parser_error(
-                'At "{}" is no file."\n'
-                'Please specify a valid path to a csv-file.'.format(path))
-        except BadTypeException:
-            self.print_parser_error(
-                "The type '{}'' is not allowed to import. Please use one of the "
-                "following types: {}".format(
-                    object_type, ', '.join(self.allowed_object_types)))
-
-    def is_type_allowed(self, object_type):
-        return object_type in self.allowed_object_types
-
-    def is_valid_path(self, path):
-        return path.isfile()
-
-    def run_import(self, path, object_type):
-        path = Path(path)
-        if not self.is_valid_path(path):
-            raise BadPathException()
-        if not self.is_type_allowed(object_type):
-            raise BadTypeException()
-
-        getattr(self, 'import_{}'.format(object_type))(path)
-
-    def import_person(self, path):
-        PersonSyncer(path)()
-
-    def import_mail(self, path):
-        MailSyncer(path)()
-
-    def import_url(self, path):
-        UrlSyncer(path)()
-
-    def import_organization(self, path):
-        OrganizationSyncer(path)()
-
-    def print_parser_error(self, msg):
-        self.parser.print_help()
-        self.parser.error(msg)
-
-
 class ObjectSyncer(object):
     """Use the objectsyncer to sync a sql-table with a csv-file.
     """
@@ -388,6 +303,79 @@ class UrlSyncer(ObjectSyncer):
             contact_id=contact_id,
             url=self.decode_text(csv_row.get('url')),
             label=self.decode_text(csv_row.get('label')))
+
+
+class CSVContactImporter(object):
+    """Object to handle the bin/instance run parameters and
+    run the correct sync-objects.
+    """
+
+    allowed_object_types = {
+        'organization': OrganizationSyncer,
+        'person': PersonSyncer,
+        'mail': MailSyncer,
+        'url': UrlSyncer,
+    }
+
+    def __init__(self):
+        self.parser = OptionParser()
+        self.parser.add_option(
+            "-p", "--path", dest="path",
+            help="REQUIRED: Specify the path to a csv-file which "
+                 "you want to import.")
+
+        self.parser.add_option(
+            "-t", "--object_type", dest="object_type",
+            help="REQUIRED: Set the object type name you want to create.\n"
+                 "Available types: {}".format(
+                     ', '.join(self.allowed_object_types.keys())))
+
+        self.parser.add_option(
+            "-c", "--config", dest="config",
+            help="Zope-Config (do not use this)")
+
+    def __call__(self, app, argv=sys.argv[1:]):
+        options, args = self.parser.parse_args()
+
+        path = options.path if options.path else None
+        if not path:
+            self.print_parser_error('Please specify the "path" with "-p path/to/csv"\n')
+
+        object_type = options.object_type if options.object_type else None
+        if not object_type:
+            self.print_parser_error(
+                'Please specify a "object_type" with "-t object_type"\n')
+
+        try:
+            self.run_import(path, object_type)
+        except BadPathException:
+            self.print_parser_error(
+                'At "{}" is no file."\n'
+                'Please specify a valid path to a csv-file.'.format(path))
+        except BadTypeException:
+            self.print_parser_error(
+                "The type '{}'' is not allowed to import. Please use one of the "
+                "following types: {}".format(
+                    object_type, ', '.join(self.allowed_object_types.keys())))
+
+    def is_type_allowed(self, object_type):
+        return object_type in self.allowed_object_types.keys()
+
+    def is_valid_path(self, path):
+        return path.isfile()
+
+    def run_import(self, path, object_type):
+        path = Path(path)
+        if not self.is_valid_path(path):
+            raise BadPathException()
+        if not self.is_type_allowed(object_type):
+            raise BadTypeException()
+
+        self.allowed_object_types.get(object_type)(path)()
+
+    def print_parser_error(self, msg):
+        self.parser.print_help()
+        self.parser.error(msg)
 
 
 if __name__ == '__main__':
