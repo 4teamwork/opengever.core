@@ -368,6 +368,37 @@ class AddressSyncer(ObjectSyncer):
             city=self.decode_text(csv_row.get('city')),)
 
 
+class OrgRoleSyncer(ObjectSyncer):
+
+    type_name = "OrgRoles"
+
+    def update_rows_mapping(self):
+        self.rows_mapping['person_id'] = 'person_id'
+        self.rows_mapping['organisation_id'] = 'organization_id'
+        self.rows_mapping['function'] = 'function'
+
+    def handle_objects_to_remove(self):
+        pass
+
+    def get_sql_obj(self, csv_row):
+        return None
+
+    def get_csv_obj(self, csv_row):
+        person_id = self.get_contact_id_by_former_contact_id(
+            csv_row.get('person_id'))
+
+        organization_id = self.get_contact_id_by_former_contact_id(
+            csv_row.get('organisation_id'))
+
+        if not person_id or not organization_id:
+            return None
+
+        return OrgRole(
+            person_id=person_id,
+            organization_id=organization_id,
+            function=self.decode_text(csv_row.get('function')))
+
+
 class CSVContactImporter(object):
     """Object to handle the bin/instance run parameters and
     run the correct sync-objects.
@@ -380,6 +411,7 @@ class CSVContactImporter(object):
         'url': UrlSyncer,
         'phonenumber': PhoneNumberSyncer,
         'address': AddressSyncer,
+        'orgrole': OrgRoleSyncer,
     }
 
     def __init__(self):
