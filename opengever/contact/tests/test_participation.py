@@ -1,10 +1,13 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.base.oguid import Oguid
+from opengever.contact.interfaces import IContactSettings
 from opengever.contact.models.participation import Participation
+from opengever.core.testing import toggle_feature
 from opengever.testing import FunctionalTestCase
 from opengever.testing import MEMORY_DB_LAYER
 from zExceptions import Unauthorized
@@ -84,6 +87,29 @@ class TestDossierParticipation(FunctionalTestCase):
         self.assertEqual(dossier, participation.resolve_dossier())
 
 
+class TestAddParticipationAction(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestAddParticipationAction, self).setUp()
+        self.dossier = create(Builder('dossier'))
+
+    @browsing
+    def test_redirects_to_plone_implementation_add_form_when_contact_feature_is_disabled(self, browser):
+        toggle_feature(IContactSettings, enabled=False)
+        browser.login().open(self.dossier)
+        factoriesmenu.add('Add Participant')
+        self.assertEqual(
+            'http://nohost/plone/dossier-1/add-plone-participation', browser.url)
+
+    @browsing
+    def test_redirects_to_plone_implementation_add_form_when_contact_feature_is_enabled(self, browser):
+        toggle_feature(IContactSettings, enabled=True)
+        browser.login().open(self.dossier)
+        factoriesmenu.add('Add Participant')
+        self.assertEqual(
+            'http://nohost/plone/dossier-1/add-sql-participation', browser.url)
+
+
 class TestAddForm(FunctionalTestCase):
 
     def setUp(self):
@@ -98,11 +124,11 @@ class TestAddForm(FunctionalTestCase):
         self.grant('Reader')
         with self.assertRaises(Unauthorized):
             browser.login().open(self.dossier,
-                                 view='add-contact-participation')
+                                 view='add-sql-participation')
 
     @browsing
     def test_add_participation_for_person(self, browser):
-        browser.login().open(self.dossier, view='add-contact-participation')
+        browser.login().open(self.dossier, view='add-sql-participation')
         browser.fill({'Contact': str(self.peter.contact_id),
                       'Roles': ['Regard']})
         browser.click_on('Add')
@@ -116,7 +142,7 @@ class TestAddForm(FunctionalTestCase):
 
     @browsing
     def test_add_participation_for_organization(self, browser):
-        browser.login().open(self.dossier, view='add-contact-participation')
+        browser.login().open(self.dossier, view='add-sql-participation')
         browser.fill({'Contact': str(self.meier_ag.contact_id),
                       'Roles': ['Final drawing', 'Regard']})
         browser.click_on('Add')
@@ -134,7 +160,7 @@ class TestAddForm(FunctionalTestCase):
                .having(contact=self.peter,
                        dossier_oguid=Oguid.for_object(self.dossier)))
 
-        browser.login().open(self.dossier, view='add-contact-participation')
+        browser.login().open(self.dossier, view='add-sql-participation')
         browser.fill({'Contact': str(self.peter.contact_id),
                       'Roles': ['Final drawing', 'Regard']})
         browser.click_on('Add')

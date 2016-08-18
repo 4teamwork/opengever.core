@@ -69,6 +69,13 @@
       />
 
   <browser:page
+      name="add-participation"
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      class=".participation_add_view.ParticipationAddView"
+      permission="cmf.AddPortalContent"
+      />
+
+  <browser:page
       name="mails"
       for="opengever.contact.interfaces.IPerson"
       class=".mail.MailAddressesView"

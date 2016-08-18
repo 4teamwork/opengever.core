@@ -90,7 +90,7 @@ class ParticipationAddForm(z3c.form.form.Form):
 
 class ParticipationAddFormView(layout.FormWrapper, grok.View):
     grok.context(Interface)
-    grok.name('add-contact-participation')
+    grok.name('add-sql-participation')
     grok.require('cmf.AddPortalContent')
     form = ParticipationAddForm
 
