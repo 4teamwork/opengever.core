@@ -67,7 +67,11 @@ class CSVContactImporter(object):
     run the correct sync-objects.
     """
 
-    allowed_object_types = ['person', 'mail']
+    allowed_object_types = [
+        'organization',
+        'person',
+        'mail',
+    ]
 
     def __init__(self):
         self.parser = OptionParser()
@@ -130,6 +134,9 @@ class CSVContactImporter(object):
 
     def import_mail(self, path):
         MailSyncer(path)()
+
+    def import_organization(self, path):
+        OrganizationSyncer(path)()
 
     def print_parser_error(self, msg):
         self.parser.print_help()
@@ -273,6 +280,27 @@ class ObjectSyncer(object):
             Contact.former_contact_id == former_contact_id).first()
 
         return contact.contact_id if contact else None
+
+
+class OrganizationSyncer(ObjectSyncer):
+
+    type_name = "Organizations"
+
+    def update_rows_mapping(self):
+        self.rows_mapping['contact_id'] = 'former_contact_id'
+        self.rows_mapping['name'] = 'name'
+
+    def handle_objects_to_remove(self):
+        pass
+
+    def get_sql_obj(self, csv_row):
+        return Organization.query.filter(
+            Organization.former_contact_id == csv_row.get('contact_id')).first()
+
+    def get_csv_obj(self, csv_row):
+        return Organization(
+            name=self.decode_text(csv_row.get('name')),
+            former_contact_id=int(self.decode_text(csv_row.get('contact_id'))))
 
 
 class PersonSyncer(ObjectSyncer):
