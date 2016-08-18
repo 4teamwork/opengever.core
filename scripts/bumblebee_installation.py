@@ -5,26 +5,26 @@ To reindex the objects run:
 
     bin/instance run ./scripts/bumblebee_installation.py -m reindex
 
-To calculate checksums for objects archived in  portal_repository run:
+To calculate checksums for objects archived in portal_repository run:
 
     bin/instance run ./scripts/bumblebee_installation.py -m history
 
 To store the objects run:
 
-    bin/instance run ./scripts/bumblebee_installation.py -m reindex
+    bin/instance run ./scripts/bumblebee_installation.py -m store
 
-If you have to specify the path to your plone insance
-then you can use following parameter:
+If you have to specify the path to your plone instance you can use following
+parameter:
 
     -p <path/to/plonesite>
 
-Per default the timestamp wont be resetted. That means, already stored
-objects wont be stored again.
+By default the timestamp won't be reset. That means, already stored objects
+won't be stored again.
 
-If you want to reset the timestamp and store all objects again then you can
-define this with the following parameter:
+If you want to reset the timestamp and store all objects again you can
+specify this with the following parameter:
 
-    -r True
+    -r
 
 For help-information type in the following:
 
@@ -90,7 +90,7 @@ def main(app, argv=sys.argv[1:]):
         parser.print_help()
         parser.error(
             'Please specify the "mode" with "bin/instance run <yourscript> -m '
-            'reindex | store"\n'
+            'reindex | history | store"\n'
             )
 
     if options.plone_path:
