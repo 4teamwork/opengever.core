@@ -197,4 +197,4 @@ class TestOrganizationView(FunctionalTestCase):
 
         self.assertEquals(
             peter.get_url(),
-            browser.css('.persons a.name').first.get('href'))
+            browser.css('.persons .name > a').first.get('href'))
