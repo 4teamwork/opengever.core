@@ -29,6 +29,7 @@ from opengever.contact.models import Organization
 from opengever.contact.models import OrgRole
 from opengever.contact.models import Person
 from opengever.contact.models import PhoneNumber
+from opengever.contact.models import URL
 from optparse import OptionParser
 from path import Path
 import csv
@@ -71,6 +72,7 @@ class CSVContactImporter(object):
         'organization',
         'person',
         'mail',
+        'url',
     ]
 
     def __init__(self):
@@ -134,6 +136,9 @@ class CSVContactImporter(object):
 
     def import_mail(self, path):
         MailSyncer(path)()
+
+    def import_url(self, path):
+        UrlSyncer(path)()
 
     def import_organization(self, path):
         OrganizationSyncer(path)()
@@ -354,6 +359,34 @@ class MailSyncer(ObjectSyncer):
         return MailAddress(
             contact_id=contact_id,
             address=self.decode_text(csv_row.get('mail_address')),
+            label=self.decode_text(csv_row.get('label')))
+
+
+class UrlSyncer(ObjectSyncer):
+
+    type_name = "Urls"
+
+    def update_rows_mapping(self):
+        self.rows_mapping['contact_id'] = 'contact_id'
+        self.rows_mapping['url'] = 'url'
+        self.rows_mapping['label'] = 'label'
+
+    def handle_objects_to_remove(self):
+        pass
+
+    def get_sql_obj(self, csv_row):
+        return None
+
+    def get_csv_obj(self, csv_row):
+        contact_id = self.get_contact_id_by_former_contact_id(
+            csv_row.get('contact_id'))
+
+        if not contact_id:
+            return None
+
+        return URL(
+            contact_id=contact_id,
+            url=self.decode_text(csv_row.get('url')),
             label=self.decode_text(csv_row.get('label')))
 
 
