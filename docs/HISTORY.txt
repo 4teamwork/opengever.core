@@ -5,6 +5,10 @@ Changelog
 4.10.0 (unreleased)
 -------------------
 
+- Fix/update script for bumblebee activation.
+  Add feature to calculate bumblebee checksums for archived documents.
+  [deiferni]
+
 - Fix showroom CSS loading order
   [Kevin Bieri]
 
