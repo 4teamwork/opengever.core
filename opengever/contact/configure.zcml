@@ -31,4 +31,9 @@
       handler=".hooks.installed"
       />
 
+  <utility
+      factory=".vocabularies.ContactsVocabularyFactory"
+      name="opengever.contact.ContactsVocabulary"
+      />
+
 </configure>

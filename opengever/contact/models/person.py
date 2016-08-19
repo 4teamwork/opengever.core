@@ -8,6 +8,12 @@ from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy.orm import relationship
+from opengever.ogds.models.query import BaseQuery
+
+
+class PersonQuery(BaseQuery):
+
+    searchable_fields = ['firstname', 'lastname']
 
 
 class Person(Contact):
@@ -42,3 +48,6 @@ class Person(Contact):
 
     def get_css_class(self):
         return 'contenttype-person'
+
+
+Person.query_cls = PersonQuery

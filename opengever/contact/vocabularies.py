@@ -1,46 +1,56 @@
-from five import grok
 from opengever.contact.models import Contact
+from opengever.contact.models import Organization
+from opengever.contact.models import Person
+from zope.interface import implementer
+from zope.interface import implements
 from zope.schema.interfaces import IVocabularyFactory
+from zope.schema.interfaces import IVocabularyTokenized
 from zope.schema.vocabulary import SimpleTerm
-from zope.schema.vocabulary import SimpleVocabulary
 
 
-class SQLSimpleVocabulary(SimpleVocabulary):
+@implementer(IVocabularyTokenized)
+class ContactsVocabulary(object):
+    """A vocabulary of all contacts (all persons and organizations).
 
-    def search(self, query_string):
-        """search method for `z3c.formwidget.autocomplete` support. Returns
-        all matching contacts.
-        """
-
-        if isinstance(query_string, str):
-            query_string = query_string.decode('utf8')
-        query = query_string.lower().split(' ')
-
-        for term in self:
-            if self._compare(query, term.title):
-                yield term
-
-    def _compare(self, query, value):
-        if not value:
-            return False
-
-        for word in query:
-            if len(word) > 0 and word not in value.lower():
-                return False
-        return True
-
-
-class ContactsAndUsersVocabularyFactory(grok.GlobalUtility):
-    """Vocabulary of contacts, users and the inbox of each client.
+    Providing a search method, which allows using the vocabulary in an
+    autocomplete field.
     """
 
-    grok.provides(IVocabularyFactory)
-    grok.name('opengever.contact.ContactsVocabulary')
+    @property
+    def queries(self):
+        return [Person.query, Organization.query]
+
+    def __contains__(self, value):
+        """Return whether the value is available in this source
+        """
+        return bool(Contact.query.get(value))
+
+    def createTerm(self, obj):
+        return SimpleTerm(value=obj.contact_id, title=obj.get_title())
+
+    def getTerm(self, value):
+        contact = Contact.query.get(value)
+        if not contact:
+            raise LookupError
+
+        return self.createTerm(contact)
+
+    def getTermByToken(self, token):
+        return self.getTerm(token)
+
+    def search(self, query_string):
+        text_filters = query_string.split()
+        for query in self.queries:
+            query = query.by_searchable_text(text_filters=text_filters)
+            for obj in query.all():
+                yield self.createTerm(obj)
+
+
+class ContactsVocabularyFactory(object):
+    """A vocabulary factory for the ContactsVocabulary.
+    """
+
+    implements(IVocabularyFactory)
 
     def __call__(self, context):
-        terms = []
-        for contact in Contact.query.all():
-            terms.append(SimpleTerm(
-                value=contact.contact_id, title=contact.get_title()))
-
-        return SQLSimpleVocabulary(terms)
+        return ContactsVocabulary()
