@@ -61,6 +61,28 @@ class TestPersonView(FunctionalTestCase):
         table.dicts()
 
     @browsing
+    def test_shows_archived_personal_information(self, browser):
+        peter = create(Builder('person')
+                       .having(salutation='Herr',
+                               firstname=u'Peter',
+                               lastname=u'M\xfcller',
+                               academic_title='Dr. rer. nat.'))
+        archived_peter = create(Builder('archived_person').having(
+                                contact=peter,
+                                salutation='Herr',
+                                firstname=u'Peter',
+                                lastname=u'Hanssen',
+                                academic_title='Magister'))
+
+        browser.login().open(self.contactfolder, view=peter.wrapper_id)
+        table = browser.css('#contactHistory .contact_details').first
+
+        [['Name', u'Peter Hanssen'],
+         ['Salutation', 'Herr'],
+         ['Academic title', 'Magister']]
+        table.dicts()
+
+    @browsing
     def test_shows_addresses_prefixed_with_label(self, browser):
         peter = create(Builder('person')
                        .having(firstname=u'Peter', lastname=u'M\xfcller'))
@@ -82,6 +104,24 @@ class TestPersonView(FunctionalTestCase):
         self.assertEquals([u'Dammweg 9\n3013 Bern',
                            u'S\xfcdweststrasse 24\n6315 Ober\xe4geri'],
                           browser.css('.address dd').text)
+
+    @browsing
+    def test_shows_archived_addresses_prefixed_with_label(self, browser):
+        peter = create(Builder('person')
+                       .having(firstname=u'Peter', lastname=u'M\xfcller'))
+
+        create(Builder('archived_address')
+               .for_contact(peter)
+               .labeled('Wochenendhaus')
+               .having(street=u'Waldstrasse 1', zip_code=u'1234',
+                       city=u'Hintertupfigen'))
+
+        browser.login().open(self.contactfolder, view=peter.wrapper_id)
+
+        self.assertEquals([u'Wochenendhaus'],
+                          browser.css('#contactHistory .address dt').text)
+        self.assertEquals([u'Waldstrasse 1\n1234 Hintertupfigen'],
+                          browser.css('#contactHistory .address dd').text)
 
     @browsing
     def test_shows_phonenumbers_prefixed_with_label(self, browser):
@@ -106,6 +146,23 @@ class TestPersonView(FunctionalTestCase):
                           browser.css('.phone_number dd').text)
 
     @browsing
+    def test_shows_archived_phonenumbers_prefixed_with_label(self, browser):
+        peter = create(Builder('person')
+                       .having(firstname=u'Peter', lastname=u'M\xfcller'))
+
+        create(Builder('archived_phonenumber')
+               .for_contact(peter)
+               .labeled('Rotary Club')
+               .having(phone_number=u'011 111 11 00'))
+
+        browser.login().open(self.contactfolder, view=peter.wrapper_id)
+
+        self.assertEquals([u'Rotary Club'],
+                          browser.css('#contactHistory .phone_number dt').text)
+        self.assertEquals(['011 111 11 00'],
+                          browser.css('#contactHistory .phone_number dd').text)
+
+    @browsing
     def test_shows_email_addresses_prefixed_with_label(self, browser):
         peter = create(Builder('person')
                        .having(firstname=u'Peter', lastname=u'M\xfcller'))
@@ -126,6 +183,23 @@ class TestPersonView(FunctionalTestCase):
                           browser.css('.mail dt').text)
         self.assertEquals([u'peter.m@example.com', u'peter.work@example.com'],
                           browser.css('.mail dd').text)
+
+    @browsing
+    def test_shows_archived_email_addresses_prefixed_with_label(self, browser):
+        peter = create(Builder('person')
+                       .having(firstname=u'Peter', lastname=u'M\xfcller'))
+
+        create(Builder('archived_mail_addresses')
+               .for_contact(peter)
+               .labeled('Privat')
+               .having(address=u'peterli@example.com'))
+
+        browser.login().open(self.contactfolder, view=peter.wrapper_id)
+
+        self.assertEquals([u'Privat'],
+                          browser.css('#contactHistory .mail dt').text)
+        self.assertEquals([u'peterli@example.com'],
+                          browser.css('#contactHistory .mail dd').text)
 
     @browsing
     def test_list_all_of_the_users_organizations(self, browser):
