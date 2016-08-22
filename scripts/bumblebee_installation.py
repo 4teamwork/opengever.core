@@ -5,37 +5,50 @@ To reindex the objects run:
 
     bin/instance run ./scripts/bumblebee_installation.py -m reindex
 
+To calculate checksums for objects archived in portal_repository run:
+
+    bin/instance run ./scripts/bumblebee_installation.py -m history
+
 To store the objects run:
 
-    bin/instance run ./scripts/bumblebee_installation.py -m reindex
+    bin/instance run ./scripts/bumblebee_installation.py -m store
 
-If you have to specify the path to your plone insance
-then you can use following parameter:
+If you have to specify the path to your plone instance you can use following
+parameter:
 
     -p <path/to/plonesite>
 
-Per default the timestamp wont be resetted. That means, already stored
-objects wont be stored again.
+By default the timestamp won't be reset. That means, already stored objects
+won't be stored again.
 
-If you want to reset the timestamp and store all objects again then you can
-define this with the following parameter:
+If you want to reset the timestamp and store all objects again you can
+specify this with the following parameter:
 
-    -r True
+    -r
 
 For help-information type in the following:
 
     bin/instance run ./scripts/bumblebee_installation.py -h
 
 """
+from ftw.bumblebee.document import DOCUMENT_CHECKSUM_ANNOTATION_KEY
 from ftw.bumblebee.interfaces import IBumblebeeConverter
+from ftw.bumblebee.interfaces import IBumblebeeDocument
+from ftw.upgrade.progresslogger import ProgressLogger
+from opengever.base.archeologist import Archeologist
+from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
 from opengever.core.debughelpers import get_first_plone_site
 from opengever.core.debughelpers import setup_plone
 from optparse import OptionParser
+from plone import api
+from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
 import logging
 import sys
+import transaction
 
-# Set global logger to info - this is necessary for the log-outbut with
+
+# Set global logger to info - this is necessary for the log-output with
 # bin/instance run.
 root_logger = logging.getLogger()
 root_logger.setLevel(logging.INFO)
@@ -47,13 +60,16 @@ root_logger.addHandler(handler)
 
 LOG = logging.getLogger('bumblebee-installation')
 
+
 parser = OptionParser()
 
-parser.add_option("-m", "--mode", dest="mode",
+parser.add_option("-m", "--mode", dest="mode", type="choice",
                   help="REQUIRED: Specify the upgrade-mode.",
-                  metavar="reindex|store")
+                  choices=['reindex', 'history', 'store', 'activate'],
+                  metavar="reindex|history|store|activate")
 
 parser.add_option("-r", "--reset-timestamp", dest="reset", default=False,
+                  action="store_true",
                   help="If set to true, all objects will be reindexed again. "
                        "Otherwise it wont update already stored objects if "
                        "you restart the script",
@@ -75,7 +91,7 @@ def main(app, argv=sys.argv[1:]):
         parser.print_help()
         parser.error(
             'Please specify the "mode" with "bin/instance run <yourscript> -m '
-            'reindex | store"\n'
+            'reindex | history | store | activate"\n'
             )
 
     if options.plone_path:
@@ -89,7 +105,34 @@ def main(app, argv=sys.argv[1:]):
 
     if mode == 'reindex':
         LOG.info("Start indexing objects...")
-        return converter.reindex()
+        converter.reindex()
+        return transaction.commit()
+
+    elif mode == 'history':
+        LOG.info("Start creating checksums for portal repository ...")
+        repository = api.portal.get_tool('portal_repository')
+        catalog = api.portal.get_tool('portal_catalog')
+
+        brains = catalog.unrestrictedSearchResults(
+            {'object_provides': 'ftw.bumblebee.interfaces.IBumblebeeable'})
+
+        for brain in ProgressLogger(
+                'Create checksums for objects in portal repository', brains,
+                logger=LOG):
+
+            obj = brain.getObject()
+            for version in repository.getHistory(obj):
+                # we have to calculate the checksum on the "restored" object
+                # returned by `portal_repository`. The archived object does not
+                # contain an accessible file without `portal_repository` magic.
+                version_checksum = IBumblebeeDocument(version.object).calculate_checksum()
+
+                archived_obj = Archeologist(obj, version).excavate()
+                annotations = IAnnotations(archived_obj)
+                annotations[DOCUMENT_CHECKSUM_ANNOTATION_KEY] = version_checksum
+                archived_obj._p_changed = True
+
+        return transaction.commit()
 
     elif mode == 'store':
         LOG.info("Start storing objects...")
@@ -99,6 +142,12 @@ def main(app, argv=sys.argv[1:]):
                 "Already converted objects will be skipped.")
 
         return converter.store(deferred=True, reset_timestamp=options.reset)
+
+    elif mode == 'activate':
+        api.portal.set_registry_record(
+            'is_feature_enabled', True, interface=IGeverBumblebeeSettings)
+        LOG.info("activating bumblebee feature in registry.")
+        return transaction.commit()
 
     else:
         parser.print_help()
