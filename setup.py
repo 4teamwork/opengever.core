@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '4.10.0'
+version = '4.10.1.dev0'
 maintainer = '4teamwork AG'
 
 
