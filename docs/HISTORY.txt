@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.10.0 (unreleased)
+4.10.0 (2016-08-23)
 -------------------
 
 - Fix/update script for bumblebee activation.
