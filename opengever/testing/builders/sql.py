@@ -11,10 +11,11 @@ from opengever.contact.models import ArchivedOrganization
 from opengever.contact.models import ArchivedPerson
 from opengever.contact.models import ArchivedPhoneNumber
 from opengever.contact.models import ArchivedURL
+from opengever.contact.models import ContactParticipation
 from opengever.contact.models import MailAddress
 from opengever.contact.models import Organization
 from opengever.contact.models import OrgRole
-from opengever.contact.models import Participation
+from opengever.contact.models import OrgRoleParticipation
 from opengever.contact.models import ParticipationRole
 from opengever.contact.models import Person
 from opengever.contact.models import PhoneNumber
@@ -478,9 +479,8 @@ class OrgRoleBuilder(SqlObjectBuilder):
 builder_registry.register('org_role', OrgRoleBuilder)
 
 
-class ParticipationBuilder(SqlObjectBuilder):
+class BaseParticipationBuilder(SqlObjectBuilder):
 
-    mapped_class = Participation
     id_argument_name = 'participation_id'
     roles = []
 
@@ -501,7 +501,19 @@ class ParticipationBuilder(SqlObjectBuilder):
             obj.add_roles(self.roles)
         return obj
 
-builder_registry.register('participation', ParticipationBuilder)
+
+class ParticipationBuilder(BaseParticipationBuilder):
+
+    mapped_class = ContactParticipation
+
+builder_registry.register('contact_participation', ParticipationBuilder)
+
+
+class ParticipationBuilder(BaseParticipationBuilder):
+
+    mapped_class = OrgRoleParticipation
+
+builder_registry.register('org_role_participation', ParticipationBuilder)
 
 
 class ParticipationRoleBuilder(SqlObjectBuilder):

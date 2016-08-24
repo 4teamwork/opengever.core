@@ -16,21 +16,21 @@ from zExceptions import Unauthorized
 import unittest2
 
 
-class TestParticipation(unittest2.TestCase):
+class TestContactParticipation(unittest2.TestCase):
 
     layer = MEMORY_DB_LAYER
 
     def setUp(self):
-        super(TestParticipation, self).setUp()
+        super(TestContactParticipation, self).setUp()
         self.contact = create(Builder('person').having(
             firstname=u'peter', lastname=u'hans'))
 
     def test_adding(self):
-        create(Builder('participation')
+        create(Builder('contact_participation')
                .having(contact=self.contact, dossier_oguid=Oguid('foo', 1234)))
 
     def test_participation_can_have_multiple_roles(self):
-        participation = create(Builder('participation').having(
+        participation = create(Builder('contact_participation').having(
             contact=self.contact,
             dossier_oguid=Oguid('foo', 1234)))
         role1 = create(Builder('participation_role').having(
@@ -43,7 +43,7 @@ class TestParticipation(unittest2.TestCase):
         self.assertEquals([role1, role2], participation.roles)
 
     def test_update_roles_removes_existing_no_longer_used_roles(self):
-        participation = create(Builder('participation').having(
+        participation = create(Builder('contact_participation').having(
             contact=self.contact,
             dossier_oguid=Oguid('foo', 1234)))
         role1 = create(Builder('participation_role').having(
@@ -60,7 +60,7 @@ class TestParticipation(unittest2.TestCase):
     def test_update_roles_add_new_roles(self):
         contact = create(Builder('person').having(
             firstname=u'peter', lastname=u'hans'))
-        participation = create(Builder('participation').having(
+        participation = create(Builder('contact_participation').having(
             contact=contact,
             dossier_oguid=Oguid('foo', 1234)))
         role1 = create(Builder('participation_role').having(
@@ -76,13 +76,49 @@ class TestParticipation(unittest2.TestCase):
                           [role.role for role in participation.roles])
 
 
+class TestOrgRoleParticipation(unittest2.TestCase):
+
+    layer = MEMORY_DB_LAYER
+
+    def test_adding(self):
+        person = create(Builder('person').having(
+            firstname=u'peter', lastname=u'hans'))
+        organization = create(Builder('organization').named('ACME'))
+        orgrole = create(Builder('org_role').having(
+            person=person, organization=organization, function=u'cheffe'))
+
+        participation = create(Builder('org_role_participation').having(
+            org_role=orgrole,
+            dossier_oguid=Oguid('foo', 1234)))
+
+    def test_participation_can_have_multiple_roles(self):
+        person = create(Builder('person').having(
+            firstname=u'peter', lastname=u'hans'))
+        organization = create(Builder('organization').named('ACME'))
+        orgrole = create(Builder('org_role').having(
+            person=person, organization=organization, function=u'cheffe'))
+
+        participation = create(Builder('org_role_participation').having(
+            org_role=orgrole,
+            dossier_oguid=Oguid('foo', 1234)))
+
+        role1 = create(Builder('participation_role').having(
+            participation=participation,
+            role=u'Sch\xf6ff'))
+        role2 = create(Builder('participation_role').having(
+            participation=participation,
+            role=u'Hanswutscht'))
+
+        self.assertEquals([role1, role2], participation.roles)
+
+
 class TestDossierParticipation(FunctionalTestCase):
 
     def test_relation_to_dossier(self):
         dossier = create(Builder('dossier'))
         contact = create(Builder('person').having(
             firstname=u'peter', lastname=u'hans'))
-        participation = create(Builder('participation').having(
+        participation = create(Builder('contact_participation').having(
             contact=contact,
             dossier_oguid=Oguid.for_object(dossier)))
 
@@ -96,7 +132,7 @@ class TestParticipationWrapper(FunctionalTestCase):
         self.dossier = create(Builder('dossier'))
         self.hans = create(Builder('person')
                            .having(firstname=u'Hans', lastname=u'M\xfcller'))
-        self.participation = create(Builder('participation')
+        self.participation = create(Builder('contact_participation')
                                     .for_dossier(self.dossier)
                                     .for_contact(self.hans))
 
@@ -257,7 +293,7 @@ class TestAddForm(FunctionalTestCase):
 
     @browsing
     def test_add_already_existing_participation_raise_validation_error(self, browser):
-        create(Builder('participation')
+        create(Builder('contact_participation')
                .having(contact=self.peter,
                        dossier_oguid=Oguid.for_object(self.dossier)))
 
@@ -281,7 +317,7 @@ class TestEditForm(FunctionalTestCase):
         self.peter = create(Builder('person')
                             .having(firstname=u'Peter', lastname=u'M\xfcller'))
         self.meier_ag = create(Builder('organization').named(u'Meier AG'))
-        self.participation = create(Builder('participation')
+        self.participation = create(Builder('contact_participation')
                                     .for_dossier(self.dossier)
                                     .for_contact(self.peter))
         create(Builder('participation_role').having(
@@ -338,7 +374,7 @@ class TestRemoveForm(FunctionalTestCase):
         self.peter = create(Builder('person')
                             .having(firstname=u'Peter', lastname=u'M\xfcller'))
         self.meier_ag = create(Builder('organization').named(u'Meier AG'))
-        self.participation = create(Builder('participation')
+        self.participation = create(Builder('contact_participation')
                                     .for_dossier(self.dossier)
                                     .for_contact(self.peter))
         create(Builder('participation_role').having(

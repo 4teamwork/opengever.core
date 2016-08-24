@@ -39,6 +39,10 @@ class Participation(Base, SQLFormSupport):
     __mapper_args__ = {'polymorphic_on': participation_type}
 
     @property
+    def participant(self):
+        raise NotImplementedError()
+
+    @property
     def wrapper_id(self):
         return 'participation-{}'.format(self.participation_id)
 
@@ -110,8 +114,12 @@ class ContactParticipation(Participation):
 
     __mapper_args__ = {'polymorphic_identity': 'contact_participation'}
 
-    contact_id = Column(Integer, ForeignKey('contacts.id'), nullable=False)
+    contact_id = Column(Integer, ForeignKey('contacts.id'))
     contact = relationship('Contact', back_populates='participations')
+
+    @property
+    def participant(self):
+        return self.contact
 
 
 class OrgRoleParticipation(Participation):
@@ -122,3 +130,7 @@ class OrgRoleParticipation(Participation):
 
     org_role_id = Column(Integer, ForeignKey('org_roles.id'))
     org_role = relationship('OrgRole', back_populates='participations')
+
+    @property
+    def participant(self):
+        return self.org_role

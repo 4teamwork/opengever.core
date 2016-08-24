@@ -17,11 +17,11 @@ class ParticipationTab(FunctionalTestCase):
         self.peter_ag = create(Builder('organization')
                                .having(name=u'Peter AG'))
 
-        create(Builder('participation')
+        create(Builder('contact_participation')
                .for_contact(self.hans)
                .for_dossier(self.dossier)
                .with_roles(['regard', 'final-drawing']))
-        create(Builder('participation')
+        create(Builder('contact_participation')
                .for_contact(self.peter_ag)
                .for_dossier(self.dossier)
                .with_roles(['participation']))
@@ -47,7 +47,7 @@ class ParticipationTab(FunctionalTestCase):
     @browsing
     def test_list_only_participations_of_the_current_dossier(self, browser):
         dossier_2 = create(Builder('dossier'))
-        create(Builder('participation')
+        create(Builder('contact_participation')
                .for_contact(self.sandra)
                .for_dossier(dossier_2)
                .with_roles(['regard, final-drawing']))
