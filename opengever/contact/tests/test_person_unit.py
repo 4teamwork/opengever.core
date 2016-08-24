@@ -79,6 +79,25 @@ class TestPerson(unittest2.TestCase):
         self.assertEquals([u'+41791234566', u'0315110000'],
                           [phone.phone_number for phone in peter.phonenumbers])
 
+    def test_person_can_have_multiple_urls(self):
+        peter = create(Builder('person')
+                       .having(firstname=u'Peter', lastname=u'M\xfcller'))
+
+        ftw = create(Builder('url')
+                     .for_contact(peter)
+                     .labeled(u'Info')
+                     .having(url=u'http://www.4teamwork.ch'))
+
+        gever = create(Builder('url')
+                       .for_contact(peter)
+                       .labeled(u'Info')
+                       .having(url=u'http://www.onegovgever.ch'))
+
+        self.assertEquals([ftw, gever], peter.urls)
+        self.assertEquals([u'http://www.4teamwork.ch',
+                           u'http://www.onegovgever.ch'],
+                          [url.url for url in peter.urls])
+
     def test_fullname_is_firstname_and_lastname_separated_with_a_space(self):
         peter = create(Builder('person')
                        .having(firstname=u'Peter', lastname=u'M\xfcller'))

@@ -5,11 +5,17 @@ from ftw.builder import builder_registry
 from ftw.builder import create
 from opengever.base.oguid import Oguid
 from opengever.contact.models import Address
+from opengever.contact.models import ArchivedAddress
+from opengever.contact.models import ArchivedMailAddress
+from opengever.contact.models import ArchivedOrganization
+from opengever.contact.models import ArchivedPerson
+from opengever.contact.models import ArchivedPhoneNumber
+from opengever.contact.models import ArchivedURL
 from opengever.contact.models import MailAddress
 from opengever.contact.models import Organization
+from opengever.contact.models import OrgRole
 from opengever.contact.models import Participation
 from opengever.contact.models import ParticipationRole
-from opengever.contact.models import OrgRole
 from opengever.contact.models import Person
 from opengever.contact.models import PhoneNumber
 from opengever.contact.models import URL
@@ -342,6 +348,18 @@ class PersonBuilder(SqlObjectBuilder):
 builder_registry.register('person', PersonBuilder)
 
 
+class ArchivedPersonBuilder(SqlObjectBuilder):
+
+    mapped_class = ArchivedPerson
+    id_argument_name = 'archived_person_id'
+
+    def __init__(self, session):
+        super(ArchivedPersonBuilder, self).__init__(session)
+        self.arguments['actor_id'] = TEST_USER_ID
+
+builder_registry.register('archived_person', ArchivedPersonBuilder)
+
+
 class ContactAttributesBuilder(SqlObjectBuilder):
     """Base class for contacts attributes builders like the
     AddressBuilder, PhoneNumberBuilder or the MailAddressBuilder.
@@ -356,12 +374,28 @@ class ContactAttributesBuilder(SqlObjectBuilder):
         return self
 
 
+class ArchivedContactAttributesBuilder(ContactAttributesBuilder):
+    """Base class for archived contacts attributes."""
+
+    def __init__(self, session):
+        super(ArchivedContactAttributesBuilder, self).__init__(session)
+        self.arguments['actor_id'] = TEST_USER_ID
+
+
 class AddressBuilder(ContactAttributesBuilder):
 
     mapped_class = Address
     id_argument_name = 'address_id'
 
 builder_registry.register('address', AddressBuilder)
+
+
+class ArchivedAddressBuilder(ArchivedContactAttributesBuilder):
+
+    mapped_class = ArchivedAddress
+    id_argument_name = 'archived_address_id'
+
+builder_registry.register('archived_address', ArchivedAddressBuilder)
 
 
 class PhoneNumberBuilder(ContactAttributesBuilder):
@@ -372,6 +406,14 @@ class PhoneNumberBuilder(ContactAttributesBuilder):
 builder_registry.register('phonenumber', PhoneNumberBuilder)
 
 
+class ArchivedPhoneNumberBuilder(ArchivedContactAttributesBuilder):
+
+    mapped_class = ArchivedPhoneNumber
+    id_argument_name = 'archived_phonenumber_id'
+
+builder_registry.register('archived_phonenumber', ArchivedPhoneNumberBuilder)
+
+
 class MailAddressBuilder(ContactAttributesBuilder):
 
     mapped_class = MailAddress
@@ -380,12 +422,28 @@ class MailAddressBuilder(ContactAttributesBuilder):
 builder_registry.register('mailaddress', MailAddressBuilder)
 
 
+class ArchivedMailAddressBuilder(ArchivedContactAttributesBuilder):
+
+    mapped_class = ArchivedMailAddress
+    id_argument_name = 'archived_mail_address_id'
+
+builder_registry.register('archived_mail_addresses', ArchivedMailAddressBuilder)
+
+
 class URLBuilder(ContactAttributesBuilder):
 
     mapped_class = URL
     id_argument_name = 'url_id'
 
 builder_registry.register('url', URLBuilder)
+
+
+class ArchivedURLBuilder(ArchivedContactAttributesBuilder):
+
+    mapped_class = ArchivedURL
+    id_argument_name = 'archived_url_id'
+
+builder_registry.register('archived_url', ArchivedURLBuilder)
 
 
 class OrganizationBuilder(SqlObjectBuilder):
@@ -398,6 +456,18 @@ class OrganizationBuilder(SqlObjectBuilder):
         return self
 
 builder_registry.register('organization', OrganizationBuilder)
+
+
+class ArchivedOrganizationBuilder(SqlObjectBuilder):
+
+    mapped_class = ArchivedOrganization
+    id_argument_name = 'archived_organization_id'
+
+    def __init__(self, session):
+        super(ArchivedOrganizationBuilder, self).__init__(session)
+        self.arguments['actor_id'] = TEST_USER_ID
+
+builder_registry.register('archived_organization', ArchivedOrganizationBuilder)
 
 
 class OrgRoleBuilder(SqlObjectBuilder):

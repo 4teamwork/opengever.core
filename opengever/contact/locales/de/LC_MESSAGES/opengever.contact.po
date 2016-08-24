@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2016-07-26 06:59+0000\n"
+"POT-Creation-Date: 2016-08-16 13:12+0000\n"
 "PO-Revision-Date: 2011-01-05 15:15+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Domain: DOMAIN\n"
 
 #. Default: "Add Person"
-#: ./opengever/contact/browser/person.py:104
+#: ./opengever/contact/browser/person.py:108
 msgid "Add Person"
 msgstr "Person hinzufügen"
 
@@ -118,7 +118,7 @@ msgid "internet"
 msgstr "Internet"
 
 #. Default: "Academic title"
-#: ./opengever/contact/browser/person.py:78
+#: ./opengever/contact/browser/person.py:82
 #: ./opengever/contact/browser/templates/person.pt:30
 #: ./opengever/contact/contact.py:69
 msgid "label_academic_title"
@@ -139,6 +139,34 @@ msgstr "Adresszusatz"
 #: ./opengever/contact/browser/templates/person.pt:35
 msgid "label_addresses"
 msgstr "Adressen"
+
+#. Default: "Archived Addresses"
+#: ./opengever/contact/browser/templates/organization.pt:104
+#: ./opengever/contact/browser/templates/person.pt:123
+msgid "label_archived_addresses"
+msgstr "Archivierte Adressen"
+
+#. Default: "Archived Mail Addresses"
+#: ./opengever/contact/browser/templates/organization.pt:125
+#: ./opengever/contact/browser/templates/person.pt:144
+msgid "label_archived_mail"
+msgstr "Archivierte Mail Adressen"
+
+#. Default: "Archived Information"
+#: ./opengever/contact/browser/templates/organization.pt:86
+msgid "label_archived_organizations"
+msgstr "Archivierte Informationen"
+
+#. Default: "Archived Personal Information"
+#: ./opengever/contact/browser/templates/person.pt:96
+msgid "label_archived_persons"
+msgstr "Archivierte persönliche Informationen"
+
+#. Default: "Archived Phone Numbers"
+#: ./opengever/contact/browser/templates/organization.pt:143
+#: ./opengever/contact/browser/templates/person.pt:162
+msgid "label_archived_phone_numbers"
+msgstr "Archivierte Telefonnummern"
 
 #. Default: "Cancel"
 #: ./opengever/contact/browser/templates/person_edit.pt:28
@@ -171,7 +199,7 @@ msgid "label_department"
 msgstr "Abteilung"
 
 #. Default: "Description"
-#: ./opengever/contact/browser/person.py:93
+#: ./opengever/contact/browser/person.py:97
 #: ./opengever/contact/contact.py:145
 msgid "label_description"
 msgstr "Beschreibung"
@@ -188,14 +216,14 @@ msgid "label_email2"
 msgstr "E-Mail 2"
 
 #. Default: "Firstname"
-#: ./opengever/contact/browser/person.py:83
+#: ./opengever/contact/browser/person.py:87
 #: ./opengever/contact/contact.py:82
 #: ./opengever/contact/contactfolder.py:112
 msgid "label_firstname"
 msgstr "Vorname"
 
 #. Default: "Lastname"
-#: ./opengever/contact/browser/person.py:88
+#: ./opengever/contact/browser/person.py:92
 #: ./opengever/contact/contact.py:75
 #: ./opengever/contact/contactfolder.py:107
 msgid "label_lastname"
@@ -268,7 +296,7 @@ msgid "label_picture"
 msgstr "Bild"
 
 #. Default: "Salutation"
-#: ./opengever/contact/browser/person.py:73
+#: ./opengever/contact/browser/person.py:77
 #: ./opengever/contact/browser/templates/person.pt:26
 #: ./opengever/contact/contact.py:64
 msgid "label_salutation"
@@ -313,3 +341,4 @@ msgstr "${amount} Treffer."
 #: ./opengever/contact/contact.py:44
 msgid "telefon"
 msgstr "Telefon"
+

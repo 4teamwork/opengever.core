@@ -39,6 +39,19 @@ class TestOrganizationView(FunctionalTestCase):
                       browser.css('body').first.get('class'))
 
     @browsing
+    def test_shows_archived_organizations(self, browser):
+        organization = create(Builder('organization').named(u'4teamwork'))
+        archived_organization = create(Builder('archived_organization').having(
+            contact=organization,
+            name=u'habegger b\xfchlmann & co'))
+
+        browser.login().open(organization.get_url())
+
+        old_name = browser.css(
+            '#contactHistory .contact_details').first.lists()[1]
+        self.assertEquals(['Name', u'habegger b\xfchlmann & co'], old_name)
+
+    @browsing
     def test_shows_addresses_prefixed_with_label(self, browser):
         organization = create(Builder('organization').named(u'4teamwork'))
 
@@ -59,6 +72,23 @@ class TestOrganizationView(FunctionalTestCase):
         self.assertEquals([u'Dammweg 9\n3013 Bern',
                            u'S\xfcdweststrasse 24\n1700 Fribourg'],
                           browser.css('.address dd').text)
+
+    @browsing
+    def test_shows_archived_addresses_prefixed_with_label(self, browser):
+        organization = create(Builder('organization').named(u'4teamwork'))
+
+        create(Builder('archived_address')
+               .for_contact(organization)
+               .labeled('Hauptsitz')
+               .having(street=u'Engehaldenstrasse 42', zip_code=u'3012',
+                       city=u'Bern'))
+
+        browser.login().open(organization.get_url())
+
+        self.assertEquals([u'Hauptsitz'],
+                          browser.css('#contactHistory .address dt').text)
+        self.assertEquals([u'Engehaldenstrasse 42\n3012 Bern'],
+                          browser.css('#contactHistory .address dd').text)
 
     @browsing
     def test_shows_phonenumbers_prefixed_with_label(self, browser):
@@ -82,6 +112,22 @@ class TestOrganizationView(FunctionalTestCase):
                           browser.css('.phone_number dd').text)
 
     @browsing
+    def test_shows_archived_phonenumbers_prefixed_with_label(self, browser):
+        organization = create(Builder('organization').named(u'4teamwork'))
+
+        create(Builder('archived_phonenumber')
+               .for_contact(organization)
+               .labeled('Support')
+               .having(phone_number=u'012 34 56 78'))
+
+        browser.login().open(organization.get_url())
+
+        self.assertEquals([u'Support'],
+                          browser.css('#contactHistory .phone_number dt').text)
+        self.assertEquals(['012 34 56 78'],
+                          browser.css('#contactHistory .phone_number dd').text)
+
+    @browsing
     def test_shows_email_addresses_prefixed_with_label(self, browser):
         organization = create(Builder('organization').named(u'4teamwork'))
 
@@ -101,6 +147,22 @@ class TestOrganizationView(FunctionalTestCase):
                           browser.css('.mail dt').text)
         self.assertEquals([u'info@example.com', u'support@example.com'],
                           browser.css('.mail dd').text)
+
+    @browsing
+    def test_shows_archived_email_addresses_prefixed_with_label(self, browser):
+        organization = create(Builder('organization').named(u'4teamwork'))
+
+        create(Builder('archived_mail_addresses')
+               .for_contact(organization)
+               .labeled('Sales')
+               .having(address=u'sales@example.com'))
+
+        browser.login().open(organization.get_url())
+
+        self.assertEquals([u'Sales'],
+                          browser.css('#contactHistory .mail dt').text)
+        self.assertEquals([u'sales@example.com'],
+                          browser.css('#contactHistory .mail dd').text)
 
     @browsing
     def test_lists_all_related_persons(self, browser):

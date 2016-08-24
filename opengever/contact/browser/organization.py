@@ -1,3 +1,4 @@
+from opengever.ogds.base.actor import Actor
 from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.interface import implements
@@ -19,3 +20,6 @@ class OrganizationView(BrowserView):
 
     def __call__(self):
         return self.template()
+
+    def get_actor_link(self, archive):
+        return Actor.lookup(archive.actor_id).get_link()

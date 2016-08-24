@@ -29,6 +29,11 @@ class Contact(Base, SQLFormSupport):
     urls = relationship("URL", back_populates="contact")
     participations = relationship("Participation", back_populates="contact")
 
+    archived_contacts = relationship("ArchivedContact", back_populates="contact")
+    archived_addresses = relationship("ArchivedAddress", back_populates="contact")
+    archived_mail_addresses = relationship("ArchivedMailAddress", back_populates="contact")
+    archived_phonenumbers = relationship("ArchivedPhoneNumber", back_populates="contact")
+    archived_urls = relationship("ArchivedURL", back_populates="contact")
+
     __mapper_args__ = {'polymorphic_on': contact_type,
-                       'polymorphic_identity': 'contact',
                        'with_polymorphic': '*'}
