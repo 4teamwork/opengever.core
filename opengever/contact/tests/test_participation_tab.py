@@ -78,7 +78,6 @@ class ParticipationTab(FunctionalTestCase):
 
         edit_link = browser.css('#participation_listing > li .edit-action').first
 
-        self.assertEquals(
-            'http://nohost/plone/dossier-1/edit-contact-participation?participation_id=1',
-            edit_link.get('href'))
         self.assertEquals('Edit', edit_link.text)
+        self.assertEquals('http://nohost/plone/dossier-1/participation-1/edit',
+                          edit_link.get('href'))

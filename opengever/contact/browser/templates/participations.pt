@@ -14,14 +14,14 @@
     <ul class="actions">
       <li>
         <a class="edit-action"
-           tal:attributes="href string:${context/absolute_url}/edit-contact-participation?participation_id=${participation/participation_id}"
+           tal:attributes="href string:${context/absolute_url}/${participation/wrapper_id}/edit"
            i18n:translate="button_edit">
           Edit
         </a>
       </li>
       <li>
       <a class="remove-action"
-         tal:attributes="href string:${context/absolute_url}/remove-contact-participation?participation_id=${participation/participation_id}"
+         tal:attributes="href string:${context/absolute_url}/${participation/wrapper_id}/remove"
          i18n:translate="button_remove">
         Remove
       </a>
