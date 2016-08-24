@@ -87,6 +87,37 @@ class TestDossierParticipation(FunctionalTestCase):
         self.assertEqual(dossier, participation.resolve_dossier())
 
 
+class TestParticipationWrapper(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestParticipationWrapper, self).setUp()
+        self.dossier = create(Builder('dossier'))
+        self.hans = create(Builder('person')
+                           .having(firstname=u'Hans', lastname=u'M\xfcller'))
+        self.participation = create(Builder('participation')
+                                    .for_dossier(self.dossier)
+                                    .for_contact(self.hans))
+
+    @browsing
+    def test_dossier_participation_endpoint(self, browser):
+        browser.login().open('{}/participation-1/edit'.format(
+            self.dossier.absolute_url()))
+
+        self.assertEqual(
+            [u'Edit Participation of Hans M\xfcller'],
+            browser.css('h1').text)
+        self.assertEqual(
+            [u'You are here: Client1 / dossier-1 / Participation of Hans M\xfcller'],
+            browser.css('#portal-breadcrumbs').text)
+
+    @browsing
+    def test_cross_injection_raises_unauthorized(self, browser):
+        dossier2 = create(Builder('dossier'))
+        with self.assertRaises(Unauthorized):
+            browser.login().open('{}/participation-1/edit'.format(
+                dossier2.absolute_url()))
+
+
 class TestAddParticipationAction(FunctionalTestCase):
 
     def setUp(self):
@@ -131,7 +162,7 @@ class TestAddForm(FunctionalTestCase):
         browser.login().open(self.dossier, view='add-sql-participation')
         browser.fill({'Contact': str(self.peter.contact_id),
                       'Roles': ['Regard']})
-        browser.click_on('Add')
+        browser.click_on('Save')
 
         participation = Participation.query.first()
         self.assertEquals(self.peter.person_id,
@@ -145,7 +176,7 @@ class TestAddForm(FunctionalTestCase):
         browser.login().open(self.dossier, view='add-sql-participation')
         browser.fill({'Contact': str(self.meier_ag.contact_id),
                       'Roles': ['Final drawing', 'Regard']})
-        browser.click_on('Add')
+        browser.click_on('Save')
 
         participation = Participation.query.first()
         self.assertEquals(self.meier_ag.organization_id,
@@ -163,7 +194,7 @@ class TestAddForm(FunctionalTestCase):
         browser.login().open(self.dossier, view='add-sql-participation')
         browser.fill({'Contact': str(self.peter.contact_id),
                       'Roles': ['Final drawing', 'Regard']})
-        browser.click_on('Add')
+        browser.click_on('Save')
 
         self.assertEquals(['There were some errors.'], error_messages())
         self.assertEquals(
@@ -201,7 +232,7 @@ class TestEditForm(FunctionalTestCase):
         browser.fill({'Roles': ['Participation', 'Regard']})
         browser.click_on('Save')
 
-        self.assertEquals(['Participation updated'], info_messages())
+        self.assertEquals(['Changes saved'], info_messages())
         self.assertEquals(
             'http://nohost/plone/dossier-1#participations', browser.url)
         self.assertEquals(

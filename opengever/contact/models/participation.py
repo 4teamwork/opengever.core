@@ -1,6 +1,8 @@
 from opengever.base.model import Base
 from opengever.base.model import create_session
+from opengever.base.model import SQLFormSupport
 from opengever.base.oguid import Oguid
+from opengever.contact import _
 from opengever.contact.models.participation_role import ParticipationRole
 from opengever.ogds.models import UNIT_ID_LENGTH
 from opengever.ogds.models.query import BaseQuery
@@ -23,7 +25,7 @@ class ParticipationQuery(BaseQuery):
             Participation.contact == contact)
 
 
-class Participation(Base):
+class Participation(Base, SQLFormSupport):
     """Lets contacts participate in dossiers with specified roles.
     """
 
@@ -37,6 +39,23 @@ class Participation(Base):
     dossier_int_id = Column(Integer, nullable=False)
     dossier_oguid = composite(Oguid, dossier_admin_unit_id, dossier_int_id)
     roles = relationship('ParticipationRole', back_populates='participation')
+
+    @property
+    def wrapper_id(self):
+        return 'participation-{}'.format(self.participation_id)
+
+    def get_url(self, view=u''):
+        elements = [self.dossier_oguid.resolve_object().absolute_url(),
+                    self.wrapper_id]
+        if view:
+            elements.append(view)
+
+        return '/'.join(elements)
+
+    def get_title(self):
+        return _(u'label_participation_of',
+                 default=u'Participation of ${contact_title}',
+                 mapping={'contact_title': self.contact.get_title()})
 
     def resolve_dossier(self):
         return self.dossier_oguid.resolve_object()
