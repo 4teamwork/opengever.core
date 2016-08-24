@@ -21,15 +21,14 @@ from opengever.contact.models import OrgRole
 from opengever.contact.models import Person
 from opengever.contact.models import PhoneNumber
 from opengever.contact.models import URL
-from optparse import OptionParser
-from path import Path
+import argparse
 import csv
 import logging
 import sys
 import transaction
 
 
-# Set global logger to info - this is necessary for the log-outbut with
+# Set global logger to info - this is necessary for the log-output with
 # bin/instance run.
 root_logger = logging.getLogger()
 root_logger.setLevel(logging.INFO)
@@ -43,10 +42,6 @@ LOG = logging.getLogger('contacts-import')
 
 
 class BadTypeException(AttributeError):
-    pass
-
-
-class BadPathException(AttributeError):
     pass
 
 
@@ -71,21 +66,21 @@ class ObjectSyncer(object):
     stat_removed = 0
     stat_total = 0
 
-    csv_path = None
+    file_ = None
 
     sql_object = None
     csv_object = None
 
-    def __init__(self, csv_path):
+    def __init__(self, file_):
         self.db_session = create_session()
-        self.csv_path = csv_path
+        self.file_ = file_
         self.update_rows_mapping()
 
     def __call__(self):
         LOG.info("Syncing {}...".format(self.type_name))
         self.reset_statistic()
 
-        for row in self.reader(self.csv_path, self.rows_mapping.keys()):
+        for row in self.reader(self.file_, self.rows_mapping.keys()):
             self.stat_total += 1
 
             sql_object = self.get_sql_obj(row)
@@ -106,17 +101,10 @@ class ObjectSyncer(object):
 
         transaction.commit()
 
-    def reader(self, path, rows):
-        self.validate_header(rows)
-
-        with open(path, 'rb') as csvfile:
-            reader = csv.DictReader(csvfile, rows)
-            for row in reader:
-                if reader.line_num <= 1:
-                    #skip header row
-                    continue
-
-                yield row
+    def reader(self, file_, rows):
+        self.validate_header(file_, rows)
+        for row in csv.DictReader(file_, rows):
+            yield row
 
     def add_object(self, obj):
         self.db_session.add(obj)
@@ -146,13 +134,12 @@ class ObjectSyncer(object):
     def get_csv_obj(self, csv_row):
         raise NotImplementedError()
 
-    def validate_header(self, rows):
-        with open(self.csv_path, 'rb') as csvfile:
-            reader = csv.reader(csvfile)
-            header_rows = reader.next()
+    def validate_header(self, file_, rows):
+        reader = csv.reader(file_)
+        header_rows = reader.next()
 
-            if rows == header_rows:
-                return True
+        if rows == header_rows:
+            return True
 
         raise BadCSVFormatException(
             "The csv-format is broken.\n"
@@ -185,12 +172,6 @@ class ObjectSyncer(object):
             return text
 
         return text.decode('utf-8')
-
-    def get_contact_id_by_former_contact_id(self, former_contact_id):
-        contact = Contact.query.filter(
-            Contact.former_contact_id == former_contact_id).first()
-
-        return contact.contact_id if contact else None
 
 
 class OrganizationSyncer(ObjectSyncer):
@@ -256,7 +237,7 @@ class MailSyncer(ObjectSyncer):
         return None
 
     def get_csv_obj(self, csv_row):
-        contact_id = self.get_contact_id_by_former_contact_id(
+        contact_id = Contact.query.get_by_former_contact_id(
             csv_row.get('contact_id'))
 
         if not contact_id:
@@ -284,7 +265,7 @@ class UrlSyncer(ObjectSyncer):
         return None
 
     def get_csv_obj(self, csv_row):
-        contact_id = self.get_contact_id_by_former_contact_id(
+        contact_id = Contact.query.get_by_former_contact_id(
             csv_row.get('contact_id'))
 
         if not contact_id:
@@ -312,7 +293,7 @@ class PhoneNumberSyncer(ObjectSyncer):
         return None
 
     def get_csv_obj(self, csv_row):
-        contact_id = self.get_contact_id_by_former_contact_id(
+        contact_id = Contact.query.get_by_former_contact_id(
             csv_row.get('contact_id'))
 
         if not contact_id:
@@ -345,7 +326,7 @@ class AddressSyncer(ObjectSyncer):
         return None
 
     def get_csv_obj(self, csv_row):
-        contact_id = self.get_contact_id_by_former_contact_id(
+        contact_id = Contact.query.get_by_former_contact_id(
             csv_row.get('contact_id'))
 
         if not contact_id:
@@ -375,10 +356,10 @@ class OrgRoleSyncer(ObjectSyncer):
         return None
 
     def get_csv_obj(self, csv_row):
-        person_id = self.get_contact_id_by_former_contact_id(
+        person_id = Contact.query.get_by_former_contact_id(
             csv_row.get('person_id'))
 
-        organization_id = self.get_contact_id_by_former_contact_id(
+        organization_id = Contact.query.get_by_former_contact_id(
             csv_row.get('organisation_id'))
 
         if not person_id or not organization_id:
@@ -395,7 +376,7 @@ class CSVContactImporter(object):
     run the correct sync-objects.
     """
 
-    allowed_object_types = {
+    import_types = {
         'organization': OrganizationSyncer,
         'person': PersonSyncer,
         'mail': MailSyncer,
@@ -406,64 +387,27 @@ class CSVContactImporter(object):
     }
 
     def __init__(self):
-        self.parser = OptionParser()
-        self.parser.add_option(
-            "-p", "--path", dest="path",
-            help="REQUIRED: Specify the path to a csv-file which "
+        self.parser = argparse.ArgumentParser()
+        self.parser.add_argument(
+            "-p", "--path", dest="file_", required=True,
+            type=argparse.FileType('r+'),
+            help="Specify the path to a csv-file which "
                  "you want to import.")
 
-        self.parser.add_option(
-            "-t", "--object_type", dest="object_type",
-            help="REQUIRED: Set the object type name you want to create.\n"
+        self.parser.add_argument(
+            "-t", "--object_type", dest="object_type", required=True,
+            choices=self.import_types.keys(),
+            help="Set the object type name you want to create.\n"
                  "Available types: {}".format(
-                     ', '.join(self.allowed_object_types.keys())))
+                     ', '.join(self.import_types.keys())))
 
-        self.parser.add_option(
+        self.parser.add_argument(
             "-c", "--config", dest="config",
             help="Zope-Config (do not use this)")
 
     def __call__(self, app, argv=sys.argv[1:]):
-        options, args = self.parser.parse_args()
-
-        path = options.path if options.path else None
-        if not path:
-            self.print_parser_error('Please specify the "path" with "-p path/to/csv"\n')
-
-        object_type = options.object_type if options.object_type else None
-        if not object_type:
-            self.print_parser_error(
-                'Please specify a "object_type" with "-t object_type"\n')
-
-        try:
-            self.run_import(path, object_type)
-        except BadPathException:
-            self.print_parser_error(
-                'At "{}" is no file."\n'
-                'Please specify a valid path to a csv-file.'.format(path))
-        except BadTypeException:
-            self.print_parser_error(
-                "The type '{}'' is not allowed to import. Please use one of the "
-                "following types: {}".format(
-                    object_type, ', '.join(self.allowed_object_types.keys())))
-
-    def is_type_allowed(self, object_type):
-        return object_type in self.allowed_object_types.keys()
-
-    def is_valid_path(self, path):
-        return path.isfile()
-
-    def run_import(self, path, object_type):
-        path = Path(path)
-        if not self.is_valid_path(path):
-            raise BadPathException()
-        if not self.is_type_allowed(object_type):
-            raise BadTypeException()
-
-        self.allowed_object_types.get(object_type)(path)()
-
-    def print_parser_error(self, msg):
-        self.parser.print_help()
-        self.parser.error(msg)
+        options = self.parser.parse_args()
+        self.import_types.get(options.object_type)(options.file_)()
 
 
 if __name__ == '__main__':
