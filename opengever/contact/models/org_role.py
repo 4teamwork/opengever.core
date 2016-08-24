@@ -25,3 +25,6 @@ class OrgRole(Base):
 
     function = Column(String(CONTENT_TITLE_LENGTH))
     description = Column(UnicodeCoercingText)
+
+    participations = relationship("OrgRoleParticipation",
+                                  back_populates="org_role")

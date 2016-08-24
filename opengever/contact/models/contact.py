@@ -27,7 +27,8 @@ class Contact(Base, SQLFormSupport):
 
     phonenumbers = relationship("PhoneNumber", back_populates="contact")
     urls = relationship("URL", back_populates="contact")
-    participations = relationship("Participation", back_populates="contact")
+    participations = relationship("ContactParticipation",
+                                  back_populates="contact")
 
     archived_contacts = relationship("ArchivedContact", back_populates="contact")
     archived_addresses = relationship("ArchivedAddress", back_populates="contact")

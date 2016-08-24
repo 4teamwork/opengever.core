@@ -22,19 +22,21 @@ class ParticipationQuery(BaseQuery):
 
 
 class Participation(Base, SQLFormSupport):
-    """Lets contacts participate in dossiers with specified roles.
+    """Base class for participations.
     """
 
     __tablename__ = 'participations'
 
     participation_id = Column('id', Integer, Sequence('participations_id_seq'),
                               primary_key=True)
-    contact_id = Column(Integer, ForeignKey('contacts.id'), nullable=False)
-    contact = relationship('Contact', back_populates='participations')
+
     dossier_admin_unit_id = Column(String(UNIT_ID_LENGTH), nullable=False)
     dossier_int_id = Column(Integer, nullable=False)
     dossier_oguid = composite(Oguid, dossier_admin_unit_id, dossier_int_id)
     roles = relationship('ParticipationRole', back_populates='participation')
+
+    participation_type = Column(String(30), nullable=False)
+    __mapper_args__ = {'polymorphic_on': participation_type}
 
     @property
     def wrapper_id(self):
@@ -100,3 +102,23 @@ class Participation(Base, SQLFormSupport):
 
 
 Participation.query_cls = ParticipationQuery
+
+
+class ContactParticipation(Participation):
+    """Let Contacts participate in dossiers with specified roles.
+    """
+
+    __mapper_args__ = {'polymorphic_identity': 'contact_participation'}
+
+    contact_id = Column(Integer, ForeignKey('contacts.id'), nullable=False)
+    contact = relationship('Contact', back_populates='participations')
+
+
+class OrgRoleParticipation(Participation):
+    """Let OrgRoles participate in dossiers with specified roles.
+    """
+
+    __mapper_args__ = {'polymorphic_identity': 'org_role_participation'}
+
+    org_role_id = Column(Integer, ForeignKey('org_roles.id'))
+    org_role = relationship('OrgRole', back_populates='participations')

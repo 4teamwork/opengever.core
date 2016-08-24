@@ -5,7 +5,7 @@ from opengever.base.browser.modelforms import ModelEditForm
 from opengever.base.oguid import Oguid
 from opengever.contact import _
 from opengever.contact.models import Contact
-from opengever.contact.models import Participation
+from opengever.contact.models import ContactParticipation
 from plone import api
 from plone.directives import form
 from plone.formwidget.autocomplete import AutocompleteFieldWidget
@@ -44,13 +44,13 @@ class IParticipation(form.Schema):
 class ParticipationAddForm(ModelAddForm):
     label = _(u'label_add_participation', default=u'Add Participation')
     fields = z3c.form.field.Fields(IParticipation)
-    model_class = Participation
+    model_class = ContactParticipation
 
     fields['contact'].widgetFactory = AutocompleteFieldWidget
     fields['roles'].widgetFactory = CheckBoxFieldWidget
 
     def validate(self, data):
-        query = Participation.query.by_dossier(self.context).filter_by(
+        query = self.model_class.query.by_dossier(self.context).filter_by(
             contact_id=data.get('contact'))
         if query.count():
             raise ActionExecutionError(Invalid(
