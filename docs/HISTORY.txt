@@ -5,7 +5,8 @@ Changelog
 4.10.1 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Move bumblebee installation script to opengever.maintenance.
+  [phgross]
 
 
 4.10.0 (2016-08-23)
