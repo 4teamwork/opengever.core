@@ -50,26 +50,24 @@ class BadCSVFormatException(AttributeError):
 
 
 class ObjectSyncer(object):
-    """Use the objectsyncer to sync a sql-table with a csv-file.
+    """Use the objectsyncer to sync a sql-table with a file.
     """
     db_session = None
 
-    # Key = csv-row
-    # Value = sql-row
-    rows_mapping = OrderedDict()
+    rows_mapping = OrderedDict()  # key = file-row, value = sql-row
 
     # For logging
     type_name = ""
 
     stat_updated = 0
     stat_added = 0
-    stat_removed = 0
+    stat_deleted = 0
     stat_total = 0
 
     file_ = None
 
-    sql_object = None
-    csv_object = None
+    internal_object = None
+    remote_object = None
 
     def __init__(self, file_):
         self.db_session = create_session()
@@ -77,24 +75,26 @@ class ObjectSyncer(object):
         self.update_rows_mapping()
 
     def __call__(self):
+        """Starts the sync-process
+        """
         LOG.info("Syncing {}...".format(self.type_name))
         self.reset_statistic()
 
         for row in self.reader(self.file_, self.rows_mapping.keys()):
             self.stat_total += 1
 
-            sql_object = self.get_sql_obj(row)
-            csv_object = self.get_csv_obj(row)
+            internal_object = self.get_internal_obj(row)
+            remote_object = self.get_remote_object(row)
 
-            if not csv_object:
+            if not remote_object:
                 continue
 
-            if sql_object:
-                self.update_object(csv_object, sql_object)
+            if internal_object:
+                self.update_object(remote_object, internal_object)
             else:
-                self.add_object(csv_object)
+                self.add_object(remote_object)
 
-        self.handle_objects_to_remove()
+        self.remove_object()
 
         LOG.info("Syncing of {} succeeded".format(self.type_name))
         self.log_statistic()
@@ -102,15 +102,52 @@ class ObjectSyncer(object):
         transaction.commit()
 
     def reader(self, file_, rows):
-        self.validate_header(file_, rows)
-        for row in csv.DictReader(file_, rows):
-            yield row
+        """Reads the file and returns each row as a dict.
+        """
+        raise NotImplementedError
+
+    def update_rows_mapping(self):
+        """This function will be called in the init of the class.
+
+        Use it to update the rows_mapping dict.
+
+        i.e.:
+
+        self.rows_mapping['name'] = 'name'
+        """
+        raise NotImplementedError()
+
+    def get_internal_obj(self, row):
+        """Returns the related existing objects depending on
+        the current row.
+        """
+        raise NotImplementedError()
+
+    def get_remote_object(self, row):
+        """Creates and returns a new object (without adding it
+        to the db) instance with the given attributes in the row.
+        """
+        raise NotImplementedError()
+
+    def remove_object(self, obj):
+        """Removes an object from the db
+        """
+        self.db_session.delete(obj)
+        self.stat_deleted += 1
 
     def add_object(self, obj):
+        """Adds an object to the db
+        """
         self.db_session.add(obj)
         self.stat_added += 1
 
     def update_object(self, source_obj, target_obj):
+        """Updates the target_obj with the data of the
+        source_obj.
+
+        It compares the fields defined in the rows_mapping
+        and only updates this fields.
+        """
         updated = False
         for row in self.rows_mapping.values():
             if getattr(source_obj, row) == getattr(target_obj, row):
@@ -122,19 +159,40 @@ class ObjectSyncer(object):
         if updated:
             self.stat_updated += 1
 
-    def update_rows_mapping(self):
-        raise NotImplementedError()
+    def reset_statistic(self):
+        self.stat_added = 0
+        self.stat_updated = 0
+        self.stat_deleted = 0
+        self.stat_total = 0
 
-    def handle_objects_to_remove(self):
-        raise NotImplementedError()
+    def log_statistic(self):
+        skipped = self.stat_total - self.stat_added - self.stat_updated - self.stat_deleted
 
-    def get_sql_obj(self, csv_row):
-        raise NotImplementedError()
+        LOG.info(
+            "STATISTICS\n"
+            "----------\n\n"
+            "Total: {}\n"
+            "Added: {}\n"
+            "Updated: {}\n"
+            "Removed: {}\n"
+            "Skipped: {}\n".format(
+                self.stat_total, self.stat_added, self.stat_updated, self.stat_deleted, skipped))
 
-    def get_csv_obj(self, csv_row):
-        raise NotImplementedError()
+    def decode_text(self, text):
+        if not text:
+            return text
 
-    def validate_header(self, file_, rows):
+        return text.decode('utf-8')
+
+
+class CSVObjectSyncer(ObjectSyncer):
+
+    def reader(self, file_, rows):
+        self._validate_header(file_, rows)
+        for row in csv.DictReader(file_, rows):
+            yield row
+
+    def _validate_header(self, file_, rows):
         reader = csv.reader(file_)
         header_rows = reader.next()
 
@@ -148,33 +206,8 @@ class ObjectSyncer(object):
                 rows, header_rows)
             )
 
-    def reset_statistic(self):
-        self.stat_added = 0
-        self.stat_updated = 0
-        self.stat_deleted = 0
-        self.stat_total = 0
 
-    def log_statistic(self):
-        skipped = self.stat_total - self.stat_added - self.stat_updated - self.stat_removed
-
-        LOG.info(
-            "STATISTICS\n"
-            "----------\n\n"
-            "Total: {}\n"
-            "Added: {}\n"
-            "Updated: {}\n"
-            "Removed: {}\n"
-            "Skipped: {}\n".format(
-                self.stat_total, self.stat_added, self.stat_updated, self.stat_removed, skipped))
-
-    def decode_text(self, text):
-        if not text:
-            return text
-
-        return text.decode('utf-8')
-
-
-class OrganizationSyncer(ObjectSyncer):
+class OrganizationSyncer(CSVObjectSyncer):
 
     type_name = "Organizations"
 
@@ -182,20 +215,20 @@ class OrganizationSyncer(ObjectSyncer):
         self.rows_mapping['contact_id'] = 'former_contact_id'
         self.rows_mapping['name'] = 'name'
 
-    def handle_objects_to_remove(self):
+    def remove_object(self):
         pass
 
-    def get_sql_obj(self, csv_row):
+    def get_internal_obj(self, row):
         return Organization.query.filter(
-            Organization.former_contact_id == csv_row.get('contact_id')).first()
+            Organization.former_contact_id == row.get('contact_id')).first()
 
-    def get_csv_obj(self, csv_row):
+    def get_remote_object(self, row):
         return Organization(
-            name=self.decode_text(csv_row.get('name')),
-            former_contact_id=int(self.decode_text(csv_row.get('contact_id'))))
+            name=self.decode_text(row.get('name')),
+            former_contact_id=int(self.decode_text(row.get('contact_id'))))
 
 
-class PersonSyncer(ObjectSyncer):
+class PersonSyncer(CSVObjectSyncer):
 
     type_name = "Persons"
 
@@ -206,22 +239,22 @@ class PersonSyncer(ObjectSyncer):
         self.rows_mapping['firstname'] = 'firstname'
         self.rows_mapping['lastname'] = 'lastname'
 
-    def handle_objects_to_remove(self):
+    def remove_object(self):
         pass
 
-    def get_sql_obj(self, csv_row):
+    def get_internal_obj(self, row):
         return Person.query.filter(
-            Person.former_contact_id == csv_row.get('contact_id')).first()
+            Person.former_contact_id == row.get('contact_id')).first()
 
-    def get_csv_obj(self, csv_row):
-        return Person(salutation=self.decode_text(csv_row.get('salutation')),
-                      academic_title=self.decode_text(csv_row.get('title')),
-                      firstname=self.decode_text(csv_row.get('firstname')),
-                      lastname=self.decode_text(csv_row.get('lastname')),
-                      former_contact_id=int(self.decode_text(csv_row.get('contact_id'))))
+    def get_remote_object(self, row):
+        return Person(salutation=self.decode_text(row.get('salutation')),
+                      academic_title=self.decode_text(row.get('title')),
+                      firstname=self.decode_text(row.get('firstname')),
+                      lastname=self.decode_text(row.get('lastname')),
+                      former_contact_id=int(self.decode_text(row.get('contact_id'))))
 
 
-class MailSyncer(ObjectSyncer):
+class MailSyncer(CSVObjectSyncer):
 
     type_name = "Mails"
 
@@ -230,26 +263,26 @@ class MailSyncer(ObjectSyncer):
         self.rows_mapping['mail_address'] = 'address'
         self.rows_mapping['label'] = 'label'
 
-    def handle_objects_to_remove(self):
+    def remove_object(self):
         pass
 
-    def get_sql_obj(self, csv_row):
+    def get_internal_obj(self, row):
         return None
 
-    def get_csv_obj(self, csv_row):
+    def get_remote_object(self, row):
         contact_id = Contact.query.get_by_former_contact_id(
-            csv_row.get('contact_id'))
+            row.get('contact_id'))
 
         if not contact_id:
             return None
 
         return MailAddress(
             contact_id=contact_id,
-            address=self.decode_text(csv_row.get('mail_address')),
-            label=self.decode_text(csv_row.get('label')))
+            address=self.decode_text(row.get('mail_address')),
+            label=self.decode_text(row.get('label')))
 
 
-class UrlSyncer(ObjectSyncer):
+class UrlSyncer(CSVObjectSyncer):
 
     type_name = "Urls"
 
@@ -258,26 +291,26 @@ class UrlSyncer(ObjectSyncer):
         self.rows_mapping['url'] = 'url'
         self.rows_mapping['label'] = 'label'
 
-    def handle_objects_to_remove(self):
+    def remove_object(self):
         pass
 
-    def get_sql_obj(self, csv_row):
+    def get_internal_obj(self, row):
         return None
 
-    def get_csv_obj(self, csv_row):
+    def get_remote_object(self, row):
         contact_id = Contact.query.get_by_former_contact_id(
-            csv_row.get('contact_id'))
+            row.get('contact_id'))
 
         if not contact_id:
             return None
 
         return URL(
             contact_id=contact_id,
-            url=self.decode_text(csv_row.get('url')),
-            label=self.decode_text(csv_row.get('label')))
+            url=self.decode_text(row.get('url')),
+            label=self.decode_text(row.get('label')))
 
 
-class PhoneNumberSyncer(ObjectSyncer):
+class PhoneNumberSyncer(CSVObjectSyncer):
 
     type_name = "Phonenumbers"
 
@@ -286,26 +319,26 @@ class PhoneNumberSyncer(ObjectSyncer):
         self.rows_mapping['number'] = 'phone_number'
         self.rows_mapping['label'] = 'label'
 
-    def handle_objects_to_remove(self):
+    def remove_object(self):
         pass
 
-    def get_sql_obj(self, csv_row):
+    def get_internal_obj(self, row):
         return None
 
-    def get_csv_obj(self, csv_row):
+    def get_remote_object(self, row):
         contact_id = Contact.query.get_by_former_contact_id(
-            csv_row.get('contact_id'))
+            row.get('contact_id'))
 
         if not contact_id:
             return None
 
         return PhoneNumber(
             contact_id=contact_id,
-            phone_number=self.decode_text(csv_row.get('number')),
-            label=self.decode_text(csv_row.get('label')))
+            phone_number=self.decode_text(row.get('number')),
+            label=self.decode_text(row.get('label')))
 
 
-class AddressSyncer(ObjectSyncer):
+class AddressSyncer(CSVObjectSyncer):
 
     type_name = "Addresses"
 
@@ -319,28 +352,28 @@ class AddressSyncer(ObjectSyncer):
         # HINT: This field does not exists on sql and will be ignored
         self.rows_mapping['country'] = 'country'
 
-    def handle_objects_to_remove(self):
+    def remove_object(self):
         pass
 
-    def get_sql_obj(self, csv_row):
+    def get_internal_obj(self, row):
         return None
 
-    def get_csv_obj(self, csv_row):
+    def get_remote_object(self, row):
         contact_id = Contact.query.get_by_former_contact_id(
-            csv_row.get('contact_id'))
+            row.get('contact_id'))
 
         if not contact_id:
             return None
 
         return Address(
             contact_id=contact_id,
-            label=self.decode_text(csv_row.get('label')),
-            street=self.decode_text(csv_row.get('street')),
-            zip_code=self.decode_text(csv_row.get('zip')),
-            city=self.decode_text(csv_row.get('city')),)
+            label=self.decode_text(row.get('label')),
+            street=self.decode_text(row.get('street')),
+            zip_code=self.decode_text(row.get('zip')),
+            city=self.decode_text(row.get('city')),)
 
 
-class OrgRoleSyncer(ObjectSyncer):
+class OrgRoleSyncer(CSVObjectSyncer):
 
     type_name = "OrgRoles"
 
@@ -349,18 +382,18 @@ class OrgRoleSyncer(ObjectSyncer):
         self.rows_mapping['organisation_id'] = 'organization_id'
         self.rows_mapping['function'] = 'function'
 
-    def handle_objects_to_remove(self):
+    def remove_object(self):
         pass
 
-    def get_sql_obj(self, csv_row):
+    def get_internal_obj(self, row):
         return None
 
-    def get_csv_obj(self, csv_row):
+    def get_remote_object(self, row):
         person_id = Contact.query.get_by_former_contact_id(
-            csv_row.get('person_id'))
+            row.get('person_id'))
 
         organization_id = Contact.query.get_by_former_contact_id(
-            csv_row.get('organisation_id'))
+            row.get('organisation_id'))
 
         if not person_id or not organization_id:
             return None
@@ -368,7 +401,7 @@ class OrgRoleSyncer(ObjectSyncer):
         return OrgRole(
             person_id=person_id,
             organization_id=organization_id,
-            function=self.decode_text(csv_row.get('function')))
+            function=self.decode_text(row.get('function')))
 
 
 class CSVContactImporter(object):
