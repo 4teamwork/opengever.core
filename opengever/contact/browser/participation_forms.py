@@ -50,9 +50,9 @@ class ParticipationAddForm(ModelAddForm):
     fields['roles'].widgetFactory = CheckBoxFieldWidget
 
     def validate(self, data):
-        contact = Contact.query.get(data.get('contact'))
-        oguid = Oguid.for_object(self.context)
-        if Participation.query.by_oguid_and_contact(oguid, contact).count():
+        query = Participation.query.by_dossier(self.context).filter_by(
+            contact_id=data.get('contact'))
+        if query.count():
             raise ActionExecutionError(Invalid(
                 _(u'msg_participation_already_exists',
                   u"There already exists a participation for this contact.")))

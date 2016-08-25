@@ -17,12 +17,8 @@ from sqlalchemy.schema import Sequence
 
 class ParticipationQuery(BaseQuery):
 
-    def by_oguid(self, oguid):
-        return self.filter(Participation.dossier_oguid == oguid)
-
-    def by_oguid_and_contact(self, oguid, contact):
-        return self.by_oguid(oguid=oguid).filter(
-            Participation.contact == contact)
+    def by_dossier(self, dossier):
+        return self.filter_by(dossier_oguid=Oguid.for_object(dossier))
 
 
 class Participation(Base, SQLFormSupport):
