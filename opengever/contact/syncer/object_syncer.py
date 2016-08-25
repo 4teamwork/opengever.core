@@ -1,4 +1,5 @@
 from collections import OrderedDict
+from ftw.upgrade import ProgressLogger
 from opengever.base.model import create_session
 from opengever.contact.models import Address
 from opengever.contact.models import Contact
@@ -16,12 +17,39 @@ import transaction
 LOG = logging.getLogger('contacts-import')
 
 
-class BadTypeException(AttributeError):
-    pass
-
-
 class BadCSVFormatException(AttributeError):
     pass
+
+
+class FileReader(object):
+    """ Contextmanager: Reads an open from beginning
+    and put the seek-pointer back to 0 after reading
+    """
+    def __init__(self, file_):
+        self.file_ = file_
+
+    def __enter__(self):
+        self.file_.seek(0)
+        return self.file_
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.file_.seek(0)
+
+
+class ObjectSyncerProgressLogger(ProgressLogger):
+
+    def __init__(self, message, iterable, length, logger=None,
+                 timeout=5):
+
+        self.logger = logger or logging.getLogger('contactsyncer')
+        self.message = message
+        self.iterable = iterable
+
+        self.timeout = timeout
+        self._timestamp = None
+        self._counter = 0
+
+        self.length = length
 
 
 class ObjectSyncer(object):
@@ -36,8 +64,9 @@ class ObjectSyncer(object):
 
     stat_updated = 0
     stat_added = 0
-    stat_deleted = 0
     stat_total = 0
+
+    total_items = 0
 
     file_ = None
 
@@ -48,6 +77,7 @@ class ObjectSyncer(object):
         self.db_session = create_session()
         self.file_ = file_
         self.update_rows_mapping()
+        self.total_items = self.count_total_items()
 
     def __call__(self):
         """Starts the sync-process
@@ -55,7 +85,7 @@ class ObjectSyncer(object):
         LOG.info("Syncing {}...".format(self.type_name))
         self.reset_statistic()
 
-        for row in self.reader(self.file_, self.rows_mapping.keys()):
+        for row in self.reader():
             self.stat_total += 1
 
             internal_object = self.get_internal_obj(row)
@@ -65,21 +95,15 @@ class ObjectSyncer(object):
                 continue
 
             if internal_object:
-                self.update_object(remote_object, internal_object)
+                self.update_object(
+                    self.rows_mapping, remote_object, internal_object)
             else:
                 self.add_object(remote_object)
-
-        self.remove_object()
 
         LOG.info("Syncing of {} succeeded".format(self.type_name))
         self.log_statistic()
 
         transaction.commit()
-
-    def reader(self, file_, rows):
-        """Reads the file and returns each row as a dict.
-        """
-        raise NotImplementedError
 
     def update_rows_mapping(self):
         """This function will be called in the init of the class.
@@ -90,7 +114,18 @@ class ObjectSyncer(object):
 
         self.rows_mapping['name'] = 'name'
         """
-        raise NotImplementedError()
+        pass
+
+    def reader(self):
+        """Reads the file and returns each row as a dict.
+        """
+        with FileReader(self.file_) as file_:
+            iterable = ObjectSyncerProgressLogger(
+                "Syncing {}".format(self.type_name),
+                file_, self.total_items)
+
+            for row in iterable:
+                yield row
 
     def get_internal_obj(self, row):
         """Returns the related existing objects depending on
@@ -104,19 +139,13 @@ class ObjectSyncer(object):
         """
         raise NotImplementedError()
 
-    def remove_object(self, obj):
-        """Removes an object from the db
-        """
-        self.db_session.delete(obj)
-        self.stat_deleted += 1
-
     def add_object(self, obj):
         """Adds an object to the db
         """
         self.db_session.add(obj)
         self.stat_added += 1
 
-    def update_object(self, source_obj, target_obj):
+    def update_object(self, mapping, source_obj, target_obj):
         """Updates the target_obj with the data of the
         source_obj.
 
@@ -124,7 +153,7 @@ class ObjectSyncer(object):
         and only updates this fields.
         """
         updated = False
-        for row in self.rows_mapping.values():
+        for row in mapping.values():
             if getattr(source_obj, row) == getattr(target_obj, row):
                 continue
 
@@ -134,14 +163,22 @@ class ObjectSyncer(object):
         if updated:
             self.stat_updated += 1
 
+        return updated
+
     def reset_statistic(self):
         self.stat_added = 0
         self.stat_updated = 0
-        self.stat_deleted = 0
         self.stat_total = 0
 
+    def count_total_items(self, skip_header_row=True):
+        with FileReader(self.file_) as file_:
+            for i, line in enumerate(file_):
+                pass
+
+        return i if skip_header_row else i + 1
+
     def log_statistic(self):
-        skipped = self.stat_total - self.stat_added - self.stat_updated - self.stat_deleted
+        skipped = self.stat_total - self.stat_added - self.stat_updated
 
         LOG.info(
             "STATISTICS\n"
@@ -149,9 +186,8 @@ class ObjectSyncer(object):
             "Total: {}\n"
             "Added: {}\n"
             "Updated: {}\n"
-            "Removed: {}\n"
             "Skipped: {}\n".format(
-                self.stat_total, self.stat_added, self.stat_updated, self.stat_deleted, skipped))
+                self.stat_total, self.stat_added, self.stat_updated, skipped))
 
     def decode_text(self, text):
         if not text:
@@ -162,10 +198,18 @@ class ObjectSyncer(object):
 
 class CSVObjectSyncer(ObjectSyncer):
 
-    def reader(self, file_, rows):
-        self._validate_header(file_, rows)
-        for row in csv.DictReader(file_, rows):
-            yield row
+    def reader(self):
+        rows = self.rows_mapping.keys()
+        with FileReader(self.file_) as file_:
+            self._validate_header(file_, rows)
+
+            iterable = ObjectSyncerProgressLogger(
+                "Syncing {}".format(self.type_name),
+                csv.DictReader(file_, rows),
+                self.total_items)
+
+            for row in iterable:
+                yield row
 
     def _validate_header(self, file_, rows):
         reader = csv.reader(file_)
@@ -190,9 +234,6 @@ class OrganizationSyncer(CSVObjectSyncer):
         self.rows_mapping['contact_id'] = 'former_contact_id'
         self.rows_mapping['name'] = 'name'
 
-    def remove_object(self):
-        pass
-
     def get_internal_obj(self, row):
         return Organization.query.filter(
             Organization.former_contact_id == row.get('contact_id')).first()
@@ -214,9 +255,6 @@ class PersonSyncer(CSVObjectSyncer):
         self.rows_mapping['firstname'] = 'firstname'
         self.rows_mapping['lastname'] = 'lastname'
 
-    def remove_object(self):
-        pass
-
     def get_internal_obj(self, row):
         return Person.query.filter(
             Person.former_contact_id == row.get('contact_id')).first()
@@ -237,9 +275,6 @@ class MailSyncer(CSVObjectSyncer):
         self.rows_mapping['contact_id'] = 'contact_id'
         self.rows_mapping['mail_address'] = 'address'
         self.rows_mapping['label'] = 'label'
-
-    def remove_object(self):
-        pass
 
     def get_internal_obj(self, row):
         return None
@@ -266,9 +301,6 @@ class UrlSyncer(CSVObjectSyncer):
         self.rows_mapping['url'] = 'url'
         self.rows_mapping['label'] = 'label'
 
-    def remove_object(self):
-        pass
-
     def get_internal_obj(self, row):
         return None
 
@@ -293,9 +325,6 @@ class PhoneNumberSyncer(CSVObjectSyncer):
         self.rows_mapping['contact_id'] = 'contact_id'
         self.rows_mapping['number'] = 'phone_number'
         self.rows_mapping['label'] = 'label'
-
-    def remove_object(self):
-        pass
 
     def get_internal_obj(self, row):
         return None
@@ -327,9 +356,6 @@ class AddressSyncer(CSVObjectSyncer):
         # HINT: This field does not exists on sql and will be ignored
         self.rows_mapping['country'] = 'country'
 
-    def remove_object(self):
-        pass
-
     def get_internal_obj(self, row):
         return None
 
@@ -356,9 +382,6 @@ class OrgRoleSyncer(CSVObjectSyncer):
         self.rows_mapping['person_id'] = 'person_id'
         self.rows_mapping['organisation_id'] = 'organization_id'
         self.rows_mapping['function'] = 'function'
-
-    def remove_object(self):
-        pass
 
     def get_internal_obj(self, row):
         return None
