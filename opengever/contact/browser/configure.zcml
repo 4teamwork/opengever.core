@@ -21,7 +21,7 @@
       name="tabbed_view"
       class=".tabbed.ContactFolderTabbedView"
       permission="zope2.View"
-      allowed_attributes="listing select_all reorder setgridstate set_default_tab msg_unknownresponse"
+      allowed_interface="ftw.tabbedview.interfaces.ITabbedViewEndpoints"
       />
 
   <browser:page
@@ -29,6 +29,34 @@
       for="opengever.contact.interfaces.IOrganization"
       class=".organization.OrganizationView"
       permission="zope2.View"
+      />
+
+  <browser:page
+      name="tabbedview_view-participations"
+      for="*"
+      class=".participations.ParticpationTab"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="add-sql-participation"
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      class=".participation_forms.ParticipationAddForm"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <browser:page
+      name="edit"
+      for="opengever.contact.participation.IParticipationWrapper"
+      class=".participation_forms.ParticipationEditForm"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <browser:page
+      name="remove"
+      for="opengever.contact.participation.IParticipationWrapper"
+      class=".participation_forms.ParticipationRemoveForm"
+      permission="cmf.ModifyPortalContent"
       />
 
   <browser:page
@@ -59,6 +87,13 @@
       permission="zope.Public"
       class=".layout.OrganizationLayoutPolicy"
       allowed_interface="plone.app.layout.globals.interfaces.ILayoutPolicy"
+      />
+
+  <browser:page
+      name="add-participation"
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      class=".participation_add_view.ParticipationAddView"
+      permission="cmf.AddPortalContent"
       />
 
   <browser:page

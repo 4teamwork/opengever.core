@@ -5,6 +5,13 @@ Changelog
 4.10.1 (unreleased)
 -------------------
 
+- Added participation tab and forms (add, edit, remove) using the new
+  contact implementation.
+  [phgross]
+
+- Disable local tab on contactfolder when contact feature is enabled.
+  [phgross]
+
 - Move bumblebee installation script to opengever.maintenance.
   [phgross]
 

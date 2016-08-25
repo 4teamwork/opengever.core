@@ -50,9 +50,11 @@ class TestMeetingDossier(TestDossier):
              'opengever.task.task'],
             [fti.id for fti in self.dossier.allowedContentTypes()])
 
-    def test_tabbedview_tabs(self):
+    @browsing
+    def test_tabbedview_tabs(self, browser):
         expected_tabs = ['Overview', 'Subdossiers', 'Documents', 'Tasks',
                          'Proposals', 'Participants', 'Trash', 'Journal',
-                         'Sharing', ]
+                         'Info']
 
-        self.assert_tabbedview_tabs_for_obj(expected_tabs, self.dossier)
+        browser.login().open(self.dossier, view='tabbed_view')
+        self.assertEquals(expected_tabs, browser.css('li.formTab').text)

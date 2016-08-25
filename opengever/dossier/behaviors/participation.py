@@ -174,7 +174,7 @@ class ParticipationAddForm(z3c.form.form.Form):
 
 class ParticipationAddFormView(layout.FormWrapper, grok.View):
     grok.context(IParticipationAwareMarker)
-    grok.name('add-participation')
+    grok.name('add-plone-participation')
     grok.require('cmf.AddPortalContent')
     form = ParticipationAddForm
 

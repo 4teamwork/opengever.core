@@ -66,29 +66,4 @@
     <permission value="Modify portal content"/>
   </action>
 
-  <!-- Tabbedview tabs-->
-  <action title="Overview" action_id="overview" category="tabbedview-tabs"
-          condition_expr="" url_expr="string:#" visible="True">
-    <permission value="View"/>
-  </action>
-  <action title="Subdossiers" action_id="subdossiers" category="tabbedview-tabs"
-          condition_expr="" url_expr="string:#" visible="True">
-    <permission value="View"/>
-  </action>
-  <action title="Documents" action_id="documents-proxy" category="tabbedview-tabs"
-          condition_expr="" url_expr="string:#" visible="True">
-    <permission value="View"/>
-  </action>
-  <action title="Tasks" action_id="tasks" category="tabbedview-tabs"
-          condition_expr="" url_expr="string:#" visible="True">
-    <permission value="View"/>
-  </action>
-  <action title="Journal" action_id="journal" category="tabbedview-tabs"
-          condition_expr="" url_expr="string:#" visible="True">
-    <permission value="View"/>
-  </action>
-  <action title="Sharing" action_id="sharing" category="tabbedview-tabs"
-          condition_expr="" url_expr="string:#" visible="True">
-    <permission value="View"/>
-  </action>
 </object>

@@ -1,21 +1,20 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-07-21 14:08+0000\n"
+"POT-Creation-Date: 2016-08-17 14:51+0000\n"
 "PO-Revision-Date: 2016-08-10 05:15+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
-"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
-"gever/opengever-dossier/fr/>\n"
-"Language: fr\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/fr/>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2.7-dev\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
+"Language: fr\n"
+"X-Generator: Weblate 2.7-dev\n"
 
 #: ./opengever/dossier/move_items.py:149
 msgid "${copied_items} Elements were moved successfully"
@@ -79,9 +78,7 @@ msgstr "Impossible de déplacer les éléments suivants: ${failed_objects}"
 
 #: ./opengever/dossier/move_items.py:161
 msgid "Failed to copy following objects: ${failed_objects}. Locked via WebDAV"
-msgstr ""
-"Les objets suivants ne peuvent pas être copiés: ${failed_objects}. Ils sont "
-"verrouillés par WebDAV."
+msgstr "Les objets suivants ne peuvent pas être copiés: ${failed_objects}. Ils sont verrouillés par WebDAV."
 
 #: ./opengever/dossier/move_items.py:212
 msgid "It isn't allowed to add such items there"
@@ -409,6 +406,11 @@ msgstr "Créé par"
 msgid "label_destination"
 msgstr "Destination"
 
+#. Default: "Documents"
+#: ./opengever/dossier/browser/tabbed.py:18
+msgid "label_documents"
+msgstr "Documents"
+
 #. Default: "Edit after creation"
 #: ./opengever/dossier/templatedossier/form_templates/template_form.pt:48
 msgid "label_edit_after_creation"
@@ -447,6 +449,16 @@ msgstr "Numéro d'inventaire"
 msgid "label_former_reference_number"
 msgstr "Ancienne numéro référence"
 
+#. Default: "Info"
+#: ./opengever/dossier/browser/tabbed.py:46
+msgid "label_info"
+msgstr "Info"
+
+#. Default: "Journal"
+#: ./opengever/dossier/browser/tabbed.py:39
+msgid "label_journal"
+msgstr "Historique"
+
 #. Default: "Keywords"
 #: ./opengever/dossier/behaviors/dossier.py:57
 msgid "label_keywords"
@@ -472,10 +484,30 @@ msgstr "Le numéro de classement est généré lors de la création du document.
 msgid "label_number_of_containers"
 msgstr "Nombre de conteneurs"
 
+#. Default: "Overview"
+#: ./opengever/dossier/browser/tabbed.py:11
+msgid "label_overview"
+msgstr "Sommaire"
+
+#. Default: "Participants"
+#: ./opengever/dossier/browser/tabbed.py:81
+msgid "label_participants"
+msgstr "Participants"
+
 #. Default: "Participation"
 #: ./opengever/dossier/behaviors/participation.py:148
 msgid "label_participation"
 msgstr "Participation"
+
+#. Default: "Participations"
+#: ./opengever/dossier/browser/tabbed.py:74
+msgid "label_participations"
+msgstr "Participation"
+
+#. Default: "Proposals"
+#: ./opengever/dossier/browser/tabbed.py:64
+msgid "label_proposals"
+msgstr "Propositions"
 
 #. Default: "Reference Number"
 #: ./opengever/dossier/behaviors/dossier.py:176
@@ -506,6 +538,11 @@ msgstr "Etat"
 msgid "label_roles"
 msgstr "Rôles"
 
+#. Default: "Sablon Templates"
+#: ./opengever/dossier/browser/tabbed.py:122
+msgid "label_sablon_templates"
+msgstr "Sablon Modèles"
+
 #. Default: "Sequence Number"
 #: ./opengever/dossier/viewlets/byline.py:61
 msgid "label_sequence_number"
@@ -523,6 +560,21 @@ msgstr "Date début"
 msgid "label_start_byline"
 msgstr "De"
 
+#. Default: "Subdossiers"
+#: ./opengever/dossier/browser/tabbed.py:55
+msgid "label_subdossiers"
+msgstr "Sous-dossiers"
+
+#. Default: "Tasks"
+#: ./opengever/dossier/browser/tabbed.py:25
+msgid "label_tasks"
+msgstr "Tâches"
+
+#. Default: "Tasktemplate Folders"
+#: ./opengever/dossier/browser/tabbed.py:112
+msgid "label_tasktemplate_folders"
+msgstr "Déroulements standards"
+
 #. Default: "Template"
 #: ./opengever/dossier/templatedossier/form_templates/template_form.pt:21
 msgid "label_template"
@@ -534,6 +586,11 @@ msgstr "Modèle"
 #: ./opengever/dossier/templatedossier/form_templates/template_form.pt:30
 msgid "label_title"
 msgstr "Titre"
+
+#. Default: "Trash"
+#: ./opengever/dossier/browser/tabbed.py:32
+msgid "label_trash"
+msgstr "Corbeille"
 
 #. Default: "State"
 #: ./opengever/dossier/project_templates/byline.pt:22

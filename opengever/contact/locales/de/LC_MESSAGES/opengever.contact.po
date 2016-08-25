@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2016-08-16 13:12+0000\n"
+"POT-Creation-Date: 2016-08-24 16:03+0000\n"
 "PO-Revision-Date: 2011-01-05 15:15+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -52,10 +52,24 @@ msgstr "E-Mail-Adressen"
 msgid "Label"
 msgstr "Label"
 
+#: ./opengever/contact/browser/participation_forms.py:120
+msgid "Remove"
+msgstr "Löschen"
+
 #. Default: "Address"
 #: ./opengever/contact/contact.py:54
 msgid "address"
 msgstr "Adresse"
+
+#. Default: "Edit"
+#: ./opengever/contact/browser/templates/participations.pt:16
+msgid "button_edit"
+msgstr "Bearbeiten"
+
+#. Default: "Remove"
+#: ./opengever/contact/browser/templates/participations.pt:23
+msgid "button_remove"
+msgstr "Löschen"
 
 #. Default: "Academic title"
 #: ./opengever/contact/browser/person_listing.py:30
@@ -112,6 +126,11 @@ msgstr "Bitte geben Sie ein Labe sowie eine E-Mail-Adresse ein."
 msgid "info_mailaddress_created"
 msgstr "Die E-Mail-Adresse wurde erstellt."
 
+#. Default: "Participation removed"
+#: ./opengever/contact/browser/participation_forms.py:129
+msgid "info_participation_removed"
+msgstr "Beteiligung gelöscht"
+
 #. Default: "Internet"
 #: ./opengever/contact/contact.py:35
 msgid "internet"
@@ -123,6 +142,11 @@ msgstr "Internet"
 #: ./opengever/contact/contact.py:69
 msgid "label_academic_title"
 msgstr "Titel"
+
+#. Default: "Add Participation"
+#: ./opengever/contact/browser/participation_forms.py:45
+msgid "label_add_participation"
+msgstr "Beteiligung hinzufügen"
 
 #. Default: "Address 1"
 #: ./opengever/contact/contact.py:150
@@ -169,6 +193,7 @@ msgid "label_archived_phone_numbers"
 msgstr "Archivierte Telefonnummern"
 
 #. Default: "Cancel"
+#: ./opengever/contact/browser/participation_forms.py:135
 #: ./opengever/contact/browser/templates/person_edit.pt:28
 msgid "label_cancel"
 msgstr "Abbrechen"
@@ -182,6 +207,11 @@ msgstr "Ort"
 #: ./opengever/contact/contact.py:88
 msgid "label_company"
 msgstr "Firma"
+
+#. Default: "Contact"
+#: ./opengever/contact/browser/participation_forms.py:26
+msgid "label_contact"
+msgstr "Kontakt"
 
 #. Default: "Country"
 #: ./opengever/contact/contact.py:170
@@ -203,6 +233,11 @@ msgstr "Abteilung"
 #: ./opengever/contact/contact.py:145
 msgid "label_description"
 msgstr "Beschreibung"
+
+#. Default: "Edit Participation of ${title}"
+#: ./opengever/contact/browser/participation_forms.py:82
+msgid "label_edit_participation"
+msgstr "Beteiligung von ${title} bearbeiten"
 
 #. Default: "email"
 #: ./opengever/contact/contact.py:103
@@ -230,7 +265,7 @@ msgid "label_lastname"
 msgstr "Nachname"
 
 #. Default: "Local"
-#: ./opengever/contact/browser/tabbed.py:11
+#: ./opengever/contact/browser/tabbed.py:25
 msgid "label_local"
 msgstr "Lokal"
 
@@ -247,10 +282,15 @@ msgid "label_name"
 msgstr "Name"
 
 #. Default: "Organizations"
-#: ./opengever/contact/browser/tabbed.py:30
+#: ./opengever/contact/browser/tabbed.py:17
 #: ./opengever/contact/browser/templates/person.pt:81
 msgid "label_organizations"
 msgstr "Organisationen"
+
+#. Default: "Participation of ${contact_title}"
+#: ./opengever/contact/models/participation.py:56
+msgid "label_participation_of"
+msgstr "Beteiligung von ${contact_title}"
 
 #. Default: "Personal information:"
 #: ./opengever/contact/browser/templates/person.pt:19
@@ -258,7 +298,7 @@ msgid "label_personal_information"
 msgstr "Persönliche Informationen:"
 
 #. Default: "Persons"
-#: ./opengever/contact/browser/tabbed.py:25
+#: ./opengever/contact/browser/tabbed.py:12
 #: ./opengever/contact/browser/templates/organization.pt:71
 msgid "label_persons"
 msgstr "Personen"
@@ -295,6 +335,16 @@ msgstr "Telefon Arbeit"
 msgid "label_picture"
 msgstr "Bild"
 
+#. Default: "Remove Participation of ${title}"
+#: ./opengever/contact/browser/participation_forms.py:116
+msgid "label_remove_participation"
+msgstr "Beteiligung von ${title} löschen"
+
+#. Default: "Roles"
+#: ./opengever/contact/browser/participation_forms.py:32
+msgid "label_roles"
+msgstr "Rollen"
+
 #. Default: "Salutation"
 #: ./opengever/contact/browser/person.py:77
 #: ./opengever/contact/browser/templates/person.pt:26
@@ -308,7 +358,7 @@ msgid "label_url"
 msgstr "URL"
 
 #. Default: "Users"
-#: ./opengever/contact/browser/tabbed.py:16
+#: ./opengever/contact/browser/tabbed.py:33
 msgid "label_users"
 msgstr "Benutzer"
 
@@ -327,6 +377,11 @@ msgstr "Funktion"
 msgid "mail_address_deleted"
 msgstr "Die E-Mail-Adresse wurde gelöscht."
 
+#. Default: "There already exists a participation for this contact."
+#: ./opengever/contact/browser/participation_forms.py:57
+msgid "msg_participation_already_exists"
+msgstr "Für diesen Kontakt existiert bereits eine Beteiligung."
+
 #. Default: "Personal Stuff"
 #: ./opengever/contact/contact.py:20
 msgid "personal"
@@ -341,4 +396,3 @@ msgstr "${amount} Treffer."
 #: ./opengever/contact/contact.py:44
 msgid "telefon"
 msgstr "Telefon"
-

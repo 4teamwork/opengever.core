@@ -3,6 +3,9 @@ from Acquisition import aq_parent
 from datetime import datetime
 from five import grok
 from opengever.base.interfaces import ISequenceNumber
+from opengever.base.oguid import Oguid
+from opengever.contact.models import Participation
+from opengever.contact.participation import ParticipationWrapper
 from opengever.document.behaviors import IBaseDocument
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
@@ -20,6 +23,7 @@ from plone.dexterity.interfaces import IDexterityFTI
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
+from zExceptions import Unauthorized
 from zope.component import getUtility
 from zope.component import queryMultiAdapter
 from zope.component import queryUtility
@@ -37,7 +41,34 @@ DOSSIER_STATES_CLOSED = [
 ]
 
 
+_marker = object()
+
+
 class DossierContainer(Container):
+
+    def _getOb(self, id_, default=_marker):
+        """We extend `_getObj` in order to change the context for participation
+        objects to the `ParticipationWrapper`. That allows us to register views
+        and forms for Participations as regular BrowserViews.
+        """
+
+        obj = super(DossierContainer, self)._getOb(id_, default)
+        if obj is not default:
+            return obj
+
+        if id_.startswith('participation-'):
+            participation_id = int(id_.split('-')[-1])
+            participation = Participation.query.get(participation_id)
+            if participation:
+                # Prevent cross injections
+                if participation.dossier_oguid != Oguid.for_object(self):
+                    raise Unauthorized
+
+                return ParticipationWrapper.wrap(self, participation)
+
+        if default is _marker:
+            raise KeyError(id_)
+        return default
 
     def allowedContentTypes(self, *args, **kwargs):
         types = super(

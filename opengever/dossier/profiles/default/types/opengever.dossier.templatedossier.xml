@@ -64,25 +64,4 @@
         <permission value="opengever.dossier: Add templatedossier"/>
     </action>
 
-    <!-- Tabbedview tabs-->
-    <action title="Templates" action_id="documents-proxy" category="tabbedview-tabs"
-            condition_expr="" url_expr="string:#" visible="True">
-        <permission value="View"/>
-    </action>
-
-    <action title="Sablon Templates" action_id="sablontemplates" category="tabbedview-tabs"
-            condition_expr="object/@@is_meeting_feature_enabled" url_expr="string:#" visible="True">
-        <permission value="View"/>
-    </action>
-
-    <action title="Tasktemplate Folders" action_id="tasktemplatefolders"
-            category="tabbedview-tabs"
-            condition_expr="" url_expr="string:#" visible="True">
-        <permission value="View"/>
-    </action>
-
-    <action i18n:domain="opengever.dossier" title="Trash" action_id="trash-proxy" category="tabbedview-tabs"
-            condition_expr="" url_expr="string:#" visible="True">
-    </action>
-
 </object>

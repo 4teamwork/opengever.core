@@ -44,7 +44,7 @@
       name="tabbed_view"
       class=".tabbed.ModelProxyTabbedView"
       permission="zope2.View"
-      allowed_attributes="listing select_all reorder setgridstate set_default_tab"
+      allowed_interface="ftw.tabbedview.interfaces.ITabbedViewEndpoints"
       />
 
   <browser:page
@@ -52,7 +52,7 @@
       name="tabbed_view"
       class=".tabbed.ModelProxyTabbedView"
       permission="zope2.View"
-      allowed_attributes="listing select_all reorder setgridstate set_default_tab"
+      allowed_interface="ftw.tabbedview.interfaces.ITabbedViewEndpoints"
       />
 
   <browser:page
@@ -60,7 +60,7 @@
       name="tabbed_view"
       class=".tabbed.ModelProxyTabbedView"
       permission="zope2.View"
-      allowed_attributes="listing select_all reorder setgridstate set_default_tab"
+      allowed_interface="ftw.tabbedview.interfaces.ITabbedViewEndpoints"
       />
 
   <browser:page

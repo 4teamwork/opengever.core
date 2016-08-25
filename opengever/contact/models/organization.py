@@ -1,11 +1,17 @@
 from opengever.base.model import CONTENT_TITLE_LENGTH
 from opengever.contact.models.contact import Contact
 from opengever.contact.utils import get_contactfolder_url
+from opengever.ogds.models.query import BaseQuery
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy.orm import relationship
+
+
+class OrganizationQuery(BaseQuery):
+
+    searchable_fields = ['name']
 
 
 class Organization(Contact):
@@ -28,5 +34,11 @@ class Organization(Contact):
         return '{}/{}/{}'.format(
             get_contactfolder_url(), self.wrapper_id, view)
 
-    def get_title(self, view='view'):
+    def get_title(self):
         return self.name
+
+    def get_css_class(self):
+        return 'contenttype-organization'
+
+
+Organization.query_cls = OrganizationQuery

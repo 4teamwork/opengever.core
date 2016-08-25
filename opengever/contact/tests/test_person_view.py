@@ -233,4 +233,4 @@ class TestPersonView(FunctionalTestCase):
 
         self.assertEquals(
             org1.get_url(),
-            browser.css('.organizations a.name').first.get('href'))
+            browser.css('.organizations .name > a').first.get('href'))

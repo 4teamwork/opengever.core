@@ -6,21 +6,8 @@ from opengever.contact import is_contact_feature_enabled
 class ContactFolderTabbedView(TabbedView):
 
     def get_tabs(self):
-        tabs = [
-            {'id': 'local',
-             'title': _(u'label_local', default=u'Local'),
-             'icon': None,
-             'url': '#',
-             'class': None},
-            {'id': 'users',
-             'title': _(u'label_users', default=u'Users'),
-             'icon': None,
-             'url': '#',
-             'class': None},
-        ]
-
         if is_contact_feature_enabled():
-            tabs += [
+            tabs = [
                 {'id': 'persons',
                  'title': _(u'label_persons', default=u'Persons'),
                  'icon': None,
@@ -31,5 +18,21 @@ class ContactFolderTabbedView(TabbedView):
                  'icon': None,
                  'url': '#',
                  'class': None}]
+
+        else:
+            tabs = [
+                {'id': 'local',
+                 'title': _(u'label_local', default=u'Local'),
+                 'icon': None,
+                 'url': '#',
+                 'class': None},
+            ]
+
+        tabs += [
+            {'id': 'users',
+             'title': _(u'label_users', default=u'Users'),
+             'icon': None,
+             'url': '#',
+             'class': None}]
 
         return tabs
