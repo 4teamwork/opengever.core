@@ -37,7 +37,9 @@ class FileReader(object):
 
 
 class ObjectSyncerProgressLogger(ProgressLogger):
-
+    """We have to override the progresslogger because
+    we have to set the length manually.
+    """
     def __init__(self, message, iterable, length, logger=None,
                  timeout=5):
 
@@ -57,7 +59,7 @@ class ObjectSyncer(object):
     """
     db_session = None
 
-    rows_mapping = OrderedDict()  # key = file-row, value = sql-row
+    rows_mapping = None  # key = file-row, value = sql-row
 
     # For logging
     type_name = ""
@@ -76,7 +78,10 @@ class ObjectSyncer(object):
     def __init__(self, file_):
         self.db_session = create_session()
         self.file_ = file_
+
+        self.rows_mapping = OrderedDict()
         self.update_rows_mapping()
+
         self.total_items = self.count_total_items()
 
     def __call__(self):
@@ -280,14 +285,14 @@ class MailSyncer(CSVObjectSyncer):
         return None
 
     def get_remote_object(self, row):
-        contact_id = Contact.query.get_by_former_contact_id(
+        contact = Contact.query.get_by_former_contact_id(
             row.get('contact_id'))
 
-        if not contact_id:
+        if not contact:
             return None
 
         return MailAddress(
-            contact_id=contact_id,
+            contact_id=contact.contact_id,
             address=self.decode_text(row.get('mail_address')),
             label=self.decode_text(row.get('label')))
 
@@ -305,14 +310,14 @@ class UrlSyncer(CSVObjectSyncer):
         return None
 
     def get_remote_object(self, row):
-        contact_id = Contact.query.get_by_former_contact_id(
+        contact = Contact.query.get_by_former_contact_id(
             row.get('contact_id'))
 
-        if not contact_id:
+        if not contact:
             return None
 
         return URL(
-            contact_id=contact_id,
+            contact_id=contact.contact_id,
             url=self.decode_text(row.get('url')),
             label=self.decode_text(row.get('label')))
 
@@ -330,14 +335,14 @@ class PhoneNumberSyncer(CSVObjectSyncer):
         return None
 
     def get_remote_object(self, row):
-        contact_id = Contact.query.get_by_former_contact_id(
+        contact = Contact.query.get_by_former_contact_id(
             row.get('contact_id'))
 
-        if not contact_id:
+        if not contact:
             return None
 
         return PhoneNumber(
-            contact_id=contact_id,
+            contact_id=contact.contact_id,
             phone_number=self.decode_text(row.get('number')),
             label=self.decode_text(row.get('label')))
 
@@ -360,14 +365,14 @@ class AddressSyncer(CSVObjectSyncer):
         return None
 
     def get_remote_object(self, row):
-        contact_id = Contact.query.get_by_former_contact_id(
+        contact = Contact.query.get_by_former_contact_id(
             row.get('contact_id'))
 
-        if not contact_id:
+        if not contact:
             return None
 
         return Address(
-            contact_id=contact_id,
+            contact_id=contact.contact_id,
             label=self.decode_text(row.get('label')),
             street=self.decode_text(row.get('street')),
             zip_code=self.decode_text(row.get('zip')),
@@ -387,16 +392,16 @@ class OrgRoleSyncer(CSVObjectSyncer):
         return None
 
     def get_remote_object(self, row):
-        person_id = Contact.query.get_by_former_contact_id(
+        person = Contact.query.get_by_former_contact_id(
             row.get('person_id'))
 
-        organization_id = Contact.query.get_by_former_contact_id(
+        organization = Contact.query.get_by_former_contact_id(
             row.get('organisation_id'))
 
-        if not person_id or not organization_id:
+        if not person or not organization:
             return None
 
         return OrgRole(
-            person_id=person_id,
-            organization_id=organization_id,
+            person_id=person.contact_id,
+            organization_id=organization.contact_id,
             function=self.decode_text(row.get('function')))
