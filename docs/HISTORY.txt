@@ -5,6 +5,9 @@ Changelog
 4.10.1 (unreleased)
 -------------------
 
+- Remove public_trial column from example XLSX repository sheet.
+  [lgraf]
+
 - Added participation tab and forms (add, edit, remove) using the new
   contact implementation.
   [phgross]
