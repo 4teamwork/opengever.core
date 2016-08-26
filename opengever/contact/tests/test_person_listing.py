@@ -32,10 +32,11 @@ class TestPersonListing(FunctionalTestCase):
             self.contactfolder, view='tabbedview_view-persons')
 
         self.assertEquals(
-            [['Salutation', 'Academic title', 'Firstname', 'Lastname'],
-             ['Frau', '', 'Sandra', 'Albert'],
-             ['Frau', '', 'Sandra', 'Mustermann'],
-             ['Herr', 'Dr. rer. nat.', 'Peter', u'M\xfcller']],
+            [['Salutation', 'Academic title', 'Firstname',
+              'Lastname', 'Organizations'],
+             ['Frau', '', 'Sandra', 'Albert', ''],
+             ['Frau', '', 'Sandra', 'Mustermann', ''],
+             ['Herr', 'Dr. rer. nat.', 'Peter', u'M\xfcller', '']],
             browser.css('.listing').first.lists())
 
     @browsing
@@ -71,7 +72,29 @@ class TestPersonListing(FunctionalTestCase):
             self.contactfolder, view='tabbedview_view-persons')
 
         row1 = browser.css('.listing').first.rows[1]
-        self.assertEquals('<b>Bold</b>', row1.css('td')[-1].text)
+        self.assertEquals('<b>Bold</b>', row1.css('td')[-2].text)
+
+    @browsing
+    def test_organizations_are_linked_and_sepearated_by_comma(self, browser):
+        self.org1 = create(Builder('organization').named(u'Meier AG'))
+        self.org2 = create(Builder('organization').named(u'Sophie SA'))
+        create(Builder('org_role').having(
+            person=self.sandra, organization=self.org1))
+        create(Builder('org_role').having(
+            person=self.sandra, organization=self.org2))
+
+        browser.login().open(
+            self.contactfolder, view='tabbedview_view-persons')
+
+        row = browser.css('.listing').first.rows[1]
+
+        self.assertEquals(
+            ['Frau', '', 'Sandra', 'Albert', u'Meier AG, Sophie SA'],
+            row.css('td').text)
+        self.assertEquals(self.org1.get_url(),
+                          row.find('Meier AG').get('href'))
+        self.assertEquals(self.org2.get_url(),
+                          row.find('Sophie SA').get('href'))
 
     @browsing
     def test_filtering_on_firstname(self, browser):
@@ -81,9 +104,10 @@ class TestPersonListing(FunctionalTestCase):
             data={'searchable_text': 'sandra'})
 
         self.assertEquals(
-            [['Salutation', 'Academic title', 'Firstname', 'Lastname'],
-             ['Frau', '', 'Sandra', 'Albert'],
-             ['Frau', '', 'Sandra', 'Mustermann']],
+            [['Salutation', 'Academic title', 'Firstname',
+              'Lastname', 'Organizations'],
+             ['Frau', '', 'Sandra', 'Albert', ''],
+             ['Frau', '', 'Sandra', 'Mustermann', '']],
             browser.css('.listing').first.lists())
 
     @browsing
@@ -94,6 +118,7 @@ class TestPersonListing(FunctionalTestCase):
             data={'searchable_text': 'Sandra Alb'})
 
         self.assertEquals(
-            [['Salutation', 'Academic title', 'Firstname', 'Lastname'],
-             ['Frau', '', 'Sandra', 'Albert']],
+            [['Salutation', 'Academic title', 'Firstname',
+              'Lastname', 'Organizations'],
+             ['Frau', '', 'Sandra', 'Albert', '']],
             browser.css('.listing').first.lists())

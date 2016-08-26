@@ -5,6 +5,9 @@ Changelog
 4.10.1 (unreleased)
 -------------------
 
+- Add organizations column to the person listing.
+  [phgross]
+
 - Remove public_trial column from example XLSX repository sheet.
   [lgraf]
 

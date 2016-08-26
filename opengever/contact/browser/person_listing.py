@@ -38,8 +38,20 @@ class PersonListingTab(BaseListingTab):
             {'column': 'lastname',
              'column_title': _(u'column_lastname', default=u'Lastname'),
              'transform': linked_sql_object},
+
+            {'column': 'organizations',
+             'column_title': _(u'column_organizations',
+                               default=u'Organizations'),
+             'transform': self.organizations_links},
         )
 
+    def organizations_links(self, item, value):
+        links = []
+        for org_role in item.organizations:
+            links.append(linked_sql_object(org_role.organization,
+                                           org_role.organization.get_title()))
+
+        return ', '.join(links)
 
     def get_base_query(self):
         return Person.query

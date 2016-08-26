@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-08-24 16:03+0000\n"
+"POT-Creation-Date: 2016-08-26 09:05+0000\n"
 "PO-Revision-Date: 2016-08-10 04:52+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-contact/fr/>\n"
@@ -74,27 +74,32 @@ msgid "button_remove"
 msgstr ""
 
 #. Default: "Academic title"
-#: ./opengever/contact/browser/person_listing.py:30
+#: ./opengever/contact/browser/person_listing.py:31
 msgid "column_academic_title"
 msgstr "Titre"
 
 #. Default: "Firstname"
-#: ./opengever/contact/browser/person_listing.py:34
+#: ./opengever/contact/browser/person_listing.py:35
 msgid "column_firstname"
 msgstr ""
 
 #. Default: "Lastname"
-#: ./opengever/contact/browser/person_listing.py:38
+#: ./opengever/contact/browser/person_listing.py:39
 msgid "column_lastname"
 msgstr ""
 
 #. Default: "Name"
-#: ./opengever/contact/browser/organization_listing.py:27
+#: ./opengever/contact/browser/organization_listing.py:28
 msgid "column_name"
 msgstr ""
 
+#. Default: "Organizations"
+#: ./opengever/contact/browser/person_listing.py:43
+msgid "column_organizations"
+msgstr ""
+
 #. Default: "Salutation"
-#: ./opengever/contact/browser/person_listing.py:27
+#: ./opengever/contact/browser/person_listing.py:28
 msgid "column_salutation"
 msgstr ""
 
@@ -290,7 +295,7 @@ msgid "label_organizations"
 msgstr ""
 
 #. Default: "Participation of ${contact_title}"
-#: ./opengever/contact/models/participation.py:56
+#: ./opengever/contact/models/participation.py:52
 msgid "label_participation_of"
 msgstr ""
 
