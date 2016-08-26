@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2016-08-24 16:03+0000\n"
+"POT-Creation-Date: 2016-08-26 09:05+0000\n"
 "PO-Revision-Date: 2011-01-05 15:15+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -72,27 +72,32 @@ msgid "button_remove"
 msgstr "Löschen"
 
 #. Default: "Academic title"
-#: ./opengever/contact/browser/person_listing.py:30
+#: ./opengever/contact/browser/person_listing.py:31
 msgid "column_academic_title"
 msgstr "Titel"
 
 #. Default: "Firstname"
-#: ./opengever/contact/browser/person_listing.py:34
+#: ./opengever/contact/browser/person_listing.py:35
 msgid "column_firstname"
 msgstr "Vorname"
 
 #. Default: "Lastname"
-#: ./opengever/contact/browser/person_listing.py:38
+#: ./opengever/contact/browser/person_listing.py:39
 msgid "column_lastname"
 msgstr "Nachname"
 
 #. Default: "Name"
-#: ./opengever/contact/browser/organization_listing.py:27
+#: ./opengever/contact/browser/organization_listing.py:28
 msgid "column_name"
 msgstr "Name"
 
+#. Default: "Organizations"
+#: ./opengever/contact/browser/person_listing.py:43
+msgid "column_organizations"
+msgstr "Organisationen"
+
 #. Default: "Salutation"
-#: ./opengever/contact/browser/person_listing.py:27
+#: ./opengever/contact/browser/person_listing.py:28
 msgid "column_salutation"
 msgstr "Anrede"
 
@@ -288,7 +293,7 @@ msgid "label_organizations"
 msgstr "Organisationen"
 
 #. Default: "Participation of ${contact_title}"
-#: ./opengever/contact/models/participation.py:56
+#: ./opengever/contact/models/participation.py:52
 msgid "label_participation_of"
 msgstr "Beteiligung von ${contact_title}"
 
@@ -396,3 +401,4 @@ msgstr "${amount} Treffer."
 #: ./opengever/contact/contact.py:44
 msgid "telefon"
 msgstr "Telefon"
+

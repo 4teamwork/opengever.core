@@ -164,6 +164,15 @@ def linked(item, value):
     return wrapper
 
 
+def linked_sql_object(item, value):
+    """Tabbedview helper for sqlobjects, wich renders a link to the
+    sqlobjects url.
+
+    The given item must provide a `get_url` getter.
+    """
+    return u'<a href="{}">{}</a>'.format(item.get_url(), escape_html(value))
+
+
 def document_with_icon(item, value):
     value = escape_html(value)
     icon = '<span class="{}"></span><span>{}</span>'.format(
