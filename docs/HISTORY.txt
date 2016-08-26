@@ -5,6 +5,11 @@ Changelog
 4.10.1 (unreleased)
 -------------------
 
+- Set and persist Dexterity default values:
+  This is a massive overhaul that fixes the behavior around
+  DX default and missing values. See PR #2118 for details.
+  [lgraf]
+
 - Display contacts URLs in the person and organization detail views.
   [phgross]
 
