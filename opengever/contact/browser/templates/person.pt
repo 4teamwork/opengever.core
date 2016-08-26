@@ -76,6 +76,20 @@
           </td>
         </tr>
 
+        <tr>
+          <th i18n:translate="label_urls">URLs</th>
+          <td>
+            <dl class="url">
+              <tal:repeat tal:repeat="url person/urls">
+                <dt tal:content="url/label" />
+                <dd>
+                  <span tal:content="url/url" />
+                </dd>
+              </tal:repeat>
+            </dl>
+          </td>
+        </tr>
+
       </table>
 
       <h3 i18n:translate="label_organizations">Organizations</h3>
