@@ -31,14 +31,6 @@ class TestOrganizationView(FunctionalTestCase):
                       browser.css('body').first.get('class'))
 
     @browsing
-    def test_body_contains_person_type_class(self, browser):
-        organization = create(Builder('organization').named(u'4teamwork'))
-
-        browser.login().open(organization.get_url())
-        self.assertIn('portaltype-opengever-contact-organization',
-                      browser.css('body').first.get('class'))
-
-    @browsing
     def test_shows_archived_organizations(self, browser):
         organization = create(Builder('organization').named(u'4teamwork'))
         archived_organization = create(Builder('archived_organization').having(
@@ -165,7 +157,7 @@ class TestOrganizationView(FunctionalTestCase):
                           browser.css('#contactHistory .mail dd').text)
 
     @browsing
-    def test_lists_all_related_persons(self, browser):
+    def test_lists_all_related_persons_alphabetically(self, browser):
         org1 = create(Builder('organization').named(u'4teamwork AG'))
         org2 = create(Builder('organization').named(u'Meier Ag'))
 
@@ -178,13 +170,18 @@ class TestOrganizationView(FunctionalTestCase):
         create(Builder('person')
                .having(firstname=u'Sandra', lastname=u'Muster')
                .in_orgs([(org1, u'Stellvertretende F\xfchrung')]))
+        create(Builder('person')
+               .having(firstname=u'Sandra', lastname=u'Meier')
+               .in_orgs([(org1, u'CFO')]))
 
         browser.login().open(org1.get_url())
 
-        self.assertEquals([u'Peter M\xfcller', 'Sandra Muster'],
-                          browser.css('.persons .name').text)
-        self.assertEquals([u'CEO', u'Stellvertretende F\xfchrung'],
-                          browser.css('.persons .function').text)
+        self.assertEquals(
+            [u'Peter M\xfcller', 'Sandra Meier', 'Sandra Muster'],
+            browser.css('.persons .name').text)
+        self.assertEquals(
+            [u'CEO', u'CFO', u'Stellvertretende F\xfchrung'],
+            browser.css('.persons .function').text)
 
     @browsing
     def test_related_persons_are_linked_to_person_view(self, browser):

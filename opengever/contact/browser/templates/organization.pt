@@ -70,7 +70,7 @@
 
       <h3 i18n:translate="label_persons">Persons</h3>
       <ul class="persons orgrole_listing">
-        <li tal:repeat="org_role organization/persons">
+        <li tal:repeat="org_role view/get_org_roles">
           <span class="name">
             <a href="#"
                tal:attributes="href org_role/person/get_url"

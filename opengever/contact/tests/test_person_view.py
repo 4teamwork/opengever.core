@@ -202,10 +202,10 @@ class TestPersonView(FunctionalTestCase):
                           browser.css('#contactHistory .mail dd').text)
 
     @browsing
-    def test_list_all_of_the_users_organizations(self, browser):
+    def test_list_all_of_the_users_organizations_alphabetically(self, browser):
         org1 = create(Builder('organization').named(u'Jaeger & Heike GmbH'))
         create(Builder('organization').named(u'Schuhmacher Peter AG'))
-        org3 = create(Builder('organization').named(u'Propst B & N SA'))
+        org3 = create(Builder('organization').named(u'Albert B & N SA'))
 
         peter = create(Builder('person')
                        .having(firstname=u'Peter', lastname=u'M\xfcller')
@@ -214,12 +214,12 @@ class TestPersonView(FunctionalTestCase):
 
         browser.login().open(self.contactfolder, view=peter.wrapper_id)
         self.assertEquals(
-            ['Jaeger & Heike GmbH', 'Propst B & N SA'],
+            ['Albert B & N SA', 'Jaeger & Heike GmbH'],
             browser.css('.organizations .name').text)
 
         browser.login().open(self.contactfolder, view=peter.wrapper_id)
         self.assertEquals(
-            [u'CEO', u'Stellvertretende F\xfchrung'],
+            [u'Stellvertretende F\xfchrung', u'CEO'],
             browser.css('.organizations .function').text)
 
     @browsing

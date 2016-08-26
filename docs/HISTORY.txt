@@ -5,6 +5,9 @@ Changelog
 4.10.1 (unreleased)
 -------------------
 
+- Sort related persons and organizations alphabetically in contact detail views.
+  [phgross]
+
 - Add organizations column to the person listing.
   [phgross]
 
