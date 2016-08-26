@@ -6,6 +6,7 @@ from opengever.contact.interfaces import IContactFolder
 from opengever.contact.models import Person
 from opengever.tabbedview import BaseListingTab
 from opengever.tabbedview import SqlTableSource
+from opengever.tabbedview.helper import linked_sql_object
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.interface import implements
 from zope.interface import Interface
@@ -32,15 +33,13 @@ class PersonListingTab(BaseListingTab):
 
             {'column': 'firstname',
              'column_title': _(u'column_firstname', default=u'Firstname'),
-             'transform': self.linked},
+             'transform': linked_sql_object},
 
             {'column': 'lastname',
              'column_title': _(u'column_lastname', default=u'Lastname'),
-             'transform': self.linked}
+             'transform': linked_sql_object},
         )
 
-    def linked(self, item, value):
-        return u'<a href="{}">{}</a>'.format(item.get_url(), value)
 
     def get_base_query(self):
         return Person.query

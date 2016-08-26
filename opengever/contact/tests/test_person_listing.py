@@ -62,6 +62,18 @@ class TestPersonListing(FunctionalTestCase):
             browser.find(u'M\xfcller').get('href'))
 
     @browsing
+    def test_contact_links_are_escaped(self, browser):
+        self.bold = create(Builder('person')
+                           .having(firstname=u'Usain',
+                                   lastname=u'<b>Bold</b>'))
+
+        browser.login().open(
+            self.contactfolder, view='tabbedview_view-persons')
+
+        row1 = browser.css('.listing').first.rows[1]
+        self.assertEquals('<b>Bold</b>', row1.css('td')[-1].text)
+
+    @browsing
     def test_filtering_on_firstname(self, browser):
         browser.login().open(
             self.contactfolder,
