@@ -90,6 +90,7 @@ that would fool the check.
 
 from Acquisition import aq_base
 from persistent.interfaces import IPersistent
+from plone.app.dexterity.behaviors import metadata
 from plone.behavior.annotation import AnnotationsFactoryImpl
 from plone.dexterity.utils import iterSchemata
 from zope.schema import getFieldsInOrder
@@ -104,18 +105,30 @@ def get_persisted_value_for_field(context, field):
     default / missing_value.
 
     Raises an AttributeError if there is no stored value for the field.
+
+    What we need to do here is basically to decide whether the storage
+    implementation used for the given field on this context has any
+    fallbacks (to default or missing value) in place. If it does, we need to
+    bypass them and only return the actually persisted value, or raise an
+    AttributeError.
     """
+    name = field.getName()
     if not IPersistent.providedBy(context):
         raise Exception(
-            "Attempt to get persisted field value for a non-persistent object")
+            "Attempt to get persisted field value for a non-persistent object "
+            "for field %r on obj %r" % (name, context))
 
     # AQ unwrap object to avoid finding an attribute via acquisition
     context = aq_base(context)
     storage_impl = field.interface(context)
 
+    def classname(obj):
+        """Stringy alternative to instance checks to avoid circular imports.
+        """
+        return getattr(getattr(obj, '__class__', object), '__name__', '')
+
     if isinstance(storage_impl, AnnotationsFactoryImpl):
         # AnnotationStorage
-        name = field.__name__
         if name not in storage_impl.__dict__['schema']:
             raise AttributeError(name)
 
@@ -128,18 +141,43 @@ def get_persisted_value_for_field(context, field):
             # AnnotationsFactoryImpl.__getattr__ does
             raise AttributeError(name)
         return value
-    else:
+    elif storage_impl is context:
         # Assume attribute storage
-        name = field.getName()
         try:
             # Two possible cases here: Field in base schema, or field in
             # behavior with attribute storage. Either way, we look up the
-            # attribute in the objec's __dict__ in order to circumvent the
+            # attribute in the object's __dict__ in order to circumvent the
             # fallback in DexterityContent.__getattr__
-            value = context.__dict__[name]
+            value = storage_impl.__dict__[name]
         except KeyError:
             raise AttributeError(name)
         return value
+    elif classname(storage_impl) in ('TranslatedTitle', 'OGMailBase'):
+        # These factories wrap a context that inherits from DexterityContent,
+        # accessed via storage_impl.context.
+        # So we need to apply the same strategy as for direct attribute
+        # storage to accessing attributes on that context in order to bypass
+        # the __getattr__ fallback.
+        try:
+            value = storage_impl.context.__dict__[name]
+        except KeyError:
+            raise AttributeError(name)
+        return value
+    elif classname(storage_impl) == 'Versionable':
+        # Versionable.changeNote is a property that isn't persisted, but
+        # written to request annotations instead
+        raise AttributeError(field.getName())
+    elif isinstance(storage_impl, metadata.MetadataBase):
+        # MetadataBase has its own default value fallback - bypass it
+        try:
+            value = context.__dict__[name]
+        except KeyError:
+            raise AttributeError
+        return value
+    else:
+        # Unknown storage - bail
+        raise Exception(
+            "Unknown storage %r for field %r" % (storage_impl, name))
 
 
 def get_persisted_values_for_obj(context):
