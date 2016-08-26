@@ -1,3 +1,5 @@
+from opengever.contact.models import OrgRole
+from opengever.contact.models import Person
 from opengever.ogds.base.actor import Actor
 from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
@@ -23,3 +25,8 @@ class OrganizationView(BrowserView):
 
     def get_actor_link(self, archive):
         return Actor.lookup(archive.actor_id).get_link()
+
+    def get_org_roles(self):
+        query = OrgRole.query.filter_by(organization=self.context.model)
+        return query.join(Person).order_by(
+            Person.firstname, Person.lastname).all()
