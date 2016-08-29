@@ -5,6 +5,9 @@ Changelog
 4.10.1 (unreleased)
 -------------------
 
+- Display contacts URLs in the person and organization detail views.
+  [phgross]
+
 - Fix bumblebee fallback image on document overview
   [Kevin Bieri]
 
