@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.10.1 (unreleased)
+4.10.1 (2016-08-29)
 -------------------
 
 - [showroom] Fix document overview on searchpage
