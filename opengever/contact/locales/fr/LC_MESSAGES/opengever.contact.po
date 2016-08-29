@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-08-26 09:05+0000\n"
+"POT-Creation-Date: 2016-08-29 06:43+0000\n"
 "PO-Revision-Date: 2016-08-10 04:52+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-contact/fr/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "X-Generator: Weblate 2.7-dev\n"
 
 #. Default: "Add Person"
-#: ./opengever/contact/browser/person.py:108
+#: ./opengever/contact/browser/person.py:114
 msgid "Add Person"
 msgstr "Ajouter une personne"
 
@@ -64,12 +64,12 @@ msgid "address"
 msgstr "Adresse"
 
 #. Default: "Edit"
-#: ./opengever/contact/browser/templates/participations.pt:16
+#: ./opengever/contact/browser/templates/participations.pt:19
 msgid "button_edit"
 msgstr ""
 
 #. Default: "Remove"
-#: ./opengever/contact/browser/templates/participations.pt:23
+#: ./opengever/contact/browser/templates/participations.pt:26
 msgid "button_remove"
 msgstr ""
 
@@ -144,7 +144,7 @@ msgid "internet"
 msgstr "Site internet"
 
 #. Default: "Academic title"
-#: ./opengever/contact/browser/person.py:82
+#: ./opengever/contact/browser/person.py:88
 #: ./opengever/contact/browser/templates/person.pt:30
 #: ./opengever/contact/contact.py:69
 msgid "label_academic_title"
@@ -236,7 +236,7 @@ msgid "label_department"
 msgstr "Service"
 
 #. Default: "Description"
-#: ./opengever/contact/browser/person.py:97
+#: ./opengever/contact/browser/person.py:103
 #: ./opengever/contact/contact.py:145
 msgid "label_description"
 msgstr "Description"
@@ -258,14 +258,14 @@ msgid "label_email2"
 msgstr "Email 2"
 
 #. Default: "Firstname"
-#: ./opengever/contact/browser/person.py:87
+#: ./opengever/contact/browser/person.py:93
 #: ./opengever/contact/contact.py:82
 #: ./opengever/contact/contactfolder.py:112
 msgid "label_firstname"
 msgstr "Prénom"
 
 #. Default: "Lastname"
-#: ./opengever/contact/browser/person.py:92
+#: ./opengever/contact/browser/person.py:98
 #: ./opengever/contact/contact.py:75
 #: ./opengever/contact/contactfolder.py:107
 msgid "label_lastname"
@@ -286,6 +286,11 @@ msgstr ""
 #: ./opengever/contact/browser/templates/organization.pt:21
 #: ./opengever/contact/browser/templates/person.pt:22
 msgid "label_name"
+msgstr ""
+
+#. Default: "No participations"
+#: ./opengever/contact/browser/templates/participations.pt:36
+msgid "label_no_participations"
 msgstr ""
 
 #. Default: "Organizations"
@@ -353,7 +358,7 @@ msgid "label_roles"
 msgstr ""
 
 #. Default: "Salutation"
-#: ./opengever/contact/browser/person.py:77
+#: ./opengever/contact/browser/person.py:83
 #: ./opengever/contact/browser/templates/person.pt:26
 #: ./opengever/contact/contact.py:64
 msgid "label_salutation"
