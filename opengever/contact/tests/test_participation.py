@@ -128,7 +128,7 @@ class TestAddParticipationAction(FunctionalTestCase):
     def test_redirects_to_plone_implementation_add_form_when_contact_feature_is_disabled(self, browser):
         toggle_feature(IContactSettings, enabled=False)
         browser.login().open(self.dossier)
-        factoriesmenu.add('Add Participant')
+        factoriesmenu.add('Participant')
         self.assertEqual(
             'http://nohost/plone/dossier-1/add-plone-participation', browser.url)
 
@@ -136,7 +136,7 @@ class TestAddParticipationAction(FunctionalTestCase):
     def test_redirects_to_plone_implementation_add_form_when_contact_feature_is_enabled(self, browser):
         toggle_feature(IContactSettings, enabled=True)
         browser.login().open(self.dossier)
-        factoriesmenu.add('Add Participant')
+        factoriesmenu.add('Participant')
         self.assertEqual(
             'http://nohost/plone/dossier-1/add-sql-participation', browser.url)
 

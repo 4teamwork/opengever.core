@@ -91,7 +91,7 @@
 
     <action action_id="add_participant"
             visible="True"
-            title="Add Participant"
+            title="Participant"
             category="folder_factories"
             url_expr="string:${object_url}/@@add-participation"
             icon_expr=""

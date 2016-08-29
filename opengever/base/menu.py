@@ -18,7 +18,7 @@ def order_factories(context, factories):
                        'Add task from template',
                        'Mail',
                        'Subdossier',
-                       'Add Participant',
+                       'Participant',
                        ]
 
     ordered_factories = []
