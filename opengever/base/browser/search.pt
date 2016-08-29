@@ -340,11 +340,9 @@
                           </dd>
                         </div>
                         <div class="searchImage" tal:condition="item/is_bumblebeeable">
-                          <img class="showroom-item bumblebeeSearchPreview"
+                          <img class="showroom-reference bumblebeeSearchPreview"
                                tal:attributes="src item/get_preview_image_url;
-                                               data-showroom-id item/UID;
-                                               data-showroom-target item/get_overlay_url;
-                                               data-showroom-title item/get_overlay_title;" />
+                                               data-showroom-target-item item/UID;" />
                         </div>
                       </div>
                       <div class="visualClear"><!-- --></div>
