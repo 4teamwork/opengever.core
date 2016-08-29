@@ -5,9 +5,6 @@ Changelog
 4.10.1 (unreleased)
 -------------------
 
-- [showroom] Fix document overview on searchpage
-  [Kevin Bieri]
-
 - Set and persist Dexterity default values:
   This is a massive overhaul that fixes the behavior around
   DX default and missing values. See PR #2118 for details.
@@ -37,6 +34,13 @@ Changelog
 
 - Move bumblebee installation script to opengever.maintenance.
   [phgross]
+
+
+4.10.1 (2016-08-29)
+-------------------
+
+- [showroom] Fix document overview on searchpage
+  [Kevin Bieri]
 
 
 4.10.0 (2016-08-23)
