@@ -18,6 +18,8 @@ import random
 
 ADDRESS_LABELS = ['Arbeit', 'Privat', None]
 PHONENUMBER_LABELS = ['Arbeit', 'Privat', 'Mobile']
+ORG_ROLE_FUNCTIONS = [
+    None, 'Verwalter', 'Vorsitz', 'Putzfachmann', 'Beratung', 'Angestellter']
 
 
 class ExampleContactCreator(object):
@@ -96,8 +98,10 @@ class ExampleContactCreator(object):
             self.add_mail(item, person, ADDRESS_LABELS)
             self.add_archived_mails(items, person, ADDRESS_LABELS)
 
-            org_role = OrgRole(person=person,
-                               organization=random.choice(organizations))
+            for entry in self.random_range:
+                org_role = OrgRole(person=person,
+                                   function=random.choice(ORG_ROLE_FUNCTIONS),
+                                   organization=random.choice(organizations))
             self.db_session.add(org_role)
 
     def add_archived_persons(self, person, items):
