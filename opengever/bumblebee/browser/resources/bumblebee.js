@@ -158,8 +158,8 @@
 
   function init() {
     showroom = Showroom([], {
-      "tail": tail,
-      "head": head,
+      tail: tail,
+      head: head,
       template: template
     });
     updateShowroom();
@@ -192,7 +192,6 @@
 
   function getNumberOfDocuments(fallbackValue) {
     var galleryDocuments = $(".preview-listing").data("number-of-documents");
-
     if ($.isNumeric(galleryDocuments)) {
       // we are in gallery_view
       return galleryDocuments;
@@ -267,21 +266,15 @@
 
     showroom.reset(items, getOffset());
     showroom.setTotal(numberOfDocuments);
-    showroom.refresh();
-  }
-
-  function refreshShowroom(event, api) {
-    showroom.refresh();
   }
 
   $(document)
     .on("reload", updateShowroom)
     .on("viewReady", updateShowroom)
     .on("agendaItemsReady", updateShowroom)
-    .on("tooltip.show", refreshShowroom)
     .on("click", ".bumblebeeGalleryShowMore", loadNextTabbedviewGalleryView)
     .on("click", ".ftw-showroom-backdrop", closeShowroom)
-    .on("tooltip.show", function() { scanForBrokenImages(".bumblebee-thumbnail") });
+    .on("tooltip.show", function() { scanForBrokenImages(".bumblebee-thumbnail"); });
   $(init);
 
 })(window, window.showroom, window.jQuery);

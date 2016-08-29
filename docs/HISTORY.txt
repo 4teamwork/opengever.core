@@ -5,6 +5,9 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
+- [showroom] Support ftw.showroom 1.2.2 version
+  [Kevin Bieri]
+
 - Set and persist Dexterity default values:
   This is a massive overhaul that fixes the behavior around
   DX default and missing values. See PR #2118 for details.
