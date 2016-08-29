@@ -12,6 +12,11 @@ class IOpengeverBaseLayer(Interface):
     """
 
 
+class IDuringContentCreation(Interface):
+    """Request layer to indicate that content is currently being created.
+    """
+
+
 class IOpengeverCatalogBrain(ICatalogBrain):
     """Detailed Interface for opengever CatalogBrain.
     Used for add an opengever specific CatalogContentlisting Adapter.
