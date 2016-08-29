@@ -5,6 +5,7 @@ from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 from opengever.testing import FunctionalTestCase
 from plone import api
 from zope.component import getMultiAdapter
+from plone.uuid.interfaces import IUUID
 
 
 class TestOpengeverSearch(FunctionalTestCase):
@@ -47,7 +48,7 @@ class TestBumblebeePreview(FunctionalTestCase):
 
     @browsing
     def test_thumbnails_are_linked_to_bumblebee_overlay(self, browser):
-        create(Builder('document')
+        document = create(Builder('document')
                .titled(u'Foo Document')
                .with_dummy_content())
 
@@ -55,8 +56,8 @@ class TestBumblebeePreview(FunctionalTestCase):
         browser.fill({'Search Site': 'Foo Document'}).submit()
 
         self.assertEqual(
-            'http://nohost/plone/document-1/@@bumblebee-overlay-listing',
-            browser.css('.bumblebeeSearchPreview').first.get('data-showroom-target'))
+            IUUID(document),
+            browser.css('.bumblebeeSearchPreview').first.get('data-showroom-target-item'))
 
     @browsing
     def test_all_links_including_documents_are_linked_to_absolute_url(self, browser):
