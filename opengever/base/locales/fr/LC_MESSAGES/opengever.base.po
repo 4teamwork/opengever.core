@@ -4,21 +4,20 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-07-21 14:08+0000\n"
+"POT-Creation-Date: 2016-08-29 07:15+0000\n"
 "PO-Revision-Date: 2016-08-10 05:15+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
-"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
-"gever/opengever-base/fr/>\n"
-"Language: fr\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-base/fr/>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2.7-dev\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
+"Language: fr\n"
+"X-Generator: Weblate 2.7-dev\n"
 
 #: ./opengever/base/browser/list_groupmembers.pt:5
 msgid "(INACTIVE)"
@@ -207,7 +206,7 @@ msgid "label_description"
 msgstr "Description"
 
 #. Default: "Dossier:"
-#: ./opengever/base/browser/search.pt:315
+#: ./opengever/base/browser/search.pt:305
 msgid "label_dossier"
 msgstr "Dossier:"
 
@@ -375,3 +374,4 @@ msgstr "Non contrôlé"
 #: opengever/repository/classification.py
 msgid "unprotected"
 msgstr "Non classé"
+

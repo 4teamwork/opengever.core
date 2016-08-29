@@ -14,9 +14,6 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-msgid "Add Participant"
-msgstr "Participant"
-
 msgid "Add response"
 msgstr "Réponse"
 
@@ -97,6 +94,9 @@ msgstr "Liste des affaires en suspens"
 
 msgid "Overview"
 msgstr "Sommaire"
+
+msgid "Participant"
+msgstr "Participant"
 
 msgid "Search OneGov Gever"
 msgstr "Parcourir OneGov Gever"
@@ -311,4 +311,3 @@ msgstr "Activer"
 
 msgid "transition-add-document"
 msgstr ""
-

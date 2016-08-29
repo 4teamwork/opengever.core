@@ -85,7 +85,7 @@ class TestDossier(FunctionalTestCase):
              u'Task',
              'Add task from template',
              u'Subdossier',
-             u'Add Participant'],
+             u'Participant'],
             [item.get('title') for item in menu_items])
 
     def test_subdossier_add_form_is_called_add_subdossier(self):

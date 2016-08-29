@@ -36,7 +36,7 @@ class TestMeetingDossier(TestDossier):
              u'Task',
              'Add task from template',
              u'Subdossier',
-             u'Add Participant',
+             u'Participant',
              u'Proposal'],
             [item.get('title') for item in menu_items])
 

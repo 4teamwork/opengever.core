@@ -90,7 +90,7 @@ msgstr ""
 msgid "Edit metadata"
 msgstr ""
 
-msgid "Add Participant"
+msgid "Participant"
 msgstr ""
 
 msgid "document_with_template"

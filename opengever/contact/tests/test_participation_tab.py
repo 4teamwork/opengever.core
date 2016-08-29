@@ -59,6 +59,14 @@ class ParticipationTab(FunctionalTestCase):
             browser.css('#participation_listing .contact').text)
 
     @browsing
+    def test_shows_no_participation_label_when_no_participations_exist(self, browser):
+        dossier2 = create(Builder('dossier'))
+        browser.login().open(dossier2,
+                             view=u'tabbedview_view-participations')
+
+        self.assertEquals(['No participations'], browser.css('body').text)
+
+    @browsing
     def test_roles_of_each_participation_is_visible_and_translated(self, browser):
         browser.login().open(self.dossier,
                              view=u'tabbedview_view-participations')
