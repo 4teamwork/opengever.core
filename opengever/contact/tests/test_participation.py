@@ -1,5 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.tabbedview.interfaces import ITabbedView
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import error_messages
@@ -10,6 +11,7 @@ from opengever.contact.models.participation import Participation
 from opengever.core.testing import toggle_feature
 from opengever.testing import FunctionalTestCase
 from opengever.testing import MEMORY_DB_LAYER
+from plone import api
 from zExceptions import Unauthorized
 import unittest2
 
@@ -116,6 +118,66 @@ class TestParticipationWrapper(FunctionalTestCase):
         with self.assertRaises(Unauthorized):
             browser.login().open('{}/participation-1/edit'.format(
                 dossier2.absolute_url()))
+
+
+class TestParticipationsEndPoint(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestParticipationsEndPoint, self).setUp()
+
+        # adjust slice size
+        api.portal.set_registry_record(
+            'batch_size', 2, interface=ITabbedView)
+
+        self.contactfolder = create(Builder('contactfolder'))
+        self.meierag = create(Builder('organization').having(name=u'Meier AG'))
+        self.dossier1 = create(Builder('dossier').titled(u'Dossier A'))
+        self.dossier2 = create(Builder('dossier').titled(u'Dossier B'))
+        self.dossier3 = create(Builder('dossier').titled(u'Dossier C'))
+        create(Builder('participation')
+               .for_dossier(self.dossier1)
+               .for_contact(self.meierag)
+               .with_roles(['regard', 'final-drawing']))
+        create(Builder('participation')
+               .for_dossier(self.dossier2)
+               .for_contact(self.meierag)
+               .with_roles(['participation']))
+        create(Builder('participation')
+               .for_dossier(self.dossier3)
+               .for_contact(self.meierag)
+               .with_roles(['participation']))
+
+    @browsing
+    def test_returns_a_list_of_serialized_participations_the_latest_first(self, browser):
+        browser.login().open(self.meierag.get_url('participations/list'))
+
+        self.assertEqual(
+            [{u'url': u'http://nohost/plone/dossier-3',
+              u'roles': [{u'label': u'Participation'}],
+              u'title': u'Dossier C'},
+             {u'url': u'http://nohost/plone/dossier-2',
+              u'roles': [{u'label': u'Regard'},
+                         {u'label': u'Final drawing'}],
+              u'title': u'Dossier B'}],
+            browser.json.get('participations'))
+
+    @browsing
+    def test_is_sliced_and_has_more_flag_is_set_when_slice_size_is_exceeded(self, browser):
+        browser.login().open(self.meierag.get_url('participations/list'))
+
+        self.assertEqual(browser.json.get('has_more'), True)
+        self.assertEqual(
+            [u'Dossier C', u'Dossier B'],
+            [participation for participation in browser.json.get('participations')])
+
+    @browsing
+    def test_returns_all_participations_when_request_flag_is_set(self, browser):
+        browser.login().open(self.meierag.get_url('participations/list'),
+                             {'show_all': 'true'})
+
+        self.assertEqual(
+            [u'Dossier C', u'Dossier B', u'Dossier A'],
+            [participation for participation in browser.json.get('participations')])
 
 
 class TestAddParticipationAction(FunctionalTestCase):

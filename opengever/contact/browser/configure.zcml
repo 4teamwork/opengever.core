@@ -32,6 +32,14 @@
       />
 
   <browser:page
+      name="participations"
+      for="opengever.contact.interfaces.IContact"
+      class=".participations.ParticipationsView"
+      permission="zope2.View"
+      allowed_attributes="list"
+      />
+
+  <browser:page
       name="tabbedview_view-participations"
       for="*"
       class=".participations.ParticpationTab"

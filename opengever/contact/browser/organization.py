@@ -30,3 +30,6 @@ class OrganizationView(BrowserView):
         query = OrgRole.query.filter_by(organization=self.context.model)
         return query.join(Person).order_by(
             Person.firstname, Person.lastname).all()
+
+    def participations_fetch_url(self):
+        return self.context.model.get_url('participations/list')
