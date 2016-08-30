@@ -229,6 +229,13 @@ Changelog
   [elioschmutz]
 
 
+4.9.3 (2016-07-19)
+------------------
+
+- Addded french translations.
+  [phgross]
+
+
 4.9.2 (2016-07-07)
 ------------------
 
