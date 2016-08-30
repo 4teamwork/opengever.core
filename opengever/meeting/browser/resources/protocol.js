@@ -136,7 +136,7 @@
 
     var headings = global.Pin("#opengever_meeting_protocol .protocol_title", "trix-toolbar");
     var labels = global.Pin("#opengever_meeting_protocol .agenda_items label", null, { pin: false });
-    var navigation = global.Pin(".protocol-navigation", null, { pin: false });
+    global.Pin(".protocol-navigation", null, { pin: false });
 
     headings.onRelease(function() {
       scrollspy.reset();
@@ -148,6 +148,11 @@
 
     labels.onPin(function(item) {
       scrollspy.select($("#" + item.element.attr("for") + "-anchor"));
+    });
+
+    $(document).on("trix-change", function() {
+      headings.refresh();
+      labels.refresh();
     });
 
   }
