@@ -53,10 +53,13 @@ class PersonView(BrowserView):
     implements(IBrowserView, IPublishTraverse)
 
     template = ViewPageTemplateFile('templates/person.pt')
+    latest_participations = ViewPageTemplateFile(
+        'templates/latest_participations.pt')
 
     def __init__(self, context, request):
         super(PersonView, self).__init__(context, request)
         self.model = self.context.model
+        self.request = request
 
     def __call__(self):
         return self.template()
@@ -77,6 +80,9 @@ class PersonView(BrowserView):
     def get_org_roles(self):
         query = OrgRole.query.filter_by(person=self.context.model)
         return query.join(Organization).order_by(Organization.name).all()
+
+    def latest_participations_template(self):
+        return self.latest_participations()
 
 
 class IPersonModel(form.Schema):
