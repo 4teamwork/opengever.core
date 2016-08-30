@@ -9,7 +9,9 @@
 
     <script id="latest_participations_template" type="text/x-handlebars-template">
       {{#if has_more}}
-      <a href="" id="participation_show_all" i18n:translate="label_show_all">Show all</a>
+      <a href="" id="participation_show_all">
+        {{show_all_label}}
+      </a>
       {{/if}}
       {{#each participations}}
       <li>

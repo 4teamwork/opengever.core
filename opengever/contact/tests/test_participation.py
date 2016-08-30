@@ -171,6 +171,13 @@ class TestParticipationsEndPoint(FunctionalTestCase):
              in browser.json.get('participations')])
 
     @browsing
+    def test_show_all_link(self, browser):
+        browser.login().open(self.meierag.get_url('participations/list'))
+
+        self.assertEqual(u'Show all 3 participations',
+                         browser.json.get('show_all_label'))
+
+    @browsing
     def test_returns_all_participations_when_request_flag_is_set(self, browser):
         browser.login().open(self.meierag.get_url('participations/list'),
                              {'show_all': 'true'})

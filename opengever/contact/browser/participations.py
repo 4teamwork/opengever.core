@@ -1,10 +1,12 @@
 from ftw.tabbedview.interfaces import ITabbedView
 from opengever.base.response import JSONResponse
+from opengever.contact import _
 from opengever.contact.models import Participation
 from opengever.tabbedview import GeverTabMixin
 from plone import api
 from Products.Five.browser import BrowserView
 from sqlalchemy import desc
+from zope.i18n import translate
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 
 
@@ -23,6 +25,7 @@ class ParticipationsView(BrowserView):
         contexts participations. It sliced to the default tabbedview batch
         size depending on the `show_all` request_flag.
         `has_more`: a boolean value if the list is sliced.
+        `show_all_label`: label for the show all link.
         """
 
         data = {}
@@ -35,7 +38,14 @@ class ParticipationsView(BrowserView):
 
         data['participations'] = self._serialize(query)
         data['has_more'] = total > len(data['participations'])
+        data['show_all_label'] = self.get_show_all_label(total)
         return JSONResponse(self.request).data(**data).dump()
+
+    def get_show_all_label(self, total):
+        msg = _(u'label_show_all',
+                default=u'Show all ${total} participations',
+                mapping={'total': total})
+        return translate(msg, context=self.request)
 
     def _serialize(self, participations):
         return [participation.get_json_representation()

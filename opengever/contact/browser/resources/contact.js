@@ -15,7 +15,8 @@
 
     this.render = function(data) {
       return this.template({ participations: data.participations,
-                             has_more: data.has_more });
+                             has_more: data.has_more,
+                             show_all_label: data.show_all_label});
     }
 
     this.show_all = function(data) {
