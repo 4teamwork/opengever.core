@@ -5,6 +5,9 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
+- Fix wrong pin position when trix content has been changed.
+  [Kevin Bieri]
+
 - [showroom] Support ftw.showroom 1.2.2 version
   [Kevin Bieri]
 
