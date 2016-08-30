@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.10.2 (unreleased)
+4.10.2 (2016-08-30)
 -------------------
 
 - Fix wrong pin position when trix content has been changed.
