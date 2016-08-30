@@ -152,13 +152,12 @@ class TestParticipationsEndPoint(FunctionalTestCase):
         browser.login().open(self.meierag.get_url('participations/list'))
 
         self.assertEqual(
-            [{u'url': u'http://nohost/plone/dossier-3',
-              u'roles': [{u'label': u'Participation'}],
-              u'title': u'Dossier C'},
-             {u'url': u'http://nohost/plone/dossier-2',
-              u'roles': [{u'label': u'Regard'},
-                         {u'label': u'Final drawing'}],
-              u'title': u'Dossier B'}],
+            [{u'roles': [{u'label': u'Participation'}],
+              u'title': u'Dossier C',
+              u'url': u'http://nohost/plone/dossier-3'},
+             {u'roles': [{u'label': u'Participation'}],
+              u'title': u'Dossier B',
+              u'url': u'http://nohost/plone/dossier-2'}],
             browser.json.get('participations'))
 
     @browsing
@@ -168,7 +167,8 @@ class TestParticipationsEndPoint(FunctionalTestCase):
         self.assertEqual(browser.json.get('has_more'), True)
         self.assertEqual(
             [u'Dossier C', u'Dossier B'],
-            [participation for participation in browser.json.get('participations')])
+            [participation.get('title') for participation
+             in browser.json.get('participations')])
 
     @browsing
     def test_returns_all_participations_when_request_flag_is_set(self, browser):
@@ -177,7 +177,8 @@ class TestParticipationsEndPoint(FunctionalTestCase):
 
         self.assertEqual(
             [u'Dossier C', u'Dossier B', u'Dossier A'],
-            [participation for participation in browser.json.get('participations')])
+            [participation.get('title') for participation
+             in browser.json.get('participations')])
 
 
 class TestAddParticipationAction(FunctionalTestCase):

@@ -104,6 +104,33 @@
         </li>
       </ul>
 
+      <h3 i18n:translate="label_latest_participations">Latest participations</h3>
+      <ul class="person dossier_listing" id="latest_participation_listing"
+          tal:attributes="data-fetch-url view/participations_fetch_url">
+
+        <img tal:attributes="src string:${portal_url}/spinner.gif" class="spinner"/>
+
+        <script id="latest_participations_template" type="text/x-handlebars-template">
+          {{#if has_more}}
+          <a href="" id="participation_show_all" i18n:translate="label_show_all">Show all</a>
+          {{/if}}
+          {{#each participations}}
+          <li>
+            <span class="name">
+              <a class="dossier" href="{{url}}">{{title}}</a>
+            </span>
+            <ul class="roles function" >
+              {{#each roles}}
+              <li>
+                <span>{{label}}</span>
+              </li>
+              {{/each}}
+            </ul>
+          </li>
+          {{/each}}
+        </script>
+      </ul>
+
       <div class="collapsible" id="contactHistory">
         <div class="collapsible-header">
           <button class="button fa fa-plus"></button>

@@ -157,7 +157,8 @@
 
   $(function() {
 
-    if ($('body.portaltype-opengever-contact-organization').length){
+    if ($('body.portaltype-opengever-contact-organization').length ||
+        $('body.portaltype-opengever-contact-person').length){
       var participatedDossierController = new ParticipatedDossierController();
     }
 

@@ -61,6 +61,9 @@ class PersonView(BrowserView):
     def __call__(self):
         return self.template()
 
+    def participations_fetch_url(self):
+        return self.context.model.get_url('participations/list')
+
     def prepare_model_tabs(self, viewlet):
         if not self.model.is_editable():
             return tuple()
