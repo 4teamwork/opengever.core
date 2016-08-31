@@ -8,14 +8,25 @@
 
     var root = $(":root");
 
+    var headings;
+    var labels;
+
     var saveButton = $("#form-buttons-save");
     var protocolControls = $("#protocol-controls");
 
     var currentMeeting = $(".protocol-navigation").data().meeting;
     var createdAt = new Date($(".protocol-navigation").data().modified).getTime();
 
-    var protocolSynchronizer = new global.Synchronizer({ target: "#content-core input, #content-core select, #content-core textarea", triggers: ["input", "change", "changeDate"] });
-    var trixSynchronizer = new global.Synchronizer({ target: "trix-editor", triggers: ["trix-change"] });
+    var protocolSynchronizer = new global.Synchronizer({
+      target: "#content-core input, #content-core select, #content-core textarea",
+      triggers: ["input", "change", "changeDate"]
+    });
+
+    var trixSynchronizer = new global.Synchronizer({
+      target: "trix-editor",
+      triggers: ["trix-change"]
+    });
+
     var meetingStorage = new global.MeetingStorage(currentMeeting);
 
     var showHintForLocalChanges = function() {
@@ -23,9 +34,7 @@
       protocolControls.addClass("local-changes");
     };
 
-    var showHintForConflictChanges = function() {
-      root.addClass("conflict-changes");
-    };
+    var showHintForConflictChanges = function() { root.addClass("conflict-changes"); };
 
     var parseProposal = function(expression) { return expression.split("-"); };
 
@@ -35,11 +44,11 @@
       meetingStorage.addOrUpdateUnit(proposalExpression[1], proposalExpression[2], html);
       meetingStorage.push();
       showHintForLocalChanges();
+      headings.refresh();
+      labels.refresh();
     };
 
-    var syncProposal = function() {
-      showHintForLocalChanges();
-    };
+    var syncProposal = function() { showHintForLocalChanges(); };
 
     protocolSynchronizer.onSync(syncProposal);
     protocolSynchronizer.observe();
@@ -63,19 +72,36 @@
         }
         return !data.hasConflict;
       };
-      return this.request(form.attr("action"), { type: "POST", data: payload, validator: conflictValidator })
-              .done(function(data) {
-                if (data.redirectUrl !== undefined) {
-                  meetingStorage.deleteCurrentMeeting();
-                  window.location = data.redirectUrl;
-                } else {
-                  // we stay on the same site. allow re-submit.
-                  $("#form-buttons-save").removeClass("submitting");
-                }
-             });
+      return this.request(form.attr("action"), {
+        type: "POST",
+        data: payload,
+        validator: conflictValidator
+      }).done(function(data) {
+        if (data.redirectUrl !== undefined) {
+          meetingStorage.deleteCurrentMeeting();
+          window.location = data.redirectUrl;
+        } else {
+          // we stay on the same site. allow re-submit.
+          $("#form-buttons-save").removeClass("submitting");
+        }
+      });
     };
 
     this.discardProtocol = function() { meetingStorage.deleteCurrentMeeting(); };
+
+    this.initScrollspy = function() {
+      var scrollspy = global.Scrollspy(".navigation > ul");
+
+      headings = global.Pin("#opengever_meeting_protocol .protocol_title", "trix-toolbar");
+      labels = global.Pin("#opengever_meeting_protocol .agenda_items label", null, { pin: false });
+      global.Pin(".protocol-navigation", null, { pin: false });
+
+      headings.onRelease(function() { scrollspy.reset(); });
+
+      headings.onPin(function(item) { scrollspy.select($("#" + item.element.attr("id") + "-anchor")); });
+
+      labels.onPin(function(item) { scrollspy.select($("#" + item.element.attr("for") + "-anchor")); });
+    };
 
     this.events = [
       {
@@ -90,6 +116,11 @@
         options: {
           prevent: false
         }
+      },
+      {
+        method: "ready",
+        target: document,
+        callback: this.initScrollspy
       }
     ];
 
@@ -98,7 +129,6 @@
     if(meetingStorage.currentMeeting.revision) {
       showHintForLocalChanges();
     }
-
   }
 
   function TrixController() {
@@ -110,9 +140,7 @@
       toolbar.addClass("active");
     };
 
-    this.attachToolbar = function(target) {
-      this.activateToolbar($("#" + target.attr("toolbar")));
-    };
+    this.attachToolbar = function(target) { this.activateToolbar($("#" + target.attr("toolbar"))); };
 
     this.events = [
       {
@@ -128,39 +156,9 @@
 
   var trixController = new TrixController();
 
-  function init() {
-
-    var protocolController = new ProtocolController();
-
-    var scrollspy = global.Scrollspy(".navigation > ul");
-
-    var headings = global.Pin("#opengever_meeting_protocol .protocol_title", "trix-toolbar");
-    var labels = global.Pin("#opengever_meeting_protocol .agenda_items label", null, { pin: false });
-    global.Pin(".protocol-navigation", null, { pin: false });
-
-    headings.onRelease(function() {
-      scrollspy.reset();
-    });
-
-    headings.onPin(function(item) {
-      scrollspy.select($("#" + item.element.attr("id") + "-anchor"));
-    });
-
-    labels.onPin(function(item) {
-      scrollspy.select($("#" + item.element.attr("for") + "-anchor"));
-    });
-
-    var scrollRefresher = new global.Synchronizer({ target: "trix-editor", triggers: ["trix-change"] });
-    scrollRefresher.onSync(function() {
-      headings.refresh();
-      labels.refresh();
-    });
-    scrollRefresher.observe();
-  }
-
   $(function() {
     if($("#opengever_meeting_protocol").length) {
-      init();
+      var protocolController = new ProtocolController();
     }
     if($(".template-opengever-meeting-proposal, .portaltype-opengever-meeting-submittedproposal.template-edit, .portaltype-opengever-meeting-proposal.template-edit").length) {
       global.Pin("trix-toolbar");
