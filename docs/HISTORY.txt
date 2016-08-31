@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.10.4 (unreleased)
+4.10.4 (2016-08-31)
 -------------------
 
 - Fix hint for local changes.
