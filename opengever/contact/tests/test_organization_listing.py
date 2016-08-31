@@ -13,7 +13,9 @@ class TestOrganizationListing(FunctionalTestCase):
                                     .titled(u'Kontakte'))
 
         create(Builder('organization').named(u'Meier AG'))
-        create(Builder('organization').named(u'M\xfcller'))
+        create(Builder('organization')
+               .named(u'M\xfcller')
+               .having(is_active=False))
         create(Builder('organization').named(u'AAA Design'))
 
     @browsing
@@ -22,10 +24,10 @@ class TestOrganizationListing(FunctionalTestCase):
             self.contactfolder, view='tabbedview_view-organizations')
 
         self.assertEquals(
-            [[u'Name'],
-             [u'AAA Design'],
-             [u'Meier AG'],
-             [u'M\xfcller']],
+            [[u'Name', 'Active'],
+             [u'AAA Design', 'Yes'],
+             [u'Meier AG', 'Yes'],
+             [u'M\xfcller', 'No']],
             browser.css('.listing').first.lists())
 
     @browsing
@@ -45,6 +47,6 @@ class TestOrganizationListing(FunctionalTestCase):
             data={'searchable_text': 'Design'})
 
         self.assertEquals(
-            [[u'Name'],
-             [u'AAA Design']],
+            [[u'Name', 'Active'],
+             [u'AAA Design', 'Yes']],
             browser.css('.listing').first.lists())

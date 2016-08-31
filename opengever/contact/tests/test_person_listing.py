@@ -20,7 +20,8 @@ class TestPersonListing(FunctionalTestCase):
         self.sandra = create(Builder('person')
                              .having(salutation='Frau',
                                      firstname=u'Sandra',
-                                     lastname=u'Albert'))
+                                     lastname=u'Albert',
+                                     is_active=False))
         self.max = create(Builder('person')
                           .having(salutation='Frau',
                                   firstname=u'Sandra',
@@ -33,10 +34,10 @@ class TestPersonListing(FunctionalTestCase):
 
         self.assertEquals(
             [['Salutation', 'Academic title', 'Firstname',
-              'Lastname', 'Organizations'],
-             ['Frau', '', 'Sandra', 'Albert', ''],
-             ['Frau', '', 'Sandra', 'Mustermann', ''],
-             ['Herr', 'Dr. rer. nat.', 'Peter', u'M\xfcller', '']],
+              'Lastname', 'Active', 'Organizations'],
+             ['Frau', '', 'Sandra', 'Albert', 'No', ''],
+             ['Frau', '', 'Sandra', 'Mustermann', 'Yes', ''],
+             ['Herr', 'Dr. rer. nat.', 'Peter', u'M\xfcller', 'Yes', '']],
             browser.css('.listing').first.lists())
 
     @browsing
@@ -72,7 +73,7 @@ class TestPersonListing(FunctionalTestCase):
             self.contactfolder, view='tabbedview_view-persons')
 
         row1 = browser.css('.listing').first.rows[1]
-        self.assertEquals('<b>Bold</b>', row1.css('td')[-2].text)
+        self.assertEquals('<b>Bold</b>', row1.css('td')[-3].text)
 
     @browsing
     def test_organizations_are_linked_and_sepearated_by_comma(self, browser):
@@ -89,7 +90,7 @@ class TestPersonListing(FunctionalTestCase):
         row = browser.css('.listing').first.rows[1]
 
         self.assertEquals(
-            ['Frau', '', 'Sandra', 'Albert', u'Meier AG, Sophie SA'],
+            ['Frau', '', 'Sandra', 'Albert', 'No', u'Meier AG, Sophie SA'],
             row.css('td').text)
         self.assertEquals(self.org1.get_url(),
                           row.find('Meier AG').get('href'))
@@ -105,9 +106,9 @@ class TestPersonListing(FunctionalTestCase):
 
         self.assertEquals(
             [['Salutation', 'Academic title', 'Firstname',
-              'Lastname', 'Organizations'],
-             ['Frau', '', 'Sandra', 'Albert', ''],
-             ['Frau', '', 'Sandra', 'Mustermann', '']],
+              'Lastname', 'Active', 'Organizations'],
+             ['Frau', '', 'Sandra', 'Albert', 'No', ''],
+             ['Frau', '', 'Sandra', 'Mustermann', 'Yes', '']],
             browser.css('.listing').first.lists())
 
     @browsing
@@ -119,6 +120,6 @@ class TestPersonListing(FunctionalTestCase):
 
         self.assertEquals(
             [['Salutation', 'Academic title', 'Firstname',
-              'Lastname', 'Organizations'],
-             ['Frau', '', 'Sandra', 'Albert', '']],
+              'Lastname', 'Active', 'Organizations'],
+             ['Frau', '', 'Sandra', 'Albert', 'No', '']],
             browser.css('.listing').first.lists())

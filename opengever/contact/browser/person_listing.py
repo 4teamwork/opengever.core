@@ -6,6 +6,7 @@ from opengever.contact.interfaces import IContactFolder
 from opengever.contact.models import Person
 from opengever.tabbedview import BaseListingTab
 from opengever.tabbedview import SqlTableSource
+from opengever.tabbedview.helper import boolean_helper
 from opengever.tabbedview.helper import linked_sql_object
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.interface import implements
@@ -38,6 +39,10 @@ class PersonListingTab(BaseListingTab):
             {'column': 'lastname',
              'column_title': _(u'column_lastname', default=u'Lastname'),
              'transform': linked_sql_object},
+
+            {'column': 'is_active',
+             'column_title': _(u'column_active', default=u'Active'),
+             'transform': boolean_helper},
 
             {'column': 'organizations',
              'column_title': _(u'column_organizations',
