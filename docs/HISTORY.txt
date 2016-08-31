@@ -5,11 +5,6 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
-- Fix performance issues for trix in IE11.
-  - Update trix to 0.9.9
-  - Throttle `trix-update` event
-  [Kevin Bieri]
-
 - [showroom] Support ftw.showroom 1.2.2 version
   [Kevin Bieri]
 
@@ -47,6 +42,17 @@ Changelog
   Add history tables for contacts (persons and organizations), addresses,
   phonenumbers, mailaddressens and urls.
   [deiferni]
+
+
+4.10.3 (2016-08-31)
+-------------------
+
+- Fix performance issues for trix in IE11.
+
+  - Update trix to 0.9.9
+  - Throttle `trix-update` event
+
+  [Kevin Bieri]
 
 
 4.10.2 (2016-08-30)
