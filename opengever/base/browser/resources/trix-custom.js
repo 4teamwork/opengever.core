@@ -8,7 +8,10 @@
      */
     delete Trix.config.blockAttributes.code;
     delete Trix.config.blockAttributes.quote;
+    delete Trix.config.blockAttributes.heading1;
     delete Trix.config.textAttributes.href;
+    delete Trix.config.textAttributes.frozen;
+    delete Trix.config.textAttributes.strike;
 
     /*
     Prevent accepting file-uploads and attachments in trix.
