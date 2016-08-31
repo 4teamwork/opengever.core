@@ -180,7 +180,6 @@ class Documents(BaseCatalogListingTab):
 class Dossiers(BaseCatalogListingTab):
     grok.name('tabbedview_view-dossiers')
 
-    selection = ViewPageTemplateFile("selection_with_filters.pt")
     template = ViewPageTemplateFile("generic_with_filters.pt")
 
     filterlist_name = 'dossier_state_filter'
@@ -293,7 +292,6 @@ class Proposals(ProposalListingTab):
     sort_on = 'title'
     show_selects = False
 
-    selection = ViewPageTemplateFile("selection_with_filters.pt")
     template = ViewPageTemplateFile("generic_with_filters.pt")
 
     model = Proposal

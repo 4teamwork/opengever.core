@@ -55,7 +55,6 @@ class GlobalTaskListingTab(BaseListingTab):
     major_actions = []
 
     select_all_template = ViewPageTemplateFile('select_all_globaltasks.pt')
-    selection = ViewPageTemplateFile("selection_with_filters.pt")
 
     filterlist_name = 'task_state_filter'
     filterlist_available = True

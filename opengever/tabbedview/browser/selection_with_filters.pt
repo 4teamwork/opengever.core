@@ -1,8 +1,4 @@
-<div class="tabbedview_select"
-     tal:define="filterlist_name python: view.filterlist_name;
-                 filter_id python: view.request.get(filterlist_name)"
-     tal:attributes="id filterlist_name"
-     i18n:domain="ftw.tabbedview">
+<div class="tabbedview_select" i18n:domain="ftw.tabbedview">
 
     <tal:condition tal:condition="view/show_selects">
       <span i18n:translate="">Choose:</span>
@@ -14,20 +10,23 @@
       </span>
     </tal:condition>
 
-    <span tal:condition="view/filterlist_available"
-          tal:attributes="id filterlist_name" class="state_filters">
-      <span tal:condition="view/show_selects"> | </span>
+    <tal:condition tal:condition="view/filterlist_available">
+      <span tal:define="filterlist_name python: view.filterlist_name;
+                        filter_id python: view.request.get(filterlist_name)"
+            tal:attributes="id filterlist_name" class="state_filters">
+        <span tal:condition="view/show_selects"> | </span>
 
-      <span i18n:translate="" i18n:domain="opengever.tabbedview">State</span>
+        <span i18n:translate="" i18n:domain="opengever.tabbedview">State</span>
 
-      <a tal:repeat="filter python: view.filterlist.filters()"
-         tal:attributes="id filter/id;
-                         class python: filter.is_active(filter_id) and 'active'"
-         tal:content="filter/label"
-         href="javascript:void(0);"
-         i18n:domain="opengever.tabbedview">
-      </a>
+        <a tal:repeat="filter python: view.filterlist.filters()"
+           tal:attributes="id filter/id;
+                           class python: filter.is_active(filter_id) and 'active'"
+           tal:content="filter/label"
+           href="javascript:void(0);"
+           i18n:domain="opengever.tabbedview">
+        </a>
 
-    </span>
+      </span>
+    </tal:condition>
 
 </div>
