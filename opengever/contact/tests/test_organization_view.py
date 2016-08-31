@@ -23,14 +23,6 @@ class TestOrganizationView(FunctionalTestCase):
         self.assertEquals([u'4teamwork AG'], browser.css('h1').text)
 
     @browsing
-    def test_body_contains_person_type_class(self, browser):
-        organization = create(Builder('organization').named(u'4teamwork'))
-
-        browser.login().open(organization.get_url())
-        self.assertIn('portaltype-opengever-contact-organization',
-                      browser.css('body').first.get('class'))
-
-    @browsing
     def test_shows_archived_organizations(self, browser):
         organization = create(Builder('organization').named(u'4teamwork'))
         archived_organization = create(Builder('archived_organization').having(
