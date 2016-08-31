@@ -15,6 +15,11 @@ class TestOrganization(unittest2.TestCase):
         self.assertTrue(isinstance(organization, Contact))
         self.assertEquals('organization', organization.contact_type)
 
+    def test_is_active_by_default(self):
+        organization = create(Builder('organization').named(u'4teamwork AG'))
+
+        self.assertTrue(organization.is_active)
+
     def test_organization_can_have_multiple_addresses(self):
         organization = create(Builder('organization').named(u'4teamwork AG'))
 

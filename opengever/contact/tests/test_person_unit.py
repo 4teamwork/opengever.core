@@ -24,6 +24,12 @@ class TestPerson(unittest2.TestCase):
         self.assertTrue(isinstance(person, Contact))
         self.assertEquals('person', person.contact_type)
 
+    def test_is_active_by_default(self):
+        person = create(Builder('person')
+                        .having(firstname=u'Peter', lastname=u'M\xfcller'))
+
+        self.assertTrue(person.is_active)
+
     def test_person_can_have_multiple_addresses(self):
         peter = create(Builder('person')
                        .having(firstname=u'Peter', lastname=u'M\xfcller'))
