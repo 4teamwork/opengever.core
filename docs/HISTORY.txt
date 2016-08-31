@@ -5,6 +5,11 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
+- Fix performance issues for trix in IE11.
+  - Update trix to 0.9.9
+  - Throttle `trix-update` event
+  [Kevin Bieri]
+
 - [showroom] Support ftw.showroom 1.2.2 version
   [Kevin Bieri]
 
