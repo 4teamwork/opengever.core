@@ -5,9 +5,6 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
-- Fix hint for local changes
-  [Kevin Bieri]
-
 - [showroom] Support ftw.showroom 1.2.2 version
   [Kevin Bieri]
 
@@ -45,6 +42,13 @@ Changelog
   Add history tables for contacts (persons and organizations), addresses,
   phonenumbers, mailaddressens and urls.
   [deiferni]
+
+
+4.10.4 (2016-08-31)
+-------------------
+
+- Fix hint for local changes.
+  [Kevin Bieri]
 
 
 4.10.3 (2016-08-31)
