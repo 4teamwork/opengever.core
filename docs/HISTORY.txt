@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.10.3 (unreleased)
+4.10.3 (2016-08-31)
 -------------------
 
 - Fix performance issues for trix in IE11.
