@@ -150,11 +150,12 @@
       scrollspy.select($("#" + item.element.attr("for") + "-anchor"));
     });
 
-    $(document).on("trix-change", function() {
+    var scrollRefresher = new global.Synchronizer({ target: "trix-editor", triggers: ["trix-change"] });
+    scrollRefresher.onSync(function() {
       headings.refresh();
       labels.refresh();
     });
-
+    scrollRefresher.observe();
   }
 
   $(function() {

@@ -5,7 +5,12 @@ Changelog
 4.10.3 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Fix performance issues for trix in IE11.
+
+  - Update trix to 0.9.9
+  - Throttle `trix-update` event
+
+  [Kevin Bieri]
 
 
 4.10.2 (2016-08-30)
