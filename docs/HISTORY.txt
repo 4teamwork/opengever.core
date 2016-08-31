@@ -5,7 +5,8 @@ Changelog
 4.10.4 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Fix hint for local changes.
+  [Kevin Bieri]
 
 
 4.10.3 (2016-08-31)
