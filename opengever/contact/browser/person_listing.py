@@ -4,11 +4,13 @@ from ftw.table.interfaces import ITableSourceConfig
 from opengever.contact import _
 from opengever.contact.interfaces import IContactFolder
 from opengever.contact.models import Person
+from opengever.tabbedview import _ as tmf
 from opengever.tabbedview import BaseListingTab
 from opengever.tabbedview import SqlTableSource
+from opengever.tabbedview.filters import Filter
+from opengever.tabbedview.filters import FilterList
 from opengever.tabbedview.helper import boolean_helper
 from opengever.tabbedview.helper import linked_sql_object
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.interface import implements
 from zope.interface import Interface
 
@@ -69,12 +71,23 @@ class PersonTableSource(SqlTableSource):
     searchable_columns = [Person.firstname, Person.lastname]
 
 
+class ActiveOnlyFilter(Filter):
+    def update_query(self, query):
+        return query.filter_by(is_active=True)
+
+
 class Persons(PersonListingTab):
     grok.name('tabbedview_view-persons')
     grok.context(IContactFolder)
 
-    selection = ViewPageTemplateFile("templates/no_selection.pt")
     sort_on = 'lastname'
+
+    show_selects = False
+    filterlist_name = 'person_state_filter'
+    filterlist_available = True
+    filterlist = FilterList(
+        Filter('filter_all', tmf('all')),
+        ActiveOnlyFilter('filter_active', tmf('Active'), default=True))
 
     enabled_actions = []
     major_actions = []

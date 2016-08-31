@@ -28,9 +28,22 @@ class TestPersonListing(FunctionalTestCase):
                                   lastname=u'Mustermann'))
 
     @browsing
-    def test_lists_all_persons(self, browser):
+    def test_lists_only_active_persons_by_default(self, browser):
         browser.login().open(
             self.contactfolder, view='tabbedview_view-persons')
+
+        self.assertEquals(
+            [['Salutation', 'Academic title', 'Firstname',
+              'Lastname', 'Active', 'Organizations'],
+             ['Frau', '', 'Sandra', 'Mustermann', 'Yes', ''],
+             ['Herr', 'Dr. rer. nat.', 'Peter', u'M\xfcller', 'Yes', '']],
+            browser.css('.listing').first.lists())
+
+    @browsing
+    def test_includes_inactive_persons_with_the_all_filter(self, browser):
+        browser.login().open(
+            self.contactfolder, view='tabbedview_view-persons',
+            data={'person_state_filter': 'filter_all'})
 
         self.assertEquals(
             [['Salutation', 'Academic title', 'Firstname',
@@ -43,7 +56,8 @@ class TestPersonListing(FunctionalTestCase):
     @browsing
     def test_sorts_on_lastname_by_default(self, browser):
         browser.login().open(
-            self.contactfolder, view='tabbedview_view-persons')
+            self.contactfolder, view='tabbedview_view-persons',
+            data={'person_state_filter': 'filter_all'})
 
         table = browser.css('.listing').first
         self.assertEquals(
@@ -85,7 +99,9 @@ class TestPersonListing(FunctionalTestCase):
             person=self.sandra, organization=self.org2))
 
         browser.login().open(
-            self.contactfolder, view='tabbedview_view-persons')
+            self.contactfolder,
+            view='tabbedview_view-persons',
+            data={'person_state_filter': 'filter_all'})
 
         row = browser.css('.listing').first.rows[1]
 
@@ -102,7 +118,8 @@ class TestPersonListing(FunctionalTestCase):
         browser.login().open(
             self.contactfolder,
             view='tabbedview_view-persons',
-            data={'searchable_text': 'sandra'})
+            data={'searchable_text': 'sandra',
+                  'person_state_filter': 'filter_all'})
 
         self.assertEquals(
             [['Salutation', 'Academic title', 'Firstname',
@@ -116,7 +133,8 @@ class TestPersonListing(FunctionalTestCase):
         browser.login().open(
             self.contactfolder,
             view='tabbedview_view-persons',
-            data={'searchable_text': 'Sandra Alb'})
+            data={'searchable_text': 'Sandra Alb',
+                  'person_state_filter': 'filter_all'})
 
         self.assertEquals(
             [['Salutation', 'Academic title', 'Firstname',

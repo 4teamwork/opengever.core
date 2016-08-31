@@ -5,6 +5,10 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
+- Add active flag for contacts, including a separate
+  column and an active statefilter on contactlistings.
+  [phgross]
+
 - Add participations for OrgRoles.
   Update model and particpation-forms to work with both, Contacts and OrgRoles.
   [deiferni]
