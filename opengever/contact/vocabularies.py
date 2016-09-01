@@ -1,6 +1,7 @@
 from opengever.contact.models import Contact
-from opengever.contact.models import Organization
 from opengever.contact.models import Person
+from opengever.contact.models import Organization
+from opengever.contact.models import OrgRole
 from zope.interface import implementer
 from zope.interface import implements
 from zope.schema.interfaces import IVocabularyFactory
@@ -16,34 +17,42 @@ class ContactsVocabulary(object):
     autocomplete field.
     """
 
-    @property
-    def queries(self):
-        return [Person.query, Organization.query]
+    by_type = {'person': Person,
+               'organization': Organization,
+               'org_role': OrgRole}
+    by_class = {v: k for k, v in by_type.iteritems()}
 
     def __contains__(self, value):
-        """Return whether the value is available in this source
+        """Currently all Contacts and OrgRoles are considered valid.
         """
-        return bool(Contact.query.get(value))
-
-    def createTerm(self, obj):
-        return SimpleTerm(value=obj.contact_id, title=obj.get_title())
+        return value.__class__ in self.by_class
 
     def getTerm(self, value):
-        contact = Contact.query.get(value)
-        if not contact:
-            raise LookupError
-
-        return self.createTerm(contact)
+        term_type = self.by_class[value.__class__]
+        return SimpleTerm(value=value,
+                          token='{}:{}'.format(term_type, value.id),
+                          title=value.get_title())
 
     def getTermByToken(self, token):
-        return self.getTerm(token)
+        if not token:
+            raise LookupError
+
+        term_type, term_id = token.split(':')
+        term_id = int(term_id)
+        clazz = self.by_type[term_type]
+        contact = clazz.query.get(term_id)
+        if not contact:
+            raise LookupError
+        return self.getTerm(contact)
 
     def search(self, query_string):
         text_filters = query_string.split()
-        for query in self.queries:
-            query = query.by_searchable_text(text_filters=text_filters)
-            for obj in query.all():
-                yield self.createTerm(obj)
+        for contact in Contact.query.polymorphic_by_searchable_text(
+                text_filters=text_filters):
+            yield self.getTerm(contact)
+            if hasattr(contact, 'organizations'):
+                for org_role in contact.organizations:
+                    yield(self.getTerm(org_role))
 
 
 class ContactsVocabularyFactory(object):
