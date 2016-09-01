@@ -488,10 +488,6 @@ class BaseParticipationBuilder(SqlObjectBuilder):
         self.arguments['dossier_oguid'] = Oguid.for_object(obj)
         return self
 
-    def for_contact(self, contact):
-        self.arguments['contact'] = contact
-        return self
-
     def with_roles(self, roles):
         self.roles = roles
         return self
@@ -502,18 +498,27 @@ class BaseParticipationBuilder(SqlObjectBuilder):
         return obj
 
 
-class ParticipationBuilder(BaseParticipationBuilder):
+class ContactParticipationBuilder(BaseParticipationBuilder):
 
     mapped_class = ContactParticipation
 
-builder_registry.register('contact_participation', ParticipationBuilder)
+    def for_contact(self, contact):
+        self.arguments['contact'] = contact
+        return self
+
+builder_registry.register('contact_participation', ContactParticipationBuilder)
 
 
-class ParticipationBuilder(BaseParticipationBuilder):
+class OrgRoleParticipationBuilder(BaseParticipationBuilder):
 
     mapped_class = OrgRoleParticipation
 
-builder_registry.register('org_role_participation', ParticipationBuilder)
+
+    def for_org_role(self, org_role):
+        self.arguments['org_role'] = org_role
+        return self
+
+builder_registry.register('org_role_participation', OrgRoleParticipationBuilder)
 
 
 class ParticipationRoleBuilder(SqlObjectBuilder):

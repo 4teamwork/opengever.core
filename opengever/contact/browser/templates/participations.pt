@@ -1,13 +1,12 @@
 <tal:define tal:define="participations view/get_participations" i18n:domain="opengever.contact">
 
-  <ul id="participation_listing"
-      tal:condition="participations">
-    <li tal:repeat="participation participations">
+  <ul id="participation_listing" tal:condition="participations">
+    <li tal:repeat="participation view/get_participations">
       <div class="contact">
         <a href="#"
-           tal:attributes="href participation/contact/get_url;
-                           class participation/contact/get_css_class"
-           tal:content="participation/contact/get_title" />
+           tal:attributes="href participation/participant/get_url;
+                           class participation/participant/get_css_class"
+           tal:content="participation/participant/get_title" />
       </div>
       <ul class="roles">
         <li tal:repeat="role participation/roles">

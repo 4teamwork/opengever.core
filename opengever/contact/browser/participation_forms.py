@@ -4,8 +4,6 @@ from opengever.base.browser.modelforms import ModelAddForm
 from opengever.base.browser.modelforms import ModelEditForm
 from opengever.base.oguid import Oguid
 from opengever.contact import _
-from opengever.contact.models import Contact
-from opengever.contact.models import ContactParticipation
 from plone import api
 from plone.directives import form
 from plone.formwidget.autocomplete import AutocompleteFieldWidget
@@ -44,14 +42,19 @@ class IParticipation(form.Schema):
 class ParticipationAddForm(ModelAddForm):
     label = _(u'label_add_participation', default=u'Add Participation')
     fields = z3c.form.field.Fields(IParticipation)
-    model_class = ContactParticipation
 
     fields['contact'].widgetFactory = AutocompleteFieldWidget
     fields['roles'].widgetFactory = CheckBoxFieldWidget
 
+    @property
+    def model_class(self):
+        return self._participant.participation_class
+
     def validate(self, data):
-        query = self.model_class.query.by_dossier(self.context).filter_by(
-            contact_id=data.get('contact'))
+        self._participant = data.get('contact')
+        query = self.model_class.query.by_participant(
+            self._participant).by_dossier(self.context)
+
         if query.count():
             raise ActionExecutionError(Invalid(
                 _(u'msg_participation_already_exists',
@@ -59,11 +62,9 @@ class ParticipationAddForm(ModelAddForm):
 
     def create(self, data):
         self.validate(data)
-        participation = self.model_class(
-            contact=Contact.query.get(data.get('contact')),
-            dossier_oguid=Oguid.for_object(self.context))
-        participation.add_roles(data.get('roles'))
-        return participation
+        return self.model_class.create(participant=self._participant,
+                                       dossier=self.context,
+                                       roles=data.pop('roles'))
 
     def nextURL(self):
         return '{}#participations'.format(self.context.absolute_url())
@@ -80,8 +81,8 @@ class ParticipationEditForm(ModelEditForm):
     @property
     def label(self):
         return _(u'label_edit_participation',
-                 default=u'Edit Participation of ${title}',
-                 mapping={'title': self.model.contact.get_title()})
+                 default=u'Edit ${title}',
+                 mapping={'title': self.model.get_title()})
 
     def updateWidgets(self):
         super(ParticipationEditForm, self).updateWidgets()
@@ -114,8 +115,8 @@ class ParticipationRemoveForm(z3c.form.form.Form):
     @property
     def label(self):
         return _(u'label_remove_participation',
-                 default=u'Remove Participation of ${title}',
-                 mapping={'title': self.model.contact.get_title()})
+                 default=u'Remove ${title}',
+                 mapping={'title': self.model.get_title()})
 
     @button.buttonAndHandler(_(u'Remove'), name='remove')
     def handleRemove(self, action):

@@ -4,6 +4,8 @@ from opengever.base.date_time import as_utc
 from plone import api
 from Products.CMFCore.utils import getToolByName
 from Products.PloneLanguageTool.LanguageTool import LanguageBinding
+from zope.component import getUtility
+from zope.schema.interfaces import IVocabularyFactory
 import pytz
 import transaction
 
@@ -75,3 +77,9 @@ def create_document_version(doc, version_id, data=None):
 
 def css_to_xpath(css):
     return LxmlTranslator().css_to_xpath(css)
+
+
+def get_contacts_vocabulary():
+    voca_factory = getUtility(IVocabularyFactory,
+                              name='opengever.contact.ContactsVocabulary')
+    return voca_factory(api.portal.get())
