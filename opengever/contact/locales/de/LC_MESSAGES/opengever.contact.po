@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2016-08-30 12:13+0000\n"
+"POT-Creation-Date: 2016-09-01 15:32+0000\n"
 "PO-Revision-Date: 2011-01-05 15:15+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -52,7 +52,7 @@ msgstr "E-Mail-Adressen"
 msgid "Label"
 msgstr "Label"
 
-#: ./opengever/contact/browser/participation_forms.py:120
+#: ./opengever/contact/browser/participation_forms.py:121
 msgid "Remove"
 msgstr "Löschen"
 
@@ -62,12 +62,12 @@ msgid "address"
 msgstr "Adresse"
 
 #. Default: "Edit"
-#: ./opengever/contact/browser/templates/participations.pt:19
+#: ./opengever/contact/browser/templates/participations.pt:18
 msgid "button_edit"
 msgstr "Bearbeiten"
 
 #. Default: "Remove"
-#: ./opengever/contact/browser/templates/participations.pt:26
+#: ./opengever/contact/browser/templates/participations.pt:25
 msgid "button_remove"
 msgstr "Löschen"
 
@@ -132,7 +132,7 @@ msgid "info_mailaddress_created"
 msgstr "Die E-Mail-Adresse wurde erstellt."
 
 #. Default: "Participation removed"
-#: ./opengever/contact/browser/participation_forms.py:129
+#: ./opengever/contact/browser/participation_forms.py:130
 msgid "info_participation_removed"
 msgstr "Beteiligung gelöscht"
 
@@ -149,7 +149,7 @@ msgid "label_academic_title"
 msgstr "Titel"
 
 #. Default: "Add Participation"
-#: ./opengever/contact/browser/participation_forms.py:45
+#: ./opengever/contact/browser/participation_forms.py:43
 msgid "label_add_participation"
 msgstr "Beteiligung hinzufügen"
 
@@ -198,7 +198,7 @@ msgid "label_archived_phone_numbers"
 msgstr "Archivierte Telefonnummern"
 
 #. Default: "Cancel"
-#: ./opengever/contact/browser/participation_forms.py:135
+#: ./opengever/contact/browser/participation_forms.py:136
 #: ./opengever/contact/browser/templates/person_edit.pt:28
 msgid "label_cancel"
 msgstr "Abbrechen"
@@ -214,7 +214,7 @@ msgid "label_company"
 msgstr "Firma"
 
 #. Default: "Contact"
-#: ./opengever/contact/browser/participation_forms.py:26
+#: ./opengever/contact/browser/participation_forms.py:24
 msgid "label_contact"
 msgstr "Kontakt"
 
@@ -239,8 +239,9 @@ msgstr "Abteilung"
 msgid "label_description"
 msgstr "Beschreibung"
 
-#. Default: "Edit Participation of ${title}"
-#: ./opengever/contact/browser/participation_forms.py:82
+#. Default: "Edit ${title}"
+#: ./opengever/contact/browser/participation_forms.py:83
+#, fuzzy
 msgid "label_edit_participation"
 msgstr "Beteiligung von ${title} bearbeiten"
 
@@ -292,7 +293,7 @@ msgid "label_name"
 msgstr "Name"
 
 #. Default: "No participations"
-#: ./opengever/contact/browser/templates/participations.pt:36
+#: ./opengever/contact/browser/templates/participations.pt:35
 msgid "label_no_participations"
 msgstr "Keine Beteiligungen"
 
@@ -303,7 +304,7 @@ msgid "label_organizations"
 msgstr "Organisationen"
 
 #. Default: "Participation of ${contact_title}"
-#: ./opengever/contact/models/participation.py:52
+#: ./opengever/contact/models/participation.py:70
 msgid "label_participation_of"
 msgstr "Beteiligung von ${contact_title}"
 
@@ -350,13 +351,13 @@ msgstr "Telefon Arbeit"
 msgid "label_picture"
 msgstr "Bild"
 
-#. Default: "Remove Participation of ${title}"
-#: ./opengever/contact/browser/participation_forms.py:116
+#. Default: "Remove ${title}"
+#: ./opengever/contact/browser/participation_forms.py:117
 msgid "label_remove_participation"
-msgstr "Beteiligung von ${title} löschen"
+msgstr "${title} löschen"
 
 #. Default: "Roles"
-#: ./opengever/contact/browser/participation_forms.py:32
+#: ./opengever/contact/browser/participation_forms.py:30
 msgid "label_roles"
 msgstr "Rollen"
 
@@ -404,7 +405,7 @@ msgid "mail_address_deleted"
 msgstr "Die E-Mail-Adresse wurde gelöscht."
 
 #. Default: "There already exists a participation for this contact."
-#: ./opengever/contact/browser/participation_forms.py:57
+#: ./opengever/contact/browser/participation_forms.py:60
 msgid "msg_participation_already_exists"
 msgstr "Für diesen Kontakt existiert bereits eine Beteiligung."
 
@@ -422,3 +423,4 @@ msgstr "${amount} Treffer."
 #: ./opengever/contact/contact.py:44
 msgid "telefon"
 msgstr "Telefon"
+
