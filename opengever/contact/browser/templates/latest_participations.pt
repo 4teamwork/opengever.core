@@ -8,11 +8,6 @@
     <img tal:attributes="src string:${portal_url}/spinner.gif" class="spinner"/>
 
     <script id="latest_participations_template" type="text/x-handlebars-template">
-      {{#if has_more}}
-      <a href="" id="participation_show_all">
-        {{show_all_label}}
-      </a>
-      {{/if}}
       {{#each participations}}
       <li>
         <span class="name">
@@ -27,6 +22,13 @@
         </ul>
       </li>
       {{/each}}
+      {{#if has_more}}
+      <li class="show_all_link">
+        <a href="" id="participation_show_all">
+          {{show_all_label}}
+        </a>
+      </li>
+      {{/if}}
     </script>
   </ul>
 </tal:define>
