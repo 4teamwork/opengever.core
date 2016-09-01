@@ -5,6 +5,9 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
+- Add specific byline for persons and organizations.
+  [phgross]
+
 - Add active flag for contacts, including a separate
   column and an active statefilter on contactlistings.
   [phgross]
