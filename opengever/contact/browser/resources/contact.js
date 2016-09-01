@@ -1,6 +1,39 @@
 (function(global, $) {
 
   "use strict";
+  function ParticipatedDossierController(options) {
+    global.Controller.call(this,
+                           $("#latest_participations_template").html(),
+                           $("#latest_participation_listing"), options);
+
+    this._show_all = false;
+
+    this.fetch = function() {
+      var url = $('#latest_participation_listing').data('fetch-url');
+      return $.get(url, {'show_all': this._show_all});
+    };
+
+    this.render = function(data) {
+      return this.template({ participations: data.participations,
+                             has_more: data.has_more,
+                             show_all_label: data.show_all_label});
+    }
+
+    this.show_all = function(data) {
+      this._show_all = true;
+      this.update();
+    }
+
+    this.events = [
+      {
+        method: "click",
+        target: "#participation_show_all",
+        callback: this.show_all
+      }
+    ];
+
+    this.init();
+  }
 
   function ContactController(options) {
 
@@ -124,6 +157,11 @@
   }
 
   $(function() {
+
+    if ($('body.portaltype-opengever-contact-organization').length ||
+        $('body.portaltype-opengever-contact-person').length){
+      var participatedDossierController = new ParticipatedDossierController();
+    }
 
     if ($(".portaltype-opengever-contact-person.template-edit").length) {
       var contactController = new ContactController();

@@ -94,6 +94,8 @@
         </li>
       </ul>
 
+      <div tal:replace="structure view/latest_participations_template" />
+
       <div class="collapsible" id="contactHistory">
         <div class="collapsible-header">
           <button class="button fa fa-plus"></button>

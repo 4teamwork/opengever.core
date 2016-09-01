@@ -56,6 +56,12 @@ class Participation(Base, SQLFormSupport):
     def resolve_dossier(self):
         return self.dossier_oguid.resolve_object()
 
+    def get_json_representation(self):
+        dossier = self.resolve_dossier()
+        return {'title': dossier.title,
+                'url': dossier.absolute_url(),
+                'roles': [{'label': role.get_label()} for role in self.roles]}
+
     def add_roles(self, role_names):
         for name in role_names:
             role = ParticipationRole(participation=self, role=name)

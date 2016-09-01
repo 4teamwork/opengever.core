@@ -5,6 +5,9 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
+- List participating dossiers on organization and person detail view.
+  [phgross]
+
 - [showroom] Support ftw.showroom 1.2.2 version
   [Kevin Bieri]
 

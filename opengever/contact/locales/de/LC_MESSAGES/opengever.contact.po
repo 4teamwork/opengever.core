@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2016-08-29 06:43+0000\n"
+"POT-Creation-Date: 2016-08-30 12:13+0000\n"
 "PO-Revision-Date: 2011-01-05 15:15+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Domain: DOMAIN\n"
 
 #. Default: "Add Person"
-#: ./opengever/contact/browser/person.py:114
+#: ./opengever/contact/browser/person.py:123
 msgid "Add Person"
 msgstr "Person hinzufügen"
 
@@ -142,7 +142,7 @@ msgid "internet"
 msgstr "Internet"
 
 #. Default: "Academic title"
-#: ./opengever/contact/browser/person.py:88
+#: ./opengever/contact/browser/person.py:97
 #: ./opengever/contact/browser/templates/person.pt:30
 #: ./opengever/contact/contact.py:69
 msgid "label_academic_title"
@@ -170,30 +170,30 @@ msgid "label_addresses"
 msgstr "Adressen"
 
 #. Default: "Archived Addresses"
-#: ./opengever/contact/browser/templates/organization.pt:104
-#: ./opengever/contact/browser/templates/person.pt:123
+#: ./opengever/contact/browser/templates/organization.pt:120
+#: ./opengever/contact/browser/templates/person.pt:139
 msgid "label_archived_addresses"
 msgstr "Archivierte Adressen"
 
 #. Default: "Archived Mail Addresses"
-#: ./opengever/contact/browser/templates/organization.pt:125
-#: ./opengever/contact/browser/templates/person.pt:144
+#: ./opengever/contact/browser/templates/organization.pt:141
+#: ./opengever/contact/browser/templates/person.pt:160
 msgid "label_archived_mail"
 msgstr "Archivierte Mail Adressen"
 
 #. Default: "Archived Information"
-#: ./opengever/contact/browser/templates/organization.pt:86
+#: ./opengever/contact/browser/templates/organization.pt:102
 msgid "label_archived_organizations"
 msgstr "Archivierte Informationen"
 
 #. Default: "Archived Personal Information"
-#: ./opengever/contact/browser/templates/person.pt:96
+#: ./opengever/contact/browser/templates/person.pt:112
 msgid "label_archived_persons"
 msgstr "Archivierte persönliche Informationen"
 
 #. Default: "Archived Phone Numbers"
-#: ./opengever/contact/browser/templates/organization.pt:143
-#: ./opengever/contact/browser/templates/person.pt:162
+#: ./opengever/contact/browser/templates/organization.pt:159
+#: ./opengever/contact/browser/templates/person.pt:178
 msgid "label_archived_phone_numbers"
 msgstr "Archivierte Telefonnummern"
 
@@ -234,7 +234,7 @@ msgid "label_department"
 msgstr "Abteilung"
 
 #. Default: "Description"
-#: ./opengever/contact/browser/person.py:103
+#: ./opengever/contact/browser/person.py:112
 #: ./opengever/contact/contact.py:145
 msgid "label_description"
 msgstr "Beschreibung"
@@ -256,18 +256,23 @@ msgid "label_email2"
 msgstr "E-Mail 2"
 
 #. Default: "Firstname"
-#: ./opengever/contact/browser/person.py:93
+#: ./opengever/contact/browser/person.py:102
 #: ./opengever/contact/contact.py:82
 #: ./opengever/contact/contactfolder.py:112
 msgid "label_firstname"
 msgstr "Vorname"
 
 #. Default: "Lastname"
-#: ./opengever/contact/browser/person.py:98
+#: ./opengever/contact/browser/person.py:107
 #: ./opengever/contact/contact.py:75
 #: ./opengever/contact/contactfolder.py:107
 msgid "label_lastname"
 msgstr "Nachname"
+
+#. Default: "Latest participations"
+#: ./opengever/contact/browser/templates/latest_participations.pt:4
+msgid "label_latest_participations"
+msgstr "Letzte Beteiligungen"
 
 #. Default: "Local"
 #: ./opengever/contact/browser/tabbed.py:25
@@ -293,7 +298,7 @@ msgstr "Keine Beteiligungen"
 
 #. Default: "Organizations"
 #: ./opengever/contact/browser/tabbed.py:17
-#: ./opengever/contact/browser/templates/person.pt:81
+#: ./opengever/contact/browser/templates/person.pt:95
 msgid "label_organizations"
 msgstr "Organisationen"
 
@@ -309,7 +314,7 @@ msgstr "Persönliche Informationen:"
 
 #. Default: "Persons"
 #: ./opengever/contact/browser/tabbed.py:12
-#: ./opengever/contact/browser/templates/organization.pt:71
+#: ./opengever/contact/browser/templates/organization.pt:85
 msgid "label_persons"
 msgstr "Personen"
 
@@ -356,16 +361,27 @@ msgid "label_roles"
 msgstr "Rollen"
 
 #. Default: "Salutation"
-#: ./opengever/contact/browser/person.py:83
+#: ./opengever/contact/browser/person.py:92
 #: ./opengever/contact/browser/templates/person.pt:26
 #: ./opengever/contact/contact.py:64
 msgid "label_salutation"
 msgstr "Anrede"
 
+#. Default: "Show all ${total} participations"
+#: ./opengever/contact/browser/participations.py:45
+msgid "label_show_all"
+msgstr "Alle ${total} Beteiligungen anzeigen"
+
 #. Default: "Url"
 #: ./opengever/contact/contact.py:115
 msgid "label_url"
 msgstr "URL"
+
+#. Default: "URLs"
+#: ./opengever/contact/browser/templates/organization.pt:70
+#: ./opengever/contact/browser/templates/person.pt:80
+msgid "label_urls"
+msgstr "URLs"
 
 #. Default: "Users"
 #: ./opengever/contact/browser/tabbed.py:33

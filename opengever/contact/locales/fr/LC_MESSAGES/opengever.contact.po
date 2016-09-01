@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-08-29 06:43+0000\n"
+"POT-Creation-Date: 2016-08-30 12:13+0000\n"
 "PO-Revision-Date: 2016-08-10 04:52+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-contact/fr/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "X-Generator: Weblate 2.7-dev\n"
 
 #. Default: "Add Person"
-#: ./opengever/contact/browser/person.py:114
+#: ./opengever/contact/browser/person.py:123
 msgid "Add Person"
 msgstr "Ajouter une personne"
 
@@ -144,7 +144,7 @@ msgid "internet"
 msgstr "Site internet"
 
 #. Default: "Academic title"
-#: ./opengever/contact/browser/person.py:88
+#: ./opengever/contact/browser/person.py:97
 #: ./opengever/contact/browser/templates/person.pt:30
 #: ./opengever/contact/contact.py:69
 msgid "label_academic_title"
@@ -172,30 +172,30 @@ msgid "label_addresses"
 msgstr ""
 
 #. Default: "Archived Addresses"
-#: ./opengever/contact/browser/templates/organization.pt:104
-#: ./opengever/contact/browser/templates/person.pt:123
+#: ./opengever/contact/browser/templates/organization.pt:120
+#: ./opengever/contact/browser/templates/person.pt:139
 msgid "label_archived_addresses"
 msgstr ""
 
 #. Default: "Archived Mail Addresses"
-#: ./opengever/contact/browser/templates/organization.pt:125
-#: ./opengever/contact/browser/templates/person.pt:144
+#: ./opengever/contact/browser/templates/organization.pt:141
+#: ./opengever/contact/browser/templates/person.pt:160
 msgid "label_archived_mail"
 msgstr ""
 
 #. Default: "Archived Information"
-#: ./opengever/contact/browser/templates/organization.pt:86
+#: ./opengever/contact/browser/templates/organization.pt:102
 msgid "label_archived_organizations"
 msgstr ""
 
 #. Default: "Archived Personal Information"
-#: ./opengever/contact/browser/templates/person.pt:96
+#: ./opengever/contact/browser/templates/person.pt:112
 msgid "label_archived_persons"
 msgstr ""
 
 #. Default: "Archived Phone Numbers"
-#: ./opengever/contact/browser/templates/organization.pt:143
-#: ./opengever/contact/browser/templates/person.pt:162
+#: ./opengever/contact/browser/templates/organization.pt:159
+#: ./opengever/contact/browser/templates/person.pt:178
 msgid "label_archived_phone_numbers"
 msgstr ""
 
@@ -236,7 +236,7 @@ msgid "label_department"
 msgstr "Service"
 
 #. Default: "Description"
-#: ./opengever/contact/browser/person.py:103
+#: ./opengever/contact/browser/person.py:112
 #: ./opengever/contact/contact.py:145
 msgid "label_description"
 msgstr "Description"
@@ -258,18 +258,23 @@ msgid "label_email2"
 msgstr "Email 2"
 
 #. Default: "Firstname"
-#: ./opengever/contact/browser/person.py:93
+#: ./opengever/contact/browser/person.py:102
 #: ./opengever/contact/contact.py:82
 #: ./opengever/contact/contactfolder.py:112
 msgid "label_firstname"
 msgstr "Prénom"
 
 #. Default: "Lastname"
-#: ./opengever/contact/browser/person.py:98
+#: ./opengever/contact/browser/person.py:107
 #: ./opengever/contact/contact.py:75
 #: ./opengever/contact/contactfolder.py:107
 msgid "label_lastname"
 msgstr "Nom"
+
+#. Default: "Latest participations"
+#: ./opengever/contact/browser/templates/latest_participations.pt:4
+msgid "label_latest_participations"
+msgstr ""
 
 #. Default: "Local"
 #: ./opengever/contact/browser/tabbed.py:25
@@ -295,7 +300,7 @@ msgstr ""
 
 #. Default: "Organizations"
 #: ./opengever/contact/browser/tabbed.py:17
-#: ./opengever/contact/browser/templates/person.pt:81
+#: ./opengever/contact/browser/templates/person.pt:95
 msgid "label_organizations"
 msgstr ""
 
@@ -311,7 +316,7 @@ msgstr ""
 
 #. Default: "Persons"
 #: ./opengever/contact/browser/tabbed.py:12
-#: ./opengever/contact/browser/templates/organization.pt:71
+#: ./opengever/contact/browser/templates/organization.pt:85
 msgid "label_persons"
 msgstr ""
 
@@ -358,16 +363,27 @@ msgid "label_roles"
 msgstr ""
 
 #. Default: "Salutation"
-#: ./opengever/contact/browser/person.py:83
+#: ./opengever/contact/browser/person.py:92
 #: ./opengever/contact/browser/templates/person.pt:26
 #: ./opengever/contact/contact.py:64
 msgid "label_salutation"
 msgstr "Titre"
 
+#. Default: "Show all ${total} participations"
+#: ./opengever/contact/browser/participations.py:45
+msgid "label_show_all"
+msgstr ""
+
 #. Default: "Url"
 #: ./opengever/contact/contact.py:115
 msgid "label_url"
 msgstr "Adresse URL"
+
+#. Default: "URLs"
+#: ./opengever/contact/browser/templates/organization.pt:70
+#: ./opengever/contact/browser/templates/person.pt:80
+msgid "label_urls"
+msgstr ""
 
 #. Default: "Users"
 #: ./opengever/contact/browser/tabbed.py:33
