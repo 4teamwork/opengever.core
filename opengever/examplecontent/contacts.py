@@ -102,7 +102,7 @@ class ExampleContactCreator(object):
                 org_role = OrgRole(person=person,
                                    function=random.choice(ORG_ROLE_FUNCTIONS),
                                    organization=random.choice(organizations))
-            self.db_session.add(org_role)
+                self.db_session.add(org_role)
 
     def add_archived_persons(self, person, items):
         for archive_entry in self.random_range:
