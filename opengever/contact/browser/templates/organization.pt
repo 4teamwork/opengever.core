@@ -97,7 +97,8 @@
 
       <div tal:replace="structure view/latest_participations_template" />
 
-      <div class="collapsible" id="contactHistory">
+      <div class="collapsible" id="contactHistory"
+           tal:condition="organization/has_archived_information">
         <div class="collapsible-header">
           <button class="button fa fa-plus"></button>
           <span class="label" i18n:translate="label_archived_organizations">Archived Information</span>
