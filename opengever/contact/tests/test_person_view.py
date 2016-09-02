@@ -200,25 +200,30 @@ class TestPersonView(FunctionalTestCase):
             browser.css('#contactHistory .mail dd a').first.get('href'))
 
     @browsing
-    def test_shows_urls_prefixed_with_label(self, browser):
+    def test_shows_linked_urls_prefixed_with_label(self, browser):
         peter = create(Builder('person')
                        .having(firstname=u'Peter', lastname=u'M\xfcller'))
 
         create(Builder('url')
                .for_contact(peter)
                .labeled('Blog')
-               .having(url=u'peters-blog.example.com'))
+               .having(url=u'https://www.peters-blog.example.com'))
         create(Builder('url')
                .for_contact(peter)
                .labeled('Homepage')
-               .having(url=u'peters-homepage.example.com'))
+               .having(url=u'https://peters-homepage.example.com'))
 
         browser.login().open(self.contactfolder, view=peter.wrapper_id)
 
         self.assertEquals([u'Blog', u'Homepage'], browser.css('.url dt').text)
-        self.assertEquals(
-            [u'peters-blog.example.com', u'peters-homepage.example.com'],
-            browser.css('.url dd').text)
+
+        links = browser.css('.url dd a')
+        self.assertEquals([u'https://www.peters-blog.example.com',
+                           u'https://peters-homepage.example.com'],
+                          [link.text for link in links])
+        self.assertEquals(['https://www.peters-blog.example.com',
+                           'https://peters-homepage.example.com'],
+                          [link.get('href') for link in links])
 
     @browsing
     def test_list_all_of_the_users_organizations_alphabetically(self, browser):

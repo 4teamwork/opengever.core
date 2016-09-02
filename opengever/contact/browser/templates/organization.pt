@@ -74,7 +74,7 @@
               <tal:repeat tal:repeat="url organization/urls">
                 <dt tal:content="url/label" />
                 <dd>
-                  <span tal:content="url/url" />
+                  <a tal:attributes="href url/url" tal:content="url/url" />
                 </dd>
               </tal:repeat>
             </dl>

@@ -5,7 +5,7 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
-- Link mail addreses in contact detail views.
+- Link mail addresses and URLs in contact detail views.
   [phgross]
 
 - Whitelist @login, @logout and @login-renew REST API endpoints for anonymous
