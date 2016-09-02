@@ -10,6 +10,7 @@ from opengever.tabbedview.browser.listing import ListingView
 from opengever.tabbedview.utils import get_translated_transitions
 from opengever.tabbedview.utils import get_translated_types
 from plone.registry.interfaces import IRegistry
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import getUtility
 from zope.component import queryAdapter
 from zope.interface import implements
@@ -158,6 +159,8 @@ class BaseListingTab(grok.View, GeverTabMixin, ListingView):
     grok.context(Interface)
     grok.require('zope2.View')
 
+    selection = ViewPageTemplateFile("browser/selection_with_filters.pt")
+
     sort_on = 'modified'
     sort_reverse = False
     #lazy must be false otherwise there will be no correct batching
@@ -181,6 +184,8 @@ class BaseCatalogListingTab(grok.View, GeverTabMixin, CatalogListingView):
 
     grok.context(ITabbedView)
     grok.require('zope2.View')
+
+    selection = ViewPageTemplateFile("browser/selection_with_filters.pt")
 
     columns = ()
 

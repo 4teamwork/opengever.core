@@ -2,6 +2,7 @@ from opengever.base.model import Base
 from opengever.base.model import SQLFormSupport
 from opengever.contact.models.participation import ContactParticipation
 from opengever.ogds.models.types import UnicodeCoercingText
+from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import String
@@ -20,6 +21,8 @@ class Contact(Base, SQLFormSupport):
     contact_id = Column('id', Integer, Sequence('contacts_id_seq'),
                         primary_key=True)
     contact_type = Column(String(20), nullable=False)
+    is_active = Column(Boolean, nullable=False, default=True)
+
     description = Column(UnicodeCoercingText)
 
     addresses = relationship("Address", back_populates="contact")

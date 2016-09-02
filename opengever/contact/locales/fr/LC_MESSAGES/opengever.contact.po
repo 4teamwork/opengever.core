@@ -74,32 +74,38 @@ msgid "button_remove"
 msgstr ""
 
 #. Default: "Academic title"
-#: ./opengever/contact/browser/person_listing.py:31
+#: ./opengever/contact/browser/person_listing.py:34
 msgid "column_academic_title"
 msgstr "Titre"
 
+#. Default: "Active"
+#: ./opengever/contact/browser/organization_listing.py:37
+#: ./opengever/contact/browser/person_listing.py:46
+msgid "column_active"
+msgstr ""
+
 #. Default: "Firstname"
-#: ./opengever/contact/browser/person_listing.py:35
+#: ./opengever/contact/browser/person_listing.py:38
 msgid "column_firstname"
 msgstr ""
 
 #. Default: "Lastname"
-#: ./opengever/contact/browser/person_listing.py:39
+#: ./opengever/contact/browser/person_listing.py:42
 msgid "column_lastname"
 msgstr ""
 
 #. Default: "Name"
-#: ./opengever/contact/browser/organization_listing.py:28
+#: ./opengever/contact/browser/organization_listing.py:33
 msgid "column_name"
 msgstr ""
 
 #. Default: "Organizations"
-#: ./opengever/contact/browser/person_listing.py:43
+#: ./opengever/contact/browser/person_listing.py:50
 msgid "column_organizations"
 msgstr ""
 
 #. Default: "Salutation"
-#: ./opengever/contact/browser/person_listing.py:28
+#: ./opengever/contact/browser/person_listing.py:31
 msgid "column_salutation"
 msgstr ""
 
@@ -149,6 +155,11 @@ msgstr "Site internet"
 #: ./opengever/contact/contact.py:69
 msgid "label_academic_title"
 msgstr "Titre"
+
+#. Default: "Active"
+#: ./opengever/contact/browser/byline.py:16
+msgid "label_active"
+msgstr "Actif"
 
 #. Default: "Add Participation"
 #: ./opengever/contact/browser/participation_forms.py:43
@@ -374,6 +385,11 @@ msgstr "Titre"
 msgid "label_show_all"
 msgstr ""
 
+#. Default: "Sequence Number"
+#: ./opengever/contact/browser/byline.py:11
+msgid "label_sequence_number"
+msgstr "Numéro courant"
+
 #. Default: "Url"
 #: ./opengever/contact/contact.py:115
 msgid "label_url"
@@ -424,4 +440,3 @@ msgstr "Résultat(s): ${amount}"
 #: ./opengever/contact/contact.py:44
 msgid "telefon"
 msgstr "Téléphone"
-

@@ -1,6 +1,7 @@
 from opengever.base.model import Base
 from opengever.contact.models.archive import ArchiveMixin
 from opengever.ogds.models.types import UnicodeCoercingText
+from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import String
@@ -16,8 +17,10 @@ class ArchivedContact(ArchiveMixin, Base):
                                  Sequence('archived_contact_id_seq'),
                                  primary_key=True)
     contact = relationship("Contact", back_populates="archived_contacts")
+    archived_contact_type = Column(String(30), nullable=False)
+    is_active = Column(Boolean, nullable=False, default=True)
+
     description = Column(UnicodeCoercingText)
 
-    archived_contact_type = Column(String(30), nullable=False)
     __mapper_args__ = {'polymorphic_on': archived_contact_type,
                        'with_polymorphic': '*'}

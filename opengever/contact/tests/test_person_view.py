@@ -25,15 +25,6 @@ class TestPersonView(FunctionalTestCase):
         self.assertEquals([u'Sandra Fl\xfcckiger'], browser.css('h1').text)
 
     @browsing
-    def test_body_contains_person_type_class(self, browser):
-        peter = create(Builder('person')
-                       .having(firstname=u'Peter', lastname=u'M\xfcller'))
-
-        browser.login().open(self.contactfolder, view=peter.wrapper_id)
-        self.assertIn('portaltype-opengever-contact-person',
-                      browser.css('body').first.get('class'))
-
-    @browsing
     def test_shows_fullname_as_title(self, browser):
         peter = create(Builder('person')
                        .having(firstname=u'Peter', lastname=u'M\xfcller'))
