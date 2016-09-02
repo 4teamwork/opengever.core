@@ -1,13 +1,14 @@
 from ftw.tabbedview.interfaces import ITabbedView
 from opengever.base.response import JSONResponse
 from opengever.contact import _
+from opengever.contact.models import ContactParticipation
 from opengever.contact.models import Participation
 from opengever.tabbedview import GeverTabMixin
 from plone import api
 from Products.Five.browser import BrowserView
 from sqlalchemy import desc
-from zope.i18n import translate
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
+from zope.i18n import translate
 
 
 class ParticipationsView(BrowserView):
@@ -29,7 +30,8 @@ class ParticipationsView(BrowserView):
         """
 
         data = {}
-        query = Participation.query.filter_by(contact=self.context.model)
+        # XXX also include OrgRoleParticipations for that person
+        query = ContactParticipation.query.by_participant(self.context.model)
         query = query.order_by(desc(Participation.participation_id))
         total = query.count()
 
