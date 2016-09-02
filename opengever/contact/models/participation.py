@@ -21,20 +21,38 @@ class ParticipationQuery(BaseQuery):
         return self.filter_by(dossier_oguid=Oguid.for_object(dossier))
 
 
-class Participation(Base, SQLFormSupport):
-    """Lets contacts participate in dossiers with specified roles.
-    """
+class ContactParticipationQuery(ParticipationQuery):
 
+    def by_participant(self, contact):
+        return self.filter_by(contact=contact)
+
+
+class OrgRoleParticipationQuery(ParticipationQuery):
+
+    def by_participant(self, org_role):
+        return self.filter_by(org_role=org_role)
+
+
+class Participation(Base, SQLFormSupport):
+    """Base class for participations.
+    """
+    query_cls = ParticipationQuery
     __tablename__ = 'participations'
 
     participation_id = Column('id', Integer, Sequence('participations_id_seq'),
                               primary_key=True)
-    contact_id = Column(Integer, ForeignKey('contacts.id'), nullable=False)
-    contact = relationship('Contact', back_populates='participations')
+
     dossier_admin_unit_id = Column(String(UNIT_ID_LENGTH), nullable=False)
     dossier_int_id = Column(Integer, nullable=False)
     dossier_oguid = composite(Oguid, dossier_admin_unit_id, dossier_int_id)
     roles = relationship('ParticipationRole', back_populates='participation')
+
+    participation_type = Column(String(30), nullable=False)
+    __mapper_args__ = {'polymorphic_on': participation_type}
+
+    @property
+    def participant(self):
+        raise NotImplementedError()
 
     @property
     def wrapper_id(self):
@@ -51,7 +69,7 @@ class Participation(Base, SQLFormSupport):
     def get_title(self):
         return _(u'label_participation_of',
                  default=u'Participation of ${contact_title}',
-                 mapping={'contact_title': self.contact.get_title()})
+                 mapping={'contact_title': self.participant.get_title()})
 
     def resolve_dossier(self):
         return self.dossier_oguid.resolve_object()
@@ -99,4 +117,43 @@ class Participation(Base, SQLFormSupport):
         session.delete(self)
 
 
-Participation.query_cls = ParticipationQuery
+class ContactParticipation(Participation):
+    """Let Contacts participate in dossiers with specified roles.
+    """
+    query_cls = ContactParticipationQuery
+    __mapper_args__ = {'polymorphic_identity': 'contact_participation'}
+
+    contact_id = Column(Integer, ForeignKey('contacts.id'))
+    contact = relationship('Contact', back_populates='participations')
+
+    @classmethod
+    def create(cls, participant, dossier, roles):
+        obj = cls(contact=participant,
+                  dossier_oguid=Oguid.for_object(dossier))
+        obj.add_roles(roles)
+        return obj
+
+    @property
+    def participant(self):
+        return self.contact
+
+
+class OrgRoleParticipation(Participation):
+    """Let OrgRoles participate in dossiers with specified roles.
+    """
+    query_cls = OrgRoleParticipationQuery
+    __mapper_args__ = {'polymorphic_identity': 'org_role_participation'}
+
+    org_role_id = Column(Integer, ForeignKey('org_roles.id'))
+    org_role = relationship('OrgRole', back_populates='participations')
+
+    @classmethod
+    def create(cls, participant, dossier, roles):
+        obj = cls(org_role=participant,
+                  dossier_oguid=Oguid.for_object(dossier))
+        obj.add_roles(roles)
+        return obj
+
+    @property
+    def participant(self):
+        return self.org_role

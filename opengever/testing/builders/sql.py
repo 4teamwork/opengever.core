@@ -11,10 +11,11 @@ from opengever.contact.models import ArchivedOrganization
 from opengever.contact.models import ArchivedPerson
 from opengever.contact.models import ArchivedPhoneNumber
 from opengever.contact.models import ArchivedURL
+from opengever.contact.models import ContactParticipation
 from opengever.contact.models import MailAddress
 from opengever.contact.models import Organization
 from opengever.contact.models import OrgRole
-from opengever.contact.models import Participation
+from opengever.contact.models import OrgRoleParticipation
 from opengever.contact.models import ParticipationRole
 from opengever.contact.models import Person
 from opengever.contact.models import PhoneNumber
@@ -478,18 +479,13 @@ class OrgRoleBuilder(SqlObjectBuilder):
 builder_registry.register('org_role', OrgRoleBuilder)
 
 
-class ParticipationBuilder(SqlObjectBuilder):
+class BaseParticipationBuilder(SqlObjectBuilder):
 
-    mapped_class = Participation
     id_argument_name = 'participation_id'
     roles = []
 
     def for_dossier(self, obj):
         self.arguments['dossier_oguid'] = Oguid.for_object(obj)
-        return self
-
-    def for_contact(self, contact):
-        self.arguments['contact'] = contact
         return self
 
     def with_roles(self, roles):
@@ -501,7 +497,28 @@ class ParticipationBuilder(SqlObjectBuilder):
             obj.add_roles(self.roles)
         return obj
 
-builder_registry.register('participation', ParticipationBuilder)
+
+class ContactParticipationBuilder(BaseParticipationBuilder):
+
+    mapped_class = ContactParticipation
+
+    def for_contact(self, contact):
+        self.arguments['contact'] = contact
+        return self
+
+builder_registry.register('contact_participation', ContactParticipationBuilder)
+
+
+class OrgRoleParticipationBuilder(BaseParticipationBuilder):
+
+    mapped_class = OrgRoleParticipation
+
+
+    def for_org_role(self, org_role):
+        self.arguments['org_role'] = org_role
+        return self
+
+builder_registry.register('org_role_participation', OrgRoleParticipationBuilder)
 
 
 class ParticipationRoleBuilder(SqlObjectBuilder):

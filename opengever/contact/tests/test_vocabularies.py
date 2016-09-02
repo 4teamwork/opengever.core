@@ -21,16 +21,27 @@ class TestContactsVocabulary(FunctionalTestCase):
         self.teamwork_ag = create(Builder('organization')
                                   .named(u'4teamwork AG'))
 
-    def test_contains_all_organizations_and_persons(self):
+        self.role1 = create(Builder('org_role')
+                            .having(person=self.peter_a,
+                                    organization=self.meier_ag,
+                                    function='Developer'))
+        self.role2 = create(Builder('org_role')
+                            .having(person=self.peter_a,
+                                    organization=self.teamwork_ag,
+                                    function='Scheffe'))
+
+    def test_contains_all_organizations_and_persons_and_org_roles(self):
         voca_factory = getUtility(IVocabularyFactory,
                                   name='opengever.contact.ContactsVocabulary')
         vocabulary = voca_factory(self.portal)
 
         self.assertTerms(
-            [(self.peter_a.contact_id, u'Peter M\xfcller'),
-             (self.peter_b.contact_id, u'Peter Fl\xfcckiger'),
-             (self.meier_ag.contact_id, u'Meier AG'),
-             (self.teamwork_ag.contact_id, u'4teamwork AG')],
+            [(self.peter_a, u'Peter M\xfcller'),
+             (self.role1, u'Peter M\xfcller - Meier AG (Developer)'),
+             (self.role2, u'Peter M\xfcller - 4teamwork AG (Scheffe)'),
+             (self.peter_b, u'Peter Fl\xfcckiger'),
+             (self.meier_ag, u'Meier AG'),
+             (self.teamwork_ag, u'4teamwork AG')],
             vocabulary.search('*'))
 
     def test_supports_fuzzy_search(self):
@@ -39,18 +50,20 @@ class TestContactsVocabulary(FunctionalTestCase):
         vocabulary = voca_factory(self.portal)
 
         self.assertTerms(
-            [(self.meier_ag.contact_id, 'Meier AG')],
+            [(self.meier_ag, 'Meier AG')],
             vocabulary.search('Meier'))
 
         self.assertTerms(
-            [(self.peter_a.contact_id, u'Peter M\xfcller'),
-             (self.peter_b.contact_id, u'Peter Fl\xfcckiger')],
+            [(self.peter_a, u'Peter M\xfcller'),
+             (self.role1, u'Peter M\xfcller - Meier AG (Developer)'),
+             (self.role2, u'Peter M\xfcller - 4teamwork AG (Scheffe)'),
+             (self.peter_b, u'Peter Fl\xfcckiger')],
             vocabulary.search('Peter'))
 
         self.assertTerms(
-            [(self.peter_b.contact_id, u'Peter Fl\xfcckiger')],
+            [(self.peter_b, u'Peter Fl\xfcckiger')],
             vocabulary.search('Peter Fl'))
 
         self.assertTerms(
-            [(self.peter_b.contact_id, u'Peter Fl\xfcckiger')],
+            [(self.peter_b, u'Peter Fl\xfcckiger')],
             vocabulary.search('Pe Fl'))
