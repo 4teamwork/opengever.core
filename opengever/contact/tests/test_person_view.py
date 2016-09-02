@@ -154,7 +154,7 @@ class TestPersonView(FunctionalTestCase):
                           browser.css('#contactHistory .phone_number dd').text)
 
     @browsing
-    def test_shows_email_addresses_prefixed_with_label(self, browser):
+    def test_shows_linked_email_addresses_prefixed_with_label(self, browser):
         peter = create(Builder('person')
                        .having(firstname=u'Peter', lastname=u'M\xfcller'))
 
@@ -172,8 +172,12 @@ class TestPersonView(FunctionalTestCase):
 
         self.assertEquals([u'Privat', u'Arbeit'],
                           browser.css('.mail dt').text)
+
         self.assertEquals([u'peter.m@example.com', u'peter.work@example.com'],
-                          browser.css('.mail dd').text)
+                          browser.css('.mail dd a').text)
+        self.assertEquals(
+            [u'mailto:peter.m@example.com', u'mailto:peter.work@example.com'],
+            [link.get('href') for link in browser.css('.mail dd a')])
 
     @browsing
     def test_shows_archived_email_addresses_prefixed_with_label(self, browser):
@@ -190,7 +194,10 @@ class TestPersonView(FunctionalTestCase):
         self.assertEquals([u'Privat'],
                           browser.css('#contactHistory .mail dt').text)
         self.assertEquals([u'peterli@example.com'],
-                          browser.css('#contactHistory .mail dd').text)
+                          browser.css('#contactHistory .mail dd a').text)
+        self.assertEquals(
+            u'mailto:peterli@example.com',
+            browser.css('#contactHistory .mail dd a').first.get('href'))
 
     @browsing
     def test_shows_urls_prefixed_with_label(self, browser):

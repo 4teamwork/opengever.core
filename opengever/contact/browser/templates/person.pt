@@ -55,7 +55,8 @@
               <tal:repeat tal:repeat="mail person/mail_addresses">
                 <dt tal:content="mail/label" />
                 <dd>
-                  <span tal:content="mail/address" />
+                  <a tal:attributes="href string:mailto:${mail/address}"
+                     tal:content="mail/address" />
                 </dd>
               </tal:repeat>
             </dl>
@@ -167,7 +168,8 @@
                 </div>
                 <dt tal:content="archived_mail/label" />
                 <dd>
-                  <span tal:content="archived_mail/address" />
+                  <a tal:attributes="href string:mailto:${archived_mail/address}"
+                     tal:content="archived_mail/address" />
                 </dd>
               </tal:repeat>
             </dl>

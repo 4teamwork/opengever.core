@@ -130,7 +130,10 @@ class TestOrganizationView(FunctionalTestCase):
         self.assertEquals([u'Info', u'Support'],
                           browser.css('.mail dt').text)
         self.assertEquals([u'info@example.com', u'support@example.com'],
-                          browser.css('.mail dd').text)
+                          browser.css('.mail dd a').text)
+        self.assertEquals(
+            [u'mailto:info@example.com', u'mailto:support@example.com'],
+            [link.get('href') for link in browser.css('.mail dd a')])
 
     @browsing
     def test_shows_archived_email_addresses_prefixed_with_label(self, browser):
@@ -146,7 +149,10 @@ class TestOrganizationView(FunctionalTestCase):
         self.assertEquals([u'Sales'],
                           browser.css('#contactHistory .mail dt').text)
         self.assertEquals([u'sales@example.com'],
-                          browser.css('#contactHistory .mail dd').text)
+                          browser.css('#contactHistory .mail dd a').text)
+        self.assertEquals(
+            u'mailto:sales@example.com',
+            browser.css('#contactHistory .mail dd a').first.get('href'))
 
     @browsing
     def test_lists_all_related_persons_alphabetically(self, browser):
