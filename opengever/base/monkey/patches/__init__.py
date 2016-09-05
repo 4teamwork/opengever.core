@@ -4,6 +4,7 @@ from .default_values import PatchDexterityContentGetattr
 from .default_values import PatchDexterityDefaultAddForm
 from .default_values import PatchDXCreateContentInContainer
 from .default_values import PatchInvokeFactory
+from .default_values import PatchTransmogrifyDXSchemaUpdater
 from .default_values import PatchZ3CFormChangedField
 from .filter_trashed_from_catalog import PatchCatalogToFilterTrashedDocs
 from .history_handler_tool import PatchCMFEditonsHistoryHandlerTool
@@ -31,6 +32,7 @@ PatchLDAPUserFolderEncoding()()
 PatchNamedfileNamedDataConverter()()
 PatchPlone43RC1Upgrade()()
 PatchResourceRegistriesURLRegex()()
+PatchTransmogrifyDXSchemaUpdater()()
 PatchWebDAVLockTimeout()()
 PatchZ2LogTimezone()()
 PatchZ3CFormChangedField()()

@@ -5,6 +5,12 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
+- Patch transmogrify.dexterity's schema updater so it correctly sets default
+  values, using our own `determine_default_value` function to determine the
+  default, and `get_persisted_value_for_field` to avoid any __getattr__
+  fallbacks.
+  [lgraf]
+
 - Fixed permission declaration for the documents tooltip view.
   [phgross]
 
