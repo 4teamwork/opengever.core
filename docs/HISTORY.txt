@@ -5,6 +5,9 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
+- Fixed showroom identifier of preview thumbnails in search template.
+  [phgross]
+
 - Add specific byline for persons and organizations.
   [phgross]
 
