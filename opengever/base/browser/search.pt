@@ -342,7 +342,7 @@
                         <div class="searchImage" tal:condition="item/is_bumblebeeable">
                           <img class="showroom-reference bumblebeeSearchPreview"
                                tal:attributes="src item/get_preview_image_url;
-                                               data-showroom-target-item item/UID;" />
+                                               data-showroom-id string:showroom-id-${item/UID};" />
                         </div>
                       </div>
                       <div class="visualClear"><!-- --></div>
