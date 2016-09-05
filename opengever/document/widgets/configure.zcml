@@ -20,7 +20,7 @@
     <browser:page
         name="tooltip"
         for="opengever.document.behaviors.IBaseDocument"
-        permission="zope.Public"
+        permission="zope2.View"
         class=".tooltip.TooltipView"
         template="tooltip.pt"
         />

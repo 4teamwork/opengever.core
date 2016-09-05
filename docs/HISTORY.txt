@@ -5,6 +5,9 @@ Changelog
 4.10.5 (unreleased)
 -------------------
 
+- Fixed permission declaration for the documents tooltip view.
+  [phgross]
+
 - Fixed showroom identifier of preview thumbnails in search template.
   [phgross]
 
