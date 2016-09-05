@@ -56,8 +56,8 @@ class TestBumblebeePreview(FunctionalTestCase):
         browser.fill({'Search Site': 'Foo Document'}).submit()
 
         self.assertEqual(
-            IUUID(document),
-            browser.css('.bumblebeeSearchPreview').first.get('data-showroom-target-item'))
+            'showroom-id-{}'.format(IUUID(document)),
+            browser.css('.bumblebeeSearchPreview').first.get('data-showroom-id'))
 
     @browsing
     def test_all_links_including_documents_are_linked_to_absolute_url(self, browser):
