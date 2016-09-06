@@ -290,3 +290,67 @@ class PatchBuilderCreate(MonkeyPatch):
         original_create = ftw.builder.create
         __patch_refs__ = False
         self.patch_refs(ftw.builder, 'create', create)
+
+
+class PatchTransmogrifyDXSchemaUpdater(MonkeyPatch):
+    """Patch transmogrify.dexterity's schema updater so it correctly
+    sets default values, using our own `determine_default_value` function to
+    determine the default, and `get_persisted_value_for_field` to avoid any
+    __getattr__ fallbacks.
+    """
+
+    def __call__(self):
+        from opengever.base import default_values
+        from opengever.base.default_values import get_persisted_value_for_field
+        from opengever.base.default_values import NO_DEFAULT_MARKER
+        from transmogrify.dexterity.schemaupdater import _marker as _tm_marker
+        from z3c.form.interfaces import NO_VALUE
+
+        def determine_default_value(self, obj, field):
+            """Determine the default to be set for a field that didn't receive
+            a value from the pipeline.
+            """
+            default = default_values.determine_default_value(
+                field, obj.aq_parent)
+            if default is NO_DEFAULT_MARKER:
+                default = field.default
+
+            return default
+
+        def update_field(self, obj, field, item):
+            if field.readonly:
+                return
+
+            name = field.getName()
+            value = self.get_value_from_pipeline(field, item)
+            if value is not _tm_marker:
+                field.set(field.interface(obj), value)
+                return
+
+            # Get the field's current value, if it has one then leave it alone
+            try:
+                value = get_persisted_value_for_field(obj, field)
+            except AttributeError:
+                value = NO_VALUE
+
+            # Fix default description to be an empty unicode instead of
+            # an empty bytestring because of this bug:
+            # https://github.com/plone/plone.dexterity/pull/33
+            if name == 'description' and value == '':
+                field.set(field.interface(obj), u'')
+                return
+
+            if not(value is field.missing_value or value is NO_VALUE):
+                return
+
+            # Finally, set a default value if nothing is set so far
+            default = self.determine_default_value(obj, field)
+            field.set(field.interface(obj), default)
+
+        from transmogrify.dexterity.schemaupdater import DexterityUpdateSection
+        self.patch_refs(
+            DexterityUpdateSection, 'determine_default_value',
+            determine_default_value)
+        self.patch_refs(
+            DexterityUpdateSection, 'update_field',
+            update_field)

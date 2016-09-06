@@ -97,6 +97,9 @@ from zope.schema import getFieldsInOrder
 from zope.schema._bootstrapinterfaces import IContextAwareDefaultFactory
 
 
+NO_DEFAULT_MARKER = object()
+
+
 def get_persisted_value_for_field(context, field):
     """Return the *real* stored value for a field, avoiding any fallbacks.
 
@@ -212,6 +215,41 @@ def object_has_value_for_field(obj, field):
         return False
 
 
+def determine_default_value(field, container):
+    """Determine a field's default value during object creation.
+    """
+    # We deliberately ignore form level defaults here.
+
+    # zope.schema defaultFactory
+    #
+    # Based on zope.schema._boostrapfields.DefaultProperty. We don't use
+    # the class level 'default' attribute, which is a DefaultProperty,
+    # because we want to be able to distinguish "default of None" and
+    # "no default", at least for the defaultFactory. That's why it's
+    # necessary to check in the instance dict for a defaultFactory first,
+    # instead of letting the DefaultProperty implementation handle it.
+
+    default_factory = field.__dict__.get('defaultFactory')
+    if default_factory is not None:
+
+        if IContextAwareDefaultFactory.providedBy(default_factory):
+            # Access DefaultProperty descriptor to trigger validation
+            field.bind(container).default
+            return default_factory(container)
+        else:
+            # Access DefaultProperty descriptor to trigger validation
+            field.default
+            return default_factory()
+
+    field_default = field.__dict__.get('default')
+    if field_default is not None:
+        # Access DefaultProperty descriptor to trigger validation
+        field.default
+        return field_default
+
+    return NO_DEFAULT_MARKER
+
+
 def set_default_values(content, container, values):
     """Set default values for all fields.
 
@@ -230,44 +268,6 @@ def set_default_values(content, container, values):
                  into consideration when determining whether defaults should
                  apply or not.
     """
-    marker = object()
-
-    def determine_default_value(field, container):
-        """Determine a field's default value during object creation.
-        """
-        # We deliberately ignore form level defaults here.
-
-        # zope.schema defaultFactory
-        #
-        # Based on zope.schema._boostrapfields.DefaultProperty. We don't use
-        # the class level 'default' attribute, which is a DefaultProperty,
-        # because we want to be able to distinguish "default of None" and
-        # "no default", at least for the defaultFactory. That's why it's
-        # necessary to check in the instance dict for a defaultFactory first,
-        # instead of letting the DefaultProperty implementation handle it.
-
-        default_factory = field.__dict__.get('defaultFactory')
-        if default_factory is not None:
-
-            if IContextAwareDefaultFactory.providedBy(default_factory):
-                # Access DefaultProperty descriptor to trigger validation
-                field.bind(container).default
-                return default_factory(container)
-            else:
-                # Access DefaultProperty descriptor to trigger validation
-                field.default
-                return default_factory()
-
-        field_default = field.__dict__.get('default')
-        if field_default is not None:
-            # Access DefaultProperty descriptor to trigger validation
-            field.default
-            return field_default
-
-        return marker
-
-    # ---------------------------------------------------------------------
-
     for schema in iterSchemata(content):
         for name, field in getFieldsInOrder(schema):
             if name in values:
@@ -286,7 +286,7 @@ def set_default_values(content, container, values):
 
             # Attempt to find a default value for the field
             value = determine_default_value(field, container)
-            if value is marker:
+            if value is NO_DEFAULT_MARKER:
                 # No default found, fall back to missing value
                 value = field.missing_value
 
