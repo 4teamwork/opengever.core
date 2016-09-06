@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.10.5 (unreleased)
+4.10.5 (2016-09-06)
 -------------------
 
 - Fixed permission declaration for the documents tooltip view.
