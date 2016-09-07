@@ -11,12 +11,6 @@ Changelog
   fallbacks.
   [lgraf]
 
-- Fixed permission declaration for the documents tooltip view.
-  [phgross]
-
-- Fixed showroom identifier of preview thumbnails in search template.
-  [phgross]
-
 - Add specific byline for persons and organizations.
   [phgross]
 
@@ -68,6 +62,16 @@ Changelog
   Add history tables for contacts (persons and organizations), addresses,
   phonenumbers, mailaddressens and urls.
   [deiferni]
+
+
+4.10.5 (2016-09-06)
+-------------------
+
+- Fixed permission declaration for the documents tooltip view.
+  [phgross]
+
+- Fixed showroom identifier of preview thumbnails in search template.
+  [phgross]
 
 
 4.10.4 (2016-08-31)
