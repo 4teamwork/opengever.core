@@ -136,6 +136,6 @@ def disallow_anonymous_views_on_site_root(event):
             ISiteRoot.providedBy(aq_parent(context))
 
         if is_site_root or is_tabbed_view_on_site_root:
-            endpoint_name = event.request['PUBLISHED'].__name__
+            endpoint_name = event.request.steps[-1]
             if endpoint_name not in ALLOWED_ENDPOINTS:
                 raise Unauthorized
