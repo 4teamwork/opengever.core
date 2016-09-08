@@ -25,6 +25,9 @@ from ZPublisher.interfaces import IPubAfterTraversal
 
 
 ALLOWED_ENDPOINTS = set([
+    '@login',
+    '@logout',
+    '@login-renew',
     'customlogo',
     'favicon',
     'list-open-dossiers-json',
