@@ -5,8 +5,12 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
+- Link mail addresses and URLs in contact detail views.
+  [phgross]
+
 - Whitelist @login, @logout and @login-renew REST API endpoints for anonymous
   access on Plone site root.
+  [lgraf]
 
 - Patch transmogrify.dexterity's schema updater so it correctly sets default
   values, using our own `determine_default_value` function to determine the

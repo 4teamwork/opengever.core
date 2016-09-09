@@ -48,3 +48,10 @@ class Contact(Base, SQLFormSupport):
     @property
     def id(self):
         return self.contact_id
+
+    def has_archived_information(self):
+        return any([self.archived_contacts,
+                    self.archived_addresses,
+                    self.archived_mail_addresses,
+                    self.archived_phonenumbers,
+                    self.archived_urls])

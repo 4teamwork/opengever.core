@@ -130,7 +130,10 @@ class TestOrganizationView(FunctionalTestCase):
         self.assertEquals([u'Info', u'Support'],
                           browser.css('.mail dt').text)
         self.assertEquals([u'info@example.com', u'support@example.com'],
-                          browser.css('.mail dd').text)
+                          browser.css('.mail dd a').text)
+        self.assertEquals(
+            [u'mailto:info@example.com', u'mailto:support@example.com'],
+            [link.get('href') for link in browser.css('.mail dd a')])
 
     @browsing
     def test_shows_archived_email_addresses_prefixed_with_label(self, browser):
@@ -146,7 +149,10 @@ class TestOrganizationView(FunctionalTestCase):
         self.assertEquals([u'Sales'],
                           browser.css('#contactHistory .mail dt').text)
         self.assertEquals([u'sales@example.com'],
-                          browser.css('#contactHistory .mail dd').text)
+                          browser.css('#contactHistory .mail dd a').text)
+        self.assertEquals(
+            u'mailto:sales@example.com',
+            browser.css('#contactHistory .mail dd a').first.get('href'))
 
     @browsing
     def test_lists_all_related_persons_alphabetically(self, browser):
@@ -176,24 +182,28 @@ class TestOrganizationView(FunctionalTestCase):
             browser.css('.persons .function').text)
 
     @browsing
-    def test_shows_urls_prefixed_with_label(self, browser):
+    def test_shows_linked_urls_prefixed_with_label(self, browser):
         organization = create(Builder('organization').named(u'4teamwork'))
 
         create(Builder('url')
                .for_contact(organization)
                .labeled('Blog')
-               .having(url=u'peters-blog.example.com'))
+               .having(url=u'http://www.peters-blog.example.com'))
         create(Builder('url')
                .for_contact(organization)
                .labeled('Homepage')
-               .having(url=u'peters-homepage.example.com'))
+               .having(url=u'https://peters-homepage.example.com'))
 
         browser.login().open(self.contactfolder, view=organization.wrapper_id)
 
         self.assertEquals([u'Blog', u'Homepage'], browser.css('.url dt').text)
-        self.assertEquals(
-            [u'peters-blog.example.com', u'peters-homepage.example.com'],
-            browser.css('.url dd').text)
+        links = browser.css('.url dd a')
+        self.assertEquals([u'http://www.peters-blog.example.com',
+                           u'https://peters-homepage.example.com'],
+                          [link.text for link in links])
+        self.assertEquals(['http://www.peters-blog.example.com',
+                           'https://peters-homepage.example.com'],
+                          [link.get('href') for link in links])
 
     @browsing
     def test_related_persons_are_linked_to_person_view(self, browser):
