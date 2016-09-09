@@ -25,9 +25,9 @@ from ZPublisher.interfaces import IPubAfterTraversal
 
 
 ALLOWED_ENDPOINTS = set([
-    '@login',
-    '@logout',
-    '@login-renew',
+    'POST_application_json_@login',
+    'POST_application_json_@logout',
+    'POST_application_json_@login-renew',
     'customlogo',
     'favicon',
     'list-open-dossiers-json',
@@ -139,6 +139,6 @@ def disallow_anonymous_views_on_site_root(event):
             ISiteRoot.providedBy(aq_parent(context))
 
         if is_site_root or is_tabbed_view_on_site_root:
-            endpoint_name = event.request.steps[-1]
+            endpoint_name = event.request['PUBLISHED'].__name__
             if endpoint_name not in ALLOWED_ENDPOINTS:
                 raise Unauthorized
