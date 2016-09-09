@@ -10,6 +10,7 @@ from opengever.contact.models import Person
 from opengever.contact.models import PhoneNumber
 from opengever.contact.models import URL
 import csv
+import json
 import logging
 import transaction
 
@@ -238,6 +239,7 @@ class OrganizationSyncer(CSVObjectSyncer):
     def update_rows_mapping(self):
         self.rows_mapping['contact_id'] = 'former_contact_id'
         self.rows_mapping['name'] = 'name'
+        self.rows_mapping['active'] = 'is_active'
 
     def get_internal_obj(self, row):
         return Organization.query.filter(
@@ -246,7 +248,8 @@ class OrganizationSyncer(CSVObjectSyncer):
     def get_remote_object(self, row):
         return Organization(
             name=self.decode_text(row.get('name')),
-            former_contact_id=int(self.decode_text(row.get('contact_id'))))
+            former_contact_id=int(self.decode_text(row.get('contact_id'))),
+            is_active=json.loads(row.get('active')))
 
 
 class PersonSyncer(CSVObjectSyncer):
@@ -259,6 +262,7 @@ class PersonSyncer(CSVObjectSyncer):
         self.rows_mapping['title'] = 'academic_title'
         self.rows_mapping['firstname'] = 'firstname'
         self.rows_mapping['lastname'] = 'lastname'
+        self.rows_mapping['active'] = 'is_active'
 
     def get_internal_obj(self, row):
         return Person.query.filter(
@@ -269,7 +273,9 @@ class PersonSyncer(CSVObjectSyncer):
                       academic_title=self.decode_text(row.get('title')),
                       firstname=self.decode_text(row.get('firstname')),
                       lastname=self.decode_text(row.get('lastname')),
-                      former_contact_id=int(self.decode_text(row.get('contact_id'))))
+                      former_contact_id=int(
+                          self.decode_text(row.get('contact_id'))),
+                      is_active=json.loads(row.get('active')))
 
 
 class MailSyncer(CSVObjectSyncer):

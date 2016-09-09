@@ -1,4 +1,4 @@
-"contact_id","salutation","title","firstname","lastname"
-1,"Herrn","Dr","Frank G.","Dippel"
-2,"Frau","Dr","Christiane","Würsdörfer"
-3,"Frau","","Dolorene","Dolores"
+"contact_id","salutation","title","firstname","lastname","active"
+1,"Herrn","Dr","Frank G.","Dippel","true"
+2,"Frau","Dr","Christiane","Würsdörfer","false"
+3,"Frau","","Dolorene","Dolores","true"
