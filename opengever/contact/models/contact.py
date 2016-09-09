@@ -1,7 +1,6 @@
 from opengever.base.model import Base
 from opengever.base.model import SQLFormSupport
 from opengever.contact.models.participation import ContactParticipation
-from opengever.ogds.models.query import BaseQuery
 from opengever.ogds.models.types import UnicodeCoercingText
 from sqlalchemy import Boolean
 from sqlalchemy import Column
@@ -11,18 +10,11 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
 
 
-class ContactQuery(BaseQuery):
-
-    def get_by_former_contact_id(self, former_contact_id):
-        return self.filter_by(former_contact_id=former_contact_id).first()
-
-
 class Contact(Base, SQLFormSupport):
     """Base class for both type of contacts organizations and persons.
     """
 
     participation_class = ContactParticipation
-    query_cls = ContactQuery
 
     __tablename__ = 'contacts'
 

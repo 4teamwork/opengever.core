@@ -15,6 +15,9 @@ class OrganizationQuery(BaseQuery):
 
     searchable_fields = ['name']
 
+    def get_by_former_contact_id(self, former_contact_id):
+        return self.filter_by(former_contact_id=former_contact_id).first()
+
 
 class Organization(Contact):
 
