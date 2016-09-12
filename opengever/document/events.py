@@ -1,8 +1,6 @@
-
 from five import grok
-from zope.component.interfaces import ObjectEvent
-
 from opengever.document import interfaces
+from zope.component.interfaces import ObjectEvent
 
 
 class ObjectCheckedOutEvent(ObjectEvent):
@@ -14,6 +12,16 @@ class ObjectCheckedOutEvent(ObjectEvent):
     def __init__(self, obj, comment):
         self.object = obj
         self.comment = comment
+
+
+class ObjectBeforeCheckInEvent(ObjectEvent):
+    """The ObjectBeforeCheckInEvent is triggered before a object gets
+    checked in.
+    """
+    grok.implements(interfaces.IObjectBeforeCheckInEvent)
+
+    def __init__(self, obj):
+        self.object = obj
 
 
 class ObjectCheckedInEvent(ObjectEvent):

@@ -34,8 +34,8 @@ class TestHandlers(FunctionalTestCase):
         super(TestHandlers, self).tearDown()
         self.set_docproperty_export_enabled(False)
 
-    def assert_doc_properties_updated_journal_entry_generated(self, document):
-        entry = get_journal_entry(document)
+    def assert_doc_properties_updated_journal_entry_generated(self, document, entry=-1):
+        entry = get_journal_entry(document, entry=entry)
 
         self.assertEqual(DOC_PROPERTIES_UPDATED, entry['action']['type'])
         self.assertEqual(TEST_USER_ID, entry['actor'])
@@ -89,8 +89,9 @@ class TestHandlers(FunctionalTestCase):
         with TemporaryDocFile(self.doc_with_gever_properties.file) as tmpfile:
             properties = read_properties(tmpfile.path)
             self.assertItemsEqual(expected_doc_properties, properties)
+
         self.assert_doc_properties_updated_journal_entry_generated(
-            self.doc_with_gever_properties)
+            self.doc_with_gever_properties, entry=-2)
 
     def test_copying_documents_updates_doc_properties(self):
         api.content.copy(source=self.doc_with_gever_properties,

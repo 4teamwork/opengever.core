@@ -5,7 +5,9 @@ Changelog
 4.10.6 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Introduce new event ObjectBeforeCheckIn to make sure all file modifications
+  are done before the file gets versioned and bumblebee storing is triggered.
+  [phgross]
 
 
 4.10.5 (2016-09-06)
