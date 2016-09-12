@@ -5,6 +5,10 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
+- Introduce new event ObjectBeforeCheckIn to make sure all file modifications
+  are done before the file gets versioned and bumblebee storing is triggered.
+  [phgross]
+
 - Link mail addresses and URLs in contact detail views.
   [phgross]
 
