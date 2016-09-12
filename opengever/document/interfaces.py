@@ -19,6 +19,11 @@ class IObjectCheckedInEvent(IObjectEvent):
     comment = schema.Text(title=u'journal comment')
 
 
+class IObjectBeforeCheckInEvent(IObjectEvent):
+    """ Event interface for events.ObjectBeforeCheckInEvent
+    """
+
+
 class IObjectCheckoutCanceledEvent(IObjectEvent):
     """ Event interface for events.ObjectCheckoutCanceledEvent
     """

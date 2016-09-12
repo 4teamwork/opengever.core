@@ -7,8 +7,13 @@ from ftw.bumblebee.tests.helpers import get_queue
 from ftw.testbrowser import browsing
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.dossier.interfaces import ITemplateDossierProperties
+from opengever.testing import assets
 from opengever.testing import FunctionalTestCase
+from opengever.testing import obj2brain
 from opengever.testing.helpers import create_document_version
+from plone import api
+from plone.namedfile.file import NamedBlobFile
 from plone.rfc822.interfaces import IPrimaryFieldInfo
 from plone.uuid.interfaces import IUUID
 from zope.component import getMultiAdapter
@@ -160,3 +165,31 @@ class TestBumblebeeIntegrationWithEnabledFeature(FunctionalTestCase):
              'deferred': False,
              'url': '/plone/dossier-1/document-1/bumblebee_trigger_storing'},
             job)
+
+    @browsing
+    def test_updates_checksum_and_queue_storing_after_docproperty_update(self, browser):
+        api.portal.set_registry_record('create_doc_properties',
+                                       interface=ITemplateDossierProperties,
+                                       value=True)
+
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document')
+                          .within(dossier)
+                          .checked_out()
+                          .with_asset_file('with_gever_properties.docx'))
+
+        # update
+        document.file = NamedBlobFile(
+            data=assets.load(u'with_gever_properties_update.docx'),
+            filename=u'with_gever_properties.docx')
+        checksum_before = IBumblebeeDocument(document).update_checksum()
+
+        browser.login().open(document)
+        browser.click_on('without comment')
+
+        self.assertNotEqual(
+            checksum_before, IBumblebeeDocument(document).get_checksum(),
+            'Document checksum not updated after docproperties update.')
+        self.assertNotEqual(
+            checksum_before, obj2brain(document).bumblebee_checksum,
+            'Document checksum not updated after docproperties update.')

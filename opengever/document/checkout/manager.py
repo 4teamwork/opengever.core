@@ -4,6 +4,7 @@ from datetime import datetime
 from five import grok
 from opengever.document import _
 from opengever.document.document import IDocumentSchema
+from opengever.document.events import ObjectBeforeCheckInEvent
 from opengever.document.events import ObjectCheckedInEvent
 from opengever.document.events import ObjectCheckedOutEvent
 from opengever.document.events import ObjectCheckoutCanceledEvent
@@ -128,6 +129,7 @@ class CheckinCheckoutManager(grok.MultiAdapter):
         """Checkin the adapted document, using the `comment` for the
         journal entry.
         """
+        notify(ObjectBeforeCheckInEvent(self.context))
 
         # is the user allowed to checkin?
         if not self.is_checkin_allowed():
