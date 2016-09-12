@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.10.6 (unreleased)
+4.10.6 (2016-09-12)
 -------------------
 
 - Introduce new event ObjectBeforeCheckIn to make sure all file modifications
