@@ -5,6 +5,9 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
+- Include OrgRole participations in organizations and persons participation listing.
+  [phgross]
+
 - Prevent creating participations for inactive contacts.
   [phgross]
 

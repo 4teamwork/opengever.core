@@ -3,12 +3,14 @@ from opengever.base.model import create_session
 from opengever.base.model import SQLFormSupport
 from opengever.base.oguid import Oguid
 from opengever.contact import _
+from opengever.contact.models.org_role import OrgRole
 from opengever.contact.models.participation_role import ParticipationRole
 from opengever.ogds.models import UNIT_ID_LENGTH
 from opengever.ogds.models.query import BaseQuery
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
+from sqlalchemy import or_
 from sqlalchemy import String
 from sqlalchemy.orm import composite
 from sqlalchemy.orm import relationship
@@ -19,6 +21,26 @@ class ParticipationQuery(BaseQuery):
 
     def by_dossier(self, dossier):
         return self.filter_by(dossier_oguid=Oguid.for_object(dossier))
+
+    def by_organization(self, organization):
+        """Returns both ContactParticapations and OrgRoleParticipation
+        of the given organization.
+        """
+        return self._org_role_join().filter(
+            or_(OrgRole.organization == organization,
+                ContactParticipation.contact == organization))
+
+    def by_person(self, person):
+        """Returns both ContactParticapations and OrgRoleParticipation
+        of the given person.
+        """
+        return self._org_role_join().filter(
+            or_(OrgRole.person == person,
+                ContactParticipation.contact == person))
+
+    def _org_role_join(self):
+        return self.outerjoin(
+            OrgRole, OrgRoleParticipation.org_role_id == OrgRole.org_role_id)
 
 
 class ContactParticipationQuery(ParticipationQuery):
@@ -157,3 +179,6 @@ class OrgRoleParticipation(Participation):
     @property
     def participant(self):
         return self.org_role
+
+
+OrgRole.participation_class = OrgRoleParticipation

@@ -1,7 +1,6 @@
 from ftw.tabbedview.interfaces import ITabbedView
 from opengever.base.response import JSONResponse
 from opengever.contact import _
-from opengever.contact.models import ContactParticipation
 from opengever.contact.models import Participation
 from opengever.tabbedview import GeverTabMixin
 from plone import api
@@ -19,6 +18,9 @@ class ParticipationsView(BrowserView):
         return api.portal.get_registry_record(
             'batch_size', interface=ITabbedView)
 
+    def get_particpations_query(self):
+        raise NotImplementedError
+
     def list(self):
         """Returns a json dict with the following structure.
 
@@ -30,9 +32,8 @@ class ParticipationsView(BrowserView):
         """
 
         data = {}
-        # XXX also include OrgRoleParticipations for that person
-        query = ContactParticipation.query.by_participant(self.context.model)
-        query = query.order_by(desc(Participation.participation_id))
+        query = self.get_particpations_query().order_by(
+            desc(Participation.participation_id))
         total = query.count()
 
         if self.request.get('show_all') != 'true':
@@ -52,6 +53,18 @@ class ParticipationsView(BrowserView):
     def _serialize(self, participations):
         return [participation.get_json_representation()
                 for participation in participations]
+
+
+class OrganizationParticipationsView(ParticipationsView):
+
+    def get_particpations_query(self):
+        return Participation.query.by_organization(self.context.model)
+
+
+class PersonParticipationsView(ParticipationsView):
+
+    def get_particpations_query(self):
+        return Participation.query.by_person(self.context.model)
 
 
 class ParticpationTab(BrowserView, GeverTabMixin):

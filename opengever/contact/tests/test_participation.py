@@ -216,6 +216,39 @@ class TestParticipationsEndPoint(FunctionalTestCase):
             browser.json.get('participations'))
 
     @browsing
+    def test_include_org_role_participations_for_the_current_context(self, browser):
+        peter = create(Builder('person')
+                       .having(firstname=u'Peter', lastname=u'M\xfcller'))
+        role1 = create(Builder('org_role')
+                       .having(person=peter, organization=self.meierag))
+        create(Builder('org_role_participation')
+               .for_dossier(self.dossier2)
+               .with_roles(['regard'])
+               .for_org_role(role1))
+
+        teamwork = create(Builder('organization').named('4teamwork AG'))
+        role2 = create(Builder('org_role')
+                       .having(person=peter, organization=teamwork))
+        create(Builder('org_role_participation')
+               .for_dossier(self.dossier1)
+               .with_roles(['regard'])
+               .for_org_role(role2))
+
+        # organization
+        browser.login().open(self.meierag.get_url('participations/list'),
+                             {'show_all': 'true'})
+        self.assertEqual(
+            [u'Dossier B', u'Dossier C', u'Dossier B', u'Dossier A'],
+            [item.get('title') for item in browser.json.get('participations')])
+
+        # person
+        browser.login().open(peter.get_url('participations/list'),
+                             {'show_all': 'true'})
+        self.assertEqual(
+            [u'Dossier A', u'Dossier B'],
+            [item.get('title') for item in browser.json.get('participations')])
+
+    @browsing
     def test_is_sliced_and_has_more_flag_is_set_when_slice_size_is_exceeded(self, browser):
         browser.login().open(self.meierag.get_url('participations/list'))
 
