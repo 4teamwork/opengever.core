@@ -51,10 +51,10 @@ class TestContactParticipation(unittest2.TestCase):
         participation = create(Builder('contact_participation').having(
             contact=self.contact,
             dossier_oguid=Oguid('foo', 1234)))
-        role1 = create(Builder('participation_role').having(
+        create(Builder('participation_role').having(
             participation=participation,
             role=u'final-drawing'))
-        role2 = create(Builder('participation_role').having(
+        create(Builder('participation_role').having(
             participation=participation,
             role=u'regard'))
 
@@ -68,10 +68,10 @@ class TestContactParticipation(unittest2.TestCase):
         participation = create(Builder('contact_participation').having(
             contact=contact,
             dossier_oguid=Oguid('foo', 1234)))
-        role1 = create(Builder('participation_role').having(
+        create(Builder('participation_role').having(
             participation=participation,
             role=u'final-drawing'))
-        role2 = create(Builder('participation_role').having(
+        create(Builder('participation_role').having(
             participation=participation,
             role=u'regard'))
 
@@ -92,7 +92,7 @@ class TestOrgRoleParticipation(unittest2.TestCase):
         orgrole = create(Builder('org_role').having(
             person=person, organization=organization, function=u'cheffe'))
 
-        participation = create(Builder('org_role_participation').having(
+        create(Builder('org_role_participation').having(
             org_role=orgrole,
             dossier_oguid=Oguid('foo', 1234)))
 
@@ -214,6 +214,39 @@ class TestParticipationsEndPoint(FunctionalTestCase):
               u'title': u'Dossier B',
               u'url': u'http://nohost/plone/dossier-2'}],
             browser.json.get('participations'))
+
+    @browsing
+    def test_include_org_role_participations_for_the_current_context(self, browser):
+        peter = create(Builder('person')
+                       .having(firstname=u'Peter', lastname=u'M\xfcller'))
+        role1 = create(Builder('org_role')
+                       .having(person=peter, organization=self.meierag))
+        create(Builder('org_role_participation')
+               .for_dossier(self.dossier2)
+               .with_roles(['regard'])
+               .for_org_role(role1))
+
+        teamwork = create(Builder('organization').named('4teamwork AG'))
+        role2 = create(Builder('org_role')
+                       .having(person=peter, organization=teamwork))
+        create(Builder('org_role_participation')
+               .for_dossier(self.dossier1)
+               .with_roles(['regard'])
+               .for_org_role(role2))
+
+        # organization
+        browser.login().open(self.meierag.get_url('participations/list'),
+                             {'show_all': 'true'})
+        self.assertEqual(
+            [u'Dossier B', u'Dossier C', u'Dossier B', u'Dossier A'],
+            [item.get('title') for item in browser.json.get('participations')])
+
+        # person
+        browser.login().open(peter.get_url('participations/list'),
+                             {'show_all': 'true'})
+        self.assertEqual(
+            [u'Dossier A', u'Dossier B'],
+            [item.get('title') for item in browser.json.get('participations')])
 
     @browsing
     def test_is_sliced_and_has_more_flag_is_set_when_slice_size_is_exceeded(self, browser):
@@ -413,9 +446,9 @@ class TestEditForm(FunctionalTestCase):
 
     @browsing
     def test_label_contains_contact_participation_title(self, browser):
-        participation = create(Builder('contact_participation')
-                               .for_dossier(self.dossier)
-                               .for_contact(self.peter))
+        create(Builder('contact_participation')
+               .for_dossier(self.dossier)
+               .for_contact(self.peter))
 
         browser.login().open(self.dossier,
                              view=u'tabbedview_view-participations')
@@ -428,9 +461,9 @@ class TestEditForm(FunctionalTestCase):
     def test_label_contains_org_role_participation_title(self, browser):
         org_role = create(Builder('org_role').having(
             person=self.peter, organization=self.meier_ag, function=u'cheffe'))
-        participation = create(Builder('org_role_participation')
-                               .for_dossier(self.dossier)
-                               .for_org_role(org_role))
+        create(Builder('org_role_participation')
+               .for_dossier(self.dossier)
+               .for_org_role(org_role))
 
         browser.login().open(self.dossier,
                              view=u'tabbedview_view-participations')
@@ -441,9 +474,9 @@ class TestEditForm(FunctionalTestCase):
 
     @browsing
     def test_cancel_redirects_to_participations_tab(self, browser):
-        participation = create(Builder('contact_participation')
-                               .for_dossier(self.dossier)
-                               .for_contact(self.peter))
+        create(Builder('contact_participation')
+               .for_dossier(self.dossier)
+               .for_contact(self.peter))
 
         browser.login().open(self.dossier,
                              view=u'tabbedview_view-participations')
@@ -486,9 +519,9 @@ class TestRemoveForm(FunctionalTestCase):
     def test_remove_org_role_particpation(self, browser):
         org_role = create(Builder('org_role').having(
             person=self.peter, organization=self.meier_ag, function=u'cheffe'))
-        participation = create(Builder('org_role_participation')
-                               .for_dossier(self.dossier)
-                               .for_org_role(org_role))
+        create(Builder('org_role_participation')
+               .for_dossier(self.dossier)
+               .for_org_role(org_role))
 
         browser.login().open(self.dossier,
                              view=u'tabbedview_view-participations')
@@ -502,9 +535,9 @@ class TestRemoveForm(FunctionalTestCase):
 
     @browsing
     def test_label_contains_participation_contact_title(self, browser):
-        participation = create(Builder('contact_participation')
-                               .for_dossier(self.dossier)
-                               .for_contact(self.peter))
+        create(Builder('contact_participation')
+               .for_dossier(self.dossier)
+               .for_contact(self.peter))
 
         browser.login().open(self.dossier,
                              view=u'tabbedview_view-participations')
@@ -515,9 +548,9 @@ class TestRemoveForm(FunctionalTestCase):
 
     @browsing
     def test_cancel_redirects_to_participations_tab(self, browser):
-        participation = create(Builder('contact_participation')
-                               .for_dossier(self.dossier)
-                               .for_contact(self.peter))
+        create(Builder('contact_participation')
+               .for_dossier(self.dossier)
+               .for_contact(self.peter))
 
         browser.login().open(self.dossier,
                              view=u'tabbedview_view-participations')

@@ -1,6 +1,5 @@
 from opengever.base.model import Base
 from opengever.base.model import CONTENT_TITLE_LENGTH
-from opengever.contact.models.participation import OrgRoleParticipation
 from opengever.ogds.models.types import UnicodeCoercingText
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
@@ -12,7 +11,6 @@ from sqlalchemy.schema import Sequence
 
 class OrgRole(Base):
 
-    participation_class = OrgRoleParticipation
     __tablename__ = 'org_roles'
 
     org_role_id = Column("id", Integer,
