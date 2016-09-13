@@ -5,10 +5,6 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
-- Introduce new event ObjectBeforeCheckIn to make sure all file modifications
-  are done before the file gets versioned and bumblebee storing is triggered.
-  [phgross]
-
 - Link mail addresses and URLs in contact detail views.
   [phgross]
 
@@ -73,6 +69,14 @@ Changelog
   Add history tables for contacts (persons and organizations), addresses,
   phonenumbers, mailaddressens and urls.
   [deiferni]
+
+
+4.10.6 (2016-09-12)
+-------------------
+
+- Introduce new event ObjectBeforeCheckIn to make sure all file modifications
+  are done before the file gets versioned and bumblebee storing is triggered.
+  [phgross]
 
 
 4.10.5 (2016-09-06)
