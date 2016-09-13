@@ -1,0 +1,3 @@
+<registry>
+    <records interface="opengever.officeatwork.interfaces.IOfficeatworkSettings" />
+</registry>
