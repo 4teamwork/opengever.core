@@ -11,7 +11,7 @@ from zope.schema.vocabulary import SimpleTerm
 
 @implementer(IVocabularyTokenized)
 class ContactsVocabulary(object):
-    """A vocabulary of all contacts (all persons and organizations).
+    """A vocabulary of all active contacts (all persons and organizations).
 
     Providing a search method, which allows using the vocabulary in an
     autocomplete field.
@@ -47,8 +47,10 @@ class ContactsVocabulary(object):
 
     def search(self, query_string):
         text_filters = query_string.split()
-        for contact in Contact.query.polymorphic_by_searchable_text(
-                text_filters=text_filters):
+        query = Contact.query.filter(Contact.is_active==True)
+        query = query.polymorphic_by_searchable_text(
+            text_filters=text_filters)
+        for contact in query:
             yield self.getTerm(contact)
             if hasattr(contact, 'organizations'):
                 for org_role in contact.organizations:

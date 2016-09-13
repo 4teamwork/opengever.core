@@ -5,6 +5,9 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
+- Prevent creating participations for inactive contacts.
+  [phgross]
+
 - Link mail addresses and URLs in contact detail views.
   [phgross]
 

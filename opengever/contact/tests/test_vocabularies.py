@@ -16,10 +16,17 @@ class TestContactsVocabulary(FunctionalTestCase):
         self.peter_b = create(Builder('person')
                               .having(firstname=u'Peter',
                                       lastname=u'Fl\xfcckiger'))
+        self.peter_c = create(Builder('person')
+                              .having(firstname=u'Peter',
+                                      lastname=u'Meier')
+                              .having(is_active=False))
         self.meier_ag = create(Builder('organization')
                                .named(u'Meier AG'))
         self.teamwork_ag = create(Builder('organization')
                                   .named(u'4teamwork AG'))
+        self.school = create(Builder('organization')
+                             .named(u'School')
+                             .having(is_active=False))
 
         self.role1 = create(Builder('org_role')
                             .having(person=self.peter_a,
@@ -30,7 +37,7 @@ class TestContactsVocabulary(FunctionalTestCase):
                                     organization=self.teamwork_ag,
                                     function='Scheffe'))
 
-    def test_contains_all_organizations_and_persons_and_org_roles(self):
+    def test_contains_only_active_organizations_and_persons_and_org_roles(self):
         voca_factory = getUtility(IVocabularyFactory,
                                   name='opengever.contact.ContactsVocabulary')
         vocabulary = voca_factory(self.portal)
