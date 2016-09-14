@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-07-21 14:08+0000\n"
+"POT-Creation-Date: 2016-09-19 14:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,8 +23,14 @@ msgid "heading_journal"
 msgstr ""
 
 #. Default: "Changed by"
-#: ./opengever/journal/tab.py:68
+#: ./opengever/journal/tab.py:74
 msgid "label_actor"
+msgstr ""
+
+#. Default: "Add journal entry"
+#: ./opengever/journal/form.py:55
+#: ./opengever/journal/templates/journal_selection.pt:2
+msgid "label_add_journal_entry"
 msgstr ""
 
 #. Default: "Attachments deleted: ${filenames}"
@@ -32,9 +38,25 @@ msgstr ""
 msgid "label_attachments_deleted"
 msgstr ""
 
+#. Default: "Category"
+#: ./opengever/journal/form.py:16
+msgid "label_category"
+msgstr ""
+
+#. Default: "Comment"
+#: ./opengever/journal/form.py:22
+msgid "label_comment"
+msgstr ""
+
 #. Default: "Comments"
-#: ./opengever/journal/tab.py:72
+#: ./opengever/journal/tab.py:78
 msgid "label_comments"
+msgstr ""
+
+#. Default: "Contacts"
+#: ./opengever/journal/form.py:27
+#: ./opengever/journal/templates/journal_references.pt:2
+msgid "label_contacts"
 msgstr ""
 
 #. Default: "DocProperties updated."
@@ -122,6 +144,11 @@ msgstr ""
 msgid "label_document_sent_comment"
 msgstr ""
 
+#. Default: "Documents"
+#: ./opengever/journal/templates/journal_references.pt:12
+msgid "label_documents"
+msgstr ""
+
 #. Default: "Dossier added: ${title}"
 #: ./opengever/journal/handlers.py:210
 msgid "label_dossier_added"
@@ -167,6 +194,11 @@ msgstr ""
 msgid "label_local_roles_modified_at"
 msgstr ""
 
+#. Default: "Manual entry: ${category}"
+#: ./opengever/journal/entry.py:75
+msgid "label_manual_journal_entry"
+msgstr ""
+
 #. Default: "Object cut: ${title}"
 #: ./opengever/journal/handlers.py:734
 msgid "label_object_cut"
@@ -197,6 +229,16 @@ msgstr ""
 msgid "label_prefix_unlocked"
 msgstr ""
 
+#. Default: "References"
+#: ./opengever/journal/tab.py:82
+msgid "label_references"
+msgstr ""
+
+#. Default: "Related Documents"
+#: ./opengever/journal/form.py:34
+msgid "label_related_documents"
+msgstr ""
+
 #. Default: "Object restore: ${title}"
 #: ./opengever/journal/handlers.py:611
 msgid "label_restore"
@@ -213,12 +255,12 @@ msgid "label_task_modified"
 msgstr ""
 
 #. Default: "Time"
-#: ./opengever/journal/tab.py:60
+#: ./opengever/journal/tab.py:66
 msgid "label_time"
 msgstr ""
 
 #. Default: "Title"
-#: ./opengever/journal/tab.py:64
+#: ./opengever/journal/tab.py:70
 msgid "label_title"
 msgstr ""
 
@@ -233,7 +275,7 @@ msgid "summary_journal"
 msgstr ""
 
 #. Default: "${amount} matches."
-#: ./opengever/journal/no_selection_amount.pt:3
+#: ./opengever/journal/templates/journal_selection.pt:9
 msgid "tab_matches"
 msgstr ""
 
