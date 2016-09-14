@@ -44,7 +44,7 @@ class TestArchiveTables(TestCase):
     def test_contact_archive_contains_all_columns(self):
         self.assert_correct_archive_entity(
             Contact, ArchivedContact,
-            ignore=['contact_type', 'archived_contact_type'])
+            ignore=['contact_type', 'archived_contact_type', 'former_contact_id'])
 
     def test_mail_address_archive_contains_all_columns(self):
         self.assert_correct_archive_entity(MailAddress, ArchivedMailAddress)
@@ -58,9 +58,9 @@ class TestArchiveTables(TestCase):
     def test_person_archive_contains_all_columns(self):
         self.assert_correct_archive_entity(
             Person, ArchivedPerson,
-            ignore=['contact_type', 'archived_contact_type'])
+            ignore=['contact_type', 'archived_contact_type', 'former_contact_id'])
 
     def test_organization_archive_contains_all_columns(self):
         self.assert_correct_archive_entity(
             Organization, ArchivedOrganization,
-            ignore=['contact_type', 'archived_contact_type'])
+            ignore=['contact_type', 'archived_contact_type', 'former_contact_id'])

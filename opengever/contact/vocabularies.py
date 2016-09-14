@@ -50,7 +50,8 @@ class ContactsVocabulary(object):
         query = Contact.query.filter(Contact.is_active==True)
         query = query.polymorphic_by_searchable_text(
             text_filters=text_filters)
-        for contact in query:
+
+        for contact in query.order_by(Contact.contact_id):
             yield self.getTerm(contact)
             if hasattr(contact, 'organizations'):
                 for org_role in contact.organizations:
