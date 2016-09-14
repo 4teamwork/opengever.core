@@ -1,0 +1,13 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="opengever.officeatwork">
+
+  <browser:page
+      for="*"
+      name="is_officeatwork_feature_enabled"
+      class=".officeatworkfeatureenabled.OfficeatworkFeatureEnabledView"
+      permission="zope2.View"
+    />
+
+</configure>

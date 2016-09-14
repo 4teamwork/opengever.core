@@ -6,6 +6,8 @@
     xmlns:i18n="http://namespaces.zope.org/i18n"
     i18n_domain="opengever.officeatwork">
 
+  <include package=".browser" />
+
   <grok:grok package="." />
 
   <genericsetup:registerProfile
