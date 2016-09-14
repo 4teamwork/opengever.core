@@ -10,4 +10,11 @@
       permission="zope2.View"
     />
 
+  <browser:page
+      for="*"
+      name="document_from_officeatwork"
+      class=".documentfromofficeatwork.DocumentFromOfficeatwork"
+      permission="zope2.View"
+    />
+
 </configure>

@@ -173,6 +173,10 @@ class FileOrPaperValidator(validator.SimpleFieldValidator):
         if IMail.providedBy(self.context):
             return
 
+        form = self.view.parentForm
+        if getattr(form, 'skip_validate_file_field', False):
+            return
+
         if not (self.has_file() or self.is_preserved_as_paper()):
             raise Invalid(
                 _(u'error_file_and_preserved_as_paper',
