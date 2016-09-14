@@ -113,7 +113,7 @@ class JournalTableSource(GeverTableSource):
 
         def _search_method(item):
             # title
-            if text.lower() in title_helper(item, '').lower():
+            if text.lower() in title_helper(item, u'').lower().encode('utf-8'):
                 return True
 
             # actor
