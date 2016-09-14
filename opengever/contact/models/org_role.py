@@ -48,3 +48,8 @@ class OrgRole(Base):
 
     def get_css_class(self):
         return self.person.get_css_class()
+
+    def get_contact_id(self):
+        """Returns the id of the person that is represented by the Orgrole.
+        """
+        return self.person.contact_id
