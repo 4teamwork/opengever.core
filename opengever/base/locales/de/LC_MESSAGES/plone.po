@@ -144,6 +144,9 @@ msgstr "Löschen"
 msgid "document-transition-restore"
 msgstr "Wiederherstellen"
 
+msgid "document_from_officeatwork"
+msgstr "Dokument aus officeatwork"
+
 msgid "document_with_template"
 msgstr "Dokument aus Vorlage"
 
@@ -311,3 +314,4 @@ msgstr "Aktivieren"
 
 msgid "transition-add-document"
 msgstr "Dokument hinzugefügt"
+

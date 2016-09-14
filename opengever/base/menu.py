@@ -14,6 +14,7 @@ def order_factories(context, factories):
                        'Document with docucomposer',
                        'Document with docugate',
                        'document_with_template',
+                       'document_from_officeatwork',
                        'Task',
                        'Add task from template',
                        'Mail',

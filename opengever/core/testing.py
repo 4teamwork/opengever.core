@@ -11,6 +11,7 @@ from opengever.base import model
 from opengever.base.model import create_session
 from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
 from opengever.meeting.interfaces import IMeetingSettings
+from opengever.officeatwork.interfaces import IOfficeatworkSettings
 from opengever.ogds.base.setup import create_sql_tables
 from opengever.ogds.models import BASE
 from plone import api
@@ -105,6 +106,14 @@ def deactivate_activity_center():
 
 def activate_activity_center():
     toggle_feature(IActivitySettings, enabled=True)
+
+
+def activate_officeatwork():
+    toggle_feature(IOfficeatworkSettings, enabled=True)
+
+
+def deactivate_officeatwork():
+    toggle_feature(IOfficeatworkSettings, enabled=False)
 
 
 def deactivate_bumblebee_feature():
@@ -442,3 +451,17 @@ class BumblebeeLayer(PloneSandboxLayer):
 
 
 OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER = BumblebeeLayer()
+
+
+class OfficeatworkLayer(PloneSandboxLayer):
+
+    def setUpPloneSite(self, portal):
+        activate_officeatwork()
+
+    def tearDownPloneSite(self, portal):
+        deactivate_officeatwork()
+
+    defaultBases = (OPENGEVER_FUNCTIONAL_TESTING,)
+
+
+OPENGEVER_FUNCTIONAL_OFFICEATWORK_LAYER = OfficeatworkLayer()
