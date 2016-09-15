@@ -3,6 +3,7 @@ from ftw.table.interfaces import ITableSource
 from ftw.table.interfaces import ITableSourceConfig
 from opengever.contact import _
 from opengever.contact.interfaces import IContactFolder
+from opengever.contact.models import Contact
 from opengever.contact.models import Person
 from opengever.tabbedview import _ as tmf
 from opengever.tabbedview import BaseListingTab
@@ -50,6 +51,10 @@ class PersonListingTab(BaseListingTab):
              'column_title': _(u'column_organizations',
                                default=u'Organizations'),
              'transform': self.organizations_links},
+
+            {'column': 'former_contact_id',
+             'column_title': _(u'column_former_contact_id',
+                               default=u'Former contact id')},
         )
 
     def organizations_links(self, item, value):
@@ -68,7 +73,8 @@ class PersonTableSource(SqlTableSource):
     grok.implements(ITableSource)
     grok.adapts(PersonListingTab, Interface)
 
-    searchable_columns = [Person.firstname, Person.lastname]
+    searchable_columns = [
+        Person.firstname, Person.lastname, Contact.former_contact_id]
 
 
 class ActiveOnlyFilter(Filter):

@@ -25,6 +25,8 @@ class Contact(Base, SQLFormSupport):
 
     description = Column(UnicodeCoercingText)
 
+    former_contact_id = Column('former_contact_id', Integer, unique=True)
+
     addresses = relationship("Address", back_populates="contact")
     mail_addresses = relationship(
         "MailAddress",

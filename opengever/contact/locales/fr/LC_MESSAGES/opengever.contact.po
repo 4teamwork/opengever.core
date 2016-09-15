@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-09-01 15:32+0000\n"
+"POT-Creation-Date: 2016-09-14 15:13+0000\n"
 "PO-Revision-Date: 2016-08-10 04:52+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-contact/fr/>\n"
@@ -74,23 +74,29 @@ msgid "button_remove"
 msgstr ""
 
 #. Default: "Academic title"
-#: ./opengever/contact/browser/person_listing.py:34
+#: ./opengever/contact/browser/person_listing.py:35
 msgid "column_academic_title"
 msgstr "Titre"
 
 #. Default: "Active"
 #: ./opengever/contact/browser/organization_listing.py:37
-#: ./opengever/contact/browser/person_listing.py:46
+#: ./opengever/contact/browser/person_listing.py:47
 msgid "column_active"
 msgstr ""
 
 #. Default: "Firstname"
-#: ./opengever/contact/browser/person_listing.py:38
+#: ./opengever/contact/browser/person_listing.py:39
 msgid "column_firstname"
 msgstr ""
 
+#. Default: "Former contact id"
+#: ./opengever/contact/browser/organization_listing.py:41
+#: ./opengever/contact/browser/person_listing.py:56
+msgid "column_former_contact_id"
+msgstr ""
+
 #. Default: "Lastname"
-#: ./opengever/contact/browser/person_listing.py:42
+#: ./opengever/contact/browser/person_listing.py:43
 msgid "column_lastname"
 msgstr ""
 
@@ -100,12 +106,12 @@ msgid "column_name"
 msgstr ""
 
 #. Default: "Organizations"
-#: ./opengever/contact/browser/person_listing.py:50
+#: ./opengever/contact/browser/person_listing.py:51
 msgid "column_organizations"
 msgstr ""
 
 #. Default: "Salutation"
-#: ./opengever/contact/browser/person_listing.py:31
+#: ./opengever/contact/browser/person_listing.py:32
 msgid "column_salutation"
 msgstr ""
 
@@ -183,30 +189,30 @@ msgid "label_addresses"
 msgstr ""
 
 #. Default: "Archived Addresses"
-#: ./opengever/contact/browser/templates/organization.pt:120
-#: ./opengever/contact/browser/templates/person.pt:139
+#: ./opengever/contact/browser/templates/organization.pt:122
+#: ./opengever/contact/browser/templates/person.pt:141
 msgid "label_archived_addresses"
 msgstr ""
 
 #. Default: "Archived Mail Addresses"
-#: ./opengever/contact/browser/templates/organization.pt:141
-#: ./opengever/contact/browser/templates/person.pt:160
+#: ./opengever/contact/browser/templates/organization.pt:143
+#: ./opengever/contact/browser/templates/person.pt:162
 msgid "label_archived_mail"
 msgstr ""
 
 #. Default: "Archived Information"
-#: ./opengever/contact/browser/templates/organization.pt:102
+#: ./opengever/contact/browser/templates/organization.pt:104
 msgid "label_archived_organizations"
 msgstr ""
 
 #. Default: "Archived Personal Information"
-#: ./opengever/contact/browser/templates/person.pt:112
+#: ./opengever/contact/browser/templates/person.pt:114
 msgid "label_archived_persons"
 msgstr ""
 
 #. Default: "Archived Phone Numbers"
-#: ./opengever/contact/browser/templates/organization.pt:159
-#: ./opengever/contact/browser/templates/person.pt:178
+#: ./opengever/contact/browser/templates/organization.pt:162
+#: ./opengever/contact/browser/templates/person.pt:181
 msgid "label_archived_phone_numbers"
 msgstr ""
 
@@ -311,12 +317,12 @@ msgstr ""
 
 #. Default: "Organizations"
 #: ./opengever/contact/browser/tabbed.py:17
-#: ./opengever/contact/browser/templates/person.pt:95
+#: ./opengever/contact/browser/templates/person.pt:96
 msgid "label_organizations"
 msgstr ""
 
 #. Default: "Participation of ${contact_title}"
-#: ./opengever/contact/models/participation.py:70
+#: ./opengever/contact/models/participation.py:92
 msgid "label_participation_of"
 msgstr ""
 
@@ -327,7 +333,7 @@ msgstr ""
 
 #. Default: "Persons"
 #: ./opengever/contact/browser/tabbed.py:12
-#: ./opengever/contact/browser/templates/organization.pt:85
+#: ./opengever/contact/browser/templates/organization.pt:86
 msgid "label_persons"
 msgstr ""
 
@@ -347,8 +353,8 @@ msgid "label_phone_mobile"
 msgstr "Téléphone mobile"
 
 #. Default: "Phone numbers"
-#: ./opengever/contact/browser/templates/organization.pt:56
-#: ./opengever/contact/browser/templates/person.pt:66
+#: ./opengever/contact/browser/templates/organization.pt:57
+#: ./opengever/contact/browser/templates/person.pt:67
 msgid "label_phone_numbers"
 msgstr ""
 
@@ -380,15 +386,15 @@ msgstr ""
 msgid "label_salutation"
 msgstr "Titre"
 
-#. Default: "Show all ${total} participations"
-#: ./opengever/contact/browser/participations.py:45
-msgid "label_show_all"
-msgstr ""
-
 #. Default: "Sequence Number"
 #: ./opengever/contact/browser/byline.py:11
 msgid "label_sequence_number"
 msgstr "Numéro courant"
+
+#. Default: "Show all ${total} participations"
+#: ./opengever/contact/browser/participations.py:48
+msgid "label_show_all"
+msgstr ""
 
 #. Default: "Url"
 #: ./opengever/contact/contact.py:115
@@ -396,8 +402,8 @@ msgid "label_url"
 msgstr "Adresse URL"
 
 #. Default: "URLs"
-#: ./opengever/contact/browser/templates/organization.pt:70
-#: ./opengever/contact/browser/templates/person.pt:80
+#: ./opengever/contact/browser/templates/organization.pt:71
+#: ./opengever/contact/browser/templates/person.pt:81
 msgid "label_urls"
 msgstr ""
 
@@ -440,3 +446,4 @@ msgstr "Résultat(s): ${amount}"
 #: ./opengever/contact/contact.py:44
 msgid "telefon"
 msgstr "Téléphone"
+

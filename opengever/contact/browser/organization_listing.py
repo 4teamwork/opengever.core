@@ -4,6 +4,7 @@ from ftw.table.interfaces import ITableSourceConfig
 from opengever.contact import _
 from opengever.contact.browser.person_listing import ActiveOnlyFilter
 from opengever.contact.interfaces import IContactFolder
+from opengever.contact.models import Contact
 from opengever.contact.models import Organization
 from opengever.tabbedview import _ as tmf
 from opengever.tabbedview import BaseListingTab
@@ -35,7 +36,12 @@ class OrganizationListingTab(BaseListingTab):
 
             {'column': 'is_active',
              'column_title': _(u'column_active', default=u'Active'),
-             'transform': boolean_helper}
+             'transform': boolean_helper},
+
+            {'column': 'former_contact_id',
+             'column_title': _(u'column_former_contact_id',
+                               default=u'Former contact id')},
+
         )
 
     def get_base_query(self):
@@ -46,7 +52,7 @@ class OrganizationTableSource(SqlTableSource):
     grok.implements(ITableSource)
     grok.adapts(OrganizationListingTab, Interface)
 
-    searchable_columns = [Organization.name]
+    searchable_columns = [Organization.name, Contact.former_contact_id]
 
 
 class Organizations(OrganizationListingTab):

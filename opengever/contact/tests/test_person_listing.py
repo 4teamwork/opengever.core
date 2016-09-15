@@ -6,6 +6,9 @@ from opengever.testing import FunctionalTestCase
 
 class TestPersonListing(FunctionalTestCase):
 
+    labels = ['Salutation', 'Academic title', 'Firstname',
+              'Lastname', 'Active', 'Organizations', 'Former contact id']
+
     def setUp(self):
         super(TestPersonListing, self).setUp()
 
@@ -16,7 +19,8 @@ class TestPersonListing(FunctionalTestCase):
                             .having(salutation='Herr',
                                     firstname=u'Peter',
                                     lastname=u'M\xfcller',
-                                    academic_title='Dr. rer. nat.'))
+                                    academic_title='Dr. rer. nat.',
+                                    former_contact_id=112233))
         self.sandra = create(Builder('person')
                              .having(salutation='Frau',
                                      firstname=u'Sandra',
@@ -25,7 +29,8 @@ class TestPersonListing(FunctionalTestCase):
         self.max = create(Builder('person')
                           .having(salutation='Frau',
                                   firstname=u'Sandra',
-                                  lastname=u'Mustermann'))
+                                  lastname=u'Mustermann',
+                                  former_contact_id=445566))
 
     @browsing
     def test_lists_only_active_persons_by_default(self, browser):
@@ -33,10 +38,10 @@ class TestPersonListing(FunctionalTestCase):
             self.contactfolder, view='tabbedview_view-persons')
 
         self.assertEquals(
-            [['Salutation', 'Academic title', 'Firstname',
-              'Lastname', 'Active', 'Organizations'],
-             ['Frau', '', 'Sandra', 'Mustermann', 'Yes', ''],
-             ['Herr', 'Dr. rer. nat.', 'Peter', u'M\xfcller', 'Yes', '']],
+            [self.labels,
+             ['Frau', '', 'Sandra', 'Mustermann', 'Yes', '', '445566'],
+             ['Herr', 'Dr. rer. nat.', 'Peter',
+              u'M\xfcller', 'Yes', '', '112233']],
             browser.css('.listing').first.lists())
 
     @browsing
@@ -46,11 +51,11 @@ class TestPersonListing(FunctionalTestCase):
             data={'person_state_filter': 'filter_all'})
 
         self.assertEquals(
-            [['Salutation', 'Academic title', 'Firstname',
-              'Lastname', 'Active', 'Organizations'],
-             ['Frau', '', 'Sandra', 'Albert', 'No', ''],
-             ['Frau', '', 'Sandra', 'Mustermann', 'Yes', ''],
-             ['Herr', 'Dr. rer. nat.', 'Peter', u'M\xfcller', 'Yes', '']],
+            [self.labels,
+             ['Frau', '', 'Sandra', 'Albert', 'No', '', ''],
+             ['Frau', '', 'Sandra', 'Mustermann', 'Yes', '', '445566'],
+             ['Herr', 'Dr. rer. nat.', 'Peter',
+              u'M\xfcller', 'Yes', '', '112233']],
             browser.css('.listing').first.lists())
 
     @browsing
@@ -87,7 +92,7 @@ class TestPersonListing(FunctionalTestCase):
             self.contactfolder, view='tabbedview_view-persons')
 
         row1 = browser.css('.listing').first.rows[1]
-        self.assertEquals('<b>Bold</b>', row1.css('td')[-3].text)
+        self.assertEquals('<b>Bold</b>', row1.css('td')[-4].text)
 
     @browsing
     def test_organizations_are_linked_and_sepearated_by_comma(self, browser):
@@ -106,7 +111,7 @@ class TestPersonListing(FunctionalTestCase):
         row = browser.css('.listing').first.rows[1]
 
         self.assertEquals(
-            ['Frau', '', 'Sandra', 'Albert', 'No', u'Meier AG, Sophie SA'],
+            ['Frau', '', 'Sandra', 'Albert', 'No', u'Meier AG, Sophie SA', ''],
             row.css('td').text)
         self.assertEquals(self.org1.get_url(),
                           row.find('Meier AG').get('href'))
@@ -122,10 +127,9 @@ class TestPersonListing(FunctionalTestCase):
                   'person_state_filter': 'filter_all'})
 
         self.assertEquals(
-            [['Salutation', 'Academic title', 'Firstname',
-              'Lastname', 'Active', 'Organizations'],
-             ['Frau', '', 'Sandra', 'Albert', 'No', ''],
-             ['Frau', '', 'Sandra', 'Mustermann', 'Yes', '']],
+            [self.labels,
+             ['Frau', '', 'Sandra', 'Albert', 'No', '', ''],
+             ['Frau', '', 'Sandra', 'Mustermann', 'Yes', '', '445566']],
             browser.css('.listing').first.lists())
 
     @browsing
@@ -137,7 +141,6 @@ class TestPersonListing(FunctionalTestCase):
                   'person_state_filter': 'filter_all'})
 
         self.assertEquals(
-            [['Salutation', 'Academic title', 'Firstname',
-              'Lastname', 'Active', 'Organizations'],
-             ['Frau', '', 'Sandra', 'Albert', 'No', '']],
+            [self.labels,
+             ['Frau', '', 'Sandra', 'Albert', 'No', '', '']],
             browser.css('.listing').first.lists())

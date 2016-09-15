@@ -12,11 +12,15 @@ class TestOrganizationListing(FunctionalTestCase):
         self.contactfolder = create(Builder('contactfolder')
                                     .titled(u'Kontakte'))
 
-        create(Builder('organization').named(u'Meier AG'))
+        create(Builder('organization')
+               .having(former_contact_id=112233)
+               .named(u'Meier AG'))
         create(Builder('organization')
                .named(u'M\xfcller')
                .having(is_active=False))
-        create(Builder('organization').named(u'AAA Design'))
+        create(Builder('organization')
+               .having(former_contact_id=445566)
+               .named(u'AAA Design'))
 
     @browsing
     def test_lists_only_active_organizations_by_default(self, browser):
@@ -24,9 +28,9 @@ class TestOrganizationListing(FunctionalTestCase):
             self.contactfolder, view='tabbedview_view-organizations')
 
         self.assertEquals(
-            [[u'Name', 'Active'],
-             [u'AAA Design', 'Yes'],
-             [u'Meier AG', 'Yes']],
+            [[u'Name', 'Active', 'Former contact id'],
+             [u'AAA Design', 'Yes', '445566'],
+             [u'Meier AG', 'Yes', '112233']],
             browser.css('.listing').first.lists())
 
     @browsing
@@ -36,10 +40,10 @@ class TestOrganizationListing(FunctionalTestCase):
             data={'organization_state_filter': 'filter_all'})
 
         self.assertEquals(
-            [[u'Name', 'Active'],
-             [u'AAA Design', 'Yes'],
-             [u'Meier AG', 'Yes'],
-             [u'M\xfcller', 'No']],
+            [[u'Name', 'Active', 'Former contact id'],
+             [u'AAA Design', 'Yes', '445566'],
+             [u'Meier AG', 'Yes', '112233'],
+             [u'M\xfcller', 'No', '']],
             browser.css('.listing').first.lists())
 
     @browsing
@@ -59,6 +63,6 @@ class TestOrganizationListing(FunctionalTestCase):
             data={'searchable_text': 'Design'})
 
         self.assertEquals(
-            [[u'Name', 'Active'],
-             [u'AAA Design', 'Yes']],
+            [[u'Name', 'Active', 'Former contact id'],
+             [u'AAA Design', 'Yes', '445566']],
             browser.css('.listing').first.lists())

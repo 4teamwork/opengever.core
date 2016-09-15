@@ -5,6 +5,9 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
+- Add new column former contact id to the contact listings.
+  [phgross]
+
 - Include OrgRole participations in organizations and persons participation listing.
   [phgross]
 
