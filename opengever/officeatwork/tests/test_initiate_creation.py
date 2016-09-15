@@ -5,6 +5,7 @@ from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_OFFICEATWORK_LAYER
 from opengever.testing import FunctionalTestCase
+from plone import api
 
 
 class TestInitiateCreationWithOfficeatwork(FunctionalTestCase):
@@ -28,3 +29,7 @@ class TestInitiateCreationWithOfficeatwork(FunctionalTestCase):
             info_messages())
         shadow_doc = self.dossier.restrictedTraverse('document-1', None)
         self.assertIsNotNone(shadow_doc)
+
+        self.assertEqual('document-state-shadow',
+                         api.content.get_state(shadow_doc))
+        self.assertTrue(shadow_doc.is_shadow_document())

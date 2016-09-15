@@ -115,6 +115,7 @@ class Document(Item, BaseDocumentMixin):
     # document state's
     removed_state = 'document-state-removed'
     active_state = 'document-state-draft'
+    shadow_state = 'document-state-shadow'
 
     remove_transition = 'document-transition-remove'
     restore_transition = 'document-transition-restore'
@@ -193,6 +194,9 @@ class Document(Item, BaseDocumentMixin):
         manager = getMultiAdapter((self, self.REQUEST),
                                   ICheckinCheckoutManager)
         return manager.get_checked_out_by()
+
+    def is_shadow_document(self):
+        return api.content.get_state(self) == self.shadow_state
 
     def is_checked_out(self):
         return self.checked_out_by() is not None

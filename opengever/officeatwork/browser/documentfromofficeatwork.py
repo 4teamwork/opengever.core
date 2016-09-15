@@ -45,25 +45,44 @@ class DocumentFromOfficeatwork(WizzardWrappedAddForm):
                     self.status = self.formErrorsMessage
                     return
 
-                obj = self.createAndAdd(data)
-                if obj is None:
+                document = self.createAndAdd(data)
+                if document is None:
                     return
 
                 self._finishedAdd = True
-
                 api.portal.show_message(
                     _(u'Creation with officeatwork initiated successfully'),
                     request=self.request,
                     type='info')
 
+                # temporarily aq-wrap the document to be able to get an url
+                aq_wrapped_doc = document.__of__(self.context)
                 target_url = '{}/create_with_officeatwork'.format(
-                    self.context.absolute_url())
-
+                    aq_wrapped_doc.absolute_url())
                 redirector = IRedirector(self.request)
                 redirector.redirect(target_url)
 
                 return self.request.RESPONSE.redirect(
                     '{}#documents'.format(self.context.absolute_url()))
+
+            def create(self, data):
+                document = super(WrappedForm, self).create(data)
+                self.initialize_in_shadow_state(document)
+                return document
+
+            def initialize_in_shadow_state(self, document):
+                """Force the initial state to be document-state-shadow."""
+
+                wftool = api.portal.get_tool('portal_workflow')
+                chain = wftool.getChainFor(document)
+                workflow_id = chain[0]
+                wftool.setStatusOf(workflow_id, document, {
+                    'review_state': 'document-state-shadow',
+                    'action': '',
+                    'actor': ''})
+                workflow = wftool.getWorkflowById(workflow_id)
+                workflow.updateRoleMappingsFor(document)
+                return document
 
             @buttonAndHandler(pd_mf(u'Cancel'), name='cancel')
             def handleCancel(self, action):
