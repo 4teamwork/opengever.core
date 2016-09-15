@@ -12,6 +12,7 @@ from opengever.journal import _
 from opengever.tabbedview import BaseListingTab
 from opengever.tabbedview import GeverTableSource
 from opengever.tabbedview.helper import linked_ogds_author
+from plone import api
 from zope.annotation.interfaces import IAnnotations
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.globalrequest import getRequest
@@ -56,7 +57,7 @@ class JournalTab(BaseListingTab):
     show_selects = False
     enabled_actions = []
     major_actions = []
-    selection = ViewPageTemplateFile("no_selection_amount.pt")
+    selection = ViewPageTemplateFile("templates/journal_selection.pt")
 
     @property
     def columns(self):
@@ -94,6 +95,11 @@ class JournalTab(BaseListingTab):
 
     def get_base_query(self):
         return None
+
+    def manual_entry_allowed(self):
+        return api.user.has_permission('Modify portal content',
+                                       user=api.user.get_current(),
+                                       obj=self.context)
 
 
 class JournalTableSource(GeverTableSource):

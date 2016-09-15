@@ -51,3 +51,16 @@ class TestJournalTab(FunctionalTestCase):
                  u'Document added: Anfrage M\xfcller',
                  'Test User (test_user_1_)', '', '']]
             self.assertEquals(expected, browser.css('.listing').first.lists())
+
+    @browsing
+    def test_add_journal_entry_link_is_only_shown_when_dosier_can_be_modified(self, browser):
+        dossier_a = create(Builder('dossier'))
+        dossier_b = create(Builder('dossier')
+                           .in_state('dossier-state-resolved'))
+
+        browser.login().open(dossier_a, view=u'tabbedview_view-journal')
+        self.assertEquals(['Add journal entry'],
+                          browser.css('.add_journal_entry').text)
+
+        browser.login().open(dossier_b, view=u'tabbedview_view-journal')
+        self.assertEquals([], browser.css('.add_journal_entry'))
