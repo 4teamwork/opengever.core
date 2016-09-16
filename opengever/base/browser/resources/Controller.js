@@ -219,7 +219,7 @@
 
  */
 
-(function(global, $, HBS) {
+(function(global, $, HBS, MessageFactory) {
 
   "use strict";
 
@@ -230,7 +230,7 @@
     template = template || "";
     this.outlet = outlet || $();
     this.template = $.noop;
-    this.messageFactory = global.MessageFactory.getInstance();
+    this.messageFactory = MessageFactory.getInstance();
     var self = this;
 
     var messageFunc = function(data) {
@@ -348,7 +348,7 @@
   global.CollapsibleController = CollapsibleController;
 
   $(function() {
-    var collapsibleController = new global.CollapsibleController();
+    var collapsibleController = new CollapsibleController();
   });
 
-}(window, jQuery, window.Handlebars));
+}(window, jQuery, window.Handlebars, window.MessageFactory));

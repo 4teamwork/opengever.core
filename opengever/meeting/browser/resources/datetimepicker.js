@@ -224,4 +224,4 @@
   });
 
 
-}(window, jQuery));
+}(window, window.jQuery));

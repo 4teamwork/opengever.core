@@ -1,4 +1,4 @@
-(function ($) {
+(function ($, Trix) {
 
     'use strict';
 
@@ -26,4 +26,4 @@
         });
     });
 
-}(jQuery));
+}(jQuery, window.Trix));

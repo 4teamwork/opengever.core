@@ -52,4 +52,4 @@
 
   $(document).on("mouseover", ".tooltip-trigger", initTooltips);
 
-}(window, jQuery));
+}(window, window.jQuery));

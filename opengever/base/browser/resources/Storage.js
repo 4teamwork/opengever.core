@@ -1,4 +1,4 @@
-(function(global, $) {
+(function(global, $, MessageFactory) {
 
   "use strict";
 
@@ -45,4 +45,4 @@
   }
 
 
-}(window, jQuery));
+}(window, jQuery, window.MessageFactory));

@@ -19,7 +19,7 @@
     var defaultTitle = $("dt", defaultMessage).text();
     var defaultText = $("dd", defaultMessage).text();
 
-    var root = $(global.document);
+    var root = $(document);
 
     var messageTemplate = " \
       <div> \

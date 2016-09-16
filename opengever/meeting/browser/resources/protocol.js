@@ -1,10 +1,10 @@
-(function(global, $) {
+(function(global, $, MeetingStorage, Pin, Synchronizer, Controller, Scrollspy, SelectAutocomplete) {
 
   "use strict";
 
   function ProtocolController() {
 
-    global.Controller.call(this);
+    Controller.call(this);
 
     var root = $(":root");
 
@@ -15,9 +15,9 @@
     var protocolControls = $("#protocol-controls");
 
     var currentMeeting = $(".protocol-navigation").data().meeting;
+    var protocolSynchronizer = new Synchronizer({
     var createdAt = new Date($(".protocol-navigation").data().modified).getTime();
 
-    var protocolSynchronizer = new global.Synchronizer({
       target: "#content-core input, #content-core select, #content-core textarea",
       triggers: ["input", "change", "changeDate"]
     });
@@ -90,11 +90,11 @@
     this.discardProtocol = function() { meetingStorage.deleteCurrentMeeting(); };
 
     this.initScrollspy = function() {
-      var scrollspy = global.Scrollspy(".navigation > ul");
+      var scrollspy = Scrollspy(".navigation > ul");
 
-      headings = global.Pin("#opengever_meeting_protocol .protocol_title", "trix-toolbar");
-      labels = global.Pin("#opengever_meeting_protocol .agenda_items label", null, { pin: false });
-      global.Pin(".protocol-navigation", null, { pin: false });
+      headings = Pin("#opengever_meeting_protocol .protocol_title", "trix-toolbar");
+      labels = Pin("#opengever_meeting_protocol .agenda_items label", null, { pin: false });
+      Pin(".protocol-navigation", null, { pin: false });
 
       headings.onRelease(function() { scrollspy.reset(); });
 
@@ -161,11 +161,11 @@
       var protocolController = new ProtocolController();
     }
     if($(".template-opengever-meeting-proposal, .portaltype-opengever-meeting-submittedproposal.template-edit, .portaltype-opengever-meeting-proposal.template-edit").length) {
-      global.Pin("trix-toolbar");
+      Pin("trix-toolbar");
     }
     if($(".template-add-membership, .template-opengever-meeting-proposal, .portaltype-opengever-meeting-proposal.template-edit").length) {
       var autocompleteSelects = new global.SelectAutocomplete();
     }
   });
 
-}(window, jQuery));
+}(window, jQuery, window.MeetingStorage, window.Pin, window.Synchronizer, window.Controller, window.Scrollspy, window.SelectAutocomplete));
