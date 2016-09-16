@@ -12,6 +12,9 @@
                 />
 
     <javascript id="++theme++plonetheme.teamraum/js/livesearch.js" enabled="false" />
+    <javascript cacheable="True" compression="safe" cookable="True" expression=""
+                enabled="True" id="++resource++opengever.base/MeetingStorage.js" inline="False"
+                insert-after="++resource++opengever.base/Storage.js" />
 
     <javascript cacheable="True" compression="safe" cookable="True" enabled="on"
                 expression="" id="++resource++opengever.base/livesearch.js"
