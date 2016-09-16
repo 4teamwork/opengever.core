@@ -41,30 +41,6 @@
 
   }
 
-  function Synchronizer(options) {
-
-    this.options = $.extend({
-      delay: 1000,
-      target: global.document,
-      context: global.document,
-      triggers: []
-    }, options || {});
-
-    var self = this;
-
-    var syncCallback = $.noop;
-
-    var trackType = function(event) {
-      global.clearTimeout(this.timeout);
-      this.timeout = global.setTimeout(function() { syncCallback(event.target); }, self.options.delay);
-    };
-
-    this.observe = function() { $(this.options.context).on(this.options.triggers.join(" "), this.options.target, trackType); };
-
-    this.onSync = function(callback) { syncCallback = callback; };
-
-  }
-
   function Meeting(proposals, revision) {
 
     var getTimestamp = function() { return new Date().getTime(); };
@@ -122,6 +98,5 @@
   }
 
   window.MeetingStorage = MeetingStorage;
-  window.Synchronizer = Synchronizer;
 
 }(window, jQuery));
