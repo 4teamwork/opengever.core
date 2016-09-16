@@ -25,8 +25,8 @@
                 />
 
     <javascript cacheable="True" compression="none" cookable="True" enabled="on"
-                expression="" id="++resource++opengever.base/handlebars.min.js"
-                inline="False" insert-after="++resource++plone.app.jquery.js" />
+                expression="" id="++resource++opengever.base/handlebars.js"
+                inline="False" insert-after="++resource++opengever.base/Synchronizer.js" />
 
     <javascript cacheable="True" compression="none" cookable="True" expression=""
                 enabled="True" id="++resource++opengever.base/notify.js" inline="False"
