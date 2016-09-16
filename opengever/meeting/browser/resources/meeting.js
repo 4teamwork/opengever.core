@@ -19,10 +19,8 @@
       dialog.load();
     };
 
-    this.closeMeeting = function(target) {
-      target.addClass("loading");
+    this.closeMeeting = function() {
       return $.post(self.currentItem.attr("href"))
-              .always(function() { target.removeClass("loading"); })
               .done(function() { location.reload(); });
     };
 
@@ -51,7 +49,8 @@
         callback: this.closeMeeting,
         options: {
           prevent: false,
-          update: true
+          update: true,
+          loading: true
         }
       },
       {
@@ -185,12 +184,10 @@
       }
     };
 
-    this.confirmDecide = function(target) {
-      target.addClass("loading");
+    this.confirmDecide = function() {
       var holdDialogCancelButton = $("#confirm_hold_meeting .decline");
       holdDialogCancelButton.hide();
       return $.post(this.currentDecideTarget.attr("href")).always(function(){
-        target.removeClass("loading");
         holdDialogCancelButton.show();
         holdDialog.close();
       }).done(function(data){
@@ -203,15 +200,11 @@
     this.declineDecide = function() { holdDialog.close(); };
 
     this.reopen = function(target){
-      target.addClass('loading');
-      return $.post(target.attr("href"))
-        .always(function() { target.removeClass("loading"); });
-    }
+      return $.post(target.attr("href"));
+    };
 
     this.revise = function(target){
-      target.addClass('loading');
-      return $.post(target.attr("href"))
-        .always(function() { target.removeClass("loading"); });
+      return $.post(target.attr("href"));
     };
 
     this.events = [
@@ -238,7 +231,8 @@
         target: ".reopen-agenda-item",
         callback: this.reopen,
         options: {
-          update: true
+          update: true,
+          loading: true
         }
       },
       {
@@ -246,7 +240,8 @@
         target: ".revise-agenda-item",
         callback: this.revise,
         options: {
-          update: true
+          update: true,
+          loading: true
         }
       },
       {
@@ -282,7 +277,8 @@
         target: "#confirm_hold_meeting .confirm",
         callback: this.confirmDecide,
         options: {
-          prevent: false
+          prevent: false,
+          loading: true
         }
       },
       {
@@ -352,7 +348,8 @@
         target: ".schedule-proposal",
         callback: this.schedule,
         options: {
-          update: true
+          update: true,
+          loading: true
         }
       },
       {

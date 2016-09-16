@@ -96,6 +96,9 @@
   - options.prevent: Set this to false so the controller would not prevent the default
                      Browser behaviour.
 
+  - options.loading: Set this to true so the clicked target would turn into a loading element and gets back to
+                     normal when the action and probably the update request has been terminated.
+
   function MyController(options) {
     global.Controller.call(this, $("#template").html(), $("#outlet"), options);
 
@@ -252,7 +255,7 @@
     this.refresh = function() { this.outlet.html(this.render(this.cache)); };
 
     this.update = function() {
-      $.when(self.fetch()).fail(messageFunc).done(function(data) {
+      return $.when(self.fetch()).fail(messageFunc).done(function(data) {
         self.cache = data;
         self.outlet.html(self.render(data));
         self.onRender.call(self);
@@ -282,17 +285,28 @@
     };
 
     this.trackEvent = function(event, callback, options) {
-      if(options.prevent) {
-        event.preventDefault();
-      }
+      var target = $(event.currentTarget);
+      var request = $.Deferred();
+      var actionRequest = $.when(callback.call(self, target, event));
 
-      var eventCallback = $.when(callback.call(self, $(event.currentTarget), event));
+      if(options.prevent) { event.preventDefault(); }
 
-      eventCallback.done(function() {
+      if(options.loading) { target.addClass("loading"); }
+
+      actionRequest.done(function(data) {
         if(options.update) {
-          self.update();
-          self.updateConnected();
+          $.when(self.update(), self.updateConnected()).done(function() {
+            request.resolve(data);
+          }).fail(function() {
+            request.reject();
+          });
+        } else {
+          request.resolve(data);
         }
+      }).fail(function() { request.reject(); });
+
+      request.done(function() {
+        if(options.loading) { target.removeClass("loading"); }
       }).always(messageFunc);
     };
 
@@ -304,7 +318,7 @@
 
       options.context.on(action.method, action.target, function(event) {
         self.trackEvent(event, action.callback, action.options);
-      } );
+      });
     };
 
     this.unregisterAction = function(action) {
@@ -337,7 +351,8 @@
       {
         method: "click",
         target: ".collapsible-header > button",
-        callback: this.toggle
+        callback: this.toggle,
+        loading: false
       }
     ];
 
@@ -347,8 +362,6 @@
 
   global.CollapsibleController = CollapsibleController;
 
-  $(function() {
-    var collapsibleController = new CollapsibleController();
-  });
+  $(function() { new CollapsibleController(); });
 
 }(window, jQuery, window.Handlebars, window.MessageFactory));

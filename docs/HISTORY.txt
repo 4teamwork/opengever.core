@@ -6,6 +6,9 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
+- Add loading option to Controller
+  [Kevin Bieri]
+
 - Load trix lazily.
 
   - Update handlebars to v4.0.5
