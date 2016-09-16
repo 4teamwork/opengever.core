@@ -1,9 +1,16 @@
 
+
 Changelog
 =========
 
 4.11.0 (unreleased)
 -------------------
+
+- Load trix lazily.
+
+  - Update handlebars to v4.0.5
+
+  [Kevin Bieri]
 
 - Add field to specify recipient to document-from-template form.
   The recipient's doc-properties will be written to the created file.

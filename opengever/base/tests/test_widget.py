@@ -15,7 +15,7 @@ class TestWidget(FunctionalTestCase):
         browser.login().visit(view='test-z3cform-widget')
 
         self.assertEqual(1, len(browser.css('trix-toolbar')))
-        self.assertEqual(1, len(browser.css('trix-editor')))
+        self.assertEqual(1, len(browser.css('.trix-editor-proxy')))
 
         browser.fill({u'trix_field': u'<div>P\xe4ter</div>'}).submit()
         self.assertEquals({u'trix_field': u'<div>P\xe4ter</div>'},

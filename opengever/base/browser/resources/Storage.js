@@ -2,47 +2,42 @@
 
   "use strict";
 
-  function Storage(options) {
+  function GEVERStorage(options) {
 
-    this.options = $.extend({ root: "storage" }, options || {});
+    options = $.extend({ root: "storage" }, options);
+    var messageFactory = MessageFactory.getInstance();
+    var reveal = {};
+    var data = {};
+    var storage;
 
-    Storage.storage = null;
+    function isSupported() { return typeof localStorage !== "undefined"; }
 
-    var messageFactory = global.MessageFactory.getInstance();
-
-    this.data = {};
-
-    var isSupported = function() { return typeof global.localStorage !== "undefined"; };
-
-    this.push = function() {
+    function push() {
       try {
-        Storage.storage.setItem(this.options.root, JSON.stringify(this.data) || {});
+        storage.setItem(options.root, JSON.stringify(reveal.data) || {});
       } catch (storageError) {
         messageFactory.shout([{ messageTitle: "Error", messageClass: "error", message: storageError }]);
       }
-    };
+    }
 
-    this.pull = function() {
-      this.data = JSON.parse(Storage.storage.getItem(this.options.root), this.reviver) || {};
-      this.postPull();
-    };
+    function pull() { reveal.data = JSON.parse(storage.getItem(options.root)) || {}; }
 
-    this.drop = function() { Storage.storage.removeItem(this.options.root); };
-
-    this.reviver = $.noop;
-
-    this.postPull = $.noop;
+    function drop() { storage.removeItem(options.root); }
 
     if (!isSupported()) {
       throw new Error("LocalStroage is not supported");
     } else {
-      Storage.storage = window.localStorage;
+      storage = window.localStorage;
     }
 
+    reveal.data = data;
+    reveal.push = push;
+    reveal.pull = pull;
+    reveal.drop = drop;
+
+    return reveal;
   }
 
-
-  }
-
+  global.GEVERStorage = GEVERStorage;
 
 }(window, jQuery, window.MessageFactory));
