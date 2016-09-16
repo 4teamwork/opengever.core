@@ -22,6 +22,10 @@
                 insert-after="++resource++opengever.base/Storage.js" />
 
     <javascript cacheable="True" compression="safe" cookable="True" expression=""
+                enabled="True" id="++resource++opengever.meeting/Pin.js" inline="False"
+                insert-after="++resource++opengever.base/MeetingStorage.js" />
+
+    <javascript cacheable="True" compression="safe" cookable="True" expression=""
                 enabled="True" id="++resource++opengever.base/Synchronizer.js" inline="False"
                 insert-after="++resource++opengever.meeting/Pin.js" />
 
