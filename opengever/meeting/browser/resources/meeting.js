@@ -444,10 +444,6 @@
       var committeecontroller = new CommitteeController();
     }
 
-    global.autosize($('body.template-opengever-meeting-proposal textarea'));
-    global.autosize($('body.template-edit.portaltype-opengever-meeting-proposal textarea'));
-    global.autosize($('body.template-edit.portaltype-opengever-meeting-submittedproposal textarea'));
-
     $(global.document).on("notify", function() {
       var notifyContainer = global.Pin("#columns", null, { pin: false });
       notifyContainer.onPin(function() { $(".notifyjs-corner").addClass("sticky"); });
