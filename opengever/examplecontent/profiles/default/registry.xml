@@ -20,4 +20,8 @@
       <value key="is_feature_enabled">True</value>
     </records>
 
+    <records interface="opengever.officeatwork.interfaces.IOfficeatworkSettings">
+      <value key="is_feature_enabled">True</value>
+    </records>
+
 </registry>
