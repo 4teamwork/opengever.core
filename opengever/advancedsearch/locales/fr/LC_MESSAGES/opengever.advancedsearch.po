@@ -2,13 +2,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2016-07-21 14:08+0000\n"
-"PO-Revision-Date: 2013-06-05 09:24+0200\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2016-09-19 10:38+0000\n"
+"Last-Translator: Lukas Graf <lukas.graf@4teamwork.ch>\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
+"gever/opengever-advancedsearch/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 2.7-dev\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
@@ -16,147 +19,179 @@ msgstr ""
 
 #. Default: "advanced search"
 #: ./opengever/advancedsearch/advanced_search.py:266
+#, fuzzy
 msgid "advanced_search"
 msgstr "Recherche avancée"
 
 #. Default: "Search"
 #: ./opengever/advancedsearch/advanced_search.py:450
+#, fuzzy
 msgid "button_search"
 msgstr "Rechercher"
 
 #: ./opengever/advancedsearch/advanced_search.py:65
+#, fuzzy
 msgid "document"
 msgstr "Document"
 
 #: ./opengever/advancedsearch/advanced_search.py:53
+#, fuzzy
 msgid "dossier"
 msgstr "Dossier"
 
 #: ./opengever/advancedsearch/advanced_search.py:230
+#, fuzzy
 msgid "help_issuer"
 msgstr "Choix du client"
 
 #. Default: "Select the contenttype to be searched for."
 #: ./opengever/advancedsearch/advanced_search.py:119
+#, fuzzy
 msgid "help_portal_type"
 msgstr "Choix du type de contenu à rechercher."
 
 #. Default: "Select the contenttype to be searched for.It searches only items from the current client."
 #: ./opengever/advancedsearch/advanced_search.py:348
+#, fuzzy
 msgid "help_portal_type_multiclient_setup"
-msgstr "Choix du type de contenu à rechercher. Ne sont parcourus que les contenus du mandant actuel."
+msgstr ""
+"Choix du type de contenu à rechercher. Ne sont parcourus que les contenus du "
+"mandant actuel."
 
 #: ./opengever/advancedsearch/advanced_search.py:150
+#, fuzzy
 msgid "help_reference_number"
 msgstr "Saisir le numéro de référence"
 
 #: ./opengever/advancedsearch/advanced_search.py:113
+#, fuzzy
 msgid "help_searchable_text"
 msgstr "Saisir les critères de recherche"
 
 #: ./opengever/advancedsearch/advanced_search.py:156
+#, fuzzy
 msgid "help_sequence_number"
 msgstr "Saisir le numéro courant"
 
 #. Default: "Checked out by"
 #: ./opengever/advancedsearch/advanced_search.py:216
+#, fuzzy
 msgid "label_checked_out"
 msgstr "Checkout fait par"
 
 #. Default: "Deadline"
 #: ./opengever/advancedsearch/advanced_search.py:236
+#, fuzzy
 msgid "label_deadline"
 msgstr "Délai"
 
 #: ./opengever/advancedsearch/advanced_search.py:242
+#, fuzzy
 msgid "label_deadline_2"
 msgstr ""
 
 #. Default: "delivery date"
 #: ./opengever/advancedsearch/advanced_search.py:188
+#, fuzzy
 msgid "label_delivery_date"
 msgstr "Date de remise"
 
 #. Default: "Document author"
 #: ./opengever/advancedsearch/advanced_search.py:210
+#, fuzzy
 msgid "label_document_author"
 msgstr "Auteur du document"
 
 #. Default: "Document Date"
 #: ./opengever/advancedsearch/advanced_search.py:199
+#, fuzzy
 msgid "label_document_date"
 msgstr "Date du document"
 
 #. Default: "End date"
 #: ./opengever/advancedsearch/advanced_search.py:138
+#, fuzzy
 msgid "label_end"
 msgstr "Date de fin"
 
 #. Default: "From"
 #: ./opengever/advancedsearch/advanced_search.py:128
+#, fuzzy
 msgid "label_from"
 msgstr "de"
 
 #. Default: "Issuer"
 #: ./opengever/advancedsearch/advanced_search.py:229
+#, fuzzy
 msgid "label_issuer"
 msgstr "Mandataire"
 
 #. Default: "Type"
 #: ./opengever/advancedsearch/advanced_search.py:118
+#, fuzzy
 msgid "label_portal_type"
 msgstr "Type de contenu"
 
 #. Default: "Receipt date"
 #: ./opengever/advancedsearch/advanced_search.py:177
+#, fuzzy
 msgid "label_receipt_date"
 msgstr "Date de réception"
 
 #. Default: "Reference number"
 #: ./opengever/advancedsearch/advanced_search.py:149
+#, fuzzy
 msgid "label_reference_number"
 msgstr "Numéro de référence"
 
 #. Default: "Responsible"
 #: ./opengever/advancedsearch/advanced_search.py:162
+#, fuzzy
 msgid "label_reponsible"
 msgstr "Responsable"
 
 #. Default: "State"
 #: ./opengever/advancedsearch/advanced_search.py:168
+#, fuzzy
 msgid "label_review_state"
 msgstr "Etat"
 
 #. Default: "Text"
 #: ./opengever/advancedsearch/advanced_search.py:112
+#, fuzzy
 msgid "label_searchable_text"
 msgstr "Texte de recherche"
 
 #. Default: "Sequence number"
 #: ./opengever/advancedsearch/advanced_search.py:155
+#, fuzzy
 msgid "label_sequence_number"
 msgstr "Numéro courant"
 
 #. Default: "Start date"
 #: ./opengever/advancedsearch/advanced_search.py:127
+#, fuzzy
 msgid "label_start"
 msgstr "Date de début"
 
 #: ./opengever/advancedsearch/advanced_search.py:248
+#, fuzzy
 msgid "label_tasktype"
 msgstr "Type de mandat"
 
 #. Default: "To"
 #: ./opengever/advancedsearch/advanced_search.py:133
+#, fuzzy
 msgid "label_to"
 msgstr "à"
 
 #. Default: "Also search in the recycle bin"
 #: ./opengever/advancedsearch/advanced_search.py:222
+#, fuzzy
 msgid "label_trashed"
 msgstr "Parcourir également la corbeille"
 
 #: ./opengever/advancedsearch/advanced_search.py:59
+#, fuzzy
 msgid "task"
 msgstr "Tâches sauvegardées localement"
-
