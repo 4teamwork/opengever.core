@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2016-07-21 14:08+0000\n"
-"PO-Revision-Date: 2016-08-10 05:19+0000\n"
-"Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
+"PO-Revision-Date: 2016-09-19 10:38+0000\n"
+"Last-Translator: Lukas Graf <lukas.graf@4teamwork.ch>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
 "gever/opengever-task/fr/>\n"
 "Language: fr\n"
@@ -478,8 +478,9 @@ msgstr "Début du travail"
 #: ./opengever/task/browser/delegate/metadata.py:27
 #: ./opengever/task/browser/overview.py:92
 #: ./opengever/task/task.py:94
+#, fuzzy
 msgid "label_issuer"
-msgstr "Mandant"
+msgstr "Mandataire"
 
 #. Default: "last modified"
 #: ./opengever/task/viewlets/byline.py:40
@@ -545,6 +546,7 @@ msgstr "Retour à la tâche"
 
 #. Default: "Sequence Number"
 #: ./opengever/task/viewlets/byline.py:52
+#, fuzzy
 msgid "label_sequence_number"
 msgstr "Numéro courant"
 
