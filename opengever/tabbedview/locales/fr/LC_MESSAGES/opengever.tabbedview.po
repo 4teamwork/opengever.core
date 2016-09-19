@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2016-07-21 14:08+0000\n"
-"PO-Revision-Date: 2016-08-10 05:17+0000\n"
-"Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
+"PO-Revision-Date: 2016-09-19 10:38+0000\n"
+"Last-Translator: Lukas Graf <lukas.graf@4teamwork.ch>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
 "gever/opengever-tabbedview/fr/>\n"
 "Language: fr\n"
@@ -205,6 +205,7 @@ msgstr "En traitement"
 
 #. Default: "Delivery Date"
 #: ./opengever/tabbedview/browser/tabs.py:132
+#, fuzzy
 msgid "label_delivery_date"
 msgstr "Date de remise"
 
@@ -225,6 +226,7 @@ msgstr "Auteur"
 
 #. Default: "Document Date"
 #: ./opengever/tabbedview/browser/tabs.py:124
+#, fuzzy
 msgid "label_document_date"
 msgstr "Date du document"
 
@@ -240,8 +242,9 @@ msgstr "Fin"
 
 #. Default: "Issuer"
 #: ./opengever/tabbedview/browser/tasklisting.py:100
+#, fuzzy
 msgid "label_issuer"
-msgstr "Mandant"
+msgstr "Mandataire"
 
 #. Default: "My notifications"
 #: ./opengever/tabbedview/browser/personal_overview.py:113
@@ -275,8 +278,9 @@ msgstr "Statut public"
 
 #. Default: "Receipt Date"
 #: ./opengever/tabbedview/browser/tabs.py:128
+#, fuzzy
 msgid "label_receipt_date"
-msgstr "Date d'entrée"
+msgstr "Date de réception"
 
 #. Default: "Reference Number"
 #: ./opengever/tabbedview/browser/tabs.py:209
@@ -290,6 +294,7 @@ msgstr "Mandataire"
 
 #. Default: "Review state"
 #: ./opengever/tabbedview/browser/tabs.py:217
+#, fuzzy
 msgid "label_review_state"
 msgstr "Etat"
 
