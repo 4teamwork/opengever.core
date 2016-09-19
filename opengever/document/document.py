@@ -190,6 +190,24 @@ class Document(Item, BaseDocumentMixin):
             return False
         return mimetypeitem
 
+    def as_shadow_document(self):
+        """Force a document into the shadow state.
+
+        The shadow-state is an alternative initial state for documents created
+        by the officeatwork integration.
+
+        """
+        wftool = api.portal.get_tool('portal_workflow')
+        chain = wftool.getChainFor(self)
+        workflow_id = chain[0]
+        wftool.setStatusOf(workflow_id, self, {
+            'review_state': self.shadow_state,
+            'action': '',
+            'actor': ''})
+        workflow = wftool.getWorkflowById(workflow_id)
+        workflow.updateRoleMappingsFor(self)
+        return self
+
     def checked_out_by(self):
         manager = getMultiAdapter((self, self.REQUEST),
                                   ICheckinCheckoutManager)

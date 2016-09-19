@@ -73,16 +73,7 @@ class DocumentFromOfficeatwork(WizzardWrappedAddForm):
             def initialize_in_shadow_state(self, document):
                 """Force the initial state to be document-state-shadow."""
 
-                wftool = api.portal.get_tool('portal_workflow')
-                chain = wftool.getChainFor(document)
-                workflow_id = chain[0]
-                wftool.setStatusOf(workflow_id, document, {
-                    'review_state': 'document-state-shadow',
-                    'action': '',
-                    'actor': ''})
-                workflow = wftool.getWorkflowById(workflow_id)
-                workflow.updateRoleMappingsFor(document)
-                return document
+                document.as_shadow_document()
 
             @buttonAndHandler(pd_mf(u'Cancel'), name='cancel')
             def handleCancel(self, action):
