@@ -33,6 +33,17 @@ class TestOrganizationListing(FunctionalTestCase):
              [u'Meier AG', 'Yes', '112233']],
             browser.css('.listing').first.lists())
 
+        self.assertEquals(['Active'],
+                          browser.css('.state_filters .active').text)
+
+    @browsing
+    def test_statefilters_are_available(self, browser):
+        browser.login().open(
+            self.contactfolder, view='tabbedview_view-organizations')
+
+        self.assertEquals(['all', 'Active'],
+                          browser.css('.state_filters a').text)
+
     @browsing
     def test_includes_inactive_organizations_with_the_all_filter(self, browser):
         browser.login().open(
