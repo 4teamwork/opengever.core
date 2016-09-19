@@ -1,14 +1,15 @@
 from opengever.base.model import CONTENT_TITLE_LENGTH
 from opengever.contact.models.contact import Contact
 from opengever.contact.utils import get_contactfolder_url
+from opengever.contact.wrapper import PersonWrapper
 from opengever.ogds.models import FIRSTNAME_LENGTH
 from opengever.ogds.models import LASTNAME_LENGTH
+from opengever.ogds.models.query import BaseQuery
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy.orm import relationship
-from opengever.ogds.models.query import BaseQuery
 
 
 class PersonQuery(BaseQuery):
@@ -37,7 +38,10 @@ class Person(Contact):
 
     @property
     def wrapper_id(self):
-        return 'person-{}'.format(self.person_id)
+        return 'contact-{}'.format(self.person_id)
+
+    def get_wrapper(self, context):
+        return PersonWrapper.wrap(context, self)
 
     def get_url(self, view='view'):
         return '{}/{}/{}'.format(

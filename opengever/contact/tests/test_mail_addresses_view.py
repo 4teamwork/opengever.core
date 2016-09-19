@@ -29,7 +29,7 @@ class TestMailAddressesView(FunctionalTestCase):
         browser.login().visit(
             self.contactfolder,
             {'label': 'Private', 'mailaddress': 'max.muster@example.com'},
-            view='person-1/mails/add')
+            view='contact-1/mails/add')
 
         mailaddress = MailAddress.query.first()
 
@@ -48,7 +48,7 @@ class TestMailAddressesView(FunctionalTestCase):
         browser.login().visit(
             self.contactfolder,
             {'mailaddress': 'max.muster@example.com'},
-            view='person-1/mails/add')
+            view='contact-1/mails/add')
 
         self.assertEquals(0, self.session.query(MailAddress).count())
 
@@ -62,7 +62,7 @@ class TestMailAddressesView(FunctionalTestCase):
         browser.login().visit(
             self.contactfolder,
             {'label': 'Private'},
-            view='person-1/mails/add')
+            view='contact-1/mails/add')
 
         self.assertEquals(0, self.session.query(MailAddress).count())
 
@@ -76,7 +76,7 @@ class TestMailAddressesView(FunctionalTestCase):
         browser.login().visit(
             self.contactfolder,
             {'label': 'Private', 'mailaddress': 'bademail'},
-            view='person-1/mails/add')
+            view='contact-1/mails/add')
 
         self.assertEquals(0, self.session.query(MailAddress).count())
 
@@ -89,7 +89,7 @@ class TestMailAddressesView(FunctionalTestCase):
     def test_add_mailaddress_without_address_and_label(self, browser):
         browser.login().visit(
             self.contactfolder,
-            view='person-1/mails/add')
+            view='contact-1/mails/add')
 
         self.assertEquals(0, self.session.query(MailAddress).count())
 
@@ -112,13 +112,13 @@ class TestMailAddressesView(FunctionalTestCase):
                    label=u'Business',
                    address=u"max.muster@foo.com"))
 
-        browser.login().visit(self.contactfolder, view='person-1/mails/list')
+        browser.login().visit(self.contactfolder, view='contact-1/mails/list')
 
         self.assertEqual(2, len(browser.json.get('mailaddresses')))
 
     @browsing
     def test_list_no_mailaddresses(self, browser):
-        browser.login().visit(self.contactfolder, view='person-1/mails/list')
+        browser.login().visit(self.contactfolder, view='contact-1/mails/list')
 
         self.assertEqual(0, len(browser.json.get('mailaddresses')))
 
@@ -128,7 +128,7 @@ class TestMailAddressesView(FunctionalTestCase):
 
         self.assertEqual(1, self.session.query(MailAddress).count())
 
-        browser.login().visit(self.contactfolder, view='person-1/mails/1/delete')
+        browser.login().visit(self.contactfolder, view='contact-1/mails/1/delete')
 
         self.assertDictContainsSubset({
             'message': 'Mailaddress successfully deleted',
@@ -150,7 +150,7 @@ class TestMailAddressesView(FunctionalTestCase):
         browser.login().visit(
             self.contactfolder,
             {'label': 'Business', 'mailaddress': 'james.bond@example.com'},
-            view='person-1/mails/1/update')
+            view='contact-1/mails/1/update')
 
         mailaddress = MailAddress.query.first()
 
@@ -173,7 +173,7 @@ class TestMailAddressesView(FunctionalTestCase):
         browser.login().visit(
             self.contactfolder,
             {'label': 'Business'},
-            view='person-1/mails/1/update')
+            view='contact-1/mails/1/update')
 
         mailaddress = MailAddress.query.first()
 
@@ -191,7 +191,7 @@ class TestMailAddressesView(FunctionalTestCase):
         browser.login().visit(
             self.contactfolder,
             {'mailaddress': 'james.bond@example.com'},
-            view='person-1/mails/1/update')
+            view='contact-1/mails/1/update')
 
         mailaddress = MailAddress.query.first()
 
@@ -200,24 +200,24 @@ class TestMailAddressesView(FunctionalTestCase):
 
     @browsing
     def test_call_api_function_if_available(self, browser):
-        browser.login().visit(self.contactfolder, view='person-1/mails/list')
+        browser.login().visit(self.contactfolder, view='contact-1/mails/list')
 
         self.assertEqual(['mailaddresses'], browser.json.keys())
 
     @browsing
     def test_raise_not_found_if_not_an_api_function_and_not_a_number(self, browser):
         with self.assertRaises(NotFound):
-            browser.login().visit(self.contactfolder, view='person-1/mails/bad_name')
+            browser.login().visit(self.contactfolder, view='contact-1/mails/bad_name')
 
     @browsing
     def test_raise_not_found_if_mail_address_id_is_already_set_on_view(self, browser):
         with self.assertRaises(NotFound):
-            browser.login().visit(self.contactfolder, view='person-1/mails/10/100')
+            browser.login().visit(self.contactfolder, view='contact-1/mails/10/100')
 
     @browsing
     def test_raise_not_found_if_no_mailaddress_with_the_given_id_exists(self, browser):
         with self.assertRaises(NotFound):
-            browser.login().visit(self.contactfolder, view='person-1/mails/10')
+            browser.login().visit(self.contactfolder, view='contact-1/mails/10')
 
     @browsing
     def test_raise_not_found_if_mailaddress_is_not_linked_to_the_given_context(self, browser):
@@ -231,7 +231,7 @@ class TestMailAddressesView(FunctionalTestCase):
         with self.assertRaises(NotFound):
             browser.login().visit(
                 self.contactfolder,
-                view='person-1/mails/{}'.format(email.mailaddress_id))
+                view='contact-1/mails/{}'.format(email.mailaddress_id))
 
     @browsing
     def test_returns_view_if_mailaddress_found_on_given_context(self, browser):
@@ -242,8 +242,8 @@ class TestMailAddressesView(FunctionalTestCase):
 
         browser.login().visit(
             self.contactfolder,
-            view='person-1/mails/{}'.format(email.mailaddress_id))
+            view='contact-1/mails/{}'.format(email.mailaddress_id))
 
         self.assertEqual(
-            '{}/person-1/mails/1'.format(self.contactfolder.absolute_url()),
+            '{}/contact-1/mails/1'.format(self.contactfolder.absolute_url()),
             browser.url)

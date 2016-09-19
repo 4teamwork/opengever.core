@@ -17,10 +17,10 @@ class TestPerson(FunctionalTestCase):
                         .having(firstname=u'Sandra', lastname=u'Meier'))
 
         self.assertEquals(
-            'http://nohost/plone/opengever-contact-contactfolder/person-1/view',
+            'http://nohost/plone/opengever-contact-contactfolder/contact-1/view',
             peter.get_url())
         self.assertEquals(
-            'http://nohost/plone/opengever-contact-contactfolder/person-2/edit',
+            'http://nohost/plone/opengever-contact-contactfolder/contact-2/edit',
             sandra.get_url(view='edit'))
 
     @browsing

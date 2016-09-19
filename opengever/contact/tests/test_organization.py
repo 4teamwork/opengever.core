@@ -12,8 +12,8 @@ class TestOrganization(FunctionalTestCase):
         org2 = create(Builder('organization').named(u'4teamwork AG'))
 
         self.assertEquals(
-            'http://nohost/plone/opengever-contact-contactfolder/organization-1/view',
+            'http://nohost/plone/opengever-contact-contactfolder/contact-1/view',
             org1.get_url())
         self.assertEquals(
-            'http://nohost/plone/opengever-contact-contactfolder/organization-2/edit',
+            'http://nohost/plone/opengever-contact-contactfolder/contact-2/edit',
             org2.get_url(view='edit'))
