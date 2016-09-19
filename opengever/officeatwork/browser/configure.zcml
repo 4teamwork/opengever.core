@@ -17,4 +17,11 @@
       permission="zope2.View"
     />
 
+  <browser:page
+      for="*"
+      name="create_with_officeatwork"
+      class=".create.CreateWithOfficeatwork"
+      permission="zope2.View"
+    />
+
 </configure>
