@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2016-07-29 08:44+0000\n"
-"PO-Revision-Date: 2016-08-10 05:15+0000\n"
-"Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
+"PO-Revision-Date: 2016-09-19 10:38+0000\n"
+"Last-Translator: Lukas Graf <lukas.graf@4teamwork.ch>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
 "gever/opengever-document/fr/>\n"
 "Language: fr\n"
@@ -314,6 +314,7 @@ msgstr "Date"
 
 #. Default: "Date of delivery"
 #: ./opengever/document/behaviors/metadata.py:99
+#, fuzzy
 msgid "label_delivery_date"
 msgstr "Date de remise"
 
@@ -329,6 +330,7 @@ msgstr "Disponble sous forme numérique"
 
 #. Default: "Document Date"
 #: ./opengever/document/behaviors/metadata.py:82
+#, fuzzy
 msgid "label_document_date"
 msgstr "Date du document"
 
@@ -396,11 +398,13 @@ msgstr "Aperçu"
 
 #. Default: "Date of receipt"
 #: ./opengever/document/behaviors/metadata.py:91
+#, fuzzy
 msgid "label_receipt_date"
-msgstr "Date d'entrée"
+msgstr "Date de réception"
 
 #. Default: "Reference Number"
 #: ./opengever/document/viewlets/byline.py:35
+#, fuzzy
 msgid "label_reference_number"
 msgstr "Numéro de référence"
 
@@ -421,6 +425,7 @@ msgstr "Reculer"
 
 #. Default: "Sequence Number"
 #: ./opengever/document/viewlets/byline.py:29
+#, fuzzy
 msgid "label_sequence_number"
 msgstr "Numéro courant"
 
