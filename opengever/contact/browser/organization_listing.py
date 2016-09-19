@@ -13,7 +13,6 @@ from opengever.tabbedview.filters import Filter
 from opengever.tabbedview.filters import FilterList
 from opengever.tabbedview.helper import boolean_helper
 from opengever.tabbedview.helper import linked_sql_object
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.interface import implements
 from zope.interface import Interface
 
@@ -59,7 +58,6 @@ class Organizations(OrganizationListingTab):
     grok.name('tabbedview_view-organizations')
     grok.context(IContactFolder)
 
-    selection = ViewPageTemplateFile("templates/no_selection.pt")
     sort_on = 'name'
 
     show_selects = False
