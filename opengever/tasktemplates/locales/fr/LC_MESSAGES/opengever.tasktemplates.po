@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2016-07-21 14:08+0000\n"
-"PO-Revision-Date: 2016-09-19 10:38+0000\n"
-"Last-Translator: Lukas Graf <lukas.graf@4teamwork.ch>\n"
+"PO-Revision-Date: 2016-09-20 21:23+0000\n"
+"Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
 "gever/opengever-tasktemplates/fr/>\n"
 "Language: fr\n"
@@ -125,7 +125,6 @@ msgstr "Délai en jours"
 #. Default: "Issuer"
 #: ./opengever/tasktemplates/browser/tasktemplates.py:50
 #: ./opengever/tasktemplates/content/tasktemplate.py:39
-#, fuzzy
 msgid "label_issuer"
 msgstr "Mandataire"
 
@@ -157,7 +156,6 @@ msgstr "Mandataire"
 
 #. Default: "Review state"
 #: ./opengever/tasktemplates/browser/templatefolders.py:33
-#, fuzzy
 msgid "label_review_state"
 msgstr "Etat"
 
