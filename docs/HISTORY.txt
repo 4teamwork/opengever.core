@@ -5,6 +5,9 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
+- Add POC officeatwork integration endpoints to GEVER.
+  [deiferni]
+
 - Add new form to add a manual journal entry.
   [phgross]
 
