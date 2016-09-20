@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2016-08-17 14:51+0000\n"
-"PO-Revision-Date: 2016-09-19 10:38+0000\n"
-"Last-Translator: Lukas Graf <lukas.graf@4teamwork.ch>\n"
+"PO-Revision-Date: 2016-09-20 21:24+0000\n"
+"Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
 "gever/opengever-dossier/fr/>\n"
 "Language: fr\n"
@@ -514,7 +514,6 @@ msgstr "Propositions"
 #: ./opengever/dossier/behaviors/dossier.py:176
 #: ./opengever/dossier/browser/report.py:48
 #: ./opengever/dossier/viewlets/byline.py:67
-#, fuzzy
 msgid "label_reference_number"
 msgstr "Numéro de référence"
 
@@ -532,7 +531,6 @@ msgstr "Responsable"
 
 #. Default: "Review state"
 #: ./opengever/dossier/browser/report.py:45
-#, fuzzy
 msgid "label_review_state"
 msgstr "Etat"
 
@@ -548,7 +546,6 @@ msgstr "Sablon Modèles"
 
 #. Default: "Sequence Number"
 #: ./opengever/dossier/viewlets/byline.py:61
-#, fuzzy
 msgid "label_sequence_number"
 msgstr "Numéro courant"
 
