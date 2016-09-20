@@ -5,6 +5,9 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
+- Add new form to add a manual journal entry.
+  [phgross]
+
 - Add new column former contact id to the contact listings.
   [phgross]
 

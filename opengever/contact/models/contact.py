@@ -57,3 +57,6 @@ class Contact(Base, SQLFormSupport):
                     self.archived_mail_addresses,
                     self.archived_phonenumbers,
                     self.archived_urls])
+
+    def get_contact_id(self):
+        return self.contact_id

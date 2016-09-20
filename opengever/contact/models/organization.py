@@ -7,6 +7,7 @@ from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy.orm import relationship
+from opengever.contact.wrapper import OrganizationWrapper
 
 
 class OrganizationQuery(BaseQuery):
@@ -28,7 +29,10 @@ class Organization(Contact):
 
     @property
     def wrapper_id(self):
-        return 'organization-{}'.format(self.organization_id)
+        return 'contact-{}'.format(self.organization_id)
+
+    def get_wrapper(self, context):
+        return OrganizationWrapper.wrap(context, self)
 
     def get_url(self, view='view'):
         return '{}/{}/{}'.format(

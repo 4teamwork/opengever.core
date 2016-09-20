@@ -1,0 +1,10 @@
+<div class="actions" tal:condition="view/manual_entry_allowed">
+  <a class="add_journal_entry" href="add-journal-entry"
+     i18n:domain="opengever.journal" i18n:translate="label_add_journal_entry">
+    Add journal entry
+  </a>
+</div>
+
+<div i18n:domain="opengever.journal" i18n:translate="tab_matches">
+  <span i18n:name="amount" tal:replace="python:len(view.contents)" /> matches.
+</div>

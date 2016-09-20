@@ -63,7 +63,7 @@ class TestOrganizationListing(FunctionalTestCase):
             self.contactfolder, view='tabbedview_view-organizations')
 
         self.assertEquals(
-            'http://nohost/plone/opengever-contact-contactfolder/organization-1/view',
+            'http://nohost/plone/opengever-contact-contactfolder/contact-1/view',
             browser.find(u'Meier AG').get('href'))
 
     @browsing

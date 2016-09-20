@@ -1,0 +1,20 @@
+<div class="contacts" tal:condition="view/contacts">
+  <p i18n:domain="opengever.journal" i18n:translate="label_contacts">Contacts</p>
+  <ul>
+    <li tal:repeat="contact view/contacts">
+      <a href="#" tal:attributes="href string:${view/get_contactfolder_url}/contact-${contact/id}"
+         tal:content="contact/title" />
+    </li>
+  </ul>
+</div>
+
+<div class="documents" tal:condition="view/documents">
+  <p i18n:domain="opengever.journal" i18n:translate="label_documents">Documents</p>
+  <ul class="documents">
+    <li tal:repeat="document view/documents">
+      <a href="#"
+         tal:attributes="href string: ${context/absolute_url}/@@resolve_oguid?oguid=${document/id}"
+         tal:content="document/title" />
+    </li>
+  </ul>
+</div>

@@ -7,10 +7,12 @@ from ftw.journal.interfaces import IJournalizable
 from ftw.journal.interfaces import IWorkflowHistoryJournalizable
 from ftw.table import helper
 from ftw.table.interfaces import ITableSourceConfig, ITableSource
+from opengever.contact.utils import get_contactfolder_url
 from opengever.journal import _
 from opengever.tabbedview import BaseListingTab
 from opengever.tabbedview import GeverTableSource
 from opengever.tabbedview.helper import linked_ogds_author
+from plone import api
 from zope.annotation.interfaces import IAnnotations
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.globalrequest import getRequest
@@ -39,6 +41,8 @@ class JournalTab(BaseListingTab):
 
     implements(IJournalSourceConfig)
 
+    reference_template = ViewPageTemplateFile('templates/journal_references.pt')
+
     grok.name('tabbedview_view-journal')
     grok.require('zope2.View')
     grok.context(IJournalizable)
@@ -53,28 +57,49 @@ class JournalTab(BaseListingTab):
     show_selects = False
     enabled_actions = []
     major_actions = []
-    selection = ViewPageTemplateFile("no_selection_amount.pt")
+    selection = ViewPageTemplateFile("templates/journal_selection.pt")
 
-    columns = (
-        {'column': 'time',
-         'column_title': _(u'label_time', default=u'Time'),
-         'transform': helper.readable_date_time},
+    @property
+    def columns(self):
+        return (
+            {'column': 'time',
+             'column_title': _(u'label_time', default=u'Time'),
+             'transform': helper.readable_date_time},
 
-        {'column': 'title',
-         'column_title': _(u'label_title', 'Title'),
-         'transform': title_helper},
+            {'column': 'title',
+             'column_title': _(u'label_title', 'Title'),
+             'transform': title_helper},
 
-        {'column': 'actor',
-         'column_title': _(u'label_actor', default=u'Changed by'),
-         'transform': linked_ogds_author},
+            {'column': 'actor',
+             'column_title': _(u'label_actor', default=u'Changed by'),
+             'transform': linked_ogds_author},
 
-        {'column': 'comments',
-         'column_title': _(u'label_comments', default=u'Comments'),
-         'transform': tooltip_helper},
+            {'column': 'comments',
+             'column_title': _(u'label_comments', default=u'Comments'),
+             'transform': tooltip_helper},
+
+            {'column': 'references',
+             'column_title': _(u'label_references', default=u'References'),
+             'transform': self.journal_references},
         )
+
+    def journal_references(self, item, value):
+        """
+        """
+        self.documents = item.get('action').get('documents', [])
+        self.contacts = item.get('action').get('contacts', [])
+        return self.reference_template(self)
+
+    def get_contactfolder_url(self):
+        return get_contactfolder_url()
 
     def get_base_query(self):
         return None
+
+    def manual_entry_allowed(self):
+        return api.user.has_permission('Modify portal content',
+                                       user=api.user.get_current(),
+                                       obj=self.context)
 
 
 class JournalTableSource(GeverTableSource):
@@ -113,7 +138,7 @@ class JournalTableSource(GeverTableSource):
 
         def _search_method(item):
             # title
-            if text.lower() in title_helper(item, '').lower():
+            if text.lower() in title_helper(item, u'').lower().encode('utf-8'):
                 return True
 
             # actor

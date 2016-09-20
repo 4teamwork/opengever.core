@@ -17,25 +17,25 @@ class IMailAddressesActions(Interface):
 
     def list():
         """Returns json list of all mailaddresses for the current context (contact).
-        'plone/person-3/mails/list'
+        'plone/contact-3/mails/list'
         """
 
     def update():
         """Updates the mailaddress attributes, with the one given by
         the request parameter.
         The view expect that its called by traversing over the mailaddress:
-        `plone/person-3/mails/14/update` for example.
+        `plone/contact-3/mails/14/update` for example.
         """
 
     def delete():
         """Remove the given mailaddress.
         The view expect that its called by traversing over the mailaddress:
-        `plone/person-3/mails/14/delete` for example.
+        `plone/contact-3/mails/14/delete` for example.
         """
 
     def add():
         """Add a new mail to the database
-        'plone/person-3/mails/add'
+        'plone/contact-3/mails/add'
         """
 
 

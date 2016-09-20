@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vdex xmlns="http://www.imsglobal.org/xsd/imsvdex_v1p0"
+      orderSignificant="false" language="en">
+    <vocabIdentifier>opengever.journal.manual_entry_categories</vocabIdentifier>
+
+    <term>
+        <termIdentifier>phone-call</termIdentifier>
+        <caption>
+            <langstring language="en">Phone call</langstring>
+            <langstring language="de-ch">Telefongespräch</langstring>
+            <langstring language="de">Telefongespräch</langstring>
+            <langstring language="fr">Conversation téléphonique</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>meeting</termIdentifier>
+        <caption>
+            <langstring language="en">Meeting</langstring>
+            <langstring language="de-ch">Sitzung</langstring>
+            <langstring language="de">Sitzung</langstring>
+            <langstring language="fr">Séances</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>information</termIdentifier>
+        <caption>
+            <langstring language="en">Information</langstring>
+            <langstring language="de-ch">Information</langstring>
+            <langstring language="de">Information</langstring>
+            <langstring language="fr">Information</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>other</termIdentifier>
+        <caption>
+            <langstring language="en">Other</langstring>
+            <langstring language="de-ch">Sonstiges</langstring>
+            <langstring language="de">Sonstiges</langstring>
+            <langstring language="fr">Divers</langstring>
+        </caption>
+    </term>
+</vdex>

@@ -4,10 +4,7 @@ from opengever.base.browser.translated_title import TranslatedTitleAddForm
 from opengever.base.browser.translated_title import TranslatedTitleEditForm
 from opengever.contact import _
 from opengever.contact.interfaces import IContactFolder
-from opengever.contact.models import Organization
-from opengever.contact.models import Person
-from opengever.contact.wrapper import PersonWrapper
-from opengever.contact.wrapper import OrganizationWrapper
+from opengever.contact.models import Contact
 from opengever.tabbedview import BaseCatalogListingTab
 from opengever.tabbedview.helper import email_helper
 from plone.dexterity.content import Container
@@ -37,17 +34,11 @@ class ContactFolder(Container, TranslatedTitleMixin):
         if obj is not default:
             return obj
 
-        if id_.startswith('person-'):
-            person_id = int(id_.split('-')[-1])
-            person = Person.query.get(person_id)
-            if person:
-                return PersonWrapper.wrap(self, person)
-
-        if id_.startswith('organization-'):
-            organization_id = int(id_.split('-')[-1])
-            organization = Organization.query.get(organization_id)
-            if organization:
-                return OrganizationWrapper.wrap(self, organization)
+        if id_.startswith('contact-'):
+            contact_id = int(id_.split('-')[-1])
+            contact = Contact.query.get(contact_id)
+            if contact:
+                return contact.get_wrapper(self)
 
         if default is _marker:
             raise KeyError(id_)

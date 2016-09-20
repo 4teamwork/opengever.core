@@ -75,11 +75,11 @@ class TestPersonListing(FunctionalTestCase):
             self.contactfolder, view='tabbedview_view-persons')
 
         self.assertEquals(
-            'http://nohost/plone/opengever-contact-contactfolder/person-1/view',
+            'http://nohost/plone/opengever-contact-contactfolder/contact-1/view',
             browser.find('Peter').get('href'))
 
         self.assertEquals(
-            'http://nohost/plone/opengever-contact-contactfolder/person-1/view',
+            'http://nohost/plone/opengever-contact-contactfolder/contact-1/view',
             browser.find(u'M\xfcller').get('href'))
 
     @browsing
