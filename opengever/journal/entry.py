@@ -7,7 +7,6 @@ from plone import api
 from zope.component import getUtility
 from zope.event import notify
 from zope.globalrequest import getRequest
-from zope.i18n import translate
 from zope.schema.interfaces import IVocabularyFactory
 
 
@@ -70,7 +69,7 @@ class ManualJournalEntry(object):
                 default=u'Manual entry: ${category}',
                 mapping={'category': self.get_category_title()})
 
-        return translate(msg, context=getRequest())
+        return msg
 
     def get_category_title(self):
         voca_factory = getUtility(
