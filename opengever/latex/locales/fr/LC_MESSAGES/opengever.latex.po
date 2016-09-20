@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2016-07-21 14:08+0000\n"
-"PO-Revision-Date: 2016-09-19 10:38+0000\n"
-"Last-Translator: Lukas Graf <lukas.graf@4teamwork.ch>\n"
+"PO-Revision-Date: 2016-09-20 21:24+0000\n"
+"Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
 "gever/opengever-latex/fr/>\n"
 "Language: fr\n"
@@ -36,7 +36,6 @@ msgstr "A réaliser jusqu'au"
 
 #. Default: "Delivery date"
 #: ./opengever/latex/listing.py:230
-#, fuzzy
 msgid "label_delivery_date"
 msgstr "Date de remise"
 
@@ -47,7 +46,6 @@ msgstr "Auteur"
 
 #. Default: "Document date"
 #: ./opengever/latex/listing.py:220
-#, fuzzy
 msgid "label_document_date"
 msgstr "Date du document"
 
@@ -64,7 +62,6 @@ msgstr "Date de fin"
 
 #. Default: "Issuer"
 #: ./opengever/latex/listing.py:257
-#, fuzzy
 msgid "label_issuer"
 msgstr "Mandataire"
 
@@ -75,14 +72,12 @@ msgstr "Participants"
 
 #. Default: "Receipt date"
 #: ./opengever/latex/listing.py:225
-#, fuzzy
 msgid "label_receipt_date"
 msgstr "Date de réception"
 
 #. Default: "Reference number"
 #: ./opengever/latex/dossierdetails.py:106
 #: ./opengever/latex/listing.py:153
-#, fuzzy
 msgid "label_reference_number"
 msgstr "Numéro de référence"
 
@@ -105,13 +100,11 @@ msgstr "Responsable"
 #. Default: "State"
 #: ./opengever/latex/dossierdetails.py:135
 #: ./opengever/latex/listing.py:176
-#, fuzzy
 msgid "label_review_state"
 msgstr "Etat"
 
 #. Default: "Sequence number"
 #: ./opengever/latex/dossierdetails.py:110
-#, fuzzy
 msgid "label_sequence_number"
 msgstr "Numéro courant"
 
