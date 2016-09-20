@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2016-09-14 15:13+0000\n"
-"PO-Revision-Date: 2016-09-19 10:38+0000\n"
-"Last-Translator: Lukas Graf <lukas.graf@4teamwork.ch>\n"
+"PO-Revision-Date: 2016-09-20 21:24+0000\n"
+"Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
 "gever/opengever-contact/fr/>\n"
 "Language: fr\n"
@@ -389,7 +389,6 @@ msgstr "Titre"
 
 #. Default: "Sequence Number"
 #: ./opengever/contact/browser/byline.py:11
-#, fuzzy
 msgid "label_sequence_number"
 msgstr "Numéro courant"
 
