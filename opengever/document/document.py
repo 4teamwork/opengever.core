@@ -1,3 +1,5 @@
+from AccessControl import ClassSecurityInfo
+from AccessControl.Permissions import webdav_unlock_items
 from Acquisition import aq_inner, aq_parent
 from collective import dexteritytextindexer
 from five import grok
@@ -110,6 +112,8 @@ grok.global_adapter(UploadValidator)
 
 class Document(Item, BaseDocumentMixin):
 
+    security = ClassSecurityInfo()
+
     implements(ITabbedviewUploadable)
 
     # document state's
@@ -119,6 +123,7 @@ class Document(Item, BaseDocumentMixin):
 
     remove_transition = 'document-transition-remove'
     restore_transition = 'document-transition-restore'
+    initialize_transition = 'document-transition-initialize'
 
     # disable file preview creation when modifying or creating document
     buildPreview = False
@@ -251,3 +256,19 @@ class Document(Item, BaseDocumentMixin):
             data=data,
             filename=filename,
             contentType=content_type)
+
+    security.declareProtected(webdav_unlock_items, 'UNLOCK')
+    def UNLOCK(self, REQUEST, RESPONSE):
+        """Leave shadow state if a shadow-document is unlocked.
+
+        If we are in shadow state when unlocking the document it was created
+        by officeatwork. In that case leave the shadow-state.
+
+        """
+        response = super(Document, self).UNLOCK(REQUEST, RESPONSE)
+
+        if self.is_shadow_document():
+            api.content.transition(
+                self, transition='document-transition-initialize')
+
+        return response
