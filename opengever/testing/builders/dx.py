@@ -392,3 +392,10 @@ class PrivateRootBuilder(DexterityBuilder):
 
 
 builder_registry.register('private_root', PrivateRootBuilder)
+
+
+class PrivateFolderBuilder(DexterityBuilder):
+    portal_type = 'opengever.private.folder'
+
+
+builder_registry.register('private_folder', PrivateFolderBuilder)

@@ -5,5 +5,9 @@
     <permission name="opengever.private: Add private root" acquire="True">
       <role name="Manager"/>
     </permission>
+
+    <permission name="opengever.private: Add private folder" acquire="True">
+      <role name="Manager"/>
+    </permission>
   </permissions>
 </rolemap>

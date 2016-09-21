@@ -2,8 +2,13 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     xmlns:profilehook="http://namespaces.zope.org/profilehook"
+    xmlns:grok="http://namespaces.zope.org/grok"
     xmlns:i18n="http://namespaces.zope.org/i18n"
     i18n_domain="opengever.private">
+
+  <i18n:registerTranslations directory="locales" />
+
+  <grok:grok package="." />
 
   <genericsetup:registerProfile
       name="default"
@@ -16,10 +21,18 @@
   <include package=".upgrades" />
 
 
+  <!-- adpaters -->
+  <adapter factory=".folder.PrivateFolderNameFromTitle" />
+
   <!-- permissions -->
   <permission
       id="opengever.private.AddPrivateRoot"
       title="opengever.private: Add private root"
+      />
+
+  <permission
+      id="opengever.private.AddPrivateFolder"
+      title="opengever.private: Add private folder"
       />
 
 </configure>
