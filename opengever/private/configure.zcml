@@ -15,4 +15,11 @@
 
   <include package=".upgrades" />
 
+
+  <!-- permissions -->
+  <permission
+      id="opengever.private.AddPrivateRoot"
+      title="opengever.private: Add private root"
+      />
+
 </configure>

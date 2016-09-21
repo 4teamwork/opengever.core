@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+
+<rolemap>
+  <permissions>
+    <permission name="opengever.private: Add private root" acquire="True">
+      <role name="Manager"/>
+    </permission>
+  </permissions>
+</rolemap>

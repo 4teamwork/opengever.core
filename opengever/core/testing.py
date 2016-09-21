@@ -240,6 +240,7 @@ class OpengeverFixture(PloneSandboxLayer):
         applyProfile(portal, 'opengever.activity:default')
         applyProfile(portal, 'opengever.bumblebee:default')
         applyProfile(portal, 'opengever.officeatwork:default')
+        applyProfile(portal, 'opengever.private:default')
         applyProfile(portal, 'ftw.datepicker:default')
         applyProfile(portal, 'plone.formwidget.autocomplete:default')
         applyProfile(portal, 'plone.formwidget.contenttree:default')
