@@ -47,7 +47,10 @@ class Person(Contact):
         return '{}/{}/{}'.format(
             get_contactfolder_url(), self.wrapper_id, view)
 
-    def get_title(self):
+    def get_title(self, with_former_id=False):
+        if with_former_id and self.former_contact_id:
+            return u'{} [{}]'.format(self.fullname, self.former_contact_id)
+
         return self.fullname
 
     def get_css_class(self):

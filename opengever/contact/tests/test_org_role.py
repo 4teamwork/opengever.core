@@ -1,8 +1,5 @@
 from ftw.builder import Builder
 from ftw.builder import create
-from opengever.contact.models import Organization
-from opengever.contact.models import OrgRole
-from opengever.contact.models import Person
 from opengever.testing import MEMORY_DB_LAYER
 import unittest2
 
@@ -39,3 +36,28 @@ class TestOrganizationalRole(unittest2.TestCase):
         self.assertEquals([role2], hugo.organizations)
         self.assertEquals([peter, hugo],
                           [role.person for role in meier_ag.persons])
+
+    def test_organization_title_is_person_organization_and_fuction_in_braclets(self):
+        peter = create(Builder('person')
+                       .having(firstname=u'Peter',
+                               lastname=u'M\xfcller',
+                               former_contact_id=123456))
+
+        teamwork = create(Builder('organization').named(u'4teamwork AG'))
+        meier = create(Builder('organization').named(u'Meier AG'))
+
+        role1 = create(Builder('org_role').having(person=peter,
+                                                  organization=meier))
+
+        role2 = create(Builder('org_role').having(person=peter,
+                                                  organization=teamwork,
+                                                  function='Developer'))
+
+        self.assertEquals(
+            u'Peter M\xfcller - Meier AG', role1.get_title())
+        self.assertEquals(
+            u'Peter M\xfcller - 4teamwork AG (Developer)', role2.get_title())
+
+        self.assertEquals(
+            u'Peter M\xfcller [123456] - Meier AG',
+            role1.get_title(with_former_id=True))

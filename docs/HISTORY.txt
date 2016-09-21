@@ -5,6 +5,9 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
+- Display former_contact_id in the contact selection field and make it searchable.
+  [phgross]
+
 - Add country field to contact addresses.
   [deiferni]
 

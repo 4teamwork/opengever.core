@@ -38,7 +38,10 @@ class Organization(Contact):
         return '{}/{}/{}'.format(
             get_contactfolder_url(), self.wrapper_id, view)
 
-    def get_title(self):
+    def get_title(self, with_former_id=False):
+        if with_former_id and self.former_contact_id:
+            return u'{} [{}]'.format(self.name, self.former_contact_id)
+
         return self.name
 
     def get_css_class(self):

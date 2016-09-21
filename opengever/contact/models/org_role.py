@@ -33,9 +33,9 @@ class OrgRole(Base):
     def id(self):
         return self.org_role_id
 
-    def get_title(self):
+    def get_title(self, with_former_id=False):
         title = u'{} - {}'.format(
-            self.person.get_title(),
+            self.person.get_title(with_former_id=with_former_id),
             self.organization.get_title())
 
         if self.function:
