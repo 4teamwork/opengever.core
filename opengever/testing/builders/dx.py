@@ -49,6 +49,7 @@ class DocumentBuilder(DexterityBuilder):
     portal_type = 'opengever.document.document'
     _checked_out = None
     _trashed = False
+    _is_shadow = False
 
     def __init__(self, session):
         super(DocumentBuilder, self).__init__(session)
@@ -81,6 +82,10 @@ class DocumentBuilder(DexterityBuilder):
         self.review_state = Document.removed_state
         return self
 
+    def as_shadow_document(self):
+        self._is_shadow = True
+        return self
+
     def after_create(self, obj):
         if self._checked_out:
             IAnnotations(obj)[CHECKIN_CHECKOUT_ANNOTATIONS_KEY] = self._checked_out
@@ -89,6 +94,9 @@ class DocumentBuilder(DexterityBuilder):
         if self._trashed:
             trasher = ITrashable(obj)
             trasher.trash()
+
+        if self._is_shadow:
+            obj.as_shadow_document()
 
         super(DocumentBuilder, self).after_create(obj)
 

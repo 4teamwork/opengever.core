@@ -1,3 +1,5 @@
+from AccessControl import ClassSecurityInfo
+from AccessControl.Permissions import webdav_unlock_items
 from Acquisition import aq_inner, aq_parent
 from collective import dexteritytextindexer
 from five import grok
@@ -110,14 +112,18 @@ grok.global_adapter(UploadValidator)
 
 class Document(Item, BaseDocumentMixin):
 
+    security = ClassSecurityInfo()
+
     implements(ITabbedviewUploadable)
 
     # document state's
     removed_state = 'document-state-removed'
     active_state = 'document-state-draft'
+    shadow_state = 'document-state-shadow'
 
     remove_transition = 'document-transition-remove'
     restore_transition = 'document-transition-restore'
+    initialize_transition = 'document-transition-initialize'
 
     # disable file preview creation when modifying or creating document
     buildPreview = False
@@ -189,10 +195,31 @@ class Document(Item, BaseDocumentMixin):
             return False
         return mimetypeitem
 
+    def as_shadow_document(self):
+        """Force a document into the shadow state.
+
+        The shadow-state is an alternative initial state for documents created
+        by the officeatwork integration.
+
+        """
+        wftool = api.portal.get_tool('portal_workflow')
+        chain = wftool.getChainFor(self)
+        workflow_id = chain[0]
+        wftool.setStatusOf(workflow_id, self, {
+            'review_state': self.shadow_state,
+            'action': '',
+            'actor': ''})
+        workflow = wftool.getWorkflowById(workflow_id)
+        workflow.updateRoleMappingsFor(self)
+        return self
+
     def checked_out_by(self):
         manager = getMultiAdapter((self, self.REQUEST),
                                   ICheckinCheckoutManager)
         return manager.get_checked_out_by()
+
+    def is_shadow_document(self):
+        return api.content.get_state(self) == self.shadow_state
 
     def is_checked_out(self):
         return self.checked_out_by() is not None
@@ -229,3 +256,19 @@ class Document(Item, BaseDocumentMixin):
             data=data,
             filename=filename,
             contentType=content_type)
+
+    security.declareProtected(webdav_unlock_items, 'UNLOCK')
+    def UNLOCK(self, REQUEST, RESPONSE):
+        """Leave shadow state if a shadow-document is unlocked.
+
+        If we are in shadow state when unlocking the document it was created
+        by officeatwork. In that case leave the shadow-state.
+
+        """
+        response = super(Document, self).UNLOCK(REQUEST, RESPONSE)
+
+        if self.is_shadow_document():
+            api.content.transition(
+                self, transition='document-transition-initialize')
+
+        return response

@@ -1,0 +1,27 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="opengever.officeatwork">
+
+  <browser:page
+      for="*"
+      name="is_officeatwork_feature_enabled"
+      class=".officeatworkfeatureenabled.OfficeatworkFeatureEnabledView"
+      permission="zope2.View"
+    />
+
+  <browser:page
+      for="opengever.document.document.IDocumentSchema"
+      name="document_from_officeatwork"
+      class=".documentfromofficeatwork.DocumentFromOfficeatwork"
+      permission="zope2.View"
+    />
+
+  <browser:page
+      for="opengever.document.document.IDocumentSchema"
+      name="create_with_officeatwork"
+      class=".create.CreateWithOfficeatwork"
+      permission="zope2.View"
+    />
+
+</configure>
