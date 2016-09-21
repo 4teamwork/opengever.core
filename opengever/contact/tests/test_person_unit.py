@@ -14,7 +14,7 @@ class TestPerson(unittest2.TestCase):
         self.session = self.layer.session
 
     def test_adding(self):
-        person = create(Builder('person')
+        create(Builder('person')
                        .having(firstname=u'Peter', lastname=u'M\xfcller'))
 
     def test_is_contact(self):
@@ -114,3 +114,16 @@ class TestPerson(unittest2.TestCase):
         peter = create(Builder('person')
                        .having(firstname=u'Peter', lastname=u'M\xfcller'))
         self.assertEquals(u'Peter M\xfcller', peter.get_title())
+
+    def test_title_is_extended_with_former_id_in_brackets_when_flag_is_set(self):
+        peter = create(Builder('person')
+                       .having(firstname=u'Peter', lastname=u'M\xfcller'))
+        james = create(Builder('person')
+                       .having(firstname=u'James',
+                               lastname=u'M\xfcller',
+                               former_contact_id=123456))
+
+        self.assertEquals(u'Peter M\xfcller',
+                          peter.get_title(with_former_id=True))
+        self.assertEquals(u'James M\xfcller [123456]',
+                          james.get_title(with_former_id=True))

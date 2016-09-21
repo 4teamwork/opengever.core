@@ -89,3 +89,18 @@ class TestOrganization(unittest2.TestCase):
         self.assertEquals([u'http://www.4teamwork.ch',
                            u'http://www.onegovgever.ch'],
                           [url.url for url in organization.urls])
+
+    def test_title_is_name(self):
+        organization = create(Builder('organization').named(u'4teamwork AG'))
+        self.assertEquals(u'4teamwork AG', organization.get_title())
+
+    def test_title_is_extended_with_former_id_in_brackets_when_flag_is_set(self):
+        teamwork = create(Builder('organization').named(u'4teamwork AG'))
+        meier = create(Builder('organization')
+                       .having(former_contact_id=123456)
+                       .named(u'Meier AG'))
+
+        self.assertEquals(u'4teamwork AG',
+                          teamwork.get_title(with_former_id=True))
+        self.assertEquals(u'Meier AG [123456]',
+                          meier.get_title(with_former_id=True))

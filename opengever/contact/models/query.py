@@ -23,7 +23,7 @@ class ContactQuery(BaseQuery):
         return extend_query_with_textfilter(
             query,
             [Person.firstname, Person.lastname, Organization.name,
-             OrgRole.function],
+             OrgRole.function, Contact.former_contact_id],
             text_filters,
         )
 

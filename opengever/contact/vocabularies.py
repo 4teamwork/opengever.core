@@ -31,7 +31,7 @@ class ContactsVocabulary(object):
         term_type = self.by_class[value.__class__]
         return SimpleTerm(value=value,
                           token='{}:{}'.format(term_type, value.id),
-                          title=value.get_title())
+                          title=value.get_title(with_former_id=True))
 
     def getTermByToken(self, token):
         if not token:
