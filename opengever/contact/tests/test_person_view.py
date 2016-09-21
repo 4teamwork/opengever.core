@@ -81,7 +81,8 @@ class TestPersonView(FunctionalTestCase):
         create(Builder('address')
                .for_contact(peter)
                .labeled('Arbeit')
-               .having(street=u'Dammweg 9', zip_code=u'3013', city=u'Bern'))
+               .having(street=u'Dammweg 9', zip_code=u'3013', city=u'Bern',
+                       country=u'Schweiz'))
         create(Builder('address')
                .for_contact(peter)
                .labeled('Privat')
@@ -92,7 +93,7 @@ class TestPersonView(FunctionalTestCase):
 
         self.assertEquals([u'Arbeit', u'Privat'],
                           browser.css('.address dt').text)
-        self.assertEquals([u'Dammweg 9\n3013 Bern',
+        self.assertEquals([u'Dammweg 9\n3013 Bern\nSchweiz',
                            u'S\xfcdweststrasse 24\n6315 Ober\xe4geri'],
                           browser.css('.address dd').text)
 
@@ -105,13 +106,13 @@ class TestPersonView(FunctionalTestCase):
                .for_contact(peter)
                .labeled('Wochenendhaus')
                .having(street=u'Waldstrasse 1', zip_code=u'1234',
-                       city=u'Hintertupfigen'))
+                       city=u'Hintertupfigen', country=u'Deutschland'))
 
         browser.login().open(self.contactfolder, view=peter.wrapper_id)
 
         self.assertEquals([u'Wochenendhaus'],
                           browser.css('#contactHistory .address dt').text)
-        self.assertEquals([u'Waldstrasse 1\n1234 Hintertupfigen'],
+        self.assertEquals([u'Waldstrasse 1\n1234 Hintertupfigen\nDeutschland'],
                           browser.css('#contactHistory .address dd').text)
 
     @browsing
