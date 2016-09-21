@@ -1,0 +1,14 @@
+<configure
+      xmlns="http://namespaces.zope.org/zope"
+      xmlns:browser="http://namespaces.zope.org/browser"
+      i18n_domain="opengever.dossier">
+
+  <browser:page
+      for="opengever.private.folder.IPrivateFolder"
+      name="tabbed_view"
+      class=".tabbed.PrivateFolderTabbedView"
+      permission="zope2.View"
+      allowed_interface="ftw.tabbedview.interfaces.ITabbedViewEndpoints"
+      />
+
+</configure>

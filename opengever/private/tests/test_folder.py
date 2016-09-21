@@ -1,7 +1,9 @@
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
+from ftw.testing import freeze
 from opengever.base.interfaces import IReferenceNumber
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
@@ -45,3 +47,41 @@ class TestPrivateFolder(FunctionalTestCase):
 
         self.assertEquals('Client1 test_user_1_',
                           IReferenceNumber(folder).get_number())
+
+
+class TestPrivateFolderTabbedView(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestPrivateFolderTabbedView, self).setUp()
+        self.root = create(Builder('private_root'))
+        self.folder = create(Builder('private_folder')
+                             .having(userid=TEST_USER_ID))
+
+    @browsing
+    def test_has_a_only_a_dossier_tab(self, browser):
+        browser.login().open(self.folder)
+
+        self.assertEquals(
+            ['Dossiers'], browser.css('.formTab').text)
+
+    @browsing
+    def test_dossier_tab_lists_all_containig_private_dossiers(self, browser):
+        with freeze(datetime(2015, 9, 1)):
+            create(Builder('private_dossier')
+                   .within(self.folder)
+                   .titled(u'Zuz\xfcge'))
+            create(Builder('private_dossier')
+                   .within(self.folder)
+                   .titled(u'Abg\xe4nge'))
+
+        browser.login().open(self.folder,
+                             view='tabbedview_view-dossiers')
+
+        self.assertEquals(
+            [['', 'Reference Number', 'Title', 'Review state',
+              'Responsible', 'Start', 'End'],
+             ['', 'Client1 test_user_1_ / 1', u'Zuz\xfcge',
+              'private', '', '01.09.2015', ''],
+             ['', 'Client1 test_user_1_ / 2', u'Abg\xe4nge',
+              'private', '', '01.09.2015', '']],
+            browser.css('.listing').first.lists())
