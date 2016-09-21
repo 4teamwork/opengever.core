@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-07-21 14:08+0000\n"
+"POT-Creation-Date: 2016-09-29 09:10+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -361,47 +361,47 @@ msgid "active"
 msgstr ""
 
 #. Default: "Agenda Item decided."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:218
+#: ./opengever/meeting/browser/meetings/agendaitem.py:223
 msgid "agenda_item_decided"
 msgstr ""
 
 #. Default: "Agenda Item Successfully deleted"
-#: ./opengever/meeting/browser/meetings/agendaitem.py:194
+#: ./opengever/meeting/browser/meetings/agendaitem.py:203
 msgid "agenda_item_deleted"
 msgstr ""
 
 #. Default: "Agendaitem has been decided and the meeting has been held."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:223
+#: ./opengever/meeting/browser/meetings/agendaitem.py:228
 msgid "agenda_item_meeting_held"
 msgstr ""
 
 #. Default: "Agenda Item order updated."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:153
+#: ./opengever/meeting/browser/meetings/agendaitem.py:170
 msgid "agenda_item_order_updated"
 msgstr ""
 
 #. Default: "Agenda Item decided and excerpt generated."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:215
+#: ./opengever/meeting/browser/meetings/agendaitem.py:220
 msgid "agenda_item_proposal_decided"
 msgstr ""
 
 #. Default: "Agenda Item successfully reopened."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:243
+#: ./opengever/meeting/browser/meetings/agendaitem.py:244
 msgid "agenda_item_reopened"
 msgstr ""
 
 #. Default: "Agenda Item revised successfully."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:260
+#: ./opengever/meeting/browser/meetings/agendaitem.py:257
 msgid "agenda_item_revised"
 msgstr ""
 
 #. Default: "Agenda Item title must not be empty."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:170
+#: ./opengever/meeting/browser/meetings/agendaitem.py:183
 msgid "agenda_item_update_empty_string"
 msgstr ""
 
 #. Default: "Agenda Item updated."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:175
+#: ./opengever/meeting/browser/meetings/agendaitem.py:188
 msgid "agenda_item_updated"
 msgstr ""
 
@@ -563,6 +563,16 @@ msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:188
 msgid "download protocol"
+msgstr ""
+
+#. Default: "Paragraph must not be empty."
+#: ./opengever/meeting/browser/meetings/agendaitem.py:269
+msgid "empty_paragraph"
+msgstr ""
+
+#. Default: "Proposal must not be empty."
+#: ./opengever/meeting/browser/meetings/agendaitem.py:284
+msgid "empty_proposal"
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:217
@@ -755,7 +765,7 @@ msgid "label_dossier"
 msgstr ""
 
 #. Default: "Dossier not available"
-#: ./opengever/meeting/proposal.py:377
+#: ./opengever/meeting/proposal.py:379
 msgid "label_dossier_not_available"
 msgstr ""
 
@@ -1130,8 +1140,8 @@ msgstr ""
 msgid "new_unscheduled_proposals"
 msgstr ""
 
-#. Default: "Paragrap successfully added."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:275
+#. Default: "Paragraph successfully added."
+#: ./opengever/meeting/browser/meetings/agendaitem.py:273
 msgid "paragraph_added"
 msgstr ""
 
@@ -1279,8 +1289,8 @@ msgstr ""
 msgid "tab_matches"
 msgstr ""
 
-#. Default: "Texst successfully added."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:289
+#. Default: "Text successfully added."
+#: ./opengever/meeting/browser/meetings/agendaitem.py:288
 msgid "text_added"
 msgstr ""
 

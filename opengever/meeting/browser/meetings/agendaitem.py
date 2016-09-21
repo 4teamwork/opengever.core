@@ -265,7 +265,8 @@ class AgendaItemsView(BrowserView):
 
         title = self.request.get('title')
         if not title:
-            raise ValueError
+            return JSONResponse(self.request).error(
+                _('empty_paragraph', default=u"Paragraph must not be empty.")).proceed().dump()
 
         self.meeting.schedule_text(title, is_paragraph=True)
         return JSONResponse(self.request).info(
@@ -279,7 +280,8 @@ class AgendaItemsView(BrowserView):
         self.check_editable()
         title = self.request.get('title')
         if not title:
-            raise ValueError
+            return JSONResponse(self.request).error(
+                _('empty_proposal', default=u"Proposal must not be empty.")).proceed().dump()
 
         self.meeting.schedule_text(title)
         return JSONResponse(self.request).info(
