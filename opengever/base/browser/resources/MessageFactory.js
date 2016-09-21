@@ -14,11 +14,6 @@
       style: "gever"
     };
 
-    var defaultMessage = $("#default-error-message");
-
-    var defaultTitle = $("dt", defaultMessage).text();
-    var defaultText = $("dd", defaultMessage).text();
-
     var root = $(document);
 
     var messageTemplate = " \
@@ -36,8 +31,8 @@
 
     this.notify = function(messageData) {
       messageData = $.extend({
-        messageTitle: defaultTitle,
-        message: defaultText
+        messageTitle: $("#default-error-message dt").text(),
+        message: $("#default-error-message dd").text()
       }, messageData || {});
 
       settings.className = messageData.messageClass;
