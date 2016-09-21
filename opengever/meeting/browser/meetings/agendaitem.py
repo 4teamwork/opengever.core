@@ -269,7 +269,7 @@ class AgendaItemsView(BrowserView):
 
         self.meeting.schedule_text(title, is_paragraph=True)
         return JSONResponse(self.request).info(
-            _('paragraph_added', default=u"Paragrap successfully added.")
+            _('paragraph_added', default=u"Paragraph successfully added.")
         ).proceed().dump()
 
     def schedule_text(self):
@@ -283,7 +283,7 @@ class AgendaItemsView(BrowserView):
 
         self.meeting.schedule_text(title)
         return JSONResponse(self.request).info(
-            _('text_added', default=u"Texst successfully added.")).proceed().dump()
+            _('text_added', default=u"Text successfully added.")).proceed().dump()
 
     def check_editable(self):
         if not self.meeting.is_editable():
