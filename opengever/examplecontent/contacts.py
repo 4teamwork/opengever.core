@@ -20,6 +20,7 @@ ADDRESS_LABELS = ['Arbeit', 'Privat', None]
 PHONENUMBER_LABELS = ['Arbeit', 'Privat', 'Mobile']
 ORG_ROLE_FUNCTIONS = [
     None, 'Verwalter', 'Vorsitz', 'Putzfachmann', 'Beratung', 'Angestellter']
+COUNTRIES = [u'Schweiz', u'Deutschland', u'\xd6sterreich', u'Belgien']
 
 
 class ExampleContactCreator(object):
@@ -122,6 +123,7 @@ class ExampleContactCreator(object):
                           street=item['street'],
                           zip_code=item['zip_code'],
                           city=item['city'],
+                          country=random.choice(COUNTRIES),
                           contact=contact)
         self.db_session.add(address)
 
@@ -136,6 +138,7 @@ class ExampleContactCreator(object):
                 street=item['street'],
                 zip_code=item['zip_code'],
                 city=item['city'],
+                country=random.choice(COUNTRIES),
                 contact=contact)
             self.db_session.add(archived_address)
 
