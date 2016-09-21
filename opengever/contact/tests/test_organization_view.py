@@ -42,7 +42,8 @@ class TestOrganizationView(FunctionalTestCase):
         create(Builder('address')
                .for_contact(organization)
                .labeled('Hauptsitz')
-               .having(street=u'Dammweg 9', zip_code=u'3013', city=u'Bern'))
+               .having(street=u'Dammweg 9', zip_code=u'3013', city=u'Bern',
+                       country=u'Schweiz'))
         create(Builder('address')
                .for_contact(organization)
                .labeled('Standort Romandie')
@@ -53,7 +54,7 @@ class TestOrganizationView(FunctionalTestCase):
 
         self.assertEquals([u'Hauptsitz', u'Standort Romandie'],
                           browser.css('.address dt').text)
-        self.assertEquals([u'Dammweg 9\n3013 Bern',
+        self.assertEquals([u'Dammweg 9\n3013 Bern\nSchweiz',
                            u'S\xfcdweststrasse 24\n1700 Fribourg'],
                           browser.css('.address dd').text)
 
@@ -65,13 +66,13 @@ class TestOrganizationView(FunctionalTestCase):
                .for_contact(organization)
                .labeled('Hauptsitz')
                .having(street=u'Engehaldenstrasse 42', zip_code=u'3012',
-                       city=u'Bern'))
+                       city=u'Bern', country=u'Schweiz'))
 
         browser.login().open(organization.get_url())
 
         self.assertEquals([u'Hauptsitz'],
                           browser.css('#contactHistory .address dt').text)
-        self.assertEquals([u'Engehaldenstrasse 42\n3012 Bern'],
+        self.assertEquals([u'Engehaldenstrasse 42\n3012 Bern\nSchweiz'],
                           browser.css('#contactHistory .address dd').text)
 
     @browsing

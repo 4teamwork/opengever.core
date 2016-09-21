@@ -32,6 +32,8 @@
                   <br />
                   <span tal:content="address/zip_code" />
                   <span tal:content="address/city" />
+                  <br />
+                  <span tal:content="address/country" />
                 </dd>
               </tal:repeat>
             </dl>
@@ -133,6 +135,8 @@
                       <br />
                       <span tal:content="archived_address/zip_code" />
                       <span tal:content="archived_address/city" />
+                      <br />
+                      <span tal:content="archived_address/country" />
                     </dd>
                   </tal:repeat>
                 </dl>
