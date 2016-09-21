@@ -21,3 +21,4 @@ class ArchivedAddress(ArchiveMixin, Base):
     street = Column(String(CONTENT_TITLE_LENGTH))
     zip_code = Column(String(ZIP_CODE_LENGTH))
     city = Column(String(CONTENT_TITLE_LENGTH))
+    country = Column(String(CONTENT_TITLE_LENGTH))
