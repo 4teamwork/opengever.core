@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
+from opengever.base.interfaces import IReferenceNumber
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
 from zExceptions import Unauthorized
@@ -38,3 +39,9 @@ class TestPrivateFolder(FunctionalTestCase):
     def test_title_is_corresponding_users_label(self):
         folder = create(Builder('private_folder').having(userid=TEST_USER_ID))
         self.assertEquals('Test User (test_user_1_)', folder.Title())
+
+    def test_uses_userid_as_reference_number_part(self):
+        folder = create(Builder('private_folder').having(userid=TEST_USER_ID))
+
+        self.assertEquals('Client1 test_user_1_',
+                          IReferenceNumber(folder).get_number())
