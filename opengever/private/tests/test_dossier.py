@@ -59,3 +59,22 @@ class TestPrivateDossier(FunctionalTestCase):
                           IReferenceNumber(dossier1).get_number())
         self.assertEquals('Client1 test_user_1_ / 2',
                           IReferenceNumber(dossier2).get_number())
+
+
+class TestPrivateDossierTabbedView(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestPrivateDossierTabbedView, self).setUp()
+        self.root = create(Builder('private_root'))
+        self.folder = create(Builder('private_folder')
+                             .having(userid=TEST_USER_ID)
+                             .within(self.root))
+
+    @browsing
+    def test_task_proposal_participations_and_info_tab_are_hidden(self, browser):
+        dossier = create(Builder('private_dossier').within(self.folder))
+        browser.login().open(dossier)
+
+        self.assertEquals(
+            ['Overview', 'Subdossiers', 'Documents', 'Trash', 'Journal'],
+            browser.css('.formTab').text)
