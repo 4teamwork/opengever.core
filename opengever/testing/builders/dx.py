@@ -385,3 +385,10 @@ class TaskTemplateBuilder(DexterityBuilder):
 
 
 builder_registry.register('tasktemplate', TaskTemplateBuilder)
+
+
+class PrivateRootBuilder(DexterityBuilder):
+    portal_type = 'opengever.private.root'
+
+
+builder_registry.register('private_root', PrivateRootBuilder)
