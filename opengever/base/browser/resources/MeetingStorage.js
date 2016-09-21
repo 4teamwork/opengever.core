@@ -1,5 +1,7 @@
 (function(global, $, GEVERStorage) {
 
+  "use strict";
+
   var MeetingStorage = (function MeetingStorage() {
     var storage;
 

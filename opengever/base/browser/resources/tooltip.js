@@ -1,5 +1,7 @@
 (function(global, $) {
 
+  "use strict";
+
   var settings = {
     overwrite: false, // Do not reload the tooltip when it's already created
     content: { text: tooltipContent }, // Set ajax content

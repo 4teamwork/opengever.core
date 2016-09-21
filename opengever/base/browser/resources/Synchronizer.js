@@ -1,5 +1,7 @@
 (function(global, $) {
 
+  "use strict";
+
   function Synchronizer(options) {
 
     this.options = $.extend({
