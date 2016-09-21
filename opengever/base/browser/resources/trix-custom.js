@@ -1,6 +1,6 @@
 (function ($, Trix) {
 
-    'use strict';
+    "use strict";
 
     /*
     Remove pre, blockquote and links from trix document model to prevent that they can
@@ -17,8 +17,8 @@
     Prevent accepting file-uploads and attachments in trix.
      */
     $(function () {
-        var trixEditor = $('trix-editor');
-        trixEditor.on('trix-file-accept', function (event) {
+        var trixEditor = $("trix-editor");
+        trixEditor.on("trix-file-accept", function (event) {
             event.preventDefault();
         });
         trixEditor.on("trix-attachment-add", function (event) {

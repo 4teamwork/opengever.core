@@ -158,7 +158,7 @@
       } else {
         source = $(".title > span", row);
       }
-      var editbox = new EditboxController({
+      new EditboxController({
         editbox: $(".edit-box", row),
         source: source,
         trigger: target
@@ -167,7 +167,7 @@
 
     this.onRender = function() {
       this.outlet.sortable(sortableSettings);
-      $(document).trigger('agendaItemsReady');
+      $(document).trigger("agendaItemsReady");
     };
 
     this.onUpdateFail = function(data) { self.messageFactory.shout(data.messages); };
@@ -391,7 +391,7 @@
     var autoUpdate = true;
     var initialTitle = title.val();
 
-    var formatDate = function(date) { return $.datepicker.formatDate('dd.mm.yy', date); };
+    var formatDate = function(date) { return $.datepicker.formatDate("dd.mm.yy", date); };
 
     var applyTimezone = function(date) {
       return new Date(date.setTime(date.getTime() + (date.getTimezoneOffset() * 60 * 1000)));
@@ -429,7 +429,7 @@
   $(function() {
 
     if($("#opengever_meeting_meeting").length) {
-      var meetingController = new MeetingController();
+      new MeetingController();
       var agendaItemController = new AgendaItemController();
       var proposalsController = new ProposalController();
 
@@ -438,7 +438,7 @@
     }
 
     if ($(".template-add-meeting").length) {
-      var committeecontroller = new CommitteeController();
+      new CommitteeController();
     }
 
     $(global.document).on("notify", function() {
