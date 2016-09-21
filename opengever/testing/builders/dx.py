@@ -399,3 +399,10 @@ class PrivateFolderBuilder(DexterityBuilder):
 
 
 builder_registry.register('private_folder', PrivateFolderBuilder)
+
+
+class PrivateDossierBuilder(DossierBuilder):
+    portal_type = 'opengever.private.dossier'
+
+
+builder_registry.register('private_dossier', PrivateDossierBuilder)

@@ -35,4 +35,9 @@
       title="opengever.private: Add private folder"
       />
 
+  <permission
+      id="opengever.private.AddPrivateDossier"
+      title="opengever.private: Add private dossier"
+      />
+
 </configure>
