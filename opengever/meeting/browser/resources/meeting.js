@@ -339,7 +339,7 @@
       var result = $.grep(self.cache.items, function(item) {
         return item.title.toLowerCase().indexOf(pattern.toLowerCase()) >= 0;
       });
-      this.render({ items: result });
+      this.outlet.html(this.render({ items: result }));
     };
 
     this.events = [
