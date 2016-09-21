@@ -1,7 +1,9 @@
 from opengever.contact.models import Contact
-from opengever.contact.models import Person
 from opengever.contact.models import Organization
 from opengever.contact.models import OrgRole
+from opengever.contact.models import Person
+from opengever.contact.ogdsuser import OgdsUserAdapter
+from opengever.ogds.base.utils import ogds_service
 from zope.interface import implementer
 from zope.interface import implements
 from zope.schema.interfaces import IVocabularyFactory
@@ -19,7 +21,8 @@ class ContactsVocabulary(object):
 
     by_type = {'person': Person,
                'organization': Organization,
-               'org_role': OrgRole}
+               'org_role': OrgRole,
+               'ogds_user': OgdsUserAdapter}
     by_class = {v: k for k, v in by_type.iteritems()}
 
     def __contains__(self, value):
@@ -38,7 +41,7 @@ class ContactsVocabulary(object):
             raise LookupError
 
         term_type, term_id = token.split(':')
-        term_id = int(term_id)
+        term_id = term_id
         clazz = self.by_type[term_type]
         contact = clazz.query.get(term_id)
         if not contact:
@@ -56,6 +59,9 @@ class ContactsVocabulary(object):
             if hasattr(contact, 'organizations'):
                 for org_role in contact.organizations:
                     yield(self.getTerm(org_role))
+
+        for ogds_user in ogds_service().filter_users(text_filters):
+            yield self.getTerm(OgdsUserAdapter(ogds_user))
 
 
 class ContactsVocabularyFactory(object):

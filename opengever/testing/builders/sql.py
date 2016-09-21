@@ -21,6 +21,7 @@ from opengever.contact.models import ParticipationRole
 from opengever.contact.models import Person
 from opengever.contact.models import PhoneNumber
 from opengever.contact.models import URL
+from opengever.contact.ogdsuser import OgdsUserAdapter
 from opengever.globalindex.model.task import Task
 from opengever.locking.model import Lock
 from opengever.meeting.committee import ICommittee
@@ -113,9 +114,28 @@ class PloneOGDSUserBuilder(UserBuilder):
     UserBuilder.
 
     """
+    _as_contact_adapter = False
+
     def __init__(self, session):
         super(PloneOGDSUserBuilder, self).__init__(session)
         self.arguments[self.id_argument_name] = TEST_USER_ID
+
+    def as_contact_adapter(self):
+        self._as_contact_adapter = True
+        return self
+
+    def create_object(self):
+        obj = super(PloneOGDSUserBuilder, self).create_object()
+        if self._as_contact_adapter:
+            obj = OgdsUserAdapter(obj)
+        return obj
+
+    def add_object_to_session(self, obj):
+        if self._as_contact_adapter:
+            # unwrap the ogds user from its adapter
+            obj = obj.ogds_user
+
+        self.db_session.add(obj)
 
 builder_registry.register('ogds_user', PloneOGDSUserBuilder, force=True)
 

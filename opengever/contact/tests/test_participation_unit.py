@@ -71,11 +71,9 @@ class TestOgdsUserParticipation(unittest2.TestCase):
     layer = MEMORY_DB_LAYER
 
     def test_adding(self):
-        adapted_peter = OgdsUserAdapter(
-            create(Builder('ogds_user').id('peter')))
-
+        peter = create(Builder('ogds_user').id('peter').as_contact_adapter())
         create(Builder('ogds_user_participation').having(
-            ogds_user=adapted_peter,
+            ogds_user=peter,
             dossier_oguid=Oguid('foo', 1234)))
 
 

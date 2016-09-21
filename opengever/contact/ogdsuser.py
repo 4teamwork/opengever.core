@@ -15,11 +15,24 @@ class OgdsUserAdapter(object):
     def __init__(self, ogds_user):
         self.ogds_user = ogds_user
 
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return self.id == other.id
+        return NotImplemented
+
+    def __ne__(self, other):
+        if isinstance(other, self.__class__):
+            return not self.__eq__(other)
+        return NotImplemented
+
+    def __hash__(self):
+        return hash(self.id)
+
     @property
     def id(self):
         return self.ogds_user.userid
 
-    def get_title(self):
+    def get_title(self, with_former_id=None):
         return self.ogds_user.label()
 
     def get_url(self):
