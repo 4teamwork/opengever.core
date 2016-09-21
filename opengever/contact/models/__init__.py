@@ -11,6 +11,7 @@ from opengever.contact.models.mailaddress import MailAddress  # noqa
 from opengever.contact.models.org_role import OrgRole  # noqa
 from opengever.contact.models.organization import Organization  # noqa
 from opengever.contact.models.participation import ContactParticipation  # noqa
+from opengever.contact.models.participation import OgdsUserParticipation  # noqa
 from opengever.contact.models.participation import OrgRoleParticipation  # noqa
 from opengever.contact.models.participation import Participation  # noqa
 from opengever.contact.models.participation_role import ParticipationRole  # noqa

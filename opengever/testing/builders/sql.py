@@ -13,6 +13,7 @@ from opengever.contact.models import ArchivedPhoneNumber
 from opengever.contact.models import ArchivedURL
 from opengever.contact.models import ContactParticipation
 from opengever.contact.models import MailAddress
+from opengever.contact.models import OgdsUserParticipation
 from opengever.contact.models import Organization
 from opengever.contact.models import OrgRole
 from opengever.contact.models import OrgRoleParticipation
@@ -513,12 +514,22 @@ class OrgRoleParticipationBuilder(BaseParticipationBuilder):
 
     mapped_class = OrgRoleParticipation
 
-
     def for_org_role(self, org_role):
         self.arguments['org_role'] = org_role
         return self
 
 builder_registry.register('org_role_participation', OrgRoleParticipationBuilder)
+
+
+class OgdsUserParticipationBuilder(BaseParticipationBuilder):
+
+    mapped_class = OgdsUserParticipation
+
+    def for_ogds_user(self, adapted_ogds_user):
+        self.arguments['ogds_user'] = adapted_ogds_user
+        return self
+
+builder_registry.register('ogds_user_participation', OgdsUserParticipationBuilder)
 
 
 class ParticipationRoleBuilder(SqlObjectBuilder):
