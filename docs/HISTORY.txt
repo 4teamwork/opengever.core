@@ -5,6 +5,9 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
+- Enable sql-participation for ogds-users in dossiers.
+  [deiferni]
+
 - Display former_contact_id in the contact selection field and make it searchable.
   [phgross]
 
