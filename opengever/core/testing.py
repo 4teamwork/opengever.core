@@ -193,7 +193,6 @@ class OpengeverFixture(PloneSandboxLayer):
 
     def setUpPloneSite(self, portal):
         self.installOpengeverProfiles(portal)
-        self.createMemberFolder(portal)
         self.setupLanguageTool(portal)
         deactivate_activity_center()
         deactivate_bumblebee_feature()
