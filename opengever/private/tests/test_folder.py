@@ -93,3 +93,21 @@ class TestPrivateFolderWorkflow(FunctionalTestCase):
     def test_owner_can_add_private_dossiers(self, browser):
         browser.login().open(self.folder)
         self.assertIn('Private Dossier', factoriesmenu.addable_types())
+
+
+class TestMyRepositoryAction(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestPrivateFolderWorkflow, self).setUp()
+        self.root = create(Builder('private_root'))
+        self.folder = create_members_folder(self.root)
+
+    @browsing
+    def is_show_when_private_folder_exists_and_redirects_to_homefolder(self, browser):
+        browser.debug().login()
+
+        self.assertIn('My Repository',
+                      browser.css('#portal-globalnav li').text)
+
+        browser.click_on('My Repository')
+        self.assertEquals(self.folder.absolute_url(), browser.url)
