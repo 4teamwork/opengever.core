@@ -16,6 +16,10 @@ class ParticipationTab(FunctionalTestCase):
             firstname=u'sandra', lastname=u'Meier'))
         self.peter_ag = create(Builder('organization')
                                .having(name=u'Peter AG'))
+        self.ogds_user = create(Builder('ogds_user')
+                                .id('peter')
+                                .having(firstname=u'Hans', lastname=u'Peter')
+                                .as_contact_adapter())
 
         create(Builder('contact_participation')
                .for_contact(self.hans)
@@ -25,6 +29,10 @@ class ParticipationTab(FunctionalTestCase):
                .for_contact(self.peter_ag)
                .for_dossier(self.dossier)
                .with_roles(['participation']))
+        create(Builder('ogds_user_participation')
+               .for_dossier(self.dossier)
+               .for_ogds_user(self.ogds_user)
+               .with_roles(['participation']))
 
     @browsing
     def test_list_all_participating_contacts_and_link_them_to_detail_view(self, browser):
@@ -32,16 +40,18 @@ class ParticipationTab(FunctionalTestCase):
                              view=u'tabbedview_view-participations')
 
         self.assertEquals(
-            [u'Hans M\xfcller', 'Peter AG'],
+            [u'Hans M\xfcller', 'Peter AG', 'Peter Hans (peter)'],
             browser.css('#participation_listing .contact').text)
 
         links = browser.css('#participation_listing .contact a')
         self.assertEquals(
-            [self.hans.get_url(), self.peter_ag.get_url()],
+            [self.hans.get_url(), self.peter_ag.get_url(),
+             self.ogds_user.get_url()],
             [link.get('href') for link in links])
 
         self.assertEquals(
-            ['contenttype-person', 'contenttype-organization'],
+            ['contenttype-person', 'contenttype-organization',
+             'contenttype-person'],
             [link.get('class') for link in links])
 
     @browsing
@@ -55,7 +65,7 @@ class ParticipationTab(FunctionalTestCase):
         browser.login().open(self.dossier,
                              view=u'tabbedview_view-participations')
         self.assertEquals(
-            [u'Hans M\xfcller', 'Peter AG'],
+            [u'Hans M\xfcller', 'Peter AG', 'Peter Hans (peter)'],
             browser.css('#participation_listing .contact').text)
 
     @browsing
@@ -71,13 +81,16 @@ class ParticipationTab(FunctionalTestCase):
         browser.login().open(self.dossier,
                              view=u'tabbedview_view-participations')
 
-        row1, row2 = browser.css('#participation_listing > li')
+        row1, row2, row3 = browser.css('#participation_listing > li')
 
         self.assertEquals([u'Hans M\xfcller'], row1.css('.contact').text)
         self.assertEquals(['Regard', 'Final drawing'], row1.css('.roles li').text)
 
         self.assertEquals([u'Peter AG'], row2.css('.contact').text)
         self.assertEquals(['Participation'], row2.css('.roles li').text)
+
+        self.assertEquals([u'Peter Hans (peter)'], row3.css('.contact').text)
+        self.assertEquals(['Participation'], row3.css('.roles li').text)
 
     @browsing
     def test_edit_action_is_available(self, browser):

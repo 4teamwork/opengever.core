@@ -5,7 +5,10 @@ from opengever.base.oguid import Oguid
 from opengever.contact import _
 from opengever.contact.models.org_role import OrgRole
 from opengever.contact.models.participation_role import ParticipationRole
+from opengever.contact.ogdsuser import OgdsUserAdapter
+from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models import UNIT_ID_LENGTH
+from opengever.ogds.models import USER_ID_LENGTH
 from opengever.ogds.models.query import BaseQuery
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
@@ -53,6 +56,12 @@ class OrgRoleParticipationQuery(ParticipationQuery):
 
     def by_participant(self, org_role):
         return self.filter_by(org_role=org_role)
+
+
+class OgdsUserParticipationQuery(ParticipationQuery):
+
+    def by_participant(self, ogds_user):
+        return self.filter_by(ogds_userid=ogds_user.id)
 
 
 class Participation(Base, SQLFormSupport):
@@ -139,6 +148,41 @@ class Participation(Base, SQLFormSupport):
         session.delete(self)
 
 
+class OgdsUserParticipation(Participation):
+    """Let users from ogds participate in dossiers with a specified role.
+
+    XXX currently ogds is abstracted by a service. Thus we must not add direct
+    relations. As soon as this goes away we should change this class and
+    include a foreign key to the ogds-user.
+
+    """
+    query_cls = OgdsUserParticipationQuery
+    __mapper_args__ = {'polymorphic_identity': 'ogds_user_participation'}
+
+    ogds_userid = Column(String(USER_ID_LENGTH))
+
+    @classmethod
+    def create(cls, participant, dossier, roles):
+        obj = cls(ogds_user=participant,
+                  dossier_oguid=Oguid.for_object(dossier))
+        obj.add_roles(roles)
+        return obj
+
+    @property
+    def ogds_user(self):
+        return OgdsUserAdapter(ogds_service().find_user(self.ogds_userid))
+
+    @ogds_user.setter
+    def ogds_user(self, ogds_user_adapter):
+        self.ogds_userid = ogds_user_adapter.id
+
+    @property
+    def participant(self):
+        return self.ogds_user
+
+OgdsUserAdapter.participation_class = OgdsUserParticipation
+
+
 class ContactParticipation(Participation):
     """Let Contacts participate in dossiers with specified roles.
     """
@@ -179,6 +223,5 @@ class OrgRoleParticipation(Participation):
     @property
     def participant(self):
         return self.org_role
-
 
 OrgRole.participation_class = OrgRoleParticipation

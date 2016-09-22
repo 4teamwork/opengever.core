@@ -1,5 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.contact.ogdsuser import OgdsUserAdapter
+from opengever.ogds.base.utils import ogds_service
 from opengever.testing import FunctionalTestCase
 from zope.component import getUtility
 from zope.schema.interfaces import IVocabularyFactory
@@ -38,6 +40,7 @@ class TestContactsVocabulary(FunctionalTestCase):
                             .having(person=self.peter_a,
                                     organization=self.teamwork_ag,
                                     function='Scheffe'))
+        self.ogds_user = OgdsUserAdapter(ogds_service().all_users()[0])
 
     def test_contains_only_active_organizations_and_persons_and_org_roles(self):
         voca_factory = getUtility(IVocabularyFactory,
@@ -50,7 +53,8 @@ class TestContactsVocabulary(FunctionalTestCase):
              (self.role2, u'Peter M\xfcller [1111] - 4teamwork AG (Scheffe)'),
              (self.peter_b, u'Peter Fl\xfcckiger'),
              (self.meier_ag, u'Meier AG [2222]'),
-             (self.teamwork_ag, u'4teamwork AG')],
+             (self.teamwork_ag, u'4teamwork AG'),
+             (self.ogds_user, u'Test User (test_user_1_)')],
             vocabulary.search('*'))
 
     def test_supports_fuzzy_search(self):

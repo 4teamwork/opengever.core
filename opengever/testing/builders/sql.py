@@ -13,6 +13,7 @@ from opengever.contact.models import ArchivedPhoneNumber
 from opengever.contact.models import ArchivedURL
 from opengever.contact.models import ContactParticipation
 from opengever.contact.models import MailAddress
+from opengever.contact.models import OgdsUserParticipation
 from opengever.contact.models import Organization
 from opengever.contact.models import OrgRole
 from opengever.contact.models import OrgRoleParticipation
@@ -20,6 +21,7 @@ from opengever.contact.models import ParticipationRole
 from opengever.contact.models import Person
 from opengever.contact.models import PhoneNumber
 from opengever.contact.models import URL
+from opengever.contact.ogdsuser import OgdsUserAdapter
 from opengever.globalindex.model.task import Task
 from opengever.locking.model import Lock
 from opengever.meeting.committee import ICommittee
@@ -112,9 +114,28 @@ class PloneOGDSUserBuilder(UserBuilder):
     UserBuilder.
 
     """
+    _as_contact_adapter = False
+
     def __init__(self, session):
         super(PloneOGDSUserBuilder, self).__init__(session)
         self.arguments[self.id_argument_name] = TEST_USER_ID
+
+    def as_contact_adapter(self):
+        self._as_contact_adapter = True
+        return self
+
+    def create_object(self):
+        obj = super(PloneOGDSUserBuilder, self).create_object()
+        if self._as_contact_adapter:
+            obj = OgdsUserAdapter(obj)
+        return obj
+
+    def add_object_to_session(self, obj):
+        if self._as_contact_adapter:
+            # unwrap the ogds user from its adapter
+            obj = obj.ogds_user
+
+        self.db_session.add(obj)
 
 builder_registry.register('ogds_user', PloneOGDSUserBuilder, force=True)
 
@@ -513,12 +534,22 @@ class OrgRoleParticipationBuilder(BaseParticipationBuilder):
 
     mapped_class = OrgRoleParticipation
 
-
     def for_org_role(self, org_role):
         self.arguments['org_role'] = org_role
         return self
 
 builder_registry.register('org_role_participation', OrgRoleParticipationBuilder)
+
+
+class OgdsUserParticipationBuilder(BaseParticipationBuilder):
+
+    mapped_class = OgdsUserParticipation
+
+    def for_ogds_user(self, adapted_ogds_user):
+        self.arguments['ogds_user'] = adapted_ogds_user
+        return self
+
+builder_registry.register('ogds_user_participation', OgdsUserParticipationBuilder)
 
 
 class ParticipationRoleBuilder(SqlObjectBuilder):
