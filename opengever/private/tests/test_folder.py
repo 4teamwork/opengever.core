@@ -34,6 +34,16 @@ class TestPrivateFolder(FunctionalTestCase):
             browser.fill({'User ID': TEST_USER_ID})
             browser.click_on('Save')
 
+    @browsing
+    def test_nesting_private_folders_is_disallowed(self, browser):
+        root = create(Builder('private_root'))
+        folder = create(Builder('private_folder')
+                        .within(root)
+                        .having(userid=TEST_USER_ID))
+
+        browser.login().open(folder)
+        self.assertEquals(['Private Dossier'], factoriesmenu.addable_types())
+
     def test_object_id_is_userid(self):
         folder = create(Builder('private_folder').having(userid=TEST_USER_ID))
         self.assertEquals(TEST_USER_ID, folder.getId())
@@ -81,7 +91,33 @@ class TestPrivateFolderTabbedView(FunctionalTestCase):
             [['', 'Reference Number', 'Title', 'Review state',
               'Responsible', 'Start', 'End'],
              ['', 'Client1 test_user_1_ / 1', u'Zuz\xfcge',
-              'private', '', '01.09.2015', ''],
+              'dossier-state-active', '', '01.09.2015', ''],
              ['', 'Client1 test_user_1_ / 2', u'Abg\xe4nge',
-              'private', '', '01.09.2015', '']],
+              'dossier-state-active', '', '01.09.2015', '']],
             browser.css('.listing').first.lists())
+
+
+class TestPrivateFolderWorkflow(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestPrivateFolderWorkflow, self).setUp()
+        self.root = create(Builder('private_root'))
+        self.folder = create(Builder('private_folder')
+                             .within(self.root)
+                             .having(userid=TEST_USER_ID))
+
+        create(Builder('user')
+               .named('Hugo', 'Boss')
+               .with_roles('Administrator', 'Editor', 'Contributor', 'Reader'))
+
+    @browsing
+    def test_only_owner_can_see_private_folder(self, browser):
+        browser.login().open(self.folder)
+
+        with self.assertRaises(Unauthorized):
+            browser.login('hugo.boss').open(self.folder)
+
+    @browsing
+    def test_owner_can_add_private_dossiers(self, browser):
+        browser.login().open(self.folder)
+        self.assertIn('Private Dossier', factoriesmenu.addable_types())

@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
+from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
 from opengever.testing import FunctionalTestCase
@@ -78,3 +79,32 @@ class TestPrivateDossierTabbedView(FunctionalTestCase):
         self.assertEquals(
             ['Overview', 'Subdossiers', 'Documents', 'Trash', 'Journal'],
             browser.css('.formTab').text)
+
+
+class TestPrivateDossierWorkflow(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestPrivateDossierWorkflow, self).setUp()
+        self.root = create(Builder('private_root'))
+        self.folder = create(Builder('private_folder')
+                             .having(userid=TEST_USER_ID)
+                             .within(self.root))
+        self.dossier = create(Builder('private_dossier').within(self.folder))
+
+    @browsing
+    def test_tasks_and_propsoals_are_not_addable(self, browser):
+        browser.login().open(self.dossier)
+
+        self.assertEquals(
+            ['Document', 'document_with_template', 'Subdossier'],
+            factoriesmenu.addable_types())
+
+    @browsing
+    def test_adding_subdossiers_is_allowed(self, browser):
+        browser.login().open(self.dossier)
+        factoriesmenu.add('Subdossier')
+        browser.fill({'Title': u'Sub 1',
+                      'Responsible': TEST_USER_ID})
+        browser.click_on('Save')
+
+        self.assertEquals(['Item created'], info_messages())
