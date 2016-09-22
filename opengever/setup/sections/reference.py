@@ -67,21 +67,27 @@ class PathFromReferenceNumberSection(object):
             refnum = item['reference_number']
             refnum = self.get_reference_number(refnum)
 
+            # We need to keep track of refnums -> paths PER repository
+            repo_root_id = item['_repo_root_id']
+            if repo_root_id not in self.refnum_mapping:
+                self.refnum_mapping[repo_root_id] = {}
+
             if len(refnum.split('.')) == 1:
                 # Top level repository folder
-                repo_root_id = item['_repo_root_id']
                 path = "/%s/%s" % (repo_root_id,
                                    self.normalize(item, max_length=MAX_LENGTH))
-                self.refnum_mapping[refnum] = path
+                self.refnum_mapping[repo_root_id][refnum] = path
             else:
                 parent_refnum = refnum[:refnum.rfind('.')]
-                if not parent_refnum in self.refnum_mapping:
-                    raise Exception("Parent position for %s does not exist!" %
-                                    refnum)
+                if parent_refnum not in self.refnum_mapping[repo_root_id]:
+                    raise Exception(
+                        "(%s) Parent position for %s does not "
+                        "exist!" % (repo_root_id, refnum))
 
-                path = "%s/%s" % (self.refnum_mapping[parent_refnum],
-                                  self.normalize(item, max_length=MAX_LENGTH))
-                self.refnum_mapping[refnum] = path
+                parent_path = self.refnum_mapping[repo_root_id][parent_refnum]
+                path = "%s/%s" % (
+                    parent_path, self.normalize(item, max_length=MAX_LENGTH))
+                self.refnum_mapping[repo_root_id][refnum] = path
 
             item['_path'] = path
 

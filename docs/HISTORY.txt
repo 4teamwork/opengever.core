@@ -5,6 +5,9 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
+- Setup: Keep track of reference number to path mappings *per repository root*.
+  [lgraf]
+
 - Enable sql-participation for ogds-users in dossiers.
   [deiferni]
 
