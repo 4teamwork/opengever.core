@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2016-07-21 14:08+0000\n"
-"PO-Revision-Date: 2016-08-10 05:17+0000\n"
-"Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
+"PO-Revision-Date: 2016-09-20 21:23+0000\n"
+"Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
 "gever/opengever-tabbedview/fr/>\n"
 "Language: fr\n"
@@ -241,7 +241,7 @@ msgstr "Fin"
 #. Default: "Issuer"
 #: ./opengever/tabbedview/browser/tasklisting.py:100
 msgid "label_issuer"
-msgstr "Mandant"
+msgstr "Mandataire"
 
 #. Default: "My notifications"
 #: ./opengever/tabbedview/browser/personal_overview.py:113
@@ -276,7 +276,7 @@ msgstr "Statut public"
 #. Default: "Receipt Date"
 #: ./opengever/tabbedview/browser/tabs.py:128
 msgid "label_receipt_date"
-msgstr "Date d'entrée"
+msgstr "Date de réception"
 
 #. Default: "Reference Number"
 #: ./opengever/tabbedview/browser/tabs.py:209
