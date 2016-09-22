@@ -5,6 +5,9 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
+- Enable task-templates for meeting-dossiers.
+  [deiferni]
+
 - Fix policytemplate when creating a policy with disabled meeting feature
   and without any templates.
   [phgross]
