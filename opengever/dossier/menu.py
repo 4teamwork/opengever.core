@@ -8,11 +8,14 @@ from zope.interface import Interface
 class DossierPostFactoryMenu(FilteredPostFactoryMenu):
     grok.adapts(IDossierMarker, Interface)
 
+    dossier_types = [u'opengever.dossier.businesscasedossier',
+                     u'opengever.private.dossier']
+
     def __init__(self, context, request):
         super(DossierPostFactoryMenu, self).__init__(context, request)
 
     def rename(self, factory):
-        if factory.get('id') == u'opengever.dossier.businesscasedossier':
+        if factory.get('id') in self.dossier_types:
             factory['title'] = _(u'Subdossier')
 
         return factory
