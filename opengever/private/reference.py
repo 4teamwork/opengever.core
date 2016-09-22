@@ -15,7 +15,7 @@ class PrivateFolderReferenceNumber(BasicReferenceNumber):
     ref_type = 'repository'
 
     def get_local_number(self):
-        return self.context.userid
+        return self.context.getId()
 
     def get_repository_number(self):
         numbers = self.get_parent_numbers()

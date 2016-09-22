@@ -18,12 +18,14 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
+  <profilehook:hook
+      profile="opengever.private:default"
+      handler=".hooks.configure_members_area"
+      />
+
   <include package=".upgrades" />
   <include package=".browser" />
 
-
-  <!-- adpaters -->
-  <adapter factory=".folder.PrivateFolderNameFromTitle" />
 
   <!-- permissions -->
   <permission

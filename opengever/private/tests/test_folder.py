@@ -5,6 +5,7 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testing import freeze
 from opengever.base.interfaces import IReferenceNumber
+from opengever.private.tests import create_members_folder
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
 from zExceptions import Unauthorized
@@ -12,51 +13,25 @@ from zExceptions import Unauthorized
 
 class TestPrivateFolder(FunctionalTestCase):
 
-    @browsing
-    def test_is_addable_on_private_root(self, browser):
-        self.grant('Manager')
-
-        root = create(Builder('private_root'))
-
-        browser.login().open(root)
-        factoriesmenu.add('Private folder')
-        browser.fill({'User ID': u'franz.mueller'})
-        browser.click_on('Save')
-
-        self.assertEquals([u'franz.mueller'], browser.css('h1').text)
-
-    @browsing
-    def test_is_only_addable_by_manager(self, browser):
-        root = create(Builder('private_root'))
-
-        with self.assertRaises(Unauthorized):
-            browser.login().open(root, view='++add++opengever.private.folder')
-            browser.fill({'User ID': TEST_USER_ID})
-            browser.click_on('Save')
+    def setUp(self):
+        super(TestPrivateFolder, self).setUp()
+        self.root = create(Builder('private_root'))
+        self.folder = create_members_folder(self.root)
 
     @browsing
     def test_nesting_private_folders_is_disallowed(self, browser):
-        root = create(Builder('private_root'))
-        folder = create(Builder('private_folder')
-                        .within(root)
-                        .having(userid=TEST_USER_ID))
-
-        browser.login().open(folder)
+        browser.login().open(self.folder)
         self.assertEquals(['Private Dossier'], factoriesmenu.addable_types())
 
     def test_object_id_is_userid(self):
-        folder = create(Builder('private_folder').having(userid=TEST_USER_ID))
-        self.assertEquals(TEST_USER_ID, folder.getId())
+        self.assertEquals(TEST_USER_ID, self.folder.getId())
 
     def test_title_is_corresponding_users_label(self):
-        folder = create(Builder('private_folder').having(userid=TEST_USER_ID))
-        self.assertEquals('Test User (test_user_1_)', folder.Title())
+        self.assertEquals('Test User (test_user_1_)', self.folder.Title())
 
     def test_uses_userid_as_reference_number_part(self):
-        folder = create(Builder('private_folder').having(userid=TEST_USER_ID))
-
         self.assertEquals('Client1 test_user_1_',
-                          IReferenceNumber(folder).get_number())
+                          IReferenceNumber(self.folder).get_number())
 
 
 class TestPrivateFolderTabbedView(FunctionalTestCase):
@@ -64,8 +39,7 @@ class TestPrivateFolderTabbedView(FunctionalTestCase):
     def setUp(self):
         super(TestPrivateFolderTabbedView, self).setUp()
         self.root = create(Builder('private_root'))
-        self.folder = create(Builder('private_folder')
-                             .having(userid=TEST_USER_ID))
+        self.folder = create_members_folder(self.root)
 
     @browsing
     def test_has_a_only_a_dossier_tab(self, browser):
@@ -102,17 +76,15 @@ class TestPrivateFolderWorkflow(FunctionalTestCase):
     def setUp(self):
         super(TestPrivateFolderWorkflow, self).setUp()
         self.root = create(Builder('private_root'))
-        self.folder = create(Builder('private_folder')
-                             .within(self.root)
-                             .having(userid=TEST_USER_ID))
-
-        create(Builder('user')
-               .named('Hugo', 'Boss')
-               .with_roles('Administrator', 'Editor', 'Contributor', 'Reader'))
+        self.folder = create_members_folder(self.root)
 
     @browsing
     def test_only_owner_can_see_private_folder(self, browser):
         browser.login().open(self.folder)
+
+        create(Builder('user')
+               .named('Hugo', 'Boss')
+               .with_roles('Editor', 'Contributor', 'Reader'))
 
         with self.assertRaises(Unauthorized):
             browser.login('hugo.boss').open(self.folder)

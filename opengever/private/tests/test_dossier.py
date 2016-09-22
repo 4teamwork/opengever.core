@@ -5,6 +5,7 @@ from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
+from opengever.private.tests import create_members_folder
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
 from zope.component import getUtility
@@ -17,9 +18,7 @@ class TestPrivateDossier(FunctionalTestCase):
     def setUp(self):
         super(TestPrivateDossier, self).setUp()
         self.root = create(Builder('private_root'))
-        self.folder = create(Builder('private_folder')
-                             .having(userid=TEST_USER_ID)
-                             .within(self.root))
+        self.folder = create_members_folder(self.root)
 
     @browsing
     def test_is_addable_to_a_private_folder(self, browser):
@@ -51,10 +50,10 @@ class TestPrivateDossier(FunctionalTestCase):
     def test_uses_the_same_reference_number_schema_as_regular_dossiers(self):
         dossier1 = create(Builder('private_dossier')
                           .within(self.folder)
-                          .having(userid=TEST_USER_ID))
+                          .having(responsible=TEST_USER_ID))
         dossier2 = create(Builder('private_dossier')
                           .within(self.folder)
-                          .having(userid=TEST_USER_ID))
+                          .having(responsible=TEST_USER_ID))
 
         self.assertEquals('Client1 test_user_1_ / 1',
                           IReferenceNumber(dossier1).get_number())
