@@ -1,4 +1,5 @@
 from opengever.ogds.base.actor import Actor
+from opengever.private.interfaces import IPrivateContainer
 from opengever.repository.repositoryfolder import IRepositoryFolderSchema
 from plone.dexterity.content import Container
 

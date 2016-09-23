@@ -1,5 +1,6 @@
 from opengever.dossier.base import DossierContainer
 from opengever.dossier.businesscase import IBusinessCaseDossier
+from opengever.private.interfaces import IPrivateContainer
 
 
 class IPrivateDossier(IBusinessCaseDossier, IPrivateContainer):
