@@ -71,6 +71,19 @@ class TestPrivateFolderTabbedView(FunctionalTestCase):
             browser.css('.listing').first.lists())
 
 
+    @browsing
+    def test_copy_and_move_items_actions_are_disabled(self, browser):
+        create(Builder('private_dossier')
+               .within(self.folder)
+               .titled(u'Zuz\xfcge'))
+
+        browser.login().open(self.folder, view='tabbedview_view-dossiers')
+
+        self.assertEquals(
+            ['Export selection', 'Print selection (PDF)'],
+            browser.css('.actionMenuContent a').text)
+
+
 class TestPrivateFolderWorkflow(FunctionalTestCase):
 
     def setUp(self):

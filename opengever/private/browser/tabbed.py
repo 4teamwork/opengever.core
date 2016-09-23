@@ -24,6 +24,8 @@ class PrivateFolderDossiers(Dossiers):
 
     filterlist_available = False
 
+    enabled_actions = ['pdf_dossierlisting', 'export_dossiers']
+
 
 class PrivateDossierTabbedView(DossierTabbedView):
     """Overwrite the DossierTabbedview to hide the task, proposal,
