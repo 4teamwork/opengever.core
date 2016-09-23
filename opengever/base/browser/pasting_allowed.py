@@ -1,6 +1,9 @@
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from five import grok
 from opengever.base.clipboard import Clipboard
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.private.interfaces import IPrivateContainer
 from ZODB.POSException import ConflictError
 from zope.interface import Interface
 
@@ -56,6 +59,19 @@ class IsPastingAllowedView(grok.View):
         for obj in objs:
             if obj.portal_type not in self.allowed_content_types:
                 return False
+
+        return self.validate_private_folder_pasting(objs)
+
+    def is_content_in_private_folder(self, obj):
+        parent = aq_parent(aq_inner(obj))
+        return IPrivateContainer.providedBy(parent)
+
+    def validate_private_folder_pasting(self, objs):
+        """Check that only private content is pasted to private containers.
+        """
+        if IPrivateContainer.providedBy(self.context):
+            return all(
+                [self.is_content_in_private_folder(obj) for obj in objs])
 
         return True
 
