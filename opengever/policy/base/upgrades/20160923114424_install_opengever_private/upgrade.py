@@ -22,3 +22,5 @@ class InstallOpengeverPrivate(UpgradeStep):
 
         if private_root.id != MEMBERSFOLDER_ID:
             api.content.rename(obj=private_root, new_id=MEMBERSFOLDER_ID)
+
+        block_context_portlets(api.portal.get(), MEMBERSFOLDER_ID)
