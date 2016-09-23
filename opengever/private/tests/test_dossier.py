@@ -5,6 +5,7 @@ from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
+from opengever.dossier.behaviors.dossier import IDossier
 from opengever.private.tests import create_members_folder
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
@@ -29,6 +30,16 @@ class TestPrivateDossier(FunctionalTestCase):
         browser.click_on('Save')
 
         self.assertEquals([u'My Personal Stuff'], browser.css('h1').text)
+
+    @browsing
+    def test_responsible_is_current_user_by_default(self, browser):
+        browser.login().open(self.folder)
+        factoriesmenu.add('Private Dossier')
+        browser.fill({'Title': u'My Personal Stuff'})
+        browser.click_on('Save')
+
+        self.assertEquals(TEST_USER_ID,
+                          IDossier(self.folder.get('dossier-1')).responsible)
 
     def test_use_same_id_schema_as_regular_dossiers(self):
         dossier1 = create(Builder('private_dossier').titled(u'Zuz\xfcge'))
