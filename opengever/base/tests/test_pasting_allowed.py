@@ -49,12 +49,20 @@ class TestPastingAllowed(FunctionalTestCase):
         self.assertSequenceEqual(
             ['Export as Zip', 'Properties', 'save attachments'], actions)
 
-    def test_pasting_not_allowed_if_disallowed_subobject_type(self):
+    @browsing
+    def test_pasting_not_allowed_if_disallowed_subobject_type(self, browser):
         repofolder = create(Builder('repository'))
-        dossier = create(Builder('dossier')
-                         .within(repofolder))
-        document = create(Builder('document')
-                          .within(dossier))
+        dossier = create(Builder('dossier').within(repofolder))
+        document = create(Builder('document').within(dossier))
+
+        browser.login().open(
+            dossier,
+            view='copy_items',
+            data={'paths:list': ['/'.join(document.getPhysicalPath())]})
+
+        browser.open(repofolder, view='is_pasting_allowed')
+        self.assertFalse(browser.contents)
+
     @browsing
     def test_pasting_public_content_into_private_container_is_disallowed(self, browser):
         repo = create(Builder('repository'))
@@ -86,10 +94,5 @@ class TestPastingAllowed(FunctionalTestCase):
             view='copy_items',
             data={'paths:list': ['/'.join(document.getPhysicalPath())]})
 
-        dossier.manage_copyObjects(document.id)
-        pasting_allowed_view = repofolder.restrictedTraverse(
-            'is_pasting_allowed')
-        allowed = pasting_allowed_view()
-        self.assertFalse(allowed)
         browser.open(dossier_2, view='is_pasting_allowed')
         self.assertTrue(browser.contents)
