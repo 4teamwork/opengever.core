@@ -22,8 +22,6 @@ class PrivateFolderTabbedView(TabbedView):
 class PrivateFolderDossiers(Dossiers):
     grok.context(IPrivateFolder)
 
-    filterlist_available = False
-
     enabled_actions = ['pdf_dossierlisting', 'export_dossiers']
 
 
