@@ -1,11 +1,13 @@
 from Acquisition import aq_parent
+from datetime import datetime
+from datetime import time
 from five import grok
 from ooxml_docprops import is_supported_mimetype
 from ooxml_docprops.properties import OOXMLDocument
 from opengever import journal
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
-from opengever.base.interfaces import ISequenceNumber
+from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.document import IDocumentSchema
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.interfaces import IDocProperties
@@ -134,23 +136,59 @@ class DocPropertyProvider(grok.Adapter):
         return self.context.title
 
     def get_reference_number(self):
-        ref_num = getAdapter(self.context, IReferenceNumber).get_number()
-        return ref_num
+        return getAdapter(self.context, IReferenceNumber).get_number()
 
     def get_sequence_number(self):
-        return getUtility(ISequenceNumber).get_number(self.context)
+        return str(getUtility(ISequenceNumber).get_number(self.context))
 
 
 class DefaultDocumentDocPropertyProvider(DocPropertyProvider):
     """
     """
     grok.context(IDocumentSchema)
+    NS = ('ogg', 'document')
+
+    def _as_datetime(self, date):
+        if not date:
+            return date
+
+        return datetime.combine(date, time(0, 0))
+
+    def get_document_author(self):
+        return IDocumentMetadata(self.context).document_author
+
+    def get_document_date(self):
+        return self._as_datetime(
+            IDocumentMetadata(self.context).document_date)
+
+    def get_reception_date(self):
+        return self._as_datetime(
+            IDocumentMetadata(self.context).receipt_date)
+
+    def get_delivery_date(self):
+        return self._as_datetime(
+            IDocumentMetadata(self.context).delivery_date)
 
     def get_properties(self):
+        """Return document properties.
+
+        XXX Also contains deprecated properties that will go away eventually.
+        """
         reference_number = self.get_reference_number()
         sequence_number = str(self.get_sequence_number())
+
+        # XXX deprecated properties
         properties = {'Document.ReferenceNumber': reference_number,
                       'Document.SequenceNumber': sequence_number}
+
+        self._add_property(properties, 'title', self.get_title())
+        self._add_property(properties, 'reference_number', reference_number)
+        self._add_property(properties, 'sequence_number', sequence_number)
+        self._add_property(properties, 'document_author', self.get_document_author())
+        self._add_property(properties, 'document_date', self.get_document_date())
+        self._add_property(properties, 'reception_date', self.get_reception_date())
+        self._add_property(properties, 'delivery_date', self.get_delivery_date())
+
         return properties
 
 

@@ -1,3 +1,4 @@
+from datetime import datetime
 from plone.app.testing import TEST_USER_ID
 
 
@@ -56,3 +57,22 @@ EXPECTED_DOSSIER_PROPERTIES = {
     'ogg.dossier.reference_number': 'Client1 / 1',
     'ogg.dossier.sequence_number': '1',
 }
+
+EXPECTED_DOCUMENT_PROPERTIES = {
+    'Document.ReferenceNumber': 'Client1 / 1 / 1',
+    'Document.SequenceNumber': '1',
+    'ogg.document.title': "My Document",
+    'ogg.document.reference_number': 'Client1 / 1 / 1',
+    'ogg.document.sequence_number': '1',
+    'ogg.document.document_author': u'M\xfcller Peter',
+    'ogg.document.document_date': datetime(2010, 1, 3),
+    'ogg.document.reception_date': datetime(2010, 1, 3),
+    'ogg.document.delivery_date': datetime(2010, 1, 3),
+}
+
+
+EXPECTED_DOC_PROPERTIES = dict(
+    EXPECTED_USER_DOC_PROPERTIES.items() +
+    EXPECTED_DOSSIER_PROPERTIES.items() +
+    EXPECTED_DOCUMENT_PROPERTIES.items()
+)
