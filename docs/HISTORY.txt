@@ -5,6 +5,10 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
+- Fix policytemplate when creating a policy with disabled meeting feature
+  and without any templates.
+  [phgross]
+
 - Setup: Keep track of reference number to path mappings *per repository root*.
   [lgraf]
 
