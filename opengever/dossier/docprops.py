@@ -102,11 +102,35 @@ class DocPropertyWriter(object):
         return is_supported_mimetype(self.document.file.contentType)
 
 
-class DefaultDocumentDocPropertyProvider(grok.Adapter):
+class DocPropertyProvider(grok.Adapter):
+    """Baseclass for DocPropertyProviders.
+
+    Contains utility methods to create a dict of doc-properties. Set the NS
+    class attribute to define a namespace. All your property-values written
+    with _add_property will be prefixed with that namespace.
     """
-    """
-    grok.context(IDocumentSchema)
+
+    grok.baseclass()
     grok.provides(IDocPropertyProvider)
+
+    NS = tuple()
+
+    def _add_property(self, properties, name, value):
+        """Add single property to collection of properties.
+
+        If a namespace (NS) has been configured prefixes keys with that
+        namespace.
+        """
+        if not value:
+            return
+        key = '.'.join(self.NS + (name,))
+        properties[key] = value
+
+    def get_properties(self):
+        return {}
+
+    def get_title(self):
+        return self.context.title
 
     def get_reference_number(self):
         ref_num = getAdapter(self.context, IReferenceNumber).get_number()
@@ -114,6 +138,12 @@ class DefaultDocumentDocPropertyProvider(grok.Adapter):
 
     def get_sequence_number(self):
         return getUtility(ISequenceNumber).get_number(self.context)
+
+
+class DefaultDocumentDocPropertyProvider(DocPropertyProvider):
+    """
+    """
+    grok.context(IDocumentSchema)
 
     def get_properties(self):
         reference_number = self.get_reference_number()
@@ -123,18 +153,11 @@ class DefaultDocumentDocPropertyProvider(grok.Adapter):
         return properties
 
 
-class DefaultDossierDocPropertyProvider(grok.Adapter):
-    """
-    """
+class DefaultDossierDocPropertyProvider(DocPropertyProvider):
+    """Return the default dossier properties"""
+
     grok.context(IDossierMarker)
-    grok.provides(IDocPropertyProvider)
-
-    def get_reference_number(self):
-        ref_num = getAdapter(self.context, IReferenceNumber).get_number()
-        return ref_num
-
-    def get_title(self):
-        return self.context.title.encode('utf-8')
+    NS = ('ogg', 'dossier')
 
     def get_properties(self):
         reference = self.get_reference_number()
@@ -144,11 +167,11 @@ class DefaultDossierDocPropertyProvider(grok.Adapter):
         return properties
 
 
-class DefaultMemberDocPropertyProvider(grok.Adapter):
+class DefaultMemberDocPropertyProvider(DocPropertyProvider):
     """Return the default user properties from LDAP/ogds."""
 
     grok.context(IMemberData)
-    grok.provides(IDocPropertyProvider)
+    NS = ('ogg', 'user')
 
     ogds_user_attributes = (
         'firstname',
@@ -171,16 +194,9 @@ class DefaultMemberDocPropertyProvider(grok.Adapter):
         'city',
         'country'
     )
-    NS = ('ogg', 'user')
 
     def get_user_id(self):
         return self.context.getMemberId()
-
-    def _add_property(self, properties, name, value):
-        if not value:
-            return
-        key = '.'.join(self.NS + (name,))
-        properties[key] = value
 
     def get_properties(self):
         """Return user properties from OGDS.
