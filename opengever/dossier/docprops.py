@@ -5,6 +5,7 @@ from ooxml_docprops.properties import OOXMLDocument
 from opengever import journal
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
+from opengever.base.interfaces import ISequenceNumber
 from opengever.document.document import IDocumentSchema
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.interfaces import IDocProperties
@@ -160,10 +161,22 @@ class DefaultDossierDocPropertyProvider(DocPropertyProvider):
     NS = ('ogg', 'dossier')
 
     def get_properties(self):
-        reference = self.get_reference_number()
+        """Return dossier properties.
+
+        XXX Also contains deprecated properties that will go away eventually.
+        """
+        reference_number = self.get_reference_number()
+        sequence_number = self.get_sequence_number()
         title = self.get_title()
-        properties = {'Dossier.ReferenceNumber': reference,
+
+        # XXX deprecated properties
+        properties = {'Dossier.ReferenceNumber': reference_number,
                       'Dossier.Title': title}
+
+        self._add_property(properties, 'title', title)
+        self._add_property(properties, 'reference_number', reference_number)
+        self._add_property(properties, 'sequence_number', sequence_number)
+
         return properties
 
 

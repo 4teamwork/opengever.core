@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.dossier.interfaces import IDocProperties
 from opengever.dossier.interfaces import IDocPropertyProvider
+from opengever.dossier.tests import EXPECTED_DOSSIER_PROPERTIES
 from opengever.dossier.tests import EXPECTED_USER_DOC_PROPERTIES
 from opengever.dossier.tests import OGDS_USER_ATTRIBUTES
 from opengever.testing import FunctionalTestCase
@@ -11,10 +12,6 @@ from zope.component import getMultiAdapter
 
 class TestDocProperties(FunctionalTestCase):
 
-    expected_dossier_properties = {
-        'Dossier.ReferenceNumber': 'Client1 / 1',
-        'Dossier.Title': 'My dossier',
-    }
     expected_document_properties = {
         'Document.ReferenceNumber': 'Client1 / 1 / 1',
         'Document.SequenceNumber': '1',
@@ -39,15 +36,15 @@ class TestDocProperties(FunctionalTestCase):
         properties = docprops.get_properties()
         self.assertItemsEqual(
             dict(EXPECTED_USER_DOC_PROPERTIES.items() +
-                 self.expected_dossier_properties.items() +
+                 EXPECTED_DOSSIER_PROPERTIES.items() +
                  self.expected_document_properties.items()),
             properties
         )
 
     def test_default_dossier_doc_properties_provider(self):
         dossier_adapter = getAdapter(self.dossier, IDocPropertyProvider)
-        self.assertEqual(self.expected_dossier_properties,
-                         dossier_adapter.get_properties())
+        self.assertItemsEqual(EXPECTED_DOSSIER_PROPERTIES,
+                              dossier_adapter.get_properties())
 
     def test_default_member_doc_properties_provider(self):
         member_adapter = getAdapter(self.member, IDocPropertyProvider)

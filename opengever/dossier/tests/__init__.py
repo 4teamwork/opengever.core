@@ -48,3 +48,11 @@ OGDS_USER_ATTRIBUTES = {
     'city': u'Vorkappelen',
     'country': u'Schweiz',
 }
+
+EXPECTED_DOSSIER_PROPERTIES = {
+    'Dossier.ReferenceNumber': 'Client1 / 1',
+    'Dossier.Title': 'My dossier',
+    'ogg.dossier.title': 'My dossier',
+    'ogg.dossier.reference_number': 'Client1 / 1',
+    'ogg.dossier.sequence_number': '1',
+}

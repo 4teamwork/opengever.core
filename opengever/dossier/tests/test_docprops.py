@@ -3,21 +3,18 @@ from ftw.builder import create
 from ooxml_docprops import read_properties
 from opengever.dossier.docprops import DocPropertyWriter
 from opengever.dossier.docprops import TemporaryDocFile
+from opengever.dossier.tests import EXPECTED_DOSSIER_PROPERTIES
+from opengever.dossier.tests import EXPECTED_USER_DOC_PROPERTIES
+from opengever.dossier.tests import OGDS_USER_ATTRIBUTES
 from opengever.journal.handlers import DOC_PROPERTIES_UPDATED
 from opengever.journal.tests.utils import get_journal_entry
 from opengever.journal.tests.utils import get_journal_length
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
-from opengever.dossier.tests import OGDS_USER_ATTRIBUTES
-from opengever.dossier.tests import EXPECTED_USER_DOC_PROPERTIES
 
 
 class TestDocPropertyWriter(FunctionalTestCase):
 
-    expected_dossier_properties = {
-        'Dossier.ReferenceNumber': 'Client1 / 1',
-        'Dossier.Title': 'My dossier',
-    }
     expected_document_properties = {
         'Document.ReferenceNumber': 'Client1 / 1 / 1',
         'Document.SequenceNumber': '1',
@@ -67,12 +64,12 @@ class TestDocPropertyWriter(FunctionalTestCase):
         self.assertFalse(self.writer.is_supported_file())
 
     def test_document_with_gever_properties_is_updated_with_all_properties(self):
-        expected_doc_properties = EXPECTED_USER_DOC_PROPERTIES.items() + [
-            ('Dossier.ReferenceNumber', 'Client1 / 1'),
-            ('Dossier.Title', 'My dossier'),
-            ('Document.ReferenceNumber', 'Client1 / 1 / 1'),
-            ('Document.SequenceNumber', '1'),
-        ]
+        expected_doc_properties = (
+            EXPECTED_USER_DOC_PROPERTIES.items() +
+            EXPECTED_DOSSIER_PROPERTIES.items() +
+            [('Document.ReferenceNumber', 'Client1 / 1 / 1'),
+             ('Document.SequenceNumber', '1')]
+        )
 
         self.writer.update_doc_properties(only_existing=True)
         with TemporaryDocFile(self.document.file) as tmpfile:
@@ -105,12 +102,12 @@ class TestDocPropertyWriter(FunctionalTestCase):
             .titled("Document without props")
             .with_asset_file('without_custom_properties.docx'))
 
-        expected_doc_properties = EXPECTED_USER_DOC_PROPERTIES.items() + [
-            ('Dossier.ReferenceNumber', 'Client1 / 1'),
-            ('Dossier.Title', 'My dossier'),
-            ('Document.ReferenceNumber', 'Client1 / 1 / 2'),
-            ('Document.SequenceNumber', '2'),
-        ]
+        expected_doc_properties = (
+            EXPECTED_USER_DOC_PROPERTIES.items() +
+            EXPECTED_DOSSIER_PROPERTIES.items() +
+            [('Document.ReferenceNumber', 'Client1 / 1 / 2'),
+             ('Document.SequenceNumber', '2')]
+        )
 
         writer = DocPropertyWriter(document)
         writer.update_doc_properties(only_existing=False)
