@@ -8,4 +8,3 @@ def configure_members_area(site):
     mtool = api.portal.get_tool('portal_membership')
     mtool.setMembersFolderById(MEMBERSFOLDER_ID)
     mtool.setMemberAreaType('opengever.private.folder')
-    mtool.setMemberareaCreationFlag()

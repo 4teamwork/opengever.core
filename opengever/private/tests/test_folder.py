@@ -5,6 +5,7 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testing import freeze
 from opengever.base.interfaces import IReferenceNumber
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_PRIVATE_FOLDER_LAYER
 from opengever.private.tests import create_members_folder
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
@@ -12,6 +13,8 @@ from zExceptions import Unauthorized
 
 
 class TestPrivateFolder(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_PRIVATE_FOLDER_LAYER
 
     def setUp(self):
         super(TestPrivateFolder, self).setUp()
@@ -35,6 +38,8 @@ class TestPrivateFolder(FunctionalTestCase):
 
 
 class TestPrivateFolderTabbedView(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_PRIVATE_FOLDER_LAYER
 
     def setUp(self):
         super(TestPrivateFolderTabbedView, self).setUp()
@@ -86,6 +91,8 @@ class TestPrivateFolderTabbedView(FunctionalTestCase):
 
 class TestPrivateFolderWorkflow(FunctionalTestCase):
 
+    layer = OPENGEVER_FUNCTIONAL_PRIVATE_FOLDER_LAYER
+
     def setUp(self):
         super(TestPrivateFolderWorkflow, self).setUp()
         self.root = create(Builder('private_root'))
@@ -109,6 +116,8 @@ class TestPrivateFolderWorkflow(FunctionalTestCase):
 
 
 class TestMyRepositoryAction(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_PRIVATE_FOLDER_LAYER
 
     def setUp(self):
         super(TestPrivateFolderWorkflow, self).setUp()

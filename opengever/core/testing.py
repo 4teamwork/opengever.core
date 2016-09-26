@@ -14,6 +14,7 @@ from opengever.meeting.interfaces import IMeetingSettings
 from opengever.officeatwork.interfaces import IOfficeatworkSettings
 from opengever.ogds.base.setup import create_sql_tables
 from opengever.ogds.models import BASE
+from opengever.private import enable_opengever_private
 from plone import api
 from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
@@ -451,6 +452,22 @@ class BumblebeeLayer(PloneSandboxLayer):
 
 
 OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER = BumblebeeLayer()
+
+
+class PrivateFolderLayer(PloneSandboxLayer):
+
+    def setUpPloneSite(self, portal):
+        enable_opengever_private()
+
+    def tearDownPloneSite(self, portal):
+        mtool = api.portal.get_tool('portal_membership')
+        if mtool.getMemberareaCreationFlag():
+            mtool.setMemberareaCreationFlag()
+
+    defaultBases = (OPENGEVER_FUNCTIONAL_TESTING,)
+
+
+OPENGEVER_FUNCTIONAL_PRIVATE_FOLDER_LAYER = PrivateFolderLayer()
 
 
 class OfficeatworkLayer(PloneSandboxLayer):

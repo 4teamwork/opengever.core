@@ -5,6 +5,7 @@ from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_PRIVATE_FOLDER_LAYER
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.private.tests import create_members_folder
 from opengever.testing import FunctionalTestCase
