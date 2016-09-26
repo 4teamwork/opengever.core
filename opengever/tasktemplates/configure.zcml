@@ -19,5 +19,6 @@
         description=""
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
+  <include package=".upgrades" />
 
 </configure>
