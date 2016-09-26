@@ -10,6 +10,8 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.interfaces import IDocProperties
 from opengever.dossier.interfaces import IDocPropertyProvider
 from opengever.dossier.interfaces import ITemplateDossierProperties
+from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.user import User
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.interfaces import IMemberData
 from Products.CMFCore.utils import getToolByName
@@ -143,22 +145,65 @@ class DefaultDossierDocPropertyProvider(grok.Adapter):
 
 
 class DefaultMemberDocPropertyProvider(grok.Adapter):
-    """
-    """
+    """Return the default user properties from LDAP/ogds."""
+
     grok.context(IMemberData)
     grok.provides(IDocPropertyProvider)
+
+    ogds_user_attributes = (
+        'firstname',
+        'lastname',
+        'directorate',
+        'directorate_abbr',
+        'department',
+        'department_abbr',
+        'email',
+        'email2',
+        'url',
+        'phone_office',
+        'phone_fax',
+        'phone_mobile',
+        'salutation',
+        'description',
+        'address1',
+        'address2',
+        'zip_code',
+        'city',
+        'country'
+    )
+    NS = ('ogg', 'user')
 
     def get_user_id(self):
         return self.context.getMemberId()
 
-    def get_fullname(self):
-        return self.context.getProperty('fullname')
+    def _add_property(self, properties, name, value):
+        if not value:
+            return
+        key = '.'.join(self.NS + (name,))
+        properties[key] = value
 
     def get_properties(self):
+        """Return user properties from OGDS.
+
+        Always returns a minimal set of the properties 'ogg.user.userid' and
+        'ogg.user.title' even when no ogds-user is found.
+
+        XXX Also contains deprecated properties that will go away eventually.
+        """
         user_id = self.get_user_id()
-        fullname = self.get_fullname()
+        ogds_user = ogds_service().fetch_user(user_id)
+        fullname = ogds_user.fullname() if ogds_user else user_id
+
+        # XXX deprecated properties
         properties = {'User.ID': user_id,
                       'User.FullName': fullname}
+
+        self._add_property(properties, 'userid', user_id)
+        self._add_property(properties, 'title', fullname)
+
+        for attribute_name in self.ogds_user_attributes:
+            value = getattr(ogds_user, attribute_name)
+            self._add_property(properties, attribute_name, value)
         return properties
 
 

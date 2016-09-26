@@ -8,14 +8,12 @@ from opengever.journal.tests.utils import get_journal_entry
 from opengever.journal.tests.utils import get_journal_length
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
+from opengever.dossier.tests import OGDS_USER_ATTRIBUTES
+from opengever.dossier.tests import EXPECTED_USER_DOC_PROPERTIES
 
 
 class TestDocPropertyWriter(FunctionalTestCase):
 
-    expected_user_properties = {
-        'User.ID': TEST_USER_ID,
-        'User.FullName': 'Peter',
-    }
     expected_dossier_properties = {
         'Dossier.ReferenceNumber': 'Client1 / 1',
         'Dossier.Title': 'My dossier',
@@ -25,9 +23,17 @@ class TestDocPropertyWriter(FunctionalTestCase):
         'Document.SequenceNumber': '1',
     }
 
+    use_default_fixture = False
+    maxDiff = None
+
     def setUp(self):
         super(TestDocPropertyWriter, self).setUp()
-        self.setup_fullname(fullname='Peter')
+
+        user, org_unit, admin_unit = create(
+            Builder('fixture')
+            .with_all_unit_setup()
+            .with_user(**OGDS_USER_ATTRIBUTES))
+
         self.set_docproperty_export_enabled(True)
 
         self.dossier = create(Builder('dossier').titled(u'My dossier'))
@@ -60,10 +66,8 @@ class TestDocPropertyWriter(FunctionalTestCase):
         self.document.file.contentType = 'text/foo'
         self.assertFalse(self.writer.is_supported_file())
 
-    def test_existing_doc_properties_are_updated(self):
-        expected_doc_properties = [
-            ('User.ID', TEST_USER_ID,),
-            ('User.FullName', 'Peter',),
+    def test_document_with_gever_properties_is_updated_with_all_properties(self):
+        expected_doc_properties = EXPECTED_USER_DOC_PROPERTIES.items() + [
             ('Dossier.ReferenceNumber', 'Client1 / 1'),
             ('Dossier.Title', 'My dossier'),
             ('Document.ReferenceNumber', 'Client1 / 1 / 1'),
@@ -101,9 +105,7 @@ class TestDocPropertyWriter(FunctionalTestCase):
             .titled("Document without props")
             .with_asset_file('without_custom_properties.docx'))
 
-        expected_doc_properties = [
-            ('User.ID', TEST_USER_ID,),
-            ('User.FullName', 'Peter',),
+        expected_doc_properties = EXPECTED_USER_DOC_PROPERTIES.items() + [
             ('Dossier.ReferenceNumber', 'Client1 / 1'),
             ('Dossier.Title', 'My dossier'),
             ('Document.ReferenceNumber', 'Client1 / 1 / 2'),
