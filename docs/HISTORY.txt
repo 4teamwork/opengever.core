@@ -5,6 +5,10 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
+- Add new functionality "Private Dossier, a private area for every user to
+  create his private dossiers and store and edit private documents there.
+  [phgross]
+
 - Group related persons by active state in the organization detail view.
   [phgross]
 
