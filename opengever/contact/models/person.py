@@ -1,4 +1,5 @@
 from opengever.base.model import CONTENT_TITLE_LENGTH
+from opengever.contact.docprops import PersonDocPropertyProvider
 from opengever.contact.models.contact import Contact
 from opengever.contact.utils import get_contactfolder_url
 from opengever.contact.wrapper import PersonWrapper
@@ -55,6 +56,9 @@ class Person(Contact):
 
     def get_css_class(self):
         return 'contenttype-person'
+
+    def get_doc_property_provider(self, prefix):
+        return PersonDocPropertyProvider(self, prefix)
 
 
 Person.query_cls = PersonQuery
