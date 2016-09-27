@@ -1,4 +1,3 @@
-from five import grok
 from ftw.table import helper
 from ftw.table.interfaces import ITableGenerator
 from opengever.base.interfaces import IRedirector
@@ -7,12 +6,13 @@ from opengever.dossier.command import CreateDocumentFromTemplateCommand
 from opengever.dossier.templatedossier import get_template_dossier
 from opengever.tabbedview.helper import document_with_icon
 from Products.CMFCore.utils import getToolByName
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.statusmessages.interfaces import IStatusMessage
+from z3c.form.form import Form
 from zope.component import getUtility
-from zope.interface import Interface
 
 
-class TemplateDocumentFormView(grok.View):
+class TemplateDocumentFormView(Form):
     """Show the "Document from template" form.
 
     This form lists available document templates from template dossiers,
@@ -20,15 +20,12 @@ class TemplateDocumentFormView(grok.View):
     template.
     """
 
-    grok.context(Interface)
-    grok.require('zope2.View')
-    grok.name('document_with_template')
-    grok.template('template_form')
+    template = ViewPageTemplateFile('form_templates/template_form.pt')
 
     label = _('create_document_with_template',
               default="create document with template")
 
-    def __call__(self):
+    def render(self):
         self.errors = {}
         self.title = ''
         self.edit_after_creation = False
@@ -105,7 +102,7 @@ class TemplateDocumentFormView(grok.View):
 
         self.templatedossier_path = '/'.join(
             template_dossier.getPhysicalPath())
-        return super(TemplateDocumentFormView, self).__call__()
+        return super(TemplateDocumentFormView, self).render()
 
     def templates(self):
         """List the available template documents the user can choose from.
