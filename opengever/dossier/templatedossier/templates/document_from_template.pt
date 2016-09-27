@@ -1,0 +1,38 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="opengever.dossier">
+
+
+<body>
+  <metal:slot metal:fill-slot="header" i18n:domain="cmf_default">
+    <h1 tal:content="view/label">View Title</h1>
+  </metal:slot>
+
+  <metal:slot metal:fill-slot="main" i18n:domain="cmf_default">
+    <metal:use use-macro="context/@@ploneform-macros/titlelessform">
+
+      <metal:block fill-slot="fields">
+        <div class="row horizontal">
+          <div class="" tal:attributes="class python: 'error field' if view.has_path_error else 'field'">
+
+            <label for="form-widgets-template" class="horizontal" i18n:domain="opengever.dossier">
+              <span i18n:translate="label_template">Template</span>
+              <span class="required horizontal" title="Erforderlich">&nbsp;</span>
+            </label>
+            <div class="fieldErrorBox" tal:condition="view/has_path_error">
+              <div class="error" i18n:domain="zope" i18n:translate="">Required input is missing.</div>
+            </div>
+            <div tal:content="structure view/templates" />
+          </div>
+        </div>
+
+        <metal:use use-macro="context/@@ploneform-macros/fields" />
+      </metal:block>
+
+    </metal:use>
+  </metal:slot>
+</body>
+</html>

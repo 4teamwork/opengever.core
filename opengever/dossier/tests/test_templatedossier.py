@@ -157,7 +157,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
     def test_save_redirects_to_the_dossiers_document_tab(self, browser):
         browser.login().open(self.dossier, view='document_with_template')
         browser.fill({'paths:list': self.template_b_path,
-                      'title': 'Test Document',
+                      'Title': 'Test Document',
                       'Edit after creation':False}).save()
 
         self.assertEquals(self.dossier, browser.context)
@@ -168,7 +168,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
     def test_new_document_is_titled_with_the_form_value(self, browser):
         browser.login().open(self.dossier, view='document_with_template')
         browser.fill({'paths:list': self.template_b_path,
-                      'title': 'Test Document'}).save()
+                      'Title': 'Test Document'}).save()
 
         document = self.dossier.listFolderContents()[0]
 
@@ -178,7 +178,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
     def test_new_document_values_are_filled_with_default_values(self, browser):
         browser.login().open(self.dossier, view='document_with_template')
         browser.fill({'paths:list': self.template_b_path,
-                      'title': 'Test Document'}).save()
+                      'Title': 'Test Document'}).save()
 
         document = self.dossier.listFolderContents()[0]
         self.assertEquals(date.today(), document.document_date)
@@ -188,7 +188,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
     def test_file_of_the_new_document_is_a_copy_of_the_template(self, browser):
         browser.login().open(self.dossier, view='document_with_template')
         browser.fill({'paths:list': self.template_b_path,
-                      'title': 'Test Document'}).save()
+                      'Title': 'Test Document'}).save()
 
         document = self.dossier.listFolderContents()[0]
 
@@ -205,7 +205,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
 
         browser.login().open(self.dossier, view='document_with_template')
         browser.fill({'paths:list': template_path,
-                      'title': 'Test Docx'}).save()
+                      'Title': 'Test Docx'}).save()
 
         document = self.dossier.listFolderContents()[0]
         self.assertEquals(u'test-docx.docx', document.file.filename)
@@ -226,7 +226,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
 
         browser.login().open(self.dossier, view='document_with_template')
         browser.fill({'paths:list': template_path,
-                      'title': 'Test Docx'}).save()
+                      'Title': 'Test Docx'}).save()
 
         document = self.dossier.listFolderContents()[0]
         self.assertEquals(u'test-docx.docx', document.file.filename)
@@ -246,7 +246,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
 
         browser.login().open(self.dossier, view='document_with_template')
         browser.fill({'paths:list': template_path,
-                      'title': 'Test Docx'}).save()
+                      'Title': 'Test Docx'}).save()
 
         document = self.dossier.listFolderContents()[0]
         self.assertEquals(u'test-docx.docx', document.file.filename)
