@@ -268,6 +268,10 @@ class DefaultMemberDocPropertyProvider(DocPropertyProvider):
         self._add_property(properties, 'userid', user_id)
         self._add_property(properties, 'title', fullname)
 
+        # abort early if there is no ogds user for some reason.
+        if not ogds_user:
+            return properties
+
         for attribute_name in self.ogds_user_attributes:
             value = getattr(ogds_user, attribute_name)
             self._add_property(properties, attribute_name, value)
