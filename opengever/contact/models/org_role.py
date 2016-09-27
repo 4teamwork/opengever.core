@@ -1,5 +1,6 @@
 from opengever.base.model import Base
 from opengever.base.model import CONTENT_TITLE_LENGTH
+from opengever.contact.docprops import OrgRoleDocPropertyProvider
 from opengever.ogds.models.types import UnicodeCoercingText
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
@@ -53,3 +54,6 @@ class OrgRole(Base):
         """Returns the id of the person that is represented by the Orgrole.
         """
         return self.person.contact_id
+
+    def get_doc_property_provider(self, prefix):
+        return OrgRoleDocPropertyProvider(self, prefix)

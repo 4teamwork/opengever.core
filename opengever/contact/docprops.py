@@ -74,3 +74,22 @@ class OrganizationDocPropertProvider(ContactDocPropertyProvider):
                            self.organization.name)
 
         return properties
+
+
+class OrgRoleDocPropertyProvider(PrefixableDocPropertyProvider):
+    """Provides doc-properties for an org-role and its associated person."""
+
+    def __init__(self, org_role, prefix):
+        super(OrgRoleDocPropertyProvider, self).__init__(prefix)
+        self.org_role = org_role
+
+    def get_properties(self):
+        person_provider = self.org_role.person.get_doc_property_provider(self.prefix)
+        properties = person_provider.get_properties()
+
+        self._add_property(properties, 'orgrole', 'function',
+                           self.org_role.function)
+        self._add_property(properties, 'orgrole', 'description',
+                           self.org_role.function)
+
+        return properties

@@ -54,3 +54,30 @@ class TestContactDocPropertyProvider(FunctionalTestCase):
         }
         self.assertItemsEqual(expected_organization_properties,
                               provider.get_properties())
+
+    def test_org_role_doc_property_provider(self):
+        peter = create(Builder('person')
+                       .having(firstname=u'Peter',
+                               lastname=u'M\xfcller',
+                               salutation='Herr',
+                               academic_title='Prof. Dr.',
+                               description='blablabla'))
+        organization = create(Builder('organization').having(name=u'Foo'))
+        org_role = create(Builder('org_role')
+                          .having(organization=organization,
+                                  person=peter,
+                                  function=u'M\xe4dchen f\xfcr alles',
+                                  description='blub'))
+        provider = org_role.get_doc_property_provider(prefix='recipient')
+        expected_orgrole_properties = {
+            'ogg.recipient.orgrole.function': u'M\xe4dchen f\xfcr alles',
+            'ogg.recipient.orgrole.description': 'blub',
+            'ogg.recipient.contact.title': u'M\xfcller Peter',
+            'ogg.recipient.contact.description': 'blablabla',
+            'ogg.recipient.person.salutation': 'Herr',
+            'ogg.recipient.person.academic_title': 'Prof. Dr.',
+            'ogg.recipient.person.firstname': 'Peter',
+            'ogg.recipient.person.lastname': u'M\xfcller',
+        }
+        self.assertItemsEqual(expected_orgrole_properties,
+                              provider.get_properties())
