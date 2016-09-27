@@ -55,7 +55,8 @@ def set_former_reference_after_moving(obj, event):
     obj.reindexObject(idxs=['reference'])
 
 
-@grok.subscribe(IDossierMarker, IObjectAddedEvent)
+# Update reference number when adding / moving content
+# (IObjectAddedEvent inherits from IObjectMovedEvent)
 @grok.subscribe(IDossierMarker, IObjectMovedEvent)
 def save_reference_number_prefix(obj, event):
     if IObjectRemovedEvent.providedBy(event):

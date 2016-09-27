@@ -5,6 +5,11 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
+- Don't fire save_reference_number_prefix() handler twice. IObjectAddedEvent
+  inherits from IObjectMovedEvent, so registering it on IObjectMovedEvent
+  is enough.
+  [lgraf]
+
 - Enable task-templates for meeting-dossiers.
   [deiferni]
 
