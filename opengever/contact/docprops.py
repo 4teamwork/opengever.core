@@ -58,3 +58,19 @@ class PersonDocPropertyProvider(ContactDocPropertyProvider):
                            self.person.lastname)
 
         return properties
+
+
+class OrganizationDocPropertProvider(ContactDocPropertyProvider):
+
+    def __init__(self, organization, prefix):
+        super(OrganizationDocPropertProvider, self).__init__(
+            organization, prefix=prefix)
+        self.organization = organization
+
+    def get_properties(self):
+        properties = super(OrganizationDocPropertProvider, self).get_properties()
+
+        self._add_property(properties, 'organization', 'name',
+                           self.organization.name)
+
+        return properties

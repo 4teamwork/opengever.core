@@ -41,3 +41,16 @@ class TestContactDocPropertyProvider(FunctionalTestCase):
         }
         self.assertItemsEqual(expected_person_properties,
                               provider.get_properties())
+
+    def test_organization_doc_property_provider(self):
+        organization = create(Builder('organization')
+                              .having(name=u'ACME corp.',
+                                      description='blablabla'))
+        provider = organization.get_doc_property_provider(prefix='recipient')
+        expected_organization_properties = {
+            'ogg.recipient.contact.title': u'ACME corp.',
+            'ogg.recipient.contact.description': 'blablabla',
+            'ogg.recipient.organization.name': u'ACME corp.',
+        }
+        self.assertItemsEqual(expected_organization_properties,
+                              provider.get_properties())
