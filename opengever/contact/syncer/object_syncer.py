@@ -1,4 +1,4 @@
-from collections import OrderedDict
+from AccessControl.SecurityInfo import ClassSecurityInformation
 from ftw.upgrade import ProgressLogger
 from opengever.base.model import create_session
 from opengever.contact.models import Address
@@ -9,42 +9,24 @@ from opengever.contact.models import OrgRole
 from opengever.contact.models import Person
 from opengever.contact.models import PhoneNumber
 from opengever.contact.models import URL
-import csv
-import json
+from urlparse import urlparse
 import logging
 import transaction
 
 
-LOG = logging.getLogger('contacts-import')
-
-
-class BadCSVFormatException(AttributeError):
-    pass
-
-
-class FileReader(object):
-    """ Contextmanager: Reads an open from beginning
-    and put the seek-pointer back to 0 after reading
-    """
-    def __init__(self, file_):
-        self.file_ = file_
-
-    def __enter__(self):
-        self.file_.seek(0)
-        return self.file_
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.file_.seek(0)
+logger = logging.getLogger('opengever.contact')
+logger.setLevel(logging.INFO)
 
 
 class ObjectSyncerProgressLogger(ProgressLogger):
-    """We have to override the progresslogger because
-    we have to set the length manually.
+    """Provide a custom progress-logger that can log iterables without
+    a predefined length.
     """
-    def __init__(self, message, iterable, length, logger=None,
-                 timeout=5):
 
-        self.logger = logger or logging.getLogger('contactsyncer')
+    security = ClassSecurityInformation()
+
+    def __init__(self, message, iterable, logger=None, timeout=5):
+        self.logger = logger or logging.getLogger('opengever.contact')
         self.message = message
         self.iterable = iterable
 
@@ -52,47 +34,52 @@ class ObjectSyncerProgressLogger(ProgressLogger):
         self._timestamp = None
         self._counter = 0
 
-        self.length = length
+    security.declarePrivate('__call__')
+    def __call__(self):
+        self._counter += 1
+        if not self.should_be_logged():
+            return
+
+        self.logger.info('%s: %s' % (self._counter, self.message))
 
 
 class ObjectSyncer(object):
-    """Use the objectsyncer to sync a sql-table with a file.
+    """Use the Objectsyncer to sync an sql-table with data form separate DB.
     """
-    db_session = None
 
-    rows_mapping = None  # key = file-row, value = sql-row
+    keys = []  # values updated by the syncer
 
-    # For logging
     type_name = ""
 
-    stat_updated = 0
-    stat_added = 0
-    stat_total = 0
-
     total_items = 0
-
-    file_ = None
 
     internal_object = None
     remote_object = None
 
-    def __init__(self, file_):
+    def __init__(self, source_session, query):
+        """data: an iterable with all queried objects (ResultProxy, list of dicts)
+        """
         self.db_session = create_session()
-        self.file_ = file_
+        self.source_session = source_session
+        self.stats = {'updated': 0, 'no_change': 0, 'added': 0, 'total': 0}
 
-        self.rows_mapping = OrderedDict()
-        self.update_rows_mapping()
-
-        self.total_items = self.count_total_items()
+        self.query = query
 
     def __call__(self):
         """Starts the sync-process
         """
-        LOG.info("Syncing {}...".format(self.type_name))
+        logger.info("Syncing {}...".format(self.type_name))
         self.reset_statistic()
 
-        for row in self.reader():
-            self.stat_total += 1
+        self.initalize_existing_mapping()
+        self.initalize_contact_id_mapping()
+
+        result = self.source_session.execute(self.query)
+        iterable = ObjectSyncerProgressLogger(
+            "Syncing {}".format(self.type_name), result)
+
+        for row in iterable:
+            self.stats['total'] += 1
 
             internal_object = self.get_internal_obj(row)
             remote_object = self.get_remote_object(row)
@@ -101,37 +88,23 @@ class ObjectSyncer(object):
                 continue
 
             if internal_object:
-                self.update_object(
-                    self.rows_mapping, remote_object, internal_object)
+                self.update_object(remote_object, internal_object)
             else:
                 self.add_object(remote_object)
 
-        LOG.info("Syncing of {} succeeded".format(self.type_name))
+        logger.info("Syncing of {} succeeded".format(self.type_name))
         self.log_statistic()
 
         transaction.commit()
 
-    def update_rows_mapping(self):
-        """This function will be called in the init of the class.
+    def initalize_existing_mapping(self):
+        self.existing_mapping = {}
 
-        Use it to update the rows_mapping dict.
-
-        i.e.:
-
-        self.rows_mapping['name'] = 'name'
-        """
-        pass
-
-    def reader(self):
-        """Reads the file and returns each row as a dict.
-        """
-        with FileReader(self.file_) as file_:
-            iterable = ObjectSyncerProgressLogger(
-                "Syncing {}".format(self.type_name),
-                file_, self.total_items)
-
-            for row in iterable:
-                yield row
+    def initalize_contact_id_mapping(self):
+        self.contact_id_mapping = {}
+        for contact in Contact.query:
+            former_id = contact.former_contact_id
+            self.contact_id_mapping[former_id] = contact.contact_id
 
     def get_internal_obj(self, row):
         """Returns the related existing objects depending on
@@ -149,260 +122,238 @@ class ObjectSyncer(object):
         """Adds an object to the db
         """
         self.db_session.add(obj)
-        self.stat_added += 1
+        self.stats['added'] += 1
 
-    def update_object(self, mapping, source_obj, target_obj):
+    def update_object(self, source_obj, target_obj):
         """Updates the target_obj with the data of the
         source_obj.
-
-        It compares the fields defined in the rows_mapping
-        and only updates this fields.
         """
         updated = False
-        for row in mapping.values():
-            if getattr(source_obj, row) == getattr(target_obj, row):
+        for key in self.keys:
+            if getattr(source_obj, key) == getattr(target_obj, key):
                 continue
 
-            setattr(target_obj, row, getattr(source_obj, row))
+            setattr(target_obj, key, getattr(source_obj, key))
             updated = True
 
         if updated:
-            self.stat_updated += 1
+            self.stats['updated'] += 1
+        else:
+            self.stats['no_change'] += 1
 
         return updated
 
     def reset_statistic(self):
-        self.stat_added = 0
-        self.stat_updated = 0
-        self.stat_total = 0
-
-    def count_total_items(self, skip_header_row=True):
-        with FileReader(self.file_) as file_:
-            for i, line in enumerate(file_):
-                pass
-
-        return i if skip_header_row else i + 1
+        self.stats = {'updated': 0, 'no_change': 0, 'added': 0, 'total': 0}
 
     def log_statistic(self):
-        skipped = self.stat_total - self.stat_added - self.stat_updated
+        skipped = (self.stats.get('total') - self.stats.get('added')
+                   - self.stats.get('updated') - self.stats.get('no_change'))
 
-        LOG.info(
-            "STATISTICS\n"
-            "----------\n\n"
-            "Total: {}\n"
-            "Added: {}\n"
-            "Updated: {}\n"
-            "Skipped: {}\n".format(
-                self.stat_total, self.stat_added, self.stat_updated, skipped))
+        logger.info("STATISTICS")
+        logger.info("Total: {}".format(self.stats.get('total')))
+        logger.info("Added: {}".format(self.stats.get('added')))
+        logger.info("Updated: {}".format(self.stats.get('updated')))
+        logger.info(
+            "Updated - no change: {}".format(self.stats.get('no_change')))
+        logger.info("Skipped: {}".format(skipped))
 
-    def decode_text(self, text):
-        if not text:
-            return text
+    def to_unicode(self, value):
+        if value and not isinstance(value, unicode):
+            return value.decode('utf-8')
 
-        return text.decode('utf-8')
-
-
-class CSVObjectSyncer(ObjectSyncer):
-
-    def reader(self):
-        rows = self.rows_mapping.keys()
-        with FileReader(self.file_) as file_:
-            self._validate_header(file_, rows)
-
-            iterable = ObjectSyncerProgressLogger(
-                "Syncing {}".format(self.type_name),
-                csv.DictReader(file_, rows),
-                self.total_items)
-
-            for row in iterable:
-                yield row
-
-    def _validate_header(self, file_, rows):
-        reader = csv.reader(file_)
-        header_rows = reader.next()
-
-        if rows == header_rows:
-            return True
-
-        raise BadCSVFormatException(
-            "The csv-format is broken.\n"
-            "We excpect the following header rows: {}\n"
-            "but the csv has the following rows definded: {}\n".format(
-                rows, header_rows)
-            )
+        return value
 
 
-class OrganizationSyncer(CSVObjectSyncer):
+class OrganizationSyncer(ObjectSyncer):
 
     type_name = "Organizations"
 
-    def update_rows_mapping(self):
-        self.rows_mapping['contact_id'] = 'former_contact_id'
-        self.rows_mapping['name'] = 'name'
-        self.rows_mapping['active'] = 'is_active'
+    keys = ['name', 'is_active']
+
+    def initalize_existing_mapping(self):
+        self.existing_mapping = {}
+        for organization in Organization.query:
+            self.existing_mapping[organization.former_contact_id] = organization
 
     def get_internal_obj(self, row):
-        return Organization.query.filter(
-            Organization.former_contact_id == row.get('contact_id')).first()
+        return self.existing_mapping.get(row.former_contact_id)
 
     def get_remote_object(self, row):
         return Organization(
-            name=self.decode_text(row.get('name')),
-            former_contact_id=int(self.decode_text(row.get('contact_id'))),
-            is_active=json.loads(row.get('active')))
+            name=self.to_unicode(row.name),
+            former_contact_id=row.former_contact_id,
+            is_active=row.is_active)
 
 
-class PersonSyncer(CSVObjectSyncer):
+class PersonSyncer(ObjectSyncer):
 
     type_name = "Persons"
 
-    def update_rows_mapping(self):
-        self.rows_mapping['contact_id'] = 'former_contact_id'
-        self.rows_mapping['salutation'] = 'salutation'
-        self.rows_mapping['title'] = 'academic_title'
-        self.rows_mapping['firstname'] = 'firstname'
-        self.rows_mapping['lastname'] = 'lastname'
-        self.rows_mapping['active'] = 'is_active'
+    keys = ['salutation', 'academic_title',
+            'firstname', 'lastname', 'is_active']
+
+    def initalize_existing_mapping(self):
+        self.existing_mapping = {}
+        for person in Person.query:
+            self.existing_mapping[person.former_contact_id] = person
 
     def get_internal_obj(self, row):
-        return Person.query.filter(
-            Person.former_contact_id == row.get('contact_id')).first()
+        return self.existing_mapping.get(row.former_contact_id)
 
     def get_remote_object(self, row):
-        return Person(salutation=self.decode_text(row.get('salutation')),
-                      academic_title=self.decode_text(row.get('title')),
-                      firstname=self.decode_text(row.get('firstname')),
-                      lastname=self.decode_text(row.get('lastname')),
-                      former_contact_id=int(
-                          self.decode_text(row.get('contact_id'))),
-                      is_active=json.loads(row.get('active')))
+        return Person(salutation=self.to_unicode(row.salutation),
+                      academic_title=self.to_unicode(row.title),
+                      firstname=self.to_unicode(row.firstname),
+                      lastname=self.to_unicode(row.lastname),
+                      former_contact_id=row.former_contact_id,
+                      is_active=row.is_active)
 
 
-class MailSyncer(CSVObjectSyncer):
+class MailSyncer(ObjectSyncer):
 
     type_name = "Mails"
 
-    def update_rows_mapping(self):
-        self.rows_mapping['contact_id'] = 'contact_id'
-        self.rows_mapping['mail_address'] = 'address'
-        self.rows_mapping['label'] = 'label'
+    keys = ['address', 'label']
+
+    def initalize_existing_mapping(self):
+        self.existing_mapping = {}
+        for mail in MailAddress.query:
+            key = u'{}:{}'.format(mail.label, mail.contact.former_contact_id)
+            self.existing_mapping[key] = mail
 
     def get_internal_obj(self, row):
-        return None
+        key = u'{}:{}'.format(self.to_unicode(row.label), row.former_contact_id)
+        return self.existing_mapping.get(key)
 
     def get_remote_object(self, row):
-        contact = Contact.query.get_by_former_contact_id(
-            row.get('contact_id'))
+        contact = Contact.query.get_by_former_contact_id(row.former_contact_id)
 
         if not contact:
             return None
 
         return MailAddress(
             contact_id=contact.contact_id,
-            address=self.decode_text(row.get('mail_address')),
-            label=self.decode_text(row.get('label')))
+            address=self.to_unicode(row.address),
+            label=self.to_unicode(row.label))
 
 
-class UrlSyncer(CSVObjectSyncer):
+class UrlSyncer(ObjectSyncer):
 
     type_name = "Urls"
 
-    def update_rows_mapping(self):
-        self.rows_mapping['contact_id'] = 'contact_id'
-        self.rows_mapping['url'] = 'url'
-        self.rows_mapping['label'] = 'label'
+    keys = ['url', 'label']
+
+    def initalize_existing_mapping(self):
+        self.existing_mapping = {}
+        for url in URL.query:
+            key = u'{}:{}'.format(url.label, url.contact.former_contact_id)
+            self.existing_mapping[key] = url
 
     def get_internal_obj(self, row):
-        return None
+        key = u'{}:{}'.format(self.to_unicode(row.label), row.former_contact_id)
+        return self.existing_mapping.get(key)
 
     def get_remote_object(self, row):
-        contact = Contact.query.get_by_former_contact_id(
-            row.get('contact_id'))
+        contact = Contact.query.get_by_former_contact_id(row.former_contact_id)
 
         if not contact:
             return None
 
-        return URL(
-            contact_id=contact.contact_id,
-            url=self.decode_text(row.get('url')),
-            label=self.decode_text(row.get('label')))
+        return URL(contact_id=contact.contact_id,
+                   url=self.save_url(self.to_unicode(row.url)),
+                   label=self.to_unicode(row.label))
+
+    def save_url(self, url):
+        if not urlparse(url).scheme:
+            return u'http://{}'.format(url)
+
+        return url
 
 
-class PhoneNumberSyncer(CSVObjectSyncer):
+class PhoneNumberSyncer(ObjectSyncer):
 
     type_name = "Phonenumbers"
 
-    def update_rows_mapping(self):
-        self.rows_mapping['contact_id'] = 'contact_id'
-        self.rows_mapping['number'] = 'phone_number'
-        self.rows_mapping['label'] = 'label'
+    keys = ['phone_number', 'label']
+
+    def initalize_existing_mapping(self):
+        self.existing_mapping = {}
+        for phone in PhoneNumber.query:
+            key = u'{}:{}'.format(phone.label, phone.contact.former_contact_id)
+            self.existing_mapping[key] = phone
 
     def get_internal_obj(self, row):
-        return None
+        key = u'{}:{}'.format(self.to_unicode(row.label), row.former_contact_id)
+        return self.existing_mapping.get(key)
 
     def get_remote_object(self, row):
-        contact = Contact.query.get_by_former_contact_id(
-            row.get('contact_id'))
+        contact = Contact.query.get_by_former_contact_id(row.former_contact_id)
 
         if not contact:
             return None
 
         return PhoneNumber(
             contact_id=contact.contact_id,
-            phone_number=self.decode_text(row.get('number')),
-            label=self.decode_text(row.get('label')))
+            phone_number=self.to_unicode(row.phone_number),
+            label=self.to_unicode(row.label))
 
 
-class AddressSyncer(CSVObjectSyncer):
+class AddressSyncer(ObjectSyncer):
 
     type_name = "Addresses"
 
-    def update_rows_mapping(self):
-        self.rows_mapping['contact_id'] = 'contact_id'
-        self.rows_mapping['label'] = 'label'
-        self.rows_mapping['street'] = 'street'
-        self.rows_mapping['zip'] = 'zip_code'
-        self.rows_mapping['city'] = 'city'
+    keys = ['label', 'street', 'zip_code', 'city', 'country']
 
-        # HINT: This field does not exists on sql and will be ignored
-        self.rows_mapping['country'] = 'country'
+    def initalize_existing_mapping(self):
+        self.existing_mapping = {}
+        for address in Address.query:
+            key = u'{}:{}'.format(address.label, address.contact.former_contact_id)
+            self.existing_mapping[key] = address
 
     def get_internal_obj(self, row):
-        return None
+        key = u'{}:{}'.format(self.to_unicode(row.label), row.former_contact_id)
+        return self.existing_mapping.get(key)
 
     def get_remote_object(self, row):
-        contact = Contact.query.get_by_former_contact_id(
-            row.get('contact_id'))
+        contact = Contact.query.get_by_former_contact_id(row.former_contact_id)
 
         if not contact:
             return None
 
         return Address(
             contact_id=contact.contact_id,
-            label=self.decode_text(row.get('label')),
-            street=self.decode_text(row.get('street')),
-            zip_code=self.decode_text(row.get('zip')),
-            city=self.decode_text(row.get('city')),)
+            label=self.to_unicode(row.label),
+            street=self.to_unicode(row.street),
+            zip_code=self.to_unicode(row.zip_code),
+            city=self.to_unicode(row.city),
+            country=self.to_unicode(row.country))
 
 
-class OrgRoleSyncer(CSVObjectSyncer):
+class OrgRoleSyncer(ObjectSyncer):
 
     type_name = "OrgRoles"
 
-    def update_rows_mapping(self):
-        self.rows_mapping['person_id'] = 'person_id'
-        self.rows_mapping['organisation_id'] = 'organization_id'
-        self.rows_mapping['function'] = 'function'
+    keys = ['function']
+
+    def initalize_existing_mapping(self):
+        self.existing_mapping = {}
+        for org_role in OrgRole.query:
+            key = u'{}:{}'.format(
+                org_role.person.former_contact_id,
+                org_role.organization.former_contact_id)
+
+            self.existing_mapping[key] = org_role
 
     def get_internal_obj(self, row):
-        return None
+        key = u'{}:{}'.format(row.person_id, row.organisation_id)
+        return self.existing_mapping.get(key)
 
     def get_remote_object(self, row):
-        person = Contact.query.get_by_former_contact_id(
-            row.get('person_id'))
+        person = Contact.query.get_by_former_contact_id(row.person_id)
 
         organization = Contact.query.get_by_former_contact_id(
-            row.get('organisation_id'))
+            row.organisation_id)
 
         if not person or not organization:
             return None
@@ -410,4 +361,4 @@ class OrgRoleSyncer(CSVObjectSyncer):
         return OrgRole(
             person_id=person.contact_id,
             organization_id=organization.contact_id,
-            function=self.decode_text(row.get('function')))
+            function=self.to_unicode(row.function))
