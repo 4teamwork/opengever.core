@@ -141,7 +141,6 @@ class TemplateDocumentFormView(AutoExtensibleForm, Form):
 
         generator = getUtility(ITableGenerator, 'ftw.tablegenerator')
         columns = (
-            (''),
             ('', helper.path_radiobutton),
             {'column': 'Title',
              'column_title': _(u'label_title', default=u'title'),
