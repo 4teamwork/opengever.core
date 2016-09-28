@@ -7,6 +7,7 @@ from opengever.dossier.templatedossier import get_template_dossier
 from opengever.tabbedview.helper import document_with_icon
 from plone.autoform.form import AutoExtensibleForm
 from plone.directives import form
+from plone.formwidget.autocomplete import AutocompleteFieldWidget
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.statusmessages.interfaces import IStatusMessage
@@ -22,6 +23,13 @@ class ICreateDocumentFromTemplate(form.Schema):
     title = schema.TextLine(
         title=_(u"label_title", default=u"Title"),
         required=True)
+
+    form.widget(recipient=AutocompleteFieldWidget)
+    recipient = schema.Choice(
+        title=_(u'label_recipient', default=u'Recipient'),
+        vocabulary=u'opengever.contact.ContactsVocabulary',
+        required=False,
+    )
 
     form.widget(edit_after_creation=SingleCheckBoxFieldWidget)
     edit_after_creation = schema.Bool(
@@ -108,7 +116,8 @@ class TemplateDocumentFormView(AutoExtensibleForm, Form):
         template_doc = self.context.restrictedTraverse(data['template_path'])
 
         command = CreateDocumentFromTemplateCommand(
-            self.context, template_doc, data['title'])
+            self.context, template_doc, data['title'],
+            recipient=data.get('recipient'))
         return command.execute()
 
     def templates(self):

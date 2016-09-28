@@ -17,6 +17,10 @@ class ContactsVocabulary(object):
 
     Providing a search method, which allows using the vocabulary in an
     autocomplete field.
+
+    Note: this vocabulary will only work with autocommplete-widgets, i.e.
+    `plone.formwidget.autocomplete.AutocompleteFieldWidget`.
+
     """
 
     by_type = {'person': Person,

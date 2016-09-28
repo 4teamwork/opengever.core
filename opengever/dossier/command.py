@@ -8,13 +8,14 @@ class CreateDocumentFromTemplateCommand(CreateDocumentCommand):
 
     skip_defaults_fields = ['title', 'file']
 
-    def __init__(self, context, template_doc, title):
+    def __init__(self, context, template_doc, title, recipient=None):
         super(CreateDocumentFromTemplateCommand, self).__init__(
             context, template_doc.file.filename, template_doc.file.data,
             title=title)
+        self.recipient = recipient
 
     def finish_creation(self, content):
         """Also make sure doc-properties are updated from template."""
 
-        DocPropertyWriter(content).initialize()
+        DocPropertyWriter(content, recipient=self.recipient).initialize()
         super(CreateDocumentFromTemplateCommand, self).finish_creation(content)

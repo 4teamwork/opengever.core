@@ -17,6 +17,7 @@ from opengever.journal.tests.utils import get_journal_entry
 from opengever.ogds.base.actor import Actor
 from opengever.testing import add_languages
 from opengever.testing import FunctionalTestCase
+from opengever.testing.helpers import get_contacts_token
 from opengever.testing.pages import sharing_tab_data
 from plone.app.testing import TEST_USER_ID
 from plone.registry.interfaces import IRegistry
@@ -45,7 +46,6 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
          'Document.SequenceNumber': '4',
          'Dossier.ReferenceNumber': 'Client1 / 2',
          'Dossier.Title': 'My Dossier',
-         'Test': 'Peter',
          'User.FullName': 'Test User',
          'User.ID': TEST_USER_ID,
          'ogg.document.document_date': document_date,
@@ -212,6 +212,38 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
         self.assertNotEquals(self.template_b.file, document.file)
 
     @browsing
+    def test_recipient_properties_are_added(self, browser):
+        template_word = create(Builder('document')
+                               .titled('Word Docx template')
+                               .within(self.templatedossier)
+                               .with_asset_file('without_custom_properties.docx'))
+        template_path = '/'.join(template_word.getPhysicalPath())
+        peter = create(Builder('person')
+                       .having(firstname=u'Peter', lastname=u'M\xfcller'))
+
+        with freeze(self.document_date):
+            browser.login().open(self.dossier, view='document_with_template')
+            browser.fill({'paths:list': template_path,
+                          'Recipient': get_contacts_token(peter),
+                          'Title': 'Test Docx'}).save()
+
+        document = self.dossier.listFolderContents()[0]
+        self.assertEquals(u'test-docx.docx', document.file.filename)
+
+        expected_person_properties = {
+            'ogg.recipient.contact.title': u'Peter M\xfcller',
+            'ogg.recipient.person.firstname': 'Peter',
+            'ogg.recipient.person.lastname': u'M\xfcller',
+        }
+        expected_person_properties.update(self.expected_doc_properties)
+
+        with TemporaryDocFile(document.file) as tmpfile:
+            self.assertItemsEqual(
+                expected_person_properties.items(),
+                read_properties(tmpfile.path))
+        self.assert_doc_properties_updated_journal_entry_generated(document)
+
+    @browsing
     def test_properties_are_added_when_created_from_template_with_doc_properties(self, browser):
         template_word = create(Builder('document')
                                .titled('Word Docx template')
@@ -228,7 +260,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
         self.assertEquals(u'test-docx.docx', document.file.filename)
         with TemporaryDocFile(document.file) as tmpfile:
             self.assertItemsEqual(
-                self.expected_doc_properties.items(),
+                self.expected_doc_properties.items() + [('Test', 'Peter')],
                 read_properties(tmpfile.path))
         self.assert_doc_properties_updated_journal_entry_generated(document)
 

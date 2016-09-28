@@ -14,7 +14,6 @@ from opengever.dossier.interfaces import IDocProperties
 from opengever.dossier.interfaces import IDocPropertyProvider
 from opengever.dossier.interfaces import ITemplateDossierProperties
 from opengever.ogds.base.utils import ogds_service
-from opengever.ogds.models.user import User
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.interfaces import IMemberData
 from Products.CMFCore.utils import getToolByName
@@ -47,7 +46,8 @@ class TemporaryDocFile(object):
 
 class DocPropertyWriter(object):
 
-    def __init__(self, document):
+    def __init__(self, document, recipient=None):
+        self.recipient = recipient
         self.document = document
         self.request = self.document.REQUEST
 
@@ -61,7 +61,7 @@ class DocPropertyWriter(object):
     def get_properties(self):
         properties_adapter = getMultiAdapter(
             (self.document, self.request), IDocProperties)
-        return properties_adapter.get_properties()
+        return properties_adapter.get_properties(self.recipient)
 
     def is_export_enabled(self):
         registry = getUtility(IRegistry)
@@ -301,7 +301,7 @@ class DefaultDocProperties(grok.MultiAdapter):
         member = portal_membership.getAuthenticatedMember()
         return member
 
-    def get_properties(self):
+    def get_properties(self, recipient=None):
         document = self.context
         dossier = aq_parent(document)
         repofolder = self.get_repofolder(dossier)
@@ -316,4 +316,9 @@ class DefaultDocProperties(grok.MultiAdapter):
             if property_provider is not None:
                 obj_properties = property_provider.get_properties()
             properties.update(obj_properties)
+
+        if recipient:
+            provider = recipient.get_doc_property_provider(prefix='recipient')
+            properties.update(provider.get_properties())
+
         return properties
