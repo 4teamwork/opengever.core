@@ -91,5 +91,7 @@ class OrgRoleDocPropertyProvider(PrefixableDocPropertyProvider):
                            self.org_role.function)
         self._add_property(properties, 'orgrole', 'description',
                            self.org_role.function)
+        self._add_property(properties, 'orgrole', 'department',
+                           self.org_role.department)
 
         return properties
