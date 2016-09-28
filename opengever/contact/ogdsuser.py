@@ -3,14 +3,14 @@ from opengever.ogds.base.browser.userdetails import UserDetails
 from opengever.ogds.base.utils import ogds_service
 
 
-class OgdsUserAdapter(object):
+class OgdsUserToContactAdapter(object):
     """Adapter that represents ogds users as sql-contacts."""
 
     class QueryAdapter(object):
         """Adapter for query calls."""
 
         def get(self, userid):
-            return OgdsUserAdapter(ogds_service().find_user(userid))
+            return OgdsUserToContactAdapter(ogds_service().find_user(userid))
     query = QueryAdapter()
 
     def __init__(self, ogds_user):

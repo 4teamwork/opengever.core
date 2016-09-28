@@ -1,7 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.base.oguid import Oguid
-from opengever.contact.ogdsuser import OgdsUserAdapter
 from opengever.testing import MEMORY_DB_LAYER
 import unittest2
 

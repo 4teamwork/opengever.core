@@ -2,7 +2,7 @@ from opengever.contact.models import Contact
 from opengever.contact.models import Organization
 from opengever.contact.models import OrgRole
 from opengever.contact.models import Person
-from opengever.contact.ogdsuser import OgdsUserAdapter
+from opengever.contact.ogdsuser import OgdsUserToContactAdapter
 from opengever.ogds.base.utils import ogds_service
 from zope.interface import implementer
 from zope.interface import implements
@@ -26,7 +26,7 @@ class ContactsVocabulary(object):
     by_type = {'person': Person,
                'organization': Organization,
                'org_role': OrgRole,
-               'ogds_user': OgdsUserAdapter}
+               'ogds_user': OgdsUserToContactAdapter}
     by_class = {v: k for k, v in by_type.iteritems()}
 
     def __contains__(self, value):
@@ -65,7 +65,7 @@ class ContactsVocabulary(object):
                     yield(self.getTerm(org_role))
 
         for ogds_user in ogds_service().filter_users(text_filters):
-            yield self.getTerm(OgdsUserAdapter(ogds_user))
+            yield self.getTerm(OgdsUserToContactAdapter(ogds_user))
 
 
 class ContactsVocabularyFactory(object):

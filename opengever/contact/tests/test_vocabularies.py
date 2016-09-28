@@ -1,6 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
-from opengever.contact.ogdsuser import OgdsUserAdapter
+from opengever.contact.ogdsuser import OgdsUserToContactAdapter
 from opengever.ogds.base.utils import ogds_service
 from opengever.testing import FunctionalTestCase
 from zope.component import getUtility
@@ -40,7 +40,7 @@ class TestContactsVocabulary(FunctionalTestCase):
                             .having(person=self.peter_a,
                                     organization=self.teamwork_ag,
                                     function='Scheffe'))
-        self.ogds_user = OgdsUserAdapter(ogds_service().all_users()[0])
+        self.ogds_user = OgdsUserToContactAdapter(ogds_service().all_users()[0])
 
     def test_contains_only_active_organizations_and_persons_and_org_roles(self):
         voca_factory = getUtility(IVocabularyFactory,
