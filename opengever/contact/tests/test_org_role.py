@@ -37,7 +37,7 @@ class TestOrganizationalRole(unittest2.TestCase):
         self.assertEquals([peter, hugo],
                           [role.person for role in meier_ag.persons])
 
-    def test_organization_title_is_person_organization_and_fuction_in_braclets(self):
+    def test_organization_title_is_person_organization_and_fuction_in_parentheses(self):
         peter = create(Builder('person')
                        .having(firstname=u'Peter',
                                lastname=u'M\xfcller',
