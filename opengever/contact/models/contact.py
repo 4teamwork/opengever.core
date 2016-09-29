@@ -60,3 +60,6 @@ class Contact(Base, SQLFormSupport):
 
     def get_contact_id(self):
         return self.contact_id
+
+    def get_doc_property_provider(self, prefix):
+        raise NotImplementedError()

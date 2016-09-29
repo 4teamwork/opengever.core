@@ -1,4 +1,3 @@
-from five import grok
 from ftw.table import helper
 from ftw.table.interfaces import ITableGenerator
 from opengever.base.interfaces import IRedirector
@@ -6,65 +5,93 @@ from opengever.dossier import _
 from opengever.dossier.command import CreateDocumentFromTemplateCommand
 from opengever.dossier.templatedossier import get_template_dossier
 from opengever.tabbedview.helper import document_with_icon
+from plone.autoform.form import AutoExtensibleForm
+from plone.directives import form
+from plone.formwidget.autocomplete import AutocompleteFieldWidget
 from Products.CMFCore.utils import getToolByName
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.statusmessages.interfaces import IStatusMessage
+from z3c.form import button
+from z3c.form.browser.checkbox import SingleCheckBoxFieldWidget
+from z3c.form.form import Form
+from zope import schema
 from zope.component import getUtility
-from zope.interface import Interface
 
 
-class TemplateDocumentFormView(grok.View):
+class ICreateDocumentFromTemplate(form.Schema):
+
+    title = schema.TextLine(
+        title=_(u"label_title", default=u"Title"),
+        required=True)
+
+    form.widget(recipient=AutocompleteFieldWidget)
+    recipient = schema.Choice(
+        title=_(u'label_recipient', default=u'Recipient'),
+        vocabulary=u'opengever.contact.ContactsVocabulary',
+        required=False,
+    )
+
+    form.widget(edit_after_creation=SingleCheckBoxFieldWidget)
+    edit_after_creation = schema.Bool(
+        title=_(u'label_edit_after_creation', default='Edit after creation'),
+        default=True,
+        required=False,
+        )
+
+
+class TemplateDocumentFormView(AutoExtensibleForm, Form):
     """Show the "Document from template" form.
 
     This form lists available document templates from template dossiers,
     allows the user to select one and creates a new document by copying the
     template.
-    """
 
-    grok.context(Interface)
-    grok.require('zope2.View')
-    grok.name('document_with_template')
-    grok.template('template_form')
+    """
+    template = ViewPageTemplateFile('templates/document_from_template.pt')
+
+    schema = ICreateDocumentFromTemplate
+    ignoreContext = True
 
     label = _('create_document_with_template',
               default="create document with template")
 
-    def __call__(self):
-        self.errors = {}
-        self.title = ''
-        self.edit_after_creation = False
+    has_path_error = False
 
-        if self.request.get('form.buttons.save'):
+    @button.buttonAndHandler(_('button_save', default=u'Save'), name='save')
+    def handleApply(self, action):
+        data, errors = self.extractData()
+        if errors:
+            self.status = self.formErrorsMessage
+            return
 
-            # Extract required parameters from the request
-            template_path = None
-            if self.request.get('paths'):
-                template_path = self.request.get('paths')[0]
-            self.title = self.request.get('form.title', '').decode('utf8')
-            self.edit_after_creation = self.request.get(
-                'form.widgets.edit_form') == ['on']
+        new_doc = self.create_document(data)
 
-            if template_path and self.title:
-                new_doc = self.create_document(template_path)
+        if data.get('edit_after_creation'):
+            self.activate_external_editing(new_doc)
+            return self.request.RESPONSE.redirect(
+                new_doc.absolute_url())
 
-                if self.edit_after_creation:
-                    self.activate_external_editing(new_doc)
+        return self.request.RESPONSE.redirect(
+            self.context.absolute_url() + '#documents')
 
-                    return self.request.RESPONSE.redirect(
-                        new_doc.absolute_url())
+    @button.buttonAndHandler(_(u'button_cancel', default=u'Cancel'), name='cancel')
+    def cancel(self, action):
+        return self.request.RESPONSE.redirect(self.context.absolute_url())
 
-                return self.request.RESPONSE.redirect(
-                    self.context.absolute_url() + '#documents')
+    def extractData(self):
+        """Also extract path of the selected template from request."""
 
-            else:
-                if template_path is None:
-                    self.errors['paths'] = True
-                if not self.title:
-                    self.errors['title'] = True
+        data, errors = super(TemplateDocumentFormView, self).extractData()
 
-        elif self.request.get('form.buttons.cancel'):
-            return self.request.RESPONSE.redirect(self.context.absolute_url())
+        paths = self.request.get('paths')
+        template_path = paths[0] if paths else None
+        if not template_path:
+            self.has_path_error = True
+            errors = errors + ("template path error",)
+        else:
+            data['template_path'] = str(template_path)
 
-        return self.render_form()
+        return data, errors
 
     def activate_external_editing(self, new_doc):
         """Check out the given document, and add the external_editor URL
@@ -83,18 +110,18 @@ class TemplateDocumentFormView(grok.View):
             target='_self',
             timeout=1000)
 
-    def create_document(self, template_path):
+    def create_document(self, data):
         """Create a new document based on a template."""
 
-        template_doc = self.context.restrictedTraverse(template_path)
+        template_doc = self.context.restrictedTraverse(data['template_path'])
 
         command = CreateDocumentFromTemplateCommand(
-            self.context, template_doc, self.title)
+            self.context, template_doc, data['title'],
+            recipient=data.get('recipient'))
         return command.execute()
 
-    def render_form(self):
-        """Get the list of template documents and render the "document from
-        template" form
+    def templates(self):
+        """List the available template documents the user can choose from.
         """
         template_dossier = get_template_dossier()
         if template_dossier is None:
@@ -102,26 +129,18 @@ class TemplateDocumentFormView(grok.View):
             status.addStatusMessage(
                 _("Not found the templatedossier"), type="error")
             return self.request.RESPONSE.redirect(self.context.absolute_url())
-
-        self.templatedossier_path = '/'.join(
-            template_dossier.getPhysicalPath())
-        return super(TemplateDocumentFormView, self).__call__()
-
-    def templates(self):
-        """List the available template documents the user can choose from.
-        """
+        templatedossier_path = '/'.join(template_dossier.getPhysicalPath())
 
         catalog = getToolByName(self.context, 'portal_catalog')
         templates = catalog(
             path=dict(
-                depth=-1, query=self.templatedossier_path),
+                depth=-1, query=templatedossier_path),
             portal_type="opengever.document.document",
             sort_on='sortable_title',
             sort_order='ascending')
 
         generator = getUtility(ITableGenerator, 'ftw.tablegenerator')
         columns = (
-            (''),
             ('', helper.path_radiobutton),
             {'column': 'Title',
              'column_title': _(u'label_title', default=u'title'),

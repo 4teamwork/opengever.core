@@ -1,13 +1,14 @@
 from opengever.base.model import CONTENT_TITLE_LENGTH
+from opengever.contact.docprops import OrganizationDocPropertProvider
 from opengever.contact.models.contact import Contact
 from opengever.contact.utils import get_contactfolder_url
+from opengever.contact.wrapper import OrganizationWrapper
 from opengever.ogds.models.query import BaseQuery
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy.orm import relationship
-from opengever.contact.wrapper import OrganizationWrapper
 
 
 class OrganizationQuery(BaseQuery):
@@ -47,5 +48,7 @@ class Organization(Contact):
     def get_css_class(self):
         return 'contenttype-organization'
 
+    def get_doc_property_provider(self, prefix):
+        return OrganizationDocPropertProvider(self, prefix)
 
 Organization.query_cls = OrganizationQuery

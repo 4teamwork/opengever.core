@@ -83,3 +83,8 @@ def get_contacts_vocabulary():
     voca_factory = getUtility(IVocabularyFactory,
                               name='opengever.contact.ContactsVocabulary')
     return voca_factory(api.portal.get())
+
+
+def get_contacts_token(obj):
+    return get_contacts_vocabulary().getTerm(obj).token
+

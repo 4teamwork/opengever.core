@@ -10,13 +10,9 @@ from opengever.contact.interfaces import IContactSettings
 from opengever.contact.models.participation import Participation
 from opengever.core.testing import toggle_feature
 from opengever.testing import FunctionalTestCase
-from opengever.testing.helpers import get_contacts_vocabulary
+from opengever.testing.helpers import get_contacts_token
 from plone import api
 from zExceptions import Unauthorized
-
-
-def get_token(obj):
-    return get_contacts_vocabulary().getTerm(obj).token
 
 
 class TestDossierParticipation(FunctionalTestCase):
@@ -237,7 +233,7 @@ class TestAddForm(FunctionalTestCase):
     @browsing
     def test_add_participation_for_person(self, browser):
         browser.login().open(self.dossier, view='add-sql-participation')
-        browser.fill({'Contact': get_token(self.peter),
+        browser.fill({'Contact': get_contacts_token(self.peter),
                       'Roles': ['Regard']})
         browser.click_on('Save')
 
@@ -251,7 +247,7 @@ class TestAddForm(FunctionalTestCase):
     @browsing
     def test_add_participation_for_ogds_user(self, browser):
         browser.login().open(self.dossier, view='add-sql-participation')
-        browser.fill({'Contact': get_token(self.hans),
+        browser.fill({'Contact': get_contacts_token(self.hans),
                       'Roles': ['Regard']})
         browser.click_on('Save')
 
@@ -265,7 +261,7 @@ class TestAddForm(FunctionalTestCase):
     @browsing
     def test_add_participation_for_organization(self, browser):
         browser.login().open(self.dossier, view='add-sql-participation')
-        browser.fill({'Contact': get_token(self.meier_ag),
+        browser.fill({'Contact': get_contacts_token(self.meier_ag),
                       'Roles': ['Final drawing', 'Regard']})
         browser.click_on('Save')
 
@@ -282,7 +278,7 @@ class TestAddForm(FunctionalTestCase):
             person=self.peter, organization=self.meier_ag, function=u'cheffe'))
 
         browser.login().open(self.dossier, view='add-sql-participation')
-        browser.fill({'Contact': get_token(org_role),
+        browser.fill({'Contact': get_contacts_token(org_role),
                       'Roles': ['Final drawing']})
         browser.click_on('Save')
 
@@ -301,7 +297,7 @@ class TestAddForm(FunctionalTestCase):
 
         browser.login().open(self.dossier, view='add-sql-participation')
 
-        browser.fill({'Contact': get_token(self.peter),
+        browser.fill({'Contact': get_contacts_token(self.peter),
                       'Roles': ['Final drawing', 'Regard']})
         browser.click_on('Save')
 

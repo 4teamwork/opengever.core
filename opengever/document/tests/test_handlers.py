@@ -1,3 +1,4 @@
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ooxml_docprops import read_properties
@@ -28,6 +29,7 @@ class TestHandlers(FunctionalTestCase):
             Builder('document')
             .within(self.dossier)
             .titled("Document with file")
+            .having(document_date=datetime(2010, 12, 30, 0, 0))
             .with_asset_file('with_gever_properties.docx'))
 
     def tearDown(self):
@@ -54,12 +56,24 @@ class TestHandlers(FunctionalTestCase):
         manager.checkout()
 
         expected_doc_properties = [
-            ('User.ID', TEST_USER_ID,),
-            ('User.FullName', 'Peter',),
-            ('Dossier.ReferenceNumber', 'Client1 / 1'),
-            ('Dossier.Title', 'Dossier'),
             ('Document.ReferenceNumber', 'Client1 / 1 / 1'),
             ('Document.SequenceNumber', '1'),
+            ('Dossier.ReferenceNumber', 'Client1 / 1'),
+            ('Dossier.Title', 'Dossier'),
+            ('ogg.document.document_date', datetime(2010, 12, 30, 0, 0)),
+            ('ogg.document.reference_number', 'Client1 / 1 / 1'),
+            ('ogg.document.sequence_number', '1'),
+            ('ogg.document.title', 'Document with file'),
+            ('ogg.dossier.reference_number', 'Client1 / 1'),
+            ('ogg.dossier.sequence_number', '1'),
+            ('ogg.dossier.title', 'Dossier'),
+            ('ogg.user.email', 'test@example.org'),
+            ('ogg.user.firstname', 'User'),
+            ('ogg.user.lastname', 'Test'),
+            ('ogg.user.title', 'Test User'),
+            ('ogg.user.userid', TEST_USER_ID),
+            ('User.FullName', 'Test User'),
+            ('User.ID', TEST_USER_ID),
         ]
 
         with TemporaryDocFile(self.doc_with_gever_properties.file) as tmpfile:
@@ -74,16 +88,27 @@ class TestHandlers(FunctionalTestCase):
             ICheckinCheckoutManager)
         manager.checkout()
         self.set_document_property_referencenumber()
-
         manager.checkin()
 
         expected_doc_properties = [
-            ('User.ID', TEST_USER_ID,),
-            ('User.FullName', 'Peter',),
-            ('Dossier.ReferenceNumber', 'Client1 / 1'),
-            ('Dossier.Title', 'Dossier'),
             ('Document.ReferenceNumber', 'Client1 / 1 / 1'),
             ('Document.SequenceNumber', '1'),
+            ('Dossier.ReferenceNumber', 'Client1 / 1'),
+            ('Dossier.Title', 'Dossier'),
+            ('ogg.document.document_date', datetime(2010, 12, 30, 0, 0)),
+            ('ogg.document.reference_number', 'Client1 / 1 / 1'),
+            ('ogg.document.sequence_number', '1'),
+            ('ogg.document.title', 'Document with file'),
+            ('ogg.dossier.reference_number', 'Client1 / 1'),
+            ('ogg.dossier.sequence_number', '1'),
+            ('ogg.dossier.title', 'Dossier'),
+            ('ogg.user.email', 'test@example.org'),
+            ('ogg.user.firstname', 'User'),
+            ('ogg.user.lastname', 'Test'),
+            ('ogg.user.title', 'Test User'),
+            ('ogg.user.userid', TEST_USER_ID),
+            ('User.FullName', 'Test User'),
+            ('User.ID', TEST_USER_ID),
         ]
 
         with TemporaryDocFile(self.doc_with_gever_properties.file) as tmpfile:
@@ -96,16 +121,27 @@ class TestHandlers(FunctionalTestCase):
     def test_copying_documents_updates_doc_properties(self):
         api.content.copy(source=self.doc_with_gever_properties,
                          target=self.target_dossier)
-
         copied_doc = self.target_dossier.getFirstChild()
 
         expected_doc_properties = [
-            ('User.ID', TEST_USER_ID,),
-            ('User.FullName', 'Peter',),
-            ('Dossier.ReferenceNumber', 'Client1 / 2'),
-            ('Dossier.Title', 'Target'),
             ('Document.ReferenceNumber', 'Client1 / 2 / 2'),
             ('Document.SequenceNumber', '2'),
+            ('Dossier.ReferenceNumber', 'Client1 / 2'),
+            ('Dossier.Title', 'Target'),
+            ('ogg.document.document_date', datetime(2010, 12, 30, 0, 0)),
+            ('ogg.document.reference_number', 'Client1 / 2 / 2'),
+            ('ogg.document.sequence_number', '2'),
+            ('ogg.document.title', 'copy of Document with file'),
+            ('ogg.dossier.reference_number', 'Client1 / 2'),
+            ('ogg.dossier.sequence_number', '2'),
+            ('ogg.dossier.title', 'Target'),
+            ('ogg.user.email', 'test@example.org'),
+            ('ogg.user.firstname', 'User'),
+            ('ogg.user.lastname', 'Test'),
+            ('ogg.user.title', 'Test User'),
+            ('ogg.user.userid', TEST_USER_ID),
+            ('User.FullName', 'Test User'),
+            ('User.ID', TEST_USER_ID),
         ]
 
         with TemporaryDocFile(copied_doc.file) as tmpfile:
@@ -116,18 +152,28 @@ class TestHandlers(FunctionalTestCase):
     def test_moving_documents_updates_doc_properties(self):
         api.content.move(source=self.doc_with_gever_properties,
                          target=self.target_dossier)
-
         moved_doc = self.target_dossier.getFirstChild()
 
         expected_doc_properties = [
-            ('User.ID', TEST_USER_ID,),
-            ('User.FullName', 'Peter',),
-            ('Dossier.ReferenceNumber', 'Client1 / 2'),
-            ('Dossier.Title', 'Target'),
             ('Document.ReferenceNumber', 'Client1 / 2 / 1'),
             ('Document.SequenceNumber', '1'),
+            ('Dossier.ReferenceNumber', 'Client1 / 2'),
+            ('Dossier.Title', 'Target'),
+            ('ogg.document.document_date', datetime(2010, 12, 30, 0, 0)),
+            ('ogg.document.reference_number', 'Client1 / 2 / 1'),
+            ('ogg.document.sequence_number', '1'),
+            ('ogg.document.title', 'Document with file'),
+            ('ogg.dossier.reference_number', 'Client1 / 2'),
+            ('ogg.dossier.sequence_number', '2'),
+            ('ogg.dossier.title', 'Target'),
+            ('ogg.user.email', 'test@example.org'),
+            ('ogg.user.firstname', 'User'),
+            ('ogg.user.lastname', 'Test'),
+            ('ogg.user.title', 'Test User'),
+            ('ogg.user.userid', TEST_USER_ID),
+            ('User.FullName', 'Test User'),
+            ('User.ID', TEST_USER_ID),
         ]
-
         with TemporaryDocFile(moved_doc.file) as tmpfile:
             properties = read_properties(tmpfile.path)
             self.assertItemsEqual(expected_doc_properties, properties)

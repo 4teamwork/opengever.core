@@ -1,15 +1,19 @@
 from Acquisition import aq_parent
+from datetime import datetime
+from datetime import time
 from five import grok
 from ooxml_docprops import is_supported_mimetype
 from ooxml_docprops.properties import OOXMLDocument
 from opengever import journal
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
+from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.document import IDocumentSchema
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.interfaces import IDocProperties
 from opengever.dossier.interfaces import IDocPropertyProvider
 from opengever.dossier.interfaces import ITemplateDossierProperties
+from opengever.ogds.base.utils import ogds_service
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.interfaces import IMemberData
 from Products.CMFCore.utils import getToolByName
@@ -42,7 +46,8 @@ class TemporaryDocFile(object):
 
 class DocPropertyWriter(object):
 
-    def __init__(self, document):
+    def __init__(self, document, recipient=None):
+        self.recipient = recipient
         self.document = document
         self.request = self.document.REQUEST
 
@@ -56,7 +61,7 @@ class DocPropertyWriter(object):
     def get_properties(self):
         properties_adapter = getMultiAdapter(
             (self.document, self.request), IDocProperties)
-        return properties_adapter.get_properties()
+        return properties_adapter.get_properties(self.recipient)
 
     def is_export_enabled(self):
         registry = getUtility(IRegistry)
@@ -100,65 +105,176 @@ class DocPropertyWriter(object):
         return is_supported_mimetype(self.document.file.contentType)
 
 
-class DefaultDocumentDocPropertyProvider(grok.Adapter):
+class DocPropertyProvider(grok.Adapter):
+    """Baseclass for DocPropertyProviders.
+
+    Contains utility methods to create a dict of doc-properties. Set the NS
+    class attribute to define a namespace. All your property-values written
+    with _add_property will be prefixed with that namespace.
+    """
+
+    grok.baseclass()
+    grok.provides(IDocPropertyProvider)
+
+    NS = tuple()
+
+    def _add_property(self, properties, name, value):
+        """Add single property to collection of properties.
+
+        If a namespace (NS) has been configured prefixes keys with that
+        namespace.
+        """
+        if not value:
+            return
+        key = '.'.join(self.NS + (name,))
+        properties[key] = value
+
+    def get_properties(self):
+        return {}
+
+    def get_title(self):
+        return self.context.title
+
+    def get_reference_number(self):
+        return getAdapter(self.context, IReferenceNumber).get_number()
+
+    def get_sequence_number(self):
+        return str(getUtility(ISequenceNumber).get_number(self.context))
+
+
+class DefaultDocumentDocPropertyProvider(DocPropertyProvider):
     """
     """
     grok.context(IDocumentSchema)
-    grok.provides(IDocPropertyProvider)
+    NS = ('ogg', 'document')
 
-    def get_reference_number(self):
-        ref_num = getAdapter(self.context, IReferenceNumber).get_number()
-        return ref_num
+    def _as_datetime(self, date):
+        if not date:
+            return date
 
-    def get_sequence_number(self):
-        return getUtility(ISequenceNumber).get_number(self.context)
+        return datetime.combine(date, time(0, 0))
+
+    def get_document_author(self):
+        return IDocumentMetadata(self.context).document_author
+
+    def get_document_date(self):
+        return self._as_datetime(
+            IDocumentMetadata(self.context).document_date)
+
+    def get_reception_date(self):
+        return self._as_datetime(
+            IDocumentMetadata(self.context).receipt_date)
+
+    def get_delivery_date(self):
+        return self._as_datetime(
+            IDocumentMetadata(self.context).delivery_date)
 
     def get_properties(self):
+        """Return document properties.
+
+        XXX Also contains deprecated properties that will go away eventually.
+        """
         reference_number = self.get_reference_number()
         sequence_number = str(self.get_sequence_number())
+
+        # XXX deprecated properties
         properties = {'Document.ReferenceNumber': reference_number,
                       'Document.SequenceNumber': sequence_number}
+
+        self._add_property(properties, 'title', self.get_title())
+        self._add_property(properties, 'reference_number', reference_number)
+        self._add_property(properties, 'sequence_number', sequence_number)
+        self._add_property(properties, 'document_author', self.get_document_author())
+        self._add_property(properties, 'document_date', self.get_document_date())
+        self._add_property(properties, 'reception_date', self.get_reception_date())
+        self._add_property(properties, 'delivery_date', self.get_delivery_date())
+
         return properties
 
 
-class DefaultDossierDocPropertyProvider(grok.Adapter):
-    """
-    """
+class DefaultDossierDocPropertyProvider(DocPropertyProvider):
+    """Return the default dossier properties"""
+
     grok.context(IDossierMarker)
-    grok.provides(IDocPropertyProvider)
-
-    def get_reference_number(self):
-        ref_num = getAdapter(self.context, IReferenceNumber).get_number()
-        return ref_num
-
-    def get_title(self):
-        return self.context.title.encode('utf-8')
+    NS = ('ogg', 'dossier')
 
     def get_properties(self):
-        reference = self.get_reference_number()
+        """Return dossier properties.
+
+        XXX Also contains deprecated properties that will go away eventually.
+        """
+        reference_number = self.get_reference_number()
+        sequence_number = self.get_sequence_number()
         title = self.get_title()
-        properties = {'Dossier.ReferenceNumber': reference,
+
+        # XXX deprecated properties
+        properties = {'Dossier.ReferenceNumber': reference_number,
                       'Dossier.Title': title}
+
+        self._add_property(properties, 'title', title)
+        self._add_property(properties, 'reference_number', reference_number)
+        self._add_property(properties, 'sequence_number', sequence_number)
+
         return properties
 
 
-class DefaultMemberDocPropertyProvider(grok.Adapter):
-    """
-    """
+class DefaultMemberDocPropertyProvider(DocPropertyProvider):
+    """Return the default user properties from LDAP/ogds."""
+
     grok.context(IMemberData)
-    grok.provides(IDocPropertyProvider)
+    NS = ('ogg', 'user')
+
+    ogds_user_attributes = (
+        'firstname',
+        'lastname',
+        'directorate',
+        'directorate_abbr',
+        'department',
+        'department_abbr',
+        'email',
+        'email2',
+        'url',
+        'phone_office',
+        'phone_fax',
+        'phone_mobile',
+        'salutation',
+        'description',
+        'address1',
+        'address2',
+        'zip_code',
+        'city',
+        'country'
+    )
 
     def get_user_id(self):
         return self.context.getMemberId()
 
-    def get_fullname(self):
-        return self.context.getProperty('fullname')
-
     def get_properties(self):
+        """Return user properties from OGDS.
+
+        Always returns a minimal set of the properties 'ogg.user.userid' and
+        'ogg.user.title' even when no ogds-user is found.
+
+        XXX Also contains deprecated properties that will go away eventually.
+        """
         user_id = self.get_user_id()
-        fullname = self.get_fullname()
+        ogds_user = ogds_service().fetch_user(user_id)
+        fullname = ogds_user.fullname() if ogds_user else user_id
+
+        # XXX deprecated properties
         properties = {'User.ID': user_id,
                       'User.FullName': fullname}
+
+        self._add_property(properties, 'userid', user_id)
+        self._add_property(properties, 'title', fullname)
+
+        # abort early if there is no ogds user for some reason.
+        if not ogds_user:
+            return properties
+
+        for attribute_name in self.ogds_user_attributes:
+            value = getattr(ogds_user, attribute_name)
+            self._add_property(properties, attribute_name, value)
         return properties
 
 
@@ -185,7 +301,7 @@ class DefaultDocProperties(grok.MultiAdapter):
         member = portal_membership.getAuthenticatedMember()
         return member
 
-    def get_properties(self):
+    def get_properties(self, recipient=None):
         document = self.context
         dossier = aq_parent(document)
         repofolder = self.get_repofolder(dossier)
@@ -200,4 +316,9 @@ class DefaultDocProperties(grok.MultiAdapter):
             if property_provider is not None:
                 obj_properties = property_provider.get_properties()
             properties.update(obj_properties)
+
+        if recipient:
+            provider = recipient.get_doc_property_provider(prefix='recipient')
+            properties.update(provider.get_properties())
+
         return properties

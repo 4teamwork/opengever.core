@@ -5,6 +5,10 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
+- Add field to specify recipient to document-from-template form.
+  The recipient's doc-properties will be written to the created file.
+  [deiferni]
+
 - Don't fire save_reference_number_prefix() handler twice. IObjectAddedEvent
   inherits from IObjectMovedEvent, so registering it on IObjectMovedEvent
   is enough.

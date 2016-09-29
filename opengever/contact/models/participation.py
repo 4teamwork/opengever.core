@@ -5,7 +5,7 @@ from opengever.base.oguid import Oguid
 from opengever.contact import _
 from opengever.contact.models.org_role import OrgRole
 from opengever.contact.models.participation_role import ParticipationRole
-from opengever.contact.ogdsuser import OgdsUserAdapter
+from opengever.contact.ogdsuser import OgdsUserToContactAdapter
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models import UNIT_ID_LENGTH
 from opengever.ogds.models import USER_ID_LENGTH
@@ -170,7 +170,7 @@ class OgdsUserParticipation(Participation):
 
     @property
     def ogds_user(self):
-        return OgdsUserAdapter(ogds_service().find_user(self.ogds_userid))
+        return OgdsUserToContactAdapter(ogds_service().find_user(self.ogds_userid))
 
     @ogds_user.setter
     def ogds_user(self, ogds_user_adapter):
@@ -180,7 +180,7 @@ class OgdsUserParticipation(Participation):
     def participant(self):
         return self.ogds_user
 
-OgdsUserAdapter.participation_class = OgdsUserParticipation
+OgdsUserToContactAdapter.participation_class = OgdsUserParticipation
 
 
 class ContactParticipation(Participation):

@@ -1,7 +1,13 @@
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.dossier.interfaces import IDocProperties
 from opengever.dossier.interfaces import IDocPropertyProvider
+from opengever.dossier.tests import EXPECTED_DOC_PROPERTIES
+from opengever.dossier.tests import EXPECTED_DOCUMENT_PROPERTIES
+from opengever.dossier.tests import EXPECTED_DOSSIER_PROPERTIES
+from opengever.dossier.tests import EXPECTED_USER_DOC_PROPERTIES
+from opengever.dossier.tests import OGDS_USER_ATTRIBUTES
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
 from zope.component import getAdapter
@@ -10,45 +16,45 @@ from zope.component import getMultiAdapter
 
 class TestDocProperties(FunctionalTestCase):
 
-    use_browser = False
-
-    expected_user_properties = {
-        'User.ID': TEST_USER_ID,
-        'User.FullName': 'Peter',
-    }
-    expected_dossier_properties = {
-        'Dossier.ReferenceNumber': 'Client1 / 1',
-        'Dossier.Title': 'My dossier',
-    }
-    expected_document_properties = {
-        'Document.ReferenceNumber': 'Client1 / 1 / 1',
-        'Document.SequenceNumber': '1',
-    }
+    use_default_fixture = False
 
     def setUp(self):
         super(TestDocProperties, self).setUp()
-        self.setup_fullname(fullname='Peter')
+        user, org_unit, admin_unit = create(
+            Builder('fixture')
+            .with_all_unit_setup()
+            .with_user(**OGDS_USER_ATTRIBUTES))
+
         self.dossier = create(Builder('dossier').titled(u'My dossier'))
-        self.document = create(Builder('document').within(self.dossier))
+        self.document = create(
+            Builder('document')
+            .within(self.dossier)
+            .titled("My Document")
+            .having(document_date=datetime(2010, 1, 3),
+                    document_author=TEST_USER_ID,
+                    receipt_date=datetime(2010, 1, 3),
+                    delivery_date=datetime(2010, 1, 3))
+            .with_asset_file('with_gever_properties.docx'))
+
         self.member = self.login()
 
     def test_default_doc_properties_adapter(self):
         docprops = getMultiAdapter(
             (self.document, self.portal.REQUEST), IDocProperties)
-        properties = docprops.get_properties()
-        self.assertEqual(
-            dict(self.expected_user_properties.items() +
-                 self.expected_dossier_properties.items() +
-                 self.expected_document_properties.items()),
-            properties
-        )
+        all_properties = docprops.get_properties()
+        self.assertItemsEqual(EXPECTED_DOC_PROPERTIES, all_properties)
 
     def test_default_dossier_doc_properties_provider(self):
         dossier_adapter = getAdapter(self.dossier, IDocPropertyProvider)
-        self.assertEqual(self.expected_dossier_properties,
-                         dossier_adapter.get_properties())
+        self.assertItemsEqual(EXPECTED_DOSSIER_PROPERTIES,
+                              dossier_adapter.get_properties())
 
     def test_default_member_doc_properties_provider(self):
         member_adapter = getAdapter(self.member, IDocPropertyProvider)
-        self.assertEqual(self.expected_user_properties,
-                         member_adapter.get_properties())
+        self.assertItemsEqual(EXPECTED_USER_DOC_PROPERTIES,
+                              member_adapter.get_properties())
+
+    def test_default_document_doc_properties_provider(self):
+        document_adapter = getAdapter(self.document, IDocPropertyProvider)
+        self.assertItemsEqual(EXPECTED_DOCUMENT_PROPERTIES,
+                              document_adapter.get_properties())

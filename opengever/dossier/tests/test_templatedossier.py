@@ -6,6 +6,7 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages import plone
 from ftw.testbrowser.pages.statusmessages import error_messages
+from ftw.testing import freeze
 from ooxml_docprops import read_properties
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.dossier.docprops import TemporaryDocFile
@@ -16,6 +17,7 @@ from opengever.journal.tests.utils import get_journal_entry
 from opengever.ogds.base.actor import Actor
 from opengever.testing import add_languages
 from opengever.testing import FunctionalTestCase
+from opengever.testing.helpers import get_contacts_token
 from opengever.testing.pages import sharing_tab_data
 from plone.app.testing import TEST_USER_ID
 from plone.registry.interfaces import IRegistry
@@ -37,14 +39,28 @@ class TestNoTemplateDossier(FunctionalTestCase):
 
 class TestDocumentWithTemplateForm(FunctionalTestCase):
 
-    expected_doc_properties = [
-        ('User.ID', TEST_USER_ID,),
-        ('User.FullName', 'Peter',),
-        ('Dossier.ReferenceNumber', 'Client1 / 2'),
-        ('Dossier.Title', 'My Dossier'),
-        ('Document.ReferenceNumber', 'Client1 / 2 / 4'),
-        ('Document.SequenceNumber', '4'),
-    ]
+    document_date = datetime(2015, 9, 28, 0, 0)
+
+    expected_doc_properties = {
+         'Document.ReferenceNumber': 'Client1 / 2 / 4',
+         'Document.SequenceNumber': '4',
+         'Dossier.ReferenceNumber': 'Client1 / 2',
+         'Dossier.Title': 'My Dossier',
+         'User.FullName': 'Test User',
+         'User.ID': TEST_USER_ID,
+         'ogg.document.document_date': document_date,
+         'ogg.document.reference_number': 'Client1 / 2 / 4',
+         'ogg.document.sequence_number': '4',
+         'ogg.document.title': 'Test Docx',
+         'ogg.dossier.reference_number': 'Client1 / 2',
+         'ogg.dossier.sequence_number': '2',
+         'ogg.dossier.title': 'My Dossier',
+         'ogg.user.email': 'test@example.org',
+         'ogg.user.firstname': 'User',
+         'ogg.user.lastname': 'Test',
+         'ogg.user.title': 'Test User',
+         'ogg.user.userid': TEST_USER_ID
+    }
 
     def setUp(self):
         super(TestDocumentWithTemplateForm, self).setUp()
@@ -157,7 +173,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
     def test_save_redirects_to_the_dossiers_document_tab(self, browser):
         browser.login().open(self.dossier, view='document_with_template')
         browser.fill({'paths:list': self.template_b_path,
-                      'title': 'Test Document',
+                      'Title': 'Test Document',
                       'Edit after creation':False}).save()
 
         self.assertEquals(self.dossier, browser.context)
@@ -168,7 +184,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
     def test_new_document_is_titled_with_the_form_value(self, browser):
         browser.login().open(self.dossier, view='document_with_template')
         browser.fill({'paths:list': self.template_b_path,
-                      'title': 'Test Document'}).save()
+                      'Title': 'Test Document'}).save()
 
         document = self.dossier.listFolderContents()[0]
 
@@ -178,7 +194,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
     def test_new_document_values_are_filled_with_default_values(self, browser):
         browser.login().open(self.dossier, view='document_with_template')
         browser.fill({'paths:list': self.template_b_path,
-                      'title': 'Test Document'}).save()
+                      'Title': 'Test Document'}).save()
 
         document = self.dossier.listFolderContents()[0]
         self.assertEquals(date.today(), document.document_date)
@@ -188,12 +204,44 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
     def test_file_of_the_new_document_is_a_copy_of_the_template(self, browser):
         browser.login().open(self.dossier, view='document_with_template')
         browser.fill({'paths:list': self.template_b_path,
-                      'title': 'Test Document'}).save()
+                      'Title': 'Test Document'}).save()
 
         document = self.dossier.listFolderContents()[0]
 
         self.assertEquals(self.template_b.file.data, document.file.data)
         self.assertNotEquals(self.template_b.file, document.file)
+
+    @browsing
+    def test_recipient_properties_are_added(self, browser):
+        template_word = create(Builder('document')
+                               .titled('Word Docx template')
+                               .within(self.templatedossier)
+                               .with_asset_file('without_custom_properties.docx'))
+        template_path = '/'.join(template_word.getPhysicalPath())
+        peter = create(Builder('person')
+                       .having(firstname=u'Peter', lastname=u'M\xfcller'))
+
+        with freeze(self.document_date):
+            browser.login().open(self.dossier, view='document_with_template')
+            browser.fill({'paths:list': template_path,
+                          'Recipient': get_contacts_token(peter),
+                          'Title': 'Test Docx'}).save()
+
+        document = self.dossier.listFolderContents()[0]
+        self.assertEquals(u'test-docx.docx', document.file.filename)
+
+        expected_person_properties = {
+            'ogg.recipient.contact.title': u'Peter M\xfcller',
+            'ogg.recipient.person.firstname': 'Peter',
+            'ogg.recipient.person.lastname': u'M\xfcller',
+        }
+        expected_person_properties.update(self.expected_doc_properties)
+
+        with TemporaryDocFile(document.file) as tmpfile:
+            self.assertItemsEqual(
+                expected_person_properties.items(),
+                read_properties(tmpfile.path))
+        self.assert_doc_properties_updated_journal_entry_generated(document)
 
     @browsing
     def test_properties_are_added_when_created_from_template_with_doc_properties(self, browser):
@@ -203,17 +251,17 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
                                .with_asset_file('with_custom_properties.docx'))
         template_path = '/'.join(template_word.getPhysicalPath())
 
-        browser.login().open(self.dossier, view='document_with_template')
-        browser.fill({'paths:list': template_path,
-                      'title': 'Test Docx'}).save()
+        with freeze(self.document_date):
+            browser.login().open(self.dossier, view='document_with_template')
+            browser.fill({'paths:list': template_path,
+                          'Title': 'Test Docx'}).save()
 
         document = self.dossier.listFolderContents()[0]
         self.assertEquals(u'test-docx.docx', document.file.filename)
         with TemporaryDocFile(document.file) as tmpfile:
-            properties = read_properties(tmpfile.path)
             self.assertItemsEqual(
-                self.expected_doc_properties + [('Test', 'Peter')],
-                properties)
+                self.expected_doc_properties.items() + [('Test', 'Peter')],
+                read_properties(tmpfile.path))
         self.assert_doc_properties_updated_journal_entry_generated(document)
 
     @browsing
@@ -224,15 +272,17 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
                                .with_asset_file('without_custom_properties.docx'))
         template_path = '/'.join(template_word.getPhysicalPath())
 
-        browser.login().open(self.dossier, view='document_with_template')
-        browser.fill({'paths:list': template_path,
-                      'title': 'Test Docx'}).save()
+        with freeze(self.document_date):
+            browser.login().open(self.dossier, view='document_with_template')
+            browser.fill({'paths:list': template_path,
+                          'Title': 'Test Docx'}).save()
 
         document = self.dossier.listFolderContents()[0]
         self.assertEquals(u'test-docx.docx', document.file.filename)
         with TemporaryDocFile(document.file) as tmpfile:
-            properties = read_properties(tmpfile.path)
-            self.assertItemsEqual(self.expected_doc_properties, properties)
+            self.assertItemsEqual(
+                self.expected_doc_properties.items(),
+                read_properties(tmpfile.path))
         self.assert_doc_properties_updated_journal_entry_generated(document)
 
     @browsing
@@ -246,7 +296,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
 
         browser.login().open(self.dossier, view='document_with_template')
         browser.fill({'paths:list': template_path,
-                      'title': 'Test Docx'}).save()
+                      'Title': 'Test Docx'}).save()
 
         document = self.dossier.listFolderContents()[0]
         self.assertEquals(u'test-docx.docx', document.file.filename)
