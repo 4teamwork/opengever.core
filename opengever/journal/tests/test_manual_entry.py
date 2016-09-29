@@ -83,11 +83,11 @@ class TestManualJournalEntry(FunctionalTestCase):
         row = browser.css('.listing').first.rows[1]
         links = row.css('.contacts a')
 
-        self.assertEquals(u'Contacts H\xfcgo Boss Meier AG',
+        self.assertEquals(u'Contacts Boss H\xfcgo Meier AG',
                           row.dict().get('References'))
 
         self.assertEquals(
             ['http://nohost/plone/opengever-contact-contactfolder/contact-1',
              'http://nohost/plone/opengever-contact-contactfolder/contact-2'],
             [link.get('href') for link in links])
-        self.assertEquals([u'H\xfcgo Boss', 'Meier AG'], links.text)
+        self.assertEquals([u'Boss H\xfcgo', 'Meier AG'], links.text)

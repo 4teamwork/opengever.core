@@ -176,7 +176,7 @@ class TestOrganizationView(FunctionalTestCase):
         browser.login().open(org1.get_url())
 
         self.assertEquals(
-            [u'Peter M\xfcller', 'Sandra Meier', 'Sandra Muster'],
+            [u'M\xfcller Peter', 'Meier Sandra', 'Muster Sandra'],
             browser.css('.persons .name').text)
         self.assertEquals(
             [u'CEO', u'CFO', u'Stellvertretende F\xfchrung'],

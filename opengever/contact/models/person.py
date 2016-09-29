@@ -38,7 +38,7 @@ class Person(Contact):
 
     @property
     def fullname(self):
-        return u'{} {}'.format(self.firstname, self.lastname)
+        return u'{} {}'.format(self.lastname, self.firstname)
 
     @property
     def wrapper_id(self):

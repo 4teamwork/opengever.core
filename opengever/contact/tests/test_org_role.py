@@ -63,14 +63,14 @@ class TestOrganizationalRole(unittest2.TestCase):
                                                   department='IT'))
 
         self.assertEquals(
-            u'Peter M\xfcller - Meier AG', role1.get_title())
+            u'M\xfcller Peter - Meier AG', role1.get_title())
         self.assertEquals(
-            u'Peter M\xfcller - 4teamwork AG (Developer)', role2.get_title())
+            u'M\xfcller Peter - 4teamwork AG (Developer)', role2.get_title())
         self.assertEquals(
-            u'Peter M\xfcller - 4teamwork AG (Developer - IT)', role3.get_title())
+            u'M\xfcller Peter - 4teamwork AG (Developer - IT)', role3.get_title())
         self.assertEquals(
-            u'Peter M\xfcller - 4teamwork AG (IT)', role4.get_title())
+            u'M\xfcller Peter - 4teamwork AG (IT)', role4.get_title())
 
         self.assertEquals(
-            u'Peter M\xfcller [123456] - Meier AG',
+            u'M\xfcller Peter [123456] - Meier AG',
             role1.get_title(with_former_id=True))

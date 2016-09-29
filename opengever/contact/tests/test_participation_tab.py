@@ -40,7 +40,7 @@ class ParticipationTab(FunctionalTestCase):
                              view=u'tabbedview_view-participations')
 
         self.assertEquals(
-            [u'Hans M\xfcller', 'Peter AG', 'Peter Hans (peter)'],
+            [u'M\xfcller Hans', 'Peter AG', 'Peter Hans (peter)'],
             browser.css('#participation_listing .contact').text)
 
         links = browser.css('#participation_listing .contact a')
@@ -65,7 +65,7 @@ class ParticipationTab(FunctionalTestCase):
         browser.login().open(self.dossier,
                              view=u'tabbedview_view-participations')
         self.assertEquals(
-            [u'Hans M\xfcller', 'Peter AG', 'Peter Hans (peter)'],
+            [u'M\xfcller Hans', 'Peter AG', 'Peter Hans (peter)'],
             browser.css('#participation_listing .contact').text)
 
     @browsing
@@ -83,7 +83,7 @@ class ParticipationTab(FunctionalTestCase):
 
         row1, row2, row3 = browser.css('#participation_listing > li')
 
-        self.assertEquals([u'Hans M\xfcller'], row1.css('.contact').text)
+        self.assertEquals([u'M\xfcller Hans'], row1.css('.contact').text)
         self.assertEquals(['Regard', 'Final drawing'], row1.css('.roles li').text)
 
         self.assertEquals([u'Peter AG'], row2.css('.contact').text)

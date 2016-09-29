@@ -48,10 +48,10 @@ class TestContactsVocabulary(FunctionalTestCase):
         vocabulary = voca_factory(self.portal)
 
         self.assertTerms(
-            [(self.peter_a, u'Peter M\xfcller [1111]'),
-             (self.role1, u'Peter M\xfcller [1111] - Meier AG (Developer)'),
-             (self.role2, u'Peter M\xfcller [1111] - 4teamwork AG (Scheffe)'),
-             (self.peter_b, u'Peter Fl\xfcckiger'),
+            [(self.peter_a, u'M\xfcller Peter [1111]'),
+             (self.role1, u'M\xfcller Peter [1111] - Meier AG (Developer)'),
+             (self.role2, u'M\xfcller Peter [1111] - 4teamwork AG (Scheffe)'),
+             (self.peter_b, u'Fl\xfcckiger Peter'),
              (self.meier_ag, u'Meier AG [2222]'),
              (self.teamwork_ag, u'4teamwork AG'),
              (self.ogds_user, u'Test User (test_user_1_)')],
@@ -67,24 +67,24 @@ class TestContactsVocabulary(FunctionalTestCase):
             vocabulary.search('Meier'))
 
         self.assertTerms(
-            [(self.peter_a, u'Peter M\xfcller [1111]'),
-             (self.role1, u'Peter M\xfcller [1111] - Meier AG (Developer)'),
-             (self.role2, u'Peter M\xfcller [1111] - 4teamwork AG (Scheffe)'),
-             (self.peter_b, u'Peter Fl\xfcckiger')],
+            [(self.peter_a, u'M\xfcller Peter [1111]'),
+             (self.role1, u'M\xfcller Peter [1111] - Meier AG (Developer)'),
+             (self.role2, u'M\xfcller Peter [1111] - 4teamwork AG (Scheffe)'),
+             (self.peter_b, u'Fl\xfcckiger Peter')],
             vocabulary.search('Peter'))
 
         self.assertTerms(
-            [(self.peter_b, u'Peter Fl\xfcckiger')],
+            [(self.peter_b, u'Fl\xfcckiger Peter')],
             vocabulary.search('Peter Fl'))
 
         self.assertTerms(
-            [(self.peter_b, u'Peter Fl\xfcckiger')],
+            [(self.peter_b, u'Fl\xfcckiger Peter')],
             vocabulary.search('Pe Fl'))
 
         self.assertTerms(
-            [(self.peter_a, u'Peter M\xfcller [1111]'),
-             (self.role1, u'Peter M\xfcller [1111] - Meier AG (Developer)'),
-             (self.role2, u'Peter M\xfcller [1111] - 4teamwork AG (Scheffe)')],
+            [(self.peter_a, u'M\xfcller Peter [1111]'),
+             (self.role1, u'M\xfcller Peter [1111] - Meier AG (Developer)'),
+             (self.role2, u'M\xfcller Peter [1111] - 4teamwork AG (Scheffe)')],
             vocabulary.search('1111'))
 
         self.assertTerms(
