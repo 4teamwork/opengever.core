@@ -2,6 +2,8 @@
 <object name="portal_javascripts" meta_type="JavaScripts Registry">
     <!-- !!! WARNING: DO NOT DEFINE DEPENDENCIES MANUALLY USE THE TARJAN SCRIPT INSTEAD: https://gist.github.com/bierik/ece24ad316424d6d4909efd272940fb4 !!! -->
 
+    <javascript remove="True" id="++resource++opengever.meeting/sticky_heading.js" />
+
     <javascript cacheable="True" compression="safe" cookable="True" expression=""
                 enabled="True" id="++resource++opengever.meeting/Pin.js" inline="False"
                 insert-after="++resource++opengever.base/MeetingStorage.js" />

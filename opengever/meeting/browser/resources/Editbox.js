@@ -1,10 +1,10 @@
-(function(global, $) {
+(function(global, $, Controller) {
 
   "use strict";
 
   var EditboxController = function(options) {
 
-    global.Controller.call(this, "", null, { context: options.editbox });
+    Controller.call(this, "", null, { context: options.editbox });
 
     var self = this;
 
@@ -86,4 +86,4 @@
 
   window.EditboxController = EditboxController;
 
-}(window, jQuery));
+}(window, window.jQuery, window.Controller));

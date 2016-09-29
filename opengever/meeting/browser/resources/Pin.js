@@ -1,4 +1,4 @@
-(function() {
+(function(global, $) {
 
   function throttle(func) {
     return function () { requestAnimationFrame(func); };
@@ -259,4 +259,4 @@
 
   window.Pin = Pin;
 
-})();
+})(window, window.jQuery);

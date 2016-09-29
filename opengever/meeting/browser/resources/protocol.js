@@ -1,33 +1,29 @@
-(function(global, $) {
+(function(global, $, MeetingStorage, Pin, Synchronizer, Controller, Scrollspy, SelectAutocomplete) {
 
   "use strict";
 
   function ProtocolController() {
 
-    global.Controller.call(this);
+    Controller.call(this);
 
     var root = $(":root");
 
     var headings;
     var labels;
 
+    $(document).on("editor.save", function() {
+      showHintForLocalChanges();
+      headings.refresh();
+      labels.refresh();
+    });
+
     var saveButton = $("#form-buttons-save");
     var protocolControls = $("#protocol-controls");
 
-    var currentMeeting = $(".protocol-navigation").data().meeting;
-    var createdAt = new Date($(".protocol-navigation").data().modified).getTime();
-
-    var protocolSynchronizer = new global.Synchronizer({
+    var protocolSynchronizer = new Synchronizer({
       target: "#content-core input, #content-core select, #content-core textarea",
       triggers: ["input", "change", "changeDate"]
     });
-
-    var trixSynchronizer = new global.Synchronizer({
-      target: "trix-editor",
-      triggers: ["trix-change"]
-    });
-
-    var meetingStorage = new global.MeetingStorage(currentMeeting);
 
     var showHintForLocalChanges = function() {
       $("#form-buttons-cancel").val($("#button-value-discard").val());
@@ -36,31 +32,27 @@
 
     var showHintForConflictChanges = function() { root.addClass("conflict-changes"); };
 
-    var parseProposal = function(expression) { return expression.split("-"); };
-
-    var syncTrix = function(target) {
-      var proposalExpression = parseProposal(target.inputElement.id);
-      var html = JSON.stringify(target.editor);
-      meetingStorage.addOrUpdateUnit(proposalExpression[1], proposalExpression[2], html);
-      meetingStorage.push();
-      showHintForLocalChanges();
-      headings.refresh();
-      labels.refresh();
-    };
-
     var syncProposal = function() { showHintForLocalChanges(); };
 
     protocolSynchronizer.onSync(syncProposal);
     protocolSynchronizer.observe();
 
-    trixSynchronizer.onSync(syncTrix);
-    trixSynchronizer.observe();
+    function createdAt() { return new Date($(".protocol-navigation").data().modified).getTime(); }
 
-    meetingStorage.pull();
-
-    if(createdAt < meetingStorage.currentMeeting.revision) {
-      meetingStorage.restore();
+    function restore() {
+      var meetingStorage = MeetingStorage.getInstance();
+      if(createdAt() < meetingStorage.get().revision) {
+        $.each(meetingStorage.get(), function(proposalId, proposal) {
+          $.each(proposal, function(sectionName, section) {
+            $("#agenda_item-" + proposalId + "-" + sectionName).val(section);
+            $("#proxy-agenda_item-" + proposalId + "-" + sectionName).html(section);
+          });
+        });
+        showHintForLocalChanges();
+      }
     }
+
+    this.discardProtocol = function() { MeetingStorage.getInstance().destroy(); };
 
     this.saveProtocol = function(target) {
       var form = target.parents("form");
@@ -78,7 +70,7 @@
         validator: conflictValidator
       }).done(function(data) {
         if (data.redirectUrl !== undefined) {
-          meetingStorage.deleteCurrentMeeting();
+          MeetingStorage.getInstance().destroy();
           window.location = data.redirectUrl;
         } else {
           // we stay on the same site. allow re-submit.
@@ -87,14 +79,12 @@
       });
     };
 
-    this.discardProtocol = function() { meetingStorage.deleteCurrentMeeting(); };
-
     this.initScrollspy = function() {
-      var scrollspy = global.Scrollspy(".navigation > ul");
+      var scrollspy = Scrollspy(".navigation > ul");
 
-      headings = global.Pin("#opengever_meeting_protocol .protocol_title", "trix-toolbar");
-      labels = global.Pin("#opengever_meeting_protocol .agenda_items label", null, { pin: false });
-      global.Pin(".protocol-navigation", null, { pin: false });
+      headings = Pin("#opengever_meeting_protocol .protocol_title", "trix-toolbar");
+      labels = Pin("#opengever_meeting_protocol .agenda_items label", null, { pin: false });
+      Pin(".protocol-navigation", null, { pin: false });
 
       headings.onRelease(function() { scrollspy.reset(); });
 
@@ -126,46 +116,19 @@
 
     this.init();
 
-    if(meetingStorage.currentMeeting.revision) {
-      showHintForLocalChanges();
-    }
+    restore();
   }
-
-  function TrixController() {
-
-    global.Controller.call(this);
-
-    this.activateToolbar = function(toolbar) {
-      $("trix-toolbar").removeClass("active");
-      toolbar.addClass("active");
-    };
-
-    this.attachToolbar = function(target) { this.activateToolbar($("#" + target.attr("toolbar"))); };
-
-    this.events = [
-      {
-        method: "click",
-        target: "trix-editor",
-        callback: this.attachToolbar
-      }
-    ];
-
-    this.init();
-
-  }
-
-  var trixController = new TrixController();
 
   $(function() {
     if($("#opengever_meeting_protocol").length) {
-      var protocolController = new ProtocolController();
+      new ProtocolController();
     }
     if($(".template-opengever-meeting-proposal, .portaltype-opengever-meeting-submittedproposal.template-edit, .portaltype-opengever-meeting-proposal.template-edit").length) {
-      global.Pin("trix-toolbar");
+      Pin("trix-toolbar");
     }
     if($(".template-add-membership, .template-opengever-meeting-proposal, .portaltype-opengever-meeting-proposal.template-edit").length) {
-      var autocompleteSelects = new global.SelectAutocomplete();
+      new SelectAutocomplete();
     }
   });
 
-}(window, jQuery));
+}(window, jQuery, window.MeetingStorage, window.Pin, window.Synchronizer, window.Controller, window.Scrollspy, window.SelectAutocomplete));

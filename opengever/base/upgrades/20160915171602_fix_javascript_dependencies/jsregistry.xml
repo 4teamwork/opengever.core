@@ -2,6 +2,9 @@
 <object name="portal_javascripts" meta_type="JavaScripts Registry">
     <!-- !!! WARNING: DO NOT DEFINE DEPENDENCIES MANUALLY USE THE TARJAN SCRIPT INSTEAD: https://gist.github.com/bierik/ece24ad316424d6d4909efd272940fb4 !!! -->
 
+    <javascript remove="True" id="++resource++opengever.base/handlebars.min.js" />
+    <javascript remove="True" id="++resource++opengever.meeting/jquery.autosize.js" />
+
     <javascript cacheable="True" compression="none" cookable="True" expression=""
                 enabled="True" id="++resource++opengever.base/notify.js" inline="False"
                 insert-after="++resource++plone.app.jquery.js" />
@@ -17,6 +20,10 @@
     <javascript cacheable="True" compression="safe" cookable="True" expression=""
                 enabled="True" id="++resource++opengever.base/MeetingStorage.js" inline="False"
                 insert-after="++resource++opengever.base/Storage.js" />
+
+    <javascript cacheable="True" compression="safe" cookable="True" expression=""
+                enabled="True" id="++resource++opengever.meeting/Pin.js" inline="False"
+                insert-after="++resource++opengever.base/MeetingStorage.js" />
 
     <javascript cacheable="True" compression="safe" cookable="True" expression=""
                 enabled="True" id="++resource++opengever.base/Synchronizer.js" inline="False"

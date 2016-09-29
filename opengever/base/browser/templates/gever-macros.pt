@@ -157,12 +157,11 @@
           <button type="button" class="button redo" data-trix-action="redo"></button>
         </div>
       </trix-toolbar>
-      <trix-editor tal:attributes="toolbar string:${id}-toolbar;
-                                   input id;
-                                   autofocus python: '' if autofocus else nothing"
-                   tal:content="structure value"
-      />
-
+      <div class="trix-editor-proxy"
+           tal:content="structure value"
+           tal:attributes="data-editor-id id;
+                           data-autofocus python: '' if autofocus else nothing;
+                           id string:proxy-${id}"></div>
     </metal:define>
 
   </body>

@@ -1,10 +1,10 @@
-(function(global, $) {
+(function(global, $, Controller, EditboxController, Pin) {
 
   "use strict";
 
   function MeetingController() {
 
-    global.Controller.call(this);
+    Controller.call(this);
 
     var self = this;
 
@@ -23,7 +23,7 @@
       target.addClass("loading");
       return $.post(self.currentItem.attr("href"))
               .always(function() { target.removeClass("loading"); })
-              .done(function() { global.location.reload(); });
+              .done(function() { location.reload(); });
     };
 
     this.closeModal = function() { dialog.close(); };
@@ -111,7 +111,7 @@
       helper: sortableHelper
     };
 
-    global.Controller.call(this, $("#agendaitemsTemplate").html(), $("#agenda_items tbody"), options);
+    Controller.call(this, $("#agendaitemsTemplate").html(), $("#agenda_items tbody"), options);
 
     this.fetch = function() { return $.get(viewlet.data().listAgendaItemsUrl); };
 
@@ -159,7 +159,7 @@
       } else {
         source = $(".title > span", row);
       }
-      var editbox = new global.EditboxController({
+      var editbox = new EditboxController({
         editbox: $(".edit-box", row),
         source: source,
         trigger: target
@@ -299,7 +299,7 @@
   function ProposalController(options) {
 
     var viewlet = $("#opengever_meeting_meeting");
-    global.Controller.call(this, $("#proposalsTemplate").html(), $("#unscheduled_porposals"), options);
+    Controller.call(this, $("#proposalsTemplate").html(), $("#unscheduled_porposals"), options);
     var self = this;
 
     this.fetch = function() { return $.get(viewlet.data().listUnscheduledProposalsUrl); };
@@ -388,7 +388,7 @@
 
   function CommitteeController() {
 
-    global.Controller.call(this);
+    Controller.call(this);
 
     var title = $("#form-widgets-title");
     var autoUpdate = true;
@@ -444,15 +444,11 @@
       var committeecontroller = new CommitteeController();
     }
 
-    global.autosize($('body.template-opengever-meeting-proposal textarea'));
-    global.autosize($('body.template-edit.portaltype-opengever-meeting-proposal textarea'));
-    global.autosize($('body.template-edit.portaltype-opengever-meeting-submittedproposal textarea'));
-
     $(global.document).on("notify", function() {
-      var notifyContainer = global.Pin("#columns", null, { pin: false });
+      var notifyContainer = Pin("#columns", null, { pin: false });
       notifyContainer.onPin(function() { $(".notifyjs-corner").addClass("sticky"); });
       notifyContainer.onRelease(function() { $(".notifyjs-corner").removeClass("sticky"); });
     });
   });
 
-}(window, jQuery));
+}(window, window.jQuery, window.Controller, window.EditboxController, window.Pin));

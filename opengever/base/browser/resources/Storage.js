@@ -1,127 +1,66 @@
-(function(global, $) {
+(function(global, $, MessageFactory) {
 
   "use strict";
 
-  function Storage(options) {
+  /*
+    The GEVERStorage is an abstraction for the browsers
+    local storage.
+    It provides a way to manage a datastructure through a given
+    endpoint - object in the browsers localStorage.
 
-    this.options = $.extend({ root: "storage" }, options || {});
+    options:
+      - root: Set the endpoint on the localStorage
+   */
+  function GEVERStorage(options) {
 
-    Storage.storage = null;
+    options = $.extend({ root: "storage" }, options);
+    var messageFactory = MessageFactory.getInstance();
+    var reveal = {};
+    var data = {};
+    var storage;
 
-    var messageFactory = global.MessageFactory.getInstance();
+    /*
+      Checks if the browser supports localStorage
+     */
+    function isSupported() { return typeof localStorage !== "undefined"; }
 
-    this.data = {};
-
-    var isSupported = function() { return typeof global.localStorage !== "undefined"; };
-
-    this.push = function() {
+    /*
+      Push the current datastructe to the localStorage by serializing
+      the object.
+      If something went wrong a message appears using the messageFactory
+     */
+    function push() {
       try {
-        Storage.storage.setItem(this.options.root, JSON.stringify(this.data) || {});
+        storage.setItem(options.root, JSON.stringify(reveal.data) || {});
       } catch (storageError) {
         messageFactory.shout([{ messageTitle: "Error", messageClass: "error", message: storageError }]);
       }
-    };
+    }
 
-    this.pull = function() {
-      this.data = JSON.parse(Storage.storage.getItem(this.options.root), this.reviver) || {};
-      this.postPull();
-    };
+    /*
+      Load the data from the localStorage by parsing the JSON.
+     */
+    function pull() { reveal.data = JSON.parse(storage.getItem(options.root)) || {}; }
 
-    this.drop = function() { Storage.storage.removeItem(this.options.root); };
-
-    this.reviver = $.noop;
-
-    this.postPull = $.noop;
+    /*
+      Drop all the data from the localStorage.
+     */
+    function drop() { storage.removeItem(options.root); }
 
     if (!isSupported()) {
       throw new Error("LocalStroage is not supported");
     } else {
-      Storage.storage = window.localStorage;
+      storage = window.localStorage;
     }
 
+    reveal.data = data;
+    reveal.push = push;
+    reveal.pull = pull;
+    reveal.drop = drop;
+
+    return reveal;
   }
 
-  function Synchronizer(options) {
+  global.GEVERStorage = GEVERStorage;
 
-    this.options = $.extend({
-      delay: 1000,
-      target: global.document,
-      context: global.document,
-      triggers: []
-    }, options || {});
-
-    var self = this;
-
-    var syncCallback = $.noop;
-
-    var trackType = function(event) {
-      global.clearTimeout(this.timeout);
-      this.timeout = global.setTimeout(function() { syncCallback(event.target); }, self.options.delay);
-    };
-
-    this.observe = function() { $(this.options.context).on(this.options.triggers.join(" "), this.options.target, trackType); };
-
-    this.onSync = function(callback) { syncCallback = callback; };
-
-  }
-
-  function Meeting(proposals, revision) {
-
-    var getTimestamp = function() { return new Date().getTime(); };
-
-    this.proposals = proposals || {};
-    this.revision = revision || 0;
-
-    this.updateRevision = function() { this.revision = getTimestamp(); };
-
-    this.addOrUpdateUnit = function(proposal, unit, text) {
-      this.proposals[proposal] = this.proposals[proposal] || {};
-      this.proposals[proposal][unit] = this.proposals[proposal][unit] || {};
-      this.proposals[proposal][unit] = text;
-    };
-
-  }
-
-  function MeetingStorage(meeting) {
-
-    Storage.call(this, { root: "protocol" });
-
-    var extendProposal = function(proposal, unit) { return "agenda_item-" + proposal + "-" + unit; };
-
-    var isMeeting = function(object) { return object.hasOwnProperty("proposals") && object.hasOwnProperty("revision"); };
-
-    this.reviver = function(k, v) {
-      if(isMeeting(v || {})) {
-        return new Meeting(v.proposals, v.revision);
-      } else {
-        return v;
-      }
-    };
-
-    this.addOrUpdateUnit = function(proposal, unit, text) {
-      this.currentMeeting.addOrUpdateUnit(proposal, unit, text);
-      this.currentMeeting.updateRevision();
-      this.data[meeting] = this.data[meeting] || this.currentMeeting;
-    };
-
-    this.deleteCurrentMeeting = function() {
-      delete this.data[meeting];
-      this.push();
-    };
-
-    this.restore = function() {
-      $.each(this.currentMeeting.proposals, function(proposalId, proposal) {
-        $.each(proposal, function(unitName, unitText) {
-          $("[input='" + extendProposal(proposalId, unitName) + "']")[0].editor.loadJSON(JSON.parse(unitText));
-        });
-      });
-    };
-
-    this.postPull = function() { this.currentMeeting = this.data[meeting] || new Meeting(); };
-
-  }
-
-  window.MeetingStorage = MeetingStorage;
-  window.Synchronizer = Synchronizer;
-
-}(window, jQuery));
+}(window, jQuery, window.MessageFactory));
