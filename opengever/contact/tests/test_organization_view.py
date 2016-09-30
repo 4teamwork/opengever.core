@@ -176,10 +176,10 @@ class TestOrganizationView(FunctionalTestCase):
         browser.login().open(org1.get_url())
 
         self.assertEquals(
-            [u'M\xfcller Peter', 'Meier Sandra', 'Muster Sandra'],
+            ['Meier Sandra', 'Muster Sandra', u'M\xfcller Peter'],
             browser.css('.persons .name').text)
         self.assertEquals(
-            [u'CEO', u'CFO', u'Stellvertretende F\xfchrung'],
+            [u'CFO', u'Stellvertretende F\xfchrung', u'CEO'],
             browser.css('.persons .function').text)
 
     @browsing
