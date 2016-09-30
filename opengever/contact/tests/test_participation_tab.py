@@ -22,20 +22,20 @@ class ParticipationTab(FunctionalTestCase):
                                 .as_contact_adapter())
 
         create(Builder('contact_participation')
-               .for_contact(self.hans)
-               .for_dossier(self.dossier)
-               .with_roles(['regard', 'final-drawing']))
-        create(Builder('contact_participation')
                .for_contact(self.peter_ag)
                .for_dossier(self.dossier)
                .with_roles(['participation']))
+        create(Builder('contact_participation')
+               .for_contact(self.hans)
+               .for_dossier(self.dossier)
+               .with_roles(['regard', 'final-drawing']))
         create(Builder('ogds_user_participation')
                .for_dossier(self.dossier)
                .for_ogds_user(self.ogds_user)
                .with_roles(['participation']))
 
     @browsing
-    def test_list_all_participating_contacts_and_link_them_to_detail_view(self, browser):
+    def test_list_all_participating_contacts_alphabetically_and_link_to_detail_view(self, browser):
         browser.login().open(self.dossier,
                              view=u'tabbedview_view-participations')
 
@@ -100,5 +100,5 @@ class ParticipationTab(FunctionalTestCase):
         edit_link = browser.css('#participation_listing > li .edit-action').first
 
         self.assertEquals('Edit', edit_link.text)
-        self.assertEquals('http://nohost/plone/dossier-1/participation-1/edit',
+        self.assertEquals('http://nohost/plone/dossier-1/participation-2/edit',
                           edit_link.get('href'))

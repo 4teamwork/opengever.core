@@ -5,6 +5,9 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
+- Sort participations alphabetically on participants title.
+  [phgross]
+
 - Change Person label to `Name Surname` instead of `Surname Name`.
   [phgross]
 
