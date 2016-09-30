@@ -19,7 +19,7 @@ class MailAddress(Base):
     contact_id = Column('contact_id', Integer, ForeignKey('contacts.id'))
     contact = relationship("Contact", back_populates="mail_addresses")
     label = Column(String(CONTENT_TITLE_LENGTH))
-    address = Column(String(EMAIL_LENGTH))
+    address = Column(String(EMAIL_LENGTH), nullable=False)
 
     def serialize(self):
         return {
