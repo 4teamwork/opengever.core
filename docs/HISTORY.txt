@@ -6,6 +6,10 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
+- Added contact syncer functionality to add and update contact objects
+  with data from an external database.
+  [elioschmutz, phgross]
+
 - Add loading option to Controller
   [Kevin Bieri]
 

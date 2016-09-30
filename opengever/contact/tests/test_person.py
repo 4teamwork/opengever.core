@@ -72,3 +72,15 @@ class TestPerson(FunctionalTestCase):
         self.assertEqual(u'Hanspeter', person.firstname)
         self.assertEqual(u'Hansj\xf6rg', person.lastname)
         self.assertEqual(u'Pellentesque posuere.', person.description)
+
+    def test_get_by_former_contact_id_returns_contact(self):
+        peter = create(Builder('person')
+                       .having(
+                           firstname=u'Peter',
+                           lastname=u'M\xfcller',
+                           former_contact_id=13))
+
+        self.assertEqual(peter, Person.query.get_by_former_contact_id(13))
+
+    def test_get_by_former_contact_id_returns_none_if_no_contact_available(self):
+        self.assertIsNone(Person.query.get_by_former_contact_id(13))
