@@ -6,7 +6,7 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
-- Make mailaddress, url required.
+- Make mailaddress, url and phone_number required.
   [phgross]
 
 - Added contact syncer functionality to add and update contact objects
