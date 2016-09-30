@@ -183,6 +183,28 @@ class TestOrganizationView(FunctionalTestCase):
             browser.css('.persons .function').text)
 
     @browsing
+    def test_group_related_persons_by_active_state(self, browser):
+        org1 = create(Builder('organization').named(u'4teamwork AG'))
+
+        create(Builder('person')
+               .having(firstname=u'Peter', lastname=u'M\xfcller')
+               .in_orgs([(org1, 'CEO')]))
+        create(Builder('person')
+               .having(firstname=u'Sandra', lastname=u'Muster',
+                       is_active=False)
+               .in_orgs([(org1, u'Stellvertretende F\xfchrung')]))
+        create(Builder('person')
+               .having(firstname=u'Sandra', lastname=u'Meier')
+               .in_orgs([(org1, u'CFO')]))
+
+        browser.login().open(org1.get_url())
+
+        self.assertEquals(['Meier Sandra', u'M\xfcller Peter'],
+                          browser.css('.active_persons .name').text)
+        self.assertEquals(['Muster Sandra'],
+                          browser.css('.inactive_persons .name').text)
+
+    @browsing
     def test_shows_linked_urls_prefixed_with_label(self, browser):
         organization = create(Builder('organization').named(u'4teamwork'))
 

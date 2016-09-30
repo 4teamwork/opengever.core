@@ -5,6 +5,9 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
+- Group related persons by active state in the organization detail view.
+  [phgross]
+
 - Sort participations alphabetically on participants title.
   [phgross]
 

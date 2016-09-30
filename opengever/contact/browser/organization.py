@@ -28,10 +28,16 @@ class OrganizationView(BrowserView):
     def get_actor_link(self, archive):
         return Actor.lookup(archive.actor_id).get_link()
 
-    def get_org_roles(self):
+    def get_org_roles(self, active):
         query = OrgRole.query.filter_by(organization=self.context.model)
-        return query.join(Person).order_by(
-            Person.lastname, Person.firstname).all()
+        query = query.join(Person).filter(Person.is_active == active)
+        return query.order_by(Person.lastname, Person.firstname).all()
+
+    def get_active_org_roles(self):
+        return self.get_org_roles(active=True)
+
+    def get_inactive_org_roles(self):
+        return self.get_org_roles(active=False)
 
     def participations_fetch_url(self):
         return self.context.model.get_url('participations/list')
