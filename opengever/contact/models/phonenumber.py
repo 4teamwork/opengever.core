@@ -18,4 +18,4 @@ class PhoneNumber(Base):
     contact = relationship("Contact", back_populates="phonenumbers")
 
     label = Column(String(CONTENT_TITLE_LENGTH))
-    phone_number = Column(String(CONTENT_TITLE_LENGTH))
+    phone_number = Column(String(CONTENT_TITLE_LENGTH), nullable=False)

@@ -16,4 +16,4 @@ class URL(Base):
     contact_id = Column('contact_id', Integer, ForeignKey('contacts.id'))
     contact = relationship("Contact", back_populates="urls")
     label = Column(String(CONTENT_TITLE_LENGTH))
-    url = Column(String(CONTENT_TITLE_LENGTH))
+    url = Column(String(CONTENT_TITLE_LENGTH), nullable=False)
