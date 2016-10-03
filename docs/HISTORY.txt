@@ -5,6 +5,9 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
+- Improve performance of person listing, using eager loading strategy.
+  [phgross]
+
 - Add department field to org-role.
   [deiferni]
 
