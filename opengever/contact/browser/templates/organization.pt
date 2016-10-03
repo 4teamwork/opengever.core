@@ -94,6 +94,7 @@
                tal:content="org_role/person/fullname" />
           </span>
           <span class="function" tal:content="org_role/function" />
+          <span class="department" tal:content="org_role/department" />
         </li>
       </ul>
 

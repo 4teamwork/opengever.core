@@ -1,10 +1,12 @@
 
-
 Changelog
 =========
 
 4.11.0 (unreleased)
 -------------------
+
+- Add department field to org-role.
+  [deiferni]
 
 - Make mailaddress, url and phone_number required.
   [phgross]

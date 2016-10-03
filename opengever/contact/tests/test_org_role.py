@@ -37,7 +37,7 @@ class TestOrganizationalRole(unittest2.TestCase):
         self.assertEquals([peter, hugo],
                           [role.person for role in meier_ag.persons])
 
-    def test_organization_title_is_person_organization_and_fuction_in_braclets(self):
+    def test_organization_title_is_person_organization_and_suffix_in_parentheses(self):
         peter = create(Builder('person')
                        .having(firstname=u'Peter',
                                lastname=u'M\xfcller',
@@ -53,10 +53,23 @@ class TestOrganizationalRole(unittest2.TestCase):
                                                   organization=teamwork,
                                                   function='Developer'))
 
+        role3 = create(Builder('org_role').having(person=peter,
+                                                  organization=teamwork,
+                                                  function='Developer',
+                                                  department='IT'))
+
+        role4 = create(Builder('org_role').having(person=peter,
+                                                  organization=teamwork,
+                                                  department='IT'))
+
         self.assertEquals(
             u'Peter M\xfcller - Meier AG', role1.get_title())
         self.assertEquals(
             u'Peter M\xfcller - 4teamwork AG (Developer)', role2.get_title())
+        self.assertEquals(
+            u'Peter M\xfcller - 4teamwork AG (Developer - IT)', role3.get_title())
+        self.assertEquals(
+            u'Peter M\xfcller - 4teamwork AG (IT)', role4.get_title())
 
         self.assertEquals(
             u'Peter M\xfcller [123456] - Meier AG',

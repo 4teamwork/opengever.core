@@ -68,11 +68,13 @@ class TestContactDocPropertyProvider(FunctionalTestCase):
                           .having(organization=organization,
                                   person=peter,
                                   function=u'M\xe4dchen f\xfcr alles',
-                                  description='blub'))
+                                  description=u'blub',
+                                  department=u'Informatik'))
         provider = org_role.get_doc_property_provider(prefix='recipient')
         expected_orgrole_properties = {
             'ogg.recipient.orgrole.function': u'M\xe4dchen f\xfcr alles',
             'ogg.recipient.orgrole.description': 'blub',
+            'ogg.recipient.orgrole.department': 'Informatik',
             'ogg.recipient.contact.title': u'M\xfcller Peter',
             'ogg.recipient.contact.description': 'blablabla',
             'ogg.recipient.person.salutation': 'Herr',

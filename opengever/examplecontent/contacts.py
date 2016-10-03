@@ -21,6 +21,15 @@ PHONENUMBER_LABELS = ['Arbeit', 'Privat', 'Mobile']
 ORG_ROLE_FUNCTIONS = [
     None, 'Verwalter', 'Vorsitz', 'Putzfachmann', 'Beratung', 'Angestellter']
 COUNTRIES = [u'Schweiz', u'Deutschland', u'\xd6sterreich', u'Belgien']
+DEPARTMENTS = [
+    None,
+    u'ausw\xe4rtige Angelegenheiten',
+    u'des Innern',
+    u'Justiz- und Polizeidepartement',
+    u'Finanzdepartement',
+    u'Wirtschaft, Bildung und Forschung',
+    u'Umwelt, Verkehr, Energie und Kommunikation'
+]
 
 
 class ExampleContactCreator(object):
@@ -102,7 +111,8 @@ class ExampleContactCreator(object):
             for entry in self.random_range:
                 org_role = OrgRole(person=person,
                                    function=random.choice(ORG_ROLE_FUNCTIONS),
-                                   organization=random.choice(organizations))
+                                   organization=random.choice(organizations),
+                                   department=random.choice(DEPARTMENTS))
                 self.db_session.add(org_role)
 
     def add_archived_persons(self, person, items):

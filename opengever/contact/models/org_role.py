@@ -25,6 +25,7 @@ class OrgRole(Base):
     person = relationship("Person", back_populates="organizations")
 
     function = Column(String(CONTENT_TITLE_LENGTH))
+    department = Column(String(CONTENT_TITLE_LENGTH))
     description = Column(UnicodeCoercingText)
 
     participations = relationship("OrgRoleParticipation",
@@ -39,8 +40,10 @@ class OrgRole(Base):
             self.person.get_title(with_former_id=with_former_id),
             self.organization.get_title())
 
-        if self.function:
-            title = u'{} ({})'.format(title, self.function)
+        if self.function or self.department:
+            suffix = u' - '.join(filter(
+                lambda each: each, [self.function, self.department]))
+            title = u'{} ({})'.format(title, suffix)
 
         return title
 
