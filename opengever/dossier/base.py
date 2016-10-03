@@ -309,6 +309,9 @@ class DefaultConstrainTypeDecider(grok.MultiAdapter):
             'opengever.dossier.businesscasedossier': 2,
             'opengever.dossier.projectdossier': 1,
             },
+        'opengever.private.dossier': {
+            'opengever.private.dossier': 2
+        },
         'opengever.dossier.projectdossier': {
             'opengever.dossier.projectdossier': 1,
             'opengever.dossier.businesscasedossier': 1,

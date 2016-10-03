@@ -72,6 +72,24 @@ class TestPrivateDossier(FunctionalTestCase):
         self.assertEquals('Client1 test_user_1_ / 2',
                           IReferenceNumber(dossier2).get_number())
 
+    def test_allow_one_level_of_subdossiers(self):
+        dossier = create(Builder('private_dossier')
+                         .within(self.folder)
+                         .having(responsible=TEST_USER_ID))
+        subdossier = create(Builder('private_dossier')
+                            .within(dossier)
+                            .having(responsible=TEST_USER_ID))
+
+        self.assertSequenceEqual(
+            ['opengever.document.document',
+             'ftw.mail.mail',
+             'opengever.private.dossier'],
+            [fti.id for fti in dossier.allowedContentTypes()])
+
+        self.assertSequenceEqual(
+            ['opengever.document.document', 'ftw.mail.mail'],
+            [fti.id for fti in subdossier.allowedContentTypes()])
+
 
 class TestPrivateDossierTabbedView(FunctionalTestCase):
 
