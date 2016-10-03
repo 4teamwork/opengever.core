@@ -1,24 +1,70 @@
+from five import grok
 from ftw.table import helper
-from ftw.table.interfaces import ITableGenerator
 from opengever.base.interfaces import IRedirector
+from opengever.base.schema import TableChoice
 from opengever.dossier import _
 from opengever.dossier.command import CreateDocumentFromTemplateCommand
 from opengever.dossier.templatedossier import get_template_dossier
 from opengever.tabbedview.helper import document_with_icon
+from plone import api
 from plone.autoform.form import AutoExtensibleForm
 from plone.directives import form
 from plone.formwidget.autocomplete import AutocompleteFieldWidget
-from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form import button
 from z3c.form.browser.checkbox import SingleCheckBoxFieldWidget
 from z3c.form.form import Form
 from zope import schema
+from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
+from zope.schema.interfaces import IContextSourceBinder
+from zope.schema.vocabulary import SimpleVocabulary
+
+
+@grok.provider(IContextSourceBinder)
+def get_templates(context):
+    template_dossier = get_template_dossier()
+    templatedossier_path = '/'.join(template_dossier.getPhysicalPath())
+
+    catalog = api.portal.get_tool('portal_catalog')
+    templates = catalog(
+        path=dict(
+            depth=-1, query=templatedossier_path),
+        portal_type="opengever.document.document",
+        sort_on='sortable_title',
+        sort_order='ascending')
+
+    intids = getUtility(IIntIds)
+
+    terms = []
+    for brain in templates:
+        template = brain.getObject()
+        terms.append(SimpleVocabulary.createTerm(
+            template,
+            str(intids.getId(template)),
+            template.title))
+    return SimpleVocabulary(terms)
 
 
 class ICreateDocumentFromTemplate(form.Schema):
+
+    template = TableChoice(
+        title=_(u"label_template", default=u"Template"),
+        source=get_templates,
+        required=True,
+        columns=(
+            {'column': 'title',
+             'column_title': _(u'label_title', default=u'title'),
+             'sort_index': 'sortable_title',
+             'transform': document_with_icon},
+            {'column': 'Creator',
+             'column_title': _(u'label_creator', default=u'Creator'),
+             'sort_index': 'document_author'},
+            {'column': 'modified',
+             'column_title': _(u'label_modified', default=u'Modified'),
+             'transform': helper.readable_date}
+            )
+    )
 
     title = schema.TextLine(
         title=_(u"label_title", default=u"Title"),
@@ -40,22 +86,9 @@ class ICreateDocumentFromTemplate(form.Schema):
 
 
 class TemplateDocumentFormView(AutoExtensibleForm, Form):
-    """Show the "Document from template" form.
 
-    This form lists available document templates from template dossiers,
-    allows the user to select one and creates a new document by copying the
-    template.
-
-    """
-    template = ViewPageTemplateFile('templates/document_from_template.pt')
-
-    schema = ICreateDocumentFromTemplate
     ignoreContext = True
-
-    label = _('create_document_with_template',
-              default="create document with template")
-
-    has_path_error = False
+    schema = ICreateDocumentFromTemplate
 
     @button.buttonAndHandler(_('button_save', default=u'Save'), name='save')
     def handleApply(self, action):
@@ -78,21 +111,6 @@ class TemplateDocumentFormView(AutoExtensibleForm, Form):
     def cancel(self, action):
         return self.request.RESPONSE.redirect(self.context.absolute_url())
 
-    def extractData(self):
-        """Also extract path of the selected template from request."""
-
-        data, errors = super(TemplateDocumentFormView, self).extractData()
-
-        paths = self.request.get('paths')
-        template_path = paths[0] if paths else None
-        if not template_path:
-            self.has_path_error = True
-            errors = errors + ("template path error",)
-        else:
-            data['template_path'] = str(template_path)
-
-        return data, errors
-
     def activate_external_editing(self, new_doc):
         """Check out the given document, and add the external_editor URL
         to redirector queue.
@@ -113,44 +131,7 @@ class TemplateDocumentFormView(AutoExtensibleForm, Form):
     def create_document(self, data):
         """Create a new document based on a template."""
 
-        template_doc = self.context.restrictedTraverse(data['template_path'])
-
         command = CreateDocumentFromTemplateCommand(
-            self.context, template_doc, data['title'],
+            self.context, data['template'], data['title'],
             recipient=data.get('recipient'))
         return command.execute()
-
-    def templates(self):
-        """List the available template documents the user can choose from.
-        """
-        template_dossier = get_template_dossier()
-        if template_dossier is None:
-            status = IStatusMessage(self.request)
-            status.addStatusMessage(
-                _("Not found the templatedossier"), type="error")
-            return self.request.RESPONSE.redirect(self.context.absolute_url())
-        templatedossier_path = '/'.join(template_dossier.getPhysicalPath())
-
-        catalog = getToolByName(self.context, 'portal_catalog')
-        templates = catalog(
-            path=dict(
-                depth=-1, query=templatedossier_path),
-            portal_type="opengever.document.document",
-            sort_on='sortable_title',
-            sort_order='ascending')
-
-        generator = getUtility(ITableGenerator, 'ftw.tablegenerator')
-        columns = (
-            ('', helper.path_radiobutton),
-            {'column': 'Title',
-             'column_title': _(u'label_title', default=u'title'),
-             'sort_index': 'sortable_title',
-             'transform': document_with_icon},
-            {'column': 'Creator',
-             'column_title': _(u'label_creator', default=u'Creator'),
-             'sort_index': 'document_author'},
-            {'column': 'modified',
-             'column_title': _(u'label_modified', default=u'Modified'),
-             'transform': helper.readable_date}
-            )
-        return generator.generate(templates, columns)

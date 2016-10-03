@@ -21,8 +21,14 @@ from opengever.testing.helpers import get_contacts_token
 from opengever.testing.pages import sharing_tab_data
 from plone.app.testing import TEST_USER_ID
 from plone.registry.interfaces import IRegistry
+from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
 import transaction
+
+
+def _make_token(document):
+    intids = getUtility(IIntIds)
+    return str(intids.getId(document))
 
 
 class TestNoTemplateDossier(FunctionalTestCase):
@@ -84,7 +90,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
                                  .with_modification_date(self.modification_date))
         self.dossier = create(Builder('dossier').titled(u'My Dossier'))
 
-        self.template_b_path = '/'.join(self.template_b.getPhysicalPath())
+        self.template_b_token = _make_token(self.template_b)
 
     def assert_doc_properties_updated_journal_entry_generated(self, document):
         entry = get_journal_entry(document)
@@ -172,9 +178,9 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
     @browsing
     def test_save_redirects_to_the_dossiers_document_tab(self, browser):
         browser.login().open(self.dossier, view='document_with_template')
-        browser.fill({'paths:list': self.template_b_path,
+        browser.fill({'form.widgets.template': self.template_b_token,
                       'Title': 'Test Document',
-                      'Edit after creation':False}).save()
+                      'Edit after creation': False}).save()
 
         self.assertEquals(self.dossier, browser.context)
         self.assertEquals(self.dossier.absolute_url() + '#documents',
@@ -183,7 +189,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
     @browsing
     def test_new_document_is_titled_with_the_form_value(self, browser):
         browser.login().open(self.dossier, view='document_with_template')
-        browser.fill({'paths:list': self.template_b_path,
+        browser.fill({'form.widgets.template': self.template_b_token,
                       'Title': 'Test Document'}).save()
 
         document = self.dossier.listFolderContents()[0]
@@ -193,7 +199,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
     @browsing
     def test_new_document_values_are_filled_with_default_values(self, browser):
         browser.login().open(self.dossier, view='document_with_template')
-        browser.fill({'paths:list': self.template_b_path,
+        browser.fill({'form.widgets.template': self.template_b_token,
                       'Title': 'Test Document'}).save()
 
         document = self.dossier.listFolderContents()[0]
@@ -203,7 +209,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
     @browsing
     def test_file_of_the_new_document_is_a_copy_of_the_template(self, browser):
         browser.login().open(self.dossier, view='document_with_template')
-        browser.fill({'paths:list': self.template_b_path,
+        browser.fill({'form.widgets.template': self.template_b_token,
                       'Title': 'Test Document'}).save()
 
         document = self.dossier.listFolderContents()[0]
@@ -217,13 +223,12 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
                                .titled('Word Docx template')
                                .within(self.templatedossier)
                                .with_asset_file('without_custom_properties.docx'))
-        template_path = '/'.join(template_word.getPhysicalPath())
         peter = create(Builder('person')
                        .having(firstname=u'Peter', lastname=u'M\xfcller'))
 
         with freeze(self.document_date):
             browser.login().open(self.dossier, view='document_with_template')
-            browser.fill({'paths:list': template_path,
+            browser.fill({'form.widgets.template': _make_token(template_word),
                           'Recipient': get_contacts_token(peter),
                           'Title': 'Test Docx'}).save()
 
@@ -249,11 +254,10 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
                                .titled('Word Docx template')
                                .within(self.templatedossier)
                                .with_asset_file('with_custom_properties.docx'))
-        template_path = '/'.join(template_word.getPhysicalPath())
 
         with freeze(self.document_date):
             browser.login().open(self.dossier, view='document_with_template')
-            browser.fill({'paths:list': template_path,
+            browser.fill({'form.widgets.template': _make_token(template_word),
                           'Title': 'Test Docx'}).save()
 
         document = self.dossier.listFolderContents()[0]
@@ -270,11 +274,10 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
                                .titled('Word Docx template')
                                .within(self.templatedossier)
                                .with_asset_file('without_custom_properties.docx'))
-        template_path = '/'.join(template_word.getPhysicalPath())
 
         with freeze(self.document_date):
             browser.login().open(self.dossier, view='document_with_template')
-            browser.fill({'paths:list': template_path,
+            browser.fill({'form.widgets.template': _make_token(template_word),
                           'Title': 'Test Docx'}).save()
 
         document = self.dossier.listFolderContents()[0]
@@ -292,10 +295,9 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
                                .titled('Word Docx template')
                                .within(self.templatedossier)
                                .with_asset_file('without_custom_properties.docx'))
-        template_path = '/'.join(template_word.getPhysicalPath())
 
         browser.login().open(self.dossier, view='document_with_template')
-        browser.fill({'paths:list': template_path,
+        browser.fill({'form.widgets.template': _make_token(template_word),
                       'Title': 'Test Docx'}).save()
 
         document = self.dossier.listFolderContents()[0]
