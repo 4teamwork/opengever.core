@@ -1,0 +1,9 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      tal:omit-tag="">
+
+<div tal:content="structure view/render_table" />
+
+<input name="field-empty-marker" type="hidden" value="1"
+       tal:attributes="name string:${view/name}-empty-marker" />
+</html>
