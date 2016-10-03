@@ -31,18 +31,6 @@ def _make_token(document):
     return str(intids.getId(document))
 
 
-class TestNoTemplateDossier(FunctionalTestCase):
-
-    @browsing
-    def test_shows_message_when_no_templatedossier_is_found(self, browser):
-        dossier = create(Builder('dossier'))
-
-        browser.login().open(dossier, view='document_with_template')
-
-        self.assertEquals(
-            ['Not found the templatedossier'], error_messages())
-
-
 class TestDocumentWithTemplateForm(FunctionalTestCase):
 
     document_date = datetime(2015, 9, 28, 0, 0)
