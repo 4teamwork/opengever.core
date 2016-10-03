@@ -1,5 +1,6 @@
 from five import grok
 from ftw.table import helper
+from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.base.interfaces import IRedirector
 from opengever.base.schema import TableChoice
 from opengever.dossier import _
@@ -10,7 +11,7 @@ from plone import api
 from plone.autoform.form import AutoExtensibleForm
 from plone.directives import form
 from plone.formwidget.autocomplete import AutocompleteFieldWidget
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from plone.z3cform.layout import FormWrapper
 from z3c.form import button
 from z3c.form.browser.checkbox import SingleCheckBoxFieldWidget
 from z3c.form.form import Form
@@ -21,21 +22,28 @@ from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
 
 
+DOCUMENT_FROM_TEMPLATE_STEPS = (
+    ('select-document', _(u'Select document')),
+    ('select-address', _(u'Select recipient address')),
+)
+
+
 @grok.provider(IContextSourceBinder)
 def get_templates(context):
     template_dossier = get_template_dossier()
-    templatedossier_path = '/'.join(template_dossier.getPhysicalPath())
 
-    catalog = api.portal.get_tool('portal_catalog')
-    templates = catalog(
-        path=dict(
-            depth=-1, query=templatedossier_path),
+    if template_dossier is None:
+        # this may happen when the user does not have permissions to
+        # view templates and/or during ++widget++ traversal
+        return SimpleVocabulary([])
+
+    templates = api.content.find(
+        context=template_dossier,
+        depth=-1,
         portal_type="opengever.document.document",
-        sort_on='sortable_title',
-        sort_order='ascending')
+        sort_on='sortable_title', sort_order='ascending')
 
     intids = getUtility(IIntIds)
-
     terms = []
     for brain in templates:
         template = brain.getObject()
@@ -85,9 +93,12 @@ class ICreateDocumentFromTemplate(form.Schema):
         )
 
 
-class TemplateDocumentFormView(AutoExtensibleForm, Form):
+class SelectTemplateDocumentWizardStep(AutoExtensibleForm, BaseWizardStepForm, Form):
 
-    ignoreContext = True
+    step_name = 'select-document'
+    label = _(u'Select document')
+    steps = DOCUMENT_FROM_TEMPLATE_STEPS
+
     schema = ICreateDocumentFromTemplate
 
     @button.buttonAndHandler(_('button_save', default=u'Save'), name='save')
@@ -135,3 +146,8 @@ class TemplateDocumentFormView(AutoExtensibleForm, Form):
             self.context, data['template'], data['title'],
             recipient=data.get('recipient'))
         return command.execute()
+
+
+class SelectTemplateDocumentView(FormWrapper):
+
+    form = SelectTemplateDocumentWizardStep
