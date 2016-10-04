@@ -72,10 +72,10 @@ class TestParticipationWrapper(FunctionalTestCase):
             self.dossier.absolute_url()))
 
         self.assertEqual(
-            [u'Edit Participation of Hans M\xfcller'],
+            [u'Edit Participation of M\xfcller Hans'],
             browser.css('h1').text)
         self.assertEqual(
-            [u'You are here: Client1 / dossier-1 / Participation of Hans M\xfcller'],
+            [u'You are here: Client1 / dossier-1 / Participation of M\xfcller Hans'],
             browser.css('#portal-breadcrumbs').text)
 
     @browsing
@@ -414,7 +414,7 @@ class TestEditForm(FunctionalTestCase):
                              view=u'tabbedview_view-participations')
         browser.click_on('Edit')
 
-        self.assertEquals([u'Edit Participation of Peter M\xfcller'],
+        self.assertEquals([u'Edit Participation of M\xfcller Peter'],
                           browser.css('h1').text)
 
     @browsing
@@ -446,7 +446,7 @@ class TestEditForm(FunctionalTestCase):
                              view=u'tabbedview_view-participations')
         browser.click_on('Edit')
 
-        self.assertEquals([u'Edit Participation of Peter M\xfcller - Meier AG (cheffe)'],
+        self.assertEquals([u'Edit Participation of M\xfcller Peter - Meier AG (cheffe)'],
                           browser.css('h1').text)
 
     @browsing
@@ -543,7 +543,7 @@ class TestRemoveForm(FunctionalTestCase):
                              view=u'tabbedview_view-participations')
         browser.click_on('Remove')
 
-        self.assertEquals([u'Remove Participation of Peter M\xfcller'],
+        self.assertEquals([u'Remove Participation of M\xfcller Peter'],
                           browser.css('h1').text)
 
     @browsing

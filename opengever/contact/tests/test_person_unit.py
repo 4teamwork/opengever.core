@@ -104,16 +104,16 @@ class TestPerson(unittest2.TestCase):
                            u'http://www.onegovgever.ch'],
                           [url.url for url in peter.urls])
 
-    def test_fullname_is_firstname_and_lastname_separated_with_a_space(self):
+    def test_fullname_is_lastname_and_firstname_separated_with_a_space(self):
         peter = create(Builder('person')
                        .having(firstname=u'Peter', lastname=u'M\xfcller'))
 
-        self.assertEquals(u'Peter M\xfcller', peter.fullname)
+        self.assertEquals(u'M\xfcller Peter', peter.fullname)
 
     def test_title_is_fullname(self):
         peter = create(Builder('person')
                        .having(firstname=u'Peter', lastname=u'M\xfcller'))
-        self.assertEquals(u'Peter M\xfcller', peter.get_title())
+        self.assertEquals(u'M\xfcller Peter', peter.get_title())
 
     def test_title_is_extended_with_former_id_in_brackets_when_flag_is_set(self):
         peter = create(Builder('person')
@@ -123,7 +123,7 @@ class TestPerson(unittest2.TestCase):
                                lastname=u'M\xfcller',
                                former_contact_id=123456))
 
-        self.assertEquals(u'Peter M\xfcller',
+        self.assertEquals(u'M\xfcller Peter',
                           peter.get_title(with_former_id=True))
-        self.assertEquals(u'James M\xfcller [123456]',
+        self.assertEquals(u'M\xfcller James [123456]',
                           james.get_title(with_former_id=True))

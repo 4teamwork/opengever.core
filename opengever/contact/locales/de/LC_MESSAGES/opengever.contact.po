@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2016-09-14 15:13+0000\n"
+"POT-Creation-Date: 2016-10-04 11:25+0000\n"
 "PO-Revision-Date: 2011-01-05 15:15+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -162,6 +162,7 @@ msgstr "Titel"
 
 #. Default: "Active"
 #: ./opengever/contact/browser/byline.py:16
+#: ./opengever/contact/browser/templates/organization.pt:89
 msgid "label_active"
 msgstr "Aktiv"
 
@@ -187,30 +188,30 @@ msgid "label_addresses"
 msgstr "Adressen"
 
 #. Default: "Archived Addresses"
-#: ./opengever/contact/browser/templates/organization.pt:122
-#: ./opengever/contact/browser/templates/person.pt:141
+#: ./opengever/contact/browser/templates/organization.pt:141
+#: ./opengever/contact/browser/templates/person.pt:144
 msgid "label_archived_addresses"
 msgstr "Archivierte Adressen"
 
 #. Default: "Archived Mail Addresses"
-#: ./opengever/contact/browser/templates/organization.pt:143
-#: ./opengever/contact/browser/templates/person.pt:162
+#: ./opengever/contact/browser/templates/organization.pt:164
+#: ./opengever/contact/browser/templates/person.pt:167
 msgid "label_archived_mail"
 msgstr "Archivierte Mail Adressen"
 
 #. Default: "Archived Information"
-#: ./opengever/contact/browser/templates/organization.pt:104
+#: ./opengever/contact/browser/templates/organization.pt:123
 msgid "label_archived_organizations"
 msgstr "Archivierte Informationen"
 
 #. Default: "Archived Personal Information"
-#: ./opengever/contact/browser/templates/person.pt:114
+#: ./opengever/contact/browser/templates/person.pt:117
 msgid "label_archived_persons"
 msgstr "Archivierte persönliche Informationen"
 
 #. Default: "Archived Phone Numbers"
-#: ./opengever/contact/browser/templates/organization.pt:162
-#: ./opengever/contact/browser/templates/person.pt:181
+#: ./opengever/contact/browser/templates/organization.pt:183
+#: ./opengever/contact/browser/templates/person.pt:186
 msgid "label_archived_phone_numbers"
 msgstr "Archivierte Telefonnummern"
 
@@ -264,7 +265,7 @@ msgstr "Beteiligung von ${title} bearbeiten"
 
 #. Default: "email"
 #: ./opengever/contact/contact.py:103
-#: ./opengever/contact/contactfolder.py:117
+#: ./opengever/contact/contactfolder.py:108
 msgid "label_email"
 msgstr "E-Mail 1"
 
@@ -276,14 +277,19 @@ msgstr "E-Mail 2"
 #. Default: "Firstname"
 #: ./opengever/contact/browser/person.py:102
 #: ./opengever/contact/contact.py:82
-#: ./opengever/contact/contactfolder.py:112
+#: ./opengever/contact/contactfolder.py:103
 msgid "label_firstname"
 msgstr "Vorname"
+
+#. Default: "Inactive"
+#: ./opengever/contact/browser/templates/organization.pt:101
+msgid "label_inactive"
+msgstr "Inaktiv"
 
 #. Default: "Lastname"
 #: ./opengever/contact/browser/person.py:107
 #: ./opengever/contact/contact.py:75
-#: ./opengever/contact/contactfolder.py:107
+#: ./opengever/contact/contactfolder.py:98
 msgid "label_lastname"
 msgstr "Nachname"
 
@@ -298,8 +304,8 @@ msgid "label_local"
 msgstr "Lokal"
 
 #. Default: "Mail Addresses"
-#: ./opengever/contact/browser/templates/organization.pt:42
-#: ./opengever/contact/browser/templates/person.pt:52
+#: ./opengever/contact/browser/templates/organization.pt:44
+#: ./opengever/contact/browser/templates/person.pt:54
 msgid "label_mail"
 msgstr "Mail Addressen"
 
@@ -316,12 +322,12 @@ msgstr "Keine Beteiligungen"
 
 #. Default: "Organizations"
 #: ./opengever/contact/browser/tabbed.py:17
-#: ./opengever/contact/browser/templates/person.pt:96
+#: ./opengever/contact/browser/templates/person.pt:98
 msgid "label_organizations"
 msgstr "Organisationen"
 
 #. Default: "Participation of ${contact_title}"
-#: ./opengever/contact/models/participation.py:92
+#: ./opengever/contact/models/participation.py:101
 msgid "label_participation_of"
 msgstr "Beteiligung von ${contact_title}"
 
@@ -332,7 +338,7 @@ msgstr "Persönliche Informationen:"
 
 #. Default: "Persons"
 #: ./opengever/contact/browser/tabbed.py:12
-#: ./opengever/contact/browser/templates/organization.pt:86
+#: ./opengever/contact/browser/templates/organization.pt:88
 msgid "label_persons"
 msgstr "Personen"
 
@@ -352,14 +358,14 @@ msgid "label_phone_mobile"
 msgstr "Telefon Mobile"
 
 #. Default: "Phone numbers"
-#: ./opengever/contact/browser/templates/organization.pt:57
-#: ./opengever/contact/browser/templates/person.pt:67
+#: ./opengever/contact/browser/templates/organization.pt:59
+#: ./opengever/contact/browser/templates/person.pt:69
 msgid "label_phone_numbers"
 msgstr "Telefonnummern"
 
 #. Default: "Phone office"
 #: ./opengever/contact/contact.py:120
-#: ./opengever/contact/contactfolder.py:122
+#: ./opengever/contact/contactfolder.py:113
 msgid "label_phone_office"
 msgstr "Telefon Arbeit"
 
@@ -401,8 +407,8 @@ msgid "label_url"
 msgstr "URL"
 
 #. Default: "URLs"
-#: ./opengever/contact/browser/templates/organization.pt:71
-#: ./opengever/contact/browser/templates/person.pt:81
+#: ./opengever/contact/browser/templates/organization.pt:73
+#: ./opengever/contact/browser/templates/person.pt:83
 msgid "label_urls"
 msgstr "URLs"
 

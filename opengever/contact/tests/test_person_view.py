@@ -19,10 +19,10 @@ class TestPersonView(FunctionalTestCase):
                         .having(firstname=u'Sandra', lastname=u'Fl\xfcckiger'))
 
         browser.login().open(self.contactfolder, view=peter.wrapper_id)
-        self.assertEquals([u'Peter M\xfcller'], browser.css('h1').text)
+        self.assertEquals([u'M\xfcller Peter'], browser.css('h1').text)
 
         browser.login().open(self.contactfolder, view=sandra.wrapper_id)
-        self.assertEquals([u'Sandra Fl\xfcckiger'], browser.css('h1').text)
+        self.assertEquals([u'Fl\xfcckiger Sandra'], browser.css('h1').text)
 
     @browsing
     def test_shows_fullname_as_title(self, browser):
@@ -30,7 +30,7 @@ class TestPersonView(FunctionalTestCase):
                        .having(firstname=u'Peter', lastname=u'M\xfcller'))
 
         browser.login().open(self.contactfolder, view=peter.wrapper_id)
-        self.assertEquals([u'Peter M\xfcller'], browser.css('h1').text)
+        self.assertEquals([u'M\xfcller Peter'], browser.css('h1').text)
 
     @browsing
     def test_shows_personal_information_as_vertical_table(self, browser):
@@ -43,7 +43,7 @@ class TestPersonView(FunctionalTestCase):
         browser.login().open(self.contactfolder, view=peter.wrapper_id)
         table = browser.css('.contact_details').first
 
-        [['Name', u'Peter M\xfcller'],
+        [['Name', u'M\xfcller Peter'],
          ['Salutation', 'Herr'],
          ['Academic title', 'Dr. rer. nat.'],
          ['Addresses'],
@@ -68,7 +68,7 @@ class TestPersonView(FunctionalTestCase):
         browser.login().open(self.contactfolder, view=peter.wrapper_id)
         table = browser.css('#contactHistory .contact_details').first
 
-        [['Name', u'Peter Hanssen'],
+        [['Name', u'Hanssen Peter'],
          ['Salutation', 'Herr'],
          ['Academic title', 'Magister']]
         table.dicts()

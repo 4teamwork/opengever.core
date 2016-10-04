@@ -5,6 +5,15 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
+- Group related persons by active state in the organization detail view.
+  [phgross]
+
+- Sort participations alphabetically on participants title.
+  [phgross]
+
+- Change Person label to `Name Surname` instead of `Surname Name`.
+  [phgross]
+
 - Implement SQLSchemaDumper and also dump schemas for common SQL types.
   [lgraf]
 

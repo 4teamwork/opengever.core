@@ -231,7 +231,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
         self.assertEquals(u'test-docx.docx', document.file.filename)
 
         expected_person_properties = {
-            'ogg.recipient.contact.title': u'Peter M\xfcller',
+            'ogg.recipient.contact.title': u'M\xfcller Peter',
             'ogg.recipient.person.firstname': 'Peter',
             'ogg.recipient.person.lastname': u'M\xfcller',
         }

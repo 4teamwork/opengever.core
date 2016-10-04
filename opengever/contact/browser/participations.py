@@ -79,4 +79,7 @@ class ParticpationTab(BrowserView, GeverTabMixin):
     def get_participations(self):
         """Returns all participations for the current context.
         """
-        return Participation.query.by_dossier(self.context).all()
+        participations = Participation.query.by_dossier(self.context).all()
+        return sorted(
+            participations,
+            key=lambda participation: participation.participant.get_title())
