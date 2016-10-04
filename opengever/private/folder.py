@@ -1,7 +1,11 @@
 from opengever.ogds.base.actor import Actor
 from opengever.private.interfaces import IPrivateContainer
 from opengever.repository.repositoryfolder import IRepositoryFolderSchema
+from plone import api
 from plone.dexterity.content import Container
+
+PRIVATE_FOLDER_DEFAULT_ROLES = [
+    'Owner', 'Reader', 'Contributor', 'Editor', 'Reviewer', 'Publisher']
 
 
 class IPrivateFolder(IRepositoryFolderSchema, IPrivateContainer):
@@ -18,3 +22,12 @@ class PrivateFolder(Container):
 
     def Title(self):
         return Actor.lookup(self.id).get_label(self)
+
+    def notifyMemberAreaCreated(self):
+        """Add additional local_roles to the members folder.
+
+        This method is called by the MembershipTool after MembersFolder
+        creation.
+        """
+        api.user.grant_roles(username=self.id, obj=self,
+                             roles=PRIVATE_FOLDER_DEFAULT_ROLES)

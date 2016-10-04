@@ -8,6 +8,7 @@ from opengever.base.interfaces import IReferenceNumber
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_PRIVATE_FOLDER_LAYER
 from opengever.private.tests import create_members_folder
 from opengever.testing import FunctionalTestCase
+from plone import api
 from plone.app.testing import TEST_USER_ID
 from zExceptions import Unauthorized
 
@@ -35,6 +36,12 @@ class TestPrivateFolder(FunctionalTestCase):
     def test_uses_userid_as_reference_number_part(self):
         self.assertEquals('Client1 test_user_1_',
                           IReferenceNumber(self.folder).get_number())
+
+    def test_adds_additonal_roles_after_creation(self):
+        self.assertEquals(
+            ['Publisher', 'Authenticated', 'Owner', 'Editor', 'Reader',
+             'Contributor', 'Reviewer'],
+            api.user.get_roles(username=TEST_USER_ID, obj=self.folder))
 
 
 class TestPrivateFolderTabbedView(FunctionalTestCase):
