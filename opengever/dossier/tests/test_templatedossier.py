@@ -228,6 +228,9 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
         mailaddress = create(Builder('mailaddress')
                              .for_contact(peter)
                              .having(address=u'foo@example.com'))
+        phonenumber = create(Builder('phonenumber')
+                             .for_contact(peter)
+                             .having(phone_number=u'1234 123 123'))
 
         with freeze(self.document_date):
             # submit first wizard step
@@ -238,7 +241,8 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
             # submit second wizard step
             browser.fill(
                 {'form.widgets.address': str(address1.address_id),
-                 'form.widgets.mail_address': str(mailaddress.mailaddress_id)}
+                 'form.widgets.mail_address': str(mailaddress.mailaddress_id),
+                 'form.widgets.phonenumber': str(phonenumber.phone_number_id)}
             ).save()
 
         document = self.dossier.listFolderContents()[0]
@@ -253,6 +257,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
             'ogg.recipient.address.city': 'Hinterkappelen',
             'ogg.recipient.address.country': 'Schweiz',
             'ogg.recipient.email.address': u'foo@example.com',
+            'ogg.recipient.phone.number': u'1234 123 123',
         }
         expected_person_properties.update(self.expected_doc_properties)
 

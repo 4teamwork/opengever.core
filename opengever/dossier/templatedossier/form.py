@@ -142,6 +142,7 @@ class CreateDocumentMixin(object):
             data.get('recipient'),
             data.get('address'),
             data.get('mail_address'),
+            data.get('phonenumber'),
         ])
 
         command = CreateDocumentFromTemplateCommand(
@@ -228,6 +229,16 @@ def make_mail_address_vocabulary(context):
         for mail_address in recipient.mail_addresses])
 
 
+@grok.provider(IContextSourceBinder)
+def make_phonenumber_vocabulary(context):
+    recipient = get_recipient(context)
+
+    return SimpleVocabulary([
+        SimpleVocabulary.createTerm(
+            phone_number, str(phone_number.phone_number_id))
+        for phone_number in recipient.phonenumbers])
+
+
 class ISelectRecipientAddress(form.Schema):
 
     address = TableChoice(
@@ -251,6 +262,17 @@ class ISelectRecipientAddress(form.Schema):
              'column_title': _(u'label_label', default=u'Label')},
             {'column': 'address',
              'column_title': _(u'label_mail_address', default=u'Mail-Address')},
+        ))
+
+    phonenumber = TableChoice(
+        title=_(u"label_phone_number", default=u"Phone Number"),
+        required=False,
+        source=make_phonenumber_vocabulary,
+        columns=(
+            {'column': 'label',
+             'column_title': _(u'label_label', default=u'Label')},
+            {'column': 'phone_number',
+             'column_title': _(u'label_phonenumber', default=u'Phonenumber')},
         ))
 
 
