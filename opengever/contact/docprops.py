@@ -149,3 +149,19 @@ class PhoneNumberDocPropertyProvider(PrefixableDocPropertyProvider):
                            self.phonenumber.phone_number)
 
         return properties
+
+
+class URLDocPropertyProvider(PrefixableDocPropertyProvider):
+    """Provides doc-properties for an url."""
+
+    def __init__(self, url, prefix):
+        super(URLDocPropertyProvider, self).__init__(prefix)
+        self.url = url
+
+    def get_properties(self):
+        properties = {}
+
+        self._add_property(properties, 'url', 'url',
+                           self.url.url)
+
+        return properties

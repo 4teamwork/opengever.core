@@ -151,3 +151,19 @@ class TestContactDocPropertyProvider(FunctionalTestCase):
         }
         self.assertItemsEqual(expected_phone_properties,
                               provider.get_properties())
+
+    def test_contact_url_doc_property_provider(self):
+        peter = create(Builder('person')
+                       .having(firstname=u'Peter',
+                               lastname=u'M\xfcller'))
+        url = create(Builder('url')
+                     .for_contact(peter)
+                     .labeled(u'There')
+                     .having(url=u'http://www.example.com'))
+
+        provider = url.get_doc_property_provider(prefix='recipient')
+        expected_url_properties = {
+            'ogg.recipient.url.url': u'http://www.example.com',
+        }
+        self.assertItemsEqual(expected_url_properties,
+                              provider.get_properties())
