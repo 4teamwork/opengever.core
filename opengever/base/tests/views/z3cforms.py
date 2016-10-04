@@ -47,6 +47,10 @@ class IWidgetTestFormSchema(Interface):
             {'column': 'description',
              'column_title': u'Description'},)
         )
+    empty_radio_table_field = TableChoice(
+        required=False,
+        title=u"empty_table",
+        vocabulary=SimpleVocabulary([]))
 
 
 class WidgetTestForm(Form):

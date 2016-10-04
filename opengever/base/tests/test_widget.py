@@ -79,6 +79,13 @@ class TestRadioTableWidget(FunctionalTestCase):
             [each.normalized_outerHTML for each in inputs]
         )
 
+    @browsing
+    def test_renders_empty_message(self, browser):
+        browser.login().visit(view='test-z3cform-widget')
+        self.assertEqual(
+            "No items available",
+            browser.css('#formfield-form-widgets-empty_radio_table_field .empty_message').first.text
+        )
 
 class TestUnitTrixStripWhitespace(TestCase):
 

@@ -47,8 +47,13 @@ class TableRadioWidget(widget.HTMLInputWidget, SequenceWidget):
     klass = u'radio-widget'
     css = u'radio'
 
+    empty_message = _("msg_no_items_available", default=u"No items available")
+
     def is_checked(self, term):
         return term.token in self.value
+
+    def has_items(self):
+        return len(self.terms) > 0
 
     def render_table(self):
         """Render the table that contains the radio-button sequence.
