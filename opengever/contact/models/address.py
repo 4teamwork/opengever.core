@@ -23,5 +23,15 @@ class Address(Base):
     city = Column(String(CONTENT_TITLE_LENGTH))
     country = Column(String(CONTENT_TITLE_LENGTH))
 
+    def get_lines(self):
+        """Return a list of all address-lines that are not empty."""
+
+        return filter(None, [
+            self.contact.get_title(),
+            self.street,
+            " ".join(filter(None, [self.zip_code, self.city])),
+            self.country
+        ])
+
     def get_doc_property_provider(self, prefix):
         return AddressDocPropertyProvider(self, prefix)

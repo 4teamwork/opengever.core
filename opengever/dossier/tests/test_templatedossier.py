@@ -213,12 +213,28 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
                                .with_asset_file('without_custom_properties.docx'))
         peter = create(Builder('person')
                        .having(firstname=u'Peter', lastname=u'M\xfcller'))
+        address1 = create(Builder('address')
+                          .for_contact(peter)
+                          .labeled(u'Home')
+                          .having(street=u'Musterstrasse 283',
+                                  zip_code=u'1234',
+                                  city=u'Hinterkappelen',
+                                  country=u'Schweiz'))
+        address2 = create(Builder('address')
+                          .for_contact(peter)
+                          .labeled(u'Home')
+                          .having(street=u'Hauptstrasse 1',
+                                  city=u'Vorkappelen'))
 
         with freeze(self.document_date):
+            # submit first wizard step
             browser.login().open(self.dossier, view='document_with_template')
             browser.fill({'form.widgets.template': _make_token(template_word),
                           'Recipient': get_contacts_token(peter),
                           'Title': 'Test Docx'}).save()
+            # submit second wizard step
+            browser.fill(
+                {'form.widgets.address': str(address1.address_id)}).save()
 
         document = self.dossier.listFolderContents()[0]
         self.assertEquals(u'test-docx.docx', document.file.filename)
@@ -227,6 +243,10 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
             'ogg.recipient.contact.title': u'M\xfcller Peter',
             'ogg.recipient.person.firstname': 'Peter',
             'ogg.recipient.person.lastname': u'M\xfcller',
+            'ogg.recipient.address.street': u'Musterstrasse 283',
+            'ogg.recipient.address.zip_code': '1234',
+            'ogg.recipient.address.city': 'Hinterkappelen',
+            'ogg.recipient.address.country': 'Schweiz',
         }
         expected_person_properties.update(self.expected_doc_properties)
 
