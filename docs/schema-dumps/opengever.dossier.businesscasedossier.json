@@ -88,7 +88,7 @@
                 {
                     "name": "temporary_former_reference_number",
                     "type": "TextLine",
-                    "title": "Temporary former reference number",
+                    "title": "Tempor\u00e4res fr\u00fcheres Aktenzeichen",
                     "desc": "",
                     "required": false,
                     "omitted": {

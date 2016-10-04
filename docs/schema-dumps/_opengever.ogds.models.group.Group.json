@@ -1,0 +1,33 @@
+{
+    "portal_type": "_opengever.ogds.models.group.Group",
+    "title": "Group",
+    "schemas": [
+        {
+            "name": "Group",
+            "fields": [
+                {
+                    "name": "groupid",
+                    "type": "String",
+                    "title": null,
+                    "desc": null,
+                    "required": true
+                },
+                {
+                    "name": "active",
+                    "type": "Boolean",
+                    "title": null,
+                    "desc": null,
+                    "required": false,
+                    "default": true
+                },
+                {
+                    "name": "title",
+                    "type": "String",
+                    "title": null,
+                    "desc": null,
+                    "required": false
+                }
+            ]
+        }
+    ]
+}

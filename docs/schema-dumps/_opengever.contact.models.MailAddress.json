@@ -1,0 +1,33 @@
+{
+    "portal_type": "_opengever.contact.models.MailAddress",
+    "title": "MailAddress",
+    "schemas": [
+        {
+            "name": "MailAddress",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "Integer",
+                    "title": null,
+                    "desc": null,
+                    "required": true,
+                    "default": "Sequence(mail_adresses_id_seq)"
+                },
+                {
+                    "name": "label",
+                    "type": "String",
+                    "title": null,
+                    "desc": null,
+                    "required": false
+                },
+                {
+                    "name": "address",
+                    "type": "String",
+                    "title": null,
+                    "desc": null,
+                    "required": true
+                }
+            ]
+        }
+    ]
+}
