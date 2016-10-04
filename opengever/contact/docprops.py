@@ -95,3 +95,25 @@ class OrgRoleDocPropertyProvider(PrefixableDocPropertyProvider):
                            self.org_role.department)
 
         return properties
+
+
+class AddressDocPropertyProvider(PrefixableDocPropertyProvider):
+    """Provides doc-properties for an address."""
+
+    def __init__(self, address, prefix):
+        super(AddressDocPropertyProvider, self).__init__(prefix)
+        self.address = address
+
+    def get_properties(self):
+        properties = {}
+
+        self._add_property(properties, 'address', 'street',
+                           self.address.street)
+        self._add_property(properties, 'address', 'zip_code',
+                           self.address.zip_code)
+        self._add_property(properties, 'address', 'city',
+                           self.address.city)
+        self._add_property(properties, 'address', 'country',
+                           self.address.country)
+
+        return properties

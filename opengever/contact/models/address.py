@@ -1,6 +1,7 @@
 from opengever.base.model import Base
 from opengever.base.model import CONTENT_TITLE_LENGTH
 from opengever.base.model import ZIP_CODE_LENGTH
+from opengever.contact.docprops import AddressDocPropertyProvider
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
@@ -21,3 +22,6 @@ class Address(Base):
     zip_code = Column(String(ZIP_CODE_LENGTH))
     city = Column(String(CONTENT_TITLE_LENGTH))
     country = Column(String(CONTENT_TITLE_LENGTH))
+
+    def get_doc_property_provider(self, prefix):
+        return AddressDocPropertyProvider(self, prefix)

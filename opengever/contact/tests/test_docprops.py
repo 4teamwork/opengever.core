@@ -97,3 +97,25 @@ class TestContactDocPropertyProvider(FunctionalTestCase):
         }
         self.assertItemsEqual(expected_ogds_user_properties,
                               provider.get_properties())
+
+    def test_contact_address_doc_property_provider(self):
+        peter = create(Builder('person')
+                       .having(firstname=u'Peter',
+                               lastname=u'M\xfcller'))
+        address = create(Builder('address')
+                         .for_contact(peter)
+                         .labeled(u'Home')
+                         .having(street=u'Musterstrasse 283',
+                                 zip_code=u'1234',
+                                 city=u'Hinterkappelen',
+                                 country=u'Schweiz'))
+
+        provider = address.get_doc_property_provider(prefix='recipient')
+        expected_address_properties = {
+            'ogg.recipient.address.street': u'Musterstrasse 283',
+            'ogg.recipient.address.zip_code': '1234',
+            'ogg.recipient.address.city': 'Hinterkappelen',
+            'ogg.recipient.address.country': 'Schweiz',
+        }
+        self.assertItemsEqual(expected_address_properties,
+                              provider.get_properties())
