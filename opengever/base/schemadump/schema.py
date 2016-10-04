@@ -139,9 +139,15 @@ class SQLTypeDumper(object):
             mapper_args = getattr(main_klass, '__mapper_args__', {})
 
             if bases and 'polymorphic_identity' not in mapper_args:
-                raise Exception(
+                raise NotImplementedError(
                     "Unexpected inheritance for %r: Mapped base classes, but "
                     "no polymorphic_identity found!" % main_klass)
+
+            for base_class in bases:
+                if list(filter(_is_mapped_class, base_class.__bases__)) != []:
+                    raise NotImplementedError(
+                        "More than one level of inheritance currently not"
+                        "supported when dumping SQL schemas.")
 
             for cls in [main_klass] + bases:
                 schema = schema_dumper.dump(cls)
