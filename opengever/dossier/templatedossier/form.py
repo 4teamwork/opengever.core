@@ -143,6 +143,7 @@ class CreateDocumentMixin(object):
             data.get('address'),
             data.get('mail_address'),
             data.get('phonenumber'),
+            data.get('url'),
         ])
 
         command = CreateDocumentFromTemplateCommand(
@@ -239,6 +240,16 @@ def make_phonenumber_vocabulary(context):
         for phone_number in recipient.phonenumbers])
 
 
+@grok.provider(IContextSourceBinder)
+def make_url_vocabulary(context):
+    recipient = get_recipient(context)
+
+    return SimpleVocabulary([
+        SimpleVocabulary.createTerm(
+            url, str(url.url_id))
+        for url in recipient.urls])
+
+
 class ISelectRecipientAddress(form.Schema):
 
     address = TableChoice(
@@ -273,6 +284,17 @@ class ISelectRecipientAddress(form.Schema):
              'column_title': _(u'label_label', default=u'Label')},
             {'column': 'phone_number',
              'column_title': _(u'label_phonenumber', default=u'Phonenumber')},
+        ))
+
+    url = TableChoice(
+        title=_(u"label_url", default=u"URL"),
+        required=False,
+        source=make_url_vocabulary,
+        columns=(
+            {'column': 'label',
+             'column_title': _(u'label_label', default=u'Label')},
+            {'column': 'url',
+             'column_title': _(u'label_url', default=u'URL')},
         ))
 
 
