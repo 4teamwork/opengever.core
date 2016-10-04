@@ -206,7 +206,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
         self.assertNotEquals(self.template_b.file, document.file)
 
     @browsing
-    def test_recipient_properties_are_added(self, browser):
+    def test_contact_recipient_properties_are_added(self, browser):
         template_word = create(Builder('document')
                                .titled('Word Docx template')
                                .within(self.templatedossier)
@@ -269,6 +269,74 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
         with TemporaryDocFile(document.file) as tmpfile:
             self.assertItemsEqual(
                 expected_person_properties.items(),
+                read_properties(tmpfile.path))
+        self.assert_doc_properties_updated_journal_entry_generated(document)
+
+    @browsing
+    def test_org_role_recipient_properties_are_added(self, browser):
+        template_word = create(Builder('document')
+                               .titled('Word Docx template')
+                               .within(self.templatedossier)
+                               .with_asset_file('without_custom_properties.docx'))
+        peter = create(Builder('person')
+                       .having(firstname=u'Peter', lastname=u'M\xfcller'))
+        organization = create(Builder('organization')
+                              .having(name=u'Meier AG'))
+        org_role = create(Builder('org_role').having(
+            person=peter, organization=organization, function=u'cheffe'))
+
+        address1 = create(Builder('address')
+                          .for_contact(peter)
+                          .labeled(u'Home')
+                          .having(street=u'Musterstrasse 283',
+                                  zip_code=u'1234',
+                                  city=u'Hinterkappelen',
+                                  country=u'Schweiz'))
+        mailaddress = create(Builder('mailaddress')
+                             .for_contact(organization)
+                             .having(address=u'foo@example.com'))
+        phonenumber = create(Builder('phonenumber')
+                             .for_contact(peter)
+                             .having(phone_number=u'1234 123 123'))
+        url = create(Builder('url')
+                     .for_contact(organization)
+                     .having(url=u'http://www.example.com'))
+
+        with freeze(self.document_date):
+            # submit first wizard step
+            browser.login().open(self.dossier, view='document_with_template')
+            browser.fill({'form.widgets.template': _make_token(template_word),
+                          'Recipient': get_contacts_token(org_role),
+                          'Title': 'Test Docx'}).save()
+            # submit second wizard step
+            browser.fill(
+                {'form.widgets.address': str(address1.address_id),
+                 'form.widgets.mail_address': str(mailaddress.mailaddress_id),
+                 'form.widgets.phonenumber': str(phonenumber.phone_number_id),
+                 'form.widgets.url': str(url.url_id)}
+            ).save()
+
+        document = self.dossier.listFolderContents()[0]
+        self.assertEquals(u'test-docx.docx', document.file.filename)
+
+        expected_org_role_properties = {
+            'ogg.recipient.contact.title': u'M\xfcller Peter',
+            'ogg.recipient.person.firstname': 'Peter',
+            'ogg.recipient.person.lastname': u'M\xfcller',
+            'ogg.recipient.orgrole.function': u'cheffe',
+            'ogg.recipient.address.street': u'Musterstrasse 283',
+            'ogg.recipient.address.zip_code': '1234',
+            'ogg.recipient.address.city': 'Hinterkappelen',
+            'ogg.recipient.address.country': 'Schweiz',
+            'ogg.recipient.email.address': u'foo@example.com',
+            'ogg.recipient.phone.number': u'1234 123 123',
+            'ogg.recipient.url.url': u'http://www.example.com',
+        }
+        expected_org_role_properties.update(self.expected_doc_properties)
+
+        with TemporaryDocFile(document.file) as tmpfile:
+            self.assertItemsEqual(
+                expected_org_role_properties.items(),
                 read_properties(tmpfile.path))
         self.assert_doc_properties_updated_journal_entry_generated(document)
 
