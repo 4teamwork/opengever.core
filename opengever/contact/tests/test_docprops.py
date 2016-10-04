@@ -119,3 +119,19 @@ class TestContactDocPropertyProvider(FunctionalTestCase):
         }
         self.assertItemsEqual(expected_address_properties,
                               provider.get_properties())
+
+    def test_contact_mail_address_doc_property_provider(self):
+        peter = create(Builder('person')
+                       .having(firstname=u'Peter',
+                               lastname=u'M\xfcller'))
+        mail_address = create(Builder('mailaddress')
+                              .for_contact(peter)
+                              .labeled(u'Private')
+                              .having(address=u'peter@example.com'))
+
+        provider = mail_address.get_doc_property_provider(prefix='recipient')
+        expected_address_properties = {
+            'ogg.recipient.email.address': u'peter@example.com',
+        }
+        self.assertItemsEqual(expected_address_properties,
+                              provider.get_properties())

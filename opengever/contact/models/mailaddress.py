@@ -2,6 +2,7 @@ from opengever.base.model import Base
 from opengever.base.model import CONTENT_TITLE_LENGTH
 from opengever.base.model import create_session
 from opengever.base.utils import to_safe_html
+from opengever.contact.docprops import MailAddressDocPropertyProvider
 from opengever.ogds.models import EMAIL_LENGTH
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
@@ -52,3 +53,6 @@ class MailAddress(Base):
             return
 
         setattr(self, name, to_safe_html(value))
+
+    def get_doc_property_provider(self, prefix):
+        return MailAddressDocPropertyProvider(self, prefix)

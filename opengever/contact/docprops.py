@@ -117,3 +117,19 @@ class AddressDocPropertyProvider(PrefixableDocPropertyProvider):
                            self.address.country)
 
         return properties
+
+
+class MailAddressDocPropertyProvider(PrefixableDocPropertyProvider):
+    """Provides doc-properties for a mail-address."""
+
+    def __init__(self, mail_address, prefix):
+        super(MailAddressDocPropertyProvider, self).__init__(prefix)
+        self.mail_address = mail_address
+
+    def get_properties(self):
+        properties = {}
+
+        self._add_property(properties, 'email', 'address',
+                           self.mail_address.address)
+
+        return properties
