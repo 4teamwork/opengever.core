@@ -12,6 +12,7 @@ from opengever.tabbedview.filters import Filter
 from opengever.tabbedview.filters import FilterList
 from opengever.tabbedview.helper import boolean_helper
 from opengever.tabbedview.helper import linked_sql_object
+from sqlalchemy.orm import joinedload
 from zope.interface import implements
 from zope.interface import Interface
 
@@ -66,7 +67,7 @@ class PersonListingTab(BaseListingTab):
         return ', '.join(links)
 
     def get_base_query(self):
-        return Person.query
+        return Person.query.options(joinedload('organizations'))
 
 
 class PersonTableSource(SqlTableSource):
