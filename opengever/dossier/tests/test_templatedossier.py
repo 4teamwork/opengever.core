@@ -225,6 +225,9 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
                           .labeled(u'Home')
                           .having(street=u'Hauptstrasse 1',
                                   city=u'Vorkappelen'))
+        mailaddress = create(Builder('mailaddress')
+                             .for_contact(peter)
+                             .having(address=u'foo@example.com'))
 
         with freeze(self.document_date):
             # submit first wizard step
@@ -234,7 +237,9 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
                           'Title': 'Test Docx'}).save()
             # submit second wizard step
             browser.fill(
-                {'form.widgets.address': str(address1.address_id)}).save()
+                {'form.widgets.address': str(address1.address_id),
+                 'form.widgets.mail_address': str(mailaddress.mailaddress_id)}
+            ).save()
 
         document = self.dossier.listFolderContents()[0]
         self.assertEquals(u'test-docx.docx', document.file.filename)
@@ -247,6 +252,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
             'ogg.recipient.address.zip_code': '1234',
             'ogg.recipient.address.city': 'Hinterkappelen',
             'ogg.recipient.address.country': 'Schweiz',
+            'ogg.recipient.email.address': u'foo@example.com',
         }
         expected_person_properties.update(self.expected_doc_properties)
 

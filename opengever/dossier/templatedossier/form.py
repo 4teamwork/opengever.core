@@ -140,7 +140,9 @@ class CreateDocumentMixin(object):
 
         recipient_data = filter(None, [
             data.get('recipient'),
-            data.get('address')])
+            data.get('address'),
+            data.get('mail_address'),
+        ])
 
         command = CreateDocumentFromTemplateCommand(
             self.context, data['template'], data['title'],
@@ -216,6 +218,16 @@ def address_lines(item, value):
     return u"<br />".join(item.get_lines())
 
 
+@grok.provider(IContextSourceBinder)
+def make_mail_address_vocabulary(context):
+    recipient = get_recipient(context)
+
+    return SimpleVocabulary([
+        SimpleVocabulary.createTerm(
+            mail_address, str(mail_address.mailaddress_id))
+        for mail_address in recipient.mail_addresses])
+
+
 class ISelectRecipientAddress(form.Schema):
 
     address = TableChoice(
@@ -228,6 +240,17 @@ class ISelectRecipientAddress(form.Schema):
             {'column': 'address',
              'column_title': _(u'label_address', default=u'Address'),
              'transform': address_lines},
+        ))
+
+    mail_address = TableChoice(
+        title=_(u"label_mail_address", default=u"Mail-Address"),
+        required=False,
+        source=make_mail_address_vocabulary,
+        columns=(
+            {'column': 'label',
+             'column_title': _(u'label_label', default=u'Label')},
+            {'column': 'address',
+             'column_title': _(u'label_mail_address', default=u'Mail-Address')},
         ))
 
 
