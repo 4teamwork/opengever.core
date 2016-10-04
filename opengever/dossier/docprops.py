@@ -45,9 +45,14 @@ class TemporaryDocFile(object):
 
 
 class DocPropertyWriter(object):
+    """Write doc-properties for a document.
 
-    def __init__(self, document, recipient=None):
-        self.recipient = recipient
+    The optional argument recipient_data is an iterable of doc-property
+    providers that are added to the document with a "recipient" prefix.
+    """
+
+    def __init__(self, document, recipient_data=tuple()):
+        self.recipient_data = recipient_data
         self.document = document
         self.request = self.document.REQUEST
 
@@ -61,7 +66,7 @@ class DocPropertyWriter(object):
     def get_properties(self):
         properties_adapter = getMultiAdapter(
             (self.document, self.request), IDocProperties)
-        return properties_adapter.get_properties(self.recipient)
+        return properties_adapter.get_properties(self.recipient_data)
 
     def is_export_enabled(self):
         registry = getUtility(IRegistry)
@@ -301,7 +306,7 @@ class DefaultDocProperties(grok.MultiAdapter):
         member = portal_membership.getAuthenticatedMember()
         return member
 
-    def get_properties(self, recipient=None):
+    def get_properties(self, recipient_data=tuple()):
         document = self.context
         dossier = aq_parent(document)
         repofolder = self.get_repofolder(dossier)
@@ -317,7 +322,7 @@ class DefaultDocProperties(grok.MultiAdapter):
                 obj_properties = property_provider.get_properties()
             properties.update(obj_properties)
 
-        if recipient:
+        for recipient in recipient_data:
             provider = recipient.get_doc_property_provider(prefix='recipient')
             properties.update(provider.get_properties())
 

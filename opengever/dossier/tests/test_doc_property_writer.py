@@ -120,3 +120,46 @@ class TestDocPropertyWriter(FunctionalTestCase):
         with TemporaryDocFile(self.document.file) as tmpfile:
             properties = read_properties(tmpfile.path)
             self.assertItemsEqual(EXPECTED_DOC_PROPERTIES.items(), properties)
+
+    def test_writes_additional_recipient_property_providers(self):
+        self.document = create(
+            Builder('document')
+            .within(self.dossier)
+            .titled("My Document")
+            .having(document_date=datetime(2010, 1, 3),
+                    document_author=TEST_USER_ID,
+                    receipt_date=datetime(2010, 1, 3),
+                    delivery_date=datetime(2010, 1, 3))
+            .with_asset_file('without_custom_properties.docx'))
+
+        peter = create(Builder('person')
+                       .having(firstname=u'Peter',
+                               lastname=u'M\xfcller'))
+        address = create(Builder('address')
+                         .for_contact(peter)
+                         .labeled(u'Home')
+                         .having(street=u'Musterstrasse 283',
+                                 zip_code=u'1234',
+                                 city=u'Hinterkappelen',
+                                 country=u'Schweiz'))
+
+        writer = DocPropertyWriter(
+            self.document, recipient_data=(peter, address))
+        writer.update_doc_properties(only_existing=False)
+
+        additional_recipient_properties = {
+            'ogg.recipient.contact.title': u'M\xfcller Peter',
+            'ogg.recipient.person.firstname': 'Peter',
+            'ogg.recipient.person.lastname': u'M\xfcller',
+            'ogg.recipient.address.street': u'Musterstrasse 283',
+            'ogg.recipient.address.zip_code': '1234',
+            'ogg.recipient.address.city': 'Hinterkappelen',
+            'ogg.recipient.address.country': 'Schweiz',
+        }
+
+        with TemporaryDocFile(self.document.file) as tmpfile:
+            properties = read_properties(tmpfile.path)
+            self.assertItemsEqual(
+                EXPECTED_DOC_PROPERTIES.items() +
+                additional_recipient_properties.items(),
+                properties)
