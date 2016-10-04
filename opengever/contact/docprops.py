@@ -133,3 +133,19 @@ class MailAddressDocPropertyProvider(PrefixableDocPropertyProvider):
                            self.mail_address.address)
 
         return properties
+
+
+class PhoneNumberDocPropertyProvider(PrefixableDocPropertyProvider):
+    """Provides doc-properties for a phone-number."""
+
+    def __init__(self, phonenumber, prefix):
+        super(PhoneNumberDocPropertyProvider, self).__init__(prefix)
+        self.phonenumber = phonenumber
+
+    def get_properties(self):
+        properties = {}
+
+        self._add_property(properties, 'phone', 'number',
+                           self.phonenumber.phone_number)
+
+        return properties

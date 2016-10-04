@@ -135,3 +135,19 @@ class TestContactDocPropertyProvider(FunctionalTestCase):
         }
         self.assertItemsEqual(expected_address_properties,
                               provider.get_properties())
+
+    def test_contact_phonenumber_doc_property_provider(self):
+        peter = create(Builder('person')
+                       .having(firstname=u'Peter',
+                               lastname=u'M\xfcller'))
+        phonenumber = create(Builder('phonenumber')
+                             .for_contact(peter)
+                             .labeled(u'Psst')
+                             .having(phone_number=u'0190 666 666'))
+
+        provider = phonenumber.get_doc_property_provider(prefix='recipient')
+        expected_phone_properties = {
+            'ogg.recipient.phone.number': u'0190 666 666',
+        }
+        self.assertItemsEqual(expected_phone_properties,
+                              provider.get_properties())
