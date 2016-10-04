@@ -9,6 +9,7 @@ from opengever.contact.participation import ParticipationWrapper
 from opengever.document.behaviors import IBaseDocument
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.dossier.behaviors.participation import IParticipationAwareMarker
 from opengever.dossier.interfaces import IConstrainTypeDecider
 from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.meeting import is_meeting_feature_enabled
@@ -297,6 +298,9 @@ class DossierContainer(Container):
 
     def get_sequence_number(self):
         return getUtility(ISequenceNumber).get_number(self)
+
+    def has_participation_support(self):
+        return IParticipationAwareMarker.providedBy(self)
 
 
 class DefaultConstrainTypeDecider(grok.MultiAdapter):

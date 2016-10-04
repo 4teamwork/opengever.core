@@ -90,6 +90,12 @@ class TestPrivateDossier(FunctionalTestCase):
             ['opengever.document.document', 'ftw.mail.mail'],
             [fti.id for fti in subdossier.allowedContentTypes()])
 
+    def test_does_not_support_participations(self):
+        dossier = create(Builder('private_dossier')
+                         .within(self.folder)
+                         .having(responsible=TEST_USER_ID))
+        self.assertFalse(dossier.has_participation_support())
+
 
 class TestPrivateDossierTabbedView(FunctionalTestCase):
 
@@ -108,6 +114,16 @@ class TestPrivateDossierTabbedView(FunctionalTestCase):
         self.assertEquals(
             ['Overview', 'Subdossiers', 'Documents', 'Trash', 'Journal'],
             browser.css('.formTab').text)
+
+    @browsing
+    def test_participation_box_is_not_shown_on_overview(self, browser):
+        dossier = create(Builder('private_dossier').within(self.folder))
+        browser.login().open(dossier, view='tabbedview_view-overview')
+
+        self.assertEquals(
+            ['Dossier structure', 'Newest tasks', 'Linked Dossiers',
+             'Newest documents', 'Description'],
+            browser.css('.box h2').text)
 
 
 class TestPrivateDossierWorkflow(FunctionalTestCase):
