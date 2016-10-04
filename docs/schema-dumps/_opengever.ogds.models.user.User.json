@@ -1,0 +1,166 @@
+{
+    "portal_type": "_opengever.ogds.models.user.User",
+    "title": "User",
+    "schemas": [
+        {
+            "name": "User",
+            "fields": [
+                {
+                    "name": "userid",
+                    "type": "String",
+                    "title": null,
+                    "desc": null,
+                    "required": true
+                },
+                {
+                    "name": "active",
+                    "type": "Boolean",
+                    "title": null,
+                    "desc": null,
+                    "required": false,
+                    "default": true
+                },
+                {
+                    "name": "firstname",
+                    "type": "String",
+                    "title": null,
+                    "desc": null,
+                    "required": false
+                },
+                {
+                    "name": "lastname",
+                    "type": "String",
+                    "title": null,
+                    "desc": null,
+                    "required": false
+                },
+                {
+                    "name": "directorate",
+                    "type": "String",
+                    "title": null,
+                    "desc": null,
+                    "required": false
+                },
+                {
+                    "name": "directorate_abbr",
+                    "type": "String",
+                    "title": null,
+                    "desc": null,
+                    "required": false
+                },
+                {
+                    "name": "department",
+                    "type": "String",
+                    "title": null,
+                    "desc": null,
+                    "required": false
+                },
+                {
+                    "name": "department_abbr",
+                    "type": "String",
+                    "title": null,
+                    "desc": null,
+                    "required": false
+                },
+                {
+                    "name": "email",
+                    "type": "String",
+                    "title": null,
+                    "desc": null,
+                    "required": false
+                },
+                {
+                    "name": "email2",
+                    "type": "String",
+                    "title": null,
+                    "desc": null,
+                    "required": false
+                },
+                {
+                    "name": "url",
+                    "type": "String",
+                    "title": null,
+                    "desc": null,
+                    "required": false
+                },
+                {
+                    "name": "phone_office",
+                    "type": "String",
+                    "title": null,
+                    "desc": null,
+                    "required": false
+                },
+                {
+                    "name": "phone_fax",
+                    "type": "String",
+                    "title": null,
+                    "desc": null,
+                    "required": false
+                },
+                {
+                    "name": "phone_mobile",
+                    "type": "String",
+                    "title": null,
+                    "desc": null,
+                    "required": false
+                },
+                {
+                    "name": "salutation",
+                    "type": "String",
+                    "title": null,
+                    "desc": null,
+                    "required": false
+                },
+                {
+                    "name": "description",
+                    "type": "UnicodeCoercingText",
+                    "title": null,
+                    "desc": null,
+                    "required": false
+                },
+                {
+                    "name": "address1",
+                    "type": "String",
+                    "title": null,
+                    "desc": null,
+                    "required": false
+                },
+                {
+                    "name": "address2",
+                    "type": "String",
+                    "title": null,
+                    "desc": null,
+                    "required": false
+                },
+                {
+                    "name": "zip_code",
+                    "type": "String",
+                    "title": null,
+                    "desc": null,
+                    "required": false
+                },
+                {
+                    "name": "city",
+                    "type": "String",
+                    "title": null,
+                    "desc": null,
+                    "required": false
+                },
+                {
+                    "name": "country",
+                    "type": "String",
+                    "title": null,
+                    "desc": null,
+                    "required": false
+                },
+                {
+                    "name": "import_stamp",
+                    "type": "String",
+                    "title": null,
+                    "desc": null,
+                    "required": false
+                }
+            ]
+        }
+    ]
+}

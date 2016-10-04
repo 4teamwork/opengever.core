@@ -1,0 +1,81 @@
+{
+    "portal_type": "_opengever.contact.models.Person",
+    "title": "Person",
+    "schemas": [
+        {
+            "name": "Person",
+            "fields": [
+                {
+                    "name": "salutation",
+                    "type": "String",
+                    "title": null,
+                    "desc": null,
+                    "required": false
+                },
+                {
+                    "name": "academic_title",
+                    "type": "String",
+                    "title": null,
+                    "desc": null,
+                    "required": false
+                },
+                {
+                    "name": "firstname",
+                    "type": "String",
+                    "title": null,
+                    "desc": null,
+                    "required": true
+                },
+                {
+                    "name": "lastname",
+                    "type": "String",
+                    "title": null,
+                    "desc": null,
+                    "required": true
+                }
+            ]
+        },
+        {
+            "name": "Contact",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "Integer",
+                    "title": null,
+                    "desc": null,
+                    "required": true,
+                    "default": "Sequence(contacts_id_seq)"
+                },
+                {
+                    "name": "contact_type",
+                    "type": "String",
+                    "title": null,
+                    "desc": null,
+                    "required": true
+                },
+                {
+                    "name": "is_active",
+                    "type": "Boolean",
+                    "title": null,
+                    "desc": null,
+                    "required": true,
+                    "default": true
+                },
+                {
+                    "name": "description",
+                    "type": "UnicodeCoercingText",
+                    "title": null,
+                    "desc": null,
+                    "required": false
+                },
+                {
+                    "name": "former_contact_id",
+                    "type": "Integer",
+                    "title": null,
+                    "desc": null,
+                    "required": false
+                }
+            ]
+        }
+    ]
+}

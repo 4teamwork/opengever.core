@@ -1,0 +1,33 @@
+{
+    "portal_type": "_opengever.contact.models.PhoneNumber",
+    "title": "PhoneNumber",
+    "schemas": [
+        {
+            "name": "PhoneNumber",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "Integer",
+                    "title": null,
+                    "desc": null,
+                    "required": true,
+                    "default": "Sequence(phonenumber_id_seq)"
+                },
+                {
+                    "name": "label",
+                    "type": "String",
+                    "title": null,
+                    "desc": null,
+                    "required": false
+                },
+                {
+                    "name": "phone_number",
+                    "type": "String",
+                    "title": null,
+                    "desc": null,
+                    "required": true
+                }
+            ]
+        }
+    ]
+}

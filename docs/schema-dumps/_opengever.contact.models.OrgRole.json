@@ -1,0 +1,40 @@
+{
+    "portal_type": "_opengever.contact.models.OrgRole",
+    "title": "OrgRole",
+    "schemas": [
+        {
+            "name": "OrgRole",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "Integer",
+                    "title": null,
+                    "desc": null,
+                    "required": true,
+                    "default": "Sequence(org_roles_id_seq)"
+                },
+                {
+                    "name": "function",
+                    "type": "String",
+                    "title": null,
+                    "desc": null,
+                    "required": false
+                },
+                {
+                    "name": "department",
+                    "type": "String",
+                    "title": null,
+                    "desc": null,
+                    "required": false
+                },
+                {
+                    "name": "description",
+                    "type": "UnicodeCoercingText",
+                    "title": null,
+                    "desc": null,
+                    "required": false
+                }
+            ]
+        }
+    ]
+}

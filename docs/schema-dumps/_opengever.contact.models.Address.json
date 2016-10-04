@@ -1,0 +1,54 @@
+{
+    "portal_type": "_opengever.contact.models.Address",
+    "title": "Address",
+    "schemas": [
+        {
+            "name": "Address",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "Integer",
+                    "title": null,
+                    "desc": null,
+                    "required": true,
+                    "default": "Sequence(adresses_id_seq)"
+                },
+                {
+                    "name": "label",
+                    "type": "String",
+                    "title": null,
+                    "desc": null,
+                    "required": false
+                },
+                {
+                    "name": "street",
+                    "type": "String",
+                    "title": null,
+                    "desc": null,
+                    "required": false
+                },
+                {
+                    "name": "zip_code",
+                    "type": "String",
+                    "title": null,
+                    "desc": null,
+                    "required": false
+                },
+                {
+                    "name": "city",
+                    "type": "String",
+                    "title": null,
+                    "desc": null,
+                    "required": false
+                },
+                {
+                    "name": "country",
+                    "type": "String",
+                    "title": null,
+                    "desc": null,
+                    "required": false
+                }
+            ]
+        }
+    ]
+}

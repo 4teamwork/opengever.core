@@ -5,6 +5,9 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
+- Implement SQLSchemaDumper and also dump schemas for common SQL types.
+  [lgraf]
+
 - Improve performance of person listing, using eager loading strategy.
   [phgross]
 

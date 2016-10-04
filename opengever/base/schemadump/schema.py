@@ -1,7 +1,9 @@
 from collections import OrderedDict
 from five import grok
+from opengever.base.schemadump.config import GEVER_SQL_TYPES
 from opengever.base.schemadump.config import GEVER_TYPES
 from opengever.base.schemadump.field import FieldDumper
+from opengever.base.schemadump.field import SQLFieldDumper
 from opengever.base.schemadump.helpers import DirectoryHelperMixin
 from opengever.base.schemadump.helpers import join_lines
 from opengever.base.schemadump.helpers import translate_de
@@ -14,6 +16,8 @@ from plone import api
 from plone.dexterity.utils import iterSchemataForType
 from plone.supermodel.interfaces import FIELDSETS_KEY
 from Products.CMFPlone.interfaces import IPloneSiteRoot
+from sqlalchemy.ext.declarative.base import _is_mapped_class
+from zope.dottedname.resolve import resolve as resolve_dotted
 from zope.schema import getFieldsInOrder
 import os
 import transaction
@@ -58,6 +62,33 @@ class SchemaDumper(object):
         return fieldsets_for_schema
 
 
+class SQLSchemaDumper(object):
+    """Dumps a simple Python representation of a SQLAlchemy mapped class.
+    """
+
+    def dump(self, klass):
+        log.info("  Dumping SQL schema %r" % klass.__name__)
+
+        fields = []
+        field_dumper = SQLFieldDumper(klass)
+
+        tbl = klass.__table__
+        for column in tbl.columns:
+            if column.foreign_keys:
+                # XXX: Skip ForeignKeys for now, because it's unclear how
+                # exactly they should be handled.
+                continue
+            field_dump = field_dumper.dump(column)
+            fields.append(field_dump)
+
+        schema_dump = OrderedDict((
+            ('name', klass.__name__),
+            ('fields', fields),
+        ))
+
+        return schema_dump
+
+
 class TypeDumper(object):
     """Dumps a simple Python representation of an FTI and its schemas.
     """
@@ -87,6 +118,44 @@ class TypeDumper(object):
         return types_tool[portal_type]
 
 
+class SQLTypeDumper(object):
+    """Dumps a simple Python representation of SQLAlchemy mapped type.
+    """
+
+    def dump(self, sql_type):
+            log.info("Dumping schemas for SQL type%r" % sql_type)
+            # SQL type names are prefixed with an underscore to distinguish
+            # them from actual portal_types
+            dottedname = sql_type.lstrip('_')
+            main_klass = resolve_dotted(dottedname)
+
+            schemas = []
+            schema_dumper = SQLSchemaDumper()
+
+            # Also consider columns from base classes (inheritance).
+            # We only consider one level of inheritance though, we don't look
+            # up base classes recursively.
+            bases = list(filter(_is_mapped_class, main_klass.__bases__))
+            mapper_args = getattr(main_klass, '__mapper_args__', {})
+
+            if bases and 'polymorphic_identity' not in mapper_args:
+                raise Exception(
+                    "Unexpected inheritance for %r: Mapped base classes, but "
+                    "no polymorphic_identity found!" % main_klass)
+
+            for cls in [main_klass] + bases:
+                schema = schema_dumper.dump(cls)
+                schemas.append(schema)
+
+            type_dump = OrderedDict((
+                ('portal_type', sql_type),
+                ('title', main_klass.__name__),
+                ('schemas', schemas),
+            ))
+
+            return type_dump
+
+
 class JSONSchemaDumpWriter(DirectoryHelperMixin):
     """Dumps a JSON representation of common GEVER types and their schemas.
     """
@@ -103,6 +172,7 @@ class JSONSchemaDumpWriter(DirectoryHelperMixin):
 
     def _dump(self):
         type_dumper = TypeDumper()
+        sql_type_dumper = SQLTypeDumper()
 
         self.purge_schema_dumps()
         for portal_type in GEVER_TYPES:
@@ -111,6 +181,17 @@ class JSONSchemaDumpWriter(DirectoryHelperMixin):
 
             with open(dump_path, 'w') as dump_file:
                 json_dump = pretty_json(type_dump)
+                dump_file.write(json_dump)
+
+            log.info('Dumped: %s\n' % dump_path)
+            yield json_dump
+
+        for sql_type in GEVER_SQL_TYPES:
+            sql_type_dump = sql_type_dumper.dump(sql_type)
+            dump_path = pjoin(self.schema_dumps_dir, '%s.json' % sql_type)
+
+            with open(dump_path, 'w') as dump_file:
+                json_dump = pretty_json(sql_type_dump)
                 dump_file.write(json_dump)
 
             log.info('Dumped: %s\n' % dump_path)

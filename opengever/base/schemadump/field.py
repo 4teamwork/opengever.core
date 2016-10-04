@@ -6,6 +6,8 @@ from opengever.base.schemadump.log import setup_logging
 from plone.autoform.interfaces import MODES_KEY
 from plone.autoform.interfaces import OMITTED_KEY
 from pprint import pprint
+from sqlalchemy.sql.schema import ColumnDefault
+from sqlalchemy.sql.schema import Sequence
 from z3c.form.interfaces import IValue
 from zope.component import ComponentLookupError
 from zope.component import getUtility
@@ -175,3 +177,50 @@ class FieldDumper(object):
             if field_name == field.getName():
                 omitted_for_field[iface.__identifier__] = omitted
         return omitted_for_field
+
+
+class SQLFieldDumper(object):
+    """Dumps a simple Python representation of a SQLAlchemy Column.
+    """
+
+    def __init__(self, klass):
+        self.schema = klass
+
+    def dump(self, column):
+        log.info("    Dumping SQL field %r" % column.name)
+
+        field_dump = OrderedDict((
+            ('name', column.name),
+            ('type', column.type.__class__.__name__),
+            ('title', None),
+            ('desc', None),
+            ('required', not column.nullable),
+        ))
+
+        # Determine the column's default value
+        log.debug("      Determining default...")
+        default_value = column.default
+        if default_value is None:
+            default_value = NO_DEFAULT_MARKER
+
+        if isinstance(default_value, ColumnDefault):
+            default_value = default_value.arg
+
+        if isinstance(default_value, Sequence):
+            default_value = 'Sequence(%s)' % default_value.name
+
+        if default_value is not NO_DEFAULT_MARKER:
+            field_dump['default'] = default_value
+
+        # TODO: Determine vocabulary, if applicable?
+        # We currently don't use any SQL ENUMS though.
+
+        try:
+            json.dumps(field_dump)
+        except TypeError:
+            msg = "Failed to convert dump for field {!r} to JSON!"
+            log.error(msg.format(column.name))
+            pprint(field_dump)
+            raise
+
+        return field_dump
