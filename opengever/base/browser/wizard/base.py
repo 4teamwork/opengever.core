@@ -48,6 +48,9 @@ class BaseWizardStepForm(object):
 
     passed_data = []
 
+    def has_steps(self):
+        return len(self.steps) > 0
+
     def wizard_steps(self):
         current_reached = False
 
