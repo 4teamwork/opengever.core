@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-10-04 11:25+0000\n"
+"POT-Creation-Date: 2016-10-05 13:39+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -75,29 +75,29 @@ msgid "button_remove"
 msgstr ""
 
 #. Default: "Academic title"
-#: ./opengever/contact/browser/person_listing.py:35
+#: ./opengever/contact/browser/person_listing.py:36
 msgid "column_academic_title"
 msgstr ""
 
 #. Default: "Active"
 #: ./opengever/contact/browser/organization_listing.py:37
-#: ./opengever/contact/browser/person_listing.py:47
+#: ./opengever/contact/browser/person_listing.py:48
 msgid "column_active"
 msgstr ""
 
 #. Default: "Firstname"
-#: ./opengever/contact/browser/person_listing.py:39
+#: ./opengever/contact/browser/person_listing.py:40
 msgid "column_firstname"
 msgstr ""
 
 #. Default: "Former contact id"
 #: ./opengever/contact/browser/organization_listing.py:41
-#: ./opengever/contact/browser/person_listing.py:56
+#: ./opengever/contact/browser/person_listing.py:57
 msgid "column_former_contact_id"
 msgstr ""
 
 #. Default: "Lastname"
-#: ./opengever/contact/browser/person_listing.py:43
+#: ./opengever/contact/browser/person_listing.py:44
 msgid "column_lastname"
 msgstr ""
 
@@ -107,12 +107,12 @@ msgid "column_name"
 msgstr ""
 
 #. Default: "Organizations"
-#: ./opengever/contact/browser/person_listing.py:51
+#: ./opengever/contact/browser/person_listing.py:52
 msgid "column_organizations"
 msgstr ""
 
 #. Default: "Salutation"
-#: ./opengever/contact/browser/person_listing.py:32
+#: ./opengever/contact/browser/person_listing.py:33
 msgid "column_salutation"
 msgstr ""
 
@@ -191,19 +191,19 @@ msgid "label_addresses"
 msgstr ""
 
 #. Default: "Archived Addresses"
-#: ./opengever/contact/browser/templates/organization.pt:141
+#: ./opengever/contact/browser/templates/organization.pt:142
 #: ./opengever/contact/browser/templates/person.pt:144
 msgid "label_archived_addresses"
 msgstr ""
 
 #. Default: "Archived Mail Addresses"
-#: ./opengever/contact/browser/templates/organization.pt:164
+#: ./opengever/contact/browser/templates/organization.pt:165
 #: ./opengever/contact/browser/templates/person.pt:167
 msgid "label_archived_mail"
 msgstr ""
 
 #. Default: "Archived Information"
-#: ./opengever/contact/browser/templates/organization.pt:123
+#: ./opengever/contact/browser/templates/organization.pt:124
 msgid "label_archived_organizations"
 msgstr ""
 
@@ -213,7 +213,7 @@ msgid "label_archived_persons"
 msgstr ""
 
 #. Default: "Archived Phone Numbers"
-#: ./opengever/contact/browser/templates/organization.pt:183
+#: ./opengever/contact/browser/templates/organization.pt:184
 #: ./opengever/contact/browser/templates/person.pt:186
 msgid "label_archived_phone_numbers"
 msgstr ""
@@ -276,6 +276,11 @@ msgstr ""
 msgid "label_email2"
 msgstr ""
 
+#. Default: "Fax"
+#: ./opengever/contact/ogdsuser.py:213
+msgid "label_fax"
+msgstr ""
+
 #. Default: "Firstname"
 #: ./opengever/contact/browser/person.py:102
 #: ./opengever/contact/contact.py:82
@@ -284,7 +289,7 @@ msgid "label_firstname"
 msgstr ""
 
 #. Default: "Inactive"
-#: ./opengever/contact/browser/templates/organization.pt:101
+#: ./opengever/contact/browser/templates/organization.pt:102
 msgid "label_inactive"
 msgstr ""
 
@@ -311,6 +316,11 @@ msgstr ""
 msgid "label_mail"
 msgstr ""
 
+#. Default: "Mobile"
+#: ./opengever/contact/ogdsuser.py:214
+msgid "label_mobile"
+msgstr ""
+
 #. Default: "Name"
 #: ./opengever/contact/browser/templates/organization.pt:21
 #: ./opengever/contact/browser/templates/person.pt:22
@@ -320,6 +330,11 @@ msgstr ""
 #. Default: "No participations"
 #: ./opengever/contact/browser/templates/participations.pt:35
 msgid "label_no_participations"
+msgstr ""
+
+#. Default: "Office"
+#: ./opengever/contact/ogdsuser.py:212
+msgid "label_office"
 msgstr ""
 
 #. Default: "Organizations"

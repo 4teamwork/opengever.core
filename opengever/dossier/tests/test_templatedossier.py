@@ -102,17 +102,17 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
             [{'': '',
               'Creator': 'test_user_1_',
               'Modified': '28.12.2010',
-              'title': 'AAA Template'},
+              'Title': 'AAA Template'},
 
              {'': '',
               'Creator': 'test_user_1_',
               'Modified': '28.12.2012',
-              'title': 'Template A'},
+              'Title': 'Template A'},
 
              {'': '',
               'Creator': 'test_user_1_',
               'Modified': '28.12.2012',
-              'title': 'Template B'}],
+              'Title': 'Template B'}],
             browser.css('table.listing').first.dicts())
 
     @browsing
@@ -122,12 +122,12 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
             [{'': '',
               'Creator': 'test_user_1_',
               'Modified': '28.12.2012',
-              'title': 'Template A'},
+              'Title': 'Template A'},
 
              {'': '',
               'Creator': 'test_user_1_',
               'Modified': '28.12.2012',
-              'title': 'Template B'}],
+              'Title': 'Template B'}],
             browser.css('table.listing').first.dicts())
 
     @browsing
@@ -145,15 +145,15 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
             [{'': '',
               'Creator': 'test_user_1_',
               'Modified': '28.12.2012',
-              'title': 'Template A'},
+              'Title': 'Template A'},
              {'': '',
               'Creator': 'test_user_1_',
               'Modified': '28.12.2012',
-              'title': 'Template B'},
+              'Title': 'Template B'},
              {'': '',
               'Creator': 'test_user_1_',
               'Modified': '28.12.2012',
-              'title': 'Template C'}],
+              'Title': 'Template C'}],
 
             browser.css('table.listing').first.dicts())
 

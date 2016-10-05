@@ -30,7 +30,7 @@ class DossierReporter(grok.View):
     def get_dossier_attributes(self):
         return [
             {'id': 'Title',
-             'title': _('label_title', default=u'title'),
+             'title': _('label_title', default=u'Title'),
              'transform': to_unicode},
             {'id': 'start',
              'title': _(u'label_start', default=u'Opening Date'),

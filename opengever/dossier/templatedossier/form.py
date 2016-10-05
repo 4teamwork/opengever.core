@@ -62,7 +62,7 @@ class ICreateDocumentFromTemplate(form.Schema):
         required=True,
         columns=(
             {'column': 'title',
-             'column_title': _(u'label_title', default=u'title'),
+             'column_title': _(u'label_title', default=u'Title'),
              'sort_index': 'sortable_title',
              'transform': document_with_icon},
             {'column': 'Creator',
@@ -175,7 +175,7 @@ class SelectTemplateDocumentWizardStep(
                 source=get_templates,
                 columns=(
                     {'column': 'title',
-                     'column_title': _(u'label_title', default=u'title'),
+                     'column_title': _(u'label_title', default=u'Title'),
                      'sort_index': 'sortable_title',
                      'transform': document_with_icon},
                     {'column': 'Creator',
@@ -324,7 +324,7 @@ class ISelectRecipientAddress(form.Schema):
         ))
 
     phonenumber = TableChoice(
-        title=_(u"label_phone_number", default=u"Phone Number"),
+        title=_(u"label_phonenumber", default=u"Phonenumber"),
         required=False,
         source=make_phonenumber_vocabulary,
         columns=(
