@@ -12,6 +12,7 @@ from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.dossier.docprops import TemporaryDocFile
 from opengever.dossier.interfaces import ITemplateDossierProperties
 from opengever.dossier.templatedossier import get_template_dossier
+from opengever.dossier.tests import OGDS_USER_ATTRIBUTES
 from opengever.journal.handlers import DOC_PROPERTIES_UPDATED
 from opengever.journal.tests.utils import get_journal_entry
 from opengever.ogds.base.actor import Actor
@@ -330,6 +331,57 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
             'ogg.recipient.address.country': 'Schweiz',
             'ogg.recipient.email.address': u'foo@example.com',
             'ogg.recipient.phone.number': u'1234 123 123',
+            'ogg.recipient.url.url': u'http://www.example.com',
+        }
+        expected_org_role_properties.update(self.expected_doc_properties)
+
+        with TemporaryDocFile(document.file) as tmpfile:
+            self.assertItemsEqual(
+                expected_org_role_properties.items(),
+                read_properties(tmpfile.path))
+        self.assert_doc_properties_updated_journal_entry_generated(document)
+
+    @browsing
+    def test_ogds_user_recipient_properties_are_added(self, browser):
+        template_word = create(Builder('document')
+                               .titled('Word Docx template')
+                               .within(self.templatedossier)
+                               .with_asset_file('without_custom_properties.docx'))
+
+        ogds_user = create(Builder('ogds_user')
+                           .id('peter')
+                           .having(**OGDS_USER_ATTRIBUTES)
+                           .as_contact_adapter())
+
+        with freeze(self.document_date):
+            # submit first wizard step
+            browser.login().open(self.dossier, view='document_with_template')
+            browser.fill({'form.widgets.template': _make_token(template_word),
+                          'Recipient': get_contacts_token(ogds_user),
+                          'Title': 'Test Docx'}).save()
+            # submit second wizard step
+            browser.fill(
+                {'form.widgets.address': '{}_1'.format(ogds_user.id),
+                 'form.widgets.mail_address': '{}_2'.format(ogds_user.id),
+                 'form.widgets.phonenumber': '{}_3'.format(ogds_user.id),
+                 'form.widgets.url': '{}_1'.format(ogds_user.id)}
+            ).save()
+
+        document = self.dossier.listFolderContents()[0]
+        self.assertEquals(u'test-docx.docx', document.file.filename)
+
+        expected_org_role_properties = {
+            'ogg.recipient.contact.title': u'M\xfcller Peter',
+            'ogg.recipient.contact.description': u'nix',
+            'ogg.recipient.person.salutation': 'Prof. Dr.',
+            'ogg.recipient.person.firstname': 'Peter',
+            'ogg.recipient.person.lastname': u'M\xfcller',
+            'ogg.recipient.address.street': u'Kappelenweg 13, Postfach 1234',
+            'ogg.recipient.address.zip_code': '1234',
+            'ogg.recipient.address.city': u'Vorkappelen',
+            'ogg.recipient.address.country': u'Schweiz',
+            'ogg.recipient.email.address': u'bar@example.com',
+            'ogg.recipient.phone.number': u'012 34 56 76',
             'ogg.recipient.url.url': u'http://www.example.com',
         }
         expected_org_role_properties.update(self.expected_doc_properties)

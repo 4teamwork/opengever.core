@@ -91,6 +91,7 @@ class TestContactDocPropertyProvider(FunctionalTestCase):
 
         expected_ogds_user_properties = {
             'ogg.recipient.contact.title': u'M\xfcller Peter',
+            'ogg.recipient.contact.description': u'nix',
             'ogg.recipient.person.salutation': 'Prof. Dr.',
             'ogg.recipient.person.firstname': 'Peter',
             'ogg.recipient.person.lastname': u'M\xfcller',

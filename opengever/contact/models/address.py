@@ -29,7 +29,7 @@ class Address(Base):
         return filter(None, [
             self.contact.get_title(),
             self.street,
-            " ".join(filter(None, [self.zip_code, self.city])),
+            u" ".join(filter(None, [self.zip_code, self.city])),
             self.country
         ])
 
