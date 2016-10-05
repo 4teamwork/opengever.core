@@ -6,6 +6,7 @@ from opengever.base.interfaces import IRedirector
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.base.schema import TableChoice
+from opengever.contact import is_contact_feature_enabled
 from opengever.dossier import _
 from opengever.dossier.command import CreateDocumentFromTemplateCommand
 from opengever.dossier.templatedossier import get_template_dossier
@@ -25,12 +26,6 @@ from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
-
-
-DOCUMENT_FROM_TEMPLATE_STEPS = (
-    ('select-document', _(u'Select document')),
-    ('select-address', _(u'Select recipient address')),
-)
 
 
 @grok.provider(IContextSourceBinder)
@@ -107,6 +102,16 @@ def get_dm_key(context):
 
 class CreateDocumentMixin(object):
 
+    label = _(u'create_document_with_template',
+              default=u'Create document from template')
+
+    @property
+    def steps(self):
+        if not is_contact_feature_enabled():
+            return []
+        return [('select-document', _(u'Select document')),
+                ('select-address', _(u'Select recipient address'))]
+
     def finish_document_creation(self, data):
         new_doc = self.create_document(data)
 
@@ -156,10 +161,53 @@ class SelectTemplateDocumentWizardStep(
         CreateDocumentMixin, AutoExtensibleForm, BaseWizardStepForm, Form):
 
     step_name = 'select-document'
-    label = _(u'Select document')
-    steps = DOCUMENT_FROM_TEMPLATE_STEPS
 
-    schema = ICreateDocumentFromTemplate
+    @property
+    def schema(self):
+        """Create the schema dynammically and omit recipient if necessary.
+
+        There seems to be an issue with AutocompleteFieldWidget's HIDDEN_MODE
+        so we omit the field completely if the feature is not enabled.
+        """
+        class ICreateDocumentFromTemplate(form.Schema):
+            template = TableChoice(
+                title=_(u"label_template", default=u"Template"),
+                source=get_templates,
+                columns=(
+                    {'column': 'title',
+                     'column_title': _(u'label_title', default=u'title'),
+                     'sort_index': 'sortable_title',
+                     'transform': document_with_icon},
+                    {'column': 'Creator',
+                     'column_title': _(u'label_creator', default=u'Creator'),
+                     'sort_index': 'document_author'},
+                    {'column': 'modified',
+                     'column_title': _(u'label_modified', default=u'Modified'),
+                     'transform': helper.readable_date}
+                    )
+            )
+
+            title = schema.TextLine(
+                title=_(u"label_title", default=u"Title"),
+                required=True)
+
+            if is_contact_feature_enabled():
+                form.widget(recipient=AutocompleteFieldWidget)
+                recipient = schema.Choice(
+                    title=_(u'label_recipient', default=u'Recipient'),
+                    vocabulary=u'opengever.contact.ContactsVocabulary',
+                    required=False,
+                )
+
+            form.widget(edit_after_creation=SingleCheckBoxFieldWidget)
+            edit_after_creation = schema.Bool(
+                title=_(u'label_edit_after_creation',
+                        default='Edit after creation'),
+                default=True,
+                required=False,
+                )
+
+        return ICreateDocumentFromTemplate
 
     @button.buttonAndHandler(_('button_save', default=u'Save'), name='save')
     def handleApply(self, action):
@@ -302,9 +350,6 @@ class SelectAddressWizardStep(
         CreateDocumentMixin, AutoExtensibleForm, BaseWizardStepForm, Form):
 
     step_name = 'select-address'
-    label = _(u'Select address')
-    steps = DOCUMENT_FROM_TEMPLATE_STEPS
-
     schema = ISelectRecipientAddress
 
     @button.buttonAndHandler(_('button_save', default=u'Save'), name='save')

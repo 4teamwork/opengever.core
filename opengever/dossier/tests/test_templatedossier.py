@@ -5,9 +5,9 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages import plone
-from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testing import freeze
 from ooxml_docprops import read_properties
+from opengever.contact.interfaces import IContactSettings
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.dossier.docprops import TemporaryDocFile
 from opengever.dossier.interfaces import ITemplateDossierProperties
@@ -20,6 +20,7 @@ from opengever.testing import add_languages
 from opengever.testing import FunctionalTestCase
 from opengever.testing.helpers import get_contacts_token
 from opengever.testing.pages import sharing_tab_data
+from plone import api
 from plone.app.testing import TEST_USER_ID
 from plone.registry.interfaces import IRegistry
 from zope.app.intid.interfaces import IIntIds
@@ -131,7 +132,6 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
 
     @browsing
     def test_template_list_includes_nested_templates(self, browser):
-
         subtemplatedossier = create(Builder('templatedossier')
                                     .within(self.templatedossier))
         create(Builder('document')
@@ -156,6 +156,13 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
               'title': 'Template C'}],
 
             browser.css('table.listing').first.dicts())
+
+    @browsing
+    def test_form_does_not_inlcude_participants_with_disabled_feature(self, browser):
+        browser.login().open(self.dossier, view='document_with_template')
+
+        self.assertEqual([u'Template', u'Title', u'Edit after creation'],
+                         browser.css('#form label').text)
 
     @browsing
     def test_cancel_redirects_to_the_dossier(self, browser):
@@ -208,6 +215,9 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
 
     @browsing
     def test_contact_recipient_properties_are_added(self, browser):
+        api.portal.set_registry_record(
+            'is_feature_enabled', True, interface=IContactSettings)
+
         template_word = create(Builder('document')
                                .titled('Word Docx template')
                                .within(self.templatedossier)
@@ -275,6 +285,9 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
 
     @browsing
     def test_org_role_recipient_properties_are_added(self, browser):
+        api.portal.set_registry_record(
+            'is_feature_enabled', True, interface=IContactSettings)
+
         template_word = create(Builder('document')
                                .titled('Word Docx template')
                                .within(self.templatedossier)
@@ -343,6 +356,9 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
 
     @browsing
     def test_ogds_user_recipient_properties_are_added(self, browser):
+        api.portal.set_registry_record(
+            'is_feature_enabled', True, interface=IContactSettings)
+
         template_word = create(Builder('document')
                                .titled('Word Docx template')
                                .within(self.templatedossier)
