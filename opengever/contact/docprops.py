@@ -32,7 +32,7 @@ class ContactDocPropertyProvider(PrefixableDocPropertyProvider):
         properties = {}
 
         self._add_property(properties, 'contact', 'title',
-                           self.contact.get_title())
+                           self.contact.get_title(with_former_id=False))
         self._add_property(properties, 'contact', 'description',
                            self.contact.description)
 

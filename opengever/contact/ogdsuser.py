@@ -146,8 +146,8 @@ class OgdsUserToContactAdapter(BaseAdapter):
     def id(self):
         return self.ogds_user.userid
 
-    def get_title(self, with_former_id=None):
-        return self.ogds_user.label(with_principal=False)
+    def get_title(self, with_former_id=True):
+        return self.ogds_user.label(with_principal=with_former_id)
 
     def get_url(self):
         return UserDetails.url_for(self.id)
