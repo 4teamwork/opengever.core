@@ -43,7 +43,8 @@ class DossierOverview(BoxesViewMixin, grok.View, GeverTabMixin):
                 dict(id='newest_tasks', content=self.tasks(),
                      href='tasks', label=_("Newest tasks")),
                 dict(id='participants', content=self.sharing(),
-                     href='participants', label=_("Participants")),
+                     href='participants', label=_("Participants"),
+                     available=self.context.has_participation_support()),
                 dict(id='references', content=self.linked_dossiers(),
                      label=_('label_linked_dossiers',
                              default='Linked Dossiers')),
@@ -78,6 +79,9 @@ class DossierOverview(BoxesViewMixin, grok.View, GeverTabMixin):
             ['opengever.document.document', 'ftw.mail.mail', ])[:10])
 
     def sharing(self):
+        if not self.context.has_participation_support():
+            return []
+
         # get the participants
         phandler = IParticipationAware(self.context)
         results = list(phandler.get_participations())

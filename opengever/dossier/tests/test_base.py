@@ -103,6 +103,10 @@ class TestDossierContainer(FunctionalTestCase):
         self.assertEquals(2, subdossier.get_sequence_number())
         self.assertEquals(3, dossier_2.get_sequence_number())
 
+    def test_support_participations(self):
+        dossier = create(Builder("dossier"))
+        self.assertTrue(dossier.has_participation_support())
+
 
 class TestDossierChecks(FunctionalTestCase):
 

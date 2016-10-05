@@ -8,5 +8,6 @@
   <element value="opengever.inbox.inbox"/>
   <element value="opengever.inbox.container"/>
   <element value="opengever.meeting.committeecontainer"/>
+  <element value="opengever.private.root"/>
  </property>
 </object>

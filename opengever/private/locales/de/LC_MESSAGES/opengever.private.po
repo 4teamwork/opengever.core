@@ -1,0 +1,36 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2016-09-23 14:23+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+
+#: ./opengever/private/profiles/default/actions.xml
+msgid "My repository"
+msgstr "Meine Ablage"
+
+#: ./opengever/private/profiles/default/types/opengever.private.dossier.xml
+msgid "Private Dossier"
+msgstr "Persönliches Dossier"
+
+#: ./opengever/private/profiles/default/types/opengever.private.root.xml
+msgid "Private Root"
+msgstr "Persönliches Verzeichnis"
+
+#: ./opengever/private/profiles/default/types/opengever.private.folder.xml
+msgid "Private folder"
+msgstr "Persönlicher Ordner"
+
+#. Default: "Dossiers"
+#: ./opengever/private/browser/tabbed.py:13
+msgid "label_dossiers"
+msgstr "Dossiers"

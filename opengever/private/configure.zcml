@@ -1,0 +1,46 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:profilehook="http://namespaces.zope.org/profilehook"
+    xmlns:grok="http://namespaces.zope.org/grok"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="opengever.private">
+
+  <i18n:registerTranslations directory="locales" />
+
+  <grok:grok package="." />
+
+  <genericsetup:registerProfile
+      name="default"
+      title="opengever.private"
+      description="Contains the private obj types(PrivateRoot, PrivateFolder, PrivateDossier) and corresponding workflows."
+      directory="profiles/default"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <profilehook:hook
+      profile="opengever.private:default"
+      handler=".hooks.configure_members_area"
+      />
+
+  <include package=".upgrades" />
+  <include package=".browser" />
+
+
+  <!-- permissions -->
+  <permission
+      id="opengever.private.AddPrivateRoot"
+      title="opengever.private: Add private root"
+      />
+
+  <permission
+      id="opengever.private.AddPrivateFolder"
+      title="opengever.private: Add private folder"
+      />
+
+  <permission
+      id="opengever.private.AddPrivateDossier"
+      title="opengever.private: Add private dossier"
+      />
+
+</configure>

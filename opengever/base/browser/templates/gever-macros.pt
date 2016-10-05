@@ -26,84 +26,87 @@
            tal:attributes="class string:boxGroup boxGroup${box_id};
                            style string:width:${css_width}%">
         <div tal:repeat="box boxes" class="box" tal:attributes="id string:${box/id}Box">
-          <h2 i18n:translate="" tal:content="box/label|box/id"></h2>
+          <tal:condition tal:condition="python: box.get('available', True)">
 
-          <tal:box tal:condition="python: not hasattr(box.get('content'), '__iter__')">
-            <tal:item  tal:condition="box/content">
-              <span tal:content="box/content" />
-            </tal:item>
-            <tal:item tal:condition="not: box/content">
-              <span i18n:translate="" >No content</span>
-            </tal:item>
-          </tal:box>
+            <h2 i18n:translate="" tal:content="box/label|box/id"></h2>
 
-          <tal:box tal:condition="python: hasattr(box.get('content'), '__iter__')">
-            <tal:items define="items box/content">
-              <ul tal:condition="items">
-                <li tal:repeat="item items">
+            <tal:box tal:condition="python: not hasattr(box.get('content'), '__iter__')">
+              <tal:item  tal:condition="box/content">
+                <span tal:content="box/content" />
+              </tal:item>
+              <tal:item tal:condition="not: box/content">
+                <span i18n:translate="" >No content</span>
+              </tal:item>
+            </tal:box>
 
-                  <tal:comment replace="nothing">
-                    Item is a widget:
-                  </tal:comment>
-                  <tal:brain tal:condition="python: view.get_type(item) == 'widget'">
-                    <tal:cond tal:condition="item/label">
-                      <span tal:content="structure item/label" />
-                      <span>: </span>
-                      <span tal:content="structure item/render" />
-                    </tal:cond>
-                    <tal:cond tal:condition="not: item/label">
-                      <span tal:content="structure item/render" />
-                    </tal:cond>
-                  </tal:brain>
+            <tal:box tal:condition="python: hasattr(box.get('content'), '__iter__')">
+              <tal:items define="items box/content">
+                <ul tal:condition="items">
+                  <li tal:repeat="item items">
 
-                  <tal:comment replace="nothing">
-                    Item is a brain:
-                  </tal:comment>
-                  <tal:brain tal:condition="python: view.get_type(item) == 'brain'">
-                    <a href="" tal:attributes="href item/getURL|nothing;
-                                               title item/alt|nothing;
-                                               class python:view.get_item_css_classes(item)" tal:omit-tag="not: item/getURL|nothing"
-                       tal:content="item/Title">
-                    </a>
-                  </tal:brain>
+                    <tal:comment replace="nothing">
+                      Item is a widget:
+                    </tal:comment>
+                    <tal:brain tal:condition="python: view.get_type(item) == 'widget'">
+                      <tal:cond tal:condition="item/label">
+                        <span tal:content="structure item/label" />
+                        <span>: </span>
+                        <span tal:content="structure item/render" />
+                      </tal:cond>
+                      <tal:cond tal:condition="not: item/label">
+                        <span tal:content="structure item/render" />
+                      </tal:cond>
+                    </tal:brain>
 
-                  <tal:comment replace="nothing">
-                    Item is a contentlistingobject:
-                  </tal:comment>
-                  <tal:contentlisting tal:condition="python: view.get_type(item) == 'contentlistingobject'">
-                    <a tal:replace="structure item/render_link" />
-                  </tal:contentlisting>
+                    <tal:comment replace="nothing">
+                      Item is a brain:
+                    </tal:comment>
+                    <tal:brain tal:condition="python: view.get_type(item) == 'brain'">
+                      <a href="" tal:attributes="href item/getURL|nothing;
+                                                 title item/alt|nothing;
+                                                 class python:view.get_item_css_classes(item)" tal:omit-tag="not: item/getURL|nothing"
+                         tal:content="item/Title">
+                      </a>
+                    </tal:brain>
 
-                  <tal:comment replace="nothing">
-                    Item is a dict (Documents and participants):
-                  </tal:comment>
-                  <tal:dict tal:condition="python: view.get_type(item) == 'dict'">
-                    <a href=""
-                       tal:attributes="href item/getURL|nothing;
-                                       title item/alt|nothing;
-                                       class python:'rollover-breadcrumb %s' % (item.get('css_class'))"
-                       tal:omit-tag="not: item/getURL|nothing">
-                    <span tal:content="item/Title" /></a>
-                  </tal:dict>
+                    <tal:comment replace="nothing">
+                      Item is a contentlistingobject:
+                    </tal:comment>
+                    <tal:contentlisting tal:condition="python: view.get_type(item) == 'contentlistingobject'">
+                      <a tal:replace="structure item/render_link" />
+                    </tal:contentlisting>
+
+                    <tal:comment replace="nothing">
+                      Item is a dict (Documents and participants):
+                    </tal:comment>
+                    <tal:dict tal:condition="python: view.get_type(item) == 'dict'">
+                      <a href=""
+                         tal:attributes="href item/getURL|nothing;
+                                         title item/alt|nothing;
+                                         class python:'rollover-breadcrumb %s' % (item.get('css_class'))"
+                         tal:omit-tag="not: item/getURL|nothing">
+                      <span tal:content="item/Title" /></a>
+                    </tal:dict>
 
 
-                  <tal:comment replace="nothing">
-                    SQLAlchemy Objects (Tasks from GlobalIndex):
-                  </tal:comment>
-                  <tal:sql tal:condition="python: view.get_type(item) == 'globalindex_task'">
-                    <div tal:replace="structure python:view.render_globalindex_task(item)" />
-                  </tal:sql>
-                </li>
+                    <tal:comment replace="nothing">
+                      SQLAlchemy Objects (Tasks from GlobalIndex):
+                    </tal:comment>
+                    <tal:sql tal:condition="python: view.get_type(item) == 'globalindex_task'">
+                      <div tal:replace="structure python:view.render_globalindex_task(item)" />
+                    </tal:sql>
+                  </li>
 
-                <li class="moreLink" tal:condition="exists: box/href">
-                  <a tal:attributes="href string:#${box/href}"
-                     i18n:translate="">
-                  show all</a>
-                </li>
-              </ul>
-              <span tal:condition="not: items" i18n:translate="">No content</span>
-            </tal:items>
-          </tal:box>
+                  <li class="moreLink" tal:condition="exists: box/href">
+                    <a tal:attributes="href string:#${box/href}"
+                       i18n:translate="">
+                    show all</a>
+                  </li>
+                </ul>
+                <span tal:condition="not: items" i18n:translate="">No content</span>
+              </tal:items>
+            </tal:box>
+          </tal:condition>
 
         </div>
       </div>

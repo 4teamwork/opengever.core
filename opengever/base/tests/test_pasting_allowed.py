@@ -49,15 +49,50 @@ class TestPastingAllowed(FunctionalTestCase):
         self.assertSequenceEqual(
             ['Export as Zip', 'Properties', 'save attachments'], actions)
 
-    def test_pasting_not_allowed_if_disallowed_subobject_type(self):
+    @browsing
+    def test_pasting_not_allowed_if_disallowed_subobject_type(self, browser):
         repofolder = create(Builder('repository'))
-        dossier = create(Builder('dossier')
-                         .within(repofolder))
-        document = create(Builder('document')
-                          .within(dossier))
+        dossier = create(Builder('dossier').within(repofolder))
+        document = create(Builder('document').within(dossier))
 
-        dossier.manage_copyObjects(document.id)
-        pasting_allowed_view = repofolder.restrictedTraverse(
-            'is_pasting_allowed')
-        allowed = pasting_allowed_view()
-        self.assertFalse(allowed)
+        browser.login().open(
+            dossier,
+            view='copy_items',
+            data={'paths:list': ['/'.join(document.getPhysicalPath())]})
+
+        browser.open(repofolder, view='is_pasting_allowed')
+        self.assertFalse(browser.contents)
+
+    @browsing
+    def test_pasting_public_content_into_private_container_is_disallowed(self, browser):
+        repo = create(Builder('repository'))
+        dossier = create(Builder('dossier').within(repo))
+        document = create(Builder('document').within(dossier))
+
+        private_root = create(Builder('private_root'))
+        private_folder = create(Builder('private_folder').within(private_root))
+        private_dossier = create(Builder('private_dossier').within(private_folder))
+
+        browser.login().open(
+            dossier,
+            view='copy_items',
+            data={'paths:list': ['/'.join(document.getPhysicalPath())]})
+
+        browser.open(private_dossier, view='is_pasting_allowed')
+        self.assertFalse(browser.contents)
+
+    @browsing
+    def test_pasting_private_content_into_private_container_is_allowed(self, browser):
+        private_root = create(Builder('private_root'))
+        private_folder = create(Builder('private_folder').within(private_root))
+        dossier_1 = create(Builder('private_dossier').within(private_folder))
+        document = create(Builder('document').within(dossier_1))
+        dossier_2 = create(Builder('private_dossier').within(private_folder))
+
+        browser.login().open(
+            dossier_1,
+            view='copy_items',
+            data={'paths:list': ['/'.join(document.getPhysicalPath())]})
+
+        browser.open(dossier_2, view='is_pasting_allowed')
+        self.assertTrue(browser.contents)
