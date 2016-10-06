@@ -37,6 +37,14 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot"
+      name="bumblebee_download"
+      class=".download.GeverBumblebeeDownload"
+      permission="zope.Public"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
   <adapter
       for="opengever.document.document.IDocumentSchema
            zope.interface.Interface"
