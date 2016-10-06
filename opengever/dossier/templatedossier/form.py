@@ -162,6 +162,11 @@ class SelectTemplateDocumentWizardStep(
 
     step_name = 'select-document'
 
+    def updateFieldsFromSchemata(self):
+        super(SelectTemplateDocumentWizardStep, self).updateFieldsFromSchemata()
+        if not is_contact_feature_enabled():
+            self.fields = self.fields.omit('recipient')
+
     @property
     def schema(self):
         """Create the schema dynammically and omit recipient if necessary.
@@ -169,43 +174,6 @@ class SelectTemplateDocumentWizardStep(
         There seems to be an issue with AutocompleteFieldWidget's HIDDEN_MODE
         so we omit the field completely if the feature is not enabled.
         """
-        class ICreateDocumentFromTemplate(form.Schema):
-            template = TableChoice(
-                title=_(u"label_template", default=u"Template"),
-                source=get_templates,
-                columns=(
-                    {'column': 'title',
-                     'column_title': _(u'label_title', default=u'Title'),
-                     'sort_index': 'sortable_title',
-                     'transform': document_with_icon},
-                    {'column': 'Creator',
-                     'column_title': _(u'label_creator', default=u'Creator'),
-                     'sort_index': 'document_author'},
-                    {'column': 'modified',
-                     'column_title': _(u'label_modified', default=u'Modified'),
-                     'transform': helper.readable_date}
-                    )
-            )
-
-            title = schema.TextLine(
-                title=_(u"label_title", default=u"Title"),
-                required=True)
-
-            if is_contact_feature_enabled():
-                form.widget(recipient=AutocompleteFieldWidget)
-                recipient = schema.Choice(
-                    title=_(u'label_recipient', default=u'Recipient'),
-                    vocabulary=u'opengever.contact.ContactsVocabulary',
-                    required=False,
-                )
-
-            form.widget(edit_after_creation=SingleCheckBoxFieldWidget)
-            edit_after_creation = schema.Bool(
-                title=_(u'label_edit_after_creation',
-                        default='Edit after creation'),
-                default=True,
-                required=False,
-                )
 
         return ICreateDocumentFromTemplate
 
