@@ -32,7 +32,7 @@ class ContactDocPropertyProvider(PrefixableDocPropertyProvider):
         properties = {}
 
         self._add_property(properties, 'contact', 'title',
-                           self.contact.get_title())
+                           self.contact.get_title(with_former_id=False))
         self._add_property(properties, 'contact', 'description',
                            self.contact.description)
 
@@ -90,8 +90,78 @@ class OrgRoleDocPropertyProvider(PrefixableDocPropertyProvider):
         self._add_property(properties, 'orgrole', 'function',
                            self.org_role.function)
         self._add_property(properties, 'orgrole', 'description',
-                           self.org_role.function)
+                           self.org_role.description)
         self._add_property(properties, 'orgrole', 'department',
                            self.org_role.department)
+
+        return properties
+
+
+class AddressDocPropertyProvider(PrefixableDocPropertyProvider):
+    """Provides doc-properties for an address."""
+
+    def __init__(self, address, prefix):
+        super(AddressDocPropertyProvider, self).__init__(prefix)
+        self.address = address
+
+    def get_properties(self):
+        properties = {}
+
+        self._add_property(properties, 'address', 'street',
+                           self.address.street)
+        self._add_property(properties, 'address', 'zip_code',
+                           self.address.zip_code)
+        self._add_property(properties, 'address', 'city',
+                           self.address.city)
+        self._add_property(properties, 'address', 'country',
+                           self.address.country)
+
+        return properties
+
+
+class MailAddressDocPropertyProvider(PrefixableDocPropertyProvider):
+    """Provides doc-properties for a mail-address."""
+
+    def __init__(self, mail_address, prefix):
+        super(MailAddressDocPropertyProvider, self).__init__(prefix)
+        self.mail_address = mail_address
+
+    def get_properties(self):
+        properties = {}
+
+        self._add_property(properties, 'email', 'address',
+                           self.mail_address.address)
+
+        return properties
+
+
+class PhoneNumberDocPropertyProvider(PrefixableDocPropertyProvider):
+    """Provides doc-properties for a phone-number."""
+
+    def __init__(self, phonenumber, prefix):
+        super(PhoneNumberDocPropertyProvider, self).__init__(prefix)
+        self.phonenumber = phonenumber
+
+    def get_properties(self):
+        properties = {}
+
+        self._add_property(properties, 'phone', 'number',
+                           self.phonenumber.phone_number)
+
+        return properties
+
+
+class URLDocPropertyProvider(PrefixableDocPropertyProvider):
+    """Provides doc-properties for an url."""
+
+    def __init__(self, url, prefix):
+        super(URLDocPropertyProvider, self).__init__(prefix)
+        self.url = url
+
+    def get_properties(self):
+        properties = {}
+
+        self._add_property(properties, 'url', 'url',
+                           self.url.url)
 
         return properties

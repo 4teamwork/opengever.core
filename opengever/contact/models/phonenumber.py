@@ -1,5 +1,6 @@
 from opengever.base.model import Base
 from opengever.base.model import CONTENT_TITLE_LENGTH
+from opengever.contact.docprops import PhoneNumberDocPropertyProvider
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
@@ -19,3 +20,6 @@ class PhoneNumber(Base):
 
     label = Column(String(CONTENT_TITLE_LENGTH))
     phone_number = Column(String(CONTENT_TITLE_LENGTH), nullable=False)
+
+    def get_doc_property_provider(self, prefix):
+        return PhoneNumberDocPropertyProvider(self, prefix)

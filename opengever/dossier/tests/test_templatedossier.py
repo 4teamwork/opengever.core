@@ -5,13 +5,14 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages import plone
-from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testing import freeze
 from ooxml_docprops import read_properties
+from opengever.contact.interfaces import IContactSettings
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.dossier.docprops import TemporaryDocFile
 from opengever.dossier.interfaces import ITemplateDossierProperties
 from opengever.dossier.templatedossier import get_template_dossier
+from opengever.dossier.tests import OGDS_USER_ATTRIBUTES
 from opengever.journal.handlers import DOC_PROPERTIES_UPDATED
 from opengever.journal.tests.utils import get_journal_entry
 from opengever.ogds.base.actor import Actor
@@ -19,22 +20,17 @@ from opengever.testing import add_languages
 from opengever.testing import FunctionalTestCase
 from opengever.testing.helpers import get_contacts_token
 from opengever.testing.pages import sharing_tab_data
+from plone import api
 from plone.app.testing import TEST_USER_ID
 from plone.registry.interfaces import IRegistry
+from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
 import transaction
 
 
-class TestNoTemplateDossier(FunctionalTestCase):
-
-    @browsing
-    def test_shows_message_when_no_templatedossier_is_found(self, browser):
-        dossier = create(Builder('dossier'))
-
-        browser.login().open(dossier, view='document_with_template')
-
-        self.assertEquals(
-            ['Not found the templatedossier'], error_messages())
+def _make_token(document):
+    intids = getUtility(IIntIds)
+    return str(intids.getId(document))
 
 
 class TestDocumentWithTemplateForm(FunctionalTestCase):
@@ -84,7 +80,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
                                  .with_modification_date(self.modification_date))
         self.dossier = create(Builder('dossier').titled(u'My Dossier'))
 
-        self.template_b_path = '/'.join(self.template_b.getPhysicalPath())
+        self.template_b_token = _make_token(self.template_b)
 
     def assert_doc_properties_updated_journal_entry_generated(self, document):
         entry = get_journal_entry(document)
@@ -106,17 +102,17 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
             [{'': '',
               'Creator': 'test_user_1_',
               'Modified': '28.12.2010',
-              'title': 'AAA Template'},
+              'Title': 'AAA Template'},
 
              {'': '',
               'Creator': 'test_user_1_',
               'Modified': '28.12.2012',
-              'title': 'Template A'},
+              'Title': 'Template A'},
 
              {'': '',
               'Creator': 'test_user_1_',
               'Modified': '28.12.2012',
-              'title': 'Template B'}],
+              'Title': 'Template B'}],
             browser.css('table.listing').first.dicts())
 
     @browsing
@@ -126,17 +122,16 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
             [{'': '',
               'Creator': 'test_user_1_',
               'Modified': '28.12.2012',
-              'title': 'Template A'},
+              'Title': 'Template A'},
 
              {'': '',
               'Creator': 'test_user_1_',
               'Modified': '28.12.2012',
-              'title': 'Template B'}],
+              'Title': 'Template B'}],
             browser.css('table.listing').first.dicts())
 
     @browsing
     def test_template_list_includes_nested_templates(self, browser):
-
         subtemplatedossier = create(Builder('templatedossier')
                                     .within(self.templatedossier))
         create(Builder('document')
@@ -150,17 +145,24 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
             [{'': '',
               'Creator': 'test_user_1_',
               'Modified': '28.12.2012',
-              'title': 'Template A'},
+              'Title': 'Template A'},
              {'': '',
               'Creator': 'test_user_1_',
               'Modified': '28.12.2012',
-              'title': 'Template B'},
+              'Title': 'Template B'},
              {'': '',
               'Creator': 'test_user_1_',
               'Modified': '28.12.2012',
-              'title': 'Template C'}],
+              'Title': 'Template C'}],
 
             browser.css('table.listing').first.dicts())
+
+    @browsing
+    def test_form_does_not_inlcude_participants_with_disabled_feature(self, browser):
+        browser.login().open(self.dossier, view='document_with_template')
+
+        self.assertEqual([u'Template', u'Title', u'Edit after creation'],
+                         browser.css('#form label').text)
 
     @browsing
     def test_cancel_redirects_to_the_dossier(self, browser):
@@ -172,9 +174,9 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
     @browsing
     def test_save_redirects_to_the_dossiers_document_tab(self, browser):
         browser.login().open(self.dossier, view='document_with_template')
-        browser.fill({'paths:list': self.template_b_path,
+        browser.fill({'form.widgets.template': self.template_b_token,
                       'Title': 'Test Document',
-                      'Edit after creation':False}).save()
+                      'Edit after creation': False}).save()
 
         self.assertEquals(self.dossier, browser.context)
         self.assertEquals(self.dossier.absolute_url() + '#documents',
@@ -183,7 +185,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
     @browsing
     def test_new_document_is_titled_with_the_form_value(self, browser):
         browser.login().open(self.dossier, view='document_with_template')
-        browser.fill({'paths:list': self.template_b_path,
+        browser.fill({'form.widgets.template': self.template_b_token,
                       'Title': 'Test Document'}).save()
 
         document = self.dossier.listFolderContents()[0]
@@ -193,7 +195,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
     @browsing
     def test_new_document_values_are_filled_with_default_values(self, browser):
         browser.login().open(self.dossier, view='document_with_template')
-        browser.fill({'paths:list': self.template_b_path,
+        browser.fill({'form.widgets.template': self.template_b_token,
                       'Title': 'Test Document'}).save()
 
         document = self.dossier.listFolderContents()[0]
@@ -203,7 +205,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
     @browsing
     def test_file_of_the_new_document_is_a_copy_of_the_template(self, browser):
         browser.login().open(self.dossier, view='document_with_template')
-        browser.fill({'paths:list': self.template_b_path,
+        browser.fill({'form.widgets.template': self.template_b_token,
                       'Title': 'Test Document'}).save()
 
         document = self.dossier.listFolderContents()[0]
@@ -212,20 +214,51 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
         self.assertNotEquals(self.template_b.file, document.file)
 
     @browsing
-    def test_recipient_properties_are_added(self, browser):
+    def test_contact_recipient_properties_are_added(self, browser):
+        api.portal.set_registry_record(
+            'is_feature_enabled', True, interface=IContactSettings)
+
         template_word = create(Builder('document')
                                .titled('Word Docx template')
                                .within(self.templatedossier)
                                .with_asset_file('without_custom_properties.docx'))
-        template_path = '/'.join(template_word.getPhysicalPath())
         peter = create(Builder('person')
                        .having(firstname=u'Peter', lastname=u'M\xfcller'))
+        address1 = create(Builder('address')
+                          .for_contact(peter)
+                          .labeled(u'Home')
+                          .having(street=u'Musterstrasse 283',
+                                  zip_code=u'1234',
+                                  city=u'Hinterkappelen',
+                                  country=u'Schweiz'))
+        address2 = create(Builder('address')
+                          .for_contact(peter)
+                          .labeled(u'Home')
+                          .having(street=u'Hauptstrasse 1',
+                                  city=u'Vorkappelen'))
+        mailaddress = create(Builder('mailaddress')
+                             .for_contact(peter)
+                             .having(address=u'foo@example.com'))
+        phonenumber = create(Builder('phonenumber')
+                             .for_contact(peter)
+                             .having(phone_number=u'1234 123 123'))
+        url = create(Builder('url')
+                     .for_contact(peter)
+                     .having(url=u'http://www.example.com'))
 
         with freeze(self.document_date):
+            # submit first wizard step
             browser.login().open(self.dossier, view='document_with_template')
-            browser.fill({'paths:list': template_path,
+            browser.fill({'form.widgets.template': _make_token(template_word),
                           'Recipient': get_contacts_token(peter),
                           'Title': 'Test Docx'}).save()
+            # submit second wizard step
+            browser.fill(
+                {'form.widgets.address': str(address1.address_id),
+                 'form.widgets.mail_address': str(mailaddress.mailaddress_id),
+                 'form.widgets.phonenumber': str(phonenumber.phone_number_id),
+                 'form.widgets.url': str(url.url_id)}
+            ).save()
 
         document = self.dossier.listFolderContents()[0]
         self.assertEquals(u'test-docx.docx', document.file.filename)
@@ -234,6 +267,13 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
             'ogg.recipient.contact.title': u'M\xfcller Peter',
             'ogg.recipient.person.firstname': 'Peter',
             'ogg.recipient.person.lastname': u'M\xfcller',
+            'ogg.recipient.address.street': u'Musterstrasse 283',
+            'ogg.recipient.address.zip_code': '1234',
+            'ogg.recipient.address.city': 'Hinterkappelen',
+            'ogg.recipient.address.country': 'Schweiz',
+            'ogg.recipient.email.address': u'foo@example.com',
+            'ogg.recipient.phone.number': u'1234 123 123',
+            'ogg.recipient.url.url': u'http://www.example.com',
         }
         expected_person_properties.update(self.expected_doc_properties)
 
@@ -244,16 +284,140 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
         self.assert_doc_properties_updated_journal_entry_generated(document)
 
     @browsing
+    def test_org_role_recipient_properties_are_added(self, browser):
+        api.portal.set_registry_record(
+            'is_feature_enabled', True, interface=IContactSettings)
+
+        template_word = create(Builder('document')
+                               .titled('Word Docx template')
+                               .within(self.templatedossier)
+                               .with_asset_file('without_custom_properties.docx'))
+        peter = create(Builder('person')
+                       .having(firstname=u'Peter', lastname=u'M\xfcller'))
+        organization = create(Builder('organization')
+                              .having(name=u'Meier AG'))
+        org_role = create(Builder('org_role').having(
+            person=peter, organization=organization, function=u'cheffe'))
+
+        address1 = create(Builder('address')
+                          .for_contact(peter)
+                          .labeled(u'Home')
+                          .having(street=u'Musterstrasse 283',
+                                  zip_code=u'1234',
+                                  city=u'Hinterkappelen',
+                                  country=u'Schweiz'))
+        mailaddress = create(Builder('mailaddress')
+                             .for_contact(organization)
+                             .having(address=u'foo@example.com'))
+        phonenumber = create(Builder('phonenumber')
+                             .for_contact(peter)
+                             .having(phone_number=u'1234 123 123'))
+        url = create(Builder('url')
+                     .for_contact(organization)
+                     .having(url=u'http://www.example.com'))
+
+        with freeze(self.document_date):
+            # submit first wizard step
+            browser.login().open(self.dossier, view='document_with_template')
+            browser.fill({'form.widgets.template': _make_token(template_word),
+                          'Recipient': get_contacts_token(org_role),
+                          'Title': 'Test Docx'}).save()
+            # submit second wizard step
+            browser.fill(
+                {'form.widgets.address': str(address1.address_id),
+                 'form.widgets.mail_address': str(mailaddress.mailaddress_id),
+                 'form.widgets.phonenumber': str(phonenumber.phone_number_id),
+                 'form.widgets.url': str(url.url_id)}
+            ).save()
+
+        document = self.dossier.listFolderContents()[0]
+        self.assertEquals(u'test-docx.docx', document.file.filename)
+
+        expected_org_role_properties = {
+            'ogg.recipient.contact.title': u'M\xfcller Peter',
+            'ogg.recipient.person.firstname': 'Peter',
+            'ogg.recipient.person.lastname': u'M\xfcller',
+            'ogg.recipient.orgrole.function': u'cheffe',
+            'ogg.recipient.address.street': u'Musterstrasse 283',
+            'ogg.recipient.address.zip_code': '1234',
+            'ogg.recipient.address.city': 'Hinterkappelen',
+            'ogg.recipient.address.country': 'Schweiz',
+            'ogg.recipient.email.address': u'foo@example.com',
+            'ogg.recipient.phone.number': u'1234 123 123',
+            'ogg.recipient.url.url': u'http://www.example.com',
+        }
+        expected_org_role_properties.update(self.expected_doc_properties)
+
+        with TemporaryDocFile(document.file) as tmpfile:
+            self.assertItemsEqual(
+                expected_org_role_properties.items(),
+                read_properties(tmpfile.path))
+        self.assert_doc_properties_updated_journal_entry_generated(document)
+
+    @browsing
+    def test_ogds_user_recipient_properties_are_added(self, browser):
+        api.portal.set_registry_record(
+            'is_feature_enabled', True, interface=IContactSettings)
+
+        template_word = create(Builder('document')
+                               .titled('Word Docx template')
+                               .within(self.templatedossier)
+                               .with_asset_file('without_custom_properties.docx'))
+
+        ogds_user = create(Builder('ogds_user')
+                           .id('peter')
+                           .having(**OGDS_USER_ATTRIBUTES)
+                           .as_contact_adapter())
+
+        with freeze(self.document_date):
+            # submit first wizard step
+            browser.login().open(self.dossier, view='document_with_template')
+            browser.fill({'form.widgets.template': _make_token(template_word),
+                          'Recipient': get_contacts_token(ogds_user),
+                          'Title': 'Test Docx'}).save()
+            # submit second wizard step
+            browser.fill(
+                {'form.widgets.address': '{}_1'.format(ogds_user.id),
+                 'form.widgets.mail_address': '{}_2'.format(ogds_user.id),
+                 'form.widgets.phonenumber': '{}_3'.format(ogds_user.id),
+                 'form.widgets.url': '{}_1'.format(ogds_user.id)}
+            ).save()
+
+        document = self.dossier.listFolderContents()[0]
+        self.assertEquals(u'test-docx.docx', document.file.filename)
+
+        expected_org_role_properties = {
+            'ogg.recipient.contact.title': u'M\xfcller Peter',
+            'ogg.recipient.contact.description': u'nix',
+            'ogg.recipient.person.salutation': 'Prof. Dr.',
+            'ogg.recipient.person.firstname': 'Peter',
+            'ogg.recipient.person.lastname': u'M\xfcller',
+            'ogg.recipient.address.street': u'Kappelenweg 13, Postfach 1234',
+            'ogg.recipient.address.zip_code': '1234',
+            'ogg.recipient.address.city': u'Vorkappelen',
+            'ogg.recipient.address.country': u'Schweiz',
+            'ogg.recipient.email.address': u'bar@example.com',
+            'ogg.recipient.phone.number': u'012 34 56 76',
+            'ogg.recipient.url.url': u'http://www.example.com',
+        }
+        expected_org_role_properties.update(self.expected_doc_properties)
+
+        with TemporaryDocFile(document.file) as tmpfile:
+            self.assertItemsEqual(
+                expected_org_role_properties.items(),
+                read_properties(tmpfile.path))
+        self.assert_doc_properties_updated_journal_entry_generated(document)
+
+    @browsing
     def test_properties_are_added_when_created_from_template_with_doc_properties(self, browser):
         template_word = create(Builder('document')
                                .titled('Word Docx template')
                                .within(self.templatedossier)
                                .with_asset_file('with_custom_properties.docx'))
-        template_path = '/'.join(template_word.getPhysicalPath())
 
         with freeze(self.document_date):
             browser.login().open(self.dossier, view='document_with_template')
-            browser.fill({'paths:list': template_path,
+            browser.fill({'form.widgets.template': _make_token(template_word),
                           'Title': 'Test Docx'}).save()
 
         document = self.dossier.listFolderContents()[0]
@@ -270,11 +434,10 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
                                .titled('Word Docx template')
                                .within(self.templatedossier)
                                .with_asset_file('without_custom_properties.docx'))
-        template_path = '/'.join(template_word.getPhysicalPath())
 
         with freeze(self.document_date):
             browser.login().open(self.dossier, view='document_with_template')
-            browser.fill({'paths:list': template_path,
+            browser.fill({'form.widgets.template': _make_token(template_word),
                           'Title': 'Test Docx'}).save()
 
         document = self.dossier.listFolderContents()[0]
@@ -292,10 +455,9 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
                                .titled('Word Docx template')
                                .within(self.templatedossier)
                                .with_asset_file('without_custom_properties.docx'))
-        template_path = '/'.join(template_word.getPhysicalPath())
 
         browser.login().open(self.dossier, view='document_with_template')
-        browser.fill({'paths:list': template_path,
+        browser.fill({'form.widgets.template': _make_token(template_word),
                       'Title': 'Test Docx'}).save()
 
         document = self.dossier.listFolderContents()[0]

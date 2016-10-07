@@ -4,10 +4,10 @@ from opengever.testing import FunctionalTestCase
 from unittest2 import TestCase
 
 
-class TestWidget(FunctionalTestCase):
+class TestTrixWidget(FunctionalTestCase):
 
     def setUp(self):
-        super(TestWidget, self).setUp()
+        super(TestTrixWidget, self).setUp()
         self.grant('Manager')
 
     @browsing
@@ -32,6 +32,60 @@ class TestWidget(FunctionalTestCase):
         self.assertEquals({u'trix_field': u'<div>P\xe4ter</div>'},
                           browser.json)
 
+
+class TestRadioTableWidget(FunctionalTestCase):
+
+    @browsing
+    def test_renders_default_table_columns(self, browser):
+        browser.login().visit(view='test-z3cform-widget')
+
+        self.assertEqual(
+            # checkbox-column title/text is empty and that's ok.
+            [{'': '', 'Title': 'foo'},
+             {'': '', 'Title': 'bar'}],
+            browser.css('#formfield-form-widgets-default_radio_table_field '
+                        'table').first.dicts()
+        )
+
+    @browsing
+    def test_renders_custom_table_columns(self, browser):
+        browser.login().visit(view='test-z3cform-widget')
+
+        self.assertEqual(
+            # checkbox-column title/text is empty and that's ok.
+            [{'': '', 'Description': 'Odi et amo.'},
+             {'': '', 'Description': 'Quare id faciam fortasse requiris?'}],
+            browser.css('#formfield-form-widgets-custom_radio_table_field '
+                        'table').first.dicts()
+        )
+
+    @browsing
+    def test_fill_table_choice_field(self, browser):
+        browser.login().visit(view='test-z3cform-widget')
+        browser.fill({'form.widgets.default_radio_table_field': '2'}).submit()
+
+        self.assertEqual(
+            {u'default_radio_table_field': [2, u'bar']}, browser.json)
+
+    @browsing
+    def test_renders_table_choice_input_fields(self, browser):
+        browser.login().visit(view='test-z3cform-widget')
+        inputs = browser.css(
+            '#formfield-form-widgets-default_radio_table_field input')
+        self.assertEqual(
+            [u'<input id="form-widgets-default_radio_table_field-1" name="form.widgets.default_radio_table_field" value="1" title="foo" type="radio">',
+             u'<input id="form-widgets-default_radio_table_field-2" name="form.widgets.default_radio_table_field" value="2" title="bar" type="radio">',
+             u'<input name="form.widgets.default_radio_table_field-empty-marker" type="hidden" value="1">'],
+            [each.normalized_outerHTML for each in inputs]
+        )
+
+    @browsing
+    def test_renders_empty_message(self, browser):
+        browser.login().visit(view='test-z3cform-widget')
+        self.assertEqual(
+            "No items available",
+            browser.css('#formfield-form-widgets-empty_radio_table_field .empty_message').first.text
+        )
 
 class TestUnitTrixStripWhitespace(TestCase):
 

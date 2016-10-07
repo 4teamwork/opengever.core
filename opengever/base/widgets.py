@@ -1,21 +1,129 @@
 from five import grok
+from ftw.table.interfaces import ITableGenerator
 from opengever.base.transforms import trix2sablon
+from opengever.base.utils import escape_html
+from opengever.dossier import _
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
+from z3c.form import util
+from z3c.form.browser import widget
 from z3c.form.converter import BaseDataConverter
 from z3c.form.interfaces import IFieldWidget
 from z3c.form.interfaces import IFormLayer
+from z3c.form.interfaces import ISequenceWidget
 from z3c.form.interfaces import ITextAreaWidget
 from z3c.form.widget import FieldWidget
+from z3c.form.widget import SequenceWidget
 from z3c.form.widget import Widget
 from zope.component import adapter
 from zope.component import adapts
+from zope.component import getUtility
+from zope.i18n import translate
 from zope.interface import implementer
 from zope.interface import implementsOnly
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from zope.schema.interfaces import IField
 from zope.schema.interfaces import ISequence
 from zope.schema.interfaces import ITextLine
+from zope.schema.interfaces import ITitledTokenizedTerm
 import re
+
+
+class ITableRadioWidget(ISequenceWidget):
+    """Table based radio-button widget."""
+
+
+class TableRadioWidget(widget.HTMLInputWidget, SequenceWidget):
+    """Render a choice (radio-buttons) in a table with ftw.table.
+
+    The TableChoice field can be configured with a tuple of additional
+    columns. If custom columns are configured render a table with the
+    radio-button column as first column followed by the custom columns. If no
+    such columns are defined render the default column displaying the term's
+    title.
+
+    """
+    implementsOnly(ITableRadioWidget)
+
+    klass = u'radio-widget'
+    css = u'radio'
+
+    empty_message = _("msg_no_items_available", default=u"No items available")
+
+    def is_checked(self, term):
+        return term.token in self.value
+
+    def has_items(self):
+        return len(self.terms) > 0
+
+    def render_table(self):
+        """Render the table that contains the radio-button sequence.
+
+        Always renders a radio-button column as first column.
+        If the field defines custom columns render these, if it does not
+        render a column with the term's title.
+
+        While rendering the table we pass only the token-values (i.e. the
+        objects) to the ITableGenerator. This improves compatibility with
+        already existing helpers that expect objects and not vocabulary-terms
+        and with the ITableGenerator itself since it can perform attribe
+        lookups based on the column name.
+
+        """
+        generator = getUtility(ITableGenerator, 'ftw.tablegenerator')
+        radio_column = ({
+            'transform': self.render_token_radiobutton,
+            'sortable': False
+        },)
+        default_title_colum = ({
+            'column_title': _(u'label_title', default=u'Title'),
+            'transform': self.render_default_title,
+        },)
+        return generator.generate(
+            [term.value for term in self.terms],
+            radio_column + (self.field.columns or default_title_colum))
+
+    def render_token_radiobutton(self, item, value):
+        """Render the radio-button input element for an item."""
+
+        term = self.terms.getTerm(item)
+
+        is_checked = self.is_checked(term)
+        item_id = '%s-%s' % (self.id, term.token)
+
+        return u'<input id="{id}" name="{name}" value="{value}"'\
+            'title="{title}" type="radio" {checked} />'.format(
+                id=item_id,
+                name=escape_html(self.name),
+                value=term.token,
+                checked='checked="checked"' if is_checked else '',
+                title=escape_html(self.render_default_title(item, value)),
+            )
+
+    def render_default_title(self, item, value):
+        """Render the default title colum with the term's title."""
+
+        term = self.terms.getTerm(item)
+
+        if ITitledTokenizedTerm.providedBy(term):
+            label = translate(term.title, context=self.request,
+                              default=term.title)
+        else:
+            label = util.toUnicode(term.value)
+        return label
+
+    def update(self):
+        """See z3c.form.interfaces.IWidget."""
+
+        super(TableRadioWidget, self).update()
+        widget.addFieldClass(self)
+
+
+@adapter(ITableRadioWidget, IFormLayer)
+@implementer(IFieldWidget)
+def TableRadioFieldWidget(field, request):
+    """IFieldWidget factory for TableRadioWidget."""
+
+    return FieldWidget(field, TableRadioWidget(request))
 
 
 @grok.implementer(IFieldWidget)

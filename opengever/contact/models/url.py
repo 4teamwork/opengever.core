@@ -1,5 +1,6 @@
 from opengever.base.model import Base
 from opengever.base.model import CONTENT_TITLE_LENGTH
+from opengever.contact.docprops import URLDocPropertyProvider
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
@@ -17,3 +18,6 @@ class URL(Base):
     contact = relationship("Contact", back_populates="urls")
     label = Column(String(CONTENT_TITLE_LENGTH))
     url = Column(String(CONTENT_TITLE_LENGTH), nullable=False)
+
+    def get_doc_property_provider(self, prefix):
+        return URLDocPropertyProvider(self, prefix)

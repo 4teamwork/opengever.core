@@ -1,24 +1,78 @@
+from five import grok
 from ftw.table import helper
-from ftw.table.interfaces import ITableGenerator
+from opengever.base.browser.wizard import BaseWizardStepForm
+from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.interfaces import IRedirector
+from opengever.base.model import create_session
+from opengever.base.oguid import Oguid
+from opengever.base.schema import TableChoice
+from opengever.contact import is_contact_feature_enabled
 from opengever.dossier import _
 from opengever.dossier.command import CreateDocumentFromTemplateCommand
 from opengever.dossier.templatedossier import get_template_dossier
 from opengever.tabbedview.helper import document_with_icon
+from plone import api
 from plone.autoform.form import AutoExtensibleForm
 from plone.directives import form
 from plone.formwidget.autocomplete import AutocompleteFieldWidget
-from Products.CMFCore.utils import getToolByName
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from Products.statusmessages.interfaces import IStatusMessage
+from plone.z3cform.layout import FormWrapper
+from sqlalchemy import inspect
+from sqlalchemy.exc import NoInspectionAvailable
 from z3c.form import button
 from z3c.form.browser.checkbox import SingleCheckBoxFieldWidget
 from z3c.form.form import Form
 from zope import schema
+from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
+from zope.schema.interfaces import IContextSourceBinder
+from zope.schema.vocabulary import SimpleVocabulary
+
+
+@grok.provider(IContextSourceBinder)
+def get_templates(context):
+    template_dossier = get_template_dossier()
+
+    if template_dossier is None:
+        # this may happen when the user does not have permissions to
+        # view templates and/or during ++widget++ traversal
+        return SimpleVocabulary([])
+
+    templates = api.content.find(
+        context=template_dossier,
+        depth=-1,
+        portal_type="opengever.document.document",
+        sort_on='sortable_title', sort_order='ascending')
+
+    intids = getUtility(IIntIds)
+    terms = []
+    for brain in templates:
+        template = brain.getObject()
+        terms.append(SimpleVocabulary.createTerm(
+            template,
+            str(intids.getId(template)),
+            template.title))
+    return SimpleVocabulary(terms)
 
 
 class ICreateDocumentFromTemplate(form.Schema):
+
+    template = TableChoice(
+        title=_(u"label_template", default=u"Template"),
+        source=get_templates,
+        required=True,
+        columns=(
+            {'column': 'title',
+             'column_title': _(u'label_title', default=u'Title'),
+             'sort_index': 'sortable_title',
+             'transform': document_with_icon},
+            {'column': 'Creator',
+             'column_title': _(u'label_creator', default=u'Creator'),
+             'sort_index': 'document_author'},
+            {'column': 'modified',
+             'column_title': _(u'label_modified', default=u'Modified'),
+             'transform': helper.readable_date}
+            )
+    )
 
     title = schema.TextLine(
         title=_(u"label_title", default=u"Title"),
@@ -39,31 +93,26 @@ class ICreateDocumentFromTemplate(form.Schema):
         )
 
 
-class TemplateDocumentFormView(AutoExtensibleForm, Form):
-    """Show the "Document from template" form.
+def get_dm_key(context):
+    """Return the key used to store template-data in the wizard-storage."""
 
-    This form lists available document templates from template dossiers,
-    allows the user to select one and creates a new document by copying the
-    template.
+    container_oguid = Oguid.for_object(context)
+    return 'add_document_from_template:{}'.format(container_oguid)
 
-    """
-    template = ViewPageTemplateFile('templates/document_from_template.pt')
 
-    schema = ICreateDocumentFromTemplate
-    ignoreContext = True
+class CreateDocumentMixin(object):
 
-    label = _('create_document_with_template',
-              default="create document with template")
+    label = _(u'create_document_with_template',
+              default=u'Create document from template')
 
-    has_path_error = False
+    @property
+    def steps(self):
+        if not is_contact_feature_enabled():
+            return []
+        return [('select-document', _(u'Select document')),
+                ('select-address', _(u'Select recipient address'))]
 
-    @button.buttonAndHandler(_('button_save', default=u'Save'), name='save')
-    def handleApply(self, action):
-        data, errors = self.extractData()
-        if errors:
-            self.status = self.formErrorsMessage
-            return
-
+    def finish_document_creation(self, data):
         new_doc = self.create_document(data)
 
         if data.get('edit_after_creation'):
@@ -73,25 +122,6 @@ class TemplateDocumentFormView(AutoExtensibleForm, Form):
 
         return self.request.RESPONSE.redirect(
             self.context.absolute_url() + '#documents')
-
-    @button.buttonAndHandler(_(u'button_cancel', default=u'Cancel'), name='cancel')
-    def cancel(self, action):
-        return self.request.RESPONSE.redirect(self.context.absolute_url())
-
-    def extractData(self):
-        """Also extract path of the selected template from request."""
-
-        data, errors = super(TemplateDocumentFormView, self).extractData()
-
-        paths = self.request.get('paths')
-        template_path = paths[0] if paths else None
-        if not template_path:
-            self.has_path_error = True
-            errors = errors + ("template path error",)
-        else:
-            data['template_path'] = str(template_path)
-
-        return data, errors
 
     def activate_external_editing(self, new_doc):
         """Check out the given document, and add the external_editor URL
@@ -113,44 +143,200 @@ class TemplateDocumentFormView(AutoExtensibleForm, Form):
     def create_document(self, data):
         """Create a new document based on a template."""
 
-        template_doc = self.context.restrictedTraverse(data['template_path'])
+        recipient_data = filter(None, [
+            data.get('recipient'),
+            data.get('address'),
+            data.get('mail_address'),
+            data.get('phonenumber'),
+            data.get('url'),
+        ])
 
         command = CreateDocumentFromTemplateCommand(
-            self.context, template_doc, data['title'],
-            recipient=data.get('recipient'))
+            self.context, data['template'], data['title'],
+            recipient_data=recipient_data)
         return command.execute()
 
-    def templates(self):
-        """List the available template documents the user can choose from.
+
+class SelectTemplateDocumentWizardStep(
+        CreateDocumentMixin, AutoExtensibleForm, BaseWizardStepForm, Form):
+
+    step_name = 'select-document'
+
+    def updateFieldsFromSchemata(self):
+        super(SelectTemplateDocumentWizardStep, self).updateFieldsFromSchemata()
+        if not is_contact_feature_enabled():
+            self.fields = self.fields.omit('recipient')
+
+    @property
+    def schema(self):
+        """Create the schema dynammically and omit recipient if necessary.
+
+        There seems to be an issue with AutocompleteFieldWidget's HIDDEN_MODE
+        so we omit the field completely if the feature is not enabled.
         """
-        template_dossier = get_template_dossier()
-        if template_dossier is None:
-            status = IStatusMessage(self.request)
-            status.addStatusMessage(
-                _("Not found the templatedossier"), type="error")
-            return self.request.RESPONSE.redirect(self.context.absolute_url())
-        templatedossier_path = '/'.join(template_dossier.getPhysicalPath())
 
-        catalog = getToolByName(self.context, 'portal_catalog')
-        templates = catalog(
-            path=dict(
-                depth=-1, query=templatedossier_path),
-            portal_type="opengever.document.document",
-            sort_on='sortable_title',
-            sort_order='ascending')
+        return ICreateDocumentFromTemplate
 
-        generator = getUtility(ITableGenerator, 'ftw.tablegenerator')
-        columns = (
-            ('', helper.path_radiobutton),
-            {'column': 'Title',
-             'column_title': _(u'label_title', default=u'title'),
-             'sort_index': 'sortable_title',
-             'transform': document_with_icon},
-            {'column': 'Creator',
-             'column_title': _(u'label_creator', default=u'Creator'),
-             'sort_index': 'document_author'},
-            {'column': 'modified',
-             'column_title': _(u'label_modified', default=u'Modified'),
-             'transform': helper.readable_date}
-            )
-        return generator.generate(templates, columns)
+    @button.buttonAndHandler(_('button_save', default=u'Save'), name='save')
+    def handleApply(self, action):
+        data, errors = self.extractData()
+        if errors:
+            self.status = self.formErrorsMessage
+            return
+
+        if data.get('recipient'):
+            dm = getUtility(IWizardDataStorage)
+            dm.update(get_dm_key(self.context), data)
+            return self.request.RESPONSE.redirect(
+                "{}/select-address".format(self.context.absolute_url()))
+
+        return self.finish_document_creation(data)
+
+    @button.buttonAndHandler(_(u'button_cancel', default=u'Cancel'), name='cancel')
+    def cancel(self, action):
+        return self.request.RESPONSE.redirect(self.context.absolute_url())
+
+
+class SelectTemplateDocumentView(FormWrapper):
+
+    form = SelectTemplateDocumentWizardStep
+
+
+def get_recipient(context):
+    """Return the previously selected recipient.
+
+    If it is an unpickled/detached mapper merge it into the current session,
+    this triggers a reload of the mapped instance.
+    """
+
+    dm = getUtility(IWizardDataStorage)
+    data = dm.get_data(get_dm_key(context))
+
+    recipient = data['recipient']
+    try:
+        # merge unpickled recipient into session when it is a mapper
+        if inspect(recipient).detached:
+            recipient = create_session().merge(recipient)
+    except NoInspectionAvailable:
+        pass
+    return recipient
+
+
+@grok.provider(IContextSourceBinder)
+def make_address_vocabulary(context):
+    recipient = get_recipient(context)
+
+    return SimpleVocabulary([
+        SimpleVocabulary.createTerm(
+            address, str(address.address_id))
+        for address in recipient.addresses])
+
+
+def address_lines(item, value):
+    return u"<br />".join(item.get_lines())
+
+
+@grok.provider(IContextSourceBinder)
+def make_mail_address_vocabulary(context):
+    recipient = get_recipient(context)
+
+    return SimpleVocabulary([
+        SimpleVocabulary.createTerm(
+            mail_address, str(mail_address.mailaddress_id))
+        for mail_address in recipient.mail_addresses])
+
+
+@grok.provider(IContextSourceBinder)
+def make_phonenumber_vocabulary(context):
+    recipient = get_recipient(context)
+
+    return SimpleVocabulary([
+        SimpleVocabulary.createTerm(
+            phone_number, str(phone_number.phone_number_id))
+        for phone_number in recipient.phonenumbers])
+
+
+@grok.provider(IContextSourceBinder)
+def make_url_vocabulary(context):
+    recipient = get_recipient(context)
+
+    return SimpleVocabulary([
+        SimpleVocabulary.createTerm(
+            url, str(url.url_id))
+        for url in recipient.urls])
+
+
+class ISelectRecipientAddress(form.Schema):
+
+    address = TableChoice(
+        title=_(u"label_address", default=u"Address"),
+        required=False,
+        source=make_address_vocabulary,
+        columns=(
+            {'column': 'label',
+             'column_title': _(u'label_label', default=u'Label')},
+            {'column': 'address',
+             'column_title': _(u'label_address', default=u'Address'),
+             'transform': address_lines},
+        ))
+
+    mail_address = TableChoice(
+        title=_(u"label_mail_address", default=u"Mail-Address"),
+        required=False,
+        source=make_mail_address_vocabulary,
+        columns=(
+            {'column': 'label',
+             'column_title': _(u'label_label', default=u'Label')},
+            {'column': 'address',
+             'column_title': _(u'label_mail_address', default=u'Mail-Address')},
+        ))
+
+    phonenumber = TableChoice(
+        title=_(u"label_phonenumber", default=u"Phonenumber"),
+        required=False,
+        source=make_phonenumber_vocabulary,
+        columns=(
+            {'column': 'label',
+             'column_title': _(u'label_label', default=u'Label')},
+            {'column': 'phone_number',
+             'column_title': _(u'label_phonenumber', default=u'Phonenumber')},
+        ))
+
+    url = TableChoice(
+        title=_(u"label_url", default=u"URL"),
+        required=False,
+        source=make_url_vocabulary,
+        columns=(
+            {'column': 'label',
+             'column_title': _(u'label_label', default=u'Label')},
+            {'column': 'url',
+             'column_title': _(u'label_url', default=u'URL')},
+        ))
+
+
+class SelectAddressWizardStep(
+        CreateDocumentMixin, AutoExtensibleForm, BaseWizardStepForm, Form):
+
+    step_name = 'select-address'
+    schema = ISelectRecipientAddress
+
+    @button.buttonAndHandler(_('button_save', default=u'Save'), name='save')
+    def handleApply(self, action):
+        data, errors = self.extractData()
+        if errors:
+            self.status = self.formErrorsMessage
+            return
+
+        dm = getUtility(IWizardDataStorage)
+        data .update(dm.get_data(get_dm_key(self.context)))
+
+        return self.finish_document_creation(data)
+
+    @button.buttonAndHandler(_(u'button_cancel', default=u'Cancel'), name='cancel')
+    def cancel(self, action):
+        return self.request.RESPONSE.redirect(self.context.absolute_url())
+
+
+class SelectAddressView(FormWrapper):
+
+    form = SelectAddressWizardStep

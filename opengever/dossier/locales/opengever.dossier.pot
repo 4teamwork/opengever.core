@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-09-28 08:14+0000\n"
+"POT-Creation-Date: 2016-10-05 13:20+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -105,10 +105,6 @@ msgstr ""
 msgid "Not all required fields are filled"
 msgstr ""
 
-#: ./opengever/dossier/templatedossier/form.py:130
-msgid "Not found the templatedossier"
-msgstr ""
-
 #: ./opengever/dossier/profiles/default/types/opengever.dossier.businesscasedossier.xml
 msgid "Participant"
 msgstr ""
@@ -119,6 +115,14 @@ msgstr ""
 
 #: ./opengever/dossier/profiles/default/types/opengever.dossier.projectdossier.xml
 msgid "Project Dossier"
+msgstr ""
+
+#: ./opengever/dossier/templatedossier/form.py:116
+msgid "Select document"
+msgstr ""
+
+#: ./opengever/dossier/templatedossier/form.py:117
+msgid "Select recipient address"
 msgstr ""
 
 #: ./opengever/dossier/menu.py:16
@@ -233,7 +237,7 @@ msgid "button_cancel"
 msgstr ""
 
 #. Default: "Save"
-#: ./opengever/dossier/templatedossier/form.py:60
+#: ./opengever/dossier/templatedossier/form.py:216
 msgid "button_save"
 msgstr ""
 
@@ -252,8 +256,8 @@ msgstr ""
 msgid "column_rolelist"
 msgstr ""
 
-#. Default: "create document with template"
-#: ./opengever/dossier/templatedossier/form.py:55
+#. Default: "Create document from template"
+#: ./opengever/dossier/templatedossier/form.py:109
 msgid "create_document_with_template"
 msgstr ""
 
@@ -377,6 +381,11 @@ msgstr ""
 msgid "label_add_participant"
 msgstr ""
 
+#. Default: "Address"
+#: ./opengever/dossier/templatedossier/form.py:308
+msgid "label_address"
+msgstr ""
+
 #. Default: "by ${author}"
 #: ./opengever/dossier/project_templates/byline.pt:10
 msgid "label_by_author"
@@ -403,7 +412,7 @@ msgid "label_container_type"
 msgstr ""
 
 #. Default: "Creator"
-#: ./opengever/dossier/templatedossier/form.py:151
+#: ./opengever/dossier/templatedossier/form.py:73
 msgid "label_creator"
 msgstr ""
 
@@ -418,7 +427,7 @@ msgid "label_documents"
 msgstr ""
 
 #. Default: "Edit after creation"
-#: ./opengever/dossier/templatedossier/form.py:36
+#: ./opengever/dossier/templatedossier/form.py:94
 msgid "label_edit_after_creation"
 msgstr ""
 
@@ -470,13 +479,23 @@ msgstr ""
 msgid "label_keywords"
 msgstr ""
 
+#. Default: "Label"
+#: ./opengever/dossier/templatedossier/form.py:313
+msgid "label_label"
+msgstr ""
+
 #. Default: "Linked Dossiers"
 #: ./opengever/dossier/browser/overview.py:48
 msgid "label_linked_dossiers"
 msgstr ""
 
+#. Default: "Mail-Address"
+#: ./opengever/dossier/templatedossier/form.py:320
+msgid "label_mail_address"
+msgstr ""
+
 #. Default: "Modified"
-#: ./opengever/dossier/templatedossier/form.py:154
+#: ./opengever/dossier/templatedossier/form.py:76
 msgid "label_modified"
 msgstr ""
 
@@ -510,13 +529,18 @@ msgstr ""
 msgid "label_participations"
 msgstr ""
 
+#. Default: "Phonenumber"
+#: ./opengever/dossier/templatedossier/form.py:331
+msgid "label_phonenumber"
+msgstr ""
+
 #. Default: "Proposals"
 #: ./opengever/dossier/browser/tabbed.py:66
 msgid "label_proposals"
 msgstr ""
 
 #. Default: "Recipient"
-#: ./opengever/dossier/templatedossier/form.py:29
+#: ./opengever/dossier/templatedossier/form.py:87
 msgid "label_recipient"
 msgstr ""
 
@@ -587,19 +611,24 @@ msgid "label_tasktemplate_folders"
 msgstr ""
 
 #. Default: "Template"
-#: ./opengever/dossier/templatedossier/templates/document_from_template.pt:22
+#: ./opengever/dossier/templatedossier/form.py:65
 msgid "label_template"
 msgstr ""
 
-#. Default: "title"
+#. Default: "Title"
 #: ./opengever/dossier/browser/report.py:33
-#: ./opengever/dossier/templatedossier/form.py:24
+#: ./opengever/dossier/templatedossier/form.py:69
 msgid "label_title"
 msgstr ""
 
 #. Default: "Trash"
 #: ./opengever/dossier/browser/tabbed.py:32
 msgid "label_trash"
+msgstr ""
+
+#. Default: "URL"
+#: ./opengever/dossier/templatedossier/form.py:342
+msgid "label_url"
 msgstr ""
 
 #. Default: "State"

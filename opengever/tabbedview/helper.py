@@ -175,7 +175,7 @@ def linked_sql_object(item, value):
 
 def document_with_icon(item, value):
     value = escape_html(value)
-    icon = '<span class="{}"></span><span>{}</span>'.format(
+    icon = u'<span class="{}"></span><span>{}</span>'.format(
         get_css_class(item), value)
     return icon
 

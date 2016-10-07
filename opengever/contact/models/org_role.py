@@ -35,6 +35,22 @@ class OrgRole(Base):
     def id(self):
         return self.org_role_id
 
+    @property
+    def addresses(self):
+        return self.person.addresses + self.organization.addresses
+
+    @property
+    def mail_addresses(self):
+        return self.person.mail_addresses + self.organization.mail_addresses
+
+    @property
+    def phonenumbers(self):
+        return self.person.phonenumbers + self.organization.phonenumbers
+
+    @property
+    def urls(self):
+        return self.person.urls + self.organization.urls
+
     def get_title(self, with_former_id=False):
         title = u'{} - {}'.format(
             self.person.get_title(with_former_id=with_former_id),
