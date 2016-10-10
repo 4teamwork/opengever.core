@@ -12,6 +12,7 @@ from opengever.journal import _
 from opengever.tabbedview import BaseListingTab
 from opengever.tabbedview import GeverTableSource
 from opengever.tabbedview.helper import linked_ogds_author
+from opengever.tabbedview.helper import readable_ogds_user
 from plone import api
 from zope.annotation.interfaces import IAnnotations
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
@@ -102,10 +103,30 @@ class JournalTab(BaseListingTab):
                                        obj=self.context)
 
 
+def time_column_sorter(a, b):
+    return cmp(a.get('time', ''), b.get('time', ''))
+
+
+def title_column_sorter(a, b):
+    return cmp(a.get('action', {}).get('title'),
+               b.get('action', {}).get('title'))
+
+
+def actor_column_sorter(a, b):
+    """Sort on the on users label (`lastname firstname (userid)`).
+    """
+    return cmp(readable_ogds_user(a, a.get('actor')),
+               readable_ogds_user(b, b.get('actor')))
+
+
 class JournalTableSource(GeverTableSource):
 
     grok.implements(ITableSource)
     grok.adapts(IJournalSourceConfig, Interface)
+
+    sorter = {'time': time_column_sorter,
+              'title': title_column_sorter,
+              'actor': actor_column_sorter}
 
     def validate_base_query(self, query):
         context = self.config.context
@@ -120,8 +141,7 @@ class JournalTableSource(GeverTableSource):
 
     def extend_query_with_ordering(self, results):
         if self.config.sort_on:
-            sorter = lambda a, b: cmp(getattr(a, self.config.sort_on, ''),
-                                      getattr(b, self.config.sort_on, ''))
+            sorter = self.sorter.get(self.config.sort_on)
             results.sort(sorter)
 
         if self.config.sort_on and self.config.sort_reverse:

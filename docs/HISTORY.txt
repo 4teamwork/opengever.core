@@ -5,6 +5,9 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
+- Fix sorting in the journal listing.
+  [phgross]
+
 - SchemaDumper: Include max_length for Stringish field types.
   [lgraf]
 
