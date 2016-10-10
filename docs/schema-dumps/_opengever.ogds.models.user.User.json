@@ -7,14 +7,14 @@
             "fields": [
                 {
                     "name": "userid",
-                    "type": "String",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
                     "required": true
                 },
                 {
                     "name": "active",
-                    "type": "Boolean",
+                    "type": "Bool",
                     "title": null,
                     "desc": null,
                     "required": false,
@@ -22,140 +22,140 @@
                 },
                 {
                     "name": "firstname",
-                    "type": "String",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
                     "required": false
                 },
                 {
                     "name": "lastname",
-                    "type": "String",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
                     "required": false
                 },
                 {
                     "name": "directorate",
-                    "type": "String",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
                     "required": false
                 },
                 {
                     "name": "directorate_abbr",
-                    "type": "String",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
                     "required": false
                 },
                 {
                     "name": "department",
-                    "type": "String",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
                     "required": false
                 },
                 {
                     "name": "department_abbr",
-                    "type": "String",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
                     "required": false
                 },
                 {
                     "name": "email",
-                    "type": "String",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
                     "required": false
                 },
                 {
                     "name": "email2",
-                    "type": "String",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
                     "required": false
                 },
                 {
                     "name": "url",
-                    "type": "String",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
                     "required": false
                 },
                 {
                     "name": "phone_office",
-                    "type": "String",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
                     "required": false
                 },
                 {
                     "name": "phone_fax",
-                    "type": "String",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
                     "required": false
                 },
                 {
                     "name": "phone_mobile",
-                    "type": "String",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
                     "required": false
                 },
                 {
                     "name": "salutation",
-                    "type": "String",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
                     "required": false
                 },
                 {
                     "name": "description",
-                    "type": "UnicodeCoercingText",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
                     "required": false
                 },
                 {
                     "name": "address1",
-                    "type": "String",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
                     "required": false
                 },
                 {
                     "name": "address2",
-                    "type": "String",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
                     "required": false
                 },
                 {
                     "name": "zip_code",
-                    "type": "String",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
                     "required": false
                 },
                 {
                     "name": "city",
-                    "type": "String",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
                     "required": false
                 },
                 {
                     "name": "country",
-                    "type": "String",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
                     "required": false
                 },
                 {
                     "name": "import_stamp",
-                    "type": "String",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
                     "required": false

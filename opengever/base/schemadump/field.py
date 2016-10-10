@@ -183,6 +183,14 @@ class SQLFieldDumper(object):
     """Dumps a simple Python representation of a SQLAlchemy Column.
     """
 
+    # Mapping from SQLAlchemy column types to zope.schema field types
+    SQL_FIELD_TYPES = {
+        'Integer': 'Int',
+        'String': 'Text',
+        'UnicodeCoercingText': 'Text',
+        'Boolean': 'Bool',
+    }
+
     def __init__(self, klass):
         self.schema = klass
 
@@ -191,7 +199,7 @@ class SQLFieldDumper(object):
 
         field_dump = OrderedDict((
             ('name', column.name),
-            ('type', column.type.__class__.__name__),
+            ('type', self._map_field_type(column)),
             ('title', None),
             ('desc', None),
             ('required', not column.nullable),
@@ -224,3 +232,9 @@ class SQLFieldDumper(object):
             raise
 
         return field_dump
+
+    def _map_field_type(self, column):
+        col_type = column.type.__class__.__name__
+        if col_type not in self.SQL_FIELD_TYPES:
+            raise Exception('Unmapped SQL column type %r!' % col_type)
+        return self.SQL_FIELD_TYPES[col_type]

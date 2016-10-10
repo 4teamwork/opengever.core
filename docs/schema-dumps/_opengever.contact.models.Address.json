@@ -7,7 +7,7 @@
             "fields": [
                 {
                     "name": "id",
-                    "type": "Integer",
+                    "type": "Int",
                     "title": null,
                     "desc": null,
                     "required": true,
@@ -15,35 +15,35 @@
                 },
                 {
                     "name": "label",
-                    "type": "String",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
                     "required": false
                 },
                 {
                     "name": "street",
-                    "type": "String",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
                     "required": false
                 },
                 {
                     "name": "zip_code",
-                    "type": "String",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
                     "required": false
                 },
                 {
                     "name": "city",
-                    "type": "String",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
                     "required": false
                 },
                 {
                     "name": "country",
-                    "type": "String",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
                     "required": false

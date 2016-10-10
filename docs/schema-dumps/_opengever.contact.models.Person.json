@@ -7,28 +7,28 @@
             "fields": [
                 {
                     "name": "salutation",
-                    "type": "String",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
                     "required": false
                 },
                 {
                     "name": "academic_title",
-                    "type": "String",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
                     "required": false
                 },
                 {
                     "name": "firstname",
-                    "type": "String",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
                     "required": true
                 },
                 {
                     "name": "lastname",
-                    "type": "String",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
                     "required": true
@@ -40,7 +40,7 @@
             "fields": [
                 {
                     "name": "id",
-                    "type": "Integer",
+                    "type": "Int",
                     "title": null,
                     "desc": null,
                     "required": true,
@@ -48,14 +48,14 @@
                 },
                 {
                     "name": "contact_type",
-                    "type": "String",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
                     "required": true
                 },
                 {
                     "name": "is_active",
-                    "type": "Boolean",
+                    "type": "Bool",
                     "title": null,
                     "desc": null,
                     "required": true,
@@ -63,14 +63,14 @@
                 },
                 {
                     "name": "description",
-                    "type": "UnicodeCoercingText",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
                     "required": false
                 },
                 {
                     "name": "former_contact_id",
-                    "type": "Integer",
+                    "type": "Int",
                     "title": null,
                     "desc": null,
                     "required": false

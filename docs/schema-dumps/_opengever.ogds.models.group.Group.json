@@ -7,14 +7,14 @@
             "fields": [
                 {
                     "name": "groupid",
-                    "type": "String",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
                     "required": true
                 },
                 {
                     "name": "active",
-                    "type": "Boolean",
+                    "type": "Bool",
                     "title": null,
                     "desc": null,
                     "required": false,
@@ -22,7 +22,7 @@
                 },
                 {
                     "name": "title",
-                    "type": "String",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
                     "required": false

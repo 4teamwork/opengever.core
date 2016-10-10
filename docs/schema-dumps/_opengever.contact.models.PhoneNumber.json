@@ -7,7 +7,7 @@
             "fields": [
                 {
                     "name": "id",
-                    "type": "Integer",
+                    "type": "Int",
                     "title": null,
                     "desc": null,
                     "required": true,
@@ -15,14 +15,14 @@
                 },
                 {
                     "name": "label",
-                    "type": "String",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
                     "required": false
                 },
                 {
                     "name": "phone_number",
-                    "type": "String",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
                     "required": true
