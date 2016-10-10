@@ -77,11 +77,13 @@ class JournalTab(BaseListingTab):
 
             {'column': 'comments',
              'column_title': _(u'label_comments', default=u'Comments'),
-             'transform': tooltip_helper},
+             'transform': tooltip_helper,
+             'sortable': False},
 
             {'column': 'references',
              'column_title': _(u'label_references', default=u'References'),
-             'transform': self.journal_references},
+             'transform': self.journal_references,
+             'sortable': False},
         )
 
     def journal_references(self, item, value):
