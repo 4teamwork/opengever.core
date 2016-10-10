@@ -10,7 +10,8 @@
                     "type": "Text",
                     "title": "Beschreibung",
                     "desc": "Eine kurze Beschreibung des Inhalts.",
-                    "required": false
+                    "required": false,
+                    "max_length": null
                 },
                 {
                     "name": "valid_from",
@@ -31,21 +32,24 @@
                     "type": "TextLine",
                     "title": "Standort",
                     "desc": "",
-                    "required": false
+                    "required": false,
+                    "max_length": null
                 },
                 {
                     "name": "referenced_activity",
                     "type": "TextLine",
                     "title": "Leistung",
                     "desc": "",
-                    "required": false
+                    "required": false,
+                    "max_length": null
                 },
                 {
                     "name": "former_reference",
                     "type": "TextLine",
                     "title": "Fr\u00fcheres Zeichen",
                     "desc": "",
-                    "required": false
+                    "required": false,
+                    "max_length": null
                 },
                 {
                     "name": "addable_dossier_types",
@@ -114,6 +118,7 @@
                     "title": "Bearbeitungsinformation",
                     "desc": "Datum Gesuch, Gesuchsteller, Datum Entscheid, Verweis auf GEVER-Gesuchdossier",
                     "required": false,
+                    "max_length": null,
                     "default": ""
                 }
             ],
@@ -134,14 +139,16 @@
                     "type": "TextLine",
                     "title": "Titel (deutsch)",
                     "desc": "",
-                    "required": true
+                    "required": true,
+                    "max_length": null
                 },
                 {
                     "name": "title_fr",
                     "type": "TextLine",
                     "title": "Titel (franz\u00f6sisch)",
                     "desc": "",
-                    "required": true
+                    "required": true,
+                    "max_length": null
                 }
             ]
         },
@@ -183,7 +190,8 @@
                     "type": "Text",
                     "title": "Kommentar zur Aufbewahrungsdauer",
                     "desc": "",
-                    "required": false
+                    "required": false,
+                    "max_length": null
                 },
                 {
                     "name": "archival_value",
@@ -205,7 +213,8 @@
                     "type": "Text",
                     "title": "Kommentar zur Archivw\u00fcrdigkeit",
                     "desc": "",
-                    "required": false
+                    "required": false,
+                    "max_length": null
                 },
                 {
                     "name": "custody_period",
@@ -257,6 +266,7 @@
                     "title": "Pr\u00e4fix des Aktenzeichens",
                     "desc": "",
                     "required": false,
+                    "max_length": null,
                     "default": "<H\u00f6chste auf dieser Ebene vergebene Nummer + 1>"
                 }
             ],

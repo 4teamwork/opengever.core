@@ -18,35 +18,40 @@
                     "type": "Text",
                     "title": null,
                     "desc": null,
-                    "required": false
+                    "required": false,
+                    "max_length": 255
                 },
                 {
                     "name": "street",
                     "type": "Text",
                     "title": null,
                     "desc": null,
-                    "required": false
+                    "required": false,
+                    "max_length": 255
                 },
                 {
                     "name": "zip_code",
                     "type": "Text",
                     "title": null,
                     "desc": null,
-                    "required": false
+                    "required": false,
+                    "max_length": 16
                 },
                 {
                     "name": "city",
                     "type": "Text",
                     "title": null,
                     "desc": null,
-                    "required": false
+                    "required": false,
+                    "max_length": 255
                 },
                 {
                     "name": "country",
                     "type": "Text",
                     "title": null,
                     "desc": null,
-                    "required": false
+                    "required": false,
+                    "max_length": 255
                 }
             ]
         }

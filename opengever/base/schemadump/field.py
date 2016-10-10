@@ -22,6 +22,8 @@ log = setup_logging(__name__)
 
 NO_DEFAULT_MARKER = object()
 
+STRING_TYPES = ('Text', 'TextLine', 'ASCII', 'ASCIILine')
+
 
 class FieldDumper(object):
     """Dumps a simple Python representation of a zope.schema Field.
@@ -44,6 +46,9 @@ class FieldDumper(object):
             ('desc', field_desc),
             ('required', field.required),
         ))
+
+        if field_dump['type'] in STRING_TYPES:
+            field_dump['max_length'] = field.max_length
 
         # Determine the field's default value
         log.debug("      Determining default...")
@@ -204,6 +209,9 @@ class SQLFieldDumper(object):
             ('desc', None),
             ('required', not column.nullable),
         ))
+
+        if field_dump['type'] in STRING_TYPES:
+            field_dump['max_length'] = column.type.length
 
         # Determine the column's default value
         log.debug("      Determining default...")

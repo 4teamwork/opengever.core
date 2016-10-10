@@ -10,7 +10,8 @@
                     "type": "Text",
                     "title": null,
                     "desc": null,
-                    "required": true
+                    "required": true,
+                    "max_length": 255
                 },
                 {
                     "name": "active",
@@ -25,7 +26,8 @@
                     "type": "Text",
                     "title": null,
                     "desc": null,
-                    "required": false
+                    "required": false,
+                    "max_length": 50
                 }
             ]
         }

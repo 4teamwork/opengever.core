@@ -10,7 +10,8 @@
                     "type": "TextLine",
                     "title": "Titel",
                     "desc": "",
-                    "required": false
+                    "required": false,
+                    "max_length": null
                 },
                 {
                     "name": "file",
@@ -90,6 +91,7 @@
                     "title": "Bearbeitungsinformation",
                     "desc": "Datum Gesuch, Gesuchsteller, Datum Entscheid, Verweis auf GEVER-Gesuchdossier",
                     "required": false,
+                    "max_length": null,
                     "default": ""
                 }
             ],
@@ -129,6 +131,7 @@
                     "title": "\u00c4nderungsnotiz",
                     "desc": "Geben Sie einen Kommentar ein, der die von Ihnen gemachten \u00c4nderungen beschreibt.",
                     "required": false,
+                    "max_length": null,
                     "omitted": {
                         "z3c.form.interfaces.IAddForm": true,
                         "z3c.form.interfaces.IEditForm": true,
@@ -150,7 +153,8 @@
                     "type": "Text",
                     "title": "Beschreibung",
                     "desc": "",
-                    "required": false
+                    "required": false,
+                    "max_length": null
                 },
                 {
                     "name": "keywords",
@@ -164,7 +168,8 @@
                     "type": "TextLine",
                     "title": "Fremdzeichen",
                     "desc": "Referenz auf das entsprechende Dossier des Absenders",
-                    "required": false
+                    "required": false,
+                    "max_length": null
                 },
                 {
                     "name": "document_date",
@@ -210,7 +215,8 @@
                     "type": "TextLine",
                     "title": "Autor",
                     "desc": "Nachname Vorname oder ein Benutzerk\u00fcrzel (wird automatisch nach Nachname Vorname aufgel\u00f6st).",
-                    "required": false
+                    "required": false,
+                    "max_length": null
                 },
                 {
                     "name": "digitally_available",

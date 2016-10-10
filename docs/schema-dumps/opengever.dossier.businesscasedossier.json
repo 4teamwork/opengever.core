@@ -14,14 +14,16 @@
                     "type": "TextLine",
                     "title": "Titel",
                     "desc": "",
-                    "required": true
+                    "required": true,
+                    "max_length": null
                 },
                 {
                     "name": "description",
                     "type": "Text",
                     "title": "Beschreibung",
                     "desc": "",
-                    "required": false
+                    "required": false,
+                    "max_length": null
                 }
             ],
             "fieldsets": {
@@ -61,7 +63,8 @@
                     "type": "Text",
                     "title": "Kommentar",
                     "desc": "",
-                    "required": false
+                    "required": false,
+                    "max_length": null
                 },
                 {
                     "name": "responsible",
@@ -91,6 +94,7 @@
                     "title": "Tempor\u00e4res fr\u00fcheres Aktenzeichen",
                     "desc": "",
                     "required": false,
+                    "max_length": null,
                     "omitted": {
                         "zope.interface.Interface": true
                     }
@@ -119,7 +123,8 @@
                     "type": "TextLine",
                     "title": "Beh\u00e4ltnis-Standort",
                     "desc": "Standortangabe des Beh\u00e4lters, in dem ein Dossier in Papierform abgelegt ist",
-                    "required": false
+                    "required": false,
+                    "max_length": null
                 },
                 {
                     "name": "relatedDossier",
@@ -135,6 +140,7 @@
                     "title": "Fr\u00fcheres Aktenzeichen",
                     "desc": "",
                     "required": false,
+                    "max_length": null,
                     "modes": {
                         "zope.interface.Interface": "display"
                     }
@@ -144,7 +150,8 @@
                     "type": "TextLine",
                     "title": "Aktenzeichen",
                     "desc": "",
-                    "required": false
+                    "required": false,
+                    "max_length": null
                 }
             ],
             "fieldsets": {
@@ -214,6 +221,7 @@
                     "title": "Bearbeitungsinformation",
                     "desc": "Datum Gesuch, Gesuchsteller, Datum Entscheid, Verweis auf GEVER-Gesuchdossier",
                     "required": false,
+                    "max_length": null,
                     "default": ""
                 }
             ],
@@ -249,7 +257,8 @@
                     "type": "Text",
                     "title": "Kommentar zur Aufbewahrungsdauer",
                     "desc": "",
-                    "required": false
+                    "required": false,
+                    "max_length": null
                 },
                 {
                     "name": "archival_value",
@@ -271,7 +280,8 @@
                     "type": "Text",
                     "title": "Kommentar zur Archivw\u00fcrdigkeit",
                     "desc": "",
-                    "required": false
+                    "required": false,
+                    "max_length": null
                 },
                 {
                     "name": "custody_period",

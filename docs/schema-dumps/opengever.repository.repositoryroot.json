@@ -24,7 +24,8 @@
                     "type": "TextLine",
                     "title": "Version",
                     "desc": "",
-                    "required": false
+                    "required": false,
+                    "max_length": null
                 }
             ]
         },
@@ -36,14 +37,16 @@
                     "type": "TextLine",
                     "title": "Titel (deutsch)",
                     "desc": "",
-                    "required": true
+                    "required": true,
+                    "max_length": null
                 },
                 {
                     "name": "title_fr",
                     "type": "TextLine",
                     "title": "Titel (franz\u00f6sisch)",
                     "desc": "",
-                    "required": true
+                    "required": true,
+                    "max_length": null
                 }
             ]
         }

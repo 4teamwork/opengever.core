@@ -18,21 +18,24 @@
                     "type": "Text",
                     "title": null,
                     "desc": null,
-                    "required": false
+                    "required": false,
+                    "max_length": 255
                 },
                 {
                     "name": "department",
                     "type": "Text",
                     "title": null,
                     "desc": null,
-                    "required": false
+                    "required": false,
+                    "max_length": 255
                 },
                 {
                     "name": "description",
                     "type": "Text",
                     "title": null,
                     "desc": null,
-                    "required": false
+                    "required": false,
+                    "max_length": null
                 }
             ]
         }
