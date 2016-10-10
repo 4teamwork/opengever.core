@@ -1,0 +1,63 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="opengever.base">
+<head>
+  <metal:head metal:fill-slot="head_slot">
+  <style>
+  table {
+      border-collapse: separate !important;
+      border-spacing: 1em 0px !important;
+  }
+  </style>
+  </metal:head>
+
+    <metal:block
+        fill-slot="top_slot"
+        tal:define="dummy python:request.set('disable_border',1)" />
+
+</head>
+
+<body>
+
+<metal:main fill-slot="main">
+
+    <tal:main-macro metal:define-macro="main">
+
+    <div tal:replace="structure provider:plone.abovecontenttitle" />
+
+    <h1 class="documentFirstHeading">Content Stats</h1>
+
+    <p>(For <strong tal:content="view/get_path" /> and below)</p>
+
+    <div tal:replace="structure provider:plone.abovecontentbody" />
+
+    <table class="listing">
+        <tr>
+            <th>Type</th>
+            <th>Total</th>
+            <th>Open</th>
+            <th>Closed</th>
+        </tr>
+        <tr tal:repeat="stats view/get_content_stats">
+            <td>
+                <a tal:condition="stats/search_url" tal:content="stats/title" tal:attributes="href stats/search_url"/>
+                <span tal:condition="not:stats/search_url" tal:content="stats/title" />
+            </td>
+            <td tal:content="stats/total"/>
+            <td tal:content="stats/open"/>
+            <td tal:content="stats/closed"/>
+        </tr>
+    </table>
+
+    <div class="visualClear"><!----></div>
+    <div tal:replace="structure provider:plone.belowcontentbody" />
+    <div class="visualClear"><!----></div>
+    </tal:main-macro>
+</metal:main>
+
+</body>
+</html>

@@ -5,6 +5,9 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
+- Implement simple content-stats view.
+  [lgraf]
+
 - SchemaDumper: Include max_length for Stringish field types.
   [lgraf]
 

@@ -84,4 +84,12 @@
         allowed_interface="plone.app.layout.globals.interfaces.IContextState"
         />
 
+    <browser:page
+        name="content-stats"
+        class=".content_stats.ContentStatsView"
+        permission="cmf.ManagePortal"
+        for="*"
+        template="content_stats.pt"
+        />
+
 </configure>
