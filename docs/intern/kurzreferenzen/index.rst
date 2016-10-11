@@ -10,3 +10,4 @@ Inhalt:
    :maxdepth: 2
 
    Administration <administration.rst>
+   Bumblebee <bumblebee.rst>
