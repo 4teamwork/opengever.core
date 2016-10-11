@@ -750,6 +750,19 @@ class TestProposal(FunctionalTestCase):
         self.assertEqual(
             u'label_dossier_not_available', submitted_proposal.get_dossier_link())
 
+    @browsing
+    def test_proposal_title_is_displayed_xss_safe(self, browser):
+        committee = create(Builder('committee').titled('My committee'))
+        proposal = create(Builder('proposal')
+                          .within(self.dossier)
+                          .titled(u'<p>qux</p>')
+                          .having(committee=committee.load_model()))
+
+        browser.open(proposal, view='tabbedview_view-overview')
+
+        self.assertEqual('&lt;p&gt;qux&lt;/p&gt;',
+                         browser.css('.listing td').first.innerHTML)
+
     def assertSubmittedDocumentCreated(self, proposal, document, submitted_document):
         submitted_document_model = SubmittedDocument.query.get_by_source(
             proposal, document)
