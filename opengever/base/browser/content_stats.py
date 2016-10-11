@@ -14,12 +14,24 @@ TYPES = (
 )
 
 
+STATS_CACHE = {}
+
+
 class ContentStatsView(BrowserView):
     """View that displays some basic content statistics (recursively, based
     on current context).
     """
 
+    def refresh_url(self):
+        return '/'.join((
+            self.context.absolute_url(), '@@content-stats?refresh=1'))
+
     def get_content_stats(self):
+        cache_key = self.get_path()
+        refresh = bool(self.request.get('refresh', 0))
+        if cache_key in STATS_CACHE and not refresh:
+            return {'cached': True, 'stats': STATS_CACHE[cache_key]}
+
         all_stats = []
 
         for portal_type in TYPES:
@@ -29,7 +41,9 @@ class ContentStatsView(BrowserView):
                 type_stats = self.get_stats_for_type(portal_type)
 
             all_stats.append(type_stats)
-        return all_stats
+
+        STATS_CACHE[cache_key] = all_stats
+        return {'cached': False, 'stats': all_stats}
 
     def get_stats_for_type(self, portal_type):
         catalog = api.portal.get_tool('portal_catalog')
