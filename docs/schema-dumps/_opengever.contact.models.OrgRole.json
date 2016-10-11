@@ -7,7 +7,7 @@
             "fields": [
                 {
                     "name": "id",
-                    "type": "Integer",
+                    "type": "Int",
                     "title": null,
                     "desc": null,
                     "required": true,
@@ -15,24 +15,27 @@
                 },
                 {
                     "name": "function",
-                    "type": "String",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
-                    "required": false
+                    "required": false,
+                    "max_length": 255
                 },
                 {
                     "name": "department",
-                    "type": "String",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
-                    "required": false
+                    "required": false,
+                    "max_length": 255
                 },
                 {
                     "name": "description",
-                    "type": "UnicodeCoercingText",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
-                    "required": false
+                    "required": false,
+                    "max_length": null
                 }
             ]
         }

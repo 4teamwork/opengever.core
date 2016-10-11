@@ -5,6 +5,9 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
+- SchemaDumper: Include max_length for Stringish field types.
+  [lgraf]
+
 - Add new functionality "Private Dossier, a private area for every user to
   create his private dossiers and store and edit private documents there.
   [phgross]

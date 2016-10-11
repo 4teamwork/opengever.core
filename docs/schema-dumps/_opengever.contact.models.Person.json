@@ -7,31 +7,35 @@
             "fields": [
                 {
                     "name": "salutation",
-                    "type": "String",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
-                    "required": false
+                    "required": false,
+                    "max_length": 255
                 },
                 {
                     "name": "academic_title",
-                    "type": "String",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
-                    "required": false
+                    "required": false,
+                    "max_length": 255
                 },
                 {
                     "name": "firstname",
-                    "type": "String",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
-                    "required": true
+                    "required": true,
+                    "max_length": 255
                 },
                 {
                     "name": "lastname",
-                    "type": "String",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
-                    "required": true
+                    "required": true,
+                    "max_length": 255
                 }
             ]
         },
@@ -40,7 +44,7 @@
             "fields": [
                 {
                     "name": "id",
-                    "type": "Integer",
+                    "type": "Int",
                     "title": null,
                     "desc": null,
                     "required": true,
@@ -48,14 +52,15 @@
                 },
                 {
                     "name": "contact_type",
-                    "type": "String",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
-                    "required": true
+                    "required": true,
+                    "max_length": 20
                 },
                 {
                     "name": "is_active",
-                    "type": "Boolean",
+                    "type": "Bool",
                     "title": null,
                     "desc": null,
                     "required": true,
@@ -63,14 +68,15 @@
                 },
                 {
                     "name": "description",
-                    "type": "UnicodeCoercingText",
+                    "type": "Text",
                     "title": null,
                     "desc": null,
-                    "required": false
+                    "required": false,
+                    "max_length": null
                 },
                 {
                     "name": "former_contact_id",
-                    "type": "Integer",
+                    "type": "Int",
                     "title": null,
                     "desc": null,
                     "required": false
