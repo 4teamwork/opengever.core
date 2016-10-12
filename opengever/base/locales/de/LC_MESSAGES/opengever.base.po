@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-10-05 13:07+0000\n"
+"POT-Creation-Date: 2016-10-18 14:56+0000\n"
 "PO-Revision-Date: 2014-09-04 01:03+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -26,7 +26,7 @@ msgstr "(INAKTIV)"
 msgid "Copy Items"
 msgstr "Kopieren"
 
-#: ./opengever/base/browser/templates/gever-macros.pt:36
+#: ./opengever/base/browser/templates/gever-macros.pt:38
 msgid "No content"
 msgstr "Keine Inhalte"
 
@@ -137,7 +137,7 @@ msgid "help_retention_period"
 msgstr "Zeitraum zwischen dem jüngsten Dokumentdatum eines in einem Dossier enthaltenen Dokuments und dem Zeitpunkt, an dem dieses für die Geschäftstätigkeit der Verwaltungseinheit nicht mehr benötigt wird"
 
 #. Default: "-- Already removed object --"
-#: ./opengever/base/adapters.py:199
+#: ./opengever/base/adapters.py:209
 msgid "label_already_removed"
 msgstr "-- Bereits gelöscht --"
 
@@ -197,7 +197,7 @@ msgid "label_dateofsubmission"
 msgstr "Anbietezeitpunkt"
 
 #. Default: "An unexpected error has occured"
-#: ./opengever/base/browser/templates/gever-macros.pt:117
+#: ./opengever/base/browser/templates/gever-macros.pt:120
 msgid "label_default_error_message"
 msgstr "Ein unerwarteter Fehler ist aufgetreten"
 
@@ -252,14 +252,14 @@ msgid "label_search"
 msgstr "Suche"
 
 #. Default: "Error"
-#: ./opengever/base/browser/templates/gever-macros.pt:116
+#: ./opengever/base/browser/templates/gever-macros.pt:119
 msgid "label_severity_error"
 msgstr "Fehler"
 
 #. Default: "Title"
 #: ./opengever/base/behaviors/base.py:24
 #: ./opengever/base/browser/translated_title.py:36
-#: ./opengever/base/widgets.py:77
+#: ./opengever/base/widgets.py:78
 msgid "label_title"
 msgstr "Titel"
 
@@ -304,9 +304,14 @@ msgid "msg_empty_clipboard"
 msgstr "Es können keine Objekte eingefügt werden, die Zwischenablage ist leer."
 
 #. Default: "No items available"
-#: ./opengever/base/widgets.py:49
+#: ./opengever/base/widgets.py:50
 msgid "msg_no_items_available"
 msgstr "Es sind keine Elemente verfügbar."
+
+#. Default: "Can't paste items, it's not allowed to add objects of this type."
+#: ./opengever/base/browser/paste.py:36
+msgid "msg_pasting_not_allowed"
+msgstr "Es ist nicht erlaubt Objekte dieses Typs einzufügen."
 
 #. Default: "Selected objects successfully copied."
 #: ./opengever/base/browser/copy_items.py:36
@@ -314,7 +319,7 @@ msgid "msg_successfuly_copied"
 msgstr "Die selektieren Objekte wurden kopiert."
 
 #. Default: "Objects from clipboard successfully pasted."
-#: ./opengever/base/browser/paste.py:37
+#: ./opengever/base/browser/paste.py:45
 msgid "msg_successfuly_pasted"
 msgstr "Die Objekte der Zwischenablage wurden eingefügt."
 
@@ -363,7 +368,7 @@ msgstr "Haben Sie nicht gefunden, wonach Sie gesucht haben? Die ${advanced_searc
 msgid "search_results_advanced_link"
 msgstr "erweiterte Suche"
 
-#: ./opengever/base/browser/templates/gever-macros.pt:99
+#: ./opengever/base/browser/templates/gever-macros.pt:101
 msgid "show all"
 msgstr "Alle anzeigen"
 
@@ -382,4 +387,3 @@ msgstr "Nicht geprüft"
 #: opengever/repository/classification.py
 msgid "unprotected"
 msgstr "Nicht klassifiziert"
-

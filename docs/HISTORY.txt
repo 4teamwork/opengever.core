@@ -5,6 +5,14 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
+- Show warning message when adding a repositoryfolder to a leafnode
+  which already contains dossiers.
+  [phgross]
+
+- Check allowedContentTypes before pasting objects from clipboard
+  to avoid pasting dossier into branch nodes.
+  [phgross]
+
 - Use ftw.tabbedview 3.5.4 to fix issue with duplicate history-entries.
   The user no longer has to press the browser-back button twice on
   tabbed-views.
