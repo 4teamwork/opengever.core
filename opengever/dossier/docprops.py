@@ -87,7 +87,7 @@ class DocPropertyWriter(object):
         with TemporaryDocFile(self.document.file) as tmpfile:
             changed = False
 
-            with OOXMLDocument(tmpfile.path) as doc:
+            with OOXMLDocument(tmpfile.path, force=True) as doc:
                 if only_existing:
                     if doc.has_any_property(properties.keys()):
                         doc.update_properties(properties)

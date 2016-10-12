@@ -5,6 +5,9 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
+- Use ooxml_docprops force mode to overwrite properties of a wrong type.
+  [deiferni]
+
 - Add bumblebee-flag option to policytemplates.
   [phgross]
 
