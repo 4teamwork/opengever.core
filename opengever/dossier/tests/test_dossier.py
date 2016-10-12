@@ -7,6 +7,7 @@ from opengever.mail.behaviors import ISendableDocsContainer
 from opengever.testing import FunctionalTestCase
 from opengever.testing import index_data_for
 from Products.CMFCore.utils import getToolByName
+from zExceptions import Unauthorized
 
 
 class TestDossier(FunctionalTestCase):
@@ -104,6 +105,15 @@ class TestDossier(FunctionalTestCase):
 
         self.assertNotIn(self.portal_type,
                          [fti.id for fti in sub.allowedContentTypes()])
+
+    @browsing
+    def test_visiting_dossier_add_form_on_branch_node_raise_unauthorized(self, browser):
+        branch_node = create(Builder('repository'))
+        create(Builder('repository').within(branch_node))
+
+        with self.assertRaises(Unauthorized):
+            browser.login().open(
+                branch_node, view='++add++{}'.format(self.portal_type))
 
     def get_factory_menu_items(self, obj):
         menu = FactoriesMenu(obj)

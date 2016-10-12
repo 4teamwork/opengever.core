@@ -17,11 +17,13 @@ from plone.dexterity.interfaces import IDexterityFTI
 from plone.directives import form, dexterity
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
 from z3c.relationfield.schema import RelationChoice, RelationList
+from zExceptions import Unauthorized
 from zope import schema
 from zope.component import getUtility
 from zope.interface import Interface, alsoProvides
 from zope.interface import invariant, Invalid
 import logging
+
 
 LOG = logging.getLogger('opengever.dossier')
 
@@ -198,6 +200,13 @@ alsoProvides(IDossier, IFormFieldProvider)
 # TODO: temporary default value (autocompletewidget)
 class AddForm(dexterity.AddForm):
     grok.name('opengever.dossier.businesscasedossier')
+
+    def render(self):
+        fti = getUtility(IDexterityFTI, name=self.portal_type)
+        if fti not in self.context.allowedContentTypes():
+            raise Unauthorized
+
+        return super(AddForm, self).render()
 
     def update(self):
         """Adds a default value for `responsible` to the request so the
