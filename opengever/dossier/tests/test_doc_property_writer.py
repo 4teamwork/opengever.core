@@ -1,6 +1,7 @@
 from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testing import freeze
 from ooxml_docprops import read_properties
 from opengever.dossier.docprops import DocPropertyWriter
 from opengever.dossier.docprops import TemporaryDocFile
@@ -84,6 +85,20 @@ class TestDocPropertyWriter(FunctionalTestCase):
         with TemporaryDocFile(self.document.file) as tmpfile:
             properties = read_properties(tmpfile.path)
             self.assertItemsEqual(EXPECTED_DOC_PROPERTIES.items(), properties)
+
+    def test_overwrites_properties_of_wrong_type(self):
+        frozen_date = datetime(2010, 1, 1)
+        with freeze(frozen_date):
+            self.document = create(
+                Builder('document')
+                .within(self.dossier)
+                .titled("Document with prop of wrong type")
+                .with_asset_file('with_property_of_wrong_type.docx'))
+
+        with TemporaryDocFile(self.document.file) as tmpfile:
+            self.assertIn(
+                ('ogg.document.document_date', frozen_date,),
+                list(read_properties(tmpfile.path)))
 
     def test_files_with_custom_properties_are_not_updated(self):
         self.document = create(
