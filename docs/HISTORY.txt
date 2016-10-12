@@ -5,6 +5,9 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
+- Fix bumblebee download view delivering wrong file for checked out documents.
+  [deiferni]
+
 - Use ooxml_docprops force mode to overwrite properties of a wrong type.
   [deiferni]
 
