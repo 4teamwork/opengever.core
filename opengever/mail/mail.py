@@ -1,7 +1,6 @@
 from collective import dexteritytextindexer
 from datetime import date
 from datetime import datetime
-from email.MIMEText import MIMEText
 from five import grok
 from ftw.mail import _ as ftw_mf
 from ftw.mail import utils
@@ -113,6 +112,11 @@ class OGMail(Mail, BaseDocumentMixin):
         self._update_attachment_infos()
         self._reset_header_cache()
 
+    def get_extraction_parent(self):
+        """Return the parent that accepts extracted attachments."""
+
+        return self.get_parent_dossier() or self.get_parent_inbox()
+
     def get_attachments(self):
         """ Returns a list of dicts describing the attachements.
 
@@ -125,8 +129,9 @@ class OGMail(Mail, BaseDocumentMixin):
 
         return len(self.get_attachments()) > 0
 
-    def extract_attachments_into_parent_dossier(self, positions):
-        """Extract all specified attachments into the mails parent dossier.
+    def extract_attachments_into_parent(self, positions):
+        """Extract all specified attachments into the mails parent dossier or
+        inbox.
 
         Also add a reference from all attached documents (*not* mails) to self.
 
@@ -137,11 +142,12 @@ class OGMail(Mail, BaseDocumentMixin):
 
         docs = []
         for position in positions:
-            docs.append(self.extract_attachment_into_parent_dossier(position))
+            docs.append(self.extract_attachment_into_parent(position))
         return docs
 
-    def extract_attachment_into_parent_dossier(self, position):
-        """Extract one specified attachment into the mails parent dossier.
+    def extract_attachment_into_parent(self, position):
+        """Extract one specified attachment into the mails parent dossier or
+        inbox.
 
         Also add a reference from all attached documents (*not* mails) to self.
 
@@ -150,20 +156,24 @@ class OGMail(Mail, BaseDocumentMixin):
         `get_attachments`.
         """
 
-        dossier = self.get_parent_dossier()
+        parent = self.get_extraction_parent()
+        if parent is None:
+            raise RuntimeError(
+                "Could not find a parent dossier or inbox for "
+                "{}".format(self.absolute_url()))
 
         data, content_type, filename = self._get_attachment_data(position)
         title = os.path.splitext(filename)[0]
 
         if content_type == 'message/rfc822':
             doc = CreateEmailCommand(
-                dossier, filename, data,
+                parent, filename, data,
                 title=title,
                 content_type=content_type,
                 digitally_available=True).execute()
         else:
             doc = CreateDocumentCommand(
-                dossier, filename, data,
+                parent, filename, data,
                 title=title,
                 content_type=content_type,
                 digitally_available=True).execute()

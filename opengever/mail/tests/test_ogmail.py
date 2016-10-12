@@ -150,77 +150,6 @@ class TestOGMailAddition(FunctionalTestCase):
                       .with_message(MAIL_DATA))
         self.assertFalse(mail.has_attachments())
 
-    def test_extract_attachment_sets_default_values_correctly_on_document(self):
-        registry = getUtility(IRegistry)
-        proxy = registry.forInterface(IDocumentSettings)
-        proxy.preserved_as_paper_default = False
-        transaction.commit()
-
-        mail = create(Builder('mail')
-                      .within(self.dossier)
-                      .with_asset_message('mail_with_one_docx_attachment.eml'))
-        doc = mail.extract_attachment_into_parent_dossier(position=2)
-        self.assertEqual(doc.portal_type, 'opengever.document.document')
-        self.assertEqual('word_document', doc.Title())
-        self.assertFalse(doc.preserved_as_paper)
-        self.assertTrue(doc.digitally_available)
-
-    def test_extract_mail_from_mail_with_one_attachment(self):
-        mail = create(Builder('mail')
-                      .within(self.dossier)
-                      .with_asset_message('mail_with_one_mail_attachment.eml'))
-
-        extracted = mail.extract_attachment_into_parent_dossier(position=2)
-        self.assertEqual(extracted.portal_type, 'ftw.mail.mail')
-        self.assertEquals(u'Inneres Testm\xe4il ohne Attachments',
-                          extracted.Title().decode('utf-8'))
-
-    def test_extract_nested_mail_from_mail_with_attachments(self):
-        mail = create(Builder('mail')
-                      .within(self.dossier)
-                      .with_asset_message('mail_with_nested_attachments.eml'))
-
-        positions = [attachment['position'] for attachment in
-                     mail.get_attachments()]
-
-        extracted = mail.extract_attachments_into_parent_dossier(positions)
-        self.assertEqual(6, len(extracted))
-
-        outer_mail = extracted[0]
-        inner_mail = extracted[1]
-
-        self.assertEqual(u'Mehrere Anh\xe4nge',
-                         outer_mail.Title().decode('utf-8'))
-        self.assertEqual(u'Inneres Testm\xe4il ohne Attachments',
-                         inner_mail.Title().decode('utf-8'))
-
-    def test_extract_multiple_attachments(self):
-        mail = create(Builder('mail')
-                      .within(self.dossier)
-                      .with_asset_message('mail_with_multiple_attachments.eml'))
-
-        positions = [attachment['position'] for attachment in
-                     mail.get_attachments()]
-
-        extracted = mail.extract_attachments_into_parent_dossier(positions)
-        self.assertEqual(3, len(extracted))
-        extracted_mail = extracted[0]
-        doc = extracted[1]
-        text = extracted[2]
-
-        self.assertEqual(u'Inneres Testm\xe4il ohne Attachments',
-                         extracted_mail.Title().decode('utf-8'))
-        self.assertEqual('word_document', doc.Title())
-        self.assertEqual('Text', text.Title())
-
-    def test_extracting_line_break_mail(self):
-        mail = create(Builder('mail')
-                      .within(self.dossier)
-                      .with_message(LINEBREAK_MESSAGETEXT))
-
-        doc = mail.extract_attachment_into_parent_dossier(position=1)
-        self.assertEquals('Projekt Test Inputvorschlag', doc.Title())
-
     def test_delete_all_attachments(self):
         mail = create(Builder('mail')
                       .within(self.dossier)
@@ -237,3 +166,104 @@ class TestOGMailAddition(FunctionalTestCase):
         self.assertEqual(3, len(mail.get_attachments()))
         mail.delete_attachments([2])
         self.assertEqual(2, len(mail.get_attachments()))
+
+    def test_extracting_into_unsupported_container_raises_error(self):
+        mail = create(Builder('mail')
+                      .with_asset_message('mail_with_one_mail_attachment.eml'))
+
+        with self.assertRaises(RuntimeError):
+            mail.extract_attachment_into_parent(position=1)
+
+
+class TestExtractMailInDossier(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestExtractMailInDossier, self).setUp()
+        self.parent = self.setup_parent()
+
+    def setup_parent(self):
+        return create(Builder('dossier'))
+
+    def test_extract_attachment_sets_default_values_correctly_on_document(self):
+        registry = getUtility(IRegistry)
+        proxy = registry.forInterface(IDocumentSettings)
+        proxy.preserved_as_paper_default = False
+        transaction.commit()
+
+        mail = create(Builder('mail')
+                      .within(self.parent)
+                      .with_asset_message('mail_with_one_docx_attachment.eml'))
+        doc = mail.extract_attachment_into_parent(position=2)
+        self.assertEqual(doc.portal_type, 'opengever.document.document')
+        self.assertEqual('word_document', doc.Title())
+        self.assertFalse(doc.preserved_as_paper)
+        self.assertTrue(doc.digitally_available)
+
+    def test_extract_mail_from_mail_with_one_attachment(self):
+        mail = create(Builder('mail')
+                      .within(self.parent)
+                      .with_asset_message('mail_with_one_mail_attachment.eml'))
+
+        extracted = mail.extract_attachment_into_parent(position=2)
+        self.assertEqual(extracted.portal_type, 'ftw.mail.mail')
+        self.assertEquals(u'Inneres Testm\xe4il ohne Attachments',
+                          extracted.Title().decode('utf-8'))
+
+    def test_extract_nested_mail_from_mail_with_attachments(self):
+        mail = create(Builder('mail')
+                      .within(self.parent)
+                      .with_asset_message('mail_with_nested_attachments.eml'))
+
+        positions = [attachment['position'] for attachment in
+                     mail.get_attachments()]
+
+        extracted = mail.extract_attachments_into_parent(positions)
+        self.assertEqual(6, len(extracted))
+
+        outer_mail = extracted[0]
+        inner_mail = extracted[1]
+
+        self.assertEqual(u'Mehrere Anh\xe4nge',
+                         outer_mail.Title().decode('utf-8'))
+        self.assertEqual(u'Inneres Testm\xe4il ohne Attachments',
+                         inner_mail.Title().decode('utf-8'))
+
+    def test_extract_multiple_attachments(self):
+        mail = create(Builder('mail')
+                      .within(self.parent)
+                      .with_asset_message('mail_with_multiple_attachments.eml'))
+
+        positions = [attachment['position'] for attachment in
+                     mail.get_attachments()]
+
+        extracted = mail.extract_attachments_into_parent(positions)
+        self.assertEqual(3, len(extracted))
+        extracted_mail = extracted[0]
+        doc = extracted[1]
+        text = extracted[2]
+
+        self.assertEqual(u'Inneres Testm\xe4il ohne Attachments',
+                         extracted_mail.Title().decode('utf-8'))
+        self.assertEqual('word_document', doc.Title())
+        self.assertEqual('Text', text.Title())
+
+    def test_extracting_line_break_mail(self):
+        mail = create(Builder('mail')
+                      .within(self.parent)
+                      .with_message(LINEBREAK_MESSAGETEXT))
+
+        doc = mail.extract_attachment_into_parent(position=1)
+        self.assertEquals('Projekt Test Inputvorschlag', doc.Title())
+
+
+class TestExtractMailInInbox(TestExtractMailInDossier):
+
+    def setup_parent(self):
+        return create(Builder('inbox'))
+
+
+class TestExtractMailInTask(TestExtractMailInDossier):
+
+    def setup_parent(self):
+        self.dossier = create(Builder('dossier'))
+        return create(Builder('task').within(self.dossier))

@@ -5,6 +5,9 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
+- Fix extracting attachments for mails in inboxes.
+  [deiferni]
+
 - Fix bumblebee download view delivering wrong file for checked out documents.
   [deiferni]
 

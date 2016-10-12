@@ -2,6 +2,7 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from opengever.base.browser.helper import get_css_class
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.inbox.inbox import IInbox
 from opengever.task.task import ITask
 from plone import api
 
@@ -33,6 +34,15 @@ class BaseDocumentMixin(object):
             return parent
         if ITask.providedBy(parent):
             return parent.get_containing_dossier()
+
+        return None
+
+    def get_parent_inbox(self):
+        """Return the document's parent inbox or None."""
+
+        parent = aq_parent(aq_inner(self))
+        if IInbox.providedBy(parent):
+            return parent
 
         return None
 

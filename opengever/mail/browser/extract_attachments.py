@@ -139,12 +139,12 @@ class ExtractAttachments(grok.View):
                 self.extract_attachments(attachments, delete_action)
                 return self.request.RESPONSE.redirect(
                     "{}/#documents".format(
-                        self.context.get_parent_dossier().absolute_url()))
+                        self.context.get_extraction_parent().absolute_url()))
 
         return super(ExtractAttachments, self).__call__()
 
     def extract_attachments(self, positions, delete_action):
-        docs = self.context.extract_attachments_into_parent_dossier(positions)
+        docs = self.context.extract_attachments_into_parent(positions)
         for document in docs:
             msg = _(u'info_extracted_document',
                     default=u'Created document ${title}',
