@@ -20,7 +20,8 @@
 
               <td tal:condition="python: not item.get('is_html', False)"
                   tal:attributes="class item/css_class|nothing"
-                  tal:content="structure item/value" />
+                  tal:content="item/value" />
+
             </tr>
             <tr tal:condition="documents">
               <th i18n:translate="label_attachments">Attachments</th>

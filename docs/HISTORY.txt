@@ -5,6 +5,9 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
+- Fix XSS vulnerability in proposal overview.
+  [phgross]
+
 - Fix sorting in the journal listing.
   [phgross]
 

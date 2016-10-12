@@ -187,40 +187,52 @@ class ProposalBase(ModelContainer):
              'value': model.title},
 
             {'label': _('label_committee', default=u'Committee'),
-             'value': model.committee.get_link()},
+             'value': model.committee.get_link(),
+             'is_html': True},
 
             {'label': _('label_meeting', default=u'Meeting'),
-             'value': model.get_meeting_link()},
+             'value': model.get_meeting_link(),
+             'is_html': True},
 
             {'label': _('label_legal_basis', default=u'Legal basis'),
-             'value': model.legal_basis},
+             'value': model.legal_basis,
+             'is_html': True},
 
             {'label': _('label_initial_position', default=u'Initial position'),
-             'value': model.initial_position},
+             'value': model.initial_position,
+             'is_html': True},
 
             {'label': _('label_proposed_action', default=u'Proposed action'),
-             'value': model.proposed_action},
+             'value': model.proposed_action,
+             'is_html': True},
 
             {'label': _('label_decision_draft', default=u'Decision draft'),
-             'value': model.decision_draft},
+             'value': model.decision_draft,
+             'is_html': True},
 
             {'label': _('label_decision', default=u'Decision'),
-             'value': model.get_decision()},
+             'value': model.get_decision(),
+             'is_html': True},
 
             {'label': _('label_publish_in', default=u'Publish in'),
-             'value': model.publish_in},
+             'value': model.publish_in,
+             'is_html': True},
 
             {'label': _('label_disclose_to', default=u'Disclose to'),
-             'value': model.disclose_to},
+             'value': model.disclose_to,
+             'is_html': True},
 
             {'label': _('label_copy_for_attention', default=u'Copy for attention'),
-             'value': model.copy_for_attention},
+             'value': model.copy_for_attention,
+             'is_html': True},
 
             {'label': _('label_workflow_state', default=u'State'),
-             'value': self.get_state().title},
+             'value': self.get_state().title,
+             'is_html': True},
 
             {'label': _('label_decision_number', default=u'Decision number'),
-             'value': model.get_decision_number()},
+             'value': model.get_decision_number(),
+             'is_html': True},
         ]
 
     def can_execute_transition(self, name):
