@@ -5,6 +5,9 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
+- Add bumblebee-flag option to policytemplates.
+  [phgross]
+
 - Fix XSS vulnerability in proposal overview.
   [phgross]
 
