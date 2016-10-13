@@ -230,6 +230,18 @@ class TestDocument(FunctionalTestCase):
 
         self.assertEqual(dossier, document.get_parent_dossier())
 
+    def test_get_parent_inbox_returns_inbox_for_document_in_inbox(self):
+        inbox = create(Builder('inbox'))
+        document = create(Builder('document').within(inbox))
+
+        self.assertEqual(inbox, document.get_parent_inbox())
+
+    def test_get_parent_inbox_returns_none_for_document_in_dossier(self):
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document').within(dossier))
+
+        self.assertIsNone(document.get_parent_inbox())
+
 
 class TestDocumentDefaultValues(FunctionalTestCase):
 
