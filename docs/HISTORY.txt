@@ -5,6 +5,9 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
+- Purge reference number mapping when dossiers are pasted.
+  [deiferni]
+
 - Fix extracting attachments for mails in inboxes.
   [deiferni]
 

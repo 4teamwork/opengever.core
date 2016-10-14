@@ -32,6 +32,16 @@ class ReferenceNumberPrefixAdpater(grok.Adapter):
     def __init__(self, context):
         self.context = context
 
+    def purge_mappings(self):
+        """Purge all child/prefix-mappings for context.
+
+        This is potentially dangerous and should only be used carefully!
+        """
+
+        annotations = unprotected_write(IAnnotations(self.context))
+        annotations.pop(REPOSITORY_FOLDER_KEY, None)
+        annotations.pop(DOSSIER_KEY, None)
+
     def get_reference_mapping(self, obj=None):
         type_key = self.get_type_key(obj)
         annotations = unprotected_write(IAnnotations(self.context))

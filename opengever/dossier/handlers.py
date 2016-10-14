@@ -10,7 +10,7 @@ from plone import api
 from Products.CMFCore.utils import getToolByName
 from zope.component import getAdapter
 from zope.lifecycleevent import IObjectRemovedEvent
-from zope.lifecycleevent.interfaces import IObjectAddedEvent
+from zope.lifecycleevent.interfaces import IObjectCopiedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 from zope.lifecycleevent.interfaces import IObjectMovedEvent
 
@@ -116,3 +116,13 @@ def reindex_containing_dossier(dossier, event):
                         if brain.portal_type in ['opengever.task.task',
                             'opengever.inbox.forwarding']:
                             sync_task(brain.getObject(), event)
+
+
+@grok.subscribe(IDossierMarker, IObjectCopiedEvent)
+def purge_reference_number_mappings(copied_dossier, event):
+    """Reset the reference number mapping when copying (or actually pasting)
+    dossiers.
+    """
+
+    prefix_adapter = IReferenceNumberPrefix(copied_dossier)
+    prefix_adapter.purge_mappings()
