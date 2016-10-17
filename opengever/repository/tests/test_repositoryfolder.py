@@ -3,6 +3,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages import plone
+from ftw.testbrowser.pages.statusmessages import warning_messages
 from opengever.base.interfaces import IReferenceNumberSettings
 from opengever.repository.behaviors.referenceprefix import IReferenceNumberPrefix
 from opengever.testing import add_languages
@@ -86,3 +87,25 @@ class TestRepositoryFolderWithBrowser(FunctionalTestCase):
                           plone.view_and_portal_type())
         custody = browser.context
         self.assertEquals(u'2', IReferenceNumberPrefix(custody).reference_number_prefix)
+
+    @browsing
+    def test_add_form_shows_warning_message_when_repositoryfolder_contains_dossiers(self, browser):
+        self.grant('Manager')
+
+        root = create(Builder('repository_root'))
+        branch_node = create(Builder('repository').within(root))
+        leaf_node = create(Builder('repository').within(branch_node))
+        create(Builder('dossier').within(leaf_node))
+
+        browser.login().open(
+            branch_node, view='++add++opengever.repository.repositoryfolder')
+        self.assertEquals([], warning_messages())
+
+        browser.login().open(
+            leaf_node, view='++add++opengever.repository.repositoryfolder')
+        self.assertEquals(
+            [u'You are adding a repositoryfolder to a leafnode '
+             'which already contains dossiers. This is only '
+             'temporarily allowed and all dossiers must be moved into '
+             'a new leafnode afterwards.'],
+            warning_messages())

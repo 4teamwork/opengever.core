@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2016-07-21 14:08+0000\n"
+"POT-Creation-Date: 2016-10-18 15:37+0000\n"
 "PO-Revision-Date: 2014-11-25 11:31+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -53,22 +53,22 @@ msgstr "Eine Ordnungsposition mit diesem Aktenzeichen existiert bereits auf glei
 #. Default: "Common"
 #: ./opengever/repository/behaviors/referenceprefix.py:33
 #: ./opengever/repository/behaviors/responsibleorg.py:12
-#: ./opengever/repository/repositoryfolder.py:28
+#: ./opengever/repository/repositoryfolder.py:30
 msgid "fieldset_common"
 msgstr "Allgemein"
 
 #. Default: "Select all additional dossier types which should be addable in this repository folder."
-#: ./opengever/repository/repositoryfolder.py:78
+#: ./opengever/repository/repositoryfolder.py:80
 msgid "help_addable_dossier_types"
 msgstr "Wählen Sie die Spezialdossiers aus, die in dieser Ordnungsposition erlaubt sind."
 
 #. Default: "A short summary of the content."
-#: ./opengever/repository/repositoryfolder.py:41
+#: ./opengever/repository/repositoryfolder.py:43
 msgid "help_description"
 msgstr "Eine kurze Beschreibung des Inhalts."
 
 #. Default: "Addable dossier types"
-#: ./opengever/repository/repositoryfolder.py:76
+#: ./opengever/repository/repositoryfolder.py:78
 msgid "label_addable_dossier_types"
 msgstr "Erlaubte Spezialdossiers"
 
@@ -83,17 +83,17 @@ msgid "label_delete_repository"
 msgstr "Ordnungsposition löschen"
 
 #. Default: "Description"
-#: ./opengever/repository/repositoryfolder.py:40
+#: ./opengever/repository/repositoryfolder.py:42
 msgid "label_description"
 msgstr "Beschreibung"
 
 #. Default: "Former reference"
-#: ./opengever/repository/repositoryfolder.py:70
+#: ./opengever/repository/repositoryfolder.py:72
 msgid "label_former_reference"
 msgstr "Früheres Zeichen"
 
 #. Default: "Location"
-#: ./opengever/repository/repositoryfolder.py:58
+#: ./opengever/repository/repositoryfolder.py:60
 msgid "label_location"
 msgstr "Standort"
 
@@ -103,7 +103,7 @@ msgid "label_reference_number_prefix"
 msgstr "Präfix des Aktenzeichens"
 
 #. Default: "Referenced activity"
-#: ./opengever/repository/repositoryfolder.py:63
+#: ./opengever/repository/repositoryfolder.py:65
 msgid "label_referenced_activity"
 msgstr "Leistung"
 
@@ -113,13 +113,13 @@ msgid "label_successfully_deleted"
 msgstr "Die Ordnungsposition wurde erfolgreich gelöscht."
 
 #. Default: "Valid from"
-#: ./opengever/repository/repositoryfolder.py:48
+#: ./opengever/repository/repositoryfolder.py:50
 #: ./opengever/repository/repositoryroot.py:20
 msgid "label_valid_from"
 msgstr "Gültig ab"
 
 #. Default: "Valid until"
-#: ./opengever/repository/repositoryfolder.py:53
+#: ./opengever/repository/repositoryfolder.py:55
 #: ./opengever/repository/repositoryroot.py:25
 msgid "label_valid_until"
 msgstr "Gültig bis"
@@ -143,6 +143,11 @@ msgstr "Status"
 #: ./opengever/repository/browser/deletion_templates/deletion.pt:26
 msgid "msg_delete_confirmation"
 msgstr "Möchten Sie die aktuelle Ordnungsposition wirklich löschen?"
+
+#. Default: "You are adding a repositoryfolder to a leafnode which already contains dossiers. This is only temporarily allowed and all dossiers must be moved into a new leafnode afterwards."
+#: ./opengever/repository/repositoryfolder.py:194
+msgid "msg_leafnode_warning"
+msgstr "Sie fügen eine Ordnungsposition einem Blattknoten hinzu, der bereits Dossiers enthält. Dies ist nur vorübergehend erlaubt und darin enthaltene Dossiers müssen anschliessend wieder in einen Blattknoten verschoben werden."
 
 #. Default: "Name"
 #: ./opengever/repository/browser/templates/referenceprefixmanager.pt:24
@@ -188,4 +193,3 @@ msgstr "Aufgaben"
 #: ./opengever/repository/browser/templates/referenceprefixmanager.pt:25
 msgid "unlock"
 msgstr "Freigeben"
-
