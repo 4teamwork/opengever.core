@@ -39,8 +39,13 @@
                 insert-after="++resource++opengever.meeting/protocol.js" />
 
     <javascript cacheable="True" compression="safe" cookable="True" expression=""
+                enabled="True" id="++resource++opengever.base/prepoverlay.js" inline="False"
+                insert-after="++resource++opengever.meeting/datetimepicker.js"
+                />
+
+    <javascript cacheable="True" compression="safe" cookable="True" expression=""
                 enabled="True" id="++resource++opengever.base/qtip.js" inline="False"
-                insert-after="++resource++opengever.meeting/datetimepicker.js" />
+                insert-after="++resource++opengever.base/prepoverlay.js" />
 
     <javascript cacheable="True" compression="safe" cookable="True" expression=""
                 enabled="True" id="++resource++opengever.base/tooltip.js" inline="False"

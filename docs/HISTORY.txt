@@ -5,6 +5,9 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
+- Readd prepoverlay.js, was removed by mistake.
+  [phgross]
+
 - Purge reference number mapping when dossiers are pasted.
   [deiferni]
 
