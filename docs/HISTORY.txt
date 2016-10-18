@@ -5,6 +5,11 @@ Changelog
 4.11.0 (unreleased)
 -------------------
 
+- Use ftw.tabbedview 3.5.4 to fix issue with duplicate history-entries.
+  The user no longer has to press the browser-back button twice on
+  tabbed-views.
+  [deiferni]
+
 - Readd prepoverlay.js, was removed by mistake.
   [phgross]
 
