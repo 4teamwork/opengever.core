@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.11.0 (unreleased)
+4.11.0 (2016-10-19)
 -------------------
 
 - Show warning message when adding a repositoryfolder to a leafnode
