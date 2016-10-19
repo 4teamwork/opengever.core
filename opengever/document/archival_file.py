@@ -2,6 +2,7 @@ from ftw.bumblebee.config import PROCESSING_QUEUE
 from ftw.bumblebee.interfaces import IBumblebeeServiceV3
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from plone.namedfile.file import NamedBlobFile
+from zope.globalrequest import getRequest
 import os
 
 
@@ -22,8 +23,9 @@ class ArchivalFileConverter(object):
             return
 
         self.set_state(STATE_CONVERTING)
-        IBumblebeeServiceV3(self.document).queue_conversion(
-            PROCESSING_QUEUE, self.get_callback_url(), target_format='pdf/a')
+        IBumblebeeServiceV3(getRequest()).queue_conversion(
+            self.document, PROCESSING_QUEUE,
+            self.get_callback_url(), target_format='pdf/a')
 
     def get_state(self):
         return IDocumentMetadata(self.document).archival_file_state
