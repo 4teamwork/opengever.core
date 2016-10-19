@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-10-05 13:07+0000\n"
+"POT-Creation-Date: 2016-10-18 14:56+0000\n"
 "PO-Revision-Date: 2016-08-10 05:15+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-base/fr/>\n"
@@ -27,7 +27,7 @@ msgstr "(INACTIF)"
 msgid "Copy Items"
 msgstr "Copier"
 
-#: ./opengever/base/browser/templates/gever-macros.pt:36
+#: ./opengever/base/browser/templates/gever-macros.pt:38
 msgid "No content"
 msgstr "Pas de contenu"
 
@@ -136,7 +136,7 @@ msgid "help_retention_period"
 msgstr "Durée entre la date du document plus récent contenu dans un dossier et la date à partir de laquelle le document n'est plus requis pour les activités administratives"
 
 #. Default: "-- Already removed object --"
-#: ./opengever/base/adapters.py:199
+#: ./opengever/base/adapters.py:209
 msgid "label_already_removed"
 msgstr "-- Déjà annulé --"
 
@@ -196,7 +196,7 @@ msgid "label_dateofsubmission"
 msgstr "Date de proposition (des documents)"
 
 #. Default: "An unexpected error has occured"
-#: ./opengever/base/browser/templates/gever-macros.pt:117
+#: ./opengever/base/browser/templates/gever-macros.pt:120
 msgid "label_default_error_message"
 msgstr "Une erreur est survenue"
 
@@ -251,14 +251,14 @@ msgid "label_search"
 msgstr "Recherche"
 
 #. Default: "Error"
-#: ./opengever/base/browser/templates/gever-macros.pt:116
+#: ./opengever/base/browser/templates/gever-macros.pt:119
 msgid "label_severity_error"
 msgstr "Erreur"
 
 #. Default: "Title"
 #: ./opengever/base/behaviors/base.py:24
 #: ./opengever/base/browser/translated_title.py:36
-#: ./opengever/base/widgets.py:77
+#: ./opengever/base/widgets.py:78
 msgid "label_title"
 msgstr "Titre"
 
@@ -303,8 +303,13 @@ msgid "msg_empty_clipboard"
 msgstr "Aucun objet ne peut être ajouté, le presse-papier est vide."
 
 #. Default: "No items available"
-#: ./opengever/base/widgets.py:49
+#: ./opengever/base/widgets.py:50
 msgid "msg_no_items_available"
+msgstr ""
+
+#. Default: "Can't paste items, it's not allowed to add objects of this type."
+#: ./opengever/base/browser/paste.py:36
+msgid "msg_pasting_not_allowed"
 msgstr ""
 
 #. Default: "Selected objects successfully copied."
@@ -313,7 +318,7 @@ msgid "msg_successfuly_copied"
 msgstr "Les objets sélectionnés ont été copiés."
 
 #. Default: "Objects from clipboard successfully pasted."
-#: ./opengever/base/browser/paste.py:37
+#: ./opengever/base/browser/paste.py:45
 msgid "msg_successfuly_pasted"
 msgstr "Les objets du presse-papiers ont été ajoutés."
 
@@ -362,7 +367,7 @@ msgstr "Vous n'avez pas trouvé ce que vous avez cherché? La ${advanced_search}
 msgid "search_results_advanced_link"
 msgstr "Recherche avancée"
 
-#: ./opengever/base/browser/templates/gever-macros.pt:99
+#: ./opengever/base/browser/templates/gever-macros.pt:101
 msgid "show all"
 msgstr "Tout afficher"
 

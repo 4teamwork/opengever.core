@@ -5,9 +5,11 @@ from opengever.base.behaviors.utils import hide_fields_from_behavior
 from opengever.base.browser.translated_title import TranslatedTitleAddForm
 from opengever.base.browser.translated_title import TranslatedTitleEditForm
 from opengever.base.interfaces import IReferenceNumber
+from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.repository import _
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.repository.interfaces import IRepositoryFolderRecords
+from plone import api
 from plone.app.content.interfaces import INameFromTitle
 from plone.dexterity import content
 from plone.directives import form
@@ -186,6 +188,25 @@ class RepositoryFolder(content.Container):
 
 class AddForm(TranslatedTitleAddForm):
     grok.name('opengever.repository.repositoryfolder')
+
+    def render(self):
+        if self.contains_dossiers():
+            msg = _('msg_leafnode_warning',
+                    default=u'You are adding a repositoryfolder to a leafnode '
+                    'which already contains dossiers. This is only '
+                    'temporarily allowed and all dossiers must be moved into '
+                    'a new leafnode afterwards.')
+
+            api.portal.show_message(
+                msg, request=self.request, type='warning')
+
+        return super(AddForm, self).render()
+
+    def contains_dossiers(self):
+        dossiers = api.content.find(context=self.context,
+                                    depth=1,
+                                    object_provides=IDossierMarker)
+        return bool(dossiers)
 
     def updateFields(self):
         super(AddForm, self).updateFields()

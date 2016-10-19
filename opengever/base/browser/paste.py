@@ -32,12 +32,26 @@ class PasteClipboardView(grok.View):
                                     request=self.request, type='error')
             return self.redirect()
 
+        if not self.is_pasting_objects_allowed(objs):
+            msg = _(u"msg_pasting_not_allowed",
+                    default=u"Can't paste items, it's not allowed to add "
+                    "objects of this type.")
+            api.portal.show_message(
+                message=msg, request=self.request, type='error')
+            return self.redirect()
+
         self.activate_request_layer()
         self.copy_objects(objs)
         msg = _(u"msg_successfuly_pasted",
                 default=u"Objects from clipboard successfully pasted.")
         api.portal.show_message(message=msg, request=self.request, type='info')
         return self.redirect()
+
+    def is_pasting_objects_allowed(self, objs):
+        allowed_content_types = [
+            fti.id for fti in self.context.allowedContentTypes()]
+
+        return all(obj.portal_type in allowed_content_types for obj in objs)
 
     def activate_request_layer(self):
         alsoProvides(self.request, ICopyPasteRequestLayer)

@@ -159,3 +159,21 @@ class TestCopyPaste(FunctionalTestCase):
                           'Dossier modified: dossier-1',
                           u'Document added: Testdokum\xe4nt',
                           'Dossier added: dossier-1'], titles)
+
+    @browsing
+    def test_pasting_dossiers_into_a_branch_node_redirects_back_and_shows_statusmessage(self, browser):
+        branch_node = create(Builder('repository'))
+        leaf_node = create(Builder('repository').within(branch_node))
+        dossier = create(Builder('dossier').within(leaf_node))
+
+        browser.login().open(
+            leaf_node, view="copy_items",
+            data={'paths:list': ['/'.join(dossier.getPhysicalPath())]})
+
+        browser.login().open(branch_node)
+        browser.click_on('Paste')
+
+        self.assertEqual(
+            ["Can't paste items, it's not allowed to add objects of this type."],
+            error_messages())
+        self.assertEqual(branch_node.absolute_url(), browser.url)
