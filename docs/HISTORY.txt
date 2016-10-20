@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.11.1 (unreleased)
+4.11.1 (2016-10-20)
 -------------------
 
 - Nothing changed yet.
