@@ -1,0 +1,10 @@
+OneGov GEVER Dokumentation
+==========================
+
+Inhalt:
+
+.. toctree::
+   :maxdepth: 3
+
+   api/index.rst
+   officeconnector/index.rst

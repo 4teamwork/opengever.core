@@ -86,7 +86,7 @@
 
    .. py:attribute:: temporary_former_reference_number
 
-       :Feldname: :field-title:`Temporary former reference number`
+       :Feldname: :field-title:`Temporäres früheres Aktenzeichen`
        :Datentyp: ``TextLine``
        
        
