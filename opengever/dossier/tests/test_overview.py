@@ -11,8 +11,6 @@ from opengever.testing import FunctionalTestCase
 
 class TestOverview(FunctionalTestCase):
 
-    use_browser = True
-
     def setUp(self):
         super(TestOverview, self).setUp()
 
