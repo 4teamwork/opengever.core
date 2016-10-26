@@ -5,6 +5,10 @@ Changelog
 4.11.1 (unreleased)
 -------------------
 
+- Add participations box implementation to dossier overview for the new
+  contact implementation.
+  [phgross]
+
 - Show statusmessage and redirect back to document when calling a checkin
   view without selecting documents.
   [phgross]

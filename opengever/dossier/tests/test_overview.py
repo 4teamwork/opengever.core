@@ -1,9 +1,11 @@
-from DateTime import DateTime
 from datetime import date
+from DateTime import DateTime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from lxml.etree import tostring
+from opengever.contact.interfaces import IContactSettings
+from opengever.core.testing import toggle_feature
 from opengever.testing import FunctionalTestCase
 
 
@@ -84,6 +86,28 @@ class TestOverview(FunctionalTestCase):
         self.assertEqual(
             [self.hugo.label()],
             browser.css('#participantsBox li:not(.moreLink) a').text)
+
+    @browsing
+    def test_contact_participations_are_listed_when_contact_feature_is_enabled(self, browser):
+        create(Builder('contactfolder'))
+        toggle_feature(IContactSettings, enabled=True)
+
+        hans = create(Builder('person')
+                      .having(firstname=u'Hans', lastname=u'M\xfcller'))
+        peter_ag = create(Builder('organization').having(name=u'Peter AG'))
+        create(Builder('contact_participation')
+               .for_contact(hans)
+               .for_dossier(self.dossier)
+               .with_roles(['participation']))
+        create(Builder('contact_participation')
+               .for_contact(peter_ag)
+               .for_dossier(self.dossier)
+               .with_roles(['final-drawing']))
+
+        browser.login().open(self.dossier, view='tabbedview_view-overview')
+        self.assertEqual(
+            [u'M\xfcller Hans', 'Peter AG'],
+            browser.css('#participationsBox li:not(.moreLink) a').text)
 
     @browsing
     def test_document_box_items_are_limited_to_ten_and_sorted_by_modified(self, browser):
