@@ -72,9 +72,8 @@
 
   function loadPreviousTabbedviewTableItems() {
     var pagenumber = getTabbedviewTablePagenumber();
-    if (!pagenumber) {
-      // If there is no pagenumber given, the listing shows the first page,
-      // so there are no previous items.
+    if (pagenumber === 1) {
+      // We don't need to fetch previous elements if we are on the first page
       return;
     }
     fetchTabbedviewTableShowroomItems(pagenumber - 1).done(function(data) {
@@ -277,4 +276,4 @@
     .on("tooltip.show", function() { scanForBrokenImages(".bumblebee-thumbnail"); });
   $(init);
 
-})(window, window.showroom, window.jQuery);
+})(window, window.ftw.showroom, window.jQuery);
