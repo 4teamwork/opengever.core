@@ -198,7 +198,8 @@ class CheckinDocuments(layout.FormWrapper, grok.View):
             IStatusMessage(self.request).addStatusMessage(
                 msg, type='error')
 
-            return get_containing_document_tab_url(self.context)
+            return self.request.RESPONSE.redirect(
+                get_containing_document_tab_url(self.context))
 
 
 class CheckinDocumentWithoutComment(BrowserView):
@@ -226,7 +227,15 @@ class CheckinDocumentsWithoutComment(CheckinDocumentWithoutComment):
 
     """
     def checkin(self):
-        self.checkin_controller.checkin_documents(self.request.get('paths'))
+        try:
+            self.checkin_controller.checkin_documents(self.request.get('paths'))
+        except NoItemsSelected:
+            msg = _(u'You have not selected any documents')
+            IStatusMessage(self.request).addStatusMessage(
+                msg, type='error')
+
+            return self.request.RESPONSE.redirect(
+                get_containing_document_tab_url(self.context))
 
     def redirect(self):
         return self.request.RESPONSE.redirect(
