@@ -1,6 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.exceptions import FormFieldNotFound
 from opengever.core.testing import activate_filing_number
 from opengever.core.testing import inactivate_filing_number
 from opengever.testing import FunctionalTestCase
@@ -9,13 +10,12 @@ import urllib
 
 class TestSearchForm(FunctionalTestCase):
 
-    use_browser = True
+    @browsing
+    def test_filing_number_fields_is_hidden_in_site_without_filing_number_support(self, browser):
+        browser.login().open(self.portal, view='advanced_search')
 
-    def test_filing_number_fields_is_hidden_in_site_without_filing_number_support(self):
-        self.browser.open('http://nohost/plone/advanced_search')
-
-        with self.assertRaises(LookupError):
-            self.browser.fill({'Filing number': 'Test'})
+        with self.assertRaises(FormFieldNotFound):
+            browser.fill({'Filing number': 'Test'})
 
 
 class TestSearchFormWithFilingNumberSupport(FunctionalTestCase):
@@ -35,32 +35,28 @@ class TestSearchFormWithFilingNumberSupport(FunctionalTestCase):
 
 
 class TestSearchFormObjectProvidesDescription(FunctionalTestCase):
-    use_browser = True
 
-    def test_contains_special_info_in_a_multi_client_setup(self):
+    @browsing
+    def test_contains_special_info_in_a_multi_client_setup(self, browser):
         create(Builder('admin_unit'))
 
-        self.browser.open('%s/advanced_search' % self.portal.absolute_url())
+        browser.login().open(self.portal, view='advanced_search')
 
-        formhelp = self.browser.css(
-            '#formfield-form-widgets-object_provides span.formHelp')[0]
         self.assertEquals(
-            'Select the contenttype to be searched for.'
-            'It searches only items from the current client.',
-            formhelp.plain_text())
+            ['Select the contenttype to be searched for.It searches '
+             'only items from the current client.'],
+            browser.css('#formfield-form-widgets-object_provides span.formHelp').text)
 
-    def test_not_contains_client_info_in_a_single_client_setup(self):
-        self.browser.open('%s/advanced_search' % self.portal.absolute_url())
+    @browsing
+    def test_not_contains_client_info_in_a_single_client_setup(self, browser):
+        browser.login().open(self.portal, view='advanced_search')
 
-        formhelp = self.browser.css(
-            '#formfield-form-widgets-object_provides span.formHelp')[0]
         self.assertEquals(
-            'Select the contenttype to be searched for.',
-            formhelp.plain_text())
+            ['Select the contenttype to be searched for.'],
+            browser.css('#formfield-form-widgets-object_provides span.formHelp').text)
 
 
 class TestSearchWithContent(FunctionalTestCase):
-    use_browser = True
 
     def setUp(self):
         super(TestSearchWithContent, self).setUp()
@@ -68,58 +64,65 @@ class TestSearchWithContent(FunctionalTestCase):
         self.dossier1 = create(Builder("dossier").titled(u"Dossier1"))
         self.dossier2 = create(Builder("dossier").titled(u"Dossier2"))
 
-    def test_search_dossiers(self):
-        self.browser.open('%s/advanced_search' % self.dossier1.absolute_url())
-        self.browser.fill({'form.widgets.searchableText': "dossier1",
-                           'form.widgets.object_provides': ['opengever.dossier.behaviors.dossier.IDossierMarker']})
-        self.browser.click('form.buttons.button_search')
-        self.assertSearchResultCount(1)
+    @browsing
+    def test_search_dossiers(self, browser):
+        browser.login().open(self.dossier1, view='advanced_search')
+        browser.fill({
+            'Text': "dossier1",
+            'Type': ['opengever.dossier.behaviors.dossier.IDossierMarker']})
+        browser.css('#form-buttons-button_search').first.click()
 
-        self.browser.open('http://nohost/plone/@@search?object_provides=opengever.dossier.behaviors.dossier.IDossierMarker&SearchableText=dossier1')
+        self.assertEquals(['1'], browser.css('#search-results-number').text)
+        self.assertEquals(
+            'http://nohost/plone/@@search?object_provides=opengever.dossier.behaviors.dossier.IDossierMarker&SearchableText=dossier1',
+            browser.url)
 
-    def test_search_documents(self):
+    @browsing
+    def test_search_documents(self, browser):
         create(Builder("document").within(self.dossier1).titled("Document1"))
         create(Builder("document").within(self.dossier2).titled("Document2"))
 
-        # search documents (we can't find the document because we must change the content-type)
-        self.browser.open('%s/advanced_search' % self.dossier1.absolute_url())
-        self.browser.fill({'form.widgets.searchableText': "document1",
-                           'form.widgets.object_provides': ['opengever.dossier.behaviors.dossier.IDossierMarker']})
-        self.browser.click('form.buttons.button_search')
-        self.assertSearchResultCount(0)
-        self.browser.open('http://nohost/plone/@@search?object_provides=opengever.dossier.behaviors.dossier.IDossierMarker&SearchableText=document1')
+        # search documents (we can't find the document because we must
+        # change the content-type)
+        browser.login().open(self.dossier1, view='advanced_search')
+        browser.fill({
+            'Text': "document1",
+            'Type': ['opengever.dossier.behaviors.dossier.IDossierMarker']})
+        browser.css('#form-buttons-button_search').first.click()
+        self.assertEquals(['0'], browser.css('#search-results-number').text)
 
         # search documents with the right content-type
-        self.browser.open('%s/advanced_search' % self.dossier1.absolute_url())
-        self.browser.fill({'form.widgets.searchableText': "(document1)",
-                          'form.widgets.object_provides': ['opengever.document.behaviors.IBaseDocument']})
-        self.browser.click('form.buttons.button_search')
-        self.browser.open('http://nohost/plone/@@search?object_provides=opengever.document.behaviors.IBaseDocument&SearchableText=document1')
-        self.assertSearchResultCount(1)
+        browser.open(self.dossier1, view='advanced_search')
+        browser.fill({
+            'Text': "document1",
+            'Type': ['opengever.document.behaviors.IBaseDocument']})
+        browser.css('#form-buttons-button_search').first.click()
 
-    def test_search_tasks(self):
+        self.assertEquals(['1'], browser.css('#search-results-number').text)
+        self.assertEquals(['Document1'], browser.css('.searchItem dt').text)
+
+    @browsing
+    def test_search_tasks(self, browser):
         create(Builder("task").within(self.dossier1).titled("Task1"))
         create(Builder("task").within(self.dossier2).titled("Task2"))
 
-        # search tasks (we can't find the task because we must change the content-type)
-        self.browser.open('%s/advanced_search' % self.dossier1.absolute_url())
-        self.browser.fill({'form.widgets.searchableText': "task1",
-                           'form.widgets.object_provides': ['opengever.document.behaviors.IBaseDocument']})
-        self.browser.click('form.buttons.button_search')
-        self.assertSearchResultCount(0)
-        self.browser.open('http://nohost/plone/@@search?object_provides=opengever.document.behaviors.IBaseDocument&SearchableText=task1')
-
+        # search tasks (we can't find the task because we must change
+        # the content-type)
+        browser.login().open(self.dossier1, view='advanced_search')
+        browser.fill({
+            'Text': "task1",
+            'Type': ['opengever.dossier.behaviors.dossier.IDossierMarker']})
+        browser.css('#form-buttons-button_search').first.click()
+        self.assertEquals(['0'], browser.css('#search-results-number').text)
 
         # search tasks with the right content-type
-        self.browser.open('%s/advanced_search' % self.dossier1.absolute_url())
-        self.browser.fill({'form.widgets.searchableText': "task1",
-                          'form.widgets.object_provides': ['opengever.task.task.ITask']})
-        self.browser.click('form.buttons.button_search')
-        self.assertSearchResultCount(1)
-        self.browser.open('http://nohost/plone/@@search?object_provides=opengever.task.task.ITask&SearchableText=task1')
-
-    def assertSearchResultCount(self, count):
-        self.assertEquals(str(count), self.browser.locate("#search-results-number").text)
+        browser.login().open(self.dossier1, view='advanced_search')
+        browser.fill({
+            'Text': "task1",
+            'Type': ['opengever.task.task.ITask']})
+        browser.css('#form-buttons-button_search').first.click()
+        self.assertEquals(['1'], browser.css('#search-results-number').text)
+        self.assertEquals(['Task1'], browser.css('.searchItem dt').text)
 
 
 class TestSearchWithoutContent(FunctionalTestCase):
