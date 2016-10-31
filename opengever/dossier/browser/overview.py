@@ -2,6 +2,8 @@ from Acquisition import aq_inner
 from five import grok
 from opengever.base.browser.boxes_view import BoxesViewMixin
 from opengever.base.browser.helper import get_css_class
+from opengever.contact import is_contact_feature_enabled
+from opengever.contact.models import Participation
 from opengever.dossier import _
 from opengever.dossier import _ as _dossier
 from opengever.dossier.base import DOSSIER_STATES_OPEN
@@ -38,23 +40,43 @@ class DossierOverview(BoxesViewMixin, grok.View, GeverTabMixin):
             sort_order='reverse')
 
     def boxes(self):
-        return [
-            [
-                dict(id='newest_tasks', content=self.tasks(),
-                     href='tasks', label=_("Newest tasks")),
-                dict(id='participants', content=self.sharing(),
-                     href='participants', label=_("Participants"),
-                     available=self.context.has_participation_support()),
-                dict(id='references', content=self.linked_dossiers(),
-                     label=_('label_linked_dossiers',
-                             default='Linked Dossiers')),
-            ], [
-                dict(id='newest_documents', content=self.documents(),
-                     href='documents', label=_("Newest documents")),
-                dict(id='description', content=self.description,
-                     label=_("Description")),
-            ]
-        ]
+        return [[self.make_task_box(),
+                 self.make_participation_box(),
+                 self.make_reference_box()],
+                [self.make_document_box(),
+                 self.make_description_box()]]
+
+    def make_participation_box(self):
+        if is_contact_feature_enabled():
+            return dict(id='participations',
+                        content=self.sql_participations(),
+                        href='participations',
+                        label=_("Participations"),
+                        available=self.context.has_participation_support())
+
+        else:
+            return dict(id='participants',
+                        content=self.plone_participations(),
+                        href='participants',
+                        label=_("Participants"),
+                        available=self.context.has_participation_support())
+
+    def make_task_box(self):
+        return dict(id='newest_tasks', content=self.tasks(),
+                    href='tasks', label=_("Newest tasks"))
+
+    def make_reference_box(self):
+        return dict(
+            id='references', content=self.linked_dossiers(),
+            label=_('label_linked_dossiers', default='Linked Dossiers'))
+
+    def make_document_box(self):
+        return dict(id='newest_documents', content=self.documents(),
+                    href='documents', label=_("Newest documents"))
+
+    def make_description_box(self):
+        return dict(id='description', content=self.description,
+                    label=_("Description"))
 
     def is_subdossier_navigation_available(self):
         main_dossier = self.context.get_main_dossier()
@@ -78,7 +100,20 @@ class DossierOverview(BoxesViewMixin, grok.View, GeverTabMixin):
         return IContentListing(self.catalog(
             ['opengever.document.document', 'ftw.mail.mail', ])[:10])
 
-    def sharing(self):
+    def sql_participations(self):
+        participations = []
+        for participation in Participation.query.by_dossier(self.context):
+            participant = participation.participant
+            participations.append({
+                'getURL': participant.get_url(),
+                'Title': participant.get_title(),
+                'css_class': participant.get_css_class(),
+            })
+
+        return sorted(participations,
+                      key=lambda participation: participation.get('Title'))
+
+    def plone_participations(self):
         if not self.context.has_participation_support():
             return []
 
