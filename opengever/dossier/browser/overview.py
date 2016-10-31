@@ -39,6 +39,13 @@ class DossierOverview(BoxesViewMixin, grok.View, GeverTabMixin):
             sort_on='modified',
             sort_order='reverse')
 
+    def boxes(self):
+        return [[self.make_task_box(),
+                 self.make_participation_box(),
+                 self.make_reference_box()],
+                [self.make_document_box(),
+                 self.make_description_box()]]
+
     def make_participation_box(self):
         if is_contact_feature_enabled():
             return dict(id='participations',
@@ -54,22 +61,22 @@ class DossierOverview(BoxesViewMixin, grok.View, GeverTabMixin):
                         label=_("Participants"),
                         available=self.context.has_participation_support())
 
-    def boxes(self):
-        return [
-            [
-                dict(id='newest_tasks', content=self.tasks(),
-                     href='tasks', label=_("Newest tasks")),
-                self.make_participation_box(),
-                dict(id='references', content=self.linked_dossiers(),
-                     label=_('label_linked_dossiers',
-                             default='Linked Dossiers')),
-            ], [
-                dict(id='newest_documents', content=self.documents(),
-                     href='documents', label=_("Newest documents")),
-                dict(id='description', content=self.description,
-                     label=_("Description")),
-            ]
-        ]
+    def make_task_box(self):
+        return dict(id='newest_tasks', content=self.tasks(),
+                    href='tasks', label=_("Newest tasks"))
+
+    def make_reference_box(self):
+        return dict(
+            id='references', content=self.linked_dossiers(),
+            label=_('label_linked_dossiers', default='Linked Dossiers'))
+
+    def make_document_box(self):
+        return dict(id='newest_documents', content=self.documents(),
+                    href='documents', label=_("Newest documents"))
+
+    def make_description_box(self):
+        return dict(id='description', content=self.description,
+                    label=_("Description"))
 
     def is_subdossier_navigation_available(self):
         main_dossier = self.context.get_main_dossier()
