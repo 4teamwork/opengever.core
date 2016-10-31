@@ -5,6 +5,9 @@ Changelog
 4.11.1 (unreleased)
 -------------------
 
+- Copy participations whenever a dossier is copied.
+  [deiferni]
+
 - Add participations box implementation to dossier overview for the new
   contact implementation.
   [phgross]
