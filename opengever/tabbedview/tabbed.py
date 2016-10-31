@@ -31,6 +31,8 @@ class GeverTabbedView(TabbedView):
     def _fill_with_defaults(self, tabs):
         finished_tabs = []
         for tab in tabs:
+            if tab is None:
+                continue
             new_tab = self._make_tab_with_defaults()
             # overwrite defaults with definition, if specified
             new_tab.update(tab)

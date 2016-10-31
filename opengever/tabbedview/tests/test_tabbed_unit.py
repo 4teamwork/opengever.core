@@ -21,6 +21,17 @@ class ExtensiveTabDefs(GeverTabbedView):
         }]
 
 
+class NoneTabDefs(GeverTabbedView):
+
+    def _get_tabs(self):
+        return [
+            None,
+            {'id': 'foo',
+             'title': 'Foo!'},
+            None
+        ]
+
+
 class TestUnitGeverTabbedView(TestCase):
 
     def test_prefills_defaults(self):
@@ -42,3 +53,13 @@ class TestUnitGeverTabbedView(TestCase):
                 'class': None,
             }],
             ExtensiveTabDefs(None, None).get_tabs())
+
+    def test_filters_empty_tabs(self):
+        self.assertEqual([{
+                'id': 'foo',
+                'title': 'Foo!',
+                'icon': None,
+                'url': '#',
+                'class': None,
+            }],
+            NoneTabDefs(None, None).get_tabs())
