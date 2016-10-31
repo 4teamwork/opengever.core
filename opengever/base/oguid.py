@@ -17,12 +17,20 @@ class Oguid(object):
     SEPARATOR = ':'
 
     @classmethod
-    def for_object(cls, context):
-        """Create the Oguid of a Plone content object."""
+    def for_object(cls, context, register=False):
+        """Create the Oguid of a Plone content object.
 
-        int_id = getUtility(IIntIds).queryId(context)
+        Optionally also register the object if on intid could be retrieved.
+        This helps generating oguids for objects that are created in the same
+        request and might not have an intid assigned yet.
+
+        """
+        intids = getUtility(IIntIds)
+        int_id = intids.queryId(context)
         if not int_id:
-            return None
+            if not register:
+                return None
+            int_id = intids.register(context)
         return cls(get_current_admin_unit().id(), int_id)
 
     @classmethod
