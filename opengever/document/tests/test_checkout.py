@@ -4,6 +4,7 @@ from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from ftw.testing import freeze
 from opengever.base.interfaces import IRedirector
@@ -375,6 +376,29 @@ class TestCheckinViews(FunctionalTestCase):
         history = repository_tool.getHistory(document2)
         last_entry = repository_tool.retrieve(document2, len(history)-1)
         self.assertEquals(None, last_entry.comment)
+
+    @browsing
+    def test_multi_checkin_shows_message_when_no_documents_are_selected(self, browser):
+        browser.login().open(
+            self.dossier,
+            data={'paths': [],
+                  'checkin_without_comment:method': 1,
+                  '_authenticator': createToken()})
+
+        self.assertEquals(['You have not selected any documents'],
+                          error_messages())
+        self.assertEquals('http://nohost/plone/dossier-1#documents', browser.url)
+
+        browser.login().open(
+            self.dossier,
+            data={'paths': [],
+                  'checkin_documents:method': 1,
+                  '_authenticator': createToken()})
+        browser.click_on('Checkin')
+
+        self.assertEquals(['You have not selected any documents'],
+                          error_messages())
+        self.assertEquals('http://nohost/plone/dossier-1#documents', browser.url)
 
 
 # TODO: rewrite this test-case to express intent

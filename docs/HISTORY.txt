@@ -5,7 +5,9 @@ Changelog
 4.11.1 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Show statusmessage and redirect back to document when calling a checkin
+  view without selecting documents.
+  [phgross]
 
 
 4.11.0 (2016-10-19)
