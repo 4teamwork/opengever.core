@@ -7,7 +7,7 @@ from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.base.oguid import Oguid
 from opengever.contact.interfaces import IContactSettings
-from opengever.contact.models.participation import Participation
+from opengever.contact.models import Participation
 from opengever.core.testing import toggle_feature
 from opengever.testing import FunctionalTestCase
 from opengever.testing.helpers import get_contacts_token
@@ -53,6 +53,43 @@ class TestDossierParticipation(FunctionalTestCase):
                                .for_ogds_user(ogds_user))
 
         self.assertEqual(dossier, participation.resolve_dossier())
+
+    def test_participations_are_copied_when_dossier_is_copied(self):
+        dossier = create(Builder('dossier'))
+        peter = create(Builder('person').having(
+            firstname=u'peter', lastname=u'hans'))
+        organization = create(Builder('organization').named('ACME'))
+        org_role = create(Builder('org_role').having(
+            person=peter, organization=organization, function=u'cheffe'))
+        ogds_user = create(Builder('ogds_user')
+                           .id('peter')
+                           .having(firstname=u'Hans', lastname=u'Peter')
+                           .as_contact_adapter())
+        ogds_participation = create(
+            Builder('ogds_user_participation')
+            .for_dossier(dossier)
+            .for_ogds_user(ogds_user))
+        peters_participation = create(
+            Builder('contact_participation').having(
+                contact=peter,
+                dossier_oguid=Oguid.for_object(dossier)))
+        organization_participation = create(
+            Builder('contact_participation').having(
+                contact=organization,
+                dossier_oguid=Oguid.for_object(dossier)))
+        org_role_participation = create(
+            Builder('org_role_participation').having(
+                org_role=org_role,
+                dossier_oguid=Oguid.for_object(dossier)))
+
+        original_participations = Participation.query.by_dossier(dossier).all()
+
+        copied_dossier = api.content.copy(source=dossier, target=self.portal)
+        copied_participations = Participation.query.by_dossier(copied_dossier).all()
+        self.assertEqual(4, len(copied_participations))
+        intersecting_elements = set(original_participations).intersection(
+                                                    set(copied_participations))
+        self.assertEqual(0, len(intersecting_elements))
 
 
 class TestParticipationWrapper(FunctionalTestCase):
