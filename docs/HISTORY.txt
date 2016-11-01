@@ -5,6 +5,9 @@ Changelog
 4.11.1 (unreleased)
 -------------------
 
+- Add a tab to list all periods of a committee.
+  [deiferni]
+
 - Fix filterbox for journal entries:
   Filtering now also works properly for comments and actor fields.
   [lgraf]
