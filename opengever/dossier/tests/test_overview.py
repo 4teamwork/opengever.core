@@ -1,5 +1,5 @@
-from DateTime import DateTime
 from datetime import date
+from DateTime import DateTime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -8,8 +8,6 @@ from opengever.testing import FunctionalTestCase
 
 
 class TestOverview(FunctionalTestCase):
-
-    use_browser = True
 
     def setUp(self):
         super(TestOverview, self).setUp()

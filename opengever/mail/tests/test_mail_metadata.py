@@ -28,8 +28,6 @@ def set_preserved_as_paper_default(value):
 
 class TestMailMetadataWithBuilder(FunctionalTestCase):
 
-    use_browser = True
-
     def create_mail(self):
         mail = create(Builder("mail").with_message(MAIL_DATA))
         return mail

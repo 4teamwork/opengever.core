@@ -7,7 +7,6 @@ from pkg_resources import resource_string
 
 
 class TestPreview(FunctionalTestCase):
-    use_browser = True
 
     @browsing
     def test_mail_preview_tab(self, browser):

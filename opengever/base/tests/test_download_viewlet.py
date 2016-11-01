@@ -6,7 +6,6 @@ from plone.namedfile.file import NamedBlobFile
 
 
 class TestDownloadViewlet(FunctionalTestCase):
-    use_browser = True
 
     def setUp(self):
         super(TestDownloadViewlet, self).setUp()

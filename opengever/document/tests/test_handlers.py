@@ -15,8 +15,6 @@ from zope.component import getMultiAdapter
 
 class TestHandlers(FunctionalTestCase):
 
-    use_browser = True
-
     def setUp(self):
         super(TestHandlers, self).setUp()
         self.setup_fullname(fullname='Peter')
