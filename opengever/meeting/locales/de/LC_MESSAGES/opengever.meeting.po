@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-09-29 09:10+0000\n"
+"POT-Creation-Date: 2016-11-01 08:51+0000\n"
 "PO-Revision-Date: 2015-04-10 09:01+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -167,7 +167,7 @@ msgstr "Export-Einstellungen"
 msgid "Generate excerpts for all proposals"
 msgstr "Für alle Anträge wird ein Protokollauszug generiert und ins Antragsdossier zurückgespielt"
 
-#: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt:86
+#: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt:87
 msgid "History"
 msgstr "Verlauf"
 
@@ -469,11 +469,13 @@ msgstr "Datum"
 
 #. Default: "Date from"
 #: ./opengever/meeting/tabs/membershiplisting.py:29
+#: ./opengever/meeting/tabs/periodlisting.py:31
 msgid "column_date_from"
 msgstr "Von"
 
 #. Default: "Date to"
 #: ./opengever/meeting/tabs/membershiplisting.py:33
+#: ./opengever/meeting/tabs/periodlisting.py:36
 msgid "column_date_to"
 msgstr "Bis"
 
@@ -526,7 +528,7 @@ msgstr "Status"
 #. Default: "Title"
 #: ./opengever/meeting/tabs/committeelisting.py:24
 #: ./opengever/meeting/tabs/meetinglisting.py:46
-#: ./opengever/meeting/tabs/proposallisting.py:42
+#: ./opengever/meeting/tabs/periodlisting.py:27
 msgid "column_title"
 msgstr "Titel"
 
@@ -632,7 +634,7 @@ msgid "label_agendaitem_list_template"
 msgstr "Vorlage Traktandenliste"
 
 #. Default: "Attachments"
-#: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt:26
+#: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt:27
 #: ./opengever/meeting/browser/submitdocuments.py:36
 #: ./opengever/meeting/proposal.py:148
 msgid "label_attachments"
@@ -724,7 +726,7 @@ msgstr "Dieses Traktandum beschliessen"
 
 #. Default: "Decision"
 #: ./opengever/meeting/browser/meetings/protocol.py:138
-#: ./opengever/meeting/proposal.py:207
+#: ./opengever/meeting/proposal.py:213
 msgid "label_decision"
 msgstr "Beschluss"
 
@@ -734,7 +736,7 @@ msgid "label_decision_draft"
 msgstr "Beschlussentwurf"
 
 #. Default: "Decision number"
-#: ./opengever/meeting/proposal.py:222
+#: ./opengever/meeting/proposal.py:233
 msgid "label_decision_number"
 msgstr "Beschlussnummer"
 
@@ -756,17 +758,17 @@ msgstr "Zu eröffnen an"
 
 #. Default: "Discussion"
 #: ./opengever/meeting/browser/meetings/protocol.py:135
-#: ./opengever/meeting/proposal.py:302
+#: ./opengever/meeting/proposal.py:314
 msgid "label_discussion"
 msgstr "Diskussion"
 
 #. Default: "Dossier"
-#: ./opengever/meeting/proposal.py:285
+#: ./opengever/meeting/proposal.py:297
 msgid "label_dossier"
 msgstr "Dossier"
 
 #. Default: "Dossier not available"
-#: ./opengever/meeting/proposal.py:379
+#: ./opengever/meeting/proposal.py:391
 msgid "label_dossier_not_available"
 msgstr "Dossier nicht verfügbar"
 
@@ -812,7 +814,7 @@ msgid "label_end"
 msgstr "Ende"
 
 #. Default: "Excerpt"
-#: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt:67
+#: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt:68
 msgid "label_excerpt"
 msgstr "Protokollauszug"
 
@@ -882,7 +884,7 @@ msgid "label_main_attributes"
 msgstr "Eigenschaften"
 
 #. Default: "Meeting"
-#: ./opengever/meeting/proposal.py:192
+#: ./opengever/meeting/proposal.py:193
 msgid "label_meeting"
 msgstr "Sitzung"
 
@@ -1044,7 +1046,7 @@ msgid "label_upcoming_meetings"
 msgstr "Kommende Sitzungen"
 
 #. Default: "State"
-#: ./opengever/meeting/proposal.py:219
+#: ./opengever/meeting/proposal.py:229
 msgid "label_workflow_state"
 msgstr "Status"
 
@@ -1060,6 +1062,16 @@ msgstr "Ort"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:150
 msgid "meetingdossier"
 msgstr "Sitzungsdossier"
+
+#. Default: "Meetings"
+#: ./opengever/meeting/browser/tabbed.py:13
+msgid "meetings"
+msgstr "Sitzungen"
+
+#. Default: "Memberships"
+#: ./opengever/meeting/browser/tabbed.py:19
+msgid "memberships"
+msgstr "Mitgliedschaften"
 
 #. Default: "Changes saved"
 #: ./opengever/meeting/browser/meetings/protocol.py:261
@@ -1141,6 +1153,11 @@ msgstr "Es gibt nicht traktandierte Anträge, die diesem Gremium zugewiesen sind
 msgid "new_unscheduled_proposals"
 msgstr "Neu eingereichte Anträge"
 
+#. Default: "Overview"
+#: ./opengever/meeting/browser/tabbed.py:10
+msgid "overview"
+msgstr "Übersicht"
+
 #. Default: "Paragraph successfully added."
 #: ./opengever/meeting/browser/meetings/agendaitem.py:273
 msgid "paragraph_added"
@@ -1156,6 +1173,11 @@ msgstr "Teilnehmende"
 #: ./opengever/meeting/model/proposal.py:140
 msgid "pending"
 msgstr "In Bearbeitung"
+
+#. Default: "Periods"
+#: ./opengever/meeting/browser/tabbed.py:22
+msgid "periods"
+msgstr "Perioden"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:126
 msgid "presidency"
@@ -1284,6 +1306,11 @@ msgstr "einreichen"
 #: ./opengever/meeting/model/proposal.py:142
 msgid "submitted"
 msgstr "Eingereicht"
+
+#. Default: "Submitted Proposals"
+#: ./opengever/meeting/browser/tabbed.py:16
+msgid "submittedproposals"
+msgstr "Anträge"
 
 #. Default: "${amount} matches."
 #: ./opengever/meeting/browser/templates/no_selection.pt:2

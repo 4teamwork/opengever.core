@@ -218,16 +218,7 @@ msgstr ""
 msgid "members"
 msgstr ""
 
-msgid "meetings"
-msgstr ""
-
-msgid "memberships"
-msgstr ""
-
 msgid "sablontemplates"
-msgstr ""
-
-msgid "submittedproposals"
 msgstr ""
 
 msgid "versions"

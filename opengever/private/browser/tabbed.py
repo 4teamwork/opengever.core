@@ -1,21 +1,19 @@
 from five import grok
-from ftw.tabbedview.browser.tabbed import TabbedView
 from opengever.dossier.browser.tabbed import DossierTabbedView
 from opengever.private import _
 from opengever.private.folder import IPrivateFolder
+from opengever.tabbedview import GeverTabbedView
 from opengever.tabbedview.browser.tabs import Dossiers
 
 
-class PrivateFolderTabbedView(TabbedView):
+class PrivateFolderTabbedView(GeverTabbedView):
 
     dossier_tab = {
         'id': 'dossiers',
-        'title': _(u'label_dossiers', default=u'Dossiers'),
-        'icon': None,
-        'url': '#',
-        'class': None}
+        'title': _(u'label_dossiers', default=u'Dossiers')
+    }
 
-    def get_tabs(self):
+    def _get_tabs(self):
         return [self.dossier_tab]
 
 
@@ -30,7 +28,7 @@ class PrivateDossierTabbedView(DossierTabbedView):
     participation and info tab.
     """
 
-    def get_tabs(self):
+    def _get_tabs(self):
         return [self.overview_tab,
                 self.subdossiers_tab,
                 self.documents_tab,

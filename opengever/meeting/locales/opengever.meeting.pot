@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-09-29 09:10+0000\n"
+"POT-Creation-Date: 2016-11-01 08:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -166,7 +166,7 @@ msgstr ""
 msgid "Generate excerpts for all proposals"
 msgstr ""
 
-#: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt:86
+#: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt:87
 msgid "History"
 msgstr ""
 
@@ -468,11 +468,13 @@ msgstr ""
 
 #. Default: "Date from"
 #: ./opengever/meeting/tabs/membershiplisting.py:29
+#: ./opengever/meeting/tabs/periodlisting.py:31
 msgid "column_date_from"
 msgstr ""
 
 #. Default: "Date to"
 #: ./opengever/meeting/tabs/membershiplisting.py:33
+#: ./opengever/meeting/tabs/periodlisting.py:36
 msgid "column_date_to"
 msgstr ""
 
@@ -525,7 +527,7 @@ msgstr ""
 #. Default: "Title"
 #: ./opengever/meeting/tabs/committeelisting.py:24
 #: ./opengever/meeting/tabs/meetinglisting.py:46
-#: ./opengever/meeting/tabs/proposallisting.py:42
+#: ./opengever/meeting/tabs/periodlisting.py:27
 msgid "column_title"
 msgstr ""
 
@@ -631,7 +633,7 @@ msgid "label_agendaitem_list_template"
 msgstr ""
 
 #. Default: "Attachments"
-#: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt:26
+#: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt:27
 #: ./opengever/meeting/browser/submitdocuments.py:36
 #: ./opengever/meeting/proposal.py:148
 msgid "label_attachments"
@@ -723,7 +725,7 @@ msgstr ""
 
 #. Default: "Decision"
 #: ./opengever/meeting/browser/meetings/protocol.py:138
-#: ./opengever/meeting/proposal.py:207
+#: ./opengever/meeting/proposal.py:213
 msgid "label_decision"
 msgstr ""
 
@@ -733,7 +735,7 @@ msgid "label_decision_draft"
 msgstr ""
 
 #. Default: "Decision number"
-#: ./opengever/meeting/proposal.py:222
+#: ./opengever/meeting/proposal.py:233
 msgid "label_decision_number"
 msgstr ""
 
@@ -755,17 +757,17 @@ msgstr ""
 
 #. Default: "Discussion"
 #: ./opengever/meeting/browser/meetings/protocol.py:135
-#: ./opengever/meeting/proposal.py:302
+#: ./opengever/meeting/proposal.py:314
 msgid "label_discussion"
 msgstr ""
 
 #. Default: "Dossier"
-#: ./opengever/meeting/proposal.py:285
+#: ./opengever/meeting/proposal.py:297
 msgid "label_dossier"
 msgstr ""
 
 #. Default: "Dossier not available"
-#: ./opengever/meeting/proposal.py:379
+#: ./opengever/meeting/proposal.py:391
 msgid "label_dossier_not_available"
 msgstr ""
 
@@ -811,7 +813,7 @@ msgid "label_end"
 msgstr ""
 
 #. Default: "Excerpt"
-#: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt:67
+#: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt:68
 msgid "label_excerpt"
 msgstr ""
 
@@ -881,7 +883,7 @@ msgid "label_main_attributes"
 msgstr ""
 
 #. Default: "Meeting"
-#: ./opengever/meeting/proposal.py:192
+#: ./opengever/meeting/proposal.py:193
 msgid "label_meeting"
 msgstr ""
 
@@ -1043,7 +1045,7 @@ msgid "label_upcoming_meetings"
 msgstr ""
 
 #. Default: "State"
-#: ./opengever/meeting/proposal.py:219
+#: ./opengever/meeting/proposal.py:229
 msgid "label_workflow_state"
 msgstr ""
 
@@ -1058,6 +1060,16 @@ msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:150
 msgid "meetingdossier"
+msgstr ""
+
+#. Default: "Meetings"
+#: ./opengever/meeting/browser/tabbed.py:13
+msgid "meetings"
+msgstr ""
+
+#. Default: "Memberships"
+#: ./opengever/meeting/browser/tabbed.py:19
+msgid "memberships"
 msgstr ""
 
 #. Default: "Changes saved"
@@ -1140,6 +1152,11 @@ msgstr ""
 msgid "new_unscheduled_proposals"
 msgstr ""
 
+#. Default: "Overview"
+#: ./opengever/meeting/browser/tabbed.py:10
+msgid "overview"
+msgstr ""
+
 #. Default: "Paragraph successfully added."
 #: ./opengever/meeting/browser/meetings/agendaitem.py:273
 msgid "paragraph_added"
@@ -1154,6 +1171,11 @@ msgstr ""
 #: ./opengever/meeting/model/meeting.py:68
 #: ./opengever/meeting/model/proposal.py:140
 msgid "pending"
+msgstr ""
+
+#. Default: "Periods"
+#: ./opengever/meeting/browser/tabbed.py:22
+msgid "periods"
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:126
@@ -1282,6 +1304,11 @@ msgstr ""
 #. Default: "Submitted"
 #: ./opengever/meeting/model/proposal.py:142
 msgid "submitted"
+msgstr ""
+
+#. Default: "Submitted Proposals"
+#: ./opengever/meeting/browser/tabbed.py:16
+msgid "submittedproposals"
 msgstr ""
 
 #. Default: "${amount} matches."
