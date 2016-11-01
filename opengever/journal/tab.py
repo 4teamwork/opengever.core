@@ -164,11 +164,11 @@ class JournalTableSource(GeverTableSource):
                 return True
 
             # actor
-            if text.lower() in item.get('actor', ''):
+            if text.lower() in item.get('actor', '').lower():
                 return True
 
             # comment
-            if text.lower() in item.get('comment', ''):
+            if text.lower() in item.get('comments', '').lower():
                 return True
 
             return False

@@ -5,6 +5,10 @@ Changelog
 4.11.1 (unreleased)
 -------------------
 
+- Fix filterbox for journal entries:
+  Filtering now also works properly for comments and actor fields.
+  [lgraf]
+
 - Copy participations whenever a dossier is copied.
   [deiferni]
 
