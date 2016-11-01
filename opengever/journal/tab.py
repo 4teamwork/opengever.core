@@ -168,7 +168,7 @@ class JournalTableSource(GeverTableSource):
                 return True
 
             # comment
-            if text.lower() in item.get('comment', ''):
+            if text.lower() in item.get('comments', ''):
                 return True
 
             return False
