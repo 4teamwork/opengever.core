@@ -1,3 +1,4 @@
+from datetime import date
 from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
@@ -75,7 +76,9 @@ class TestUnitMeeting(TestCase):
         self.assertEqual(2, item_1.sort_order)
 
     def test_generate_decision_numbers(self):
-        create(Builder('period').having(committee=self.committee))
+        create(Builder('period').having(committee=self.committee,
+                                        date_from=date(2010, 1, 1),
+                                        date_to=date(2010, 12, 31)))
         item_1 = create(Builder('agenda_item')
                         .having(meeting=self.meeting))
         item_2 = create(Builder('agenda_item')
@@ -93,7 +96,9 @@ class TestUnitMeeting(TestCase):
         self.assertEqual(2, period.decision_sequence_number)
 
     def test_generate_meeting_number(self):
-        create(Builder('period').having(committee=self.committee))
+        create(Builder('period').having(committee=self.committee,
+                                        date_from=date(2010, 1, 1),
+                                        date_to=date(2010, 12, 31)))
 
         self.meeting.generate_meeting_number()
 

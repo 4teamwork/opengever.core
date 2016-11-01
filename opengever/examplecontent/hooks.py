@@ -99,9 +99,18 @@ class MeetingExampleContentCreator(object):
         self.create_proposals()
 
     def create_periods(self):
-        create(Builder('period').having(committee=self.committee_law_model))
-        create(Builder('period').having(committee=self.committee_accounting_model))
-        create(Builder('period').having(committee=self.committee_assembly_model))
+        create(Builder('period').having(
+            date_from=date(2016, 1, 1),
+            date_to=date(2016, 12, 31),
+            committee=self.committee_law_model))
+        create(Builder('period').having(
+            date_from=date(2016, 1, 1),
+            date_to=date(2016, 12, 31),
+            committee=self.committee_accounting_model))
+        create(Builder('period').having(
+            date_from=date(2016, 1, 1),
+            date_to=date(2016, 12, 31),
+            committee=self.committee_assembly_model))
 
     def create_members_and_memberships(self):
         peter = create(Builder('member')

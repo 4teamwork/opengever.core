@@ -17,8 +17,10 @@ class TestCommitteeOverview(FunctionalTestCase):
     def test_shows_current_period_box(self, browser):
         browser.login().open(self.committee, view='tabbedview_view-overview')
 
-        self.assertEqual(unicode(date.today().year),
-                         browser.css('#periodBox li').first.text)
+        this_year = date.today().year
+        self.assertEqual(
+            u'{year} (Jan 01, {year} - Dec 31, {year})'.format(year=this_year),
+            browser.css('#periodBox li').first.text)
 
     @browsing
     def test_membership_box_shows_only_active_members(self, browser):

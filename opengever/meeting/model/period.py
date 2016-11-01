@@ -38,8 +38,8 @@ class Period(Base):
     workflow_state = Column(String(WORKFLOW_STATE_LENGTH), nullable=False,
                             default=workflow.default_state.name)
     title = Column(String(256), nullable=False)
-    date_from = Column(Date)
-    date_to = Column(Date)
+    date_from = Column(Date, nullable=False)
+    date_to = Column(Date, nullable=False)
     decision_sequence_number = Column(Integer, nullable=False, default=0)
     meeting_sequence_number = Column(Integer, nullable=False, default=0)
 
@@ -47,24 +47,18 @@ class Period(Base):
         return '<Period {}>'.format(repr(self.title))
 
     def get_title(self):
-        if self.date_from or self.date_to:
-            return u'{} ({} - {})'.format(
-                self.title, self.get_date_from(), self.get_date_to())
-        return self.title
+        return u'{} ({} - {})'.format(
+            self.title, self.get_date_from(), self.get_date_to())
 
     def get_date_from(self):
         """Return a localized date."""
 
-        if self.date_from:
-            return api.portal.get_localized_time(datetime=self.date_from)
-        return ''
+        return api.portal.get_localized_time(datetime=self.date_from)
 
     def get_date_to(self):
         """Return a localized date."""
 
-        if self.date_to:
-            return api.portal.get_localized_time(datetime=self.date_to)
-        return ''
+        return api.portal.get_localized_time(datetime=self.date_to)
 
     def execute_transition(self, name):
         self.workflow.execute_transition(self, self, name)
