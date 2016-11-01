@@ -159,7 +159,7 @@ class BaseListingTab(grok.View, GeverTabMixin, ListingView):
     grok.context(Interface)
     grok.require('zope2.View')
 
-    selection = ViewPageTemplateFile("browser/selection_with_filters.pt")
+    selection = ViewPageTemplateFile("selection_with_filters.pt")
 
     sort_on = 'modified'
     sort_reverse = False
@@ -185,7 +185,7 @@ class BaseCatalogListingTab(grok.View, GeverTabMixin, CatalogListingView):
     grok.context(ITabbedView)
     grok.require('zope2.View')
 
-    selection = ViewPageTemplateFile("browser/selection_with_filters.pt")
+    selection = ViewPageTemplateFile("selection_with_filters.pt")
 
     columns = ()
 
