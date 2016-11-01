@@ -64,7 +64,7 @@ class TestJournalTab(FunctionalTestCase):
         with freeze(datetime(2016, 8, 12)):
             self.dossier = create(Builder('dossier'))
             entry = get_journal_entry(self.dossier)
-            entry['comments'] = 'lorem ipsum'
+            entry['comments'] = 'Lorem Ipsum'
             transaction.commit()
             browser.login().open(self.dossier, view=u'tabbedview_view-journal',
                                  data={'searchable_text': u'ipsum'})
@@ -73,7 +73,21 @@ class TestJournalTab(FunctionalTestCase):
                 ['Time', 'Title', 'Changed by', 'Comments', 'References'],
                 ['12.08.2016 01:00',
                  'Dossier added: dossier-1',
-                 'Test User (test_user_1_)', 'lorem ipsum', '']]
+                 'Test User (test_user_1_)', 'Lorem Ipsum', '']]
+            self.assertEquals(expected, browser.css('.listing').first.lists())
+
+    @browsing
+    def test_listing_supports_filtering_on_actor(self, browser):
+        with freeze(datetime(2016, 8, 12)):
+            self.dossier = create(Builder('dossier'))
+            browser.login().open(self.dossier, view=u'tabbedview_view-journal',
+                                 data={'searchable_text': u'Test_User'})
+
+            expected = [
+                ['Time', 'Title', 'Changed by', 'Comments', 'References'],
+                ['12.08.2016 01:00',
+                 'Dossier added: dossier-1',
+                 'Test User (test_user_1_)', '', '']]
             self.assertEquals(expected, browser.css('.listing').first.lists())
 
     @browsing
