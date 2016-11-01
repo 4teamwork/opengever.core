@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.9.4 (unreleased)
+4.9.4 (2016-11-01)
 ------------------
 
 - Added french translation.
