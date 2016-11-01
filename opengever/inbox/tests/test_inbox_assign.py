@@ -1,5 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browser as default_browser
+from ftw.testbrowser import browsing
 from opengever.activity.model import Activity
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 from opengever.task.adapters import IResponseContainer
@@ -9,7 +11,6 @@ from Products.CMFCore.utils import getToolByName
 
 class TestAssingForwarding(FunctionalTestCase):
 
-    use_browser = True
     layer = OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 
     def setUp(self):
@@ -28,15 +29,17 @@ class TestAssingForwarding(FunctionalTestCase):
                     responsible=u'inbox:client1')
             .in_state('forwarding-state-refused'))
 
-    def test_its_possible_to_select_an_different_client(self):
-        self.browser.open(self.forwarding.absolute_url())
-        self.browser.getLink('forwarding-transition-reassign-refused').click()
+    @browsing
+    def test_its_possible_to_select_an_different_client(self, browser):
+        browser.login().open(self.forwarding)
+        browser.click_on('forwarding-transition-reassign-refused')
 
-        self.assertItemsEqual(
-            ['client1', 'client2'],
-            self.browser.control('Responsible Client').options)
+        self.assertEquals(
+            [('client1', 'Client1'), ('client2', 'Client2')],
+            browser.find('Responsible Client').options)
 
-    def test_updates_responsible_and_responsible_client(self):
+    @browsing
+    def test_updates_responsible_and_responsible_client(self, browser):
         self.assign_forwarding('client2', 'Fake Response')
 
         self.assertEquals('client2', self.forwarding.responsible_client)
@@ -47,7 +50,8 @@ class TestAssingForwarding(FunctionalTestCase):
         self.assertEquals('inbox:client2',
                           self.forwarding.get_sql_object().responsible)
 
-    def test_assign_sets_forwarding_in_open_state(self):
+    @browsing
+    def test_assign_sets_forwarding_in_open_state(self, browser):
         self.assign_forwarding('client2', 'Fake Response')
 
         wf_tool = getToolByName(self.portal, 'portal_workflow')
@@ -57,7 +61,8 @@ class TestAssingForwarding(FunctionalTestCase):
         self.assertEquals('forwarding-state-open',
                           self.forwarding.get_sql_object().review_state)
 
-    def test_assign_add_corresonding_response(self):
+    @browsing
+    def test_assign_add_corresonding_response(self, browser):
         self.assign_forwarding('client2', 'Fake Response')
 
         response = IResponseContainer(self.forwarding)[-1]
@@ -75,7 +80,8 @@ class TestAssingForwarding(FunctionalTestCase):
         self.assertEquals([responsible_change, responsible_client_change],
                           response.changes)
 
-    def test_activity_is_recorded_correctly(self):
+    @browsing
+    def test_activity_is_recorded_correctly(self, browser):
         self.assign_forwarding('client2', 'Fake Response')
 
         self.assertEquals('client2', self.forwarding.responsible_client)
@@ -90,21 +96,10 @@ class TestAssingForwarding(FunctionalTestCase):
         self.assertEquals('forwarding-transition-reassign-refused',
                           Activity.query.all()[0].kind)
 
-    def assign_forwarding(self, new_client, response):
-        self.browser.open(self.forwarding.absolute_url())
-        self.browser.getLink('forwarding-transition-reassign-refused').click()
-
-        # select responsible client
-        self.browser.getControl('Responsible Client').value = [new_client]
-
-        # select responsible
-        self.browser.getControl(
-            name='form.widgets.responsible.widgets.query').value = new_client
-        self.browser.click('form.widgets.responsible.buttons.search')
-
-        self.browser.getControl('Responsible Client').value = [new_client]
-        self.browser.getControl(
-            name='form.widgets.responsible').value = ['inbox:client2']
-
-        self.browser.fill({'Response': 'Fake response'})
-        self.browser.click('Assign')
+    def assign_forwarding(self, new_client, response, browser=default_browser):
+        browser.login().open(self.forwarding)
+        browser.click_on('forwarding-transition-reassign-refused')
+        browser.fill({'Responsible Client': new_client,
+                      'Responsible': 'inbox:client2',
+                      'Response': 'Fake response'})
+        browser.click_on('Assign')

@@ -15,7 +15,6 @@ import unittest
 
 
 class TestRefusingForwardings(FunctionalTestCase):
-    use_browser = True
 
     def setUp(self):
         super(TestRefusingForwardings, self).setUp()
