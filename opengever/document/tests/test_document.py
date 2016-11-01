@@ -400,7 +400,6 @@ class TestDocumentMimetype(FunctionalTestCase):
 
 
 class TestDocumentAuthorResolving(FunctionalTestCase):
-    use_browser = True
 
     def test_adding_document_with_a_userid_as_author_resolves_to_fullname(self):
         create_ogds_user('hugo.boss', firstname='Hugo', lastname='Boss')
@@ -418,34 +417,34 @@ class TestDocumentAuthorResolving(FunctionalTestCase):
 
         self.assertEquals('Muster Peter', document.document_author)
 
-    def test_editing_document_with_a_userid_as_author_resolves_to_fullname(self):
+    @browsing
+    def test_editing_document_with_a_userid_as_author_resolves_to_fullname(self, browser):
         create_ogds_user('hugo.boss', firstname='Hugo', lastname='Boss')
         document = create(Builder('document')
                           .having(document_author='hanspeter')
                           .with_dummy_content())
 
-        self.browser.open('%s/edit' % (document.absolute_url()))
-        self.browser.fill({'Author': u'hugo.boss'})
-        self.browser.click('Save')
+        browser.login().open(document, view='edit')
+        browser.fill({'Author': u'hugo.boss'})
+        browser.click_on('Save')
 
         self.assertEquals('Boss Hugo', document.document_author)
         self.assertEquals('Boss Hugo', obj2brain(document).document_author)
 
-    def test_editing_document_with_a_real_name_as_author_dont_change_author_name(self):
+    @browsing
+    def test_editing_document_with_a_real_name_as_author_dont_change_author_name(self, browser):
         document = create(Builder('document')
                           .having(document_author='hugo.boss')
                           .with_dummy_content())
 
-        self.browser.open('%s/edit' % (document.absolute_url()))
-        self.browser.fill({'Author': u'Muster Peter'})
-        self.browser.click('Save')
+        browser.login().open(document, view='edit')
+        browser.fill({'Author': u'Muster Peter'})
+        browser.click_on('Save')
 
         self.assertEquals('Muster Peter', document.document_author)
 
 
 class TestDocumentValidatorsInAddForm(FunctionalTestCase):
-
-    use_browser = True
 
     layer = OPENGEVER_FUNCTIONAL_TESTING
 
@@ -496,8 +495,6 @@ class TestDocumentValidatorsInAddForm(FunctionalTestCase):
 
 class TestDocumentValidatorsInEditForm(FunctionalTestCase):
 
-    use_browser = True
-
     layer = OPENGEVER_FUNCTIONAL_TESTING
 
     def setUp(self):
@@ -537,8 +534,6 @@ class TestDocumentValidatorsInEditForm(FunctionalTestCase):
 
 
 class TestDocumentValidatorsInEditFormForCheckedOutDoc(FunctionalTestCase):
-
-    use_browser = True
 
     layer = OPENGEVER_FUNCTIONAL_TESTING
 
