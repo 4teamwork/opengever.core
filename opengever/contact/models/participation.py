@@ -147,6 +147,23 @@ class Participation(Base, SQLFormSupport):
 
         session.delete(self)
 
+    def copy(self):
+        copied_participation = self.__class__(**self._get_copied_attributes())
+        copied_participation.add_roles([role.role for role in self.roles])
+        return copied_participation
+
+    def copy_to_dossier(self, dossier):
+        copied_participation = self.copy()
+        copied_participation.dossier_oguid = Oguid.for_object(
+            dossier, register=True)
+        return copied_participation
+
+    def _get_copied_attributes(self):
+        return dict(
+            dossier_oguid=self.dossier_oguid,
+            participation_type=self.participation_type
+        )
+
 
 class OgdsUserParticipation(Participation):
     """Let users from ogds participate in dossiers with a specified role.
@@ -180,6 +197,12 @@ class OgdsUserParticipation(Participation):
     def participant(self):
         return self.ogds_user
 
+    def _get_copied_attributes(self):
+        attributes = super(OgdsUserParticipation, self)._get_copied_attributes()
+        attributes['ogds_userid'] = self.ogds_userid
+        return attributes
+
+
 OgdsUserToContactAdapter.participation_class = OgdsUserParticipation
 
 
@@ -203,6 +226,11 @@ class ContactParticipation(Participation):
     def participant(self):
         return self.contact
 
+    def _get_copied_attributes(self):
+        attributes = super(ContactParticipation, self)._get_copied_attributes()
+        attributes['contact'] = self.contact
+        return attributes
+
 
 class OrgRoleParticipation(Participation):
     """Let OrgRoles participate in dossiers with specified roles.
@@ -223,5 +251,10 @@ class OrgRoleParticipation(Participation):
     @property
     def participant(self):
         return self.org_role
+
+    def _get_copied_attributes(self):
+        attributes = super(OrgRoleParticipation, self)._get_copied_attributes()
+        attributes['org_role'] = self.org_role
+        return attributes
 
 OrgRole.participation_class = OrgRoleParticipation

@@ -55,3 +55,14 @@ class TestOguidFunctional(FunctionalTestCase):
         self.assertEqual(
             'http://example.com/@@resolve_oguid?oguid=foo:1234',
             oguid.get_url())
+
+    def test_oguid_register_registers_intid(self):
+        repo = create(Builder('repository'))
+        dossier = create(Builder('dossier').within(repo))
+
+        copied_dossier = dossier._getCopy(repo)
+        self.assertIsNone(Oguid.for_object(copied_dossier))
+
+        oguid = Oguid.for_object(copied_dossier, register=True)
+        self.assertIsNotNone(oguid)
+        self.assertEqual(oguid, Oguid.for_object(copied_dossier))
