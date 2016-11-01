@@ -5,6 +5,9 @@ Changelog
 4.11.1 (unreleased)
 -------------------
 
+- Make period start/end date required.
+  [deiferni]
+
 - Add a tab to list all periods of a committee.
   [deiferni]
 
