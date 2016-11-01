@@ -17,5 +17,8 @@ class CommitteeTabbedView(ModelProxyTabbedView):
             }, {
             'id': 'memberships',
             'title': _(u'memberships', default=u'Memberships'),
+            }, {
+            'id': 'periods',
+            'title': _(u'periods', default=u'Periods'),
             }
         ]

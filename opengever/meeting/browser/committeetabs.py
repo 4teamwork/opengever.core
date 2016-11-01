@@ -4,6 +4,7 @@ from five import grok
 from opengever.meeting.committee import ICommittee
 from opengever.meeting.tabs.meetinglisting import MeetingListingTab
 from opengever.meeting.tabs.membershiplisting import MembershipListingTab
+from opengever.meeting.tabs.periodlisting import PeriodListingTab
 from opengever.meeting.tabs.submittedproposallisting import SubmittedProposalListingTab
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 
@@ -43,3 +44,11 @@ class Memberships(MembershipListingTab):
 
     def get_member_link(self, item, value):
         return item.member.get_link(aq_parent(aq_inner(self.context)))
+
+
+class Periods(PeriodListingTab):
+    grok.name('tabbedview_view-periods')
+    grok.context(ICommittee)
+
+    enabled_actions = []
+    major_actions = []

@@ -22,6 +22,27 @@ class TestPeriod(FunctionalTestCase):
         self.committee_model = self.committee.load_model()
 
     @browsing
+    def test_periods_tab(self, browser):
+        create(Builder('period').having(
+            title=u'2010',
+            date_from=date(2010, 1, 1),
+            date_to=date(2010, 12, 31),
+            committee=self.committee_model))
+        create(Builder('period').having(
+            title=u'2011',
+            date_from=date(2011, 1, 1),
+            committee=self.committee_model))
+
+        browser.login().open(self.committee, view='tabbedview_view-periods')
+        listing_table = browser.css('.listing').first
+        self.assertEqual(
+            [{'To': '', 'From': 'Jan 01, 2011', 'Title': '2011'},
+             {'To': 'Dec 31, 2010', 'From': 'Jan 01, 2010', 'Title': '2010'},
+             {'To': '', 'From': '', 'Title': '2016'},
+             ],
+            listing_table.dicts())
+
+    @browsing
     def test_close_and_create_new_period(self, browser):
         browser.login()
         browser.open(self.committee)
