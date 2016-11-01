@@ -5,7 +5,8 @@ Changelog
 4.9.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Added french translation.
+  [phgross]
 
 
 4.9.3 (2016-07-19)
