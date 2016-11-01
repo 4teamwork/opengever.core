@@ -1,38 +1,40 @@
 from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browsing
+from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
 
 
 class TestStardEndValidator(FunctionalTestCase):
 
-    use_browser = True
-
-    def test_start_date_must_be_before_end_date(self):
+    @browsing
+    def test_start_date_must_be_before_end_date(self, browser):
         dossier = create(Builder('dossier')
                          .having(title=u'Testdossier',
                                  responsible=TEST_USER_ID,
                                  start=date(2013, 02, 01),
                                  end=date(2013, 01, 01)))
 
-        self.browser.open('%s/edit' % (dossier.absolute_url()))
-        self.browser.click('Save')
+        browser.login().open(dossier, view='edit')
+        browser.click_on('Save')
 
         self.assertEquals(
-            u'The start date must be before the end date.',
-            self.browser.css('div.error')[0].plain_text())
+            ['The start date must be before the end date.'],
+            browser.css('div.error').text)
 
-    def test_changing_invalid_dates_on_edit_form_is_possible(self):
-
+    @browsing
+    def test_changing_invalid_dates_on_edit_form_is_possible(self, browser):
         dossier = create(Builder('dossier')
                          .having(title=u'Testdossier',
                                  responsible=TEST_USER_ID,
                                  start=date(2013, 02, 01),
                                  end=date(2013, 01, 01)))
 
-        self.browser.open('%s/edit' % (dossier.absolute_url()))
-        self.browser.fill({'Closing Date': 'February 2, 2013'})
-        self.browser.click('Save')
+        browser.login().open(dossier, view='edit')
+        browser.fill({'Closing Date': 'February 2, 2013'})
+        browser.click_on('Save')
 
-        self.browser.assert_url(dossier.absolute_url())
+        self.assertEquals(['Changes saved'], info_messages())
+        self.assertEquals(dossier, browser.context)
