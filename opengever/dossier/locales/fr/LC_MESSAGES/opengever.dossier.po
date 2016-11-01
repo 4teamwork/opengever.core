@@ -454,7 +454,7 @@ msgstr "Mots-clés"
 #. Default: "Linked Dossiers"
 #: ./opengever/dossier/browser/overview.py:49
 msgid "label_linked_dossiers"
-msgstr ""
+msgstr "Dossiers liés"
 
 #. Default: "Modified"
 #: ./opengever/dossier/templatedossier/form.py:134
