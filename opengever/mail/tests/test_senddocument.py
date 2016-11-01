@@ -2,6 +2,7 @@ from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.mail.utils import get_attachments
+from ftw.testbrowser import browser as default_browser
 from ftw.testbrowser import browsing
 from ftw.testing.mailing import Mailing
 from opengever.mail.behaviors import ISendableDocsContainer
@@ -34,7 +35,6 @@ class MockEvent(object):
 
 
 class TestSendDocument(FunctionalTestCase):
-    use_browser = True
     use_default_fixture = False
 
     def setUp(self):
@@ -52,7 +52,8 @@ class TestSendDocument(FunctionalTestCase):
         self.assertTrue(
             ISendableDocsContainer.providedBy(dossier))
 
-    def test_document_size_validator(self):
+    @browsing
+    def test_document_size_validator(self, browser):
         dossier = create(Builder("dossier"))
         document = create(Builder("document")
                           .within(dossier)
@@ -60,14 +61,16 @@ class TestSendDocument(FunctionalTestCase):
 
         mail = self.send_documents(dossier, [document, ])
         self.assertEquals(mail, None)
-        self.assertPageContains(
-            'The files you selected are larger than the maximum size')
+        self.assertEquals(
+            ['The files you selected are larger than the maximum size'],
+            browser.css('#formfield-form-widgets-documents .error').text)
 
         mail = self.send_documents(dossier, [document, ], as_links=True)
-        self.browser.assert_url('%s#documents' % dossier.absolute_url())
+        self.assertEquals('%s#documents' % dossier.absolute_url(), browser.url)
         self.assert_mail_links_to(mail, document.absolute_url())
 
-    def test_address_validator(self):
+    @browsing
+    def test_address_validator(self, browser):
         dossier = create(Builder("dossier"))
         documents = [create(Builder("document").within(dossier)), ]
 
@@ -75,10 +78,12 @@ class TestSendDocument(FunctionalTestCase):
             dossier, documents, extern_receiver=None, intern_receiver=None)
 
         self.assertEquals(mail, None)
-        self.assertPageContains('You have to select a intern \
-                            or enter a extern mail-addres')
+        self.assertEquals(
+            ['You have to select a intern or enter a extern mail-addres'],
+            browser.css('div.error').text)
 
-    def test_send_documents(self):
+    @browsing
+    def test_send_documents(self, browser):
         dossier = create(Builder("dossier"))
         documents = [create(Builder("document")
                             .within(dossier)
@@ -98,7 +103,8 @@ class TestSendDocument(FunctionalTestCase):
 
         self.assert_attachment(mail, 'test.doc', 'application/msword')
 
-    def test_send_documents_with_non_ascii_message(self):
+    @browsing
+    def test_send_documents_with_non_ascii_message(self, browser):
         dossier = create(Builder("dossier"))
         documents = [create(Builder("document").within(dossier).with_dummy_content()), ]
 
@@ -112,7 +118,8 @@ f\xc3\xbcr Ernst Franz\r\n\r\nBesten Dank im Voraus"""
             quopri.encodestring(non_ascii_message), mail.as_string(),
             'The message(non ascii) of the created mail is incorrect')
 
-    def test_send_empty_documents(self):
+    @browsing
+    def test_send_empty_documents(self, browser):
         dossier = create(Builder("dossier"))
         document = create(Builder("document"))
 
@@ -120,7 +127,8 @@ f\xc3\xbcr Ernst Franz\r\n\r\nBesten Dank im Voraus"""
 
         self.assert_mail_links_to(mail, document.absolute_url())
 
-    def test_send_documents_as_links(self):
+    @browsing
+    def test_send_documents_as_links(self, browser):
         dossier = create(Builder("dossier"))
         document = create(Builder("document").with_dummy_content())
 
@@ -128,7 +136,8 @@ f\xc3\xbcr Ernst Franz\r\n\r\nBesten Dank im Voraus"""
 
         self.assert_mail_links_to(mail, document.absolute_url())
 
-    def test_send_mails(self):
+    @browsing
+    def test_send_mails(self, browser):
         dossier = create(Builder("dossier"))
         mails = [create(Builder("mail").within(dossier).with_dummy_message()), ]
 
@@ -140,7 +149,8 @@ f\xc3\xbcr Ernst Franz\r\n\r\nBesten Dank im Voraus"""
             'foobar', attachment.get_payload(),
             'Attached mails should not be base64 encoded')
 
-    def test_send_document_event(self):
+    @browsing
+    def test_send_document_event(self, browser):
         intids = getUtility(IIntIds)
         dossier = create(Builder("dossier"))
         documents = [create(Builder("document").within(dossier).with_dummy_content()), ]
@@ -163,7 +173,8 @@ f\xc3\xbcr Ernst Franz\r\n\r\nBesten Dank im Voraus"""
             intids.getObject(event.intids[0]),
             documents[0])
 
-    def test_sent_mail_gets_filed_in_dossier(self):
+    @browsing
+    def test_sent_mail_gets_filed_in_dossier(self, browser):
         dossier = create(Builder("dossier"))
         document = create(Builder("document").with_dummy_content())
 
@@ -182,7 +193,8 @@ f\xc3\xbcr Ernst Franz\r\n\r\nBesten Dank im Voraus"""
         self.assertEquals(u'User Test', filed_mail.document_author,
                           "Author of filed mail should be name of OGDS user")
 
-    def test_do_not_create_mail_archive_if_dossier_is_resolved(self):
+    @browsing
+    def test_do_not_create_mail_archive_if_dossier_is_resolved(self, browser):
         dossier = create(Builder("dossier").in_state('dossier-state-resolved'))
         document = create(Builder("document").with_dummy_content())
 
@@ -242,26 +254,22 @@ f\xc3\xbcr Ernst Franz\r\n\r\nBesten Dank im Voraus"""
             "See the field: {}".format(
                 fieldname, field))
 
-    def send_documents(self, container, documents, **kwargs):
+    def send_documents(self, container, documents, browser=default_browser, **kwargs):
         documents = ['/'.join(doc.getPhysicalPath()) for doc in documents]
-        data = '&'.join(['paths:list=%s' % path for path in documents])
-
         attr = TEST_FORM_DATA.copy()
         attr.update(kwargs)
 
-        self.browser.open(
-            '%s/send_documents' % container.absolute_url(),
-            data=data)
+        browser.login().open(container,
+                             {'paths:list': documents},
+                             view='send_documents')
+        browser.fill({'Send documents only als links': attr.get('as_links'),
+                      'Subject': attr.get('subject', ''),
+                      'Message': attr.get('message', '')})
 
-        self.browser.getControl(name='form.widgets.documents_as_links:list').value = attr.get('as_links')
-        self.browser.getControl(
-            name='form.widgets.subject').value = attr.get('subject', '')
-        self.browser.getControl(
-            name='form.widgets.message').value = attr.get('message', '')
         if attr.get('extern_receiver', ''):
-            self.browser.getControl(name='form.widgets.extern_receiver').value = attr.get('extern_receiver', '')
+            browser.fill({'Extern receiver': attr.get('extern_receiver')})
 
-        self.browser.getControl(name='form.buttons.button_send').click()
+        browser.click_on('Send')
 
         return self.get_mail()
 
