@@ -137,14 +137,8 @@ msgstr "Centre de coûts"
 msgid "local"
 msgstr "Local"
 
-msgid "meetings"
-msgstr "Séances"
-
 msgid "members"
 msgstr "Membres"
-
-msgid "memberships"
-msgstr "Affiliations"
 
 msgid "my_issues"
 msgstr "Mes tickets"
@@ -202,9 +196,6 @@ msgstr "Info"
 
 msgid "subdossiers"
 msgstr "Sous-dossiers"
-
-msgid "submittedproposals"
-msgstr "Propositions"
 
 msgid "tasks"
 msgstr "Tâches"
