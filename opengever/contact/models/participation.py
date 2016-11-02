@@ -89,7 +89,7 @@ class Participation(Base, SQLFormSupport):
     def wrapper_id(self):
         return 'participation-{}'.format(self.participation_id)
 
-    def get_url(self, view=u''):
+    def get_url(self, context, view=u''):
         elements = [self.dossier_oguid.resolve_object().absolute_url(),
                     self.wrapper_id]
         if view:

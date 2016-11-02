@@ -1,6 +1,7 @@
 from datetime import datetime
 from datetime import time
 from opengever.base.model import Base
+from opengever.base.model import SQLFormSupport
 from plone import api
 from sqlalchemy import Column
 from sqlalchemy import Date
@@ -12,12 +13,12 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
 
 
-class Membership(Base):
+class Membership(Base, SQLFormSupport):
     """Associate members with their commmission for a certain timespan.
 
     """
     __tablename__ = 'memberships'
-    __mapper_args__= {'order_by': 'date_from'}
+    __mapper_args__ = {'order_by': 'date_from'}
     __table_args__ = (UniqueConstraint('committee_id',
                                        'member_id',
                                        'date_from',
@@ -42,9 +43,6 @@ class Membership(Base):
             self.date_from,
             self.date_to)
 
-    def is_editable(self):
-        return True
-
     def is_removable(self):
         return True
 
@@ -64,25 +62,14 @@ class Membership(Base):
     def title(self):
         return self.member.fullname
 
-    def get_edit_values(self, fieldnames):
-        values = {}
-        for fieldname in fieldnames:
-            value = getattr(self, fieldname, None)
-            if value:
-                values[fieldname] = value
-
-        return values
-
-    def update_model(self, data):
-        for key, value in data.items():
-            setattr(self, key, value)
-
-    def get_url(self, context):
-        return "{}/membership-{}".format(context.absolute_url(),
-                                         self.membership_id)
-
-    def get_edit_url(self, context):
-        return '/'.join((self.get_url(context), 'edit'))
+    def get_url(self, context, view=None):
+        parts = [
+            context.absolute_url(),
+            'membership-{}'.format(self.membership_id),
+        ]
+        if view:
+            parts.append(view)
+        return '/'.join(parts)
 
     def get_remove_url(self, context):
-        return '/'.join((self.get_url(context), 'remove'))
+        return self.get_url(context, view='remove')
