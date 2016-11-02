@@ -344,6 +344,7 @@ class CommitteeBuilder(DexterityBuilder):
         self.arguments.pop('repository_folder', None)
         self.arguments.pop('excerpt_template', None)
         self.arguments.pop('protocol_template', None)
+        self.arguments.pop('toc_template', None)
 
         obj.create_model(self.arguments, self.container)
         self.create_default_period(obj)

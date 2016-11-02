@@ -62,6 +62,13 @@ class ICommittee(form.Schema):
         required=False,
     )
 
+    toc_template = RelationChoice(
+        title=_('label_toc_template',
+                default=u'Table of contents template'),
+        source=sablon_template_source,
+        required=False,
+    )
+
     repository_folder = RelationChoice(
         title=_(u'Linked repository folder'),
         description=_(
@@ -202,6 +209,12 @@ class Committee(ModelContainer):
             return self.agendaitem_list_template.to_object
 
         return self.get_committee_container().get_agendaitem_list_template()
+
+    def get_toc_template(self):
+        if self.toc_template:
+            return self.toc_template.to_object
+
+        return self.get_committee_container().get_toc_template()
 
     def get_repository_folder(self):
         return self.repository_folder.to_object
