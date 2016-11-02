@@ -76,6 +76,18 @@ class TestTOC(FunctionalTestCase):
 
     def test_toc(self):
         expected = [{
+            'group_title': u'5',
+            'contents': [
+                {
+                    'title': u'5 Dinge',
+                    'dossier_reference_number': '1.1.4 / 2',
+                    'repository_folder_title': 'Business',
+                    'meeting_date': u'Jan 01, 2010',
+                    'decision_number': 3,
+                    'has_proposal': True,
+                    'meeting_start_page_number': 33,
+                }]
+            }, {
             'group_title': u'A',
             'contents': [
                 {
@@ -97,7 +109,8 @@ class TestTOC(FunctionalTestCase):
                 'decision_number': 2,
                 'has_proposal': True,
                 'meeting_start_page_number': 33,
-                }, {
+
+            }, {
                 'title': u'Proposal 3',
                 'dossier_reference_number': '2.1.4 / 1',
                 'repository_folder_title': 'Stuff',
@@ -105,18 +118,6 @@ class TestTOC(FunctionalTestCase):
                 'decision_number': 4,
                 'has_proposal': True,
                 'meeting_start_page_number': 129,
-                }]
-            }, {
-            'group_title': u'\xdc',
-            'contents': [
-                {
-                    'title': u'\xdchhh',
-                    'dossier_reference_number': '1.1.4 / 2',
-                    'repository_folder_title': 'Business',
-                    'meeting_date': u'Jan 01, 2010',
-                    'decision_number': 3,
-                    'has_proposal': True,
-                    'meeting_start_page_number': 33,
-                }]
+            }]
         }]
         self.assertEqual(expected, AlphabeticalToc(self.period).get_json())
