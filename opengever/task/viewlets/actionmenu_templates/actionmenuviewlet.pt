@@ -7,7 +7,7 @@
              tal:attributes="href subMenuItem/url;
                              title subMenuItem/title;
                              id subMenuItem/id | nothing;
-                             class string: ${css_class} button"
+                             class string: ${css_class}"
              i18n:attributes="title">
               <span tal:content="subMenuItem/title"
                     i18n:translate=""

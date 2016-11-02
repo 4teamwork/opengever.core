@@ -34,7 +34,7 @@ class TestTaskWorkflowAddingDocumentsAndMails(FunctionalTestCase):
         is True, saves the form and reloads the overview view.
         """
         self.visit_overview(browser)
-        button = browser.css('.button.{}'.format(button_class)).first
+        button = browser.css('.{}'.format(button_class)).first
         button.click()
         if save_and_reload:
             browser.forms.get('form').save()
