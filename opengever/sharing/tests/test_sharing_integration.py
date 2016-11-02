@@ -1,5 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browsing
 from opengever.sharing.browser.sharing import OpengeverSharingView
 from opengever.sharing.interfaces import ILocalRolesAcquisitionActivated
 from opengever.sharing.interfaces import ILocalRolesAcquisitionBlocked
@@ -12,7 +13,6 @@ from zope.component import provideHandler
 
 
 class TestOpengeverSharingIntegration(FunctionalTestCase):
-    use_browser = True
     use_default_fixture = False
 
     def setUp(self):
@@ -212,19 +212,19 @@ class TestOpengeverSharingIntegration(FunctionalTestCase):
 
 
 class TestOpengeverSharingWithBrowser(FunctionalTestCase):
-    use_browser = True
 
     def setUp(self):
         super(TestOpengeverSharingWithBrowser, self).setUp()
+
         self.grant('Manager')
         self.dossier = create(Builder("dossier"))
 
-    def test_sharing_views(self):
+    @browsing
+    def test_sharing_views(self, browser):
         """ Test Integration of opengever.sharing
         """
-
         # We just test to open the views because the rest is tested
         # in other packages
-        self.browser.open('%s/@@sharing' % self.dossier.absolute_url())
-        self.browser.open(
-            '%s/@@tabbedview_view-sharing' % self.dossier.absolute_url())
+        browser.login().open(self.dossier, view='sharing')
+
+        browser.open(self.dossier, view='tabbedview_view-sharing')
