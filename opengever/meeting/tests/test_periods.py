@@ -31,14 +31,15 @@ class TestPeriod(FunctionalTestCase):
         create(Builder('period').having(
             title=u'2011',
             date_from=date(2011, 1, 1),
+            date_to=date(2011, 12, 31),
             committee=self.committee_model))
 
         browser.login().open(self.committee, view='tabbedview_view-periods')
         listing_table = browser.css('.listing').first
         self.assertEqual(
-            [{'To': '', 'From': 'Jan 01, 2011', 'Title': '2011'},
+            [{'From': 'Jan 01, 2016', 'Title': '2016', 'To': 'Dec 31, 2016'},
+             {'To': 'Dec 31, 2011', 'From': 'Jan 01, 2011', 'Title': '2011'},
              {'To': 'Dec 31, 2010', 'From': 'Jan 01, 2010', 'Title': '2010'},
-             {'To': '', 'From': '', 'Title': '2016'},
              ],
             listing_table.dicts())
 
@@ -70,23 +71,6 @@ class TestPeriod(FunctionalTestCase):
         self.assertEqual(u'New', new_period.title)
         self.assertEqual(date(2013, 1, 1), new_period.date_from)
         self.assertEqual(date(2013, 12, 31), new_period.date_to)
-
-    def test_period_title_without_date(self):
-        period = create(Builder('period').having(
-            title=u'Foo', committee=self.committee_model))
-        self.assertEqual(u'Foo', period.get_title())
-
-    def test_period_title_with_start_date(self):
-        period = create(Builder('period').having(
-            title=u'Foo', date_from=date(2010, 1, 1),
-            committee=self.committee_model))
-        self.assertEqual('Foo (Jan 01, 2010 - )', period.get_title())
-
-    def test_period_title_with_end_date(self):
-        period = create(Builder('period').having(
-            title=u'Foo', date_to=date(2010, 12, 31),
-            committee=self.committee_model))
-        self.assertEqual('Foo ( - Dec 31, 2010)', period.get_title())
 
     def test_period_title_with_start_and_end_date(self):
         period = create(Builder('period').having(

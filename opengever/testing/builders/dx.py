@@ -356,7 +356,9 @@ class CommitteeBuilder(DexterityBuilder):
         db_session = self.session.session
 
         db_session.add(Period(committee=committee_model,
-                              title=unicode(today.year)))
+                              title=unicode(today.year),
+                              date_from=date(today.year, 1, 1),
+                              date_to=date(today.year, 12, 31)))
 
         if self.session.auto_commit:
             db_session.flush()

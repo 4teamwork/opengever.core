@@ -26,12 +26,12 @@ class IPeriodModel(form.Schema):
 
     date_from = schema.Date(
         description=_('label_date_from', default='Start date'),
-        required=False,
+        required=True,
     )
 
     date_to = schema.Date(
         description=_('label_date_to', default='End date'),
-        required=False,
+        required=True,
     )
 
 
