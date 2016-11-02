@@ -5,6 +5,9 @@ Changelog
 4.11.1 (unreleased)
 -------------------
 
+- LDAPSearch utility: Also respect _extra_user_filter property during OGDS sync.
+  [lgraf]
+
 - Make period start/end date required.
   [deiferni]
 
