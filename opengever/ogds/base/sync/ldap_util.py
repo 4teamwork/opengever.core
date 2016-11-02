@@ -415,10 +415,17 @@ class LDAPSearch(grok.Adapter):
 
     def get_user_filter(self):
         """Get the user filter expression defined for the adapted
-        LDAPUserFolder from the custom property `user_filter`.
+        LDAPUserFolder by combining the GEVER custom property `user_filter`
+        and the LDAPUserFolder's `_extra_user_filter`.
         """
         uf = self.context
-        return uf.getProperty('user_filter')
+
+        # TODO: Do we still need a custom property for this?
+        user_filter = uf.getProperty('user_filter')
+
+        extra_user_filter = uf.getProperty('_extra_user_filter')
+        user_filter = self._combine_filters(user_filter, extra_user_filter)
+        return user_filter
 
     def get_group_filter(self):
         """Get the group filter expression defined for the adapted
