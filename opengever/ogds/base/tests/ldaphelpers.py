@@ -19,6 +19,8 @@ class FakeLDAPUserFolder(object):
     def __init__(self):
         self.users = []
         self.groups = []
+        self.users_base = ''
+        self.groups_base = ''
 
     def getSchemaDict(self):
         return (
@@ -69,6 +71,12 @@ class FakeLDAPSearchUtility(object):
 
     def __init__(self, userfolder):
         self.userfolder = userfolder
+
+    def get_user_filter(self):
+        return ''
+
+    def get_group_filter(self):
+        return ''
 
     def get_users(self):
         return self.userfolder.users

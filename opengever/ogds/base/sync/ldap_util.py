@@ -251,9 +251,9 @@ class LDAPSearch(grok.Adapter):
             search_filter = '(objectClass=%s)' % user_object_classes[0]
 
         custom_filter = self.get_user_filter()
-        if custom_filter not in [None, '']:
+        if custom_filter:
             custom_filter = self._apply_schema_map_to_filter(custom_filter)
-            search_filter = self._combine_filters(custom_filter, search_filter)
+        search_filter = self._combine_filters(custom_filter, search_filter)
 
         mapped_results = []
         results = self.search(base_dn=self.context.users_base,
@@ -283,8 +283,7 @@ class LDAPSearch(grok.Adapter):
         search_filter = '(|%s)' % possible_classes
 
         custom_filter = self.get_group_filter()
-        if custom_filter not in [None, '']:
-            search_filter = self._combine_filters(custom_filter, search_filter)
+        search_filter = self._combine_filters(custom_filter, search_filter)
 
         results = self.search(base_dn=self.context.groups_base,
                               filter=search_filter)
@@ -416,10 +415,17 @@ class LDAPSearch(grok.Adapter):
 
     def get_user_filter(self):
         """Get the user filter expression defined for the adapted
-        LDAPUserFolder from the custom property `user_filter`.
+        LDAPUserFolder by combining the GEVER custom property `user_filter`
+        and the LDAPUserFolder's `_extra_user_filter`.
         """
         uf = self.context
-        return uf.getProperty('user_filter')
+
+        # TODO: Do we still need a custom property for this?
+        user_filter = uf.getProperty('user_filter')
+
+        extra_user_filter = uf.getProperty('_extra_user_filter')
+        user_filter = self._combine_filters(user_filter, extra_user_filter)
+        return user_filter
 
     def get_group_filter(self):
         """Get the group filter expression defined for the adapted
@@ -441,9 +447,17 @@ class LDAPSearch(grok.Adapter):
 
     def _combine_filters(self, filter_a, filter_b):
         """Combine two LDAP filter expressions with a boolean AND.
+
+        If one of the filters is the empty string, simply return the other one.
         """
-        combined_filter = '(& %s %s)' % (filter_a, filter_b)
-        return combined_filter
+        if filter_a == '':
+            return filter_b
+        elif filter_b == '':
+            return filter_a
+        else:
+            # Both filters are non-empty, need to combine them
+            combined_filter = '(& %s %s)' % (filter_a, filter_b)
+            return combined_filter
 
     def _get_object_classes(self):
         """Returns a list of tuples containing primary and alternative names

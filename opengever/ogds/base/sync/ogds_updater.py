@@ -145,6 +145,9 @@ class OGDSUpdater(grok.Adapter):
             uid_attr = self._get_uid_attr(ldap_userfolder)
 
             ldap_util = ILDAPSearch(ldap_userfolder)
+            logger.info(u'Users base: %s' % ldap_userfolder.users_base)
+            logger.info(u'User filter: %s' % ldap_util.get_user_filter())
+
             ldap_users = ldap_util.get_users()
 
             for ldap_user in ldap_users:
@@ -226,6 +229,9 @@ class OGDSUpdater(grok.Adapter):
             ldap_userfolder = plugin._getLDAPUserFolder()
 
             ldap_util = ILDAPSearch(ldap_userfolder)
+            logger.info(u'Groups base: %s' % ldap_userfolder.groups_base)
+            logger.info(u'Group filter: %r' % ldap_util.get_group_filter())
+
             ldap_groups = ldap_util.get_groups()
 
             for ldap_group in ldap_groups:
@@ -327,7 +333,7 @@ class OGDSUpdater(grok.Adapter):
                         except MultipleResultsFound:
                             # Duplicate user - skip (see above).
                             logger.warn(
-                                u"Skipping duplicate user '{}'!".format(userid))
+                                u"  Skipping duplicate user '{}'!".format(userid))
                             continue
 
                         contained_users.append(user)
