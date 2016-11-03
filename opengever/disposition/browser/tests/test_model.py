@@ -1,11 +1,13 @@
 from datetime import date
+from DateTime import DateTime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testing import staticuid
 from opengever.disposition.ech0160.model import Dossier
-from opengever.disposition.ech0160.model import Repository
 from opengever.disposition.ech0160.model import Position
+from opengever.disposition.ech0160.model import Repository
 from opengever.testing import FunctionalTestCase
+import unittest
 
 
 class TestRepositoryModel(FunctionalTestCase):
@@ -26,8 +28,8 @@ class TestRepositoryModel(FunctionalTestCase):
 
         self.assertEquals(root, model.obj)
         positions = model.positions.values()
-        self.assertSequenceEqual(
-            [folder1, folder2], [pos.obj for pos in positions])
+        self.assertEquals(set([folder1, folder2]),
+                          set([pos.obj for pos in positions]))
         self.assertEquals([folder1_1],
                           [pos.obj for pos in positions[0].positions.values()])
 
@@ -120,3 +122,126 @@ class TestPositionModel(FunctionalTestCase):
         self.assertEquals([dossier_model], model.dossiers.values())
 
 
+class TestDossierModel(FunctionalTestCase):
+
+    @staticuid('fake')
+    def test_id_is_uid_prefixed_with_a_underscore(self):
+        dossier = create(Builder('dossier'))
+        self.assertEquals('_fake0000000000000000000000000001',
+                          Dossier(dossier).binding().id)
+
+    def test_titel_is_title_in_utf8(self):
+        dossier = create(Builder('dossier').titled(u'F\xfchrung'))
+        self.assertEquals(u'F\xfchrung', Dossier(dossier).binding().titel)
+
+    def test_aktenzeichen_is_refernce_number(self):
+        folder1 = create(Builder('repository'))
+        folder1_7 = create(Builder('repository')
+                           .having(reference_number_prefix='7')
+                           .within(folder1))
+        dossier = create(Builder('dossier').within(folder1_7))
+
+        self.assertEquals('Client1 1.7 / 1', Dossier(dossier).binding().aktenzeichen)
+
+    def test_classification_attributes_and_schutzfrist(self):
+        dossier = create(Builder('dossier')
+                         .having(custody_period=30,
+                                 classification='unprotected',
+                                 privacy_layer='privacy_layer_yes',
+                                 public_trial='private',
+                                 public_trial_statement=u'Enth\xe4lt sch\xfctzenswerte Daten.'))
+
+        binding = Dossier(dossier).binding()
+
+        self.assertEquals(u'30', binding.schutzfrist)
+        self.assertEquals('unprotected', binding.klassifizierungskategorie)
+        self.assertEquals(1, binding.datenschutz)
+        self.assertEquals('private', binding.oeffentlichkeitsstatus)
+        self.assertEquals(u'Enth\xe4lt sch\xfctzenswerte Daten.',
+                          binding.oeffentlichkeitsstatusBegruendung)
+
+    def test_entstehungszeitraum_is_oldest_document_date_to_newest_one(self):
+        dossier = create(Builder('dossier'))
+        create(Builder('document')
+               .within(dossier)
+               .with_modification_date(DateTime(2016, 1, 15))
+               .with_creation_date(DateTime(2014, 3, 4)))
+        create(Builder('document')
+               .within(dossier)
+               .with_modification_date(DateTime(2016, 3, 1))
+               .with_creation_date(DateTime(2015, 1, 1)))
+        create(Builder('document')
+               .within(dossier)
+               .with_modification_date(DateTime(2016, 12, 27))
+               .with_creation_date(DateTime(2016, 1, 1)))
+
+        binding = Dossier(dossier).binding()
+
+        self.assertEquals(date(2014, 3, 4),
+                          binding.entstehungszeitraum.von.datum.date())
+        self.assertEquals(date(2016, 12, 27),
+                          binding.entstehungszeitraum.bis.datum.date())
+
+    def test_entstehungszeitraum_is_kein_angabe_when_dossier_is_empty(self):
+        dossier = create(Builder('dossier'))
+
+        binding = Dossier(dossier).binding()
+        self.assertEquals(u'keine Angabe',
+                          binding.entstehungszeitraum.von.datum)
+        self.assertEquals(u'keine Angabe',
+                          binding.entstehungszeitraum.bis.datum)
+
+    def test_eroeffnungsdatum_is_start_date(self):
+        dossier = create(Builder('dossier')
+                         .having(start=date(2016, 11, 6)))
+
+        binding = Dossier(dossier).binding()
+        self.assertEquals(date(2016, 11, 6),
+                          binding.eroeffnungsdatum.datum.date())
+
+    def test_abschlussdatum_is_end_date(self):
+        dossier = create(Builder('dossier')
+                         .having(end=date(2016, 11, 6)))
+
+        binding = Dossier(dossier).binding()
+        self.assertEquals(date(2016, 11, 6),
+                          binding.abschlussdatum.datum.date())
+
+    def test_add_descendants_adds_all_subdossiers(self):
+        dossier = create(Builder('dossier'))
+        subdossier1 = create(Builder('dossier').within(dossier))
+        create(Builder('dossier'))
+        subdossier3 = create(Builder('dossier').within(dossier))
+
+        model = Dossier(dossier)
+        model._add_descendants()
+
+        self.assertEquals(
+            set([subdossier3, subdossier1]),
+            set([mod.obj for mod in model.dossiers.values()]))
+
+    def test_add_descendants_adds_all_containing_documents(self):
+        dossier = create(Builder('dossier'))
+        document1 = create(Builder('document').within(dossier))
+        create(Builder('document'))
+        document3 = create(Builder('document').within(dossier))
+
+        model = Dossier(dossier)
+        model._add_descendants()
+
+        self.assertEquals(
+            set([document1, document3]),
+            set([doc.obj for doc in model.documents.values()]))
+
+    @unittest.skip('Currently not implemented')
+    def test_add_descendants_adds_also_documents_in_tasks(self):
+        dossier = create(Builder('dossier'))
+        task = create(Builder('task').within(dossier))
+        document = create(Builder('document').within(task))
+
+        model = Dossier(dossier)
+        model._add_descendants()
+
+        self.assertEqual(
+            set([document]),
+            set([doc.obj for doc in model.documents.values()]))
