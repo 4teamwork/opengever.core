@@ -1,5 +1,8 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browser as default_browser
+from ftw.testbrowser import browsing
+from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.task.adapters import IResponseContainer
 from opengever.task.browser.modify_deadline import ModifyDeadlineFormView
 from opengever.task.interfaces import IDeadlineModifier
@@ -13,50 +16,50 @@ import datetime
 
 class TestDeadlineModificationForm(FunctionalTestCase):
 
-    use_browser = True
+    def _change_deadline(self, task, new_deadline, text=u'', browser=default_browser):
+        url = ModifyDeadlineFormView.url_for(
+            task, transition='task-transition-modify-deadline')
+        browser.login().open(url)
+        browser.fill({'New Deadline': new_deadline.strftime('%m/%d/%y'),
+                      'Response': text})
+        browser.click_on('Save')
 
-    def _change_deadline(self, task, new_deadline, text=u''):
-        url = ModifyDeadlineFormView.url_for(task,
-            transition='task-transition-modify-deadline')
-        self.browser.open(url)
-        self.browser.fill({
-            'New Deadline': new_deadline.strftime('%m/%d/%y'),
-            'Response': text})
-        self.browser.click('Save')
-
-    def test_task_deadline_is_updated_when_set_to_a_valid_date(self):
+    @browsing
+    def test_task_deadline_is_updated_when_set_to_a_valid_date(self, browser):
         task = create(Builder('task')
                       .having(issuer=TEST_USER_ID, deadline=datetime.date(2013, 1, 1)))
 
         new_deadline = datetime.date(2013, 10, 1)
 
-        url = ModifyDeadlineFormView.url_for(task,
-            transition='task-transition-modify-deadline')
-        self.browser.open(url)
-        self.browser.fill({
-            'New Deadline': new_deadline.strftime('%m/%d/%y'), })
-        self.browser.click('Save')
+        url = ModifyDeadlineFormView.url_for(
+            task, transition='task-transition-modify-deadline')
+        browser.login().open(url)
+        browser.fill({'New Deadline': new_deadline.strftime('%m/%d/%y'), })
+        browser.click_on('Save')
 
         self.assertEquals(task.deadline, datetime.date(2013, 10, 1))
-        self.assertPageContains('Deadline successfully changed.')
+        self.assertEquals(['Deadline successfully changed.'], info_messages())
 
-    def test_raise_invalidation_error_when_new_deadline_is_the_current_one(self):
+    @browsing
+    def test_raise_invalidation_error_when_new_deadline_is_the_current_one(self, browser):
         current_deadline = datetime.date(2013, 1, 1)
         task = create(Builder('task')
                       .having(issuer=TEST_USER_ID, deadline=current_deadline))
 
         url = ModifyDeadlineFormView.url_for(task,
             transition='task-transition-modify-deadline')
-        self.browser.open(url)
-        self.browser.fill({
-            'New Deadline': current_deadline.strftime('%m/%d/%y'), })
-        self.browser.click('Save')
+        browser.login().open(url)
+        browser.fill({'New Deadline': current_deadline.strftime('%m/%d/%y')})
+        browser.click_on('Save')
 
-        self.browser.assert_url(
-            '{}/@@modify_deadline'.format(task.absolute_url()))
-        self.assertPageContains('The given deadline, is the current one.')
+        self.assertEquals('{}/@@modify_deadline'.format(task.absolute_url()),
+                          browser.url)
+        self.assertEquals(
+            ['The given deadline, is the current one.'],
+            browser.css('#formfield-form-widgets-new_deadline .error').text)
 
-    def test_deadline_is_updated_also_in_globalindex(self):
+    @browsing
+    def test_deadline_is_updated_also_in_globalindex(self, browser):
         task = create(Builder('task')
                       .having(issuer=TEST_USER_ID, deadline=datetime.date(2013, 1, 1)))
 
@@ -64,7 +67,8 @@ class TestDeadlineModificationForm(FunctionalTestCase):
 
         self.assertEquals(task.get_sql_object().deadline, datetime.date(2013, 10, 1))
 
-    def test_according_response_is_created_when_modify_deadline(self):
+    @browsing
+    def test_according_response_is_created_when_modify_deadline(self, browser):
         task = create(Builder('task')
                       .having(issuer=TEST_USER_ID,
                               deadline=datetime.date(2013, 1, 1)))
@@ -82,7 +86,8 @@ class TestDeadlineModificationForm(FunctionalTestCase):
               'before': datetime.date(2013, 1, 1)}],
             response.changes)
 
-    def test_successor_is_also_updated_when_modify_predecessors_deadline(self):
+    @browsing
+    def test_successor_is_also_updated_when_modify_predecessors_deadline(self, browser):
         predecessor = create(Builder('task')
                              .having(issuer=TEST_USER_ID,
                                      deadline=datetime.date(2013, 1, 1)))
@@ -164,8 +169,6 @@ class TestDeadlineModifierController(FunctionalTestCase):
 
 
 class RemoteDeadlineModifier(FunctionalTestCase):
-
-    use_browser = True
 
     def test_updating_deadline_of_the_task(self):
         task = create(Builder('task')

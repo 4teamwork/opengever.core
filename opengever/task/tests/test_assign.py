@@ -1,6 +1,8 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browser as default_browser
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages.statusmessages import error_messages
 from opengever.task.adapters import IResponseContainer
 from opengever.task.statesyncer import SyncTaskWorkflowStateReceiveView
 from opengever.testing import FunctionalTestCase
@@ -8,8 +10,6 @@ from plone.app.testing import TEST_USER_ID
 
 
 class TestAssignTask(FunctionalTestCase):
-
-    use_browser = True
 
     def setUp(self):
         super(TestAssignTask, self).setUp()
@@ -24,23 +24,22 @@ class TestAssignTask(FunctionalTestCase):
                            .having(responsible_client='client1',
                                    responsible=TEST_USER_ID))
 
-    def test_do_nothing_when_responsible_has_not_changed(self):
+    @browsing
+    def test_do_nothing_when_responsible_has_not_changed(self, browser):
         self.assign_task('Test', TEST_USER_ID, '')
 
-        self.assertEquals(self.task.absolute_url(),
-                          self.browser.url.strip('/'))
+        self.assertEquals(self.task.absolute_url(), browser.url.strip('/'))
+        self.assertEquals(['No changes: same responsible selected'],
+                          error_messages())
 
-        self.assertIn(
-            'No changes: same responsible selected',
-            [aa.plain_text() for aa in self.browser.css('.portalMessage dd')])
+    @browsing
+    def test_responsible_client_and_transition_field_is_hidden(self, browser):
+        browser.login().open(self.task, view='assign-task')
 
-    def test_responsible_client_and_transition_field_is_hidden(self):
-        self.browser.open('%s/assign-task' % (self.task.absolute_url()))
+        self.assertEquals(None, browser.find('Responsible Client'))
 
-        with self.assertRaises(LookupError):
-            self.browser.getControl('Responsible Client')
-
-    def test_updates_responsible(self):
+    @browsing
+    def test_updates_responsible(self, browser):
 
         self.assign_task('James', 'james.bond', '')
 
@@ -48,7 +47,8 @@ class TestAssignTask(FunctionalTestCase):
         self.assertEquals('james.bond',
                           self.task.get_sql_object().responsible)
 
-    def test_adds_an_corresponding_response(self):
+    @browsing
+    def test_adds_an_corresponding_response(self, browser):
         self.assign_task('James', 'james.bond', 'Please make that for me.')
 
         response = IResponseContainer(self.task)[-1]
@@ -59,17 +59,11 @@ class TestAssignTask(FunctionalTestCase):
             response.changes)
         self.assertEquals('Please make that for me.', response.text)
 
-    def assign_task(self, name, userid, response):
-        self.browser.open(
-            '%s/assign-task?form.widgets.transition=%s' % (
-                self.task.absolute_url(), 'task-transition-reassign'))
-
-        self.browser.getControl(
-            name='form.widgets.responsible.widgets.query').value = name
-        self.browser.click('form.widgets.responsible.buttons.search')
-        self.browser.getControl(name='form.widgets.responsible').value=[userid]
-        self.browser.fill({'Response': response})
-        self.browser.click('Assign')
+    def assign_task(self, name, userid, response, browser=default_browser):
+        data = {'form.widgets.transition': 'task-transition-reassign'}
+        browser.login().open(self.task, data, view='assign-task')
+        browser.fill({'Responsible': userid, 'Response': response})
+        browser.click_on('Assign')
 
 
 class TestAssignTaskWithSuccessors(FunctionalTestCase):
