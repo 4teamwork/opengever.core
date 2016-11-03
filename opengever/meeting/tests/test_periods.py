@@ -4,6 +4,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
+from opengever.meeting.model import Period
 from opengever.testing import FunctionalTestCase
 
 
@@ -37,11 +38,29 @@ class TestPeriod(FunctionalTestCase):
         browser.login().open(self.committee, view='tabbedview_view-periods')
         listing_table = browser.css('.listing').first
         self.assertEqual(
-            [{'From': 'Jan 01, 2016', 'Title': '2016', 'To': 'Dec 31, 2016'},
-             {'To': 'Dec 31, 2011', 'From': 'Jan 01, 2011', 'Title': '2011'},
-             {'To': 'Dec 31, 2010', 'From': 'Jan 01, 2010', 'Title': '2010'},
+            [{'Date from': 'Jan 01, 2016',
+              'Title': '2016',
+              'Date to': 'Dec 31, 2016',
+              '': 'Edit'},
+             {'Date to': 'Dec 31, 2011',
+              'Date from': 'Jan 01, 2011',
+              'Title': '2011',
+              '': 'Edit'},
+             {'Date to': 'Dec 31, 2010',
+              'Date from': 'Jan 01, 2010',
+              'Title': '2010',
+              '': 'Edit'},
              ],
             listing_table.dicts())
+
+    @browsing
+    def test_edit_period(self, browser):
+        browser.login().open(self.committee, view='tabbedview_view-periods')
+        browser.find('Edit').click()
+        browser.fill({'Start date': 'January 20, 2016'}).submit()
+
+        self.assertEqual(['Changes saved'], info_messages())
+        self.assertEqual(date(2016, 1, 20), Period.query.one().date_from)
 
     @browsing
     def test_close_and_create_new_period(self, browser):

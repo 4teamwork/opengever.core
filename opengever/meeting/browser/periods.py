@@ -1,3 +1,5 @@
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from datetime import date
 from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
@@ -10,9 +12,7 @@ from opengever.meeting import is_meeting_feature_enabled
 from opengever.meeting.committee import ICommittee
 from opengever.meeting.model import Period
 from plone.directives import form
-from plone.directives import form
 from plone.z3cform.layout import FormWrapper
-from z3c.form import field
 from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
 from z3c.form.interfaces import IDataConverter
@@ -194,8 +194,13 @@ class AddNewPeriodStepView(FormWrapper, grok.View):
 
 class EditPeriod(ModelEditForm):
 
-    fields = field.Fields(IPeriodModel)
+    label = _('label_edit_period', default=u'Edit Period')
 
+    schema = IPeriodModel
 
     def __init__(self, context, request):
         super(EditPeriod, self).__init__(context, request, context.model)
+
+    def nextURL(self):
+        return "{}#periods".format(
+            aq_parent(aq_inner(self.context)).absolute_url())
