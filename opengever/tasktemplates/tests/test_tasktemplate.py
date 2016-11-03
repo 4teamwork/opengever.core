@@ -1,8 +1,9 @@
-from Products.CMFCore.utils import getToolByName
+from ftw.testbrowser import browsing
 from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
 from opengever.testing import FunctionalTestCase
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.dexterity.utils import createContent, addContentToContainer
+from Products.CMFCore.utils import getToolByName
 from zope.component import createObject
 from zope.component import queryUtility
 from zope.event import notify
@@ -69,10 +70,11 @@ class TestTaskTemplates(FunctionalTestCase):
             'opengever_tasktemplate_workflow' in workflow.getWorkflowsFor(
                 'opengever.tasktemplates.tasktemplate')[0].getId())
 
-class TestTaskTemplatesWithBrowser(FunctionalTestCase):
-    use_browser = True
 
-    def test_view(self):
+class TestTaskTemplatesWithBrowser(FunctionalTestCase):
+
+    @browsing
+    def test_view(self, browser):
         portal = self.layer['portal']
 
         self.grant('Manager')
@@ -96,6 +98,6 @@ class TestTaskTemplatesWithBrowser(FunctionalTestCase):
             responsible='current_user', )
         transaction.commit()
 
-        self.browser.open('%s' % template1.absolute_url())
-        heading = self.browser.locate(".documentFirstHeading")
-        self.assertEquals('TaskTemplate 1', heading.plain_text())
+        browser.login().open(template1)
+        self.assertEquals(['TaskTemplate 1'],
+                          browser.css('.documentFirstHeading').text)
