@@ -29,12 +29,12 @@ class PeriodListingTab(BaseListingTab):
              },
 
             {'column': 'date_from',
-             'column_title': _(u'column_date_from', default=u'From'),
+             'column_title': _(u'column_date_from', default=u'Date from'),
              'transform': lambda item, value: item.get_date_from(),
              },
 
             {'column': 'date_to',
-             'column_title': _(u'column_date_to', default=u'To'),
+             'column_title': _(u'column_date_to', default=u'Date to'),
              'transform': lambda item, value: item.get_date_to(),
              },
             {'column': '',
