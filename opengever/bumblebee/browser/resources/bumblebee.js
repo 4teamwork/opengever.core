@@ -261,7 +261,7 @@
     endpoint = previewListing.data("fetch-url");
     numberOfDocuments = getNumberOfDocuments(items.length);
     toggleShowMoreButton();
-    scanForBrokenImages(".bumblebee-thumbnail");
+    scanForBrokenImages(".bumblebee-thumbnail, .documentPreview > img");
 
     showroom.reset(items, getOffset());
     showroom.setTotal(numberOfDocuments);

@@ -14,7 +14,7 @@
             </table>
         </div>
         <div tal:condition="view/show_preview" class="documentPreview">
-            <img class="showroom-item bumblebee-thumbnail"
+            <img class="showroom-item"
                  tal:attributes="data-showroom-target view/get_overlay_url;
                                  data-showroom-title string:${context/title};
                                  src view/get_preview_image_url;
