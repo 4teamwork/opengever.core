@@ -1,15 +1,18 @@
 from datetime import date
 from five import grok
+from ftw.datepicker.widget import DatePickerFieldWidget
+from opengever.base.browser.modelforms import ModelAddForm
+from opengever.base.browser.modelforms import ModelEditForm
 from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.meeting import _
 from opengever.meeting import is_meeting_feature_enabled
 from opengever.meeting.committee import ICommittee
-from opengever.base.browser.modelforms import ModelAddForm
-from opengever.base.browser.modelforms import ModelEditForm
 from opengever.meeting.model import Period
 from plone.directives import form
+from plone.directives import form
 from plone.z3cform.layout import FormWrapper
+from z3c.form import field
 from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
 from z3c.form.interfaces import IDataConverter
@@ -24,11 +27,13 @@ class IPeriodModel(form.Schema):
         max_length=256,
         required=True)
 
+    form.widget(date_from=DatePickerFieldWidget)
     date_from = schema.Date(
         description=_('label_date_from', default='Start date'),
         required=True,
     )
 
+    form.widget(date_to=DatePickerFieldWidget)
     date_to = schema.Date(
         description=_('label_date_to', default='End date'),
         required=True,
@@ -185,3 +190,12 @@ class AddNewPeriodStepView(FormWrapper, grok.View):
 
     def available(self):
         return is_meeting_feature_enabled()
+
+
+class EditPeriod(ModelEditForm):
+
+    fields = field.Fields(IPeriodModel)
+
+
+    def __init__(self, context, request):
+        super(EditPeriod, self).__init__(context, request, context.model)

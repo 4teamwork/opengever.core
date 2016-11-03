@@ -46,9 +46,19 @@ class Period(Base):
     def __repr__(self):
         return '<Period {}>'.format(repr(self.title))
 
+    def is_editable(self):
+        return True
+
+    def is_removable(self):
+        return False
+
     def get_title(self):
         return u'{} ({} - {})'.format(
             self.title, self.get_date_from(), self.get_date_to())
+
+    def get_url(self, context, view=None):
+        # XXX move to sqlformsupport
+        return "{}/period-{}".format(context.absolute_url(), self.period_id)
 
     def get_date_from(self):
         """Return a localized date."""

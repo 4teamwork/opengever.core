@@ -7,10 +7,12 @@ from opengever.meeting.committeeroles import CommitteeRoles
 from opengever.meeting.container import ModelContainer
 from opengever.meeting.model import Committee as CommitteeModel
 from opengever.meeting.model import Meeting
+from opengever.meeting.model import Period
 from opengever.meeting.service import meeting_service
 from opengever.meeting.sources import repository_folder_source
 from opengever.meeting.sources import sablon_template_source
 from opengever.meeting.wrapper import MeetingWrapper
+from opengever.meeting.wrapper import PeriodWrapper
 from opengever.ogds.base.utils import ogds_service
 from plone import api
 from plone.directives import form
@@ -132,6 +134,12 @@ class Committee(ModelContainer):
             meeting = Meeting.query.get(meeting_id)
             if meeting:
                 return MeetingWrapper.wrap(self, meeting)
+
+        elif id_.startswith('period'):
+            period_id = int(id_.split('-')[-1])
+            period = Period.query.get(period_id)
+            if period:
+                return PeriodWrapper.wrap(self, period)
 
         if default is _marker:
             raise KeyError(id_)

@@ -3,6 +3,7 @@ from opengever.locking.interfaces import ISQLLockable
 from opengever.meeting.interfaces import IMeetingWrapper
 from opengever.meeting.interfaces import IMembershipWrapper
 from opengever.meeting.interfaces import IMemberWrapper
+from opengever.meeting.interfaces import IPeriodWrapper
 from opengever.meeting.model import Membership
 from zope.interface import implements
 
@@ -10,6 +11,16 @@ from zope.interface import implements
 class MeetingWrapper(SQLWrapperBase):
 
     implements(IMeetingWrapper, ISQLLockable)
+
+
+class PeriodWrapper(SQLWrapperBase):
+
+    implements(IPeriodWrapper)
+
+    default_view = 'edit'
+
+    def absolute_url(self):
+        return self.model.get_url(self.parent)
 
 
 class MemberWrapper(SQLWrapperBase):

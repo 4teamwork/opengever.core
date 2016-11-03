@@ -115,4 +115,11 @@
       allowed_attributes="available"
       />
 
+  <browser:page
+      for="opengever.meeting.interfaces.IPeriodWrapper"
+      name="edit"
+      class=".periods.EditPeriod"
+      permission="cmf.ModifyPortalContent"
+      />
+
 </configure>
