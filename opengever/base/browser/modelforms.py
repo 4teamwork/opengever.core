@@ -1,6 +1,6 @@
+from opengever.base import _
 from opengever.base.model import create_session
 from opengever.base.utils import disable_edit_bar
-from opengever.base import _
 from plone import api
 from plone.autoform.form import AutoExtensibleForm
 from z3c.form import button
@@ -61,14 +61,14 @@ class ModelAddForm(AutoExtensibleForm, AddForm):
         return self.context.absolute_url()
 
 
-class ModelEditForm(EditForm):
+class ModelEditForm(AutoExtensibleForm, EditForm):
     """Base edit-form for stand-alone model objects.
     """
 
     ignoreContext = True
     has_model_breadcrumbs = True
+    schema = None
 
-    fields = None
     field_prefix = 'form.widgets.'
 
     def __init__(self, context, request, model):

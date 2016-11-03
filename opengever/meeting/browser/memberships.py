@@ -72,9 +72,7 @@ class EditMembership(ModelEditForm):
 
     label = _('label_edit_membership', default=u'Edit Membership')
 
-    fields = field.Fields(IMembershipModel)
-    fields['date_to'].widgetFactory[INPUT_MODE] = DatePickerFieldWidget
-    fields['date_from'].widgetFactory[INPUT_MODE] = DatePickerFieldWidget
+    schema = IMembershipModel
 
     def __init__(self, context, request):
         super(EditMembership, self).__init__(context, request, context.model)
