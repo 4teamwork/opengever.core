@@ -10,14 +10,12 @@ from opengever.ogds.models.admin_unit import AdminUnit
 from opengever.ogds.models.org_unit import OrgUnit
 from opengever.ogds.models.user import User
 from opengever.testing import builders  # keep!
-from opengever.testing.browser import OGBrowser
 from opengever.testing.helpers import localized_datetime
 from plone import api
 from plone.app.testing import login
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
-from plone.app.testing import TEST_USER_PASSWORD
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from zope.component import getUtility
@@ -34,7 +32,6 @@ class TestCase(unittest2.TestCase):
 
 class FunctionalTestCase(TestCase):
     layer = OPENGEVER_FUNCTIONAL_TESTING
-    use_browser = False  # deprecated flag, XXX remove me once unused
     use_default_fixture = True
 
     def setUp(self):
@@ -44,8 +41,6 @@ class FunctionalTestCase(TestCase):
         self.request = self.app.REQUEST
         alsoProvides(self.request, IOpengeverBaseLayer)
         self.membership_tool = getToolByName(self.portal, 'portal_membership')
-        if self.use_browser:
-            self.browser = self._setup_browser()
 
         if self.use_default_fixture:
             user, org_unit, admin_unit = create(
@@ -180,12 +175,6 @@ class FunctionalTestCase(TestCase):
 
     def assertResponseHeader(self, name, value):
         self.assertEquals(value, self.portal.REQUEST.response.headers.get(name))
-
-    def _setup_browser(self):
-        browser = OGBrowser(self.app)
-        browser.handleErrors = False
-        browser.addHeader('Authorization', 'Basic %s:%s' % (TEST_USER_NAME, TEST_USER_PASSWORD,))
-        return browser
 
     def assertSubmittedDocumentCreated(self, proposal, document,
                                        submitted_version=0):
