@@ -3,6 +3,7 @@ from DateTime import DateTime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testing import staticuid
+from opengever.disposition.ech0160.model import Document
 from opengever.disposition.ech0160.model import Dossier
 from opengever.disposition.ech0160.model import Position
 from opengever.disposition.ech0160.model import Repository
@@ -245,3 +246,53 @@ class TestDossierModel(FunctionalTestCase):
         self.assertEqual(
             set([document]),
             set([doc.obj for doc in model.documents.values()]))
+
+
+class TestDocumentModel(FunctionalTestCase):
+
+    def test_title_is_document_title_in_utf8(self):
+        document = create(Builder('document')
+                          .titled(u'Qualit\xe4tsumfrage'))
+        self.assertEquals(u'Qualit\xe4tsumfrage',
+                          Document(document).binding().titel)
+
+    def test_autor_is_a_list_containing_document_author(self):
+        document = create(Builder('document')
+                          .having(document_author=u'Peter Fl\xfcckiger'))
+        self.assertEquals([u'Peter Fl\xfcckiger'],
+                          [author for author in Document(document).binding().autor])
+
+    def test_erscheinungsform_is_digital_available_flag(self):
+        doc_with_file = create(Builder('document').with_dummy_content())
+        self.assertEquals(
+            u'digital',
+            Document(doc_with_file).binding().erscheinungsform)
+
+        doc_without_file = create(Builder('document'))
+        self.assertEquals(
+            u'nicht digital',
+            Document(doc_without_file).binding().erscheinungsform)
+
+    def test_dokumentyp_is_document_type_title(self):
+        document = create(Builder('document')
+                          .having(document_type='contract'))
+        self.assertEquals(
+            u'Contract',
+            Document(document).binding().dokumenttyp)
+
+    def test_registrierdatum_is_created_date(self):
+        document = create(Builder('document')
+                          .with_creation_date(DateTime(2016, 11, 6)))
+
+        self.assertEquals(
+            date(2016, 11, 6),
+            Document(document).binding().registrierdatum.datum.date())
+
+    def test_entstehungszeitraum_is_created_to_modified_date_range(self):
+        document = create(Builder('document')
+                          .with_creation_date(DateTime(2016, 11, 6))
+                          .with_modification_date(DateTime(2017, 12, 6)))
+
+        entstehungszeitraum = Document(document).binding().entstehungszeitraum
+        self.assertEquals(date(2016, 11, 6), entstehungszeitraum.von.datum.date())
+        self.assertEquals(date(2017, 12, 6), entstehungszeitraum.bis.datum.date())
