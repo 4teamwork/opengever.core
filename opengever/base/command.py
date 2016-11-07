@@ -27,7 +27,7 @@ class CreateDocumentCommand(object):
         self.context = context
         self.data = data
         self.filename = filename
-        self.title = title or filename
+        self.title = title
         self.content_type = content_type
         self.additional_args = kwargs
 
