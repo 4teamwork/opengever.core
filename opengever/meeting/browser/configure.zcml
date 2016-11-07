@@ -122,4 +122,12 @@
       permission="cmf.ModifyPortalContent"
       />
 
+  <browser:page
+      for="opengever.meeting.interfaces.IPeriodWrapper"
+      name="alphabetical_toc"
+      class=".toc.DownloadAlphabeticalTOC"
+      permission="zope2.View"
+      allowed_attributes="as_json"
+      />
+
 </configure>

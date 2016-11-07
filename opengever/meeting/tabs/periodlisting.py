@@ -37,17 +37,31 @@ class PeriodListingTab(BaseListingTab):
              'column_title': _(u'column_date_to', default=u'Date to'),
              'transform': lambda item, value: item.get_date_to(),
              },
+            {'column': 'toc',
+             'column_title': _(u'column_toc',
+                               default=u'Download table of Contents'),
+             'transform': self.get_toc_link,
+             },
             {'column': '',
              'transform': self.get_edit_link,
              },
             )
 
-    def get_edit_link(self, item, value):
-        url = item.get_edit_url(self.context)
+    def _make_link(self, url, label, css_class):
+        return '<a  href="{0}" title="{1}" class="{2}">{1}</a>'.format(
+                url, translate(label, context=self.request), css_class)
 
-        return '<a  href="{0}" title="{1}" class="edit_period">{1}</a>'.format(
-                url, translate(_('label_edit', default=u'Edit'),
-                               context=self.request))
+    def get_edit_link(self, item, value):
+        return self._make_link(
+            item.get_edit_url(self.context),
+            _('label_edit', default=u'Edit'),
+            "edit_period")
+
+    def get_toc_link(self, item, value):
+        return self._make_link(
+            item.get_url(self.context, view='alphabetical_toc'),
+            _('label_download_alphabetical_toc', default=u'Alphabetical'),
+            "download_toc")
 
     def get_base_query(self):
         return Period.query.by_committee(self.context.load_model())

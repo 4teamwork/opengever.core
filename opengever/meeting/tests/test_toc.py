@@ -2,6 +2,8 @@ from datetime import date
 from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browsing
+from ftw.testbrowser.pages.statusmessages import error_messages
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.toc.alphabetical import AlphabeticalToc
 from opengever.testing import FunctionalTestCase
@@ -121,3 +123,19 @@ class TestTOC(FunctionalTestCase):
             }]
         }]
         self.assertEqual(expected, AlphabeticalToc(self.period).get_json())
+
+    @browsing
+    def test_shows_statusmessage_when_no_template_is_configured(self, browser):
+        container = create(Builder('committee_container'))
+        committee = create(Builder('committee')
+                           .within(container))
+        period = create(Builder('period').having(
+            date_from=date(2010, 1, 1),
+            date_to=date(2010, 12, 31),
+            committee=committee.load_model()))
+
+        url = period.get_url(committee)
+        browser.login().open(url, view='alphabetical_toc')
+        self.assertEqual(u'There is no toc template configured, toc could '
+                         'not be generated.',
+                         error_messages()[0])
