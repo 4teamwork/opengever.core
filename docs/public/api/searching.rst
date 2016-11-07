@@ -31,7 +31,7 @@ beschriebene ``metadata_fields`` Parameter verwendet werden.
 .. note::
         Suchresultate werden **paginiert** wenn die Anzahl Resultate die
         voreingestellte Seitengrösse (default: 25) überschreitet. Siehe
-        :doc:`/batching` zu Details zum Umgang mit paginierten Resultaten.
+        :doc:`/api/batching` zu Details zum Umgang mit paginierten Resultaten.
 
 
 Query-Format

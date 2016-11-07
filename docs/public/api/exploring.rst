@@ -51,7 +51,7 @@ So lässt sich die Struktur des GEVER-Mandandanten über die API mittels ``GET``
 
 .. _Postman: http://www.getpostman.com/
 
-.. |postman-retain-headers| image:: _static/img/postman_retain_headers.png
-.. |postman-request| image:: _static/img/postman_request.png
-.. |postman-basic-auth| image:: _static/img/postman_basic_auth.png
-.. |postman-headers| image:: _static/img/postman_headers.png
+.. |postman-retain-headers| image:: ../_static/img/postman_retain_headers.png
+.. |postman-request| image:: ../_static/img/postman_request.png
+.. |postman-basic-auth| image:: ../_static/img/postman_basic_auth.png
+.. |postman-headers| image:: ../_static/img/postman_headers.png
