@@ -10,6 +10,10 @@
     visibility: hidden;
 }
 
+div.body li.toctree-l2 ul {
+    display: none;
+}
+
 
 h3 {
     margin-top: 1em !important;
