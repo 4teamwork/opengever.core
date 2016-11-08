@@ -18,7 +18,7 @@ class IGeverBumblebeeSettings(Interface):
 
     open_pdf_in_a_new_window = schema.Bool(
         title=u'Open PDF in a new window/tab.',
-        description=u'Sets target="_browser" for links to PDF files.',
+        description=u'Sets target="_blank" for links to PDF files.',
         default=False)
 
 
