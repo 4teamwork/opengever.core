@@ -28,14 +28,19 @@ class TestRepositoryModel(FunctionalTestCase):
 
         model = Repository()
         model.add_dossier(Dossier(dossier1))
-        model.add_dossier(Dossier(dossier2))
 
         self.assertEquals(root, model.obj)
         positions = model.positions.values()
-        self.assertEquals(set([folder1, folder2]),
-                          set([pos.obj for pos in positions]))
+
+        self.assertEquals([folder1], [pos.obj for pos in positions])
         self.assertEquals([folder1_1],
                           [pos.obj for pos in positions[0].positions.values()])
+
+        model.add_dossier(Dossier(dossier2))
+        positions = model.positions.values()
+
+        self.assertEquals(set([folder1, folder2]),
+                          set([pos.obj for pos in positions]))
 
     def test_name_is_root_title(self):
         root = create(Builder('repository_root').titled(u'Ordnungsystem 2001'))
@@ -47,14 +52,14 @@ class TestRepositoryModel(FunctionalTestCase):
 
     def test_anwendungszeitraum_bis_is_valid_from_date_or_keine_angabe(self):
         root1 = create(Builder('repository_root')
-                       .having(valid_from=date(2016, 06, 11)))
+                       .having(valid_from=date(2016, 6, 11)))
         model = Repository()
         model.obj = root1
-        self.assertEquals(date(2016, 06, 11),
+        self.assertEquals(date(2016, 6, 11),
                           model.binding().anwendungszeitraum.von.datum.date())
 
         root2 = create(Builder('repository_root')
-                       .having(valid_until=date(2016, 06, 11)))
+                       .having(valid_until=date(2016, 6, 11)))
         model = Repository()
         model.obj = root2
         self.assertEquals('keine Angabe',
@@ -324,7 +329,6 @@ class TestFolderAndFileModel(FunctionalTestCase):
             repo.add_dossier(dossier_model)
             content.add_dossier(dossier_model)
 
-
         self.assertEquals(2, len(content.folders))
         dossier_model_a, dossier_model_b = content.folders
 
@@ -378,11 +382,12 @@ class TestFileModel(FunctionalTestCase):
         self.assertEquals('p003240.doc', model.name)
 
     def test_pruefsumme_is_a_md5_hash(self):
-        document = create(Builder('document').with_dummy_content('Test data'))
+        document = create(Builder('document')
+                          .attach_archival_file_containing('Test data'))
         model = File(self.toc, Document(document))
 
         _hash = hashlib.md5()
         _hash.update('Test data')
 
         self.assertEquals(_hash.hexdigest(), model.binding().pruefsumme)
-        self.assertEquals('md5', model.binding().pruefalgorithmus)
+        self.assertEquals('MD5', model.binding().pruefalgorithmus)
