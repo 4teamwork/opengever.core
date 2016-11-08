@@ -200,7 +200,7 @@ class BumblebeeBaseDocumentOverlay(object):
             url, _(u'label_revert', default=u'Revert document'),
             css_class='standalone function-revert')
 
-    def new_window(self):
+    def should_open_in_new_window(self):
         return api.portal.get_registry_record('open_pdf_in_a_new_window',
                                               interface=IGeverBumblebeeSettings)
 
