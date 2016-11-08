@@ -8,6 +8,7 @@ from opengever.base.protect import unprotected_write
 from opengever.bumblebee import _
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.bumblebee.interfaces import IBumblebeeOverlay
+from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
 from opengever.bumblebee.interfaces import IVersionedContextMarker
 from opengever.document.browser.versions_tab import translate_link
 from opengever.document.checkout.viewlets import CheckedOutViewlet
@@ -70,6 +71,7 @@ class BumblebeeBaseDocumentOverlay(object):
             return None
 
         return '{}/edit'.format(self.context.absolute_url())
+
 
     def get_detail_view_url(self):
         return self.context.absolute_url()
@@ -198,6 +200,9 @@ class BumblebeeBaseDocumentOverlay(object):
             url, _(u'label_revert', default=u'Revert document'),
             css_class='standalone function-revert')
 
+    def new_window(self):
+        return api.portal.get_registry_record('open_pdf_in_a_new_window',
+                                              interface=IGeverBumblebeeSettings)
 
 class BumblebeeMailOverlay(BumblebeeBaseDocumentOverlay):
     """Bumblebee overlay for base mails.
