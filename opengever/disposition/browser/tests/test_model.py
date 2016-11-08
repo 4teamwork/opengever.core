@@ -3,11 +3,14 @@ from DateTime import DateTime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testing import staticuid
+from opengever.disposition.ech0160.model import ContentRootFolder
 from opengever.disposition.ech0160.model import Document
 from opengever.disposition.ech0160.model import Dossier
+from opengever.disposition.ech0160.model import File
 from opengever.disposition.ech0160.model import Position
 from opengever.disposition.ech0160.model import Repository
 from opengever.testing import FunctionalTestCase
+import hashlib
 import unittest
 
 
@@ -296,3 +299,90 @@ class TestDocumentModel(FunctionalTestCase):
         entstehungszeitraum = Document(document).binding().entstehungszeitraum
         self.assertEquals(date(2016, 11, 6), entstehungszeitraum.von.datum.date())
         self.assertEquals(date(2017, 12, 6), entstehungszeitraum.bis.datum.date())
+
+
+class TestFolderAndFileModel(FunctionalTestCase):
+
+    def test_complete_tree_representation(self):
+        root = create(Builder('repository_root'))
+        folder = create(Builder('repository').within(root))
+        dossier_a = create(Builder('dossier').within(folder))
+        subdossier_a = create(Builder('dossier').within(dossier_a))
+        document_a = create(Builder('document')
+                            .within(subdossier_a)
+                            .with_dummy_content())
+        dossier_b = create(Builder('dossier').within(folder))
+        document_b = create(Builder('document')
+                            .within(dossier_b)
+                            .with_dummy_content())
+
+        repo = Repository()
+        content = ContentRootFolder('SIP_20101212_FD_MyRef')
+
+        models = [Dossier(dossier_a), Dossier(dossier_b)]
+        for dossier_model in models:
+            repo.add_dossier(dossier_model)
+            content.add_dossier(dossier_model)
+
+
+        self.assertEquals(2, len(content.folders))
+        dossier_model_a, dossier_model_b = content.folders
+
+        # dossier a
+        self.assertEquals(1, len(dossier_model_a.folders))
+        subdossier_model = dossier_model_a.folders[0]
+        self.assertEquals(1, len(subdossier_model.files))
+        file_model_a = subdossier_model.files[0]
+        self.assertEquals(u'testdokumant.doc', file_model_a.filename)
+        self.assertEquals(document_a.file._blob.committed(), file_model_a.filepath)
+
+        # dossier b
+        self.assertEquals([], dossier_model_b.folders)
+        self.assertEquals(1, len(dossier_model_b.files))
+        file_model_b = dossier_model_b.files[0]
+        self.assertEquals(u'testdokumant.doc', file_model_b.filename)
+        self.assertEquals(document_b.file._blob.committed(), file_model_b.filepath)
+
+
+class TestFileModel(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestFileModel, self).setUp()
+        self.toc = ContentRootFolder('FAKE_PATH')
+        self.toc.next_file = 3239
+
+    def test_uses_documents_archival_file_if_exist(self):
+        document = create(Builder('document')
+                          .attach_archival_file_containing('ARCHIVDATA', u'test.pdf')
+                          .with_dummy_content())
+        model = File(self.toc, Document(document))
+
+        self.assertEquals(u'test.pdf', model.filename)
+        self.assertEquals(document.archival_file._blob.committed(),
+                          model.filepath)
+
+    def test_represents_documents_file_if_no_archival_file_exist(self):
+        document = create(Builder('document').with_dummy_content())
+        model = File(self.toc, Document(document))
+
+        self.assertEquals(u'testdokumant.doc', model.filename)
+        self.assertEquals(document.file._blob.committed(), model.filepath)
+
+    def test_named_next_file_number_prefixed_with_p(self):
+        document_a = create(Builder('document').with_dummy_content())
+        document_b = create(Builder('document').with_dummy_content())
+
+        model = File(self.toc, Document(document_a))
+        self.assertEquals('p003239.doc', model.name)
+        model = File(self.toc, Document(document_b))
+        self.assertEquals('p003240.doc', model.name)
+
+    def test_pruefsumme_is_a_md5_hash(self):
+        document = create(Builder('document').with_dummy_content('Test data'))
+        model = File(self.toc, Document(document))
+
+        _hash = hashlib.md5()
+        _hash.update('Test data')
+
+        self.assertEquals(_hash.hexdigest(), model.binding().pruefsumme)
+        self.assertEquals('md5', model.binding().pruefalgorithmus)
