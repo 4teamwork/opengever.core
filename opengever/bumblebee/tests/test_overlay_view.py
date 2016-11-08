@@ -3,9 +3,11 @@ from ftw.builder import create
 from ftw.bumblebee.tests.helpers import asset as bumblebee_asset
 from ftw.testbrowser import browsing
 from opengever.bumblebee.browser.overlay import BumblebeeOverlayBaseView
+from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 from opengever.testing import FunctionalTestCase
 from opengever.testing.helpers import create_document_version
+from plone import api
 from zExceptions import NotFound
 import transaction
 
@@ -22,6 +24,51 @@ class TestBumblebeeOverlayListing(FunctionalTestCase):
         browser.login().visit(document, view="bumblebee-overlay-listing")
 
         self.assertEqual(1, len(browser.css('#file-preview')))
+
+    @browsing
+    def test_open_pdf_in_a_new_window_disabled(self, browser):
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document')
+                          .within(dossier)
+                          .attach_file_containing(
+                              bumblebee_asset('example.docx').bytes(),
+                              u'example.docx'))
+
+        browser.login().visit(document, view="bumblebee-overlay-listing")
+
+        # Only one anchor element shall contain 'PDF' in its CDATA
+        # This element shall not have a target attribute
+        self.assertEqual([True],
+                         [True
+                          for a in browser.xpath('//a')
+                          if 'PDF' in a.innerHTML
+                          and 'target=' not in a.outerHTML],
+                         msg='Anchor to PDF file not found in expected format')
+
+    @browsing
+    def test_open_pdf_in_a_new_window_enabled(self, browser):
+        api.portal.set_registry_record('open_pdf_in_a_new_window',
+                                       True,
+                                       interface=IGeverBumblebeeSettings)
+
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document')
+                          .within(dossier)
+                          .attach_file_containing(
+                              bumblebee_asset('example.docx').bytes(),
+                              u'example.docx'))
+
+        browser.login().visit(document, view='bumblebee-overlay-listing')
+
+        # Only one anchor element shall contain 'PDF' in its CDATA
+        # This element shall have a target attribute
+
+        self.assertEqual([True],
+                         [True
+                          for a in browser.xpath('//a')
+                          if 'PDF' in a.innerHTML
+                          and 'target=' in a.outerHTML],
+                         msg='Anchor to PDF file not found in expected format')
 
     @browsing
     def test_actions_with_file(self, browser):
