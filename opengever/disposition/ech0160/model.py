@@ -251,7 +251,7 @@ class Folder(object):
         self.path = os.path.join(base_path, self.name)
 
         for dossier in dossier.dossiers.values():
-            self.folder.append(Folder(toc, dossier, self.path))
+            self.folders.append(Folder(toc, dossier, self.path))
 
         for doc in dossier.documents.values():
             self.files.append(File(toc, doc))
