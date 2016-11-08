@@ -47,6 +47,9 @@ class Contact(Base, SQLFormSupport):
     __mapper_args__ = {'polymorphic_on': contact_type,
                        'with_polymorphic': '*'}
 
+    def get_edit_url(self, context):
+        return self.get_url(view='edit')
+
     @property
     def id(self):
         return self.contact_id

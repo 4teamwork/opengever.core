@@ -24,7 +24,9 @@ class TestCommittee(FunctionalTestCase):
         self.repository_folder = create(Builder('repository')
                                         .within(self.repo_root)
                                         .titled('Repo'))
-        self.container = create(Builder('committee_container'))
+        self.template = create(Builder('sablontemplate'))
+        self.container = create(Builder('committee_container')
+                                .having(toc_template=self.template))
 
     def test_committee_can_be_added(self):
         committee = create(Builder('committee').within(self.container))
@@ -33,6 +35,17 @@ class TestCommittee(FunctionalTestCase):
         model = committee.load_model()
         self.assertIsNotNone(model)
         self.assertEqual(Oguid.for_object(committee), model.oguid)
+
+    def test_get_toc_template_returns_committee_template_if_available(self):
+        committee = create(
+            Builder('committee')
+            .having(toc_template=self.template)
+            .within(self.container))
+        self.assertEqual(self.template, committee.get_toc_template())
+
+    def test_get_toc_template_falls_back_to_container(self):
+        committee = create(Builder('committee').within(self.container))
+        self.assertEqual(self.template, committee.get_toc_template())
 
     @browsing
     def test_committee_repository_is_validated(self, browser):
@@ -75,6 +88,7 @@ class TestCommittee(FunctionalTestCase):
             {'Title': u'A c\xf6mmittee',
              'Protocol template': sablon_template,
              'Excerpt template': sablon_template,
+             'Table of contents template': sablon_template,
              'Linked repository folder': self.repository_folder,
              self.group_field_name: 'client1_users'})
         browser.css('#form-buttons-save').first.click()

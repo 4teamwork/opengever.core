@@ -110,7 +110,7 @@ class DownloadProtocolJson(DownloadGeneratedProtocol):
         return self.get_protocol_json(pretty=True)
 
 
-class EditProtocol(AutoExtensibleForm, ModelEditForm):
+class EditProtocol(ModelEditForm):
 
     has_model_breadcrumbs = True
     ignoreContext = True

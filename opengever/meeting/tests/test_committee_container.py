@@ -22,8 +22,9 @@ class TestCommitteeContainer(FunctionalTestCase):
         browser.login().open(view='++add++opengever.meeting.committeecontainer')
         browser.fill({'Title (German)': u'Sitzungen',
                       'Title (French)': u's\xe9ance',
-                      'Protocol template':self.template,
-                      'Excerpt template': self.template})
+                      'Protocol template': self.template,
+                      'Excerpt template': self.template,
+                      'Table of contents template': self.template})
 
         browser.find('Save').click()
 
@@ -32,6 +33,19 @@ class TestCommitteeContainer(FunctionalTestCase):
 
         browser.find('DE').click()
         self.assertEquals(u'Sitzungen', browser.css('h1').first.text)
+
+    def test_get_toc_template(self):
+        toc_template = create(
+            Builder('sablontemplate')
+            .attach_file_containing("blabla", name=u'toc.docx'))
+
+        container = create(
+            Builder('committee_container').having(
+                protocol_template=self.template,
+                excerpt_template=self.template,
+                toc_template=toc_template))
+
+        self.assertEqual(toc_template, container.get_toc_template())
 
 
 class TestCommitteesTab(FunctionalTestCase):

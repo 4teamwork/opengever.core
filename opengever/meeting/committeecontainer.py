@@ -34,6 +34,13 @@ class ICommitteeContainer(form.Schema):
         required=False,
     )
 
+    toc_template = RelationChoice(
+        title=_('label_toc_template',
+                default=u'Table of contents template'),
+        source=sablon_template_source,
+        required=False,
+    )
+
 
 class CommitteeContainerAddForm(TranslatedTitleAddForm):
     grok.name('opengever.meeting.committeecontainer')
@@ -79,5 +86,11 @@ class CommitteeContainer(Container, TranslatedTitleMixin):
     def get_agendaitem_list_template(self):
         if self.agendaitem_list_template:
             return self.agendaitem_list_template.to_object
+
+        return None
+
+    def get_toc_template(self):
+        if self.toc_template:
+            return self.toc_template.to_object
 
         return None

@@ -1,4 +1,5 @@
 from opengever.base.model import Base
+from opengever.base.model import SQLFormSupport
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
 from opengever.meeting.workflow import State
@@ -14,7 +15,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
 
 
-class Period(Base):
+class Period(Base, SQLFormSupport):
 
     STATE_ACTIVE = State('active', is_default=True,
                          title=_('active', default='Active'))
@@ -46,9 +47,23 @@ class Period(Base):
     def __repr__(self):
         return '<Period {}>'.format(repr(self.title))
 
+    @property
+    def wrapper_id(self):
+        return 'period-{}'.format(self.period_id)
+
+    def is_removable(self):
+        return False
+
     def get_title(self):
         return u'{} ({} - {})'.format(
             self.title, self.get_date_from(), self.get_date_to())
+
+    def get_url(self, context, view=None):
+        elements = [context.absolute_url(), self.wrapper_id]
+        if view:
+            elements.append(view)
+
+        return '/'.join(elements)
 
     def get_date_from(self):
         """Return a localized date."""
@@ -65,19 +80,6 @@ class Period(Base):
 
     def can_execute_transition(self, name):
         return self.workflow.can_execute_transition(self, name)
-
-    def get_edit_values(self, fieldnames):
-        values = {}
-        for fieldname in fieldnames:
-            value = getattr(self, fieldname, None)
-            if value:
-                values[fieldname] = value
-
-        return values
-
-    def update_model(self, data):
-        for key, value in data.items():
-            setattr(self, key, value)
 
     def get_next_decision_sequence_number(self):
         self.decision_sequence_number += 1

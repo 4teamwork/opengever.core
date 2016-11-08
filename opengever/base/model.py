@@ -76,7 +76,7 @@ class SQLFormSupport(object):
         return True
 
     def get_edit_url(self, context):
-        return self.get_url(view='edit')
+        return self.get_url(context, view='edit')
 
     def get_edit_values(self, fieldnames):
         values = {}

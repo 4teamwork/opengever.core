@@ -10,3 +10,6 @@ class IParticipationWrapper(Interface):
 class ParticipationWrapper(SQLWrapperBase):
 
     implements(IParticipationWrapper)
+
+    def absolute_url(self):
+        return self.model.get_url(self.parent)

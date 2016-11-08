@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-11-01 08:51+0000\n"
+"POT-Creation-Date: 2016-11-03 14:44+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -47,12 +47,12 @@ msgstr ""
 msgid "Add committee"
 msgstr ""
 
-#: ./opengever/meeting/browser/periods.py:40
+#: ./opengever/meeting/browser/periods.py:45
 msgid "Add new period"
 msgstr ""
 
 #: ./opengever/meeting/browser/committeeforms.py:33
-#: ./opengever/meeting/browser/periods.py:125
+#: ./opengever/meeting/browser/periods.py:130
 msgid "Add period"
 msgstr ""
 
@@ -81,7 +81,7 @@ msgstr ""
 msgid "Can't add membership, it overlaps an existing membership from ${date_from} to ${date_to}"
 msgstr ""
 
-#: ./opengever/meeting/browser/memberships.py:89
+#: ./opengever/meeting/browser/memberships.py:87
 msgid "Can't change membership, it overlaps an existing membership from ${date_from} to ${date_to}"
 msgstr ""
 
@@ -93,11 +93,11 @@ msgstr ""
 msgid "Close all proposals"
 msgstr ""
 
-#: ./opengever/meeting/browser/periods.py:59
+#: ./opengever/meeting/browser/periods.py:64
 msgid "Close currently active period"
 msgstr ""
 
-#: ./opengever/meeting/browser/periods.py:39
+#: ./opengever/meeting/browser/periods.py:44
 msgid "Close period"
 msgstr ""
 
@@ -149,7 +149,7 @@ msgstr ""
 msgid "Excerpt for meeting ${title} has been updated successfully"
 msgstr ""
 
-#: ./opengever/meeting/committee.py:53
+#: ./opengever/meeting/committee.py:55
 #: ./opengever/meeting/committeecontainer.py:25
 msgid "Excerpt template"
 msgstr ""
@@ -206,7 +206,7 @@ msgstr ""
 msgid "Include publish in"
 msgstr ""
 
-#: ./opengever/meeting/committee.py:66
+#: ./opengever/meeting/committee.py:75
 msgid "Linked repository folder"
 msgstr ""
 
@@ -286,7 +286,7 @@ msgstr ""
 msgid "Protocol for meeting ${title} has been updated successfully"
 msgstr ""
 
-#: ./opengever/meeting/committee.py:47
+#: ./opengever/meeting/committee.py:49
 #: ./opengever/meeting/committeecontainer.py:19
 msgid "Protocol template"
 msgstr ""
@@ -356,7 +356,7 @@ msgstr ""
 
 #. Default: "Active"
 #: ./opengever/meeting/model/committee.py:30
-#: ./opengever/meeting/model/period.py:20
+#: ./opengever/meeting/model/period.py:21
 msgid "active"
 msgstr ""
 
@@ -413,7 +413,7 @@ msgid "button_cancel"
 msgstr ""
 
 #. Default: "Close period"
-#: ./opengever/meeting/browser/periods.py:80
+#: ./opengever/meeting/browser/periods.py:85
 msgid "button_close_period"
 msgstr ""
 
@@ -446,13 +446,13 @@ msgid "close_meeting"
 msgstr ""
 
 #. Default: "Close period"
-#: ./opengever/meeting/model/period.py:28
+#: ./opengever/meeting/model/period.py:29
 msgid "close_period"
 msgstr ""
 
 #. Default: "Closed"
 #: ./opengever/meeting/model/meeting.py:70
-#: ./opengever/meeting/model/period.py:21
+#: ./opengever/meeting/model/period.py:22
 msgid "closed"
 msgstr ""
 
@@ -468,13 +468,13 @@ msgstr ""
 
 #. Default: "Date from"
 #: ./opengever/meeting/tabs/membershiplisting.py:29
-#: ./opengever/meeting/tabs/periodlisting.py:31
+#: ./opengever/meeting/tabs/periodlisting.py:32
 msgid "column_date_from"
 msgstr ""
 
 #. Default: "Date to"
 #: ./opengever/meeting/tabs/membershiplisting.py:33
-#: ./opengever/meeting/tabs/periodlisting.py:36
+#: ./opengever/meeting/tabs/periodlisting.py:37
 msgid "column_date_to"
 msgstr ""
 
@@ -527,7 +527,7 @@ msgstr ""
 #. Default: "Title"
 #: ./opengever/meeting/tabs/committeelisting.py:24
 #: ./opengever/meeting/tabs/meetinglisting.py:46
-#: ./opengever/meeting/tabs/periodlisting.py:27
+#: ./opengever/meeting/tabs/periodlisting.py:28
 msgid "column_title"
 msgstr ""
 
@@ -554,7 +554,7 @@ msgid "decided"
 msgstr ""
 
 #. Default: "Automatically configure permissions on the committee for this group."
-#: ./opengever/meeting/committee.py:95
+#: ./opengever/meeting/committee.py:104
 msgid "description_group"
 msgstr ""
 
@@ -627,7 +627,7 @@ msgid "label_agendaitem_list"
 msgstr ""
 
 #. Default: "Agendaitem list template"
-#: ./opengever/meeting/committee.py:59
+#: ./opengever/meeting/committee.py:61
 #: ./opengever/meeting/committeecontainer.py:31
 msgid "label_agendaitem_list_template"
 msgstr ""
@@ -696,14 +696,14 @@ msgstr ""
 
 #. Default: "Start date"
 #: ./opengever/meeting/browser/memberships.py:21
-#: ./opengever/meeting/browser/periods.py:28
+#: ./opengever/meeting/browser/periods.py:32
 #: ./opengever/meeting/browser/templates/member.pt:50
 msgid "label_date_from"
 msgstr ""
 
 #. Default: "End date"
 #: ./opengever/meeting/browser/memberships.py:26
-#: ./opengever/meeting/browser/periods.py:33
+#: ./opengever/meeting/browser/periods.py:38
 #: ./opengever/meeting/browser/templates/member.pt:51
 msgid "label_date_to"
 msgstr ""
@@ -777,6 +777,7 @@ msgstr ""
 
 #. Default: "Edit"
 #: ./opengever/meeting/browser/templates/member.pt:62
+#: ./opengever/meeting/tabs/periodlisting.py:49
 msgid "label_edit"
 msgstr ""
 
@@ -793,6 +794,11 @@ msgstr ""
 #. Default: "Edit Membership"
 #: ./opengever/meeting/browser/memberships.py:73
 msgid "label_edit_membership"
+msgstr ""
+
+#. Default: "Edit Period"
+#: ./opengever/meeting/browser/periods.py:197
+msgid "label_edit_period"
 msgstr ""
 
 #. Default: "Save"
@@ -829,7 +835,7 @@ msgid "label_firstname"
 msgstr ""
 
 #. Default: "Group"
-#: ./opengever/meeting/committee.py:94
+#: ./opengever/meeting/committee.py:103
 msgid "label_group"
 msgstr ""
 
@@ -867,7 +873,7 @@ msgid "label_linked_meeting"
 msgstr ""
 
 #. Default: "Contains automatically generated dossiers and documents for this committee."
-#: ./opengever/meeting/committee.py:67
+#: ./opengever/meeting/committee.py:76
 msgid "label_linked_repository_folder"
 msgstr ""
 
@@ -1019,6 +1025,12 @@ msgstr ""
 msgid "label_title"
 msgstr ""
 
+#. Default: "Table of contents template"
+#: ./opengever/meeting/committee.py:68
+#: ./opengever/meeting/committeecontainer.py:38
+msgid "label_toc_template"
+msgstr ""
+
 #. Default: "Transition ${transition} executed"
 #: ./opengever/meeting/browser/meetings/transitions.py:25
 msgid "label_transition_executed"
@@ -1108,7 +1120,7 @@ msgid "msg_meeting_successfully_closed"
 msgstr ""
 
 #. Default: "The membership was deleted successfully"
-#: ./opengever/meeting/browser/memberships.py:108
+#: ./opengever/meeting/browser/memberships.py:106
 msgid "msg_membership_deleted"
 msgstr ""
 

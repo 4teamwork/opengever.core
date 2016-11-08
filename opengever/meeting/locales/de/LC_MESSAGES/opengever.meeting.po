@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-11-01 08:51+0000\n"
+"POT-Creation-Date: 2016-11-03 14:44+0000\n"
 "PO-Revision-Date: 2015-04-10 09:01+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -48,12 +48,12 @@ msgstr "Mitgliedschaft hinzufügen"
 msgid "Add committee"
 msgstr "Gremium hinzufügen"
 
-#: ./opengever/meeting/browser/periods.py:40
+#: ./opengever/meeting/browser/periods.py:45
 msgid "Add new period"
 msgstr "Neue Periode hinzufügen"
 
 #: ./opengever/meeting/browser/committeeforms.py:33
-#: ./opengever/meeting/browser/periods.py:125
+#: ./opengever/meeting/browser/periods.py:130
 msgid "Add period"
 msgstr "Periode hinzufügen"
 
@@ -82,7 +82,7 @@ msgstr "Sind Sie sicher das Sie dieses Traktandum beschliessen möchten?"
 msgid "Can't add membership, it overlaps an existing membership from ${date_from} to ${date_to}"
 msgstr "Die Mitgliedschaft kann nicht erstellt werden, weil sie eine bestehende Mitgliedschaft vom ${date_from} bis ${date_to} überschneidet."
 
-#: ./opengever/meeting/browser/memberships.py:89
+#: ./opengever/meeting/browser/memberships.py:87
 msgid "Can't change membership, it overlaps an existing membership from ${date_from} to ${date_to}"
 msgstr "Die Mitgliedschaft kann nicht geändert werden, weil sie eine bestehende Mitgliedschaft vom ${date_from} bis zum ${date_to} überschneidet."
 
@@ -94,11 +94,11 @@ msgstr "Traktanden auswählen"
 msgid "Close all proposals"
 msgstr "Alle Anträge werden abgeschlossen"
 
-#: ./opengever/meeting/browser/periods.py:59
+#: ./opengever/meeting/browser/periods.py:64
 msgid "Close currently active period"
 msgstr "Aktuelle Periode abschliessen"
 
-#: ./opengever/meeting/browser/periods.py:39
+#: ./opengever/meeting/browser/periods.py:44
 msgid "Close period"
 msgstr "Periode abschliessen"
 
@@ -150,7 +150,7 @@ msgstr "Protokollauszug für die Sitzung ${title} wurde erfolgreich erstellt."
 msgid "Excerpt for meeting ${title} has been updated successfully"
 msgstr "Protokollauszug für die Sitzung ${title} wurde erfolgreich aktualisiert."
 
-#: ./opengever/meeting/committee.py:53
+#: ./opengever/meeting/committee.py:55
 #: ./opengever/meeting/committeecontainer.py:25
 msgid "Excerpt template"
 msgstr "Vorlage Protokollauszug"
@@ -207,7 +207,7 @@ msgstr "Antrag einfügen"
 msgid "Include publish in"
 msgstr "Veröffentlichung in einfügen"
 
-#: ./opengever/meeting/committee.py:66
+#: ./opengever/meeting/committee.py:75
 msgid "Linked repository folder"
 msgstr "Ablageposition"
 
@@ -287,7 +287,7 @@ msgstr "Protokoll für die Sitzung ${title} wurde erfolgreich erstellt."
 msgid "Protocol for meeting ${title} has been updated successfully"
 msgstr "Protokoll für die Sitzung ${title} wurde erfolgreich aktualisiert."
 
-#: ./opengever/meeting/committee.py:47
+#: ./opengever/meeting/committee.py:49
 #: ./opengever/meeting/committeecontainer.py:19
 msgid "Protocol template"
 msgstr "Vorlage Protokoll"
@@ -357,7 +357,7 @@ msgstr "Mit einer neuen Version der Sitzung ${title} aktualisiert."
 
 #. Default: "Active"
 #: ./opengever/meeting/model/committee.py:30
-#: ./opengever/meeting/model/period.py:20
+#: ./opengever/meeting/model/period.py:21
 msgid "active"
 msgstr "Aktiv"
 
@@ -414,7 +414,7 @@ msgid "button_cancel"
 msgstr "Abbrechen"
 
 #. Default: "Close period"
-#: ./opengever/meeting/browser/periods.py:80
+#: ./opengever/meeting/browser/periods.py:85
 msgid "button_close_period"
 msgstr "Periode abschliessen"
 
@@ -447,13 +447,13 @@ msgid "close_meeting"
 msgstr "Abschliessen"
 
 #. Default: "Close period"
-#: ./opengever/meeting/model/period.py:28
+#: ./opengever/meeting/model/period.py:29
 msgid "close_period"
 msgstr "Periode abschliessen"
 
 #. Default: "Closed"
 #: ./opengever/meeting/model/meeting.py:70
-#: ./opengever/meeting/model/period.py:21
+#: ./opengever/meeting/model/period.py:22
 msgid "closed"
 msgstr "geschlossen"
 
@@ -469,13 +469,13 @@ msgstr "Datum"
 
 #. Default: "Date from"
 #: ./opengever/meeting/tabs/membershiplisting.py:29
-#: ./opengever/meeting/tabs/periodlisting.py:31
+#: ./opengever/meeting/tabs/periodlisting.py:32
 msgid "column_date_from"
 msgstr "Von"
 
 #. Default: "Date to"
 #: ./opengever/meeting/tabs/membershiplisting.py:33
-#: ./opengever/meeting/tabs/periodlisting.py:36
+#: ./opengever/meeting/tabs/periodlisting.py:37
 msgid "column_date_to"
 msgstr "Bis"
 
@@ -528,7 +528,7 @@ msgstr "Status"
 #. Default: "Title"
 #: ./opengever/meeting/tabs/committeelisting.py:24
 #: ./opengever/meeting/tabs/meetinglisting.py:46
-#: ./opengever/meeting/tabs/periodlisting.py:27
+#: ./opengever/meeting/tabs/periodlisting.py:28
 msgid "column_title"
 msgstr "Titel"
 
@@ -555,7 +555,7 @@ msgid "decided"
 msgstr "Beschlossen"
 
 #. Default: "Automatically configure permissions on the committee for this group."
-#: ./opengever/meeting/committee.py:95
+#: ./opengever/meeting/committee.py:104
 msgid "description_group"
 msgstr "Für diese Gruppe werden automatisch Berechtigungen auf dem Gremium vergeben."
 
@@ -628,7 +628,7 @@ msgid "label_agendaitem_list"
 msgstr "Traktandenliste"
 
 #. Default: "Agendaitem list template"
-#: ./opengever/meeting/committee.py:59
+#: ./opengever/meeting/committee.py:61
 #: ./opengever/meeting/committeecontainer.py:31
 msgid "label_agendaitem_list_template"
 msgstr "Vorlage Traktandenliste"
@@ -697,14 +697,14 @@ msgstr "Aktuelle Periode"
 
 #. Default: "Start date"
 #: ./opengever/meeting/browser/memberships.py:21
-#: ./opengever/meeting/browser/periods.py:28
+#: ./opengever/meeting/browser/periods.py:32
 #: ./opengever/meeting/browser/templates/member.pt:50
 msgid "label_date_from"
 msgstr "Von"
 
 #. Default: "End date"
 #: ./opengever/meeting/browser/memberships.py:26
-#: ./opengever/meeting/browser/periods.py:33
+#: ./opengever/meeting/browser/periods.py:38
 #: ./opengever/meeting/browser/templates/member.pt:51
 msgid "label_date_to"
 msgstr "Bis"
@@ -778,6 +778,7 @@ msgstr "Traktandenliste herunterladen"
 
 #. Default: "Edit"
 #: ./opengever/meeting/browser/templates/member.pt:62
+#: ./opengever/meeting/tabs/periodlisting.py:49
 msgid "label_edit"
 msgstr "Bearbeiten"
 
@@ -795,6 +796,11 @@ msgstr "Abbrechen"
 #: ./opengever/meeting/browser/memberships.py:73
 msgid "label_edit_membership"
 msgstr "Mitgliedschaft bearbeiten"
+
+#. Default: "Edit Period"
+#: ./opengever/meeting/browser/periods.py:197
+msgid "label_edit_period"
+msgstr "Bearbeiten"
 
 #. Default: "Save"
 #: ./opengever/meeting/browser/meetings/meeting.py:360
@@ -830,7 +836,7 @@ msgid "label_firstname"
 msgstr "Vorname"
 
 #. Default: "Group"
-#: ./opengever/meeting/committee.py:94
+#: ./opengever/meeting/committee.py:103
 msgid "label_group"
 msgstr "Gruppe"
 
@@ -868,7 +874,7 @@ msgid "label_linked_meeting"
 msgstr "Sitzung"
 
 #. Default: "Contains automatically generated dossiers and documents for this committee."
-#: ./opengever/meeting/committee.py:67
+#: ./opengever/meeting/committee.py:76
 msgid "label_linked_repository_folder"
 msgstr "Alle automatisch generierten Sitzungsdossiers und Dokumente werden in dieser Ordnungsposition abgelegt."
 
@@ -1020,6 +1026,12 @@ msgstr "Start"
 msgid "label_title"
 msgstr "Titel"
 
+#. Default: "Table of contents template"
+#: ./opengever/meeting/committee.py:68
+#: ./opengever/meeting/committeecontainer.py:38
+msgid "label_toc_template"
+msgstr "Vorlage Inhaltsverzeichnis"
+
 #. Default: "Transition ${transition} executed"
 #: ./opengever/meeting/browser/meetings/transitions.py:25
 msgid "label_transition_executed"
@@ -1109,7 +1121,7 @@ msgid "msg_meeting_successfully_closed"
 msgstr "Die Sitzung ${title} wurde erfolgreich abgeschlossen, die Protokollauszüge wurden generiert und an die Urprungsdossiers zurückgespielt."
 
 #. Default: "The membership was deleted successfully"
-#: ./opengever/meeting/browser/memberships.py:108
+#: ./opengever/meeting/browser/memberships.py:106
 msgid "msg_membership_deleted"
 msgstr "Die Mitgliedschaft wurde erfolgreich gelöscht"
 

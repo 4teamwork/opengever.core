@@ -24,5 +24,9 @@ class IMembershipWrapper(ISQLObjectWrapper):
     """Marker interface for membership object wrappers."""
 
 
+class IPeriodWrapper(ISQLObjectWrapper):
+    """Marker interface for period object wrappers."""
+
+
 class IMeetingDossier(form.Schema):
     """Marker interface for MeetingDossier"""

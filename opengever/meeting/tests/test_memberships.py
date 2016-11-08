@@ -23,6 +23,14 @@ class TestMemberships(FunctionalTestCase):
         self.member = create(Builder('member'))
         self.member_wrapper = MemberWrapper.wrap(self.container, self.member)
 
+    def test_get_url(self):
+        membership = create(Builder('membership').having(
+            committee=self.committee.load_model(), member=self.member))
+
+        self.assertEqual(
+            'http://nohost/plone/opengever-meeting-committeecontainer/committee-1/membership-1',
+            membership.get_url(self.committee))
+
     @browsing
     def test_membership_can_be_added(self, browser):
         self.assertEqual(0, len(self.committee.get_memberships()))
