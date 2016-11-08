@@ -5,6 +5,10 @@ Changelog
 4.12.1 (unreleased)
 -------------------
 
+- Provide alphabetical table of contents for all agenda items of a period
+  per committee.
+  [deiferni]
+
 - Add a new setting for opening links to PDF files in new tabs/windows
   [Rotonen]
 
