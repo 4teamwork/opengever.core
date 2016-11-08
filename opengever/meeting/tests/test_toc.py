@@ -162,7 +162,8 @@ class TestTOC(FunctionalTestCase):
 
         self.assertDictContainsSubset(
             {'status': '200 Ok',
-             'content-disposition': 'attachment; filename="Alphabetical Toc.docx"',
+             'content-disposition': 'attachment; '
+                'filename="Alphabetical Toc 2016 my-committee.docx"',
              'x-frame-options': 'SAMEORIGIN',
              'content-type': MIME_DOCX,
              'x-theme-disabled': 'True'},

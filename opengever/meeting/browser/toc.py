@@ -3,7 +3,9 @@ from opengever.meeting.command import MIME_DOCX
 from opengever.meeting.sablon import Sablon
 from opengever.meeting.toc.alphabetical import AlphabeticalToc
 from plone import api
+from plone.i18n.normalizer.interfaces import IIDNormalizer
 from Products.Five.browser import BrowserView
+from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 import json
@@ -47,10 +49,18 @@ class DownloadAlphabeticalTOC(BrowserView):
                           indent=indent)
 
     def get_filename(self):
+        normalizer = getUtility(IIDNormalizer)
+        period_title = normalizer.normalize(self.model.title)
+        committee_title = normalizer.normalize(self.model.committee.title)
+
         return u"{}.docx".format(
             translate(_(u'filename_alphabetical_toc',
-                      default='Alphabetical Toc'),
-            context=getRequest()))
+                        default='Alphabetical Toc ${period} ${committee}',
+                        mapping={
+                          'period': period_title,
+                          'committee': committee_title,
+                        }),
+                      context=getRequest()))
 
     def as_json(self):
         """Return the table of contents data as JSON."""
