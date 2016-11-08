@@ -5,7 +5,6 @@ from zope.component import getUtility
 
 
 class TestSequenceBehavior(FunctionalTestCase):
-    use_browser = True
 
     def setUp(self):
         super(TestSequenceBehavior, self).setUp()

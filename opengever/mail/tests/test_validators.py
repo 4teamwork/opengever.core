@@ -90,8 +90,6 @@ class TestValidators(MockTestCase):
 
 class TestFileOrPaperValidatorInEditForm(FunctionalTestCase):
 
-    use_browser = True
-
     layer = OPENGEVER_FUNCTIONAL_TESTING
 
     def setUp(self):

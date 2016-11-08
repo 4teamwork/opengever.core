@@ -1,25 +1,31 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browsing
+from ftw.testbrowser.pages import factoriesmenu
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
 
 
 class TestTaskRedirector(FunctionalTestCase):
 
-    use_browser = True
-
     def setUp(self):
         super(TestTaskRedirector, self).setUp()
-
         self.dossier = create(Builder('dossier'))
 
-    def test_redirects_to_dossiers_task_tab_when_creating_a_maintask(self):
-        self.create_task(self.dossier, 'Main task')
+    @browsing
+    def test_redirects_to_dossiers_task_tab_when_creating_a_maintask(self, browser):
+        browser.login().open(self.dossier)
+        factoriesmenu.add('Task')
+        browser.fill({'Title': 'Main task',
+                      'Task Type': 'direct-execution',
+                      'Responsible': TEST_USER_ID})
+        browser.click_on('Save')
 
-        self.browser.assert_url('%s#tasks' % self.dossier.absolute_url())
+        self.assertEquals('{}#tasks'.format(self.dossier.absolute_url()),
+                          browser.url)
 
-    def test_redirects_to_maintask_overview_tab_when_creating_a_subtask(self):
-
+    @browsing
+    def test_redirects_to_maintask_overview_tab_when_creating_a_subtask(self, browser):
         task = create(Builder('task')
                       .within(self.dossier)
                       .having(title='Subtask',
@@ -28,21 +34,12 @@ class TestTaskRedirector(FunctionalTestCase):
                               issuer=TEST_USER_ID)
                       .in_state('task-state-in-progress'))
 
-        self.create_task(task, 'Subtask')
+        browser.login().open(task)
+        factoriesmenu.add('Subtask')
+        browser.fill({'Title': 'Subtask',
+                      'Task Type': 'direct-execution',
+                      'Responsible': TEST_USER_ID})
+        browser.click_on('Save')
 
-        self.browser.assert_url('%s#overview' % task.absolute_url())
-
-    def create_task(self, container, title, task_type='For direct execution',
-                    responsible_name='Test', responsible_id=TEST_USER_ID):
-
-        self.browser.open(
-            '%s/++add++opengever.task.task' % container.absolute_url())
-
-        self.browser.fill({'Title': title})
-        self.browser.getControl(task_type).selected = True
-        self.browser.getControl(
-            name='form.widgets.responsible.widgets.query').value = responsible_name
-        self.browser.click('form.widgets.responsible.buttons.search')
-        self.browser.getControl(
-            name='form.widgets.responsible').value = [responsible_id]
-        self.browser.click('Save')
+        self.assertEquals('{}#overview'.format(task.absolute_url()),
+                          browser.url)

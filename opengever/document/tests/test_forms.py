@@ -1,6 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.widgets.file import DexterityFileWidget
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import login
@@ -10,7 +11,6 @@ import transaction
 
 
 class TestDocumentIntegration(FunctionalTestCase):
-    use_browser = True
 
     def setUp(self):
         super(TestDocumentIntegration, self).setUp()
@@ -63,26 +63,29 @@ class TestDocumentIntegration(FunctionalTestCase):
 
         manager.cancel()
 
-    def test_edit_form_without_document(self):
+    @browsing
+    def test_edit_form_without_document_shows_file_input_field(self, browser):
         self.document.file = None
         self.document.digitally_available = False
         transaction.commit()
 
-        self.browser.open('%s/edit' % self.document.absolute_url())
+        browser.login().open(self.document, view='edit')
 
-        self.file_field = '<input type="file" id="form-widgets-file-input" name="form.widgets.file"'
+        file_field = browser.forms.get('form').find_field('File')
+        self.assertIsNotNone(file_field)
+        self.assertTrue(isinstance(file_field, DexterityFileWidget))
 
-        self.assertPageContains(self.file_field)
+    @browsing
+    def test_edit_form_does_not_contain_change_note(self, browser):
+        browser.login().open(self.document, view='edit')
 
-    def test_edit_form_does_not_contain_change_note(self):
-        self.browser.open('%s/edit' % self.document.absolute_url())
+        inputs = [input.name for input in browser.forms.get('form').inputs]
+        self.assertNotIn('form.widgets.IVersionable.changeNote', inputs)
 
-        # the changeNote field from IVersionable should not show up
-        self.assertPageContainsNot('form.widgets.IVersionable.changeNote')
+    @browsing
+    def test_add_form_does_not_contain_change_note(self, browser):
+        browser.login().open(
+            self.portal, view='++add++opengever.document.document')
 
-    def test_add_form_does_not_contain_change_note(self):
-        self.browser.open('%s/++add++opengever.document.document' %
-            self.portal.absolute_url())
-
-        # the changeNote field from IVersionable should not show up
-        self.assertPageContainsNot('form.widgets.IVersionable.changeNote')
+        inputs = [input.name for input in browser.forms.get('form').inputs]
+        self.assertNotIn('form.widgets.IVersionable.changeNote', inputs)

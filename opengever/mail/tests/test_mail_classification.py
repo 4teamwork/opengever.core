@@ -12,7 +12,6 @@ from zope.component import getUtility
 
 
 class TestMailMetadata(FunctionalTestCase):
-    use_browser = True
 
     def test_fill_classification_infos_of_new_mail(self):
         mail = create(Builder("mail").with_message(MAIL_DATA))

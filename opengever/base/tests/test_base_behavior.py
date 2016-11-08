@@ -1,10 +1,11 @@
 from opengever.testing import FunctionalTestCase
 from plone.dexterity.fti import DexterityFTI
 import transaction
+from ftw.testbrowser import browsing
+from ftw.testbrowser.pages import factoriesmenu
 
 
 class TestBaseBehavior(FunctionalTestCase):
-    use_browser = True
 
     def setUp(self):
         super(TestBaseBehavior, self).setUp()
@@ -16,26 +17,27 @@ class TestBaseBehavior(FunctionalTestCase):
         fti.lookupSchema()
         transaction.commit()
 
-    def test_base_behavior(self):
-        # We can see this type in the addable types at the root of the site:
-        self.browser.open('http://nohost/plone/folder_factories')
+    @browsing
+    def test_base_behavior(self, browser):
+        browser.login().open(self.portal)
 
-        self.browser.getControl('OpenGeverBaseFTI').click()
-        self.browser.getControl('Add').click()
-        self.browser.assert_url('http://nohost/plone/++add++OpenGeverBaseFTI')
+        factoriesmenu.add('OpenGeverBaseFTI')
+        browser.fill({'Title': 'Foo', 'Description': 'Bar'})
+        browser.click_on('Save')
 
-        self.browser.getControl(name='form.widgets.IOpenGeverBase.title').value = 'Foo'
-        self.browser.getControl(name='form.widgets.IOpenGeverBase.description').value = 'Bar'
-        self.browser.getControl('Save').click()
-        self.browser.assert_url('http://nohost/plone/opengeverbasefti/view')
+        self.assertEquals(
+            'http://nohost/plone/opengeverbasefti/view', browser.url)
 
-        # Get the created object:
         obj = self.portal.opengeverbasefti
-
-        # Title should be set:
         self.assertEquals('Foo', obj.Title())
         self.assertEquals('Bar', obj.Description())
 
-        # We use the "Common" fieldset, not the "Default" fieldset:
-        self.browser.open('http://nohost/plone/opengeverbasefti/edit')
-        self.assertPageContains('Common')
+    @browsing
+    def test_base_behavior_uses_common_fieldset(self, browser):
+        browser.login().open(self.portal)
+
+        factoriesmenu.add('OpenGeverBaseFTI')
+        browser.fill({'Title': 'Foo', 'Description': 'Bar'})
+        browser.click_on('Save')
+
+        self.assertEquals(['Common'], browser.css('fieldset legend').text)

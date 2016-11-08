@@ -5,7 +5,6 @@ from opengever.testing import FunctionalTestCase
 
 
 class TestGenerateMailIdAndSequentialNumber(FunctionalTestCase):
-    use_browser = True
 
     def test_generate_mail_id_with_sequencenumber(self):
         mail = create(Builder("mail").with_message(MAIL_DATA))

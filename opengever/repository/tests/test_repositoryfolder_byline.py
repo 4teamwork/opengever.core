@@ -22,13 +22,17 @@ class TestRepositoryfolderByline(TestBylineBase):
                .in_state('repositoryfolder-state-active')
                .having(privacy_layer=PRIVACY_LAYER_NO))
 
-        self.browser.open(self.repo.absolute_url())
+    @browsing
+    def test_repository_byline_privacy_layer_display(self, browser):
+        browser.login().open(self.repo)
 
-    def test_repository_byline_privacy_layer_display(self):
         privacy_layer = self.get_byline_value_by_label('Privacy layer:')
-        self.assertEquals('privacy_layer_no', privacy_layer.text_content())
+        self.assertEquals('privacy_layer_no', privacy_layer.text)
 
-    def test_repository_byline_public_trial_is_not_present(self):
+    @browsing
+    def test_repository_byline_public_trial_is_not_present(self, browser):
+        browser.login().open(self.repo)
+
         public_trial = self.get_byline_value_by_label('Public Trial:')
         self.assertIsNone(
             public_trial,

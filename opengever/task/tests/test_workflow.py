@@ -2,6 +2,7 @@ from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.testing import FunctionalTestCase
 from plone import api
 from plone.app.testing import TEST_USER_ID
@@ -93,13 +94,12 @@ class TestTaskWorkflowAddingDocumentsAndMails(FunctionalTestCase):
 
 class TestTaskWorkflow(FunctionalTestCase):
 
-    use_browser = True
-
     def setUp(self):
         super(TestTaskWorkflow, self).setUp()
         self.wf_tool = getToolByName(self.portal, 'portal_workflow')
 
-    def test_document_in_a_closed_tasks_are_still_editable(self):
+    @browsing
+    def test_document_in_a_closed_tasks_are_still_editable(self, browser):
         task = create(Builder('task')
                       .having(issuer=TEST_USER_ID,
                               responsible=TEST_USER_ID)
@@ -109,13 +109,14 @@ class TestTaskWorkflow(FunctionalTestCase):
                           .titled(u'Letter for Peter')
                           .within(task))
 
-        self.browser.open('%s/edit' % (document.absolute_url()))
-        self.browser.fill({'Title': 'New Title'})
-        self.browser.click('Save')
+        browser.login().open(document, view='edit')
+        browser.fill({'Title': 'New Title'})
+        browser.click_on('Save')
 
-        self.browser.assert_portal_message('Changes saved')
+        self.assertEquals(['Changes saved'], info_messages())
 
-    def test_editing_document_inside_a_task_inside_a_closed_dossier_raise_unauthorized(self):
+    @browsing
+    def test_editing_document_inside_a_task_inside_a_closed_dossier_raise_unauthorized(self, browser):
         self.grant('Administrator')
         dossier = create(Builder('dossier'))
 
@@ -132,7 +133,7 @@ class TestTaskWorkflow(FunctionalTestCase):
         transaction.commit()
 
         with self.assertRaises(Unauthorized) as cm:
-            self.browser.open('%s/edit' % (document.absolute_url()))
+            browser.login().open(document, view='edit')
 
         self.assertEquals(
             'You are not authorized to access this resource.',
