@@ -28,6 +28,7 @@ class ManualJournalEntry(object):
         self.documents = documents
 
     def save(self):
+        comment = self.comment.encode('utf-8') if self.comment else ''
         entry = {'obj': self.context,
                  'action': PersistentDict({
                      'type': MANUAL_JOURNAL_ENTRY,
@@ -37,7 +38,7 @@ class ManualJournalEntry(object):
                      'contacts': self.serialize_contacts(),
                      'users': self.serialize_users()}),
                  'actor': api.user.get_current().getId(),
-                 'comment': self.comment.encode('utf-8')}
+                 'comment': comment}
 
         notify(JournalEntryEvent(**entry))
 

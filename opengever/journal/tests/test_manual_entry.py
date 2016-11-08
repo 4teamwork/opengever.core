@@ -117,3 +117,19 @@ class TestManualJournalEntry(FunctionalTestCase):
             ['http://nohost/plone/@@user-details/peter.mueller'],
             [link.get('href') for link in links])
         self.assertEquals([u'M\xfcller Peter (peter.mueller)'], links.text)
+
+    @browsing
+    def test_supports_adding_an_entry_without_a_comment(self, browser):
+        peter = create(Builder('person')
+                       .having(firstname=u'H\xfcgo', lastname='Boss'))
+
+        browser.login().open(self.dossier, view='add-journal-entry')
+        browser.fill({'Category': u'phone-call',
+                      'Contacts': [get_token(peter)]})
+        browser.css('#form-buttons-add').first.click()
+
+        browser.open(self.dossier, view=u'tabbedview_view-journal')
+        row = browser.css('.listing').first.rows[1]
+
+        self.assertEquals('Manual entry: Phone call', row.dict().get('Title'))
+        self.assertEquals('', row.dict().get('Comments'))
