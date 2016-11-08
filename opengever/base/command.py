@@ -81,6 +81,12 @@ class CreateEmailCommand(CreateDocumentCommand):
     """
     portal_type = 'ftw.mail.mail'
 
+    def notify_created(self, content):
+        """Make sure filename is updated from subject upon creation.
+        """
+        content._update_title_from_message_subject()
+        notify(ObjectCreatedEvent(content))
+
     def is_msg_upload(self):
         root, ext = splitext(self.filename)
         return ext.lower() == '.msg'
