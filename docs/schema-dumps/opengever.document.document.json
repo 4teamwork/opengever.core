@@ -175,7 +175,7 @@
                     "name": "document_date",
                     "type": "Date",
                     "title": "Dokumentdatum",
-                    "desc": "Datum, an dem das Dokument erstellt worden ist",
+                    "desc": "Datum des Dokuments",
                     "required": false,
                     "default": "<Aktuelles Datum>"
                 },
