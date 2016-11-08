@@ -36,14 +36,8 @@ class TestBumblebeeOverlayListing(FunctionalTestCase):
 
         browser.login().visit(document, view="bumblebee-overlay-listing")
 
-        # Only one anchor element shall contain 'PDF' in its CDATA
-        # This element shall not have a target attribute
-        self.assertEqual([True],
-                         [True
-                          for a in browser.xpath('//a')
-                          if 'PDF' in a.innerHTML
-                          and 'target=' not in a.outerHTML],
-                         msg='Anchor to PDF file not found in expected format')
+        self.assertNotIn('target=',
+                         browser.css('#action-pdf').first.outerHTML)
 
     @browsing
     def test_open_pdf_in_a_new_window_enabled(self, browser):
@@ -60,15 +54,8 @@ class TestBumblebeeOverlayListing(FunctionalTestCase):
 
         browser.login().visit(document, view='bumblebee-overlay-listing')
 
-        # Only one anchor element shall contain 'PDF' in its CDATA
-        # This element shall have a target attribute
-
-        self.assertEqual([True],
-                         [True
-                          for a in browser.xpath('//a')
-                          if 'PDF' in a.innerHTML
-                          and 'target=' in a.outerHTML],
-                         msg='Anchor to PDF file not found in expected format')
+        self.assertIn('target=',
+                         browser.css('#action-pdf').first.outerHTML)
 
     @browsing
     def test_actions_with_file(self, browser):
