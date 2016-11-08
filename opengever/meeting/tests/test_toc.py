@@ -77,7 +77,7 @@ class TestTOC(FunctionalTestCase):
             committee=self.committee))
 
     def test_toc(self):
-        expected = [{
+        expected = {'toc': [{
             'group_title': u'5',
             'contents': [
                 {
@@ -121,7 +121,7 @@ class TestTOC(FunctionalTestCase):
                 'has_proposal': True,
                 'meeting_start_page_number': 129,
             }]
-        }]
+        }]}
         self.assertEqual(expected, AlphabeticalToc(self.period).get_json())
 
     @browsing
