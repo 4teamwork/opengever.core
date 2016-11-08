@@ -58,13 +58,29 @@ class ManualJournalEntryAddForm(AddForm):
     fields['contacts'].widgetFactory = AutocompleteMultiFieldWidget
 
     def createAndAdd(self, data):
+        contacts, users = self.split_contacts_and_users(data.get('contacts'))
         entry = ManualJournalEntry(self.context,
                                    data.get('category'),
                                    data.get('comment'),
-                                   data.get('contacts'),
+                                   contacts,
+                                   users,
                                    data.get('related_documents'))
         entry.save()
         return entry
+
+    def split_contacts_and_users(self, items):
+        """Spliting up the contact list, in to a list of contact objects
+        and a list of adapted users.
+        """
+        contacts = []
+        users = []
+        for item in items:
+            if item.is_adapted_user:
+                users.append(item)
+            else:
+                contacts.append(item)
+
+        return contacts, users
 
     def nextURL(self):
         return '{}#journal'.format(self.context.absolute_url())

@@ -36,6 +36,10 @@ class OrgRole(Base):
         return self.org_role_id
 
     @property
+    def is_adapted_user(self):
+        return False
+
+    @property
     def addresses(self):
         return self.person.addresses + self.organization.addresses
 

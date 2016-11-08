@@ -1,9 +1,14 @@
-<div class="contacts" tal:condition="view/contacts">
+<div class="contacts" tal:condition="python: view.contacts or view.users"
+     tal:define="portal_url context/@@plone_portal_state/portal_url">
   <p i18n:domain="opengever.journal" i18n:translate="label_contacts">Contacts</p>
   <ul>
     <li tal:repeat="contact view/contacts">
       <a href="#" tal:attributes="href string:${view/get_contactfolder_url}/contact-${contact/id}"
          tal:content="contact/title" />
+    </li>
+    <li tal:repeat="user view/users">
+      <a href="#" tal:attributes="href string:${portal_url}/@@user-details/${user/id}"
+         tal:content="user/title" />
     </li>
   </ul>
 </div>

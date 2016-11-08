@@ -91,6 +91,7 @@ class JournalTab(BaseListingTab):
         """
         self.documents = item.get('action').get('documents', [])
         self.contacts = item.get('action').get('contacts', [])
+        self.users = item.get('action').get('users', [])
         return self.reference_template(self)
 
     def get_contactfolder_url(self):

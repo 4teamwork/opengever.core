@@ -18,24 +18,27 @@ class ManualJournalEntry(object):
     Its used by the ManualJournalEntry form.
     """
 
-    def __init__(self, context, category, comment, contacts, documents):
+    def __init__(self, context, category, comment, contacts, users, documents):
         self.context = context
         self.request = getRequest()
         self.category = category
         self.comment = comment
         self.contacts = contacts
+        self.users = users
         self.documents = documents
 
     def save(self):
+        comment = self.comment.encode('utf-8') if self.comment else ''
         entry = {'obj': self.context,
                  'action': PersistentDict({
                      'type': MANUAL_JOURNAL_ENTRY,
                      'title': self.get_title(),
                      'visible': True,
                      'documents': self.serialize_documents(),
-                     'contacts': self.serialize_contacts()}),
+                     'contacts': self.serialize_contacts(),
+                     'users': self.serialize_users()}),
                  'actor': api.user.get_current().getId(),
-                 'comment': self.comment.encode('utf-8')}
+                 'comment': comment}
 
         notify(JournalEntryEvent(**entry))
 
@@ -61,6 +64,16 @@ class ManualJournalEntry(object):
             value.append(
                 PersistentDict({'id': item.get_contact_id(),
                                 'title': item.get_title()}))
+
+        return value
+
+    def serialize_users(self):
+        """Returns a persistent list of dicts for all users.
+        """
+        value = PersistentList()
+        for item in self.users:
+            value.append(
+                PersistentDict({'id': item.id, 'title': item.get_title()}))
 
         return value
 

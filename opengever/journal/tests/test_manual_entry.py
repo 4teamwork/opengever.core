@@ -3,6 +3,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
+from opengever.contact.ogdsuser import OgdsUserToContactAdapter
 from opengever.testing import FunctionalTestCase
 from opengever.testing.helpers import get_contacts_vocabulary
 
@@ -91,3 +92,44 @@ class TestManualJournalEntry(FunctionalTestCase):
              'http://nohost/plone/opengever-contact-contactfolder/contact-2'],
             [link.get('href') for link in links])
         self.assertEquals([u'Boss H\xfcgo', 'Meier AG'], links.text)
+
+    @browsing
+    def test_adding_a_entry_with_a_user_as_contact(self, browser):
+        peter = create(Builder('ogds_user').having(userid=u'peter.mueller',
+                                                   firstname=u'Peter',
+                                                   lastname=u'M\xfcller'))
+
+        browser.login().open(self.dossier, view='add-journal-entry')
+        browser.fill({
+            'Category': u'phone-call',
+            'Comment': u'Anfrage bez\xfcglich dem Jahr 2016 von Herr Meier',
+            'Contacts': [get_token(OgdsUserToContactAdapter(peter))]})
+        browser.css('#form-buttons-add').first.click()
+
+        browser.open(self.dossier, view=u'tabbedview_view-journal')
+        row = browser.css('.listing').first.rows[1]
+        links = row.css('.contacts a')
+
+        self.assertEquals(u'Contacts M\xfcller Peter (peter.mueller)',
+                          row.dict().get('References'))
+
+        self.assertEquals(
+            ['http://nohost/plone/@@user-details/peter.mueller'],
+            [link.get('href') for link in links])
+        self.assertEquals([u'M\xfcller Peter (peter.mueller)'], links.text)
+
+    @browsing
+    def test_supports_adding_an_entry_without_a_comment(self, browser):
+        peter = create(Builder('person')
+                       .having(firstname=u'H\xfcgo', lastname='Boss'))
+
+        browser.login().open(self.dossier, view='add-journal-entry')
+        browser.fill({'Category': u'phone-call',
+                      'Contacts': [get_token(peter)]})
+        browser.css('#form-buttons-add').first.click()
+
+        browser.open(self.dossier, view=u'tabbedview_view-journal')
+        row = browser.css('.listing').first.rows[1]
+
+        self.assertEquals('Manual entry: Phone call', row.dict().get('Title'))
+        self.assertEquals('', row.dict().get('Comments'))
