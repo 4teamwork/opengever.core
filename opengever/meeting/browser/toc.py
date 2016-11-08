@@ -51,3 +51,12 @@ class DownloadAlphabeticalTOC(BrowserView):
             translate(_(u'filename_alphabetical_toc',
                       default='Alphabetical Toc'),
             context=getRequest()))
+
+    def as_json(self):
+        """Return the table of contents data as JSON."""
+
+        response = self.request.response
+        response.setHeader('Content-Type', 'application/json')
+        response.setHeader('X-Theme-Disabled', 'True')
+        response.enableHTTPCompression(REQUEST=self.request)
+        return self.get_json_data(pretty=True)
