@@ -5,6 +5,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import error_messages
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
+from opengever.meeting.command import MIME_DOCX
 from opengever.meeting.toc.alphabetical import AlphabeticalToc
 from opengever.testing import FunctionalTestCase
 import pytz
@@ -139,3 +140,30 @@ class TestTOC(FunctionalTestCase):
         self.assertEqual(u'There is no toc template configured, toc could '
                          'not be generated.',
                          error_messages()[0])
+
+    @browsing
+    def test_toc_can_be_downloaded(self, browser):
+        self.templates = create(Builder('templatedossier'))
+        self.sablon_template = create(Builder('sablontemplate')
+                                      .within(self.templates)
+                                      .with_asset_file('sablon_template.docx'))
+        container = create(Builder('committee_container'))
+        committee = create(Builder('committee')
+                           .having(toc_template=self.sablon_template)
+                           .within(container))
+        create(Builder('period').having(
+            date_from=date(2010, 1, 1),
+            date_to=date(2010, 12, 31),
+            committee=committee.load_model()))
+
+        browser.login().open(committee, view='tabbedview_view-periods')
+        browser.find('Alphabetical').click()
+
+        self.assertDictContainsSubset(
+            {'status': '200 Ok',
+             'content-disposition': 'attachment; filename="Alphabetical Toc.docx"',
+             'x-frame-options': 'SAMEORIGIN',
+             'content-type': MIME_DOCX,
+             'x-theme-disabled': 'True'},
+            browser.headers)
+        self.assertIsNotNone(browser.contents)

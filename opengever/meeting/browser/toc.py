@@ -1,9 +1,12 @@
 from opengever.meeting import _
 from opengever.meeting.command import MIME_DOCX
 from opengever.meeting.sablon import Sablon
+from opengever.meeting.toc.alphabetical import AlphabeticalToc
 from plone import api
 from Products.Five.browser import BrowserView
-from opengever.meeting.toc.alphabetical import AlphabeticalToc
+from zope.globalrequest import getRequest
+from zope.i18n import translate
+import json
 
 
 class DownloadAlphabeticalTOC(BrowserView):
@@ -29,7 +32,8 @@ class DownloadAlphabeticalTOC(BrowserView):
         sablon.process(self.get_json_data())
 
         assert sablon.is_processed_successfully(), sablon.stderr
-        filename = self.model.get_toc_filename().encode('utf-8')
+
+        filename = self.get_filename().encode('utf-8')
         response = self.request.response
         response.setHeader('X-Theme-Disabled', 'True')
         response.setHeader('Content-Type', MIME_DOCX)
@@ -38,5 +42,12 @@ class DownloadAlphabeticalTOC(BrowserView):
         return sablon.file_data
 
     def get_json_data(self, pretty=False):
-        return AlphabeticalToc(self.model).get_json()
+        indent = 4 if pretty else None
+        return json.dumps(AlphabeticalToc(self.model).get_json(),
+                          indent=indent)
 
+    def get_filename(self):
+        return u"{}.docx".format(
+            translate(_(u'filename_alphabetical_toc',
+                      default='Alphabetical Toc'),
+            context=getRequest()))
