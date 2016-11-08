@@ -3,9 +3,11 @@ from ftw.builder import create
 from ftw.bumblebee.tests.helpers import asset as bumblebee_asset
 from ftw.testbrowser import browsing
 from opengever.bumblebee.browser.overlay import BumblebeeOverlayBaseView
+from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 from opengever.testing import FunctionalTestCase
 from opengever.testing.helpers import create_document_version
+from plone import api
 from zExceptions import NotFound
 import transaction
 
@@ -22,6 +24,38 @@ class TestBumblebeeOverlayListing(FunctionalTestCase):
         browser.login().visit(document, view="bumblebee-overlay-listing")
 
         self.assertEqual(1, len(browser.css('#file-preview')))
+
+    @browsing
+    def test_open_pdf_in_a_new_window_disabled(self, browser):
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document')
+                          .within(dossier)
+                          .attach_file_containing(
+                              bumblebee_asset('example.docx').bytes(),
+                              u'example.docx'))
+
+        browser.login().visit(document, view="bumblebee-overlay-listing")
+
+        self.assertNotIn('target=',
+                         browser.css('#action-pdf').first.outerHTML)
+
+    @browsing
+    def test_open_pdf_in_a_new_window_enabled(self, browser):
+        api.portal.set_registry_record('open_pdf_in_a_new_window',
+                                       True,
+                                       interface=IGeverBumblebeeSettings)
+
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document')
+                          .within(dossier)
+                          .attach_file_containing(
+                              bumblebee_asset('example.docx').bytes(),
+                              u'example.docx'))
+
+        browser.login().visit(document, view='bumblebee-overlay-listing')
+
+        self.assertIn('target=',
+                         browser.css('#action-pdf').first.outerHTML)
 
     @browsing
     def test_actions_with_file(self, browser):
