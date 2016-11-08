@@ -51,6 +51,10 @@ class Contact(Base, SQLFormSupport):
     def id(self):
         return self.contact_id
 
+    @property
+    def is_adapted_user(self):
+        return False
+
     def has_archived_information(self):
         return any([self.archived_contacts,
                     self.archived_addresses,

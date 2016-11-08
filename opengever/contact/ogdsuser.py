@@ -146,6 +146,10 @@ class OgdsUserToContactAdapter(BaseAdapter):
     def id(self):
         return self.ogds_user.userid
 
+    @property
+    def is_adapted_user(self):
+        return True
+
     def get_title(self, with_former_id=True):
         return self.ogds_user.label(with_principal=with_former_id)
 
