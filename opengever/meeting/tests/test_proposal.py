@@ -215,6 +215,23 @@ class TestProposal(FunctionalTestCase):
         self.assertEqual(u'Stuff', proposal.repository_folder_title)
 
     @browsing
+    def test_dossier_link_rendering_for_proposal(self, browser):
+        committee = create(Builder('committee'))
+        proposal = create(Builder('proposal')
+                          .within(self.dossier)
+                          .titled(u'My Proposal')
+                          .having(committee=committee.load_model())
+                          .as_submitted())
+        submitted_proposal = proposal.load_model().submitted_oguid.resolve_object()
+
+        browser.login().open(submitted_proposal,
+                             view='tabbedview_view-overview')
+
+        self.assertIsNotNone(browser.find(u'D\xf6ssier'))
+        self.assertEqual(self.dossier.absolute_url(),
+                         browser.find(u'D\xf6ssier').get('href'))
+
+    @browsing
     def test_edit_view_availability_for_proposal(self, browser):
         committee = create(Builder('committee'))
         proposal = create(Builder('proposal')
@@ -730,7 +747,7 @@ class TestProposal(FunctionalTestCase):
             browser.css('a').first.get('title'))
 
         self.assertEqual(
-            '/'.join(self.dossier.getPhysicalPath()),
+            self.dossier.absolute_url(),
             browser.css('a').first.get('href'))
 
     def test_get_link_returns_fallback_message_if_proposal_is_not_on_same_admin_unit(self):

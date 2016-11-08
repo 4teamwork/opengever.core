@@ -5,6 +5,9 @@ Changelog
 4.12.1 (unreleased)
 -------------------
 
+- Fix dossier links in proposal overviews.
+  [Rotonen]
+
 - Provide repository based table of contents for all agenda items of a period
   per committee.
   [deiferni]
