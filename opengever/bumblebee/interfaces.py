@@ -16,6 +16,11 @@ class IGeverBumblebeeSettings(Interface):
         description=u'Whether features from opengever.bumblebee are enabled',
         default=False)
 
+    open_pdf_in_a_new_window = schema.Bool(
+        title=u'Open PDF in a new window/tab.',
+        description=u'Sets target="_browser" for links to PDF files.',
+        default=False)
+
 
 class IVersionedContextMarker(Interface):
     """Marker interface for a versioned context.

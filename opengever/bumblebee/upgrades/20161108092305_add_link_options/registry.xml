@@ -1,0 +1,5 @@
+<registry>
+    <records interface="opengever.bumblebee.interfaces.IGeverBumblebeeSettings">
+      <value key="open_pdf_in_a_new_window">False</value>
+    </records>
+</registry>
