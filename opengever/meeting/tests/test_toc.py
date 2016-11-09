@@ -36,7 +36,7 @@ class TestAlphabeticalTOC(FunctionalTestCase):
         }, {
         'group_title': u'P',
         'contents': [{
-            'title': u'Proposal 1',
+            'title': u'proposal 1',
             'dossier_reference_number': u'1.1.4 / 1',
             'repository_folder_title': u'Business',
             'meeting_date': 'Jan 01, 2010',
@@ -83,7 +83,7 @@ class TestAlphabeticalTOC(FunctionalTestCase):
             protocol_start_page_number=129))
 
         proposal1_1 = create(Builder('proposal_model').having(
-            title=u'Proposal 1',
+            title=u'proposal 1',
             repository_folder_title='Business',
             dossier_reference_number='1.1.4 / 1',
             int_id=1))

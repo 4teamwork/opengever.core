@@ -8,6 +8,10 @@ def first_title_char(value):
     return value['title'][:1].upper()
 
 
+def item_sort_key(item):
+    return (first_title_char(item), item['decision_number'])
+
+
 class AlphabeticalToc(object):
 
     def __init__(self, period):
@@ -17,8 +21,7 @@ class AlphabeticalToc(object):
         """We currently sort on the client side since title can be either in
         the agenda_items table or in the proposals table.
         """
-        return sorted(unordered_items,
-                      key=itemgetter('title', 'decision_number'))
+        return sorted(unordered_items, key=item_sort_key)
 
     def group_items(self, sorted_items):
         """Input items must be sorted since groupby depends on input order.
