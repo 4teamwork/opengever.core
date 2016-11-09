@@ -88,3 +88,6 @@ class Period(Base, SQLFormSupport):
     def get_next_meeting_sequence_number(self):
         self.meeting_sequence_number += 1
         return self.meeting_sequence_number
+
+    def get_toc_template(self):
+        return self.committee.get_toc_template()

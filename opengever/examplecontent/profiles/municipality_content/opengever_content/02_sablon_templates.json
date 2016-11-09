@@ -14,5 +14,10 @@
         "_type": "opengever.meeting.sablontemplate",
         "title": "Traktandenliste",
         "file:file": "templates/traktandenliste.docx"
+    }, {
+        "_path": "/vorlagen/sablon-template-4",
+        "_type": "opengever.meeting.sablontemplate",
+        "title": "Inhaltsverzeichnis",
+        "file:file": "templates/inhaltsverzeichnis.docx"
     }
 ]

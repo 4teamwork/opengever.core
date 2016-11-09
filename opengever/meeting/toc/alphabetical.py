@@ -43,4 +43,4 @@ class AlphabeticalToc(object):
                 'group_title': character,
                 'contents': list(contents)
             })
-        return sorted(results, key=itemgetter('group_title'))
+        return {'toc': sorted(results, key=itemgetter('group_title'))}

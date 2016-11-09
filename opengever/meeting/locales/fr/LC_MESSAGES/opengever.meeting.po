@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-11-03 14:44+0000\n"
+"POT-Creation-Date: 2016-11-08 10:44+0000\n"
 "PO-Revision-Date: 2016-08-10 05:19+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -539,6 +539,11 @@ msgstr "Titre"
 msgid "column_to"
 msgstr "Jusqu'à"
 
+#. Default: "Download table of Contents"
+#: ./opengever/meeting/tabs/periodlisting.py:41
+msgid "column_toc"
+msgstr ""
+
 #. Default: "Decide"
 #: ./opengever/meeting/model/agendaitem.py:37
 #: ./opengever/meeting/model/proposal.py:165
@@ -578,6 +583,11 @@ msgstr ""
 #. Default: "Proposal must not be empty."
 #: ./opengever/meeting/browser/meetings/agendaitem.py:284
 msgid "empty_proposal"
+msgstr ""
+
+#. Default: "Alphabetical Toc ${period} ${committee}"
+#: ./opengever/meeting/browser/toc.py:57
+msgid "filename_alphabetical_toc"
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:217
@@ -778,9 +788,14 @@ msgstr "Dossier indisponible"
 msgid "label_download_agendaitem_list"
 msgstr ""
 
+#. Default: "Alphabetical"
+#: ./opengever/meeting/tabs/periodlisting.py:62
+msgid "label_download_alphabetical_toc"
+msgstr ""
+
 #. Default: "Edit"
 #: ./opengever/meeting/browser/templates/member.pt:62
-#: ./opengever/meeting/tabs/periodlisting.py:49
+#: ./opengever/meeting/tabs/periodlisting.py:57
 msgid "label_edit"
 msgstr ""
 
@@ -1130,6 +1145,11 @@ msgstr ""
 #. Default: "There is no agendaitem list template configured, agendaitem list could not be generated."
 #: ./opengever/meeting/browser/meetings/agendaitem_list.py:25
 msgid "msg_no_agenaitem_list_template"
+msgstr ""
+
+#. Default: "There is no toc template configured, toc could not be generated."
+#: ./opengever/meeting/browser/toc.py:24
+msgid "msg_no_toc_template"
 msgstr ""
 
 #. Default: "Not all meetings are closed."
