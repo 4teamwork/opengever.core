@@ -23,7 +23,7 @@
                 <a tal:attributes="href python: view.transition_url(transition);
                                    title transition/title;
                                    id transition/name;
-                                   class string: ${transition/name} button;"
+                                   class string: ${transition/name};"
                    i18n:attributes="title">
                     <span tal:content="transition/title"
                           i18n:translate=""

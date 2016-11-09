@@ -61,7 +61,7 @@ class TestResponseDescriptions(FunctionalTestCase):
         """
         # browser.open(self.task, view='tabbedview_view-overview')
         self.visit_overview(browser)
-        button = browser.css('.button.{}'.format(button_class)).first
+        button = browser.css('.{}'.format(button_class)).first
         button.click()
         if save_and_reload:
             browser.forms.get('form').save()
