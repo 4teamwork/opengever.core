@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-11-08 10:44+0000\n"
+"POT-Creation-Date: 2016-11-09 09:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -583,8 +583,13 @@ msgid "empty_proposal"
 msgstr ""
 
 #. Default: "Alphabetical Toc ${period} ${committee}"
-#: ./opengever/meeting/browser/toc.py:57
+#: ./opengever/meeting/browser/toc.py:60
 msgid "filename_alphabetical_toc"
+msgstr ""
+
+#. Default: "Repository Toc ${period} ${committee}"
+#: ./opengever/meeting/browser/toc.py:89
+msgid "filename_repository_toc"
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:217
@@ -786,8 +791,13 @@ msgid "label_download_agendaitem_list"
 msgstr ""
 
 #. Default: "Alphabetical"
-#: ./opengever/meeting/tabs/periodlisting.py:62
+#: ./opengever/meeting/tabs/periodlisting.py:64
 msgid "label_download_alphabetical_toc"
+msgstr ""
+
+#. Default: "By repository"
+#: ./opengever/meeting/tabs/periodlisting.py:68
+msgid "label_download_repository_toc"
 msgstr ""
 
 #. Default: "Edit"
@@ -1145,7 +1155,7 @@ msgid "msg_no_agenaitem_list_template"
 msgstr ""
 
 #. Default: "There is no toc template configured, toc could not be generated."
-#: ./opengever/meeting/browser/toc.py:24
+#: ./opengever/meeting/browser/toc.py:25
 msgid "msg_no_toc_template"
 msgstr ""
 

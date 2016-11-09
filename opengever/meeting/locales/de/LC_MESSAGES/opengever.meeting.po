@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-11-08 10:44+0000\n"
+"POT-Creation-Date: 2016-11-09 09:26+0000\n"
 "PO-Revision-Date: 2015-04-10 09:01+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -584,9 +584,14 @@ msgid "empty_proposal"
 msgstr "Der Freitext darf nicht leer sein."
 
 #. Default: "Alphabetical Toc ${period} ${committee}"
-#: ./opengever/meeting/browser/toc.py:57
+#: ./opengever/meeting/browser/toc.py:60
 msgid "filename_alphabetical_toc"
 msgstr "Inhaltsverzeichnis ${period} ${committee} alphabetisch"
+
+#. Default: "Repository Toc ${period} ${committee}"
+#: ./opengever/meeting/browser/toc.py:89
+msgid "filename_repository_toc"
+msgstr "Inhaltsverzeichnis ${period} ${committee} nach Ordnungsposition"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:217
 msgid "generate new excerpt"
@@ -787,9 +792,14 @@ msgid "label_download_agendaitem_list"
 msgstr "Traktandenliste herunterladen"
 
 #. Default: "Alphabetical"
-#: ./opengever/meeting/tabs/periodlisting.py:62
+#: ./opengever/meeting/tabs/periodlisting.py:64
 msgid "label_download_alphabetical_toc"
 msgstr "Alphabetisch"
+
+#. Default: "By repository"
+#: ./opengever/meeting/tabs/periodlisting.py:68
+msgid "label_download_repository_toc"
+msgstr "Nach Ordnungsposition"
 
 #. Default: "Edit"
 #: ./opengever/meeting/browser/templates/member.pt:62
@@ -1146,7 +1156,7 @@ msgid "msg_no_agenaitem_list_template"
 msgstr "Es ist keine Vorlage für die Traktandenliste konfiguriert, die Traktandenliste konnte nicht generiert werden."
 
 #. Default: "There is no toc template configured, toc could not be generated."
-#: ./opengever/meeting/browser/toc.py:24
+#: ./opengever/meeting/browser/toc.py:25
 msgid "msg_no_toc_template"
 msgstr "Es ist keine Vorlage für das Inhaltsverzeichnis konfiguriert, das Inhaltsverzeichnis konnte nicht generiert werden."
 
