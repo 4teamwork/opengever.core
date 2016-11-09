@@ -159,7 +159,7 @@ class TestAlphabeticalTOC(FunctionalTestCase):
         transaction.commit()
 
         browser.login().open(self.committee, view='tabbedview_view-periods')
-        browser.find('Alphabetical').click()
+        browser.find('download TOC alphabetical').click()
 
         self.assertDictContainsSubset(
             {'status': '200 Ok',
@@ -313,7 +313,7 @@ class TestTOCByRepository(FunctionalTestCase):
         transaction.commit()
 
         browser.login().open(self.committee, view='tabbedview_view-periods')
-        browser.find('By repository').click()
+        browser.find('download TOC by repository').click()
 
         self.assertDictContainsSubset(
             {'status': '200 Ok',

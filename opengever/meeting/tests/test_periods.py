@@ -36,25 +36,19 @@ class TestPeriod(FunctionalTestCase):
             committee=self.committee_model))
 
         browser.login().open(self.committee, view='tabbedview_view-periods')
-        listing_table = browser.css('.listing').first
-        self.assertEqual(
-            [{'Date from': 'Jan 01, 2016',
-              'Title': '2016',
-              'Date to': 'Dec 31, 2016',
-              'Download table of Contents': 'Alphabetical By repository',
-              '': 'Edit'},
-             {'Date to': 'Dec 31, 2011',
-              'Date from': 'Jan 01, 2011',
-              'Title': '2011',
-              'Download table of Contents': 'Alphabetical By repository',
-              '': 'Edit'},
-             {'Date to': 'Dec 31, 2010',
-              'Date from': 'Jan 01, 2010',
-              'Title': '2010',
-              'Download table of Contents': 'Alphabetical By repository',
-              '': 'Edit'},
-             ],
-            listing_table.dicts())
+        period_rows = browser.css('#period_listing .period')
+        text_by_period = [row.css('> *').text for row in period_rows]
+        self.assertEqual([
+            ['2016 (Jan 01, 2016 - Dec 31, 2016)',
+             'download TOC alphabetical download TOC by repository',
+             'Edit'], [
+             '2011 (Jan 01, 2011 - Dec 31, 2011)',
+             'download TOC alphabetical download TOC by repository',
+             'Edit'], [
+             '2010 (Jan 01, 2010 - Dec 31, 2010)',
+             'download TOC alphabetical download TOC by repository',
+             'Edit']
+        ], text_by_period)
 
     @browsing
     def test_edit_period(self, browser):

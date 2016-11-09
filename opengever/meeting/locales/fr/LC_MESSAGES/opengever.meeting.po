@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-11-09 09:26+0000\n"
+"POT-Creation-Date: 2016-11-09 14:20+0000\n"
 "PO-Revision-Date: 2016-08-10 05:19+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -50,12 +50,12 @@ msgstr "Ajouter l'affiliation"
 msgid "Add committee"
 msgstr ""
 
-#: ./opengever/meeting/browser/periods.py:45
+#: ./opengever/meeting/browser/periods.py:49
 msgid "Add new period"
 msgstr ""
 
 #: ./opengever/meeting/browser/committeeforms.py:33
-#: ./opengever/meeting/browser/periods.py:130
+#: ./opengever/meeting/browser/periods.py:134
 msgid "Add period"
 msgstr ""
 
@@ -96,11 +96,11 @@ msgstr ""
 msgid "Close all proposals"
 msgstr ""
 
-#: ./opengever/meeting/browser/periods.py:64
+#: ./opengever/meeting/browser/periods.py:68
 msgid "Close currently active period"
 msgstr ""
 
-#: ./opengever/meeting/browser/periods.py:44
+#: ./opengever/meeting/browser/periods.py:48
 msgid "Close period"
 msgstr ""
 
@@ -416,7 +416,7 @@ msgid "button_cancel"
 msgstr "Annuler"
 
 #. Default: "Close period"
-#: ./opengever/meeting/browser/periods.py:85
+#: ./opengever/meeting/browser/periods.py:89
 msgid "button_close_period"
 msgstr ""
 
@@ -471,13 +471,11 @@ msgstr "Date"
 
 #. Default: "Date from"
 #: ./opengever/meeting/tabs/membershiplisting.py:29
-#: ./opengever/meeting/tabs/periodlisting.py:32
 msgid "column_date_from"
 msgstr "De"
 
 #. Default: "Date to"
 #: ./opengever/meeting/tabs/membershiplisting.py:33
-#: ./opengever/meeting/tabs/periodlisting.py:37
 msgid "column_date_to"
 msgstr "Jusqu'à"
 
@@ -530,7 +528,7 @@ msgstr "Etat"
 #. Default: "Title"
 #: ./opengever/meeting/tabs/committeelisting.py:24
 #: ./opengever/meeting/tabs/meetinglisting.py:46
-#: ./opengever/meeting/tabs/periodlisting.py:28
+#: ./opengever/meeting/tabs/proposallisting.py:42
 msgid "column_title"
 msgstr "Titre"
 
@@ -538,11 +536,6 @@ msgstr "Titre"
 #: ./opengever/meeting/tabs/meetinglisting.py:66
 msgid "column_to"
 msgstr "Jusqu'à"
-
-#. Default: "Download table of Contents"
-#: ./opengever/meeting/tabs/periodlisting.py:41
-msgid "column_toc"
-msgstr ""
 
 #. Default: "Decide"
 #: ./opengever/meeting/model/agendaitem.py:37
@@ -714,14 +707,14 @@ msgstr ""
 
 #. Default: "Start date"
 #: ./opengever/meeting/browser/memberships.py:21
-#: ./opengever/meeting/browser/periods.py:32
+#: ./opengever/meeting/browser/periods.py:36
 #: ./opengever/meeting/browser/templates/member.pt:50
 msgid "label_date_from"
 msgstr "De"
 
 #. Default: "End date"
 #: ./opengever/meeting/browser/memberships.py:26
-#: ./opengever/meeting/browser/periods.py:38
+#: ./opengever/meeting/browser/periods.py:42
 #: ./opengever/meeting/browser/templates/member.pt:51
 msgid "label_date_to"
 msgstr "Jusqu'à"
@@ -793,19 +786,19 @@ msgstr "Dossier indisponible"
 msgid "label_download_agendaitem_list"
 msgstr ""
 
-#. Default: "Alphabetical"
-#: ./opengever/meeting/tabs/periodlisting.py:64
+#. Default: "download TOC alphabetical"
+#: ./opengever/meeting/browser/templates/periods.pt:13
 msgid "label_download_alphabetical_toc"
 msgstr ""
 
-#. Default: "By repository"
-#: ./opengever/meeting/tabs/periodlisting.py:68
+#. Default: "download TOC by repository"
+#: ./opengever/meeting/browser/templates/periods.pt:20
 msgid "label_download_repository_toc"
 msgstr ""
 
 #. Default: "Edit"
 #: ./opengever/meeting/browser/templates/member.pt:62
-#: ./opengever/meeting/tabs/periodlisting.py:57
+#: ./opengever/meeting/browser/templates/periods.pt:31
 msgid "label_edit"
 msgstr ""
 
@@ -825,7 +818,7 @@ msgid "label_edit_membership"
 msgstr ""
 
 #. Default: "Edit Period"
-#: ./opengever/meeting/browser/periods.py:197
+#: ./opengever/meeting/browser/periods.py:201
 msgid "label_edit_period"
 msgstr ""
 
