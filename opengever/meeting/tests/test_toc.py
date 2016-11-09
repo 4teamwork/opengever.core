@@ -287,3 +287,40 @@ class TestTOCByRepository(FunctionalTestCase):
     def test_toc(self):
         self.assertEqual(
             self.expected_toc_json, RepositoryBasedTOC(self.period).get_json())
+
+    @browsing
+    def test_shows_statusmessage_when_no_template_is_configured(self, browser):
+        url = self.period.get_url(self.committee)
+        browser.login().open(url, view='repository_toc')
+        self.assertEqual(u'There is no toc template configured, toc could '
+                         'not be generated.',
+                         error_messages()[0])
+
+    @browsing
+    def test_toc_json_can_be_downloaded(self, browser):
+        url = self.period.get_url(self.committee)
+        browser.login().open(url, view='repository_toc/as_json')
+        self.assertEqual(self.expected_toc_json, browser.json)
+
+    @browsing
+    def test_toc_can_be_downloaded(self, browser):
+        templates = create(Builder('templatedossier'))
+        sablon_template = create(Builder('sablontemplate')
+                                 .within(templates)
+                                 .with_asset_file('sablon_template.docx'))
+        self.committee.toc_template = RelationValue(
+            getUtility(IIntIds).getId(sablon_template))
+        transaction.commit()
+
+        browser.login().open(self.committee, view='tabbedview_view-periods')
+        browser.find('By repository').click()
+
+        self.assertDictContainsSubset(
+            {'status': '200 Ok',
+             'content-disposition': 'attachment; '
+                'filename="Repository Toc 2016 my-committee.docx"',
+             'x-frame-options': 'SAMEORIGIN',
+             'content-type': MIME_DOCX,
+             'x-theme-disabled': 'True'},
+            browser.headers)
+        self.assertIsNotNone(browser.contents)

@@ -58,10 +58,16 @@ class PeriodListingTab(BaseListingTab):
             "edit_period")
 
     def get_toc_link(self, item, value):
-        return self._make_link(
-            item.get_url(self.context, view='alphabetical_toc'),
-            _('label_download_alphabetical_toc', default=u'Alphabetical'),
-            "download_toc")
+        return "{} {}".format(
+            self._make_link(
+                item.get_url(self.context, view='alphabetical_toc'),
+                _('label_download_alphabetical_toc', default=u'Alphabetical'),
+                "download_toc"),
+            self._make_link(
+                item.get_url(self.context, view='repository_toc'),
+                _('label_download_repository_toc', default=u'By repository'),
+                "download_toc"),
+        )
 
     def get_base_query(self):
         return Period.query.by_committee(self.context.load_model())
