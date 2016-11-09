@@ -2,6 +2,7 @@ from datetime import datetime
 from five import grok
 from opengever.base.behaviors.utils import set_attachment_content_disposition
 from opengever.base.reporter import DATE_NUMBER_FORMAT
+from opengever.base.reporter import issuing_org_unit_label
 from opengever.base.reporter import readable_author
 from opengever.base.reporter import StringTranslater
 from opengever.base.reporter import XLSReporter
@@ -68,6 +69,9 @@ class TaskReporter(grok.View):
             {'id': 'containing_dossier', 'title': _('label_dossier_title')},
             {'id': 'issuer', 'title': _('label_issuer'),
              'transform': readable_author},
+            {'id': 'get_issuing_org_unit',
+             'title': _('label_issuing_org_unit'),
+             'transform': issuing_org_unit_label},
             {'id': 'responsible', 'title': _('label_responsible'),
              'transform': readable_author},
             {'id': 'task_type', 'title': _('label_task_type'),

@@ -5,6 +5,9 @@ Changelog
 4.12.1 (unreleased)
 -------------------
 
+- Added an issuing org_unit column to excel exports of tasks
+  [Rotonen]
+
 - Provide alphabetical table of contents for all agenda items of a period
   per committee.
   [deiferni]
