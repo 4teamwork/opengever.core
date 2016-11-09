@@ -16,6 +16,10 @@ def readable_author(author):
     return Actor.lookup(author).get_label()
 
 
+def issuing_org_unit_label(org_unit):
+    """Helper method which returns the label of the issuing org_unit"""
+    return org_unit().label()
+
 class StringTranslater(object):
     """provide the translate method as helper method
     for the given domain and request"""

@@ -35,6 +35,7 @@ class TestTaskReporter(FunctionalTestCase):
              None,
              None,
              u'Test User (test_user_1_)',
+             u'Client1',
              u'Test User (test_user_1_)',
              u'To comment',
              u'client1',
