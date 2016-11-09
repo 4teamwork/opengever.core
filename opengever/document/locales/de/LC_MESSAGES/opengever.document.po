@@ -231,7 +231,7 @@ msgstr "Datum, an dem das Dokument über den Korrespondenzweg versandt worden is
 
 #: ./opengever/document/behaviors/metadata.py:83
 msgid "help_document_date"
-msgstr "Datum, an dem das Dokument erstellt worden ist"
+msgstr "Datum des Dokuments"
 
 #. Default: ""
 #: ./opengever/document/document.py:64

@@ -12,6 +12,9 @@ Changelog
 - Add a new setting for opening links to PDF files in new tabs/windows
   [Rotonen]
 
+- Simplified the German locale string for opengever.document help_document_date.
+  [Rotonen]
+
 - Fixed manual journal entry creation when users are selected as contacts.
   [phgross]
 

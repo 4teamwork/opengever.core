@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-10-31 11:33+0000\n"
+"POT-Creation-Date: 2016-11-08 13:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,7 +44,7 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#: ./opengever/dossier/browser/overview.py:71
+#: ./opengever/dossier/browser/overview.py:79
 msgid "Description"
 msgstr ""
 
@@ -89,11 +89,11 @@ msgstr ""
 msgid "Move Items"
 msgstr ""
 
-#: ./opengever/dossier/browser/overview.py:69
+#: ./opengever/dossier/browser/overview.py:75
 msgid "Newest documents"
 msgstr ""
 
-#: ./opengever/dossier/browser/overview.py:62
+#: ./opengever/dossier/browser/overview.py:66
 msgid "Newest tasks"
 msgstr ""
 
@@ -109,11 +109,11 @@ msgstr ""
 msgid "Participant"
 msgstr ""
 
-#: ./opengever/dossier/browser/overview.py:55
+#: ./opengever/dossier/browser/overview.py:61
 msgid "Participants"
 msgstr ""
 
-#: ./opengever/dossier/browser/overview.py:48
+#: ./opengever/dossier/browser/overview.py:54
 msgid "Participations"
 msgstr ""
 
@@ -426,7 +426,7 @@ msgid "label_destination"
 msgstr ""
 
 #. Default: "Documents"
-#: ./opengever/dossier/browser/tabbed.py:18
+#: ./opengever/dossier/browser/tabbed.py:16
 msgid "label_documents"
 msgstr ""
 
@@ -469,12 +469,12 @@ msgid "label_former_reference_number"
 msgstr ""
 
 #. Default: "Info"
-#: ./opengever/dossier/browser/tabbed.py:46
+#: ./opengever/dossier/browser/tabbed.py:36
 msgid "label_info"
 msgstr ""
 
 #. Default: "Journal"
-#: ./opengever/dossier/browser/tabbed.py:39
+#: ./opengever/dossier/browser/tabbed.py:31
 msgid "label_journal"
 msgstr ""
 
@@ -489,7 +489,7 @@ msgid "label_label"
 msgstr ""
 
 #. Default: "Linked Dossiers"
-#: ./opengever/dossier/browser/overview.py:65
+#: ./opengever/dossier/browser/overview.py:71
 msgid "label_linked_dossiers"
 msgstr ""
 
@@ -519,7 +519,7 @@ msgid "label_overview"
 msgstr ""
 
 #. Default: "Participants"
-#: ./opengever/dossier/browser/tabbed.py:85
+#: ./opengever/dossier/browser/tabbed.py:67
 msgid "label_participants"
 msgstr ""
 
@@ -529,7 +529,7 @@ msgid "label_participation"
 msgstr ""
 
 #. Default: "Participations"
-#: ./opengever/dossier/browser/tabbed.py:78
+#: ./opengever/dossier/browser/tabbed.py:62
 msgid "label_participations"
 msgstr ""
 
@@ -539,7 +539,7 @@ msgid "label_phonenumber"
 msgstr ""
 
 #. Default: "Proposals"
-#: ./opengever/dossier/browser/tabbed.py:66
+#: ./opengever/dossier/browser/tabbed.py:52
 msgid "label_proposals"
 msgstr ""
 
@@ -578,7 +578,7 @@ msgid "label_roles"
 msgstr ""
 
 #. Default: "Sablon Templates"
-#: ./opengever/dossier/browser/tabbed.py:126
+#: ./opengever/dossier/browser/tabbed.py:99
 msgid "label_sablon_templates"
 msgstr ""
 
@@ -600,17 +600,17 @@ msgid "label_start_byline"
 msgstr ""
 
 #. Default: "Subdossiers"
-#: ./opengever/dossier/browser/tabbed.py:55
+#: ./opengever/dossier/browser/tabbed.py:43
 msgid "label_subdossiers"
 msgstr ""
 
 #. Default: "Tasks"
-#: ./opengever/dossier/browser/tabbed.py:25
+#: ./opengever/dossier/browser/tabbed.py:21
 msgid "label_tasks"
 msgstr ""
 
 #. Default: "Tasktemplate Folders"
-#: ./opengever/dossier/browser/tabbed.py:116
+#: ./opengever/dossier/browser/tabbed.py:91
 msgid "label_tasktemplate_folders"
 msgstr ""
 
@@ -626,7 +626,7 @@ msgid "label_title"
 msgstr ""
 
 #. Default: "Trash"
-#: ./opengever/dossier/browser/tabbed.py:32
+#: ./opengever/dossier/browser/tabbed.py:26
 msgid "label_trash"
 msgstr ""
 

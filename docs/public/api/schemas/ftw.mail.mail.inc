@@ -90,7 +90,7 @@
        :Datentyp: ``Date``
        
        :Default: <Aktuelles Datum>
-       :Beschreibung: Datum, an dem das Dokument erstellt worden ist
+       :Beschreibung: Datum des Dokuments
        
 
 
