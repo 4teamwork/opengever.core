@@ -165,3 +165,45 @@ Metadaten zu einem Traktandum (AgendaItem):
 - ``publish_in``
 
   Zu veröffentlichen in (Text).
+
+
+Metadaten zu einer Inhaltsverzeichnis-Gruppe:
+
+- ``group_title``
+
+  Titel/Name des Elementes nach dem das Inhaltsverzeichnis gruppiert wurde. Entweder der erste Buchstabe des Antrags/Traktandums oder der Name der Ordnungsposition (Text).
+
+- ``contents``
+
+  Liste aller der Inhaltsverzeichnis-Elemente aller Traktanden/Anträge (Liste von Inhaltsverzeichnis-Elementen, siehe unten)
+
+
+Metadaten zu einem Inhaltsverzeichnis-Element:
+
+- ``title``
+
+  Titel des Antrags/Traktandums (Text).
+
+- ``dossier_reference_number``
+
+  Aktenzeichen des Dossiers eines Antrags (Text).
+
+- ``repository_folder_title``
+
+  Titel der Ordnungsposition eines Antrags (Text).
+
+- ``decision_number``
+
+  Beschlussnummer des Antrags/Traktandums (Text).
+
+- ``has_proposal``
+
+  Gibt an, ob es sich um ein Traktandum mit oder ohne Antrag handelt (Boolean).
+
+- ``meeting_date``
+
+  Datum der Sitzung des Antrags/Traktandums (Text).
+
+- ``meeting_start_page_number``
+
+  Start-Seitenzahl der Sitzung (Text).
