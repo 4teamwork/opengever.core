@@ -34,6 +34,18 @@ class TestAlphabeticalTOC(FunctionalTestCase):
                 'meeting_start_page_number': 129,
             }]
         }, {
+        'group_title': u'N',
+        'contents': [
+            {
+                'title': u'No Proposal here',
+                'dossier_reference_number': None,
+                'repository_folder_title': None,
+                'meeting_date': u'Dec 31, 2010',
+                'decision_number': 6,
+                'has_proposal': False,
+                'meeting_start_page_number': 129,
+            }]
+        }, {
         'group_title': u'P',
         'contents': [{
             'title': u'proposal 1',
@@ -124,6 +136,11 @@ class TestAlphabeticalTOC(FunctionalTestCase):
             proposal=proposal2_2,
             decision_number=5,
             ))
+        create(Builder('agenda_item').having(
+            meeting=self.meeting2,
+            title=u'No Proposal here',
+            decision_number=6,
+        ))
 
         self.period = create(Builder('period').having(
             date_from=date(2010, 1, 1),
@@ -178,6 +195,18 @@ class TestTOCByRepository(FunctionalTestCase):
     maxDiff = None
 
     expected_toc_json = {'toc': [{
+        'group_title': None,
+        'contents': [
+            {
+                'title': u'No Proposal here',
+                'dossier_reference_number': None,
+                'repository_folder_title': None,
+                'meeting_date': u'Dec 31, 2010',
+                'decision_number': 6,
+                'has_proposal': False,
+                'meeting_start_page_number': 129,
+            }]
+        }, {
             'group_title': u'Business',
             'contents': [{
                 'title': u'Proposal 1',
@@ -278,6 +307,11 @@ class TestTOCByRepository(FunctionalTestCase):
             proposal=proposal2_2,
             decision_number=5,
             ))
+        create(Builder('agenda_item').having(
+            meeting=self.meeting2,
+            title=u'No Proposal here',
+            decision_number=6,
+        ))
 
         self.period = create(Builder('period').having(
             date_from=date(2010, 1, 1),
