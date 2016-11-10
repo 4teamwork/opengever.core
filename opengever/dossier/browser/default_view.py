@@ -10,7 +10,7 @@ class DossierDefaultView(OGDefaultView):
 
     @property
     def omitted_fields(self):
-        fields = super(DossierDefaultView, self).omitted_fields
-        fields.extend(['IClassification.public_trial',
-                       'IClassification.public_trial_statement'])
+        fields = ['IClassification.public_trial',
+                  'IClassification.public_trial_statement']
+        fields.extend(super(DossierDefaultView, self).omitted_fields)
         return fields
