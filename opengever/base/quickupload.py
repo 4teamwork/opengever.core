@@ -77,9 +77,11 @@ class OGQuickUploadCapableFileFactory(grok.Adapter):
                  data, portal_type):
 
         if self.is_email_upload(filename):
-            command = CreateEmailCommand(self.context, filename, data)
+            command = CreateEmailCommand(
+                self.context, filename, data, description=description)
         else:
-            command = CreateDocumentCommand(self.context, filename, data)
+            command = CreateDocumentCommand(
+                self.context, filename, data, description=description)
 
         obj = command.execute()
 

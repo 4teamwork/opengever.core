@@ -51,6 +51,22 @@ class TestClassificationDefault(FunctionalTestCase):
         self.assertEqual(u'confidential', value)
 
     @browsing
+    def test_classification_acquires_default_with_quickupload(self, browser):
+        browser.login().open(self.repofolder)
+        factoriesmenu.add(u'Business Case Dossier')
+        browser.fill(
+            {'Title': 'My Dossier', 'Classification': 'confidential'}).save()
+        dossier = browser.context
+        transaction.commit()
+
+        document = create(Builder('quickuploaded_document')
+                          .within(dossier)
+                          .with_data('text'))
+
+        value = self.get_classification(document)
+        self.assertEqual(u'confidential', value)
+
+    @browsing
     def test_intermediate_folder_doesnt_break_default_aq(self, browser):
         # An intermediate folderish object that doesn't have the respective
         # field shouldn't break acquisition of the default

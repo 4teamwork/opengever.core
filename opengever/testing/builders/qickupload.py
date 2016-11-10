@@ -19,7 +19,7 @@ class QuickuploadMailBuilder(PloneObjectBuilder):
 
         result = factory(filename=self.filename,
                          title='',  # ignored by adapter
-                         description='',  # ignored by adapter
+                         description=None,
                          content_type='message/rfc822',
                          data=self.data,
                          portal_type='ftw.mail.mail')
@@ -52,7 +52,7 @@ class QuickuploadDocumentBuilder(PloneObjectBuilder):
 
         result = factory(filename=self.filename,
                          title='',  # ignored by adapter
-                         description='',  # ignored by adapter
+                         description=None,
                          content_type=self.content_type,
                          data=self.data,
                          portal_type='opengever.document.document')

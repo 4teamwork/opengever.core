@@ -4,15 +4,10 @@ from os.path import join
 from os.path import splitext
 from plone.dexterity.utils import addContentToContainer
 from plone.dexterity.utils import createContent
-from plone.dexterity.utils import iterSchemata
-from plone.rfc822.interfaces import IPrimaryField
 from plone.rfc822.interfaces import IPrimaryFieldInfo
-from z3c.form.interfaces import IValue
-from zope.component import queryMultiAdapter
 from zope.event import notify
 from zope.lifecycleevent import ObjectCreatedEvent
 from zope.lifecycleevent import ObjectModifiedEvent
-from zope.schema import getFieldsInOrder
 
 
 class CreateDocumentCommand(object):
@@ -32,7 +27,7 @@ class CreateDocumentCommand(object):
         self.context = context
         self.data = data
         self.filename = filename
-        self.title = title or filename
+        self.title = title
         self.content_type = content_type
         self.additional_args = kwargs
 
@@ -43,7 +38,6 @@ class CreateDocumentCommand(object):
         # Temporarily acquisition wrap content to make adaptation work
         content = content.__of__(self.context)
         self.set_primary_field_value(content)
-        self.set_default_values(content, self.context)
         self.notify_created(content)
 
         # Remove temporary acquisition wrapper
@@ -77,35 +71,6 @@ class CreateDocumentCommand(object):
                             contentType=self.content_type)
         field.set(field.interface(obj), value)
 
-    def set_default_values(self, content, container):
-        """Set default values for all fields.
-
-        This is necessary for content created programmatically since dexterity
-        only sets default values in a view.
-
-        """
-        for schema in iterSchemata(content):
-            for name, field in getFieldsInOrder(schema):
-                if name in self.skip_defaults_fields:
-                    continue
-                if IPrimaryField.providedBy(field):
-                    continue
-                else:
-                    default = queryMultiAdapter(
-                        (container, container.REQUEST, None, field, None),
-                        IValue, name='default')
-                    if default is not None:
-                        default = default.get()
-                    if default is None:
-                        default = getattr(field, 'default', None)
-                    if default is None:
-                        try:
-                            default = field.missing_value
-                        except AttributeError:
-                            pass
-                    value = default
-                    field.set(field.interface(content), value)
-
 
 class CreateEmailCommand(CreateDocumentCommand):
     """Create a new ftw.mail.mail object and update its fields
@@ -115,6 +80,12 @@ class CreateEmailCommand(CreateDocumentCommand):
 
     """
     portal_type = 'ftw.mail.mail'
+
+    def notify_created(self, content):
+        """Make sure filename is updated from subject upon creation.
+        """
+        content._update_title_from_message_subject()
+        notify(ObjectCreatedEvent(content))
 
     def is_msg_upload(self):
         root, ext = splitext(self.filename)
