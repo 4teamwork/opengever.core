@@ -624,3 +624,24 @@ class TestPublicTrial(FunctionalTestCase):
         # check if object got indexed
         self.assertEquals('private',
                           index_data_for(self.document).get('public_trial'))
+
+    @browsing
+    def test_public_trial_is_displayed(self, browser):
+        dossier = create(Builder('dossier').titled(u'Dossier A'))
+        document = create(Builder('document').within(dossier))
+
+        browser.login().open(document, view='view')
+
+        self.assertTrue(
+            browser.css('#form-widgets-IClassification-public_trial'))
+
+    @browsing
+    def test_public_trial_is_displayed_after_visiting_a_dossier(self, browser):
+        dossier = create(Builder('dossier').titled(u'Dossier A'))
+        document = create(Builder('document').within(dossier))
+
+        browser.login().open(dossier, view='view')
+        browser.open(document, view='view')
+
+        self.assertTrue(
+            browser.css('#form-widgets-IClassification-public_trial'))

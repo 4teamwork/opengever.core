@@ -5,6 +5,9 @@ Changelog
 4.12.1 (unreleased)
 -------------------
 
+- Fix public_trial being hidden on document views after visiting a dossier.
+  [Rotonen]
+
 - Update collective quickupload to 1.9.0 to prevent construction of partial files.
   [deiferni]
 
