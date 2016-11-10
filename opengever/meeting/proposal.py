@@ -296,6 +296,7 @@ class SubmittedProposal(ProposalBase):
             2, {
                 'label': _('label_dossier', default=u"Dossier"),
                 'value': self.get_dossier_link(),
+                'is_html': True,
             }
         )
 
@@ -392,7 +393,7 @@ class SubmittedProposal(ProposalBase):
                      default=u"Dossier not available")
 
         return u'<a href="{0}" title="{1}">{1}</a>'.format(
-            '/'.join(dossier.getPhysicalPath()),
+            dossier.absolute_url(),
             dossier.title)
 
 
