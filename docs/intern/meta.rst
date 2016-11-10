@@ -74,7 +74,7 @@ Beispiel für die interne Dokumentation:
 
 .. code-block:: bash
 
-   bin/intern-docs-build
+   bin/docs-build-intern
 
 Dieses Script wird eine Menge Output produzieren, und ganz am Schluss einen
 Hinweis darauf geben, wo das Resultat des Builds zu finden ist:
@@ -115,7 +115,7 @@ Um z.B. die interne Doku zu publizieren:
 
 .. code-block:: bash
 
-   bin/intern-docs-build-and-publish
+   bin/docs-build-and-publish-intern
 
 Das Publizieren ist völlig unabhängig von ``git``. Publiziert wird, was im
 bei einem frischen ``dirhtml`` build der Dokumentation rauskommt, so wie sie
@@ -242,5 +242,5 @@ davon ein PDF. Beispiel:
 
 .. code-block:: bash
 
-   bin/intern-docs-build latexpdf
+   bin/docs-build-intern latexpdf
    open docs/intern/_build/latex/OneGovGEVERIntern.pdf

@@ -8,3 +8,5 @@ Inhalt:
 
    api/index.rst
    officeconnector/index.rst
+   docproperties/index.rst
+   meeting/index.rst
