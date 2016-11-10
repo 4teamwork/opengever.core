@@ -5,6 +5,9 @@ Changelog
 4.12.1 (unreleased)
 -------------------
 
+- Fix setting of default values for quickuploaded documents.
+  [lgraf]
+
 - Fix public_trial being hidden on document views after visiting a dossier.
   [Rotonen]
 
