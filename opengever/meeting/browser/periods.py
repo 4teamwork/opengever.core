@@ -11,12 +11,16 @@ from opengever.meeting import _
 from opengever.meeting import is_meeting_feature_enabled
 from opengever.meeting.committee import ICommittee
 from opengever.meeting.model import Period
+from opengever.tabbedview import GeverTabMixin
 from plone.directives import form
 from plone.z3cform.layout import FormWrapper
+from Products.Five.browser import BrowserView
+from sqlalchemy import desc
 from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
 from z3c.form.interfaces import IDataConverter
 from zope import schema
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import getUtility
 
 
@@ -204,3 +208,19 @@ class EditPeriod(ModelEditForm):
     def nextURL(self):
         return "{}#periods".format(
             aq_parent(aq_inner(self.context)).absolute_url())
+
+
+class PeriodsTab(BrowserView, GeverTabMixin):
+
+    show_searchform = False
+
+    template = ViewPageTemplateFile('templates/periods.pt')
+
+    def __call__(self):
+        return self.template()
+
+    def get_periods(self):
+        """Returns all periods for the current committee.
+        """
+        return Period.query.by_committee(
+            self.context.load_model()).order_by(desc(Period.date_from))

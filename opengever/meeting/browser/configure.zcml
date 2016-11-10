@@ -130,4 +130,19 @@
       allowed_attributes="as_json"
       />
 
+  <browser:page
+      for="opengever.meeting.interfaces.IPeriodWrapper"
+      name="repository_toc"
+      class=".toc.DownloadRepositoryTOC"
+      permission="zope2.View"
+      allowed_attributes="as_json"
+      />
+
+  <browser:page
+      name="tabbedview_view-periods"
+      for="opengever.meeting.committee.ICommittee"
+      class=".periods.PeriodsTab"
+      permission="zope2.View"
+      />
+
 </configure>

@@ -2,6 +2,7 @@ from opengever.meeting import _
 from opengever.meeting.command import MIME_DOCX
 from opengever.meeting.sablon import Sablon
 from opengever.meeting.toc.alphabetical import AlphabeticalToc
+from opengever.meeting.toc.repository import RepositoryBasedTOC
 from plone import api
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from Products.Five.browser import BrowserView
@@ -43,10 +44,12 @@ class DownloadAlphabeticalTOC(BrowserView):
                            'attachment; filename="{}"'.format(filename))
         return sablon.file_data
 
+    def get_data(self):
+        return AlphabeticalToc(self.model).get_json()
+
     def get_json_data(self, pretty=False):
         indent = 4 if pretty else None
-        return json.dumps(AlphabeticalToc(self.model).get_json(),
-                          indent=indent)
+        return json.dumps(self.get_data(), indent=indent)
 
     def get_filename(self):
         normalizer = getUtility(IIDNormalizer)
@@ -55,7 +58,7 @@ class DownloadAlphabeticalTOC(BrowserView):
 
         return u"{}.docx".format(
             translate(_(u'filename_alphabetical_toc',
-                        default='Alphabetical Toc ${period} ${committee}',
+                        default=u'Alphabetical Toc ${period} ${committee}',
                         mapping={
                           'period': period_title,
                           'committee': committee_title,
@@ -70,3 +73,23 @@ class DownloadAlphabeticalTOC(BrowserView):
         response.setHeader('X-Theme-Disabled', 'True')
         response.enableHTTPCompression(REQUEST=self.request)
         return self.get_json_data(pretty=True)
+
+
+class DownloadRepositoryTOC(DownloadAlphabeticalTOC):
+
+    def get_data(self):
+        return RepositoryBasedTOC(self.model).get_json()
+
+    def get_filename(self):
+        normalizer = getUtility(IIDNormalizer)
+        period_title = normalizer.normalize(self.model.title)
+        committee_title = normalizer.normalize(self.model.committee.title)
+
+        return u"{}.docx".format(
+            translate(_(u'filename_repository_toc',
+                        default=u'Repository Toc ${period} ${committee}',
+                        mapping={
+                          'period': period_title,
+                          'committee': committee_title,
+                        }),
+                      context=getRequest()))

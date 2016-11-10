@@ -4,14 +4,39 @@ from operator import itemgetter
 from sqlalchemy.orm import joinedload
 
 
-def _first_title_char(value):
+def first_title_char(value):
     return value['title'][:1].upper()
+
+
+def item_sort_key(item):
+    return (first_title_char(item), item['decision_number'])
 
 
 class AlphabeticalToc(object):
 
     def __init__(self, period):
         self.period = period
+
+    def sort_items(self, unordered_items):
+        """We currently sort on the client side since title can be either in
+        the agenda_items table or in the proposals table.
+        """
+        return sorted(unordered_items, key=item_sort_key)
+
+    def group_items(self, sorted_items):
+        """Input items must be sorted since groupby depends on input order.
+        """
+        results = []
+        for character, contents in groupby(sorted_items,
+                                           key=first_title_char):
+            results.append({
+                'group_title': character,
+                'contents': list(contents)
+            })
+        return results
+
+    def sort_groups(self, groups):
+        return sorted(groups, key=itemgetter('group_title'))
 
     def get_json(self):
         agenda_items = AgendaItem.query.options(
@@ -30,17 +55,6 @@ class AlphabeticalToc(object):
                 'meeting_start_page_number': meeting.protocol_start_page_number,
             })
 
-        # input items must be sorted since grouping depends on input order
-        # currently sort on the client side since title can be either in the
-        # agenda_items table or in the proposals table.
-        sorted_items = sorted(unordered_items,
-                              key=itemgetter('title', 'decision_number'))
-
-        results = []
-        for character, contents in groupby(sorted_items,
-                                           key=_first_title_char):
-            results.append({
-                'group_title': character,
-                'contents': list(contents)
-            })
-        return {'toc': sorted(results, key=itemgetter('group_title'))}
+        sorted_items = self.sort_items(unordered_items)
+        grouped_results = self.group_items(sorted_items)
+        return {'toc': self.sort_groups(grouped_results)}

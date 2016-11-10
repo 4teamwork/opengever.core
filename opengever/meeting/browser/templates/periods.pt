@@ -1,0 +1,37 @@
+<tal:define tal:define="periods view/get_periods"
+            i18n:domain="opengever.meeting">
+
+  <ul id="period_listing" tal:condition="periods">
+    <li tal:repeat="period periods" class="period">
+      <div class="title">
+        <span tal:content="period/get_title"></span>
+      </div>
+      <ul class="download actions">
+        <li>
+          <a class="download_toc"
+             tal:attributes="href string:${context/absolute_url}/${period/wrapper_id}/alphabetical_toc"
+             i18n:translate="label_download_alphabetical_toc">
+            download TOC alphabetical
+          </a>
+        </li>
+        <li>
+          <a class="download_toc"
+             tal:attributes="href string:${context/absolute_url}/${period/wrapper_id}/repository_toc"
+             i18n:translate="label_download_repository_toc">
+            download TOC by repository
+          </a>
+        </li>
+      </ul>
+      <ul class="actions">
+        <li>
+          <a class="edit_period"
+             tal:attributes="href string:${context/absolute_url}/${period/wrapper_id}/edit"
+             i18n:translate="label_edit">
+            Edit
+          </a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+</tal:define>

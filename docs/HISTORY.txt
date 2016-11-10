@@ -5,6 +5,10 @@ Changelog
 4.12.1 (unreleased)
 -------------------
 
+- Provide repository based table of contents for all agenda items of a period
+  per committee.
+  [deiferni]
+
 - Use flat buttons in tasks and proposals actionmenu.
   [Kevin Bieri]
 
