@@ -5,6 +5,9 @@ Changelog
 4.12.1 (unreleased)
 -------------------
 
+- Update collective quickupload to 1.9.0 to prevent construction of partial files.
+  [deiferni]
+
 - Fix dossier links in proposal overviews.
   [Rotonen]
 
