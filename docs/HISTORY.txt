@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.12.1 (unreleased)
+4.13.0 (2016-11-14)
 -------------------
 
 - Fix setting of default values for quickuploaded documents.
