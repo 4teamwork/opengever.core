@@ -85,6 +85,12 @@ class TestAlphabeticalTOC(FunctionalTestCase):
         self.committee = create(Builder('committee')
                                 .within(self.container))
         self.committee_model = self.committee.load_model()
+
+        self.meeting_before = create(Builder('meeting').having(
+            committee=self.committee_model,
+            start=pytz.UTC.localize(datetime(2009, 12, 31, 23, 45)),
+            protocol_start_page_number=99))
+
         self.meeting1 = create(Builder('meeting').having(
             committee=self.committee_model,
             start=pytz.UTC.localize(datetime(2010, 1, 1, 10, 30)),
@@ -93,6 +99,11 @@ class TestAlphabeticalTOC(FunctionalTestCase):
             committee=self.committee_model,
             start=pytz.UTC.localize(datetime(2010, 12, 31, 18, 30)),
             protocol_start_page_number=129))
+
+        self.meeting_after = create(Builder('meeting').having(
+            committee=self.committee_model,
+            start=pytz.UTC.localize(datetime(2011, 1, 1, 0, 0)),
+            protocol_start_page_number=99))
 
         proposal1_1 = create(Builder('proposal_model').having(
             title=u'proposal 1',
@@ -115,6 +126,12 @@ class TestAlphabeticalTOC(FunctionalTestCase):
             repository_folder_title='Other Stuff',
             dossier_reference_number='3.1.4 / 77',
             int_id=4))
+
+        create(Builder('agenda_item').having(
+            meeting=self.meeting_before,
+            title=u'I am before period start',
+            decision_number=1,
+        ))
 
         create(Builder('agenda_item').having(
             meeting=self.meeting1,
@@ -140,6 +157,12 @@ class TestAlphabeticalTOC(FunctionalTestCase):
             meeting=self.meeting2,
             title=u'No Proposal here',
             decision_number=6,
+        ))
+
+        create(Builder('agenda_item').having(
+            meeting=self.meeting_after,
+            title=u'I am after period end',
+            decision_number=1,
         ))
 
         self.period = create(Builder('period').having(
@@ -189,7 +212,7 @@ class TestAlphabeticalTOC(FunctionalTestCase):
         self.assertIsNotNone(browser.contents)
 
 
-class TestTOCByRepository(FunctionalTestCase):
+class TestTOCByRepository(TestAlphabeticalTOC):
 
     layer = OPENGEVER_FUNCTIONAL_MEETING_LAYER
     maxDiff = None
@@ -209,7 +232,7 @@ class TestTOCByRepository(FunctionalTestCase):
         }, {
             'group_title': u'Business',
             'contents': [{
-                'title': u'Proposal 1',
+                'title': u'proposal 1',
                 'dossier_reference_number': u'1.1.4 / 1',
                 'repository_folder_title': u'Business',
                 'meeting_date': 'Jan 01, 2010',
@@ -249,74 +272,6 @@ class TestTOCByRepository(FunctionalTestCase):
             }]
         }
     ]}
-
-    def setUp(self):
-        super(TestTOCByRepository, self).setUp()
-        self.container = create(Builder('committee_container'))
-        self.committee = create(Builder('committee')
-                                .within(self.container))
-        self.committee_model = self.committee.load_model()
-        self.meeting1 = create(Builder('meeting').having(
-            committee=self.committee_model,
-            start=pytz.UTC.localize(datetime(2010, 1, 1, 10, 30)),
-            protocol_start_page_number=33))
-        self.meeting2 = create(Builder('meeting').having(
-            committee=self.committee_model,
-            start=pytz.UTC.localize(datetime(2010, 12, 31, 18, 30)),
-            protocol_start_page_number=129))
-
-        proposal1_1 = create(Builder('proposal_model').having(
-            title=u'Proposal 1',
-            repository_folder_title='Business',
-            dossier_reference_number='1.1.4 / 1',
-            int_id=1))
-        proposal1_2 = create(Builder('proposal_model').having(
-            title=u'\xdchhh',
-            repository_folder_title='Business',
-            dossier_reference_number='1.1.4 / 2',
-            int_id=2))
-
-        proposal2_1 = create(Builder('proposal_model').having(
-            title=u'Proposal 3',
-            repository_folder_title='Stuff',
-            dossier_reference_number='2.1.4 / 1',
-            int_id=3))
-        proposal2_2 = create(Builder('proposal_model').having(
-            title=u'Anything goes',
-            repository_folder_title='Other Stuff',
-            dossier_reference_number='3.1.4 / 77',
-            int_id=4))
-
-        create(Builder('agenda_item').having(
-            meeting=self.meeting1,
-            proposal=proposal1_1,
-            decision_number=2,
-            ))
-        create(Builder('agenda_item').having(
-            meeting=self.meeting1,
-            proposal=proposal1_2,
-            decision_number=3,
-            ))
-        create(Builder('agenda_item').having(
-            meeting=self.meeting2,
-            proposal=proposal2_1,
-            decision_number=4,
-            ))
-        create(Builder('agenda_item').having(
-            meeting=self.meeting2,
-            proposal=proposal2_2,
-            decision_number=5,
-            ))
-        create(Builder('agenda_item').having(
-            meeting=self.meeting2,
-            title=u'No Proposal here',
-            decision_number=6,
-        ))
-
-        self.period = create(Builder('period').having(
-            date_from=date(2010, 1, 1),
-            date_to=date(2010, 12, 31),
-            committee=self.committee_model))
 
     def test_toc(self):
         self.assertEqual(

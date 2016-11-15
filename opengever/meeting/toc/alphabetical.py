@@ -1,7 +1,13 @@
+from datetime import datetime
+from datetime import time
+from datetime import timedelta
 from itertools import groupby
 from opengever.meeting.model import AgendaItem
+from opengever.meeting.model import Meeting
 from operator import itemgetter
+from sqlalchemy.orm import contains_eager
 from sqlalchemy.orm import joinedload
+import pytz
 
 
 def first_title_char(value):
@@ -38,12 +44,26 @@ class AlphabeticalToc(object):
     def sort_groups(self, groups):
         return sorted(groups, key=itemgetter('group_title'))
 
-    def get_json(self):
-        agenda_items = AgendaItem.query.options(
-            joinedload('proposal'), joinedload('meeting'))
+    def build_query(self):
+        datetime_from = pytz.UTC.localize(
+            datetime.combine(self.period.date_from, time(0, 0)))
+        datetime_to = pytz.UTC.localize(
+            datetime.combine(self.period.date_to + timedelta(days=1),
+                             time(0, 0)))
 
+        # we need the explicit join to filter below and to avoid a cross-join
+        # without on-condition.
+        query = AgendaItem.query.join(Meeting).options(
+            joinedload('proposal'), contains_eager('meeting'))
+        # we only have a look at the start-date of a meeting to decide the
+        # relevant day for the toc
+        query = query.filter(Meeting.start >= datetime_from,
+                             Meeting.start < datetime_to)
+        return query
+
+    def get_json(self):
         unordered_items = []
-        for agenda_item in agenda_items:
+        for agenda_item in self.build_query():
             meeting = agenda_item.meeting
             unordered_items.append({
                 'title': agenda_item.get_title(),
