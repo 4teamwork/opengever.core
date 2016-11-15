@@ -5,7 +5,9 @@ Changelog
 4.13.1 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Register OGDefaultView for all contenttypes, to hide the form
+  helpers in tasks detailview.
+  [phgross]
 
 
 4.13.0 (2016-11-14)
