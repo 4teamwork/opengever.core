@@ -1,5 +1,4 @@
 from Acquisition import aq_parent
-from Products.CMFCore.utils import getToolByName
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.base.interfaces import IReferenceNumber
 from opengever.disposition.ech0160.bindings import arelda
@@ -12,9 +11,12 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.repository.repositoryroot import IRepositoryRoot
-
+from Products.CMFCore.utils import getToolByName
 import binascii
 import os.path
+
+
+NOT_SPECIFIED = u'keine Angabe'
 
 
 class Repository(object):
@@ -34,15 +36,17 @@ class Repository(object):
         self._add_descendants(parents[1:])
 
     def _add_descendants(self, descendants):
-        if descendants:
-            obj = descendants[0]
-            uid = obj.UID()
-            if uid in self.positions:
-                pos = self.positions[uid]
-            else:
-                pos = Position(obj)
-                self.positions[uid] = pos
-            pos._add_descendants(descendants[1:])
+        if not descendants:
+            return
+
+        obj = descendants[0]
+        uid = obj.UID()
+        if uid in self.positions:
+            pos = self.positions[uid]
+        else:
+            pos = Position(obj)
+            self.positions[uid] = pos
+        pos._add_descendants(descendants[1:])
 
     def binding(self):
         """Return XML binding"""
@@ -58,12 +62,12 @@ class Repository(object):
                 os.anwendungszeitraum.von = arelda.historischerZeitpunkt(
                     self.obj.valid_from)
             else:
-                os.anwendungszeitraum.von = u'keine Angabe'
+                os.anwendungszeitraum.von = NOT_SPECIFIED
             if self.obj.valid_until:
                 os.anwendungszeitraum.bis = arelda.historischerZeitpunkt(
                     self.obj.valid_until)
             else:
-                os.anwendungszeitraum.bis = u'keine Angabe'
+                os.anwendungszeitraum.bis = NOT_SPECIFIED
 
         for pos in self.positions.values():
             os.ordnungssystemposition.append(pos.binding())
@@ -80,23 +84,25 @@ class Position(object):
         self.dossiers = {}
 
     def _add_descendants(self, descendants):
-        if descendants:
-            obj = descendants[0]
-            if IRepositoryFolder.providedBy(obj):
-                uid = obj.UID()
-                if uid in self.positions:
-                    pos = self.positions[uid]
-                else:
-                    pos = Position(obj)
-                    self.positions[uid] = pos
-                pos._add_descendants(descendants[1:])
-            elif isinstance(obj, Dossier):
-                uid = obj.obj.UID()
-                if uid in self.dossiers:
-                    dossier = self.dossiers[uid]
-                else:
-                    dossier = obj
-                    self.dossiers[uid] = dossier
+        if not descendants:
+            return
+
+        obj = descendants[0]
+        if IRepositoryFolder.providedBy(obj):
+            uid = obj.UID()
+            if uid in self.positions:
+                pos = self.positions[uid]
+            else:
+                pos = Position(obj)
+                self.positions[uid] = pos
+            pos._add_descendants(descendants[1:])
+        elif isinstance(obj, Dossier):
+            uid = obj.obj.UID()
+            if uid in self.dossiers:
+                dossier = self.dossiers[uid]
+            else:
+                dossier = obj
+                self.dossiers[uid] = dossier
 
     def binding(self):
         op = arelda.ordnungssystempositionGeverSIP(
@@ -163,7 +169,7 @@ class Dossier(object):
             dossier.entstehungszeitraum.von = arelda.historischerZeitpunkt(
                 oldest_docs[0].created.asdatetime().date())
         else:
-            dossier.entstehungszeitraum.von = u'keine Angabe'
+            dossier.entstehungszeitraum.von = NOT_SPECIFIED
         latest_docs = catalog(
             portal_type=self.document_types,
             path='/'.join(self.obj.getPhysicalPath()),
@@ -174,7 +180,7 @@ class Dossier(object):
             dossier.entstehungszeitraum.bis = arelda.historischerZeitpunkt(
                 latest_docs[0].modified.asdatetime().date())
         else:
-            dossier.entstehungszeitraum.bis = u'keine Angabe'
+            dossier.entstehungszeitraum.bis = NOT_SPECIFIED
 
         set_classification_attributes(dossier, self.obj)
 
@@ -247,7 +253,7 @@ class Folder(object):
         self.files = []
 
         self.name = u'd{0:06d}'.format(toc.next_folder)
-        toc.next_folder += 1
+        toc.increment_folder_counter()
         self.path = os.path.join(base_path, self.name)
 
         for dossier in dossier.dossiers.values():
@@ -284,6 +290,9 @@ class ContentRootFolder(Folder):
         self.path = os.path.join(base_path, self.name)
         self.folders = []
         self.files = []
+
+    def increment_folder_counter(self):
+        self.next_folder += 1
 
     def add_dossier(self, dossier):
         self.folders.append(Folder(self, dossier, self.path))
