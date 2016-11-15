@@ -1,9 +1,8 @@
-# ./bindings/archivischeNotiz.py
+# ./opengever/disposition/ech0160/bindings/archivischeNotiz.py
 # -*- coding: utf-8 -*-
 # PyXB bindings for NM:e92452c8d3e28a9e27abfc9994d2007779e7f4c9
-# Generated 2016-04-16 12:49:30.773924 by PyXB version 1.2.5-DEV using Python 2.7.11.final.0
+# Generated 2016-11-15 15:31:48.925233 by PyXB version 1.2.5 using Python 2.7.11.final.0
 # Namespace AbsentNamespace1
-# flake8: noqa
 
 from __future__ import unicode_literals
 import pyxb
@@ -15,10 +14,10 @@ import pyxb.utils.domutils
 import sys
 import pyxb.utils.six as _six
 # Unique identifier for bindings created at the same time
-_GenerationUID = pyxb.utils.utility.UniqueIdentifier('urn:uuid:e548cfc5-03c0-11e6-820c-c42c03358f75')
+_GenerationUID = pyxb.utils.utility.UniqueIdentifier('urn:uuid:3d913d21-ab40-11e6-adb4-7831c1b93318')
 
 # Version of PyXB used to generate the bindings
-_PyXBVersion = '1.2.5-DEV'
+_PyXBVersion = '1.2.5'
 # Generated bindings are not compatible across PyXB versions
 if pyxb.__version__ != _PyXBVersion:
     raise pyxb.PyXBVersionError(_PyXBVersion)
@@ -83,7 +82,7 @@ class idArchivischeNotiz (pyxb.binding.datatypes.ID):
     """Paketweit eindeutige ID.Unambiguous ID for the whole package.ID univoque pour tout le paquet."""
 
     _ExpandedName = pyxb.namespace.ExpandedName(Namespace, 'idArchivischeNotiz')
-    _XSDLocation = pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/archivischeNotiz.xsd', 7, 2)
+    _XSDLocation = pyxb.utils.utility.Location('/Users/flipsi/projects/opengever/28/opengever/disposition/ech0160/schemas/archivischeNotiz.xsd', 7, 2)
     _Documentation = 'Paketweit eindeutige ID.Unambiguous ID for the whole package.ID univoque pour tout le paquet.'
 idArchivischeNotiz._CF_minLength = pyxb.binding.facets.CF_minLength(value=pyxb.binding.datatypes.nonNegativeInteger(1))
 idArchivischeNotiz._InitializeFacetMap(idArchivischeNotiz._CF_minLength)
@@ -96,7 +95,7 @@ class ca (pyxb.binding.datatypes.boolean):
     """An atomic simple type."""
 
     _ExpandedName = pyxb.namespace.ExpandedName(Namespace, 'ca')
-    _XSDLocation = pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/base.xsd', 21, 2)
+    _XSDLocation = pyxb.utils.utility.Location('/Users/flipsi/projects/opengever/28/opengever/disposition/ech0160/schemas/base.xsd', 21, 2)
     _Documentation = ''
 ca._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'ca', ca)
@@ -108,7 +107,7 @@ class keineAngabe (pyxb.binding.datatypes.token, pyxb.binding.basis.enumeration_
     """An atomic simple type."""
 
     _ExpandedName = pyxb.namespace.ExpandedName(Namespace, 'keineAngabe')
-    _XSDLocation = pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/base.xsd', 28, 2)
+    _XSDLocation = pyxb.utils.utility.Location('/Users/flipsi/projects/opengever/28/opengever/disposition/ech0160/schemas/base.xsd', 28, 2)
     _Documentation = ''
 keineAngabe._CF_enumeration = pyxb.binding.facets.CF_enumeration(value_datatype=keineAngabe, enum_prefix=None)
 keineAngabe.keine_Angabe = keineAngabe._CF_enumeration.addEnumeration(unicode_value='keine Angabe', tag='keine_Angabe')
@@ -123,7 +122,7 @@ class zeitpunkt (pyxb.binding.basis.STD_union):
     """Simple type that is a union of pyxb.binding.datatypes.date, pyxb.binding.datatypes.dateTime."""
 
     _ExpandedName = pyxb.namespace.ExpandedName(Namespace, 'zeitpunkt')
-    _XSDLocation = pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/base.xsd', 63, 2)
+    _XSDLocation = pyxb.utils.utility.Location('/Users/flipsi/projects/opengever/28/opengever/disposition/ech0160/schemas/base.xsd', 63, 2)
     _Documentation = None
 
     _MemberTypes = ( pyxb.binding.datatypes.date, pyxb.binding.datatypes.dateTime, )
@@ -145,7 +144,7 @@ class datumTypB (pyxb.binding.basis.STD_union):
         * MM indicates the month
         * DD indicates the day
         Hinweis: Alle Komponenten werden benötigt!
-
+        
         DateTime Data Type (xs:dateTime)
         The dateTime data type is used to specify a date and a time.
         The dateTime is specified in the following form "YYYY-MM-DDThh:mm:ss" where:
@@ -164,7 +163,7 @@ class datumTypB (pyxb.binding.basis.STD_union):
         * MM indicates the month
         * DD indicates the day
         Note: All components are required!
-
+        
         DateTime Data Type (xs:dateTime)
         The dateTime data type is used to specify a date and a time.
         The dateTime is specified in the following form ''YYYY-MM-DDThh:mm:ss'' where:
@@ -182,7 +181,7 @@ class datumTypB (pyxb.binding.basis.STD_union):
         * MM indicates the month
         * DD indicates the day
         Remarque : Tous les composants sont n�cessaires!
-
+        
         DateTime Data Type (xs:dateTime)
         The dateTime data type is used to specify a date and a time.
         The dateTime is specified in the following form "YYYY-MM-DDThh:mm:ss" where:
@@ -196,7 +195,7 @@ class datumTypB (pyxb.binding.basis.STD_union):
         Remarque : Tous les composants sont nécessaires!"""
 
     _ExpandedName = pyxb.namespace.ExpandedName(Namespace, 'datumTypB')
-    _XSDLocation = pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/base.xsd', 74, 2)
+    _XSDLocation = pyxb.utils.utility.Location('/Users/flipsi/projects/opengever/28/opengever/disposition/ech0160/schemas/base.xsd', 74, 2)
     _Documentation = 'Zeitpunkte: the following values are possible by date type 3 regular expression (technische Anwendung)\n        Date Data Type (xs:date)\n        The date is specified in the following form "YYYY-MM-DD" where:\n        * YYYY indicates the year\n        * MM indicates the month\n        * DD indicates the day\n        Hinweis: Alle Komponenten werden ben\xf6tigt!\n        \n        DateTime Data Type (xs:dateTime)\n        The dateTime data type is used to specify a date and a time.\n        The dateTime is specified in the following form "YYYY-MM-DDThh:mm:ss" where:\n        * YYYY indicates the year\n        * MM indicates the month\n        * DD indicates the day\n        * T indicates the start of the required time section\n        * hh indicates the hour\n        * mm indicates the minute\n        * ss indicates the second\n        Hinweis: Alle Komponenten werden ben\xf6tigt!\n      "Time points: the following values are possible by date type 3 regular expression (technical application)\n        Date Data Type (xs:date)\n        The date is specified in the following form ""YYYY-MM-DD"" where:\n        * YYYY indicates the year\n        * MM indicates the month\n        * DD indicates the day\n        Note: All components are required!\n        \n        DateTime Data Type (xs:dateTime)\n        The dateTime data type is used to specify a date and a time.\n        The dateTime is specified in the following form ""YYYY-MM-DDThh:mm:ss"" where:\n        * YYYY indicates the year\n        * MM indicates the month\n        * DD indicates the day\n        * T indicates the start of the required time section\n        * hh indicates the hour\n        * mm indicates the minute\n        * ss indicates the second\n        Note: All components are required!"Moments: the following values are possible by date type 3 regular expression (application technique)\n        Date Data Type (xs:date)\n        The date is specified in the following form "YYYY-MM-DD" where:\n        * YYYY indicates the year\n        * MM indicates the month\n        * DD indicates the day\n        Remarque : Tous les composants sont n\ufffdcessaires!\n        \n        DateTime Data Type (xs:dateTime)\n        The dateTime data type is used to specify a date and a time.\n        The dateTime is specified in the following form "YYYY-MM-DDThh:mm:ss" where:\n        * YYYY indicates the year\n        * MM indicates the month\n        * DD indicates the day\n        * T indicates the start of the required time section\n        * hh indicates the hour\n        * mm indicates the minute\n        * ss indicates the second\n        Remarque : Tous les composants sont n\xe9cessaires!'
 
     _MemberTypes = ( pyxb.binding.datatypes.date, pyxb.binding.datatypes.dateTime, )
@@ -213,7 +212,7 @@ class text1 (pyxb.binding.datatypes.string):
     """An atomic simple type."""
 
     _ExpandedName = pyxb.namespace.ExpandedName(Namespace, 'text1')
-    _XSDLocation = pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/base.xsd', 169, 2)
+    _XSDLocation = pyxb.utils.utility.Location('/Users/flipsi/projects/opengever/28/opengever/disposition/ech0160/schemas/base.xsd', 169, 2)
     _Documentation = None
 text1._CF_maxLength = pyxb.binding.facets.CF_maxLength(value=pyxb.binding.datatypes.nonNegativeInteger(100))
 text1._InitializeFacetMap(text1._CF_maxLength)
@@ -226,7 +225,7 @@ class text2 (pyxb.binding.datatypes.string):
     """An atomic simple type."""
 
     _ExpandedName = pyxb.namespace.ExpandedName(Namespace, 'text2')
-    _XSDLocation = pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/base.xsd', 175, 2)
+    _XSDLocation = pyxb.utils.utility.Location('/Users/flipsi/projects/opengever/28/opengever/disposition/ech0160/schemas/base.xsd', 175, 2)
     _Documentation = None
 text2._CF_maxLength = pyxb.binding.facets.CF_maxLength(value=pyxb.binding.datatypes.nonNegativeInteger(200))
 text2._InitializeFacetMap(text2._CF_maxLength)
@@ -239,7 +238,7 @@ class text3 (pyxb.binding.datatypes.string):
     """An atomic simple type."""
 
     _ExpandedName = pyxb.namespace.ExpandedName(Namespace, 'text3')
-    _XSDLocation = pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/base.xsd', 181, 2)
+    _XSDLocation = pyxb.utils.utility.Location('/Users/flipsi/projects/opengever/28/opengever/disposition/ech0160/schemas/base.xsd', 181, 2)
     _Documentation = None
 text3._CF_maxLength = pyxb.binding.facets.CF_maxLength(value=pyxb.binding.datatypes.nonNegativeInteger(1000))
 text3._InitializeFacetMap(text3._CF_maxLength)
@@ -252,7 +251,7 @@ class text4 (pyxb.binding.datatypes.string):
     """An atomic simple type."""
 
     _ExpandedName = pyxb.namespace.ExpandedName(Namespace, 'text4')
-    _XSDLocation = pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/base.xsd', 187, 2)
+    _XSDLocation = pyxb.utils.utility.Location('/Users/flipsi/projects/opengever/28/opengever/disposition/ech0160/schemas/base.xsd', 187, 2)
     _Documentation = None
 text4._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'text4', text4)
@@ -281,7 +280,7 @@ class datumTypA (pyxb.binding.basis.STD_union):
         keineAngabe"""
 
     _ExpandedName = pyxb.namespace.ExpandedName(Namespace, 'datumTypA')
-    _XSDLocation = pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/base.xsd', 37, 2)
+    _XSDLocation = pyxb.utils.utility.Location('/Users/flipsi/projects/opengever/28/opengever/disposition/ech0160/schemas/base.xsd', 37, 2)
     _Documentation = 'Zeitpunkte: the following values are possible by date type 1 regular expression (historische Anwendung)\n        31.01.2004\n        ca.31.01.2004\n        2004\n        ca.2004\n        keineAngabe\n      "Time points: the following values are possible by date type 1 regular expression (legacy application)\n        31.01.2004\n        approx.31.01.2004\n        2004\n        approx.2004\n        vMoments: the following values are possible by date type 1 regular expression (application historique)\n        31.01.2004\n        ca.31.01.2004\n        2004\n        ca.2004\n        keineAngabe'
 
     _MemberTypes = ( pyxb.binding.datatypes.date, pyxb.binding.datatypes.gYear, keineAngabe, )
@@ -300,7 +299,7 @@ class notizDatum (pyxb.binding.basis.STD_union):
     """Datum, an welchem die Notiz erfasst wurde. Datums-Tagengenauigkeit reicht (keine Std. und Sek.). Zwingendes Feld.Date on which the note was created. Date and day are sufficient (no hours and seconds). Compulsory field.Date à laquelle la notice a été cataloguée. L'indication du jour suffit (pas d'heure ni de seconde) Champ obligatoire."""
 
     _ExpandedName = pyxb.namespace.ExpandedName(Namespace, 'notizDatum')
-    _XSDLocation = pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/base.xsd', 139, 2)
+    _XSDLocation = pyxb.utils.utility.Location('/Users/flipsi/projects/opengever/28/opengever/disposition/ech0160/schemas/base.xsd', 139, 2)
     _Documentation = "Datum, an welchem die Notiz erfasst wurde. Datums-Tagengenauigkeit reicht (keine Std. und Sek.). Zwingendes Feld.Date on which the note was created. Date and day are sufficient (no hours and seconds). Compulsory field.Date \xe0 laquelle la notice a \xe9t\xe9 catalogu\xe9e. L'indication du jour suffit (pas d'heure ni de seconde) Champ obligatoire."
 
     _MemberTypes = ( pyxb.binding.datatypes.date, pyxb.binding.datatypes.dateTime, )
@@ -314,7 +313,7 @@ class notizErfasser (text1):
     """Benutzer, welcher die Notiz erfasst hat. Optionales Feld.User who created the note. Optional field.Utilisateur qui a catalogué la notice. Champ facultatif."""
 
     _ExpandedName = pyxb.namespace.ExpandedName(Namespace, 'notizErfasser')
-    _XSDLocation = pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/base.xsd', 149, 2)
+    _XSDLocation = pyxb.utils.utility.Location('/Users/flipsi/projects/opengever/28/opengever/disposition/ech0160/schemas/base.xsd', 149, 2)
     _Documentation = 'Benutzer, welcher die Notiz erfasst hat. Optionales Feld.User who created the note. Optional field.Utilisateur qui a catalogu\xe9 la notice. Champ facultatif.'
 notizErfasser._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'notizErfasser', notizErfasser)
@@ -326,7 +325,7 @@ class notizBeschreibung (text4):
     """Notiz i.e.S, d.h. Beschreibung. Zwingendes Feld.Notice in narrower sense, i.e. description. Compulsory field.Notice au sens strict, c.-à-d. description. Champ obligatoire"""
 
     _ExpandedName = pyxb.namespace.ExpandedName(Namespace, 'notizBeschreibung')
-    _XSDLocation = pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/base.xsd', 159, 2)
+    _XSDLocation = pyxb.utils.utility.Location('/Users/flipsi/projects/opengever/28/opengever/disposition/ech0160/schemas/base.xsd', 159, 2)
     _Documentation = 'Notiz i.e.S, d.h. Beschreibung. Zwingendes Feld.Notice in narrower sense, i.e. description. Compulsory field.Notice au sens strict, c.-\xe0-d. description. Champ obligatoire'
 notizBeschreibung._InitializeFacetMap()
 Namespace.addCategoryObject('typeBinding', 'notizBeschreibung', notizBeschreibung)
@@ -339,15 +338,15 @@ class comparable (pyxb.binding.basis.complexTypeDefinition):
     _ContentTypeTag = pyxb.binding.basis.complexTypeDefinition._CT_EMPTY
     _Abstract = True
     _ExpandedName = pyxb.namespace.ExpandedName(Namespace, 'comparable')
-    _XSDLocation = pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/base.xsd', 6, 2)
+    _XSDLocation = pyxb.utils.utility.Location('/Users/flipsi/projects/opengever/28/opengever/disposition/ech0160/schemas/base.xsd', 6, 2)
     _ElementMap = {}
     _AttributeMap = {}
     # Base type is pyxb.binding.datatypes.anyType
     _ElementMap.update({
-
+        
     })
     _AttributeMap.update({
-
+        
     })
 _module_typeBindings.comparable = comparable
 Namespace.addCategoryObject('typeBinding', 'comparable', comparable)
@@ -360,22 +359,22 @@ class historischerZeitpunkt (pyxb.binding.basis.complexTypeDefinition):
     _ContentTypeTag = pyxb.binding.basis.complexTypeDefinition._CT_ELEMENT_ONLY
     _Abstract = False
     _ExpandedName = pyxb.namespace.ExpandedName(Namespace, 'historischerZeitpunkt')
-    _XSDLocation = pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/base.xsd', 7, 2)
+    _XSDLocation = pyxb.utils.utility.Location('/Users/flipsi/projects/opengever/28/opengever/disposition/ech0160/schemas/base.xsd', 7, 2)
     _ElementMap = {}
     _AttributeMap = {}
     # Base type is pyxb.binding.datatypes.anyType
-
+    
     # Element ca uses Python identifier ca
-    __ca = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(None, 'ca'), 'ca', '__AbsentNamespace1_historischerZeitpunkt_ca', False, pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/base.xsd', 9, 6), )
+    __ca = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(None, 'ca'), 'ca', '__AbsentNamespace1_historischerZeitpunkt_ca', False, pyxb.utils.utility.Location('/Users/flipsi/projects/opengever/28/opengever/disposition/ech0160/schemas/base.xsd', 9, 6), )
 
-
+    
     ca = property(__ca.value, __ca.set, None, None)
 
-
+    
     # Element datum uses Python identifier datum
-    __datum = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(None, 'datum'), 'datum', '__AbsentNamespace1_historischerZeitpunkt_datum', False, pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/base.xsd', 10, 6), )
+    __datum = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(None, 'datum'), 'datum', '__AbsentNamespace1_historischerZeitpunkt_datum', False, pyxb.utils.utility.Location('/Users/flipsi/projects/opengever/28/opengever/disposition/ech0160/schemas/base.xsd', 10, 6), )
 
-
+    
     datum = property(__datum.value, __datum.set, None, None)
 
     _ElementMap.update({
@@ -383,7 +382,7 @@ class historischerZeitpunkt (pyxb.binding.basis.complexTypeDefinition):
         __datum.name() : __datum
     })
     _AttributeMap.update({
-
+        
     })
 _module_typeBindings.historischerZeitpunkt = historischerZeitpunkt
 Namespace.addCategoryObject('typeBinding', 'historischerZeitpunkt', historischerZeitpunkt)
@@ -396,22 +395,22 @@ class historischerZeitraum (pyxb.binding.basis.complexTypeDefinition):
     _ContentTypeTag = pyxb.binding.basis.complexTypeDefinition._CT_ELEMENT_ONLY
     _Abstract = False
     _ExpandedName = pyxb.namespace.ExpandedName(Namespace, 'historischerZeitraum')
-    _XSDLocation = pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/base.xsd', 14, 2)
+    _XSDLocation = pyxb.utils.utility.Location('/Users/flipsi/projects/opengever/28/opengever/disposition/ech0160/schemas/base.xsd', 14, 2)
     _ElementMap = {}
     _AttributeMap = {}
     # Base type is pyxb.binding.datatypes.anyType
-
+    
     # Element von uses Python identifier von
-    __von = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(None, 'von'), 'von', '__AbsentNamespace1_historischerZeitraum_von', False, pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/base.xsd', 16, 6), )
+    __von = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(None, 'von'), 'von', '__AbsentNamespace1_historischerZeitraum_von', False, pyxb.utils.utility.Location('/Users/flipsi/projects/opengever/28/opengever/disposition/ech0160/schemas/base.xsd', 16, 6), )
 
-
+    
     von = property(__von.value, __von.set, None, None)
 
-
+    
     # Element bis uses Python identifier bis
-    __bis = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(None, 'bis'), 'bis', '__AbsentNamespace1_historischerZeitraum_bis', False, pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/base.xsd', 17, 6), )
+    __bis = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(None, 'bis'), 'bis', '__AbsentNamespace1_historischerZeitraum_bis', False, pyxb.utils.utility.Location('/Users/flipsi/projects/opengever/28/opengever/disposition/ech0160/schemas/base.xsd', 17, 6), )
 
-
+    
     bis = property(__bis.value, __bis.set, None, None)
 
     _ElementMap.update({
@@ -419,7 +418,7 @@ class historischerZeitraum (pyxb.binding.basis.complexTypeDefinition):
         __bis.name() : __bis
     })
     _AttributeMap.update({
-
+        
     })
 _module_typeBindings.historischerZeitraum = historischerZeitraum
 Namespace.addCategoryObject('typeBinding', 'historischerZeitraum', historischerZeitraum)
@@ -432,22 +431,22 @@ class zeitraum (pyxb.binding.basis.complexTypeDefinition):
     _ContentTypeTag = pyxb.binding.basis.complexTypeDefinition._CT_ELEMENT_ONLY
     _Abstract = False
     _ExpandedName = pyxb.namespace.ExpandedName(Namespace, 'zeitraum')
-    _XSDLocation = pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/base.xsd', 67, 2)
+    _XSDLocation = pyxb.utils.utility.Location('/Users/flipsi/projects/opengever/28/opengever/disposition/ech0160/schemas/base.xsd', 67, 2)
     _ElementMap = {}
     _AttributeMap = {}
     # Base type is pyxb.binding.datatypes.anyType
-
+    
     # Element von uses Python identifier von
-    __von = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(None, 'von'), 'von', '__AbsentNamespace1_zeitraum_von', False, pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/base.xsd', 69, 6), )
+    __von = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(None, 'von'), 'von', '__AbsentNamespace1_zeitraum_von', False, pyxb.utils.utility.Location('/Users/flipsi/projects/opengever/28/opengever/disposition/ech0160/schemas/base.xsd', 69, 6), )
 
-
+    
     von = property(__von.value, __von.set, None, None)
 
-
+    
     # Element bis uses Python identifier bis
-    __bis = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(None, 'bis'), 'bis', '__AbsentNamespace1_zeitraum_bis', False, pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/base.xsd', 70, 6), )
+    __bis = pyxb.binding.content.ElementDeclaration(pyxb.namespace.ExpandedName(None, 'bis'), 'bis', '__AbsentNamespace1_zeitraum_bis', False, pyxb.utils.utility.Location('/Users/flipsi/projects/opengever/28/opengever/disposition/ech0160/schemas/base.xsd', 70, 6), )
 
-
+    
     bis = property(__bis.value, __bis.set, None, None)
 
     _ElementMap.update({
@@ -455,7 +454,7 @@ class zeitraum (pyxb.binding.basis.complexTypeDefinition):
         __bis.name() : __bis
     })
     _AttributeMap.update({
-
+        
     })
 _module_typeBindings.zeitraum = zeitraum
 Namespace.addCategoryObject('typeBinding', 'zeitraum', zeitraum)
@@ -463,9 +462,9 @@ Namespace.addCategoryObject('typeBinding', 'zeitraum', zeitraum)
 
 
 
-historischerZeitpunkt._AddElement(pyxb.binding.basis.element(pyxb.namespace.ExpandedName(None, 'ca'), ca, scope=historischerZeitpunkt, location=pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/base.xsd', 9, 6), unicode_default='false'))
+historischerZeitpunkt._AddElement(pyxb.binding.basis.element(pyxb.namespace.ExpandedName(None, 'ca'), ca, scope=historischerZeitpunkt, location=pyxb.utils.utility.Location('/Users/flipsi/projects/opengever/28/opengever/disposition/ech0160/schemas/base.xsd', 9, 6), unicode_default='false'))
 
-historischerZeitpunkt._AddElement(pyxb.binding.basis.element(pyxb.namespace.ExpandedName(None, 'datum'), datumTypA, scope=historischerZeitpunkt, location=pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/base.xsd', 10, 6)))
+historischerZeitpunkt._AddElement(pyxb.binding.basis.element(pyxb.namespace.ExpandedName(None, 'datum'), datumTypA, scope=historischerZeitpunkt, location=pyxb.utils.utility.Location('/Users/flipsi/projects/opengever/28/opengever/disposition/ech0160/schemas/base.xsd', 10, 6)))
 
 def _BuildAutomaton ():
     # Remove this helper function from the namespace after it is invoked
@@ -474,15 +473,15 @@ def _BuildAutomaton ():
     import pyxb.utils.fac as fac
 
     counters = set()
-    cc_0 = fac.CounterCondition(min=0, max=1, metadata=pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/base.xsd', 9, 6))
+    cc_0 = fac.CounterCondition(min=0, max=1, metadata=pyxb.utils.utility.Location('/Users/flipsi/projects/opengever/28/opengever/disposition/ech0160/schemas/base.xsd', 9, 6))
     counters.add(cc_0)
     states = []
     final_update = None
-    symbol = pyxb.binding.content.ElementUse(historischerZeitpunkt._UseForTag(pyxb.namespace.ExpandedName(None, 'ca')), pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/base.xsd', 9, 6))
+    symbol = pyxb.binding.content.ElementUse(historischerZeitpunkt._UseForTag(pyxb.namespace.ExpandedName(None, 'ca')), pyxb.utils.utility.Location('/Users/flipsi/projects/opengever/28/opengever/disposition/ech0160/schemas/base.xsd', 9, 6))
     st_0 = fac.State(symbol, is_initial=True, final_update=final_update, is_unordered_catenation=False)
     states.append(st_0)
     final_update = set()
-    symbol = pyxb.binding.content.ElementUse(historischerZeitpunkt._UseForTag(pyxb.namespace.ExpandedName(None, 'datum')), pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/base.xsd', 10, 6))
+    symbol = pyxb.binding.content.ElementUse(historischerZeitpunkt._UseForTag(pyxb.namespace.ExpandedName(None, 'datum')), pyxb.utils.utility.Location('/Users/flipsi/projects/opengever/28/opengever/disposition/ech0160/schemas/base.xsd', 10, 6))
     st_1 = fac.State(symbol, is_initial=True, final_update=final_update, is_unordered_catenation=False)
     states.append(st_1)
     transitions = []
@@ -499,9 +498,9 @@ historischerZeitpunkt._Automaton = _BuildAutomaton()
 
 
 
-historischerZeitraum._AddElement(pyxb.binding.basis.element(pyxb.namespace.ExpandedName(None, 'von'), historischerZeitpunkt, scope=historischerZeitraum, location=pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/base.xsd', 16, 6)))
+historischerZeitraum._AddElement(pyxb.binding.basis.element(pyxb.namespace.ExpandedName(None, 'von'), historischerZeitpunkt, scope=historischerZeitraum, location=pyxb.utils.utility.Location('/Users/flipsi/projects/opengever/28/opengever/disposition/ech0160/schemas/base.xsd', 16, 6)))
 
-historischerZeitraum._AddElement(pyxb.binding.basis.element(pyxb.namespace.ExpandedName(None, 'bis'), historischerZeitpunkt, scope=historischerZeitraum, location=pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/base.xsd', 17, 6)))
+historischerZeitraum._AddElement(pyxb.binding.basis.element(pyxb.namespace.ExpandedName(None, 'bis'), historischerZeitpunkt, scope=historischerZeitraum, location=pyxb.utils.utility.Location('/Users/flipsi/projects/opengever/28/opengever/disposition/ech0160/schemas/base.xsd', 17, 6)))
 
 def _BuildAutomaton_ ():
     # Remove this helper function from the namespace after it is invoked
@@ -512,11 +511,11 @@ def _BuildAutomaton_ ():
     counters = set()
     states = []
     final_update = None
-    symbol = pyxb.binding.content.ElementUse(historischerZeitraum._UseForTag(pyxb.namespace.ExpandedName(None, 'von')), pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/base.xsd', 16, 6))
+    symbol = pyxb.binding.content.ElementUse(historischerZeitraum._UseForTag(pyxb.namespace.ExpandedName(None, 'von')), pyxb.utils.utility.Location('/Users/flipsi/projects/opengever/28/opengever/disposition/ech0160/schemas/base.xsd', 16, 6))
     st_0 = fac.State(symbol, is_initial=True, final_update=final_update, is_unordered_catenation=False)
     states.append(st_0)
     final_update = set()
-    symbol = pyxb.binding.content.ElementUse(historischerZeitraum._UseForTag(pyxb.namespace.ExpandedName(None, 'bis')), pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/base.xsd', 17, 6))
+    symbol = pyxb.binding.content.ElementUse(historischerZeitraum._UseForTag(pyxb.namespace.ExpandedName(None, 'bis')), pyxb.utils.utility.Location('/Users/flipsi/projects/opengever/28/opengever/disposition/ech0160/schemas/base.xsd', 17, 6))
     st_1 = fac.State(symbol, is_initial=False, final_update=final_update, is_unordered_catenation=False)
     states.append(st_1)
     transitions = []
@@ -531,9 +530,9 @@ historischerZeitraum._Automaton = _BuildAutomaton_()
 
 
 
-zeitraum._AddElement(pyxb.binding.basis.element(pyxb.namespace.ExpandedName(None, 'von'), datumTypB, scope=zeitraum, location=pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/base.xsd', 69, 6)))
+zeitraum._AddElement(pyxb.binding.basis.element(pyxb.namespace.ExpandedName(None, 'von'), datumTypB, scope=zeitraum, location=pyxb.utils.utility.Location('/Users/flipsi/projects/opengever/28/opengever/disposition/ech0160/schemas/base.xsd', 69, 6)))
 
-zeitraum._AddElement(pyxb.binding.basis.element(pyxb.namespace.ExpandedName(None, 'bis'), datumTypB, scope=zeitraum, location=pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/base.xsd', 70, 6)))
+zeitraum._AddElement(pyxb.binding.basis.element(pyxb.namespace.ExpandedName(None, 'bis'), datumTypB, scope=zeitraum, location=pyxb.utils.utility.Location('/Users/flipsi/projects/opengever/28/opengever/disposition/ech0160/schemas/base.xsd', 70, 6)))
 
 def _BuildAutomaton_2 ():
     # Remove this helper function from the namespace after it is invoked
@@ -544,11 +543,11 @@ def _BuildAutomaton_2 ():
     counters = set()
     states = []
     final_update = None
-    symbol = pyxb.binding.content.ElementUse(zeitraum._UseForTag(pyxb.namespace.ExpandedName(None, 'von')), pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/base.xsd', 69, 6))
+    symbol = pyxb.binding.content.ElementUse(zeitraum._UseForTag(pyxb.namespace.ExpandedName(None, 'von')), pyxb.utils.utility.Location('/Users/flipsi/projects/opengever/28/opengever/disposition/ech0160/schemas/base.xsd', 69, 6))
     st_0 = fac.State(symbol, is_initial=True, final_update=final_update, is_unordered_catenation=False)
     states.append(st_0)
     final_update = set()
-    symbol = pyxb.binding.content.ElementUse(zeitraum._UseForTag(pyxb.namespace.ExpandedName(None, 'bis')), pyxb.utils.utility.Location('/Users/tom/Projects/opengever.sgdemo/src/opengever.core/opengever/disposition/ech0160/schemas/base.xsd', 70, 6))
+    symbol = pyxb.binding.content.ElementUse(zeitraum._UseForTag(pyxb.namespace.ExpandedName(None, 'bis')), pyxb.utils.utility.Location('/Users/flipsi/projects/opengever/28/opengever/disposition/ech0160/schemas/base.xsd', 70, 6))
     st_1 = fac.State(symbol, is_initial=False, final_update=final_update, is_unordered_catenation=False)
     states.append(st_1)
     transitions = []
