@@ -7,6 +7,8 @@ from opengever.base.browser.helper import get_css_class
 from opengever.base.pdfconverter import is_pdfconverter_enabled
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.document import _
+from opengever.document.behaviors.metadata import IDocumentMetadata
+from opengever.document.browser import archival_file_form
 from opengever.document.browser.download import DownloadConfirmationHelper
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
@@ -17,8 +19,12 @@ from opengever.ogds.base.actor import Actor
 from opengever.tabbedview import GeverTabMixin
 from plone import api
 from plone.directives.dexterity import DisplayForm
+from plone.i18n.normalizer.interfaces import IIDNormalizer
+from Products.CMFCore.utils import getToolByName
+from Products.MimetypesRegistry.common import MimeTypeException
 from z3c.form.browser.checkbox import SingleCheckBoxWidget
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
+from zope.component import getUtility
 from zope.component import queryMultiAdapter
 
 
@@ -127,6 +133,7 @@ class Overview(DisplayForm, GeverTabMixin):
     show_searchform = False
 
     file_template = ViewPageTemplateFile('templates/file.pt')
+    archival_file_template = ViewPageTemplateFile('templates/archiv_file.pt')
     public_trial_template = ViewPageTemplateFile('templates/public_trial.pt')
     submitted_with_template = ViewPageTemplateFile('templates/submitted_with.pt')
 
@@ -154,8 +161,14 @@ class Overview(DisplayForm, GeverTabMixin):
             TemplateRow(self.public_trial_template,
                         label=ogbmf('label_public_trial',
                                     default='Public Trial')),
-            FieldRow('IClassification.public_trial_statement'),
+            FieldRow('IClassification.public_trial_statement')
         ]
+        if self.is_archivale_file_visible():
+            row = TemplateRow(
+                self.archival_file_template,
+                label=_(u'label_archival_file', default='Archival File'))
+            rows.append(row)
+
         if is_meeting_feature_enabled():
             rows.append(TemplateRow(self.submitted_with_template,
                                     label=_('Submitted with')))
@@ -181,6 +194,9 @@ class Overview(DisplayForm, GeverTabMixin):
 
     def is_outdated(self, submitted_document):
         return not submitted_document.is_up_to_date(self.context)
+
+    def is_archivale_file_visible(self):
+        return api.user.has_permission('opengever.document.ModifyArchivalFile')
 
     def render_submitted_version(self, submitted_document):
         return _(u"Submitted version: ${version}",
@@ -269,3 +285,28 @@ class Overview(DisplayForm, GeverTabMixin):
     def get_overlay_url(self):
         return '{}/@@bumblebee-overlay-document'.format(
             self.context.absolute_url())
+
+    def show_edit_archival_file_link(self):
+        try:
+            can_edit = archival_file_form.can_access_archival_file_form(
+                api.user.get_current(), self.context)
+        except (AssertionError, ValueError):
+            return False
+
+        state = api.content.get_state(self.context.get_parent_dossier())
+        return can_edit and state in DOSSIER_STATES_CLOSED
+
+    def get_archival_file_class(self):
+        mtr = getToolByName(self, 'mimetypes_registry', None)
+        archival_file = IDocumentMetadata(self.context).archival_file
+        normalize = getUtility(IIDNormalizer).normalize
+
+        try:
+            icon = mtr.lookup(archival_file.contentType)[0].icon_path
+            filetype = icon[:icon.rfind('.')].replace('icon_', '')
+            return 'icon-%s' % normalize(filetype)
+
+        except MimeTypeException:
+            pass
+
+        return 'contenttype-opengever-document-document'

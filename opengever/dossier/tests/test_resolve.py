@@ -1,14 +1,27 @@
+from Acquisition import aq_parent
 from datetime import date
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.bumblebee.tests import RequestsSessionMock
+from ftw.bumblebee.tests.helpers import asset as bumblebee_asset
+from ftw.bumblebee.tests.helpers import DOCX_CHECKSUM
+from ftw.bumblebee.tests.helpers import get_queue
+from ftw.bumblebee.tests.helpers import reset_queue
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
+from ftw.testing import freeze
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
+from opengever.document.behaviors import IBaseDocument
 from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.testing import FunctionalTestCase
 from plone import api
 from plone.app.testing import applyProfile
 from plone.protect import createToken
+from plone.uuid.interfaces import IUUID
+import transaction
 
 
 class TestResolvingDossiers(FunctionalTestCase):
@@ -42,6 +55,163 @@ class TestResolvingDossiers(FunctionalTestCase):
         self.assertEquals(subdossier.absolute_url(), browser.url)
         self.assertEquals(['The subdossier has been succesfully resolved'],
                           info_messages())
+
+
+class TestResolveJobs(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestResolveJobs, self).setUp()
+        self.dossier = create(Builder('dossier'))
+        self.grant('Contributor', 'Editor', 'Reader', 'Reviewer')
+        self.catalog = api.portal.get_tool('portal_catalog')
+
+    def test_all_trashed_documents_are_deleted_when_resolving_a_dossier_if_enabled(self):
+        api.portal.set_registry_record(
+            'purge_trash_enabled', True, interface=IDossierResolveProperties)
+
+        doc1 = create(Builder('document').within(self.dossier))
+        doc2 = create(Builder('document').within(self.dossier).trashed())
+
+        api.content.transition(obj=self.dossier,
+                               transition='dossier-transition-resolve')
+
+        docs = [brain.getObject() for brain in
+                self.catalog.unrestrictedSearchResults(
+                    path='/'.join(self.dossier.getPhysicalPath()))]
+
+        self.assertIn(doc1, docs)
+        self.assertNotIn(doc2, docs)
+
+    def test_purge_trashs_recursive(self):
+        api.portal.set_registry_record(
+            'purge_trash_enabled', True, interface=IDossierResolveProperties)
+
+        subdossier = create(Builder('dossier').within(self.dossier))
+        doc1 = create(Builder('document').within(subdossier))
+        doc2 = create(Builder('document').within(subdossier).trashed())
+
+        api.content.transition(obj=self.dossier,
+                               transition='dossier-transition-resolve')
+
+        docs = [brain.getObject() for brain in
+                self.catalog.unrestrictedSearchResults(
+                    path='/'.join(self.dossier.getPhysicalPath()))]
+
+        self.assertIn(doc1, docs)
+        self.assertNotIn(doc2, docs)
+
+    def test_purging_trashed_documents_is_disabled_by_default(self):
+        api.portal.set_registry_record(
+            'purge_trash_enabled', False, interface=IDossierResolveProperties)
+
+        doc1 = create(Builder('document').within(self.dossier).trashed())
+        api.content.transition(obj=self.dossier,
+                               transition='dossier-transition-resolve')
+
+        docs = [brain.getObject() for brain in
+                self.catalog.unrestrictedSearchResults(
+                    path='/'.join(self.dossier.getPhysicalPath()))]
+        self.assertIn(doc1, docs)
+
+    def test_adds_journal_pdf_when_enabled(self):
+        api.portal.set_registry_record(
+            'journal_pdf_enabled', True, interface=IDossierResolveProperties)
+
+        with freeze(datetime(2016, 4, 25)):
+            api.content.transition(obj=self.dossier,
+                                   transition='dossier-transition-resolve')
+
+        journal_pdf = self.dossier.get('document-1')
+        self.assertEquals(u'Dossier Journal Apr 25, 2016', journal_pdf.title)
+        self.assertEquals(u'dossier-journal-apr-25-2016.pdf',
+                          journal_pdf.file.filename)
+        self.assertEquals(u'application/pdf',
+                          journal_pdf.file.contentType)
+
+    def test_journal_pdf_is_only_added_to_main_dossier(self):
+        api.portal.set_registry_record(
+            'journal_pdf_enabled', True, interface=IDossierResolveProperties)
+
+        create(Builder('dossier').within(self.dossier))
+        api.content.transition(obj=self.dossier,
+                               transition='dossier-transition-resolve')
+
+        docs = api.content.find(context=self.dossier,
+                                depth=-1,
+                                object_provides=[IBaseDocument])
+
+        self.assertEquals(1, len(docs))
+        self.assertEquals(self.dossier, aq_parent(docs[0].getObject()))
+
+    def test_journal_pdf_is_disabled_by_default(self):
+        doc1 = create(Builder('document').within(self.dossier))
+        api.content.transition(obj=self.dossier,
+                               transition='dossier-transition-resolve')
+
+        self.assertEquals(
+            [doc1], self.dossier.listFolderContents(),
+            "Journal PDF created altough it's disabled by default.")
+
+
+class TestAutomaticPDFAConversion(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
+
+    def setUp(self):
+        super(TestAutomaticPDFAConversion, self).setUp()
+        self.dossier = create(Builder('dossier'))
+        self.grant('Contributor', 'Editor', 'Reader', 'Reviewer')
+        self.catalog = api.portal.get_tool('portal_catalog')
+
+        reset_queue()
+
+    def test_pdf_conversion_job_is_queued_for_every_document(self):
+        api.portal.set_registry_record(
+            'archival_file_conversion_enabled', True,
+            interface=IDossierResolveProperties)
+
+        doc1 = create(Builder('document')
+                      .within(self.dossier)
+                      .attach_file_containing(
+                          bumblebee_asset('example.docx').bytes(),
+                          u'example.docx'))
+        create(Builder('document')
+               .within(self.dossier)
+               .attach_file_containing(
+                   bumblebee_asset('example.docx').bytes(),
+                   u'example.docx'))
+
+        get_queue().reset()
+        with RequestsSessionMock.installed():
+            api.content.transition(obj=self.dossier,
+                                   transition='dossier-transition-resolve')
+            transaction.commit()
+
+            self.assertEquals(2, len(get_queue().queue))
+            self.assertDictContainsSubset(
+                {'callback_url': '{}/archival_file_conversion_callback'.format(
+                    doc1.absolute_url()),
+                 'file_url': 'http://nohost/plone/bumblebee_download?checksum={}&uuid={}'.format(
+                     DOCX_CHECKSUM, IUUID(doc1)),
+                 'target_format': 'pdf/a',
+                 'url': '/plone/dossier-1/document-1/bumblebee_trigger_conversion'},
+                get_queue().queue[0])
+
+    def test_pdf_conversion_is_disabled_by_default(self):
+        create(Builder('document')
+               .within(self.dossier)
+               .attach_file_containing(
+                   bumblebee_asset('example.docx').bytes(),
+                   u'example.docx'))
+
+        get_queue().reset()
+
+        with RequestsSessionMock.installed():
+            api.content.transition(obj=self.dossier,
+                                   transition='dossier-transition-resolve')
+            transaction.commit()
+
+            self.assertEquals(0, len(get_queue().queue))
 
 
 class TestResolvingDossiersWithFilingNumberSupport(FunctionalTestCase):
@@ -117,7 +287,6 @@ class TestResolveConditions(FunctionalTestCase):
         create(Builder('document')
                .within(dossier)
                .having(document_date=date(2016, 6, 1)))
-
 
         browser.login().open(dossier,
                              {'_authenticator': createToken()},

@@ -175,3 +175,26 @@ class IDocPropertyProvider(Interface):
     def get_properties():
         """Return a dictionary of DocProperties for the adapted object.
         """
+
+
+class IDossierResolveProperties(Interface):
+    """Dossier resolving configuration.
+    """
+
+    purge_trash_enabled = schema.Bool(
+        title=u'Enable `purge trash` option.',
+        description=u'Select if the trashed documents should be deleteted '
+        'when a dossier gets resolved.',
+        default=False)
+
+    journal_pdf_enabled = schema.Bool(
+        title=u'Enable `journal pdf` option.',
+        description=u'Select if a pdf representation of the dossier journal '
+        'should be added automatically to the dossier when it gets resolved.',
+        default=False)
+
+    archival_file_conversion_enabled = schema.Bool(
+        title=u'Enable automatic archival file conversion with bumblebee.',
+        description=u'Select if GEVER should trigger the archival file '
+        'conversion for each document, when a dossier gets resolved.',
+        default=False)

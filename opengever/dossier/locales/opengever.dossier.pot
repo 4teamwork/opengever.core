@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-11-08 13:09+0000\n"
+"POT-Creation-Date: 2016-11-16 11:12+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -56,7 +56,7 @@ msgstr ""
 msgid "Dossier structure"
 msgstr ""
 
-#: ./opengever/dossier/resolve.py:81
+#: ./opengever/dossier/resolve.py:89
 msgid "Dossiers successfully reactivated."
 msgstr ""
 
@@ -81,7 +81,7 @@ msgstr ""
 msgid "It isn't allowed to add such items there"
 msgstr ""
 
-#: ./opengever/dossier/resolve.py:86
+#: ./opengever/dossier/resolve.py:94
 msgid "It isn't possible to reactivate a sub dossier."
 msgstr ""
 
@@ -168,15 +168,15 @@ msgstr ""
 msgid "The Dossier has been resolved"
 msgstr ""
 
-#: ./opengever/dossier/resolve.py:45
+#: ./opengever/dossier/resolve.py:53
 msgid "The dossier ${dossier} has a invalid end_date"
 msgstr ""
 
-#: ./opengever/dossier/resolve.py:16
+#: ./opengever/dossier/resolve.py:24
 msgid "The dossier contains active proposals."
 msgstr ""
 
-#: ./opengever/dossier/resolve.py:62
+#: ./opengever/dossier/resolve.py:70
 msgid "The dossier has been succesfully resolved"
 msgstr ""
 
@@ -204,7 +204,7 @@ msgstr ""
 msgid "The start or end date is invalid"
 msgstr ""
 
-#: ./opengever/dossier/resolve.py:58
+#: ./opengever/dossier/resolve.py:66
 msgid "The subdossier has been succesfully resolved"
 msgstr ""
 
@@ -646,15 +646,15 @@ msgstr ""
 msgid "msg_main_dossier_not_found"
 msgstr ""
 
-#: ./opengever/dossier/resolve.py:11
+#: ./opengever/dossier/resolve.py:19
 msgid "not all documents and tasks are stored in a subdossier"
 msgstr ""
 
-#: ./opengever/dossier/resolve.py:13
+#: ./opengever/dossier/resolve.py:21
 msgid "not all documents are checked in"
 msgstr ""
 
-#: ./opengever/dossier/resolve.py:14
+#: ./opengever/dossier/resolve.py:22
 msgid "not all task are closed"
 msgstr ""
 
@@ -692,13 +692,18 @@ msgstr ""
 msgid "temporary_former_reference_number"
 msgstr ""
 
-#: ./opengever/dossier/resolve.py:15
+#: ./opengever/dossier/resolve.py:23
 msgid "the dossier start date is missing."
 msgstr ""
 
 #. Default: "expired"
 #: ./opengever/dossier/project_templates/byline.pt:47
 msgid "time_expired"
+msgstr ""
+
+#. Default: "Dossier Journal ${today}"
+#: ./opengever/dossier/resolve.py:189
+msgid "title_dossier_journal"
 msgstr ""
 
 #. Default: "You didn't select any participants."

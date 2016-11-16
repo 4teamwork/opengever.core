@@ -4,9 +4,11 @@ from OFS.interfaces import IObjectWillBeMovedEvent
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import IReferenceNumberPrefix
 from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
+from opengever.dossier.resolve import DossierResolver
 from opengever.globalindex.handlers.task import sync_task
 from opengever.globalindex.handlers.task import TaskSqlSyncer
 from plone import api
+from Products.CMFCore.interfaces import IActionSucceededEvent
 from Products.CMFCore.utils import getToolByName
 from zope.component import getAdapter
 from zope.lifecycleevent import IObjectRemovedEvent
@@ -126,3 +128,11 @@ def purge_reference_number_mappings(copied_dossier, event):
 
     prefix_adapter = IReferenceNumberPrefix(copied_dossier)
     prefix_adapter.purge_mappings()
+
+
+@grok.subscribe(IDossierMarker, IActionSucceededEvent)
+def run_cleanup_jobs(dossier, event):
+    if event.action != 'dossier-transition-resolve':
+        return
+
+    DossierResolver(dossier).after_resolve()

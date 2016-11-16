@@ -1,0 +1,7 @@
+<rolemap>
+  <permissions>
+    <permission name="opengever.document: Modify archival file" acquire="True">
+      <role name="Manager"/>
+    </permission>
+  </permissions>
+</rolemap>

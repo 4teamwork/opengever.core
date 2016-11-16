@@ -231,6 +231,79 @@ class TestDocumentOverview(FunctionalTestCase):
         proposals = browser.css('#proposals_box .proposal')
         self.assertEqual(0, len(proposals))
 
+    @browsing
+    def test_archival_file_is_only_available_for_managers_by_default(self, browser):
+        doc = create(Builder('document')
+                     .attach_archival_file_containing('TEST', name=u'test.pdf')
+                     .with_dummy_content())
+        browser.login().visit(doc, view='tabbedview_view-overview')
+
+        self.assertNotIn('Archival File', browser.css('.listing th').text)
+
+    @browsing
+    def test_edit_archival_file_link_NOT_shown_on_open_dossier(self, browser):
+        self.grant('Manager')
+        dossier = create(Builder('dossier').within(self.repo_folder))
+        document = create(Builder('document')
+                          .within(dossier)
+                          .with_dummy_content())
+        browser.login().visit(document, view='tabbedview_view-overview')
+
+        self.assertFalse(browser.css('#archival_file_edit_link'),
+                         'Archival file edit link should not be visible.')
+
+    @browsing
+    def test_edit_archival_file_link_is_visible_on_closed_dossier(self, browser):
+        self.grant('Manager')
+        dossier = create(
+            Builder('dossier')
+            .within(self.repo_folder)
+            .in_state('dossier-state-resolved'))
+
+        document = create(Builder('document')
+                          .within(dossier)
+                          .with_dummy_content())
+        browser.login().visit(document, view='tabbedview_view-overview')
+
+        self.assertEquals(
+            '{}/edit_archival_file'.format(document.absolute_url()),
+            browser.css('#archival_file_edit_link').first.get('href'))
+
+    @browsing
+    def test_edit_archival_file_link_is_visible_on_closed_dossier_inside_a_task(self, browser):
+        self.grant('Manager')
+        dossier = create(Builder('dossier')
+                         .within(self.repo_folder)
+                         .in_state('dossier-state-resolved'))
+        task = create(Builder('task')
+                      .within(dossier)
+                      .in_state('task-state-tested-and-closed'))
+        document = create(Builder('document')
+                          .within(task)
+                          .with_dummy_content())
+
+        browser.login().visit(document, view='tabbedview_view-overview')
+
+        self.assertEquals(
+            '{}/edit_archival_file'.format(document.absolute_url()),
+            browser.css('#archival_file_edit_link').first.get('href'))
+
+    @browsing
+    def test_archival_file_is_extended_with_mimetype_class(self, browser):
+        self.grant('Manager')
+        doc = create(Builder('document')
+                      .attach_archival_file_containing('TEST', name=u'test.pdf')
+                      .with_dummy_content())
+        browser.login().visit(doc, view='tabbedview_view-overview')
+
+        archival_file_row = browser.css('.listing tr')[-1]
+        self.assertEquals('Archival File',
+                          archival_file_row.css('th').first.text)
+        self.assertEquals('icon-pdf',
+                          archival_file_row.css('td span')[0].get('class'))
+        self.assertEquals(u'test.pdf \u2014 0 KB',
+                          archival_file_row.css('td span')[1].text)
+
 
 class TestOverviewMeetingFeatures(FunctionalTestCase):
 

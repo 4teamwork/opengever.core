@@ -89,6 +89,7 @@ class TestDocument(FunctionalTestCase):
 
     @browsing
     def test_documents_properties_view(self, browser):
+        self.grant('Manager')
         doc = create(Builder('document').with_dummy_content())
         browser.login().open(doc, view='@@view')
 
@@ -97,7 +98,7 @@ class TestDocument(FunctionalTestCase):
             browser.css('.documentFirstHeading').first.text)
 
         self.assertEquals(
-            ['Common', 'Classification'],
+            ['Common', 'Classification', 'Archive file'],
             browser.css('#content-core fieldset legend').text)
 
     def test_copying_a_document_prefixes_title_with_copy_of(self):
@@ -645,3 +646,22 @@ class TestPublicTrial(FunctionalTestCase):
 
         self.assertTrue(
             browser.css('#form-widgets-IClassification-public_trial'))
+
+
+class TestArchivalFileField(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestArchivalFileField, self).setUp()
+
+        self.dossier = create(Builder('dossier'))
+        self.grant('Manager')
+
+    @browsing
+    def test_archival_file_is_displayed_but_in_a_separate_fieldset(self, browser):
+        browser.login().open(self.dossier)
+        factoriesmenu.add('Document')
+
+        archival_file_field = browser.css(
+            '#form-widgets-IDocumentMetadata-archival_file').first
+        self.assertEquals(
+            'Archive file', archival_file_field.parent('fieldset legend').text)
