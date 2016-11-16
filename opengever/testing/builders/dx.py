@@ -104,8 +104,13 @@ class DocumentBuilder(DexterityBuilder):
         self.attach(NamedBlobFile(data=content, filename=name))
         return self
 
-    def attach(self, file_):
-        self.arguments["file"] = file_
+    def attach_archival_file_containing(self, content, name=u"test.pdf"):
+        self.attach(NamedBlobFile(data=content, filename=name),
+                    fieldname='archival_file')
+        return self
+
+    def attach(self, file_, fieldname="file"):
+        self.arguments[fieldname] = file_
         return self
 
     def relate_to(self, documents):

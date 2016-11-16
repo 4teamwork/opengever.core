@@ -5,6 +5,9 @@ Changelog
 4.13.1 (unreleased)
 -------------------
 
+- Added eCH-0160 model and export functionality.
+  [phgross]
+
 - Register OGDefaultView for all contenttypes, to hide the form
   helpers in tasks detailview.
   [phgross]
