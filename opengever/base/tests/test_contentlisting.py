@@ -1,5 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from lxml import objectify
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 from opengever.document.widgets.document_link import DocumentLinkWidget
 from opengever.testing import FunctionalTestCase
@@ -177,9 +178,13 @@ class TestBrainContentListingRenderLink(FunctionalTestCase):
     def test_uses_simple_renderer_for_dossiers(self):
         dossier = create(Builder('dossier').titled(u'D\xf6ssier A'))
 
-        self.assertEquals(
-            u'<a href="http://nohost/plone/dossier-1" alt="D\xf6ssier A" class="contenttype-opengever-dossier-businesscasedossier">D\xf6ssier A</a>\n',
+        dossier_url = objectify.fromstring(
             IContentListingObject(obj2brain(dossier)).render_link())
+
+        comparison_url = objectify.fromstring(
+            u'<a href="http://nohost/plone/dossier-1" alt="D\xf6ssier A" class="contenttype-opengever-dossier-businesscasedossier">D\xf6ssier A</a>\n')
+
+        self.assertEquals(dossier_url.attrib, comparison_url.attrib)
 
 
 class TestOpengeverContentListingWithDisabledBumblebee(FunctionalTestCase):
