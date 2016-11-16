@@ -9,6 +9,14 @@ from zope.i18n import translate
 DATE_NUMBER_FORMAT = 'DD.MM.YYYY'
 
 
+def value(input_string):
+    """Return unicode"""
+
+    if not isinstance(input_string, unicode):
+        input_string = input_string.decode('utf-8')
+    return input_string
+
+
 def readable_author(author):
     """Helper method which returns the author description,
     instead of the userid"""
@@ -19,6 +27,7 @@ def readable_author(author):
 def issuing_org_unit_label(org_unit):
     """Helper method which returns the label of the issuing org_unit"""
     return org_unit().label()
+
 
 class StringTranslater(object):
     """provide the translate method as helper method
