@@ -4,7 +4,7 @@
   i18n_domain="opengever.core">
 
   <browser:page
-    class=".ech0160_export.ECH0160ExportView"
+    class=".ech0160.ECH0160ExportView"
     for="*"
     name="ech0160_export"
     permission="cmf.ManagePortal"/>
