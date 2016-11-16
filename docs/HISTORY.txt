@@ -5,6 +5,14 @@ Changelog
 4.13.1 (unreleased)
 -------------------
 
+- Add dossier resolving jobs:
+
+  - Trigger archival_file conversion.
+  - Purge the trash of the dossier.
+  - Generate a PDF representation of the dossiers journal and file as a regular document in the dossier.
+
+  [phgross]
+
 - Added eCH-0160 model and export functionality.
   [phgross]
 
