@@ -2,6 +2,7 @@ from Missing import Value as MissingValue
 from opengever.ogds.base.actor import Actor
 from openpyxl import Workbook
 from openpyxl.styles import Font
+from plone.api.portal import get_localized_time
 from StringIO import StringIO
 from zope.i18n import translate
 
@@ -23,6 +24,12 @@ def readable_author(author):
 
     return Actor.lookup(author).get_label()
 
+def readable_date(date):
+    """Helper method to return a localized date"""
+    if date:
+        return get_localized_time(date)
+    else:
+        return None
 
 def issuing_org_unit_label(org_unit):
     """Helper method which returns the label of the issuing org_unit"""
