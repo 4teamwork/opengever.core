@@ -52,8 +52,6 @@ class DocumentReporter(grok.View):
         ]
 
     def get_selected_documents(self):
-
-        # get the given documents
         catalog = getToolByName(self.context, 'portal_catalog')
         documents = []
         for path in self.request.get('paths'):
@@ -63,7 +61,6 @@ class DocumentReporter(grok.View):
         return documents
 
     def render(self):
-
         if not self.request.get('paths'):
             msg = _(
                 u'error_no_items', default=u'You have not selected any Items')

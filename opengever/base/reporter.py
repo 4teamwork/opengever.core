@@ -24,12 +24,10 @@ def readable_author(author):
 
     return Actor.lookup(author).get_label()
 
+
 def readable_date(date):
     """Helper method to return a localized date"""
-    if date:
-        return get_localized_time(date)
-    else:
-        return None
+    return get_localized_time(date) if date else None
 
 
 class StringTranslater(object):
