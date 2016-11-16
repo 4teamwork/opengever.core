@@ -5,6 +5,9 @@ Changelog
 4.13.1 (unreleased)
 -------------------
 
+- Added excel export functionality to document listings
+  [Rotonen]
+
 - Add dossier resolving jobs:
 
   - Trigger archival_file conversion.
