@@ -197,6 +197,7 @@ class MyDocuments(Documents):
 
     enabled_actions = [
         'zip_selected',
+        'export_documents',
     ]
     major_actions = []
 

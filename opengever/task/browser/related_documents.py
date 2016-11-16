@@ -236,6 +236,7 @@ class RelatedDocuments(Documents):
         'move_items',
         'copy_items',
         'zip_selected',
+        'export_documents',
         ]
 
     sort_on = 'sortable_title'
