@@ -98,11 +98,10 @@ class XLSReporter(object):
             cell.font = title_font
 
     def insert_value_rows(self, sheet):
-        for row, dossier in enumerate(self.results, 2):
+        for row, obj in enumerate(self.results, 2):
             for column, attr in enumerate(self.attributes, 1):
                 cell = sheet.cell(row=row, column=column)
-
-                value = getattr(dossier, attr.get('id'))
+                value = getattr(obj, attr.get('id'))
                 if attr.get('transform'):
                     value = attr.get('transform')(value)
                 if value == MissingValue:
