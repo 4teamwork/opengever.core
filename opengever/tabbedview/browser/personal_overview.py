@@ -184,6 +184,7 @@ class MyDocumentsProxy(DocumentsProxy):
     grok.context(Interface)
 
     listview = "tabbedview_view-mydocuments"
+    select_all_template = "document_view-select_all"
     galleryview = "tabbedview_view-mydocuments-gallery"
 
 
