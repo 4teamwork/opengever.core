@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-10-24 09:02+0000\n"
+"POT-Creation-Date: 2016-11-14 11:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -73,6 +73,10 @@ msgstr ""
 msgid "Could not check out object: ${title}, it is not a document"
 msgstr ""
 
+#: ./opengever/document/browser/report.py:96
+msgid "Could not generate the report"
+msgstr ""
+
 #: ./opengever/document/profiles/default/actions.xml
 msgid "Create Task"
 msgstr ""
@@ -87,6 +91,11 @@ msgstr ""
 
 #: ./opengever/document/browser/download_templates/downloadconfirmation.pt:22
 msgid "Don't show this message again."
+msgstr ""
+
+#: ./opengever/document/profiles/default/actions.xml
+#: ./opengever/document/upgrades/20161111090446_add_document_export_actions/actions.xml
+msgid "Export selection"
 msgstr ""
 
 #: ./opengever/document/browser/templates/logout_overlay.pt:19
@@ -169,17 +178,22 @@ msgid "description_download_confirmation"
 msgstr ""
 
 #. Default: "You don't select a file and document is also not preserved in paper_form, please correct it."
-#: ./opengever/document/behaviors/metadata.py:187
+#: ./opengever/document/behaviors/metadata.py:182
 msgid "error_file_and_preserved_as_paper"
 msgstr ""
 
 #. Default: "It's not possible to add E-mails here, please '                    'send it to ${mailaddress} or drag it to the dossier '                    ' (Dragn'n'Drop)."
-#: ./opengever/document/document.py:96
+#: ./opengever/document/document.py:99
 msgid "error_mail_upload"
 msgstr ""
 
+#. Default: "You have not selected any Items"
+#: ./opengever/document/browser/report.py:80
+msgid "error_no_items"
+msgstr ""
+
 #. Default: "Either the title or the file is required."
-#: ./opengever/document/document.py:73
+#: ./opengever/document/document.py:76
 msgid "error_title_or_file_required"
 msgstr ""
 
@@ -191,7 +205,7 @@ msgstr ""
 #. Default: "Common"
 #: ./opengever/document/behaviors/metadata.py:39
 #: ./opengever/document/behaviors/related_docs.py:39
-#: ./opengever/document/document.py:49
+#: ./opengever/document/document.py:52
 msgid "fieldset_common"
 msgstr ""
 
@@ -237,7 +251,7 @@ msgstr ""
 msgid "help_document_date"
 msgstr ""
 
-#: ./opengever/document/document.py:66
+#: ./opengever/document/document.py:69
 msgid "help_file"
 msgstr ""
 
@@ -280,6 +294,7 @@ msgstr ""
 
 #. Default: "Author"
 #: ./opengever/document/behaviors/metadata.py:114
+#: ./opengever/document/browser/report.py:46
 msgid "label_author"
 msgstr ""
 
@@ -344,14 +359,39 @@ msgstr ""
 msgid "label_digitally_available"
 msgstr ""
 
+#: ./opengever/document/browser/report.py:55
+msgid "label_document_checked_out_by"
+msgstr ""
+
 #. Default: "Document Date"
 #: ./opengever/document/behaviors/metadata.py:82
+#: ./opengever/document/browser/report.py:49
 msgid "label_document_date"
+msgstr ""
+
+#: ./opengever/document/browser/report.py:53
+msgid "label_document_delivery_date"
+msgstr ""
+
+#: ./opengever/document/browser/report.py:51
+msgid "label_document_receipt_date"
+msgstr ""
+
+#: ./opengever/document/browser/report.py:37
+msgid "label_document_reference_number"
+msgstr ""
+
+#: ./opengever/document/browser/report.py:40
+msgid "label_document_sequence_number"
 msgstr ""
 
 #. Default: "Document Type"
 #: ./opengever/document/behaviors/metadata.py:105
 msgid "label_document_type"
+msgstr ""
+
+#: ./opengever/document/browser/report.py:61
+msgid "label_dossier_title"
 msgstr ""
 
 #: ./opengever/document/browser/download_templates/downloadconfirmation.pt:25
@@ -366,8 +406,8 @@ msgid "label_download_copy"
 msgstr ""
 
 #. Default: "File"
-#: ./opengever/document/browser/overview.py:153
-#: ./opengever/document/document.py:65
+#: ./opengever/document/browser/overview.py:146
+#: ./opengever/document/document.py:68
 msgid "label_file"
 msgstr ""
 
@@ -411,6 +451,10 @@ msgstr ""
 msgid "label_preview"
 msgstr ""
 
+#: ./opengever/document/browser/report.py:58
+msgid "label_public_trial"
+msgstr ""
+
 #. Default: "Date of receipt"
 #: ./opengever/document/behaviors/metadata.py:91
 msgid "label_receipt_date"
@@ -452,7 +496,8 @@ msgid "label_thumbnail"
 msgstr ""
 
 #. Default: "Title"
-#: ./opengever/document/document.py:59
+#: ./opengever/document/browser/report.py:43
+#: ./opengever/document/document.py:62
 msgid "label_title"
 msgstr ""
 
