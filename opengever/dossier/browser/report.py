@@ -39,7 +39,7 @@ class DossierReporter(grok.View):
              'transform': StringTranslater(self.request, 'plone').translate},
             {'id': 'reference',
              'title': _(u'label_reference_number',
-                       default=u'Reference Number')},
+                        default=u'Reference Number')},
         ]
 
     def get_selected_dossiers(self):
