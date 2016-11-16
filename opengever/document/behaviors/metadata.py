@@ -137,11 +137,13 @@ class IDocumentMetadata(form.Schema):
         defaultFactory=preserved_as_paper_default,
         )
 
+    form.read_permission(archival_file='opengever.document.ModifyArchivalFile')
+    form.write_permission(archival_file='opengever.document.ModifyArchivalFile')
     archival_file = NamedBlobFile(
         title=_(u'label_archival_file', default='Archival File'),
         description=_(u'help_archival_file', default=''),
         required=False,
-        )
+    )
 
     form.omitted('archival_file_state')
     archival_file_state = schema.Int(

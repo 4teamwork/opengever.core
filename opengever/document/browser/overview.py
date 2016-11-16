@@ -161,11 +161,14 @@ class Overview(DisplayForm, GeverTabMixin):
             TemplateRow(self.public_trial_template,
                         label=ogbmf('label_public_trial',
                                     default='Public Trial')),
-            FieldRow('IClassification.public_trial_statement'),
-            TemplateRow(self.archival_file_template,
-                        label=_(u'label_archival_file',
-                                default='Archival File')),
+            FieldRow('IClassification.public_trial_statement')
         ]
+        if self.is_archivale_file_visible():
+            row = TemplateRow(
+                self.archival_file_template,
+                label=_(u'label_archival_file', default='Archival File'))
+            rows.append(row)
+
         if is_meeting_feature_enabled():
             rows.append(TemplateRow(self.submitted_with_template,
                                     label=_('Submitted with')))
@@ -191,6 +194,9 @@ class Overview(DisplayForm, GeverTabMixin):
 
     def is_outdated(self, submitted_document):
         return not submitted_document.is_up_to_date(self.context)
+
+    def is_archivale_file_visible(self):
+        return api.user.has_permission('opengever.document.ModifyArchivalFile')
 
     def render_submitted_version(self, submitted_document):
         return _(u"Submitted version: ${version}",

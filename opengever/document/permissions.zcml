@@ -24,4 +24,8 @@
           id="opengever.document.Cancel"
           title="opengever.document: Cancel" />
 
+    <permission
+        id="opengever.document.ModifyArchivalFile"
+        title="opengever.document: Modify archival file" />
+
 </configure>

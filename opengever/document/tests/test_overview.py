@@ -231,9 +231,18 @@ class TestDocumentOverview(FunctionalTestCase):
         proposals = browser.css('#proposals_box .proposal')
         self.assertEqual(0, len(proposals))
 
+    @browsing
+    def test_archival_file_is_only_available_for_managers_by_default(self, browser):
+        doc = create(Builder('document')
+                     .attach_archival_file_containing('TEST', name=u'test.pdf')
+                     .with_dummy_content())
+        browser.login().visit(doc, view='tabbedview_view-overview')
+
+        self.assertNotIn('Archival File', browser.css('.listing th').text)
 
     @browsing
     def test_edit_archival_file_link_NOT_shown_on_open_dossier(self, browser):
+        self.grant('Manager')
         dossier = create(Builder('dossier').within(self.repo_folder))
         document = create(Builder('document')
                           .within(dossier)
@@ -245,6 +254,7 @@ class TestDocumentOverview(FunctionalTestCase):
 
     @browsing
     def test_edit_archival_file_link_is_visible_on_closed_dossier(self, browser):
+        self.grant('Manager')
         dossier = create(
             Builder('dossier')
             .within(self.repo_folder)
@@ -261,6 +271,7 @@ class TestDocumentOverview(FunctionalTestCase):
 
     @browsing
     def test_edit_archival_file_link_is_visible_on_closed_dossier_inside_a_task(self, browser):
+        self.grant('Manager')
         dossier = create(Builder('dossier')
                          .within(self.repo_folder)
                          .in_state('dossier-state-resolved'))
@@ -279,6 +290,7 @@ class TestDocumentOverview(FunctionalTestCase):
 
     @browsing
     def test_archival_file_is_extended_with_mimetype_class(self, browser):
+        self.grant('Manager')
         doc = create(Builder('document')
                       .attach_archival_file_containing('TEST', name=u'test.pdf')
                       .with_dummy_content())

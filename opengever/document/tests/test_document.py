@@ -89,6 +89,7 @@ class TestDocument(FunctionalTestCase):
 
     @browsing
     def test_documents_properties_view(self, browser):
+        self.grant('Manager')
         doc = create(Builder('document').with_dummy_content())
         browser.login().open(doc, view='@@view')
 
@@ -653,6 +654,7 @@ class TestArchivalFileField(FunctionalTestCase):
         super(TestArchivalFileField, self).setUp()
 
         self.dossier = create(Builder('dossier'))
+        self.grant('Manager')
 
     @browsing
     def test_archival_file_is_displayed_but_in_a_separate_fieldset(self, browser):

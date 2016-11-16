@@ -17,6 +17,8 @@ class TestArchivalFile(FunctionalTestCase):
                                .titled(u'\xdcberpr\xfcfung XY')
                                .with_dummy_content())
 
+        self.grant('Manager')
+
     @browsing
     def test_archival_file_state_is_omitted(self, browser):
         browser.login().open(self.document, view='edit')
@@ -25,6 +27,19 @@ class TestArchivalFile(FunctionalTestCase):
             [],
             browser.css('#formfield-form-widgets-'
                         'IDocumentMetadata-archival_file_state'))
+
+    @browsing
+    def test_archival_file_is_ommitted_for_normal_users_by_default(self, browser):
+        """By default only managers have the ModifyArchivalFile permission.
+        """
+
+        self.grant('Contributor', 'Editor', 'Reader')
+        browser.login().open(self.document, view='edit')
+
+        self.assertEquals(
+            [],
+            browser.css('#formfield-form-widgets-'
+                        'IDocumentMetadata-archival_file'))
 
     def test_file_name_is_file_filename_with_pdf_extension(self):
         self.assertEquals(
@@ -59,6 +74,7 @@ class TestArchivalFileState(FunctionalTestCase):
     def setUp(self):
         super(TestArchivalFileState, self).setUp()
         self.dossier = create(Builder('dossier'))
+        self.grant('Manager')
 
     @browsing
     def test_set_to_manually_when_archival_file_is_added_in_edit_form(self, browser):
