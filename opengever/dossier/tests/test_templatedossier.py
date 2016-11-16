@@ -594,7 +594,7 @@ class TestTemplateDossierListings(FunctionalTestCase):
 
         self.assertEqual(
             ['Copy Items', 'Checkin with comment', 'Checkin without comment',
-             'trashed', 'Export as Zip'],
+             'Export selection', 'trashed', 'Export as Zip'],
             browser.css('.actionMenuContent li').text)
 
     @browsing
@@ -615,7 +615,7 @@ class TestTemplateDossierListings(FunctionalTestCase):
 
         self.assertEqual(
             ['Copy Items', 'Checkin with comment', 'Checkin without comment',
-             'trashed', 'Export as Zip'],
+             'Export selection', 'trashed', 'Export as Zip'],
             browser.css('.actionMenuContent li').text)
 
     @browsing
