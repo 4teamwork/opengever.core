@@ -3,6 +3,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.base.tests.byline_base_test import TestBylineBase
+from plone.api.portal import get_localized_time
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
 import transaction
@@ -60,14 +61,18 @@ class TestTaskByline(TestBylineBase):
         browser.login().open(self.task)
 
         start_date = self.get_byline_value_by_label('created:')
-        self.assertEquals('Aug 10, 2011 08:10 PM', start_date.text)
+        self.assertEquals(get_localized_time(DateTime(2011, 8, 10, 20, 10),
+                                             long_format=True),
+                          start_date.text)
 
     @browsing
     def test_task_byline_modification_date_display(self, browser):
         browser.login().open(self.task)
 
         start_date = self.get_byline_value_by_label('last modified:')
-        self.assertEquals('Aug 11, 2011 08:10 PM', start_date.text)
+        self.assertEquals(get_localized_time(DateTime(2011, 8, 11, 20, 10),
+                                             long_format=True),
+                          start_date.text)
 
     @browsing
     def test_dossier_byline_sequence_number_display_is_prefixed_with_admin_unit_abbreviation(self, browser):

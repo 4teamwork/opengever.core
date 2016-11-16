@@ -1,5 +1,6 @@
 from datetime import date
 from datetime import datetime
+from dateutil.parser import parse as parse_date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -257,8 +258,9 @@ class TestArchiveFormDefaults(FunctionalTestCase):
             self.dossier = create(Builder('dossier'))
 
     def _get_form_date(self, browser, field_name):
-        datestr = browser.css('#form-widgets-%s' % field_name).first.value
-        return datetime.strptime(datestr, '%B %d, %Y').date()
+        datestr = browser.css('#form-widgets-{}'
+                              .format(field_name)).first.value
+        return parse_date(datestr).date()
 
     @browsing
     def test_filing_prefix_default(self, browser):
