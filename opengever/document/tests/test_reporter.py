@@ -1,4 +1,4 @@
-from dateutil.parser import parse as parse_date
+from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -18,9 +18,9 @@ class TestDocumentReporter(FunctionalTestCase):
         create_ogds_user('max.mustermann',
                          firstname='Max',
                          lastname='Mustermann')
-        self.document_date = parse_date('2020-02-01').date()
-        self.receipt_date = parse_date('2020-02-02').date()
-        self.delivery_date = parse_date('2020-02-03').date()
+        self.document_date = date(2020, 02, 01)
+        self.receipt_date = date(2020, 02, 02)
+        self.delivery_date = date(2020, 02, 03)
         self.dossier = create(Builder('dossier').titled(u'Dossier A'))
         self.document = create(
             Builder('document')
