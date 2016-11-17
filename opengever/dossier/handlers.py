@@ -1,15 +1,16 @@
-from Acquisition import aq_inner, aq_parent
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from five import grok
 from OFS.interfaces import IObjectWillBeMovedEvent
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import IReferenceNumberPrefix
-from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
+from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.resolve import DossierResolver
 from opengever.globalindex.handlers.task import sync_task
 from opengever.globalindex.handlers.task import TaskSqlSyncer
 from plone import api
 from Products.CMFCore.interfaces import IActionSucceededEvent
-from Products.CMFCore.utils import getToolByName
 from zope.component import getAdapter
 from zope.lifecycleevent import IObjectRemovedEvent
 from zope.lifecycleevent.interfaces import IObjectCopiedEvent
@@ -89,7 +90,7 @@ def reindex_contained_objects(dossier, event):
     show an outdated title in the ``subdossier`` column
     """
 
-    catalog = getToolByName(dossier, 'portal_catalog')
+    catalog = api.portal.get_tool('portal_catalog')
     parent = aq_parent(aq_inner(dossier))
     is_subdossier = IDossierMarker.providedBy(parent)
     if is_subdossier:

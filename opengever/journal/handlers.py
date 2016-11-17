@@ -39,6 +39,7 @@ from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.event import notify
+from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.i18nmessageid import MessageFactory
 from zope.i18nmessageid.message import Message
@@ -66,10 +67,10 @@ def propper_string(value):
 def journal_entry_factory(context, action, title,
                           visible=True, comment='', actor=None):
     portal_state = getMultiAdapter(
-        (context, context.REQUEST), name=u'plone_portal_state')
+        (context, getRequest()), name=u'plone_portal_state')
     if actor is None:
         actor = portal_state.member().getId()
-    comment = comment == '' and get_change_note(context.REQUEST, '') or comment
+    comment = comment == '' and get_change_note(getRequest(), '') or comment
     title = propper_string(title)
     action = propper_string(action)
     comment = propper_string(comment)
@@ -706,7 +707,7 @@ def object_moved(context, event):
         return
 
     # Skip automatically renamed objects during copy & paste process.
-    if ICopyPasteRequestLayer.providedBy(context.REQUEST):
+    if ICopyPasteRequestLayer.providedBy(getRequest()):
         return
 
     title = _(u'label_object_moved',
@@ -728,7 +729,7 @@ def object_will_be_moved(context, event):
         return
 
     # Skip automatically renamed objects during copy & paste process.
-    if ICopyPasteRequestLayer.providedBy(context.REQUEST):
+    if ICopyPasteRequestLayer.providedBy(getRequest()):
         return
 
     title = _(u'label_object_cut',

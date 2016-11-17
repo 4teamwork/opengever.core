@@ -549,6 +549,17 @@ class TestProposal(FunctionalTestCase):
                 "reference to submitted document on {} should be removed".format(
                     record))
 
+    def test_copying_proposals_is_prevented(self):
+        committee = create(Builder('committee').titled('My committee'))
+        proposal = create(Builder('proposal')
+                          .within(self.dossier)
+                          .titled(u'My Proposal')
+                          .having(committee=committee.load_model()))
+
+        copied_dossier = api.content.copy(
+            source=self.dossier, target=self.repo_folder)
+        self.assertItemsEqual([], copied_dossier.getFolderContents())
+
     def test_is_submission_allowed(self):
         committee = create(Builder('committee').titled('My committee'))
         proposal = create(Builder('proposal')

@@ -1,7 +1,9 @@
 from five import grok
 from OFS.interfaces import IObjectWillBeRemovedEvent
+from opengever.base.browser.paste import ICopyPasteRequestLayer
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
+from opengever.base.security import elevated_privileges
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import IObjectCheckedInEvent
 from opengever.document.interfaces import IObjectRevertedToVersion
@@ -10,9 +12,13 @@ from opengever.meeting.model import GeneratedExcerpt
 from opengever.meeting.model import Proposal
 from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.proposal import IProposal
+from plone import api
 from zope.component import getUtility
 from zope.component.interfaces import ComponentLookupError
+from zope.globalrequest import getRequest
 from zope.intid.interfaces import IIntIds
+from zope.lifecycleevent.interfaces import IObjectAddedEvent
+from zope.lifecycleevent.interfaces import IObjectCopiedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 from zope.lifecycleevent.interfaces import IObjectMovedEvent
 
@@ -60,8 +66,23 @@ def _sync_excerpt(document):
     UpdateExcerptInDossierCommand(proposal).execute()
 
 
+@grok.subscribe(IProposal, IObjectCopiedEvent)
+def delete_copied_proposal(obj, event):
+    """Prevent that proposals are copied.
+
+    Turns out the easiest way to accomplish this is to delete the proposal
+    after it has been copied.
+    """
+    with elevated_privileges():
+        api.content.delete(obj)
+
+
 @grok.subscribe(IProposal, IObjectMovedEvent)
 def sync_moved_proposal(obj, event):
+    # Skip automatically renamed objects during copy & paste process.
+    if ICopyPasteRequestLayer.providedBy(getRequest()):
+        return
+
     # make sure obj wasn't just created or deleted
     if not event.oldParent or not event.newParent:
         return
