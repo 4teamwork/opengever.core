@@ -19,8 +19,10 @@ class TestProtocolJsonData(FunctionalTestCase):
         self.dossier = create(
             Builder("dossier").within(self.folder))
         self.doc1 = create(Builder("document")
-                           .titled("Beweisaufnahme")
-                           .within(self.dossier))
+                           .titled("Beweisaufn\xc3\xa4hme")
+                           .within(self.dossier)
+                           .attach_file_containing("lorem ipsum",
+                                                   name=u"beweisaufna-hme.txt"))
         self.doc2 = create(Builder("document")
                            .titled("Strafbefehl")
                            .within(self.dossier))

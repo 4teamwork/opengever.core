@@ -26,7 +26,8 @@ SAMPLE_MEETING_DATA = {
         'is_paragraph': False,
         'decision_number': 1,
         'attachments': [{
-            "title": "Beweisaufnahme"
+            "title": "Beweisaufn\xc3\xa4hme",
+            "filename": u"beweisaufna-hme.txt"
             }, {
             "title": "Strafbefehl"
         }]
