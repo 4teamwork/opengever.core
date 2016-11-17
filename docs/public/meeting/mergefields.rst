@@ -166,6 +166,21 @@ Metadaten zu einem Traktandum (AgendaItem):
 
   Zu veröffentlichen in (Text).
 
+- ``attachments``
+
+  Liste von Anhängen des Antrags (Liste von Attachment).
+
+
+Metadaten zu einem Anhang eines Antrags (Attachment):
+
+- ``title``
+
+  Titel des Dokumentes (Text).
+
+- ``filename``
+
+  Dateiname der Datei (Text).
+
 
 Metadaten zu einer Inhaltsverzeichnis-Gruppe:
 
