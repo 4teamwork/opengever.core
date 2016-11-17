@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-10-24 09:02+0000\n"
+"POT-Creation-Date: 2016-11-14 11:29+0000\n"
 "PO-Revision-Date: 2016-09-20 21:24+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-document/fr/>\n"
@@ -72,6 +72,10 @@ msgstr "Checkout de ${title} n'a pas abouti"
 msgid "Could not check out object: ${title}, it is not a document"
 msgstr "${title} n'est pas un document, par consequet checkout n'a pas abouti"
 
+#: ./opengever/document/browser/report.py:96
+msgid "Could not generate the report"
+msgstr ""
+
 #: ./opengever/document/profiles/default/actions.xml
 msgid "Create Task"
 msgstr "Créer une tâche"
@@ -87,6 +91,11 @@ msgstr "Document"
 #: ./opengever/document/browser/download_templates/downloadconfirmation.pt:22
 msgid "Don't show this message again."
 msgstr "Ne plus afficher ce message."
+
+#: ./opengever/document/profiles/default/actions.xml
+#: ./opengever/document/upgrades/20161111090446_add_document_export_actions/actions.xml
+msgid "Export selection"
+msgstr ""
 
 #: ./opengever/document/browser/templates/logout_overlay.pt:19
 msgid "Logout"
@@ -168,17 +177,22 @@ msgid "description_download_confirmation"
 msgstr "Vous étes en train de télécharger une copie du document ${filename}."
 
 #. Default: "You don't select a file and document is also not preserved in paper_form, please correct it."
-#: ./opengever/document/behaviors/metadata.py:187
+#: ./opengever/document/behaviors/metadata.py:182
 msgid "error_file_and_preserved_as_paper"
 msgstr "Vous n'avez pas sélectionné un fichier ni conservé un document en version papier. Merci de corriger cela."
 
 #. Default: "It's not possible to add E-mails here, please '                    'send it to ${mailaddress} or drag it to the dossier '                    ' (Dragn'n'Drop)."
-#: ./opengever/document/document.py:96
+#: ./opengever/document/document.py:99
 msgid "error_mail_upload"
 msgstr "Il n'est pas possible d'insérer des Email à cet endroit. Pour le faire, utilisez l'adresse E-Mail ${mailaddress}  ou glissez-le dans le dossier (Drag'n'Drop)."
 
+#. Default: "You have not selected any Items"
+#: ./opengever/document/browser/report.py:80
+msgid "error_no_items"
+msgstr ""
+
 #. Default: "Either the title or the file is required."
-#: ./opengever/document/document.py:73
+#: ./opengever/document/document.py:76
 msgid "error_title_or_file_required"
 msgstr "Un titre ou un fichier est requis."
 
@@ -190,7 +204,7 @@ msgstr ""
 #. Default: "Common"
 #: ./opengever/document/behaviors/metadata.py:39
 #: ./opengever/document/behaviors/related_docs.py:39
-#: ./opengever/document/document.py:49
+#: ./opengever/document/document.py:52
 msgid "fieldset_common"
 msgstr "En général"
 
@@ -236,7 +250,7 @@ msgstr "Date, à laquelle le document a été envoyé par écrit"
 msgid "help_document_date"
 msgstr "Date de création du document"
 
-#: ./opengever/document/document.py:66
+#: ./opengever/document/document.py:69
 msgid "help_file"
 msgstr "Ficher, ajouté dans un dossier"
 
@@ -279,6 +293,7 @@ msgstr ""
 
 #. Default: "Author"
 #: ./opengever/document/behaviors/metadata.py:114
+#: ./opengever/document/browser/report.py:46
 msgid "label_author"
 msgstr "Auteur"
 
@@ -343,15 +358,40 @@ msgstr "Description"
 msgid "label_digitally_available"
 msgstr "Disponble sous forme numérique"
 
+#: ./opengever/document/browser/report.py:55
+msgid "label_document_checked_out_by"
+msgstr ""
+
 #. Default: "Document Date"
 #: ./opengever/document/behaviors/metadata.py:82
+#: ./opengever/document/browser/report.py:49
 msgid "label_document_date"
 msgstr "Date du document"
+
+#: ./opengever/document/browser/report.py:53
+msgid "label_document_delivery_date"
+msgstr ""
+
+#: ./opengever/document/browser/report.py:51
+msgid "label_document_receipt_date"
+msgstr ""
+
+#: ./opengever/document/browser/report.py:37
+msgid "label_document_reference_number"
+msgstr ""
+
+#: ./opengever/document/browser/report.py:40
+msgid "label_document_sequence_number"
+msgstr ""
 
 #. Default: "Document Type"
 #: ./opengever/document/behaviors/metadata.py:105
 msgid "label_document_type"
 msgstr "Type de document"
+
+#: ./opengever/document/browser/report.py:61
+msgid "label_dossier_title"
+msgstr ""
 
 #: ./opengever/document/browser/download_templates/downloadconfirmation.pt:25
 msgid "label_download"
@@ -365,8 +405,8 @@ msgid "label_download_copy"
 msgstr "Télécharger une copie"
 
 #. Default: "File"
-#: ./opengever/document/browser/overview.py:153
-#: ./opengever/document/document.py:65
+#: ./opengever/document/browser/overview.py:146
+#: ./opengever/document/document.py:68
 msgid "label_file"
 msgstr "Fichier"
 
@@ -410,6 +450,10 @@ msgstr "Conserver sous forme papier"
 msgid "label_preview"
 msgstr "Aperçu"
 
+#: ./opengever/document/browser/report.py:58
+msgid "label_public_trial"
+msgstr ""
+
 #. Default: "Date of receipt"
 #: ./opengever/document/behaviors/metadata.py:91
 msgid "label_receipt_date"
@@ -451,7 +495,8 @@ msgid "label_thumbnail"
 msgstr "Vignette"
 
 #. Default: "Title"
-#: ./opengever/document/document.py:59
+#: ./opengever/document/browser/report.py:43
+#: ./opengever/document/document.py:62
 msgid "label_title"
 msgstr "Titre"
 

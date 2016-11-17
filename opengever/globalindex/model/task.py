@@ -129,6 +129,10 @@ class Task(Base):
     def is_successor(self):
         return bool(self.predecessor)
 
+    @property
+    def issuing_org_unit_label(self):
+        return self.get_issuing_org_unit().label()
+
     def get_admin_unit(self):
         return ogds_service().fetch_admin_unit(self.admin_unit_id)
 

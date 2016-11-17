@@ -2,11 +2,20 @@ from Missing import Value as MissingValue
 from opengever.ogds.base.actor import Actor
 from openpyxl import Workbook
 from openpyxl.styles import Font
+from plone.api.portal import get_localized_time
 from StringIO import StringIO
 from zope.i18n import translate
 
 
 DATE_NUMBER_FORMAT = 'DD.MM.YYYY'
+
+
+def value(input_string):
+    """Return unicode"""
+
+    if not isinstance(input_string, unicode):
+        input_string = input_string.decode('utf-8')
+    return input_string
 
 
 def readable_author(author):
@@ -16,9 +25,10 @@ def readable_author(author):
     return Actor.lookup(author).get_label()
 
 
-def issuing_org_unit_label(org_unit):
-    """Helper method which returns the label of the issuing org_unit"""
-    return org_unit().label()
+def readable_date(date):
+    """Helper method to return a localized date"""
+    return get_localized_time(date) if date else None
+
 
 class StringTranslater(object):
     """provide the translate method as helper method
@@ -82,11 +92,10 @@ class XLSReporter(object):
             cell.font = title_font
 
     def insert_value_rows(self, sheet):
-        for row, dossier in enumerate(self.results, 2):
+        for row, obj in enumerate(self.results, 2):
             for column, attr in enumerate(self.attributes, 1):
                 cell = sheet.cell(row=row, column=column)
-
-                value = getattr(dossier, attr.get('id'))
+                value = getattr(obj, attr.get('id'))
                 if attr.get('transform'):
                     value = attr.get('transform')(value)
                 if value == MissingValue:

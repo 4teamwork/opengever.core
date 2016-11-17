@@ -157,6 +157,7 @@ class Documents(BaseCatalogListingTab):
         'move_items',
         'copy_items',
         'zip_selected',
+        'export_documents',
         ]
 
     major_actions = [

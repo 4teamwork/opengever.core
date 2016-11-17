@@ -3,18 +3,11 @@ from opengever.base.behaviors.utils import set_attachment_content_disposition
 from opengever.base.reporter import DATE_NUMBER_FORMAT
 from opengever.base.reporter import readable_author
 from opengever.base.reporter import StringTranslater, XLSReporter
+from opengever.base.reporter import value
 from opengever.dossier import _
 from Products.CMFCore.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
 from zope.interface import Interface
-
-
-def to_unicode(title):
-    """Return unicode"""
-
-    if not isinstance(title, unicode):
-        title = title.decode('utf-8')
-    return title
 
 
 class DossierReporter(grok.View):
@@ -31,7 +24,7 @@ class DossierReporter(grok.View):
         return [
             {'id': 'Title',
              'title': _('label_title', default=u'Title'),
-             'transform': to_unicode},
+             'transform': value},
             {'id': 'start',
              'title': _(u'label_start', default=u'Opening Date'),
              'number_format': DATE_NUMBER_FORMAT},
@@ -46,7 +39,7 @@ class DossierReporter(grok.View):
              'transform': StringTranslater(self.request, 'plone').translate},
             {'id': 'reference',
              'title': _(u'label_reference_number',
-                       default=u'Reference Number')},
+                        default=u'Reference Number')},
         ]
 
     def get_selected_dossiers(self):
