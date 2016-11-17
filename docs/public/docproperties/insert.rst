@@ -5,6 +5,11 @@ Damit DocProperties in Worddokumenten verwendet werden können, muss in einem
 ersten Schritt die entsprechende Wordvorlage, die in OneGov GEVER über den
 Menüpunkt Vorlagen abgelegt ist, vorbereitet werden:
 
+
+Hinzufügen in Eigenschaften
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
 1. Wählen Sie die Wordvorlage im Vorlagenbereich von OneGov GEVER aus, und
    öffnen Sie das Dokument zur Bearbeitung (Auschecken und bearbeiten).
 
@@ -32,8 +37,12 @@ Menüpunkt Vorlagen abgelegt ist, vorbereitet werden:
 .. admonition:: Vorlagen kopieren
 
    Für die Erarbeitung einer neuen Vorlage können auch bestehende Vorlagen
-   überarbeitet werden. So müssen nicht alle DocProperties jedes Mal manuell
-   neu erstellt werden, sondern werden mitkopiert.
+   überarbeitet werden. So müssen nicht alle DocProperties jedes Mal manuell neu erstellt werden, sondern werden mitkopiert.
+
+
+Hinzufügen in Haupttext
+~~~~~~~~~~~~~~~~~~~~~~~
+
 
 Sind alle benötigten DocProperties in der Wordvorlage definiert, können sie
 nun nach Belieben im Haupttext verwendet werden.
@@ -51,23 +60,21 @@ Dies geschieht in Word wie folgt:
 
    |docprops-6|
 
-4. Feldname auswählen = DocProperty.
-
-5. Gewünschte Eigenschaft auswählen.
-
-6. Die Option “Feldfunktionen” auswählen.
+4. In der Kategorie „Dokument-Information“ anwählen und dann den Feldnamen „DocProperty“ auswählen.
 
    |docprops-7|
 
-7. Ausgewähltes DocProperty in Anführungs- und Schlusszeichen setzen.
-
-8. Mit “OK” bestätigen.
+5. Unter „Optionen“ die gewünschte Eigenschaft (welche oben unter Punkt 1.1. hinzugefügt wurde) hinzufügen und mit „OK“ bestätigen.
 
    |docprops-8|
 
-Die DocProperty ist eingefügt und kann in Word mit Doppelklick > Rechtsklick
-> Feldfunktion ein an der gewünschten Position im Dokument angezeigt und
-überprüft werden.
+6. Mit “OK” bestätigen.
+
+
+Datumsformat anpassen
+~~~~~~~~~~~~~~~~~~~~~
+
+Wenn ein Datum DocProperty eingefügt wird z.B. ogg.document.document_date kann das Datumsformat nach Einfügen des DocProperty nachträglich angepasst werden. Dazu kann mit Doppelklick > Rechtsklick > Feldfunktion ein auf die gewünschten Position im Dokument geklickt und gemäss Printscreen unten das Datumsformat angepasst werden:
 
 |docprops-9|
 
