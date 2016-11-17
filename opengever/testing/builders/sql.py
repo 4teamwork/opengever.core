@@ -35,6 +35,7 @@ from opengever.meeting.model import Period
 from opengever.meeting.model import Proposal as ProposalModel
 from opengever.meeting.model.generateddocument import GeneratedExcerpt
 from opengever.meeting.model.generateddocument import GeneratedProtocol
+from opengever.meeting.model.submitteddocument import SubmittedDocument
 from opengever.meeting.proposal import IProposal
 from opengever.meeting.proposal import Proposal
 from opengever.ogds.base.interfaces import IAdminUnitConfiguration
@@ -178,6 +179,25 @@ class ProposalModelBuilder(SqlObjectBuilder):
 
         """
         raise NotImplementedError
+
+    def with_submitted_documents(self, *documents):
+        """Attach documents on the submitted side."""
+
+        # XXX should receive an optional list of tuples to have different
+        # submitted and source documents
+        if not documents:
+            return
+
+        submitted = []
+        for document in documents:
+            oguid = Oguid.for_object(document)
+            submitted.append(SubmittedDocument(
+                    oguid=oguid,
+                    submitted_oguid=oguid,
+                    submitted_version=document.get_current_version(),
+                ))
+        self.arguments['submitted_documents'] = submitted
+        return self
 
 builder_registry.register('proposal_model', ProposalModelBuilder)
 

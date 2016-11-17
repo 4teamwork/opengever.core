@@ -140,6 +140,15 @@ class AgendaItem(Base):
             data['html:copy_for_attention'] = self._sanitize_text(
                 self.copy_for_attention)
 
+        if self.has_proposal:
+            attachment_data = []
+            for document in self.proposal.resolve_submitted_documents():
+                attachment_data.append({
+                    'title': document.title
+                })
+            if attachment_data:
+                data['attachments'] = attachment_data
+
         return data
 
     def _sanitize_text(self, text):

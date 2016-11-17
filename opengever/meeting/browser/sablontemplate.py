@@ -24,7 +24,13 @@ SAMPLE_MEETING_DATA = {
         'number': '1.',
         'title': u'Strafbefehl wegen Bauens ohne Bewilligung',
         'is_paragraph': False,
-        'decision_number': 1}, {
+        'decision_number': 1,
+        'attachments': [{
+            "title": "Beweisaufnahme"
+            }, {
+            "title": "Strafbefehl"
+        }]
+    }, {
         'description': u'R\xfccktritt Hans Muster',
         'dossier_reference_number': None,
         'repository_folder_title': None,
