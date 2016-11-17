@@ -21,18 +21,20 @@ class TestDossierByline(TestBylineBase):
         self.intids = getUtility(IIntIds)
 
         create_ogds_user('hugo.boss')
-
-        self.dossier = create(Builder('dossier')
-               .in_state('dossier-state-active')
-               .having(reference_number_prefix='5',
-                       responsible='hugo.boss',
-                       start=date(2013, 11, 6),
-                       end=date(2013, 11, 7)))
+        self.dossier = self.create_dossier()
 
         registry = getUtility(IRegistry)
         mail_settings = registry.forInterface(IMailSettings)
         mail_settings.mail_domain = u'opengever.4teamwork.ch'
         transaction.commit()
+
+    def create_dossier(self):
+        return create(Builder('dossier')
+                      .in_state('dossier-state-active')
+                      .having(reference_number_prefix='5',
+                              responsible='hugo.boss',
+                              start=date(2013, 11, 6),
+                              end=date(2013, 11, 7)))
 
     @browsing
     def test_dossier_byline_responsible_display(self, browser):

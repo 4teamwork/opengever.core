@@ -5,6 +5,9 @@ Changelog
 4.13.1 (unreleased)
 -------------------
 
+- Use correct dossier byline for meeting dossiers.
+  [deiferni]
+
 - Added excel export functionality to document listings
   [Rotonen]
 

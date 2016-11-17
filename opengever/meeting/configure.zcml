@@ -1,5 +1,6 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     xmlns:grok="http://namespaces.zope.org/grok"
     xmlns:i18n="http://namespaces.zope.org/i18n"
@@ -24,5 +25,12 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
     <include package=".upgrades" />
+
+    <browser:viewlet
+        name="plone.belowcontenttitle.documentbyline"
+        for="opengever.meeting.interfaces.IMeetingDossier"
+        manager="plone.app.layout.viewlets.interfaces.IBelowContentTitle"
+        class="opengever.dossier.viewlets.byline.BusinessCaseByline"
+        permission="zope2.View" />
 
 </configure>
