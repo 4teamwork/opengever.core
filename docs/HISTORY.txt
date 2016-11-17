@@ -5,6 +5,9 @@ Changelog
 4.13.1 (unreleased)
 -------------------
 
+- Add attachment information of documents attached to proposals to procotol json.
+  [deiferni]
+
 - Use correct dossier byline for meeting dossiers.
   [deiferni]
 
