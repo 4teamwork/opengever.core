@@ -1,6 +1,12 @@
 from five import grok
+from ftw.table import helper
 from opengever.dossier.templatedossier.interfaces import ITemplateDossier
+from opengever.tabbedview import _
+from opengever.tabbedview import BaseCatalogListingTab
 from opengever.tabbedview.browser.tabs import Documents, Trash
+from opengever.tabbedview.helper import linked
+from opengever.tabbedview.helper import workflow_state
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 
 
 REMOVED_COLUMNS = ['receipt_date', 'delivery_date', 'containing_subdossier']
@@ -84,3 +90,26 @@ class TemplateDossierTrash(Trash):
     def columns(self):
         return drop_columns(
             super(TemplateDossierTrash, self).columns)
+
+
+class TemplateDossierDossierTemplates(BaseCatalogListingTab):
+    grok.name('tabbedview_view-dossiertemplates')
+
+    filterlist_available = False
+
+    object_provides = 'opengever.dossier.dossiertemplate.behaviors.IDossierTemplate'
+
+    search_options = {'is_subdossier': False}
+
+    columns = (
+
+        {'column': 'Title',
+         'column_title': _(u'label_title', default=u'Title'),
+         'sort_index': 'sortable_title',
+         'transform': linked},
+
+        )
+
+    enabled_actions = []
+    major_actions = []
+

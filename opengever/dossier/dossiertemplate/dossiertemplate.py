@@ -29,3 +29,7 @@ class DossierTemplateEditForm(dexterity.EditForm):
 
 class DossierTemplate(Container):
     """Base class for template dossiers."""
+
+    def is_subdossier(self):
+        parent = aq_parent(aq_inner(self))
+        return bool(IDossierTemplate.providedBy(parent))

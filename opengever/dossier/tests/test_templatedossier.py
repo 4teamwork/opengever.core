@@ -506,6 +506,14 @@ class TestTemplateDossier(FunctionalTestCase):
         browser.find('DE').click()
         self.assertEquals(u'Vorlagen', browser.css('h1').first.text)
 
+    @browsing
+    def test_do_not_show_dossier_templates_tab(self, browser):
+        templatedossier = create(Builder('templatedossier'))
+
+        browser.login().visit(templatedossier)
+
+        self.assertEqual(0, len(browser.css('.formTab #tab-dossiertemplates')))
+
 
 class TestTemplateDossierMeetingEnabled(FunctionalTestCase):
 
@@ -701,3 +709,13 @@ class TestDossierTemplateFeature(FunctionalTestCase):
         browser.login().open(templatedossier)
 
         self.assertIn('Dossier template', factoriesmenu.addable_types())
+
+    @browsing
+    def test_show_dossier_templates_tab(self, browser):
+        templatedossier = create(Builder('templatedossier'))
+
+        browser.login().visit(templatedossier)
+
+        self.assertEqual(
+            'Dossier templates',
+            browser.css('.formTab #tab-dossiertemplates').first.text)
