@@ -1,5 +1,4 @@
 from collective import dexteritytextindexer
-from datetime import date
 from opengever.base.behaviors.classification import IClassification
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.base.interfaces import ISequenceNumber
@@ -182,18 +181,12 @@ class Disposition(Container):
 
     def update_added_dossiers(self, dossiers):
         for dossier in dossiers:
-            ILifeCycle(dossier).date_of_submission = date.today()
-            api.content.transition(
-                obj=dossier, transition='dossier-transition-offer')
-
+            dossier.offer()
             IAppraisal(self).initialize(dossier)
 
     def update_dropped_dossiers(self, dossiers):
         for dossier in dossiers:
-            ILifeCycle(dossier).date_of_submission = None
-            api.content.transition(
-                obj=dossier, to_state=self.get_former_state(dossier))
-
+            dossier.retract()
             IAppraisal(self).drop(dossier)
 
     def finalize_appraisal(self):
@@ -207,12 +200,6 @@ class Disposition(Container):
         for relation in self.dossiers:
             api.content.transition(
                 obj=relation.to_object, transition='dossier-transition-archive')
-
-    def get_former_state(self, dossier):
-        workflow = api.portal.get_tool('portal_workflow')
-        workflow_id = workflow.getWorkflowsFor(dossier)[0].getId()
-        history = workflow.getHistoryOf(workflow_id,dossier)
-        return history[1].get('review_state')
 
     def destroy_dossiers(self):
         dossiers = [relation.to_object for relation in self.dossiers]

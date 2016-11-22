@@ -321,6 +321,20 @@ class DossierContainer(Container):
 
         return False
 
+    def offer(self):
+        ILifeCycle(self).date_of_submission = date.today()
+        api.content.transition(obj=self, transition='dossier-transition-offer')
+
+    def retract(self):
+        ILifeCycle(self).date_of_submission = None
+        api.content.transition(obj=self, to_state=self.get_former_state())
+
+    def get_former_state(self):
+        workflow = api.portal.get_tool('portal_workflow')
+        workflow_id = workflow.getWorkflowsFor(self)[0].getId()
+        history = workflow.getHistoryOf(workflow_id, self)
+        return history[1].get('review_state')
+
 
 class DefaultConstrainTypeDecider(grok.MultiAdapter):
     grok.provides(IConstrainTypeDecider)
