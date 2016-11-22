@@ -16,6 +16,7 @@ Worddokument zu erzeugen.
 Die folgenden Seriendruckfelder können standardmässig verwendet werden:
 
 Metadaten zur Sitzung:
+~~~~~~~~~~~~~~~~~~~~~~
 
 - ``mandant.name``
 
@@ -81,6 +82,7 @@ Metadaten zur Sitzung:
 
 
 Metadaten zu einem Sitzungsteilnehmer (Participant):
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - ``member.fullname``
 
@@ -100,6 +102,7 @@ Metadaten zu einem Sitzungsteilnehmer (Participant):
 
 
 Metadaten zu einem Traktandum (AgendaItem):
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - ``repository_folder_title``
 
@@ -166,8 +169,25 @@ Metadaten zu einem Traktandum (AgendaItem):
 
   Zu veröffentlichen in (Text).
 
+- ``attachments``
+
+  Liste von Anhängen des Antrags (Liste von Attachment).
+
+
+Metadaten zu einem Anhang eines Antrags (Attachment):
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- ``title``
+
+  Titel des Dokumentes (Text).
+
+- ``filename``
+
+  Dateiname der Datei (Text).
+
 
 Metadaten zu einer Inhaltsverzeichnis-Gruppe:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - ``group_title``
 
@@ -179,6 +199,7 @@ Metadaten zu einer Inhaltsverzeichnis-Gruppe:
 
 
 Metadaten zu einem Inhaltsverzeichnis-Element:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - ``title``
 

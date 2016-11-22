@@ -14,6 +14,19 @@ class TestProtocolJsonData(FunctionalTestCase):
 
     def setUp(self):
         super(TestProtocolJsonData, self).setUp()
+        self.root = create(Builder('repository_root'))
+        self.folder = create(Builder('repository').titled('Strafwesen'))
+        self.dossier = create(
+            Builder("dossier").within(self.folder))
+        self.doc1 = create(Builder("document")
+                           .titled("Beweisaufn\xc3\xa4hme")
+                           .within(self.dossier)
+                           .attach_file_containing("lorem ipsum",
+                                                   name=u"beweisaufna-hme.txt"))
+        self.doc2 = create(Builder("document")
+                           .titled("Strafbefehl")
+                           .within(self.dossier))
+
         self.proposal = create(
             Builder('proposal_model')
             .having(title=u'Strafbefehl wegen Bauens ohne Bewilligung',
@@ -26,7 +39,8 @@ class TestProtocolJsonData(FunctionalTestCase):
                     copy_for_attention=u'<div>Hanspeter</div>',
                     disclose_to=u'<div>Jans\xf6rg</div>',
                     decision_draft=u'<div>Der Gemeinderat erstattet Strafanzeige gegen Unbekannt und informiert zudem den Vermieter (Herr. Meier).</div>',
-                    publish_in=u'<div>Tagblatt</div>',))
+                    publish_in=u'<div>Tagblatt</div>',)
+            .with_submitted_documents(self.doc1, self.doc2))
         self.committee = create(Builder('committee_model')
                                 .having(title=u'Gemeinderat'))
         self.member_peter = create(Builder('member'))
