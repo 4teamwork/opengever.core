@@ -3,4 +3,5 @@
   <records interface="opengever.dossier.interfaces.IDossierParticipants" />
   <records interface="opengever.dossier.interfaces.ITemplateDossierProperties" />
   <records interface="opengever.dossier.interfaces.IDossierResolveProperties" />
+  <records interface="opengever.dossier.dossiertemplate.interfaces.IDossierTemplateSettings" />
 </registry>

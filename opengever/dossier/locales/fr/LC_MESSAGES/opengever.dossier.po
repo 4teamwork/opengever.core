@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-11-16 11:12+0000\n"
+"POT-Creation-Date: 2016-11-22 16:30+0000\n"
 "PO-Revision-Date: 2016-09-20 21:24+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/fr/>\n"
@@ -24,6 +24,7 @@ msgid "Add Business Case Dossier"
 msgstr "Insérer un dossier d'affaire"
 
 #: ./opengever/dossier/behaviors/dossier.py:232
+#: ./opengever/dossier/dossiertemplate/dossiertemplate.py:19
 msgid "Add Subdossier"
 msgstr "Insérer un sous-dossier"
 
@@ -35,7 +36,7 @@ msgstr "Dossier"
 msgid "Can only move objects from open dossiers!"
 msgstr "Seuls les objets de dossiers actifs peuvent être déplacés!"
 
-#: ./opengever/dossier/browser/report.py:82
+#: ./opengever/dossier/browser/report.py:75
 msgid "Could not generate the report"
 msgstr "Impossible de générer l'affichage"
 
@@ -55,11 +56,17 @@ msgstr "Document ${name} est lié avec une tâche, déplacer la tâche, svp."
 msgid "Dossier structure"
 msgstr "Structure du dossier"
 
+#: ./opengever/dossier/profiles/default/types/opengever.dossier.dossiertemplate.xml
+#: ./opengever/dossier/upgrades/20161122103454_add_dossier_templates/types/opengever.dossier.dossiertemplate.xml
+msgid "Dossier template"
+msgstr ""
+
 #: ./opengever/dossier/resolve.py:89
 msgid "Dossiers successfully reactivated."
 msgstr "Le dossier a été à nouveau ouvert avec succès"
 
 #: ./opengever/dossier/behaviors/dossier.py:254
+#: ./opengever/dossier/dossiertemplate/dossiertemplate.py:33
 msgid "Edit Subdossier"
 msgstr "Modifier le sous-dossier"
 
@@ -128,6 +135,7 @@ msgstr ""
 msgid "Select recipient address"
 msgstr ""
 
+#: ./opengever/dossier/dossiertemplate/menu.py:15
 #: ./opengever/dossier/menu.py:19
 msgid "Subdossier"
 msgstr "Sous-dossier"
@@ -278,7 +286,7 @@ msgid "error_enddate"
 msgstr "Date de clôture obligatoire"
 
 #. Default: "You have not selected any Items"
-#: ./opengever/dossier/browser/report.py:66
+#: ./opengever/dossier/browser/report.py:59
 msgid "error_no_items"
 msgstr "Vous n'avez sélectionné aucun objet."
 
@@ -442,7 +450,7 @@ msgstr "Email"
 #. Default: "Closing Date"
 #: ./opengever/dossier/archive.py:189
 #: ./opengever/dossier/behaviors/dossier.py:79
-#: ./opengever/dossier/browser/report.py:39
+#: ./opengever/dossier/browser/report.py:32
 msgid "label_end"
 msgstr "Date de fin :"
 
@@ -549,7 +557,7 @@ msgstr ""
 
 #. Default: "Reference Number"
 #: ./opengever/dossier/behaviors/dossier.py:179
-#: ./opengever/dossier/browser/report.py:48
+#: ./opengever/dossier/browser/report.py:41
 #: ./opengever/dossier/viewlets/byline.py:67
 msgid "label_reference_number"
 msgstr "Numéro de référence"
@@ -562,12 +570,12 @@ msgstr "Dossiers liés"
 #. Default: "Responsible"
 #: ./opengever/dossier/behaviors/dossier.py:90
 #: ./opengever/dossier/browser/participants.py:169
-#: ./opengever/dossier/browser/report.py:42
+#: ./opengever/dossier/browser/report.py:35
 msgid "label_responsible"
 msgstr "Responsable"
 
 #. Default: "Review state"
-#: ./opengever/dossier/browser/report.py:45
+#: ./opengever/dossier/browser/report.py:38
 msgid "label_review_state"
 msgstr "Etat"
 
@@ -588,7 +596,7 @@ msgstr "Numéro courant"
 
 #. Default: "Opening Date"
 #: ./opengever/dossier/behaviors/dossier.py:71
-#: ./opengever/dossier/browser/report.py:36
+#: ./opengever/dossier/browser/report.py:29
 msgid "label_start"
 msgstr "Date début"
 
@@ -619,7 +627,7 @@ msgid "label_template"
 msgstr ""
 
 #. Default: "Title"
-#: ./opengever/dossier/browser/report.py:33
+#: ./opengever/dossier/browser/report.py:26
 #: ./opengever/dossier/templatedossier/form.py:65
 msgid "label_title"
 msgstr "Titre"

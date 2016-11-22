@@ -10,6 +10,7 @@ from opengever.activity.interfaces import IActivitySettings
 from opengever.base import model
 from opengever.base.model import create_session
 from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
+from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings
 from opengever.meeting.interfaces import IMeetingSettings
 from opengever.officeatwork.interfaces import IOfficeatworkSettings
 from opengever.ogds.base.setup import create_sql_tables
@@ -417,6 +418,20 @@ class ActivityLayer(PloneSandboxLayer):
 
 
 OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER = ActivityLayer()
+
+
+class DossierTemplateLayer(PloneSandboxLayer):
+
+    def setUpPloneSite(self, portal):
+        toggle_feature(IDossierTemplateSettings, enabled=True)
+
+    def tearDownPloneSite(self, portal):
+        toggle_feature(IDossierTemplateSettings, enabled=False)
+
+    defaultBases = (OPENGEVER_FUNCTIONAL_TESTING,)
+
+
+OPENGEVER_FUNCTIONAL_DOSSIER_TEMPLATE_LAYER = DossierTemplateLayer()
 
 
 class BumblebeeLayer(PloneSandboxLayer):

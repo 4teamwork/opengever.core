@@ -10,6 +10,7 @@ from opengever.document.behaviors import IBaseDocument
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.participation import IParticipationAwareMarker
+from opengever.dossier.dossiertemplate import is_dossier_template_feature_enabled
 from opengever.dossier.interfaces import IConstrainTypeDecider
 from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.meeting import is_meeting_feature_enabled
@@ -338,6 +339,10 @@ class DefaultConstrainTypeDecider(grok.MultiAdapter):
         if factory_type in [u'opengever.meeting.proposal',
                             u'opengever.meeting.sablontemplate']:
             return is_meeting_feature_enabled()
+
+        if factory_type in [u'opengever.dossier.dossiertemplate']:
+            return is_dossier_template_feature_enabled()
+
         return True
 
     @property

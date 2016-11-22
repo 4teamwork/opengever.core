@@ -14,6 +14,7 @@
         <element value="opengever.tasktemplates.tasktemplatefolder" />
         <element value="opengever.dossier.templatedossier" />
         <element value="opengever.meeting.sablontemplate" />
+        <element value="opengever.dossier.dossiertemplate" />
     </property>
 
     <!-- schema interface -->
