@@ -1,0 +1,36 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "title": "PhoneNumber",
+    "additionalProperties": false,
+    "properties": {
+        "phone_number": {
+            "type": "string",
+            "title": "phone_number",
+            "description": "",
+            "_zope_schema_type": "Text"
+        },
+        "id": {
+            "type": "integer",
+            "title": "id",
+            "description": "",
+            "_zope_schema_type": "Int",
+            "default": "Sequence(phonenumber_id_seq)"
+        },
+        "label": {
+            "type": "string",
+            "title": "label",
+            "description": "",
+            "_zope_schema_type": "Text"
+        }
+    },
+    "required": [
+        "id",
+        "phone_number"
+    ],
+    "field_order": [
+        "id",
+        "label",
+        "phone_number"
+    ]
+}

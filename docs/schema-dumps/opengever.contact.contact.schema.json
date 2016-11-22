@@ -1,0 +1,162 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "title": "Kontakt",
+    "additionalProperties": false,
+    "properties": {
+        "academic_title": {
+            "type": "string",
+            "title": "Titel",
+            "description": "",
+            "_zope_schema_type": "TextLine"
+        },
+        "function": {
+            "type": "string",
+            "title": "Funktion",
+            "description": "",
+            "_zope_schema_type": "TextLine"
+        },
+        "address2": {
+            "type": "string",
+            "title": "Adresszusatz",
+            "description": "",
+            "_zope_schema_type": "TextLine"
+        },
+        "description": {
+            "type": "string",
+            "title": "Beschreibung",
+            "description": "",
+            "_zope_schema_type": "Text"
+        },
+        "firstname": {
+            "type": "string",
+            "title": "Vorname",
+            "description": "",
+            "_zope_schema_type": "TextLine"
+        },
+        "picture": {
+            "type": "string",
+            "title": "Bild",
+            "description": "",
+            "_zope_schema_type": "NamedImage"
+        },
+        "url": {
+            "type": "string",
+            "title": "URL",
+            "format": "uri",
+            "description": "",
+            "_zope_schema_type": "URI"
+        },
+        "lastname": {
+            "type": "string",
+            "title": "Nachname",
+            "description": "",
+            "_zope_schema_type": "TextLine"
+        },
+        "company": {
+            "type": "string",
+            "title": "Firma",
+            "description": "",
+            "_zope_schema_type": "TextLine"
+        },
+        "phone_office": {
+            "type": "string",
+            "title": "Telefon Arbeit",
+            "description": "",
+            "_zope_schema_type": "TextLine"
+        },
+        "country": {
+            "type": "string",
+            "title": "Land",
+            "description": "",
+            "_zope_schema_type": "TextLine"
+        },
+        "department": {
+            "type": "string",
+            "title": "Abteilung",
+            "description": "",
+            "_zope_schema_type": "TextLine"
+        },
+        "phone_home": {
+            "type": "string",
+            "title": "Telefon Privat",
+            "description": "",
+            "_zope_schema_type": "TextLine"
+        },
+        "phone_fax": {
+            "type": "string",
+            "title": "Fax Arbeit",
+            "description": "",
+            "_zope_schema_type": "TextLine"
+        },
+        "address1": {
+            "type": "string",
+            "title": "Adresse (Strasse / Nr.)",
+            "description": "",
+            "_zope_schema_type": "TextLine"
+        },
+        "salutation": {
+            "type": "string",
+            "title": "Anrede",
+            "description": "",
+            "_zope_schema_type": "TextLine"
+        },
+        "city": {
+            "type": "string",
+            "title": "Ort",
+            "description": "",
+            "_zope_schema_type": "TextLine"
+        },
+        "zip_code": {
+            "type": "string",
+            "title": "PLZ",
+            "description": "",
+            "_zope_schema_type": "TextLine"
+        },
+        "email2": {
+            "type": "string",
+            "title": "E-Mail 2",
+            "description": "",
+            "_zope_schema_type": "TextLine"
+        },
+        "email": {
+            "type": "string",
+            "title": "E-Mail 1",
+            "description": "",
+            "_zope_schema_type": "TextLine"
+        },
+        "phone_mobile": {
+            "type": "string",
+            "title": "Telefon Mobile",
+            "description": "",
+            "_zope_schema_type": "TextLine"
+        }
+    },
+    "required": [
+        "lastname",
+        "firstname"
+    ],
+    "field_order": [
+        "salutation",
+        "academic_title",
+        "lastname",
+        "firstname",
+        "company",
+        "department",
+        "function",
+        "email",
+        "email2",
+        "url",
+        "phone_office",
+        "phone_fax",
+        "phone_mobile",
+        "phone_home",
+        "picture",
+        "description",
+        "address1",
+        "address2",
+        "zip_code",
+        "city",
+        "country"
+    ]
+}

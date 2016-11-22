@@ -1,5 +1,6 @@
 from collections import OrderedDict
 from opengever.base.schemadump.config import DEFAULT_OVERRIDES
+from opengever.base.schemadump.config import PYTHON_TO_JS_TYPES
 from opengever.base.schemadump.config import VOCAB_OVERRIDES
 from opengever.base.schemadump.helpers import translate_de
 from opengever.base.schemadump.log import setup_logging
@@ -43,7 +44,7 @@ class FieldDumper(object):
             ('name', field.getName()),
             ('type', field_type),
             ('title', field_title),
-            ('desc', field_desc),
+            ('description', field_desc),
             ('required', field.required),
         ))
 
@@ -71,6 +72,14 @@ class FieldDumper(object):
         modes_for_field = self._get_modes_for_field(field)
         if modes_for_field:
             field_dump['modes'] = modes_for_field
+
+        if isinstance(field, Choice):
+            # Include the value type of the field by looking at the
+            # terms in the vocabulary
+            vocab_type = type(field_vocab[0])
+            assert all(isinstance(item, vocab_type) for item in field_vocab)
+            value_type = PYTHON_TO_JS_TYPES[vocab_type]
+            field_dump['value_type'] = value_type
 
         try:
             json.dumps(field_dump)
@@ -205,8 +214,8 @@ class SQLFieldDumper(object):
         field_dump = OrderedDict((
             ('name', column.name),
             ('type', self._map_field_type(column)),
-            ('title', None),
-            ('desc', None),
+            ('title', column.name),
+            ('description', ''),
             ('required', not column.nullable),
         ))
 

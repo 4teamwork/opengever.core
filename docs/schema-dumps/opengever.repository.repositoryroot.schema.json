@@ -1,0 +1,63 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "title": "Ordnungssystem",
+    "additionalProperties": false,
+    "properties": {
+        "valid_until": {
+            "type": "string",
+            "title": "G\u00fcltig bis",
+            "format": "date",
+            "description": "",
+            "_zope_schema_type": "Date"
+        },
+        "title_de": {
+            "type": "string",
+            "title": "Titel (deutsch)",
+            "description": "",
+            "_zope_schema_type": "TextLine"
+        },
+        "valid_from": {
+            "type": "string",
+            "title": "G\u00fcltig ab",
+            "format": "date",
+            "description": "",
+            "_zope_schema_type": "Date"
+        },
+        "version": {
+            "type": "string",
+            "title": "Version",
+            "description": "",
+            "_zope_schema_type": "TextLine"
+        },
+        "title_fr": {
+            "type": "string",
+            "title": "Titel (franz\u00f6sisch)",
+            "description": "",
+            "_zope_schema_type": "TextLine"
+        }
+    },
+    "required": [
+        "title_de",
+        "title_fr"
+    ],
+    "anyOf": [
+        {
+            "required": [
+                "title_de"
+            ]
+        },
+        {
+            "required": [
+                "title_fr"
+            ]
+        }
+    ],
+    "field_order": [
+        "valid_from",
+        "valid_until",
+        "version",
+        "title_de",
+        "title_fr"
+    ]
+}

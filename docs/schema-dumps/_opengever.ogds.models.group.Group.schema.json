@@ -1,0 +1,35 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "title": "Group",
+    "additionalProperties": false,
+    "properties": {
+        "active": {
+            "type": "boolean",
+            "title": "active",
+            "description": "",
+            "_zope_schema_type": "Bool",
+            "default": true
+        },
+        "groupid": {
+            "type": "string",
+            "title": "groupid",
+            "description": "",
+            "_zope_schema_type": "Text"
+        },
+        "title": {
+            "type": "string",
+            "title": "title",
+            "description": "",
+            "_zope_schema_type": "Text"
+        }
+    },
+    "required": [
+        "groupid"
+    ],
+    "field_order": [
+        "groupid",
+        "active",
+        "title"
+    ]
+}

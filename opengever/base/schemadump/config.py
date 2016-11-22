@@ -41,3 +41,24 @@ DEFAULT_OVERRIDES = {
             u'<H\xf6chste auf dieser Ebene vergebene Nummer + 1>',
     },
 }
+
+JSON_SCHEMA_FIELD_TYPES = {
+    'TextLine':      {'type': 'string'},                     # noqa
+    'Text':          {'type': 'string'},                     # noqa
+    'Tuple':         {'type': 'array'},                      # noqa
+    'Date':          {'type': 'string', 'format': 'date'},   # noqa
+    'Int':           {'type': 'integer'},                    # noqa
+    'RelationList':  {'type': 'array'},                      # noqa
+    'Bool':          {'type': 'boolean'},                    # noqa
+    'NamedBlobFile': {'type': 'string'},                     # noqa
+    'Choice':        {'type': 'string'},                     # noqa
+    'NamedImage':    {'type': 'string'},                     # noqa
+    'List':          {'type': 'array'},                      # noqa
+    'URI':           {'type': 'string', 'format': 'uri'},    # noqa
+}
+
+PYTHON_TO_JS_TYPES = {
+    int: 'integer',
+    unicode: 'string',
+    str: 'string',
+}

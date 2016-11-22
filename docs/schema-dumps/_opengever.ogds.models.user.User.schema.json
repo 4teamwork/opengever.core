@@ -1,0 +1,168 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "title": "User",
+    "additionalProperties": false,
+    "properties": {
+        "directorate": {
+            "type": "string",
+            "title": "directorate",
+            "description": "",
+            "_zope_schema_type": "Text"
+        },
+        "phone_fax": {
+            "type": "string",
+            "title": "phone_fax",
+            "description": "",
+            "_zope_schema_type": "Text"
+        },
+        "salutation": {
+            "type": "string",
+            "title": "salutation",
+            "description": "",
+            "_zope_schema_type": "Text"
+        },
+        "email2": {
+            "type": "string",
+            "title": "email2",
+            "description": "",
+            "_zope_schema_type": "Text"
+        },
+        "city": {
+            "type": "string",
+            "title": "city",
+            "description": "",
+            "_zope_schema_type": "Text"
+        },
+        "department_abbr": {
+            "type": "string",
+            "title": "department_abbr",
+            "description": "",
+            "_zope_schema_type": "Text"
+        },
+        "address1": {
+            "type": "string",
+            "title": "address1",
+            "description": "",
+            "_zope_schema_type": "Text"
+        },
+        "department": {
+            "type": "string",
+            "title": "department",
+            "description": "",
+            "_zope_schema_type": "Text"
+        },
+        "email": {
+            "type": "string",
+            "title": "email",
+            "description": "",
+            "_zope_schema_type": "Text"
+        },
+        "zip_code": {
+            "type": "string",
+            "title": "zip_code",
+            "description": "",
+            "_zope_schema_type": "Text"
+        },
+        "description": {
+            "type": "string",
+            "title": "description",
+            "description": "",
+            "_zope_schema_type": "Text"
+        },
+        "firstname": {
+            "type": "string",
+            "title": "firstname",
+            "description": "",
+            "_zope_schema_type": "Text"
+        },
+        "lastname": {
+            "type": "string",
+            "title": "lastname",
+            "description": "",
+            "_zope_schema_type": "Text"
+        },
+        "address2": {
+            "type": "string",
+            "title": "address2",
+            "description": "",
+            "_zope_schema_type": "Text"
+        },
+        "phone_office": {
+            "type": "string",
+            "title": "phone_office",
+            "description": "",
+            "_zope_schema_type": "Text"
+        },
+        "active": {
+            "type": "boolean",
+            "title": "active",
+            "description": "",
+            "_zope_schema_type": "Bool",
+            "default": true
+        },
+        "url": {
+            "type": "string",
+            "title": "url",
+            "description": "",
+            "_zope_schema_type": "Text"
+        },
+        "country": {
+            "type": "string",
+            "title": "country",
+            "description": "",
+            "_zope_schema_type": "Text"
+        },
+        "directorate_abbr": {
+            "type": "string",
+            "title": "directorate_abbr",
+            "description": "",
+            "_zope_schema_type": "Text"
+        },
+        "userid": {
+            "type": "string",
+            "title": "userid",
+            "description": "",
+            "_zope_schema_type": "Text"
+        },
+        "phone_mobile": {
+            "type": "string",
+            "title": "phone_mobile",
+            "description": "",
+            "_zope_schema_type": "Text"
+        },
+        "import_stamp": {
+            "type": "string",
+            "title": "import_stamp",
+            "description": "",
+            "_zope_schema_type": "Text"
+        }
+    },
+    "required": [
+        "userid"
+    ],
+    "field_order": [
+        "userid",
+        "active",
+        "firstname",
+        "lastname",
+        "directorate",
+        "directorate_abbr",
+        "department",
+        "department_abbr",
+        "email",
+        "email2",
+        "url",
+        "phone_office",
+        "phone_fax",
+        "phone_mobile",
+        "salutation",
+        "description",
+        "address1",
+        "address2",
+        "zip_code",
+        "city",
+        "country",
+        "import_stamp"
+    ]
+}
