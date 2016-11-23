@@ -6,6 +6,8 @@ from opengever.base.security import elevated_privileges
 from opengever.disposition import _
 from opengever.disposition.appraisal import IAppraisal
 from opengever.disposition.interfaces import IDisposition
+from opengever.disposition.validators import OfferedDossiersValidator
+from opengever.dossier.base import DOSSIER_STATES_OFFERABLE
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.ogds.base.utils import get_current_admin_unit
 from persistent.dict import PersistentDict
@@ -14,16 +16,16 @@ from plone import api
 from plone.dexterity.content import Container
 from plone.directives import form
 from plone.formwidget.contenttree import ObjPathSourceBinder
+from z3c.form import validator
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
 from zope import schema
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
+from zope.component import provideAdapter
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.interface import implements
-from zope.interface import Invalid
-from zope.interface import invariant
 from zope.intid.interfaces import IIntIds
 
 
@@ -95,6 +97,7 @@ class IDispositionSchema(form.Schema):
             title=u"Dossier",
             source=ObjPathSourceBinder(
                 object_provides=('opengever.dossier.behaviors.dossier.IDossierMarker'),
+                review_state=DOSSIER_STATES_OFFERABLE,
                 navigation_tree_query={
                     'object_provides':
                     ['opengever.repository.repositoryroot.IRepositoryRoot',
@@ -102,17 +105,16 @@ class IDispositionSchema(form.Schema):
                      'opengever.dossier.behaviors.dossier.IDossierMarker'],
                 }),
             ),
-        required=False,
+        required=True,
     )
 
-    @invariant
-    def is_retention_period_expired(data):
-        for dossier in data.dossiers:
-            if not dossier.is_retention_period_expired():
-                raise Invalid(
-                    _(u'error_retention_period_not_expired',
-                      default=u'The retention period of the selected dossiers'
-                      ' is not expired.'))
+
+validator.WidgetValidatorDiscriminators(
+    OfferedDossiersValidator,
+    field=IDispositionSchema['dossiers'],
+)
+provideAdapter(OfferedDossiersValidator)
+
 
 
 class Disposition(Container):

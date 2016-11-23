@@ -44,6 +44,8 @@ DOSSIER_STATES_CLOSED = [
     'dossier-state-resolved'
 ]
 
+DOSSIER_STATES_OFFERABLE = DOSSIER_STATES_CLOSED + ['dossier-state-offered']
+
 
 _marker = object()
 

@@ -5,6 +5,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import info_messages
+from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testing import freeze
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.testing import FunctionalTestCase
@@ -24,9 +25,11 @@ class TestDisposition(FunctionalTestCase):
         self.root = create(Builder('repository_root'))
         self.repository = create(Builder('repository').within(self.root))
         self.dossier1 = create(Builder('dossier')
+                               .titled(u'Dossier A')
                                .as_expired()
                                .within(self.repository))
         self.dossier2 = create(Builder('dossier')
+                               .in_state('dossier-state-resolved')
                                .within(self.repository))
         self.dossier3 = create(Builder('dossier')
                                .as_expired()
@@ -80,6 +83,41 @@ class TestDisposition(FunctionalTestCase):
                           [rel.to_object for rel in browser.context.dossiers])
 
     @browsing
+    def test_selected_dossiers_in_active_states_are_skipped(self, browser):
+        dossier4 = create(Builder('dossier')
+                          .within(self.repository))
+        data = {'paths:list': obj2paths([dossier4]),
+                '_authenticator': createToken()}
+
+        browser.login().open(self.root,
+                             view='++add++opengever.disposition.disposition',
+                             data=data)
+        browser.find('Save').click()
+
+        self.assertEquals(['There were some errors.'], error_messages())
+        self.assertEquals(['Required input is missing.'],
+                          browser.css('.fieldErrorBox .error').text)
+
+    @browsing
+    def test_already_offered_dossiers_cant_be_selected(self, browser):
+        data = {'paths:list': obj2paths([self.dossier1]),
+                '_authenticator': createToken()}
+        browser.login().open(self.root,
+                             view='++add++opengever.disposition.disposition',
+                             data=data)
+        browser.find('Save').click()
+
+        browser.login().open(self.root,
+                             view='++add++opengever.disposition.disposition',
+                             data=data)
+        browser.find('Save').click()
+
+        self.assertEquals(['There were some errors.'], error_messages())
+        self.assertEquals(['The dossier Dossier A is already offered in '
+                           'a different disposition.'],
+                          browser.css('.fieldErrorBox .error').text)
+
+    @browsing
     def test_only_expired_dossiers_can_be_added(self, browser):
         data = {'paths:list': obj2paths([self.dossier2]),
                 '_authenticator': createToken()}
@@ -90,10 +128,10 @@ class TestDisposition(FunctionalTestCase):
         browser.fill({'Reference': 'Ablieferung X29238'})
         browser.find('Save').click()
 
+        self.assertEquals(['There were some errors.'], error_messages())
         self.assertEquals(
-            ['Error There were some errors.',
-             'The retention period of the selected dossiers is not expired.'],
-            browser.css('.error').text)
+            ['The retention period of the selected dossiers is not expired.'],
+            browser.css('.fieldErrorBox .error').text)
 
     @browsing
     def test_attached_dossier_are_set_to_offered_state(self, browser):
