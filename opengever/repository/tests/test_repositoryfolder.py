@@ -5,11 +5,14 @@ from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages import plone
 from ftw.testbrowser.pages.statusmessages import warning_messages
 from opengever.base.interfaces import IReferenceNumberSettings
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_DOSSIER_TEMPLATE_LAYER
 from opengever.repository.behaviors.referenceprefix import IReferenceNumberPrefix
+from opengever.repository.interfaces import IRepositoryFolderRecords
 from opengever.testing import add_languages
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
 from opengever.testing import set_preferred_language
+from plone import api
 from plone.protect import createToken
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
@@ -109,3 +112,108 @@ class TestRepositoryFolderWithBrowser(FunctionalTestCase):
              'temporarily allowed and all dossiers must be moved into '
              'a new leafnode afterwards.'],
             warning_messages())
+
+    @browsing
+    def test_addable_types_on_a_repository_folder_containing_other_repo_folders(self, browser):
+        self.grant('Manager')
+
+        root = create(Builder('repository_root'))
+        branch_node = create(Builder('repository').within(root))
+        leaf_node = create(Builder('repository').within(branch_node))
+
+        browser.login().open(branch_node)
+
+        self.assertEquals(
+            ['RepositoryFolder'],
+            factoriesmenu.addable_types())
+
+    @browsing
+    def test_addable_types_on_a_repository_leaf_folder(self, browser):
+        self.grant('Manager')
+
+        api.portal.set_registry_record(
+            'maximum_repository_depth', 3,
+            interface=IRepositoryFolderRecords)
+
+        root = create(Builder('repository_root'))
+        branch_node = create(Builder('repository').within(root))
+        leaf_node = create(Builder('repository').within(branch_node))
+
+        browser.login().open(leaf_node)
+
+        self.assertEquals(
+            ['Business Case Dossier', 'Disposition', 'RepositoryFolder'],
+            factoriesmenu.addable_types())
+
+    @browsing
+    def test_addable_types_on_a_repository_leaf_folder_if_max_rep_depth_reached(self, browser):
+        self.grant('Manager')
+
+        api.portal.set_registry_record(
+            'maximum_repository_depth', 2,
+            interface=IRepositoryFolderRecords)
+
+        root = create(Builder('repository_root'))
+        branch_node = create(Builder('repository').within(root))
+        leaf_node = create(Builder('repository').within(branch_node))
+
+        browser.login().open(leaf_node)
+
+        self.assertEquals(
+            ['Business Case Dossier', 'Disposition'],
+            factoriesmenu.addable_types())
+
+
+class TestDossierTemplateFeatureEnabled(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_DOSSIER_TEMPLATE_LAYER
+
+    @browsing
+    def test_addable_types_on_a_repository_folder_containing_other_repo_folders(self, browser):
+        self.grant('Manager')
+
+        root = create(Builder('repository_root'))
+        branch_node = create(Builder('repository').within(root))
+        leaf_node = create(Builder('repository').within(branch_node))
+
+        browser.login().open(branch_node)
+
+        self.assertEquals(
+            ['RepositoryFolder'],
+            factoriesmenu.addable_types())
+
+    @browsing
+    def test_addable_types_on_a_repository_leaf_folder(self, browser):
+        self.grant('Manager')
+
+        api.portal.set_registry_record(
+            'maximum_repository_depth', 3,
+            interface=IRepositoryFolderRecords)
+
+        root = create(Builder('repository_root'))
+        branch_node = create(Builder('repository').within(root))
+        leaf_node = create(Builder('repository').within(branch_node))
+
+        browser.login().open(leaf_node)
+
+        self.assertEquals(
+            ['Business Case Dossier', 'Disposition', 'Dossier with template', 'RepositoryFolder'],
+            factoriesmenu.addable_types())
+
+    @browsing
+    def test_addable_types_on_a_repository_leaf_folder_if_max_rep_depth_reached(self, browser):
+        self.grant('Manager')
+
+        api.portal.set_registry_record(
+            'maximum_repository_depth', 2,
+            interface=IRepositoryFolderRecords)
+
+        root = create(Builder('repository_root'))
+        branch_node = create(Builder('repository').within(root))
+        leaf_node = create(Builder('repository').within(branch_node))
+
+        browser.login().open(leaf_node)
+
+        self.assertEquals(
+            ['Business Case Dossier', 'Disposition', 'Dossier with template'],
+            factoriesmenu.addable_types())

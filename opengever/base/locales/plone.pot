@@ -96,6 +96,9 @@ msgstr ""
 msgid "document_with_template"
 msgstr ""
 
+msgid "Dossier with template"
+msgstr ""
+
 msgid "Dossier state changed to dossier-state-active"
 msgstr ""
 

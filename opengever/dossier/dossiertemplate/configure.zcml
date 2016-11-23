@@ -1,0 +1,14 @@
+<configure
+      xmlns="http://namespaces.zope.org/zope"
+      xmlns:browser="http://namespaces.zope.org/browser"
+      i18n_domain="opengever.dossier">
+
+  <browser:page
+      for="opengever.repository.interfaces.IRepositoryFolder"
+      name="dossier_with_template"
+      class=".form.SelectTemplateDossierView"
+      permission="zope2.View"
+      allowed_attributes="is_available"
+      />
+
+</configure>
