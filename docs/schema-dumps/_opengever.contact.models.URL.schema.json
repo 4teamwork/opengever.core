@@ -1,0 +1,36 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "title": "URL",
+    "additionalProperties": false,
+    "properties": {
+        "url": {
+            "type": "string",
+            "title": "url",
+            "description": "",
+            "_zope_schema_type": "Text"
+        },
+        "id": {
+            "type": "integer",
+            "title": "id",
+            "description": "",
+            "_zope_schema_type": "Int",
+            "default": "Sequence(urls_id_seq)"
+        },
+        "label": {
+            "type": "string",
+            "title": "label",
+            "description": "",
+            "_zope_schema_type": "Text"
+        }
+    },
+    "required": [
+        "id",
+        "url"
+    ],
+    "field_order": [
+        "id",
+        "label",
+        "url"
+    ]
+}

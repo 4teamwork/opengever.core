@@ -1,0 +1,42 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "title": "OrgRole",
+    "additionalProperties": false,
+    "properties": {
+        "function": {
+            "type": "string",
+            "title": "function",
+            "description": "",
+            "_zope_schema_type": "Text"
+        },
+        "department": {
+            "type": "string",
+            "title": "department",
+            "description": "",
+            "_zope_schema_type": "Text"
+        },
+        "id": {
+            "type": "integer",
+            "title": "id",
+            "description": "",
+            "_zope_schema_type": "Int",
+            "default": "Sequence(org_roles_id_seq)"
+        },
+        "description": {
+            "type": "string",
+            "title": "description",
+            "description": "",
+            "_zope_schema_type": "Text"
+        }
+    },
+    "required": [
+        "id"
+    ],
+    "field_order": [
+        "id",
+        "function",
+        "department",
+        "description"
+    ]
+}

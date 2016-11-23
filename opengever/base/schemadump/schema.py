@@ -1,11 +1,12 @@
 from collections import OrderedDict
 from five import grok
+from jsonschema import Draft4Validator
 from opengever.base.schemadump.config import GEVER_SQL_TYPES
 from opengever.base.schemadump.config import GEVER_TYPES
+from opengever.base.schemadump.config import JSON_SCHEMA_FIELD_TYPES
 from opengever.base.schemadump.field import FieldDumper
 from opengever.base.schemadump.field import SQLFieldDumper
 from opengever.base.schemadump.helpers import DirectoryHelperMixin
-from opengever.base.schemadump.helpers import join_lines
 from opengever.base.schemadump.helpers import translate_de
 from opengever.base.schemadump.log import setup_logging
 from opengever.base.utils import pretty_json
@@ -19,7 +20,6 @@ from Products.CMFPlone.interfaces import IPloneSiteRoot
 from sqlalchemy.ext.declarative.base import _is_mapped_class
 from zope.dottedname.resolve import resolve as resolve_dotted
 from zope.schema import getFieldsInOrder
-import os
 import transaction
 
 
@@ -162,56 +162,131 @@ class SQLTypeDumper(object):
             return type_dump
 
 
-class JSONSchemaDumpWriter(DirectoryHelperMixin):
-    """Dumps a JSON representation of common GEVER types and their schemas.
+class JSONSchemaGenerator(object):
+    """Generates a JSON Schema representation of a single GEVER type (as a
+    Python data structure).
     """
 
-    def dump_to_fs(self):
-        result = join_lines(self._dump())
-        return result
+    def generate_schema(self, portal_type):
+        schema = OrderedDict([
+            (u'$schema', u'http://json-schema.org/draft-04/schema#'),
+            (u'type', u'object'),
+            (u'title', None),
+            ('additionalProperties', False),
+            (u'properties', {}),
+        ])
 
-    def purge_schema_dumps(self):
-        dir_ = self.schema_dumps_dir
-        for name in os.listdir(dir_):
-            if name.endswith('.json'):
-                os.remove(pjoin(dir_, name))
+        if portal_type in GEVER_TYPES:
+            type_dumper = TypeDumper()
+        elif portal_type in GEVER_SQL_TYPES:
+            type_dumper = SQLTypeDumper()
+        else:
+            raise Exception("Unmapped type: %r" % portal_type)
 
-    def _dump(self):
-        type_dumper = TypeDumper()
-        sql_type_dumper = SQLTypeDumper()
+        type_dump = type_dumper.dump(portal_type)
+        type_schema = self._js_type_from_type_dump(type_dump)
+        schema.update(type_schema)
 
-        self.purge_schema_dumps()
-        for portal_type in GEVER_TYPES:
-            type_dump = type_dumper.dump(portal_type)
-            dump_path = pjoin(self.schema_dumps_dir, '%s.json' % portal_type)
+        Draft4Validator.check_schema(schema)
+        return schema
+
+    def _js_type_from_type_dump(self, type_dump):
+        json_schema_type = OrderedDict([
+            ('type', 'object'),
+            ('properties', {}),
+            ('title', type_dump['title']),
+        ])
+
+        constraints = {'required': [], 'anyOf': []}
+
+        field_order = []
+        # Collect field info from all schemas (base schema + behaviors)
+        for schema in type_dump['schemas']:
+            # Note: This is not the final / "correct" field order as displayed
+            # in the user interface (which should eventually honor fieldsets
+            # and plone.autoform directives).
+            # The intent here is rather to keep a *consistent* order for now.
+            field_order.extend([field['name'] for field in schema['fields']])
+            for field in schema['fields']:
+                name = field['name']
+                json_schema_field = self._js_property_from_field_dump(field)
+
+                if 'default' in field:
+                    json_schema_field['default'] = field['default']
+
+                if field.get('vocabulary'):
+                    vocab = field['vocabulary']
+                    if isinstance(vocab, basestring) and vocab.startswith('<'):
+                        json_schema_field['_vocabulary'] = vocab
+                    else:
+                        json_schema_field['enum'] = vocab
+
+                json_schema_type['properties'][name] = json_schema_field
+
+                if field.get('required', False):
+                    constraints['required'].append(name)
+
+                if name in ('title_de', 'title_fr'):
+                    constraints['anyOf'].append({'required': [name]})
+
+        for c_name, c_value in constraints.items():
+            if c_value:
+                json_schema_type[c_name] = c_value
+
+        json_schema_type['field_order'] = field_order
+        return json_schema_type
+
+    def _js_property_from_field_dump(self, field):
+        """Create a JSON Schema property definition from a field info dump.
+        """
+        js_property = OrderedDict(title=None, type=None)
+
+        try:
+            type_ = JSON_SCHEMA_FIELD_TYPES[field['type']].copy()
+            js_property.update(sorted(type_.items()))
+        except KeyError:
+            raise Exception(
+                "Don't know what JS type to map %r to. Please map it in "
+                "JSON_SCHEMA_FIELD_TYPES first." % field['type'])
+
+        if field['type'] == 'Choice':
+            js_property['type'] = field['value_type']
+
+        js_property['title'] = field['title']
+        js_property['description'] = field['description']
+        js_property['_zope_schema_type'] = field['type']
+
+        return js_property
+
+
+class JSONSchemaDumpWriter(DirectoryHelperMixin):
+    """Collects JSON Schema representations of common GEVER types and dumps
+    them to the file system.
+    """
+
+    def dump(self):
+        generator = JSONSchemaGenerator()
+
+        for portal_type in GEVER_TYPES + GEVER_SQL_TYPES:
+            schema = generator.generate_schema(portal_type)
+            filename = '%s.schema.json' % portal_type
+            dump_path = pjoin(self.schema_dumps_dir, filename)
 
             with open(dump_path, 'w') as dump_file:
-                json_dump = pretty_json(type_dump)
+                json_dump = pretty_json(schema)
                 dump_file.write(json_dump)
 
             log.info('Dumped: %s\n' % dump_path)
-            yield json_dump
-
-        for sql_type in GEVER_SQL_TYPES:
-            sql_type_dump = sql_type_dumper.dump(sql_type)
-            dump_path = pjoin(self.schema_dumps_dir, '%s.json' % sql_type)
-
-            with open(dump_path, 'w') as dump_file:
-                json_dump = pretty_json(sql_type_dump)
-                dump_file.write(json_dump)
-
-            log.info('Dumped: %s\n' % dump_path)
-            yield json_dump
 
 
 def dump_schemas():
-    """Dump schemas of common GEVER content types to the filesystem.
+    """Dump JSON Schemas of common GEVER content types to the filesystem.
 
-    Dumps will be JSON representations of the schemas and their fields.
+    Dumps will be JSON Schema representations of the schemas and their fields.
     """
     transaction.doom()
     writer = JSONSchemaDumpWriter()
-    result = writer.dump_to_fs()
+    result = writer.dump()
     return result
 
 

@@ -5,6 +5,9 @@ Changelog
 4.13.1 (unreleased)
 -------------------
 
+- Switch schema dumps to JSON schema.
+  [lgraf]
+
 - Update task workflow, allow "Contributor" to "Access contents information" of a task.
   This is necessary to allow editing of related documents when documents inside a task
   are referenced from a second task in the same dossier.

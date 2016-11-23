@@ -1,0 +1,60 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "title": "Organization",
+    "additionalProperties": false,
+    "properties": {
+        "description": {
+            "type": "string",
+            "title": "description",
+            "description": "",
+            "_zope_schema_type": "Text"
+        },
+        "contact_type": {
+            "type": "string",
+            "title": "contact_type",
+            "description": "",
+            "_zope_schema_type": "Text"
+        },
+        "is_active": {
+            "type": "boolean",
+            "title": "is_active",
+            "description": "",
+            "_zope_schema_type": "Bool",
+            "default": true
+        },
+        "former_contact_id": {
+            "type": "integer",
+            "title": "former_contact_id",
+            "description": "",
+            "_zope_schema_type": "Int"
+        },
+        "id": {
+            "type": "integer",
+            "title": "id",
+            "description": "",
+            "_zope_schema_type": "Int",
+            "default": "Sequence(contacts_id_seq)"
+        },
+        "name": {
+            "type": "string",
+            "title": "name",
+            "description": "",
+            "_zope_schema_type": "Text"
+        }
+    },
+    "required": [
+        "name",
+        "id",
+        "contact_type",
+        "is_active"
+    ],
+    "field_order": [
+        "name",
+        "id",
+        "contact_type",
+        "is_active",
+        "description",
+        "former_contact_id"
+    ]
+}

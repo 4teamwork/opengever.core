@@ -33,42 +33,61 @@ class SchemaDocsBuilder(DirectoryHelperMixin):
                 doc_file.write(type_doc.encode('utf-8'))
             print "Updated {}".format(doc_path)
 
-    def _build_docs_for_type(self, portal_type):
-            type_dump_path = pjoin(
-                self.schema_dumps_dir,
-                '{}.json'.format(portal_type))
+    def ordered_fields(self, schema):
+        """Return (field_name, field_info) tuples in order according to
+        the `field_order` property.
+        """
+        field_order = schema['field_order']
+
+        def keyfunc(pair):
+            key, value = pair
             try:
-                type_dump = json.load(open(type_dump_path))
+                idx = field_order.index(key)
+            except ValueError:
+                idx = -1
+            return idx
+
+        return sorted(schema['properties'].items(), key=keyfunc)
+
+    def _build_docs_for_type(self, portal_type):
+            schema_filename = '{}.schema.json'.format(portal_type)
+            schema_path = pjoin(self.schema_dumps_dir, schema_filename)
+
+            try:
+                json_schema = json.load(open(schema_path))
             except IOError:
                 self._show_create_schema_dumps_message()
                 raise
 
             field_docs = []
-            for schema in type_dump['schemas']:
 
-                for field in schema['fields']:
-                    field_doc = self._build_docs_for_field(field)
-                    field_docs.append(field_doc)
+            for field_name, field_info in self.ordered_fields(json_schema):
+                required = field_name in json_schema['required']
+                field_doc = self._build_docs_for_field(
+                    field_name, field_info, required)
+                field_docs.append(field_doc)
 
             type_template = env.get_template('type.rst')
             type_doc = type_template.render(
                 dict(
                     portal_type=portal_type,
-                    title=type_dump['title'],
+                    title=json_schema['title'],
                     field_docs=u'\n'.join(field_docs),
                 )
             )
 
             return type_doc
 
-    def _build_docs_for_field(self, field):
-        field = field.copy()
+    def _build_docs_for_field(self, field_name, field_info, required=False):
+        field = field_info.copy()
+        field['name'] = field_name
+        field['type'] = field['_zope_schema_type']
 
-        if not field['desc'].strip():
-            field.pop('desc')
+        if not field['description'].strip():
+            field.pop('description')
 
-        if not field['required']:
-            field.pop('required')
+        if required:
+            field['required'] = True
 
         if 'default' in field:
             default = field['default']
@@ -77,11 +96,11 @@ class SchemaDocsBuilder(DirectoryHelperMixin):
                 default = json.dumps(default)
             field['default'] = default
 
-        if 'vocabulary' in field:
-            vocab = field['vocabulary']
-            if not self._is_placeholder(vocab):
-                vocab = json.dumps(vocab)
-            field['vocabulary'] = vocab
+        if 'enum' in field:
+            field['vocabulary'] = json.dumps(field['enum'])
+        elif '_vocabulary' in field:
+            # placeholder
+            field['vocabulary'] = field['_vocabulary']
 
         field_template = env.get_template('field.rst')
         field_doc = field_template.render(**field)

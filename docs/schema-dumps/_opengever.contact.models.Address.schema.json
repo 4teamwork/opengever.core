@@ -1,0 +1,56 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "title": "Address",
+    "additionalProperties": false,
+    "properties": {
+        "city": {
+            "type": "string",
+            "title": "city",
+            "description": "",
+            "_zope_schema_type": "Text"
+        },
+        "country": {
+            "type": "string",
+            "title": "country",
+            "description": "",
+            "_zope_schema_type": "Text"
+        },
+        "label": {
+            "type": "string",
+            "title": "label",
+            "description": "",
+            "_zope_schema_type": "Text"
+        },
+        "street": {
+            "type": "string",
+            "title": "street",
+            "description": "",
+            "_zope_schema_type": "Text"
+        },
+        "id": {
+            "type": "integer",
+            "title": "id",
+            "description": "",
+            "_zope_schema_type": "Int",
+            "default": "Sequence(adresses_id_seq)"
+        },
+        "zip_code": {
+            "type": "string",
+            "title": "zip_code",
+            "description": "",
+            "_zope_schema_type": "Text"
+        }
+    },
+    "required": [
+        "id"
+    ],
+    "field_order": [
+        "id",
+        "label",
+        "street",
+        "zip_code",
+        "city",
+        "country"
+    ]
+}
