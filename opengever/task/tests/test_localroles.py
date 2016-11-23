@@ -1,5 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browsing
 from opengever.testing import FunctionalTestCase
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
@@ -9,8 +10,8 @@ class TestLocalRolesSetter(FunctionalTestCase):
 
     def setUp(self):
         super(TestLocalRolesSetter, self).setUp()
-        create(Builder('ogds_user').id('hugo.boss'))
-        create(Builder('ogds_user').id('james.bond'))
+        self.hugo = create(Builder('ogds_user').id('hugo.boss'))
+        self.james = create(Builder('ogds_user').id('james.bond'))
 
     def test_responsible_has_local_editor_role_on_task_when_is_added(self):
         task = create(Builder('task').having(responsible='hugo.boss'))
@@ -146,3 +147,27 @@ class TestLocalRolesSetter(FunctionalTestCase):
 
         self.assertEquals(
             (), task.get_local_roles_for_userid('inbox:client1'))
+
+    @browsing
+    def test_responsible_can_edit_related_documents_that_are_inside_a_task(self, browser):
+        create(Builder('user').with_userid('hugo.boss'))
+
+        dossier = create(Builder('dossier'))
+        task1 = create(Builder('task')
+                       .within(dossier))
+        referenced_document = create(Builder('document')
+                                     .within(task1)
+                                     .with_dummy_content()
+                                     .checked_out_by('hugo.boss'))
+        task2 = create(Builder('task')
+                       .within(dossier)
+                       .relate_to(referenced_document)
+                       .having(responsible='hugo.boss',
+                               responsible_client='client1'))
+
+        browser.login('hugo.boss')
+        # this will fail if permissions are set incorrectly
+        browser.open(referenced_document, view='external_edit')
+
+        self.assertEqual('application/x-zope-edit', browser.mimetype)
+        self.assertIsNotNone(browser.contents)
