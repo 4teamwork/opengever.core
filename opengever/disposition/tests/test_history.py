@@ -168,7 +168,7 @@ class TestHistoryListingInOverview(FunctionalTestCase):
         add = browser.css('div.details ul')[1]
 
         self.assertEquals(
-            ['Client1 1 / 1 Archive', "Client1 1 / 2 Don't Archive"],
+            ['Client1 1 / 1 Archive', "Client1 1 / 2 Don't archive"],
             appraise.css('li').text)
         self.assertEquals(
             ['Client1 1 / 1 Archive', 'Client1 1 / 2 Archive'],

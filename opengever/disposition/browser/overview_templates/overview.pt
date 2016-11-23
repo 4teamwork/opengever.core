@@ -163,7 +163,7 @@
                     <span tal:condition="detail/appraisal"
                           i18n:translate="label_archive">Archive</span>
                     <span tal:condition="not: detail/appraisal"
-                          i18n:translate="label_dont_archive">Don't Archive</span>
+                          i18n:translate="label_dont_archive">Don't archive</span>
                   </li>
                 </ul>
               </div>
