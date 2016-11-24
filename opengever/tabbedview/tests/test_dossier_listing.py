@@ -86,8 +86,8 @@ class TestDossierListing(FunctionalTestCase):
             data={'dossier_state_filter': 'filter_retention_expired'})
 
         table = browser.css('.listing').first
-        self.assertEquals(['Dossier B', 'Dossier C'],
-                          [row.get('Title') for row in table.dicts()])
+        self.assertItemsEqual(['Dossier B', 'Dossier C'],
+                              [row.get('Title') for row in table.dicts()])
 
         # update retention_period for dossier_b, so that its no longer expired
         IDossier(self.dossier_b).end = date.today() - relativedelta(years=1)
