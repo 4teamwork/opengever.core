@@ -8,6 +8,7 @@ from ftw.testbrowser.pages import plone
 from ftw.testing import freeze
 from ooxml_docprops import read_properties
 from opengever.contact.interfaces import IContactSettings
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_DOSSIER_TEMPLATE_LAYER
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.dossier.docprops import TemporaryDocFile
 from opengever.dossier.interfaces import ITemplateDossierProperties
@@ -688,3 +689,15 @@ class TestTemplateDocumentTabs(FunctionalTestCase):
         self.assertEquals([['Logged-in users', False, False, False],
                            [TEST_USER_ID, True, True, True]],
                           sharing_tab_data())
+
+
+class TestDossierTemplateFeature(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_DOSSIER_TEMPLATE_LAYER
+
+    @browsing
+    def test_dossier_template_is_addable_if_dossier_template_feature_is_enabled(self, browser):
+        templatedossier = create(Builder('templatedossier'))
+        browser.login().open(templatedossier)
+
+        self.assertIn('Dossier template', factoriesmenu.addable_types())

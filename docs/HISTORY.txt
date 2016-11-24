@@ -5,6 +5,9 @@ Changelog
 4.13.1 (unreleased)
 -------------------
 
+- Add initial dossiertemplate type.
+  [elioschmutz]
+
 - Switch schema dumps to JSON schema.
   [lgraf]
 

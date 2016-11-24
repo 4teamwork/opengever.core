@@ -7,7 +7,7 @@
         id="opengever.dossier.AddBusinessCaseDossier"
         title="opengever.dossier: Add businesscasedossier"
         />
-        
+
     <permission
         id="opengever.dossier.AddProjectDossier"
         title="opengever.dossier: Add projectdossier"
@@ -17,5 +17,10 @@
         id="opengever.dossier.AddTemplateDossier"
         title="opengever.dossier: Add templatedossier"
         />
-   
+
+    <permission
+        id="opengever.dossier.AddDossierTemplate"
+        title="opengever.dossier: Add dossiertemplate"
+        />
+
 </configure>

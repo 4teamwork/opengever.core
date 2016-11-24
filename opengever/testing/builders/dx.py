@@ -39,6 +39,12 @@ class TemplateDossierBuilder(TranslatedTitleBuilderMixin, DexterityBuilder):
 builder_registry.register('templatedossier', TemplateDossierBuilder)
 
 
+class DossierTemplateBuilder(TranslatedTitleBuilderMixin, DexterityBuilder):
+    portal_type = 'opengever.dossier.dossiertemplate'
+
+builder_registry.register('dossiertemplate', DossierTemplateBuilder)
+
+
 class InboxBuilder(TranslatedTitleBuilderMixin, DexterityBuilder):
     portal_type = 'opengever.inbox.inbox'
 

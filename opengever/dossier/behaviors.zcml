@@ -40,6 +40,15 @@
         for="opengever.dossier.behaviors.dossier.IDossierMarker"
         />
 
+    <!-- dossiertemplate name from title beahvior -->
+    <plone:behavior
+        title="dossiertemplate name from title"
+        description=""
+        provides=".dossiertemplate.behaviors.IDossierTemplateNameFromTitle"
+        factory=".dossiertemplate.behaviors.DossierTemplateNameFromTitle"
+        for="opengever.dossier.dossiertemplate.behaviors.IDossierTemplate"
+        />
+
     <!-- Restricted dossier behavior -->
     <plone:behavior
         title="Restricted dossier"
