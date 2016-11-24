@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-11-23 14:56+0000\n"
+"POT-Creation-Date: 2016-11-24 10:39+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,14 +32,19 @@ msgid "document_sequence_number"
 msgstr "Laufnummer"
 
 #. Default: "The dossier ${title} is already offered in a different disposition."
-#: ./opengever/disposition/validators.py:25
+#: ./opengever/disposition/validators.py:27
 msgid "error_offered_in_a_different_disposition"
 msgstr "Das Dossier ${title} ist bereits in einem anderen Angebot angeboten."
 
 #. Default: "The retention period of the selected dossiers is not expired."
-#: ./opengever/disposition/validators.py:19
+#: ./opengever/disposition/validators.py:21
 msgid "error_retention_period_not_expired"
 msgstr "Die Aufbewahrungsfrist der selektierten Dossiers ist nicht abgelaufen."
+
+#. Default: "Common"
+#: ./opengever/disposition/disposition.py:88
+msgid "fieldset_common"
+msgstr "Allgemein"
 
 #. Default: "Archive"
 #: ./opengever/disposition/browser/overview_templates/overview.pt:23
@@ -52,7 +57,7 @@ msgid "label_details"
 msgstr "Details:"
 
 #. Default: "Disposition"
-#: ./opengever/disposition/disposition.py:138
+#: ./opengever/disposition/disposition.py:144
 msgid "label_disposition"
 msgstr "Angebot"
 
@@ -73,7 +78,7 @@ msgid "label_dosisers"
 msgstr "Dossiers"
 
 #. Default: "Dossiers"
-#: ./opengever/disposition/disposition.py:92
+#: ./opengever/disposition/disposition.py:93
 msgid "label_dossiers"
 msgstr "Dossiers"
 
@@ -82,15 +87,15 @@ msgstr "Dossiers"
 msgid "label_export_appraisal_list_as_excel"
 msgstr "Bewertungsliste als Excel exportieren"
 
-#. Default: "Reference"
-#: ./opengever/disposition/disposition.py:87
-msgid "label_reference"
-msgstr "Referenz"
-
 #. Default: "Title"
 #: ./opengever/disposition/browser/listing.py:29
 msgid "label_title"
 msgstr "Titel"
+
+#. Default: "Transfer number"
+#: ./opengever/disposition/disposition.py:113
+msgid "label_transfer_number"
+msgstr "Ablieferungsnummer"
 
 #. Default: "Added by ${user}"
 #: ./opengever/disposition/history.py:67
