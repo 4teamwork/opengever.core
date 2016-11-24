@@ -1,25 +1,20 @@
-from five import grok
 from opengever.base import _ as base_mf
 from opengever.base.behaviors.utils import set_attachment_content_disposition
 from opengever.base.reporter import DATE_NUMBER_FORMAT
 from opengever.base.reporter import StringTranslater
 from opengever.base.reporter import XLSReporter
 from opengever.disposition import _
-from opengever.disposition.interfaces import IDisposition
 from opengever.dossier import _ as dossier_mf
 from plone import api
+from Products.Five.browser import BrowserView
 
 
-class DispositionExcelExport(grok.View):
+class DispositionExcelExport(BrowserView):
     """View that generates an excel spreadsheet for the disposition.
 
     The generated files lists the selected dossiers (paths in request) and
     their important attributes.
     """
-
-    grok.context(IDisposition)
-    grok.name('download_excel')
-    grok.require('zope2.View')
 
     def get_attributes(self):
         return [
@@ -48,7 +43,7 @@ class DispositionExcelExport(grok.View):
              'title': base_mf(u'label_appraisal', default=u'Appraisal')},
         ]
 
-    def render(self):
+    def __call__(self):
         reporter = XLSReporter(
             self.request, self.get_attributes(),
             self.context.get_dossier_representations(),

@@ -14,4 +14,10 @@
       name="ech0160_export"
       permission="cmf.ManagePortal"/>
 
+  <browser:page
+      class=".excel_export.DispositionExcelExport"
+      for="opengever.disposition.interfaces.IDisposition"
+      name="download_excel"
+      permission="zope2.View"/>
+
 </configure>
