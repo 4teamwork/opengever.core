@@ -26,6 +26,9 @@ import transaction
 log = setup_logging(__name__)
 
 
+TRANSLATED_TITLE_NAMES = ('title_de', 'title_fr')
+
+
 class SchemaDumper(object):
     """Dumps a simple Python representation of a zope.schema Schema interface.
     """
@@ -224,9 +227,10 @@ class JSONSchemaGenerator(object):
                 json_schema_type['properties'][name] = json_schema_field
 
                 if field.get('required', False):
-                    constraints['required'].append(name)
+                    if name not in TRANSLATED_TITLE_NAMES:
+                        constraints['required'].append(name)
 
-                if name in ('title_de', 'title_fr'):
+                if name in TRANSLATED_TITLE_NAMES:
                     constraints['anyOf'].append({'required': [name]})
 
         for c_name, c_value in constraints.items():

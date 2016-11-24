@@ -18,7 +18,7 @@
 
        :Feldname: :field-title:`Klassifikation`
        :Datentyp: ``Choice``
-       :Pflichtfeld: Ja :required:`(*)`
+       
        :Default: "unprotected"
        :Beschreibung: Grad, in dem die Unterlagen vor unberechtigter Einsicht geschützt werden müssen
        :Wertebereich: ["unprotected", "confidential", "classified"]
@@ -28,7 +28,7 @@
 
        :Feldname: :field-title:`Datenschutzstufe`
        :Datentyp: ``Choice``
-       :Pflichtfeld: Ja :required:`(*)`
+       
        :Default: "privacy_layer_no"
        :Beschreibung: Markierung, die angibt, ob die Unterlagen besonders schützenswerte Personendaten oder Persönlichkeitsprofile gemäss Datenschutzrecht enthalten
        :Wertebereich: ["privacy_layer_no", "privacy_layer_yes"]
@@ -38,7 +38,7 @@
 
        :Feldname: :field-title:`Öffentlichkeitsstatus`
        :Datentyp: ``Choice``
-       :Pflichtfeld: Ja :required:`(*)`
+       
        :Default: "unchecked"
        :Beschreibung: Angabe, ob die Unterlagen gemäss Öffentlichkeitsgesetz zugänglich sind oder nicht
        :Wertebereich: ["unchecked", "public", "limited-public", "private"]

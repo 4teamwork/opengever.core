@@ -184,16 +184,6 @@
             "_zope_schema_type": "Tuple"
         }
     },
-    "required": [
-        "classification",
-        "privacy_layer",
-        "public_trial",
-        "title_de",
-        "title_fr",
-        "retention_period",
-        "archival_value",
-        "custody_period"
-    ],
     "anyOf": [
         {
             "required": [

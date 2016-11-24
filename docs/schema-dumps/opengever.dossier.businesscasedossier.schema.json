@@ -224,13 +224,7 @@
     },
     "required": [
         "title",
-        "responsible",
-        "classification",
-        "privacy_layer",
-        "public_trial",
-        "retention_period",
-        "archival_value",
-        "custody_period"
+        "responsible"
     ],
     "field_order": [
         "title",

@@ -38,7 +38,7 @@
 
        :Feldname: :field-title:`Titel (deutsch)`
        :Datentyp: ``TextLine``
-       :Pflichtfeld: Ja :required:`(*)`
+       
        
        
        
@@ -48,7 +48,7 @@
 
        :Feldname: :field-title:`Titel (französisch)`
        :Datentyp: ``TextLine``
-       :Pflichtfeld: Ja :required:`(*)`
+       
        
        
        

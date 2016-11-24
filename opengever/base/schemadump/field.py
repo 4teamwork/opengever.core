@@ -56,6 +56,11 @@ class FieldDumper(object):
         default_value = self._get_default(field)
         if default_value is not NO_DEFAULT_MARKER:
             field_dump['default'] = default_value
+            # Also remove a potential `required` flag from the field if there
+            # is a default. The field may be tagged as being required on a
+            # zope.schema level, but functionally it's not actually required
+            # if a default value is defined.
+            field_dump['required'] = False
 
         # Determine vocabulary, if applicable
         log.debug("      Determining vocabulary...")

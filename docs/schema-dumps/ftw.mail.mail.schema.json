@@ -165,11 +165,6 @@
             "_zope_schema_type": "TextLine"
         }
     },
-    "required": [
-        "classification",
-        "privacy_layer",
-        "public_trial"
-    ],
     "field_order": [
         "message",
         "classification",
