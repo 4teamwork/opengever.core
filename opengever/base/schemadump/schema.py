@@ -163,12 +163,12 @@ class SQLTypeDumper(object):
             return type_dump
 
 
-class JSONSchemaGenerator(object):
-    """Generates a JSON Schema representation of a single GEVER type (as a
+class JSONSchemaBuilder(object):
+    """Builds a JSON Schema representation of a single GEVER type (as a
     Python data structure).
     """
 
-    def generate_schema(self, portal_type):
+    def build_schema(self, portal_type):
         schema = OrderedDict([
             (u'$schema', u'http://json-schema.org/draft-04/schema#'),
             (u'type', u'object'),
@@ -267,10 +267,10 @@ class JSONSchemaDumpWriter(DirectoryHelperMixin):
     """
 
     def dump(self):
-        generator = JSONSchemaGenerator()
+        builder = JSONSchemaBuilder()
 
         for portal_type in GEVER_TYPES + GEVER_SQL_TYPES:
-            schema = generator.generate_schema(portal_type)
+            schema = builder.build_schema(portal_type)
             filename = '%s.schema.json' % portal_type
             dump_path = pjoin(self.schema_dumps_dir, filename)
 
