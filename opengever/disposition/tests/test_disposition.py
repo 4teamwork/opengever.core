@@ -9,7 +9,6 @@ from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testing import freeze
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.testing import FunctionalTestCase
-from opengever.testing import obj2brain
 from opengever.testing import obj2paths
 from plone import api
 from plone.protect import createToken
@@ -45,18 +44,21 @@ class TestDisposition(FunctionalTestCase):
         self.assertEquals('disposition-1', disposition_1.getId())
         self.assertEquals('disposition-2', disposition_2.getId())
 
-    def test_title_composed_disposition_label_adminunit_abbreviation_creation_year_and_sequence_number(self):
+    @browsing
+    def test_title_is_prefilled_with_default_suggestion(self, browser):
+        """Expected format:
+        Disposition {adminiunit-abbreviation} {today's date}'.
+        """
+
+        expected = 'Disposition Client1 Jan 01, 2014'
 
         with freeze(datetime(2014, 1, 1)):
-            disposition = create(Builder('disposition'))
+            browser.login().open(
+                self.repository,
+                view="++add++opengever.disposition.disposition")
 
-            expected = u'Disposition Client1 2014 1'
-            self.assertEquals(expected, disposition.title)
-            self.assertEquals(expected.decode('utf-8'), disposition.Title())
-            self.assertEquals(expected, obj2brain(disposition).Title)
-
-        with freeze(datetime(2016, 1, 1)):
-            self.assertEquals(u'Disposition Client1 2014 1', disposition.title)
+            self.assertEquals(
+                expected, browser.forms.get('form').find_field('Title').value)
 
     @browsing
     def test_can_be_added(self, browser):

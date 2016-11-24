@@ -1,7 +1,7 @@
 from collective import dexteritytextindexer
+from datetime import date
 from opengever.base.behaviors.classification import IClassification
 from opengever.base.behaviors.lifecycle import ILifeCycle
-from opengever.base.interfaces import ISequenceNumber
 from opengever.base.security import elevated_privileges
 from opengever.disposition import _
 from opengever.disposition.appraisal import IAppraisal
@@ -81,12 +81,32 @@ class RemovedDossierDispositionInformation(DossierDispositionInformation):
         return False
 
 
+def title_default():
+    """Returns title suggestion in the following format:
+
+    `Disposition {admin unit abbreviation} {localized today's date}`
+    """
+    return u'{} {} {}'.format(
+        translate(_('label_disposition', default=u'Disposition'),
+                  context=getRequest()),
+        get_current_admin_unit().abbreviation,
+        api.portal.get_localized_time(date.today(), long_format=False))
+
+
 class IDispositionSchema(form.Schema):
 
     form.fieldset(
         u'common',
         label=_(u'fieldset_common', default=u'Common'),
-        fields=[u'dossiers', u'transfer_number'],
+        fields=[u'title', u'dossiers', u'transfer_number'],
+    )
+
+    dexteritytextindexer.searchable('title')
+    title = schema.TextLine(
+        title=_(u"label_title", default=u"Title"),
+        required=True,
+        max_length=256,
+        defaultFactory=title_default,
     )
 
     dossiers = RelationList(
@@ -121,7 +141,6 @@ validator.WidgetValidatorDiscriminators(
 provideAdapter(OfferedDossiersValidator)
 
 
-
 class Disposition(Container):
     implements(IDisposition)
 
@@ -131,25 +150,6 @@ class Disposition(Container):
         super(Disposition, self).__init__(*args, **kwargs)
         self.appraisal = {}
         self._dossiers = PersistentList()
-
-    @property
-    def title(self):
-        """The disposition title is composed of the string Disposition,
-        the client abbrivation, the year of the creation and the
-        disposition sequence number.
-
-        Angebot SKA.ARCH 2016 3
-        """
-        return u'{} {} {} {}'.format(
-            translate(_('label_disposition', default=u'Disposition'),
-                      context=getRequest()),
-            get_current_admin_unit().abbreviation,
-            self.created().year(),
-            getUtility(ISequenceNumber).get_number(self))
-
-    @title.setter
-    def title(self, x):
-        pass
 
     @property
     def dossiers(self):
