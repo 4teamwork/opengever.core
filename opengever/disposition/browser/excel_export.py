@@ -31,14 +31,18 @@ class DispositionExcelExport(BrowserView):
              'number_format': DATE_NUMBER_FORMAT},
             {'id': 'public_trial',
              'title': base_mf(u'label_public_trial', default=u'Public Trial'),
-             'transform': StringTranslater(self.request, 'opengever.base').translate},
+             'transform': StringTranslater(
+                 self.request, 'opengever.base').translate},
             {'id': 'archival_value',
-             'title': base_mf(u'label_archival_value', default=u'Archival value'),
-             'transform': StringTranslater(self.request, 'opengever.base').translate},
+             'title': base_mf(u'label_archival_value',
+                              default=u'Archival value'),
+             'transform': StringTranslater(
+                 self.request, 'opengever.base').translate},
             {'id': 'archival_value_annotation',
              'title': base_mf(u'label_archival_value_annotation',
                               default=u'archivalValueAnnotation'),
-             'transform': StringTranslater(self.request, 'opengever.base').translate},
+             'transform': StringTranslater(
+                 self.request, 'opengever.base').translate},
             {'id': 'appraisal',
              'title': base_mf(u'label_appraisal', default=u'Appraisal')},
         ]
