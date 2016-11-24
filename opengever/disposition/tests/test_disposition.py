@@ -62,7 +62,7 @@ class TestDisposition(FunctionalTestCase):
     def test_can_be_added(self, browser):
         browser.login().open(self.root)
         factoriesmenu.add('Disposition')
-        browser.fill({'Reference': 'Ablieferung X29238',
+        browser.fill({'Transfer number': 'Ablieferung X29238',
                       'Dossiers': [self.dossier1, self.dossier3]})
         browser.find('Save').click()
 
@@ -76,7 +76,7 @@ class TestDisposition(FunctionalTestCase):
                              view='++add++opengever.disposition.disposition',
                              data=data)
 
-        browser.fill({'Reference': 'Ablieferung X29238'})
+        browser.fill({'Transfer number': 'Ablieferung X29238'})
         browser.find('Save').click()
 
         self.assertEquals([self.dossier1, self.dossier3],
@@ -125,7 +125,7 @@ class TestDisposition(FunctionalTestCase):
                              view='++add++opengever.disposition.disposition',
                              data=data)
 
-        browser.fill({'Reference': 'Ablieferung X29238'})
+        browser.fill({'Transfer number': 'Ablieferung X29238'})
         browser.find('Save').click()
 
         self.assertEquals(['There were some errors.'], error_messages())

@@ -49,7 +49,7 @@ class TestHistoryEntries(FunctionalTestCase):
     @browsing
     def test_add_history_entry_when_editing_a_disposition(self, browser):
         browser.login().open(self.disposition, view='edit')
-        browser.fill({'Reference': 'Ablieferung X29238',
+        browser.fill({'Transfer number': 'Ablieferung X29238',
                       'Dossiers': [self.dossier1, self.dossier2]})
         browser.find('Save').click()
 
