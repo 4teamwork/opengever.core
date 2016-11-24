@@ -114,12 +114,6 @@
                     "description": "Referenz auf das entsprechende Dossier des Absenders",
                     "_zope_schema_type": "TextLine"
                 },
-                "thumbnail": {
-                    "type": "string",
-                    "title": "Kurzbild",
-                    "description": "",
-                    "_zope_schema_type": "NamedBlobFile"
-                },
                 "description": {
                     "type": "string",
                     "title": "Beschreibung",
@@ -208,7 +202,6 @@
                 "preserved_as_paper",
                 "archival_file",
                 "archival_file_state",
-                "thumbnail",
                 "preview"
             ],
             "required": [

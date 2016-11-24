@@ -44,6 +44,7 @@ DEFAULT_OVERRIDES = {
 
 IGNORED_FIELDS = [
     'plone.app.versioningbehavior.behaviors.IVersionable.changeNote',
+    'opengever.document.behaviors.metadata.IDocumentMetadata.thumbnail',
 ]
 
 JSON_SCHEMA_FIELD_TYPES = {
