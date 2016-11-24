@@ -1,9 +1,8 @@
-from five import grok
-from plone.directives import dexterity
+from plone.dexterity.browser import add
 
 
-class DispositionAddForm(dexterity.AddForm):
-    grok.name('opengever.disposition.disposition')
+class DispositionAddForm(add.DefaultAddForm):
+    portal_type = 'opengever.disposition.disposition'
 
     def update(self):
         """Insert selected dossier paths into the request.
@@ -13,3 +12,7 @@ class DispositionAddForm(dexterity.AddForm):
             self.request.set('form.widgets.dossiers', paths)
 
         return super(DispositionAddForm, self).update()
+
+
+class DispositionAddView(add.DefaultAddView):
+    form = DispositionAddForm

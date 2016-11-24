@@ -1,4 +1,3 @@
-from five import grok
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_UNWORTHY
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_WORTHY
 from opengever.base.behaviors.lifecycle import ILifeCycle
@@ -6,22 +5,23 @@ from opengever.disposition.interfaces import IAppraisal
 from opengever.disposition.interfaces import IDisposition
 from persistent.dict import PersistentDict
 from zope.annotation.interfaces import IAnnotations
+from zope.component import adapter
 from zope.component import getUtility
+from zope.interface import implementer
 from zope.intid.interfaces import IIntIds
 
 
-class Appraisal(grok.Adapter):
+@implementer(IAppraisal)
+@adapter(IDisposition)
+class Appraisal(object):
     """Adapter for disposition objects, which stores the archival appraisal
     for each dossiers in the annotations of the context (disposition).
     """
 
-    grok.provides(IAppraisal)
-    grok.context(IDisposition)
-
     key = 'disposition_appraisal'
 
     def __init__(self, context):
-        super(Appraisal, self).__init__(context)
+        self.context = context
         self._annotations = IAnnotations(self.context)
         if self.key not in self._annotations.keys():
             self._annotations[self.key] = PersistentDict()

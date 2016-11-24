@@ -8,10 +8,45 @@
       directory="resources"
       />
 
+  <!-- Disposition add form  -->
+  <adapter
+      for="Products.CMFCore.interfaces.IFolderish
+           zope.publisher.interfaces.browser.IDefaultBrowserLayer
+           plone.dexterity.interfaces.IDexterityFTI"
+      provides="zope.publisher.interfaces.browser.IBrowserPage"
+      factory=".form.DispositionAddView"
+      name="opengever.disposition.disposition"
+      />
+  <class class=".form.DispositionAddView">
+    <require
+        permission="cmf.AddPortalContent"
+        interface="zope.publisher.interfaces.browser.IBrowserPage"
+        />
+  </class>
+
   <browser:page
       class=".ech0160.ECH0160ExportView"
       for="opengever.disposition.interfaces.IDisposition"
       name="ech0160_export"
       permission="cmf.ManagePortal"/>
+
+  <browser:page
+      class=".overview.DispositionOverview"
+      for="opengever.disposition.interfaces.IDisposition"
+      name="tabbedview_view-overview"
+      permission="zope2.View"
+      template="templates/overview.pt"/>
+
+  <browser:page
+      class=".views.UpdateAppraisalView"
+      for="*"
+      name="update_appraisal_view"
+      permission="zope2.View"/>
+
+  <browser:page
+      class=".excel_export.DispositionExcelExport"
+      for="opengever.disposition.interfaces.IDisposition"
+      name="download_excel"
+      permission="zope2.View"/>
 
 </configure>

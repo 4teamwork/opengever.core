@@ -1,5 +1,4 @@
 from datetime import datetime
-from five import grok
 from opengever.disposition import _
 from opengever.disposition.interfaces import IDisposition
 from opengever.disposition.interfaces import IHistoryStorage
@@ -8,6 +7,8 @@ from persistent.dict import PersistentDict
 from persistent.list import PersistentList
 from plone import api
 from zope.annotation.interfaces import IAnnotations
+from zope.component import adapter
+from zope.interface import implementer
 
 
 class DispositionHistory(object):
@@ -131,14 +132,14 @@ class Closed(DispositionHistory):
 DispositionHistory.add_description(Closed)
 
 
-class HistoryStorage(grok.Adapter):
-    grok.provides(IHistoryStorage)
-    grok.context(IDisposition)
+@implementer(IHistoryStorage)
+@adapter(IDisposition)
+class HistoryStorage(object):
 
     key = 'disposition_history'
 
     def __init__(self, context):
-        super(HistoryStorage, self).__init__(context)
+        self.context = context
         self._annotations = IAnnotations(self.context)
         if self.key not in self._annotations.keys():
             self._annotations[self.key] = PersistentList()
