@@ -37,10 +37,6 @@
             "_zope_schema_type": "TextLine"
         }
     },
-    "required": [
-        "title_de",
-        "title_fr"
-    ],
     "anyOf": [
         {
             "required": [

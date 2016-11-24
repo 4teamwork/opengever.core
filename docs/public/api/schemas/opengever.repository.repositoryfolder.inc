@@ -78,7 +78,7 @@
 
        :Feldname: :field-title:`Klassifikation`
        :Datentyp: ``Choice``
-       :Pflichtfeld: Ja :required:`(*)`
+       
        :Default: "unprotected"
        :Beschreibung: Grad, in dem die Unterlagen vor unberechtigter Einsicht geschützt werden müssen
        :Wertebereich: ["unprotected", "confidential", "classified"]
@@ -88,7 +88,7 @@
 
        :Feldname: :field-title:`Datenschutzstufe`
        :Datentyp: ``Choice``
-       :Pflichtfeld: Ja :required:`(*)`
+       
        :Default: "privacy_layer_no"
        :Beschreibung: Markierung, die angibt, ob die Unterlagen besonders schützenswerte Personendaten oder Persönlichkeitsprofile gemäss Datenschutzrecht enthalten
        :Wertebereich: ["privacy_layer_no", "privacy_layer_yes"]
@@ -98,7 +98,7 @@
 
        :Feldname: :field-title:`Öffentlichkeitsstatus`
        :Datentyp: ``Choice``
-       :Pflichtfeld: Ja :required:`(*)`
+       
        :Default: "unchecked"
        :Beschreibung: Angabe, ob die Unterlagen gemäss Öffentlichkeitsgesetz zugänglich sind oder nicht
        :Wertebereich: ["unchecked", "public", "limited-public", "private"]
@@ -118,7 +118,7 @@
 
        :Feldname: :field-title:`Titel (deutsch)`
        :Datentyp: ``TextLine``
-       :Pflichtfeld: Ja :required:`(*)`
+       
        
        
        
@@ -128,7 +128,7 @@
 
        :Feldname: :field-title:`Titel (französisch)`
        :Datentyp: ``TextLine``
-       :Pflichtfeld: Ja :required:`(*)`
+       
        
        
        
@@ -148,7 +148,7 @@
 
        :Feldname: :field-title:`Aufbewahrungsdauer (Jahre)`
        :Datentyp: ``Choice``
-       :Pflichtfeld: Ja :required:`(*)`
+       
        :Default: 5
        :Beschreibung: Zeitraum zwischen dem jüngsten Dokumentdatum eines in einem Dossier enthaltenen Dokuments und dem Zeitpunkt, an dem dieses für die Geschäftstätigkeit der Verwaltungseinheit nicht mehr benötigt wird
        :Wertebereich: [5, 10, 15, 20, 25]
@@ -168,7 +168,7 @@
 
        :Feldname: :field-title:`Archivwürdigkeit`
        :Datentyp: ``Choice``
-       :Pflichtfeld: Ja :required:`(*)`
+       
        :Default: "unchecked"
        :Beschreibung: Archivwürdigkeit
        :Wertebereich: ["unchecked", "prompt", "archival worthy", "not archival worthy", "archival worthy with sampling"]
@@ -188,7 +188,7 @@
 
        :Feldname: :field-title:`Archivische Schutzfrist (Jahre)`
        :Datentyp: ``Choice``
-       :Pflichtfeld: Ja :required:`(*)`
+       
        :Default: 30
        :Beschreibung: Dauer, während der nach der Archivierung die Dokumente vor öffentlicher Einsichtnahme geschützt sind
        :Wertebereich: [0, 30, 100, 150]

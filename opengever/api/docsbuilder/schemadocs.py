@@ -62,7 +62,7 @@ class SchemaDocsBuilder(DirectoryHelperMixin):
             field_docs = []
 
             for field_name, field_info in self.ordered_fields(json_schema):
-                required = field_name in json_schema['required']
+                required = field_name in json_schema.get('required', [])
                 field_doc = self._build_docs_for_field(
                     field_name, field_info, required)
                 field_docs.append(field_doc)

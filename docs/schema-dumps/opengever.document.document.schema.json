@@ -178,11 +178,6 @@
             "_zope_schema_type": "Date"
         }
     },
-    "required": [
-        "classification",
-        "privacy_layer",
-        "public_trial"
-    ],
     "field_order": [
         "title",
         "file",
