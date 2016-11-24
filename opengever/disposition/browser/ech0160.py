@@ -9,8 +9,8 @@ from zipfile import ZipFile
 
 
 class ECH0160ExportView(BrowserView):
-    """A view which create export
-    WIP: only export selected or refrenced dossiers instead of all dosiers.
+    """A view which creates an eCH-0160 export of all dossiers
+    form the disposition.
     """
 
     def __call__(self):
@@ -30,9 +30,7 @@ class ECH0160ExportView(BrowserView):
         return TempfileStreamIterator(tmpfile, size)
 
     def get_dossiers(self):
-        brains = api.portal.get_tool('portal_catalog')(
-            portal_type='opengever.dossier.businesscasedossier')
-        return [brain.getObject() for brain in brains]
+        return [relation.to_object for relation in self.context.dossiers]
 
     def create_zipfile(self, package):
         tmpfile = TemporaryFile()

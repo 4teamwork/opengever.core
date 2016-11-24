@@ -1,7 +1,11 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
+from datetime import date
 from datetime import datetime
+from dateutil.relativedelta import relativedelta
 from five import grok
+from opengever.base.behaviors.lifecycle import ILifeCycle
+from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
 from opengever.base.oguid import Oguid
 from opengever.contact.models import Participation
@@ -37,10 +41,11 @@ DOSSIER_STATES_OPEN = [
 ]
 
 DOSSIER_STATES_CLOSED = [
-    'dossier-state-archived',
     'dossier-state-inactive',
     'dossier-state-resolved'
 ]
+
+DOSSIER_STATES_OFFERABLE = DOSSIER_STATES_CLOSED + ['dossier-state-offered']
 
 
 _marker = object()
@@ -302,6 +307,36 @@ class DossierContainer(Container):
 
     def has_participation_support(self):
         return IParticipationAwareMarker.providedBy(self)
+
+    def get_reference_number(self):
+        return IReferenceNumber(self).get_number()
+
+    def get_retention_expiration_date(self):
+        if IDossier(self).end:
+            return IDossier(self).end + relativedelta(
+                years=ILifeCycle(self).retention_period)
+
+        return None
+
+    def is_retention_period_expired(self):
+        if IDossier(self).end:
+            return self.get_retention_expiration_date() <= date.today()
+
+        return False
+
+    def offer(self):
+        ILifeCycle(self).date_of_submission = date.today()
+        api.content.transition(obj=self, transition='dossier-transition-offer')
+
+    def retract(self):
+        ILifeCycle(self).date_of_submission = None
+        api.content.transition(obj=self, to_state=self.get_former_state())
+
+    def get_former_state(self):
+        workflow = api.portal.get_tool('portal_workflow')
+        workflow_id = workflow.getWorkflowsFor(self)[0].getId()
+        history = workflow.getHistoryOf(workflow_id, self)
+        return history[1].get('review_state')
 
 
 class DefaultConstrainTypeDecider(grok.MultiAdapter):

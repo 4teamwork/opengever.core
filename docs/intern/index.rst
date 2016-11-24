@@ -10,6 +10,7 @@ Inhalt:
 
    kurzreferenzen/index.rst
    glossar.rst
+   aussonderung.rst
    meta.rst
 
 
@@ -18,4 +19,3 @@ Stichwortverzeichnis
 
 * :ref:`genindex`
 * :ref:`search`
-

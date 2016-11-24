@@ -1,0 +1,138 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2016-11-23 14:56+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+
+#: ./opengever/disposition/profiles/default/actions.xml
+msgid "Create Disposition"
+msgstr "Aussonderungsangebot erstellen"
+
+#: ./opengever/disposition/profiles/default/types/opengever.disposition.disposition.xml
+msgid "Disposition"
+msgstr "Angebot"
+
+#: ./opengever/disposition/browser/excel_export.py:60
+msgid "The report could not been generated."
+msgstr "Der Report konnte nicht generiert werden."
+
+#. Default: "Sequence Number"
+#: ./opengever/disposition/browser/listing.py:24
+msgid "document_sequence_number"
+msgstr "Laufnummer"
+
+#. Default: "The dossier ${title} is already offered in a different disposition."
+#: ./opengever/disposition/validators.py:25
+msgid "error_offered_in_a_different_disposition"
+msgstr "Das Dossier ${title} ist bereits in einem anderen Angebot angeboten."
+
+#. Default: "The retention period of the selected dossiers is not expired."
+#: ./opengever/disposition/validators.py:19
+msgid "error_retention_period_not_expired"
+msgstr "Die Aufbewahrungsfrist der selektierten Dossiers ist nicht abgelaufen."
+
+#. Default: "Archive"
+#: ./opengever/disposition/browser/overview_templates/overview.pt:23
+msgid "label_archive"
+msgstr "Archivieren"
+
+#. Default: "Details:"
+#: ./opengever/disposition/browser/overview_templates/overview.pt:156
+msgid "label_details"
+msgstr "Details:"
+
+#. Default: "Disposition"
+#: ./opengever/disposition/disposition.py:138
+msgid "label_disposition"
+msgstr "Angebot"
+
+#. Default: "Download disposition package"
+#: ./opengever/disposition/browser/overview.py:50
+msgid "label_dispositon_package_download"
+msgstr "Ablieferungspaket herunterladen"
+
+#. Default: "Don't archive"
+#: ./opengever/disposition/browser/overview_templates/overview.pt:81
+#, fuzzy
+msgid "label_dont_archive"
+msgstr "Nicht archvieren"
+
+#. Default: "Dossiers"
+#: ./opengever/disposition/browser/overview_templates/overview.pt:20
+msgid "label_dosisers"
+msgstr "Dossiers"
+
+#. Default: "Dossiers"
+#: ./opengever/disposition/disposition.py:92
+msgid "label_dossiers"
+msgstr "Dossiers"
+
+#. Default: "Export appraisal list as excel"
+#: ./opengever/disposition/browser/overview.py:44
+msgid "label_export_appraisal_list_as_excel"
+msgstr "Bewertungsliste als Excel exportieren"
+
+#. Default: "Reference"
+#: ./opengever/disposition/disposition.py:87
+msgid "label_reference"
+msgstr "Referenz"
+
+#. Default: "Title"
+#: ./opengever/disposition/browser/listing.py:29
+msgid "label_title"
+msgstr "Titel"
+
+#. Default: "Added by ${user}"
+#: ./opengever/disposition/history.py:67
+msgid "msg_disposition_added"
+msgstr "Hinzugefügt durch ${user}"
+
+#. Default: "Appraisal finalized by ${user}"
+#: ./opengever/disposition/history.py:90
+msgid "msg_disposition_appraised"
+msgstr "Bewertung finalisiert durch ${user}"
+
+#. Default: "The archiving confirmed by ${user}"
+#: ./opengever/disposition/history.py:114
+msgid "msg_disposition_archived"
+msgstr "Archivierung bestätigt durch ${user}"
+
+#. Default: "Disposition closed and all dossiers destroyed by ${user}"
+#: ./opengever/disposition/history.py:126
+msgid "msg_disposition_close"
+msgstr "Angebot abgeschlossen und alle Dossiers vernicht durch ${user}"
+
+#. Default: "Disposition disposed for the archive by ${user}"
+#: ./opengever/disposition/history.py:102
+msgid "msg_disposition_disposed"
+msgstr "Für die Archivierung angeboten durch ${user}"
+
+#. Default: "Edited by ${user}"
+#: ./opengever/disposition/history.py:78
+msgid "msg_disposition_edited"
+msgstr "Editiert durch ${user}"
+
+#. Default: "Updated by ${user}"
+#: ./opengever/disposition/history.py:51
+msgid "msg_disposition_updated"
+msgstr "Aktualisiert durch ${user}"
+
+#. Default: "Period"
+#: ./opengever/disposition/browser/overview_templates/overview.pt:42
+msgid "period"
+msgstr "Periode"
+
+#. Default: "Progress:"
+#: ./opengever/disposition/browser/overview_templates/overview.pt:143
+msgid "progress"
+msgstr "Verlauf:"

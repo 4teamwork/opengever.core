@@ -1,9 +1,11 @@
+from datetime import date
 from five import grok
 from ftw.tabbedview.interfaces import ITabbedView
 from ftw.table import helper
 from opengever.bumblebee import get_preferred_listing_view
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.bumblebee import set_preferred_listing_view
+from opengever.dossier.base import DOSSIER_STATES_CLOSED
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.interfaces import IDossierMarker
 from opengever.globalindex.model.task import Task
@@ -192,7 +194,13 @@ class Dossiers(BaseCatalogListingTab):
             'filter_active',
             _('Active'),
             default=True,
-            query_extension={'review_state': DOSSIER_STATES_OPEN})
+            query_extension={'review_state': DOSSIER_STATES_OPEN}),
+        CatalogQueryFilter(
+            'filter_retention_expired',
+            _('expired'),
+            query_extension={
+                'review_state': DOSSIER_STATES_CLOSED,
+                'retention_expiration': {'query': date.today(), 'range': 'max'}})
     )
 
     object_provides = 'opengever.dossier.behaviors.dossier.IDossierMarker'
@@ -238,6 +246,7 @@ class Dossiers(BaseCatalogListingTab):
                        'export_dossiers',
                        'move_items',
                        'copy_items',
+                       'create_disposition',
                        ]
 
     major_actions = ['change_state', ]

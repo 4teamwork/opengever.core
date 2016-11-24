@@ -67,7 +67,6 @@ def add_languages(codes, support_combined=True):
 
     transaction.commit()
 
-
 def create_document_version(doc, version_id, data=None):
     repo_tool = api.portal.get_tool('portal_repository')
     vdata = data or 'VERSION {} DATA'.format(version_id)
@@ -88,3 +87,8 @@ def get_contacts_vocabulary():
 def get_contacts_token(obj):
     return get_contacts_vocabulary().getTerm(obj).token
 
+
+def obj2paths(objs):
+    """Returns a list of paths (string) for the given objects.
+    """
+    return ['/'.join(obj.getPhysicalPath()) for obj in objs]

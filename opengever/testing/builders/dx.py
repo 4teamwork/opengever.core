@@ -1,4 +1,5 @@
 from datetime import date
+from dateutil.relativedelta import relativedelta
 from ftw.builder import builder_registry
 from ftw.builder.dexterity import DexterityBuilder
 from opengever.base.behaviors.translated_title import TranslatedTitle
@@ -23,6 +24,20 @@ from zope.lifecycleevent import ObjectCreatedEvent
 
 class DossierBuilder(DexterityBuilder):
     portal_type = 'opengever.dossier.businesscasedossier'
+
+    def __init__(self, session):
+        super(DossierBuilder, self).__init__(session)
+        self.arguments['retention_period'] = 15
+
+    def as_expired(self):
+        """Resolves the dossier and set the end date so that the
+        retention period is expired.
+        """
+        self.in_state('dossier-state-resolved')
+        self.arguments['end'] = date.today() - relativedelta(
+            years=self.arguments['retention_period'] + 1)
+
+        return self
 
 builder_registry.register('dossier', DossierBuilder)
 
@@ -420,3 +435,10 @@ class PrivateDossierBuilder(DossierBuilder):
 
 
 builder_registry.register('private_dossier', PrivateDossierBuilder)
+
+
+class DispositionBuilder(DexterityBuilder):
+    portal_type = 'opengever.disposition.disposition'
+
+
+builder_registry.register('disposition', DispositionBuilder)

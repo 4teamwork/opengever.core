@@ -9,6 +9,7 @@
     <dependency>profile-opengever.globalindex:default</dependency>
     <dependency>profile-opengever.base:default</dependency>
     <dependency>profile-collective.mtrsetup:default</dependency>
+    <dependency>profile-opengever.disposition:default</dependency>
     <dependency>profile-opengever.document:default</dependency>
     <dependency>profile-opengever.mail:default</dependency>
     <dependency>profile-opengever.dossier:default</dependency>
@@ -29,6 +30,7 @@
     <dependency>profile-opengever.bumblebee:default</dependency>
     <dependency>profile-opengever.officeatwork:default</dependency>
     <dependency>profile-opengever.private:default</dependency>
+    <dependency>profile-opengever.disposition:default</dependency>
     <dependency>profile-ftw.datepicker:default</dependency>
     <dependency>profile-ftw.contentmenu:default</dependency>
     <dependency>profile-ftw.zipexport:default</dependency>

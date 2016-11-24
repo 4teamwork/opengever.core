@@ -350,7 +350,7 @@
     this.events = [
       {
         method: "click",
-        target: ".collapsible-header > button",
+        target: ".collapsible-header > button, .collapsible-header > span",
         callback: this.toggle,
         loading: false
       }

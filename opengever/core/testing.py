@@ -247,6 +247,7 @@ class OpengeverFixture(PloneSandboxLayer):
         applyProfile(portal, 'plone.formwidget.contenttree:default')
         applyProfile(portal, 'ftw.contentmenu:default')
         applyProfile(portal, 'ftw.zipexport:default')
+        applyProfile(portal, 'opengever.disposition:default')
 
         applyProfile(portal, 'opengever.testing:testing')
 

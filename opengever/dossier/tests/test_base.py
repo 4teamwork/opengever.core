@@ -107,6 +107,17 @@ class TestDossierContainer(FunctionalTestCase):
         dossier = create(Builder("dossier"))
         self.assertTrue(dossier.has_participation_support())
 
+    def test_reference_number(self):
+        root = create(Builder('repository_root'))
+        repo = create(Builder('repository').within(root))
+        dossier_1 = create(Builder("dossier").within(repo))
+        subdossier = create(Builder("dossier").within(dossier_1))
+        dossier_2 = create(Builder("dossier").within(repo))
+
+        self.assertEquals('Client1 1 / 1', dossier_1.get_reference_number())
+        self.assertEquals('Client1 1 / 1.1', subdossier.get_reference_number())
+        self.assertEquals('Client1 1 / 2', dossier_2.get_reference_number())
+
 
 class TestDossierChecks(FunctionalTestCase):
 

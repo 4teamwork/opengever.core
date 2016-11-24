@@ -1,0 +1,88 @@
+Aussonderung
+============
+
+.. contents::
+   :local:
+   :backlinks: none
+
+
+Abgelaufene Dossiers
+--------------------
+Das Aussondern von Inhalten im OneGov GEVER wird ausschliesslich auf Stufe Dossier angeboten. Dabei können nur stornierte oder abgeschlossen Dossier, bei welchen die Aufbewahrungsfrist abgelaufen ist ausgesondert werden.
+
+Eine Übersicht über Abgelaufene Dossiers, also Dossiers welche für eine Aussonderung in Frage kommen, bietet der Status-Filter `angeboten` welcher auf allen Dossierauflistungen zur Verfügung steht.
+
+Für die Berechnung, ob ein Dossier abgelaufen ist, wird ein Catalog-Index `retention_expiration` mit dem Ablaufdatum geführt.
+
+Angebot erstellen und archivieren
+---------------------------------
+Beim Angebot handelt es sich um einen separaten Inhaltstypen, der neben zustätzlichen Metadaten, vor allem die Referenzen auf die entsprechenden Dossiers führt. Das Angebot-Objekt stellt zudem den kompletten Aussonderungs-Workflow zur Verfügung. Dieser setzt sich aus den folgenden Transitions zusammen:
+
+ 1. Angebot erstellen
+ 2. Bewertung finalisieren
+ 3. Angebot abliefern
+ 4. Archivierung bestätigen
+ 5. Dossiers vernichten
+
+|aussonderungs-prozess|
+
+
+Angebot erstellen und bewerten
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Aussonderungsangebote können auf Stufe Ordnungssystem bzw. Ordnungsposition erstellt werden. Für die direkte Erstellung eines Angebots aus einer Dossierauflistung inkl. Auswahl der Dossiers, steht zudem die Tabbedview-Action `Aussonderungsangebot erstellen` zur Verfügung.
+
+|aussonderung-1|
+
+Wurde eine Angebot erstellt, befindet es sich im Status ``In Arbeit`` (``disposition-state-in-progress``). In diesem Status können die Metadaten des Angebots, wie auch die enthaltenen Dossiers, noch bearbeitet werden.
+
+Zudem kann die Bewertung des Angebots vorgenommen werden, dabei handelt es sich um den Entscheid, ob ein Dossier archiviert werden soll oder nicht. GEVER macht dabei automatisch ein Vorbewertung anhand des Dossier-Metadatums ``Archivwürdigkeit``.
+
+Anschliessend kann die Bewertung von den Records Managern über die Angebotsansicht angepasst und vorbereitet werden. Der Entscheid bzw. die Bewertung wird via dem ``Appraisal Adapter`` in die Annotations des Angebots gespeichert.
+
+|aussonderung-2|
+
+Je nach Arbeitsweise kann für die endgültige Bewertung das Archiv auf dem GEVER Mandanten berechtigt werden um die Bewertung gleich im GEVER vornehmen zu können oder es kann ein Bewertungsliste (Excel) generiert und dem Archiv übermittelt werden. Eine automatischer Import der Bewertungsliste steht aktuell nicht zur Verfügung.
+
+Alle Angebot sind im neuen Tab `Angebote` ersichtlich. Es steht nur Benutzern mit der Berechtigung Angebote zu Erstellen zur Verfügung.
+
+Bewertung finalisieren
+~~~~~~~~~~~~~~~~~~~~~~
+Wurde die Bewertung durch das Archiv vorgenommen, kann die Bewertung finalisiert werden. Dabei wird das Angebot in den Status ``Bewertet`` (``disposition-state-appraised``) versetzt und kann nicht mehr bearbeitet bzw. angepasst werden.
+
+Angebot abliefern
+~~~~~~~~~~~~~~~~~
+Anschliessend kann das Angebot abgeliefert werden. Danach steht auch die Aktion ``Ablieferungspaket herunterladen`` zur Verfügung, welches den eCH-160 Export für die enthaltenen Dossiers mit einer positiven Bewertung zum Download anbietet.
+
+
+Archivierung bestätigen
+~~~~~~~~~~~~~~~~~~~~~~~
+War der Ingest des SIP-Pakets ins Langzeitarchiv erfolgreich, so kann die Archivierung bestätigt werden, im Idealfall wird dies natürlich gleich von der verantwortlichen Person im Archiv gemacht.
+
+
+Dossiers vernichten
+~~~~~~~~~~~~~~~~~~~
+Der Prozess der Aussonderung wird mit der Vernichtung der Dossiers abgeschlossen. Dabei werden alle im Angebot enthaltenen Dossiers (auch nicht archivwürdige) vernichtet, also effektiv aus dem GEVER gelöscht.
+
+Zusätzliche Vernichtungs-Varianten (Nur löschen der Primärdaten, Entzug der Leseberechtigung etc.) sind aktuell nicht umgesetzt und auch nicht geplant.
+
+Verlauf
+-------
+Für jedes Angebot wird ein Verlauf geführt und ähnlich wie bei Aufgaben oder Anträgen dargestellt.
+
+|aussonderung-3|
+
+
+Berechtigung
+------------
+Sowohl das Erstellen wie auch das Betrachten eines Angebots ist durch eine separate Permission geschützt. Diese steht nur den Rollen `Manager` und `Records Manager` zur Verfügung.
+
+Die neue Rolle `Records Manager` wird global vergeben und wird dem relativ kleinen Benutzerkreis von Benutzern welche für die Aussonderung des entsprechenden Mandants zuständig sind, vergeben.
+
+Feature Flag
+------------
+Die zusätzichen Features sind nicht durch einen Registry Feature-Flag geschützt, sondern die neue Rolle `Records Manager` übernimmt die Funktionalität des Feature-Flags.
+
+.. |aussonderungs-prozess| image:: _static/img/aussonderungs-prozess.png
+.. |aussonderung-1| image:: _static/img/aussonderung_1.png
+.. |aussonderung-2| image:: _static/img/aussonderung_2.png
+.. |aussonderung-3| image:: _static/img/aussonderung_3.png

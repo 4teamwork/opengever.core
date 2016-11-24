@@ -188,6 +188,10 @@ msgstr "Ende"
 msgid "events"
 msgstr "Termine"
 
+#: ./opengever/tabbedview/browser/tabs.py:158
+msgid "expired"
+msgstr "Abgelaufen"
+
 msgid "important_contact"
 msgstr "Allgemein"
 
@@ -249,7 +253,7 @@ msgid "label_issuer"
 msgstr "Auftraggeber"
 
 #. Default: "My notifications"
-#: ./opengever/tabbedview/browser/personal_overview.py:113
+#: ./opengever/tabbedview/browser/personal_overview.py:108
 msgid "label_my_notifications"
 msgstr "Meine Benachrichtigungen"
 
@@ -365,7 +369,7 @@ msgid "participants"
 msgstr "Beteiligte"
 
 #. Default: "Personal Overview: ${user_name}"
-#: ./opengever/tabbedview/browser/personal_overview.py:94
+#: ./opengever/tabbedview/browser/personal_overview.py:89
 msgid "personal_overview_title"
 msgstr "Persönliche Übersicht: ${user_name}"
 
@@ -437,4 +441,3 @@ msgstr "Titel"
 
 msgid "trash"
 msgstr "Papierkorb"
-

@@ -16,11 +16,16 @@ class TesteCH0160Deployment(FunctionalTestCase):
 
     @browsing
     def test_returns_zip_file_stream(self, browser):
-        dossier_a = create(Builder('dossier').within(self.folder))
+        dossier_a = create(Builder('dossier')
+                           .as_expired()
+                           .within(self.folder))
         create(Builder('document').with_dummy_content().within(dossier_a))
+        disposition = create(Builder('disposition')
+                             .having(dossiers=[dossier_a])
+                             .within(self.root))
 
         with freeze(datetime(2016, 6, 11)):
-            view = self.portal.unrestrictedTraverse('ech0160_export')
+            view = disposition.unrestrictedTraverse('ech0160_export')
             view()
 
             self.assertEquals(
