@@ -42,6 +42,10 @@ DEFAULT_OVERRIDES = {
     },
 }
 
+IGNORED_FIELDS = [
+    'plone.app.versioningbehavior.behaviors.IVersionable.changeNote',
+]
+
 JSON_SCHEMA_FIELD_TYPES = {
     'TextLine':      {'type': 'string'},                     # noqa
     'Text':          {'type': 'string'},                     # noqa

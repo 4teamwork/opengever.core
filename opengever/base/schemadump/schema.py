@@ -2,6 +2,7 @@ from collections import OrderedDict
 from jsonschema import Draft4Validator
 from opengever.base.schemadump.config import GEVER_SQL_TYPES
 from opengever.base.schemadump.config import GEVER_TYPES
+from opengever.base.schemadump.config import IGNORED_FIELDS
 from opengever.base.schemadump.config import JSON_SCHEMA_FIELD_TYPES
 from opengever.base.schemadump.field import FieldDumper
 from opengever.base.schemadump.field import SQLFieldDumper
@@ -37,6 +38,11 @@ class SchemaDumper(object):
         field_dumper = FieldDumper(schema)
 
         for name, field in getFieldsInOrder(schema):
+            dottedname = '.'.join((schema.__identifier__, field.getName()))
+            if dottedname in IGNORED_FIELDS:
+                print "    Skipping field %s" % dottedname
+                continue
+
             field_dump = field_dumper.dump(field)
             fields.append(field_dump)
 
