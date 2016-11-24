@@ -38,4 +38,23 @@
       for="opengever.disposition.disposition.IDisposition"
       />
 
+  <!-- handlers -->
+  <subscriber
+      for="opengever.disposition.interfaces.IDisposition
+           Products.CMFCore.interfaces.IActionSucceededEvent"
+      handler=".handlers.disposition_state_changed"
+      />
+
+  <subscriber
+      for="opengever.disposition.interfaces.IDisposition
+           zope.lifecycleevent.interfaces.IObjectAddedEvent"
+      handler=".handlers.disposition_added"
+      />
+
+  <subscriber
+      for="opengever.disposition.interfaces.IDisposition
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".handlers.disposition_modified"
+      />
+
 </configure>
