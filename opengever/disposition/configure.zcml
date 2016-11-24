@@ -13,6 +13,8 @@
 
   <grok:grok package="." />
 
+  <adapter factory=".appraisal.Appraisal" />
+
   <genericsetup:registerProfile
       name="default"
       title="opengever.disposition"
