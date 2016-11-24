@@ -9,8 +9,6 @@ from opengever.base.schemadump.helpers import DirectoryHelperMixin
 from opengever.base.schemadump.helpers import translate_de
 from opengever.base.schemadump.log import setup_logging
 from opengever.base.utils import pretty_json
-from opengever.core.debughelpers import get_first_plone_site
-from opengever.core.debughelpers import setup_plone
 from os.path import join as pjoin
 from plone import api
 from plone.dexterity.utils import iterSchemataForType
@@ -290,10 +288,3 @@ def dump_schemas():
     writer = JSONSchemaDumpWriter()
     result = writer.dump()
     return result
-
-
-def dump_schemas_zopectl_handler(app, args):
-    """Handler for the 'bin/instance dump_schemas' zopectl command.
-    """
-    setup_plone(get_first_plone_site(app))
-    dump_schemas()
