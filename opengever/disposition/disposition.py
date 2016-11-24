@@ -83,6 +83,12 @@ class RemovedDossierDispositionInformation(DossierDispositionInformation):
 
 class IDispositionSchema(form.Schema):
 
+    form.fieldset(
+        u'common',
+        label=_(u'fieldset_common', default=u'Common'),
+        fields=[u'dossiers', u'transfer_number'],
+    )
+
     dossiers = RelationList(
         title=_(u'label_dossiers', default=u'Dossiers'),
         default=[],
