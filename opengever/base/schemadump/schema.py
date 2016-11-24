@@ -1,5 +1,4 @@
 from collections import OrderedDict
-from five import grok
 from jsonschema import Draft4Validator
 from opengever.base.schemadump.config import GEVER_SQL_TYPES
 from opengever.base.schemadump.config import GEVER_TYPES
@@ -10,13 +9,10 @@ from opengever.base.schemadump.helpers import DirectoryHelperMixin
 from opengever.base.schemadump.helpers import translate_de
 from opengever.base.schemadump.log import setup_logging
 from opengever.base.utils import pretty_json
-from opengever.core.debughelpers import get_first_plone_site
-from opengever.core.debughelpers import setup_plone
 from os.path import join as pjoin
 from plone import api
 from plone.dexterity.utils import iterSchemataForType
 from plone.supermodel.interfaces import FIELDSETS_KEY
-from Products.CMFPlone.interfaces import IPloneSiteRoot
 from sqlalchemy.ext.declarative.base import _is_mapped_class
 from zope.dottedname.resolve import resolve as resolve_dotted
 from zope.schema import getFieldsInOrder
@@ -165,12 +161,12 @@ class SQLTypeDumper(object):
             return type_dump
 
 
-class JSONSchemaGenerator(object):
-    """Generates a JSON Schema representation of a single GEVER type (as a
+class JSONSchemaBuilder(object):
+    """Builds a JSON Schema representation of a single GEVER type (as a
     Python data structure).
     """
 
-    def generate_schema(self, portal_type):
+    def build_schema(self, portal_type):
         schema = OrderedDict([
             (u'$schema', u'http://json-schema.org/draft-04/schema#'),
             (u'type', u'object'),
@@ -269,10 +265,10 @@ class JSONSchemaDumpWriter(DirectoryHelperMixin):
     """
 
     def dump(self):
-        generator = JSONSchemaGenerator()
+        builder = JSONSchemaBuilder()
 
         for portal_type in GEVER_TYPES + GEVER_SQL_TYPES:
-            schema = generator.generate_schema(portal_type)
+            schema = builder.build_schema(portal_type)
             filename = '%s.schema.json' % portal_type
             dump_path = pjoin(self.schema_dumps_dir, filename)
 
@@ -292,23 +288,3 @@ def dump_schemas():
     writer = JSONSchemaDumpWriter()
     result = writer.dump()
     return result
-
-
-class DumpSchemasView(grok.View):
-    """Helper view to dump schemas from a running instance.
-    """
-
-    grok.name('dump-schemas')
-    grok.context(IPloneSiteRoot)
-    grok.require('cmf.ManagePortal')
-
-    def render(self):
-        result = dump_schemas()
-        return result
-
-
-def dump_schemas_zopectl_handler(app, args):
-    """Handler for the 'bin/instance dump_schemas' zopectl command.
-    """
-    setup_plone(get_first_plone_site(app))
-    dump_schemas()
