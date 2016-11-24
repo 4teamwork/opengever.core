@@ -83,10 +83,10 @@ class RemovedDossierDispositionInformation(DossierDispositionInformation):
 
 class IDispositionSchema(form.Schema):
 
-    dexteritytextindexer.searchable('reference')
-    reference = schema.TextLine(
-        title=_(u"label_reference", default=u"Reference"),
-        required=False,
+    form.fieldset(
+        u'common',
+        label=_(u'fieldset_common', default=u'Common'),
+        fields=[u'dossiers', u'transfer_number'],
     )
 
     dossiers = RelationList(
@@ -108,6 +108,11 @@ class IDispositionSchema(form.Schema):
         required=True,
     )
 
+    dexteritytextindexer.searchable('transfer_number')
+    transfer_number = schema.TextLine(
+        title=_(u"label_transfer_number", default=u"Transfer number"),
+        required=False,
+    )
 
 validator.WidgetValidatorDiscriminators(
     OfferedDossiersValidator,

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-11-23 14:56+0000\n"
+"POT-Creation-Date: 2016-11-24 10:39+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,13 +35,18 @@ msgid "document_sequence_number"
 msgstr ""
 
 #. Default: "The dossier ${title} is already offered in a different disposition."
-#: ./opengever/disposition/validators.py:25
+#: ./opengever/disposition/validators.py:27
 msgid "error_offered_in_a_different_disposition"
 msgstr ""
 
 #. Default: "The retention period of the selected dossiers is not expired."
-#: ./opengever/disposition/validators.py:19
+#: ./opengever/disposition/validators.py:21
 msgid "error_retention_period_not_expired"
+msgstr ""
+
+#. Default: "Common"
+#: ./opengever/disposition/disposition.py:88
+msgid "fieldset_common"
 msgstr ""
 
 #. Default: "Archive"
@@ -55,7 +60,7 @@ msgid "label_details"
 msgstr ""
 
 #. Default: "Disposition"
-#: ./opengever/disposition/disposition.py:138
+#: ./opengever/disposition/disposition.py:144
 msgid "label_disposition"
 msgstr ""
 
@@ -75,7 +80,7 @@ msgid "label_dosisers"
 msgstr ""
 
 #. Default: "Dossiers"
-#: ./opengever/disposition/disposition.py:92
+#: ./opengever/disposition/disposition.py:93
 msgid "label_dossiers"
 msgstr ""
 
@@ -84,14 +89,14 @@ msgstr ""
 msgid "label_export_appraisal_list_as_excel"
 msgstr ""
 
-#. Default: "Reference"
-#: ./opengever/disposition/disposition.py:87
-msgid "label_reference"
-msgstr ""
-
 #. Default: "Title"
 #: ./opengever/disposition/browser/listing.py:29
 msgid "label_title"
+msgstr ""
+
+#. Default: "Transfer number"
+#: ./opengever/disposition/disposition.py:113
+msgid "label_transfer_number"
 msgstr ""
 
 #. Default: "Added by ${user}"

@@ -5,6 +5,9 @@ Changelog
 4.13.1 (unreleased)
 -------------------
 
+- Replace reference field with a transfer_number field on disposition schema.
+  [phgross]
+
 - Add initial dossiertemplate type.
   [elioschmutz]
 
