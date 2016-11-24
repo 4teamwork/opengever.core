@@ -22,6 +22,12 @@
       template="templates/overview.pt"/>
 
   <browser:page
+      class=".views.UpdateAppraisalView"
+      for="*"
+      name="update_appraisal_view"
+      permission="zope2.View"/>
+
+  <browser:page
       class=".excel_export.DispositionExcelExport"
       for="opengever.disposition.interfaces.IDisposition"
       name="download_excel"

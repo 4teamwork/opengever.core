@@ -1,19 +1,15 @@
-from five import grok
 from opengever.disposition.appraisal import IAppraisal
-from zope.interface import Interface
+from Products.Five.browser import BrowserView
 import json
 
 
-class UpdateAppraisalView(grok.View):
+class UpdateAppraisalView(BrowserView):
     """View to update a the appraisal for a specific dossier.
 
     Used by the DispositionOverview via AJAX request.
     """
-    grok.context(Interface)
-    grok.name('update_appraisal_view')
-    grok.require('zope2.View')
 
-    def render(self):
+    def __call__(self):
         IAppraisal(self.context).update(
             intid=json.loads(self.request['dossier-id']),
             archive=json.loads(self.request['should_be_archived']))
