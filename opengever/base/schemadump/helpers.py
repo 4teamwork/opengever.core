@@ -3,6 +3,8 @@ from opengever.base.schemadump.config import SCHEMA_DOCS_DIR
 from opengever.base.schemadump.config import SCHEMA_DUMPS_DIR
 from os.path import join as pjoin
 from zope.i18n import translate
+import errno
+import os
 
 
 class DirectoryHelperMixin(object):
@@ -29,3 +31,13 @@ def join_lines(lines):
 def translate_de(*args, **kwargs):
     kwargs.update({'target_language': 'de'})
     return translate(*args, **kwargs)
+
+
+def mkdir_p(path):
+    try:
+        os.makedirs(path)
+    except OSError as exc:
+        if exc.errno == errno.EEXIST:
+            pass
+        else:
+            raise
