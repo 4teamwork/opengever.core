@@ -1,20 +1,15 @@
-from five import grok
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_UNWORTHY
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.disposition import _
-from opengever.disposition.interfaces import IDisposition
 from opengever.disposition.interfaces import IHistoryStorage
 from opengever.tabbedview import GeverTabMixin
 from plone import api
 from plone.protect.utils import addTokenToUrl
+from Products.Five.browser import BrowserView
 import json
 
 
-class DispositionOverview(grok.View, GeverTabMixin):
-    grok.context(IDisposition)
-    grok.name('tabbedview_view-overview')
-    grok.require('zope2.View')
-    grok.template('overview')
+class DispositionOverview(BrowserView, GeverTabMixin):
 
     show_searchform = False
 

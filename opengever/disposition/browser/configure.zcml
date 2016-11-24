@@ -15,6 +15,13 @@
       permission="cmf.ManagePortal"/>
 
   <browser:page
+      class=".overview.DispositionOverview"
+      for="opengever.disposition.interfaces.IDisposition"
+      name="tabbedview_view-overview"
+      permission="zope2.View"
+      template="templates/overview.pt"/>
+
+  <browser:page
       class=".excel_export.DispositionExcelExport"
       for="opengever.disposition.interfaces.IDisposition"
       name="download_excel"
