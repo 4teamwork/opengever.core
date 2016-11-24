@@ -161,6 +161,9 @@
                     "description": "Online Voransicht des Originaldokuments",
                     "_zope_schema_type": "NamedBlobFile"
                 },
+                "filepath": {
+                    "type": "string"
+                },
                 "title": {
                     "type": "string",
                     "title": "Titel",
@@ -207,7 +210,9 @@
             "required": [
                 "review_state",
                 "guid",
-                "parent_guid"
+                "parent_guid",
+                "title",
+                "filepath"
             ]
         }
     }

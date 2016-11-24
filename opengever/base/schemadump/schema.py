@@ -324,6 +324,11 @@ class OGGBundleJSONSchemaBuilder(object):
                 "reactivate": string_array,
             }
 
+        if portal_type == 'opengever.document.document':
+            core_schema['properties']['filepath'] = {'type': 'string'}
+            core_schema['required'].extend(['title', 'filepath'])
+            # XXX: Documents without files?
+
         return schema
 
 
