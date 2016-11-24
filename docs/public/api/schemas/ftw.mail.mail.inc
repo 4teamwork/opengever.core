@@ -156,11 +156,21 @@
 
    .. py:attribute:: archival_file
 
-       :Feldname: :field-title:`Archivierte Datei`
+       :Feldname: :field-title:`Archivdatei`
        :Datentyp: ``NamedBlobFile``
        
        
        :Beschreibung: Archivtaugliche Version der Originaldatei
+       
+
+
+   .. py:attribute:: archival_file_state
+
+       :Feldname: :field-title:`Status Archivdatei`
+       :Datentyp: ``Int``
+       
+       
+       
        
 
 
