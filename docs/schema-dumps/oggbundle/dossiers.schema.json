@@ -230,12 +230,6 @@
                     "description": "",
                     "_zope_schema_type": "TextLine"
                 },
-                "temporary_former_reference_number": {
-                    "type": "string",
-                    "title": "Tempor\u00e4res fr\u00fcheres Aktenzeichen",
-                    "description": "",
-                    "_zope_schema_type": "TextLine"
-                },
                 "_permissions": {
                     "$ref": "#/definitions/permission"
                 }
@@ -256,7 +250,6 @@
                 "comments",
                 "responsible",
                 "filing_prefix",
-                "temporary_former_reference_number",
                 "container_type",
                 "number_of_containers",
                 "container_location",

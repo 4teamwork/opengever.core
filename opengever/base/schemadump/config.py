@@ -45,6 +45,7 @@ DEFAULT_OVERRIDES = {
 IGNORED_FIELDS = [
     'plone.app.versioningbehavior.behaviors.IVersionable.changeNote',
     'opengever.document.behaviors.metadata.IDocumentMetadata.thumbnail',
+    'opengever.dossier.behaviors.dossier.IDossier.temporary_former_reference_number',  # noqa
 ]
 
 JSON_SCHEMA_FIELD_TYPES = {
