@@ -68,9 +68,15 @@
             "description": "",
             "_zope_schema_type": "TextLine"
         },
+        "archival_file_state": {
+            "type": "integer",
+            "title": "Status Archivdatei",
+            "description": "",
+            "_zope_schema_type": "Int"
+        },
         "archival_file": {
             "type": "string",
-            "title": "Archivierte Datei",
+            "title": "Archivdatei",
             "description": "Archivtaugliche Version der Originaldatei",
             "_zope_schema_type": "NamedBlobFile"
         },
@@ -181,6 +187,7 @@
         "digitally_available",
         "preserved_as_paper",
         "archival_file",
+        "archival_file_state",
         "thumbnail",
         "preview",
         "title",
