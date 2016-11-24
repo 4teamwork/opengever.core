@@ -1,5 +1,4 @@
 from collections import OrderedDict
-from five import grok
 from jsonschema import Draft4Validator
 from opengever.base.schemadump.config import GEVER_SQL_TYPES
 from opengever.base.schemadump.config import GEVER_TYPES
@@ -16,7 +15,6 @@ from os.path import join as pjoin
 from plone import api
 from plone.dexterity.utils import iterSchemataForType
 from plone.supermodel.interfaces import FIELDSETS_KEY
-from Products.CMFPlone.interfaces import IPloneSiteRoot
 from sqlalchemy.ext.declarative.base import _is_mapped_class
 from zope.dottedname.resolve import resolve as resolve_dotted
 from zope.schema import getFieldsInOrder
@@ -292,19 +290,6 @@ def dump_schemas():
     writer = JSONSchemaDumpWriter()
     result = writer.dump()
     return result
-
-
-class DumpSchemasView(grok.View):
-    """Helper view to dump schemas from a running instance.
-    """
-
-    grok.name('dump-schemas')
-    grok.context(IPloneSiteRoot)
-    grok.require('cmf.ManagePortal')
-
-    def render(self):
-        result = dump_schemas()
-        return result
 
 
 def dump_schemas_zopectl_handler(app, args):
