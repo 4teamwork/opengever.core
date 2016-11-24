@@ -8,6 +8,22 @@
       directory="resources"
       />
 
+  <!-- Disposition add form  -->
+  <adapter
+      for="Products.CMFCore.interfaces.IFolderish
+           zope.publisher.interfaces.browser.IDefaultBrowserLayer
+           plone.dexterity.interfaces.IDexterityFTI"
+      provides="zope.publisher.interfaces.browser.IBrowserPage"
+      factory=".form.DispositionAddView"
+      name="opengever.disposition.disposition"
+      />
+  <class class=".form.DispositionAddView">
+    <require
+        permission="cmf.AddPortalContent"
+        interface="zope.publisher.interfaces.browser.IBrowserPage"
+        />
+  </class>
+
   <browser:page
       class=".ech0160.ECH0160ExportView"
       for="opengever.disposition.interfaces.IDisposition"
