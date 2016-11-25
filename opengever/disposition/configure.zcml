@@ -21,6 +21,8 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
+  <include package=".upgrades" />
+
   <permission
       id="opengever.disposition.AddDisposition"
       title="opengever.disposition: Add disposition"
