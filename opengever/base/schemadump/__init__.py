@@ -9,10 +9,4 @@ def dump_schemas_zopectl_handler(app, args):
     """
     setup_plone(get_first_plone_site(app))
     dump_schemas()
-
-
-def dump_oggbundle_schemas_zopectl_handler(app, args):
-    """Handler for the 'bin/instance dump_oggbundle_schemas' zopectl command.
-    """
-    setup_plone(get_first_plone_site(app))
     dump_oggbundle_schemas()
