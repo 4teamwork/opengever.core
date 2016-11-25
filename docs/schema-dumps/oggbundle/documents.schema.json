@@ -137,12 +137,6 @@
                     "_zope_schema_type": "Bool",
                     "default": true
                 },
-                "preview": {
-                    "type": "string",
-                    "title": "Vorschau",
-                    "description": "Online Voransicht des Originaldokuments",
-                    "_zope_schema_type": "NamedBlobFile"
-                },
                 "filepath": {
                     "type": "string"
                 },
@@ -186,8 +180,7 @@
                 "digitally_available",
                 "preserved_as_paper",
                 "archival_file",
-                "archival_file_state",
-                "preview"
+                "archival_file_state"
             ],
             "required": [
                 "review_state",
