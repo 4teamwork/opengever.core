@@ -11,12 +11,16 @@
             "additionalProperties": false,
             "properties": {
                 "classification": {
-                    "type": "string",
+                    "type": [
+                        "null",
+                        "string"
+                    ],
                     "title": "Klassifikation",
                     "description": "Grad, in dem die Unterlagen vor unberechtigter Einsicht gesch\u00fctzt werden m\u00fcssen",
                     "_zope_schema_type": "Choice",
                     "default": "unprotected",
                     "enum": [
+                        null,
                         "unprotected",
                         "confidential",
                         "classified"
@@ -26,7 +30,10 @@
                     "type": "string"
                 },
                 "keywords": {
-                    "type": "array",
+                    "type": [
+                        "null",
+                        "array"
+                    ],
                     "title": "Schlagworte",
                     "description": "",
                     "_zope_schema_type": "Tuple"
@@ -35,7 +42,10 @@
                     "type": "string"
                 },
                 "document_date": {
-                    "type": "string",
+                    "type": [
+                        "null",
+                        "string"
+                    ],
                     "title": "Dokumentdatum",
                     "format": "date",
                     "description": "Datum des Dokuments",
@@ -43,50 +53,70 @@
                     "default": "<Aktuelles Datum>"
                 },
                 "receipt_date": {
-                    "type": "string",
+                    "type": [
+                        "null",
+                        "string"
+                    ],
                     "title": "Eingangsdatum",
                     "format": "date",
                     "description": "Datum, an dem das Dokument \u00fcber den Korrespondenzweg angekommen ist",
                     "_zope_schema_type": "Date"
                 },
                 "privacy_layer": {
-                    "type": "string",
+                    "type": [
+                        "null",
+                        "string"
+                    ],
                     "title": "Datenschutzstufe",
                     "description": "Markierung, die angibt, ob die Unterlagen besonders sch\u00fctzenswerte Personendaten oder Pers\u00f6nlichkeitsprofile gem\u00e4ss Datenschutzrecht enthalten",
                     "_zope_schema_type": "Choice",
                     "default": "privacy_layer_no",
                     "enum": [
+                        null,
                         "privacy_layer_no",
                         "privacy_layer_yes"
                     ]
                 },
                 "document_author": {
-                    "type": "string",
+                    "type": [
+                        "null",
+                        "string"
+                    ],
                     "title": "Autor",
                     "description": "Nachname Vorname oder ein Benutzerk\u00fcrzel (wird automatisch nach Nachname Vorname aufgel\u00f6st).",
                     "_zope_schema_type": "TextLine"
                 },
                 "relatedItems": {
-                    "type": "array",
+                    "type": [
+                        "null",
+                        "array"
+                    ],
                     "title": "Verwandte Dokumente",
                     "description": "",
                     "_zope_schema_type": "RelationList",
                     "default": []
                 },
                 "public_trial_statement": {
-                    "type": "string",
+                    "type": [
+                        "null",
+                        "string"
+                    ],
                     "title": "Bearbeitungsinformation",
                     "description": "Datum Gesuch, Gesuchsteller, Datum Entscheid, Verweis auf GEVER-Gesuchdossier",
                     "_zope_schema_type": "Text",
                     "default": ""
                 },
                 "public_trial": {
-                    "type": "string",
+                    "type": [
+                        "null",
+                        "string"
+                    ],
                     "title": "\u00d6ffentlichkeitsstatus",
                     "description": "Angabe, ob die Unterlagen gem\u00e4ss \u00d6ffentlichkeitsgesetz zug\u00e4nglich sind oder nicht",
                     "_zope_schema_type": "Choice",
                     "default": "unchecked",
                     "enum": [
+                        null,
                         "unchecked",
                         "public",
                         "limited-public",
@@ -97,29 +127,42 @@
                     "type": "string"
                 },
                 "foreign_reference": {
-                    "type": "string",
+                    "type": [
+                        "null",
+                        "string"
+                    ],
                     "title": "Fremdzeichen",
                     "description": "Referenz auf das entsprechende Dossier des Absenders",
                     "_zope_schema_type": "TextLine"
                 },
                 "description": {
-                    "type": "string",
+                    "type": [
+                        "null",
+                        "string"
+                    ],
                     "title": "Beschreibung",
                     "description": "",
                     "_zope_schema_type": "Text"
                 },
                 "digitally_available": {
-                    "type": "boolean",
+                    "type": [
+                        "null",
+                        "boolean"
+                    ],
                     "title": "Digital verf\u00fcgbar",
                     "description": "",
                     "_zope_schema_type": "Bool"
                 },
                 "document_type": {
-                    "type": "string",
+                    "type": [
+                        "null",
+                        "string"
+                    ],
                     "title": "Dokumenttyp",
                     "description": "",
                     "_zope_schema_type": "Choice",
                     "enum": [
+                        null,
                         "question",
                         "request",
                         "report",
@@ -131,7 +174,10 @@
                     ]
                 },
                 "preserved_as_paper": {
-                    "type": "boolean",
+                    "type": [
+                        "null",
+                        "boolean"
+                    ],
                     "title": "In Papierform aufbewahrt",
                     "description": "In Papierform aufbewahrt",
                     "_zope_schema_type": "Bool",
@@ -147,13 +193,19 @@
                     "_zope_schema_type": "TextLine"
                 },
                 "creators": {
-                    "type": "array",
+                    "type": [
+                        "null",
+                        "array"
+                    ],
                     "title": "Autoren",
                     "description": "",
                     "_zope_schema_type": "Tuple"
                 },
                 "delivery_date": {
-                    "type": "string",
+                    "type": [
+                        "null",
+                        "string"
+                    ],
                     "title": "Ausgangsdatum",
                     "format": "date",
                     "description": "Datum, an dem das Dokument \u00fcber den Korrespondenzweg versandt worden ist",

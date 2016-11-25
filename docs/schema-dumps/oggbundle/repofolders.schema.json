@@ -11,25 +11,35 @@
             "additionalProperties": false,
             "properties": {
                 "title_de": {
-                    "type": "string",
+                    "type": [
+                        "null",
+                        "string"
+                    ],
                     "title": "Titel (deutsch)",
                     "description": "",
                     "_zope_schema_type": "TextLine"
                 },
                 "date_of_submission": {
-                    "type": "string",
+                    "type": [
+                        "null",
+                        "string"
+                    ],
                     "title": "Anbietezeitpunkt",
                     "format": "date",
                     "description": "",
                     "_zope_schema_type": "Date"
                 },
                 "classification": {
-                    "type": "string",
+                    "type": [
+                        "null",
+                        "string"
+                    ],
                     "title": "Klassifikation",
                     "description": "Grad, in dem die Unterlagen vor unberechtigter Einsicht gesch\u00fctzt werden m\u00fcssen",
                     "_zope_schema_type": "Choice",
                     "default": "unprotected",
                     "enum": [
+                        null,
                         "unprotected",
                         "confidential",
                         "classified"
@@ -39,12 +49,16 @@
                     "type": "string"
                 },
                 "retention_period": {
-                    "type": "integer",
+                    "type": [
+                        "null",
+                        "integer"
+                    ],
                     "title": "Aufbewahrungsdauer (Jahre)",
                     "description": "Zeitraum zwischen dem j\u00fcngsten Dokumentdatum eines in einem Dossier enthaltenen Dokuments und dem Zeitpunkt, an dem dieses f\u00fcr die Gesch\u00e4ftst\u00e4tigkeit der Verwaltungseinheit nicht mehr ben\u00f6tigt wird",
                     "_zope_schema_type": "Choice",
                     "default": 5,
                     "enum": [
+                        null,
                         5,
                         10,
                         15,
@@ -53,7 +67,10 @@
                     ]
                 },
                 "date_of_cassation": {
-                    "type": "string",
+                    "type": [
+                        "null",
+                        "string"
+                    ],
                     "title": "Kassationsdatum",
                     "format": "date",
                     "description": "",
@@ -63,42 +80,59 @@
                     "type": "string"
                 },
                 "title_fr": {
-                    "type": "string",
+                    "type": [
+                        "null",
+                        "string"
+                    ],
                     "title": "Titel (franz\u00f6sisch)",
                     "description": "",
                     "_zope_schema_type": "TextLine"
                 },
                 "retention_period_annotation": {
-                    "type": "string",
+                    "type": [
+                        "null",
+                        "string"
+                    ],
                     "title": "Kommentar zur Aufbewahrungsdauer",
                     "description": "",
                     "_zope_schema_type": "Text"
                 },
                 "valid_from": {
-                    "type": "string",
+                    "type": [
+                        "null",
+                        "string"
+                    ],
                     "title": "G\u00fcltig ab",
                     "format": "date",
                     "description": "",
                     "_zope_schema_type": "Date"
                 },
                 "privacy_layer": {
-                    "type": "string",
+                    "type": [
+                        "null",
+                        "string"
+                    ],
                     "title": "Datenschutzstufe",
                     "description": "Markierung, die angibt, ob die Unterlagen besonders sch\u00fctzenswerte Personendaten oder Pers\u00f6nlichkeitsprofile gem\u00e4ss Datenschutzrecht enthalten",
                     "_zope_schema_type": "Choice",
                     "default": "privacy_layer_no",
                     "enum": [
+                        null,
                         "privacy_layer_no",
                         "privacy_layer_yes"
                     ]
                 },
                 "custody_period": {
-                    "type": "integer",
+                    "type": [
+                        "null",
+                        "integer"
+                    ],
                     "title": "Archivische Schutzfrist (Jahre)",
                     "description": "Dauer, w\u00e4hrend der nach der Archivierung die Dokumente vor \u00f6ffentlicher Einsichtnahme gesch\u00fctzt sind",
                     "_zope_schema_type": "Choice",
                     "default": 30,
                     "enum": [
+                        null,
                         0,
                         30,
                         100,
@@ -106,12 +140,16 @@
                     ]
                 },
                 "archival_value": {
-                    "type": "string",
+                    "type": [
+                        "null",
+                        "string"
+                    ],
                     "title": "Archivw\u00fcrdigkeit",
                     "description": "Archivw\u00fcrdigkeit",
                     "_zope_schema_type": "Choice",
                     "default": "unchecked",
                     "enum": [
+                        null,
                         "unchecked",
                         "prompt",
                         "archival worthy",
@@ -120,18 +158,25 @@
                     ]
                 },
                 "location": {
-                    "type": "string",
+                    "type": [
+                        "null",
+                        "string"
+                    ],
                     "title": "Standort",
                     "description": "",
                     "_zope_schema_type": "TextLine"
                 },
                 "public_trial": {
-                    "type": "string",
+                    "type": [
+                        "null",
+                        "string"
+                    ],
                     "title": "\u00d6ffentlichkeitsstatus",
                     "description": "Angabe, ob die Unterlagen gem\u00e4ss \u00d6ffentlichkeitsgesetz zug\u00e4nglich sind oder nicht",
                     "_zope_schema_type": "Choice",
                     "default": "unchecked",
                     "enum": [
+                        null,
                         "unchecked",
                         "public",
                         "limited-public",
@@ -145,58 +190,85 @@
                     "$ref": "#/definitions/permission"
                 },
                 "valid_until": {
-                    "type": "string",
+                    "type": [
+                        "null",
+                        "string"
+                    ],
                     "title": "G\u00fcltig bis",
                     "format": "date",
                     "description": "",
                     "_zope_schema_type": "Date"
                 },
                 "description": {
-                    "type": "string",
+                    "type": [
+                        "null",
+                        "string"
+                    ],
                     "title": "Beschreibung",
                     "description": "Eine kurze Beschreibung des Inhalts.",
                     "_zope_schema_type": "Text"
                 },
                 "referenced_activity": {
-                    "type": "string",
+                    "type": [
+                        "null",
+                        "string"
+                    ],
                     "title": "Leistung",
                     "description": "",
                     "_zope_schema_type": "TextLine"
                 },
                 "archival_value_annotation": {
-                    "type": "string",
+                    "type": [
+                        "null",
+                        "string"
+                    ],
                     "title": "Kommentar zur Archivw\u00fcrdigkeit",
                     "description": "",
                     "_zope_schema_type": "Text"
                 },
                 "public_trial_statement": {
-                    "type": "string",
+                    "type": [
+                        "null",
+                        "string"
+                    ],
                     "title": "Bearbeitungsinformation",
                     "description": "Datum Gesuch, Gesuchsteller, Datum Entscheid, Verweis auf GEVER-Gesuchdossier",
                     "_zope_schema_type": "Text",
                     "default": ""
                 },
                 "addable_dossier_types": {
-                    "type": "array",
+                    "type": [
+                        "null",
+                        "array"
+                    ],
                     "title": "Erlaubte Spezialdossiers",
                     "description": "W\u00e4hlen Sie die Spezialdossiers aus, die in dieser Ordnungsposition erlaubt sind.",
                     "_zope_schema_type": "List"
                 },
                 "former_reference": {
-                    "type": "string",
+                    "type": [
+                        "null",
+                        "string"
+                    ],
                     "title": "Fr\u00fcheres Zeichen",
                     "description": "",
                     "_zope_schema_type": "TextLine"
                 },
                 "reference_number_prefix": {
-                    "type": "string",
+                    "type": [
+                        "null",
+                        "string"
+                    ],
                     "title": "Pr\u00e4fix des Aktenzeichens",
                     "description": "",
                     "_zope_schema_type": "TextLine",
                     "default": "<H\u00f6chste auf dieser Ebene vergebene Nummer + 1>"
                 },
                 "creators": {
-                    "type": "array",
+                    "type": [
+                        "null",
+                        "array"
+                    ],
                     "title": "Autoren",
                     "description": "",
                     "_zope_schema_type": "Tuple"
