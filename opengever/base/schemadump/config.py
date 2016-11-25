@@ -42,6 +42,19 @@ DEFAULT_OVERRIDES = {
     },
 }
 
+# Dropped from all schema dumps
+IGNORED_FIELDS = [
+    'plone.app.versioningbehavior.behaviors.IVersionable.changeNote',
+    'opengever.document.behaviors.metadata.IDocumentMetadata.preview',
+    'opengever.document.behaviors.metadata.IDocumentMetadata.thumbnail',
+    'opengever.dossier.behaviors.dossier.IDossier.temporary_former_reference_number',  # noqa
+]
+
+# Dropped from OGGBundle schema dumps
+IGNORED_OGGBUNDLE_FIELDS = {
+    'document': ['file', 'archival_file', 'archival_file_state'],
+}
+
 JSON_SCHEMA_FIELD_TYPES = {
     'TextLine':      {'type': 'string'},                     # noqa
     'Text':          {'type': 'string'},                     # noqa

@@ -2,10 +2,13 @@ from collections import OrderedDict
 from jsonschema import Draft4Validator
 from opengever.base.schemadump.config import GEVER_SQL_TYPES
 from opengever.base.schemadump.config import GEVER_TYPES
+from opengever.base.schemadump.config import IGNORED_FIELDS
+from opengever.base.schemadump.config import IGNORED_OGGBUNDLE_FIELDS
 from opengever.base.schemadump.config import JSON_SCHEMA_FIELD_TYPES
 from opengever.base.schemadump.field import FieldDumper
 from opengever.base.schemadump.field import SQLFieldDumper
 from opengever.base.schemadump.helpers import DirectoryHelperMixin
+from opengever.base.schemadump.helpers import mkdir_p
 from opengever.base.schemadump.helpers import translate_de
 from opengever.base.schemadump.log import setup_logging
 from opengever.base.utils import pretty_json
@@ -36,6 +39,11 @@ class SchemaDumper(object):
         field_dumper = FieldDumper(schema)
 
         for name, field in getFieldsInOrder(schema):
+            dottedname = '.'.join((schema.__identifier__, field.getName()))
+            if dottedname in IGNORED_FIELDS:
+                print "    Skipping field %s" % dottedname
+                continue
+
             field_dump = field_dumper.dump(field)
             fields.append(field_dump)
 
@@ -259,6 +267,81 @@ class JSONSchemaBuilder(object):
         return js_property
 
 
+class OGGBundleJSONSchemaBuilder(object):
+    """Builds a JSON Schema representation of a single OGGBundle type (as a
+    Python data structure).
+    """
+
+    def build_schema(self, short_name, portal_type):
+        schema = OrderedDict([
+            (u'$schema', u'http://json-schema.org/draft-04/schema#'),
+            (u'type', u'array'),
+            (u'items', {"$ref": "#/definitions/%s" % short_name}),
+            (u'definitions', {}),
+        ])
+
+        core_schema = JSONSchemaBuilder().build_schema(portal_type)
+        core_schema.pop('$schema')
+        schema['definitions'][short_name] = core_schema
+        if 'required' not in core_schema:
+            core_schema['required'] = []
+
+        core_schema['properties']['review_state'] = {'type': 'string'}
+        core_schema['required'].append('review_state')
+
+        core_schema['properties']['guid'] = {'type': 'string'}
+        core_schema['required'].append('guid')
+
+        core_schema['properties']['parent_guid'] = {'type': 'string'}
+        core_schema['required'].append('parent_guid')
+
+        if portal_type == 'opengever.repository.repositoryroot':
+            # Repository roots don't have a parent GUID
+            core_schema['required'].remove('parent_guid')
+
+        if not portal_type == 'opengever.document.document':
+            # Permissions
+            core_schema['properties']['_permissions'] = {
+                "$ref": "#/definitions/permission"}
+
+            schema['definitions']['permission'] = {
+                "type": "object",
+                "additionalProperties": False,
+                "properties": {}
+            }
+            string_array = {
+                "type": "array",
+                "items": {
+                    "type": "string"
+                }
+            }
+
+            schema['definitions']['permission']['properties'] = {
+                "block_inheritance": {"type": "boolean"},
+                "read": string_array,
+                "add": string_array,
+                "edit": string_array,
+                "close": string_array,
+                "reactivate": string_array,
+            }
+
+        if portal_type == 'opengever.document.document':
+            core_schema['properties']['filepath'] = {'type': 'string'}
+            core_schema['required'].extend(['title', 'filepath'])
+            # XXX: Documents without files?
+
+        self._filter_fields(short_name, core_schema)
+
+        return schema
+
+    def _filter_fields(self, short_name, core_schema):
+        filtered_fields = IGNORED_OGGBUNDLE_FIELDS.get(short_name, [])
+        for field_name in filtered_fields:
+            core_schema['properties'].pop(field_name, None)
+            if field_name in core_schema['required']:
+                core_schema['required'].remove(field_name)
+
+
 class JSONSchemaDumpWriter(DirectoryHelperMixin):
     """Collects JSON Schema representations of common GEVER types and dumps
     them to the file system.
@@ -279,6 +362,36 @@ class JSONSchemaDumpWriter(DirectoryHelperMixin):
             log.info('Dumped: %s\n' % dump_path)
 
 
+class OGGBundleJSONSchemaDumpWriter(DirectoryHelperMixin):
+    """Collects JSON Schema representations of OGGBundle types and dumps
+    them to the file system.
+    """
+
+    OGGBUNDLE_TYPES = {
+        'reporoot': 'opengever.repository.repositoryroot',
+        'repofolder': 'opengever.repository.repositoryfolder',
+        'dossier': 'opengever.dossier.businesscasedossier',
+        'document': 'opengever.document.document',
+    }
+
+    def dump(self):
+        builder = OGGBundleJSONSchemaBuilder()
+
+        dump_dir = pjoin(self.schema_dumps_dir, 'oggbundle')
+        mkdir_p(dump_dir)
+
+        for short_name, portal_type in self.OGGBUNDLE_TYPES.items():
+            schema = builder.build_schema(short_name, portal_type)
+            filename = '%ss.schema.json' % short_name
+            dump_path = pjoin(dump_dir, filename)
+
+            with open(dump_path, 'w') as dump_file:
+                json_dump = pretty_json(schema)
+                dump_file.write(json_dump)
+
+            log.info('Dumped: %s\n' % dump_path)
+
+
 def dump_schemas():
     """Dump JSON Schemas of common GEVER content types to the filesystem.
 
@@ -286,5 +399,14 @@ def dump_schemas():
     """
     transaction.doom()
     writer = JSONSchemaDumpWriter()
+    result = writer.dump()
+    return result
+
+
+def dump_oggbundle_schemas():
+    """Dump JSON Schemas for the OGGBundle exchange format to the filesystem.
+    """
+    transaction.doom()
+    writer = OGGBundleJSONSchemaDumpWriter()
     result = writer.dump()
     return result
