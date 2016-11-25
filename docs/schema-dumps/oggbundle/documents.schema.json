@@ -25,12 +25,6 @@
                 "parent_guid": {
                     "type": "string"
                 },
-                "file": {
-                    "type": "string",
-                    "title": "Datei",
-                    "description": "Datei, die zu einem Dossier hinzugef\u00fcgt wird",
-                    "_zope_schema_type": "NamedBlobFile"
-                },
                 "keywords": {
                     "type": "array",
                     "title": "Schlagworte",

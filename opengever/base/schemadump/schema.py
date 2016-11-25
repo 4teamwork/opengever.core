@@ -3,6 +3,7 @@ from jsonschema import Draft4Validator
 from opengever.base.schemadump.config import GEVER_SQL_TYPES
 from opengever.base.schemadump.config import GEVER_TYPES
 from opengever.base.schemadump.config import IGNORED_FIELDS
+from opengever.base.schemadump.config import IGNORED_OGGBUNDLE_FIELDS
 from opengever.base.schemadump.config import JSON_SCHEMA_FIELD_TYPES
 from opengever.base.schemadump.field import FieldDumper
 from opengever.base.schemadump.field import SQLFieldDumper
@@ -329,7 +330,16 @@ class OGGBundleJSONSchemaBuilder(object):
             core_schema['required'].extend(['title', 'filepath'])
             # XXX: Documents without files?
 
+        self._filter_fields(short_name, core_schema)
+
         return schema
+
+    def _filter_fields(self, short_name, core_schema):
+        filtered_fields = IGNORED_OGGBUNDLE_FIELDS.get(short_name, [])
+        for field_name in filtered_fields:
+            core_schema['properties'].pop(field_name, None)
+            if field_name in core_schema['required']:
+                core_schema['required'].remove(field_name)
 
 
 class JSONSchemaDumpWriter(DirectoryHelperMixin):
