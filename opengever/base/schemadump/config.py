@@ -51,7 +51,7 @@ IGNORED_FIELDS = [
 
 # Dropped from OGGBundle schema dumps
 IGNORED_OGGBUNDLE_FIELDS = {
-    'document': ['file'],
+    'document': ['file', 'archival_file', 'archival_file_state'],
 }
 
 JSON_SCHEMA_FIELD_TYPES = {
