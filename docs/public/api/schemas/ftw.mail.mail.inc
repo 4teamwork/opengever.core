@@ -174,26 +174,6 @@
        
 
 
-   .. py:attribute:: thumbnail
-
-       :Feldname: :field-title:`Kurzbild`
-       :Datentyp: ``NamedBlobFile``
-       
-       
-       
-       
-
-
-   .. py:attribute:: preview
-
-       :Feldname: :field-title:`Vorschau`
-       :Datentyp: ``NamedBlobFile``
-       
-       
-       :Beschreibung: Online Voransicht des Originaldokuments
-       
-
-
    .. py:attribute:: title
 
        :Feldname: :field-title:`Titel`
@@ -201,14 +181,4 @@
        
        
        
-       
-
-
-   .. py:attribute:: changeNote
-
-       :Feldname: :field-title:`Änderungsnotiz`
-       :Datentyp: ``TextLine``
-       
-       
-       :Beschreibung: Geben Sie einen Kommentar ein, der die von Ihnen gemachten Änderungen beschreibt.
        

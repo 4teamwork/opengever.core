@@ -62,12 +62,6 @@
             "description": "Nachname Vorname oder ein Benutzerk\u00fcrzel (wird automatisch nach Nachname Vorname aufgel\u00f6st).",
             "_zope_schema_type": "TextLine"
         },
-        "title": {
-            "type": "string",
-            "title": "Titel",
-            "description": "",
-            "_zope_schema_type": "TextLine"
-        },
         "archival_file_state": {
             "type": "integer",
             "title": "Status Archivdatei",
@@ -79,12 +73,6 @@
             "title": "Archivdatei",
             "description": "Archivtaugliche Version der Originaldatei",
             "_zope_schema_type": "NamedBlobFile"
-        },
-        "changeNote": {
-            "type": "string",
-            "title": "\u00c4nderungsnotiz",
-            "description": "Geben Sie einen Kommentar ein, der die von Ihnen gemachten \u00c4nderungen beschreibt.",
-            "_zope_schema_type": "TextLine"
         },
         "digitally_available": {
             "type": "boolean",
@@ -118,11 +106,11 @@
             "description": "",
             "_zope_schema_type": "Tuple"
         },
-        "preview": {
+        "title": {
             "type": "string",
-            "title": "Vorschau",
-            "description": "Online Voransicht des Originaldokuments",
-            "_zope_schema_type": "NamedBlobFile"
+            "title": "Titel",
+            "description": "",
+            "_zope_schema_type": "TextLine"
         },
         "message": {
             "type": "string",
@@ -144,12 +132,6 @@
             "description": "In Papierform aufbewahrt",
             "_zope_schema_type": "Bool",
             "default": true
-        },
-        "thumbnail": {
-            "type": "string",
-            "title": "Kurzbild",
-            "description": "",
-            "_zope_schema_type": "NamedBlobFile"
         },
         "public_trial_statement": {
             "type": "string",
@@ -183,9 +165,6 @@
         "preserved_as_paper",
         "archival_file",
         "archival_file_state",
-        "thumbnail",
-        "preview",
-        "title",
-        "changeNote"
+        "title"
     ]
 }

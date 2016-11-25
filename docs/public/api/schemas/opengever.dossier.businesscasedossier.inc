@@ -84,16 +84,6 @@
        :Wertebereich: ["department", "directorate", "administration", "personal", "government"]
 
 
-   .. py:attribute:: temporary_former_reference_number
-
-       :Feldname: :field-title:`Temporäres früheres Aktenzeichen`
-       :Datentyp: ``TextLine``
-       
-       
-       
-       
-
-
    .. py:attribute:: container_type
 
        :Feldname: :field-title:`Behältnis-Art`
