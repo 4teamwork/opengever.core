@@ -331,6 +331,7 @@ class OGGBundleJSONSchemaBuilder(object):
             # XXX: Documents without files?
 
         self._filter_fields(short_name, core_schema)
+        self._make_optional_fields_nullable(core_schema)
 
         return schema
 
@@ -340,6 +341,22 @@ class OGGBundleJSONSchemaBuilder(object):
             core_schema['properties'].pop(field_name, None)
             if field_name in core_schema['required']:
                 core_schema['required'].remove(field_name)
+
+    def _make_optional_fields_nullable(self, core_schema):
+        for field_name, field in core_schema['properties'].items():
+            if field_name not in core_schema['required']:
+                existing_type = field.get('type')
+                if not existing_type:
+                    continue
+
+                # Add null/None as one of the allowed data types
+                assert isinstance(existing_type, basestring)
+                field['type'] = ['null'] + [existing_type]
+
+                # If the field has a vocabulary, null/None also needs to be
+                # part of that vocabulary in order for the schema to validate
+                if 'enum' in field:
+                    field['enum'].insert(0, None)
 
 
 class JSONSchemaDumpWriter(DirectoryHelperMixin):
