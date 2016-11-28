@@ -75,4 +75,9 @@
     name="opengever.setup.modelconstructor"
     />
 
+  <utility
+    component=".sections.jsonsource.JSONSourceSection"
+    name="opengever.setup.jsonsource"
+    />
+
 </configure>
