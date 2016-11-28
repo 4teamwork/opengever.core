@@ -5,6 +5,9 @@ Changelog
 4.13.1 (unreleased)
 -------------------
 
+- Add templatefolder-tab for displaying dossiertemplates.
+  [elioschmutz]
+
 - Make disposition title editable, but prefill it with a default value.
   [phgross]
 

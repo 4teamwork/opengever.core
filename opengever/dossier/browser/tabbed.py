@@ -1,5 +1,6 @@
 from opengever.contact import is_contact_feature_enabled
 from opengever.dossier import _
+from opengever.dossier.dossiertemplate import is_dossier_template_feature_enabled
 from opengever.meeting import is_meeting_feature_enabled
 from opengever.tabbedview import GeverTabbedView
 
@@ -100,9 +101,18 @@ class TemplateDossierTabbedView(GeverTabbedView):
                                default=u'Sablon Templates'),
                     }
 
+    @property
+    def dossiertemplate_tab(self):
+        if is_dossier_template_feature_enabled():
+            return {'id': 'dossiertemplates',
+                    'title': _(u'label_dossier_templates',
+                               default=u'Dossier templates'),
+                    }
+
     def _get_tabs(self):
         return [
             self.template_tab,
+            self.dossiertemplate_tab,
             self.sablon_tab,
             self.tasktemplate_folders_tab
         ]

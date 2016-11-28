@@ -128,3 +128,43 @@ class TestDossierTemplate(FunctionalTestCase):
         self.assertEqual(
             'Edit Subdossier',
             browser.css('#content h1').first.text)
+
+    @browsing
+    def test_dossiertemplates_tab_lists_only_dossiertemplates_without_subdossiers(self, browser):
+        dossiertemplate = create(Builder('dossiertemplate')
+                                 .titled(u'My Dossiertemplate')
+                                 .within(self.templatedossier))
+
+        create(Builder('dossiertemplate')
+               .titled(u'A Subdossiertemplate')
+               .within(dossiertemplate))
+
+        create(Builder('document')
+               .titled('Template A')
+               .within(self.templatedossier))
+
+        browser.login().visit(self.templatedossier, view="tabbedview_view-dossiertemplates")
+
+        self.assertEqual(
+            ['My Dossiertemplate'],
+            browser.css('.listing td .linkWrapper').text)
+
+    @browsing
+    def test_documents_inside_a_dossiertemplate_will_not_be_listed_in_documents_tab(self, browser):
+        create(Builder('document')
+               .titled('Good document')
+               .within(self.templatedossier))
+
+        dossiertemplate = create(Builder('dossiertemplate')
+                                 .titled(u'My Dossiertemplate')
+                                 .within(self.templatedossier))
+
+        create(Builder('document')
+               .titled('Bad document')
+               .within(dossiertemplate))
+
+        browser.login().visit(self.templatedossier, view="tabbedview_view-documents-proxy")
+
+        self.assertEqual(
+            ['Good document'],
+            browser.css('.listing td .linkWrapper').text)
