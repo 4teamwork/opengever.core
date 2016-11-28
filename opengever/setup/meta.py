@@ -80,6 +80,11 @@ class IDeploymentDirective(Interface):
         required=False,
         max_length=GROUP_ID_LENGTH)
 
+    records_manager_group = TextLine(
+        title=u'Records manager group',
+        required=False,
+        max_length=GROUP_ID_LENGTH)
+
 
 def register_ldap(context, **kwargs):
     title = kwargs.get('title')
