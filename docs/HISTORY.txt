@@ -5,6 +5,9 @@ Changelog
 4.13.1 (unreleased)
 -------------------
 
+- Unprotect all buckets when unprotecting a btree.
+  [phgross]
+
 - Add templatefolder-tab for displaying dossiertemplates.
   [elioschmutz]
 

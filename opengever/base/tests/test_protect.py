@@ -1,8 +1,26 @@
+from BTrees.OOBTree import OOBTree
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from itertools import chain
+from opengever.base.protect import get_buckets_for_btree
 from opengever.testing import FunctionalTestCase
 import transaction
+import unittest2
+
+
+class TestBucketsForBTree(unittest2.TestCase):
+
+    def test_get_buckets_for_btree_yield_all_contained_buckets(self):
+        tree = OOBTree()
+        for i in range(0, 50):
+            tree['key-{}'.format(i)] = 'Lorem Ipsum'
+
+        buckets = list(get_buckets_for_btree(tree))
+        self.assertEquals(3, len(buckets))
+
+        keys = [bucket.keys() for bucket in buckets]
+        self.assertEquals(50, len(list(chain(*keys))))
 
 
 class TestProtect(FunctionalTestCase):

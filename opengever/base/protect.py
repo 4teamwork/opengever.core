@@ -48,8 +48,22 @@ def unprotected_write(obj):
         unprotected_write(getattr(obj.obj, '__annotations__', None))
         return obj
 
+    # safeWrite all buckets of a BTree
+    if getattr(obj, '_firstbucket', None):
+        for bucket in get_buckets_for_btree(obj):
+            safeWrite(bucket)
+
     safeWrite(obj)
     return obj
+
+
+def get_buckets_for_btree(tree):
+    bucket = tree._firstbucket
+    yield bucket
+
+    while bucket._next:
+        bucket = bucket._next
+        yield bucket
 
 
 class OGProtectTransform(ProtectTransform):
