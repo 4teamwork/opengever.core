@@ -440,5 +440,12 @@ builder_registry.register('private_dossier', PrivateDossierBuilder)
 class DispositionBuilder(DexterityBuilder):
     portal_type = 'opengever.disposition.disposition'
 
+    def __init__(self, session):
+        super(DispositionBuilder, self).__init__(session)
+        # OfferedDossiersValidator is broken when this is import is in
+        # module scope.
+        from opengever.disposition.disposition import title_default
+        self.arguments['title'] = title_default()
+
 
 builder_registry.register('disposition', DispositionBuilder)

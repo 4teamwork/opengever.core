@@ -35,23 +35,26 @@ class TestDispositionListing(FunctionalTestCase):
         with freeze(datetime(2015, 1, 1)):
             repository = create(Builder('repository').within(self.root))
             self.disposition_a = create(Builder('disposition')
+                                        .titled(u'Angebot FD 23.11.2010')
                                         .within(repository))
             self.disposition_b = create(Builder('disposition')
+                                        .titled(u'Angebot FD 1.2.2003')
                                         .within(repository))
             self.disposition_c = create(Builder('disposition')
+                                        .titled(u'Angebot FD 1.2.1995')
                                         .within(repository))
 
         browser.login().open(self.root, view='tabbedview_view-dispositions')
         self.assertEquals(
             [{'': '',
               'Sequence Number': '1',
-              'Title': 'Disposition Client1 2015 1'},
+              'Title': 'Angebot FD 23.11.2010'},
              {'': '',
               'Sequence Number': '2',
-              'Title': 'Disposition Client1 2015 2'},
+              'Title': 'Angebot FD 1.2.2003'},
              {'': '',
               'Sequence Number': '3',
-              'Title': 'Disposition Client1 2015 3'}],
+              'Title': 'Angebot FD 1.2.1995'}],
             browser.css('.listing').first.dicts())
 
     @browsing

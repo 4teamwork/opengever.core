@@ -5,6 +5,9 @@ Changelog
 4.13.1 (unreleased)
 -------------------
 
+- Make disposition title editable, but prefill it with a default value.
+  [phgross]
+
 - Replace reference field with a transfer_number field on disposition schema.
   [phgross]
 

@@ -51,7 +51,7 @@ class DispositionExcelExport(BrowserView):
         reporter = XLSReporter(
             self.request, self.get_attributes(),
             self.context.get_dossier_representations(),
-            sheet_title=self.context.title)
+            sheet_title=self.get_sheet_title())
 
         response = self.request.RESPONSE
         data = reporter()
@@ -68,3 +68,9 @@ class DispositionExcelExport(BrowserView):
             self.request, "disposition_report.xlsx")
 
         return data
+
+    def get_sheet_title(self):
+        """Returns current disposition title. Crop it to 30 characters
+        because openpyxl only accepts sheet titles with max 30 characters.
+        """
+        return self.context.title[:30]
