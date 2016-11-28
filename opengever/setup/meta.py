@@ -75,6 +75,11 @@ class IDeploymentDirective(Interface):
         required=False,
         max_length=GROUP_ID_LENGTH)
 
+    archivist_group = TextLine(
+        title=u'Archivist group',
+        required=False,
+        max_length=GROUP_ID_LENGTH)
+
 
 def register_ldap(context, **kwargs):
     title = kwargs.get('title')

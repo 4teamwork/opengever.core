@@ -159,6 +159,8 @@ class GeverDeployment(object):
                                   'rolemanager_group', 'Role Manager')
         self.assign_group_to_role(self.site, self.config,
                                   'administrator_group', 'Administrator')
+        self.assign_group_to_role(self.site, self.config,
+                                  'archivist_group', 'Archivist')
 
         # REALLY set the language - the plone4 addPloneSite is really
         # buggy with languages.
