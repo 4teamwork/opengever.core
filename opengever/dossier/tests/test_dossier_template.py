@@ -5,7 +5,7 @@ from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_DOSSIER_TEMPLATE_LAYER
 from opengever.dossier.behaviors.dossier import IDossierMarker
-from opengever.dossier.dossiertemplate import IDossierTemplate
+from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateSchema
 from opengever.dossier.dossiertemplate import is_dossier_template_feature_enabled
 from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings
 from opengever.testing import FunctionalTestCase
@@ -48,7 +48,7 @@ class TestDossierTemplate(FunctionalTestCase):
 
     def test_dossiertemplate_provides_the_IDossierTemplate_behavior(self):
         dossiertemplate = create(Builder('dossiertemplate'))
-        self.assertTrue(IDossierTemplate.providedBy(dossiertemplate))
+        self.assertTrue(IDossierTemplateSchema.providedBy(dossiertemplate))
 
     @browsing
     def test_adding_dossiertemplate_works_properly(self, browser):
@@ -58,6 +58,19 @@ class TestDossierTemplate(FunctionalTestCase):
 
         self.assertEquals(['Item created'], info_messages())
         self.assertEquals(['Template'], browser.css('h1').text)
+
+    @browsing
+    def test_edit_dossiertemplate_works_properly(self, browser):
+        dossiertemplate = create(Builder('dossiertemplate')
+                                 .within(self.templatedossier))
+
+        browser.login().open(dossiertemplate)
+
+        browser.find('Edit').click()
+        browser.fill({'Title': 'Edited Template'}).submit()
+
+        self.assertEquals(['Changes saved'], info_messages())
+        self.assertEquals(['Edited Template'], browser.css('h1').text)
 
     @browsing
     def test_addable_types(self, browser):
@@ -80,11 +93,10 @@ class TestDossierTemplate(FunctionalTestCase):
         factoriesmenu.add('Subdossier')
         browser.fill({'Title': 'Template'}).submit()
 
-        self.assertTrue(IDossierTemplate.providedBy(browser.context))
+        self.assertTrue(IDossierTemplateSchema.providedBy(browser.context))
 
     @browsing
     def test_add_form_title_of_dossiertemplate_is_the_default_title(self, browser):
-
         browser.login().open(self.templatedossier)
         factoriesmenu.add('Dossier template')
 
@@ -168,3 +180,26 @@ class TestDossierTemplate(FunctionalTestCase):
         self.assertEqual(
             ['Good document'],
             browser.css('.listing td .linkWrapper').text)
+
+    @browsing
+    def test_show_only_whitelisted_schema_fields_in_add_form(self, browser):
+        browser.login().open(self.templatedossier)
+        factoriesmenu.add('Dossier template')
+
+        self.assertEqual(
+            [u'Title', 'Description', 'Keywords', 'Comments', 'filing prefix'],
+            browser.css('#content fieldset label').text
+        )
+
+    @browsing
+    def test_show_only_whitelisted_schema_fields_in_edit_form(self, browser):
+        dossiertemplate = create(Builder('dossiertemplate')
+                                 .titled(u'My Dossiertemplate')
+                                 .within(self.templatedossier))
+
+        browser.login().visit(dossiertemplate, view="edit")
+
+        self.assertEqual(
+            [u'Title', 'Description', 'Keywords', 'Comments', 'filing prefix'],
+            browser.css('#content fieldset label').text
+        )

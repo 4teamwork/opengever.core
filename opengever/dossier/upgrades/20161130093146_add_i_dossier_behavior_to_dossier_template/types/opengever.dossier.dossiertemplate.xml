@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<object name="opengever.dossier.dossiertemplate" meta_type="Dexterity FTI"
+        i18n:domain="opengever.dossier" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+
+    <!-- schema interface -->
+    <property name="schema">opengever.dossier.dossiertemplate.behaviors.IDossierTemplateSchema</property>
+
+    <!-- enabled behaviors -->
+    <property name="behaviors" purge="False">
+        <element value="opengever.dossier.dossiertemplate.behaviors.IDossierTemplate" />
+    </property>
+
+</object>

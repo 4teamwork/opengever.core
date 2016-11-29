@@ -1,13 +1,10 @@
 from five import grok
-from ftw.table import helper
+from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateSchema
 from opengever.dossier.templatedossier.interfaces import ITemplateDossier
 from opengever.tabbedview import _
 from opengever.tabbedview import BaseCatalogListingTab
 from opengever.tabbedview.browser.tabs import Documents, Trash
 from opengever.tabbedview.helper import linked
-from opengever.tabbedview.helper import workflow_state
-from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
-
 
 REMOVED_COLUMNS = ['receipt_date', 'delivery_date', 'containing_subdossier']
 
@@ -97,7 +94,7 @@ class TemplateDossierDossierTemplates(BaseCatalogListingTab):
 
     filterlist_available = False
 
-    object_provides = 'opengever.dossier.dossiertemplate.behaviors.IDossierTemplate'
+    object_provides = IDossierTemplateSchema.__identifier__
 
     search_options = {'is_subdossier': False}
 

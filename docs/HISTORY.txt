@@ -5,6 +5,10 @@ Changelog
 4.13.1 (unreleased)
 -------------------
 
+- Add a whitelisted schema generator for dossiertemplates to avoid duplicate
+  schema-definitions
+  [elioschmutz]
+
 - Add removal protocol PDF export for dispositions.
   [phgross]
 

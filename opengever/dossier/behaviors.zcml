@@ -40,13 +40,24 @@
         for="opengever.dossier.behaviors.dossier.IDossierMarker"
         />
 
-    <!-- dossiertemplate name from title beahvior -->
+    <!-- Dossiertemplate -->
+
+    <plone:behavior
+        title="OpenGever Dossiertemplate"
+        description="Adds the dossier behavior with an own marker interface"
+        provides=".dossiertemplate.behaviors.IDossierTemplate"
+        factory="plone.behavior.AnnotationStorage"
+        marker=".dossiertemplate.behaviors.IDossierTemplateMarker"
+        for="plone.dexterity.interfaces.IDexterityContent"
+        />
+
+    <!-- Dossiertemplate name from title beahvior -->
     <plone:behavior
         title="dossiertemplate name from title"
         description=""
         provides=".dossiertemplate.behaviors.IDossierTemplateNameFromTitle"
         factory=".dossiertemplate.behaviors.DossierTemplateNameFromTitle"
-        for="opengever.dossier.dossiertemplate.behaviors.IDossierTemplate"
+        for="opengever.dossier.dossiertemplate.behaviors.IDossierTemplateSchema"
         />
 
     <!-- Restricted dossier behavior -->
