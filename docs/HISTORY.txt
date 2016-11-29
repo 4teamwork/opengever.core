@@ -5,6 +5,10 @@ Changelog
 4.13.1 (unreleased)
 -------------------
 
+- Add new role Archivist and let them see dispositions and offered and
+  archived dossiers.
+  [phgross]
+
 - Unprotect all buckets when unprotecting a btree.
   [phgross]
 

@@ -19,6 +19,8 @@
                            opengever.examplecontent:municipality_content
                            opengever.examplecontent:init"
       admin_unit_id="fd"
+      records_manager_group="record_managers"
+      archivist_group="archiv"
       />
 
   <opengever:registerLDAP
