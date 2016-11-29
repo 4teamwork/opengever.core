@@ -440,9 +440,9 @@ class BumblebeeLayer(PloneSandboxLayer):
     def setUpZope(self, app, configurationContext):
         super(BumblebeeLayer, self).setUpZope(app, configurationContext)
 
-        queue = BumblebeeTestTaskQueue()
+        self.queue = BumblebeeTestTaskQueue()
         sm = getSiteManager()
-        sm.registerUtility(queue, provided=ITaskQueue, name='test-queue')
+        sm.registerUtility(self.queue, provided=ITaskQueue, name='test-queue')
 
     def setUpPloneSite(self, portal):
         activate_bumblebee_feature()
@@ -465,6 +465,10 @@ class BumblebeeLayer(PloneSandboxLayer):
         os.environ['BUMBLEBEE_PUBLIC_URL'] = 'http://bumblebee'
         os.environ.pop('BUMBLEBEE_INTERNAL_URL', None)
         os.environ.pop('BUMBLEBEE_DEACTIVATE', None)
+
+    def testTearDown(self):
+        self.queue.reset()
+        super(BumblebeeLayer, self).testTearDown()
 
     defaultBases = (OPENGEVER_FUNCTIONAL_TESTING,)
 
