@@ -13,12 +13,17 @@ class DuplicateGuid(Exception):
     pass
 
 
+class MissingParent(Exception):
+    pass
+
+
 class ResolveGUIDSection(object):
     """Resolve and validate GUIDs.
 
     This section also validates that:
         - each item has a guid
         - each guid is unique
+        - parent pointers are valid, should they exist
 
     """
     classProvides(ISectionBlueprint)
@@ -35,6 +40,7 @@ class ResolveGUIDSection(object):
 
     def __iter__(self):
         self.register_items()
+        roots = self.build_tree()
 
     def register_items(self):
         """Register all items by their guid."""
@@ -48,3 +54,22 @@ class ResolveGUIDSection(object):
                 raise DuplicateGuid(guid)
 
             self.item_by_guid[guid] = item
+
+    def build_tree(self):
+        """Build a tree from the flat list of items.
+
+        Register all items with their parents.
+        """
+        roots = []
+        for item in self.item_by_guid.values():
+            parent_guid = item.get('parent_guid', None)
+            if parent_guid:
+                parent = self.item_by_guid.get(parent_guid)
+                if not parent:
+                    raise MissingParent(parent_guid)
+                children = parent.setdefault('_children', [])
+                children.append(item)
+            else:
+                roots.append(item)
+        return roots
+

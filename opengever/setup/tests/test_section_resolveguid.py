@@ -1,5 +1,6 @@
 from opengever.setup.sections.resolveguid import DuplicateGuid
 from opengever.setup.sections.resolveguid import MissingGuid
+from opengever.setup.sections.resolveguid import MissingParent
 from opengever.setup.sections.resolveguid import ResolveGUIDSection
 from opengever.setup.tests import MockTransmogrifier
 from opengever.testing import FunctionalTestCase
@@ -28,4 +29,12 @@ class TestResolveGUID(FunctionalTestCase):
         )
 
         with self.assertRaises(DuplicateGuid):
+            list(section)
+
+    def test_validates_parent_guid(self):
+        section = self.setup_section(
+            previous=[{'guid': 1234, 'parent_guid': 1337}]
+        )
+
+        with self.assertRaises(MissingParent):
             list(section)
