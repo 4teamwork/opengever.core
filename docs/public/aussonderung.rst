@@ -8,15 +8,14 @@ Aussonderung
 
 Abgelaufene Dossiers
 --------------------
-Das Aussondern von Inhalten im OneGov GEVER wird ausschliesslich auf Stufe Dossier angeboten. Dabei können nur stornierte oder abgeschlossen Dossier, bei welchen die Aufbewahrungsfrist abgelaufen ist ausgesondert werden.
+Das Aussondern von Inhalten im OneGov GEVER wird ausschliesslich auf Stufe Dossier angeboten. Dabei können nur stornierte oder abgeschlossen Dossier, bei welchen die Aufbewahrungsfrist abgelaufen ist, ausgesondert werden.
 
 Eine Übersicht über Abgelaufene Dossiers, also Dossiers welche für eine Aussonderung in Frage kommen, bietet der Status-Filter `angeboten` welcher auf allen Dossierauflistungen zur Verfügung steht.
 
-Für die Berechnung, ob ein Dossier abgelaufen ist, wird ein Catalog-Index `retention_expiration` mit dem Ablaufdatum geführt.
 
 Angebot erstellen und archivieren
 ---------------------------------
-Beim Angebot handelt es sich um einen separaten Inhaltstypen, der neben zustätzlichen Metadaten, vor allem die Referenzen auf die entsprechenden Dossiers führt. Das Angebot-Objekt stellt zudem den kompletten Aussonderungs-Workflow zur Verfügung. Dieser setzt sich aus den folgenden Transitions zusammen:
+Beim Angebot handelt es sich um einen separaten Inhaltstypen, der neben zusätzlichen Metadaten vor allem die Referenzen auf die entsprechenden Dossiers führt. Das Angebot-Objekt stellt zudem den kompletten Aussonderungs-Workflow zur Verfügung. Dieser setzt sich aus den folgenden Übergängen zusammen:
 
  1. Angebot erstellen
  2. Bewertung finalisieren
@@ -29,7 +28,7 @@ Beim Angebot handelt es sich um einen separaten Inhaltstypen, der neben zustätz
 
 Angebot erstellen und bewerten
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Aussonderungsangebote können auf Stufe Ordnungssystem bzw. Ordnungsposition erstellt werden. Für die direkte Erstellung eines Angebots aus einer Dossierauflistung inkl. Auswahl der Dossiers, steht zudem die Tabbedview-Action `Aussonderungsangebot erstellen` zur Verfügung.
+Aussonderungsangebote können auf Stufe Ordnungssystem bzw. Ordnungsposition erstellt werden. Für die direkte Erstellung eines Angebots aus einer Dossierauflistung inkl. Auswahl der Dossiers, steht die Tabbedview-Action `Aussonderungsangebot erstellen` zur Verfügung.
 
 |aussonderung-1|
 
@@ -37,7 +36,7 @@ Wurde eine Angebot erstellt, befindet es sich im Status ``In Arbeit`` (``disposi
 
 Zudem kann die Bewertung des Angebots vorgenommen werden, dabei handelt es sich um den Entscheid, ob ein Dossier archiviert werden soll oder nicht. GEVER macht dabei automatisch ein Vorbewertung anhand des Dossier-Metadatums ``Archivwürdigkeit``.
 
-Anschliessend kann die Bewertung von den Records Managern über die Angebotsansicht angepasst und vorbereitet werden. Der Entscheid bzw. die Bewertung wird via dem ``Appraisal Adapter`` in die Annotations des Angebots gespeichert.
+Anschliessend kann die Bewertung von den Records Managern über die Angebotsansicht angepasst und vorbereitet werden.
 
 |aussonderung-2|
 
@@ -80,7 +79,7 @@ Die neue Rolle `Records Manager` wird global vergeben und wird dem relativ klein
 
 Feature Flag
 ------------
-Die zusätzichen Features sind nicht durch einen Registry Feature-Flag geschützt, sondern die neue Rolle `Records Manager` übernimmt die Funktionalität des Feature-Flags.
+Die zusätzichen Features sind mit einem Feature-Flag geschützt, und stehen nur der neuen Rolle `Records Manager` zur Verfügung.
 
 .. |aussonderungs-prozess| image:: _static/img/aussonderungs-prozess.png
 .. |aussonderung-1| image:: _static/img/aussonderung_1.png
