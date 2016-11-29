@@ -1,0 +1,2 @@
+class MockTransmogrifier(object):
+    pass

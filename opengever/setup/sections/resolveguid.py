@@ -1,0 +1,50 @@
+from collections import OrderedDict
+from collective.transmogrifier.interfaces import ISection
+from collective.transmogrifier.interfaces import ISectionBlueprint
+from zope.interface import classProvides
+from zope.interface import implements
+
+
+class MissingGuid(Exception):
+    pass
+
+
+class DuplicateGuid(Exception):
+    pass
+
+
+class ResolveGUIDSection(object):
+    """Resolve and validate GUIDs.
+
+    This section also validates that:
+        - each item has a guid
+        - each guid is unique
+
+    """
+    classProvides(ISectionBlueprint)
+    implements(ISection)
+
+    def __init__(self, transmogrifier, name, options, previous):
+        self.previous = previous
+        self.transmogrifier = transmogrifier
+        self.transmogrifier.item_by_guid = OrderedDict()
+
+    @property
+    def item_by_guid(self):
+        return self.transmogrifier.item_by_guid
+
+    def __iter__(self):
+        self.register_items()
+
+    def register_items(self):
+        """Register all items by their guid."""
+
+        for item in self.previous:
+            if 'guid' not in item:
+                raise MissingGuid(item)
+
+            guid = item['guid']
+            if guid in self.item_by_guid:
+                raise DuplicateGuid(guid)
+
+            self.item_by_guid[guid] = item

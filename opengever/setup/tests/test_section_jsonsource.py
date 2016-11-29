@@ -2,14 +2,11 @@ from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from jsonschema.exceptions import ValidationError
 from opengever.setup.sections.jsonsource import JSONSourceSection
+from opengever.setup.tests import MockTransmogrifier
 from opengever.testing import FunctionalTestCase
 from pkg_resources import resource_filename
 from zope.interface.verify import verifyClass
 from zope.interface.verify import verifyObject
-
-
-class MockTransmogrifier(object):
-    pass
 
 
 class TestJSONSource(FunctionalTestCase):
