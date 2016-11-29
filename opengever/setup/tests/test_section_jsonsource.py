@@ -1,17 +1,20 @@
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
+from jsonschema.exceptions import ValidationError
 from opengever.setup.sections.jsonsource import JSONSourceSection
+from opengever.testing import FunctionalTestCase
 from pkg_resources import resource_filename
-from unittest2 import TestCase
 from zope.interface.verify import verifyClass
 from zope.interface.verify import verifyObject
 
 
-class TestJSONSource(TestCase):
+class TestJSONSource(FunctionalTestCase):
 
     def setup_source(self, options, previous=None):
         previous = previous or []
+        directory = resource_filename('opengever.setup.tests', 'assets')
         options.setdefault('blueprint', 'opengever.setup.jsonsource')
+        options.setdefault('json_dir', directory)
         return JSONSourceSection(None, '', options, previous)
 
     def test_implements_interface(self):
@@ -30,18 +33,14 @@ class TestJSONSource(TestCase):
         self.assertEqual(['Foo'], list(source))
 
     def test_json_file_parsing(self):
-        directory = resource_filename('opengever.setup.tests', 'assets')
-        source = self.setup_source({'json_dir': directory,
-                                    'filename': 'simple.json'})
+        source = self.setup_source({'filename': 'simple.json'})
         self.assertEqual(
             [{u'_source': 'simple.json', u'item': u'b\xe4r'}], list(source)
         )
 
     def test_inserts_portal_type_if_specified(self):
-        directory = resource_filename('opengever.setup.tests', 'assets')
         source = self.setup_source(
-            {'json_dir': directory,
-             'filename': 'simple.json',
+            {'filename': 'simple.json',
              'portal_type': 'foo.bar.qux'})
         self.assertEqual(
             [{u'item': u'b\xe4r',
@@ -49,3 +48,25 @@ class TestJSONSource(TestCase):
               u'_type': 'foo.bar.qux'}],
             list(source)
         )
+
+    def test_validates_portal_type_schema_if_in_supported_types(self):
+        source = self.setup_source(
+            {'filename': 'reporoot.json',
+             'portal_type': 'opengever.repository.repositoryroot'})
+        self.assertEqual([{
+            '_source': 'reporoot.json',
+            '_type': 'opengever.repository.repositoryroot',
+            'guid': '754daf80623f45659004a8c38c78dc3e',
+            'review_state': 'repositoryroot-state-active',
+            'title_de': 'Ordnungssystem',
+            'valid_from': '2000-01-01',
+            'valid_until': '2099-12-31',
+            }],
+            list(source))
+
+    def test_validation_fails_when_files_does_not_meet_schema_spec(self):
+        source = self.setup_source(
+            {'filename': 'simple.json',
+             'portal_type': 'opengever.repository.repositoryroot'})
+        with self.assertRaises(ValidationError):
+            list(source)
