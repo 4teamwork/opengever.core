@@ -32,13 +32,16 @@ class JSONSourceSection(object):
         self.transmogrifier = transmogrifier
 
         self.key = defaultMatcher(options, 'key', name)
-        self.json_dir = options.get('json_dir')
         self.filename = options.get('filename')
+        if hasattr(transmogrifier, 'bundle_dir'):
+            self.bundle_dir = transmogrifier.bundle_dir
+        else:
+            self.bundle_dir = options.get('bundle_dir')
 
         self.portal_type = options.get('portal_type')
         self.json_schema = self.get_content_type_json_schema()
 
-        self.filepath = os.path.join(self.json_dir, self.filename)
+        self.filepath = os.path.join(self.bundle_dir, self.filename)
 
     def get_content_type_json_schema(self):
         if not self.portal_type:
