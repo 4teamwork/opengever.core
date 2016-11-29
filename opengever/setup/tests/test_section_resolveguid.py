@@ -1,6 +1,5 @@
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
-from opengever.setup.sections.jsonsource import JSONSourceSection
 from opengever.setup.sections.resolveguid import DuplicateGuid
 from opengever.setup.sections.resolveguid import MissingGuid
 from opengever.setup.sections.resolveguid import MissingParent
@@ -21,11 +20,11 @@ class TestResolveGUID(FunctionalTestCase):
         return ResolveGUIDSection(transmogrifier, '', options, previous)
 
     def test_implements_interface(self):
-        self.assertTrue(ISection.implementedBy(JSONSourceSection))
-        verifyClass(ISection, JSONSourceSection)
+        self.assertTrue(ISection.implementedBy(ResolveGUIDSection))
+        verifyClass(ISection, ResolveGUIDSection)
 
-        self.assertTrue(ISectionBlueprint.providedBy(JSONSourceSection))
-        verifyObject(ISectionBlueprint, JSONSourceSection)
+        self.assertTrue(ISectionBlueprint.providedBy(ResolveGUIDSection))
+        verifyObject(ISectionBlueprint, ResolveGUIDSection)
 
     def test_requires_guid(self):
         section = self.setup_section(
