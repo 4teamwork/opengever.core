@@ -196,7 +196,9 @@ class Overview(DisplayForm, GeverTabMixin):
         return not submitted_document.is_up_to_date(self.context)
 
     def is_archivale_file_visible(self):
-        return api.user.has_permission('opengever.document.ModifyArchivalFile')
+        return api.user.has_permission(
+            'opengever.document: Modify archival file',
+            obj=self.context)
 
     def render_submitted_version(self, submitted_document):
         return _(u"Submitted version: ${version}",
