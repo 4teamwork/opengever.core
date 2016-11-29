@@ -11,6 +11,13 @@ GEVER_TYPES = [
     'opengever.repository.repositoryroot',
 ]
 
+GEVER_TYPES_TO_OGGBUNDLE_TYPES = {
+    'opengever.document.document': 'document',
+    'opengever.dossier.businesscasedossier': 'dossier',
+    'opengever.repository.repositoryfolder': 'repofolder',
+    'opengever.repository.repositoryroot': 'reporoot'
+}
+
 GEVER_SQL_TYPES = [
     '_opengever.contact.models.Address',
     '_opengever.contact.models.MailAddress',

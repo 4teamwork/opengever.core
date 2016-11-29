@@ -5,6 +5,7 @@ from opengever.base.schemadump.config import GEVER_TYPES
 from opengever.base.schemadump.config import IGNORED_FIELDS
 from opengever.base.schemadump.config import IGNORED_OGGBUNDLE_FIELDS
 from opengever.base.schemadump.config import JSON_SCHEMA_FIELD_TYPES
+from opengever.base.schemadump.config import GEVER_TYPES_TO_OGGBUNDLE_TYPES
 from opengever.base.schemadump.field import FieldDumper
 from opengever.base.schemadump.field import SQLFieldDumper
 from opengever.base.schemadump.helpers import DirectoryHelperMixin
@@ -272,7 +273,8 @@ class OGGBundleJSONSchemaBuilder(object):
     Python data structure).
     """
 
-    def build_schema(self, short_name, portal_type):
+    def build_schema(self, portal_type):
+        short_name = GEVER_TYPES_TO_OGGBUNDLE_TYPES[portal_type]
         schema = OrderedDict([
             (u'$schema', u'http://json-schema.org/draft-04/schema#'),
             (u'type', u'array'),
@@ -384,21 +386,14 @@ class OGGBundleJSONSchemaDumpWriter(DirectoryHelperMixin):
     them to the file system.
     """
 
-    OGGBUNDLE_TYPES = {
-        'reporoot': 'opengever.repository.repositoryroot',
-        'repofolder': 'opengever.repository.repositoryfolder',
-        'dossier': 'opengever.dossier.businesscasedossier',
-        'document': 'opengever.document.document',
-    }
-
     def dump(self):
         builder = OGGBundleJSONSchemaBuilder()
 
         dump_dir = pjoin(self.schema_dumps_dir, 'oggbundle')
         mkdir_p(dump_dir)
 
-        for short_name, portal_type in self.OGGBUNDLE_TYPES.items():
-            schema = builder.build_schema(short_name, portal_type)
+        for portal_type, short_name in GEVER_TYPES_TO_OGGBUNDLE_TYPES.items():
+            schema = builder.build_schema(portal_type)
             filename = '%ss.schema.json' % short_name
             dump_path = pjoin(dump_dir, filename)
 
