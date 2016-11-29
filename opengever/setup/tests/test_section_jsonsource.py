@@ -36,3 +36,16 @@ class TestJSONSource(TestCase):
         self.assertEqual(
             [{u'_source': 'simple.json', u'item': u'b\xe4r'}], list(source)
         )
+
+    def test_inserts_portal_type_if_specified(self):
+        directory = resource_filename('opengever.setup.tests', 'assets')
+        source = self.setup_source(
+            {'json_dir': directory,
+             'filename': 'simple.json',
+             'portal_type': 'foo.bar.qux'})
+        self.assertEqual(
+            [{u'item': u'b\xe4r',
+              u'_source': 'simple.json',
+              u'_type': 'foo.bar.qux'}],
+            list(source)
+        )

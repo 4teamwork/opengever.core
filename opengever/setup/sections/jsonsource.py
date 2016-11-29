@@ -25,6 +25,8 @@ class JSONSourceSection(object):
         self.json_dir = options.get('json_dir')
         self.filename = options.get('filename')
 
+        self.portal_type = options.get('portal_type')
+
         self.filepath = os.path.join(self.json_dir, self.filename)
 
     def read_json_file(self):
@@ -42,4 +44,6 @@ class JSONSourceSection(object):
 
         for item in self.read_json_file():
             item[u'_source'] = self.filename
+            if self.portal_type:
+                item[u'_type'] = self.portal_type
             yield item
