@@ -61,6 +61,8 @@
                           "
       admin_unit_id="{{{adminunit.id}}}"
       rolemanager_group="{{{deployment.rolemanager_group}}}"
+      records_manager_group="{{{deployment.records_manager_group}}}"
+      archivist_group="{{{deployment.archivist_group}}}"
       is_default="True"
       mail_domain="{{{deployment.mail_domain}}}"
       mail_from_address="{{{deployment.mail_from_address}}}"
