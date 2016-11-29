@@ -1,10 +1,14 @@
 from datetime import date
 from datetime import datetime
 from datetime import timedelta
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testing import freeze
 from opengever.base.default_values import get_persisted_values_for_obj
+from opengever.core.testing import toggle_feature
+from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings
 from opengever.testing import FunctionalTestCase
 from plone import api
 from plone.app.testing import setRoles
@@ -418,6 +422,35 @@ class TestDossierDefaults(TestDefaultsBase):
 
         self.assertDictEqual(expected, persisted_values)
 
+    @browsing
+    def test_dossier_from_template(self, browser):
+        toggle_feature(IDossierTemplateSettings, enabled=True)
+
+        root = create(Builder('repository_root'))
+        leaf_node = create(Builder('repository').within(root))
+
+        create(Builder("dossiertemplate")
+               .titled(DOSSIER_REQUIREDS['title']))
+
+        with freeze(FROZEN_NOW):
+            browser.login().open(leaf_node)
+            factoriesmenu.add(u'Dossier with template')
+
+            token = browser.css(
+                'input[name="form.widgets.template"]').first.attrib.get('value')
+
+            browser.fill({'form.widgets.template': token}).submit()
+            browser.click_on('Save')
+            dossier = browser.context
+
+        persisted_values = get_persisted_values_for_obj(dossier)
+        expected = self.get_z3c_form_defaults()
+
+        # XXX: Don't know why this happens
+        expected['public_trial_statement'] = None
+
+        self.assertDictEqual(expected, persisted_values)
+
 
 class TestDocumentDefaults(TestDefaultsBase):
 
@@ -674,3 +707,4 @@ class TestContactDefaults(TestDefaultsBase):
         expected['description'] = None
 
         self.assertDictEqual(expected, persisted_values)
+

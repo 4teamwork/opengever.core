@@ -5,6 +5,9 @@ Changelog
 4.13.1 (unreleased)
 -------------------
 
+- Add a wizard to add a dossier from a dossiertemplate.
+  [elioschmutz]
+
 -  Add entry point to run OGGBundle import from console via
    bin/instance import <path_to_oggbundle>
    [lgraf]

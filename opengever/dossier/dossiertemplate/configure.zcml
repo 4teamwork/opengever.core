@@ -6,7 +6,7 @@
   <browser:page
       for="opengever.repository.interfaces.IRepositoryFolder"
       name="dossier_with_template"
-      class=".form.SelectTemplateDossierView"
+      class=".form.SelectDossierTemplateView"
       permission="zope2.View"
       allowed_attributes="is_available"
       />

@@ -5,10 +5,12 @@ from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_DOSSIER_TEMPLATE_LAYER
 from opengever.core.testing import toggle_feature
+from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
-from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateSchema
 from opengever.dossier.dossiertemplate import is_dossier_template_feature_enabled
+from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateSchema
 from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings
+from opengever.ogds.base.autocomplete_widget import AutocompleteSelectionWidget
 from opengever.testing import FunctionalTestCase
 from plone import api
 
@@ -210,26 +212,113 @@ class TestDossierTemplateAddWizard(FunctionalTestCase):
 
     layer = OPENGEVER_FUNCTIONAL_DOSSIER_TEMPLATE_LAYER
 
-    def test_is_not_available_if_dossiertempalte_feature_is_disabled(self):
-        root = create(Builder('repository_root'))
-        leaf_node = create(Builder('repository').within(root))
+    def setUp(self):
+        super(TestDossierTemplateAddWizard, self).setUp()
+        self.root = create(Builder('repository_root'))
+        self.branch_node = create(Builder('repository').within(self.root))
+        self.leaf_node = create(Builder('repository').within(self.branch_node))
 
+        self.templatedossier = create(Builder('templatedossier'))
+
+    def test_is_not_available_if_dossiertempalte_feature_is_disabled(self):
         toggle_feature(IDossierTemplateSettings, enabled=False)
 
         self.assertFalse(
-            leaf_node.restrictedTraverse('@@dossier_with_template/is_available')())
+            self.leaf_node.restrictedTraverse('@@dossier_with_template/is_available')())
 
     def test_is_not_available_on_branch_node(self):
-        root = create(Builder('repository_root'))
-        branch_node = create(Builder('repository').within(root))
-        leaf_node = create(Builder('repository').within(branch_node))
-
         self.assertFalse(
-            branch_node.restrictedTraverse('@@dossier_with_template/is_available')())
+            self.branch_node.restrictedTraverse('@@dossier_with_template/is_available')())
 
     def test_is_available_on_leaf_node_when_feature_is_enabled(self):
-        root = create(Builder('repository_root'))
-        leaf_node = create(Builder('repository').within(root))
-
         self.assertTrue(
-            leaf_node.restrictedTraverse('@@dossier_with_template/is_available')())
+            self.leaf_node.restrictedTraverse('@@dossier_with_template/is_available')())
+
+    @browsing
+    def test_only_show_dossiertemplates_without_subdossiers(self, browser):
+        template1 = create(Builder("dossiertemplate")
+                           .within(self.templatedossier)
+                           .titled(u"Template 1"))
+
+        create(Builder("dossiertemplate")
+               .within(template1)
+               .titled(u"Subdossier 1"))
+
+        template2 = create(Builder("dossiertemplate")
+                           .within(self.templatedossier)
+                           .titled(u"Template 2"))
+
+        create(Builder("dossiertemplate")
+               .within(template2)
+               .titled(u"Subdossier 2"))
+
+        browser.login().visit(self.leaf_node)
+        factoriesmenu.add('Dossier with template')
+
+        self.assertEqual(
+            ['Template 1', 'Template 2'],
+            browser.css('.listing tr td:nth-child(2)').text)
+
+    @browsing
+    def test_dossiertemplate_values_are_prefilled_properly_in_the_dossier(self, browser):
+        values = {
+            'title': u'My template',
+            'description': u'Lorem ipsum',
+            'keywords': (u'special', u'secret'),
+            'comments': 'this is very special',
+            'filing_prefix': 'department'
+            }
+
+        create(Builder("dossiertemplate").within(self.templatedossier).having(**values))
+
+        browser.login().visit(self.leaf_node)
+        factoriesmenu.add('Dossier with template')
+
+        token = browser.css(
+            'input[name="form.widgets.template"]').first.attrib.get('value')
+
+        browser.fill({'form.widgets.template': token}).submit()
+
+        browser.click_on('Save')
+
+        dossier = browser.context
+
+        self.assertEqual(values.get('title'), dossier.title)
+        self.assertEqual(values.get('description'), dossier.description)
+        self.assertEqual(values.get('keywords'), IDossier(dossier).keywords)
+        self.assertEqual(values.get('comments'), IDossier(dossier).comments)
+        self.assertEqual(values.get('filing_prefix'), IDossier(dossier).filing_prefix)
+
+    @browsing
+    def test_redirects_to_dossier_after_creating_dossier_from_template(self, browser):
+        create(Builder("dossiertemplate")
+               .within(self.templatedossier)
+               .titled(u"My Template"))
+
+        browser.login().visit(self.leaf_node)
+        factoriesmenu.add('Dossier with template')
+
+        token = browser.css(
+            'input[name="form.widgets.template"]').first.attrib.get('value')
+
+        browser.fill({'form.widgets.template': token}).submit()
+
+        browser.click_on('Save')
+
+        self.assertEqual(self.leaf_node.listFolderContents()[0], browser.context)
+
+    def test_traversing_to_autocomplete_selection_widget_in_add_dossier_template_view_is_possible(self):
+        autocomplete_selection_widget = self.leaf_node.unrestrictedTraverse(
+            'add-dossier-from-template/++widget++IDossier.responsible')
+
+        self.assertIsInstance(
+            autocomplete_selection_widget,
+            AutocompleteSelectionWidget)
+
+    @browsing
+    def test_redirects_to_first_step_if_the_user_skips_the_first_wizard_step(self, browser):
+        browser.login().visit(self.leaf_node, view="add-dossier-from-template")
+
+        self.assertEqual(
+            '{}/dossier_with_template'.format(self.leaf_node.absolute_url()),
+            browser.url)
