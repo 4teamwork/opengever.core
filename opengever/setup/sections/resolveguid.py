@@ -20,6 +20,14 @@ class MissingParent(Exception):
 class ResolveGUIDSection(object):
     """Resolve and validate GUIDs.
 
+    Each item must define a globally unique identifier (GUID) wich is used as
+    identifier while importing an oggbundle. The format of this id can be
+    chosen freely.
+
+    Yield items in an order that guarantees that parents are always positioned
+    before their children. This is achieved by building a temporary tree, then
+    re-yielding the children in pre-order.
+
     This section also validates that:
         - each item has a guid
         - each guid is unique
@@ -41,6 +49,8 @@ class ResolveGUIDSection(object):
     def __iter__(self):
         self.register_items()
         roots = self.build_tree()
+        for node in self.visit_in_pre_order(roots):
+            yield node
 
     def register_items(self):
         """Register all items by their guid."""
@@ -73,3 +83,14 @@ class ResolveGUIDSection(object):
                 roots.append(item)
         return roots
 
+    def visit_in_pre_order(self, items):
+        """Visit list of items depth first, always yield parent before its
+        children.
+
+        """
+        for item in items:
+            children = item.pop('_children', [])
+            yield item
+
+            for child in self.visit_in_pre_order(children):
+                yield child
