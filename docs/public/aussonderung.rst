@@ -73,9 +73,11 @@ Für jedes Angebot wird ein Verlauf geführt und ähnlich wie bei Aufgaben oder 
 
 Berechtigung
 ------------
-Sowohl das Erstellen wie auch das Betrachten eines Angebots ist durch eine separate Permission geschützt. Diese steht nur den Rollen `Manager` und `Records Manager` zur Verfügung.
+Sowohl das Erstellen wie auch das Betrachten eines Angebots ist durch eine separate Permission geschützt. Diese steht nur den Rollen `Manager`, `Records Manager` und `Archivist` zur Verfügung.
 
 Die neue Rolle `Records Manager` wird global vergeben und wird dem relativ kleinen Benutzerkreis von Benutzern welche für die Aussonderung des entsprechenden Mandants zuständig sind, vergeben.
+
+Die neue Rolle `Archivist` wird global den Archiv-Mitarbeitenden vergeben, welche dazu berechtigt sind Angebote zu bewerten und ins Langzeitarchiv zu überführen. Benutzer mit der Rolle Archivist können alle angebotenen und archivierten Dossiers sehen, auch wenn Sie nicht dem entsprechenden Mandanten zugewiesen sind. Dies ermöglicht eine Prüfung der Dossiers durch die Archiv Mitarbeitenden während der Bewertungsphase.
 
 Feature Flag
 ------------
