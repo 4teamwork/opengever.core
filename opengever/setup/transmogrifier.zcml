@@ -80,4 +80,9 @@
     name="opengever.setup.jsonsource"
     />
 
+  <utility
+    component=".sections.resolveguid.ResolveGUIDSection"
+    name="opengever.setup.resolveguid"
+    />
+
 </configure>

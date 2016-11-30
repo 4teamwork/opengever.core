@@ -2,6 +2,7 @@ from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from jsonschema.exceptions import ValidationError
 from opengever.setup.sections.jsonsource import JSONSourceSection
+from opengever.setup.tests import MockTransmogrifier
 from opengever.testing import FunctionalTestCase
 from pkg_resources import resource_filename
 from zope.interface.verify import verifyClass
@@ -10,12 +11,16 @@ from zope.interface.verify import verifyObject
 
 class TestJSONSource(FunctionalTestCase):
 
-    def setup_source(self, options, previous=None):
+    def setup_source(self, options, bundle_dir=None, previous=None):
         previous = previous or []
-        directory = resource_filename('opengever.setup.tests', 'assets')
+        bundle_dir = bundle_dir or resource_filename(
+            'opengever.setup.tests', 'assets')
+        transmogrifier = MockTransmogrifier()
+        transmogrifier.bundle_dir = bundle_dir
+
         options.setdefault('blueprint', 'opengever.setup.jsonsource')
-        options.setdefault('json_dir', directory)
-        return JSONSourceSection(None, '', options, previous)
+
+        return JSONSourceSection(transmogrifier, '', options, previous)
 
     def test_implements_interface(self):
         self.assertTrue(ISection.implementedBy(JSONSourceSection))
@@ -26,7 +31,7 @@ class TestJSONSource(FunctionalTestCase):
 
     def test_skips_missing_files(self):
         directory = resource_filename('opengever.setup.tests', 'nope')
-        source = self.setup_source({'json_dir': directory,
+        source = self.setup_source({'bundle_dir': directory,
                                     'filename': 'nope.json'},
                                    previous=['Foo'])
 
