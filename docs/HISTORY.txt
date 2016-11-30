@@ -5,6 +5,13 @@ Changelog
 4.13.1 (unreleased)
 -------------------
 
+- Add missing i18n_domain entries into subproduct configure.zcml files in
+  order to squelch UserWarning messages bleeding into test output.
+  [Rotonen]
+
+- Block log levels DEBUG and INFO from bleeding into test output.
+  [Rotonen]
+
 - Add new role Archivist and let them see dispositions and offered and
   archived dossiers.
   [phgross]
