@@ -8,6 +8,16 @@
 
   <i18n:registerTranslations directory="locales" />
 
+  <permission
+      id="opengever.disposition.AddDisposition"
+      title="opengever.disposition: Add disposition"
+      />
+
+  <permission
+      id="opengever.disposition.DownloadSIPPackage"
+      title="opengever.disposition: Download SIP Package"
+      />
+
 	<include package=".browser" />
 	<include package=".viewlets" />
 
@@ -25,11 +35,6 @@
       />
 
   <include package=".upgrades" />
-
-  <permission
-      id="opengever.disposition.AddDisposition"
-      title="opengever.disposition: Add disposition"
-      />
 
   <!-- name from title behaviors -->
   <plone:behavior

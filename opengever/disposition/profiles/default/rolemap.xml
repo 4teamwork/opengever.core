@@ -11,5 +11,8 @@
       <role name="Records Manager"/>
       <role name="Archivist" />
     </permission>
+    <permission name="opengever.disposition: Download SIP Package" acquire="True">
+      <role name="Manager"/>
+    </permission>
   </permissions>
 </rolemap>

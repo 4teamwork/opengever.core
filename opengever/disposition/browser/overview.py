@@ -50,9 +50,9 @@ class DispositionOverview(BrowserView, GeverTabMixin):
         ]
 
     def sip_download_available(self):
-        """TODO: Should be protected with a own permission.
-        """
-        return api.content.get_state(self.context) == 'disposition-state-disposed'
+        return api.user.has_permission(
+            'opengever.disposition: Download SIP Package',
+            obj=self.context)
 
     def appraisal_buttons_available(self):
         return api.content.get_state(self.context) == 'disposition-state-in-progress'

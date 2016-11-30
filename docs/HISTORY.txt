@@ -5,6 +5,9 @@ Changelog
 4.13.1 (unreleased)
 -------------------
 
+- Add separate permission "Download SIP Package".
+  [phgross]
+
 - Add missing i18n_domain entries into subproduct configure.zcml files in
   order to squelch UserWarning messages bleeding into test output.
   [Rotonen]
