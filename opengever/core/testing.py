@@ -48,7 +48,7 @@ import transaction
 
 
 loghandler = logging.StreamHandler(stream=sys.stdout)
-loghandler.setLevel(logging.DEBUG)
+loghandler.setLevel(logging.WARNING)
 for name, level in {'plone.protect': logging.INFO,
                     'opengever.base.protect': logging.INFO}.items():
     logger = logging.getLogger(name)
