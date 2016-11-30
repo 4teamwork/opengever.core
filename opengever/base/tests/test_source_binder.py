@@ -1,6 +1,7 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.testing import FunctionalTestCase
-from plone.dexterity.utils import createContentInContainer
 
 
 class TestSourceBinder(FunctionalTestCase):
@@ -10,21 +11,24 @@ class TestSourceBinder(FunctionalTestCase):
         self.grant('Administrator', 'Contributor', 'Editor', 'Reader')
 
         # Repository 1
-        reporoot1 = createContentInContainer(self.portal, 'opengever.repository.repositoryroot', title="Ordnungssystem1")
-        createContentInContainer(reporoot1, 'opengever.repository.repositoryfolder', title="Ordnungsposition1")
-        repofolder2 = createContentInContainer(reporoot1, 'opengever.repository.repositoryfolder', title="Ordnungsposition2")
-        createContentInContainer(reporoot1, 'opengever.repository.repositoryfolder', title="Ordnungsposition3")
-        self.repofolder2_1 = createContentInContainer(repofolder2, 'opengever.repository.repositoryfolder', title="Ordnungsposition2-1")
+        reporoot1 = create(Builder('repository_root').titled('Ordnungssystem1'))
+        repofolder1 = create(Builder('repository').within(reporoot1))
+        repofolder2 = create(Builder('repository').within(repofolder1))
+        create(Builder('repository').within(reporoot1))
+        self.repofolder2_1 = create(Builder('repository').within(repofolder2))
         # Repository 2
-        reporoot2 = createContentInContainer(self.portal, 'opengever.repository.repositoryroot', title="Ordnungssystem2")
-        createContentInContainer(reporoot2, 'opengever.repository.repositoryfolder', title="Ordnungsposition4")
-        createContentInContainer(reporoot2, 'opengever.repository.repositoryfolder', title="Ordnungsposition5")
-        createContentInContainer(reporoot2, 'opengever.repository.repositoryfolder', title="Ordnungsposition6")
+        reporoot2 = create(Builder('repository_root').titled('Ordnungssystem2'))
+        for index in range(3):
+            create(Builder('repository').within(reporoot2))
 
     def test_sourcebinder(self):
         """
         Check if SourceBinder works correctly without a querymodificator
         """
         query = RepositoryPathSourceBinder()(self.repofolder2_1)
-        self.assertEqual(query.navigation_tree_query['path'], {'query': '/plone/ordnungssystem1'})
-        self.assertEqual(len(query.catalog.searchResults(query.navigation_tree_query)), 5)
+        self.assertEqual(
+            {'query': '/plone/ordnungssystem1'},
+            query.navigation_tree_query['path'])
+        self.assertEqual(
+            5,
+            len(query.catalog.searchResults(query.navigation_tree_query)))
