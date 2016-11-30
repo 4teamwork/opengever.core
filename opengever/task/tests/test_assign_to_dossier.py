@@ -47,7 +47,7 @@ class TestAssignForwardignToDossier(FunctionalTestCase):
         browser.fill(
             {'form.widgets.repositoryfolder.widgets.query': 'Repo A'}).submit()
         browser.fill({'form.widgets.repositoryfolder':
-                      '/plone/opengever-repository-repositoryroot/repo-a'})
+                      '/plone/ordnungssystem/repo-a'})
         browser.css('#form-buttons-save').first.click()
 
         # Step 3 - dossier add form
