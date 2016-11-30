@@ -19,6 +19,13 @@
       />
 
   <transmogrifier:registerConfig
+      name="opengever.setup.oggbundle"
+      title="Opengever Setup OGGBundle Import"
+      description="Import a OneGov GEVER Bundle which contains initial content"
+      configuration="cfgs/oggbundle.cfg"
+      />
+
+  <transmogrifier:registerConfig
       name="opengever.setup.repository"
       title="Opengever Repositorysystem import"
       description="Pipeline configuration for Opengever Setup"
