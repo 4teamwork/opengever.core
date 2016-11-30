@@ -28,7 +28,7 @@
       class=".ech0160.ECH0160ExportView"
       for="opengever.disposition.interfaces.IDisposition"
       name="ech0160_export"
-      permission="cmf.ManagePortal"/>
+      permission="opengever.disposition.DownloadSIPPackage"/>
 
   <browser:page
       class=".overview.DispositionOverview"
