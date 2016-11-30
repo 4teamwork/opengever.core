@@ -1,8 +1,10 @@
 from five import grok
+from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.base.behaviors.translated_title import TranslatedTitleMixin
 from opengever.base.browser.translated_title import TranslatedTitleAddForm
 from opengever.base.browser.translated_title import TranslatedTitleEditForm
 from opengever.repository import _
+from plone.app.content.interfaces import INameFromTitle
 from plone.dexterity.content import Container
 from plone.directives import form
 from Products.CMFCore.utils import getToolByName
@@ -88,3 +90,18 @@ class PrimaryRepositoryRoot(grok.View):
         brains.sort(sorter)
 
         return brains[-1]
+
+
+class RepositoryRootNameFromTitle(grok.Adapter):
+    """ An INameFromTitle adapter for namechooser gets the name from the
+    translated_title.
+    """
+    grok.implements(INameFromTitle)
+    grok.context(IRepositoryRoot)
+
+    def __init__(self, context):
+        self.context = context
+
+    @property
+    def title(self):
+        return ITranslatedTitle(self.context).translated_title()
