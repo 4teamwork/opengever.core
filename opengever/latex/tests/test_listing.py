@@ -118,6 +118,7 @@ class TestDossierListing(BaseLatexListingTest):
              '01.11.2013',
              ''], rows[1])
 
+
 class TestDossierListingWithGrouppedByThreeFormatter(BaseLatexListingTest):
 
     def setUp(self):
@@ -260,7 +261,8 @@ class TestTaskListings(BaseLatexListingTest):
         cols = table.xpath(CSSSelector('thead th').path)
 
         self.assertEquals(
-            ['No.', 'Task type', 'Issuer', 'Responsible', 'State', 'Title', 'Deadline'],
+            ['No.', 'Task type', 'Issuer', 'Responsible',
+             'State', 'Title', 'Deadline'],
             [col.text_content().strip() for col in cols])
 
     def test_drop_reference_and_sequence_number_from_default_task_listings(self):
@@ -294,20 +296,18 @@ class TestJournalListings(BaseLatexListingTest):
          'comments': '',
          'actor': 'peter.mueller',
          'time': DateTime(2016, 4, 12, 10, 7)},
-
-                {'action': {'visible': True,
-                            'type': 'Document added',
-                            'title': u'label_document_added'},
-                 'comments': '',
-                 'actor': 'hugo.boss',
-                 'time': DateTime(2016, 4, 12, 12, 10)},
-
-                {'action': {'visible': False,
-                            'type': 'Dossier modified',
-                            'title': u'label_dossier_modified'},
-                 'comments': '',
-                 'actor': 'peter.mueller',
-                 'time': DateTime(2016, 4, 25, 10, 0)},
+        {'action': {'visible': True,
+                    'type': 'Document added',
+                    'title': u'label_document_added'},
+         'comments': '',
+         'actor': 'hugo.boss',
+         'time': DateTime(2016, 4, 12, 12, 10)},
+        {'action': {'visible': False,
+                    'type': 'Dossier modified',
+                    'title': u'label_dossier_modified'},
+         'comments': '',
+         'actor': 'peter.mueller',
+         'time': DateTime(2016, 4, 25, 10, 0)},
     ]
 
     def setUp(self):
