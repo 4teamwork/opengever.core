@@ -6,7 +6,7 @@ from opengever.base.security import elevated_privileges
 from opengever.disposition import _
 from opengever.disposition.appraisal import IAppraisal
 from opengever.disposition.interfaces import IDisposition
-from opengever.disposition.validators import OfferedDossiersValidator
+from opengever.disposition.interfaces import IHistoryStorage
 from opengever.dossier.base import DOSSIER_STATES_OFFERABLE
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -22,7 +22,6 @@ from z3c.relationfield.schema import RelationList
 from zope import schema
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
-from zope.component import provideAdapter
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.interface import implements
@@ -134,12 +133,6 @@ class IDispositionSchema(form.Schema):
         required=False,
     )
 
-validator.WidgetValidatorDiscriminators(
-    OfferedDossiersValidator,
-    field=IDispositionSchema['dossiers'],
-)
-provideAdapter(OfferedDossiersValidator)
-
 
 class Disposition(Container):
     implements(IDisposition)
@@ -164,6 +157,9 @@ class Disposition(Container):
 
         self.update_added_dossiers(new - old)
         self.update_dropped_dossiers(old - new)
+
+    def get_history(self):
+        return IHistoryStorage(self).get_history()
 
     def get_destroyed_dossiers(self):
         annotations = IAnnotations(self)

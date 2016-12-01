@@ -5,6 +5,9 @@ Changelog
 4.13.1 (unreleased)
 -------------------
 
+- Add removal protocol PDF export for dispositions.
+  [phgross]
+
 - Replace INameFromTitle behavior with adapter for repository roots.
   [deiferni]
 

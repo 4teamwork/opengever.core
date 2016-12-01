@@ -14,7 +14,16 @@ from zope.component import getUtility
 import lxml
 
 
-class TestDossierListing(FunctionalTestCase):
+class BaseLatexListingTest(FunctionalTestCase):
+
+    def assert_row_values(self, expected, row):
+        self.assertEquals(
+            expected,
+            [value.text_content().strip() for value in
+             row.xpath(CSSSelector('td').path)])
+
+
+class TestDossierListing(BaseLatexListingTest):
 
     def setUp(self):
         super(TestDossierListing, self).setUp()
@@ -89,7 +98,7 @@ class TestDossierListing(FunctionalTestCase):
         table = lxml.html.fromstring(self.listing.template())
         rows = table.xpath(CSSSelector('tbody tr').path)
 
-        self.assertEquals(
+        self.assert_row_values(
             ['Client1 1.1 / 1',
              '1',
              '1.1. Repository XY',
@@ -97,10 +106,9 @@ class TestDossierListing(FunctionalTestCase):
              'Client1 / Boss Hugo (hugo.boss)',
              'dossier-state-resolved',
              '01.11.2013',
-             '31.12.2013'],
-            [value.text_content().strip() for value in rows[0].xpath(CSSSelector('td').path)])
+             '31.12.2013'], rows[0])
 
-        self.assertEquals(
+        self.assert_row_values(
             ['Client1 1.1 / 1.1',
              '2',
              '1.1. Repository XY',
@@ -108,11 +116,10 @@ class TestDossierListing(FunctionalTestCase):
              'Client1 / Boss Hugo (hugo.boss)',
              'dossier-state-active',
              '01.11.2013',
-             ''],
-            [value.text_content().strip() for value in rows[1].xpath(CSSSelector('td').path)])
+             ''], rows[1])
 
 
-class TestDossierListingWithGrouppedByThreeFormatter(FunctionalTestCase):
+class TestDossierListingWithGrouppedByThreeFormatter(BaseLatexListingTest):
 
     def setUp(self):
         super(TestDossierListingWithGrouppedByThreeFormatter, self).setUp()
@@ -147,7 +154,7 @@ class TestDossierListingWithGrouppedByThreeFormatter(FunctionalTestCase):
                 obj2brain(self.subdossier)))
 
 
-class TestSubDossierListing(FunctionalTestCase):
+class TestSubDossierListing(BaseLatexListingTest):
 
     def setUp(self):
         super(TestSubDossierListing, self).setUp()
@@ -183,17 +190,16 @@ class TestSubDossierListing(FunctionalTestCase):
         table = lxml.html.fromstring(self.listing.template())
         rows = table.xpath(CSSSelector('tbody tr').path)
 
-        self.assertEquals(
+        self.assert_row_values(
             ['1',
              'Dossier A',
              'Client1 / Boss Hugo (hugo.boss)',
              'dossier-state-resolved',
              '01.11.2013',
-             '31.12.2013'],
-            [value.text_content().strip() for value in rows[0].xpath(CSSSelector('td').path)])
+             '31.12.2013'], rows[0])
 
 
-class TestDocumentListing(FunctionalTestCase):
+class TestDocumentListing(BaseLatexListingTest):
 
     def setUp(self):
         super(TestDocumentListing, self).setUp()
@@ -214,17 +220,16 @@ class TestDocumentListing(FunctionalTestCase):
         table = lxml.html.fromstring(self.listing.template())
         rows = table.xpath(CSSSelector('tbody tr').path)
 
-        self.assertEquals(
+        self.assert_row_values(
             ['1',
              'Document A',
              '04.11.2013',
              '06.11.2013',
              '',
-             'Hugo Boss'],
-            [value.text_content().strip() for value in rows[0].xpath(CSSSelector('td').path)])
+             'Hugo Boss'], rows[0])
 
 
-class TestTaskListings(FunctionalTestCase):
+class TestTaskListings(BaseLatexListingTest):
 
     def setUp(self):
         super(TestTaskListings, self).setUp()
@@ -256,7 +261,8 @@ class TestTaskListings(FunctionalTestCase):
         cols = table.xpath(CSSSelector('thead th').path)
 
         self.assertEquals(
-            ['No.', 'Task type', 'Issuer', 'Responsible', 'State', 'Title', 'Deadline'],
+            ['No.', 'Task type', 'Issuer', 'Responsible',
+             'State', 'Title', 'Deadline'],
             [col.text_content().strip() for col in cols])
 
     def test_drop_reference_and_sequence_number_from_default_task_listings(self):
@@ -265,15 +271,14 @@ class TestTaskListings(FunctionalTestCase):
         table = lxml.html.fromstring(self.listing.template())
         rows = table.xpath(CSSSelector('tbody tr').path)
 
-        self.assertEquals(
+        self.assert_row_values(
             ['1',
              'For approval',
              'Client1 / Boss Hugo',
              'Client1 / Boss Hugo',
              'task-state-in-progress',
              'Task A',
-             '06.11.2013'],
-            [value.text_content().strip() for value in rows[0].xpath(CSSSelector('td').path)])
+             '06.11.2013'], rows[0])
 
     @browsing
     def test_task_listing(self, browser):
@@ -282,7 +287,7 @@ class TestTaskListings(FunctionalTestCase):
                                    'task_ids:list': task_id})
 
 
-class TestJournalListings(FunctionalTestCase):
+class TestJournalListings(BaseLatexListingTest):
 
     sample_journal_entries = [
         {'action': {'visible': True,
@@ -291,20 +296,18 @@ class TestJournalListings(FunctionalTestCase):
          'comments': '',
          'actor': 'peter.mueller',
          'time': DateTime(2016, 4, 12, 10, 7)},
-
-                {'action': {'visible': True,
-                            'type': 'Document added',
-                            'title': u'label_document_added'},
-                 'comments': '',
-                 'actor': 'hugo.boss',
-                 'time': DateTime(2016, 4, 12, 12, 10)},
-
-                {'action': {'visible': False,
-                            'type': 'Dossier modified',
-                            'title': u'label_dossier_modified'},
-                 'comments': '',
-                 'actor': 'peter.mueller',
-                 'time': DateTime(2016, 4, 25, 10, 0)},
+        {'action': {'visible': True,
+                    'type': 'Document added',
+                    'title': u'label_document_added'},
+         'comments': '',
+         'actor': 'hugo.boss',
+         'time': DateTime(2016, 4, 12, 12, 10)},
+        {'action': {'visible': False,
+                    'type': 'Dossier modified',
+                    'title': u'label_dossier_modified'},
+         'comments': '',
+         'actor': 'peter.mueller',
+         'time': DateTime(2016, 4, 25, 10, 0)},
     ]
 
     def setUp(self):
