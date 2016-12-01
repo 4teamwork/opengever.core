@@ -47,6 +47,12 @@ class DispositionOverview(BrowserView, GeverTabMixin):
              'url': '{}/ech0160_export'.format(self.context.absolute_url()),
              'visible': self.sip_download_available(),
              'class': 'sip_download'},
+            {'id': 'removal_protocol',
+             'label': _('label_download_removal_protocol',
+                        default=u'Download removal protocol'),
+             'url': '{}/removal_protocol'.format(self.context.absolute_url()),
+             'visible': self.removal_protocol_available(),
+             'class': 'removal_protocol'}
         ]
 
     def sip_download_available(self):
@@ -56,6 +62,9 @@ class DispositionOverview(BrowserView, GeverTabMixin):
 
     def appraisal_buttons_available(self):
         return api.content.get_state(self.context) == 'disposition-state-in-progress'
+
+    def removal_protocol_available(self):
+        return api.content.get_state(self.context) == 'disposition-state-closed'
 
     def get_history(self):
         return IHistoryStorage(self.context).get_history()

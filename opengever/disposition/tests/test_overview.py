@@ -159,6 +159,31 @@ class TestDispositionOverview(FunctionalTestCase):
             browser.find('Export appraisal list as excel').get('href'))
 
     @browsing
+    def test_removal_protocol_is_available_in_closed_state(self, browser):
+        self.grant('Editor', 'Records Manager')
+
+        browser.login().open(self.disposition, view='tabbedview_view-overview')
+        self.assertEquals(['Export appraisal list as excel'],
+                          browser.css('ul.actions li').text)
+
+        dossier = create(Builder('dossier').as_expired()
+                         .within(self.repository))
+        disposition_2 = create(Builder('disposition')
+                               .having(dossiers=[dossier])
+                               .in_state('disposition-state-closed'))
+        disposition_2.set_destroyed_dossiers([dossier])
+        transaction.commit()
+
+        browser.login().open(disposition_2, view='tabbedview_view-overview')
+
+        self.assertEquals(['Export appraisal list as excel',
+                           'Download removal protocol'],
+                          browser.css('ul.actions li').text)
+        self.assertEquals(
+            'http://nohost/plone/disposition-2/removal_protocol',
+            browser.find('Download removal protocol').get('href'))
+
+    @browsing
     def test_states_are_displayed_in_a_wizard_in_the_process_order(self, browser):
         browser.login().open(self.disposition, view='tabbedview_view-overview')
 
