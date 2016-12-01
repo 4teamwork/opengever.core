@@ -59,6 +59,8 @@ class LaTexListing(grok.MultiAdapter):
     grok.provides(ILaTexListing)
     grok.adapts(Interface, Interface, Interface)
 
+    template = ViewPageTemplateFile('templates/listing.pt')
+
     def __init__(self, context, request, latex_view):
         self.context = context
         self.request = request
