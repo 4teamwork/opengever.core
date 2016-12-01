@@ -23,7 +23,7 @@ class BaseLatexListingTest(FunctionalTestCase):
              row.xpath(CSSSelector('td').path)])
 
 
-class TestDossierListing(FunctionalTestCase):
+class TestDossierListing(BaseLatexListingTest):
 
     def setUp(self):
         super(TestDossierListing, self).setUp()
@@ -98,7 +98,7 @@ class TestDossierListing(FunctionalTestCase):
         table = lxml.html.fromstring(self.listing.template())
         rows = table.xpath(CSSSelector('tbody tr').path)
 
-        self.assertEquals(
+        self.assert_row_values(
             ['Client1 1.1 / 1',
              '1',
              '1.1. Repository XY',
@@ -106,10 +106,9 @@ class TestDossierListing(FunctionalTestCase):
              'Client1 / Boss Hugo (hugo.boss)',
              'dossier-state-resolved',
              '01.11.2013',
-             '31.12.2013'],
-            [value.text_content().strip() for value in rows[0].xpath(CSSSelector('td').path)])
+             '31.12.2013'], rows[0])
 
-        self.assertEquals(
+        self.assert_row_values(
             ['Client1 1.1 / 1.1',
              '2',
              '1.1. Repository XY',
@@ -117,11 +116,9 @@ class TestDossierListing(FunctionalTestCase):
              'Client1 / Boss Hugo (hugo.boss)',
              'dossier-state-active',
              '01.11.2013',
-             ''],
-            [value.text_content().strip() for value in rows[1].xpath(CSSSelector('td').path)])
+             ''], rows[1])
 
-
-class TestDossierListingWithGrouppedByThreeFormatter(FunctionalTestCase):
+class TestDossierListingWithGrouppedByThreeFormatter(BaseLatexListingTest):
 
     def setUp(self):
         super(TestDossierListingWithGrouppedByThreeFormatter, self).setUp()
@@ -156,7 +153,7 @@ class TestDossierListingWithGrouppedByThreeFormatter(FunctionalTestCase):
                 obj2brain(self.subdossier)))
 
 
-class TestSubDossierListing(FunctionalTestCase):
+class TestSubDossierListing(BaseLatexListingTest):
 
     def setUp(self):
         super(TestSubDossierListing, self).setUp()
@@ -192,17 +189,16 @@ class TestSubDossierListing(FunctionalTestCase):
         table = lxml.html.fromstring(self.listing.template())
         rows = table.xpath(CSSSelector('tbody tr').path)
 
-        self.assertEquals(
+        self.assert_row_values(
             ['1',
              'Dossier A',
              'Client1 / Boss Hugo (hugo.boss)',
              'dossier-state-resolved',
              '01.11.2013',
-             '31.12.2013'],
-            [value.text_content().strip() for value in rows[0].xpath(CSSSelector('td').path)])
+             '31.12.2013'], rows[0])
 
 
-class TestDocumentListing(FunctionalTestCase):
+class TestDocumentListing(BaseLatexListingTest):
 
     def setUp(self):
         super(TestDocumentListing, self).setUp()
@@ -223,17 +219,16 @@ class TestDocumentListing(FunctionalTestCase):
         table = lxml.html.fromstring(self.listing.template())
         rows = table.xpath(CSSSelector('tbody tr').path)
 
-        self.assertEquals(
+        self.assert_row_values(
             ['1',
              'Document A',
              '04.11.2013',
              '06.11.2013',
              '',
-             'Hugo Boss'],
-            [value.text_content().strip() for value in rows[0].xpath(CSSSelector('td').path)])
+             'Hugo Boss'], rows[0])
 
 
-class TestTaskListings(FunctionalTestCase):
+class TestTaskListings(BaseLatexListingTest):
 
     def setUp(self):
         super(TestTaskListings, self).setUp()
@@ -274,15 +269,14 @@ class TestTaskListings(FunctionalTestCase):
         table = lxml.html.fromstring(self.listing.template())
         rows = table.xpath(CSSSelector('tbody tr').path)
 
-        self.assertEquals(
+        self.assert_row_values(
             ['1',
              'For approval',
              'Client1 / Boss Hugo',
              'Client1 / Boss Hugo',
              'task-state-in-progress',
              'Task A',
-             '06.11.2013'],
-            [value.text_content().strip() for value in rows[0].xpath(CSSSelector('td').path)])
+             '06.11.2013'], rows[0])
 
     @browsing
     def test_task_listing(self, browser):
@@ -291,7 +285,7 @@ class TestTaskListings(FunctionalTestCase):
                                    'task_ids:list': task_id})
 
 
-class TestJournalListings(FunctionalTestCase):
+class TestJournalListings(BaseLatexListingTest):
 
     sample_journal_entries = [
         {'action': {'visible': True,
