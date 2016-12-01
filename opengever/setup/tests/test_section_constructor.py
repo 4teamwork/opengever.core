@@ -47,7 +47,7 @@ class TestConstructor(FunctionalTestCase):
         list(section)
 
         portal = api.portal.get()
-        self.assertEqual('/reporoot', item['_path'])
+        self.assertEqual('reporoot', item['_path'])
         self.assertEqual(portal.get('reporoot'), item['_object'])
 
     def test_creates_itranslated_title_content(self):

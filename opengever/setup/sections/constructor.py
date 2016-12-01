@@ -65,7 +65,8 @@ class ConstructorSection(object):
                         parent_path, item['guid'], e.message))
                 continue
 
-            item[u'_path'] = '/'.join(obj.getPhysicalPath())
+            # build path relative to plone site
+            item[u'_path'] = '/'.join(obj.getPhysicalPath()[2:])
             item[u'_object'] = obj
 
             yield item
