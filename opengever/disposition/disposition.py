@@ -6,6 +6,7 @@ from opengever.base.security import elevated_privileges
 from opengever.disposition import _
 from opengever.disposition.appraisal import IAppraisal
 from opengever.disposition.interfaces import IDisposition
+from opengever.disposition.interfaces import IHistoryStorage
 from opengever.disposition.validators import OfferedDossiersValidator
 from opengever.dossier.base import DOSSIER_STATES_OFFERABLE
 from opengever.dossier.behaviors.dossier import IDossier
@@ -164,6 +165,9 @@ class Disposition(Container):
 
         self.update_added_dossiers(new - old)
         self.update_dropped_dossiers(old - new)
+
+    def get_history(self):
+        return IHistoryStorage(self).get_history()
 
     def get_destroyed_dossiers(self):
         annotations = IAnnotations(self)

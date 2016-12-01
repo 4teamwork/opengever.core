@@ -1,19 +1,23 @@
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.pdfgenerator.builder import Builder as PDFBuilder
 from ftw.pdfgenerator.interfaces import ILaTeXView
 from ftw.pdfgenerator.utils import provide_request_layer
+from ftw.testing import freeze
 from lxml.cssselect import CSSSelector
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_UNWORTHY
 from opengever.disposition.browser.removal_protocol import IRemovalProtocolLayer
 from opengever.latex.layouts.default import DefaultLayout
 from opengever.latex.listing import ILaTexListing
+from opengever.latex.tests.test_listing import BaseLatexListingTest
 from opengever.testing import FunctionalTestCase
+from plone import api
 from zope.component import getMultiAdapter
 import lxml
 
 
-class TestDestroyedDossierListing(FunctionalTestCase):
+class TestDestroyedDossierListing(BaseLatexListingTest):
 
     def setUp(self):
         super(TestDestroyedDossierListing, self).setUp()
@@ -40,15 +44,50 @@ class TestDestroyedDossierListing(FunctionalTestCase):
         table = lxml.html.fromstring(self.listing.template())
         rows = table.xpath(CSSSelector('tbody tr').path)
 
-        self.assertEquals(
-            ['Client1 / 1', 'Dossier A', 'Yes'],
-            [value.text_content().strip() for value in
-             rows[0].xpath(CSSSelector('td').path)])
+        self.assert_row_values(
+            ['Client1 / 1', 'Dossier A', 'Yes'], rows[0])
+        self.assert_row_values(
+            ['Client1 / 2', 'Dossier B', 'No'], rows[1])
 
-        self.assertEquals(
-            ['Client1 / 2', 'Dossier B', 'No'],
-            [value.text_content().strip() for value in
-             rows[1].xpath(CSSSelector('td').path)])
+
+class TestDispositionHistoryListing(BaseLatexListingTest):
+
+    def test_listing(self):
+        disposition = create(Builder('disposition'))
+
+        self.grant('Records Manager')
+        with freeze(datetime(2014, 11, 6, 12, 33)):
+            api.content.transition(disposition,
+                                   'disposition-transition-appraise')
+            api.content.transition(disposition,
+                                   'disposition-transition-dispose')
+
+        with freeze(datetime(2014, 11, 16, 8, 12)):
+            api.content.transition(disposition,
+                                   'disposition-transition-archive')
+
+        self.listing = getMultiAdapter(
+            (disposition, disposition.REQUEST, self),
+            ILaTexListing, name='disposition_history')
+        self.listing.items = disposition.get_history()
+
+        table = lxml.html.fromstring(self.listing.template())
+        rows = table.xpath(CSSSelector('tbody tr').path)
+
+        self.assert_row_values(
+            ['Nov 16, 2014 08:12 AM',
+             'Test User (test_user_1_)',
+             'disposition-transition-archive'], rows[0])
+
+        self.assert_row_values(
+            ['Nov 06, 2014 12:33 PM',
+             'Test User (test_user_1_)',
+             'disposition-transition-dispose'], rows[1])
+
+        self.assert_row_values(
+            ['Nov 06, 2014 12:33 PM',
+             'Test User (test_user_1_)',
+             'disposition-transition-appraise'], rows[2])
 
 
 class TestRemovalProtocolLaTeXView(FunctionalTestCase):

@@ -14,6 +14,15 @@ from zope.component import getUtility
 import lxml
 
 
+class BaseLatexListingTest(FunctionalTestCase):
+
+    def assert_row_values(self, expected, row):
+        self.assertEquals(
+            expected,
+            [value.text_content().strip() for value in
+             row.xpath(CSSSelector('td').path)])
+
+
 class TestDossierListing(FunctionalTestCase):
 
     def setUp(self):

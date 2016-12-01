@@ -8,6 +8,8 @@ from persistent.list import PersistentList
 from plone import api
 from zope.annotation.interfaces import IAnnotations
 from zope.component import adapter
+from zope.globalrequest import getRequest
+from zope.i18n import translate
 from zope.interface import implementer
 
 
@@ -44,6 +46,12 @@ class DispositionHistory(object):
         return self.mapping.get('transition')
 
     @property
+    def transition_label(self):
+        return translate(self.mapping.get('transition'),
+                         domain="plone",
+                         context=getRequest())
+
+    @property
     def date(self):
         return api.portal.get_localized_time(
             datetime=self.mapping.get('date'), long_format=True)
@@ -51,6 +59,10 @@ class DispositionHistory(object):
     def msg(self):
         _('msg_disposition_updated', default=u'Updated by ${user}')
         return self.msg_mapping.get(self.transition)
+
+    @property
+    def actor_label(self):
+        return Actor.lookup(self.mapping.get('actor_id')).get_label()
 
     @property
     def _msg_mapping(self):

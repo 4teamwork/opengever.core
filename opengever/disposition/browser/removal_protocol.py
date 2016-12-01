@@ -60,6 +60,27 @@ class DestroyedDossierListing(LaTexListing):
         ]
 
 
+class DispositionHistoryLaTeXListing(LaTexListing):
+    grok.provides(ILaTexListing)
+    grok.adapts(Interface, Interface, Interface)
+    grok.name('disposition_history')
+
+    def get_columns(self):
+        return [
+            Column('date',
+                   _('label_time', default=u'Time'),
+                   '20%'),
+
+            Column('actor_label',
+                   _('label_actor', default=u'Actor'),
+                   '40%'),
+
+            Column('transition_label',
+                   _('label_action', default=u'Action'),
+                   '40%')
+        ]
+
+
 class RemovalProtocolLaTeXView(grok.MultiAdapter, MakoLaTeXView):
     grok.provides(ILaTeXView)
     grok.adapts(Interface, IRemovalProtocolLayer, ILaTeXLayout)
@@ -77,7 +98,11 @@ class RemovalProtocolLaTeXView(grok.MultiAdapter, MakoLaTeXView):
             (self.context, self.request, self),
             ILaTexListing, name='destroyed_dossiers')
 
-        data = {
+        history_listener = getMultiAdapter(
+            (self.context, self.request, self),
+            ILaTexListing, name='disposition_history')
+
+        return {
             'label_protocol': self.translate(
                 _('label_removal_protocol', default="Removal protocol")),
             'title': self.context.title,
@@ -85,9 +110,11 @@ class RemovalProtocolLaTeXView(grok.MultiAdapter, MakoLaTeXView):
             'label_dossiers': translate(
                 _('label_dossiers', default="Dossiers"), context=self.request),
             'dossier_listing': dossier_listener.get_listing(
-                self.context.get_dossier_representations())
+                self.context.get_dossier_representations()),
+            'label_history': translate(
+                _('label_history', default="History"), context=self.request),
+            'history': history_listener.get_listing(self.context.get_history())
         }
-        return data
 
     def get_disposition_metadata(self):
         rows = []
