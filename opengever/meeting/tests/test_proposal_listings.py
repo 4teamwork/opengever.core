@@ -52,7 +52,7 @@ class TestDossierProposalListing(ProposalListingTests):
         self.assertEquals('My Proposal', link.text)
 
         self.assertEquals(
-            'http://example.com/opengever-repository-repositoryroot/'
+            'http://example.com/ordnungssystem/'
             'opengever-repository-repositoryfolder/dossier-1/proposal-1',
             link.get('href'))
 

@@ -322,7 +322,7 @@ class TestProposal(FunctionalTestCase):
         moved_proposal = moved_dossier['proposal-1']
         model = moved_proposal.load_model()
         self.assertEqual(
-            'opengever-repository-repositoryroot/new/dossier-1/proposal-1',
+            'ordnungssystem/new/dossier-1/proposal-1',
             model.physical_path)
         self.assertEqual(u'New', model.repository_folder_title)
         self.assertEqual(u'Client1 2', model.dossier_reference_number)

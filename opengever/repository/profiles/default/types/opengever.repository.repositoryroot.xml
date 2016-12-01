@@ -25,7 +25,6 @@
 
     <!-- enabled behaviors -->
     <property name="behaviors">
-        <element value="plone.app.content.interfaces.INameFromTitle" />
         <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
         <element value="opengever.sharing.behaviors.IDossier" />
         <element value="plone.app.lockingbehavior.behaviors.ILocking" />

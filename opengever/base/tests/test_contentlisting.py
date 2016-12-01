@@ -132,13 +132,13 @@ class TestOpengeverContentListing(FunctionalTestCase):
                           .with_dummy_content())
 
         self.assertEquals(
-            ({'absolute_url': 'http://nohost/plone/opengever-repository-repositoryroot',
+            ({'absolute_url': 'http://nohost/plone/ordnungssystem',
               'Title': 'Ordnungssystem'},
-             {'absolute_url': 'http://nohost/plone/opengever-repository-repositoryroot/ablage-1',
+             {'absolute_url': 'http://nohost/plone/ordnungssystem/ablage-1',
               'Title': '1. Ablage 1'},
-             {'absolute_url': 'http://nohost/plone/opengever-repository-repositoryroot/ablage-1/dossier-1',
+             {'absolute_url': 'http://nohost/plone/ordnungssystem/ablage-1/dossier-1',
               'Title': 'hans m\xc3\xbcller'},
-             {'absolute_url': 'http://nohost/plone/opengever-repository-repositoryroot/ablage-1/dossier-1/document-1',
+             {'absolute_url': 'http://nohost/plone/ordnungssystem/ablage-1/dossier-1/document-1',
               'Title': 'Anfrage Meier'}),
             IContentListingObject(obj2brain(document)).get_breadcrumbs())
 

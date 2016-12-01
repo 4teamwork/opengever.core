@@ -277,6 +277,12 @@ builder_registry.register('contact', ContactBuilder)
 class RepositoryRootBuilder(TranslatedTitleBuilderMixin, DexterityBuilder):
     portal_type = 'opengever.repository.repositoryroot'
 
+    def __init__(self, session):
+        super(RepositoryRootBuilder, self).__init__(session)
+        self.arguments = {
+            'title_de': u'Ordnungssystem',
+        }
+
 builder_registry.register('repository_root', RepositoryRootBuilder)
 
 

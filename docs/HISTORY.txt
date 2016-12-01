@@ -5,6 +5,9 @@ Changelog
 4.13.1 (unreleased)
 -------------------
 
+- Replace INameFromTitle behavior with adapter for repository roots.
+  [deiferni]
+
 - Add separate permission "Download SIP Package".
   [phgross]
 
