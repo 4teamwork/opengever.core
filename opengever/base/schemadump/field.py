@@ -3,7 +3,6 @@ from opengever.base.schemadump.config import DEFAULT_OVERRIDES
 from opengever.base.schemadump.config import PYTHON_TO_JS_TYPES
 from opengever.base.schemadump.config import VOCAB_OVERRIDES
 from opengever.base.schemadump.helpers import translate_de
-from opengever.base.schemadump.log import setup_logging
 from plone.autoform.interfaces import MODES_KEY
 from plone.autoform.interfaces import OMITTED_KEY
 from pprint import pprint
@@ -16,9 +15,10 @@ from zope.component import queryMultiAdapter
 from zope.schema import Choice
 from zope.schema.interfaces import IVocabularyFactory
 import json
+import logging
 
 
-log = setup_logging(__name__)
+log = logging.getLogger(__name__)
 
 
 NO_DEFAULT_MARKER = object()
