@@ -7,7 +7,6 @@ from opengever.disposition import _
 from opengever.disposition.appraisal import IAppraisal
 from opengever.disposition.interfaces import IDisposition
 from opengever.disposition.interfaces import IHistoryStorage
-from opengever.disposition.validators import OfferedDossiersValidator
 from opengever.dossier.base import DOSSIER_STATES_OFFERABLE
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -23,7 +22,6 @@ from z3c.relationfield.schema import RelationList
 from zope import schema
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
-from zope.component import provideAdapter
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.interface import implements
@@ -134,12 +132,6 @@ class IDispositionSchema(form.Schema):
         title=_(u"label_transfer_number", default=u"Transfer number"),
         required=False,
     )
-
-validator.WidgetValidatorDiscriminators(
-    OfferedDossiersValidator,
-    field=IDispositionSchema['dossiers'],
-)
-provideAdapter(OfferedDossiersValidator)
 
 
 class Disposition(Container):

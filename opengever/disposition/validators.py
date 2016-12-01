@@ -1,7 +1,9 @@
 from opengever.disposition import _
+from opengever.disposition.disposition import IDispositionSchema
 from opengever.disposition.interfaces import IDisposition
 from plone import api
 from z3c.form import validator
+from zope.component import provideAdapter
 from zope.interface import Invalid
 
 
@@ -45,3 +47,10 @@ class OfferedDossiersValidator(validator.SimpleFieldValidator):
                 self._current_dossiers = []
 
         return self._current_dossiers
+
+
+validator.WidgetValidatorDiscriminators(
+    OfferedDossiersValidator,
+    field=IDispositionSchema['dossiers'],
+)
+provideAdapter(OfferedDossiersValidator)
