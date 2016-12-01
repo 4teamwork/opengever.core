@@ -49,6 +49,7 @@ class TestOggBundlePipeline(FunctionalTestCase):
     def assert_repo_folders_created(self, root):
         folder_organisation = self.assert_organization_folder_created(root)
         self.assert_processes_folder_created(folder_organisation)
+        self.assert_staff_folder_created(folder_organisation)
 
     def assert_organization_folder_created(self, root):
         folder_organisation = root.get('organisation')
@@ -162,3 +163,61 @@ class TestOggBundlePipeline(FunctionalTestCase):
         self.assertIsNone(getattr(folder_process, 'guid', None))
         self.assertIsNone(getattr(folder_process, 'parent_guid', None))
         return folder_process
+
+    def assert_staff_folder_created(self, parent):
+        folder_staff = parent.get('personal')
+        self.assertEqual('0.1. Personal', folder_staff.Title())
+        self.assertEqual(u'Personal', folder_staff.title_de)
+        self.assertIsNone(folder_staff.title_fr)
+        self.assertEqual('personal', folder_staff.getId())
+        self.assertEqual(
+            u'prompt',
+            ILifeCycle(folder_staff).archival_value)
+        self.assertEqual(
+            u'confidential',
+            IClassification(folder_staff).classification)
+        self.assertEqual(
+            100,
+            ILifeCycle(folder_staff).custody_period)
+        self.assertEqual(
+            u'',
+            folder_staff.description)
+        self.assertEqual(
+            u'',
+            folder_staff.former_reference)
+        self.assertEqual(
+            u'privacy_layer_yes',
+            IClassification(folder_staff).privacy_layer)
+        self.assertEqual(
+            u'private',
+            IClassification(folder_staff).public_trial)
+        self.assertEqual(
+            u'Enth\xe4lt vertrauliche Personaldossiers.',
+            IClassification(folder_staff).public_trial_statement)
+
+        # XXX reference_number_prefix
+
+        self.assertEqual(
+            u'',
+            folder_staff.referenced_activity)
+        self.assertEqual(
+            10,
+            ILifeCycle(folder_staff).retention_period)
+        self.assertEqual(
+            u'',
+            ILifeCycle(folder_staff).retention_period_annotation)
+        self.assertEqual(
+            date(2005, 1, 1),
+            folder_staff.valid_from)
+        self.assertEqual(
+            date(2050, 1, 1),
+            folder_staff.valid_until)
+        self.assertEqual(
+            'repositoryfolder-state-active',
+            api.content.get_state(folder_staff))
+        self.assertIsNone(getattr(folder_staff, 'guid', None))
+        self.assertIsNone(getattr(folder_staff, 'parent_guid', None))
+
+        # XXX local roles
+
+        return folder_staff
