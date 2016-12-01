@@ -48,6 +48,7 @@ class TestOggBundlePipeline(FunctionalTestCase):
 
     def assert_repo_folders_created(self, root):
         folder_organisation = self.assert_organization_folder_created(root)
+        self.assert_processes_folder_created(folder_organisation)
 
     def assert_organization_folder_created(self, root):
         folder_organisation = root.get('organisation')
@@ -114,3 +115,50 @@ class TestOggBundlePipeline(FunctionalTestCase):
             api.content.get_state(folder_organisation))
         self.assertIsNone(getattr(folder_organisation, 'guid', None))
         self.assertIsNone(getattr(folder_organisation, 'parent_guid', None))
+        return folder_organisation
+
+    def assert_processes_folder_created(self, parent):
+        folder_process = parent.get('organigramm-prozesse')
+        self.assertEqual('0.0. Organigramm, Prozesse', folder_process.Title())
+        self.assertEqual(u'Organigramm, Prozesse', folder_process.title_de)
+        self.assertIsNone(folder_process.title_fr)
+        self.assertEqual('organigramm-prozesse', folder_process.getId())
+        self.assertEqual(
+            30,
+            ILifeCycle(folder_process).custody_period)
+        self.assertEqual(
+            u'',
+            folder_process.description)
+        self.assertEqual(
+            u'',
+            folder_process.former_reference)
+        self.assertEqual(
+            u'privacy_layer_no',
+            IClassification(folder_process).privacy_layer)
+        self.assertEqual(
+            u'unchecked',
+            IClassification(folder_process).public_trial)
+        self.assertEqual(
+            u'',
+            IClassification(folder_process).public_trial_statement)
+
+        # XXX reference_number_prefix
+
+        self.assertEqual(
+            u'',
+            folder_process.referenced_activity)
+        self.assertEqual(
+            5,
+            ILifeCycle(folder_process).retention_period)
+        self.assertEqual(
+            date(2005, 1, 1),
+            folder_process.valid_from)
+        self.assertEqual(
+            date(2020, 1, 1),
+            folder_process.valid_until)
+        self.assertEqual(
+            'repositoryfolder-state-active',
+            api.content.get_state(folder_process))
+        self.assertIsNone(getattr(folder_process, 'guid', None))
+        self.assertIsNone(getattr(folder_process, 'parent_guid', None))
+        return folder_process
