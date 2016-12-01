@@ -40,7 +40,7 @@ class SchemaDumper(object):
         for name, field in getFieldsInOrder(schema):
             dottedname = '.'.join((schema.__identifier__, field.getName()))
             if dottedname in IGNORED_FIELDS:
-                print "    Skipping field %s" % dottedname
+                log.info("  Skipping field %s" % dottedname)
                 continue
 
             field_dump = field_dumper.dump(field)
