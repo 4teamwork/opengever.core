@@ -35,7 +35,8 @@ class TestOggBundlePipeline(FunctionalTestCase):
         # XXX use separate test-cases based on a layer
         root = self.assert_repo_root_created()
         folder_staff = self.assert_repo_folders_created(root)
-        self.assert_dossiers_created(folder_staff)
+        dossier_peter = self.assert_dossiers_created(folder_staff)
+        self.assert_documents_created(dossier_peter)
 
     def assert_repo_root_created(self):
         root = self.portal.get('ordnungssystem')
@@ -226,7 +227,7 @@ class TestOggBundlePipeline(FunctionalTestCase):
 
     def assert_dossiers_created(self, parent):
         self.assert_dossier_vreni_created(parent)
-        self.assert_dossier_peter_created(parent)
+        return self.assert_dossier_peter_created(parent)
 
     def assert_dossier_vreni_created(self, parent):
         dossier_vreni = parent.get('dossier-1')
@@ -308,3 +309,32 @@ class TestOggBundlePipeline(FunctionalTestCase):
             dossier_peter.title)
 
         # XXX local roles
+
+        return dossier_peter
+
+    def assert_documents_created(self, parent):
+        document_1 = parent.get('document-1')
+
+        # XXX load files
+        # self.assertTrue(document_1.digitally_available)
+
+        self.assertEqual(
+            u'david.erni',
+            document_1.document_author)
+        self.assertEqual(
+            date(2007, 1, 1),
+            document_1.document_date)
+        self.assertEqual(
+            tuple(),
+            document_1.keywords)
+        self.assertTrue(
+            document_1.preserved_as_paper)
+        self.assertEqual(
+            [],
+            document_1.relatedItems)
+        self.assertEqual(
+            'document-state-draft',
+            api.content.get_state(document_1))
+        self.assertEqual(
+            u'Bewerbung Hanspeter M\xfcller',
+            document_1.title)
