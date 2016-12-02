@@ -1,5 +1,6 @@
 from collections import OrderedDict
 from jsonschema import Draft4Validator
+from opengever.base.behaviors.translated_title import TRANSLATED_TITLE_NAMES
 from opengever.base.schemadump.config import GEVER_SQL_TYPES
 from opengever.base.schemadump.config import GEVER_TYPES
 from opengever.base.schemadump.config import IGNORED_FIELDS
@@ -24,9 +25,6 @@ import transaction
 
 
 log = setup_logging(__name__)
-
-
-TRANSLATED_TITLE_NAMES = ('title_de', 'title_fr')
 
 
 class SchemaDumper(object):

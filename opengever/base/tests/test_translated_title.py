@@ -3,14 +3,29 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from opengever.base.behaviors.translated_title import ITranslatedTitle
+from opengever.base.behaviors.translated_title import TRANSLATED_TITLE_NAMES
 from opengever.base.behaviors.translated_title import TranslatedTitle
 from opengever.base.brain import supports_translated_title
 from opengever.testing import add_languages
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
 from opengever.testing import set_preferred_language
+from opengever.testing import TestCase
 from plone import api
 import transaction
+
+
+class TestTranslatedTitleConfig(TestCase):
+
+    def test_translated_title_config_is_consistent(self):
+        self.assertEqual(len(TRANSLATED_TITLE_NAMES),
+                         len(TranslatedTitle.SUPPORTED_LANGUAGES))
+
+        names = ['title_{}'.format(code) for code in
+                 TranslatedTitle.SUPPORTED_LANGUAGES]
+        self.assertItemsEqual(names, TRANSLATED_TITLE_NAMES)
+
+        self.assertItemsEqual(names, ITranslatedTitle.names())
 
 
 class TestSupportTranslatedTitle(FunctionalTestCase):
