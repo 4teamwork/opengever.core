@@ -2,10 +2,14 @@ from datetime import date
 from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from ftw.testing import freeze
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.dossier.maintenance import SourceFileEraser
+from opengever.journal.handlers import SOURCE_FILE_ERASED
+from opengever.journal.handlers import SOURCE_FILES_ERASED
 from opengever.testing import FunctionalTestCase
+from zope.annotation.interfaces import IAnnotations
 
 
 class TestSourceFileEraser(FunctionalTestCase):
@@ -73,3 +77,28 @@ class TestSourceFileEraser(FunctionalTestCase):
         self.assertIsNotNone(IDocumentMetadata(mail).message)
         SourceFileEraser().erase()
         self.assertIsNone(IDocumentMetadata(mail).message)
+
+    def test_erasement_is_journalized_on_dossier_and_documents(self):
+        dossier = create(Builder('dossier')
+                         .having(end=date(2014, 1, 2)))
+        document = create(Builder('document')
+                          .within(dossier)
+                          .attach_file_containing('source data')
+                          .attach_archival_file_containing('archive data'))
+
+        SourceFileEraser().erase()
+
+        # document
+        journal = IAnnotations(document).get(JOURNAL_ENTRIES_ANNOTATIONS_KEY)
+        entry = journal[-1]
+        self.assertEquals(SOURCE_FILE_ERASED,
+                          entry.get('action').get('type'))
+        self.assertEquals(u'label_source_file_erased',
+                          entry.get('action').get('title'))
+
+        # dossier
+        journal = IAnnotations(dossier).get(JOURNAL_ENTRIES_ANNOTATIONS_KEY)
+        entry = journal[-1]
+        self.assertEquals(SOURCE_FILES_ERASED, entry.get('action').get('type'))
+        self.assertEquals(u'label_source_files_erased',
+                          entry.get('action').get('title'))

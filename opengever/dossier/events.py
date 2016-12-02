@@ -24,3 +24,11 @@ class ParticipationRemoved(ObjectEvent):
     def __init__(self, obj, participant):
         self.object = obj
         self.participant = participant
+
+
+class SourceFileErased(ObjectEvent):
+    """The `SourceFileErased` is fired after the source file of a document
+    is erased during a maintenance job.
+    """
+
+    implements(interfaces.ISourceFileErased)

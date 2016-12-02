@@ -17,6 +17,7 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.browser.participants import role_list_helper
 from opengever.dossier.interfaces import IParticipationCreated
 from opengever.dossier.interfaces import IParticipationRemoved
+from opengever.dossier.interfaces import ISourceFileErased
 from opengever.journal import _
 from opengever.mail.interfaces import IAttachmentsDeletedEvent
 from opengever.mail.interfaces import IDocumentSent
@@ -310,6 +311,18 @@ def doc_properties_updated(context):
                                   default=u'DocProperties updated.'))
 
 
+SOURCE_FILES_ERASED = 'Source files erased'
+
+
+@grok.subscribe(IDossierMarker, ISourceFileErased)
+def source_files_erased(context, event):
+    journal_entry_factory(
+        context,
+        SOURCE_FILES_ERASED,
+        title=_(u'label_source_files_erased',
+                default=u'Source files of all documents has been erased.'))
+
+
 # ----------------------- MAIL -----------------------
 ATTACHMENTS_DELETED_ACTION = 'Attachments deleted'
 
@@ -542,6 +555,18 @@ def document_sent(context, event):
                 }), context=context.REQUEST)
     journal_entry_factory(
         context, DOCUMENT_SENT, title, visible=True, comment=comment)
+
+
+SOURCE_FILE_ERASED = 'Source file erased'
+
+
+@grok.subscribe(IBaseDocument, ISourceFileErased)
+def source_file_erased(context, event):
+    journal_entry_factory(
+        context,
+        SOURCE_FILE_ERASED,
+        title=_(u'label_source_file_erased',
+                default=u'Source file has been erased.'))
 
 
 # ----------------------- TASK -----------------------

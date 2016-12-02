@@ -96,6 +96,11 @@ class IParticipationRemoved(IObjectEvent):
     """
 
 
+class ISourceFileErased(IObjectEvent):
+    """Interface for source file erased event.
+    """
+
+
 class IDisplayedInOverviewMarker(IDossierMarker):
     """Marker Interface for additional dossier behaviors."""
 

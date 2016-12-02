@@ -5,8 +5,10 @@ from opengever.document.behaviors import IBaseDocument
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.document import IDocumentSchema
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.dossier.events import SourceFileErased
 from opengever.dossier.interfaces import IDossierResolveProperties
 from plone import api
+from zope.event import notify
 
 
 class SourceFileEraser(object):
@@ -35,6 +37,8 @@ class SourceFileEraser(object):
             for document in api.content.find(dossier, object_provides=IBaseDocument):
                 self.erase_source_file(document.getObject())
 
+            notify(SourceFileErased(dossier))
+
     def erase_source_file(self, document):
         if not IDocumentMetadata(document).archival_file:
             return
@@ -44,3 +48,5 @@ class SourceFileEraser(object):
 
         else:
             IMail(document).message = None
+
+        notify(SourceFileErased(document))
