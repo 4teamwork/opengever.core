@@ -1,5 +1,4 @@
 from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings
-from opengever.dossier.dossiertemplate.behaviors import IDossierTemplate  # keep!
 from plone import api
 
 
