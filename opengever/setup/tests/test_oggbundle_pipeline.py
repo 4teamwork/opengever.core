@@ -313,6 +313,10 @@ class TestOggBundlePipeline(FunctionalTestCase):
         return dossier_peter
 
     def assert_documents_created(self, parent):
+        self.assert_document_1_created(parent)
+        self.assert_document_2_created(parent)
+
+    def assert_document_1_created(self, parent):
         document_1 = parent.get('document-1')
 
         # XXX load files
@@ -338,3 +342,42 @@ class TestOggBundlePipeline(FunctionalTestCase):
         self.assertEqual(
             u'Bewerbung Hanspeter M\xfcller',
             document_1.title)
+
+    def assert_document_2_created(self, parent):
+        document_2 = parent.get('document-2')
+
+        # XXX load files
+        # self.assertTrue(document_1.digitally_available)
+
+        self.assertEqual(
+            u'david.erni',
+            document_2.document_author)
+        self.assertEqual(
+            date(2011, 1, 1),
+            document_2.document_date)
+        self.assertEqual(
+            u'directive',
+            document_2.document_type)
+        self.assertEqual(
+            tuple(),
+            document_2.keywords)
+        self.assertTrue(
+            document_2.preserved_as_paper)
+        self.assertEqual(
+            u'private',
+            IClassification(document_2).public_trial)
+        self.assertEqual(
+            u'Enth\xe4lt private Daten',
+            IClassification(document_2).public_trial_statement)
+        self.assertEqual(
+            date(2011, 1, 1),
+            document_2.receipt_date)
+        self.assertEqual(
+            [],
+            document_2.relatedItems)
+        self.assertEqual(
+            'document-state-draft',
+            api.content.get_state(document_2))
+        self.assertEqual(
+            u'Entlassung Hanspeter M\xfcller',
+            document_2.title)
