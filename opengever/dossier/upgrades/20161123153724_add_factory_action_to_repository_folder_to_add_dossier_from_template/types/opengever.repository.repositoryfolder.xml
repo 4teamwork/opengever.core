@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<object name="opengever.repository.repositoryfolder" meta_type="Dexterity FTI"
+        i18n:domain="opengever.repository" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+
+    <action action_id="dossier_with_template"
+            visible="True"
+            title="Dossier with template"
+            category="folder_factories"
+            url_expr="string:${object_url}/dossier_with_template"
+            icon_expr=""
+            condition_expr="object/@@dossier_with_template/is_available"
+            i18n:domain="opengever.dossier">
+        <permission value="Add portal content"/>
+    </action>
+
+</object>

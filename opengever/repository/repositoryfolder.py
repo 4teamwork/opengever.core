@@ -114,6 +114,14 @@ class RepositoryFolder(content.Container):
             sep=reference_adapter.get_active_formatter().repository_title_seperator,
             title=title)
 
+    def is_leaf_node(self):
+        """ Checks if the current repository folder is a leaf-node.
+        """
+        for id, obj in self.contentItems():
+            if obj.portal_type == self.portal_type:
+                return False
+        return True
+
     def allowedContentTypes(self, *args, **kwargs):
         """
         We have to follow some rules:
@@ -148,15 +156,9 @@ class RepositoryFolder(content.Container):
                 # depth exceeded
                 # RepositoryFolder not allowed, but any other type
                 types = filter(lambda a: a != fti, types)
-        # check if self contains any similar objects
-        contains_similar_objects = False
-        for id, obj in self.contentItems():
-            if obj.portal_type == self.portal_type:
-                contains_similar_objects = True
-                break
 
         # filter content types, if required
-        if contains_similar_objects:
+        if not self.is_leaf_node():
             # only allow same types
             types = filter(lambda a: a == fti, types)
 

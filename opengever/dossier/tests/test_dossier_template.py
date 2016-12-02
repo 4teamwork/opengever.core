@@ -4,6 +4,7 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_DOSSIER_TEMPLATE_LAYER
+from opengever.core.testing import toggle_feature
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateSchema
 from opengever.dossier.dossiertemplate import is_dossier_template_feature_enabled
@@ -203,3 +204,32 @@ class TestDossierTemplate(FunctionalTestCase):
             [u'Title', 'Description', 'Keywords', 'Comments', 'filing prefix'],
             browser.css('#content fieldset label').text
         )
+
+
+class TestDossierTemplateAddWizard(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_DOSSIER_TEMPLATE_LAYER
+
+    def test_is_not_available_if_dossiertempalte_feature_is_disabled(self):
+        root = create(Builder('repository_root'))
+        leaf_node = create(Builder('repository').within(root))
+
+        toggle_feature(IDossierTemplateSettings, enabled=False)
+
+        self.assertFalse(
+            leaf_node.restrictedTraverse('@@dossier_with_template/is_available')())
+
+    def test_is_not_available_on_branch_node(self):
+        root = create(Builder('repository_root'))
+        branch_node = create(Builder('repository').within(root))
+        leaf_node = create(Builder('repository').within(branch_node))
+
+        self.assertFalse(
+            branch_node.restrictedTraverse('@@dossier_with_template/is_available')())
+
+    def test_is_available_on_leaf_node_when_feature_is_enabled(self):
+        root = create(Builder('repository_root'))
+        leaf_node = create(Builder('repository').within(root))
+
+        self.assertTrue(
+            leaf_node.restrictedTraverse('@@dossier_with_template/is_available')())

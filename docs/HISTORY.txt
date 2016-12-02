@@ -5,6 +5,9 @@ Changelog
 4.13.1 (unreleased)
 -------------------
 
+- Add folder-factory actions to add a dossier from a dossiertemplate in a repository-folder.
+  [elioschmutz]
+
 - Add a whitelisted schema generator for dossiertemplates to avoid duplicate
   schema-definitions
   [elioschmutz]

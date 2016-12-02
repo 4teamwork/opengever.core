@@ -74,6 +74,9 @@ msgstr "Etat du dossier modifié : Annulé"
 msgid "Dossier state changed to dossier-state-resolved"
 msgstr "Etat du dossier modifié : Fermé"
 
+msgid "Dossier with template"
+msgstr ""
+
 msgid "Edit metadata"
 msgstr "Modifier les méta-données"
 
