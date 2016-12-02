@@ -168,3 +168,13 @@ class TestDossierTemplate(FunctionalTestCase):
         self.assertEqual(
             ['Good document'],
             browser.css('.listing td .linkWrapper').text)
+
+    @browsing
+    def test_dossiertemplate_schema_fields_sort_order(self, browser):
+        browser.login().open(self.portal)
+        factoriesmenu.add('Dossier template')
+
+        self.assertEqual(
+            [u'Title', 'Description', 'Keywords', 'Comments', 'filing prefix'],
+            browser.css('#content fieldset label').text
+        )
