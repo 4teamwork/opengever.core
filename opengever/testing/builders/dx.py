@@ -220,12 +220,20 @@ class MailBuilder(DexterityBuilder):
         return self
 
     def with_message(self, message, filename=u'testmail.eml'):
-        file_ = NamedBlobFile(data=message, filename=filename)
-        self.arguments["message"] = file_
+        self.attach(NamedBlobFile(data=message, filename=filename))
         return self
 
     def with_asset_message(self, filename):
         self.with_message(assets.load(filename), unicode(filename))
+        return self
+
+    def attach_archival_file_containing(self, content, name=u"test.pdf"):
+        self.attach(NamedBlobFile(data=content, filename=name),
+                    fieldname='archival_file')
+        return self
+
+    def attach(self, file_, fieldname="message"):
+        self.arguments[fieldname] = file_
         return self
 
     def trashed(self):
