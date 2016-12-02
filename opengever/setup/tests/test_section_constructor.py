@@ -41,7 +41,7 @@ class TestConstructor(FunctionalTestCase):
     def test_updates_item_with_object_information(self):
         item = {
             u"_type": u"opengever.repository.repositoryroot",
-            u"title": u"Reporoot",
+            u"title_de": u"Reporoot",
         }
         section = self.setup_section(previous=[item])
         list(section)
@@ -50,10 +50,10 @@ class TestConstructor(FunctionalTestCase):
         self.assertEqual('/reporoot', item['_path'])
         self.assertEqual(portal.get('reporoot'), item['_object'])
 
-    def test_creates_content(self):
+    def test_creates_itranslated_title_content(self):
         item = {
             u"_type": u"opengever.repository.repositoryroot",
-            u"title": u"Reporoot",
+            u"title_de": u"Reporoot",
         }
         section = self.setup_section(previous=[item])
         list(section)
@@ -61,12 +61,26 @@ class TestConstructor(FunctionalTestCase):
         portal = api.portal.get()
         content = portal.get('reporoot')
         self.assertIsNotNone(content)
-        self.assertEqual('Reporoot', content.title_de)
+        self.assertEqual(u'Reporoot', content.title_de)
+        self.assertIsNone(content.title_fr)
+
+    def test_creates_simple_title_content(self):
+        item = {
+            u"_type": u"opengever.dossier.businesscasedossier",
+            u"title": u"Dossier",
+        }
+        section = self.setup_section(previous=[item])
+        list(section)
+
+        content = item['_object']
+        self.assertEqual(u'Dossier', content.title)
+        self.assertFalse(hasattr(content, 'title_de'))
+        self.assertFalse(hasattr(content, 'title_Fr'))
 
     def test_catalog(self):
         item = {
             u"_type": u"opengever.repository.repositoryroot",
-            u"title": u"Reporoot",
+            u"title_de": u"Reporoot",
         }
         section = self.setup_section(previous=[item])
         list(section)
@@ -82,4 +96,4 @@ class TestConstructor(FunctionalTestCase):
         obj_brain = brains[0]
         self.assertEqual(obj_brain.portal_type,
                          'opengever.repository.repositoryroot')
-        self.assertEqual(obj_brain.Title, 'Reporoot')
+        self.assertEqual(obj_brain.Title, u'Reporoot')

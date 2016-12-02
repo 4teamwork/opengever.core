@@ -1,5 +1,7 @@
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
+from opengever.base.behaviors.translated_title import ITranslatedTitle
+from opengever.base.behaviors.translated_title import TRANSLATED_TITLE_NAMES
 from plone import api
 from plone.dexterity.utils import createContentInContainer
 from zope.interface import classProvides
@@ -26,6 +28,9 @@ class ConstructorSection(object):
         self.site = api.portal.get()
         self.ttool = api.portal.get_tool(u'portal_types')
 
+    def has_translated_title(self, fti):
+        return ITranslatedTitle.__identifier__ in fti.behaviors
+
     def __iter__(self):
         for item in self.previous:
             portal_type = item[u'_type']
@@ -44,11 +49,15 @@ class ConstructorSection(object):
                 # we need the title sometimes to auto-generate ids
                 # XXX maybe be a bit more intelligent here and set all required
                 # fields while constructing?
+                if self.has_translated_title(fti):
+                    title_keys = TRANSLATED_TITLE_NAMES
+                else:
+                    title_keys = (u'title',)
+
+                title_args = dict((key, item.get(key)) for key in title_keys)
+
                 obj = createContentInContainer(
-                    context, portal_type,
-                    title_de=item.get(u'title_de'),
-                    title_fr=item.get(u'title_fr'),
-                    title=item.get(u'title'))
+                    context, portal_type, **title_args)
                 parent_path = '/'.join(context.getPhysicalPath())
             except ValueError as e:
                 logger.warning(
