@@ -27,7 +27,7 @@
     "responsible": "lukas.graf",
     "retention_period": 5,
     "retention_period_annotation": null,
-    "review_state": "dossier-state-active",
+    "review_state": "dossier-state-resolved",
     "title": "Hanspeter Müller",
     "_permissions": {
       "read": [

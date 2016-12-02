@@ -225,6 +225,10 @@ class TestOggBundlePipeline(FunctionalTestCase):
         return folder_staff
 
     def assert_dossiers_created(self, parent):
+        self.assert_dossier_vreni_created(parent)
+        self.assert_dossier_peter_created(parent)
+
+    def assert_dossier_vreni_created(self, parent):
         dossier_vreni = parent.get('dossier-1')
         self.assertEqual(
             u'Vreni Meier ist ein Tausendsassa',
@@ -250,3 +254,57 @@ class TestOggBundlePipeline(FunctionalTestCase):
         self.assertEqual(
             u'Dossier Vreni Meier',
             dossier_vreni.title)
+
+    def assert_dossier_peter_created(self, parent):
+        dossier_peter = parent.get('dossier-2')
+        self.assertEqual(
+            u'archival worthy',
+            ILifeCycle(dossier_peter).archival_value)
+        self.assertEqual(
+            u'Beinhaltet Informationen zum Verfahren',
+            ILifeCycle(dossier_peter).archival_value_annotation)
+        self.assertEqual(
+            u'classified',
+            IClassification(dossier_peter).classification)
+        self.assertEqual(
+            150,
+            ILifeCycle(dossier_peter).custody_period)
+        self.assertEqual(
+            u'Wir haben Hanspeter M\xfcller in einem Verfahren entlassen.',
+            dossier_peter.description)
+        self.assertEqual(
+            date(2007, 1, 1),
+            IDossier(dossier_peter).start)
+        self.assertEqual(
+            date(2011, 1, 6),
+            IDossier(dossier_peter).end)
+        self.assertEqual(
+            tuple(),
+            IDossier(dossier_peter).keywords)
+        self.assertEqual(
+            u'privacy_layer_yes',
+            IClassification(dossier_peter).privacy_layer)
+        self.assertEqual(
+            '2',
+            IDossier(dossier_peter).reference_number)
+        self.assertEqual(
+            [],
+            IDossier(dossier_peter).relatedDossier)
+        self.assertEqual(
+            u'lukas.graf',
+            IDossier(dossier_peter).responsible)
+        self.assertEqual(
+            5,
+            ILifeCycle(dossier_peter).retention_period)
+        self.assertIsNone(
+            ILifeCycle(dossier_peter).retention_period_annotation)
+
+        # XXX workflow transitions/states
+        # self.assertEqual(
+        #     'dossier-state-resolved',
+        #     api.content.get_state(dossier_peter))
+        self.assertEqual(
+            u'Hanspeter M\xfcller',
+            dossier_peter.title)
+
+        # XXX local roles
