@@ -4,6 +4,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.base.behaviors.classification import IClassification
 from opengever.base.behaviors.lifecycle import ILifeCycle
+from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import FunctionalTestCase
 from pkg_resources import resource_filename
 from plone import api
@@ -33,7 +34,8 @@ class TestOggBundlePipeline(FunctionalTestCase):
         # test content creation
         # XXX use separate test-cases based on a layer
         root = self.assert_repo_root_created()
-        self.assert_repo_folders_created(root)
+        folder_staff = self.assert_repo_folders_created(root)
+        self.assert_dossiers_created(folder_staff)
 
     def assert_repo_root_created(self):
         root = self.portal.get('ordnungssystem')
@@ -49,7 +51,7 @@ class TestOggBundlePipeline(FunctionalTestCase):
     def assert_repo_folders_created(self, root):
         folder_organisation = self.assert_organization_folder_created(root)
         self.assert_processes_folder_created(folder_organisation)
-        self.assert_staff_folder_created(folder_organisation)
+        return self.assert_staff_folder_created(folder_organisation)
 
     def assert_organization_folder_created(self, root):
         folder_organisation = root.get('organisation')
@@ -221,3 +223,30 @@ class TestOggBundlePipeline(FunctionalTestCase):
         # XXX local roles
 
         return folder_staff
+
+    def assert_dossiers_created(self, parent):
+        dossier_vreni = parent.get('dossier-1')
+        self.assertEqual(
+            u'Vreni Meier ist ein Tausendsassa',
+            IDossier(dossier_vreni).comments)
+        self.assertEqual(
+            tuple(),
+            IDossier(dossier_vreni).keywords)
+        self.assertEqual(
+            '1',
+            IDossier(dossier_vreni).reference_number)
+        self.assertEqual(
+            [],
+            IDossier(dossier_vreni).relatedDossier)
+        self.assertEqual(
+            u'lukas.graf',
+            IDossier(dossier_vreni).responsible)
+        self.assertEqual(
+            'dossier-state-active',
+            api.content.get_state(dossier_vreni))
+        self.assertEqual(
+            date(2010, 11, 11),
+            IDossier(dossier_vreni).start)
+        self.assertEqual(
+            u'Dossier Vreni Meier',
+            dossier_vreni.title)
