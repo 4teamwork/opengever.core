@@ -162,6 +162,7 @@ setup(name='opengever.core',
       [zopectl.command]
       sync_ogds = opengever.ogds.base:sync_ogds_zopectl_handler
       dump_schemas = opengever.base.schemadump:dump_schemas_zopectl_handler
+      erase_source_files = opengever.dossier.maintenance:source_file_eraser_zopectl_handler
 
       [izug.basetheme]
       version = opengever.core

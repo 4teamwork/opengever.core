@@ -1,6 +1,8 @@
 from datetime import date
 from dateutil.relativedelta import relativedelta
 from ftw.mail.mail import IMail
+from opengever.core.debughelpers import get_first_plone_site
+from opengever.core.debughelpers import setup_plone
 from opengever.document.behaviors import IBaseDocument
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.document import IDocumentSchema
@@ -9,6 +11,12 @@ from opengever.dossier.events import SourceFileErased
 from opengever.dossier.interfaces import IDossierResolveProperties
 from plone import api
 from zope.event import notify
+import logging
+import transaction
+
+
+logger = logging.getLogger('opengever.dossier')
+logger.setLevel(logging.INFO)
 
 
 class SourceFileEraser(object):
@@ -25,19 +33,29 @@ class SourceFileEraser(object):
         files has to be erased.
         """
         catalog = api.portal.get_tool('portal_catalog')
-        brains = catalog({
-            'object_provides': IDossierMarker.__identifier__,
-            'end': {'query': self.get_waiting_period_deadline_date(),
-                   'range': 'max'}})
+        brains = catalog.unrestrictedSearchResults(
+            {'object_provides': IDossierMarker.__identifier__,
+             'end': {'query': self.get_waiting_period_deadline_date(),
+                     'range': 'max'}})
 
         return [brain.getObject() for brain in brains]
 
     def erase(self):
-        for dossier in self.get_dossiers_to_erase():
-            for document in api.content.find(dossier, object_provides=IBaseDocument):
+        logger.info('Source file erasement started.')
+        dossiers = self.get_dossiers_to_erase()
+
+        for dossier in dossiers:
+            catalog = api.portal.get_tool('portal_catalog')
+            documents = catalog.unrestrictedSearchResults(
+                {'object_provides': IBaseDocument.__identifier__,
+                 'path': '/'.join(dossier.getPhysicalPath())})
+
+            for document in documents:
                 self.erase_source_file(document.getObject())
 
             notify(SourceFileErased(dossier))
+
+        logger.info('Source files of {} dossiers erased'.format(len(dossiers)))
 
     def erase_source_file(self, document):
         if not IDocumentMetadata(document).archival_file:
@@ -50,3 +68,14 @@ class SourceFileEraser(object):
             IMail(document).message = None
 
         notify(SourceFileErased(document))
+
+
+def source_file_eraser_zopectl_handler(app, args):
+    # Set Zope's default StreamHandler's level to INFO (default is WARNING)
+    # to make sure SourceFileEraser()'s output gets logged on console
+    stream_handler = logger.root.handlers[0]
+    stream_handler.setLevel(logging.INFO)
+
+    setup_plone(get_first_plone_site(app))
+    SourceFileEraser().erase()
+    transaction.commit()
