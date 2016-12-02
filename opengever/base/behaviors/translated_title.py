@@ -9,6 +9,9 @@ from zope.interface import Interface
 from zope.schema import TextLine
 
 
+TRANSLATED_TITLE_NAMES = ('title_de', 'title_fr')
+
+
 class ITranslatedTitleSupport(Interface):
     """Mark objects with translated title support."""
 

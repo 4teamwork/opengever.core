@@ -40,11 +40,7 @@ class ResolveGUIDSection(object):
     def __init__(self, transmogrifier, name, options, previous):
         self.previous = previous
         self.transmogrifier = transmogrifier
-        self.transmogrifier.item_by_guid = OrderedDict()
-
-    @property
-    def item_by_guid(self):
-        return self.transmogrifier.item_by_guid
+        self.item_by_guid = self.transmogrifier.item_by_guid = OrderedDict()
 
     def __iter__(self):
         self.register_items()
