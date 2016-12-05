@@ -11,3 +11,8 @@ class IHistoryStorage(Interface):
 
 class IDisposition(Interface):
     """The disposition Interface."""
+
+
+class IDuringDossierDestruction(Interface):
+    """Request layer to indicate that dossiers are currently being destroyed.
+    """

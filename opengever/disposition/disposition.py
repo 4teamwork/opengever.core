@@ -6,6 +6,7 @@ from opengever.base.security import elevated_privileges
 from opengever.disposition import _
 from opengever.disposition.appraisal import IAppraisal
 from opengever.disposition.interfaces import IDisposition
+from opengever.disposition.interfaces import IDuringDossierDestruction
 from opengever.disposition.interfaces import IHistoryStorage
 from opengever.dossier.base import DOSSIER_STATES_OFFERABLE
 from opengever.dossier.behaviors.dossier import IDossier
@@ -24,6 +25,7 @@ from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.i18n import translate
+from zope.interface import alsoProvides
 from zope.interface import implements
 from zope.intid.interfaces import IIntIds
 
@@ -205,6 +207,7 @@ class Disposition(Container):
                 obj=relation.to_object, transition='dossier-transition-archive')
 
     def destroy_dossiers(self):
+        alsoProvides(getRequest(), IDuringDossierDestruction)
         dossiers = [relation.to_object for relation in self.dossiers]
         self.set_destroyed_dossiers(dossiers)
         with elevated_privileges():
