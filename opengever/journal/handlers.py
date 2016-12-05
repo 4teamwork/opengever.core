@@ -743,3 +743,31 @@ def object_will_be_moved(context, event):
     journal_entry_factory(
         context.aq_inner.aq_parent, OBJECT_WILL_BE_MOVED_EVENT, title)
     return
+
+# ----------------------- ZIP EXPORTS -----------------------
+
+
+DOSSIER_EXPORTED = 'Dossier included in a zip export'
+
+
+def dossier_zipped(context, event):
+    title = _(u'label_dossier_zipped',
+              default=u'Dossier included in a zip export: ${title}',
+              mapping={'title': context.title_or_id()})
+
+    journal_entry_factory(context, DOSSIER_EXPORTED, title)
+
+    return
+
+
+DOCUMENT_EXPORTED = 'Document exported in zip export'
+
+
+def document_zipped(context, event):
+    title = _(u'label_document_zipped',
+              default=u'Document included in a zip export: ${title}',
+              mapping={'title': context.title_or_id()})
+
+    journal_entry_factory(context, DOCUMENT_EXPORTED, title)
+
+    return

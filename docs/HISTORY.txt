@@ -5,6 +5,10 @@ Changelog
 4.13.1 (unreleased)
 -------------------
 
+- Use ftw.zipexport events for journalizing Dossier zip exports per originating
+  Dossier, Per Document
+  [Rotonen]
+
 - Add a wizard to add a dossier from a dossiertemplate.
   [elioschmutz]
 
