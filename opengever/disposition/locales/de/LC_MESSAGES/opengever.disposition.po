@@ -179,7 +179,7 @@ msgstr "Archivierung bestätigt durch ${user}"
 #. Default: "Disposition closed and all dossiers destroyed by ${user}"
 #: ./opengever/disposition/history.py:152
 msgid "msg_disposition_close"
-msgstr "Angebot abgeschlossen und alle Dossiers vernicht durch ${user}"
+msgstr "Angebot abgeschlossen und alle Dossiers vernichtet durch ${user}"
 
 #. Default: "Disposition disposed for the archive by ${user}"
 #: ./opengever/disposition/history.py:128
@@ -205,4 +205,3 @@ msgstr "Periode"
 #: ./opengever/disposition/browser/templates/overview.pt:143
 msgid "progress"
 msgstr "Verlauf:"
-
