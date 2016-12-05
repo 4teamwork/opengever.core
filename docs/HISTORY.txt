@@ -5,6 +5,10 @@ Changelog
 4.13.1 (unreleased)
 -------------------
 
+- Add maintenance job to erase source files when waiting period has
+  been expired.
+  [phgross]
+
 - Add folder-factory actions to add a dossier from a dossiertemplate in a repository-folder.
   [elioschmutz]
 
