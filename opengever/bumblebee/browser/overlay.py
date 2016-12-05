@@ -70,8 +70,7 @@ class BumblebeeBaseDocumentOverlay(object):
                 'Modify portal content', obj=self.context):
             return None
 
-        return '{}/edit'.format(self.context.absolute_url())
-
+        return u'{}/edit'.format(self.context.absolute_url())
 
     def get_detail_view_url(self):
         return self.context.absolute_url()
@@ -87,7 +86,7 @@ class BumblebeeBaseDocumentOverlay(object):
         if not self.has_file() or not self._is_checkout_and_edit_available():
             return None
 
-        return '{}/editing_document?_authenticator={}'.format(
+        return u'{}/editing_document?_authenticator={}'.format(
             self.context.absolute_url(),
             createToken())
 
@@ -111,7 +110,7 @@ class BumblebeeBaseDocumentOverlay(object):
         if not mimetypeitem or not is_mimetype_supported(mimetypeitem[0]):
             return None
 
-        return '{}/bumblebee-open-pdf?filename={}'.format(
+        return u'{}/bumblebee-open-pdf?filename={}'.format(
             self.context.absolute_url(), quote(self._get_pdf_filename()))
 
     def get_checkin_without_comment_url(self):
@@ -157,7 +156,7 @@ class BumblebeeBaseDocumentOverlay(object):
             return None
 
         filename, extenstion = os.path.splitext(self.get_file().filename)
-        return '{}.pdf'.format(filename)
+        return u'{}.pdf'.format(filename)
 
     def _is_checkin_allowed(self):
         manager = queryMultiAdapter(
@@ -180,17 +179,17 @@ class BumblebeeBaseDocumentOverlay(object):
             return None
 
         if with_comment:
-            checkin_view = '@@checkin_document'
+            checkin_view = u'@@checkin_document'
         else:
-            checkin_view = '@@checkin_without_comment'
+            checkin_view = u'@@checkin_without_comment'
 
-        return "{}/{}?_authenticator={}".format(
+        return u"{}/{}?_authenticator={}".format(
             self.context.absolute_url(),
             checkin_view,
             createToken())
 
     def _get_revert_link(self):
-        url = '{}/revert-file-to-version?version_id={}'.format(
+        url = u'{}/revert-file-to-version?version_id={}'.format(
             self.context.absolute_url(),
             self.version_id)
 
@@ -204,12 +203,13 @@ class BumblebeeBaseDocumentOverlay(object):
         return api.portal.get_registry_record('open_pdf_in_a_new_window',
                                               interface=IGeverBumblebeeSettings)
 
+
 class BumblebeeMailOverlay(BumblebeeBaseDocumentOverlay):
     """Bumblebee overlay for base mails.
     """
 
     def get_open_as_pdf_url(self):
-        return '{}/bumblebee-open-pdf?filename={}'.format(
+        return u'{}/bumblebee-open-pdf?filename={}'.format(
             self.context.absolute_url(), quote(self._get_pdf_filename()))
 
     def get_checkout_url(self):
@@ -222,11 +222,11 @@ class BumblebeeMailOverlay(BumblebeeBaseDocumentOverlay):
         return None
 
     def get_download_copy_link(self):
-        href = "{}/download?_authenticator={}".format(
+        href = u"{}/download?_authenticator={}".format(
             self.context.absolute_url(),
             self.context.restrictedTraverse('@@authenticator').token())
 
-        return "<a href={}>{}</a>".format(href, translate(
+        return u"<a href={}>{}</a>".format(href, translate(
             'label_download_copy',
             default="Download copy",
             domain='opengever.document',
