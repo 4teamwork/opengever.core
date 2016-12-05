@@ -2,7 +2,7 @@ from ftw.upgrade import UpgradeStep
 
 
 class DisableQuickuploadOverride(UpgradeStep):
-    """Disable quickupload override.
+    """Disable quickupload override and unique id.
 
     The override default in collective.quickupload was inconsistent in the
     default profile and in the upgrade step.
