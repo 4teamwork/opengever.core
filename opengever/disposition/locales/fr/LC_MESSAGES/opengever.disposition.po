@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-12-01 12:47+0000\n"
+"POT-Creation-Date: 2016-12-05 13:47+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,17 +32,17 @@ msgid "document_sequence_number"
 msgstr ""
 
 #. Default: "The dossier ${title} is already offered in a different disposition."
-#: ./opengever/disposition/validators.py:27
+#: ./opengever/disposition/validators.py:29
 msgid "error_offered_in_a_different_disposition"
 msgstr ""
 
 #. Default: "The retention period of the selected dossiers is not expired."
-#: ./opengever/disposition/validators.py:21
+#: ./opengever/disposition/validators.py:23
 msgid "error_retention_period_not_expired"
 msgstr ""
 
 #. Default: "Common"
-#: ./opengever/disposition/disposition.py:101
+#: ./opengever/disposition/disposition.py:99
 msgid "fieldset_common"
 msgstr ""
 
@@ -72,8 +72,18 @@ msgid "label_details"
 msgstr ""
 
 #. Default: "Disposition"
-#: ./opengever/disposition/disposition.py:91
+#: ./opengever/disposition/disposition.py:89
 msgid "label_disposition"
+msgstr ""
+
+#. Default: "Disposition added"
+#: ./opengever/disposition/history.py:86
+msgid "label_disposition_added"
+msgstr ""
+
+#. Default: "Disposition edited"
+#: ./opengever/disposition/history.py:105
+msgid "label_disposition_edited"
 msgstr ""
 
 #. Default: "Download disposition package"
@@ -93,7 +103,7 @@ msgstr ""
 
 #. Default: "Dossiers"
 #: ./opengever/disposition/browser/removal_protocol.py:111
-#: ./opengever/disposition/disposition.py:114
+#: ./opengever/disposition/disposition.py:112
 msgid "label_dossiers"
 msgstr ""
 
@@ -135,13 +145,13 @@ msgstr ""
 #. Default: "Title"
 #: ./opengever/disposition/browser/listing.py:29
 #: ./opengever/disposition/browser/removal_protocol.py:53
-#: ./opengever/disposition/disposition.py:107
+#: ./opengever/disposition/disposition.py:105
 msgid "label_title"
 msgstr ""
 
 #. Default: "Transfer number"
 #: ./opengever/disposition/browser/removal_protocol.py:124
-#: ./opengever/disposition/disposition.py:134
+#: ./opengever/disposition/disposition.py:132
 msgid "label_transfer_number"
 msgstr ""
 
@@ -156,27 +166,27 @@ msgid "msg_disposition_added"
 msgstr ""
 
 #. Default: "Appraisal finalized by ${user}"
-#: ./opengever/disposition/history.py:103
+#: ./opengever/disposition/history.py:116
 msgid "msg_disposition_appraised"
 msgstr ""
 
 #. Default: "The archiving confirmed by ${user}"
-#: ./opengever/disposition/history.py:127
+#: ./opengever/disposition/history.py:140
 msgid "msg_disposition_archived"
 msgstr ""
 
 #. Default: "Disposition closed and all dossiers destroyed by ${user}"
-#: ./opengever/disposition/history.py:139
+#: ./opengever/disposition/history.py:152
 msgid "msg_disposition_close"
 msgstr ""
 
 #. Default: "Disposition disposed for the archive by ${user}"
-#: ./opengever/disposition/history.py:115
+#: ./opengever/disposition/history.py:128
 msgid "msg_disposition_disposed"
 msgstr ""
 
 #. Default: "Edited by ${user}"
-#: ./opengever/disposition/history.py:91
+#: ./opengever/disposition/history.py:98
 msgid "msg_disposition_edited"
 msgstr ""
 

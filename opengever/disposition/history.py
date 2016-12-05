@@ -80,6 +80,13 @@ class Added(DispositionHistory):
         return _('msg_disposition_added', default=u'Added by ${user}',
                  mapping=self._msg_mapping)
 
+    @property
+    def transition_label(self):
+        return translate(
+            _('label_disposition_added', default=u'Disposition added'),
+            context=getRequest())
+
+
 DispositionHistory.add_description(Added)
 
 
@@ -91,6 +98,12 @@ class Edited(DispositionHistory):
         return _('msg_disposition_edited',
                  default=u'Edited by ${user}',
                  mapping=self._msg_mapping)
+
+    @property
+    def transition_label(self):
+        return translate(
+            _('label_disposition_edited', default=u'Disposition edited'),
+            context=getRequest())
 
 DispositionHistory.add_description(Edited)
 

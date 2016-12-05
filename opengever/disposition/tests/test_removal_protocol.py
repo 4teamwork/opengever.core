@@ -8,6 +8,7 @@ from ftw.testing import freeze
 from lxml.cssselect import CSSSelector
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_UNWORTHY
 from opengever.disposition.browser.removal_protocol import IRemovalProtocolLayer
+from opengever.disposition.interfaces import IHistoryStorage
 from opengever.latex.layouts.default import DefaultLayout
 from opengever.latex.listing import ILaTexListing
 from opengever.latex.tests.test_listing import BaseLatexListingTest
@@ -88,6 +89,26 @@ class TestDispositionHistoryListing(BaseLatexListingTest):
             ['Nov 06, 2014 12:33 PM',
              'Test User (test_user_1_)',
              'disposition-transition-appraise'], rows[2])
+
+    def test_transition_label_for_added_and_edited_entries_is_translated_correctly(self):
+        disposition = create(Builder('disposition'))
+
+        storage = IHistoryStorage(disposition)
+        storage.add('added', api.user.get_current().getId(), [])
+        storage.add('edited', api.user.get_current().getId(), [])
+
+        self.listing = getMultiAdapter(
+            (disposition, disposition.REQUEST, self),
+            ILaTexListing, name='disposition_history')
+        self.listing.items = disposition.get_history()
+
+        table = lxml.html.fromstring(self.listing.template())
+        rows = table.xpath(CSSSelector('tbody tr').path)
+
+        self.assert_row_values(
+            ['Disposition edited'], rows[0][2])
+        self.assert_row_values(
+            ['Disposition added'], rows[1][2])
 
 
 class TestRemovalProtocolLaTeXView(FunctionalTestCase):
