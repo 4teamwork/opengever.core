@@ -101,6 +101,11 @@ class ISourceFileErased(IObjectEvent):
     """
 
 
+class ISourceFileHasBeenErased(Interface):
+    """Marker interface for dossier where the source files has been erased.
+    """
+
+
 class IDisplayedInOverviewMarker(IDossierMarker):
     """Marker Interface for additional dossier behaviors."""
 

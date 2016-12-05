@@ -9,8 +9,10 @@ from opengever.document.document import IDocumentSchema
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.events import SourceFileErased
 from opengever.dossier.interfaces import IDossierResolveProperties
+from opengever.dossier.interfaces import ISourceFileHasBeenErased
 from plone import api
 from zope.event import notify
+from zope.interface import alsoProvides
 import logging
 import transaction
 
@@ -45,6 +47,11 @@ class SourceFileEraser(object):
         dossiers = self.get_dossiers_to_erase()
 
         for dossier in dossiers:
+            if ISourceFileHasBeenErased.providedBy(dossier):
+                logger.info(
+                    '{} skipped, erasment already done.'.format(dossier))
+                continue
+
             catalog = api.portal.get_tool('portal_catalog')
             documents = catalog.unrestrictedSearchResults(
                 {'object_provides': IBaseDocument.__identifier__,
@@ -53,6 +60,7 @@ class SourceFileEraser(object):
             for document in documents:
                 self.erase_source_file(document.getObject())
 
+            alsoProvides(dossier, ISourceFileHasBeenErased)
             notify(SourceFileErased(dossier))
 
         logger.info('Source files of {} dossiers erased'.format(len(dossiers)))
