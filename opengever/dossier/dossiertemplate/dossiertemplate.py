@@ -7,6 +7,7 @@ from plone.dexterity.content import Container
 from plone.dexterity.utils import getAdditionalSchemata
 from plone.directives import dexterity
 from plone.z3cform.fieldsets.utils import remove
+from zope.schema import getFieldsInOrder
 
 TEMPLATABLE_FIELDS = [
     'IOpenGeverBase.title',
@@ -15,6 +16,10 @@ TEMPLATABLE_FIELDS = [
     'IDossierTemplate.comments',
     'IDossierTemplate.filing_prefix',
     ]
+
+BEHAVIOR_INTERFACE_MAPPING = {
+    'IDossier': 'IDossierTemplate'
+    }
 
 
 def whitelist_form_fields(form, whitlisted_fields):
@@ -64,3 +69,14 @@ class DossierTemplate(Container):
     def is_subdossier(self):
         parent = aq_parent(aq_inner(self))
         return bool(IDossierTemplateSchema.providedBy(parent))
+
+    def get_schema_values(self):
+        values = {}
+        for schema in getAdditionalSchemata(self):
+            for fieldname, field in getFieldsInOrder(schema):
+                key = '{}.{}'.format(schema.__name__, fieldname)
+                if key not in TEMPLATABLE_FIELDS:
+                    continue
+
+                values[key] = getattr(field.interface(self), fieldname)
+        return values
