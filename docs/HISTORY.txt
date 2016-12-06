@@ -5,6 +5,9 @@ Changelog
 4.14.1 (unreleased)
 -------------------
 
+- Hide DossierTemplate from navigation.
+  [elioschmutz]
+
 - Remove unused skip_defaults_fields for ObjectCreatorCommands.
   [elioschmutz]
 

@@ -35,6 +35,7 @@
             <element value="opengever.task.task"/>
             <element value="opengever.tasktemplates.tasktemplate"/>
             <element value="opengever.tasktemplates.tasktemplatefolder"/>
+            <element value="opengever.dossier.dossiertemplate"/>
             <element value="opengever.private.root"/>
         </property>
     </object>
