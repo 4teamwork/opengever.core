@@ -62,6 +62,8 @@ Dossiers vernichten
 ~~~~~~~~~~~~~~~~~~~
 Der Prozess der Aussonderung wird mit der Vernichtung der Dossiers abgeschlossen. Dabei werden alle im Angebot enthaltenen Dossiers (auch nicht archivwürdige) vernichtet, also effektiv aus dem GEVER gelöscht.
 
+Nach Abschluss des Angebots, also nach der Vernichtung der Dossiers, besteht zudem die Möglichkeit ein automatisch generiertes Löschprotokoll herunterzuladen.
+
 Zusätzliche Vernichtungs-Varianten (Nur löschen der Primärdaten, Entzug der Leseberechtigung etc.) sind aktuell nicht umgesetzt und auch nicht geplant.
 
 Verlauf
