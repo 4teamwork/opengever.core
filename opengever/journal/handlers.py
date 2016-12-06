@@ -147,6 +147,7 @@ def repository_prefix_unlock(context, event):
         REPOSITORY_PREFIX_UNLOCKED,
         title=title)
 
+
 REPOSITORY_PREFIX_UNLOCKED = 'Repository prefix unlocked'
 
 
@@ -313,6 +314,7 @@ def doc_properties_updated(context):
 # ----------------------- MAIL -----------------------
 ATTACHMENTS_DELETED_ACTION = 'Attachments deleted'
 
+
 @grok.subscribe(IMail, IAttachmentsDeletedEvent)
 def attachments_deleted(context, event):
     attachment_names = event.attachments
@@ -374,7 +376,8 @@ def document_modified(context, event):
             else:
                 metadata_changed = True
 
-    if context.REQUEST.get('form.widgets.file.action', u'nochange') == u'nochange':
+    if context.REQUEST.get('form.widgets.file.action',
+                           u'nochange') == u'nochange':
         file_changed = False
 
     if not file_changed and not metadata_changed and not public_trial_changed:
@@ -534,7 +537,7 @@ def document_sent(context, event):
     comment = translate(
         _(u'label_document_sent_comment',
           default=u'Attachments: ${documents} | Receivers: ${receiver} |'
-                    ' Message: ${message}',
+          ' Message: ${message}',
           mapping={
                 'documents': make_document_event_list(context, objs),
                 'receiver': receiver.decode('utf-8'),
@@ -693,7 +696,7 @@ def participation_removed(context, event):
     journal_entry_factory(context, PARTICIPANT_REMOVED, title)
 
 
-#----------------------------Verschieben-----------------------------------
+# ----------------------------Verschieben-----------------------------------
 
 OBJECT_MOVED_EVENT = 'Object moved'
 
@@ -739,4 +742,32 @@ def object_will_be_moved(context, event):
 
     journal_entry_factory(
         context.aq_inner.aq_parent, OBJECT_WILL_BE_MOVED_EVENT, title)
+    return
+
+# ----------------------- ZIP EXPORTS -----------------------
+
+
+DOSSIER_EXPORTED = 'Dossier included in a zip export'
+
+
+def dossier_zipped(context, event):
+    title = _(u'label_dossier_zipped',
+              default=u'Dossier included in a zip export: ${title}',
+              mapping={'title': context.title_or_id()})
+
+    journal_entry_factory(context, DOSSIER_EXPORTED, title)
+
+    return
+
+
+DOCUMENT_EXPORTED = 'Document exported in zip export'
+
+
+def document_zipped(context, event):
+    title = _(u'label_document_zipped',
+              default=u'Document included in a zip export: ${title}',
+              mapping={'title': context.title_or_id()})
+
+    journal_entry_factory(context, DOCUMENT_EXPORTED, title)
+
     return

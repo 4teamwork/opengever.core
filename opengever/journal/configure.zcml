@@ -56,4 +56,16 @@
         permission="cmf.ModifyPortalContent"
         />
 
+    <subscriber
+        for="opengever.document.behaviors.IBaseDocument
+             ftw.zipexport.interfaces.IItemZippedEvent"
+        handler=".handlers.document_zipped"
+        />
+
+    <subscriber
+        for="opengever.dossier.behaviors.dossier.IDossierMarker
+             ftw.zipexport.interfaces.IContainerZippedEvent"
+        handler=".handlers.dossier_zipped"
+        />
+
 </configure>
