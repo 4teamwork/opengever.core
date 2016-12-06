@@ -62,6 +62,8 @@ Dossiers vernichten
 ~~~~~~~~~~~~~~~~~~~
 Der Prozess der Aussonderung wird mit der Vernichtung der Dossiers abgeschlossen. Dabei werden alle im Angebot enthaltenen Dossiers (auch nicht archivwürdige) vernichtet, also effektiv aus dem GEVER gelöscht.
 
+Nach Abschluss des Angebots, also nach der Vernichtung der Dossiers, besteht zudem die Möglichkeit ein automatisch generiertes Löschprotokoll herunterzuladen.
+
 Zusätzliche Vernichtungs-Varianten (Nur löschen der Primärdaten, Entzug der Leseberechtigung etc.) sind aktuell nicht umgesetzt und auch nicht geplant.
 
 Verlauf
@@ -69,6 +71,13 @@ Verlauf
 Für jedes Angebot wird ein Verlauf geführt und ähnlich wie bei Aufgaben oder Anträgen dargestellt.
 
 |aussonderung-3|
+
+
+Auflistung
+----------
+Auf Stufe Ordnungssytem steht für Benutzer mit den Rollen `Records Manager` oder `Archivist` ein zusätzlicher Reiter `Angebote` zur Verfügung, welcher alle Angebote dieses Ordnungssystems auflistet.
+
+|aussonderung-4|
 
 
 Berechtigung
@@ -87,3 +96,4 @@ Die zusätzichen Features sind mit einem Feature-Flag geschützt, und stehen nur
 .. |aussonderung-1| image:: _static/img/aussonderung_1.png
 .. |aussonderung-2| image:: _static/img/aussonderung_2.png
 .. |aussonderung-3| image:: _static/img/aussonderung_3.png
+.. |aussonderung-4| image:: _static/img/aussonderung_4.png
