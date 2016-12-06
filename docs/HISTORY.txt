@@ -5,6 +5,9 @@ Changelog
 4.13.1 (unreleased)
 -------------------
 
+- Make sure that items of a TOC are sorted as well.
+  [deiferni]
+
 - Use ftw.zipexport events for journalizing Dossier zip exports per originating
   Dossier, Per Document
   [Rotonen]

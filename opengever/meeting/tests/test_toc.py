@@ -37,6 +37,14 @@ class TestAlphabeticalTOC(FunctionalTestCase):
         'group_title': u'N',
         'contents': [
             {
+                'title': u'Nahhh not here either',
+                'dossier_reference_number': None,
+                'repository_folder_title': None,
+                'meeting_date': u'Dec 31, 2010',
+                'decision_number': 7,
+                'has_proposal': False,
+                'meeting_start_page_number': 129,
+            }, {
                 'title': u'No Proposal here',
                 'dossier_reference_number': None,
                 'repository_folder_title': None,
@@ -47,22 +55,23 @@ class TestAlphabeticalTOC(FunctionalTestCase):
             }]
         }, {
         'group_title': u'P',
-        'contents': [{
-            'title': u'proposal 1',
-            'dossier_reference_number': u'1.1.4 / 1',
-            'repository_folder_title': u'Business',
-            'meeting_date': 'Jan 01, 2010',
-            'decision_number': 2,
-            'has_proposal': True,
-            'meeting_start_page_number': 33,
-            }, {
-            'title': u'Proposal 3',
-            'dossier_reference_number': '2.1.4 / 1',
-            'repository_folder_title': 'Stuff',
-            'meeting_date': u'Dec 31, 2010',
-            'decision_number': 4,
-            'has_proposal': True,
-            'meeting_start_page_number': 129,
+        'contents': [
+            {
+                'title': u'proposal 1',
+                'dossier_reference_number': u'1.1.4 / 1',
+                'repository_folder_title': u'Business',
+                'meeting_date': 'Jan 01, 2010',
+                'decision_number': 2,
+                'has_proposal': True,
+                'meeting_start_page_number': 33,
+                }, {
+                'title': u'Proposal 3',
+                'dossier_reference_number': '2.1.4 / 1',
+                'repository_folder_title': 'Stuff',
+                'meeting_date': u'Dec 31, 2010',
+                'decision_number': 4,
+                'has_proposal': True,
+                'meeting_start_page_number': 129,
             }]
         }, {
         'group_title': u'\xdc',
@@ -158,6 +167,11 @@ class TestAlphabeticalTOC(FunctionalTestCase):
             title=u'No Proposal here',
             decision_number=6,
         ))
+        create(Builder('agenda_item').having(
+            meeting=self.meeting2,
+            title=u'Nahhh not here either',
+            decision_number=7,
+        ))
 
         create(Builder('agenda_item').having(
             meeting=self.meeting_after,
@@ -170,7 +184,7 @@ class TestAlphabeticalTOC(FunctionalTestCase):
             date_to=date(2010, 12, 31),
             committee=self.committee_model))
 
-    def test_toc(self):
+    def test_toc_json_is_generated_correctly(self):
         self.assertEqual(
             self.expected_toc_json, AlphabeticalToc(self.period).get_json())
 
@@ -219,8 +233,15 @@ class TestTOCByRepository(TestAlphabeticalTOC):
 
     expected_toc_json = {'toc': [{
         'group_title': None,
-        'contents': [
-            {
+        'contents': [{
+                'title': u'Nahhh not here either',
+                'dossier_reference_number': None,
+                'repository_folder_title': None,
+                'meeting_date': u'Dec 31, 2010',
+                'decision_number': 7,
+                'has_proposal': False,
+                'meeting_start_page_number': 129,
+            }, {
                 'title': u'No Proposal here',
                 'dossier_reference_number': None,
                 'repository_folder_title': None,
@@ -273,7 +294,7 @@ class TestTOCByRepository(TestAlphabeticalTOC):
         }
     ]}
 
-    def test_toc(self):
+    def test_toc_json_is_generated_correctly(self):
         self.assertEqual(
             self.expected_toc_json, RepositoryBasedTOC(self.period).get_json())
 
