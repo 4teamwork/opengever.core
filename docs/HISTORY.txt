@@ -5,6 +5,9 @@ Changelog
 4.14.1 (unreleased)
 -------------------
 
+- Remove unused skip_defaults_fields for ObjectCreatorCommands.
+  [elioschmutz]
+
 - Creates successor-tasks of forwardings with a default task type.
   [phgross]
 

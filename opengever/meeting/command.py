@@ -181,8 +181,6 @@ class ManualExcerptOperations(object):
 
 class CreateGeneratedDocumentCommand(CreateDocumentCommand):
 
-    skip_defaults_fields = ['title', ]
-
     def __init__(self, context, meeting, document_operations,
                  lock_document_after_creation=False):
         """Data will be initialized lazily since it is only available after the

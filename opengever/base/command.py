@@ -9,7 +9,6 @@ class BaseObjectCreatorCommand(object):
     """Base class to create an object in a container.
     """
     portal_type = None
-    skip_defaults_fields = []
 
     def __init__(self, context, title, **kwargs):
         self.context = context
@@ -30,7 +29,6 @@ class CreateDocumentCommand(BaseObjectCreatorCommand):
 
     """
     portal_type = 'opengever.document.document'
-    skip_defaults_fields = []
     primary_field_name = 'file'
 
     def __init__(self, context, filename, data, title=None, content_type='',
