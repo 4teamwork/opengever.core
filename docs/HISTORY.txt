@@ -5,6 +5,9 @@ Changelog
 4.14.1 (unreleased)
 -------------------
 
+- Remove workflow for DossierTemplate.
+  [elioschmutz]
+
 - Hide DossierTemplate from navigation.
   [elioschmutz]
 
