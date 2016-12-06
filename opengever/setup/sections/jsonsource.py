@@ -13,6 +13,7 @@ import os.path
 
 
 logger = logging.getLogger('opengever.setup.jsonsource')
+logger.setLevel(logging.INFO)
 
 
 class JSONSourceSection(object):
@@ -73,6 +74,7 @@ class JSONSourceSection(object):
         return data
 
     def __iter__(self):
+        logger.info('Yielding items from %s' % self.filename)
         for item in self.previous:
             yield item
 
