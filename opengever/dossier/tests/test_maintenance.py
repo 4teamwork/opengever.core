@@ -17,10 +17,13 @@ class TestSourceFileEraser(FunctionalTestCase):
 
     def test_get_dossiers_with_expired_waiting_period(self):
         dossier_a = create(Builder('dossier')
+                           .in_state('dossier-state-resolved')
                            .having(end=date(2016, 1, 2)))
         dossier_b = create(Builder('dossier')
+                           .in_state('dossier-state-resolved')
                            .having(end=date(2015, 1, 2)))
         dossier_c = create(Builder('dossier')
+                           .in_state('dossier-state-resolved')
                            .having(end=date(2013, 5, 12)))
 
         with freeze(datetime(2017, 1, 2)):
@@ -28,8 +31,24 @@ class TestSourceFileEraser(FunctionalTestCase):
                 [dossier_b, dossier_c],
                 SourceFileEraser().get_dossiers_to_erase())
 
+    def test_only_erase_resolved_dossiers(self):
+        create(Builder('dossier')
+               .having(end=date(2013, 1, 2)))
+        create(Builder('dossier')
+               .in_state('dossier-state-inactive')
+               .having(end=date(2013, 1, 2)))
+        dossier_c = create(Builder('dossier')
+                           .in_state('dossier-state-resolved')
+                           .having(end=date(2013, 1, 2)))
+
+        with freeze(datetime(2017, 1, 2)):
+            self.assertItemsEqual(
+                [dossier_c],
+                SourceFileEraser().get_dossiers_to_erase())
+
     def test_erase_source_file_only_when_archival_file_exists(self):
         dossier = create(Builder('dossier')
+                         .in_state('dossier-state-resolved')
                          .having(end=date(2014, 1, 2)))
         document_a = create(Builder('document')
                             .within(dossier)
@@ -47,6 +66,7 @@ class TestSourceFileEraser(FunctionalTestCase):
     def test_erase_only_documents_from_expired_dossiers(self):
         # expired
         dossier_a = create(Builder('dossier')
+                           .in_state('dossier-state-resolved')
                            .having(end=date(2012, 1, 2)))
         document_a = create(Builder('document')
                             .within(dossier_a)
@@ -55,6 +75,7 @@ class TestSourceFileEraser(FunctionalTestCase):
 
         # not_expired
         dossier_b = create(Builder('dossier')
+                           .in_state('dossier-state-resolved')
                            .having(end=date(2016, 1, 2)))
         document_b = create(Builder('document')
                             .within(dossier_b)
@@ -69,6 +90,7 @@ class TestSourceFileEraser(FunctionalTestCase):
 
     def test_erase_source_file_of_mails(self):
         dossier = create(Builder('dossier')
+                         .in_state('dossier-state-resolved')
                          .having(end=date(2014, 1, 2)))
         mail = create(Builder('mail')
                       .within(dossier)
@@ -81,6 +103,7 @@ class TestSourceFileEraser(FunctionalTestCase):
 
     def test_erasement_is_journalized_on_dossier_and_documents(self):
         dossier = create(Builder('dossier')
+                         .in_state('dossier-state-resolved')
                          .having(end=date(2014, 1, 2)))
         document = create(Builder('document')
                           .within(dossier)
@@ -106,6 +129,7 @@ class TestSourceFileEraser(FunctionalTestCase):
 
     def test_mark_dossier_with_marker_interface_after_the_erasing_documents(self):
         dossier = create(Builder('dossier')
+                         .in_state('dossier-state-resolved')
                          .having(end=date(2014, 1, 2)))
         create(Builder('document')
                .within(dossier)

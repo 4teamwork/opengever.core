@@ -37,6 +37,7 @@ class SourceFileEraser(object):
         catalog = api.portal.get_tool('portal_catalog')
         brains = catalog.unrestrictedSearchResults(
             {'object_provides': IDossierMarker.__identifier__,
+             'review_state': 'dossier-state-resolved',
              'end': {'query': self.get_waiting_period_deadline_date(),
                      'range': 'max'}})
 
