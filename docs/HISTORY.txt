@@ -5,6 +5,10 @@ Changelog
 4.13.1 (unreleased)
 -------------------
 
+- Ensure consistent collective.quickupload configuration across all
+  our installations.
+  [deiferni]
+
 - Make sure that items of a TOC are sorted as well.
   [deiferni]
 
