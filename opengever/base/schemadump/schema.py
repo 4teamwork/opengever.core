@@ -3,16 +3,15 @@ from jsonschema import Draft4Validator
 from opengever.base.behaviors.translated_title import TRANSLATED_TITLE_NAMES
 from opengever.base.schemadump.config import GEVER_SQL_TYPES
 from opengever.base.schemadump.config import GEVER_TYPES
+from opengever.base.schemadump.config import GEVER_TYPES_TO_OGGBUNDLE_TYPES
 from opengever.base.schemadump.config import IGNORED_FIELDS
 from opengever.base.schemadump.config import IGNORED_OGGBUNDLE_FIELDS
 from opengever.base.schemadump.config import JSON_SCHEMA_FIELD_TYPES
-from opengever.base.schemadump.config import GEVER_TYPES_TO_OGGBUNDLE_TYPES
 from opengever.base.schemadump.field import FieldDumper
 from opengever.base.schemadump.field import SQLFieldDumper
 from opengever.base.schemadump.helpers import DirectoryHelperMixin
 from opengever.base.schemadump.helpers import mkdir_p
 from opengever.base.schemadump.helpers import translate_de
-from opengever.base.schemadump.log import setup_logging
 from opengever.base.utils import pretty_json
 from os.path import join as pjoin
 from plone import api
@@ -21,10 +20,11 @@ from plone.supermodel.interfaces import FIELDSETS_KEY
 from sqlalchemy.ext.declarative.base import _is_mapped_class
 from zope.dottedname.resolve import resolve as resolve_dotted
 from zope.schema import getFieldsInOrder
+import logging
 import transaction
 
 
-log = setup_logging(__name__)
+log = logging.getLogger(__name__)
 
 
 class SchemaDumper(object):
@@ -40,7 +40,7 @@ class SchemaDumper(object):
         for name, field in getFieldsInOrder(schema):
             dottedname = '.'.join((schema.__identifier__, field.getName()))
             if dottedname in IGNORED_FIELDS:
-                print "    Skipping field %s" % dottedname
+                log.info("  Skipping field %s" % dottedname)
                 continue
 
             field_dump = field_dumper.dump(field)
