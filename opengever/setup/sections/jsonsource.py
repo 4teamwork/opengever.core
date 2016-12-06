@@ -39,6 +39,9 @@ class JSONSourceSection(object):
         else:
             self.bundle_dir = options.get('bundle_dir')
 
+        if not os.path.exists(self.bundle_dir):
+            raise Exception("Bundle %s not found" % self.bundle_dir)
+
         self.portal_type = options.get('portal_type')
         self.json_schema = self.get_content_type_json_schema()
 

@@ -5,6 +5,10 @@ Changelog
 4.13.1 (unreleased)
 -------------------
 
+-  Add entry point to run OGGBundle import from console via
+   bin/instance import <path_to_oggbundle>
+   [lgraf]
+
 - Add folder-factory actions to add a dossier from a dossiertemplate in a repository-folder.
   [elioschmutz]
 
