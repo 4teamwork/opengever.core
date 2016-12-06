@@ -5,17 +5,32 @@ from ftw.builder import create
 from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from ftw.testing import freeze
 from opengever.document.behaviors.metadata import IDocumentMetadata
+from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.dossier.interfaces import ISourceFileHasBeenErased
 from opengever.dossier.maintenance import SourceFileEraser
 from opengever.journal.handlers import SOURCE_FILE_ERASED
 from opengever.journal.handlers import SOURCE_FILES_ERASED
 from opengever.testing import FunctionalTestCase
+from plone import api
 from zope.annotation.interfaces import IAnnotations
+import transaction
 
 
 class TestSourceFileEraser(FunctionalTestCase):
 
+    def setUp(self):
+        super(TestSourceFileEraser, self).setUp()
+
+    def enable_erasement(self):
+        api.portal.set_registry_record(
+            name='source_file_removal_enabled',
+            value=True,
+            interface=IDossierResolveProperties)
+        transaction.commit()
+
     def test_get_dossiers_with_expired_waiting_period(self):
+        self.enable_erasement()
+
         dossier_a = create(Builder('dossier')
                            .in_state('dossier-state-resolved')
                            .having(end=date(2016, 1, 2)))
@@ -32,6 +47,8 @@ class TestSourceFileEraser(FunctionalTestCase):
                 SourceFileEraser().get_dossiers_to_erase())
 
     def test_only_erase_resolved_dossiers(self):
+        self.enable_erasement()
+
         create(Builder('dossier')
                .having(end=date(2013, 1, 2)))
         create(Builder('dossier')
@@ -46,7 +63,22 @@ class TestSourceFileEraser(FunctionalTestCase):
                 [dossier_c],
                 SourceFileEraser().get_dossiers_to_erase())
 
+    def test_erasement_is_skipped_when_feature_is_disabled(self):
+        dossier = create(Builder('dossier')
+                         .in_state('dossier-state-resolved')
+                         .having(end=date(2014, 1, 2)))
+        document = create(Builder('document')
+                          .within(dossier)
+                          .attach_file_containing('source data')
+                          .attach_archival_file_containing('archive data'))
+
+        self.assertIsNotNone(IDocumentMetadata(document).file)
+        SourceFileEraser().erase()
+        self.assertIsNotNone(IDocumentMetadata(document).file)
+
     def test_erase_source_file_only_when_archival_file_exists(self):
+        self.enable_erasement()
+
         dossier = create(Builder('dossier')
                          .in_state('dossier-state-resolved')
                          .having(end=date(2014, 1, 2)))
@@ -64,6 +96,8 @@ class TestSourceFileEraser(FunctionalTestCase):
         self.assertIsNotNone(IDocumentMetadata(document_b).file)
 
     def test_erase_only_documents_from_expired_dossiers(self):
+        self.enable_erasement()
+
         # expired
         dossier_a = create(Builder('dossier')
                            .in_state('dossier-state-resolved')
@@ -89,6 +123,8 @@ class TestSourceFileEraser(FunctionalTestCase):
         self.assertIsNotNone(IDocumentMetadata(document_b).file)
 
     def test_erase_source_file_of_mails(self):
+        self.enable_erasement()
+
         dossier = create(Builder('dossier')
                          .in_state('dossier-state-resolved')
                          .having(end=date(2014, 1, 2)))
@@ -102,6 +138,8 @@ class TestSourceFileEraser(FunctionalTestCase):
         self.assertIsNone(IDocumentMetadata(mail).message)
 
     def test_erasement_is_journalized_on_dossier_and_documents(self):
+        self.enable_erasement()
+
         dossier = create(Builder('dossier')
                          .in_state('dossier-state-resolved')
                          .having(end=date(2014, 1, 2)))
@@ -128,6 +166,8 @@ class TestSourceFileEraser(FunctionalTestCase):
                           entry.get('action').get('title'))
 
     def test_mark_dossier_with_marker_interface_after_the_erasing_documents(self):
+        self.enable_erasement()
+
         dossier = create(Builder('dossier')
                          .in_state('dossier-state-resolved')
                          .having(end=date(2014, 1, 2)))

@@ -1,0 +1,5 @@
+<registry purge="False">
+  <records interface="opengever.dossier.interfaces.IDossierResolveProperties">
+    <value key="source_file_removal_enabled">False</value>
+  </records>
+</registry>

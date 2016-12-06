@@ -23,6 +23,11 @@ logger.setLevel(logging.INFO)
 
 class SourceFileEraser(object):
 
+    def is_enabled(self):
+        return api.portal.get_registry_record(
+            'source_file_removal_enabled',
+            interface=IDossierResolveProperties)
+
     def get_waiting_period_deadline_date(self):
         waiting_period = api.portal.get_registry_record(
             'waiting_period_source_file_removal',
@@ -44,6 +49,10 @@ class SourceFileEraser(object):
         return [brain.getObject() for brain in brains]
 
     def erase(self):
+        if not self.is_enabled():
+            logger.info('Source file erasement aborted, feature is disabled.')
+            return
+
         logger.info('Source file erasement started.')
         dossiers = self.get_dossiers_to_erase()
 

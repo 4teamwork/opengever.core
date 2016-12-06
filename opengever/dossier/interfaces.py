@@ -209,6 +209,11 @@ class IDossierResolveProperties(Interface):
         'conversion for each document, when a dossier gets resolved.',
         default=False)
 
+    source_file_removal_enabled = schema.Bool(
+        title=u'Enable automatic source file removal, when waiting period '
+        'is expired',
+        default=False)
+
     waiting_period_source_file_removal = schema.Int(
         title=u'Waiting period in years.',
         description=u'Length of the waiting period in years, before the '
