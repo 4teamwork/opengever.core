@@ -73,6 +73,13 @@ Für jedes Angebot wird ein Verlauf geführt und ähnlich wie bei Aufgaben oder 
 |aussonderung-3|
 
 
+Auflistung
+----------
+Auf Stufe Ordnungssytem steht für Benutzer mit den Rollen `Records Manager` oder `Archivist` ein zusätzlicher Reiter `Angebote` zur Verfügung, welcher alle Angebote dieses Ordnungssystems auflistet.
+
+|aussonderung-4|
+
+
 Berechtigung
 ------------
 Sowohl das Erstellen wie auch das Betrachten eines Angebots ist durch eine separate Permission geschützt. Diese steht nur den Rollen `Manager`, `Records Manager` und `Archivist` zur Verfügung.
@@ -89,3 +96,4 @@ Die zusätzichen Features sind mit einem Feature-Flag geschützt, und stehen nur
 .. |aussonderung-1| image:: _static/img/aussonderung_1.png
 .. |aussonderung-2| image:: _static/img/aussonderung_2.png
 .. |aussonderung-3| image:: _static/img/aussonderung_3.png
+.. |aussonderung-4| image:: _static/img/aussonderung_4.png
