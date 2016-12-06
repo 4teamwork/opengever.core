@@ -43,7 +43,7 @@ class TestTaskOverview(FunctionalTestCase):
             self.user.label(), browser.css('.issuer a').first.text)
 
     @browsing
-    def test_issuer_is_prefixed_by_current_org_unit_on_a_multiclient_setup(self, browser):
+    def test_issuer_is_prefixed_by_current_org_unit_on_a_multiclient_setup(self, browser): # noqa
         create(Builder('org_unit').id('client2')
                .having(admin_unit=self.admin_unit))
         task = create(Builder("task").having(task_type='comment',
@@ -64,7 +64,7 @@ class TestTaskOverview(FunctionalTestCase):
 
         browser.login().open(task, view='tabbedview_view-overview')
 
-        main_attributes_table = browser.css('#main_attributesBox .listing').first
+        main_attributes_table = browser.css('#main_attributesBox .listing').first #noqa
         date_of_completion_row = main_attributes_table.lists()[-1]
         self.assertEquals(['Date of completion', 'Feb 02, 2015'],
                           date_of_completion_row)
@@ -201,10 +201,10 @@ class TestTaskOverview(FunctionalTestCase):
         self.assertSequenceEqual(
             [], browser.css("#successor_tasksBox div.task").text)
 
-
     @browsing
     def test_state_is_translated_state_label(self, browser):
-        self.task = create(Builder('task').in_state('task-state-tested-and-closed'))
+        self.task = create(Builder('task')
+                           .in_state('task-state-tested-and-closed'))
 
         # set french as preferred language
         lang_tool = api.portal.get_tool('portal_languages')
