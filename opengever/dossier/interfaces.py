@@ -96,6 +96,16 @@ class IParticipationRemoved(IObjectEvent):
     """
 
 
+class ISourceFileErased(IObjectEvent):
+    """Interface for source file erased event.
+    """
+
+
+class ISourceFileHasBeenErased(Interface):
+    """Marker interface for dossier where the source files has been erased.
+    """
+
+
 class IDisplayedInOverviewMarker(IDossierMarker):
     """Marker Interface for additional dossier behaviors."""
 
@@ -198,3 +208,14 @@ class IDossierResolveProperties(Interface):
         description=u'Select if GEVER should trigger the archival file '
         'conversion for each document, when a dossier gets resolved.',
         default=False)
+
+    source_file_removal_enabled = schema.Bool(
+        title=u'Enable automatic source file removal, when waiting period '
+        'is expired',
+        default=False)
+
+    waiting_period_source_file_removal = schema.Int(
+        title=u'Waiting period in years.',
+        description=u'Length of the waiting period in years, before the '
+        'source file (file in the original format) gets removed.',
+        default=2)
