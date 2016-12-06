@@ -3,9 +3,11 @@ from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.zipexport.zipfilestream import ZipFile
 from opengever.testing import FunctionalTestCase
 from plone import api
 from plone.app.testing import TEST_USER_ID
+from StringIO import StringIO
 import transaction
 
 
@@ -88,6 +90,67 @@ class TestTaskOverview(FunctionalTestCase):
         self.assertSequenceEqual(
             [u'Some document'],
             browser.css('#documentsBox a.document_link').text)
+
+    @browsing
+    def test_zip_export_actions_are_available(self, browser):
+        dossier = create(Builder('dossier').titled(u'Dossier'))
+
+        task = create(Builder("task")
+                      .within(dossier)
+                      .titled(u'Aufgabe')
+                      .having(text='Text blabla',
+                              task_type='comment',
+                              deadline=datetime(2010, 1, 1),
+                              issuer=TEST_USER_ID,
+                              responsible=TEST_USER_ID,))
+
+        create(Builder('document')
+               .titled(u'Some document')
+               .within(task))
+
+        browser.login().open(task)
+
+        self.assertIsNotNone(
+            browser.css('.actionicon-object_buttons-zipexport'))
+
+        browser.open(task, view='tabbedview_view-documents')
+
+        self.assertIn('Export as Zip',
+                      browser.css('#plone-contentmenu-tabbedview-actions li')
+                      .text)
+
+    @browsing
+    def test_can_export_zip(self, browser):
+        dossier = create(Builder('dossier').titled(u'Dossier'))
+
+        task = create(Builder("task")
+                      .within(dossier)
+                      .titled(u'Aufgabe')
+                      .having(text='Text blabla',
+                              task_type='comment',
+                              deadline=datetime(2010, 1, 1),
+                              issuer=TEST_USER_ID,
+                              responsible=TEST_USER_ID,))
+
+        document = create(Builder('document')
+                          .titled(u'Some document')
+                          .within(task)
+                          .with_dummy_content())
+
+        data = {'zip_selected:method': 1,
+                'paths:list': ['/'.join(document.getPhysicalPath())]}
+
+        browser.login().open(task, view='zip_export')
+
+        zipfile = ZipFile(StringIO(browser.contents), 'r')
+
+        self.assertEquals([document.file.filename], zipfile.namelist())
+
+        browser.open(task, data=data)
+
+        zipfile = ZipFile(StringIO(browser.contents), 'r')
+
+        self.assertEquals([document.file.filename], zipfile.namelist())
 
     @browsing
     def test_task_overview_displays_task_information(self, browser):

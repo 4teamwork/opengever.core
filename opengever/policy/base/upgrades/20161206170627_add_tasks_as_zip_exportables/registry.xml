@@ -1,0 +1,7 @@
+<registry>
+    <records interface="ftw.zipexport.interfaces.IZipExportSettings">
+        <value key="enabled_dotted_names" purge="False">
+            <element>opengever.task.task.ITask</element>
+        </value>
+    </records>
+</registry>
