@@ -124,6 +124,23 @@ class TestHistoryEntries(FunctionalTestCase):
                 self.user_link),
             translate(entry.msg(), context=self.request))
 
+    @browsing
+    def test_ignores_modified_events_during_dossier_destruction(self, browser):
+        api.content.transition(obj=self.disposition,
+                               transition='disposition-transition-appraise')
+        api.content.transition(obj=self.disposition,
+                               transition='disposition-transition-dispose')
+        api.content.transition(obj=self.disposition,
+                               transition='disposition-transition-archive')
+        api.content.transition(obj=self.disposition,
+                               transition='disposition-transition-close')
+
+        history = IHistoryStorage(self.disposition).get_history()
+        self.assertEquals(
+            'disposition-transition-close', history[0].transition)
+        self.assertEquals(
+            'disposition-transition-archive', history[1].transition)
+
 
 class TestHistoryListingInOverview(FunctionalTestCase):
 

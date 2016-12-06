@@ -123,7 +123,8 @@ class RemovalProtocolLaTeXView(grok.MultiAdapter, MakoLaTeXView):
              'value': self.context.title},
             {'label': _('label_transfer_number',
                         default=u'Transfer number'),
-             'value': self.context.transfer_number}
+             'value': self.context.transfer_number if
+                 self.context.transfer_number else u''}
         ]
 
         for row in config:
