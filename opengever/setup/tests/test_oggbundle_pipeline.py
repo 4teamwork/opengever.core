@@ -5,6 +5,7 @@ from ftw.builder import create
 from opengever.base.behaviors.classification import IClassification
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.dossier.behaviors.dossier import IDossier
+from opengever.repository.behaviors.referenceprefix import IReferenceNumberPrefix
 from opengever.testing import FunctionalTestCase
 from pkg_resources import resource_filename
 from plone import api
@@ -99,9 +100,9 @@ class TestOggBundlePipeline(FunctionalTestCase):
         self.assertEqual(
             u'',
             IClassification(folder_organisation).public_trial_statement)
-
-        # XXX reference_number_prefix
-
+        self.assertEqual(
+            "0",
+            IReferenceNumberPrefix(folder_organisation).reference_number_prefix)
         self.assertEqual(
             u'',
             folder_organisation.referenced_activity)
@@ -145,9 +146,9 @@ class TestOggBundlePipeline(FunctionalTestCase):
         self.assertEqual(
             u'',
             IClassification(folder_process).public_trial_statement)
-
-        # XXX reference_number_prefix
-
+        self.assertEqual(
+            "0",
+            IReferenceNumberPrefix(folder_process).reference_number_prefix)
         self.assertEqual(
             u'',
             folder_process.referenced_activity)
@@ -197,9 +198,9 @@ class TestOggBundlePipeline(FunctionalTestCase):
         self.assertEqual(
             u'Enth\xe4lt vertrauliche Personaldossiers.',
             IClassification(folder_staff).public_trial_statement)
-
-        # XXX reference_number_prefix
-
+        self.assertEqual(
+            "1",
+            IReferenceNumberPrefix(folder_staff).reference_number_prefix)
         self.assertEqual(
             u'',
             folder_staff.referenced_activity)
