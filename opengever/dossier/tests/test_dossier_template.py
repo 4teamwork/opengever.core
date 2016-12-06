@@ -3,6 +3,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import info_messages
+from opengever.base.default_values import get_persisted_values_for_obj
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_DOSSIER_TEMPLATE_LAYER
 from opengever.core.testing import toggle_feature
 from opengever.dossier.behaviors.dossier import IDossier
@@ -322,3 +323,81 @@ class TestDossierTemplateAddWizard(FunctionalTestCase):
         self.assertEqual(
             '{}/dossier_with_template'.format(self.leaf_node.absolute_url()),
             browser.url)
+
+    @browsing
+    def test_add_recursive_documents_and_subdossiers(self, browser):
+        templatedossier = create(Builder('templatedossier'))
+
+        root = create(Builder('repository_root'))
+        leaf_node = create(Builder('repository').within(root))
+
+        template = create(Builder("dossiertemplate")
+                          .within(templatedossier)
+                          .titled(u'Template'))
+
+        create(Builder('document')
+               .titled('Document')
+               .within(template)
+               .with_dummy_content())
+
+        template_subdossier_1 = create(Builder("dossiertemplate")
+                                       .within(template)
+                                       .titled(u'Subdossier 1'))
+
+        create(Builder('document')
+               .titled('Document 1')
+               .within(template_subdossier_1)
+               .with_dummy_content())
+
+        template_subdossier_2 = create(Builder("dossiertemplate")
+                                       .within(template)
+                                       .titled(u'Subdossier 2'))
+
+        template_subdossier_2_1 = create(Builder("dossiertemplate")
+                                         .within(template_subdossier_2)
+                                         .titled(u'Subdossier 2.1'))
+
+        create(Builder('document')
+               .titled('Document 2.1')
+               .within(template_subdossier_2_1)
+               .with_dummy_content())
+
+        browser.login().visit(leaf_node)
+        factoriesmenu.add('Dossier with template')
+
+        token = browser.css(
+            'input[name="form.widgets.template"]').first.attrib.get('value')
+
+        browser.fill({'form.widgets.template': token}).submit()
+
+        browser.find('Save').click()
+
+        dossier = browser.context
+
+        self.assertEqual('Template', dossier.title)
+        self.assertEqual(
+            [u'Document', u'Subdossier 1', u'Subdossier 2'],
+            [obj.title for obj in dossier.listFolderContents()],
+            "The content of the root-dossier is not correct."
+            )
+
+        subdossier_1 = dossier.listFolderContents()[1]
+        self.assertEqual(
+            [u'Document 1'],
+            [obj.title for obj in subdossier_1.listFolderContents()],
+            "The content of the subdossier 1 is not correct"
+            )
+
+        subdossier_2 = dossier.listFolderContents()[2]
+        self.assertEqual(
+            [u'Subdossier 2.1'],
+            [obj.title for obj in subdossier_2.listFolderContents()],
+            "The content of the subdossier 2 is not correct"
+            )
+
+        subdossier_2_1 = subdossier_2.listFolderContents()[0]
+        self.assertEqual(
+            [u'Document 2.1'],
+            [obj.title for obj in subdossier_2_1.listFolderContents()],
+            "The content of the subdossier 2.1 is not correct"
+            )

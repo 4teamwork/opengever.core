@@ -5,6 +5,12 @@ Changelog
 4.13.1 (unreleased)
 -------------------
 
+- Remove unused skip_defaults_fields for ObjectCreatorCommands.
+  [elioschmutz]
+
+- Add example dossiertemplates with recursive dossier from template object creation.
+  [elioschmutz]
+
 - Add a wizard to add a dossier from a dossiertemplate.
   [elioschmutz]
 

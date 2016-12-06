@@ -10,26 +10,52 @@ from zope.lifecycleevent import ObjectCreatedEvent
 from zope.lifecycleevent import ObjectModifiedEvent
 
 
-class CreateDocumentCommand(object):
+class BaseObjectCreatorCommand(object):
+    """Base class to create an object in a container.
+    """
+    portal_type = None
+
+    def __init__(self, context, title, **kwargs):
+        self.context = context
+        self.title = title
+        self.additional_args = kwargs
+
+    def execute(self):
+        content = createContent(self.portal_type, title=self.title,
+                                **self.additional_args)
+
+        obj = addContentToContainer(
+            self.context, content, checkConstraints=True)
+
+        self.finish_creation(obj)
+
+        obj.reindexObject()
+        return obj
+
+    def finish_creation(self, content):
+        """Trigger rest of initialization."""
+
+        notify(ObjectModifiedEvent(content))
+
+
+class CreateDocumentCommand(BaseObjectCreatorCommand):
     """Create a new opengever.document.document object and update its fields
     with default values.
 
     """
     portal_type = 'opengever.document.document'
-    skip_defaults_fields = []
 
     def __init__(self, context, filename, data, title=None, content_type='',
                  **kwargs):
+        super(CreateDocumentCommand, self).__init__(context, title, **kwargs)
+
         # filename must be unicode
         if not isinstance(filename, unicode):
             filename = filename.decode('utf-8')
 
-        self.context = context
         self.data = data
         self.filename = filename
-        self.title = title
         self.content_type = content_type
-        self.additional_args = kwargs
 
     def execute(self):
         content = createContent(self.portal_type, title=self.title,
@@ -56,11 +82,6 @@ class CreateDocumentCommand(object):
 
         """
         notify(ObjectCreatedEvent(content))
-
-    def finish_creation(self, content):
-        """Trigger rest of initialization."""
-
-        notify(ObjectModifiedEvent(content))
 
     def set_primary_field_value(self, obj):
         if not self.data:
