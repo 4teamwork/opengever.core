@@ -5,6 +5,9 @@ Changelog
 4.13.1 (unreleased)
 -------------------
 
+- Prevent that too long proposal titles can be entered on meeting view.
+  [deiferni]
+
 - Ensure consistent collective.quickupload configuration across all
   our installations.
   [deiferni]

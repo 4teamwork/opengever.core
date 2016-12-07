@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-11-09 14:20+0000\n"
+"POT-Creation-Date: 2016-12-07 10:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,11 +25,11 @@ msgstr ""
 msgid "Actions"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/meeting.py:71
+#: ./opengever/meeting/browser/meetings/meeting.py:72
 msgid "Add Dossier for Meeting"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/meeting.py:70
+#: ./opengever/meeting/browser/meetings/meeting.py:71
 msgid "Add Meeting"
 msgstr ""
 
@@ -65,7 +65,7 @@ msgid "Agenda Items"
 msgstr ""
 
 #. Default: "An unexpected error has occurred"
-#: ./opengever/meeting/browser/meetings/meeting.py:416
+#: ./opengever/meeting/browser/meetings/meeting.py:418
 msgid "An unexpected error has occurred"
 msgstr ""
 
@@ -219,7 +219,7 @@ msgstr ""
 msgid "Meeting number"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/meeting.py:288
+#: ./opengever/meeting/browser/meetings/meeting.py:289
 msgid "Meeting on ${date}"
 msgstr ""
 
@@ -318,7 +318,7 @@ msgstr ""
 msgid "Text:"
 msgstr ""
 
-#: ./opengever/meeting/browser/meetings/meeting.py:240
+#: ./opengever/meeting/browser/meetings/meeting.py:241
 msgid "The meeting and its dossier were created successfully"
 msgstr ""
 
@@ -361,17 +361,17 @@ msgid "active"
 msgstr ""
 
 #. Default: "Agenda Item decided."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:223
+#: ./opengever/meeting/browser/meetings/agendaitem.py:231
 msgid "agenda_item_decided"
 msgstr ""
 
 #. Default: "Agenda Item Successfully deleted"
-#: ./opengever/meeting/browser/meetings/agendaitem.py:203
+#: ./opengever/meeting/browser/meetings/agendaitem.py:211
 msgid "agenda_item_deleted"
 msgstr ""
 
 #. Default: "Agendaitem has been decided and the meeting has been held."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:228
+#: ./opengever/meeting/browser/meetings/agendaitem.py:236
 msgid "agenda_item_meeting_held"
 msgstr ""
 
@@ -381,17 +381,17 @@ msgid "agenda_item_order_updated"
 msgstr ""
 
 #. Default: "Agenda Item decided and excerpt generated."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:220
+#: ./opengever/meeting/browser/meetings/agendaitem.py:228
 msgid "agenda_item_proposal_decided"
 msgstr ""
 
 #. Default: "Agenda Item successfully reopened."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:244
+#: ./opengever/meeting/browser/meetings/agendaitem.py:252
 msgid "agenda_item_reopened"
 msgstr ""
 
 #. Default: "Agenda Item revised successfully."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:257
+#: ./opengever/meeting/browser/meetings/agendaitem.py:265
 msgid "agenda_item_revised"
 msgstr ""
 
@@ -400,15 +400,20 @@ msgstr ""
 msgid "agenda_item_update_empty_string"
 msgstr ""
 
+#. Default: "Agenda Item title is too long."
+#: ./opengever/meeting/browser/meetings/agendaitem.py:190
+msgid "agenda_item_update_too_long_title"
+msgstr ""
+
 #. Default: "Agenda Item updated."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:188
+#: ./opengever/meeting/browser/meetings/agendaitem.py:196
 msgid "agenda_item_updated"
 msgstr ""
 
 #. Default: "Cancel"
 #: ./opengever/meeting/browser/committeeforms.py:69
 #: ./opengever/meeting/browser/documents/submit.py:95
-#: ./opengever/meeting/browser/meetings/meeting.py:186
+#: ./opengever/meeting/browser/meetings/meeting.py:187
 msgid "button_cancel"
 msgstr ""
 
@@ -419,7 +424,7 @@ msgstr ""
 
 #. Default: "Continue"
 #: ./opengever/meeting/browser/committeeforms.py:57
-#: ./opengever/meeting/browser/meetings/meeting.py:170
+#: ./opengever/meeting/browser/meetings/meeting.py:171
 msgid "button_continue"
 msgstr ""
 
@@ -566,12 +571,12 @@ msgid "download protocol"
 msgstr ""
 
 #. Default: "Paragraph must not be empty."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:269
+#: ./opengever/meeting/browser/meetings/agendaitem.py:277
 msgid "empty_paragraph"
 msgstr ""
 
 #. Default: "Proposal must not be empty."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:284
+#: ./opengever/meeting/browser/meetings/agendaitem.py:292
 msgid "empty_proposal"
 msgstr ""
 
@@ -669,7 +674,7 @@ msgid "label_committe_reactivated"
 msgstr ""
 
 #. Default: "Committee"
-#: ./opengever/meeting/browser/meetings/meeting.py:51
+#: ./opengever/meeting/browser/meetings/meeting.py:52
 #: ./opengever/meeting/browser/templates/member.pt:49
 #: ./opengever/meeting/proposal.py:48
 msgid "label_committee"
@@ -727,7 +732,7 @@ msgid "label_decide"
 msgstr ""
 
 #. Default: "Decide this agenda item"
-#: ./opengever/meeting/browser/meetings/meeting.py:364
+#: ./opengever/meeting/browser/meetings/meeting.py:365
 msgid "label_decide_action"
 msgstr ""
 
@@ -748,7 +753,7 @@ msgid "label_decision_number"
 msgstr ""
 
 #. Default: "delete this agenda item"
-#: ./opengever/meeting/browser/meetings/meeting.py:362
+#: ./opengever/meeting/browser/meetings/meeting.py:363
 msgid "label_delete_action"
 msgstr ""
 
@@ -765,7 +770,7 @@ msgstr ""
 
 #. Default: "Discussion"
 #: ./opengever/meeting/browser/meetings/protocol.py:135
-#: ./opengever/meeting/proposal.py:314
+#: ./opengever/meeting/proposal.py:315
 msgid "label_discussion"
 msgstr ""
 
@@ -775,7 +780,7 @@ msgid "label_dossier"
 msgstr ""
 
 #. Default: "Dossier not available"
-#: ./opengever/meeting/proposal.py:391
+#: ./opengever/meeting/proposal.py:392
 msgid "label_dossier_not_available"
 msgstr ""
 
@@ -784,28 +789,28 @@ msgid "label_download_agendaitem_list"
 msgstr ""
 
 #. Default: "download TOC alphabetical"
-#: ./opengever/meeting/browser/templates/periods.pt:13
+#: ./opengever/meeting/browser/templates/periods.pt:11
 msgid "label_download_alphabetical_toc"
 msgstr ""
 
 #. Default: "download TOC by repository"
-#: ./opengever/meeting/browser/templates/periods.pt:20
+#: ./opengever/meeting/browser/templates/periods.pt:18
 msgid "label_download_repository_toc"
 msgstr ""
 
 #. Default: "Edit"
 #: ./opengever/meeting/browser/templates/member.pt:62
-#: ./opengever/meeting/browser/templates/periods.pt:31
+#: ./opengever/meeting/browser/templates/periods.pt:27
 msgid "label_edit"
 msgstr ""
 
 #. Default: "edit title"
-#: ./opengever/meeting/browser/meetings/meeting.py:361
+#: ./opengever/meeting/browser/meetings/meeting.py:362
 msgid "label_edit_action"
 msgstr ""
 
 #. Default: "Cancel"
-#: ./opengever/meeting/browser/meetings/meeting.py:359
+#: ./opengever/meeting/browser/meetings/meeting.py:360
 msgid "label_edit_cancel"
 msgstr ""
 
@@ -820,7 +825,7 @@ msgid "label_edit_period"
 msgstr ""
 
 #. Default: "Save"
-#: ./opengever/meeting/browser/meetings/meeting.py:360
+#: ./opengever/meeting/browser/meetings/meeting.py:361
 msgid "label_edit_save"
 msgstr ""
 
@@ -831,7 +836,7 @@ msgid "label_email"
 msgstr ""
 
 #. Default: "End"
-#: ./opengever/meeting/browser/meetings/meeting.py:65
+#: ./opengever/meeting/browser/meetings/meeting.py:66
 #: ./opengever/meeting/browser/meetings/protocol.py:71
 msgid "label_end"
 msgstr ""
@@ -896,7 +901,7 @@ msgid "label_linked_repository_folder"
 msgstr ""
 
 #. Default: "Location"
-#: ./opengever/meeting/browser/meetings/meeting.py:56
+#: ./opengever/meeting/browser/meetings/meeting.py:57
 #: ./opengever/meeting/browser/meetings/protocol.py:62
 msgid "label_location"
 msgstr ""
@@ -932,7 +937,7 @@ msgid "label_no_memberships"
 msgstr ""
 
 #. Default: "No proposals submitted"
-#: ./opengever/meeting/browser/meetings/meeting.py:384
+#: ./opengever/meeting/browser/meetings/meeting.py:386
 msgid "label_no_proposals"
 msgstr ""
 
@@ -994,12 +999,12 @@ msgid "label_remove"
 msgstr ""
 
 #. Default: "Reopen this agenda item"
-#: ./opengever/meeting/browser/meetings/meeting.py:367
+#: ./opengever/meeting/browser/meetings/meeting.py:368
 msgid "label_reopen_action"
 msgstr ""
 
 #. Default: "Revise this agenda item"
-#: ./opengever/meeting/browser/meetings/meeting.py:370
+#: ./opengever/meeting/browser/meetings/meeting.py:371
 msgid "label_revise_action"
 msgstr ""
 
@@ -1015,7 +1020,7 @@ msgid "label_sablon_template_file"
 msgstr ""
 
 #. Default: "Schedule"
-#: ./opengever/meeting/browser/meetings/meeting.py:383
+#: ./opengever/meeting/browser/meetings/meeting.py:385
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:245
 msgid "label_schedule"
 msgstr ""
@@ -1031,14 +1036,14 @@ msgid "label_select_dossier"
 msgstr ""
 
 #. Default: "Start"
-#: ./opengever/meeting/browser/meetings/meeting.py:61
+#: ./opengever/meeting/browser/meetings/meeting.py:62
 #: ./opengever/meeting/browser/meetings/protocol.py:67
 msgid "label_start"
 msgstr ""
 
 #. Default: "Title"
 #: ./opengever/meeting/browser/meetings/excerpt.py:31
-#: ./opengever/meeting/browser/meetings/meeting.py:46
+#: ./opengever/meeting/browser/meetings/meeting.py:47
 #: ./opengever/meeting/browser/meetings/protocol.py:29
 msgid "label_title"
 msgstr ""
@@ -1193,7 +1198,7 @@ msgid "overview"
 msgstr ""
 
 #. Default: "Paragraph successfully added."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:273
+#: ./opengever/meeting/browser/meetings/agendaitem.py:281
 msgid "paragraph_added"
 msgstr ""
 
@@ -1352,7 +1357,7 @@ msgid "tab_matches"
 msgstr ""
 
 #. Default: "Text successfully added."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:288
+#: ./opengever/meeting/browser/meetings/agendaitem.py:296
 msgid "text_added"
 msgstr ""
 

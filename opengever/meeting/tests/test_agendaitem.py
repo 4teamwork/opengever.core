@@ -172,7 +172,24 @@ class TestAgendaItemEdit(TestAgendaItem):
                             u'messageClass': u'error',
                             u'messageTitle': u'Error'}],
                           browser.json.get('messages'))
-        self.assertEquals(False, browser.json.get('proceed'))
+        self.assertEquals(True, browser.json.get('proceed'))
+
+    @browsing
+    def test_when_title_is_too_long_returns_json_error(self, browser):
+        proposal = create(Builder('proposal_model'))
+        item = create(Builder('agenda_item').having(
+            title=u'foo', meeting=self.meeting, proposal=proposal))
+
+        browser.login().open(
+            self.meeting_wrapper,
+            view='agenda_items/{}/edit'.format(item.agenda_item_id),
+            data={'title': 257*u'a'})
+
+        self.assertEquals([{u'message': u'Agenda Item title is too long.',
+                            u'messageClass': u'error',
+                            u'messageTitle': u'Error'}],
+                          browser.json.get('messages'))
+        self.assertEquals(True, browser.json.get('proceed'))
 
     @browsing
     def test_raises_not_found_for_invalid_agenda_item_id(self, browser):

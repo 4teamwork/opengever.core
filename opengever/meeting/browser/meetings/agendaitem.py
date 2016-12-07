@@ -1,6 +1,6 @@
 from opengever.base.response import JSONResponse
 from opengever.meeting import _
-from opengever.meeting.model import AgendaItem
+from opengever.meeting.proposal import ISubmittedProposalModel
 from opengever.meeting.service import meeting_service
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListing
@@ -181,7 +181,15 @@ class AgendaItemsView(BrowserView):
         if not title:
             return JSONResponse(self.request).error(
                 _('agenda_item_update_empty_string',
-                  default=u"Agenda Item title must not be empty.")).remain().dump()
+                  default=u"Agenda Item title must not be empty.")).proceed().dump()
+
+        title = title.decode('utf-8')
+        if self.agenda_item.has_proposal:
+            if len(title) > ISubmittedProposalModel['title'].max_length:
+                return JSONResponse(self.request).error(
+                    _('agenda_item_update_too_long_title',
+                      default=u"Agenda Item title is too long.")
+                ).proceed().dump()
 
         self.agenda_item.set_title(title)
         return JSONResponse(self.request).info(

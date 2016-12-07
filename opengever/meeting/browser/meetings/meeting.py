@@ -12,6 +12,7 @@ from opengever.meeting.browser.protocol import GenerateProtocol
 from opengever.meeting.browser.protocol import UpdateProtocol
 from opengever.meeting.committee import ICommittee
 from opengever.meeting.model import Meeting
+from opengever.meeting.proposal import ISubmittedProposalModel
 from opengever.repository.interfaces import IRepositoryFolder
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListing
@@ -95,7 +96,7 @@ AGENDAITEMS_TEMPLATE = '''
         {{/if}}
         <div class="edit-box">
           <div class="input-group">
-            <input type="text" />
+            <input type="text" {{#if has_proposal}}maxlength="%(max_proposal_title_lengt)i"{{/if}} />
             <div class="button-group">
               <input value="%(label_edit_save)s" type="button" class="button edit-save" />
               <input value="%(label_edit_cancel)s" type="button" class="button edit-cancel" />
@@ -370,6 +371,7 @@ class MeetingView(BrowserView):
             _('label_revise_action', default='Revise this agenda item'),
             context=self.request)
         return AGENDAITEMS_TEMPLATE % {
+            'max_proposal_title_lengt': ISubmittedProposalModel['title'].max_length,
             'label_edit_cancel': label_edit_cancel,
             'label_edit_save': label_edit_save,
             'label_edit_action': label_edit_action,
