@@ -57,9 +57,10 @@ class TestTaskOverview(FunctionalTestCase):
 
     @browsing
     def test_date_of_completion_is_displayed_correclty(self, browser):
-        task = create(Builder("task").having(task_type='comment',
-                                             date_of_completion=date(2015, 02, 02),
-                                             issuer=TEST_USER_ID))
+        task = create(Builder("task")
+                      .having(task_type='comment',
+                              date_of_completion=date(2015, 2, 2),
+                              issuer=TEST_USER_ID))
 
         browser.login().open(task, view='tabbedview_view-overview')
 
