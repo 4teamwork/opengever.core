@@ -1,3 +1,4 @@
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -14,8 +15,8 @@ from opengever.ogds.base.autocomplete_widget import AutocompleteSelectionWidget
 from opengever.ogds.base.interfaces import ISyncStamp
 from opengever.testing import FunctionalTestCase
 from plone import api
+from zExceptions import Unauthorized
 from zope.component import getUtility
-from datetime import datetime
 
 
 class TestIsDossierTemplateFeatureEnabled(FunctionalTestCase):
@@ -236,6 +237,41 @@ class TestDossierTemplateAddWizard(FunctionalTestCase):
     def test_is_available_on_leaf_node_when_feature_is_enabled(self):
         self.assertTrue(
             self.leaf_node.restrictedTraverse('@@dossier_with_template/is_available')())
+
+    def test_is_not_available_if_user_does_not_have_add_dossier_permission(self):
+        self.grant('Reader')
+
+        self.assertFalse(api.user.has_permission(
+            'opengever.dossier: Add businesscasedossier', obj=self.leaf_node))
+
+        self.assertFalse(
+            self.leaf_node.restrictedTraverse('@@dossier_with_template/is_available')())
+
+    def test_is_available_if_user_has_add_dossier_permission(self):
+        self.grant('Reader')
+
+        api.user.grant_roles(
+            user=api.user.get_current(),
+            obj=self.leaf_node,
+            roles=['Contributor'])
+
+        self.assertFalse(api.user.has_permission(
+            'opengever.dossier: Add businesscasedossier', obj=self.portal))
+
+        self.assertTrue(api.user.has_permission(
+            'opengever.dossier: Add businesscasedossier', obj=self.leaf_node))
+
+        self.assertTrue(
+            self.leaf_node.restrictedTraverse('@@dossier_with_template/is_available')())
+
+    def test_raise_not_found_if_access_on_wizard_if_feature_is_not_available(self):
+        toggle_feature(IDossierTemplateSettings, enabled=False)
+
+        with self.assertRaises(Unauthorized):
+            self.leaf_node.restrictedTraverse('@@dossier_with_template')()
+
+        with self.assertRaises(Unauthorized):
+            self.leaf_node.restrictedTraverse('@@add-dossier-from-template')()
 
     @browsing
     def test_only_show_dossiertemplates_without_subdossiers(self, browser):

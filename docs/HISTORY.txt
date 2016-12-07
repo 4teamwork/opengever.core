@@ -5,13 +5,13 @@ Changelog
 4.14.1 (unreleased)
 -------------------
 
-- Remove workflow for DossierTemplate.
-  [elioschmutz]
+- Adjustments for the dossiertemplates:
 
-- Hide DossierTemplate from navigation.
-  [elioschmutz]
+  - Protect dossiertemplate wizard with opengever.dossier: Add businesscasedossier permission.
+  - Remove workflow for DossierTemplate.
+  - Hide DossierTemplate from navigation.
+  - Remove unused skip_defaults_fields for ObjectCreatorCommands.
 
-- Remove unused skip_defaults_fields for ObjectCreatorCommands.
   [elioschmutz]
 
 - Creates successor-tasks of forwardings with a default task type.

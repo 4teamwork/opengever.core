@@ -25,6 +25,7 @@ from z3c.form import button
 from z3c.form.button import buttonAndHandler
 from z3c.form.form import Form
 from z3c.form.interfaces import IDataConverter
+from zExceptions import Unauthorized
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
 from zope.schema.interfaces import IContextSourceBinder
@@ -98,12 +99,22 @@ class CreateDossierMixin(object):
         ('select-template', _(u'Select dossiertemplate')),
         ('add-dossier-from-template', _(u'Add dossier'))]
 
+    def is_available(self):
+        if not self.context.restrictedTraverse(
+                'dossier_with_template/is_available')():
+
+            raise(Unauthorized)
+
 
 class SelectDossierTemplateWizardStep(
         CreateDossierMixin, AutoExtensibleForm, BaseWizardStepForm, Form):
     """First wizard step - select dossiertemplate
     """
     step_name = 'select-template'
+
+    def update(self):
+        self.is_available()
+        super(SelectDossierTemplateWizardStep, self).update()
 
     @property
     def schema(self):
@@ -146,6 +157,8 @@ class AddDossierFromTemplateWizardStep(WizzardWrappedAddForm):
                 if not getSecurityManager().getUser().getId():
                     # this happens during ++widget++ traversal
                     return
+
+                self.is_available()
 
                 template_obj = get_wizard_storage(self.context).get('template')
 
@@ -240,4 +253,5 @@ class SelectDossierTemplateView(FormWrapper):
         at the current context.
         """
         return is_dossier_template_feature_enabled() and \
-            self.context.is_leaf_node()
+            self.context.is_leaf_node() and \
+            api.user.has_permission('opengever.dossier: Add businesscasedossier', obj=self.context)

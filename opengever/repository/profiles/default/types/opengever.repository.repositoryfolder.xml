@@ -72,7 +72,7 @@
             icon_expr=""
             condition_expr="object/@@dossier_with_template/is_available"
             i18n:domain="opengever.dossier">
-        <permission value="Add portal content"/>
+        <permission value="opengever.dossier: Add businesscasedossier"/>
     </action>
 
     <!-- Tabbedview tabs-->
