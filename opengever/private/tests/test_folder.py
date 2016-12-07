@@ -61,6 +61,13 @@ class TestPrivateFolderTabbedView(FunctionalTestCase):
             ['Dossiers'], browser.css('.formTab').text)
 
     @browsing
+    def test_private_root_is_hidden_from_breadcrumbs(self, browser):
+        browser.login().open(self.folder)
+        self.assertEqual(
+            'You are here: Client1 / Test User (test_user_1_)',
+            browser.css('#portal-breadcrumbs').first.text)
+
+    @browsing
     def test_dossier_tab_lists_all_containig_private_dossiers(self, browser):
         with freeze(datetime(2015, 9, 1)):
             create(Builder('private_dossier')
