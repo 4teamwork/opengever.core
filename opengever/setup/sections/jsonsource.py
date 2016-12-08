@@ -7,6 +7,7 @@ from opengever.base.schemadump import config
 from opengever.base.schemadump.schema import OGGBundleJSONSchemaBuilder
 from zope.interface import classProvides
 from zope.interface import implements
+import codecs
 import json
 import logging
 import os.path
@@ -58,7 +59,7 @@ class JSONSourceSection(object):
 
     def read_json_file(self):
         try:
-            with open(self.filepath, "rb") as file_:
+            with codecs.open(self.filepath, 'r', 'utf-8-sig') as file_:
                 return json.load(file_)
         except IOError:
             logger.info("Could not read file '{}'. Skipping...".format(
