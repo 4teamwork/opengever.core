@@ -97,4 +97,9 @@
     name="opengever.setup.constructor"
     />
 
+  <utility
+    component=".sections.fileloader.FileLoaderSection"
+    name="opengever.setup.fileloader"
+    />
+
 </configure>

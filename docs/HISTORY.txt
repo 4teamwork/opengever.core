@@ -5,6 +5,9 @@ Changelog
 4.13.1 (unreleased)
 -------------------
 
+- Implement basic pipeline for OGGBundle import.
+  [deiferni, lgraf]
+
 - Fixed select_all selection for ProxyTabbedViews as the document listings.
   [phgross]
 
@@ -47,9 +50,9 @@ Changelog
 - Add a wizard to add a dossier from a dossiertemplate.
   [elioschmutz]
 
--  Add entry point to run OGGBundle import from console via
-   bin/instance import <path_to_oggbundle>
-   [lgraf]
+- Add entry point to run OGGBundle import from console via
+  bin/instance import <path_to_oggbundle>
+  [lgraf]
 
 - Add folder-factory actions to add a dossier from a dossiertemplate in a repository-folder.
   [elioschmutz]
