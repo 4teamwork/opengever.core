@@ -320,8 +320,9 @@ class TestOggBundlePipeline(FunctionalTestCase):
     def assert_document_1_created(self, parent):
         document_1 = parent.get('document-1')
 
-        # XXX load files
-        # self.assertTrue(document_1.digitally_available)
+        self.assertTrue(document_1.digitally_available)
+        self.assertIsNotNone(document_1.file)
+        self.assertEqual(22198, len(document_1.file.data))
 
         self.assertEqual(
             u'david.erni',
@@ -347,8 +348,9 @@ class TestOggBundlePipeline(FunctionalTestCase):
     def assert_document_2_created(self, parent):
         document_2 = parent.get('document-2')
 
-        # XXX load files
-        # self.assertTrue(document_1.digitally_available)
+        self.assertTrue(document_2.digitally_available)
+        self.assertIsNotNone(document_2.file)
+        self.assertEqual(22198, len(document_2.file.data))
 
         self.assertEqual(
             u'david.erni',

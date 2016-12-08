@@ -19,6 +19,7 @@ logger.setLevel(logging.INFO)
 
 
 BUNDLE_PATH_KEY = 'opengever.setup.bundle_path'
+JSON_STATS_KEY = 'opengever.setup.json_stats'
 
 
 class JSONSourceSection(object):
@@ -51,6 +52,8 @@ class JSONSourceSection(object):
         # Store the bundle path in global annotations on the
         # transmogrifier object for use by later sections
         IAnnotations(transmogrifier)[BUNDLE_PATH_KEY] = self.bundle_path
+
+        IAnnotations(transmogrifier)[JSON_STATS_KEY] = {'errors': {}}
 
         self.portal_type = options.get('portal_type')
         self.json_schema = self.get_content_type_json_schema()
