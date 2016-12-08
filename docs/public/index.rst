@@ -10,4 +10,5 @@ Inhalt:
    officeconnector/index.rst
    docproperties/index.rst
    meeting/index.rst
+   meine_ablage.rst
    aussonderung.rst
