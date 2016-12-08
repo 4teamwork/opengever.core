@@ -451,6 +451,39 @@ class TestDossierDefaults(TestDefaultsBase):
 
         self.assertDictEqual(expected, persisted_values)
 
+    @browsing
+    def test_subdossier_from_template(self, browser):
+        toggle_feature(IDossierTemplateSettings, enabled=True)
+
+        root = create(Builder('repository_root'))
+        leaf_node = create(Builder('repository').within(root))
+        template = create(Builder("dossiertemplate")
+                          .titled(u'Main template'))
+        subdossier_template = create(Builder("dossiertemplate")
+                                     .within(template)
+                                     .titled(DOSSIER_REQUIREDS['title']))
+
+        with freeze(FROZEN_NOW):
+            browser.login().open(leaf_node)
+            factoriesmenu.add(u'Dossier with template')
+            token = browser.css(
+                'input[name="form.widgets.template"]').first.attrib.get('value')
+            browser.fill({'form.widgets.template': token}).submit()
+            browser.click_on('Save')
+
+            subdossier = browser.context.listFolderContents()[0]
+
+        persisted_values = get_persisted_values_for_obj(subdossier)
+        expected = self.get_type_defaults()
+
+        # Because the main-dossier is made through the ++add++-form and the
+        # subdossier is created trough the object-creator with some attribute
+        # inheritance, we get a mix of z3c_form_defaults and the type_defaults.
+        # A subdossier has the type_defaults with addiional form_defaults
+        expected.update(self.form_defaults)
+
+        self.assertDictEqual(expected, persisted_values)
+
 
 class TestDocumentDefaults(TestDefaultsBase):
 
@@ -509,6 +542,37 @@ class TestDocumentDefaults(TestDefaultsBase):
         # XXX: Don't know why this happens
         expected['public_trial_statement'] = None
         expected['description'] = None
+
+        self.assertDictEqual(expected, persisted_values)
+
+    @browsing
+    def test_document_from_dossiertemplate(self, browser):
+        toggle_feature(IDossierTemplateSettings, enabled=True)
+
+        root = create(Builder('repository_root'))
+        leaf_node = create(Builder('repository').within(root))
+        template = create(Builder("dossiertemplate")
+                          .titled(DOSSIER_REQUIREDS['title']))
+        create(Builder('document')
+               .titled(DOCUMENT_REQUIREDS['title'])
+               .within(template)
+               .with_dummy_content())
+
+        with freeze(FROZEN_NOW):
+            browser.login().open(leaf_node)
+            factoriesmenu.add(u'Dossier with template')
+            token = browser.css(
+                'input[name="form.widgets.template"]').first.attrib.get('value')
+            browser.fill({'form.widgets.template': token}).submit()
+            browser.click_on('Save')
+
+            doc = browser.context.listFolderContents()[0]
+
+        persisted_values = get_persisted_values_for_obj(doc)
+        expected = self.get_type_defaults()
+
+        expected['digitally_available'] = True
+        expected['file'] = doc.file
 
         self.assertDictEqual(expected, persisted_values)
 

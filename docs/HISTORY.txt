@@ -5,6 +5,18 @@ Changelog
 4.13.1 (unreleased)
 -------------------
 
+- Refactor CreateDocumentCommand and CreateEmailCommand.
+  [elioschmutz]
+
+- Enable dossier templates for local development ( examplecontent)
+  [elioschmutz]
+
+- Add sample dossiertemplate to examplecontent.
+  [elioschmutz]
+
+- Create recursively documents and subdossiers when adding a dossier from template
+  [elioschmutz]
+
 - Enable zip exports for tasks
   [Rotonen]
 

@@ -194,11 +194,8 @@ class CreateGeneratedDocumentCommand(CreateDocumentCommand):
         self.lock_document_after_creation = lock_document_after_creation
 
         super(CreateGeneratedDocumentCommand, self).__init__(
-            context,
-            self.document_operations.get_filename(self.meeting),
-            data=None,
-            title=self.document_operations.get_title(self.meeting),
-            content_type=MIME_DOCX)
+            context, filename=None, data=None,
+            title=self.document_operations.get_title(self.meeting))
 
     def generate_file_data(self):
         template = self.document_operations.get_sablon_template(self.meeting)
@@ -208,7 +205,11 @@ class CreateGeneratedDocumentCommand(CreateDocumentCommand):
         return sablon.file_data
 
     def execute(self):
-        self.data = self.generate_file_data()
+        self.set_file(
+            self.document_operations.get_filename(self.meeting),
+            self.generate_file_data(),
+            MIME_DOCX
+            )
 
         document = super(CreateGeneratedDocumentCommand, self).execute()
         self.lock_document(document)

@@ -11,8 +11,11 @@ from opengever.dossier.dossiertemplate import is_dossier_template_feature_enable
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateSchema
 from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings
 from opengever.ogds.base.autocomplete_widget import AutocompleteSelectionWidget
+from opengever.ogds.base.interfaces import ISyncStamp
 from opengever.testing import FunctionalTestCase
 from plone import api
+from zope.component import getUtility
+from datetime import datetime
 
 
 class TestIsDossierTemplateFeatureEnabled(FunctionalTestCase):
@@ -322,3 +325,92 @@ class TestDossierTemplateAddWizard(FunctionalTestCase):
         self.assertEqual(
             '{}/dossier_with_template'.format(self.leaf_node.absolute_url()),
             browser.url)
+
+    @browsing
+    def test_add_recursive_documents_and_subdossiers(self, browser):
+        template = create(Builder("dossiertemplate")
+                          .within(self.templatedossier)
+                          .titled(u'Template'))
+
+        template_subdossier_1 = create(Builder("dossiertemplate")
+                                       .within(template)
+                                       .titled(u'Subdossier 1'))
+
+        create(Builder('document')
+               .titled('Document 1')
+               .within(template_subdossier_1)
+               .with_dummy_content())
+
+        template_subdossier_1_1 = create(Builder("dossiertemplate")
+                                         .within(template_subdossier_1)
+                                         .titled(u'Subdossier 1.1'))
+
+        create(Builder('document')
+               .titled('Document 1.1')
+               .within(template_subdossier_1_1)
+               .with_dummy_content())
+
+        browser.login().visit(self.leaf_node)
+        factoriesmenu.add('Dossier with template')
+        token = browser.css(
+            'input[name="form.widgets.template"]').first.attrib.get('value')
+        browser.fill({'form.widgets.template': token}).submit()
+        browser.click_on('Save')
+
+        dossier = browser.context
+
+        self.assertEqual('Template', dossier.title)
+        self.assertEqual(
+            [u'Subdossier 1'],
+            [obj.title for obj in dossier.listFolderContents()],
+            "The content of the root-dossier is not correct."
+            )
+
+        subdossier_1 = dossier.listFolderContents()[0]
+        self.assertEqual(
+            [u'Document 1', u'Subdossier 1.1'],
+            [obj.title for obj in subdossier_1.listFolderContents()],
+            "The content of the subdossier 1 is not correct"
+            )
+
+        subdossier_1_1 = subdossier_1.listFolderContents()[1]
+        self.assertEqual(
+            [u'Document 1.1'],
+            [obj.title for obj in subdossier_1_1.listFolderContents()],
+            "The content of the subdossier 1.1 is not correct"
+            )
+
+    @browsing
+    def test_subdossier_has_same_responsible_as_dossier(self, browser):
+        create(Builder('ogds_user')
+               .id('peter.meier')
+               .having(firstname='Peter', lastname='Meier')
+               .assign_to_org_units([self.org_unit]))
+
+        # Reset the cachekey for the users-vocabulary.
+        # This is necessary, otherwise the user wont be listed
+        # in the responsible-autocomplete-widget.
+        getUtility(ISyncStamp).set_sync_stamp(
+            datetime.now().isoformat(), context=self.portal)
+
+        template = create(Builder("dossiertemplate")
+                          .within(self.templatedossier)
+                          .titled(u'Template'))
+
+        template_subdossier = create(Builder("dossiertemplate")
+                                     .within(template)
+                                     .titled(u'Subdossier'))
+
+        self.leaf_node.restrictedTraverse(
+            'add-dossier-from-template').form.recursive_content_creation
+        browser.login().visit(self.leaf_node)
+        factoriesmenu.add('Dossier with template')
+        token = browser.css(
+            'input[name="form.widgets.template"]').first.attrib.get('value')
+        browser.fill({'form.widgets.template': token}).submit()
+        browser.fill({'Responsible': 'peter.meier'})
+        browser.click_on('Save')
+
+        subdossier = browser.context.listFolderContents()[0]
+
+        self.assertEqual('peter.meier', IDossier(subdossier).responsible)
