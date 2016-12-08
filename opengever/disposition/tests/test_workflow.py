@@ -1,5 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browsing
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_PROMPT
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_SAMPLING
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_UNWORTHY
@@ -24,6 +25,7 @@ class TestDispositionWorkflow(FunctionalTestCase):
                                .as_expired()
                                .having(archival_value=ARCHIVAL_VALUE_SAMPLING)
                                .within(self.repository))
+
         self.disposition = create(Builder('disposition')
                                   .having(dossiers=[self.dossier1, self.dossier2])
                                   .within(self.root))
@@ -33,6 +35,21 @@ class TestDispositionWorkflow(FunctionalTestCase):
     def test_initial_state_is_in_progress(self):
         self.assertEquals('disposition-state-in-progress',
                           api.content.get_state(self.disposition))
+
+    def test_dispositon_in_progress_can_be_refused_by_an_archivist(self):
+        self.grant('Archivist')
+        api.content.transition(self.disposition, 'disposition-transition-refuse')
+        self.assertEquals('disposition-state-in-progress',
+                          api.content.get_state(self.disposition))
+
+    def test_dispositon_in_disposed_state_can_be_refused_by_an_archivist(self):
+        disposition = create(Builder('disposition')
+                             .in_state('disposition-state-disposed'))
+
+        self.grant('Archivist')
+        api.content.transition(disposition, 'disposition-transition-refuse')
+        self.assertEquals('disposition-state-in-progress',
+                          api.content.get_state(disposition))
 
     def test_when_appraising_final_archival_value_is_stored_on_dossier(self):
         IAppraisal(self.disposition).update(
