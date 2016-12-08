@@ -11,12 +11,12 @@ from zope.interface.verify import verifyObject
 
 class TestJSONSource(FunctionalTestCase):
 
-    def setup_source(self, options, bundle_dir=None, previous=None):
+    def setup_source(self, options, bundle_path=None, previous=None):
         previous = previous or []
-        bundle_dir = bundle_dir or resource_filename(
+        bundle_path = bundle_path or resource_filename(
             'opengever.setup.tests', 'assets')
         transmogrifier = MockTransmogrifier()
-        transmogrifier.bundle_dir = bundle_dir
+        transmogrifier.bundle_path = bundle_path
 
         options.setdefault('blueprint', 'opengever.setup.jsonsource')
 
@@ -31,7 +31,7 @@ class TestJSONSource(FunctionalTestCase):
 
     def test_skips_missing_files(self):
         directory = resource_filename('opengever.setup.tests', 'nope')
-        source = self.setup_source({'bundle_dir': directory,
+        source = self.setup_source({'bundle_path': directory,
                                     'filename': 'nope.json'},
                                    previous=['Foo'])
 

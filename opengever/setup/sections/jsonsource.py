@@ -35,18 +35,18 @@ class JSONSourceSection(object):
 
         self.key = defaultMatcher(options, 'key', name)
         self.filename = options.get('filename')
-        if hasattr(transmogrifier, 'bundle_dir'):
-            self.bundle_dir = transmogrifier.bundle_dir
+        if hasattr(transmogrifier, 'bundle_path'):
+            self.bundle_path = transmogrifier.bundle_path
         else:
-            self.bundle_dir = options.get('bundle_dir')
+            self.bundle_path = options.get('bundle_path')
 
-        if not os.path.exists(self.bundle_dir):
-            raise Exception("Bundle %s not found" % self.bundle_dir)
+        if not os.path.exists(self.bundle_path):
+            raise Exception("Bundle %s not found" % self.bundle_path)
 
         self.portal_type = options.get('portal_type')
         self.json_schema = self.get_content_type_json_schema()
 
-        self.filepath = os.path.join(self.bundle_dir, self.filename)
+        self.filepath = os.path.join(self.bundle_path, self.filename)
 
     def get_content_type_json_schema(self):
         if not self.portal_type:

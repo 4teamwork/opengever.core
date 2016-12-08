@@ -28,7 +28,7 @@ class TestOggBundlePipeline(FunctionalTestCase):
             Builder('fixture').with_all_unit_setup())
 
         transmogrifier = Transmogrifier(api.portal.get())
-        transmogrifier.bundle_dir = resource_filename(
+        transmogrifier.bundle_path = resource_filename(
             'opengever.setup.tests', 'assets/oggbundle')
         transmogrifier(u'opengever.setup.oggbundle')
 
