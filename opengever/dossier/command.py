@@ -18,11 +18,10 @@ class CreateDocumentFromTemplateCommand(CreateDocumentCommand):
             title=title)
         self.recipient_data = recipient_data
 
-    def finish_creation(self, content):
-        """Also make sure doc-properties are updated from template."""
-
-        DocPropertyWriter(content, recipient_data=self.recipient_data).initialize()
-        super(CreateDocumentFromTemplateCommand, self).finish_creation(content)
+    def execute(self):
+        obj = super(CreateDocumentFromTemplateCommand, self).execute()
+        DocPropertyWriter(obj, recipient_data=self.recipient_data).initialize()
+        return obj
 
 
 class CreateDossierFromTemplateCommand(BaseObjectCreatorCommand):

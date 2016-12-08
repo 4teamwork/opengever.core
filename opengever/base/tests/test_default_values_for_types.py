@@ -545,6 +545,37 @@ class TestDocumentDefaults(TestDefaultsBase):
 
         self.assertDictEqual(expected, persisted_values)
 
+    @browsing
+    def test_document_from_dossiertemplate(self, browser):
+        toggle_feature(IDossierTemplateSettings, enabled=True)
+
+        root = create(Builder('repository_root'))
+        leaf_node = create(Builder('repository').within(root))
+        template = create(Builder("dossiertemplate")
+                          .titled(DOSSIER_REQUIREDS['title']))
+        create(Builder('document')
+               .titled(DOCUMENT_REQUIREDS['title'])
+               .within(template)
+               .with_dummy_content())
+
+        with freeze(FROZEN_NOW):
+            browser.login().open(leaf_node)
+            factoriesmenu.add(u'Dossier with template')
+            token = browser.css(
+                'input[name="form.widgets.template"]').first.attrib.get('value')
+            browser.fill({'form.widgets.template': token}).submit()
+            browser.click_on('Save')
+
+            doc = browser.context.listFolderContents()[0]
+
+        persisted_values = get_persisted_values_for_obj(doc)
+        expected = self.get_type_defaults()
+
+        expected['digitally_available'] = True
+        expected['file'] = doc.file
+
+        self.assertDictEqual(expected, persisted_values)
+
 
 class TestMailDefaults(TestDefaultsBase):
 

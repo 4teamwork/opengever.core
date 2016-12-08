@@ -5,6 +5,9 @@ Changelog
 4.13.1 (unreleased)
 -------------------
 
+- Refactor CreateDocumentCommand and CreateEmailCommand.
+  [elioschmutz]
+
 - Enable dossier templates for local development ( examplecontent)
   [elioschmutz]
 
