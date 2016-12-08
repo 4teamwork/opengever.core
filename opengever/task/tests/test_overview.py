@@ -3,9 +3,11 @@ from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.zipexport.zipfilestream import ZipFile
 from opengever.testing import FunctionalTestCase
 from plone import api
 from plone.app.testing import TEST_USER_ID
+from StringIO import StringIO
 import transaction
 
 
@@ -43,7 +45,7 @@ class TestTaskOverview(FunctionalTestCase):
             self.user.label(), browser.css('.issuer a').first.text)
 
     @browsing
-    def test_issuer_is_prefixed_by_current_org_unit_on_a_multiclient_setup(self, browser):
+    def test_issuer_is_prefixed_by_current_org_unit_on_a_multiclient_setup(self, browser): # noqa
         create(Builder('org_unit').id('client2')
                .having(admin_unit=self.admin_unit))
         task = create(Builder("task").having(task_type='comment',
@@ -57,13 +59,14 @@ class TestTaskOverview(FunctionalTestCase):
 
     @browsing
     def test_date_of_completion_is_displayed_correclty(self, browser):
-        task = create(Builder("task").having(task_type='comment',
-                                             date_of_completion=date(2015, 02, 02),
-                                             issuer=TEST_USER_ID))
+        task = create(Builder("task")
+                      .having(task_type='comment',
+                              date_of_completion=date(2015, 2, 2),
+                              issuer=TEST_USER_ID))
 
         browser.login().open(task, view='tabbedview_view-overview')
 
-        main_attributes_table = browser.css('#main_attributesBox .listing').first
+        main_attributes_table = browser.css('#main_attributesBox .listing').first #noqa
         date_of_completion_row = main_attributes_table.lists()[-1]
         self.assertEquals(['Date of completion', 'Feb 02, 2015'],
                           date_of_completion_row)
@@ -87,6 +90,67 @@ class TestTaskOverview(FunctionalTestCase):
         self.assertSequenceEqual(
             [u'Some document'],
             browser.css('#documentsBox a.document_link').text)
+
+    @browsing
+    def test_zip_export_actions_are_available(self, browser):
+        dossier = create(Builder('dossier').titled(u'Dossier'))
+
+        task = create(Builder("task")
+                      .within(dossier)
+                      .titled(u'Aufgabe')
+                      .having(text='Text blabla',
+                              task_type='comment',
+                              deadline=datetime(2010, 1, 1),
+                              issuer=TEST_USER_ID,
+                              responsible=TEST_USER_ID,))
+
+        create(Builder('document')
+               .titled(u'Some document')
+               .within(task))
+
+        browser.login().open(task)
+
+        self.assertIsNotNone(
+            browser.css('.actionicon-object_buttons-zipexport'))
+
+        browser.open(task, view='tabbedview_view-documents')
+
+        self.assertIn('Export as Zip',
+                      browser.css('#plone-contentmenu-tabbedview-actions li')
+                      .text)
+
+    @browsing
+    def test_can_export_zip(self, browser):
+        dossier = create(Builder('dossier').titled(u'Dossier'))
+
+        task = create(Builder("task")
+                      .within(dossier)
+                      .titled(u'Aufgabe')
+                      .having(text='Text blabla',
+                              task_type='comment',
+                              deadline=datetime(2010, 1, 1),
+                              issuer=TEST_USER_ID,
+                              responsible=TEST_USER_ID,))
+
+        document = create(Builder('document')
+                          .titled(u'Some document')
+                          .within(task)
+                          .with_dummy_content())
+
+        data = {'zip_selected:method': 1,
+                'paths:list': ['/'.join(document.getPhysicalPath())]}
+
+        browser.login().open(task, view='zip_export')
+
+        zipfile = ZipFile(StringIO(browser.contents), 'r')
+
+        self.assertEquals([document.file.filename], zipfile.namelist())
+
+        browser.open(task, data=data)
+
+        zipfile = ZipFile(StringIO(browser.contents), 'r')
+
+        self.assertEquals([document.file.filename], zipfile.namelist())
 
     @browsing
     def test_task_overview_displays_task_information(self, browser):
@@ -200,10 +264,10 @@ class TestTaskOverview(FunctionalTestCase):
         self.assertSequenceEqual(
             [], browser.css("#successor_tasksBox div.task").text)
 
-
     @browsing
     def test_state_is_translated_state_label(self, browser):
-        self.task = create(Builder('task').in_state('task-state-tested-and-closed'))
+        self.task = create(Builder('task')
+                           .in_state('task-state-tested-and-closed'))
 
         # set french as preferred language
         lang_tool = api.portal.get_tool('portal_languages')

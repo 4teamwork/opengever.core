@@ -5,6 +5,9 @@ Changelog
 4.13.1 (unreleased)
 -------------------
 
+- Enable zip exports for tasks
+  [Rotonen]
+
 - Hide private root from breadcrumbs.
   [deiferni]
 
