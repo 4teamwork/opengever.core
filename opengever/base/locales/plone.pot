@@ -359,3 +359,6 @@ msgstr ""
 
 msgid "disposition-transition-dispose"
 msgstr ""
+
+msgid "disposition-transition-refuse"
+msgstr ""

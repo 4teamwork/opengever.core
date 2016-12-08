@@ -156,6 +156,9 @@ msgstr "Dossiers aussondern"
 msgid "disposition-transition-dispose"
 msgstr "Abliefern"
 
+msgid "disposition-transition-refuse"
+msgstr "Ablehnen"
+
 msgid "document-state-draft"
 msgstr "nicht definiert"
 
