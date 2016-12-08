@@ -8,6 +8,7 @@ from opengever.tabbedview.browser.bumblebee_gallery import BumblebeeGalleryMixin
 from opengever.tabbedview.browser.tabs import BaseTabProxy
 from opengever.tabbedview.interfaces import ITabbedViewProxy
 from opengever.testing import FunctionalTestCase
+from opengever.testing import obj2paths
 from plone import api
 from zExceptions import NotFound
 from zope.component import getMultiAdapter
@@ -538,3 +539,20 @@ class TestProxyViewsWithActivatedFeature(FunctionalTestCase):
         self.assertEqual(
             'Gallery',
             browser.css('.ViewChooser .active').first.text)
+
+    @browsing
+    def test_select_all_use_preferred_view_content_query(self, browser):
+        dossier = create(Builder('dossier'))
+
+        document_a = create(Builder('document').within(dossier))
+        create(Builder('document'))
+
+
+        data = {'view_name':'documents-proxy',
+                'initialize': 0,
+                'selected_count': 0}
+        browser.login().open(dossier, data, view='tabbed_view/select_all')
+
+        self.assertEqual(
+            obj2paths([document_a]),
+            [input.get('value') for input in browser.css('input')])
