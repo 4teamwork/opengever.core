@@ -7,6 +7,7 @@ from opengever.disposition.history import Archived
 from opengever.disposition.history import Closed
 from opengever.disposition.history import Disposed
 from opengever.disposition.history import Edited
+from opengever.disposition.history import Refused
 from opengever.disposition.interfaces import IAppraisal
 from opengever.disposition.interfaces import IHistoryStorage
 from opengever.testing import FunctionalTestCase
@@ -122,6 +123,19 @@ class TestHistoryEntries(FunctionalTestCase):
         self.assertEquals(
             u'Disposition closed and all dossiers destroyed by {}'.format(
                 self.user_link),
+            translate(entry.msg(), context=self.request))
+
+    def test_add_history_entry_when_refuse_a_disposition(self):
+        self.grant('Archivist')
+        api.content.transition(obj=self.disposition,
+                               transition='disposition-transition-refuse')
+
+        entry = IHistoryStorage(self.disposition).get_history()[0]
+
+        self.assertTrue(isinstance(entry, Refused))
+        self.assertEquals('refuse', entry.css_class)
+        self.assertEquals(
+            u'Disposition refused by {}'.format(self.user_link),
             translate(entry.msg(), context=self.request))
 
     @browsing
