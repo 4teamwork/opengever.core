@@ -5,6 +5,9 @@ Changelog
 4.13.1 (unreleased)
 -------------------
 
+- Enable dossier templates for local development ( examplecontent)
+  [elioschmutz]
+
 - Add sample dossiertemplate to examplecontent.
   [elioschmutz]
 
