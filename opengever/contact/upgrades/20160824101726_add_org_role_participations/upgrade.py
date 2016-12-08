@@ -39,7 +39,7 @@ class AddOrgRoleParticipations(SchemaMigration):
 
     def make_participation_type_non_nullable(self):
         self.op.alter_column('participations', 'participation_type',
-                             existing_type=String, nullable=False)
+                             existing_type=String(30), nullable=False)
 
     def add_org_role_participation(self):
         self.op.add_column(

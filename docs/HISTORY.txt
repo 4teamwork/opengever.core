@@ -5,6 +5,10 @@ Changelog
 4.13.1 (unreleased)
 -------------------
 
+- Fixed schemamigration AddOrgRoleParticipations for deployments with MySQL
+  backend.
+  [phgross]
+
 - Refactor CreateDocumentCommand and CreateEmailCommand.
   [elioschmutz]
 
