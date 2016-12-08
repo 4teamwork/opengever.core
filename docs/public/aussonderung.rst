@@ -66,6 +66,12 @@ Nach Abschluss des Angebots, also nach der Vernichtung der Dossiers, besteht zud
 
 Zusätzliche Vernichtungs-Varianten (Nur löschen der Primärdaten, Entzug der Leseberechtigung etc.) sind aktuell nicht umgesetzt und auch nicht geplant.
 
+
+Angebot ablehnen
+~~~~~~~~~~~~~~~~
+Ein Angebot im Status `In Bearbeitung` oder `Abgeliefert` kann zudem von einem Archivar abgelehnt werden, dabei wird das Angebot wieder in den Status `In Bearbeitung` versetzt.
+
+
 Verlauf
 -------
 Für jedes Angebot wird ein Verlauf geführt und ähnlich wie bei Aufgaben oder Anträgen dargestellt.
