@@ -1,11 +1,12 @@
+from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossiernamefromtitle import DossierNameFromTitle
 from plone.app.content.interfaces import INameFromTitle
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.directives import form
-from zope.interface import Interface
 from zope.interface import alsoProvides
 from zope.interface import implements
+from zope.interface import Interface
 
 
 class IDossierTemplateSchema(form.Schema):
@@ -15,7 +16,7 @@ class IDossierTemplateSchema(form.Schema):
     """
 
 
-class IDossierTemplateMarker(Interface):
+class IDossierTemplateMarker(Interface, ITabbedviewUploadable):
     """Marker Interface for dossiertemplates.
     """
 

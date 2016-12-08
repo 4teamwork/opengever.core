@@ -93,6 +93,8 @@ class TemplateDossierDossierTemplates(BaseCatalogListingTab):
     grok.name('tabbedview_view-dossiertemplates')
 
     filterlist_available = False
+    sort_on = 'sortable_title'
+    show_selects = False
 
     object_provides = IDossierTemplateSchema.__identifier__
 
@@ -104,9 +106,11 @@ class TemplateDossierDossierTemplates(BaseCatalogListingTab):
          'column_title': _(u'label_title', default=u'Title'),
          'sort_index': 'sortable_title',
          'transform': linked},
+        {'column': 'Description',
+         'column_title': _(u'label_description', default=u'Description')},
+
 
         )
 
     enabled_actions = []
     major_actions = []
-

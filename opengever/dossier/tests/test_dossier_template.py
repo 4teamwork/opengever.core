@@ -4,6 +4,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import info_messages
+from opengever.core.testing import activate_bumblebee_feature
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_DOSSIER_TEMPLATE_LAYER
 from opengever.core.testing import toggle_feature
 from opengever.dossier.behaviors.dossier import IDossier
@@ -450,3 +451,169 @@ class TestDossierTemplateAddWizard(FunctionalTestCase):
         subdossier = browser.context.listFolderContents()[0]
 
         self.assertEqual('peter.meier', IDossier(subdossier).responsible)
+
+
+OVERVIEW_TAB = 'tabbedview_view-overview'
+SUBDOSSIERS_TAB = 'tabbedview_view-subdossiers'
+DOCUMENTS_LIST_TAB = 'tabbedview_view-documents'
+DOCUMENTS_GALLERY_TAB = 'tabbedview_view-documents-gallery'
+
+
+class TestDossierTemplateOverview(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_DOSSIER_TEMPLATE_LAYER
+
+    def setUp(self):
+        super(TestDossierTemplateOverview, self).setUp()
+        self.dossiertemplate = create(Builder('dossiertemplate')
+                                      .titled(u'My Dossiertemplate')
+                                      .having(description=u'This is a description',
+                                              keywords=(u'chuck', u'james'),
+                                              comments=u'This is a comment',
+                                              filing_prefix='directorate'))
+
+    @browsing
+    def test_description_box_shows_description(self, browser):
+        browser.login().open(self.dossiertemplate, view=OVERVIEW_TAB)
+        self.assertEqual(u'This is a description',
+                         browser.css('#descriptionBox span').first.text)
+
+    @browsing
+    def test_keywords_box_shows_keywords_joined_by_comma(self, browser):
+        browser.login().open(self.dossiertemplate, view=OVERVIEW_TAB)
+        self.assertEqual(u'chuck, james',
+                         browser.css('#keywordsBox span').first.text)
+
+    @browsing
+    def test_comments_box_shows_comment(self, browser):
+        browser.login().open(self.dossiertemplate, view=OVERVIEW_TAB)
+        self.assertEqual(u'This is a comment',
+                         browser.css('#commentsBox span').first.text)
+
+    @browsing
+    def test_filing_prefix_box_shows_filing_prefix_title(self, browser):
+        browser.login().open(self.dossiertemplate, view=OVERVIEW_TAB)
+        self.assertEqual(u'Directorate',
+                         browser.css('#filing_prefixBox span').first.text)
+
+    @browsing
+    def test_document_box_items_are_limited_to_ten_and_sorted_by_sortable_title(self, browser):
+        for i in range(1, 11):
+            create(Builder('document')
+                   .within(self.dossiertemplate)
+                   .titled(u'C Document %s' % i))
+
+        create(Builder('document')
+               .within(self.dossiertemplate)
+               .titled(u'A Document'))
+        create(Builder('document')
+               .within(self.dossiertemplate)
+               .titled(u'B Document'))
+
+        browser.login().open(self.dossiertemplate, view=OVERVIEW_TAB)
+
+        self.assertSequenceEqual(
+            ['A Document', 'B Document', 'C Document 1', 'C Document 2', 'C Document 3',
+             'C Document 4', 'C Document 5', 'C Document 6', 'C Document 7',
+             'C Document 8'],
+            browser.css('#documentsBox li:not(.moreLink) a.document_link').text)
+
+    @browsing
+    def test_documents_in_overview_are_linked(self, browser):
+        document = create(Builder('document')
+                          .within(self.dossiertemplate)
+                          .titled(u'Document 1'))
+
+        browser.login().open(self.dossiertemplate, view=OVERVIEW_TAB)
+
+        items = browser.css('#documentsBox li:not(.moreLink) a.document_link')
+
+        self.assertEqual(1, len(items))
+        self.assertEqual(document.absolute_url(), items.first.get('href'))
+
+
+class TestDossierTemplateSubdossiers(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_DOSSIER_TEMPLATE_LAYER
+
+    def setUp(self):
+        super(TestDossierTemplateSubdossiers, self).setUp()
+        self.dossiertemplate = create(Builder('dossiertemplate')
+                                      .titled(u'My Dossiertemplate'))
+
+    @browsing
+    def test_list_subdossiers_alphabetically(self, browser):
+        create(Builder('dossiertemplate')
+               .within(self.dossiertemplate)
+               .titled(u'A Subdossier'))
+
+        create(Builder('dossiertemplate')
+               .within(self.dossiertemplate)
+               .titled(u'C Subdossier'))
+
+        create(Builder('dossiertemplate')
+               .within(self.dossiertemplate)
+               .titled(u'B Subdossier'))
+
+        browser.login().open(self.dossiertemplate, view=SUBDOSSIERS_TAB)
+
+        self.assertEqual(
+            ['A Subdossier', 'B Subdossier', 'C Subdossier'],
+            browser.css('table.listing a.contenttype-opengever-dossier-dossiertemplate').text)
+
+    @browsing
+    def test_list_subdossiers_in_subdossiers(self, browser):
+        subdossier_1 = create(Builder('dossiertemplate')
+                              .within(self.dossiertemplate)
+                              .titled(u'B Subdossier'))
+
+        create(Builder('dossiertemplate')
+               .within(subdossier_1)
+               .titled(u'A Subdossier'))
+
+        browser.login().open(self.dossiertemplate, view=SUBDOSSIERS_TAB)
+
+        self.assertEqual(
+            ['A Subdossier', 'B Subdossier'],
+            browser.css('table.listing a.contenttype-opengever-dossier-dossiertemplate').text)
+
+
+class TestDossierTemplateDocuments(FunctionalTestCase):
+
+    layer = OPENGEVER_FUNCTIONAL_DOSSIER_TEMPLATE_LAYER
+
+    def setUp(self):
+        super(TestDossierTemplateDocuments, self).setUp()
+        self.dossiertemplate = create(Builder('dossiertemplate')
+                                      .titled(u'My Dossiertemplate'))
+
+        subdossier = create(Builder('dossiertemplate')
+                            .within(self.dossiertemplate))
+
+        create(Builder('document')
+               .within(self.dossiertemplate)
+               .titled('Document 1'))
+        create(Builder('document')
+               .within(subdossier)
+               .titled('Document 2'))
+        create(Builder('document')
+               .within(self.dossiertemplate)
+               .titled('Document 3'))
+
+    @browsing
+    def test_show_documents_in_list_view_sorted_alphabetically(self, browser):
+        browser.login().open(self.dossiertemplate, view=DOCUMENTS_LIST_TAB)
+
+        self.assertEqual(
+            ['Document 1', 'Document 2', 'Document 3'],
+            browser.css('table.listing a.contenttype-opengever-document-document').text)
+
+    @browsing
+    def test_show_documents_in_gallery_view_sorted_alphabetically(self, browser):
+        activate_bumblebee_feature()
+        browser.login().open(self.dossiertemplate, view=DOCUMENTS_GALLERY_TAB)
+
+        self.assertEqual(
+            ['Document 1', 'Document 2', 'Document 3'],
+            [preview.attrib.get('alt') for preview in browser.css(
+                '.preview-listing .file-preview')])

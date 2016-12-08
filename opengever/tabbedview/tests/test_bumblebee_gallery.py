@@ -503,6 +503,26 @@ class TestProxyViewsWithActivatedFeature(FunctionalTestCase):
             browser.css('.ViewChooser .active').first.text)
 
     @browsing
+    def test_dossiertemplates_documents_proxy_tab(self, browser):
+        dossiertemplate = create(Builder('dossiertemplate')
+                                 .titled(u'My Dossiertemplate'))
+
+        browser.login().visit(dossiertemplate, view="tabbedview_view-documents-proxy")
+
+        self.assertEqual(
+            'List',
+            browser.css('.ViewChooser .active').first.text)
+
+        # Set cookie for gallery-view
+        browser.login().visit(dossiertemplate, view="tabbedview_view-documents-gallery")
+
+        browser.login().visit(dossiertemplate, view="tabbedview_view-documents-proxy")
+
+        self.assertEqual(
+            'Gallery',
+            browser.css('.ViewChooser .active').first.text)
+
+    @browsing
     def test_mydocuments_proxy_tab(self, browser):
         browser.login().visit(
             self.portal, view="tabbedview_view-mydocuments-proxy")
