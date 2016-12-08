@@ -7,7 +7,11 @@ from opengever.base.form import WizzardWrappedAddForm
 from opengever.base.oguid import Oguid
 from opengever.base.schema import TableChoice
 from opengever.dossier import _
+from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.command import CreateDocumentFromTemplateCommand
+from opengever.dossier.command import CreateDossierFromTemplateCommand
 from opengever.dossier.dossiertemplate import is_dossier_template_feature_enabled
+from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateSchema
 from opengever.dossier.dossiertemplate.dossiertemplate import BEHAVIOR_INTERFACE_MAPPING
 from opengever.dossier.dossiertemplate.dossiertemplate import TEMPLATABLE_FIELDS
 from opengever.repository.interfaces import IRepositoryFolder
@@ -196,15 +200,32 @@ class AddDossierFromTemplateWizardStep(WizzardWrappedAddForm):
 
                 obj = self.createAndAdd(data)
                 if obj is not None:
-                    # mark only as finished if we get the new object
-                    self._finishedAdd = True
+                    obj = self.context.get(obj.getId())
+                    template_obj = get_wizard_storage(self.context).get('template')
+                    self.recursive_content_creation(template_obj, obj)
 
+                    self._finishedAdd = True
                     api.portal.show_message(
                         PDMF(u"Item created"), request=self.request, type="info")
 
             @buttonAndHandler(pd_mf(u'Cancel'), name='cancel')
             def handleCancel(self, action):
                 return self.request.RESPONSE.redirect(self.context.absolute_url())
+
+            def recursive_content_creation(self, template_obj, target_container):
+                responsible = IDossier(target_container).responsible
+
+                for child_obj in template_obj.listFolderContents():
+                    if IDossierTemplateSchema.providedBy(child_obj):
+                        dossier = CreateDossierFromTemplateCommand(
+                            target_container, child_obj).execute()
+
+                        IDossier(dossier).responsible = responsible
+
+                        self.recursive_content_creation(child_obj, dossier)
+                    else:
+                        CreateDocumentFromTemplateCommand(
+                            target_container, child_obj, child_obj.title).execute()
 
         return WrappedForm
 

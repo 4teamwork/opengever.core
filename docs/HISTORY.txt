@@ -5,6 +5,9 @@ Changelog
 4.13.1 (unreleased)
 -------------------
 
+- Create recursively documents and subdossiers when adding a dossier from template
+  [elioschmutz]
+
 - Enable zip exports for tasks
   [Rotonen]
 

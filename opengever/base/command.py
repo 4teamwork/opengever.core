@@ -4,13 +4,33 @@ from os.path import join
 from os.path import splitext
 from plone.dexterity.utils import addContentToContainer
 from plone.dexterity.utils import createContent
+from plone.dexterity.utils import createContentInContainer
 from plone.rfc822.interfaces import IPrimaryFieldInfo
 from zope.event import notify
 from zope.lifecycleevent import ObjectCreatedEvent
 from zope.lifecycleevent import ObjectModifiedEvent
 
 
-class CreateDocumentCommand(object):
+class BaseObjectCreatorCommand(object):
+    """Base class to create an object in a container.
+    """
+    portal_type = None
+    skip_defaults_fields = []
+
+    def __init__(self, context, title, **kwargs):
+        self.context = context
+        self.title = title
+        self.additional_args = kwargs
+
+    def execute(self):
+        return createContentInContainer(
+            self.context,
+            self.portal_type,
+            title=self.title,
+            **self.additional_args)
+
+
+class CreateDocumentCommand(BaseObjectCreatorCommand):
     """Create a new opengever.document.document object and update its fields
     with default values.
 
@@ -20,16 +40,15 @@ class CreateDocumentCommand(object):
 
     def __init__(self, context, filename, data, title=None, content_type='',
                  **kwargs):
+        super(CreateDocumentCommand, self).__init__(context, title, **kwargs)
+
         # filename must be unicode
         if not isinstance(filename, unicode):
             filename = filename.decode('utf-8')
 
-        self.context = context
         self.data = data
         self.filename = filename
-        self.title = title
         self.content_type = content_type
-        self.additional_args = kwargs
 
     def execute(self):
         content = createContent(self.portal_type, title=self.title,
