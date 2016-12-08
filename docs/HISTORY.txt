@@ -5,6 +5,9 @@ Changelog
 4.13.1 (unreleased)
 -------------------
 
+- Add sample dossiertemplate to examplecontent.
+  [elioschmutz]
+
 - Create recursively documents and subdossiers when adding a dossier from template
   [elioschmutz]
 

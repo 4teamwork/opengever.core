@@ -1,0 +1,210 @@
+[{
+    "_path": "/vorlagen/dossiertemplate-1",
+    "_type": "opengever.dossier.dossiertemplate",
+    "title": "Investitionsvorhaben",
+    "_children": [
+        {
+            "_id": "dossiertemplate-3",
+            "_type": "opengever.dossier.dossiertemplate",
+            "title": "Projektgrundlagen",
+            "_children": [
+                {
+                    "_id": "dossiertemplate-12",
+                    "_type": "opengever.dossier.dossiertemplate",
+                    "title": "Auftrag, Organistaion",
+                    "description": "Projektauftrag, Projekthandbuch, Projektorganisation, Adressen"
+                },
+                {
+                    "_id": "dossiertemplate-13",
+                    "_type": "opengever.dossier.dossiertemplate",
+                    "title": "Termin-, Bauprogramme",
+                    "description": ""
+                },
+                {
+                    "_id": "dossiertemplate-14",
+                    "_type": "opengever.dossier.dossiertemplate",
+                    "title": "Bestandsaufnahmen",
+                    "description": "Schadstoffuntersuchungen, Gebäude- (Rissprotokolle) und Terrainaufnahme"
+                },
+                {
+                    "_id": "dossiertemplate-15",
+                    "_type": "opengever.dossier.dossiertemplate",
+                    "title": "Masterplan",
+                    "description": ""
+                },
+                {
+                    "_id": "dossiertemplate-16",
+                    "_type": "opengever.dossier.dossiertemplate",
+                    "title": "Vorstudien",
+                    "description": "Machbarkeitsstudien, Überbauungskonzepte, best. Nutzungsvereinbarung"
+                },
+                {
+                    "_id": "dossiertemplate-17",
+                    "_type": "opengever.dossier.dossiertemplate",
+                    "title": "Wettbewerb",
+                    "description": "Planerwahl, Projektwettbewerb"
+                },
+                {
+                    "_id": "dossiertemplate-18",
+                    "_type": "opengever.dossier.dossiertemplate",
+                    "title": "Vorprojekt",
+                    "description": ""
+                },
+                {
+                    "_id": "dossiertemplate-19",
+                    "_type": "opengever.dossier.dossiertemplate",
+                    "title": "Bauprojekt",
+                    "description": ""
+                },
+                {
+                    "_id": "dossiertemplate-20",
+                    "_type": "opengever.dossier.dossiertemplate",
+                    "title": "Konzepte / Simulationen",
+                    "description": "Betriebskonzept, Energiekonzept, Bauphysik, Schallschutz- und Akkustikkonzept, Sicherheitskonzept, Brandschutzkonzept, Statikkonzept, etc"
+                },
+                {
+                    "_id": "dossiertemplate-21",
+                    "_type": "opengever.dossier.dossiertemplate",
+                    "title": "Servitute, Dienstbarkeitsverträge",
+                    "description": "Dienstbarkeitsverträge, Servitute, Nutzungsverträge, Verträge"
+                },
+                {
+                    "_id": "dossiertemplate-22",
+                    "_type": "opengever.dossier.dossiertemplate",
+                    "title": "Grundstück, Lage",
+                    "description": "Situationsplan, Berichte Geologie, Hydrologie, Naturgefahren, Grundwassererhebung"
+                },
+                {
+                    "_id": "dossiertemplate-23",
+                    "_type": "opengever.dossier.dossiertemplate",
+                    "title": "Übriges",
+                    "description": ""
+                }
+            ]
+        },
+        {
+            "_id": "dossiertemplate-4",
+            "_type": "opengever.dossier.dossiertemplate",
+            "title": "Kredit und Rechnungswesen",
+            "_children": [
+                {
+                    "_id": "dossiertemplate-24",
+                    "_type": "opengever.dossier.dossiertemplate",
+                    "title": "Kreditbegehren",
+                    "description": "Budget, Botschaft, Zusatzkredit, Kreditumlagerung"
+                },
+                {
+                    "_id": "dossiertemplate-25",
+                    "_type": "opengever.dossier.dossiertemplate",
+                    "title": "Kosten",
+                    "description": "Kostenschätzung, Kostenvoranschlag, Material- und Baubeschrieb, Kostenkontrolle, Änderungswesen, etc."
+                },
+                {
+                    "_id": "dossiertemplate-26",
+                    "_type": "opengever.dossier.dossiertemplate",
+                    "title": "Kreditabrechnung",
+                    "description": "Bauabrechung, Revisionsbericht, RRB"
+                },
+                {
+                    "_id": "dossiertemplate-27",
+                    "_type": "opengever.dossier.dossiertemplate",
+                    "title": "Subventionen",
+                    "description": "Zuschüsse Dritter, Bundesbeitrag"
+                },
+                {
+                    "_id": "dossiertemplate-28",
+                    "_type": "opengever.dossier.dossiertemplate",
+                    "title": "Übriges",
+                    "description": ""
+                }
+            ]
+        },
+        {
+            "_id": "dossiertemplate-5",
+            "_type": "opengever.dossier.dossiertemplate",
+            "title": "Behörden",
+            "_children": [
+                {
+                    "_id": "dossiertemplate-29",
+                    "_type": "opengever.dossier.dossiertemplate",
+                    "title": "Gutachten",
+                    "description": "UVP, Parkraum, Verkehr, etc."
+                },
+                {
+                    "_id": "dossiertemplate-30",
+                    "_type": "opengever.dossier.dossiertemplate",
+                    "title": "Sondernutzungspläne",
+                    "description": "Gestaltungsplan, Überbauungsplan"
+                },
+                {
+                    "_id": "dossiertemplate-31",
+                    "_type": "opengever.dossier.dossiertemplate",
+                    "title": "Baubewilligung",
+                    "description": "Baugesuch, Bewilligungsunterlagen, usw."
+                },
+                {
+                    "_id": "dossiertemplate-32",
+                    "_type": "opengever.dossier.dossiertemplate",
+                    "title": "Korrektureingaben",
+                    "description": ""
+                },
+                {
+                    "_id": "dossiertemplate-33",
+                    "_type": "opengever.dossier.dossiertemplate",
+                    "title": "Einsprachenverfahren",
+                    "description": ""
+                },
+                {
+                    "_id": "dossiertemplate-34",
+                    "_type": "opengever.dossier.dossiertemplate",
+                    "title": "Betriebsbewilligung",
+                    "description": ""
+                },
+                {
+                    "_id": "dossiertemplate-35",
+                    "_type": "opengever.dossier.dossiertemplate",
+                    "title": "Übriges",
+                    "description": ""
+                }
+            ]
+        },
+        {
+            "_id": "dossiertemplate-6",
+            "_type": "opengever.dossier.dossiertemplate",
+            "title": "Korrespondenz"
+        },
+        {
+            "_id": "dossiertemplate-7",
+            "_type": "opengever.dossier.dossiertemplate",
+            "title": "Protokolle"
+        },
+        {
+            "_id": "dossiertemplate-8",
+            "_type": "opengever.dossier.dossiertemplate",
+            "title": "Dienstleistungsverträge"
+        },
+        {
+            "_id": "dossiertemplate-9",
+            "_type": "opengever.dossier.dossiertemplate",
+            "title": "Bau- und Lieferverträge"
+        },
+        {
+            "_id": "dossiertemplate-10",
+            "_type": "opengever.dossier.dossiertemplate",
+            "title": "Pläne / Dokumentation"
+        },
+        {
+            "_id": "dossiertemplate-11",
+            "_type": "opengever.dossier.dossiertemplate",
+            "title": "Abschlussarbeiten"
+        }
+
+    ]
+},
+{
+    "_path": "/vorlagen/dossiertemplate-2",
+    "_type": "opengever.dossier.dossiertemplate",
+    "title": "Kleinvorhaben",
+    "_children": []
+}
+]
