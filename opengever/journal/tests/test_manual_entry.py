@@ -39,7 +39,7 @@ class TestManualJournalEntry(FunctionalTestCase):
              'Comments': u'Anfrage bez\xfcglich dem Jahr 2016 von Herr Meier',
              'References': u'',
              'Time': '09.12.2016 09:40'},
-            browser.css('.listing').first.rows[1].dict())
+            browser.css('.listing').first.rows[2].dict())
 
     @browsing
     def test_selected_documents_are_listed_and_linked_in_the_references_column(self, browser):
