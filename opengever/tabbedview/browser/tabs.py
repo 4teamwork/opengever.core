@@ -83,6 +83,30 @@ class BaseTabProxy(BaseCatalogListingTab):
     def name_without_postfix(self):
         return self.__name__.rstrip(PROXY_VIEW_POSTFIX)
 
+    def select_all(self, pagenumber, selected_count):
+        """Called when select-all is clicked. Returns HTML containing
+        a hidden input field for each field which is not displayed (is outside
+        of the current batch) at the moment.
+
+        `pagenumber`: the current page number (1 is first page)
+        `selected_count`: number of items selected / displayed on this page
+        """
+
+        if not self.batching_enabled:
+            return
+
+        if self.table_options is None:
+            self.table_options = {}
+
+        # Fetch contents from the preferred_view (gallery or listing view)
+        # to use the query of the really display tabbedview.
+        view = self.context.restrictedTraverse(self.preferred_view_name)
+        view.update()
+
+        above, beneath = self._select_all_remove_visibles(
+            view.contents, pagenumber, selected_count)
+        return self.select_all_template(above=above, beneath=beneath)
+
 
 class DocumentsProxy(BaseTabProxy):
     """This proxyview is looking for the last used documents

@@ -5,6 +5,9 @@ Changelog
 4.13.1 (unreleased)
 -------------------
 
+- Fixed select_all selection for ProxyTabbedViews as the document listings.
+  [phgross]
+
 - Fixed schemamigration AddOrgRoleParticipations for deployments with MySQL
   backend.
   [phgross]
