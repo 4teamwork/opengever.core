@@ -66,12 +66,6 @@
             "description": "",
             "_zope_schema_type": "TextLine"
         },
-        "digitally_available": {
-            "type": "boolean",
-            "title": "Digital verf\u00fcgbar",
-            "description": "",
-            "_zope_schema_type": "Bool"
-        },
         "archival_file": {
             "type": "string",
             "title": "Archivdatei",
@@ -177,7 +171,6 @@
         "delivery_date",
         "document_type",
         "document_author",
-        "digitally_available",
         "preserved_as_paper",
         "archival_file",
         "archival_file_state"
