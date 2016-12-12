@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-11-23 16:10+0000\n"
+"POT-Creation-Date: 2016-12-08 08:32+0000\n"
 "PO-Revision-Date: 2014-09-04 01:03+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -264,12 +264,12 @@ msgid "label_title"
 msgstr "Titel"
 
 #. Default: "Title (German)"
-#: ./opengever/base/behaviors/translated_title.py:36
+#: ./opengever/base/behaviors/translated_title.py:39
 msgid "label_title_de"
 msgstr "Titel (deutsch)"
 
 #. Default: "Title (French)"
-#: ./opengever/base/behaviors/translated_title.py:42
+#: ./opengever/base/behaviors/translated_title.py:45
 msgid "label_title_fr"
 msgstr "Titel (französisch)"
 

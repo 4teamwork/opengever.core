@@ -7,6 +7,7 @@ from opengever.disposition.history import Archived
 from opengever.disposition.history import Closed
 from opengever.disposition.history import Disposed
 from opengever.disposition.history import Edited
+from opengever.disposition.history import Refused
 from opengever.disposition.interfaces import IAppraisal
 from opengever.disposition.interfaces import IHistoryStorage
 from opengever.testing import FunctionalTestCase
@@ -60,8 +61,7 @@ class TestHistoryEntries(FunctionalTestCase):
         self.assertEquals(u'Edited by {}'.format(self.user_link),
                           translate(entry.msg(), context=self.request))
 
-    @browsing
-    def test_add_history_entry_when_finalize_appraisal_a_disposition(self, browser):
+    def test_add_history_entry_when_finalize_appraisal_a_disposition(self):
         api.content.transition(obj=self.disposition,
                                transition='disposition-transition-appraise')
 
@@ -72,8 +72,7 @@ class TestHistoryEntries(FunctionalTestCase):
         self.assertEquals(u'Appraisal finalized by {}'.format(self.user_link),
                           translate(entry.msg(), context=self.request))
 
-    @browsing
-    def test_add_history_entry_when_dispose_a_disposition(self, browser):
+    def test_add_history_entry_when_dispose_a_disposition(self):
         api.content.transition(obj=self.disposition,
                                transition='disposition-transition-appraise')
         api.content.transition(obj=self.disposition,
@@ -87,8 +86,7 @@ class TestHistoryEntries(FunctionalTestCase):
             u'Disposition disposed for the archive by {}'.format(self.user_link),
             translate(entry.msg(), context=self.request))
 
-    @browsing
-    def test_add_history_entry_when_archive_a_disposition(self, browser):
+    def test_add_history_entry_when_archive_a_disposition(self):
         api.content.transition(obj=self.disposition,
                                transition='disposition-transition-appraise')
         api.content.transition(obj=self.disposition,
@@ -104,8 +102,7 @@ class TestHistoryEntries(FunctionalTestCase):
             u'The archiving confirmed by {}'.format(self.user_link),
             translate(entry.msg(), context=self.request))
 
-    @browsing
-    def test_add_history_entry_when_close_a_disposition(self, browser):
+    def test_add_history_entry_when_close_a_disposition(self):
         api.content.transition(obj=self.disposition,
                                transition='disposition-transition-appraise')
         api.content.transition(obj=self.disposition,
@@ -124,8 +121,20 @@ class TestHistoryEntries(FunctionalTestCase):
                 self.user_link),
             translate(entry.msg(), context=self.request))
 
-    @browsing
-    def test_ignores_modified_events_during_dossier_destruction(self, browser):
+    def test_add_history_entry_when_refuse_a_disposition(self):
+        self.grant('Archivist')
+        api.content.transition(obj=self.disposition,
+                               transition='disposition-transition-refuse')
+
+        entry = IHistoryStorage(self.disposition).get_history()[0]
+
+        self.assertTrue(isinstance(entry, Refused))
+        self.assertEquals('refuse', entry.css_class)
+        self.assertEquals(
+            u'Disposition refused by {}'.format(self.user_link),
+            translate(entry.msg(), context=self.request))
+
+    def test_ignores_modified_events_during_dossier_destruction(self):
         api.content.transition(obj=self.disposition,
                                transition='disposition-transition-appraise')
         api.content.transition(obj=self.disposition,

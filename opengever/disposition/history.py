@@ -157,6 +157,19 @@ class Closed(DispositionHistory):
 DispositionHistory.add_description(Closed)
 
 
+class Refused(DispositionHistory):
+    transition = 'disposition-transition-refuse'
+    css_class = 'refuse'
+
+    def msg(self):
+        return _(
+            'msg_disposition_refuse',
+            default=u'Disposition refused by ${user}',
+            mapping=self._msg_mapping)
+
+DispositionHistory.add_description(Refused)
+
+
 @implementer(IHistoryStorage)
 @adapter(IDisposition)
 class HistoryStorage(object):

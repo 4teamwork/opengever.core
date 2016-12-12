@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-12-05 13:47+0000\n"
+"POT-Creation-Date: 2016-12-08 10:17+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,7 +42,7 @@ msgid "error_retention_period_not_expired"
 msgstr "Die Aufbewahrungsfrist der selektierten Dossiers ist nicht abgelaufen."
 
 #. Default: "Common"
-#: ./opengever/disposition/disposition.py:99
+#: ./opengever/disposition/disposition.py:101
 msgid "fieldset_common"
 msgstr "Allgemein"
 
@@ -72,7 +72,7 @@ msgid "label_details"
 msgstr "Details:"
 
 #. Default: "Disposition"
-#: ./opengever/disposition/disposition.py:89
+#: ./opengever/disposition/disposition.py:91
 msgid "label_disposition"
 msgstr "Angebot"
 
@@ -104,7 +104,7 @@ msgstr "Dossiers"
 
 #. Default: "Dossiers"
 #: ./opengever/disposition/browser/removal_protocol.py:111
-#: ./opengever/disposition/disposition.py:112
+#: ./opengever/disposition/disposition.py:114
 msgid "label_dossiers"
 msgstr "Dossiers"
 
@@ -146,13 +146,13 @@ msgstr "Zeitpunkt"
 #. Default: "Title"
 #: ./opengever/disposition/browser/listing.py:29
 #: ./opengever/disposition/browser/removal_protocol.py:53
-#: ./opengever/disposition/disposition.py:105
+#: ./opengever/disposition/disposition.py:107
 msgid "label_title"
 msgstr "Titel"
 
 #. Default: "Transfer number"
 #: ./opengever/disposition/browser/removal_protocol.py:124
-#: ./opengever/disposition/disposition.py:132
+#: ./opengever/disposition/disposition.py:134
 msgid "label_transfer_number"
 msgstr "Ablieferungsnummer"
 
@@ -191,6 +191,11 @@ msgstr "Für die Archivierung angeboten durch ${user}"
 msgid "msg_disposition_edited"
 msgstr "Editiert durch ${user}"
 
+#. Default: "Disposition refused by ${user}"
+#: ./opengever/disposition/history.py:165
+msgid "msg_disposition_refuse"
+msgstr "Angebot abgelehnt durch ${user}"
+
 #. Default: "Updated by ${user}"
 #: ./opengever/disposition/history.py:60
 msgid "msg_disposition_updated"
@@ -205,3 +210,4 @@ msgstr "Periode"
 #: ./opengever/disposition/browser/templates/overview.pt:143
 msgid "progress"
 msgstr "Verlauf:"
+
