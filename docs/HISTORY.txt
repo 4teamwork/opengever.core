@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.13.1 (unreleased)
+4.14.0 (2016-12-12)
 -------------------
 
 - Add new refuse transition to disposition workflow.
