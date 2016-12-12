@@ -113,10 +113,9 @@ class SelectDocumentsStepForm(CloseTaskWizardStepFormMixin, Form):
             dm.update(dmkey, data)
 
             if len(data['documents']) == 0:
-                url = '/'.join((
-                    self.context.absolute_url(),
-                    '@@close-task-wizard_close?oguid=%s' % oguid))
-                return self.request.RESPONSE.redirect(url)
+                self.close_task(data.get('text'))
+                return self.request.RESPONSE.redirect(
+                    self.context.absolute_url())
 
             else:
                 admin_unit = self.context.get_responsible_admin_unit()
@@ -131,6 +130,11 @@ class SelectDocumentsStepForm(CloseTaskWizardStepFormMixin, Form):
                       name='cancel')
     def handle_cancel(self, action):
         return self.request.RESPONSE.redirect(self.context.absolute_url())
+
+    def close_task(self, text):
+        change_task_workflow_state(
+            self.context, 'task-transition-open-tested-and-closed', text=text)
+
 
 
 class SelectDocumentsStepView(FormWrapper, grok.View):
