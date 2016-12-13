@@ -5,7 +5,9 @@ Changelog
 4.14.1 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Improved and reworked closing mechanism of `for information`
+  multi-adminunit tasks.
+  [phgross]
 
 
 4.14.0 (2016-12-12)

@@ -6,19 +6,20 @@ from five import grok
 from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.interfaces import IReferenceNumber
-from opengever.base.oguid import Oguid
+from opengever.base.request import dispatch_request
 from opengever.base.source import RepositoryPathSourceBinder
+from opengever.base.utils import ok_response
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.globalindex.model.task import Task
-from opengever.ogds.base.utils import get_current_admin_unit
-from opengever.ogds.base.utils import ogds_service
 from opengever.task import _
+from opengever.task.adapters import IResponseContainer
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.interfaces import ITaskDocumentsTransporter
 from opengever.task.task import ITask
 from opengever.task.util import change_task_workflow_state
 from opengever.task.util import CustomInitialVersionMessage
 from opengever.task.util import get_documents_of_task
+from plone import api
 from plone.directives.form import Schema
 from plone.z3cform.layout import FormWrapper
 from Products.CMFCore.utils import getToolByName
@@ -31,7 +32,6 @@ from z3c.form.form import Form
 from z3c.form.validator import SimpleFieldValidator
 from z3c.form.validator import WidgetValidatorDiscriminators
 from z3c.relationfield.schema import RelationChoice
-from zExceptions import NotFound
 from zope import schema
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
@@ -39,7 +39,6 @@ from zope.interface import Interface
 from zope.interface import Invalid
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
-import urllib
 
 
 class CloseTaskWizardStepFormMixin(BaseWizardStepForm):
@@ -136,7 +135,6 @@ class SelectDocumentsStepForm(CloseTaskWizardStepFormMixin, Form):
             self.context, 'task-transition-open-tested-and-closed', text=text)
 
 
-
 class SelectDocumentsStepView(FormWrapper, grok.View):
     grok.context(ITask)
     grok.name('close-task-wizard_select-documents')
@@ -208,28 +206,17 @@ class ChooseDossierStepForm(CloseTaskWizardStepFormMixin, Form):
         data, errors = self.extractData()
 
         if not errors:
-            dm = getUtility(IWizardDataStorage)
-
             oguid = self.request.get('oguid')
+            dm = getUtility(IWizardDataStorage)
             dmkey = 'close:%s' % oguid
-
             task = Task.query.by_oguid(oguid)
-            source_admin_unit = ogds_service().fetch_admin_unit(
-                task.admin_unit_id)
 
-            self.copy_documents(task, data['dossier'],
-                                dm.get(dmkey, 'documents'))
+            self.copy_documents(
+                task, data['dossier'], dm.get(dmkey, 'documents'))
+            self.close_task(task, dm.get(dmkey, 'text'))
 
-            redirect_data = {
-                'oguid': oguid,
-                'redirect_url': '%s#documents' % (
-                    data['dossier'].absolute_url())}
-
-            url = '/'.join((
-                source_admin_unit.public_url,
-                '@@close-task-wizard_close?%s' % urllib.urlencode(
-                    redirect_data)))
-            return self.request.RESPONSE.redirect(url)
+            return self.request.RESPONSE.redirect(
+                '{}#documents'.format(data['dossier'].absolute_url()))
 
     @buttonAndHandler(_(u'button_cancel', default=u'Cancel'),
                       name='cancel')
@@ -238,6 +225,20 @@ class ChooseDossierStepForm(CloseTaskWizardStepFormMixin, Form):
         url = '%s/resolve_oguid?oguid=%s' % (
             portal_url(), self.request.get('oguid'))
         return self.request.RESPONSE.redirect(url)
+
+    def close_task(self, task, text):
+        response = dispatch_request(
+            task.admin_unit_id,
+            u'@@close-task-wizard-remote_close',
+            path=task.physical_path,
+            data={'text': text.encode('utf-8') if text else u''})
+
+        response_data = response.read().strip()
+        if response_data != 'OK':
+            raise Exception(
+                'Could not close task on remote site %s (%s)' % (
+                    task.admin_unit_id,
+                    task.physical_path))
 
     def copy_documents(self, task, dossier, documents):
         doc_transporter = getUtility(ITaskDocumentsTransporter)
@@ -297,40 +298,35 @@ class CloseTaskView(grok.View):
     It is not context sensitive.
     """
 
-    grok.context(Interface)
-    grok.name('close-task-wizard_close')
+    grok.context(ITask)
+    grok.name('close-task-wizard-remote_close')
     grok.require('zope2.View')
 
+    transition = 'task-transition-open-tested-and-closed'
+
     def render(self):
-        task = self.get_task()
-        text = self.get_text()
+        text = self.request.get('text')
+        if self.is_already_done():
+            return ok_response(self.request)
 
-        transition = 'task-transition-open-tested-and-closed'
-        change_task_workflow_state(task, transition, text=text)
+        change_task_workflow_state(self.context, self.transition, text=text)
+        return ok_response(self.request)
 
-        redirect_url = self.request.get('redirect_url', None)
-        if redirect_url is None:
-            redirect_url = task.absolute_url()
+    def is_already_done(self):
+        """This method returns `True` if this exact request was already
+        executed.
+        This is the case when the sender client has a conflict error when
+        committing and the sender-request needs to be re-done. In this case
+        this view is called another time but the changes were already made
+        and committed - so we need to return "OK" and do nothing.
+        """
+        response_container = IResponseContainer(self.context)
+        if len(response_container) == 0:
+            return False
 
-        return self.request.RESPONSE.redirect(redirect_url)
+        last_response = response_container[-1]
+        if last_response.transition == self.transition and \
+           api.user.get_current().getId() == last_response.creator:
+            return True
 
-    def get_task(self):
-        intids = getUtility(IIntIds)
-        membership = getToolByName(self.context, 'portal_membership')
-        oguid = Oguid.parse(self.request.get('oguid'))
-
-        if get_current_admin_unit().id() != oguid.admin_unit_id:
-            raise NotFound
-
-        task = intids.getObject(oguid.int_id)
-        if not membership.checkPermission('Add portal content', task):
-            raise NotFound
-
-        return task
-
-    def get_text(self):
-        dm = getUtility(IWizardDataStorage)
-
-        oguid = self.request.get('oguid')
-        dmkey = 'close:%s' % oguid
-        return dm.get(dmkey, 'text')
+        return False
