@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2016-10-05 13:39+0000\n"
+"POT-Creation-Date: 2016-12-13 16:53+0000\n"
 "PO-Revision-Date: 2011-01-05 15:15+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -274,7 +274,7 @@ msgid "label_email2"
 msgstr "E-Mail 2"
 
 #. Default: "Fax"
-#: ./opengever/contact/ogdsuser.py:213
+#: ./opengever/contact/ogdsuser.py:217
 msgid "label_fax"
 msgstr "Fax"
 
@@ -284,6 +284,11 @@ msgstr "Fax"
 #: ./opengever/contact/contactfolder.py:103
 msgid "label_firstname"
 msgstr "Vorname"
+
+#. Default: "Former contact ID"
+#: ./opengever/contact/browser/byline.py:21
+msgid "label_former_contact_id"
+msgstr "Frühere Kontakt ID"
 
 #. Default: "Inactive"
 #: ./opengever/contact/browser/templates/organization.pt:102
@@ -314,7 +319,7 @@ msgid "label_mail"
 msgstr "Mail Addressen"
 
 #. Default: "Mobile"
-#: ./opengever/contact/ogdsuser.py:214
+#: ./opengever/contact/ogdsuser.py:218
 msgid "label_mobile"
 msgstr "Mobiltelefon"
 
@@ -330,7 +335,7 @@ msgid "label_no_participations"
 msgstr "Keine Beteiligungen"
 
 #. Default: "Office"
-#: ./opengever/contact/ogdsuser.py:212
+#: ./opengever/contact/ogdsuser.py:216
 msgid "label_office"
 msgstr "Büro"
 
@@ -465,4 +470,3 @@ msgstr "${amount} Treffer."
 #: ./opengever/contact/contact.py:44
 msgid "telefon"
 msgstr "Telefon"
-

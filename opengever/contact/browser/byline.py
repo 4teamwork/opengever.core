@@ -15,6 +15,12 @@ class ContactByline(BylineBase):
             {'class': 'active',
              'label': _('label_active', default='Active'),
              'content': self.active_label(),
+             'replace': False},
+
+            {'class': 'former_contact_id',
+             'label': _('label_former_contact_id',
+                        default='Former contact ID'),
+             'content': self.context.model.former_contact_id,
              'replace': False}
         ]
 

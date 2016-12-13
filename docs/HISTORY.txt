@@ -5,6 +5,9 @@ Changelog
 4.14.1 (unreleased)
 -------------------
 
+- Display former contact id in the byline of contacts.
+  [phgross]
+
 - Implement basic pipeline for OGGBundle import.
   [deiferni, lgraf]
 
