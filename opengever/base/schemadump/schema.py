@@ -327,8 +327,22 @@ class OGGBundleJSONSchemaBuilder(object):
 
         if portal_type == 'opengever.document.document':
             core_schema['properties']['filepath'] = {'type': 'string'}
+            core_schema['properties']['sequence_number'] = {
+                'type': 'integer',
+                'title': 'Laufnummer',
+                'description': u'Fortlaufend gez\xe4hlte Nummer eines '
+                               'Dokumentes.'
+            }
             core_schema['required'].extend(['title', 'filepath'])
             # XXX: Documents without files?
+
+        if portal_type == 'opengever.dossier.businesscasedossier':
+            core_schema['properties']['sequence_number'] = {
+                'type': 'integer',
+                'title': 'Laufnummer',
+                'description': u'Fortlaufend gez\xe4hlte Nummer eines '
+                               'Dossiers.'
+            }
 
         self._filter_fields(short_name, core_schema)
         self._make_optional_fields_nullable(core_schema)

@@ -144,15 +144,6 @@
                     "description": "",
                     "_zope_schema_type": "Text"
                 },
-                "digitally_available": {
-                    "type": [
-                        "null",
-                        "boolean"
-                    ],
-                    "title": "Digital verf\u00fcgbar",
-                    "description": "",
-                    "_zope_schema_type": "Bool"
-                },
                 "document_type": {
                     "type": [
                         "null",
@@ -192,6 +183,14 @@
                     "description": "",
                     "_zope_schema_type": "TextLine"
                 },
+                "sequence_number": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ],
+                    "description": "Fortlaufend gez\u00e4hlte Nummer eines Dokumentes.",
+                    "title": "Laufnummer"
+                },
                 "creators": {
                     "type": [
                         "null",
@@ -229,7 +228,6 @@
                 "delivery_date",
                 "document_type",
                 "document_author",
-                "digitally_available",
                 "preserved_as_paper",
                 "archival_file",
                 "archival_file_state"
