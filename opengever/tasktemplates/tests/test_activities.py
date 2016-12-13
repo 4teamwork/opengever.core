@@ -40,7 +40,7 @@ class TestTaskTemplateActivites(FunctionalTestCase):
         browser.click_on('Continue')
         browser.click_on('Trigger')
 
-        self.assertEquals(
+        self.assertItemsEqual(
             [u'Einladung zum Mitbericht versenden',
              u'Mitberichte zusammenfassen.',
              u'Endg\xfcltige Stellungnahme versenden'],
