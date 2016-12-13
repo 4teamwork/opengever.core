@@ -1,17 +1,40 @@
+from opengever.bundle.loader import BUNDLE_JSON_TYPES
 from opengever.bundle.loader import BundleLoader
 from opengever.bundle.tests.helpers import get_pt
 from opengever.bundle.tests.helpers import get_title
-from pkg_resources import resource_filename
+from pkg_resources import resource_filename as rf
 from unittest2 import TestCase
+import codecs
+import json
+import jsonschema
+import os
+
+
+def get_bundle_path(bundle_name):
+    return rf('opengever.bundle.tests', 'assets/%s' % bundle_name)
 
 
 class TestBundleLoader(TestCase):
 
-    def load_bundle(self):
-        bundle_path = resource_filename(
-            'opengever.bundle.tests', 'assets/basic.oggbundle')
+    def load_schemas(self):
+        schema_dir = rf('opengever.bundle', 'schemas/')
+        schemas = {}
+        filenames = os.listdir(schema_dir)
+        for schema_filename in filenames:
+            short_name = schema_filename.replace('.schema.json', '')
+            if '%s.json' % short_name in BUNDLE_JSON_TYPES:
+                schema_path = os.path.join(schema_dir, schema_filename)
 
-        bundle = BundleLoader(bundle_path)
+                with codecs.open(schema_path, 'r', 'utf-8-sig') as schema_file:
+                    schema = json.load(schema_file)
+                schemas['%s.json' % short_name] = schema
+        return schemas
+
+    def load_bundle(self, bundle_path=None):
+        if not bundle_path:
+            bundle_path = get_bundle_path('basic.oggbundle')
+        schemas = self.load_schemas()
+        bundle = BundleLoader(bundle_path, schemas)
         return list(bundle)
 
     def test_loads_correct_number_of_items(self):
@@ -45,3 +68,9 @@ class TestBundleLoader(TestCase):
             'opengever.document.document'],
             types
         )
+
+    def test_validates_schemas(self):
+        bundle_path = get_bundle_path('schema_violation.oggbundle')
+
+        with self.assertRaises(jsonschema.ValidationError):
+            self.load_bundle(bundle_path)
