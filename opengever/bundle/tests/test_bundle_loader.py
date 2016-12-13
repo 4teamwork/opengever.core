@@ -1,16 +1,20 @@
 from opengever.bundle.loader import BundleLoader
 from opengever.bundle.tests.helpers import get_pt
 from opengever.bundle.tests.helpers import get_title
-from pkg_resources import resource_filename
+from pkg_resources import resource_filename as rf
 from unittest2 import TestCase
+import jsonschema
+
+
+def get_bundle_path(bundle_name):
+    return rf('opengever.bundle.tests', 'assets/%s' % bundle_name)
 
 
 class TestBundleLoader(TestCase):
 
-    def load_bundle(self):
-        bundle_path = resource_filename(
-            'opengever.bundle.tests', 'assets/basic.oggbundle')
-
+    def load_bundle(self, bundle_path=None):
+        if not bundle_path:
+            bundle_path = get_bundle_path('basic.oggbundle')
         bundle = BundleLoader(bundle_path)
         return list(bundle)
 
@@ -43,3 +47,9 @@ class TestBundleLoader(TestCase):
             ('repositoryfolder', u'Personal'),
             ('repositoryroot', u'Ordnungssystem')],
             sorted([(get_pt(i), get_title(i)) for i in items]))
+
+    def test_validates_schemas(self):
+        bundle_path = get_bundle_path('schema_violation.oggbundle')
+
+        with self.assertRaises(jsonschema.ValidationError):
+            self.load_bundle(bundle_path)
