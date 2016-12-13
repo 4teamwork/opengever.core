@@ -309,6 +309,14 @@
                 },
                 "_permissions": {
                     "$ref": "#/definitions/permission"
+                },
+                "sequence_number": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ],
+                    "description": "Fortlaufend gez\u00e4hlte Nummer eines Dossiers.",
+                    "title": "Laufnummer"
                 }
             },
             "required": [

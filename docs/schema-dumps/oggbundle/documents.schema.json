@@ -183,6 +183,14 @@
                     "description": "",
                     "_zope_schema_type": "TextLine"
                 },
+                "sequence_number": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ],
+                    "description": "Fortlaufend gez\u00e4hlte Nummer eines Dokumentes.",
+                    "title": "Laufnummer"
+                },
                 "creators": {
                     "type": [
                         "null",
