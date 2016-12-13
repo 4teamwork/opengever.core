@@ -22,7 +22,7 @@ class TestFileLoader(FunctionalTestCase):
         self.transmogrifier.context = api.portal.get()
 
         self.bundle_path = resource_filename(
-            'opengever.setup.tests', 'assets/oggbundle')
+            'opengever.bundle.tests', 'assets/basic.oggbundle')
         IAnnotations(self.transmogrifier)[BUNDLE_PATH_KEY] = self.bundle_path
         IAnnotations(self.transmogrifier)[JSON_STATS_KEY] = {'errors': {}}
         options = {'blueprint': 'opengever.setup.fileloader'}

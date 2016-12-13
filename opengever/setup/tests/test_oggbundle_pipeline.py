@@ -29,7 +29,7 @@ class TestOggBundlePipeline(FunctionalTestCase):
 
         transmogrifier = Transmogrifier(api.portal.get())
         transmogrifier.bundle_path = resource_filename(
-            'opengever.setup.tests', 'assets/oggbundle')
+            'opengever.bundle.tests', 'assets/basic.oggbundle')
         transmogrifier(u'opengever.setup.oggbundle')
 
         # test content creation
