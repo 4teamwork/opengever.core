@@ -18,12 +18,12 @@ def import_oggbundle(app, args):
     stream_handler = logging.root.handlers[0]
     stream_handler.setLevel(logging.INFO)
 
-    bundle_dir = sys.argv[3]
-    log.info("Importing OGGBundle %s" % bundle_dir)
+    bundle_path = sys.argv[3]
+    log.info("Importing OGGBundle %s" % bundle_path)
 
     plone = setup_plone(get_first_plone_site(app))
     transmogrifier = Transmogrifier(plone)
-    transmogrifier.bundle_dir = bundle_dir
+    transmogrifier.bundle_path = bundle_path
     transmogrifier(u'opengever.setup.oggbundle')
 
     log.info("Committing transaction...")

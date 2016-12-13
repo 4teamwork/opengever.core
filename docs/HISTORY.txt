@@ -5,6 +5,9 @@ Changelog
 4.14.1 (unreleased)
 -------------------
 
+- Implement basic pipeline for OGGBundle import.
+  [deiferni, lgraf]
+
 - Improved and reworked closing mechanism of `for information`
   multi-adminunit tasks.
   [phgross]
@@ -58,9 +61,9 @@ Changelog
 - Add a wizard to add a dossier from a dossiertemplate.
   [elioschmutz]
 
--  Add entry point to run OGGBundle import from console via
-   bin/instance import <path_to_oggbundle>
-   [lgraf]
+- Add entry point to run OGGBundle import from console via
+  bin/instance import <path_to_oggbundle>
+  [lgraf]
 
 - Add folder-factory actions to add a dossier from a dossiertemplate in a repository-folder.
   [elioschmutz]
