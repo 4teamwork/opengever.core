@@ -14,6 +14,7 @@ from opengever.base.schemadump.helpers import mkdir_p
 from opengever.base.schemadump.helpers import translate_de
 from opengever.base.utils import pretty_json
 from os.path import join as pjoin
+from pkg_resources import resource_filename
 from plone import api
 from plone.dexterity.utils import iterSchemataForType
 from plone.supermodel.interfaces import FIELDSETS_KEY
@@ -401,7 +402,7 @@ class OGGBundleJSONSchemaDumpWriter(DirectoryHelperMixin):
     def dump(self):
         builder = OGGBundleJSONSchemaBuilder()
 
-        dump_dir = pjoin(self.schema_dumps_dir, 'oggbundle')
+        dump_dir = pjoin(resource_filename('opengever.bundle', 'schemas/'))
         mkdir_p(dump_dir)
 
         for portal_type, short_name in GEVER_TYPES_TO_OGGBUNDLE_TYPES.items():
