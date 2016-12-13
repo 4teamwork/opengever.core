@@ -15,7 +15,7 @@ GEVER_TYPES_TO_OGGBUNDLE_TYPES = {
     'opengever.document.document': 'document',
     'opengever.dossier.businesscasedossier': 'dossier',
     'opengever.repository.repositoryfolder': 'repofolder',
-    'opengever.repository.repositoryroot': 'reporoot'
+    'opengever.repository.repositoryroot': 'reporoot',
 }
 
 GEVER_SQL_TYPES = [
@@ -34,6 +34,10 @@ VOCAB_OVERRIDES = {
     'opengever.dossier.behaviors.dossier.IDossier': {
         'responsible': u'<G\xfcltige User-ID>',
     },
+    'opengever.task.task.ITask': {
+        'issuer': u'<G\xfcltige User-ID>',
+        'responsible': u'<G\xfcltige User-ID>',
+    },
 }
 
 DEFAULT_OVERRIDES = {
@@ -46,6 +50,9 @@ DEFAULT_OVERRIDES = {
     'opengever.repository.behaviors.referenceprefix.IReferenceNumberPrefix': {
         'reference_number_prefix':
             u'<H\xf6chste auf dieser Ebene vergebene Nummer + 1>',
+    },
+    'opengever.task.task.ITask': {
+        'deadline': u'<Aktuelles Datum>',
     },
 }
 
@@ -68,6 +75,7 @@ JSON_SCHEMA_FIELD_TYPES = {
     'Text':          {'type': 'string'},                     # noqa
     'Tuple':         {'type': 'array'},                      # noqa
     'Date':          {'type': 'string', 'format': 'date'},   # noqa
+    'Float':         {'type': 'number'},                     # noqa
     'Int':           {'type': 'integer'},                    # noqa
     'RelationList':  {'type': 'array'},                      # noqa
     'Bool':          {'type': 'boolean'},                    # noqa

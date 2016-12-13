@@ -7,6 +7,7 @@
         "academic_title": {
             "type": "string",
             "title": "academic_title",
+            "maxLength": 255,
             "description": "",
             "_zope_schema_type": "Text"
         },
@@ -19,18 +20,21 @@
         "firstname": {
             "type": "string",
             "title": "firstname",
+            "maxLength": 255,
             "description": "",
             "_zope_schema_type": "Text"
         },
         "contact_type": {
             "type": "string",
             "title": "contact_type",
+            "maxLength": 20,
             "description": "",
             "_zope_schema_type": "Text"
         },
         "lastname": {
             "type": "string",
             "title": "lastname",
+            "maxLength": 255,
             "description": "",
             "_zope_schema_type": "Text"
         },
@@ -50,6 +54,7 @@
         "salutation": {
             "type": "string",
             "title": "salutation",
+            "maxLength": 255,
             "description": "",
             "_zope_schema_type": "Text"
         },

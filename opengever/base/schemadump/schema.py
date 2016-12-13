@@ -260,6 +260,9 @@ class JSONSchemaBuilder(object):
         if field['type'] == 'Choice':
             js_property['type'] = field['value_type']
 
+        if field.get('max_length') is not None:
+            js_property['maxLength'] = field['max_length']
+
         js_property['title'] = field['title']
         js_property['description'] = field['description']
         js_property['_zope_schema_type'] = field['type']

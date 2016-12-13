@@ -7,12 +7,14 @@
         "function": {
             "type": "string",
             "title": "function",
+            "maxLength": 255,
             "description": "",
             "_zope_schema_type": "Text"
         },
         "department": {
             "type": "string",
             "title": "department",
+            "maxLength": 255,
             "description": "",
             "_zope_schema_type": "Text"
         },

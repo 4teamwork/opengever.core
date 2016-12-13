@@ -7,24 +7,28 @@
         "city": {
             "type": "string",
             "title": "city",
+            "maxLength": 255,
             "description": "",
             "_zope_schema_type": "Text"
         },
         "country": {
             "type": "string",
             "title": "country",
+            "maxLength": 255,
             "description": "",
             "_zope_schema_type": "Text"
         },
         "label": {
             "type": "string",
             "title": "label",
+            "maxLength": 255,
             "description": "",
             "_zope_schema_type": "Text"
         },
         "street": {
             "type": "string",
             "title": "street",
+            "maxLength": 255,
             "description": "",
             "_zope_schema_type": "Text"
         },
@@ -38,6 +42,7 @@
         "zip_code": {
             "type": "string",
             "title": "zip_code",
+            "maxLength": 16,
             "description": "",
             "_zope_schema_type": "Text"
         }

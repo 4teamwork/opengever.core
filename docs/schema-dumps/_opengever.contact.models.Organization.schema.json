@@ -13,6 +13,7 @@
         "contact_type": {
             "type": "string",
             "title": "contact_type",
+            "maxLength": 20,
             "description": "",
             "_zope_schema_type": "Text"
         },
@@ -39,6 +40,7 @@
         "name": {
             "type": "string",
             "title": "name",
+            "maxLength": 255,
             "description": "",
             "_zope_schema_type": "Text"
         }

@@ -13,6 +13,7 @@ from zope.component import ComponentLookupError
 from zope.component import getUtility
 from zope.component import queryMultiAdapter
 from zope.schema import Choice
+from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.interfaces import IVocabularyFactory
 import json
 import logging
@@ -122,6 +123,11 @@ class FieldDumper(object):
 
             elif field.vocabulary:
                 if IVocabularyFactory.providedBy(field.vocabulary):
+                    vf = field.vocabulary
+                # we (sometimes) use IContextSourceBinder independent of
+                # context - for fields where we don't we should define an
+                # override
+                elif IContextSourceBinder.providedBy(field.vocabulary):
                     vf = field.vocabulary
             elif field.vocabularyName:
                 try:
