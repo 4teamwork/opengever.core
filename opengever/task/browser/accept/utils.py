@@ -30,6 +30,9 @@ import transaction
 
 ACCEPT_TASK_TRANSITION = 'task-transition-open-in-progress'
 
+# default task type for successor tasks of a forwarding
+FORWARDING_SUCCESSOR_TYPE = u'information'
+
 
 def _copy_documents_from_forwarding(from_obj, to_obj):
     # set prevent copyname key on the request
@@ -117,12 +120,14 @@ def accept_forwarding_with_successor(
             value = ITask.get(fieldname).get(successor_forwarding)
             fielddata[fieldname] = value
 
+        # Predefine the task_type to avoid tasks with an invalid task_type
+        fielddata['task_type'] = FORWARDING_SUCCESSOR_TYPE
+
         # lets create a new task - the successor task
         task = createContentInContainer(
             dossier, 'opengever.task.task', **fielddata)
 
         # copy documents and map the intids
-
         intids_mapping = _copy_documents_from_forwarding(
             successor_forwarding, task)
 
@@ -191,6 +196,9 @@ def assign_forwarding_to_dossier(
 
     # Reset issuer to the current inbox
     fielddata['issuer'] = get_current_org_unit().inbox().id()
+
+    # Predefine the task_type to avoid tasks with an invalid task_type
+    fielddata['task_type'] = FORWARDING_SUCCESSOR_TYPE
 
     # lets create a new task - the successor task
     task = createContentInContainer(
