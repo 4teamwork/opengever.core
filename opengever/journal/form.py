@@ -1,4 +1,4 @@
-from opengever.base.source import RepositoryPathSourceBinder
+from opengever.base.source import DossierPathSourceBinder
 from opengever.journal import _
 from opengever.journal.entry import ManualJournalEntry
 from plone.directives import form
@@ -36,15 +36,14 @@ class IManualJournalEntry(form.Schema):
         missing_value=[],
         value_type=RelationChoice(
             title=u"Related",
-            source=RepositoryPathSourceBinder(
+            source=DossierPathSourceBinder(
                 portal_type=("opengever.document.document", "ftw.mail.mail"),
                 navigation_tree_query={
                     'object_provides':
-                    ['opengever.repository.repositoryroot.IRepositoryRoot',
-                     'opengever.repository.repositoryfolder.IRepositoryFolderSchema',
-                     'opengever.dossier.behaviors.dossier.IDossierMarker',
+                    ['opengever.dossier.behaviors.dossier.IDossierMarker',
                      'opengever.document.document.IDocumentSchema',
-                     'ftw.mail.mail.IMail', ]
+                     'opengever.task.task.ITask',
+                     'ftw.mail.mail.IMail']
                 }),
             ),
         required=False,
