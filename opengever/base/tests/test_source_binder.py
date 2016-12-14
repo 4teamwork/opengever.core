@@ -1,5 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.base.source import DossierPathSourceBinder
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.testing import FunctionalTestCase
 
@@ -32,3 +33,31 @@ class TestSourceBinder(FunctionalTestCase):
         self.assertEqual(
             5,
             len(query.catalog.searchResults(query.navigation_tree_query)))
+
+
+class TestDossierSourceBinder(FunctionalTestCase):
+
+    def test_only_objects_inside_the_maindossier_are_selectable(self):
+        dossier_1 = create(Builder('dossier'))
+        sub = create(Builder('dossier').within(dossier_1))
+        dossier_2 = create(Builder('dossier'))
+        create(Builder('document').titled(u'Test 1').within(dossier_1))
+        create(Builder('document').titled(u'Test 2').within(dossier_2))
+
+        source_binder = DossierPathSourceBinder(
+            portal_type=("opengever.document.document", "ftw.mail.mail"),
+            navigation_tree_query={
+                'object_provides':
+                ['opengever.dossier.behaviors.dossier.IDossierMarker',
+                 'opengever.document.document.IDocumentSchema',
+                 'opengever.task.task.ITask',
+                 'ftw.mail.mail.IMail']}
+        )
+
+        source = source_binder(dossier_1)
+        self.assertEqual(
+            ['Test 1'], [term.title for term in source.search('Test')])
+
+        source = source_binder(sub)
+        self.assertEqual(
+            ['Test 1'], [term.title for term in source.search('Test')])

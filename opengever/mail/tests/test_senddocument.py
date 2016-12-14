@@ -121,7 +121,7 @@ f\xc3\xbcr Ernst Franz\r\n\r\nBesten Dank im Voraus"""
     @browsing
     def test_send_empty_documents(self, browser):
         dossier = create(Builder("dossier"))
-        document = create(Builder("document"))
+        document = create(Builder("document").within(dossier))
 
         mail = self.send_documents(dossier, [document, ])
 
@@ -130,7 +130,9 @@ f\xc3\xbcr Ernst Franz\r\n\r\nBesten Dank im Voraus"""
     @browsing
     def test_send_documents_as_links(self, browser):
         dossier = create(Builder("dossier"))
-        document = create(Builder("document").with_dummy_content())
+        document = create(Builder("document")
+                          .within(dossier)
+                          .with_dummy_content())
 
         mail = self.send_documents(dossier, [document, ], as_links=True)
 
@@ -176,7 +178,9 @@ f\xc3\xbcr Ernst Franz\r\n\r\nBesten Dank im Voraus"""
     @browsing
     def test_sent_mail_gets_filed_in_dossier(self, browser):
         dossier = create(Builder("dossier"))
-        document = create(Builder("document").with_dummy_content())
+        document = create(Builder("document")
+                          .within(dossier)
+                          .with_dummy_content())
 
         self.send_documents(dossier, [document], file_copy_in_dossier=True)
 
