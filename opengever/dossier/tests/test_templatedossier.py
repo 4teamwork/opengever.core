@@ -301,7 +301,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
             person=peter, organization=organization, function=u'cheffe'))
 
         address1 = create(Builder('address')
-                          .for_contact(peter)
+                          .for_contact(organization)
                           .labeled(u'Home')
                           .having(street=u'Musterstrasse 283',
                                   zip_code=u'1234',
@@ -316,6 +316,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
         url = create(Builder('url')
                      .for_contact(organization)
                      .having(url=u'http://www.example.com'))
+        address_id = org_role.addresses[0].address_id
 
         with freeze(self.document_date):
             # submit first wizard step
@@ -325,7 +326,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
                           'Title': 'Test Docx'}).save()
             # submit second wizard step
             browser.fill(
-                {'form.widgets.address': str(address1.address_id),
+                {'form.widgets.address': address_id,
                  'form.widgets.mail_address': str(mailaddress.mailaddress_id),
                  'form.widgets.phonenumber': str(phonenumber.phone_number_id),
                  'form.widgets.url': str(url.url_id)}
@@ -333,12 +334,12 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
 
         document = self.dossier.listFolderContents()[0]
         self.assertEquals(u'test-docx.docx', document.file.filename)
-
         expected_org_role_properties = {
             'ogg.recipient.contact.title': u'M\xfcller Peter',
             'ogg.recipient.person.firstname': 'Peter',
             'ogg.recipient.person.lastname': u'M\xfcller',
             'ogg.recipient.orgrole.function': u'cheffe',
+            'ogg.recipient.organization.name': u'Meier AG',
             'ogg.recipient.address.street': u'Musterstrasse 283',
             'ogg.recipient.address.zip_code': '1234',
             'ogg.recipient.address.city': 'Hinterkappelen',

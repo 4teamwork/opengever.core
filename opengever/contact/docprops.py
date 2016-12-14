@@ -165,3 +165,21 @@ class URLDocPropertyProvider(PrefixableDocPropertyProvider):
                            self.url.url)
 
         return properties
+
+
+class OrgRoleAddressDocPropertyProvider(AddressDocPropertyProvider):
+    """Provides doc-properties for org role addresses."""
+
+    def __init__(self, address, organization, prefix):
+        super(OrgRoleAddressDocPropertyProvider, self).__init__(address,
+                                                                prefix)
+        self.organization = organization
+
+    def get_properties(self):
+        properties = super(
+            OrgRoleAddressDocPropertyProvider, self).get_properties()
+
+        self._add_property(properties, 'organization', 'name',
+                           self.organization.name)
+
+        return properties

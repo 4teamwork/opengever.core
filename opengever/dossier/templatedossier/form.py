@@ -328,7 +328,7 @@ class SelectAddressWizardStep(
             return
 
         dm = getUtility(IWizardDataStorage)
-        data .update(dm.get_data(get_dm_key(self.context)))
+        data.update(dm.get_data(get_dm_key(self.context)))
 
         return self.finish_document_creation(data)
 

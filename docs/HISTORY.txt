@@ -5,6 +5,9 @@ Changelog
 4.14.2 (unreleased)
 -------------------
 
+- Include organization name in org-role addresses.
+  [deiferni]
+
 - Show expired filter for managers and record managers only and hide it on
   subdossier listings.
   [phgross]
