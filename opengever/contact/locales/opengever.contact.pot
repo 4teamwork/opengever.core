@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-10-05 13:39+0000\n"
+"POT-Creation-Date: 2016-12-13 16:53+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -277,7 +277,7 @@ msgid "label_email2"
 msgstr ""
 
 #. Default: "Fax"
-#: ./opengever/contact/ogdsuser.py:213
+#: ./opengever/contact/ogdsuser.py:217
 msgid "label_fax"
 msgstr ""
 
@@ -286,6 +286,11 @@ msgstr ""
 #: ./opengever/contact/contact.py:82
 #: ./opengever/contact/contactfolder.py:103
 msgid "label_firstname"
+msgstr ""
+
+#. Default: "Former contact ID"
+#: ./opengever/contact/browser/byline.py:21
+msgid "label_former_contact_id"
 msgstr ""
 
 #. Default: "Inactive"
@@ -317,7 +322,7 @@ msgid "label_mail"
 msgstr ""
 
 #. Default: "Mobile"
-#: ./opengever/contact/ogdsuser.py:214
+#: ./opengever/contact/ogdsuser.py:218
 msgid "label_mobile"
 msgstr ""
 
@@ -333,7 +338,7 @@ msgid "label_no_participations"
 msgstr ""
 
 #. Default: "Office"
-#: ./opengever/contact/ogdsuser.py:212
+#: ./opengever/contact/ogdsuser.py:216
 msgid "label_office"
 msgstr ""
 

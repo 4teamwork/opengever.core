@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-10-05 13:39+0000\n"
+"POT-Creation-Date: 2016-12-13 16:53+0000\n"
 "PO-Revision-Date: 2016-09-20 21:24+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-contact/fr/>\n"
@@ -276,7 +276,7 @@ msgid "label_email2"
 msgstr "Email 2"
 
 #. Default: "Fax"
-#: ./opengever/contact/ogdsuser.py:213
+#: ./opengever/contact/ogdsuser.py:217
 msgid "label_fax"
 msgstr ""
 
@@ -286,6 +286,11 @@ msgstr ""
 #: ./opengever/contact/contactfolder.py:103
 msgid "label_firstname"
 msgstr "Prénom"
+
+#. Default: "Former contact ID"
+#: ./opengever/contact/browser/byline.py:21
+msgid "label_former_contact_id"
+msgstr ""
 
 #. Default: "Inactive"
 #: ./opengever/contact/browser/templates/organization.pt:102
@@ -316,7 +321,7 @@ msgid "label_mail"
 msgstr ""
 
 #. Default: "Mobile"
-#: ./opengever/contact/ogdsuser.py:214
+#: ./opengever/contact/ogdsuser.py:218
 msgid "label_mobile"
 msgstr ""
 
@@ -332,7 +337,7 @@ msgid "label_no_participations"
 msgstr ""
 
 #. Default: "Office"
-#: ./opengever/contact/ogdsuser.py:212
+#: ./opengever/contact/ogdsuser.py:216
 msgid "label_office"
 msgstr ""
 
