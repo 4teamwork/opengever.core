@@ -22,7 +22,7 @@ class TestContactByline(FunctionalTestCase):
             ['Sequence Number: 1'],
             browser.css('#plone-document-byline .sequenceNumber').text)
 
-        browser.login().open(self.contactfolder, view=organization.wrapper_id)
+        browser.open(self.contactfolder, view=organization.wrapper_id)
         self.assertEquals(
             ['Sequence Number: 2'],
             browser.css('#plone-document-byline .sequenceNumber').text)
@@ -44,15 +44,15 @@ class TestContactByline(FunctionalTestCase):
         self.assertEquals(['Active: Yes'],
                           browser.css('#plone-document-byline .active').text)
 
-        browser.login().open(self.contactfolder, view=person2.wrapper_id)
+        browser.open(self.contactfolder, view=person2.wrapper_id)
         self.assertEquals(['Active: No'],
                           browser.css('#plone-document-byline .active').text)
 
-        browser.login().open(self.contactfolder, view=organization1.wrapper_id)
+        browser.open(self.contactfolder, view=organization1.wrapper_id)
         self.assertEquals(['Active: Yes'],
                           browser.css('#plone-document-byline .active').text)
 
-        browser.login().open(self.contactfolder, view=organization2.wrapper_id)
+        browser.open(self.contactfolder, view=organization2.wrapper_id)
         self.assertEquals(['Active: No'],
                           browser.css('#plone-document-byline .active').text)
 
