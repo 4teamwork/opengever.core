@@ -133,3 +133,18 @@ class TestDossierListing(FunctionalTestCase):
         table = browser.css('.listing').first
         self.assertEquals(['Dossier B', 'Dossier C'],
                           [row.get('Title') for row in table.dicts()])
+
+    @browsing
+    def test_expired_filters_is_hidden_on_subdossier_listings(self, browser):
+        self.grant('Reader', 'Records Manager')
+        dossier = create(Builder('dossier')
+               .within(self.repository)
+               .titled(u'Dossier D')
+               .as_expired()
+               .in_state('dossier-state-archived'))
+        create(Builder('dossier').within(dossier))
+
+        browser.login().open(dossier, view='tabbedview_view-subdossiers')
+
+        self.assertEquals(['all', 'Active'],
+                          browser.css('.state_filters a').text)

@@ -289,6 +289,10 @@ class SubDossiers(Dossiers):
 
     search_options = {'is_subdossier': True}
 
+    @property
+    def filterlist(self):
+        return FilterList(self.all_filter, self.active_filter)
+
 
 class Tasks(GlobalTaskListingTab):
 
