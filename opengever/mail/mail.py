@@ -288,6 +288,11 @@ class OGMail(Mail, BaseDocumentMixin):
         normalized_subject = normalizer.normalize(self.title)
         self.message.filename = u'{}.eml'.format(normalized_subject)
 
+    def get_filename(self):
+        if not self.message:
+            return None
+        return self.message.filename
+
 
 class OGMailBase(metadata.MetadataBase):
     """Behavior that adds a title field.

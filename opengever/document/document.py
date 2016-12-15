@@ -257,6 +257,11 @@ class Document(Item, BaseDocumentMixin):
             filename=filename,
             contentType=content_type)
 
+    def get_filename(self):
+        if not self.file:
+            return None
+        return self.file.filename
+
     security.declareProtected(webdav_unlock_items, 'UNLOCK')
     def UNLOCK(self, REQUEST, RESPONSE):
         """Leave shadow state if a shadow-document is unlocked.

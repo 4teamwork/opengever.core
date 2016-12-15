@@ -5,6 +5,9 @@ Changelog
 4.14.1 (unreleased)
 -------------------
 
+- Add get_filename method to documents and mails.
+  [deiferni]
+
 - Adjustments for the dossiertemplates:
 
   - Protect dossiertemplate wizard with opengever.dossier: Add businesscasedossier permission.

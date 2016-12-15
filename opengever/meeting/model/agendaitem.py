@@ -154,8 +154,9 @@ class AgendaItem(Base):
         attachment_data = []
         for document in documents:
             attachment = {'title': document.title}
-            if document.file:
-                attachment['filename'] = document.file.filename
+            filename = document.get_filename()
+            if filename:
+                attachment['filename'] = filename
             attachment_data.append(attachment)
         data['attachments'] = attachment_data
 
