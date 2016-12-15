@@ -4,7 +4,12 @@ from jsonschema import validate
 from pkg_resources import resource_filename as rf
 import codecs
 import json
+import logging
 import os
+
+
+log = logging.getLogger(__name__)
+log.setLevel(logging.INFO)
 
 
 BUNDLE_JSON_TYPES = OrderedDict([
@@ -38,8 +43,12 @@ class BundleLoader(object):
         for json_name, portal_type in BUNDLE_JSON_TYPES.items():
             json_path = os.path.join(self.bundle_path, json_name)
 
-            with codecs.open(json_path, 'r', 'utf-8-sig') as json_file:
-                items = json.load(json_file)
+            try:
+                with codecs.open(json_path, 'r', 'utf-8-sig') as json_file:
+                    items = json.load(json_file)
+            except IOError as exc:
+                log.info('%s: %s, skipping' % (json_name, exc.strerror))
+                continue
 
             self.validate_schema(items, json_name)
             for item in items:

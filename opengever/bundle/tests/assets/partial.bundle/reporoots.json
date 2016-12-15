@@ -1,0 +1,28 @@
+[
+  {
+    "guid": "754daf80623f45659004a8c38c78dc3e",
+    "review_state": "repositoryroot-state-active",
+    "title_de": "Ordnungssystem",
+    "title_fr": "",
+    "valid_from": "2000-01-01",
+    "valid_until": "2099-12-31",
+    "version": "",
+    "_permissions": {
+      "read": [
+        "all_users"
+      ],
+      "add": [
+        "all_users"
+      ],
+      "edit": [
+        "all_users"
+      ],
+      "close": [
+        "all_users"
+      ],
+      "reactivate": [
+        "admin_users"
+      ]
+    }
+  }
+]

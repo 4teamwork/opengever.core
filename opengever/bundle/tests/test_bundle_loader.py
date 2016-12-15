@@ -53,3 +53,7 @@ class TestBundleLoader(TestCase):
 
         with self.assertRaises(jsonschema.ValidationError):
             self.load_bundle(bundle_path)
+
+    def test_skips_missing_files_gracefully(self):
+        bundle = self.load_bundle(get_bundle_path('partial.bundle'))
+        self.assertEqual(1, len(bundle))
