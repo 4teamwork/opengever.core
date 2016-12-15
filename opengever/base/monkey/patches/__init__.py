@@ -1,3 +1,4 @@
+from .cmf_catalog_aware import PatchCMFCatalogAware
 from .create_mail_defaults import PatchCreateMailInContainer
 from .default_values import PatchBuilderCreate
 from .default_values import PatchDexterityContentGetattr
@@ -36,3 +37,4 @@ PatchTransmogrifyDXSchemaUpdater()()
 PatchWebDAVLockTimeout()()
 PatchZ2LogTimezone()()
 PatchZ3CFormChangedField()()
+PatchCMFCatalogAware()()
