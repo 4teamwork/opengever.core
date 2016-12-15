@@ -61,13 +61,6 @@ class TestProposal(FunctionalTestCase):
         self.assertIsNotNone(model)
         self.assertEqual(Oguid.for_object(proposal), model.oguid)
 
-    def search_for_document(self, browser, document):
-        """Relation-widget, search for one document."""
-
-        title = document.Title()
-        browser.fill(
-            {'form.widgets.relatedItems.widgets.query': title}).submit()
-
     @browsing
     def test_dossier_title_is_default_value_for_proposal_title(self, browser):
         browser.login()
@@ -85,11 +78,9 @@ class TestProposal(FunctionalTestCase):
         browser.login()
         browser.open(self.dossier, view='++add++opengever.meeting.proposal')
 
-        self.search_for_document(browser, document)
         browser.fill({
             'Title': u'A pr\xf6posal',
             'Committee': str(committee.committee_id),
-            'form.widgets.relatedItems:list': True,
             'Legal basis': u'<div>possible</div>',
             'Initial position': u'<div>My pr\xf6posal</div>',
             'Proposed action': u'<div>Lorem ips\xfcm</div>',
@@ -97,6 +88,7 @@ class TestProposal(FunctionalTestCase):
             'Publish in': u'<div>B\xe4rner Zeitung</div>',
             'Disclose to': u'<div>Hansj\xf6rg</div>',
             'Copy for attention': u'<div>   &nbsp; \n  &nbsp;</div>',
+            'Attachments': [document],
         })
         browser.css('#form-buttons-save').first.click()
         self.assertIn('Item created',
@@ -139,8 +131,6 @@ class TestProposal(FunctionalTestCase):
         form = browser.css('#content-core form').first
         self.assertEqual(u'My Proposal', form.find_field('Title').value)
 
-        self.search_for_document(browser, document)
-
         browser.fill({
             'Title': u'A pr\xf6posal',
             'Legal basis': u'<div>not possible</div>',
@@ -150,7 +140,7 @@ class TestProposal(FunctionalTestCase):
             'Publish in': u'<div>B\xe4rner Zeitung</div>',
             'Disclose to': u'<div>Hansj\xf6rg</div>',
             'Copy for attention': u'<div>P\xe4tra</div>',
-            'form.widgets.relatedItems:list': True,
+            'Attachments': [document],
             })
 
         browser.css('#form-buttons-save').first.click()
@@ -389,14 +379,13 @@ class TestProposal(FunctionalTestCase):
 
         browser.login()
         browser.open(self.dossier, view='++add++opengever.meeting.proposal')
-        self.search_for_document(browser, document)
         browser.fill({
             'Title': u'A pr\xf6posal',
             'Legal basis': u'possible',
             'Initial position': u'My pr\xf6posal',
             'Proposed action': u'Lorem ips\xfcm',
             'Committee': str(committee.committee_id),
-            'form.widgets.relatedItems:list': True,
+            'Attachments': [document],
         })
         browser.find('Save').click()
 
@@ -414,14 +403,13 @@ class TestProposal(FunctionalTestCase):
 
         browser.login()
         browser.open(subdossier, view='++add++opengever.meeting.proposal')
-        self.search_for_document(browser, document)
         browser.fill({
             'Title': u'A pr\xf6posal',
             'Legal basis': u'possible',
             'Initial position': u'My pr\xf6posal',
             'Proposed action': u'Lorem ips\xfcm',
             'Committee': str(committee.committee_id),
-            'form.widgets.relatedItems:list': True,
+            'Attachments': [document],
         })
         browser.find('Save').click()
 
