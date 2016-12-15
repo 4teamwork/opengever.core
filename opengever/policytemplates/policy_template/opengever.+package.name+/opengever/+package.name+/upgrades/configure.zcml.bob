@@ -12,7 +12,7 @@
         />
 
     <!-- Do not add more upgrade steps here.
-         use ./bin/create-upgrade opengever.{{{package.name}}} "Upgrade description"
+         use ./bin/upgrade create "Upgrade description"
          /-->
 
 </configure>
