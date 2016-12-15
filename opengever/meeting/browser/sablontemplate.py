@@ -30,6 +30,9 @@ SAMPLE_MEETING_DATA = {
             "filename": u"beweisaufna-hme.txt"
             }, {
             "title": "Strafbefehl"
+            }, {
+            "title": u"L\xf6rem",
+            "filename": u"lorem.eml"
         }]
     }, {
         'description': u'R\xfccktritt Hans Muster',

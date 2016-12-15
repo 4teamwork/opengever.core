@@ -70,6 +70,16 @@ class TestDocument(FunctionalTestCase):
         field.set(document, file)
         self.assertTrue(field.get(document).data == 'bla bla')
 
+    def test_filename_getter_returns_filename_if_file_is_available(self):
+        document = create(Builder('document')
+                          .titled('Foo')
+                          .attach_file_containing('foo', name=u'foo.txt'))
+        self.assertEqual(u'foo.txt', document.get_filename())
+
+    def test_filename_getter_return_none_if_no_file_is_available(self):
+        document = create(Builder('document'))
+        self.assertIsNone(document.get_filename())
+
     def test_document_with_file_is_digitally_available(self):
         document_with_file = create(Builder("document").with_dummy_content())
         self.assertTrue(document_with_file.digitally_available)

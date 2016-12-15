@@ -26,6 +26,9 @@ class TestProtocolJsonData(FunctionalTestCase):
         self.doc2 = create(Builder("document")
                            .titled("Strafbefehl")
                            .within(self.dossier))
+        self.mail1 = create(Builder("mail")
+                            .titled(u"L\xf6rem")
+                            .with_message("lorem", filename=u"lorem.eml"))
 
         self.proposal = create(
             Builder('proposal_model')
@@ -40,7 +43,7 @@ class TestProtocolJsonData(FunctionalTestCase):
                     disclose_to=u'<div>Jans\xf6rg</div>',
                     decision_draft=u'<div>Der Gemeinderat erstattet Strafanzeige gegen Unbekannt und informiert zudem den Vermieter (Herr. Meier).</div>',
                     publish_in=u'<div>Tagblatt</div>',)
-            .with_submitted_documents(self.doc1, self.doc2))
+            .with_submitted_documents(self.doc1, self.doc2, self.mail1))
         self.committee = create(Builder('committee_model')
                                 .having(title=u'Gemeinderat'))
         self.member_peter = create(Builder('member'))

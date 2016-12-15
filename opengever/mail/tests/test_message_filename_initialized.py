@@ -11,7 +11,12 @@ class TestMessageFilenameInitialized(FunctionalTestCase):
 
     def test_message_filename_initialized_with_builder(self):
         mail = create(Builder("mail").with_message(MAIL_DATA))
+        self.assertEquals('die-burgschaft.eml', mail.get_filename())
         self.assertEquals('die-burgschaft.eml', mail.message.filename)
+
+    def test_filename_is_none_when_no_file_is_present(self):
+        mail = create(Builder("mail"))
+        self.assertIsNone(mail.get_filename())
 
     def test_message_filename_initialized_with_quickupload(self):
         dossier = create(Builder("dossier"))

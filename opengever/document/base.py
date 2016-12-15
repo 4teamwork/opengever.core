@@ -61,3 +61,6 @@ class BaseDocumentMixin(object):
 
     def get_current_version(self):
         raise NotImplementedError
+
+    def get_filename(self):
+        raise NotImplementedError
