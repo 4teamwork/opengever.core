@@ -14,6 +14,7 @@
         <type type_id="opengever.dossier.templatedossier">
             <bound-workflow workflow_id="opengever_templatedossier_workflow"/>
         </type>
+        <type type_id="opengever.dossier.dossiertemplate"/>
     </bindings>
 
 </object>
