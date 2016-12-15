@@ -5,8 +5,8 @@ from mimetypes import guess_type
 from opengever.document.document import IDocumentSchema
 from opengever.document.subscribers import set_digitally_available
 from opengever.document.subscribers import sync_title_and_filename_handler
-from opengever.setup.sections.jsonsource import BUNDLE_PATH_KEY
-from opengever.setup.sections.jsonsource import JSON_STATS_KEY
+from opengever.setup.sections.bundlesource import BUNDLE_PATH_KEY
+from opengever.setup.sections.bundlesource import JSON_STATS_KEY
 from zope.annotation.interfaces import IAnnotations
 from zope.interface import classProvides
 from zope.interface import implements

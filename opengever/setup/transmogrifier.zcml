@@ -83,8 +83,8 @@
     />
 
   <utility
-    component=".sections.jsonsource.JSONSourceSection"
-    name="opengever.setup.jsonsource"
+    component=".sections.bundlesource.BundleSourceSection"
+    name="opengever.setup.bundlesource"
     />
 
   <utility

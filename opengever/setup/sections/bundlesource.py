@@ -7,7 +7,7 @@ from zope.interface import implements
 import logging
 
 
-logger = logging.getLogger('opengever.setup.jsonsource')
+logger = logging.getLogger('opengever.setup.bundlesource')
 logger.setLevel(logging.INFO)
 
 
@@ -15,7 +15,7 @@ BUNDLE_PATH_KEY = 'opengever.setup.bundle_path'
 JSON_STATS_KEY = 'opengever.setup.json_stats'
 
 
-class JSONSourceSection(object):
+class BundleSourceSection(object):
     """Injects items from an OGGBundle into the pipeline.
     """
 
