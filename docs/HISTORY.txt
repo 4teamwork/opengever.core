@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.14.1 (unreleased)
+4.14.1 (2016-12-15)
 -------------------
 
 - Add get_filename method to documents and mails.
