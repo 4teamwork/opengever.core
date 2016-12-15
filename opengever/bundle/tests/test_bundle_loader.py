@@ -43,15 +43,17 @@ class TestBundleLoader(TestCase):
 
     def test_loads_items_in_correct_order(self):
         items = self.load_bundle()
-        self.assertEqual(
-            [('repositoryroot', u'Ordnungssystem'),
-             ('repositoryfolder', u'Personal'),
-             ('repositoryfolder', u'Organigramm, Prozesse'),
-             ('repositoryfolder', u'Organisation'),
-             ('businesscasedossier', u'Dossier Vreni Meier'),
-             ('businesscasedossier', u'Hanspeter M\xfcller'),
-             ('document', u'Bewerbung Hanspeter M\xfcller'),
-             ('document', u'Entlassung Hanspeter M\xfcller')],
+        # TODO: A "correct order" at this point is any order that satisfies
+        # the "parents before children" constraint.
+        self.assertEqual([
+            ('repositoryroot', u'Ordnungssystem'),
+            ('repositoryfolder', u'Organisation'),
+            ('repositoryfolder', u'Personal'),
+            ('businesscasedossier', u'Dossier Vreni Meier'),
+            ('businesscasedossier', u'Hanspeter M\xfcller'),
+            ('document', u'Bewerbung Hanspeter M\xfcller'),
+            ('document', u'Entlassung Hanspeter M\xfcller'),
+            ('repositoryfolder', u'Organigramm, Prozesse')],
             [(get_pt(i), get_title(i)) for i in items])
 
     def test_inserts_portal_type(self):
