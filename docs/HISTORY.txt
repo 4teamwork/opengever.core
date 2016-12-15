@@ -5,6 +5,9 @@ Changelog
 4.14.2 (unreleased)
 -------------------
 
+- Show expired filter for managers and record managers only.
+  [phgross]
+
 - Use the DeactivatedCatalogIndexing contextmanager while generating dossiers from
   a dossiertemplate to improve the performance.
   [elioschmutz]

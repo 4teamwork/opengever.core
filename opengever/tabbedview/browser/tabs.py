@@ -27,6 +27,7 @@ from opengever.tabbedview.helper import readable_ogds_author
 from opengever.tabbedview.helper import readable_ogds_user
 from opengever.tabbedview.helper import workflow_state
 from opengever.tabbedview.interfaces import ITabbedViewProxy
+from plone import api
 from plone.dexterity.interfaces import IDexterityContainer
 from Products.Five.browser.pagetemplatefile import BoundPageTemplate
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
@@ -209,24 +210,6 @@ class Dossiers(BaseCatalogListingTab):
 
     template = ViewPageTemplateFile("generic_with_filters.pt")
 
-    filterlist_name = 'dossier_state_filter'
-    filterlist_available = True
-
-    filterlist = FilterList(
-        Filter('filter_all', _('all')),
-        CatalogQueryFilter(
-            'filter_active',
-            _('Active'),
-            default=True,
-            query_extension={'review_state': DOSSIER_STATES_OPEN}),
-        CatalogQueryFilter(
-            'filter_retention_expired',
-            _('expired'),
-            query_extension={
-                'review_state': DOSSIER_STATES_CLOSED,
-                'retention_expiration': {'query': date.today(), 'range': 'max'}})
-    )
-
     object_provides = 'opengever.dossier.behaviors.dossier.IDossierMarker'
 
     columns = (
@@ -274,6 +257,28 @@ class Dossiers(BaseCatalogListingTab):
                        ]
 
     major_actions = ['change_state', ]
+
+    all_filter = Filter('filter_all', _('all'))
+    active_filter = CatalogQueryFilter(
+        'filter_active', _('Active'), default=True,
+        query_extension={'review_state': DOSSIER_STATES_OPEN})
+    expired_filter = CatalogQueryFilter(
+        'filter_retention_expired', _('expired'),
+        query_extension={'review_state': DOSSIER_STATES_CLOSED,
+                         'retention_expiration': {'query': date.today(),
+                                                  'range': 'max'}})
+
+    filterlist_name = 'dossier_state_filter'
+    filterlist_available = True
+
+    @property
+    def filterlist(self):
+        filters = [self.all_filter, self.active_filter]
+
+        if api.user.has_permission('opengever.disposition: Add disposition'):
+            filters.append(self.expired_filter)
+
+        return FilterList(*filters)
 
 
 class SubDossiers(Dossiers):
