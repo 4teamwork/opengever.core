@@ -1,6 +1,8 @@
 from collective.transmogrifier.transmogrifier import Transmogrifier
 from opengever.core.debughelpers import get_first_plone_site
 from opengever.core.debughelpers import setup_plone
+from opengever.setup.sections.bundlesource import BUNDLE_PATH_KEY
+from zope.annotation import IAnnotations
 import logging
 import sys
 import transaction
@@ -23,7 +25,7 @@ def import_oggbundle(app, args):
 
     plone = setup_plone(get_first_plone_site(app))
     transmogrifier = Transmogrifier(plone)
-    transmogrifier.bundle_path = bundle_path
+    IAnnotations(transmogrifier)[BUNDLE_PATH_KEY] = bundle_path
     transmogrifier(u'opengever.setup.oggbundle')
 
     log.info("Committing transaction...")
