@@ -6,9 +6,11 @@ from opengever.base.behaviors.classification import IClassification
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.repository.behaviors.referenceprefix import IReferenceNumberPrefix
+from opengever.setup.sections.bundlesource import BUNDLE_PATH_KEY
 from opengever.testing import FunctionalTestCase
 from pkg_resources import resource_filename
 from plone import api
+from zope.annotation import IAnnotations
 
 
 class TestOggBundlePipeline(FunctionalTestCase):
@@ -28,7 +30,7 @@ class TestOggBundlePipeline(FunctionalTestCase):
             Builder('fixture').with_all_unit_setup())
 
         transmogrifier = Transmogrifier(api.portal.get())
-        transmogrifier.bundle_path = resource_filename(
+        IAnnotations(transmogrifier)[BUNDLE_PATH_KEY] = resource_filename(
             'opengever.bundle.tests', 'assets/basic.oggbundle')
         transmogrifier(u'opengever.setup.oggbundle')
 

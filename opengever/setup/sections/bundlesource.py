@@ -26,18 +26,17 @@ class BundleSourceSection(object):
         self.previous = previous
         self.transmogrifier = transmogrifier
 
-        if hasattr(transmogrifier, 'bundle_path'):
-            self.bundle_path = transmogrifier.bundle_path
-        else:
-            self.bundle_path = options.get('bundle_path')
-
-        # Store the bundle path in global annotations on the
-        # transmogrifier object for use by later sections
-        IAnnotations(transmogrifier)[BUNDLE_PATH_KEY] = self.bundle_path
-
         IAnnotations(transmogrifier)[JSON_STATS_KEY] = {'errors': {}}
 
-        self.bundle = BundleLoader(self.bundle_path)
+        bundle_path = IAnnotations(transmogrifier).get(BUNDLE_PATH_KEY)
+        if not bundle_path:
+            raise Exception(
+                "No bundle_path specified. Please pass the bundle_path in "
+                "annotations on the transmogrifier object, for example: "
+                "IAnnotations(transmogrifier)[BUNDLE_PATH_KEY] = "
+                "'/path/to/bundle'")
+
+        self.bundle = BundleLoader(bundle_path)
 
     def __iter__(self):
         return iter(self.bundle)
