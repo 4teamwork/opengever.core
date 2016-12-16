@@ -20,7 +20,7 @@ class TestBundleLoader(TestCase):
 
     def test_loads_correct_number_of_items(self):
         items = self.load_bundle()
-        self.assertEqual(8, len(items))
+        self.assertEqual(9, len(items))
 
     def test_loads_items_in_correct_order(self):
         items = self.load_bundle()
@@ -32,7 +32,8 @@ class TestBundleLoader(TestCase):
              ('businesscasedossier', u'Dossier Vreni Meier'),
              ('businesscasedossier', u'Hanspeter M\xfcller'),
              ('document', u'Bewerbung Hanspeter M\xfcller'),
-             ('document', u'Entlassung Hanspeter M\xfcller')],
+             ('document', u'Entlassung Hanspeter M\xfcller'),
+             ('mail', u'Ein Mail')],
             [(get_portal_type(i), get_title(i)) for i in items])
 
     def test_inserts_portal_type(self):
@@ -42,6 +43,7 @@ class TestBundleLoader(TestCase):
             ('businesscasedossier', u'Hanspeter M\xfcller'),
             ('document', u'Bewerbung Hanspeter M\xfcller'),
             ('document', u'Entlassung Hanspeter M\xfcller'),
+            ('mail', u'Ein Mail'),
             ('repositoryfolder', u'Organigramm, Prozesse'),
             ('repositoryfolder', u'Organisation'),
             ('repositoryfolder', u'Personal'),
