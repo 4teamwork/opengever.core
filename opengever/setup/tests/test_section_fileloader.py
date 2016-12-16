@@ -2,9 +2,9 @@ from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.setup.sections.bundlesource import BUNDLE_PATH_KEY
+from opengever.setup.sections.bundlesource import JSON_STATS_KEY
 from opengever.setup.sections.fileloader import FileLoaderSection
-from opengever.setup.sections.jsonsource import BUNDLE_PATH_KEY
-from opengever.setup.sections.jsonsource import JSON_STATS_KEY
 from opengever.setup.tests import MockTransmogrifier
 from opengever.testing import FunctionalTestCase
 from pkg_resources import resource_filename
@@ -22,7 +22,7 @@ class TestFileLoader(FunctionalTestCase):
         self.transmogrifier.context = api.portal.get()
 
         self.bundle_path = resource_filename(
-            'opengever.setup.tests', 'assets/oggbundle')
+            'opengever.bundle.tests', 'assets/basic.oggbundle')
         IAnnotations(self.transmogrifier)[BUNDLE_PATH_KEY] = self.bundle_path
         IAnnotations(self.transmogrifier)[JSON_STATS_KEY] = {'errors': {}}
         options = {'blueprint': 'opengever.setup.fileloader'}
