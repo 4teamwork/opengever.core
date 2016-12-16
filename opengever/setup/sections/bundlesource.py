@@ -11,6 +11,7 @@ logger = logging.getLogger('opengever.setup.bundlesource')
 logger.setLevel(logging.INFO)
 
 
+BUNDLE_KEY = 'opengever.setup.bundle'
 BUNDLE_PATH_KEY = 'opengever.setup.bundle_path'
 JSON_STATS_KEY = 'opengever.setup.json_stats'
 
@@ -37,6 +38,9 @@ class BundleSourceSection(object):
                 "'/path/to/bundle'")
 
         self.bundle = BundleLoader(bundle_path)
+
+        # Store a reference to the bundle for later sections to use
+        IAnnotations(transmogrifier)[BUNDLE_KEY] = self.bundle
 
     def __iter__(self):
         return iter(self.bundle)

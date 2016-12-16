@@ -88,11 +88,6 @@
     />
 
   <utility
-    component=".sections.resolveguid.ResolveGUIDSection"
-    name="opengever.setup.resolveguid"
-    />
-
-  <utility
     component=".sections.constructor.ConstructorSection"
     name="opengever.setup.constructor"
     />

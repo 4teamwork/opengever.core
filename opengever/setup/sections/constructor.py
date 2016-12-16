@@ -2,8 +2,10 @@ from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.base.behaviors.translated_title import TRANSLATED_TITLE_NAMES
+from opengever.setup.sections.bundlesource import BUNDLE_KEY
 from plone import api
 from plone.dexterity.utils import createContentInContainer
+from zope.annotation import IAnnotations
 from zope.interface import classProvides
 from zope.interface import implements
 import logging
@@ -23,7 +25,7 @@ class ConstructorSection(object):
     def __init__(self, transmogrifier, name, options, previous):
         self.previous = previous
         self.transmogrifier = transmogrifier
-        self.item_by_guid = self.transmogrifier.item_by_guid
+        self.bundle = IAnnotations(transmogrifier)[BUNDLE_KEY]
 
         self.site = api.portal.get()
         self.ttool = api.portal.get_tool(u'portal_types')
@@ -37,7 +39,7 @@ class ConstructorSection(object):
 
             parent_guid = item.get(u'parent_guid')
             if parent_guid:
-                context = self.item_by_guid[parent_guid][u'_object']
+                context = self.bundle.item_by_guid[parent_guid][u'_object']
             else:
                 context = self.site
 

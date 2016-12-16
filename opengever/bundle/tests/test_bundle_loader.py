@@ -26,14 +26,14 @@ class TestBundleLoader(TestCase):
         items = self.load_bundle()
         self.assertEqual(
             [('repositoryroot', u'Ordnungssystem'),
-             ('repositoryfolder', u'Personal'),
-             ('repositoryfolder', u'Organigramm, Prozesse'),
              ('repositoryfolder', u'Organisation'),
+             ('repositoryfolder', u'Personal'),
              ('businesscasedossier', u'Dossier Vreni Meier'),
              ('businesscasedossier', u'Hanspeter M\xfcller'),
              ('document', u'Bewerbung Hanspeter M\xfcller'),
              ('document', u'Entlassung Hanspeter M\xfcller'),
-             ('mail', u'Ein Mail')],
+             ('mail', u'Ein Mail'),
+             ('repositoryfolder', u'Organigramm, Prozesse')],
             [(get_portal_type(i), get_title(i)) for i in items])
 
     def test_inserts_portal_type(self):

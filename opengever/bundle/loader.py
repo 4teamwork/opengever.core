@@ -1,6 +1,9 @@
 from collections import OrderedDict
 from jsonschema import FormatChecker
 from jsonschema import validate
+from opengever.bundle.exceptions import DuplicateGUID
+from opengever.bundle.exceptions import MissingGUID
+from opengever.bundle.exceptions import MissingParent
 from pkg_resources import resource_filename as rf
 import codecs
 import json
@@ -37,6 +40,13 @@ class BundleLoader(object):
         self.json_schemas = self.load_schemas()
 
         self.load_items()
+        self.resolve_guids()
+
+    def resolve_guids(self):
+        resolver = GUIDResolver(self.items)
+        self.tree = resolver.tree
+        self.item_by_guid = resolver.item_by_guid
+        self.items = list(resolver)
 
     def load_items(self):
         self.items = []
@@ -89,3 +99,74 @@ class BundleLoader(object):
         """Yield all items of the bundle in order.
         """
         return iter(self.items)
+
+
+class GUIDResolver(object):
+    """Resolve and validate GUIDs.
+
+    Each item must define a globally unique identifier (GUID) wich is used as
+    identifier while importing an oggbundle. The format of this id can be
+    chosen freely.
+
+    Yield items in an order that guarantees that parents are always positioned
+    before their children. This is achieved by building a temporary tree, then
+    re-yielding the children in pre-order.
+
+    This section also validates that:
+        - each item has a guid
+        - each guid is unique
+        - parent pointers are valid, should they exist
+
+    """
+
+    def __init__(self, items):
+        self.item_by_guid = OrderedDict()
+
+        self.register_items(items)
+        self.tree = self.build_tree()
+
+    def __iter__(self):
+        for node in self.visit_in_pre_order(self.tree):
+            yield node
+
+    def register_items(self, items):
+        """Register all items by their guid."""
+        for item in items:
+            if 'guid' not in item:
+                raise MissingGUID(item)
+
+            guid = item['guid']
+            if guid in self.item_by_guid:
+                raise DuplicateGUID(guid)
+
+            self.item_by_guid[guid] = item
+
+    def build_tree(self):
+        """Build a tree from the flat list of items.
+
+        Register all items with their parents.
+        """
+        roots = []
+        for item in self.item_by_guid.values():
+            parent_guid = item.get('parent_guid')
+            if parent_guid:
+                parent = self.item_by_guid.get(parent_guid)
+                if not parent:
+                    raise MissingParent(parent_guid)
+                children = parent.setdefault('_bundle_children', [])
+                children.append(item)
+            else:
+                roots.append(item)
+        return roots
+
+    def visit_in_pre_order(self, items):
+        """Visit list of items depth first, always yield parent before its
+        children.
+
+        """
+        for item in items:
+            children = item.pop('_bundle_children', [])
+            yield item
+
+            for child in self.visit_in_pre_order(children):
+                yield child
