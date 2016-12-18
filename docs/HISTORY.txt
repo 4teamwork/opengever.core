@@ -4,6 +4,8 @@ Changelog
 
 2017.4.1 (unreleased)
 ---------------------
+
+- Ungrok opengever.advancedsearch. [phgross]
 - Handle unknown asynchronous tooltip response. [Kevin Bieri]
 - Update ftw.keyowordwidget to 1.3.3, to fix a problem while select/search new keywords. [mathias.leimgruber]
 - Upgrade ftw.zopemaster which uses the new ftw.slacker for slack notifications. [elioschmutz]
