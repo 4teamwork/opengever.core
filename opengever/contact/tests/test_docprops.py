@@ -1,5 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.contact.models.org_role import OrgRoleAddress
 from opengever.contact.ogdsuser import OgdsUserToContactAdapter
 from opengever.dossier.tests import OGDS_USER_ATTRIBUTES
 from opengever.testing import FunctionalTestCase
@@ -116,6 +117,41 @@ class TestContactDocPropertyProvider(FunctionalTestCase):
             'ogg.recipient.address.street': u'Musterstrasse 283',
             'ogg.recipient.address.zip_code': '1234',
             'ogg.recipient.address.city': 'Hinterkappelen',
+            'ogg.recipient.address.country': 'Schweiz',
+        }
+        self.assertItemsEqual(expected_address_properties,
+                              provider.get_properties())
+
+    def test_org_role_address_doc_propety_provider(self):
+        peter = create(Builder('person')
+                       .having(firstname=u'Peter',
+                               lastname=u'M\xfcller',
+                               salutation='Herr',
+                               academic_title='Prof. Dr.',
+                               description='blablabla'))
+        organization = create(Builder('organization').having(name=u'Foo'))
+        address = create(Builder('address')
+                         .for_contact(organization)
+                         .labeled(u'Main')
+                         .having(street=u'Musterstrasse 1234',
+                                 zip_code=u'7335',
+                                 city=u'Obermumpf',
+                                 country=u'Schweiz'))
+        org_role = create(Builder('org_role')
+                          .having(organization=organization,
+                                  person=peter,
+                                  function=u'M\xe4dchen f\xfcr alles',
+                                  description=u'blub',
+                                  department=u'Informatik'))
+
+        org_role_address = org_role.addresses[0]
+        provider = org_role_address.get_doc_property_provider(
+            prefix='recipient')
+        expected_address_properties = {
+            'ogg.recipient.organization.name': u'Foo',
+            'ogg.recipient.address.street': u'Musterstrasse 1234',
+            'ogg.recipient.address.zip_code': '7335',
+            'ogg.recipient.address.city': 'Obermumpf',
             'ogg.recipient.address.country': 'Schweiz',
         }
         self.assertItemsEqual(expected_address_properties,
