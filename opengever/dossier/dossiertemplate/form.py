@@ -4,10 +4,12 @@ from ftw.table import helper
 from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.form import WizzardWrappedAddForm
+from opengever.base.monkey.patches.cmf_catalog_aware import DeactivatedCatalogIndexing
 from opengever.base.oguid import Oguid
 from opengever.base.schema import TableChoice
 from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.command import CreateDocumentFromTemplateCommand
 from opengever.dossier.command import CreateDossierFromTemplateCommand
 from opengever.dossier.dossiertemplate import is_dossier_template_feature_enabled
@@ -19,6 +21,7 @@ from plone import api
 from plone.autoform.form import AutoExtensibleForm
 from plone.dexterity.i18n import MessageFactory as pd_mf
 from plone.dexterity.i18n import MessageFactory as PDMF
+from plone.dexterity.interfaces import IDexterityContainer
 from plone.directives import form
 from plone.z3cform.layout import FormWrapper
 from z3c.form import button
@@ -211,11 +214,24 @@ class AddDossierFromTemplateWizardStep(WizzardWrappedAddForm):
                     self.status = self.formErrorsMessage
                     return
 
-                obj = self.createAndAdd(data)
-                if obj is not None:
-                    obj = self.context.get(obj.getId())
-                    template_obj = get_wizard_storage(self.context).get('template')
-                    self.recursive_content_creation(template_obj, obj)
+                container = self.createAndAdd(data)
+                if container is not None:
+                    container = self.context.get(container.getId())
+                    template_container = get_wizard_storage(self.context).get('template')
+
+                    with DeactivatedCatalogIndexing():
+                        # While generating content, each newly created object
+                        # will be indexed up to 4 times in the creation process.
+                        #
+                        # This is not necessary and takes a long time.
+                        #
+                        # Creating all the subdossier without reindexing the catalog
+                        # will improve the performance massively and we can manually
+                        # reindex the created objects once at the end of the creation
+                        # process.
+                        self.recursive_content_creation(template_container, container)
+
+                    self.recursive_reindex(container)
 
                     self._finishedAdd = True
                     api.portal.show_message(
@@ -224,6 +240,13 @@ class AddDossierFromTemplateWizardStep(WizzardWrappedAddForm):
             @buttonAndHandler(pd_mf(u'Cancel'), name='cancel')
             def handleCancel(self, action):
                 return self.request.RESPONSE.redirect(self.context.absolute_url())
+
+            def recursive_reindex(self, obj):
+                for child_obj in obj.listFolderContents():
+                    child_obj.reindexObject()
+
+                    if IDexterityContainer.providedBy(child_obj):
+                        self.recursive_reindex(child_obj)
 
             def recursive_content_creation(self, template_obj, target_container):
                 responsible = IDossier(target_container).responsible
