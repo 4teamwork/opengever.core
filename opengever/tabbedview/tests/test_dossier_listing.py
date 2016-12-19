@@ -67,18 +67,31 @@ class TestDossierListing(FunctionalTestCase):
         self.assertItemsEqual(['Dossier A', 'Dossier B', 'Dossier C'],
                               [row.get('Title') for row in table.dicts()])
 
-
     @browsing
-    def test_active_closed_and_expired_filter_available(self, browser):
+    def test_active_closed_filter_available(self, browser):
         browser.login().open(self.repository,
                              view='tabbedview_view-dossiers',
                              data={'dossier_state_filter': 'filter_all'})
 
+        self.assertEquals(['all', 'Active'],
+                          browser.css('.state_filters a').text)
+
+    @browsing
+    def test_expired_filter_only_avaiable_for_record_managers(self, browser):
+        browser.login().open(self.repository,
+                             view='tabbedview_view-dossiers')
+        self.assertEquals(['all', 'Active'],
+                          browser.css('.state_filters a').text)
+
+        self.grant('Reader', 'Records Manager')
+        browser.login().open(self.repository,
+                             view='tabbedview_view-dossiers')
         self.assertEquals(['all', 'Active', 'expired'],
                           browser.css('.state_filters a').text)
 
     @browsing
     def test_expired_filters_shows_only_dossiers_with_expired_retention_period(self, browser):
+        self.grant('Reader', 'Records Manager')
         browser.login()
         browser.open(
             self.repository,
@@ -105,6 +118,7 @@ class TestDossierListing(FunctionalTestCase):
 
     @browsing
     def test_expired_filters_exclude_archived_dossiers(self, browser):
+        self.grant('Reader', 'Records Manager')
         create(Builder('dossier')
                .within(self.repository)
                .titled(u'Dossier D')
@@ -119,3 +133,18 @@ class TestDossierListing(FunctionalTestCase):
         table = browser.css('.listing').first
         self.assertEquals(['Dossier B', 'Dossier C'],
                           [row.get('Title') for row in table.dicts()])
+
+    @browsing
+    def test_expired_filters_is_hidden_on_subdossier_listings(self, browser):
+        self.grant('Reader', 'Records Manager')
+        dossier = create(Builder('dossier')
+               .within(self.repository)
+               .titled(u'Dossier D')
+               .as_expired()
+               .in_state('dossier-state-archived'))
+        create(Builder('dossier').within(dossier))
+
+        browser.login().open(dossier, view='tabbedview_view-subdossiers')
+
+        self.assertEquals(['all', 'Active'],
+                          browser.css('.state_filters a').text)
