@@ -14,12 +14,14 @@
         "groupid": {
             "type": "string",
             "title": "groupid",
+            "maxLength": 255,
             "description": "",
             "_zope_schema_type": "Text"
         },
         "title": {
             "type": "string",
             "title": "title",
+            "maxLength": 50,
             "description": "",
             "_zope_schema_type": "Text"
         }

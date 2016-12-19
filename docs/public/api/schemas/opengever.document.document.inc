@@ -164,16 +164,6 @@
        
 
 
-   .. py:attribute:: digitally_available
-
-       :Feldname: :field-title:`Digital verfügbar`
-       :Datentyp: ``Bool``
-       
-       
-       
-       
-
-
    .. py:attribute:: preserved_as_paper
 
        :Feldname: :field-title:`In Papierform aufbewahrt`
