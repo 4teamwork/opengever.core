@@ -44,6 +44,7 @@ Doc-Properties Dokument:
 - ``ogg.document.sequence_number`` - Laufnummer des Dokuments
 - ``ogg.document.document_author``
 - ``ogg.document.document_date``
+- ``ogg.document.document_type`` - Dokumenttyp des Dokuments
 - ``ogg.document.reception_date``
 - ``ogg.document.delivery_date``
 
