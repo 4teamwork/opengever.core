@@ -4,6 +4,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.contact.ogdsuser import OgdsUserToContactAdapter
+from opengever.journal.tests.utils import get_journal_entry
 from opengever.testing import FunctionalTestCase
 from opengever.testing.helpers import get_contacts_vocabulary
 
@@ -133,3 +134,22 @@ class TestManualJournalEntry(FunctionalTestCase):
 
         self.assertEquals('Manual entry: Phone call', row.dict().get('Title'))
         self.assertEquals('', row.dict().get('Comments'))
+
+    @browsing
+    def test_only_documents_from_the_dossier_are_selectable(self, browser):
+        doc1 = create(Builder('document')
+                      .titled(u'Test A')
+                      .within(self.dossier))
+
+        dossier2 = create(Builder('dossier'))
+        doc2 = create(Builder('document')
+                      .titled(u'Test B')
+                      .within(dossier2))
+
+        browser.login().open(self.dossier, view='add-journal-entry')
+        browser.fill(
+            {'form.widgets.related_documents.widgets.query': 'test'}).submit()
+
+        self.assertEquals(
+            ['Test A'],
+            browser.css('#form-widgets-related_documents-autocomplete .option').text)

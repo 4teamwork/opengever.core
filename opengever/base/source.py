@@ -78,7 +78,12 @@ class DossierPathSourceBinder(ObjPathSourceBinder):
             parent = aq_parent(aq_inner(parent))
         if not self.navigation_tree_query:
             self.navigation_tree_query = {}
+
         self.navigation_tree_query['path'] = {'query': dossier_path}
+
+        # Extend path in selectable_filter, to make sure only objects
+        # inside the current dossier are selectable.
+        self.selectable_filter.criteria['path'] = {'query': dossier_path}
 
         source = self.path_source(
             context,
