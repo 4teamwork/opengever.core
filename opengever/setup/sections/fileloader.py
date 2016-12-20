@@ -5,6 +5,8 @@ from mimetypes import guess_type
 from opengever.document.document import IDocumentSchema
 from opengever.document.subscribers import set_digitally_available
 from opengever.document.subscribers import sync_title_and_filename_handler
+from opengever.mail.mail import initalize_title
+from opengever.mail.mail import initialize_metadata
 from opengever.setup.sections.bundlesource import BUNDLE_PATH_KEY
 from opengever.setup.sections.bundlesource import JSON_STATS_KEY
 from zope.annotation.interfaces import IAnnotations
@@ -88,12 +90,17 @@ class FileLoaderSection(object):
                     yield item
                     continue
 
+                if item['_type'] == 'ftw.mail.mail':
+                    file_field_name = 'message'
+                else:
+                    file_field_name = 'file'
+
                 try:
                     with open(filepath, 'rb') as f:
-                        obj.file = self.file_field_class(
+                        setattr(obj, file_field_name, self.file_field_class(
                             data=f.read(),
                             contentType=mimetype,
-                            filename=filename)
+                            filename=filename))
                 except EnvironmentError as e:
                     # TODO: Check for this in OGGBundle validation
                     logger.warning("Can't open file %s. %s." % (
@@ -102,7 +109,15 @@ class FileLoaderSection(object):
                     yield item
                     continue
 
-                sync_title_and_filename_handler(obj, None)
-                set_digitally_available(obj, None)
+                # Fire these event handlers manually because they got fired
+                # too early before (when the file contents weren't loaded yet)
+                if item['_type'] == 'opengever.document.document':
+                    sync_title_and_filename_handler(obj, None)
+                    set_digitally_available(obj, None)
+                elif item['_type'] == 'ftw.mail.mail':
+                    initialize_metadata(obj, None)
+                    # Reset the [No Subject] placeholder
+                    obj.title = None
+                    initalize_title(obj, None)
 
             yield item

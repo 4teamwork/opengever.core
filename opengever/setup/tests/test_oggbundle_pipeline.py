@@ -1,7 +1,9 @@
 from collective.transmogrifier.transmogrifier import Transmogrifier
 from datetime import date
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testing import freeze
 from opengever.base.behaviors.classification import IClassification
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.dossier.behaviors.dossier import IDossier
@@ -11,6 +13,9 @@ from opengever.testing import FunctionalTestCase
 from pkg_resources import resource_filename
 from plone import api
 from zope.annotation import IAnnotations
+
+
+FROZEN_NOW = datetime(2016, 12, 20, 9, 40)
 
 
 class TestOggBundlePipeline(FunctionalTestCase):
@@ -32,7 +37,9 @@ class TestOggBundlePipeline(FunctionalTestCase):
         transmogrifier = Transmogrifier(api.portal.get())
         IAnnotations(transmogrifier)[BUNDLE_PATH_KEY] = resource_filename(
             'opengever.bundle.tests', 'assets/basic.oggbundle')
-        transmogrifier(u'opengever.setup.oggbundle')
+
+        with freeze(FROZEN_NOW):
+            transmogrifier(u'opengever.setup.oggbundle')
 
         # test content creation
         # XXX use separate test-cases based on a layer
@@ -318,6 +325,7 @@ class TestOggBundlePipeline(FunctionalTestCase):
     def assert_documents_created(self, parent):
         self.assert_document_1_created(parent)
         self.assert_document_2_created(parent)
+        self.assert_mail_created(parent)
 
     def assert_document_1_created(self, parent):
         document_1 = parent.get('document-1')
@@ -386,3 +394,41 @@ class TestOggBundlePipeline(FunctionalTestCase):
         self.assertEqual(
             u'Entlassung Hanspeter M\xfcller',
             document_2.title)
+
+    def assert_mail_created(self, parent):
+        mail = parent.get('document-3')
+
+        self.assertTrue(mail.digitally_available)
+        self.assertIsNotNone(mail.message)
+        self.assertEqual(920, len(mail.message.data))
+
+        self.assertEqual(
+            u'Peter Muster <from@example.org>',
+            mail.document_author)
+        self.assertEqual(
+            date(2013, 1, 1),
+            mail.document_date)
+        self.assertEqual(
+            None,
+            mail.document_type)
+        self.assertEqual(
+            tuple(),
+            mail.keywords)
+        self.assertTrue(
+            mail.preserved_as_paper)
+        self.assertEqual(
+            u'unchecked',
+            IClassification(mail).public_trial)
+        self.assertEqual(
+            u'',
+            IClassification(mail).public_trial_statement)
+        self.assertEqual(
+            FROZEN_NOW.date(),
+            mail.receipt_date)
+        self.assertEqual(
+            'mail-state-active',
+            api.content.get_state(mail))
+
+        self.assertEqual(
+            u'Lorem Ipsum',
+            mail.title)
