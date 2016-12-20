@@ -76,7 +76,7 @@ class ILifeCycle(form.Schema):
         required=True,
     )
 
-    #dexterity.write_permission(date_of_cassation='cmf.ManagePortal')
+    write_permission(date_of_cassation='opengever.base.EditDateOfCassation')
     form.widget(date_of_cassation=DatePickerFieldWidget)
     date_of_cassation = schema.Date(
         title=_(u'label_dateofcassation', default=u'Date of cassation'),

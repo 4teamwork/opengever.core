@@ -1,4 +1,3 @@
-from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -891,3 +890,35 @@ class TestDateOfSubmission(FunctionalTestCase):
         self.grant('Manager')
         browser.login().open(dossier, view='edit')
         self.assertIsNotNone(browser.forms['form'].find_field('Date of submission'))
+
+
+class TestDateOfCassation(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestDateOfCassation, self).setUp()
+        self.repofolder = create(Builder('repository'))
+
+    @browsing
+    def test_is_only_visible_for_managers_on_add_form(self, browser):
+        browser.login().open(
+            self.repofolder,
+            view='++add++opengever.dossier.businesscasedossier')
+
+        self.assertIsNone(browser.forms['form'].find_field('Date of cassation'))
+
+        self.grant('Manager')
+        browser.login().open(
+            self.repofolder,
+            view='++add++opengever.dossier.businesscasedossier')
+
+        self.assertIsNotNone(browser.forms['form'].find_field('Date of cassation'))
+
+    @browsing
+    def test_is_only_visible_for_managers_on_edit_form(self, browser):
+        dossier = create(Builder('dossier'))
+        browser.login().open(dossier, view='edit')
+        self.assertIsNone(browser.forms['form'].find_field('Date of cassation'))
+
+        self.grant('Manager')
+        browser.login().open(dossier, view='edit')
+        self.assertIsNotNone(browser.forms['form'].find_field('Date of cassation'))

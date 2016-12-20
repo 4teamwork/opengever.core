@@ -9,5 +9,8 @@
     <permission name="Edit date of submission" acquire="True">
       <role name="Manager"/>
     </permission>
+    <permission name="Edit date of cassation" acquire="True">
+      <role name="Manager"/>
+    </permission>
   </permissions>
 </rolemap>

@@ -17,6 +17,7 @@ class TestRegressionPloneformMacros(FunctionalTestCase):
     @browsing
     def test_error_messages_are_displayed_for_form_groups(self, browser):
         browser.login()
+        self.grant('Manager')
 
         # make sure that only title is required
         # ensure that our assumption is correct, otherwise the regression
