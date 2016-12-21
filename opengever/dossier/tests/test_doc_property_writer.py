@@ -76,6 +76,7 @@ class TestDocPropertyWriter(FunctionalTestCase):
             .titled("My Document")
             .having(document_date=datetime(2010, 1, 3),
                     document_author=TEST_USER_ID,
+                    document_type='contract',
                     receipt_date=datetime(2010, 1, 3),
                     delivery_date=datetime(2010, 1, 3))
             .with_asset_file('with_gever_properties.docx'))
@@ -126,6 +127,7 @@ class TestDocPropertyWriter(FunctionalTestCase):
             .titled("My Document")
             .having(document_date=datetime(2010, 1, 3),
                     document_author=TEST_USER_ID,
+                    document_type='contract',
                     receipt_date=datetime(2010, 1, 3),
                     delivery_date=datetime(2010, 1, 3))
             .with_asset_file('without_custom_properties.docx'))
@@ -143,6 +145,7 @@ class TestDocPropertyWriter(FunctionalTestCase):
             .titled("My Document")
             .having(document_date=datetime(2010, 1, 3),
                     document_author=TEST_USER_ID,
+                    document_type='contract',
                     receipt_date=datetime(2010, 1, 3),
                     delivery_date=datetime(2010, 1, 3))
             .with_asset_file('without_custom_properties.docx'))

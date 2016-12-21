@@ -66,6 +66,7 @@ EXPECTED_DOCUMENT_PROPERTIES = {
     'ogg.document.sequence_number': '1',
     'ogg.document.document_author': u'M\xfcller Peter',
     'ogg.document.document_date': datetime(2010, 1, 3),
+    'ogg.document.document_type': u'Contract',
     'ogg.document.reception_date': datetime(2010, 1, 3),
     'ogg.document.delivery_date': datetime(2010, 1, 3),
 }

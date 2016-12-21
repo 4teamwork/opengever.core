@@ -5,6 +5,9 @@ Changelog
 4.14.2 (unreleased)
 -------------------
 
+- Add doc-property ogg.document.document_type for documents.
+  [deiferni]
+
 - Limit document selection when creating a manual journal entry.
   Only documents inside the dossier are selectable.
   [phgross]

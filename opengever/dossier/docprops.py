@@ -7,6 +7,7 @@ from ooxml_docprops.properties import OOXMLDocument
 from opengever import journal
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
+from opengever.base.vocabulary import voc_term_title
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.document import IDocumentSchema
 from opengever.dossier.behaviors.dossier import IDossierMarker
@@ -166,6 +167,11 @@ class DefaultDocumentDocPropertyProvider(DocPropertyProvider):
         return self._as_datetime(
             IDocumentMetadata(self.context).document_date)
 
+    def get_document_type_label(self):
+        return voc_term_title(
+            IDocumentMetadata['document_type'],
+            IDocumentMetadata(self.context).document_type)
+
     def get_reception_date(self):
         return self._as_datetime(
             IDocumentMetadata(self.context).receipt_date)
@@ -191,6 +197,7 @@ class DefaultDocumentDocPropertyProvider(DocPropertyProvider):
         self._add_property(properties, 'sequence_number', sequence_number)
         self._add_property(properties, 'document_author', self.get_document_author())
         self._add_property(properties, 'document_date', self.get_document_date())
+        self._add_property(properties, 'document_type', self.get_document_type_label())
         self._add_property(properties, 'reception_date', self.get_reception_date())
         self._add_property(properties, 'delivery_date', self.get_delivery_date())
 
