@@ -38,5 +38,7 @@
     <dependency>profile-plone.formwidget.contenttree:default</dependency>
     <dependency>profile-collective.js.timeago:default</dependency>
     <dependency>profile-ftw.footer:default</dependency>
+    <dependency>profile-plone.app.caching:default</dependency>
+    <dependency>profile-plone.app.caching:without-caching-proxy</dependency>
   </dependencies>
 </metadata>
