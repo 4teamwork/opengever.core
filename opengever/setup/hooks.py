@@ -1,4 +1,5 @@
 from opengever.private import MEMBERSFOLDER_ID
+from plone import api
 from plone.app.portlets.portlets import navigation
 from plone.portlets.constants import CONTEXT_CATEGORY
 from plone.portlets.interfaces import ILocalPortletAssignmentManager
@@ -13,6 +14,7 @@ def default_installed(site):
     set_global_roles(site)
     settings(site)
     disable_site_syndication(site)
+    reorder_css_resources(site)
 
 
 def default_content_installed(site):
@@ -85,3 +87,64 @@ def block_context_portlets(site, content_id):
     assignable = getMultiAdapter(
         (content, manager), ILocalPortletAssignmentManager)
     assignable.setBlacklistStatus(CONTEXT_CATEGORY, True)
+
+
+def reorder_css_resources(site):
+    """The aim of reordering the CSS resources is to make as large
+    bundles as possible, so that the client needs as few requests
+    as possible to load the CSS.
+    """
+    registry = api.portal.get_tool('portal_css')
+
+    # Ship all resources with "link", no "inline" anymore.
+    for resource in registry.getResources():
+        resource.setRendering('link')
+
+    # Move all css resources, wich are disabled when diazo is disabled
+    # to the top, in order to not have them in between other
+    # resources which could possibly be bundled together.
+    # This is done without changing the order in between those
+    # resources.
+    expression = 'not:request/HTTP_X_THEME_ENABLED | nothing'
+    hidden = filter(lambda resource: resource.getExpression() == expression,
+                    registry.getResources())
+    for resource in reversed(hidden):
+        registry.moveResourceToTop(resource.getId())
+
+    # IEFixes has an diazo expression but also an IE conditional comment.
+    # Move it to bottom in order to have it at the bottom of the diazo
+    # block after the next step.
+    registry.moveResourceToBottom('IEFixes.css')
+    registry.moveResourceToBottom(
+        '++theme++plonetheme.teamraum/css/iefixes.css')
+
+    # Remove all "authenticated" conditions
+    for resource in registry.getResources()[:]:
+        if resource.getAuthenticated():
+            resource.setAuthenticated(False)
+
+    # Disable RTL CSS, we don't support RTL
+    registry.getResource('RTL.css').setEnabled(False)
+
+    # Remove `enabled diazo` expression
+    expression = 'request/HTTP_X_THEME_ENABLED | nothing'
+    hidden = filter(lambda resource: resource.getExpression() == expression,
+                    registry.getResources())
+    for resource in reversed(hidden):
+        resource.setExpression('')
+
+    # Move print.css to bottom (distinct "media"; can be loaded late)
+    registry.moveResourceToBottom('print.css')
+
+
+def reorder_js_resources(site):
+    """The aim of reordering the JS resources is to make as large
+    bundles as possible, so that the client needs as few requests
+    as possible to load the JS.
+    """
+    registry = api.portal.get_tool('portal_javascripts')
+
+    # Move all authenticated resources together to form one bundle.
+    for resource in registry.getResources()[:]:
+        if resource.getAuthenticated():
+            registry.moveResourceToBottom(resource.getId())
