@@ -83,7 +83,7 @@ class GeverTabMixin(object):
         # custom sort for sorting on the readable fullname
         # of the users, contacts and inboxes
         elif sort_on in (
-            'responsible', 'Creator', 'checked_out', 'issuer', 'contact'):
+            'checked_out', 'issuer', 'contact'):
 
             if sort_on in ('issuer', 'contact'):
                 sort_dict = SortHelpers().get_user_contact_sort_dict()
