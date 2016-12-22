@@ -1,7 +1,7 @@
 from collections import OrderedDict
 from five import grok
 from ftw.table import helper
-from opengever.base.interfaces import IReferenceNumber
+from opengever.journal import _ as journal_mf
 from opengever.journal.tab import title_helper
 from opengever.latex import _
 from opengever.latex.utils import get_issuer_of_task
@@ -9,10 +9,11 @@ from opengever.latex.utils import get_responsible_of_task
 from opengever.latex.utils import workflow_state
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit
+from opengever.repository.interfaces import IRepositoryFolder
 from opengever.task.helper import task_type_helper
+from plone import api
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.interface import Interface
-from opengever.journal import _ as journal_mf
 
 
 class Column(object):
@@ -117,28 +118,18 @@ class LaTexListing(grok.MultiAdapter):
         """Returns the title of the first parental repository folder.
         """
 
-        # We could either query the catalog for every parent (slow), get the
-        # object and walk up (slower), or guess the distance to the first
-        # parental repository folder based on the reference number signature
-        # (fast). Using the distance we can get title from the breadcrumbs
-        # index. So we take the latter, altough it seems a little risky when
-        # the reference number concept is changed.
+        # The breadcrumb_titles index was removed in favor of 30% performance
+        # improvement while reindexing, thus we now walk up to the
+        # repository folder.
 
-        active_formatter = IReferenceNumber(self.context).get_active_formatter()
-        seperator = active_formatter.repository_dossier_seperator
+        obj = brain.getObject()
+        while obj != api.portal.get():
+            if IRepositoryFolder.providedBy(obj):
+                break
+            else:
+                obj = obj.aq_parent
 
-        if seperator not in brain.reference:
-            return ''
-
-        # get the last part of the reference number
-        dossier_ref_nr = brain.reference.split(seperator)[-1].strip()
-
-        # multiple nested dossiers are seperated by a dot (.), so count the
-        # dots
-        distance = len(dossier_ref_nr.split('.')) + 1
-
-        # get the title of the repository folder from the breadcrumb_titles
-        return brain.breadcrumb_titles[-distance]['Title']
+        return obj.Title()
 
 
 class DossiersLaTeXListing(LaTexListing):
