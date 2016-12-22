@@ -5,6 +5,8 @@ Changelog
 4.14.2 (unreleased)
 -------------------
 
+- Install and configure plone.app.caching. [jone]
+
 - Add doc-property ogg.document.document_type for documents.
   [deiferni]
 
