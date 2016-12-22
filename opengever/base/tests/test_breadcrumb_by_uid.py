@@ -4,10 +4,10 @@ from opengever.testing import FunctionalTestCase
 from plone.uuid.interfaces import IUUID
 
 
-class TestBreadcrumbByUidView(FunctionalTestCase):
+class TestBreadcrumbByUIDView(FunctionalTestCase):
 
     def setUp(self):
-        super(TestBreadcrumbByUidView, self).setUp()
+        super(TestBreadcrumbByUIDView, self).setUp()
 
         self.root = create(Builder('repository_root').titled(u'Repository'))
         self.repo = create(Builder('repository')

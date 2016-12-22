@@ -21,7 +21,7 @@ def _breadcrumbs_from_obj(obj):
     return " > ".join(t for t in breadcrumb_titles)
 
 
-class ResolveUidToBreadcrumb(BrowserView):
+class ResolveUIDToBreadcrumb(BrowserView):
 
     def __call__(self):
         uid = self.request.get('ploneuid', None)

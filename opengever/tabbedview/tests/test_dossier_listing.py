@@ -153,7 +153,6 @@ class TestDossierListing(FunctionalTestCase):
                           browser.css('.state_filters a').text)
 
     def test_linked_helper_adds_uid_data_attribute_using_obj(self):
-
         browser.open_html(linked(self.dossier_c, 'Title'))
         self.assertEquals(browser.css('a').first.attrib['data-uid'],
                           IUUID(self.dossier_c))
