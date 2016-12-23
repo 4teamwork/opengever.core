@@ -22,9 +22,11 @@ class UpdateFeedbackLinkInFooter(UpgradeStep):
     """
 
     def __call__(self):
-        assignments = self._get_footer_portlet_assignments()
-        for assignment in assignments:
-            self._update_link_if_necessary(assignment)
+        # ftw.footer was removed
+        # assignments = self._get_footer_portlet_assignments()
+        # for assignment in assignments:
+        #     self._update_link_if_necessary(assignment)
+        pass
 
     def _update_link_if_necessary(self, assignment):
         markup, name = assignment.text, assignment.__name__

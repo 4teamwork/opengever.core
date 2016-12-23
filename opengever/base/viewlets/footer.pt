@@ -1,0 +1,44 @@
+<div id="ftw-footer" class="row">
+
+    <div id="footer-column-1" class="column cell position-0 width-4">
+        <h2>Über OneGov GEVER</h2>
+
+        <p><a href="http://www.onegov.ch/gever/die-wichtigsten-module-von-onegov-gever">Funktionen</a></p>
+        <p><a href="https://github.com/OneGov/onegov.gever">Quellcode</a></p>
+        <p><a href="https://jenkins.4teamwork.ch">Software Tests</a></p>
+        <p><a href="http://www.onegov.ch/gever/aktuell">Release-Informationen</a></p>
+        <p>GEVER Version: <span tal:content="view/get_gever_version" /></p>
+    </div>
+
+    <div id="footer-column-2" class="column cell position-4 width-4">
+        <h2>Optionen</h2>
+
+        <p><a href="http://www.onegov.ch/gever/dokumentation/installation-des-external-editors-unter-windows">External Editor (Windows)</a></p>
+        <p><a href="http://www.onegov.ch/gever/die-wichtigsten-module-von-onegov-gever/direktes-bearbeiten/#external-editor-unter-os-x">External Editor (Mac)</a></p>
+    </div>
+
+    <div id="footer-column-3" class="column cell position-8 width-4">
+        <h2>Dokumentation</h2>
+
+        <p><a href="http://www.onegov.ch/gever/dokumentation">Benutzerhandbuch</a></p>
+        <p><a href="https://feedback.onegovgever.ch">Feedback Forum</a></p>
+    </div>
+
+    <div id="footer-column-4" class="column cell position-12 width-4">
+        <h2>Kontakt</h2>
+        <p>
+            <strong>4teamwork AG</strong><br />
+            Dammweg 9<br />
+            3013 Bern<br />
+            <a href="http://www.4teamwork.ch">www.4teamwork.ch</a>
+        </p>
+        <p><br /></p>
+        <p>
+            <strong>Support</strong><br />
+            031 511 04 04<br />
+            <a href="mailto:support@4teamwork.ch">support@4temwork.ch</a>
+        </p>
+    </div>
+
+    <div class="visualClear"><!-- --></div>
+</div>

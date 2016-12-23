@@ -79,4 +79,11 @@
       layer="opengever.base.interfaces.IOpengeverBaseLayer"
       />
 
+  <browser:viewlet
+      name="opengever.base.footer"
+      manager="plone.app.layout.viewlets.interfaces.IPortalFooter"
+      class=".footer.FooterViewlet"
+      permission="zope2.View"
+      />
+
 </configure>
