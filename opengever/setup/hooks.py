@@ -15,6 +15,7 @@ def default_installed(site):
     settings(site)
     disable_site_syndication(site)
     reorder_css_resources(site)
+    reorder_js_resources(site)
 
 
 def default_content_installed(site):
