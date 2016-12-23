@@ -1,2 +1,8 @@
 @import url("alabaster.css");
 @import url("typography.css");
+
+ul li.toctree-l1,
+ul li.toctree-l2,
+ul li.toctree-l3 {
+    list-style-type: none;
+}
