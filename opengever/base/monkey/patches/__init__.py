@@ -17,7 +17,6 @@ from .resource_registries_url_regex import PatchResourceRegistriesURLRegex
 from .tz_for_log import PatchZ2LogTimezone
 from .verify_object_paste import PatchCopyContainerVerifyObjectPaste
 from .webdav_lock_timeout import PatchWebDAVLockTimeout
-from .zcatalog_catalog import PatchZCatalog
 
 
 PatchBuilderCreate()()
@@ -39,4 +38,3 @@ PatchWebDAVLockTimeout()()
 PatchZ2LogTimezone()()
 PatchZ3CFormChangedField()()
 PatchCMFCatalogAware()()
-PatchZCatalog()()
