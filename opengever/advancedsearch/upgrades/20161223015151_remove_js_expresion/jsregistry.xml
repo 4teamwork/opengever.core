@@ -2,8 +2,7 @@
 <object name="portal_javascripts" meta_type="JavaScripts Registry">
 
   <javascript
-      cacheable="True" compression="safe" cookable="True"
-      expression="" enabled="True" inline="False"
+      expression=""
       id="++resource++opengever.advancedsearch.resources/advanced_search.js"
       />
 
