@@ -60,12 +60,41 @@ class KeyMapProxy(object):
         return sort_value
 
 
+class SortIndexProxy(object):
+
+    def __init__(self, index):
+        self.index = index
+
+    def __getattr__(self, name):
+        return getattr(self.index, name)
+
+    def __len__(self):
+        return self.index.__len__()
+
+    def items(self):
+        result = []
+        keymap = self.index.value_to_sortvalue_map()
+        for key, intset in self.index.items():
+            try:
+                key = keymap[key]
+            except KeyError:
+                pass
+            result.append((key, intset))
+        return result
+
+
 class UserTurboIndex(FieldIndex):
     meta_type = 'UserTurboIndex'
 
     def documentToKeyMap(self):
-        sort_dict = SortHelpers().get_user_sort_dict()
+        sort_dict = self.value_to_sortvalue_map()
         return KeyMapProxy(self, sort_dict.get)
+
+    def value_to_sortvalue_map(self):
+        return SortHelpers().get_user_sort_dict()
+
+    def get_sort_index(self):
+        return SortIndexProxy(self)
 
 
 manage_addUserTurboIndexForm = DTMLFile('dtml/addUserTurboIndex', globals())
