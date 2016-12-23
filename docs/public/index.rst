@@ -6,6 +6,7 @@ Inhalt:
 .. toctree::
    :maxdepth: 3
 
+   bhb/index.rst
    api/index.rst
    officeconnector/index.rst
    docproperties/index.rst

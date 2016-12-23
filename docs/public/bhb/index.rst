@@ -32,10 +32,4 @@ Contents:
    rollenmanager
    sitzungs-und-protokollverwaltung
 
-Verzeichnisse
-=============
-
-* :ref:`genindex`
-* :ref:`search`
-
 .. |image1| image:: img/media/image1.png
