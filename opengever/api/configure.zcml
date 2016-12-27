@@ -2,10 +2,18 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:zcml="http://namespaces.zope.org/zcml"
     xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:plone="http://namespaces.plone.org/plone"
     i18n_domain="opengever.api">
 
     <configure zcml:condition="installed plone.restapi">
         <adapter factory=".summary.GeverJSONSummarySerializer" />
     </configure>
+
+    <plone:CORSPolicy
+      allow_origin="*"
+      allow_methods="DELETE,GET,OPTIONS,PATCH,POST,PUT"
+      allow_credentials="true"
+      allow_headers="Accept,Authorization,Content-Type"
+      />
 
 </configure>

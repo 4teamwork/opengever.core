@@ -130,6 +130,9 @@ def disallow_anonymous_views_on_site_root(event):
        The same applies for tabbed_view attributes of a tabbed_view that is
        displayed for the portal root.
     """
+    if event.request['REQUEST_METHOD'] == 'OPTIONS':
+        return
+ 
     user = getSecurityManager().getUser()
     if user is None or user.getUserName() == 'Anonymous User':
         context = event.request['PARENTS'][0]
