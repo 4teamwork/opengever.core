@@ -1,3 +1,5 @@
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from collective import dexteritytextindexer
 from datetime import date
 from opengever.base.behaviors.classification import IClassification
@@ -43,6 +45,7 @@ class DossierDispositionInformation(object):
         self.intid = getUtility(IIntIds).getId(dossier)
         self.url = dossier.absolute_url()
         self.reference_number = dossier.get_reference_number()
+        self.parent = aq_parent(aq_inner(dossier))
         self.start = IDossier(dossier).start
         self.end = IDossier(dossier).end
         self.public_trial = IClassification(dossier).public_trial
@@ -54,6 +57,12 @@ class DossierDispositionInformation(object):
     def additional_metadata_available(self):
         return True
 
+    def get_grouping_key(self):
+        return self.parent
+
+    def get_repository_title(self):
+        return self.parent.Title().decode('utf-8')
+
     def get_storage_representation(self):
         """Returns a PersistentDict with the most important values.
         """
@@ -61,6 +70,7 @@ class DossierDispositionInformation(object):
             'title': self.title,
             'intid': self.intid,
             'reference_number': self.reference_number,
+            'repository_title': self.get_repository_title(),
             'appraisal': self.appraisal})
 
 
@@ -71,6 +81,7 @@ class RemovedDossierDispositionInformation(DossierDispositionInformation):
         self.intid = dossier_mapping.get('intid')
         self.appraisal = dossier_mapping.get('appraisal')
         self.reference_number = dossier_mapping.get('reference_number')
+        self.repository_title = dossier_mapping.get('repository_title')
         self.url = None
         self.start = None
         self.end = None
@@ -81,6 +92,12 @@ class RemovedDossierDispositionInformation(DossierDispositionInformation):
     @property
     def additional_metadata_available(self):
         return False
+
+    def get_grouping_key(self):
+        return self.repository_title
+
+    def get_repository_title(self):
+        return self.repository_title
 
 
 def title_default():
@@ -178,8 +195,12 @@ class Disposition(Container):
 
         IAnnotations(self)[self.destroyed_key] = value
 
+    @property
+    def is_closed(self):
+        return api.content.get_state(self) == 'disposition-state-closed'
+
     def get_dossier_representations(self):
-        if api.content.get_state(self) == 'disposition-state-closed':
+        if self.is_closed:
             return [RemovedDossierDispositionInformation(data, self)
                     for data in self.get_destroyed_dossiers()]
 

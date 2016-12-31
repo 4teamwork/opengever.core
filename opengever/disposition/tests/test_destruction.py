@@ -14,7 +14,9 @@ class TestDestruction(FunctionalTestCase):
     def setUp(self):
         super(TestDestruction, self).setUp()
         self.root = create(Builder('repository_root'))
-        self.repository = create(Builder('repository').within(self.root))
+        self.repository = create(Builder('repository')
+                                 .titled('Anfragen')
+                                 .within(self.root))
         self.dossier1 = create(Builder('dossier')
                                .titled(u'D\xf6ssier 1')
                                .having(archival_value=ARCHIVAL_VALUE_UNWORTHY)
@@ -53,15 +55,18 @@ class TestDestruction(FunctionalTestCase):
             {'intid': self.dossier_intids[0],
              'title': u'D\xf6ssier 1',
              'appraisal': False,
-             'reference_number': 'Client1 1 / 1'},
+             'reference_number': 'Client1 1 / 1',
+             'repository_title': u'1. Anfragen'},
             {'intid': self.dossier_intids[1],
              'title': u'D\xf6ssier 2',
              'appraisal': True,
-             'reference_number': 'Client1 1 / 2'},
+             'reference_number': 'Client1 1 / 2',
+             'repository_title': u'1. Anfragen'},
             {'intid': self.dossier_intids[2],
              'title': u'D\xf6ssier 3',
              'appraisal': True,
-             'reference_number': 'Client1 1 / 3'}]
+             'reference_number': 'Client1 1 / 3',
+             'repository_title': u'1. Anfragen'}]
 
         self.assertEquals(expected,
                           list(self.disposition.get_destroyed_dossiers()))

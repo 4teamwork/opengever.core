@@ -5,6 +5,9 @@ Changelog
 4.14.2 (unreleased)
 -------------------
 
+- Display dossiers grouped by repository on the disposition overview.
+  [phgross]
+
 - Hide dossiers offer and archive transition from the action menu.
   [phgross]
 
