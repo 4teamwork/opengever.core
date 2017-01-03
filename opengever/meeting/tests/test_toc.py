@@ -4,6 +4,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import error_messages
+from ftw.testing import freeze
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.command import MIME_DOCX
 from opengever.meeting.toc.alphabetical import AlphabeticalToc
@@ -91,8 +92,11 @@ class TestAlphabeticalTOC(FunctionalTestCase):
     def setUp(self):
         super(TestAlphabeticalTOC, self).setUp()
         self.container = create(Builder('committee_container'))
-        self.committee = create(Builder('committee')
-                                .within(self.container))
+
+        # freeze date to make sure the default period is 2016
+        with freeze(datetime(2016, 12, 3)):
+            self.committee = create(Builder('committee')
+                                    .within(self.container))
         self.committee_model = self.committee.load_model()
 
         self.meeting_before = create(Builder('meeting').having(
@@ -212,7 +216,8 @@ class TestAlphabeticalTOC(FunctionalTestCase):
             getUtility(IIntIds).getId(sablon_template))
         transaction.commit()
 
-        browser.login().open(self.committee, view='tabbedview_view-periods')
+        browser.login().open(self.committee,
+                             view='tabbedview_view-periods')
         browser.find('download TOC alphabetical').click()
 
         self.assertDictContainsSubset(
@@ -322,7 +327,8 @@ class TestTOCByRepository(TestAlphabeticalTOC):
             getUtility(IIntIds).getId(sablon_template))
         transaction.commit()
 
-        browser.login().open(self.committee, view='tabbedview_view-periods')
+        browser.login().open(self.committee,
+                             view='tabbedview_view-periods')
         browser.find('download TOC by repository').click()
 
         self.assertDictContainsSubset(

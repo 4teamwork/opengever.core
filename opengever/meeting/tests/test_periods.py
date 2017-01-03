@@ -1,8 +1,10 @@
 from datetime import date
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import info_messages
+from ftw.testing import freeze
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.model import Period
 from opengever.testing import FunctionalTestCase
@@ -19,7 +21,11 @@ class TestPeriod(FunctionalTestCase):
                                         .within(self.repo_root)
                                         .titled('Repo'))
         self.container = create(Builder('committee_container'))
-        self.committee = create(Builder('committee').within(self.container))
+
+        # freeze date to make sure the default period is 2016
+        with freeze(datetime(2016, 12, 26)):
+            self.committee = create(Builder('committee').within(self.container))
+
         self.committee_model = self.committee.load_model()
 
     @browsing
@@ -41,11 +47,11 @@ class TestPeriod(FunctionalTestCase):
         self.assertEqual([
             ['2016 (Jan 01, 2016 - Dec 31, 2016)',
              'download TOC alphabetical download TOC by repository',
-             'Edit'], [
-             '2011 (Jan 01, 2011 - Dec 31, 2011)',
+             'Edit'],
+            ['2011 (Jan 01, 2011 - Dec 31, 2011)',
              'download TOC alphabetical download TOC by repository',
-             'Edit'], [
-             '2010 (Jan 01, 2010 - Dec 31, 2010)',
+             'Edit'],
+            ['2010 (Jan 01, 2010 - Dec 31, 2010)',
              'download TOC alphabetical download TOC by repository',
              'Edit']
         ], text_by_period)
