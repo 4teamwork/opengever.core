@@ -6,6 +6,7 @@ from opengever.base.interfaces import IBaseCustodyPeriods
 from opengever.base.interfaces import IRetentionPeriodRegister
 from opengever.base.restricted_vocab import propagate_vocab_restrictions
 from opengever.base.restricted_vocab import RestrictedVocabularyFactory
+from plone.autoform.directives import write_permission
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.directives import form
 from plone.registry.interfaces import IRegistry
@@ -75,14 +76,14 @@ class ILifeCycle(form.Schema):
         required=True,
     )
 
-    #dexterity.write_permission(date_of_cassation='cmf.ManagePortal')
+    write_permission(date_of_cassation='opengever.base.EditDateOfCassation')
     form.widget(date_of_cassation=DatePickerFieldWidget)
     date_of_cassation = schema.Date(
         title=_(u'label_dateofcassation', default=u'Date of cassation'),
         required=False,
     )
 
-    #dexterity.write_permission(date_of_submission='cmf.ManagePortal')
+    write_permission(date_of_submission='opengever.base.EditDateOfSubmission')
     form.widget(date_of_submission=DatePickerFieldWidget)
     date_of_submission = schema.Date(
         title=_(u'label_dateofsubmission', default=u'Date of submission'),

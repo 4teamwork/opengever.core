@@ -7,4 +7,14 @@
         title="Remove GEVER content"
         />
 
+    <permission
+        id="opengever.base.EditDateOfSubmission"
+        title="Edit date of submission"
+        />
+
+    <permission
+        id="opengever.base.EditDateOfCassation"
+        title="Edit date of cassation"
+        />
+
 </configure>

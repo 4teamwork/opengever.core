@@ -1,0 +1,7 @@
+<rolemap>
+  <permissions>
+    <permission name="Edit date of cassation" acquire="True">
+      <role name="Manager"/>
+    </permission>
+  </permissions>
+</rolemap>

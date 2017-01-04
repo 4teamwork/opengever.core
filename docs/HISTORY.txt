@@ -5,6 +5,10 @@ Changelog
 4.14.2 (unreleased)
 -------------------
 
+- Protect date of cassation and submission with a separate edit permission.
+  Only managers should be allowed to edit those dates.
+  [phgross]
+
 - Install and configure plone.app.caching. [jone]
 
 - Add doc-property ogg.document.document_type for documents.
