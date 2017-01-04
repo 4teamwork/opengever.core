@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-02-09 11:59+0000\n"
+"POT-Creation-Date: 2017-02-13 13:31+0000\n"
 "PO-Revision-Date: 2016-09-20 21:24+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/fr/>\n"
@@ -411,6 +411,11 @@ msgstr ""
 msgid "help_text_edit_note"
 msgstr ""
 
+#. Default: "Recommendation for the title. Will be displayed as a help text if you create a dossier from template"
+#: ./opengever/dossier/dossiertemplate/behaviors.py:31
+msgid "help_title_help"
+msgstr ""
+
 #. Default: "Participation created"
 #: ./opengever/dossier/behaviors/participation.py:161
 msgid "info_participation_create"
@@ -486,7 +491,7 @@ msgid "label_documents"
 msgstr "Documents"
 
 #. Default: "Dossiernote"
-#: ./opengever/dossier/viewlets/byline.py:114
+#: ./opengever/dossier/viewlets/byline.py:115
 msgid "label_dossier_note"
 msgstr ""
 
@@ -511,7 +516,7 @@ msgid "label_edit_note"
 msgstr ""
 
 #. Default: "E-Mail"
-#: ./opengever/dossier/viewlets/byline.py:101
+#: ./opengever/dossier/viewlets/byline.py:102
 msgid "label_email_address"
 msgstr "Email"
 
@@ -524,7 +529,7 @@ msgstr "Date de fin :"
 
 #. Default: "to"
 #: ./opengever/dossier/project_templates/byline.pt:38
-#: ./opengever/dossier/viewlets/byline.py:82
+#: ./opengever/dossier/viewlets/byline.py:83
 msgid "label_end_byline"
 msgstr "Jusqu'au"
 
@@ -628,7 +633,7 @@ msgstr ""
 #. Default: "Reference Number"
 #: ./opengever/dossier/behaviors/dossier.py:179
 #: ./opengever/dossier/browser/report.py:41
-#: ./opengever/dossier/viewlets/byline.py:94
+#: ./opengever/dossier/viewlets/byline.py:95
 msgid "label_reference_number"
 msgstr "Numéro de référence"
 
@@ -665,7 +670,7 @@ msgid "label_save"
 msgstr ""
 
 #. Default: "Sequence Number"
-#: ./opengever/dossier/viewlets/byline.py:88
+#: ./opengever/dossier/viewlets/byline.py:89
 msgid "label_sequence_number"
 msgstr "Numéro courant"
 
@@ -677,7 +682,7 @@ msgstr "Date début"
 
 #. Default: "from"
 #: ./opengever/dossier/project_templates/byline.pt:29
-#: ./opengever/dossier/viewlets/byline.py:76
+#: ./opengever/dossier/viewlets/byline.py:77
 msgid "label_start_byline"
 msgstr "De"
 
@@ -709,6 +714,11 @@ msgstr ""
 msgid "label_title"
 msgstr "Titre"
 
+#. Default: "Title help"
+#: ./opengever/dossier/dossiertemplate/behaviors.py:30
+msgid "label_title_help"
+msgstr ""
+
 #. Default: "Trash"
 #: ./opengever/dossier/browser/tabbed.py:27
 msgid "label_trash"
@@ -721,7 +731,7 @@ msgstr ""
 
 #. Default: "State"
 #: ./opengever/dossier/project_templates/byline.pt:22
-#: ./opengever/dossier/viewlets/byline.py:70
+#: ./opengever/dossier/viewlets/byline.py:71
 msgid "label_workflow_state"
 msgstr "Etat"
 

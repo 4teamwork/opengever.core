@@ -3,6 +3,7 @@ from ftw.table.interfaces import ITableGenerator
 from opengever.base import _
 from opengever.base.transforms import trix2sablon
 from opengever.base.utils import escape_html
+from plone.app.z3cform.templates import RenderWidget
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
 from z3c.form import util
 from z3c.form.browser import widget
@@ -14,6 +15,7 @@ from z3c.form.interfaces import ITextAreaWidget
 from z3c.form.widget import FieldWidget
 from z3c.form.widget import SequenceWidget
 from z3c.form.widget import Widget
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import adapter
 from zope.component import adapts
 from zope.component import getUtility
@@ -26,6 +28,31 @@ from zope.schema.interfaces import ISequence
 from zope.schema.interfaces import ITextLine
 from zope.schema.interfaces import ITitledTokenizedTerm
 import re
+
+
+class GeverRenderWidget(RenderWidget):
+    """Renders the widget with the possiblity to add a dynamic description.
+
+    Add a new property to the widget in your form to display a dynamic
+    description instead the default field description:
+
+    widget.dynamic_description = u"My dynamic description"
+
+
+    Motivation:
+    The default behavior is, that the field description will be displayed
+    if it's available.
+
+    If you want to change the description for a specific widget only for
+    a specific request there was no possiblity to do that. Changing the
+    fields description is not an option because it is persistent.
+    """
+    index = ViewPageTemplateFile('templates/widget.pt')
+
+    def get_description(self):
+        if hasattr(self.context, 'dynamic_description') and self.context.dynamic_description:
+            return self.context.dynamic_description
+        return self.context.field.description
 
 
 class ITableRadioWidget(ISequenceWidget):

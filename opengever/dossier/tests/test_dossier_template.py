@@ -4,6 +4,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import info_messages
+from ftw.testbrowser.utils import normalize_spaces
 from opengever.core.testing import activate_bumblebee_feature
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_DOSSIER_TEMPLATE_LAYER
 from opengever.core.testing import toggle_feature
@@ -194,9 +195,20 @@ class TestDossierTemplate(FunctionalTestCase):
         browser.login().open(self.templatedossier)
         factoriesmenu.add('Dossier template')
 
-        self.assertEqual(
-            [u'Title', 'Description', 'Keywords', 'Comments', 'filing prefix'],
-            browser.css('#content fieldset label').text
+        # browser.css('').text will return the text of the current node an all
+        # its child-nodes. The help-text is in the same node as the field-title.
+        # This means, that we get the title and the helptext if we use .text.
+        #
+        # The .raw_text will return only the text of the current node but
+        # unnormalized. So we have to do it manually.
+        self.assertEqual([
+            u'Title help',
+            u'Title',
+            u'Description',
+            u'Keywords',
+            u'Comments',
+            u'filing prefix'],
+            map(normalize_spaces, browser.css('#content fieldset label').raw_text)
         )
 
     @browsing
@@ -207,9 +219,14 @@ class TestDossierTemplate(FunctionalTestCase):
 
         browser.login().visit(dossiertemplate, view="edit")
 
-        self.assertEqual(
-            [u'Title', 'Description', 'Keywords', 'Comments', 'filing prefix'],
-            browser.css('#content fieldset label').text
+        self.assertEqual([
+            u'Title help',
+            u'Title',
+            u'Description',
+            u'Keywords',
+            u'Comments',
+            u'filing prefix'],
+            map(normalize_spaces, browser.css('#content fieldset label').raw_text)
         )
 
 
@@ -451,6 +468,50 @@ class TestDossierTemplateAddWizard(FunctionalTestCase):
         subdossier = browser.context.listFolderContents()[0]
 
         self.assertEqual('peter.meier', IDossier(subdossier).responsible)
+
+    @browsing
+    def test_prefill_title_if_no_title_help_is_available(self, browser):
+        create(Builder("dossiertemplate")
+               .within(self.templatedossier)
+               .titled(u"My Template"))
+
+        browser.login().visit(self.leaf_node)
+        factoriesmenu.add('Dossier with template')
+
+        token = browser.css(
+            'input[name="form.widgets.template"]').first.attrib.get('value')
+
+        browser.fill({'form.widgets.template': token}).submit()
+
+        self.assertEqual(
+            "My Template",
+            browser.css('#formfield-form-widgets-IOpenGeverBase-title input').first.value)
+
+        self.assertEqual(
+            [], browser.css('#formfield-form-widgets-IOpenGeverBase-title .formHelp'))
+
+    @browsing
+    def test_do_not_fill_title_and_add_title_help_as_description_if_title_help_is_available(self, browser):
+        create(Builder("dossiertemplate")
+               .within(self.templatedossier)
+               .titled(u"My Template")
+               .having(title_help=u"This is a helpt text"))
+
+        browser.login().visit(self.leaf_node)
+        factoriesmenu.add('Dossier with template')
+
+        token = browser.css(
+            'input[name="form.widgets.template"]').first.attrib.get('value')
+
+        browser.fill({'form.widgets.template': token}).submit()
+
+        self.assertEqual(
+            "",
+            browser.css('#formfield-form-widgets-IOpenGeverBase-title input').first.value)
+
+        self.assertEqual(
+            "This is a helpt text",
+            browser.css('#formfield-form-widgets-IOpenGeverBase-title .formHelp').first.text)
 
 
 OVERVIEW_TAB = 'tabbedview_view-overview'

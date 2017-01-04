@@ -172,6 +172,7 @@ class AddDossierFromTemplateWizardStep(WizzardWrappedAddForm):
                         '{}/dossier_with_template'.format(self.context.absolute_url()))
 
                 template_values = template_obj.get_schema_values()
+                title_help = IDossierTemplateSchema(template_obj).title_help
 
                 for group in self.groups:
                     for widgetname in group.widgets:
@@ -185,6 +186,14 @@ class AddDossierFromTemplateWizardStep(WizzardWrappedAddForm):
 
                         value = template_values.get(template_widget_name)
                         widget = group.widgets.get(widgetname)
+
+                        # If the current field is the title field and the
+                        # title_help is set, we remove the input-value and
+                        # add a field description with the title_help text
+                        # instead.
+                        if widget.field == IDossierTemplateSchema['title_help'] and title_help:
+                            widget.dynamic_description = title_help
+                            value = ''
 
                         # Set the template value to the dossier add-form widget.
                         widget.value = IDataConverter(widget).toWidgetValue(value)

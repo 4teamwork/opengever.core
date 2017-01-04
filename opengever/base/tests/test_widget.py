@@ -1,7 +1,48 @@
 from ftw.testbrowser import browsing
 from opengever.base.widgets import trix_strip_whitespace
 from opengever.testing import FunctionalTestCase
+from plone.app.z3cform.interfaces import IPloneFormLayer
 from unittest2 import TestCase
+from z3c.form.browser.text import TextWidget
+from zope.component import getMultiAdapter
+from zope.interface import alsoProvides
+from zope.schema._bootstrapfields import TextLine
+
+
+class TestGeverRenderWidget(FunctionalTestCase):
+    def setUp(self):
+        super(TestGeverRenderWidget, self).setUp()
+        textfield = TextLine()
+        textfield.description = u"A d\xfcscription"
+
+        self.widget = TextWidget(self.request)
+        self.widget.field = textfield
+
+        alsoProvides(self.request, IPloneFormLayer)
+
+    @browsing
+    def test_display_default_field_description(self, browser):
+        view = getMultiAdapter((self.widget, self.request),
+                               name="ploneform-render-widget")
+
+        browser.open_html(view())
+
+        self.assertEqual(
+            u'A d\xfcscription',
+            browser.css('.formHelp').first.text)
+
+    @browsing
+    def test_dispaly_dynamic_description_if_available(self, browser):
+        self.widget.dynamic_description = u"A d\xfcnamic description"
+
+        view = getMultiAdapter((self.widget, self.request),
+                               name="ploneform-render-widget")
+
+        browser.open_html(view())
+
+        self.assertEqual(
+            u'A d\xfcnamic description',
+            browser.css('.formHelp').first.text)
 
 
 class TestTrixWidget(FunctionalTestCase):
