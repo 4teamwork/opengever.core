@@ -14,6 +14,7 @@ from opengever.ogds.base.utils import get_current_admin_unit
 from persistent.dict import PersistentDict
 from persistent.list import PersistentList
 from plone import api
+from plone.autoform.directives import write_permission
 from plone.dexterity.content import Container
 from plone.directives import form
 from plone.formwidget.contenttree import ObjPathSourceBinder
@@ -129,6 +130,7 @@ class IDispositionSchema(form.Schema):
         required=True,
     )
 
+    write_permission(transfer_number='opengever.disposition.EditTransferNumber')
     dexteritytextindexer.searchable('transfer_number')
     transfer_number = schema.TextLine(
         title=_(u"label_transfer_number", default=u"Transfer number"),

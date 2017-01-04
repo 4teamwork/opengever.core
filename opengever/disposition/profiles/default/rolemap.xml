@@ -14,5 +14,8 @@
     <permission name="opengever.disposition: Download SIP Package" acquire="True">
       <role name="Manager"/>
     </permission>
+    <permission name="opengever.disposition: Edit transfer number" acquire="True">
+      <role name="Manager"/>
+    </permission>
   </permissions>
 </rolemap>

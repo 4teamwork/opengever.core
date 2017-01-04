@@ -1,6 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.exceptions import FormFieldNotFound
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_PROMPT
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_SAMPLING
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_UNWORTHY
@@ -80,3 +81,19 @@ class TestDispositionWorkflow(FunctionalTestCase):
             'dossier-state-archived', api.content.get_state(self.dossier1))
         self.assertEquals(
             'dossier-state-archived', api.content.get_state(self.dossier2))
+
+    @browsing
+    def test_transfer_number_is_only_editable_by_archivist(self, browser):
+        self.grant('Records Manager')
+        browser.login().open(self.disposition, view='edit')
+
+        with self.assertRaises(FormFieldNotFound):
+            browser.fill({'Transfer number': 'AB 123'})
+            browser.click_on('Save')
+
+        self.grant('Archivist')
+        browser.login().open(self.disposition, view='edit')
+        browser.fill({'Transfer number': 'AB 123'})
+        browser.click_on('Save')
+
+        self.assertEquals('AB 123', self.disposition.transfer_number)
