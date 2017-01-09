@@ -1,16 +1,19 @@
 from collective.taskqueue.interfaces import ITaskQueue
 from collective.transmogrifier import transmogrifier
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.builder import session
 from ftw.builder.testing import BUILDER_LAYER
 from ftw.builder.testing import set_builder_session_factory
 from ftw.bumblebee.tests.helpers import BumblebeeTestTaskQueue
+from ftw.dictstorage.sql import DictStorageModel
 from ftw.testing import ComponentRegistryLayer
 from ftw.testing.quickinstaller import snapshots
 from opengever.activity.interfaces import IActivitySettings
 from opengever.base import model
 from opengever.base.model import create_session
 from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
-from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings # noqa
+from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings  # noqa
 from opengever.meeting.interfaces import IMeetingSettings
 from opengever.officeatwork.interfaces import IOfficeatworkSettings
 from opengever.ogds.base.setup import create_sql_tables
@@ -30,8 +33,15 @@ from plone.browserlayer.utils import unregister_layer
 from plone.dexterity.schema import SCHEMA_CACHE
 from plone.testing import Layer
 from plone.testing import z2
+from plone.testing.z2 import zopeApp
 from Products.CMFCore.utils import getToolByName
+from sqlalchemy import create_engine
+from sqlalchemy import MetaData
+from sqlalchemy.orm import scoped_session
+from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
+from sqlalchemy_utils import create_database
+from sqlalchemy_utils import drop_database
 from Testing.ZopeTestCase.utils import setupCoreSessions
 from z3c.saconfig import EngineFactory
 from z3c.saconfig import GloballyScopedSession
@@ -40,9 +50,13 @@ from z3c.saconfig.interfaces import IScopedSession
 from zope.component import getSiteManager
 from zope.component import provideUtility
 from zope.configuration import xmlconfig
+from zope.globalrequest import setRequest
 from zope.sqlalchemy import datamanager
+
 import logging
 import os
+import random
+import string
 import sys
 import transaction
 
@@ -241,6 +255,156 @@ class OpengeverFixture(PloneSandboxLayer):
         portal.portal_types['Plone Site'].filter_content_types = False
 
 
+class OpengeverFixtureSQL(PloneSandboxLayer):
+
+    defaultBases = (PLONE_FIXTURE, BUILDER_LAYER)
+
+    def setUpZope(self, app, configurationContext):
+        # do not install pas plugins (doesnt work in tests)
+        from opengever.ogds.base import hooks
+        hooks._setup_scriptable_plugin = lambda *a, **kw: None
+
+        xmlconfig.string(
+            '<configure xmlns="http://namespaces.zope.org/zope">'
+
+            '  <include package="z3c.autoinclude" file="meta.zcml" />'
+            '  <includePlugins package="plone" />'
+            '  <includePluginsOverrides package="plone" />'
+
+            '  <include package="opengever.core.tests" file="tests.zcml" />'
+            '  <include package="opengever.ogds.base" file="tests.zcml" />'
+            '  <include package="opengever.base.tests" file="tests.zcml" />'
+            '  <include package="opengever.testing" file="tests.zcml" />'
+            '  <include package="opengever.setup.tests" />'
+
+            '</configure>',
+            context=configurationContext)
+
+        z2.installProduct(app, 'plone.app.versioningbehavior')
+        z2.installProduct(app, 'collective.taskqueue.pasplugin')
+
+        memory_session_factory()
+        setupCoreSessions(app)
+
+        # Set max subobject limit to 0 -> unlimited
+        # In tests this is set to 100 by default
+        transient_object_container = app.temp_folder.session_data
+        transient_object_container.setSubobjectLimit(0)
+
+        os.environ['BUMBLEBEE_DEACTIVATE'] = "True"
+
+        import opengever.base.tests.views
+        xmlconfig.file('configure.zcml',
+                       opengever.base.tests.views,
+                       context=configurationContext)
+
+    def setUpPloneSite(self, portal):
+        self.installOpengeverProfiles(portal)
+        self.setupLanguageTool(portal)
+        deactivate_activity_center()
+        deactivate_bumblebee_feature()
+
+    def setUp(self):
+        super(OpengeverFixtureSQL, self).setUp()
+
+    def testSetUp(self):
+        super(OpengeverFixtureSQL, self).testSetUp()
+
+    def testTearDown(self):
+        super(OpengeverFixtureSQL, self).testTearDown()
+
+    def tearDown(self):
+        clear_transmogrifier_registry()
+        super(OpengeverFixtureSQL, self).tearDown()
+
+    def tearDownPloneSite(self, portal):
+        activate_activity_center()
+        activate_bumblebee_feature()
+
+    def tearDownZope(self, app):
+        os.environ['BUMBLEBEE_DEACTIVATE'] = "True"
+        super(OpengeverFixtureSQL, self).tearDownZope(app)
+
+    def installOpengeverProfiles(self, portal):
+        # Copied from metadata.zxml of opengever.policy.base:default
+        # The aim is to use the opengever.policy.base:default here, but it
+        # changes some things such as the language which will result in
+        # lots of failing tests.
+        applyProfile(portal, 'plone.app.dexterity:default')
+        applyProfile(portal, 'plone.app.registry:default')
+        applyProfile(portal, 'plone.app.relationfield:default')
+        applyProfile(portal, 'opengever.globalindex:default')
+        applyProfile(portal, 'opengever.ogds.base:default')
+        applyProfile(portal, 'opengever.base:default')
+        applyProfile(portal, 'opengever.document:default')
+        applyProfile(portal, 'opengever.mail:default')
+        applyProfile(portal, 'opengever.dossier:default')
+        applyProfile(portal, 'opengever.repository:default')
+        applyProfile(portal, 'opengever.journal:default')
+        applyProfile(portal, 'opengever.task:default')
+        applyProfile(portal, 'opengever.tabbedview:default')
+        applyProfile(portal, 'opengever.trash:default')
+        applyProfile(portal, 'opengever.inbox:default')
+        applyProfile(portal, 'opengever.tasktemplates:default')
+        applyProfile(portal, 'opengever.portlets.tree:default')
+        applyProfile(portal, 'opengever.contact:default')
+        applyProfile(portal, 'opengever.advancedsearch:default')
+        applyProfile(portal, 'opengever.sharing:default')
+        applyProfile(portal, 'opengever.latex:default')
+        applyProfile(portal, 'opengever.meeting:default')
+        applyProfile(portal, 'opengever.activity:default')
+        applyProfile(portal, 'opengever.bumblebee:default')
+        applyProfile(portal, 'opengever.officeatwork:default')
+        applyProfile(portal, 'opengever.private:default')
+        applyProfile(portal, 'ftw.datepicker:default')
+        applyProfile(portal, 'plone.formwidget.autocomplete:default')
+        applyProfile(portal, 'plone.formwidget.contenttree:default')
+        applyProfile(portal, 'ftw.contentmenu:default')
+        applyProfile(portal, 'ftw.zipexport:default')
+        applyProfile(portal, 'opengever.disposition:default')
+
+        applyProfile(portal, 'opengever.testing:testing')
+
+    def createMemberFolder(self, portal):
+        # Create a Members folder.
+        setRoles(portal, TEST_USER_ID, ['Manager'])
+        portal.invokeFactory('Folder', 'Members')
+        portal['Members'].invokeFactory('Folder', TEST_USER_ID)
+        setRoles(portal, TEST_USER_ID, ['Member'])
+
+    def setupLanguageTool(self, portal):
+        """Configure the language tool as close as possible to production,
+        without breaking most of the existing tests.
+
+        For production, the language tool is configured in
+        opengever.policy.base:default, which we don't import here
+        (see comment in installOpengeverProfiles() above).
+        """
+        lang_tool = api.portal.get_tool('portal_languages')
+        lang_tool.use_combined_language_codes = True
+        lang_tool.display_flags = False
+        lang_tool.start_neutral = False
+        lang_tool.use_subdomain_negotiation = False
+        lang_tool.authenticated_users_only = False
+        lang_tool.use_request_negotiation = True
+
+        # These would be (possible) production defaults, but will break tests
+        # lang_tool.setDefaultLanguage('de-ch')
+        # lang_tool.supported_langs = ['fr-ch', 'de-ch']
+
+
+class APILayer(Layer):
+    """A layer that installs the plone.restapi:default generic setup profile.
+    """
+
+    def setUp(self):
+        with ploneSite() as site:
+            applyProfile(site, 'plone.restapi:default')
+
+
+RESTAPI_LAYER = APILayer()
+
+
 class MemoryDBLayer(Layer):
     """A Layer which only set up a test sqlite db in to the memory
     """
@@ -268,6 +432,16 @@ def functional_session_factory():
     return sess
 
 
+def functional_session_factory_sql():
+    sess = session.BuilderSession()
+    # Auto commit must be False to enable matroska rollbacks!
+    sess.auto_commit = False
+    # We use model.Session here to allow matroskas to switch DB engines in
+    # parallel while still allowing ftw.builder to function as intended.
+    sess.session = model.Session
+    return sess
+
+
 def memory_session_factory():
     engine_factory = EngineFactory(
         'sqlite:///:memory:',
@@ -289,6 +463,7 @@ MEMORY_DB_LAYER = MemoryDBLayer(
     name='opengever:core:memory_db')
 
 OPENGEVER_FIXTURE = OpengeverFixture()
+OPENGEVER_FIXTURE_SQL = OpengeverFixtureSQL()
 
 OPENGEVER_INTEGRATION_TESTING = IntegrationTesting(
     bases=(OPENGEVER_FIXTURE,
@@ -299,6 +474,11 @@ OPENGEVER_FUNCTIONAL_TESTING = FunctionalTesting(
     bases=(OPENGEVER_FIXTURE,
            set_builder_session_factory(functional_session_factory)),
     name="opengever.core:functional")
+
+OPENGEVER_FUNCTIONAL_TESTING_SQL = FunctionalTesting(
+    bases=(OPENGEVER_FIXTURE_SQL,
+           set_builder_session_factory(functional_session_factory_sql)),
+    name="opengever.core:functional_sql")
 
 OPENGEVER_FUNCTIONAL_ZSERVER_TESTING = FunctionalTesting(
     bases=(z2.ZSERVER_FIXTURE, OPENGEVER_FIXTURE,
@@ -322,6 +502,164 @@ def inactivate_filing_number(portal):
                      if not behavior.endswith('IFilingNumber')]
 
     SCHEMA_CACHE.invalidate('opengever.dossier.businesscasedossier')
+
+
+class SQLTestLayer(PloneSandboxLayer):
+
+    defaultBases = (OPENGEVER_FUNCTIONAL_TESTING_SQL,)
+
+    def setUp(self):
+        super(SQLTestLayer, self).setUp()
+
+    def setUpPloneSite(self, portal):
+        # Grab the parent layer DB
+        self.layer_matroska_engine_urls = []
+        self.parent_layer_session = model.create_session()
+        self.parent_layer_engine = self.parent_layer_session.get_bind()
+        self.parent_layer_metadata = MetaData(self.parent_layer_engine)
+        # We need to reflect here to get Base vs. BASE vs. DictStorage
+        self.parent_layer_metadata.reflect()
+        self.parent_layer_tables = self.parent_layer_metadata.sorted_tables
+
+        # Preserve the reference to our parent layer engine or else we cannot
+        # properly tear down this layer!
+
+        # Set the parent layer DB as the parent for our first generation
+        # matroska.
+        self.matroska_parent_session = self.parent_layer_session
+        self.matroska_parent_engine = self.parent_layer_engine
+        self.matroska_parent_metadata = self.parent_layer_metadata
+        self.matroska_parent_tables = self.parent_layer_tables
+
+        # Make our first generation matroska a copy of the parent layer DB
+        self.nextMatroska()
+        # Seed our first matroska with the layer specific data to be shared
+        # across the layer tests.
+        self.seedData()
+
+        # Preserve a reference to the seeded first generation matroska so we
+        # can make more matroskas based on that and do not have to reseed!
+        self.matroska_parent_session = self.current_matroska_session
+        self.matroska_parent_engine = self.current_matroska_engine
+        self.matroska_parent_metadata = MetaData(self.current_matroska_engine)
+
+        # Generate the first matroska to be actually run tests against
+        self.nextMatroska()
+
+    def testSetUp(self):
+        super(SQLTestLayer, self).testSetUp()
+        # We set up a transaction checkpoint at test setup time in order to
+        # check at test teardown time if we can clean up the matroska or not.
+        self.savepoint = transaction.savepoint()
+
+    def testTearDown(self):
+        # If the transaction cannot be rolled back, we need to roll a new
+        # matroska - ZODB gets appropriately rolled back by the normal test
+        # isolation mechanisms of the parent layer(s) so we do not have to
+        # worry about that.
+        if self.savepoint.valid:
+            self.savepoint.rollback()
+        else:
+            self.nextMatroska()
+
+        super(SQLTestLayer, self).testTearDown()
+
+    def tearDown(self):
+        # Drop the matroskas we've accumulated
+        for url in self.layer_matroska_engine_urls:
+            drop_database(url)
+
+        # Switch models back to use the parent layer engine!
+        model.Session.bind = self.parent_layer_engine
+
+        # If we have not restored the parent layer engine before we exit here,
+        # the underlying layers and further tests will unwantedly try to use
+        # whatever matroska engine we last used!
+        super(SQLTestLayer, self).tearDown()
+
+    def nextMatroska(self):
+        # Create a new database
+        self.current_matroska_engine = create_engine(
+            'postgresql+psycopg2:///opengever_test_{0}'
+            .format(''.join(
+                random.choice(string.ascii_lowercase + string.digits)
+                for _ in range(8))))
+
+        self.layer_matroska_engine_urls.append(
+            self.current_matroska_engine.url)
+
+        create_database(self.current_matroska_engine.url)
+        model.Base.metadata.create_all(self.current_matroska_engine)
+        BASE.metadata.create_all(self.current_matroska_engine)
+        DictStorageModel.metadata.create_all(self.current_matroska_engine)
+
+        self.current_matroska_session = scoped_session(
+            sessionmaker(self.current_matroska_engine)())
+
+        # Copy data into our new database from the matroska parent
+        for table in self.matroska_parent_tables:
+            # Fetch all the data in a table
+            data = [dict((column.key, x[column.name])
+                         for column in table.c)
+                    for x in self.matroska_parent_engine
+                    .execute(table.select())]
+
+            # Insert all the data in the table, if any
+            if data:
+                self.current_matroska_engine.execute(table.insert(), data)
+
+        # Make sure we preserve sequences, if the matroska parent supports them
+        if self.matroska_parent_engine.dialect.supports_sequences:
+            # Grab parent matroska sequence names
+            sequence_names = self.matroska_parent_engine.execute(
+                "SELECT c.relname "
+                "FROM pg_class c "
+                "WHERE c.relkind = 'S'").fetchall()
+
+            for sequence_name in sequence_names:
+                # Get the last_value from a parent matroska sequence
+                parent_last_value = self.matroska_parent_engine.execute(
+                    "SELECT last_value FROM {0}"
+                    .format(sequence_name[0])).fetchall()
+
+                # Reset the new matroska sequence to + 1
+                # https://www.postgresql.org/docs/current/static/sql-altersequence.html
+                self.current_matroska_engine.execute(
+                    "ALTER SEQUENCE {0} RESTART WITH {1};"
+                    .format(sequence_name[0],
+                            parent_last_value[0][0] + 1))
+
+        # Switch DictStorage, Base and BASE to use the per layer engine
+        # This works by the virtue of scoped_session being a thread local
+        # singleton.
+        #
+        # This needs to be set back to the parent layer engine at layer
+        # teardown or one will suffer very weird artefacts and a debug rabbit
+        # hole!
+        model.Session.bind = self.current_matroska_engine
+
+    def seedData(self):
+        # Circumvent our improper use of ftw.builder
+        with zopeApp() as app:
+            session.current_session = session.factory()
+            setRequest(app.REQUEST)
+            setRoles(api.portal.get(),
+                     api.user.get_current().id,
+                     ['Contributor', 'Editor', 'Reader', 'Member'])
+
+            # Create the layer fixture
+            create(Builder('fixture').with_all_unit_setup())
+            repository_tree = create(Builder('repository_tree'))
+            create(Builder('globalindex_task'))
+            create(Builder('globalindex_task').having(int_id=4321))
+            create(Builder('task'))
+            create(Builder('task'))
+            create(Builder('dossier').within(repository_tree[-1]))
+            dossier = create(Builder('dossier').within(repository_tree[-1]))
+            create(Builder('document').within(dossier))
+
+
+OPENGEVER_SQL_TEST_LAYER = SQLTestLayer()
 
 
 class FilingLayer(PloneSandboxLayer):
