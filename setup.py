@@ -148,6 +148,7 @@ setup(name='opengever.core',
         'zc.relation',
         'zope.globalrequest',
         'PyXB',
+        'collective.indexing',
         # -*- Extra requirements: -*-
         ],
       tests_require=tests_require,
