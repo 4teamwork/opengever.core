@@ -5,6 +5,9 @@ Changelog
 4.14.2 (unreleased)
 -------------------
 
+- Extend OGGBundle fileloader to handle mails correctly.
+  [lgraf]
+
 - Add dossiertemplate tabbedview views.
   [elioschmutz]
 

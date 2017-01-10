@@ -16,6 +16,8 @@ class TestConstructor(FunctionalTestCase):
 
         lang_tool = api.portal.get_tool('portal_languages')
         lang_tool.setDefaultLanguage('de-ch')
+        # Required to create mails, but not dossiers - no idea why
+        self.grant('Manager')
 
     def setup_section(self, previous=None):
         previous = previous or []
@@ -97,3 +99,17 @@ class TestConstructor(FunctionalTestCase):
         self.assertEqual(obj_brain.portal_type,
                          'opengever.repository.repositoryroot')
         self.assertEqual(obj_brain.Title, u'Reporoot')
+
+    def test_can_create_eml_emails(self):
+        item = {
+            u"_type": u"ftw.mail.mail",
+            u"title": u"My Mail",
+            u"_path": u"/foo/bar"
+        }
+        section = self.setup_section(previous=[item])
+        list(section)
+
+        content = item['_object']
+        self.assertEqual(u'My Mail', content.title)
+        self.assertFalse(hasattr(content, 'title_de'))
+        self.assertFalse(hasattr(content, 'title_Fr'))

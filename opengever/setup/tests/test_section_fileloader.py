@@ -98,3 +98,22 @@ class TestFileLoader(FunctionalTestCase):
         self.assertEqual(
             {abs_filepath: '/relative/path/to/doc'},
             stats['errors']['msgs'])
+
+    def test_handles_eml_mails(self):
+        mail = create(Builder('mail'))
+        self.assertIsNone(mail.message)
+        relative_path = '/'.join(mail.getPhysicalPath()[2:])
+        item = {
+            u"_type": u"ftw.mail.mail",
+            u"_path": relative_path,
+            u"filepath": u"files/sample.eml",
+            u"_object": mail,
+        }
+        section = self.setup_section(previous=[item])
+        list(section)
+
+        self.assertEqual(u'Lorem Ipsum', mail.title)
+        self.assertEqual(920, len(mail.message.data))
+        self.assertEqual('message/rfc822', mail.message.contentType)
+        self.assertEqual('lorem-ipsum.eml', mail.message.filename)
+        self.assertEqual(True, mail.digitally_available)

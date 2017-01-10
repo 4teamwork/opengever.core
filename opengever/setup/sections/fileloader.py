@@ -1,10 +1,13 @@
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.utils import defaultMatcher
+from ftw.mail.mail import IMail
 from mimetypes import guess_type
 from opengever.document.document import IDocumentSchema
 from opengever.document.subscribers import set_digitally_available
 from opengever.document.subscribers import sync_title_and_filename_handler
+from opengever.mail.mail import initalize_title
+from opengever.mail.mail import initialize_metadata
 from opengever.setup.sections.bundlesource import BUNDLE_PATH_KEY
 from opengever.setup.sections.bundlesource import JSON_STATS_KEY
 from zope.annotation.interfaces import IAnnotations
@@ -34,16 +37,22 @@ class FileLoaderSection(object):
 
         self.bundle_path = IAnnotations(transmogrifier)[BUNDLE_PATH_KEY]
 
-        # TODO: Handle .eml / ftw.mail.mail
-        self.file_field_class = IDocumentSchema['file']._type
-
         self.stats = IAnnotations(transmogrifier)[JSON_STATS_KEY]
         self.stats['errors']['files_not_found'] = {}
         self.stats['errors']['files_io_errors'] = {}
         self.stats['errors']['msgs'] = {}
 
+    def is_mail(self, item):
+        return item['_type'] == 'ftw.mail.mail'
+
     def __iter__(self):
         for item in self.previous:
+
+            if self.is_mail(item):
+                file_field = IMail['message']
+            else:
+                file_field = IDocumentSchema['file']
+
             keys = item.keys()
             pathkey = self.pathkey(*keys)[0]
 
@@ -90,10 +99,11 @@ class FileLoaderSection(object):
 
                 try:
                     with open(filepath, 'rb') as f:
-                        obj.file = self.file_field_class(
+                        namedblobfile = file_field._type(
                             data=f.read(),
                             contentType=mimetype,
                             filename=filename)
+                        setattr(obj, file_field.getName(), namedblobfile)
                 except EnvironmentError as e:
                     # TODO: Check for this in OGGBundle validation
                     logger.warning("Can't open file %s. %s." % (
@@ -102,7 +112,15 @@ class FileLoaderSection(object):
                     yield item
                     continue
 
-                sync_title_and_filename_handler(obj, None)
-                set_digitally_available(obj, None)
+                # Fire these event handlers manually because they got fired
+                # too early before (when the file contents weren't loaded yet)
+                if self.is_mail(item):
+                    initialize_metadata(obj, None)
+                    # Reset the [No Subject] placeholder
+                    obj.title = None
+                    initalize_title(obj, None)
+                else:
+                    sync_title_and_filename_handler(obj, None)
+                    set_digitally_available(obj, None)
 
             yield item
