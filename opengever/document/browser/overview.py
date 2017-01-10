@@ -266,7 +266,8 @@ class Overview(DisplayForm, GeverTabMixin):
         except (AssertionError, ValueError):
             return False
 
-        state = api.content.get_state(self.context.get_parent_dossier())
+        state = api.content.get_state(
+            self.context.get_parent_dossier(), default=None)
         return can_edit and state in DOSSIER_STATES_CLOSED
 
     def get_download_copy_tag(self):
@@ -295,7 +296,8 @@ class Overview(DisplayForm, GeverTabMixin):
         except (AssertionError, ValueError):
             return False
 
-        state = api.content.get_state(self.context.get_parent_dossier())
+        state = api.content.get_state(
+            self.context.get_parent_dossier(), default=None)
         return can_edit and state in DOSSIER_STATES_CLOSED
 
     def get_archival_file_class(self):

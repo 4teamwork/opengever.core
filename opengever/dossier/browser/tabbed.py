@@ -116,3 +116,13 @@ class TemplateDossierTabbedView(GeverTabbedView):
             self.sablon_tab,
             self.tasktemplate_folders_tab
         ]
+
+
+class DossierTemplateTabbedView(DossierTabbedView):
+
+    def _get_tabs(self):
+        return [
+            self.overview_tab,
+            self.subdossiers_tab,
+            self.documents_tab,
+            ]

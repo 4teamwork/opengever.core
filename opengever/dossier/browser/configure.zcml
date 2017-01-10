@@ -26,6 +26,13 @@
       />
 
   <browser:page
+      for="opengever.dossier.dossiertemplate.behaviors.IDossierTemplateMarker"
+      name="dossier_navigation.json"
+      class=".navigation.JSONNavigation"
+      permission="zope2.View"
+      />
+
+  <browser:page
       for="opengever.dossier.behaviors.dossier.IDossierMarker"
       name="tabbed_view"
       class=".tabbed.DossierTabbedView"
@@ -37,6 +44,14 @@
       for="opengever.dossier.templatedossier.ITemplateDossier"
       name="tabbed_view"
       class=".tabbed.TemplateDossierTabbedView"
+      permission="zope2.View"
+      allowed_interface="ftw.tabbedview.interfaces.ITabbedViewEndpoints"
+      />
+
+  <browser:page
+      for="opengever.dossier.dossiertemplate.behaviors.IDossierTemplateMarker"
+      name="tabbed_view"
+      class=".tabbed.DossierTemplateTabbedView"
       permission="zope2.View"
       allowed_interface="ftw.tabbedview.interfaces.ITabbedViewEndpoints"
       />

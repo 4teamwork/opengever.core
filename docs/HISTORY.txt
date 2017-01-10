@@ -5,6 +5,9 @@ Changelog
 4.14.2 (unreleased)
 -------------------
 
+- Add dossiertemplate tabbedview views.
+  [elioschmutz]
+
 - Install collective.indexing.
   [mathias.leimgruber]
 

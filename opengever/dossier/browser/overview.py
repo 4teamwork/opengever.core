@@ -10,6 +10,7 @@ from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.participation import IParticipationAware
+from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -31,13 +32,14 @@ class DossierOverview(BoxesViewMixin, grok.View, GeverTabMixin):
     grok.require('zope2.View')
     grok.template('overview')
 
-    def catalog(self, types, showTrashed=False, depth=2):
+    def catalog(self, types, showTrashed=False,
+                depth=2, sort_on='modified', sort_order='reverse'):
         return self.context.portal_catalog(
             portal_type=types,
             path=dict(depth=depth,
                       query='/'.join(self.context.getPhysicalPath())),
-            sort_on='modified',
-            sort_order='reverse')
+            sort_on=sort_on,
+            sort_order=sort_order)
 
     def boxes(self):
         return [[self.make_task_box(),
@@ -180,3 +182,48 @@ class DossierOverview(BoxesViewMixin, grok.View, GeverTabMixin):
             {'to_id': intids.getId(aq_inner(self.context)),
              'from_attribute': 'relatedDossier'})
         return [relation.from_id for relation in relations]
+
+
+class DossierTemplateOverview(DossierOverview):
+    grok.context(IDossierTemplateMarker)
+
+    def boxes(self):
+        # Column 1 is hardcoded and used by the structure-tree.
+        # Column 2 contains dossiertemplate metadata
+        # Column 3 contains a listing of all documents within the template.
+        return [[self.make_description_box(),
+                 self.make_keyword_box(),
+                 self.make_comment_box(),
+                 self.make_filing_prefix_box()],
+                [self.make_document_box()]]
+
+    def make_document_box(self):
+        return dict(id='documents', content=self.documents(), href='documents',
+                    label=_(u"label_documents", default="Documents"))
+
+    def make_keyword_box(self):
+        return dict(id='keywords', content=self.get_keywords(),
+                    label=_(u"label_keywords", default="Keywords"))
+
+    def make_comment_box(self):
+        return dict(id='comments', content=self.get_comments(),
+                    label=_(u"label_comments", default="Comments"))
+
+    def make_filing_prefix_box(self):
+        return dict(id='filing_prefix', content=self.context.get_filing_prefix_label(),
+                    label=_(u'filing_prefix', default="filing prefix"))
+
+    def make_description_box(self):
+        return dict(id='description', content=self.description(),
+                    label=_(u'label_description', default=u'Description'))
+
+    def documents(self):
+        return IContentListing(self.catalog(
+            ['opengever.document.document', 'ftw.mail.mail', ],
+            sort_on='sortable_title', sort_order='asc')[:10])
+
+    def get_keywords(self):
+        return ', '.join(IDossier(self.context).keywords)
+
+    def get_comments(self):
+        return IDossier(self.context).comments

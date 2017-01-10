@@ -1,8 +1,12 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from five import grok
+from opengever.base.vocabulary import voc_term_title
 from opengever.dossier import _
+from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateSchema
+from plone import api
 from plone.dexterity.content import Container
 from plone.dexterity.utils import getAdditionalSchemata
 from plone.directives import dexterity
@@ -80,3 +84,36 @@ class DossierTemplate(Container):
 
                 values[key] = getattr(field.interface(self), fieldname)
         return values
+
+    def show_subdossier(self):
+        """We do not restrict dossier depth in a dossiertemplate.
+        """
+        return True
+
+    def get_main_dossier(self):
+        dossier = self
+        while dossier.is_subdossier():
+            dossier = aq_parent(aq_inner(dossier))
+
+        return dossier
+
+    def has_subdossiers(self):
+        return len(self.get_subdossiers()) > 0
+
+    def get_subdossiers(self, sort_on='sortable_title',
+                        sort_order='ascending',
+                        **kwargs):
+
+        subdossiers = api.content.find(self, object_provides=IDossierTemplateMarker,
+                                       sort_order=sort_order, sort_on=sort_on)
+
+        # Remove the object itself from the list of subdossiers
+        current_uid = self.UID()
+        subdossiers = [s for s in subdossiers
+                       if not s.UID == current_uid]
+
+        return subdossiers
+
+    def get_filing_prefix_label(self):
+        return voc_term_title(IDossier['filing_prefix'],
+                              IDossier(self).filing_prefix)

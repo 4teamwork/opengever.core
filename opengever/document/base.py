@@ -2,6 +2,7 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from opengever.base.browser.helper import get_css_class
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.inbox.inbox import IInbox
 from opengever.task.task import ITask
 from plone import api
@@ -30,7 +31,7 @@ class BaseDocumentMixin(object):
 
         """
         parent = aq_parent(aq_inner(self))
-        if IDossierMarker.providedBy(parent):
+        if IDossierMarker.providedBy(parent) or IDossierTemplateMarker.providedBy(parent):
             return parent
         if ITask.providedBy(parent):
             return parent.get_containing_dossier()
