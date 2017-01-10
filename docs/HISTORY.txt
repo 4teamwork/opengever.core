@@ -5,6 +5,10 @@ Changelog
 4.14.2 (unreleased)
 -------------------
 
+- Make sure reference number sorters also support sorting
+  repofolder-only numbers (i.e., no dossier/document parts).
+  [lgraf]
+
 - Extend OGGBundle fileloader to handle mails correctly.
   [lgraf]
 

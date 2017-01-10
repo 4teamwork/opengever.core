@@ -129,8 +129,15 @@ class GroupedByThreeReferenceFormatter(DottedReferenceFormatter):
         # 'OG 010.123.43-1.1-7'  -->  '010.123.43-1.1-7'
         clientid, remainder = value.split(clientid_repository_separator, 1)
 
-        # '010.123.43-1.1-7'  -->  '010.123.43', '1.1-7'
-        refnums_part, remainder = remainder.split(self.repository_dossier_seperator, 1)
+        if self.repository_dossier_seperator in remainder:
+            # Dossier or document reference number
+            # '010.123.43-1.1-7'  -->  '010.123.43', '1.1-7'
+            refnums_part, remainder = remainder.split(
+                self.repository_dossier_seperator, 1)
+        else:
+            # Repofolder-only reference number
+            # Nothing left to do, should already be sortable as string
+            return remainder
 
         # Return a tuple with the different parts separated.
         # Cast document and (sub)dossier parts to integers to achieve proper
@@ -139,7 +146,8 @@ class GroupedByThreeReferenceFormatter(DottedReferenceFormatter):
 
         if remainder.count(self.dossier_document_seperator) > 0:
             # Document Reference Number
-            dossier_part, document_part = remainder.split(self.dossier_document_seperator, 1)
+            dossier_part, document_part = remainder.split(
+                self.dossier_document_seperator, 1)
             subdossier_parts = [int(d) for d in dossier_part.split('.')]
             return (refnums_part, tuple(subdossier_parts), int(document_part))
         else:
@@ -211,8 +219,14 @@ class NoClientIdGroupedByThreeFormatter(GroupedByThreeReferenceFormatter):
             # It's already a string value
             value = brain_or_value
 
-        # '010.123.43-1.1-7'  -->  '010.123.43', '1.1-7'
-        refnums_part, remainder = value.split(self.repository_dossier_seperator, 1)
+        if self.repository_dossier_seperator in value:
+            # '010.123.43-1.1-7'  -->  '010.123.43', '1.1-7'
+            refnums_part, remainder = value.split(
+                self.repository_dossier_seperator, 1)
+        else:
+            # Repofolder-only reference number
+            # Nothing left to do, should already be sortable as string
+            return value
 
         # Return a tuple with the different parts separated.
         # Cast document and (sub)dossier parts to integers to achieve proper
@@ -221,7 +235,8 @@ class NoClientIdGroupedByThreeFormatter(GroupedByThreeReferenceFormatter):
 
         if remainder.count(self.dossier_document_seperator) > 0:
             # Document Reference Number
-            dossier_part, document_part = remainder.split(self.dossier_document_seperator, 1)
+            dossier_part, document_part = remainder.split(
+                self.dossier_document_seperator, 1)
             subdossier_parts = [int(d) for d in dossier_part.split('.')]
             return (refnums_part, tuple(subdossier_parts), int(document_part))
         else:

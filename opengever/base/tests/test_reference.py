@@ -236,6 +236,19 @@ class TestNoClientIDGroupedbyThreeFormatter(FunctionalTestCase):
 
 
 class TestDottedFormatSorter(TestDottedFormatter):
+
+    def test_orders_standalone_repofolders_correctly(self):
+        expected = ['OG 1.9.9',
+                    'OG 3.9.9',
+                    'OG 11.9.9']
+
+        unordered = ['OG 3.9.9',
+                     'OG 1.9.9',
+                     'OG 11.9.9']
+
+        actual = sorted(unordered, key=self.formatter.sorter)
+        self.assertEquals(expected, actual)
+
     def test_orders_first_level_refnums_correctly(self):
         expected = ['OG 1.9.9 / 9.9.9',
                     'OG 3.9.9 / 9.9.9',
@@ -298,6 +311,49 @@ class TestDottedFormatSorter(TestDottedFormatter):
 
 
 class TestGroupedbyThreeFormatSorter(TestGroupedbyThreeFormatter):
+
+    def test_orders_standalone_repofolders_correctly(self):
+        # Zero-padded
+        expected_1 = [
+            'OG 01.0',
+            'OG 010.0',
+            'OG 011.0',
+            'OG 02.0',
+            'OG 020.0',
+            'OG 021.0']
+
+        unordered_1 = [
+            'OG 021.0',
+            'OG 010.0',
+            'OG 020.0',
+            'OG 011.0',
+            'OG 02.0',
+            'OG 01.0']
+
+        # Unpadded
+        expected_2 = [
+            'OG 0',
+            'OG 00',
+            'OG 000',
+            'OG 001',
+            'OG 01',
+            'OG 011',
+            'OG 1']
+
+        unordered_2 = [
+            'OG 1',
+            'OG 000',
+            'OG 0',
+            'OG 00',
+            'OG 011',
+            'OG 01',
+            'OG 001']
+
+        actual_1 = sorted(unordered_1, key=self.formatter.sorter)
+        self.assertEquals(expected_1, actual_1)
+
+        actual_2 = sorted(unordered_2, key=self.formatter.sorter)
+        self.assertEquals(expected_2, actual_2)
 
     def test_orders_first_level_refnums_correctly(self):
         expected = ['OG 01.0-9.9.9-99',
@@ -367,6 +423,49 @@ class TestGroupedbyThreeFormatSorter(TestGroupedbyThreeFormatter):
 
 
 class TestNoClientIDGBTSorter(TestNoClientIDGroupedbyThreeFormatter):
+
+    def test_orders_standalone_repofolders_correctly(self):
+        # Zero-padded
+        expected_1 = [
+            '01.0',
+            '010.0',
+            '011.0',
+            '02.0',
+            '020.0',
+            '021.0']
+
+        unordered_1 = [
+            '021.0',
+            '010.0',
+            '020.0',
+            '011.0',
+            '02.0',
+            '01.0']
+
+        # Unpadded
+        expected_2 = [
+            'OG 0',
+            'OG 00',
+            'OG 000',
+            'OG 001',
+            'OG 01',
+            'OG 011',
+            'OG 1']
+
+        unordered_2 = [
+            'OG 1',
+            'OG 000',
+            'OG 0',
+            'OG 00',
+            'OG 011',
+            'OG 01',
+            'OG 001']
+
+        actual_1 = sorted(unordered_1, key=self.formatter.sorter)
+        self.assertEquals(expected_1, actual_1)
+
+        actual_2 = sorted(unordered_2, key=self.formatter.sorter)
+        self.assertEquals(expected_2, actual_2)
 
     def test_orders_first_level_refnums_correctly(self):
         expected = ['01.0-9.9.9-99',
