@@ -18,6 +18,11 @@
       title="opengever.disposition: Download SIP Package"
       />
 
+  <permission
+      id="opengever.disposition.EditTransferNumber"
+      title="opengever.disposition: Edit transfer number"
+      />
+
 	<include package=".browser" />
 	<include package=".viewlets" />
 
