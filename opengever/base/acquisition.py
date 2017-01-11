@@ -66,7 +66,8 @@ def acquired_default_factory(field, default=None):
     def default_value_generator(context):
         container = context
 
-        acquired_value = acquire_field_value(field, container)
+        bound_field = field.bind(container)
+        acquired_value = acquire_field_value(bound_field, container)
         if acquired_value is not NO_VALUE_FOUND:
             return acquired_value
 
