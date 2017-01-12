@@ -1,5 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browsing
 from opengever.testing import FunctionalTestCase
 from plone import api
 from zExceptions import Unauthorized
@@ -18,3 +19,22 @@ class TestDossierWorkflow(FunctionalTestCase):
 
         with self.assertRaises(Unauthorized):
             api.content.delete(obj=dossier)
+
+    @browsing
+    def test_offer_transition_is_hidden_in_action_menu(self, browser):
+        self.grant('Manager')
+        dossier = create(Builder('dossier').as_expired())
+
+        browser.login().open(dossier)
+        self.assertEquals(
+            [], browser.css('#workflow-transition-dossier-transition-offer'))
+
+    @browsing
+    def test_archive_transition_is_hidden_in_action_menu(self, browser):
+        self.grant('Manager')
+        dossier = create(Builder('dossier')
+                         .in_state('dossier-state-offered'))
+
+        browser.login().open(dossier)
+        self.assertEquals(
+            [], browser.css('#workflow-transition-dossier-transition-archive'))

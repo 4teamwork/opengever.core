@@ -5,6 +5,9 @@ Changelog
 4.14.2 (unreleased)
 -------------------
 
+- Hide dossiers offer and archive transition from the action menu.
+  [phgross]
+
 - Make transfer number only editable for archivists and managers.
   [phgross]
 
