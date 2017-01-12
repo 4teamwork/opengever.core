@@ -51,7 +51,7 @@ class TestDossierProposalListing(IntegrationTestCase):
     maxDiff = None
 
     @browsing
-    def test_listing(self, browser):
+    def test_listing_shows_active_proposals_by_default(self, browser):
         self.login(self.dossier_responsible, browser)
         browser.open(self.dossier, view='tabbedview_view-proposals')
         self.assertEquals(
@@ -117,6 +117,15 @@ class TestDossierProposalListing(IntegrationTestCase):
              SUBMITTED_WORD_PROPOSAL, DRAFT_WORD_PROPOSAL],
             proposal_dicts(browser))
 
+    @browsing
+    def test_decided_filter_shows_only_decided_proposals(self, browser):
+        self.login(self.dossier_responsible, browser)
+        browser.open(self.dossier,
+                     view='tabbedview_view-proposals',
+                     data={'proposal_state_filter': 'filter_proposals_decided'})
+
+        self.assertEquals([DECIDED_PROPOSAL], proposal_dicts(browser))
+
 
 class TestMyProposals(IntegrationTestCase):
 
@@ -130,11 +139,44 @@ class TestMyProposals(IntegrationTestCase):
         browser.open(view='tabbedview_view-myproposals')
         self.assertEquals([DRAFT_PROPOSAL], proposal_dicts(browser))
 
+    @browsing
+    def test_listing_shows_active_proposals_by_default(self, browser):
+        self.login(self.dossier_responsible, browser)
+        browser.open(view='tabbedview_view-myproposals')
+        self.assertEquals(
+            [SUBMITTED_PROPOSAL, DRAFT_PROPOSAL,
+             SUBMITTED_WORD_PROPOSAL, DRAFT_WORD_PROPOSAL],
+            proposal_dicts(browser))
+
+    @browsing
+    def test_decided_filter_shows_only_decided_proposals(self, browser):
+        self.login(self.dossier_responsible, browser)
+        browser.open(view='tabbedview_view-myproposals',
+                     data={'proposal_state_filter': 'filter_proposals_decided'})
+
+        self.assertEquals([DECIDED_PROPOSAL], proposal_dicts(browser))
+
+    @browsing
+    def test_all_filter_shows_all_proposals(self, browser):
+        self.login(self.dossier_responsible, browser)
+
+        browser.open(self.draft_proposal, view='tabbedview_view-overview')
+        browser.find('Cancel').click()
+        browser.open(view='tabbedview_view-myproposals',
+                     data={'proposal_state_filter': 'filter_proposals_all'})
+
+        cancelled_proposal = DRAFT_PROPOSAL.copy()
+        cancelled_proposal['State'] = 'Cancelled'
+        self.assertEquals(
+            [SUBMITTED_PROPOSAL, cancelled_proposal, DECIDED_PROPOSAL,
+             SUBMITTED_WORD_PROPOSAL, DRAFT_WORD_PROPOSAL],
+            proposal_dicts(browser))
+
 
 class TestSubmittedProposals(IntegrationTestCase):
 
     @browsing
-    def test_listing(self, browser):
+    def test_listing_shows_submitted_proposals_by_default(self, browser):
         self.login(self.committee_responsible, browser)
         browser.open(self.committee, view='tabbedview_view-submittedproposals')
 
@@ -170,3 +212,39 @@ class TestSubmittedProposals(IntegrationTestCase):
             'http://nohost/plone/opengever-meeting-committeecontainer/'
             'committee-1/meeting-1/view',
             elem.node.get('href'))
+
+    @browsing
+    def test_listing_shows_active_proposals_by_default(self, browser):
+        self.login(self.committee_responsible, browser)
+        browser.open(self.committee,
+                     view='tabbedview_view-submittedproposals')
+        self.assertEquals(
+            [SUBMITTED_PROPOSAL, SUBMITTED_WORD_PROPOSAL],
+            proposal_dicts(browser))
+
+    @browsing
+    def test_decided_filter_shows_only_decided_proposals(self, browser):
+        self.login(self.committee_responsible, browser)
+        browser.open(self.committee,
+                     view='tabbedview_view-submittedproposals',
+                     data={'proposal_state_filter': 'filter_proposals_decided'})
+
+        self.assertEquals([DECIDED_PROPOSAL], proposal_dicts(browser))
+
+    @browsing
+    def test_submitted_proposal_all_filter_shows_all_proposals(self, browser):
+        self.login(self.dossier_responsible, browser)
+
+        browser.open(self.draft_proposal, view='tabbedview_view-overview')
+        browser.find('Cancel').click()
+
+        self.login(self.committee_responsible, browser)
+        browser.open(self.committee,
+                     view='tabbedview_view-submittedproposals',
+                     data={'proposal_state_filter': 'filter_proposals_all'})
+
+        cancelled_proposal = DRAFT_PROPOSAL.copy()
+        cancelled_proposal['State'] = 'Cancelled'
+        self.assertEquals(
+            [SUBMITTED_PROPOSAL, DECIDED_PROPOSAL, SUBMITTED_WORD_PROPOSAL],
+            proposal_dicts(browser))

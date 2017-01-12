@@ -42,6 +42,9 @@ class ProposalQuery(BaseQuery):
         query = self.filter(Proposal.workflow_state.in_(states))
         return query.filter(Proposal.committee == committee)
 
+    def for_committee(self, committee):
+        return self.filter(Proposal.committee == committee)
+
     def active(self):
         return self.filter(Proposal.workflow_state.in_([
             Proposal.STATE_PENDING.name,

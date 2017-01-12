@@ -1,8 +1,11 @@
 from ftw.table.interfaces import ITableSource
 from ftw.table.interfaces import ITableSourceConfig
+from opengever.meeting import _
 from opengever.meeting.model import Proposal
-from opengever.meeting.tabs.proposallisting import ProposalListingTab
 from opengever.tabbedview import SqlTableSource
+from opengever.tabbedview.browser.tabs import Proposals
+from opengever.tabbedview.filters import Filter
+from opengever.tabbedview.filters import FilterList
 from zope.component import adapter
 from zope.interface import implementer
 from zope.interface import implements
@@ -17,20 +20,47 @@ class ISubmittedProposalTableSourceConfig(ITableSourceConfig):
     """Marker interface for submitted proposal table source configs."""
 
 
-class SubmittedProposalListingTab(ProposalListingTab):
+class AllProposalFilter(Filter):
+
+    visible_states = ['submitted', 'scheduled', 'decided']
+
+    def update_query(self, query):
+        return query.filter(Proposal.workflow_state.in_(self.visible_states))
+
+
+class UndecidedProposalFilter(AllProposalFilter):
+
+    visible_states = ['submitted', 'scheduled']
+
+
+class DecidedProposalFilter(AllProposalFilter):
+
+    visible_states = ['decided']
+
+
+class SubmittedProposalListingTab(Proposals):
     implements(ISubmittedProposalTableSourceConfig)
 
-    sort_on = ''
+    filterlist_name = 'submitted_proposal_state_filter'
+    filterlist = FilterList(
+        AllProposalFilter('filter_proposals_all',
+                          _('all', default=u'All')),
+        UndecidedProposalFilter(
+            'filter_proposals_active',
+            _('active', default=u'Active'),
+            default=True),
+        DecidedProposalFilter('filter_proposals_decided',
+                              _('decided', default=u'Decided'))
+    )
 
     def get_base_query(self):
-        return Proposal.query.visible_for_committee(
-            self.context.load_model())
+        return Proposal.query.for_committee(self.context.load_model())
 
     @property
     def columns(self):
         """Inherit column definition from the ProposalListingTab,
-        but replace transform with """
-
+        but replace transform.
+        """
         columns = super(SubmittedProposalListingTab, self).columns
         for col in columns:
             if col.get('column') == 'title':
