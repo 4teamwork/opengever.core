@@ -1,7 +1,9 @@
-.. _kapitel-mit-dossiers-arbeiten:
+.. _label-mit-dossiers-arbeiten:
 
 Mit Dossiers arbeiten
 =====================
+
+.. _label-dossier-erstellen:
 
 Ein neues Dossier eröffnen
 --------------------------
@@ -215,7 +217,7 @@ Dossieransicht nach dem Speichern
    wird nur eingeblendet, wenn das Modul "Sitzungs- und Protokollverwaltung"
    aktiviert wurde.
 
-:: _dossiers-bearbeiten:
+.. _label-dossier-bearbeiten:
 
 Ein Dossier bearbeiten
 ----------------------
@@ -243,7 +245,7 @@ aus direkt ausgewählt werden.
 
 |img-dossiers-13|
 
-.. _beteiligungen:
+.. _label-beteiligungen:
 
 Einem Dossier Beteiligte hinzufügen
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -425,8 +427,8 @@ Ein komplettes Dossier kann als ZIP-Datei verpackt und heruntergeladen werden.
 .. note::
 
    Es besteht ebenfalls die Möglichkeit, eine Auswahl von Dokumenten als
-   ZIP-Datei zu exportieren. Die Anleitung hierzu finden Sie im Kapitel
-   :ref:`kapitel_mit_dokumenten_arbeiten`.
+   ZIP-Datei zu exportieren. Die Anleitung hierzu finden Sie unter
+   :ref:`label-dokumente-zip-export`.
 
 Mit Subdossiers arbeiten
 ------------------------
@@ -437,7 +439,7 @@ Subdossiers eröffnen
 Wählen Sie auf dem Hauptdossier *Hinzufügen → Subdossier*.
 
 Die Erfassungsmasken von Haupt- und Subdossiers sind identisch (siehe
-Kapitel :ref:`_kapitel-mit-dossiers-arbeiten`). Die federführende Person wird
+:ref:`Neues Dossier eröffnen <label-dossier-erstellen>`). Die federführende Person wird
 automatisch vom Hauptdossier übernommen, kann aber geändert werden. Unter
 einem Hauptdossier können beliebig viele Verschachtelungsstufen von Subdossiers
 eröffnet werden; standardmässig ist dies jedoch auf eine Hierarchiestufe
@@ -447,7 +449,7 @@ Subdossiers bearbeiten
 ~~~~~~~~~~~~~~~~~~~~~~
 
 Die Bearbeitung von Subdossiers ist identisch zur Bearbeitung von
-Hauptdossiers (siehe :ref:`Dossiers bearbeiten <_dossiers-bearbeiten>`).
+Hauptdossiers (siehe :ref:`Dossier bearbeiten <label-dossier-bearbeiten>`).
 
 Dossiers mit Subdossiers abschliessen
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

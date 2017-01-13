@@ -10,11 +10,7 @@ Benutzerhandbuch
 
 Release 3.10
 
-Version 1.0
-
-23. Dezember 2016
-
-Contents:
+Version 1.0 / 23. Dezember 2016
 
 .. toctree::
    :maxdepth: 2
@@ -31,5 +27,11 @@ Contents:
    standardablaeufe
    rollenmanager
    sitzungs-und-protokollverwaltung
+
+Verzeichnisse
+=============
+
+* :ref:`genindex`
+* :ref:`search`
 
 .. |image1| image:: img/media/image1.png

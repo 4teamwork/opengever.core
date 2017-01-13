@@ -171,7 +171,7 @@ Auftraggeber schliesst die Aufgabe ab Abgeschlossen |image149|
 
   - "Zur direkten Erledigung": Diese Aufgabe kann nach dem Akzeptieren direkt
     abgeschlossen werden.
-    
+
   Mitarbeitende, die Zugriff auf den Eingangskorb haben, können zusätzliche
   Aufgabenaktionen auslösen, auch wenn sie nicht Auftragnehmer sind.
 
@@ -354,7 +354,7 @@ des Amts für Raumplanung.
 -  Erstellen Sie eine Aufgabe und verknüpfen Sie sie mit denjenigen
    Dokumenten, die der Auftragnehmer zur Bearbeitung der Aufgabe
    benötigt. Alle anderen Dokumente im Dossier bleiben für den
-   Auftragnehmer unsichtbar. [6]_
+   Auftragnehmer unsichtbar.
 
 -  Wählen Sie im Feld *Mandant des Auftragnehmers* das entsprechende
    Kürzel (z.B. SKA-ARCH).
@@ -582,16 +582,23 @@ Vorgehen:
 -  Erstellen Sie zunächst eine Aufgabe mit den Dokumenten, die im
    nächsten Schritt an andere Stellen weitergegeben werden sollen.
    Akzeptieren Sie diese Aufgabe (die Funktion Delegieren steht erst
-   dann zur Verfügung).\ |image204|
+   dann zur Verfügung).
+
+   |image204|
 
 -  Wählen Sie durch Texteingabe alle Adressaten aus, an welche die
    Aufgabe gerichtet werden soll und klicken Sie die Dokumente an, die
-   der Aufgabe mitgegeben werden sollen. **Achtung: Die Dokumente werden
-   beim Anhängen an die Aufgabe nicht kopiert; es handelt sich dabei
-   lediglich um einen Link auf dasselbe Dokument!
-   **\ Klicken Sie auf *Weiter*.\ |image205|
+   der Aufgabe mitgegeben werden sollen.
 
-|image206|\ |image207|
+
+   Klicken Sie auf *Weiter*.
+
+   |image205|
+
+.. note::
+   Achtung: Die Dokumente werden beim Anhängen an die Aufgabe nicht
+   kopiert; es handelt sich dabei lediglich um einen Link auf dasselbe
+   Dokument!
 
 |image208|
 
@@ -648,7 +655,9 @@ Es bestehen folgende Auswertungsmöglichkeiten: Ausgewählte Aufgaben
 können als PDF oder in eine Excel-Tabelle exportiert werden. Die
 Auswertung muss für *Meine Aufgaben* und *Erteilte Aufgaben* separat
 vorgenommen werden. Zu den Sortierungsmöglichkeiten siehe
-Kapitel 6.\ |image217|
+:ref:`Spalten sortieren <label-spalten-sortieren>`.
+
+|image217|
 
 Zentrale Aufgabenkontrolle
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -720,36 +729,27 @@ Aufgaben verhindern.
 .. |img-aufgaben-5| image:: img/media/img-aufgaben-5.png
 .. |img-aufgaben-6| image:: img/media/img-aufgaben-6.png
 .. |img-aufgaben-7| image:: img/media/img-aufgaben-7.png
-.. |img-aufgaben-8| image:: img/media/img-aufgaben-8.png
-.. |img-aufgaben-9| image:: img/media/img-aufgaben-9.png
-.. |img-aufgaben-10| image:: img/media/img-aufgaben-10.png
-.. |img-aufgaben-11| image:: img/media/img-aufgaben-11.png
-.. |img-aufgaben-12| image:: img/media/img-aufgaben-12.png
-.. |img-aufgaben-13| image:: img/media/img-aufgaben-13.png
-.. |img-aufgaben-14| image:: img/media/img-aufgaben-14.png
-.. |img-aufgaben-15| image:: img/media/img-aufgaben-15.png
-.. |img-aufgaben-16| image:: img/media/img-aufgaben-16.png
-.. |img-aufgaben-17| image:: img/media/img-aufgaben-17.png
-.. |img-aufgaben-18| image:: img/media/img-aufgaben-18.png
-.. |img-aufgaben-19| image:: img/media/img-aufgaben-19.png
-.. |img-aufgaben-20| image:: img/media/img-aufgaben-20.png
+
+..
+ .. |img-aufgaben-8| image:: img/media/img-aufgaben-8.png
+ .. |img-aufgaben-9| image:: img/media/img-aufgaben-9.png
+ .. |img-aufgaben-10| image:: img/media/img-aufgaben-10.png
+ .. |img-aufgaben-11| image:: img/media/img-aufgaben-11.png
+ .. |img-aufgaben-12| image:: img/media/img-aufgaben-12.png
+ .. |img-aufgaben-13| image:: img/media/img-aufgaben-13.png
+ .. |img-aufgaben-14| image:: img/media/img-aufgaben-14.png
+ .. |img-aufgaben-15| image:: img/media/img-aufgaben-15.png
+ .. |img-aufgaben-16| image:: img/media/img-aufgaben-16.png
+ .. |img-aufgaben-17| image:: img/media/img-aufgaben-17.png
+ .. |img-aufgaben-18| image:: img/media/img-aufgaben-18.png
+ .. |img-aufgaben-19| image:: img/media/img-aufgaben-19.png
+ .. |img-aufgaben-20| image:: img/media/img-aufgaben-20.png
 
 
 .. |image138| image:: img/media/image134.png
 .. |image139| image:: img/media/image135.png
-   :width: 6.25000in
 .. |image140| image:: img/media/image136.png
-   :width: 6.25000in
 .. |image141| image:: img/media/image137.png
-   :width: 6.23611in
-.. |image142| image:: img/media/image138.png
-   :width: 0.73403in
-.. |image143| image:: img/media/image139.png
-   :width: 6.12153in
-.. |image144| image:: img/media/image140.png
-   :width: 5.99653in
-.. |image145| image:: img/media/image141.png
-   :width: 5.99653in
 .. |image146| image:: img/media/image142.png
    :width: 0.33333in
    :height: 0.33333in
@@ -764,8 +764,6 @@ Aufgaben verhindern.
    :height: 0.30208in
 .. |image150| image:: img/media/image144.png
    :width: 6.23611in
-.. |image151| image:: img/media/image138.png
-   :width: 0.73819in
 .. |image152| image:: img/media/image145.png
    :width: 0.31250in
    :height: 0.28125in

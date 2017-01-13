@@ -570,6 +570,8 @@ Sie wie folgt vor:
 ZIP-Export/Import
 -----------------
 
+.. _label-dokumente-zip-export:
+
 ZIP-Export
 ~~~~~~~~~~
 
