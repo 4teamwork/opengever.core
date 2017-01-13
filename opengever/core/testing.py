@@ -248,6 +248,7 @@ class OpengeverFixture(PloneSandboxLayer):
         applyProfile(portal, 'ftw.contentmenu:default')
         applyProfile(portal, 'ftw.zipexport:default')
         applyProfile(portal, 'opengever.disposition:default')
+        applyProfile(portal, 'plone.restapi:default')
 
         applyProfile(portal, 'opengever.testing:testing')
 
@@ -284,8 +285,7 @@ class APILayer(Layer):
     """
 
     def setUp(self):
-        with ploneSite() as site:
-            applyProfile(site, 'plone.restapi:default')
+        pass
 
 
 RESTAPI_LAYER = APILayer()
