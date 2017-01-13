@@ -40,6 +40,8 @@ Sie die Breite der Spalte mit gedrückter Maustaste.
 
 |img-grundlagen-3|
 
+.. _label-spalten-sortieren:
+
 Spalten sortieren
 ~~~~~~~~~~~~~~~~~
 

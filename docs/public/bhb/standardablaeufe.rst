@@ -90,7 +90,7 @@ gegebenenfalls auch die Frist der Hauptgabe automatisch angepasst
 |img-standardablauf-6|
 
 Anschliessend stehen die Aufgaben zur weiteren Bearbeitung bereit (siehe
-Kapitel :ref:`_kapitel_aufgaben`).
+:ref:`kapitel-aufgaben`).
 
 .. |img-standardablauf-1| image:: img/media/img-standardablauf-1.png
 .. |img-standardablauf-2| image:: img/media/img-standardablauf-2.png
