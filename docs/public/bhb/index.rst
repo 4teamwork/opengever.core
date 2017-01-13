@@ -26,6 +26,8 @@ Version 1.0 / 23. Dezember 2016
    aufgaben
    standardablaeufe
    rollenmanager
+   meine_ablage
+   aussonderung
    sitzungs-und-protokollverwaltung
    glossary
 
