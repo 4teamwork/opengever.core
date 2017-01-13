@@ -8,15 +8,15 @@ Mit Dossiers arbeiten
 Ein neues Dossier eröffnen
 --------------------------
 
-Um ein neues Dossier zu eröffnen, klicken Sie auf die Ordnungsposition,
-unter der das Dossier erfasst werden soll, und wählen Sie *Hinzufügen
-Geschäftsdossier*.
+Um ein neues :term:`Dossier` zu eröffnen, klicken Sie auf die
+:term:`Ordnungsposition`, unter der das Dossier erfasst werden soll, und wählen
+Sie *Hinzufügen Geschäftsdossier*.
 
 |img-dossiers-1|
 
 .. note::
    Ein Dossier kann jeweils nur auf der untersten Gliederungsstufe des
-   Ordnungssystems (sog. Rubrik) hinzugefügt werden, z.B. unter 1.2.3,
+   Ordnungssystems (sog. :term:`Rubrik`) hinzugefügt werden, z.B. unter 1.2.3,
    nicht aber unter 1.2
 
 Die Erfassungsmaske ist in die vier Reiter *Allgemein*, *Ablage*,
@@ -84,7 +84,7 @@ Reiter.
    Führung des Dossiers verantwortlich ist. Federführend ist immer eine
    Person aus dem eigenen Mandanten. Standardmässig schlägt OneGov GEVER
    im Feld Federführend die angemeldete Person vor. Änderung der
-   Federführung: Im Textfeld werden mindestens zwei Buchstaben des Vor-
+   :term:`Federführung`: Im Textfeld werden mindestens zwei Buchstaben des Vor-
    oder Nachnamens oder das Kürzel eingegeben. Aus der darauf
    erscheinenden Liste wird die gewünschte Person mit Klick
    ausgewählt.
@@ -190,7 +190,7 @@ Dossieransicht nach dem Speichern
    -  *Ende*: Ende-Datum (wird erst angezeigt, wenn eingetragen)
 
    -  *Laufnummer*: Fortlaufende Dossiernummer (unabhängig davon, ob es sich
-      um ein Dossier oder um ein Subdossier handelt)
+      um ein Dossier oder um ein :term:`Subdossier` handelt)
 
    -  *Aktenzeichen*: Das Aktenzeichen eines Dossiers setzt sich aus
       folgenden Elementen zusammen: Kürzel Mandant, Nummer der
@@ -274,7 +274,7 @@ fakultativ zu Dokumentationszwecken vergeben werden.
    - Eine Beteiligung hat keine zusätzlichen *Zugriffsrechte* auf das Dossier
      zur Folge.
 
-Während die Federführung direkt in der Eingabemaske des Dossiers
+Während die :term:`Federführung` direkt in der Eingabemaske des Dossiers
 eingegeben wird, werden die übrigen Beteiligungen über *Hinzufügen →
 Beteiligung hinzufügen* oder über den Dossier-Reiter *Beteiligungen*
 ergänzt.
@@ -407,7 +407,7 @@ Wer hat wann, was gemacht – der Reiter „Journal“
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Unter dem Reiter *Journal* wird angezeigt, wer wann welche Veränderungen
-am Dossier vorgenommen hat. Das Journal dient der Nachvollziehbarkeit.
+am Dossier vorgenommen hat. Das Journal dient der :term:`Nachvollziehbarkeit`.
 Es kann nicht bearbeitet werden.
 
 |img-dossiers-18|
@@ -433,22 +433,22 @@ Ein komplettes Dossier kann als ZIP-Datei verpackt und heruntergeladen werden.
 Mit Subdossiers arbeiten
 ------------------------
 
-Subdossiers eröffnen
-~~~~~~~~~~~~~~~~~~~~
+Subdossier eröffnen
+~~~~~~~~~~~~~~~~~~~
 
 Wählen Sie auf dem Hauptdossier *Hinzufügen → Subdossier*.
 
 Die Erfassungsmasken von Haupt- und Subdossiers sind identisch (siehe
-:ref:`Neues Dossier eröffnen <label-dossier-erstellen>`). Die federführende Person wird
-automatisch vom Hauptdossier übernommen, kann aber geändert werden. Unter
+:ref:`Neues Dossier eröffnen <label-dossier-erstellen>`). Die federführende
+Person wird automatisch vom Hauptdossier übernommen, kann aber geändert werden. Unter
 einem Hauptdossier können beliebig viele Verschachtelungsstufen von Subdossiers
 eröffnet werden; standardmässig ist dies jedoch auf eine Hierarchiestufe
 beschränkt.
 
-Subdossiers bearbeiten
-~~~~~~~~~~~~~~~~~~~~~~
+Subdossier bearbeiten
+~~~~~~~~~~~~~~~~~~~~~
 
-Die Bearbeitung von Subdossiers ist identisch zur Bearbeitung von
+Die Bearbeitung eines Subdossiers ist identisch zur Bearbeitung von
 Hauptdossiers (siehe :ref:`Dossier bearbeiten <label-dossier-bearbeiten>`).
 
 Dossiers mit Subdossiers abschliessen
@@ -534,7 +534,7 @@ Subdossier 2: ``SKA ARCH-Amt-2011-5.2``
 Ein Subdossier wieder öffnen
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Wenn ein Subdossier wiedereröffnet werden soll, muss zuerst das
+Wenn ein :term:`Subdossier` wiedereröffnet werden soll, muss zuerst das
 Hauptdossier wieder offen sein. Anschliessend kann das Subdossier
 bearbeitet werden.
 

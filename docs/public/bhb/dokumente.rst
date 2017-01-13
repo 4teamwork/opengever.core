@@ -579,7 +579,7 @@ Einzelne oder mehrere Dokumente können in eine ZIP-Datei verpackt und
 exportiert werden.
 
 -  Markieren Sie in der Dokumentenübersicht die Dokumente aus, welche
-   exportiert werden sollen (mit :kbd:`CTRL` + rechter Maustaste können mehrere
+   exportiert werden sollen (mit :kbd:`Ctrl` + rechter Maustaste können mehrere
    Dokumente markiert werden)
 
 -  Öffnen Sie unterhalb der Dokumentenliste das "Weitere Aktionen" Menü
@@ -613,7 +613,7 @@ Dokumentvorlagen verwalten
 Dokumentvorlagen
 ~~~~~~~~~~~~~~~~
 
-Die Anwendungskomponente Vorlagen befindet sich in der
+Die Anwendungskomponente *Vorlagen* befindet sich in der
 GEVER-Übersichtsleiste und beinhaltet die Menüs *Dokumente* und
 *Standardabläufe* (siehe auch :ref:`kapitel-standardablaeufe`).
 

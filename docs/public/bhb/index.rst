@@ -13,8 +13,8 @@ Release 3.10
 Version 1.0 / 23. Dezember 2016
 
 .. toctree::
-   :maxdepth: 2
    :numbered:
+   :maxdepth: 2
 
    overview
    grundlagen
@@ -27,6 +27,8 @@ Version 1.0 / 23. Dezember 2016
    standardablaeufe
    rollenmanager
    sitzungs-und-protokollverwaltung
+   glossary
+
 
 Verzeichnisse
 =============

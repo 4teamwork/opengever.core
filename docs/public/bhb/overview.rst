@@ -1,5 +1,5 @@
-OneGov GEVER
-============
+Über OneGov GEVER
+=================
 
 Was ist OneGov GEVER?
 ---------------------
@@ -91,7 +91,7 @@ Benutzeroberfläche.
 OneGov GEVER ist mit beliebigen Betriebssystemen wie auch mit
 Office-Pakten kompatibel. Es zeichnet sich durch eine hohe
 Integrierbarkeit in die Umsysteme aus. Für die generelle Anbindung an
-Drittsysteme ist die standardisierte Dossierschnittstelle eCH0039
+Drittsysteme ist die standardisierte :term:`Dossierschnittstelle` eCH-0039
 vorgesehen. OneGov GEVER kann für einen einzelnen Mandanten bzw. eine
 Amtsstelle oder ein Organ eingesetzt werden, aber auch für beliebig
 viele Mandanten in grossen und arbeitsteilig gegliederten Verwaltungen.
@@ -109,7 +109,7 @@ Weiterentwicklung des Produkts einbringen kann.
 Über diese Unterlagen
 ---------------------
 
-Diesen Unterlagen basieren auf den Schulungsunterlagen des Staatsarchivs
-des Kantons Zug, die dem Verein OneGov.ch freundlicherweise zur
-Verfügung gestellt wurden. Diese Unterlagen werden durch die 4teamwork
+Diesen Unterlagen basieren teilweise auf den Schulungsunterlagen des
+Staatsarchivs des Kantons Zug, die dem Verein OneGov.ch freundlicherweise
+zur Verfügung gestellt wurden. Diese Unterlagen werden durch die 4teamwork
 AG laufend erweitert und aktualisiert.
