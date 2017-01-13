@@ -162,18 +162,18 @@ Auftragnehmer erledigt die Aufgabe Erledigt |image148|
 Auftraggeber schliesst die Aufgabe ab Abgeschlossen |image149|
 
 .. note::
-  Bei den Auftragstypen "Zur Kenntnisnahme" sowie "Zur direkten Erledigung"
-  ist der Workflow abgekürzt, da der Auftraggeber in diesen Fällen keine
-  Antwort erwartet, die überprüft werden muss.
+   Bei den Auftragstypen "Zur Kenntnisnahme" sowie "Zur direkten Erledigung"
+   ist der Workflow abgekürzt, da der Auftraggeber in diesen Fällen keine
+   Antwort erwartet, die überprüft werden muss.
 
-  - "Zur Kenntnisnahme": Diese Aufgabe kann ohne Akzeptieren direkt
-    abgeschlossen werden.
+   - "Zur Kenntnisnahme": Diese Aufgabe kann ohne Akzeptieren direkt
+     abgeschlossen werden.
 
-  - "Zur direkten Erledigung": Diese Aufgabe kann nach dem Akzeptieren direkt
-    abgeschlossen werden.
+   - "Zur direkten Erledigung": Diese Aufgabe kann nach dem Akzeptieren direkt
+     abgeschlossen werden.
 
-  Mitarbeitende, die Zugriff auf den Eingangskorb haben, können zusätzliche
-  Aufgabenaktionen auslösen, auch wenn sie nicht Auftragnehmer sind.
+   Mitarbeitende, die Zugriff auf den Eingangskorb haben, können zusätzliche
+   Aufgabenaktionen auslösen, auch wenn sie nicht Auftragnehmer sind.
 
 **Spezialfälle:**
 
@@ -477,7 +477,10 @@ Die Aufgabe wird nun im eigenen Dossier bearbeitet, indem beispielsweise
 dem Dossier neue Dokumente hinzugefügt werden oder ein mitgeschicktes
 Dokument bearbeitet wird.
 
-|image186|\ |image187|
+.. note::
+   Bearbeitet der Auftragnehmer vom Auftraggeber mitgesendete Dokumente, so
+   handelt es sich dabei um **Kopien**, die dem Auftraggeber bei der
+   Auftragserledigung erneut übermittelt werden müssen.
 
 | Beim Erledigen der Aufgabe kann aus der Auflistung der Dokumente
   ausgewählt werden, welche Dateien dem Auftraggeber übermittelt werden
@@ -612,16 +615,38 @@ Vorgehen:
    werden, kann das Delegieren beliebig oft wiederholt
    werden.\ |image209|
 
+.. note::
+   Wurde eine Delegation mandantenübergreifend erstellt, hat der Empfänger
+   die Möglichkeit, die Aufgabe direkt im Dossier des Auftraggebers oder in
+   einem eigenen Dossier zu bearbeiten (analog zu einer anderen
+   mandantenübergreifenden Aufgabe).
+
+   Wird die Aufgabe direkt im Dossier des Auftraggebers bearbeitet, ist zu
+   beachten, dass ein mitgesendetes Dokument unter Umständen heruntergeladen
+   werden muss, damit nicht alle mit demselben Dokument arbeiten (z.B. bei
+   Stellungnahmen, die von verschiedenen Amtsstellen eintreffen sollten).
+
+   Die Hauptaufgabe kann erst erledigt und abgeschlossen werden, wenn alle
+   Unteraufgaben abgeschlossen sind.
+
 Aufgaben überwachen (Pendenzenkontrolle)
 ----------------------------------------
 
-|image210|\ |image211|
+
 
 Unter der Komponente Übersicht werden die persönlichen Aufgaben sowie
 diejenigen des ganzen Amtes aufgelistet. Dies ermöglicht eine
 persönliche und eine zentrale Pendenzenkontrolle. Mandantenübergreifende
 Aufgaben sind mit einem speziellen Icon versehen: |image212|
-|image213|\ |image214|
+
+.. note::
+   Die Spalte *Mandant* gibt an, in welchem Mandanten eine Aufgabe und damit
+   das zugehörige Dossier gespeichert ist. Wurde eine Aufgabe aus einem
+   anderen Mandanten in ein eigenes Dossier kopiert, so wird unter der Spalte
+   *Mandant* der eigene Mandant angegeben, weil die Aufgabe hier gespeichert
+   ist. In der Spalte *Mandant* wird also nur dann ein anderer Mandant
+   angegeben, wenn sich zur betreffenden Aufgabe kein Dossier im eigenen
+   Mandanten befindet.
 
 Persönliche Aufgabenkontrolle
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

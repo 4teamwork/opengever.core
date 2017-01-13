@@ -25,7 +25,7 @@ Markierungszeichen ☑ in der entsprechenden Zeile.
    - Klicken Sie in die Auswahl, um eine Zeile zu markieren.
    - Halten Sie :kbd:`Ctrl` gedrückt, und klicken Sie, um eine
      weitere bzw. mehrere nicht zusammenhängende Zeilen zu markieren.
-   - Halten Sie :kbd:`Ctrl + Shift` gedrückt und klicken Sie, um einen
+   - Halten Sie :kbd:`Ctrl Shift` gedrückt und klicken Sie, um einen
      zusammenhängenden Bereich zu selektieren.
 
 Spalten
@@ -184,22 +184,30 @@ Tipps & Tricks
 
 Nachfolgend einige generelle Inputs zum Handling:
 
-- Keine Doppelklicks: Im OneGov GEVER müssen die Aktionen jeweils nur mit einem
-  Klick bestätigt werden.
-- Mehrere Reiter verwenden: Wir empfehlen, für jedes Dossier ein eigenes Tab zu
-  verwenden für ein paralleles Bearbeiten der Dossiers.
-  Dies sind die Shortcuts dazu:
-  Mac: cmd + Klick
-  Windows: ctrl + Klick
+- Keine Doppelklicks: In OneGov GEVER müssen die Aktionen jeweils nur mit einem
+  Mausklick bestätigt werden.
 
-- Lesezeichen im Browser verwenden: Es empfiehlt sich, im Browser für die viel
-  benutzten Dossiers ein Lesezeichen zu setzen, damit diese jeweils mit einem
-  Klick wieder geöffnet werden können.
-- Schriftgrösse anpassen: Wenn dies gewünscht ist, kann mit folgenden Shortcuts
-  die Schriftgrösse individuell angepasst werden:
-  Mac: Grösser: cmd + / Kleiner: cmd -
-  Windows: Grösser: ctrl + / Kleiner: cmd -
-- Nachstehend noch eine Übersich aller im GEVER verwendeten Icons als Übersicht:
+- Mehrere Reiter verwenden: Wir empfehlen, für jedes Dossier einen eigenen
+  Reiter im Browser zu verwenden, um das parallele Arbeiten in mehreren Dossiers
+  zu erleichtern.
+
+  Dies sind die Shortcuts dazu:
+  Mac: :kbd:`cmd` + Klick
+  Windows: :kbd:`ctrl` + Klick
+
+- Lesezeichen im Browser verwenden: Es empfiehlt sich, im Browser für häufig
+  benutzte Dossiers und Ordnungspositionen ein Lesezeichen zu setzen, damit
+  diese jeweils mit einem Klick wieder geöffnet werden können.
+
+- Schriftgrösse anpassen: Bei Bedarf kann mit folgenden Tastaturkürzeln
+  die Schriftgrösse im Webbrowser individuell angepasst werden:
+
+  - Grössere Schrift: :kbd:`Ctrl +` (Windows) bzw. :kbd:`Cmd +` (Mac)
+
+  - Kleinere Schrift: :kbd:`Cmd -` (Windows) bzw. :kbd:`Cmd -` (Mac)
+
+- Nachstehend noch eine Übersicht aller in OneGov GEVER verwendeten Icons
+  als Übersicht:
 
 |img-grundlagen-14|
 

@@ -46,10 +46,9 @@ Sollen die Angaben bearbeitet werden, wählen Sie *Bearbeiten*.
 Reiter Benutzer
 ---------------
 
-Das :abbr:`OGDS (OneGov Global Directory Service)` enthält
-das zentrale Adressverzeichnis der aktiven und der inaktiven Mitarbeitenden
-der gesamten Installation von OneGov GEVER. Dieses Verzeichnis kann mit dem
-Filter durchsucht, aber nicht bearbeitet werden.
+Das :term:`OGDS` enthält das zentrale Adressverzeichnis der aktiven und der
+inaktiven Mitarbeitenden der gesamten Installation von OneGov GEVER. Dieses
+Verzeichnis kann mit dem Filter durchsucht, aber nicht bearbeitet werden.
 
 Das zentrale Adressverzeichnis wird normalerweise mehrmals täglich
 automatisch mit den Daten aus dem Active Directory synchronisiert (falls
