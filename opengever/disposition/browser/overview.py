@@ -13,8 +13,17 @@ class DispositionOverview(BrowserView, GeverTabMixin):
 
     show_searchform = False
 
-    def get_dossiers(self):
-        return self.context.get_dossier_representations()
+    def get_dossiers_grouped_by_repository(self):
+        dossiers = self.context.get_dossier_representations()
+        grouped_dossiers = {}
+        for dossier in dossiers:
+            key = dossier.get_grouping_key()
+            if key not in grouped_dossiers:
+                grouped_dossiers[key] = [dossier]
+            else:
+                grouped_dossiers[key].append(dossier)
+
+        return grouped_dossiers.items()
 
     def is_archival_worthy(self, dossier):
         return ILifeCycle(dossier).archival_value != ARCHIVAL_VALUE_UNWORTHY

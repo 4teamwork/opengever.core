@@ -24,89 +24,99 @@
       </div>
     </li>
 
-    <li tal:repeat="dossier view/get_dossiers"
-        class="dispositions list-group-item">
+    <li tal:repeat="item view/get_dossiers_grouped_by_repository"
+        class="repository-list-item">
 
-      <div class="list-group-cell data-cell">
-        <h3 class="title">
-          <span class="reference_number" tal:content="dossier/reference_number"/>
+      <tal:define tal:define="repository python: item[0]; dossiers python: item[1];">
 
-          <a href="#" tal:condition="dossier/url"
-             tal:attributes="href dossier/url" tal:content="dossier/title" />
+        <h3 class="repository_title" tal:condition="not: context/is_closed"
+            tal:content="repository/Title" />
 
-          <span tal:condition="not: dossier/url" tal:content="dossier/title" />
+        <h3 class="repository_title" tal:condition="context/is_closed"
+            tal:content="repository" />
 
-        </h3>
-        <div class="meta" tal:condition="dossier/additional_metadata_available">
-          <span class="meta-value date_period">
-            <span i18n:translate="period">Period</span>:
-            <span tal:content="python: view.get_localized_time(dossier.start)"/>
-            -
-            <span tal:content="python: view.get_localized_time(dossier.end)"/>
-          </span>
-          <span class="meta-value public_trial">
-            <span i18n:domain="opengever.base" i18n:translate="label_public_trial">Public Trial</span>:
-            <span i18n:domain="opengever.base" i18n:translate="" tal:content="dossier/public_trial"/>
-          </span>
-          <span class="meta-value archival_value">
-            <span i18n:domain="opengever.base" i18n:translate="label_archival_value">Archival value</span>:
-            <span i18n:domain="opengever.base" i18n:translate=""
-                  tal:content="dossier/archival_value"/>
+          <ul>
+            <li tal:repeat="dossier dossiers" class="dispositions list-group-item">
 
-            <span tal:condition="dossier/archival_value_annotation">
-              (
-              <span i18n:domain="opengever.base"
-                    tal:content="dossier/archival_value_annotation"/>
-              )
-            </span>
-          </span>
+              <div class="list-group-cell data-cell">
 
-        </div>
-      </div>
+                <h3 class="title">
+                  <span class="reference_number" tal:content="dossier/reference_number"/>
 
-      <div class="list-group-cell action-cell">
+                  <a href="#" tal:condition="dossier/url"
+                     tal:attributes="href dossier/url" tal:content="dossier/title" />
 
-        <div class="button-group appraisal-button-group"
-             tal:condition="view/appraisal_buttons_available">
+                  <span tal:condition="not: dossier/url" tal:content="dossier/title" />
+                </h3>
 
-          <a href="#"
-             class="button"
-             title="Archive"
-             i18n:attributes="title label_archive"
-             tal:attributes="class python: 'icon_button archive active' if dossier.appraisal else 'icon_button archive';
-                             data-url python: view.get_update_appraisal_url(dossier, True);">
+                <div class="meta" tal:condition="dossier/additional_metadata_available">
+                  <span class="meta-value date_period">
+                    <span i18n:translate="period">Period</span>:
+                    <span tal:content="python: view.get_localized_time(dossier.start)"/>
+                    -
+                    <span tal:content="python: view.get_localized_time(dossier.end)"/>
+                  </span>
+                  <span class="meta-value public_trial">
+                    <span i18n:domain="opengever.base" i18n:translate="label_public_trial">Public Trial</span>:
+                    <span i18n:domain="opengever.base" i18n:translate="" tal:content="dossier/public_trial"/>
+                  </span>
+                  <span class="meta-value archival_value">
+                    <span i18n:domain="opengever.base" i18n:translate="label_archival_value">Archival value</span>:
+                    <span i18n:domain="opengever.base" i18n:translate=""
+                          tal:content="dossier/archival_value"/>
 
-          </a>
+                    <span tal:condition="dossier/archival_value_annotation">
+                      (
+                      <span i18n:domain="opengever.base"
+                            tal:content="dossier/archival_value_annotation"/>
+                      )
+                    </span>
+                  </span>
+                </div>
 
-          <a href="#"
-             class="button"
-             title="Don't archive"
-             i18n:attributes="title label_dont_archive"
-             tal:attributes="class python: 'not_archive icon_button' if dossier.appraisal else 'not_archive icon_button active';
-                             data-url python: view.get_update_appraisal_url(dossier, False);">
-          </a>
+              </div>
 
-        </div>
+              <div class="list-group-cell action-cell">
+                <div class="button-group appraisal-button-group"
+                     tal:condition="view/appraisal_buttons_available">
 
-        <div class="button-group appraisal-button-group"
-             tal:condition="not: view/appraisal_buttons_available">
+                  <a href="#"
+                     class="button"
+                     title="Archive"
+                     i18n:attributes="title label_archive"
+                     tal:attributes="class python: 'icon_button archive active' if dossier.appraisal else 'icon_button archive';
+                                     data-url python: view.get_update_appraisal_url(dossier, True);">
+                  </a>
+                  <a href="#"
+                     title="Don't archive"
+                     i18n:attributes="title label_dont_archive"
+                     tal:attributes="class python: 'not_archive icon_button' if dossier.appraisal else 'not_archive icon_button active';
+                                     data-url python: view.get_update_appraisal_url(dossier, False);">
+                  </a>
 
-          <span tal:condition="dossier/appraisal"
-                class="icon_button archive active"
-                title="Archive"
-                i18n:attributes="title label_archive" />
+                </div>
 
-          <span
-              tal:condition="not: dossier/appraisal"
-              class="icon_button not_archive active"
-              title="Don't archive"
-              i18n:attributes="title label_dont_archive" />
+                <div class="button-group appraisal-button-group"
+                     tal:condition="not: view/appraisal_buttons_available">
 
-        </div>
-      </div>
+                  <span tal:condition="dossier/appraisal"
+                        class="icon_button archive active"
+                        title="Archive"
+                        i18n:attributes="title label_archive" />
+                  <span
+                      tal:condition="not: dossier/appraisal"
+                      class="icon_button not_archive active"
+                      title="Don't archive"
+                      i18n:attributes="title label_dont_archive" />
 
-     </li>
+                </div>
+
+            </li>
+          </ul>
+      </tal:define>
+    </li>
   </ul>
+
   <div class="actionButtons clearfix">
     <ul class="transitions">
       <li tal:repeat="transition view/get_transitions" >
