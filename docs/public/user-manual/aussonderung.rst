@@ -10,6 +10,12 @@ Abgelaufene Dossiers
 --------------------
 Das Aussondern von Inhalten im OneGov GEVER wird ausschliesslich auf Stufe Dossier angeboten. Dabei können nur stornierte oder abgeschlossen Dossier, bei welchen die Aufbewahrungsfrist abgelaufen ist, ausgesondert werden.
 
+Die Berechnung der Aufbewahrungsdauer erfolgt nach Geschäftsjahr.
+Beispiel:
+   - Dossierabschluss: 03.01.2013
+   - Aufbewahrungsdauer: 10 Jahre
+   - Aussonderung möglich ab: 1.1.2024
+
 Eine Übersicht über Abgelaufene Dossiers, also Dossiers welche für eine Aussonderung in Frage kommen, bietet der Status-Filter `angeboten` welcher auf allen Dossierauflistungen zur Verfügung steht.
 
 
