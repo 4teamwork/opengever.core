@@ -49,3 +49,5 @@ Die benötigte Zeit für das Update kann gemäss Erfahrungswert linear approximi
   - ``4:`` 124 Sekunden für 1243 Dokumente
   - ``5:`` 207 Sekunden für 1243 Dokumente
   - ``7:`` 234 Sekunden fur 1243 Dokumente
+
+.. disqus::

@@ -96,3 +96,5 @@ können diese mittels der Option ``metadata_fields`` verlangt werden:
 
 Um *alle* im Suchkatalog verfügbaren Metadaten direkt in den Suchresultaten
 darzustellen, kann ``metadata_fields=_all`` verwendet werden.
+
+.. disqus::

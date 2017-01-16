@@ -29,3 +29,5 @@ Inhalte bearbeiten (PATCH)
 --------------------------
 
 .. literalinclude:: example_patch.py
+
+.. disqus::

@@ -77,3 +77,5 @@ aktualisiert.
 .. |docprops-13| image:: ../_static/img/kurzref_adm_docprops_13.png
 .. |docprops-14| image:: ../_static/img/kurzref_adm_docprops_14.png
 .. |docprops-15| image:: ../_static/img/kurzref_adm_docprops_15.png
+
+.. disqus::

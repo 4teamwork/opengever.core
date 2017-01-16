@@ -103,3 +103,5 @@ Die zusätzichen Features sind mit einem Feature-Flag geschützt, und stehen nur
 .. |img-aussonderung-3| image:: img/media/img-aussonderung-3.png
 .. |img-aussonderung-4| image:: img/media/img-aussonderung-4.png
 .. |img-aussonderung-5| image:: img/media/img-aussonderung-5.png
+
+.. disqus::

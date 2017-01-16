@@ -23,3 +23,5 @@ Version 1.0 / 13. Januar 2016
 * :ref:`genindex`
 
 .. |logo-onegovgever| image:: ../_static/img/logo-onegovgever.png
+
+.. disqus::

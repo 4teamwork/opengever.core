@@ -281,3 +281,5 @@ Geschäft.
 .. |img-sitzungs-und-protokollverwaltung-15| image:: img/media/img-sitzungs-und-protokollverwaltung-15.png
 .. |img-sitzungs-und-protokollverwaltung-16| image:: img/media/img-sitzungs-und-protokollverwaltung-16.png
 .. |img-sitzungs-und-protokollverwaltung-17| image:: img/media/img-sitzungs-und-protokollverwaltung-17.png
+
+.. disqus::
