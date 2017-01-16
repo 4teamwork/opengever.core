@@ -5,6 +5,9 @@ Changelog
 4.14.2 (unreleased)
 -------------------
 
+- Adjust dossiers retention expiration calculation.
+  [phgross]
+
 - Disallow record manager to archive a disposition.
   [phgross]
 
