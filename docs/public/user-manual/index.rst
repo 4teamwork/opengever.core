@@ -13,7 +13,6 @@ Release 3.10
 Version 1.0 / 13. Januar 2016
 
 .. toctree::
-   :numbered:
    :maxdepth: 2
 
    overview
@@ -29,10 +28,8 @@ Version 1.0 / 13. Januar 2016
    meine_ablage
    aussonderung
    sitzungs-und-protokollverwaltung
-   glossary
 
 * :ref:`genindex`
 
 .. |logo-onegovgever| image:: ../_static/img/logo-onegovgever.png
 
-.. disqus::
