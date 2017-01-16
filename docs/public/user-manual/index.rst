@@ -3,14 +3,14 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-|image1|
+|logo-onegovgever|
 
-Benutzerhandbuch
-================
+Anwenderdokumentation
+=====================
 
 Release 3.10
 
-Version 1.0 / 23. Dezember 2016
+Version 1.0 / 13. Januar 2016
 
 .. toctree::
    :numbered:
@@ -26,14 +26,11 @@ Version 1.0 / 23. Dezember 2016
    aufgaben
    standardablaeufe
    rollenmanager
+   meine_ablage
+   aussonderung
    sitzungs-und-protokollverwaltung
    glossary
 
-
-Verzeichnisse
-=============
-
 * :ref:`genindex`
-* :ref:`search`
 
-.. |image1| image:: img/media/image1.png
+.. |logo-onegovgever| image:: ../_static/img/logo-onegovgever.png

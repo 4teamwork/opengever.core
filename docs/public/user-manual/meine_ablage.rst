@@ -15,8 +15,7 @@ gleichen Workflow-Status (In Bearbeitung, Abgeschlossen und Storniert) wie bei
 einem Geschäftsdossier zur Verfügung. Auch die Mail-in Funktionalität kann bei
 persönlichen Dossiers genutzt werden.
 
-|meine-ablage|
-
+|img-meine-ablage|
 
 Der persönliche Bereich ist nur für den entsprechenden Benutzer sichtbar. Die
 Inhalte der persönlichen Ablage sind auch über die Suche auffindbar,
@@ -28,4 +27,4 @@ Dokumente gleich käme.
 Das Feature persönliche Ablage ist standardmässig deaktiviert, kann aber auf
 Wunsch aktiviert werden.
 
-.. |meine-ablage| image:: _static/img/meine_ablage.png
+.. |img-meine-ablage| image:: img/media/img-meine-ablage-1.png

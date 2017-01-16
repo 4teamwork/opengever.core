@@ -23,14 +23,14 @@ Beim Angebot handelt es sich um einen separaten Inhaltstypen, der neben zusätzl
  4. Archivierung bestätigen
  5. Dossiers vernichten
 
-|aussonderungs-prozess|
+|img-aussonderung-5|
 
 
 Angebot erstellen und bewerten
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Aussonderungsangebote können auf Stufe Ordnungssystem bzw. Ordnungsposition erstellt werden. Für die direkte Erstellung eines Angebots aus einer Dossierauflistung inkl. Auswahl der Dossiers, steht die Tabbedview-Action `Aussonderungsangebot erstellen` zur Verfügung.
 
-|aussonderung-1|
+|img-aussonderung-1|
 
 Wurde eine Angebot erstellt, befindet es sich im Status ``In Arbeit`` (``disposition-state-in-progress``). In diesem Status können die Metadaten des Angebots, wie auch die enthaltenen Dossiers, noch bearbeitet werden.
 
@@ -38,7 +38,7 @@ Zudem kann die Bewertung des Angebots vorgenommen werden, dabei handelt es sich 
 
 Anschliessend kann die Bewertung von den Records Managern über die Angebotsansicht angepasst und vorbereitet werden.
 
-|aussonderung-2|
+|img-aussonderung-2|
 
 Je nach Arbeitsweise kann für die endgültige Bewertung das Archiv auf dem GEVER Mandanten berechtigt werden um die Bewertung gleich im GEVER vornehmen zu können oder es kann ein Bewertungsliste (Excel) generiert und dem Archiv übermittelt werden. Eine automatischer Import der Bewertungsliste steht aktuell nicht zur Verfügung.
 
@@ -76,14 +76,14 @@ Verlauf
 -------
 Für jedes Angebot wird ein Verlauf geführt und ähnlich wie bei Aufgaben oder Anträgen dargestellt.
 
-|aussonderung-3|
+|img-aussonderung-3|
 
 
 Auflistung
 ----------
 Auf Stufe Ordnungssytem steht für Benutzer mit den Rollen `Records Manager` oder `Archivist` ein zusätzlicher Reiter `Angebote` zur Verfügung, welcher alle Angebote dieses Ordnungssystems auflistet.
 
-|aussonderung-4|
+|img-aussonderung-4|
 
 
 Berechtigung
@@ -98,8 +98,8 @@ Feature Flag
 ------------
 Die zusätzichen Features sind mit einem Feature-Flag geschützt, und stehen nur der neuen Rolle `Records Manager` zur Verfügung.
 
-.. |aussonderungs-prozess| image:: _static/img/aussonderungs-prozess.png
-.. |aussonderung-1| image:: _static/img/aussonderung_1.png
-.. |aussonderung-2| image:: _static/img/aussonderung_2.png
-.. |aussonderung-3| image:: _static/img/aussonderung_3.png
-.. |aussonderung-4| image:: _static/img/aussonderung_4.png
+.. |img-aussonderung-1| image:: img/media/img-aussonderung-1.png
+.. |img-aussonderung-2| image:: img/media/img-aussonderung-2.png
+.. |img-aussonderung-3| image:: img/media/img-aussonderung-3.png
+.. |img-aussonderung-4| image:: img/media/img-aussonderung-4.png
+.. |img-aussonderung-5| image:: img/media/img-aussonderung-5.png
