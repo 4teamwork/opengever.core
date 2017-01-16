@@ -98,3 +98,5 @@ Anschliessend stehen die Aufgaben zur weiteren Bearbeitung bereit (siehe
 .. |img-standardablauf-4| image:: img/media/img-standardablauf-4.png
 .. |img-standardablauf-5| image:: img/media/img-standardablauf-5.png
 .. |img-standardablauf-6| image:: img/media/img-standardablauf-6.png
+
+.. disqus::

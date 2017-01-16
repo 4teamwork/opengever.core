@@ -52,4 +52,4 @@ Im Folgenden sind (substantielle) Änderungen an der Dokumentation aufgeführt.
 - Kapitel "Inhaltstypen" hinzugefügt
 - Initiale Version erstellt
 
-
+.. disqus::

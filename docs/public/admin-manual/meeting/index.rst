@@ -10,3 +10,5 @@ Inhalt:
    sablon.rst
    debugging.rst
    wordconfig.rst
+
+.. disqus::

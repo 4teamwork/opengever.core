@@ -2,3 +2,5 @@ Glossar
 =======
 
 Lorem Ipsum.
+
+.. disqus::

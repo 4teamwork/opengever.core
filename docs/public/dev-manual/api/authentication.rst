@@ -130,3 +130,4 @@ Wenn die Invalidierung erfolgreich war, antwortet der Server mit einer leeren
 .. literalinclude:: examples/logout.json
    :language: http
 
+.. disqus::

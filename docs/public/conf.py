@@ -30,6 +30,7 @@ import os
 # ones.
 extensions = [
     'sphinxcontrib.httpdomain',
+    'sphinxcontrib.disqus',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -50,6 +51,7 @@ master_doc = 'index'
 project = u'OneGov GEVER API'
 copyright = u'2016 <a href="https://www.4teamwork.ch">4teamwork AG</a>'
 author = u'4teamwork AG'
+disqus_shortname = 'onegovgever'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

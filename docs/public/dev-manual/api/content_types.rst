@@ -63,3 +63,5 @@ Kontakt
 ^^^^^^^
 
 .. include:: schemas/opengever.contact.contact.inc
+
+.. disqus::

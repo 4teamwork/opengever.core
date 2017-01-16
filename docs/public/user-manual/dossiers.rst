@@ -559,3 +559,5 @@ bearbeitet werden.
 .. |img-subdossiers-1| image:: img/media/img-subdossiers-1.png
 .. |img-subdossiers-2| image:: img/media/img-subdossiers-2.png
 .. |img-subdossiers-3| image:: img/media/img-subdossiers-3.png
+
+.. disqus::

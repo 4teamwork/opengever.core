@@ -225,3 +225,5 @@ Nachfolgend einige generelle Inputs zum Handling:
 .. |img-grundlagen-12| image:: img/media/img-grundlagen-12.png
 .. |img-grundlagen-13| image:: img/media/img-grundlagen-13.png
 .. |img-grundlagen-14| image:: img/media/img-grundlagen-14.png
+
+.. disqus::

@@ -17,3 +17,5 @@ Inhalt:
    content_types.rst
    examples/index.rst
    docs_changelog.rst
+
+.. disqus::

@@ -244,3 +244,5 @@ davon ein PDF. Beispiel:
 
    bin/docs-build-intern latexpdf
    open docs/intern/_build/latex/OneGovGEVERIntern.pdf
+
+.. disqus::

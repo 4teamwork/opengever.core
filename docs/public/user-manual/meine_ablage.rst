@@ -28,3 +28,5 @@ Das Feature persönliche Ablage ist standardmässig deaktiviert, kann aber auf
 Wunsch aktiviert werden.
 
 .. |img-meine-ablage| image:: img/media/img-meine-ablage-1.png
+
+.. disqus::
