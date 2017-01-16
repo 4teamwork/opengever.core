@@ -3,14 +3,12 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-|logo-onegovgever|
-
-Admindokumentation
+Admin-Dokumentation
 ===================
 
-Release 3.10
-
-Version 1.0 / 13. Januar 2016
+Diese Admin-Dokumentation beschreibt die zahlreichen weiterführenden
+Konfigurationsmöglichkeiten von OneGov GEVER und richtet sich primär an
+Power-User und Administratoren von OneGov GEVER.
 
 .. toctree::
    :maxdepth: 2
@@ -20,5 +18,3 @@ Version 1.0 / 13. Januar 2016
    officeconnector/index.rst
 
 * :ref:`genindex`
-
-.. |logo-onegovgever| image:: ../_static/img/logo-onegovgever.png

@@ -3,10 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-|logo-onegovgever|
-
-Anwenderdokumentation
-=====================
+Anwender-Dokumentation
+======================
 
 Release 3.10
 
@@ -30,6 +28,3 @@ Version 1.0 / 13. Januar 2016
    sitzungs-und-protokollverwaltung
 
 * :ref:`genindex`
-
-.. |logo-onegovgever| image:: ../_static/img/logo-onegovgever.png
-

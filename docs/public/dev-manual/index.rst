@@ -3,14 +3,12 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-|logo-onegovgever|
+Entwickler-Dokumentation
+========================
 
-Entwicklerdokumentation
-=======================
-
-Release 3.10
-
-Version 1.0 / 13. Januar 2016
+Diese Entwickler-Dokumentation beschreibt die offenen Schnittstellen von
+OneGov GEVER und richtet sich in erster Linie an Entwickler und Integratoren
+von Fachanwendungen und Drittlösungen.
 
 .. toctree::
    :maxdepth: 2
@@ -19,5 +17,3 @@ Version 1.0 / 13. Januar 2016
 
 
 * :ref:`genindex`
-
-.. |logo-onegovgever| image:: ../_static/img/logo-onegovgever.png
