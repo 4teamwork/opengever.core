@@ -74,7 +74,6 @@
       name="unscheduled_proposals"
       class=".unscheduled_proposals.UnscheduledProposalsView"
       permission="zope2.View"
-      allowed_attributes="schedule"
       />
 
 </configure>
