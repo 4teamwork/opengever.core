@@ -52,6 +52,18 @@ class TestDispositionWorkflow(FunctionalTestCase):
         self.assertEquals('disposition-state-in-progress',
                           api.content.get_state(disposition))
 
+    def test_archivist_is_not_allowed_to_dispose_a_disposition(self):
+        disposition = create(Builder('disposition')
+                             .in_state('disposition-state-appraised'))
+
+        with self.assertRaises(InvalidParameterError):
+            self.grant('Archivist')
+            api.content.transition(disposition,
+                                   'disposition-transition-dispose')
+
+        self.grant('Records Manager')
+        api.content.transition(disposition, 'disposition-transition-dispose')
+
     def test_when_appraising_final_archival_value_is_stored_on_dossier(self):
         IAppraisal(self.disposition).update(
             dossier=self.dossier1, archive=False)
