@@ -32,8 +32,8 @@ class TestHistoryEntries(FunctionalTestCase):
                                .as_expired()
                                .within(self.repository))
 
-        self.grant(
-            'Contributor', 'Editor', 'Reader', 'Reviewer', 'Records Manager')
+        self.grant('Contributor', 'Editor', 'Reader',
+                   'Reviewer', 'Records Manager', 'Archivist')
 
         self.disposition = create(Builder('disposition')
                              .having(dossiers=[self.dossier1])

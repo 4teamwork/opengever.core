@@ -5,6 +5,12 @@ Changelog
 4.14.2 (unreleased)
 -------------------
 
+- Disallow record manager to archive a disposition.
+  [phgross]
+
+- Disallow archivist to dispose a disposition.
+  [phgross]
+
 - Display dossiers grouped by repository on the disposition overview.
   [phgross]
 

@@ -56,7 +56,7 @@ class TestDispositionHistoryListing(BaseLatexListingTest):
     def test_listing(self):
         disposition = create(Builder('disposition'))
 
-        self.grant('Records Manager')
+        self.grant('Records Manager', 'Archivist')
         with freeze(datetime(2014, 11, 6, 12, 33)):
             api.content.transition(disposition,
                                    'disposition-transition-appraise')

@@ -10,6 +10,7 @@ from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.disposition.interfaces import IAppraisal
 from opengever.testing import FunctionalTestCase
 from plone import api
+from plone.api.exc import InvalidParameterError
 
 
 class TestDispositionWorkflow(FunctionalTestCase):
@@ -52,6 +53,30 @@ class TestDispositionWorkflow(FunctionalTestCase):
         self.assertEquals('disposition-state-in-progress',
                           api.content.get_state(disposition))
 
+    def test_archivist_is_not_allowed_to_dispose_a_disposition(self):
+        disposition = create(Builder('disposition')
+                             .in_state('disposition-state-appraised'))
+
+        with self.assertRaises(InvalidParameterError):
+            self.grant('Archivist')
+            api.content.transition(disposition,
+                                   'disposition-transition-dispose')
+
+        self.grant('Records Manager')
+        api.content.transition(disposition, 'disposition-transition-dispose')
+
+    def test_records_manager_is_not_allowed_to_archive_a_disposition(self):
+        disposition = create(Builder('disposition')
+                             .in_state('disposition-state-disposed'))
+
+        with self.assertRaises(InvalidParameterError):
+            self.grant('Records Manager')
+            api.content.transition(disposition,
+                                   'disposition-transition-archive')
+
+        self.grant('Archivist')
+        api.content.transition(disposition, 'disposition-transition-archive')
+
     def test_when_appraising_final_archival_value_is_stored_on_dossier(self):
         IAppraisal(self.disposition).update(
             dossier=self.dossier1, archive=False)
@@ -67,6 +92,7 @@ class TestDispositionWorkflow(FunctionalTestCase):
             ARCHIVAL_VALUE_WORTHY, ILifeCycle(self.dossier2).archival_value)
 
     def test_when_archiving_all_dossiers_moved_to_archived_set_to_archive_state(self):
+        self.grant('Archivist', 'Records Manager')
         IAppraisal(self.disposition).update(dossier=self.dossier1, archive=True)
         IAppraisal(self.disposition).update(dossier=self.dossier2, archive=True)
         api.content.transition(
