@@ -1,4 +1,5 @@
 from opengever.activity import notification_center
+from opengever.activity.base import BaseActivity
 from opengever.activity.model.subscription import TASK_OLD_RESPONSIBLE_ROLE
 from opengever.base.model import get_locale
 from opengever.ogds.base.actor import Actor
@@ -6,10 +7,9 @@ from opengever.task import _
 from opengever.task.response_description import ResponseDescription
 from plone import api
 from Products.CMFPlone import PloneMessageFactory
-from zope.i18n import translate
 
 
-class TaskActivity(object):
+class TaskActivity(BaseActivity):
     """Abstract base class for all task-related activities.
 
     The TaskActivity class is a representation for every activity which can
@@ -18,76 +18,8 @@ class TaskActivity(object):
 
     """
     def __init__(self, context, request, parent):
-        self.context = context
-        self.request = request
+        super(TaskActivity, self).__init__(context, request)
         self.parent = parent
-        self.center = notification_center()
-
-    @property
-    def kind(self):
-        raise NotImplementedError()
-
-    @property
-    def title(self):
-        return self.translate_to_all_languages(self.context.title)
-
-    @property
-    def actor_id(self):
-        return api.user.get_current().getId()
-
-    @property
-    def summary(self):
-        raise NotImplementedError()
-
-    @property
-    def description(self):
-        raise NotImplementedError()
-
-    def before_recording(self):
-        """Will be called before adding the activity to the
-        notification center (see method `record`). Used for watcher
-        adjustments ect.
-        """
-        pass
-
-    def after_recording(self):
-        """Will be called after adding the activity to the
-        notification center (see method `record`). Used for watcher
-        adjustments ect.
-        """
-        pass
-
-    def record(self):
-        """Adds the activity itself to the notification center.
-        """
-        self.before_recording()
-
-        self.center.add_activity(
-            self.context,
-            self.kind,
-            self.title,
-            self.label,
-            self.summary,
-            self.actor_id,
-            self.description)
-
-        self.after_recording()
-
-    def translate_to_all_languages(self, msg):
-        values = {}
-        for code in self._get_supported_languages():
-            values[code] = translate(msg, context=self.request, target_language=code)
-
-        return values
-
-    def translate(self, msg, language):
-        return translate(msg, context=self.request, target_language=language)
-
-    def _get_supported_languages(self):
-        """Returns a list of codes of all supported language.
-        """
-        lang_tool = api.portal.get_tool('portal_languages')
-        return [code.split('-')[0] for code in lang_tool.getSupportedLanguages()]
 
 
 class TaskAddedActivity(TaskActivity):
