@@ -1,7 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.api.testing import RelativeSession
-from opengever.core.testing import OPENGEVER_FUNCTIONAL_ZSERVER_API_TESTING
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_ZSERVER_TESTING
 from opengever.testing import FunctionalTestCase
 from plone import api
 from plone.app.testing import SITE_OWNER_NAME
@@ -12,7 +12,7 @@ import transaction
 
 class TestContentCreation(FunctionalTestCase):
 
-    layer = OPENGEVER_FUNCTIONAL_ZSERVER_API_TESTING
+    layer = OPENGEVER_FUNCTIONAL_ZSERVER_TESTING
 
     def setUp(self):
         super(TestContentCreation, self).setUp()

@@ -280,17 +280,6 @@ class OpengeverFixture(PloneSandboxLayer):
         # lang_tool.supported_langs = ['fr-ch', 'de-ch']
 
 
-class APILayer(Layer):
-    """A layer that installs the plone.restapi:default generic setup profile.
-    """
-
-    def setUp(self):
-        pass
-
-
-RESTAPI_LAYER = APILayer()
-
-
 class MemoryDBLayer(Layer):
     """A Layer which only set up a test sqlite db in to the memory
     """
@@ -355,13 +344,6 @@ OPENGEVER_FUNCTIONAL_ZSERVER_TESTING = FunctionalTesting(
            set_builder_session_factory(functional_session_factory),
            ),
     name="opengever.core:functional:zserver")
-
-OPENGEVER_FUNCTIONAL_ZSERVER_API_TESTING = FunctionalTesting(
-    bases=(OPENGEVER_FIXTURE,
-           RESTAPI_LAYER,
-           set_builder_session_factory(functional_session_factory),
-           PLONE_ZSERVER),
-    name="opengever.core:functional:zserver:api")
 
 
 def activate_filing_number(portal):
