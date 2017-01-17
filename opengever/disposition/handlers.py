@@ -1,4 +1,5 @@
 from opengever.disposition.activities import DispositionAddedActivity
+from opengever.disposition.activities import DispositionStateChangedActivity
 from opengever.disposition.interfaces import IDuringDossierDestruction
 from opengever.disposition.interfaces import IHistoryStorage
 from plone import api
@@ -19,6 +20,9 @@ def disposition_state_changed(context, event):
     storage.add(event.action,
                 api.user.get_current().getId(),
                 context.get_dossier_representations())
+
+    DispositionStateChangedActivity(
+        context, getRequest(), storage.get_history()[0]).record()
 
 
 def disposition_added(context, event):

@@ -33,3 +33,27 @@ class DispositionAddedActivity(BaseActivity):
 
     def before_recording(self):
         self.context.register_watchers()
+
+
+class DispositionStateChangedActivity(BaseActivity):
+
+    def __init__(self, context, request, entry):
+        super(DispositionStateChangedActivity, self).__init__(context, request)
+        self.entry = entry
+
+    @property
+    def kind(self):
+        return self.entry.transition
+
+    @property
+    def label(self):
+        return self.translate_to_all_languages(
+            PloneMessageFactory(self.entry.transition))
+
+    @property
+    def summary(self):
+        return self.translate_to_all_languages(self.entry.msg())
+
+    @property
+    def description(self):
+        return {}
