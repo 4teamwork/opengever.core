@@ -1,6 +1,8 @@
+from opengever.disposition.activities import DispositionAddedActivity
 from opengever.disposition.interfaces import IDuringDossierDestruction
 from opengever.disposition.interfaces import IHistoryStorage
 from plone import api
+from zope.globalrequest import getRequest
 
 
 def disposition_state_changed(context, event):
@@ -25,6 +27,7 @@ def disposition_added(context, event):
                 api.user.get_current().getId(),
                 context.get_dossier_representations())
 
+    DispositionAddedActivity(context, getRequest()).record()
     context.register_watchers()
 
 

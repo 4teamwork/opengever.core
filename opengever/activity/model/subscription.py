@@ -10,6 +10,8 @@ from sqlalchemy.orm import relationship
 TASK_ISSUER_ROLE = 'task_issuer'
 TASK_RESPONSIBLE_ROLE = 'task_responsible'
 TASK_OLD_RESPONSIBLE_ROLE = 'task_old_responsible'
+DISPOSITION_RECORDS_MANAGER_ROLE = 'records_manager'
+DISPOSITION_ARCHIVIST_ROLE = 'archivist'
 WATCHER_ROLE = 'regular_watcher'
 
 
