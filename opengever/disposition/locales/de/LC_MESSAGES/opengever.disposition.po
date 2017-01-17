@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-12-08 10:17+0000\n"
+"POT-Creation-Date: 2017-01-17 18:44+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,7 +42,7 @@ msgid "error_retention_period_not_expired"
 msgstr "Die Aufbewahrungsfrist der selektierten Dossiers ist nicht abgelaufen."
 
 #. Default: "Common"
-#: ./opengever/disposition/disposition.py:101
+#: ./opengever/disposition/disposition.py:120
 msgid "fieldset_common"
 msgstr "Allgemein"
 
@@ -67,16 +67,17 @@ msgid "label_archived"
 msgstr "Archiviert"
 
 #. Default: "Details:"
-#: ./opengever/disposition/browser/templates/overview.pt:156
+#: ./opengever/disposition/browser/templates/overview.pt:166
 msgid "label_details"
 msgstr "Details:"
 
 #. Default: "Disposition"
-#: ./opengever/disposition/disposition.py:91
+#: ./opengever/disposition/disposition.py:110
 msgid "label_disposition"
 msgstr "Angebot"
 
 #. Default: "Disposition added"
+#: ./opengever/disposition/activities.py:19
 #: ./opengever/disposition/history.py:86
 msgid "label_disposition_added"
 msgstr "Angebot hinzugefügt"
@@ -87,12 +88,12 @@ msgid "label_disposition_edited"
 msgstr "Angebot bearbeitet"
 
 #. Default: "Download disposition package"
-#: ./opengever/disposition/browser/overview.py:45
+#: ./opengever/disposition/browser/overview.py:54
 msgid "label_dispositon_package_download"
 msgstr "Ablieferungspaket herunterladen"
 
 #. Default: "Don't archive"
-#: ./opengever/disposition/browser/templates/overview.pt:81
+#: ./opengever/disposition/browser/templates/overview.pt:90
 #, fuzzy
 msgid "label_dont_archive"
 msgstr "Nicht archvieren"
@@ -104,17 +105,17 @@ msgstr "Dossiers"
 
 #. Default: "Dossiers"
 #: ./opengever/disposition/browser/removal_protocol.py:111
-#: ./opengever/disposition/disposition.py:114
+#: ./opengever/disposition/disposition.py:133
 msgid "label_dossiers"
 msgstr "Dossiers"
 
 #. Default: "Download removal protocol"
-#: ./opengever/disposition/browser/overview.py:51
+#: ./opengever/disposition/browser/overview.py:60
 msgid "label_download_removal_protocol"
 msgstr "Löschprotokoll herunterladen"
 
 #. Default: "Export appraisal list as excel"
-#: ./opengever/disposition/browser/overview.py:39
+#: ./opengever/disposition/browser/overview.py:48
 msgid "label_export_appraisal_list_as_excel"
 msgstr "Bewertungsliste als Excel exportieren"
 
@@ -146,13 +147,13 @@ msgstr "Zeitpunkt"
 #. Default: "Title"
 #: ./opengever/disposition/browser/listing.py:29
 #: ./opengever/disposition/browser/removal_protocol.py:53
-#: ./opengever/disposition/disposition.py:107
+#: ./opengever/disposition/disposition.py:126
 msgid "label_title"
 msgstr "Titel"
 
 #. Default: "Transfer number"
 #: ./opengever/disposition/browser/removal_protocol.py:124
-#: ./opengever/disposition/disposition.py:134
+#: ./opengever/disposition/disposition.py:154
 msgid "label_transfer_number"
 msgstr "Ablieferungsnummer"
 
@@ -202,12 +203,16 @@ msgid "msg_disposition_updated"
 msgstr "Aktualisiert durch ${user}"
 
 #. Default: "Period"
-#: ./opengever/disposition/browser/templates/overview.pt:42
+#: ./opengever/disposition/browser/templates/overview.pt:54
 msgid "period"
 msgstr "Periode"
 
 #. Default: "Progress:"
-#: ./opengever/disposition/browser/templates/overview.pt:143
+#: ./opengever/disposition/browser/templates/overview.pt:153
 msgid "progress"
 msgstr "Verlauf:"
 
+#. Default: "New disposition added by ${user} on admin unit ${admin_unit}"
+#: ./opengever/disposition/activities.py:24
+msgid "summary_disposition_added"
+msgstr "Neues Angebot hinzugefügt durch ${user} im Mandanten ${admin_unit}"
