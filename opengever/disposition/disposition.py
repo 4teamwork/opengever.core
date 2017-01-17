@@ -2,6 +2,7 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from collective import dexteritytextindexer
 from datetime import date
+from opengever.activity import notification_center
 from opengever.base.behaviors.classification import IClassification
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.base.security import elevated_privileges
@@ -235,3 +236,29 @@ class Disposition(Container):
         self.set_destroyed_dossiers(dossiers)
         with elevated_privileges():
             api.content.delete(objects=dossiers)
+
+    def register_watchers(self):
+        center = notification_center()
+        center.add_watcher_to_resource(self, self.Creator(), 'record_manager')
+
+        for archivist in self.get_all_archivists():
+            center.add_watcher_to_resource(self, archivist, 'archivist')
+
+    def get_all_archivists(self):
+        archivists = []
+        acl_users = api.portal.get_tool('acl_users')
+        role_manager = acl_users.get('portal_role_manager')
+        for principal, title in role_manager.listAssignedPrincipals('Archivist'):
+            info = role_manager.searchPrincipals(
+                id=principal, exact_match=True)
+            # skip not existing or duplicated groups or users
+            if len(info) != 1:
+                continue
+
+            if info[0].get('principal_type') == 'group':
+                group = acl_users.getGroupById(principal)
+                archivists += group.getGroupMemberIds()
+            else:
+                archivists.append(principal)
+
+        return archivists

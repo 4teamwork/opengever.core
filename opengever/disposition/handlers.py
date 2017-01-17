@@ -25,6 +25,8 @@ def disposition_added(context, event):
                 api.user.get_current().getId(),
                 context.get_dossier_representations())
 
+    context.register_watchers()
+
 
 def disposition_modified(context, event):
     # Skip modified events during dossier destruction
