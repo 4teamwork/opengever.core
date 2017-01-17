@@ -3,17 +3,14 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-|logo-onegovgever|
-
-Anwenderdokumentation
-=====================
+Anwender-Dokumentation
+======================
 
 Release 3.10
 
 Version 1.0 / 13. Januar 2016
 
 .. toctree::
-   :numbered:
    :maxdepth: 2
 
    overview
@@ -29,10 +26,5 @@ Version 1.0 / 13. Januar 2016
    meine_ablage
    aussonderung
    sitzungs-und-protokollverwaltung
-   glossary
 
 * :ref:`genindex`
-
-.. |logo-onegovgever| image:: ../_static/img/logo-onegovgever.png
-
-.. disqus::
