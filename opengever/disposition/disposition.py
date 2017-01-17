@@ -188,7 +188,7 @@ class Disposition(Container):
     def get_destroyed_dossiers(self):
         annotations = IAnnotations(self)
         if not annotations.get(self.destroyed_key):
-            return None
+            return []
         return annotations.get(self.destroyed_key)
 
     def set_destroyed_dossiers(self, dossiers):
