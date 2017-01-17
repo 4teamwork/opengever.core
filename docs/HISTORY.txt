@@ -5,6 +5,14 @@ Changelog
 4.14.2 (unreleased)
 -------------------
 
+- Include REST API in mainline GEVER:
+
+  - Introduces a new role APIUser
+  - By default, only the Manager and APIUser roles have the "plone.restapi: Use REST API" permission
+  - The APIUser role isn't assigned to any users or groups by default
+
+  [lgraf]
+
 - Add notifications support for dispositions.
   [phgross]
 
