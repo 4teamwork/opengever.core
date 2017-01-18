@@ -20,28 +20,36 @@ class TestRetentionExpirationDate(FunctionalTestCase):
                                       end=date(2010, 2, 21),
                                       retention_period=20))
 
-    def test_is_the_retention_period_years_added_to_the_end_date(self):
-        self.assertEqual(date(2030, 2, 21),
+    def test_is_the_start_of_the_year_after_the_retention_period_years_added_to_the_end_date(self):
+        self.assertEqual(date(2031, 1, 1),
                          self.dossier.get_retention_expiration_date())
+
+    def test_dossiers_with_first_january_as_end_date_is_handled_correctly(self):
+        dossier = create(Builder('dossier')
+                         .having(start=date(2010, 2, 18),
+                                 end=date(2010, 1, 1),
+                                 retention_period=20))
+        self.assertEqual(date(2030, 1, 1),
+                         dossier.get_retention_expiration_date())
 
     @browsing
     def test_is_updated_when_resolving_a_dossier(self, browser):
-        self.grant('Reader', 'Contributor',  'Editor', 'Reviewer')
+        self.grant('Reader', 'Contributor', 'Editor', 'Reviewer')
 
-        with freeze(datetime(2010, 2, 21)):
-            IDossier(self.dossier).end = date(2010, 2, 25)
+        with freeze(datetime(2015, 2, 21)):
+            IDossier(self.dossier).end = date(2015, 2, 25)
             transaction.commit()
 
             browser.login().open(self.dossier)
             browser.find('dossier-transition-resolve').click()
-            self.assertEqual(date(2030, 2, 25),
+            self.assertEqual(date(2036, 1, 1),
                              self.dossier.get_retention_expiration_date())
-            self.assertEqual(date(2030, 2, 25),
+            self.assertEqual(date(2036, 1, 1),
                              obj2brain(self.dossier).retention_expiration)
 
     @browsing
     def test_index_is_updated_when_end_date_is_changed_during_resolving(self, browser):
-        self.grant('Reader', 'Contributor',  'Editor', 'Reviewer')
+        self.grant('Reader', 'Contributor', 'Editor', 'Reviewer')
 
         create(Builder('document')
                .within(self.dossier)
@@ -57,11 +65,11 @@ class TestRetentionExpirationDate(FunctionalTestCase):
             index_data_for(self.dossier).get('retention_expiration'))
 
     def test_is_expired_when_its_earlier_than_today(self):
-        with freeze(datetime(2030, 2, 22)):
+        with freeze(datetime(2031, 2, 22)):
             self.assertTrue(self.dossier.is_retention_period_expired())
 
     def test_is_expired_when_its_today(self):
-        with freeze(datetime(2030, 2, 21)):
+        with freeze(datetime(2031, 1, 1)):
             self.assertTrue(self.dossier.is_retention_period_expired())
 
     def test_is_not_expired_when_its_later_than_today(self):

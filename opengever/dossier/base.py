@@ -2,7 +2,6 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from datetime import date
 from datetime import datetime
-from dateutil.relativedelta import relativedelta
 from five import grok
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.base.interfaces import IReferenceNumber
@@ -49,6 +48,10 @@ DOSSIER_STATES_OFFERABLE = DOSSIER_STATES_CLOSED + ['dossier-state-offered']
 
 
 _marker = object()
+
+
+def is_january_the_first(value):
+    return value.month == 1 and value.day == 1
 
 
 class DossierContainer(Container):
@@ -312,9 +315,20 @@ class DossierContainer(Container):
         return IReferenceNumber(self).get_number()
 
     def get_retention_expiration_date(self):
+        """Returns the date when the expiration date expires:
+
+        The start of the next year (the first of january) after the
+        retention period.
+        """
         if IDossier(self).end:
-            return IDossier(self).end + relativedelta(
-                years=ILifeCycle(self).retention_period)
+            year = IDossier(self).end.year + ILifeCycle(self).retention_period
+
+            if not is_january_the_first(IDossier(self).end):
+                # The rention period will be expired at the first of
+                # january in the next year.
+                year += 1
+
+            return date(year, 1, 1)
 
         return None
 
