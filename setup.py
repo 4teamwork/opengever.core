@@ -5,9 +5,7 @@ version = '4.14.2.dev0'
 maintainer = '4teamwork AG'
 
 
-api_require = [
-    'plone.restapi',
-]
+api_require = []
 
 tests_require = [
     'Products.CMFPlone',
@@ -121,6 +119,8 @@ setup(name='opengever.core',
         'plone.principalsource',
         'plone.protect >= 3.0.15',
         'plone.registry',
+        'plone.rest',
+        'plone.restapi',
         'plone.rfc822',
         'plone.supermodel',
         'plone.z3cform',

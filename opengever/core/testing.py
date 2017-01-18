@@ -248,6 +248,7 @@ class OpengeverFixture(PloneSandboxLayer):
         applyProfile(portal, 'ftw.contentmenu:default')
         applyProfile(portal, 'ftw.zipexport:default')
         applyProfile(portal, 'opengever.disposition:default')
+        applyProfile(portal, 'plone.restapi:default')
 
         applyProfile(portal, 'opengever.testing:testing')
 
@@ -277,18 +278,6 @@ class OpengeverFixture(PloneSandboxLayer):
         # These would be (possible) production defaults, but will break tests
         # lang_tool.setDefaultLanguage('de-ch')
         # lang_tool.supported_langs = ['fr-ch', 'de-ch']
-
-
-class APILayer(Layer):
-    """A layer that installs the plone.restapi:default generic setup profile.
-    """
-
-    def setUp(self):
-        with ploneSite() as site:
-            applyProfile(site, 'plone.restapi:default')
-
-
-RESTAPI_LAYER = APILayer()
 
 
 class MemoryDBLayer(Layer):
@@ -355,13 +344,6 @@ OPENGEVER_FUNCTIONAL_ZSERVER_TESTING = FunctionalTesting(
            set_builder_session_factory(functional_session_factory),
            ),
     name="opengever.core:functional:zserver")
-
-OPENGEVER_FUNCTIONAL_ZSERVER_API_TESTING = FunctionalTesting(
-    bases=(OPENGEVER_FIXTURE,
-           RESTAPI_LAYER,
-           set_builder_session_factory(functional_session_factory),
-           PLONE_ZSERVER),
-    name="opengever.core:functional:zserver:api")
 
 
 def activate_filing_number(portal):

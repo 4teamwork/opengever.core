@@ -1,7 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
-from opengever.core.testing import OPENGEVER_FUNCTIONAL_ZSERVER_API_TESTING
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_ZSERVER_TESTING
 from opengever.testing import FunctionalTestCase
 from opengever.testing.officeconnector import TestOfficeConnector
 from plone import api
@@ -9,7 +9,7 @@ from plone import api
 
 class TestWebDAVUnlock(FunctionalTestCase):
 
-    layer = OPENGEVER_FUNCTIONAL_ZSERVER_API_TESTING
+    layer = OPENGEVER_FUNCTIONAL_ZSERVER_TESTING
 
     def setUp(self):
         super(TestWebDAVUnlock, self).setUp()

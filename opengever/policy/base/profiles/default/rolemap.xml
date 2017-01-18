@@ -1,0 +1,14 @@
+<rolemap>
+
+  <roles>
+    <role name="APIUser" />
+  </roles>
+
+  <permissions>
+    <permission name="plone.restapi: Use REST API" acquire="True">
+      <role name="Manager"/>
+      <role name="APIUser"/>
+    </permission>
+  </permissions>
+
+</rolemap>
