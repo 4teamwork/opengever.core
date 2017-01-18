@@ -5,6 +5,9 @@ Changelog
 4.14.2 (unreleased)
 -------------------
 
+- Add notifications support for dispositions.
+  [phgross]
+
 - Adjust dossiers retention expiration calculation.
   [phgross]
 
