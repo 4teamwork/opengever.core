@@ -36,7 +36,7 @@ class BundleSourceSection(object):
                 "IAnnotations(transmogrifier)[BUNDLE_PATH_KEY] = "
                 "'/path/to/bundle'")
 
-        self.bundle = BundleLoader(bundle_path)
+        self.bundle = BundleLoader(bundle_path).load()
 
     def __iter__(self):
         return iter(self.bundle)
