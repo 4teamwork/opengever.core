@@ -24,12 +24,20 @@ class Bundle(object):
     """An iterable OGGBundle.
     """
 
-    def __init__(self, items, json_schemas=None):
+    def __init__(self, items, bundle_path, json_schemas=None, stats=None):
         self.items = items
+        self.bundle_path = bundle_path
 
         self.json_schemas = {}
         if json_schemas is not None:
             self.json_schemas = json_schemas
+
+        self.stats = {}
+        if stats is not None:
+            self.stats = stats
+
+    def __repr__(self):
+        return '<%s %s>' % (self.__class__.__name__, self.bundle_path)
 
     def __iter__(self):
         """Yield all items of the bundle in order.
@@ -57,16 +65,28 @@ class BundleLoader(object):
         """Load the bundle from disk and return an iterable Bundle.
         """
         self._load_items()
-        return Bundle(self._items, self.json_schemas)
+        bundle = Bundle(
+            self._items, self.bundle_path, self.json_schemas, self._stats)
+        self._display_stats(bundle)
+        return bundle
+
+    def _display_stats(self, bundle):
+        log.info('')
+        log.info('Stats for %r' % bundle)
+        log.info('=' * 80)
+        for json_name, count in bundle.stats['counts'].items():
+            log.info("%-20s %s" % (json_name, count))
 
     def _load_items(self):
         self._items = []
+        self._stats = {'counts': {}}
         for json_name, portal_type in BUNDLE_JSON_TYPES.items():
             json_path = os.path.join(self.bundle_path, json_name)
 
             try:
                 with codecs.open(json_path, 'r', 'utf-8-sig') as json_file:
                     items = json.load(json_file)
+                    self._stats['counts'][json_name] = len(items)
             except IOError as exc:
                 log.info('%s: %s, skipping' % (json_name, exc.strerror))
                 continue
