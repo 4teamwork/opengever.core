@@ -5,6 +5,9 @@ Changelog
 4.14.2 (unreleased)
 -------------------
 
+- OGGBundle loader: Strip extension for title if necessary.
+  [lgraf]
+
 - OGGBundle constructor: Support setting local reference number part
   for dossiers (when provided by JSON item).
   [lgraf]

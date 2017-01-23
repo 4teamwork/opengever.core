@@ -53,7 +53,22 @@ class BundleLoader(object):
             self.validate_schema(items, json_name)
             for item in items:
                 item['_type'] = self.determine_portal_type(json_name, item)
+                if json_name == 'documents.json':
+                    self.strip_extension_from_title(item)
                 self.items.append(item)
+
+    def strip_extension_from_title(self, item):
+        """Strip extension from title if present. Otherwise we'd end up with
+        the extension in the final title.
+        """
+        title = item['title']
+        basename, ext = os.path.splitext(title)
+        if item['filepath'].lower().endswith(ext.lower()):
+            # Only strip what looks like a file extension from title if
+            # filename ends with the same extension
+            item['title'] = basename
+            item['_original_filename'] = title
+        return item
 
     def load_schemas(self):
         schema_dir = rf('opengever.bundle', 'schemas/')
