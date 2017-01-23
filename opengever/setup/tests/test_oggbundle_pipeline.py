@@ -231,7 +231,13 @@ class TestOggBundlePipeline(FunctionalTestCase):
         self.assertIsNone(getattr(folder_staff, 'guid', None))
         self.assertIsNone(getattr(folder_staff, 'parent_guid', None))
 
-        # XXX local roles
+        self.assertDictContainsSubset(
+            {'privileged_users':
+                ['Reader', 'Editor', 'Contributor', 'Reviewer'],
+             'admin_users':
+                ['Publisher']},
+            folder_staff.__ac_local_roles__)
+        self.assertTrue(folder_staff.__ac_local_roles_block__)
 
         return folder_staff
 
@@ -318,7 +324,11 @@ class TestOggBundlePipeline(FunctionalTestCase):
             u'Hanspeter M\xfcller',
             dossier_peter.title)
 
-        # XXX local roles
+        self.assertDictContainsSubset(
+            {'admin_users':
+                ['Reader', 'Editor', 'Contributor', 'Publisher', 'Reviewer']},
+            dossier_peter.__ac_local_roles__)
+        self.assertTrue(dossier_peter.__ac_local_roles_block__)
 
         return dossier_peter
 

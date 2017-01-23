@@ -30,6 +30,7 @@
     "review_state": "dossier-state-resolved",
     "title": "Hanspeter Müller",
     "_permissions": {
+      "block_inheritance": true,
       "read": [
         "admin_users"
       ],
