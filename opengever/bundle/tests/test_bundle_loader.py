@@ -15,7 +15,8 @@ class TestBundleLoader(TestCase):
     def load_bundle(self, bundle_path=None):
         if not bundle_path:
             bundle_path = get_bundle_path('basic.oggbundle')
-        bundle = BundleLoader(bundle_path)
+        loader = BundleLoader(bundle_path)
+        bundle = loader.load()
         return list(bundle)
 
     def test_loads_correct_number_of_items(self):

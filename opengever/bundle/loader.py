@@ -20,6 +20,31 @@ BUNDLE_JSON_TYPES = OrderedDict([
 ])
 
 
+class Bundle(object):
+    """An iterable OGGBundle.
+    """
+
+    def __init__(self, items, bundle_path, json_schemas=None, stats=None):
+        self.items = items
+        self.bundle_path = bundle_path
+
+        self.json_schemas = {}
+        if json_schemas is not None:
+            self.json_schemas = json_schemas
+
+        self.stats = {}
+        if stats is not None:
+            self.stats = stats
+
+    def __repr__(self):
+        return '<%s %s>' % (self.__class__.__name__, self.bundle_path)
+
+    def __iter__(self):
+        """Yield all items of the bundle in order.
+        """
+        return iter(self.items)
+
+
 class BundleLoader(object):
     """Loads an OGGBundle from the filesystem and yields the contained items
     in proper order.
@@ -34,30 +59,46 @@ class BundleLoader(object):
 
     def __init__(self, bundle_path):
         self.bundle_path = bundle_path
-        self.json_schemas = self.load_schemas()
+        self.json_schemas = self._load_schemas()
 
-        self.load_items()
+    def load(self):
+        """Load the bundle from disk and return an iterable Bundle.
+        """
+        self._load_items()
+        bundle = Bundle(
+            self._items, self.bundle_path, self.json_schemas, self._stats)
+        self._display_stats(bundle)
+        return bundle
 
-    def load_items(self):
-        self.items = []
+    def _display_stats(self, bundle):
+        log.info('')
+        log.info('Stats for %r' % bundle)
+        log.info('=' * 80)
+        for json_name, count in bundle.stats['counts'].items():
+            log.info("%-20s %s" % (json_name, count))
+
+    def _load_items(self):
+        self._items = []
+        self._stats = {'counts': {}}
         for json_name, portal_type in BUNDLE_JSON_TYPES.items():
             json_path = os.path.join(self.bundle_path, json_name)
 
             try:
                 with codecs.open(json_path, 'r', 'utf-8-sig') as json_file:
                     items = json.load(json_file)
+                    self._stats['counts'][json_name] = len(items)
             except IOError as exc:
                 log.info('%s: %s, skipping' % (json_name, exc.strerror))
                 continue
 
-            self.validate_schema(items, json_name)
+            self._validate_schema(items, json_name)
             for item in items:
-                item['_type'] = self.determine_portal_type(json_name, item)
+                item['_type'] = self._determine_portal_type(json_name, item)
                 if json_name == 'documents.json':
-                    self.strip_extension_from_title(item)
-                self.items.append(item)
+                    self._strip_extension_from_title(item)
+                self._items.append(item)
 
-    def strip_extension_from_title(self, item):
+    def _strip_extension_from_title(self, item):
         """Strip extension from title if present. Otherwise we'd end up with
         the extension in the final title.
         """
@@ -70,7 +111,7 @@ class BundleLoader(object):
             item['_original_filename'] = title
         return item
 
-    def load_schemas(self):
+    def _load_schemas(self):
         schema_dir = rf('opengever.bundle', 'schemas/')
         schemas = {}
         filenames = os.listdir(schema_dir)
@@ -84,12 +125,12 @@ class BundleLoader(object):
                 schemas['%s.json' % short_name] = schema
         return schemas
 
-    def validate_schema(self, items, json_name):
+    def _validate_schema(self, items, json_name):
         schema = self.json_schemas[json_name]
         # May raise jsonschema.ValidationError
         validate(items, schema, format_checker=FormatChecker())
 
-    def determine_portal_type(self, json_name, item):
+    def _determine_portal_type(self, json_name, item):
         """Determine what portal_type an item should be, based on the name of
         the JSON file it's been read from.
         """
@@ -99,8 +140,3 @@ class BundleLoader(object):
                 return 'ftw.mail.mail'
             return 'opengever.document.document'
         return BUNDLE_JSON_TYPES[json_name]
-
-    def __iter__(self):
-        """Yield all items of the bundle in order.
-        """
-        return iter(self.items)
