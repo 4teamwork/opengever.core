@@ -179,7 +179,7 @@ class TestOggBundlePipeline(FunctionalTestCase):
 
     def assert_staff_folder_created(self, parent):
         folder_staff = parent.get('personal')
-        self.assertEqual('0.1. Personal', folder_staff.Title())
+        self.assertEqual('0.3. Personal', folder_staff.Title())
         self.assertEqual(u'Personal', folder_staff.title_de)
         self.assertIsNone(folder_staff.title_fr)
         self.assertEqual('personal', folder_staff.getId())
@@ -208,7 +208,7 @@ class TestOggBundlePipeline(FunctionalTestCase):
             u'Enth\xe4lt vertrauliche Personaldossiers.',
             IClassification(folder_staff).public_trial_statement)
         self.assertEqual(
-            "1",
+            "3",
             IReferenceNumberPrefix(folder_staff).reference_number_prefix)
         self.assertEqual(
             u'',
@@ -296,7 +296,7 @@ class TestOggBundlePipeline(FunctionalTestCase):
             u'privacy_layer_yes',
             IClassification(dossier_peter).privacy_layer)
         self.assertEqual(
-            '2',
+            '7',
             IDossier(dossier_peter).reference_number)
         self.assertEqual(
             [],

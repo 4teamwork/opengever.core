@@ -17,6 +17,12 @@ class IDuringContentCreation(Interface):
     """
 
 
+class IDontIssueDossierReferenceNumber(Interface):
+    """Request layer to indicate that no reference number should be issued
+    when creating new dossiers.
+    """
+
+
 class IOpengeverCatalogBrain(ICatalogBrain):
     """Detailed Interface for opengever CatalogBrain.
     Used for add an opengever specific CatalogContentlisting Adapter.

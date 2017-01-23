@@ -2,6 +2,7 @@ from AccessControl.SecurityManagement import newSecurityManager
 from Products.CMFPlone.Portal import PloneSite
 from Testing.makerequest import makerequest
 from zope.component.hooks import setSite
+from zope.globalrequest import setRequest
 import AccessControl
 
 
@@ -25,6 +26,7 @@ def setup_plone(plone, options=None):
 
     # Set up request for debug / bin/instance run mode.
     app = makerequest(app)
+    setRequest(app.REQUEST)
 
     # Get a reference to the Plone site *inside* the request-wrapped app
     plone = app.restrictedTraverse(plone.id)

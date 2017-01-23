@@ -2,10 +2,16 @@ from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.base.behaviors.translated_title import TRANSLATED_TITLE_NAMES
+from opengever.base.interfaces import IDontIssueDossierReferenceNumber
+from opengever.base.interfaces import IReferenceNumberPrefix
+from opengever.dossier.behaviors.dossier import IDossierMarker
 from plone import api
 from plone.dexterity.utils import createContentInContainer
+from zope.globalrequest import getRequest
+from zope.interface import alsoProvides
 from zope.interface import classProvides
 from zope.interface import implements
+from zope.interface import noLongerProvides
 import logging
 
 
@@ -14,6 +20,18 @@ logger = logging.getLogger('opengever.setup.constructor')
 
 class InvalidType(Exception):
     pass
+
+
+class NoDossierReferenceNumbersIssued(object):
+    """Contextmanager that temporarily disables issuing of reference numbers
+    for newly created dossiers.
+    """
+
+    def __enter__(self):
+        alsoProvides(getRequest(), IDontIssueDossierReferenceNumber)
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        noLongerProvides(getRequest(), IDontIssueDossierReferenceNumber)
 
 
 class ConstructorSection(object):
@@ -56,8 +74,24 @@ class ConstructorSection(object):
 
                 title_args = dict((key, item.get(key)) for key in title_keys)
 
-                obj = createContentInContainer(
-                    context, portal_type, **title_args)
+                with NoDossierReferenceNumbersIssued():
+                    # Create the object without automatically issuing a
+                    # reference number - we might want to set it explicitely
+                    obj = createContentInContainer(
+                        context, portal_type, **title_args)
+
+                    if IDossierMarker.providedBy(obj):
+                        prefix_adapter = IReferenceNumberPrefix(context)
+                        if not prefix_adapter.get_number(obj):
+                            # Set the local reference number part for the
+                            # dossier if provided in item, otherwise have
+                            # the adapter issue the next one
+                            local_refnum = item.get('reference_number')
+                            if local_refnum is not None:
+                                prefix_adapter.set_number(obj, local_refnum)
+                            else:
+                                prefix_adapter.set_number(obj)
+
                 parent_path = '/'.join(context.getPhysicalPath())
             except ValueError as e:
                 logger.warning(

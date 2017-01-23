@@ -9,6 +9,7 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.resolve import DossierResolver
 from opengever.globalindex.handlers.task import sync_task
 from opengever.globalindex.handlers.task import TaskSqlSyncer
+from opengever.setup.sections.constructor import IDontIssueDossierReferenceNumber
 from plone import api
 from Products.CMFCore.interfaces import IActionSucceededEvent
 from zope.component import getAdapter
@@ -62,6 +63,9 @@ def set_former_reference_after_moving(obj, event):
 # (IObjectAddedEvent inherits from IObjectMovedEvent)
 @grok.subscribe(IDossierMarker, IObjectMovedEvent)
 def save_reference_number_prefix(obj, event):
+    if IDontIssueDossierReferenceNumber.providedBy(obj.REQUEST):
+        return
+
     if IObjectRemovedEvent.providedBy(event):
         return
 

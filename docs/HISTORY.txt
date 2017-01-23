@@ -5,6 +5,10 @@ Changelog
 4.14.2 (unreleased)
 -------------------
 
+- OGGBundle constructor: Support setting local reference number part
+  for dossiers (when provided by JSON item).
+  [lgraf]
+
 - Include REST API in mainline GEVER:
 
   - Introduces a new role APIUser
