@@ -12,9 +12,14 @@ from zope.interface import implements
 
 
 class AssignRepoRootNavigation(object):
-    """Assigns the repository root navigation the plone site for the first
-    repository root encountered in the pipeline.
+    """Assigns appropriate navigation tree portlets.
 
+    - For the Plone Site:
+        Assign a tree portlet with the first repository root encountered
+        in the pipeline (assumed to be the primary repo)
+
+    - For (all) repository roots:
+        Assign tree portlets with their respective location as the root.
     """
     classProvides(ISectionBlueprint)
     implements(ISection)
@@ -22,15 +27,33 @@ class AssignRepoRootNavigation(object):
     def __init__(self, transmogrifier, name, options, previous):
         self.previous = previous
         self.context = transmogrifier.context
-        self.has_assigned_portlet = False
+        self.has_assigned_primary_portlet = False
+
+    def _get_repo_root_id(self, item):
+        if '_repo_root_id' in item:
+            # Classic og.setup
+            return item['_repo_root_id']
+        elif '_object' in item:
+            # OGGBundle import
+            return item['_object'].id
 
     def __iter__(self):
+        portal = self.context
         for item in self.previous:
             if item.get('_type') == 'opengever.repository.repositoryroot':
-                if not self.has_assigned_portlet:
-                    self.has_assigned_portlet = True
-                    repository_id = item['_repo_root_id']
-                    assign_repo_root_portlets(self.context, repository_id)
+                repository_id = self._get_repo_root_id(item)
+                if repository_id is not None:
+                    # Plone Site
+                    if not self.has_assigned_primary_portlet:
+                        assign_repo_root_portlets(portal, repository_id)
+                        self.has_assigned_primary_portlet = True
+
+                    # Repo root
+                    if '_object' in item:
+                        obj = item['_object']
+                        assign_tree_portlet(
+                            context=obj, root_path=repository_id,
+                            remove_nav=True, block_inheritance=True)
 
             yield item
 

@@ -5,6 +5,9 @@ Changelog
 4.14.2 (unreleased)
 -------------------
 
+- OGGBundle pipeline: Assign nav tree portlets for imported repo roots.
+  [lgraf]
+
 - OGGBundle loader: Strip extension for title if necessary.
   [lgraf]
 
