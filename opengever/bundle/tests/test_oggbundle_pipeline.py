@@ -39,7 +39,7 @@ class TestOggBundlePipeline(FunctionalTestCase):
             'opengever.bundle.tests', 'assets/basic.oggbundle')
 
         with freeze(FROZEN_NOW):
-            transmogrifier(u'opengever.setup.oggbundle')
+            transmogrifier(u'opengever.bundle.oggbundle')
 
         # test content creation
         # XXX use separate test-cases based on a layer

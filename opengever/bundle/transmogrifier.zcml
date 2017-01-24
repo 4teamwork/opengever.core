@@ -4,6 +4,15 @@
     xmlns:transmogrifier="http://namespaces.plone.org/transmogrifier"
     i18n_domain="opengever.bundle">
 
+  <include package="collective.transmogrifier" file="meta.zcml" />
+
+  <transmogrifier:registerConfig
+      name="opengever.bundle.oggbundle"
+      title="OGGBundle Import Pipeline"
+      description="Import a OneGov GEVER Bundle"
+      configuration="cfgs/oggbundle.cfg"
+      />
+
   <utility
       component=".sections.map_local_roles.MapLocalRolesSection"
       name="opengever.bundle.map_local_roles"
