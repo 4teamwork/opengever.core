@@ -19,6 +19,11 @@
       />
 
   <utility
+    component=".sections.resolveguid.ResolveGUIDSection"
+    name="opengever.bundle.resolveguid"
+    />
+
+  <utility
       component=".sections.constructor.ConstructorSection"
       name="opengever.bundle.constructor"
     />

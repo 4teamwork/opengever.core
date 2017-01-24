@@ -75,9 +75,4 @@
     name="opengever.setup.modelconstructor"
     />
 
-  <utility
-    component=".sections.resolveguid.ResolveGUIDSection"
-    name="opengever.setup.resolveguid"
-    />
-
 </configure>
