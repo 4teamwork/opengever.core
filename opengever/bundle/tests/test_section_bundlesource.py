@@ -2,7 +2,7 @@ from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from opengever.bundle.sections.bundlesource import BUNDLE_PATH_KEY
 from opengever.bundle.sections.bundlesource import BundleSourceSection
-from opengever.setup.tests import MockTransmogrifier
+from opengever.bundle.tests import MockTransmogrifier
 from opengever.testing import FunctionalTestCase
 from pkg_resources import resource_filename
 from zope.annotation import IAnnotations

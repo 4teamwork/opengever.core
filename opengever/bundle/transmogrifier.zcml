@@ -19,6 +19,11 @@
       />
 
   <utility
+      component=".sections.fileloader.FileLoaderSection"
+      name="opengever.bundle.fileloader"
+    />
+
+  <utility
       component=".sections.map_local_roles.MapLocalRolesSection"
       name="opengever.bundle.map_local_roles"
       />
