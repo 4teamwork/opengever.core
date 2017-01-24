@@ -74,4 +74,10 @@
       is_default="True"
       />
 
+  <!-- logo -->
+  <browser:resource
+      name="logo.png"
+      file="resources/logo.png"
+      />
+
 </configure>
