@@ -7,7 +7,7 @@ from zope.interface import implements
 import logging
 
 
-logger = logging.getLogger('opengever.setup.bundlesource')
+logger = logging.getLogger('opengever.bundle.bundlesource')
 logger.setLevel(logging.INFO)
 
 

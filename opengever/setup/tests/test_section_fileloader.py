@@ -2,8 +2,8 @@ from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from ftw.builder import Builder
 from ftw.builder import create
-from opengever.setup.sections.bundlesource import BUNDLE_PATH_KEY
-from opengever.setup.sections.bundlesource import JSON_STATS_KEY
+from opengever.bundle.sections.bundlesource import BUNDLE_PATH_KEY
+from opengever.bundle.sections.bundlesource import JSON_STATS_KEY
 from opengever.setup.sections.fileloader import FileLoaderSection
 from opengever.setup.tests import MockTransmogrifier
 from opengever.testing import FunctionalTestCase

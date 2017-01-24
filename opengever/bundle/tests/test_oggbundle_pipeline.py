@@ -6,9 +6,9 @@ from ftw.builder import create
 from ftw.testing import freeze
 from opengever.base.behaviors.classification import IClassification
 from opengever.base.behaviors.lifecycle import ILifeCycle
+from opengever.bundle.sections.bundlesource import BUNDLE_PATH_KEY
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.repository.behaviors.referenceprefix import IReferenceNumberPrefix
-from opengever.setup.sections.bundlesource import BUNDLE_PATH_KEY
 from opengever.testing import FunctionalTestCase
 from pkg_resources import resource_filename
 from plone import api

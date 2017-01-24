@@ -3,13 +3,13 @@ from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.utils import defaultMatcher
 from ftw.mail.mail import IMail
 from mimetypes import guess_type
+from opengever.bundle.sections.bundlesource import BUNDLE_PATH_KEY
+from opengever.bundle.sections.bundlesource import JSON_STATS_KEY
 from opengever.document.document import IDocumentSchema
 from opengever.document.subscribers import set_digitally_available
 from opengever.document.subscribers import sync_title_and_filename_handler
 from opengever.mail.mail import initalize_title
 from opengever.mail.mail import initialize_metadata
-from opengever.setup.sections.bundlesource import BUNDLE_PATH_KEY
-from opengever.setup.sections.bundlesource import JSON_STATS_KEY
 from zope.annotation.interfaces import IAnnotations
 from zope.interface import classProvides
 from zope.interface import implements

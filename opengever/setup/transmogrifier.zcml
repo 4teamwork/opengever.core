@@ -76,11 +76,6 @@
     />
 
   <utility
-    component=".sections.bundlesource.BundleSourceSection"
-    name="opengever.setup.bundlesource"
-    />
-
-  <utility
     component=".sections.resolveguid.ResolveGUIDSection"
     name="opengever.setup.resolveguid"
     />
