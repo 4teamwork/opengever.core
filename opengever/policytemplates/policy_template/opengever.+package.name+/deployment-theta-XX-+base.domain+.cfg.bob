@@ -4,7 +4,7 @@ extends =
     https://raw.githubusercontent.com/4teamwork/gever-buildouts/master/ogds-postgres.cfg
     https://raw.githubusercontent.com/4teamwork/gever-buildouts/master/tika-standalone.cfg
     https://raw.githubusercontent.com/4teamwork/ftw-buildouts/master/zeoclients/2.cfg
-    http://kgs.4teamwork.ch/release/opengever/XXX
+    versions.cfg
 
 deployment-number = YY
 ogds-db-name = gever-{{{package.name}}}

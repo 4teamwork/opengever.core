@@ -1,0 +1,10 @@
+[buildout]
+extends =
+    http://kgs.4teamwork.ch/release/opengever/XXX
+    https://raw.githubusercontent.com/4teamwork/ftw-buildouts/master/4teamwork-psc.cfg
+    https://raw.githubusercontent.com/4teamwork/opengever.core/master/sources.cfg
+    https://raw.githubusercontent.com/4teamwork/gever-buildouts/master/standard-sources.cfg
+
+# Auto-checkout applies to production, development and test-policy.
+auto-checkout =
+    ${buildout:deployment-checkouts}
