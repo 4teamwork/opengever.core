@@ -8,7 +8,11 @@ class ReplaceFooterWithStaticViewlets(UpgradeStep):
 
     def __call__(self):
         self.install_upgrade_profile()
+        self.remove_footer_layer()
         self.remove_footer_portlets()
+
+    def remove_footer_layer(self):
+        self.remove_broken_browserlayer('ftw.footer', 'IFtwFooterLayer')
 
     def remove_footer_portlets(self):
         assignments = (IAnnotations(self.portal)
