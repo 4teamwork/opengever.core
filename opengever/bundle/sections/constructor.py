@@ -15,7 +15,7 @@ from zope.interface import noLongerProvides
 import logging
 
 
-logger = logging.getLogger('opengever.setup.constructor')
+logger = logging.getLogger('opengever.bundle.constructor')
 
 
 class InvalidType(Exception):
@@ -35,6 +35,8 @@ class NoDossierReferenceNumbersIssued(object):
 
 
 class ConstructorSection(object):
+    """OGGBundle specific constructor section.
+    """
     classProvides(ISectionBlueprint)
     implements(ISection)
 
@@ -76,7 +78,7 @@ class ConstructorSection(object):
 
                 with NoDossierReferenceNumbersIssued():
                     # Create the object without automatically issuing a
-                    # reference number - we might want to set it explicitely
+                    # reference number - we might want to set it explicitly
                     obj = createContentInContainer(
                         context, portal_type, **title_args)
 

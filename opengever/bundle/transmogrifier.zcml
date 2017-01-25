@@ -4,6 +4,35 @@
     xmlns:transmogrifier="http://namespaces.plone.org/transmogrifier"
     i18n_domain="opengever.bundle">
 
+  <include package="collective.transmogrifier" file="meta.zcml" />
+
+  <transmogrifier:registerConfig
+      name="opengever.bundle.oggbundle"
+      title="OGGBundle Import Pipeline"
+      description="Import a OneGov GEVER Bundle"
+      configuration="cfgs/oggbundle.cfg"
+      />
+
+  <utility
+      component=".sections.bundlesource.BundleSourceSection"
+      name="opengever.bundle.bundlesource"
+      />
+
+  <utility
+    component=".sections.resolveguid.ResolveGUIDSection"
+    name="opengever.bundle.resolveguid"
+    />
+
+  <utility
+      component=".sections.constructor.ConstructorSection"
+      name="opengever.bundle.constructor"
+    />
+
+  <utility
+      component=".sections.fileloader.FileLoaderSection"
+      name="opengever.bundle.fileloader"
+    />
+
   <utility
       component=".sections.map_local_roles.MapLocalRolesSection"
       name="opengever.bundle.map_local_roles"

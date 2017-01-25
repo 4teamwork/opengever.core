@@ -4,12 +4,12 @@ from five import grok
 from OFS.interfaces import IObjectWillBeMovedEvent
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import IReferenceNumberPrefix
+from opengever.bundle.sections.constructor import IDontIssueDossierReferenceNumber
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.resolve import DossierResolver
 from opengever.globalindex.handlers.task import sync_task
 from opengever.globalindex.handlers.task import TaskSqlSyncer
-from opengever.setup.sections.constructor import IDontIssueDossierReferenceNumber
 from plone import api
 from Products.CMFCore.interfaces import IActionSucceededEvent
 from zope.component import getAdapter

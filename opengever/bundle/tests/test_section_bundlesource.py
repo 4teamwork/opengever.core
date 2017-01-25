@@ -1,8 +1,8 @@
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
-from opengever.setup.sections.bundlesource import BUNDLE_PATH_KEY
-from opengever.setup.sections.bundlesource import BundleSourceSection
-from opengever.setup.tests import MockTransmogrifier
+from opengever.bundle.sections.bundlesource import BUNDLE_PATH_KEY
+from opengever.bundle.sections.bundlesource import BundleSourceSection
+from opengever.bundle.tests import MockTransmogrifier
 from opengever.testing import FunctionalTestCase
 from pkg_resources import resource_filename
 from zope.annotation import IAnnotations
@@ -19,7 +19,7 @@ class TestBundleSource(FunctionalTestCase):
         transmogrifier = MockTransmogrifier()
         IAnnotations(transmogrifier)[BUNDLE_PATH_KEY] = bundle_path
 
-        options.setdefault('blueprint', 'opengever.setup.bundlesource')
+        options.setdefault('blueprint', 'opengever.bundle.bundlesource')
 
         return BundleSourceSection(transmogrifier, '', options, previous)
 

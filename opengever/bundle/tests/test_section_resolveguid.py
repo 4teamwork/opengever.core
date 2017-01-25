@@ -1,10 +1,10 @@
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
-from opengever.setup.sections.resolveguid import DuplicateGuid
-from opengever.setup.sections.resolveguid import MissingGuid
-from opengever.setup.sections.resolveguid import MissingParent
-from opengever.setup.sections.resolveguid import ResolveGUIDSection
-from opengever.setup.tests import MockTransmogrifier
+from opengever.bundle.sections.resolveguid import DuplicateGuid
+from opengever.bundle.sections.resolveguid import MissingGuid
+from opengever.bundle.sections.resolveguid import MissingParent
+from opengever.bundle.sections.resolveguid import ResolveGUIDSection
+from opengever.bundle.tests import MockTransmogrifier
 from opengever.testing import FunctionalTestCase
 from zope.interface.verify import verifyClass
 from zope.interface.verify import verifyObject
@@ -15,7 +15,7 @@ class TestResolveGUID(FunctionalTestCase):
     def setup_section(self, previous=None):
         previous = previous or []
         transmogrifier = MockTransmogrifier()
-        options = {'blueprint', 'opengever.setup.resolveguid'}
+        options = {'blueprint', 'opengever.bundle.resolveguid'}
 
         return ResolveGUIDSection(transmogrifier, '', options, previous)
 
