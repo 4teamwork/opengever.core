@@ -28,9 +28,8 @@
         Checkout and edit
       </a>
     </li>
-    <li tal:condition="view/download_link_available" id="action-download">
-      <a id="action-download"
-         tal:replace="structure view/download_link" />
+    <li tal:condition="view/download_link_available">
+      <a tal:replace="structure view/download_link" />
     </li>
   </ul>
 

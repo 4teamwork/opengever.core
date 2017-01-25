@@ -45,7 +45,7 @@
                           </span>
 
                         <div class="updateActions">
-                          <a class="outdated"
+                          <a class="proposal-outdated"
                              tal:attributes="href python: view.get_update_document_url(document);"
                              i18n:translate="">
                             Update document in proposal

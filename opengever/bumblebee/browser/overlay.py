@@ -101,7 +101,7 @@ class BumblebeeBaseDocumentOverlay(object):
         dc_helper = DownloadConfirmationHelper()
         return dc_helper.get_html_tag(
             self.context.absolute_url(),
-            additional_classes=[''],
+            additional_classes=['function-download-copy'],
             include_token=True
             )
 

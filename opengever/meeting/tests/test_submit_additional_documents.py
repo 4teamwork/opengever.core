@@ -223,7 +223,7 @@ class TestSubmitAdditionalDocuments(FunctionalTestCase):
 
         self.assertEqual(
             ['Update document in proposal'],
-            browser.css('a.outdated').text,
+            browser.css('a.proposal-outdated').text,
             "The outdated link should be visible on a proposal")
 
         browser.login().visit(
@@ -236,7 +236,7 @@ class TestSubmitAdditionalDocuments(FunctionalTestCase):
             "submittedproposal listing")
 
         self.assertEqual(
-            [], browser.css('a.outdated'),
+            [], browser.css('a.proposal-outdated'),
             "The outdated link should not be visible on a submitted proposal")
 
     @browsing
