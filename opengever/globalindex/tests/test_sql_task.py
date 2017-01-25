@@ -39,7 +39,7 @@ class TestGlobalindexTaskDeadlineLabel(FunctionalTestCase):
         overdue = create(Builder('globalindex_task').having(deadline=deadline))
 
         self.assertEquals(
-            '<span class="overdue">{}</span>'.format(deadline.strftime('%d.%m.%Y')),
+            '<span class="task-overdue">{}</span>'.format(deadline.strftime('%d.%m.%Y')),
             overdue.get_deadline_label())
 
     def test_deadline_returns_empty_string_for_tasks_without_a_deadline(self):
@@ -67,7 +67,7 @@ class TestGlobalindexTaskDeadlineLabel(FunctionalTestCase):
                       .having(int_id=1, deadline=yesterday))
 
         self.assertEqual(
-            '<span class="overdue">{}</span>'.format(
+            '<span class="task-overdue">{}</span>'.format(
                 yesterday.strftime('%d.%m.%Y')),
             task.get_deadline_label())
 

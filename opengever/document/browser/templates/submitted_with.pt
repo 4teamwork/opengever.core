@@ -16,7 +16,7 @@
         </div>
         <div class="updateActions">
           <a tal:attributes="href python: view.get_update_document_url(submitted_document);
-                             class python: 'outdated' if is_outdated else ''"
+                             class python: 'document-proposal-outdated' if is_outdated else ''"
              i18n:translate=""
             >
             Update document in proposal

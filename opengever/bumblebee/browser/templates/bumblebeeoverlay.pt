@@ -63,8 +63,7 @@
            i18n:domain="plone"
            i18n:translate="">Edit metadata</a>
       </li>
-      <li id="action-download"
-          tal:define="link view/overlay/get_download_copy_link"
+      <li tal:define="link view/overlay/get_download_copy_link"
           tal:condition="nocall: link"
           tal:content="structure link">
       </li>

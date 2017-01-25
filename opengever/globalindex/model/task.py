@@ -216,7 +216,7 @@ class Task(Base):
             return u''
 
         if self.is_overdue:
-            label = u'<span class="overdue">{}</span>'
+            label = u'<span class="task-overdue">{}</span>'
         else:
             label = u'<span>{}</span>'
 

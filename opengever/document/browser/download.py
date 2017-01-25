@@ -127,7 +127,10 @@ class DownloadConfirmationHelper(object):
                      viewname='download', include_token=False):
         if self.is_active():
             viewname = 'file_download_confirmation'
-            clazz = 'link-overlay modal {0}'.format(' '.join(additional_classes))
+            clazz = (('link-overlay '
+                      'modal '
+                      '{0}')
+                     .format(' '.join(additional_classes)))
         else:
             clazz = ' '.join(additional_classes)
 
@@ -138,7 +141,9 @@ class DownloadConfirmationHelper(object):
         label = translate(_(u'label_download_copy', default='Download copy'),
                           context=self.request).encode('utf-8')
 
-        return '<a href="{0}" class="{1}">{2}</a>'.format(url, clazz, label)
+        return ('<a href="{0}" '
+                'id="action-download" '
+                'class="{1}">{2}</a>').format(url, clazz, label)
 
     def process_request_form(self):
         """Process a request containing the rendered form."""
