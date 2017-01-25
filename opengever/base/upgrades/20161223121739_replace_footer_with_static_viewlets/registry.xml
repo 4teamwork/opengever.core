@@ -1,0 +1,3 @@
+<registry>
+    <record name="ftw.footer.interfaces.IFooterSettings.columns_count" remove="True" />
+</registry>
