@@ -2,6 +2,9 @@
 extends =
     test-policy.cfg
     https://raw.githubusercontent.com/4teamwork/gever-buildouts/master/standard-dev.cfg
+{{% if setup.enable_bumblebee_feature %}}
+    https://raw.githubusercontent.com/4teamwork/ftw-buildouts/master/bumblebee.cfg
+{{% endif %}}
 {{% if setup.enable_meeting_feature %}}
   http://buildout-proxy.4teamwork.ch/4teamwork/opengever-buildouts/master/ruby-gems.cfg
 {{% endif %}}
