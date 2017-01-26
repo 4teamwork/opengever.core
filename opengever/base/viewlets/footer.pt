@@ -1,9 +1,7 @@
 <div id="ftw-footer" class="row">
-
     <div id="footer-column-1" class="column cell position-0 width-4">
-        <h2>Über OneGov GEVER</h2>
-
-        <p><a href="http://www.onegov.ch/gever/die-wichtigsten-module-von-onegov-gever">Funktionen</a></p>
+        <h2>OneGov GEVER</h2>
+        <p><a href="https://onegovgever.ch">Über OneGov GEVER</a></p>
         <p><a href="https://github.com/OneGov/onegov.gever">Quellcode</a></p>
         <p><a href="https://jenkins.4teamwork.ch">Software Tests</a></p>
         <p><a href="http://www.onegov.ch/gever/aktuell">Release-Informationen</a></p>
