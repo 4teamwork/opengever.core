@@ -37,7 +37,6 @@
     <dependency>profile-plone.formwidget.autocomplete:default</dependency>
     <dependency>profile-plone.formwidget.contenttree:default</dependency>
     <dependency>profile-collective.js.timeago:default</dependency>
-    <dependency>profile-ftw.footer:default</dependency>
     <dependency>profile-plone.app.caching:default</dependency>
     <dependency>profile-plone.app.caching:without-caching-proxy</dependency>
     <dependency>profile-plone.restapi:default</dependency>
