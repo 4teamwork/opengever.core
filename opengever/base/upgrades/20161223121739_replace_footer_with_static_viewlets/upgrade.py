@@ -10,6 +10,7 @@ class ReplaceFooterWithStaticViewlets(UpgradeStep):
         self.install_upgrade_profile()
         self.remove_footer_layer()
         self.remove_footer_portlets()
+        self.remove_footer_portlet_managers()
 
     def remove_footer_layer(self):
         self.remove_broken_browserlayer('ftw.footer', 'IFtwFooterLayer')
@@ -21,3 +22,9 @@ class ReplaceFooterWithStaticViewlets(UpgradeStep):
         assignments.pop('ftw.footer.column2', None)
         assignments.pop('ftw.footer.column3', None)
         assignments.pop('ftw.footer.column4', None)
+
+    def remove_footer_portlet_managers(self):
+        self.remove_broken_portlet_manager('ftw.footer.column1')
+        self.remove_broken_portlet_manager('ftw.footer.column2')
+        self.remove_broken_portlet_manager('ftw.footer.column3')
+        self.remove_broken_portlet_manager('ftw.footer.column4')
