@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.exceptions import FormFieldNotFound
+from ftw.testbrowser.pages.statusmessages import error_messages
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_PROMPT
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_SAMPLING
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_UNWORTHY
@@ -11,6 +12,7 @@ from opengever.disposition.interfaces import IAppraisal
 from opengever.testing import FunctionalTestCase
 from plone import api
 from plone.api.exc import InvalidParameterError
+import transaction
 
 
 class TestDispositionWorkflow(FunctionalTestCase):
@@ -90,6 +92,27 @@ class TestDispositionWorkflow(FunctionalTestCase):
             ARCHIVAL_VALUE_UNWORTHY, ILifeCycle(self.dossier1).archival_value)
         self.assertEquals(
             ARCHIVAL_VALUE_WORTHY, ILifeCycle(self.dossier2).archival_value)
+
+    @browsing
+    def test_appraising_is_not_possible_if_the_appraisal_is_incomplete(self, browser):
+        browser.login().open(self.disposition)
+        browser.click_on('disposition-transition-appraise')
+
+        self.assertEquals(
+            ['The appraisal is incomplete, appraisal could not be finalized.'],
+            error_messages())
+        self.assertEquals('disposition-state-in-progress',
+                          api.content.get_state(self.disposition))
+
+        appraisal = IAppraisal(self.disposition)
+        appraisal.update(dossier=self.dossier1, archive=False)
+        appraisal.update(dossier=self.dossier2, archive=True)
+        transaction.commit()
+
+        browser.login().open(self.disposition)
+        browser.click_on('disposition-transition-appraise')
+        self.assertEquals('disposition-state-appraised',
+                          api.content.get_state(self.disposition))
 
     def test_when_archiving_all_dossiers_moved_to_archived_set_to_archive_state(self):
         self.grant('Archivist', 'Records Manager')

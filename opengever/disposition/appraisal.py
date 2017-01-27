@@ -30,6 +30,9 @@ class Appraisal(object):
     def storage(self):
         return self._annotations[self.key]
 
+    def is_complete(self):
+        return None not in self.storage.values()
+
     def initialize(self, dossier):
         intid = getUtility(IIntIds).getId(dossier)
         self.storage[intid] = self.get_pre_appraisal(dossier)

@@ -85,3 +85,21 @@ class TestAppraisal(FunctionalTestCase):
                                    'should_be_archived': json.dumps(True)})
 
         self.assertTrue(IAppraisal(disposition).get(self.dossier1))
+
+    def test_appraisal_is_in_complete_when_not_all_dossiers_are_appraised(self):
+        dossier3 = create(Builder('dossier')
+                          .having(archival_value=ARCHIVAL_VALUE_SAMPLING)
+                          .as_expired()
+                          .within(self.repository))
+
+        disposition = create(Builder('disposition')
+                             .having(dossiers=[self.dossier1,
+                                               self.dossier2,
+                                               dossier3])
+                             .within(self.root))
+
+        appraisal = IAppraisal(disposition)
+        self.assertFalse(appraisal.is_complete())
+
+        appraisal.update(dossier=dossier3, archive=True)
+        self.assertTrue(appraisal.is_complete())
