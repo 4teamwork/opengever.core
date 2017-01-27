@@ -7,6 +7,7 @@ from opengever.base.interfaces import IReferenceNumberPrefix
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from plone import api
 from plone.dexterity.utils import createContentInContainer
+from zope.annotation import IAnnotations
 from zope.globalrequest import getRequest
 from zope.interface import alsoProvides
 from zope.interface import classProvides
@@ -16,6 +17,9 @@ import logging
 
 
 logger = logging.getLogger('opengever.bundle.constructor')
+
+
+BUNDLE_GUID_KEY = 'bundle_guid'
 
 
 class InvalidType(Exception):
@@ -70,6 +74,12 @@ class ConstructorSection(object):
         title_args = dict((key, item.get(key)) for key in title_keys)
         return title_args
 
+    def _set_guid(self, obj, item):
+        """Store the GUID from the bundle in item's annotations in order to
+        later be able to match up Plone objects with bundle items.
+        """
+        IAnnotations(obj)[BUNDLE_GUID_KEY] = item['guid']
+
     def _construct_object(self, container, portal_type, item):
         fti = self._get_fti(portal_type)
         title_args = self._get_title_args(fti, item)
@@ -91,6 +101,8 @@ class ConstructorSection(object):
                         prefix_adapter.set_number(obj, local_refnum)
                     else:
                         prefix_adapter.set_number(obj)
+
+        self._set_guid(obj, item)
         return obj
 
     def __iter__(self):
