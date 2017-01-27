@@ -90,7 +90,7 @@
                   <a href="#"
                      title="Don't archive"
                      i18n:attributes="title label_dont_archive"
-                     tal:attributes="class python: 'not_archive icon_button' if dossier.appraisal else 'not_archive icon_button active';
+                     tal:attributes="class python: 'not_archive icon_button active' if dossier.appraisal==False else 'not_archive icon_button';
                                      data-url python: view.get_update_appraisal_url(dossier, False);">
                   </a>
 

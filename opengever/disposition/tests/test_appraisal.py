@@ -1,6 +1,9 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_PROMPT
+from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_SAMPLING
+from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_UNCHECKED
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_UNWORTHY
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_WORTHY
 from opengever.disposition.interfaces import IAppraisal
@@ -30,12 +33,29 @@ class TestAppraisal(FunctionalTestCase):
             'Contributor', 'Editor', 'Reader', 'Reviewer', 'Records Manager')
 
     def test_added_dossiers(self):
+        dossier3 = create(Builder('dossier')
+                          .having(archival_value=ARCHIVAL_VALUE_SAMPLING)
+                          .as_expired()
+                          .within(self.repository))
+        dossier4 = create(Builder('dossier')
+                          .having(archival_value=ARCHIVAL_VALUE_UNCHECKED)
+                          .as_expired()
+                          .within(self.repository))
+        dossier5 = create(Builder('dossier')
+                          .having(archival_value=ARCHIVAL_VALUE_PROMPT)
+                          .as_expired()
+                          .within(self.repository))
+
         disposition = create(Builder('disposition')
-                             .having(dossiers=[self.dossier1, self.dossier2])
+                             .having(dossiers=[self.dossier1, self.dossier2,
+                                               dossier3, dossier4, dossier5])
                              .within(self.root))
 
         self.assertFalse(IAppraisal(disposition).get(self.dossier1))
         self.assertTrue(IAppraisal(disposition).get(self.dossier2))
+        self.assertIsNone(IAppraisal(disposition).get(dossier3))
+        self.assertIsNone(IAppraisal(disposition).get(dossier4))
+        self.assertIsNone(IAppraisal(disposition).get(dossier5))
 
     @browsing
     def test_is_updated_when_editing_the_dossier_list(self, browser):

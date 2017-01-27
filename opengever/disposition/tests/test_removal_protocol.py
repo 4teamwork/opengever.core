@@ -7,6 +7,7 @@ from ftw.pdfgenerator.utils import provide_request_layer
 from ftw.testing import freeze
 from lxml.cssselect import CSSSelector
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_UNWORTHY
+from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_WORTHY
 from opengever.disposition.browser.removal_protocol import IRemovalProtocolLayer
 from opengever.disposition.interfaces import IHistoryStorage
 from opengever.latex.layouts.default import DefaultLayout
@@ -24,6 +25,7 @@ class TestDestroyedDossierListing(BaseLatexListingTest):
         super(TestDestroyedDossierListing, self).setUp()
         dossier_a = create(Builder('dossier')
                            .as_expired()
+                           .having(archival_value=ARCHIVAL_VALUE_WORTHY)
                            .titled(u'Dossier A'))
         dossier_b = create(Builder('dossier')
                            .as_expired()
