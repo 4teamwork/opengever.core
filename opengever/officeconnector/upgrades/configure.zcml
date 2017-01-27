@@ -1,0 +1,18 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:upgrade-step="http://namespaces.zope.org/ftw.upgrade"
+    i18n_domain="opengever.officeconnector">
+
+  <include package="ftw.upgrade" file="meta.zcml" />
+
+  <upgrade-step:directory
+      profile="opengever.officeconnector:default"
+      directory="."
+      />
+
+  <!-- Do not add more upgrade steps here.
+       use ./bin/create-upgrade opengever.officeconnector "Upgrade description"
+       /-->
+
+</configure>

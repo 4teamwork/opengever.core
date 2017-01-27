@@ -11,5 +11,7 @@
     <javascript cacheable="True" compression="safe" cookable="True" expression=""
                 enabled="True" id="++resource++opengever.document/download_confirmation.js" inline="False"
                 />
-
+    <javascript cacheable="True" compression="safe" cookable="True" expression=""
+                enabled="True" id="++resource++opengever.document/officeconnector.js" inline="False"
+                />
 </object>

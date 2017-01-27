@@ -1,0 +1,40 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    i18n_domain="opengever.officeconnector">
+
+    <include package=".browser" />
+
+    <i18n:registerTranslations directory="locales" />
+
+    <genericsetup:registerProfile
+        name="default"
+        title="opengever.officeconnector"
+        description="the opengever.officeconnector profile"
+        directory="profiles/default"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+    <include package=".upgrades" />
+
+    <plone:service
+        method="GET"
+        for="opengever.document.document.IDocumentSchema"
+        accept="application/json"
+        factory=".service.OfficeConnectorAttachToken"
+        name="officeconnector_attach_token"
+        permission="zope2.View"
+        />
+
+    <plone:service
+        method="GET"
+        for="opengever.document.document.IDocumentSchema"
+        accept="application/json"
+        factory=".service.OfficeConnectorCheckoutToken"
+        name="officeconnector_checkout_token"
+        permission="zope2.View"
+        />
+
+</configure>

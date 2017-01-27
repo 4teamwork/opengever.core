@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<metadata>
+  <dependencies>
+    <dependency>profile-opengever.officeconnector:default</dependency>
+  </dependencies>
+</metadata>

@@ -37,7 +37,7 @@ class TestDocumentOverview(FunctionalTestCase):
     @browsing
     def test_overview_has_edit_link(self, browser):
         browser.login().open(self.document, view='tabbedview_view-overview')
-        self.assertEquals('Edit Document',
+        self.assertEquals('Checkout and edit',
                           browser.css('a.function-edit').first.text)
         self.assertEquals(
             '{0}/editing_document'.format(
@@ -81,7 +81,7 @@ class TestDocumentOverview(FunctionalTestCase):
 
         self.assertEquals('Test User (test_user_1_)',
                           browser.css('[href*="user-details"]').first.text)
-        self.assertEquals('Edit Document',
+        self.assertEquals('Checkout and edit',
                           browser.css('a.function-edit').first.text)
 
         self.assertEquals('Download copy',
@@ -97,7 +97,7 @@ class TestDocumentOverview(FunctionalTestCase):
             'Didn\'t expect the document to be checked out yet.')
 
         browser.login().open(self.document, view='tabbedview_view-overview')
-        browser.find('Edit Document').click()
+        browser.find('Checkout and edit').click()
 
         self.assertEquals(self.document.absolute_url(), browser.url,
                           'editing_document should redirect back to document')
@@ -125,7 +125,7 @@ class TestDocumentOverview(FunctionalTestCase):
 
         browser.login().visit(self.document, view='tabbedview_view-overview')
 
-        self.assertEquals('Edit Document',
+        self.assertEquals('Checkout and edit',
                           browser.css('.function-edit-inactive').first.text)
         self.assertEquals(
             'Download copy',

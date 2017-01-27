@@ -1,0 +1,14 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="opengever.officeconnector">
+
+  <browser:page
+      for="*"
+      name="officeconnector_settings"
+      class=".settings.SettingsView"
+      allowed_interface="opengever.officeconnector.interfaces.IOfficeConnectorSettingsView"
+      permission="zope2.View"
+      />
+
+</configure>
