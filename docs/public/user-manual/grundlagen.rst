@@ -195,9 +195,9 @@ Nachfolgend einige generelle Inputs zum Handling:
   Mac: :kbd:`cmd` + Klick
   Windows: :kbd:`ctrl` + Klick
 
-- Lesezeichen im Browser verwenden: Es empfiehlt sich, im Browser für häufig
-  benutzte Dossiers und Ordnungspositionen ein Lesezeichen zu setzen, damit
-  diese jeweils mit einem Klick wieder geöffnet werden können.
+- Lesezeichen im Browser (Favoriten) verwenden: Es empfiehlt sich, im Browser
+  für häufig benutzte Dossiers und Ordnungspositionen ein Lesezeichen zu setzen,
+  damit diese jeweils mit einem Klick wieder geöffnet werden können.
 
 - Schriftgrösse anpassen: Bei Bedarf kann mit folgenden Tastaturkürzeln
   die Schriftgrösse im Webbrowser individuell angepasst werden:

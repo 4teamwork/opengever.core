@@ -17,7 +17,11 @@ Sie *Hinzufügen Geschäftsdossier*.
 .. note::
    Ein Dossier kann jeweils nur auf der untersten Gliederungsstufe des
    Ordnungssystems (sog. :term:`Rubrik`) hinzugefügt werden, z.B. unter 1.2.3,
-   nicht aber unter 1.2
+   nicht aber unter 1.2.
+
+   Alle Elemente in OneGov GEVER (Dokumente, Mails,
+   Subdossiers, Aufgaben, usw.) müssen in ein Dossier abgelegt werden.
+   Ohne ein Dossier ist die Nutzung dieser Elemente nicht möglich.
 
 Die Erfassungsmaske ist in die vier Reiter *Allgemein*, *Ablage*,
 *Sichtbarkeit*, *Lebenszyklus* gegliedert. Der jeweils aktive Reiter ist

@@ -22,6 +22,8 @@ Mit der einfachen und der erweiterten Suche werden durchsucht:
 
 Mit der Filtersuche (z.B. innerhalb eines Dossiers) werden Objekte
 (Dossiers, Dokumente oder Aufgaben) aus Listen ausgewählt.
+Der eingegebene Begriff durchsucht dabei alle Objekte ebenfalls im Volltext
+und liefert die Ergebnisse direkt in der Liste.
 
 Regeln und Operatoren für alle drei Suchtypen
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

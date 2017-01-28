@@ -24,7 +24,6 @@ Version 1.0 / 13. Januar 2016
    standardablaeufe
    rollenmanager
    meine_ablage
-   aussonderung
    sitzungs-und-protokollverwaltung
 
 * :ref:`genindex`

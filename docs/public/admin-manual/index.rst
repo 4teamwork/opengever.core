@@ -13,6 +13,7 @@ Power-User und Administratoren von OneGov GEVER.
 .. toctree::
    :maxdepth: 2
 
+   aussonderung.rst
    docproperties/index.rst
    meeting/index.rst
    officeconnector/index.rst
