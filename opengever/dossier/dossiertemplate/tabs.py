@@ -25,8 +25,11 @@ class DossierTemplateDocuments(TemplateDossierDocuments):
     # Reset depth from super-class because we want do display
     # all sub-docouments in the dossiertemplate.
     depth = -1
+    sort_on = 'sortable_title'
 
 
 class DossierTemplateDocumentsGallery(DocumentsGallery):
     grok.context(IDossierTemplateMarker)
     grok.name('tabbedview_view-documents-gallery')
+
+    sort_on = 'sortable_title'

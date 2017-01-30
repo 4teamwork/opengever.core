@@ -594,11 +594,11 @@ class TestDossierTemplateDocuments(FunctionalTestCase):
                .within(self.dossiertemplate)
                .titled('Document 1'))
         create(Builder('document')
-               .within(subdossier)
-               .titled('Document 2'))
-        create(Builder('document')
                .within(self.dossiertemplate)
                .titled('Document 3'))
+        create(Builder('document')
+               .within(subdossier)
+               .titled('Document 2'))
 
     @browsing
     def test_show_documents_in_list_view_sorted_alphabetically(self, browser):

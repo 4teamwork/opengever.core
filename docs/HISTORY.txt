@@ -5,6 +5,9 @@ Changelog
 4.14.2 (unreleased)
 -------------------
 
+- Fix sorting for documents in template dossier "documents" tab.
+  [lgraf]
+
 - Remove ftw.footer, replace with static footer viewlet. [jone]
 
 - OGGBundle pipeline: Implement setting of local roles and blocking
