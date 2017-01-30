@@ -86,6 +86,35 @@ class TestAppraisal(FunctionalTestCase):
 
         self.assertTrue(IAppraisal(disposition).get(self.dossier1))
 
+    @browsing
+    def test_update_appraisal_for_multiple_dossiers_via_update_view(self, browser):
+        repository2 = create(Builder('repository').within(self.root))
+        dossier3 = create(Builder('dossier')
+                          .having(archival_value=ARCHIVAL_VALUE_SAMPLING)
+                          .as_expired()
+                          .within(repository2))
+        dossier4 = create(Builder('dossier')
+                          .having(archival_value=ARCHIVAL_VALUE_SAMPLING)
+                          .as_expired()
+                          .within(repository2))
+        disposition = create(Builder('disposition')
+                             .within(self.root)
+                             .having(dossiers=[self.dossier1, self.dossier2,
+                                               dossier3, dossier4]))
+
+        intids = getUtility(IIntIds)
+        dossier_ids = [intids.getId(self.dossier1),
+                       intids.getId(dossier3),
+                       intids.getId(dossier4)]
+        browser.login().open(disposition, view='update_appraisal_view',
+                             data={'_authenticator': createToken(),
+                                   'dossier-ids': json.dumps(dossier_ids),
+                                   'should_be_archived': json.dumps(True)})
+
+        self.assertTrue(IAppraisal(disposition).get(self.dossier1))
+        self.assertTrue(IAppraisal(disposition).get(dossier3))
+        self.assertTrue(IAppraisal(disposition).get(dossier4))
+
     def test_appraisal_is_in_complete_when_not_all_dossiers_are_appraised(self):
         dossier3 = create(Builder('dossier')
                           .having(archival_value=ARCHIVAL_VALUE_SAMPLING)

@@ -12,9 +12,16 @@ class UpdateAppraisalView(BrowserView):
     """
 
     def __call__(self):
-        IAppraisal(self.context).update(
-            intid=json.loads(self.request['dossier-id']),
-            archive=json.loads(self.request['should_be_archived']))
+        appraisal = IAppraisal(self.context)
+        should_be_archived = json.loads(self.request['should_be_archived'])
+        if self.request.get('dossier-ids'):
+            for intid in json.loads(self.request['dossier-ids']):
+                appraisal.update(intid=intid, archive=should_be_archived)
+
+        else:
+            appraisal.update(
+                intid=json.loads(self.request['dossier-id']),
+                archive=should_be_archived)
 
 
 class AppraiseView(BrowserView):

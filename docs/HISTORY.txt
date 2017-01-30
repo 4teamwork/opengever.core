@@ -5,6 +5,9 @@ Changelog
 4.14.2 (unreleased)
 -------------------
 
+- Change pre appraisal handling and allow appraisal per repository.
+  [phgross]
+
 - Remove breadcrumb_title from metadata.
   [mathias.leimgruber]
 
