@@ -1,4 +1,5 @@
-<div id="disposition_overview" i18n:domain="opengever.disposition">
+<div id="disposition_overview" i18n:domain="opengever.disposition"
+     tal:attributes="data-appraisal_update_url view/get_update_appraisal_url">
 
   <div>
     <!-- <h3><span i18n:domain="plone" i18n:translate="State">State</span>:</h3> -->
@@ -85,13 +86,15 @@
                      title="Archive"
                      i18n:attributes="title label_archive"
                      tal:attributes="class python: 'icon_button archive active' if dossier.appraisal else 'icon_button archive';
-                                     data-url python: view.get_update_appraisal_url(dossier, True);">
+                                     data-intid dossier/intid;
+                                     data-archive string:true">
                   </a>
                   <a href="#"
                      title="Don't archive"
                      i18n:attributes="title label_dont_archive"
                      tal:attributes="class python: 'not_archive icon_button active' if dossier.appraisal==False else 'not_archive icon_button';
-                                     data-url python: view.get_update_appraisal_url(dossier, False);">
+                                     data-intid dossier/intid;
+                                     data-archive string:false">
                   </a>
 
                 </div>
