@@ -1,0 +1,139 @@
+<metal:page define-macro="master">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="ftw.tabbedview">
+
+  <head>
+    <div metal:fill-slot="javascript_head_slot" tal:omit-tag="">
+
+      <tal:extjs condition="here/@@tabbedview_config/extjs_enabled">
+
+      <script type="text/javascript"
+                  tal:attributes="src string:${here/portal_url}/++resource++ext-jquery-adapter.js"></script>
+
+        <script type="text/javascript"
+                  tal:attributes="src string:${here/portal_url}/++resource++collective.js.extjs-resources/js/ext-all.js"></script>
+        <script type="text/javascript"
+                  tal:attributes="src string:${here/portal_url}/++resource++collective.js.extjs-resources/ux/dd/GridDragDropRowOrder.js"></script>
+        <script type="text/javascript"
+                  tal:attributes="src string:${here/portal_url}/++resource++ftwtable.extjs.js"></script>
+      </tal:extjs>
+
+      <script type="text/javascript">
+        $(function(){
+          load_tabbedview();
+        });
+      </script>
+    </div>
+  </head>
+  <body>
+
+
+    <div metal:fill-slot="main" class="tabbedview_view"
+         tal:define="came_from python:request.get('HTTP_REFERER', context.absolute_url()).split('?')[0];">
+      <metal:main-macro define-macro="main">
+        <tal:variables define="tabs view/get_tab_items">
+
+        <div id="tabbedview-header">
+
+          <div tal:replace="structure provider:plone.abovecontenttitle" />
+
+
+          <metal:title define-slot="tabbedview-content-title">
+            <div id="editable-title">
+                <h1 class="documentFirstHeading" tal:content="context/Title" />
+            </div>
+
+            <script tal:attributes="src string:${here/portal_url}/++resource++opengever.base/jscomponents/editable_heading/public/bundle.js" />
+
+          </metal:title>
+          <div tal:replace="structure provider:plone.belowcontenttitle" />
+
+          <metal:befortabs define-slot="before-tabs">
+
+          </metal:befortabs>
+
+          <div id="tabbedview-msg-unknownresponse">
+            <p tal:content="structure view/msg_unknownresponse"></p>
+          </div>
+
+          <div class="tabbedview-tabs">
+            <ul class="formTabs">
+              <li tal:repeat="tab tabs" class="formTab">
+                <a  tal:define="tab_id tab/id;"
+                    tal:attributes="href string:#${tab_id};
+                                    id string:tab-${tab_id};
+                                    class tab/class;
+                                    title string:"
+                    i18n:attributes="title"
+                    >
+                    <span tal:condition="tab/title|nothing" tal:content="tab/title" />
+                    <span tal:condition="not:tab/title|nothing" tal:content="tab_id" i18n:translate="" i18n:domain="ftw.tabbedview" />
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="visualClear" ></div>
+        <div id="tabbedview-body" class="panes">
+            <div id="uploadbox" class="uploaderContainer" tal:condition="view/show_uploadbox">
+                <a tal:attributes="href string:${context/absolute_url}/quick_upload"
+                   class="uploadUrl" style="display:none ">
+                    <!-- link for html5 upload -->
+                </a>
+                <input type="hidden"
+                       name="uploadData"
+                       class="uploadData"
+                       value=""
+                       />
+            </div>
+
+            <dl class="actionMenu tabbedview-tab-menu"
+                tal:condition="view/user_is_logged_in">
+                <dt class="actionMenuHeader tabbedviewMenuHeader">
+                    <a href="#">
+                        <span>&nbsp;</span>
+                    </a>
+                </dt>
+            </dl>
+
+            <dl class="tabbdview-tab-menu-template">
+                <tal:tab tal:repeat="tab tabs">
+                    <dd tal:define="actions tab/tab_menu_actions|nothing;
+                                    classes string:tabbedview-${tab/id}-menu-items;
+                                    classes string:actionMenuContent ${classes}"
+                        tal:attributes="class classes"
+                        tal:condition="actions">
+                        <ul>
+                            <li tal:repeat="action actions">
+                                <a tal:attributes="href action/href;
+                                                   title action/description|nothing;
+                                                   class action/classes|nothing"
+                                   tal:content="action/label" />
+                            </li>
+                        </ul>
+                    </dd>
+                </tal:tab>
+            </dl>
+
+            <tal:panes repeat="tab tabs">
+                <div tal:attributes="id python:'%s_overview' % tab['id']" class="pane"><!-- iefix --></div>
+            </tal:panes>
+        </div>
+
+        <div tal:replace="structure provider:plone.belowcontentbody" />
+        <div id="tabbedview-spinner" style="display:none">
+          <img src="/++resource++ftw.tabbedview-resources/spinner.gif" tal:attributes="src string: ${portal_url}/++resource++ftw.tabbedview-resources/spinner.gif"/>
+        </div>
+
+        </tal:variables>
+      </metal:main-macro>
+    </div>
+  </body>
+</html>
+</metal:page>

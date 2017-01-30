@@ -3,13 +3,16 @@ from opengever.dossier import _
 from opengever.dossier.dossiertemplate import is_dossier_template_feature_enabled
 from opengever.meeting import is_meeting_feature_enabled
 from opengever.tabbedview import GeverTabbedView
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 
 
 class DossierTabbedView(GeverTabbedView):
 
+    __call__ = ViewPageTemplateFile("templates/dossier_overview.pt")
+
     overview_tab = {
         'id': 'overview',
-        'title': _(u'label_overview', default=u'Overview'),
+        'title': _(u'label_overviewsdsd', default=u'Overview'),
         }
 
     documents_tab = {

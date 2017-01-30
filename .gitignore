@@ -15,3 +15,4 @@ parts/
 src/
 var/
 snakefood/
+!opengever/base/browser/resources/jscomponents/*/src
