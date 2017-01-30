@@ -131,8 +131,8 @@ class TestDossierListing(FunctionalTestCase):
             data={'dossier_state_filter': 'filter_retention_expired'})
 
         table = browser.css('.listing').first
-        self.assertEquals(['Dossier B', 'Dossier C'],
-                          [row.get('Title') for row in table.dicts()])
+        self.assertSetEqual(set(['Dossier B', 'Dossier C']),
+                            set([row.get('Title') for row in table.dicts()]))
 
     @browsing
     def test_expired_filters_is_hidden_on_subdossier_listings(self, browser):
