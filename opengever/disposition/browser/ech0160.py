@@ -1,6 +1,5 @@
 from opengever.base.stream import TempfileStreamIterator
 from opengever.disposition.ech0160.sippackage import SIPPackage
-from plone import api
 from Products.Five import BrowserView
 from pyxb.utils.domutils import BindingDOMSupport
 from tempfile import TemporaryFile
@@ -16,7 +15,7 @@ class ECH0160ExportView(BrowserView):
     def __call__(self):
         BindingDOMSupport.SetDefaultNamespace(u'http://bar.admin.ch/arelda/v4')
 
-        package = SIPPackage(self.get_dossiers())
+        package = SIPPackage(self.context)
         tmpfile = self.create_zipfile(package)
 
         size = tmpfile.tell()
@@ -28,9 +27,6 @@ class ECH0160ExportView(BrowserView):
         response.setHeader("Content-Length", size)
 
         return TempfileStreamIterator(tmpfile, size)
-
-    def get_dossiers(self):
-        return [relation.to_object for relation in self.context.dossiers]
 
     def create_zipfile(self, package):
         tmpfile = TemporaryFile()

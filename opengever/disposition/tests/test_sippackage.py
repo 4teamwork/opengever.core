@@ -21,17 +21,23 @@ class TestSIPPackage(FunctionalTestCase):
 
         SIP_[Ablieferungsdatum]_[Name der ablieferenden Stelle]_[Referenz].
         """
-        dossier = create(Builder('dossier').within(self.folder))
+        dossier = create(Builder('dossier').within(self.folder).as_expired())
+        disposition = create(Builder('disposition')
+                             .having(dossiers=[dossier])
+                             .within(self.folder))
 
         with freeze(datetime(2016, 11, 6)):
-            package = SIPPackage([dossier])
+            package = SIPPackage(disposition)
             self.assertEquals(
                 'SIP_20161106_PLONE_MyRef', package.get_folder_name())
 
     def test_ablieferungs_metadata(self):
-        dossier = create(Builder('dossier').within(self.folder))
+        dossier = create(Builder('dossier').within(self.folder).as_expired())
+        disposition = create(Builder('disposition')
+                             .having(dossiers=[dossier])
+                             .within(self.folder))
 
-        package = SIPPackage([dossier])
+        package = SIPPackage(disposition)
 
         self.assertEquals(
             u'GEVER', package.ablieferung.ablieferungstyp)
@@ -45,30 +51,36 @@ class TestSIPPackage(FunctionalTestCase):
 
     # TODO: should only include all dossiers from the disposition object
     def test_adds_all_dossiers_and_documents(self):
-        dossier_a = create(Builder('dossier').within(self.folder))
+        dossier_a = create(Builder('dossier').within(self.folder).as_expired())
         create(Builder('document').with_dummy_content().within(dossier_a))
-        dossier_b = create(Builder('dossier').within(self.folder))
+        dossier_b = create(Builder('dossier').within(self.folder).as_expired())
+        disposition = create(Builder('disposition')
+                             .having(dossiers=[dossier_a, dossier_b])
+                             .within(self.folder))
 
-        package = SIPPackage([dossier_a, dossier_b])
+        package = SIPPackage(disposition)
 
         dossier_a_model, dossier_b_model = package.content_folder.folders
         self.assertEquals(1, len(dossier_a_model.files))
         self.assertEquals(0, len(dossier_b_model.files))
 
     def test_zipfile_structure(self):
-        dossier_a = create(Builder('dossier').within(self.folder))
-        dossier_b = create(Builder('dossier').within(self.folder))
+        dossier_a = create(Builder('dossier').within(self.folder).as_expired())
+        dossier_b = create(Builder('dossier').within(self.folder).as_expired())
         create(Builder('document').with_dummy_content().within(dossier_a))
         create(Builder('document')
                .with_dummy_content()
                .attach_archival_file_containing('TEST DATA')
                .within(dossier_b))
+        disposition = create(Builder('disposition')
+                             .having(dossiers=[dossier_a, dossier_b])
+                             .within(self.folder))
 
         with freeze(datetime(2016, 6, 11)):
             tmpfile = TemporaryFile()
             zip_file = ZipFile(tmpfile, 'w')
 
-            package = SIPPackage([dossier_a, dossier_b])
+            package = SIPPackage(disposition)
             package.write_to_zipfile(zip_file)
 
             self.assertItemsEqual(
