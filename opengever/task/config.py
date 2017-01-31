@@ -1,7 +1,7 @@
 INDEXES = (
     ('deadline', 'DateIndex'),
     ('date_of_completion', 'DateIndex'),
-    ('responsible', 'FieldIndex'),
+    ('responsible', 'UserTurboIndex'),
     ('issuer', 'FieldIndex'),
     ('task_type', 'FieldIndex'),
     ('assigned_client', "KeywordIndex"),
