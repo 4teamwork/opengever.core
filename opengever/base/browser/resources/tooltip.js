@@ -68,10 +68,18 @@
       return;
     }
 
-    $.get(portal_url + '/breadcrumb_by_uid', {ploneuid: target.data("uid")}).done(function(data){
-      target.attr('title', data);
-    });
+    setTimeout(function(){
+      if (!target.is(":hover")){
+        return;
+      }
 
+      $.get(portal_url + '/breadcrumb_by_uid', {ploneuid: target.data("uid")}).done(function(data){
+        target.attr('title', data);
+        // Force the browser to repaint - otherwise the tooltip is not directly displayed
+        target.hide(0);
+        target.show(0);
+      });
+    }, 100);
   }
 
   $(document).on("mouseover", ".rollover-breadcrumb", setBreadcrumbAsTitleAttr);
