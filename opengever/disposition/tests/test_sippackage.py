@@ -21,17 +21,30 @@ class TestSIPPackage(FunctionalTestCase):
 
         SIP_[Ablieferungsdatum]_[Name der ablieferenden Stelle]_[Referenz].
         """
-        dossier = create(Builder('dossier').within(self.folder))
+        dossier = create(Builder('dossier').within(self.folder).as_expired())
+        disposition = create(Builder('disposition')
+                             .having(dossiers=[dossier])
+                             .within(self.folder))
 
         with freeze(datetime(2016, 11, 6)):
-            package = SIPPackage([dossier])
+            package = SIPPackage(disposition)
             self.assertEquals(
-                'SIP_20161106_PLONE_MyRef', package.get_folder_name())
+                'SIP_20161106_PLONE', package.get_folder_name())
+
+        disposition.transfer_number = u'10\xe434'
+        with freeze(datetime(2016, 11, 6)):
+            package = SIPPackage(disposition)
+            self.assertEquals(
+                u'SIP_20161106_PLONE_10\xe434', package.get_folder_name())
+
 
     def test_ablieferungs_metadata(self):
-        dossier = create(Builder('dossier').within(self.folder))
+        dossier = create(Builder('dossier').within(self.folder).as_expired())
+        disposition = create(Builder('disposition')
+                             .having(dossiers=[dossier])
+                             .within(self.folder))
 
-        package = SIPPackage([dossier])
+        package = SIPPackage(disposition)
 
         self.assertEquals(
             u'GEVER', package.ablieferung.ablieferungstyp)
@@ -45,48 +58,55 @@ class TestSIPPackage(FunctionalTestCase):
 
     # TODO: should only include all dossiers from the disposition object
     def test_adds_all_dossiers_and_documents(self):
-        dossier_a = create(Builder('dossier').within(self.folder))
+        dossier_a = create(Builder('dossier').within(self.folder).as_expired())
         create(Builder('document').with_dummy_content().within(dossier_a))
-        dossier_b = create(Builder('dossier').within(self.folder))
+        dossier_b = create(Builder('dossier').within(self.folder).as_expired())
+        disposition = create(Builder('disposition')
+                             .having(dossiers=[dossier_a, dossier_b])
+                             .within(self.folder))
 
-        package = SIPPackage([dossier_a, dossier_b])
+        package = SIPPackage(disposition)
 
         dossier_a_model, dossier_b_model = package.content_folder.folders
         self.assertEquals(1, len(dossier_a_model.files))
         self.assertEquals(0, len(dossier_b_model.files))
 
     def test_zipfile_structure(self):
-        dossier_a = create(Builder('dossier').within(self.folder))
-        dossier_b = create(Builder('dossier').within(self.folder))
+        dossier_a = create(Builder('dossier').within(self.folder).as_expired())
+        dossier_b = create(Builder('dossier').within(self.folder).as_expired())
         create(Builder('document').with_dummy_content().within(dossier_a))
         create(Builder('document')
                .with_dummy_content()
                .attach_archival_file_containing('TEST DATA')
                .within(dossier_b))
+        disposition = create(Builder('disposition')
+                             .having(dossiers=[dossier_a, dossier_b],
+                                     transfer_number=u'10xy')
+                             .within(self.folder))
 
         with freeze(datetime(2016, 6, 11)):
             tmpfile = TemporaryFile()
             zip_file = ZipFile(tmpfile, 'w')
 
-            package = SIPPackage([dossier_a, dossier_b])
+            package = SIPPackage(disposition)
             package.write_to_zipfile(zip_file)
 
             self.assertItemsEqual(
-                ['SIP_20160611_PLONE_MyRef/header/xsd/ablieferung.xsd',
-                 'SIP_20160611_PLONE_MyRef/header/xsd/archivischeNotiz.xsd',
-                 'SIP_20160611_PLONE_MyRef/header/xsd/archivischerVorgang.xsd',
-                 'SIP_20160611_PLONE_MyRef/header/xsd/arelda.xsd',
-                 'SIP_20160611_PLONE_MyRef/header/xsd/base.xsd',
-                 'SIP_20160611_PLONE_MyRef/header/xsd/datei.xsd',
-                 'SIP_20160611_PLONE_MyRef/header/xsd/dokument.xsd',
-                 'SIP_20160611_PLONE_MyRef/header/xsd/dossier.xsd',
-                 'SIP_20160611_PLONE_MyRef/header/xsd/ordner.xsd',
-                 'SIP_20160611_PLONE_MyRef/header/xsd/ordnungssystem.xsd',
-                 'SIP_20160611_PLONE_MyRef/header/xsd/ordnungssystemposition.xsd',
-                 'SIP_20160611_PLONE_MyRef/header/xsd/paket.xsd',
-                 'SIP_20160611_PLONE_MyRef/header/xsd/provenienz.xsd',
-                 'SIP_20160611_PLONE_MyRef/header/xsd/zusatzDaten.xsd',
-                 'SIP_20160611_PLONE_MyRef/content/d000001/p000001.doc',
-                 'SIP_20160611_PLONE_MyRef/content/d000002/p000002.pdf',
-                 'SIP_20160611_PLONE_MyRef/header/metadata.xml'],
+                ['SIP_20160611_PLONE_10xy/header/xsd/ablieferung.xsd',
+                 'SIP_20160611_PLONE_10xy/header/xsd/archivischeNotiz.xsd',
+                 'SIP_20160611_PLONE_10xy/header/xsd/archivischerVorgang.xsd',
+                 'SIP_20160611_PLONE_10xy/header/xsd/arelda.xsd',
+                 'SIP_20160611_PLONE_10xy/header/xsd/base.xsd',
+                 'SIP_20160611_PLONE_10xy/header/xsd/datei.xsd',
+                 'SIP_20160611_PLONE_10xy/header/xsd/dokument.xsd',
+                 'SIP_20160611_PLONE_10xy/header/xsd/dossier.xsd',
+                 'SIP_20160611_PLONE_10xy/header/xsd/ordner.xsd',
+                 'SIP_20160611_PLONE_10xy/header/xsd/ordnungssystem.xsd',
+                 'SIP_20160611_PLONE_10xy/header/xsd/ordnungssystemposition.xsd',
+                 'SIP_20160611_PLONE_10xy/header/xsd/paket.xsd',
+                 'SIP_20160611_PLONE_10xy/header/xsd/provenienz.xsd',
+                 'SIP_20160611_PLONE_10xy/header/xsd/zusatzDaten.xsd',
+                 'SIP_20160611_PLONE_10xy/content/d000001/p000001.doc',
+                 'SIP_20160611_PLONE_10xy/content/d000002/p000002.pdf',
+                 'SIP_20160611_PLONE_10xy/header/metadata.xml'],
                 zip_file.namelist())

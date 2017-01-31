@@ -5,6 +5,9 @@ Changelog
 4.14.2 (unreleased)
 -------------------
 
+- Fixed SIP package name, include disposition transfer number if exists.
+  [phgross]
+
 - Fix sorting for documents in template dossier "documents" tab.
   [lgraf]
 

@@ -26,9 +26,10 @@ class SIPPackage(object):
     http://www.ech.ch/vechweb/page?p=dossier&documentNumber=eCH-0160
     """
 
-    def __init__(self, dossiers):
+    def __init__(self, disposition):
         self.xsd = self.create_xsd()
-        self.dossiers = self.create_dossiers(dossiers)
+        self.disposition = disposition
+        self.dossiers = self.create_dossiers(self.disposition.get_dossiers())
         self.repo = self.create_repository()
         self.content_folder = self.create_content_folder()
         self.ablieferung = self.create_ablieferung()
@@ -105,10 +106,13 @@ class SIPPackage(object):
         return ITranslatedTitle(parent).translated_title()
 
     def get_folder_name(self):
-        return 'SIP_{}_{}_{}'.format(
+        name = u'SIP_{}_{}'.format(
             DateTime().strftime('%Y%m%d'),
-            api.portal.get().getId().upper(),
-            'MyRef')
+            api.portal.get().getId().upper())
+        if self.disposition.transfer_number:
+            name = u'{}_{}'.format(name, self.disposition.transfer_number)
+
+        return name
 
     def write_to_zipfile(self, zipfile):
         self.add_schema_files(zipfile)

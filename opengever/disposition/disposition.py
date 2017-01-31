@@ -182,6 +182,9 @@ class Disposition(Container):
         self.update_added_dossiers(new - old)
         self.update_dropped_dossiers(old - new)
 
+    def get_dossiers(self):
+        return [relation.to_object for relation in self.dossiers]
+
     def get_history(self):
         return IHistoryStorage(self).get_history()
 
