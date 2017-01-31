@@ -21,7 +21,8 @@ class TesteCH0160Deployment(FunctionalTestCase):
                            .within(self.folder))
         create(Builder('document').with_dummy_content().within(dossier_a))
         disposition = create(Builder('disposition')
-                             .having(dossiers=[dossier_a])
+                             .having(dossiers=[dossier_a],
+                                     transfer_number=u'10xy')
                              .within(self.root))
 
         with freeze(datetime(2016, 6, 11)):
@@ -32,5 +33,5 @@ class TesteCH0160Deployment(FunctionalTestCase):
                 'application/zip',
                 self.request.response.headers.get('content-type'))
             self.assertEquals(
-                'inline; filename="SIP_20160611_PLONE_MyRef.zip"',
+                'inline; filename="SIP_20160611_PLONE_10xy.zip"',
                 self.request.response.headers.get('content-disposition'))

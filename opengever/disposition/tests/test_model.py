@@ -322,7 +322,7 @@ class TestFolderAndFileModel(FunctionalTestCase):
                             .with_dummy_content())
 
         repo = Repository()
-        content = ContentRootFolder('SIP_20101212_FD_MyRef')
+        content = ContentRootFolder('SIP_20101212_FD_10xy')
 
         models = [Dossier(dossier_a), Dossier(dossier_b)]
         for dossier_model in models:

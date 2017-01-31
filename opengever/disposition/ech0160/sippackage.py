@@ -106,10 +106,13 @@ class SIPPackage(object):
         return ITranslatedTitle(parent).translated_title()
 
     def get_folder_name(self):
-        return 'SIP_{}_{}_{}'.format(
+        name = u'SIP_{}_{}'.format(
             DateTime().strftime('%Y%m%d'),
-            api.portal.get().getId().upper(),
-            'MyRef')
+            api.portal.get().getId().upper())
+        if self.disposition.transfer_number:
+            name = u'{}_{}'.format(name, self.disposition.transfer_number)
+
+        return name
 
     def write_to_zipfile(self, zipfile):
         self.add_schema_files(zipfile)
