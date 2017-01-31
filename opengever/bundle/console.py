@@ -1,4 +1,6 @@
 from collective.transmogrifier.transmogrifier import Transmogrifier
+from opengever.bundle.ldap import disable_ldap
+from opengever.bundle.ldap import enable_ldap
 from opengever.bundle.sections.bundlesource import BUNDLE_PATH_KEY
 from opengever.core.debughelpers import get_first_plone_site
 from opengever.core.debughelpers import setup_plone
@@ -24,9 +26,14 @@ def import_oggbundle(app, args):
     log.info("Importing OGGBundle %s" % bundle_path)
 
     plone = setup_plone(get_first_plone_site(app))
+
+    disable_ldap(plone)
+
     transmogrifier = Transmogrifier(plone)
     IAnnotations(transmogrifier)[BUNDLE_PATH_KEY] = bundle_path
     transmogrifier(u'opengever.bundle.oggbundle')
+
+    enable_ldap(plone)
 
     log.info("Committing transaction...")
     transaction.commit()

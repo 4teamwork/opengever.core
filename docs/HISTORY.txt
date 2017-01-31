@@ -5,6 +5,9 @@ Changelog
 4.14.2 (unreleased)
 -------------------
 
+- Disable LDAP during OGGBundle import to avoid costly LDAP lookups.
+  [lgraf]
+
 - Fixed SIP package name, include disposition transfer number if exists.
   [phgross]
 
