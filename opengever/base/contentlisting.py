@@ -106,7 +106,10 @@ class OpengeverCatalogContentListingObject(CatalogContentListingObject):
         return self.CroppedTitle().decode('utf-8')
 
     def get_breadcrumbs(self):
-        return self._brain.breadcrumb_titles
+        obj = self._brain.getObject()
+        breadcrumbs_view = getMultiAdapter((obj, obj.REQUEST),
+                                           name='breadcrumbs_view')
+        return breadcrumbs_view.breadcrumbs()
 
     def is_bumblebeeable(self):
         if not hasattr(self, '_is_bumblebeeable'):

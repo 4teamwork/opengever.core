@@ -92,4 +92,11 @@
         allowed_interface="plone.app.layout.globals.interfaces.IContextState"
         />
 
+    <browser:page
+        name="breadcrumb_by_uid"
+        for="*"
+        permission="zope2.View"
+        class=".breadcrumb_by_uid.ResolveUIDToBreadcrumb"
+        />
+
 </configure>

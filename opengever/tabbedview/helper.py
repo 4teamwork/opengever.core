@@ -8,9 +8,9 @@ from opengever.ogds.base.utils import ogds_service
 from opengever.tabbedview import _
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize import ram
+from plone.uuid.interfaces import IUUID
 from Products.CMFCore.interfaces._tools import IMemberData
 from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
-from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
@@ -96,28 +96,6 @@ def linked_ogds_author(item, author):
     return Actor.lookup(author).get_link()
 
 
-def _breadcrumbs_from_item(item):
-    """Returns a list of titles for the items parent hierarchy (breadcrumbs).
-    `item` can be either a brain or an object.
-    """
-    breadcrumb_titles = []
-    raw_breadcrumb_titles = getattr(item, 'breadcrumb_titles', None)
-    if not raw_breadcrumb_titles:
-        # Not a brain - get breadcrumbs from the breadcrumbs view
-        breadcrumbs_view = getMultiAdapter((item, item.REQUEST),
-                                           name='breadcrumbs_view')
-        raw_breadcrumb_titles = breadcrumbs_view.breadcrumbs()
-
-    # Make sure all titles are utf-8
-    for elem in raw_breadcrumb_titles:
-        title = elem.get('Title')
-        if isinstance(title, unicode):
-            title = title.encode('utf-8')
-        breadcrumb_titles.append(title)
-
-    return breadcrumb_titles
-
-
 def linked_document_subdossier(item, value):
     subdossier_title = item.containing_subdossier
     if not subdossier_title:
@@ -139,26 +117,23 @@ def linked(item, value):
     if isinstance(value, unicode):
         value = value.encode('utf-8')
 
-    # Determine URL method
+    # Determine URL method and UID
     url_method = lambda: '#'
     if hasattr(item, 'getURL'):
         url_method = item.getURL
+        uid = item.UID
     elif hasattr(item, 'absolute_url'):
         url_method = item.absolute_url
+        uid = IUUID(item)
 
     # Construct CSS class
     css_class = get_css_class(item)
 
-    # Construct breadcrumbs
-    breadcrumb_titles = _breadcrumbs_from_item(item)
-    link_title = " > ".join(t for t in breadcrumb_titles)
-
     # Make sure all data used in the HTML snippet is properly escaped
-    link_title = escape_html(link_title)
     value = escape_html(value)
 
-    link = '<a class="rollover-breadcrumb %s" href="%s" title="%s">%s</a>' % (
-        css_class, url_method(), link_title, value)
+    link = '<a class="rollover-breadcrumb %s" href="%s" data-uid="%s">%s</a>' % (
+        css_class, url_method(), uid, value)
 
     wrapper = '<span class="linkWrapper">%s</span>' % link
     return wrapper

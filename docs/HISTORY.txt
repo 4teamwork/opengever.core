@@ -5,6 +5,9 @@ Changelog
 4.14.2 (unreleased)
 -------------------
 
+- Remove breadcrumb_title from metadata.
+  [mathias.leimgruber]
+
 - Disable LDAP during OGGBundle import to avoid costly LDAP lookups.
   [lgraf]
 

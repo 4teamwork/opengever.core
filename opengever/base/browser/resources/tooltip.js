@@ -55,3 +55,34 @@
   $(document).on("mouseover", ".tooltip-trigger", initTooltips);
 
 }(window, window.jQuery));
+
+
+(function(global, $) {
+
+  "use strict";
+
+  function setBreadcrumbAsTitleAttr(event) {
+    var target = $(event.currentTarget);
+    var title = target.attr('title');
+    if ((typeof title !== typeof undefined && title !== false)){
+      return;
+    }
+
+    setTimeout(function(){
+      if (!target.is(":hover")){
+        return;
+      }
+
+      $.get(portal_url + '/breadcrumb_by_uid', {ploneuid: target.data("uid")}).done(function(data){
+        target.attr('title', data);
+        // Force the browser to repaint - otherwise the tooltip is not directly displayed
+        target.hide(0);
+        target.show(0);
+      });
+    }, 100);
+  }
+
+  $(document).on("mouseover", ".rollover-breadcrumb", setBreadcrumbAsTitleAttr);
+
+
+}(window, window.jQuery));
