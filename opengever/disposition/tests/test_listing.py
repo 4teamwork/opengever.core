@@ -69,3 +69,40 @@ class TestDispositionListing(FunctionalTestCase):
 
         browser.login().open(self.root, view='tabbedview_view-dispositions')
         self.assertEquals([''], browser.css('.tabbedview-action-list').text)
+
+    @browsing
+    def test_statefilter_hides_closed_by_default(self, browser):
+        with freeze(datetime(2015, 1, 1)):
+            repository = create(Builder('repository').within(self.root))
+            create(Builder('disposition')
+                   .titled(u'In Progress')
+                   .within(repository))
+            create(Builder('disposition')
+                   .titled(u'Appraised')
+                   .in_state('disposition-state-appraised')
+                   .within(repository))
+            create(Builder('disposition')
+                   .titled(u'Disposed')
+                   .in_state('disposition-state-disposed')
+                   .within(repository))
+            create(Builder('disposition')
+                   .titled(u'Disposed')
+                   .in_state('disposition-state-archived')
+                   .within(repository))
+            create(Builder('disposition')
+                   .titled(u'Closed')
+                   .in_state('disposition-state-closed')
+                   .within(repository))
+
+        browser.login().open(self.root, view='tabbedview_view-dispositions')
+        rows = browser.css('.listing').first.dicts()
+        self.assertItemsEqual(
+            ['In Progress', 'Appraised', 'Disposed', 'Disposed'],
+            [row.get('Title') for row in rows])
+
+        browser.open(self.root, view='tabbedview_view-dispositions',
+                     data={'disposition_state_filter': 'filter_all'})
+        rows = browser.css('.listing').first.dicts()
+        self.assertItemsEqual(
+            ['In Progress', 'Appraised', 'Disposed', 'Disposed', 'Closed'],
+            [row.get('Title') for row in rows])
