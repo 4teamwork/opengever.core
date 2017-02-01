@@ -39,22 +39,27 @@ class TestDispositionListing(FunctionalTestCase):
                                         .within(repository))
             self.disposition_b = create(Builder('disposition')
                                         .titled(u'Angebot FD 1.2.2003')
+                                        .in_state('disposition-state-appraised')
                                         .within(repository))
             self.disposition_c = create(Builder('disposition')
                                         .titled(u'Angebot FD 1.2.1995')
+                                        .in_state('disposition-state-disposed')
                                         .within(repository))
 
         browser.login().open(self.root, view='tabbedview_view-dispositions')
         self.assertEquals(
             [{'': '',
               'Sequence Number': '1',
-              'Title': 'Angebot FD 23.11.2010'},
+              'Title': 'Angebot FD 23.11.2010',
+              'Review state': 'disposition-state-in-progress'},
              {'': '',
               'Sequence Number': '2',
-              'Title': 'Angebot FD 1.2.2003'},
+              'Title': 'Angebot FD 1.2.2003',
+              'Review state': 'disposition-state-appraised'},
              {'': '',
               'Sequence Number': '3',
-              'Title': 'Angebot FD 1.2.1995'}],
+              'Title': 'Angebot FD 1.2.1995',
+              'Review state': 'disposition-state-disposed'}],
             browser.css('.listing').first.dicts())
 
     @browsing

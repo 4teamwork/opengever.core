@@ -3,6 +3,7 @@ from ftw.table.helper import path_checkbox
 from opengever.disposition import _
 from opengever.tabbedview import BaseCatalogListingTab
 from opengever.tabbedview.helper import linked
+from opengever.tabbedview.helper import workflow_state
 
 
 class Dispositions(BaseCatalogListingTab):
@@ -29,4 +30,8 @@ class Dispositions(BaseCatalogListingTab):
          'column_title': _(u'label_title', default=u'Title'),
          'sort_index': 'sortable_title',
          'transform': linked},
+
+        {'column': 'review_state',
+         'column_title': _(u'label_review_state', default=u'Review state'),
+         'transform': workflow_state},
     )
