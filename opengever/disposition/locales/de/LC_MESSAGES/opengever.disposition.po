@@ -94,9 +94,8 @@ msgstr "Ablieferungspaket herunterladen"
 
 #. Default: "Don't archive"
 #: ./opengever/disposition/browser/templates/overview.pt:90
-#, fuzzy
 msgid "label_dont_archive"
-msgstr "Nicht archvieren"
+msgstr "Nicht archivieren"
 
 #. Default: "Dossiers"
 #: ./opengever/disposition/browser/templates/overview.pt:20
