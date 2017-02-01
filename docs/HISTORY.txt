@@ -5,6 +5,9 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Fix holey bumblebee fallback svg icon.
+  [Kevin Bieri]
+
 - Fix rendering of new agenda points in IE11.
   [Kevin Bieri]
 
