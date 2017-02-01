@@ -5,6 +5,9 @@ Changelog
 4.14.2 (unreleased)
 -------------------
 
+- Fixed retention period calculation for dossiers closed at the first of january.
+  [phgross]
+
 - Fix broken link and missing translation for add participation label.
   [deiferni]
 

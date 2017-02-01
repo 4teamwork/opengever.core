@@ -50,10 +50,6 @@ DOSSIER_STATES_OFFERABLE = DOSSIER_STATES_CLOSED + ['dossier-state-offered']
 _marker = object()
 
 
-def is_january_the_first(value):
-    return value.month == 1 and value.day == 1
-
-
 class DossierContainer(Container):
 
     def _getOb(self, id_, default=_marker):
@@ -322,13 +318,7 @@ class DossierContainer(Container):
         """
         if IDossier(self).end:
             year = IDossier(self).end.year + ILifeCycle(self).retention_period
-
-            if not is_january_the_first(IDossier(self).end):
-                # The rention period will be expired at the first of
-                # january in the next year.
-                year += 1
-
-            return date(year, 1, 1)
+            return date(year + 1, 1, 1)
 
         return None
 
