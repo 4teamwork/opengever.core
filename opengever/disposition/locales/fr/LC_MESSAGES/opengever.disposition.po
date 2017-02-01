@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-01-30 13:00+0000\n"
+"POT-Creation-Date: 2017-02-01 15:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,8 +26,16 @@ msgstr ""
 msgid "The report could not been generated."
 msgstr ""
 
+#: ./opengever/disposition/browser/listing.py:30
+msgid "active"
+msgstr ""
+
+#: ./opengever/disposition/browser/listing.py:28
+msgid "all"
+msgstr ""
+
 #. Default: "Sequence Number"
-#: ./opengever/disposition/browser/listing.py:24
+#: ./opengever/disposition/browser/listing.py:43
 msgid "document_sequence_number"
 msgstr ""
 
@@ -138,13 +146,18 @@ msgstr ""
 msgid "label_removal_protocol"
 msgstr ""
 
+#. Default: "Review state"
+#: ./opengever/disposition/browser/listing.py:53
+msgid "label_review_state"
+msgstr ""
+
 #. Default: "Time"
 #: ./opengever/disposition/browser/removal_protocol.py:71
 msgid "label_time"
 msgstr ""
 
 #. Default: "Title"
-#: ./opengever/disposition/browser/listing.py:29
+#: ./opengever/disposition/browser/listing.py:48
 #: ./opengever/disposition/browser/removal_protocol.py:53
 #: ./opengever/disposition/disposition.py:128
 msgid "label_title"
@@ -220,4 +233,3 @@ msgstr ""
 #: ./opengever/disposition/activities.py:24
 msgid "summary_disposition_added"
 msgstr ""
-
