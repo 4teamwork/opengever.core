@@ -139,6 +139,7 @@
                            title transition/title;
                            id transition/id | nothing;
                            class string: ${transition/id} "
+           i18n:domain="plone"
            i18n:attributes="title">
           <span tal:content="transition/title" class="transition actionText"
                 i18n:translate="" i18n:domain="plone">
