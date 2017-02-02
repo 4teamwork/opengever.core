@@ -5,6 +5,14 @@ Changelog
 4.14.2 (unreleased)
 -------------------
 
+- Modified opengever.document to conditionally use the new Office Connector
+  functionality.
+  [Rotonen]
+
+- Added the preliminary release of the opengever.officeconnector subproduct,
+  which only provides the attach-to-outlook functionality for now.
+  [Rotonen]
+
 - Change pre appraisal handling and allow appraisal per repository.
   [phgross]
 

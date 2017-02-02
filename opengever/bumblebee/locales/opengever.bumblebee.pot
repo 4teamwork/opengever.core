@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-07-21 14:08+0000\n"
+"POT-Creation-Date: 2017-01-30 15:48+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,37 +17,33 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.bumblebee\n"
 
-#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:14
+#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:16
 msgid "Creator:"
 msgstr ""
 
-#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:18
+#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:20
 msgid "Document date:"
 msgstr ""
 
-#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:22
+#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:24
 msgid "Dossier:"
 msgstr ""
 
-#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:68
-msgid "Open as PDF"
-msgstr ""
-
-#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:73
-msgid "Open detail view"
-msgstr ""
-
-#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:26
+#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:30
 msgid "Reference number:"
 msgstr ""
 
+#. Default: "Open as PDF"
+#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:94
+msgid "label_open_document_as_pdf"
+msgstr ""
+
 #. Default: "Revert document"
-#: ./opengever/bumblebee/browser/overlay.py:198
+#: ./opengever/bumblebee/browser/overlay.py:199
 msgid "label_revert"
 msgstr ""
 
 #. Default: "You are looking at a versioned file."
-#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:84
+#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:114
 msgid "warning_on_versioned_context"
 msgstr ""
-

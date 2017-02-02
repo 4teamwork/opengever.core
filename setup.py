@@ -8,7 +8,7 @@ maintainer = '4teamwork AG'
 api_require = []
 
 tests_require = [
-    'Products.CMFPlone',
+    'ftw.builder',
     'ftw.journal',
     'ftw.tabbedview',
     'ftw.table',
@@ -21,6 +21,8 @@ tests_require = [
     'plone.mocktestcase',
     'plone.namedfile[blobs]',
     'plone.testing',
+    'Products.CMFPlone',
+    'PyJWT',
     'pyquery',
     'xlrd',
     'z3c.blobfile',
@@ -28,7 +30,6 @@ tests_require = [
     'z3c.saconfig',
     'zope.globalrequest',
     'zope.testing',
-    'ftw.builder',
 ]
 
 setup(name='opengever.core',

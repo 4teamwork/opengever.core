@@ -10,7 +10,7 @@ from opengever.activity.interfaces import IActivitySettings
 from opengever.base import model
 from opengever.base.model import create_session
 from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
-from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings
+from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings # noqa
 from opengever.meeting.interfaces import IMeetingSettings
 from opengever.officeatwork.interfaces import IOfficeatworkSettings
 from opengever.ogds.base.setup import create_sql_tables
@@ -241,6 +241,7 @@ class OpengeverFixture(PloneSandboxLayer):
         applyProfile(portal, 'opengever.activity:default')
         applyProfile(portal, 'opengever.bumblebee:default')
         applyProfile(portal, 'opengever.officeatwork:default')
+        applyProfile(portal, 'opengever.officeconnector:default')
         applyProfile(portal, 'opengever.private:default')
         applyProfile(portal, 'ftw.datepicker:default')
         applyProfile(portal, 'plone.formwidget.autocomplete:default')
@@ -346,6 +347,7 @@ OPENGEVER_FUNCTIONAL_ZSERVER_TESTING = FunctionalTesting(
     name="opengever.core:functional:zserver")
 
 
+
 def activate_filing_number(portal):
     applyProfile(portal, 'opengever.dossier:filing')
     transaction.commit()
@@ -371,6 +373,7 @@ class FilingLayer(PloneSandboxLayer):
 
     def tearDownPloneSite(self, portal):
         inactivate_filing_number(portal)
+
 
 OPENGEVER_FUNCTIONAL_FILING_LAYER = FilingLayer()
 
