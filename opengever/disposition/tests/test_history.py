@@ -1,6 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_WORTHY
 from opengever.disposition.history import Added
 from opengever.disposition.history import Appraised
 from opengever.disposition.history import Archived
@@ -158,9 +159,11 @@ class TestHistoryListingInOverview(FunctionalTestCase):
         self.repository = create(Builder('repository').within(self.root))
         self.dossier1 = create(Builder('dossier')
                                .as_expired()
+                               .having(archival_value=ARCHIVAL_VALUE_WORTHY)
                                .within(self.repository))
         self.dossier2 = create(Builder('dossier')
                                .as_expired()
+                               .having(archival_value=ARCHIVAL_VALUE_WORTHY)
                                .within(self.repository))
         self.grant(
             'Contributor', 'Editor', 'Reader', 'Reviewer', 'Records Manager')

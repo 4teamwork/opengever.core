@@ -49,4 +49,10 @@
       name="download_excel"
       permission="zope2.View"/>
 
+  <browser:page
+      class=".views.AppraiseView"
+      for="opengever.disposition.interfaces.IDisposition"
+      name="appraise-transition"
+      permission="zope2.View"/>
+
 </configure>

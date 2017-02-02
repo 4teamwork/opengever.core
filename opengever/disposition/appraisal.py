@@ -30,15 +30,27 @@ class Appraisal(object):
     def storage(self):
         return self._annotations[self.key]
 
+    def is_complete(self):
+        return None not in self.storage.values()
+
     def initialize(self, dossier):
         intid = getUtility(IIntIds).getId(dossier)
-        self.storage[intid] = self.is_archival_worthy(dossier)
+        self.storage[intid] = self.get_pre_appraisal(dossier)
 
-    def is_archival_worthy(self, dossier):
+    def get_pre_appraisal(self, dossier):
         """Checks the preselection in the archive_value field and return
-        if the dossier should be archived or not.
+        it if exists.
+
+        Sampling, unchecked and prompt aren't handled as a preselection.
         """
-        return ILifeCycle(dossier).archival_value != ARCHIVAL_VALUE_UNWORTHY
+        archival_value = ILifeCycle(dossier).archival_value
+        if archival_value == ARCHIVAL_VALUE_UNWORTHY:
+            return False
+        elif archival_value == ARCHIVAL_VALUE_WORTHY:
+            return True
+
+        # sampling, unchecked, prompt
+        return None
 
     def get(self, dossier):
         intid = getUtility(IIntIds).getId(dossier)

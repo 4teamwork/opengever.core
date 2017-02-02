@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-01-17 18:44+0000\n"
+"POT-Creation-Date: 2017-01-30 13:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,7 +42,7 @@ msgid "error_retention_period_not_expired"
 msgstr ""
 
 #. Default: "Common"
-#: ./opengever/disposition/disposition.py:120
+#: ./opengever/disposition/disposition.py:122
 msgid "fieldset_common"
 msgstr ""
 
@@ -72,7 +72,7 @@ msgid "label_details"
 msgstr ""
 
 #. Default: "Disposition"
-#: ./opengever/disposition/disposition.py:110
+#: ./opengever/disposition/disposition.py:112
 msgid "label_disposition"
 msgstr ""
 
@@ -104,7 +104,7 @@ msgstr ""
 
 #. Default: "Dossiers"
 #: ./opengever/disposition/browser/removal_protocol.py:111
-#: ./opengever/disposition/disposition.py:133
+#: ./opengever/disposition/disposition.py:135
 msgid "label_dossiers"
 msgstr ""
 
@@ -146,19 +146,24 @@ msgstr ""
 #. Default: "Title"
 #: ./opengever/disposition/browser/listing.py:29
 #: ./opengever/disposition/browser/removal_protocol.py:53
-#: ./opengever/disposition/disposition.py:126
+#: ./opengever/disposition/disposition.py:128
 msgid "label_title"
 msgstr ""
 
 #. Default: "Transfer number"
 #: ./opengever/disposition/browser/removal_protocol.py:124
-#: ./opengever/disposition/disposition.py:154
+#: ./opengever/disposition/disposition.py:156
 msgid "label_transfer_number"
 msgstr ""
 
 #. Default: "Yes"
 #: ./opengever/disposition/browser/removal_protocol.py:42
 msgid "label_yes"
+msgstr ""
+
+#. Default: "The appraisal is incomplete, appraisal could not be finalized."
+#: ./opengever/disposition/browser/views.py:30
+msgid "msg_appraisal_incomplete"
 msgstr ""
 
 #. Default: "Added by ${user}"

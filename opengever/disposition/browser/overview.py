@@ -31,11 +31,9 @@ class DispositionOverview(BrowserView, GeverTabMixin):
     def get_localized_time(self, value):
         return api.portal.get_localized_time(datetime=value)
 
-    def get_update_appraisal_url(self, dossier, should_be_archived):
-        url = '{}/update_appraisal_view?dossier-id={}&should_be_archived={}'.format(
-            self.context.absolute_url(), dossier.intid, json.dumps(should_be_archived))
-
-        return addTokenToUrl(url)
+    def get_update_appraisal_url(self):
+        return addTokenToUrl(
+            '{}/update_appraisal_view'.format(self.context.absolute_url()))
 
     def get_transitions(self):
         wftool = api.portal.get_tool(name='portal_workflow')

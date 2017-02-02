@@ -103,10 +103,14 @@ class TestDispositionOverview(FunctionalTestCase):
             ['Archive', "Don't archive"],
             [link.get('title') for link in browser.css('.appraisal-button-group .active')])
 
-        dont_archive_button = browser.css('.appraisal-button-group .archive')[1]
-        browser.open(dont_archive_button.get('data-url'))
+        button = browser.css('.appraisal-button-group .archive')[1]
+        url = browser.css('#disposition_overview').first.get(
+            'data-appraisal_update_url')
+        data = {'dossier-id': button.get('data-intid'),
+                'should_be_archived': button.get('data-archive')}
+        browser.open(url, data)
 
-        browser.login().open(self.disposition, view='tabbedview_view-overview')
+        browser.open(self.disposition, view='tabbedview_view-overview')
         self.assertEquals(
             ['Archive', 'Archive'],
             [link.get('title') for link in browser.css('.appraisal-button-group .active')])

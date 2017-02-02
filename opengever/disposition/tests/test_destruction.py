@@ -1,6 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_UNWORTHY
+from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_WORTHY
 from opengever.testing import FunctionalTestCase
 from persistent.list import PersistentList
 from persistent.mapping import PersistentMapping
@@ -24,10 +25,12 @@ class TestDestruction(FunctionalTestCase):
                                .within(self.repository))
         self.dossier2 = create(Builder('dossier')
                                .titled(u'D\xf6ssier 2')
+                               .having(archival_value=ARCHIVAL_VALUE_WORTHY)
                                .as_expired()
                                .within(self.repository))
         self.dossier3 = create(Builder('dossier')
                                .titled(u'D\xf6ssier 3')
+                               .having(archival_value=ARCHIVAL_VALUE_WORTHY)
                                .as_expired()
                                .within(self.repository))
 
