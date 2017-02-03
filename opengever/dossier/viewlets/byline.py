@@ -1,9 +1,14 @@
 from ftw.mail.interfaces import IEmailAddress
+from opengever.base import _ as ogbmf
 from opengever.base.viewlets.byline import BylineBase
 from opengever.dossier import _
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.utils import get_main_dossier
 from opengever.ogds.base.actor import Actor
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from zope.i18n import translate
+import json
 
 
 class BusinessCaseByline(BylineBase):
@@ -21,17 +26,39 @@ class BusinessCaseByline(BylineBase):
         dossier = IDossier(self.context)
         return self.to_localized_time(dossier.end)
 
+    note_template = ViewPageTemplateFile('templates/note.pt')
+
+    def note(self):
+        dossier = IDossier(self.context)
+        msg_confirm = _(u'note_text_confirm_abbord', default=u'Confirm abbord')
+        msg_title_info = ogbmf(u'message_title_info', default=u'Information')
+        msg_title_error = ogbmf(u'message_title_error', default=u'Error')
+        msg_body_info = _(u'message_body_info', default=u'Changes saved')
+        msg_body_error = _(u'message_body_error', default=u'Changes not saved')
+        create_translations = lambda msg: translate(msg, context=self.request)
+
+        translations = json.dumps(
+            {'note_text_confirm_abbord': create_translations(msg_confirm),
+             'message_title_info': create_translations(msg_title_info),
+             'message_title_error': create_translations(msg_title_error),
+             'message_body_info': create_translations(msg_body_info),
+             'message_body_error': create_translations(msg_body_error)
+             })
+        comments = '' if not dossier.comments else dossier.comments
+        return self.note_template(note=comments,
+                                  translations=translations)
+
     def mailto_link(self):
         """Displays email-address if the IMailInAddressMarker behavior
          is provided and the dossier is Active"""
 
         if self.get_current_state() in DOSSIER_STATES_OPEN:
             address = IEmailAddress(self.request
-                ).get_email_for_object(self.context)
+                                    ).get_email_for_object(self.context)
             return '<a href="mailto:%s">%s</a>' % (address, address)
 
     def get_items(self):
-        return [
+        items = [
             {
                 'class': 'responsible',
                 'label': _('label_responsible', default='Responsible'),
@@ -76,3 +103,14 @@ class BusinessCaseByline(BylineBase):
                 'replace': True
             }
         ]
+
+        if self.context == get_main_dossier(self.context):
+            items += [
+                {
+                    'class': 'note',
+                    'label': _('label_dossier_note', default='Dossiernote'),
+                    'content': self.note(),
+                    'replace': True
+                }
+            ]
+        return items
