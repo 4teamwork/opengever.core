@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-01-04 15:02+0000\n"
+"POT-Creation-Date: 2017-02-06 14:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,8 +24,12 @@ msgstr ""
 msgid "Add Business Case Dossier"
 msgstr ""
 
+#: ./opengever/dossier/profiles/default/actions.xml
+msgid "Add Participant"
+msgstr ""
+
 #: ./opengever/dossier/behaviors/dossier.py:232
-#: ./opengever/dossier/dossiertemplate/dossiertemplate.py:46
+#: ./opengever/dossier/dossiertemplate/dossiertemplate.py:48
 msgid "Add Subdossier"
 msgstr ""
 
@@ -49,7 +53,7 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#: ./opengever/dossier/browser/overview.py:82
+#: ./opengever/dossier/browser/overview.py:81
 msgid "Description"
 msgstr ""
 
@@ -71,7 +75,7 @@ msgid "Dossiers successfully reactivated."
 msgstr ""
 
 #: ./opengever/dossier/behaviors/dossier.py:254
-#: ./opengever/dossier/dossiertemplate/dossiertemplate.py:64
+#: ./opengever/dossier/dossiertemplate/dossiertemplate.py:66
 msgid "Edit Subdossier"
 msgstr ""
 
@@ -100,11 +104,11 @@ msgstr ""
 msgid "Move Items"
 msgstr ""
 
-#: ./opengever/dossier/browser/overview.py:78
+#: ./opengever/dossier/browser/overview.py:77
 msgid "Newest documents"
 msgstr ""
 
-#: ./opengever/dossier/browser/overview.py:69
+#: ./opengever/dossier/browser/overview.py:68
 msgid "Newest tasks"
 msgstr ""
 
@@ -120,11 +124,11 @@ msgstr ""
 msgid "Participant"
 msgstr ""
 
-#: ./opengever/dossier/browser/overview.py:64
+#: ./opengever/dossier/browser/overview.py:63
 msgid "Participants"
 msgstr ""
 
-#: ./opengever/dossier/browser/overview.py:57
+#: ./opengever/dossier/browser/overview.py:56
 msgid "Participations"
 msgstr ""
 
@@ -345,7 +349,7 @@ msgstr ""
 #. Default: "filing prefix"
 #: ./opengever/dossier/archive.py:179
 #: ./opengever/dossier/behaviors/dossier.py:109
-#: ./opengever/dossier/browser/overview.py:215
+#: ./opengever/dossier/browser/overview.py:214
 msgid "filing_prefix"
 msgstr ""
 
@@ -403,11 +407,6 @@ msgstr ""
 msgid "info_removed_participations"
 msgstr ""
 
-#. Default: "Add Participant"
-#: ./opengever/dossier/profiles/default/actions.xml
-msgid "label_add_participant"
-msgstr ""
-
 #. Default: "Address"
 #: ./opengever/dossier/templatedossier/form.py:272
 msgid "label_address"
@@ -420,7 +419,7 @@ msgstr ""
 
 #. Default: "Comments"
 #: ./opengever/dossier/behaviors/dossier.py:84
-#: ./opengever/dossier/browser/overview.py:211
+#: ./opengever/dossier/browser/overview.py:210
 msgid "label_comments"
 msgstr ""
 
@@ -446,7 +445,7 @@ msgid "label_creator"
 msgstr ""
 
 #. Default: "Description"
-#: ./opengever/dossier/browser/overview.py:219
+#: ./opengever/dossier/browser/overview.py:218
 #: ./opengever/dossier/templatedossier/tabs.py:110
 msgid "label_description"
 msgstr ""
@@ -457,7 +456,7 @@ msgid "label_destination"
 msgstr ""
 
 #. Default: "Documents"
-#: ./opengever/dossier/browser/overview.py:203
+#: ./opengever/dossier/browser/overview.py:202
 #: ./opengever/dossier/browser/tabbed.py:17
 msgid "label_documents"
 msgstr ""
@@ -517,7 +516,7 @@ msgstr ""
 
 #. Default: "Keywords"
 #: ./opengever/dossier/behaviors/dossier.py:59
-#: ./opengever/dossier/browser/overview.py:207
+#: ./opengever/dossier/browser/overview.py:206
 msgid "label_keywords"
 msgstr ""
 
@@ -527,7 +526,7 @@ msgid "label_label"
 msgstr ""
 
 #. Default: "Linked Dossiers"
-#: ./opengever/dossier/browser/overview.py:74
+#: ./opengever/dossier/browser/overview.py:73
 msgid "label_linked_dossiers"
 msgstr ""
 
