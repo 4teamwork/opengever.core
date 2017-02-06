@@ -34,7 +34,7 @@
         overlay.getOverlay().on('onBeforeClose', function(event){
           // Show message if there are unsaved changes
           if (editNoteLink.data('notecache') !== overlay.getOverlay().find('textarea').val()){
-            if (confirm('You have unsaved changes, do you really wanna quit')){
+            if (confirm(i18n.note_text_confirm_abord)){
               overlay.getOverlay().find('textarea').val(editNoteLink.data('notecache'));
               return true;
             } else {
@@ -72,11 +72,11 @@
         makeRequest({comments: overlay.getOverlay().find('textarea').val()}).done(function(data){
           editNoteLink.data('notecache', overlay.getOverlay().find('textarea').val());
           if (editNoteLink.data('notecache').length) {
-            editNoteLink.find('.labelEdit').removeClass('hide');
-            editNoteLink.find('.labelAdd').addClass('hide');
+            editNoteLink.find('.edit').removeClass('hide');
+            editNoteLink.find('.add').addClass('hide');
           } else {
-            editNoteLink.find('.labelEdit').addClass('hide');
-            editNoteLink.find('.labelAdd').removeClass('hide');            
+            editNoteLink.find('.edit').addClass('hide');
+            editNoteLink.find('.add').removeClass('hide');            
           }
           closeNote();
           successMessage();

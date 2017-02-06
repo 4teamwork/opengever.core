@@ -30,7 +30,8 @@ class TestPrivateDossier(FunctionalTestCase):
                       'Responsible': TEST_USER_ID})
         browser.click_on('Save')
 
-        self.assertEquals([u'My Personal Stuff'], browser.css('h1').text)
+        self.assertEquals([u'My Personal Stuff'],
+                          browser.css('h1.documentFirstHeading').text)
 
     @browsing
     def test_responsible_is_current_user_by_default(self, browser):

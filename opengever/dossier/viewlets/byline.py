@@ -6,6 +6,7 @@ from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.utils import get_main_dossier
 from opengever.ogds.base.actor import Actor
+from plone import api
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.i18n import translate
 import json
@@ -30,7 +31,7 @@ class BusinessCaseByline(BylineBase):
 
     def note(self):
         dossier = IDossier(self.context)
-        msg_confirm = _(u'note_text_confirm_abbord', default=u'Confirm abbord')
+        msg_confirm = _(u'note_text_confirm_abord', default=u'Confirm abbord')
         msg_title_info = ogbmf(u'message_title_info', default=u'Information')
         msg_title_error = ogbmf(u'message_title_error', default=u'Error')
         msg_body_info = _(u'message_body_info', default=u'Changes saved')
@@ -38,7 +39,7 @@ class BusinessCaseByline(BylineBase):
         create_translations = lambda msg: translate(msg, context=self.request)
 
         translations = json.dumps(
-            {'note_text_confirm_abbord': create_translations(msg_confirm),
+            {'note_text_confirm_abord': create_translations(msg_confirm),
              'message_title_info': create_translations(msg_title_info),
              'message_title_error': create_translations(msg_title_error),
              'message_body_info': create_translations(msg_body_info),
@@ -104,7 +105,10 @@ class BusinessCaseByline(BylineBase):
             }
         ]
 
-        if self.context == get_main_dossier(self.context):
+        can_edit = api.user.has_permission('Modify portal content',
+                                           obj=self.context)
+        is_main_dossier = self.context == get_main_dossier(self.context)
+        if is_main_dossier and can_edit:
             items += [
                 {
                     'class': 'note',
