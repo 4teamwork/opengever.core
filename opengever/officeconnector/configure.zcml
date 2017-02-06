@@ -19,6 +19,9 @@
 
     <include package=".upgrades" />
 
+    <!-- Need to load meta.zcml of plone.rest in order to use plone:service directive -->
+    <include package="plone.rest" />
+
     <plone:service
         method="GET"
         for="opengever.document.document.IDocumentSchema"

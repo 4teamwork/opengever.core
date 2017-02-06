@@ -5,6 +5,9 @@ Changelog
 4.14.2 (unreleased)
 -------------------
 
+- Load ZCML of plone.rest before using plone:service directive.
+  [lgraf]
+
 - Modified opengever.document to conditionally use the new Office Connector
   functionality.
   [Rotonen]
