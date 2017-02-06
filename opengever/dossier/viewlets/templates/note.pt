@@ -25,14 +25,15 @@
     <div>
       <h1>
         <u i18n:translate="heading_dossier_note">
-          <span i18n:name="title" tal:content="context/Title" />
+          <span i18n:name="title" tal:replace="context/Title" />
           notes / comments
         </u>
       </h1>
       <form>
         <textarea name="note"
-                  placeholder="Dossier Notizen hinzufügen"
-                  tal:content="options/note" />
+                  placeholder="Create Dossier note"
+                  tal:content="options/note"
+                  i18n:attributes="placeholder label_dossier_note_placeholder"/>
 
         <div class="button-group">
           <button class="button confirm"

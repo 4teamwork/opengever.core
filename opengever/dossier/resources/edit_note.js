@@ -9,12 +9,15 @@
       var editNoteLink;
       var overlay;
       var overlayElement;
+      var i18n;
 
       function init(){
         editNoteLink = $('#editNoteLink');
         if (!editNoteLink.length) {
           return;
         }
+
+        i18n = editNoteLink.data('i18n');
 
         // Move for correct stacking with overlaymask
         overlayElement = $('#editNoteOverlay');
