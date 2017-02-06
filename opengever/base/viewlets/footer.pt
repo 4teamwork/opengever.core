@@ -5,7 +5,7 @@
         <p><a href="https://github.com/OneGov/onegov.gever">Quellcode</a></p>
         <p><a href="https://jenkins.4teamwork.ch">Software Tests</a></p>
         <p><a href="http://www.onegov.ch/gever/aktuell">Release-Informationen</a></p>
-        <p>GEVER Version: <span tal:content="view/get_gever_version" /></p>
+        <p>Version: <span tal:content="view/get_gever_version" /></p>
     </div>
 
     <div id="footer-column-2" class="column cell position-4 width-4">
