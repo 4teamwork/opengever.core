@@ -5,6 +5,9 @@ Changelog
 4.14.2 (unreleased)
 -------------------
 
+- Fix broken link and missing translation for add participation label.
+  [deiferni]
+
 - Load ZCML of plone.rest before using plone:service directive.
   [lgraf]
 
