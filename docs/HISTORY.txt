@@ -5,14 +5,12 @@ Changelog
 4.15.1 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Fixed retention period calculation for dossiers closed at the first of january.
+  [phgross]
 
 
 4.15.0 (2017-02-07)
 -------------------
-
-- Fixed retention period calculation for dossiers closed at the first of january.
-  [phgross]
 
 - Fix broken link and missing translation for add participation label.
   [deiferni]
