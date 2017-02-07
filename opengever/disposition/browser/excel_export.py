@@ -44,7 +44,7 @@ class DispositionExcelExport(BrowserView):
              'transform': StringTranslater(
                  self.request, 'opengever.base').translate},
             {'id': 'appraisal',
-             'title': base_mf(u'label_appraisal', default=u'Appraisal')},
+             'title': _(u'label_appraisal', default=u'Appraisal'),
         ]
 
     def __call__(self):
