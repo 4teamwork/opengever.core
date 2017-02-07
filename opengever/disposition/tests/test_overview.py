@@ -2,6 +2,7 @@ from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_SAMPLING
 from opengever.testing import FunctionalTestCase
 from plone import api
 import transaction
@@ -12,7 +13,9 @@ class TestDispositionOverview(FunctionalTestCase):
     def setUp(self):
         super(TestDispositionOverview, self).setUp()
         self.root = create(Builder('repository_root'))
-        self.repository = create(Builder('repository').within(self.root))
+        self.repository = create(Builder('repository')
+                                 .having(archival_value=ARCHIVAL_VALUE_SAMPLING)
+                                 .within(self.root))
         self.dossier1 = create(Builder('dossier')
                                .as_expired()
                                .within(self.repository)
@@ -206,6 +209,14 @@ class TestDispositionOverview(FunctionalTestCase):
         self.assertEquals(
             ['disposition-state-in-progress'],
             browser.css('.wizard_steps li.selected').text)
+
+    @browsing
+    def test_displays_archival_value_for_repositories(self, browser):
+        browser.login().open(self.disposition, view='tabbedview_view-overview')
+
+        self.assertEquals(
+            ['Archival value: archival worthy with sampling'],
+            browser.css('.repository_title .meta').text)
 
 
 class TestClosedDispositionOverview(FunctionalTestCase):

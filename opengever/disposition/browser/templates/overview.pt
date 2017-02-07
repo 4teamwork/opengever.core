@@ -31,8 +31,14 @@
       <tal:define tal:define="repository python: item[0]; dossiers python: item[1];">
 
         <div class="repository_cell">
-          <div class="repository_title">
-            <h3 tal:condition="not: context/is_closed" tal:content="repository/Title" />
+          <div class="repository_title" tal:condition="not: context/is_closed">
+            <h3 tal:content="repository/Title" />
+            <div class="meta" i18n:domain="opengever.base" >
+              <span i18n:translate="label_archival_value">Archival value</span>:
+              <span tal:content="repository/get_archival_value" i18n:translate=""/>
+            </div>
+          </div>
+          <div class="repository_title" tal:condition="context/is_closed">
             <h3 tal:condition="context/is_closed" tal:content="repository" />
           </div>
 

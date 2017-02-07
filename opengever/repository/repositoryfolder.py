@@ -1,5 +1,6 @@
 from Acquisition import aq_inner, aq_parent
 from five import grok
+from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.base.behaviors.utils import hide_fields_from_behavior
 from opengever.base.browser.translated_title import TranslatedTitleAddForm
@@ -106,6 +107,9 @@ class RepositoryFolder(content.Container):
         title = self.title_fr
         if title:
             return self._prefix_with_reference_number(title)
+
+    def get_archival_value(self):
+        return ILifeCycle(self).archival_value
 
     def _prefix_with_reference_number(self, title):
         reference_adapter = IReferenceNumber(self)
