@@ -3,8 +3,8 @@
         <h2>OneGov GEVER</h2>
         <p><a href="https://onegovgever.ch">Über OneGov GEVER</a></p>
         <p><a href="https://github.com/OneGov/onegov.gever">Quellcode</a></p>
-        <p><a href="https://jenkins.4teamwork.ch">Software Tests</a></p>
-        <p><a href="http://www.onegov.ch/gever/aktuell">Release-Informationen</a></p>
+        <p><a href="https://jenkins.4teamwork.ch/view/OneGov%20GEVER/">Software Tests</a></p>
+        <p><a href="https://onegovgever.ch/aktuell">Release-Informationen</a></p>
         <p>Version: <span tal:content="view/get_gever_version" /></p>
     </div>
 
@@ -18,7 +18,7 @@
     <div id="footer-column-3" class="column cell position-8 width-4">
         <h2>Dokumentation</h2>
 
-        <p><a href="http://www.onegov.ch/gever/dokumentation">Benutzerhandbuch</a></p>
+        <p><a href="https://docs.onegovgever.ch/">Benutzerhandbuch</a></p>
         <p><a href="https://feedback.onegovgever.ch">Feedback Forum</a></p>
     </div>
 
@@ -28,7 +28,7 @@
             <strong>4teamwork AG</strong><br />
             Dammweg 9<br />
             3013 Bern<br />
-            <a href="http://www.4teamwork.ch">www.4teamwork.ch</a>
+            <a href="https://www.4teamwork.ch">www.4teamwork.ch</a>
         </p>
         <p><br /></p>
         <p>

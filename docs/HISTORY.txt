@@ -5,6 +5,8 @@ Changelog
 4.15.1 (unreleased)
 -------------------
 
+- Update footer links. [jone]
+
 - Fixed retention period calculation for dossiers closed at the first of january.
   [phgross]
 
