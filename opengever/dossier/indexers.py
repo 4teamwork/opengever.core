@@ -5,6 +5,7 @@ from five import grok
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.dossier.utils import get_main_dossier
 from plone.dexterity.interfaces import IDexterityContent
 from plone.indexer import indexer
@@ -14,10 +15,17 @@ from zope.component import getUtility
 
 
 @indexer(IDossierMarker)
-def SubjectIndexer(obj):
+def DossierSubjectIndexer(obj):
     aobj = IDossier(obj)
     return aobj.keywords
-grok.global_adapter(SubjectIndexer, name="Subject")
+grok.global_adapter(DossierSubjectIndexer, name="Subject")
+
+
+@indexer(IDossierTemplateMarker)
+def DossierTemplateSubjectIndexer(obj):
+    aobj = IDossier(obj)
+    return aobj.keywords
+grok.global_adapter(DossierTemplateSubjectIndexer, name="Subject")
 
 
 @indexer(IDossierMarker)
