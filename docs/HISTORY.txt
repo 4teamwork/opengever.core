@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.14.2 (unreleased)
+4.15.0 (2017-02-07)
 -------------------
 
 - Fix broken link and missing translation for add participation label.
