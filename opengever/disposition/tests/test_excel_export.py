@@ -66,11 +66,12 @@ class TestDispositionExcelExport(FunctionalTestCase):
             self.assertEquals(
                 [u'Client1 1 / 1', u'Dossier A', datetime(2016, 1, 19, 0, 0),
                  datetime(2016, 3, 19, 0, 0), u'limited-public',
-                 u'archival worthy', None, True],
+                 u'archival worthy', None, u'archival worthy'],
                 [cell.value for cell in workbook.active.rows[1]])
 
             self.assertEquals(
                 [u'Client1 1 / 2', u'Dossier B', datetime(2015, 1, 19, 0, 0),
                  datetime(2015, 3, 19, 0, 0), u'limited-public',
-                 u'not archival worthy', u'In Absprache mit ARCH.', False],
+                 u'not archival worthy', u'In Absprache mit ARCH.',
+                 u'not archival worthy'],
                 [cell.value for cell in workbook.active.rows[2]])

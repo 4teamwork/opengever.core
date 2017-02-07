@@ -5,6 +5,10 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Fix label translation and improve readability of the values in appraisal
+  column in the excel export of a disposition.
+  [phgross]
+
 - OGGBundle test assets: Add some tests and assets to test/demonstrate
   behavior in case of business rule violations.
   [lgraf]
