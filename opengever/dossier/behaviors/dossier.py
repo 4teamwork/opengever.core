@@ -5,6 +5,8 @@ from collective.elephantvocabulary import wrap_vocabulary
 from datetime import date
 from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
+from ftw.keywordwidget.field import ChoicePlus
+from ftw.keywordwidget.widget import KeywordFieldWidget
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.base.behaviors.utils import hide_fields_from_behavior
 from opengever.base.source import RepositoryPathSourceBinder
@@ -15,7 +17,6 @@ from plone.autoform.interfaces import IFormFieldProvider
 from plone.dexterity.i18n import MessageFactory as pd_mf  # noqa
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.directives import form, dexterity
-from plone.z3cform.textlines.textlines import TextLinesFieldWidget
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zExceptions import Unauthorized
 from zope import schema
@@ -58,12 +59,14 @@ class IDossier(form.Schema):
     keywords = schema.Tuple(
         title=_(u'label_keywords', default=u'Keywords'),
         description=_(u'help_keywords', default=u''),
-        value_type=schema.TextLine(),
+        value_type=ChoicePlus(
+            vocabulary='plone.app.vocabularies.Keywords'
+        ),
         required=False,
         missing_value=(),
         default=(),
     )
-    form.widget(keywords=TextLinesFieldWidget)
+    form.widget(keywords=KeywordFieldWidget)
 
     # workaround because ftw.datepicker wasn't working on the edit form
     form.widget(start=DatePickerFieldWidget)
