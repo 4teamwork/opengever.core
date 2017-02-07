@@ -14,6 +14,13 @@ from zope.component import getUtility
 
 
 @indexer(IDossierMarker)
+def SubjectIndexer(obj):
+    aobj = IDossier(obj)
+    return aobj.keywords
+grok.global_adapter(SubjectIndexer, name="Subject")
+
+
+@indexer(IDossierMarker)
 def startIndexer(obj):
     aobj = IDossier(obj)
     if aobj.start is None:
