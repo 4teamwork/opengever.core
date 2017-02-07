@@ -5,6 +5,9 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- List repositories alphabetically on the disposition overview.
+  [phgross]
+
 - Display archival value of repositories on the disposition overview.
   [phgross]
 

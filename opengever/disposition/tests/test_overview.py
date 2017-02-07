@@ -14,6 +14,7 @@ class TestDispositionOverview(FunctionalTestCase):
         super(TestDispositionOverview, self).setUp()
         self.root = create(Builder('repository_root'))
         self.repository = create(Builder('repository')
+                                 .titled(u'Repository A')
                                  .having(archival_value=ARCHIVAL_VALUE_SAMPLING)
                                  .within(self.root))
         self.dossier1 = create(Builder('dossier')
@@ -217,6 +218,43 @@ class TestDispositionOverview(FunctionalTestCase):
         self.assertEquals(
             ['Archival value: archival worthy with sampling'],
             browser.css('.repository_title .meta').text)
+
+    @browsing
+    def test_are_grouped_by_repository_and_sorted(self, browser):
+        repository_10 = create(Builder('repository')
+                               .titled(u'Repository B')
+                               .having(reference_number_prefix=u'10'))
+        dossier_c = create(Builder('dossier')
+                           .as_expired()
+                           .titled(u'Dossier C')
+                           .within(repository_10))
+        repository_7 = create(Builder('repository')
+                              .titled(u'Repository C')
+                              .having(reference_number_prefix=u'7'))
+        dossier_d = create(Builder('dossier')
+                           .as_expired()
+                           .titled(u'Dossier D')
+                           .within(repository_7))
+        dossier_e = create(Builder('dossier')
+                           .as_expired()
+                           .titled(u'Dossier E')
+                           .within(self.repository))
+
+        self.disposition = create(Builder('disposition')
+                                  .having(dossiers=[dossier_c,
+                                                    dossier_d,
+                                                    dossier_e]))
+
+        browser.login().open(self.disposition, view='tabbedview_view-overview')
+
+        repos = browser.css('.repository-list-item')
+        self.assertEquals(
+            ['1. Repository A', '7. Repository C', '10. Repository B'],
+            repos.css('.repository_title h3').text)
+
+        self.assertEquals(
+            ['Dossier E', 'Dossier D', 'Dossier C'],
+            repos.css('h3.title a').text)
 
 
 class TestClosedDispositionOverview(FunctionalTestCase):
