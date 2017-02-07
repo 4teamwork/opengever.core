@@ -96,6 +96,7 @@ class BundleLoader(object):
                 item['_type'] = self._determine_portal_type(json_name, item)
                 if json_name == 'documents.json':
                     self._strip_extension_from_title(item)
+                    self._preprocess_workflow_states(item, json_name)
                 self._items.append(item)
 
     def _strip_extension_from_title(self, item):
@@ -110,6 +111,13 @@ class BundleLoader(object):
             item['title'] = basename
             item['_original_filename'] = title
         return item
+
+    def _preprocess_workflow_states(self, item, json_name):
+        if json_name == 'documents.json':
+            # Documents (and mails) have a single-state workflow. No need to
+            # invoke wftool.setStatusOf() when those objects will already
+            # have been created in their only possible state by default
+            item.pop('review_state', None)
 
     def _load_schemas(self):
         schema_dir = rf('opengever.bundle', 'schemas/')

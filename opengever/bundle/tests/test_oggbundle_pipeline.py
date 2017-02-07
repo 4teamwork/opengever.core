@@ -6,6 +6,7 @@ from ftw.builder import create
 from ftw.testing import freeze
 from opengever.base.behaviors.classification import IClassification
 from opengever.base.behaviors.lifecycle import ILifeCycle
+from opengever.base.security import elevated_privileges
 from opengever.bundle.sections.bundlesource import BUNDLE_PATH_KEY
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.repository.behaviors.referenceprefix import IReferenceNumberPrefix
@@ -38,7 +39,10 @@ class TestOggBundlePipeline(FunctionalTestCase):
         IAnnotations(transmogrifier)[BUNDLE_PATH_KEY] = resource_filename(
             'opengever.bundle.tests', 'assets/basic.oggbundle')
 
-        with freeze(FROZEN_NOW):
+        # We need to add documents to dossiers that have already been created
+        # in the 'closed' state, which isn't allowed for anyone except users
+        # inheriting from `UnrestrictedUser` -> we need elevated privileges
+        with freeze(FROZEN_NOW), elevated_privileges():
             transmogrifier(u'opengever.bundle.oggbundle')
 
         # test content creation
@@ -316,10 +320,10 @@ class TestOggBundlePipeline(FunctionalTestCase):
         self.assertIsNone(
             ILifeCycle(dossier_peter).retention_period_annotation)
 
-        # XXX workflow transitions/states
-        # self.assertEqual(
-        #     'dossier-state-resolved',
-        #     api.content.get_state(dossier_peter))
+        self.assertEqual(
+            'dossier-state-resolved',
+            api.content.get_state(dossier_peter))
+
         self.assertEqual(
             u'Hanspeter M\xfcller',
             dossier_peter.title)

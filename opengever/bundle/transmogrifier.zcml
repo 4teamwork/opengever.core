@@ -34,6 +34,11 @@
     />
 
   <utility
+      component=".sections.workflow.WorkflowUpdaterSection"
+      name="opengever.bundle.workflow"
+    />
+
+  <utility
       component=".sections.map_local_roles.MapLocalRolesSection"
       name="opengever.bundle.map_local_roles"
       />
