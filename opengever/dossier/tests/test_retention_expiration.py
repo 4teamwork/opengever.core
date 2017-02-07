@@ -29,7 +29,7 @@ class TestRetentionExpirationDate(FunctionalTestCase):
                          .having(start=date(2010, 2, 18),
                                  end=date(2010, 1, 1),
                                  retention_period=20))
-        self.assertEqual(date(2030, 1, 1),
+        self.assertEqual(date(2031, 1, 1),
                          dossier.get_retention_expiration_date())
 
     @browsing
