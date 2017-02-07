@@ -153,6 +153,22 @@ class TestDossierByline(TestBylineBase):
                           link.attrib['data-notecache'])
         self.assertEquals('Edit Note', link.css('.edit .linkLabel').first.text)
 
+    @browsing
+    def test_dossier_byline_save_comments_endpoint(self, browser):
+        payload = '{"comments": "New comment"}'
+        browser.login().visit(self.dossier,
+                              view='save_comments',
+                              data={'data': payload})
+
+        dossier_data = IDossier(self.dossier)
+        self.assertEquals("New comment", dossier_data.comments)
+
+        with self.assertRaises(KeyError):
+            payload = '{"invalidkey": "New comment"}'
+            browser.login().visit(self.dossier,
+                                  view='save_comments',
+                                  data={'data': payload})
+
 
 class TestFilingBusinessCaseByline(TestBylineBase):
 

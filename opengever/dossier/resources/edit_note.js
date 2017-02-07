@@ -85,12 +85,9 @@
 
       function makeRequest(data, successor){
         var options = {
-          url: '.',
-          dataType: 'json',
-          data: JSON.stringify(data),
-          type: 'PATCH',
-          headers: {"Accept": "application/json",
-                    "Content-Type": "application/json"}
+          url: './save_comments',
+          data: {data: JSON.stringify(data)},
+          type: 'POST',
         };
         return $.ajax(options);
       }

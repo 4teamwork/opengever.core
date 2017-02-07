@@ -56,4 +56,11 @@
       allowed_interface="ftw.tabbedview.interfaces.ITabbedViewEndpoints"
       />
 
+  <browser:page
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      name="save_comments"
+      class=".save_comments_entpoint.SaveCommentsEndpoint"
+      permission="cmf.ModifyPortalContent"
+      />
+
 </configure>
