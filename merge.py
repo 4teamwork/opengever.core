@@ -98,6 +98,7 @@ class MergeTool(object):
             'actions.xml',
             'controlpanel.xml',
             'jsregistry.xml',
+            'registry.xml',
         )
 
         map(lambda name: execute_step(
