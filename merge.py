@@ -8,6 +8,7 @@ except pkg_resources.DistributionNotFound:
     sys.exit(1)
 
 
+from collections import defaultdict
 from lxml import etree
 from operator import methodcaller
 from path import Path
@@ -56,6 +57,7 @@ class MergeTool(object):
         self.migrate_standard_xmls()
         self.migrate_mailhost()
         self.migrate_workflows()
+        self.migrate_types()
         self.validate_no_leftovers()
 
     @step('Create opengever.core Generic Setup profile.')
@@ -110,6 +112,7 @@ class MergeTool(object):
             'repositorytool.xml',
             'rolemap.xml',
             'skins.xml',
+            'types.xml',
             'viewlets.xml',
             'workflows.xml',
         )
@@ -147,8 +150,81 @@ class MergeTool(object):
             path.parent.rmdir()
             path.parent.parent.rmdir_p()
 
+    @step('Migrate types')
+    def migrate_types(self):
+        sources_by_filename = defaultdict(list)
+        for path in reduce(list.__add__,
+                           map(methodcaller('glob', '*.xml'),
+                               self.find_dir_in_profiles_to_migrate('types'))):
+            sources_by_filename[str(path.name)].append(path)
 
-    @step('Analyze')
+
+        # opengever.tasktemplates:default is installed BEFORE
+        # opengever.meeting:default, but tasktemplates customizes
+        # meetingdossier before it is even installed.
+        # In order to fix such issues, we reorder some FTIs manually here:
+        # move the primary XML to position 0
+        for relpath in (
+                'meeting/profiles/default/types/opengever.meeting.meetingdossier.xml',
+        ):
+            path = self.opengever_dir.joinpath(relpath)
+            filename = str(path.name)
+            sources_by_filename[filename].remove(path)
+            sources_by_filename[filename].insert(0, path)
+
+
+        target_types_dir = self.og_core_profile_dir.joinpath('types').mkdir()
+        for filename, sources in sources_by_filename.items():
+            sources = sources[:]  # copy
+            target_path = target_types_dir.joinpath(filename)
+            source_path = sources.pop(0)
+            source_path.move(target_path)
+            source_path.parent.rmdir_p()
+
+            if not sources:
+                continue
+
+            with target_path.open('r') as fio:
+                target_doc = etree.parse(fio)
+
+            for source_path in sources:
+                with source_path.open('r') as fio:
+                    source_doc = etree.parse(fio)
+
+                self.add_source_comment(target_doc.getroot(), source_path)
+                for node in source_doc.getroot().getchildren():
+                    if isinstance(node, etree._Comment) or \
+                       node.tag == 'action':
+                        target_doc.getroot().append(node)
+
+                    elif node.tag == 'property' and \
+                         node.attrib.get('name') == 'allowed_content_types':
+                        if node.attrib.get('purge') not in ('False', 'false'):
+                            raise ValueError(
+                                'Error merging FTIs: '
+                                'cannot merge <property> when not purging. '
+                                'Attrs: {!r}'.format(node.attrib))
+                        target_node = target_doc.xpath(
+                            '//property[@name="allowed_content_types"]')
+                        if len(target_node) != 1:
+                            raise ValueError(
+                                'Couldnt find 1 <property '
+                                'name="allowed_content_types"> in {}'.format(
+                                    target_path))
+
+                        target_node, = target_node
+                        map(target_node.append, node.getchildren())
+
+                    else:
+                        raise ValueError(
+                            'Error merging FTIs: <{}> unsupported in {}.\n{!r}'
+                            .format(node.tag, source_path,
+                                    sources_by_filename[filename]))
+
+                target_path.write_bytes(etree.tostring(target_doc))
+                source_path.unlink().parent.rmdir_p()
+
+    @step('Check for leftovers in old profiles')
     def validate_no_leftovers(self):
         errors = False
 
@@ -172,16 +248,7 @@ class MergeTool(object):
             with path.open() as fio:
                 doc = etree.parse(fio)
 
-            if target.getroot().getchildren():
-                target.getroot().getchildren()[-1].tail = '\n\n\n    '
-            else:
-                target.getroot().text = '\n\n    '
-
-            comment = etree.Comment('merged from {}'.format(
-                path.relpath(self.buildout_dir)))
-            comment.tail = '\n    '
-            target.getroot().append(comment)
-
+            self.add_source_comment(target.getroot(), path)
             map(target.getroot().append, doc.getroot().getchildren())
             path.unlink()
 
@@ -237,7 +304,16 @@ class MergeTool(object):
 
         return result
 
+    def add_source_comment(self, node, path):
+        if node.getchildren():
+            node.getchildren()[-1].tail = '\n\n\n    '
+        else:
+            node.text = '\n\n    '
 
+        comment = etree.Comment('merged from {}'.format(
+            path.relpath(self.buildout_dir)))
+        comment.tail = '\n    '
+        node.append(comment)
 
 
 if __name__ == '__main__':
