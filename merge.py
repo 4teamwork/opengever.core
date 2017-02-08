@@ -102,6 +102,7 @@ class MergeTool(object):
             'controlpanel.xml',
             'jsregistry.xml',
             'properties.xml',
+            'propertiestool.xml',
             'registry.xml',
         )
 
