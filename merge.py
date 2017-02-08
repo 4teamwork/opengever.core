@@ -10,6 +10,7 @@ except pkg_resources.DistributionNotFound:
 
 from collections import defaultdict
 from lxml import etree
+from operator import itemgetter
 from operator import methodcaller
 from path import Path
 from plone.memoize import instance
@@ -59,6 +60,7 @@ class MergeTool(object):
         self.migrate_workflows()
         self.migrate_types()
         self.validate_no_leftovers()
+        self.migrate_hook_registrations()
 
     @step('Create opengever.core Generic Setup profile.')
     def create_opengever_core_profile(self):
@@ -239,6 +241,44 @@ class MergeTool(object):
                 print '  ', profile.ljust(35), item.isdir() and 'D' or ' ', item.name
 
         assert not errors, 'Should not have any leftovers'
+
+    @step('Migrate hook registrations.')
+    def migrate_hook_registrations(self):
+        handler_by_profile = {}
+
+        for path in self.opengever_dir.walkfiles('*.zcml'):
+            with path.open() as fio:
+                doc = etree.parse(fio)
+
+            changes = False
+            for node in doc.xpath('//*[local-name()="hook"]'):
+                profile = node.attrib.get('profile')
+                if profile not in self.profiles_to_migrate:
+                    continue
+                handler = node.attrib.get('handler')
+                assert handler.startswith('.')
+                package = path.parent.relpath(self.buildout_dir).replace('/', '.')
+                handler = package + handler
+                handler_by_profile[profile] = handler
+                node.getparent().remove(node)
+                changes = True
+
+            if changes:
+                path.write_bytes(etree.tostring(doc))
+
+        handlers = map(
+            itemgetter(1),
+            sorted(handler_by_profile.items(),
+                   key=lambda item: self.profiles_to_migrate.index(item[0])))
+
+        target_hooks = self.opengever_dir.joinpath('core', 'hooks.py')
+        hooks_lines = map(
+            lambda handler: 'import {}'.format(handler.rsplit('.', 1)[0]),
+            sorted(handlers))
+        hooks_lines.extend(['', '', target_hooks.bytes().strip()])
+        hooks_lines.extend(map('    {}(site)'.format, handlers))
+        target_hooks.write_bytes('\n'.join(hooks_lines) + '\n')
+
 
     def standard_migrate_xml(self, filename):
         with self.og_core_profile_dir.joinpath(filename).open() as fio:
