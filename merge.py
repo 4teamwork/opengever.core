@@ -96,6 +96,7 @@ class MergeTool(object):
     def migrate_standard_xmls(self):
         standard_xmls = (
             'actions.xml',
+            'controlpanel.xml',
         )
 
         map(lambda name: execute_step(
