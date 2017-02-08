@@ -96,6 +96,7 @@ class MergeTool(object):
     def migrate_standard_xmls(self):
         standard_xmls = (
             'actions.xml',
+            'browserlayer.xml',
             'controlpanel.xml',
             'jsregistry.xml',
             'registry.xml',
@@ -132,7 +133,7 @@ class MergeTool(object):
             if target.getroot().getchildren():
                 target.getroot().getchildren()[-1].tail = '\n\n\n    '
             else:
-                target.getroot().text = '\n\n\n    '
+                target.getroot().text = '\n\n    '
 
             comment = etree.Comment('merged from {}'.format(
                 path.relpath(self.buildout_dir)))
