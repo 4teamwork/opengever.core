@@ -97,6 +97,7 @@ class MergeTool(object):
         standard_xmls = (
             'actions.xml',
             'browserlayer.xml',
+            'catalog.xml',
             'controlpanel.xml',
             'jsregistry.xml',
             'registry.xml',
