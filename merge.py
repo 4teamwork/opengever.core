@@ -61,6 +61,7 @@ class MergeTool(object):
         self.migrate_types()
         self.validate_no_leftovers()
         self.migrate_hook_registrations()
+        self.install_the_new_profile()
 
     @step('Create opengever.core Generic Setup profile.')
     def create_opengever_core_profile(self):
@@ -279,6 +280,13 @@ class MergeTool(object):
         hooks_lines.extend(map('    {}(site)'.format, handlers))
         target_hooks.write_bytes('\n'.join(hooks_lines) + '\n')
 
+    @step('Install the new profile')
+    def install_the_new_profile(self):
+        path = self.opengever_dir.joinpath('setup/meta.py')
+        code = path.bytes()
+        code = code.replace("default=u'opengever.policy.base:default'",
+                            "default=u'opengever.core:default'")
+        path.write_bytes(code)
 
     def standard_migrate_xml(self, filename):
         with self.og_core_profile_dir.joinpath(filename).open() as fio:
