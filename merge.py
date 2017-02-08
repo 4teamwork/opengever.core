@@ -9,6 +9,7 @@ except pkg_resources.DistributionNotFound:
 
 
 from lxml import etree
+from operator import methodcaller
 from path import Path
 from plone.memoize import instance
 from pprint import pprint
@@ -19,18 +20,22 @@ import re
 def step(message):
     def decorator(func):
         def wrapper(*args, **kwargs):
-            print '🔧 ', message
-            try:
-                returnvalue = func(*args, **kwargs)
-            except:
-                print '💥'
-                raise
-            else:
-                print '✔ 🍺'
-                print ''
-                return returnvalue
+            return execute_step(message, func, *args, **kwargs)
         return wrapper
     return decorator
+
+
+def execute_step(message, func, *args, **kwargs):
+    print '🔧 ', message
+    try:
+        returnvalue = func(*args, **kwargs)
+    except:
+        print '💥'
+        raise
+    else:
+        print '✔ 🍺'
+        print ''
+        return returnvalue
 
 
 class MergeTool(object):
@@ -48,6 +53,7 @@ class MergeTool(object):
         self.create_opengever_core_profile()
         self.list_old_profiles()
         self.migrate_dependencies()
+        self.migrate_standard_xmls()
         self.validate_no_leftovers()
 
     @step('Create opengever.core Generic Setup profile.')
@@ -87,6 +93,15 @@ class MergeTool(object):
         node.tail = '\n' + ' ' * 4
         target_metadata.write_bytes(etree.tostring(target_doc))
 
+    def migrate_standard_xmls(self):
+        standard_xmls = (
+            'actions.xml',
+        )
+
+        map(lambda name: execute_step(
+            'Migrating {}'.format(name), self.standard_migrate_xml, name),
+            standard_xmls)
+
     @step('Analyze')
     def validate_no_leftovers(self):
         errors = False
@@ -102,6 +117,36 @@ class MergeTool(object):
                 print '  ', profile.ljust(35), item.isdir() and 'D' or ' ', item.name
 
         assert not errors, 'Should not have any leftovers'
+
+    def standard_migrate_xml(self, filename):
+        with self.og_core_profile_dir.joinpath(filename).open() as fio:
+            target = etree.parse(fio)
+
+        for path in self.find_file_in_profiles_to_migrate(filename):
+            with path.open() as fio:
+                doc = etree.parse(fio)
+
+            if target.getroot().getchildren():
+                target.getroot().getchildren()[-1].tail = '\n\n\n    '
+            else:
+                target.getroot().text = '\n\n\n    '
+
+            comment = etree.Comment('merged from {}'.format(
+                path.relpath(self.buildout_dir)))
+            comment.tail = '\n    '
+            target.getroot().append(comment)
+
+            map(target.getroot().append, doc.getroot().getchildren())
+            path.unlink()
+
+        self.og_core_profile_dir.joinpath(filename).write_bytes(
+            etree.tostring(target))
+
+
+    def find_file_in_profiles_to_migrate(self, filename):
+        return filter(methodcaller('isfile'),
+                      map(methodcaller('joinpath', filename),
+                          map(self.profile_path, self.profiles_to_migrate)))
 
     @property
     @instance.memoize
