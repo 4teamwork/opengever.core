@@ -55,6 +55,7 @@ class MergeTool(object):
         self.migrate_dependencies()
         self.migrate_standard_xmls()
         self.migrate_mailhost()
+        self.migrate_workflows()
         self.validate_no_leftovers()
 
     @step('Create opengever.core Generic Setup profile.')
@@ -108,6 +109,7 @@ class MergeTool(object):
             'rolemap.xml',
             'skins.xml',
             'viewlets.xml',
+            'workflows.xml',
         )
 
         map(lambda name: execute_step(
@@ -123,6 +125,26 @@ class MergeTool(object):
         assert len(xmls) == 1, 'Expected exactly 1 mailhost.xml, got {!r}'.format(
             xmls)
         xmls[0].move(self.og_core_profile_dir)
+
+    @step('Migrate workflows')
+    def migrate_workflows(self):
+        seen = []
+        for path in reduce(list.__add__,
+                           map(methodcaller('glob', '*/definition.xml'),
+                               self.find_dir_in_profiles_to_migrate('workflows'))):
+            wf_name = str(path.parent.name)
+            if wf_name in seen:
+                raise ValueError(
+                    'Workflow definition for {!r} appears twice'.format(wf_name))
+            seen.append(wf_name)
+
+            target = self.og_core_profile_dir.joinpath(
+                path.relpath(path.parent.parent.parent))
+            target.parent.makedirs()
+            path.move(target)
+            path.parent.rmdir()
+            path.parent.parent.rmdir_p()
+
 
     @step('Analyze')
     def validate_no_leftovers(self):
@@ -167,6 +189,11 @@ class MergeTool(object):
 
     def find_file_in_profiles_to_migrate(self, filename):
         return filter(methodcaller('isfile'),
+                      map(methodcaller('joinpath', filename),
+                          map(self.profile_path, self.profiles_to_migrate)))
+
+    def find_dir_in_profiles_to_migrate(self, filename):
+        return filter(methodcaller('isdir'),
                       map(methodcaller('joinpath', filename),
                           map(self.profile_path, self.profiles_to_migrate)))
 
