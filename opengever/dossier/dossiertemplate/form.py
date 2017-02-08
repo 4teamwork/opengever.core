@@ -206,6 +206,9 @@ class AddDossierFromTemplateWizardStep(WizzardWrappedAddForm):
                 if not template_obj.predefined_keywords:
                     widget.value = ()
 
+                if template_obj.restrict_keywords:
+                    widget.field.value_type.allow_new = False
+
             def get_template_widget_name(self, widgetname):
                 """The dossiertemplates uses the same fields as the
                 dossier (IDossier) but it includes it with another interface.

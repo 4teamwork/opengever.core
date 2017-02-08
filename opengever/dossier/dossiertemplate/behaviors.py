@@ -20,9 +20,11 @@ class IDossierTemplateSchema(form.Schema):
 
     form.fieldset(
         u'common',
+        label=base_mf(u'fieldset_common', default=u'Common'),
         fields=[
             u'title_help',
             u'predefined_keywords',
+            u'restrict_keywords',
         ],
     )
 
@@ -41,6 +43,14 @@ class IDossierTemplateSchema(form.Schema):
         required=False,
         missing_value=True,
         default=True,
+    )
+
+    form.order_after(restrict_keywords='predefined_keywords')
+    restrict_keywords = schema.Bool(
+        title=_(u'label_restrict_keywords', default=u'Restrict Keywords'),
+        required=False,
+        missing_value=False,
+        default=False,
     )
 
 
