@@ -1,4 +1,5 @@
 from opengever.bundle.loader import BundleLoader
+from opengever.bundle.loader import ItemPreprocessor
 from opengever.bundle.tests.helpers import get_portal_type
 from opengever.bundle.tests.helpers import get_title
 from pkg_resources import resource_filename as rf
@@ -60,3 +61,57 @@ class TestBundleLoader(TestCase):
     def test_skips_missing_files_gracefully(self):
         bundle = self.load_bundle(get_bundle_path('partial.bundle'))
         self.assertEqual(1, len(bundle))
+
+
+class TestItemPreprocessor(TestCase):
+
+    def test_strips_extension_from_title(self):
+        item = {'title': 'foo.txt', 'filepath': '/file1.txt'}
+        ItemPreprocessor(item, 'documents.json').process()
+        self.assertEqual('foo', item['title'])
+
+    def test_strips_extension_from_title_but_keeps_original_filename(self):
+        item = {'title': 'foo.txt', 'filepath': '/file1.txt'}
+        ItemPreprocessor(item, 'documents.json').process()
+        self.assertEqual('foo.txt', item['_original_filename'])
+
+    def test_doesnt_strip_non_extension(self):
+        item = {'title': 'Position 1.2.3', 'filepath': '/file1.txt'}
+        ItemPreprocessor(item, 'documents.json').process()
+        self.assertEqual('Position 1.2.3', item['title'])
+
+    def test_sets_portal_type_based_on_json_name_by_default(self):
+        item = {}
+        ItemPreprocessor(item, 'reporoots.json').process()
+        expected = 'opengever.repository.repositoryroot'
+        self.assertEqual(expected, item['_type'])
+
+        item = {}
+        ItemPreprocessor(item, 'repofolders.json').process()
+        expected = 'opengever.repository.repositoryfolder'
+        self.assertEqual(expected, item['_type'])
+
+        item = {}
+        ItemPreprocessor(item, 'dossiers.json').process()
+        expected = 'opengever.dossier.businesscasedossier'
+        self.assertEqual(expected, item['_type'])
+
+        item = {'filepath': 'regular_document.docx', 'title': ''}
+        ItemPreprocessor(item, 'documents.json').process()
+        expected = 'opengever.document.document'
+        self.assertEqual(expected, item['_type'])
+
+    def test_sets_portal_type_for_mails(self):
+        item = {'filepath': 'mail.eml', 'title': ''}
+        ItemPreprocessor(item, 'documents.json').process()
+        expected = 'ftw.mail.mail'
+        self.assertEqual(expected, item['_type'])
+
+    def test_drops_review_state_for_items_with_one_state_workflows(self):
+        item = {
+            'title': 'My document',
+            'filepath': '/mydoc.docx',
+            'review_state': 'document-state-draft'
+        }
+        ItemPreprocessor(item, 'documents.json').process()
+        self.assertNotIn('review_state', item)
