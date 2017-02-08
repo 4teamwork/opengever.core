@@ -48,6 +48,7 @@ class MergeTool(object):
         self.create_opengever_core_profile()
         self.list_old_profiles()
         self.migrate_dependencies()
+        self.validate_no_leftovers()
 
     @step('Create opengever.core Generic Setup profile.')
     def create_opengever_core_profile(self):
@@ -81,6 +82,22 @@ class MergeTool(object):
 
         node.tail = '\n' + ' ' * 4
         target_metadata.write_bytes(etree.tostring(target_doc))
+
+    @step('Analyze')
+    def validate_no_leftovers(self):
+        errors = False
+
+        for profile in self.profiles_to_migrate:
+            for item in self.profile_path(profile).listdir():
+                if item.name == 'metadata.xml':
+                    continue
+                if not errors:
+                    print '   ERROR: leftovers found:'
+                    errors = True
+
+                print '  ', profile.ljust(35), item.isdir() and 'D' or ' ', item.name
+
+        assert not errors, 'Should not have any leftovers'
 
     @property
     @instance.memoize
