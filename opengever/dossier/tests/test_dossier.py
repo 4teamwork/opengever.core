@@ -126,6 +126,21 @@ class TestDossier(FunctionalTestCase):
              'opengever.dossier.businesscasedossier', 'opengever.task.task'],
             [fti.id for fti in self.dossier.allowedContentTypes()])
 
+    @browsing
+    def test_regular_user_can_add_new_keywords_in_dossier(self, browser):
+        self.grant('Reader', 'Contributor', 'Editor')
+        browser.login().visit(self.dossier, view='@@edit')
+
+        keywords = browser.find_field_by_text(u'Keywords')
+        new = browser.css('#' + keywords.attrib['id'] + '_new').first
+        new.text = u'NewItem1\nNew Item 2\nN\xf6i 3'
+        browser.find_button_by_label('Save').click()
+
+        browser.visit(self.dossier, view='edit')
+        keywords = browser.find_field_by_text(u'Keywords')
+        self.assertTupleEqual(('New Item 2', 'NewItem1', 'N=C3=B6i 3'),
+                              tuple(keywords.value))
+
 
 class TestMeetingFeatureTypes(FunctionalTestCase):
 
