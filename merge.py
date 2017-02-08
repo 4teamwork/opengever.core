@@ -94,7 +94,7 @@ class MergeTool(object):
                 # do not migrate dependency to migrated profiles (og.task, ..)
                 continue
             node = etree.SubElement(dependencies_node, 'dependency')
-            node.text = profile
+            node.text = 'profile-' + profile
             node.tail = dependencies_node.text
 
         node.tail = '\n' + ' ' * 4
