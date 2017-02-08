@@ -101,6 +101,7 @@ class MergeTool(object):
             'browserlayer.xml',
             'catalog.xml',
             'controlpanel.xml',
+            'cssregistry.xml',
             'jsregistry.xml',
             'properties.xml',
             'propertiestool.xml',
