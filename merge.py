@@ -104,6 +104,7 @@ class MergeTool(object):
             'properties.xml',
             'propertiestool.xml',
             'registry.xml',
+            'repositorytool.xml',
             'rolemap.xml',
             'skins.xml',
             'viewlets.xml',
