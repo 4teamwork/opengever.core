@@ -8,8 +8,12 @@ except pkg_resources.DistributionNotFound:
     sys.exit(1)
 
 
+from lxml import etree
 from path import Path
+from plone.memoize import instance
+from pprint import pprint
 import os
+import re
 
 
 def step(message):
@@ -36,17 +40,87 @@ class MergeTool(object):
         self.buildout_dir = Path(__file__).parent.parent.parent.abspath()
         assert self.buildout_dir.joinpath('bootstrap.py'), \
             'Could not find buildout root.'
+        self.opengever_dir = self.buildout_dir.joinpath('opengever')
+        self.og_core_profile_dir = self.opengever_dir.joinpath(
+            'core', 'profiles', 'default')
 
     def __call__(self):
         self.create_opengever_core_profile()
+        self.list_old_profiles()
+        self.migrate_dependencies()
 
     @step('Create opengever.core Generic Setup profile.')
     def create_opengever_core_profile(self):
         source = self.here_dir.joinpath('opengever-core')
-        target = self.buildout_dir.joinpath('opengever', 'core')
+        target = self.opengever_dir.joinpath('core')
         cmd = 'cp -r {}/* {}'.format(source, target)
-        print '>', cmd
+        print '   >', cmd
         os.system(cmd)
+
+    @step('These profiles will be merged in this order:')
+    def list_old_profiles(self):
+        for profile in self.profiles_to_migrate:
+            print '  ', profile
+
+    @step('Migrate GS dependencies into opengever.core profile.')
+    def migrate_dependencies(self):
+        target_metadata = self.og_core_profile_dir.joinpath('metadata.xml')
+        with target_metadata.open() as fio:
+            target_doc = etree.parse(fio)
+
+        dependencies_node = target_doc.xpath('//dependencies')[0]
+        dependencies_node.text = '\n' + ' ' * 8
+        for profile in self.read_dependencies('opengever.policy.base:default'):
+            if profile in self.profiles_to_migrate:
+                # do not migrate dependency to migrated profiles (og.task, ..)
+                continue
+            node = etree.Element('dependency')
+            node.text = profile
+            node.tail = dependencies_node.text
+            dependencies_node.append(node)
+
+        node.tail = '\n' + ' ' * 4
+        target_metadata.write_bytes(etree.tostring(target_doc))
+
+    @property
+    @instance.memoize
+    def profiles_to_migrate(self):
+        result = []
+        for profile in self.read_dependencies('opengever.policy.base:default'):
+            if not profile.startswith('opengever.'):
+                continue
+            elif profile in result:
+                print '   WARNING: skipping duplicate profile', profile
+            else:
+                result.append(profile)
+        return result
+
+    def profile_path(self, profile):
+        profile = re.sub('^profile-', '', profile)
+        return (self.buildout_dir
+                .joinpath(*profile.split(':')[0].split('.'))
+                .joinpath('profiles', profile.split(':')[1])).abspath()
+
+    def recursive_dependencies(self, profile):
+        return map(self.read_dependencies, self.read_dependencies(profile))
+
+    @instance.memoize
+    def read_dependencies(self, profile):
+        metadata_xml_path = (self.profile_path('opengever.policy.base:default')
+                             .joinpath('metadata.xml'))
+        if not metadata_xml_path.isfile() and metadata_xml_path.parent.isdir():
+            return []
+
+        with metadata_xml_path.open() as fio:
+            doc = etree.parse(fio)
+
+        result = []
+        for node in doc.xpath('//dependency'):
+            result.append(re.sub('^profile-', '', node.text.strip()))
+
+        return result
+
+
 
 
 if __name__ == '__main__':
