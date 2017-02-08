@@ -26,7 +26,7 @@
     </li>
 
     <li tal:repeat="item view/get_dossiers_grouped_by_repository"
-        class="repository-list-item">
+        class="repository-list-item collapsible">
 
       <tal:define tal:define="repository python: item[0]; dossiers python: item[1];">
 
@@ -37,9 +37,21 @@
               <span i18n:translate="label_archival_value">Archival value</span>:
               <span tal:content="repository/get_archival_value" i18n:translate=""/>
             </div>
+            <div class="collapsible-header dossier-header">
+              <span>
+                <span tal:content="python: len(dossiers)" />
+                <span i18n:translate="label_dossiers">Dossiers</span>
+              </span>
+            </div>
           </div>
           <div class="repository_title" tal:condition="context/is_closed">
             <h3 tal:condition="context/is_closed" tal:content="repository" />
+            <div class="collapsible-header dossier-header">
+              <span>
+                <span tal:content="python: len(dossiers)" />
+                <span i18n:translate="label_dossiers">Dossiers</span>
+              </span>
+            </div>
           </div>
 
           <div class="repo-appraisal-button-group action-cell"
@@ -53,7 +65,7 @@
           </div>
         </div>
 
-          <ul>
+          <ul class="dossiers">
             <li tal:repeat="dossier dossiers" class="dispositions list-group-item">
 
               <div class="list-group-cell data-cell">

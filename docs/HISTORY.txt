@@ -5,6 +5,9 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Make dossiers collabsible and hide them by default on the disposition overview.
+  [phgross]
+
 - List repositories alphabetically on the disposition overview.
   [phgross]
 
