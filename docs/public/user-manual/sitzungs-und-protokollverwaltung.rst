@@ -267,6 +267,35 @@ Geschäft.
 |img-sitzungs-und-protokollverwaltung-16|
 |img-sitzungs-und-protokollverwaltung-17|
 
+
+Periode abschliessen
+--------------------
+
+Um zum Jahresabschluss die definierte Periode abzuschliessen, kann
+folgendermassen vorgegangen werden:
+
+Die aktuelle Periode wird in der Übersicht jeweils angezeigt:
+
+|img-sitzungs-und-protokollverwaltung-18|
+
+Um diese abzuschliessen, muss auf das Tab "Periode" geklickt werden und
+anschliessend auf "Aktionen" und "Aktuelle Periode abschliessen".
+
+|img-sitzungs-und-protokollverwaltung-19|
+
+Zuerst wird die aktuelle Periode abgeschlossen:
+
+|img-sitzungs-und-protokollverwaltung-20|
+
+Anschliessend wird direkt die neue Periode eröffnet.
+
+|img-sitzungs-und-protokollverwaltung-21|
+
+Nun kann das Inhaltsverzeichnis (alphabetisch oder nach Ordnungsposition)
+gedownloadet werden.
+
+|img-sitzungs-und-protokollverwaltung-22|
+
 .. |img-sitzungs-und-protokollverwaltung-1| image:: img/media/img-sitzungs-und-protokollverwaltung-1.png
 .. |img-sitzungs-und-protokollverwaltung-2| image:: img/media/img-sitzungs-und-protokollverwaltung-2.png
 .. |img-sitzungs-und-protokollverwaltung-3| image:: img/media/img-sitzungs-und-protokollverwaltung-3.png
@@ -284,5 +313,10 @@ Geschäft.
 .. |img-sitzungs-und-protokollverwaltung-15| image:: img/media/img-sitzungs-und-protokollverwaltung-15.png
 .. |img-sitzungs-und-protokollverwaltung-16| image:: img/media/img-sitzungs-und-protokollverwaltung-16.png
 .. |img-sitzungs-und-protokollverwaltung-17| image:: img/media/img-sitzungs-und-protokollverwaltung-17.png
+.. |img-sitzungs-und-protokollverwaltung-18| image:: img/media/img-sitzungs-und-protokollverwaltung-18.png
+.. |img-sitzungs-und-protokollverwaltung-19| image:: img/media/img-sitzungs-und-protokollverwaltung-19.png
+.. |img-sitzungs-und-protokollverwaltung-20| image:: img/media/img-sitzungs-und-protokollverwaltung-20.png
+.. |img-sitzungs-und-protokollverwaltung-21| image:: img/media/img-sitzungs-und-protokollverwaltung-21.png
+.. |img-sitzungs-und-protokollverwaltung-22| image:: img/media/img-sitzungs-und-protokollverwaltung-22.png
 
 .. disqus::
