@@ -54,6 +54,7 @@ class MergeTool(object):
         self.list_old_profiles()
         self.migrate_dependencies()
         self.migrate_standard_xmls()
+        self.migrate_mailhost()
         self.validate_no_leftovers()
 
     @step('Create opengever.core Generic Setup profile.')
@@ -106,6 +107,16 @@ class MergeTool(object):
         map(lambda name: execute_step(
             'Migrating {}'.format(name), self.standard_migrate_xml, name),
             standard_xmls)
+
+    @step('Migrate mailhost.xml')
+    def migrate_mailhost(self):
+        # There is only one mailhost.xml.
+        # Since everything is in the XML roo tnode, we cannot use
+        # standard_migrate_xml.
+        xmls = self.find_file_in_profiles_to_migrate('mailhost.xml')
+        assert len(xmls) == 1, 'Expected exactly 1 mailhost.xml, got {!r}'.format(
+            xmls)
+        xmls[0].move(self.og_core_profile_dir)
 
     @step('Analyze')
     def validate_no_leftovers(self):
