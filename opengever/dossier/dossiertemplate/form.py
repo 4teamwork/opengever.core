@@ -198,6 +198,14 @@ class AddDossierFromTemplateWizardStep(WizzardWrappedAddForm):
                         # Set the template value to the dossier add-form widget.
                         widget.value = IDataConverter(widget).toWidgetValue(value)
 
+                        if widgetname == 'IDossier.keywords':
+                            self._modify_keyword_widget_according_to_template(widget)
+
+            def _modify_keyword_widget_according_to_template(self, widget):
+                template_obj = get_wizard_storage(self.context).get('template')
+                if not template_obj.predefined_keywords:
+                    widget.value = ()
+
             def get_template_widget_name(self, widgetname):
                 """The dossiertemplates uses the same fields as the
                 dossier (IDossier) but it includes it with another interface.
@@ -209,7 +217,7 @@ class AddDossierFromTemplateWizardStep(WizzardWrappedAddForm):
 
                 Example:
 
-                IDossier.keywords => IDossierTemplate.keyworkds
+                IDossier.keywords => IDossierTemplate.keywords
                 """
                 interface_name, name = widgetname.split('.')
                 return '.'.join([

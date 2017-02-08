@@ -206,6 +206,7 @@ class TestDossierTemplate(FunctionalTestCase):
             u'Title',
             u'Description',
             u'Keywords',
+            u'Predefined Keywords'
             u'Comments',
             u'filing prefix'],
             map(normalize_spaces, browser.css('#content fieldset label').raw_text)
@@ -224,10 +225,26 @@ class TestDossierTemplate(FunctionalTestCase):
             u'Title',
             u'Description',
             u'Keywords',
+            u'Predefined Keywords'
             u'Comments',
             u'filing prefix'],
             map(normalize_spaces, browser.css('#content fieldset label').raw_text)
         )
+
+    @browsing
+    def test_dossiertemplate_predefined_keywords_is_there(self, browser):
+        dossiertemplate = create(Builder('dossiertemplate')
+                                 .titled(u'My Dossiertemplate')
+                                 .within(self.templatedossier))
+
+        browser.login().visit(dossiertemplate, view='@@edit')
+        self.assertTrue(browser.find_field_by_text('Predefined Keywords'),
+                        'Expect the "Predefined Keywords" field')
+
+        form_labels = browser.form_field_labels
+        self.assertGreater(form_labels.index('Predefined Keywords'),
+                           form_labels.index('Keywords'),
+                           '"Predefined Keywords" should be after "Keywords"')
 
 
 class TestDossierTemplateAddWizard(FunctionalTestCase):
@@ -321,7 +338,7 @@ class TestDossierTemplateAddWizard(FunctionalTestCase):
         values = {
             'title': u'My template',
             'description': u'Lorem ipsum',
-            'keywords': (u'special', u'secret'),
+            'keywords': (u'secret', u'special'),
             'comments': 'this is very special',
             'filing_prefix': 'department'
             }
@@ -345,6 +362,30 @@ class TestDossierTemplateAddWizard(FunctionalTestCase):
         self.assertEqual(values.get('keywords'), IDossier(dossier).keywords)
         self.assertEqual(values.get('comments'), IDossier(dossier).comments)
         self.assertEqual(values.get('filing_prefix'), IDossier(dossier).filing_prefix)
+
+    @browsing
+    def test_dossiertemplate_do_not_copy_keywords(self, browser):
+        values = {
+            'title': u'My template',
+            'keywords': (u'special', u'secret'),
+            'predefined_keywords': False
+            }
+
+        create(Builder("dossiertemplate")
+               .within(self.templatedossier)
+               .having(**values))
+
+        browser.login().visit(self.leaf_node)
+        factoriesmenu.add('Dossier with template')
+
+        token = browser.css(
+            'input[name="form.widgets.template"]').first.attrib.get('value')
+
+        browser.fill({'form.widgets.template': token}).submit()
+        browser.click_on('Save')
+
+        dossier = browser.context
+        self.assertEqual((), IDossier(dossier).keywords)
 
     @browsing
     def test_redirects_to_dossier_after_creating_dossier_from_template(self, browser):
