@@ -437,6 +437,10 @@
       agendaItemController.connectedTo = [proposalsController];
     }
 
+    window.addEventListener("pageshow", function() {
+      agendaItemController.update();
+    });
+
     if ($(".template-add-meeting").length) {
       new CommitteeController();
     }
