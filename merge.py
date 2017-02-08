@@ -65,6 +65,11 @@ class MergeTool(object):
 
     @step('Migrate GS dependencies into opengever.core profile.')
     def migrate_dependencies(self):
+        # Migrate dependencies according to recursive dependency lookup,
+        # skipping merged profiles.
+        # We do not remove dependencies from old profiles since we will
+        # no longer install them and we need the dependencies for upgrade
+        # step ordering.
         target_metadata = self.og_core_profile_dir.joinpath('metadata.xml')
         with target_metadata.open() as fio:
             target_doc = etree.parse(fio)
@@ -75,10 +80,9 @@ class MergeTool(object):
             if profile in self.profiles_to_migrate:
                 # do not migrate dependency to migrated profiles (og.task, ..)
                 continue
-            node = etree.Element('dependency')
+            node = etree.SubElement(dependencies_node, 'dependency')
             node.text = profile
             node.tail = dependencies_node.text
-            dependencies_node.append(node)
 
         node.tail = '\n' + ' ' * 4
         target_metadata.write_bytes(etree.tostring(target_doc))
