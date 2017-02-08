@@ -104,6 +104,7 @@ class MergeTool(object):
             'properties.xml',
             'propertiestool.xml',
             'registry.xml',
+            'rolemap.xml',
         )
 
         map(lambda name: execute_step(
