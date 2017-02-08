@@ -204,8 +204,7 @@ class AddDossierFromTemplateWizardStep(WizzardWrappedAddForm):
 
             def _modify_keyword_widget_according_to_template(self, widget):
                 template_obj = get_wizard_storage(self.context).get('template')
-                if not template_obj.predefined_keywords:
-                    widget.value = ()
+
 
                 if template_obj.restrict_keywords:
                     widget.field.value_type.allow_new = False
@@ -213,6 +212,16 @@ class AddDossierFromTemplateWizardStep(WizzardWrappedAddForm):
                     js_config = json.loads(widget.js_config)
                     js_config['tags'] = False
                     widget.js_config = json.dumps(js_config)
+
+                    # The vocabular should only contain the terms from
+                    # the template.
+                    terms = filter(
+                        lambda term: term.value in widget.value,
+                        widget.terms.terms._terms)
+                    widget.terms.terms = SimpleVocabulary(terms)
+
+                if not template_obj.predefined_keywords:
+                    widget.value = ()
 
             def get_template_widget_name(self, widgetname):
                 """The dossiertemplates uses the same fields as the

@@ -398,6 +398,11 @@ class TestDossierTemplateAddWizard(FunctionalTestCase):
                .within(self.templatedossier)
                .having(**values))
 
+        create(Builder("dossiertemplate")
+               .within(self.templatedossier)
+               .having(title=u'Another dossiertemplate',
+                       keywords=(u'do not appear', u'not there')))
+
         browser.login().visit(self.leaf_node)
         factoriesmenu.add('Dossier with template')
 
@@ -414,7 +419,7 @@ class TestDossierTemplateAddWizard(FunctionalTestCase):
     def test_dossiertemplate_restrict_keywords(self, browser):
         values = {
             'title': u'My template',
-            'keywords': (u'special', u'secret'),
+            'keywords': (u'secret', u'special'),
             'restrict_keywords': True
             }
 
@@ -432,6 +437,7 @@ class TestDossierTemplateAddWizard(FunctionalTestCase):
         keywords = browser.find_field_by_text(u'Keywords')
         new = browser.css('#' + keywords.attrib['id'] + '_new')
 
+        self.assertEquals(list(values['keywords']), keywords.options_labels)
         self.assertFalse(new, 'It should not be possible to add new keywords')
 
     @browsing
