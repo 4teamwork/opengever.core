@@ -58,6 +58,9 @@
                     "$ref": "#/definitions/permission"
                 },
                 "review_state": {
+                    "enum": [
+                        "repositoryroot-state-active"
+                    ],
                     "type": "string"
                 },
                 "guid": {

@@ -124,6 +124,9 @@
                     ]
                 },
                 "review_state": {
+                    "enum": [
+                        "document-state-draft"
+                    ],
                     "type": "string"
                 },
                 "foreign_reference": {

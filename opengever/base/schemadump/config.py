@@ -18,6 +18,36 @@ GEVER_TYPES_TO_OGGBUNDLE_TYPES = {
     'opengever.repository.repositoryroot': 'reporoot',
 }
 
+# Workflow states allowed in JSON schemas. The state that's listed first
+# indicates the initial workflow state (i.e. default state)
+ALLOWED_REVIEW_STATES = {
+    'opengever.repository.repositoryroot': [
+        'repositoryroot-state-active',
+    ],
+    'opengever.repository.repositoryfolder': [
+        'repositoryfolder-state-active',
+        'repositoryfolder-state-inactive',
+    ],
+    'opengever.dossier.businesscasedossier': [
+        'dossier-state-active',
+        'dossier-state-archived',
+        'dossier-state-inactive',
+        'dossier-state-resolved',
+        'dossier-state-offered',
+    ],
+    # We don't support migrating types in their removed
+    # or shadow states
+    'opengever.document.document': [
+        'document-state-draft',
+        # 'document-state-removed',
+        # 'document-state-shadow',
+    ],
+    'ftw.mail.mail': [
+        'mail-state-active',
+        # 'mail-state-removed',
+    ],
+}
+
 GEVER_SQL_TYPES = [
     '_opengever.contact.models.Address',
     '_opengever.contact.models.MailAddress',

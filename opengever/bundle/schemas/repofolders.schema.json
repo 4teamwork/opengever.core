@@ -184,6 +184,10 @@
                     ]
                 },
                 "review_state": {
+                    "enum": [
+                        "repositoryfolder-state-active",
+                        "repositoryfolder-state-inactive"
+                    ],
                     "type": "string"
                 },
                 "_permissions": {
