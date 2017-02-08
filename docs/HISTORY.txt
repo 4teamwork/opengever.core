@@ -5,6 +5,9 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Add review state column and state filter to disposition listings.
+  [phgross]
+
 - Fix holey bumblebee fallback svg icon.
   [Kevin Bieri]
 
