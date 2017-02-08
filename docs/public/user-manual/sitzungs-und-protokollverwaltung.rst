@@ -16,7 +16,7 @@ Kommission / Gremium erfassen
 Eine neue Kommission kann im Bereich *Sitzungen* erstellt werden.
 
 1. Pro Kommission kann eine eigene Berechtigungsgruppe festgelegt werden, die
-   diese Kommission verwalten und einsehen kann.
+   diese Kommission verwaltet und einsehen kann.
 
 2. Zusätzlich muss auch eine Ablageposition im Ordnungssystem definiert werden.
    Dort wird dann automatisch ein neues Sitzungsdossier erstellt, in welches
