@@ -33,6 +33,7 @@ from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
+import json
 
 
 @grok.provider(IContextSourceBinder)
@@ -208,6 +209,10 @@ class AddDossierFromTemplateWizardStep(WizzardWrappedAddForm):
 
                 if template_obj.restrict_keywords:
                     widget.field.value_type.allow_new = False
+                    # Needs to be updated  manually
+                    js_config = json.loads(widget.js_config)
+                    js_config['tags'] = False
+                    widget.js_config = json.dumps(js_config)
 
             def get_template_widget_name(self, widgetname):
                 """The dossiertemplates uses the same fields as the
