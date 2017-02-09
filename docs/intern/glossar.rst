@@ -1,6 +1,0 @@
-Glossar
-=======
-
-Lorem Ipsum.
-
-.. disqus::

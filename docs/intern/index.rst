@@ -9,7 +9,9 @@ Inhalt:
    :maxdepth: 3
 
    kurzreferenzen/index.rst
-   glossar.rst
+   development/index.rst
+   releasemanagement/index.rst
+   operations/index.rst
    meta.rst
 
 
@@ -18,5 +20,3 @@ Stichwortverzeichnis
 
 * :ref:`genindex`
 * :ref:`search`
-
-.. disqus::
