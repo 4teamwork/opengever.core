@@ -9,6 +9,9 @@ Inhalt:
    :maxdepth: 3
 
    kurzreferenzen/index.rst
+   development/index.rst
+   releasemanagement/index.rst
+   operations/index.rst
    meta.rst
 
 
