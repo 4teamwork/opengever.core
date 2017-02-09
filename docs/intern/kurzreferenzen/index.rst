@@ -1,9 +1,6 @@
 Kurzreferenzen
 ==============
 
-Lorem Ipsum.
-
-
 Inhalt:
 
 .. toctree::
