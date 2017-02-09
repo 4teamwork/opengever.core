@@ -244,6 +244,13 @@
                     "_zope_schema_type": "TextLine"
                 },
                 "review_state": {
+                    "enum": [
+                        "dossier-state-active",
+                        "dossier-state-archived",
+                        "dossier-state-inactive",
+                        "dossier-state-resolved",
+                        "dossier-state-offered"
+                    ],
                     "type": "string"
                 },
                 "description": {

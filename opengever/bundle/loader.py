@@ -93,23 +93,9 @@ class BundleLoader(object):
 
             self._validate_schema(items, json_name)
             for item in items:
-                item['_type'] = self._determine_portal_type(json_name, item)
-                if json_name == 'documents.json':
-                    self._strip_extension_from_title(item)
+                # Apply required preprocessing to items (in-place)
+                ItemPreprocessor(item, json_name).process()
                 self._items.append(item)
-
-    def _strip_extension_from_title(self, item):
-        """Strip extension from title if present. Otherwise we'd end up with
-        the extension in the final title.
-        """
-        title = item['title']
-        basename, ext = os.path.splitext(title)
-        if item['filepath'].lower().endswith(ext.lower()):
-            # Only strip what looks like a file extension from title if
-            # filename ends with the same extension
-            item['title'] = basename
-            item['_original_filename'] = title
-        return item
 
     def _load_schemas(self):
         schema_dir = rf('opengever.bundle', 'schemas/')
@@ -130,13 +116,73 @@ class BundleLoader(object):
         # May raise jsonschema.ValidationError
         validate(items, schema, format_checker=FormatChecker())
 
-    def _determine_portal_type(self, json_name, item):
-        """Determine what portal_type an item should be, based on the name of
+
+class ItemPreprocessor(object):
+    """A preprocessor that transforms items *in place*.
+
+    This applies transformations that are required for the items to suit
+    internal needs dictated by implementation details.
+
+    This also serves as a compatibility layer that translates between the
+    public facing OGGBundle format and the exact internal format items need
+    to follow in order for "things to just work", without littering other
+    parts of the codebase with conditionals for handling special cases.
+
+    Transformations done here should be kept to a minimum, and when possible
+    and appropriate, should be pushed back to the public facing OGGBundle
+    specification and/or schemas.
+    """
+
+    def __init__(self, item, json_name):
+        self.item = item
+        self.json_name = json_name
+
+    def process(self):
+        self._set_portal_type()
+        self._strip_extension_from_title()
+        self._preprocess_workflow_state()
+
+    def _set_portal_type(self):
+        """Set the appropriate portal type for items.
+
+        Determine what portal_type an item should be, based on the name of
         the JSON file it's been read from.
         """
-        if json_name == 'documents.json':
-            filepath = item['filepath']
+        # Default to setting type based on which JSON file the item came from
+        _type = BUNDLE_JSON_TYPES[self.json_name]
+
+        # Mails however need a bit of special love
+        if self.json_name == 'documents.json':
+            filepath = self.item['filepath']
             if filepath is not None and filepath.endswith('.eml'):
-                return 'ftw.mail.mail'
-            return 'opengever.document.document'
-        return BUNDLE_JSON_TYPES[json_name]
+                _type = 'ftw.mail.mail'
+
+        self.item['_type'] = _type
+
+    def _strip_extension_from_title(self):
+        """Strip extension from title if present.
+
+        Otherwise we'd end up with the extension in the final title, and twice
+        in the filename derived from the title.
+        """
+        if self.json_name == 'documents.json':
+            title = self.item['title']
+            basename, ext = os.path.splitext(title)
+            if self.item['filepath'].lower().endswith(ext.lower()):
+                # Only strip what looks like a file extension from title if
+                # filename ends with the same extension
+                self.item['title'] = basename
+                self.item['_original_filename'] = title
+
+    def _preprocess_workflow_state(self):
+        """Remove or map workflow state in items to suit internal needs.
+
+        For types with only a single supported workflow-state, drop
+        `review_state` entirely.
+        """
+        if self.json_name == 'documents.json':
+            # We don't support creating documents (or mails) in any other state
+            # than their initial state. So we drop the review_state entirely,
+            # because it would be their initial state anyway, and therefore
+            # avoid an unnecessary invocation of wftool.setStatusOf().
+            self.item.pop('review_state', None)

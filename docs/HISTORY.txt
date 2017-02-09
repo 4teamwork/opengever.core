@@ -5,6 +5,12 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- OGGBundle schemas: Include enums for valid review_states.
+  [lgraf]
+
+- OGGBundle import: Implement setting workflow state for imported objects.
+  [lgraf]
+
 - Add review state column and state filter to disposition listings.
   [phgross]
 
