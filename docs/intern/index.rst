@@ -17,5 +17,3 @@ Stichwortverzeichnis
 
 * :ref:`genindex`
 * :ref:`search`
-
-.. disqus::

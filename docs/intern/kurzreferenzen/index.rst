@@ -10,5 +10,3 @@ Inhalt:
    :maxdepth: 2
 
    Bumblebee <bumblebee.rst>
-
-.. disqus::
