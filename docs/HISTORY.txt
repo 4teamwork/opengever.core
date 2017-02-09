@@ -5,6 +5,9 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Make sure the breadcrumb title tooltip only gets loaded if a data-uid attribute is present.
+  [mathias.leimgruber]
+
 - OGGBundle schemas: Include enums for valid review_states.
   [lgraf]
 
