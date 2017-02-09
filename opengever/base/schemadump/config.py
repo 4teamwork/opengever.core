@@ -1,5 +1,5 @@
 SCHEMA_DUMPS_DIR = 'docs/schema-dumps'
-SCHEMA_DOCS_DIR = 'docs/public/api/schemas'
+SCHEMA_DOCS_DIR = 'docs/public/dev-manual/api/schemas'
 
 
 GEVER_TYPES = [
