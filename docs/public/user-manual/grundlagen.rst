@@ -189,9 +189,7 @@ Nachfolgend einige generelle Inputs zum Handling:
 
 - Mehrere Reiter verwenden: Wir empfehlen, für jedes Dossier einen eigenen
   Reiter im Browser zu verwenden, um das parallele Arbeiten in mehreren Dossiers
-  zu erleichtern.
-
-  Dies sind die Shortcuts dazu:
+  zu erleichtern. Dies sind die Shortcuts dazu:
 
   - Mac: :kbd:`cmd` + Klick
 
@@ -204,9 +202,9 @@ Nachfolgend einige generelle Inputs zum Handling:
 - Schriftgrösse anpassen: Bei Bedarf kann mit folgenden Tastaturkürzeln
   die Schriftgrösse im Webbrowser individuell angepasst werden:
 
-  - Grössere Schrift: :kbd:`Ctrl +` (Windows) bzw. :kbd:`Cmd +` (Mac)
+  - Grössere Schrift: :kbd:`ctrl +` (Windows) bzw. :kbd:`cmd +` (Mac)
 
-  - Kleinere Schrift: :kbd:`Cmd -` (Windows) bzw. :kbd:`Cmd -` (Mac)
+  - Kleinere Schrift: :kbd:`cmd -` (Windows) bzw. :kbd:`cmd -` (Mac)
 
 - Nachstehend noch eine Übersicht aller in OneGov GEVER verwendeten Icons
   als Übersicht:
