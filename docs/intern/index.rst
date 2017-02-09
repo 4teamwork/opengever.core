@@ -9,7 +9,6 @@ Inhalt:
    :maxdepth: 3
 
    kurzreferenzen/index.rst
-   glossar.rst
    meta.rst
 
 
