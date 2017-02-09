@@ -192,7 +192,9 @@ Nachfolgend einige generelle Inputs zum Handling:
   zu erleichtern.
 
   Dies sind die Shortcuts dazu:
+
   - Mac: :kbd:`cmd` + Klick
+
   - Windows: :kbd:`ctrl` + Klick
 
 - Lesezeichen im Browser (Favoriten) verwenden: Es empfiehlt sich, im Browser
