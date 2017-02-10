@@ -39,8 +39,8 @@ Currently there are three SQL databases supported:
 .. code::
 
     $ brew install postgresql --with-python
-    $ ln -sfv /usr/local/opt/postgresql/*.plist ~/Library/LaunchAgents
-    $ launchctl load ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
+    $ brew services start postgresql
+    $ brew services run postgresql
     $ createdb opengever
 
 - **MySQL**
