@@ -1,0 +1,39 @@
+[
+  {
+    "guid": "GUID-dossier-A-1.1-1",
+    "parent_guid": "GUID-repofolder-A-1.1",
+    "reference_number": "1",
+    "responsible": "lukas.graf",
+    "review_state": "dossier-state-active",
+    "start": "2010-11-11",
+    "title": "Dossier 1.1-1 (nesting depth violations inside)"
+  },
+  {
+    "guid": "GUID-dossier-A-1.1-1.1",
+    "parent_guid": "GUID-dossier-A-1.1-1",
+    "reference_number": "1",
+    "responsible": "lukas.graf",
+    "review_state": "dossier-state-active",
+    "start": "2010-11-11",
+    "title": "Subdossier 1.1-1.1"
+  },
+  {
+    "guid": "GUID-dossier-A-1.1-1.1.1",
+    "parent_guid": "GUID-dossier-A-1.1-1.1",
+    "reference_number": "1",
+    "responsible": "lukas.graf",
+    "review_state": "dossier-state-active",
+    "start": "2010-11-11",
+    "title": "Subdossier 1.1-1.1.1"
+  },
+  {
+    "guid": "GUID-dossier-A-1.1-1.1.1.1",
+    "parent_guid": "GUID-dossier-A-1.1-1.1.1",
+    "comments": "This dossier violates max nesting depth",
+    "reference_number": "1",
+    "responsible": "lukas.graf",
+    "review_state": "dossier-state-active",
+    "start": "2010-11-11",
+    "title": "Subdossier 1.1-1.1.1.1 (violating max nesting depth)"
+  }
+]

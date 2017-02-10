@@ -46,6 +46,10 @@ class TestBusinessRuleViolations(FunctionalTestCase):
         root = self.assert_repo_root_created()
         self.assert_deeply_nested_repo_folder_created(root)
 
+        folder = root.restrictedTraverse(
+            'ordnungsposition-1/ordnungsposition-1.1')
+        self.assert_deeply_nested_subdossier_created(folder)
+
     def assert_repo_root_created(self):
         root = self.portal.get('ordnungssystem-a')
         self.assertEqual('Ordnungssystem A', root.Title())
@@ -63,3 +67,16 @@ class TestBusinessRuleViolations(FunctionalTestCase):
             folder.Title())
 
         return folder
+
+    def assert_deeply_nested_subdossier_created(self, folder):
+        subdossier = folder.restrictedTraverse(
+            'dossier-1/'
+            'dossier-2/'
+            'dossier-3/'
+            'dossier-4'
+        )
+        self.assertEqual(
+            'Subdossier 1.1-1.1.1.1 (violating max nesting depth)',
+            subdossier.Title())
+
+        return subdossier
