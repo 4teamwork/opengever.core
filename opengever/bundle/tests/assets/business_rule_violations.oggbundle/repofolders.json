@@ -1,0 +1,20 @@
+[
+  {
+    "guid": "GUID-repofolder-A-1",
+    "parent_guid": "GUID-reporoot-A",
+    "reference_number_prefix": "1",
+    "review_state": "repositoryfolder-state-active",
+    "title_de": "Ordnungsposition 1",
+    "valid_from": "2005-01-01",
+    "valid_until": "2050-01-01"
+  },
+  {
+    "guid": "GUID-repofolder-A-1.1",
+    "parent_guid": "GUID-repofolder-A-1",
+    "reference_number_prefix": "1",
+    "review_state": "repositoryfolder-state-active",
+    "title_de": "Ordnungsposition 1.1",
+    "valid_from": "2005-01-01",
+    "valid_until": "2020-01-01"
+  }
+]
