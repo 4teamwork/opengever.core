@@ -5,6 +5,9 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Fix error on agendaItemController update.
+  [Kevin Bieri]
+
 - Make sure the breadcrumb title tooltip only gets loaded if a data-uid attribute is present.
   [mathias.leimgruber]
 
