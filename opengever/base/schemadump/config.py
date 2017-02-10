@@ -19,24 +19,25 @@ GEVER_TYPES_TO_OGGBUNDLE_TYPES = {
 }
 
 # Workflow states allowed in JSON schemas. The state that's listed first
-# indicates the initial workflow state (i.e. default state)
+# indicates the initial workflow state (i.e. default state).
+#
+# Many workflow states are disabled here because we don't support migrating
+# objects in these states from OGGBundle at this point.
 ALLOWED_REVIEW_STATES = {
     'opengever.repository.repositoryroot': [
         'repositoryroot-state-active',
     ],
     'opengever.repository.repositoryfolder': [
         'repositoryfolder-state-active',
-        'repositoryfolder-state-inactive',
+        # 'repositoryfolder-state-inactive',
     ],
     'opengever.dossier.businesscasedossier': [
         'dossier-state-active',
-        'dossier-state-archived',
-        'dossier-state-inactive',
+        # 'dossier-state-archived',
+        # 'dossier-state-inactive',
         'dossier-state-resolved',
-        'dossier-state-offered',
+        # 'dossier-state-offered',
     ],
-    # We don't support migrating types in their removed
-    # or shadow states
     'opengever.document.document': [
         'document-state-draft',
         # 'document-state-removed',

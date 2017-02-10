@@ -5,6 +5,11 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- OGGBundle schemas: Restrict allowed workflow states even further.
+  We don't currently support migration to most of non-active states, so
+  let's not advertise them.
+  [lgraf]
+
 - Add tests for Sphinx docs builds.
   [lgraf]
 
