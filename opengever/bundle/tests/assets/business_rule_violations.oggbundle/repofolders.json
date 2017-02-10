@@ -1,0 +1,57 @@
+[
+  {
+    "guid": "GUID-repofolder-A-1",
+    "parent_guid": "GUID-reporoot-A",
+    "reference_number_prefix": "1",
+    "review_state": "repositoryfolder-state-active",
+    "title_de": "Ordnungsposition 1",
+    "valid_from": "2005-01-01",
+    "valid_until": "2050-01-01"
+  },
+  {
+    "guid": "GUID-repofolder-A-1.1",
+    "parent_guid": "GUID-repofolder-A-1",
+    "reference_number_prefix": "1",
+    "review_state": "repositoryfolder-state-active",
+    "title_de": "Ordnungsposition 1.1",
+    "valid_from": "2005-01-01",
+    "valid_until": "2020-01-01"
+  },
+  {
+    "guid": "GUID-repofolder-A-2",
+    "parent_guid": "GUID-reporoot-A",
+    "reference_number_prefix": "2",
+    "review_state": "repositoryfolder-state-active",
+    "title_de": "Ordnungsposition 2 (nesting depth violations inside)",
+    "valid_from": "2005-01-01",
+    "valid_until": "2020-01-01"
+  },
+  {
+    "guid": "GUID-repofolder-A-2.1",
+    "parent_guid": "GUID-repofolder-A-2",
+    "reference_number_prefix": "1",
+    "review_state": "repositoryfolder-state-active",
+    "title_de": "Ordnungsposition 2.1",
+    "valid_from": "2005-01-01",
+    "valid_until": "2020-01-01"
+  },
+  {
+    "guid": "GUID-repofolder-A-2.1.1",
+    "parent_guid": "GUID-repofolder-A-2.1",
+    "reference_number_prefix": "1",
+    "review_state": "repositoryfolder-state-active",
+    "title_de": "Ordnungsposition 2.1.1",
+    "valid_from": "2005-01-01",
+    "valid_until": "2020-01-01"
+  },
+  {
+    "guid": "GUID-repofolder-A-2.1.1.1",
+    "parent_guid": "GUID-repofolder-A-2.1.1",
+    "description": "This repofolder violates max nesting depth",
+    "reference_number_prefix": "1",
+    "review_state": "repositoryfolder-state-active",
+    "title_de": "Ordnungsposition 2.1.1.1 (violates max nesting depth)",
+    "valid_from": "2005-01-01",
+    "valid_until": "2020-01-01"
+  }
+]
