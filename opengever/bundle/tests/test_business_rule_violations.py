@@ -49,6 +49,7 @@ class TestBusinessRuleViolations(FunctionalTestCase):
         folder = root.restrictedTraverse(
             'ordnungsposition-1/ordnungsposition-1.1')
         self.assert_deeply_nested_subdossier_created(folder)
+        self.assert_resolved_dossier_with_violations_created(folder)
 
     def assert_repo_root_created(self):
         root = self.portal.get('ordnungssystem-a')
@@ -80,3 +81,26 @@ class TestBusinessRuleViolations(FunctionalTestCase):
             subdossier.Title())
 
         return subdossier
+
+    def assert_resolved_dossier_with_violations_created(self, folder):
+        dossier = folder.restrictedTraverse('dossier-5')
+        subdossier = dossier.restrictedTraverse('dossier-7')
+
+        self.assertEqual(
+            'Dossier 1.1-2 (resolved, constraint violations inside)',
+            dossier.Title())
+
+        self.assertEqual(
+            u'dossier-state-resolved',
+            api.content.get_state(dossier))
+
+        self.assertEqual(
+            u'dossier-state-active',
+            api.content.get_state(subdossier))
+
+        document = dossier.restrictedTraverse('document-1')
+        self.assertEqual(
+            'Loose Document outside subdossier (in resolved dossier)',
+            document.Title())
+
+        return dossier
