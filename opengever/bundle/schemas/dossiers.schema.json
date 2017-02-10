@@ -246,10 +246,7 @@
                 "review_state": {
                     "enum": [
                         "dossier-state-active",
-                        "dossier-state-archived",
-                        "dossier-state-inactive",
-                        "dossier-state-resolved",
-                        "dossier-state-offered"
+                        "dossier-state-resolved"
                     ],
                     "type": "string"
                 },
