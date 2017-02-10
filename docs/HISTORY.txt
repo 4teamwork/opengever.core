@@ -5,6 +5,9 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Add tests for Sphinx docs builds.
+  [lgraf]
+
 - Fix error on agendaItemController update.
   [Kevin Bieri]
 
