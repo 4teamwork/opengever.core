@@ -1,0 +1,87 @@
+trix-toolbar {
+
+  border-bottom: 1px solid $gray-dark;
+  height: 42px;
+  position: relative;
+
+  &:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  &.active {
+
+    &:before {
+      content: none;
+    }
+
+    .button-group {
+      opacity: 1;
+    }
+
+    .button-group button:disabled:before {
+      opacity: .2;
+    }
+
+  }
+
+  &.pin-pinned {
+    background-color: $white;
+    box-shadow: 0 0 10px 0 $shadow-black-color;
+    &:before {
+      content: "";
+      display: block;
+      width: 20px;
+      height: 100%;
+      position: absolute;
+      left: -20px;
+      top: 0;
+      background: $white;
+    }
+    &:after {
+      content: "";
+      display: block;
+      width: 20px;
+      height: 100%;
+      position: absolute;
+      right: -20px;
+      top: 0;
+      background: $white;
+    }
+  }
+
+  @include clearfix();
+
+  .button-group {
+
+    float: left;
+    margin-right: 5px;
+    opacity: .2;
+
+    button {
+      @extend .fa;
+
+      border-bottom: none !important;
+      opacity: 1;
+
+      &.bold { @extend .fa-bold; };
+      &.italic { @extend .fa-italic; };
+      &.link { @extend .fa-link; };
+      &.strike { @extend .fa-strikethrough; };
+      &.quote { @extend .fa-quote-left; };
+      &.code { @extend .fa-code; };
+      &.bullet { @extend .fa-list-ul; };
+      &.number { @extend .fa-list-ol; };
+      &.decreaseBlockLevel { @extend .fa-outdent; };
+      &.increaseBlockLevel { @extend .fa-indent; };
+      &.undo { @extend .fa-undo; };
+      &.redo { @extend .fa-repeat; };
+
+    }
+  }
+
+}

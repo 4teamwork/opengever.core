@@ -40,7 +40,6 @@ setup(name='opengever.{{{package.name}}}',
         'setuptools',
         'z3c.autoinclude',
         'opengever.core',
-        'plonetheme.teamraum',
         'ftw.tika',
         'ftw.upgrade',
         # We not depend directly on ftw.inflator to avoid ConfigurationConflictError.

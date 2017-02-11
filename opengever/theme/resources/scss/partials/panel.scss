@@ -1,0 +1,47 @@
+.panel {
+
+  margin-bottom: 20px;
+
+  .panel-title {
+    margin: 0;
+  }
+
+  .panel-header {
+    background-color: $gray-dark;
+    border-top-left-radius: $border-radius;
+    border-top-right-radius: $border-radius;
+    padding: 10px 20px;
+  }
+
+  .panel-body {
+    border-color: $gray-dark;
+    border-style: solid;
+    border-width: 0 1px 1px;
+    padding: 10px 20px;
+  }
+
+  .panel-footer {
+    padding: 10px 20px;
+    background-color: $gray-dark;
+    border-bottom-left-radius: $border-radius;
+    border-bottom-right-radius: $border-radius;
+
+    .actionButtons {
+      padding: 0;
+      .regular_buttons {
+        @include clearfix();
+        > li {
+          > a {
+            border-radius: 0;
+          }
+          &:last-of-type {
+            > a {
+              border-bottom-left-radius: $border-radius;
+              border-bottom-right-radius: $border-radius;
+            }
+          }
+        }
+      }
+    }
+  }
+}

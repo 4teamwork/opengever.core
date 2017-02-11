@@ -1,0 +1,61 @@
+#opengever_meeting_meeting, #opengever_meeting_protocol, .portaltype-opengever-contact-organization, .portaltype-opengever-contact-person {
+
+  .collapsible {
+    width: 100%;
+    margin-bottom: $padding-factor * 8px;
+    border-radius: $border-radius;
+    box-sizing: border-box;
+    .collapsible-header {
+      display: table;
+      width: 100%;
+      background-color: $light-blue;
+      border-radius: $border-radius + 2;
+      color: $white;
+      border-right: 1px solid $light-blue;
+      > .button {
+        display: table-cell;
+        border-right: 1px solid $gray-dark;
+        border-top-left-radius: $border-radius;
+        border-bottom-left-radius: $border-radius;
+        @extend .fa;
+        @extend .fa-plus;
+        &:focus {
+          box-shadow: none;
+        }
+      }
+      > .label {
+        vertical-align: middle;
+        display: table-cell;
+        width: 100%;
+        margin: 0;
+        padding-left: $padding-factor * 16px;
+        border-radius: $border-radius;
+        line-height: 20px;
+      }
+    }
+    .collapsible-content {
+      display: none;
+      @include clearfix();
+      width: 100%;
+      box-sizing: border-box;
+      padding: $padding-factor * 16px $padding-factor * 18px;
+      border: 1px solid $gray-dark;
+      border-top: none;
+      border-bottom-left-radius: $border-radius;
+      border-bottom-right-radius: $border-radius;
+    }
+    &.open {
+      .collapsible-header {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        > .button {
+          @extend .fa-minus;
+          border-bottom-left-radius: 0;
+        }
+      }
+      .collapsible-content {
+        display: inline-block;
+      }
+    }
+  }
+}

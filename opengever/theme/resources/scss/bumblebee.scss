@@ -1,0 +1,97 @@
+.previewContainer .imageContainer {
+    width: 33%;
+    padding-bottom: 1em;
+}
+.simplelayout-block-wrapper .previewContainer .imageContainer a{
+    height:200px;
+}
+
+.previewContainer .imageContainer:hover > a > .previewDesc {display:none;}
+
+@media screen and (max-width: 699px) {
+.previewContainer .imageContainer {
+    width: 50%;
+}
+}
+
+.portaltype-classificationitem .previewContainer .imageContainer {
+    width: 50%;
+    height:auto;
+}
+
+.gallery .previewItem,
+.portaltype-classificationitem .previewItem,
+.file.BlockOverallWrapper .previewItem{
+    height: 100%;
+    display: block;
+    width: 200px;
+    box-shadow: 4px 4px 10px #aaa;
+    border-radius: 3px;
+    border-left: 1px solid rgba(80,80,80,0.2);
+    border-top: 1px solid rgba(80,80,80,0.2);
+}
+
+.file.BlockOverallWrapper .previewContainer {
+    margin-bottom: 1em;
+}
+
+.gallery .imageContainer .previewItem {
+    width: 160px;
+}
+
+.file.BlockOverallWrapper .previewItem {
+    float:left;
+}
+.BlockOverallWrapper .fileinfo {
+    float:right;
+    width:auto;
+    line-height: 1.5em;
+    max-width: calc(100% - 210px);
+}
+.fileinfo .mimeicon {
+    padding-right: 5px;
+}
+.fileinfo th {
+    vertical-align: top;
+    text-align:left;
+    padding-right: 5px;
+}
+.previewContainer {
+    zoom: 1;
+}
+.previewContainer:before, .previewContainer:after {
+   content: "\0020";
+   display: block;
+   height: 0;
+   visibility: hidden;
+ }
+
+.previewContainer:after { clear: both; }
+
+/* Remove colorbox animations: see ftw.colorbox.resources/colorbox.css */
+#cboxClose:hover{background-position:-100px -25px;}
+#cboxNext:hover{background-position:-75px -25px;}
+#cboxPrevious:hover{background-position:-51px -25px;}
+
+#file-preview .fileDetails {
+    width: 100%;
+}
+
+.searchItem {
+    float: left;
+    border-bottom: 1px solid #ddd;
+    width: 100%;
+    padding-bottom: 1em;
+}
+.searchInfos {
+    float: left;
+    width: 50%;
+}
+.searchImage {
+    margin-top: 1em;
+    float: left;
+    padding-left: 2em;
+}
+.searchInfos dt img {
+    margin-right: 0.5em;
+}

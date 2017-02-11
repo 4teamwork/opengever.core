@@ -1,0 +1,27 @@
+#content trix-editor, .trix-editor-proxy {
+
+  $editor-line-height: 18px;
+
+  min-height: 200px;
+  padding: $padding-factor * 25px $padding-factor * 15px;
+  border: 1px solid $gray-dark;
+  box-sizing: border-box;
+  margin-top: -1px;
+  line-height: $editor-line-height;
+
+  ul, ol {
+    margin: 0 0 0 1.4em;
+    li {
+      line-height: $editor-line-height;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+
+  li {
+    > ul, > ol {
+      list-style-type: inherit;
+    }
+  }
+
+}

@@ -1,0 +1,393 @@
+$overlay-padding: 50px;
+$spacing: 8px;
+
+.ftw-showroom-open {
+  overflow: hidden;
+}
+
+.ftw-showroom-button {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 15px 15px;
+}
+
+.ftw-showroom-backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(0, 0, 0, .6);
+  z-index: -1;
+}
+
+#ftw-showroom-next {
+  @extend .icon-angle-right;
+  margin-left: 8px;
+}
+
+#ftw-showroom-prev {
+  @extend .icon-angle-left;
+  margin-right: 8px;
+}
+
+#ftw-showroom-close {
+  @extend .icon-close;
+  margin-left: 30px;
+}
+
+#action-view {
+  @extend .fa-eye;
+}
+
+#action-edit {
+  @extend .fa-file-text;
+}
+
+#action-checkout {
+  @extend .fa-pencil;
+}
+
+#action-download > a {
+  @extend .fa-download;
+}
+
+#action-checkin {
+  @extend .fa-floppy-o;
+}
+
+#action-pdf {
+  @extend .fa-file-pdf-o;
+}
+
+#file-preview {
+  box-sizing: border-box;
+  width: calc(100% - 400px);
+  height: 100%;
+  background-color: #fff;
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
+  position: relative;
+
+  > iframe {
+    width: 100%;
+    height: 100%;
+  }
+
+  > img {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.file-actions > li > a { @include button-fluid(); }
+
+// Do not overlap download confirmation
+.ftw-showroom {
+  background-color: #fff;
+  z-index: 8000;
+  top: $overlay-padding - 30px;
+  right: $overlay-padding;
+  bottom: $overlay-padding;
+  left: $overlay-padding;
+
+  > nav {
+    font-size: 18px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: $spacing * 2;
+
+    > * {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    > a {
+      cursor: pointer;
+    }
+
+  }
+
+  > aside {
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    background-color: #fff;
+    padding: $spacing * 2;
+    padding-top: 45px;
+    width: 400px;
+    float: right;
+    box-sizing: border-box;
+    height: 100%;
+    border-left: 1px solid $gray-dark;
+
+    > header {
+      box-sizing: border-box;
+      width: 100%;
+      display: table;
+      height: auto;
+      border-bottom: 1px solid $gray-dark;
+      margin-bottom: $spacing;
+      padding: $spacing;
+      padding-left: 0;
+      > div {
+        width: 100%;
+        display: table-cell;
+        vertical-align: top;
+      }
+
+      .title {
+        font-weight: bold;
+        font-size: 16px;
+        word-break: break-word;
+        color: #000;
+
+        &:hover, &:visited {
+          color: #000;
+          text-decoration: none;
+        }
+      }
+
+      .filesize {
+        font-style: italic;
+        white-space: nowrap;
+      }
+    }
+
+    > main {
+      margin-bottom: $spacing;
+      padding-bottom: $spacing;
+    }
+
+    .metadata {
+      width: 100%;
+
+      tr {
+        &:first-child td {
+          padding-top: 0;
+        }
+
+        td {
+          border-bottom: 1px solid $gray-dark;
+        }
+      }
+
+      td {
+        padding: $spacing * 1;
+
+        &:first-child {
+          padding-left: 0;
+          padding-right: 0;
+        }
+
+        &:last-child {
+          padding-right: 0;
+        }
+      }
+
+      .title {
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.showroom-item {
+  cursor: pointer;
+}
+
+@mixin documentoverview() {
+  width: 48%;
+  margin-right: 2%;
+  display: table-cell;
+  vertical-align: top;
+  @media screen and (max-width: 1024px) {
+    width: 100%;
+    margin-bottom: 1em;
+    display: block;
+  }
+}
+
+.feature-bumblebee {
+
+  .search-item-wrapper {
+      display: table;
+      width: 100%;
+      padding-bottom: 1em;
+      border-bottom: 1px solid $gray-dark;
+      .searchItem {
+        width: 60%;
+        display: table-cell;
+        @media screen and (max-width: 769px) {
+          display: block;
+        }
+        vertical-align: top;
+        padding-right: 1em;
+      }
+      .searchImage {
+        width: 150px;
+        height: 150px;
+        box-shadow: 0 0 3px 0 rgba(0,0,0,0.3);
+        margin-top: 1.5em;
+        .bumblebeeSearchPreview {
+          max-width: 100%;
+          height: auto;
+        }
+      }
+  }
+
+  .preview-listing .bumblebeeGalleryShowMore {
+    margin: auto;
+    display: none;
+  }
+
+  #content .ViewChooser {
+    @include clearfix();
+    list-style-type: none;
+    display: block;
+    margin: -22px 22px 22px 0;
+
+    li {
+      margin: 0;
+      float: right;
+
+      &.active {
+        border-bottom: 2px solid #000;
+        background-color: #e6e6e6;
+      }
+    }
+
+    .documentsList, .documentsGallery {
+      @extend .fa;
+      text-align: center;
+      display: inline-block;
+      text-indent: 0;
+      font-size: 0;
+      width: 28px;
+      background-position: 6px 4px;
+      background-size: 16px;
+      background-repeat: no-repeat;
+
+      &:visited {
+        color: $black;
+      }
+
+      &:before {
+        font-size: 16px;
+        display: inline-block;
+        vertical-align: middle;
+      }
+    }
+
+    .documentsGallery {
+      @extend .fa-th-large;
+    }
+
+    .documentsList {
+      @extend .fa-th-list;
+    }
+
+  }
+
+  #tabbedview-body #overview_overview .documentMetadata {
+    @include documentoverview();
+    table.listing {
+      width: 100%;
+    }
+  }
+
+  .documentPreview {
+    @include documentoverview();
+    > img {
+      max-width: 100%;
+    }
+  }
+
+}
+
+$image-container-margin: 2%;
+
+@mixin grid($columns: 1) {
+  width: (100% / $columns) - $image-container-margin + ($image-container-margin / $columns);
+  margin: 0 $image-container-margin $image-container-margin 0;
+  &:nth-child(#{$columns}n-#{$columns}) {
+    margin-right: 0;
+  }
+}
+
+.bumblebee-thumbnail {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  box-sizing: border-box;
+  height: 200px;
+}
+
+.bumblebee-document-wrapper {
+  display: table;
+  width: 100%;
+}
+
+.imageContainer {
+  @include grid(2);
+  @media (min-width: 770px) {
+    &:nth-child(2n-2) {
+      margin-right: $image-container-margin;
+    }
+    @include grid(4);
+  }
+  @media (min-width: 1200px) {
+    &:nth-child(4n-4) {
+      margin-right: $image-container-margin;
+    }
+    @include grid(5);
+  }
+  @media (min-width: 1919px) {
+    &:nth-child(5n-5) {
+      margin-right: $image-container-margin;
+    }
+    @include grid(6);
+  }
+
+  border-radius: $border-radius;
+  float: left;
+  position: relative;
+  border: 1px solid $gray-dark;
+  box-sizing: border-box;
+
+  &:hover {
+    box-shadow: 0 0 10px 0 $gray-dark;
+  }
+
+  .file-mimetype {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 16px;
+    padding: 0;
+    z-index: 1;
+  }
+
+  .bumblebeeTitle {
+    display: block;
+    height: 3em;
+    line-height: 3em;
+    padding: 1em;
+    background-color: $gray-light;
+    text-align: center;
+    font-weight: bold;
+
+    span {
+      max-height: 3em;
+      vertical-align: middle;
+      line-height: 1.5em;
+      display: inline-block;
+      overflow: hidden;
+      width: 100%;
+      text-overflow: ellipsis;
+    }
+  }
+
+}

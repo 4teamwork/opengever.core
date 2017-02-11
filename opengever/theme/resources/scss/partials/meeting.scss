@@ -1,0 +1,454 @@
+#meeting_location {
+  @extend .fa;
+  @extend .fa-map-marker;
+}
+
+#meeting_date {
+  @extend .fa;
+  @extend .fa-calendar;
+}
+
+#meeting_time {
+  @extend .fa;
+  @extend .fa-clock-o;
+}
+
+#meeting_secretary {
+  @extend .fa;
+  @extend .fa-pencil;
+}
+
+#meeting_number {
+  @extend .fa;
+  @extend .fa-hashtag;
+}
+
+#meeting_presidency {
+  @extend .fa;
+  @extend .fa-user-secret;
+}
+
+#meeting_participants {
+  @extend .gv;
+  @extend .gv-contact;
+}
+
+#related_dossier {
+  @extend .gv;
+  @extend .gv-folder;
+}
+
+.portaltype-opengever-meeting-committeecontainer,
+.portaltype-opengever-meeting-committee {
+  #plone-document-byline {
+    display: none;
+  }
+}
+
+#opengever_meeting_meeting {
+
+  p {
+    margin: 16px * $padding-factor 0;
+  }
+
+  #plone-document-byline {
+    display: none;
+  }
+
+  $sidebar-list-height: 20px !default;
+  $sidebar-list-spacing: 8px !default;
+
+  margin-bottom: 50px;
+
+  .sidebar {
+    width: 300px;
+    float: left;
+
+    .pending-held {
+      @extend .fa;
+      @extend .fa-gavel;
+    }
+
+    .pending-closed,
+    .held-closed{
+      @extend .fa;
+      @extend .fa-check;
+    }
+
+    .workflow_state {
+      &.pending:before {
+        content: "";
+        @include sprite();
+        @extend .icon-status-open;
+      }
+      &.closed:before {
+        content: "";
+        @include sprite();
+        @extend .icon-status-closed;
+      }
+      &.held:before {
+        content: "";
+        @include sprite();
+        @extend .icon-status-done;
+      }
+    }
+
+    .metadata {
+
+      &.full-width {
+        .button {
+          width: 100%;
+        }
+      }
+
+      .button {
+        width: 50%;
+      }
+
+      .actionButtons {
+        width: 50%;
+      }
+
+      dl {
+        > dt {
+          float: left;
+          font-size: $sidebar-list-height;
+          min-width: $sidebar-list-height;
+          padding: $sidebar-list-spacing $sidebar-list-spacing $sidebar-list-spacing 0;
+          text-align: center;
+        }
+        > dd {
+          @include clearfix();
+          line-height: $sidebar-list-height;
+          padding: $sidebar-list-spacing 0;
+          > ul {
+            @include list(plain);
+            float: left;
+          }
+        }
+      }
+    }
+
+    .documents {
+      .title {
+        font-weight: bold;
+        font-size: 14px;
+      }
+
+      .item {
+        padding-top: 6px;
+      }
+      .agendaitem_list {
+        padding-bottom: 21px;
+      }
+      .generate-protocol {
+        @extend .fa;
+        @extend .fa-cogs;
+        float: right;
+        font-size: 15px;
+        &:hover {
+          text-decoration: none;
+        }
+      }
+      .refresh-protocol {
+        @extend .fa;
+        @extend .fa-refresh;
+        float: right;
+        font-size: 15px;
+        &:hover {
+          text-decoration: none;
+        }
+      }
+      .download-agendaitem-list-btn,
+      .download-protocol-btn {
+        @extend .fa;
+        @extend .fa-download;
+        float: right;
+        margin-left: 8px;
+        font-size: 15px;
+        &:hover {
+          text-decoration: none;
+        }
+      }
+      .fileinfo {
+        padding-top: 8px;
+
+        span {
+          margin-left: 6px;
+          display: list-item;
+        }
+      }
+    }
+
+    .excerpts {
+      .title {
+        font-weight: bold;
+        font-size: 14px;
+      }
+
+      p {
+        margin-top: 6px;
+        margin-left: 6px;
+      }
+      ul {
+        @include list(plain);
+        list-style-type: None;
+        margin-left: 6px;
+        padding-top: 6px;
+      }
+      .generate-excerpt {
+        @extend .fa;
+        @extend .fa-plus;
+        float: right;
+        font-size: 15px;
+        &:hover {
+          text-decoration: none;
+        }
+      }
+    }
+
+  }
+
+  .content {
+    width: 100%;
+    box-sizing: border-box;
+    padding-left: 350px;
+    .collapsible {
+      float: left;
+    }
+  }
+}
+
+table#agenda_items {
+  float: left;
+  tbody {
+    tr {
+      &.expanded {
+        .title {
+          .attachements {
+            display: block;
+            .toggle-attachements-btn {
+            }
+          }
+          .summary {
+            display: block;
+          }
+        }
+        .toggle-attachements {
+          .toggle-attachements-btn {
+            @extend .fa-caret-down;
+          }
+        }
+      }
+      &.proposal {
+        .actions .delete-agenda-item {
+          @extend .fa-times;
+        }
+      }
+      td {
+        vertical-align: top;
+      }
+      &.ui-sortable-helper {
+        box-shadow: 10px 10px 10px 0 $shadow-black-color;
+        border: 1px solid $gray-dark;
+      }
+      .sortable-handle {
+        width: 10px;
+        @extend .fa;
+        @extend .fa-bars;
+        display: table-cell;
+        &:hover {
+          cursor: move;
+        }
+      }
+      .number {
+        width: 10px;
+      }
+      .title {
+        padding-left: $padding-factor * 16px * 2;
+        > span {
+          display: block;
+        }
+        .attachements {
+          @include list(plain);
+          float: left;
+          margin: $padding-factor * 16px 0;
+          margin-right: $padding-factor * 18px;
+          display: none;
+        }
+        .summary {
+          margin: $padding-factor * 16px 0;
+          float: right;
+          display: none;
+        }
+      }
+      .toggle-attachements {
+        width: 10px;
+        .toggle-attachements-btn {
+          @extend .fa;
+          @extend .fa-caret-right;
+          font-size: 20px;
+          &:hover {
+            text-decoration: none;
+          }
+        }
+        &:hover {
+          cursor: pointer;
+        }
+      }
+      .actions {
+        width: 106px;
+        > .button-group .button {
+          width: 47px;
+        }
+        .delete-agenda-item {
+          @extend .fa;
+          @extend .fa-trash-o;
+        }
+        .edit-agenda-item {
+          @extend .fa;
+          @extend .fa-pencil;
+        }
+        .decide-agenda-item, .revise-agenda-item {
+          > span {
+            @extend .fa;
+            @extend .fa-check;
+          }
+        }
+        .reopen-agenda-item > span {
+          @extend .fa;
+          @extend .fa-reply;
+        }
+      }
+    }
+    .paragraph {
+      .title {
+        font-weight: bold;
+        padding-left: $padding-factor * 16px;
+      }
+    }
+  }
+}
+
+#committees_view {
+  .committee_box {
+    float: left;
+    width: 25em;
+    height: 15em;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    margin: 1em;
+    padding-left: 1em;
+    padding-right: 1em;
+    border-radius: 2px;
+    .header {
+      height: 5em;
+      a {
+        color: #205c90;
+        &:visited,&:hover {
+          color: #205c90;
+        }
+      }
+    }
+    &.inactive {
+      background-color: #e6e6e6;
+      border-color: #bbb;
+      .header a{
+        color: #888
+      }
+    }
+  }
+  .unscheduled_proposals {
+    padding-bottom: .75em;
+    border-bottom: 1px solid #ccc;
+    .number {
+      float: right;
+      background: #71a971;
+      padding: 2px 6px;
+      border-radius: 10px;
+      font-size: 12px;
+      color: #fff;
+      &:hover, &:visited {
+        text-decoration: none;
+      }
+    }
+    .unscheduled_number {
+      background: #ff7070;
+    }
+  }
+  .meetings {
+    list-style-type: none;
+    margin-top: 2em;
+    margin-left: 0em;
+  }
+}
+
+$spacing: 8px;
+
+#content #period_listing {
+
+  list-style-type: none;
+  vertical-align: middle;
+
+  li.period {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  > li {
+    display: table;
+    width: 100%;
+    border-bottom: 1px solid #eee;
+    padding: 15px 0;
+    margin-bottom: 0;
+  }
+
+  .title {
+    display: table-cell;
+    width: 250px;
+    vertical-align: top;
+  }
+
+  .download {
+    width: 600px;
+  }
+
+  .actions {
+    display: table-cell;
+    vertical-align: middle;
+    li {
+      display: inline;
+      margin-left: 5px;
+    }
+    a {
+      padding: $spacing;
+      padding-left: $spacing;
+      color: #000;
+      border: 1px solid $gray-dark;
+      margin-bottom: $spacing;
+      border-radius: 2px;
+      transition: background-color .2s ease-out;
+
+      &:hover {
+        text-decoration: none;
+        background-color: $gray-light;
+      }
+
+      &:before {
+        @extend .fa;
+        font-size: 16px;
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: 5px;
+      }
+
+      &.edit_period:before {
+        @extend .fa-pencil;
+      }
+
+      &.download_toc:before {
+        @extend .fa-download;
+      }
+    }
+  }
+}

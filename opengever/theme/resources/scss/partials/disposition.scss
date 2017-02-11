@@ -1,0 +1,188 @@
+#content #disposition_overview {
+  margin: 0 15px;
+
+  .progress {
+    .answer {
+
+      .answerType:before {
+        @extend .fa;
+      }
+
+      &.add .answerType:before {
+        @extend .gv;
+        color:#797;
+        content: $created;
+      }
+      &.edit .answerType:before {
+        @extend .fa-pencil;
+      }
+      &.appraise .answerType:before {
+        @extend .fa-gavel;
+      }
+      &.dispose .answerType:before {
+        @extend .fa-briefcase;
+      }
+      &.archive .answerType:before {
+        @extend .fa-database;
+      }
+      &.close .answerType:before {
+        @extend .fa-trash;
+      }
+    }
+    .details.collapsible {
+      .collapsible-header span:before {
+        @extend .fa;
+        @extend .fa-plus;
+        padding-right: 13px;
+      }
+      .collapsible-content {
+        display: none;
+      }
+      &.open {
+        .collapsible-header span:before {
+          @extend .fa-minus;
+        }
+        .collapsible-content {
+          display: inline-block;
+        }
+      }
+    }
+  }
+
+  .list-group {
+    width: 100%;
+    display: table;
+    margin-left: 0px;
+
+  }
+
+  .list-group-item {
+    display: table;
+
+    .data-cell {
+      display: table-cell;
+      width: 100%;
+    }
+  }
+
+  .list-group-cell {
+    display: table-cell;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 5px;
+
+    .title {
+      margin: 0;
+
+      a:visited {
+        color: #205C90;
+      }
+
+      .reference_number {
+        padding-right: 10px;
+      }
+
+    }
+
+    .meta {
+      padding-top: 5px;
+    }
+
+    .meta-value {
+      color: grey;
+      padding-right: 20px;
+    }
+  }
+
+  .action-cell {
+    width: 1%;
+    display: table-cell;
+    white-space: nowrap;
+    border-collapse: collapse;
+    vertical-align: middle;
+
+    .icon_button{
+      color: #ADADAD;
+
+      &:hover{
+        text-decoration: none;
+      }
+      &:hover:before{
+        color: black;
+      }
+      &.active {
+        color: black;
+      }
+      &:before {
+        content: "";
+        @extend .fa;
+        font-size: 19px;
+        padding-left: 6px;
+        padding-right: 12px;
+      }
+      &.archive:before {
+        @extend .fa-check;
+      }
+      &.not_archive:before {
+        @extend .fa-times;
+      }
+    }
+  }
+
+  .actionButtons {
+    a {
+      &:before {
+        @extend .fa;
+      }
+
+      &.disposition-transition-appraise:before { content: $appraise; }
+      &.disposition-transition-dispose:before { content: $dispose; }
+      &.disposition-transition-archive:before { content: $archive; }
+      &.disposition-transition-close:before { content: $disposition-close; }
+      &.sip_download:before { content: $sip_download; }
+      &.appraisal_list:before { content: $appraisal_list; }
+      &.removal_protocol:before { @extend .fa-download; }
+    }
+
+
+    .transitions {
+      float: left;
+    }
+    .actions {
+      float: right;
+    }
+    li {
+      display: inline-block;
+    }
+  }
+
+  .workflow_wizard {
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    margin: 1em 0;
+    padding: 0.5em 0;
+
+    .wizard_steps {
+      list-style: none;
+      padding: 1em 0.5em;
+      li {
+        float:left;
+        display: inline;
+        padding-right: 2em;
+        &:after {
+          content: '〉';
+          color: #000;
+          padding-left: 2em;
+        }
+        &:last-child:after {
+          content: '';
+          display: none;
+        }
+        &.selected {
+          font-weight: bold;
+        }
+      }
+    }
+
+  }
+
+}

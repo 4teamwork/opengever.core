@@ -1,0 +1,52 @@
+/*
+deco grid: 16 cells
+cell width: 36px
+gutter: 28px
+margin: 4px
+total width: 1004px
+*/
+
+div.row {
+  float: left;
+  width: 100%;
+  display: block;
+  position: relative;
+}
+div.cell {
+  position: relative;
+  float: left;
+  left: 100%;
+}
+div.width-1 { width:3.58566%; }
+div.width-2 { width:9.96016%; }
+div.width-3 { width:16.33466%; }
+div.width-4 { width:22.70916%; }
+div.width-5 { width:29.08367%; }
+div.width-6 { width:35.45817%; }
+div.width-7 { width:41.83267%; }
+div.width-8 { width:48.20717%; }
+div.width-9 { width:54.58167%; }
+div.width-10 { width:60.95618%; }
+div.width-11 { width:67.33068%; }
+div.width-12 { width:73.70518%; }
+div.width-13 { width:80.07968%; }
+div.width-14 { width:86.45418%; }
+div.width-15 { width:92.82869%; }
+div.width-16 { width:99.20319%; }
+div.width-full { width:99.20319%; }
+div.position-0  { margin-left:-99.60159%; }
+div.position-1  { margin-left:-93.22709%; }
+div.position-2  { margin-left:-86.85259%; }
+div.position-3  { margin-left:-80.47809%; }
+div.position-4  { margin-left:-74.10359%; }
+div.position-5  { margin-left:-67.72908%; }
+div.position-6  { margin-left:-61.35458%; }
+div.position-7  { margin-left:-54.98008%; }
+div.position-8  { margin-left:-48.60558%; }
+div.position-9  { margin-left:-42.23108%; }
+div.position-10  { margin-left:-35.85657%; }
+div.position-11  { margin-left:-29.48207%; }
+div.position-12  { margin-left:-23.10757%; }
+div.position-13  { margin-left:-16.73307%; }
+div.position-14  { margin-left:-10.35857%; }
+div.position-15  { margin-left:-3.98406%; }
