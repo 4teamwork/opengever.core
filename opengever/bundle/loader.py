@@ -74,19 +74,19 @@ class BundleLoader(object):
         log.info('')
         log.info('Stats for %r' % bundle)
         log.info('=' * 80)
-        for json_name, count in bundle.stats['counts'].items():
+        for json_name, count in bundle.stats['bundle_counts'].items():
             log.info("%-20s %s" % (json_name, count))
 
     def _load_items(self):
         self._items = []
-        self._stats = {'counts': {}}
+        self._stats = {'bundle_counts': {}}
         for json_name, portal_type in BUNDLE_JSON_TYPES.items():
             json_path = os.path.join(self.bundle_path, json_name)
 
             try:
                 with codecs.open(json_path, 'r', 'utf-8-sig') as json_file:
                     items = json.load(json_file)
-                    self._stats['counts'][json_name] = len(items)
+                    self._stats['bundle_counts'][json_name] = len(items)
             except IOError as exc:
                 log.info('%s: %s, skipping' % (json_name, exc.strerror))
                 continue
