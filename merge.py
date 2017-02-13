@@ -22,9 +22,22 @@ import os
 import re
 
 
-XML_CHILD_INDENT = 2
-XML_ATTR_INDENT = 4
+XML_CHILD_INDENT = 4
+XML_ATTR_INDENT = 6
 _marker = object()
+
+# Tags to format on a single line
+XML_FORMAT_ONELINE = (
+    'object',
+    'property',
+    'index',
+)
+
+# Tags to format on multiple lines
+XML_FORMAT_MULTILINE = (
+    'layer',
+    'configlet',
+)
 
 
 def step(message):
@@ -439,7 +452,16 @@ def prettyformat(xmldoc):
         prefix, indent, start, attributes, end = match.groups()
         attr_prefix = '\n' + indent + (' ' * XML_ATTR_INDENT)
         attr_regex = re.compile(r'([^ ]*="[^"]*") ')
-        if len(attr_regex.findall(attributes)) > 0:
+        tagname = start.lstrip('<').strip()
+
+        if tagname in XML_FORMAT_ONELINE:
+            apply_multiline = False
+        elif tagname in XML_FORMAT_MULTILINE:
+            apply_multiline = True
+        else:
+            apply_multiline = len(attr_regex.findall(attributes)) > 0
+
+        if apply_multiline:
             attributes = attr_prefix + attr_regex.sub(
                 '\g<1>' + attr_prefix, attributes)
         return ''.join((prefix, indent, start, attributes, end))
@@ -471,7 +493,7 @@ def c14n(xmlstring):
     output = StringIO()
     parser = etree.XMLParser(remove_blank_text=True)
     etree.parse(StringIO(xmlstring), parser).write_c14n(output)
-    return output.getvalue()
+    return output.getvalue().strip()
 
 
 
