@@ -1,4 +1,6 @@
 from opengever.base import _ as base_mf
+from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_UNWORTHY
+from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_WORTHY
 from opengever.base.behaviors.utils import set_attachment_content_disposition
 from opengever.base.reporter import DATE_NUMBER_FORMAT
 from opengever.base.reporter import StringTranslater
@@ -7,6 +9,19 @@ from opengever.disposition import _
 from opengever.dossier import _ as dossier_mf
 from plone import api
 from Products.Five.browser import BrowserView
+from zope.globalrequest import getRequest
+from zope.i18n import translate
+
+
+def readable_appraisal(value):
+    if value is None:
+        return value
+    elif value:
+        label = ARCHIVAL_VALUE_WORTHY
+    else:
+        label = ARCHIVAL_VALUE_UNWORTHY
+
+    return translate(label, domain="opengever.base", context=getRequest())
 
 
 class DispositionExcelExport(BrowserView):
@@ -44,7 +59,8 @@ class DispositionExcelExport(BrowserView):
              'transform': StringTranslater(
                  self.request, 'opengever.base').translate},
             {'id': 'appraisal',
-             'title': base_mf(u'label_appraisal', default=u'Appraisal')},
+             'title': _(u'label_appraisal', default=u'Appraisal'),
+             'transform': readable_appraisal},
         ]
 
     def __call__(self):

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-02-01 15:26+0000\n"
+"POT-Creation-Date: 2017-02-07 14:50+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,7 +22,7 @@ msgstr "Aussonderungsangebot erstellen"
 msgid "Disposition"
 msgstr "Angebot"
 
-#: ./opengever/disposition/browser/excel_export.py:59
+#: ./opengever/disposition/browser/excel_export.py:75
 msgid "The report could not been generated."
 msgstr "Der Report konnte nicht generiert werden."
 
@@ -64,8 +64,13 @@ msgstr "Aktion"
 msgid "label_actor"
 msgstr "Akteur"
 
+#. Default: "Appraisal"
+#: ./opengever/disposition/browser/excel_export.py:62
+msgid "label_appraisal"
+msgstr "Bewertungsentscheid"
+
 #. Default: "Archive"
-#: ./opengever/disposition/browser/templates/overview.pt:23
+#: ./opengever/disposition/browser/templates/overview.pt:24
 msgid "label_archive"
 msgstr "Archivieren"
 
@@ -75,7 +80,7 @@ msgid "label_archived"
 msgstr "Archiviert"
 
 #. Default: "Details:"
-#: ./opengever/disposition/browser/templates/overview.pt:166
+#: ./opengever/disposition/browser/templates/overview.pt:181
 msgid "label_details"
 msgstr "Details:"
 
@@ -96,17 +101,17 @@ msgid "label_disposition_edited"
 msgstr "Angebot bearbeitet"
 
 #. Default: "Download disposition package"
-#: ./opengever/disposition/browser/overview.py:54
+#: ./opengever/disposition/browser/overview.py:52
 msgid "label_dispositon_package_download"
 msgstr "Ablieferungspaket herunterladen"
 
 #. Default: "Don't archive"
-#: ./opengever/disposition/browser/templates/overview.pt:90
+#: ./opengever/disposition/browser/templates/overview.pt:103
 msgid "label_dont_archive"
 msgstr "Nicht archivieren"
 
 #. Default: "Dossiers"
-#: ./opengever/disposition/browser/templates/overview.pt:20
+#: ./opengever/disposition/browser/templates/overview.pt:21
 msgid "label_dosisers"
 msgstr "Dossiers"
 
@@ -117,12 +122,12 @@ msgid "label_dossiers"
 msgstr "Dossiers"
 
 #. Default: "Download removal protocol"
-#: ./opengever/disposition/browser/overview.py:60
+#: ./opengever/disposition/browser/overview.py:58
 msgid "label_download_removal_protocol"
 msgstr "Löschprotokoll herunterladen"
 
 #. Default: "Export appraisal list as excel"
-#: ./opengever/disposition/browser/overview.py:48
+#: ./opengever/disposition/browser/overview.py:46
 msgid "label_export_appraisal_list_as_excel"
 msgstr "Bewertungsliste als Excel exportieren"
 
@@ -175,7 +180,7 @@ msgid "label_yes"
 msgstr "Ja"
 
 #. Default: "The appraisal is incomplete, appraisal could not be finalized."
-#: ./opengever/disposition/browser/views.py:30
+#: ./opengever/disposition/browser/views.py:37
 msgid "msg_appraisal_incomplete"
 msgstr "Die Bewertung ist nicht komplett, die Bewertung konnte nicht finalisiert werden."
 
@@ -220,12 +225,12 @@ msgid "msg_disposition_updated"
 msgstr "Aktualisiert durch ${user}"
 
 #. Default: "Period"
-#: ./opengever/disposition/browser/templates/overview.pt:54
+#: ./opengever/disposition/browser/templates/overview.pt:66
 msgid "period"
 msgstr "Periode"
 
 #. Default: "Progress:"
-#: ./opengever/disposition/browser/templates/overview.pt:153
+#: ./opengever/disposition/browser/templates/overview.pt:168
 msgid "progress"
 msgstr "Verlauf:"
 
