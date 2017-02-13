@@ -1,4 +1,5 @@
 from collections import OrderedDict
+from datetime import datetime
 from jsonschema import FormatChecker
 from jsonschema import validate
 from pkg_resources import resource_filename as rf
@@ -62,10 +63,12 @@ class BundleLoader(object):
     def __init__(self, bundle_path):
         self.bundle_path = bundle_path
         self.json_schemas = self._load_schemas()
+        self._stats = {'bundle_counts': {}, 'timings': {}}
 
     def load(self):
         """Load the bundle from disk and return an iterable Bundle.
         """
+        self._stats['timings']['start_loading'] = datetime.now()
         self._load_items()
         bundle = Bundle(
             self._items, self.bundle_path, self.json_schemas, self._stats)
@@ -81,7 +84,6 @@ class BundleLoader(object):
 
     def _load_items(self):
         self._items = []
-        self._stats = {'bundle_counts': {}}
         for json_name, portal_type in BUNDLE_JSON_TYPES.items():
             json_path = os.path.join(self.bundle_path, json_name)
 
