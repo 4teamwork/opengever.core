@@ -10,6 +10,7 @@ except pkg_resources.DistributionNotFound:
 
 from collections import defaultdict
 from lxml import etree
+from operator import attrgetter
 from operator import itemgetter
 from operator import methodcaller
 from path import Path
@@ -21,8 +22,9 @@ import os
 import re
 
 
-XML_CHILD_INDENT = 4
-XML_ATTR_INDENT = 6
+XML_CHILD_INDENT = 2
+XML_ATTR_INDENT = 4
+_marker = object()
 
 
 def step(message):
@@ -31,6 +33,16 @@ def step(message):
             return execute_step(message, func, *args, **kwargs)
         return wrapper
     return decorator
+
+
+def xpath_one(doc, xpath, default=_marker):
+    nodes = doc.xpath(xpath)
+    if default == _marker:
+        assert len(nodes) == 1, 'Found {} {!r}, expected 1'.format(
+            len(nodes), xpath)
+    elif len(nodes) == 0:
+        return default
+    return nodes[0]
 
 
 def execute_step(message, func, *args, **kwargs):
@@ -63,6 +75,7 @@ class MergeTool(object):
         self.migrate_dependencies()
         self.migrate_standard_xmls()
         self.migrate_mailhost()
+        self.migrate_rolemap()
         self.migrate_workflows()
         self.migrate_types()
         self.validate_no_leftovers()
@@ -116,7 +129,6 @@ class MergeTool(object):
             'propertiestool.xml',
             'registry.xml',
             'repositorytool.xml',
-            'rolemap.xml',
             'skins.xml',
             'types.xml',
             'viewlets.xml',
@@ -136,6 +148,10 @@ class MergeTool(object):
         assert len(xmls) == 1, 'Expected exactly 1 mailhost.xml, got {!r}'.format(
             xmls)
         xmls[0].move(self.og_core_profile_dir)
+
+    @step('Migrate rolemap.xml')
+    def migrate_rolemap(self):
+        self.first_level_tag_xml_migration('rolemap.xml', ('roles', 'permissions'))
 
     @step('Migrate workflows')
     def migrate_workflows(self):
@@ -305,6 +321,40 @@ class MergeTool(object):
 
         prettywrite(self.og_core_profile_dir.joinpath(filename), target)
 
+    def first_level_tag_xml_migration(self, filename, tagnames):
+        target_path = self.og_core_profile_dir.joinpath(filename)
+        target = parsexml(target_path)
+        source_paths = self.find_file_in_profiles_to_migrate(filename)
+        sources = map(parsexml, source_paths)
+        for tagname in tagnames:
+            self.migrate_first_level_children_node(
+                tagname, target, zip(source_paths,sources))
+
+        prettywrite(target_path, target)
+        did_not_migrate_tags = set()
+
+        for doc in sources:
+            map(did_not_migrate_tags.add,
+                map(attrgetter('tag'), doc.getroot().getchildren()))
+
+        assert not did_not_migrate_tags, \
+            '{} didnt migrate tags {!r}'.format(
+                filename,
+                tuple(did_not_migrate_tags))
+
+        map(methodcaller('unlink'), source_paths)
+
+    def migrate_first_level_children_node(self, tagname, target, sources):
+        target_node = xpath_one(target, tagname)
+
+        for path, source in sources:
+            source_node = xpath_one(source, tagname, None)
+            if source_node is None or len(source_node.getchildren()) == 0:
+                continue
+
+            self.add_source_comment(target_node, path)
+            map(target_node.append, source_node.getchildren())
+            source_node.getparent().remove(source_node)
 
     def find_file_in_profiles_to_migrate(self, filename):
         return filter(methodcaller('isfile'),
@@ -396,12 +446,17 @@ def prettyformat(xmldoc):
 
     set_indentation(xmldoc.getroot())
     xml = etree.tostring(xmldoc, pretty_print=True)
-    xml = re.sub('(\n?)( *)(\<[^ /!]+ )([^>]*)(\/?>)',
-                 indent_attributes, xml, flags=re.DOTALL)
+    xml = re.sub('(\n?)( *)(\<[^ /!>]+ )([^>]*)(\/?>)',
+                 indent_attributes, xml)
 
     assert_unchanged(original, xml,
                      'Unexpected difference detected when prettyfing XML')
     return xml
+
+
+def parsexml(path):
+    with path.open() as fio:
+        return etree.parse(fio)
 
 
 def assert_unchanged(expected, got, message):
