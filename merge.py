@@ -94,6 +94,7 @@ class MergeTool(object):
         self.validate_no_leftovers()
         self.migrate_hook_registrations()
         self.install_the_new_profile()
+        self.update_testing_layer()
 
     @step('Create opengever.core Generic Setup profile.')
     def create_opengever_core_profile(self):
@@ -320,6 +321,35 @@ class MergeTool(object):
         code = code.replace("default=u'opengever.policy.base:default'",
                             "default=u'opengever.core:default'")
         path.write_bytes(code)
+
+    @step('Update testing layer')
+    def update_testing_layer(self):
+        testing_path = self.opengever_dir.joinpath('core', 'testing.py')
+        testing_lines = testing_path.bytes().splitlines()
+
+        # lets applyProfile(portal, 'opengever.core:default')
+        # remove all profiles which are a dependency of opengever.core.
+        method_firstline = testing_lines.index(
+            '        # lots of failing tests.') + 1
+        method_lastline = testing_lines.index(
+            '    def createMemberFolder(self, portal):') - 1
+        method_lines = filter(None, testing_lines[method_firstline:method_lastline])
+        apply_profile = '        applyProfile(portal, \'{}\')'
+        method_lines_new = [apply_profile.format('opengever.core:default')]
+        for line in method_lines:
+            match = re.match(
+                '        applyProfile\(portal, \'([^\']+)\'\)', line)
+            if not match:
+                raise ValueError('Cannot find profile in {!r}'.format(line))
+            profile = match.group(1)
+            if profile not in self.recursive_dependencies('opengever.core:default') \
+               and profile not in self.profiles_to_migrate:
+                method_lines_new.append(apply_profile.format(profile))
+
+        testing_lines = (testing_lines[:method_firstline]
+                         + method_lines_new
+                         + testing_lines[method_lastline:])
+        testing_path.write_bytes('\n'.join(testing_lines))
 
     def standard_migrate_xml(self, filename):
         with self.og_core_profile_dir.joinpath(filename).open() as fio:
