@@ -11,8 +11,8 @@ logger = logging.getLogger('opengever.bundle.bundlesource')
 logger.setLevel(logging.INFO)
 
 
-BUNDLE_PATH_KEY = 'opengever.setup.bundle_path'
-JSON_STATS_KEY = 'opengever.setup.json_stats'
+BUNDLE_PATH_KEY = 'opengever.bundle.bundle_path'
+JSON_STATS_KEY = 'opengever.bundle.json_stats'
 
 
 class BundleSourceSection(object):
