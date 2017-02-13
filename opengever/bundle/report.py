@@ -24,11 +24,19 @@ class DataCollector(object):
         portal_types = BUNDLE_JSON_TYPES.values()
         portal_types.append('ftw.mail.mail')
 
+        # Determine paths of repository roots that were part of the current
+        # import to limit catalog search accordingly
+        portal = api.portal.get()
+        root_paths = [
+            '/'.join(portal.getPhysicalPath() + (r['_path'], ))
+            for r in self.bundle.get_repository_roots()]
+
         for portal_type in portal_types:
             data[portal_type] = []
             log.info("Collecting %s" % portal_type)
 
-            brains = catalog.unrestrictedSearchResults(portal_type=portal_type)
+            brains = catalog.unrestrictedSearchResults(
+                portal_type=portal_type, path=root_paths)
             for brain in brains:
                 obj = brain.getObject()
                 guid = IAnnotations(obj).get(BUNDLE_GUID_KEY)

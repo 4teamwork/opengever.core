@@ -47,6 +47,11 @@ class Bundle(object):
         """
         return iter(self.items)
 
+    def get_repository_roots(self):
+        roots = [item for item in self.items
+                 if item['_type'] == 'opengever.repository.repositoryroot']
+        return roots
+
 
 class BundleLoader(object):
     """Loads an OGGBundle from the filesystem and yields the contained items
