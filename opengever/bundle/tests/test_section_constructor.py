@@ -1,10 +1,12 @@
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
+from opengever.bundle.sections.constructor import BUNDLE_GUID_KEY
 from opengever.bundle.sections.constructor import ConstructorSection
 from opengever.bundle.sections.constructor import InvalidType
 from opengever.bundle.tests import MockTransmogrifier
 from opengever.testing import FunctionalTestCase
 from plone import api
+from zope.annotation import IAnnotations
 from zope.interface.verify import verifyClass
 from zope.interface.verify import verifyObject
 
@@ -35,6 +37,7 @@ class TestConstructor(FunctionalTestCase):
 
     def test_raises_for_invalid_types(self):
         section = self.setup_section(previous=[{
+            "guid": "12345xy",
             "_type": "foo.bar.qux",
         }])
         with self.assertRaises(InvalidType):
@@ -42,6 +45,7 @@ class TestConstructor(FunctionalTestCase):
 
     def test_updates_item_with_object_information(self):
         item = {
+            u"guid": "12345xy",
             u"_type": u"opengever.repository.repositoryroot",
             u"title_de": u"Reporoot",
         }
@@ -54,6 +58,7 @@ class TestConstructor(FunctionalTestCase):
 
     def test_creates_itranslated_title_content(self):
         item = {
+            u"guid": "12345xy",
             u"_type": u"opengever.repository.repositoryroot",
             u"title_de": u"Reporoot",
         }
@@ -68,6 +73,7 @@ class TestConstructor(FunctionalTestCase):
 
     def test_creates_simple_title_content(self):
         item = {
+            u"guid": "12345xy",
             u"_type": u"opengever.dossier.businesscasedossier",
             u"title": u"Dossier",
         }
@@ -79,8 +85,22 @@ class TestConstructor(FunctionalTestCase):
         self.assertFalse(hasattr(content, 'title_de'))
         self.assertFalse(hasattr(content, 'title_Fr'))
 
+    def test_sets_bundle_guid_on_obj(self):
+        guid = "12345xy"
+        item = {
+            u"guid": guid,
+            u"_type": u"opengever.dossier.businesscasedossier",
+            u"title": u"My Dossier",
+        }
+        section = self.setup_section(previous=[item])
+        list(section)
+
+        content = item['_object']
+        self.assertEqual(guid, IAnnotations(content)[BUNDLE_GUID_KEY])
+
     def test_catalog(self):
         item = {
+            u"guid": "12345xy",
             u"_type": u"opengever.repository.repositoryroot",
             u"title_de": u"Reporoot",
         }
@@ -102,6 +122,7 @@ class TestConstructor(FunctionalTestCase):
 
     def test_can_create_eml_emails(self):
         item = {
+            u"guid": "12345xy",
             u"_type": u"ftw.mail.mail",
             u"title": u"My Mail",
             u"_path": u"/foo/bar"
