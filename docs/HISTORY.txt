@@ -5,6 +5,12 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Do intermediate commits during creation of initial versions. This addresses
+  a performance issue where the time to write initial versions increases
+  exponentially with the number of previous initial versions created in the
+  same transaction.
+  [lgraf]
+
 - Defer creation of initial versions to end of pipeline by creating a
   dedicated section for post-processing steps.
   [lgraf]
