@@ -410,7 +410,7 @@ class MergeTool(object):
         else:
             node.text = '\n\n'
 
-        node.append(etree.Comment('merged from {}'.format(
+        node.append(etree.Comment('migrated from {}'.format(
             path.relpath(self.buildout_dir))))
 
 
