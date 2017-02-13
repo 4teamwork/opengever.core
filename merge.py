@@ -120,7 +120,8 @@ class MergeTool(object):
             target_doc = etree.parse(fio)
 
         dependencies_node = target_doc.xpath('//dependencies')[0]
-        for profile in self.read_dependencies('opengever.policy.base:default'):
+
+        for profile in self.recursive_dependencies('opengever.policy.base:default'):
             if profile in self.profiles_to_migrate:
                 # do not migrate dependency to migrated profiles (og.task, ..)
                 continue
@@ -383,7 +384,7 @@ class MergeTool(object):
     @instance.memoize
     def profiles_to_migrate(self):
         result = []
-        for profile in self.read_dependencies('opengever.policy.base:default'):
+        for profile in self.recursive_dependencies('opengever.policy.base:default'):
             if not profile.startswith('opengever.'):
                 continue
             elif profile in result:
@@ -398,12 +399,31 @@ class MergeTool(object):
                 .joinpath(*profile.split(':')[0].split('.'))
                 .joinpath('profiles', profile.split(':')[1])).abspath()
 
+    @instance.memoize
     def recursive_dependencies(self, profile):
-        return map(self.read_dependencies, self.read_dependencies(profile))
+        result = []
+
+        def recurse(profile):
+            result.append(profile)
+            if profile.startswith('opengever.'):
+                map(recurse, self.read_dependencies(profile))
+
+        recurse(profile)
+        result.remove(profile)
+
+        deduplicated = []
+        for profile in result:
+            if profile in deduplicated:
+                deduplicated.remove(profile)
+
+            deduplicated.append(profile)
+
+        return deduplicated
+
 
     @instance.memoize
     def read_dependencies(self, profile):
-        metadata_xml_path = (self.profile_path('opengever.policy.base:default')
+        metadata_xml_path = (self.profile_path(profile)
                              .joinpath('metadata.xml'))
         if not metadata_xml_path.isfile() and metadata_xml_path.parent.isdir():
             return []
