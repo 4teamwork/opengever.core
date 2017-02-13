@@ -1,5 +1,7 @@
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
+from opengever.bundle.loader import Bundle
+from opengever.bundle.sections.bundlesource import BUNDLE_KEY
 from opengever.bundle.sections.bundlesource import BUNDLE_PATH_KEY
 from opengever.bundle.sections.bundlesource import BundleSourceSection
 from opengever.bundle.tests import MockTransmogrifier
@@ -38,3 +40,8 @@ class TestBundleSource(FunctionalTestCase):
         transmogrifier = MockTransmogrifier()
         with self.assertRaises(Exception):
             BundleSourceSection(transmogrifier, '', {}, [])
+
+    def test_adds_reference_to_bundle_to_transmogrifier(self):
+        source = self.setup_source({})
+        self.assertIsInstance(
+            IAnnotations(source.transmogrifier)[BUNDLE_KEY], Bundle)
