@@ -5,6 +5,11 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- OGGBundle pipeline: Fix suppression of automatically created initial
+  versions by moving the disabled-initial-version section after the
+  resolveguid one.
+  [lgraf]
+
 - Add a title_help field for dossiertemplates.
   [elioschmutz]
 
