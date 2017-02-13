@@ -1,8 +1,8 @@
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.utils import defaultMatcher
-from opengever.document.checkout import handlers
 from opengever.document.checkout.handlers import create_initial_version
+from opengever.document.checkout.handlers import NoAutomaticInitialVersion
 from zope.interface import classProvides
 from zope.interface import implements
 
@@ -21,12 +21,9 @@ class DisabledInitialVersion(object):
         self.previous = previous
 
     def __iter__(self):
-        handlers.DISABLE_INITIAL_VERSION = True
-        try:
+        with NoAutomaticInitialVersion():
             for item in self.previous:
                 yield item
-        finally:
-            handlers.DISABLE_INITIAL_VERSION = False
 
 
 class ManualInitialVersion(object):

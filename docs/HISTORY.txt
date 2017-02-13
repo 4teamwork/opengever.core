@@ -5,6 +5,10 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Use a request layer instead of monkey patch to disable automatic creation
+  of initial versions.
+  [lgraf]
+
 - Do intermediate commits during creation of initial versions. This addresses
   a performance issue where the time to write initial versions increases
   exponentially with the number of previous initial versions created in the
