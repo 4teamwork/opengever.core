@@ -161,7 +161,7 @@ msgstr ""
 msgid "label_documents_as_link"
 msgstr ""
 
-#. Default: "File a copy of the sent mail in dossier"
+#. Default: "Save a copy of the sent mail in dossier"
 #: ./opengever/mail/browser/send_document.py:116
 msgid "label_file_copy_in_dossier"
 msgstr ""

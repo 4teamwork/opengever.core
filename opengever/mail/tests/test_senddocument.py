@@ -216,7 +216,7 @@ f\xc3\xbcr Ernst Franz\r\n\r\nBesten Dank im Voraus"""
 
         browser.login().open(dossier, view="send_documents")
 
-        field = browser.find('File a copy of the sent mail in dossier')
+        field = browser.find('Save a copy of the sent mail in dossier')
 
         self.assertTrue(
             field,
@@ -239,7 +239,7 @@ f\xc3\xbcr Ernst Franz\r\n\r\nBesten Dank im Voraus"""
 
         browser.login().open(dossier, view="send_documents")
 
-        field = browser.find('File a copy of the sent mail in dossier')
+        field = browser.find('Save a copy of the sent mail in dossier')
         self.assertIsNone(field, "The field should not be visible")
 
         fields = browser.css('input[id="form-widgets-{}-0"]'.format(fieldname))

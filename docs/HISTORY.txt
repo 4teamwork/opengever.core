@@ -4,6 +4,8 @@ Changelog
 
 4.15.2 (unreleased)
 -------------------
+- Update weird field title for the file_copy_in_dossier-field.
+  [elioschmutz]
 
 - Add a title_help field for dossiertemplates.
   [elioschmutz]
