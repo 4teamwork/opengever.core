@@ -30,16 +30,20 @@ class DataCollector(object):
 
             brains = catalog.unrestrictedSearchResults(portal_type=portal_type)
             for brain in brains:
-                item_info = self.get_item_info(brain)
+                obj = brain.getObject()
+                guid = IAnnotations(obj).get(BUNDLE_GUID_KEY)
+                if guid not in self.bundle.item_by_guid:
+                    # Skip object, not part of current import
+                    continue
+                item_info = self.get_item_info(brain, guid)
                 data[portal_type].append(item_info)
 
         return data
 
-    def get_item_info(self, brain):
+    def get_item_info(self, brain, guid):
         obj = brain.getObject()
         path = '/'.join(obj.getPhysicalPath())
         title = brain.Title
-        guid = IAnnotations(obj).get(BUNDLE_GUID_KEY)
         item_info = OrderedDict(
             [('guid', guid), ('path', path), ('title', title)])
         return item_info
