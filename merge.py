@@ -28,14 +28,14 @@ def step(message):
 
 
 def execute_step(message, func, *args, **kwargs):
-    print '🔧 ', message
+    print '\xf0\x9f\x94\xa7 ', message
     try:
         returnvalue = func(*args, **kwargs)
     except:
-        print '💥'
+        print '\xf0\x9f\x92\xa5'
         raise
     else:
-        print '✔ 🍺'
+        print '\xe2\x9c\x94 \xf0\x9f\x8d\xba'
         print ''
         return returnvalue
 
