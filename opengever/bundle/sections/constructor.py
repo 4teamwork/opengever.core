@@ -4,6 +4,7 @@ from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.base.behaviors.translated_title import TRANSLATED_TITLE_NAMES
 from opengever.base.interfaces import IDontIssueDossierReferenceNumber
 from opengever.base.interfaces import IReferenceNumberPrefix
+from opengever.bundle.sections.bundlesource import BUNDLE_KEY
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from plone import api
 from plone.dexterity.utils import createContentInContainer
@@ -49,7 +50,7 @@ class ConstructorSection(object):
     def __init__(self, transmogrifier, name, options, previous):
         self.previous = previous
         self.transmogrifier = transmogrifier
-        self.item_by_guid = self.transmogrifier.item_by_guid
+        self.bundle = IAnnotations(transmogrifier)[BUNDLE_KEY]
 
         self.site = api.portal.get()
         self.ttool = api.portal.get_tool(u'portal_types')
@@ -112,7 +113,7 @@ class ConstructorSection(object):
 
             parent_guid = item.get(u'parent_guid')
             if parent_guid:
-                context = self.item_by_guid[parent_guid][u'_object']
+                context = self.bundle.item_by_guid[parent_guid][u'_object']
             else:
                 context = self.site
 
