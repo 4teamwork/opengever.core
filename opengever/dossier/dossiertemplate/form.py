@@ -1,6 +1,7 @@
 from AccessControl import getSecurityManager
 from five import grok
 from ftw.table import helper
+from opengever.base.behaviors.base import IOpenGeverBase
 from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.form import WizzardWrappedAddForm
@@ -9,7 +10,6 @@ from opengever.base.oguid import Oguid
 from opengever.base.schema import TableChoice
 from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossier
-from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.command import CreateDocumentFromTemplateCommand
 from opengever.dossier.command import CreateDossierFromTemplateCommand
 from opengever.dossier.dossiertemplate import is_dossier_template_feature_enabled
@@ -172,6 +172,7 @@ class AddDossierFromTemplateWizardStep(WizzardWrappedAddForm):
                         '{}/dossier_with_template'.format(self.context.absolute_url()))
 
                 template_values = template_obj.get_schema_values()
+                title_help = IDossierTemplateSchema(template_obj).title_help
 
                 for group in self.groups:
                     for widgetname in group.widgets:
@@ -185,6 +186,14 @@ class AddDossierFromTemplateWizardStep(WizzardWrappedAddForm):
 
                         value = template_values.get(template_widget_name)
                         widget = group.widgets.get(widgetname)
+
+                        # If the current field is the title field and the
+                        # title_help is set, we remove the input-value and
+                        # add a field description with the title_help text
+                        # instead.
+                        if widget.field == IOpenGeverBase['title'] and title_help:
+                            widget.dynamic_description = title_help
+                            value = ''
 
                         # Set the template value to the dossier add-form widget.
                         widget.value = IDataConverter(widget).toWidgetValue(value)

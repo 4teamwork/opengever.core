@@ -162,7 +162,11 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
     def test_form_does_not_inlcude_participants_with_disabled_feature(self, browser):
         browser.login().open(self.dossier, view='document_with_template')
 
-        self.assertEqual([u'Template', u'Title', u'Edit after creation'],
+        # The CheckBoxWidget is rendered with two labels (only in testing).
+        # The reason for that is a wrong widget renderer adapter lookup because
+        # of the stacked globalregistry (see plone.testing.zca: pushGlobalRegistry
+        # for more information).
+        self.assertEqual([u'Template', u'Title', u'', u'Edit after creation'],
                          browser.css('#form label').text)
 
     @browsing

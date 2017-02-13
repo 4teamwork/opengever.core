@@ -1,9 +1,12 @@
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
+from opengever.base import _ as base_mf
+from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossiernamefromtitle import DossierNameFromTitle
 from plone.app.content.interfaces import INameFromTitle
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.directives import form
+from zope import schema
 from zope.interface import alsoProvides
 from zope.interface import implements
 from zope.interface import Interface
@@ -14,6 +17,23 @@ class IDossierTemplateSchema(form.Schema):
 
     Use this type of dossier to create a reusable template structures.
     """
+
+    form.fieldset(
+        u'common',
+        label=base_mf(u'fieldset_common', default=u'Common'),
+        fields=[
+            u'title_help',
+        ],
+    )
+
+    title_help = schema.TextLine(
+        title=_(u'label_title_help', default=u'Title help'),
+        description=_(u'help_title_help',
+                      default=u'Recommendation for the title. Will be '
+                              u'displayed as a help text if you create '
+                              u'a dossier from template'),
+        required=False,
+    )
 
 
 class IDossierTemplateMarker(Interface, ITabbedviewUploadable):

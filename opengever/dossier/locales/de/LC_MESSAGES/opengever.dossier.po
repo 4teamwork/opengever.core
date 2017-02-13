@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-02-09 11:59+0000\n"
+"POT-Creation-Date: 2017-02-13 13:31+0000\n"
 "PO-Revision-Date: 2016-07-22 15:24+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
@@ -415,6 +415,11 @@ msgstr "Neuen Kommentar erfassen."
 msgid "help_text_edit_note"
 msgstr "Es wurde ein Kommentar erfasst!"
 
+#. Default: "Recommendation for the title. Will be displayed as a help text if you create a dossier from template"
+#: ./opengever/dossier/dossiertemplate/behaviors.py:31
+msgid "help_title_help"
+msgstr "Empfehlung für Titel. Wird beim Erstellen eines Dossiers ab Vorlage als Hilfetext dargestellt"
+
 #. Default: "Participation created"
 #: ./opengever/dossier/behaviors/participation.py:161
 msgid "info_participation_create"
@@ -490,7 +495,7 @@ msgid "label_documents"
 msgstr "Dokumente"
 
 #. Default: "Dossiernote"
-#: ./opengever/dossier/viewlets/byline.py:114
+#: ./opengever/dossier/viewlets/byline.py:115
 msgid "label_dossier_note"
 msgstr "Dossier Kommentar"
 
@@ -515,7 +520,7 @@ msgid "label_edit_note"
 msgstr "Bearbeiten"
 
 #. Default: "E-Mail"
-#: ./opengever/dossier/viewlets/byline.py:101
+#: ./opengever/dossier/viewlets/byline.py:102
 msgid "label_email_address"
 msgstr "E-Mail"
 
@@ -528,7 +533,7 @@ msgstr "Ende"
 
 #. Default: "to"
 #: ./opengever/dossier/project_templates/byline.pt:38
-#: ./opengever/dossier/viewlets/byline.py:82
+#: ./opengever/dossier/viewlets/byline.py:83
 msgid "label_end_byline"
 msgstr "Ende"
 
@@ -632,7 +637,7 @@ msgstr "Empfänger"
 #. Default: "Reference Number"
 #: ./opengever/dossier/behaviors/dossier.py:179
 #: ./opengever/dossier/browser/report.py:41
-#: ./opengever/dossier/viewlets/byline.py:94
+#: ./opengever/dossier/viewlets/byline.py:95
 msgid "label_reference_number"
 msgstr "Aktenzeichen"
 
@@ -669,7 +674,7 @@ msgid "label_save"
 msgstr "Speichern"
 
 #. Default: "Sequence Number"
-#: ./opengever/dossier/viewlets/byline.py:88
+#: ./opengever/dossier/viewlets/byline.py:89
 msgid "label_sequence_number"
 msgstr "Laufnummer"
 
@@ -681,7 +686,7 @@ msgstr "Beginn"
 
 #. Default: "from"
 #: ./opengever/dossier/project_templates/byline.pt:29
-#: ./opengever/dossier/viewlets/byline.py:76
+#: ./opengever/dossier/viewlets/byline.py:77
 msgid "label_start_byline"
 msgstr "Beginn"
 
@@ -713,6 +718,11 @@ msgstr "Vorlage"
 msgid "label_title"
 msgstr "Titel"
 
+#. Default: "Title help"
+#: ./opengever/dossier/dossiertemplate/behaviors.py:30
+msgid "label_title_help"
+msgstr "Titelhilfe"
+
 #. Default: "Trash"
 #: ./opengever/dossier/browser/tabbed.py:27
 msgid "label_trash"
@@ -725,7 +735,7 @@ msgstr "URL"
 
 #. Default: "State"
 #: ./opengever/dossier/project_templates/byline.pt:22
-#: ./opengever/dossier/viewlets/byline.py:70
+#: ./opengever/dossier/viewlets/byline.py:71
 msgid "label_workflow_state"
 msgstr "Status"
 
