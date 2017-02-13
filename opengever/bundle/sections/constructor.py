@@ -38,6 +38,7 @@ class NoDossierReferenceNumbersIssued(object):
 class ConstructorSection(object):
     """OGGBundle specific constructor section.
     """
+
     classProvides(ISectionBlueprint)
     implements(ISection)
 
@@ -49,8 +50,49 @@ class ConstructorSection(object):
         self.site = api.portal.get()
         self.ttool = api.portal.get_tool(u'portal_types')
 
-    def has_translated_title(self, fti):
+    def _has_translated_title(self, fti):
         return ITranslatedTitle.__identifier__ in fti.behaviors
+
+    def _get_fti(self, portal_type):
+        fti = self.ttool.getTypeInfo(portal_type)
+        if fti is None:
+            raise InvalidType(portal_type)
+        return fti
+
+    def _get_title_args(self, fti, item):
+        # we need the title sometimes to auto-generate ids
+        # XXX maybe be a bit more intelligent here and set all required
+        # fields while constructing?
+        if self._has_translated_title(fti):
+            title_keys = TRANSLATED_TITLE_NAMES
+        else:
+            title_keys = (u'title',)
+
+        title_args = dict((key, item.get(key)) for key in title_keys)
+        return title_args
+
+    def _construct_object(self, container, portal_type, item):
+        fti = self._get_fti(portal_type)
+        title_args = self._get_title_args(fti, item)
+
+        with NoDossierReferenceNumbersIssued():
+            # Create the object without automatically issuing a
+            # reference number - we might want to set it explicitly
+            obj = createContentInContainer(
+                container, portal_type, **title_args)
+
+            if IDossierMarker.providedBy(obj):
+                prefix_adapter = IReferenceNumberPrefix(container)
+                if not prefix_adapter.get_number(obj):
+                    # Set the local reference number part for the
+                    # dossier if provided in item, otherwise have
+                    # the adapter issue the next one
+                    local_refnum = item.get('reference_number')
+                    if local_refnum is not None:
+                        prefix_adapter.set_number(obj, local_refnum)
+                    else:
+                        prefix_adapter.set_number(obj)
+        return obj
 
     def __iter__(self):
         for item in self.previous:
@@ -62,39 +104,8 @@ class ConstructorSection(object):
             else:
                 context = self.site
 
-            fti = self.ttool.getTypeInfo(portal_type)
-            if fti is None:
-                raise InvalidType(portal_type)
-
             try:
-                # we need the title sometimes to auto-generate ids
-                # XXX maybe be a bit more intelligent here and set all required
-                # fields while constructing?
-                if self.has_translated_title(fti):
-                    title_keys = TRANSLATED_TITLE_NAMES
-                else:
-                    title_keys = (u'title',)
-
-                title_args = dict((key, item.get(key)) for key in title_keys)
-
-                with NoDossierReferenceNumbersIssued():
-                    # Create the object without automatically issuing a
-                    # reference number - we might want to set it explicitly
-                    obj = createContentInContainer(
-                        context, portal_type, **title_args)
-
-                    if IDossierMarker.providedBy(obj):
-                        prefix_adapter = IReferenceNumberPrefix(context)
-                        if not prefix_adapter.get_number(obj):
-                            # Set the local reference number part for the
-                            # dossier if provided in item, otherwise have
-                            # the adapter issue the next one
-                            local_refnum = item.get('reference_number')
-                            if local_refnum is not None:
-                                prefix_adapter.set_number(obj, local_refnum)
-                            else:
-                                prefix_adapter.set_number(obj)
-
+                obj = self._construct_object(context, portal_type, item)
                 parent_path = '/'.join(context.getPhysicalPath())
                 logger.info("Constructed %r" % obj)
             except ValueError as e:
