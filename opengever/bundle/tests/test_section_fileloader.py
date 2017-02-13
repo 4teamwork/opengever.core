@@ -2,8 +2,9 @@ from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.bundle.loader import BundleLoader
+from opengever.bundle.sections.bundlesource import BUNDLE_KEY
 from opengever.bundle.sections.bundlesource import BUNDLE_PATH_KEY
-from opengever.bundle.sections.bundlesource import JSON_STATS_KEY
 from opengever.bundle.sections.fileloader import FileLoaderSection
 from opengever.bundle.tests import MockTransmogrifier
 from opengever.testing import FunctionalTestCase
@@ -23,8 +24,9 @@ class TestFileLoader(FunctionalTestCase):
 
         self.bundle_path = resource_filename(
             'opengever.bundle.tests', 'assets/basic.oggbundle')
+        self.bundle = BundleLoader(self.bundle_path).load()
         IAnnotations(self.transmogrifier)[BUNDLE_PATH_KEY] = self.bundle_path
-        IAnnotations(self.transmogrifier)[JSON_STATS_KEY] = {'errors': {}}
+        IAnnotations(self.transmogrifier)[BUNDLE_KEY] = self.bundle
         options = {'blueprint': 'opengever.setup.fileloader'}
 
         return FileLoaderSection(self.transmogrifier, '', options, previous)
@@ -69,7 +71,7 @@ class TestFileLoader(FunctionalTestCase):
         self.assertEqual('beschluss.pdf', doc.file.filename)
         self.assertEqual('beschluss', doc.title)
 
-    def test_tracks_missing_files_in_stats(self):
+    def test_tracks_missing_files_in_errors(self):
         item = {
             u"_type": u"opengever.document.document",
             u"_path": '/relative/path/to/doc',
@@ -78,13 +80,12 @@ class TestFileLoader(FunctionalTestCase):
         section = self.setup_section(previous=[item])
         list(section)
 
-        stats = IAnnotations(self.transmogrifier)[JSON_STATS_KEY]
         abs_filepath = '/'.join((self.bundle_path, 'files/missing.file'))
         self.assertEqual(
             {abs_filepath: '/relative/path/to/doc'},
-            stats['errors']['files_not_found'])
+            self.bundle.errors['files_not_found'])
 
-    def test_tracks_skipped_msg_files_in_stats(self):
+    def test_tracks_skipped_msg_files_in_errors(self):
         item = {
             u"_type": u"opengever.document.document",
             u"_path": '/relative/path/to/doc',
@@ -93,11 +94,10 @@ class TestFileLoader(FunctionalTestCase):
         section = self.setup_section(previous=[item])
         list(section)
 
-        stats = IAnnotations(self.transmogrifier)[JSON_STATS_KEY]
         abs_filepath = '/'.join((self.bundle_path, 'files/outlook.msg'))
         self.assertEqual(
             {abs_filepath: '/relative/path/to/doc'},
-            stats['errors']['msgs'])
+            self.bundle.errors['msgs'])
 
     def test_handles_eml_mails(self):
         mail = create(Builder('mail'))

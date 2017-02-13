@@ -36,6 +36,8 @@ class Bundle(object):
         if stats is not None:
             self.stats = stats
 
+        self.errors = {}
+
     def __repr__(self):
         return '<%s %s>' % (self.__class__.__name__, self.bundle_path)
 
