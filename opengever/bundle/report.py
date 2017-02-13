@@ -52,16 +52,33 @@ class DataCollector(object):
 
         return data
 
+    def get_file_field(self, obj):
+        if obj.portal_type == 'opengever.document.document':
+            file_field = obj.file
+        elif obj.portal_type == 'ftw.mail.mail':
+            file_field = obj.message
+        else:
+            file_field = None
+
+        return file_field
+
+    def get_title(self, obj):
+        if ITranslatedTitleSupport.providedBy(obj):
+            return ITranslatedTitle(obj).title_de
+        return obj.title
+
     def get_item_info(self, brain, guid):
         obj = brain.getObject()
         path = '/'.join(obj.getPhysicalPath())
+        title = self.get_title(obj)
 
-        if ITranslatedTitleSupport.providedBy(obj):
-            title = ITranslatedTitle(obj).title_de
-        else:
-            title = obj.title
         item_info = OrderedDict(
             [('guid', guid), ('path', path), ('title', title)])
+
+        file_field = self.get_file_field(obj)
+        if file_field:
+            item_info['file_size'] = file_field.getSize()
+
         return item_info
 
 
