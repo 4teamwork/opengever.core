@@ -258,6 +258,15 @@ f\xc3\xbcr Ernst Franz\r\n\r\nBesten Dank im Voraus"""
             "See the field: {}".format(
                 fieldname, field))
 
+    @browsing
+    def test_file_copy_field_not_shown_if_not_on_dossier(self, browser):
+        inbox = create(Builder('inbox'))
+
+        browser.login().open(inbox, view="send_documents")
+
+        field = browser.find('File a copy of the sent mail in dossier')
+        self.assertIsNone(field, "The field should not be visible")
+
     def send_documents(self, container, documents, browser=default_browser, **kwargs):
         documents = ['/'.join(doc.getPhysicalPath()) for doc in documents]
         attr = TEST_FORM_DATA.copy()

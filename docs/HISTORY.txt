@@ -5,6 +5,11 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Fix send_documents view on the inbox.
+  Allows the functionality to save sent files in the dossier
+  only for IDossierMarker-types.
+  [elioschmutz]
+
 - Use a request layer instead of monkey patch to disable automatic creation
   of initial versions.
   [lgraf]
