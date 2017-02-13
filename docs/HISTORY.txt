@@ -5,6 +5,10 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Defer creation of initial versions to end of pipeline by creating a
+  dedicated section for post-processing steps.
+  [lgraf]
+
 - OGGBundle pipeline: Fix suppression of automatically created initial
   versions by moving the disabled-initial-version section after the
   resolveguid one.
