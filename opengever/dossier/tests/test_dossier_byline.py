@@ -6,10 +6,12 @@ from ftw.testbrowser import browsing
 from opengever.base.tests.byline_base_test import TestBylineBase
 from opengever.core.testing import activate_filing_number
 from opengever.core.testing import inactivate_filing_number
+from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import create_ogds_user
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
+import json
 import transaction
 
 
@@ -93,6 +95,79 @@ class TestDossierByline(TestBylineBase):
 
         self.assertEquals(None,
                           self.get_byline_value_by_label('Filing Number:'))
+
+    @browsing
+    def test_dossier_byline_editlink_for_comments(self, browser):
+        browser.login().visit(self.dossier)
+        comment = self.get_byline_value_by_label('Dossiernote:')
+        # There are both labels (show/hide by css/js)
+        self.assertEquals(['Edit Note', 'Add Note'],
+                          comment.css('#editNoteLink .linkLabel').text)
+
+    @browsing
+    def test_dossier_byline_show_comments_editlink_on_maindossier_only(
+            self, browser):
+        browser.login().visit(self.dossier)
+        comment = self.get_byline_value_by_label('Dossiernote:')
+        self.assertTrue(comment,
+                        'Expect the edit comment link in dossier byline')
+
+        subdossier = create(Builder('dossier').within(self.dossier))
+        browser.visit(subdossier)
+        comment = self.get_byline_value_by_label('Dossiernote:')
+        self.assertFalse(comment,
+                         'Expect NO edit comment link on subdossier')
+
+    @browsing
+    def test_dossier_byline_hide_comments_editlink_without_modify_rights(
+            self, browser):
+        self.dossier.manage_permission('Modify portal content',
+                                       roles=[],
+                                       acquire=False)
+        transaction.commit()
+        browser.login().visit(self.dossier)
+        comment = self.get_byline_value_by_label('Dossiernote:')
+        self.assertFalse(comment,
+                         'Expect NO edit comment link on dossier')
+
+    @browsing
+    def test_dossier_byline_comments_editlink_data(self, browser):
+        browser.login().visit(self.dossier)
+        link = browser.css('#editNoteLink').first
+        dossier_data = IDossier(self.dossier)
+
+        # No comments
+        self.assertEquals(type(json.loads(link.attrib['data-i18n'])),
+                          dict)
+        self.assertEquals('',
+                          link.attrib['data-notecache'])
+        self.assertEquals('Add Note', link.css('.add .linkLabel').first.text)
+
+        # With comments
+        dossier_data.comments = u'This is a comment'
+        transaction.commit()
+
+        browser.open(self.dossier)
+        link = browser.css('#editNoteLink').first
+        self.assertEquals(str(dossier_data.comments),
+                          link.attrib['data-notecache'])
+        self.assertEquals('Edit Note', link.css('.edit .linkLabel').first.text)
+
+    @browsing
+    def test_dossier_byline_save_comments_endpoint(self, browser):
+        payload = '{"comments": "New comment"}'
+        browser.login().visit(self.dossier,
+                              view='save_comments',
+                              data={'data': payload})
+
+        dossier_data = IDossier(self.dossier)
+        self.assertEquals("New comment", dossier_data.comments)
+
+        with self.assertRaises(KeyError):
+            payload = '{"invalidkey": "New comment"}'
+            browser.login().visit(self.dossier,
+                                  view='save_comments',
+                                  data={'data': payload})
 
 
 class TestFilingBusinessCaseByline(TestBylineBase):

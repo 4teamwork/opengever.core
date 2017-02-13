@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-02-06 14:13+0000\n"
+"POT-Creation-Date: 2017-02-09 11:59+0000\n"
 "PO-Revision-Date: 2016-07-22 15:24+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
@@ -366,6 +366,11 @@ msgstr "Ablage Jahr"
 msgid "heading_archive_form"
 msgstr "Dossier ablegen"
 
+#. Default: "${title} notes / comments"
+#: ./opengever/dossier/viewlets/templates/note.pt:28
+msgid "heading_dossier_note"
+msgstr "`${title}` Kommentar"
+
 #. Default: "Move Items"
 #: ./opengever/dossier/move_items.py:56
 msgid "heading_move_items"
@@ -400,6 +405,16 @@ msgstr "Schlagwörter zur Umschreibung eines Dossiers. Nicht zu verwechseln mit 
 msgid "help_number_of_containers"
 msgstr "Anzahl Behälter, die ein (grosses) Dossier in Papierform enthalten"
 
+#. Default: "Create a new note"
+#: ./opengever/dossier/viewlets/templates/note.pt:18
+msgid "help_text_add_note"
+msgstr "Neuen Kommentar erfassen."
+
+#. Default: "There is a note"
+#: ./opengever/dossier/viewlets/templates/note.pt:10
+msgid "help_text_edit_note"
+msgstr "Es wurde ein Kommentar erfasst!"
+
 #. Default: "Participation created"
 #: ./opengever/dossier/behaviors/participation.py:161
 msgid "info_participation_create"
@@ -410,6 +425,11 @@ msgstr "Die Beteiligung wurde gespeichert."
 msgid "info_removed_participations"
 msgstr "Die Beteiligungen wurde entfernt."
 
+#. Default: "Add Note"
+#: ./opengever/dossier/viewlets/templates/note.pt:17
+msgid "label_add_note"
+msgstr "Erfassen"
+
 #. Default: "Address"
 #: ./opengever/dossier/templatedossier/form.py:272
 msgid "label_address"
@@ -419,6 +439,11 @@ msgstr "Adresse"
 #: ./opengever/dossier/project_templates/byline.pt:10
 msgid "label_by_author"
 msgstr "Federführend: ${author}"
+
+#. Default: "Cancel"
+#: ./opengever/dossier/viewlets/templates/note.pt:41
+msgid "label_cancel"
+msgstr "Abbrechen"
 
 #. Default: "Comments"
 #: ./opengever/dossier/behaviors/dossier.py:84
@@ -464,6 +489,16 @@ msgstr "Zielposition / Zieldossier"
 msgid "label_documents"
 msgstr "Dokumente"
 
+#. Default: "Dossiernote"
+#: ./opengever/dossier/viewlets/byline.py:114
+msgid "label_dossier_note"
+msgstr "Dossier Kommentar"
+
+#. Default: "Create Dossier note"
+#: ./opengever/dossier/viewlets/templates/note.pt:33
+msgid "label_dossier_note_placeholder"
+msgstr "Dossier Kommentar erfassen"
+
 #. Default: "Dossier templates"
 #: ./opengever/dossier/browser/tabbed.py:108
 msgid "label_dossier_templates"
@@ -474,8 +509,13 @@ msgstr "Dossier Vorlagen"
 msgid "label_edit_after_creation"
 msgstr "Nach dem Hinzufügen bearbeiten"
 
+#. Default: "Edit Note"
+#: ./opengever/dossier/viewlets/templates/note.pt:9
+msgid "label_edit_note"
+msgstr "Bearbeiten"
+
 #. Default: "E-Mail"
-#: ./opengever/dossier/viewlets/byline.py:74
+#: ./opengever/dossier/viewlets/byline.py:101
 msgid "label_email_address"
 msgstr "E-Mail"
 
@@ -488,7 +528,7 @@ msgstr "Ende"
 
 #. Default: "to"
 #: ./opengever/dossier/project_templates/byline.pt:38
-#: ./opengever/dossier/viewlets/byline.py:55
+#: ./opengever/dossier/viewlets/byline.py:82
 msgid "label_end_byline"
 msgstr "Ende"
 
@@ -592,7 +632,7 @@ msgstr "Empfänger"
 #. Default: "Reference Number"
 #: ./opengever/dossier/behaviors/dossier.py:179
 #: ./opengever/dossier/browser/report.py:41
-#: ./opengever/dossier/viewlets/byline.py:67
+#: ./opengever/dossier/viewlets/byline.py:94
 msgid "label_reference_number"
 msgstr "Aktenzeichen"
 
@@ -623,8 +663,13 @@ msgstr "Rollen"
 msgid "label_sablon_templates"
 msgstr "Sablon Vorlagen"
 
+#. Default: "Save"
+#: ./opengever/dossier/viewlets/templates/note.pt:39
+msgid "label_save"
+msgstr "Speichern"
+
 #. Default: "Sequence Number"
-#: ./opengever/dossier/viewlets/byline.py:61
+#: ./opengever/dossier/viewlets/byline.py:88
 msgid "label_sequence_number"
 msgstr "Laufnummer"
 
@@ -636,7 +681,7 @@ msgstr "Beginn"
 
 #. Default: "from"
 #: ./opengever/dossier/project_templates/byline.pt:29
-#: ./opengever/dossier/viewlets/byline.py:49
+#: ./opengever/dossier/viewlets/byline.py:76
 msgid "label_start_byline"
 msgstr "Beginn"
 
@@ -680,9 +725,19 @@ msgstr "URL"
 
 #. Default: "State"
 #: ./opengever/dossier/project_templates/byline.pt:22
-#: ./opengever/dossier/viewlets/byline.py:43
+#: ./opengever/dossier/viewlets/byline.py:70
 msgid "label_workflow_state"
 msgstr "Status"
+
+#. Default: "Changes not saved"
+#: ./opengever/dossier/viewlets/byline.py:38
+msgid "message_body_error"
+msgstr "Änderungen wurde nicht gespeichert"
+
+#. Default: "Changes saved"
+#: ./opengever/dossier/viewlets/byline.py:37
+msgid "message_body_info"
+msgstr "Änderungen gespeichert"
 
 #. Default: "The object `${title}` is not stored inside a dossier."
 #: ./opengever/dossier/browser/redirect_to_maindossier.py:16
@@ -700,6 +755,11 @@ msgstr "Es sind nicht alle Dokumente eingecheckt"
 #: ./opengever/dossier/resolve.py:22
 msgid "not all task are closed"
 msgstr "Es sind nicht alle Aufgaben abgeschlossen"
+
+#. Default: "Confirm abbord"
+#: ./opengever/dossier/viewlets/byline.py:34
+msgid "note_text_confirm_abord"
+msgstr "Sie haben nicht gespeicherte Änderungen, wollen Sie wirklich abbrechen?"
 
 #: ./opengever/dossier/archive.py:36
 msgid "only resolve, set filing no later"

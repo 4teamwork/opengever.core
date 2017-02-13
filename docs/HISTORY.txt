@@ -55,6 +55,10 @@ Changelog
 4.15.0 (2017-02-07)
 -------------------
 
+- Introduce new feature: Direct edit dossier comments/note thru
+  a link in the byline (Opens overlay).
+  [mathias.leimgruber]
+
 - Fix broken link and missing translation for add participation label.
   [deiferni]
 
