@@ -15,8 +15,14 @@ from operator import methodcaller
 from path import Path
 from plone.memoize import instance
 from pprint import pprint
+from StringIO import StringIO
+import difflib
 import os
 import re
+
+
+XML_CHILD_INDENT = 4
+XML_ATTR_INDENT = 6
 
 
 def step(message):
@@ -88,17 +94,14 @@ class MergeTool(object):
             target_doc = etree.parse(fio)
 
         dependencies_node = target_doc.xpath('//dependencies')[0]
-        dependencies_node.text = '\n' + ' ' * 8
         for profile in self.read_dependencies('opengever.policy.base:default'):
             if profile in self.profiles_to_migrate:
                 # do not migrate dependency to migrated profiles (og.task, ..)
                 continue
             node = etree.SubElement(dependencies_node, 'dependency')
             node.text = 'profile-' + profile
-            node.tail = dependencies_node.text
 
-        node.tail = '\n' + ' ' * 4
-        target_metadata.write_bytes(etree.tostring(target_doc))
+        prettywrite(target_metadata, target_doc)
 
     def migrate_standard_xmls(self):
         standard_xmls = (
@@ -224,7 +227,7 @@ class MergeTool(object):
                             .format(node.tag, source_path,
                                     sources_by_filename[filename]))
 
-                target_path.write_bytes(etree.tostring(target_doc))
+                prettywrite(target_path, target_doc)
                 source_path.unlink().parent.rmdir_p()
 
     @step('Check for leftovers in old profiles')
@@ -265,7 +268,7 @@ class MergeTool(object):
                 changes = True
 
             if changes:
-                path.write_bytes(etree.tostring(doc))
+                prettywrite(path, doc)
 
         handlers = map(
             itemgetter(1),
@@ -300,8 +303,7 @@ class MergeTool(object):
             map(target.getroot().append, doc.getroot().getchildren())
             path.unlink()
 
-        self.og_core_profile_dir.joinpath(filename).write_bytes(
-            etree.tostring(target))
+        prettywrite(self.og_core_profile_dir.joinpath(filename), target)
 
 
     def find_file_in_profiles_to_migrate(self, filename):
@@ -354,14 +356,72 @@ class MergeTool(object):
 
     def add_source_comment(self, node, path):
         if node.getchildren():
-            node.getchildren()[-1].tail = '\n\n\n    '
+            node.getchildren()[-1].tail = '\n\n\n'
         else:
-            node.text = '\n\n    '
+            node.text = '\n\n'
 
-        comment = etree.Comment('merged from {}'.format(
-            path.relpath(self.buildout_dir)))
-        comment.tail = '\n    '
-        node.append(comment)
+        node.append(etree.Comment('merged from {}'.format(
+            path.relpath(self.buildout_dir))))
+
+
+def prettyformat(xmldoc):
+    original = etree.tostring(xmldoc)
+
+    def set_indentation(elem, level=0):
+        def indent(text, level):
+            text = (text or '').rstrip(' ')
+            if '\n' not in text:
+                text += '\n'
+            return text + (level * XML_CHILD_INDENT * ' ')
+
+        if len(elem):
+            elem.text = indent(elem.text, level + 1)
+            elem.tail = indent(elem.tail, level)
+
+            for child in elem:
+                set_indentation(child, level + 1)
+
+            child.tail = indent(child.tail, level)
+        elif level:
+            elem.tail = indent(elem.tail, level)
+
+    def indent_attributes(match):
+        prefix, indent, start, attributes, end = match.groups()
+        attr_prefix = '\n' + indent + (' ' * XML_ATTR_INDENT)
+        attr_regex = re.compile(r'([^ ]*="[^"]*") ')
+        if len(attr_regex.findall(attributes)) > 0:
+            attributes = attr_prefix + attr_regex.sub(
+                '\g<1>' + attr_prefix, attributes)
+        return ''.join((prefix, indent, start, attributes, end))
+
+    set_indentation(xmldoc.getroot())
+    xml = etree.tostring(xmldoc, pretty_print=True)
+    xml = re.sub('(\n?)( *)(\<[^ /!]+ )([^>]*)(\/?>)',
+                 indent_attributes, xml, flags=re.DOTALL)
+
+    assert_unchanged(original, xml,
+                     'Unexpected difference detected when prettyfing XML')
+    return xml
+
+
+def assert_unchanged(expected, got, message):
+    expected = c14n(expected)
+    got = c14n(got)
+    assert got == expected, \
+        message + '\n\n' + ''.join((difflib.ndiff(expected.splitlines(1),
+                                                  got.splitlines(1))))
+
+
+def c14n(xmlstring):
+    output = StringIO()
+    parser = etree.XMLParser(remove_blank_text=True)
+    etree.parse(StringIO(xmlstring), parser).write_c14n(output)
+    return output.getvalue()
+
+
+
+def prettywrite(target, doc):
+    target.write_bytes(prettyformat(doc))
 
 
 if __name__ == '__main__':
