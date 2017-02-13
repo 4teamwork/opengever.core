@@ -12,6 +12,7 @@ log.setLevel(logging.INFO)
 
 
 INTERMEDIATE_COMMIT_INTERVAL = 1000
+VERSIONABLE_TYPES = ('opengever.document.document', 'ftw.mail.mail')
 
 
 class PostProcessingSection(object):
@@ -46,8 +47,9 @@ class PostProcessingSection(object):
         # Any operations performed here will be applied after all the previous
         # sections have been run for all the items
         for count, item in enumerate(items_to_post_process, start=1):
-            log.info("Creating initial version: %s" % item['_path'])
-            create_initial_version(item['_object'])
+            if item['_type'] in VERSIONABLE_TYPES:
+                log.info("Creating initial version: %s" % item['_path'])
+                create_initial_version(item['_object'])
 
             if count % INTERMEDIATE_COMMIT_INTERVAL == 0:
                 self.commit_and_log(
