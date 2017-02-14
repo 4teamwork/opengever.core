@@ -3,10 +3,10 @@ SaaS Deployments
 
 Im Moment sind alle SaaS Deployments auf ``theta.4teamwork.ch`` installiert.
 Skripte und Metadaten für die SaaS-Deployments/Policies werden im Moment im
-`opengever-saas <https://github.com/4teamwork/opengever-saas>`_ Repository auf
-github gepflegt. Dieses ist auf dem Server ``theta.4teamwork.ch`` nach
-``/home/zope/opengever-saas`` ausgecheckt und muss manuell mittels ``git pull``
-aktualisiert werden.
+`opengever-deployments <https://github.com/4teamwork/opengever-deployments>`_
+Repository auf github gepflegt. Dieses ist auf dem Server
+``theta.4teamwork.ch`` nach ``/home/zope/opengever-saas`` ausgecheckt und
+muss manuell mittels ``git pull`` aktualisiert werden.
 
 
 Einzelnes Deployment aktualisieren
@@ -33,10 +33,9 @@ Nachfolgend ein Beispiel wie ein Dev-Deployment aktualisiert werden kann:
 Operationen über alle SaaS Deployments
 --------------------------------------
 
-Im `opengever-saas <https://github.com/4teamwork/opengever-saas>`_ Repository
-wird ein JSON-File aller SaaS-Policies/Deployments gepflegt. Die Liste der D
-eployments muss dort aktuell gehalten werden. Die Skripte
-
+Im `opengever-deployments <https://github.com/4teamwork/opengever-deployments>`_
+Repository wird ein JSON-File aller SaaS-Policies/Deployments gepflegt. Die
+Liste der Deployments muss dort aktuell gehalten werden. Die Skripte
 
 .. code-block:: bash
 
