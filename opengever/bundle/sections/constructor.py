@@ -16,6 +16,7 @@ import logging
 
 
 logger = logging.getLogger('opengever.bundle.constructor')
+logger.setLevel(logging.INFO)
 
 
 class InvalidType(Exception):
@@ -95,6 +96,7 @@ class ConstructorSection(object):
                                 prefix_adapter.set_number(obj)
 
                 parent_path = '/'.join(context.getPhysicalPath())
+                logger.info("Constructed %r" % obj)
             except ValueError as e:
                 logger.warning(
                     u'Could not create object at {} with guid {}. {}'.format(

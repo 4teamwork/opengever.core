@@ -1,6 +1,7 @@
 from five import grok
 from opengever.document import _
 from opengever.document.document import IDocumentSchema
+from opengever.document.interfaces import INoAutomaticInitialVersion
 from opengever.task.util import CUSTOM_INITIAL_VERSION_MESSAGE
 from Products.CMFCore.utils import getToolByName
 from Products.CMFEditions.interfaces.IArchivist import ArchivistUnregisteredError
@@ -8,12 +9,24 @@ from Products.CMFEditions.interfaces.IModifier import FileTooLargeToVersionError
 from Products.CMFPlone.utils import base_hasattr
 from zope.globalrequest import getRequest
 from zope.i18n import translate
+from zope.interface import alsoProvides
+from zope.interface import noLongerProvides
 from zope.lifecycleevent.interfaces import IObjectAddedEvent
 
 
-# Versioning can be disabled when required, this is usually necessary when a
-# transmogrifier pipeline is involved, i.e. during setup or migration.
-DISABLE_INITIAL_VERSION = False
+class NoAutomaticInitialVersion(object):
+    """Contextmanager that temporarily disables automatic creation of
+    initial versions via event handler.
+
+    This is sometimes necessary when a transmogrifier pipeline is involved,
+    i.e. during setup or migration.
+    """
+
+    def __enter__(self):
+        alsoProvides(getRequest(), INoAutomaticInitialVersion)
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        noLongerProvides(getRequest(), INoAutomaticInitialVersion)
 
 
 @grok.subscribe(IDocumentSchema, IObjectAddedEvent)
@@ -23,7 +36,7 @@ def handle_document_added(context, event):
     version doesn't get created automatically.
 
     """
-    if DISABLE_INITIAL_VERSION:
+    if INoAutomaticInitialVersion.providedBy(context.REQUEST):
         return
 
     create_initial_version(context)

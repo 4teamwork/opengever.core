@@ -33,5 +33,6 @@ def import_oggbundle(app, args):
         transmogrifier(u'opengever.bundle.oggbundle')
 
     log.info("Committing transaction...")
+    transaction.get().note("Finished import of OGGBundle %r" % bundle_path)
     transaction.commit()
     log.info("Done.")

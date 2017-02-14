@@ -369,6 +369,10 @@ class TestOggBundlePipeline(FunctionalTestCase):
             u'Bewerbung Hanspeter M\xfcller',
             document_1.title)
 
+        repo_tool = api.portal.get_tool('portal_repository')
+        history = repo_tool.getHistoryMetadata(document_1)
+        self.assertEqual(1, len(history))
+
     def assert_document_2_created(self, parent):
         document_2 = parent.get('document-2')
 
@@ -408,6 +412,10 @@ class TestOggBundlePipeline(FunctionalTestCase):
         self.assertEqual(
             u'Entlassung Hanspeter M\xfcller',
             document_2.title)
+
+        repo_tool = api.portal.get_tool('portal_repository')
+        history = repo_tool.getHistoryMetadata(document_2)
+        self.assertEqual(1, len(history))
 
     def assert_mail_created(self, parent):
         mail = parent.get('document-3')

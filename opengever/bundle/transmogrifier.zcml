@@ -43,4 +43,9 @@
       name="opengever.bundle.map_local_roles"
       />
 
+  <utility
+      component=".sections.post_processing.PostProcessingSection"
+      name="opengever.bundle.post_processing"
+      />
+
 </configure>

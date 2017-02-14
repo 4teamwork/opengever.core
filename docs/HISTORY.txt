@@ -5,6 +5,25 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Use a request layer instead of monkey patch to disable automatic creation
+  of initial versions.
+  [lgraf]
+
+- Do intermediate commits during creation of initial versions. This addresses
+  a performance issue where the time to write initial versions increases
+  exponentially with the number of previous initial versions created in the
+  same transaction.
+  [lgraf]
+
+- Defer creation of initial versions to end of pipeline by creating a
+  dedicated section for post-processing steps.
+  [lgraf]
+
+- OGGBundle pipeline: Fix suppression of automatically created initial
+  versions by moving the disabled-initial-version section after the
+  resolveguid one.
+  [lgraf]
+
 - Add a title_help field for dossiertemplates.
   [elioschmutz]
 
