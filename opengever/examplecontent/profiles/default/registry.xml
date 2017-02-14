@@ -8,7 +8,7 @@
       <value key="reference_prefix_starting_point">0</value>
     </records>
 
-    <records interface="opengever.dossier.interfaces.ITemplateDossierProperties">
+    <records interface="opengever.dossier.interfaces.ITemplateFolderProperties">
       <value key="create_doc_properties">True</value>
     </records>
 

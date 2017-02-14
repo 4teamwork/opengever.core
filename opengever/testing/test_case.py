@@ -3,7 +3,7 @@ from ftw.builder import create
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.base.oguid import Oguid
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
-from opengever.dossier.interfaces import ITemplateDossierProperties
+from opengever.dossier.interfaces import ITemplateFolderProperties
 from opengever.journal.tests.utils import get_journal_entry
 from opengever.meeting.model import SubmittedDocument
 from opengever.ogds.models.admin_unit import AdminUnit
@@ -102,7 +102,7 @@ class FunctionalTestCase(TestCase):
 
     def set_docproperty_export_enabled(self, enabled=True):
         registry = getUtility(IRegistry)
-        props = registry.forInterface(ITemplateDossierProperties)
+        props = registry.forInterface(ITemplateFolderProperties)
         props.create_doc_properties = enabled
 
     def grant(self, *roles, **kwargs):

@@ -13,7 +13,7 @@ from opengever.document.document import IDocumentSchema
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.interfaces import IDocProperties
 from opengever.dossier.interfaces import IDocPropertyProvider
-from opengever.dossier.interfaces import ITemplateDossierProperties
+from opengever.dossier.interfaces import ITemplateFolderProperties
 from opengever.ogds.base.utils import ogds_service
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.interfaces import IMemberData
@@ -71,7 +71,7 @@ class DocPropertyWriter(object):
 
     def is_export_enabled(self):
         registry = getUtility(IRegistry)
-        props = registry.forInterface(ITemplateDossierProperties)
+        props = registry.forInterface(ITemplateFolderProperties)
         return props.create_doc_properties
 
     def update_doc_properties(self, only_existing):

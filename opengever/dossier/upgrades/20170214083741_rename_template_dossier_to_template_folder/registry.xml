@@ -1,0 +1,4 @@
+<registry>
+  <records interface="opengever.dossier.interfaces.ITemplateDossierProperties" remove="True"/>
+  <records interface="opengever.dossier.interfaces.ITemplateFolderProperties" />
+</registry>

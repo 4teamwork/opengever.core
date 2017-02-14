@@ -11,7 +11,7 @@ from opengever.contact.interfaces import IContactSettings
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_DOSSIER_TEMPLATE_LAYER
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.dossier.docprops import TemporaryDocFile
-from opengever.dossier.interfaces import ITemplateDossierProperties
+from opengever.dossier.interfaces import ITemplateFolderProperties
 from opengever.dossier.templatedossier import get_template_dossier
 from opengever.dossier.tests import OGDS_USER_ATTRIBUTES
 from opengever.journal.handlers import DOC_PROPERTIES_UPDATED
@@ -64,7 +64,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
         self.setup_fullname(fullname='Peter')
 
         registry = getUtility(IRegistry)
-        self.props = registry.forInterface(ITemplateDossierProperties)
+        self.props = registry.forInterface(ITemplateFolderProperties)
         self.props.create_doc_properties = True
 
         self.modification_date = datetime(2012, 12, 28)

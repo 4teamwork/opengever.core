@@ -7,7 +7,7 @@ from ftw.bumblebee.tests.helpers import get_queue
 from ftw.testbrowser import browsing
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 from opengever.document.interfaces import ICheckinCheckoutManager
-from opengever.dossier.interfaces import ITemplateDossierProperties
+from opengever.dossier.interfaces import ITemplateFolderProperties
 from opengever.testing import assets
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
@@ -169,7 +169,7 @@ class TestBumblebeeIntegrationWithEnabledFeature(FunctionalTestCase):
     @browsing
     def test_updates_checksum_and_queue_storing_after_docproperty_update(self, browser):
         api.portal.set_registry_record('create_doc_properties',
-                                       interface=ITemplateDossierProperties,
+                                       interface=ITemplateFolderProperties,
                                        value=True)
 
         dossier = create(Builder('dossier'))

@@ -21,7 +21,7 @@
 
 {{% endif %}}
 {{% if setup.enable_docproperty_feature %}}
-  <records interface="opengever.dossier.interfaces.ITemplateDossierProperties">
+  <records interface="opengever.dossier.interfaces.ITemplateFolderProperties">
     <value key="create_doc_properties">True</value>
   </records>
 
