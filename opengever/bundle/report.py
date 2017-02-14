@@ -122,13 +122,19 @@ class DataCollector(object):
         elif obj.portal_type in (
                 'opengever.document.document', 'ftw.mail.mail'):
             file_field = self.get_file_field(obj)
+            file_size = None
+            file_name = None
+            if file_field is not None:
+                file_size = file_field.getSize()
+                file_name = file_field.filename
+
             item_info = OrderedDict([
                 ('guid', guid),
                 ('parent_guid', parent_guid),
                 ('path', path),
                 ('title', title),
-                ('file_size', file_field.getSize()),
-                ('file_name', file_field.filename),
+                ('file_size', file_size),
+                ('file_name', file_name),
                 ('document_date', obj.document_date),
             ])
         else:
