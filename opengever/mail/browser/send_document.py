@@ -11,6 +11,7 @@ from five import grok
 from ftw.mail.inbound import createMailInContainer
 from ftw.mail.mail import IMail
 from opengever.base.source import DossierPathSourceBinder
+from opengever.dossier.interfaces import IDossierMarker
 from opengever.mail import _
 from opengever.mail.behaviors import ISendableDocsContainer
 from opengever.mail.events import DocumentSent
@@ -182,7 +183,7 @@ class SendDocumentForm(form.Form):
     def updateWidgets(self):
         super(SendDocumentForm, self).updateWidgets()
 
-        if not self.context.is_open():
+        if not self._allow_save_file_copy_in_context():
             file_copy_widget = self.widgets['file_copy_in_dossier']
             disabled_hint_text = translate(
                 _(u'file_copy_widget_disabled_hint_text',
@@ -238,7 +239,7 @@ class SendDocumentForm(form.Form):
             mh.send(msg, mfrom=mfrom, mto=','.join(addresses))
 
             # Store a copy of the sent mail in dossier
-            if data.get('file_copy_in_dossier', False) and self.context.is_open():
+            if data.get('file_copy_in_dossier', False) and self._allow_save_file_copy_in_context():
                 self.file_sent_mail_in_dossier(msg)
 
             # let the user know that the mail was sent
@@ -336,6 +337,14 @@ class SendDocumentForm(form.Form):
             u"Sent mail filed as '${title}'.",
             mapping={'title': mail.title_or_id()})
         IStatusMessage(self.request).addStatusMessage(status_msg, type='info')
+
+    def _allow_save_file_copy_in_context(self):
+        """The field file_copy_in_dossier should not be allowed for closed
+        dossiers or on all other contenttypes (i.e. the Inbox).
+        """
+        if IDossierMarker.providedBy(self.context):
+            return self.context.is_open()
+        return False
 
 
 class SendDocumentFormView(layout.FormWrapper, grok.View):
