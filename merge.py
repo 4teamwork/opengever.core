@@ -417,6 +417,24 @@ class MergeTool(object):
         testing_lines = (testing_lines[:method_firstline]
                          + method_lines_new
                          + testing_lines[method_lastline:])
+
+        # portal_languages.xml is now imported, so we need to update the
+        # language configuration code.
+        method_firstline = testing_lines.index(
+            '        """Configure the language tool as close as possible to production,')
+        method_lastline = testing_lines.index(
+            '        # lang_tool.supported_langs = [\'fr-ch\', \'de-ch\']')
+        testing_lines = (
+            testing_lines[:method_firstline]
+            + [
+                '        """Configure the language tool as close as possible to production,',
+                '        without breaking most of the existing tests.',
+                '        """',
+                '        lang_tool = api.portal.get_tool(\'portal_languages\')',
+                '        lang_tool.setDefaultLanguage(\'en\')',
+            ]
+            + testing_lines[method_lastline:])
+
         testing_path.write_bytes('\n'.join(testing_lines))
 
     def standard_migrate_xml(self, filename):
