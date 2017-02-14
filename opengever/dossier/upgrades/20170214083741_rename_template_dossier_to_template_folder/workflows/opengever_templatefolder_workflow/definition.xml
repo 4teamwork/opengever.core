@@ -17,7 +17,7 @@
  <permission>opengever.document: Checkin</permission>
  <permission>opengever.document: Checkout</permission>
  <permission>opengever.document: Force Checkin</permission>
- <permission>opengever.dossier: Add templatedossier</permission>
+ <permission>opengever.dossier: Add templatefolder</permission>
  <permission>opengever.trash: Trash content</permission>
  <permission>opengever.trash: Untrash content</permission>
  <permission>opengever.meeting: Add Sablon Template</permission>
@@ -112,7 +112,7 @@
    <permission-role>Administrator</permission-role>
    <permission-role>Manager</permission-role>
   </permission-map>
-  <permission-map name="opengever.dossier: Add templatedossier" acquired="False">
+  <permission-map name="opengever.dossier: Add templatefolder" acquired="False">
    <permission-role>Administrator</permission-role>
    <permission-role>Manager</permission-role>
   </permission-map>
