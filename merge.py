@@ -91,6 +91,7 @@ class MergeTool(object):
         self.validate_dependencies()
         self.migrate_standard_xmls()
         self.migrate_mailhost()
+        self.migrate_actions()
         self.migrate_rolemap()
         self.migrate_workflows()
         self.migrate_types()
@@ -192,7 +193,6 @@ class MergeTool(object):
 
     def migrate_standard_xmls(self):
         standard_xmls = (
-            'actions.xml',
             'browserlayer.xml',
             'catalog.xml',
             'controlpanel.xml',
@@ -227,6 +227,38 @@ class MergeTool(object):
     @step('Migrate rolemap.xml')
     def migrate_rolemap(self):
         self.first_level_tag_xml_migration('rolemap.xml', ('roles', 'permissions'))
+
+    @step('Migrate actions.xml')
+    def migrate_actions(self):
+        categories = (
+            'document_actions',
+            'site_actions',
+            'folder_buttons',
+            'object',
+            'object_buttons',
+            'portal_tabs',
+            'user',
+            'controlpanel',
+            'jqueryui_panels',
+            'mobile_buttons',
+            'object_checkin_menu')
+
+        self.first_level_tag_xml_migration(
+            'actions.xml',
+            map('object[@name="{}"]'.format, categories))
+
+        path = self.opengever_dir.joinpath('core/profiles/default/actions.xml')
+        doc = parsexml(path)
+
+        # remove <property name="title"/> tags from actegories
+        for node in doc.xpath('/object/object/property[@name="title"]'):
+            node.getparent().remove(node)
+
+        # normalize newlines between objects
+        for node in doc.xpath('/object/object/object'):
+            node.tail = '\n\n'
+
+        prettywrite(path, doc)
 
     @step('Migrate workflows')
     def migrate_workflows(self):
@@ -412,21 +444,23 @@ class MergeTool(object):
 
         prettywrite(self.og_core_profile_dir.joinpath(filename), target)
 
-    def first_level_tag_xml_migration(self, filename, tagnames):
+    def first_level_tag_xml_migration(self, filename, expressions):
         target_path = self.og_core_profile_dir.joinpath(filename)
         target = parsexml(target_path)
         source_paths = self.find_file_in_profiles_to_migrate(filename)
         sources = map(parsexml, source_paths)
-        for tagname in tagnames:
+        for expression in expressions:
             self.migrate_first_level_children_node(
-                tagname, target, zip(source_paths,sources))
+                expression, target, zip(source_paths, sources))
 
         prettywrite(target_path, target)
         did_not_migrate_tags = set()
 
         for doc in sources:
             map(did_not_migrate_tags.add,
-                map(attrgetter('tag'), doc.getroot().getchildren()))
+                map(attrgetter('tag'),
+                    filter(lambda node: not isinstance(node, etree._Comment),
+                           doc.getroot().getchildren())))
 
         assert not did_not_migrate_tags, \
             '{} didnt migrate tags {!r}'.format(
@@ -435,11 +469,11 @@ class MergeTool(object):
 
         map(methodcaller('unlink'), source_paths)
 
-    def migrate_first_level_children_node(self, tagname, target, sources):
-        target_node = xpath_one(target, tagname)
+    def migrate_first_level_children_node(self, expression, target, sources):
+        target_node = xpath_one(target, expression)
 
         for path, source in sources:
-            source_node = xpath_one(source, tagname, None)
+            source_node = xpath_one(source, expression, None)
             if source_node is None or len(source_node.getchildren()) == 0:
                 continue
 
