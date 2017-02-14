@@ -86,6 +86,9 @@ class MergeTool(object):
         self.create_opengever_core_profile()
         self.list_old_profiles()
         self.migrate_dependencies()
+        self.remove_examplecontent_dependency()
+        self.declare_examplecontent_softdependency()
+        self.validate_dependencies()
         self.migrate_standard_xmls()
         self.migrate_mailhost()
         self.migrate_rolemap()
@@ -130,6 +133,60 @@ class MergeTool(object):
             node.text = 'profile-' + profile
 
         prettywrite(target_metadata, target_doc)
+
+    @step('Remove examplecontent dependency to og.policy.base')
+    def remove_examplecontent_dependency(self):
+        for path in [
+                self.opengever_dir.joinpath(
+                    'examplecontent/profiles/default/metadata.xml'),
+                self.opengever_dir.joinpath(
+                    'policytemplates/policy_template/opengever.+package.name+/'
+                    'opengever/+package.name+/profiles/default/metadata.xml')]:
+            doc = parsexml(path)
+            node, = doc.xpath(
+                '//dependency[text()="profile-opengever.policy.base:default"]')
+            node.getparent().remove(node)
+            prettywrite(path, doc)
+
+    @step('Declare examplecontent softdependency to og.core upgrade order')
+    def declare_examplecontent_softdependency(self):
+        for path in [
+                self.opengever_dir.joinpath(
+                    'examplecontent/upgrades/configure.zcml'),
+                self.opengever_dir.joinpath(
+                    'policytemplates/policy_template/opengever.+package.name+/'
+                    'opengever/+package.name+/upgrades/configure.zcml.bob')]:
+            doc = parsexml(path)
+            node, = doc.xpath('//*[local-name()="directory"]')
+            node.attrib['soft_dependencies'] = 'opengever.core:default'
+            prettywrite(path, doc)
+
+    @step('Validate dependencies to merged profiles in not merged profiles')
+    def validate_dependencies(self):
+        metadata_files = filter(
+            lambda path: path.name == 'metadata.xml',
+            self.opengever_dir.walkfiles())
+        metadata_files = filter(
+            lambda path: '/upgrades/' not in path,
+            metadata_files)
+        metadata_files = filter(
+            lambda path: '/opengever.+package.name+/' not in path,
+            metadata_files)
+        invalid_target_profiles = self.profiles_to_migrate + [
+            'opengever.policy.base:default']
+        paths_to_invalid_profiles = map(self.profile_path, invalid_target_profiles)
+        metadata_files = filter(
+            lambda path: path.parent not in paths_to_invalid_profiles,
+            metadata_files)
+
+        for path in metadata_files:
+            doc = parsexml(path)
+            changed = True
+            for node in doc.xpath('//dependency'):
+                profile = re.sub('^profile-', '', node.text)
+                assert profile not in invalid_target_profiles, \
+                    'Dependency to {!r} should be removed from {}'.format(
+                        profile, path)
 
     def migrate_standard_xmls(self):
         standard_xmls = (
