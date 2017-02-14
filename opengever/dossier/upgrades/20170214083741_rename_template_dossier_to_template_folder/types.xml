@@ -1,0 +1,4 @@
+<object name="portal_types">
+    <object name="opengever.dossier.templatefolder" meta_type="Dexterity FTI" />
+    <object name="opengever.dossier.templatedossier" meta_type="Dexterity FTI" remove="True"/>
+</object>
