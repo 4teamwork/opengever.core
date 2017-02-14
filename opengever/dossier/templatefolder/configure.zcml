@@ -3,4 +3,18 @@
       xmlns:browser="http://namespaces.zope.org/browser"
       i18n_domain="opengever.dossier">
 
+  <browser:page
+      for="*"
+      name="document_with_template"
+      class=".form.SelectTemplateDocumentView"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="*"
+      name="select-address"
+      class=".form.SelectAddressView"
+      permission="zope2.View"
+      />
+
 </configure>
