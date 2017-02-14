@@ -76,4 +76,11 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="opengever.meeting.interfaces.IMeetingWrapper"
+      name="zipexport"
+      class=".zipexport.MeetingZipExport"
+      permission="zope2.View"
+      />
+
 </configure>
