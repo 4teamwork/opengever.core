@@ -565,7 +565,7 @@ def prettyformat(xmldoc):
 
     def set_indentation(elem, level=0):
         def indent(text, level):
-            text = (text or '').rstrip(' ')
+            text = (text or '').replace('\t', '    ').rstrip(' ')
             if '\n' not in text:
                 text += '\n'
             return text + (level * XML_CHILD_INDENT * ' ')
