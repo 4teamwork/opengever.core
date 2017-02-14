@@ -38,8 +38,8 @@ class PostProcessingSection(object):
         self.bundle = IAnnotations(transmogrifier)[BUNDLE_KEY]
 
     def __iter__(self):
-        self.commit_and_log("Committing transaction before post-processing.")
-        log.info("Transaction committed.")
+        log.info("Committing transaction...")
+        self.commit_and_log("Committed transaction before post-processing.")
 
         # Yield all items and collect them, so we can apply post-processing
         # steps *after* all the other sections have been executed
@@ -67,5 +67,5 @@ class PostProcessingSection(object):
 
     def commit_and_log(self, msg):
         transaction.get().note(msg)
-        log.info(msg)
         transaction.commit()
+        log.info(msg)
