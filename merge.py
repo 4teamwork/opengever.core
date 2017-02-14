@@ -310,9 +310,17 @@ class MergeTool(object):
         hooks_lines = map(
             lambda handler: 'import {}'.format(handler.rsplit('.', 1)[0]),
             sorted(handlers))
-        hooks_lines.extend(['', '', target_hooks.bytes().strip()])
+        hooks_lines.extend([target_hooks.bytes().strip()])
         hooks_lines.extend(map('    {}(site)'.format, handlers))
-        target_hooks.write_bytes('\n'.join(hooks_lines) + '\n')
+
+        code = '\n'.join(hooks_lines) + '\n'
+        code = code.replace(
+            'FORBIDDEN_PROFILES = ()',
+            "FORBIDDEN_PROFILES = (\n    '{}')".format(
+                "',\n    '".join(['opengever.policy.base:default'] +
+                                 self.profiles_to_migrate)))
+
+        target_hooks.write_bytes(code)
 
     @step('Install the new profile')
     def install_the_new_profile(self):

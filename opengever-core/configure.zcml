@@ -26,6 +26,6 @@
 
     <subscriber
           for="Products.GenericSetup.interfaces.IBeforeProfileImportEvent"
-          handler=".hooks.print_imported_gs_profile" />
+          handler=".hooks.awoid_profile_reinstallation" />
 
 </configure>
