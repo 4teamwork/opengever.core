@@ -95,6 +95,7 @@ class MergeTool(object):
         self.migrate_rolemap()
         self.migrate_workflows()
         self.migrate_types()
+        self.cleanup_jsregistry()
         self.validate_no_leftovers()
         self.migrate_hook_registrations()
         self.install_the_new_profile()
@@ -353,6 +354,28 @@ class MergeTool(object):
 
                 prettywrite(target_path, target_doc)
                 source_path.unlink().parent.rmdir_p()
+
+    @step('Cleanup jsregistry order')
+    def cleanup_jsregistry(self):
+        path = self.og_core_profile_dir.joinpath('jsregistry.xml')
+        order = self.here_dir.joinpath('jsorder.txt').bytes().strip().splitlines()
+        order_after = {order[i]: order[i-1] for i in range(1, len(order))}
+
+        new_doc = parsexml(path)
+        new = new_doc.getroot()
+        map(new.remove, new.getchildren())
+
+        old = parsexml(path)
+        nodes = {node.attrib.get('id'): node for node in old.xpath('javascript')}
+        for name in order:
+            if name not in nodes:
+                continue
+            node = nodes[name]
+            node.tail = '\n\n'
+            node.attrib['insert-after'] = order_after[name]
+            new.append(node)
+
+        prettywrite(path, new_doc)
 
     @step('Check for leftovers in old profiles')
     def validate_no_leftovers(self):
