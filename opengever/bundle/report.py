@@ -3,6 +3,7 @@ from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.base.behaviors.translated_title import ITranslatedTitleSupport
 from opengever.bundle.loader import BUNDLE_JSON_TYPES
 from opengever.bundle.sections.constructor import BUNDLE_GUID_KEY
+from opengever.bundle.sections.map_local_roles import NAME_ROLE_MAPPING
 from openpyxl import Workbook
 from openpyxl.styles import Font
 from plone import api
@@ -22,7 +23,7 @@ class DataCollector(object):
         self.bundle = bundle
 
     def __call__(self):
-        data = {'metadata': {}}
+        data = {'metadata': {}, 'permissions': {}}
         catalog = api.portal.get_tool('portal_catalog')
 
         portal_types = BUNDLE_JSON_TYPES.values()
@@ -37,10 +38,12 @@ class DataCollector(object):
 
         for portal_type in portal_types:
             data['metadata'][portal_type] = []
+            data['permissions'][portal_type] = []
             log.info("Collecting %s" % portal_type)
 
             brains = catalog.unrestrictedSearchResults(
                 portal_type=portal_type, path=root_paths)
+
             for brain in brains:
                 obj = brain.getObject()
                 guid = IAnnotations(obj).get(BUNDLE_GUID_KEY)
@@ -49,6 +52,13 @@ class DataCollector(object):
                     continue
                 item_info = self.get_item_metadata(obj, guid)
                 data['metadata'][portal_type].append(item_info)
+
+                if portal_type not in (
+                        'opengever.document.document', 'ftw.mail.mail'):
+                    permission_info = self.get_permissions(obj, guid)
+                    if permission_info:
+                        data['permissions'][portal_type].extend(
+                            permission_info)
 
         return data
 
@@ -80,6 +90,47 @@ class DataCollector(object):
 
         return item_info
 
+    def get_permissions(self, obj, guid):
+        local_roles = obj.get_local_roles()
+        inheritance_blocked = getattr(obj, '__ac_local_roles_block__', False)
+
+        # Always include at least one row per object with the info whether
+        # or not inheritance is blocked
+        inheritance_blocked_row = OrderedDict([
+            ('guid', guid),
+            ('principal', None),
+            ('read', None),
+            ('edit', None),
+            ('add', None),
+            ('close', None),
+            ('reactivate', None),
+            ('blocked_inheritance', inheritance_blocked),
+        ])
+
+        # If local role assignments are present, include them as additional
+        # rows (using GUID as key), one row per principal and their roles
+        principal_role_rows = []
+        for principal, roles in dict(local_roles).items():
+            principal_roles = OrderedDict([
+                ('guid', guid),
+                ('principal', principal),
+                ('read', False),
+                ('edit', False),
+                ('add', False),
+                ('close', False),
+                ('reactivate', False),
+                ('blocked_inheritance', None),
+            ])
+            for rolename in roles:
+                if rolename == 'Owner':
+                    continue
+                short_role_name = NAME_ROLE_MAPPING[rolename]
+                assert short_role_name in principal_roles
+                principal_roles[short_role_name] = True
+            principal_role_rows.append(principal_roles)
+
+        return [inheritance_blocked_row] + principal_role_rows
+
 
 class ASCIISummaryBuilder(object):
     """Build a quick ASCII summary of object counts based on report data.
@@ -105,16 +156,24 @@ class XLSXReportBuilder(object):
     """
 
     def __init__(self, report_data):
-        self.report_data = {'metadata': {}}
+        self.report_data = {'metadata': {}, 'permissions': {}}
         metadata = self.report_data['metadata']
         metadata.update(report_data['metadata'])
+        permissions = self.report_data['permissions']
+        permissions.update(report_data['permissions'])
         self.metadata = metadata
+        self.permissions = permissions
 
         # Include mails in documents by moving them over
         docs = metadata.get('opengever.document.document', [])
         mails = metadata.get('ftw.mail.mail', [])
         metadata['opengever.document.document'] = docs + mails
         metadata.pop('ftw.mail.mail', None)
+
+        docs = permissions.get('opengever.document.document', [])
+        mails = permissions.get('ftw.mail.mail', [])
+        permissions['opengever.document.document'] = docs + mails
+        permissions.pop('ftw.mail.mail', None)
 
     def build_and_save(self, report_path):
         workbook = self.build_report()
@@ -148,10 +207,30 @@ class XLSXReportBuilder(object):
             for rownum, info in enumerate(self.metadata[portal_type], 1):
                 self._write_row(sheet, rownum, info.values())
 
+    def _write_permissions(self, workbook):
+        for json_name, portal_type in BUNDLE_JSON_TYPES.items():
+            if not self.permissions.get(portal_type):
+                continue
+
+            sheet_name = '%s_permissions' % json_name.replace('.json', '')
+            log.info("Creating sheet %s" % sheet_name)
+            sheet = workbook.create_sheet(sheet_name)
+            sheet.title = sheet_name
+
+            # Label Row
+            headers = self.permissions[portal_type][0].keys()
+            self._write_row(sheet, 0, headers, bold=True)
+
+            # Data rows
+            permission_infos = self.permissions[portal_type]
+            for rownum, perm_info in enumerate(permission_infos, 1):
+                self._write_row(sheet, rownum, perm_info.values())
+
     def build_report(self):
         workbook = Workbook()
         workbook.remove_sheet(workbook.active)
 
         self._write_metadata(workbook)
+        self._write_permissions(workbook)
 
         return workbook

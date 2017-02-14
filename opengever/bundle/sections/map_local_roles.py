@@ -14,6 +14,9 @@ ROLE_NAME_MAPPING = {
     'reactivate': 'Publisher',
 }
 
+# Inverted mapping of the above
+NAME_ROLE_MAPPING = {v: k for k, v in ROLE_NAME_MAPPING.iteritems()}
+
 
 class MapLocalRolesSection(object):
     """Map local roles from short names used in OGGBundles to actual role names
