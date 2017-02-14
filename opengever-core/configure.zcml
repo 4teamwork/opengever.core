@@ -24,4 +24,8 @@
           handler=".hooks.installed"
           />
 
+    <subscriber
+          for="Products.GenericSetup.interfaces.IBeforeProfileImportEvent"
+          handler=".hooks.print_imported_gs_profile" />
+
 </configure>

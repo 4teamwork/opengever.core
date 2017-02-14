@@ -1,3 +1,7 @@
+def print_imported_gs_profile(event):
+    print 'IMPORTING', event.profile_id
+
+
 def installed(site):
     trigger_subpackage_hooks(site)
 
