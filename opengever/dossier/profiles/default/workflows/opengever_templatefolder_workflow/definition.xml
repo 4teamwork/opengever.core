@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<dc-workflow workflow_id="opengever_templatedossier_workflow" title="Template Dossier Workflow" description="" state_variable="review_state" initial_state="templatedossier-state-active" manager_bypass="False">
+<dc-workflow workflow_id="opengever_templatefolder_workflow" title="Template Folder Workflow" description="" state_variable="review_state" initial_state="templatefolder-state-active" manager_bypass="False">
  <permission>Access contents information</permission>
  <permission>Add portal content</permission>
  <permission>Change portal events</permission>
@@ -21,7 +21,7 @@
  <permission>opengever.trash: Trash content</permission>
  <permission>opengever.trash: Untrash content</permission>
  <permission>opengever.meeting: Add Sablon Template</permission>
- <state state_id="templatedossier-state-active" title="Active">
+ <state state_id="templatefolder-state-active" title="Active">
   <description>Visible to everyone, editable by the owner.</description>
   <permission-map name="opengever.meeting: Add Sablon Template" acquired="False">
    <permission-role>Contributor</permission-role>
