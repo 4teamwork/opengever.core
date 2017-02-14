@@ -176,8 +176,7 @@ class MergeTool(object):
         metadata_files = filter(
             lambda path: '/opengever.+package.name+/' not in path,
             metadata_files)
-        invalid_target_profiles = self.profiles_to_migrate + [
-            'opengever.policy.base:default']
+        invalid_target_profiles = self.profiles_to_migrate
         paths_to_invalid_profiles = map(self.profile_path, invalid_target_profiles)
         metadata_files = filter(
             lambda path: path.parent not in paths_to_invalid_profiles,
@@ -185,7 +184,6 @@ class MergeTool(object):
 
         for path in metadata_files:
             doc = parsexml(path)
-            changed = True
             for node in doc.xpath('//dependency'):
                 profile = re.sub('^profile-', '', node.text)
                 assert profile not in invalid_target_profiles, \
@@ -209,6 +207,7 @@ class MergeTool(object):
             'types.xml',
             'viewlets.xml',
             'workflows.xml',
+            'portal_languages.xml',
         )
 
         map(lambda name: execute_step(
@@ -264,6 +263,7 @@ class MergeTool(object):
         # move the primary XML to position 0
         for relpath in (
                 'meeting/profiles/default/types/opengever.meeting.meetingdossier.xml',
+                'policy/base/profiles/default/types/Plone_Site.xml',
         ):
             path = self.opengever_dir.joinpath(relpath)
             filename = str(path.name)
@@ -378,8 +378,7 @@ class MergeTool(object):
         code = code.replace(
             'FORBIDDEN_PROFILES = ()',
             "FORBIDDEN_PROFILES = (\n    '{}')".format(
-                "',\n    '".join(['opengever.policy.base:default'] +
-                                 self.profiles_to_migrate)))
+                "',\n    '".join(self.profiles_to_migrate)))
 
         target_hooks.write_bytes(code)
 
@@ -490,6 +489,8 @@ class MergeTool(object):
                 print '   WARNING: skipping duplicate profile', profile
             else:
                 result.append(profile)
+
+        result.append('opengever.policy.base:default')
         return result
 
     def profile_path(self, profile):
