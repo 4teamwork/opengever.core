@@ -1,9 +1,14 @@
+from Acquisition import aq_parent
 from collections import OrderedDict
+from opengever.base.behaviors.base import IOpenGeverBase
 from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.base.behaviors.translated_title import ITranslatedTitleSupport
+from opengever.base.interfaces import IReferenceNumber
 from opengever.bundle.loader import BUNDLE_JSON_TYPES
 from opengever.bundle.sections.constructor import BUNDLE_GUID_KEY
 from opengever.bundle.sections.map_local_roles import NAME_ROLE_MAPPING
+from opengever.dossier.behaviors.dossier import IDossier
+from opengever.ogds.base.utils import get_current_admin_unit
 from openpyxl import Workbook
 from openpyxl.styles import Font
 from plone import api
@@ -21,6 +26,7 @@ class DataCollector(object):
 
     def __init__(self, bundle):
         self.bundle = bundle
+        self.au_abbreviation = get_current_admin_unit().abbreviation
 
     def __call__(self):
         data = {'metadata': {}, 'permissions': {}}
@@ -77,16 +83,60 @@ class DataCollector(object):
             return ITranslatedTitle(obj).title_de
         return obj.title
 
+    def get_reference_number(self, obj):
+        reference_adapter = IReferenceNumber(obj)
+        refnum = reference_adapter.get_number()
+        # Strip AdminUnit abbreviation
+        refnum = refnum.replace(self.au_abbreviation, '').strip()
+        return refnum
+
     def get_item_metadata(self, obj, guid):
         path = '/'.join(obj.getPhysicalPath())
         title = self.get_title(obj)
+        parent = aq_parent(obj)
+        parent_guid = IAnnotations(parent).get(BUNDLE_GUID_KEY)
 
-        item_info = OrderedDict(
-            [('guid', guid), ('path', path), ('title', title)])
-
-        file_field = self.get_file_field(obj)
-        if file_field:
-            item_info['file_size'] = file_field.getSize()
+        if obj.portal_type == 'opengever.repository.repositoryfolder':
+            item_info = OrderedDict([
+                ('guid', guid),
+                ('parent_guid', parent_guid),
+                ('path', path),
+                ('title', title),
+                ('description', obj.description),
+                ('full_reference_number', self.get_reference_number(obj)),
+            ])
+        elif obj.portal_type == 'opengever.dossier.businesscasedossier':
+            item_info = OrderedDict([
+                ('guid', guid),
+                ('parent_guid', parent_guid),
+                ('path', path),
+                ('title', title),
+                ('full_reference_number', self.get_reference_number(obj)),
+                ('reference_number', IDossier(obj).reference_number),
+                ('responsible', IDossier(obj).responsible),
+                ('description', IOpenGeverBase(obj).description),
+                ('start', IDossier(obj).start),
+                ('end', IDossier(obj).end),
+                ('review_state', api.content.get_state(obj)),
+            ])
+        elif obj.portal_type in (
+                'opengever.document.document', 'ftw.mail.mail'):
+            file_field = self.get_file_field(obj)
+            item_info = OrderedDict([
+                ('guid', guid),
+                ('parent_guid', parent_guid),
+                ('path', path),
+                ('title', title),
+                ('file_size', file_field.getSize()),
+                ('file_name', file_field.filename),
+                ('document_date', obj.document_date),
+            ])
+        else:
+            item_info = OrderedDict([
+                ('guid', guid),
+                ('path', path),
+                ('title', title),
+            ])
 
         return item_info
 
