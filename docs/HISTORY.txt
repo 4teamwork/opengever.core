@@ -5,6 +5,11 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- OGGBundle pipeline: Implement basic reports for imported objects. After
+  a bundle import, a quick ASCII summary and a much more detailed XLSX
+  report will be generated.
+  [lgraf]
+
 - Fix send_documents view on the inbox.
   Allows the functionality to save sent files in the dossier
   only for IDossierMarker-types.
