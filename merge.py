@@ -31,6 +31,9 @@ XML_FORMAT_ONELINE = (
     'object',
     'property',
     'index',
+    'hidden',
+    'order',
+    'viewlet',
 )
 
 # Tags to format on multiple lines
@@ -96,6 +99,7 @@ class MergeTool(object):
         self.migrate_workflows()
         self.migrate_types()
         self.cleanup_jsregistry()
+        self.cleanup_viewlets()
         self.validate_no_leftovers()
         self.migrate_hook_registrations()
         self.install_the_new_profile()
@@ -376,6 +380,41 @@ class MergeTool(object):
             new.append(node)
 
         prettywrite(path, new_doc)
+
+    @step('Cleanup viewlets.xml')
+    def cleanup_viewlets(self):
+        path = self.og_core_profile_dir.joinpath('viewlets.xml')
+        doc = parsexml(path)
+
+        # remove "migrated" comments since we are gonna reorder
+        map(doc.getroot().remove,
+            filter(lambda node: node.text.startswith('migrated'),
+                   filter(lambda node: isinstance(node, etree._Comment),
+                          doc.getroot().getchildren())))
+
+        # merge <viewlet> into "same" <order> / <hidden> containers
+        containers = {}
+        for node in filter(lambda node: not isinstance(node, etree._Comment),
+                                doc.getroot()):
+            key = (node.tag, tuple(sorted(dict(node.attrib).items())))
+            if key in containers:
+                map(containers[key].append, node.getchildren())
+                node.getparent().remove(node)
+            else:
+                containers[key] = node
+
+        # now we may have duplicate <viewlet> tag per parent, lets clean up
+        for container in filter(lambda node: not isinstance(node, etree._Comment),
+                                doc.getroot()):
+            viewlets = []
+            for node in container.getchildren():
+                key = (node.tag, tuple(sorted(dict(node.attrib).items())))
+                if key in viewlets:
+                    container.remove(node)
+                else:
+                    viewlets.append(key)
+
+        prettywrite(path, doc)
 
     @step('Check for leftovers in old profiles')
     def validate_no_leftovers(self):
