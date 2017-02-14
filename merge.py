@@ -146,6 +146,10 @@ class MergeTool(object):
             node, = doc.xpath(
                 '//dependency[text()="profile-opengever.policy.base:default"]')
             node.getparent().remove(node)
+            # mimetypes are installed explicitly in og.setup.
+            node, = doc.xpath(
+                '//dependency[text()="profile-opengever.policy.base:mimetype"]')
+            node.getparent().remove(node)
             prettywrite(path, doc)
 
     @step('Declare examplecontent softdependency to og.core upgrade order')
