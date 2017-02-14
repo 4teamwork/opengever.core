@@ -11,8 +11,8 @@ logger = logging.getLogger('opengever.bundle.bundlesource')
 logger.setLevel(logging.INFO)
 
 
-BUNDLE_PATH_KEY = 'opengever.setup.bundle_path'
-JSON_STATS_KEY = 'opengever.setup.json_stats'
+BUNDLE_KEY = 'opengever.bundle.bundle'
+BUNDLE_PATH_KEY = 'opengever.bundle.bundle_path'
 
 
 class BundleSourceSection(object):
@@ -26,8 +26,6 @@ class BundleSourceSection(object):
         self.previous = previous
         self.transmogrifier = transmogrifier
 
-        IAnnotations(transmogrifier)[JSON_STATS_KEY] = {'errors': {}}
-
         bundle_path = IAnnotations(transmogrifier).get(BUNDLE_PATH_KEY)
         if not bundle_path:
             raise Exception(
@@ -37,6 +35,7 @@ class BundleSourceSection(object):
                 "'/path/to/bundle'")
 
         self.bundle = BundleLoader(bundle_path).load()
+        IAnnotations(transmogrifier)[BUNDLE_KEY] = self.bundle
 
     def __iter__(self):
         return iter(self.bundle)

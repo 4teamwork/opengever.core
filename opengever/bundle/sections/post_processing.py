@@ -1,6 +1,9 @@
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
+from datetime import datetime
+from opengever.bundle.sections.bundlesource import BUNDLE_KEY
 from opengever.document.checkout.handlers import create_initial_version
+from zope.annotation import IAnnotations
 from zope.interface import classProvides
 from zope.interface import implements
 import logging
@@ -32,10 +35,11 @@ class PostProcessingSection(object):
     def __init__(self, transmogrifier, name, options, previous):
         self.previous = previous
         self.context = transmogrifier.context
+        self.bundle = IAnnotations(transmogrifier)[BUNDLE_KEY]
 
     def __iter__(self):
-        self.commit_and_log("Committing transaction before post-processing.")
-        log.info("Transaction committed.")
+        log.info("Committing transaction...")
+        self.commit_and_log("Committed transaction before post-processing.")
 
         # Yield all items and collect them, so we can apply post-processing
         # steps *after* all the other sections have been executed
@@ -59,8 +63,9 @@ class PostProcessingSection(object):
         self.commit_and_log(
             "Final commit after OGGBundle post-processing. "
             "%s of %s items." % (count, len(items_to_post_process)))
+        self.bundle.stats['timings']['done_post_processing'] = datetime.now()
 
     def commit_and_log(self, msg):
         transaction.get().note(msg)
-        log.info(msg)
         transaction.commit()
+        log.info(msg)

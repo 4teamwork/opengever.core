@@ -1,11 +1,14 @@
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
+from opengever.bundle.sections.bundlesource import BUNDLE_KEY
 from opengever.bundle.sections.resolveguid import DuplicateGuid
 from opengever.bundle.sections.resolveguid import MissingGuid
 from opengever.bundle.sections.resolveguid import MissingParent
 from opengever.bundle.sections.resolveguid import ResolveGUIDSection
+from opengever.bundle.tests import MockBundle
 from opengever.bundle.tests import MockTransmogrifier
 from opengever.testing import FunctionalTestCase
+from zope.annotation import IAnnotations
 from zope.interface.verify import verifyClass
 from zope.interface.verify import verifyObject
 
@@ -15,6 +18,9 @@ class TestResolveGUID(FunctionalTestCase):
     def setup_section(self, previous=None):
         previous = previous or []
         transmogrifier = MockTransmogrifier()
+        self.bundle = MockBundle()
+        IAnnotations(transmogrifier)[BUNDLE_KEY] = self.bundle
+
         options = {'blueprint', 'opengever.bundle.resolveguid'}
 
         return ResolveGUIDSection(transmogrifier, '', options, previous)
@@ -72,7 +78,6 @@ class TestResolveGUID(FunctionalTestCase):
     def test_defines_guid_mapping_on_transmogrifier(self):
         item = {'guid': 'marvin'}
         section = self.setup_section(previous=[item])
-        transmogrifier = section.transmogrifier
 
         list(section)
-        self.assertEqual(item, transmogrifier.item_by_guid['marvin'])
+        self.assertEqual(item, self.bundle.item_by_guid['marvin'])

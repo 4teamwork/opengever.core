@@ -48,4 +48,9 @@
       name="opengever.bundle.post_processing"
       />
 
+  <utility
+      component=".sections.report.ReportSection"
+      name="opengever.bundle.report"
+      />
+
 </configure>

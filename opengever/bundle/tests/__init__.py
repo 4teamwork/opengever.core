@@ -5,6 +5,9 @@ from zope.interface import implementer
 
 @implementer(IAttributeAnnotatable)
 class MockTransmogrifier(object):
+    pass
 
+
+class MockBundle(object):
     def __init__(self):
         self.item_by_guid = OrderedDict()

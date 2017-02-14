@@ -1,4 +1,5 @@
 from collections import OrderedDict
+from datetime import datetime
 from jsonschema import FormatChecker
 from jsonschema import validate
 from pkg_resources import resource_filename as rf
@@ -36,6 +37,8 @@ class Bundle(object):
         if stats is not None:
             self.stats = stats
 
+        self.errors = {}
+
     def __repr__(self):
         return '<%s %s>' % (self.__class__.__name__, self.bundle_path)
 
@@ -43,6 +46,11 @@ class Bundle(object):
         """Yield all items of the bundle in order.
         """
         return iter(self.items)
+
+    def get_repository_roots(self):
+        roots = [item for item in self.items
+                 if item['_type'] == 'opengever.repository.repositoryroot']
+        return roots
 
 
 class BundleLoader(object):
@@ -60,10 +68,12 @@ class BundleLoader(object):
     def __init__(self, bundle_path):
         self.bundle_path = bundle_path
         self.json_schemas = self._load_schemas()
+        self._stats = {'bundle_counts': {}, 'timings': {}}
 
     def load(self):
         """Load the bundle from disk and return an iterable Bundle.
         """
+        self._stats['timings']['start_loading'] = datetime.now()
         self._load_items()
         bundle = Bundle(
             self._items, self.bundle_path, self.json_schemas, self._stats)
@@ -74,19 +84,18 @@ class BundleLoader(object):
         log.info('')
         log.info('Stats for %r' % bundle)
         log.info('=' * 80)
-        for json_name, count in bundle.stats['counts'].items():
+        for json_name, count in bundle.stats['bundle_counts'].items():
             log.info("%-20s %s" % (json_name, count))
 
     def _load_items(self):
         self._items = []
-        self._stats = {'counts': {}}
         for json_name, portal_type in BUNDLE_JSON_TYPES.items():
             json_path = os.path.join(self.bundle_path, json_name)
 
             try:
                 with codecs.open(json_path, 'r', 'utf-8-sig') as json_file:
                     items = json.load(json_file)
-                    self._stats['counts'][json_name] = len(items)
+                    self._stats['bundle_counts'][json_name] = len(items)
             except IOError as exc:
                 log.info('%s: %s, skipping' % (json_name, exc.strerror))
                 continue

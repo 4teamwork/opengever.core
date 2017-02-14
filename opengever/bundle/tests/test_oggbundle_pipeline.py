@@ -7,6 +7,7 @@ from ftw.testing import freeze
 from opengever.base.behaviors.classification import IClassification
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.base.security import elevated_privileges
+from opengever.bundle.sections.bundlesource import BUNDLE_KEY
 from opengever.bundle.sections.bundlesource import BUNDLE_PATH_KEY
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.repository.behaviors.referenceprefix import IReferenceNumberPrefix
@@ -45,12 +46,15 @@ class TestOggBundlePipeline(FunctionalTestCase):
         with freeze(FROZEN_NOW), elevated_privileges():
             transmogrifier(u'opengever.bundle.oggbundle')
 
+        bundle = IAnnotations(transmogrifier)[BUNDLE_KEY]
+
         # test content creation
         # XXX use separate test-cases based on a layer
         root = self.assert_repo_root_created()
         folder_staff = self.assert_repo_folders_created(root)
         dossier_peter = self.assert_dossiers_created(folder_staff)
         self.assert_documents_created(dossier_peter)
+        self.assert_report_data_collected(bundle)
 
     def assert_repo_root_created(self):
         root = self.portal.get('ordnungssystem')
@@ -454,3 +458,30 @@ class TestOggBundlePipeline(FunctionalTestCase):
         self.assertEqual(
             u'Lorem Ipsum',
             mail.title)
+
+    def assert_report_data_collected(self, bundle):
+        report_data = bundle.report_data
+        metadata = report_data['metadata']
+
+        self.assertSetEqual(
+            set([
+                'opengever.repository.repositoryroot',
+                'opengever.repository.repositoryfolder',
+                'opengever.dossier.businesscasedossier',
+                'opengever.document.document',
+                'ftw.mail.mail']),
+            set(metadata.keys()))
+
+        reporoots = metadata['opengever.repository.repositoryroot']
+        repofolders = metadata['opengever.repository.repositoryfolder']
+        dossiers = metadata['opengever.dossier.businesscasedossier']
+        documents = metadata['opengever.document.document']
+        mails = metadata['ftw.mail.mail']
+
+        self.assertEqual(1, len(reporoots))
+        self.assertEqual(3, len(repofolders))
+        self.assertEqual(2, len(dossiers))
+        self.assertEqual(2, len(documents))
+        self.assertEqual(1, len(mails))
+
+        print bundle

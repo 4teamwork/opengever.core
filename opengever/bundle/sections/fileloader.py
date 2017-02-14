@@ -3,8 +3,8 @@ from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.utils import defaultMatcher
 from ftw.mail.mail import IMail
 from mimetypes import guess_type
+from opengever.bundle.sections.bundlesource import BUNDLE_KEY
 from opengever.bundle.sections.bundlesource import BUNDLE_PATH_KEY
-from opengever.bundle.sections.bundlesource import JSON_STATS_KEY
 from opengever.document.document import IDocumentSchema
 from opengever.document.subscribers import set_digitally_available
 from opengever.document.subscribers import sync_title_and_filename_handler
@@ -35,12 +35,12 @@ class FileLoaderSection(object):
         self.key = 'filepath'
         self.pathkey = defaultMatcher(options, 'path-key', name, 'path')
 
+        self.bundle = IAnnotations(transmogrifier)[BUNDLE_KEY]
         self.bundle_path = IAnnotations(transmogrifier)[BUNDLE_PATH_KEY]
 
-        self.stats = IAnnotations(transmogrifier)[JSON_STATS_KEY]
-        self.stats['errors']['files_not_found'] = {}
-        self.stats['errors']['files_io_errors'] = {}
-        self.stats['errors']['msgs'] = {}
+        self.bundle.errors['files_not_found'] = {}
+        self.bundle.errors['files_io_errors'] = {}
+        self.bundle.errors['msgs'] = {}
 
     def is_mail(self, item):
         return item['_type'] == 'ftw.mail.mail'
@@ -74,14 +74,14 @@ class FileLoaderSection(object):
                 # TODO: Check for this in OGGBundle validation
                 if filepath.endswith(u'.msg'):
                     logger.warning("Skipping .msg file: %s" % filepath)
-                    self.stats['errors']['msgs'][filepath] = path
+                    self.bundle.errors['msgs'][filepath] = path
                     yield item
                     continue
 
                 # TODO: Check for this in OGGBundle validation
                 if not os.path.exists(filepath):
                     logger.warning("File not found: %s" % filepath)
-                    self.stats['errors']['files_not_found'][filepath] = path
+                    self.bundle.errors['files_not_found'][filepath] = path
                     yield item
                     continue
 
@@ -108,7 +108,7 @@ class FileLoaderSection(object):
                     # TODO: Check for this in OGGBundle validation
                     logger.warning("Can't open file %s. %s." % (
                         filepath, str(e)))
-                    self.stats['errors']['files_io_errors'][filepath] = path
+                    self.bundle.errors['files_io_errors'][filepath] = path
                     yield item
                     continue
 

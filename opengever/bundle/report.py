@@ -1,0 +1,236 @@
+from collections import OrderedDict
+from opengever.base.behaviors.translated_title import ITranslatedTitle
+from opengever.base.behaviors.translated_title import ITranslatedTitleSupport
+from opengever.bundle.loader import BUNDLE_JSON_TYPES
+from opengever.bundle.sections.constructor import BUNDLE_GUID_KEY
+from opengever.bundle.sections.map_local_roles import NAME_ROLE_MAPPING
+from openpyxl import Workbook
+from openpyxl.styles import Font
+from plone import api
+from zope.annotation import IAnnotations
+import logging
+
+
+log = logging.getLogger(__name__)
+log.setLevel(logging.INFO)
+
+
+class DataCollector(object):
+    """Collect report data from Plone.
+    """
+
+    def __init__(self, bundle):
+        self.bundle = bundle
+
+    def __call__(self):
+        data = {'metadata': {}, 'permissions': {}}
+        catalog = api.portal.get_tool('portal_catalog')
+
+        portal_types = BUNDLE_JSON_TYPES.values()
+        portal_types.append('ftw.mail.mail')
+
+        # Determine paths of repository roots that were part of the current
+        # import to limit catalog search accordingly
+        portal = api.portal.get()
+        root_paths = [
+            '/'.join(portal.getPhysicalPath() + (r['_path'], ))
+            for r in self.bundle.get_repository_roots()]
+
+        for portal_type in portal_types:
+            data['metadata'][portal_type] = []
+            data['permissions'][portal_type] = []
+            log.info("Collecting %s" % portal_type)
+
+            brains = catalog.unrestrictedSearchResults(
+                portal_type=portal_type, path=root_paths)
+
+            for brain in brains:
+                obj = brain.getObject()
+                guid = IAnnotations(obj).get(BUNDLE_GUID_KEY)
+                if guid not in self.bundle.item_by_guid:
+                    # Skip object, not part of current import
+                    continue
+                item_info = self.get_item_metadata(obj, guid)
+                data['metadata'][portal_type].append(item_info)
+
+                if portal_type not in (
+                        'opengever.document.document', 'ftw.mail.mail'):
+                    permission_info = self.get_permissions(obj, guid)
+                    if permission_info:
+                        data['permissions'][portal_type].extend(
+                            permission_info)
+
+        return data
+
+    def get_file_field(self, obj):
+        if obj.portal_type == 'opengever.document.document':
+            file_field = obj.file
+        elif obj.portal_type == 'ftw.mail.mail':
+            file_field = obj.message
+        else:
+            file_field = None
+
+        return file_field
+
+    def get_title(self, obj):
+        if ITranslatedTitleSupport.providedBy(obj):
+            return ITranslatedTitle(obj).title_de
+        return obj.title
+
+    def get_item_metadata(self, obj, guid):
+        path = '/'.join(obj.getPhysicalPath())
+        title = self.get_title(obj)
+
+        item_info = OrderedDict(
+            [('guid', guid), ('path', path), ('title', title)])
+
+        file_field = self.get_file_field(obj)
+        if file_field:
+            item_info['file_size'] = file_field.getSize()
+
+        return item_info
+
+    def get_permissions(self, obj, guid):
+        local_roles = obj.get_local_roles()
+        inheritance_blocked = getattr(obj, '__ac_local_roles_block__', False)
+
+        # Always include at least one row per object with the info whether
+        # or not inheritance is blocked
+        inheritance_blocked_row = OrderedDict([
+            ('guid', guid),
+            ('principal', None),
+            ('read', None),
+            ('edit', None),
+            ('add', None),
+            ('close', None),
+            ('reactivate', None),
+            ('blocked_inheritance', inheritance_blocked),
+        ])
+
+        # If local role assignments are present, include them as additional
+        # rows (using GUID as key), one row per principal and their roles
+        principal_role_rows = []
+        for principal, roles in dict(local_roles).items():
+            principal_roles = OrderedDict([
+                ('guid', guid),
+                ('principal', principal),
+                ('read', False),
+                ('edit', False),
+                ('add', False),
+                ('close', False),
+                ('reactivate', False),
+                ('blocked_inheritance', None),
+            ])
+            for rolename in roles:
+                if rolename == 'Owner':
+                    continue
+                short_role_name = NAME_ROLE_MAPPING[rolename]
+                assert short_role_name in principal_roles
+                principal_roles[short_role_name] = True
+            principal_role_rows.append(principal_roles)
+
+        return [inheritance_blocked_row] + principal_role_rows
+
+
+class ASCIISummaryBuilder(object):
+    """Build a quick ASCII summary of object counts based on report data.
+    """
+
+    def __init__(self, report_data):
+        self.report_data = report_data
+
+    def build(self):
+        report = []
+        report.append('Imported objects:')
+        report.append('=================')
+
+        for portal_type, items in self.report_data['metadata'].items():
+            line = "%s: %s" % (portal_type, len(items))
+            report.append(line)
+
+        return '\n'.join(report)
+
+
+class XLSXReportBuilder(object):
+    """Build a detailed report in XLSX format based on report data.
+    """
+
+    def __init__(self, report_data):
+        self.report_data = {'metadata': {}, 'permissions': {}}
+        metadata = self.report_data['metadata']
+        metadata.update(report_data['metadata'])
+        permissions = self.report_data['permissions']
+        permissions.update(report_data['permissions'])
+        self.metadata = metadata
+        self.permissions = permissions
+
+        # Include mails in documents by moving them over
+        docs = metadata.get('opengever.document.document', [])
+        mails = metadata.get('ftw.mail.mail', [])
+        metadata['opengever.document.document'] = docs + mails
+        metadata.pop('ftw.mail.mail', None)
+
+        docs = permissions.get('opengever.document.document', [])
+        mails = permissions.get('ftw.mail.mail', [])
+        permissions['opengever.document.document'] = docs + mails
+        permissions.pop('ftw.mail.mail', None)
+
+    def build_and_save(self, report_path):
+        workbook = self.build_report()
+        self.save_report(workbook, report_path)
+
+    def save_report(self, workbook, path):
+        with open(path, 'w') as report_xlsx:
+            workbook.save(report_xlsx)
+            log.info("Wrote report to %s" % path)
+        return path
+
+    def _write_row(self, sheet, rownum, values, bold=False):
+        for col_num, value in enumerate(values, 1):
+            cell = sheet.cell(row=rownum + 1, column=col_num)
+            cell.value = value
+            if bold:
+                cell.font = Font(bold=True)
+
+    def _write_metadata(self, workbook):
+        for json_name, portal_type in BUNDLE_JSON_TYPES.items():
+            short_name = json_name.replace('.json', '')
+            log.info("Creating sheet %s" % short_name)
+            sheet = workbook.create_sheet(short_name)
+            sheet.title = short_name
+
+            # Label Row
+            self._write_row(
+                sheet, 0, self.metadata[portal_type][0].keys(), bold=True)
+
+            # Data rows
+            for rownum, info in enumerate(self.metadata[portal_type], 1):
+                self._write_row(sheet, rownum, info.values())
+
+    def _write_permissions(self, workbook):
+        for json_name, portal_type in BUNDLE_JSON_TYPES.items():
+            if not self.permissions.get(portal_type):
+                continue
+
+            sheet_name = '%s_permissions' % json_name.replace('.json', '')
+            log.info("Creating sheet %s" % sheet_name)
+            sheet = workbook.create_sheet(sheet_name)
+            sheet.title = sheet_name
+
+            # Label Row
+            headers = self.permissions[portal_type][0].keys()
+            self._write_row(sheet, 0, headers, bold=True)
+
+            # Data rows
+            permission_infos = self.permissions[portal_type]
+            for rownum, perm_info in enumerate(permission_infos, 1):
+                self._write_row(sheet, rownum, perm_info.values())
+
+    def build_report(self):
+        workbook = Workbook()
+        workbook.remove_sheet(workbook.active)
+
+        self._write_metadata(workbook)
+        self._write_permissions(workbook)
+
+        return workbook

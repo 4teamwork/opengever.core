@@ -1,6 +1,8 @@
 from collections import OrderedDict
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
+from opengever.bundle.sections.bundlesource import BUNDLE_KEY
+from zope.annotation import IAnnotations
 from zope.interface import classProvides
 from zope.interface import implements
 
@@ -34,13 +36,16 @@ class ResolveGUIDSection(object):
         - parent pointers are valid, should they exist
 
     """
+
     classProvides(ISectionBlueprint)
     implements(ISection)
 
     def __init__(self, transmogrifier, name, options, previous):
         self.previous = previous
         self.transmogrifier = transmogrifier
-        self.item_by_guid = self.transmogrifier.item_by_guid = OrderedDict()
+        self.bundle = IAnnotations(transmogrifier)[BUNDLE_KEY]
+
+        self.bundle.item_by_guid = OrderedDict()
 
     def __iter__(self):
         self.register_items()
@@ -56,10 +61,10 @@ class ResolveGUIDSection(object):
                 raise MissingGuid(item)
 
             guid = item['guid']
-            if guid in self.item_by_guid:
+            if guid in self.bundle.item_by_guid:
                 raise DuplicateGuid(guid)
 
-            self.item_by_guid[guid] = item
+            self.bundle.item_by_guid[guid] = item
 
     def build_tree(self):
         """Build a tree from the flat list of items.
@@ -67,10 +72,10 @@ class ResolveGUIDSection(object):
         Register all items with their parents.
         """
         roots = []
-        for item in self.item_by_guid.values():
+        for item in self.bundle.item_by_guid.values():
             parent_guid = item.get('parent_guid', None)
             if parent_guid:
-                parent = self.item_by_guid.get(parent_guid)
+                parent = self.bundle.item_by_guid.get(parent_guid)
                 if not parent:
                     raise MissingParent(parent_guid)
                 children = parent.setdefault('_children', [])

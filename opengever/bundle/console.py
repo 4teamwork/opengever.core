@@ -1,5 +1,6 @@
 from collective.transmogrifier.transmogrifier import Transmogrifier
 from opengever.bundle.ldap import DisabledLDAP
+from opengever.bundle.sections.bundlesource import BUNDLE_KEY
 from opengever.bundle.sections.bundlesource import BUNDLE_PATH_KEY
 from opengever.core.debughelpers import get_first_plone_site
 from opengever.core.debughelpers import setup_plone
@@ -31,6 +32,11 @@ def import_oggbundle(app, args):
 
     with DisabledLDAP(plone):
         transmogrifier(u'opengever.bundle.oggbundle')
+
+    bundle = IAnnotations(transmogrifier)[BUNDLE_KEY]
+    timings = bundle.stats['timings']
+    duration = timings['done_post_processing'] - timings['start_loading']
+    log.info("Duration: %.2fs" % duration.total_seconds())
 
     log.info("Committing transaction...")
     transaction.get().note("Finished import of OGGBundle %r" % bundle_path)
