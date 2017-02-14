@@ -8,6 +8,7 @@ except pkg_resources.DistributionNotFound:
     sys.exit(1)
 
 
+from lxml import etree
 from path import Path
 import os
 
@@ -17,6 +18,8 @@ class Differ(object):
     def __call__(self, first_dir, second_dir):
         self.first_dir = first_dir
         self.second_dir = second_dir
+        self.create_actions_order(self.first_dir)
+        self.create_actions_order(self.second_dir)
         self.compare_filelist()
         if not self.get_differing_files():
             print 'No changes.'
@@ -49,6 +52,16 @@ class Differ(object):
             print '>', cmd
             os.system(cmd)
 
+    def create_actions_order(self, directory):
+        doc = parsexml(directory.joinpath('actions.xml'))
+        order = []
+        for category in doc.xpath('/object/object'):
+            for action in category.xpath('object'):
+                order.append(':'.join((category.attrib['name'],
+                                       action.attrib['name'])))
+
+        directory.joinpath('actions_order.txt').write_bytes('\n'.join(order))
+
     def numbered_files(self):
         return enumerate(self.get_differing_files())
 
@@ -79,6 +92,10 @@ class Differ(object):
         else:
             return files
 
+
+def parsexml(path):
+    with path.open() as fio:
+        return etree.parse(fio)
 
 
 if __name__ == '__main__':
