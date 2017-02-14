@@ -15,7 +15,8 @@ class TemplateDossierEditForm(TranslatedTitleEditForm):
 
 
 class TemplateDossier(DossierContainer, TranslatedTitleMixin):
-    """Base class for template dossiers."""
+    """XXX Legacy class from rename TemplateFolder to TemplateDossier.
 
-
-    Title = TranslatedTitleMixin.Title
+    Leave this class until each GEVER-installation is updated to the version
+    containing this changes.
+    """

@@ -1,8 +1,12 @@
+from ftw.upgrade import ProgressLogger
 from ftw.upgrade import UpgradeStep
 from ftw.upgrade.workflow import WorkflowChainUpdater
 from opengever.dossier.interfaces import ITemplateDossierProperties
 from opengever.dossier.interfaces import ITemplateFolderProperties
+from opengever.dossier.templatefolder.templatefolder import TemplateFolder
 from plone import api
+from zope.event import notify
+from zope.lifecycleevent import ObjectModifiedEvent
 
 
 class RenameTemplateDossierToTemplateFolder(UpgradeStep):
@@ -22,8 +26,15 @@ class RenameTemplateDossierToTemplateFolder(UpgradeStep):
             'create_doc_properties', ITemplateDossierProperties)
 
         with WorkflowChainUpdater(objects, review_state_mapping,
-                                  migrate_workflow_history=False):
+                                  migrate_workflow_history=False) as updater:
             self.install_upgrade_profile()
+            for obj in ProgressLogger("Migrate type opengever.dossier.templatedossier "
+                                      "to opengever.dossier.templatefolder",
+                                      updater.objects):
+
+                self.migrate_class(obj, TemplateFolder)
+                obj.portal_type = 'opengever.dossier.templatefolder'
+                notify(ObjectModifiedEvent(obj))
 
         # Restore current ITemplateDossierProperties settings
         api.portal.set_registry_record(

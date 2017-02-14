@@ -3,7 +3,7 @@ from five import grok
 from opengever.base.interfaces import IReferenceNumber, IReferenceNumberPrefix
 from opengever.base.reference import BasicReferenceNumber
 from opengever.dossier.behaviors.dossier import IDossierMarker
-from opengever.dossier.templatedossier import ITemplateDossier
+from opengever.dossier.templatefolder import ITemplateFolder
 
 
 class DossierReferenceNumber(BasicReferenceNumber):
@@ -21,11 +21,11 @@ class DossierReferenceNumber(BasicReferenceNumber):
         return prefix or ''
 
 
-class TemplateDossierReferenceNumber(BasicReferenceNumber):
-    """ Reference number for template dossiers.
+class TemplateFolderReferenceNumber(BasicReferenceNumber):
+    """ Reference number for template folder.
     """
     grok.provides(IReferenceNumber)
-    grok.context(ITemplateDossier)
+    grok.context(ITemplateFolder)
 
     ref_type = 'dossier'
 

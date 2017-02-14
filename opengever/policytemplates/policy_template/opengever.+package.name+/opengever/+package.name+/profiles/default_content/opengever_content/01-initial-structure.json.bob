@@ -14,7 +14,7 @@
     },
     {
         "_path": "vorlagen",
-        "_type": "opengever.dossier.templatedossier",
+        "_type": "opengever.dossier.templatefolder",
         "title_de": "Vorlagen",
         "_ac_local_roles": {
             "{{{orgunit.users_group}}}": [

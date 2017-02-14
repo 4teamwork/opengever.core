@@ -42,7 +42,7 @@ class TestSupportTranslatedTitle(FunctionalTestCase):
         self.assertTrue(
             supports_translated_title('opengever.contact.contactfolder'))
         self.assertTrue(
-            supports_translated_title('opengever.dossier.templatedossier'))
+            supports_translated_title('opengever.dossier.templatefolder'))
 
     def test_content_objects_does_not_support_translated_title(self):
         self.assertFalse(

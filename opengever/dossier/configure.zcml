@@ -20,6 +20,7 @@
   <include package=".browser" />
   <include package=".dossiertemplate" />
   <include package=".templatedossier" />
+  <include package=".templatefolder" />
 
   <include file="behaviors.zcml" />
   <include file="permissions.zcml" />

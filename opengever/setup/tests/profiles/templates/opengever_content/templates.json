@@ -1,7 +1,7 @@
 [
     {
         "_path": "vorlagen",
-        "_type": "opengever.dossier.templatedossier",
+        "_type": "opengever.dossier.templatefolder",
         "title_de": "Vorlagen",
         "title_fr": "Modèles",
         "_children": [

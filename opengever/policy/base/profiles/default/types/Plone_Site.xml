@@ -3,7 +3,7 @@
  <property name="filter_content_types">True</property>
  <property name="allowed_content_types">
   <element value="opengever.contact.contactfolder"/>
-  <element value="opengever.dossier.templatedossier"/>
+  <element value="opengever.dossier.templatefolder"/>
   <element value="opengever.repository.repositoryroot"/>
   <element value="opengever.inbox.inbox"/>
   <element value="opengever.inbox.container"/>

@@ -4,7 +4,7 @@ from opengever.base.utils import find_parent_dossier
 from opengever.document.behaviors import IBaseDocument
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.dossier.base import DOSSIER_STATES_OPEN
-from opengever.dossier.templatedossier.interfaces import ITemplateDossier
+from opengever.dossier.templatefolder.interfaces import ITemplateFolder
 from plone import api
 from plone.directives import dexterity
 from z3c.form.field import Fields
@@ -14,7 +14,7 @@ from zExceptions import Unauthorized
 def can_access_archival_file_form(user, content):
     """Returns True if the user has 'Modify portal content' permission in any
     open dossier state. And the containing dossier is
-     - not a templatedossier
+     - not a templatefolder
      - not inactive
     """
 
@@ -22,7 +22,7 @@ def can_access_archival_file_form(user, content):
         content), 'Content needs to provide IBaseDocument'
 
     dossier = find_parent_dossier(content)
-    if ITemplateDossier.providedBy(dossier):
+    if ITemplateFolder.providedBy(dossier):
         return False
     if api.content.get_state(obj=dossier) == 'dossier-state-inactive':
         return False
