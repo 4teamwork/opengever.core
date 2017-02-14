@@ -461,6 +461,8 @@ class TestOggBundlePipeline(FunctionalTestCase):
 
     def assert_report_data_collected(self, bundle):
         report_data = bundle.report_data
+        metadata = report_data['metadata']
+
         self.assertSetEqual(
             set([
                 'opengever.repository.repositoryroot',
@@ -468,13 +470,13 @@ class TestOggBundlePipeline(FunctionalTestCase):
                 'opengever.dossier.businesscasedossier',
                 'opengever.document.document',
                 'ftw.mail.mail']),
-            set(report_data.keys()))
+            set(metadata.keys()))
 
-        reporoots = report_data['opengever.repository.repositoryroot']
-        repofolders = report_data['opengever.repository.repositoryfolder']
-        dossiers = report_data['opengever.dossier.businesscasedossier']
-        documents = report_data['opengever.document.document']
-        mails = report_data['ftw.mail.mail']
+        reporoots = metadata['opengever.repository.repositoryroot']
+        repofolders = metadata['opengever.repository.repositoryfolder']
+        dossiers = metadata['opengever.dossier.businesscasedossier']
+        documents = metadata['opengever.document.document']
+        mails = metadata['ftw.mail.mail']
 
         self.assertEqual(1, len(reporoots))
         self.assertEqual(3, len(repofolders))

@@ -22,7 +22,7 @@ class DataCollector(object):
         self.bundle = bundle
 
     def __call__(self):
-        data = {}
+        data = {'metadata': {}}
         catalog = api.portal.get_tool('portal_catalog')
 
         portal_types = BUNDLE_JSON_TYPES.values()
@@ -36,7 +36,7 @@ class DataCollector(object):
             for r in self.bundle.get_repository_roots()]
 
         for portal_type in portal_types:
-            data[portal_type] = []
+            data['metadata'][portal_type] = []
             log.info("Collecting %s" % portal_type)
 
             brains = catalog.unrestrictedSearchResults(
@@ -47,8 +47,8 @@ class DataCollector(object):
                 if guid not in self.bundle.item_by_guid:
                     # Skip object, not part of current import
                     continue
-                item_info = self.get_item_info(brain, guid)
-                data[portal_type].append(item_info)
+                item_info = self.get_item_metadata(obj, guid)
+                data['metadata'][portal_type].append(item_info)
 
         return data
 
@@ -67,8 +67,7 @@ class DataCollector(object):
             return ITranslatedTitle(obj).title_de
         return obj.title
 
-    def get_item_info(self, brain, guid):
-        obj = brain.getObject()
+    def get_item_metadata(self, obj, guid):
         path = '/'.join(obj.getPhysicalPath())
         title = self.get_title(obj)
 
@@ -94,7 +93,7 @@ class ASCIISummaryBuilder(object):
         report.append('Imported objects:')
         report.append('=================')
 
-        for portal_type, items in self.report_data.items():
+        for portal_type, items in self.report_data['metadata'].items():
             line = "%s: %s" % (portal_type, len(items))
             report.append(line)
 
@@ -106,14 +105,16 @@ class XLSXReportBuilder(object):
     """
 
     def __init__(self, report_data):
-        self.report_data = {}
-        self.report_data.update(report_data)
+        self.report_data = {'metadata': {}}
+        metadata = self.report_data['metadata']
+        metadata.update(report_data['metadata'])
+        self.metadata = metadata
 
         # Include mails in documents by moving them over
-        docs = self.report_data.get('opengever.document.document', [])
-        mails = self.report_data.get('ftw.mail.mail', [])
-        self.report_data['opengever.document.document'] = docs + mails
-        self.report_data.pop('ftw.mail.mail', None)
+        docs = metadata.get('opengever.document.document', [])
+        mails = metadata.get('ftw.mail.mail', [])
+        metadata['opengever.document.document'] = docs + mails
+        metadata.pop('ftw.mail.mail', None)
 
     def build_and_save(self, report_path):
         workbook = self.build_report()
@@ -132,10 +133,7 @@ class XLSXReportBuilder(object):
             if bold:
                 cell.font = Font(bold=True)
 
-    def build_report(self):
-        workbook = Workbook()
-        workbook.remove_sheet(workbook.active)
-
+    def _write_metadata(self, workbook):
         for json_name, portal_type in BUNDLE_JSON_TYPES.items():
             short_name = json_name.replace('.json', '')
             log.info("Creating sheet %s" % short_name)
@@ -144,10 +142,16 @@ class XLSXReportBuilder(object):
 
             # Label Row
             self._write_row(
-                sheet, 0, self.report_data[portal_type][0].keys(), bold=True)
+                sheet, 0, self.metadata[portal_type][0].keys(), bold=True)
 
             # Data rows
-            for rownum, info in enumerate(self.report_data[portal_type], 1):
+            for rownum, info in enumerate(self.metadata[portal_type], 1):
                 self._write_row(sheet, rownum, info.values())
+
+    def build_report(self):
+        workbook = Workbook()
+        workbook.remove_sheet(workbook.active)
+
+        self._write_metadata(workbook)
 
         return workbook
