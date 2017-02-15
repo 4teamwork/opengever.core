@@ -131,9 +131,17 @@ class MergeTool(object):
 
         dependencies_node = target_doc.xpath('//dependencies')[0]
 
+        # We do not need to reinstall Plone packages, therefore do not migrate
+        # them.
+        blacklist = (
+            'plone.app.registry:default',
+        )
+
         for profile in self.recursive_dependencies('opengever.policy.base:default'):
             if profile in self.profiles_to_migrate:
                 # do not migrate dependency to migrated profiles (og.task, ..)
+                continue
+            if profile in blacklist:
                 continue
             node = etree.SubElement(dependencies_node, 'dependency')
             node.text = 'profile-' + profile
