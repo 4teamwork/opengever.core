@@ -292,7 +292,7 @@ msgstr "Dokument aus Vorlage erstellen"
 #. Default: "Create dossier from template"
 #: ./opengever/dossier/dossiertemplate/form.py:97
 msgid "create_dossier_with_template"
-msgstr "Dossier aus Vorlage erstellen"
+msgstr "Geschäftsdossier aus Vorlage erstellen"
 
 msgid "documents"
 msgstr "Dokumente"

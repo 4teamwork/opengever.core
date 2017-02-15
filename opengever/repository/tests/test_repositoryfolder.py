@@ -197,7 +197,7 @@ class TestDossierTemplateFeatureEnabled(FunctionalTestCase):
         browser.login().open(leaf_node)
 
         self.assertEquals(
-            ['Business Case Dossier', 'Disposition', 'Dossier with template', 'RepositoryFolder'],
+            ['Business Case Dossier', 'Dossier with template', 'Disposition', 'RepositoryFolder'],
             factoriesmenu.addable_types())
 
     @browsing
@@ -215,5 +215,5 @@ class TestDossierTemplateFeatureEnabled(FunctionalTestCase):
         browser.login().open(leaf_node)
 
         self.assertEquals(
-            ['Business Case Dossier', 'Disposition', 'Dossier with template'],
+            ['Business Case Dossier', 'Dossier with template', 'Disposition'],
             factoriesmenu.addable_types())
