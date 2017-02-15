@@ -1,10 +1,12 @@
 from opengever.bundle.loader import BundleLoader
+from opengever.bundle.loader import IngestionSettingsReader
 from opengever.bundle.loader import ItemPreprocessor
 from opengever.bundle.tests.helpers import get_portal_type
 from opengever.bundle.tests.helpers import get_title
 from pkg_resources import resource_filename as rf
 from unittest2 import TestCase
 import jsonschema
+import tempfile
 
 
 def get_bundle_path(bundle_name):
@@ -22,7 +24,7 @@ class TestBundleLoader(TestCase):
 
     def test_loads_correct_number_of_items(self):
         items = self.load_bundle()
-        self.assertEqual(9, len(items))
+        self.assertEqual(10, len(items))
 
     def test_loads_items_in_correct_order(self):
         items = self.load_bundle()
@@ -35,7 +37,8 @@ class TestBundleLoader(TestCase):
              ('businesscasedossier', u'Hanspeter M\xfcller'),
              ('document', u'Bewerbung Hanspeter M\xfcller'),
              ('document', u'Entlassung Hanspeter M\xfcller'),
-             ('mail', u'Ein Mail')],
+             ('mail', u'Ein Mail'),
+             ('document', u'Document referenced via UNC-Path')],
             [(get_portal_type(i), get_title(i)) for i in items])
 
     def test_inserts_portal_type(self):
@@ -44,6 +47,7 @@ class TestBundleLoader(TestCase):
             ('businesscasedossier', u'Dossier Vreni Meier'),
             ('businesscasedossier', u'Hanspeter M\xfcller'),
             ('document', u'Bewerbung Hanspeter M\xfcller'),
+            ('document', u'Document referenced via UNC-Path'),
             ('document', u'Entlassung Hanspeter M\xfcller'),
             ('mail', u'Ein Mail'),
             ('repositoryfolder', u'Organigramm, Prozesse'),
@@ -115,3 +119,23 @@ class TestItemPreprocessor(TestCase):
         }
         ItemPreprocessor(item, 'documents.json').process()
         self.assertNotIn('review_state', item)
+
+
+class TestIngestionSettingsReader(TestCase):
+
+    def setUp(self):
+        super(TestIngestionSettingsReader, self).setUp()
+
+    def test_loads_settings_from_json_file(self):
+        with tempfile.NamedTemporaryFile() as settings_file:
+            settings_file.write('{}')
+            settings_file.flush()
+
+            reader = IngestionSettingsReader(settings_file.name)
+            settings = reader()
+            self.assertEqual({}, settings)
+
+    def test_doesnt_fail_if_settings_file_doesnt_exist(self):
+        reader = IngestionSettingsReader('/missing/directory/file.json')
+        settings = reader()
+        self.assertEqual({}, settings)
