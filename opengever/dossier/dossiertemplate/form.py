@@ -33,6 +33,7 @@ from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
+import json
 
 
 @grok.provider(IContextSourceBinder)
@@ -198,6 +199,30 @@ class AddDossierFromTemplateWizardStep(WizzardWrappedAddForm):
                         # Set the template value to the dossier add-form widget.
                         widget.value = IDataConverter(widget).toWidgetValue(value)
 
+                        if widgetname == 'IDossier.keywords':
+                            self._modify_keyword_widget_according_to_template(widget)
+
+            def _modify_keyword_widget_according_to_template(self, widget):
+                template_obj = get_wizard_storage(self.context).get('template')
+
+
+                if template_obj.restrict_keywords:
+                    widget.field.value_type.allow_new = False
+                    # Needs to be updated  manually
+                    js_config = json.loads(widget.js_config)
+                    js_config['tags'] = False
+                    widget.js_config = json.dumps(js_config)
+
+                    # The vocabular should only contain the terms from
+                    # the template.
+                    terms = filter(
+                        lambda term: term.value in widget.value,
+                        widget.terms.terms._terms)
+                    widget.terms.terms = SimpleVocabulary(terms)
+
+                if not template_obj.predefined_keywords:
+                    widget.value = ()
+
             def get_template_widget_name(self, widgetname):
                 """The dossiertemplates uses the same fields as the
                 dossier (IDossier) but it includes it with another interface.
@@ -209,7 +234,7 @@ class AddDossierFromTemplateWizardStep(WizzardWrappedAddForm):
 
                 Example:
 
-                IDossier.keywords => IDossierTemplate.keyworkds
+                IDossier.keywords => IDossierTemplate.keywords
                 """
                 interface_name, name = widgetname.split('.')
                 return '.'.join([

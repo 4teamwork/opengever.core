@@ -6,6 +6,7 @@ from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.mail.behaviors import ISendableDocsContainer
 from opengever.testing import FunctionalTestCase
 from opengever.testing import index_data_for
+from plone.app.testing import TEST_USER_ID
 from Products.CMFCore.utils import getToolByName
 from zExceptions import Unauthorized
 
@@ -20,7 +21,9 @@ class TestDossier(FunctionalTestCase):
         self.dossier = self.create_test_dossier()
 
     def create_test_dossier(self):
-        return create(Builder(self.builder_id))
+        return create(Builder(self.builder_id)
+                      .titled(u'Test Dossier')
+                      .having(responsible=TEST_USER_ID))
 
     def test_get_main_dossier_returns_self_when_is_already_root(self):
         self.assertEqual(self.dossier, self.dossier.get_main_dossier())
@@ -125,6 +128,21 @@ class TestDossier(FunctionalTestCase):
             ['opengever.document.document', 'ftw.mail.mail',
              'opengever.dossier.businesscasedossier', 'opengever.task.task'],
             [fti.id for fti in self.dossier.allowedContentTypes()])
+
+    @browsing
+    def test_regular_user_can_add_new_keywords_in_dossier(self, browser):
+        self.grant('Reader', 'Contributor', 'Editor')
+        browser.login().visit(self.dossier, view='@@edit')
+
+        keywords = browser.find_field_by_text(u'Keywords')
+        new = browser.css('#' + keywords.attrib['id'] + '_new').first
+        new.text = u'NewItem1\nNew Item 2\nN\xf6i 3'
+        browser.find_button_by_label('Save').click()
+
+        browser.visit(self.dossier, view='edit')
+        keywords = browser.find_field_by_text(u'Keywords')
+        self.assertTupleEqual(('New Item 2', 'NewItem1', 'N=C3=B6i 3'),
+                              tuple(keywords.value))
 
 
 class TestMeetingFeatureTypes(FunctionalTestCase):

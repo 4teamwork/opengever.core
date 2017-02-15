@@ -201,14 +201,20 @@ class TestDossierTemplate(FunctionalTestCase):
         #
         # The .raw_text will return only the text of the current node but
         # unnormalized. So we have to do it manually.
+        # Two empty labels are introduced by the plone default single checkbox
+        # widget.
         self.assertEqual([
-            u'Title help',
+            u'Title help Recommendation for the title. Will be displayed as a'
+            u' help text if you create a dossier from template',
             u'Title',
             u'Description',
             u'Keywords',
+            u'Predefined Keywords',
+            u'Restrict Keywords',
             u'Comments',
             u'filing prefix'],
-            map(normalize_spaces, browser.css('#content fieldset label').raw_text)
+            filter(lambda text: bool(text),
+                   browser.css('#content fieldset label').text)
         )
 
     @browsing
@@ -218,16 +224,50 @@ class TestDossierTemplate(FunctionalTestCase):
                                  .within(self.templatedossier))
 
         browser.login().visit(dossiertemplate, view="edit")
-
         self.assertEqual([
-            u'Title help',
+            u'Title help Recommendation for the title. Will be displayed as a'
+            u' help text if you create a dossier from template',
             u'Title',
             u'Description',
             u'Keywords',
+            u'Predefined Keywords',
+            u'Restrict Keywords',
             u'Comments',
             u'filing prefix'],
-            map(normalize_spaces, browser.css('#content fieldset label').raw_text)
+            filter(lambda text: bool(text),
+                   browser.css('#content fieldset label').text)
         )
+
+    @browsing
+    def test_dossiertemplate_predefined_keywords_is_there(self, browser):
+        dossiertemplate = create(Builder('dossiertemplate')
+                                 .titled(u'My Dossiertemplate')
+                                 .within(self.templatedossier))
+
+        browser.login().visit(dossiertemplate, view='@@edit')
+        self.assertTrue(browser.find_field_by_text('Predefined Keywords'),
+                        'Expect the "Predefined Keywords" field')
+
+        form_labels = browser.form_field_labels
+        self.assertGreater(form_labels.index('Predefined Keywords'),
+                           form_labels.index('Keywords'),
+                           '"Predefined Keywords" should be after "Keywords"')
+
+    @browsing
+    def test_dossiertemplate_restrict_keywords_is_there(self, browser):
+        dossiertemplate = create(Builder('dossiertemplate')
+                                 .titled(u'My Dossiertemplate')
+                                 .within(self.templatedossier))
+
+        browser.login().visit(dossiertemplate, view='@@edit')
+        self.assertTrue(browser.find_field_by_text('Restrict Keywords'),
+                        'Expect the "Restrict Keywords" field')
+
+        form_labels = browser.form_field_labels
+        self.assertGreater(form_labels.index('Restrict Keywords'),
+                           form_labels.index('Predefined Keywords'),
+                           '"Restrict Keywords" should be after "Predefined '
+                           'Keywords"')
 
 
 class TestDossierTemplateAddWizard(FunctionalTestCase):
@@ -321,7 +361,7 @@ class TestDossierTemplateAddWizard(FunctionalTestCase):
         values = {
             'title': u'My template',
             'description': u'Lorem ipsum',
-            'keywords': (u'special', u'secret'),
+            'keywords': (u'secret', u'special'),
             'comments': 'this is very special',
             'filing_prefix': 'department'
             }
@@ -345,6 +385,60 @@ class TestDossierTemplateAddWizard(FunctionalTestCase):
         self.assertEqual(values.get('keywords'), IDossier(dossier).keywords)
         self.assertEqual(values.get('comments'), IDossier(dossier).comments)
         self.assertEqual(values.get('filing_prefix'), IDossier(dossier).filing_prefix)
+
+    @browsing
+    def test_dossiertemplate_do_not_copy_keywords(self, browser):
+        values = {
+            'title': u'My template',
+            'keywords': (u'special', u'secret'),
+            'predefined_keywords': False
+            }
+
+        create(Builder("dossiertemplate")
+               .within(self.templatedossier)
+               .having(**values))
+
+        create(Builder("dossiertemplate")
+               .within(self.templatedossier)
+               .having(title=u'Another dossiertemplate',
+                       keywords=(u'do not appear', u'not there')))
+
+        browser.login().visit(self.leaf_node)
+        factoriesmenu.add('Dossier with template')
+
+        token = browser.css(
+            'input[name="form.widgets.template"]').first.attrib.get('value')
+
+        browser.fill({'form.widgets.template': token}).submit()
+        browser.click_on('Save')
+
+        dossier = browser.context
+        self.assertEqual((), IDossier(dossier).keywords)
+
+    @browsing
+    def test_dossiertemplate_restrict_keywords(self, browser):
+        values = {
+            'title': u'My template',
+            'keywords': (u'secret', u'special'),
+            'restrict_keywords': True
+            }
+
+        create(Builder("dossiertemplate")
+               .within(self.templatedossier)
+               .having(**values))
+
+        browser.login().visit(self.leaf_node)
+        factoriesmenu.add('Dossier with template')
+
+        token = browser.css(
+            'input[name="form.widgets.template"]').first.attrib.get('value')
+
+        browser.fill({'form.widgets.template': token}).submit()
+        keywords = browser.find_field_by_text(u'Keywords')
+        new = browser.css('#' + keywords.attrib['id'] + '_new')
+
+        self.assertEquals(list(values['keywords']), keywords.options_labels)
+        self.assertFalse(new, 'It should not be possible to add new keywords')
 
     @browsing
     def test_redirects_to_dossier_after_creating_dossier_from_template(self, browser):

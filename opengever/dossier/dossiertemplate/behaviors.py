@@ -1,8 +1,8 @@
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.base import _ as base_mf
 from opengever.dossier import _
+from opengever.dossier.behaviors import dossiernamefromtitle
 from opengever.dossier.behaviors.dossier import IDossier
-from opengever.dossier.behaviors.dossiernamefromtitle import DossierNameFromTitle
 from plone.app.content.interfaces import INameFromTitle
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.directives import form
@@ -23,6 +23,8 @@ class IDossierTemplateSchema(form.Schema):
         label=base_mf(u'fieldset_common', default=u'Common'),
         fields=[
             u'title_help',
+            u'predefined_keywords',
+            u'restrict_keywords',
         ],
     )
 
@@ -33,6 +35,22 @@ class IDossierTemplateSchema(form.Schema):
                               u'displayed as a help text if you create '
                               u'a dossier from template'),
         required=False,
+    )
+
+    form.order_after(predefined_keywords='IDossierTemplate.keywords')
+    predefined_keywords = schema.Bool(
+        title=_(u'label_predefined_keywords', default=u'Predefined Keywords'),
+        required=False,
+        missing_value=True,
+        default=True,
+    )
+
+    form.order_after(restrict_keywords='predefined_keywords')
+    restrict_keywords = schema.Bool(
+        title=_(u'label_restrict_keywords', default=u'Restrict Keywords'),
+        required=False,
+        missing_value=False,
+        default=False,
     )
 
 
@@ -64,7 +82,7 @@ class IDossierTemplateNameFromTitle(INameFromTitle):
     """
 
 
-class DossierTemplateNameFromTitle(DossierNameFromTitle):
+class DossierTemplateNameFromTitle(dossiernamefromtitle.DossierNameFromTitle):
     """Choose IDs for a dossiertemplate in the following format:
     'dossiertemplate-{sequence number}'
     """

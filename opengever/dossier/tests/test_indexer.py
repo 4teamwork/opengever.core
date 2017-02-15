@@ -89,6 +89,31 @@ class TestIndexers(FunctionalTestCase):
         self.assertEquals(None,
                           index_data_for(dossier).get('searchable_filing_no'))
 
+    def test_keywords_field_is_indexed_in_Subject_index(self):
+        catalog = self.portal.portal_catalog
+
+        dossier_with_keywords = create(
+            Builder("dossier")
+            .titled(u"Dossier with keywords")
+            .having(keywords=(u'Keyword 1', u'Keyword with \xf6'))
+            .within(self.repo_folder))
+
+        self.assertTrue(len(catalog(Subject=u'Keyword 1')),
+                        'Expect one item with Keyword 1')
+        self.assertTrue(len(catalog(Subject=u'Keyword with \xf6')),
+                        u'Expect one item with Keyword with \xf6')
+
+        create(Builder("dossier")
+               .titled(u"Another Dossier with keywords")
+               .having(keywords=(u'Keyword 2', ))
+               .within(dossier_with_keywords))
+
+        self.assertTrue(len(catalog(Subject=u'Keyword 2')),
+                        'Expect one item with Keyword 2')
+
+        self.assertEquals((u'Keyword 1', u'Keyword 2', u'Keyword with \xf6'),
+                          catalog.uniqueValuesFor('Subject'))
+
 
 class TestFilingNumberIndexer(FunctionalTestCase):
 
