@@ -42,7 +42,7 @@ class TestDossierTemplate(FunctionalTestCase):
 
     def setUp(self):
         super(TestDossierTemplate, self).setUp()
-        self.templatedossier = create(Builder('templatedossier'))
+        self.templatefolder = create(Builder('templatefolder'))
 
     def test_templatedosisers_does_not_provide_dossier_interface(self):
         dossiertemplate = create(Builder('dossiertemplate'))
@@ -71,7 +71,7 @@ class TestDossierTemplate(FunctionalTestCase):
     @browsing
     def test_edit_dossiertemplate_works_properly(self, browser):
         dossiertemplate = create(Builder('dossiertemplate')
-                                 .within(self.templatedossier))
+                                 .within(self.templatefolder))
 
         browser.login().open(dossiertemplate)
 
@@ -84,7 +84,7 @@ class TestDossierTemplate(FunctionalTestCase):
     @browsing
     def test_addable_types(self, browser):
         dossiertemplate = create(Builder('dossiertemplate')
-                                 .within(self.templatedossier))
+                                 .within(self.templatefolder))
 
         browser.login().open(dossiertemplate)
 
@@ -95,7 +95,7 @@ class TestDossierTemplate(FunctionalTestCase):
     @browsing
     def test_a_subdossiers_is_a_dossiertemplate(self, browser):
         dossiertemplate = create(Builder('dossiertemplate')
-                                 .within(self.templatedossier))
+                                 .within(self.templatefolder))
 
         browser.login().open(dossiertemplate)
 
@@ -106,7 +106,7 @@ class TestDossierTemplate(FunctionalTestCase):
 
     @browsing
     def test_add_form_title_of_dossiertemplate_is_the_default_title(self, browser):
-        browser.login().open(self.templatedossier)
+        browser.login().open(self.templatefolder)
         factoriesmenu.add('Dossier template')
 
         self.assertEqual(
@@ -116,7 +116,7 @@ class TestDossierTemplate(FunctionalTestCase):
     @browsing
     def test_add_form_title_of_dossiertemplate_as_a_subdossier_contains_subdossier(self, browser):
         dossiertemplate = create(Builder('dossiertemplate')
-                                 .within(self.templatedossier))
+                                 .within(self.templatefolder))
 
         browser.login().open(dossiertemplate)
         factoriesmenu.add('Subdossier')
@@ -128,7 +128,7 @@ class TestDossierTemplate(FunctionalTestCase):
     @browsing
     def test_edit_form_title_of_dossiertemplate_is_the_default_title(self, browser):
         dossiertemplate = create(Builder('dossiertemplate')
-                                 .within(self.templatedossier))
+                                 .within(self.templatefolder))
 
         browser.login().visit(dossiertemplate, view="edit")
 
@@ -139,7 +139,7 @@ class TestDossierTemplate(FunctionalTestCase):
     @browsing
     def test_edit_form_title_of_dossiertemplate_as_a_subdossier_contains_subdossier(self, browser):
         dossiertemplate = create(Builder('dossiertemplate')
-                                 .within(self.templatedossier))
+                                 .within(self.templatefolder))
 
         subdossiertemplate = create(Builder('dossiertemplate')
                                     .within(dossiertemplate))
@@ -154,7 +154,7 @@ class TestDossierTemplate(FunctionalTestCase):
     def test_dossiertemplates_tab_lists_only_dossiertemplates_without_subdossiers(self, browser):
         dossiertemplate = create(Builder('dossiertemplate')
                                  .titled(u'My Dossiertemplate')
-                                 .within(self.templatedossier))
+                                 .within(self.templatefolder))
 
         create(Builder('dossiertemplate')
                .titled(u'A Subdossiertemplate')
@@ -162,9 +162,9 @@ class TestDossierTemplate(FunctionalTestCase):
 
         create(Builder('document')
                .titled('Template A')
-               .within(self.templatedossier))
+               .within(self.templatefolder))
 
-        browser.login().visit(self.templatedossier, view="tabbedview_view-dossiertemplates")
+        browser.login().visit(self.templatefolder, view="tabbedview_view-dossiertemplates")
 
         self.assertEqual(
             ['My Dossiertemplate'],
@@ -174,17 +174,17 @@ class TestDossierTemplate(FunctionalTestCase):
     def test_documents_inside_a_dossiertemplate_will_not_be_listed_in_documents_tab(self, browser):
         create(Builder('document')
                .titled('Good document')
-               .within(self.templatedossier))
+               .within(self.templatefolder))
 
         dossiertemplate = create(Builder('dossiertemplate')
                                  .titled(u'My Dossiertemplate')
-                                 .within(self.templatedossier))
+                                 .within(self.templatefolder))
 
         create(Builder('document')
                .titled('Bad document')
                .within(dossiertemplate))
 
-        browser.login().visit(self.templatedossier, view="tabbedview_view-documents-proxy")
+        browser.login().visit(self.templatefolder, view="tabbedview_view-documents-proxy")
 
         self.assertEqual(
             ['Good document'],
@@ -192,7 +192,7 @@ class TestDossierTemplate(FunctionalTestCase):
 
     @browsing
     def test_show_only_whitelisted_schema_fields_in_add_form(self, browser):
-        browser.login().open(self.templatedossier)
+        browser.login().open(self.templatefolder)
         factoriesmenu.add('Dossier template')
 
         # browser.css('').text will return the text of the current node an all
@@ -221,7 +221,7 @@ class TestDossierTemplate(FunctionalTestCase):
     def test_show_only_whitelisted_schema_fields_in_edit_form(self, browser):
         dossiertemplate = create(Builder('dossiertemplate')
                                  .titled(u'My Dossiertemplate')
-                                 .within(self.templatedossier))
+                                 .within(self.templatefolder))
 
         browser.login().visit(dossiertemplate, view="edit")
         self.assertEqual([
@@ -242,7 +242,7 @@ class TestDossierTemplate(FunctionalTestCase):
     def test_dossiertemplate_predefined_keywords_is_there(self, browser):
         dossiertemplate = create(Builder('dossiertemplate')
                                  .titled(u'My Dossiertemplate')
-                                 .within(self.templatedossier))
+                                 .within(self.templatefolder))
 
         browser.login().visit(dossiertemplate, view='@@edit')
         self.assertTrue(browser.find_field_by_text('Predefined Keywords'),
@@ -257,7 +257,7 @@ class TestDossierTemplate(FunctionalTestCase):
     def test_dossiertemplate_restrict_keywords_is_there(self, browser):
         dossiertemplate = create(Builder('dossiertemplate')
                                  .titled(u'My Dossiertemplate')
-                                 .within(self.templatedossier))
+                                 .within(self.templatefolder))
 
         browser.login().visit(dossiertemplate, view='@@edit')
         self.assertTrue(browser.find_field_by_text('Restrict Keywords'),
@@ -280,7 +280,7 @@ class TestDossierTemplateAddWizard(FunctionalTestCase):
         self.branch_node = create(Builder('repository').within(self.root))
         self.leaf_node = create(Builder('repository').within(self.branch_node))
 
-        self.templatedossier = create(Builder('templatedossier'))
+        self.templatefolder = create(Builder('templatefolder'))
 
     def test_is_not_available_if_dossiertempalte_feature_is_disabled(self):
         toggle_feature(IDossierTemplateSettings, enabled=False)
@@ -334,7 +334,7 @@ class TestDossierTemplateAddWizard(FunctionalTestCase):
     @browsing
     def test_only_show_dossiertemplates_without_subdossiers(self, browser):
         template1 = create(Builder("dossiertemplate")
-                           .within(self.templatedossier)
+                           .within(self.templatefolder)
                            .titled(u"Template 1"))
 
         create(Builder("dossiertemplate")
@@ -342,7 +342,7 @@ class TestDossierTemplateAddWizard(FunctionalTestCase):
                .titled(u"Subdossier 1"))
 
         template2 = create(Builder("dossiertemplate")
-                           .within(self.templatedossier)
+                           .within(self.templatefolder)
                            .titled(u"Template 2"))
 
         create(Builder("dossiertemplate")
@@ -366,7 +366,7 @@ class TestDossierTemplateAddWizard(FunctionalTestCase):
             'filing_prefix': 'department'
             }
 
-        create(Builder("dossiertemplate").within(self.templatedossier).having(**values))
+        create(Builder("dossiertemplate").within(self.templatefolder).having(**values))
 
         browser.login().visit(self.leaf_node)
         factoriesmenu.add('Dossier with template')
@@ -395,11 +395,11 @@ class TestDossierTemplateAddWizard(FunctionalTestCase):
             }
 
         create(Builder("dossiertemplate")
-               .within(self.templatedossier)
+               .within(self.templatefolder)
                .having(**values))
 
         create(Builder("dossiertemplate")
-               .within(self.templatedossier)
+               .within(self.templatefolder)
                .having(title=u'Another dossiertemplate',
                        keywords=(u'do not appear', u'not there')))
 
@@ -424,7 +424,7 @@ class TestDossierTemplateAddWizard(FunctionalTestCase):
             }
 
         create(Builder("dossiertemplate")
-               .within(self.templatedossier)
+               .within(self.templatefolder)
                .having(**values))
 
         browser.login().visit(self.leaf_node)
@@ -443,7 +443,7 @@ class TestDossierTemplateAddWizard(FunctionalTestCase):
     @browsing
     def test_redirects_to_dossier_after_creating_dossier_from_template(self, browser):
         create(Builder("dossiertemplate")
-               .within(self.templatedossier)
+               .within(self.templatefolder)
                .titled(u"My Template"))
 
         browser.login().visit(self.leaf_node)
@@ -477,7 +477,7 @@ class TestDossierTemplateAddWizard(FunctionalTestCase):
     @browsing
     def test_add_recursive_documents_and_subdossiers(self, browser):
         template = create(Builder("dossiertemplate")
-                          .within(self.templatedossier)
+                          .within(self.templatefolder)
                           .titled(u'Template'))
 
         template_subdossier_1 = create(Builder("dossiertemplate")
@@ -542,7 +542,7 @@ class TestDossierTemplateAddWizard(FunctionalTestCase):
             datetime.now().isoformat(), context=self.portal)
 
         template = create(Builder("dossiertemplate")
-                          .within(self.templatedossier)
+                          .within(self.templatefolder)
                           .titled(u'Template'))
 
         template_subdossier = create(Builder("dossiertemplate")
@@ -566,7 +566,7 @@ class TestDossierTemplateAddWizard(FunctionalTestCase):
     @browsing
     def test_prefill_title_if_no_title_help_is_available(self, browser):
         create(Builder("dossiertemplate")
-               .within(self.templatedossier)
+               .within(self.templatefolder)
                .titled(u"My Template"))
 
         browser.login().visit(self.leaf_node)
@@ -587,7 +587,7 @@ class TestDossierTemplateAddWizard(FunctionalTestCase):
     @browsing
     def test_do_not_fill_title_and_add_title_help_as_description_if_title_help_is_available(self, browser):
         create(Builder("dossiertemplate")
-               .within(self.templatedossier)
+               .within(self.templatefolder)
                .titled(u"My Template")
                .having(title_help=u"This is a helpt text"))
 

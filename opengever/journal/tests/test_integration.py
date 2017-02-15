@@ -159,13 +159,13 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
             comment='ratman: sharing_dossier_reader; test_user: '
                     'sharing_dossier_reader, sharing_dossier_publisher')
 
-    def test_integration_templatedossier_event(self):
-        templatedossier = create(Builder('templatedossier'))
+    def test_integration_templatefolder_event(self):
+        templatefolder = create(Builder('templatefolder'))
 
         # Local roles Modified
         notify(
             LocalRolesModified(
-                templatedossier, 'old roles',
+                templatefolder, 'old roles',
                 (['catman', ['Owner']],
                  ['ratman', ['Owner', 'Reader']],
                  ['test_user', ['Reader', 'Editor']])
@@ -173,7 +173,7 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
 
         # CheckLocalRolesModified
         self.check_annotation(
-            templatedossier,
+            templatefolder,
             action_type='Local roles modified',
             action_title='Local roles modified.',
             comment='ratman: sharing_reader; test_user: '

@@ -6,7 +6,7 @@ from opengever.tasktemplates import _
 
 
 class TaskTemplateFoldersTab(BaseCatalogListingTab):
-    """Tab for listing all task template folders on the template dossier.
+    """Tab for listing all task template folders on the template folder.
     """
 
     grok.name('tabbedview_view-tasktemplatefolders')

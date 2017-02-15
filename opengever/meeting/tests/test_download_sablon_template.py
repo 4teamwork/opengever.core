@@ -9,7 +9,7 @@ class TestSablonTemplateDownloadView(FunctionalTestCase):
     def setUp(self):
         super(TestSablonTemplateDownloadView, self).setUp()
         self.grant('Manager')
-        self.dossier = create(Builder('templatedossier'))
+        self.dossier = create(Builder('templatefolder'))
         self.template = create(
             Builder('sablontemplate')
             .without_default_title()

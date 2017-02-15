@@ -12,7 +12,7 @@ from opengever.core.testing import OPENGEVER_FUNCTIONAL_DOSSIER_TEMPLATE_LAYER
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.dossier.docprops import TemporaryDocFile
 from opengever.dossier.interfaces import ITemplateFolderProperties
-from opengever.dossier.templatedossier import get_template_dossier
+from opengever.dossier.templatefolder import get_template_folder
 from opengever.dossier.tests import OGDS_USER_ATTRIBUTES
 from opengever.journal.handlers import DOC_PROPERTIES_UPDATED
 from opengever.journal.tests.utils import get_journal_entry
@@ -69,14 +69,14 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
 
         self.modification_date = datetime(2012, 12, 28)
 
-        self.templatedossier = create(Builder('templatedossier'))
+        self.templatefolder = create(Builder('templatefolder'))
         self.template_a = create(Builder('document')
                                  .titled('Template A')
-                                 .within(self.templatedossier)
+                                 .within(self.templatefolder)
                                  .with_modification_date(self.modification_date))
         self.template_b = create(Builder('document')
                                  .titled('Template B')
-                                 .within(self.templatedossier)
+                                 .within(self.templatefolder)
                                  .with_dummy_content()
                                  .with_modification_date(self.modification_date))
         self.dossier = create(Builder('dossier').titled(u'My Dossier'))
@@ -94,7 +94,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
     def test_templates_are_sorted_alphabetically_ascending(self, browser):
         create(Builder('document')
                .titled('AAA Template')
-               .within(self.templatedossier)
+               .within(self.templatefolder)
                .with_dummy_content()
                .with_modification_date(datetime(2010, 12, 28)))
 
@@ -133,11 +133,11 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
 
     @browsing
     def test_template_list_includes_nested_templates(self, browser):
-        subtemplatedossier = create(Builder('templatedossier')
-                                    .within(self.templatedossier))
+        subtemplatefolder = create(Builder('templatefolder')
+                                    .within(self.templatefolder))
         create(Builder('document')
                .titled('Template C')
-               .within(subtemplatedossier)
+               .within(subtemplatefolder)
                .with_modification_date(self.modification_date))
 
         browser.login().open(self.dossier, view='document_with_template')
@@ -225,7 +225,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
 
         template_word = create(Builder('document')
                                .titled('Word Docx template')
-                               .within(self.templatedossier)
+                               .within(self.templatefolder)
                                .with_asset_file('without_custom_properties.docx'))
         peter = create(Builder('person')
                        .having(firstname=u'Peter', lastname=u'M\xfcller'))
@@ -295,7 +295,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
 
         template_word = create(Builder('document')
                                .titled('Word Docx template')
-                               .within(self.templatedossier)
+                               .within(self.templatefolder)
                                .with_asset_file('without_custom_properties.docx'))
         peter = create(Builder('person')
                        .having(firstname=u'Peter', lastname=u'M\xfcller'))
@@ -367,7 +367,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
 
         template_word = create(Builder('document')
                                .titled('Word Docx template')
-                               .within(self.templatedossier)
+                               .within(self.templatefolder)
                                .with_asset_file('without_custom_properties.docx'))
 
         ogds_user = create(Builder('ogds_user')
@@ -418,7 +418,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
     def test_properties_are_added_when_created_from_template_with_doc_properties(self, browser):
         template_word = create(Builder('document')
                                .titled('Word Docx template')
-                               .within(self.templatedossier)
+                               .within(self.templatefolder)
                                .with_asset_file('with_custom_properties.docx'))
 
         with freeze(self.document_date):
@@ -438,7 +438,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
     def test_properties_are_added_when_created_from_template_without_doc_properties(self, browser):
         template_word = create(Builder('document')
                                .titled('Word Docx template')
-                               .within(self.templatedossier)
+                               .within(self.templatefolder)
                                .with_asset_file('without_custom_properties.docx'))
 
         with freeze(self.document_date):
@@ -459,7 +459,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
         self.props.create_doc_properties = False
         template_word = create(Builder('document')
                                .titled('Word Docx template')
-                               .within(self.templatedossier)
+                               .within(self.templatefolder)
                                .with_asset_file('without_custom_properties.docx'))
 
         browser.login().open(self.dossier, view='document_with_template')
@@ -472,13 +472,14 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
             self.assertItemsEqual([], read_properties(tmpfile.path))
 
 
-class TestTemplateDossier(FunctionalTestCase):
+class TestTemplateFolder(FunctionalTestCase):
 
     @browsing
     def test_adding(self, browser):
         add_languages(['de-ch'])
         browser.login().open(self.portal)
-        factoriesmenu.add('Template Dossier')
+        factoriesmenu.add('Template Folder')
+
         browser.fill({'Title': 'Templates',
                       'Responsible': TEST_USER_ID}).save()
 
@@ -487,11 +488,11 @@ class TestTemplateDossier(FunctionalTestCase):
     @browsing
     def test_manager_addable_types(self, browser):
         self.grant('Manager')
-        templatedossier = create(Builder('templatedossier'))
-        browser.login().open(templatedossier)
+        templatefolder = create(Builder('templatefolder'))
+        browser.login().open(templatefolder)
 
         self.assertEquals(
-            ['Document', 'TaskTemplateFolder', 'Template Dossier'],
+            ['Document', 'TaskTemplateFolder', 'Template Folder'],
             factoriesmenu.addable_types())
 
     @browsing
@@ -499,7 +500,7 @@ class TestTemplateDossier(FunctionalTestCase):
         add_languages(['de-ch', 'fr-ch'])
 
         browser.login().open()
-        factoriesmenu.add('Template Dossier')
+        factoriesmenu.add('Template Folder')
         browser.fill({'Responsible': TEST_USER_ID,
                       'Title (German)': u'Vorlagen',
                       'Title (French)': u'mod\xe8le'})
@@ -513,45 +514,45 @@ class TestTemplateDossier(FunctionalTestCase):
 
     @browsing
     def test_do_not_show_dossier_templates_tab(self, browser):
-        templatedossier = create(Builder('templatedossier'))
+        templatefolder = create(Builder('templatefolder'))
 
-        browser.login().visit(templatedossier)
+        browser.login().visit(templatefolder)
 
         self.assertEqual(0, len(browser.css('.formTab #tab-dossiertemplates')))
 
 
-class TestTemplateDossierMeetingEnabled(FunctionalTestCase):
+class TestTemplateFolderMeetingEnabled(FunctionalTestCase):
 
     layer = OPENGEVER_FUNCTIONAL_MEETING_LAYER
 
     def setUp(self):
-        super(TestTemplateDossierMeetingEnabled, self).setUp()
+        super(TestTemplateFolderMeetingEnabled, self).setUp()
         self.grant('Manager')
 
     @browsing
     def test_addable_types_with_meating_feature(self, browser):
-        templatedossier = create(Builder('templatedossier'))
-        browser.login().open(templatedossier)
+        templatefolder = create(Builder('templatefolder'))
+        browser.login().open(templatefolder)
 
         self.assertEquals(
             ['Document', 'Sablon Template', 'TaskTemplateFolder',
-             'Template Dossier'],
+             'Template Folder'],
             factoriesmenu.addable_types())
 
 
 class TestTemplateFolderUtility(FunctionalTestCase):
 
-    def test_get_template_folder_returns_path_of_the_templatedossier(self):
-        templatedossier = create(Builder('templatedossier'))
+    def test_get_template_folder_returns_path_of_the_templatefolder(self):
+        templatefolder = create(Builder('templatefolder'))
 
-        self.assertEquals(templatedossier, get_template_dossier())
+        self.assertEquals(templatefolder, get_template_folder())
 
     def test_get_template_folder_returns_allways_root_templatefolder(self):
-        templatedossier = create(Builder('templatedossier'))
-        create(Builder('templatedossier')
-               .within(templatedossier))
+        templatefolder = create(Builder('templatefolder'))
+        create(Builder('templatefolder')
+               .within(templatefolder))
 
-        self.assertEquals(templatedossier, get_template_dossier())
+        self.assertEquals(templatefolder, get_template_folder())
 
 
 OVERVIEW_TAB = 'tabbedview_view-overview'
@@ -562,21 +563,21 @@ INFO_TAB = 'tabbedview_view-sharing'
 SABLONTEMPLATES_TAB = 'tabbedview_view-sablontemplates'
 
 
-class TestTemplateDossierListings(FunctionalTestCase):
+class TestTemplateFolderListings(FunctionalTestCase):
 
     def setUp(self):
-        super(TestTemplateDossierListings, self).setUp()
+        super(TestTemplateFolderListings, self).setUp()
 
-        self.templatedossier = create(Builder('templatedossier'))
+        self.templatefolder = create(Builder('templatefolder'))
         self.dossier = create(Builder('dossier'))
         self.template = create(Builder('sablontemplate')
-                               .within(self.templatedossier))
+                               .within(self.templatefolder))
         self.document = create(Builder('document')
-                               .within(self.templatedossier))
+                               .within(self.templatefolder))
 
     @browsing
     def test_receipt_delivery_and_subdossier_column_are_hidden_in_document_tab(self, browser):
-        browser.login().open(self.templatedossier, view=DOCUMENT_TAB)
+        browser.login().open(self.templatefolder, view=DOCUMENT_TAB)
 
         table_heading = browser.css('table.listing').first.lists()[0]
         self.assertEquals(['', 'Sequence Number', 'Title', 'Document Author',
@@ -585,7 +586,7 @@ class TestTemplateDossierListings(FunctionalTestCase):
 
     @browsing
     def test_receipt_delivery_and_subdossier_column_are_hidden_in_sablon_template_tab(self, browser):
-        browser.login().open(self.templatedossier, view=SABLONTEMPLATES_TAB)
+        browser.login().open(self.templatefolder, view=SABLONTEMPLATES_TAB)
 
         table_heading = browser.css('table.listing').first.lists()[0]
         self.assertEquals(['', 'Sequence Number', 'Title', 'Document Author',
@@ -594,9 +595,9 @@ class TestTemplateDossierListings(FunctionalTestCase):
 
     @browsing
     def test_receipt_delivery_and_subdossier_column_are_hidden_in_trash_tab(self, browser):
-        create(Builder('document').within(self.templatedossier).trashed())
+        create(Builder('document').within(self.templatefolder).trashed())
 
-        browser.login().open(self.templatedossier, view=TRASH_TAB)
+        browser.login().open(self.templatefolder, view=TRASH_TAB)
         table_heading = browser.css('table.listing').first.lists()[0]
         self.assertEquals(['', 'Sequence Number', 'Title', 'Document Author',
                           'Document Date', 'Public Trial'],
@@ -604,7 +605,7 @@ class TestTemplateDossierListings(FunctionalTestCase):
 
     @browsing
     def test_enabled_actions_are_limited_in_document_tab(self, browser):
-        browser.login().open(self.templatedossier, view=DOCUMENT_TAB)
+        browser.login().open(self.templatefolder, view=DOCUMENT_TAB)
 
         self.assertEqual(
             ['Copy Items', 'Checkin with comment', 'Checkin without comment',
@@ -613,11 +614,11 @@ class TestTemplateDossierListings(FunctionalTestCase):
 
     @browsing
     def test_document_tab_lists_only_documents_directly_beneath(self, browser):
-        subdossier = create(Builder('templatedossier')
-                            .within(self.templatedossier))
+        subdossier = create(Builder('templatefolder')
+                            .within(self.templatefolder))
         create(Builder('document').within(subdossier))
 
-        browser.login().open(self.templatedossier, view=DOCUMENT_TAB)
+        browser.login().open(self.templatefolder, view=DOCUMENT_TAB)
         templates = browser.css('table.listing').first.dicts(as_text=False)
         self.assertEqual(1, len(templates))
         document_link = templates[0]['Title'].css('a').first.get('href')
@@ -625,7 +626,7 @@ class TestTemplateDossierListings(FunctionalTestCase):
 
     @browsing
     def test_enabled_actions_are_limited_in_sablontemplates_tab(self, browser):
-        browser.login().open(self.templatedossier, view=SABLONTEMPLATES_TAB)
+        browser.login().open(self.templatefolder, view=SABLONTEMPLATES_TAB)
 
         self.assertEqual(
             ['Copy Items', 'Checkin with comment', 'Checkin without comment',
@@ -634,11 +635,11 @@ class TestTemplateDossierListings(FunctionalTestCase):
 
     @browsing
     def test_sablontemplates_tab_lists_only_documents_directly_beneath(self, browser):
-        subdossier = create(Builder('templatedossier')
-                            .within(self.templatedossier))
+        subdossier = create(Builder('templatefolder')
+                            .within(self.templatefolder))
         create(Builder('sablontemplate').within(subdossier))
 
-        browser.login().open(self.templatedossier, view=SABLONTEMPLATES_TAB)
+        browser.login().open(self.templatefolder, view=SABLONTEMPLATES_TAB)
         templates = browser.css('table.listing').first.dicts(as_text=False)
         self.assertEqual(1, len(templates))
         template_link = templates[0]['Title'].css('a').first.get('href')
@@ -647,12 +648,12 @@ class TestTemplateDossierListings(FunctionalTestCase):
     @browsing
     def test_trash_tab_lists_only_documents_directly_beneath(self, browser):
         trashed = create(
-            Builder('document').trashed().within(self.templatedossier))
-        subdossier = create(Builder('templatedossier')
-                            .within(self.templatedossier))
+            Builder('document').trashed().within(self.templatefolder))
+        subdossier = create(Builder('templatefolder')
+                            .within(self.templatefolder))
         create(Builder('document').trashed().within(subdossier))
 
-        browser.login().open(self.templatedossier, view=TRASH_TAB)
+        browser.login().open(self.templatefolder, view=TRASH_TAB)
         templates = browser.css('table.listing').first.dicts(as_text=False)
         self.assertEqual(1, len(templates))
         trashed_link = templates[0]['Title'].css('a').first.get('href')
@@ -664,9 +665,9 @@ class TestTemplateDocumentTabs(FunctionalTestCase):
     def setUp(self):
         super(TestTemplateDocumentTabs, self).setUp()
 
-        self.templatedossier = create(Builder('templatedossier'))
+        self.templatefolder = create(Builder('templatefolder'))
         self.template = create(Builder('document')
-                               .within(self.templatedossier)
+                               .within(self.templatefolder)
                                .titled('My Document'))
 
     @browsing
@@ -710,16 +711,16 @@ class TestDossierTemplateFeature(FunctionalTestCase):
 
     @browsing
     def test_dossier_template_is_addable_if_dossier_template_feature_is_enabled(self, browser):
-        templatedossier = create(Builder('templatedossier'))
-        browser.login().open(templatedossier)
+        templatefolder = create(Builder('templatefolder'))
+        browser.login().open(templatefolder)
 
         self.assertIn('Dossier template', factoriesmenu.addable_types())
 
     @browsing
     def test_show_dossier_templates_tab(self, browser):
-        templatedossier = create(Builder('templatedossier'))
+        templatefolder = create(Builder('templatefolder'))
 
-        browser.login().visit(templatedossier)
+        browser.login().visit(templatefolder)
 
         self.assertEqual(
             'Dossier templates',

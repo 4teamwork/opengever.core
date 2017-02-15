@@ -67,7 +67,7 @@ class TestAgendaItem(FunctionalTestCase):
         return AgendaItem.query.first()
 
     def setup_excerpt_template(self):
-        templates = create(Builder('templatedossier'))
+        templates = create(Builder('templatefolder'))
         sablon_template = create(
             Builder('sablontemplate')
             .within(templates)

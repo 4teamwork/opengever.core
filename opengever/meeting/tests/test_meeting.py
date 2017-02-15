@@ -23,7 +23,7 @@ class TestMeeting(FunctionalTestCase):
         self.repo = create(Builder('repository_root'))
         self.repository_folder = create(Builder('repository')
                                         .within(self.repo))
-        self.templates = create(Builder('templatedossier'))
+        self.templates = create(Builder('templatefolder'))
         self.dossier = create(
             Builder('dossier').within(self.repository_folder))
         self.meeting_dossier = create(

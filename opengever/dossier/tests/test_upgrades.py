@@ -3,10 +3,10 @@ from opengever.testing import FunctionalTestCase
 from zope.annotation.interfaces import IAnnotations
 
 
-class TestDropTemplateDossierReferenceNumber(FunctionalTestCase):
+class TestDropTemplateFolderReferenceNumber(FunctionalTestCase):
 
     def setUp(self):
-        super(TestDropTemplateDossierReferenceNumber, self).setUp()
+        super(TestDropTemplateFolderReferenceNumber, self).setUp()
         annotations = IAnnotations(self.portal)
         annotations['dossier_reference_mapping'] = 'Foo'
         annotations['reference_numbers'] = 'Bar'
