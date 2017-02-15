@@ -26,13 +26,17 @@ class Bundle(object):
     """
 
     def __init__(self, items, bundle_path, json_schemas=None, stats=None,
-                 ingestion_settings=None):
+                 ingestion_settings=None, configuration=None):
         self.items = items
         self.bundle_path = bundle_path
 
         self.ingestion_settings = ingestion_settings
         if ingestion_settings is None:
             self.ingestion_settings = IngestionSettingsReader()()
+
+        self.configuration = {}
+        if configuration is not None:
+            self.configuration = configuration
 
         self.json_schemas = {}
         if json_schemas is not None:
@@ -80,9 +84,10 @@ class BundleLoader(object):
         """
         self._stats['timings']['start_loading'] = datetime.now()
         self._load_items()
+        configuration = self._load_configuration()
         bundle = Bundle(
             self._items, self.bundle_path, self.json_schemas, self._stats,
-            ingestion_settings)
+            ingestion_settings, configuration)
         self._display_stats(bundle)
         return bundle
 
@@ -102,6 +107,10 @@ class BundleLoader(object):
             log.info('%s: %s, skipping' % (json_name, exc.strerror))
             return None
         return data
+
+    def _load_configuration(self):
+        config = self._load_json('configuration.json')
+        return config
 
     def _load_items(self):
         self._items = []
