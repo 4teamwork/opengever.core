@@ -22,6 +22,9 @@ import posixpath
 logger = logging.getLogger('opengever.setup.sections.fileloader')
 
 
+INVALID_FILE_EXTENSIONS = ('.msg', '.exe', '.dll')
+
+
 class FileLoaderSection(object):
     """Stores file data directly in already constructed content items."""
 
@@ -43,8 +46,8 @@ class FileLoaderSection(object):
         self.bundle.errors['files_not_found'] = []
         self.bundle.errors['files_io_errors'] = []
         self.bundle.errors['files_unresolvable_path'] = []
+        self.bundle.errors['files_invalid_types'] = []
         self.bundle.errors['unmapped_unc_mounts'] = set()
-        self.bundle.errors['msgs'] = []
 
     def is_mail(self, item):
         return item['_type'] == 'ftw.mail.mail'
@@ -122,10 +125,11 @@ class FileLoaderSection(object):
                 filename = os.path.basename(abs_filepath)
 
                 # TODO: Check for this in OGGBundle validation
-                if abs_filepath.endswith(u'.msg'):
-                    logger.warning("Skipping .msg file: %s" % abs_filepath)
+                if any(abs_filepath.lower().endswith(ext) for ext in INVALID_FILE_EXTENSIONS):  # noqa
+                    logger.warning(
+                        "Skipping file with invalid type: %s" % abs_filepath)
                     error = (guid, abs_filepath, path)
-                    self.bundle.errors['msgs'].append(error)
+                    self.bundle.errors['files_invalid_types'].append(error)
                     yield item
                     continue
 

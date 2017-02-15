@@ -119,7 +119,7 @@ class TestFileLoader(FunctionalTestCase):
         abs_filepath = '/'.join((self.bundle_path, 'files/outlook.msg'))
         self.assertEqual(
             [(u'12345', abs_filepath, '/relative/path/to/doc')],
-            self.bundle.errors['msgs'])
+            self.bundle.errors['files_invalid_types'])
 
     def test_handles_eml_mails(self):
         mail = create(Builder('mail'))
