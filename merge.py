@@ -9,6 +9,7 @@ except pkg_resources.DistributionNotFound:
 
 
 from collections import defaultdict
+from ftw.upgrade.directory.scaffold import UpgradeStepCreator
 from lxml import etree
 from operator import attrgetter
 from operator import itemgetter
@@ -104,6 +105,7 @@ class MergeTool(object):
         self.migrate_hook_registrations()
         self.install_the_new_profile()
         self.apply_patches()
+        self.add_upgrade_step()
 
     @step('Create opengever.core Generic Setup profile.')
     def create_opengever_core_profile(self):
@@ -499,6 +501,23 @@ class MergeTool(object):
             cmd = 'git apply {}'.format(path)
             code = os.system('cd {}; {}'.format(self.buildout_dir, cmd))
             assert code==0, 'patch failed, see above'
+
+
+    @step('Add upgrade step installing opengever.core:default')
+    def add_upgrade_step(self):
+        upgrades_dir = self.opengever_dir.joinpath('policy/base/upgrades')
+        message = 'Install opengever.core:default after profile merge.'
+        step_dir = UpgradeStepCreator(upgrades_dir).create(message)
+        upgrade_path = step_dir.joinpath('upgrade.py')
+        code = upgrade_path.bytes()
+        code += '\n'.join((
+            '',
+            '        profileid = \'opengever.core:default\'',
+            '        if not self.is_profile_installed(profileid):',
+            '            self.portal_setup.setLastVersionForProfile(profileid, \'1\')',
+            '',
+        ))
+        upgrade_path.write_bytes(code)
 
     def standard_migrate_xml(self, filename):
         with self.og_core_profile_dir.joinpath(filename).open() as fio:

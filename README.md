@@ -1,3 +1,14 @@
+## Hinweis zum Upgrade nach merge
+
+Der Merge erstellt einen upgrade step in ``opengever.policy.base:default``, der
+die Version von ``opengever.core:default`` auf ``1`` setzt, so dass dessen
+upgrades in Zukunft auch auf alten Installation installiert werden.
+
+Wenn im gleichen Deployment bereits core-upgrades vorhanden sind, werden diese
+noch nicht "proposed" wenn die Profilversion noch ``unknown`` ist.
+Das heisst konkret: es müssen 2mal die proposed Upgrades durchgeführt werden.
+
+
 ## Funktionsweise
 
 1. `opengever.core` auf neuestem `master` auschecken oder aktualisieren.
