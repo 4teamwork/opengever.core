@@ -76,8 +76,9 @@ index e225868..2a0f7ae 100644
 -
 -        # These would be (possible) production defaults, but will break tests
 -        # lang_tool.setDefaultLanguage('de-ch')
+-        # lang_tool.supported_langs = ['fr-ch', 'de-ch']
 +        lang_tool.setDefaultLanguage('en')
-         # lang_tool.supported_langs = ['fr-ch', 'de-ch']
++        lang_tool.supported_langs = ['en']
  
 +    def allowAllTypes(self, portal):
 +        """We used to have filter_content_types=False for the Plone Site
