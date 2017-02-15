@@ -28,12 +28,14 @@ class ReportSection(object):
         self.previous = previous
         self.context = transmogrifier.context
         self.bundle = IAnnotations(transmogrifier)[BUNDLE_KEY]
+        self.report_dir = None
 
     def __iter__(self):
         for item in self.previous:
             yield item
 
         log.info("Creating import reports...")
+        self.report_dir = self.create_report_dir()
 
         report_data = DataCollector(self.bundle)()
         self.bundle.report_data = report_data
@@ -41,19 +43,33 @@ class ReportSection(object):
         self.build_ascii_summary(report_data)
         self.build_xlsx_report(report_data)
 
+    def create_report_dir(self):
+        """Create a directory to store all import report files.
+
+        In a real invocation, this will be created inside the instance's
+        var/ directory (no git-pollution, variable data where it belongs).
+
+        During tests, a temporary directory will be created.
+        """
+        dirname = 'import-report'
+        try:
+            report_dir = os.path.join(PathFinder().var, dirname)
+            try:
+                os.makedirs(report_dir)
+            except OSError:
+                # Already exists
+                pass
+        except RuntimeError:
+            # During tests
+            report_dir = tempfile.mkdtemp(prefix=dirname)
+        return report_dir
+
     def build_ascii_summary(self, report_data):
         summary = ASCIISummaryBuilder(report_data).build()
         log.info('\n\n%s\n' % summary)
 
     def build_xlsx_report(self, report_data):
-        try:
-            report_path = os.path.join(PathFinder().var, 'report.xlsx')
-        except RuntimeError:
-            # During tests
-            tmp_file = tempfile.NamedTemporaryFile(
-                delete=False, suffix='.xlsx')
-            tmp_file.close()
-            report_path = tmp_file.name
+        report_path = os.path.join(self.report_dir, 'main-report.xlsx')
 
         xlsx_builder = XLSXReportBuilder(report_data)
         xlsx_builder.build_and_save(report_path)
