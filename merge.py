@@ -478,11 +478,30 @@ class MergeTool(object):
         hooks_lines.extend([target_hooks.bytes().strip()])
         hooks_lines.extend(map('    {}(site)'.format, handlers))
 
+        forbidden = self.profiles_to_migrate
+        installed_in_upgrade = [
+            'opengever.bumblebee:default',
+            'opengever.officeatwork:default',
+            'opengever.private:default',
+            'opengever.disposition:default',
+            'opengever.officeconnector:default',
+        ]
+        map(forbidden.remove, installed_in_upgrade)
+
         code = '\n'.join(hooks_lines) + '\n'
         code = code.replace(
             'FORBIDDEN_PROFILES = ()',
-            "FORBIDDEN_PROFILES = (\n    '{}')".format(
-                "',\n    '".join(self.profiles_to_migrate)))
+            '\n'.join(
+                ("FORBIDDEN_PROFILES = (",
+                 "    '{}',",
+                 '',
+                 '    # Profiles, which are installed in an (old) upgrade step,',
+                 '    # should not be forbidden, since this would break the',
+                 '    # upgrade steps.',
+                 "    # '{}',",
+                 '    )')).format(
+                     "',\n    '".join(forbidden),
+                     "',\n    # '".join(installed_in_upgrade)))
 
         target_hooks.write_bytes(code)
 
