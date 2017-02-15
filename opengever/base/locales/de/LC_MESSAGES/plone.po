@@ -75,7 +75,7 @@ msgid "Dossier state changed to dossier-state-resolved"
 msgstr "Status des Dossiers geändert zu Abgeschlossen"
 
 msgid "Dossier with template"
-msgstr "Dossier aus Vorlage"
+msgstr "Geschäftsdossier aus Vorlage"
 
 msgid "Edit metadata"
 msgstr "Metadaten bearbeiten"

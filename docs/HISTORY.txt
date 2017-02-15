@@ -5,14 +5,18 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
-- Introduce new feature: Restrict Keywords for DossierTemplates. 
+- Rename translation for "Dossier with template" and reorder it in
+  the factories-menu.
+  [elioschmutz]
+
+- Introduce new feature: Restrict Keywords for DossierTemplates.
   [mathias.leimgruber]
 
-- Introduce new feature: Predefined Keywords for DossierTemplates. 
+- Introduce new feature: Predefined Keywords for DossierTemplates.
   [mathias.leimgruber]
 
-- Introduce new feature: Use ftw.keywordwidget for Dossier and 
-  DossierTemplate Keywords. 
+- Introduce new feature: Use ftw.keywordwidget for Dossier and
+  DossierTemplate Keywords.
   [mathias.leimgruber]
 
 - OGGBundle pipeline: Implement basic reports for imported objects. After
