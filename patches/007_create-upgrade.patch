@@ -1,5 +1,5 @@
 diff --git a/bin/create-upgrade b/bin/create-upgrade
-index 11f4a47..6dbe98a 100755
+index 99e1f4f..6dbe98a 100755
 --- a/bin/create-upgrade
 +++ b/bin/create-upgrade
 @@ -2,24 +2,4 @@
@@ -7,23 +7,24 @@ index 11f4a47..6dbe98a 100755
  
  buildout_dir=$( cd "$(dirname "$BASH_SOURCE")/.." ; pwd -P )
 -
--# function usage_exit() {
--#     >&2 echo "Usage example: ./bin/create-upgrade opengever.dossier \"Add TranslatedTitle behavior to templatedossier.\""
--#     >&2 echo "Usage example: ./bin/create-schema-migration opengever.meeting \"Migrate the schema.\""
--#     exit 1
--# }
+-function usage_exit() {
+-    >&2 echo "Usage example: ./bin/create-upgrade opengever.dossier \"Add TranslatedTitle behavior to templatedossier.\""
+-    >&2 echo "Usage example: ./bin/create-schema-migration opengever.meeting \"Migrate the schema.\""
+-    exit 1
+-}
 -
--# if [[ "$#" -ne 2 ]]; then
--#     usage_exit
--# fi
+-if [[ "$#" -ne 2 ]]; then
+-    usage_exit
+-fi
 -
--# package=$1; shift
--# message=$1; shift
+-package=$1; shift
+-message=$1; shift
 -
--# package_path=$buildout_dir/`echo $package|sed -e 's:\.:/:g'`/upgrades
--# if [[ ! -d $package_path ]]; then
--#     >&2 echo "$package_path: No such directory"
--#     exit 1
--# fi
+-package_path=$buildout_dir/`echo $package|sed -e 's:\.:/:g'`/upgrades
+-if [[ ! -d $package_path ]]; then
+-    >&2 echo "$package_path: No such directory"
+-    exit 1
+-fi
 -
- $buildout_dir/bin/upgrade create --path $buildout_dir/opengever/core/upgrades "$@" ; exit $?
+-$buildout_dir/bin/upgrade create --path $package_path "$message" ; exit $?
++$buildout_dir/bin/upgrade create --path $buildout_dir/opengever/core/upgrades "$@" ; exit $?
