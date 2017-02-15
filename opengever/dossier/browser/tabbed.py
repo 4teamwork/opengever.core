@@ -80,7 +80,7 @@ class DossierTabbedView(GeverTabbedView):
                 self.info_tab]
 
 
-class TemplateDossierTabbedView(GeverTabbedView):
+class TemplateFolderTabbedView(GeverTabbedView):
 
     template_tab = {
         'id': 'documents-proxy',
