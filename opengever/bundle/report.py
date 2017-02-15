@@ -299,3 +299,52 @@ class XLSXMainReportBuilder(XLSXReportBuilderBase):
     def write_report_data(self, workbook):
         self._write_metadata(workbook)
         self._write_permissions(workbook)
+
+
+class XLSXValidationReportBuilder(XLSXReportBuilderBase):
+    """Build a validation report in XLSX format based on `errors` dictionary.
+    """
+
+    ERROR_FIELDS = OrderedDict([
+        ('files_not_found', ('guid', 'filepath', 'ogg_path')),
+        ('files_io_errors', ('guid', 'filepath', 'ioerror', 'ogg_path')),
+        ('files_unresolvable_path', ('guid', 'filepath', 'ogg_path')),
+        ('files_invalid_types', ('guid', 'filepath', 'ogg_path')),
+        ('unmapped_unc_mounts', ('mount', )),
+    ])
+
+    def __init__(self, errors):
+        self.errors = errors
+
+    def _write_summary(self, workbook):
+        sheet_name = 'summary'
+        log.info("Creating sheet %s" % sheet_name)
+        sheet = workbook.create_sheet(sheet_name)
+        sheet.title = sheet_name
+
+        for rownum, item in enumerate(self.errors.items()):
+            error_type, error_list = item
+            self.write_row(sheet, rownum, (error_type, len(error_list)))
+
+    def _write_errors(self, workbook):
+        for error_type, error_list in self.errors.items():
+            try:
+                fields = self.ERROR_FIELDS[error_type]
+            except KeyError:
+                log.warn('Unknown error type %r, skipping.' % error_type)
+                continue
+
+            log.info("Creating sheet %s" % error_type)
+            sheet = workbook.create_sheet(error_type)
+            sheet.title = error_type
+
+            # Label Row
+            self.write_row(sheet, 0, fields, bold=True)
+
+            # Data rows
+            for rownum, error in enumerate(error_list, 1):
+                self.write_row(sheet, rownum, error)
+
+    def write_report_data(self, workbook):
+        self._write_summary(workbook)
+        self._write_errors(workbook)
