@@ -221,6 +221,12 @@ class XLSXReportBuilderBase(object):
             log.info("Wrote report to %s" % path)
         return path
 
+    def add_sheet(self, workbook, sheet_name):
+        log.info("Creating sheet %s" % sheet_name)
+        sheet = workbook.create_sheet(sheet_name)
+        sheet.title = sheet_name
+        return sheet
+
     def write_row(self, sheet, rownum, values, bold=False):
         for col_num, value in enumerate(values, 1):
             cell = sheet.cell(row=rownum + 1, column=col_num)
@@ -265,9 +271,7 @@ class XLSXMainReportBuilder(XLSXReportBuilderBase):
     def _write_metadata(self, workbook):
         for json_name, portal_type in BUNDLE_JSON_TYPES.items():
             short_name = json_name.replace('.json', '')
-            log.info("Creating sheet %s" % short_name)
-            sheet = workbook.create_sheet(short_name)
-            sheet.title = short_name
+            sheet = self.add_sheet(workbook, short_name)
 
             # Label Row
             self.write_row(
@@ -283,9 +287,7 @@ class XLSXMainReportBuilder(XLSXReportBuilderBase):
                 continue
 
             sheet_name = '%s_permissions' % json_name.replace('.json', '')
-            log.info("Creating sheet %s" % sheet_name)
-            sheet = workbook.create_sheet(sheet_name)
-            sheet.title = sheet_name
+            sheet = self.add_sheet(workbook, sheet_name)
 
             # Label Row
             headers = self.permissions[portal_type][0].keys()
@@ -318,9 +320,7 @@ class XLSXValidationReportBuilder(XLSXReportBuilderBase):
 
     def _write_summary(self, workbook):
         sheet_name = 'summary'
-        log.info("Creating sheet %s" % sheet_name)
-        sheet = workbook.create_sheet(sheet_name)
-        sheet.title = sheet_name
+        sheet = self.add_sheet(workbook, sheet_name)
 
         for rownum, item in enumerate(self.errors.items()):
             error_type, error_list = item
@@ -334,9 +334,7 @@ class XLSXValidationReportBuilder(XLSXReportBuilderBase):
                 log.warn('Unknown error type %r, skipping.' % error_type)
                 continue
 
-            log.info("Creating sheet %s" % error_type)
-            sheet = workbook.create_sheet(error_type)
-            sheet.title = error_type
+            sheet = self.add_sheet(workbook, error_type)
 
             # Label Row
             self.write_row(sheet, 0, fields, bold=True)
