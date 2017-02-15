@@ -85,6 +85,23 @@ class TestFileLoader(FunctionalTestCase):
             {abs_filepath: '/relative/path/to/doc'},
             self.bundle.errors['files_not_found'])
 
+    def test_tracks_unmapped_unc_files_in_errors(self):
+        item = {
+            u"_type": u"opengever.document.document",
+            u"_path": '/relative/path/to/doc',
+            u"filepath": u'\\\\host\\unmapped\\foo.docx',
+        }
+        section = self.setup_section(previous=[item])
+        list(section)
+
+        self.assertEqual(
+            set([u'\\\\host\\unmapped']),
+            self.bundle.errors['unmapped_unc_mounts'])
+
+        self.assertEqual(
+            [item['filepath']],
+            self.bundle.errors['unresolvable_filepaths'])
+
     def test_tracks_skipped_msg_files_in_errors(self):
         item = {
             u"_type": u"opengever.document.document",

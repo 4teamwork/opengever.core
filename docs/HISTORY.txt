@@ -5,6 +5,9 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- FileLoader: Add support for loading files from UNC paths.
+  [lgraf]
+
 - Rename translation for "Dossier with template" and reorder it in
   the factories-menu.
   [elioschmutz]

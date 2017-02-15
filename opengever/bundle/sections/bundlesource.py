@@ -13,6 +13,7 @@ logger.setLevel(logging.INFO)
 
 BUNDLE_KEY = 'opengever.bundle.bundle'
 BUNDLE_PATH_KEY = 'opengever.bundle.bundle_path'
+BUNDLE_INGESTION_SETTINGS_KEY = 'opengever.bundle.ingestion_settings'
 
 
 class BundleSourceSection(object):
@@ -26,7 +27,9 @@ class BundleSourceSection(object):
         self.previous = previous
         self.transmogrifier = transmogrifier
 
-        bundle_path = IAnnotations(transmogrifier).get(BUNDLE_PATH_KEY)
+        annotations = IAnnotations(transmogrifier)
+
+        bundle_path = annotations.get(BUNDLE_PATH_KEY)
         if not bundle_path:
             raise Exception(
                 "No bundle_path specified. Please pass the bundle_path in "
@@ -34,8 +37,9 @@ class BundleSourceSection(object):
                 "IAnnotations(transmogrifier)[BUNDLE_PATH_KEY] = "
                 "'/path/to/bundle'")
 
-        self.bundle = BundleLoader(bundle_path).load()
-        IAnnotations(transmogrifier)[BUNDLE_KEY] = self.bundle
+        ingestion_settings = annotations.get(BUNDLE_INGESTION_SETTINGS_KEY)
+        self.bundle = BundleLoader(bundle_path).load(ingestion_settings)
+        annotations[BUNDLE_KEY] = self.bundle
 
     def __iter__(self):
         return iter(self.bundle)

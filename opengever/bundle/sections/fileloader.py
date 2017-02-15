@@ -14,7 +14,9 @@ from zope.annotation.interfaces import IAnnotations
 from zope.interface import classProvides
 from zope.interface import implements
 import logging
+import ntpath
 import os.path
+import posixpath
 
 
 logger = logging.getLogger('opengever.setup.sections.fileloader')
@@ -40,10 +42,50 @@ class FileLoaderSection(object):
 
         self.bundle.errors['files_not_found'] = {}
         self.bundle.errors['files_io_errors'] = {}
+        self.bundle.errors['unmapped_unc_mounts'] = set()
+        self.bundle.errors['unresolvable_filepaths'] = []
         self.bundle.errors['msgs'] = {}
 
     def is_mail(self, item):
         return item['_type'] == 'ftw.mail.mail'
+
+    def _is_absolute_path(self, path):
+        if posixpath.isabs(path):
+            return True
+
+        if ntpath.isabs(path):
+            return True
+
+        return False
+
+    def _is_unc_path(self, filepath):
+        return filepath.startswith('\\\\')
+
+    def _translate_unc_path(self, filepath):
+        ingestion_settings = self.bundle.ingestion_settings
+        unc_mount_mapping = ingestion_settings.get('unc_mounts', {})
+        mount, rest = ntpath.splitunc(filepath)
+
+        if mount not in unc_mount_mapping:
+            logger.warning('UNC mount %s is not mapped!' % mount)
+            self.bundle.errors['unmapped_unc_mounts'].add(mount)
+            return None
+
+        # posix_mountpoint is the location where the fileshare has been
+        # mounted on the POSIX system (Linux / OS X)
+        posix_mountpoint = unc_mount_mapping[mount]
+        relative_path = rest.replace('\\', '/').lstrip('/')
+        abs_filepath = os.path.join(posix_mountpoint, relative_path)
+        return abs_filepath
+
+    def build_absolute_filepath(self, filepath):
+        if not self._is_absolute_path(filepath):
+            filepath = os.path.join(self.bundle_path, filepath)
+
+        if self._is_unc_path(filepath):
+            filepath = self._translate_unc_path(filepath)
+
+        return filepath
 
     def __iter__(self):
         for item in self.previous:
@@ -57,37 +99,45 @@ class FileLoaderSection(object):
             pathkey = self.pathkey(*keys)[0]
 
             if self.key in item:
-                filepath = item[self.key]
-                if filepath is None:
+                _filepath = item[self.key]
+                if _filepath is None:
                     yield item
                     continue
 
                 if pathkey not in item:
-                    logger.warning("Missing path key for file %s" % filepath)
+                    logger.warning("Missing path key for file %s" % _filepath)
                     yield item
                     continue
                 path = item[pathkey]
 
-                filepath = os.path.join(self.bundle_path, filepath)
-                filename = os.path.basename(filepath)
+                abs_filepath = self.build_absolute_filepath(_filepath)
+                if abs_filepath is None:
+                    logger.warning('Unresolvable filepath: %s' % _filepath)
+                    self.bundle.errors['unresolvable_filepaths'].append(
+                        _filepath)
+                    yield item
+                    continue
+
+                filename = os.path.basename(abs_filepath)
 
                 # TODO: Check for this in OGGBundle validation
-                if filepath.endswith(u'.msg'):
-                    logger.warning("Skipping .msg file: %s" % filepath)
-                    self.bundle.errors['msgs'][filepath] = path
+                if abs_filepath.endswith(u'.msg'):
+                    logger.warning("Skipping .msg file: %s" % abs_filepath)
+                    self.bundle.errors['msgs'][abs_filepath] = path
                     yield item
                     continue
 
                 # TODO: Check for this in OGGBundle validation
-                if not os.path.exists(filepath):
-                    logger.warning("File not found: %s" % filepath)
-                    self.bundle.errors['files_not_found'][filepath] = path
+                if not os.path.exists(abs_filepath):
+                    logger.warning("File not found: %s" % abs_filepath)
+                    self.bundle.errors['files_not_found'][abs_filepath] = path
                     yield item
                     continue
 
-                mimetype, _encoding = guess_type(filepath, strict=False)
+                mimetype, _encoding = guess_type(abs_filepath, strict=False)
                 if mimetype is None:
-                    logger.warning("Unknown mimetype for file %s" % filepath)
+                    logger.warning(
+                        "Unknown mimetype for file %s" % abs_filepath)
                     mimetype = 'application/octet-stream'
 
                 obj = item.get('_object')
@@ -98,7 +148,7 @@ class FileLoaderSection(object):
                     continue
 
                 try:
-                    with open(filepath, 'rb') as f:
+                    with open(abs_filepath, 'rb') as f:
                         namedblobfile = file_field._type(
                             data=f.read(),
                             contentType=mimetype,
@@ -107,8 +157,8 @@ class FileLoaderSection(object):
                 except EnvironmentError as e:
                     # TODO: Check for this in OGGBundle validation
                     logger.warning("Can't open file %s. %s." % (
-                        filepath, str(e)))
-                    self.bundle.errors['files_io_errors'][filepath] = path
+                        abs_filepath, str(e)))
+                    self.bundle.errors['files_io_errors'][abs_filepath] = path
                     yield item
                     continue
 

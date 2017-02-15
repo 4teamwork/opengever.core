@@ -25,9 +25,14 @@ class Bundle(object):
     """An iterable OGGBundle.
     """
 
-    def __init__(self, items, bundle_path, json_schemas=None, stats=None):
+    def __init__(self, items, bundle_path, json_schemas=None, stats=None,
+                 ingestion_settings=None):
         self.items = items
         self.bundle_path = bundle_path
+
+        self.ingestion_settings = ingestion_settings
+        if ingestion_settings is None:
+            self.ingestion_settings = IngestionSettingsReader()()
 
         self.json_schemas = {}
         if json_schemas is not None:
@@ -70,13 +75,14 @@ class BundleLoader(object):
         self.json_schemas = self._load_schemas()
         self._stats = {'bundle_counts': {}, 'timings': {}}
 
-    def load(self):
+    def load(self, ingestion_settings=None):
         """Load the bundle from disk and return an iterable Bundle.
         """
         self._stats['timings']['start_loading'] = datetime.now()
         self._load_items()
         bundle = Bundle(
-            self._items, self.bundle_path, self.json_schemas, self._stats)
+            self._items, self.bundle_path, self.json_schemas, self._stats,
+            ingestion_settings)
         self._display_stats(bundle)
         return bundle
 
@@ -195,3 +201,30 @@ class ItemPreprocessor(object):
             # because it would be their initial state anyway, and therefore
             # avoid an unnecessary invocation of wftool.setStatusOf().
             self.item.pop('review_state', None)
+
+
+class IngestionSettingsReader(object):
+    """Read bundle ingestion related settings from a JSON file.
+
+    These settings contain parameters that are relevant for the bundle import
+    process, but are not part of the configuration parameters associated with
+    the bundle. They tend to vary depending on what environment the bundle
+    import is performed on.
+    """
+
+    def __init__(self, settings_path=None):
+        self.settings_path = settings_path
+        if not settings_path:
+            self.settings_path = self.DEFAULT_SETTINGS_PATH
+
+    DEFAULT_SETTINGS_PATH = '~/.opengever/bundle_ingestion/settings.json'
+
+    def __call__(self):
+        settings_path = os.path.expanduser(self.settings_path)
+        try:
+            with open(settings_path) as settings_file:
+                settings = json.load(settings_file)
+        except IOError:
+            log.info('No ingestion settings found at %s' % settings_path)
+            return {}
+        return settings

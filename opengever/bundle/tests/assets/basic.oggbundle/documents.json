@@ -31,5 +31,11 @@
     "filepath": "files/sample.eml",
     "review_state": "document-state-draft",
     "title": "Ein Mail"
+  },  {
+    "guid": "7363583a8a78407ea2558d718774e8d2",
+    "parent_guid": "659645aec58d48a9b9663399ea2ec069",
+    "filepath": "\\\\host\\mount\\subdir\\wordfile.docx",
+    "review_state": "document-state-draft",
+    "title": "Document referenced via UNC-Path"
   }
 ]

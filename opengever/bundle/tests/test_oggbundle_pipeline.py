@@ -7,10 +7,11 @@ from ftw.testing import freeze
 from opengever.base.behaviors.classification import IClassification
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.base.security import elevated_privileges
+from opengever.bundle.sections.bundlesource import BUNDLE_INGESTION_SETTINGS_KEY  # noqa
 from opengever.bundle.sections.bundlesource import BUNDLE_KEY
 from opengever.bundle.sections.bundlesource import BUNDLE_PATH_KEY
 from opengever.dossier.behaviors.dossier import IDossier
-from opengever.repository.behaviors.referenceprefix import IReferenceNumberPrefix
+from opengever.repository.behaviors.referenceprefix import IReferenceNumberPrefix  # noqa
 from opengever.testing import FunctionalTestCase
 from pkg_resources import resource_filename
 from plone import api
@@ -37,16 +38,22 @@ class TestOggBundlePipeline(FunctionalTestCase):
             Builder('fixture').with_all_unit_setup())
 
         transmogrifier = Transmogrifier(api.portal.get())
-        IAnnotations(transmogrifier)[BUNDLE_PATH_KEY] = resource_filename(
+        annotations = IAnnotations(transmogrifier)
+        annotations[BUNDLE_PATH_KEY] = resource_filename(
             'opengever.bundle.tests', 'assets/basic.oggbundle')
 
+        unc_share_asset_directory = resource_filename(
+            'opengever.bundle.tests', 'assets/files_outside_bundle')
+        annotations[BUNDLE_INGESTION_SETTINGS_KEY] = {
+            'unc_mounts': {u'\\\\host\\mount': unc_share_asset_directory},
+        }
         # We need to add documents to dossiers that have already been created
         # in the 'closed' state, which isn't allowed for anyone except users
         # inheriting from `UnrestrictedUser` -> we need elevated privileges
         with freeze(FROZEN_NOW), elevated_privileges():
             transmogrifier(u'opengever.bundle.oggbundle')
 
-        bundle = IAnnotations(transmogrifier)[BUNDLE_KEY]
+        bundle = annotations[BUNDLE_KEY]
 
         # test content creation
         # XXX use separate test-cases based on a layer
@@ -344,6 +351,7 @@ class TestOggBundlePipeline(FunctionalTestCase):
         self.assert_document_1_created(parent)
         self.assert_document_2_created(parent)
         self.assert_mail_created(parent)
+        self.assert_document_4_created(parent)
 
     def assert_document_1_created(self, parent):
         document_1 = parent.get('document-1')
@@ -421,6 +429,20 @@ class TestOggBundlePipeline(FunctionalTestCase):
         history = repo_tool.getHistoryMetadata(document_2)
         self.assertEqual(1, len(history))
 
+    def assert_document_4_created(self, parent):
+        document_4 = parent.get('document-4')
+
+        self.assertTrue(document_4.digitally_available)
+        self.assertIsNotNone(document_4.file)
+        self.assertEqual(24390, len(document_4.file.data))
+
+        self.assertEqual(
+            'document-state-draft',
+            api.content.get_state(document_4))
+        self.assertEqual(
+            u'Document referenced via UNC-Path',
+            document_4.title)
+
     def assert_mail_created(self, parent):
         mail = parent.get('document-3')
 
@@ -481,7 +503,7 @@ class TestOggBundlePipeline(FunctionalTestCase):
         self.assertEqual(1, len(reporoots))
         self.assertEqual(3, len(repofolders))
         self.assertEqual(2, len(dossiers))
-        self.assertEqual(2, len(documents))
+        self.assertEqual(3, len(documents))
         self.assertEqual(1, len(mails))
 
         print bundle
