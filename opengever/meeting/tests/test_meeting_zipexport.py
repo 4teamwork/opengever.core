@@ -147,3 +147,74 @@ class TestMeetingZipExportView(FunctionalTestCase):
         self.assertIn('Protocol-this-is-the-modified-different-title'
                       '-than-before.docx',
                       zip_file.namelist())
+
+    @browsing
+    def test_zip_export_agenda_items_attachments(self, browser):
+        attachement1 = create(
+            Builder('document')
+            .without_default_title()
+            .attach_file_containing(u"attachement",
+                                    u"attachement1.docx")
+            .within(self.dossier))
+
+        attachement2 = create(
+            Builder('document')
+            .without_default_title()
+            .attach_file_containing(u"attachement",
+                                    u"attachement2.docx")
+            .within(self.dossier))
+
+        self.proposal_a = create(
+            Builder('proposal')
+            .titled(u'Proposal \xc4')
+            .within(self.dossier)
+            .as_submitted()
+            .having(committee=self.committee.load_model())
+            .relate_to(attachement1, attachement2))
+
+        self.proposal_b = create(
+            Builder('proposal')
+            .titled(u'Proposal B')
+            .within(self.dossier)
+            .as_submitted()
+            .having(committee=self.committee.load_model())
+            .relate_to(attachement1))
+
+        self.proposal_c = create(
+            Builder('proposal')
+            .titled(u'Proposal C')
+            .within(self.dossier)
+            .as_submitted()
+            .having(committee=self.committee.load_model())
+        )
+
+        meeting = create(
+            Builder('meeting')
+            .having(committee=self.committee.load_model(),
+                    start=self.localized_datetime(2013, 1, 1, 8, 30),
+                    end=self.localized_datetime(2013, 1, 1, 10, 30),
+                    location='There',
+                    presidency=self.hugo,
+                    participants=[self.peter,
+                                  self.hans,
+                                  self.roland],
+                    secretary=self.sile)
+            .scheduled_proposals([self.proposal_a, self.proposal_b])
+            .link_with(self.meeting_dossier))
+
+        browser.login().visit(meeting.get_url())
+        browser.open(meeting.get_url(view='zipexport'))
+
+        zip_file = ZipFile(StringIO(browser.contents), 'r')
+        meeting = Meeting.query.get(meeting.meeting_id)
+
+        self.assertIn('1. Proposal A/Attachemant 2.docx',
+                      zip_file.namelist())
+        self.assertIn('1. Proposal A/Attachemant 1.docx',
+                      zip_file.namelist())
+        self.assertIn('2. Proposal B/Attachemant 1.docx',
+                      zip_file.namelist())
+        self.assertNotIn('3. Proposal C',
+                         zip_file.namelist())
+
+    # TODO test that excerpt is not in zip

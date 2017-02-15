@@ -1,11 +1,11 @@
 from ftw.zipexport.generation import ZipGenerator
-from opengever.meeting import _
+from ftw.zipexport.utils import normalize_path
+from opengever.meeting.command import AgendaItemListOperations
 from opengever.meeting.command import CreateGeneratedDocumentCommand
 from opengever.meeting.command import ProtocolOperations
 from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
 from StringIO import StringIO
-from zope.i18n import translate
 from ZPublisher.Iterators import filestream_iterator
 import os
 import pytz
@@ -28,6 +28,9 @@ class MeetingZipExport(BrowserView):
         with ZipGenerator() as generator:
             # Protocol
             generator.add_file(*self.get_protocol())
+
+            # Agenda items
+            self.add_agenda_items_attachments(generator)
 
             # Return zip
             zip_file = generator.generate()
@@ -64,3 +67,18 @@ class MeetingZipExport(BrowserView):
 
         filename = operations.get_filename(self.model)
         return (filename, StringIO(command.generate_file_data()))
+
+    def add_agenda_items_attachments(self, generator):
+
+        for agenda_item in self.model.agenda_items:
+            if not agenda_item.has_submitted_documents():
+                continue
+
+            for document in agenda_item.proposal.resolve_submitted_documents():
+                namedfile = document.file                
+                path = u'{} {}/{}'.format(
+                    agenda_item.number,
+                    agenda_item.proposal.title,
+                    namedfile.filename
+                )
+                generator.add_file(path, namedfile.open())
