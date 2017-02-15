@@ -586,6 +586,13 @@ class MergeTool(object):
             '        if not self.is_profile_installed(profileid):',
             '            self.portal_setup.setLastVersionForProfile(profileid, \'1\')',
             '',
+            '        product = \'opengever.core\'',
+            '        if not self.is_profile_installed(\'opengever.core\'):',
+            '            quickinstaller = self.getToolByName(\'portal_quickinstaller\')',
+            '            quickinstaller.notifyInstalled(',
+            '                product,',
+            '                installedversion=quickinstaller.getProductVersion(product),',
+            '                status=\'installed\')',
         ))
         upgrade_path.write_bytes(code)
 
