@@ -5,6 +5,9 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Rename dossiertemplate wizard button from "save" to "continue".
+  [elioschmutz]
+
 - OGGBundle reports: Implement XLSX validation report.
   [lgraf]
 

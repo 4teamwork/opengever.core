@@ -124,7 +124,7 @@ class SelectDossierTemplateWizardStep(
     def schema(self):
         return ICreateDossierFromTemplate
 
-    @button.buttonAndHandler(_('button_save', default=u'Save'), name='save')
+    @button.buttonAndHandler(_('button_continue', default=u'Continue'), name='save')
     def handleApply(self, action):
         data, errors = self.extractData()
         if errors:
