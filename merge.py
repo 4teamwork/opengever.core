@@ -89,6 +89,7 @@ class MergeTool(object):
     def __call__(self):
         self.create_opengever_core_profile()
         self.list_old_profiles()
+        self.embedd_profiles_into_upgrade_steps()
         self.migrate_dependencies()
         self.remove_examplecontent_dependency()
         self.declare_examplecontent_softdependency()
@@ -120,6 +121,64 @@ class MergeTool(object):
     def list_old_profiles(self):
         for profile in self.profiles_to_migrate:
             print '  ', profile
+
+    @step('Embedd opengever.* profiles into upgrade steps installing them.')
+    def embedd_profiles_into_upgrade_steps(self):
+        # At this time, there is no upgrade step installing an opengever.*
+        # component in code, usually a metadata.xml is used.
+        # Verify that this did not change.
+        upgradesteps = filter(lambda path: path.name == 'upgrade.py',
+                              self.opengever_dir.walkfiles())
+        for path in upgradesteps:
+            lines = path.bytes().splitlines()
+            for line in filter(lambda line: 'setup_install_profile' in line, lines):
+                profile = re.match(
+                    '^ +self\.setup_install_profile\(\'profile-([^\']+)\'\)',
+                    line).group(1)
+                assert profile not in self.profiles_to_migrate, \
+                    'Unexpectedly found an upgrade step installing {}'.format(
+                        profile)
+
+        # Find all metadata.xml's in upgrade steps.
+        # When the upgade step is installing one of the profiles to migrate,
+        # we need to copy everything to the upgrade step since we will empty
+        # the profile later.
+        for upgrade_dir in map(attrgetter('parent'), upgradesteps):
+            dependencies = self.dependencies_in(upgrade_dir.joinpath('metadata.xml'))
+            if len(dependencies) == 0:
+                continue
+
+            assert len(dependencies) == 1, \
+                'Only one dependency supported in upgrade step metadata.xml' \
+                ' at {}'.format(upgrade_dir)
+            profile, = dependencies
+
+            if profile not in self.profiles_to_migrate:
+                continue
+
+            profile_path = self.profile_path(profile)
+            profile_metadata = profile_path.joinpath('metadata.xml')
+            profile_dependencies = self.dependencies_in(profile_metadata)
+            for dependency in profile_dependencies:
+                assert dependency not in self.profiles_to_migrate, \
+                    'Cannot copy profile recursively into upgrade step....'
+
+            # copy profile into ugprade step
+            os.system('cp -r {}/* {}'.format(profile_path, upgrade_dir))
+
+            # update metdata.xml
+            if profile_dependencies:
+                metadata_doc = parsexml(upgrade_dir.joinpath('metadata.xml'))
+                map(metadata_doc.getroot().remove,
+                    metadata_doc.getroot().getchildren())
+                deps_node = etree.SubElement(metadata_doc.getroot(), 'dependencies')
+                for dependency in profile_dependencies:
+                    node = etree.SubElement(deps_node, 'dependency')
+                    node.text = 'profile-' + dependency
+
+                prettywrite(upgrade_dir.joinpath('metadata.xml'), metadata_doc)
+            else:
+                upgrade_dir.joinpath('metadata.xml').unlink()
 
     @step('Migrate GS dependencies into opengever.core profile.')
     def migrate_dependencies(self):
@@ -479,30 +538,11 @@ class MergeTool(object):
         hooks_lines.extend([target_hooks.bytes().strip()])
         hooks_lines.extend(map('    {}(site)'.format, handlers))
 
-        forbidden = self.profiles_to_migrate
-        installed_in_upgrade = [
-            'opengever.bumblebee:default',
-            'opengever.officeatwork:default',
-            'opengever.private:default',
-            'opengever.disposition:default',
-            'opengever.officeconnector:default',
-        ]
-        map(forbidden.remove, installed_in_upgrade)
-
         code = '\n'.join(hooks_lines) + '\n'
         code = code.replace(
             'FORBIDDEN_PROFILES = ()',
-            '\n'.join(
-                ("FORBIDDEN_PROFILES = (",
-                 "    '{}',",
-                 '',
-                 '    # Profiles, which are installed in an (old) upgrade step,',
-                 '    # should not be forbidden, since this would break the',
-                 '    # upgrade steps.',
-                 "    # '{}',",
-                 '    )')).format(
-                     "',\n    '".join(forbidden),
-                     "',\n    # '".join(installed_in_upgrade)))
+            "FORBIDDEN_PROFILES = (\n    '{}')".format(
+                "',\n    '".join(self.profiles_to_migrate)))
 
         target_hooks.write_bytes(code)
 
@@ -652,12 +692,13 @@ class MergeTool(object):
     def read_dependencies(self, profile):
         metadata_xml_path = (self.profile_path(profile)
                              .joinpath('metadata.xml'))
-        if not metadata_xml_path.isfile() and metadata_xml_path.parent.isdir():
+        return self.dependencies_in(metadata_xml_path)
+
+    def dependencies_in(self, metadata_file):
+        if not metadata_file.isfile() and metadata_file.parent.isdir():
             return []
 
-        with metadata_xml_path.open() as fio:
-            doc = etree.parse(fio)
-
+        doc = parsexml(metadata_file)
         result = []
         for node in doc.xpath('//dependency'):
             result.append(re.sub('^profile-', '', node.text.strip()))

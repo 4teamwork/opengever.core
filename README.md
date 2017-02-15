@@ -87,3 +87,8 @@ Das heisst konkret: es müssen 2mal die proposed Upgrades durchgeführt werden.
 - **Tests: Sortierung:** Da gewisse Actions und FTI anders sortiert sind mussten
     einige Tests angepasst werden, so dass diese die Sortierung nicht mehr
     testen sondern nur den Inhalt von Listen.
+
+- **Alte Profile in Upgrade-Steps einbetten:** Beispiel: ein Upgrade-Step
+    installiert opengever.bumblebee. Aber wir leeren opengever.bumblebee.
+    Damit der Upgrade-Step weiterhin auf alten Installationen funktioniert
+    werden alle Dateien aus dem alten Profil in den Upgrade-Step kopiert.
