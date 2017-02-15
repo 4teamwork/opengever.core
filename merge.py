@@ -106,6 +106,7 @@ class MergeTool(object):
         self.install_the_new_profile()
         self.apply_patches()
         self.add_upgrade_step()
+        self.keep_old_profiles()
 
     @step('Create opengever.core Generic Setup profile.')
     def create_opengever_core_profile(self):
@@ -537,6 +538,11 @@ class MergeTool(object):
             '',
         ))
         upgrade_path.write_bytes(code)
+
+    @step('Add .gitkeep to old profiles.')
+    def keep_old_profiles(self):
+        for directory in map(self.profile_path, self.profiles_to_migrate):
+            directory.joinpath('.gitkeep').touch()
 
     def standard_migrate_xml(self, filename):
         with self.og_core_profile_dir.joinpath(filename).open() as fio:
