@@ -17,6 +17,7 @@
     <upgrade-step:directory
           profile="opengever.core:default"
           directory="upgrades"
+          soft_dependencies="opengever.policy.base:default"
           />
 
     <profilehook:hook
