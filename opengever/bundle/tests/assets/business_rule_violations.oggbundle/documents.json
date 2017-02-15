@@ -7,5 +7,14 @@
     "filepath": "files/word.docx",
     "review_state": "document-state-draft",
     "title": "Loose Document outside subdossier (in resolved dossier)"
+  },
+  {
+    "guid": "GUID-document-A-1.1-3-missing-file",
+    "parent_guid": "GUID-dossier-A-1.1-3",
+    "document_author": "david.erni",
+    "document_date": "2007-01-01",
+    "filepath": "files/file-doesnt-exist.pdf",
+    "review_state": "document-state-draft",
+    "title": "Document whose referenced file doesn't exist"
   }
 ]
