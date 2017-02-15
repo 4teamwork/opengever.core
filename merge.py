@@ -163,6 +163,16 @@ class MergeTool(object):
                 assert dependency not in self.profiles_to_migrate, \
                     'Cannot copy profile recursively into upgrade step....'
 
+            handled_by_patch = map(
+                self.opengever_dir.joinpath,
+                ('policy/base/upgrades/20160923114424_install_opengever_private',
+                ))
+            if upgrade_dir not in handled_by_patch:
+                hooks_path = profile_path.parent.parent.joinpath('hooks.py')
+                assert not hooks_path.isfile(), \
+                    ('{} may get us in trouble because the code is no longer '
+                     'in the upgrade step {}').format(hooks_path, upgrade_dir)
+
             # copy profile into ugprade step
             os.system('cp -r {}/* {}'.format(profile_path, upgrade_dir))
 
