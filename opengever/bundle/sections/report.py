@@ -1,5 +1,6 @@
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
+from datetime import datetime
 from opengever.base.pathfinder import PathFinder
 from opengever.bundle.report import ASCIISummaryBuilder
 from opengever.bundle.report import DataCollector
@@ -51,7 +52,8 @@ class ReportSection(object):
 
         During tests, a temporary directory will be created.
         """
-        dirname = 'import-report'
+        ts = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+        dirname = 'import-report-%s' % ts
         try:
             report_dir = os.path.join(PathFinder().var, dirname)
             try:
