@@ -10,12 +10,6 @@ import transaction
 
 class TestInbox(FunctionalTestCase):
 
-    def setUp(self):
-        super(TestInbox, self).setUp()
-
-        self.org_unit2 = create(Builder('org_unit').id('client2')
-                                .having(admin_unit=self.admin_unit))
-
     @browsing
     def test_adding(self, browser):
         self.grant('Manager')
