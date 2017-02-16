@@ -4,6 +4,7 @@ from ftw.testbrowser import browsing
 from ftw.zipexport.zipfilestream import ZipFile
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.model import Meeting
+from opengever.meeting.model.generateddocument import GeneratedExcerpt
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.testing import FunctionalTestCase
 from StringIO import StringIO
@@ -204,7 +205,7 @@ class TestMeetingZipExportView(FunctionalTestCase):
 
         browser.login().visit(meeting.get_url())
         browser.open(meeting.get_url(view='zipexport'))
-
+    
         zip_file = ZipFile(StringIO(browser.contents), 'r')
         meeting = Meeting.query.get(meeting.meeting_id)
 
@@ -217,4 +218,33 @@ class TestMeetingZipExportView(FunctionalTestCase):
         self.assertNotIn('3. Proposal C',
                          zip_file.namelist())
 
-    # TODO test that excerpt is not in zip
+    @browsing
+    def test_zip_export_excerpt_is_not_exported(self, browser):
+        excerpt = create(Builder('document')
+                         .titled(u'Excerpt')
+                         .attach_file_containing(u"excerpt",
+                                                 u"excerpt.docx")
+                         .within(self.dossier))
+
+        generated_excerpt = create(Builder('generated_excerpt')
+                                   .for_document(excerpt))
+        # restore session by refreshing instance
+        generated_excerpt = GeneratedExcerpt.get(generated_excerpt.document_id)
+
+        meeting = create(
+            Builder('meeting')
+            .having(committee=self.committee.load_model(),
+                    start=self.localized_datetime(2013, 1, 1, 8, 30),
+                    end=self.localized_datetime(2013, 1, 1, 10, 30),
+                    location='There',
+                    presidency=self.hugo,
+                    participants=[self.peter,
+                                  self.hans,
+                                  self.roland],
+                    secretary=self.sile,
+                    excerpt_documents=[generated_excerpt], )
+            .link_with(self.meeting_dossier))
+
+        browser.login().open(meeting.get_url(view='zipexport'))
+        zip_file = ZipFile(StringIO(browser.contents), 'r')
+        self.assertNotIn('excerpt.docx', zip_file.namelist())
