@@ -211,19 +211,23 @@ class XLSXReportBuilderBase(object):
     """Base class for XLSX report builders.
     """
 
-    def build_and_save(self, report_path):
-        workbook = self.build_report()
-        self.save_report(workbook, report_path)
+    def __init__(self, *args, **kwargs):
+        self.workbook = Workbook()
+        self.workbook.remove_sheet(self.workbook.active)
 
-    def save_report(self, workbook, path):
+    def build_and_save(self, report_path):
+        self.write_report_data()
+        self.save_report(report_path)
+
+    def save_report(self, path):
         with open(path, 'w') as report_xlsx:
-            workbook.save(report_xlsx)
+            self.workbook.save(report_xlsx)
             log.info("Wrote report to %s" % path)
         return path
 
-    def add_sheet(self, workbook, sheet_name):
+    def add_sheet(self, sheet_name):
         log.info("Creating sheet %s" % sheet_name)
-        sheet = workbook.create_sheet(sheet_name)
+        sheet = self.workbook.create_sheet(sheet_name)
         sheet.title = sheet_name
         return sheet
 
@@ -234,14 +238,8 @@ class XLSXReportBuilderBase(object):
             if bold:
                 cell.font = Font(bold=True)
 
-    def write_report_data(self, workbook):
+    def write_report_data(self):
         raise NotImplementedError("To be implemented by subclasses")
-
-    def build_report(self):
-        workbook = Workbook()
-        workbook.remove_sheet(workbook.active)
-        self.write_report_data(workbook)
-        return workbook
 
 
 class XLSXMainReportBuilder(XLSXReportBuilderBase):
@@ -249,6 +247,7 @@ class XLSXMainReportBuilder(XLSXReportBuilderBase):
     """
 
     def __init__(self, report_data):
+        super(XLSXMainReportBuilder, self).__init__()
         self.report_data = {'metadata': {}, 'permissions': {}}
         metadata = self.report_data['metadata']
         metadata.update(report_data['metadata'])
@@ -268,10 +267,10 @@ class XLSXMainReportBuilder(XLSXReportBuilderBase):
         permissions['opengever.document.document'] = docs + mails
         permissions.pop('ftw.mail.mail', None)
 
-    def _write_metadata(self, workbook):
+    def _write_metadata(self):
         for json_name, portal_type in BUNDLE_JSON_TYPES.items():
             short_name = json_name.replace('.json', '')
-            sheet = self.add_sheet(workbook, short_name)
+            sheet = self.add_sheet(short_name)
 
             # Label Row
             self.write_row(
@@ -281,13 +280,13 @@ class XLSXMainReportBuilder(XLSXReportBuilderBase):
             for rownum, info in enumerate(self.metadata[portal_type], 1):
                 self.write_row(sheet, rownum, info.values())
 
-    def _write_permissions(self, workbook):
+    def _write_permissions(self):
         for json_name, portal_type in BUNDLE_JSON_TYPES.items():
             if not self.permissions.get(portal_type):
                 continue
 
             sheet_name = '%s_permissions' % json_name.replace('.json', '')
-            sheet = self.add_sheet(workbook, sheet_name)
+            sheet = self.add_sheet(sheet_name)
 
             # Label Row
             headers = self.permissions[portal_type][0].keys()
@@ -298,9 +297,9 @@ class XLSXMainReportBuilder(XLSXReportBuilderBase):
             for rownum, perm_info in enumerate(permission_infos, 1):
                 self.write_row(sheet, rownum, perm_info.values())
 
-    def write_report_data(self, workbook):
-        self._write_metadata(workbook)
-        self._write_permissions(workbook)
+    def write_report_data(self):
+        self._write_metadata()
+        self._write_permissions()
 
 
 class XLSXValidationReportBuilder(XLSXReportBuilderBase):
@@ -316,33 +315,38 @@ class XLSXValidationReportBuilder(XLSXReportBuilderBase):
     ])
 
     def __init__(self, errors):
+        super(XLSXValidationReportBuilder, self).__init__()
         self.errors = errors
 
-    def _write_summary(self, workbook):
+    def write_summary(self):
+        """Write a summary with counts for every message type.
+        """
         sheet_name = 'summary'
-        sheet = self.add_sheet(workbook, sheet_name)
+        sheet = self.add_sheet(sheet_name)
 
         for rownum, item in enumerate(self.errors.items()):
             error_type, error_list = item
             self.write_row(sheet, rownum, (error_type, len(error_list)))
 
-    def _write_errors(self, workbook):
-        for error_type, error_list in self.errors.items():
+    def write_msg_sheets(self, msg_dict, field_defs):
+        """Write a sheet for every message type in msg_dict.
+        """
+        for msg_type, msg_list in msg_dict.items():
             try:
-                fields = self.ERROR_FIELDS[error_type]
+                fields = field_defs[msg_type]
             except KeyError:
-                log.warn('Unknown error type %r, skipping.' % error_type)
+                log.warn('Unknown message type %r, skipping.' % msg_type)
                 continue
 
-            sheet = self.add_sheet(workbook, error_type)
+            sheet = self.add_sheet(msg_type)
 
             # Label Row
             self.write_row(sheet, 0, fields, bold=True)
 
             # Data rows
-            for rownum, error in enumerate(error_list, 1):
-                self.write_row(sheet, rownum, error)
+            for rownum, msg in enumerate(msg_list, 1):
+                self.write_row(sheet, rownum, msg)
 
-    def write_report_data(self, workbook):
-        self._write_summary(workbook)
-        self._write_errors(workbook)
+    def write_report_data(self):
+        self.write_summary()
+        self.write_msg_sheets(self.errors, self.ERROR_FIELDS)
