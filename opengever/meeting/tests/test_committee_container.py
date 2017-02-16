@@ -2,23 +2,58 @@ from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages import factoriesmenu
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
+from opengever.meeting.committeecontainer import ICommitteeContainer
 from opengever.testing import add_languages
 from opengever.testing import FunctionalTestCase
 
 
 class TestCommitteeContainer(FunctionalTestCase):
 
+    layer = OPENGEVER_FUNCTIONAL_MEETING_LAYER
+
     def setUp(self):
         super(TestCommitteeContainer, self).setUp()
         self.grant('Manager')
-        add_languages(['de-ch', 'fr-ch'])
         self.template = create(
             Builder('sablontemplate')
             .without_default_title()
             .attach_file_containing("blub blub", name=u't\xf6st.txt'))
 
     @browsing
+    def test_adding(self, browser):
+        self.grant('Manager')
+        add_languages(['de-ch'])
+        browser.login().open()
+        factoriesmenu.add('Committee Container')
+        browser.fill({'Title': u'Committee Container',
+                      'Protocol template': self.template,
+                      'Excerpt template': self.template}).save()
+
+        self.assertTrue(ICommitteeContainer.providedBy(browser.context))
+
+    @browsing
+    def test_is_only_addable_by_manager(self, browser):
+        browser.login().open()
+
+        self.grant('Administrator')
+        browser.reload()
+        self.assertNotIn(
+            'Committee Container',
+            factoriesmenu.addable_types()
+            )
+
+        self.grant('Manager')
+        browser.reload()
+        self.assertIn(
+            'Committee Container',
+            factoriesmenu.addable_types()
+            )
+
+    @browsing
     def test_supports_translated_title(self, browser):
+        add_languages(['de-ch', 'fr-ch'])
         browser.login().open(view='++add++opengever.meeting.committeecontainer')
         browser.fill({'Title (German)': u'Sitzungen',
                       'Title (French)': u's\xe9ance',

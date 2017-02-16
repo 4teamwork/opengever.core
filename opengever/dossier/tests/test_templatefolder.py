@@ -13,6 +13,7 @@ from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.dossier.docprops import TemporaryDocFile
 from opengever.dossier.interfaces import ITemplateFolderProperties
 from opengever.dossier.templatefolder import get_template_folder
+from opengever.dossier.templatefolder.interfaces import ITemplateFolder
 from opengever.dossier.tests import OGDS_USER_ATTRIBUTES
 from opengever.journal.handlers import DOC_PROPERTIES_UPDATED
 from opengever.journal.tests.utils import get_journal_entry
@@ -476,6 +477,7 @@ class TestTemplateFolder(FunctionalTestCase):
 
     @browsing
     def test_adding(self, browser):
+        self.grant('Manager')
         add_languages(['de-ch'])
         browser.login().open(self.portal)
         factoriesmenu.add('Template Folder')
@@ -483,7 +485,25 @@ class TestTemplateFolder(FunctionalTestCase):
         browser.fill({'Title': 'Templates',
                       'Responsible': TEST_USER_ID}).save()
 
-        self.assertEquals('tabbed_view', plone.view())
+        self.assertTrue(ITemplateFolder.providedBy(browser.context))
+
+    @browsing
+    def test_is_only_addable_by_manager(self, browser):
+        browser.login().open(self.portal)
+
+        self.grant('Administrator')
+        browser.reload()
+        self.assertNotIn(
+            'Template Folder',
+            factoriesmenu.addable_types()
+            )
+
+        self.grant('Manager')
+        browser.reload()
+        self.assertIn(
+            'Template Folder',
+            factoriesmenu.addable_types()
+            )
 
     @browsing
     def test_manager_addable_types(self, browser):
@@ -498,7 +518,7 @@ class TestTemplateFolder(FunctionalTestCase):
     @browsing
     def test_supports_translated_title(self, browser):
         add_languages(['de-ch', 'fr-ch'])
-
+        self.grant('Manager')
         browser.login().open()
         factoriesmenu.add('Template Folder')
         browser.fill({'Responsible': TEST_USER_ID,

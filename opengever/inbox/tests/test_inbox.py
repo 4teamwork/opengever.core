@@ -2,9 +2,9 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
+from opengever.inbox.inbox import IInbox
 from opengever.testing import add_languages
 from opengever.testing import FunctionalTestCase
-from plone import api
 import transaction
 
 
@@ -15,6 +15,34 @@ class TestInbox(FunctionalTestCase):
 
         self.org_unit2 = create(Builder('org_unit').id('client2')
                                 .having(admin_unit=self.admin_unit))
+
+    @browsing
+    def test_adding(self, browser):
+        self.grant('Manager')
+        add_languages(['de-ch'])
+        browser.login().open()
+        factoriesmenu.add('Inbox')
+        browser.fill({'Title': 'Inbox'}).save()
+
+        self.assertTrue(IInbox.providedBy(browser.context))
+
+    @browsing
+    def test_is_only_addable_by_manager(self, browser):
+        browser.login().open()
+
+        self.grant('Administrator')
+        browser.reload()
+        self.assertNotIn(
+            'Inbox',
+            factoriesmenu.addable_types()
+            )
+
+        self.grant('Manager')
+        browser.reload()
+        self.assertIn(
+            'Inbox',
+            factoriesmenu.addable_types()
+            )
 
     def test_get_responsible_org_unit_fetch_configured_org_unit(self):
         inbox = create(Builder('inbox').
@@ -36,6 +64,7 @@ class TestInbox(FunctionalTestCase):
     @browsing
     def test_supports_translated_title(self, browser):
         add_languages(['de-ch', 'fr-ch'])
+        self.grant('Manager')
 
         browser.login().open()
         factoriesmenu.add('Inbox')

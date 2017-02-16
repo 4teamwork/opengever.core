@@ -70,6 +70,7 @@ class TestTranslatedTitle(FunctionalTestCase):
 
     @browsing
     def test_both_title_fields_are_accessible_on_add_form(self, browser):
+        self.grant('Manager')
         browser.login().open()
         factoriesmenu.add('RepositoryRoot')
 

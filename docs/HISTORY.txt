@@ -5,6 +5,9 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Allow add root content only for managers.
+  [elioschmutz]
+
 - Fix newstyle OfficeConnector URL support for file tooltips and Bumblebee
   overlays.
   [Rotonen]
