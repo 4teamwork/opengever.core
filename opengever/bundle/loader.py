@@ -46,6 +46,7 @@ class Bundle(object):
         if stats is not None:
             self.stats = stats
 
+        self.warnings = {}
         self.errors = {}
 
     def __repr__(self):

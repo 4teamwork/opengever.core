@@ -5,6 +5,11 @@ from opengever.bundle.sections.bundlesource import BUNDLE_KEY
 from zope.annotation import IAnnotations
 from zope.interface import classProvides
 from zope.interface import implements
+import logging
+
+
+log = logging.getLogger('opengever.bundle.resolveguid')
+log.setLevel(logging.INFO)
 
 
 class MissingGuid(Exception):
@@ -50,7 +55,8 @@ class ResolveGUIDSection(object):
     def __iter__(self):
         self.register_items()
         roots = self.build_tree()
-        for node in self.visit_in_pre_order(roots):
+        for node in self.visit_in_pre_order(
+                roots, level=1, previous_type='Portal'):
             yield node
 
     def register_items(self):
@@ -84,14 +90,24 @@ class ResolveGUIDSection(object):
                 roots.append(item)
         return roots
 
-    def visit_in_pre_order(self, items):
+    def visit_in_pre_order(self, items, level, previous_type):
         """Visit list of items depth first, always yield parent before its
         children.
 
+        In addition, keep track of the nesting depth of objects of the *same
+        type* - this is used for validation in a later section.
         """
         for item in items:
+            type_ = item.get('_type')
+
+            # Type of nested folderish items changed - reset nesting depth
+            if previous_type != type_:
+                level = 1
+
+            item['_nesting_depth'] = level
             children = item.pop('_children', [])
             yield item
 
-            for child in self.visit_in_pre_order(children):
+            for child in self.visit_in_pre_order(
+                    children, level + 1, type_):
                 yield child
