@@ -7,6 +7,7 @@ from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
 from StringIO import StringIO
 from ZPublisher.Iterators import filestream_iterator
+import cgi
 import os
 import pytz
 
@@ -19,7 +20,6 @@ class MeetingZipExport(BrowserView):
 
     def __call__(self):
         # Download zip file
-
         return self.generate_zip()
 
     def generate_zip(self):
@@ -31,6 +31,9 @@ class MeetingZipExport(BrowserView):
 
             # Agenda items
             self.add_agenda_items_attachments(generator)
+
+            # Agenda items list
+            self.add_agenda_item_list(generator)
 
             # Return zip
             zip_file = generator.generate()
@@ -82,3 +85,14 @@ class MeetingZipExport(BrowserView):
                     namedfile.filename
                 )
                 generator.add_file(path, namedfile.open())
+
+    def add_agenda_item_list(self, generator):
+        has_template = AgendaItemListOperations().get_sablon_template(
+            self.model)
+
+        if self.model.agenda_items and has_template:
+            view = self.context.restrictedTraverse('@@agenda_item_list')
+            doc = view()
+            filename = cgi.parse_header(view.request.response.getHeader(
+                "Content-Disposition"))[1]['filename']
+            generator.add_file(filename, StringIO(doc))

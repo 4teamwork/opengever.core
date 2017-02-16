@@ -31,7 +31,10 @@ class TestMeetingZipExportView(FunctionalTestCase):
             Builder('sablontemplate')
             .with_asset_file('excerpt_template.docx'))
 
-        container = create(Builder('committee_container'))
+        container = create(
+            Builder('committee_container')
+            .having(agendaitem_list_template=self.sablon_template))
+
         self.committee = create(Builder('committee')
                                 .having(protocol_template=self.sablon_template)
                                 .within(container))
@@ -248,3 +251,32 @@ class TestMeetingZipExportView(FunctionalTestCase):
         browser.login().open(meeting.get_url(view='zipexport'))
         zip_file = ZipFile(StringIO(browser.contents), 'r')
         self.assertNotIn('excerpt.docx', zip_file.namelist())
+
+    @browsing
+    def test_zip_export_agenda_items_list(self, browser):
+        self.proposal_a = create(
+            Builder('proposal')
+            .titled(u'Proposal A')
+            .within(self.dossier)
+            .as_submitted()
+            .having(committee=self.committee.load_model())
+            )
+
+        meeting = create(
+            Builder('meeting')
+            .having(committee=self.committee.load_model(),
+                    start=self.localized_datetime(2013, 1, 1, 8, 30),
+                    end=self.localized_datetime(2013, 1, 1, 10, 30),
+                    location='There',
+                    presidency=self.hugo,
+                    participants=[self.peter,
+                                  self.hans,
+                                  self.roland],
+                    secretary=self.sile)
+            .scheduled_proposals([self.proposal_a, ])
+            .link_with(self.meeting_dossier))
+
+        browser.login().open(meeting.get_url(view='zipexport'))
+        zip_file = ZipFile(StringIO(browser.contents), 'r')
+        self.assertIn('Agendaitem list-community-meeting.docx',
+                      zip_file.namelist())
