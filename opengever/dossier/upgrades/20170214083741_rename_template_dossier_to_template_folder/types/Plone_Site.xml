@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<object name="Plone Site">
+ <property name="allowed_content_types" purge="False">
+   <element value="opengever.dossier.templatedossier" remove="True"/>
+   <element value="opengever.dossier.templatefolder"/>
+ </property>
+</object>

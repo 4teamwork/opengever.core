@@ -208,7 +208,7 @@ class TestAlphabeticalTOC(FunctionalTestCase):
 
     @browsing
     def test_toc_can_be_downloaded(self, browser):
-        templates = create(Builder('templatedossier'))
+        templates = create(Builder('templatefolder'))
         sablon_template = create(Builder('sablontemplate')
                                  .within(templates)
                                  .with_asset_file('sablon_template.docx'))
@@ -319,7 +319,7 @@ class TestTOCByRepository(TestAlphabeticalTOC):
 
     @browsing
     def test_toc_can_be_downloaded(self, browser):
-        templates = create(Builder('templatedossier'))
+        templates = create(Builder('templatefolder'))
         sablon_template = create(Builder('sablontemplate')
                                  .within(templates)
                                  .with_asset_file('sablon_template.docx'))

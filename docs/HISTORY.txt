@@ -5,6 +5,10 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Rename portal-type opengever.dossier.templatedossier to
+  opengever.dossier.templatefolder.
+  [elioschmutz]
+
 - Reindex SearchableText after changing the comment thru the overlay.
   [mathias.leimgruber]
 

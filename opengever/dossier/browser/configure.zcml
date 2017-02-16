@@ -41,9 +41,9 @@
       />
 
   <browser:page
-      for="opengever.dossier.templatedossier.ITemplateDossier"
+      for="opengever.dossier.templatefolder.ITemplateFolder"
       name="tabbed_view"
-      class=".tabbed.TemplateDossierTabbedView"
+      class=".tabbed.TemplateFolderTabbedView"
       permission="zope2.View"
       allowed_interface="ftw.tabbedview.interfaces.ITabbedViewEndpoints"
       />

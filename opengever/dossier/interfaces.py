@@ -74,7 +74,7 @@ class IDossierParticipants(Interface):
     )
 
 
-class ITemplateDossierProperties(Interface):
+class ITemplateFolderProperties(Interface):
     """ Document properties configuration.
     """
 
@@ -84,6 +84,14 @@ class ITemplateDossierProperties(Interface):
             when a word document is created from a document template.',
         default=False,
     )
+
+
+class ITemplateDossierProperties(ITemplateFolderProperties):
+    """XXX Legacy interface from rename TemplateFolder to TemplateDossier.
+
+    Do not remove this interface until each GEVER-installation is updated to the version
+    containing this changes.
+    """
 
 
 class IParticipationCreated(IObjectEvent):

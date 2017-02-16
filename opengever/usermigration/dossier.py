@@ -70,7 +70,7 @@ class DossierMigrator(object):
         path = '/'.join(dossier.getPhysicalPath())
 
         if not IParticipationAwareMarker.providedBy(dossier):
-            # No participation support - probably a template dossier
+            # No participation support - probably a template folder
             return modified_idxs, moved
 
         phandler = IParticipationAware(dossier)

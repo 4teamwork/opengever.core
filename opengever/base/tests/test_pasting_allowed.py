@@ -21,16 +21,16 @@ class TestPastingAllowed(FunctionalTestCase):
         self.assertSequenceEqual(['Export as Zip'], actions)
 
     @browsing
-    def test_paste_action_not_displayed_for_templatedossier(self, browser):
-        templatedossier = create(Builder('templatedossier'))
+    def test_paste_action_not_displayed_for_templatefolder(self, browser):
+        templatefolder = create(Builder('templatefolder'))
         document = create(Builder('document')
-                          .within(templatedossier))
+                          .within(templatefolder))
 
         paths = ['/'.join(document.getPhysicalPath())]
-        browser.login().open(templatedossier, {'paths:list': paths},
+        browser.login().open(templatefolder, {'paths:list': paths},
                              view='copy_items')
 
-        browser.open(templatedossier)
+        browser.open(templatefolder)
         actions = browser.css('#plone-contentmenu-actions li').text
         self.assertSequenceEqual(
             ['Export as Zip', 'Properties'], actions)

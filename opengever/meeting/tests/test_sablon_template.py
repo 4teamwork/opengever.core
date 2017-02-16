@@ -12,7 +12,7 @@ class TestSablonTemplateView(FunctionalTestCase):
 
     def setUp(self):
         super(TestSablonTemplateView, self).setUp()
-        self.templates = create(Builder('templatedossier'))
+        self.templates = create(Builder('templatefolder'))
         self.sablon_template = create(
             Builder('sablontemplate')
             .within(self.templates)

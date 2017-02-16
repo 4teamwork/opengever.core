@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-02-16 12:58+0000\n"
+"POT-Creation-Date: 2017-02-16 16:28+0000\n"
 "PO-Revision-Date: 2016-07-22 15:24+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
@@ -138,7 +138,7 @@ msgstr "Beteiligungen"
 msgid "Project Dossier"
 msgstr "Projektdossier"
 
-#: ./opengever/dossier/templatedossier/form.py:112
+#: ./opengever/dossier/templatefolder/form.py:112
 msgid "Select document"
 msgstr "Dokument auswählen"
 
@@ -146,7 +146,7 @@ msgstr "Dokument auswählen"
 msgid "Select dossiertemplate"
 msgstr "Vorlage auswählen"
 
-#: ./opengever/dossier/templatedossier/form.py:113
+#: ./opengever/dossier/templatefolder/form.py:113
 msgid "Select recipient address"
 msgstr "Empfänger-Adresse auswählen"
 
@@ -155,9 +155,10 @@ msgstr "Empfänger-Adresse auswählen"
 msgid "Subdossier"
 msgstr "Subdossier"
 
-#: ./opengever/dossier/profiles/default/types/opengever.dossier.templatedossier.xml
-msgid "Template Dossier"
-msgstr "Vorlagendossier"
+#: ./opengever/dossier/profiles/default/types/opengever.dossier.templatefolder.xml
+#: ./opengever/dossier/upgrades/20170214083741_rename_template_dossier_to_template_folder/types/opengever.dossier.templatefolder.xml
+msgid "Template Folder"
+msgstr "Vorlagenordner"
 
 #. Default: "expired"
 msgid "Templates"
@@ -269,7 +270,7 @@ msgid "button_continue"
 msgstr "Weiter"
 
 #. Default: "Save"
-#: ./opengever/dossier/templatedossier/form.py:180
+#: ./opengever/dossier/templatefolder/form.py:180
 msgid "button_save"
 msgstr "Speichern"
 
@@ -289,7 +290,7 @@ msgid "column_rolelist"
 msgstr "Rolle"
 
 #. Default: "Create document from template"
-#: ./opengever/dossier/templatedossier/form.py:105
+#: ./opengever/dossier/templatefolder/form.py:105
 msgid "create_document_with_template"
 msgstr "Dokument aus Vorlage erstellen"
 
@@ -440,7 +441,7 @@ msgid "label_add_note"
 msgstr "Erfassen"
 
 #. Default: "Address"
-#: ./opengever/dossier/templatedossier/form.py:272
+#: ./opengever/dossier/templatefolder/form.py:272
 msgid "label_address"
 msgstr "Adresse"
 
@@ -477,13 +478,13 @@ msgstr "Behältnis-Art"
 
 #. Default: "Creator"
 #: ./opengever/dossier/dossiertemplate/form.py:87
-#: ./opengever/dossier/templatedossier/form.py:69
+#: ./opengever/dossier/templatefolder/form.py:69
 msgid "label_creator"
 msgstr "Erstellt von"
 
 #. Default: "Description"
 #: ./opengever/dossier/browser/overview.py:218
-#: ./opengever/dossier/templatedossier/tabs.py:110
+#: ./opengever/dossier/templatefolder/tabs.py:110
 msgid "label_description"
 msgstr "Beschreibung"
 
@@ -514,7 +515,7 @@ msgid "label_dossier_templates"
 msgstr "Dossiervorlagen"
 
 #. Default: "Edit after creation"
-#: ./opengever/dossier/templatedossier/form.py:90
+#: ./opengever/dossier/templatefolder/form.py:90
 msgid "label_edit_after_creation"
 msgstr "Nach dem Hinzufügen bearbeiten"
 
@@ -573,7 +574,7 @@ msgid "label_keywords"
 msgstr "Schlagworte"
 
 #. Default: "Label"
-#: ./opengever/dossier/templatedossier/form.py:277
+#: ./opengever/dossier/templatefolder/form.py:277
 msgid "label_label"
 msgstr "Label"
 
@@ -583,13 +584,13 @@ msgid "label_linked_dossiers"
 msgstr "Verlinkte Dossiers"
 
 #. Default: "Mail-Address"
-#: ./opengever/dossier/templatedossier/form.py:284
+#: ./opengever/dossier/templatefolder/form.py:284
 msgid "label_mail_address"
 msgstr "Mail Addresse"
 
 #. Default: "Modified"
 #: ./opengever/dossier/dossiertemplate/form.py:90
-#: ./opengever/dossier/templatedossier/form.py:72
+#: ./opengever/dossier/templatefolder/form.py:72
 msgid "label_modified"
 msgstr "Zuletzt Bearbeitet"
 
@@ -624,7 +625,7 @@ msgid "label_participations"
 msgstr "Beteiligungen"
 
 #. Default: "Phonenumber"
-#: ./opengever/dossier/templatedossier/form.py:295
+#: ./opengever/dossier/templatefolder/form.py:295
 msgid "label_phonenumber"
 msgstr "Telefonnummer"
 
@@ -639,7 +640,7 @@ msgid "label_proposals"
 msgstr "Anträge"
 
 #. Default: "Recipient"
-#: ./opengever/dossier/templatedossier/form.py:83
+#: ./opengever/dossier/templatefolder/form.py:83
 msgid "label_recipient"
 msgstr "Empfänger"
 
@@ -721,14 +722,14 @@ msgstr "Standardabläufe"
 
 #. Default: "Template"
 #: ./opengever/dossier/dossiertemplate/form.py:79
-#: ./opengever/dossier/templatedossier/form.py:60
+#: ./opengever/dossier/templatefolder/form.py:60
 msgid "label_template"
 msgstr "Vorlage"
 
 #. Default: "Title"
 #: ./opengever/dossier/browser/report.py:26
 #: ./opengever/dossier/dossiertemplate/form.py:84
-#: ./opengever/dossier/templatedossier/form.py:65
+#: ./opengever/dossier/templatefolder/form.py:65
 msgid "label_title"
 msgstr "Titel"
 
@@ -743,7 +744,7 @@ msgid "label_trash"
 msgstr "Papierkorb"
 
 #. Default: "URL"
-#: ./opengever/dossier/templatedossier/form.py:306
+#: ./opengever/dossier/templatefolder/form.py:306
 msgid "label_url"
 msgstr "URL"
 

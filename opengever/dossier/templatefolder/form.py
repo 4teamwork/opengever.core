@@ -9,7 +9,7 @@ from opengever.base.schema import TableChoice
 from opengever.contact import is_contact_feature_enabled
 from opengever.dossier import _
 from opengever.dossier.command import CreateDocumentFromTemplateCommand
-from opengever.dossier.templatedossier import get_template_dossier
+from opengever.dossier.templatefolder import get_template_folder
 from opengever.tabbedview.helper import document_with_icon
 from plone import api
 from plone.autoform.form import AutoExtensibleForm
@@ -30,15 +30,15 @@ from zope.schema.vocabulary import SimpleVocabulary
 
 @grok.provider(IContextSourceBinder)
 def get_templates(context):
-    template_dossier = get_template_dossier()
+    template_folder = get_template_folder()
 
-    if template_dossier is None:
+    if template_folder is None:
         # this may happen when the user does not have permissions to
         # view templates and/or during ++widget++ traversal
         return SimpleVocabulary([])
 
     templates = api.content.find(
-        context=template_dossier,
+        context=template_folder,
         depth=-1,
         portal_type="opengever.document.document",
         sort_on='sortable_title', sort_order='ascending')

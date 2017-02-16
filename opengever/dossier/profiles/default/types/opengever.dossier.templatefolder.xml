@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
-<object name="opengever.dossier.templatedossier" meta_type="Dexterity FTI"
+<object name="opengever.dossier.templatefolder" meta_type="Dexterity FTI"
         i18n:domain="opengever.dossier" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
 
     <!-- Basic metadata -->
-    <property name="title" i18n:translate="">Template Dossier</property>
+    <property name="title" i18n:translate="">Template Folder</property>
     <property name="description" i18n:translate=""></property>
     <property name="icon_expr"></property>
     <property name="allow_discussion">False</property>
@@ -12,19 +12,19 @@
     <property name="allowed_content_types">
         <element value="opengever.document.document" />
         <element value="opengever.tasktemplates.tasktemplatefolder" />
-        <element value="opengever.dossier.templatedossier" />
+        <element value="opengever.dossier.templatefolder" />
         <element value="opengever.meeting.sablontemplate" />
         <element value="opengever.dossier.dossiertemplate" />
     </property>
 
     <!-- schema interface -->
-    <property name="schema">opengever.dossier.templatedossier.ITemplateDossier</property>
+    <property name="schema">opengever.dossier.templatefolder.ITemplateFolder</property>
 
     <!-- class used for content items -->
-    <property name="klass">opengever.dossier.templatedossier.TemplateDossier</property>
+    <property name="klass">opengever.dossier.templatefolder.TemplateFolder</property>
 
     <!-- add permission -->
-    <property name="add_permission">opengever.dossier.AddTemplateDossier</property>
+    <property name="add_permission">opengever.dossier.AddTemplateFolder</property>
 
     <!-- enabled behaviors -->
     <property name="behaviors">
@@ -62,7 +62,7 @@
     <action title="Edit" action_id="edit" category="object"
             condition_expr="not:object/@@plone_lock_info/is_locked_for_current_user|python:True "
             url_expr="string:${object_url}/edit" visible="True">
-        <permission value="opengever.dossier: Add templatedossier"/>
+        <permission value="opengever.dossier: Add templatefolder"/>
     </action>
 
 </object>

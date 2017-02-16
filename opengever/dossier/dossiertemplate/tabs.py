@@ -1,12 +1,12 @@
 from five import grok
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
-from opengever.dossier.templatedossier.tabs import TemplateDossierDocuments
-from opengever.dossier.templatedossier.tabs import TemplateDossierDossierTemplates
+from opengever.dossier.templatefolder.tabs import TemplateFolderDocuments
+from opengever.dossier.templatefolder.tabs import TemplateFolderDossierTemplates
 from opengever.tabbedview.browser.bumblebee_gallery import DocumentsGallery
 from opengever.tabbedview.browser.tabs import DocumentsProxy
 
 
-class DossierTemplateSubDossiers(TemplateDossierDossierTemplates):
+class DossierTemplateSubDossiers(TemplateFolderDossierTemplates):
     grok.context(IDossierTemplateMarker)
     grok.name('tabbedview_view-subdossiers')
 
@@ -18,7 +18,7 @@ class DossierTemplateDocumentsProxy(DocumentsProxy):
     grok.name('tabbedview_view-documents-proxy')
 
 
-class DossierTemplateDocuments(TemplateDossierDocuments):
+class DossierTemplateDocuments(TemplateFolderDocuments):
     grok.context(IDossierTemplateMarker)
     grok.name('tabbedview_view-documents')
 

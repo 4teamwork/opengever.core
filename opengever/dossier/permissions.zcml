@@ -14,8 +14,8 @@
         />
 
     <permission
-        id="opengever.dossier.AddTemplateDossier"
-        title="opengever.dossier: Add templatedossier"
+        id="opengever.dossier.AddTemplateFolder"
+        title="opengever.dossier: Add templatefolder"
         />
 
     <permission

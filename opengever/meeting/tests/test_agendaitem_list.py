@@ -22,7 +22,7 @@ class TestAgendaItemList(FunctionalTestCase):
         self.meeting_dossier = create(Builder('meeting_dossier')
                                       .within(self.repository_folder))
 
-        self.templates = create(Builder('templatedossier'))
+        self.templates = create(Builder('templatefolder'))
         self.sablon_template = create(Builder('sablontemplate')
                                       .within(self.templates)
                                       .with_asset_file('sablon_template.docx'))

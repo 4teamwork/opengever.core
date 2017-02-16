@@ -13,13 +13,13 @@ class TestTaskTemplateActivites(FunctionalTestCase):
     def setUp(self):
         super(TestTaskTemplateActivites, self).setUp()
 
-        self.template_dossier = create(Builder('templatedossier'))
+        self.template_folder = create(Builder('templatefolder'))
         self.dossier = create(Builder('dossier'))
 
     @browsing
     def test_record_activity_for_the_maintask_and_all_subtasks(self, browser):
         template_folder = create(Builder('tasktemplatefolder')
-                                 .within(self.template_dossier)
+                                 .within(self.template_folder)
                                  .in_state('tasktemplatefolder-state-activ')
                                  .titled(u'Mitberichtsverfahren'))
         create(Builder('tasktemplate')

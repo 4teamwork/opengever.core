@@ -4,7 +4,7 @@ from opengever.base.behaviors.classification import IClassification
 from opengever.base.utils import find_parent_dossier
 from opengever.document.behaviors import IBaseDocument
 from opengever.dossier.base import DOSSIER_STATES_OPEN
-from opengever.dossier.templatedossier.interfaces import ITemplateDossier
+from opengever.dossier.templatefolder.interfaces import ITemplateFolder
 from plone.directives import dexterity
 from Products.CMFCore.utils import getToolByName
 from z3c.form.field import Fields
@@ -14,7 +14,7 @@ from zExceptions import Unauthorized
 def can_access_public_trial_edit_form(user, content):
     """Returns True if the user has 'Modify portal content' permission in any
     open dossier state. And the containing dossier is
-     - not a templatedossier
+     - not a templatefolder
      - not inactive
     """
 
@@ -24,7 +24,7 @@ def can_access_public_trial_edit_form(user, content):
     wftool = getToolByName(content, 'portal_workflow')
     dossier = find_parent_dossier(content)
 
-    if ITemplateDossier.providedBy(dossier):
+    if ITemplateFolder.providedBy(dossier):
         return False
 
     if wftool.getInfoFor(dossier, 'review_state') == 'dossier-state-inactive':

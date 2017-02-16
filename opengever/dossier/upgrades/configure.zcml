@@ -58,7 +58,7 @@
 
     <!-- 2602 -> 2603 -->
     <upgrade-step:importProfile
-        title="Create ITemplateDossierProperties registry entry"
+        title="Create ITemplateFolderProperties registry entry"
         profile="opengever.dossier:default"
         source="2602"
         destination="2603"

@@ -48,10 +48,10 @@ class MeetingDossierBuilder(DossierBuilder):
 builder_registry.register('meeting_dossier', MeetingDossierBuilder)
 
 
-class TemplateDossierBuilder(TranslatedTitleBuilderMixin, DexterityBuilder):
-    portal_type = 'opengever.dossier.templatedossier'
+class TemplateFolderBuilder(TranslatedTitleBuilderMixin, DexterityBuilder):
+    portal_type = 'opengever.dossier.templatefolder'
 
-builder_registry.register('templatedossier', TemplateDossierBuilder)
+builder_registry.register('templatefolder', TemplateFolderBuilder)
 
 
 class DossierTemplateBuilder(DexterityBuilder):

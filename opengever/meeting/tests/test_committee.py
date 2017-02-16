@@ -75,7 +75,7 @@ class TestCommittee(FunctionalTestCase):
     def test_committee_can_be_created_in_browser(self, browser):
         self.grant('Administrator')
 
-        templates = create(Builder('templatedossier'))
+        templates = create(Builder('templatefolder'))
         sablon_template = create(
             Builder('sablontemplate')
             .within(templates)

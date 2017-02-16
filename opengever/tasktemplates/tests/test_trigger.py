@@ -20,10 +20,10 @@ class TestTriggeringTaskTemplate(FunctionalTestCase):
         create(Builder('ogds_user').id(u'peter.meier'))
         self.dossier = create(Builder('dossier')
                               .having(responsible=u'peter.meier'))
-        self.templatedossier = create(Builder('templatedossier'))
+        self.templatefolder = create(Builder('templatefolder'))
 
         self.folder1 = create(Builder('tasktemplatefolder')
-                         .within(self.templatedossier)
+                         .within(self.templatefolder)
                          .titled(u'Mitberichtsverfahren')
                          .in_state('tasktemplatefolder-state-activ'))
 
