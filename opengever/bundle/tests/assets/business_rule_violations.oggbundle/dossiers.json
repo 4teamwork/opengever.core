@@ -62,5 +62,14 @@
     "review_state": "dossier-state-active",
     "start": "2010-11-11",
     "title": "Subdossier 1.1-2.2 (active inside resolved, violates constraint)"
+  },
+  {
+    "guid": "GUID-dossier-A-1.1-3",
+    "parent_guid": "GUID-repofolder-A-1.1",
+    "reference_number": "3",
+    "responsible": "lukas.graf",
+    "review_state": "dossier-state-active",
+    "start": "2010-11-11",
+    "title": "Dossier 1.1-3 (file related violations inside)"
   }
 ]

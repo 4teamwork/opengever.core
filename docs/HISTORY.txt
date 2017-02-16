@@ -5,6 +5,9 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- OGGBundle reports: Implement XLSX validation report.
+  [lgraf]
+
 - OGGBundle reports: Also store raw JSON data for errors and stats.
   [lgraf]
 

@@ -4,7 +4,8 @@ from datetime import datetime
 from opengever.base.pathfinder import PathFinder
 from opengever.bundle.report import ASCIISummaryBuilder
 from opengever.bundle.report import DataCollector
-from opengever.bundle.report import XLSXReportBuilder
+from opengever.bundle.report import XLSXMainReportBuilder
+from opengever.bundle.report import XLSXValidationReportBuilder
 from opengever.bundle.sections.bundlesource import BUNDLE_KEY
 from zope.annotation import IAnnotations
 from zope.interface import classProvides
@@ -46,7 +47,8 @@ class ReportSection(object):
         self.bundle.report_data = report_data
 
         self.build_ascii_summary(report_data)
-        self.build_xlsx_report(report_data)
+        self.build_xlsx_main_report(report_data)
+        self.build_xlsx_validation_report(self.bundle.errors)
 
     def create_report_dir(self):
         """Create a directory to store all import report files.
@@ -83,11 +85,17 @@ class ReportSection(object):
         summary = ASCIISummaryBuilder(report_data).build()
         log.info('\n\n%s\n' % summary)
 
-    def build_xlsx_report(self, report_data):
+    def build_xlsx_main_report(self, report_data):
         report_path = os.path.join(self.report_dir, 'main-report.xlsx')
 
-        xlsx_builder = XLSXReportBuilder(report_data)
-        xlsx_builder.build_and_save(report_path)
+        builder = XLSXMainReportBuilder(report_data)
+        builder.build_and_save(report_path)
+
+    def build_xlsx_validation_report(self, errors):
+        report_path = os.path.join(self.report_dir, 'validation-report.xlsx')
+
+        builder = XLSXValidationReportBuilder(errors)
+        builder.build_and_save(report_path)
 
 
 class AdvancedJSONEncoder(json.JSONEncoder):

@@ -26,13 +26,17 @@ class Bundle(object):
     """
 
     def __init__(self, items, bundle_path, json_schemas=None, stats=None,
-                 ingestion_settings=None):
+                 ingestion_settings=None, configuration=None):
         self.items = items
         self.bundle_path = bundle_path
 
         self.ingestion_settings = ingestion_settings
         if ingestion_settings is None:
             self.ingestion_settings = IngestionSettingsReader()()
+
+        self.configuration = {}
+        if configuration is not None:
+            self.configuration = configuration
 
         self.json_schemas = {}
         if json_schemas is not None:
@@ -80,9 +84,10 @@ class BundleLoader(object):
         """
         self._stats['timings']['start_loading'] = datetime.now()
         self._load_items()
+        configuration = self._load_configuration()
         bundle = Bundle(
             self._items, self.bundle_path, self.json_schemas, self._stats,
-            ingestion_settings)
+            ingestion_settings, configuration)
         self._display_stats(bundle)
         return bundle
 
@@ -93,19 +98,28 @@ class BundleLoader(object):
         for json_name, count in bundle.stats['bundle_counts'].items():
             log.info("%-20s %s" % (json_name, count))
 
+    def _load_json(self, json_name):
+        json_path = os.path.join(self.bundle_path, json_name)
+        try:
+            with codecs.open(json_path, 'r', 'utf-8-sig') as json_file:
+                data = json.load(json_file)
+        except IOError as exc:
+            log.info('%s: %s, skipping' % (json_name, exc.strerror))
+            return None
+        return data
+
+    def _load_configuration(self):
+        config = self._load_json('configuration.json')
+        return config
+
     def _load_items(self):
         self._items = []
         for json_name, portal_type in BUNDLE_JSON_TYPES.items():
-            json_path = os.path.join(self.bundle_path, json_name)
-
-            try:
-                with codecs.open(json_path, 'r', 'utf-8-sig') as json_file:
-                    items = json.load(json_file)
-                    self._stats['bundle_counts'][json_name] = len(items)
-            except IOError as exc:
-                log.info('%s: %s, skipping' % (json_name, exc.strerror))
+            items = self._load_json(json_name)
+            if items is None:
                 continue
 
+            self._stats['bundle_counts'][json_name] = len(items)
             self._validate_schema(items, json_name)
             for item in items:
                 # Apply required preprocessing to items (in-place)

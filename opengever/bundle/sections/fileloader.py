@@ -22,6 +22,9 @@ import posixpath
 logger = logging.getLogger('opengever.setup.sections.fileloader')
 
 
+INVALID_FILE_EXTENSIONS = ('.msg', '.exe', '.dll')
+
+
 class FileLoaderSection(object):
     """Stores file data directly in already constructed content items."""
 
@@ -40,11 +43,11 @@ class FileLoaderSection(object):
         self.bundle = IAnnotations(transmogrifier)[BUNDLE_KEY]
         self.bundle_path = IAnnotations(transmogrifier)[BUNDLE_PATH_KEY]
 
-        self.bundle.errors['files_not_found'] = {}
-        self.bundle.errors['files_io_errors'] = {}
+        self.bundle.errors['files_not_found'] = []
+        self.bundle.errors['files_io_errors'] = []
+        self.bundle.errors['files_unresolvable_path'] = []
+        self.bundle.errors['files_invalid_types'] = []
         self.bundle.errors['unmapped_unc_mounts'] = set()
-        self.bundle.errors['unresolvable_filepaths'] = []
-        self.bundle.errors['msgs'] = {}
 
     def is_mail(self, item):
         return item['_type'] == 'ftw.mail.mail'
@@ -68,7 +71,7 @@ class FileLoaderSection(object):
 
         if mount not in unc_mount_mapping:
             logger.warning('UNC mount %s is not mapped!' % mount)
-            self.bundle.errors['unmapped_unc_mounts'].add(mount)
+            self.bundle.errors['unmapped_unc_mounts'].add((mount, ))
             return None
 
         # posix_mountpoint is the location where the fileshare has been
@@ -89,6 +92,7 @@ class FileLoaderSection(object):
 
     def __iter__(self):
         for item in self.previous:
+            guid = item['guid']
 
             if self.is_mail(item):
                 file_field = IMail['message']
@@ -113,24 +117,27 @@ class FileLoaderSection(object):
                 abs_filepath = self.build_absolute_filepath(_filepath)
                 if abs_filepath is None:
                     logger.warning('Unresolvable filepath: %s' % _filepath)
-                    self.bundle.errors['unresolvable_filepaths'].append(
-                        _filepath)
+                    error = (guid, _filepath, path)
+                    self.bundle.errors['files_unresolvable_path'].append(error)
                     yield item
                     continue
 
                 filename = os.path.basename(abs_filepath)
 
                 # TODO: Check for this in OGGBundle validation
-                if abs_filepath.endswith(u'.msg'):
-                    logger.warning("Skipping .msg file: %s" % abs_filepath)
-                    self.bundle.errors['msgs'][abs_filepath] = path
+                if any(abs_filepath.lower().endswith(ext) for ext in INVALID_FILE_EXTENSIONS):  # noqa
+                    logger.warning(
+                        "Skipping file with invalid type: %s" % abs_filepath)
+                    error = (guid, abs_filepath, path)
+                    self.bundle.errors['files_invalid_types'].append(error)
                     yield item
                     continue
 
                 # TODO: Check for this in OGGBundle validation
                 if not os.path.exists(abs_filepath):
                     logger.warning("File not found: %s" % abs_filepath)
-                    self.bundle.errors['files_not_found'][abs_filepath] = path
+                    error = (guid, abs_filepath, path)
+                    self.bundle.errors['files_not_found'].append(error)
                     yield item
                     continue
 
@@ -158,7 +165,8 @@ class FileLoaderSection(object):
                     # TODO: Check for this in OGGBundle validation
                     logger.warning("Can't open file %s. %s." % (
                         abs_filepath, str(e)))
-                    self.bundle.errors['files_io_errors'][abs_filepath] = path
+                    error = (guid, abs_filepath, str(e), path)
+                    self.bundle.errors['files_io_errors'].append(error)
                     yield item
                     continue
 

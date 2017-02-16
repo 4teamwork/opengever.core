@@ -43,6 +43,7 @@ class TestFileLoader(FunctionalTestCase):
         self.assertIsNone(doc.file)
         relative_path = '/'.join(doc.getPhysicalPath()[2:])
         item = {
+            u"guid": u"12345",
             u"_type": u"opengever.document.document",
             u"_path": relative_path,
             u"filepath": u"files/beschluss.pdf",
@@ -60,6 +61,7 @@ class TestFileLoader(FunctionalTestCase):
         self.assertIsNone(doc.file)
         relative_path = '/'.join(doc.getPhysicalPath()[2:])
         item = {
+            u"guid": u"12345",
             u"_type": u"opengever.document.document",
             u"_path": relative_path,
             u"filepath": u"files/beschluss.pdf",
@@ -73,6 +75,7 @@ class TestFileLoader(FunctionalTestCase):
 
     def test_tracks_missing_files_in_errors(self):
         item = {
+            u"guid": u"12345",
             u"_type": u"opengever.document.document",
             u"_path": '/relative/path/to/doc',
             u"filepath": u"files/missing.file",
@@ -82,11 +85,12 @@ class TestFileLoader(FunctionalTestCase):
 
         abs_filepath = '/'.join((self.bundle_path, 'files/missing.file'))
         self.assertEqual(
-            {abs_filepath: '/relative/path/to/doc'},
+            [(u'12345', abs_filepath, '/relative/path/to/doc')],
             self.bundle.errors['files_not_found'])
 
     def test_tracks_unmapped_unc_files_in_errors(self):
         item = {
+            u"guid": u"12345",
             u"_type": u"opengever.document.document",
             u"_path": '/relative/path/to/doc',
             u"filepath": u'\\\\host\\unmapped\\foo.docx',
@@ -95,15 +99,16 @@ class TestFileLoader(FunctionalTestCase):
         list(section)
 
         self.assertEqual(
-            set([u'\\\\host\\unmapped']),
+            set([(u'\\\\host\\unmapped', )]),
             self.bundle.errors['unmapped_unc_mounts'])
 
         self.assertEqual(
-            [item['filepath']],
-            self.bundle.errors['unresolvable_filepaths'])
+            [(u'12345', item['filepath'], '/relative/path/to/doc')],
+            self.bundle.errors['files_unresolvable_path'])
 
     def test_tracks_skipped_msg_files_in_errors(self):
         item = {
+            u"guid": u"12345",
             u"_type": u"opengever.document.document",
             u"_path": '/relative/path/to/doc',
             u"filepath": u"files/outlook.msg",
@@ -113,14 +118,15 @@ class TestFileLoader(FunctionalTestCase):
 
         abs_filepath = '/'.join((self.bundle_path, 'files/outlook.msg'))
         self.assertEqual(
-            {abs_filepath: '/relative/path/to/doc'},
-            self.bundle.errors['msgs'])
+            [(u'12345', abs_filepath, '/relative/path/to/doc')],
+            self.bundle.errors['files_invalid_types'])
 
     def test_handles_eml_mails(self):
         mail = create(Builder('mail'))
         self.assertIsNone(mail.message)
         relative_path = '/'.join(mail.getPhysicalPath()[2:])
         item = {
+            u"guid": u"12345",
             u"_type": u"ftw.mail.mail",
             u"_path": relative_path,
             u"filepath": u"files/sample.eml",

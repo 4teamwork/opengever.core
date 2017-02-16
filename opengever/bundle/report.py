@@ -207,7 +207,44 @@ class ASCIISummaryBuilder(object):
         return '\n'.join(report)
 
 
-class XLSXReportBuilder(object):
+class XLSXReportBuilderBase(object):
+    """Base class for XLSX report builders.
+    """
+
+    def build_and_save(self, report_path):
+        workbook = self.build_report()
+        self.save_report(workbook, report_path)
+
+    def save_report(self, workbook, path):
+        with open(path, 'w') as report_xlsx:
+            workbook.save(report_xlsx)
+            log.info("Wrote report to %s" % path)
+        return path
+
+    def add_sheet(self, workbook, sheet_name):
+        log.info("Creating sheet %s" % sheet_name)
+        sheet = workbook.create_sheet(sheet_name)
+        sheet.title = sheet_name
+        return sheet
+
+    def write_row(self, sheet, rownum, values, bold=False):
+        for col_num, value in enumerate(values, 1):
+            cell = sheet.cell(row=rownum + 1, column=col_num)
+            cell.value = value
+            if bold:
+                cell.font = Font(bold=True)
+
+    def write_report_data(self, workbook):
+        raise NotImplementedError("To be implemented by subclasses")
+
+    def build_report(self):
+        workbook = Workbook()
+        workbook.remove_sheet(workbook.active)
+        self.write_report_data(workbook)
+        return workbook
+
+
+class XLSXMainReportBuilder(XLSXReportBuilderBase):
     """Build a detailed report in XLSX format based on report data.
     """
 
@@ -231,37 +268,18 @@ class XLSXReportBuilder(object):
         permissions['opengever.document.document'] = docs + mails
         permissions.pop('ftw.mail.mail', None)
 
-    def build_and_save(self, report_path):
-        workbook = self.build_report()
-        self.save_report(workbook, report_path)
-
-    def save_report(self, workbook, path):
-        with open(path, 'w') as report_xlsx:
-            workbook.save(report_xlsx)
-            log.info("Wrote report to %s" % path)
-        return path
-
-    def _write_row(self, sheet, rownum, values, bold=False):
-        for col_num, value in enumerate(values, 1):
-            cell = sheet.cell(row=rownum + 1, column=col_num)
-            cell.value = value
-            if bold:
-                cell.font = Font(bold=True)
-
     def _write_metadata(self, workbook):
         for json_name, portal_type in BUNDLE_JSON_TYPES.items():
             short_name = json_name.replace('.json', '')
-            log.info("Creating sheet %s" % short_name)
-            sheet = workbook.create_sheet(short_name)
-            sheet.title = short_name
+            sheet = self.add_sheet(workbook, short_name)
 
             # Label Row
-            self._write_row(
+            self.write_row(
                 sheet, 0, self.metadata[portal_type][0].keys(), bold=True)
 
             # Data rows
             for rownum, info in enumerate(self.metadata[portal_type], 1):
-                self._write_row(sheet, rownum, info.values())
+                self.write_row(sheet, rownum, info.values())
 
     def _write_permissions(self, workbook):
         for json_name, portal_type in BUNDLE_JSON_TYPES.items():
@@ -269,24 +287,62 @@ class XLSXReportBuilder(object):
                 continue
 
             sheet_name = '%s_permissions' % json_name.replace('.json', '')
-            log.info("Creating sheet %s" % sheet_name)
-            sheet = workbook.create_sheet(sheet_name)
-            sheet.title = sheet_name
+            sheet = self.add_sheet(workbook, sheet_name)
 
             # Label Row
             headers = self.permissions[portal_type][0].keys()
-            self._write_row(sheet, 0, headers, bold=True)
+            self.write_row(sheet, 0, headers, bold=True)
 
             # Data rows
             permission_infos = self.permissions[portal_type]
             for rownum, perm_info in enumerate(permission_infos, 1):
-                self._write_row(sheet, rownum, perm_info.values())
+                self.write_row(sheet, rownum, perm_info.values())
 
-    def build_report(self):
-        workbook = Workbook()
-        workbook.remove_sheet(workbook.active)
-
+    def write_report_data(self, workbook):
         self._write_metadata(workbook)
         self._write_permissions(workbook)
 
-        return workbook
+
+class XLSXValidationReportBuilder(XLSXReportBuilderBase):
+    """Build a validation report in XLSX format based on `errors` dictionary.
+    """
+
+    ERROR_FIELDS = OrderedDict([
+        ('files_not_found', ('guid', 'filepath', 'ogg_path')),
+        ('files_io_errors', ('guid', 'filepath', 'ioerror', 'ogg_path')),
+        ('files_unresolvable_path', ('guid', 'filepath', 'ogg_path')),
+        ('files_invalid_types', ('guid', 'filepath', 'ogg_path')),
+        ('unmapped_unc_mounts', ('mount', )),
+    ])
+
+    def __init__(self, errors):
+        self.errors = errors
+
+    def _write_summary(self, workbook):
+        sheet_name = 'summary'
+        sheet = self.add_sheet(workbook, sheet_name)
+
+        for rownum, item in enumerate(self.errors.items()):
+            error_type, error_list = item
+            self.write_row(sheet, rownum, (error_type, len(error_list)))
+
+    def _write_errors(self, workbook):
+        for error_type, error_list in self.errors.items():
+            try:
+                fields = self.ERROR_FIELDS[error_type]
+            except KeyError:
+                log.warn('Unknown error type %r, skipping.' % error_type)
+                continue
+
+            sheet = self.add_sheet(workbook, error_type)
+
+            # Label Row
+            self.write_row(sheet, 0, fields, bold=True)
+
+            # Data rows
+            for rownum, error in enumerate(error_list, 1):
+                self.write_row(sheet, rownum, error)
+
+    def write_report_data(self, workbook):
+        self._write_summary(workbook)
+        self._write_errors(workbook)

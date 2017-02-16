@@ -20,14 +20,18 @@ class TestBundleLoader(TestCase):
             bundle_path = get_bundle_path('basic.oggbundle')
         loader = BundleLoader(bundle_path)
         bundle = loader.load()
-        return list(bundle)
+        return bundle
+
+    def test_loads_configuration(self):
+        bundle = self.load_bundle()
+        self.assertEqual({}, bundle.configuration)
 
     def test_loads_correct_number_of_items(self):
-        items = self.load_bundle()
-        self.assertEqual(10, len(items))
+        bundle = self.load_bundle()
+        self.assertEqual(10, len(list(bundle)))
 
     def test_loads_items_in_correct_order(self):
-        items = self.load_bundle()
+        bundle = self.load_bundle()
         self.assertEqual(
             [('repositoryroot', u'Ordnungssystem'),
              ('repositoryfolder', u'Personal'),
@@ -39,10 +43,10 @@ class TestBundleLoader(TestCase):
              ('document', u'Entlassung Hanspeter M\xfcller'),
              ('mail', u'Ein Mail'),
              ('document', u'Document referenced via UNC-Path')],
-            [(get_portal_type(i), get_title(i)) for i in items])
+            [(get_portal_type(i), get_title(i)) for i in list(bundle)])
 
     def test_inserts_portal_type(self):
-        items = self.load_bundle()
+        bundle = self.load_bundle()
         self.assertEqual([
             ('businesscasedossier', u'Dossier Vreni Meier'),
             ('businesscasedossier', u'Hanspeter M\xfcller'),
@@ -54,7 +58,7 @@ class TestBundleLoader(TestCase):
             ('repositoryfolder', u'Organisation'),
             ('repositoryfolder', u'Personal'),
             ('repositoryroot', u'Ordnungssystem')],
-            sorted([(get_portal_type(i), get_title(i)) for i in items]))
+            sorted([(get_portal_type(i), get_title(i)) for i in list(bundle)]))
 
     def test_validates_schemas(self):
         bundle_path = get_bundle_path('schema_violation.oggbundle')
@@ -64,7 +68,7 @@ class TestBundleLoader(TestCase):
 
     def test_skips_missing_files_gracefully(self):
         bundle = self.load_bundle(get_bundle_path('partial.bundle'))
-        self.assertEqual(1, len(bundle))
+        self.assertEqual(1, len(list(bundle)))
 
 
 class TestItemPreprocessor(TestCase):
