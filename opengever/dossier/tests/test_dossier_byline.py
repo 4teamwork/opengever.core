@@ -169,6 +169,11 @@ class TestDossierByline(TestBylineBase):
                                   view='save_comments',
                                   data={'data': payload})
 
+        query = {'SearchableText': 'New comment'}
+        result = self.portal.portal_catalog(**query)
+        self.assertEquals(1, len(result), 'Expect one result')
+        self.assertEquals(self.dossier, result[0].getObject())
+
 
 class TestFilingBusinessCaseByline(TestBylineBase):
 

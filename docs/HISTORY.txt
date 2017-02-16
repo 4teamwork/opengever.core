@@ -5,6 +5,9 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Reindex SearchableText after changing the comment thru the overlay.
+  [mathias.leimgruber]
+
 - Adjust german translation for dossier template.
   [elioschmutz]
 
