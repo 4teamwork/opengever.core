@@ -37,7 +37,7 @@ class MeetingZipExport(BrowserView):
 
             # Return zip
             zip_file = generator.generate()
-            filename = '{}.zip'.format(self.model.title.encode('utf-8'))
+            filename = '{}.zip'.format(normalize_path(self.model.title))
             response.setHeader(
                 "Content-Disposition",
                 'inline; filename="{0}"'.format(

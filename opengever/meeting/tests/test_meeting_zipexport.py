@@ -8,6 +8,7 @@ from opengever.meeting.model.generateddocument import GeneratedExcerpt
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.testing import FunctionalTestCase
 from StringIO import StringIO
+import cgi
 import transaction
 
 
@@ -208,7 +209,7 @@ class TestMeetingZipExportView(FunctionalTestCase):
 
         browser.login().visit(meeting.get_url())
         browser.open(meeting.get_url(view='zipexport'))
-    
+
         zip_file = ZipFile(StringIO(browser.contents), 'r')
         meeting = Meeting.query.get(meeting.meeting_id)
 
@@ -260,7 +261,7 @@ class TestMeetingZipExportView(FunctionalTestCase):
             .within(self.dossier)
             .as_submitted()
             .having(committee=self.committee.load_model())
-            )
+        )
 
         meeting = create(
             Builder('meeting')
@@ -280,3 +281,34 @@ class TestMeetingZipExportView(FunctionalTestCase):
         zip_file = ZipFile(StringIO(browser.contents), 'r')
         self.assertIn('Agendaitem list-community-meeting.docx',
                       zip_file.namelist())
+
+    @browsing
+    def test_zip_export_link_on_meeting_view(self, browser):
+        meeting = create(
+            Builder('meeting')
+            .having(committee=self.committee.load_model(),
+                    start=self.localized_datetime(2013, 1, 1, 8, 30),
+                    end=self.localized_datetime(2013, 1, 1, 10, 30),
+                    location='There',
+                    presidency=self.hugo,
+                    participants=[self.peter,
+                                  self.hans,
+                                  self.roland],
+                    secretary=self.sile)
+            .link_with(self.meeting_dossier))
+
+        browser.login().open(meeting.get_url())
+        self.assertTrue(browser.css('a.download-zipexport-btn'))
+        self.assertEquals(
+            'Export as Zip',
+            browser.css('.item.zip-download > .title').first.text)
+
+        browser.css('a.download-zipexport-btn').first.click()
+        zip_file = ZipFile(StringIO(browser.contents), 'r')
+
+        self.assertIsNone(zip_file.testzip(),
+                          'Got a invalid zip file.')
+        self.assertEquals(
+            'Community meeting.zip',
+            cgi.parse_header(browser.headers['content-disposition'])[1]['filename'],
+            'Wrong zip filename.')
