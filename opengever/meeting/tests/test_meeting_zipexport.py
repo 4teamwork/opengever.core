@@ -82,7 +82,7 @@ class TestMeetingZipExportView(FunctionalTestCase):
         meeting = Meeting.query.get(meeting.meeting_id)
 
         self.assertFalse(meeting.has_protocol_document())
-        self.assertIn('Protocol-community-meeting.docx',
+        self.assertIn('Protocol-Community meeting.docx',
                       zip_file.namelist())
 
     @browsing
@@ -109,7 +109,7 @@ class TestMeetingZipExportView(FunctionalTestCase):
         meeting = Meeting.query.get(meeting.meeting_id)
 
         self.assertTrue(meeting.has_protocol_document())
-        self.assertIn('protocol-community-meeting.docx',
+        self.assertIn('Protocol-Community meeting.docx',
                       zip_file.namelist())
 
     @browsing
@@ -140,7 +140,7 @@ class TestMeetingZipExportView(FunctionalTestCase):
         # Do a modification
         browser.login().open(meeting.get_url(view='protocol'))
         browser.fill({'Title': u'This is the modified different title than '
-                               u' before'}).submit()
+                               u'before'}).submit()
         browser.open(meeting.get_url(view='zipexport'))
 
         zip_file = ZipFile(StringIO(browser.contents), 'r')
@@ -149,22 +149,22 @@ class TestMeetingZipExportView(FunctionalTestCase):
                              zip_file.filelist[0].filename)
         self.assertNotEquals(protocol.file.getSize(),
                              zip_file.filelist[0].file_size)
-        self.assertIn('Protocol-this-is-the-modified-different-title'
-                      '-than-before.docx',
+        self.assertIn('Protocol-This is the modified different title than'
+                      ' before.docx',
                       zip_file.namelist())
 
     @browsing
     def test_zip_export_agenda_items_attachments(self, browser):
         attachement1 = create(
             Builder('document')
-            .without_default_title()
+            .titled(u'Attachem\xe4nt 1')
             .attach_file_containing(u"attachement",
                                     u"attachement1.docx")
             .within(self.dossier))
 
         attachement2 = create(
             Builder('document')
-            .without_default_title()
+            .titled(u'Attachem\xe4nt 2')
             .attach_file_containing(u"attachement",
                                     u"attachement2.docx")
             .within(self.dossier))

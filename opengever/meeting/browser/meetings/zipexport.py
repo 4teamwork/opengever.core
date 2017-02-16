@@ -57,8 +57,8 @@ class MeetingZipExport(BrowserView):
 
             if self.model.modified < protocol_modified:
                 # Return current protocol
-                namedfile = protocol.file
-                return (namedfile.filename, namedfile.open())
+                return (u'{}.docx'.format(safe_unicode(protocol.Title())),
+                        protocol.file.open())
 
         # Create new protocol
         operations = ProtocolOperations()
@@ -68,7 +68,7 @@ class MeetingZipExport(BrowserView):
             operations,
             lock_document_after_creation=False)
 
-        filename = operations.get_filename(self.model)
+        filename = u'{}.docx'.format(operations.get_title(self.model))
         return (filename, StringIO(command.generate_file_data()))
 
     def add_agenda_items_attachments(self, generator):
@@ -78,13 +78,13 @@ class MeetingZipExport(BrowserView):
                 continue
 
             for document in agenda_item.proposal.resolve_submitted_documents():
-                namedfile = document.file                
+                extension = os.path.splitext(document.file.filename)[1]
                 path = u'{} {}/{}'.format(
                     agenda_item.number,
                     agenda_item.proposal.title,
-                    namedfile.filename
+                    safe_unicode(document.Title()) + extension
                 )
-                generator.add_file(path, namedfile.open())
+                generator.add_file(path, document.file.open())
 
     def add_agenda_item_list(self, generator):
         has_template = AgendaItemListOperations().get_sablon_template(
