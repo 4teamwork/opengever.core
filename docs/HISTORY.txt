@@ -5,6 +5,9 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Adjust german translation for dossier template.
+  [elioschmutz]
+
 - Rename dossiertemplate wizard button from "save" to "continue".
   [elioschmutz]
 
