@@ -83,7 +83,9 @@ class ResolveGUIDSection(object):
             if parent_guid:
                 parent = self.bundle.item_by_guid.get(parent_guid)
                 if not parent:
-                    raise MissingParent(parent_guid)
+                    msg = "%r (referenced by GUID %r)" % (
+                        parent_guid, item['guid'])
+                    raise MissingParent(msg)
                 children = parent.setdefault('_children', [])
                 children.append(item)
             else:
