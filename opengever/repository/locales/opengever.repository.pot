@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-10-18 15:37+0000\n"
+"POT-Creation-Date: 2017-02-20 15:20+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -113,18 +113,18 @@ msgstr ""
 
 #. Default: "Valid from"
 #: ./opengever/repository/repositoryfolder.py:50
-#: ./opengever/repository/repositoryroot.py:20
+#: ./opengever/repository/repositoryroot.py:22
 msgid "label_valid_from"
 msgstr ""
 
 #. Default: "Valid until"
 #: ./opengever/repository/repositoryfolder.py:55
-#: ./opengever/repository/repositoryroot.py:25
+#: ./opengever/repository/repositoryroot.py:27
 msgid "label_valid_until"
 msgstr ""
 
 #. Default: "Version"
-#: ./opengever/repository/repositoryroot.py:30
+#: ./opengever/repository/repositoryroot.py:32
 msgid "label_version"
 msgstr ""
 
@@ -144,7 +144,7 @@ msgid "msg_delete_confirmation"
 msgstr ""
 
 #. Default: "You are adding a repositoryfolder to a leafnode which already contains dossiers. This is only temporarily allowed and all dossiers must be moved into a new leafnode afterwards."
-#: ./opengever/repository/repositoryfolder.py:194
+#: ./opengever/repository/repositoryfolder.py:196
 msgid "msg_leafnode_warning"
 msgstr ""
 
@@ -168,8 +168,13 @@ msgstr ""
 msgid "responsible_org_unit"
 msgstr ""
 
+#. Default: "The reference you try to unlock is still in use."
+#: ./opengever/repository/browser/referenceprefix_manager.py:23
+msgid "statmsg_prefix_unlock_failure"
+msgstr ""
+
 #. Default: "Reference prefix has been unlocked."
-#: ./opengever/repository/browser/referenceprefix_manager.py:25
+#: ./opengever/repository/browser/referenceprefix_manager.py:32
 msgid "statmsg_prefix_unlocked"
 msgstr ""
 
