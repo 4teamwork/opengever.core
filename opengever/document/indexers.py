@@ -163,3 +163,9 @@ def public_trial(obj):
 
     return ''
 grok.global_adapter(public_trial, name='public_trial')
+
+
+@indexer(IDocumentMetadata)
+def has_archival_file(obj):
+    return bool(IDocumentMetadata(obj).archival_file)
+grok.global_adapter(has_archival_file, name='has_archival_file')
