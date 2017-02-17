@@ -5,6 +5,10 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Fix newstyle OfficeConnector URL support for file tooltips and Bumblebee
+  overlays.
+  [Rotonen]
+
 - Rename portal-type opengever.dossier.templatedossier to
   opengever.dossier.templatefolder.
   [elioschmutz]
