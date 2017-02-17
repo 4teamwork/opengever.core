@@ -1,4 +1,6 @@
 from collective.transmogrifier.transmogrifier import Transmogrifier
+from opengever.bundle.catalog import disable_indexing
+from opengever.bundle.catalog import enable_indexing
 from opengever.bundle.ldap import DisabledLDAP
 from opengever.bundle.sections.bundlesource import BUNDLE_KEY
 from opengever.bundle.sections.bundlesource import BUNDLE_PATH_KEY
@@ -30,8 +32,10 @@ def import_oggbundle(app, args):
     transmogrifier = Transmogrifier(plone)
     IAnnotations(transmogrifier)[BUNDLE_PATH_KEY] = bundle_path
 
+    disable_indexing()
     with DisabledLDAP(plone):
         transmogrifier(u'opengever.bundle.oggbundle')
+    enable_indexing()
 
     bundle = IAnnotations(transmogrifier)[BUNDLE_KEY]
     timings = bundle.stats['timings']
