@@ -1,5 +1,8 @@
-from setuptools import setup, find_packages
+from setuptools import find_packages
+from setuptools import setup
+
 import os
+
 
 version = '4.15.2.dev0'
 maintainer = '4teamwork AG'
@@ -35,9 +38,13 @@ tests_require = [
 setup(name='opengever.core',
       version=version,
       description="OpenGever Core (Maintainer: %s)" % maintainer,
-      long_description=open("README.rst").read() + "\n" + \
-          open(os.path.join("docs", "HISTORY.txt")).read(),
-      # Get more strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
+      long_description=(
+          open("README.rst").read()
+          + "\n"
+          + open(os.path.join("docs", "HISTORY.txt")).read()
+          ),
+      # Get more strings from
+      # http://pypi.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
         "Framework :: Plone",
         "Framework :: Zope2",
@@ -52,7 +59,12 @@ setup(name='opengever.core',
       url='http://github.com/4teamwork/opengever.core',
       license='GPL2',
       packages=find_packages(exclude=['ez_setup']),
-      namespace_packages=['opengever', 'opengever.policy', 'opengever.ogds', 'opengever.portlets'],
+      namespace_packages=[
+          'opengever',
+          'opengever.ogds',
+          'opengever.policy',
+          'opengever.portlets',
+          ],
       include_package_data=True,
       zip_safe=False,
       install_requires=[
@@ -65,6 +77,7 @@ setup(name='opengever.core',
         'collective.blueprint.usersandgroups',
         'collective.dexteritytextindexer',
         'collective.elephantvocabulary',
+        'collective.indexing',
         'collective.jqcookie',
         'collective.js.timeago',
         'collective.mtrsetup',
@@ -87,9 +100,9 @@ setup(name='opengever.core',
         'ftw.mail',
         'ftw.pdfgenerator',
         'ftw.profilehook',
+        'ftw.showroom',
         'ftw.tabbedview[extjs, quickupload]',
         'ftw.table',
-        'ftw.showroom',
         'ftw.upgrade >= 1.18.0',
         'ftw.zipexport',
         'jsonschema',
@@ -100,7 +113,6 @@ setup(name='opengever.core',
         'openpyxl',
         'ordereddict',
         'Pillow',
-        'Plone',
         'plone.api >= 1.4.11',
         'plone.app.caching',
         'plone.app.dexterity [grok, relations]',
@@ -125,17 +137,19 @@ setup(name='opengever.core',
         'plone.rfc822',
         'plone.supermodel',
         'plone.z3cform',
+        'Plone',
         'plone4.csrffixes',
         'plonetheme.teamraum',
         'Products.LDAPUserFolder',
         'Products.PloneLDAP',
         'python-ldap',
         'pytz',
+        'PyXB',
         'requests',
         'rwproperty',
         'setuptools',
-        'SQLAlchemy',
         'sqlalchemy-i18n',
+        'SQLAlchemy',
         'subprocess32',
         'transmogrify.dexterity',
         'tzlocal',
@@ -148,14 +162,12 @@ setup(name='opengever.core',
         'z3c.saconfig',
         'zc.relation',
         'zope.globalrequest',
-        'PyXB',
-        'collective.indexing',
         # -*- Extra requirements: -*-
         ],
       tests_require=tests_require,
       extras_require=dict(
-          tests=tests_require,
           api=api_require,
+          tests=tests_require,
       ),
       entry_points="""
       # -*- Entry points: -*-
