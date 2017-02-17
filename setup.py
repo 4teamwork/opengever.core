@@ -38,9 +38,13 @@ tests_require = [
 setup(name='opengever.core',
       version=version,
       description="OpenGever Core (Maintainer: %s)" % maintainer,
-      long_description=open("README.rst").read() + "\n" + \
-          open(os.path.join("docs", "HISTORY.txt")).read(),
-      # Get more strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
+      long_description=(
+          open("README.rst").read()
+          + "\n"
+          + open(os.path.join("docs", "HISTORY.txt")).read()
+          ),
+      # Get more strings from
+      # http://pypi.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
         "Framework :: Plone",
         "Framework :: Zope2",
@@ -55,7 +59,12 @@ setup(name='opengever.core',
       url='http://github.com/4teamwork/opengever.core',
       license='GPL2',
       packages=find_packages(exclude=['ez_setup']),
-      namespace_packages=['opengever', 'opengever.policy', 'opengever.ogds', 'opengever.portlets'],
+      namespace_packages=[
+          'opengever',
+          'opengever.policy',
+          'opengever.ogds',
+          'opengever.portlets',
+          ],
       include_package_data=True,
       zip_safe=False,
       install_requires=[
