@@ -166,8 +166,8 @@ setup(name='opengever.core',
         ],
       tests_require=tests_require,
       extras_require=dict(
-          tests=tests_require,
           api=api_require,
+          tests=tests_require,
       ),
       entry_points="""
       # -*- Entry points: -*-
