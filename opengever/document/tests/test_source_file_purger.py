@@ -11,6 +11,7 @@ class TestSourceFilePurgerView(FunctionalTestCase):
 
     def setUp(self):
         super(TestSourceFilePurgerView, self).setUp()
+        self.grant('Records Manager', 'Editor', 'Contributor')
 
         dossier_a = create(Builder('dossier')
                            .titled(u'Dossier A')

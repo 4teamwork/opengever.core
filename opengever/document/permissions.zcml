@@ -28,4 +28,8 @@
         id="opengever.document.ModifyArchivalFile"
         title="opengever.document: Modify archival file" />
 
+    <permission
+        id="opengever.document.PurgeSourceFile"
+        title="opengever.document: Purge source file" />
+
 </configure>
