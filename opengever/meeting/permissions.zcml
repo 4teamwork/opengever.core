@@ -8,6 +8,11 @@
           />
 
     <permission
+          id="opengever.meeting.AddCommitteeContainer"
+          title="opengever.meeting: Add CommitteeContainer"
+          />
+
+    <permission
           id="opengever.meeting.AddCommittee"
           title="opengever.meeting: Add Committee"
           />

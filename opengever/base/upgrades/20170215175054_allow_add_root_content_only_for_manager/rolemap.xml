@@ -3,7 +3,7 @@
       <permission name="opengever.inbox: Add Inbox" acquire="True">
           <role name="Manager"/>
       </permission>
-      <permission name="opengever.meeting: Add Committee" acquire="True">
+      <permission name="opengever.meeting: Add CommitteeContainer" acquire="True">
           <role name="Manager"/>
       </permission>
       <permission name="opengever.repository: Add repositoryroot" acquire="True">

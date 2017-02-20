@@ -13,8 +13,14 @@
       <role name="Administrator"/>
     </permission>
 
+    <permission name="opengever.meeting: Add CommitteeContainer" acquire="True">
+      <role name="Manager"/>
+    </permission>
+
     <permission name="opengever.meeting: Add Committee" acquire="True">
       <role name="Manager"/>
+      <role name="Contributor"/>
+      <role name="Administrator"/>
     </permission>
 
     <permission name="opengever.meeting: Add Member" acquire="True">
