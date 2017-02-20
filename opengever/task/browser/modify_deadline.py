@@ -25,7 +25,6 @@ class IModifyDeadlineSchema(form.Schema):
         required=True,
         )
 
-    form.widget(new_deadline=DatePickerFieldWidget)
     new_deadline = schema.Date(
         title=_(u"label_new_deadline", default=u"New Deadline"),
         required=True,
@@ -41,6 +40,7 @@ class ModifyDeadlineForm(Form):
     """Form wich allows to modify the deadline of a task."""
 
     fields = Fields(IModifyDeadlineSchema)
+    fields['new_deadline'].widgetFactory = DatePickerFieldWidget
     ignoreContext = True
     allow_prefill_from_GET_request = True  # XXX
 

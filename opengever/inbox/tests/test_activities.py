@@ -38,7 +38,7 @@ class TestForwardingActivites(FunctionalTestCase):
             data={'paths': ['/'.join(self.document.getPhysicalPath())]})
 
         browser.fill({'Title': u'Abkl\xe4rung Fall Meier',
-                      'Deadline': '02/13/15',
+                      'Deadline': '13.02.2015',
                       'Text': 'Lorem ipsum'})
 
         form = browser.find_form_by_field('Responsible')

@@ -94,8 +94,8 @@ class TestCommittee(FunctionalTestCase):
         browser.css('#form-buttons-save').first.click()
 
         browser.fill({'Title': u'Initial',
-                      'Start date': 'January 1, 2012',
-                      'End date': 'December 31, 2012'}).submit()
+                      'Start date': '01.01.2012',
+                      'End date': '31.12.2012'}).submit()
 
         self.assertIn('Item created',
                       browser.css('.portalMessage.info dd').text)

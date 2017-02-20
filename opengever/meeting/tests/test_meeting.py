@@ -68,8 +68,8 @@ class TestMeeting(FunctionalTestCase):
         # create meeting
         browser.login().open(self.committee, view='add-meeting')
         browser.fill({
-            'Start': datetime(2010, 1, 1, 10),
-            'End': datetime(2010, 1, 1, 11),
+            'Start': '01.01.2010 10:00',
+            'End': '01.01.2010 11:00',
             'Location': 'Somewhere',
         }).submit()
 

@@ -69,6 +69,8 @@ class CloseCurrentPeriodStep(BaseWizardStepForm, ModelEditForm):
     steps = CLOSE_PERIOD_STEPS
 
     fields = Fields(IPeriodModel)
+    fields['date_from'].widgetFactory = DatePickerFieldWidget
+    fields['date_to'].widgetFactory = DatePickerFieldWidget
 
     def __init__(self, context, request):
         self.committee = context.load_model()
