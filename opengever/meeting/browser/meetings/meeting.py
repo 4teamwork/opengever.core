@@ -1,4 +1,5 @@
 from five import grok
+from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.base.browser.helper import get_css_class
 from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
@@ -167,6 +168,9 @@ class AddMeetingWizardStep(BaseWizardStepForm, Form):
     steps = ADD_MEETING_STEPS
 
     fields = Fields(IMeetingModel)
+
+    fields['start'].widgetFactory = DatePickerFieldWidget
+    fields['end'].widgetFactory = DatePickerFieldWidget
 
     @buttonAndHandler(_(u'button_continue', default=u'Continue'), name='save')
     def handle_continue(self, action):
