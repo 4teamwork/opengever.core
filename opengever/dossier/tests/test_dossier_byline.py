@@ -8,6 +8,7 @@ from opengever.core.testing import activate_filing_number
 from opengever.core.testing import inactivate_filing_number
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import create_ogds_user
+from plone.protect import createToken
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
@@ -156,9 +157,12 @@ class TestDossierByline(TestBylineBase):
     @browsing
     def test_dossier_byline_save_comments_endpoint(self, browser):
         payload = '{"comments": "New comment"}'
-        browser.login().visit(self.dossier,
-                              view='save_comments',
-                              data={'data': payload})
+        browser.login().visit(self.dossier)
+
+        browser.visit(self.dossier,
+                      view='save_comments',
+                      data={'data': payload,
+                            '_authenticator': createToken()})
 
         dossier_data = IDossier(self.dossier)
         self.assertEquals("New comment", dossier_data.comments)
