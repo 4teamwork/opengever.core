@@ -44,6 +44,11 @@
       />
 
   <utility
+      component=".sections.progress.ProgressSection"
+      name="opengever.bundle.progress"
+      />
+
+  <utility
       component=".sections.post_processing.PostProcessingSection"
       name="opengever.bundle.post_processing"
       />
