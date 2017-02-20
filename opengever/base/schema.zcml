@@ -7,7 +7,7 @@
   <adapter
       factory=".schema.UTCDatetimeDataConverter"
       for=".schema.IUTCDatetime
-           collective.z3cform.datetimewidget.interfaces.IDatetimeWidget"
+           ftw.datepicker.interfaces.IDateTimePickerWidget"
       />
 
 </configure>
