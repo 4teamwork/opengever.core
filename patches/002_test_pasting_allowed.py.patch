@@ -10,7 +10,7 @@ index d70921f..9654fc5 100644
 +        self.assertSequenceEqual([], actions)
  
      @browsing
-     def test_paste_action_not_displayed_for_templatedossier(self, browser):
+     def test_paste_action_not_displayed_for_templatefolder(self, browser):
 @@ -47,7 +47,7 @@ class TestPastingAllowed(FunctionalTestCase):
          browser.open(mail)
          actions = browser.css('#plone-contentmenu-actions li').text

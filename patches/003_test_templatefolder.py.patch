@@ -1,19 +1,19 @@
-diff --git a/opengever/dossier/tests/test_templatedossier.py b/opengever/dossier/tests/test_templatedossier.py
+diff --git a/opengever/dossier/tests/test_templatefolder.py b/opengever/dossier/tests/test_templatefolder.py
 index 99232fd..64de2a1 100644
---- a/opengever/dossier/tests/test_templatedossier.py
-+++ b/opengever/dossier/tests/test_templatedossier.py
-@@ -606,7 +606,7 @@ class TestTemplateDossierListings(FunctionalTestCase):
+--- a/opengever/dossier/tests/test_templatefolder.py
++++ b/opengever/dossier/tests/test_templatefolder.py
+@@ -606,7 +606,7 @@ class TestTemplatefolderListings(FunctionalTestCase):
      def test_enabled_actions_are_limited_in_document_tab(self, browser):
-         browser.login().open(self.templatedossier, view=DOCUMENT_TAB)
+         browser.login().open(self.templatefolder, view=DOCUMENT_TAB)
  
 -        self.assertEqual(
 +        self.assertItemsEqual(
              ['Copy Items', 'Checkin with comment', 'Checkin without comment',
               'Export selection', 'trashed', 'Export as Zip'],
              browser.css('.actionMenuContent li').text)
-@@ -627,7 +627,7 @@ class TestTemplateDossierListings(FunctionalTestCase):
+@@ -627,7 +627,7 @@ class TestTemplatefolderListings(FunctionalTestCase):
      def test_enabled_actions_are_limited_in_sablontemplates_tab(self, browser):
-         browser.login().open(self.templatedossier, view=SABLONTEMPLATES_TAB)
+         browser.login().open(self.templatefolder, view=SABLONTEMPLATES_TAB)
  
 -        self.assertEqual(
 +        self.assertItemsEqual(
