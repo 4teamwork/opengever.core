@@ -212,3 +212,8 @@ class IDossierResolveProperties(Interface):
         description=u'Length of the waiting period in years, before the '
         'source file (file in the original format) gets removed.',
         default=2)
+
+
+class ISourceFileHasBeenPurged(Interface):
+    """Marker interface for dossier where the source files has been purged.
+    """

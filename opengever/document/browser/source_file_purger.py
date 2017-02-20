@@ -9,16 +9,22 @@ class SourceFilePurger(BrowserView):
     """
 
     def __call__(self):
+        self._dossiers = None
+
         if self.request.get('purge') == '1':
             return self.purge_files()
 
         return super(SourceFilePurger, self).__call__()
 
     def get_expired_dossiers(self):
-        return DocumentMaintenance().get_dossiers_to_erase()
+        if not self._dossiers:
+            self._dossiers = DocumentMaintenance().get_dossiers_to_erase()
+
+        return self._dossiers
 
     def get_documents(self):
-        return DocumentMaintenance().get_documents_to_erase_source_file()
+        return DocumentMaintenance().get_documents_to_erase_source_file(
+            self.get_expired_dossiers())
 
     def purge_files(self):
         """Remove purge files. XXX
