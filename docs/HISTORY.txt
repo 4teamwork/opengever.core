@@ -5,6 +5,9 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Translate missing "open detail view" in bumblebee-overlay.
+  [elioschmutz]
+
 - Disallow closing dispositions for archivists.
   [phgross]
 
