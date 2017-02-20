@@ -5,6 +5,11 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Fix an error if the user tries to unlock a referencenumber in the referenceprefix manager
+  which is still in use. The user will see an error status-message instead the
+  full error-traceback.
+  [elioschmutz]
+
 - Allow add root content only for managers.
   [elioschmutz]
 

@@ -1,6 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages import statusmessages
 from opengever.base.adapters import ReferenceNumberPrefixAdpater
 from opengever.journal.tests.utils import get_journal_entry
 from opengever.testing import FunctionalTestCase
@@ -109,3 +110,20 @@ class TestReferencePrefixManager(FunctionalTestCase):
         self.assertEquals(
             'Unlocked prefix 1 in weiterbildung.',
             translate(journal.get('action').get('title')))
+
+    @browsing
+    def test_successfully_unlock_shows_statusmessage(self, browser):
+        browser.login().open(self.repo, view='referenceprefix_manager')
+        browser.css('.unlock').first.click()
+
+        self.assertEqual(
+            ['Reference prefix has been unlocked.'],
+            statusmessages.info_messages())
+
+    @browsing
+    def test_error_while_unlock_shows_statusmessage(self, browser):
+        browser.login().open(self.repo, view='referenceprefix_manager?prefix=2')
+
+        self.assertEqual(
+            ['The reference you try to unlock is still in use.'],
+            statusmessages.error_messages())
