@@ -256,7 +256,7 @@ class TestProposal(FunctionalTestCase):
         submitted_proposal = api.portal.get().restrictedTraverse(
             proposal.load_model().submitted_physical_path.encode('utf-8'))
         browser.login().open(submitted_proposal)
-        self.assertEqual(['Edit', 'Sharing'],
+        self.assertEqual(['Edit'],
                          browser.css('#content-views li').text)
 
         proposal_model = submitted_proposal.load_model()
@@ -265,7 +265,7 @@ class TestProposal(FunctionalTestCase):
 
         # cannot edit decided SubmittedProposal
         browser.open(submitted_proposal)
-        self.assertEqual(['Sharing'],
+        self.assertEqual([],
                          browser.css('#content-views li').text)
         with self.assertRaises(Unauthorized):
             browser.open(submitted_proposal, view='edit')

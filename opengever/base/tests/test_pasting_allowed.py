@@ -18,7 +18,7 @@ class TestPastingAllowed(FunctionalTestCase):
 
         browser.open(contactfolder)
         actions = browser.css('#plone-contentmenu-actions li').text
-        self.assertSequenceEqual(['Export as Zip'], actions)
+        self.assertSequenceEqual([], actions)
 
     @browsing
     def test_paste_action_not_displayed_for_templatefolder(self, browser):
@@ -47,7 +47,7 @@ class TestPastingAllowed(FunctionalTestCase):
         browser.open(mail)
         actions = browser.css('#plone-contentmenu-actions li').text
         self.assertSequenceEqual(
-            ['Export as Zip', 'Properties', 'save attachments'], actions)
+            ['Properties', 'save attachments'], actions)
 
     @browsing
     def test_pasting_not_allowed_if_disallowed_subobject_type(self, browser):
