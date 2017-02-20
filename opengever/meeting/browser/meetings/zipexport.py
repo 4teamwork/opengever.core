@@ -92,7 +92,5 @@ class MeetingZipExport(BrowserView):
 
         if self.model.agenda_items and has_template:
             view = self.context.restrictedTraverse('@@agenda_item_list')
-            doc = view()
-            filename = cgi.parse_header(view.request.response.getHeader(
-                "Content-Disposition"))[1]['filename']
-            generator.add_file(filename, StringIO(doc))
+            generator.add_file(view.get_document_filename(),
+                               StringIO(view.create_agenda_item_list()))
