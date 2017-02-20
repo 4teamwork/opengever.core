@@ -258,7 +258,7 @@ class TestArchiveFormDefaults(FunctionalTestCase):
 
     def _get_form_date(self, browser, field_name):
         datestr = browser.css('#form-widgets-%s' % field_name).first.value
-        return datetime.strptime(datestr, '%B %d, %Y').date()
+        return datetime.strptime(datestr, '%d.%m.%Y').date()
 
     @browsing
     def test_filing_prefix_default(self, browser):

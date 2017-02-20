@@ -148,8 +148,8 @@ class TestSearchWithoutContent(FunctionalTestCase):
         browser.login()
         browser.open(view='advanced_search')
         browser.fill({'form.widgets.object_provides': 'opengever.dossier.behaviors.dossier.IDossierMarker',
-                      'form.widgets.start_1': "1/1/10",
-                      'form.widgets.end_2': "4/1/10"})
+                      'form.widgets.start_1': "01.01.2010",
+                      'form.widgets.end_2': "01.04.2010"})
         browser.css('#form-buttons-button_search').first.click()
 
         self.assertBrowserUrlContainsSearchParams(browser, [
@@ -169,10 +169,10 @@ class TestSearchWithoutContent(FunctionalTestCase):
         browser.login().open(view='advanced_search')
         browser.fill({'form.widgets.searchableText': "dossier1",
                       'form.widgets.object_provides': ['opengever.dossier.behaviors.dossier.IDossierMarker'],
-                      'form.widgets.start_1': "1/1/10",
-                      'form.widgets.start_2': "2/1/10",
-                      'form.widgets.end_1': "3/1/10",
-                      'form.widgets.end_2': "4/1/10",
+                      'form.widgets.start_1': "01.01.2010",
+                      'form.widgets.start_2': "01.02.2010",
+                      'form.widgets.end_1': "01.03.2010",
+                      'form.widgets.end_2': "01.04.2010",
                       'form.widgets.reference': "OG 14.2",
                       'form.widgets.sequence_number': "5",
                       'form.widgets.searchable_filing_no': "14",
@@ -201,10 +201,10 @@ class TestSearchWithoutContent(FunctionalTestCase):
         browser.login().open(view='advanced_search')
         browser.fill({'form.widgets.searchableText': "document1",
                       'form.widgets.object_provides': 'opengever.document.behaviors.IBaseDocument',
-                      'form.widgets.receipt_date_1': "1/1/10",
-                      'form.widgets.receipt_date_2': "2/1/10",
-                      'form.widgets.delivery_date_1': "3/1/10",
-                      'form.widgets.delivery_date_2': "4/1/10",
+                      'form.widgets.receipt_date_1': "01.01.2010",
+                      'form.widgets.receipt_date_2': "01.02.2010",
+                      'form.widgets.delivery_date_1': "01.03.2010",
+                      'form.widgets.delivery_date_2': "01.04.2010",
                       'form.widgets.document_author': "Eduard",
                       'form.widgets.sequence_number': "5",
                       'form.widgets.trashed:list': True})
@@ -229,8 +229,8 @@ class TestSearchWithoutContent(FunctionalTestCase):
         browser.login().open(view='advanced_search')
         browser.fill({'form.widgets.searchableText': "task1",
                       'form.widgets.object_provides': 'opengever.task.task.ITask',
-                      'form.widgets.deadline_1': "1/1/10",
-                      'form.widgets.deadline_2': "2/1/10",
+                      'form.widgets.deadline_1': "01.01.2010",
+                      'form.widgets.deadline_2': "01.02.2010",
                       'form.widgets.task_type:list': 'information',
                       'form.widgets.dossier_review_state:list': 'dossier-state-active'})
         browser.css('#form-buttons-button_search').first.click()

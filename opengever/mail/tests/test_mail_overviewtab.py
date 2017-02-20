@@ -10,7 +10,7 @@ from opengever.testing import FunctionalTestCase
 
 def date_format_helper(dateobj):
     """zope.schema.Date default date format"""
-    return dateobj.strftime('%B %d, %Y').replace(' 0', ' ')
+    return dateobj.strftime('%d.%m.%Y')
 
 
 class TestOverview(FunctionalTestCase):

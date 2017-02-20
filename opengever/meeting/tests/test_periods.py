@@ -60,7 +60,7 @@ class TestPeriod(FunctionalTestCase):
     def test_edit_period(self, browser):
         browser.login().open(self.committee, view='tabbedview_view-periods')
         browser.find('Edit').click()
-        browser.fill({'Start date': 'January 20, 2016'}).submit()
+        browser.fill({'Start date': '20.01.2016'}).submit()
 
         self.assertEqual(['Changes saved'], info_messages())
         self.assertEqual(date(2016, 1, 20), Period.query.one().date_from)
@@ -72,11 +72,11 @@ class TestPeriod(FunctionalTestCase):
         browser.find('Close current period').click()
 
         browser.fill({'Title': u'Old',
-                      'Start date': 'January 1, 2012',
-                      'End date': 'December 31, 2012'}).submit()
+                      'Start date': '01.01.2012',
+                      'End date': '31.12.2012'}).submit()
         browser.fill({'Title': u'New',
-                      'Start date': 'January 1, 2013',
-                      'End date': 'December 31, 2013'}).submit()
+                      'Start date': '01.01.2013',
+                      'End date': '31.12.2013'}).submit()
 
         self.assertEqual(["Record created"], info_messages())
 
