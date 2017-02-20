@@ -3,8 +3,40 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages import statusmessages
+from opengever.inbox.container import IInboxContainer
 from opengever.testing import add_languages
 from opengever.testing import FunctionalTestCase
+
+
+class TestInboxContainer(FunctionalTestCase):
+
+    @browsing
+    def test_adding(self, browser):
+        self.grant('Manager')
+        add_languages(['de-ch'])
+        browser.login().open()
+        factoriesmenu.add('Inbox Container')
+        browser.fill({'Title': 'Inbox Container'}).save()
+
+        self.assertTrue(IInboxContainer.providedBy(browser.context))
+
+    @browsing
+    def test_is_only_addable_by_manager(self, browser):
+        browser.login().open()
+
+        self.grant('Administrator')
+        browser.reload()
+        self.assertNotIn(
+            'Inbox Container',
+            factoriesmenu.addable_types()
+            )
+
+        self.grant('Manager')
+        browser.reload()
+        self.assertIn(
+            'Inbox Container',
+            factoriesmenu.addable_types()
+            )
 
 
 class TestInboxView(FunctionalTestCase):
@@ -40,6 +72,7 @@ class TestInboxView(FunctionalTestCase):
     @browsing
     def test_supports_translated_title(self, browser):
         add_languages(['de-ch', 'fr-ch'])
+        self.grant('Manager')
 
         browser.login().open()
         factoriesmenu.add('Inbox Container')
