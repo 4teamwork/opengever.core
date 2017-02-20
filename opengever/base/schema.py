@@ -1,9 +1,10 @@
 from collective.z3cform.datetimewidget.interfaces import DatetimeValidationError
 from ftw.datepicker.converter import DateTimeDataConverter
+from opengever.base.date_time import as_utc
+from tzlocal import get_localzone
 from zope import schema
 from zope.interface import implements
 from zope.schema.interfaces import IChoice
-import pytz
 
 
 class IUTCDatetime(schema.interfaces.IDatetime):
@@ -25,7 +26,8 @@ class UTCDatetimeDataConverter(DateTimeDataConverter):
         value = super(UTCDatetimeDataConverter, self).toFieldValue(value)
 
         try:
-            return value.replace(tzinfo=pytz.UTC)
+            local_dt = get_localzone().localize(value)
+            return as_utc(local_dt)
         except ValueError:
             raise DatetimeValidationError
 
