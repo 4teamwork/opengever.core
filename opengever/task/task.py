@@ -31,6 +31,8 @@ from Products.CMFCore.utils import _mergedLocalRoles
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import safe_unicode
 from z3c.form import validator
+from z3c.form.interfaces import HIDDEN_MODE
+from z3c.form.interfaces import IAddForm
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
 from zope import schema
@@ -40,7 +42,6 @@ from zope.component import getUtility
 from zope.component import provideAdapter
 from zope.interface import implements
 from zope.schema.vocabulary import getVocabularyRegistry
-
 
 _marker = object()
 
@@ -132,6 +133,7 @@ class ITask(form.Schema):
         )
 
     form.widget(date_of_completion=DatePickerFieldWidget)
+    form.mode(IAddForm, date_of_completion=HIDDEN_MODE)
     date_of_completion = schema.Date(
         title=_(u"label_date_of_completion", default=u"Date of completion"),
         description=_(u"help_date_of_completion", default=u""),

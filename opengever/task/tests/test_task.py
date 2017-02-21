@@ -76,6 +76,26 @@ class TestTaskIntegration(FunctionalTestCase):
         self.assertTrue(len(dossier.objectValues()),
                         'Expect one item in dossier')
 
+    @browsing
+    def test_hide_date_of_completion_field_in_add_form(self, browser):
+        dossier = create(Builder('dossier'))
+        browser.login().open(dossier, view='++add++opengever.task.task')
+
+        self.assertEqual(
+            'hidden',
+            browser.css('input#form-widgets-date_of_completion').first.type)
+
+    @browsing
+    def test_show_date_of_completion_field_in_edit_form(self, browser):
+        dossier = create(Builder('dossier'))
+        task = create(Builder('task').within(dossier).titled('Task 1'))
+
+        browser.login().visit(task, view="edit")
+
+        self.assertNotEqual(
+            'hidden',
+            browser.css('input#form-widgets-date_of_completion').first.type)
+
     def test_relateddocuments(self):
         # create document and append it to the relatedItems of the task
         doc3 = create(Builder("document").titled("a-testthree"))
