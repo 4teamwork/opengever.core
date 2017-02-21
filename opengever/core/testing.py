@@ -153,20 +153,9 @@ class AnnotationLayer(ComponentRegistryLayer):
 ANNOTATION_LAYER = AnnotationLayer()
 
 
-class OpengeverFixture(PloneSandboxLayer):
+class OpengeverFixtureSQL(PloneSandboxLayer):
 
     defaultBases = (PLONE_FIXTURE, BUILDER_LAYER)
-
-    def testSetUp(self):
-        super(OpengeverFixture, self).testSetUp()
-        setup_sql_tables()
-
-    def testTearDown(self):
-        truncate_sql_tables()
-        from opengever.testing.sql import reset_ogds_sync_stamp
-        with ploneSite() as portal:
-            reset_ogds_sync_stamp(portal)
-        super(OpengeverFixture, self).testTearDown()
 
     def setUpZope(self, app, configurationContext):
         # do not install pas plugins (doesnt work in tests)
@@ -215,16 +204,16 @@ class OpengeverFixture(PloneSandboxLayer):
         deactivate_bumblebee_feature()
 
     def tearDown(self):
-        super(OpengeverFixture, self).tearDown()
         clear_transmogrifier_registry()
+        super(OpengeverFixtureSQL, self).tearDown()
 
     def tearDownPloneSite(self, portal):
         activate_activity_center()
         activate_bumblebee_feature()
 
     def tearDownZope(self, app):
-        super(OpengeverFixture, self).tearDownZope(app)
         os.environ['BUMBLEBEE_DEACTIVATE'] = "True"
+        super(OpengeverFixtureSQL, self).tearDownZope(app)
 
     def installOpengeverProfiles(self, portal):
         applyProfile(portal, 'opengever.policy.base:default')
@@ -255,142 +244,26 @@ class OpengeverFixture(PloneSandboxLayer):
         portal.portal_types['Plone Site'].filter_content_types = False
 
 
-class OpengeverFixtureSQL(PloneSandboxLayer):
+OPENGEVER_FIXTURE_SQL = OpengeverFixtureSQL()
 
-    defaultBases = (PLONE_FIXTURE, BUILDER_LAYER)
 
-    def setUpZope(self, app, configurationContext):
-        # do not install pas plugins (doesnt work in tests)
-        from opengever.ogds.base import hooks
-        hooks._setup_scriptable_plugin = lambda *a, **kw: None
+class OpengeverFixture(PloneSandboxLayer):
 
-        xmlconfig.string(
-            '<configure xmlns="http://namespaces.zope.org/zope">'
-
-            '  <include package="z3c.autoinclude" file="meta.zcml" />'
-            '  <includePlugins package="plone" />'
-            '  <includePluginsOverrides package="plone" />'
-
-            '  <include package="opengever.core.tests" file="tests.zcml" />'
-            '  <include package="opengever.ogds.base" file="tests.zcml" />'
-            '  <include package="opengever.base.tests" file="tests.zcml" />'
-            '  <include package="opengever.testing" file="tests.zcml" />'
-            '  <include package="opengever.setup.tests" />'
-
-            '</configure>',
-            context=configurationContext)
-
-        z2.installProduct(app, 'plone.app.versioningbehavior')
-        z2.installProduct(app, 'collective.taskqueue.pasplugin')
-
-        memory_session_factory()
-        setupCoreSessions(app)
-
-        # Set max subobject limit to 0 -> unlimited
-        # In tests this is set to 100 by default
-        transient_object_container = app.temp_folder.session_data
-        transient_object_container.setSubobjectLimit(0)
-
-        os.environ['BUMBLEBEE_DEACTIVATE'] = "True"
-
-        import opengever.base.tests.views
-        xmlconfig.file('configure.zcml',
-                       opengever.base.tests.views,
-                       context=configurationContext)
-
-    def setUpPloneSite(self, portal):
-        self.installOpengeverProfiles(portal)
-        self.setupLanguageTool(portal)
-        deactivate_activity_center()
-        deactivate_bumblebee_feature()
-
-    def setUp(self):
-        super(OpengeverFixtureSQL, self).setUp()
+    defaultBases = (OPENGEVER_FIXTURE_SQL,)
 
     def testSetUp(self):
-        super(OpengeverFixtureSQL, self).testSetUp()
+        super(OpengeverFixture, self).testSetUp()
+        setup_sql_tables()
 
     def testTearDown(self):
-        super(OpengeverFixtureSQL, self).testTearDown()
+        truncate_sql_tables()
+        from opengever.testing.sql import reset_ogds_sync_stamp
+        with ploneSite() as portal:
+            reset_ogds_sync_stamp(portal)
+        super(OpengeverFixture, self).testTearDown()
 
-    def tearDown(self):
-        clear_transmogrifier_registry()
-        super(OpengeverFixtureSQL, self).tearDown()
 
-    def tearDownPloneSite(self, portal):
-        activate_activity_center()
-        activate_bumblebee_feature()
-
-    def tearDownZope(self, app):
-        os.environ['BUMBLEBEE_DEACTIVATE'] = "True"
-        super(OpengeverFixtureSQL, self).tearDownZope(app)
-
-    def installOpengeverProfiles(self, portal):
-        # Copied from metadata.zxml of opengever.policy.base:default
-        # The aim is to use the opengever.policy.base:default here, but it
-        # changes some things such as the language which will result in
-        # lots of failing tests.
-        applyProfile(portal, 'plone.app.dexterity:default')
-        applyProfile(portal, 'plone.app.registry:default')
-        applyProfile(portal, 'plone.app.relationfield:default')
-        applyProfile(portal, 'opengever.globalindex:default')
-        applyProfile(portal, 'opengever.ogds.base:default')
-        applyProfile(portal, 'opengever.base:default')
-        applyProfile(portal, 'opengever.document:default')
-        applyProfile(portal, 'opengever.mail:default')
-        applyProfile(portal, 'opengever.dossier:default')
-        applyProfile(portal, 'opengever.repository:default')
-        applyProfile(portal, 'opengever.journal:default')
-        applyProfile(portal, 'opengever.task:default')
-        applyProfile(portal, 'opengever.tabbedview:default')
-        applyProfile(portal, 'opengever.trash:default')
-        applyProfile(portal, 'opengever.inbox:default')
-        applyProfile(portal, 'opengever.tasktemplates:default')
-        applyProfile(portal, 'opengever.portlets.tree:default')
-        applyProfile(portal, 'opengever.contact:default')
-        applyProfile(portal, 'opengever.advancedsearch:default')
-        applyProfile(portal, 'opengever.sharing:default')
-        applyProfile(portal, 'opengever.latex:default')
-        applyProfile(portal, 'opengever.meeting:default')
-        applyProfile(portal, 'opengever.activity:default')
-        applyProfile(portal, 'opengever.bumblebee:default')
-        applyProfile(portal, 'opengever.officeatwork:default')
-        applyProfile(portal, 'opengever.private:default')
-        applyProfile(portal, 'ftw.datepicker:default')
-        applyProfile(portal, 'plone.formwidget.autocomplete:default')
-        applyProfile(portal, 'plone.formwidget.contenttree:default')
-        applyProfile(portal, 'ftw.contentmenu:default')
-        applyProfile(portal, 'ftw.zipexport:default')
-        applyProfile(portal, 'opengever.disposition:default')
-
-        applyProfile(portal, 'opengever.testing:testing')
-
-    def createMemberFolder(self, portal):
-        # Create a Members folder.
-        setRoles(portal, TEST_USER_ID, ['Manager'])
-        portal.invokeFactory('Folder', 'Members')
-        portal['Members'].invokeFactory('Folder', TEST_USER_ID)
-        setRoles(portal, TEST_USER_ID, ['Member'])
-
-    def setupLanguageTool(self, portal):
-        """Configure the language tool as close as possible to production,
-        without breaking most of the existing tests.
-
-        For production, the language tool is configured in
-        opengever.policy.base:default, which we don't import here
-        (see comment in installOpengeverProfiles() above).
-        """
-        lang_tool = api.portal.get_tool('portal_languages')
-        lang_tool.use_combined_language_codes = True
-        lang_tool.display_flags = False
-        lang_tool.start_neutral = False
-        lang_tool.use_subdomain_negotiation = False
-        lang_tool.authenticated_users_only = False
-        lang_tool.use_request_negotiation = True
-
-        # These would be (possible) production defaults, but will break tests
-        # lang_tool.setDefaultLanguage('de-ch')
-        # lang_tool.supported_langs = ['fr-ch', 'de-ch']
+OPENGEVER_FIXTURE = OpengeverFixture()
 
 
 class APILayer(Layer):
@@ -461,9 +334,6 @@ MEMORY_DB_LAYER = MemoryDBLayer(
     bases=(BUILDER_LAYER,
            set_builder_session_factory(memory_session_factory)),
     name='opengever:core:memory_db')
-
-OPENGEVER_FIXTURE = OpengeverFixture()
-OPENGEVER_FIXTURE_SQL = OpengeverFixtureSQL()
 
 OPENGEVER_INTEGRATION_TESTING = IntegrationTesting(
     bases=(OPENGEVER_FIXTURE,
