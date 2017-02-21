@@ -15,6 +15,7 @@ class TestSourceFilePurgerView(FunctionalTestCase):
 
         dossier_a = create(Builder('dossier')
                            .titled(u'Dossier A')
+                           .in_state('dossier-state-resolved')
                            .having(end=date(2013, 2, 1)))
         self.document_a = create(Builder('document')
                .titled(u'Document A')
@@ -22,6 +23,7 @@ class TestSourceFilePurgerView(FunctionalTestCase):
                .within(dossier_a))
         dossier_b = create(Builder('dossier')
                            .titled(u'Dossier B')
+                           .in_state('dossier-state-resolved')
                            .having(end=date(2013, 5, 12)))
         self.document_b = create(Builder('document')
                .titled(u'Document B')
