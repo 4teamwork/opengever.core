@@ -5,8 +5,10 @@ from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.base.oguid import Oguid
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
+from opengever.locking.lock import MEETING_SUBMITTED_LOCK
 from opengever.meeting.model import Proposal
 from opengever.meeting.model import SubmittedDocument
+from opengever.meeting.proposal import IProposal
 from opengever.testing import FunctionalTestCase
 from opengever.testing import index_data_for
 from plone import api
@@ -14,7 +16,6 @@ from plone.app.testing import TEST_USER_ID
 from plone.locking.interfaces import ILockable
 from zExceptions import Unauthorized
 import transaction
-from opengever.locking.lock import MEETING_SUBMITTED_LOCK
 
 
 class TestProposalViewsDisabled(FunctionalTestCase):
@@ -623,6 +624,26 @@ class TestProposal(FunctionalTestCase):
         proposal.submit_additional_document(document)
 
         self.assertEqual(1, submitted_document.get_current_version())
+
+    def test_submit_document_updates_proposal_attachements(self):
+        committee = create(Builder('committee').titled('My committee'))
+        document = create(Builder('document')
+                          .within(self.dossier)
+                          .titled(u'A Document')
+                          .with_dummy_content())
+        proposal = create(Builder('proposal')
+                          .within(self.dossier)
+                          .titled(u'My Proposal')
+                          .as_submitted()
+                          .having(committee=committee.load_model()))
+
+        self.assertEqual(0, len(IProposal(proposal).relatedItems))
+
+        proposal.submit_additional_document(document)
+
+        self.assertEqual(
+            [document],
+            [item.to_object for item in IProposal(proposal).relatedItems])
 
     def test_attributes_sort_order_for_proposal(self):
         committee = create(Builder('committee').titled('My committee'))

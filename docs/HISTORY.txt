@@ -5,6 +5,9 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Fix updating the proposal attachement-list after submitting a new document.
+  [elioschmutz]
+
 - OGGBundle import: Validate max nesting depth for repositoryfolders
   and dossiers. Failure to validate will be logged in validation report,
   but otherwise doesn't affect import.

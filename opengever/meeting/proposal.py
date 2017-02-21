@@ -20,12 +20,15 @@ from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from plone import api
 from plone.directives import form
+from z3c.relationfield.relation import RelationValue
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
 from zope import schema
+from zope.component import getUtility
 from zope.interface import implements
 from zope.interface import Interface
 from zope.interface import provider
+from zope.intid.interfaces import IIntIds
 from zope.schema.interfaces import IContextAwareDefaultFactory
 
 
@@ -511,6 +514,26 @@ class Proposal(ProposalBase):
                 document,
                 target_path=proposal_model.submitted_physical_path,
                 target_admin_unit_id=proposal_model.submitted_admin_unit_id)
+
+            if not self.relatedItems:
+                # The missing_value attribute of a z3c-form field is used
+                # as soon as an object has no default_value i.e. after creating
+                # an object trough the command-line.
+                #
+                # Because the relatedItems field needs a list as a missing_value,
+                # we will fall into the "mutable keyword argument"-python gotcha.
+                # The relatedItems will be shared between the object-instances.
+                #
+                # Unfortunately the z3c-form field does not provide a
+                # missing_value-factory (like the defaultFactory) which would be
+                # necessary to fix this issue properly.
+                #
+                # As a workaround we reassign the field with a new list if the
+                # relatedItems-attribute has never been assigned before.
+                self.relatedItems = []
+
+            self.relatedItems.append(
+                RelationValue(getUtility(IIntIds).getId(document)))
 
         command.execute()
         return command
