@@ -4,6 +4,7 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages import plone
 from ftw.testbrowser.pages.statusmessages import warning_messages
+from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_SAMPLING
 from opengever.base.interfaces import IReferenceNumberSettings
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_DOSSIER_TEMPLATE_LAYER
 from opengever.repository.behaviors.referenceprefix import IReferenceNumberPrefix
@@ -24,14 +25,14 @@ class TestRepositoryFolderTitle(FunctionalTestCase):
         super(TestRepositoryFolderTitle, self).setUp()
 
         repository_1 = create(Builder('repository'))
-
         repository_1_1 = create(Builder('repository')
                                 .within(repository_1))
 
         self.repository_folder = create(Builder('repository')
                                         .within(repository_1_1)
                                         .having(title_de=u'F\xfchrung',
-                                                title_fr=u'Direction'))
+                                                title_fr=u'Direction',
+                                                archival_value=ARCHIVAL_VALUE_SAMPLING))
 
     def test_returns_reference_number_and_title_separated_with_space(self):
         self.assertEquals('1.1.1. F\xc3\xbchrung', self.repository_folder.Title())
@@ -54,6 +55,10 @@ class TestRepositoryFolderTitle(FunctionalTestCase):
         brain = obj2brain(self.repository_folder)
         self.assertEquals(u'1.1.1. Direction', brain.title_fr)
         self.assertEquals(u'1.1.1. F\xfchrung', brain.title_de)
+
+    def test_get_archival_value(self):
+        self.assertEquals(ARCHIVAL_VALUE_SAMPLING,
+                          self.repository_folder.get_archival_value())
 
 
 class TestRepositoryFolderWithBrowser(FunctionalTestCase):

@@ -5,6 +5,15 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Make dossiers collabsible and hide them by default on the disposition overview.
+  [phgross]
+
+- List repositories alphabetically on the disposition overview.
+  [phgross]
+
+- Display archival value of repositories on the disposition overview.
+  [phgross]
+
 - Fix an error if the user tries to unlock a referencenumber in the referenceprefix manager
   which is still in use. The user will see an error status-message instead the
   full error-traceback.

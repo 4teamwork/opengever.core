@@ -5,8 +5,9 @@ from opengever.disposition.interfaces import IHistoryStorage
 from opengever.tabbedview import GeverTabMixin
 from plone import api
 from plone.protect.utils import addTokenToUrl
+from Products.CMFPlone.CatalogTool import num_sort_regex
+from Products.CMFPlone.CatalogTool import zero_fill
 from Products.Five.browser import BrowserView
-import json
 
 
 class DispositionOverview(BrowserView, GeverTabMixin):
@@ -23,7 +24,12 @@ class DispositionOverview(BrowserView, GeverTabMixin):
             else:
                 grouped_dossiers[key].append(dossier)
 
-        return grouped_dossiers.items()
+        def sort_on_sortable_title(item):
+            if isinstance(item[0], unicode):
+                return num_sort_regex.sub(zero_fill, item[0])
+            return num_sort_regex.sub(zero_fill, item[0].Title())
+
+        return sorted(grouped_dossiers.items(), key=sort_on_sortable_title)
 
     def is_archival_worthy(self, dossier):
         return ILifeCycle(dossier).archival_value != ARCHIVAL_VALUE_UNWORTHY
