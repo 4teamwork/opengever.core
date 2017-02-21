@@ -16,32 +16,17 @@ from operator import itemgetter
 from operator import methodcaller
 from path import Path
 from plone.memoize import instance
-from pprint import pprint
-from StringIO import StringIO
-import difflib
+import imp
 import os
 import re
 
 
-XML_CHILD_INDENT = 4
-XML_ATTR_INDENT = 6
+format_xml_path = Path(__file__).joinpath(
+    '..', '..', '..', 'bin', 'format-xml').abspath()
+Indenter = imp.load_source('format_xml', format_xml_path).Indenter
+
+
 _marker = object()
-
-# Tags to format on a single line
-XML_FORMAT_ONELINE = (
-    'object',
-    'property',
-    'index',
-    'hidden',
-    'order',
-    'viewlet',
-)
-
-# Tags to format on multiple lines
-XML_FORMAT_MULTILINE = (
-    'layer',
-    'configlet',
-)
 
 
 def step(message):
@@ -732,78 +717,15 @@ class MergeTool(object):
             path.relpath(self.buildout_dir))))
 
 
-def prettyformat(xmldoc):
-    original = etree.tostring(xmldoc)
-
-    def set_indentation(elem, level=0):
-        def indent(text, level):
-            text = (text or '').replace('\t', '    ').rstrip(' ')
-            if '\n' not in text:
-                text += '\n'
-            return text + (level * XML_CHILD_INDENT * ' ')
-
-        if len(elem):
-            elem.text = indent(elem.text, level + 1)
-            elem.tail = indent(elem.tail, level)
-
-            for child in elem:
-                set_indentation(child, level + 1)
-
-            child.tail = indent(child.tail, level)
-        elif level:
-            elem.tail = indent(elem.tail, level)
-
-    def indent_attributes(match):
-        prefix, indent, start, attributes, end = match.groups()
-        attr_prefix = '\n' + indent + (' ' * XML_ATTR_INDENT)
-        attr_regex = re.compile(r'([^ ]*="[^"]*") ')
-        tagname = start.lstrip('<').strip()
-
-        if tagname in XML_FORMAT_ONELINE:
-            apply_multiline = False
-        elif tagname in XML_FORMAT_MULTILINE:
-            apply_multiline = True
-        else:
-            apply_multiline = len(attr_regex.findall(attributes)) > 0
-
-        if apply_multiline:
-            attributes = attr_prefix + attr_regex.sub(
-                '\g<1>' + attr_prefix, attributes)
-        return ''.join((prefix, indent, start, attributes, end))
-
-    set_indentation(xmldoc.getroot())
-    xml = etree.tostring(xmldoc, pretty_print=True)
-    xml = re.sub('(\n?)( *)(\<[^ /!>]+ )([^>]*)(\/?>)',
-                 indent_attributes, xml)
-
-    assert_unchanged(original, xml,
-                     'Unexpected difference detected when prettyfing XML')
-    return xml
-
-
 def parsexml(path):
     with path.open() as fio:
         return etree.parse(fio)
 
 
-def assert_unchanged(expected, got, message):
-    expected = c14n(expected)
-    got = c14n(got)
-    assert got == expected, \
-        message + '\n\n' + ''.join((difflib.ndiff(expected.splitlines(1),
-                                                  got.splitlines(1))))
-
-
-def c14n(xmlstring):
-    output = StringIO()
-    parser = etree.XMLParser(remove_blank_text=True)
-    etree.parse(StringIO(xmlstring), parser).write_c14n(output)
-    return output.getvalue().strip()
-
-
-
 def prettywrite(target, doc):
-    target.write_bytes(prettyformat(doc))
+    xmlstring = etree.tostring(doc, pretty_print=True)
+    xmlstring = Indenter().format_xml_string(xmlstring)
+    target.write_bytes(xmlstring)
 
 
 if __name__ == '__main__':
