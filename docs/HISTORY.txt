@@ -5,6 +5,9 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Disallow closing dispositions for archivists.
+  [phgross]
+
 - Make dossiers collabsible and hide them by default on the disposition overview.
   [phgross]
 
