@@ -2,12 +2,16 @@ from datetime import date
 from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from ftw.mail.mail import IMail
 from ftw.testing import freeze
 from opengever.document.document import IDocumentSchema
 from opengever.document.maintenance import DocumentMaintenance
 from opengever.dossier.interfaces import ISourceFileHasBeenPurged
+from opengever.journal.handlers import SOURCE_FILE_PURGED
+from opengever.journal.handlers import SOURCE_FILES_PURGED
 from opengever.testing import FunctionalTestCase
+from zope.annotation import IAnnotations
 from zope.interface import alsoProvides
 
 
@@ -143,3 +147,30 @@ class TestSourceFilePurgement(FunctionalTestCase):
             DocumentMaintenance().purge_source_files()
 
         self.assertTrue(ISourceFileHasBeenPurged.providedBy(dossier))
+
+    def test_purging_is_journalized_on_dossier_and_document(self):
+        dossier = create(Builder('dossier')
+                         .in_state('dossier-state-resolved')
+                         .having(end=date(2013, 5, 12)))
+        document = create(Builder('document')
+                            .attach_file_containing('DATA')
+                            .attach_archival_file_containing('DATA')
+                            .within(dossier))
+
+        with freeze(datetime(2017, 3, 5)):
+            DocumentMaintenance().purge_source_files()
+
+        # document
+        journal = IAnnotations(document).get(JOURNAL_ENTRIES_ANNOTATIONS_KEY)
+        entry = journal[-1]
+        self.assertEquals(SOURCE_FILE_PURGED,
+                          entry.get('action').get('type'))
+        self.assertEquals(u'label_source_file_purged',
+                          entry.get('action').get('title'))
+
+        # dossier
+        journal = IAnnotations(dossier).get(JOURNAL_ENTRIES_ANNOTATIONS_KEY)
+        entry = journal[-1]
+        self.assertEquals(SOURCE_FILES_PURGED, entry.get('action').get('type'))
+        self.assertEquals(u'label_source_files_purged',
+                          entry.get('action').get('title'))

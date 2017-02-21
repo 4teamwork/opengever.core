@@ -217,3 +217,7 @@ class IDossierResolveProperties(Interface):
 class ISourceFileHasBeenPurged(Interface):
     """Marker interface for dossier where the source files has been purged.
     """
+
+
+class ISourceFilesPurged(IObjectEvent):
+    """Interface for source files purged event."""

@@ -1,6 +1,7 @@
 from five import grok
 from opengever.document import interfaces
 from zope.component.interfaces import ObjectEvent
+from zope.interface import implements
 
 
 class ObjectCheckedOutEvent(ObjectEvent):
@@ -61,3 +62,12 @@ class FileCopyDownloadedEvent(ObjectEvent):
     """
 
     grok.implements(interfaces.IFileCopyDownloadedEvent)
+
+
+
+class SourceFilePurged(ObjectEvent):
+    """The `SourceFilesErased` event is fired after the source file of a
+    document has been purged.
+    """
+
+    implements(interfaces.ISourceFilePurged)

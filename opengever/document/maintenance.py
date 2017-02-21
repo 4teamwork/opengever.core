@@ -3,10 +3,13 @@ from ftw.mail.mail import IMail
 from opengever.document.behaviors import IBaseDocument
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.document import IDocumentSchema
+from opengever.document.events import SourceFilePurged
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.dossier.interfaces import ISourceFileHasBeenPurged
+from opengever.dossier.events import SourceFilesPurged
 from plone import api
+from zope.event import notify
 from zope.interface import alsoProvides
 
 
@@ -55,11 +58,14 @@ class DocumentMaintenance(object):
             else:
                 IMail(document).message = None
 
-        self.mark_dossiers(dossiers)
+            notify(SourceFilePurged(document))
 
-    def mark_dossiers(self, dossiers):
-        """Mark dossiers with ISourceFileHasBeenPurged marker interface.
+        for dossier in dossiers:
+            self.mark_dossier(dossier)
+            notify(SourceFilesPurged(dossier))
+
+    def mark_dossier(self, dossier):
+        """Mark dossier with ISourceFileHasBeenPurged marker interface.
         To make sure the dossiers are excluded from next source file purgements.
         """
-        for dossier in dossiers:
-            alsoProvides(dossier, ISourceFileHasBeenPurged)
+        alsoProvides(dossier, ISourceFileHasBeenPurged)

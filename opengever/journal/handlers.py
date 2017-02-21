@@ -13,10 +13,12 @@ from opengever.document.interfaces import IObjectCheckedInEvent
 from opengever.document.interfaces import IObjectCheckedOutEvent
 from opengever.document.interfaces import IObjectCheckoutCanceledEvent
 from opengever.document.interfaces import IObjectRevertedToVersion
+from opengever.document.interfaces import ISourceFilePurged
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.browser.participants import role_list_helper
 from opengever.dossier.interfaces import IParticipationCreated
 from opengever.dossier.interfaces import IParticipationRemoved
+from opengever.dossier.interfaces import ISourceFilesPurged
 from opengever.journal import _
 from opengever.mail.interfaces import IAttachmentsDeletedEvent
 from opengever.mail.interfaces import IDocumentSent
@@ -311,6 +313,18 @@ def doc_properties_updated(context):
                                   default=u'DocProperties updated.'))
 
 
+SOURCE_FILES_PURGED = 'Source files purged'
+
+
+@grok.subscribe(IDossierMarker, ISourceFilesPurged)
+def source_files_purged(context, event):
+    journal_entry_factory(
+        context,
+        SOURCE_FILES_PURGED,
+        title=_(u'label_source_files_purged',
+                default=u'The Source files of all documents has been purged.'))
+
+
 # ----------------------- MAIL -----------------------
 ATTACHMENTS_DELETED_ACTION = 'Attachments deleted'
 
@@ -546,6 +560,17 @@ def document_sent(context, event):
     journal_entry_factory(
         context, DOCUMENT_SENT, title, visible=True, comment=comment)
 
+
+SOURCE_FILE_PURGED = 'Source file purged'
+
+
+@grok.subscribe(IBaseDocument, ISourceFilePurged)
+def source_file_purged(context, event):
+    journal_entry_factory(
+        context,
+        SOURCE_FILE_PURGED,
+        title=_(u'label_source_file_purged',
+                default=u'The Source file has been purged.'))
 
 # ----------------------- TASK -----------------------
 

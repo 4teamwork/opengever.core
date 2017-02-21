@@ -121,3 +121,7 @@ class INoAutomaticInitialVersion(Interface):
     This is sometimes necessary when a transmogrifier pipeline is involved,
     i.e. during setup or migration.
     """
+
+
+class ISourceFilePurged(IObjectEvent):
+    """Interface for source file purged event."""
