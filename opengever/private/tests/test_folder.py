@@ -9,9 +9,7 @@ from opengever.core.testing import OPENGEVER_FUNCTIONAL_PRIVATE_FOLDER_LAYER
 from opengever.private.tests import create_members_folder
 from opengever.testing import FunctionalTestCase
 from plone import api
-from plone.app.testing import login
 from plone.app.testing import TEST_USER_ID
-from zExceptions import Unauthorized
 
 
 class TestPrivateFolder(FunctionalTestCase):
@@ -103,67 +101,12 @@ class TestPrivateFolderTabbedView(FunctionalTestCase):
             browser.css('.actionMenuContent a').text)
 
 
-class TestPrivateFolderWorkflow(FunctionalTestCase):
-
-    layer = OPENGEVER_FUNCTIONAL_PRIVATE_FOLDER_LAYER
-
-    def setUp(self):
-        super(TestPrivateFolderWorkflow, self).setUp()
-        self.root = create(Builder('private_root'))
-        self.folder = create_members_folder(self.root)
-
-    @browsing
-    def test_only_owner_can_see_private_folder(self, browser):
-        browser.login().open(self.folder)
-
-        create(Builder('user')
-               .named('Hugo', 'Boss')
-               .with_roles('Member'))
-
-        with self.assertRaises(Unauthorized):
-            browser.login('hugo.boss').open(self.folder)
-
-    @browsing
-    def test_owner_can_add_private_dossiers(self, browser):
-        browser.login().open(self.folder)
-        self.assertIn('Private Dossier', factoriesmenu.addable_types())
-
-    @browsing
-    def test_only_owner_can_see_private_documents(self, browser):
-        user_a = create(Builder('user')
-                        .named('A', 'User')
-                        .with_roles('Member'))
-
-        user_b = create(Builder('user')
-                        .named('Hugo', 'Boss')
-                        .with_roles('Member'))
-
-        login(self.portal, user_a.getId())
-        api.portal.get_tool('portal_membership').createMemberarea()
-        user_a_private_folder = self.root[user_a.getId()]
-        dossier = create(Builder('private_dossier')
-                         .within(user_a_private_folder)
-                         .titled(u'Zuz\xfcge'))
-
-        document = create(Builder('document')
-                          .within(dossier)
-                          .with_dummy_content()
-                          .titled(u'Some File'))
-
-        with self.assertRaises(Unauthorized):
-            browser.login(user_b).visit(document)
-
-    def test_make_sure_private_root_has_no_additional_local_roles(self):
-        self.assertEquals({'test_user_1_': ['Owner']},
-                          self.root.__ac_local_roles__)
-
-
 class TestMyRepositoryAction(FunctionalTestCase):
 
     layer = OPENGEVER_FUNCTIONAL_PRIVATE_FOLDER_LAYER
 
     def setUp(self):
-        super(TestPrivateFolderWorkflow, self).setUp()
+        super(TestMyRepositoryAction, self).setUp()
         self.root = create(Builder('private_root'))
         self.folder = create_members_folder(self.root)
 
