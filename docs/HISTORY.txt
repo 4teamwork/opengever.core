@@ -5,6 +5,9 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Include Hotfixes in development and test buildouts.
+  [lgraf]
+
 - Translate missing "open detail view" in bumblebee-overlay.
   [elioschmutz]
 
