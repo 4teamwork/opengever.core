@@ -106,6 +106,7 @@
       <li tal:define="link view/overlay/get_detail_view_url" tal:condition="python:not view.on_detail_view and link">
         <a id="action-view"
             tal:attributes="href link"
+            i18n:domain="opengever.bumblebee"
             i18n:translate="label_open_detail_view">Open detail view</a>
       </li>
     </ul>
