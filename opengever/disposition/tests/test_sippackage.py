@@ -37,7 +37,6 @@ class TestSIPPackage(FunctionalTestCase):
             self.assertEquals(
                 u'SIP_20161106_PLONE_10\xe434', package.get_folder_name())
 
-
     def test_ablieferungs_metadata(self):
         dossier = create(Builder('dossier').within(self.folder).as_expired())
         disposition = create(Builder('disposition')
@@ -70,6 +69,20 @@ class TestSIPPackage(FunctionalTestCase):
         dossier_a_model, dossier_b_model = package.content_folder.folders
         self.assertEquals(1, len(dossier_a_model.files))
         self.assertEquals(0, len(dossier_b_model.files))
+
+    def test_handles_documents_without_a_file_correctly(self):
+        dossier_a = create(Builder('dossier').within(self.folder).as_expired())
+        create(Builder('document').with_dummy_content().within(dossier_a))
+        create(Builder('document').within(dossier_a))
+        disposition = create(Builder('disposition')
+                             .having(dossiers=[dossier_a])
+                             .within(self.folder))
+
+        package = SIPPackage(disposition)
+
+        dossier_a_model = package.content_folder.folders[0]
+        self.assertEquals(1, len(dossier_a_model.files))
+        self.assertEquals(2, len(package.dossiers[0].documents))
 
     def test_zipfile_structure(self):
         dossier_a = create(Builder('dossier').within(self.folder).as_expired())

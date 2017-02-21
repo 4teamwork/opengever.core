@@ -5,6 +5,9 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Fix an error when creating a SIP export of documents without a file.
+  [phgross]
+
 - Allow `Administrator` to view and edit private dossiers and private
   folders.
   [deiferni]
