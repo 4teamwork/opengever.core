@@ -2,6 +2,7 @@ from AccessControl.interfaces import IRoleManager
 from ftw.mail.interfaces import IMailSettings
 from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.ogds.base.sync.ogds_updater import sync_ogds
+from opengever.private.root import IPrivateRoot
 from opengever.setup import DEVELOPMENT_USERS_GROUP
 from opengever.setup.ldap_creds import configure_ldap_credentials
 from plone.app.controlpanel.language import ILanguageSelectionSchema
@@ -14,7 +15,6 @@ from Products.PluggableAuthService.interfaces.plugins import IPropertiesPlugin
 from sqlalchemy import MetaData
 from zope.component import getAdapter
 from zope.component import getUtility
-
 
 # these profiles will be installed automatically
 EXTENSION_PROFILES = (
@@ -187,7 +187,7 @@ class GeverDeployment(object):
 
     def configure_development_options(self):
         for obj in self.site.listFolderContents():
-            if IRoleManager.providedBy(obj):
+            if IRoleManager.providedBy(obj) and not IPrivateRoot.providedBy(obj):
                 obj.manage_addLocalRoles(
                     DEVELOPMENT_USERS_GROUP,
                     ["Contributor", "Editor", "Reader"])
