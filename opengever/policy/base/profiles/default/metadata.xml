@@ -5,6 +5,9 @@
     <dependency>profile-plone.app.registry:default</dependency>
     <dependency>profile-plone.app.relationfield:default</dependency>
 
+    <dependency>profile-ftw.keywordwidget:default</dependency>
+    <dependency>profile-ftw.keywordwidget:select2js</dependency>
+
     <dependency>profile-opengever.ogds.base:default</dependency>
     <dependency>profile-opengever.globalindex:default</dependency>
     <dependency>profile-opengever.base:default</dependency>
@@ -33,8 +36,6 @@
     <dependency>profile-opengever.private:default</dependency>
     <dependency>profile-opengever.disposition:default</dependency>
     <dependency>profile-ftw.datepicker:default</dependency>
-    <dependency>profile-ftw.keywordwidget:default</dependency>
-    <dependency>profile-ftw.keywordwidget:select2js</dependency>
     <dependency>profile-ftw.contentmenu:default</dependency>
     <dependency>profile-ftw.zipexport:default</dependency>
     <dependency>profile-plone.formwidget.autocomplete:default</dependency>
