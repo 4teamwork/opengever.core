@@ -59,17 +59,22 @@ class TestTaskIntegration(FunctionalTestCase):
         self.assertEquals([t2.get_sql_object()], view.get_sub_tasks())
 
     @browsing
-    def test_task_title_length_is_validated(self, browser):
+    def test_task_title_length_is_validated_to_a_max_of_256(self, browser):
         dossier = create(Builder('dossier'))
         browser.login().open(dossier, view='++add++opengever.task.task')
 
-        browser.fill({'Title': 300*'x',
+        browser.fill({'Title': 257 * 'x',
                       'Task Type': 'To comment',
                       'Responsible': TEST_USER_ID})
         browser.find('Save').click()
 
         self.assertEquals({u'Title': ['Value is too long']},
                           erroneous_fields())
+
+        browser.fill({'Title': 256 * 'x'})
+        browser.find('Save').click()
+        self.assertTrue(len(dossier.objectValues()),
+                        'Expect one item in dossier')
 
     def test_relateddocuments(self):
         # create document and append it to the relatedItems of the task
@@ -87,7 +92,7 @@ class TestTaskIntegration(FunctionalTestCase):
         results = [aa.Title for aa in view.table_source.build_query()]
         self.assertTrue(doc3.Title() in results)
 
-        #check sorting
+        # check sorting
         view.request.set('sort', u'sortable_title')
         results = [aa.Title for aa in view.table_source.build_query()]
         self.assertTrue(results == [doc3.Title(), doc1.Title(), doc2.Title()])
