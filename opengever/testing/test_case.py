@@ -164,12 +164,6 @@ class FunctionalTestCase(TestCase):
     opengever.testing.browser whenever possible.
     """
 
-    def assertPageContains(self, text):
-        self.assertIn(text, self.browser.contents)
-
-    def assertPageContainsNot(self, text):
-        self.assertNotIn(text, self.browser.contents)
-
     def assertResponseStatus(self, code):
         self.assertEquals(code, self.portal.REQUEST.response.status)
 
