@@ -53,8 +53,8 @@ class FunctionalTestCase(TestCase):
 
         self.grant('Contributor', 'Editor', 'Reader')
 
-        # necessary to force tabbed-view into correct mode, otherwise it only
-        # renders empty views/tabs.
+        # necessary to force tabbed-view into HTML mode, because
+        # ftw.testbrowser does not support JavaScript.
         api.portal.set_registry_record(
             'ftw.tabbedview.interfaces.ITabbedView.extjs_enabled', False)
 
