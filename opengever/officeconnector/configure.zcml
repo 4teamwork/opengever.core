@@ -26,8 +26,8 @@
         method="GET"
         for="opengever.document.document.IDocumentSchema"
         accept="application/json"
-        factory=".service.OfficeConnectorAttachToken"
-        name="officeconnector_attach_token"
+        factory=".service.OfficeConnectorAttachURL"
+        name="officeconnector_attach_url"
         permission="zope2.View"
         />
 
@@ -35,8 +35,8 @@
         method="GET"
         for="opengever.document.document.IDocumentSchema"
         accept="application/json"
-        factory=".service.OfficeConnectorCheckoutToken"
-        name="officeconnector_checkout_token"
+        factory=".service.OfficeConnectorCheckoutURL"
+        name="officeconnector_checkout_url"
         permission="zope2.View"
         />
 

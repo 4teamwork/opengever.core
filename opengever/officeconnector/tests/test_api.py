@@ -49,7 +49,7 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
                                        'ordnungsposition/'
                                        'dossier-1/'
                                        'document-1/'
-                                       'officeconnector_attach_token')
+                                       'officeconnector_attach_url')
         self.assertEquals(404, attach_response.status_code)
 
         checkout_response = self.api.get('/'
@@ -57,7 +57,7 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
                                          'ordnungsposition/'
                                          'dossier-1/'
                                          'document-1/'
-                                         'officeconnector_checkout_token')
+                                         'officeconnector_checkout_url')
         self.assertEquals(404, checkout_response.status_code)
 
     def test_attach_to_outlook(self):
@@ -73,7 +73,7 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
                                 'ordnungsposition/'
                                 'dossier-1/'
                                 'document-1/'
-                                'officeconnector_attach_token')
+                                'officeconnector_attach_url')
         self.assertEquals(200, response.status_code)
 
         response_json = response.json()
@@ -97,7 +97,7 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
                                 'ordnungsposition/'
                                 'dossier-1/'
                                 'document-1/'
-                                'officeconnector_checkout_token')
+                                'officeconnector_checkout_url')
         self.assertEquals(200, response.status_code)
 
         response_json = response.json()

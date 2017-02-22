@@ -11,7 +11,7 @@ from zExceptions import NotFound
 import json
 
 
-class OfficeConnectorToken(Service):
+class OfficeConnectorURL(Service):
 
     def create_officeconnector_url(self, payload):
         # Feature used wrong - an action is always required
@@ -56,7 +56,7 @@ class OfficeConnectorToken(Service):
         return json.dumps(response)
 
 
-class OfficeConnectorAttachToken(OfficeConnectorToken):
+class OfficeConnectorAttachURL(OfficeConnectorURL):
 
     def render(self):
         # Feature disabled or used wrong
@@ -66,7 +66,7 @@ class OfficeConnectorAttachToken(OfficeConnectorToken):
         return self.create_officeconnector_url(payload)
 
 
-class OfficeConnectorCheckoutToken(OfficeConnectorToken):
+class OfficeConnectorCheckoutURL(OfficeConnectorURL):
 
     def render(self):
         # Feature disabled or used wrong
