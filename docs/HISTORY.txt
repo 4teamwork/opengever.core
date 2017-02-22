@@ -5,7 +5,13 @@ Changelog
 4.15.4 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Allow certain z3c forms to be prefilled via GET requests. This is required
+  after the introduction of Products.PloneHotfix20160830.
+  [lgraf]
+
+- Include Hotfixes in development and test buildouts.
+  [lgraf]
+
 
 
 4.15.3 (2017-03-13)

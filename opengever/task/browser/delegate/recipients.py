@@ -40,6 +40,8 @@ class ISelectRecipientsSchema(Schema):
 class SelectRecipientsForm(DelegateWizardFormMixin, Form):
     grok.context(ITask)
 
+    allow_prefill_from_GET_request = True  # XXX
+
     fields = Fields(ISelectRecipientsSchema)
     fields['responsibles'].widgetFactory = \
         autocomplete_widget.AutocompleteMultiFieldWidget
