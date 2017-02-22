@@ -89,6 +89,7 @@ class GenerateExcerpt(AutoExtensibleForm, EditForm):
 
     has_model_breadcrumbs = True
     ignoreContext = True
+    allow_prefill_from_GET_request = True
     schema = IGenerateExcerpt
 
     template = ViewPageTemplateFile('templates/excerpt.pt')
