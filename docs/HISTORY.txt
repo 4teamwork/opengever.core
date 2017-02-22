@@ -5,6 +5,13 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Allow certain z3c forms to be prefilled via GET requests. This is required
+  after the introduction of Products.PloneHotfix20160830.
+  [lgraf]
+
+- Include Hotfixes in development and test buildouts.
+  [lgraf]
+
 - Translate missing "open detail view" in bumblebee-overlay.
   [elioschmutz]
 
