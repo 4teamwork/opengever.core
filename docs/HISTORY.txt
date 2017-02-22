@@ -5,6 +5,9 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Compare strings in the dossier-comments-overlay newline encoding insensitive.
+  [elioschmutz]
+
 - Improve removal protocol title.
   [phgross]
 

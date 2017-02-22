@@ -36,7 +36,18 @@
 
         overlay.getOverlay().on('onBeforeClose', function(event){
           // Show message if there are unsaved changes
-          if (editNoteLink.data('notecache') !== overlay.getOverlay().find('textarea').val()){
+
+          /*
+          FIX: If you modify the textarea field for comments in the dossier
+          edit form, the newline encoding will be CR+LF (\r\n). After rendering the
+          template, the newline-encoding in the textarea will be LF (\n) and in the
+          data-attribute it is still CR+LF. Comparing these two strings will always
+          return false.
+
+          To fix this issue, we replace the CR+LF newlines with the LF newlines.
+           */
+          var notecache = editNoteLink.data('notecache').replace(/\r\n/g, '\n');
+          if (notecache !== overlay.getOverlay().find('textarea').val()){
             if (confirm(i18n.note_text_confirm_abord)){
               overlay.getOverlay().find('textarea').val(editNoteLink.data('notecache'));
               return true;
@@ -79,7 +90,7 @@
             editNoteLink.find('.add').addClass('hide');
           } else {
             editNoteLink.find('.edit').addClass('hide');
-            editNoteLink.find('.add').removeClass('hide');            
+            editNoteLink.find('.add').removeClass('hide');
           }
           closeNote();
           successMessage();
