@@ -86,6 +86,17 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
         payload = self.get_oc_url_response(document, action).json()
         return jwt.decode(payload['url'].split(':')[-1], verify=False)
 
+    def get_oc_payload_response(self, document, action):
+        return self.api.get(
+            '/oc_{}/'.format(action)
+            + api.content.get_uuid(document))
+
+    def get_oc_payload_response_status(self, document, action):
+        return self.get_oc_payload_response(document, action).status_code
+
+    def get_oc_payload_json(self, document, action):
+        return self.get_oc_payload_response(document, action).json()
+
     def test_returns_404_when_feature_disabled(self):
         self.assertEquals(404, self.get_oc_url_response_status(self.document_without_attachment, 'attach')) # noqa
         self.assertEquals(404, self.get_oc_url_response_status(self.document_with_attachment, 'attach')) # noqa
@@ -95,6 +106,10 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
     def test_attach_to_outlook_url_without_file(self):
         self.enable_attach_to_outlook()
         self.assertEquals(404, self.get_oc_url_response_status(self.document_without_attachment, 'attach')) # noqa
+
+    def test_attach_to_outlook_payload_without_file(self):
+        self.enable_attach_to_outlook()
+        self.assertEquals(404, self.get_oc_payload_response_status(self.document_without_attachment, 'attach')) # noqa
 
     def test_attach_to_outlook_url_with_file(self):
         self.enable_attach_to_outlook()
@@ -108,6 +123,21 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
         self.assertTrue('/oc_attach/' in token['url'])
         self.assertEquals(token['action'], 'attach')
         self.assertEquals(TEST_USER_ID, token['sub'])
+
+    def test_attach_to_outlook_payload_with_file(self):
+        self.enable_attach_to_outlook()
+        token = self.get_oc_url_jwt(self.document_with_attachment, 'attach') # noqa
+
+        # Test we can actually fetch an action payload based on the URL JWT
+        response = self.api.get(token['url'])
+        self.assertEquals(200, response.status_code)
+
+        payload = response.json()
+        self.assertTrue('csrf-token' in payload)
+        self.assertTrue('download' in payload)
+        self.assertEquals(self.document_with_attachment.file.contentType, payload['content-type']) # noqa
+        self.assertEquals(self.document_with_attachment.absolute_url(), payload['document-url']) # noqa
+        self.assertEquals(self.document_with_attachment.get_filename(), payload['filename']) # noqa
 
     def test_document_checkout_url_without_file(self):
         self.enable_checkout()

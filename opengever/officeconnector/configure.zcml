@@ -40,4 +40,13 @@
         permission="zope2.View"
         />
 
+    <plone:service
+        method="GET"
+        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+        accept="application/json"
+        factory=".service.OfficeConnectorAttachPayload"
+        name="oc_attach"
+        permission="zope2.View"
+        />
+
 </configure>
