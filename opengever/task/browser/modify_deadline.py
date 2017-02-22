@@ -44,6 +44,7 @@ class ModifyDeadlineForm(Form):
 
     fields = Fields(IModifyDeadlineSchema)
     ignoreContext = True
+    allow_prefill_from_GET_request = True  # XXX
 
     label = _(u'title_modify_deadline', u'Modify deadline')
 

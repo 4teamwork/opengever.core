@@ -66,6 +66,7 @@ class ModelEditForm(AutoExtensibleForm, EditForm):
     """
 
     ignoreContext = True
+    allow_prefill_from_GET_request = True  # XXX
     has_model_breadcrumbs = True
     schema = None
 
