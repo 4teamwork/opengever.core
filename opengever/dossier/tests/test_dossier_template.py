@@ -419,7 +419,7 @@ class TestDossierTemplateAddWizard(FunctionalTestCase):
     def test_dossiertemplate_restrict_keywords(self, browser):
         values = {
             'title': u'My template',
-            'keywords': (u'secret', u'special'),
+            'keywords': (u'secret\xe4', u'special'),
             'restrict_keywords': True,
             'predefined_keywords': True
             }
@@ -446,7 +446,7 @@ class TestDossierTemplateAddWizard(FunctionalTestCase):
 
         self.assertEquals(list(values['keywords']), keywords.options_labels)
         browser.click_on('Save')
-        self.assertEquals((u'secret', u'special'),
+        self.assertEquals((u'secret\xe4', u'special'),
                           IDossier(browser.context).keywords)
 
     @browsing
