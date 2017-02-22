@@ -4,6 +4,7 @@ from ftw.builder import create
 from ftw.pdfgenerator.builder import Builder as PDFBuilder
 from ftw.pdfgenerator.interfaces import ILaTeXView
 from ftw.pdfgenerator.utils import provide_request_layer
+from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from lxml.cssselect import CSSSelector
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_UNWORTHY
@@ -130,3 +131,16 @@ class TestRemovalProtocolLaTeXView(FunctionalTestCase):
             u'\\bf Title & Angebot FD 43929 \\\\%%\n\\bf '
             'Transfer number & RSX 382 \\\\%%',
             self.get_view(disposition).get_disposition_metadata())
+
+    @browsing
+    def test_pdf_title_is_removal_protocol_for_disposition_title(self, browser):
+        disposition = create(Builder('disposition')
+                             .having(title=u'Angebot FD 43929',
+                                     transfer_number='RSX 382'))
+
+        browser.login().open(disposition, view='removal_protocol')
+
+        self.assertEquals(
+            'attachment; filename="Removal protocol for disposition '
+            'Angebot FD 43929.pdf"',
+            browser.headers.get('content-disposition'))
