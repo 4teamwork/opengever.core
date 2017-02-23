@@ -507,7 +507,7 @@ msgstr "Kommentar"
 #. Default: "Create Dossier note"
 #: ./opengever/dossier/viewlets/templates/note.pt:33
 msgid "label_dossier_note_placeholder"
-msgstr "Dossier Kommentar erfassen"
+msgstr "Kommentar erfassen"
 
 #. Default: "Dossier templates"
 #: ./opengever/dossier/browser/tabbed.py:108
