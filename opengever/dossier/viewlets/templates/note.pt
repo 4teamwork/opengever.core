@@ -35,8 +35,8 @@
                   tal:content="options/note"
                   i18n:attributes="placeholder label_dossier_note_placeholder"/>
 
-        <div class="button-group">
-          <button class="button confirm"
+        <div class="formControls">
+          <button class="button confirm context"
                   i18n:translate="label_save">Save</button>
           <button class="button decline"
                   i18n:translate="label_cancel">Cancel</button>
