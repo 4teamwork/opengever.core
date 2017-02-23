@@ -161,6 +161,10 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
         self.enable_checkout()
         self.assertEquals(404, self.get_oc_url_response_status(self.document_without_attachment, 'checkout')) # noqa
 
+    def test_document_checkout_payload_without_file(self):
+        self.enable_checkout()
+        self.assertEquals(404, self.get_oc_url_response_status(self.document_without_attachment, 'checkout')) # noqa
+
     def test_document_checkout_url_with_file(self):
         self.enable_checkout()
         self.assertEquals(200, self.get_oc_url_response_status(self.document_with_attachment, 'checkout')) # noqa
@@ -173,3 +177,18 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
         self.assertTrue('/oc_checkout/' in token['url'])
         self.assertEquals(token['action'], 'checkout')
         self.assertEquals(TEST_USER_ID, token['sub'])
+
+    def test_document_checkout_payload_with_file(self):
+        self.enable_checkout()
+        token = self.get_oc_url_jwt(self.document_with_attachment, 'checkout') # noqa
+
+        # Test we can actually fetch an action payload based on the URL JWT
+        response = self.api.get(token['url'])
+        self.assertEquals(200, response.status_code)
+
+        payload = response.json()
+        self.assertTrue('csrf-token' in payload)
+        self.assertTrue('download' in payload)
+        self.assertEquals(self.document_with_attachment.file.contentType, payload['content-type']) # noqa
+        self.assertEquals(self.document_with_attachment.absolute_url(), payload['document-url']) # noqa
+        self.assertEquals(self.document_with_attachment.get_filename(), payload['filename']) # noqa

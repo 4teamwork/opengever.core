@@ -161,3 +161,27 @@ class OfficeConnectorAttachPayload(OfficeConnectorPayload):
     def render(self):
         self.request.response.setHeader('Content-type', 'application/json')
         return json.dumps(self.get_base_payload())
+
+
+class OfficeConnectorCheckoutPayload(OfficeConnectorPayload):
+    """Issue JSON instruction payloads for OfficeConnector.
+
+    Consists of the minimal instruction set with which to perform a full
+    checkout checkin cycle for a file attached to a document.
+    """
+
+    def render(self):
+        payload = self.get_base_payload()
+
+        # A permission check to verify the user is also able to upload
+        if not api.user.has_permission('Modify portal content',
+                                       obj=self.document):
+            raise Forbidden
+
+        payload['checkin-with-comment'] = '@@checkin_document'
+        payload['checkin-without-comment'] = 'checkin_without_comment'
+        payload['checkout'] = '@@checkout_documents'
+        payload['edit-form'] = 'edit'
+
+        self.request.response.setHeader('Content-type', 'application/json')
+        return json.dumps(payload)
