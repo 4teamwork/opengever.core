@@ -502,7 +502,7 @@ msgstr "Dokumente"
 #. Default: "Dossiernote"
 #: ./opengever/dossier/viewlets/byline.py:115
 msgid "label_dossier_note"
-msgstr "Dossier Kommentar"
+msgstr "Kommentar"
 
 #. Default: "Create Dossier note"
 #: ./opengever/dossier/viewlets/templates/note.pt:33
