@@ -208,6 +208,15 @@
                 </div>
               </div>
 
+              <div class="item zip-download">
+                <span class="title" i18n:translate="" i18n:domain="ftw.zipexport">Export as Zip</span>
+                <a href="#" class="download-zipexport-btn"
+                   tal:attributes="href view/url_zipexport"
+                   title="label_zip_download"
+                   i18n:attributes="title">
+                </a>
+              </div>
+
             </div>
 
             <div class="list-group-item excerpts" tal:define="excerpts view/manually_generated_excerpts">
