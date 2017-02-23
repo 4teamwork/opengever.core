@@ -139,6 +139,24 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
         self.assertEquals(self.document_with_attachment.absolute_url(), payload['document-url']) # noqa
         self.assertEquals(self.document_with_attachment.get_filename(), payload['filename']) # noqa
 
+    def test_attach_to_outlook(self):
+        self.enable_attach_to_outlook()
+        token = self.get_oc_url_jwt(self.document_with_attachment, 'attach') # noqa
+
+        # Test we can actually fetch an action payload based on the URL JWT
+        payload = self.api.get(token['url']).json()
+
+        content_type = payload['content-type']
+        filename = payload['filename']
+
+        # Test fetching the indicated file
+        self.api.headers.update({'Accept': content_type})
+        response = self.api.get('/'.join((payload['document-url'], payload['download']))) # noqa
+
+        self.assertEquals(200, response.status_code)
+        self.assertEquals(response.headers['content-type'], content_type) # noqa
+        self.assertEquals(response.headers['content-disposition'], 'attachment; filename="{}"'.format(filename)) # noqa
+
     def test_document_checkout_url_without_file(self):
         self.enable_checkout()
         self.assertEquals(404, self.get_oc_url_response_status(self.document_without_attachment, 'checkout')) # noqa
