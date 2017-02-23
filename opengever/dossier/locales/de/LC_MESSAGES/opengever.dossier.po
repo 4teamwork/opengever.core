@@ -374,7 +374,7 @@ msgstr "Dossier ablegen"
 #. Default: "${title} notes / comments"
 #: ./opengever/dossier/viewlets/templates/note.pt:28
 msgid "heading_dossier_note"
-msgstr "`${title}` Kommentar"
+msgstr "Kommentar zu Dossier `${title}`"
 
 #. Default: "Move Items"
 #: ./opengever/dossier/move_items.py:56
