@@ -5,6 +5,10 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Implement several display improvements for the Dossier note overlay
+  according to the feedback of @phabegger. Check #2624 for details.
+  [mathias.leimgruber]
+
 - Compare strings in the dossier-comments-overlay newline encoding insensitive.
   [elioschmutz]
 
