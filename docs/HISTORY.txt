@@ -5,6 +5,9 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Improve removal protocol title.
+  [phgross]
+
 - Hide 'Date of completion'-field on tasks add-form.
   [elioschmutz]
 

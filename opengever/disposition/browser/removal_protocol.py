@@ -31,6 +31,17 @@ class RemovalProtocol(grok.View, ExportPDFView):
 
         return ExportPDFView.__call__(self)
 
+    def get_build_arguments(self):
+        args = super(RemovalProtocol, self).get_build_arguments()
+        args['filename'] = self.get_pdf_title()
+        return args
+
+    def get_pdf_title(self):
+        title = _(u'title_removal_protocol',
+                  default=u'Removal protocol for disposition ${disposition}',
+                  mapping={'disposition': self.context.title})
+        return translate(title, context=self.request)
+
 
 class DestroyedDossierListing(LaTexListing):
     grok.provides(ILaTexListing)
