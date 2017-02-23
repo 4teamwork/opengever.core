@@ -22,7 +22,15 @@
         // Move for correct stacking with overlaymask
         overlayElement = $('#editNoteOverlay');
         $('body').append(overlayElement);
-        overlay = overlayElement.overlay().data('overlay');
+        var options = {
+          left: 'invalid', // Only way to have no "left" online style on overlay.
+          onBeforeLoad: function(event){
+            // Set height
+            var textarea = overlayElement.find('textarea');
+            textarea.height(($(window).height() - textarea.offset().top) * 0.7);
+          }
+        };
+        overlay = overlayElement.overlay(options).data('overlay');
 
         // Bind overlay events
         overlay.getOverlay().on('click', 'button.confirm', function(event){
