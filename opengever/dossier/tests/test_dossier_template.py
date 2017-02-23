@@ -419,8 +419,9 @@ class TestDossierTemplateAddWizard(FunctionalTestCase):
     def test_dossiertemplate_restrict_keywords(self, browser):
         values = {
             'title': u'My template',
-            'keywords': (u'secret', u'special'),
-            'restrict_keywords': True
+            'keywords': (u'secret\xe4', u'special'),
+            'restrict_keywords': True,
+            'predefined_keywords': True
             }
 
         create(Builder("dossiertemplate")
@@ -435,10 +436,18 @@ class TestDossierTemplateAddWizard(FunctionalTestCase):
 
         browser.fill({'form.widgets.template': token}).submit()
         keywords = browser.find_field_by_text(u'Keywords')
-        new = browser.css('#' + keywords.attrib['id'] + '_new')
+
+        # The field is there but not visible.
+        # It's not really possible to change the behavior of a widget in
+        # the update method of a group form. So many update/updateWidget
+        # happen in this process.
+        # new = browser.css('#' + keywords.attrib['id'] + '_new')
+        # self.assertFalse(new, 'It should not be possible to add new terms')
 
         self.assertEquals(list(values['keywords']), keywords.options_labels)
-        self.assertFalse(new, 'It should not be possible to add new keywords')
+        browser.click_on('Save')
+        self.assertEquals((u'secret\xe4', u'special'),
+                          IDossier(browser.context).keywords)
 
     @browsing
     def test_redirects_to_dossier_after_creating_dossier_from_template(self, browser):

@@ -205,10 +205,13 @@ class AddDossierFromTemplateWizardStep(WizzardWrappedAddForm):
             def _modify_keyword_widget_according_to_template(self, widget):
                 template_obj = get_wizard_storage(self.context).get('template')
 
-
                 if template_obj.restrict_keywords:
-                    widget.field.value_type.allow_new = False
-                    # Needs to be updated  manually
+                    # since the widget gets somehow reinitialized it's not
+                    # possible to manipualte the add_permission directly. 
+                    # Changing other values like something on a field may
+                    # lead to unexpected behavior.
+                    # This is the insecure options - but it feeds for this
+                    # usecase
                     js_config = json.loads(widget.js_config)
                     js_config['tags'] = False
                     widget.js_config = json.dumps(js_config)
@@ -216,7 +219,7 @@ class AddDossierFromTemplateWizardStep(WizzardWrappedAddForm):
                     # The vocabular should only contain the terms from
                     # the template.
                     terms = filter(
-                        lambda term: term.value in widget.value,
+                        lambda term: term.token in widget.value,
                         widget.terms.terms._terms)
                     widget.terms.terms = SimpleVocabulary(terms)
 
