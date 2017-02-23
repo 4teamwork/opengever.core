@@ -2,12 +2,13 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.api.testing import RelativeSession
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ZSERVER_TESTING
+from opengever.officeconnector.interfaces import IOfficeConnectorSettings
 from opengever.testing import FunctionalTestCase
 from plone import api
-from plone.app.testing import SITE_OWNER_NAME
-from plone.app.testing import SITE_OWNER_PASSWORD
+from plone.app.testing import TEST_USER_ID
+from plone.app.testing import TEST_USER_NAME
+from plone.app.testing import TEST_USER_PASSWORD
 
-import json
 import jwt
 import transaction
 
@@ -22,7 +23,9 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
 
         self.api = RelativeSession(self.portal.absolute_url())
         self.api.headers.update({'Accept': 'application/json'})
-        self.api.auth = (SITE_OWNER_NAME, SITE_OWNER_PASSWORD)
+        self.api.auth = (TEST_USER_NAME, TEST_USER_PASSWORD)
+
+        self.original_file_content = u'original file content'
 
         self.repo = create(Builder('repository_root')
                            .having(id='ordnungssystem',
@@ -35,75 +38,90 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
         self.dossier = create(Builder('dossier')
                               .within(self.repofolder)
                               .titled(u'Mein Dossier'))
-        self.document = create(Builder('document')
-                               .within(self.dossier))
+        # We rely on the creation order of these documents for the tests!
+        # ZServer craps out if you have non-ascii in the document titles!
+        self.document_without_attachment = create(Builder('document')
+                                                  .titled(u'docu-1')
+                                                  .within(self.dossier))
+        self.document_with_attachment = create(Builder('document')
+                                               .titled(u'docu-2')
+                                               .within(self.dossier)
+                                               .attach_file_containing(
+                                                   self.original_file_content))
 
         lang_tool = api.portal.get_tool('portal_languages')
         lang_tool.setDefaultLanguage('de-ch')
         lang_tool.supported_langs = ['fr-ch', 'de-ch']
         transaction.commit()
 
+    def enable_attach_to_outlook(self):
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+        transaction.commit()
+
+    def enable_checkout(self):
+        api.portal.set_registry_record(
+            'direct_checkout_and_edit_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+        transaction.commit()
+
+    def get_oc_url_response(self, document, action):
+        # The requests based api tester expects its paths to start from the
+        # site root so we strip out the site id from the physical path.
+        site_id = api.portal.get().id
+        path_segments = [s for s in document.getPhysicalPath() if s != site_id]
+        path_segments.append('officeconnector_{}_url'.format(action))
+        return self.api.get('/'.join(path_segments))
+
+    def get_oc_url_response_status(self, document, action):
+        return self.get_oc_url_response(document, action).status_code
+
+    def get_oc_url_payload(self, document, action):
+        return self.get_oc_url_response(document, action).json()
+
+    def get_oc_url_jwt(self, document, action):
+        payload = self.get_oc_url_response(document, action).json()
+        return jwt.decode(payload['url'].split(':')[-1], verify=False)
+
     def test_returns_404_when_feature_disabled(self):
-        attach_response = self.api.get('/'
-                                       'ordnungssystem/'
-                                       'ordnungsposition/'
-                                       'dossier-1/'
-                                       'document-1/'
-                                       'officeconnector_attach_url')
-        self.assertEquals(404, attach_response.status_code)
+        self.assertEquals(404, self.get_oc_url_response_status(self.document_without_attachment, 'attach')) # noqa
+        self.assertEquals(404, self.get_oc_url_response_status(self.document_with_attachment, 'attach')) # noqa
+        self.assertEquals(404, self.get_oc_url_response_status(self.document_without_attachment, 'checkout')) # noqa
+        self.assertEquals(404, self.get_oc_url_response_status(self.document_with_attachment, 'checkout')) # noqa
 
-        checkout_response = self.api.get('/'
-                                         'ordnungssystem/'
-                                         'ordnungsposition/'
-                                         'dossier-1/'
-                                         'document-1/'
-                                         'officeconnector_checkout_url')
-        self.assertEquals(404, checkout_response.status_code)
+    def test_attach_to_outlook_url_without_file(self):
+        self.enable_attach_to_outlook()
+        self.assertEquals(404, self.get_oc_url_response_status(self.document_without_attachment, 'attach')) # noqa
 
-    def test_attach_to_outlook(self):
-        registry_setting = {}
-        registry_setting['opengever'
-                         '.officeconnector'
-                         '.interfaces'
-                         '.IOfficeConnectorSettings'
-                         '.attach_to_outlook_enabled'] = True
-        self.api.patch('/@registry', json.dumps(registry_setting))
-        response = self.api.get('/'
-                                'ordnungssystem/'
-                                'ordnungsposition/'
-                                'dossier-1/'
-                                'document-1/'
-                                'officeconnector_attach_url')
-        self.assertEquals(200, response.status_code)
+    def test_attach_to_outlook_url_with_file(self):
+        self.enable_attach_to_outlook()
+        self.assertEquals(200, self.get_oc_url_response_status(self.document_with_attachment, 'attach')) # noqa
 
-        response_json = response.json()
-        self.assertTrue('token' in response_json)
+        payload = self.get_oc_url_payload(self.document_with_attachment, 'attach') # noqa
+        self.assertTrue('url' in payload)
 
-        token = jwt.decode(response_json['token'], verify=False)
-        self.assertTrue('download' in token)
+        token = self.get_oc_url_jwt(self.document_with_attachment, 'attach') # noqa
+        self.assertTrue('url' in token)
+        self.assertTrue('/oc_attach/' in token['url'])
         self.assertEquals(token['action'], 'attach')
-        self.assertEquals(SITE_OWNER_NAME, token['sub'])
+        self.assertEquals(TEST_USER_ID, token['sub'])
 
-    def test_document_checkout(self):
-        registry_setting = {}
-        registry_setting['opengever'
-                         '.officeconnector'
-                         '.interfaces'
-                         '.IOfficeConnectorSettings'
-                         '.direct_checkout_and_edit_enabled'] = True
-        self.api.patch('/@registry', json.dumps(registry_setting))
-        response = self.api.get('/'
-                                'ordnungssystem/'
-                                'ordnungsposition/'
-                                'dossier-1/'
-                                'document-1/'
-                                'officeconnector_checkout_url')
-        self.assertEquals(200, response.status_code)
+    def test_document_checkout_url_without_file(self):
+        self.enable_checkout()
+        self.assertEquals(404, self.get_oc_url_response_status(self.document_without_attachment, 'checkout')) # noqa
 
-        response_json = response.json()
-        self.assertTrue('token' in response_json)
+    def test_document_checkout_url_with_file(self):
+        self.enable_checkout()
+        self.assertEquals(200, self.get_oc_url_response_status(self.document_with_attachment, 'checkout')) # noqa
 
-        token = jwt.decode(response_json['token'], verify=False)
-        self.assertTrue('download' in token)
+        payload = self.get_oc_url_payload(self.document_with_attachment, 'checkout') # noqa
+        self.assertTrue('url' in payload)
+
+        token = self.get_oc_url_jwt(self.document_with_attachment, 'checkout') # noqa
+        self.assertTrue('url' in token)
+        self.assertTrue('/oc_checkout/' in token['url'])
         self.assertEquals(token['action'], 'checkout')
-        self.assertEquals(SITE_OWNER_NAME, token['sub'])
+        self.assertEquals(TEST_USER_ID, token['sub'])
