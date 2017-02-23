@@ -107,7 +107,7 @@
       }
 
       // Bind Edit note link
-      $(document).on('click', '#editNoteLink', function(){
+      $(document).on('click', '#editNoteLink', function(event){
         event.preventDefault();
         showNote();
       });
