@@ -208,8 +208,8 @@
                 </div>
               </div>
 
-              <div class="item zip-download" i18n:domain="ftw.zipexport">
-                <span class="title" i18n:translate="">Export as Zip</span>
+              <div class="item zip-download">
+                <span class="title" i18n:translate="" i18n:domain="ftw.zipexport">Export as Zip</span>
                 <a href="#" class="download-zipexport-btn"
                    tal:attributes="href view/url_zipexport"
                    title="label_zip_download"
