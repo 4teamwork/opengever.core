@@ -24,10 +24,10 @@
   <div id="editNoteOverlay" class="overlay">
     <div>
       <h1>
-        <u i18n:translate="heading_dossier_note">
+        <tal:title i18n:translate="heading_dossier_note">
           <span i18n:name="title" tal:replace="context/Title" />
           notes / comments
-        </u>
+        </tal:title>
       </h1>
       <form>
         <textarea name="note"
