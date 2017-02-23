@@ -38,7 +38,7 @@ dl.portlet ul.filetree ul.navTree li a {
   padding: 0;
   display: block;
   padding-left: 0.25em;
-  color: #333333;
+  color: #333;
   border: none;
 }
 dl.portlet ul.filetree img.spinner{
@@ -81,12 +81,8 @@ dl.portlet ul.navTree li {
 
 #portal-orgunit-selector dt.actionMenuHeader {
   border: 1px solid #bfbfbf;
-  background-color: #FFF;
-  box-shadow: 0 0 0.8em -0.75em #000000 inset;
-  -moz-box-shadow: 0px 1px 5px -4px #bfbfbf inset;
-  -webkit-box-shadow: 0px 1px 5px -4px #bfbfbf inset;
-  moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
+  background-color: $color-white;
+  box-shadow: 0 0 0.8em -0.75em #000 inset;
   border-radius: 4px;
   height: 27px;
   overflow: hidden;
@@ -115,16 +111,16 @@ dl.portlet ul.navTree li {
 }
 
 #portal-orgunit-selector dd {
-  background-color: #FFFFFF;
+  background-color: $color-white;
 }
 
 #portal-orgunit-selector div.item-content:hover {
-  background-color: #E6E6E6;
+  background-color: $gray-dark;
 }
 
 #portal-orgunit-selector a,
 #portal-orgunit-selector a:hover {
-  color: #333333;
+  color: #333;
   text-decoration: none;
 }
 
@@ -147,12 +143,8 @@ dl.portlet ul.navTree li {
 
 #portal-notifications dt.notificationsMenuHeader {
   border: 1px solid #bfbfbf;
-  background-color: #FFF;
-  box-shadow: 0 0 0.8em -0.75em #000000 inset;
-  -moz-box-shadow: 0 1px 5px -4px #bfbfbf inset;
-  -webkit-box-shadow: 0 1px 5px -4px #bfbfbf inset;
-  moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
+  background-color: $color-white;
+  box-shadow: 0 0 0.8em -0.75em #000 inset;
   border-radius: 4px;
   height: 27px;
   overflow: hidden;
@@ -171,7 +163,7 @@ dl.portlet ul.navTree li {
   position: absolute;
   top: -6px;
   left: -9px;
-  background: #FF7070;
+  background: #ff7070;
   padding: 2px 6px;
   border-radius: 10px;
   font-size: 12px;
@@ -214,7 +206,7 @@ dl.portlet ul.navTree li {
 
   &.new {
     background-color: #f9f9f9;
-    border-left: 3px solid #205C90;
+    border-left: 3px solid $blue;
     .item-location {
       font-weight: bold;
     }
@@ -227,7 +219,7 @@ dl.portlet ul.navTree li {
   &.show_all {
     position: absolute;
     bottom: 0;
-    background: #fff;
+    background: $color-white;
     border: none;
     border-top: 3px solid #eaeaea;
     padding: 15px 0;
@@ -260,7 +252,6 @@ dl.portlet ul.navTree li {
       }
       .item-summary {
         width: 100%;
-        // color: #888;
         overflow: hidden;
         text-overflow: ellipsis;
         > a {
@@ -272,6 +263,8 @@ dl.portlet ul.navTree li {
   }
 
 }
+
+/* @end */
 
 /* @group language selector */
 
@@ -297,7 +290,6 @@ dl.portlet ul.navTree li {
 
 /* @end */
 
-
 /* @group tabbedview */
 
 .tabbedview_view #tabbedview-body #overview_overview table.listing {
@@ -320,11 +312,9 @@ dl.portlet ul.navTree li {
   clear: left;
 }
 .state_filters .active {
-  background: none repeat scroll 0 0 #EEEEEE;
-  border: 1px solid #CCCCCC;
+  background: none repeat scroll 0 0 #eee;
+  border: 1px solid $disabled;
   border-radius: 4px;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
   padding: 0 0.25em;
 }
 .state_filters .active:hover {
@@ -352,7 +342,6 @@ dl.portlet ul.navTree li {
 .response {
   border: 1px solid #eee;
   margin-bottom: 1em;
-/* padding: 0.5em; */
 }
 .response > * {
   padding: 0.5em;
@@ -367,7 +356,7 @@ dl.portlet ul.navTree li {
 .response .response-info {
   color: #000;
   font-size: 100%;
-  background: #F7F7F7;
+  background: #f7f7f7;
   border-bottom: 1px solid #eee;
 }
 
@@ -382,6 +371,7 @@ dl.portlet ul.navTree li {
 /* @end */
 
 /* @group document */
+
 @mixin fa-icon($fa-class) {
   @extend .fa;
   @extend .fa-#{$fa-class};
@@ -432,7 +422,7 @@ dl.portlet ul.navTree li {
 }
 #plone-contentmenu-tabbedview-actions dd a:hover {
   text-decoration: none;
-  background-color: #E6E6E6;
+  background-color: $gray-dark;
 }
 
 /* @end */
@@ -467,11 +457,9 @@ dl.portlet ul.navTree li {
 
 #sorting-options strong {
   font-weight: normal;
-  background-color: #EEEEEE;
-  border: 1px solid #CCCCCC;
+  background-color: #eee;
+  border: 1px solid $disabled;
   border-radius: 4px;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
   padding: 0 0.25em;
 }
 
@@ -480,8 +468,6 @@ dl.portlet ul.navTree li {
   background: #fcfcfc;
   border: 1px solid #ddd;
   border-radius: 4px;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
 
   dl.actionMenu {
     float: right;
@@ -536,11 +522,10 @@ dl.portlet ul.navTree li {
 }
 #tabbedview-searchbox:focus {
   opacity: 1;
-  border-color: #AAA;
+  border-color: #aaa;
 }
 
 /* @end */
-
 
 /* @group listings */
 
@@ -666,8 +651,6 @@ div.answers:before {
   border: 1px solid #cecece;
   border-width: 0 0 1px 1px;
   border-radius: 0 0 0 4px;
-  -webkit-border-radius: 0 0 0 4px;
-  -moz-border-radius: 0 0 0 4px;
   padding: 0.35em 0.75em;
 }
 .answerBody .metadata {
@@ -679,8 +662,6 @@ div.answers:before {
 }
 .answer:hover .answerBody {
   box-shadow: 0 0 0.5em #e8e8e8;
-  -webkit-box-shadow: 0 0 0.5em #e8e8e8;
-  -moz-box-shadow: 0 0 0.5em #e8e8e8;
 }
 
 /* @end */
@@ -699,15 +680,13 @@ div.answerType {
   height: 28px;
   width: 28px;
   border-radius: 28px;
-  -webkit-border-radius: 28px;
-  -moz-border-radius: 28px;
   margin-top: 14px;
   margin-right: 14px;
   float: left;
   position: relative;
 }
 div.answerType:after {
-  content: ' ';
+  content: " ";
   position: absolute;
   display: block;
   width: 28px;
@@ -719,8 +698,6 @@ div.answerType:after {
   left: 28px;
 }
 
-
-
 /* @end */
 
 /* @group task manage actions */
@@ -731,7 +708,7 @@ div.answerType:after {
   display: none;
   position: absolute;
   right: 0px;
-  background: #fff;
+  background: $color-white;
   padding: 0.25em;
   padding-top: 0;
 }
@@ -768,6 +745,7 @@ div.answerType:after {
 /* @end */
 
 /* @group task answer form */
+
 .template-assign_choose_method #content form,
 .template-accept_choose_method #content form,
 .template-refuse-task #content form,
@@ -780,7 +758,6 @@ div.answerType:after {
 .template-assign_choose_method #content textarea,
 .template-assign-task #content textarea,
 .template-addresponse #content textarea {
-  /* width: 80%; */
   width: 98%;
   padding: 1%;
   height: 200px;
@@ -819,13 +796,14 @@ div.answerType:after {
 /* @end */
 
 /* @group  remove confirmation*/
+
 #remove_confirmation div.documents {
   width:100%;
 }
 
 #remove_confirmation div.documents ul {
   list-style: none;
-  margin-left: 0 px;
+  margin-left: 0px;
   margin: 0 0 10px 0;
   line-heigth: 20px;
   border: 1px solid #ddd;
@@ -865,23 +843,18 @@ div.answerType:after {
 #delete_confirmation dl.message {
   margin: 1em 0;
   border: 1px solid #eee;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
   border-radius: 4px;
   background-color: #eee;
   clear: both;
 }
 #remove_confirmation dl.message dt,
 #delete_confirmation dl.message dt {
-  background-color: #9dca27;
+  background-color: $message-info;
   line-height: 1.25em;
   float: left;
   margin-right: 0.75em;
   padding: 0.5em 0.75em;
   color: white;
-  /*border: 1px solid #3a87ad;*/
-  -webkit-border-radius: 4px 0 0 4px;
-  -moz-border-radius: 4px 0 0 4px;
   border-radius: 4px 0 0 4px;
 
 }
@@ -894,15 +867,14 @@ div.answerType:after {
 }
 #remove_confirmation dl.warning dt,
 #delete_confirmation dl.warning dt {
-  background-color: #D69B29;
+  background-color: $message-warn;
 }
 #remove_confirmation dl.error dt,
 #delete_confirmation dl.error dt {
-  background-color: #D65829;
+  background-color: $message-error;
 }
 
 /* @end*/
-
 
 /* @group fixes and hacks */
 
@@ -931,7 +903,6 @@ div.answerType:after {
 
 /* @end */
 
-
 /* @group user-detail */
 
 body.template-user-details #content{
@@ -953,9 +924,7 @@ body.template-user-details #content{
   }
 }
 
-
 /* @end */
-
 
 /* @group dashboard */
 
@@ -973,6 +942,7 @@ body.template-user-details #content{
 @media screen and (max-width: 769px) {
 
   /* @group orgunit menu */
+
   #portal-orgunit-selector dt.actionMenuHeader {
     display: none;
   }
@@ -986,7 +956,7 @@ body.template-user-details #content{
     margin: 0 auto;
   }
   #portal-orgunit-selector-menu dd {
-    background: #E6E6E6;
+    background: $gray-dark;
   }
   #portal-orgunit-selector-menu dd {
     border-bottom: 1px solid #000;
@@ -999,16 +969,18 @@ body.template-user-details #content{
     letter-spacing: 0.04em;
     border-top: 1px solid #000;
     background-color: #005fa2;
-    color: #FFF;
+    color: $color-white;
     text-shadow: 0px 1px 0px #000;
   }
   #portal-orgunit-selector-menu li a:hover {
-    color: #FFF;
+    color: $color-white;
     background-color: #005fa2;
   }
-/* @end */
+
+  /* @end */
 
   /* @group orgunit mobile button */
+
   #toggle_orgunitselector {
     background: url("++resource++opengever.theme/images/ouselector_mobile_button.png") no-repeat center center;
   }

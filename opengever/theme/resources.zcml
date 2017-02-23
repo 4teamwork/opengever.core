@@ -14,22 +14,20 @@
         />
 
     <theme:resources profile="opengever.theme:default" slot="variables">
-        <theme:scss file="resources/scss/variables.scss" />
-        <theme:scss file="resources/scss/partials/variables.scss" />
-        <theme:scss file="resources/scss/icons/variables.scss" />
-        <theme:scss file="resources/scss/partials/colors.scss" />
+        <theme:scss file="resources/scss/variables.scss"
+                    after="ftw.theming:resources/scss/globals/variables.scss" />
+
         <theme:scss file="resources/scss/partials/iconfont.scss" />
     </theme:resources>
 
     <theme:resources profile="opengever.theme:default" slot="mixins">
-        <theme:scss file="resources/scss/icons/mixins.scss" />
-        <theme:scss file="resources/scss/partials/mixins.scss" />
+        <theme:scss file="resources/scss/mixins.scss" />
         <theme:scss file="resources/scss/partials/gradient.scss" before="resources/scss/partials/buttons.scss" />
         <theme:scss file="resources/scss/partials/buttons.scss" />
     </theme:resources>
 
     <theme:resources profile="opengever.theme:default" slot="theme">
-        <theme:scss file="resources/scss/reset.scss" />
+        <theme:scss file="resources/scss/reset.scss" slot="top" />
         <theme:scss file="resources/scss/columns.scss" />
         <theme:scss file="resources/scss/main.scss" />
         <theme:scss file="resources/scss/sprites.scss" />

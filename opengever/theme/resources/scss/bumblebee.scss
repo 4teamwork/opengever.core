@@ -3,15 +3,17 @@
     padding-bottom: 1em;
 }
 .simplelayout-block-wrapper .previewContainer .imageContainer a{
-    height:200px;
+    height: 200px;
 }
 
-.previewContainer .imageContainer:hover > a > .previewDesc {display:none;}
+.previewContainer .imageContainer:hover > a > .previewDesc {
+    display:none;
+}
 
 @media screen and (max-width: 699px) {
-.previewContainer .imageContainer {
-    width: 50%;
-}
+    .previewContainer .imageContainer {
+        width: 50%;
+    }
 }
 
 .portaltype-classificationitem .previewContainer .imageContainer {
@@ -27,8 +29,8 @@
     width: 200px;
     box-shadow: 4px 4px 10px #aaa;
     border-radius: 3px;
-    border-left: 1px solid rgba(80,80,80,0.2);
-    border-top: 1px solid rgba(80,80,80,0.2);
+    border-left: 1px solid transparentize(#505050, 0.8);
+    border-top: 1px solid transparentize(#505050, 0.8);
 }
 
 .file.BlockOverallWrapper .previewContainer {
@@ -66,12 +68,20 @@
    visibility: hidden;
  }
 
-.previewContainer:after { clear: both; }
+.previewContainer:after {
+    clear: both;
+}
 
 /* Remove colorbox animations: see ftw.colorbox.resources/colorbox.css */
-#cboxClose:hover{background-position:-100px -25px;}
-#cboxNext:hover{background-position:-75px -25px;}
-#cboxPrevious:hover{background-position:-51px -25px;}
+#cboxClose:hover{
+    background-position:-100px -25px;
+}
+#cboxNext:hover{
+    background-position:-75px -25px;
+}
+#cboxPrevious:hover{
+    background-position:-51px -25px;
+}
 
 #file-preview .fileDetails {
     width: 100%;

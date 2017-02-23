@@ -227,8 +227,6 @@ table#agenda_items {
         .title {
           .attachements {
             display: block;
-            .toggle-attachements-btn {
-            }
           }
           .summary {
             display: block;
@@ -307,7 +305,7 @@ table#agenda_items {
         }
         .edit-agenda-item {
           @extend .fa;
-          @extend .fa-pencil;
+          @extend .fa-calendar;
         }
         .decide-agenda-item, .revise-agenda-item {
           > span {
@@ -335,7 +333,7 @@ table#agenda_items {
     float: left;
     width: 25em;
     height: 15em;
-    border: 1px solid #ccc;
+    border: 1px solid $disabled;
     background-color: #f9f9f9;
     margin: 1em;
     padding-left: 1em;
@@ -344,14 +342,14 @@ table#agenda_items {
     .header {
       height: 5em;
       a {
-        color: #205c90;
+        color: $blue;
         &:visited,&:hover {
-          color: #205c90;
+          color: $blue;
         }
       }
     }
     &.inactive {
-      background-color: #e6e6e6;
+      background-color: $gray-dark;
       border-color: #bbb;
       .header a{
         color: #888
@@ -360,14 +358,14 @@ table#agenda_items {
   }
   .unscheduled_proposals {
     padding-bottom: .75em;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid $disabled;
     .number {
       float: right;
       background: #71a971;
       padding: 2px 6px;
       border-radius: 10px;
       font-size: 12px;
-      color: #fff;
+      color: $color-white;
       &:hover, &:visited {
         text-decoration: none;
       }

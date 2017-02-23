@@ -67,20 +67,19 @@
 
   .list-group-cell {
     display: table-cell;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid $disabled;
     padding-bottom: 5px;
 
     .title {
       margin: 0;
 
       a:visited {
-        color: #205C90;
+        color: $blue;
       }
 
       .reference_number {
         padding-right: 10px;
       }
-
     }
 
     .meta {
@@ -101,7 +100,7 @@
     vertical-align: middle;
 
     .icon_button{
-      color: #ADADAD;
+      color: #adadad;
 
       &:hover{
         text-decoration: none;
@@ -134,15 +133,28 @@
         @extend .fa;
       }
 
-      &.disposition-transition-appraise:before { content: $appraise; }
-      &.disposition-transition-dispose:before { content: $dispose; }
-      &.disposition-transition-archive:before { content: $archive; }
-      &.disposition-transition-close:before { content: $disposition-close; }
-      &.sip_download:before { content: $sip_download; }
-      &.appraisal_list:before { content: $appraisal_list; }
-      &.removal_protocol:before { @extend .fa-download; }
+      &.disposition-transition-appraise:before {
+        content: $appraise;
+      }
+      &.disposition-transition-dispose:before {
+        content: $dispose;
+      }
+      &.disposition-transition-archive:before {
+        content: $archive;
+      }
+      &.disposition-transition-close:before {
+        content: $disposition-close;
+      }
+      &.sip_download:before {
+        content: $sip_download;
+      }
+      &.appraisal_list:before {
+        content: $appraisal_list;
+      }
+      &.removal_protocol:before {
+        @extend .fa-download;
+      }
     }
-
 
     .transitions {
       float: left;
@@ -156,8 +168,8 @@
   }
 
   .workflow_wizard {
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
+    border-top: 1px solid $disabled;
+    border-bottom: 1px solid $disabled;
     margin: 1em 0;
     padding: 0.5em 0;
 
@@ -169,12 +181,12 @@
         display: inline;
         padding-right: 2em;
         &:after {
-          content: '〉';
+          content: "〉";
           color: #000;
           padding-left: 2em;
         }
         &:last-child:after {
-          content: '';
+          content: "";
           display: none;
         }
         &.selected {
@@ -182,7 +194,5 @@
         }
       }
     }
-
   }
-
 }

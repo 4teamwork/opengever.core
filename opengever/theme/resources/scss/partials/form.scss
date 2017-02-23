@@ -7,7 +7,6 @@
   #opengever_meeting_meeting,
   #opengever_meeting_protocol,
   #content {
-
     input[type="text"], input[type="search"] {
       @include component();
     }
@@ -17,7 +16,7 @@
       @include appearance();
       width: 100%;
       padding: $padding-factor * 8px $padding-factor * 16px + 15px $padding-factor * 8px $padding-factor * 16px;
-      background: url("../../images/caret_down.png") no-repeat right center;
+      background: url("++resource++opengever.theme/images/caret_down.png") no-repeat right center;
       max-width: 300px;
       @include ie-only {
         background-image: none;
@@ -29,7 +28,6 @@
       @include component();
       min-height: 100px;
     }
-
 
     form {
       display: inline-block;

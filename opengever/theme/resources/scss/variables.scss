@@ -1,7 +1,113 @@
+$padding-factor: 1;
+$border-radius: 2px;
+$button-font-size: 12px;
+
+/*
+    Config
+*/
+
 $color-primary: #787f86;
 $color-secondary: #70777d;
-$color-secondary-bg: #4a555b;
-$color-default: #3997b4;
-$color-bg: #3387a1;
-$nav-hover-bg: #7c848a;
-$color-content-background: #fff;
+$gray-dark: #e6e6e6;
+$gray-light: #f5f5f5;
+
+/*
+    Colors
+*/
+
+$disabled: #ccc !default;
+$blue: #205c90 !default;
+$light-blue: #437795 !default;
+$black: #444 !default;
+$white: $color-white !default;
+$green: #51a351 !default;
+$green-light: #62c462 !default;
+$red: #bd362f !default;
+$red-light: #ee5f5b !default;
+$shadow-black-color: transparentize($black, .8) !default;
+$shadow-blue-color: transparentize($blue, .2) !default;
+
+$message-info: #9dca27 !default;
+$message-error: #d65829 !default;
+$message-warn: #d69b29 !default;
+
+$color-secondary-bg: #4a555b !default;
+$color-default: #3997b4 !default;
+$color-bg: #3387a1 !default;
+$nav-hover-bg: #7c848a !default;
+$color-content-background: $white !default;
+
+/*
+    Navigation colors
+*/
+
+$color-navigation-start: $color-primary !default;
+$color-navigation-end: $color-secondary-bg !default;
+$color-navigation-selected-start: $color-bg !default;
+$color-navigation-selected-end: $color-bg !default;
+$color-navigation-hover-start: $nav-hover-bg !default;
+$color-navigation-hover-end: $nav-hover-bg !default;
+
+/*
+    Icons
+*/
+
+$font-path: '++theme++opengever.theme/fonts' !default;
+$font-size-base: 14px !default;
+$line-height-base: 1 !default;
+$gv-css-prefix: 'gv' !default;
+
+//**************************************
+//           GEVER ICONS               *
+//**************************************
+
+$gc-var-committeecontainer: '\e600';
+$gc-var-contactfolder: '\e601';
+$gc-var-copy: '\e602';
+$gc-var-contact: '\e603';
+$gc-var-agency: '\e604';
+$gc-var-pencil: '\e605';
+$gc-var-committee: '\e606';
+$gc-var-time: '\e607';
+$gc-var-reopen: '\e608';
+$gc-var-submit: '\e609';
+$gc-var-square-check: '\e60a';
+$gc-var-plus: '\e60b';
+$gc-var-cancel: '\e60c';
+$gc-var-reassign: '\e60d';
+$gc-var-accept: '\e60e';
+$gc-var-refuse: '\e60f';
+$gc-var-update-document: '\e610';
+$gc-var-membership: '\e611';
+$gc-var-schedule: '\e612';
+$gc-var-proposal: '\e613';
+$gc-var-inbox: '\e614';
+$gc-var-document: '\e615';
+$gc-var-leaf: '\e616';
+$rgc-var-tree: '\e617';
+$gc-var-folder: '\e618';
+$gc-var-subtask: '\e619';
+$gc-var-task: '\e61a';
+$gc-var-shared-task: '\e61b';
+$gc-var-mail: '\e61c';
+$gc-var-text: '\e61d';
+$gc-var-remove: '\e61e';
+$gc-var-document-removed: '\e61f';
+$gc-var-mail-removed: '\e620';
+$gc-var-forward: '\e621';
+$gc-var-identity: '\e622';
+$gc-var-check: '\e623';
+$gc-var-meeting: '\e624';
+$gc-var-ordered-list: '\e625';
+$gc-var-gavel: '\e626';
+$gc-var-paste: '\e627';
+$gc-var-flag: '\e628';
+$gc-var-circle-ok: '\e629';
+$gc-var-bell: '\e62a';
+$gc-var-star-blank: '\e62b';
+$gc-var-star: '\e62c';
+$gc-var-location: '\e62d';
+$gc-var-leader: '\e62e';
+$gc-var-state: '\e62f';
+$gc-var-collapsed: '\e630';
+$gc-var-expanded: '\e631';

@@ -89,11 +89,9 @@
   #portal-globalnav.mobileNavigation li a.loadChildren:hover,
   #portal-globalnav.mobileNavigation .selected a,
   #portal-globalnav.mobileNavigation a:hover {
-    color: #FFF;
+    color: $color-white;
     background-color: transparent;
     box-shadow: none;
-    -moz-box-shadow: none;
-    -webkit-box-shadow: none;
   }
 
   /* @end */
@@ -102,7 +100,7 @@
 
   #slider-container .slideNavi ul.globalnav li,
   #slider-container .slideNavi ul.globalnav a {
-    color: #FFF;
+    color: $color-white;
     border: none;
   }
   #slider-container .slideNavi ul.globalnav li {
@@ -123,7 +121,7 @@
     z-index: 3;
   }
   #portal-personaltools dd {
-    background: #E6E6E6;
+    background: $gray-dark;
   }
   #portal-personaltools dd {
     border-bottom: 1px solid #000;
@@ -136,11 +134,11 @@
     letter-spacing: 0.04em;
     border-top: 1px solid #000;
     background-color: #005fa2;
-    color: #FFF;
+    color: $color-white;
     text-shadow: 0px 1px 0px #000;
   }
   #portal-personaltools li a:hover {
-    color: #FFF;
+    color: $color-white;
     background-color: #005fa2;
   }
 
@@ -232,14 +230,16 @@
     display: none;
   }
 
-/* @end */
+  /* @end */
 
   /* @group subsite */
+
   #content-core .subsiteColumns .column {
     float: none;
     width: 98%;
     padding: 0 1%;
   }
+
   /* @end */
 
   /* @group tabs */
@@ -256,7 +256,7 @@
     display: block;
     float: left;
     text-align: right;
-    border: 1px solid #ccc;
+    border: 1px solid $disabled;
     border-left-width: 0;
     background-color: #eee;
     width: 10%;
@@ -272,13 +272,11 @@
   }
   #content li.formTab a {
     border-radius: 0;
-    -webkit-border-radius: 0;
-    -moz-border-radius: 0;
     margin-bottom: -1px;
   }
   #content li.formTab a.selected,
   #content li.formTab a:hover {
-    border-bottom-color: #ccc;
+    border-bottom-color: $disabled;
   }
   #content li.formTab a {
     display: none;
@@ -287,7 +285,6 @@
   #content li.formTab a.selected {
     display: block;
   }
-
 
 /* @end */
 

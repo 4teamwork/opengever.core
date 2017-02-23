@@ -8,10 +8,10 @@
   min-height: 300px;
   font-size: 12px;
   text-align: left;
-  background: #fff;
+  background: $color-white;
   border: 1px solid $gray-light;
   border-radius: 2px;
-  box-shadow: 0 0 2px 0 rgba(0, 0, 0, .3);
+  box-shadow: 0 0 2px 0 transparentize(#000, .7);
 }
 
 .tooltip-trigger {
@@ -57,7 +57,6 @@
     }
   }
 }
-
 
 .preview {
   float: left;

@@ -17,7 +17,7 @@ $spacing: 8px;
   right: 0;
   bottom: 0;
   left: 0;
-  background: rgba(0, 0, 0, .6);
+  background: transparentize(#000, .4);
   z-index: -1;
 }
 
@@ -64,7 +64,7 @@ $spacing: 8px;
   box-sizing: border-box;
   width: calc(100% - 400px);
   height: 100%;
-  background-color: #fff;
+  background-color: $color-white;
   border-top-left-radius: 2px;
   border-bottom-left-radius: 2px;
   position: relative;
@@ -82,11 +82,13 @@ $spacing: 8px;
   }
 }
 
-.file-actions > li > a { @include button-fluid(); }
+.file-actions > li > a {
+  @include button-fluid();
+}
 
 // Do not overlap download confirmation
 .ftw-showroom {
-  background-color: #fff;
+  background-color: $color-white;
   z-index: 8000;
   top: $overlay-padding - 30px;
   right: $overlay-padding;
@@ -114,7 +116,7 @@ $spacing: 8px;
   > aside {
     border-top-right-radius: 2px;
     border-bottom-right-radius: 2px;
-    background-color: #fff;
+    background-color: $color-white;
     padding: $spacing * 2;
     padding-top: 45px;
     width: 400px;
@@ -229,7 +231,7 @@ $spacing: 8px;
       .searchImage {
         width: 150px;
         height: 150px;
-        box-shadow: 0 0 3px 0 rgba(0,0,0,0.3);
+        box-shadow: 0 0 3px 0 transparentize(#000, 0.7);
         margin-top: 1.5em;
         .bumblebeeSearchPreview {
           max-width: 100%;
@@ -255,7 +257,7 @@ $spacing: 8px;
 
       &.active {
         border-bottom: 2px solid #000;
-        background-color: #e6e6e6;
+        background-color: $gray-dark;
       }
     }
 

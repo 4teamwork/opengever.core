@@ -1,50 +1,39 @@
-/* - customstyles.scss - */
+/* customstyles.scss */
 
 #navi-wrapper {
   box-shadow: 0 1px 0 $color-primary inset, 0 0 0 1px $color-secondary-bg ;
 }
 
 #navi-wrapper {
-  background-color: $color-secondary-bg;
-  background-image: -moz-linear-gradient(top, $color-secondary, $color-secondary-bg);
-  background-image: -ms-linear-gradient(top, $color-secondary, $color-secondary-bg);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from($color-secondary), to($color-secondary-bg));
-  background-image: -webkit-linear-gradient(top, $color-secondary, $color-secondary-bg);
-  background-image: -o-linear-gradient(top, $color-secondary, $color-secondary-bg);
-  background-image: linear-gradient(top, $color-secondary, $color-secondary-bg);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$color-secondary', endColorstr='$color-secondary-bg', GradientType=0);
+  @include linear-gradient(
+    top,
+    $color-navigation-start,
+    $color-navigation-end
+  );
 }
 
+#portal-globalnav li.selected a {
+  @include linear-gradient(
+    top,
+    $color-navigation-selected-start,
+    $color-navigation-selected-end
+  );
+}
+
+#portal-globalnav a:hover {
+  @include linear-gradient(
+    top,
+    $color-navigation-hover-start,
+    $color-navigation-hover-end
+  );
+}
 
 #portal-globalnav li.selected a {
   box-shadow: 0 1px 0 $color-default inset, 0 -1px 0 $color-secondary-bg ;
 }
 
-#portal-globalnav li.selected a {
-  background-color: $color-bg;
-  background-image: -moz-linear-gradient(top, $color-bg, $color-bg);
-  background-image: -ms-linear-gradient(top, $color-bg, $color-bg);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from($color-bg), to($color-bg));
-  background-image: -webkit-linear-gradient(top, $color-bg, $color-bg);
-  background-image: -o-linear-gradient(top, $color-bg, $color-bg);
-  background-image: linear-gradient(top, $color-bg, $color-bg);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$color-bg', endColorstr='$color-bg', GradientType=0);
-}
-
-
 #portal-globalnav a:hover {
   box-shadow: 0 1px 0 $color-primary inset, 0 -1px 0 $color-secondary-bg ;
-}
-
-#portal-globalnav a:hover {
-  background-color: $nav-hover-bg;
-  background-image: -moz-linear-gradient(top, $nav-hover-bg, $nav-hover-bg);
-  background-image: -ms-linear-gradient(top, $nav-hover-bg, $nav-hover-bg);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from($nav-hover-bg), to($nav-hover-bg));
-  background-image: -webkit-linear-gradient(top, $nav-hover-bg, $nav-hover-bg);
-  background-image: -o-linear-gradient(top, $nav-hover-bg, $nav-hover-bg);
-  background-image: linear-gradient(top, $nav-hover-bg, $nav-hover-bg);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$nav-hover-bg', endColorstr='$nav-hover-bg', GradientType=0);
 }
 
 #portal-globalnav.mobileNavigation, #portal-globalnav.mobileNavigation li a {
@@ -54,20 +43,23 @@
   background-color:$nav-hover-bg;
 }
 
-            @media screen and (max-width: 769px) {
-                #portal-personaltools dd li a,
-                #portal-personaltools dd li a:hover,
-                #container #portal-searchbox {
-                    background-color: $nav-hover-bg;
-                }
-            }
+@media screen and (max-width: 769px) {
+  #portal-personaltools dd li a,
+  #portal-personaltools dd li a:hover,
+  #container #portal-searchbox {
+    background-color: $nav-hover-bg;
+  }
+}
 
-            @media screen and (max-width: 769px) {
-                #portal-orgunit-selector dd li a,
-                #portal-orgunit-selector dd li a:hover {
-                    background-color: $nav-hover-bg;
-                }
-            }
+@media screen and (max-width: 769px) {
+  #portal-orgunit-selector dd li a {
+    background-color: $nav-hover-bg;
+    &:hover {
+      background-color: $nav-hover-bg;
+    }
+  }
+}
+
 #header-wrapper, #columns-wrapper {
   background-color: $color-content-background;
 }
@@ -87,10 +79,10 @@ body {
   font-size:12px;
 }
 a {
-  color:#205C90;
+  color:$blue;
 }
 body {
-  color:#444;
+  color:$black;
 }
 body, #footer-wrapper {
   background-color:#f8f8f8;

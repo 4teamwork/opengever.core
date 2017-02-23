@@ -1,7 +1,7 @@
 .template-add-membership, .template-opengever-meeting-proposa, .portaltype-opengever-meeting-proposal.template-edit {
   .ui-autocomplete {
     border: 1px solid $gray-dark;
-    background: none #fff;
+    background: none $color-white;
     padding: 0;
     border-radius: $border-radius;
     box-shadow: 0 5px 40px 0 $shadow-black-color;

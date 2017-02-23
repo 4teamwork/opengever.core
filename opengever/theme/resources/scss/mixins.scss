@@ -1,3 +1,122 @@
+@mixin noselect {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+@mixin appearance {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+@mixin ie-only {
+  @media \9screen,screen\0 {
+    @content
+  }
+}
+
+@mixin component {
+  padding: $padding-factor * 8px $padding-factor * 16px;
+  line-height: 24px * $padding-factor;
+  border: 1px solid $gray-dark;
+  box-sizing: border-box;
+  border-radius: $border-radius;
+  color: $black;
+  margin: 0;
+  height: 42px;
+  &:focus {
+    background-color: $white;
+    border-color: $light-blue;
+  }
+  &:hover {
+    background-color: $gray-light;
+  }
+}
+
+@mixin clearfix() {
+    & {
+        *zoom: 1;
+    }
+    &:before,
+    &:after {
+        content: "";
+        display: table;
+    }
+    &:after {
+        clear: both;
+    }
+}
+
+
+
+@mixin equalHeight($width) {
+  &:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    width: $width;
+    background-color: $color-white;
+  }
+}
+
+@mixin list($style: default) {
+  @if $style == default {
+    list-style: disc;
+    padding-left: 2em;
+  }
+  @if $style == plain {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+  }
+  @if $style == inline {
+    padding-left: 0;
+    margin: 0;
+    li {
+      display: inline;
+    }
+  }
+  @if $style == table {
+    padding-left: 0;
+    margin: 0;
+    display: table;
+    li {
+      display: table-cell;
+    }
+  }
+}
+
+@mixin defList($style: default) {
+  @if $style == default {
+    > dt {
+      float: left;
+    }
+    > dd {
+      margin: 20px 0;
+      &:after {
+        content: "";
+        display: table;
+        clear: both;
+      }
+    }
+  }
+  @if $style == table {
+    display: table;
+    > dt {
+      display: table-cell;
+    }
+    > dd {
+      margin: 20px 0;
+      display: table-cell;
+    }
+  }
+}
+
 @mixin sprite($dims: 20px) {
   background-repeat: no-repeat;
   background-size: contain;
@@ -53,7 +172,7 @@ $size-mapping: (
   margin-right: 5px * $size;
   border-radius: $border-radius;
   transition: background-color .2s ease-out;
-  background-color: #fff;
+  background-color: $color-white;
 
   @if $disabled {
     color: darken($gray-dark, 20%);
