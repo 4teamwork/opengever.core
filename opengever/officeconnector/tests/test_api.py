@@ -1,5 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browsing
 from opengever.api.testing import RelativeSession
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ZSERVER_TESTING
 from opengever.officeconnector.interfaces import IOfficeConnectorSettings
@@ -26,6 +27,8 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
         self.api.auth = (TEST_USER_NAME, TEST_USER_PASSWORD)
 
         self.original_file_content = u'original file content'
+        self.modified_file_content = u'modified file content'
+        self.test_comment = 'Test Comment'
 
         self.repo = create(Builder('repository_root')
                            .having(id='ordnungssystem',
@@ -192,3 +195,119 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
         self.assertEquals(self.document_with_attachment.file.contentType, payload['content-type']) # noqa
         self.assertEquals(self.document_with_attachment.absolute_url(), payload['document-url']) # noqa
         self.assertEquals(self.document_with_attachment.get_filename(), payload['filename']) # noqa
+
+    @browsing
+    def test_document_checkout(self, browser):
+        self.enable_checkout()
+        token = self.get_oc_url_jwt(self.document_with_attachment, 'checkout') # noqa
+
+        # Test we can actually fetch an action payload based on the URL JWT
+        response = self.api.get(token['url'])
+        payload = response.json()
+
+        # Test fetching the indicated file
+        self.api.headers.update({'Accept': payload['content-type']})
+        response = self.api.get('/'.join((payload['document-url'], payload['download']))) # noqa
+
+        self.assertEquals(200, response.status_code)
+        self.assertEquals(response.headers['content-type'], payload['content-type']) # noqa
+        self.assertEquals(response.headers['content-disposition'], 'attachment; filename="{}"'.format(payload['filename'])) # noqa
+        self.assertEquals(response.content, self.original_file_content)
+
+        # Test we can perform a checkout based on the action payload
+        self.api.headers.update({'Accept': 'text/html'})
+        self.api.get('/'.join((payload['document-url'], payload['checkout'])) + '?_authenticator={}'.format(payload['csrf-token'])) # noqa
+
+        self.assertTrue(browser.login().open(self.document_with_attachment).css('.checked_out_viewlet')) # noqa
+
+    @browsing
+    def test_document_checkin_without_comment(self, browser):
+        self.enable_checkout()
+        token = self.get_oc_url_jwt(self.document_with_attachment, 'checkout') # noqa
+
+        # Test we can actually fetch an action payload based on the URL JWT
+        response = self.api.get(token['url'])
+        payload = response.json()
+
+        # Test fetching the indicated file
+        self.api.headers.update({'Accept': payload['content-type']})
+        response = self.api.get('/'.join((payload['document-url'], payload['download']))) # noqa
+
+        # Test we can perform a checkout based on the action payload
+        self.api.headers.update({'Accept': 'text/html'})
+        self.api.get('/'.join((payload['document-url'], payload['checkout'])) + '?_authenticator={}'.format(payload['csrf-token'])) # noqa
+
+        # Test we can upload a new version of the file
+        browser.login()
+        browser.open(self.document_with_attachment, view=payload['edit-form'])
+        # The DATA in the file tuple needs to be seekable
+        browser.fill({
+            'form.widgets.file.action': 'replace',
+            'form.widgets.file': (
+                str(self.modified_file_content),
+                payload['filename'],
+                payload['content-type'],
+                ),
+            })
+        browser.css('#form-buttons-save').first.click()
+
+        # Test we can check in the file
+        response = self.api.get('/'.join((payload['document-url'], payload['checkin-without-comment'])) + '?_authenticator={}'.format(payload['csrf-token'])) # noqa
+
+        # Test the uploaded new file is now properly the latest version
+        self.api.headers.update({'Accept': payload['content-type']})
+        response = self.api.get('/'.join((payload['document-url'], payload['download']))) # noqa
+
+        self.assertEquals(response.content, self.modified_file_content)
+
+    @browsing
+    def test_document_checkin_with_comment(self, browser):
+        self.enable_checkout()
+        token = self.get_oc_url_jwt(self.document_with_attachment, 'checkout') # noqa
+
+        # Test we can actually fetch an action payload based on the URL JWT
+        response = self.api.get(token['url'])
+        payload = response.json()
+
+        # Test fetching the indicated file
+        self.api.headers.update({'Accept': payload['content-type']})
+        response = self.api.get('/'.join((payload['document-url'], payload['download']))) # noqa
+
+        # Test we can perform a checkout based on the action payload
+        self.api.headers.update({'Accept': 'text/html'})
+
+        self.api.get('/'.join((payload['document-url'], payload['checkout'])) + '?_authenticator={}' .format(payload['csrf-token'])) # noqa
+
+        # Test we can upload a new version of the file
+        browser.login()
+        browser.open(self.document_with_attachment, view=payload['edit-form'])
+        # The DATA in the file tuple needs to be seekable
+        browser.fill({
+            'form.widgets.file.action': 'replace',
+            'form.widgets.file': (
+                str(self.modified_file_content),
+                payload['filename'],
+                payload['content-type'],
+                ),
+            })
+        browser.css('#form-buttons-save').first.click()
+
+        # Test we can check in with a comment
+        browser.open(self.document_with_attachment, view='checkin_document')
+        browser.fill({
+            'form.widgets.comment': self.test_comment,
+        })
+        browser.css('#form-buttons-button_checkin').first.click()
+
+        browser.open(self.document_with_attachment, view='tabbedview_view-journal') # noqa
+
+        journal_entry = browser.css('.listing').first.lists()[1]
+
+        self.assertEquals(journal_entry[1], 'Dokument eingecheckt')
+        self.assertEquals(journal_entry[3], self.test_comment)
+
+        # Test the uploaded new file is now properly the latest version
+        self.api.headers.update({'Accept': payload['content-type']})
+        response = self.api.get('/'.join((payload['document-url'], payload['download']))) # noqa
+
+        self.assertEquals(response.content, self.modified_file_content)
