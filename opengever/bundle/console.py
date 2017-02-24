@@ -17,11 +17,7 @@ log.setLevel(logging.INFO)
 def import_oggbundle(app, args):
     """Handler for the 'bin/instance import' zopectl command.
     """
-    # Set Zope's default StreamHandler's level to INFO (default is WARNING)
-    # to make sure output gets logged on console
-    stream_handler = logging.root.handlers[0]
-    stream_handler.setLevel(logging.INFO)
-
+    setup_logging()
     bundle_path = sys.argv[3]
     log.info("Importing OGGBundle %s" % bundle_path)
 
@@ -42,3 +38,16 @@ def import_oggbundle(app, args):
     transaction.get().note("Finished import of OGGBundle %r" % bundle_path)
     transaction.commit()
     log.info("Done.")
+
+
+def setup_logging():
+    # Set Zope's default StreamHandler's level to INFO (default is WARNING)
+    # to make sure output gets logged on console
+    stream_handler = logging.root.handlers[0]
+    stream_handler.setLevel(logging.INFO)
+
+    # Also write logs to a dedicated migration log in the working directory.
+    file_handler = logging.FileHandler('migration.log')
+    file_handler.setFormatter(stream_handler.formatter)
+    file_handler.setLevel(logging.INFO)
+    logging.root.addHandler(file_handler)
