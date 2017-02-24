@@ -46,9 +46,9 @@ class ReportSection(object):
         report_data = DataCollector(self.bundle)()
         self.bundle.report_data = report_data
 
-        self.build_ascii_summary(report_data)
-        self.build_xlsx_main_report(report_data)
-        self.build_xlsx_validation_report(self.bundle.errors)
+        self.build_ascii_summary(self.bundle)
+        self.build_xlsx_main_report(self.bundle)
+        self.build_xlsx_validation_report(self.bundle)
 
     def create_report_dir(self):
         """Create a directory to store all import report files.
@@ -81,20 +81,20 @@ class ReportSection(object):
                       sort_keys=True, indent=4, separators=(',', ': '))
         log.info('Stored %s' % json_path)
 
-    def build_ascii_summary(self, report_data):
-        summary = ASCIISummaryBuilder(report_data).build()
+    def build_ascii_summary(self, bundle):
+        summary = ASCIISummaryBuilder(bundle).build()
         log.info('\n\n%s\n' % summary)
 
-    def build_xlsx_main_report(self, report_data):
+    def build_xlsx_main_report(self, bundle):
         report_path = os.path.join(self.report_dir, 'main-report.xlsx')
 
-        builder = XLSXMainReportBuilder(report_data)
+        builder = XLSXMainReportBuilder(bundle)
         builder.build_and_save(report_path)
 
-    def build_xlsx_validation_report(self, errors):
+    def build_xlsx_validation_report(self, bundle):
         report_path = os.path.join(self.report_dir, 'validation-report.xlsx')
 
-        builder = XLSXValidationReportBuilder(errors)
+        builder = XLSXValidationReportBuilder(bundle)
         builder.build_and_save(report_path)
 
 

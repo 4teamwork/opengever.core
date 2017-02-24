@@ -5,6 +5,10 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- OGGBundle reports: Include summary sheet containing import duration,
+  time of import and bundle name.
+  [lgraf]
+
 - Add 'mock OfficeConnector' tests for attach and direct checkin APIs
   [Rotonen]
 

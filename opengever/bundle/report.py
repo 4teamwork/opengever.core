@@ -1,5 +1,6 @@
 from Acquisition import aq_parent
 from collections import OrderedDict
+from datetime import datetime
 from opengever.base.behaviors.base import IOpenGeverBase
 from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.base.behaviors.translated_title import ITranslatedTitleSupport
@@ -10,7 +11,9 @@ from opengever.bundle.sections.map_local_roles import NAME_ROLE_MAPPING
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.ogds.base.utils import get_current_admin_unit
 from openpyxl import Workbook
+from openpyxl.cell import get_column_letter
 from openpyxl.styles import Font
+from os.path import basename
 from plone import api
 from zope.annotation import IAnnotations
 import logging
@@ -192,8 +195,9 @@ class ASCIISummaryBuilder(object):
     """Build a quick ASCII summary of object counts based on report data.
     """
 
-    def __init__(self, report_data):
-        self.report_data = report_data
+    def __init__(self, bundle):
+        self.bundle = bundle
+        self.report_data = bundle.report_data
 
     def build(self):
         report = []
@@ -231,11 +235,13 @@ class XLSXReportBuilderBase(object):
         sheet.title = sheet_name
         return sheet
 
-    def write_row(self, sheet, rownum, values, bold=False):
+    def write_row(self, sheet, rownum, values, bold=False, firstbold=False):
         for col_num, value in enumerate(values, 1):
             cell = sheet.cell(row=rownum + 1, column=col_num)
             cell.value = value
-            if bold:
+            if isinstance(value, datetime):
+                sheet.column_dimensions[get_column_letter(col_num)].width = 20
+            if bold or (firstbold and col_num == 1):
                 cell.font = Font(bold=True)
 
     def write_report_data(self):
@@ -246,8 +252,12 @@ class XLSXMainReportBuilder(XLSXReportBuilderBase):
     """Build a detailed report in XLSX format based on report data.
     """
 
-    def __init__(self, report_data):
+    def __init__(self, bundle):
         super(XLSXMainReportBuilder, self).__init__()
+        self.bundle = bundle
+
+        report_data = self.bundle.report_data
+
         self.report_data = {'metadata': {}, 'permissions': {}}
         metadata = self.report_data['metadata']
         metadata.update(report_data['metadata'])
@@ -266,6 +276,28 @@ class XLSXMainReportBuilder(XLSXReportBuilderBase):
         mails = permissions.get('ftw.mail.mail', [])
         permissions['opengever.document.document'] = docs + mails
         permissions.pop('ftw.mail.mail', None)
+
+    def _write_summary(self):
+        """Write a summary sheet with information regarding the entire import.
+        """
+        sheet_name = 'summary'
+        sheet = self.add_sheet(sheet_name)
+
+        stats = self.bundle.stats
+        timings = stats['timings']
+        duration = timings['done_post_processing'] - timings['start_loading']
+        bundle_name = basename(self.bundle.bundle_path.rstrip('/'))
+
+        summary_stats = OrderedDict([
+            ('bundle_name', bundle_name),
+            ('start_time', timings['start_loading']),
+            ('duration', duration),
+        ])
+
+        for rownum, item in enumerate(summary_stats.items()):
+            stat_name, stat_value = item
+            self.write_row(
+                sheet, rownum, (stat_name, stat_value), firstbold=True)
 
     def _write_metadata(self):
         for json_name, portal_type in BUNDLE_JSON_TYPES.items():
@@ -298,6 +330,7 @@ class XLSXMainReportBuilder(XLSXReportBuilderBase):
                 self.write_row(sheet, rownum, perm_info.values())
 
     def write_report_data(self):
+        self._write_summary()
         self._write_metadata()
         self._write_permissions()
 
@@ -314,9 +347,10 @@ class XLSXValidationReportBuilder(XLSXReportBuilderBase):
         ('unmapped_unc_mounts', ('mount', )),
     ])
 
-    def __init__(self, errors):
+    def __init__(self, bundle):
         super(XLSXValidationReportBuilder, self).__init__()
-        self.errors = errors
+        self.bundle = bundle
+        self.errors = bundle.errors
 
     def write_summary(self):
         """Write a summary with counts for every message type.
@@ -326,7 +360,8 @@ class XLSXValidationReportBuilder(XLSXReportBuilderBase):
 
         for rownum, item in enumerate(self.errors.items()):
             error_type, error_list = item
-            self.write_row(sheet, rownum, (error_type, len(error_list)))
+            self.write_row(
+                sheet, rownum, (error_type, len(error_list)), firstbold=True)
 
     def write_msg_sheets(self, msg_dict, field_defs):
         """Write a sheet for every message type in msg_dict.
