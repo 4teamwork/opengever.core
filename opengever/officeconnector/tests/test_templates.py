@@ -54,7 +54,7 @@ class TestOfficeConnectorTemplates(FunctionalTestCase):
 
         self.assertEqual(1, len(browser.css('#officeconnector-attach-url')))
         self.assertTrue(
-            'data-officeconnector-attach-token-url'
+            'data-officeconnector-attach-url'
             in browser.css('#officeconnector-attach-url')[0].outerHTML)
 
         self.assertEqual(0, len(browser.css('#officeconnector-checkout-url')))
@@ -73,7 +73,7 @@ class TestOfficeConnectorTemplates(FunctionalTestCase):
 
         self.assertEqual(1, len(browser.css('#officeconnector-checkout-url')))
         self.assertTrue(
-            'data-officeconnector-checkout-token-url'
+            'data-officeconnector-checkout-url'
             in browser.css('#officeconnector-checkout-url')[0].outerHTML)
 
     @browsing
@@ -92,12 +92,12 @@ class TestOfficeConnectorTemplates(FunctionalTestCase):
 
         self.assertEqual(1, len(browser.css('#officeconnector-attach-url')))
         self.assertTrue(
-            'data-officeconnector-attach-token-url'
+            'data-officeconnector-attach-url'
             in browser.css('#officeconnector-attach-url')[0].outerHTML)
 
         self.assertEqual(1, len(browser.css('#officeconnector-checkout-url')))
         self.assertTrue(
-            'data-officeconnector-checkout-token-url'
+            'data-officeconnector-checkout-url'
             in browser.css('#officeconnector-checkout-url')[0].outerHTML)
 
     @browsing
@@ -112,7 +112,7 @@ class TestOfficeConnectorTemplates(FunctionalTestCase):
 
         self.assertEqual(1, len(browser.css('#officeconnector-attach-url')))
         self.assertTrue(
-            'data-officeconnector-attach-token-url'
+            'data-officeconnector-attach-url'
             in browser.css('#officeconnector-attach-url')[0].outerHTML)
 
         self.assertEqual(0, len(browser.css('#officeconnector-checkout-url')))
@@ -131,7 +131,7 @@ class TestOfficeConnectorTemplates(FunctionalTestCase):
 
         self.assertEqual(1, len(browser.css('#officeconnector-checkout-url')))
         self.assertTrue(
-            'data-officeconnector-checkout-token-url'
+            'data-officeconnector-checkout-url'
             in browser.css('#officeconnector-checkout-url')[0].outerHTML)
 
     @browsing
@@ -150,12 +150,12 @@ class TestOfficeConnectorTemplates(FunctionalTestCase):
 
         self.assertEqual(1, len(browser.css('#officeconnector-attach-url')))
         self.assertTrue(
-            'data-officeconnector-attach-token-url'
+            'data-officeconnector-attach-url'
             in browser.css('#officeconnector-attach-url')[0].outerHTML)
 
         self.assertEqual(1, len(browser.css('#officeconnector-checkout-url')))
         self.assertTrue(
-            'data-officeconnector-checkout-token-url'
+            'data-officeconnector-checkout-url'
             in browser.css('#officeconnector-checkout-url')[0].outerHTML)
 
 
@@ -198,7 +198,7 @@ class TestOfficeConnectorBumblebeeTemplates(FunctionalTestCase):
 
         self.assertEqual(1, len(browser.css('#officeconnector-attach-url')))
         self.assertTrue(
-            'data-officeconnector-attach-token-url'
+            'data-officeconnector-attach-url'
             in browser.css('#officeconnector-attach-url')[0].outerHTML)
 
         self.assertEqual(0, len(browser.css('#officeconnector-checkout-url')))
@@ -217,7 +217,7 @@ class TestOfficeConnectorBumblebeeTemplates(FunctionalTestCase):
 
         self.assertEqual(1, len(browser.css('#officeconnector-checkout-url')))
         self.assertTrue(
-            'data-officeconnector-checkout-token-url'
+            'data-officeconnector-checkout-url'
             in browser.css('#officeconnector-checkout-url')[0].outerHTML)
 
     @browsing
@@ -236,10 +236,10 @@ class TestOfficeConnectorBumblebeeTemplates(FunctionalTestCase):
 
         self.assertEqual(1, len(browser.css('#officeconnector-attach-url')))
         self.assertTrue(
-            'data-officeconnector-attach-token-url'
+            'data-officeconnector-attach-url'
             in browser.css('#officeconnector-attach-url')[0].outerHTML)
 
         self.assertEqual(1, len(browser.css('#officeconnector-checkout-url')))
         self.assertTrue(
-            'data-officeconnector-checkout-token-url'
+            'data-officeconnector-checkout-url'
             in browser.css('#officeconnector-checkout-url')[0].outerHTML)

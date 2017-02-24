@@ -36,7 +36,7 @@
     <ul class="file-actions" i18n:domain="opengever.document">
       <li tal:define="link view/overlay/get_checkout_url" tal:condition="nocall: link">
        <tal:cond tal:condition="context/@@officeconnector_settings/is_checkout_enabled">
-         <a tal:attributes="data-officeconnector-checkout-token-url string:${context/absolute_url}/officeconnector_checkout_token"
+         <a tal:attributes="data-officeconnector-checkout-url string:${context/absolute_url}/officeconnector_checkout_url"
              id="officeconnector-checkout-url"
              class="function-edit"
              href="#"
@@ -54,7 +54,7 @@
       </li>
        <tal:cond tal:condition="context/@@officeconnector_settings/is_attach_enabled">
         <li>
-         <a tal:attributes="data-officeconnector-attach-token-url string:${context/absolute_url}/officeconnector_attach_token"
+         <a tal:attributes="data-officeconnector-attach-url string:${context/absolute_url}/officeconnector_attach_url"
              id="officeconnector-attach-url"
              class="function-attach"
              href="#"
