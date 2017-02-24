@@ -100,6 +100,7 @@ class BundleLoader(object):
 
     def _load_json(self, json_name):
         json_path = os.path.join(self.bundle_path, json_name)
+        log.info("Loading %s" % json_path)
         try:
             with codecs.open(json_path, 'r', 'utf-8-sig') as json_file:
                 data = json.load(json_file)
