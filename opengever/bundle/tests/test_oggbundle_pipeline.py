@@ -505,5 +505,3 @@ class TestOggBundlePipeline(FunctionalTestCase):
         self.assertEqual(2, len(dossiers))
         self.assertEqual(3, len(documents))
         self.assertEqual(1, len(mails))
-
-        print bundle
