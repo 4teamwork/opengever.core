@@ -253,6 +253,23 @@ Glossar
      nachgeführt, was speziell für die mandantenübergreifende Zusammenarbeit
      zentral ist.
 
+   OGIP
+     Engl. *OneGov GEVER Improvement Proposal* (Verbesserungsvorschlag zu
+     OneGov GEVER). Auf der Basis einer vorstrukturierten Dokumentvorlage
+     können Benutzer, Kunden oder 4teamwork technische und fachliche
+     Verbesserungsvorschläge formulieren, die den Funktionsumfang oder die
+     Bedienung von OneGov GEVER verbessern, ändern oder erweitern. Neben
+     Motivation und Spezifikation der vorgeschlagenen Verbesserung muss der
+     OGIP auch Fragen zu Abgrenzung, Rückwärtskompatibilität zu früheren
+     Releases von OneGov GEVER, Migration und Risikobewertung behandeln.
+     Üblicherweise schliesst der OGIP mit einer groben Kostenzusammenstellung
+     der geplanten Verbesserung. Der OGIP wird danach in der Community
+     im `Feedback-Forum <https://feedback.onegovgever.ch>`_ diskutiert
+     und gegebenenfalls überarbeitet. Sobald die Finanzierung der
+     Verbesserung (z.B. mittels *Crowd Funding*) gesichert ist, wird der OGIP
+     durch 4teamwork umgesetzt und in die ordentliche Releaseplanung von
+     OneGov GEVER aufgenommen.
+
    Ordnungsposition
      Position im :term:`Ordnungssystem`.
 
