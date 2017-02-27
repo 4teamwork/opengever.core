@@ -1,6 +1,6 @@
 function openOfficeconnector(data) {
     // URLs the browser does not handle get passed onto the OS
-    window.location = JSON.parse(data)['url'];
+    window.location = data['url'];
 }
 
 var officeconnector_config = {

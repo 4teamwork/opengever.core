@@ -5,6 +5,9 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Remove an unnecessary JSON parse step from OfficeConnector JS.
+  [Rotonen]
+
 - OGGBundle reports: Include summary sheet containing import duration,
   time of import and bundle name.
   [lgraf]
