@@ -5,6 +5,10 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Allow `Administrator` to view and edit private dossiers and private
+  folders.
+  [deiferni]
+
 - Remove an unnecessary JSON parse step from OfficeConnector JS.
   [Rotonen]
 
