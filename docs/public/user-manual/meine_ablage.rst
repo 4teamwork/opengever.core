@@ -17,12 +17,14 @@ persönlichen Dossiers genutzt werden.
 
 |img-meine-ablage|
 
-Der persönliche Bereich ist nur für den entsprechenden Benutzer sichtbar. Die
-Inhalte der persönlichen Ablage sind auch über die Suche auffindbar,
-selbstverständlich nur für den entsprechenden Benutzer. Dokumente im privaten
-Bereich können ins Ordnungssystem verschoben werden, Dokumente aus dem
-Ordnungssystem aber nicht in den privaten Bereich, da dies einem Löschen der
-Dokumente gleich käme.
+Der persönliche Bereich ist nur für den entsprechenden Benutzer und
+Administratoren sichtbar. Die Inhalte der persönlichen Ablage sind auch über
+die Suche auffindbar, selbstverständlich nur für den entsprechenden Benutzer
+und die Administratoren. Administratoren können Inhalte in persönlichen
+Bereichen bearbeiten, jedoch können Sie keine neuen Inhalte erstellen.
+Dokumente im privaten Bereich können ins Ordnungssystem verschoben werden,
+Dokumente aus dem Ordnungssystem aber nicht in den privaten Bereich, da dies
+einem Löschen der Dokumente gleich käme.
 
 Das Feature persönliche Ablage ist standardmässig deaktiviert, kann aber auf
 Wunsch aktiviert werden.

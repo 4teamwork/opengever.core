@@ -10,7 +10,6 @@ from opengever.private.tests import create_members_folder
 from opengever.testing import FunctionalTestCase
 from plone import api
 from plone.app.testing import TEST_USER_ID
-from zExceptions import Unauthorized
 
 
 class TestPrivateFolder(FunctionalTestCase):
@@ -89,7 +88,6 @@ class TestPrivateFolderTabbedView(FunctionalTestCase):
               'dossier-state-active', '', '01.09.2015', '']],
             browser.css('.listing').first.lists())
 
-
     @browsing
     def test_copy_and_move_items_actions_are_disabled(self, browser):
         create(Builder('private_dossier')
@@ -103,38 +101,12 @@ class TestPrivateFolderTabbedView(FunctionalTestCase):
             browser.css('.actionMenuContent a').text)
 
 
-class TestPrivateFolderWorkflow(FunctionalTestCase):
-
-    layer = OPENGEVER_FUNCTIONAL_PRIVATE_FOLDER_LAYER
-
-    def setUp(self):
-        super(TestPrivateFolderWorkflow, self).setUp()
-        self.root = create(Builder('private_root'))
-        self.folder = create_members_folder(self.root)
-
-    @browsing
-    def test_only_owner_can_see_private_folder(self, browser):
-        browser.login().open(self.folder)
-
-        create(Builder('user')
-               .named('Hugo', 'Boss')
-               .with_roles('Editor', 'Contributor', 'Reader'))
-
-        with self.assertRaises(Unauthorized):
-            browser.login('hugo.boss').open(self.folder)
-
-    @browsing
-    def test_owner_can_add_private_dossiers(self, browser):
-        browser.login().open(self.folder)
-        self.assertIn('Private Dossier', factoriesmenu.addable_types())
-
-
 class TestMyRepositoryAction(FunctionalTestCase):
 
     layer = OPENGEVER_FUNCTIONAL_PRIVATE_FOLDER_LAYER
 
     def setUp(self):
-        super(TestPrivateFolderWorkflow, self).setUp()
+        super(TestMyRepositoryAction, self).setUp()
         self.root = create(Builder('private_root'))
         self.folder = create_members_folder(self.root)
 
