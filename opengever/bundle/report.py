@@ -336,7 +336,8 @@ class XLSXMainReportBuilder(XLSXReportBuilderBase):
 
 
 class XLSXValidationReportBuilder(XLSXReportBuilderBase):
-    """Build a validation report in XLSX format based on `errors` dictionary.
+    """Build a validation report in XLSX format based on `errors` and
+    `warnings` dictionaries.
     """
 
     ERROR_FIELDS = OrderedDict([
@@ -347,10 +348,15 @@ class XLSXValidationReportBuilder(XLSXReportBuilderBase):
         ('unmapped_unc_mounts', ('mount', )),
     ])
 
+    WARNING_FIELDS = OrderedDict([
+        ('max_nesting_depth_exceeded', ('guid', 'max', 'actual', 'path')),
+    ])
+
     def __init__(self, bundle):
         super(XLSXValidationReportBuilder, self).__init__()
         self.bundle = bundle
         self.errors = bundle.errors
+        self.warnings = bundle.warnings
 
     def write_summary(self):
         """Write a summary with counts for every message type.
@@ -358,10 +364,25 @@ class XLSXValidationReportBuilder(XLSXReportBuilderBase):
         sheet_name = 'summary'
         sheet = self.add_sheet(sheet_name)
 
-        for rownum, item in enumerate(self.errors.items()):
-            error_type, error_list = item
+        rownum = 0
+        self.write_row(sheet, rownum, ['Errors'], bold=True)
+        rownum += 1
+
+        for error_type, error_list in self.errors.items():
             self.write_row(
-                sheet, rownum, (error_type, len(error_list)), firstbold=True)
+                sheet, rownum, (error_type, len(error_list)),
+                firstbold=True)
+            rownum += 1
+
+        rownum += 1
+        self.write_row(sheet, rownum, ['Warnings'], bold=True)
+        rownum += 1
+
+        for warning_type, warning_list in self.warnings.items():
+            self.write_row(
+                sheet, rownum, (warning_type, len(warning_list)),
+                firstbold=True)
+            rownum += 1
 
     def write_msg_sheets(self, msg_dict, field_defs):
         """Write a sheet for every message type in msg_dict.
@@ -385,3 +406,4 @@ class XLSXValidationReportBuilder(XLSXReportBuilderBase):
     def write_report_data(self):
         self.write_summary()
         self.write_msg_sheets(self.errors, self.ERROR_FIELDS)
+        self.write_msg_sheets(self.warnings, self.WARNING_FIELDS)

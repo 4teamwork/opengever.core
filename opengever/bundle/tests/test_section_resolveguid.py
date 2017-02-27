@@ -66,11 +66,11 @@ class TestResolveGUID(FunctionalTestCase):
         ])
 
         self.assertEqual([
-                {'guid': 1337},
-                {'guid': 'qux', 'parent_guid': 1337},
-                {'guid': 1},
-                {'guid': 2, 'parent_guid': 1},
-                {'guid': 3, 'parent_guid': 2},
+                {'_nesting_depth': 1, 'guid': 1337},
+                {'_nesting_depth': 2, 'guid': 'qux', 'parent_guid': 1337},
+                {'_nesting_depth': 1, 'guid': 1},
+                {'_nesting_depth': 2, 'guid': 2, 'parent_guid': 1},
+                {'_nesting_depth': 3, 'guid': 3, 'parent_guid': 2},
             ],
             list(section)
         )
