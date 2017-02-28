@@ -348,24 +348,40 @@ class DefaultConstrainTypeDecider(grok.MultiAdapter):
     grok.adapts(Interface, IDossierMarker, IDexterityFTI)
     grok.name('')
 
-    CONSTRAIN_CONFIGURATION = {
-        'opengever.dossier.businesscasedossier': {
-            'opengever.dossier.businesscasedossier': 2,
-            'opengever.dossier.projectdossier': 1,
-            },
-        'opengever.private.dossier': {
-            'opengever.private.dossier': 2
-        },
-        'opengever.dossier.projectdossier': {
-            'opengever.dossier.projectdossier': 1,
-            'opengever.dossier.businesscasedossier': 1,
-            },
-        }
-
     def __init__(self, request, context, fti):
         self.context = context
         self.request = request
         self.fti = fti
+
+    @property
+    def CONSTRAIN_CONFIGURATION(self):
+        """Return the dynamically computed default constrain configuration.
+
+        This previously was a class-level variable, and is being extended by
+        type-specific ConstrainTypeDeciders in policies (e.g. opengever.zug).
+        """
+        # The registry record 'maximum_dossier_depth' actually describes the
+        # maximum levels of *sub*dossiers allowed. That's why we increase this
+        # value by one below, in order to get the maximum allowed nesting
+        # level for dossiers in general.
+        max_subdossier_levels = api.portal.get_registry_record(
+            'maximum_dossier_depth', interface=IDossierContainerTypes)
+        max_dossier_levels = max_subdossier_levels + 1
+
+        config = {
+            'opengever.dossier.businesscasedossier': {
+                'opengever.dossier.businesscasedossier': max_dossier_levels,
+                'opengever.dossier.projectdossier': 1,
+            },
+            'opengever.private.dossier': {
+                'opengever.private.dossier': 2
+            },
+            'opengever.dossier.projectdossier': {
+                'opengever.dossier.projectdossier': 1,
+                'opengever.dossier.businesscasedossier': 1,
+            },
+        }
+        return config
 
     def addable(self, depth):
         container_type = self.context.portal_type
