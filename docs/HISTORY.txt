@@ -5,6 +5,11 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- OGGBundle import: Validate max nesting depth for repositoryfolders
+  and dossiers. Failure to validate will be logged in validation report,
+  but otherwise doesn't affect import.
+  [lgraf]
+
 - Make DefaultConstrainTypeDecider read max dossier nesting levels from
   registry instead of hardcoding them.
   [lgraf]
