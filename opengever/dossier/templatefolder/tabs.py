@@ -1,10 +1,11 @@
 from five import grok
+from opengever.dossier import _
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateSchema
 from opengever.dossier.templatefolder.interfaces import ITemplateFolder
-from opengever.tabbedview import _
 from opengever.tabbedview import BaseCatalogListingTab
 from opengever.tabbedview.browser.tabs import Documents, Trash
 from opengever.tabbedview.helper import linked
+
 
 REMOVED_COLUMNS = ['receipt_date', 'delivery_date', 'containing_subdossier']
 
