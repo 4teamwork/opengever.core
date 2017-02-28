@@ -2,6 +2,14 @@
 Changelog
 =========
 
+4.15.2 (unreleased)
+-------------------
+
+- Allow `Administrator` to view and edit private dossiers and private
+  folders.
+  [deiferni]
+
+
 4.15.1 (2017-02-07)
 -------------------
 
