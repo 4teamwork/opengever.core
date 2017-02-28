@@ -5,6 +5,10 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Make DefaultConstrainTypeDecider read max dossier nesting levels from
+  registry instead of hardcoding them.
+  [lgraf]
+
 - Fix an error when creating a SIP export of documents without a file.
   [phgross]
 
