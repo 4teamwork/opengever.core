@@ -19,6 +19,11 @@
       />
 
   <utility
+      component=".sections.disabled_indexing.DisabledCatalogIndexing"
+      name="opengever.bundle.disabled_indexing"
+      />
+
+  <utility
     component=".sections.resolveguid.ResolveGUIDSection"
     name="opengever.bundle.resolveguid"
     />
