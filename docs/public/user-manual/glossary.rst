@@ -5,12 +5,15 @@ Glossar
 
    Ablagestandort
      Eindeutig identifizierbarer Standort der analogen oder digitalen
-     Dossiers und/oder Dokumente.
+     Dossiers und/oder Dokumente (gemäss
+     `TermDat:GEV09 <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67192?strLanguages=2-6-7-8-3&isPartialView=0>`_).
 
    Ablaufsteuerung
      Funktionskomponente eines GEVER-Systems zum Zuteilen, Ausführen und
      Nachverfolgen von Pendenzen und Aktivitäten.
      Vgl. :term:`Geschäftsprozess`.
+
+     Quelle: `TermDat:GEV12 <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67121?strLanguages=2-6-7-8-3&isPartialView=0>`_
 
    Ablieferung
      Vorgang, bei dem archivwürdige Unterlagen dem Archiv abgeliefert werden.
