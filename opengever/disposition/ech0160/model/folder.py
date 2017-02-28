@@ -18,7 +18,8 @@ class Folder(object):
             self.folders.append(Folder(toc, dossier, self.path))
 
         for doc in dossier.documents.values():
-            self.files.append(File(toc, doc))
+            if doc.obj.archival_file or doc.obj.file:
+                self.files.append(File(toc, doc))
 
     def binding(self):
         ordner = arelda.ordnerSIP(self.name)
