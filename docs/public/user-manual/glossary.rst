@@ -5,15 +5,12 @@ Glossar
 
    Ablagestandort
      Eindeutig identifizierbarer Standort der analogen oder digitalen
-     Dossiers und/oder Dokumente (gemäss
-     `TermDat:GEV09 <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67192?strLanguages=2-6-7-8-3&isPartialView=0>`_).
+     Dossiers und/oder Dokumente. [#ablagestandort]_
 
    Ablaufsteuerung
      Funktionskomponente eines GEVER-Systems zum Zuteilen, Ausführen und
      Nachverfolgen von Pendenzen und Aktivitäten.
-     Vgl. :term:`Geschäftsprozess`.
-
-     Quelle: `TermDat:GEV12 <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67121?strLanguages=2-6-7-8-3&isPartialView=0>`_
+     Vgl. :term:`Geschäftsprozess`. [#ablaufsteuerung]_
 
    Ablieferung
      Vorgang, bei dem archivwürdige Unterlagen dem Archiv abgeliefert werden.
@@ -383,5 +380,11 @@ Glossar
      Mitarbeitenden zur Registrierung weiterleiten. In OneGov GEVER erfolgt
      die Vorregistrierung im Posteingang oder in der persönlichen Ablage.
 
+.. rubric:: Quellenangaben
+
+.. [#ablagestandort] `TERMDAT:GEV09:Ablagestandort <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67192>`_,
+     abgerufen am 28. Februar 2017.
+.. [#ablaufsteuerung] `TERMDAT:GEV12:Ablaufsteuerung <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67121>`_,
+     abgerufen am 28. Februar 2017.
 
 .. disqus::
