@@ -5,6 +5,11 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- OGGBundle: Don't reindex during pipeline.
+  Have reindexing only happen once per object instead at the end of the
+  pipeline.
+  [lgraf]
+
 - Fix updating the proposal attachement-list after submitting a new document.
   [elioschmutz]
 
