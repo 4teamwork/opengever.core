@@ -24,3 +24,12 @@ class ParticipationRemoved(ObjectEvent):
     def __init__(self, obj, participant):
         self.object = obj
         self.participant = participant
+
+
+class SourceFilesPurged(ObjectEvent):
+    """The `SourceFilesErased` event is fired after the source files from
+    all documents, as long they provide an archival file, contained by a
+    dossier has been purged.
+    """
+
+    implements(interfaces.ISourceFilesPurged)

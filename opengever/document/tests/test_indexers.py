@@ -117,6 +117,15 @@ class TestDocumentIndexers(FunctionalTestCase):
         self.assertEquals(fulltext_indexer.__class__,
                           DefaultDocumentIndexer)
 
+    def test_has_archival_file_index(self):
+        doc1 = create(Builder('document').attach_file_containing('DATA'))
+        doc2 = create(Builder('document')
+                      .attach_archival_file_containing('DATA')
+                      .attach_file_containing('DATA'))
+
+        self.assertFalse(index_data_for(doc1).get('has_archival_file'))
+        self.assertTrue(index_data_for(doc2).get('has_archival_file'))
+
 
 class TestDefaultDocumentIndexer(MockTestCase):
 

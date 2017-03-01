@@ -206,3 +206,18 @@ class IDossierResolveProperties(Interface):
         description=u'Select if GEVER should trigger the archival file '
         'conversion for each document, when a dossier gets resolved.',
         default=False)
+
+    waiting_period_source_file_removal = schema.Int(
+        title=u'Waiting period in years.',
+        description=u'Length of the waiting period in years, before the '
+        'source file (file in the original format) gets removed.',
+        default=2)
+
+
+class ISourceFileHasBeenPurged(Interface):
+    """Marker interface for dossier where the source files has been purged.
+    """
+
+
+class ISourceFilesPurged(IObjectEvent):
+    """Interface for source files purged event."""

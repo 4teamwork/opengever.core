@@ -224,6 +224,11 @@ class MailBuilder(DexterityBuilder):
         self.arguments["message"] = file_
         return self
 
+    def attach_archival_file_containing(self, content, name=u"test.pdf"):
+        file_ = NamedBlobFile(data=content, filename=name)
+        self.arguments['archival_file'] = file_
+        return self
+
     def with_asset_message(self, filename):
         self.with_message(assets.load(filename), unicode(filename))
         return self

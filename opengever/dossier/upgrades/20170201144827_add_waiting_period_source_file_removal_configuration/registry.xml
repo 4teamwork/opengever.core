@@ -1,0 +1,5 @@
+<registry purge="False">
+  <records interface="opengever.dossier.interfaces.IDossierResolveProperties">
+    <value key="waiting_period_source_file_removal">2</value>
+  </records>
+</registry>

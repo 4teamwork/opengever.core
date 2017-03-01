@@ -35,4 +35,12 @@
         allowed_attributes="listing select_all reorder setgridstate set_default_tab msg_unknownresponse"
         />
 
+    <browser:page
+        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+        name="source_file_purger"
+        class=".source_file_purger.SourceFilePurger"
+        permission="opengever.document.PurgeSourceFile"
+        template="templates/source_file_purger.pt"
+        />
+
 </configure>

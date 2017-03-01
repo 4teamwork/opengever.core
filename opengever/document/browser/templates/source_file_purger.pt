@@ -1,0 +1,50 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="opengever.document">
+
+  <body>
+    <metal:main fill-slot="main">
+      <tal:main-macro metal:define-macro="main" tal:define="portal_url context/@@plone_portal_state/portal_url">
+
+        <div tal:replace="structure provider:plone.abovecontenttitle" />
+        <h1 i18n:translate="label_source_file_purging" class="documentFirstHeading">Source file purging</h1>
+        <p class="warning" i18n:translate="msg_purge_warning">
+          The source files are purged permanently and can't be restored.
+        </p>
+
+        <div tal:replace="structure provider:plone.abovecontentbody" />
+        <h3 i18n:translate="label_dossiers_with_expired_waiting_period">
+          Dossiers with a expired waiting period
+        </h3>
+        <ul class="dossiers">
+          <li tal:repeat="dossier view/get_expired_dossiers">
+            <a href="#" tal:attributes="href dossier/absolute_url"
+               tal:content="dossier/Title" />
+          </li>
+        </ul>
+
+        <div tal:replace="structure provider:plone.abovecontentbody" />
+        <h3 i18n:translate="label_documents_to_remove">Documents with a removable source file</h3>
+        <ul class="documents">
+          <li tal:repeat="document view/get_documents">
+            <a href="#" tal:attributes="href document/absolute_url"
+               tal:content="document/Title" />
+          </li>
+        </ul>
+
+        <a href="purge_source_files" class="button context"
+           i18n:translate="lable_purge_source_files"
+           tal:attributes="href string:${context/absolute_url}/source_file_purger?purge=1&_authenticator=${context/@@authenticator/token}">
+          Purge all source files
+        </a>
+
+        <div tal:replace="structure provider:plone.belowcontentbody" />
+      </tal:main-macro>
+    </metal:main>
+
+  </body>
+</html>
