@@ -4,8 +4,9 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.widgets.file import DexterityFileWidget
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import FunctionalTestCase
-from plone.app.testing import login
 from plone.app.testing import TEST_USER_NAME
+from plone.app.testing import login
+from urllib2 import HTTPError
 from zope.component import queryMultiAdapter
 import transaction
 
@@ -89,3 +90,60 @@ class TestDocumentIntegration(FunctionalTestCase):
 
         inputs = [input.name for input in browser.forms.get('form').inputs]
         self.assertNotIn('form.widgets.IVersionable.changeNote', inputs)
+
+
+class TestDocumentFileUploadForm(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestDocumentFileUploadForm, self).setUp()
+        login(self.portal, TEST_USER_NAME)
+
+        self.repo, self.repo_folder = create(Builder('repository_tree'))
+
+        self.dossier = create(Builder('dossier').within(self.repo_folder))
+        self.document = create(
+            Builder('document')
+            .within(self.dossier)
+            .titled(u'Document1')
+            .having(digitally_available=True)
+            .with_dummy_content())
+
+    @browsing
+    def test_file_upload_form_renders_file_field(self, browser):
+        browser.login().open(self.document, view='file_upload')
+        file_field = browser.forms.get('form').find_field('File')
+        self.assertIsNotNone(file_field)
+        self.assertTrue(isinstance(file_field, DexterityFileWidget))
+
+    @browsing
+    def test_file_upload_form_doesnt_render_title_field(self, browser):
+        browser.login().open(self.document, view='file_upload')
+        title_field = browser.forms.get('form').find_field('Title')
+        self.assertIsNone(title_field)
+
+    @browsing
+    def test_file_upload_form_replaces_file(self, browser):
+        # checkout the document
+        manager = queryMultiAdapter((self.document, self.document.REQUEST),
+                                    ICheckinCheckoutManager)
+        manager.checkout()
+        transaction.commit()
+
+        browser.login().open(self.document, view='file_upload')
+        browser.fill({
+            'File': ('New file data', 'file.txt', 'text/plain'),
+            'form.widgets.file.action': 'replace',
+            })
+        browser.find('Save').click()
+        self.assertEqual('New file data', self.document.file.data)
+
+    @browsing
+    def test_file_upload_fails_if_document_isnt_checked_out(self, browser):
+        browser.login().open(self.document, view='file_upload')
+        browser.fill({
+            'File': ('New file data', 'file.txt', 'text/plain'),
+            'form.widgets.file.action': 'replace',
+            })
+        with self.assertRaises(HTTPError) as cm:
+            browser.find('Save').click()
+        self.assertEqual(412, cm.exception.getcode())
