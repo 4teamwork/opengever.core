@@ -8,6 +8,7 @@ Changelog
 - Improve disposal of inactive dossiers:
 
   - Set end date to current date when deactivating a dossier.
+  - Display inactive dossiers in a separate listing on the disposition overview.
 
   [phgross]
 

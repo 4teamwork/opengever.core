@@ -10,26 +10,49 @@ from Products.CMFPlone.CatalogTool import zero_fill
 from Products.Five.browser import BrowserView
 
 
+def sort_on_sortable_title(item):
+    if isinstance(item[0], unicode):
+        return num_sort_regex.sub(zero_fill, item[0])
+    return num_sort_regex.sub(zero_fill, item[0].Title())
+
+
 class DispositionOverview(BrowserView, GeverTabMixin):
 
     show_searchform = False
 
-    def get_dossiers_grouped_by_repository(self):
+
+    def __call__(self):
+        self.init_dossiers()
+        return super(DispositionOverview, self).__call__()
+
+    def init_dossiers(self):
         dossiers = self.context.get_dossier_representations()
-        grouped_dossiers = {}
+        active_dossiers = {}
+        inactive_dossiers = {}
+
         for dossier in dossiers:
-            key = dossier.get_grouping_key()
-            if key not in grouped_dossiers:
-                grouped_dossiers[key] = [dossier]
+            if dossier.was_inactive():
+                self._add_to(inactive_dossiers, dossier)
             else:
-                grouped_dossiers[key].append(dossier)
+                self._add_to(active_dossiers, dossier)
 
-        def sort_on_sortable_title(item):
-            if isinstance(item[0], unicode):
-                return num_sort_regex.sub(zero_fill, item[0])
-            return num_sort_regex.sub(zero_fill, item[0].Title())
+        self.active_dossiers = sorted(
+            active_dossiers.items(), key=sort_on_sortable_title)
 
-        return sorted(grouped_dossiers.items(), key=sort_on_sortable_title)
+        self.inactive_dossiers = sorted(
+            inactive_dossiers.items(), key=sort_on_sortable_title)
+
+    def _add_to(self, mapping, dossier):
+        key = dossier.get_grouping_key()
+        mapping.setdefault(key, []).append(dossier)
+
+    def get_dossier_lists(self):
+        return [
+            [_(u'label_resolved_dossiers', default=u'Resolved Dossiers'),
+             self.active_dossiers],
+            [_(u'label_inactive_dossiers', default=u'Inactive Dossiers'),
+             self.inactive_dossiers]
+        ]
 
     def is_archival_worthy(self, dossier):
         return ILifeCycle(dossier).archival_value != ARCHIVAL_VALUE_UNWORTHY

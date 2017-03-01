@@ -28,6 +28,7 @@ class TestDispositionOverview(FunctionalTestCase):
 
         self.dossier2 = create(Builder('dossier')
                                .as_expired()
+                               .in_state('dossier-state-inactive')
                                .within(self.repository)
                                .having(title=u'Dossier B',
                                        start=date(2015, 1, 19),
@@ -216,8 +217,30 @@ class TestDispositionOverview(FunctionalTestCase):
         browser.login().open(self.disposition, view='tabbedview_view-overview')
 
         self.assertEquals(
-            ['Archival value: archival worthy with sampling'],
-            browser.css('.repository_title .meta').text)
+            'Archival value: archival worthy with sampling',
+            browser.css('.repository_title .meta').first.text)
+
+    @browsing
+    def test_displays_active_and_inactive_dossiers_separately(self, browser):
+        browser.login().open(self.disposition, view='tabbedview_view-overview')
+
+        resolved_list, inactive_list = browser.css('ul.list-group')
+
+        # resolved
+        self.assertEquals(
+            ['Resolved Dossiers', 'Archive'],
+            resolved_list.css('.label h3').text)
+        self.assertEquals(
+            ['Client1 1 / 1 Dossier A'],
+            resolved_list.css('.dispositions h3.title').text)
+
+        # inactive
+        self.assertEquals(
+            ['Inactive Dossiers', 'Archive'],
+            inactive_list.css('.label h3').text)
+        self.assertEquals(
+            ['Client1 1 / 2 Dossier B'],
+            inactive_list.css('.dispositions h3.title').text)
 
     @browsing
     def test_are_grouped_by_repository_and_sorted(self, browser):

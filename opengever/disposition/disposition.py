@@ -59,6 +59,7 @@ class DossierDispositionInformation(object):
         self.archival_value = ILifeCycle(dossier).archival_value
         self.archival_value_annotation = ILifeCycle(dossier).archival_value_annotation
         self.appraisal = IAppraisal(disposition).get(dossier)
+        self.former_state = dossier.get_former_state()
 
     @property
     def additional_metadata_available(self):
@@ -66,6 +67,9 @@ class DossierDispositionInformation(object):
 
     def get_grouping_key(self):
         return self.parent
+
+    def was_inactive(self):
+        return self.former_state == 'dossier-state-inactive'
 
     def get_repository_title(self):
         return self.parent.Title().decode('utf-8')
@@ -78,7 +82,8 @@ class DossierDispositionInformation(object):
             'intid': self.intid,
             'reference_number': self.reference_number,
             'repository_title': self.get_repository_title(),
-            'appraisal': self.appraisal})
+            'appraisal': self.appraisal,
+            'former_state': self.former_state})
 
 
 class RemovedDossierDispositionInformation(DossierDispositionInformation):
@@ -95,6 +100,7 @@ class RemovedDossierDispositionInformation(DossierDispositionInformation):
         self.public_trial = None
         self.archival_value = None
         self.archival_value_annotation = None
+        self.former_state = dossier_mapping.get('former_state')
 
     @property
     def additional_metadata_available(self):

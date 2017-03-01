@@ -60,17 +60,20 @@ class TestDestruction(FunctionalTestCase):
              'title': u'D\xf6ssier 1',
              'appraisal': False,
              'reference_number': 'Client1 1 / 1',
-             'repository_title': u'1. Anfragen'},
+             'repository_title': u'1. Anfragen',
+             'former_state': u'dossier-state-resolved'},
             {'intid': self.dossier_intids[1],
              'title': u'D\xf6ssier 2',
              'appraisal': True,
              'reference_number': 'Client1 1 / 2',
-             'repository_title': u'1. Anfragen'},
+             'repository_title': u'1. Anfragen',
+             'former_state': u'dossier-state-resolved'},
             {'intid': self.dossier_intids[2],
              'title': u'D\xf6ssier 3',
              'appraisal': True,
              'reference_number': 'Client1 1 / 3',
-             'repository_title': u'1. Anfragen'}]
+             'repository_title': u'1. Anfragen',
+             'former_state': u'dossier-state-resolved'}]
 
         self.assertEquals(expected,
                           list(self.disposition.get_destroyed_dossiers()))
