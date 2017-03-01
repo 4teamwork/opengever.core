@@ -9,6 +9,7 @@ Changelog
 
   - Set end date to current date when deactivating a dossier.
   - Display inactive dossiers in a separate listing on the disposition overview.
+  - Preappraisal: Handle inactive dossier always as not archival worthy.
 
   [phgross]
 

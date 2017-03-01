@@ -42,7 +42,11 @@ class Appraisal(object):
         it if exists.
 
         Sampling, unchecked and prompt aren't handled as a preselection.
+        Inactive dossiers are always handled as not archival worthy.
         """
+        if dossier.get_former_state() == 'dossier-state-inactive':
+            return False
+
         archival_value = ILifeCycle(dossier).archival_value
         if archival_value == ARCHIVAL_VALUE_UNWORTHY:
             return False
