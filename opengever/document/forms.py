@@ -1,10 +1,16 @@
 from AccessControl import getSecurityManager
+from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.interfaces import NO_DOWNLOAD_DISPLAY_MODE
 from opengever.document.interfaces import NO_DOWNLOAD_INPUT_MODE
 from plone.dexterity.browser.edit import DefaultEditForm
+from plone.dexterity.events import EditFinishedEvent
+from plone.dexterity.i18n import MessageFactory as _
+from plone.directives import form
 from plone.z3cform import layout
+from z3c.form import button
 from zope.component import queryMultiAdapter
+from zope.event import notify
 
 
 class DocumentEditForm(DefaultEditForm):
@@ -39,3 +45,41 @@ class DocumentEditForm(DefaultEditForm):
                 file_field.mode = NO_DOWNLOAD_INPUT_MODE
 
 DocumentEditView = layout.wrap_form(DocumentEditForm)
+
+
+class IDocumentFileUploadForm(IDocumentSchema):
+    """Schema for the file upload form."""
+
+    form.omitted('title')
+
+
+class DocumentFileUploadForm(DefaultEditForm):
+    """A form for just uploading the file of a document without any metadata
+       fields. Used by Office Connector."""
+    schema = IDocumentFileUploadForm
+    additionalSchemata = ()
+    render_form = True
+
+    @button.buttonAndHandler(_(u'Save'), name='save')
+    def handleApply(self, action):
+        data, errors = self.extractData()
+        if errors:
+            self.status = self.formErrorsMessage
+            self.request.response.setStatus(400)
+            return
+
+        manager = queryMultiAdapter((self.context, self.request),
+                                    ICheckinCheckoutManager)
+        if not manager.is_checked_out_by_current_user():
+            self.request.response.setStatus(412)
+            return
+
+        self.applyChanges(data)
+        self.request.response.setStatus(204)
+        notify(EditFinishedEvent(self.context))
+        self.render_form = False
+
+    def render(self):
+        if self.render_form:
+            return super(DocumentFileUploadForm, self).render()
+        return None

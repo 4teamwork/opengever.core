@@ -94,4 +94,12 @@
           permission="cmf.ModifyPortalContent"
           />
 
+    <!-- file upload form for documents -->
+    <browser:page
+          for="opengever.document.document.IDocumentSchema"
+          name="file_upload"
+          class=".forms.DocumentFileUploadForm"
+          permission="cmf.ModifyPortalContent"
+          />
+
 </configure>
