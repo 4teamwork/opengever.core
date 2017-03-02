@@ -178,10 +178,14 @@ class OfficeConnectorCheckoutPayload(OfficeConnectorPayload):
                                        obj=self.document):
             raise Forbidden
 
+        # Upload API will be included as a registry setting in the future when
+        # the plone.api endpoint gets made - for now we've made a custom upload
+        # form.
         payload['checkin-with-comment'] = '@@checkin_document'
         payload['checkin-without-comment'] = 'checkin_without_comment'
         payload['checkout'] = '@@checkout_documents'
-        payload['edit-form'] = 'edit'
+        payload['upload-form'] = 'file_upload'
+        payload['upload-api'] = None
 
         self.request.response.setHeader('Content-type', 'application/json')
         return json.dumps(payload)
