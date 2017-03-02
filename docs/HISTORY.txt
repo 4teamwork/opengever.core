@@ -5,6 +5,8 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Caching: enable tabbedview etag value. [jone]
+
 - Translate missing "open detail view" in bumblebee-overlay.
   [elioschmutz]
 
