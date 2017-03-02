@@ -240,7 +240,7 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
         # Test we can upload a new version of the file
         browser.login()
         browser.open(self.document_with_attachment,
-                     view=str(payload['edit-form']))
+                     view=str(payload['upload-form']))
         # The DATA in the file tuple needs to be seekable
         browser.fill({
             'form.widgets.file.action': 'replace',
@@ -282,7 +282,7 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
         # Test we can upload a new version of the file
         browser.login()
         browser.open(self.document_with_attachment,
-                     view=str(payload['edit-form']))
+                     view=str(payload['upload-form']))
         # The DATA in the file tuple needs to be seekable
         browser.fill({
             'form.widgets.file.action': 'replace',

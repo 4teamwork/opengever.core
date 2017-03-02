@@ -5,6 +5,10 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Add scaffolding to OC checkout payloads in anticipation of plone.api direct
+  file uploads.
+  [Rotonen]
+
 - Improve disposal of inactive dossiers:
 
   - Set end date to current date when deactivating a dossier.
