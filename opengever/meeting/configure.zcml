@@ -4,34 +4,34 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     xmlns:grok="http://namespaces.zope.org/grok"
     xmlns:i18n="http://namespaces.zope.org/i18n"
-    i18n_domain="opengever.meeting"
-    >
+    i18n_domain="opengever.meeting">
 
-    <include file="permissions.zcml" />
-    <include package=".behaviors" />
-    <include package=".browser" />
+  <include file="permissions.zcml" />
+  <include package=".behaviors" />
+  <include package=".browser" />
 
-    <!-- Grok the package to initialise schema interfaces and content classes -->
-    <grok:grok package="." />
+  <!-- Grok the package to initialise schema interfaces and content classes -->
+  <grok:grok package="." />
 
-    <!-- Register locales translations -->
-    <i18n:registerTranslations directory="locales" />
+  <!-- Register locales translations -->
+  <i18n:registerTranslations directory="locales" />
 
-    <!-- Register an extension profile to make the product installable -->
-    <genericsetup:registerProfile
-        name="default"
-        title="opengever.meeting"
-        description="OpenGever Meeting"
-        directory="profiles/default"
-        provides="Products.GenericSetup.interfaces.EXTENSION"
-        />
-    <include package=".upgrades" />
+  <!-- Register an extension profile to make the product installable -->
+  <genericsetup:registerProfile
+      name="default"
+      title="opengever.meeting"
+      description="OpenGever Meeting"
+      directory="profiles/default"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+  <include package=".upgrades" />
 
-    <browser:viewlet
-        name="plone.belowcontenttitle.documentbyline"
-        for="opengever.meeting.interfaces.IMeetingDossier"
-        manager="plone.app.layout.viewlets.interfaces.IBelowContentTitle"
-        class="opengever.dossier.viewlets.byline.BusinessCaseByline"
-        permission="zope2.View" />
+  <browser:viewlet
+      name="plone.belowcontenttitle.documentbyline"
+      for="opengever.meeting.interfaces.IMeetingDossier"
+      manager="plone.app.layout.viewlets.interfaces.IBelowContentTitle"
+      class="opengever.dossier.viewlets.byline.BusinessCaseByline"
+      permission="zope2.View"
+      />
 
 </configure>

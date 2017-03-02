@@ -1,4 +1,3 @@
-<?xml version="1.0"?>
 <rolemap>
 
   <roles>
@@ -8,30 +7,30 @@
   <permissions>
 
     <permission name="opengever.meeting: Add Proposal" acquire="True">
-      <role name="Manager"/>
-      <role name="Contributor"/>
-      <role name="Administrator"/>
+      <role name="Manager" />
+      <role name="Contributor" />
+      <role name="Administrator" />
     </permission>
 
     <permission name="opengever.meeting: Add CommitteeContainer" acquire="True">
-      <role name="Manager"/>
+      <role name="Manager" />
     </permission>
 
     <permission name="opengever.meeting: Add Committee" acquire="True">
-      <role name="Manager"/>
-      <role name="Contributor"/>
-      <role name="Administrator"/>
+      <role name="Manager" />
+      <role name="Contributor" />
+      <role name="Administrator" />
     </permission>
 
     <permission name="opengever.meeting: Add Member" acquire="True">
-      <role name="Manager"/>
-      <role name="Contributor"/>
-      <role name="Administrator"/>
+      <role name="Manager" />
+      <role name="Contributor" />
+      <role name="Administrator" />
     </permission>
 
     <permission name="opengever.meeting: Add Sablon Template" acquire="True">
-      <role name="Manager"/>
-      <role name="Administrator"/>
+      <role name="Manager" />
+      <role name="Administrator" />
     </permission>
 
   </permissions>

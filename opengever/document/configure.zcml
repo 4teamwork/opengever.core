@@ -8,98 +8,100 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="opengever.document">
 
-    <include package="collective.vdexvocabulary" file="meta.zcml" />
+  <include package="collective.vdexvocabulary" file="meta.zcml" />
 
-    <!-- Grok the package to initialise schema interfaces and content classes -->
-    <grok:grok package="." />
+  <!-- Grok the package to initialise schema interfaces and content classes -->
+  <grok:grok package="." />
 
-    <include package=".checkout" />
-    <include package=".widgets" />
+  <include package=".checkout" />
+  <include package=".widgets" />
 
-    <!-- vdex vocabularies folder -->
-    <vdex:vocabulary directory="vdexvocabs" />
+  <!-- vdex vocabularies folder -->
+  <vdex:vocabulary directory="vdexvocabs" />
 
-    <browser:resourceDirectory
-        name="opengever.document"
-        directory="static"
-        />
+  <browser:resourceDirectory
+      name="opengever.document"
+      directory="static"
+      />
 
-    <!-- Include custom permissions -->
-    <include file="permissions.zcml" />
+  <!-- Include custom permissions -->
+  <include file="permissions.zcml" />
 
-    <include file="profiles.zcml" />
+  <include file="profiles.zcml" />
 
-    <include package=".browser" />
-    <include package=".menu" />
-    <include package=".viewlets" />
-    <include package=".upgrades" />
+  <include package=".browser" />
+  <include package=".menu" />
+  <include package=".viewlets" />
+  <include package=".upgrades" />
 
-    <subscriber
-        for="ftw.bumblebee.interfaces.IBumblebeeable
-             opengever.document.interfaces.IObjectCheckedInEvent"
-        handler="ftw.bumblebee.subscribers.handle_bumblebee_document_added" />
+  <subscriber
+      for="ftw.bumblebee.interfaces.IBumblebeeable
+           opengever.document.interfaces.IObjectCheckedInEvent"
+      handler="ftw.bumblebee.subscribers.handle_bumblebee_document_added"
+      />
 
-    <subscriber
-        for="ftw.bumblebee.interfaces.IBumblebeeable
-             opengever.document.interfaces.IObjectRevertedToVersion"
-        handler="ftw.bumblebee.subscribers.handle_bumblebee_document_added" />
+  <subscriber
+      for="ftw.bumblebee.interfaces.IBumblebeeable
+           opengever.document.interfaces.IObjectRevertedToVersion"
+      handler="ftw.bumblebee.subscribers.handle_bumblebee_document_added"
+      />
 
-    <adapter
-        factory=".contentlisting.DocumentContentListingObject"
-        for="opengever.document.behaviors.IBaseDocument"
-        />
+  <adapter
+      factory=".contentlisting.DocumentContentListingObject"
+      for="opengever.document.behaviors.IBaseDocument"
+      />
 
-    <!-- Register locales translations -->
-    <i18n:registerTranslations directory="locales" />
+  <!-- Register locales translations -->
+  <i18n:registerTranslations directory="locales" />
 
-    <!-- Document Metadata behavior -->
-    <plone:behavior
-        title="Document Metadata"
-        description="Common metadata for GEVER documents"
-        provides=".behaviors.metadata.IDocumentMetadata"
-        for="*"
-        />
+  <!-- Document Metadata behavior -->
+  <plone:behavior
+      title="Document Metadata"
+      description="Common metadata for GEVER documents"
+      provides=".behaviors.metadata.IDocumentMetadata"
+      for="*"
+      />
 
-    <!-- Related documents (marker) -->
-    <plone:behavior
-        title="Related documents"
-        description="Adds the ability to assign related documents"
-        provides=".behaviors.related_docs.IRelatedDocuments"
-        factory="plone.behavior.AnnotationStorage"
-        for="opengever.document.document.IDocumentSchema"
-        />
+  <!-- Related documents (marker) -->
+  <plone:behavior
+      title="Related documents"
+      description="Adds the ability to assign related documents"
+      provides=".behaviors.related_docs.IRelatedDocuments"
+      factory="plone.behavior.AnnotationStorage"
+      for="opengever.document.document.IDocumentSchema"
+      />
 
-    <!-- name from title behavior -->
-    <plone:behavior
-        title="document name from title"
-        description=""
-        provides="opengever.document.behaviors.name_from_title.IDocumentNameFromTitle"
-        factory=".behaviors.name_from_title.DocumentNameFromTitle"
-        for="opengever.document.behaviors.IBaseDocument"
-        />
+  <!-- name from title behavior -->
+  <plone:behavior
+      title="document name from title"
+      description=""
+      provides="opengever.document.behaviors.name_from_title.IDocumentNameFromTitle"
+      factory=".behaviors.name_from_title.DocumentNameFromTitle"
+      for="opengever.document.behaviors.IBaseDocument"
+      />
 
-    <!-- BaseDocument behavior -->
-    <plone:behavior
-        title="BaseDocument Behavior"
-        description="Marker interface for document like objects"
-        provides="opengever.document.behaviors.IBaseDocument"
-        for="*"
-        />
+  <!-- BaseDocument behavior -->
+  <plone:behavior
+      title="BaseDocument Behavior"
+      description="Marker interface for document like objects"
+      provides="opengever.document.behaviors.IBaseDocument"
+      for="*"
+      />
 
-    <!-- custom edit form for documents -->
-    <browser:page
-          for="opengever.document.document.IDocumentSchema"
-          name="edit"
-          class=".forms.DocumentEditForm"
-          permission="cmf.ModifyPortalContent"
-          />
+  <!-- custom edit form for documents -->
+  <browser:page
+      for="opengever.document.document.IDocumentSchema"
+      name="edit"
+      class=".forms.DocumentEditForm"
+      permission="cmf.ModifyPortalContent"
+      />
 
-    <!-- file upload form for documents -->
-    <browser:page
-          for="opengever.document.document.IDocumentSchema"
-          name="file_upload"
-          class=".forms.DocumentFileUploadForm"
-          permission="cmf.ModifyPortalContent"
-          />
+  <!-- file upload form for documents -->
+  <browser:page
+      for="opengever.document.document.IDocumentSchema"
+      name="file_upload"
+      class=".forms.DocumentFileUploadForm"
+      permission="cmf.ModifyPortalContent"
+      />
 
 </configure>

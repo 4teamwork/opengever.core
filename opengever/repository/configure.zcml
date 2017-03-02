@@ -6,26 +6,26 @@
     xmlns:plone="http://namespaces.plone.org/plone"
     i18n_domain="opengever.repository">
 
-    <!-- Include custom permissions -->
-    <include file="permissions.zcml" />
-    <include package=".behaviors" />
-    <include package=".viewlets" />
-    <include package=".browser" />
+  <!-- Include custom permissions -->
+  <include file="permissions.zcml" />
+  <include package=".behaviors" />
+  <include package=".viewlets" />
+  <include package=".browser" />
 
-    <!-- Grok the package to initialise schema interfaces and content classes -->
-    <grok:grok package="." />
+  <!-- Grok the package to initialise schema interfaces and content classes -->
+  <grok:grok package="." />
 
-    <!-- Register locales translations -->
-    <i18n:registerTranslations directory="locales" />
+  <!-- Register locales translations -->
+  <i18n:registerTranslations directory="locales" />
 
-    <!-- Register an extension profile to make the product installable -->
-    <genericsetup:registerProfile
-        name="default"
-        title="opengever.repository"
-        description="OpenGever Repository"
-        directory="profiles/default"
-        provides="Products.GenericSetup.interfaces.EXTENSION"
-        />
-    <include package=".upgrades" />
+  <!-- Register an extension profile to make the product installable -->
+  <genericsetup:registerProfile
+      name="default"
+      title="opengever.repository"
+      description="OpenGever Repository"
+      directory="profiles/default"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+  <include package=".upgrades" />
 
 </configure>

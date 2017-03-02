@@ -1,8 +1,8 @@
 <configure
-      xmlns="http://namespaces.zope.org/zope"
-      xmlns:browser="http://namespaces.zope.org/browser"
-      xmlns:i18n="http://namespaces.zope.org/i18n"
-      i18n_domain="opengever.base">
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="opengever.base">
 
   <browser:menu
       id="ftw_contentmenu_actions"
@@ -31,19 +31,19 @@
 
   <!-- Adds the feature to add a dynamic description to a widget. -->
   <configure package="plone.app.z3cform">
-      <browser:page
-          name="ploneform-render-widget"
-          for="z3c.form.interfaces.IWidget"
-          layer=".interfaces.IPloneFormLayer"
-          class="opengever.base.widgets.GeverRenderWidget"
-          permission="zope.Public"
-          />
+    <browser:page
+        name="ploneform-render-widget"
+        for="z3c.form.interfaces.IWidget"
+        layer=".interfaces.IPloneFormLayer"
+        class="opengever.base.widgets.GeverRenderWidget"
+        permission="zope.Public"
+        />
   </configure>
 
-<adapter
-    for="zope.annotation.interfaces.IAttributeAnnotatable"
-    provides="zope.annotation.interfaces.IAnnotations"
-    factory=".protect.ProtectAwareAttributeAnnotations"
-    />
+  <adapter
+      for="zope.annotation.interfaces.IAttributeAnnotatable"
+      provides="zope.annotation.interfaces.IAnnotations"
+      factory=".protect.ProtectAwareAttributeAnnotations"
+      />
 
 </configure>

@@ -7,18 +7,18 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     i18n_domain="opengever.tasktemplates">
 
-    <!-- Grok the package to initialise schema interfaces and content classes -->
-    <grok:grok package="." />
+  <!-- Grok the package to initialise schema interfaces and content classes -->
+  <grok:grok package="." />
 
-    <i18n:registerTranslations directory="locales" />
+  <i18n:registerTranslations directory="locales" />
 
-    <genericsetup:registerProfile
-        name="default"
-        title="opengever.tasktemplates"
-        directory="profiles/default"
-        description=""
-        provides="Products.GenericSetup.interfaces.EXTENSION"
-        />
+  <genericsetup:registerProfile
+      name="default"
+      title="opengever.tasktemplates"
+      directory="profiles/default"
+      description=""
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
   <include package=".upgrades" />
 
 </configure>

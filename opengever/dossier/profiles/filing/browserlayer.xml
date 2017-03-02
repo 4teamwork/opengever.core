@@ -1,5 +1,3 @@
-<?xml version="1.0"?>
 <layers>
-  <layer name="opengever.dossier.filing"
-         interface="opengever.dossier.filing.interfaces.IFilingNumberActivatedLayer" />
+  <layer name="opengever.dossier.filing" interface="opengever.dossier.filing.interfaces.IFilingNumberActivatedLayer" />
 </layers>

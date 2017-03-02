@@ -1,8 +1,8 @@
 <rolemap>
   <permissions>
     <permission name="Remove GEVER content" acquire="True">
-      <role name="Manager"/>
-      <role name="Editor"/>
+      <role name="Manager" />
+      <role name="Editor" />
     </permission>
   </permissions>
 </rolemap>

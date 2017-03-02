@@ -29,10 +29,10 @@
       />
 
   <plone:behavior
-        title="ISendableDocsContainer behavior"
-        description="generates an email adress for a dossier"
-        provides=".behaviors.ISendableDocsContainer"
-        />
+      title="ISendableDocsContainer behavior"
+      description="generates an email adress for a dossier"
+      provides=".behaviors.ISendableDocsContainer"
+      />
 
   <plone:behavior
       title="Opengever Mail"
@@ -44,12 +44,12 @@
       />
 
   <genericsetup:registerProfile
-        name="default"
-        title="opengever.mail"
-        directory="profiles/default"
-        description="opengever mail"
-        provides="Products.GenericSetup.interfaces.EXTENSION"
-        />
+      name="default"
+      title="opengever.mail"
+      directory="profiles/default"
+      description="opengever mail"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
   <include package=".upgrades" />
 
   <profilehook:hook

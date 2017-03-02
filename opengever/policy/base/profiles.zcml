@@ -3,20 +3,20 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     i18n_domain="opengever.policy.base">
 
-    <genericsetup:registerProfile
-        name="default"
-        title="opengever.policy.base"
-        directory="profiles/default"
-        description="A policy product which turns a vanilla plone site into an OpenGever client."
-        provides="Products.GenericSetup.interfaces.EXTENSION"
-    />
+  <genericsetup:registerProfile
+      name="default"
+      title="opengever.policy.base"
+      directory="profiles/default"
+      description="A policy product which turns a vanilla plone site into an OpenGever client."
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
 
-    <genericsetup:registerProfile
-        name="mimetype"
-        title="opengever.policy.base.mimetypes"
-        directory="profiles/mimetype"
-        description="Separate profile which installs gever specific mimetypes."
-        provides="Products.GenericSetup.interfaces.EXTENSION"
-    />
+  <genericsetup:registerProfile
+      name="mimetype"
+      title="opengever.policy.base.mimetypes"
+      directory="profiles/mimetype"
+      description="Separate profile which installs gever specific mimetypes."
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
 
 </configure>

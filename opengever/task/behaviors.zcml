@@ -4,18 +4,18 @@
     xmlns:grok="http://namespaces.zope.org/grok"
     i18n_domain="collective.gtags">
 
-    <include package="plone.behavior" file="meta.zcml" />
+  <include package="plone.behavior" file="meta.zcml" />
 
-    <include package="plone.directives.form" file="meta.zcml" />
-    <include package="plone.directives.form" />
+  <include package="plone.directives.form" file="meta.zcml" />
+  <include package="plone.directives.form" />
 
-    <!-- name from title beahvior -->
-    <plone:behavior
-        title="task name from title"
-        description=""
-        provides="opengever.task.behaviors.ITaskNameFromTitle"
-        factory=".behaviors.TaskNameFromTitle"
-        for="opengever.task.task.ITask"
-        />
+  <!-- name from title beahvior -->
+  <plone:behavior
+      title="task name from title"
+      description=""
+      provides="opengever.task.behaviors.ITaskNameFromTitle"
+      factory=".behaviors.TaskNameFromTitle"
+      for="opengever.task.task.ITask"
+      />
 
 </configure>

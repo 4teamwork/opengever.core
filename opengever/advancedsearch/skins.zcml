@@ -4,6 +4,6 @@
     i18n_domain="opengever.advancedsearch">
 
   <!-- File System Directory Views registration -->
-  <cmf:registerDirectory name="advancedsearch_resources"/>
+  <cmf:registerDirectory name="advancedsearch_resources" />
 
 </configure>

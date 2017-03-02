@@ -8,39 +8,39 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="opengever.sharing">
 
-    <include package="plone.behavior" file="meta.zcml" />
+  <include package="plone.behavior" file="meta.zcml" />
 
-    <include package="plone.app.workflow" />
-    <include package=".browser" />
+  <include package="plone.app.workflow" />
+  <include package=".browser" />
 
-    <grok:grok package="." />
+  <grok:grok package="." />
 
-    <i18n:registerTranslations directory="locales"/>
+  <i18n:registerTranslations directory="locales" />
 
-    <!-- Register an extension profile to make the product installable -->
-    <genericsetup:registerProfile
-        name="default"
-        title="opengever.sharing"
-        description="the opengever.sharing step"
-        directory="profiles/default"
-        provides="Products.GenericSetup.interfaces.EXTENSION"
-        />
-    <include package=".upgrades" />
+  <!-- Register an extension profile to make the product installable -->
+  <genericsetup:registerProfile
+      name="default"
+      title="opengever.sharing"
+      description="the opengever.sharing step"
+      directory="profiles/default"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+  <include package=".upgrades" />
 
-    <!--  Sharing behaviors -->
-    <plone:behavior
-        title="OpenGever Standard Sharing"
-        description="Adds OpenGever Standard Sharing View"
-        provides=".behaviors.IStandard"
-        for="plone.dexterity.interfaces.IDexterityContent"
-        />
+  <!--  Sharing behaviors -->
+  <plone:behavior
+      title="OpenGever Standard Sharing"
+      description="Adds OpenGever Standard Sharing View"
+      provides=".behaviors.IStandard"
+      for="plone.dexterity.interfaces.IDexterityContent"
+      />
 
-    <plone:behavior
-        title="OpenGever Dossier Sharing"
-        description="Adds OpenGever Dossier Sharing View"
-        provides=".behaviors.IDossier"
-        for="plone.dexterity.interfaces.IDexterityContent"
-        />
+  <plone:behavior
+      title="OpenGever Dossier Sharing"
+      description="Adds OpenGever Dossier Sharing View"
+      provides=".behaviors.IDossier"
+      for="plone.dexterity.interfaces.IDexterityContent"
+      />
 
 
 </configure>

@@ -1,7 +1,8 @@
-<configure xmlns="http://namespaces.zope.org/zope"
-           xmlns:db="http://namespaces.zope.org/db">
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:db="http://namespaces.zope.org/db">
 
-    <include package="plone.app.dexterity" />
-    <include package="opengever.contact" />
+  <include package="plone.app.dexterity" />
+  <include package="opengever.contact" />
 
 </configure>

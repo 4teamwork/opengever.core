@@ -8,6 +8,6 @@
       name="submit_additional_document"
       class=".submit.SubmitAdditionalDocument"
       permission="zope2.View"
-    />
+      />
 
 </configure>

@@ -1,8 +1,7 @@
 <configure
-      xmlns="http://namespaces.zope.org/zope"
-      xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
-      i18n_domain="opengever.testing"
-      >
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="opengever.testing">
 
   <genericsetup:registerProfile
       name="testing"

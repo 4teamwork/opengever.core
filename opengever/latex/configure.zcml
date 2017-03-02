@@ -5,19 +5,19 @@
     xmlns:i18n="http://namespaces.zope.org/i18n"
     i18n_domain="opengever.latex">
 
-    <i18n:registerTranslations directory="locales" />
+  <i18n:registerTranslations directory="locales" />
 
-    <!-- grok -->
-    <grok:grok package="." />
+  <!-- grok -->
+  <grok:grok package="." />
 
-    <!-- generic setup -->
-    <genericsetup:registerProfile
-        name="default"
-        title="opengever.latex"
-        description=""
-        directory="profiles/default"
-        provides="Products.GenericSetup.interfaces.EXTENSION"
-        />
-    <include package=".upgrades" />
+  <!-- generic setup -->
+  <genericsetup:registerProfile
+      name="default"
+      title="opengever.latex"
+      description=""
+      directory="profiles/default"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+  <include package=".upgrades" />
 
 </configure>

@@ -8,23 +8,14 @@
 
   <i18n:registerTranslations directory="locales" />
 
-  <permission
-      id="opengever.disposition.AddDisposition"
-      title="opengever.disposition: Add disposition"
-      />
+  <permission id="opengever.disposition.AddDisposition" title="opengever.disposition: Add disposition" />
 
-  <permission
-      id="opengever.disposition.DownloadSIPPackage"
-      title="opengever.disposition: Download SIP Package"
-      />
+  <permission id="opengever.disposition.DownloadSIPPackage" title="opengever.disposition: Download SIP Package" />
 
-  <permission
-      id="opengever.disposition.EditTransferNumber"
-      title="opengever.disposition: Edit transfer number"
-      />
+  <permission id="opengever.disposition.EditTransferNumber" title="opengever.disposition: Edit transfer number" />
 
-	<include package=".browser" />
-	<include package=".viewlets" />
+  <include package=".browser" />
+  <include package=".viewlets" />
 
   <grok:grok package="." />
 

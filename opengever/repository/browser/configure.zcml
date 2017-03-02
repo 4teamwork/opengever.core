@@ -1,28 +1,30 @@
 <configure
-      xmlns="http://namespaces.zope.org/zope"
-      xmlns:browser="http://namespaces.zope.org/browser"
-      i18n_domain="opengever.repository">
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="opengever.repository">
 
-    <browser:page
-        name="referenceprefix_manager"
-        for="opengever.repository.interfaces.IRepositoryFolder"
-        class=".referenceprefix_manager.ReferencePrefixManager"
-        template="templates/referenceprefixmanager.pt"
-        permission="opengever.repository.UnlockReferencePrefix" />
+  <browser:page
+      name="referenceprefix_manager"
+      for="opengever.repository.interfaces.IRepositoryFolder"
+      class=".referenceprefix_manager.ReferencePrefixManager"
+      template="templates/referenceprefixmanager.pt"
+      permission="opengever.repository.UnlockReferencePrefix"
+      />
 
-    <browser:page
-        name="referenceprefix_manager"
-        for="opengever.repository.repositoryroot.IRepositoryRoot"
-        class=".referenceprefix_manager.ReferencePrefixManager"
-        template="templates/referenceprefixmanager.pt"
-        permission="opengever.repository.UnlockReferencePrefix" />
+  <browser:page
+      name="referenceprefix_manager"
+      for="opengever.repository.repositoryroot.IRepositoryRoot"
+      class=".referenceprefix_manager.ReferencePrefixManager"
+      template="templates/referenceprefixmanager.pt"
+      permission="opengever.repository.UnlockReferencePrefix"
+      />
 
-    <browser:page
-        name="view"
-        for="opengever.repository.interfaces.IRepositoryFolder"
-        class=".default_view.RepositoryFolderDefaultView"
-        permission="zope2.View"
-        layer="opengever.base.interfaces.IOpengeverBaseLayer"
-        />
+  <browser:page
+      name="view"
+      for="opengever.repository.interfaces.IRepositoryFolder"
+      class=".default_view.RepositoryFolderDefaultView"
+      permission="zope2.View"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
 
 </configure>

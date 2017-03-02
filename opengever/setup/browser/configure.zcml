@@ -1,39 +1,40 @@
 <configure
-      xmlns="http://namespaces.zope.org/zope"
-      xmlns:browser="http://namespaces.zope.org/browser">
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser">
 
-    <browser:page
-          for="OFS.interfaces.IApplication"
-          name="gever-add-deployment"
-          class=".admin.AddDeployment"
-          permission="zope2.ViewManagementScreens"
-          template="adddeployment.pt"
-          />
+  <browser:page
+      for="OFS.interfaces.IApplication"
+      name="gever-add-deployment"
+      class=".admin.AddDeployment"
+      permission="zope2.ViewManagementScreens"
+      template="adddeployment.pt"
+      />
 
-    <browser:page
-          for="OFS.interfaces.IApplication"
-          name="gever-create-deployment"
-          class=".admin.CreateDeployment"
-          permission="zope2.ViewManagementScreens"
-          />
+  <browser:page
+      for="OFS.interfaces.IApplication"
+      name="gever-create-deployment"
+      class=".admin.CreateDeployment"
+      permission="zope2.ViewManagementScreens"
+      />
 
-    <browser:resource
-          file="resources/onegovgever.jpeg"
-          name="onegovgever.jpeg"
-          />
+  <browser:resource
+      file="resources/onegovgever.jpeg"
+      name="onegovgever.jpeg"
+      />
 
-    <browser:resource
-          file="resources/adddeployment.css"
-          name="adddeployment.css"
-          />
+  <browser:resource
+      file="resources/adddeployment.css"
+      name="adddeployment.css"
+      />
 
-    <browser:resource
-          file="resources/jquery.min.js"
-          name="opengever.setup-jquery.min.js" />
+  <browser:resource
+      file="resources/jquery.min.js"
+      name="opengever.setup-jquery.min.js"
+      />
 
-    <browser:resource
-          file="resources/adddeployment.js"
-          name="adddeployment.js"
-          />
+  <browser:resource
+      file="resources/adddeployment.js"
+      name="adddeployment.js"
+      />
 
 </configure>

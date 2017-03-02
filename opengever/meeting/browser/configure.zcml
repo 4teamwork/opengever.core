@@ -16,28 +16,28 @@
       name="add-membership"
       class=".memberships.AddMembership"
       permission="cmf.ModifyPortalContent"
-    />
+      />
 
   <browser:page
       for="opengever.meeting.committeecontainer.ICommitteeContainer"
       name="add-member"
       class=".members.AddMember"
       permission="opengever.meeting.AddMember"
-    />
+      />
 
   <browser:page
       for="opengever.meeting.proposal.IProposal"
       name="submit_additional_documents"
       class=".submitdocuments.SubmitAdditionalDocuments"
       permission="zope2.View"
-    />
+      />
 
   <browser:page
       for="zope.interface.Interface"
       name="submit_additional_documents"
       class=".submitdocuments.SubmitDocumentsByPaths"
       permission="zope2.View"
-    />
+      />
 
   <browser:page
       for="opengever.meeting.proposal.IProposal"

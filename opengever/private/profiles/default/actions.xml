@@ -1,17 +1,15 @@
-<?xml version="1.0"?>
-<object name="portal_actions" meta_type="Plone Actions Tool"
-        xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="portal_actions" meta_type="Plone Actions Tool">
 
   <object name="portal_tabs" meta_type="CMF Action Category">
     <object name="my_repository" meta_type="CMF Action" i18n:domain="opengever.private">
       <property name="title" i18n:translate="">My repository</property>
-      <property name="description" i18n:translate=""></property>
+      <property name="description" i18n:translate="" />
       <property name="url_expr">string:${portal/portal_membership/getHomeUrl}</property>
-      <property name="link_target"></property>
-      <property name="icon_expr"></property>
+      <property name="link_target" />
+      <property name="icon_expr" />
       <property name="available_expr">portal/portal_membership/getHomeFolder</property>
       <property name="permissions">
-        <element value="View"/>
+        <element value="View" />
       </property>
       <property name="visible">True</property>
     </object>

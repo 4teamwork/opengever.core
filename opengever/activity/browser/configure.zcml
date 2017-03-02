@@ -4,7 +4,8 @@
 
   <browser:resourceDirectory
       name="opengever.activity.resources"
-      directory="resources" />
+      directory="resources"
+      />
 
   <browser:page
       for="*"

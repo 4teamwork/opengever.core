@@ -1,17 +1,14 @@
-<?xml version="1.0"?>
-<object name="Dummy"
-   meta_type="Dexterity FTI"
-   i18n:domain="opengever.testing" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="Dummy" meta_type="Dexterity FTI" i18n:domain="opengever.testing">
 
   <!-- Basic metadata -->
   <property name="title" i18n:translate="">Dummy</property>
-  <property name="description" i18n:translate=""></property>
-  <property name="icon_expr"></property>
+  <property name="description" i18n:translate="" />
+  <property name="icon_expr" />
   <property name="factory">Dummy</property>
   <property name="add_view_expr">string:${folder_url}/++add++Dummy</property>
   <property name="global_allow">True</property>
   <property name="filter_content_types">False</property>
-  <property name="allowed_content_types"/>
+  <property name="allowed_content_types" />
   <property name="allow_discussion">False</property>
 
   <!-- schema and class used for content items -->

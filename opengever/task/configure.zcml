@@ -9,48 +9,48 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     i18n_domain="opengever.task">
 
-    <include package=".browser" />
-    <include package=".viewlets" />
+  <include package=".browser" />
+  <include package=".viewlets" />
 
-    <include file="profiles.zcml" />
-    <include file="permissions.zcml" />
-    <include file="behaviors.zcml" />
-    <include package=".upgrades" />
+  <include file="profiles.zcml" />
+  <include file="permissions.zcml" />
+  <include file="behaviors.zcml" />
+  <include package=".upgrades" />
 
-    <grok:grok package="." />
+  <grok:grok package="." />
 
-    <vdex:vocabulary directory="vdexvocabs" />
+  <vdex:vocabulary directory="vdexvocabs" />
 
-    <i18n:registerTranslations directory="locales" />
+  <i18n:registerTranslations directory="locales" />
 
-    <browser:page
-        name="task_response_delete"
-        for="opengever.task.task.ITask"
-        permission="zope2.View"
-        class=".response.Delete"
-        />
+  <browser:page
+      name="task_response_delete"
+      for="opengever.task.task.ITask"
+      permission="zope2.View"
+      class=".response.Delete"
+      />
 
-    <browser:page
-        name="task_response_edit"
-        for="opengever.task.task.ITask"
-        permission="zope2.View"
-        class=".response.Edit"
-        template="templates/edit_response.pt"
-        />
+  <browser:page
+      name="task_response_edit"
+      for="opengever.task.task.ITask"
+      permission="zope2.View"
+      class=".response.Edit"
+      template="templates/edit_response.pt"
+      />
 
-    <browser:page
-        name="task_response_save"
-        for="opengever.task.task.ITask"
-        permission="zope2.View"
-        class=".response.Save"
-        />
+  <browser:page
+      name="task_response_save"
+      for="opengever.task.task.ITask"
+      permission="zope2.View"
+      class=".response.Save"
+      />
 
-    <browser:page
-        name="plone_layout"
-        for="opengever.task.task.ITask"
-        permission="zope.Public"
-        class=".layout.TaskLayoutPolicy"
-        allowed_interface="plone.app.layout.globals.interfaces.ILayoutPolicy"
-        />
+  <browser:page
+      name="plone_layout"
+      for="opengever.task.task.ITask"
+      permission="zope.Public"
+      class=".layout.TaskLayoutPolicy"
+      allowed_interface="plone.app.layout.globals.interfaces.ILayoutPolicy"
+      />
 
 </configure>
