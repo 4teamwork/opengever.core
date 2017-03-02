@@ -13,10 +13,10 @@ Glossar
      Vgl. :term:`Geschäftsprozess`. [#ablaufsteuerung]_
 
    Ablieferung
-     Vorgang, bei dem archivwürdige Unterlagen dem Archiv abgeliefert werden.
+     Vorgang, bei dem archivwürdige Unterlagen dem Archiv abgeliefert werden. [#ablieferung]_
 
    Abschlussdatum
-     Datum, an welchem das Geschäft oder Teilgeschäft abgeschlossen wurde.
+     Datum, an welchem das Geschäft oder Teilgeschäft abgeschlossen wurde. [#abschlussdatum]_
 
    Akte
      Siehe :term:`Dossier`.
@@ -26,12 +26,12 @@ Glossar
 
    Aktenzeichen
      Numerisches oder alphanumerisches Zeichen zur eindeutigen
-     Identifikation eines Dossiers oder eines Dokuments.
+     Identifikation eines Dossiers oder eines Dokuments. [#aktenzeichen]_
 
    Aktivität
      Bearbeitungsknoten innerhalb eines Vorgangs und Handlungsanweisung,
      die dem Arbeitsvorrat eines GEVER-Anwenders zugewiesen werden kann.
-     Vgl. :term:`Aufgabe`.
+     Vgl. :term:`Aufgabe`. [#aktivitaet]_
 
    Antrag
      Subtyp einer Aufgabe (Aktivität), bei welcher der empfangende
@@ -46,18 +46,18 @@ Glossar
 
    Archiv
      Institution oder Stelle, die :term:`Archivgut` übernimmt, aufbewahrt,
-     konserviert und zugänglich macht.
+     konserviert und zugänglich macht. [#archiv]_
 
    Archivgut
      Gesamtheit von :term:`Unterlagen`, die vom zuständigen :term:`Archiv` zur
      Aufbewahrung übernommen worden sind oder von anderen Stellen
-     selbstständig archiviert werden.
+     selbstständig archiviert werden. [#archivgut]_
 
    Archivierung
      Tätigkeit, die Aufzeichnungen aus der Verwaltungsarbeit zu
      :term:`Archivgut` macht.
      Dies umfasst die Erfassung, :term:`Bewertung`, Erschliessung, Erhaltung
-     und die Bereitstellung von Unterlagen.
+     und die Bereitstellung von Unterlagen. [#archivierung]_
 
    Archivische Ablieferungsschnittstelle
      Ablieferungsschnittstelle für Dossiers und Dokumente aus
@@ -73,7 +73,7 @@ Glossar
    archivwürdig
      Eigenschaft von :term:`Unterlagen`, die aufgrund ihrer juristischen oder
      administrativen Bedeutung oder eines historisch-sozialwissenschaftlichen
-     Wertes archiviert werden.
+     Wertes archiviert werden. [#archivwuerdig]_
 
    Aufbewahrungsfrist
      Zeitspanne, bis zu deren Ablauf die Unterlagen aus rechtlichen oder
@@ -104,7 +104,7 @@ Glossar
 
    Bewertung
      Verfahren zur Ermittlung der Archivwürdigkeit angebotener
-     :term:`Unterlagen` anhand nachvollziehbarer Kriterien.
+     :term:`Unterlagen` anhand nachvollziehbarer Kriterien. [#bewertung]_
 
    Datei
      Digital speicherbarer Inhalt eines Dokuments in Dateiform. Dateien können
@@ -112,7 +112,7 @@ Glossar
      werden.
 
    Dokument
-     Als Einheit zu behandelnde aufgezeichnete Information oder Objekt.
+     Als Einheit zu behandelnde aufgezeichnete Information oder Objekt. [#dokument]_
 
    Dossier
      Gesamtheit der zu einem Geschäft gehörenden Unterlagen, die einer Rubrik
@@ -120,7 +120,7 @@ Glossar
      grundsätzlich einem Geschäft, wobei die :term:`Dossierbildung` auf der
      Grundlage des Ordnungssystems erfolgt und die Grundstruktur durch
      Zusammenfassen artverwandter Geschäfte bzw. durch Aufteilung von Dossiers
-     in Subdossiers den jeweiligen Bedürfnissen angepasst werden kann.
+     in Subdossiers den jeweiligen Bedürfnissen angepasst werden kann. [#dossier]_
 
    Dossierbildung
      Erstellung von Dossiers, in denen die :term:`Unterlagen` zusammengefügt
@@ -164,7 +164,7 @@ Glossar
 
    Geschäft
      Aufgabe, die von einem Amt oder einem Dienst erledigt wird.
-     Vgl. mit :term:`Geschäftsdossier`.
+     Vgl. mit :term:`Geschäftsdossier`. [#geschaeft]_
 
    Geschäftsdossier
      Dossiertyp in OneGov GEVER, der einem Geschäft gemäss I017 und
@@ -173,17 +173,17 @@ Glossar
    Geschäftsfall
      Konkrete Ausführung eines Prozesses, der durch ein Ereignis ausgelöst wird,
      aus einer oder mehreren Aktivitäten besteht und eine Aufgabe erfüllt
-     beziehungsweise eine nachgefragte Leistung erbringt.
+     beziehungsweise eine nachgefragte Leistung erbringt. [#geschaeftsfall]_
 
    Geschäftskontrolle
      Funktionskomponente eines GEVER-Systems zur Feststellung und Anzeige des
      Status, des Ablaufs, der Termine und Fristen sämtlicher über GEVER
-     abgewickelten Verwaltungsgeschäfte.
+     abgewickelten Verwaltungsgeschäfte. [#geschaeftskontrolle]_
 
    Geschäftsprozess
      Funktionsüberschreitende Verkettung wertschöpfender Aktivitäten, die
      spezifische, vom Kunden erwartete Leistungen erzeugen und deren
-     Ergebnisse strategische Bedeutung für das Unternehmen haben.
+     Ergebnisse strategische Bedeutung für das Unternehmen haben. [#geschaeftsprozess]_
 
    geschäftsrelevant
      Eigenschaft von :term:`Unterlagen`, die Informationen enthalten, welche
@@ -238,7 +238,7 @@ Glossar
 
    Nachvollziehbarkeit
      Erstellung, Erfassung und Aufbewahrung von Informationen über die
-     Bewegung und Nutzung von Dokumenten.
+     Bewegung und Nutzung von Dokumenten. [#nachvollziehbarkeit]_
 
    OAIS
      Open Archival Information Systems (ISO 14721:2003) ist das zentrale
@@ -365,26 +365,64 @@ Glossar
    Unterlagen
      Geschäftsrelevante Informationen, unabhängig vom Informationsträger,
      welche bei der Erfüllung öffentlicher Aufgaben erstellt oder
-     empfangen werden.
+     empfangen werden. [#unterlagen]_
 
    Vernichtung
      Definitive Zerstörung von nicht archivwürdigen :term:`Unterlagen`.
 
    Vorgang
      Alle Aktivitäten, die zu einem Geschäft gehören und durch einen
-     Anfangs- und Endpunkt abgegrenzt sind. Vgl. :term:`Aufgabe`.
+     Anfangs- und Endpunkt abgegrenzt sind. Vgl. :term:`Aufgabe`. [#vorgang]_
 
    vorregistrieren
      Dokumente mit Metadaten versehen und an die gemäss
      Organisationsvorschriften zuständige Stelle bzw. an die zuständigen
      Mitarbeitenden zur Registrierung weiterleiten. In OneGov GEVER erfolgt
-     die Vorregistrierung im Posteingang oder in der persönlichen Ablage.
+     die Vorregistrierung im Posteingang oder in der persönlichen Ablage. [#vorregistrieren]_
 
 .. rubric:: Quellenangaben
 
 .. [#ablagestandort] `TERMDAT:GEV09:Ablagestandort <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67192>`_,
      abgerufen am 28. Februar 2017.
-.. [#ablaufsteuerung] `TERMDAT:GEV12:Ablaufsteuerung <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67121>`_,
-     abgerufen am 28. Februar 2017.
+.. [#ablaufsteuerung] `TERMDAT:GEV09:Ablaufsteuerung <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67121>`_,
+     abgerufen am 02. März 2017.
+.. [#ablieferung] `TERMDAT:GEV09:Ablieferung <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67154>`_,
+     abgerufen am 02. März 2017. 
+.. [#abschlussdatum] `TERMDAT:GEV09:Abschlussdatum <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67156>`_,
+     abgerufen am 02. März 2017. 
+.. [#aktenzeichen] `TERMDAT:GEV09:Aktenzeichen <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67160>`_,
+     abgerufen am 02. März 2017. 
+.. [#aktivitaet] `TERMDAT:GEV09:Aktivität <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67161>`_,
+     abgerufen am 02. März 2017. 
+.. [#archiv] `TERMDAT:GEV09:Archiv <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67112>`_,
+     abgerufen am 02. März 2017. 
+.. [#archivgut] `TERMDAT:GEV09:Archivgut <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67145>`_,
+     abgerufen am 02. März 2017. 
+.. [#archivierung] `TERMDAT:GEV09:Archivierung <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67147>`_,
+     abgerufen am 02. März 2017.  
+.. [#archivwuerdig] `TERMDAT:GEV09:archivwürdig <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67148>`_,
+     abgerufen am 02. März 2017. 
+.. [#bewertung] `TERMDAT:GEV09:Bewertung <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67171>`_,
+     abgerufen am 02. März 2017. 
+.. [#dokument] `TERMDAT:GEV09:Dokument <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67200>`_,
+     abgerufen am 02. März 2017. 
+.. [#dossier] `TERMDAT:GEV09:Dossier <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67173>`_,
+     abgerufen am 02. März 2017.
+.. [#geschaeft] `TERMDAT:GEV09:Geschäft <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67140>`_,
+     abgerufen am 02. März 2017.  
+.. [#geschaeftsfall] `TERMDAT:GEV12:Geschäftsfall <https://www.termdat.bk.admin.ch/Entry/EntryDetail/379326>`_,
+     abgerufen am 02. März 2017. 
+.. [#geschaeftskontrolle] `TERMDAT:GEV09:Geschäftskontrolle <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67141>`_,
+     abgerufen am 02. März 2017. 
+.. [#geschaeftsprozess] `TERMDAT:GEV09:Geschäftsprozess <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67202>`_,
+     abgerufen am 02. März 2017. 
+.. [#nachvollziehbarkeit] `TERMDAT:GEV09:Nachvollziehbarkeit <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67198>`_,
+     abgerufen am 02. März 2017. 
+.. [#unterlagen] `TERMDAT:GEV09:Unterlagen <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67205>`_,
+     abgerufen am 02. März 2017. 
+.. [#vorgang] `TERMDAT:GEV09:Vorgang <https://www.termdat.bk.admin.ch/Entry/EntryDetail/67197>`_,
+     abgerufen am 02. März 2017. 
+.. [#vorregistrieren] `TERMDAT:GEV12:vorregistrieren <https://www.termdat.bk.admin.ch/Entry/EntryDetail/379390>`_,
+     abgerufen am 02. März 2017. 
 
 .. disqus::
