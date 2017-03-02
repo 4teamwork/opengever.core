@@ -1,7 +1,11 @@
+from datetime import date
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import error_messages
+from ftw.testing import freeze
+from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import FunctionalTestCase
 from plone import api
 from plone.protect import createToken
@@ -107,3 +111,12 @@ class TestDossierDeactivation(FunctionalTestCase):
                          api.content.get_state(subdossier1))
         self.assertEqual('dossier-state-inactive',
                          api.content.get_state(subdossier2))
+
+    @browsing
+    def test_sets_end_date_to_current_date(self, browser):
+        with freeze(datetime(2016, 3, 29)):
+            browser.login().open(self.dossier,
+                                 view='transition-deactivate',
+                                 data={'_authenticator': createToken()})
+
+        self.assertEqual(date(2016, 3, 29), IDossier(self.dossier).end)

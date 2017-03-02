@@ -337,10 +337,20 @@ class DossierContainer(Container):
         api.content.transition(obj=self, to_state=self.get_former_state())
 
     def get_former_state(self):
+        """Returns the end state of the active dossier lifecycle,
+        so `dossier-state-resolved` for resolved dossiers or
+        `dossier-state-inactive` for deactivated dossiers.
+        """
+        end_states = ['dossier-state-resolved', 'dossier-state-inactive']
+
         workflow = api.portal.get_tool('portal_workflow')
         workflow_id = workflow.getWorkflowsFor(self)[0].getId()
         history = workflow.getHistoryOf(workflow_id, self)
-        return history[1].get('review_state')
+        for entry in reversed(history):
+            if entry.get('review_state') in end_states:
+                return entry.get('review_state')
+
+        return None
 
 
 class DefaultConstrainTypeDecider(grok.MultiAdapter):

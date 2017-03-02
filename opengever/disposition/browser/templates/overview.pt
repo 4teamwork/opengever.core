@@ -14,56 +14,58 @@
     </div>
   </div>
 
-  <ul class="list-group">
+  <ul class="list-group" tal:repeat="dossier_list view/get_dossier_lists">
+    <tal:define tal:define="label python: dossier_list[0];
+                            mappings python: dossier_list[1]">
 
-    <li class="list-group-item label">
-      <div class="list-group-cell data-cell">
-        <h3 i18n:translate="label_dosisers">Dossiers</h3>
-      </div>
-      <div class="list-group-cell action-cell">
-        <h3 i18n:translate="label_archive">Archive</h3>
-      </div>
-    </li>
-
-    <li tal:repeat="item view/get_dossiers_grouped_by_repository"
-        class="repository-list-item collapsible">
-
-      <tal:define tal:define="repository python: item[0]; dossiers python: item[1];">
-
-        <div class="repository_cell">
-          <div class="repository_title" tal:condition="not: context/is_closed">
-            <h3 tal:content="repository/Title" />
-            <div class="meta" i18n:domain="opengever.base" >
-              <span i18n:translate="label_archival_value">Archival value</span>:
-              <span tal:content="repository/get_archival_value" i18n:translate=""/>
-            </div>
-            <div class="collapsible-header dossier-header">
-              <span>
-                <span tal:content="python: len(dossiers)" />
-                <span i18n:translate="label_dossiers">Dossiers</span>
-              </span>
-            </div>
-          </div>
-          <div class="repository_title" tal:condition="context/is_closed">
-            <h3 tal:condition="context/is_closed" tal:content="repository" />
-            <div class="collapsible-header dossier-header">
-              <span>
-                <span tal:content="python: len(dossiers)" />
-                <span i18n:translate="label_dossiers">Dossiers</span>
-              </span>
-            </div>
-          </div>
-
-          <div class="repo-appraisal-button-group action-cell"
-               tal:condition="view/appraisal_buttons_available"
-               tal:attributes="data-intids python:[dossier.intid for dossier in dossiers]">
-            <a href="#" title="Archive" class="icon_button archive_all"
-               data-archive="true" i18n:attributes="title label_archive" />
-
-            <a href="#" title="Archive" class="icon_button not_archive_all"
-               data-archive="false" i18n:attributes="title label_archive" />
-          </div>
+      <li class="list-group-item label">
+        <div class="list-group-cell data-cell">
+          <h3 tal:content="label" i18n:translate="" />
         </div>
+        <div class="list-group-cell action-cell">
+          <h3 i18n:translate="label_archive">Archive</h3>
+        </div>
+      </li>
+
+      <li tal:repeat="item mappings"
+          class="repository-list-item collapsible">
+
+        <tal:define tal:define="repository python: item[0]; dossiers python: item[1];">
+
+          <div class="repository_cell">
+            <div class="repository_title" tal:condition="not: context/is_closed">
+              <h3 tal:content="repository/Title" />
+              <div class="meta" i18n:domain="opengever.base" >
+                <span i18n:translate="label_archival_value">Archival value</span>:
+                <span tal:content="repository/get_archival_value" i18n:translate=""/>
+              </div>
+              <div class="collapsible-header dossier-header">
+                <span>
+                  <span tal:content="python: len(dossiers)" />
+                  <span i18n:translate="label_dossiers">Dossiers</span>
+                </span>
+              </div>
+            </div>
+            <div class="repository_title" tal:condition="context/is_closed">
+              <h3 tal:condition="context/is_closed" tal:content="repository" />
+              <div class="collapsible-header dossier-header">
+                <span>
+                  <span tal:content="python: len(dossiers)" />
+                  <span i18n:translate="label_dossiers">Dossiers</span>
+                </span>
+              </div>
+            </div>
+
+            <div class="repo-appraisal-button-group action-cell"
+                 tal:condition="view/appraisal_buttons_available"
+                 tal:attributes="data-intids python:[dossier.intid for dossier in dossiers]">
+              <a href="#" title="Archive" class="icon_button archive_all"
+                 data-archive="true" i18n:attributes="title label_archive" />
+
+              <a href="#" title="Archive" class="icon_button not_archive_all"
+                 data-archive="false" i18n:attributes="title label_archive" />
+            </div>
+          </div>
 
           <ul class="dossiers">
             <li tal:repeat="dossier dossiers" class="dispositions list-group-item">
@@ -143,10 +145,11 @@
 
                 </div>
 
-            </li>
-          </ul>
+              </li>
+            </ul>
+          </tal:define>
+        </li>
       </tal:define>
-    </li>
   </ul>
 
   <div class="actionButtons clearfix">

@@ -5,6 +5,7 @@ from ftw.builder import create
 from ftw.testing import freeze
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import FunctionalTestCase
+from plone import api
 
 
 class TestDossierContainer(FunctionalTestCase):
@@ -299,3 +300,22 @@ class TestDateCalculations(FunctionalTestCase):
             end=date(2012, 01, 01)))
 
         self.assertTrue(dossier.has_valid_enddate())
+
+    def test_get_former_state_returns_last_end_state_in_history(self):
+        self.grant('Manager', 'Editor', 'Publisher', 'Reviewer')
+
+        dossier = create(Builder("dossier"))
+
+        api.content.transition(obj=dossier, transition='dossier-transition-deactivate')
+        api.content.transition(obj=dossier, transition='dossier-transition-activate')
+        api.content.transition(obj=dossier, transition='dossier-transition-resolve')
+        api.content.transition(obj=dossier, transition='dossier-transition-offer')
+        api.content.transition(obj=dossier, transition='dossier-transition-archive')
+
+        self.assertEquals('dossier-state-resolved', dossier.get_former_state())
+
+    def test_get_former_state_returns_none_for_dossiers_was_never_in_an_end_state(self):
+        self.grant('Manager', 'Editor', 'Publisher', 'Reviewer')
+
+        dossier = create(Builder("dossier"))
+        self.assertIsNone(dossier.get_former_state())

@@ -57,6 +57,25 @@ class TestAppraisal(FunctionalTestCase):
         self.assertIsNone(IAppraisal(disposition).get(dossier4))
         self.assertIsNone(IAppraisal(disposition).get(dossier5))
 
+    def test_inactive_dossiers_are_always_not_archival_worthy(self):
+        dossier1 = create(Builder('dossier')
+                          .having(archival_value=ARCHIVAL_VALUE_SAMPLING)
+                          .as_expired()
+                          .in_state('dossier-state-inactive')
+                          .within(self.repository))
+        dossier2 = create(Builder('dossier')
+                          .having(archival_value=ARCHIVAL_VALUE_WORTHY)
+                          .as_expired()
+                          .in_state('dossier-state-inactive')
+                          .within(self.repository))
+
+        disposition = create(Builder('disposition')
+                             .having(dossiers=[dossier1, dossier2])
+                             .within(self.root))
+
+        self.assertFalse(IAppraisal(disposition).get(dossier1))
+        self.assertFalse(IAppraisal(disposition).get(dossier2))
+
     @browsing
     def test_is_updated_when_editing_the_dossier_list(self, browser):
         disposition = create(Builder('disposition')

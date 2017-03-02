@@ -1,7 +1,9 @@
 from five import grok
 from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.dossier.behaviors.dossier import IDossier
 from plone import api
+from datetime import date
 
 
 class DossierDeactivateView(grok.View):
@@ -26,6 +28,7 @@ class DossierDeactivateView(grok.View):
                     transition=u'dossier-transition-deactivate')
 
         # deactivate main dossier
+        self.set_end_date(self.context)
         api.content.transition(obj=self.context,
                                transition='dossier-transition-deactivate')
 
@@ -33,6 +36,10 @@ class DossierDeactivateView(grok.View):
             _("The Dossier has been deactivated"), self.request, type='info')
 
         return self.redirect()
+
+    def set_end_date(self, dossier):
+        if not IDossier(dossier).end:
+            IDossier(dossier).end = date.today()
 
     def redirect(self):
         return self.request.RESPONSE.redirect(self.context.absolute_url())
