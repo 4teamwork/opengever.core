@@ -138,17 +138,17 @@ class CheckinCheckoutManager(grok.MultiAdapter):
         # update document_date to current date
         self.context.document_date = date.today()
 
-        # create new version in CMFEditions
-        self.repository.save(obj=self.context, comment=comment)
-
         # remember that we checked in
         self.annotations[CHECKIN_CHECKOUT_ANNOTATIONS_KEY] = None
 
-        # finally, reindex the object
-        self.context.reindexObject()
-
         # Clear any WebDAV locks left over by ExternalEditor if necessary
         self.clear_locks()
+
+        # create new version in CMFEditions
+        self.repository.save(obj=self.context, comment=comment)
+
+        # finally, reindex the object
+        self.context.reindexObject()
 
         # fire the event
         notify(ObjectCheckedInEvent(self.context, comment))

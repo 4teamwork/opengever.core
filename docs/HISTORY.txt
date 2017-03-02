@@ -5,6 +5,8 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Fix off-by-one bumblebee preview image for document versions. [deiferni]
+
 - Add scaffolding to OC checkout payloads in anticipation of plone.api direct
   file uploads.
   [Rotonen]
