@@ -6,6 +6,7 @@ from opengever.testing import FunctionalTestCase
 from persistent.list import PersistentList
 from persistent.mapping import PersistentMapping
 from plone import api
+from zExceptions import Unauthorized
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
 
@@ -92,3 +93,52 @@ class TestDestruction(FunctionalTestCase):
                                transition='disposition-transition-close')
 
         self.assertEquals([], self.repository.listFolderContents())
+
+
+class TestDestroyPermission(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestDestroyPermission, self).setUp()
+        self.root = create(Builder('repository_root'))
+        self.repository = create(Builder('repository')
+                                 .titled('Anfragen')
+                                 .within(self.root))
+
+    def test_destruction_raises_unauthorized_when_dossiers_is_not_archived(self):
+        dossier = create(Builder('dossier')
+                         .titled(u'D\xf6ssier 2')
+                         .having(archival_value=ARCHIVAL_VALUE_WORTHY)
+                         .as_expired()
+                         .within(self.repository))
+        disposition = create(Builder('disposition')
+                             .having(dossiers=[dossier])
+                             .within(self.root))
+
+        self.grant('Records Manager')
+        with self.assertRaises(Unauthorized):
+            disposition.destroy_dossiers()
+
+    def test_destruction_raises_unauthorized_when_user_has_not_destroy_permission(self):
+        dossier = create(Builder('dossier')
+                         .titled(u'D\xf6ssier 2')
+                         .having(archival_value=ARCHIVAL_VALUE_WORTHY)
+                         .as_expired()
+                         .within(self.repository))
+        disposition = create(Builder('disposition')
+                             .having(dossiers=[dossier])
+                             .within(self.root))
+
+        self.grant('Archivist', 'Records Manager')
+        api.content.transition(obj=disposition,
+                               transition='disposition-transition-appraise')
+        api.content.transition(obj=disposition,
+                               transition='disposition-transition-dispose')
+        api.content.transition(obj=disposition,
+                               transition='disposition-transition-archive')
+
+        self.grant('Archivist')
+        with self.assertRaises(Unauthorized):
+            disposition.destroy_dossiers()
+
+        self.grant('Records Manager')
+        disposition.destroy_dossiers()

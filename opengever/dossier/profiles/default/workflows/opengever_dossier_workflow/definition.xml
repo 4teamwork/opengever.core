@@ -27,6 +27,7 @@
   <permission>Delete objects</permission>
   <permission>Remove GEVER content</permission>
   <permission>opengever.meeting: Add Proposal</permission>
+  <permission>opengever.dossier: Destroy dossier</permission>
   <state state_id="dossier-state-active" title="dossier-state-active">
     <exit-transition transition_id="dossier-transition-deactivate"/>
     <exit-transition transition_id="dossier-transition-resolve"/>
@@ -176,6 +177,8 @@
       <permission-role>Manager</permission-role>
       <permission-role>Administrator</permission-role>
     </permission-map>
+    <permission-map name="opengever.dossier: Destroy dossier" acquired="False">
+    </permission-map>
   </state>
   <state state_id="dossier-state-archived" title="dossier-state-archived">
     <permission-map name="opengever.meeting: Add Proposal" acquired="False">
@@ -267,6 +270,10 @@
     <permission-map name="opengever.trash: Trash content" acquired="False">
     </permission-map>
     <permission-map name="opengever.trash: Untrash content" acquired="False">
+    </permission-map>
+    <permission-map name="opengever.dossier: Destroy dossier" acquired="False">
+      <permission-role>Manager</permission-role>
+      <permission-role>Records Manager</permission-role>
     </permission-map>
   </state>
   <state state_id="dossier-state-inactive" title="dossier-state-inactive">
@@ -360,6 +367,8 @@
     <permission-map name="opengever.trash: Trash content" acquired="False">
     </permission-map>
     <permission-map name="opengever.trash: Untrash content" acquired="False">
+    </permission-map>
+    <permission-map name="opengever.dossier: Destroy dossier" acquired="False">
     </permission-map>
   </state>
   <state state_id="dossier-state-resolved" title="dossier-state-resolved">
@@ -457,6 +466,8 @@
     <permission-map name="opengever.trash: Trash content" acquired="False">
     </permission-map>
     <permission-map name="opengever.trash: Untrash content" acquired="False">
+    </permission-map>
+    <permission-map name="opengever.dossier: Destroy dossier" acquired="False">
     </permission-map>
   </state>
   <state state_id="dossier-state-offered" title="dossier-state-offered">
@@ -559,6 +570,8 @@
     <permission-map name="opengever.trash: Trash content" acquired="False">
     </permission-map>
     <permission-map name="opengever.trash: Untrash content" acquired="False">
+    </permission-map>
+    <permission-map name="opengever.dossier: Destroy dossier" acquired="False">
     </permission-map>
   </state>
 

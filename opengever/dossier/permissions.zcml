@@ -23,4 +23,9 @@
         title="opengever.dossier: Add dossiertemplate"
         />
 
+    <permission
+        id="opengever.dossier.DestroyDossier"
+        title="opengever.dossier: Destroy dossier"
+        />
+
 </configure>

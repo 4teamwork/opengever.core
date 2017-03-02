@@ -26,6 +26,7 @@ from plone.formwidget.contenttree import ObjPathSourceBinder
 from z3c.form import validator
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
+from zExceptions import Unauthorized
 from zope import schema
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
@@ -34,6 +35,9 @@ from zope.i18n import translate
 from zope.interface import alsoProvides
 from zope.interface import implements
 from zope.intid.interfaces import IIntIds
+
+
+DESTROY_PERMISSION = 'opengever.dossier: Destroy dossier'
 
 
 class DossierDispositionInformation(object):
@@ -239,8 +243,14 @@ class Disposition(Container):
         alsoProvides(getRequest(), IDuringDossierDestruction)
         dossiers = [relation.to_object for relation in self.dossiers]
         self.set_destroyed_dossiers(dossiers)
+        self.check_destroy_permission(dossiers)
         with elevated_privileges():
             api.content.delete(objects=dossiers)
+
+    def check_destroy_permission(self, dossiers):
+        for dossier in dossiers:
+            if not api.user.has_permission(DESTROY_PERMISSION, obj=dossier):
+                raise Unauthorized()
 
     def register_watchers(self):
         center = notification_center()
