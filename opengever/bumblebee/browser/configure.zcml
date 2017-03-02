@@ -5,7 +5,8 @@
 
   <browser:resourceDirectory
       name="opengever.bumblebee.resources"
-      directory="resources" />
+      directory="resources"
+      />
 
   <browser:page
       for="ftw.bumblebee.interfaces.IBumblebeeable"

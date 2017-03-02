@@ -1,68 +1,75 @@
-<?xml version="1.0"?>
-<object name="opengever.dossier.templatefolder" meta_type="Dexterity FTI"
-        i18n:domain="opengever.dossier" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.dossier.templatefolder" meta_type="Dexterity FTI" i18n:domain="opengever.dossier">
 
-    <!-- Basic metadata -->
-    <property name="title" i18n:translate="">Template Folder</property>
-    <property name="description" i18n:translate=""></property>
-    <property name="icon_expr"></property>
-    <property name="allow_discussion">False</property>
-    <property name="global_allow">True</property>
-    <property name="filter_content_types">True</property>
-    <property name="allowed_content_types">
-        <element value="opengever.document.document" />
-        <element value="opengever.tasktemplates.tasktemplatefolder" />
-        <element value="opengever.dossier.templatefolder" />
-        <element value="opengever.meeting.sablontemplate" />
-        <element value="opengever.dossier.dossiertemplate" />
-    </property>
+  <!-- Basic metadata -->
+  <property name="title" i18n:translate="">Template Folder</property>
+  <property name="description" i18n:translate="" />
+  <property name="icon_expr" />
+  <property name="allow_discussion">False</property>
+  <property name="global_allow">True</property>
+  <property name="filter_content_types">True</property>
+  <property name="allowed_content_types">
+    <element value="opengever.document.document" />
+    <element value="opengever.tasktemplates.tasktemplatefolder" />
+    <element value="opengever.dossier.templatefolder" />
+    <element value="opengever.meeting.sablontemplate" />
+    <element value="opengever.dossier.dossiertemplate" />
+  </property>
 
-    <!-- schema interface -->
-    <property name="schema">opengever.dossier.templatefolder.ITemplateFolder</property>
+  <!-- schema interface -->
+  <property name="schema">opengever.dossier.templatefolder.ITemplateFolder</property>
 
-    <!-- class used for content items -->
-    <property name="klass">opengever.dossier.templatefolder.TemplateFolder</property>
+  <!-- class used for content items -->
+  <property name="klass">opengever.dossier.templatefolder.TemplateFolder</property>
 
-    <!-- add permission -->
-    <property name="add_permission">opengever.dossier.AddTemplateFolder</property>
+  <!-- add permission -->
+  <property name="add_permission">opengever.dossier.AddTemplateFolder</property>
 
-    <!-- enabled behaviors -->
-    <property name="behaviors">
-        <element value="collective.dexteritytextindexer.behavior.IDexterityTextIndexer" />
-        <element value="opengever.base.behaviors.translated_title.ITranslatedTitle" />
-        <element value="ftw.journal.interfaces.IAnnotationsJournalizable" />
-        <element value="opengever.dossier.behaviors.dossier.IDossier" />
-        <element value="plone.app.content.interfaces.INameFromTitle" />
-        <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
-        <element value="plone.app.lockingbehavior.behaviors.ILocking" />
-        <element value="opengever.trash.trash.ITrashable" />
-    </property>
+  <!-- enabled behaviors -->
+  <property name="behaviors">
+    <element value="collective.dexteritytextindexer.behavior.IDexterityTextIndexer" />
+    <element value="opengever.base.behaviors.translated_title.ITranslatedTitle" />
+    <element value="ftw.journal.interfaces.IAnnotationsJournalizable" />
+    <element value="opengever.dossier.behaviors.dossier.IDossier" />
+    <element value="plone.app.content.interfaces.INameFromTitle" />
+    <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
+    <element value="plone.app.lockingbehavior.behaviors.ILocking" />
+    <element value="opengever.trash.trash.ITrashable" />
+  </property>
 
-    <!-- View information -->
-    <property name="immediate_view">tabbed_view</property>
-    <property name="default_view">tabbed_view</property>
-    <property name="default_view_fallback">False</property>
-    <property name="view_methods">
-        <element value="view"/>
-        <element value="tabbed_view" />
-        <element value="template_view" />
-    </property>
+  <!-- View information -->
+  <property name="immediate_view">tabbed_view</property>
+  <property name="default_view">tabbed_view</property>
+  <property name="default_view_fallback">False</property>
+  <property name="view_methods">
+    <element value="view" />
+    <element value="tabbed_view" />
+    <element value="template_view" />
+  </property>
 
-    <!-- Method aliases -->
-    <alias from="(Default)" to="(selected layout)"/>
-    <alias from="edit" to="@@edit"/>
-    <alias from="sharing" to="@@sharing"/>
-    <alias from="view" to="@@view"/>
+  <!-- Method aliases -->
+  <alias from="(Default)" to="(selected layout)" />
+  <alias from="edit" to="@@edit" />
+  <alias from="sharing" to="@@sharing" />
+  <alias from="view" to="@@view" />
 
-    <!-- Actions -->
-    <action title="View" action_id="view" category="object" condition_expr=""
-            url_expr="string:${object_url}" visible="False">
-        <permission value="View"/>
-    </action>
-    <action title="Edit" action_id="edit" category="object"
-            condition_expr="not:object/@@plone_lock_info/is_locked_for_current_user|python:True "
-            url_expr="string:${object_url}/edit" visible="True">
-        <permission value="opengever.dossier: Add templatefolder"/>
-    </action>
+  <!-- Actions -->
+  <action
+      title="View"
+      action_id="view"
+      category="object"
+      condition_expr=""
+      url_expr="string:${object_url}"
+      visible="False">
+    <permission value="View" />
+  </action>
+  <action
+      title="Edit"
+      action_id="edit"
+      category="object"
+      condition_expr="not:object/@@plone_lock_info/is_locked_for_current_user|python:True "
+      url_expr="string:${object_url}/edit"
+      visible="True">
+    <permission value="opengever.dossier: Add templatefolder" />
+  </action>
 
 </object>

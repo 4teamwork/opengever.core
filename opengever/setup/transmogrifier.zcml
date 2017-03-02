@@ -71,8 +71,8 @@
       />
 
   <utility
-    component=".sections.modelconstructor.ModelConstructor"
-    name="opengever.setup.modelconstructor"
-    />
+      component=".sections.modelconstructor.ModelConstructor"
+      name="opengever.setup.modelconstructor"
+      />
 
 </configure>

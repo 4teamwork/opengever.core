@@ -8,64 +8,64 @@
     xmlns:vdex="http://namespaces.zope.org/vdex"
     i18n_domain="opengever.journal">
 
-    <!-- Grok the package to initialise schema interfaces and content classes -->
-    <grok:grok package="." />
+  <!-- Grok the package to initialise schema interfaces and content classes -->
+  <grok:grok package="." />
 
-    <!-- register translations -->
-    <i18n:registerTranslations directory="locales" />
+  <!-- register translations -->
+  <i18n:registerTranslations directory="locales" />
 
-    <vdex:vocabulary directory="vdexvocabs" />
+  <vdex:vocabulary directory="vdexvocabs" />
 
-    <!-- Register an extension profile to make the product installable -->
-    <genericsetup:registerProfile
-        name="default"
-        title="opengever.journal"
-        description="OpenGever Journal"
-        directory="profiles/default"
-        provides="Products.GenericSetup.interfaces.EXTENSION"
-        />
+  <!-- Register an extension profile to make the product installable -->
+  <genericsetup:registerProfile
+      name="default"
+      title="opengever.journal"
+      description="OpenGever Journal"
+      directory="profiles/default"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
 
-    <!-- Register some marker interfaces of ftw.journal as behaviors
+  <!-- Register some marker interfaces of ftw.journal as behaviors
          for easy adding to content types -->
 
-    <plone:behavior
-            title="Workflow History Journalizable"
-            description="Journalizable using workflow history"
-            provides="ftw.journal.interfaces.IWorkflowHistoryJournalizable"
-            />
+  <plone:behavior
+      title="Workflow History Journalizable"
+      description="Journalizable using workflow history"
+      provides="ftw.journal.interfaces.IWorkflowHistoryJournalizable"
+      />
 
-    <plone:behavior
-            title="Annotations Journalizable"
-            description="Journalizable using annotations"
-            provides="ftw.journal.interfaces.IAnnotationsJournalizable"
-            />
+  <plone:behavior
+      title="Annotations Journalizable"
+      description="Journalizable using annotations"
+      provides="ftw.journal.interfaces.IAnnotationsJournalizable"
+      />
 
-    <!-- add a journal history view -->
-    <browser:page
-        for="ftw.journal.interfaces.IJournalizable"
-        name="journal"
-        permission="zope2.View"
-        class=".browser.JournalHistory"
-        template="templates/journalhistory.pt"
-        />
+  <!-- add a journal history view -->
+  <browser:page
+      for="ftw.journal.interfaces.IJournalizable"
+      name="journal"
+      permission="zope2.View"
+      class=".browser.JournalHistory"
+      template="templates/journalhistory.pt"
+      />
 
-    <browser:page
-        name="add-journal-entry"
-        for="ftw.journal.interfaces.IJournalizable"
-        class=".form.ManualJournalEntryAddForm"
-        permission="cmf.ModifyPortalContent"
-        />
+  <browser:page
+      name="add-journal-entry"
+      for="ftw.journal.interfaces.IJournalizable"
+      class=".form.ManualJournalEntryAddForm"
+      permission="cmf.ModifyPortalContent"
+      />
 
-    <subscriber
-        for="opengever.document.behaviors.IBaseDocument
-             ftw.zipexport.interfaces.IItemZippedEvent"
-        handler=".handlers.document_zipped"
-        />
+  <subscriber
+      for="opengever.document.behaviors.IBaseDocument
+           ftw.zipexport.interfaces.IItemZippedEvent"
+      handler=".handlers.document_zipped"
+      />
 
-    <subscriber
-        for="opengever.dossier.behaviors.dossier.IDossierMarker
-             ftw.zipexport.interfaces.IContainerZippedEvent"
-        handler=".handlers.dossier_zipped"
-        />
+  <subscriber
+      for="opengever.dossier.behaviors.dossier.IDossierMarker
+           ftw.zipexport.interfaces.IContainerZippedEvent"
+      handler=".handlers.dossier_zipped"
+      />
 
 </configure>

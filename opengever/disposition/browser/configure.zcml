@@ -1,7 +1,7 @@
 <configure
-  xmlns="http://namespaces.zope.org/zope"
-  xmlns:browser="http://namespaces.zope.org/browser"
-  i18n_domain="opengever.core">
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="opengever.core">
 
   <browser:resourceDirectory
       name="opengever.disposition"
@@ -28,31 +28,36 @@
       class=".ech0160.ECH0160ExportView"
       for="opengever.disposition.interfaces.IDisposition"
       name="ech0160_export"
-      permission="opengever.disposition.DownloadSIPPackage"/>
+      permission="opengever.disposition.DownloadSIPPackage"
+      />
 
   <browser:page
       class=".overview.DispositionOverview"
       for="opengever.disposition.interfaces.IDisposition"
       name="tabbedview_view-overview"
       permission="zope2.View"
-      template="templates/overview.pt"/>
+      template="templates/overview.pt"
+      />
 
   <browser:page
       class=".views.UpdateAppraisalView"
       for="*"
       name="update_appraisal_view"
-      permission="zope2.View"/>
+      permission="zope2.View"
+      />
 
   <browser:page
       class=".excel_export.DispositionExcelExport"
       for="opengever.disposition.interfaces.IDisposition"
       name="download_excel"
-      permission="zope2.View"/>
+      permission="zope2.View"
+      />
 
   <browser:page
       class=".views.AppraiseView"
       for="opengever.disposition.interfaces.IDisposition"
       name="appraise-transition"
-      permission="zope2.View"/>
+      permission="zope2.View"
+      />
 
 </configure>

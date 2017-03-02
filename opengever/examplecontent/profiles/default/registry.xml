@@ -1,31 +1,33 @@
 <registry>
-    <record interface="opengever.meeting.interfaces.IMeetingSettings" field="is_feature_enabled">
-      <field type="plone.registry.field.Bool" />
-      <value>True</value>
-    </record>
+  <record
+      interface="opengever.meeting.interfaces.IMeetingSettings"
+      field="is_feature_enabled">
+    <field type="plone.registry.field.Bool" />
+    <value>True</value>
+  </record>
 
-    <records interface="opengever.base.interfaces.IReferenceNumberSettings">
-      <value key="reference_prefix_starting_point">0</value>
-    </records>
+  <records interface="opengever.base.interfaces.IReferenceNumberSettings">
+    <value key="reference_prefix_starting_point">0</value>
+  </records>
 
-    <records interface="opengever.dossier.interfaces.ITemplateFolderProperties">
-      <value key="create_doc_properties">True</value>
-    </records>
+  <records interface="opengever.dossier.interfaces.ITemplateFolderProperties">
+    <value key="create_doc_properties">True</value>
+  </records>
 
-    <records interface="opengever.bumblebee.interfaces.IGeverBumblebeeSettings">
-      <value key="is_feature_enabled">True</value>
-    </records>
+  <records interface="opengever.bumblebee.interfaces.IGeverBumblebeeSettings">
+    <value key="is_feature_enabled">True</value>
+  </records>
 
-    <records interface="opengever.contact.interfaces.IContactSettings">
-      <value key="is_feature_enabled">True</value>
-    </records>
+  <records interface="opengever.contact.interfaces.IContactSettings">
+    <value key="is_feature_enabled">True</value>
+  </records>
 
-    <records interface="opengever.officeatwork.interfaces.IOfficeatworkSettings">
-      <value key="is_feature_enabled">True</value>
-    </records>
+  <records interface="opengever.officeatwork.interfaces.IOfficeatworkSettings">
+    <value key="is_feature_enabled">True</value>
+  </records>
 
-    <records interface="opengever.dossier.dossiertemplate.interfaces.IDossierTemplateSettings">
-      <value key="is_feature_enabled">True</value>
-    </records>
+  <records interface="opengever.dossier.dossiertemplate.interfaces.IDossierTemplateSettings">
+    <value key="is_feature_enabled">True</value>
+  </records>
 
 </registry>

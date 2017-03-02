@@ -28,19 +28,10 @@
 
 
   <!-- permissions -->
-  <permission
-      id="opengever.private.AddPrivateRoot"
-      title="opengever.private: Add private root"
-      />
+  <permission id="opengever.private.AddPrivateRoot" title="opengever.private: Add private root" />
 
-  <permission
-      id="opengever.private.AddPrivateFolder"
-      title="opengever.private: Add private folder"
-      />
+  <permission id="opengever.private.AddPrivateFolder" title="opengever.private: Add private folder" />
 
-  <permission
-      id="opengever.private.AddPrivateDossier"
-      title="opengever.private: Add private dossier"
-      />
+  <permission id="opengever.private.AddPrivateDossier" title="opengever.private: Add private dossier" />
 
 </configure>

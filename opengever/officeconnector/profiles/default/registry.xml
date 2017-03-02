@@ -1,4 +1,3 @@
-<?xml version="1.0"?>
 <registry>
-    <records interface="opengever.officeconnector.interfaces.IOfficeConnectorSettings" />
+  <records interface="opengever.officeconnector.interfaces.IOfficeConnectorSettings" />
 </registry>

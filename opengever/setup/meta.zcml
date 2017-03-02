@@ -2,18 +2,18 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:meta="http://namespaces.zope.org/meta">
 
-    <meta:directive
-        namespace="http://namespaces.zope.org/opengever"
-        name="registerDeployment"
-        schema=".meta.IDeploymentDirective"
-        handler=".meta.register_deployment"
-        />
+  <meta:directive
+      namespace="http://namespaces.zope.org/opengever"
+      name="registerDeployment"
+      schema=".meta.IDeploymentDirective"
+      handler=".meta.register_deployment"
+      />
 
-    <meta:directive
-        namespace="http://namespaces.zope.org/opengever"
-        name="registerLDAP"
-        schema=".meta.ILDAPDirective"
-        handler=".meta.register_ldap"
-        />
+  <meta:directive
+      namespace="http://namespaces.zope.org/opengever"
+      name="registerLDAP"
+      schema=".meta.ILDAPDirective"
+      handler=".meta.register_ldap"
+      />
 
 </configure>

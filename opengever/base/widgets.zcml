@@ -6,36 +6,37 @@
   <adapter factory=".widgets.TrixDataConverter" />
 
   <class class=".widgets.TrixFieldWidget">
-      <require
-          permission="zope.Public"
-          interface=".widgets.ITrixWidget"
-      />
+    <require
+        permission="zope.Public"
+        interface=".widgets.ITrixWidget"
+        />
   </class>
 
   <z3c:widgetTemplate
-        mode="input"
-        widget=".widgets.ITrixWidget"
-        layer="z3c.form.interfaces.IFormLayer"
-        template="templates/trix_input.pt"
-        />
+      mode="input"
+      widget=".widgets.ITrixWidget"
+      layer="z3c.form.interfaces.IFormLayer"
+      template="templates/trix_input.pt"
+      />
 
-  <adapter factory=".widgets.TableRadioFieldWidget"
-           for="opengever.base.schema.ITableChoice
-                z3c.form.interfaces.IFormLayer"
-    />
+  <adapter
+      factory=".widgets.TableRadioFieldWidget"
+      for="opengever.base.schema.ITableChoice
+           z3c.form.interfaces.IFormLayer"
+      />
 
   <class class=".widgets.TableRadioFieldWidget">
-      <require
-          permission="zope.Public"
-          interface=".widgets.ITableRadioWidget"
-      />
+    <require
+        permission="zope.Public"
+        interface=".widgets.ITableRadioWidget"
+        />
   </class>
 
   <z3c:widgetTemplate
-        mode="input"
-        widget=".widgets.ITableRadioWidget"
-        layer="z3c.form.interfaces.IFormLayer"
-        template="templates/tableradio_input.pt"
-        />
+      mode="input"
+      widget=".widgets.ITableRadioWidget"
+      layer="z3c.form.interfaces.IFormLayer"
+      template="templates/tableradio_input.pt"
+      />
 
 </configure>

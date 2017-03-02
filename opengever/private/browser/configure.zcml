@@ -1,7 +1,7 @@
 <configure
-      xmlns="http://namespaces.zope.org/zope"
-      xmlns:browser="http://namespaces.zope.org/browser"
-      i18n_domain="opengever.dossier">
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="opengever.dossier">
 
   <browser:page
       for="opengever.private.folder.IPrivateFolder"

@@ -1,21 +1,21 @@
 <configure
-      xmlns="http://namespaces.zope.org/zope"
-      xmlns:browser="http://namespaces.zope.org/browser"
-      i18n_domain="opengever.inbox">
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="opengever.inbox">
 
-    <browser:page
-          name="task_transition_controller"
-          for="opengever.inbox.forwarding.IForwarding"
-          class=".transitioncontroller.ForwardingTransitionController"
-          permission="zope.Public"
-          allowed_interface="opengever.task.browser.transitioncontroller.ITaskTransitionController"
-          />
+  <browser:page
+      name="task_transition_controller"
+      for="opengever.inbox.forwarding.IForwarding"
+      class=".transitioncontroller.ForwardingTransitionController"
+      permission="zope.Public"
+      allowed_interface="opengever.task.browser.transitioncontroller.ITaskTransitionController"
+      />
 
-    <browser:page
-        name="view"
-        for="opengever.inbox.container.IInboxContainer"
-        class=".view.InboxContainerView"
-        permission="zope2.View"
-        />
+  <browser:page
+      name="view"
+      for="opengever.inbox.container.IInboxContainer"
+      class=".view.InboxContainerView"
+      permission="zope2.View"
+      />
 
 </configure>

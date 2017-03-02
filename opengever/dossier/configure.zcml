@@ -13,7 +13,9 @@
   <vdex:vocabulary directory="vdexvocabs" />
 
   <browser:resourceDirectory
-      name="opengever.dossier.resources" directory="resources" />
+      name="opengever.dossier.resources"
+      directory="resources"
+      />
 
   <include package=".viewlets" />
   <include package=".filing" />

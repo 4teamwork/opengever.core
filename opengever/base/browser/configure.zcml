@@ -1,102 +1,102 @@
 <configure
-      xmlns="http://namespaces.zope.org/zope"
-      xmlns:browser="http://namespaces.zope.org/browser">
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser">
 
+  <browser:page
+      name="list_groupmembers"
+      for="*"
+      class=".list_groupmembers.ListGroupMembers"
+      permission="zope2.View"
+      />
+
+  <adapter factory=".navtree.OpengeverNavtreeStrategy" />
+
+  <browser:page
+      name="search"
+      class=".search.OpengeverSearch"
+      permission="zope2.View"
+      for="*"
+      template="search.pt"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
+  <browser:page
+      name="view"
+      for="plone.dexterity.interfaces.IDexterityItem"
+      class=".default_view.OGDefaultView"
+      permission="zope2.View"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
+  <browser:page
+      name="view"
+      for="plone.dexterity.interfaces.IDexterityContainer"
+      class=".default_view.OGDefaultView"
+      permission="zope2.View"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
+  <browser:page
+      name="confirm-action"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      template="confirm.pt"
+      permission="zope2.View"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
+  <configure package="plone.app.search">
     <browser:page
-          name="list_groupmembers"
-          for="*"
-          class=".list_groupmembers.ListGroupMembers"
-          permission="zope2.View"
-          />
-
-    <adapter factory=".navtree.OpengeverNavtreeStrategy" />
-
-    <browser:page
-        name="search"
-        class=".search.OpengeverSearch"
+        name="updated_search"
+        class="opengever.base.browser.search.OpengeverSearch"
         permission="zope2.View"
-        for="*"
-        template="search.pt"
+        for="Products.CMFCore.interfaces.IFolderish"
+        template="updated_search.pt"
         layer="opengever.base.interfaces.IOpengeverBaseLayer"
         />
+  </configure>
 
-    <browser:page
-        name="view"
-        for="plone.dexterity.interfaces.IDexterityItem"
-        class=".default_view.OGDefaultView"
-        permission="zope2.View"
-        layer="opengever.base.interfaces.IOpengeverBaseLayer"
-        />
+  <browser:page
+      for="opengever.repository.repositoryroot.IRepositoryRoot"
+      name="navigation.json"
+      class=".navigation.JSONNavigation"
+      permission="zope2.View"
+      />
 
-    <browser:page
-        name="view"
-        for="plone.dexterity.interfaces.IDexterityContainer"
-        class=".default_view.OGDefaultView"
-        permission="zope2.View"
-        layer="opengever.base.interfaces.IOpengeverBaseLayer"
-        />
+  <browser:page
+      name="gever_state"
+      for="*"
+      permission="zope2.View"
+      class=".gever_state.GeverStateView"
+      allowed_interface="opengever.base.interfaces.IGeverState"
+      />
 
-    <browser:page
-        name="confirm-action"
-        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-        template="confirm.pt"
-        permission="zope2.View"
-        layer="opengever.base.interfaces.IOpengeverBaseLayer"
-    />
+  <browser:resourceDirectory
+      name="opengever.base"
+      directory="resources"
+      />
 
-    <configure package="plone.app.search">
-      <browser:page
-          name="updated_search"
-          class="opengever.base.browser.search.OpengeverSearch"
-          permission="zope2.View"
-          for="Products.CMFCore.interfaces.IFolderish"
-          template="updated_search.pt"
-          layer="opengever.base.interfaces.IOpengeverBaseLayer"
-          />
-    </configure>
+  <browser:page
+      name="plone_layout"
+      for="*"
+      permission="zope.Public"
+      class=".layout.GeverLayoutPolicy"
+      allowed_interface="plone.app.layout.globals.interfaces.ILayoutPolicy"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
 
-    <browser:page
-        for="opengever.repository.repositoryroot.IRepositoryRoot"
-        name="navigation.json"
-        class=".navigation.JSONNavigation"
-        permission="zope2.View"
-        />
+  <browser:page
+      name="plone_context_state"
+      for="opengever.base.interfaces.ISQLObjectWrapper"
+      permission="zope.Public"
+      class=".context.WrapperContextState"
+      allowed_interface="plone.app.layout.globals.interfaces.IContextState"
+      />
 
-    <browser:page
-        name="gever_state"
-        for="*"
-        permission="zope2.View"
-        class=".gever_state.GeverStateView"
-        allowed_interface="opengever.base.interfaces.IGeverState"
-        />
-
-    <browser:resourceDirectory
-        name="opengever.base"
-        directory="resources"
-        />
-
-    <browser:page
-        name="plone_layout"
-        for="*"
-        permission="zope.Public"
-        class=".layout.GeverLayoutPolicy"
-        allowed_interface="plone.app.layout.globals.interfaces.ILayoutPolicy"
-        layer="opengever.base.interfaces.IOpengeverBaseLayer"
-        />
-
-    <browser:page
-        name="plone_context_state"
-        for="opengever.base.interfaces.ISQLObjectWrapper"
-        permission="zope.Public"
-        class=".context.WrapperContextState"
-        allowed_interface="plone.app.layout.globals.interfaces.IContextState"
-        />
-
-    <browser:page
-        name="breadcrumb_by_uid"
-        for="*"
-        permission="zope2.View"
-        class=".breadcrumb_by_uid.ResolveUIDToBreadcrumb"
-        />
+  <browser:page
+      name="breadcrumb_by_uid"
+      for="*"
+      permission="zope2.View"
+      class=".breadcrumb_by_uid.ResolveUIDToBreadcrumb"
+      />
 
 </configure>

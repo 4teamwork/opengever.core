@@ -1,19 +1,17 @@
-<?xml version="1.0"?>
-<object name="opengever.dossier.projectdossier" meta_type="Dexterity FTI"
-        i18n:domain="opengever.dossier" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.dossier.projectdossier" meta_type="Dexterity FTI" i18n:domain="opengever.dossier">
 
   <!-- Basic metadata -->
   <property name="title" i18n:translate="">Project Dossier</property>
-  <property name="description" i18n:translate=""></property>
-  <property name="icon_expr"></property>
+  <property name="description" i18n:translate="" />
+  <property name="icon_expr" />
   <property name="allow_discussion">False</property>
   <property name="global_allow">True</property>
   <property name="filter_content_types">True</property>
   <property name="allowed_content_types">
     <element value="opengever.dossier.projectdossier" />
     <element value="opengever.dossier.businesscasedossier" />
-    <element value="opengever.task.task"/>
-    <element value="ftw.mail.mail"/>
+    <element value="opengever.task.task" />
+    <element value="ftw.mail.mail" />
   </property>
 
   <!-- schema interface -->
@@ -27,7 +25,7 @@
 
   <!-- enabled behaviors -->
   <property name="behaviors">
-	<element value="collective.dexteritytextindexer.behavior.IDexterityTextIndexer" />
+    <element value="collective.dexteritytextindexer.behavior.IDexterityTextIndexer" />
     <element value="opengever.base.behaviors.base.IOpenGeverBase" />
     <element value="ftw.journal.interfaces.IAnnotationsJournalizable" />
     <element value="opengever.dossier.behaviors.dossier.IDossier" />
@@ -45,25 +43,34 @@
   <property name="default_view">tabbed_view</property>
   <property name="default_view_fallback">False</property>
   <property name="view_methods">
-    <element value="view"/>
+    <element value="view" />
     <element value="tabbed_view" />
   </property>
 
   <!-- Method aliases -->
-  <alias from="(Default)" to="(selected layout)"/>
-  <alias from="edit" to="@@edit"/>
-  <alias from="sharing" to="@@sharing"/>
-  <alias from="view" to="@@view"/>
+  <alias from="(Default)" to="(selected layout)" />
+  <alias from="edit" to="@@edit" />
+  <alias from="sharing" to="@@sharing" />
+  <alias from="view" to="@@view" />
 
   <!-- Actions -->
-  <action title="View" action_id="view" category="object" condition_expr=""
-          url_expr="string:${object_url}" visible="False">
-    <permission value="View"/>
+  <action
+      title="View"
+      action_id="view"
+      category="object"
+      condition_expr=""
+      url_expr="string:${object_url}"
+      visible="False">
+    <permission value="View" />
   </action>
-  <action title="Edit" action_id="edit" category="object"
-          condition_expr="not:object/@@plone_lock_info/is_locked_for_current_user|python:True"
-          url_expr="string:${object_url}/edit" visible="True">
-    <permission value="Modify portal content"/>
+  <action
+      title="Edit"
+      action_id="edit"
+      category="object"
+      condition_expr="not:object/@@plone_lock_info/is_locked_for_current_user|python:True"
+      url_expr="string:${object_url}/edit"
+      visible="True">
+    <permission value="Modify portal content" />
   </action>
 
 </object>

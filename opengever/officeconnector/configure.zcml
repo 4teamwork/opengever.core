@@ -5,57 +5,57 @@
     xmlns:plone="http://namespaces.plone.org/plone"
     i18n_domain="opengever.officeconnector">
 
-    <include package=".browser" />
+  <include package=".browser" />
 
-    <i18n:registerTranslations directory="locales" />
+  <i18n:registerTranslations directory="locales" />
 
-    <genericsetup:registerProfile
-        name="default"
-        title="opengever.officeconnector"
-        description="the opengever.officeconnector profile"
-        directory="profiles/default"
-        provides="Products.GenericSetup.interfaces.EXTENSION"
-        />
+  <genericsetup:registerProfile
+      name="default"
+      title="opengever.officeconnector"
+      description="the opengever.officeconnector profile"
+      directory="profiles/default"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
 
-    <include package=".upgrades" />
+  <include package=".upgrades" />
 
-    <!-- Need to load meta.zcml of plone.rest in order to use plone:service directive -->
-    <include package="plone.rest" />
+  <!-- Need to load meta.zcml of plone.rest in order to use plone:service directive -->
+  <include package="plone.rest" />
 
-    <plone:service
-        method="GET"
-        for="opengever.document.document.IDocumentSchema"
-        accept="application/json"
-        factory=".service.OfficeConnectorAttachURL"
-        name="officeconnector_attach_url"
-        permission="zope2.View"
-        />
+  <plone:service
+      method="GET"
+      for="opengever.document.document.IDocumentSchema"
+      accept="application/json"
+      factory=".service.OfficeConnectorAttachURL"
+      name="officeconnector_attach_url"
+      permission="zope2.View"
+      />
 
-    <plone:service
-        method="GET"
-        for="opengever.document.document.IDocumentSchema"
-        accept="application/json"
-        factory=".service.OfficeConnectorCheckoutURL"
-        name="officeconnector_checkout_url"
-        permission="zope2.View"
-        />
+  <plone:service
+      method="GET"
+      for="opengever.document.document.IDocumentSchema"
+      accept="application/json"
+      factory=".service.OfficeConnectorCheckoutURL"
+      name="officeconnector_checkout_url"
+      permission="zope2.View"
+      />
 
-    <plone:service
-        method="GET"
-        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-        accept="application/json"
-        factory=".service.OfficeConnectorAttachPayload"
-        name="oc_attach"
-        permission="zope2.View"
-        />
+  <plone:service
+      method="GET"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      accept="application/json"
+      factory=".service.OfficeConnectorAttachPayload"
+      name="oc_attach"
+      permission="zope2.View"
+      />
 
-    <plone:service
-        method="GET"
-        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-        accept="application/json"
-        factory=".service.OfficeConnectorCheckoutPayload"
-        name="oc_checkout"
-        permission="zope2.View"
-        />
+  <plone:service
+      method="GET"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      accept="application/json"
+      factory=".service.OfficeConnectorCheckoutPayload"
+      name="oc_checkout"
+      permission="zope2.View"
+      />
 
 </configure>

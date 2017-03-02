@@ -4,8 +4,8 @@
     xmlns:i18n="http://namespaces.zope.org/i18n"
     i18n_domain="opengever.api">
 
-    <configure zcml:condition="installed plone.restapi">
-        <adapter factory=".summary.GeverJSONSummarySerializer" />
-    </configure>
+  <configure zcml:condition="installed plone.restapi">
+    <adapter factory=".summary.GeverJSONSummarySerializer" />
+  </configure>
 
 </configure>

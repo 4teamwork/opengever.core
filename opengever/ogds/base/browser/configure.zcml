@@ -9,12 +9,12 @@
       directory="resources"
       />
 
-      <browser:page
-          for="*"
-          name="orgunit_selector"
-          class=".orgunit_selector.OrgunitSelectorView"
-          attribute="has_available_units"
-          permission="zope.Public"
-          />
+  <browser:page
+      for="*"
+      name="orgunit_selector"
+      class=".orgunit_selector.OrgunitSelectorView"
+      attribute="has_available_units"
+      permission="zope.Public"
+      />
 
 </configure>

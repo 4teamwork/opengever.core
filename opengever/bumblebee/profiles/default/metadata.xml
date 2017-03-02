@@ -1,7 +1,6 @@
-<?xml version="1.0"?>
 <metadata>
-    <dependencies>
-        <dependency>profile-ftw.bumblebee:default</dependency>
-        <dependency>profile-ftw.showroom:default</dependency>
-    </dependencies>
+  <dependencies>
+    <dependency>profile-ftw.bumblebee:default</dependency>
+    <dependency>profile-ftw.showroom:default</dependency>
+  </dependencies>
 </metadata>

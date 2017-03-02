@@ -11,45 +11,45 @@
       />
 
   <browser:viewlet
-     name="plone.belowcontenttitle.documentbyline"
-     for="plone.dexterity.interfaces.IDexterityContainer"
-     manager="plone.app.layout.viewlets.interfaces.IBelowContentTitle"
-     class="opengever.base.viewlets.byline.BylineBase"
-     permission="zope2.View"
-     />
+      name="plone.belowcontenttitle.documentbyline"
+      for="plone.dexterity.interfaces.IDexterityContainer"
+      manager="plone.app.layout.viewlets.interfaces.IBelowContentTitle"
+      class="opengever.base.viewlets.byline.BylineBase"
+      permission="zope2.View"
+      />
 
   <browser:viewlet
-     name="plone.belowcontenttitle.documentbyline"
-     for="plone.dexterity.interfaces.IDexterityItem"
-     manager="plone.app.layout.viewlets.interfaces.IBelowContentTitle"
-     class="opengever.base.viewlets.byline.BylineBase"
-     permission="zope2.View"
-     />
+      name="plone.belowcontenttitle.documentbyline"
+      for="plone.dexterity.interfaces.IDexterityItem"
+      manager="plone.app.layout.viewlets.interfaces.IBelowContentTitle"
+      class="opengever.base.viewlets.byline.BylineBase"
+      permission="zope2.View"
+      />
 
   <browser:viewlet
-     name="plone.belowcontenttitle.documentbyline"
-     for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot"
-     manager="plone.app.layout.viewlets.interfaces.IBelowContentTitle"
-     class="opengever.base.viewlets.byline.PloneSiteByline"
-     permission="zope2.View"
-     />
+      name="plone.belowcontenttitle.documentbyline"
+      for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot"
+      manager="plone.app.layout.viewlets.interfaces.IBelowContentTitle"
+      class="opengever.base.viewlets.byline.PloneSiteByline"
+      permission="zope2.View"
+      />
 
   <browser:viewlet
-     name="gever-colorization"
-     manager="plone.app.layout.viewlets.interfaces.IPortalTop"
-     template="colorization.pt"
-     class=".colorization.ColorizationViewlet"
-     permission="zope2.View"
-     />
+      name="gever-colorization"
+      manager="plone.app.layout.viewlets.interfaces.IPortalTop"
+      template="colorization.pt"
+      class=".colorization.ColorizationViewlet"
+      permission="zope2.View"
+      />
 
   <!-- searchbox viewlet -->
   <browser:viewlet
-     name="plone.searchbox"
-     manager="plone.app.layout.viewlets.interfaces.IPortalHeader"
-     class=".searchbox.SearchBoxViewlet"
-     permission="zope2.View"
-     layer="opengever.base.interfaces.IOpengeverBaseLayer"
-     />
+      name="plone.searchbox"
+      manager="plone.app.layout.viewlets.interfaces.IPortalHeader"
+      class=".searchbox.SearchBoxViewlet"
+      permission="zope2.View"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
 
   <!-- Custom content views -->
   <browser:viewlet

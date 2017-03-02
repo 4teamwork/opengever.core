@@ -1,4 +1,3 @@
 <layers>
-    <layer name="opengever.sharing" 
-           interface="opengever.sharing.interfaces.IOpengeverSharing" />
+  <layer name="opengever.sharing" interface="opengever.sharing.interfaces.IOpengeverSharing" />
 </layers>

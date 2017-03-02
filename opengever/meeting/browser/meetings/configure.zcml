@@ -8,7 +8,7 @@
       name="add-meeting"
       class=".meeting.AddMeetingWizardStepView"
       permission="cmf.ModifyPortalContent"
-    />
+      />
 
   <browser:page
       for="opengever.meeting.interfaces.IMeetingWrapper"

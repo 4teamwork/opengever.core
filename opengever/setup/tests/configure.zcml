@@ -5,39 +5,39 @@
     xmlns:inflator="http://namespaces.zope.org/inflator"
     i18n_domain="opengever.core">
 
-    <include package="zope.i18n" file="meta.zcml" />
-    <include package="Products.GenericSetup" file="meta.zcml" />
+  <include package="zope.i18n" file="meta.zcml" />
+  <include package="Products.GenericSetup" file="meta.zcml" />
 
-    <genericsetup:registerProfile
-        name="units"
-        title="opengever.setup.tests:units"
-        directory="profiles/units"
-        description=""
-        provides="Products.GenericSetup.interfaces.EXTENSION"
-        />
+  <genericsetup:registerProfile
+      name="units"
+      title="opengever.setup.tests:units"
+      directory="profiles/units"
+      description=""
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
 
-    <genericsetup:registerProfile
-        name="localroles"
-        title="opengever.setup.tests:localroles"
-        directory="profiles/localroles"
-        description=""
-        provides="Products.GenericSetup.interfaces.EXTENSION"
-        />
+  <genericsetup:registerProfile
+      name="localroles"
+      title="opengever.setup.tests:localroles"
+      directory="profiles/localroles"
+      description=""
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
 
-    <genericsetup:registerProfile
-        name="templates"
-        title="opengever.setup.tests:templates"
-        directory="profiles/templates"
-        description=""
-        provides="Products.GenericSetup.interfaces.EXTENSION"
-        />
+  <genericsetup:registerProfile
+      name="templates"
+      title="opengever.setup.tests:templates"
+      directory="profiles/templates"
+      description=""
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
 
-    <genericsetup:registerProfile
-        name="repositories"
-        title="opengever.setup.tests:repositories"
-        directory="profiles/repositories"
-        description=""
-        provides="Products.GenericSetup.interfaces.EXTENSION"
-        />
+  <genericsetup:registerProfile
+      name="repositories"
+      title="opengever.setup.tests:repositories"
+      directory="profiles/repositories"
+      description=""
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
 
 </configure>

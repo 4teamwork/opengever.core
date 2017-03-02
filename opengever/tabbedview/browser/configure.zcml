@@ -3,16 +3,17 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="opengever.tabbedview">
 
-    <browser:page
-        for="*"
-        name="personal_overview"
-        class=".personal_overview.PersonalOverview"
-        permission="zope2.View"
-        allowed_interface="ftw.tabbedview.interfaces.ITabbedViewEndpoints"
-        />
+  <browser:page
+      for="*"
+      name="personal_overview"
+      class=".personal_overview.PersonalOverview"
+      permission="zope2.View"
+      allowed_interface="ftw.tabbedview.interfaces.ITabbedViewEndpoints"
+      />
 
-    <browser:resourceDirectory
-        name="opengever.tabbedview-resources"
-        directory="resources" />
+  <browser:resourceDirectory
+      name="opengever.tabbedview-resources"
+      directory="resources"
+      />
 
 </configure>

@@ -1,16 +1,14 @@
-<?xml version="1.0"?>
-<object name="opengever.meeting.committeecontainer" meta_type="Dexterity FTI"
-        i18n:domain="opengever.meeting" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.meeting.committeecontainer" meta_type="Dexterity FTI" i18n:domain="opengever.meeting">
 
   <!-- Basic metadata -->
   <property name="title" i18n:translate="">Committee Container</property>
-  <property name="description" i18n:translate=""></property>
-  <property name="icon_expr"></property>
+  <property name="description" i18n:translate="" />
+  <property name="icon_expr" />
   <property name="allow_discussion">False</property>
   <property name="global_allow">True</property>
   <property name="filter_content_types">True</property>
   <property name="allowed_content_types">
-      <element value="opengever.meeting.committee"/>
+    <element value="opengever.meeting.committee" />
   </property>
 
   <!-- schema interface -->
@@ -38,46 +36,59 @@
   </property>
 
   <!-- Method aliases -->
-  <alias from="(Default)" to="(selected layout)"/>
-  <alias from="edit" to="@@edit"/>
-  <alias from="sharing" to="@@sharing"/>
-  <alias from="view" to="@@view"/>
+  <alias from="(Default)" to="(selected layout)" />
+  <alias from="edit" to="@@edit" />
+  <alias from="sharing" to="@@sharing" />
+  <alias from="view" to="@@view" />
 
-  <action action_id="add-member"
-          visible="True"
-          title="Committee Member"
-          category="folder_factories"
-          url_expr="string:${object_url}/add-member"
-          icon_expr=""
-          condition_expr="">
-      <permission value="opengever.meeting: Add Member"/>
+  <action
+      action_id="add-member"
+      visible="True"
+      title="Committee Member"
+      category="folder_factories"
+      url_expr="string:${object_url}/add-member"
+      icon_expr=""
+      condition_expr="">
+    <permission value="opengever.meeting: Add Member" />
   </action>
 
   <!-- Actions -->
-  <action title="View" action_id="view" category="object" condition_expr=""
-          url_expr="string:${object_url}" visible="False">
-      <permission value="View"/>
+  <action
+      title="View"
+      action_id="view"
+      category="object"
+      condition_expr=""
+      url_expr="string:${object_url}"
+      visible="False">
+    <permission value="View" />
   </action>
 
-  <action title="Edit" action_id="edit" category="object" condition_expr=""
-          url_expr="string:${object_url}/edit" visible="True">
-      <permission value="Modify portal content"/>
+  <action
+      title="Edit"
+      action_id="edit"
+      category="object"
+      condition_expr=""
+      url_expr="string:${object_url}/edit"
+      visible="True">
+    <permission value="Modify portal content" />
   </action>
 
   <!-- Tab Actions -->
-  <action title="committees"
-          action_id="committees"
-          category="tabbedview-tabs"
-          condition_expr=""
-          url_expr="string:#"
-          visible="True">
+  <action
+      title="committees"
+      action_id="committees"
+      category="tabbedview-tabs"
+      condition_expr=""
+      url_expr="string:#"
+      visible="True">
   </action>
-  <action title="members"
-          action_id="members"
-          category="tabbedview-tabs"
-          condition_expr=""
-          url_expr="string:#"
-          visible="True">
+  <action
+      title="members"
+      action_id="members"
+      category="tabbedview-tabs"
+      condition_expr=""
+      url_expr="string:#"
+      visible="True">
   </action>
 
 </object>

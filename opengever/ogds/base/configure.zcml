@@ -1,4 +1,5 @@
-<configure xmlns="http://namespaces.zope.org/zope"
+<configure
+    xmlns="http://namespaces.zope.org/zope"
     xmlns:five="http://namespaces.zope.org/five"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     xmlns:grok="http://namespaces.zope.org/grok"
@@ -43,7 +44,7 @@
       description="OpenGever directory service : create example users and clients"
       directory="profiles/example"
       provides="Products.GenericSetup.interfaces.EXTENSION"
-        />
+      />
 
   <profilehook:hook
       profile="opengever.ogds.base:default"

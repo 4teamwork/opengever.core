@@ -4,17 +4,23 @@
     xmlns:zcml="http://namespaces.zope.org/zcml"
     i18n_domain="opengever.globalindex">
 
-    <!-- event handlers for tasks -->
-    <configure zcml:condition="installed opengever.task">
-        <subscriber for="opengever.task.task.ITask
-                         zope.lifecycleevent.interfaces.IObjectModifiedEvent"
-                    handler=".task.sync_task" />
-        <subscriber for="opengever.task.task.ITask
-                         zope.lifecycleevent.interfaces.IObjectAddedEvent"
-                    handler=".task.sync_task" />
-        <subscriber for="opengever.task.task.ITask
-                         zope.lifecycleevent.interfaces.IObjectMovedEvent"
-                    handler=".task.sync_task" />
-    </configure>
+  <!-- event handlers for tasks -->
+  <configure zcml:condition="installed opengever.task">
+    <subscriber
+        for="opengever.task.task.ITask
+             zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+        handler=".task.sync_task"
+        />
+    <subscriber
+        for="opengever.task.task.ITask
+             zope.lifecycleevent.interfaces.IObjectAddedEvent"
+        handler=".task.sync_task"
+        />
+    <subscriber
+        for="opengever.task.task.ITask
+             zope.lifecycleevent.interfaces.IObjectMovedEvent"
+        handler=".task.sync_task"
+        />
+  </configure>
 
 </configure>

@@ -4,35 +4,35 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="opengever.document">
 
-    <browser:page
-        name="download"
-        for="opengever.document.document.IDocumentSchema"
-        class=".download.DocumentishDownload"
-        permission="zope2.View"
-        />
+  <browser:page
+      name="download"
+      for="opengever.document.document.IDocumentSchema"
+      class=".download.DocumentishDownload"
+      permission="zope2.View"
+      />
 
-    <browser:page
-        name="view"
-        for="opengever.document.behaviors.IBaseDocument"
-        class=".default_view.DocumentDefaultView"
-        permission="zope2.View"
-        layer="opengever.base.interfaces.IOpengeverBaseLayer"
-        />
+  <browser:page
+      name="view"
+      for="opengever.document.behaviors.IBaseDocument"
+      class=".default_view.DocumentDefaultView"
+      permission="zope2.View"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
 
-    <browser:page
-        name="plone_layout"
-        for="opengever.document.behaviors.IBaseDocument"
-        permission="zope.Public"
-        class=".layout.DocumentishLayoutPolicy"
-        allowed_interface="plone.app.layout.globals.interfaces.ILayoutPolicy"
-        />
+  <browser:page
+      name="plone_layout"
+      for="opengever.document.behaviors.IBaseDocument"
+      permission="zope.Public"
+      class=".layout.DocumentishLayoutPolicy"
+      allowed_interface="plone.app.layout.globals.interfaces.ILayoutPolicy"
+      />
 
-    <browser:page
-        for="opengever.document.document.IDocumentSchema"
-        name="tabbed_view"
-        class=".tabbed.DocumentTabbedView"
-        permission="zope2.View"
-        allowed_attributes="listing select_all reorder setgridstate set_default_tab msg_unknownresponse"
-        />
+  <browser:page
+      for="opengever.document.document.IDocumentSchema"
+      name="tabbed_view"
+      class=".tabbed.DocumentTabbedView"
+      permission="zope2.View"
+      allowed_attributes="listing select_all reorder setgridstate set_default_tab msg_unknownresponse"
+      />
 
 </configure>

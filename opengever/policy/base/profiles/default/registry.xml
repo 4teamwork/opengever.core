@@ -1,37 +1,37 @@
 <registry>
-    <records interface="ftw.zipexport.interfaces.IZipExportSettings">
-        <value key="enabled_dotted_names">
-            <element>opengever.dossier.behaviors.dossier.IDossierMarker</element>
-            <element>Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot</element>
-            <element>opengever.task.task.ITask</element>
-        </value>
-    </records>
+  <records interface="ftw.zipexport.interfaces.IZipExportSettings">
+    <value key="enabled_dotted_names">
+      <element>opengever.dossier.behaviors.dossier.IDossierMarker</element>
+      <element>Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot</element>
+      <element>opengever.task.task.ITask</element>
+    </value>
+  </records>
 
-    <!-- CACHING -->
-    <record name="plone.caching.interfaces.ICacheSettings.enabled">
-        <value>True</value>
-    </record>
+  <!-- CACHING -->
+  <record name="plone.caching.interfaces.ICacheSettings.enabled">
+    <value>True</value>
+  </record>
 
-    <record name="plone.app.caching.interfaces.IPloneCacheSettings.enableCompression">
-        <value>True</value>
-    </record>
+  <record name="plone.app.caching.interfaces.IPloneCacheSettings.enableCompression">
+    <value>True</value>
+  </record>
 
-    <!-- disable cache purging for now, since we have no proxies configured
+  <!-- disable cache purging for now, since we have no proxies configured
          to be purged -->
-    <record name="plone.cachepurging.interfaces.ICachePurgingSettings.enabled">
-        <value>False</value>
-    </record>
+  <record name="plone.cachepurging.interfaces.ICachePurgingSettings.enabled">
+    <value>False</value>
+  </record>
 
-    <record name="plone.app.caching.weakCaching.plone.content.itemView.etags">
-        <value purge="False">
-            <element>tabbedview</element>
-        </value>
-    </record>
+  <record name="plone.app.caching.weakCaching.plone.content.itemView.etags">
+    <value purge="False">
+      <element>tabbedview</element>
+    </value>
+  </record>
 
-    <record name="plone.app.caching.weakCaching.plone.content.folderView.etags">
-        <value purge="False">
-            <element>tabbedview</element>
-        </value>
-    </record>
+  <record name="plone.app.caching.weakCaching.plone.content.folderView.etags">
+    <value purge="False">
+      <element>tabbedview</element>
+    </value>
+  </record>
 
 </registry>

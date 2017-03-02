@@ -16,26 +16,26 @@
 
   <grok:grok package="." />
 
-  <i18n:registerTranslations directory="locales"/>
+  <i18n:registerTranslations directory="locales" />
 
   <!-- Classification Behavior -->
   <plone:behavior
-        title="Tabbed View"
-        description="Adds a tabbed view to folderish content"
-        provides=".interfaces.ITabbedViewEnabled"
-        factory="plone.behavior.AnnotationStorage"
-        marker="ftw.tabbedview.interfaces.ITabbedView"
-        for="plone.dexterity.interfaces.IDexterityContent"
-        />
+      title="Tabbed View"
+      description="Adds a tabbed view to folderish content"
+      provides=".interfaces.ITabbedViewEnabled"
+      factory="plone.behavior.AnnotationStorage"
+      marker="ftw.tabbedview.interfaces.ITabbedView"
+      for="plone.dexterity.interfaces.IDexterityContent"
+      />
 
   <!-- Register the installation GenericSetup extension profile -->
   <genericsetup:registerProfile
-        name="default"
-        title="opengever.tabbedview"
-        directory="profiles/default"
-        description="opengever Tabbed View"
-        provides="Products.GenericSetup.interfaces.EXTENSION"
-          />
+      name="default"
+      title="opengever.tabbedview"
+      directory="profiles/default"
+      description="opengever Tabbed View"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
   <include package=".upgrades" />
 
   <profilehook:hook
@@ -44,12 +44,12 @@
       />
 
   <class class="ftw.tabbedview.browser.tabbed.TabbedView">
-      <!-- This avoids having write transactions when visiting /tabbed_view for the
+    <!-- This avoids having write transactions when visiting /tabbed_view for the
            very first time (mostly relevant for tests).
            It avoids storing an empty BTree in the annotations of the site root.
            If you want to have some fun, remove it and fix the tests.
       -->
-      <implements interface="ftw.dictstorage.interfaces.ISQLAlchemy" />
+    <implements interface="ftw.dictstorage.interfaces.ISQLAlchemy" />
   </class>
 
 </configure>
