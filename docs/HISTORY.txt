@@ -5,6 +5,8 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Fix off-by-one bumblebee preview image for document versions. [deiferni]
+
 - Caching: enable tabbedview etag value. [jone]
 
 - Translate missing "open detail view" in bumblebee-overlay.
