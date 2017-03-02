@@ -5,6 +5,9 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Update ftw.keywordwidget from 1.1.1 to 1.1.2 to fix an ie11 issue.
+  [elioschmutz]
+
 - Fix off-by-one bumblebee preview image for document versions. [deiferni]
 
 - Add scaffolding to OC checkout payloads in anticipation of plone.api direct
