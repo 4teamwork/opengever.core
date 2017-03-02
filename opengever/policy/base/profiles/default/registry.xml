@@ -22,4 +22,16 @@
         <value>False</value>
     </record>
 
+    <record name="plone.app.caching.weakCaching.plone.content.itemView.etags">
+        <value purge="False">
+            <element>tabbedview</element>
+        </value>
+    </record>
+
+    <record name="plone.app.caching.weakCaching.plone.content.folderView.etags">
+        <value purge="False">
+            <element>tabbedview</element>
+        </value>
+    </record>
+
 </registry>
