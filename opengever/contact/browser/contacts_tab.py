@@ -1,8 +1,6 @@
-from five import grok
 from opengever.contact import _
 from opengever.tabbedview import BaseCatalogListingTab
 from opengever.tabbedview.helper import email_helper
-from plone.dexterity.interfaces import IDexterityContainer
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 
 
@@ -40,9 +38,6 @@ def linked_no_icon(item, value):
 
 
 class Contacts(BaseCatalogListingTab):
-
-    grok.name('tabbedview_view-local')
-    grok.context(IDexterityContainer)
 
     types = ['opengever.contact.contact', ]
 
