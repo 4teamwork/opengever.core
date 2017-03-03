@@ -55,5 +55,4 @@ class OGDSAllTasks(GlobalTaskListingTab):
     def get_base_query(self):
         """Returns the base search query (sqlalchemy)
         """
-
-        return Session().query(Task)
+        return Task.query
