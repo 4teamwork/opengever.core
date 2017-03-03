@@ -1,7 +1,5 @@
-from five import grok
 from opengever.dossier import _
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateSchema
-from opengever.dossier.templatefolder.interfaces import ITemplateFolder
 from opengever.tabbedview import BaseCatalogListingTab
 from opengever.tabbedview.browser.tabs import Documents, Trash
 from opengever.tabbedview.helper import linked
@@ -23,8 +21,6 @@ def drop_columns(columns):
 
 
 class TemplateFolderDocuments(Documents):
-    grok.context(ITemplateFolder)
-
     depth = 1
 
     @property
@@ -49,8 +45,6 @@ class TemplateFolderDocuments(Documents):
 
 
 class TemplateFolderSablonTemplates(Documents):
-    grok.context(ITemplateFolder)
-    grok.name('tabbedview_view-sablontemplates')
 
     types = ['opengever.meeting.sablontemplate']
 
@@ -79,8 +73,6 @@ class TemplateFolderSablonTemplates(Documents):
 
 
 class TemplateFolderProposalTemplates(Documents):
-    grok.context(ITemplateFolder)
-    grok.name('tabbedview_view-proposaltemplates')
 
     types = ['opengever.meeting.proposaltemplate']
 
@@ -109,8 +101,6 @@ class TemplateFolderProposalTemplates(Documents):
 
 
 class TemplateFolderTrash(Trash):
-    grok.context(ITemplateFolder)
-
     depth = 1
 
     @property
@@ -120,7 +110,6 @@ class TemplateFolderTrash(Trash):
 
 
 class TemplateFolderDossierTemplates(BaseCatalogListingTab):
-    grok.name('tabbedview_view-dossiertemplates')
 
     filterlist_available = False
     sort_on = 'sortable_title'
