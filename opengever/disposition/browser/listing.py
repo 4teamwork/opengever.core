@@ -1,4 +1,3 @@
-from five import grok
 from ftw.table.helper import path_checkbox
 from opengever.disposition import _
 from opengever.tabbedview import BaseCatalogListingTab
@@ -16,7 +15,6 @@ ACTIVE_STATES = ['disposition-state-in-progress',
 
 
 class Dispositions(BaseCatalogListingTab):
-    grok.name('tabbedview_view-dispositions')
 
     types = ['opengever.disposition.disposition']
     enabled_actions = []
