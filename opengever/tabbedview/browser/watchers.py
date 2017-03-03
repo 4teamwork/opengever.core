@@ -15,6 +15,7 @@ class Watchers(grok.View):
         resource = notification_center().fetch_resource(self.context)
         watchers = {}
         for subscription in resource.subscriptions:
-            watchers[subscription.watcher.user_id] = subscription.roles
+            watchers.setdefault(subscription.watcher.actorid, []).append(
+                subscription.role)
 
         return json.dumps(watchers)
