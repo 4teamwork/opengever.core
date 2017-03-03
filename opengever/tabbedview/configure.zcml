@@ -18,6 +18,9 @@
 
   <i18n:registerTranslations directory="locales" />
 
+  <adapter factory=".catalog_source.GeverCatalogTableSource" />
+  <adapter factory=".sqlsource.SqlTableSource" />
+
   <!-- Classification Behavior -->
   <plone:behavior
       title="Tabbed View"

@@ -1,6 +1,3 @@
-from Products.CMFPlone.utils import getToolByName
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from five import grok
 from ftw import bumblebee
 from opengever.base.browser.helper import get_css_class
 from opengever.bumblebee import is_bumblebee_feature_enabled
@@ -10,6 +7,7 @@ from opengever.tabbedview.browser.tabs import Documents
 from opengever.tabbedview.browser.tabs import Trash
 from opengever.task.browser.related_documents import RelatedDocuments
 from plone.memoize.view import memoize
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zExceptions import NotFound
 
 
@@ -86,7 +84,6 @@ class BumblebeeGalleryMixin(object):
 
 
 class DocumentsGallery(BumblebeeGalleryMixin, Documents):
-    grok.name('tabbedview_view-documents-gallery')
 
     @property
     def list_view_name(self):
@@ -103,14 +100,13 @@ class DocumentsGalleryFetch(DocumentsGallery):
     This browserview can be removed and implemented with allowed-attributes as
     soon as the parent views are registered as Zope 3 BrowserViews.
     """
-    grok.name('tabbedview_view-documents-gallery-fetch')
+    # XXX implement as and traversable method instead of a separate view.
 
     def __call__(self):
         return self.fetch()
 
 
 class MyDocumentsGallery(BumblebeeGalleryMixin, MyDocuments):
-    grok.name('tabbedview_view-mydocuments-gallery')
 
     @property
     def list_view_name(self):
@@ -127,14 +123,13 @@ class MyDocumentsGalleryFetch(MyDocumentsGallery):
     This browserview can be removed and implemented with allowed-attributes as
     soon as the parent views are registered as Zope 3 BrowserViews.
     """
-    grok.name('tabbedview_view-mydocuments-gallery-fetch')
+    # XXX implement as and traversable method instead of a separate view.
 
     def __call__(self):
         return self.fetch()
 
 
 class TrashGallery(BumblebeeGalleryMixin, Trash):
-    grok.name('tabbedview_view-trash-gallery')
 
     @property
     def list_view_name(self):
@@ -151,14 +146,13 @@ class TrashGalleryFetch(TrashGallery):
     This browserview can be removed and implemented with allowed-attributes as
     soon as the parent views are registered as Zope 3 BrowserViews.
     """
-    grok.name('tabbedview_view-trash-gallery-fetch')
+    # XXX implement as and traversable method instead of a separate view.
 
     def __call__(self):
         return self.fetch()
 
 
 class RelatedDocumentsGallery(BumblebeeGalleryMixin, RelatedDocuments):
-    grok.name('tabbedview_view-relateddocuments-gallery')
 
     @property
     def list_view_name(self):
@@ -175,7 +169,8 @@ class RelatedDocumentsGalleryFetch(RelatedDocumentsGallery):
     This browserview can be removed and implemented with allowed-attributes as
     soon as the parent views are registered as Zope 3 BrowserViews.
     """
-    grok.name('tabbedview_view-relateddocuments-gallery-fetch')
+
+    # XXX implement as and traversable method instead of a separate view.
 
     def __call__(self):
         return self.fetch()

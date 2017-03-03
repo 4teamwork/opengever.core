@@ -1,4 +1,3 @@
-from five import grok
 from ftw.table.interfaces import ITableSource
 from opengever.tabbedview import GeverTableSource
 from opengever.tabbedview.interfaces import IGeverTableSourceConfig
@@ -9,18 +8,19 @@ from sqlalchemy.sql.expression import asc
 from sqlalchemy.sql.expression import cast
 from sqlalchemy.sql.expression import column
 from sqlalchemy.sql.expression import desc
+from zope.component import adapter
+from zope.interface import implementer
 from zope.interface import Interface
 
 
+@implementer(ITableSource)
+@adapter(IGeverTableSourceConfig, Interface)
 class SqlTableSource(GeverTableSource):
     """Base table source adapter for every listing,
        that gets the content from sql.
     """
 
     searchable_columns = []
-
-    grok.implements(ITableSource)
-    grok.adapts(IGeverTableSourceConfig, Interface)
 
     def validate_base_query(self, query):
         """Validates and fixes the base query. Returns the query object.

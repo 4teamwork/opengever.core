@@ -1,4 +1,5 @@
-from five import grok
+from zope.component import adapter
+from zope.interface import implementer
 from ftw.table.interfaces import ITableSource
 from ftw.table.interfaces import ITableSourceConfig
 from opengever.meeting import _
@@ -56,9 +57,8 @@ class ProposalListingTab(BaseListingTab):
 
         )
 
-
+@implementer(ITableSource)
+@adapter(ProposalListingTab, Interface)
 class ProposalTableSource(SqlTableSource):
-    grok.implements(ITableSource)
-    grok.adapts(ProposalListingTab, Interface)
 
     searchable_columns = []

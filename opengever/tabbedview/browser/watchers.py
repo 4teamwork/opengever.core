@@ -1,15 +1,11 @@
-from five import grok
 from opengever.activity import notification_center
-from zope.interface import Interface
+from Products.Five import BrowserView
 import json
 
 
-class Watchers(grok.View):
+class Watchers(BrowserView):
     """Maintenance/Debugging view, which shows watchers of the current object.
     """
-    grok.name('watchers')
-    grok.context(Interface)
-    grok.require('cmf.ManagePortal')
 
     def render(self):
         resource = notification_center().fetch_resource(self.context)
