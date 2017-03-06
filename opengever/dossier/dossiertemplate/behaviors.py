@@ -6,6 +6,8 @@ from opengever.dossier.behaviors.dossier import IDossier
 from plone.app.content.interfaces import INameFromTitle
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.directives import form
+from plone.formwidget.contenttree import ObjPathSourceBinder
+from z3c.relationfield.schema import RelationChoice, RelationList
 from zope import schema
 from zope.interface import alsoProvides
 from zope.interface import implements
@@ -90,3 +92,28 @@ class DossierTemplateNameFromTitle(dossiernamefromtitle.DossierNameFromTitle):
     implements(IDossierTemplateNameFromTitle)
 
     format = u'dossiertemplate-%i'
+
+
+class IRestrictAddableDossierTemplates(form.Schema):
+
+    addable_dossier_templates = RelationList(
+        title=_(u'label_addable_dossier_templates',
+                default=u'Addable dossier templates'),
+        default=[],
+        missing_value=[],
+        value_type=RelationChoice(
+            title=u'Addable dossiertemplate',
+            source=ObjPathSourceBinder(
+                portal_type=("opengever.dossier.dossiertemplate"),
+                is_subdossier=False,
+                navigation_tree_query={
+                    'object_provides':
+                    ['opengever.dossier.templatefolder.interfaces.ITemplateFolder',
+                     'opengever.dossier.dossiertemplate.behaviors.IDossierTemplateSchema']
+                }),
+            ),
+        required=False,
+    )
+
+
+alsoProvides(IRestrictAddableDossierTemplates, IFormFieldProvider)

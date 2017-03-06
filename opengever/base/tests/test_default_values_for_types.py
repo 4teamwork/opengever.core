@@ -60,6 +60,7 @@ REPOFOLDER_DEFAULTS = {
 }
 REPOFOLDER_FORM_DEFAULTS = {}
 REPOFOLDER_MISSING_VALUES = {
+    'addable_dossier_templates': [],
     'addable_dossier_types': [],
     'archival_value_annotation': None,
     'date_of_cassation': None,
@@ -771,4 +772,3 @@ class TestContactDefaults(TestDefaultsBase):
         expected['description'] = None
 
         self.assertDictEqual(expected, persisted_values)
-
