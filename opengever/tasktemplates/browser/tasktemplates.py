@@ -23,7 +23,6 @@ def preselected_helper(item, value):
 
 
 class TaskTemplates(BaseCatalogListingTab):
-    grok.name('tabbedview_view-tasktemplates')
 
     columns = (
         {'column': '',
