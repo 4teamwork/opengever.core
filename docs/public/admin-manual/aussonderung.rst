@@ -74,8 +74,6 @@ zu können oder es kann ein Bewertungsliste (Excel) generiert und dem Archiv
 übermittelt werden. Eine automatischer Import der Bewertungsliste steht
 aktuell nicht zur Verfügung.
 
-Alle Angebot sind im neuen Tab `Angebote` ersichtlich. Es steht nur Benutzern
-mit der Berechtigung Angebote zu Erstellen zur Verfügung.
 
 Bewertung finalisieren
 ~~~~~~~~~~~~~~~~~~~~~~
