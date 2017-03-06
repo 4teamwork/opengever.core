@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-02-16 16:28+0000\n"
+"POT-Creation-Date: 2017-03-06 23:34+0000\n"
 "PO-Revision-Date: 2016-09-20 21:24+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/fr/>\n"
@@ -32,7 +32,7 @@ msgstr "Participant"
 msgid "Add Subdossier"
 msgstr "Insérer un sous-dossier"
 
-#: ./opengever/dossier/dossiertemplate/form.py:104
+#: ./opengever/dossier/dossiertemplate/form.py:114
 msgid "Add dossier"
 msgstr ""
 
@@ -139,7 +139,7 @@ msgstr "Dossier du projet"
 msgid "Select document"
 msgstr ""
 
-#: ./opengever/dossier/dossiertemplate/form.py:103
+#: ./opengever/dossier/dossiertemplate/form.py:113
 msgid "Select dossiertemplate"
 msgstr ""
 
@@ -160,19 +160,19 @@ msgstr "Dossier des modèles"
 msgid "Templates"
 msgstr "Modèles"
 
-#: ./opengever/dossier/deactivate.py:51
+#: ./opengever/dossier/deactivate.py:58
 msgid "The Dossier can't be deactivated, it contains active proposals."
 msgstr "Le dossier ne peut pas être détruit, il contient des requêtes actives."
 
-#: ./opengever/dossier/deactivate.py:69
+#: ./opengever/dossier/deactivate.py:76
 msgid "The Dossier can't be deactivated, not all contained tasks are in a closed state."
 msgstr "Ce dossier ne peut pas être annulé, il contient encore des tâches qui ne sont pas accomplies."
 
-#: ./opengever/dossier/deactivate.py:45
+#: ./opengever/dossier/deactivate.py:52
 msgid "The Dossier can't be deactivated, not all containeddocuments are checked in."
 msgstr "Ce dossier ne peut pas être annulé, il contient encore des documents avec le statut checkout"
 
-#: ./opengever/dossier/deactivate.py:59
+#: ./opengever/dossier/deactivate.py:66
 msgid "The Dossier can't be deactivated, the subdossier ${dossier} is already resolved"
 msgstr "Impossible d'annuler le dossier, parce que le sous-dossier ${dossier} est déja fermé. Le sous-dossier doit d'abord être réouvert."
 
@@ -180,7 +180,7 @@ msgstr "Impossible d'annuler le dossier, parce que le sous-dossier ${dossier} es
 msgid "The Dossier has been activated"
 msgstr "Le dossier a été activé."
 
-#: ./opengever/dossier/deactivate.py:33
+#: ./opengever/dossier/deactivate.py:36
 msgid "The Dossier has been deactivated"
 msgstr "Le dossier a été annulé."
 
@@ -256,12 +256,12 @@ msgstr "Enregistrer"
 #. Default: "Cancel"
 #: ./opengever/dossier/archive.py:291
 #: ./opengever/dossier/behaviors/participation.py:166
-#: ./opengever/dossier/dossiertemplate/form.py:138
+#: ./opengever/dossier/dossiertemplate/form.py:148
 msgid "button_cancel"
 msgstr "Annuler"
 
 #. Default: "Continue"
-#: ./opengever/dossier/dossiertemplate/form.py:127
+#: ./opengever/dossier/dossiertemplate/form.py:137
 msgid "button_continue"
 msgstr "Continuer"
 
@@ -291,7 +291,7 @@ msgid "create_document_with_template"
 msgstr "Créer un document à partir d'un modèle"
 
 #. Default: "Create dossier from template"
-#: ./opengever/dossier/dossiertemplate/form.py:99
+#: ./opengever/dossier/dossiertemplate/form.py:109
 msgid "create_dossier_with_template"
 msgstr ""
 
@@ -417,7 +417,7 @@ msgid "help_text_edit_note"
 msgstr ""
 
 #. Default: "Recommendation for the title. Will be displayed as a help text if you create a dossier from template"
-#: ./opengever/dossier/dossiertemplate/behaviors.py:33
+#: ./opengever/dossier/dossiertemplate/behaviors.py:35
 msgid "help_title_help"
 msgstr ""
 
@@ -434,6 +434,11 @@ msgstr "Participations enlevées"
 #. Default: "Add Note"
 #: ./opengever/dossier/viewlets/templates/note.pt:17
 msgid "label_add_note"
+msgstr ""
+
+#. Default: "Addable dossier templates"
+#: ./opengever/dossier/dossiertemplate/behaviors.py:100
+msgid "label_addable_dossier_templates"
 msgstr ""
 
 #. Default: "Address"
@@ -473,14 +478,14 @@ msgid "label_container_type"
 msgstr "Type de conteneur"
 
 #. Default: "Creator"
-#: ./opengever/dossier/dossiertemplate/form.py:87
+#: ./opengever/dossier/dossiertemplate/form.py:97
 #: ./opengever/dossier/templatefolder/form.py:69
 msgid "label_creator"
 msgstr "Créé par"
 
 #. Default: "Description"
 #: ./opengever/dossier/browser/overview.py:218
-#: ./opengever/dossier/templatefolder/tabs.py:110
+#: ./opengever/dossier/templatefolder/tabs.py:111
 msgid "label_description"
 msgstr ""
 
@@ -585,7 +590,7 @@ msgid "label_mail_address"
 msgstr ""
 
 #. Default: "Modified"
-#: ./opengever/dossier/dossiertemplate/form.py:90
+#: ./opengever/dossier/dossiertemplate/form.py:100
 #: ./opengever/dossier/templatefolder/form.py:72
 msgid "label_modified"
 msgstr "Modifié"
@@ -626,7 +631,7 @@ msgid "label_phonenumber"
 msgstr ""
 
 #. Default: "Predefined Keywords"
-#: ./opengever/dossier/dossiertemplate/behaviors.py:42
+#: ./opengever/dossier/dossiertemplate/behaviors.py:44
 msgid "label_predefined_keywords"
 msgstr ""
 
@@ -660,7 +665,7 @@ msgid "label_responsible"
 msgstr "Responsable"
 
 #. Default: "Restrict Keywords"
-#: ./opengever/dossier/dossiertemplate/behaviors.py:50
+#: ./opengever/dossier/dossiertemplate/behaviors.py:52
 msgid "label_restrict_keywords"
 msgstr ""
 
@@ -717,20 +722,20 @@ msgid "label_tasktemplate_folders"
 msgstr "Déroulements standards"
 
 #. Default: "Template"
-#: ./opengever/dossier/dossiertemplate/form.py:79
+#: ./opengever/dossier/dossiertemplate/form.py:89
 #: ./opengever/dossier/templatefolder/form.py:60
 msgid "label_template"
 msgstr ""
 
 #. Default: "Title"
 #: ./opengever/dossier/browser/report.py:26
-#: ./opengever/dossier/dossiertemplate/form.py:84
+#: ./opengever/dossier/dossiertemplate/form.py:94
 #: ./opengever/dossier/templatefolder/form.py:65
 msgid "label_title"
 msgstr "Titre"
 
 #. Default: "Title help"
-#: ./opengever/dossier/dossiertemplate/behaviors.py:32
+#: ./opengever/dossier/dossiertemplate/behaviors.py:34
 msgid "label_title_help"
 msgstr ""
 
