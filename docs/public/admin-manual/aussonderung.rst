@@ -60,9 +60,13 @@ dabei automatisch ein Vorbewertung anhand des
 Dossier-Metadatums ``Archivwürdigkeit``.
 
 Anschliessend kann die Bewertung von den Records Managern über die
-Angebotsansicht angepasst und vorbereitet werden.
+Angebotsansicht angepasst und vorbereitet werden. Die Bewertung kann sowohl auf Stufe Ordnungsposition für alle enthaltenen Dossiers oder einzeln pro Dossier angepasst werden.
 
 |img-aussonderung-2|
+
+Stornierte Dossiers werden in einer separten Liste aufgeführt. Auch die automatische Vorbewertung anhand des Dossier-Metadatums ``Archivwürdigkeit`` entfällt. Stornierte Dossiers sind immer als nicht archivwürdig vorbewertet.
+
+|img-aussonderung-6|
 
 Je nach Arbeitsweise kann für die endgültige Bewertung das Archiv auf dem
 GEVER Mandanten berechtigt werden um die Bewertung gleich im GEVER vornehmen
@@ -160,5 +164,6 @@ nur der neuen Rolle `Records Manager` zur Verfügung.
 .. |img-aussonderung-3| image:: img/media/img-aussonderung-3.png
 .. |img-aussonderung-4| image:: img/media/img-aussonderung-4.png
 .. |img-aussonderung-5| image:: img/media/img-aussonderung-5.png
+.. |img-aussonderung-6| image:: img/media/img-aussonderung-6.png
 
 .. disqus::
