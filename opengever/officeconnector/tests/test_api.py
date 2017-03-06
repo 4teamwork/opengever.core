@@ -15,6 +15,7 @@ import transaction
 
 
 class TestOfficeconnectorAPI(FunctionalTestCase):
+    """Simulate an OfficeConnector client."""
 
     layer = OPENGEVER_FUNCTIONAL_ZSERVER_TESTING
 
@@ -34,18 +35,22 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
                            .having(id='ordnungssystem',
                                    title_de=u'Ordnungssystem',
                                    title_fr=u'Syst\xe8me de classement'))
+
         self.repofolder = create(Builder('repository')
                                  .within(self.repo)
                                  .having(title_de=u'Ordnungsposition',
                                          title_fr=u'Position'))
+
         self.dossier = create(Builder('dossier')
                               .within(self.repofolder)
                               .titled(u'Mein Dossier'))
+
         # We rely on the creation order of these documents for the tests!
         # ZServer craps out if you have non-ascii in the document titles!
         self.document_without_attachment = create(Builder('document')
                                                   .titled(u'docu-1')
                                                   .within(self.dossier))
+
         self.document_with_attachment = create(Builder('document')
                                                .titled(u'docu-2')
                                                .within(self.dossier)
@@ -55,6 +60,7 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
         lang_tool = api.portal.get_tool('portal_languages')
         lang_tool.setDefaultLanguage('de-ch')
         lang_tool.supported_langs = ['fr-ch', 'de-ch']
+
         transaction.commit()
 
     def enable_attach_to_outlook(self):
@@ -64,7 +70,7 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
             interface=IOfficeConnectorSettings)
         transaction.commit()
 
-    def enable_checkout(self):
+    def enable_oc_checkout(self):
         api.portal.set_registry_record(
             'direct_checkout_and_edit_enabled',
             True,
@@ -99,6 +105,48 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
 
     def get_oc_payload_json(self, document, action):
         return self.get_oc_payload_response(document, action).json()
+
+    def checkout_document(self, payload):
+        self.api.headers.update({'Accept': 'text/html'})
+        self.api.get('/'.join((payload['document-url'], payload['checkout'])) + '?_authenticator={}'.format(payload['csrf-token'])) # noqa
+
+    def upload_document(self, payload, modified_file_content):
+        self.api.headers.update({'Accept': 'text/html'})
+        data = {
+            'form.widgets.file.action': 'replace',
+            'form.buttons.save': 'Save',
+            '_authenticator': payload['csrf-token'],
+            }
+
+        # The DATA in the file tuple needs to be seekable
+        # The order within the file tuple matters if the file is not a file
+        files = {
+            'form.widgets.file': (
+                payload['filename'],
+                str(modified_file_content),
+                payload['content-type'],
+                ),
+            }
+
+        self.api.post(
+            '/'.join((payload['document-url'], payload['upload-form'])),
+            data=data,
+            files=files,
+            )
+
+    def checkin_with_comment(self, payload, comment):
+        self.api.headers.update({'Accept': 'text/html'})
+
+        data = {
+            'form.widgets.comment': self.test_comment,
+            'form.buttons.button_checkin': 'Checkin',
+            '_authenticator': payload['csrf-token'],
+            }
+
+        self.api.post(
+            '/'.join((payload['document-url'], payload['checkin-with-comment'])),  # noqa
+            data=data,
+            )
 
     def test_returns_404_when_feature_disabled(self):
         self.assertEquals(404, self.get_oc_url_response_status(self.document_without_attachment, 'attach')) # noqa
@@ -161,15 +209,15 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
         self.assertEquals(response.headers['content-disposition'], 'attachment; filename="{}"'.format(filename)) # noqa
 
     def test_document_checkout_url_without_file(self):
-        self.enable_checkout()
+        self.enable_oc_checkout()
         self.assertEquals(404, self.get_oc_url_response_status(self.document_without_attachment, 'checkout')) # noqa
 
     def test_document_checkout_payload_without_file(self):
-        self.enable_checkout()
+        self.enable_oc_checkout()
         self.assertEquals(404, self.get_oc_url_response_status(self.document_without_attachment, 'checkout')) # noqa
 
     def test_document_checkout_url_with_file(self):
-        self.enable_checkout()
+        self.enable_oc_checkout()
         self.assertEquals(200, self.get_oc_url_response_status(self.document_with_attachment, 'checkout')) # noqa
 
         payload = self.get_oc_url_payload(self.document_with_attachment, 'checkout') # noqa
@@ -182,7 +230,7 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
         self.assertEquals(TEST_USER_ID, token['sub'])
 
     def test_document_checkout_payload_with_file(self):
-        self.enable_checkout()
+        self.enable_oc_checkout()
         token = self.get_oc_url_jwt(self.document_with_attachment, 'checkout') # noqa
 
         # Test we can actually fetch an action payload based on the URL JWT
@@ -198,12 +246,14 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
 
     @browsing
     def test_document_checkout(self, browser):
-        self.enable_checkout()
+        # Enable the OC checkout feature
+        self.enable_oc_checkout()
+
+        # Grab the OC URL
         token = self.get_oc_url_jwt(self.document_with_attachment, 'checkout') # noqa
 
-        # Test we can actually fetch an action payload based on the URL JWT
-        response = self.api.get(token['url'])
-        payload = response.json()
+        # Grab the action payload based on the OC URL
+        payload = self.api.get(token['url']).json()
 
         # Test fetching the indicated file
         self.api.headers.update({'Accept': payload['content-type']})
@@ -215,94 +265,78 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
         self.assertEquals(response.content, self.original_file_content)
 
         # Test we can perform a checkout based on the action payload
-        self.api.headers.update({'Accept': 'text/html'})
-        self.api.get('/'.join((payload['document-url'], payload['checkout'])) + '?_authenticator={}'.format(payload['csrf-token'])) # noqa
+        self.checkout_document(payload)
 
-        self.assertTrue(browser.login().open(self.document_with_attachment).css('.checked_out_viewlet')) # noqa
+        browser.login()
+        self.assertTrue(browser.open(self.document_with_attachment).css('.checked_out_viewlet')) # noqa
+
+        # Test there is also a journal entry from the checkout
+        browser.open(self.document_with_attachment, view='tabbedview_view-journal') # noqa
+        journal_entry = browser.css('.listing').first.lists()[1]
+        self.assertEquals(journal_entry[1], 'Dokument ausgecheckt')
 
     @browsing
     def test_document_checkin_without_comment(self, browser):
-        self.enable_checkout()
+        # Enable the OC checkout feature
+        self.enable_oc_checkout()
+
+        # Grab the OC URL
         token = self.get_oc_url_jwt(self.document_with_attachment, 'checkout') # noqa
 
-        # Test we can actually fetch an action payload based on the URL JWT
-        response = self.api.get(token['url'])
-        payload = response.json()
+        # Grab the action payload based on the OC URL
+        payload = self.api.get(token['url']).json()
 
-        # Test fetching the indicated file
-        self.api.headers.update({'Accept': payload['content-type']})
-        response = self.api.get('/'.join((payload['document-url'], payload['download']))) # noqa
-
-        # Test we can perform a checkout based on the action payload
-        self.api.headers.update({'Accept': 'text/html'})
-        self.api.get('/'.join((payload['document-url'], payload['checkout'])) + '?_authenticator={}'.format(payload['csrf-token'])) # noqa
+        # Checkout the document based on the action payload
+        self.checkout_document(payload)
 
         # Test we can upload a new version of the file
-        browser.login()
-        browser.open(self.document_with_attachment,
-                     view=str(payload['upload-form']))
-        # The DATA in the file tuple needs to be seekable
-        browser.fill({
-            'form.widgets.file.action': 'replace',
-            'form.widgets.file': (
-                str(self.modified_file_content),
-                payload['filename'],
-                payload['content-type'],
-                ),
-            })
-        browser.css('#form-buttons-save').first.click()
+        self.upload_document(payload, self.modified_file_content)
 
-        # Test we can check in the file
-        response = self.api.get('/'.join((payload['document-url'], payload['checkin-without-comment'])) + '?_authenticator={}'.format(payload['csrf-token'])) # noqa
-
-        # Test the uploaded new file is now properly the latest version
+        # Test the uploaded new file is now properly the working copy
         self.api.headers.update({'Accept': payload['content-type']})
         response = self.api.get('/'.join((payload['document-url'], payload['download']))) # noqa
 
         self.assertEquals(response.content, self.modified_file_content)
 
+        # Check the document in without a comment
+        self.api.get('/'.join((payload['document-url'], payload['checkin-without-comment'])) + '?_authenticator={}'.format(payload['csrf-token'])) # noqa
+
+        # Test the journal entry from the commentless checkin
+        browser.login()
+        browser.open(self.document_with_attachment, view='tabbedview_view-journal') # noqa
+        journal_entry = browser.css('.listing').first.lists()[1]
+
+        self.assertEquals(journal_entry[1], 'Dokument eingecheckt')
+
+        # Test the checked in version is the uploaded version
+        self.api.headers.update({'Accept': payload['content-type']})
+        response = self.api.get('/'.join((payload['document-url'], 'download_file_version'))) # noqa
+
+        self.assertEquals(response.content, self.modified_file_content)
+
     @browsing
     def test_document_checkin_with_comment(self, browser):
-        self.enable_checkout()
+        # Enable the OC checkout feature
+        self.enable_oc_checkout()
+
+        # Grab the OC URL
         token = self.get_oc_url_jwt(self.document_with_attachment, 'checkout') # noqa
 
-        # Test we can actually fetch an action payload based on the URL JWT
-        response = self.api.get(token['url'])
-        payload = response.json()
+        # Grab the action payload based on the OC URL
+        payload = self.api.get(token['url']).json()
 
-        # Test fetching the indicated file
-        self.api.headers.update({'Accept': payload['content-type']})
-        response = self.api.get('/'.join((payload['document-url'], payload['download']))) # noqa
+        # Perform a checkout based on the action payload
+        self.checkout_document(payload)
 
-        # Test we can perform a checkout based on the action payload
-        self.api.headers.update({'Accept': 'text/html'})
+        # Upload a new version of the file
+        self.upload_document(payload, self.modified_file_content)
 
-        self.api.get('/'.join((payload['document-url'], payload['checkout'])) + '?_authenticator={}' .format(payload['csrf-token'])) # noqa
+        # Check the document in with a comment
+        self.checkin_with_comment(payload, self.test_comment)
 
-        # Test we can upload a new version of the file
+        # Test the journal entries from the checkin with a comment
         browser.login()
-        browser.open(self.document_with_attachment,
-                     view=str(payload['upload-form']))
-        # The DATA in the file tuple needs to be seekable
-        browser.fill({
-            'form.widgets.file.action': 'replace',
-            'form.widgets.file': (
-                str(self.modified_file_content),
-                payload['filename'],
-                payload['content-type'],
-                ),
-            })
-        browser.css('#form-buttons-save').first.click()
-
-        # Test we can check in with a comment
-        browser.open(self.document_with_attachment, view='checkin_document')
-        browser.fill({
-            'form.widgets.comment': self.test_comment,
-        })
-        browser.css('#form-buttons-button_checkin').first.click()
-
         browser.open(self.document_with_attachment, view='tabbedview_view-journal') # noqa
-
         journal_entry = browser.css('.listing').first.lists()[1]
 
         self.assertEquals(journal_entry[1], 'Dokument eingecheckt')
