@@ -5,6 +5,10 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Add restriction possibility for dossier templates on a
+  specific repositoryfolder.
+  [phgross]
+
 - The document redirector now handles newstyle OC URLs.
   [Rotonen]
 

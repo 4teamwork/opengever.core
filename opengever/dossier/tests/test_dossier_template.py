@@ -357,6 +357,26 @@ class TestDossierTemplateAddWizard(FunctionalTestCase):
             browser.css('.listing tr td:nth-child(2)').text)
 
     @browsing
+    def test_selectable_templates_are_restricted_when_addable_templates_are_selected(self, browser):
+        template1 = create(Builder("dossiertemplate")
+                           .within(self.templatefolder)
+                           .titled(u"Template 1"))
+        template2 = create(Builder("dossiertemplate")
+                           .within(self.templatefolder)
+                           .titled(u"Template 2"))
+
+        leaf_node_2 = create(Builder('repository')
+                             .having(addable_dossier_templates=[template2])
+                             .within(self.branch_node))
+
+        browser.login().visit(leaf_node_2)
+        factoriesmenu.add('Dossier with template')
+
+        self.assertEqual(
+            ['Template 2'],
+            browser.css('.listing tr td:nth-child(2)').text)
+
+    @browsing
     def test_dossiertemplate_values_are_prefilled_properly_in_the_dossier(self, browser):
         values = {
             'title': u'My template',

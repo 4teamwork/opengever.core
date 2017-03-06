@@ -13,6 +13,7 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.command import CreateDocumentFromTemplateCommand
 from opengever.dossier.command import CreateDossierFromTemplateCommand
 from opengever.dossier.dossiertemplate import is_dossier_template_feature_enabled
+from opengever.dossier.dossiertemplate.behaviors import IRestrictAddableDossierTemplates
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateSchema
 from opengever.dossier.dossiertemplate.dossiertemplate import BEHAVIOR_INTERFACE_MAPPING
 from opengever.dossier.dossiertemplate.dossiertemplate import TEMPLATABLE_FIELDS
@@ -38,15 +39,24 @@ import json
 
 @grok.provider(IContextSourceBinder)
 def get_dossier_templates(context):
-    templates = api.portal.get_tool('portal_catalog')({
-        'portal_type': 'opengever.dossier.dossiertemplate',
-        'is_subdossier': False
+    """Returns the selected templates when the addable templates are restricted
+    by the addable_dossier_templates field, otherwise it returns all templates.
+    """
+
+    if IRestrictAddableDossierTemplates(context).addable_dossier_templates:
+        templates = [rel.to_object for rel in
+                     IRestrictAddableDossierTemplates(context).addable_dossier_templates]
+
+    else:
+        brains = api.portal.get_tool('portal_catalog')({
+            'portal_type': 'opengever.dossier.dossiertemplate',
+            'is_subdossier': False
         })
+        templates = [brain.getObject() for brain in brains]
 
     intids = getUtility(IIntIds)
     terms = []
-    for brain in templates:
-        template = brain.getObject()
+    for template in templates:
         terms.append(SimpleVocabulary.createTerm(
             template,
             str(intids.getId(template)),
@@ -207,7 +217,7 @@ class AddDossierFromTemplateWizardStep(WizzardWrappedAddForm):
 
                 if template_obj.restrict_keywords:
                     # since the widget gets somehow reinitialized it's not
-                    # possible to manipualte the add_permission directly. 
+                    # possible to manipulate the add_permission directly.
                     # Changing other values like something on a field may
                     # lead to unexpected behavior.
                     # This is the insecure options - but it feeds for this
