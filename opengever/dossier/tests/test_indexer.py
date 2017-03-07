@@ -114,7 +114,7 @@ class TestIndexers(FunctionalTestCase):
         self.assertEquals((u'Keyword 1', u'Keyword 2', u'Keyword with \xf6'),
                           catalog.uniqueValuesFor('Subject'))
 
-    def test_searchable_text_contains_keywords(self):
+    def test_dossier_searchable_text_contains_keywords(self):
         dossier_with_keywords = create(
             Builder("dossier")
             .titled(u"Dossier")
@@ -124,6 +124,18 @@ class TestIndexers(FunctionalTestCase):
         self.assertItemsEqual(
             [u'1', u'3', 'client1', 'dossier', 'keyword', 'me', 'pick'],
             index_data_for(dossier_with_keywords).get('SearchableText'))
+
+    def test_dossiertemplate_searchable_text_contains_keywords(self):
+        folder = create(Builder('templatefolder'))
+        template_with_keywords = create(
+            Builder("dossiertemplate")
+            .titled(u"Dossiertemplate")
+            .having(keywords=(u'Thingy', u'Keyw\xf6rd',))
+            .within(folder))
+
+        self.assertItemsEqual(
+            [u'1', 'client1', 'dossiertemplate', 'keyword', 'thingy'],
+            index_data_for(template_with_keywords).get('SearchableText'))
 
 
 class TestFilingNumberIndexer(FunctionalTestCase):

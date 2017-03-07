@@ -157,3 +157,9 @@ class SearchableTextExtender(grok.Adapter):
                 keyword.encode('utf-8') for keyword in keywords)
 
         return ' '.join(searchable)
+
+
+class DossierTemplateSearchableTextExtender(SearchableTextExtender):
+    grok.context(IDossierTemplateMarker)
+    grok.name('IDossierTemplate')
+    grok.implements(dexteritytextindexer.IDynamicTextIndexExtender)
