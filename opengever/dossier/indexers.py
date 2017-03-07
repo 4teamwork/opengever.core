@@ -149,4 +149,9 @@ class SearchableTextExtender(grok.Adapter):
         if comments:
             searchable.append(comments.encode('utf-8'))
 
+        # keywords
+        keywords = dossier.keywords
+        if keywords:
+            searchable.append(keywords.encode('utf-8'))
+
         return ' '.join(searchable)

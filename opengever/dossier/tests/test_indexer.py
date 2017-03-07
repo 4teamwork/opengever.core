@@ -114,6 +114,17 @@ class TestIndexers(FunctionalTestCase):
         self.assertEquals((u'Keyword 1', u'Keyword 2', u'Keyword with \xf6'),
                           catalog.uniqueValuesFor('Subject'))
 
+    def test_searchable_text_contains_keywords(self):
+        dossier_with_keywords = create(
+            Builder("dossier")
+            .titled(u"Dossier")
+            .having(keywords=(u'Pick me!', u'Keyw\xf6rd'))
+            .within(self.repo_folder))
+
+        self.assertItemsEqual(
+            [u'1', u'3', 'client1', 'dossier', 'keyword', 'me', 'pick'],
+            index_data_for(dossier_with_keywords).get('SearchableText'))
+
 
 class TestFilingNumberIndexer(FunctionalTestCase):
 
