@@ -55,7 +55,6 @@ class IDossier(form.Schema):
         ],
     )
 
-    dexteritytextindexer.searchable('keywords')
     form.widget(keywords=KeywordFieldWidget)
     keywords = schema.Tuple(
         title=_(u'label_keywords', default=u'Keywords'),
