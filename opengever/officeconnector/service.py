@@ -142,7 +142,7 @@ class OfficeConnectorPayload(Service):
             'content-type': self.document.file.contentType,
             'csrf-token': createToken(),
             'document-url': self.document.absolute_url(),
-            'download': 'download_file_version',
+            'download': 'download',
             'filename': self.document.get_filename(),
             }
 

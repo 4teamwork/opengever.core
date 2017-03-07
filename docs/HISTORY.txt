@@ -5,6 +5,10 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- OfficeConnector now gets given the latest working copy of a file instead of
+  the latest checked in copy of a file.
+  [Rotonen]
+
 - Update ftw.keywordwidget from 1.1.1 to 1.1.2 to fix an ie11 issue.
   [elioschmutz]
 
