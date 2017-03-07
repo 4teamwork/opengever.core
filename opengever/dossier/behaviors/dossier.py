@@ -56,6 +56,7 @@ class IDossier(form.Schema):
     )
 
     dexteritytextindexer.searchable('keywords')
+    form.widget(keywords=KeywordFieldWidget)
     keywords = schema.Tuple(
         title=_(u'label_keywords', default=u'Keywords'),
         description=_(u'help_keywords', default=u''),
@@ -66,7 +67,6 @@ class IDossier(form.Schema):
         missing_value=(),
         default=(),
     )
-    form.widget(keywords=KeywordFieldWidget)
 
     # workaround because ftw.datepicker wasn't working on the edit form
     form.widget(start=DatePickerFieldWidget)
