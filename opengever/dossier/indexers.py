@@ -154,7 +154,9 @@ class SearchableTextExtender(grok.Adapter):
         keywords = IDossier(self.context).keywords
         if keywords:
             searchable.extend(
-                keyword.encode('utf-8') for keyword in keywords)
+                keyword.encode('utf-8') if isinstance(keyword, unicode)
+                else keyword
+                for keyword in keywords)
 
         return ' '.join(searchable)
 
