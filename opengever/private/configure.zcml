@@ -34,4 +34,6 @@
 
   <permission id="opengever.private.AddPrivateDossier" title="opengever.private: Add private dossier" />
 
+  <adapter factory=".quota.PrivateFolderQuotaSizeSettings" />
+
 </configure>
