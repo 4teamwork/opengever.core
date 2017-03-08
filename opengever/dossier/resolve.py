@@ -269,7 +269,11 @@ class Reactivator(object):
         if self.wft.getInfoFor(dossier,
                                'review_state') == 'dossier-state-resolved':
 
+            self.reset_end_date(dossier)
             self.wft.doActionFor(dossier, 'dossier-transition-reactivate')
+
+    def reset_end_date(self, dossier):
+        IDossier(dossier).end = None
 
 
 class ResolveConditions(object):

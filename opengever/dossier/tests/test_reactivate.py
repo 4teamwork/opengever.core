@@ -1,8 +1,10 @@
+from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import info_messages
 from ftw.testbrowser.pages.statusmessages import warning_messages
+from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import FunctionalTestCase
 from plone import api
 from plone.protect import createToken
@@ -62,3 +64,24 @@ class TestReactivating(FunctionalTestCase):
             ["It isn't possible to reactivate a sub dossier."],
             warning_messages())
         self.assertEquals('dossier-state-resolved', api.content.get_state(sub))
+
+    @browsing
+    def test_resets_end_dates_recursively(self, browser):
+        dossier = create(Builder('dossier')
+                         .having(end=date(2013, 2, 21))
+                         .in_state('dossier-state-resolved'))
+        sub = create(Builder('dossier')
+                     .within(dossier)
+                     .having(end=date(2013, 2, 21))
+                     .in_state('dossier-state-resolved'))
+        subsub = create(Builder('dossier')
+                        .within(sub)
+                        .having(end=date(2013, 2, 21))
+                        .in_state('dossier-state-resolved'))
+
+        browser.login().open(dossier, view=u'transition-reactivate',
+                             data={'_authenticator': createToken()})
+
+        self.assertIsNone(IDossier(dossier).end)
+        self.assertIsNone(IDossier(sub).end)
+        self.assertIsNone(IDossier(subsub).end)
