@@ -1,0 +1,15 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="opengever.quota">
+
+  <adapter factory=".primary.PrimaryFieldQuotaSubject" />
+  <plone:behavior
+      title="Primary field quota subject"
+      description="Subject to quota by counting the primary field blob size."
+      provides="opengever.quota.primary.IPrimaryBlobFieldQuota"
+      for="plone.dexterity.interfaces.IDexterityItem"
+      />
+
+</configure>
