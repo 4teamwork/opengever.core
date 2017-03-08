@@ -336,6 +336,14 @@ class DossierContainer(Container):
         ILifeCycle(self).date_of_submission = None
         api.content.transition(obj=self, to_state=self.get_former_state())
 
+    def activate(self):
+        self.reset_end_date()
+        api.content.transition(obj=self,
+                               transition='dossier-transition-activate')
+
+    def reset_end_date(self):
+        IDossier(self).end = None
+
     def get_former_state(self):
         """Returns the end state of the active dossier lifecycle,
         so `dossier-state-resolved` for resolved dossiers or

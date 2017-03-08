@@ -1,8 +1,10 @@
+from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
+from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import FunctionalTestCase
 from plone import api
 from plone.protect import createToken
@@ -51,3 +53,24 @@ class TestDossierActivation(FunctionalTestCase):
         self.assertEqual("This subdossier can't be activated,"
                          "because the main dossiers is inactive",
                          error_messages()[0])
+
+    @browsing
+    def test_resets_end_dates_recursively(self, browser):
+        dossier = create(Builder('dossier')
+                         .having(end=date(2013, 2, 21))
+                         .in_state('dossier-state-inactive'))
+        sub = create(Builder('dossier')
+                     .within(dossier)
+                     .having(end=date(2013, 2, 21))
+                     .in_state('dossier-state-inactive'))
+        subsub = create(Builder('dossier')
+                        .within(sub)
+                        .having(end=date(2013, 2, 21))
+                        .in_state('dossier-state-inactive'))
+
+        browser.login().open(dossier, view=u'transition-activate',
+                             data={'_authenticator': createToken()})
+
+        self.assertIsNone(IDossier(dossier).end)
+        self.assertIsNone(IDossier(sub).end)
+        self.assertIsNone(IDossier(subsub).end)

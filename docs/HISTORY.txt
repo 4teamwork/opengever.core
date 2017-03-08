@@ -5,7 +5,7 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
-- Reset end date when reactivating a resolved dossier.
+- Reset end date when reactivating a resolved or activating an inactive dossier.
   [phgross]
 
 - Fix permission issue if user tries to trash a document in a private dossier.
