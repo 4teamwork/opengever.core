@@ -3,7 +3,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_PRIVATE_FOLDER_LAYER
 from opengever.private.tests import create_members_folder
-from opengever.quota.primary import IPrimaryBlobFieldQuota
+
 from opengever.quota.sizequota import ISizeQuota
 from opengever.testing import FunctionalTestCase
 from plone.namedfile.file import NamedBlobFile
@@ -13,17 +13,6 @@ from zope.lifecycleevent import ObjectModifiedEvent
 
 class TestSizeQuota(FunctionalTestCase):
     layer = OPENGEVER_FUNCTIONAL_PRIVATE_FOLDER_LAYER
-
-    def setUp(self):
-        super(TestSizeQuota, self).setUp()
-        # XXX remove me when quota support is enabled on documents
-        self.portal.portal_types['opengever.document.document'].behaviors += (
-            IPrimaryBlobFieldQuota.__identifier__,
-        )
-        # XXX remove me when quota is enabled on opengever.private.folder
-        self.portal.portal_types['opengever.private.folder'].behaviors += (
-            ISizeQuota.__identifier__,
-        )
 
     def test_content_modifications_update_usage(self):
         """Test that adding, updating, removing and moving update the usage.

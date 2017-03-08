@@ -1,0 +1,7 @@
+<object name="opengever.document.document">
+
+  <property name="behaviors" purge="False">
+    <element value="opengever.quota.primary.IPrimaryBlobFieldQuota" />
+  </property>
+
+</object>

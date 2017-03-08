@@ -26,6 +26,7 @@
     <element value="opengever.sharing.behaviors.IDossier" />
     <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
     <element value="plone.app.lockingbehavior.behaviors.ILocking" />
+    <element value="opengever.quota.sizequota.ISizeQuota" />
   </property>
 
   <!-- View information -->

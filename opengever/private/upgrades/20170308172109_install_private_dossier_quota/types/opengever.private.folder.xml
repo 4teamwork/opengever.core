@@ -1,0 +1,7 @@
+<object name="opengever.private.folder">
+
+  <property name="behaviors" purge="False">
+    <element value="opengever.quota.sizequota.ISizeQuota" />
+  </property>
+
+</object>

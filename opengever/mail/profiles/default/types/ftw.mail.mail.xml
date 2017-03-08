@@ -82,5 +82,6 @@
     <element value="plone.app.versioningbehavior.behaviors.IVersionable" />
     <element value="plone.app.lockingbehavior.behaviors.ILocking" />
     <element value="ftw.bumblebee.interfaces.IBumblebeeable" />
+    <element value="opengever.quota.primary.IPrimaryBlobFieldQuota" />
   </property>
 </object>
