@@ -82,7 +82,7 @@
     }, 100);
   }
 
-  $(document).on("mouseover", ".rollover-breadcrumb", setBreadcrumbAsTitleAttr);
+  $(document).on("mouseover", ".rollover-breadcrumb[data-uid]", setBreadcrumbAsTitleAttr);
 
 
 }(window, window.jQuery));
