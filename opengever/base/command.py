@@ -1,5 +1,4 @@
 from opengever.base.transforms.msg2mime import Msg2MimeTransform
-from os.path import join
 from os.path import splitext
 from plone.dexterity.utils import createContentInContainer
 from plone.namedfile.file import NamedBlobFile
@@ -61,7 +60,9 @@ class CreateEmailCommand(CreateDocumentCommand):
     primary_field_name = 'message'
 
     def __init__(self, context, filename, data, title=None, content_type='',
-                 **kwargs):
+                 transform=None, **kwargs):
+        self.transform = transform or Msg2MimeTransform()
+
         if self.is_msg_upload(filename):
                 filename, data = self.convert_to_mime(filename, data)
 
@@ -73,9 +74,9 @@ class CreateEmailCommand(CreateDocumentCommand):
         return ext.lower() == '.msg'
 
     def convert_to_mime(self, filename, data):
-        data = Msg2MimeTransform().transform(data)
-        root, ext = splitext(filename)
-        filename = join(root, '.eml')
+        data = self.transform.transform(data)
+        base_filename, ext = splitext(filename)
+        filename = u'{}.eml'.format(base_filename)
         return filename, data
 
     def execute(self):
