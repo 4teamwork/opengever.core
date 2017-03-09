@@ -80,6 +80,9 @@ class BumblebeeBaseDocumentOverlay(ActionButtonRendererMixin):
     def get_title(self):
         return self.context.title
 
+    def get_description(self):
+        return self.context.description
+
     def get_file_size(self):
         """Return the filesize in KB."""
         return self.get_file().getSize() / 1024 if self.has_file() else None

@@ -1,17 +1,8 @@
 <aside class="sidebar"
        i18n:domain="opengever.bumblebee"
        tal:define="file_size view/overlay/get_file_size">
-  <header>
-    <span tal:attributes="class string:file-mimetype ${view/overlay/get_mime_type_css_class}" />
-    <div>
-      <a class="title"
-         tal:attributes="href context/absolute_url"
-         tal:content="view/overlay/get_title" />
-      <span class="filesize" tal:condition="file_size" tal:content="string:${file_size} KB" />
-    </div>
-  </header>
   <main>
-    <table class="metadata">
+    <table class="metadata" tal:attributes="data-mimetype string:${view/overlay/get_mime_type_css_class}">
       <tr>
         <td class="title" i18n:translate="">Creator:</td>
         <td class="value" tal:content="structure view/overlay/get_creator_link"></td>
@@ -29,6 +20,12 @@
       <tr>
         <td class="title" i18n:translate="">Reference number:</td>
         <td class="value" tal:content="view/overlay/get_reference_number"></td>
+      </tr>
+      <tr tal:condition="view/overlay/get_description">
+        <td class="title" i18n:translate="">Description:</td>
+        <td class="value">
+          <div tal:content="structure view/overlay/get_description" />
+        </td>
       </tr>
     </table>
   </main>

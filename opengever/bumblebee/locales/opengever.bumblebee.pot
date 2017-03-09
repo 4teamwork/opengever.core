@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-04-27 11:20+0000\n"
+"POT-Creation-Date: 2017-06-01 07:42+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,29 +17,33 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.bumblebee\n"
 
-#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:16
+#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:7
 msgid "Creator:"
 msgstr ""
 
-#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:20
+#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:25
+msgid "Description:"
+msgstr ""
+
+#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:11
 msgid "Document date:"
 msgstr ""
 
-#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:24
+#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:15
 msgid "Dossier:"
 msgstr ""
 
-#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:30
+#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:21
 msgid "Reference number:"
 msgstr ""
 
 #. Default: "Revert document"
-#: ./opengever/bumblebee/browser/overlay.py:159
+#: ./opengever/bumblebee/browser/overlay.py:161
 msgid "label_revert"
 msgstr ""
 
 #. Default: "You are looking at a versioned file."
-#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:43
+#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:40
 msgid "warning_on_versioned_context"
 msgstr ""
 
