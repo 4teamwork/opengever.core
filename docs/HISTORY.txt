@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.15.2 (unreleased)
+4.15.2 (2017-03-09)
 -------------------
 
 - No longer set incorrect contentType for drag-drop uploaded mails. [deiferni]
