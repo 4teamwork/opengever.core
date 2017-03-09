@@ -5,6 +5,8 @@ from five import grok
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.dossier.behaviors.filing import IFilingNumber
+from opengever.dossier.behaviors.filing import IFilingNumberMarker
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.dossier.utils import get_main_dossier
 from plone.dexterity.interfaces import IDexterityContent
@@ -133,20 +135,33 @@ class SearchableTextExtender(grok.Adapter):
         # sequence_number
         seqNumb = getUtility(ISequenceNumber)
         searchable.append(str(seqNumb.get_number(self.context)))
-        # responsible
-        searchable.append(
-            self.context.responsible_label.encode('utf-8'))
 
-        dossier = IDossier(self.context)
-        # filling_no
-        dossier = IDossierMarker(self.context)
-        if getattr(dossier, 'filing_no', None):
-            searchable.append(str(getattr(dossier, 'filing_no',
-                                          None)).encode('utf-8'))
+        # responsible
+        searchable.append(self.context.responsible_label.encode('utf-8'))
+
+        # filing_no
+        if IFilingNumberMarker.providedBy(self.context):
+            filing_no = getattr(IFilingNumber(self.contxt), 'filing_no', None)
+            if filing_no:
+                searchable.append(filing_no.encode('utf-8'))
 
         # comments
         comments = getattr(IDossier(self.context), 'comments', None)
         if comments:
             searchable.append(comments.encode('utf-8'))
 
+        # keywords
+        keywords = IDossier(self.context).keywords
+        if keywords:
+            searchable.extend(
+                keyword.encode('utf-8') if isinstance(keyword, unicode)
+                else keyword
+                for keyword in keywords)
+
         return ' '.join(searchable)
+
+
+class DossierTemplateSearchableTextExtender(SearchableTextExtender):
+    grok.context(IDossierTemplateMarker)
+    grok.name('IDossierTemplate')
+    grok.implements(dexteritytextindexer.IDynamicTextIndexExtender)
