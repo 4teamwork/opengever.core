@@ -5,6 +5,8 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- No longer set incorrect contentType for drag-drop uploaded mails. [deiferni]
+
 - Make sure the breadcrumb title tooltip only gets loaded if a data-uid attribute is present.
   [mathias.leimgruber]
 
