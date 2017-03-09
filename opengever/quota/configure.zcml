@@ -7,6 +7,8 @@
 
   <include package="ftw.profilehook" />
 
+  <i18n:registerTranslations directory="locales" />
+
   <include package=".browser" />
 
   <profilehook:hook

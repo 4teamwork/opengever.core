@@ -48,6 +48,9 @@ msgstr ""
 msgid "Checkin"
 msgstr ""
 
+msgid "Usage"
+msgstr ""
+
 msgid "document-state-working_copy"
 msgstr ""
 

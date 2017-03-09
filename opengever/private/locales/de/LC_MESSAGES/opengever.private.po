@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-09-23 14:23+0000\n"
+"POT-Creation-Date: 2017-03-09 16:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,6 +29,14 @@ msgstr "Persönliches Verzeichnis"
 #: ./opengever/private/profiles/default/types/opengever.private.folder.xml
 msgid "Private folder"
 msgstr "Persönlicher Ordner"
+
+#: ./opengever/private/viewlets/quotawarning.py:31
+msgid "The quota of your private folder has exceeded, you can not add any new files or mails."
+msgstr "Der Ihnen zur Verfügung stehende Speicherplatz für die persönlichen Ablage ist überschritten: es können keine Dateien oder E-Mails mehr hinzugefügt werden."
+
+#: ./opengever/private/viewlets/quotawarning.py:37
+msgid "The quota of your private folder will exceed soon."
+msgstr "Der Ihnen zur Verfügung stehende Speicherplatz für die persönlichen Ablage ist nächstens ausgeschöpft. Löschen Sie Dateien um mehr freien Speicherplatz zu schaffen."
 
 #. Default: "Dossiers"
 #: ./opengever/private/browser/tabbed.py:13

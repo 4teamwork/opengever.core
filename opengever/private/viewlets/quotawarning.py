@@ -1,6 +1,6 @@
 from Acquisition import aq_chain
+from opengever.private import _
 from opengever.private.folder import IPrivateFolder
-from opengever.quota import _
 from opengever.quota.interfaces import HARD_LIMIT_EXCEEDED
 from opengever.quota.interfaces import SOFT_LIMIT_EXCEEDED
 from opengever.quota.sizequota import ISizeQuota
