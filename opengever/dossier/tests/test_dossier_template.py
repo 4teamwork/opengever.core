@@ -444,7 +444,8 @@ class TestDossierTemplateAddWizard(FunctionalTestCase):
         # new = browser.css('#' + keywords.attrib['id'] + '_new')
         # self.assertFalse(new, 'It should not be possible to add new terms')
 
-        self.assertEquals(list(values['keywords']), keywords.options_labels)
+        self.assertItemsEqual(list(values['keywords']),
+                              keywords.options_labels)
         browser.click_on('Save')
         self.assertEquals((u'secret\xe4', u'special'),
                           IDossier(browser.context).keywords)
