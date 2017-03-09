@@ -5,6 +5,9 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Display archival value in the repositoryfolder byline.
+  [phgross]
+
 - LDAP util: Skip referrals that are supposed to be hunted by client-chasing.
   [lgraf]
 
