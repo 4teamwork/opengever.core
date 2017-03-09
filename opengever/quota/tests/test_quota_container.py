@@ -3,7 +3,6 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_PRIVATE_FOLDER_LAYER
 from opengever.private.tests import create_members_folder
-
 from opengever.quota.sizequota import ISizeQuota
 from opengever.testing import FunctionalTestCase
 from plone.namedfile.file import NamedBlobFile
