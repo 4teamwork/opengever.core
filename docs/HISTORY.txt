@@ -5,6 +5,9 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Fix permission issue if user tries to trash a document in a private dossier.
+  [elioschmutz]
+
 - Implement quota for private folder. [jone]
 
 - Add restriction possibility for dossier templates on a
