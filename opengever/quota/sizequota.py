@@ -1,6 +1,8 @@
 from Acquisition import aq_chain
 from BTrees.OOBTree import OOBTree
 from opengever.quota.interfaces import IQuotaSubject
+from opengever.quota.primary import IPrimaryBlobFieldQuota
+from plone import api
 from plone.uuid.interfaces import IUUID
 from zope.annotation.interfaces import IAnnotations
 from zope.interface import Interface
@@ -51,6 +53,17 @@ class SizeQuota(object):
         """Remove usage for a object which will be deleted or moved.
         """
         self.get_usage_map(for_writing=True).pop(IUUID(obj), 0)
+
+    def recalculate(self):
+        """Clear and recalculate usage.
+        """
+        catalog = api.portal.get_tool('portal_catalog')
+        portal = api.portal.get()
+
+        for brain in catalog.unrestrictedSearchResults({
+                'object_provides': IPrimaryBlobFieldQuota.__identifier__}):
+            obj = portal.unrestrictedTraverse(brain.getPath())
+            self.update_object_usage(obj)
 
     def get_usage_map(self, for_writing):
         """The usage map is a btree containing the size in bytes for each

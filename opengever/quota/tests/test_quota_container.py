@@ -59,6 +59,13 @@ class TestSizeQuota(FunctionalTestCase):
                                       'delete'):
             user_dossier.manage_delObjects([doc2.getId()])
 
+        # clear and recalculate
+        self.assertEqual(2, ISizeQuota(user_folder).get_usage())
+        ISizeQuota(user_folder).get_usage_map(for_writing=True).clear()
+        self.assertEqual(0, ISizeQuota(user_folder).get_usage())
+        ISizeQuota(user_folder).recalculate()
+        self.assertEqual(2, ISizeQuota(user_folder).get_usage())
+
     @contextmanager
     def assert_usage_change(self, container, increase, action):
         before = ISizeQuota(container).get_usage()
