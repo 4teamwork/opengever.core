@@ -68,7 +68,8 @@ class GlobalTaskListingTab(BaseListingTab):
     columns = (
         {'column': '',
          'sortable': False,
-         'transform': task_id_checkbox_helper},
+         'transform': task_id_checkbox_helper,
+         'width': 30},
 
         {'column': 'review_state',
          'column_title': _(u'column_review_state', default=u'Review state'),
