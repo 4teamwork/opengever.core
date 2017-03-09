@@ -2,11 +2,16 @@ from contextlib import contextmanager
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_PRIVATE_FOLDER_LAYER
+from opengever.private.interfaces import IPrivateFolderQuotaSettings
 from opengever.private.tests import create_members_folder
+from opengever.quota.interfaces import HARD_LIMIT_EXCEEDED
+from opengever.quota.interfaces import SOFT_LIMIT_EXCEEDED
 from opengever.quota.sizequota import ISizeQuota
 from opengever.testing import FunctionalTestCase
 from opengever.trash.trash import ITrashable
 from plone.namedfile.file import NamedBlobFile
+from plone.registry.interfaces import IRegistry
+from zope.component import getUtility
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
 
@@ -72,6 +77,27 @@ class TestSizeQuota(FunctionalTestCase):
         self.assertEqual(0, ISizeQuota(user_folder).get_usage())
         ISizeQuota(user_folder).recalculate()
         self.assertEqual(2, ISizeQuota(user_folder).get_usage())
+
+    def test_exceeded_limit(self):
+        user_folder = create_members_folder(create(Builder('private_root')))
+        create(Builder('document').attach_file_containing('X' * 100)
+               .within(user_folder))
+        quota = ISizeQuota(user_folder)
+        settings = getUtility(IRegistry).forInterface(
+            IPrivateFolderQuotaSettings)
+
+        self.assertEqual(100, quota.get_usage())
+        self.assertEqual(None, quota.exceeded_limit())
+
+        settings.size_soft_limit = 70
+        self.assertEqual(SOFT_LIMIT_EXCEEDED, quota.exceeded_limit())
+
+        settings.size_hard_limit = 80
+        self.assertEqual(HARD_LIMIT_EXCEEDED, quota.exceeded_limit())
+
+        settings.size_soft_limit = 110
+        settings.size_hard_limit = 120
+        self.assertEqual(None, quota.exceeded_limit())
 
     @contextmanager
     def assert_usage_change(self, container, increase, action):

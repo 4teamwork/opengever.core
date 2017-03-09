@@ -1,0 +1,13 @@
+<dl class="portalMessage info"
+    tal:define="message view/get_message_to_show;
+                mtype message/type | nothing;"
+    tal:condition="message"
+    tal:attributes="class string:portalMessage ${mtype};">
+
+  <dt tal:content="python:mtype.capitalize()"
+      i18n:translate=""
+      i18n:domain="plone"/>
+
+  <dd tal:content="message/message | nothing" />
+
+</dl>

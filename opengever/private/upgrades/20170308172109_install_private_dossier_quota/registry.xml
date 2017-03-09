@@ -1,3 +1,17 @@
 <registry>
+
   <records interface="opengever.private.interfaces.IPrivateFolderQuotaSettings" />
+
+  <record name="plone.app.caching.weakCaching.plone.content.itemView.etags">
+    <value purge="False">
+      <element>quotawarning</element>
+    </value>
+  </record>
+
+  <record name="plone.app.caching.weakCaching.plone.content.folderView.etags">
+    <value purge="False">
+      <element>quotawarning</element>
+    </value>
+  </record>
+
 </registry>

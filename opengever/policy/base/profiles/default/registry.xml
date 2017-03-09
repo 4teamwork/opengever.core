@@ -25,12 +25,14 @@
   <record name="plone.app.caching.weakCaching.plone.content.itemView.etags">
     <value purge="False">
       <element>tabbedview</element>
+      <element>quotawarning</element>
     </value>
   </record>
 
   <record name="plone.app.caching.weakCaching.plone.content.folderView.etags">
     <value purge="False">
       <element>tabbedview</element>
+      <element>quotawarning</element>
     </value>
   </record>
 

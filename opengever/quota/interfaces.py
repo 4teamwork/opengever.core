@@ -1,6 +1,10 @@
 from zope.interface import Interface
 
 
+HARD_LIMIT_EXCEEDED = 'hard limit is exceeded'
+SOFT_LIMIT_EXCEEDED = 'soft limit is exceeded'
+
+
 class IQuotaSubject(Interface):
     """Objects providing IQuotaSubject will count to the usage
     in the quota container.

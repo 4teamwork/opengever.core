@@ -1,6 +1,9 @@
 from Acquisition import aq_chain
 from BTrees.OOBTree import OOBTree
+from opengever.quota.interfaces import HARD_LIMIT_EXCEEDED
+from opengever.quota.interfaces import IQuotaSizeSettings
 from opengever.quota.interfaces import IQuotaSubject
+from opengever.quota.interfaces import SOFT_LIMIT_EXCEEDED
 from opengever.quota.primary import IPrimaryBlobFieldQuota
 from plone import api
 from plone.uuid.interfaces import IUUID
@@ -39,6 +42,24 @@ class SizeQuota(object):
         """Returns the current quota usage in bytes.
         """
         return sum((self.get_usage_map(for_writing=False) or {}).values())
+
+    def exceeded_limit(self):
+        """Returns
+        - ``HARD_LIMIT_EXCEEDED`` when the hard limit is exceeded,
+        - ``SOFT_LIMIT_EXCEEDED`` when the soft limit is exceeded
+        - else ``None``
+        """
+        usage = self.get_usage()
+        settings = IQuotaSizeSettings(self.context)
+        soft_limit = settings.get_soft_limit()
+        hard_limit = settings.get_hard_limit()
+
+        if hard_limit and usage > hard_limit:
+            return HARD_LIMIT_EXCEEDED
+        elif soft_limit and usage > soft_limit:
+            return SOFT_LIMIT_EXCEEDED
+        else:
+            return None
 
     def update_object_usage(self, obj):
         """Update usage for an existing or a new object.

@@ -25,6 +25,7 @@
 
   <include package=".upgrades" />
   <include package=".browser" />
+  <include package=".viewlets" />
 
 
   <!-- permissions -->
