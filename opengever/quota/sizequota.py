@@ -75,7 +75,8 @@ class SizeQuota(object):
             return
 
         usage_before = self.get_usage()
-        self.get_usage_map(for_writing=True)[IUUID(obj)] = quota_subject.get_size()
+        self.get_usage_map(for_writing=True)[IUUID(obj)] = (
+            quota_subject.get_size())
         usage_after = self.get_usage()
 
         if self.exceeded_limit() == HARD_LIMIT_EXCEEDED \

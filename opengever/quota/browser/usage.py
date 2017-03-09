@@ -5,7 +5,7 @@ from Products.Five import BrowserView
 
 
 def human_readable_size(num):
-    for unit in ['Bytes','KB','MB','GB']:
+    for unit in ['Bytes', 'KB', 'MB', 'GB']:
         if abs(num) < 1024.0:
             return '%3.1f %s' % (num, unit)
         num /= 1024.0
@@ -32,5 +32,7 @@ class UsageView(BrowserView):
         usage = size_quota.get_usage()
         return {
             'size_usage': human_readable_size(usage),
-            'soft_limit': human_readable_limit(usage, settings.get_soft_limit()),
-            'hard_limit': human_readable_limit(usage, settings.get_hard_limit())}
+            'soft_limit': human_readable_limit(
+                usage, settings.get_soft_limit()),
+            'hard_limit': human_readable_limit(
+                usage, settings.get_hard_limit())}
