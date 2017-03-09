@@ -37,6 +37,18 @@
 
   <subscriber
       for="opengever.quota.primary.IPrimaryBlobFieldQuota
+           opengever.trash.trash.ITrashedEvent"
+      handler=".subscribers.update_size_usage_for_object"
+      />
+
+  <subscriber
+      for="opengever.quota.primary.IPrimaryBlobFieldQuota
+           opengever.trash.trash.IUntrashedEvent"
+      handler=".subscribers.update_size_usage_for_object"
+      />
+
+  <subscriber
+      for="opengever.quota.primary.IPrimaryBlobFieldQuota
            zope.lifecycleevent.interfaces.IObjectMovedEvent"
       handler=".subscribers.update_size_usage_when_moving_object"
       />

@@ -5,6 +5,7 @@ from opengever.core.testing import OPENGEVER_FUNCTIONAL_PRIVATE_FOLDER_LAYER
 from opengever.private.tests import create_members_folder
 from opengever.quota.sizequota import ISizeQuota
 from opengever.testing import FunctionalTestCase
+from opengever.trash.trash import ITrashable
 from plone.namedfile.file import NamedBlobFile
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
@@ -54,6 +55,12 @@ class TestSizeQuota(FunctionalTestCase):
                                       'move back into quota container'):
             user_dossier.manage_pasteObjects(
                 shared_dossier.manage_cutObjects([doc2.getId()]))
+
+        with self.assert_usage_change(user_folder, -3, 'trash document'):
+            ITrashable(doc2).trash()
+
+        with self.assert_usage_change(user_folder, +3, 'restore document'):
+            ITrashable(doc2).untrash()
 
         with self.assert_usage_change(user_folder, -3,
                                       'delete'):
