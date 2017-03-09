@@ -5,21 +5,28 @@
   var numberOfDocuments;
 
   var template = (' \
-    <div class="{{showroom.options.cssClass}}"> \
-      <div class="ftw-showroom-backdrop"></div> \
-      <nav> \
-        <a id="ftw-showroom-prev" class="ftw-showroom-button"></a> \
-        {{#if showroom.options.displayCurrent}} \
-          <span class="ftw-showroom-current">{{showroom.current}}</span> \
-        {{/if}} \
-        {{#if showroom.options.displayTotal}} \
-          {{#if showroom.options.total}}<span>/</span> \
-            <span class="ftw-showroom-total">{{showroom.options.total}}</span> \
+    <div class="{{showroom.options.cssClass}} {{#if showroom.options.isMenuOpen}}menu-open{{/if}}"> \
+      <header class="ftw-showroom-header"> \
+        <h1>{{item.title}}</h1> \
+        <nav> \
+          <a id="ftw-showroom-prev" class="ftw-showroom-button"></a> \
+          {{#if showroom.options.multiple}} \
+            <div class="ftw-showroom-header-tile ftw-showroom-pagecount"> \
+              {{#if showroom.options.displayCurrent}} \
+                <span class="ftw-showroom-current">{{showroom.current}}</span> \
+              {{/if}} \
+              {{#if showroom.options.displayTotal}} \
+                {{#if showroom.options.total}}<span>/</span> \
+                  <span class="ftw-showroom-total">{{showroom.options.total}}</span> \
+                {{/if}} \
+              {{/if}} \
+            </div> \
           {{/if}} \
-        {{/if}} \
-        <a id="ftw-showroom-next" class="ftw-showroom-button"></a> \
-        <a id="ftw-showroom-close" class="ftw-showroom-button"></a> \
-      </nav> \
+          <a id="ftw-showroom-next" class="ftw-showroom-button"></a> \
+          <a id="ftw-showroom-close" class="ftw-showroom-button"></a> \
+          <a id="ftw-showroom-menu" class="ftw-showroom-button {{#if showroom.options.isMenuOpen}}selected{{/if}}"></a> \
+        </nav> \
+      </header> \
       {{{content}}} \
     </div> \
   ');
@@ -159,7 +166,8 @@
     showroom = Showroom([], {
       tail: tail,
       head: head,
-      template: template
+      template: template,
+      isMenuOpen: true
     });
     updateShowroom();
 
@@ -265,6 +273,13 @@
 
     showroom.reset(items, getOffset());
     showroom.setTotal(numberOfDocuments);
+    showroom.options.multiple = numberOfDocuments > 1
+  }
+
+  function toggleMenu() {
+    showroom.options.isMenuOpen = !showroom.options.isMenuOpen;
+    $(this).toggleClass("selected");
+    showroom.element.toggleClass("menu-open");
   }
 
   $(document)
@@ -272,8 +287,8 @@
     .on("viewReady", updateShowroom)
     .on("agendaItemsReady", updateShowroom)
     .on("click", ".bumblebeeGalleryShowMore", loadNextTabbedviewGalleryView)
-    .on("click", ".ftw-showroom-backdrop", closeShowroom)
-    .on("tooltip.show", function() { scanForBrokenImages(".bumblebee-thumbnail"); });
+    .on("tooltip.show", function() { scanForBrokenImages(".bumblebee-thumbnail"); })
+    .on("click", "#ftw-showroom-menu", toggleMenu);
   $(init);
 
 })(window, window.ftw.showroom, window.jQuery);
