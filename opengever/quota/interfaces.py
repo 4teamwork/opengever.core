@@ -5,6 +5,12 @@ HARD_LIMIT_EXCEEDED = 'hard limit is exceeded'
 SOFT_LIMIT_EXCEEDED = 'soft limit is exceeded'
 
 
+class IQuotaSubject(Interface):
+    """An object providing this interface is subject to quota and provides
+    an IObjectSize adapter.
+    """
+
+
 class IObjectSize(Interface):
     """Adapter for getting size of an object.
     """

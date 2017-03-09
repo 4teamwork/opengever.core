@@ -1,12 +1,12 @@
 from opengever.quota.interfaces import IObjectSize
+from opengever.quota.interfaces import IQuotaSubject
 from opengever.trash.trash import ITrashed
 from plone.rfc822.interfaces import IPrimaryFieldInfo
 from zope.component import adapter
 from zope.interface import implementer
-from zope.interface import Interface
 
 
-class IPrimaryBlobFieldQuota(Interface):
+class IPrimaryBlobFieldQuota(IQuotaSubject):
     """Behavior for counting the size of the primary field blob
     as usage.
     """

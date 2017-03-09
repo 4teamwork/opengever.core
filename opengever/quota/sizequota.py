@@ -6,7 +6,7 @@ from opengever.quota.interfaces import HARD_LIMIT_EXCEEDED
 from opengever.quota.interfaces import IObjectSize
 from opengever.quota.interfaces import IQuotaSizeSettings
 from opengever.quota.interfaces import SOFT_LIMIT_EXCEEDED
-from opengever.quota.primary import IPrimaryBlobFieldQuota
+from opengever.quota.primary import IQuotaSubject
 from plone import api
 from plone.uuid.interfaces import IUUID
 from zope.annotation.interfaces import IAnnotations
@@ -99,7 +99,7 @@ class SizeQuota(object):
         portal = api.portal.get()
 
         for brain in catalog.unrestrictedSearchResults({
-                'object_provides': IPrimaryBlobFieldQuota.__identifier__}):
+                'object_provides': IQuotaSubject.__identifier__}):
             obj = portal.unrestrictedTraverse(brain.getPath())
             self.update_object_usage(obj)
 
