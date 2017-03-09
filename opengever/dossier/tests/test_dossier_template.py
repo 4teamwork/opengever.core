@@ -447,8 +447,8 @@ class TestDossierTemplateAddWizard(FunctionalTestCase):
         self.assertItemsEqual(list(values['keywords']),
                               keywords.options_labels)
         browser.click_on('Save')
-        self.assertEquals((u'secret\xe4', u'special'),
-                          IDossier(browser.context).keywords)
+        self.assertItemsEqual((u'secret\xe4', u'special'),
+                              IDossier(browser.context).keywords)
 
     @browsing
     def test_redirects_to_dossier_after_creating_dossier_from_template(self, browser):
