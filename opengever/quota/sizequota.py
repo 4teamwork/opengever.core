@@ -1,5 +1,7 @@
 from Acquisition import aq_chain
 from BTrees.OOBTree import OOBTree
+from opengever.quota import _
+from opengever.quota.exceptions import ForbiddenByQuota
 from opengever.quota.interfaces import HARD_LIMIT_EXCEEDED
 from opengever.quota.interfaces import IQuotaSizeSettings
 from opengever.quota.interfaces import IQuotaSubject
@@ -9,6 +11,10 @@ from plone import api
 from plone.uuid.interfaces import IUUID
 from zope.annotation.interfaces import IAnnotations
 from zope.interface import Interface
+import logging
+
+
+LOG = logging.getLogger('opengever.quota')
 
 
 def size_quotas_in_chain_of(context):
@@ -68,7 +74,18 @@ class SizeQuota(object):
         if not quota_subject:
             return
 
+        usage_before = self.get_usage()
         self.get_usage_map(for_writing=True)[IUUID(obj)] = quota_subject.get_size()
+        usage_after = self.get_usage()
+
+        if self.exceeded_limit() == HARD_LIMIT_EXCEEDED \
+           and usage_after > usage_before:
+            if self.bypass_hardlimit():
+                LOG.warning('Hard limit violation by admin.')
+            else:
+                message = _(u'Can not add this item'
+                            u' because it exhausts the quota.')
+                raise ForbiddenByQuota(message, container=self.context)
 
     def remove_object_usage(self, obj):
         """Remove usage for a object which will be deleted or moved.
@@ -99,3 +116,8 @@ class SizeQuota(object):
             annotations[key] = OOBTree()
 
         return annotations[key]
+
+    def bypass_hardlimit(self):
+        if api.user.is_anonymous():
+            return False
+        return 'Manager' in api.user.get_roles(obj=self.context)

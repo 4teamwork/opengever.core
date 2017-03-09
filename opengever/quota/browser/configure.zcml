@@ -12,4 +12,11 @@
       template="templates/usage.pt"
       />
 
+  <browser:page
+      name="index.html"
+      for="opengever.quota.exceptions.ForbiddenByQuota"
+      class=".error.ForbiddenByQuotaView"
+      permission="zope2.View"
+      />
+
 </configure>

@@ -8,11 +8,14 @@ from five import grok
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.command import CreateEmailCommand
+from opengever.quota.exceptions import ForbiddenByQuota
 from plone.protect import createToken
 from plone.protect.interfaces import IDisableCSRFProtection
+from zope.i18n import translate
 from zope.interface import alsoProvides
 import mimetypes
 import os
+import transaction
 
 
 class OGQuickUploadInit(QuickUploadInit):
@@ -83,7 +86,14 @@ class OGQuickUploadCapableFileFactory(grok.Adapter):
             command = CreateDocumentCommand(
                 self.context, filename, data, description=description)
 
-        obj = command.execute()
+        try:
+            obj = command.execute()
+        except ForbiddenByQuota, exc:
+            # this is an error, we must not commit
+            transaction.abort()
+            return {'error': translate(exc.message,
+                                       context=self.context.REQUEST),
+                    'success': None}
 
         result = {'success': obj}
         return result

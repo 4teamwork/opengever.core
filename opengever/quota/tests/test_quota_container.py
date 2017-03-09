@@ -1,6 +1,9 @@
 from contextlib import contextmanager
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browsing
+from ftw.testbrowser.pages import factoriesmenu
+from ftw.testbrowser.pages import statusmessages
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_PRIVATE_FOLDER_LAYER
 from opengever.private.interfaces import IPrivateFolderQuotaSettings
 from opengever.private.tests import create_members_folder
@@ -98,6 +101,28 @@ class TestSizeQuota(FunctionalTestCase):
         settings.size_soft_limit = 110
         settings.size_hard_limit = 120
         self.assertEqual(None, quota.exceeded_limit())
+
+    @browsing
+    def test_quota_hard_limit_exceeded_message(self, browser):
+        settings = getUtility(IRegistry).forInterface(
+            IPrivateFolderQuotaSettings)
+        settings.size_hard_limit = 12
+
+        user_folder = create_members_folder(create(Builder('private_root')))
+        user_dossier = create(Builder('dossier').within(user_folder))
+        browser.login().get_mechbrowser().addheaders.remove((
+            'X-zope-handle-errors', 'False'))
+
+        browser.open(user_dossier)
+        factoriesmenu.add('Document')
+        browser.fill({'File': ('Some data', 'file.txt', 'text/plain')}).save()
+        statusmessages.assert_no_error_messages()
+
+        browser.open(user_dossier)
+        factoriesmenu.add('Document')
+        browser.fill({'File': ('Some data', 'file.txt', 'text/plain')}).save()
+        statusmessages.assert_message(
+            'Can not add this item because it exhausts the quota.')
 
     @contextmanager
     def assert_usage_change(self, container, increase, action):
