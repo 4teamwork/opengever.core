@@ -5,10 +5,13 @@ HARD_LIMIT_EXCEEDED = 'hard limit is exceeded'
 SOFT_LIMIT_EXCEEDED = 'soft limit is exceeded'
 
 
-class IQuotaSubject(Interface):
-    """Objects providing IQuotaSubject will count to the usage
-    in the quota container.
+class IObjectSize(Interface):
+    """Adapter for getting size of an object.
     """
+
+    def __init__(context):
+        """Adapts a context.
+        """
 
     def get_size():
         """Return the current size of the context in bytes.

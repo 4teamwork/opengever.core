@@ -3,8 +3,8 @@ from BTrees.OOBTree import OOBTree
 from opengever.quota import _
 from opengever.quota.exceptions import ForbiddenByQuota
 from opengever.quota.interfaces import HARD_LIMIT_EXCEEDED
+from opengever.quota.interfaces import IObjectSize
 from opengever.quota.interfaces import IQuotaSizeSettings
-from opengever.quota.interfaces import IQuotaSubject
 from opengever.quota.interfaces import SOFT_LIMIT_EXCEEDED
 from opengever.quota.primary import IPrimaryBlobFieldQuota
 from plone import api
@@ -70,7 +70,7 @@ class SizeQuota(object):
     def update_object_usage(self, obj):
         """Update usage for an existing or a new object.
         """
-        quota_subject = IQuotaSubject(obj, None)
+        quota_subject = IObjectSize(obj, None)
         if not quota_subject:
             return
 

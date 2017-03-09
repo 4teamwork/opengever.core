@@ -1,4 +1,4 @@
-from opengever.quota.interfaces import IQuotaSubject
+from opengever.quota.interfaces import IObjectSize
 from opengever.trash.trash import ITrashed
 from plone.rfc822.interfaces import IPrimaryFieldInfo
 from zope.component import adapter
@@ -12,7 +12,7 @@ class IPrimaryBlobFieldQuota(Interface):
     """
 
 
-@implementer(IQuotaSubject)
+@implementer(IObjectSize)
 @adapter(IPrimaryBlobFieldQuota)
 class PrimaryFieldQuotaSubject(object):
 
