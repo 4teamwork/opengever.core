@@ -10,6 +10,7 @@ class InstallPrivateDossierQuota(UpgradeStep):
         self.install_upgrade_profile()
         self.index_new_behaviors()
         self.calculate_private_folder_usage()
+        self.configure_error_log()
 
     def index_new_behaviors(self):
         msg = 'Update `object_provides` for objects with new behavior.'
@@ -28,3 +29,12 @@ class InstallPrivateDossierQuota(UpgradeStep):
         for obj in self.objects({'portal_type': ['opengever.private.folder']},
                                 msg):
             ISizeQuota(obj).recalculate()
+
+    def configure_error_log(self):
+        error_log = self.getToolByName('error_log')
+        properties = error_log.getProperties()
+        if 'ForbiddenByQuota' in properties.get('ignored_exceptions', ()):
+            return
+
+        properties['ignored_exceptions'] += ('ForbiddenByQuota',)
+        error_log.setProperties(**properties)

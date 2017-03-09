@@ -1,10 +1,18 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
-    xmlns:plone="http://namespaces.plone.org/plone"
     xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    xmlns:profilehook="http://namespaces.zope.org/profilehook"
     i18n_domain="opengever.quota">
 
+  <include package="ftw.profilehook" />
+
   <include package=".browser" />
+
+  <profilehook:hook
+      profile="opengever.policy.base:default"
+      handler=".hooks.policy_installed"
+      />
 
   <plone:behavior
       title="Size quota"
