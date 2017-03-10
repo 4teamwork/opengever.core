@@ -1,6 +1,7 @@
 <span class="editNoteWrapper"
       i18n:domain="opengever.dossier"
       tal:define="has_notes options/note"
+      tal:condition="view/can_edit"
       tal:attributes="data-notecache string:${options/note};
                       data-i18n string:${options/translations}">
 
