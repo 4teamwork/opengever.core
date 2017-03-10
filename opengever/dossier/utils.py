@@ -33,5 +33,5 @@ def get_main_dossier(obj):
     return dossier
 
 
-def truncate_ellipsis(text, threshold, ellipsis=ELLIPSIS):
+def truncate_ellipsis(text, threshold, ellipsis=" " + ELLIPSIS):
     return (text[:threshold] + ellipsis) if len(text) > threshold else text
