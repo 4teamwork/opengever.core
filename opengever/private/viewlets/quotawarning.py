@@ -55,4 +55,4 @@ class QuotaWarningETagValue(object):
         elif warning_type == SOFT_LIMIT_EXCEEDED:
             return 's'
         else:
-            return None
+            return '-'
