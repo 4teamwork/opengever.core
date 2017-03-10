@@ -3,6 +3,10 @@ from Acquisition import aq_parent
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.inbox.inbox import IInbox
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
+import unicodedata
+
+
+ELLIPSIS = unicodedata.lookup('HORIZONTAL ELLIPSIS')
 
 
 def get_containing_dossier(obj):
@@ -27,3 +31,7 @@ def get_main_dossier(obj):
         obj = aq_parent(aq_inner(obj))
 
     return dossier
+
+
+def truncate_ellipsis(text, threshold, ellipsis=ELLIPSIS):
+    return (text[:threshold] + ellipsis) if len(text) > threshold else text
