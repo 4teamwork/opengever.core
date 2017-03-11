@@ -59,4 +59,8 @@ class SetCorrectMessageContentTypeForDragDropUploadedMails(UpgradeStep):
         mail.reindexObject(idxs=['id'])
 
     def has_expected_content_type(self, brain):
-        return brain.getContentType == 'message/rfc822'
+        # Defensive getattr access because some brains in production didn't
+        # have the getContentType metadata attribute. Those are fishy and
+        # deserve no better than to get reindexed.
+        content_type = getattr(brain, 'getContentType', '')
+        return content_type == 'message/rfc822'
