@@ -9,6 +9,7 @@ from opengever.dossier.behaviors.filing import IFilingNumber
 from opengever.dossier.behaviors.filing import IFilingNumberMarker
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.dossier.utils import get_main_dossier
+from opengever.inbox.inbox import IInbox
 from plone.dexterity.interfaces import IDexterityContent
 from plone.indexer import indexer
 from Products.CMFCore.interfaces import ISiteRoot
@@ -81,7 +82,23 @@ def main_dossier_title(obj):
     dossier = get_main_dossier(obj)
     if not dossier:
         return None
-    return dossier.Title()
+    try:
+        title = dossier.Title()
+    except TypeError:
+        # XXX: During upgrades, the odd case can happen that a mail inside a
+        # forwarding inside the inbox wants to have its containing_dossier
+        # reindexed. This can lead to a situation where we attempt to adapt
+        # the Inbox to ITranslatedTitle, but it doesn't provide this behavior
+        # yet because that behavior is going to be actived in the very same
+        # upgrade.
+        #
+        # Account for this case, and fall back to inbox.title, which
+        # will contain the original title (in unicode though).
+        if IInbox.providedBy(dossier):
+            title = dossier.title.encode('utf-8')
+        else:
+            raise
+    return title
 grok.global_adapter(main_dossier_title, name="containing_dossier")
 
 
