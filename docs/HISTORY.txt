@@ -5,6 +5,9 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- LDAP util: Skip referrals that are supposed to be hunted by client-chasing.
+  [lgraf]
+
 - Make containing_dossier indexer more defensive in order to account for an
   odd corner case during upgrades.
   [lgraf]

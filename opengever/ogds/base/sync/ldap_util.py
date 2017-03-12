@@ -289,6 +289,12 @@ class LDAPSearch(grok.Adapter):
                               filter=search_filter)
         mapped_results = []
         for result in results:
+            dn, entry = result
+            if dn is None:
+                # This is likely a referral to be hunted down by
+                # client-chasing. We don't support those.
+                logger.info('Skipping referral: %r' % (result, ))
+                continue
             mapped_results.append(self.apply_schema_map(result))
 
         return mapped_results
@@ -372,6 +378,7 @@ class LDAPSearch(grok.Adapter):
         # LDAPUserFolder mapping to those
         is_user = False
         obj_classes = attrs['objectClass']
+
         for obj_class in obj_classes:
             if obj_class.lower() in [uc.lower() for uc in
                                      self.context._user_objclasses]:
