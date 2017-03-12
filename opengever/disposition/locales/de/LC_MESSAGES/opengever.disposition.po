@@ -223,7 +223,7 @@ msgstr "Angebot abgeschlossen und alle Dossiers vernichtet durch ${user}"
 #. Default: "Disposition disposed for the archive by ${user}"
 #: ./opengever/disposition/history.py:128
 msgid "msg_disposition_disposed"
-msgstr "Für die Archivierung angeboten durch ${user}"
+msgstr "Zur Archivierung angeboten durch ${user}"
 
 #. Default: "Edited by ${user}"
 #: ./opengever/disposition/history.py:98
