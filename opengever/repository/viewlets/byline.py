@@ -18,6 +18,11 @@ class RepositoryByline(BylineBase):
                          context=self.request,
                          domain='opengever.base')
 
+    def archival_value(self):
+        return translate(self.context.get_archival_value(),
+                         context=self.request,
+                         domain='opengever.base')
+
     def get_items(self):
         return [
             {'class': 'review_state',
@@ -29,6 +34,12 @@ class RepositoryByline(BylineBase):
              'label': base_messagefactory(u'label_privacy_layer',
                                           default=u'Privacy layer'),
              'content': self.privacy_layer(),
+             'replace': False},
+
+            {'class': 'archival_value',
+             'label': base_messagefactory(u'label_archival_value',
+                                          default=u'Archival value'),
+             'content': self.archival_value(),
              'replace': False},
         ]
 

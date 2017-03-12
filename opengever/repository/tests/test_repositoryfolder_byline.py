@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.base.behaviors.classification import PRIVACY_LAYER_NO
+from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_SAMPLING
 from opengever.base.tests.byline_base_test import TestBylineBase
 from opengever.testing import create_ogds_user
 from zope.component import getUtility
@@ -20,7 +21,8 @@ class TestRepositoryfolderByline(TestBylineBase):
 
         self.repo = create(Builder('repository')
                .in_state('repositoryfolder-state-active')
-               .having(privacy_layer=PRIVACY_LAYER_NO))
+               .having(privacy_layer=PRIVACY_LAYER_NO,
+                       archival_value=ARCHIVAL_VALUE_SAMPLING))
 
     @browsing
     def test_repository_byline_privacy_layer_display(self, browser):
@@ -28,6 +30,14 @@ class TestRepositoryfolderByline(TestBylineBase):
 
         privacy_layer = self.get_byline_value_by_label('Privacy layer:')
         self.assertEquals('privacy_layer_no', privacy_layer.text)
+
+    @browsing
+    def test_repository_byline_archival_value_display(self, browser):
+        browser.login().open(self.repo)
+
+        archival_value = self.get_byline_value_by_label('Archival value:')
+        self.assertEquals('archival worthy with sampling',
+                          archival_value.text)
 
     @browsing
     def test_repository_byline_public_trial_is_not_present(self, browser):
