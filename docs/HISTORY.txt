@@ -5,7 +5,11 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
-- Disposition overview: fix tooltips for appraisal buttons.
+- Disposition overview:
+
+  - Fix tooltips for appraisal buttons.
+  - Hide subtitles (active or inactive dossiers) when list is empty.
+
   [phgross]
 
 - Fix missing table-column width for checkbox column.

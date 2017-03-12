@@ -16,7 +16,8 @@
 
   <ul class="list-group" tal:repeat="dossier_list view/get_dossier_lists">
     <tal:define tal:define="label python: dossier_list[0];
-                            mappings python: dossier_list[1]">
+                            mappings python: dossier_list[1]"
+                tal:condition="mappings">
 
       <li class="list-group-item label">
         <div class="list-group-cell data-cell">
@@ -204,11 +205,11 @@
               <div class="collapsible-content">
                 <ul>
                   <li tal:repeat="detail entry/details">
-                    <span tal:content="detail/reference_number" />
-                    <span tal:content="detail/title" />
-                    <span tal:condition="detail/appraisal"
+                    <span class="reference_number" tal:content="detail/reference_number" />
+                    <span class="title" tal:content="detail/title" />
+                    <span class="appraisal" tal:condition="detail/appraisal"
                           i18n:translate="label_archive">Archive</span>
-                    <span tal:condition="not: detail/appraisal"
+                    <span class="appraisal" tal:condition="not: detail/appraisal"
                           i18n:translate="label_dont_archive">Don't archive</span>
                   </li>
                 </ul>
