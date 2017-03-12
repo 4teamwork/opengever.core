@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-03-12 14:43+0000\n"
+"POT-Creation-Date: 2017-03-12 14:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -245,10 +245,10 @@ msgstr "Aktualisiert durch ${user}"
 msgid "period"
 msgstr "Periode"
 
-#. Default: "Progress:"
+#. Default: "Progress"
 #: ./opengever/disposition/browser/templates/overview.pt:189
 msgid "progress"
-msgstr "Verlauf:"
+msgstr "Verlauf"
 
 #. Default: "New disposition added by ${user} on admin unit ${admin_unit}"
 #: ./opengever/disposition/activities.py:24
