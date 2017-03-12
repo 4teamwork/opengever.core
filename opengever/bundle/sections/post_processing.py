@@ -14,7 +14,7 @@ log = logging.getLogger('opengever.bundle.post_processing')
 log.setLevel(logging.INFO)
 
 
-INTERMEDIATE_COMMIT_INTERVAL = 1000
+INTERMEDIATE_COMMIT_INTERVAL = 200
 VERSIONABLE_TYPES = ('opengever.document.document', 'ftw.mail.mail')
 
 
