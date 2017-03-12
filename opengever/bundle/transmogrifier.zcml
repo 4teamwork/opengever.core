@@ -49,6 +49,11 @@
       />
 
   <utility
+      component=".sections.map_principals.MapPrincipalsSection"
+      name="opengever.bundle.map_principals"
+      />
+
+  <utility
       component=".sections.progress.ProgressSection"
       name="opengever.bundle.progress"
       />
