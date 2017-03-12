@@ -5,6 +5,9 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Set preserved as paper to false for generated journal pdfs.
+  [phgross]
+
 - Disposition overview:
 
   - Fix tooltips for appraisal buttons.

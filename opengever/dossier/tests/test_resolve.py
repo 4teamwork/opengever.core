@@ -127,6 +127,7 @@ class TestResolveJobs(FunctionalTestCase):
                           journal_pdf.file.filename)
         self.assertEquals(u'application/pdf',
                           journal_pdf.file.contentType)
+        self.assertFalse(journal_pdf.preserved_as_paper)
 
     def test_journal_pdf_is_only_added_to_main_dossier(self):
         api.portal.set_registry_record(
