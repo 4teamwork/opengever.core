@@ -92,6 +92,8 @@ class TestDispositionWorkflow(FunctionalTestCase):
         api.content.transition(disposition, 'disposition-transition-close')
 
     def test_when_appraising_final_archival_value_is_stored_on_dossier(self):
+        self.grant('Archivist')
+
         IAppraisal(self.disposition).update(
             dossier=self.dossier1, archive=False)
         IAppraisal(self.disposition).update(
@@ -107,6 +109,7 @@ class TestDispositionWorkflow(FunctionalTestCase):
 
     @browsing
     def test_appraising_is_not_possible_if_the_appraisal_is_incomplete(self, browser):
+        self.grant('Archivist')
         browser.login().open(self.disposition)
         browser.click_on('disposition-transition-appraise')
 

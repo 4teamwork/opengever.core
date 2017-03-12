@@ -184,7 +184,6 @@
         category="workflow"
         icon="">disposition-transition-appraise</action>
     <guard>
-      <guard-role>Records Manager</guard-role>
       <guard-role>Archivist</guard-role>
       <guard-role>Manager</guard-role>
     </guard>

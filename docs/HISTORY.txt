@@ -5,6 +5,9 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Allow only archivists and managers to finalize the appraisal.
+  [phgross]
+
 - Disallow readers to see dispositions.
   [phgross]
 

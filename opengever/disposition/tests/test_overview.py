@@ -82,7 +82,7 @@ class TestDispositionOverview(FunctionalTestCase):
 
     @browsing
     def test_appraisal_buttons_are_only_links_in_progress_state(self, browser):
-        self.grant('Records Manager')
+        self.grant('Archivist')
         browser.login().open(self.disposition, view='tabbedview_view-overview')
 
         self.assertEquals(
