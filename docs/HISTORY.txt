@@ -5,6 +5,9 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Disposition overview: fix tooltips for appraisal buttons.
+  [phgross]
+
 - Fix missing table-column width for checkbox column.
   [elioschmutz]
 
