@@ -12,6 +12,7 @@ class TestDispositionOverview(FunctionalTestCase):
 
     def setUp(self):
         super(TestDispositionOverview, self).setUp()
+        self.grant('Records Manager')
         self.root = create(Builder('repository_root'))
         self.repository = create(Builder('repository')
                                  .titled(u'Repository A')
@@ -122,10 +123,11 @@ class TestDispositionOverview(FunctionalTestCase):
 
     @browsing
     def test_lists_possible_transitions_in_actionmenu_as_buttons(self, browser):
-        self.grant('Records Manager')
+        self.grant('Archivist', 'Records Manager')
         browser.login().open(self.disposition, view='tabbedview_view-overview')
 
-        self.assertEquals(['disposition-transition-appraise'],
+        self.assertEquals(['disposition-transition-appraise',
+                           'disposition-transition-refuse'],
                           browser.css('.transitions li').text)
         browser.css('.transitions li a').first.click()
         self.assertEquals('disposition-state-appraised',
@@ -137,7 +139,7 @@ class TestDispositionOverview(FunctionalTestCase):
 
     @browsing
     def test_sip_download_is_only_available_in_disposed_state(self, browser):
-        self.grant('Records Manager')
+        self.grant('Archivist', 'Records Manager')
         browser.login().open(self.disposition, view='tabbedview_view-overview')
         self.assertEquals(['Export appraisal list as excel'],
                           browser.css('ul.actions li').text)

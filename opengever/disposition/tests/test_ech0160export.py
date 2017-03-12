@@ -13,6 +13,7 @@ class TesteCH0160Deployment(FunctionalTestCase):
         self.root = create(Builder('repository_root')
                            .having(title_de=u'Ordnungssytem 2000'))
         self.folder = create(Builder('repository').within(self.root))
+        self.grant('Contributor', 'Editor', 'Reader', 'Records Manager')
 
     @browsing
     def test_returns_zip_file_stream(self, browser):

@@ -15,6 +15,8 @@ class TestDispositionByline(FunctionalTestCase):
                                .as_expired()
                                .within(self.repository))
 
+        self.grant('Records Manager')
+
     @browsing
     def test_shows_current_review_state_creation_and_modification_date(self, browser):
         disposition = create(Builder('disposition')

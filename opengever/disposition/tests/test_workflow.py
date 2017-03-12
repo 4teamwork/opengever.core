@@ -30,11 +30,11 @@ class TestDispositionWorkflow(FunctionalTestCase):
                                .having(archival_value=ARCHIVAL_VALUE_SAMPLING)
                                .within(self.repository))
 
+        self.grant('Records Manager')
         self.disposition = create(Builder('disposition')
                                   .having(dossiers=[self.dossier1, self.dossier2])
                                   .within(self.root))
 
-        self.grant('Records Manager')
 
     def test_initial_state_is_in_progress(self):
         self.assertEquals('disposition-state-in-progress',

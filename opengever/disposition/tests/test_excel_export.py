@@ -33,6 +33,7 @@ class TestDispositionExcelExport(FunctionalTestCase):
                                        archival_value='not archival worthy',
                                        archival_value_annotation=u'In Absprache mit ARCH.'))
 
+        self.grant('Records Manager')
         self.disposition = create(Builder('disposition')
                                   .having(dossiers=[self.dossier1, self.dossier2]))
 

@@ -5,6 +5,9 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Disallow readers to see dispositions.
+  [phgross]
+
 - Remove unused tasktemplate table draggable column.
   [elioschmutz]
 
