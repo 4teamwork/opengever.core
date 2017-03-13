@@ -11,5 +11,7 @@ def configure_error_log(site):
     if 'ForbiddenByQuota' in properties.get('ignored_exceptions', ()):
         return
 
-    properties['ignored_exceptions'] += ('ForbiddenByQuota',)
+    ignored = tuple(properties['ignored_exceptions'])
+    ignored += ('ForbiddenByQuota',)
+    properties['ignored_exceptions'] = ignored
     error_log.setProperties(**properties)
