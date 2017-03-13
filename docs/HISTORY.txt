@@ -5,7 +5,9 @@ Changelog
 4.15.3 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Make containing_dossier indexer more defensive in order to account for an
+  odd corner case during upgrades.
+  [lgraf]
 
 
 4.15.2 (2017-03-09)
