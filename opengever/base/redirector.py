@@ -1,7 +1,5 @@
 from five import grok
 from opengever.base.interfaces import IRedirector
-from persistent.dict import PersistentDict
-from persistent.list import PersistentList
 from plone.app.layout.viewlets.interfaces import IAboveContentTitle
 from zope.interface import Interface
 from zope.publisher.interfaces.browser import IBrowserRequest
@@ -29,7 +27,8 @@ class RedirectorCookie(object):
         return value
 
     def _get(self):
-        # Load from response cookie in case this request added / updated the cookie
+        # Load from response cookie in case this request added or updated the
+        # cookie
         cookie = self.request.response.cookies.get(REDIRECTOR_COOKIE_NAME, {})
         value = cookie.get('value', None)
         if value == 'deleted':
@@ -81,8 +80,7 @@ class Redirector(grok.Adapter):
 
 
 class RedirectorViewlet(grok.Viewlet):
-    """ Viewlet which adds the redirects for the IRedirector.
-    """
+    """Viewlet which adds the redirects for the IRedirector."""
 
     grok.name('redirector')
     grok.context(Interface)
@@ -92,7 +90,11 @@ class RedirectorViewlet(grok.Viewlet):
     JS_TEMPLATE = '''
 <script type="text/javascript" class="redirector">
 $(function() {
+  if ('%(url)s'.split(':')[0] == 'oc') {
+    window.location = '%(url)s';
+  } else {
     window.setTimeout("window.open('%(url)s', '%(target)s');", %(timeout)s);
+  }
 });
 </script>
 '''

@@ -3,6 +3,8 @@ from opengever.base.interfaces import IRedirector
 from opengever.document import _
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.officeconnector.helpers import create_oc_url
+from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
 from Products.CMFCore.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
 from zope.component import getMultiAdapter
@@ -24,7 +26,6 @@ class CheckoutDocuments(grok.View):
     grok.name('checkout_documents')
 
     def render(self):
-
         # check whether we have paths or not
         paths = self.request.get('paths')
 
@@ -71,11 +72,14 @@ class CheckoutDocuments(grok.View):
         external_edit = self.request.get('mode') == 'external'
         if len(objects) == 1 and external_edit:
             redirector = IRedirector(self.request)
-            redirector.redirect(
-                '%s/external_edit' % objects[0].absolute_url(),
-                target='_self',
-                timeout=1000)
-
+            if not is_officeconnector_checkout_feature_enabled():
+                redirector.redirect(
+                    '%s/external_edit' % objects[0].absolute_url(),
+                    target='_self',
+                    timeout=1000)
+            else:
+                redirector.redirect(
+                    create_oc_url(self.context, dict(action='checkout')))
         # now lets redirect to an appropriate target..
         if len(objects) == 1:
             return self.request.RESPONSE.redirect(
@@ -86,10 +90,8 @@ class CheckoutDocuments(grok.View):
                 '%s#documents' % self.context.absolute_url())
 
     def checkout(self, obj):
-        """Checks out a single document object.
-        """
-
-        # check out the document
+        """Checks out a single document object."""
+        # Check out the document
         manager = getMultiAdapter((obj, self.request), ICheckinCheckoutManager)
 
         # is checkout allowed for this document?
