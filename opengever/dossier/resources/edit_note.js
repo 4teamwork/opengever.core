@@ -6,19 +6,23 @@
 
     var DossierNote = (function () {
 
+      var noteBox;
       var editNoteLink;
       var overlay;
       var overlayElement;
       var i18n;
 
       function init(){
+        noteBox = $('#commentsBox');
         editNoteLink = $('#editNoteLink');
-        if (!editNoteLink.length) {
+        if (!editNoteLink.length && !noteBox.length) {
           return;
         }
 
-        i18n = editNoteLink.data('i18n');
+        // Move add/edit link to comment section in overview tab
+        editNoteLink.clone().insertAfter(noteBox.find('h2'));
 
+        i18n = editNoteLink.data('i18n');
         // Move for correct stacking with overlaymask
         overlayElement = $('#editNoteOverlay');
         $('body').append(overlayElement);
@@ -126,6 +130,6 @@
 
     })();
 
-    DossierNote.init();
+    $(document).on('reload', '.tabbedview_view', DossierNote.init);
   });
 })(window.Handlebars, window.jQuery, window.MessageFactory);
