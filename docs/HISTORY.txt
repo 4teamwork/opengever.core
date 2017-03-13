@@ -5,6 +5,10 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- OGGBundle: Add support to map local role principal names during
+  import based on ingestion settings.
+  [lgraf]
+
 - Display archival value in the repositoryfolder byline.
   [phgross]
 
