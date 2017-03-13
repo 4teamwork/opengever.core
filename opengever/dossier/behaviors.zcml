@@ -60,6 +60,13 @@
       for="opengever.dossier.dossiertemplate.behaviors.IDossierTemplateSchema"
       />
 
+  <plone:behavior
+      title="Restrict addable dossier templates"
+      description="Adds addable dossiertemplate field for repositoryfolders"
+      provides=".dossiertemplate.behaviors.IRestrictAddableDossierTemplates"
+      for="plone.dexterity.interfaces.IDexterityContent"
+      />
+
   <!-- Restricted dossier behavior -->
   <plone:behavior
       title="Restricted dossier"
