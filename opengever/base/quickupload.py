@@ -88,7 +88,7 @@ class OGQuickUploadCapableFileFactory(grok.Adapter):
 
         try:
             obj = command.execute()
-        except ForbiddenByQuota, exc:
+        except ForbiddenByQuota as exc:
             # this is an error, we must not commit
             transaction.abort()
             return {'error': translate(exc.message,
