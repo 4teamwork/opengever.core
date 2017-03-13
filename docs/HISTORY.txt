@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.15.3 (unreleased)
+4.15.3 (2017-03-13)
 -------------------
 
 - Make containing_dossier indexer more defensive in order to account for an
