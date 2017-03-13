@@ -119,6 +119,4 @@ class SizeQuota(object):
         return annotations[key]
 
     def bypass_hardlimit(self):
-        if api.user.is_anonymous():
-            return False
-        return 'Manager' in api.user.get_roles(obj=self.context)
+        return api.user.has_permission('Manage portal')
