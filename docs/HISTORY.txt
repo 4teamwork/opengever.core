@@ -34,6 +34,15 @@ Changelog
 - Get rid of unnecessary column label in extract attachments view. [lgraf]
 - Allow private dossiers to be resolved. [lgraf]
 - Escape dossiertemplate title_help field on display. [elioschmutz]
+2017.1.0 (unreleased)
+-------------------
+
+- Refactor: Use SQLFormSupport class for: Meeting
+  [elioschmutz]
+
+- Escape dossiertemplate title_help field on display.
+  [elioschmutz]
+
 - Fix the common-fieldset translation in the add/edit-form if using the
   ITranslatedTitle behavior in combination with a
   dossier-type (i.e. the templatefolder). [elioschmutz]

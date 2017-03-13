@@ -1,6 +1,7 @@
 from collections import OrderedDict
 from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.model import Base
+from opengever.base.model import SQLFormSupport
 from opengever.base.model import UTCDateTime
 from opengever.base.oguid import Oguid
 from opengever.base.utils import escape_html
@@ -62,7 +63,7 @@ class CloseTransition(Transition):
         api.portal.show_message(msg, api.portal.get().REQUEST)
 
 
-class Meeting(Base):
+class Meeting(Base, SQLFormSupport):
 
     STATE_PENDING = State('pending', is_default=True,
                           title=_('pending', default='Pending'))
@@ -283,21 +284,9 @@ class Meeting(Base):
     def get_state(self):
         return self.workflow.get_state(self.workflow_state)
 
-    def get_edit_values(self, fieldnames):
-        values = {}
-        for fieldname in fieldnames:
-            value = getattr(self, fieldname, None)
-            if value:
-                values[fieldname] = value
-
-        return values
-
     def update_model(self, data):
         """Manually set the modified timestamp when updating meetings."""
-
-        for key, value in data.items():
-            setattr(self, key, value)
-
+        super(Meeting, self).update_model(data)
         self.modified = utcnow_tz_aware()
 
     def get_title(self):
@@ -382,7 +371,7 @@ class Meeting(Base):
             url, escape_html(self.get_title()), self.css_class)
         return link
 
-    def get_url(self, view='view'):
+    def get_url(self, context=None, view='view'):
         elements = [self.committee.get_admin_unit().public_url, self.physical_path]
         if view:
             elements.append(view)
@@ -394,6 +383,3 @@ class Meeting(Base):
 
     def get_dossier(self):
         return self.dossier_oguid.resolve_object()
-
-    def get_edit_url(self, context):
-        return self.get_url(view='edit')
