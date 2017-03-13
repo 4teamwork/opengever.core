@@ -11,6 +11,7 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
+from opengever.dossier.utils import truncate_ellipsis
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -26,6 +27,7 @@ from zope.security import checkPermission
 class DossierOverview(BoxesViewMixin, grok.View, GeverTabMixin):
 
     show_searchform = False
+    comments_max_length = 400
 
     grok.context(IDossierMarker)
     grok.name('tabbedview_view-overview')
@@ -43,10 +45,19 @@ class DossierOverview(BoxesViewMixin, grok.View, GeverTabMixin):
 
     def boxes(self):
         return [[self.make_task_box(),
+                 self.make_comment_box(),
                  self.make_participation_box(),
                  self.make_reference_box()],
                 [self.make_document_box(),
                  self.make_description_box()]]
+
+    def get_comments(self):
+        return truncate_ellipsis(
+            IDossier(self.context).comments, self.comments_max_length)
+
+    def make_comment_box(self):
+        return dict(id='comments', content=self.get_comments(),
+                    label=_(u"label_comments", default="Comments"))
 
     def make_participation_box(self):
         if is_contact_feature_enabled():
@@ -197,7 +208,6 @@ class DossierTemplateOverview(DossierOverview):
         # Column 3 contains a listing of all documents within the template.
         return [[self.make_description_box(),
                  self.make_keyword_box(),
-                 self.make_comment_box(),
                  self.make_filing_prefix_box()],
                 [self.make_document_box()]]
 
@@ -208,10 +218,6 @@ class DossierTemplateOverview(DossierOverview):
     def make_keyword_box(self):
         return dict(id='keywords', content=self.get_keywords(),
                     label=_(u"label_keywords", default="Keywords"))
-
-    def make_comment_box(self):
-        return dict(id='comments', content=self.get_comments(),
-                    label=_(u"label_comments", default="Comments"))
 
     def make_filing_prefix_box(self):
         return dict(id='filing_prefix', content=self.context.get_filing_prefix_label(),
@@ -228,6 +234,3 @@ class DossierTemplateOverview(DossierOverview):
 
     def get_keywords(self):
         return ', '.join(IDossier(self.context).keywords)
-
-    def get_comments(self):
-        return IDossier(self.context).comments
