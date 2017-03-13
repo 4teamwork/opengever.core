@@ -1,0 +1,22 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="opengever.quota">
+
+  <browser:page
+      name="usage"
+      for="*"
+      class=".usage.UsageView"
+      permission="zope2.View"
+      template="templates/usage.pt"
+      />
+
+  <browser:page
+      name="index.html"
+      for="opengever.quota.exceptions.ForbiddenByQuota"
+      class=".error.ForbiddenByQuotaView"
+      permission="zope2.View"
+      />
+
+</configure>

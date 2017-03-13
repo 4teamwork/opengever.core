@@ -1,0 +1,44 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      i18n:domain="opengever.quota"
+      metal:use-macro="context/main_template/macros/master">
+
+  <metal:main fill-slot="main">
+    <tal:main-macro metal:define-macro="main">
+
+      <h1 i18n:translate="usage_title">
+        Usage of «<tal:title i18n:name="title" tal:replace="here/Title" />»
+      </h1>
+
+      <table class="vertical listing usage">
+        <tal:size_infos define="size_infos view/get_size_infos"
+                        condition="size_infos">
+          <tr>
+            <th i18n:translate="">Usage</th>
+            <td tal:content="size_infos/size_usage" />
+          </tr>
+          <tr>
+            <th i18n:translate="">Soft limit</th>
+            <td tal:content="size_infos/soft_limit" />
+          </tr>
+          <tr>
+            <th i18n:translate="">Hard limit</th>
+            <td tal:content="size_infos/hard_limit" />
+          </tr>
+        </tal:size_infos>
+      </table>
+
+      <br />
+
+      <a tal:attributes="href here/absolute_url"
+         class="button standalone"
+         i18n:translate="">
+        Back
+      </a>
+
+    </tal:main-macro>
+  </metal:main>
+
+</html>

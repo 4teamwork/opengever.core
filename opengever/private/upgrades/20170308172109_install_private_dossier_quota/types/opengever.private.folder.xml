@@ -1,0 +1,17 @@
+<object name="opengever.private.folder">
+
+  <property name="behaviors" purge="False">
+    <element value="opengever.quota.sizequota.ISizeQuota" />
+  </property>
+
+  <action
+      title="Usage"
+      action_id="usage"
+      category="object_buttons"
+      condition_expr=""
+      url_expr="string:${object_url}/usage"
+      visible="True">
+    <permission value="Add portal content" />
+  </action>
+
+</object>

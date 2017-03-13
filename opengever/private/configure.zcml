@@ -25,6 +25,7 @@
 
   <include package=".upgrades" />
   <include package=".browser" />
+  <include package=".viewlets" />
 
 
   <!-- permissions -->
@@ -33,5 +34,7 @@
   <permission id="opengever.private.AddPrivateFolder" title="opengever.private: Add private folder" />
 
   <permission id="opengever.private.AddPrivateDossier" title="opengever.private: Add private dossier" />
+
+  <adapter factory=".quota.PrivateFolderQuotaSizeSettings" />
 
 </configure>

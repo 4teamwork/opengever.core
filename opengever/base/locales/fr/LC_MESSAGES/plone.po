@@ -92,6 +92,9 @@ msgstr ""
 msgid "Modify deadline"
 msgstr "Changer le délai"
 
+msgid "Nutzung"
+msgstr ""
+
 msgid "Open tasks report"
 msgstr "Liste des affaires en suspens"
 

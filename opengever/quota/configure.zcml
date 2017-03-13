@@ -1,0 +1,66 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    xmlns:profilehook="http://namespaces.zope.org/profilehook"
+    i18n_domain="opengever.quota">
+
+  <include package="ftw.profilehook" />
+
+  <i18n:registerTranslations directory="locales" />
+
+  <include package=".browser" />
+
+  <profilehook:hook
+      profile="opengever.policy.base:default"
+      handler=".hooks.policy_installed"
+      />
+
+  <plone:behavior
+      title="Size quota"
+      description="Enables a size quota for a container."
+      provides="opengever.quota.sizequota.ISizeQuota"
+      factory="opengever.quota.sizequota.SizeQuota"
+      marker="opengever.quota.sizequota.IContainerWithSizeQuota"
+      for="plone.dexterity.interfaces.IDexterityContainer"
+      />
+
+  <adapter factory=".primary.PrimaryFieldQuotaSubject" />
+  <plone:behavior
+      title="Primary field quota subject"
+      description="Subject to quota by counting the primary field blob size."
+      provides="opengever.quota.primary.IPrimaryBlobFieldQuota"
+      for="plone.dexterity.interfaces.IDexterityItem"
+      />
+
+  <subscriber
+      for="opengever.quota.primary.IQuotaSubject
+           zope.lifecycleevent.interfaces.IObjectAddedEvent"
+      handler=".subscribers.update_size_usage_for_object"
+      />
+
+  <subscriber
+      for="opengever.quota.primary.IQuotaSubject
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".subscribers.update_size_usage_for_object"
+      />
+
+  <subscriber
+      for="opengever.quota.primary.IQuotaSubject
+           opengever.trash.trash.ITrashedEvent"
+      handler=".subscribers.update_size_usage_for_object"
+      />
+
+  <subscriber
+      for="opengever.quota.primary.IQuotaSubject
+           opengever.trash.trash.IUntrashedEvent"
+      handler=".subscribers.update_size_usage_for_object"
+      />
+
+  <subscriber
+      for="opengever.quota.primary.IQuotaSubject
+           zope.lifecycleevent.interfaces.IObjectMovedEvent"
+      handler=".subscribers.update_size_usage_when_moving_object"
+      />
+
+</configure>

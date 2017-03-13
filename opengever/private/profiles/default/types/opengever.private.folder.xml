@@ -26,6 +26,7 @@
     <element value="opengever.sharing.behaviors.IDossier" />
     <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
     <element value="plone.app.lockingbehavior.behaviors.ILocking" />
+    <element value="opengever.quota.sizequota.ISizeQuota" />
   </property>
 
   <!-- View information -->
@@ -61,6 +62,16 @@
       url_expr="string:${object_url}/edit"
       visible="True">
     <permission value="Modify portal content" />
+  </action>
+
+  <action
+      title="Usage"
+      action_id="usage"
+      category="object_buttons"
+      condition_expr=""
+      url_expr="string:${object_url}/usage"
+      visible="True">
+    <permission value="Add portal content" />
   </action>
 
 </object>
