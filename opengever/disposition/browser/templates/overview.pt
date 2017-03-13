@@ -16,7 +16,8 @@
 
   <ul class="list-group" tal:repeat="dossier_list view/get_dossier_lists">
     <tal:define tal:define="label python: dossier_list[0];
-                            mappings python: dossier_list[1]">
+                            mappings python: dossier_list[1]"
+                tal:condition="mappings">
 
       <li class="list-group-item label">
         <div class="list-group-cell data-cell">
@@ -59,11 +60,11 @@
             <div class="repo-appraisal-button-group action-cell"
                  tal:condition="view/appraisal_buttons_available"
                  tal:attributes="data-intids python:[dossier.intid for dossier in dossiers]">
-              <a href="#" title="Archive" class="icon_button archive_all"
-                 data-archive="true" i18n:attributes="title label_archive" />
+              <a href="#" title="Archive all" class="icon_button archive_all"
+                 data-archive="true" i18n:attributes="title label_archive_all" />
 
-              <a href="#" title="Archive" class="icon_button not_archive_all"
-                 data-archive="false" i18n:attributes="title label_archive" />
+              <a href="#" title="Do not archive all" class="icon_button not_archive_all"
+                 data-archive="false" i18n:attributes="title label_dont_archive_all" />
             </div>
           </div>
 
@@ -186,7 +187,7 @@
   </div>
 
   <div class="progress">
-    <h3 i18n:translate="progress">Progress:</h3>
+    <h3 i18n:translate="progress">Progress</h3>
 
     <div class="answers">
       <tal:repeat tal:repeat="entry view/get_history">
@@ -204,11 +205,11 @@
               <div class="collapsible-content">
                 <ul>
                   <li tal:repeat="detail entry/details">
-                    <span tal:content="detail/reference_number" />
-                    <span tal:content="detail/title" />
-                    <span tal:condition="detail/appraisal"
+                    <span class="reference_number" tal:content="detail/reference_number" />
+                    <span class="title" tal:content="detail/title" />
+                    <span class="appraisal" tal:condition="detail/appraisal"
                           i18n:translate="label_archive">Archive</span>
-                    <span tal:condition="not: detail/appraisal"
+                    <span class="appraisal" tal:condition="not: detail/appraisal"
                           i18n:translate="label_dont_archive">Don't archive</span>
                   </li>
                 </ul>
