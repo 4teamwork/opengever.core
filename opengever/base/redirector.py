@@ -90,7 +90,11 @@ class RedirectorViewlet(grok.Viewlet):
     JS_TEMPLATE = '''
 <script type="text/javascript" class="redirector">
 $(function() {
+  if ('%(url)s'.split(':')[0] == 'oc') {
+    window.location = '%(url)s';
+  } else {
     window.setTimeout("window.open('%(url)s', '%(target)s');", %(timeout)s);
+  }
 });
 </script>
 '''

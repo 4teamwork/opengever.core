@@ -5,6 +5,9 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- The document redirector now handles newstyle OC URLs.
+  [Rotonen]
+
 - Set preserved as paper to false for generated journal pdfs.
   [phgross]
 
