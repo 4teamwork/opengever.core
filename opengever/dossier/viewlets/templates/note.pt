@@ -1,9 +1,10 @@
 <span class="editNoteWrapper"
       i18n:domain="opengever.dossier"
-      tal:define="has_notes options/note">
+      tal:condition="view/available"
+      tal:define="has_notes view/note">
   <a href="#" id='editNoteLink'
-     tal:attributes="data-notecache string:${options/note};
-                     data-i18n string:${options/translations}">
+     tal:attributes="data-notecache string:${view/note};
+                     data-i18n string:${view/translations}">
     <span tal:define="hide_class python: '' if has_notes else 'hide'"
           tal:attributes="class string:edit ${hide_class}">
       <span class="linkLabel" i18n:translate="label_edit_note">Edit Note</span>
@@ -32,7 +33,7 @@
       <form>
         <textarea name="note"
                   placeholder="Create Dossier note"
-                  tal:content="options/note"
+                  tal:content="view/note"
                   i18n:attributes="placeholder label_dossier_note_placeholder"/>
 
         <div class="formControls">

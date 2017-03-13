@@ -10,4 +10,12 @@
       permission="zope2.View"
       />
 
+  <browser:viewlet
+      name="opengever.dossier.comment"
+      for="opengever.dossier.businesscase.IBusinessCaseDossier"
+      manager="plone.app.layout.viewlets.interfaces.IBelowContentTitle"
+      class=".comment.BusinessCaseCommentViewlet"
+      permission="cmf.ModifyPortalContent"
+      />
+
 </configure>
