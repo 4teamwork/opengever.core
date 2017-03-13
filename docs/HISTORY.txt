@@ -28,13 +28,7 @@ Changelog
 - LDAP util: Skip referrals that are supposed to be hunted by client-chasing.
   [lgraf]
 
-- Make containing_dossier indexer more defensive in order to account for an
-  odd corner case during upgrades.
-  [lgraf]
-
 - Extend searchable text with dossier keywords. [deiferni]
-
-- No longer set incorrect contentType for drag-drop uploaded mails. [deiferni]
 
 - OfficeConnector now gets given the latest working copy of a file instead of
   the latest checked in copy of a file.
@@ -42,8 +36,6 @@ Changelog
 
 - Update ftw.keywordwidget from 1.1.1 to 1.1.2 to fix an ie11 issue.
   [elioschmutz]
-
-- Fix off-by-one bumblebee preview image for document versions. [deiferni]
 
 - Add scaffolding to OC checkout payloads in anticipation of plone.api direct
   file uploads.
@@ -75,10 +67,6 @@ Changelog
 
 - Fix an error when creating a SIP export of documents without a file.
   [phgross]
-
-- Allow `Administrator` to view and edit private dossiers and private
-  folders.
-  [deiferni]
 
 - Remove an unnecessary JSON parse step from OfficeConnector JS.
   [Rotonen]
@@ -127,9 +115,6 @@ Changelog
 
 - Include Hotfixes in development and test buildouts.
   [lgraf]
-
-- Translate missing "open detail view" in bumblebee-overlay.
-  [elioschmutz]
 
 - Disallow closing dispositions for archivists.
   [phgross]
@@ -242,9 +227,6 @@ Changelog
 - Fix error on agendaItemController update.
   [Kevin Bieri]
 
-- Make sure the breadcrumb title tooltip only gets loaded if a data-uid attribute is present.
-  [mathias.leimgruber]
-
 - OGGBundle schemas: Include enums for valid review_states.
   [lgraf]
 
@@ -259,6 +241,34 @@ Changelog
 
 - Fix rendering of new agenda points in IE11.
   [Kevin Bieri]
+
+
+4.15.3 (2017-03-13)
+-------------------
+
+- Make containing_dossier indexer more defensive in order to account for an
+  odd corner case during upgrades.
+  [lgraf]
+
+
+4.15.2 (2017-03-09)
+-------------------
+
+- No longer set incorrect contentType for drag-drop uploaded mails. [deiferni]
+
+- Make sure the breadcrumb title tooltip only gets loaded if a data-uid attribute is present.
+  [mathias.leimgruber]
+
+- Fix off-by-one bumblebee preview image for document versions. [deiferni]
+
+- Caching: enable tabbedview etag value. [jone]
+
+- Translate missing "open detail view" in bumblebee-overlay.
+  [elioschmutz]
+
+- Allow `Administrator` to view and edit private dossiers and private
+  folders.
+  [deiferni]
 
 
 4.15.1 (2017-02-07)
