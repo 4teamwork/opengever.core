@@ -1,5 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.mail.interfaces import IEmailAddress
 from ftw.testbrowser import browsing
 from opengever.api.testing import RelativeSession
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ZSERVER_TESTING
@@ -41,21 +42,51 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
                                  .having(title_de=u'Ordnungsposition',
                                          title_fr=u'Position'))
 
-        self.dossier = create(Builder('dossier')
-                              .within(self.repofolder)
-                              .titled(u'Mein Dossier'))
+        self.open_dossier = create(Builder('dossier')
+                                   .within(self.repofolder)
+                                   .titled(u'Mein Dossier'))
+
+        self.resolved_dossier = create(Builder('dossier')
+                                       .within(self.repofolder)
+                                       .titled(u'Abgeschlossenes Dossier')
+                                       .in_state('dossier-state-resolved'))
+
+        self.inactive_dossier = create(Builder('dossier')
+                                       .within(self.repofolder)
+                                       .titled(u'Inaktives Dossier')
+                                       .in_state('dossier-state-inactive'))
 
         # We rely on the creation order of these documents for the tests!
         # ZServer craps out if you have non-ascii in the document titles!
-        self.document_without_attachment = create(Builder('document')
-                                                  .titled(u'docu-1')
-                                                  .within(self.dossier))
+        self.doc_without_file_wf_open = create(Builder('document')
+                                               .titled(u'docu-1')
+                                               .within(self.open_dossier))
 
-        self.document_with_attachment = create(Builder('document')
-                                               .titled(u'docu-2')
-                                               .within(self.dossier)
-                                               .attach_file_containing(
-                                                   self.original_file_content))
+        self.doc_with_file_wf_open = create(Builder('document')
+                                            .titled(u'docu-2')
+                                            .within(self.open_dossier)
+                                            .attach_file_containing(
+                                                self.original_file_content))
+
+        self.doc_without_file_wf_resolved = create(Builder('document')
+                                                   .titled(u'docu-3')
+                                                   .within(
+                                                       self.resolved_dossier))
+
+        self.doc_with_file_wf_resolved = create(Builder('document')
+                                                .titled(u'docu-4')
+                                                .within(self.resolved_dossier)
+                                                .attach_file_containing(self.original_file_content))  # noqa
+
+        self.doc_without_file_wf_inactive = create(Builder('document')
+                                                   .titled(u'docu-5')
+                                                   .within(
+                                                       self.inactive_dossier))
+
+        self.doc_with_file_wf_inactive = create(Builder('document')
+                                                .titled(u'docu-6')
+                                                .within(self.inactive_dossier)
+                                                .attach_file_containing(self.original_file_content))  # noqa
 
         lang_tool = api.portal.get_tool('portal_languages')
         lang_tool.setDefaultLanguage('de-ch')
@@ -149,50 +180,74 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
             )
 
     def test_returns_404_when_feature_disabled(self):
-        self.assertEquals(404, self.get_oc_url_response_status(self.document_without_attachment, 'attach')) # noqa
-        self.assertEquals(404, self.get_oc_url_response_status(self.document_with_attachment, 'attach')) # noqa
-        self.assertEquals(404, self.get_oc_url_response_status(self.document_without_attachment, 'checkout')) # noqa
-        self.assertEquals(404, self.get_oc_url_response_status(self.document_with_attachment, 'checkout')) # noqa
+        self.assertEquals(404, self.get_oc_url_response_status(self.doc_without_file_wf_open, 'attach')) # noqa
+        self.assertEquals(404, self.get_oc_url_response_status(self.doc_with_file_wf_open, 'attach')) # noqa
+        self.assertEquals(404, self.get_oc_url_response_status(self.doc_without_file_wf_open, 'checkout')) # noqa
+        self.assertEquals(404, self.get_oc_url_response_status(self.doc_with_file_wf_open, 'checkout')) # noqa
 
     def test_attach_to_outlook_url_without_file(self):
         self.enable_attach_to_outlook()
-        self.assertEquals(404, self.get_oc_url_response_status(self.document_without_attachment, 'attach')) # noqa
+        self.assertEquals(404, self.get_oc_url_response_status(self.doc_without_file_wf_open, 'attach')) # noqa
 
     def test_attach_to_outlook_payload_without_file(self):
         self.enable_attach_to_outlook()
-        self.assertEquals(404, self.get_oc_payload_response_status(self.document_without_attachment, 'attach')) # noqa
+        self.assertEquals(404, self.get_oc_payload_response_status(self.doc_without_file_wf_open, 'attach')) # noqa
 
     def test_attach_to_outlook_url_with_file(self):
         self.enable_attach_to_outlook()
-        self.assertEquals(200, self.get_oc_url_response_status(self.document_with_attachment, 'attach')) # noqa
+        self.assertEquals(200, self.get_oc_url_response_status(self.doc_with_file_wf_open, 'attach')) # noqa
 
-        payload = self.get_oc_url_payload(self.document_with_attachment, 'attach') # noqa
+        payload = self.get_oc_url_payload(self.doc_with_file_wf_open, 'attach') # noqa
         self.assertTrue('url' in payload)
 
-        token = self.get_oc_url_jwt(self.document_with_attachment, 'attach') # noqa
+        token = self.get_oc_url_jwt(self.doc_with_file_wf_open, 'attach') # noqa
         self.assertTrue('url' in token)
         self.assertTrue('/oc_attach/' in token['url'])
         self.assertEquals(token['action'], 'attach')
         self.assertEquals(TEST_USER_ID, token['sub'])
 
-    def test_attach_to_outlook_payload_with_file(self):
+    def test_attach_to_outlook_payload_with_file_and_open_dossier(self):
         self.enable_attach_to_outlook()
-        token = self.get_oc_url_jwt(self.document_with_attachment, 'attach') # noqa
+        token = self.get_oc_url_jwt(self.doc_with_file_wf_open, 'attach')
 
         # Test we can actually fetch an action payload based on the URL JWT
         response = self.api.get(token['url'])
         self.assertEquals(200, response.status_code)
 
         payload = response.json()
-        self.assertTrue('csrf-token' in payload)
-        self.assertTrue('download' in payload)
-        self.assertEquals(self.document_with_attachment.file.contentType, payload['content-type']) # noqa
-        self.assertEquals(self.document_with_attachment.absolute_url(), payload['document-url']) # noqa
-        self.assertEquals(self.document_with_attachment.get_filename(), payload['filename']) # noqa
+
+        self.assertTrue('bcc' in payload)
+        bcc = IEmailAddress(
+            self.request).get_email_for_object(self.open_dossier)
+        self.assertEquals(bcc, payload['bcc'])
+
+    def test_attach_to_outlook_payload_with_file_and_resolved_dossier(self):
+        self.enable_attach_to_outlook()
+        token = self.get_oc_url_jwt(self.doc_with_file_wf_resolved, 'attach')
+
+        # Test we can actually fetch an action payload based on the URL JWT
+        response = self.api.get(token['url'])
+        self.assertEquals(200, response.status_code)
+
+        payload = response.json()
+
+        self.assertTrue('bcc' not in payload)
+
+    def test_attach_to_outlook_payload_with_file_and_inactive_dossier(self):
+        self.enable_attach_to_outlook()
+        token = self.get_oc_url_jwt(self.doc_with_file_wf_inactive, 'attach')
+
+        # Test we can actually fetch an action payload based on the URL JWT
+        response = self.api.get(token['url'])
+        self.assertEquals(200, response.status_code)
+
+        payload = response.json()
+
+        self.assertTrue('bcc' not in payload)
 
     def test_attach_to_outlook(self):
         self.enable_attach_to_outlook()
-        token = self.get_oc_url_jwt(self.document_with_attachment, 'attach') # noqa
+        token = self.get_oc_url_jwt(self.doc_with_file_wf_open, 'attach') # noqa
 
         # Test we can actually fetch an action payload based on the URL JWT
         payload = self.api.get(token['url']).json()
@@ -210,20 +265,20 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
 
     def test_document_checkout_url_without_file(self):
         self.enable_oc_checkout()
-        self.assertEquals(404, self.get_oc_url_response_status(self.document_without_attachment, 'checkout')) # noqa
+        self.assertEquals(404, self.get_oc_url_response_status(self.doc_without_file_wf_open, 'checkout')) # noqa
 
     def test_document_checkout_payload_without_file(self):
         self.enable_oc_checkout()
-        self.assertEquals(404, self.get_oc_url_response_status(self.document_without_attachment, 'checkout')) # noqa
+        self.assertEquals(404, self.get_oc_url_response_status(self.doc_without_file_wf_open, 'checkout')) # noqa
 
     def test_document_checkout_url_with_file(self):
         self.enable_oc_checkout()
-        self.assertEquals(200, self.get_oc_url_response_status(self.document_with_attachment, 'checkout')) # noqa
+        self.assertEquals(200, self.get_oc_url_response_status(self.doc_with_file_wf_open, 'checkout')) # noqa
 
-        payload = self.get_oc_url_payload(self.document_with_attachment, 'checkout') # noqa
+        payload = self.get_oc_url_payload(self.doc_with_file_wf_open, 'checkout') # noqa
         self.assertTrue('url' in payload)
 
-        token = self.get_oc_url_jwt(self.document_with_attachment, 'checkout') # noqa
+        token = self.get_oc_url_jwt(self.doc_with_file_wf_open, 'checkout') # noqa
         self.assertTrue('url' in token)
         self.assertTrue('/oc_checkout/' in token['url'])
         self.assertEquals(token['action'], 'checkout')
@@ -231,7 +286,7 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
 
     def test_document_checkout_payload_with_file(self):
         self.enable_oc_checkout()
-        token = self.get_oc_url_jwt(self.document_with_attachment, 'checkout') # noqa
+        token = self.get_oc_url_jwt(self.doc_with_file_wf_open, 'checkout') # noqa
 
         # Test we can actually fetch an action payload based on the URL JWT
         response = self.api.get(token['url'])
@@ -240,9 +295,9 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
         payload = response.json()
         self.assertTrue('csrf-token' in payload)
         self.assertTrue('download' in payload)
-        self.assertEquals(self.document_with_attachment.file.contentType, payload['content-type']) # noqa
-        self.assertEquals(self.document_with_attachment.absolute_url(), payload['document-url']) # noqa
-        self.assertEquals(self.document_with_attachment.get_filename(), payload['filename']) # noqa
+        self.assertEquals(self.doc_with_file_wf_open.file.contentType, payload['content-type']) # noqa
+        self.assertEquals(self.doc_with_file_wf_open.absolute_url(), payload['document-url']) # noqa
+        self.assertEquals(self.doc_with_file_wf_open.get_filename(), payload['filename']) # noqa
 
     @browsing
     def test_document_checkout(self, browser):
@@ -250,7 +305,7 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
         self.enable_oc_checkout()
 
         # Grab the OC URL
-        token = self.get_oc_url_jwt(self.document_with_attachment, 'checkout') # noqa
+        token = self.get_oc_url_jwt(self.doc_with_file_wf_open, 'checkout') # noqa
 
         # Grab the action payload based on the OC URL
         payload = self.api.get(token['url']).json()
@@ -268,10 +323,10 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
         self.checkout_document(payload)
 
         browser.login()
-        self.assertTrue(browser.open(self.document_with_attachment).css('.checked_out_viewlet')) # noqa
+        self.assertTrue(browser.open(self.doc_with_file_wf_open).css('.checked_out_viewlet')) # noqa
 
         # Test there is also a journal entry from the checkout
-        browser.open(self.document_with_attachment, view='tabbedview_view-journal') # noqa
+        browser.open(self.doc_with_file_wf_open, view='tabbedview_view-journal') # noqa
         journal_entry = browser.css('.listing').first.lists()[1]
         self.assertEquals(journal_entry[1], 'Dokument ausgecheckt')
 
@@ -281,7 +336,7 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
         self.enable_oc_checkout()
 
         # Grab the OC URL
-        token = self.get_oc_url_jwt(self.document_with_attachment, 'checkout') # noqa
+        token = self.get_oc_url_jwt(self.doc_with_file_wf_open, 'checkout') # noqa
 
         # Grab the action payload based on the OC URL
         payload = self.api.get(token['url']).json()
@@ -303,7 +358,7 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
 
         # Test the journal entry from the commentless checkin
         browser.login()
-        browser.open(self.document_with_attachment, view='tabbedview_view-journal') # noqa
+        browser.open(self.doc_with_file_wf_open, view='tabbedview_view-journal') # noqa
         journal_entry = browser.css('.listing').first.lists()[1]
 
         self.assertEquals(journal_entry[1], 'Dokument eingecheckt')
@@ -320,7 +375,7 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
         self.enable_oc_checkout()
 
         # Grab the OC URL
-        token = self.get_oc_url_jwt(self.document_with_attachment, 'checkout') # noqa
+        token = self.get_oc_url_jwt(self.doc_with_file_wf_open, 'checkout') # noqa
 
         # Grab the action payload based on the OC URL
         payload = self.api.get(token['url']).json()
@@ -336,7 +391,7 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
 
         # Test the journal entries from the checkin with a comment
         browser.login()
-        browser.open(self.document_with_attachment, view='tabbedview_view-journal') # noqa
+        browser.open(self.doc_with_file_wf_open, view='tabbedview_view-journal') # noqa
         journal_entry = browser.css('.listing').first.lists()[1]
 
         self.assertEquals(journal_entry[1], 'Dokument eingecheckt')
