@@ -5,6 +5,9 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Fix missing table-column width for checkbox column.
+  [elioschmutz]
+
 - OGGBundle: Add support to map local role principal names during
   import based on ingestion settings.
   [lgraf]
