@@ -86,10 +86,8 @@ class CheckoutDocuments(grok.View):
                 '%s#documents' % self.context.absolute_url())
 
     def checkout(self, obj):
-        """Checks out a single document object.
-        """
-
-        # check out the document
+        """Checks out a single document object."""
+        # Check out the document
         manager = getMultiAdapter((obj, self.request), ICheckinCheckoutManager)
 
         # is checkout allowed for this document?
