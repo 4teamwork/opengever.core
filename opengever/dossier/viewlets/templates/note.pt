@@ -1,24 +1,24 @@
 <span class="editNoteWrapper"
       i18n:domain="opengever.dossier"
       tal:condition="view/available"
-      tal:define="has_notes view/note">
-  <a href="#" id='editNoteLink'
-     tal:attributes="data-notecache string:${view/note};
-                     data-i18n string:${view/translations}">
+      tal:define="has_notes view/note"
+      tal:attributes="data-notecache string:${view/note};
+                      data-i18n string:${view/translations}">
+  <a href="#" class='editNoteLink'>
     <span tal:define="hide_class python: '' if has_notes else 'hide'"
           tal:attributes="class string:edit ${hide_class}">
-      <span class="linkLabel" i18n:translate="label_edit_note">Edit Note</span>
       <span class="visualHint"
             title="There is a note"
             i18n:attributes="title help_text_edit_note"></span>
+      <span class="linkLabel" i18n:translate="label_edit_note">Edit Note</span>
     </span>
 
     <span tal:define="hide_class python: 'hide' if has_notes else ''"
           tal:attributes="class string:add ${hide_class}">
-      <span class="linkLabel" i18n:translate="label_add_note">Add Note</span>
       <span class="visualHint noNote"
         title="Create a new note"
         i18n:attributes="title help_text_add_note"></span>
+      <span class="linkLabel" i18n:translate="label_add_note">Add Note</span>
     </span>
   </a>
 

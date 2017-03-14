@@ -193,19 +193,19 @@ class TestOverview(FunctionalTestCase):
         browser.login().visit(self.dossier)
         # There are both labels (show/hide by css/js)
         self.assertEquals(['Edit Note', 'Add Note'],
-                          browser.css('#editNoteLink .linkLabel').text)
+                          browser.css('.editNoteLink .linkLabel').text)
 
     @browsing
     def test_dossier_show_comments_editlink_on_maindossier_only(
             self, browser):
         browser.login().visit(self.dossier)
-        comment = browser.css('#editNoteLink')
+        comment = browser.css('.editNoteLink')
         self.assertTrue(comment,
                         'Expect the edit comment link in dossier byline')
 
         subdossier = create(Builder('dossier').within(self.dossier))
         browser.visit(subdossier)
-        comment = browser.css('#editNoteLink')
+        comment = browser.css('.editNoteLink')
         self.assertFalse(comment,
                          'Expect NO edit comment link on subdossier')
 
@@ -217,14 +217,14 @@ class TestOverview(FunctionalTestCase):
                                        acquire=False)
         transaction.commit()
         browser.login().visit(self.dossier)
-        comment = browser.css('#editNoteLink')
+        comment = browser.css('.editNoteLink')
         self.assertFalse(comment,
                          'Expect NO edit comment link on dossier')
 
     @browsing
     def test_dossier_comments_editlink_data(self, browser):
         browser.login().visit(self.dossier)
-        link = browser.css('#editNoteLink').first
+        link = browser.css('.editNoteWrapper').first
         dossier_data = IDossier(self.dossier)
 
         # No comments
@@ -239,7 +239,7 @@ class TestOverview(FunctionalTestCase):
         transaction.commit()
 
         browser.open(self.dossier)
-        link = browser.css('#editNoteLink').first
+        link = browser.css('.editNoteWrapper').first
         self.assertEquals(str(dossier_data.comments),
                           link.attrib['data-notecache'])
         self.assertEquals('Edit Note', link.css('.edit .linkLabel').first.text)

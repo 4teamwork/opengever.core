@@ -8,21 +8,20 @@
 
       var noteBox;
       var editNoteLink;
+      var editNoteWrapper;
       var overlay;
       var overlayElement;
       var i18n;
 
       function init(){
         noteBox = $('#commentsBox');
-        editNoteLink = $('#editNoteLink');
-        if (!editNoteLink.length && !noteBox.length) {
+        editNoteLink = $('.editNoteLink');
+        if (!editNoteLink.length) {
           return;
         }
 
-        // Move add/edit link to comment section in overview tab
-        editNoteLink.clone().insertAfter(noteBox.find('h2'));
-
-        i18n = editNoteLink.data('i18n');
+        editNoteWrapper = $('.editNoteWrapper');
+        i18n = editNoteWrapper.data('i18n');
         // Move for correct stacking with overlaymask
         overlayElement = $('#editNoteOverlay');
         $('body').append(overlayElement);
@@ -34,6 +33,8 @@
             textarea.height(($(window).height() - textarea.offset().top) * 0.7);
           }
         };
+
+        manipulateDom();
 
         if (!overlay) {
           overlay = overlayElement.overlay(options).data('overlay');
@@ -60,10 +61,10 @@
 
             To fix this issue, we replace the CR+LF newlines with the LF newlines.
              */
-            var notecache = editNoteLink.data('notecache').replace(/\r\n/g, '\n');
+            var notecache = editNoteWrapper.data('notecache').replace(/\r\n/g, '\n');
             if (notecache !== overlay.getOverlay().find('textarea').val()){
               if (confirm(i18n.note_text_confirm_abord)){
-                overlay.getOverlay().find('textarea').val(editNoteLink.data('notecache'));
+                overlay.getOverlay().find('textarea').val(editNoteWrapper.data('notecache'));
                 return true;
               } else {
                 return false;
@@ -72,6 +73,20 @@
           });
 
         }
+      }
+
+      function manipulateDom() {
+        // Move add/edit link to commentBox on overview tab
+        if (noteBox.find('.editNoteLink').length === 0) {
+          editNoteLink.eq(0).clone().insertAfter(noteBox.find('h2'));  
+        }
+
+        // Move add/edit link to title
+        if (!overlay) {
+          editNoteLink.eq(0).clone().appendTo('h1.documentFirstHeading');
+        }
+
+        editNoteLink = $('.editNoteLink');
       }
 
       function successMessage() {
@@ -100,8 +115,8 @@
 
       function saveNote() {
         makeRequest({comments: overlay.getOverlay().find('textarea').val()}).done(function(data){
-          editNoteLink.data('notecache', overlay.getOverlay().find('textarea').val());
-          if (editNoteLink.data('notecache').length) {
+          editNoteWrapper.data('notecache', overlay.getOverlay().find('textarea').val());
+          if (editNoteWrapper.data('notecache').length) {
             editNoteLink.find('.edit').removeClass('hide');
             editNoteLink.find('.add').addClass('hide');
           } else {
@@ -123,7 +138,7 @@
       }
 
       // Bind Edit note link
-      $(document).on('click', '#editNoteLink', function(event){
+      $(document).on('click', '.editNoteLink', function(event){
         event.preventDefault();
         showNote();
       });
