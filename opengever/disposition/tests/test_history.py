@@ -166,7 +166,8 @@ class TestHistoryListingInOverview(FunctionalTestCase):
                                .having(archival_value=ARCHIVAL_VALUE_WORTHY)
                                .within(self.repository))
         self.grant(
-            'Contributor', 'Editor', 'Reader', 'Reviewer', 'Records Manager')
+            'Contributor', 'Editor', 'Reader', 'Reviewer',
+            'Records Manager', 'Archivist')
 
         self.disposition = create(Builder('disposition')
                              .having(dossiers=[self.dossier1, self.dossier2])

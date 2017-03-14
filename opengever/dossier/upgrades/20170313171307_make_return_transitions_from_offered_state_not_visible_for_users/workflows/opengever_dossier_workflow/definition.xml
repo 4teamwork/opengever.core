@@ -936,7 +936,7 @@
       before_script=""
       after_script="">
     <guard>
-      <guard-role>Records Manager</guard-role>
+      <guard-role>Editor</guard-role>
       <guard-role>Manager</guard-role>
     </guard>
   </transition>

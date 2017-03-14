@@ -32,6 +32,8 @@ class TestDispositionListing(FunctionalTestCase):
 
     @browsing
     def test_disposition_listing(self, browser):
+        self.grant('Records Manager')
+
         with freeze(datetime(2015, 1, 1)):
             repository = create(Builder('repository').within(self.root))
             self.disposition_a = create(Builder('disposition')
@@ -64,6 +66,8 @@ class TestDispositionListing(FunctionalTestCase):
 
     @browsing
     def test_no_tabbedview_actions_available(self, browser):
+        self.grant('Records Manager')
+
         repository = create(Builder('repository').within(self.root))
         self.disposition_a = create(Builder('disposition').within(repository))
 
@@ -72,6 +76,8 @@ class TestDispositionListing(FunctionalTestCase):
 
     @browsing
     def test_statefilter_hides_closed_by_default(self, browser):
+        self.grant('Records Manager')
+
         with freeze(datetime(2015, 1, 1)):
             repository = create(Builder('repository').within(self.root))
             create(Builder('disposition')

@@ -33,6 +33,8 @@ class TestDestroyedDossierListing(BaseLatexListingTest):
                            .having(archival_value=ARCHIVAL_VALUE_UNWORTHY)
                            .titled(u'Dossier B'))
 
+        self.grant('Records Manager')
+
         self.disposition = create(Builder('disposition')
                                   .having(dossiers=[dossier_a, dossier_b])
                                   .in_state('disposition-state-closed'))
@@ -115,6 +117,11 @@ class TestDispositionHistoryListing(BaseLatexListingTest):
 
 
 class TestRemovalProtocolLaTeXView(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestRemovalProtocolLaTeXView, self).setUp()
+
+        self.grant('Records Manager')
 
     def get_view(self, disposition):
         provide_request_layer(disposition.REQUEST, IRemovalProtocolLayer)

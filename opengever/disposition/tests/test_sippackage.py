@@ -15,6 +15,7 @@ class TestSIPPackage(FunctionalTestCase):
         self.root = create(Builder('repository_root')
                            .having(title_de=u'Ordnungssytem 2000'))
         self.folder = create(Builder('repository').within(self.root))
+        self.grant('Contributor', 'Editor', 'Reader', 'Records Manager')
 
     def test_sip_folder_name_correspond_to_ech0160_definition(self):
         """See chapter 5.4 Aufbau eines SIP in eCH-0160 definition.

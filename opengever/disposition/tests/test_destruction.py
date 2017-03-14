@@ -40,6 +40,8 @@ class TestDestruction(FunctionalTestCase):
                                intids.getId(self.dossier2),
                                intids.getId(self.dossier3)]
 
+        self.grant(
+            'Contributor', 'Editor', 'Reader', 'Reviewer', 'Records Manager')
         self.disposition = create(Builder('disposition')
                                   .having(dossiers=[self.dossier1,
                                                     self.dossier2,
@@ -47,8 +49,6 @@ class TestDestruction(FunctionalTestCase):
                                   .in_state('disposition-state-archived')
                                   .within(self.root))
 
-        self.grant(
-            'Contributor', 'Editor', 'Reader', 'Reviewer', 'Records Manager')
         self.disposition.mark_dossiers_as_archived()
 
     def test_removed_dossiers_are_added_to_destroyed_dossier_list(self):
@@ -106,6 +106,7 @@ class TestDestroyPermission(FunctionalTestCase):
         self.repository = create(Builder('repository')
                                  .titled('Anfragen')
                                  .within(self.root))
+        self.grant('Records Manager')
 
     def test_destruction_raises_unauthorized_when_dossiers_is_not_archived(self):
         dossier = create(Builder('dossier')
@@ -117,7 +118,6 @@ class TestDestroyPermission(FunctionalTestCase):
                              .having(dossiers=[dossier])
                              .within(self.root))
 
-        self.grant('Records Manager')
         with self.assertRaises(Unauthorized):
             disposition.destroy_dossiers()
 
