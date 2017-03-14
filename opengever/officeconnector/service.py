@@ -1,3 +1,4 @@
+from ftw.mail.interfaces import IEmailAddress
 from opengever.officeconnector.helpers import create_oc_url
 from opengever.officeconnector.helpers import is_officeconnector_attach_feature_enabled  # noqa
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
@@ -110,7 +111,15 @@ class OfficeConnectorAttachPayload(OfficeConnectorPayload):
 
     def render(self):
         self.request.response.setHeader('Content-type', 'application/json')
-        return json.dumps(self.get_base_payload())
+
+        payload = self.get_base_payload()
+
+        parent_dossier = self.document.get_parent_dossier()
+        if parent_dossier and parent_dossier.is_open():
+            payload['bcc'] = IEmailAddress(
+                self.request).get_email_for_object(parent_dossier)
+
+        return json.dumps(payload)
 
 
 class OfficeConnectorCheckoutPayload(OfficeConnectorPayload):
