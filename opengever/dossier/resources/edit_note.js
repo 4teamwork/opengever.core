@@ -125,6 +125,7 @@
           }
           closeNote();
           successMessage();
+          $('#commentsBox > span').html(data.comment);
         }).fail(errorMessage);
       }
 
