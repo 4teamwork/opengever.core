@@ -90,8 +90,8 @@ def journal_entry_factory(context, action, title,
 
 def role_mapping_to_str(context, mapping):
     """Parse the given local_roles mapping to a str,
-    with the help of the ROLE_MAPPING from opengever.sharing"""
-
+    with the help of the ROLE_MAPPING from opengever.sharing.
+    """
     skip_roles = [u'Owner', ]
 
     user_roles = []
