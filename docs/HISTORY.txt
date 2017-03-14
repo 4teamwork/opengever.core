@@ -5,6 +5,10 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Hide newest tasks box for private dossiers overview tabbedview view because
+  it's not possible to add tasks in private dossiers.
+  [elioschmutz]
+
 - Fixed role guards for dossier's offer transition.
   [phgross]
 

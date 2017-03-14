@@ -108,6 +108,10 @@ class TestDossierContainer(FunctionalTestCase):
         dossier = create(Builder("dossier"))
         self.assertTrue(dossier.has_participation_support())
 
+    def test_support_tasks(self):
+        dossier = create(Builder("dossier"))
+        self.assertTrue(dossier.has_task_support())
+
     def test_reference_number(self):
         root = create(Builder('repository_root'))
         repo = create(Builder('repository').within(root))
