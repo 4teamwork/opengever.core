@@ -1,5 +1,4 @@
 from ftw.upgrade import UpgradeStep
-from opengever.quota.sizequota import ISizeQuota
 
 
 class InstallPrivateDossierQuota(UpgradeStep):
@@ -9,8 +8,11 @@ class InstallPrivateDossierQuota(UpgradeStep):
     def __call__(self):
         self.install_upgrade_profile()
         self.index_new_behaviors()
-        self.calculate_private_folder_usage()
         self.configure_error_log()
+
+        # recalculation was moved to upgrade
+        # 20170314200202_fix_private_folder_usage_calculation
+        # because it had errors.
 
     def index_new_behaviors(self):
         msg = 'Update `object_provides` for objects with new behavior.'
@@ -23,12 +25,6 @@ class InstallPrivateDossierQuota(UpgradeStep):
             catalog.reindexObject(obj,
                                   idxs=['object_provides'],
                                   update_metadata=False)
-
-    def calculate_private_folder_usage(self):
-        msg = 'Calculate usage in private folders.'
-        for obj in self.objects({'portal_type': ['opengever.private.folder']},
-                                msg):
-            ISizeQuota(obj).recalculate()
 
     def configure_error_log(self):
         error_log = self.getToolByName('error_log')
