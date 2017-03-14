@@ -307,6 +307,9 @@ class DossierContainer(Container):
     def has_participation_support(self):
         return IParticipationAwareMarker.providedBy(self)
 
+    def has_task_support(self):
+        return self.portal_types['opengever.task.task'] in self.allowedContentTypes()
+
     def get_reference_number(self):
         return IReferenceNumber(self).get_number()
 

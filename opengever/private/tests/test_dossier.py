@@ -98,6 +98,12 @@ class TestPrivateDossier(FunctionalTestCase):
                          .having(responsible=TEST_USER_ID))
         self.assertFalse(dossier.has_participation_support())
 
+    def test_does_not_support_tasks(self):
+        dossier = create(Builder('private_dossier')
+                         .within(self.folder)
+                         .having(responsible=TEST_USER_ID))
+        self.assertFalse(dossier.has_task_support())
+
 
 class TestPrivateDossierTabbedView(FunctionalTestCase):
 
@@ -118,12 +124,12 @@ class TestPrivateDossierTabbedView(FunctionalTestCase):
             browser.css('.formTab').text)
 
     @browsing
-    def test_participation_box_is_not_shown_on_overview(self, browser):
+    def test_participation_and_task_box_are_hidden_on_overview(self, browser):
         dossier = create(Builder('private_dossier').within(self.folder))
         browser.login().open(dossier, view='tabbedview_view-overview')
 
         self.assertEquals(
-            ['Dossier structure', 'Newest tasks', 'Linked Dossiers',
+            ['Dossier structure', 'Linked Dossiers',
              'Newest documents', 'Description'],
             browser.css('.box h2').text)
 

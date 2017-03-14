@@ -65,7 +65,8 @@ class DossierOverview(BoxesViewMixin, grok.View, GeverTabMixin):
 
     def make_task_box(self):
         return dict(id='newest_tasks', content=self.tasks(),
-                    href='tasks', label=_("Newest tasks"))
+                    href='tasks', label=_("Newest tasks"),
+                    available=self.context.has_task_support())
 
     def make_reference_box(self):
         return dict(
@@ -94,6 +95,9 @@ class DossierOverview(BoxesViewMixin, grok.View, GeverTabMixin):
             review_state=DOSSIER_STATES_OPEN)[:5]
 
     def tasks(self):
+        if not self.context.has_task_support():
+            return []
+
         return Task.query.by_container(self.context, get_current_admin_unit())\
                          .in_pending_state()\
                          .order_by(desc('modified')).limit(5).all()
