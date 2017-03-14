@@ -209,6 +209,7 @@ class DossierTemplateOverview(DossierOverview):
         # Column 3 contains a listing of all documents within the template.
         return [[self.make_description_box(),
                  self.make_keyword_box(),
+                 self.make_comment_box(),
                  self.make_filing_prefix_box()],
                 [self.make_document_box()]]
 
