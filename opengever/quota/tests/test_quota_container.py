@@ -12,6 +12,8 @@ from opengever.quota.interfaces import SOFT_LIMIT_EXCEEDED
 from opengever.quota.sizequota import ISizeQuota
 from opengever.testing import FunctionalTestCase
 from opengever.trash.trash import ITrashable
+from plone.app.testing import login
+from plone.app.testing import TEST_USER_NAME
 from plone.namedfile.file import NamedBlobFile
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
@@ -31,7 +33,8 @@ class TestSizeQuota(FunctionalTestCase):
         """
         self.grant('Manager')
 
-        user_folder = create_members_folder(create(Builder('private_root')))
+        user_root = create(Builder('private_root'))
+        user_folder = create_members_folder(user_root)
         user_dossier = create(Builder('dossier').within(user_folder))
         shared_dossier = create(Builder('dossier'))
         self.assertEqual(0, ISizeQuota(user_folder).get_usage(),
@@ -80,6 +83,26 @@ class TestSizeQuota(FunctionalTestCase):
         self.assertEqual(0, ISizeQuota(user_folder).get_usage())
         ISizeQuota(user_folder).recalculate()
         self.assertEqual(2, ISizeQuota(user_folder).get_usage())
+
+        # changes to foreign user folders should never affect our user folder
+        with self.assert_usage_change(user_folder, 0,
+                                      'create and fill foreign user folder'):
+            john_doe = create(Builder('user').named('John', 'Deo')
+                              .with_roles('Contributor', 'Editor', 'Reader'))
+            login(self.portal, john_doe.getId())
+            other_user_folder = create_members_folder(user_root)
+            other_user_dossier = create(Builder('dossier').within(
+                other_user_folder))
+            create(Builder('document')
+                   .attach_file_containing('XXX')
+                   .within(other_user_dossier))
+            login(self.portal, TEST_USER_NAME)
+
+        with self.assert_usage_change(user_folder, 0,
+                                      'recalculate without change'):
+            ISizeQuota(user_folder).get_usage_map(
+                for_writing=True)['purge-me'] = 999
+            ISizeQuota(user_folder).recalculate()
 
     def test_exceeded_limit(self):
         user_folder = create_members_folder(create(Builder('private_root')))

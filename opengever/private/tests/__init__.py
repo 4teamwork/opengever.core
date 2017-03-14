@@ -1,3 +1,4 @@
+from AccessControl import getSecurityManager
 from plone import api
 from plone.app.testing import TEST_USER_ID
 import transaction
@@ -11,4 +12,4 @@ def create_members_folder(private_root):
     mtool.createMemberArea()
     transaction.commit()
 
-    return private_root.get(TEST_USER_ID)
+    return private_root.get(getSecurityManager().getUser().getId())

@@ -99,7 +99,10 @@ class SizeQuota(object):
         catalog = api.portal.get_tool('portal_catalog')
         portal = api.portal.get()
 
+        self.get_usage_map(for_writing=True).clear()
+
         for brain in catalog.unrestrictedSearchResults({
+                'path': '/'.join(self.context.getPhysicalPath()),
                 'object_provides': IQuotaSubject.__identifier__}):
             obj = portal.unrestrictedTraverse(brain.getPath())
             self.update_object_usage(obj)
