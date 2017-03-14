@@ -27,9 +27,9 @@ def resolve_document_author(document, event):
 @grok.subscribe(IDocumentSchema, IObjectCreatedEvent)
 @grok.subscribe(IDocumentSchema, IObjectModifiedEvent)
 def set_digitally_available(doc, event):
-    """set the digitally_available field,
-    if a file exist the document is digital available"""
-
+    """Set the digitally_available field, if a file exist the document is
+    digitally available.
+    """
     if doc.file:
         doc.digitally_available = True
     else:
@@ -64,9 +64,7 @@ def sync_title_and_filename_handler(doc, event):
 
 @grok.subscribe(IBaseDocument, IObjectCopiedEvent)
 def set_copyname(doc, event):
-    """Documents wich are copied, should be renamed to copy of filename
-    """
-
+    """Documents wich are copied, should be renamed to copy of filename."""
     key = 'prevent-copyname-on-document-copy'
     request = getRequest()
 

@@ -1,12 +1,14 @@
 from five import grok
 from opengever.document import interfaces
 from zope.component.interfaces import ObjectEvent
+from zope.interface import implements
 
 
 class ObjectCheckedOutEvent(ObjectEvent):
-    """ The ObjectCheckedOutEvent is triggered when a object
+    """The ObjectCheckedOutEvent is triggered when a object
     was checked out.
     """
+
     grok.implements(interfaces.IObjectCheckedOutEvent)
 
     def __init__(self, obj, comment):
@@ -18,6 +20,7 @@ class ObjectBeforeCheckInEvent(ObjectEvent):
     """The ObjectBeforeCheckInEvent is triggered before a object gets
     checked in.
     """
+
     grok.implements(interfaces.IObjectBeforeCheckInEvent)
 
     def __init__(self, obj):
@@ -25,9 +28,10 @@ class ObjectBeforeCheckInEvent(ObjectEvent):
 
 
 class ObjectCheckedInEvent(ObjectEvent):
-    """ The ObjectCheckedInEvent is triggered when a object
+    """The ObjectCheckedInEvent is triggered when a object
     was checked in.
     """
+
     grok.implements(interfaces.IObjectCheckedInEvent)
 
     def __init__(self, obj, comment):
@@ -36,9 +40,10 @@ class ObjectCheckedInEvent(ObjectEvent):
 
 
 class ObjectCheckoutCanceledEvent(ObjectEvent):
-    """ The ObjectCheckoutCanceledEvent is triggered when the editing
-    of a checked out object is canceled and the working copy is destroyed
+    """The ObjectCheckoutCanceledEvent is triggered when the editing
+    of a checked out object is canceled and the working copy is destroyed.
     """
+
     grok.implements(interfaces.IObjectCheckoutCanceledEvent)
 
     def __init__(self, obj):
@@ -46,8 +51,8 @@ class ObjectCheckoutCanceledEvent(ObjectEvent):
 
 
 class ObjectRevertedToVersion(ObjectEvent):
-    """The document was reverted back to a specific version.
-    """
+    """The document was reverted back to a specific version."""
+
     grok.implements(interfaces.IObjectRevertedToVersion)
 
     def __init__(self, obj, version_id, create_version):
@@ -57,7 +62,12 @@ class ObjectRevertedToVersion(ObjectEvent):
 
 
 class FileCopyDownloadedEvent(ObjectEvent):
-    """The file of a document was downloaded
-    """
+    """The file of a document was downloaded."""
 
     grok.implements(interfaces.IFileCopyDownloadedEvent)
+
+
+class FileAttachedToEmailEvent(ObjectEvent):
+    """The file was attached to an email by OfficeConnector."""
+
+    implements(interfaces.IFileAttachedToEmailEvent)

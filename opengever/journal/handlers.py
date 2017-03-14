@@ -1,9 +1,11 @@
-from Acquisition import aq_inner, aq_parent
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from five import grok
 from ftw.journal.events.events import JournalEntryEvent
 from ftw.journal.interfaces import IJournalizable
 from ftw.mail.mail import IMail
-from OFS.interfaces import IObjectWillBeMovedEvent, IObjectWillBeAddedEvent
+from OFS.interfaces import IObjectWillBeAddedEvent
+from OFS.interfaces import IObjectWillBeMovedEvent
 from opengever.base.behaviors import classification
 from opengever.base.browser.paste import ICopyPasteRequestLayer
 from opengever.bumblebee.interfaces import IPDFDownloadedEvent
@@ -30,7 +32,8 @@ from opengever.sharing.interfaces import ILocalRolesAcquisitionBlocked
 from opengever.sharing.interfaces import ILocalRolesModified
 from opengever.tabbedview.helper import readable_ogds_author
 from opengever.task.task import ITask
-from opengever.trash.trash import ITrashedEvent, IUntrashedEvent
+from opengever.trash.trash import ITrashedEvent
+from opengever.trash.trash import IUntrashedEvent
 from persistent.dict import PersistentDict
 from plone.app.versioningbehavior.utils import get_change_note
 from plone.dexterity.interfaces import IDexterityContent
@@ -87,8 +90,8 @@ def journal_entry_factory(context, action, title,
 
 def role_mapping_to_str(context, mapping):
     """Parse the given local_roles mapping to a str,
-    with the help of the ROLE_MAPPING from opengever.sharing"""
-
+    with the help of the ROLE_MAPPING from opengever.sharing.
+    """
     skip_roles = [u'Owner', ]
 
     user_roles = []
@@ -769,5 +772,24 @@ def document_zipped(context, event):
               mapping={'title': context.title_or_id()})
 
     journal_entry_factory(context, DOCUMENT_EXPORTED, title)
+
+    return
+
+# ----------------------- OFFICECONNECTOR -----------------------
+
+
+DOCUMENT_ATTACHED = 'Document attached to email via OfficeConnector'
+
+
+def document_attached_to_email(context, event):
+    """Journal OfficeConnector email attach events from the plone.rest
+    OfficeConnector action payload service in the site root context.
+
+    The document in question is passed into the ObjectEvent.
+    """
+    title = _(u'label_document_attached',
+              default=u'Document attached to email via OfficeConnector')
+
+    journal_entry_factory(event.object, DOCUMENT_ATTACHED, title)
 
     return

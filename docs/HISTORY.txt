@@ -5,6 +5,9 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Add a journal event for attaching documents to emails via OfficeConnector.
+  [Rotonen]
+
 - Hide newest tasks box for private dossiers overview tabbedview view because
   it's not possible to add tasks in private dossiers.
   [elioschmutz]
