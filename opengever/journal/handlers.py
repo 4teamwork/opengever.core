@@ -1,9 +1,11 @@
-from Acquisition import aq_inner, aq_parent
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from five import grok
 from ftw.journal.events.events import JournalEntryEvent
 from ftw.journal.interfaces import IJournalizable
 from ftw.mail.mail import IMail
-from OFS.interfaces import IObjectWillBeMovedEvent, IObjectWillBeAddedEvent
+from OFS.interfaces import IObjectWillBeAddedEvent
+from OFS.interfaces import IObjectWillBeMovedEvent
 from opengever.base.behaviors import classification
 from opengever.base.browser.paste import ICopyPasteRequestLayer
 from opengever.bumblebee.interfaces import IPDFDownloadedEvent
@@ -30,7 +32,8 @@ from opengever.sharing.interfaces import ILocalRolesAcquisitionBlocked
 from opengever.sharing.interfaces import ILocalRolesModified
 from opengever.tabbedview.helper import readable_ogds_author
 from opengever.task.task import ITask
-from opengever.trash.trash import ITrashedEvent, IUntrashedEvent
+from opengever.trash.trash import ITrashedEvent
+from opengever.trash.trash import IUntrashedEvent
 from persistent.dict import PersistentDict
 from plone.app.versioningbehavior.utils import get_change_note
 from plone.dexterity.interfaces import IDexterityContent

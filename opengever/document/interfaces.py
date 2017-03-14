@@ -1,6 +1,7 @@
-from zope.interface import Interface
-from zope.component.interfaces import IObjectEvent
 from zope import schema
+from zope.component.interfaces import IObjectEvent
+from zope.interface import Interface
+
 
 # custom plone.formwidget.namedfile modes
 NO_DOWNLOAD_DISPLAY_MODE = 'no_download_display'
