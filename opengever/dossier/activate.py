@@ -33,12 +33,10 @@ class DossierActivateView(grok.View):
     def activate(self):
         # subdossiers
         for subdossier in self.context.get_subdossiers():
-            api.content.transition(obj=subdossier.getObject(),
-                                   transition='dossier-transition-activate')
+            subdossier.getObject().activate()
 
         # main dossier
-        api.content.transition(obj=self.context,
-                               transition='dossier-transition-activate')
+        self.context.activate()
 
         IStatusMessage(self.request).add(_("The Dossier has been activated"),
                                          type='info')
