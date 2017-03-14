@@ -5,6 +5,9 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Remove unused tasktemplate table draggable column.
+  [elioschmutz]
+
 - Add the mail-in address of the parent dossier of a document as a BCC field to
   OfficeConnector email attach action payloads when said dossier is open.
   [Rotonen]

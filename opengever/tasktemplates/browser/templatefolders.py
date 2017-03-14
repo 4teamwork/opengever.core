@@ -15,12 +15,6 @@ class TaskTemplateFoldersTab(BaseCatalogListingTab):
 
         {'column': '',
          'column_title': '',
-         'transform': helper.draggable,
-         'sortable': False,
-         'width': 30},
-
-        {'column': '',
-         'column_title': '',
          'transform': helper.path_checkbox,
          'sortable': False,
          'width': 30},
