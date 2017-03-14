@@ -5,7 +5,6 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from lxml.etree import tostring
 from opengever.contact.interfaces import IContactSettings
-from opengever.core.testing import OPENGEVER_FUNCTIONAL_DOSSIER_TEMPLATE_LAYER
 from opengever.core.testing import toggle_feature
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import FunctionalTestCase
