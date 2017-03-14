@@ -5,6 +5,12 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Fixed role guards for dossier's offer transition.
+  [phgross]
+
+- Make return transitions from offered state not available as transition actions.
+  [phgross]
+
 - Allow only archivists and managers to finalize the appraisal.
   [phgross]
 
