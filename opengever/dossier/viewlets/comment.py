@@ -2,6 +2,7 @@ from opengever.base import _ as ogbmf
 from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.utils import get_main_dossier
+from plone import api
 from plone.app.layout.viewlets import ViewletBase
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.i18n import translate
@@ -14,6 +15,10 @@ class BusinessCaseCommentViewlet(ViewletBase):
 
     def available(self):
         return self.context == get_main_dossier(self.context)
+
+    def has_edit_permission(self):
+        return api.user.has_permission(
+            'Modify portal content', obj=self.context)
 
     def translations(self):
         msg_confirm = _(u'note_text_confirm_abord', default=u'Confirm abbord')

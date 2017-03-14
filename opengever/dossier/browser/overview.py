@@ -16,6 +16,7 @@ from opengever.globalindex.model.task import Task
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.tabbedview import GeverTabMixin
+from plone import api
 from plone.app.contentlisting.interfaces import IContentListing
 from sqlalchemy import desc
 from zc.relation.interfaces import ICatalog
@@ -44,8 +45,12 @@ class DossierOverview(BoxesViewMixin, grok.View, GeverTabMixin):
             sort_order=sort_order)
 
     def boxes(self):
+        can_modify = api.user.has_permission('Modify portal content',
+                                             obj=self.context)
+        has_empty_marker = (not can_modify and not self.get_comments())
+
         return [[self.make_task_box(),
-                 self.make_comment_box(has_empty_marker=False),
+                 self.make_comment_box(has_empty_marker=has_empty_marker),
                  self.make_participation_box(),
                  self.make_reference_box()],
                 [self.make_document_box(),

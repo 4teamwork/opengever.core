@@ -48,6 +48,10 @@
             event.preventDefault();
             closeNote();
           });
+          overlay.getOverlay().on('click', 'button.close', function(event){
+            event.preventDefault();
+            closeNote();
+          });
 
           overlay.getOverlay().on('onBeforeClose', function(event){
             // Show message if there are unsaved changes

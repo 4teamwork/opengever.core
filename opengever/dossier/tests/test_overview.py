@@ -209,7 +209,7 @@ class TestOverview(FunctionalTestCase):
                          'Expect NO edit comment link on subdossier')
 
     @browsing
-    def test_dossier_hide_comments_editlink_without_modify_rights(
+    def test_dossier_show_comments_editlink_without_modify_rights(
             self, browser):
         self.dossier.manage_permission('Modify portal content',
                                        roles=[],
@@ -217,8 +217,7 @@ class TestOverview(FunctionalTestCase):
         transaction.commit()
         browser.login().visit(self.dossier)
         comment = browser.css('.editNoteLink')
-        self.assertFalse(comment,
-                         'Expect NO edit comment link on dossier')
+        self.assertEqual('Show Note', comment.first.text)
 
     @browsing
     def test_dossier_comments_editlink_data(self, browser):
