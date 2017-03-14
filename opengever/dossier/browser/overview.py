@@ -45,7 +45,7 @@ class DossierOverview(BoxesViewMixin, grok.View, GeverTabMixin):
 
     def boxes(self):
         return [[self.make_task_box(),
-                 self.make_comment_box(has_no_content_placeholder=False),
+                 self.make_comment_box(has_empty_marker=False),
                  self.make_participation_box(),
                  self.make_reference_box()],
                 [self.make_document_box(),
@@ -55,10 +55,10 @@ class DossierOverview(BoxesViewMixin, grok.View, GeverTabMixin):
         return truncate_ellipsis(
             IDossier(self.context).comments, self.comments_max_length)
 
-    def make_comment_box(self, has_no_content_placeholder=True):
+    def make_comment_box(self, has_empty_marker=True):
         return dict(id='comments', content=self.get_comments(),
                     label=_(u"label_comments", default="Comments"),
-                    has_no_content_placeholder=has_no_content_placeholder)
+                    has_empty_marker=has_empty_marker)
 
     def make_participation_box(self):
         if is_contact_feature_enabled():
