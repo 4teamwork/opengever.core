@@ -36,6 +36,10 @@ class IFileCopyDownloadedEvent(IObjectEvent):
     """Event interface for event.FileDownloadedEvent."""
 
 
+class IFileAttachedToEmailEvent(IObjectEvent):
+    """The file was attached to an email with OfficeConnector."""
+
+
 class IDocumentType(Interface):
     """An interface to distinguish between different document types."""
 

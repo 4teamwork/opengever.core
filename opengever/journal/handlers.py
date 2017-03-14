@@ -774,3 +774,22 @@ def document_zipped(context, event):
     journal_entry_factory(context, DOCUMENT_EXPORTED, title)
 
     return
+
+# ----------------------- OFFICECONNECTOR -----------------------
+
+
+DOCUMENT_ATTACHED = 'Document attached to email via OfficeConnector'
+
+
+def document_attached_to_email(context, event):
+    """Journal OfficeConnector email attach events from the plone.rest
+    OfficeConnector action payload service in the site root context.
+
+    The document in question is passed into the ObjectEvent.
+    """
+    title = _(u'label_document_attached',
+              default=u'Document attached to email via OfficeConnector')
+
+    journal_entry_factory(event.object, DOCUMENT_ATTACHED, title)
+
+    return

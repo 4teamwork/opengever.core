@@ -1,4 +1,5 @@
 from ftw.mail.interfaces import IEmailAddress
+from opengever.document.events import FileAttachedToEmailEvent
 from opengever.officeconnector.helpers import create_oc_url
 from opengever.officeconnector.helpers import is_officeconnector_attach_feature_enabled  # noqa
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
@@ -7,6 +8,7 @@ from plone.protect import createToken
 from plone.rest import Service
 from zExceptions import Forbidden
 from zExceptions import NotFound
+from zope.event import notify
 from zope.interface import implements
 from zope.publisher.interfaces import IPublishTraverse
 
@@ -118,6 +120,8 @@ class OfficeConnectorAttachPayload(OfficeConnectorPayload):
         if parent_dossier and parent_dossier.is_open():
             payload['bcc'] = IEmailAddress(
                 self.request).get_email_for_object(parent_dossier)
+
+        notify(FileAttachedToEmailEvent(self.document))
 
         return json.dumps(payload)
 

@@ -1,6 +1,7 @@
 from five import grok
 from opengever.document import interfaces
 from zope.component.interfaces import ObjectEvent
+from zope.interface import implements
 
 
 class ObjectCheckedOutEvent(ObjectEvent):
@@ -64,3 +65,9 @@ class FileCopyDownloadedEvent(ObjectEvent):
     """The file of a document was downloaded."""
 
     grok.implements(interfaces.IFileCopyDownloadedEvent)
+
+
+class FileAttachedToEmailEvent(ObjectEvent):
+    """The file was attached to an email by OfficeConnector."""
+
+    implements(interfaces.IFileAttachedToEmailEvent)

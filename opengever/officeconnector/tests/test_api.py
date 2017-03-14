@@ -206,7 +206,8 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
         self.assertEquals(token['action'], 'attach')
         self.assertEquals(TEST_USER_ID, token['sub'])
 
-    def test_attach_to_outlook_payload_with_file_and_open_dossier(self):
+    @browsing
+    def test_attach_to_outlook_payload_with_file_and_open_dossier(self, browser):  # noqa
         self.enable_attach_to_outlook()
         token = self.get_oc_url_jwt(self.doc_with_file_wf_open, 'attach')
 
@@ -221,7 +222,14 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
             self.request).get_email_for_object(self.open_dossier)
         self.assertEquals(bcc, payload['bcc'])
 
-    def test_attach_to_outlook_payload_with_file_and_resolved_dossier(self):
+        # Test there is also a journal entry from the attach action
+        browser.login()
+        browser.open(self.doc_with_file_wf_open, view='tabbedview_view-journal') # noqa
+        journal_entry = browser.css('.listing').first.lists()[1]
+        self.assertEquals(journal_entry[1], 'Dokument mit Mailprogramm versendet')  # noqa
+
+    @browsing
+    def test_attach_to_outlook_payload_with_file_and_resolved_dossier(self, browser):  # noqa
         self.enable_attach_to_outlook()
         token = self.get_oc_url_jwt(self.doc_with_file_wf_resolved, 'attach')
 
@@ -233,7 +241,14 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
 
         self.assertTrue('bcc' not in payload)
 
-    def test_attach_to_outlook_payload_with_file_and_inactive_dossier(self):
+        # Test there is also a journal entry from the attach action
+        browser.login()
+        browser.open(self.doc_with_file_wf_resolved, view='tabbedview_view-journal') # noqa
+        journal_entry = browser.css('.listing').first.lists()[1]
+        self.assertEquals(journal_entry[1], 'Dokument mit Mailprogramm versendet')  # noqa
+
+    @browsing
+    def test_attach_to_outlook_payload_with_file_and_inactive_dossier(self, browser):  # noqa
         self.enable_attach_to_outlook()
         token = self.get_oc_url_jwt(self.doc_with_file_wf_inactive, 'attach')
 
@@ -244,6 +259,12 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
         payload = response.json()
 
         self.assertTrue('bcc' not in payload)
+
+        # Test there is also a journal entry from the attach action
+        browser.login()
+        browser.open(self.doc_with_file_wf_inactive, view='tabbedview_view-journal') # noqa
+        journal_entry = browser.css('.listing').first.lists()[1]
+        self.assertEquals(journal_entry[1], 'Dokument mit Mailprogramm versendet')  # noqa
 
     def test_attach_to_outlook(self):
         self.enable_attach_to_outlook()

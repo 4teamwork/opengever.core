@@ -68,4 +68,10 @@
       handler=".handlers.dossier_zipped"
       />
 
+  <subscriber
+      for="opengever.document.behaviors.IBaseDocument
+           opengever.document.interfaces.IFileAttachedToEmailEvent"
+      handler=".handlers.document_attached_to_email"
+      />
+
 </configure>
