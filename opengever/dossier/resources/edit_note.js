@@ -78,7 +78,13 @@
       function manipulateDom() {
         // Move add/edit link to commentBox on overview tab
         if (noteBox.find('.editNoteLink').length === 0) {
-          editNoteLink.eq(0).clone().insertAfter(noteBox.find('h2'));  
+          // insert after text if we have a span
+          var elem = noteBox.find('span');
+          if (elem.length === 0) {
+            // insert after header if there is no text yet
+            elem = noteBox.find('h2');
+          }
+          editNoteLink.eq(0).clone().insertAfter(elem);
         }
 
         // Move add/edit link to title
@@ -115,6 +121,7 @@
 
       function saveNote() {
         makeRequest({comments: overlay.getOverlay().find('textarea').val()}).done(function(data){
+          var comment_container;
           editNoteWrapper.data('notecache', overlay.getOverlay().find('textarea').val());
           if (editNoteWrapper.data('notecache').length) {
             editNoteLink.find('.edit').removeClass('hide');
@@ -125,7 +132,12 @@
           }
           closeNote();
           successMessage();
-          $('#commentsBox > span').html(data.comment);
+
+          comment_container = $('#commentsBox > span');
+          if (comment_container.length === 0) {
+            comment_container = $('<span></span>').insertAfter($('#commentsBox > h2'));
+          }
+          comment_container.html(data.comment);
         }).fail(errorMessage);
       }
 
