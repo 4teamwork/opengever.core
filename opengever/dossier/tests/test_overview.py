@@ -265,3 +265,15 @@ class TestOverview(FunctionalTestCase):
         result = self.portal.portal_catalog(**query)
         self.assertEquals(1, len(result), 'Expect one result')
         self.assertEquals(self.dossier, result[0].getObject())
+
+    @browsing
+    def test_keywords_are_listed_on_overview(self, browser):
+        dossier = create(Builder('dossier')
+                         .titled(u'Testdossier')
+                         .having(description=u'Hie hesch e beschribig',
+                                 responsible='hugo.boss',
+                                 keywords=(u'secret', u'special')))
+
+        browser.login().visit(dossier, view='tabbedview_view-overview')
+        self.assertEquals(['secret, special'],
+                          browser.css('#keywordsBox span').text)
