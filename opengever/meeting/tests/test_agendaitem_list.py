@@ -133,10 +133,10 @@ class TestAgendaItemList(FunctionalTestCase):
                           .as_submitted())
 
         create(Builder('agenda_item')
+               .having(title=u'foo', number=u'2', meeting=meeting))
+        create(Builder('agenda_item')
                .having(meeting=meeting, proposal=proposal.load_model(),
                        discussion=u'I say Nay!', number=u'1'))
-        create(Builder('agenda_item')
-               .having(title=u'foo', number=u'2', meeting=meeting))
 
         browser.login().open(meeting.get_url(view='agenda_item_list/as_json'))
 

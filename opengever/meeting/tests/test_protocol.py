@@ -2,7 +2,6 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import error_messages
-from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from ftw.testbrowser.pages.z3cform import erroneous_fields
 from opengever.base.model import create_session
@@ -11,7 +10,6 @@ from opengever.locking.lock import SYS_LOCK
 from opengever.locking.model import Lock
 from opengever.meeting.browser.protocol import GenerateProtocol
 from opengever.meeting.command import MIME_DOCX
-from opengever.meeting.exceptions import ProtocolAlreadyGenerated
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import GeneratedProtocol
 from opengever.meeting.model import Meeting
@@ -419,9 +417,9 @@ class TestProtocol(FunctionalTestCase):
         numbers = browser.css('.protocol_title .number')
 
         self.assertEqual(map(lambda nav: nav.text, navigation),
-                         ['1. Mach doch', '2. Mach ize'])
+                         ['1. Mach ize', '2. Mach doch'])
         self.assertEqual(map(lambda heading: heading.text, headings),
-                         ['Mach doch', 'Mach ize'])
+                         ['Mach ize', 'Mach doch'])
 
         self.assertEqual(map(lambda number: number.text, numbers),
                          ['1.', '2.'])

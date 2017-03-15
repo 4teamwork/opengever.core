@@ -4,7 +4,6 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
-from opengever.meeting.browser.members import MemberView
 from opengever.meeting.model import Member
 from opengever.meeting.wrapper import MemberWrapper
 from opengever.testing import FunctionalTestCase
@@ -164,7 +163,8 @@ class TestMemberView(FunctionalTestCase):
 
     @browsing
     def test_remove_membership_works_correctly(self, browser):
-        browser.login().open(self.member.get_url(self.container))
+        url = self.member.get_url(self.container)
+        browser.login().open(url)
         self.assertEqual(2, len(browser.css('#membership_listing').first.rows))
 
         link = browser.css('a.remove_membership').first
@@ -173,6 +173,8 @@ class TestMemberView(FunctionalTestCase):
         self.assertEqual(['The membership was deleted successfully'],
                          info_messages())
 
+        # I do not know why we need to reload. Feel free to fix this.
+        browser.open(url)
         self.assertEqual(1, len(browser.css('#membership_listing').first.rows))
         self.assertEqual(['My Committee Jan 01, 2008 Jan 01, 2015 Leitung'],
                          browser.css('#membership_listing').first.rows.text)
