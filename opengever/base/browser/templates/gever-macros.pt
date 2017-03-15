@@ -31,6 +31,10 @@
             <h2 i18n:translate="" tal:content="box/label|box/id"></h2>
 
             <tal:box tal:condition="python: not hasattr(box.get('content'), '__iter__')">
+              <a class="moreLink"
+                 tal:condition="exists: box/href"
+                 tal:content="box/link"
+                 tal:attributes="href string:#${box/href}">more link</a>
               <tal:item  tal:condition="box/content">
                 <span tal:content="box/content" />
               </tal:item>

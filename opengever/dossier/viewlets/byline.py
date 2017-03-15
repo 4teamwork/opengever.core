@@ -15,6 +15,8 @@ import json
 class BusinessCaseByline(BylineBase):
     """ Specific DocumentByLine, for the Businesscasedossier Type"""
 
+    index = ViewPageTemplateFile('templates/byline.pt')
+
     def start(self):
         dossier = IDossier(self.context)
         return self.to_localized_time(dossier.start)
@@ -29,8 +31,7 @@ class BusinessCaseByline(BylineBase):
 
     note_template = ViewPageTemplateFile('templates/note.pt')
 
-    def note(self):
-        dossier = IDossier(self.context)
+    def translations(self):
         msg_confirm = _(u'note_text_confirm_abord', default=u'Confirm abbord')
         msg_title_info = ogbmf(u'message_title_info', default=u'Information')
         msg_title_error = ogbmf(u'message_title_error', default=u'Error')
@@ -38,16 +39,23 @@ class BusinessCaseByline(BylineBase):
         msg_body_error = _(u'message_body_error', default=u'Changes not saved')
         create_translations = lambda msg: translate(msg, context=self.request)
 
-        translations = json.dumps(
+        return json.dumps(
             {'note_text_confirm_abord': create_translations(msg_confirm),
              'message_title_info': create_translations(msg_title_info),
              'message_title_error': create_translations(msg_title_error),
              'message_body_info': create_translations(msg_body_info),
              'message_body_error': create_translations(msg_body_error)
              })
-        comments = '' if not dossier.comments else dossier.comments
-        return self.note_template(note=comments,
-                                  translations=translations)
+
+    def note(self):
+        dossier = IDossier(self.context)
+        return '' if not dossier.comments else dossier.comments
+
+    def can_edit(self):
+        can_edit = api.user.has_permission('Modify portal content',
+                                           obj=self.context)
+        is_main_dossier = self.context == get_main_dossier(self.context)
+        return is_main_dossier and can_edit
 
     def mailto_link(self):
         """Displays email-address if the IMailInAddressMarker behavior
@@ -105,16 +113,4 @@ class BusinessCaseByline(BylineBase):
             }
         ]
 
-        can_edit = api.user.has_permission('Modify portal content',
-                                           obj=self.context)
-        is_main_dossier = self.context == get_main_dossier(self.context)
-        if is_main_dossier and can_edit:
-            items += [
-                {
-                    'class': 'note',
-                    'label': _('label_dossier_note', default='Dossiernote'),
-                    'content': self.note(),
-                    'replace': True
-                }
-            ]
         return items
