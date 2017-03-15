@@ -1,7 +1,5 @@
 from collective.transmogrifier.transmogrifier import Transmogrifier
 from datetime import datetime
-from ftw.builder import Builder
-from ftw.builder import create
 from ftw.testing import freeze
 from opengever.base.security import elevated_privileges
 from opengever.bundle.sections.bundlesource import BUNDLE_PATH_KEY
@@ -16,8 +14,6 @@ FROZEN_NOW = datetime(2016, 12, 20, 9, 40)
 
 class TestBusinessRuleViolations(FunctionalTestCase):
 
-    use_default_fixture = False
-
     def test_oggbundle_transmogrifier(self):
         # this is a bit hackish, but since builders currently don't work in
         # layer setup/teardown and isolation of database content is ensured
@@ -27,8 +23,6 @@ class TestBusinessRuleViolations(FunctionalTestCase):
         # load pipeline
         # XXX move this to a layer
         self.grant("Manager")
-        user, org_unit, admin_unit = create(
-            Builder('fixture').with_all_unit_setup())
 
         transmogrifier = Transmogrifier(api.portal.get())
         IAnnotations(transmogrifier)[BUNDLE_PATH_KEY] = resource_filename(

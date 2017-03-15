@@ -1,8 +1,6 @@
 from collective.transmogrifier.transmogrifier import Transmogrifier
 from datetime import date
 from datetime import datetime
-from ftw.builder import Builder
-from ftw.builder import create
 from ftw.testing import freeze
 from opengever.base.behaviors.classification import IClassification
 from opengever.base.behaviors.lifecycle import ILifeCycle
@@ -23,8 +21,6 @@ FROZEN_NOW = datetime(2016, 12, 20, 9, 40)
 
 class TestOggBundlePipeline(FunctionalTestCase):
 
-    use_default_fixture = False
-
     def test_oggbundle_transmogrifier(self):
         # this is a bit hackish, but since builders currently don't work in
         # layer setup/teardown and isolation of database content is ensured
@@ -34,8 +30,6 @@ class TestOggBundlePipeline(FunctionalTestCase):
         # load pipeline
         # XXX move this to a layer
         self.grant("Manager")
-        user, org_unit, admin_unit = create(
-            Builder('fixture').with_all_unit_setup())
 
         transmogrifier = Transmogrifier(api.portal.get())
         annotations = IAnnotations(transmogrifier)
