@@ -21,9 +21,7 @@ from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
 from plone.app.testing import IntegrationTesting
 from plone.app.testing import PLONE_FIXTURE
-from plone.app.testing import PLONE_ZSERVER
 from plone.app.testing import PloneSandboxLayer
-from plone.app.testing import ploneSite
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.browserlayer.utils import unregister_layer
@@ -149,10 +147,6 @@ class OpengeverFixture(PloneSandboxLayer):
         setup_sql_tables()
 
     def testTearDown(self):
-        from opengever.testing.sql import reset_ogds_sync_stamp
-        with ploneSite() as portal:
-            reset_ogds_sync_stamp(portal)
-
         # Tear down the sql session because we use the keep_session flag.
         model.Session.close_all()
         truncate_sql_tables()
