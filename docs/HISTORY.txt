@@ -5,6 +5,9 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Disable grouping for checkbox columns in tables.
+  [elioschmutz]
+
 - Show Keywords on dossier overview tab. [mathias.leimgruber]
 
 - Hide columns "public trial", "receipt date" and "delivery date" from the
