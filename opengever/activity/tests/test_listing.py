@@ -6,6 +6,7 @@ from opengever.base.oguid import Oguid
 from opengever.testing import FunctionalTestCase
 from plone import api
 from plone.app.testing import TEST_USER_ID
+import transaction
 
 
 class TestMyNotifications(FunctionalTestCase):
@@ -55,6 +56,7 @@ class TestMyNotifications(FunctionalTestCase):
             {'de': u'Neue Aufgabe hinzugef\xfcgt durch Peter M\xfcller'},
             'peter.mueller',
             {'de': None}).get('activity')
+        transaction.commit()
 
     @browsing
     def test_lists_only_notifications_of_current_user(self, browser):
@@ -64,7 +66,8 @@ class TestMyNotifications(FunctionalTestCase):
         links = [link.get('href') for link in browser.css('.listing a')]
         self.assertEquals(
             ['http://example.com/@@resolve_notification?notification_id=1',
-             'http://example.com/@@resolve_notification?notification_id=2'],
+             'http://example.com/@@resolve_notification?notification_id=2',
+             'http://example.com/@@resolve_notification?notification_id=3'],
             links)
 
     @browsing
@@ -72,6 +75,7 @@ class TestMyNotifications(FunctionalTestCase):
         browser.login().open(self.portal,
                              view='tabbedview_view-mynotifications')
 
+        self.maxDiff = None
         self.assertEquals(
             [{'Actor': u'B\xf6ss Hugo (hugo.boss)',
               'Created': api.portal.get_localized_time(
@@ -82,6 +86,11 @@ class TestMyNotifications(FunctionalTestCase):
               'Created': api.portal.get_localized_time(
                   self.activity_2.created, long_format=True),
               'Kind': u'Aufgabe akzeptiert',
+              'Title': u'Kennzahlen 2014 \xfcbertragen'},
+             {'Actor': u'M\xfcller Peter (peter.mueller)',
+              'Created': api.portal.get_localized_time(
+                  self.activity_3.created, long_format=True),
+              'Kind': u'Aufgabe hinzugef\xfcgt',
               'Title': u'Kennzahlen 2014 \xfcbertragen'}],
             browser.css('.listing').first.dicts())
 
