@@ -11,10 +11,12 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
+from opengever.dossier.utils import truncate_ellipsis
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.tabbedview import GeverTabMixin
+from plone import api
 from plone.app.contentlisting.interfaces import IContentListing
 from sqlalchemy import desc
 from zc.relation.interfaces import ICatalog
@@ -26,6 +28,7 @@ from zope.security import checkPermission
 class DossierOverview(BoxesViewMixin, grok.View, GeverTabMixin):
 
     show_searchform = False
+    comments_max_length = 400
 
     grok.context(IDossierMarker)
     grok.name('tabbedview_view-overview')
@@ -42,11 +45,25 @@ class DossierOverview(BoxesViewMixin, grok.View, GeverTabMixin):
             sort_order=sort_order)
 
     def boxes(self):
+        can_modify = api.user.has_permission('Modify portal content',
+                                             obj=self.context)
+        has_empty_marker = (not can_modify and not self.get_comments())
+
         return [[self.make_task_box(),
+                 self.make_comment_box(has_empty_marker=has_empty_marker),
                  self.make_participation_box(),
                  self.make_reference_box()],
                 [self.make_document_box(),
                  self.make_description_box()]]
+
+    def get_comments(self):
+        return truncate_ellipsis(
+            IDossier(self.context).comments, self.comments_max_length)
+
+    def make_comment_box(self, has_empty_marker=True):
+        return dict(id='comments', content=self.get_comments(),
+                    label=_(u"label_comments", default="Comments"),
+                    has_empty_marker=has_empty_marker)
 
     def make_participation_box(self):
         if is_contact_feature_enabled():
@@ -209,10 +226,6 @@ class DossierTemplateOverview(DossierOverview):
         return dict(id='keywords', content=self.get_keywords(),
                     label=_(u"label_keywords", default="Keywords"))
 
-    def make_comment_box(self):
-        return dict(id='comments', content=self.get_comments(),
-                    label=_(u"label_comments", default="Comments"))
-
     def make_filing_prefix_box(self):
         return dict(id='filing_prefix', content=self.context.get_filing_prefix_label(),
                     label=_(u'filing_prefix', default="filing prefix"))
@@ -228,6 +241,3 @@ class DossierTemplateOverview(DossierOverview):
 
     def get_keywords(self):
         return ', '.join(IDossier(self.context).keywords)
-
-    def get_comments(self):
-        return IDossier(self.context).comments

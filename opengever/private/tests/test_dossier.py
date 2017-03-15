@@ -129,7 +129,7 @@ class TestPrivateDossierTabbedView(FunctionalTestCase):
         browser.login().open(dossier, view='tabbedview_view-overview')
 
         self.assertEquals(
-            ['Dossier structure', 'Linked Dossiers',
+            ['Dossier structure', 'Comments', 'Linked Dossiers',
              'Newest documents', 'Description'],
             browser.css('.box h2').text)
 
