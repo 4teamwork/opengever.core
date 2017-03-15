@@ -130,7 +130,7 @@ class TestPrivateDossierTabbedView(FunctionalTestCase):
 
         self.assertEquals(
             ['Dossier structure', 'Comments', 'Linked Dossiers',
-             'Newest documents', 'Description'],
+             'Newest documents', 'Description', 'Keywords'],
             browser.css('.box h2').text)
 
     def test_columns_are_hidden_in_documents_tab(self):

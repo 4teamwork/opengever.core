@@ -54,7 +54,8 @@ class DossierOverview(BoxesViewMixin, grok.View, GeverTabMixin):
                  self.make_participation_box(),
                  self.make_reference_box()],
                 [self.make_document_box(),
-                 self.make_description_box()]]
+                 self.make_description_box(),
+                 self.make_keyword_box()]]
 
     def get_comments(self):
         return truncate_ellipsis(
@@ -204,6 +205,13 @@ class DossierOverview(BoxesViewMixin, grok.View, GeverTabMixin):
              'from_attribute': 'relatedDossier'})
         return [relation.from_id for relation in relations]
 
+    def get_keywords(self):
+        return ', '.join(IDossier(self.context).keywords)
+
+    def make_keyword_box(self):
+        return dict(id='keywords', content=self.get_keywords(),
+                    label=_(u"label_keywords", default="Keywords"))
+
 
 class DossierTemplateOverview(DossierOverview):
     grok.context(IDossierTemplateMarker)
@@ -222,10 +230,6 @@ class DossierTemplateOverview(DossierOverview):
         return dict(id='documents', content=self.documents(), href='documents',
                     label=_(u"label_documents", default="Documents"))
 
-    def make_keyword_box(self):
-        return dict(id='keywords', content=self.get_keywords(),
-                    label=_(u"label_keywords", default="Keywords"))
-
     def make_filing_prefix_box(self):
         return dict(id='filing_prefix', content=self.context.get_filing_prefix_label(),
                     label=_(u'filing_prefix', default="filing prefix"))
@@ -238,6 +242,3 @@ class DossierTemplateOverview(DossierOverview):
         return IContentListing(self.catalog(
             ['opengever.document.document', 'ftw.mail.mail', ],
             sort_on='sortable_title', sort_order='asc')[:10])
-
-    def get_keywords(self):
-        return ', '.join(IDossier(self.context).keywords)

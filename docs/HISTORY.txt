@@ -5,6 +5,8 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Show Keywords on dossier overview tab. [mathias.leimgruber]
+
 - Hide columns "public trial", "receipt date" and "delivery date" from the
   documents tab in private dossiers. [jone]
 
