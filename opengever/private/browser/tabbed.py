@@ -1,8 +1,10 @@
 from five import grok
 from opengever.dossier.browser.tabbed import DossierTabbedView
 from opengever.private import _
+from opengever.private.dossier import IPrivateDossier
 from opengever.private.folder import IPrivateFolder
 from opengever.tabbedview import GeverTabbedView
+from opengever.tabbedview.browser.tabs import Documents
 from opengever.tabbedview.browser.tabs import Dossiers
 
 
@@ -34,3 +36,16 @@ class PrivateDossierTabbedView(DossierTabbedView):
                 self.documents_tab,
                 self.trash_tab,
                 self.journal_tab]
+
+
+class PrivateDossierDocuments(Documents):
+    grok.context(IPrivateDossier)
+
+    @property
+    def columns(self):
+        columns = super(PrivateDossierDocuments, self).columns
+        cols_by_name = {col['column']: col for col in columns}
+        cols_by_name['public_trial']['hidden'] = True
+        cols_by_name['receipt_date']['hidden'] = True
+        cols_by_name['delivery_date']['hidden'] = True
+        return columns

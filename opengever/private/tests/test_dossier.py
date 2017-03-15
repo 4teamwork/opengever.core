@@ -133,6 +133,18 @@ class TestPrivateDossierTabbedView(FunctionalTestCase):
              'Newest documents', 'Description'],
             browser.css('.box h2').text)
 
+    def test_columns_are_hidden_in_documents_tab(self):
+        """Some columns do not make a lot of sense in a private dossier.
+        We hide them in the default configuration.
+        """
+
+        dossier = create(Builder('private_dossier').within(self.folder))
+        view = dossier.unrestrictedTraverse('tabbedview_view-documents')
+        columns_by_name = {col['column']: col for col in view.columns}
+        self.assertTrue(columns_by_name['public_trial'].get('hidden', None))
+        self.assertTrue(columns_by_name['receipt_date'].get('hidden', None))
+        self.assertTrue(columns_by_name['delivery_date'].get('hidden', None))
+
 
 class TestPrivateDossierWorkflow(FunctionalTestCase):
 

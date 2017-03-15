@@ -5,6 +5,9 @@ Changelog
 4.15.2 (unreleased)
 -------------------
 
+- Hide columns "public trial", "receipt date" and "delivery date" from the
+  documents tab in private dossiers. [jone]
+
 - Add a journal event for attaching documents to emails via OfficeConnector.
   [Rotonen]
 
