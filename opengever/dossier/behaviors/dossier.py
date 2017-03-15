@@ -45,6 +45,7 @@ class IDossier(form.Schema):
 
     form.fieldset(
         u'common',
+        label=_(u'fieldset_common', u'Common'),
         fields=[
             u'keywords',
             u'start',

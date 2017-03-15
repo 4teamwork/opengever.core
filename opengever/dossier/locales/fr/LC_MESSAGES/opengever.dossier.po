@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-03-16 10:01+0000\n"
+"POT-Creation-Date: 2017-03-16 13:09+0000\n"
 "PO-Revision-Date: 2016-09-20 21:24+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/fr/>\n"
@@ -27,7 +27,7 @@ msgstr "Insérer un dossier d'affaire"
 msgid "Add Participant"
 msgstr "Participant"
 
-#: ./opengever/dossier/behaviors/dossier.py:234
+#: ./opengever/dossier/behaviors/dossier.py:235
 #: ./opengever/dossier/dossiertemplate/dossiertemplate.py:48
 msgid "Add Subdossier"
 msgstr "Insérer un sous-dossier"
@@ -73,7 +73,7 @@ msgstr ""
 msgid "Dossiers successfully reactivated."
 msgstr "Le dossier a été à nouveau ouvert avec succès"
 
-#: ./opengever/dossier/behaviors/dossier.py:256
+#: ./opengever/dossier/behaviors/dossier.py:257
 #: ./opengever/dossier/dossiertemplate/dossiertemplate.py:66
 msgid "Edit Subdossier"
 msgstr "Modifier le sous-dossier"
@@ -216,11 +216,11 @@ msgstr "L'année de dépôt attribuée n'est pas valable"
 msgid "The selected objects can't be found, please try it again."
 msgstr "Impossible de trouver les objets sélectionnés, merci de réessayer."
 
-#: ./opengever/dossier/behaviors/dossier.py:197
+#: ./opengever/dossier/behaviors/dossier.py:198
 msgid "The start date must be before the end date."
 msgstr "La date de début doit être plus récente que la date de clôture."
 
-#: ./opengever/dossier/behaviors/dossier.py:263
+#: ./opengever/dossier/behaviors/dossier.py:264
 msgid "The start or end date is invalid"
 msgstr "La date de début ou la date de clôture n'est pas valable."
 
@@ -323,8 +323,13 @@ msgstr "Date de clôture obligatoire"
 msgid "error_no_items"
 msgstr "Vous n'avez sélectionné aucun objet."
 
+#. Default: "Common"
+#: ./opengever/dossier/behaviors/dossier.py:48
+msgid "fieldset_common"
+msgstr "En général"
+
 #. Default: "Filing"
-#: ./opengever/dossier/behaviors/dossier.py:99
+#: ./opengever/dossier/behaviors/dossier.py:100
 #: ./opengever/dossier/behaviors/filing.py:17
 msgid "fieldset_filing"
 msgstr "Classeur"
@@ -362,7 +367,7 @@ msgstr "Numéro d'inventaire"
 
 #. Default: "filing prefix"
 #: ./opengever/dossier/archive.py:179
-#: ./opengever/dossier/behaviors/dossier.py:111
+#: ./opengever/dossier/behaviors/dossier.py:112
 #: ./opengever/dossier/browser/overview.py:235
 msgid "filing_prefix"
 msgstr "Préfixe du lieu de dépôt"
@@ -391,11 +396,11 @@ msgstr "Déplacer des éléments"
 msgid "help_contact"
 msgstr "Choix d'un utilisateur ou un contact."
 
-#: ./opengever/dossier/behaviors/dossier.py:147
+#: ./opengever/dossier/behaviors/dossier.py:148
 msgid "help_container_location"
 msgstr "Emplacement du dossier imprimé"
 
-#: ./opengever/dossier/behaviors/dossier.py:130
+#: ./opengever/dossier/behaviors/dossier.py:131
 msgid "help_container_type"
 msgstr "Type de conteneur du dossier imprimé"
 
@@ -408,11 +413,11 @@ msgstr "Recherche en direct: Recherche de ce client"
 msgid "help_filing_number"
 msgstr "Saisir le numéro d'inventaire complet"
 
-#: ./opengever/dossier/behaviors/dossier.py:61
+#: ./opengever/dossier/behaviors/dossier.py:62
 msgid "help_keywords"
 msgstr "Mots-clés pour la description du dossier. Ne pas confondre avec le numéro de la position"
 
-#: ./opengever/dossier/behaviors/dossier.py:141
+#: ./opengever/dossier/behaviors/dossier.py:142
 msgid "help_number_of_containers"
 msgstr "Nombre de conteneurs contenant des dossiers imprimés (volumineux)"
 
@@ -477,7 +482,7 @@ msgid "label_close"
 msgstr ""
 
 #. Default: "Comments"
-#: ./opengever/dossier/behaviors/dossier.py:86
+#: ./opengever/dossier/behaviors/dossier.py:87
 #: ./opengever/dossier/browser/overview.py:66
 msgid "label_comments"
 msgstr "Commentaire"
@@ -488,12 +493,12 @@ msgid "label_contact"
 msgstr "Personne"
 
 #. Default: "Container Location"
-#: ./opengever/dossier/behaviors/dossier.py:146
+#: ./opengever/dossier/behaviors/dossier.py:147
 msgid "label_container_location"
 msgstr "Emplacement du conteneur"
 
 #. Default: "Container Type"
-#: ./opengever/dossier/behaviors/dossier.py:129
+#: ./opengever/dossier/behaviors/dossier.py:130
 msgid "label_container_type"
 msgstr "Type de conteneur"
 
@@ -547,7 +552,7 @@ msgstr "Email"
 
 #. Default: "Closing Date"
 #: ./opengever/dossier/archive.py:189
-#: ./opengever/dossier/behaviors/dossier.py:81
+#: ./opengever/dossier/behaviors/dossier.py:82
 #: ./opengever/dossier/browser/report.py:32
 msgid "label_end"
 msgstr "Date de fin :"
@@ -569,7 +574,7 @@ msgid "label_filing_number"
 msgstr "Numéro d'inventaire"
 
 #. Default: "Reference Number"
-#: ./opengever/dossier/behaviors/dossier.py:174
+#: ./opengever/dossier/behaviors/dossier.py:175
 msgid "label_former_reference_number"
 msgstr "Ancienne numéro référence"
 
@@ -584,7 +589,7 @@ msgid "label_journal"
 msgstr "Historique"
 
 #. Default: "Keywords"
-#: ./opengever/dossier/behaviors/dossier.py:60
+#: ./opengever/dossier/behaviors/dossier.py:61
 #: ./opengever/dossier/browser/overview.py:213
 msgid "label_keywords"
 msgstr "Mots-clés"
@@ -616,7 +621,7 @@ msgid "label_no_reference_number"
 msgstr "Le numéro de classement est généré lors de la création du document."
 
 #. Default: "Number of Containers"
-#: ./opengever/dossier/behaviors/dossier.py:139
+#: ./opengever/dossier/behaviors/dossier.py:140
 msgid "label_number_of_containers"
 msgstr "Nombre de conteneurs"
 
@@ -661,19 +666,19 @@ msgid "label_recipient"
 msgstr ""
 
 #. Default: "Reference Number"
-#: ./opengever/dossier/behaviors/dossier.py:181
+#: ./opengever/dossier/behaviors/dossier.py:182
 #: ./opengever/dossier/browser/report.py:41
 #: ./opengever/dossier/viewlets/byline.py:67
 msgid "label_reference_number"
 msgstr "Numéro de référence"
 
 #. Default: "Related Dossier"
-#: ./opengever/dossier/behaviors/dossier.py:152
+#: ./opengever/dossier/behaviors/dossier.py:153
 msgid "label_related_dossier"
 msgstr "Dossiers liés"
 
 #. Default: "Responsible"
-#: ./opengever/dossier/behaviors/dossier.py:92
+#: ./opengever/dossier/behaviors/dossier.py:93
 #: ./opengever/dossier/browser/participants.py:169
 #: ./opengever/dossier/browser/report.py:35
 msgid "label_responsible"
@@ -715,7 +720,7 @@ msgid "label_show_note"
 msgstr ""
 
 #. Default: "Opening Date"
-#: ./opengever/dossier/behaviors/dossier.py:73
+#: ./opengever/dossier/behaviors/dossier.py:74
 #: ./opengever/dossier/browser/report.py:29
 msgid "label_start"
 msgstr "Date début"
@@ -837,7 +842,7 @@ msgid "tasks"
 msgstr "Tâches"
 
 #. Default: "Temporary former reference number"
-#: ./opengever/dossier/behaviors/dossier.py:123
+#: ./opengever/dossier/behaviors/dossier.py:124
 msgid "temporary_former_reference_number"
 msgstr "Ancien numéro de référence temporaire"
 
