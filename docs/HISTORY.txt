@@ -11,331 +11,156 @@ Changelog
 2017.1.0 (2017-03-24)
 ---------------------
 
-- Fix tooltip overlay links and simplify OfficeConnector JS.
-  [Rotonen]
-
-- Make sure qtip tooltips are destroyed on hide.
-  [Rotonen]
-
+- Fix tooltip overlay links and simplify OfficeConnector JS. [Rotonen]
+- Make sure qtip tooltips are destroyed on hide. [Rotonen]
 - Make sure checkout link on document tooltip is only displayed for editable
-  documents (e.g., not on documents in resolved dossiers).
-  [lgraf]
-
-- Disposition overview: Differs beetween singular/plural on the dossier(s) label.
-  [phgross]
-
-- Limit creating initial versions to documents.
-  [deiferni]
-
+  documents (e.g., not on documents in resolved dossiers). [lgraf]
+- Disposition overview: Differs beetween singular/plural on
+  the dossier(s) label. [phgross]
+- Limit creating initial versions to documents. [deiferni]
 - Protect dispose transition with a guard, that checks if any of the dossier
-  has to be archived.
-  [phgross]
-
+  has to be archived. [phgross]
 - Add new transition to directly close a disposition, without any dossiers to
-  archive, after appraisal.
-  [phgross]
-
-- Prefill responsible user for templatefolders.
-  [elioschmutz]
-
+  archive, after appraisal. [phgross]
+- Prefill responsible user for templatefolders. [elioschmutz]
 - Task listing PDF: Use AdminUnit abbreviation instead of title in order to
-  avoid nasty overflows caused by long admin unit titles.
-  [lgraf]
-
-- Get rid of unnecessary column label in extract attachments view.
-  [lgraf]
-
-- Allow private dossiers to be resolved.
-  [lgraf]
-
-- Escape dossiertemplate title_help field on display.
-  [elioschmutz]
-
+  avoid nasty overflows caused by long admin unit titles. [lgraf]
+- Get rid of unnecessary column label in extract attachments view. [lgraf]
+- Allow private dossiers to be resolved. [lgraf]
+- Escape dossiertemplate title_help field on display. [elioschmutz]
 - Fix the common-fieldset translation in the add/edit-form if using the
-  ITranslatedTitle behavior in combination with a dossier-type (i.e. the templatefolder).
-  [elioschmutz]
-
-- Fixed contenttype encoding for archival files.
-  [phgross]
-
-- Add missing field description for predefined_keywords and restrcit_keywords.
-  [elioschmutz]
-
-- Disable grouping for checkbox columns in tables.
-  [elioschmutz]
-
+  ITranslatedTitle behavior in combination with a
+  dossier-type (i.e. the templatefolder). [elioschmutz]
+- Fixed contenttype encoding for archival files. [phgross]
+- Add missing field description for predefined_keywords
+  and restrcit_keywords. [elioschmutz]
+- Disable grouping for checkbox columns in tables. [elioschmutz]
 - Show Keywords on dossier overview tab. [mathias.leimgruber]
-
 - Hide columns "public trial", "receipt date" and "delivery date" from the
   documents tab in private dossiers. [jone]
-
-- Add a journal event for attaching documents to emails via OfficeConnector.
-  [Rotonen]
-
+- Add a journal event for attaching documents to emails via OfficeConnector. [Rotonen]
 - Hide newest tasks box for private dossiers overview tabbedview view because
-  it's not possible to add tasks in private dossiers.
-  [elioschmutz]
-
-- Fixed role guards for dossier's offer transition.
-  [phgross]
-
-- Make return transitions from offered state not available as transition actions.
-  [phgross]
-
-- Allow only archivists and managers to finalize the appraisal.
-  [phgross]
-
-- Disallow readers to see dispositions.
-  [phgross]
-
-- Remove unused tasktemplate table draggable column.
-  [elioschmutz]
-
+  it's not possible to add tasks in private dossiers. [elioschmutz]
+- Fixed role guards for dossier's offer transition. [phgross]
+- Make return transitions from offered state not available
+  as transition actions. [phgross]
+- Allow only archivists and managers to finalize the appraisal. [phgross]
+- Disallow readers to see dispositions. [phgross]
+- Remove unused tasktemplate table draggable column. [elioschmutz]
 - Add the mail-in address of the parent dossier of a document as a BCC field to
-  OfficeConnector email attach action payloads when said dossier is open.
-  [Rotonen]
-
-- Reset end date when reactivating a resolved or activating an inactive dossier.
-  [phgross]
-
+  OfficeConnector email attach action payloads when said dossier is open. [Rotonen]
+- Reset end date when reactivating a resolved or activating
+  an inactive dossier. [phgross]
 - Implement quota for private folder. [jone]
-
 - Add restriction possibility for dossier templates on a
-  specific repositoryfolder.
-  [phgross]
-
-- The document redirector now handles newstyle OC URLs.
-  [Rotonen]
-
-- Set preserved as paper to false for generated journal pdfs.
-  [phgross]
-
-- Disposition overview:
-
-  - Fix tooltips for appraisal buttons.
-  - Hide subtitles (active or inactive dossiers) when list is empty.
-
-  [phgross]
-
-- Fix missing table-column width for checkbox column.
-  [elioschmutz]
-
+  specific repositoryfolder. [phgross]
+- The document redirector now handles newstyle OC URLs. [Rotonen]
+- Set preserved as paper to false for generated journal pdfs. [phgross]
+- Disposition overview: Fix tooltips for appraisal buttons. [phgross]
+- Disposition overview: Hide subtitles (active or inactive dossiers)
+  when list is empty. [phgross]
+- Fix missing table-column width for checkbox column. [elioschmutz]
 - OGGBundle: Add support to map local role principal names during
-  import based on ingestion settings.
-  [lgraf]
-
-- Display archival value in the repositoryfolder byline.
-  [phgross]
-
-- LDAP util: Skip referrals that are supposed to be hunted by client-chasing.
-  [lgraf]
-
+  import based on ingestion settings. [lgraf]
+- Display archival value in the repositoryfolder byline. [phgross]
+- LDAP util: Skip referrals that are supposed to be hunted by client-chasing. [lgraf]
 - Extend searchable text with dossier keywords. [deiferni]
-
 - OfficeConnector now gets given the latest working copy of a file instead of
-  the latest checked in copy of a file.
-  [Rotonen]
-
-- Update ftw.keywordwidget from 1.1.1 to 1.1.2 to fix an ie11 issue.
-  [elioschmutz]
-
+  the latest checked in copy of a file. [Rotonen]
+- Update ftw.keywordwidget from 1.1.1 to 1.1.2 to fix an ie11 issue. [elioschmutz]
 - Add scaffolding to OC checkout payloads in anticipation of plone.api direct
-  file uploads.
-  [Rotonen]
-
-- Improve disposal of inactive dossiers:
+  file uploads. [Rotonen]
+- Improve disposal of inactive dossiers: [phgross]
 
   - Set end date to current date when deactivating a dossier.
   - Display inactive dossiers in a separate listing on the disposition overview.
   - Preappraisal: Handle inactive dossier always as not archival worthy.
 
-  [phgross]
-
-- Protect dossier destruction with a separate permission 'Destroy Dossier'.
-  [phgross]
-
+- Protect dossier destruction with a separate permission 'Destroy Dossier'. [phgross]
 - OGGBundle: Don't reindex during pipeline.
   Have reindexing only happen once per object instead at the end of the
-  pipeline.
-  [lgraf]
-
-- Fix updating the proposal attachement-list after submitting a new document.
-  [elioschmutz]
-
+  pipeline. [lgraf]
+- Fix updating the proposal attachement-list after submitting
+  a new document. [elioschmutz]
 - OGGBundle import: Validate max nesting depth for repositoryfolders
   and dossiers. Failure to validate will be logged in validation report,
-  but otherwise doesn't affect import.
-  [lgraf]
-
-- Fix an error when creating a SIP export of documents without a file.
-  [phgross]
-
-- Remove an unnecessary JSON parse step from OfficeConnector JS.
-  [Rotonen]
-
+  but otherwise doesn't affect import. [lgraf]
+- Fix an error when creating a SIP export of documents without a file. [phgross]
+- Remove an unnecessary JSON parse step from OfficeConnector JS. [Rotonen]
 - OGGBundle reports: Include summary sheet containing import duration,
-  time of import and bundle name.
-  [lgraf]
-
-- Add 'mock OfficeConnector' tests for attach and direct checkin APIs
-  [Rotonen]
-
-- A new API endpoint for OfficeConnector direct checkin payloads
-  [Rotonen]
-
-- Issue newstyle OfficeConnector URLs for direct checkins
-  [Rotonen]
-
-- A new API endpoint for OfficeConnector attach payloads
-  [Rotonen]
-
-- Issue newstyle OfficeConnector URLs for attaching to email
-  [Rotonen]
-
-- Fix OfficeConnector URLs for IE11
-  [Rotonen]
-
+  time of import and bundle name. [lgraf]
+- Add 'mock OfficeConnector' tests for attach and direct checkin APIs [Rotonen]
+- A new API endpoint for OfficeConnector direct checkin payloads [Rotonen]
+- Issue newstyle OfficeConnector URLs for direct checkins [Rotonen]
+- A new API endpoint for OfficeConnector attach payloads [Rotonen]
+- Issue newstyle OfficeConnector URLs for attaching to email [Rotonen]
+- Fix OfficeConnector URLs for IE11 [Rotonen]
 - Implement several display improvements for the Dossier note overlay
-  according to the feedback of @phabegger. Check #2624 for details.
-  [mathias.leimgruber]
-
-- Compare strings in the dossier-comments-overlay newline encoding insensitive.
-  [elioschmutz]
-
-- Improve removal protocol title.
-  [phgross]
-
-- Hide 'Date of completion'-field on tasks add-form.
-  [elioschmutz]
-
-- Introduce new feature: SPV Zip-Export.
-  [mathias.leimgruber]
-
-- Disallow closing dispositions for archivists.
-  [phgross]
-
-- Make dossiers collabsible and hide them by default on the disposition overview.
-  [phgross]
-
-- List repositories alphabetically on the disposition overview.
-  [phgross]
-
-- Display archival value of repositories on the disposition overview.
-  [phgross]
-
-- Fix an error if the user tries to unlock a referencenumber in the referenceprefix manager
-  which is still in use. The user will see an error status-message instead the
-  full error-traceback.
-  [elioschmutz]
-
-- Allow add root content only for managers.
-  [elioschmutz]
-
+  according to the feedback of @phabegger. Check #2624 for details. [mathias.leimgruber]
+- Compare strings in the dossier-comments-overlay newline
+  encoding insensitive. [elioschmutz]
+- Improve removal protocol title. [phgross]
+- Hide 'Date of completion'-field on tasks add-form. [elioschmutz]
+- Introduce new feature: SPV Zip-Export. [mathias.leimgruber]
+- Disallow closing dispositions for archivists. [phgross]
+- Make dossiers collabsible and hide them by default on the
+  disposition overview. [phgross]
+- List repositories alphabetically on the disposition overview. [phgross]
+- Display archival value of repositories on the disposition overview. [phgross]
+- Fix an error if the user tries to unlock a referencenumber in the
+  referenceprefix manager which is still in use.
+  The user will see an error status-message instead
+  the full error-traceback. [elioschmutz]
+- Allow add root content only for managers. [elioschmutz]
 - Fix newstyle OfficeConnector URL support for file tooltips and Bumblebee
-  overlays.
-  [Rotonen]
-
+  overlays. [Rotonen]
 - Rename portal-type opengever.dossier.templatedossier to
-  opengever.dossier.templatefolder.
-  [elioschmutz]
-
-- Reindex SearchableText after changing the comment thru the overlay.
-  [mathias.leimgruber]
-
-- Adjust german translation for dossier template.
-  [elioschmutz]
-
-- Rename dossiertemplate wizard button from "save" to "continue".
-  [elioschmutz]
-
-- OGGBundle reports: Implement XLSX validation report.
-  [lgraf]
-
-- OGGBundle reports: Also store raw JSON data for errors and stats.
-  [lgraf]
-
-- FileLoader: Add support for loading files from UNC paths.
-  [lgraf]
-
+  opengever.dossier.templatefolder. [elioschmutz]
+- Reindex SearchableText after changing the comment
+  thru the overlay. [mathias.leimgruber]
+- Adjust german translation for dossier template. [elioschmutz]
+- Rename dossiertemplate wizard button from "save" to "continue". [elioschmutz]
+- OGGBundle reports: Implement XLSX validation report. [lgraf]
+- OGGBundle reports: Also store raw JSON data for errors and stats. [lgraf]
+- FileLoader: Add support for loading files from UNC paths. [lgraf]
 - Rename translation for "Dossier with template" and reorder it in
-  the factories-menu.
-  [elioschmutz]
-
-- Introduce new feature: Restrict Keywords for DossierTemplates.
-  [mathias.leimgruber]
-
-- Introduce new feature: Predefined Keywords for DossierTemplates.
-  [mathias.leimgruber]
-
+  the factories-menu. [elioschmutz]
+- Introduce new feature: Restrict Keywords for DossierTemplates. [mathias.leimgruber]
+- Introduce new feature: Predefined Keywords for DossierTemplates. [mathias.leimgruber]
 - Introduce new feature: Use ftw.keywordwidget for Dossier and
-  DossierTemplate Keywords.
-  [mathias.leimgruber]
-
+  DossierTemplate Keywords. [mathias.leimgruber]
 - OGGBundle pipeline: Implement basic reports for imported objects. After
   a bundle import, a quick ASCII summary and a much more detailed XLSX
-  report will be generated.
-  [lgraf]
-
+  report will be generated. [lgraf]
 - Fix send_documents view on the inbox.
   Allows the functionality to save sent files in the dossier
-  only for IDossierMarker-types.
-  [elioschmutz]
-
+  only for IDossierMarker-types. [elioschmutz]
 - Use a request layer instead of monkey patch to disable automatic creation
-  of initial versions.
-  [lgraf]
-
+  of initial versions. [lgraf]
 - Do intermediate commits during creation of initial versions. This addresses
   a performance issue where the time to write initial versions increases
   exponentially with the number of previous initial versions created in the
-  same transaction.
-  [lgraf]
-
+  same transaction. [lgraf]
 - Defer creation of initial versions to end of pipeline by creating a
-  dedicated section for post-processing steps.
-  [lgraf]
-
+  dedicated section for post-processing steps. [lgraf]
 - OGGBundle pipeline: Fix suppression of automatically created initial
   versions by moving the disabled-initial-version section after the
-  resolveguid one.
-  [lgraf]
-
-- Add a title_help field for dossiertemplates.
-  [elioschmutz]
-
+  resolveguid one. [lgraf]
+- Add a title_help field for dossiertemplates. [elioschmutz]
 - Fix label translation and improve readability of the values in appraisal
-  column in the excel export of a disposition.
-  [phgross]
-
+  column in the excel export of a disposition. [phgross]
 - OGGBundle test assets: Add some tests and assets to test/demonstrate
-  behavior in case of business rule violations.
-  [lgraf]
-
+  behavior in case of business rule violations. [lgraf]
 - OGGBundle schemas: Restrict allowed workflow states even further.
   We don't currently support migration to most of non-active states, so
-  let's not advertise them.
-  [lgraf]
-
-- Add tests for Sphinx docs builds.
-  [lgraf]
-
-- Fix error on agendaItemController update.
-  [Kevin Bieri]
-
-- OGGBundle schemas: Include enums for valid review_states.
-  [lgraf]
-
-- OGGBundle import: Implement setting workflow state for imported objects.
-  [lgraf]
-
-- Add review state column and state filter to disposition listings.
-  [phgross]
-
-- Fix holey bumblebee fallback svg icon.
-  [Kevin Bieri]
-
-- Fix rendering of new agenda points in IE11.
-  [Kevin Bieri]
+  let's not advertise them. [lgraf]
+- Add tests for Sphinx docs builds. [lgraf]
+- Fix error on agendaItemController update. [Kevin Bieri]
+- OGGBundle schemas: Include enums for valid review_states. [lgraf]
+- OGGBundle import: Implement setting workflow state for imported objects. [lgraf]
+- Add review state column and state filter to disposition listings. [phgross]
+- Fix holey bumblebee fallback svg icon. [Kevin Bieri]
+- Fix rendering of new agenda points in IE11. [Kevin Bieri]
 
 
 4.15.4 (2017-03-20)
