@@ -236,7 +236,7 @@ OPENGEVER_FIXTURE_POSTGRES = OpengeverFixture(
     postgresql_testing.POSTGRES_FIXTURE)
 
 OPENGEVER_INTEGRATION_TESTING = IntegrationTesting(
-    bases=(OPENGEVER_FIXTURE_SQLITE,
+    bases=(OPENGEVER_FIXTURE_POSTGRES,
            set_builder_session_factory(integration_session_factory)),
     name="opengever.core:integration")
 
@@ -250,11 +250,11 @@ OPENGEVER_FUNCTIONAL_TESTING_POSTGRES = FunctionalTesting(
            set_builder_session_factory(functional_session_factory)),
     name="opengever.core:postgres:functional")
 
-OPENGEVER_FUNCTIONAL_TESTING = OPENGEVER_FUNCTIONAL_TESTING_SQLITE
+OPENGEVER_FUNCTIONAL_TESTING = OPENGEVER_FUNCTIONAL_TESTING_POSTGRES
 
 OPENGEVER_FUNCTIONAL_ZSERVER_TESTING = FunctionalTesting(
     bases=(z2.ZSERVER_FIXTURE,
-           OPENGEVER_FIXTURE_SQLITE,
+           OPENGEVER_FIXTURE_POSTGRES,
            set_builder_session_factory(functional_session_factory)),
     name="opengever.core:functional:zserver")
 

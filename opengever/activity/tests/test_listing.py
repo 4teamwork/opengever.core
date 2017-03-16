@@ -3,6 +3,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.activity.center import NotificationCenter
 from opengever.base.oguid import Oguid
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING_SQLITE
 from opengever.testing import FunctionalTestCase
 from plone import api
 from plone.app.testing import TEST_USER_ID
@@ -10,6 +11,7 @@ import transaction
 
 
 class TestMyNotifications(FunctionalTestCase):
+    layer = OPENGEVER_FUNCTIONAL_TESTING_SQLITE
 
     def setUp(self):
         super(TestMyNotifications, self).setUp()
