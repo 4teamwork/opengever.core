@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.15.2 (unreleased)
+2017.1.0 (unreleased)
 -------------------
 
 - Disable grouping for checkbox columns in tables.
