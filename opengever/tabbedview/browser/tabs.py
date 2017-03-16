@@ -130,6 +130,7 @@ class Documents(BaseCatalogListingTab):
          'column_title': '',
          'transform': helper.path_checkbox,
          'sortable': False,
+         'groupable': False,
          'width': 30},
 
         {'column': 'sequence_number',
@@ -218,6 +219,7 @@ class Dossiers(BaseCatalogListingTab):
          'column_title': '',
          'transform': helper.path_checkbox,
          'sortable': False,
+         'groupable': False,
          'width': 30},
 
         {'column': 'reference',
