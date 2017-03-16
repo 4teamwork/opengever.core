@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-03-14 19:29+0000\n"
+"POT-Creation-Date: 2017-03-16 10:01+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -108,7 +108,7 @@ msgstr ""
 msgid "Newest documents"
 msgstr ""
 
-#: ./opengever/dossier/browser/overview.py:87
+#: ./opengever/dossier/browser/overview.py:86
 msgid "Newest tasks"
 msgstr ""
 
@@ -124,11 +124,11 @@ msgstr ""
 msgid "Participant"
 msgstr ""
 
-#: ./opengever/dossier/browser/overview.py:82
+#: ./opengever/dossier/browser/overview.py:81
 msgid "Participants"
 msgstr ""
 
-#: ./opengever/dossier/browser/overview.py:75
+#: ./opengever/dossier/browser/overview.py:74
 msgid "Participations"
 msgstr ""
 
@@ -296,6 +296,16 @@ msgstr ""
 msgid "create_dossier_with_template"
 msgstr ""
 
+#. Default: "The defined keywords will be preselected for new dossies from template."
+#: ./opengever/dossier/dossiertemplate/behaviors.py:45
+msgid "description_predefined_keywords"
+msgstr ""
+
+#. Default: "The user can choose only from the defined keywords in a new dossier from template. It also prevents the user for creating new keywords"
+#: ./opengever/dossier/dossiertemplate/behaviors.py:56
+msgid "description_restrict_keywords"
+msgstr ""
+
 msgid "documents"
 msgstr ""
 
@@ -354,7 +364,7 @@ msgstr ""
 #. Default: "filing prefix"
 #: ./opengever/dossier/archive.py:179
 #: ./opengever/dossier/behaviors/dossier.py:111
-#: ./opengever/dossier/browser/overview.py:229
+#: ./opengever/dossier/browser/overview.py:235
 msgid "filing_prefix"
 msgstr ""
 
@@ -443,7 +453,7 @@ msgid "label_add_note"
 msgstr ""
 
 #. Default: "Addable dossier templates"
-#: ./opengever/dossier/dossiertemplate/behaviors.py:100
+#: ./opengever/dossier/dossiertemplate/behaviors.py:107
 msgid "label_addable_dossier_templates"
 msgstr ""
 
@@ -469,7 +479,7 @@ msgstr ""
 
 #. Default: "Comments"
 #: ./opengever/dossier/behaviors/dossier.py:86
-#: ./opengever/dossier/browser/overview.py:67
+#: ./opengever/dossier/browser/overview.py:66
 msgid "label_comments"
 msgstr ""
 
@@ -495,7 +505,7 @@ msgid "label_creator"
 msgstr ""
 
 #. Default: "Description"
-#: ./opengever/dossier/browser/overview.py:233
+#: ./opengever/dossier/browser/overview.py:239
 #: ./opengever/dossier/templatefolder/tabs.py:111
 msgid "label_description"
 msgstr ""
@@ -506,7 +516,7 @@ msgid "label_destination"
 msgstr ""
 
 #. Default: "Documents"
-#: ./opengever/dossier/browser/overview.py:221
+#: ./opengever/dossier/browser/overview.py:231
 #: ./opengever/dossier/browser/tabbed.py:17
 msgid "label_documents"
 msgstr ""
@@ -576,7 +586,7 @@ msgstr ""
 
 #. Default: "Keywords"
 #: ./opengever/dossier/behaviors/dossier.py:60
-#: ./opengever/dossier/browser/overview.py:225
+#: ./opengever/dossier/browser/overview.py:213
 msgid "label_keywords"
 msgstr ""
 
@@ -671,7 +681,7 @@ msgid "label_responsible"
 msgstr ""
 
 #. Default: "Restrict Keywords"
-#: ./opengever/dossier/dossiertemplate/behaviors.py:52
+#: ./opengever/dossier/dossiertemplate/behaviors.py:55
 msgid "label_restrict_keywords"
 msgstr ""
 

@@ -5,6 +5,9 @@ Changelog
 2017.1.0 (unreleased)
 -------------------
 
+- Add missing field description for predefined_keywords and restrcit_keywords.
+  [elioschmutz]
+
 - Disable grouping for checkbox columns in tables.
   [elioschmutz]
 

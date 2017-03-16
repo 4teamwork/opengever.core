@@ -42,6 +42,9 @@ class IDossierTemplateSchema(form.Schema):
     form.order_after(predefined_keywords='IDossierTemplate.keywords')
     predefined_keywords = schema.Bool(
         title=_(u'label_predefined_keywords', default=u'Predefined Keywords'),
+        description=_(u'description_predefined_keywords',
+                      default=u'The defined keywords will be preselected for '
+                              u'new dossies from template.'),
         required=False,
         missing_value=True,
         default=True,
@@ -50,6 +53,10 @@ class IDossierTemplateSchema(form.Schema):
     form.order_after(restrict_keywords='predefined_keywords')
     restrict_keywords = schema.Bool(
         title=_(u'label_restrict_keywords', default=u'Restrict Keywords'),
+        description=_(u'description_restrict_keywords',
+                      default=u'The user can choose only from the defined keywords '
+                              u'in a new dossier from template. It also prevents '
+                              u'the user for creating new keywords'),
         required=False,
         missing_value=False,
         default=False,
