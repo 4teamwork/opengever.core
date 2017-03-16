@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-03-14 19:29+0000\n"
+"POT-Creation-Date: 2017-03-16 10:01+0000\n"
 "PO-Revision-Date: 2016-07-22 15:24+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
@@ -109,7 +109,7 @@ msgstr "Elemente verschieben"
 msgid "Newest documents"
 msgstr "Neuste Dokumente"
 
-#: ./opengever/dossier/browser/overview.py:87
+#: ./opengever/dossier/browser/overview.py:86
 msgid "Newest tasks"
 msgstr "Neuste Aufgaben"
 
@@ -125,11 +125,11 @@ msgstr "Nicht alle benötigten Felder wurden ausgefüllt."
 msgid "Participant"
 msgstr "Beteiligung"
 
-#: ./opengever/dossier/browser/overview.py:82
+#: ./opengever/dossier/browser/overview.py:81
 msgid "Participants"
 msgstr "Beteiligungen"
 
-#: ./opengever/dossier/browser/overview.py:75
+#: ./opengever/dossier/browser/overview.py:74
 msgid "Participations"
 msgstr "Beteiligungen"
 
@@ -299,6 +299,16 @@ msgstr "Dokument aus Vorlage erstellen"
 msgid "create_dossier_with_template"
 msgstr "Geschäftsdossier aus Vorlage erstellen"
 
+#. Default: "The defined keywords will be preselected for new dossies from template."
+#: ./opengever/dossier/dossiertemplate/behaviors.py:45
+msgid "description_predefined_keywords"
+msgstr "Durch Aktivieren dieser Option werden bei der Erstellung des Dossiers ab Vorlage die angegebenen Schlagworte bereits vorausgefüllt."
+
+#. Default: "The user can choose only from the defined keywords in a new dossier from template. It also prevents the user for creating new keywords"
+#: ./opengever/dossier/dossiertemplate/behaviors.py:56
+msgid "description_restrict_keywords"
+msgstr "Durch Aktivieren dieser Option stehen bei der Erstellung des Dossiers ab Vorlage nur noch die in der Vorlage angegebenen Schlagworte zur Auswahl.<br>Der Benutzer kann dadurch auch keine neuen Schlagworte erfassen."
+
 msgid "documents"
 msgstr "Dokumente"
 
@@ -357,7 +367,7 @@ msgstr "Ablagenummer"
 #. Default: "filing prefix"
 #: ./opengever/dossier/archive.py:179
 #: ./opengever/dossier/behaviors/dossier.py:111
-#: ./opengever/dossier/browser/overview.py:229
+#: ./opengever/dossier/browser/overview.py:235
 msgid "filing_prefix"
 msgstr "Ablage Präfix"
 
@@ -446,7 +456,7 @@ msgid "label_add_note"
 msgstr "Erfassen"
 
 #. Default: "Addable dossier templates"
-#: ./opengever/dossier/dossiertemplate/behaviors.py:100
+#: ./opengever/dossier/dossiertemplate/behaviors.py:107
 msgid "label_addable_dossier_templates"
 msgstr "Erlaubte Dossiervorlagen"
 
@@ -472,7 +482,7 @@ msgstr "Schliessen"
 
 #. Default: "Comments"
 #: ./opengever/dossier/behaviors/dossier.py:86
-#: ./opengever/dossier/browser/overview.py:67
+#: ./opengever/dossier/browser/overview.py:66
 msgid "label_comments"
 msgstr "Kommentar"
 
@@ -498,7 +508,7 @@ msgid "label_creator"
 msgstr "Erstellt von"
 
 #. Default: "Description"
-#: ./opengever/dossier/browser/overview.py:233
+#: ./opengever/dossier/browser/overview.py:239
 #: ./opengever/dossier/templatefolder/tabs.py:111
 msgid "label_description"
 msgstr "Beschreibung"
@@ -509,7 +519,7 @@ msgid "label_destination"
 msgstr "Zielposition / Zieldossier"
 
 #. Default: "Documents"
-#: ./opengever/dossier/browser/overview.py:221
+#: ./opengever/dossier/browser/overview.py:231
 #: ./opengever/dossier/browser/tabbed.py:17
 msgid "label_documents"
 msgstr "Dokumente"
@@ -579,7 +589,7 @@ msgstr "Journal"
 
 #. Default: "Keywords"
 #: ./opengever/dossier/behaviors/dossier.py:60
-#: ./opengever/dossier/browser/overview.py:225
+#: ./opengever/dossier/browser/overview.py:213
 msgid "label_keywords"
 msgstr "Schlagworte"
 
@@ -674,7 +684,7 @@ msgid "label_responsible"
 msgstr "Federführend"
 
 #. Default: "Restrict Keywords"
-#: ./opengever/dossier/dossiertemplate/behaviors.py:52
+#: ./opengever/dossier/dossiertemplate/behaviors.py:55
 msgid "label_restrict_keywords"
 msgstr "Schlagwortkatalog einschränken"
 

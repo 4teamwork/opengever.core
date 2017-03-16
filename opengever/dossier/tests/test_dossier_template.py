@@ -209,7 +209,10 @@ class TestDossierTemplate(FunctionalTestCase):
             u'Title',
             u'Description',
             u'Keywords',
+            u'The defined keywords will be preselected for new dossies from template.',
             u'Predefined Keywords',
+            u'The user can choose only from the defined keywords in a new dossier '
+            u'from template. It also prevents the user for creating new keywords',
             u'Restrict Keywords',
             u'Comments',
             u'filing prefix'],
@@ -230,7 +233,10 @@ class TestDossierTemplate(FunctionalTestCase):
             u'Title',
             u'Description',
             u'Keywords',
+            u'The defined keywords will be preselected for new dossies from template.',
             u'Predefined Keywords',
+            u'The user can choose only from the defined keywords in a new dossier '
+            u'from template. It also prevents the user for creating new keywords',
             u'Restrict Keywords',
             u'Comments',
             u'filing prefix'],
