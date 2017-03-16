@@ -12,6 +12,9 @@
       permission="zope2.View"
       />
 
-  <adapter factory=".quotawarning.QuotaWarningETagValue" name="quotawarning" />
+  <adapter
+      factory=".quotawarning.QuotaWarningETagValue"
+      name="quotawarning"
+      />
 
 </configure>
