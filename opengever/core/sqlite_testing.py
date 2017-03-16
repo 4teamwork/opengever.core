@@ -34,6 +34,10 @@ class SQLiteMemoryFixture(Layer):
         model.Session.close_all()
         truncate_tables()
 
+    def tearDown(self):
+        model.Session.registry.clear()
+
+
 
 SQLITE_MEMORY_FIXTURE = SQLiteMemoryFixture()
 

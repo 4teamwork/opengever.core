@@ -12,6 +12,7 @@ from opengever.base import pdfconverter
 from opengever.base.model import create_session
 from opengever.base.pdfconverter import pdfconverter_available_lock
 from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
+from opengever.core import postgresql_testing
 from opengever.core import sqlite_testing
 from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings # noqa
 from opengever.meeting.interfaces import IMeetingSettings
@@ -247,13 +248,23 @@ MEMORY_DB_LAYER = sqlite_testing.StandaloneMemoryDBLayer(
 OPENGEVER_FIXTURE_SQLITE = OpengeverFixture(
     sql_layer=sqlite_testing.SQLITE_MEMORY_FIXTURE)
 
+OPENGEVER_FIXTURE_POSTGRES = OpengeverFixture(
+    sql_layer=postgresql_testing.POSTGRES_FIXTURE)
+
 # OPENGEVER_FIXTURE is the default fixture used in policy tests.
 OPENGEVER_FIXTURE = OPENGEVER_FIXTURE_SQLITE
 
-OPENGEVER_FUNCTIONAL_TESTING = FunctionalTesting(
+OPENGEVER_FUNCTIONAL_TESTING_SQLITE = FunctionalTesting(
     bases=(OPENGEVER_FIXTURE_SQLITE,
            set_builder_session_factory(functional_session_factory)),
-    name="opengever.core:functional")
+    name="opengever.core:functional:sqlite")
+
+OPENGEVER_FUNCTIONAL_TESTING_POSTGRES = FunctionalTesting(
+    bases=(OPENGEVER_FIXTURE_POSTGRES,
+           set_builder_session_factory(functional_session_factory)),
+    name="opengever.core:functional:postgres")
+
+OPENGEVER_FUNCTIONAL_TESTING = OPENGEVER_FUNCTIONAL_TESTING_SQLITE
 
 OPENGEVER_FUNCTIONAL_ZSERVER_TESTING = FunctionalTesting(
     bases=(z2.ZSERVER_FIXTURE,
