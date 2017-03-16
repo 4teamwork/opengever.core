@@ -59,10 +59,6 @@ def toggle_feature(registry_interface, enabled=True):
     transaction.commit()
 
 
-def deactivate_meeting():
-    toggle_feature(IMeetingSettings, enabled=False)
-
-
 def activate_meeting():
     toggle_feature(IMeetingSettings, enabled=True)
 
@@ -77,10 +73,6 @@ def activate_activity_center():
 
 def activate_officeatwork():
     toggle_feature(IOfficeatworkSettings, enabled=True)
-
-
-def deactivate_officeatwork():
-    toggle_feature(IOfficeatworkSettings, enabled=False)
 
 
 def deactivate_bumblebee_feature():
@@ -161,10 +153,6 @@ class OpengeverFixture(PloneSandboxLayer):
     def tearDown(self):
         super(OpengeverFixture, self).tearDown()
         clear_transmogrifier_registry()
-
-    def tearDownPloneSite(self, portal):
-        activate_activity_center()
-        activate_bumblebee_feature()
 
     def tearDownZope(self, app):
         super(OpengeverFixture, self).tearDownZope(app)
@@ -269,9 +257,6 @@ class FilingLayer(PloneSandboxLayer):
     def setUpPloneSite(self, portal):
         activate_filing_number(portal)
 
-    def tearDownPloneSite(self, portal):
-        inactivate_filing_number(portal)
-
 
 OPENGEVER_FUNCTIONAL_FILING_LAYER = FilingLayer()
 
@@ -280,9 +265,6 @@ class MeetingLayer(PloneSandboxLayer):
 
     def setUpPloneSite(self, portal):
         activate_meeting()
-
-    def tearDownPloneSite(self, portal):
-        deactivate_meeting()
 
     defaultBases = (OPENGEVER_FUNCTIONAL_TESTING,)
 
@@ -295,9 +277,6 @@ class ActivityLayer(PloneSandboxLayer):
     def setUpPloneSite(self, portal):
         activate_activity_center()
 
-    def tearDownPloneSite(self, portal):
-        deactivate_activity_center()
-
     defaultBases = (OPENGEVER_FUNCTIONAL_TESTING,)
 
 
@@ -308,9 +287,6 @@ class DossierTemplateLayer(PloneSandboxLayer):
 
     def setUpPloneSite(self, portal):
         toggle_feature(IDossierTemplateSettings, enabled=True)
-
-    def tearDownPloneSite(self, portal):
-        toggle_feature(IDossierTemplateSettings, enabled=False)
 
     defaultBases = (OPENGEVER_FUNCTIONAL_TESTING,)
 
@@ -329,9 +305,6 @@ class BumblebeeLayer(PloneSandboxLayer):
 
     def setUpPloneSite(self, portal):
         activate_bumblebee_feature()
-
-    def tearDownPloneSite(self, portal):
-        deactivate_bumblebee_feature()
 
     def testSetUp(self):
         super(BumblebeeLayer, self).testSetUp()
@@ -364,11 +337,6 @@ class PrivateFolderLayer(PloneSandboxLayer):
     def setUpPloneSite(self, portal):
         enable_opengever_private()
 
-    def tearDownPloneSite(self, portal):
-        mtool = api.portal.get_tool('portal_membership')
-        if mtool.getMemberareaCreationFlag():
-            mtool.setMemberareaCreationFlag()
-
     defaultBases = (OPENGEVER_FUNCTIONAL_TESTING,)
 
 
@@ -379,9 +347,6 @@ class OfficeatworkLayer(PloneSandboxLayer):
 
     def setUpPloneSite(self, portal):
         activate_officeatwork()
-
-    def tearDownPloneSite(self, portal):
-        deactivate_officeatwork()
 
     defaultBases = (OPENGEVER_FUNCTIONAL_TESTING,)
 
