@@ -41,6 +41,9 @@ class ArchivalFileConverter(object):
             self.document.absolute_url())
 
     def store_file(self, data, mimetype='application/pdf'):
+        if isinstance(mimetype, unicode):
+            mimetype = mimetype.encode('utf-8')
+
         IDocumentMetadata(self.document).archival_file = NamedBlobFile(
             data=data,
             contentType=mimetype,

@@ -5,6 +5,9 @@ Changelog
 2017.1.0 (unreleased)
 -------------------
 
+- Fixed contenttype encoding for archival files.
+  [phgross]
+
 - Add missing field description for predefined_keywords and restrcit_keywords.
   [elioschmutz]
 

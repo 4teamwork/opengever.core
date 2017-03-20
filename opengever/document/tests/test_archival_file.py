@@ -68,6 +68,13 @@ class TestArchivalFile(FunctionalTestCase):
             STATE_CONVERTED,
             IDocumentMetadata(self.document).archival_file_state)
 
+    def test_store_file_decodes_unicode_contenttypes(self):
+        ArchivalFileConverter(self.document).store_file(
+            'TEST DATA', mimetype=u'application/pdf')
+
+        archival_file = IDocumentMetadata(self.document).archival_file
+        self.assertTrue(isinstance(archival_file.contentType, str))
+
 
 class TestArchivalFileState(FunctionalTestCase):
 
