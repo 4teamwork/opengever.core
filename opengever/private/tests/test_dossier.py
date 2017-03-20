@@ -10,6 +10,7 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.private.tests import create_members_folder
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
+from plone.protect import createToken
 from zope.component import getUtility
 
 
@@ -153,3 +154,19 @@ class TestPrivateDossierWorkflow(FunctionalTestCase):
         browser.click_on('Save')
 
         self.assertEquals(['Item created'], info_messages())
+
+    @browsing
+    def test_trashing_documents_in_private_folder_is_possible(self, browser):
+        document = create(Builder('document')
+                          .within(self.dossier)
+                          .titled(u'My private document'))
+
+        data = {'paths:list': ['/'.join(document.getPhysicalPath())],
+                '_authenticator': createToken()}
+
+        self.grant('Member', 'Reader')
+
+        browser.login().open(self.dossier, view="trashed", data=data)
+
+        self.assertEquals([u'the object My private document trashed'],
+                          info_messages())

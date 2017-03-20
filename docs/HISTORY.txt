@@ -5,6 +5,9 @@ Changelog
 4.15.4 (unreleased)
 -------------------
 
+- Fix permission issue if user tries to trash a document in a private dossier.
+  [elioschmutz]
+
 - Allow certain z3c forms to be prefilled via GET requests. This is required
   after the introduction of Products.PloneHotfix20160830.
   [lgraf]
