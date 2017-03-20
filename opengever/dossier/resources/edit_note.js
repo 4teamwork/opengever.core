@@ -27,6 +27,9 @@
         $('body').append(overlayElement);
         var options = {
           left: 'invalid', // Only way to have no "left" online style on overlay.
+          onLoad: function(event) {
+            event.currentTarget.getOverlay().find('textarea').focus();
+          },
           onBeforeLoad: function(event){
             // Set height
             var textarea = overlayElement.find('textarea');
