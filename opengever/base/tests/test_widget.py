@@ -44,6 +44,17 @@ class TestGeverRenderWidget(FunctionalTestCase):
             u'A d\xfcnamic description',
             browser.css('.formHelp').first.text)
 
+    @browsing
+    def test_escape_dynamic_description(self, browser):
+        self.widget.dynamic_description = u"<script>alert('bad');</script>"
+
+        widget_renderer = getMultiAdapter(
+            (self.widget, self.request), name='ploneform-render-widget')
+
+        self.assertEqual(
+            u'&lt;script&gt;alert(&apos;bad&apos;);&lt;/script&gt;',
+            widget_renderer.get_description())
+
 
 class TestTrixWidget(FunctionalTestCase):
 
