@@ -5,9 +5,6 @@ Changelog
 2017.1.0 (unreleased)
 -------------------
 
-- Allow private dossiers to be resolved.
-  [lgraf]
-
 - Escape dossiertemplate title_help field on display.
   [elioschmutz]
 
@@ -57,9 +54,6 @@ Changelog
 
 - Reset end date when reactivating a resolved or activating an inactive dossier.
   [phgross]
-
-- Fix permission issue if user tries to trash a document in a private dossier.
-  [elioschmutz]
 
 - Implement quota for private folder. [jone]
 
@@ -173,13 +167,6 @@ Changelog
 
 - Introduce new feature: SPV Zip-Export.
   [mathias.leimgruber]
-
-- Allow certain z3c forms to be prefilled via GET requests. This is required
-  after the introduction of Products.PloneHotfix20160830.
-  [lgraf]
-
-- Include Hotfixes in development and test buildouts.
-  [lgraf]
 
 - Disallow closing dispositions for archivists.
   [phgross]
@@ -306,6 +293,23 @@ Changelog
 
 - Fix rendering of new agenda points in IE11.
   [Kevin Bieri]
+
+
+4.15.4 (2017-03-20)
+-------------------
+
+- Allow private dossiers to be resolved.
+  [lgraf]
+
+- Fix permission issue if user tries to trash a document in a private dossier.
+  [elioschmutz]
+
+- Allow certain z3c forms to be prefilled via GET requests. This is required
+  after the introduction of Products.PloneHotfix20160830.
+  [lgraf]
+
+- Include Hotfixes in development and test buildouts.
+  [lgraf]
 
 
 4.15.3 (2017-03-13)
