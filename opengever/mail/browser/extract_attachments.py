@@ -10,12 +10,12 @@ from zope.component import getUtility
 import os.path
 
 
-def attachment_checkbox_helper(item, position):
+def attachment_checkbox_helper(item, value):
     attrs = {'type': 'checkbox',
              'class': 'noborder selectable',
              'name': 'attachments:list',
-             'id': 'attachment%s' % str(position),
-             'value': str(position)}
+             'id': 'attachment%s' % str(item['position']),
+             'value': str(item['position'])}
 
     return '<input %s />' % ' '.join(['%s="%s"' % (k, v)
                                       for k, v in attrs.items()])
@@ -85,8 +85,7 @@ class ExtractAttachments(grok.View):
         """
 
         columns = (
-            {'column': 'position',
-             'column_title': u'',
+            {'column': '',
              'transform': attachment_checkbox_helper,
              'width': 30},
 
