@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-03-16 13:09+0000\n"
+"POT-Creation-Date: 2017-03-20 15:03+0000\n"
 "PO-Revision-Date: 2016-07-22 15:24+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
@@ -481,7 +481,7 @@ msgid "label_cancel"
 msgstr "Abbrechen"
 
 #. Default: "Close"
-#: ./opengever/dossier/viewlets/templates/note.pt:59
+#: ./opengever/dossier/viewlets/templates/note.pt:61
 msgid "label_close"
 msgstr "Schliessen"
 
@@ -849,6 +849,10 @@ msgstr "Aufgaben"
 #: ./opengever/dossier/behaviors/dossier.py:124
 msgid "temporary_former_reference_number"
 msgstr "Temporäres früheres Aktenzeichen"
+
+#: ./opengever/dossier/viewlets/templates/note.pt:57
+msgid "text_delete_note"
+msgstr "Kommentar löschen (Löscht den Kommentar und schliesst das Overlay)."
 
 #: ./opengever/dossier/resolve.py:23
 msgid "the dossier start date is missing."

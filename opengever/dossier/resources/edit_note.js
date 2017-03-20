@@ -56,6 +56,12 @@
             closeNote();
           });
 
+          overlay.getOverlay().on('click', 'button.delete', function(event){
+            event.preventDefault();
+            overlayElement.find('textarea').val('');
+            saveNote();
+          });
+
           overlay.getOverlay().on('onBeforeClose', function(event){
             // Show message if there are unsaved changes
 

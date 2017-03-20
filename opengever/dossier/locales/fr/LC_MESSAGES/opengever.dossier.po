@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-03-16 13:09+0000\n"
+"POT-Creation-Date: 2017-03-20 15:03+0000\n"
 "PO-Revision-Date: 2016-09-20 21:24+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/fr/>\n"
@@ -477,7 +477,7 @@ msgid "label_cancel"
 msgstr ""
 
 #. Default: "Close"
-#: ./opengever/dossier/viewlets/templates/note.pt:59
+#: ./opengever/dossier/viewlets/templates/note.pt:61
 msgid "label_close"
 msgstr ""
 
@@ -845,6 +845,10 @@ msgstr "Tâches"
 #: ./opengever/dossier/behaviors/dossier.py:124
 msgid "temporary_former_reference_number"
 msgstr "Ancien numéro de référence temporaire"
+
+#: ./opengever/dossier/viewlets/templates/note.pt:57
+msgid "text_delete_note"
+msgstr ""
 
 #: ./opengever/dossier/resolve.py:23
 msgid "the dossier start date is missing."
