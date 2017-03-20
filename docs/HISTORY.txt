@@ -5,6 +5,9 @@ Changelog
 2017.1.0 (unreleased)
 -------------------
 
+- Escape dossiertemplate title_help field on display.
+  [elioschmutz]
+
 - Fix the common-fieldset translation in the add/edit-form if using the
   ITranslatedTitle behavior in combination with a dossier-type (i.e. the templatefolder).
   [elioschmutz]
