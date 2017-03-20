@@ -9,6 +9,7 @@ from opengever.core.testing import OPENGEVER_FUNCTIONAL_PRIVATE_FOLDER_LAYER
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.private.tests import create_members_folder
 from opengever.testing import FunctionalTestCase
+from plone import api
 from plone.app.testing import TEST_USER_ID
 from plone.protect import createToken
 from zope.component import getUtility
@@ -189,3 +190,14 @@ class TestPrivateDossierWorkflow(FunctionalTestCase):
 
         self.assertEquals([u'the object My private document trashed'],
                           info_messages())
+
+    @browsing
+    def test_private_dossier_can_be_resolved(self, browser):
+        browser.login().open(self.dossier,
+                             {'_authenticator': createToken()},
+                             view='transition-resolve')
+        self.assertEquals(['The dossier has been succesfully resolved'],
+                          info_messages())
+
+        self.assertEqual('dossier-state-resolved',
+                         api.content.get_state(self.dossier))
