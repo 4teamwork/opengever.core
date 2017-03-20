@@ -10,6 +10,7 @@ from opengever.dossier.behaviors.filing import IFilingNumberMarker
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.dossier.utils import get_main_dossier
 from opengever.inbox.inbox import IInbox
+from opengever.private.dossier import IPrivateDossier
 from plone.dexterity.interfaces import IDexterityContent
 from plone.indexer import indexer
 from Products.CMFCore.interfaces import ISiteRoot
@@ -51,6 +52,10 @@ grok.global_adapter(endIndexer, name="end")
 
 @indexer(IDossierMarker)
 def retention_expiration(obj):
+    if IPrivateDossier.providedBy(obj):
+        # Private dossiers don't have the Lifecycle behavior, and therefore
+        # don't have a retention period, or expiration thereof
+        return None
     return obj.get_retention_expiration_date()
 grok.global_adapter(retention_expiration, name="retention_expiration")
 
