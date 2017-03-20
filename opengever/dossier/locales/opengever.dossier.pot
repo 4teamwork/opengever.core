@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-03-16 13:09+0000\n"
+"POT-Creation-Date: 2017-03-20 15:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -478,7 +478,7 @@ msgid "label_cancel"
 msgstr ""
 
 #. Default: "Close"
-#: ./opengever/dossier/viewlets/templates/note.pt:59
+#: ./opengever/dossier/viewlets/templates/note.pt:61
 msgid "label_close"
 msgstr ""
 
@@ -845,6 +845,10 @@ msgstr ""
 #. Default: "Temporary former reference number"
 #: ./opengever/dossier/behaviors/dossier.py:124
 msgid "temporary_former_reference_number"
+msgstr ""
+
+#: ./opengever/dossier/viewlets/templates/note.pt:57
+msgid "text_delete_note"
 msgstr ""
 
 #: ./opengever/dossier/resolve.py:23

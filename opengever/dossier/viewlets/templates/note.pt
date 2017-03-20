@@ -54,6 +54,8 @@
                     i18n:translate="label_save">Save</button>
             <button class="button decline"
                     i18n:translate="label_cancel">Cancel</button>
+            <button class="button delete destructive"
+                    i18n:attributes="title text_delete_note"></button>
           </tal:editcontrols>
           <tal:closecontrol tal:condition="not: view/has_edit_permission">
             <button class="button close"

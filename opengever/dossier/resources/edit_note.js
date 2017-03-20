@@ -27,6 +27,9 @@
         $('body').append(overlayElement);
         var options = {
           left: 'invalid', // Only way to have no "left" online style on overlay.
+          onLoad: function(event) {
+            event.currentTarget.getOverlay().find('textarea').focus();
+          },
           onBeforeLoad: function(event){
             // Set height
             var textarea = overlayElement.find('textarea');
@@ -51,6 +54,12 @@
           overlay.getOverlay().on('click', 'button.close', function(event){
             event.preventDefault();
             closeNote();
+          });
+
+          overlay.getOverlay().on('click', 'button.delete', function(event){
+            event.preventDefault();
+            overlayElement.find('textarea').val('');
+            saveNote();
           });
 
           overlay.getOverlay().on('onBeforeClose', function(event){
