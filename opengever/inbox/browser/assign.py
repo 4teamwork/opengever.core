@@ -30,6 +30,7 @@ class AssignForwardingForm(AssignTaskForm):
     fields = Fields(IForwardingAssignSchema)
     fields['responsible'].widgetFactory[INPUT_MODE] = AutocompleteFieldWidget
     ignoreContext = True
+    allow_prefill_from_GET_request = True  # XXX
 
     label = _(u'title_assign_forwarding', u'Assign Forwarding')
 

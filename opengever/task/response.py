@@ -143,6 +143,9 @@ class Base(BrowserView):
 
 
 class AddForm(form.AddForm, AutoExtensibleForm):
+
+    allow_prefill_from_GET_request = True  # XXX
+
     fields = field.Fields(IResponse)
     # keep widget for converters (even though field is hidden)
     fields['transition'].widgetFactory = radio.RadioFieldWidget

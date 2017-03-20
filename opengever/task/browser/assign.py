@@ -66,6 +66,7 @@ class AssignTaskForm(Form):
     fields['responsible'].widgetFactory[INPUT_MODE] = \
         AutocompleteFieldWidget
     ignoreContext = True
+    allow_prefill_from_GET_request = True  # XXX
 
     label = _(u'title_assign_task', u'Assign task')
 

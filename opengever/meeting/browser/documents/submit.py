@@ -47,6 +47,7 @@ class SubmitAdditionalDocument(AutoExtensibleForm, Form):
 
     """
     ignoreContext = True
+    allow_prefill_from_GET_request = True  # XXX
 
     schema = ISubmitAdditionalDocument
 
