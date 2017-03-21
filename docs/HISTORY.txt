@@ -5,6 +5,10 @@ Changelog
 2017.1.0 (unreleased)
 -------------------
 
+- Task listing PDF: Use AdminUnit abbreviation instead of title in order to
+  avoid nasty overflows caused by long admin unit titles.
+  [lgraf]
+
 - Get rid of unnecessary column label in extract attachments view.
   [lgraf]
 
