@@ -89,6 +89,8 @@ Aktion ``Ablieferungspaket herunterladen`` zur Verfügung, welches den eCH-0160
 Export für die enthaltenen Dossiers mit einer positiven Bewertung zum Download
 anbietet.
 
+Enthält eine Angebot nur Dossier die nicht ans Archiv abgeliefert werden müssen, so können die Schritte 3 und 4 übersprungen werden und die Dossiers direkt ausgesondert und das Angebot abgeschlossen werden.
+
 
 Archivierung bestätigen
 ~~~~~~~~~~~~~~~~~~~~~~~
