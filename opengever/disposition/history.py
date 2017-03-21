@@ -157,6 +157,12 @@ class Closed(DispositionHistory):
 DispositionHistory.add_description(Closed)
 
 
+class AppraisedToClosed(Closed):
+    transition = 'disposition-transition-appraised-to-closed'
+
+DispositionHistory.add_description(AppraisedToClosed)
+
+
 class Refused(DispositionHistory):
     transition = 'disposition-transition-refuse'
     css_class = 'refuse'

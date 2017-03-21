@@ -145,3 +145,43 @@ class TestDestroyPermission(FunctionalTestCase):
 
         self.grant('Records Manager')
         disposition.destroy_dossiers()
+
+
+class TestDestructionForNotArchivedDossiers(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestDestructionForNotArchivedDossiers, self).setUp()
+        self.root = create(Builder('repository_root'))
+        self.repository = create(Builder('repository')
+                                 .titled('Anfragen')
+                                 .within(self.root))
+        self.dossier1 = create(Builder('dossier')
+                               .titled(u'D\xf6ssier 1')
+                               .having(archival_value=ARCHIVAL_VALUE_UNWORTHY)
+                               .as_expired()
+                               .within(self.repository))
+        self.dossier2 = create(Builder('dossier')
+                               .titled(u'D\xf6ssier 2')
+                               .having(archival_value=ARCHIVAL_VALUE_UNWORTHY)
+                               .as_expired()
+                               .in_state('dossier-state-inactive')
+                               .within(self.repository))
+
+        self.grant('Records Manager', 'Contributor')
+        self.disposition = create(Builder('disposition')
+                                  .having(dossiers=[self.dossier1, self.dossier2])
+                                  .in_state('disposition-state-appraised')
+                                  .within(self.root))
+
+    def test_dossiers_gets_removed(self):
+        self.assertEquals(
+            [self.dossier1, self.dossier2],
+            self.repository.listFolderContents())
+
+        api.content.transition(
+            obj=self.disposition,
+            transition='disposition-transition-appraised-to-closed')
+
+        self.assertEquals(
+            [],
+            self.repository.listFolderContents())

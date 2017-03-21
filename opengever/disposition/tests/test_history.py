@@ -4,6 +4,7 @@ from ftw.testbrowser import browsing
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_WORTHY
 from opengever.disposition.history import Added
 from opengever.disposition.history import Appraised
+from opengever.disposition.history import AppraisedToClosed
 from opengever.disposition.history import Archived
 from opengever.disposition.history import Closed
 from opengever.disposition.history import Disposed
@@ -28,6 +29,7 @@ class TestHistoryEntries(FunctionalTestCase):
         self.repository = create(Builder('repository').within(self.root))
         self.dossier1 = create(Builder('dossier')
                                .as_expired()
+                               .having(archival_value=ARCHIVAL_VALUE_WORTHY)
                                .within(self.repository))
         self.dossier2 = create(Builder('dossier')
                                .as_expired()
@@ -86,6 +88,23 @@ class TestHistoryEntries(FunctionalTestCase):
             u'Disposition disposed for the archive by {}'.format(self.user_link),
             translate(entry.msg(), context=self.request))
 
+    def test_add_history_entry_when_directly_close_a_disposition(self):
+        IAppraisal(self.disposition).update(dossier=self.dossier1,
+                                            archive=False)
+        api.content.transition(obj=self.disposition,
+                               transition='disposition-transition-appraise')
+        api.content.transition(obj=self.disposition,
+                               transition='disposition-transition-appraised-to-closed')
+
+        entry = IHistoryStorage(self.disposition).get_history()[0]
+
+        self.assertTrue(isinstance(entry, AppraisedToClosed))
+        self.assertEquals('close', entry.css_class)
+        self.assertEquals(
+            u'Disposition closed and all dossiers destroyed by {}'.format(
+                self.user_link),
+            translate(entry.msg(), context=self.request))
+
     def test_add_history_entry_when_archive_a_disposition(self):
         api.content.transition(obj=self.disposition,
                                transition='disposition-transition-appraise')
@@ -137,6 +156,8 @@ class TestHistoryEntries(FunctionalTestCase):
     def test_ignores_modified_events_during_dossier_destruction(self):
         api.content.transition(obj=self.disposition,
                                transition='disposition-transition-appraise')
+        IAppraisal(self.disposition).update(dossier=self.dossier1,
+                                            archive=True)
         api.content.transition(obj=self.disposition,
                                transition='disposition-transition-dispose')
         api.content.transition(obj=self.disposition,

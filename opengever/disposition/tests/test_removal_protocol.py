@@ -58,10 +58,17 @@ class TestDestroyedDossierListing(BaseLatexListingTest):
 
 class TestDispositionHistoryListing(BaseLatexListingTest):
 
-    def test_listing(self):
-        disposition = create(Builder('disposition'))
+    def setUp(self):
+        super(TestDispositionHistoryListing, self).setUp()
+        self.dossier = create(Builder('dossier')
+                              .as_expired()
+                              .having(archival_value=ARCHIVAL_VALUE_WORTHY))
 
+    def test_listing(self):
         self.grant('Records Manager', 'Archivist')
+        disposition = create(Builder('disposition')
+                             .having(dossiers=[self.dossier]))
+
         with freeze(datetime(2014, 11, 6, 12, 33)):
             api.content.transition(disposition,
                                    'disposition-transition-appraise')

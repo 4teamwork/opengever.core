@@ -360,6 +360,9 @@ msgstr ""
 msgid "disposition-transition-close"
 msgstr ""
 
+msgid "disposition-transition-appraised-to-closed"
+msgstr ""
+
 msgid "disposition-transition-dispose"
 msgstr ""
 

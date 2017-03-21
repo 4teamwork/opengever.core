@@ -92,9 +92,6 @@ msgstr ""
 msgid "Modify deadline"
 msgstr "Changer le délai"
 
-msgid "Nutzung"
-msgstr ""
-
 msgid "Open tasks report"
 msgstr "Liste des affaires en suspens"
 
@@ -119,6 +116,9 @@ msgid "Submit additional document"
 msgstr ""
 
 msgid "Submit additional documents"
+msgstr ""
+
+msgid "Usage"
 msgstr ""
 
 #: plone.app.search/plone/app/search/browser.py:121
@@ -148,6 +148,9 @@ msgid "disposition-state-in-progress"
 msgstr ""
 
 msgid "disposition-transition-appraise"
+msgstr ""
+
+msgid "disposition-transition-appraised-to-closed"
 msgstr ""
 
 msgid "disposition-transition-archive"

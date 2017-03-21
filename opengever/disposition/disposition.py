@@ -215,6 +215,9 @@ class Disposition(Container):
     def is_closed(self):
         return api.content.get_state(self) == 'disposition-state-closed'
 
+    def has_dossiers_to_archive(self):
+        return any(IAppraisal(self).storage.values())
+
     def get_dossier_representations(self):
         if self.is_closed:
             return [RemovedDossierDispositionInformation(data, self)
