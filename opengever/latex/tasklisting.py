@@ -61,7 +61,7 @@ class TaskListingLaTeXView(grok.MultiAdapter, MakoLaTeXView):
         return rows
 
     def get_data_for_item(self, item):
-        admin_unit = item.get_admin_unit().title
+        admin_unit = item.get_admin_unit().abbreviation
         task_type = task_type_helper(item, item.task_type)
         sequence_number = unicode(item.sequence_number).encode('utf-8')
         deadline = helper.readable_date(item, item.deadline)
