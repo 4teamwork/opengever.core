@@ -11,6 +11,7 @@ from opengever.document.interfaces import IDocumentIndexer
 from opengever.ogds.base.actor import Actor
 from plone.indexer import indexer
 from Products.CMFCore.utils import getToolByName
+from Products.CMFDiffTool.utils import safe_utf8
 from ZODB.POSException import ConflictError
 from zope.component import getUtility, queryMultiAdapter, getAdapter
 from zope.interface import Interface
@@ -79,6 +80,11 @@ class SearchableTextExtender(grok.Adapter):
         fulltext_indexer = getAdapter(self.context, IDocumentIndexer)
         fulltext = fulltext_indexer.extract_text()
         searchable.append(fulltext)
+
+        # keywords
+        keywords = IDocumentMetadata(self.context).keywords
+        if keywords:
+            searchable.extend(safe_utf8(keyword) for keyword in keywords)
 
         return ' '.join(searchable)
 
@@ -153,6 +159,12 @@ def sortable_author(obj):
         return Actor.user(author).get_label()
     return ''
 grok.global_adapter(sortable_author, name='sortable_author')
+
+
+@indexer(IDocumentMetadata)
+def DocumentSubjectIndexer(obj):
+    return IDocumentMetadata(obj).keywords
+grok.global_adapter(DocumentSubjectIndexer, name="Subject")
 
 
 @indexer(IClassificationMarker)
