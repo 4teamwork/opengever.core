@@ -482,8 +482,7 @@ class TestTemplateFolder(FunctionalTestCase):
         browser.login().open(self.portal)
         factoriesmenu.add('Template Folder')
 
-        browser.fill({'Title': 'Templates',
-                      'Responsible': TEST_USER_ID}).save()
+        browser.fill({'Title': 'Templates'}).save()
 
         self.assertTrue(ITemplateFolder.providedBy(browser.context))
 
@@ -521,8 +520,7 @@ class TestTemplateFolder(FunctionalTestCase):
         self.grant('Manager')
         browser.login().open()
         factoriesmenu.add('Template Folder')
-        browser.fill({'Responsible': TEST_USER_ID,
-                      'Title (German)': u'Vorlagen',
+        browser.fill({'Title (German)': u'Vorlagen',
                       'Title (French)': u'mod\xe8le'})
         browser.find('Save').click()
 
@@ -539,6 +537,18 @@ class TestTemplateFolder(FunctionalTestCase):
         browser.login().visit(templatefolder)
 
         self.assertEqual(0, len(browser.css('.formTab #tab-dossiertemplates')))
+
+    @browsing
+    def test_prefill_responsible_user(self, browser):
+        self.grant('Manager')
+        add_languages(['de-ch'])
+        browser.login().open(self.portal)
+        factoriesmenu.add('Template Folder')
+
+        self.assertEqual(
+            'Test User (test_user_1_)',
+            browser.css('#formfield-form-widgets-IDossier-responsible span.label').first.text
+            )
 
 
 class TestTemplateFolderMeetingEnabled(FunctionalTestCase):
