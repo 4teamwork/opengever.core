@@ -92,9 +92,6 @@ msgstr "Mitgliedschaft"
 msgid "Modify deadline"
 msgstr "Frist ändern"
 
-msgid "Usage"
-msgstr "Nutzung"
-
 msgid "Open tasks report"
 msgstr "Pendenzenliste"
 
@@ -120,6 +117,9 @@ msgstr "Zusätzlichen Anhang einreichen"
 
 msgid "Submit additional documents"
 msgstr "Zusätzliche Anhänge einreichen"
+
+msgid "Usage"
+msgstr "Nutzung"
 
 #: plone.app.search/plone/app/search/browser.py:121
 msgid "alphabetically"
@@ -149,6 +149,9 @@ msgstr "In Bearbeitung"
 
 msgid "disposition-transition-appraise"
 msgstr "Bewertung finalisieren"
+
+msgid "disposition-transition-appraised-to-closed"
+msgstr "Dossiers aussondern"
 
 msgid "disposition-transition-archive"
 msgstr "Archivieren"
@@ -353,3 +356,4 @@ msgstr "Aktivieren"
 
 msgid "transition-add-document"
 msgstr "Dokument hinzugefügt"
+
