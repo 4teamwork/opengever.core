@@ -11,14 +11,13 @@
     <div id="footer-column-2" class="column cell position-4 width-4">
         <h2>Optionen</h2>
 
-        <p><a href="http://www.onegov.ch/gever/dokumentation/installation-des-external-editors-unter-windows">External Editor (Windows)</a></p>
-        <p><a href="http://www.onegov.ch/gever/die-wichtigsten-module-von-onegov-gever/direktes-bearbeiten/#external-editor-unter-os-x">External Editor (Mac)</a></p>
+        <p><a href="https://www.4teamwork.ch/office-connector">Office Connector (Windows und Mac)</a></p>
     </div>
 
     <div id="footer-column-3" class="column cell position-8 width-4">
         <h2>Dokumentation</h2>
 
-        <p><a href="https://docs.onegovgever.ch/">Benutzerhandbuch</a></p>
+        <p><a href="https://docs.onegovgever.ch/">Benutzerhandbücher</a></p>
         <p><a href="https://feedback.onegovgever.ch">Feedback Forum</a></p>
     </div>
 
