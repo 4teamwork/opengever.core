@@ -5,6 +5,12 @@ Changelog
 2017.1.0 (unreleased)
 -------------------
 
+- Get rid of unnecessary column label in extract attachments view.
+  [lgraf]
+
+- Allow private dossiers to be resolved.
+  [lgraf]
+
 - Escape dossiertemplate title_help field on display.
   [elioschmutz]
 
