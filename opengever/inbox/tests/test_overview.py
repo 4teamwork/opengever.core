@@ -4,6 +4,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.globalindex.handlers.task import sync_task
 from opengever.testing import FunctionalTestCase
+import transaction
 
 
 class TestBaseInboxOverview(FunctionalTestCase):
@@ -155,6 +156,7 @@ class TestInboxOverviewAssignedInboxTasks(TestBaseInboxOverview):
                         .in_state('forwarding-state-closed')
                         .titled('Closed'))
         sync_task(closed, None)
+        transaction.commit()
 
         browser.login().open(self.inbox, view='tabbedview_view-overview')
         self.assertSequenceEqual(
@@ -212,6 +214,7 @@ class TestInboxOverviewIssuedInboxTasks(TestBaseInboxOverview):
                         .in_state('forwarding-state-closed')
                         .titled('Closed'))
         sync_task(closed, None)
+        transaction.commit()
 
         browser.login().open(self.inbox, view='tabbedview_view-overview')
         self.assertSequenceEqual(

@@ -72,13 +72,6 @@ class TestProtocolJsonData(FunctionalTestCase):
             presidency=self.member_peter,
             secretary=self.member_franz,))
 
-        self.agenda_item_proposal = create(
-            Builder('agenda_item').having(
-                proposal=self.proposal,
-                meeting=self.meeting,
-                decision=u'<div>Die Bauherren werden gest\xfctzt auf \xa7 160 und in Anwendung von \xa7 162 des Baugesetzes wegen Bauens ohne Baubewilligung gesamthaft bestraft. Der Betrag von je Fr. 1000.-- ist - sofern keine Einsprache erfolgt - innert 30 Tagen der Finanzverwaltung der Gemeinde zu bezahlen.</div><ol><li>Erster Punkt</li><li>Zweiter Punkt<ol><li>Subpunkt</li></ol></li></ol>',
-                discussion=u'<div>Der Gemeinderat setzt sich geschlossen f\xfcr eine Busse ein.</div>',
-                decision_number=1))
         self.agend_item_text = create(
             Builder('agenda_item').having(
                 title=u'R\xfccktritt Hans Muster',
@@ -86,6 +79,14 @@ class TestProtocolJsonData(FunctionalTestCase):
                 discussion=u'<div>Hans Muster tritt als Gemeinderat zur\xfcck.</div>',
                 decision=u'<div>Der Gemeinderat hat den R\xfccktritt genehmigt. Die Neuwahl eines Ersatzmitglieds f\xfcr Hans Muster erfolgt bald. Die Wahlvorschl\xe4ge sind n\xe4chstens bei der Kanzlei einzureichen. Falls ein 2. Wahlgang notwendig werden sollte, wird dieser danach durchgef\xfchrt. Die detaillierten Angaben \xfcber den Eingang der Wahlvorschl\xe4ge usw. sind ab sofort auf der Gemeindehomepage publiziert.</div>',
                 decision_number=2,))
+
+        self.agenda_item_proposal = create(
+            Builder('agenda_item').having(
+                proposal=self.proposal,
+                meeting=self.meeting,
+                decision=u'<div>Die Bauherren werden gest\xfctzt auf \xa7 160 und in Anwendung von \xa7 162 des Baugesetzes wegen Bauens ohne Baubewilligung gesamthaft bestraft. Der Betrag von je Fr. 1000.-- ist - sofern keine Einsprache erfolgt - innert 30 Tagen der Finanzverwaltung der Gemeinde zu bezahlen.</div><ol><li>Erster Punkt</li><li>Zweiter Punkt<ol><li>Subpunkt</li></ol></li></ol>',
+                discussion=u'<div>Der Gemeinderat setzt sich geschlossen f\xfcr eine Busse ein.</div>',
+                decision_number=1))
 
     def test_protocol_json(self):
         data = ProtocolData(self.meeting).data

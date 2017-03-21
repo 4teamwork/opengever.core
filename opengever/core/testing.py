@@ -21,9 +21,7 @@ from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
 from plone.app.testing import IntegrationTesting
 from plone.app.testing import PLONE_FIXTURE
-from plone.app.testing import PLONE_ZSERVER
 from plone.app.testing import PloneSandboxLayer
-from plone.app.testing import ploneSite
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.browserlayer.utils import unregister_layer
@@ -41,6 +39,7 @@ from zope.component import getSiteManager
 from zope.component import provideUtility
 from zope.configuration import xmlconfig
 from zope.sqlalchemy import datamanager
+from zope.sqlalchemy import ZopeTransactionExtension
 import logging
 import os
 import sys
@@ -148,10 +147,9 @@ class OpengeverFixture(PloneSandboxLayer):
         setup_sql_tables()
 
     def testTearDown(self):
+        # Tear down the sql session because we use the keep_session flag.
+        model.Session.close_all()
         truncate_sql_tables()
-        from opengever.testing.sql import reset_ogds_sync_stamp
-        with ploneSite() as portal:
-            reset_ogds_sync_stamp(portal)
         super(OpengeverFixture, self).testTearDown()
 
     def setUpZope(self, app, configurationContext):
@@ -178,7 +176,7 @@ class OpengeverFixture(PloneSandboxLayer):
         z2.installProduct(app, 'plone.app.versioningbehavior')
         z2.installProduct(app, 'collective.taskqueue.pasplugin')
 
-        memory_session_factory()
+        setup_sqlite_memory_session()
         setupCoreSessions(app)
 
         # Set max subobject limit to 0 -> unlimited
@@ -251,6 +249,7 @@ class MemoryDBLayer(Layer):
         self.session = create_session()
 
     def testTearDown(self):
+        model.Session.close_all()
         truncate_sql_tables()
         transaction.abort()
 
@@ -268,7 +267,7 @@ def functional_session_factory():
     return sess
 
 
-def memory_session_factory():
+def setup_sqlite_memory_session():
     engine_factory = EngineFactory(
         'sqlite:///:memory:',
         connect_args={'check_same_thread': False},
@@ -276,11 +275,24 @@ def memory_session_factory():
     provideUtility(
         engine_factory, provides=IEngineFactory, name=u'opengever_db')
 
-    scoped_session = GloballyScopedSession(engine=u'opengever_db')
+    # keep_session is necessary so that the builders can commit the
+    # transaction multiple times and we can still use the sql objects
+    # without fetching fresh copies.
+    # The session should be closed on test tear down.
+    scoped_session = GloballyScopedSession(
+        engine=u'opengever_db',
+        extension=ZopeTransactionExtension(keep_session=True))
     provideUtility(
         scoped_session, provides=IScopedSession, name=u'opengever')
 
-    return functional_session_factory()
+
+def memory_session_factory():
+    setup_sqlite_memory_session()
+    sess = session.BuilderSession()
+    sess.auto_commit = False
+    sess.auto_flush = True
+    sess.session = create_session()
+    return sess
 
 
 MEMORY_DB_LAYER = MemoryDBLayer(
