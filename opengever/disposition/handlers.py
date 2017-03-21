@@ -16,6 +16,10 @@ def disposition_state_changed(context, event):
     if event.action == 'disposition-transition-close':
         context.destroy_dossiers()
 
+    if event.action == 'disposition-transition-appraised-to-closed':
+        context.mark_dossiers_as_archived()
+        context.destroy_dossiers()
+
     storage = IHistoryStorage(context)
     storage.add(event.action,
                 api.user.get_current().getId(),
