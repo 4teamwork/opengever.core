@@ -60,4 +60,12 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      class=".views.GuardsView"
+      for="opengever.disposition.interfaces.IDisposition"
+      name="guards"
+      permission="zope2.View"
+      allowed_attributes="is_appraised_to_closed_transition_available is_dispose_transition_available"
+      />
+
 </configure>

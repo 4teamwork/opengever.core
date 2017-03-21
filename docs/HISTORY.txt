@@ -5,6 +5,14 @@ Changelog
 2017.1.0 (unreleased)
 -------------------
 
+- Protect dispose transition with a guard, that checks if any of the dossier
+  has to be archived.
+  [phgross]
+
+- Add new transition to directly close a disposition, without any dossiers to
+  archive, after appraisal.
+  [phgross]
+
 - Prefill responsible user for templatefolders.
   [elioschmutz]
 

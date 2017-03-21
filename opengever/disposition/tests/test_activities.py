@@ -3,6 +3,8 @@ from ftw.builder import create
 from opengever.activity import notification_center
 from opengever.activity.model import Activity
 from opengever.activity.model import Resource
+from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_WORTHY
+from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_UNWORTHY
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 from opengever.ogds.base.actor import Actor
 from opengever.testing import FunctionalTestCase
@@ -66,7 +68,12 @@ class TestDispositionNotifications(FunctionalTestCase):
 
     def test_dispose_activity_is_recorded(self):
         self.grant('Records Manager')
+        dossier = create(Builder('dossier')
+                         .as_expired()
+                         .having(archival_value=ARCHIVAL_VALUE_WORTHY))
+
         disposition = create(Builder('disposition')
+                             .having(dossiers=[dossier])
                              .in_state('disposition-state-appraised'))
         api.content.transition(disposition,
                                transition='disposition-transition-dispose')
@@ -77,6 +84,26 @@ class TestDispositionNotifications(FunctionalTestCase):
             u'Disposition disposed for the archive by {}'.format(self.actor_link),
             activity.summary)
         self.assertEquals(u'disposition-transition-dispose', activity.label)
+        self.assertIsNone(activity.description)
+
+    def test_appraised_to_close_activity_is_recorded(self):
+        self.grant('Records Manager')
+        dossier = create(Builder('dossier')
+                         .as_expired()
+                         .having(archival_value=ARCHIVAL_VALUE_UNWORTHY))
+        disposition = create(Builder('disposition')
+                             .having(dossiers=[dossier])
+                             .in_state('disposition-state-appraised'))
+        api.content.transition(disposition,
+                               transition='disposition-transition-appraised-to-closed')
+
+        activity = Activity.query.all()[-1]
+        self.assertEquals('disposition-transition-appraised-to-closed', activity.kind)
+        self.assertEquals(
+            u'Disposition closed and all dossiers destroyed by {}'.format(
+                self.actor_link),
+            activity.summary)
+        self.assertEquals(u'disposition-transition-appraised-to-closed', activity.label)
         self.assertIsNone(activity.description)
 
     def test_archive_activity_is_recorded(self):

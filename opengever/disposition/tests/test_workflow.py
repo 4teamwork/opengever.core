@@ -35,7 +35,6 @@ class TestDispositionWorkflow(FunctionalTestCase):
                                   .having(dossiers=[self.dossier1, self.dossier2])
                                   .within(self.root))
 
-
     def test_initial_state_is_in_progress(self):
         self.assertEquals('disposition-state-in-progress',
                           api.content.get_state(self.disposition))
@@ -58,6 +57,8 @@ class TestDispositionWorkflow(FunctionalTestCase):
     def test_archivist_is_not_allowed_to_dispose_a_disposition(self):
         disposition = create(Builder('disposition')
                              .in_state('disposition-state-appraised'))
+        IAppraisal(disposition).update(dossier=self.dossier1, archive=True)
+        IAppraisal(disposition).update(dossier=self.dossier2, archive=True)
 
         with self.assertRaises(InvalidParameterError):
             self.grant('Archivist')
@@ -66,6 +67,55 @@ class TestDispositionWorkflow(FunctionalTestCase):
 
         self.grant('Records Manager')
         api.content.transition(disposition, 'disposition-transition-dispose')
+
+    def test_dispose_is_only_allowed_when_disposition_contains_dossier_to_archive(self):
+        self.grant('Archivist')
+        appraisal = IAppraisal(self.disposition)
+        appraisal.update(dossier=self.dossier1, archive=False)
+        appraisal.update(dossier=self.dossier2, archive=False)
+        api.content.transition(self.disposition,
+                               'disposition-transition-appraise')
+
+        self.grant('Records Manager')
+        with self.assertRaises(InvalidParameterError):
+            api.content.transition(self.disposition,
+                                   'disposition-transition-dispose')
+
+        appraisal.update(dossier=self.dossier1, archive=True)
+        api.content.transition(self.disposition, 'disposition-transition-dispose')
+
+    def test_direct_close_is_not_allowed_when_disposition_contains_dossier_to_archive(self):
+        self.grant('Archivist')
+        appraisal = IAppraisal(self.disposition)
+        appraisal.update(dossier=self.dossier1, archive=True)
+        appraisal.update(dossier=self.dossier2, archive=False)
+        api.content.transition(self.disposition,
+                               'disposition-transition-appraise')
+
+        self.grant('Records Manager')
+        with self.assertRaises(InvalidParameterError):
+            api.content.transition(self.disposition,
+                                   'disposition-transition-appraised-to-closed')
+
+        appraisal.update(dossier=self.dossier1, archive=False)
+        api.content.transition(self.disposition,
+                               'disposition-transition-appraised-to-closed')
+
+    def test_direct_close_is_not_allowed_for_archivists(self):
+        self.grant('Archivist')
+        appraisal = IAppraisal(self.disposition)
+        appraisal.update(dossier=self.dossier1, archive=False)
+        appraisal.update(dossier=self.dossier2, archive=False)
+        api.content.transition(self.disposition,
+                               'disposition-transition-appraise')
+
+        with self.assertRaises(InvalidParameterError):
+            api.content.transition(self.disposition,
+                                   'disposition-transition-appraised-to-closed')
+
+        self.grant('Records Manager')
+        api.content.transition(self.disposition,
+                               'disposition-transition-appraised-to-closed')
 
     def test_records_manager_is_not_allowed_to_archive_a_disposition(self):
         disposition = create(Builder('disposition')

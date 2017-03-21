@@ -45,3 +45,20 @@ class AppraiseView(BrowserView):
         return self.request.RESPONSE.redirect(
             '{}/content_status_modify?workflow_action={}'.format(
                 self.context.absolute_url(), self.transition))
+
+
+class GuardsView(BrowserView):
+    """Provides some helper methods used by disposition workflow
+    transition guards.
+    """
+
+    def is_appraised_to_closed_transition_available(self):
+        """Returns only true when all dossiers has a negative appraisal.
+        """
+        return not self.context.has_dossiers_to_archive()
+
+    def is_dispose_transition_available(self):
+        """Returns only true when the disposition object contains dossiers
+        with a positive appraisal.
+        """
+        return self.context.has_dossiers_to_archive()
