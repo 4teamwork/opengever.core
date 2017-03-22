@@ -40,8 +40,9 @@ from zope.lifecycleevent import ObjectModifiedEvent
 import datetime
 
 
-class IResponse(Interface):
-
+class ITaskTransitionResponseFormSchema(Interface):
+    """Schema-interface class for the task transition response form
+    """
     transition = schema.Choice(
         title=_("label_transition", default="Transition"),
         source=util.getTransitionVocab,
@@ -146,7 +147,7 @@ class AddForm(form.AddForm, AutoExtensibleForm):
 
     allow_prefill_from_GET_request = True  # XXX
 
-    fields = field.Fields(IResponse)
+    fields = field.Fields(ITaskTransitionResponseFormSchema)
     # keep widget for converters (even though field is hidden)
     fields['transition'].widgetFactory = radio.RadioFieldWidget
     fields = fields.omit('date_of_completion')
