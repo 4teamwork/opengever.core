@@ -40,6 +40,26 @@ from zope.lifecycleevent import ObjectModifiedEvent
 import datetime
 
 
+class ITaskCommentResponseFormSchema(Interface):
+    text = schema.Text(
+        title=_('label_response', default="Response"),
+        required=False,
+        )
+
+    relatedItems = RelationList(
+        title=_(u'label_related_items', default=u'Related Items'),
+        default=[],
+        missing_value=[],
+        value_type=RelationChoice(
+            title=u"Related",
+            source=DossierPathSourceBinder(
+                portal_type=("opengever.document.document", "ftw.mail.mail"),
+                ),
+            ),
+        required=False,
+        )
+
+
 class ITaskTransitionResponseFormSchema(Interface):
     """Schema-interface class for the task transition response form
     """
