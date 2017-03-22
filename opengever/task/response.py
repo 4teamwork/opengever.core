@@ -163,7 +163,7 @@ class Base(BrowserView):
         return self.memship.checkPermission('Delete objects', context)
 
 
-class AddForm(form.AddForm, AutoExtensibleForm):
+class TaskTransitionResponseAddForm(form.AddForm, AutoExtensibleForm):
 
     allow_prefill_from_GET_request = True  # XXX
 
@@ -189,7 +189,7 @@ class AddForm(form.AddForm, AutoExtensibleForm):
         return self._transition
 
     def updateActions(self):
-        super(AddForm, self).updateActions()
+        super(TaskTransitionResponseAddForm, self).updateActions()
         self.actions["save"].addClass("context")
 
     @button.buttonAndHandler(_(u'save', default='Save'),
@@ -317,12 +317,12 @@ class AddForm(form.AddForm, AutoExtensibleForm):
         TaskTransitionActivity(self.context, response).record()
 
 
-class SingleAddFormView(layout.FormWrapper, grok.View):
+class TaskTransitionResponseAddFormView(layout.FormWrapper, grok.View):
     grok.context(ITask)
     grok.name("addresponse")
     grok.require('cmf.AddPortalContent')
 
-    form = AddForm
+    form = TaskTransitionResponseAddForm
 
     def __init__(self, context, request):
         layout.FormWrapper.__init__(self, context, request)
