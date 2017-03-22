@@ -132,6 +132,18 @@ class TestDocument(FunctionalTestCase):
         copy = api.content.copy(source=mail, target=dossier_b)
         self.assertEquals(u'copy of Testmail', copy.title)
 
+    def test_copying_a_mail_does_not_create_versions(self):
+        self.grant('Reader', 'Contributor', 'Editor')
+        dossier_a = create(Builder('dossier').titled(u'Dossier A'))
+        dossier_b = create(Builder('dossier').titled(u'Dossier B'))
+        mail = create(Builder('mail')
+                      .within(dossier_a)
+                      .titled('Testmail'))
+
+        copy = api.content.copy(source=mail, target=dossier_b)
+        new_history = self.portal.portal_repository.getHistory(copy)
+        self.assertEquals(len(new_history), 0)
+
     def test_copying_a_document_does_not_copy_its_versions(self):
         orig_doc = create(Builder("document").having(preserved_as_paper=False))
 
