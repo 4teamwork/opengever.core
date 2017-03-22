@@ -475,6 +475,10 @@ class TestOggBundlePipeline(FunctionalTestCase):
             u'Lorem Ipsum',
             mail.title)
 
+        repo_tool = api.portal.get_tool('portal_repository')
+        history = repo_tool.getHistoryMetadata(mail)
+        self.assertEqual(0, len(history))
+
     def assert_report_data_collected(self, bundle):
         report_data = bundle.report_data
         metadata = report_data['metadata']

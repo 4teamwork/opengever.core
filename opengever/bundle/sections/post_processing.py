@@ -15,7 +15,7 @@ log.setLevel(logging.INFO)
 
 
 INTERMEDIATE_COMMIT_INTERVAL = 200
-VERSIONABLE_TYPES = ('opengever.document.document', 'ftw.mail.mail')
+VERSIONABLE_TYPES = ('opengever.document.document',)
 
 
 class PostProcessingSection(object):
