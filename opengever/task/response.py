@@ -16,6 +16,7 @@ from plone.autoform.form import AutoExtensibleForm
 from plone.memoize.view import memoize
 from plone.z3cform import layout
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone import PloneMessageFactory as pmf
 from Products.Five.browser import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form import button
@@ -161,6 +162,61 @@ class Base(BrowserView):
     def can_delete_response(self):
         context = aq_inner(self.context)
         return self.memship.checkPermission('Delete objects', context)
+
+
+class TaskCommentResponseAddForm(form.AddForm, AutoExtensibleForm):
+
+    fields = field.Fields(ITaskCommentResponseFormSchema)
+
+    @property
+    def label(self):
+        return translate(
+            pmf('label_add_comment', default='Add Comment'),
+            context=self.request)
+
+    @button.buttonAndHandler(_(u'save', default='Save'), name='save')
+    def handleSubmit(self, action):
+        data, errors = self.extractData()
+        if errors:
+            errorMessage = '<ul>'
+            for error in errors:
+                if errorMessage.find(error.message):
+                    errorMessage += '<li>' + error.message + '</li>'
+            errorMessage += '</ul>'
+            self.status = errorMessage
+            return None
+
+        self.add_response(data)
+        self.request.RESPONSE.redirect(self.context.absolute_url())
+
+    @button.buttonAndHandler(_(u'cancel', default='Cancel'), name='cancel', )
+    def handleCancel(self, action):
+        return self.request.RESPONSE.redirect('.')
+
+    def add_response(self, data):
+        pass
+
+    def updateWidgets(self):
+        super(TaskCommentResponseAddForm, self).updateWidgets()
+        if self.context.portal_type == 'opengever.inbox.forwarding':
+            self.widgets['relatedItems'].mode = HIDDEN_MODE
+        if not self.is_user_assigned_to_current_org_unit():
+            self.widgets['relatedItems'].mode = HIDDEN_MODE
+
+    def is_user_assigned_to_current_org_unit(self):
+        units = ogds_service().assigned_org_units()
+        return get_current_org_unit() in units
+
+    def record_activity(self, response):
+        pass
+
+
+class TaskCommentResponseAddFormView(layout.FormWrapper, grok.View):
+    grok.context(ITask)
+    grok.name("addtaskcommentresponse")
+    grok.require('cmf.AddPortalContent')
+
+    form = TaskCommentResponseAddForm
 
 
 class TaskTransitionResponseAddForm(form.AddForm, AutoExtensibleForm):
