@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-03-12 14:51+0000\n"
+"POT-Creation-Date: 2017-03-23 14:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -70,12 +70,12 @@ msgid "label_appraisal"
 msgstr ""
 
 #. Default: "Archive"
-#: ./opengever/disposition/browser/templates/overview.pt:26
+#: ./opengever/disposition/browser/templates/overview.pt:27
 msgid "label_archive"
 msgstr ""
 
 #. Default: "Archive all"
-#: ./opengever/disposition/browser/templates/overview.pt:62
+#: ./opengever/disposition/browser/templates/overview.pt:65
 msgid "label_archive_all"
 msgstr ""
 
@@ -85,7 +85,7 @@ msgid "label_archived"
 msgstr ""
 
 #. Default: "Details:"
-#: ./opengever/disposition/browser/templates/overview.pt:202
+#: ./opengever/disposition/browser/templates/overview.pt:205
 msgid "label_details"
 msgstr ""
 
@@ -111,18 +111,23 @@ msgid "label_dispositon_package_download"
 msgstr ""
 
 #. Default: "Don't archive"
-#: ./opengever/disposition/browser/templates/overview.pt:123
+#: ./opengever/disposition/browser/templates/overview.pt:126
 msgid "label_dont_archive"
 msgstr ""
 
 #. Default: "Do not archive all"
-#: ./opengever/disposition/browser/templates/overview.pt:65
+#: ./opengever/disposition/browser/templates/overview.pt:68
 msgid "label_dont_archive_all"
+msgstr ""
+
+#. Default: "Dossier"
+#: ./opengever/disposition/browser/templates/overview.pt:47
+msgid "label_dossier"
 msgstr ""
 
 #. Default: "Dossiers"
 #: ./opengever/disposition/browser/removal_protocol.py:122
-#: ./opengever/disposition/browser/templates/overview.pt:45
+#: ./opengever/disposition/browser/templates/overview.pt:46
 #: ./opengever/disposition/disposition.py:145
 msgid "label_dossiers"
 msgstr ""
@@ -231,7 +236,7 @@ msgid "msg_disposition_edited"
 msgstr ""
 
 #. Default: "Disposition refused by ${user}"
-#: ./opengever/disposition/history.py:165
+#: ./opengever/disposition/history.py:171
 msgid "msg_disposition_refuse"
 msgstr ""
 
@@ -241,12 +246,12 @@ msgid "msg_disposition_updated"
 msgstr ""
 
 #. Default: "Period"
-#: ./opengever/disposition/browser/templates/overview.pt:86
+#: ./opengever/disposition/browser/templates/overview.pt:89
 msgid "period"
 msgstr ""
 
 #. Default: "Progress"
-#: ./opengever/disposition/browser/templates/overview.pt:189
+#: ./opengever/disposition/browser/templates/overview.pt:192
 msgid "progress"
 msgstr ""
 
