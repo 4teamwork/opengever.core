@@ -22,19 +22,8 @@ class ActionMenuViewlet(grok.Viewlet):
         regular_items = []
         agency_items = []
 
-        wftool = api.portal.get_tool(name='portal_workflow')
-        infos = wftool.listActionInfos(object=self.context, check_condition=False)
-
-        controller = getMultiAdapter((self.context, self.request),
-                                     name='task_transition_controller')
-        for info in infos:
-            description = ResponseDescription.get(transition=info['id'])
-            info['response_description'] = description
-
-            if controller.is_transition_possible(info.get('id'), include_agency=False):
-                regular_items.append(info)
-            else:
-                agency_items.append(info)
+        self._append_workflow_menu_items(regular_items, agency_items)
+        self._append_additional_menu_items(regular_items, agency_items)
 
         self.regular_items = regular_items
         self.agency_items = agency_items
@@ -52,3 +41,25 @@ class ActionMenuViewlet(grok.Viewlet):
             self.get_menu_items()
 
         return self.agency_items
+
+    def _append_workflow_menu_items(self, regular_items, agency_items):
+        wftool = api.portal.get_tool(name='portal_workflow')
+        infos = wftool.listActionInfos(object=self.context, check_condition=False)
+
+        controller = getMultiAdapter((self.context, self.request),
+                                     name='task_transition_controller')
+
+        for info in infos:
+            description = ResponseDescription.get(transition=info['id'])
+            info['response_description'] = description
+
+            if controller.is_transition_possible(info.get('id'), include_agency=False):
+                regular_items.append(info)
+            else:
+                agency_items.append(info)
+
+    def _append_additional_menu_items(self, regular_items, agency_items):
+        regular_items.append(
+            {'title': 'label_add_comment',
+             'url': '{}/@@addtaskcommentresponse'.format(self.context.absolute_url()),
+             'response_description': ResponseDescription.get(transition='task-commented')})

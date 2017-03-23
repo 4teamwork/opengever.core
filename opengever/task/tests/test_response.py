@@ -39,6 +39,17 @@ class TestTaskCommentResponseAddFormView(FunctionalTestCase):
             'Commented by Test User (test_user_1_)',
             self.get_latest_answer(browser))
 
+    @browsing
+    def test_click_on_comment_button_redirects_to_add_comment_view(self, browser):
+        task = create(Builder('task').titled('Task 1'))
+        browser.login().open(task, view='tabbedview_view-overview')
+
+        browser.css('.taskCommented').first.click()
+
+        self.assertEqual(
+            '{}/@@addtaskcommentresponse'.format(task.absolute_url()),
+            browser.url)
+
     def get_latest_answer(self, browser):
         latest_answer = browser.css('div.answers .answer').first
         return latest_answer.css('h3').text[0]

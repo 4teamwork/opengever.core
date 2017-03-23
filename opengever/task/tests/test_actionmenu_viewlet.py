@@ -31,7 +31,8 @@ class TestActionmenuViewlet(FunctionalTestCase):
             ['task-transition-open-in-progress',
              'task-transition-open-rejected',
              'task-transition-open-resolved',
-             'task-transition-reassign'],
+             'task-transition-reassign',
+             'label_add_comment'],
             browser.css('ul.regular_buttons a').text)
 
         self.assertEquals(
