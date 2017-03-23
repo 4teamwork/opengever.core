@@ -22,6 +22,32 @@ class TaskActivity(BaseActivity):
         self.parent = parent
 
 
+class TaskCommentedActivity(TaskActivity):
+    """Activity representation for commenting a task.
+    """
+    def __init__(self, context, request, parent, response):
+        super(TaskCommentedActivity, self).__init__(context, request, parent)
+        self.response = response
+
+    @property
+    def kind(self):
+        return PloneMessageFactory(u'task-commented', default=u'Task commented')
+
+    @property
+    def description(self):
+        return {get_locale(): self.response.text}
+
+    @property
+    def summary(self):
+        return self.translate_to_all_languages(
+            ResponseDescription.get(response=self.response).msg())
+
+    @property
+    def label(self):
+        return self.translate_to_all_languages(
+            ResponseDescription.get(response=self.response).label())
+
+
 class TaskAddedActivity(TaskActivity):
     """Activity representation for adding a task."""
 

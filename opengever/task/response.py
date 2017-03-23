@@ -6,6 +6,7 @@ from opengever.ogds.base.utils import ogds_service
 from opengever.tabbedview.helper import linked
 from opengever.task import _
 from opengever.task import util
+from opengever.task.activities import TaskCommentedActivity
 from opengever.task.activities import TaskTransitionActivity
 from opengever.task.adapters import IResponseContainer
 from opengever.task.adapters import Response
@@ -189,6 +190,7 @@ class TaskCommentResponseAddForm(form.AddForm, AutoExtensibleForm):
         response = self.create_response(data)
 
         self.add_response_to_obj(self.context, response)
+        self.record_activity(response)
 
         self.request.RESPONSE.redirect(self.context.absolute_url())
 
@@ -220,7 +222,10 @@ class TaskCommentResponseAddForm(form.AddForm, AutoExtensibleForm):
         return get_current_org_unit() in units
 
     def record_activity(self, response):
-        pass
+        TaskCommentedActivity(self.context,
+                              self.context.REQUEST,
+                              None,
+                              response).record()
 
 
 class TaskCommentResponseAddFormView(layout.FormWrapper, grok.View):
