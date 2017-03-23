@@ -50,19 +50,6 @@ class ITaskCommentResponseFormSchema(Interface):
         required=False,
         )
 
-    relatedItems = RelationList(
-        title=_(u'label_related_items', default=u'Related Items'),
-        default=[],
-        missing_value=[],
-        value_type=RelationChoice(
-            title=u"Related",
-            source=DossierPathSourceBinder(
-                portal_type=("opengever.document.document", "ftw.mail.mail"),
-                ),
-            ),
-        required=False,
-        )
-
 
 class ITaskTransitionResponseFormSchema(Interface):
     """Schema-interface class for the task transition response form
@@ -191,7 +178,6 @@ class TaskCommentResponseAddForm(form.AddForm, AutoExtensibleForm):
 
         response = self.create_response(data)
 
-        self.add_related_items(response, data)
         self.add_response_to_obj(self.context, response)
         self.record_activity(response)
 
@@ -213,32 +199,9 @@ class TaskCommentResponseAddForm(form.AddForm, AutoExtensibleForm):
 
         notify(ObjectModifiedEvent(obj))
 
-    def updateWidgets(self):
-        super(TaskCommentResponseAddForm, self).updateWidgets()
-        if self.context.portal_type == 'opengever.inbox.forwarding':
-            self.widgets['relatedItems'].mode = HIDDEN_MODE
-        if not self.is_user_assigned_to_current_org_unit():
-            self.widgets['relatedItems'].mode = HIDDEN_MODE
-
     def is_user_assigned_to_current_org_unit(self):
         units = ogds_service().assigned_org_units()
         return get_current_org_unit() in units
-
-    def add_related_items(self, response, data):
-        current_related_ids = [item.to_id for item in self.context.relatedItems]
-        intids = getUtility(IIntIds)
-        for item in data.get('relatedItems', []):
-            to_id = intids.getId(item)
-
-            # relation allready exists
-            if to_id not in current_related_ids:
-                self.context.relatedItems.append(RelationValue(to_id))
-
-            response.add_change('relatedItems',
-                                _(u'label_related_items',
-                                  default=u"Related Items"),
-                                '',
-                                linked(item, item.Title()))
 
     def record_activity(self, response):
         TaskCommentedActivity(self.context,
