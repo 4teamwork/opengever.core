@@ -47,7 +47,7 @@ import datetime
 class ITaskCommentResponseFormSchema(Interface):
     text = schema.Text(
         title=_('label_response', default="Response"),
-        required=False,
+        required=True,
         )
 
 
@@ -168,13 +168,8 @@ class TaskCommentResponseAddForm(form.AddForm, AutoExtensibleForm):
     def handleSubmit(self, action):
         data, errors = self.extractData()
         if errors:
-            errorMessage = '<ul>'
-            for error in errors:
-                if errorMessage.find(error.message):
-                    errorMessage += '<li>' + error.message + '</li>'
-            errorMessage += '</ul>'
-            self.status = errorMessage
-            return None
+            self.status = self.formErrorsMessage
+            return
 
         response = self.create_response(data)
 

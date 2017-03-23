@@ -1,6 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages import statusmessages
 from opengever.testing import FunctionalTestCase
 from zExceptions import Unauthorized
 from zope.component import getMultiAdapter
@@ -40,6 +41,18 @@ class TestTaskCommentResponseAddFormView(FunctionalTestCase):
         self.assertEqual(
             'Commented by Test User (test_user_1_)',
             self.get_latest_answer(browser))
+
+    @browsing
+    def test_text_field_is_required_for_comments(self, browser):
+        dossier = create(Builder('dossier'))
+        task = create(Builder('task').titled('Task').within(dossier))
+
+        browser.login().visit(task, view="addtaskcommentresponse")
+        browser.find('Save').click()
+
+        self.assertEqual(
+            ['There were some errors.'],
+            statusmessages.error_messages())
 
     @browsing
     def test_click_on_comment_button_redirects_to_add_comment_view(self, browser):
