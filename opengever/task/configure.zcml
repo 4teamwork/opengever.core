@@ -53,4 +53,10 @@
       allowed_interface="plone.app.layout.globals.interfaces.ILayoutPolicy"
       />
 
+  <adapter
+      factory=".comment_response.CommentResponseHandler"
+      for="opengever.task.task.ITask"
+      provides="opengever.task.interfaces.ICommentResponseHandler"
+      />
+
 </configure>

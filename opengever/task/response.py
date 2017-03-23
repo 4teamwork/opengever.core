@@ -10,6 +10,7 @@ from opengever.task.activities import TaskCommentedActivity
 from opengever.task.activities import TaskTransitionActivity
 from opengever.task.adapters import IResponseContainer
 from opengever.task.adapters import Response
+from opengever.task.interfaces import ICommentResponseHandler
 from opengever.task.interfaces import IWorkflowStateSyncer
 from opengever.task.permissions import DEFAULT_ISSUE_MIME_TYPE
 from opengever.task.task import ITask
@@ -29,6 +30,7 @@ from z3c.relationfield.relation import RelationValue
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
 from zExceptions import BadRequest
+from zExceptions import Unauthorized
 from zope import schema
 from zope.cachedescriptors.property import Lazy
 from zope.component import getMultiAdapter
@@ -251,6 +253,12 @@ class TaskCommentResponseAddFormView(layout.FormWrapper, grok.View):
     grok.require('cmf.AddPortalContent')
 
     form = TaskCommentResponseAddForm
+
+    def __call__(self):
+        if not ICommentResponseHandler(self.context).is_allowed():
+            raise Unauthorized('Commenting is not allowed on closed dossiers')
+
+        return super(TaskCommentResponseAddFormView, self).__call__()
 
 
 class TaskTransitionResponseAddForm(form.AddForm, AutoExtensibleForm):

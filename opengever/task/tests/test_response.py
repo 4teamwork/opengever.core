@@ -2,6 +2,8 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.testing import FunctionalTestCase
+from zExceptions import Unauthorized
+from zope.component import getMultiAdapter
 
 
 class TestTaskCommentResponseAddFormView(FunctionalTestCase):
@@ -63,6 +65,40 @@ class TestTaskCommentResponseAddFormView(FunctionalTestCase):
         self.assertEqual(
             '{}/@@addtaskcommentresponse'.format(task.absolute_url()),
             browser.url)
+
+    @browsing
+    def test_do_not_show_comment_button_if_dossier_is_closed(self, browser):
+        dossier = create(Builder('dossier')
+                         .in_state('dossier-state-resolved'))
+
+        task = create(Builder('task').titled('Task 1').within(dossier))
+        browser.login().open(task, view='tabbedview_view-overview')
+
+        self.assertEqual(0, len(browser.css('.taskCommented')))
+
+    def test_protect_addcommenttaskresponse_view_if_containing_dossier_is_closed(self):
+        dossier = create(Builder('dossier')
+                         .in_state('dossier-state-resolved'))
+
+        task = create(Builder('task').titled('Task 1').within(dossier))
+        view = getMultiAdapter((task, self.request), name='addtaskcommentresponse')
+
+        with self.assertRaises(Unauthorized):
+            view()
+
+    def test_protect_addcommenttaskresponse_view_if_user_has_no_add_permission(self):
+        create(Builder('user')
+               .having(firstname='Hugo', lastname='Boss')
+               .with_userid('hugo.boss'))
+
+        dossier = create(Builder('dossier'))
+        task = create(Builder('task').titled('Task 1').within(dossier))
+
+        self.login('hugo.boss')
+        view = getMultiAdapter((task, self.request), name='addtaskcommentresponse')
+
+        with self.assertRaises(Unauthorized):
+            view()
 
     def get_latest_answer(self, browser):
         latest_answer = browser.css('div.answers .answer').first

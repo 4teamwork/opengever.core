@@ -1,4 +1,5 @@
 from five import grok
+from opengever.task.interfaces import ICommentResponseHandler
 from opengever.task.response_description import ResponseDescription
 from opengever.task.task import ITask
 from opengever.task.viewlets.manager import BeneathTask
@@ -59,7 +60,8 @@ class ActionMenuViewlet(grok.Viewlet):
                 agency_items.append(info)
 
     def _append_additional_menu_items(self, regular_items, agency_items):
-        regular_items.append(
-            {'title': 'label_add_comment',
-             'url': '{}/@@addtaskcommentresponse'.format(self.context.absolute_url()),
-             'response_description': ResponseDescription.get(transition='task-commented')})
+        if ICommentResponseHandler(self.context).is_allowed():
+            regular_items.append(
+                {'title': 'label_add_comment',
+                 'url': '{}/@@addtaskcommentresponse'.format(self.context.absolute_url()),
+                 'response_description': ResponseDescription.get(transition='task-commented')})
