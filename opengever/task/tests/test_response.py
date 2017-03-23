@@ -40,6 +40,20 @@ class TestTaskCommentResponseAddFormView(FunctionalTestCase):
             self.get_latest_answer(browser))
 
     @browsing
+    def test_add_related_items_to_task_after_commenting(self, browser):
+        dossier = create(Builder('dossier'))
+
+        task = create(Builder('task').titled('Task 1').within(dossier))
+        document = create(Builder('document').titled('Document 1').within(dossier))
+
+        browser.login().visit(task, view="addtaskcommentresponse")
+        browser.fill({'Related Items': [document]}).find('Save').click()
+
+        self.assertEqual(
+            [document],
+            [item.to_object for item in task.relatedItems])
+
+    @browsing
     def test_click_on_comment_button_redirects_to_add_comment_view(self, browser):
         task = create(Builder('task').titled('Task 1'))
         browser.login().open(task, view='tabbedview_view-overview')

@@ -189,6 +189,7 @@ class TaskCommentResponseAddForm(form.AddForm, AutoExtensibleForm):
 
         response = self.create_response(data)
 
+        self.add_related_items(response, data)
         self.add_response_to_obj(self.context, response)
         self.record_activity(response)
 
@@ -220,6 +221,22 @@ class TaskCommentResponseAddForm(form.AddForm, AutoExtensibleForm):
     def is_user_assigned_to_current_org_unit(self):
         units = ogds_service().assigned_org_units()
         return get_current_org_unit() in units
+
+    def add_related_items(self, response, data):
+        current_related_ids = [item.to_id for item in self.context.relatedItems]
+        intids = getUtility(IIntIds)
+        for item in data.get('relatedItems', []):
+            to_id = intids.getId(item)
+
+            # relation allready exists
+            if to_id not in current_related_ids:
+                self.context.relatedItems.append(RelationValue(to_id))
+
+            response.add_change('relatedItems',
+                                _(u'label_related_items',
+                                  default=u"Related Items"),
+                                '',
+                                linked(item, item.Title()))
 
     def record_activity(self, response):
         TaskCommentedActivity(self.context,
