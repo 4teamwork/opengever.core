@@ -3,8 +3,6 @@ from AccessControl.SecurityManagement import getSecurityManager
 from Acquisition import aq_parent
 from five import grok
 from ftw.tabbedview.browser.tabbed import TabbedView
-from OFS.interfaces import IObjectClonedEvent
-from opengever.base import _
 from plone.app.lockingbehavior.behaviors import ILocking
 from plone.app.relationfield.event import extract_relations
 from plone.dexterity.interfaces import IDexterityContent
@@ -14,9 +12,6 @@ from Products.CMFCore.interfaces import ISiteRoot
 from Products.PluggableAuthService.interfaces.events import IUserLoggedOutEvent
 from z3c.relationfield.event import _setRelation
 from zope.annotation import IAnnotations
-from zope.component.hooks import getSite
-from zope.globalrequest import getRequest
-from zope.i18n import translate
 from zope.interface import alsoProvides
 from zope.interface import Interface
 from zope.lifecycleevent.interfaces import IObjectAddedEvent
@@ -50,23 +45,6 @@ ALLOWED_ENDPOINTS = set([
     'bumblebee_download',
     'health-check',
 ])
-
-
-@grok.subscribe(IDexterityContent, IObjectClonedEvent)
-def create_initial_version(obj, event):
-    """When a object was copied, create an initial version.
-    """
-    portal = getSite()
-    pr = portal.portal_repository
-    history = pr.getHistory(obj)
-
-    if history is not None and not len(history) > 0:
-        comment = translate(_(u'label_initial_version_copied',
-                            default="Initial version (document copied)"),
-                            context=getRequest())
-        # Create an initial version
-        pr._recursiveSave(obj, {}, pr._prepareSysMetadata(comment),
-            autoapply=pr.autoapply)
 
 
 @grok.subscribe(ILocking, IEditBegunEvent)
