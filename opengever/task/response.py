@@ -186,15 +186,27 @@ class TaskCommentResponseAddForm(form.AddForm, AutoExtensibleForm):
             self.status = errorMessage
             return None
 
-        self.add_response(data)
+        response = self.create_response(data)
+
+        self.add_response_to_obj(self.context, response)
+
         self.request.RESPONSE.redirect(self.context.absolute_url())
 
     @button.buttonAndHandler(_(u'cancel', default='Cancel'), name='cancel', )
     def handleCancel(self, action):
         return self.request.RESPONSE.redirect('.')
 
-    def add_response(self, data):
-        pass
+    def create_response(self, data):
+        response = Response(data.get('text'))
+        response.transition = "task-commented"
+
+        return response
+
+    def add_response_to_obj(self, obj, response):
+        container = IResponseContainer(obj)
+        container.add(response)
+
+        notify(ObjectModifiedEvent(obj))
 
     def updateWidgets(self):
         super(TaskCommentResponseAddForm, self).updateWidgets()
