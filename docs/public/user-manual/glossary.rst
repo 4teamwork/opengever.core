@@ -162,6 +162,9 @@ Glossar
      Person oder Organisationseinheit, die für das Geschäft oder Teilgeschäft
      verantwortlich ist.
 
+   Freie Zehnergliederung:
+     Strukturierungsmethode, nach der ein Ordnungssystem hierarchisch in Gruppen und Rubriken unterteilt wird. Dabei stehen auf der obersten Ebene des Ordnungssystems maximal 10 Positionen (0-9) zur Verfügung. Jede dieser Positionen darf ihrerseits wieder höchstens zehn Unterpositionen haben.
+
    Geschäft
      Aufgabe, die von einem Amt oder einem Dienst erledigt wird.
      Vgl. mit :term:`Geschäftsdossier`. [#geschaeft]_
