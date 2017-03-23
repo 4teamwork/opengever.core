@@ -5,6 +5,9 @@ Changelog
 2017.1.0 (unreleased)
 -------------------
 
+- Limit creating initial versions to documents.
+  [deiferni]
+
 - Protect dispose transition with a guard, that checks if any of the dossier
   has to be archived.
   [phgross]
