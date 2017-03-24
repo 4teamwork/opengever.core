@@ -1,4 +1,5 @@
 from AccessControl import ClassSecurityInfo
+from AccessControl import getSecurityManager
 from AccessControl.Permissions import webdav_unlock_items
 from Acquisition import aq_inner, aq_parent
 from collective import dexteritytextindexer
@@ -23,6 +24,8 @@ from Products.MimetypesRegistry.common import MimeTypeException
 from z3c.form import validator
 from zope import schema
 from zope.component import getMultiAdapter
+from zope.component import queryMultiAdapter
+from zope.globalrequest import getRequest
 from zope.interface import implements
 from zope.interface import Invalid
 from zope.interface import invariant
@@ -217,6 +220,19 @@ class Document(Item, BaseDocumentMixin):
         manager = getMultiAdapter((self, self.REQUEST),
                                   ICheckinCheckoutManager)
         return manager.get_checked_out_by()
+
+    def is_checkout_and_edit_available(self):
+        manager = queryMultiAdapter(
+            (self, getRequest()), ICheckinCheckoutManager)
+
+        if manager.get_checked_out_by():
+            if manager.get_checked_out_by() == \
+                    getSecurityManager().getUser().getId():
+                return True
+            else:
+                return False
+
+        return manager.is_checkout_allowed()
 
     def is_shadow_document(self):
         return api.content.get_state(self) == self.shadow_state

@@ -21,7 +21,9 @@ class TooltipView(BrowserView):
         return not self.document.is_trashed
 
     def checkout_and_edit_link_available(self):
-        return self.document.is_document
+        if not self.document.is_document:
+            return False
+        return self.document.getObject().is_checkout_and_edit_available()
 
     def checkout_and_edit_link(self):
         return addTokenToUrl('{}/editing_document'.format(self.get_url()))

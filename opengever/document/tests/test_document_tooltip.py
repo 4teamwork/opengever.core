@@ -45,7 +45,10 @@ class TestDocumentTooltip(FunctionalTestCase):
     @browsing
     def test_tooltip_actions(self, browser):
         pdfconverter.PDFCONVERTER_AVAILABLE = True
-        document = create(Builder('document').with_dummy_content())
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document')
+                          .within(dossier)
+                          .with_dummy_content())
 
         browser.login().open(document, view='tooltip')
         preview, metadata, checkout, download = browser.css('.file-actions a')
@@ -53,24 +56,24 @@ class TestDocumentTooltip(FunctionalTestCase):
         # preview
         self.assertEquals('PDF Preview', preview.text)
         self.assertEquals(
-            'http://nohost/plone/document-1/@@download_pdfpreview',
+            'http://nohost/plone/dossier-1/document-1/@@download_pdfpreview',
             preview.get('href'))
 
         # metadata
         self.assertEquals('Edit metadata', metadata.text)
         self.assertEquals(
-            'http://nohost/plone/document-1/edit_checker',
+            'http://nohost/plone/dossier-1/document-1/edit_checker',
             metadata.get('href'))
 
         # checkout and edit
         self.assertEquals('Checkout and edit', checkout.text)
         self.assertTrue(checkout.get('href').startswith(
-            'http://nohost/plone/document-1/editing_document?_authenticator='))
+            'http://nohost/plone/dossier-1/document-1/editing_document?_authenticator='))
 
         # download copy
         self.assertEquals('Download copy', download.text)
         self.assertEquals(
-            'http://nohost/plone/document-1/file_download_confirmation',
+            'http://nohost/plone/dossier-1/document-1/file_download_confirmation',
             download.get('href'))
 
     @browsing
@@ -111,8 +114,12 @@ class TestDocumentTooltip(FunctionalTestCase):
 
     @browsing
     def test_checkout_link_is_only_available_for_documents(self, browser):
-        document = create(Builder('document').with_dummy_content())
-        mail = create(Builder('mail'))
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document')
+                          .within(dossier)
+                          .with_dummy_content())
+        mail = create(Builder('mail')
+                      .within(dossier))
 
         browser.login().open(document, view='tooltip')
         self.assertIn('Checkout and edit',
@@ -121,6 +128,17 @@ class TestDocumentTooltip(FunctionalTestCase):
         browser.open(mail, view='tooltip')
         self.assertNotIn('Checkout and edit',
                          browser.css('.file-actions a').text)
+
+    @browsing
+    def test_checkout_link_is_only_available_for_editable_docs(self, browser):
+        dossier = create(Builder('dossier').in_state('dossier-state-resolved'))
+        document = create(Builder('document')
+                          .within(dossier)
+                          .with_dummy_content())
+
+        browser.login().open(document, view='tooltip')
+        self.assertEquals(['Edit metadata', 'Download copy'],
+                          browser.css('.file-actions a').text)
 
     @browsing
     def test_download_link_is_available_for_documents_and_mails_when_file_exists(self, browser):
