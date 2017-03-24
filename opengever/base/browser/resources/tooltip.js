@@ -29,7 +29,8 @@
       fixed: true // Make sure the tooltip gets not hidden if mouse is over the tooltip
     },
     events: {
-      show: closeTooltips
+      show: closeTooltips,
+      hide: destroyTooltips,
     }
   };
 
@@ -51,6 +52,8 @@
   function initTooltips(event) { $(event.currentTarget).qtip(settings, event); }
 
   function closeTooltips(event, api) { $(event.originalEvent.target).on("click", function() { api.hide(); }); }
+
+  function destroyTooltips(event, api) { api.destroy(true); }
 
   $(document).on("mouseover", ".tooltip-trigger", initTooltips);
 
