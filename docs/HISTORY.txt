@@ -5,6 +5,9 @@ Changelog
 2017.1.0 (unreleased)
 -------------------
 
+- Disposition overview: Differs beetween singular/plural on the dossier(s) label.
+  [phgross]
+
 - Limit creating initial versions to documents.
   [deiferni]
 

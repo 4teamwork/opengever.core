@@ -41,18 +41,20 @@
                 <span tal:content="repository/get_archival_value" i18n:translate=""/>
               </div>
               <div class="collapsible-header dossier-header">
-                <span>
-                  <span tal:content="python: len(dossiers)" />
-                  <span i18n:translate="label_dossiers">Dossiers</span>
+                <span tal:define="number_of_dossiers python: len(dossiers)">
+                  <span tal:content="number_of_dossiers" />
+                  <span tal:condition="python: number_of_dossiers > 1" i18n:translate="label_dossiers">Dossiers</span>
+                  <span tal:condition="python: number_of_dossiers == 1" i18n:translate="label_dossier">Dossier</span>
                 </span>
               </div>
             </div>
             <div class="repository_title" tal:condition="context/is_closed">
               <h3 tal:condition="context/is_closed" tal:content="repository" />
               <div class="collapsible-header dossier-header">
-                <span>
-                  <span tal:content="python: len(dossiers)" />
-                  <span i18n:translate="label_dossiers">Dossiers</span>
+                <span tal:define="number_of_dossiers python: len(dossiers)">
+                  <span tal:content="number_of_dossiers" />
+                  <span tal:condition="python: number_of_dossiers > 1" i18n:translate="label_dossiers">Dossiers</span>
+                  <span tal:condition="python: number_of_dossiers == 1" i18n:translate="label_dossier">Dossier</span>
                 </span>
               </div>
             </div>
