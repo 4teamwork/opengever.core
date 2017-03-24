@@ -154,10 +154,37 @@ archivierten Dossiers sehen, auch wenn Sie nicht dem entsprechenden Mandanten
 zugewiesen sind. Dies ermöglicht eine Prüfung der Dossiers durch die Archiv
 Mitarbeitenden während der Bewertungsphase.
 
+Konfigurationsmöglichkeiten
+---------------------------
+
+Dossierabschluss
+~~~~~~~~~~~~~~~~
+Die folgenden Optionen stehen für den Dossierabschluss zur Verfügung und können pro Mandant aktiviert bzw. deaktiviert werden.
+
+- ``Automatische PDF Generierung``: Bei Dossierabschluss wird jedes Dokument im Dossier in ein Archivformat konvertiert und als separate Datei im Feld ``Archivdatei`` abgelegt. Die Konvertierung geschieht asynchron.
+- ``Journal PDF``: Bei Dossierabschluss wird ein PDF mit dem komplette Dossier journal generiert und als separates Dokument ins Dossier abgelegt.
+- ``Papierkorb entleeren``: Alle Dokumente weche bei Abschluss des Dossiers im Papierkorb enthalten sind werden gelöscht.
+
+Rollen und Berechtigungen
+~~~~~~~~~~~~~~~~~~~~~~~~~
+Mit dem Aussonderungsprozess wurden die zwei neuen Rollen ``Records Manager`` und ``Archivist`` eingeführt. Die Rollen werden global pro Mandant vergeben und sind mit den folgenden Berechtigungen verknüpft.
+
+``Records Manager``:
+
+- Erstellung und Bearbeitung von Angeboten
+- Einsicht in Angebote
+- Angebotsablieferung
+- Angebotsabschluss inkl. Dossiervernichtung
+
+``Archivist``:
+
+- Finalisierung der Angebotsbewertung
+- Einsicht in Angebote (auch auf fremden Mandanten)
+- Bestätigung der Archivierung.
+
 Feature Flag
-------------
-Die zusätzichen Features sind mit einem Feature-Flag geschützt, und stehen
-nur der neuen Rolle `Records Manager` zur Verfügung.
+~~~~~~~~~~~~
+Die zusätzlichen Features sind nicht mit einem separaten Feature-Flag sondern durch die neuen Rollen ``Records Manager`` bzw. ``Archivist`` geschützt, welche standarmässig keiner Gruppe zugewiesen sind.
 
 .. |img-aussonderung-1| image:: img/media/img-aussonderung-1.png
 .. |img-aussonderung-2| image:: img/media/img-aussonderung-2.png
