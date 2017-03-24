@@ -32,15 +32,21 @@ class TestOfficeConnectorTemplates(FunctionalTestCase):
     def test_overview_template_without_officeconnector(self, browser):
         browser.login().open(self.document, view='tabbedview_view-overview')
 
-        self.assertEqual(0, len(browser.css('#officeconnector-attach-url')))
-        self.assertEqual(0, len(browser.css('#officeconnector-checkout-url')))
+        self.assertFalse(
+            'javascript:officeConnectorCheckout('
+            in browser.css('a.function-edit').first.get('href'))
+
+        self.assertEqual(0, len(browser.css('a.function-attach')))
 
     @browsing
     def test_tooltip_template_without_officeconnector(self, browser):
         browser.login().open(self.document, view='tooltip')
 
-        self.assertEqual(0, len(browser.css('#officeconnector-attach-url')))
-        self.assertEqual(0, len(browser.css('#officeconnector-checkout-url')))
+        self.assertFalse(
+            'javascript:officeConnectorCheckout('
+            in browser.css('a.function-edit').first.get('href'))
+
+        self.assertEqual(0, len(browser.css('a.function-attach')))
 
     @browsing
     def test_overview_template_with_officeconnector_attach(self, browser):
@@ -52,12 +58,15 @@ class TestOfficeConnectorTemplates(FunctionalTestCase):
 
         browser.login().open(self.document, view='tabbedview_view-overview')
 
-        self.assertEqual(1, len(browser.css('#officeconnector-attach-url')))
-        self.assertTrue(
-            'data-officeconnector-attach-url'
-            in browser.css('#officeconnector-attach-url')[0].outerHTML)
+        self.assertFalse(
+            'javascript:officeConnectorCheckout('
+            in browser.css('a.function-edit').first.get('href'))
 
-        self.assertEqual(0, len(browser.css('#officeconnector-checkout-url')))
+        self.assertEqual(1, len(browser.css('a.function-attach')))
+
+        self.assertTrue(
+            self.document.absolute_url()
+            in browser.css('a.function-attach').first.get('href'))
 
     @browsing
     def test_overview_template_with_officeconnector_checkout(self, browser):
@@ -69,12 +78,15 @@ class TestOfficeConnectorTemplates(FunctionalTestCase):
 
         browser.login().open(self.document, view='tabbedview_view-overview')
 
-        self.assertEqual(0, len(browser.css('#officeconnector-attach-url')))
+        self.assertEqual(0, len(browser.css('a.function-attach')))
 
-        self.assertEqual(1, len(browser.css('#officeconnector-checkout-url')))
         self.assertTrue(
-            'data-officeconnector-checkout-url'
-            in browser.css('#officeconnector-checkout-url')[0].outerHTML)
+            'javascript:officeConnectorCheckout('
+            in browser.css('a.function-edit').first.get('href'))
+
+        self.assertTrue(
+            self.document.absolute_url()
+            in browser.css('a.function-edit').first.get('href'))
 
     @browsing
     def test_overview_template_with_officeconnector_attach_and_checkout(self, browser): # noqa
@@ -90,15 +102,19 @@ class TestOfficeConnectorTemplates(FunctionalTestCase):
 
         browser.login().open(self.document, view='tabbedview_view-overview')
 
-        self.assertEqual(1, len(browser.css('#officeconnector-attach-url')))
-        self.assertTrue(
-            'data-officeconnector-attach-url'
-            in browser.css('#officeconnector-attach-url')[0].outerHTML)
+        self.assertEqual(1, len(browser.css('a.function-attach')))
 
-        self.assertEqual(1, len(browser.css('#officeconnector-checkout-url')))
         self.assertTrue(
-            'data-officeconnector-checkout-url'
-            in browser.css('#officeconnector-checkout-url')[0].outerHTML)
+            self.document.absolute_url()
+            in browser.css('a.function-attach').first.get('href'))
+
+        self.assertTrue(
+            'javascript:officeConnectorCheckout('
+            in browser.css('a.function-edit').first.get('href'))
+
+        self.assertTrue(
+            self.document.absolute_url()
+            in browser.css('a.function-edit').first.get('href'))
 
     @browsing
     def test_tooltip_template_with_officeconnector_attach(self, browser):
@@ -110,12 +126,15 @@ class TestOfficeConnectorTemplates(FunctionalTestCase):
 
         browser.login().open(self.document, view='tooltip')
 
-        self.assertEqual(1, len(browser.css('#officeconnector-attach-url')))
-        self.assertTrue(
-            'data-officeconnector-attach-url'
-            in browser.css('#officeconnector-attach-url')[0].outerHTML)
+        self.assertFalse(
+            'javascript:officeConnectorCheckout('
+            in browser.css('a.function-edit').first.get('href'))
 
-        self.assertEqual(0, len(browser.css('#officeconnector-checkout-url')))
+        self.assertEqual(1, len(browser.css('a.function-edit')))
+
+        self.assertTrue(
+            self.document.absolute_url()
+            in browser.css('a.function-attach').first.get('href'))
 
     @browsing
     def test_tooltip_template_with_officeconnector_checkout(self, browser):
@@ -127,12 +146,15 @@ class TestOfficeConnectorTemplates(FunctionalTestCase):
 
         browser.login().open(self.document, view='tooltip')
 
-        self.assertEqual(0, len(browser.css('#officeconnector-attach-url')))
+        self.assertEqual(0, len(browser.css('a.function-attach')))
 
-        self.assertEqual(1, len(browser.css('#officeconnector-checkout-url')))
         self.assertTrue(
-            'data-officeconnector-checkout-url'
-            in browser.css('#officeconnector-checkout-url')[0].outerHTML)
+            'javascript:officeConnectorCheckout('
+            in browser.css('a.function-edit').first.get('href'))
+
+        self.assertTrue(
+            self.document.absolute_url()
+            in browser.css('a.function-edit').first.get('href'))
 
     @browsing
     def test_tooltip_template_with_officeconnector_attach_and_checkout(self, browser): #noqa
@@ -148,15 +170,19 @@ class TestOfficeConnectorTemplates(FunctionalTestCase):
 
         browser.login().open(self.document, view='tooltip')
 
-        self.assertEqual(1, len(browser.css('#officeconnector-attach-url')))
-        self.assertTrue(
-            'data-officeconnector-attach-url'
-            in browser.css('#officeconnector-attach-url')[0].outerHTML)
+        self.assertEqual(1, len(browser.css('a.function-attach')))
 
-        self.assertEqual(1, len(browser.css('#officeconnector-checkout-url')))
         self.assertTrue(
-            'data-officeconnector-checkout-url'
-            in browser.css('#officeconnector-checkout-url')[0].outerHTML)
+            self.document.absolute_url()
+            in browser.css('a.function-attach').first.get('href'))
+
+        self.assertTrue(
+            'javascript:officeConnectorCheckout('
+            in browser.css('a.function-edit').first.get('href'))
+
+        self.assertTrue(
+            self.document.absolute_url()
+            in browser.css('a.function-edit').first.get('href'))
 
 
 class TestOfficeConnectorBumblebeeTemplates(FunctionalTestCase):
@@ -183,8 +209,11 @@ class TestOfficeConnectorBumblebeeTemplates(FunctionalTestCase):
     def test_bumblebeeoverlay_template_without_officeconnector(self, browser):
         browser.login().open(self.document, view='bumblebee-overlay-listing')
 
-        self.assertEqual(0, len(browser.css('#officeconnector-attach-url')))
-        self.assertEqual(0, len(browser.css('#officeconnector-checkout-url')))
+        self.assertFalse(
+            'javascript:officeConnectorCheckout('
+            in browser.css('a.function-edit').first.get('href'))
+
+        self.assertEqual(0, len(browser.css('a.function-attach')))
 
     @browsing
     def test_bumblebeeoverlay_template_with_officeconnector_attach(self, browser): #noqa
@@ -196,12 +225,15 @@ class TestOfficeConnectorBumblebeeTemplates(FunctionalTestCase):
 
         browser.login().open(self.document, view='bumblebee-overlay-listing')
 
-        self.assertEqual(1, len(browser.css('#officeconnector-attach-url')))
-        self.assertTrue(
-            'data-officeconnector-attach-url'
-            in browser.css('#officeconnector-attach-url')[0].outerHTML)
+        self.assertFalse(
+            'javascript:officeConnectorCheckout('
+            in browser.css('a.function-edit').first.get('href'))
 
-        self.assertEqual(0, len(browser.css('#officeconnector-checkout-url')))
+        self.assertEqual(1, len(browser.css('a.function-edit')))
+
+        self.assertTrue(
+            self.document.absolute_url()
+            in browser.css('a.function-attach').first.get('href'))
 
     @browsing
     def test_bumblebeeoverlay_template_with_officeconnector_checkout(self, browser): #noqa
@@ -213,12 +245,15 @@ class TestOfficeConnectorBumblebeeTemplates(FunctionalTestCase):
 
         browser.login().open(self.document, view='bumblebee-overlay-listing')
 
-        self.assertEqual(0, len(browser.css('#officeconnector-attach-url')))
+        self.assertEqual(0, len(browser.css('a.function-attach')))
 
-        self.assertEqual(1, len(browser.css('#officeconnector-checkout-url')))
         self.assertTrue(
-            'data-officeconnector-checkout-url'
-            in browser.css('#officeconnector-checkout-url')[0].outerHTML)
+            'javascript:officeConnectorCheckout('
+            in browser.css('a.function-edit').first.get('href'))
+
+        self.assertTrue(
+            self.document.absolute_url()
+            in browser.css('a.function-edit').first.get('href'))
 
     @browsing
     def test_bumblebeeoverlay_template_with_officeconnector_attach_and_checkout(self, browser): #noqa
@@ -234,12 +269,16 @@ class TestOfficeConnectorBumblebeeTemplates(FunctionalTestCase):
 
         browser.login().open(self.document, view='bumblebee-overlay-listing')
 
-        self.assertEqual(1, len(browser.css('#officeconnector-attach-url')))
-        self.assertTrue(
-            'data-officeconnector-attach-url'
-            in browser.css('#officeconnector-attach-url')[0].outerHTML)
+        self.assertEqual(1, len(browser.css('a.function-attach')))
 
-        self.assertEqual(1, len(browser.css('#officeconnector-checkout-url')))
         self.assertTrue(
-            'data-officeconnector-checkout-url'
-            in browser.css('#officeconnector-checkout-url')[0].outerHTML)
+            self.document.absolute_url()
+            in browser.css('a.function-attach').first.get('href'))
+
+        self.assertTrue(
+            'javascript:officeConnectorCheckout('
+            in browser.css('a.function-edit').first.get('href'))
+
+        self.assertTrue(
+            self.document.absolute_url()
+            in browser.css('a.function-edit').first.get('href'))

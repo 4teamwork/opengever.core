@@ -35,8 +35,7 @@
           </tal:preview_support>
           <tal:cond tal:condition="checkout_and_edit_available">
             <tal:cond tal:condition="context/@@officeconnector_settings/is_checkout_enabled">
-              <a tal:attributes="data-officeconnector-checkout-url string:${context/absolute_url}/officeconnector_checkout_url"
-                  id="officeconnector-checkout-url"
+              <a tal:attributes="href string:javascript:officeConnectorCheckout('${context/absolute_url}/officeconnector_checkout_url');;"
                   class="function-edit"
                   href="#"
                   i18n:translate="label_checkout_and_edit">
@@ -52,8 +51,7 @@
               </a>
             </tal:cond>
             <tal:cond tal:condition="context/@@officeconnector_settings/is_attach_enabled">
-              <a tal:attributes="data-officeconnector-attach-url string:${context/absolute_url}/officeconnector_attach_url"
-                  id="officeconnector-attach-url"
+              <a tal:attributes="href string:javascript:officeConnectorAttach('${context/absolute_url}/officeconnector_attach_url');;"
                   class="function-attach"
                   href="#"
                   i18n:translate="label_attach_to_email">

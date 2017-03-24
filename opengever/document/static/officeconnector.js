@@ -8,14 +8,12 @@ var officeconnector_config = {
     url: ''
 }
 
-$(document).on('click', '#officeconnector-attach-url', function(event){
-    event.preventDefault();
-    officeconnector_config.url = $('#officeconnector-attach-url').data('officeconnectorAttachUrl');
+function officeConnectorCheckout(url) {
+    officeconnector_config.url = url;
     $.ajax(officeconnector_config).done(openOfficeconnector);
-});
+}
 
-$(document).on('click', '#officeconnector-checkout-url', function(event){
-    event.preventDefault();
-    officeconnector_config.url = $('#officeconnector-checkout-url').data('officeconnectorCheckoutUrl')
+function officeConnectorAttach(url) {
+    officeconnector_config.url = url;
     $.ajax(officeconnector_config).done(openOfficeconnector);
-});
+}
