@@ -226,11 +226,13 @@ class BumblebeeMailOverlay(BumblebeeBaseDocumentOverlay):
             self.context.absolute_url(),
             self.context.restrictedTraverse('@@authenticator').token())
 
-        return u"<a href={}>{}</a>".format(href, translate(
-            'label_download_copy',
-            default="Download copy",
-            domain='opengever.document',
-            context=self.request))
+        return u'<a href="{}" class="{}">{}</a>'.format(
+            href,
+            'function-download-copy',
+            translate('label_download_copy',
+                      default="Download copy",
+                      domain='opengever.document',
+                      context=self.request))
 
     def get_file(self):
         if not hasattr(self, '_file'):
