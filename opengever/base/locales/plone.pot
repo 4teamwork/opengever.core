@@ -114,6 +114,9 @@ msgstr ""
 msgid "Dossier state changed to dossier-state-resolved"
 msgstr ""
 
+msgid "Dossier state changed to dossier-state-offered"
+msgstr ""
+
 msgid "dossier-state-active"
 msgstr ""
 

@@ -71,6 +71,9 @@ msgstr "Etat du dossier modifié : Archivé"
 msgid "Dossier state changed to dossier-state-inactive"
 msgstr "Etat du dossier modifié : Annulé"
 
+msgid "Dossier state changed to dossier-state-offered"
+msgstr ""
+
 msgid "Dossier state changed to dossier-state-resolved"
 msgstr "Etat du dossier modifié : Fermé"
 

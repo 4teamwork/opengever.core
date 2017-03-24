@@ -71,6 +71,9 @@ msgstr "Status des Dossiers geändert zu Archiviert"
 msgid "Dossier state changed to dossier-state-inactive"
 msgstr "Status des Dossiers geändert zu Storniert"
 
+msgid "Dossier state changed to dossier-state-offered"
+msgstr "Status des Dossiers geändert zu Angeboten"
+
 msgid "Dossier state changed to dossier-state-resolved"
 msgstr "Status des Dossiers geändert zu Abgeschlossen"
 
@@ -356,4 +359,3 @@ msgstr "Aktivieren"
 
 msgid "transition-add-document"
 msgstr "Dokument hinzugefügt"
-
