@@ -2,8 +2,8 @@
 Changelog
 =========
 
-2017.1.0 (unreleased)
--------------------
+2017.1.0 (2017-03-24)
+---------------------
 
 - Fix tooltip overlay links and simplify OfficeConnector JS.
   [Rotonen]
