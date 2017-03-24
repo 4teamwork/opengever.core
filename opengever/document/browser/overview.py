@@ -235,17 +235,7 @@ class Overview(DisplayForm, GeverTabMixin):
         return False
 
     def is_checkout_and_edit_available(self):
-        manager = queryMultiAdapter(
-            (self.context, self.request), ICheckinCheckoutManager)
-
-        if manager.get_checked_out_by():
-            if manager.get_checked_out_by() == \
-                    getSecurityManager().getUser().getId():
-                return True
-            else:
-                return False
-
-        return manager.is_checkout_allowed()
+        return self.context.is_checkout_and_edit_available()
 
     def is_download_copy_available(self):
         """Disable copy link when the document is checked
