@@ -5,6 +5,9 @@ Changelog
 2017.1.0 (unreleased)
 -------------------
 
+- Make sure qtip tooltips are destroyed on hide.
+  [Rotonen]
+
 - Make sure checkout link on document tooltip is only displayed for editable
   documents (e.g., not on documents in resolved dossiers).
   [lgraf]
