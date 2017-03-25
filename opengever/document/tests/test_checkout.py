@@ -8,7 +8,7 @@ from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from ftw.testing import freeze
 from opengever.base.interfaces import IRedirector
-from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
+from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY  # noqa
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
@@ -30,15 +30,16 @@ import transaction
 
 
 class TestCheckin(FunctionalTestCase):
+    """Tests for the checkin functionality."""
 
     def setUp(self):
         super(TestCheckin, self).setUp()
         self.dossier = create(Builder('dossier'))
 
         self.document = create(Builder('document')
-                          .having(document_date=date(2014, 1, 1))
-                          .within(self.dossier)
-                          .checked_out())
+                               .having(document_date=date(2014, 1, 1))
+                               .within(self.dossier)
+                               .checked_out())
 
         self.manager = self.get_manager(self.document)
 
@@ -77,6 +78,7 @@ class TestCheckin(FunctionalTestCase):
 
 
 class TestReverting(FunctionalTestCase):
+    """Tests for reverting documents to older revisions."""
 
     def setUp(self):
         super(TestReverting, self).setUp()
@@ -168,7 +170,7 @@ class TestReverting(FunctionalTestCase):
         self.assertEqual('reset', browser.css('span.discreet').first.text)
 
     @browsing
-    def test_browser_revert_view_raises_unauthorized_when_revert_disallowed(self, browser):
+    def test_browser_revert_view_raises_unauthorized_when_revert_disallowed(self, browser):  # noqa
         self.manager.checkout()
         transaction.commit()
 
@@ -179,6 +181,7 @@ class TestReverting(FunctionalTestCase):
 
 
 class TestManagerHelpers(FunctionalTestCase):
+    """Tests for the checkin-checkout manager helper functions."""
 
     def get_manager(self, document):
         return getMultiAdapter(
@@ -188,13 +191,15 @@ class TestManagerHelpers(FunctionalTestCase):
         doc = create(Builder('document').checked_out())
         self.assertTrue(self.get_manager(doc).is_checked_out_by_current_user())
 
-    def test_is_not_checked_out_by_current_user_when_document_is_checked_out_by_another_user(self):
+    def test_is_not_checked_out_by_current_user_when_document_is_checked_out_by_another_user(self):  # noqa
         doc = create(Builder('document').checked_out_by('hugo.boss'))
-        self.assertFalse(self.get_manager(doc).is_checked_out_by_current_user())
+        self.assertFalse(
+            self.get_manager(doc).is_checked_out_by_current_user())
 
     def test_is_not_checked_out_when_document_is_checked_in(self):
         doc = create(Builder('document'))
-        self.assertFalse(self.get_manager(doc).is_checked_out_by_current_user())
+        self.assertFalse(
+            self.get_manager(doc).is_checked_out_by_current_user())
 
     def test_file_upload_is_disallowed_when_document_is_locked(self):
         doc = create(Builder('document').checked_out())
@@ -202,7 +207,7 @@ class TestManagerHelpers(FunctionalTestCase):
 
         self.assertFalse(self.get_manager(doc).is_file_upload_allowed())
 
-    def test_file_upload_is_disallowed_when_document_is_checked_out_by_other_user(self):
+    def test_file_upload_is_disallowed_when_document_is_checked_out_by_other_user(self):  # noqa
         doc = create(Builder('document').checked_out_by('hugo.boss'))
         self.assertFalse(self.get_manager(doc).is_file_upload_allowed())
 
@@ -210,12 +215,13 @@ class TestManagerHelpers(FunctionalTestCase):
         doc = create(Builder('document'))
         self.assertFalse(self.get_manager(doc).is_file_upload_allowed())
 
-    def test_file_upload_is_allowed_when_document_is_checked_out_and_not_locked(self):
+    def test_file_upload_is_allowed_when_document_is_checked_out_and_not_locked(self):  # noqa
         doc = create(Builder('document').checked_out())
         self.assertTrue(self.get_manager(doc).is_file_upload_allowed())
 
 
 class TestCheckinCheckoutManager(FunctionalTestCase):
+    """Tests for the checkin-checkout manager."""
 
     def setUp(self):
         super(TestCheckinCheckoutManager, self).setUp()
@@ -250,7 +256,7 @@ class TestCheckinCheckoutManager(FunctionalTestCase):
         manager.checkout()
 
         transaction.commit()
-        self.portal.REQUEST['paths'] = [obj2brain(self.doc1).getPath(),]
+        self.portal.REQUEST['paths'] = [obj2brain(self.doc1).getPath(), ]
         view = self.doc1.restrictedTraverse('cancel_document_checkouts')()
 
         self.assertEquals(self.doc1.absolute_url(), view)
@@ -276,6 +282,8 @@ class TestCheckinCheckoutManager(FunctionalTestCase):
 
 
 class TestCheckinViews(FunctionalTestCase):
+    """Tests for the checkin views."""
+
     def setUp(self):
         super(TestCheckinViews, self).setUp()
 
@@ -292,7 +300,10 @@ class TestCheckinViews(FunctionalTestCase):
         browser.css('#checkin_with_comment').first.click()
 
         # fill and submit checkin form
-        browser.fill({'Journal Comment Describe, why you checkin the selected documents': 'Checkinerino'})
+        browser.fill({
+            'Journal Comment Describe, why you checkin the selected documents':
+            'Checkinerino'
+            })
         browser.css('#form-buttons-button_checkin').first.click()
 
         manager = getMultiAdapter((self.document, self.portal.REQUEST),
@@ -319,7 +330,10 @@ class TestCheckinViews(FunctionalTestCase):
                   '_authenticator': createToken()})
 
         # fill and submit checkin form
-        browser.fill({'Journal Comment Describe, why you checkin the selected documents': 'Checkini'})
+        browser.fill({
+            'Journal Comment Describe, why you checkin the selected documents':
+            'Checkini'
+            })
         browser.css('#form-buttons-button_checkin').first.click()
 
         manager1 = getMultiAdapter((self.document, self.portal.REQUEST),
@@ -378,7 +392,7 @@ class TestCheckinViews(FunctionalTestCase):
         self.assertEquals(None, last_entry.comment)
 
     @browsing
-    def test_multi_checkin_shows_message_when_no_documents_are_selected(self, browser):
+    def test_multi_checkin_shows_message_when_no_documents_are_selected(self, browser):  # noqa
         browser.login().open(
             self.dossier,
             data={'paths': [],
@@ -387,7 +401,8 @@ class TestCheckinViews(FunctionalTestCase):
 
         self.assertEquals(['You have not selected any documents'],
                           error_messages())
-        self.assertEquals('http://nohost/plone/dossier-1#documents', browser.url)
+        self.assertEquals(
+            'http://nohost/plone/dossier-1#documents', browser.url)
 
         browser.login().open(
             self.dossier,
@@ -398,11 +413,13 @@ class TestCheckinViews(FunctionalTestCase):
 
         self.assertEquals(['You have not selected any documents'],
                           error_messages())
-        self.assertEquals('http://nohost/plone/dossier-1#documents', browser.url)
+        self.assertEquals(
+            'http://nohost/plone/dossier-1#documents', browser.url)
 
 
 # TODO: rewrite this test-case to express intent
 class TestCheckinCheckoutManagerAPI(FunctionalTestCase):
+    """Tests for the complete checkin-checkout cycle."""
 
     def setUp(self):
         super(TestCheckinCheckoutManagerAPI, self).setUp()
@@ -425,7 +442,7 @@ class TestCheckinCheckoutManagerAPI(FunctionalTestCase):
         # create a defaultfolder
         pr = getToolByName(self.portal, 'portal_repository')
 
-        # create a document, and get the CheckinCheckoutManager for the document
+        # create a document, and get CheckinCheckoutManager for the document
         manager = getMultiAdapter(
             (self.doc1, self.portal.REQUEST), ICheckinCheckoutManager)
         manager2 = getMultiAdapter(
@@ -460,16 +477,19 @@ class TestCheckinCheckoutManagerAPI(FunctionalTestCase):
         # Switch to different user and lock the document
         logout()
         login(self.portal, 'other_user')
-        setRoles(self.portal, 'other_user', ['Manager','Editor','Contributor'])
+        setRoles(
+            self.portal, 'other_user', ['Manager', 'Editor', 'Contributor'])
         lockable = IRefreshableLockable(self.doc2)
         lockable.lock()
 
         # Log back in as the regular test user
         logout()
         login(self.portal, TEST_USER_NAME)
-        setRoles(self.portal, TEST_USER_ID, ['Manager','Editor','Contributor'])
+        setRoles(
+            self.portal, TEST_USER_ID, ['Manager', 'Editor', 'Contributor'])
 
-        # Checkout should not be allowed since the document is locked by another user
+        # Checkout should not be allowed since the document is already
+        # locked by an another user
         self.assertFalse(manager2.is_checkout_allowed())
 
         # checkin and cancelling:

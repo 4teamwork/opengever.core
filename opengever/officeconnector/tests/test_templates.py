@@ -11,6 +11,7 @@ import transaction
 
 
 class TestOfficeConnectorTemplates(FunctionalTestCase):
+    """Test templates to ensure OC can function."""
 
     def setUp(self):
         super(TestOfficeConnectorTemplates, self).setUp()
@@ -186,6 +187,7 @@ class TestOfficeConnectorTemplates(FunctionalTestCase):
 
 
 class TestOfficeConnectorBumblebeeTemplates(FunctionalTestCase):
+    """Test Bumblebee templates to ensure OC can function."""
 
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 
