@@ -78,8 +78,11 @@ class CheckoutDocuments(grok.View):
                     target='_self',
                     timeout=1000)
             else:
-                redirector.redirect(
-                    create_oc_url(self.context, dict(action='checkout')))
+                redirector.redirect(create_oc_url(
+                    self.request,
+                    self.context,
+                    dict(action='checkout'),
+                    ))
         # now lets redirect to an appropriate target..
         if len(objects) == 1:
             return self.request.RESPONSE.redirect(

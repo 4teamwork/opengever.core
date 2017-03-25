@@ -202,7 +202,8 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
 
         token = self.get_oc_url_jwt(self.doc_with_file_wf_open, 'attach') # noqa
         self.assertTrue('url' in token)
-        self.assertTrue('/oc_attach/' in token['url'])
+        self.assertNotIn('documents', token)
+        self.assertTrue('/oc_attach' in token['url'])
         self.assertEquals(token['action'], 'attach')
         self.assertEquals(TEST_USER_ID, token['sub'])
 
@@ -210,6 +211,8 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
     def test_attach_to_outlook_payload_with_file_and_open_dossier(self, browser):  # noqa
         self.enable_attach_to_outlook()
         token = self.get_oc_url_jwt(self.doc_with_file_wf_open, 'attach')
+
+        self.assertNotIn('documents', token)
 
         # Test we can actually fetch an action payload based on the URL JWT
         response = self.api.get(token['url'])
@@ -233,6 +236,8 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
         self.enable_attach_to_outlook()
         token = self.get_oc_url_jwt(self.doc_with_file_wf_resolved, 'attach')
 
+        self.assertNotIn('documents', token)
+
         # Test we can actually fetch an action payload based on the URL JWT
         response = self.api.get(token['url'])
         self.assertEquals(200, response.status_code)
@@ -252,6 +257,8 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
         self.enable_attach_to_outlook()
         token = self.get_oc_url_jwt(self.doc_with_file_wf_inactive, 'attach')
 
+        self.assertNotIn('documents', token)
+
         # Test we can actually fetch an action payload based on the URL JWT
         response = self.api.get(token['url'])
         self.assertEquals(200, response.status_code)
@@ -266,9 +273,11 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
         journal_entry = browser.css('.listing').first.lists()[1]
         self.assertEquals(journal_entry[1], 'Dokument mit Mailprogramm versendet')  # noqa
 
-    def test_attach_to_outlook(self):
+    def test_attach_to_outlook_get(self):
         self.enable_attach_to_outlook()
         token = self.get_oc_url_jwt(self.doc_with_file_wf_open, 'attach') # noqa
+
+        self.assertNotIn('documents', token)
 
         # Test we can actually fetch an action payload based on the URL JWT
         payload = self.api.get(token['url']).json()
@@ -300,8 +309,10 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
         self.assertTrue('url' in payload)
 
         token = self.get_oc_url_jwt(self.doc_with_file_wf_open, 'checkout') # noqa
+
         self.assertTrue('url' in token)
-        self.assertTrue('/oc_checkout/' in token['url'])
+        self.assertTrue('/oc_checkout' in token['url'])
+        self.assertNotIn('documents', token)
         self.assertEquals(token['action'], 'checkout')
         self.assertEquals(TEST_USER_ID, token['sub'])
 
@@ -309,6 +320,7 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
         self.enable_oc_checkout()
         token = self.get_oc_url_jwt(self.doc_with_file_wf_open, 'checkout') # noqa
 
+        self.assertNotIn('documents', token)
         # Test we can actually fetch an action payload based on the URL JWT
         response = self.api.get(token['url'])
         self.assertEquals(200, response.status_code)
@@ -327,6 +339,8 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
 
         # Grab the OC URL
         token = self.get_oc_url_jwt(self.doc_with_file_wf_open, 'checkout') # noqa
+
+        self.assertNotIn('documents', token)
 
         # Grab the action payload based on the OC URL
         payload = self.api.get(token['url']).json()
@@ -358,6 +372,8 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
 
         # Grab the OC URL
         token = self.get_oc_url_jwt(self.doc_with_file_wf_open, 'checkout') # noqa
+
+        self.assertNotIn('documents', token)
 
         # Grab the action payload based on the OC URL
         payload = self.api.get(token['url']).json()
@@ -397,6 +413,8 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
 
         # Grab the OC URL
         token = self.get_oc_url_jwt(self.doc_with_file_wf_open, 'checkout') # noqa
+
+        self.assertNotIn('documents', token)
 
         # Grab the action payload based on the OC URL
         payload = self.api.get(token['url']).json()

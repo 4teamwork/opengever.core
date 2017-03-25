@@ -17,17 +17,22 @@ def is_officeconnector_checkout_feature_enabled():
                                           interface=IOfficeConnectorSettings)
 
 
-def create_oc_url(context, payload):
+def create_oc_url(request, context, payload):
     # Feature used wrong - an action is always required
     if 'action' not in payload:
         raise NotFound
 
-    # Feature enabled for the wrong content type
-    if not IDocumentSchema.providedBy(context):
-        raise NotFound
+    documents = []
 
-    if not context.file:
-        raise NotFound
+    if request['REQUEST_METHOD'] == 'GET':
+        # Feature enabled for the wrong content type
+        if not IDocumentSchema.providedBy(context):
+            raise NotFound
+
+        if not context.file:
+            raise NotFound
+
+        documents.append(context)
 
     plugin = None
     acl_users = getToolByName(context, "acl_users")
@@ -51,12 +56,25 @@ def create_oc_url(context, payload):
     # Create a JWT for OfficeConnector - contents:
     # action - tells OfficeConnector which code path to take
     # url - tells OfficeConnector where from to fetch further instructions
-    payload['url'] = '/'.join([
+
+    payload['url'] = '/'.join((
         api.portal.get().absolute_url(),
         'oc_' + payload['action'],
-        api.content.get_uuid(context),
-        ])
+        ))
+
+    # Create a multi-document payload
+    payload['documents'] = []
+
+    # Use plain locators for one document payloads - saves on char count
+    if len(documents) == 1:
+        payload['url'] += '/' + api.content.get_uuid(documents[0])
+        del payload['documents']
+    else:
+        for document in documents:
+            payload['documents'].append(api.content.get_uuid(document))
+
     user_id = api.user.get_current().getId()
+
     token = plugin.create_token(user_id, data=payload)
 
     # https://blogs.msdn.microsoft.com/ieinternals/2014/08/13/url-length-limits/

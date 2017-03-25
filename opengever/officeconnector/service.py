@@ -21,7 +21,7 @@ class OfficeConnectorURL(Service):
     def create_officeconnector_url_json(self, payload):
         self.request.response.setHeader('Content-type', 'application/json')
 
-        url = create_oc_url(self.context, payload)
+        url = create_oc_url(self.request, self.context, payload)
 
         if url:
             return json.dumps(dict(url=url))

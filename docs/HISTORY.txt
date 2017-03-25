@@ -9,6 +9,7 @@ Changelog
 - Improve title and TeX template for removal protocol. [phgross]
 - Enable keywordswidget for IDocumentMetadata behavior.  [elioschmutz]
 - Refactor: Use SQLFormSupport class for: Meeting and Member [elioschmutz]
+- Refactor OC payloads to have a list of documents instead of just one. [Rotonen]
 
 
 2017.1.1 (2017-03-27)
