@@ -184,11 +184,13 @@ class DossierResolver(grok.Adapter):
             return
 
         view = self.context.unrestrictedTraverse('pdf-dossier-journal')
-        today = api.portal.get_localized_time(datetime=datetime.today())
+        today = api.portal.get_localized_time(
+            datetime=datetime.today(), long_format=True)
         filename = u'Journal {}.pdf'.format(today)
         title = _(u'title_dossier_journal',
-                  default=u'Dossier Journal ${today}',
-                  mapping={'today': today})
+                  default=u'Journal of dossier ${title}, ${timestamp}',
+                  mapping={'title': self.context.title,
+                           'timestamp': today})
 
         with elevated_privileges():
             CreateDocumentCommand(
