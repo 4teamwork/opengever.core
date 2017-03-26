@@ -62,7 +62,10 @@ class DossierListingLaTeXView(grok.MultiAdapter, MakoLaTeXView):
 
         return {
             'label': translate(
-                _('label_dossier_journal', default=u'Dossier journal'),
+                _('label_dossier_journal',
+                  default=u'Journal of dossier ${title} (${reference_number})',
+                  mapping={'title': self.context.title,
+                           'reference_number': self.context.get_reference_number()}),
                 context=self.request),
             'listing': dossier_listing.get_listing(self.get_journal_data())}
 

@@ -49,6 +49,19 @@ class TestDossierJournalPDFView(MockTestCase):
 class TestDossierListingLaTeXView(FunctionalTestCase):
 
     @browsing
+    def test_journal_label(self, browser):
+        dossier = create(Builder('dossier').titled(u'Anfr\xf6gen 2015'))
+
+        provide_request_layer(dossier.REQUEST, IDossierJournalLayer)
+        layout = DefaultLayout(dossier, dossier.REQUEST, PDFBuilder())
+        dossier_journal = getMultiAdapter(
+            (dossier, dossier.REQUEST, layout), ILaTeXView)
+
+        self.assertEquals(
+            u'Journal of dossier Anfr\xf6gen 2015 (Client1 / 1)',
+            dossier_journal.get_render_arguments().get('label'))
+
+    @browsing
     def test_journal_listing(self, browser):
         repo = create(Builder('repository'))
 
