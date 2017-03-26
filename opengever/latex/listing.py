@@ -294,7 +294,7 @@ class JournalLaTeXListing(LaTexListing):
                    lambda brain: helper.readable_date_time(brain, brain.get('time'))),
 
             Column('title',
-                   journal_mf('label_titel', default=u'Title'),
+                   journal_mf('label_title', default=u'Title'),
                    '45%',
                    lambda brain: title_helper(brain, brain['action'].get('title'))),
 
