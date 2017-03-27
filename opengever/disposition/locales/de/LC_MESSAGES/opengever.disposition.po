@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-03-23 14:40+0000\n"
+"POT-Creation-Date: 2017-03-27 11:02+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -260,7 +260,7 @@ msgstr "Verlauf"
 msgid "summary_disposition_added"
 msgstr "Neues Angebot hinzugefügt durch ${user} im Mandanten ${admin_unit}"
 
-#. Default: "Removal protocol for disposition ${disposition}"
+#. Default: "Removal protocol for ${disposition}"
 #: ./opengever/disposition/browser/removal_protocol.py:40
 msgid "title_removal_protocol"
-msgstr "Löschprotokoll zum Angebot ${disposition}"
+msgstr "Löschprotokoll zu ${disposition}"

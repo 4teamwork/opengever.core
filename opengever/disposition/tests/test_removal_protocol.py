@@ -155,6 +155,5 @@ class TestRemovalProtocolLaTeXView(FunctionalTestCase):
         browser.login().open(disposition, view='removal_protocol')
 
         self.assertEquals(
-            'attachment; filename="Removal protocol for disposition '
-            'Angebot FD 43929.pdf"',
+            'attachment; filename="Removal protocol for Angebot FD 43929.pdf"',
             browser.headers.get('content-disposition'))
