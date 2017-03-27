@@ -21,9 +21,12 @@ class FixContentypesEncodingForArchivalFiles(UpgradeStep):
             self.fix_contenttype_encoding(obj)
 
     def is_conversion_enabled(self):
-        return api.portal.get_registry_record(
-            'archival_file_conversion_enabled',
-            interface=IDossierResolveProperties)
+        try:
+            return api.portal.get_registry_record(
+                'archival_file_conversion_enabled',
+                interface=IDossierResolveProperties)
+        except KeyError:
+            return False
 
     def fix_contenttype_encoding(self, document):
         if not IDocumentMetadata(document).archival_file:
