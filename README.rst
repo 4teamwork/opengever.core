@@ -256,6 +256,41 @@ Alternatively it's also possible to only update a single subpackage, for example
     bin/i18n-build opengever.dossier
 
 
+Updating the history file
+-------------------------
+
+The ``docs/HISTORY.txt`` file is a hotspot for git merge conflicts.
+In order to reduce merge conflicts we use the git union merge strategy for
+auto-resolving merge conflicts.
+For this to work smoothly developmers must follow theese rules when adding
+changelog entries:
+
+1. Always add a new entry at the top of the ``unreleased`` section.
+2. Add your ``[name]`` onto the *same line*, it should never be on a standalone
+   line, otherwise it might be deleted by the union merge.
+3. Do *not* insert any empty lines.
+4. Awoid nested lists in your entry, because it makes auto-merging brittle.
+   It is better to add each change as a separate changelog entry and prefix
+   them, as shown below (see `Feature x`).
+   If you must use nested lists, make sure to add an empty line before and
+   after the list.
+5. You *must rebase* when you do not "make the release", so that your entry is
+   not added to an already released section. Git cannot resolve that.
+
+Example:
+
+.. code:: rst
+
+    17.12.72 (unreleased)
+    ---------------------
+
+    - Fix critical bug. [Susanne]
+    - Lots of changes after a lot of time. [Fritz]
+    - Update translations. [Fritz]
+    - Feature x: implement new things. [Susanne]
+    - Feature x: fix bug. [Susanne]
+
+
 Updating API docs
 -----------------
 
@@ -544,5 +579,3 @@ Example configuration:
           }
       }
   ]
-
-.. disqus::
