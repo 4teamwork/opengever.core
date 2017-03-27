@@ -11,6 +11,7 @@ from opengever.dossier.interfaces import IDossierMarker
 from opengever.globalindex.model.task import Task
 from opengever.meeting.model.proposal import Proposal
 from opengever.meeting.tabs.proposallisting import ProposalListingTab
+from opengever.officeconnector.helpers import is_officeconnector_attach_feature_enabled  # noqa
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.tabbedview import _
 from opengever.tabbedview import BaseCatalogListingTab
@@ -174,21 +175,6 @@ class Documents(BaseCatalogListingTab):
          'transform': translate_public_trial_options},
         )
 
-    enabled_actions = [
-        'send_as_email',
-        'checkout',
-        'checkin_with_comment',
-        'checkin_without_comment',
-        'cancel',
-        'create_task',
-        'submit_additional_documents',
-        'trashed',
-        'move_items',
-        'copy_items',
-        'zip_selected',
-        'export_documents',
-        ]
-
     major_actions = [
         'create_task',
         ]
@@ -206,6 +192,29 @@ class Documents(BaseCatalogListingTab):
     @property
     def gallery_view_name(self):
         return '{}-gallery'.format(self.view_name)
+
+    @property
+    def enabled_actions(self):
+        actions = [
+            'send_as_email',
+            'checkout',
+            'checkin_with_comment',
+            'checkin_without_comment',
+            'cancel',
+            'create_task',
+            'submit_additional_documents',
+            'trashed',
+            'move_items',
+            'copy_items',
+            'zip_selected',
+            'export_documents',
+        ]
+
+        if is_officeconnector_attach_feature_enabled():
+            actions.append('attach_documents')
+            actions.remove('send_as_email')
+
+        return actions
 
 
 class Dossiers(BaseCatalogListingTab):

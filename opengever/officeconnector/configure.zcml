@@ -30,6 +30,16 @@
       />
 
   <plone:service
+      method="POST"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      accept="application/json"
+      factory=".service.OfficeConnectorAttachURL"
+      name="officeconnector_attach_url"
+      permission="zope2.View"
+      />
+
+
+  <plone:service
       method="GET"
       for="opengever.document.document.IDocumentSchema"
       accept="application/json"

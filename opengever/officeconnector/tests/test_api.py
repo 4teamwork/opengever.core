@@ -11,6 +11,7 @@ from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
 from plone.app.testing import TEST_USER_PASSWORD
 
+import json
 import jwt
 import transaction
 
@@ -68,23 +69,29 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
                                             .attach_file_containing(
                                                 self.original_file_content))
 
-        self.doc_without_file_wf_resolved = create(Builder('document')
+        self.doc_with_file_wf_open_second = create(Builder('document')
                                                    .titled(u'docu-3')
+                                                   .within(self.open_dossier)
+                                                   .attach_file_containing(
+                                                   self.original_file_content))
+
+        self.doc_without_file_wf_resolved = create(Builder('document')
+                                                   .titled(u'docu-4')
                                                    .within(
                                                        self.resolved_dossier))
 
         self.doc_with_file_wf_resolved = create(Builder('document')
-                                                .titled(u'docu-4')
+                                                .titled(u'docu-5')
                                                 .within(self.resolved_dossier)
                                                 .attach_file_containing(self.original_file_content))  # noqa
 
         self.doc_without_file_wf_inactive = create(Builder('document')
-                                                   .titled(u'docu-5')
+                                                   .titled(u'docu-6')
                                                    .within(
                                                        self.inactive_dossier))
 
         self.doc_with_file_wf_inactive = create(Builder('document')
-                                                .titled(u'docu-6')
+                                                .titled(u'docu-7')
                                                 .within(self.inactive_dossier)
                                                 .attach_file_containing(self.original_file_content))  # noqa
 
@@ -292,6 +299,52 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
         self.assertEquals(200, response.status_code)
         self.assertEquals(response.headers['content-type'], content_type) # noqa
         self.assertEquals(response.headers['content-disposition'], 'attachment; filename="{}"'.format(filename)) # noqa
+
+    @browsing
+    def test_attach_to_outlook_post(self, browser):
+        self.enable_attach_to_outlook()
+        browser.login().open(
+            self.open_dossier, view='tabbedview_view-documents')
+
+        document_checkboxes = browser.css("input[type='checkbox']")
+        self.assertEquals(3, len(document_checkboxes))
+
+        document_paths = []
+        for checkbox in document_checkboxes:
+            document_paths.append(checkbox.get('value'))
+
+        self.api.headers.update({
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            })
+
+        token = self.api.post(
+            '/officeconnector_attach_url',
+            data=json.dumps(document_paths),
+            ).json()
+
+        payload = jwt.decode(token['url'].split(':')[-1], verify=False)
+
+        self.assertEquals(2, len(payload['documents']))
+
+        for document in payload['documents']:
+            # Test we can actually fetch an action payload based on the URL JWT
+            self.api.headers.update({'Accept': 'application/json'})
+            action = self.api.get('/'.join((
+                payload['url'],
+                document,
+                ))).json()
+
+            content_type = action['content-type']
+            filename = action['filename']
+
+            # Test fetching the indicated file
+            self.api.headers.update({'Accept': content_type})
+            response = self.api.get('/'.join((action['document-url'], action['download']))) # noqa
+
+            self.assertEquals(200, response.status_code)
+            self.assertEquals(response.headers['content-type'], content_type) # noqa
+            self.assertEquals(response.headers['content-disposition'], 'attachment; filename="{}"'.format(filename)) # noqa
 
     def test_document_checkout_url_without_file(self):
         self.enable_oc_checkout()

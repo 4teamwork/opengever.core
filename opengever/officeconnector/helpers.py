@@ -6,6 +6,8 @@ from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlug
 from zExceptions import Forbidden
 from zExceptions import NotFound
 
+import json
+
 
 def is_officeconnector_attach_feature_enabled():
     return api.portal.get_registry_record('attach_to_outlook_enabled',
@@ -33,6 +35,17 @@ def create_oc_url(request, context, payload):
             raise NotFound
 
         documents.append(context)
+
+    if request['REQUEST_METHOD'] == 'POST':
+        paths = json.loads(request['BODY'])
+        for path in paths:
+            # Restricted traversal does not handle unicode paths
+            document = api.content.get(path=str(path))
+            if document.file:
+                documents.append(document)
+
+    if not documents:
+        raise NotFound
 
     plugin = None
     acl_users = getToolByName(context, "acl_users")
