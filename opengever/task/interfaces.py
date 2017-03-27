@@ -146,3 +146,10 @@ class ICommentResponseHandler(Interface):
     def is_allowed():
         """Check if the current user is allowed to add a comment response
         """
+
+    def add_response(text):
+        """Handles the whole repsponse process:
+            - Create response obj
+            - Append response obj to parent
+            - Record activity
+        """

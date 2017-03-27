@@ -105,7 +105,7 @@ class TestTaskActivites(FunctionalTestCase):
         browser.find('Save').click()
 
         activity = Activity.query.one()
-        self.assertEquals(u'label_add_comment', activity.kind)
+        self.assertEquals(u'task-commented', activity.kind)
         self.assertEquals(u'Abkl\xe4rung Fall Meier', activity.title)
         self.assertEquals(
             u'Commented by <a href="http://nohost/plone/@@user-details/test_user_1_">Test User (test_user_1_)</a>',

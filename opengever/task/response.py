@@ -6,7 +6,6 @@ from opengever.ogds.base.utils import ogds_service
 from opengever.tabbedview.helper import linked
 from opengever.task import _
 from opengever.task import util
-from opengever.task.activities import TaskCommentedActivity
 from opengever.task.activities import TaskTransitionActivity
 from opengever.task.adapters import IResponseContainer
 from opengever.task.adapters import Response
@@ -170,39 +169,13 @@ class TaskCommentResponseAddForm(form.AddForm, AutoExtensibleForm):
         if errors:
             self.status = self.formErrorsMessage
             return
-
-        response = self.create_response(data)
-
-        self.add_response_to_obj(self.context, response)
-        self.record_activity(response)
+        ICommentResponseHandler(self.context).add_response(data.get('text'))
 
         self.request.RESPONSE.redirect(self.context.absolute_url())
 
     @button.buttonAndHandler(_(u'cancel', default='Cancel'), name='cancel', )
     def handleCancel(self, action):
         return self.request.RESPONSE.redirect('.')
-
-    def create_response(self, data):
-        response = Response(data.get('text'))
-        response.transition = "task-commented"
-
-        return response
-
-    def add_response_to_obj(self, obj, response):
-        container = IResponseContainer(obj)
-        container.add(response)
-
-        notify(ObjectModifiedEvent(obj))
-
-    def is_user_assigned_to_current_org_unit(self):
-        units = ogds_service().assigned_org_units()
-        return get_current_org_unit() in units
-
-    def record_activity(self, response):
-        TaskCommentedActivity(self.context,
-                              self.context.REQUEST,
-                              None,
-                              response).record()
 
 
 class TaskCommentResponseAddFormView(layout.FormWrapper, grok.View):
