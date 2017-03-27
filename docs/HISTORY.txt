@@ -5,7 +5,7 @@ Changelog
 2017.1.1 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Make conttenttype fix upgrade step more robust. [deiferni]
 
 
 2017.1.0 (2017-03-24)
