@@ -2,15 +2,19 @@ from Acquisition import aq_chain
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from five import grok
+from ftw.referencewidget.selectable import DefaultSelectable
+from ftw.referencewidget.widget import ReferenceWidgetFactory
 from OFS.CopySupport import CopyError, ResourceLockedError
+from opengever.base.source import DEFAULT_TRAVERSABLE_PARAMS
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.document.document import IDocumentSchema
 from opengever.dossier import _
-from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.dossier.templatefolder.interfaces import ITemplateFolder
 from opengever.globalindex.model.task import Task
+from opengever.repository.repositoryfolder import IRepositoryFolderSchema
+from plone.autoform.widgets import ParameterizedWidget
 from plone.dexterity.interfaces import IDexterityContainer
 from plone.formwidget.contenttree import ObjPathSourceBinder
 from plone.z3cform import layout
@@ -27,31 +31,23 @@ from zope.interface import Interface, Invalid
 import z3c.form
 
 
+class DestinationSelectableClass(DefaultSelectable):
+
+    def is_selectable(self):
+        return IDossierMarker.providedBy(self.content) or \
+            IRepositoryFolderSchema.providedBy(self.content)
+
+
 class IMoveItemsSchema(Interface):
     destination_folder = RelationChoice(
         title=_('label_destination', default="Destination"),
         description=_('help_destination',
                       default="Live Search: search the Plone Site"),
         source=RepositoryPathSourceBinder(
-            object_provides=[
-                'opengever.dossier.behaviors.dossier.IDossierMarker',
-                'opengever.repository.repositoryfolder.'
-                'IRepositoryFolderSchema'],
-            navigation_tree_query={
-                'object_provides': [
-                    'opengever.repository.repositoryroot.IRepositoryRoot',
-                    'opengever.repository.repositoryfolder.' +
-                    'IRepositoryFolderSchema',
-                    'opengever.dossier.behaviors.dossier.IDossierMarker',
-                ],
-                'review_state': DOSSIER_STATES_OPEN + [
-                    'repositoryfolder-state-active',
-                    'repositoryroot-state-active']
-                }
-            ),
+            selectable_class=DestinationSelectableClass),
         required=True,
-        )
-    #We Use TextLine here because Tuple and List have no hidden_mode.
+    )
+    # We Use TextLine here because Tuple and List have no hidden_mode.
     request_paths = schema.TextLine(title=u"request_paths")
 
 
@@ -76,6 +72,10 @@ class MoveItemsForm(form.Form):
     fields = field.Fields(IMoveItemsSchema)
     ignoreContext = True
     label = _('heading_move_items', default="Move Items")
+
+    fields['destination_folder'].widgetFactory = ParameterizedWidget(
+        ReferenceWidgetFactory,
+        **DEFAULT_TRAVERSABLE_PARAMS)
 
     def updateWidgets(self):
         super(MoveItemsForm, self).updateWidgets()
@@ -118,7 +118,8 @@ class MoveItemsForm(form.Form):
                 if IDocumentSchema.providedBy(obj) and not obj.is_movable():
                     msg = _(u'Document ${name} is not movable.',
                             mapping=dict(name=obj.title))
-                    IStatusMessage(self.request).addStatusMessage(msg, type='error')
+                    IStatusMessage(self.request).addStatusMessage(
+                        msg, type='error')
                     continue
 
                 try:
@@ -160,10 +161,10 @@ class MoveItemsForm(form.Form):
         return objs
 
     def create_statusmessages(
-        self,
-        copied_items,
-        failed_objects,
-        failed_resource_locked_objects, ):
+            self,
+            copied_items,
+            failed_objects,
+            failed_resource_locked_objects, ):
         """ Create statusmessages with errors and infos af the move-process
         """
         if copied_items:
