@@ -164,18 +164,21 @@ class TaskCommentResponseAddForm(form.AddForm, AutoExtensibleForm):
             context=self.request)
 
     @button.buttonAndHandler(_(u'save', default='Save'), name='save')
-    def handleSubmit(self, action):
-        data, errors = self.extractData()
-        if errors:
-            self.status = self.formErrorsMessage
-            return
-        ICommentResponseHandler(self.context).add_response(data.get('text'))
+    def handleAdd(self, action):
+        """Registers the default "add"-button of the AddForm as "save"-button
+        """
+        return super(TaskCommentResponseAddForm, self).handleAdd(self, action)
 
-        self.request.RESPONSE.redirect(self.context.absolute_url())
+    def createAndAdd(self, data):
+        response_handler = ICommentResponseHandler(self.context)
+        return response_handler.add_response(data.get('text'))
+
+    def nextURL(self):
+        return self.context.absolute_url()
 
     @button.buttonAndHandler(_(u'cancel', default='Cancel'), name='cancel', )
-    def handleCancel(self, action):
-        return self.request.RESPONSE.redirect('.')
+    def handle(self, action):
+        self.request.response.redirect(self.nextURL())
 
 
 class TaskCommentResponseAddFormView(layout.FormWrapper, grok.View):
