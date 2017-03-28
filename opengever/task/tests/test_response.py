@@ -11,7 +11,8 @@ class TestTaskCommentResponseAddFormView(FunctionalTestCase):
 
     @browsing
     def test_add_task_comment_response_view_is_available(self, browser):
-        task = create(Builder('task').titled('Task 1'))
+        dossier = create(Builder('dossier'))
+        task = create(Builder('task').titled('Task 1').within(dossier))
 
         browser.login().visit(task, view="addcommentresponse")
         self.assertEqual(
@@ -20,7 +21,8 @@ class TestTaskCommentResponseAddFormView(FunctionalTestCase):
 
     @browsing
     def test_default_task_response_form_fields(self, browser):
-        task = create(Builder('task').titled('Task 1'))
+        dossier = create(Builder('dossier'))
+        task = create(Builder('task').titled('Task 1').within(dossier))
 
         browser.login().visit(task, view="addcommentresponse")
         labels = browser.css('#content-core label').text
@@ -32,7 +34,8 @@ class TestTaskCommentResponseAddFormView(FunctionalTestCase):
 
     @browsing
     def test_add_related_response_object_after_commenting(self, browser):
-        task = create(Builder('task').titled('Task 1'))
+        dossier = create(Builder('dossier'))
+        task = create(Builder('task').titled('Task 1').within(dossier))
 
         browser.login().visit(task, view="addcommentresponse")
         browser.fill({'Response': 'I am a comment'}).find('Save').click()
@@ -56,7 +59,8 @@ class TestTaskCommentResponseAddFormView(FunctionalTestCase):
 
     @browsing
     def test_click_on_comment_button_redirects_to_add_comment_view(self, browser):
-        task = create(Builder('task').titled('Task 1'))
+        dossier = create(Builder('dossier'))
+        task = create(Builder('task').titled('Task 1').within(dossier))
         browser.login().open(task, view='tabbedview_view-overview')
 
         browser.css('.taskCommented').first.click()
@@ -75,29 +79,110 @@ class TestTaskCommentResponseAddFormView(FunctionalTestCase):
 
         self.assertEqual(0, len(browser.css('.taskCommented')))
 
-    def test_protect_addcommenttaskresponse_view_if_containing_dossier_is_closed(self):
+    @browsing
+    def test_Manager_can_access_addcommentresponse_view_on_open_dossier(self, browser):
+        self.grant('Manager')
+        dossier = create(Builder('dossier'))
+        task = create(Builder('task').titled('Task 1').within(dossier))
+
+        self.assertEqual(
+            '{}/addcommentresponse'.format(task.absolute_url()),
+            browser.login().open(task, view='addcommentresponse').url)
+
+    @browsing
+    def test_Adminstrator_can_access_addcommentresponse_view_on_open_dossier(self, browser):
+        self.grant('Adminstrator')
+        dossier = create(Builder('dossier'))
+        task = create(Builder('task').titled('Task 1').within(dossier))
+
+        self.assertEqual(
+            '{}/addcommentresponse'.format(task.absolute_url()),
+            browser.login().open(task, view='addcommentresponse').url)
+
+    @browsing
+    def test_Contributor_can_access_addcommentresponse_view_on_open_dossier(self, browser):
+        self.grant('Contributor')
+        dossier = create(Builder('dossier'))
+        task = create(Builder('task').titled('Task 1').within(dossier))
+
+        self.assertEqual(
+            '{}/addcommentresponse'.format(task.absolute_url()),
+            browser.login().open(task, view='addcommentresponse').url)
+
+    @browsing
+    def test_Editor_can_access_addcommentresponse_view_on_open_dossier(self, browser):
+        self.grant('Editor')
+        dossier = create(Builder('dossier'))
+        task = create(Builder('task').titled('Task 1').within(dossier))
+
+        self.assertEqual(
+            '{}/addcommentresponse'.format(task.absolute_url()),
+            browser.login().open(task, view='addcommentresponse').url)
+
+    @browsing
+    def test_Reader_can_not_access_addcommentresponse_view_on_open_dossier(self, browser):
+        self.grant('Reader')
+        dossier = create(Builder('dossier'))
+        task = create(Builder('task').titled('Task 1').within(dossier))
+
+        self.assertEqual(
+            '{}/addcommentresponse'.format(task.absolute_url()),
+            browser.login().open(task, view='addcommentresponse').url)
+
+    @browsing
+    def test_Manager_can_not_access_addcommentresponse_view_on_closed_dossier(self, browser):
+        self.grant('Manager')
         dossier = create(Builder('dossier')
                          .in_state('dossier-state-resolved'))
 
         task = create(Builder('task').titled('Task 1').within(dossier))
-        view = getMultiAdapter((task, self.request), name='addcommentresponse')
 
         with self.assertRaises(Unauthorized):
-            view()
+            browser.login().open(task, view='addcommentresponse')
 
-    def test_protect_addcommenttaskresponse_view_if_user_has_no_add_permission(self):
-        create(Builder('user')
-               .having(firstname='Hugo', lastname='Boss')
-               .with_userid('hugo.boss'))
+    @browsing
+    def test_Adminstrator_can_not_access_addcommentresponse_view_on_closed_dossier(self, browser):
+        self.grant('Adminstrator')
+        dossier = create(Builder('dossier')
+                         .in_state('dossier-state-resolved'))
 
-        dossier = create(Builder('dossier'))
         task = create(Builder('task').titled('Task 1').within(dossier))
 
-        self.login('hugo.boss')
-        view = getMultiAdapter((task, self.request), name='addcommentresponse')
+        with self.assertRaises(Unauthorized):
+            browser.login().open(task, view='addcommentresponse')
+
+    @browsing
+    def test_Contributor_can_not_access_addcommentresponse_view_on_closed_dossier(self, browser):
+        self.grant('Contributor')
+        dossier = create(Builder('dossier')
+                         .in_state('dossier-state-resolved'))
+
+        task = create(Builder('task').titled('Task 1').within(dossier))
 
         with self.assertRaises(Unauthorized):
-            view()
+            browser.login().open(task, view='addcommentresponse')
+
+    @browsing
+    def test_Editor_can_not_access_addcommentresponse_view_on_closed_dossier(self, browser):
+        self.grant('Editor')
+        dossier = create(Builder('dossier')
+                         .in_state('dossier-state-resolved'))
+
+        task = create(Builder('task').titled('Task 1').within(dossier))
+
+        with self.assertRaises(Unauthorized):
+            browser.login().open(task, view='addcommentresponse')
+
+    @browsing
+    def test_Reader_can_not_access_addcommentresponse_view_on_closed_dossier(self, browser):
+        self.grant('Reader')
+        dossier = create(Builder('dossier')
+                         .in_state('dossier-state-resolved'))
+
+        task = create(Builder('task').titled('Task 1').within(dossier))
+
+        with self.assertRaises(Unauthorized):
+            browser.login().open(task, view='addcommentresponse')
 
     def get_latest_answer(self, browser):
         latest_answer = browser.css('div.answers .answer').first

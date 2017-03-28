@@ -96,7 +96,9 @@ class TestTaskActivites(FunctionalTestCase):
 
     @browsing
     def test_task_commented(self, browser):
+        dossier = create(Builder('dossier'))
         task = create(Builder('task')
+                      .within(dossier)
                       .titled(u'Abkl\xe4rung Fall Meier')
                       .having(responsible=TEST_USER_ID))
 

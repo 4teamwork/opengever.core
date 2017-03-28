@@ -23,25 +23,6 @@ class TestCommentResponseHandler(FunctionalTestCase):
 
         self.assertFalse(ICommentResponseHandler(task).is_allowed())
 
-    def test_commenting_is_disallowed_for_user_without_add_portal_content_permission(self):
-        create(Builder('user')
-               .having(firstname='Hugo', lastname='Boss')
-               .with_roles('Reader')
-               .with_userid('hugo.boss'))
-
-        dossier = create(Builder('dossier'))
-        task = create(Builder('task').within(dossier))
-
-        self.login('hugo.boss')
-
-        self.assertFalse(ICommentResponseHandler(task).is_allowed())
-
-    def test_commenting_is_allowed_if_user_has_add_portal_content_permission_and_dossier_is_not_closed(self):
-        dossier = create(Builder('dossier'))
-        task = create(Builder('task').within(dossier))
-
-        self.assertTrue(ICommentResponseHandler(task).is_allowed())
-
     def test_add_response_creates_a_task_commented_activity_record(self):
         dossier = create(Builder('dossier'))
         task = create(Builder('task').within(dossier))
@@ -60,3 +41,159 @@ class TestCommentResponseHandler(FunctionalTestCase):
         self.assertEqual(0, len(response_container))
         ICommentResponseHandler(task).add_response("My response")
         self.assertEqual(1, len(response_container))
+
+    def test_a_Member_can_not_add_task_comment_on_open_dossier(self):
+        create(Builder('user')
+               .having(firstname='Hugo', lastname='Boss')
+               .with_roles('Member')
+               .with_userid('hugo.boss'))
+
+        dossier = create(Builder('dossier'))
+        task = create(Builder('task').within(dossier))
+
+        self.login('hugo.boss')
+
+        self.assertFalse(ICommentResponseHandler(task).is_allowed())
+
+    def test_a_Reader_can_not_add_task_comment_on_open_dossier(self):
+        create(Builder('user')
+               .having(firstname='Hugo', lastname='Boss')
+               .with_roles('Reader')
+               .with_userid('hugo.boss'))
+
+        dossier = create(Builder('dossier'))
+        task = create(Builder('task').within(dossier))
+
+        self.login('hugo.boss')
+
+        self.assertFalse(ICommentResponseHandler(task).is_allowed())
+
+    def test_a_Editor_can_add_task_comment_on_open_dossier(self):
+        create(Builder('user')
+               .having(firstname='Hugo', lastname='Boss')
+               .with_roles('Editor')
+               .with_userid('hugo.boss'))
+
+        dossier = create(Builder('dossier'))
+        task = create(Builder('task').within(dossier))
+
+        self.login('hugo.boss')
+
+        self.assertTrue(ICommentResponseHandler(task).is_allowed())
+
+    def test_a_Contributor_can_add_task_comment_on_open_dossier(self):
+        create(Builder('user')
+               .having(firstname='Hugo', lastname='Boss')
+               .with_roles('Contributor')
+               .with_userid('hugo.boss'))
+
+        dossier = create(Builder('dossier'))
+        task = create(Builder('task').within(dossier))
+
+        self.login('hugo.boss')
+
+        self.assertTrue(ICommentResponseHandler(task).is_allowed())
+
+    def test_a_Administrator_can_add_task_comment_on_open_dossier(self):
+        create(Builder('user')
+               .having(firstname='Hugo', lastname='Boss')
+               .with_roles('Administrator')
+               .with_userid('hugo.boss'))
+
+        dossier = create(Builder('dossier'))
+        task = create(Builder('task').within(dossier))
+
+        self.login('hugo.boss')
+
+        self.assertTrue(ICommentResponseHandler(task).is_allowed())
+
+    def test_a_Manager_can_add_task_comment_on_open_dossier(self):
+        create(Builder('user')
+               .having(firstname='Hugo', lastname='Boss')
+               .with_roles('Manager')
+               .with_userid('hugo.boss'))
+
+        dossier = create(Builder('dossier'))
+        task = create(Builder('task').within(dossier))
+
+        self.login('hugo.boss')
+
+        self.assertTrue(ICommentResponseHandler(task).is_allowed())
+
+    def test_a_Member_can_not_add_task_comment_on_closed_dossier(self):
+        create(Builder('user')
+               .having(firstname='Hugo', lastname='Boss')
+               .with_roles('Member')
+               .with_userid('hugo.boss'))
+
+        dossier = create(Builder('dossier').in_state('dossier-state-resolved'))
+        task = create(Builder('task').within(dossier))
+
+        self.login('hugo.boss')
+
+        self.assertFalse(ICommentResponseHandler(task).is_allowed())
+
+    def test_a_Reader_can_not_add_task_comment_on_closed_dossier(self):
+        create(Builder('user')
+               .having(firstname='Hugo', lastname='Boss')
+               .with_roles('Reader')
+               .with_userid('hugo.boss'))
+
+        dossier = create(Builder('dossier').in_state('dossier-state-resolved'))
+        task = create(Builder('task').within(dossier))
+
+        self.login('hugo.boss')
+
+        self.assertFalse(ICommentResponseHandler(task).is_allowed())
+
+    def test_a_Editor_can_not_add_task_comment_on_closed_dossier(self):
+        create(Builder('user')
+               .having(firstname='Hugo', lastname='Boss')
+               .with_roles('Editor')
+               .with_userid('hugo.boss'))
+
+        dossier = create(Builder('dossier').in_state('dossier-state-resolved'))
+        task = create(Builder('task').within(dossier))
+
+        self.login('hugo.boss')
+
+        self.assertFalse(ICommentResponseHandler(task).is_allowed())
+
+    def test_a_Contributor_can_not_add_task_comment_on_closed_dossier(self):
+        create(Builder('user')
+               .having(firstname='Hugo', lastname='Boss')
+               .with_roles('Contributor')
+               .with_userid('hugo.boss'))
+
+        dossier = create(Builder('dossier').in_state('dossier-state-resolved'))
+        task = create(Builder('task').within(dossier))
+
+        self.login('hugo.boss')
+
+        self.assertFalse(ICommentResponseHandler(task).is_allowed())
+
+    def test_a_Administrator_can_not_add_task_comment_on_closed_dossier(self):
+        create(Builder('user')
+               .having(firstname='Hugo', lastname='Boss')
+               .with_roles('Administrator')
+               .with_userid('hugo.boss'))
+
+        dossier = create(Builder('dossier').in_state('dossier-state-resolved'))
+        task = create(Builder('task').within(dossier))
+
+        self.login('hugo.boss')
+
+        self.assertFalse(ICommentResponseHandler(task).is_allowed())
+
+    def test_a_Manager_can_not_add_task_comment_on_closed_dossier(self):
+        create(Builder('user')
+               .having(firstname='Hugo', lastname='Boss')
+               .with_roles('Manager')
+               .with_userid('hugo.boss'))
+
+        dossier = create(Builder('dossier').in_state('dossier-state-resolved'))
+        task = create(Builder('task').within(dossier))
+
+        self.login('hugo.boss')
+
+        self.assertFalse(ICommentResponseHandler(task).is_allowed())

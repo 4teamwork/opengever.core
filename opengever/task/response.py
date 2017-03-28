@@ -184,15 +184,9 @@ class TaskCommentResponseAddForm(form.AddForm, AutoExtensibleForm):
 class TaskCommentResponseAddFormView(layout.FormWrapper, grok.View):
     grok.context(ITask)
     grok.name("addcommentresponse")
-    grok.require('cmf.AddPortalContent')
+    grok.require('opengever.task.AddTaskComment')
 
     form = TaskCommentResponseAddForm
-
-    def __call__(self):
-        if not ICommentResponseHandler(self.context).is_allowed():
-            raise Unauthorized('Commenting is not allowed on closed dossiers')
-
-        return super(TaskCommentResponseAddFormView, self).__call__()
 
 
 class TaskTransitionResponseAddForm(form.AddForm, AutoExtensibleForm):

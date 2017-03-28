@@ -11,8 +11,9 @@ class TestActionmenuViewlet(FunctionalTestCase):
         super(TestActionmenuViewlet, self).setUp()
 
         create(Builder('ogds_user').id('hugo.boss'))
-
+        dossier = create(Builder('dossier'))
         self.task = create(Builder('task')
+                           .within(dossier)
                            .having(issuer='hugo.boss',
                                    responsible=TEST_USER_ID,
                                    task_type='comment'))
