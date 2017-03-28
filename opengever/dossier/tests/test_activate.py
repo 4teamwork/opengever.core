@@ -4,6 +4,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING_POSTGRES
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import FunctionalTestCase
 from plone import api
@@ -11,6 +12,11 @@ from plone.protect import createToken
 
 
 class TestDossierActivation(FunctionalTestCase):
+    # This test uses the postgres layer in order to profe that postgres can
+    # be used in tests. It was chose randomly.
+    # The layer should be removed when "FunctionalTestCase" has been switched
+    # to postgres testing as default.
+    layer = OPENGEVER_FUNCTIONAL_TESTING_POSTGRES
 
     def setUp(self):
         super(TestDossierActivation, self).setUp()
