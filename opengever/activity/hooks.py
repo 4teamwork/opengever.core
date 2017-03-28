@@ -28,6 +28,8 @@ DEFAULT_SETTINGS = [
      'mail_notification': False},
     {'kind': 'task-transition-open-tested-and-closed',
      'mail_notification': False},
+    {'kind': 'task-commented',
+     'mail_notification': False},
     {'kind': 'task-transition-reassign',
      'mail_notification': True,
      'mail_notification_roles': [TASK_RESPONSIBLE_ROLE]},
