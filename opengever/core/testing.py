@@ -108,10 +108,9 @@ class OpengeverFixture(PloneSandboxLayer):
     defaultBases = (PLONE_FIXTURE, BUILDER_LAYER)
 
     def __init__(self, sql_layer):
-        self.sql_layer = sql_layer
         bases = self.defaultBases + (sql_layer, )
         name = ':'.join((self.__class__.__name__,
-                         self.sql_layer.__class__.__name__))
+                         sql_layer.__class__.__name__))
         super(OpengeverFixture, self).__init__(bases=bases, name=name)
 
     def setUpZope(self, app, configurationContext):
@@ -138,7 +137,6 @@ class OpengeverFixture(PloneSandboxLayer):
         z2.installProduct(app, 'plone.app.versioningbehavior')
         z2.installProduct(app, 'collective.taskqueue.pasplugin')
 
-        self.sql_layer.setup_sql_connection()
         setupCoreSessions(app)
 
         # Set max subobject limit to 0 -> unlimited

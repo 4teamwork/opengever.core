@@ -22,7 +22,7 @@ class SQLiteMemoryFixture(Layer):
     All threads use the same connection and transaction.
     """
 
-    def setup_sql_connection(self):
+    def setUp(self):
         setup_memory_database()
 
     def testSetUp(self):
