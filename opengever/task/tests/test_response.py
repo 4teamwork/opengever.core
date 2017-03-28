@@ -13,7 +13,7 @@ class TestTaskCommentResponseAddFormView(FunctionalTestCase):
     def test_add_task_comment_response_view_is_available(self, browser):
         task = create(Builder('task').titled('Task 1'))
 
-        browser.login().visit(task, view="addtaskcommentresponse")
+        browser.login().visit(task, view="addcommentresponse")
         self.assertEqual(
             'Add Comment',
             browser.css('.documentFirstHeading').first.text)
@@ -22,7 +22,7 @@ class TestTaskCommentResponseAddFormView(FunctionalTestCase):
     def test_default_task_response_form_fields(self, browser):
         task = create(Builder('task').titled('Task 1'))
 
-        browser.login().visit(task, view="addtaskcommentresponse")
+        browser.login().visit(task, view="addcommentresponse")
         labels = browser.css('#content-core label').text
 
         # remove empty labels.
@@ -34,7 +34,7 @@ class TestTaskCommentResponseAddFormView(FunctionalTestCase):
     def test_add_related_response_object_after_commenting(self, browser):
         task = create(Builder('task').titled('Task 1'))
 
-        browser.login().visit(task, view="addtaskcommentresponse")
+        browser.login().visit(task, view="addcommentresponse")
         browser.fill({'Response': 'I am a comment'}).find('Save').click()
         browser.open(task, view='tabbedview_view-overview')
 
@@ -47,7 +47,7 @@ class TestTaskCommentResponseAddFormView(FunctionalTestCase):
         dossier = create(Builder('dossier'))
         task = create(Builder('task').titled('Task').within(dossier))
 
-        browser.login().visit(task, view="addtaskcommentresponse")
+        browser.login().visit(task, view="addcommentresponse")
         browser.find('Save').click()
 
         self.assertEqual(
@@ -62,7 +62,7 @@ class TestTaskCommentResponseAddFormView(FunctionalTestCase):
         browser.css('.taskCommented').first.click()
 
         self.assertEqual(
-            '{}/@@addtaskcommentresponse'.format(task.absolute_url()),
+            '{}/@@addcommentresponse'.format(task.absolute_url()),
             browser.url)
 
     @browsing
@@ -80,7 +80,7 @@ class TestTaskCommentResponseAddFormView(FunctionalTestCase):
                          .in_state('dossier-state-resolved'))
 
         task = create(Builder('task').titled('Task 1').within(dossier))
-        view = getMultiAdapter((task, self.request), name='addtaskcommentresponse')
+        view = getMultiAdapter((task, self.request), name='addcommentresponse')
 
         with self.assertRaises(Unauthorized):
             view()
@@ -94,7 +94,7 @@ class TestTaskCommentResponseAddFormView(FunctionalTestCase):
         task = create(Builder('task').titled('Task 1').within(dossier))
 
         self.login('hugo.boss')
-        view = getMultiAdapter((task, self.request), name='addtaskcommentresponse')
+        view = getMultiAdapter((task, self.request), name='addcommentresponse')
 
         with self.assertRaises(Unauthorized):
             view()

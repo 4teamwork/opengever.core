@@ -63,5 +63,5 @@ class ActionMenuViewlet(grok.Viewlet):
         if ICommentResponseHandler(self.context).is_allowed():
             regular_items.append(
                 {'title': 'label_add_comment',
-                 'url': '{}/@@addtaskcommentresponse'.format(self.context.absolute_url()),
+                 'url': '{}/@@addcommentresponse'.format(self.context.absolute_url()),
                  'response_description': ResponseDescription.get(transition='task-commented')})

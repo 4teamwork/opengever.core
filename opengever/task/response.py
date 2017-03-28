@@ -183,7 +183,7 @@ class TaskCommentResponseAddForm(form.AddForm, AutoExtensibleForm):
 
 class TaskCommentResponseAddFormView(layout.FormWrapper, grok.View):
     grok.context(ITask)
-    grok.name("addtaskcommentresponse")
+    grok.name("addcommentresponse")
     grok.require('cmf.AddPortalContent')
 
     form = TaskCommentResponseAddForm

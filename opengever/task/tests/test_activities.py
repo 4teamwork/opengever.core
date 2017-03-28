@@ -100,7 +100,7 @@ class TestTaskActivites(FunctionalTestCase):
                       .titled(u'Abkl\xe4rung Fall Meier')
                       .having(responsible=TEST_USER_ID))
 
-        browser.login().visit(task, view="addtaskcommentresponse")
+        browser.login().visit(task, view="addcommentresponse")
         browser.fill({'Response': u'Wird n\xe4chste Woche erledigt.'})
         browser.find('Save').click()
 
