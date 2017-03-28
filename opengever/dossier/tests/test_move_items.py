@@ -3,14 +3,12 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import assert_no_error_messages
 from ftw.testbrowser.pages.statusmessages import error_messages
-from opengever.base.interfaces import IReferenceNumber
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
-from plone.uuid.interfaces import IUUID
-from Products.CMFCore.utils import getToolByName
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
+import json
 import transaction
 
 
@@ -72,7 +70,7 @@ class TestMoveItems(FunctionalTestCase):
         self.assert_contains(target_dossier,
                              ['Dossier \xc2\xb6c1', 'a Dossier'])
 
-    def test_closed_items_hidden_in_destination_widget(self):
+    def test_dossier_in_state_resolved_is_not_traversable(self):
         setRoles(self.portal, TEST_USER_ID, ['Reviewer', 'Manager'])
         target_repo = create(Builder("repository"))
 
@@ -80,15 +78,9 @@ class TestMoveItems(FunctionalTestCase):
                .within(target_repo)
                .in_state('dossier-state-resolved'))
 
-        self.request['paths'] = '/'.join(self.source_dossier.getPhysicalPath())
-
-        uids = self.get_uids_from_tree_widget()
-
-        self.assertEquals([IUUID(self.source_dossier),
-                           IUUID(self.source_repo),
-                           IUUID(target_repo)],
-                          uids,
-                          "Closed dossier found as target in move items")
+        self.request['start'] = '/'.join(target_repo.getPhysicalPath())
+        result = self.get_items_from_widget()
+        self.assertEquals(0, len(result['items']), 'Expect no dossier')
 
     def test_open_items_appear_in_destination_widget(self):
         target_repo = create(Builder("repository"))
@@ -96,22 +88,15 @@ class TestMoveItems(FunctionalTestCase):
         target_dossier = create(Builder("dossier").within(target_repo))
         self.request['paths'] = '/'.join(self.source_dossier.getPhysicalPath())
 
-        uids = self.get_uids_from_tree_widget()
+        self.request['start'] = '/'.join(target_repo.getPhysicalPath())
+        result = self.get_items_from_widget()
+        self.assertEquals(['/'.join(target_dossier.getPhysicalPath())],
+                          [item['path'] for item in result['items']])
 
-        self.assertIn(IUUID(target_dossier),
-                      uids,
-                      "Active dossier not found as target in move items")
-
-    def get_uids_from_tree_widget(self):
-        view = self.source_repo.restrictedTraverse('move_items')
-        form = view.form(self.source_repo, self.request)
-        form.updateWidgets()
-
-        catalog = getToolByName(self.portal, 'portal_catalog')
-        widget = form.widgets['destination_folder']
-        query_result = catalog(widget.bound_source.navigation_tree_query)
-
-        return [item.UID for item in query_result]
+    def get_items_from_widget(self):
+        widget_name = 'form.widgets.destination_folder'
+        path = '@@move_items/++widget++' + widget_name + '/get_reference_data'
+        return json.loads(self.source_repo.unrestrictedTraverse(path)())
 
     def move_items(self, items, source=None, target=None):
         paths = u";;".join(["/".join(i.getPhysicalPath()) for i in items])
@@ -125,7 +110,6 @@ class TestMoveItems(FunctionalTestCase):
         form.updateWidgets()
         form.widgets['destination_folder'].value = target
         form.widgets['request_paths'].value = paths
-
         form.handle_submit(form, object)
 
     def assert_contains(self, container, items):

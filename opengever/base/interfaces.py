@@ -231,14 +231,6 @@ class IUniqueNumberGenerator(Interface):
         """
 
 
-class IRepositoryPathSourceBinderQueryModificator(Interface):
-    """Markerinterface for RepositoryPathSourceBinderQueryModificator
-    adapter"""
-
-    def modify_query(self, query):
-        """Modify the ReppositoryPathSourceBinderQuery"""
-
-
 class IDataCollector(Interface):
     """Interface for adapters which are able to serialize and
     deserialize data. With these named-adapters any kind of additional

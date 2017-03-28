@@ -19,17 +19,17 @@ class TestRepositoryPathSourceBinder(FunctionalTestCase):
                                     .within(self.repofolder1))
 
         self.reporoot2 = create(Builder('repository_root')
-                                 .titled(u'Ordnungssystem2'))
+                                .titled(u'Ordnungssystem2'))
         self.repofolder2 = create(Builder('repository').within(self.reporoot2))
 
-    def test_navigation_tree_query_is_limited_to_current_repository(self):
+    def test_root_path_is_limited_to_current_repository(self):
         source_binder = RepositoryPathSourceBinder()
         source = source_binder(self.repofolder1_1)
-        self.assertEqual({'query': '/plone/ordnungssystem1'},
-                         source.navigation_tree_query['path'])
+        self.assertEqual('/plone/ordnungssystem1',
+                         source.root_path)
         source = source_binder(self.repofolder1)
-        self.assertEqual({'query': '/plone/ordnungssystem1'},
-                         source.navigation_tree_query['path'])
+        self.assertEqual('/plone/ordnungssystem1',
+                         source.root_path)
 
 
 class TestDossierSourceBinder(FunctionalTestCase):
