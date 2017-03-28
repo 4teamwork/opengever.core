@@ -1,4 +1,5 @@
 from opengever.base.model import Base
+from opengever.base.model import SQLFormSupport
 from opengever.base.utils import escape_html
 from opengever.ogds.models import EMAIL_LENGTH
 from opengever.ogds.models import FIRSTNAME_LENGTH
@@ -10,7 +11,7 @@ from sqlalchemy.orm import column_property
 from sqlalchemy.schema import Sequence
 
 
-class Member(Base):
+class Member(Base, SQLFormSupport):
 
     __tablename__ = 'members'
 
@@ -28,9 +29,6 @@ class Member(Base):
     def css_class(self):
         return 'contenttype-opengever-meeting-member'
 
-    def is_editable(self):
-        return True
-
     def get_link(self, context, title=None):
         title = title or self.fullname
         url = self.get_url(context)
@@ -44,25 +42,12 @@ class Member(Base):
     def get_lastname_link(self, context):
         return self.get_link(context, title=self.lastname)
 
-    def get_url(self, context):
-        return "{}/member-{}".format(context.absolute_url(), self.member_id)
+    def get_url(self, context, view=None):
+        elements = [context.absolute_url(), "member-{}".format(self.member_id)]
+        if view:
+            elements.append(view)
 
-    def get_edit_url(self, context):
-        return '/'.join((self.get_url(context), 'edit'))
-
-    def get_edit_values(self, fieldnames):
-        values = {}
-        for fieldname in fieldnames:
-            value = getattr(self, fieldname, None)
-            if not value:
-                continue
-
-            values[fieldname] = value
-        return values
-
-    def update_model(self, data):
-        for key, value in data.items():
-            setattr(self, key, value)
+        return '/'.join(elements)
 
     def get_title(self, show_email_as_link=True):
         fullname = escape_html(self.fullname)

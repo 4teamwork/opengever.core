@@ -5,7 +5,7 @@ Changelog
 2017.1.2 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Refactor: Use SQLFormSupport class for: Meeting and Member [elioschmutz]
 
 
 2017.1.1 (2017-03-27)

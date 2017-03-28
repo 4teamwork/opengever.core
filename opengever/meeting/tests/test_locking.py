@@ -58,9 +58,9 @@ class TestMeetingLocking(FunctionalTestCase):
 
     @browsing
     def test_editing_a_protocol_locks_meeting(self, browser):
-        browser.login().open(self.meeting.get_url('protocol'))
+        browser.login().open(self.meeting.get_url(view='protocol'))
 
-        browser.open(self.meeting.get_url('plone_lock_info/lock_info'))
+        browser.open(self.meeting.get_url(view='plone_lock_info/lock_info'))
         lock_infos = ILockable(
             MeetingWrapper.wrap(self.committee, self.meeting)).lock_info()
 
@@ -71,12 +71,12 @@ class TestMeetingLocking(FunctionalTestCase):
 
     @browsing
     def test_lock_refreshing_is_enabled(self, browser):
-        browser.login().open(self.meeting.get_url('protocol'))
+        browser.login().open(self.meeting.get_url(view='protocol'))
         self.assertIn('enableUnlockProtection', browser.css('#form').first.get('class'))
 
     @browsing
     def test_saving_protocol_unlock_meeting(self, browser):
-        browser.login().open(self.meeting.get_url('protocol'))
+        browser.login().open(self.meeting.get_url(view='protocol'))
         lock_infos = ILockable(
             MeetingWrapper.wrap(self.committee, self.meeting)).lock_info()
         self.assertEquals(1, len(lock_infos))
@@ -88,7 +88,7 @@ class TestMeetingLocking(FunctionalTestCase):
 
     @browsing
     def test_cancelling_protocol_unlock_meeting(self, browser):
-        browser.login().open(self.meeting.get_url('protocol'))
+        browser.login().open(self.meeting.get_url(view='protocol'))
         lock_infos = ILockable(
             MeetingWrapper.wrap(self.committee, self.meeting)).lock_info()
         self.assertEquals(1, len(lock_infos))
@@ -103,10 +103,10 @@ class TestMeetingLocking(FunctionalTestCase):
         user = create(Builder('user')
                       .named('Hugo', 'Boss')
                       .in_groups('client1_users'))
-        browser.login(username='hugo.boss').open(self.meeting.get_url('protocol'))
+        browser.login(username='hugo.boss').open(self.meeting.get_url(view='protocol'))
 
         with self.assertRaises(Redirect) as cm:
-            browser.login().open(self.meeting.get_url('protocol'))
+            browser.login().open(self.meeting.get_url(view='protocol'))
 
         self.assertEquals(
             'http://nohost/plone/opengever-meeting-committeecontainer/committee-1/meeting-1',
@@ -117,7 +117,7 @@ class TestMeetingLocking(FunctionalTestCase):
         user = create(Builder('user')
                       .named('Hugo', 'Boss')
                       .in_groups('client1_users'))
-        browser.login(username='hugo.boss').open(self.meeting.get_url('protocol'))
+        browser.login(username='hugo.boss').open(self.meeting.get_url(view='protocol'))
 
         browser.login().open(self.meeting.get_url(),
                              {'_authenticator': createToken()})
