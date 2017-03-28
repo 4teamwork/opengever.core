@@ -7,14 +7,12 @@ from ftw.bumblebee.tests.helpers import BumblebeeTestTaskQueue
 from ftw.testing import ComponentRegistryLayer
 from ftw.testing.quickinstaller import snapshots
 from opengever.activity.interfaces import IActivitySettings
-from opengever.base import model
 from opengever.base.model import create_session
 from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
+from opengever.core import sqlite_testing
 from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings # noqa
 from opengever.meeting.interfaces import IMeetingSettings
 from opengever.officeatwork.interfaces import IOfficeatworkSettings
-from opengever.ogds.base.setup import create_sql_tables
-from opengever.ogds.models import BASE
 from opengever.private import enable_opengever_private
 from plone import api
 from plone.app.testing import applyProfile
@@ -26,20 +24,11 @@ from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.browserlayer.utils import unregister_layer
 from plone.dexterity.schema import SCHEMA_CACHE
-from plone.testing import Layer
 from plone.testing import z2
 from Products.CMFCore.utils import getToolByName
-from sqlalchemy.pool import StaticPool
 from Testing.ZopeTestCase.utils import setupCoreSessions
-from z3c.saconfig import EngineFactory
-from z3c.saconfig import GloballyScopedSession
-from z3c.saconfig.interfaces import IEngineFactory
-from z3c.saconfig.interfaces import IScopedSession
 from zope.component import getSiteManager
-from zope.component import provideUtility
 from zope.configuration import xmlconfig
-from zope.sqlalchemy import datamanager
-from zope.sqlalchemy import ZopeTransactionExtension
 import logging
 import os
 import sys
@@ -61,29 +50,6 @@ snapshots.disable()
 def clear_transmogrifier_registry():
     transmogrifier.configuration_registry._config_info = {}
     transmogrifier.configuration_registry._config_ids = []
-
-
-def setup_sql_tables():
-    # Create opengever.ogds.base SQL tables
-    create_sql_tables()
-
-    # Create opengever.globalindex SQL tables
-    model.Base.metadata.create_all(create_session().bind)
-
-    # Activate savepoint "support" for sqlite
-    # We need savepoint support for version retrieval with CMFEditions.
-    if 'sqlite' in datamanager.NO_SAVEPOINT_SUPPORT:
-        datamanager.NO_SAVEPOINT_SUPPORT.remove('sqlite')
-
-
-def truncate_sql_tables():
-    tables = BASE.metadata.tables.values() + \
-        model.Base.metadata.tables.values()
-
-    session = create_session()
-
-    for table in tables:
-        session.execute(table.delete())
 
 
 def toggle_feature(registry_interface, enabled=True):
@@ -139,18 +105,13 @@ ANNOTATION_LAYER = AnnotationLayer()
 
 
 class OpengeverFixture(PloneSandboxLayer):
-
     defaultBases = (PLONE_FIXTURE, BUILDER_LAYER)
 
-    def testSetUp(self):
-        super(OpengeverFixture, self).testSetUp()
-        setup_sql_tables()
-
-    def testTearDown(self):
-        # Tear down the sql session because we use the keep_session flag.
-        model.Session.close_all()
-        truncate_sql_tables()
-        super(OpengeverFixture, self).testTearDown()
+    def __init__(self, sql_layer):
+        bases = self.defaultBases + (sql_layer, )
+        name = ':'.join((self.__class__.__name__,
+                         sql_layer.__class__.__name__))
+        super(OpengeverFixture, self).__init__(bases=bases, name=name)
 
     def setUpZope(self, app, configurationContext):
         # do not install pas plugins (doesnt work in tests)
@@ -176,7 +137,6 @@ class OpengeverFixture(PloneSandboxLayer):
         z2.installProduct(app, 'plone.app.versioningbehavior')
         z2.installProduct(app, 'collective.taskqueue.pasplugin')
 
-        setup_sqlite_memory_session()
         setupCoreSessions(app)
 
         # Set max subobject limit to 0 -> unlimited
@@ -239,21 +199,6 @@ class OpengeverFixture(PloneSandboxLayer):
         portal.portal_types['Plone Site'].filter_content_types = False
 
 
-class MemoryDBLayer(Layer):
-    """A Layer which only set up a test sqlite db in to the memory
-    """
-
-    def testSetUp(self):
-        super(MemoryDBLayer, self).testSetUp()
-        setup_sql_tables()
-        self.session = create_session()
-
-    def testTearDown(self):
-        model.Session.close_all()
-        truncate_sql_tables()
-        transaction.abort()
-
-
 def integration_session_factory():
     sess = session.BuilderSession()
     sess.session = create_session()
@@ -267,27 +212,8 @@ def functional_session_factory():
     return sess
 
 
-def setup_sqlite_memory_session():
-    engine_factory = EngineFactory(
-        'sqlite:///:memory:',
-        connect_args={'check_same_thread': False},
-        poolclass=StaticPool)
-    provideUtility(
-        engine_factory, provides=IEngineFactory, name=u'opengever_db')
-
-    # keep_session is necessary so that the builders can commit the
-    # transaction multiple times and we can still use the sql objects
-    # without fetching fresh copies.
-    # The session should be closed on test tear down.
-    scoped_session = GloballyScopedSession(
-        engine=u'opengever_db',
-        extension=ZopeTransactionExtension(keep_session=True))
-    provideUtility(
-        scoped_session, provides=IScopedSession, name=u'opengever')
-
-
 def memory_session_factory():
-    setup_sqlite_memory_session()
+    sqlite_testing.setup_memory_database()
     sess = session.BuilderSession()
     sess.auto_commit = False
     sess.auto_flush = True
@@ -295,29 +221,29 @@ def memory_session_factory():
     return sess
 
 
-MEMORY_DB_LAYER = MemoryDBLayer(
+MEMORY_DB_LAYER = sqlite_testing.StandaloneMemoryDBLayer(
     bases=(BUILDER_LAYER,
            set_builder_session_factory(memory_session_factory)),
     name='opengever:core:memory_db')
 
-OPENGEVER_FIXTURE = OpengeverFixture()
+OPENGEVER_FIXTURE_SQLITE = OpengeverFixture(
+    sqlite_testing.SQLITE_MEMORY_FIXTURE)
 
 OPENGEVER_INTEGRATION_TESTING = IntegrationTesting(
-    bases=(OPENGEVER_FIXTURE,
+    bases=(OPENGEVER_FIXTURE_SQLITE,
            set_builder_session_factory(integration_session_factory)),
     name="opengever.core:integration")
 
 OPENGEVER_FUNCTIONAL_TESTING = FunctionalTesting(
-    bases=(OPENGEVER_FIXTURE,
+    bases=(OPENGEVER_FIXTURE_SQLITE,
            set_builder_session_factory(functional_session_factory)),
     name="opengever.core:functional")
 
 OPENGEVER_FUNCTIONAL_ZSERVER_TESTING = FunctionalTesting(
-    bases=(z2.ZSERVER_FIXTURE, OPENGEVER_FIXTURE,
-           set_builder_session_factory(functional_session_factory),
-           ),
+    bases=(z2.ZSERVER_FIXTURE,
+           OPENGEVER_FIXTURE_SQLITE,
+           set_builder_session_factory(functional_session_factory)),
     name="opengever.core:functional:zserver")
-
 
 
 def activate_filing_number(portal):
