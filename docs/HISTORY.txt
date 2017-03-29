@@ -5,6 +5,7 @@ Changelog
 2017.1.2 (unreleased)
 ---------------------
 
+- Refactor: Use ZCML for registering reference number adapters for consistency. [jone]
 - Refactor: Use SQLFormSupport class for: Meeting and Member [elioschmutz]
 
 
