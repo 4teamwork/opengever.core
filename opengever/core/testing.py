@@ -217,6 +217,9 @@ MEMORY_DB_LAYER = sqlite_testing.StandaloneMemoryDBLayer(
 OPENGEVER_FIXTURE_SQLITE = OpengeverFixture(
     sqlite_testing.SQLITE_MEMORY_FIXTURE)
 
+# OPENGEVER_FIXTURE is the default fixture used in policy tests.
+OPENGEVER_FIXTURE = OPENGEVER_FIXTURE_SQLITE
+
 OPENGEVER_INTEGRATION_TESTING = IntegrationTesting(
     bases=(OPENGEVER_FIXTURE_SQLITE,
            set_builder_session_factory(integration_session_factory)),
