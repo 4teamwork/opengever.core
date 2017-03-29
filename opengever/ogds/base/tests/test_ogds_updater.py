@@ -21,7 +21,7 @@ class TestOGDSUpdater(FunctionalTestCase):
         ldap_plugin = FakeLDAPPlugin(FAKE_LDAP_USERFOLDER)
         self.portal.acl_users._setObject('ldap', ldap_plugin)
 
-        provideAdapter(FakeLDAPSearchUtility)
+        self.portal.getSiteManager().registerAdapter(FakeLDAPSearchUtility)
 
     def test_imports_users(self):
         FAKE_LDAP_USERFOLDER.users = [
