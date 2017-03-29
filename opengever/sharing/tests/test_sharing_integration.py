@@ -6,6 +6,8 @@ from opengever.sharing.interfaces import ILocalRolesAcquisitionActivated
 from opengever.sharing.interfaces import ILocalRolesAcquisitionBlocked
 from opengever.sharing.interfaces import ILocalRolesModified
 from opengever.testing import FunctionalTestCase
+from opengever.testing.event_recorder import get_last_recorded_event
+from opengever.testing.event_recorder import register_event_recorder
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
@@ -26,20 +28,6 @@ class TestOpengeverSharingIntegration(FunctionalTestCase):
 
         self.view_repo = OpengeverSharingView(self.repo, self.portal.REQUEST)
         self.view_dossier = OpengeverSharingView(self.dossier, self.portal.REQUEST)
-
-        # Event class to look for fired events
-        class MockEvent(object):
-
-            # History: [[interface, context], ]
-            event_history = []
-
-            def mock_handler(self, event):
-                self.event_history.append(event, )
-
-            def last_event(self):
-                return self.event_history[-1]
-
-        self.mock_event = MockEvent()
 
     def _check_roles(self, expect, roles):
         """ Base method to check the received roles
@@ -104,42 +92,34 @@ class TestOpengeverSharingIntegration(FunctionalTestCase):
         we lose the role 'owner' on the context
         """
 
-        # Mock event handlers
-        provideHandler(
-            factory=self.mock_event.mock_handler,
-            adapts=[ILocalRolesAcquisitionBlocked, ], )
-        provideHandler(
-            factory=self.mock_event.mock_handler,
-            adapts=[ILocalRolesAcquisitionActivated, ], )
+        register_event_recorder(ILocalRolesAcquisitionBlocked)
+        register_event_recorder(ILocalRolesAcquisitionActivated)
 
         # We disable locale role aquisition on dossier
         self.view_dossier.update_inherit(False, reindex=False)
-        last_event = self.mock_event.last_event()
+        last_event = get_last_recorded_event()
         self.assertTrue(ILocalRolesAcquisitionBlocked.providedBy(last_event))
         self.assertEquals(last_event.object, self.dossier)
 
         # we disable it again,it shouldn't fire a event because nothing changed
         self.view_dossier.update_inherit(False, reindex=False)
-        self.assertEquals(last_event, self.mock_event.last_event())
+        self.assertEquals(last_event, get_last_recorded_event())
 
         # # We enable locale role aquisition on dossier
         self.view_dossier.update_inherit(True, reindex=False)
         # and check the fired event
-        last_event = self.mock_event.last_event()
+        last_event = get_last_recorded_event()
         self.assertTrue(ILocalRolesAcquisitionActivated.providedBy(last_event))
         self.assertEquals(last_event.object, self.dossier)
 
         # we disable it again,it shouldn't fire a event because nothing changed
         self.view_dossier.update_inherit(True, reindex=False)
-        self.assertEquals(last_event, self.mock_event.last_event())
+        self.assertEquals(last_event, get_last_recorded_event())
 
     def test_update_role_settings(self):
         """ Test update_role_settings method
         """
-        # Mock event handler
-        provideHandler(
-            factory=self.mock_event.mock_handler,
-            adapts=[ILocalRolesModified, ], )
+        register_event_recorder(ILocalRolesModified)
 
         # If nothing has changed it needs to be reported accordingly
         changed = self.view_repo.update_role_settings([], False)
@@ -152,7 +132,7 @@ class TestOpengeverSharingIntegration(FunctionalTestCase):
         changed = self.view_repo.update_role_settings(new_settings, False)
         self.assertTrue(changed)
 
-        last_event = self.mock_event.last_event()
+        last_event = get_last_recorded_event()
         # check the event type
         self.assertTrue(ILocalRolesModified.providedBy(last_event))
         # check the event context
@@ -171,7 +151,7 @@ class TestOpengeverSharingIntegration(FunctionalTestCase):
         self.assertTrue(changed)
 
         # check event attributes
-        last_event = self.mock_event.last_event()
+        last_event = get_last_recorded_event()
         self.assertTrue(ILocalRolesModified.providedBy(last_event))
         self.assertEquals(last_event.object, self.repo)
         self.assertEquals(last_event.old_local_roles,

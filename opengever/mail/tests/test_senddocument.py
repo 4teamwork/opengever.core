@@ -8,12 +8,14 @@ from ftw.testing.mailing import Mailing
 from opengever.mail.behaviors import ISendableDocsContainer
 from opengever.mail.interfaces import IDocumentSent
 from opengever.testing import FunctionalTestCase
+from opengever.testing.event_recorder import get_last_recorded_event
+from opengever.testing.event_recorder import register_event_recorder
 from plone.app.testing import TEST_USER_ID
 from zope.component import getUtility
-from zope.component import provideHandler
 from zope.intid.interfaces import IIntIds
 import email
 import quopri
+import transaction
 
 
 TEST_FORM_DATA = {
@@ -22,16 +24,6 @@ TEST_FORM_DATA = {
     'subject': 'Test Subject',
     'extern_receiver': 'info@4teamwork.ch',
     'intern_receiver': ['hugo@boss.ch', ]}
-
-
-class MockEvent(object):
-    event_history = []
-
-    def mock_handler(self, event):
-        self.event_history.append(event, )
-
-    def last_event(self):
-        return self.event_history[-1]
 
 
 class TestSendDocument(FunctionalTestCase):
@@ -157,23 +149,17 @@ f\xc3\xbcr Ernst Franz\r\n\r\nBesten Dank im Voraus"""
         dossier = create(Builder("dossier"))
         documents = [create(Builder("document").within(dossier).with_dummy_content()), ]
 
-        # mock event handler
-        mock_event = MockEvent()
-        provideHandler(factory=mock_event.mock_handler,
-                       adapts=[IDocumentSent, ], )
+        register_event_recorder(IDocumentSent)
+        transaction.commit()
 
         self.send_documents(dossier, documents)
 
-        # check event
-        event = mock_event.last_event()
+        event = get_last_recorded_event()
         self.assertEquals(event.sender, TEST_USER_ID)
         self.assertEquals(event.receiver, TEST_FORM_DATA.get('extern_receiver'))
-        self.assertEquals(event.object.getPhysicalPath(), dossier.getPhysicalPath())
         self.assertEquals(event.subject, TEST_FORM_DATA.get('subject'))
         self.assertEquals(event.message, TEST_FORM_DATA.get('message'))
-        self.assertEquals(
-            intids.getObject(event.intids[0]),
-            documents[0])
+        self.assertEquals(event.intids, map(intids.getId, documents))
 
     @browsing
     def test_sent_mail_gets_filed_in_dossier(self, browser):
