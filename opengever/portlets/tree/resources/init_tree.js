@@ -5,7 +5,7 @@ $(function() {
   }
 
   $(document).bind('tree:rendered', function() {
-    resize_treeportlet_height();
+    limit_treeportlet_height();
     scroll_to_selected_item(portlet.find('.portlet-tabs > .tab'));
   });
 
@@ -133,12 +133,11 @@ $(function() {
     return find_parent_node_for_url(tree, url.slice(0, url.lastIndexOf('/')));
   }
 
-  function resize_treeportlet_height() {
+  function limit_treeportlet_height() {
     var tabs = $('dl.portlet.portletTreePortlet .portlet-tabs > .tab');
-    var max = $(window).height() - tabs.offset().top - 20;
-    tabs.css('max-height', max);
+    var offset = $('.portletTreePortlet').offset().top + 70;
+    tabs.css('max-height', 'calc(100vh - ' + offset + 'px');
   }
-  $(window).resize(resize_treeportlet_height);
 
   function scroll_to_selected_item(tree) {
     var position = tree.find('a.current').position();

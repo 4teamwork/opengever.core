@@ -5,6 +5,7 @@ Changelog
 2017.1.2 (unreleased)
 ---------------------
 
+- Fix scrollbar of tree view portlet. [Kevin Bieri]
 - Add state filters to user listings. [deiferni]
 - Fix UnicodeDecodeError if uploading a .msg email with an umlaut in the filename
   to a dossier. [elioschmutz]
