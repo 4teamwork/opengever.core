@@ -120,10 +120,6 @@ class TaskTransitionActivity(BaseTaskResponseActivity):
     def kind(self):
         return self.response.transition
 
-    @property
-    def actor(self):
-        return api.user.get_current().getId()
-
     def record(self):
         if self._is_ignored_transition():
             return
