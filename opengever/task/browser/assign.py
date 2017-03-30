@@ -123,7 +123,7 @@ class AssignTaskForm(Form):
             responsible_client=kwargs.get('responsible_client'))
 
     def record_activity(self, response):
-        TaskReassignActivity(self.context, response).record()
+        TaskReassignActivity(self.context, self.context.REQUEST, response).record()
 
     @buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
     def handle_cancel(self, action):

@@ -76,7 +76,7 @@ class TaskEditForm(dexterity.EditForm):
         if self.is_reassigned(data):
             response = self.add_reassign_response(data)
             changes = super(TaskEditForm, self).applyChanges(data)
-            TaskReassignActivity(self.context, response).record()
+            TaskReassignActivity(self.context, self.context.REQUEST, response).record()
         else:
             changes = super(TaskEditForm, self).applyChanges(data)
 

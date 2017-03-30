@@ -42,5 +42,4 @@ class CommentResponseHandler(object):
     def _record_activity(self, response):
         TaskCommentedActivity(self.context,
                               self.context.REQUEST,
-                              None,
                               response).record()

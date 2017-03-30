@@ -340,7 +340,7 @@ class TaskTransitionResponseAddForm(form.AddForm, AutoExtensibleForm):
         return get_current_org_unit() in units
 
     def record_activity(self, response):
-        TaskTransitionActivity(self.context, response).record()
+        TaskTransitionActivity(self.context, self.context.REQUEST, response).record()
 
 
 class TaskTransitionResponseAddFormView(layout.FormWrapper, grok.View):
