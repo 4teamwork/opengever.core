@@ -10,6 +10,8 @@ from ftw.testing import freeze
 from opengever.base.interfaces import IRedirector
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY  # noqa
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.officeconnector.helpers import create_oc_url
+from opengever.officeconnector.interfaces import IOfficeConnectorSettings
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
 from opengever.testing.helpers import create_document_version
@@ -26,6 +28,8 @@ from plone.protect import createToken
 from Products.CMFCore.utils import getToolByName
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getMultiAdapter
+
+import jwt
 import transaction
 
 
@@ -250,6 +254,41 @@ class TestCheckinCheckoutManager(FunctionalTestCase):
             IRedirector(self.doc1.REQUEST).get_redirects()[0].get('url'))
         self.assertEquals(TEST_USER_ID,
                           self.get_manager(self.doc1).get_checked_out_by())
+
+    @browsing
+    def test_checkout_with_officeconnector_enabled(self, browser):
+        api.portal.set_registry_record(
+            'direct_checkout_and_edit_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+        transaction.commit()
+
+        # We cannot freeze time due to the test browser being threaded
+        oc_url = create_oc_url(
+            self.doc1.REQUEST, self.doc1, {'action': 'checkout'})
+        decoded_oc_url = jwt.decode(oc_url.split(':')[-1], verify=False)
+
+        redirector_js = browser.login().open(
+            self.doc1,
+            view='checkout_documents'
+            '?_authenticator={}&mode=external'
+            .format(createToken()),
+            ).css('script.redirector')[0].text
+
+        tokens_from_js = [token for token in redirector_js.split("\'")
+                          if 'oc:' in token]
+
+        self.assertEqual(3, len(tokens_from_js))
+
+        parsed_oc_url = tokens_from_js[0]
+        decoded_parsed_oc_url = jwt.decode(
+            parsed_oc_url.split(':')[-1], verify=False)
+
+        # Take out the timestamps
+        del decoded_oc_url['exp']
+        del decoded_parsed_oc_url['exp']
+
+        self.assertEqual(decoded_oc_url, decoded_parsed_oc_url)
 
     def test_cancel(self):
         manager = self.get_manager(self.doc1)
