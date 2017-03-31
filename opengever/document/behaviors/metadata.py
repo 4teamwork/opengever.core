@@ -3,6 +3,8 @@ from collective.elephantvocabulary import wrap_vocabulary
 from datetime import date
 from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
+from ftw.keywordwidget.field import ChoicePlus
+from ftw.keywordwidget.widget import KeywordFieldWidget
 from ftw.mail.mail import IMail
 from opengever.document import _
 from opengever.document.interfaces import IDocumentSettings
@@ -65,15 +67,17 @@ class IDocumentMetadata(form.Schema):
         required=False,
         )
 
-    dexteritytextindexer.searchable('keywords')
-    form.widget(keywords=TextLinesFieldWidget)
+    form.widget(keywords=KeywordFieldWidget)
     keywords = schema.Tuple(
         title=_(u'label_keywords', default=u'Keywords'),
-        value_type=schema.TextLine(),
+        description=_(u'help_keywords', default=u''),
+        value_type=ChoicePlus(
+            vocabulary='plone.app.vocabularies.Keywords'
+        ),
         required=False,
         missing_value=(),
         default=(),
-        )
+    )
 
     foreign_reference = schema.TextLine(
         title=_(u'label_foreign_reference', default='Foreign Reference'),

@@ -2,7 +2,9 @@ from collective import dexteritytextindexer
 from five import grok
 from ftw.mail.mail import IMail
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
+from opengever.document.behaviors.metadata import IDocumentMetadata
 from plone.indexer import indexer
+from Products.CMFDiffTool.utils import safe_utf8
 from zope.component import getAdapter, getUtility
 
 
@@ -36,5 +38,10 @@ class SearchableTextExtender(grok.Adapter):
         # sequence_number
         seqNumb = getUtility(ISequenceNumber)
         searchable.append(str(seqNumb.get_number(self.context)))
+
+        # keywords
+        keywords = IDocumentMetadata(self.context).keywords
+        if keywords:
+            searchable.extend(safe_utf8(keyword) for keyword in keywords)
 
         return ' '.join(searchable)

@@ -89,9 +89,10 @@ class TestDocumentIndexers(FunctionalTestCase):
             document_date=datetime.date(2011,1,1),
             receipt_date=datetime.date(2011, 2, 1))
 
-        self.assertEquals(
-            index_data_for(doc1).get('SearchableText'),
-            ['doc', 'one', 'foo', 'bar', 'hugo', 'boss', 'client1', '1', '1'])
+        self.assertItemsEqual(
+            ['doc', 'one', 'foo', 'bar', 'hugo', 'boss', 'client1', '1', '1'],
+            index_data_for(doc1).get('SearchableText')
+            )
 
     def test_full_text_indexing_with_plain_text(self):
         sample_file = NamedBlobFile('foobar barfoo', filename=u'test.txt')
@@ -116,6 +117,17 @@ class TestDocumentIndexers(FunctionalTestCase):
         fulltext_indexer = getAdapter(doc1, IDocumentIndexer)
         self.assertEquals(fulltext_indexer.__class__,
                           DefaultDocumentIndexer)
+
+    def test_keywords_field_is_indexed_in_Subject_index(self):
+        catalog = self.portal.portal_catalog
+
+        create(Builder("document")
+               .having(keywords=(u'Keyword 1', u'Keyword with \xf6')))
+
+        self.assertTrue(len(catalog(Subject=u'Keyword 1')),
+                        'Expect one item with Keyword 1')
+        self.assertTrue(len(catalog(Subject=u'Keyword with \xf6')),
+                        u'Expect one item with Keyword with \xf6')
 
 
 class TestDefaultDocumentIndexer(MockTestCase):
