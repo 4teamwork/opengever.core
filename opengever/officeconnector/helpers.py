@@ -19,11 +19,7 @@ def is_officeconnector_checkout_feature_enabled():
                                           interface=IOfficeConnectorSettings)
 
 
-def create_oc_url(request, context, payload):
-    # Feature used wrong - an action is always required
-    if 'action' not in payload:
-        raise NotFound
-
+def parse_documents(request, context):
     documents = []
 
     if request['REQUEST_METHOD'] == 'GET':
@@ -44,9 +40,10 @@ def create_oc_url(request, context, payload):
             if document.file:
                 documents.append(document)
 
-    if not documents:
-        raise NotFound
+    return documents
 
+
+def get_auth_plugin(context):
     plugin = None
     acl_users = getToolByName(context, "acl_users")
     plugins = acl_users._getOb('plugins')
@@ -63,7 +60,22 @@ def create_oc_url(request, context, payload):
             plugin = authenticator
             break
 
-    if not plugin:
+    return plugin
+
+
+def create_oc_url(request, context, payload):
+    # Feature used wrong - an action is always required
+    if 'action' not in payload:
+        raise NotFound
+
+    documents = parse_documents(request, context)
+
+    if not documents:
+        raise NotFound
+
+    auth_plugin = get_auth_plugin(context)
+
+    if not auth_plugin:
         raise Forbidden
 
     # Create a JWT for OfficeConnector - contents:
@@ -88,7 +100,7 @@ def create_oc_url(request, context, payload):
 
     user_id = api.user.get_current().getId()
 
-    token = plugin.create_token(user_id, data=payload)
+    token = auth_plugin.create_token(user_id, data=payload)
 
     # https://blogs.msdn.microsoft.com/ieinternals/2014/08/13/url-length-limits/
     # IE11 only allows up to 507 characters for Application Protocols.
