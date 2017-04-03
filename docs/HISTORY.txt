@@ -5,6 +5,7 @@ Changelog
 2017.1.2 (unreleased)
 ---------------------
 
+- Adjust title and label of dossiers journal PDF representation. [phgross]
 - Enable keywordswidget for IDocumentMetadata behavior.  [elioschmutz]
 - Refactor: Use SQLFormSupport class for: Meeting and Member [elioschmutz]
 
