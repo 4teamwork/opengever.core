@@ -142,7 +142,7 @@ class AddForm(BrowserView):
         if not self.has_active_tasktemplatefolders():
             api.portal.show_message(
                 _(u'msg_no_active_tasktemplatefolders',
-                  default=u'Currently there are no active'
+                  default=u'Currently there are no active '
                   'task template folders registered.'),
                 request=self.request,
                 type='error')

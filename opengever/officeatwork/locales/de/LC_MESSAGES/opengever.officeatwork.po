@@ -24,5 +24,4 @@ msgstr "Mit officeatwork erstellen"
 
 #: ./opengever/officeatwork/browser/documentfromofficeatwork.py:54
 msgid "Creation with officeatwork initiated successfully"
-msgstr ""
-
+msgstr "Inhaltserstellung mit officeatwork erfolgreich gestartet"

@@ -438,7 +438,7 @@ msgstr "Es wurde ein Kommentar erfasst!"
 #. Default: "View note"
 #: ./opengever/dossier/viewlets/templates/note.pt:28
 msgid "help_text_view_note"
-msgstr ""
+msgstr "Kommentar anzeigen."
 
 #. Default: "Recommendation for the title. Will be displayed as a help text if you create a dossier from template"
 #: ./opengever/dossier/dossiertemplate/behaviors.py:35
@@ -872,4 +872,3 @@ msgstr "Dossier Journal ${today}"
 #: ./opengever/dossier/behaviors/participation.py:196
 msgid "warning_no_participants_selected"
 msgstr "Sie haben keine Beteiligungen ausgewählt."
-

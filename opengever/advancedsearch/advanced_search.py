@@ -239,7 +239,7 @@ class IAdvancedSearch(directives_form.Schema):
     )
 
     deadline_2 = schema.Date(
-        title=_('label_deadline_2', default=''),
+        title=u'',
         description=_('label_to', default='To'),
         required=False,
     )
