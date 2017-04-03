@@ -38,7 +38,7 @@ class RemovalProtocol(grok.View, ExportPDFView):
 
     def get_pdf_title(self):
         title = _(u'title_removal_protocol',
-                  default=u'Removal protocol for disposition ${disposition}',
+                  default=u'Removal protocol for ${disposition}',
                   mapping={'disposition': self.context.title})
         return translate(title, context=self.request)
 
