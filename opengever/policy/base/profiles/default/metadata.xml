@@ -34,6 +34,7 @@
     <dependency>profile-opengever.officeconnector:default</dependency>
     <dependency>profile-opengever.private:default</dependency>
     <dependency>profile-opengever.disposition:default</dependency>
+    <dependency>profile-opengever.theme:default</dependency>
     <dependency>profile-ftw.datepicker:default</dependency>
     <dependency>profile-ftw.contentmenu:default</dependency>
     <dependency>profile-ftw.zipexport:default</dependency>

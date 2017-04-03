@@ -1,0 +1,77 @@
+.qtip {
+  position: absolute;
+  left: -28000px;
+  top: -28000px;
+  display: none;
+  padding:10px 15px;
+  width: 450px;
+  min-height: 300px;
+  font-size: 12px;
+  text-align: left;
+  background: $color-white;
+  border: 1px solid $gray-light;
+  border-radius: 2px;
+  box-shadow: 0 0 2px 0 transparentize(#000, .7);
+}
+
+.tooltip-trigger {
+  display: inline-block;
+}
+
+.tooltip-header {
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 1em;
+}
+
+.tooltip-breadcrumb {
+  margin-bottom: 1em;
+  line-height: 16px;
+  color: #969696;
+
+  a {
+    color: #969696;
+  }
+
+  li {
+    &:after {
+      content: ">";
+      padding-left: 6px;
+      padding-right: 3px;
+    }
+    &:last-child:after {
+      content: none;
+    }
+  }
+}
+
+.tooltip-content {
+  .file-actions {
+    width: 50%;
+    float: left;
+
+    > li > a {
+      @include button-fluid();
+    }
+  }
+}
+
+.preview {
+  float: left;
+  width: 50%;
+  text-align: center;
+
+  img {
+    display: block;
+    margin: 0 auto;
+    border: 1px solid $gray-dark;
+  }
+
+  span {
+    display: block;
+    margin-top: 5px;
+  }
+
+}

@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<object name="portal_css">
+
+  <stylesheet
+      id="authoring.css"
+      expression="not:request/HTTP_X_FTW_THEMING | nothing"
+      />
+  <stylesheet
+      id="public.css"
+      expression="not:request/HTTP_X_FTW_THEMING | nothing"
+      />
+  <stylesheet
+      id="portlets.css"
+      expression="not:request/HTTP_X_FTW_THEMING | nothing"
+      />
+  <stylesheet
+      id="mobile.css"
+      expression="not:request/HTTP_X_FTW_THEMING | nothing"
+      />
+  <stylesheet id="member.css" enabled="False" />
+  <stylesheet
+      id="++resource++plone.app.discussion.stylesheets/discussion.css"
+      expression="not:request/HTTP_X_FTW_THEMING | nothing"
+      />
+  <stylesheet
+      id="base.css"
+      expression="not:request/HTTP_X_FTW_THEMING | nothing"
+      />
+
+</object>

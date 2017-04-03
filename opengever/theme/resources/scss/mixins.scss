@@ -1,0 +1,215 @@
+@mixin noselect {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+@mixin appearance {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+@mixin ie-only {
+  @media \9screen,screen\0 {
+    @content
+  }
+}
+
+@mixin component {
+  padding: $padding-factor * 8px $padding-factor * 16px;
+  line-height: 24px * $padding-factor;
+  border: 1px solid $gray-dark;
+  box-sizing: border-box;
+  border-radius: $border-radius;
+  color: $black;
+  margin: 0;
+  height: 42px;
+  &:focus {
+    background-color: $white;
+    border-color: $light-blue;
+  }
+  &:hover {
+    background-color: $gray-light;
+  }
+}
+
+@mixin clearfix() {
+    & {
+        *zoom: 1;
+    }
+    &:before,
+    &:after {
+        content: "";
+        display: table;
+    }
+    &:after {
+        clear: both;
+    }
+}
+
+
+
+@mixin equalHeight($width) {
+  &:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    width: $width;
+    background-color: $color-white;
+  }
+}
+
+@mixin list($style: default) {
+  @if $style == default {
+    list-style: disc;
+    padding-left: 2em;
+  }
+  @if $style == plain {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+  }
+  @if $style == inline {
+    padding-left: 0;
+    margin: 0;
+    li {
+      display: inline;
+    }
+  }
+  @if $style == table {
+    padding-left: 0;
+    margin: 0;
+    display: table;
+    li {
+      display: table-cell;
+    }
+  }
+}
+
+@mixin defList($style: default) {
+  @if $style == default {
+    > dt {
+      float: left;
+    }
+    > dd {
+      margin: 20px 0;
+      &:after {
+        content: "";
+        display: table;
+        clear: both;
+      }
+    }
+  }
+  @if $style == table {
+    display: table;
+    > dt {
+      display: table-cell;
+    }
+    > dd {
+      margin: 20px 0;
+      display: table-cell;
+    }
+  }
+}
+
+@mixin sprite($dims: 20px) {
+  background-repeat: no-repeat;
+  background-size: contain;
+  display: block;
+  width: $dims;
+  height: $dims;
+}
+
+@mixin fa-icon() {
+  display: inline-block;
+  font: normal normal normal #{$fa-font-size-base}/#{$fa-line-height-base} FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+$size-mapping: (
+  large: 1.1,
+  medium: 1,
+  small: .6
+);
+
+@function get-size($size) {
+  @return map-get($size-mapping, $size);
+}
+
+@function min-size($size) {
+  @if $size < 12px {
+    @return 12px;
+  }
+  @return $size;
+}
+
+@mixin button-list($size: medium, $iconset: fa, $disabled: false) {
+  > li {
+    > a {
+      @include gever-button($size: $size, $iconset: $iconset, $disabled: $disabled);
+      margin-bottom: 0;
+      border-top: 0;
+    }
+
+    &:first-child > a { border-top: 1px solid $gray-dark; }
+  }
+}
+
+@mixin gever-button($size: medium, $iconset: fa, $disabled: false) {
+  $size: get-size($size);
+  display: inline-block;
+  padding: 8px * $size 12px * $size;
+  border: 1px solid $gray-dark;
+  margin-bottom: 1em;
+  margin-right: 5px * $size;
+  border-radius: $border-radius;
+  transition: background-color .2s ease-out;
+  background-color: $color-white;
+
+  @if $disabled {
+    color: darken($gray-dark, 20%);
+    cursor: not-allowed;
+  } @else {
+    color: #000;
+
+    &:hover {
+      background-color: $gray-light;
+      text-decoration: none;
+    }
+  }
+
+  &:visited {
+    text-decoration: none;
+    color: #000;
+  }
+
+  &::before {
+    @extend .#{$iconset};
+    display: inline-block;
+    min-width: min-size(22px * $size);
+    font-size: min-size(18px * $size);
+    vertical-align: middle;
+    text-align: left;
+  }
+
+  > span {
+    display: inline-block;
+    font-size: min-size(12px * $size);
+    vertical-align: middle;
+  }
+
+}
+
+@mixin button-fluid($size: medium, $iconset: fa, $disabled: false) {
+  @include gever-button($size: $size, $iconset: $iconset, $disabled: $disabled);
+  margin-left: 0;
+  display: block;
+}

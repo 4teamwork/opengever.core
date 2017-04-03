@@ -1,0 +1,17 @@
+/* :before polyfill, creates <span class="ie-before"></span> */
+.formTabs {
+    zoom: expression( this.runtimeStyle.zoom="1", this.insertBefore( document.createElement("span"), this.firstChild ).className="ie-before" );
+}
+/* :after polyfill, creates <span class="ie-after"></span> */
+.formTabs,
+#portal-personaltools .actionMenuHeader a {
+    zoom: expression( this.runtimeStyle.zoom="1", this.appendChild( document.createElement("span") ).className="ie-after" );
+}
+
+#portal-personaltools .actionMenuHeader a .ie-after {
+    zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '▼');
+}
+
+#portal-notifications dd.notificationsMenuContent {
+  width: 427px !important;
+}

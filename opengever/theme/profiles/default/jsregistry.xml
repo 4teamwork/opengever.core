@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<object name="portal_javascripts" meta_type="JavaScripts Registry"
+        autogroup="False">
+
+  <javascript id="livesearch.js" enabled="false" />
+  <javascript id="++theme++opengever.theme/js/livesearch.js" enabled="False"/>
+
+  <javascript cacheable="True" compression="safe" cookable="True" enabled="on"
+              expression="" id="++theme++opengever.theme/js/gever.js"
+              inline="False"/>
+
+  <javascript cacheable="True" compression="safe" cookable="True" enabled="on"
+              expression="" id="++theme++opengever.theme/js/livesearch.js"
+              inline="False"/>
+</object>

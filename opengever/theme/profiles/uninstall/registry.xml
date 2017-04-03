@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<registry>
+    <record name="plone.app.theming.interfaces.IThemeSettings.doctype">
+        <value></value>
+    </record>
+    <record name="plone.app.theming.interfaces.IThemeSettings.currentTheme">
+        <value></value>
+    </record>
+    <record name="plone.app.theming.interfaces.IThemeSettings.enabled">
+        <value>False</value>
+    </record>
+</registry>

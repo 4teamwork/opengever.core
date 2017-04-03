@@ -1,0 +1,137 @@
+#content .actionButtons > ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  margin-top: 1em;
+  display: inline-block;
+
+  > li {
+    line-height: normal;
+    margin: 0;
+    display: inline-block;
+  }
+}
+
+#content div.actionButtons {
+  .button, a {
+    @include gever-button($iconset: gv);
+    background-image: none;
+    text-shadow: none;
+  }
+
+  .button {
+    margin-bottom: 0;
+  }
+}
+
+.agency_buttons dt {
+  @extend .gv-agency;
+}
+
+#content .dropdown_button ul {
+  margin: 0;
+  list-style-type: none;
+  @include button-list($iconset: gv);
+
+  > li > a {
+    border-right: 0;
+    border-left: 0;
+  }
+}
+
+.actionButtons .refuse {
+  @extend .gv-refuse;
+}
+
+.actionButtons .reopen {
+  @extend .gv-reopen;
+}
+
+.actionButtons .reactivate {
+  @extend .gv-reopen;
+}
+
+.actionButtons .cancelled {
+  @extend .gv-cancel;
+}
+
+.actionButtons .accept {
+  @extend .gv-accept;
+}
+
+.actionButtons .reassign {
+  @extend .gv-reassign;
+}
+
+.actionButtons .revise {
+  @extend .gv-pencil;
+}
+
+.actionButtons .assignDossier {
+  @extend .gv-folder;
+}
+
+.actionButtons .complete {
+  @extend .gv-square-check;
+}
+
+.actionButtons .close {
+  @extend .gv-check;
+}
+
+.actionButtons .modifyDeadline {
+  @extend .gv-time;
+}
+
+.actionButtons .delegate {
+  @extend .gv-committee;
+}
+
+.actionButtons .pending-submitted {
+  @extend .gv-submit;
+}
+
+.actionButtons .submitted-pending {
+  @extend .gv-refuse;
+}
+
+.actionButtons .pending-cancelled {
+  @extend .gv-cancel;
+}
+
+.actionButtons .cancelled-pending {
+  @extend .gv-reopen;
+}
+
+#tabbedview-body {
+  .downloadActions, .editActions, .updateActions {
+    margin-left: 0;
+    margin-top: 5px;
+
+    > a {
+      @include button-fluid();
+    }
+
+    > span {
+      @include button-fluid($disabled: true);
+    }
+  }
+}
+
+.function-edit, .function-edit-inactive {
+  @extend .fa-pencil;
+}
+
+.function-download-copy, .function-download-copy-inactive {
+  @extend .fa-download;
+}
+
+.function-preview-pdf, .function-preview-pdf-inactive, .function-download-pdf, .function-download-pdf-inactive {
+  @extend .fa-file-pdf-o;
+}
+
+.outdated {
+  @extend .fa-exclamation-triangle;
+
+  color: $red;
+}

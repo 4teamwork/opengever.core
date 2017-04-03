@@ -1,0 +1,105 @@
+/* customstyles.scss */
+
+#navi-wrapper {
+  box-shadow: 0 1px 0 $color-primary inset, 0 0 0 1px $color-secondary-bg ;
+}
+
+#navi-wrapper {
+  @include linear-gradient(
+    top,
+    $color-navigation-start,
+    $color-navigation-end
+  );
+}
+
+#portal-globalnav li.selected a {
+  @include linear-gradient(
+    top,
+    $color-navigation-selected-start,
+    $color-navigation-selected-end
+  );
+}
+
+#portal-globalnav a:hover {
+  @include linear-gradient(
+    top,
+    $color-navigation-hover-start,
+    $color-navigation-hover-end
+  );
+}
+
+#portal-globalnav li.selected a {
+  box-shadow: 0 1px 0 $color-default inset, 0 -1px 0 $color-secondary-bg ;
+}
+
+#portal-globalnav a:hover {
+  box-shadow: 0 1px 0 $color-primary inset, 0 -1px 0 $color-secondary-bg ;
+}
+
+#portal-globalnav.mobileNavigation, #portal-globalnav.mobileNavigation li a {
+  background-color:$nav-hover-bg;
+}
+#slider-container .slideNavi ul.globalnav li, #slider-container .slideNavi ul.globalnav a, div.slideNavi.loading {
+  background-color:$nav-hover-bg;
+}
+
+@media screen and (max-width: 769px) {
+  #portal-personaltools dd li a,
+  #portal-personaltools dd li a:hover,
+  #container #portal-searchbox {
+    background-color: $nav-hover-bg;
+  }
+}
+
+@media screen and (max-width: 769px) {
+  #portal-orgunit-selector dd li a {
+    background-color: $nav-hover-bg;
+    &:hover {
+      background-color: $nav-hover-bg;
+    }
+  }
+}
+
+#header-wrapper, #columns-wrapper {
+  background-color: $color-content-background;
+}
+#header {
+  height:60px;
+}
+#columns-wrapper, .contentWrapper {
+  background-color: $color-content-background;
+}
+.fixedWidth {
+  width:90%;
+}
+#header-wrapper, #columns-wrapper {
+  min-width:90%;
+}
+body {
+  font-size:12px;
+}
+a {
+  color:$blue;
+}
+body {
+  color:$black;
+}
+body, #footer-wrapper {
+  background-color:#f8f8f8;
+}
+#footer {
+  height:10em;
+}
+#footer, .footerPush {
+  height:10em;
+}
+.contentWrapper {
+  margin-bottom:-12em;
+}
+div.headerTop div.logo-wrapper {
+  margin-top:12px;
+  margin-bottom:12px;
+}
+#login-box {
+  background-color:$color-bg;
+}

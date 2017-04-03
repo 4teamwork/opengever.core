@@ -1,0 +1,75 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:theme="http://namespaces.zope.org/ftw.theming"
+    i18n_domain="opengever.theme">
+
+    <include package="ftw.theming" />
+    <browser:resourceDirectory name="opengever.theme" directory="resources" />
+
+    <browser:resource
+        name="logo.png"
+        file="resources/images/logo.png"
+        layer="zope.interface.Interface"
+        />
+
+    <theme:resources profile="opengever.theme:default" slot="variables">
+        <theme:scss file="resources/scss/variables.scss"
+                    after="ftw.theming:resources/scss/globals/variables.scss" />
+
+        <theme:scss file="resources/scss/partials/iconfont.scss" />
+    </theme:resources>
+
+    <theme:resources profile="opengever.theme:default" slot="mixins">
+        <theme:scss file="resources/scss/mixins.scss" />
+        <theme:scss file="resources/scss/partials/gradient.scss" before="resources/scss/partials/buttons.scss" />
+        <theme:scss file="resources/scss/partials/buttons.scss" />
+    </theme:resources>
+
+    <theme:resources profile="opengever.theme:default" slot="theme">
+        <theme:scss file="resources/scss/reset.scss" slot="top" />
+        <theme:scss file="resources/scss/columns.scss" />
+        <theme:scss file="resources/scss/main.scss" />
+        <theme:scss file="resources/scss/sprites.scss" />
+        <theme:scss file="resources/scss/iefixes.scss" />
+        <theme:scss file="resources/scss/print.scss" />
+        <theme:scss file="resources/scss/responsive.scss" />
+        <theme:scss file="resources/scss/bumblebee.scss" />
+        <theme:scss file="resources/scss/trix/editor.scss" />
+        <theme:scss file="resources/scss/trix/toolbar.scss" />
+        <theme:scss file="resources/scss/trix/trix.scss" />
+        <theme:scss file="resources/scss/partials/gever.scss" />
+        <theme:scss file="resources/scss/partials/action-buttons.scss" />
+        <theme:scss file="resources/scss/partials/advanced_search.scss" />
+        <theme:scss file="resources/scss/partials/autocomplete.scss" />
+        <theme:scss file="resources/scss/partials/bumblebee.scss" />
+        <theme:scss file="resources/scss/partials/byline.scss" />
+        <theme:scss file="resources/scss/partials/checkbox.scss" />
+        <theme:scss file="resources/scss/partials/collapsible.scss" />
+        <theme:scss file="resources/scss/partials/contact.scss" />
+        <theme:scss file="resources/scss/partials/datetimepicker.scss" />
+        <theme:scss file="resources/scss/partials/datetimewidget.scss" />
+        <theme:scss file="resources/scss/partials/disposition.scss" />
+        <theme:scss file="resources/scss/partials/form.scss" />
+        <theme:scss file="resources/scss/partials/journal.scss" />
+        <theme:scss file="resources/scss/partials/labels.scss" />
+        <theme:scss file="resources/scss/partials/list.scss" />
+        <theme:scss file="resources/scss/partials/loginform.scss" />
+        <theme:scss file="resources/scss/partials/meeting.scss" />
+        <theme:scss file="resources/scss/partials/mimetypes.scss" />
+        <theme:scss file="resources/scss/partials/notify.scss" />
+        <theme:scss file="resources/scss/partials/opengever.scss" />
+        <theme:scss file="resources/scss/partials/panel.scss" />
+        <theme:scss file="resources/scss/partials/protocol.scss" />
+        <theme:scss file="resources/scss/partials/radio.scss" />
+        <theme:scss file="resources/scss/partials/select-autocomplete.scss" />
+        <theme:scss file="resources/scss/partials/tabbedview.scss" />
+        <theme:scss file="resources/scss/partials/table.scss" />
+        <theme:scss file="resources/scss/partials/tooltip.scss" />
+        <theme:scss file="resources/scss/icons/opengever.scss" />
+        <theme:scss file="resources/scss/icons/path.scss" />
+        <theme:scss file="resources/scss/icons/sprites.scss" />
+        <theme:scss file="resources/scss/customstyles.scss" />
+    </theme:resources>
+
+</configure>

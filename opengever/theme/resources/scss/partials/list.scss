@@ -1,0 +1,113 @@
+#opengever_meeting_meeting, #opengever_meeting_protocol, .template-add-membership {
+  .list-group {
+    @include list(plain);
+    border-radius: $border-radius;
+    .list-group-item {
+      display: table;
+      width: 100%;
+      padding: $padding-factor * 16px $padding-factor * 18px;
+      border: 1px solid $gray-dark;
+      border-bottom: none;
+      box-sizing: border-box;
+      @include clearfix();
+      &:last-child {
+        border-bottom: 1px solid $gray-dark;
+        border-bottom-right-radius: $border-radius;
+        border-bottom-left-radius: $border-radius;
+        > .button-group {
+          > input, >.button {
+            &:last-child {
+              border-bottom-right-radius: $border-radius;
+            }
+          }
+        }
+      }
+      &:first-child {
+        border-top-right-radius: $border-radius;
+        border-top-left-radius: $border-radius;
+        > .button-group {
+          > input, >.button {
+            &:last-child {
+              border-top-right-radius: $border-radius;
+            }
+          }
+        }
+      }
+      > .button-group {
+        > input, >.button {
+          border: none;
+          border-left: 1px solid $gray-dark;
+          border-radius: 0;
+        }
+        > div.actionButtons {
+          > input, .button {
+            border: none;
+            border-left: 1px solid $gray-dark;
+          }
+          > .regular_buttons {
+            > li {
+              > a {
+                border: none;
+                border-left: 1px solid $gray-dark;
+                border-radius: 0;
+              }
+            }
+          }
+        }
+        > .formControls {
+          > input, .button {
+            border: none;
+            border-left: 1px solid $gray-dark;
+            &:first-child {
+              border-left: none;
+              border-top-left-radius: 0;
+              border-bottom-left-radius: 0;
+            }
+            &:last-child {
+              border-top-right-radius: 0;
+              border-bottom-right-radius: 0;
+            }
+          }
+        }
+        &.fluid {
+          width: 100%;
+          > input, >.button {
+            &:first-child {
+              border-left: none;
+            }
+            &:last-child {
+              border-right: none;
+            }
+          }
+          > div.actionButtons {
+            > .regular_buttons {
+              > li {
+                > a {
+                  width: 100%;
+                }
+              }
+            }
+          }
+        }
+      }
+      > .title {
+        display: table-cell;
+        vertical-align: middle;
+        padding-left: 16px;
+      }
+      > .spv-label {
+        border-radius: 0;
+        width: 100%;
+      }
+      > h1, > h2, > h3 {
+        margin-top: 0;
+      }
+      &.submit {
+        padding: 0;
+        .button-group {
+          float: right;
+        }
+      }
+    }
+  }
+}

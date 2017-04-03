@@ -1,0 +1,42 @@
+#opengever_meeting_protocol, .template-add-meeting {
+
+  .field {
+    .datetime-widget, .caltrigger {
+      display: none;
+    }
+  }
+
+  #formfield-form-widgets-start, #formfield-form-widgets-end {
+    font-size: 0;
+    label {
+      font-size: 12px;
+    }
+  }
+
+  .spv-datetime-widget {
+    font-size: 12px;
+  }
+}
+
+.datetimepicker {
+  .prev {
+    @extend .fa;
+    @extend .fa-chevron-left;
+  }
+  .next {
+    @extend .fa;
+    @extend .fa-chevron-right;
+  }
+}
+
+.spv-datetime-widget-clear {
+  @extend .fa;
+  @extend .fa-close;
+  display: inline-block;
+  font-size: 20px;
+  vertical-align: middle;
+  margin-left: 10px;
+  &:hover {
+    text-decoration: none;
+  }
+}

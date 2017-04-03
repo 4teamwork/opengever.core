@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<metadata>
+    <dependencies>
+        <dependency>profile-plone.app.theming:default</dependency>
+        <dependency>profile-ftw.theming:default</dependency>
+        <dependency>profile-ftw.theming:base</dependency>
+        <dependency>profile-ftw.upgrade:default</dependency>
+        <dependency>profile-collective.mtrsetup:default</dependency>
+    </dependencies>
+</metadata>

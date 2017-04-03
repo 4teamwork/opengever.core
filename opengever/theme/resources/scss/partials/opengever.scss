@@ -1,0 +1,265 @@
+/*
+Original file from opengever.base project
+ */
+
+/* @group tree portlet */
+
+#dossier-tree {
+  padding-right: 1em;
+  ul {
+    &.folded {
+      display: none;
+    }
+  }
+  ul.filetree {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style-type: none;
+    }
+    li {
+      line-height: 1.6em;
+      margin: 0;
+      padding: 0;
+      padding-left: 16px;
+      a {
+        display: block;
+        padding-left: 25px;
+        &.current {
+          background: #eaeaea;
+          color: $blue;
+        }
+        &.toggleNav {
+          z-index: 4;
+          display: block;
+          margin-left: -22px;
+          height: 8px;
+          background: url("++resource++opengever.base/images/expand_navi.png") no-repeat center center;
+          float: left;
+          text-decoration: none;
+          margin-top: 5px;
+        }
+        &.expanded {
+          background: url("++resource++opengever.base/images/collapse_navi.png") no-repeat center center;
+        }
+      }
+    }
+  }
+}
+
+dl.portlet.portletTreePortlet {
+  min-height: 100px;
+  border: none;
+}
+
+dl.portlet.portletTreePortlet .portletHeader {
+  padding: 0;
+  border: none;
+  border-right: 1px solid $disabled;
+  background-color: transparent;
+}
+
+dl.portlet.portletTreePortlet .portlet-header-tabs {
+  display: table;
+  list-style: none;
+  width: 100%;
+  border-bottom: 1px solid $disabled;
+}
+
+dl.portlet.portletTreePortlet .portlet-header-tabs li {
+  display: table-cell;
+  width: 50%;
+  text-align: center;
+  padding: 0;
+  padding-left: 1px;
+}
+dl.portlet.portletTreePortlet .portlet-header-tabs li:first-child {
+  padding-left: 0;
+}
+
+dl.portlet.portletTreePortlet .portlet-header-tabs li a {
+  display: block;
+  padding: 0.3333em 0.75em;
+  text-decoration: none;
+  border: 1px solid $disabled;
+  border-radius: 4px 4px 0 0;
+  margin: 0;
+  margin-bottom: -1px;
+  color: #333;
+  text-shadow: 0 1px 1px transparentize($color-white, 0.25);
+  @include linear-gradient(
+    top,
+    $gray-light,
+    $gray-dark
+  );
+}
+dl.portlet.portletTreePortlet .portlet-header-tabs li:last-child a {
+  border-right: none;
+}
+
+dl.portlet.portletTreePortlet .portlet-header-tabs li a.active,
+dl.portlet.portletTreePortlet .portlet-header-tabs li:hover a {
+  background: white;
+  border-bottom: 1px solid transparent;
+}
+
+dl.portlet.portletTreePortlet .portlet-header-tabs li a.the-only-one {
+  @include linear-gradient(
+    top,
+    $gray-light,
+    $gray-dark
+  );
+  border-bottom: 1px solid $disabled;
+  cursor: default;
+}
+
+
+dl.portlet.portletTreePortlet dd.portletFooter {
+  display: none;
+}
+dl.portlet.portletTreePortlet .portlet-tabs {
+  border: 1px solid $disabled;
+  border-top: none;
+}
+dl.portlet.portletTreePortlet .portlet-tabs > .tab {
+  overflow-y:scroll;
+  height:100%;
+  width: 100%;
+  padding: 10px 0;
+}
+
+dl.portlet.portletTreePortlet li {
+  margin: 0;
+  padding: 0;
+  padding-left: 16px;
+}
+#container dl.portlet ul.filetree li a,
+dl.portlet ul.filetree ul.navTree li a {
+  padding: 0.25em;
+}
+dl.portlet.portletTreePortlet .filetree a.current,
+dl.portlet.portletTreePortlet .filetree a.inPath:last-child {
+  background: #ddd;
+}
+
+#tree-favorites {
+  text-align: center;
+  .filetree {
+    text-align: left;
+    border-bottom: 1px solid #cbcbcb;
+    padding-bottom: 10px;
+  }
+}
+
+dl.portlet.portletTreePortlet .no-favorites {
+  padding: 10px;
+  border-bottom: 1px solid #cbcbcb;
+  text-align: left;
+}
+
+dl.portlet.portletTreePortlet .toggle-helptext {
+  display: inline-block;
+  padding: 10px 0;
+  position: relative;
+}
+
+dl.portlet.portletTreePortlet .toggle-helptext:before {
+  content: "";
+  position: absolute;
+  top: 13px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 4px;
+  border-color: transparent transparent #cbcbcb transparent;
+  display: block;
+  right: -12px;
+}
+
+dl.portlet.portletTreePortlet .toggle-helptext.expanded:before {
+  border-color: #cbcbcb transparent transparent transparent;
+  top: 17px;
+}
+
+dl.portlet.portletTreePortlet .helptext {
+  text-align: left;
+  padding: 0 10px;
+
+}
+dl.portlet.portletTreePortlet .helptext p {
+  padding-bottom: 10px;
+}
+
+dl.portlet.portletTreePortlet .favorite-icon:before {
+  font-family: "opengever";
+  content: "\e62c";
+  width: 22px;
+  color: #aaa;
+  text-align: center;
+}
+
+dl.portlet.portletTreePortlet .helptext .favorite-icon:before {
+  font-size: 80%;
+}
+
+dl.portlet.portletTreePortlet .add-to-favorites:before,
+dl.portlet.portletTreePortlet .filetree a:hover .favorite-icon:before {
+  color: $color-bg;
+}
+
+dl.portlet.portletTreePortlet .remove-from-favorites:before,
+dl.portlet.portletTreePortlet .filetree a:hover .favorite-icon.bookmarked:before {
+  content: "\e62b";
+  color: #a13333;
+}
+
+dl.portlet.portletTreePortlet .filetree .favorite-icon:before {
+  display: block;
+  float: right;
+  text-decoration: none;
+  cursor: pointer;
+  color: transparent;
+}
+
+dl.portlet.portletTreePortlet .filetree .favorite-icon.bookmarked:before {
+  color: #aaa;
+}
+
+dl.portlet ul.filetree ul.folded {
+  display: none;
+}
+dl.portlet ul.filetree a.toggleNav {
+  z-index: 4;
+  display: block;
+  width: 1em;
+  height: 1em;
+  background: url("++resource++opengever.base/images/expand_navi.png") no-repeat center center;
+  float: left;
+  margin-left: -1.3em;
+}
+dl.portlet ul.filetree a.toggleNav.expanded {
+  background: url("++resource++opengever.base/images/collapse_navi.png") no-repeat center center;
+}
+#column-navigation dl.portlet ul.filetree a.toggleNav {
+  text-decoration: none;
+}
+
+/* @end */
+
+/* @group general */
+
+.portaltype-ftw-mail-mail table.mailHeaders {
+  margin-bottom: 1.5em;
+}
+
+@media screen {
+
+  .template-confirm-action .documentByLine {
+    display: none;
+  }
+}
+
+/* @group general */
