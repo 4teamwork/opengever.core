@@ -60,7 +60,7 @@ class GlobalTaskListingTab(BaseListingTab):
     filterlist_available = True
 
     filterlist = FilterList(
-        Filter('filter_all', _('all')),
+        Filter('filter_all', _('label_tabbedview_filter_all')),
         PendingTasksFilter('filter_pending',
                            _('label_pending', 'Pending'), default=True),
     )

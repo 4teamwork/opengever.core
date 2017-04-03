@@ -260,7 +260,7 @@ class Dossiers(BaseCatalogListingTab):
 
     major_actions = ['change_state', ]
 
-    all_filter = Filter('filter_all', _('all'))
+    all_filter = Filter('filter_all', _('label_tabbedview_filter_all'))
     active_filter = CatalogQueryFilter(
         'filter_active', _('Active'), default=True,
         query_extension={'review_state': DOSSIER_STATES_OPEN})
@@ -345,7 +345,7 @@ class Proposals(ProposalListingTab):
     filterlist_available = True
 
     filterlist = FilterList(
-        Filter('filter_all', _('all')),
+        Filter('filter_all', _('label_tabbedview_filter_all')),
         ActiveProposalFilter(
             'filter_active',
             _('Active'),

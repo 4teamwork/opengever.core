@@ -76,20 +76,20 @@ class TestDossierListing(FunctionalTestCase):
                              view='tabbedview_view-dossiers',
                              data={'dossier_state_filter': 'filter_all'})
 
-        self.assertEquals(['all', 'Active'],
+        self.assertEquals(['label_tabbedview_filter_all', 'Active'],
                           browser.css('.state_filters a').text)
 
     @browsing
     def test_expired_filter_only_avaiable_for_record_managers(self, browser):
         browser.login().open(self.repository,
                              view='tabbedview_view-dossiers')
-        self.assertEquals(['all', 'Active'],
+        self.assertEquals(['label_tabbedview_filter_all', 'Active'],
                           browser.css('.state_filters a').text)
 
         self.grant('Reader', 'Records Manager')
         browser.login().open(self.repository,
                              view='tabbedview_view-dossiers')
-        self.assertEquals(['all', 'Active', 'expired'],
+        self.assertEquals(['label_tabbedview_filter_all', 'Active', 'expired'],
                           browser.css('.state_filters a').text)
 
     @browsing
@@ -149,7 +149,7 @@ class TestDossierListing(FunctionalTestCase):
 
         browser.login().open(dossier, view='tabbedview_view-subdossiers')
 
-        self.assertEquals(['all', 'Active'],
+        self.assertEquals(['label_tabbedview_filter_all', 'Active'],
                           browser.css('.state_filters a').text)
 
     def test_linked_helper_adds_uid_data_attribute_using_obj(self):
