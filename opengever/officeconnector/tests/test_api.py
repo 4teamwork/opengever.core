@@ -198,12 +198,12 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
         self.assertEquals(200, self.get_oc_url_response_status(self.doc_with_file_wf_open, 'attach')) # noqa
 
         payload = self.get_oc_url_payload(self.doc_with_file_wf_open, 'attach') # noqa
-        self.assertTrue('url' in payload)
+        self.assertIn('url', payload)
 
         token = self.get_oc_url_jwt(self.doc_with_file_wf_open, 'attach') # noqa
-        self.assertTrue('url' in token)
+        self.assertIn('url', token)
         self.assertNotIn('documents', token)
-        self.assertTrue('/oc_attach' in token['url'])
+        self.assertIn('/oc_attach', token['url'])
         self.assertEquals(token['action'], 'attach')
         self.assertEquals(TEST_USER_ID, token['sub'])
 
@@ -220,7 +220,7 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
 
         payload = response.json()
 
-        self.assertTrue('bcc' in payload)
+        self.assertIn('bcc', payload)
         bcc = IEmailAddress(
             self.request).get_email_for_object(self.open_dossier)
         self.assertEquals(bcc, payload['bcc'])
@@ -244,7 +244,7 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
 
         payload = response.json()
 
-        self.assertTrue('bcc' not in payload)
+        self.assertNotIn('bcc', payload)
 
         # Test there is also a journal entry from the attach action
         browser.login()
@@ -265,7 +265,7 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
 
         payload = response.json()
 
-        self.assertTrue('bcc' not in payload)
+        self.assertNotIn('bcc', payload)
 
         # Test there is also a journal entry from the attach action
         browser.login()
@@ -306,12 +306,12 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
         self.assertEquals(200, self.get_oc_url_response_status(self.doc_with_file_wf_open, 'checkout')) # noqa
 
         payload = self.get_oc_url_payload(self.doc_with_file_wf_open, 'checkout') # noqa
-        self.assertTrue('url' in payload)
+        self.assertIn('url', payload)
 
         token = self.get_oc_url_jwt(self.doc_with_file_wf_open, 'checkout') # noqa
 
-        self.assertTrue('url' in token)
-        self.assertTrue('/oc_checkout' in token['url'])
+        self.assertIn('url', token)
+        self.assertIn('/oc_checkout', token['url'])
         self.assertNotIn('documents', token)
         self.assertEquals(token['action'], 'checkout')
         self.assertEquals(TEST_USER_ID, token['sub'])
@@ -326,8 +326,8 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
         self.assertEquals(200, response.status_code)
 
         payload = response.json()
-        self.assertTrue('csrf-token' in payload)
-        self.assertTrue('download' in payload)
+        self.assertIn('csrf-token', payload)
+        self.assertIn('download', payload)
         self.assertEquals(self.doc_with_file_wf_open.file.contentType, payload['content-type']) # noqa
         self.assertEquals(self.doc_with_file_wf_open.absolute_url(), payload['document-url']) # noqa
         self.assertEquals(self.doc_with_file_wf_open.get_filename(), payload['filename']) # noqa
