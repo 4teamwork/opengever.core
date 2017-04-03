@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-12-08 08:32+0000\n"
+"POT-Creation-Date: 2017-03-28 13:19+0000\n"
 "PO-Revision-Date: 2016-08-10 05:15+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-base/fr/>\n"
@@ -102,12 +102,12 @@ msgid "fieldset_common"
 msgstr "En général"
 
 #. Default: "Life Cycle"
-#: ./opengever/base/behaviors/lifecycle.py:29
+#: ./opengever/base/behaviors/lifecycle.py:30
 msgid "fieldset_lifecycle"
 msgstr "Cycle de vie"
 
 #. Default: "Archival value code"
-#: ./opengever/base/behaviors/lifecycle.py:58
+#: ./opengever/base/behaviors/lifecycle.py:59
 msgid "help_archival_value"
 msgstr "Valeur archivistique"
 
@@ -115,7 +115,7 @@ msgstr "Valeur archivistique"
 msgid "help_classification"
 msgstr "Classification permettant la protection des documents contre la consultation non-autorisée "
 
-#: ./opengever/base/behaviors/lifecycle.py:73
+#: ./opengever/base/behaviors/lifecycle.py:74
 msgid "help_custody_period"
 msgstr "Délai de protection"
 
@@ -131,7 +131,7 @@ msgstr "Mention, si les documents sont accessibles ou non selon la loi sur la pr
 msgid "help_public_trial_statement"
 msgstr "Date de la requête, requérant, date de la décision, Référence vers le dossier de la requête GEVER"
 
-#: ./opengever/base/behaviors/lifecycle.py:43
+#: ./opengever/base/behaviors/lifecycle.py:44
 msgid "help_retention_period"
 msgstr "Durée entre la date du document plus récent contenu dans un dossier et la date à partir de laquelle le document n'est plus requis pour les activités administratives"
 
@@ -141,12 +141,12 @@ msgid "label_already_removed"
 msgstr "-- Déjà annulé --"
 
 #. Default: "Archival value"
-#: ./opengever/base/behaviors/lifecycle.py:57
+#: ./opengever/base/behaviors/lifecycle.py:58
 msgid "label_archival_value"
 msgstr "Valeur archivistique"
 
 #. Default: "archivalValueAnnotation"
-#: ./opengever/base/behaviors/lifecycle.py:65
+#: ./opengever/base/behaviors/lifecycle.py:66
 msgid "label_archival_value_annotation"
 msgstr "Commentaire concernant la valeur archivistique"
 
@@ -181,17 +181,17 @@ msgid "label_creators"
 msgstr "Auteurs"
 
 #. Default: "Custody period (years)"
-#: ./opengever/base/behaviors/lifecycle.py:72
+#: ./opengever/base/behaviors/lifecycle.py:73
 msgid "label_custody_period"
 msgstr "Délai de protection archivistique"
 
 #. Default: "Date of cassation"
-#: ./opengever/base/behaviors/lifecycle.py:81
+#: ./opengever/base/behaviors/lifecycle.py:82
 msgid "label_dateofcassation"
 msgstr "Date d'élimination"
 
 #. Default: "Date of submission"
-#: ./opengever/base/behaviors/lifecycle.py:88
+#: ./opengever/base/behaviors/lifecycle.py:89
 msgid "label_dateofsubmission"
 msgstr "Date de proposition (des documents)"
 
@@ -209,11 +209,6 @@ msgstr "Description"
 #: ./opengever/base/browser/search.pt:305
 msgid "label_dossier"
 msgstr "Dossier:"
-
-#. Default: "Initial version (document copied)"
-#: ./opengever/base/subscribers.py:64
-msgid "label_initial_version_copied"
-msgstr "Version initiale (documents copiés)"
 
 #. Default: "Last modified"
 #: ./opengever/base/viewlets/byline.py:72
@@ -236,12 +231,12 @@ msgid "label_public_trial_statement"
 msgstr "Jusitificaton pour le retrait du status public"
 
 #. Default: "Retention period (years)"
-#: ./opengever/base/behaviors/lifecycle.py:42
+#: ./opengever/base/behaviors/lifecycle.py:43
 msgid "label_retention_period"
 msgstr "Délai de conservation"
 
 #. Default: "retentionPeriodAnnotation"
-#: ./opengever/base/behaviors/lifecycle.py:50
+#: ./opengever/base/behaviors/lifecycle.py:51
 msgid "label_retention_period_annotation"
 msgstr "Commentaire concernant le délai de protection"
 
@@ -258,7 +253,7 @@ msgstr "Erreur"
 #. Default: "Title"
 #: ./opengever/base/behaviors/base.py:24
 #: ./opengever/base/browser/translated_title.py:36
-#: ./opengever/base/widgets.py:78
+#: ./opengever/base/widgets.py:106
 msgid "label_title"
 msgstr "Titre"
 
@@ -278,7 +273,7 @@ msgid "limited-public"
 msgstr "Accès public restreint"
 
 #. Default: "Changes saved"
-#: ./opengever/base/browser/modelforms.py:121
+#: ./opengever/base/browser/modelforms.py:122
 msgid "message_changes_saved"
 msgstr "Modifications sauvegardées"
 
@@ -303,7 +298,7 @@ msgid "msg_empty_clipboard"
 msgstr "Aucun objet ne peut être ajouté, le presse-papier est vide."
 
 #. Default: "No items available"
-#: ./opengever/base/widgets.py:50
+#: ./opengever/base/widgets.py:78
 msgid "msg_no_items_available"
 msgstr ""
 

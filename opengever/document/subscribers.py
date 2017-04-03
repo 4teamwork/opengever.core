@@ -29,8 +29,8 @@ def create_initial_version(obj, event):
                             default="Initial version (document copied)"),
                             context=getRequest())
         # Create an initial version
-        pr._recursiveSave(obj, {}, pr._prepareSysMetadata(comment),
-            autoapply=pr.autoapply)
+        pr._recursiveSave(
+            obj, {}, pr._prepareSysMetadata(comment), autoapply=pr.autoapply)
 
 
 @grok.subscribe(IDocumentSchema, IObjectAddedEvent)

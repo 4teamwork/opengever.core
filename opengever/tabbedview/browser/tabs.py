@@ -11,6 +11,7 @@ from opengever.dossier.interfaces import IDossierMarker
 from opengever.globalindex.model.task import Task
 from opengever.meeting.model.proposal import Proposal
 from opengever.meeting.tabs.proposallisting import ProposalListingTab
+from opengever.officeconnector.helpers import is_officeconnector_attach_feature_enabled  # noqa
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.tabbedview import _
 from opengever.tabbedview import BaseCatalogListingTab
@@ -50,6 +51,7 @@ class BaseTabProxy(BaseCatalogListingTab):
     used view-mode (list or gallery) on a tab
     and reopens this view.
     """
+
     grok.context(ITabbedView)
     grok.implements(ITabbedViewProxy)
     grok.require('zope2.View')
@@ -92,7 +94,6 @@ class BaseTabProxy(BaseCatalogListingTab):
         `pagenumber`: the current page number (1 is first page)
         `selected_count`: number of items selected / displayed on this page
         """
-
         if not self.batching_enabled:
             return
 
@@ -113,6 +114,7 @@ class DocumentsProxy(BaseTabProxy):
     """This proxyview is looking for the last used documents
     view (list or gallery) and reopens this view.
     """
+
     grok.name('tabbedview_view-documents-proxy')
 
 
@@ -173,26 +175,12 @@ class Documents(BaseCatalogListingTab):
          'transform': translate_public_trial_options},
         )
 
-    enabled_actions = [
-        'send_as_email',
-        'checkout',
-        'checkin_with_comment',
-        'checkin_without_comment',
-        'cancel',
-        'create_task',
-        'submit_additional_documents',
-        'trashed',
-        'move_items',
-        'copy_items',
-        'zip_selected',
-        'export_documents',
-        ]
-
     major_actions = [
         'create_task',
         ]
 
-    bumblebee_template = ViewPageTemplateFile('generic_with_bumblebee_viewchooser.pt')
+    bumblebee_template = ViewPageTemplateFile(
+        'generic_with_bumblebee_viewchooser.pt')
 
     def __call__(self, *args, **kwargs):
         if is_bumblebee_feature_enabled():
@@ -205,8 +193,33 @@ class Documents(BaseCatalogListingTab):
     def gallery_view_name(self):
         return '{}-gallery'.format(self.view_name)
 
+    @property
+    def enabled_actions(self):
+        actions = [
+            'send_as_email',
+            'checkout',
+            'checkin_with_comment',
+            'checkin_without_comment',
+            'cancel',
+            'create_task',
+            'submit_additional_documents',
+            'trashed',
+            'move_items',
+            'copy_items',
+            'zip_selected',
+            'export_documents',
+        ]
+
+        if is_officeconnector_attach_feature_enabled():
+            actions.append('attach_documents')
+            actions.remove('send_as_email')
+
+        return actions
+
 
 class Dossiers(BaseCatalogListingTab):
+    """List all dossiers recursively."""
+
     grok.name('tabbedview_view-dossiers')
 
     template = ViewPageTemplateFile("generic_with_filters.pt")
@@ -285,7 +298,8 @@ class Dossiers(BaseCatalogListingTab):
 
 class SubDossiers(Dossiers):
     """Listing of all subdossier. Using only the base dossier tab
-    configuration (without a statefilter)."""
+    configuration (without a statefilter).
+    """
 
     grok.name('tabbedview_view-subdossiers')
 
@@ -297,6 +311,7 @@ class SubDossiers(Dossiers):
 
 
 class Tasks(GlobalTaskListingTab):
+    """Recursively list tasks."""
 
     grok.name('tabbedview_view-tasks')
     grok.context(IDossierMarker)
@@ -322,12 +337,14 @@ class Tasks(GlobalTaskListingTab):
 
 
 class ActiveProposalFilter(Filter):
+    """Filter out inactive proposals."""
 
     def update_query(self, query):
         return query.active()
 
 
 class Proposals(ProposalListingTab):
+    """Recursively list proposals."""
 
     grok.name('tabbedview_view-proposals')
     grok.context(IDossierMarker)
@@ -361,10 +378,13 @@ class TrashProxy(BaseTabProxy):
     """This proxyview is looking for the last used documents
     view (list or gallery) and reopens this view.
     """
+
     grok.name('tabbedview_view-trash-proxy')
 
 
 class Trash(Documents):
+    """List trash contents."""
+
     grok.name('tabbedview_view-trash')
 
     types = ['opengever.dossier.dossier',
@@ -407,7 +427,8 @@ class Trash(Documents):
 class DocumentRedirector(grok.View):
     """Redirector View is called after a Document is created,
     make it easier to implement type specifics immediate_views
-    like implemented for opengever.task"""
+    like implemented for opengever.task.
+    """
 
     grok.name('document-redirector')
     grok.context(IDexterityContainer)

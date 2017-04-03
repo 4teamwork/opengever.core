@@ -14,6 +14,11 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
+#: ./opengever/document/profiles/default/actions.xml
+#: ./opengever/document/upgrades/20170322142153_add_office_connector_multi_attach_action_to_documents/actions.xml
+msgid "Attach selection"
+msgstr "Mit Mailprogramm versenden"
+
 #: ./opengever/document/browser/edit.py:104
 msgid "Can't edit the document at moment, beacuse it's locked."
 msgstr "Das Dokument kann momentan nicht bearbeitet werden, es ist gesperrt."

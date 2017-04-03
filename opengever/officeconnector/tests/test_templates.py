@@ -11,6 +11,7 @@ import transaction
 
 
 class TestOfficeConnectorTemplates(FunctionalTestCase):
+    """Test templates to ensure OC can function."""
 
     def setUp(self):
         super(TestOfficeConnectorTemplates, self).setUp()
@@ -47,6 +48,16 @@ class TestOfficeConnectorTemplates(FunctionalTestCase):
             in browser.css('a.function-edit').first.get('href'))
 
         self.assertEqual(0, len(browser.css('a.function-attach')))
+
+    @browsing
+    def test_tabbedview_template_without_officeconnector(self, browser):
+        browser.login().open(self.dossier, view='tabbedview_view-documents')
+
+        self.assertEqual(
+            0, len(browser.css('a.tabbedview-menu-attach_documents')))
+
+        self.assertEqual(
+            1, len(browser.css('a.tabbedview-menu-send_as_email')))
 
     @browsing
     def test_overview_template_with_officeconnector_attach(self, browser):
@@ -184,8 +195,29 @@ class TestOfficeConnectorTemplates(FunctionalTestCase):
             self.document.absolute_url()
             in browser.css('a.function-edit').first.get('href'))
 
+    @browsing
+    def test_tabbedview_template_with_officeconnector_attach(self, browser):
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+        transaction.commit()
+
+        browser.login().open(self.dossier, view='tabbedview_view-documents')
+
+        self.assertEqual(1, len(browser.css('a.tabbedview-menu-attach_documents')))  # noqa
+
+        self.assertIn(
+            'javascript:officeConnectorMultiAttach(',
+            browser.css('a.tabbedview-menu-attach_documents').first.get('href')
+            )
+
+        self.assertEqual(
+            0, len(browser.css('a.tabbedview-menu-send_as_email')))
+
 
 class TestOfficeConnectorBumblebeeTemplates(FunctionalTestCase):
+    """Test Bumblebee templates to ensure OC can function."""
 
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 

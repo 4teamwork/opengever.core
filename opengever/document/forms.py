@@ -21,7 +21,6 @@ class DocumentEditForm(DefaultEditForm):
     def updateWidgets(self):
         """Using document specific formwidget.namedfile modes.
         """
-
         super(DocumentEditForm, self).updateWidgets()
 
         # get the checkin checkout manager
@@ -44,6 +43,7 @@ class DocumentEditForm(DefaultEditForm):
             else:
                 file_field.mode = NO_DOWNLOAD_INPUT_MODE
 
+
 DocumentEditView = layout.wrap_form(DocumentEditForm)
 
 
@@ -55,7 +55,9 @@ class IDocumentFileUploadForm(IDocumentSchema):
 
 class DocumentFileUploadForm(DefaultEditForm):
     """A form for just uploading the file of a document without any metadata
-       fields. Used by Office Connector."""
+    fields. Used by Office Connector.
+    """
+
     schema = IDocumentFileUploadForm
     additionalSchemata = ()
     render_form = True
