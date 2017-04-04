@@ -50,14 +50,10 @@ class UsersListing(BaseListingTab):
 
     sort_on = 'lastname'
     sort_order = ''
-    # lazy must be false otherwise there will be no correct batching
-    lazy = False
 
     # the model attributes is used for a dynamic textfiltering functionality
     model = User
     show_selects = False
-    enabled_actions = []
-    major_actions = []
 
     filterlist_name = 'user_state_filter'
     filterlist_available = True
