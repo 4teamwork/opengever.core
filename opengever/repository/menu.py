@@ -11,3 +11,7 @@ class RepositoryFolderPostFactoryMenu(FilteredPostFactoryMenu):
         factory_id = factory.get('id')
         if factory_id == u'opengever.meeting.meetingdossier':
             return True
+
+        if factory_id == u'opengever.dossier.businesscasedossier' and \
+                not self.context.allow_add_businesscase_dossier:
+            return True

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-02-20 15:20+0000\n"
+"POT-Creation-Date: 2017-04-04 09:44+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -36,6 +36,16 @@ msgstr "Système de classement"
 msgid "Unlock unused repository prefixes."
 msgstr "Déblocage de préfixes de référence inutilisés"
 
+#. Default: "Allow add businesscase dossier"
+#: ./opengever/repository/repositoryfolder.py:89
+msgid "allow_add_businesscase_dossier"
+msgstr ""
+
+#. Default: "Choose if the user is allowed to add businesscase dossiers or only dossiers from a  dossiertemplate."
+#: ./opengever/repository/repositoryfolder.py:91
+msgid "description_allow_add_businesscase_dossier"
+msgstr ""
+
 #. Default: "No nested repositorys available."
 #: ./opengever/repository/browser/templates/referenceprefixmanager.pt:29
 msgid "empty_repository"
@@ -49,22 +59,22 @@ msgstr "A ce niveau du classement ce numéro de référence existe déjà."
 #. Default: "Common"
 #: ./opengever/repository/behaviors/referenceprefix.py:33
 #: ./opengever/repository/behaviors/responsibleorg.py:12
-#: ./opengever/repository/repositoryfolder.py:30
+#: ./opengever/repository/repositoryfolder.py:31
 msgid "fieldset_common"
 msgstr "En général"
 
 #. Default: "Select all additional dossier types which should be addable in this repository folder."
-#: ./opengever/repository/repositoryfolder.py:80
+#: ./opengever/repository/repositoryfolder.py:81
 msgid "help_addable_dossier_types"
 msgstr "Sélectionnez les types de dossiers à ajouter pour cette position du classeur"
 
 #. Default: "A short summary of the content."
-#: ./opengever/repository/repositoryfolder.py:43
+#: ./opengever/repository/repositoryfolder.py:44
 msgid "help_description"
 msgstr "Brève description du contenu."
 
 #. Default: "Addable dossier types"
-#: ./opengever/repository/repositoryfolder.py:78
+#: ./opengever/repository/repositoryfolder.py:79
 msgid "label_addable_dossier_types"
 msgstr "Types de dossiers à ajouter"
 
@@ -79,17 +89,17 @@ msgid "label_delete_repository"
 msgstr "Effacer le numéro de la position"
 
 #. Default: "Description"
-#: ./opengever/repository/repositoryfolder.py:42
+#: ./opengever/repository/repositoryfolder.py:43
 msgid "label_description"
 msgstr "Description"
 
 #. Default: "Former reference"
-#: ./opengever/repository/repositoryfolder.py:72
+#: ./opengever/repository/repositoryfolder.py:73
 msgid "label_former_reference"
 msgstr "Ancien numéro de référence"
 
 #. Default: "Location"
-#: ./opengever/repository/repositoryfolder.py:60
+#: ./opengever/repository/repositoryfolder.py:61
 msgid "label_location"
 msgstr "Site"
 
@@ -99,7 +109,7 @@ msgid "label_reference_number_prefix"
 msgstr "Préfixe référence"
 
 #. Default: "Referenced activity"
-#: ./opengever/repository/repositoryfolder.py:65
+#: ./opengever/repository/repositoryfolder.py:66
 msgid "label_referenced_activity"
 msgstr "Performance"
 
@@ -109,13 +119,13 @@ msgid "label_successfully_deleted"
 msgstr "Le numéro de la position a été effacé avec succès."
 
 #. Default: "Valid from"
-#: ./opengever/repository/repositoryfolder.py:50
+#: ./opengever/repository/repositoryfolder.py:51
 #: ./opengever/repository/repositoryroot.py:22
 msgid "label_valid_from"
 msgstr "Valable de :"
 
 #. Default: "Valid until"
-#: ./opengever/repository/repositoryfolder.py:55
+#: ./opengever/repository/repositoryfolder.py:56
 #: ./opengever/repository/repositoryroot.py:27
 msgid "label_valid_until"
 msgstr "Valable jusqu'à :"
@@ -131,7 +141,7 @@ msgid "label_warning"
 msgstr "Avertissement"
 
 #. Default: "State"
-#: ./opengever/repository/viewlets/byline.py:24
+#: ./opengever/repository/viewlets/byline.py:29
 msgid "label_workflow_state"
 msgstr "Etat"
 
@@ -141,7 +151,7 @@ msgid "msg_delete_confirmation"
 msgstr "Voulez-vous vraiment effacer le numéro de la position actuel?"
 
 #. Default: "You are adding a repositoryfolder to a leafnode which already contains dossiers. This is only temporarily allowed and all dossiers must be moved into a new leafnode afterwards."
-#: ./opengever/repository/repositoryfolder.py:196
+#: ./opengever/repository/repositoryfolder.py:212
 msgid "msg_leafnode_warning"
 msgstr ""
 
