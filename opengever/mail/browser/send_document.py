@@ -116,7 +116,7 @@ class ISendDocumentSchema(Interface):
 
     file_copy_in_dossier = schema.Bool(
         title=_(u'label_file_copy_in_dossier',
-                default=u'File a copy of the sent mail in dossier'),
+                default=u'Save a copy of the sent mail in dossier'),
         required=True,
         default=True,
         )

@@ -180,6 +180,8 @@ Changelog
 
 4.15.4 (2017-03-20)
 -------------------
+- Update weird field title for the file_copy_in_dossier-field.
+  [elioschmutz]
 
 - Allow private dossiers to be resolved.
   [lgraf]
