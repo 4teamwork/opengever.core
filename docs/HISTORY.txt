@@ -5,6 +5,7 @@ Changelog
 2017.1.2 (unreleased)
 ---------------------
 
+- Add state filters to user listings. [deiferni]
 - Add api-link to footer viewlet. [elioschmutz]
 - Adjust title and label of dossiers journal PDF representation. [phgross]
 - Improve title and TeX template for removal protocol. [phgross]

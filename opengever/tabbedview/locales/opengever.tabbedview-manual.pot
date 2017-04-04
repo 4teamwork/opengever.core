@@ -170,10 +170,6 @@ msgstr ""
 msgid "Show all in this Folder"
 msgstr ""
 
-#: ./opengever/tabbedview/browser/tabs_templates/generic.pt:12
-msgid "all"
-msgstr ""
-
 #. Default: "More actions &#9660;"
 #: ./opengever/tabbedview/browser/tabs_templates/generic.pt:40
 msgid "button_more_actions"
