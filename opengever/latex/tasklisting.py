@@ -29,9 +29,11 @@ class TaskListingPDFView(grok.View, ExportPDFView):
 
     index = ViewPageTemplateFile('templates/export_pdf.pt')
 
+    request_layer = ITaskListingLayer
+
     def render(self):
         # let the request provide ITaskListingLayer
-        provide_request_layer(self.request, ITaskListingLayer)
+        provide_request_layer(self.request, self.request_layer)
 
         return ExportPDFView.__call__(self)
 

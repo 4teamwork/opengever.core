@@ -40,11 +40,13 @@ class OpenTaskReportPDFView(grok.View, ExportPDFView):
     grok.context(Interface)
     grok.require('zope2.View')
 
+    request_layer = IOpenTaskReportLayer
+
     def render(self):
         if not is_open_task_report_allowed():
             raise Unauthorized()
 
-        provide_request_layer(self.request, IOpenTaskReportLayer)
+        provide_request_layer(self.request, self.request_layer)
         return ExportPDFView.__call__(self)
 
 
