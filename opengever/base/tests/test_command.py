@@ -19,7 +19,7 @@ class TestCreateEmailCommand(FunctionalTestCase):
 
     def test_converted_msg_is_created_correctly(self):
         command = CreateEmailCommand(
-            self.dossier, 'testmail.msg', 'mock-msg-body',
+            self.dossier, 'testm\xc3\xa4il.msg', 'mock-msg-body',
             transform=MockMsg2MimeTransform())
         mail = command.execute()
 
