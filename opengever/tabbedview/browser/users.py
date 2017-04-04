@@ -6,9 +6,10 @@ from opengever.ogds.models.user import User
 from opengever.tabbedview import _
 from opengever.tabbedview import BaseListingTab
 from opengever.tabbedview import SqlTableSource
+from opengever.tabbedview.filters import Filter
+from opengever.tabbedview.filters import FilterList
 from opengever.tabbedview.helper import boolean_helper
 from opengever.tabbedview.helper import email_helper
-from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.interface import implements
 from zope.interface import Interface
 
@@ -29,6 +30,13 @@ class IUsersListingTableSourceConfig(ITableSourceConfig):
     """
 
 
+class ActiveOnlyFilter(Filter):
+    """Filter to only display active users."""
+
+    def update_query(self, query):
+        return query.filter_by(active=True)
+
+
 class UsersListing(BaseListingTab):
     """Tab registered on contacts folder (see opengever.contact) listing all
     users.
@@ -42,15 +50,16 @@ class UsersListing(BaseListingTab):
 
     sort_on = 'lastname'
     sort_order = ''
-    # lazy must be false otherwise there will be no correct batching
-    lazy = False
 
     # the model attributes is used for a dynamic textfiltering functionality
     model = User
     show_selects = False
-    enabled_actions = []
-    major_actions = []
-    selection = ViewPageTemplateFile("no_selection_amount.pt")
+
+    filterlist_name = 'user_state_filter'
+    filterlist_available = True
+    filterlist = FilterList(
+        Filter('filter_all', _('label_tabbedview_filter_all')),
+        ActiveOnlyFilter('filter_active', _('Active'), default=True))
 
     columns = (
         {'column': 'lastname',
@@ -79,12 +88,12 @@ class UsersListing(BaseListingTab):
 
         {'column': 'department',
          'column_title': _(u'label_department_user',
-                          default=u'Department')},
+                           default=u'Department')},
 
 
         {'column': 'directorate',
          'column_title': _(u'label_directorate_user',
-                         default=u'Directorate')},
+                           default=u'Directorate')},
 
         {'column': 'active',
          'column_title': _(u'label_active',
