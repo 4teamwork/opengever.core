@@ -6,6 +6,8 @@ Changelog
 ---------------------
 
 - Add state filters to user listings. [deiferni]
+- Fix UnicodeDecodeError if uploading a .msg email with an umlaut in the filename
+  to a dossier. [elioschmutz]
 - Add api-link to footer viewlet. [elioschmutz]
 - Adjust title and label of dossiers journal PDF representation. [phgross]
 - Improve title and TeX template for removal protocol. [phgross]

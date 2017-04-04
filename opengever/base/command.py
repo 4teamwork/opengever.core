@@ -2,6 +2,7 @@ from opengever.base.transforms.msg2mime import Msg2MimeTransform
 from os.path import splitext
 from plone.dexterity.utils import createContentInContainer
 from plone.namedfile.file import NamedBlobFile
+from Products.CMFPlone.utils import safe_unicode
 
 
 class BaseObjectCreatorCommand(object):
@@ -75,6 +76,7 @@ class CreateEmailCommand(CreateDocumentCommand):
 
     def convert_to_mime(self, filename, data):
         data = self.transform.transform(data)
+        filename = safe_unicode(filename)
         base_filename, ext = splitext(filename)
         filename = u'{}.eml'.format(base_filename)
         return filename, data
