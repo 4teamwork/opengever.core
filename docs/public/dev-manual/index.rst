@@ -14,6 +14,7 @@ von Fachanwendungen und Drittlösungen.
    :maxdepth: 2
 
    api/index.rst
+   oggbundle/index.rst
 
 
 * :ref:`genindex`

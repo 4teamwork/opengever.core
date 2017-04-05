@@ -1,0 +1,247 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "array",
+  "items": {
+    "$ref": "#/definitions/document"
+  },
+  "definitions": {
+    "document": {
+      "type": "object",
+      "title": "Dokument",
+      "additionalProperties": false,
+      "properties": {
+        "classification": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "title": "Klassifikation",
+          "description": "Grad, in dem die Unterlagen vor unberechtigter Einsicht geschützt werden müssen",
+          "_zope_schema_type": "Choice",
+          "default": "unprotected",
+          "enum": [
+            null,
+            "unprotected",
+            "confidential",
+            "classified"
+          ]
+        },
+        "parent_guid": {
+          "type": "string"
+        },
+        "keywords": {
+          "type": [
+            "null",
+            "array"
+          ],
+          "title": "Schlagworte",
+          "description": "",
+          "_zope_schema_type": "Tuple"
+        },
+        "guid": {
+          "type": "string"
+        },
+        "document_date": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "title": "Dokumentdatum",
+          "format": "date",
+          "description": "Datum des Dokuments",
+          "_zope_schema_type": "Date",
+          "default": "<Aktuelles Datum>"
+        },
+        "receipt_date": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "title": "Eingangsdatum",
+          "format": "date",
+          "description": "Datum, an dem das Dokument über den Korrespondenzweg angekommen ist",
+          "_zope_schema_type": "Date"
+        },
+        "privacy_layer": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "title": "Datenschutzstufe",
+          "description": "Markierung, die angibt, ob die Unterlagen besonders schützenswerte Personendaten oder Persönlichkeitsprofile gemäss Datenschutzrecht enthalten",
+          "_zope_schema_type": "Choice",
+          "default": "privacy_layer_no",
+          "enum": [
+            null,
+            "privacy_layer_no",
+            "privacy_layer_yes"
+          ]
+        },
+        "document_author": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "title": "Autor",
+          "description": "Nachname Vorname oder ein Benutzerkürzel (wird automatisch nach Nachname Vorname aufgelöst).",
+          "_zope_schema_type": "TextLine"
+        },
+        "relatedItems": {
+          "type": [
+            "null",
+            "array"
+          ],
+          "title": "Verwandte Dokumente",
+          "description": "",
+          "_zope_schema_type": "RelationList",
+          "default": []
+        },
+        "public_trial_statement": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "title": "Bearbeitungsinformation",
+          "description": "Datum Gesuch, Gesuchsteller, Datum Entscheid, Verweis auf GEVER-Gesuchdossier",
+          "_zope_schema_type": "Text",
+          "default": ""
+        },
+        "public_trial": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "title": "Öffentlichkeitsstatus",
+          "description": "Angabe, ob die Unterlagen gemäss Öffentlichkeitsgesetz zugänglich sind oder nicht",
+          "_zope_schema_type": "Choice",
+          "default": "unchecked",
+          "enum": [
+            null,
+            "unchecked",
+            "public",
+            "limited-public",
+            "private"
+          ]
+        },
+        "review_state": {
+          "enum": [
+            "document-state-draft"
+          ],
+          "type": "string"
+        },
+        "foreign_reference": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "title": "Fremdzeichen",
+          "description": "Referenz auf das entsprechende Dossier des Absenders",
+          "_zope_schema_type": "TextLine"
+        },
+        "description": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "title": "Beschreibung",
+          "description": "",
+          "_zope_schema_type": "Text"
+        },
+        "document_type": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "title": "Dokumenttyp",
+          "description": "",
+          "_zope_schema_type": "Choice",
+          "enum": [
+            null,
+            "question",
+            "request",
+            "report",
+            "offer",
+            "protocol",
+            "regulations",
+            "contract",
+            "directive"
+          ]
+        },
+        "preserved_as_paper": {
+          "type": [
+            "null",
+            "boolean"
+          ],
+          "title": "In Papierform aufbewahrt",
+          "description": "In Papierform aufbewahrt",
+          "_zope_schema_type": "Bool",
+          "default": true
+        },
+        "filepath": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string",
+          "title": "Titel",
+          "description": "",
+          "_zope_schema_type": "TextLine"
+        },
+        "sequence_number": {
+          "type": [
+            "null",
+            "integer"
+          ],
+          "description": "Fortlaufend gezählte Nummer eines Dokumentes.",
+          "title": "Laufnummer"
+        },
+        "creators": {
+          "type": [
+            "null",
+            "array"
+          ],
+          "title": "Autoren",
+          "description": "",
+          "_zope_schema_type": "Tuple"
+        },
+        "delivery_date": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "title": "Ausgangsdatum",
+          "format": "date",
+          "description": "Datum, an dem das Dokument über den Korrespondenzweg versandt worden ist",
+          "_zope_schema_type": "Date"
+        }
+      },
+      "field_order": [
+        "title",
+        "file",
+        "creators",
+        "classification",
+        "privacy_layer",
+        "public_trial",
+        "public_trial_statement",
+        "relatedItems",
+        "description",
+        "keywords",
+        "foreign_reference",
+        "document_date",
+        "receipt_date",
+        "delivery_date",
+        "document_type",
+        "document_author",
+        "preserved_as_paper",
+        "archival_file",
+        "archival_file_state"
+      ],
+      "required": [
+        "review_state",
+        "guid",
+        "parent_guid",
+        "title",
+        "filepath"
+      ]
+    }
+  }
+}
