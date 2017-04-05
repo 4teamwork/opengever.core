@@ -159,7 +159,8 @@
     showroom = Showroom([], {
       tail: tail,
       head: head,
-      template: template
+      template: template,
+      isMenuOpen: false
     });
     updateShowroom();
 
