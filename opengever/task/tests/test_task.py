@@ -3,6 +3,7 @@ from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.dexterity import erroneous_fields
 from opengever.task.adapters import IResponseContainer
 from opengever.task.interfaces import ITaskSettings
@@ -212,6 +213,46 @@ class TestTaskIntegration(FunctionalTestCase):
         response = IResponseContainer(maintask)[-1]
         self.assertEquals(intids.getId(document), response.added_object.to_id)
         self.assertEquals('transition-add-document', response.transition)
+
+    @browsing
+    def test_responsible_client_for_one_orgunit(self, browser):
+        dossier = create(Builder('dossier'))
+        browser.login().visit(dossier)
+        factoriesmenu.add('Task')
+
+        field = browser.css('[data-fieldname="form.widgets.responsible_client"]')
+        self.assertTrue(
+            field.css('input.hidden-widget'),
+            'There is only 1 client, the responsible_client shoud be hidden.')
+
+        self.assertEquals('client1',
+                          field.css('input').first.value,
+                          'The default value should be the client of the user'
+                          ' if there is only one client')
+
+    @browsing
+    def test_responsible_client_for_multiple_orgunits(self, browser):
+        create(Builder('org_unit')
+               .with_default_groups()
+               .id('client2')
+               .having(title='Client2',
+                       admin_unit=self.admin_unit))
+
+        dossier = create(Builder('dossier'))
+
+        browser.login().visit(dossier)
+        factoriesmenu.add('Task')
+
+        field = browser.css('[data-fieldname="form.widgets.responsible_client"]')
+        self.assertFalse(
+            field.css('input.hidden-widget'),
+            'There are multiple clients, the responsible_client shoud be '
+            'visible.')
+
+        self.assertEquals('ALL_ORGUNITS',
+                          field.css('select').first.value,
+                          'The default value should be the client of the user'
+                          ' if there is only one client')
 
 
 class TestDossierSequenceNumber(FunctionalTestCase):

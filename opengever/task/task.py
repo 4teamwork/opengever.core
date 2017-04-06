@@ -364,7 +364,10 @@ class Task(Container):
 
 @form.default_value(field=ITask['responsible_client'])
 def responsible_client_default_value(data):
-    return get_current_org_unit().id()
+    if ogds_service().has_multiple_org_units():
+        return u'ALL_ORGUNITS'
+    else:
+        return get_current_org_unit().id()
 
 
 def related_document(context):
