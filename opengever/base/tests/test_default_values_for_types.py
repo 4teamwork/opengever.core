@@ -62,6 +62,7 @@ REPOFOLDER_FORM_DEFAULTS = {}
 REPOFOLDER_MISSING_VALUES = {
     'addable_dossier_templates': [],
     'addable_dossier_types': [],
+    'allow_add_businesscase_dossier': True,
     'archival_value_annotation': None,
     'date_of_cassation': None,
     'date_of_submission': None,

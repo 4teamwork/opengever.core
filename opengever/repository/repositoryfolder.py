@@ -85,6 +85,18 @@ class IRepositoryFolderSchema(form.Schema):
             vocabulary=u'opengever.repository.RestrictedAddableDossiersVocabulary'),
         required=False)
 
+    allow_add_businesscase_dossier = schema.Bool(
+        title=_(u'allow_add_businesscase_dossier',
+                default=u'Allow add businesscase dossier'),
+        description=_(u'description_allow_add_businesscase_dossier',
+                      default=u'Choose if the user is allowed to add '
+                              u'businesscase dossiers or only dossiers from a '
+                              u' dossiertemplate.'),
+        required=False,
+        missing_value=True,
+        default=True,
+    )
+
 
 class RepositoryFolder(content.Container):
 
