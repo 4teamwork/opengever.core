@@ -1,4 +1,3 @@
-from Products.CMFCore.utils import getToolByName
 from five import grok
 from opengever.inbox import _
 from opengever.inbox.forwarding import IForwarding
@@ -9,6 +8,7 @@ from opengever.task.browser.assign import IAssignSchema
 from plone.directives import form
 from plone.z3cform import layout
 from plone.z3cform.fieldsets.utils import move
+from Products.CMFCore.utils import getToolByName
 from z3c.form.field import Fields
 from z3c.form.interfaces import INPUT_MODE
 from zope import schema
@@ -16,13 +16,21 @@ from zope import schema
 
 class IForwardingAssignSchema(IAssignSchema):
 
+    responsible_client = schema.Choice(
+        title=task_mf(u'label_resonsible_client',
+                      default=u'Responsible Client'),
+        description=task_mf(u'help_responsible_client',
+                            default=u''),
+        vocabulary='opengever.ogds.base.OrgUnitsVocabularyFactory',
+        required=True)
+
     form.widget(responsible=AutocompleteFieldWidget)
     responsible = schema.Choice(
         title=task_mf(u"label_responsible", default=u"Responsible"),
         description=task_mf(u"help_responsible", default=""),
         vocabulary=u'opengever.ogds.base.InboxesVocabulary',
         required=True,
-        )
+    )
 
 
 class AssignForwardingForm(AssignTaskForm):
@@ -46,6 +54,7 @@ class AssignForwardingForm(AssignTaskForm):
         wf_tool = getToolByName(self.context, 'portal_workflow')
         wf_tool.doActionFor(self.context, kwargs.get('transition'))
         super(AssignForwardingForm, self).update_task(**kwargs)
+
 
 class AssignForwardingView(layout.FormWrapper, grok.View):
     grok.context(IForwarding)

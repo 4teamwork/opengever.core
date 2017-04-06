@@ -113,7 +113,7 @@ class ITask(form.Schema):
                 default=u'Responsible Client'),
         description=_(u'help_responsible_client',
                       default=u''),
-        vocabulary='opengever.ogds.base.OrgUnitsVocabularyFactory',
+        vocabulary='opengever.ogds.base.OrgUnitsVocabularyForTasksFactory',
         required=True)
 
     form.widget(responsible=AutocompleteFieldWidget)

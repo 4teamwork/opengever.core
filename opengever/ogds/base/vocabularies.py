@@ -7,9 +7,11 @@ from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.base.vocabulary import ContactsVocabulary
+from opengever.task import _
 from plone.memoize import ram
 from zope.component import getUtility
 from zope.globalrequest import getRequest
+from zope.i18n import translate
 from zope.schema.interfaces import IVocabularyFactory
 
 
@@ -435,6 +437,18 @@ class OrgUnitsVocabularyFactory(grok.GlobalUtility):
         return vocab
 
     def key_value_provider(self):
+        for unit in ogds_service().all_org_units():
+            yield (unit.id(), unit.label())
+
+
+class OrgUnitsVocabularyFactoryForTasks(OrgUnitsVocabularyFactory):
+
+    grok.name('opengever.ogds.base.OrgUnitsVocabularyForTasksFactory')
+
+    def key_value_provider(self):
+        yield (u'ALL_ORGUNITS', translate(_(u'label_all', default=u'All'),
+                                          context=self.context.REQUEST))
+
         for unit in ogds_service().all_org_units():
             yield (unit.id(), unit.label())
 

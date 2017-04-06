@@ -50,6 +50,14 @@ class IForwarding(ITask):
         required=False,
         )
 
+    responsible_client = schema.Choice(
+        title=task_mf(u'label_resonsible_client',
+                      default=u'Responsible Client'),
+        description=task_mf(u'help_responsible_client',
+                            default=u''),
+        vocabulary='opengever.ogds.base.OrgUnitsVocabularyFactory',
+        required=True)
+
     form.widget(responsible=AutocompleteFieldWidget)
     responsible = schema.Choice(
         title=_(u"label_responsible", default=u"Responsible"),

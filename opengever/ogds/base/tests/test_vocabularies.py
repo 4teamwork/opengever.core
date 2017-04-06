@@ -511,14 +511,45 @@ class TestOrgUnitsVocabularyFactory(FunctionalTestCase):
                .having(title="Informatikamt",
                        admin_unit=admin_unit))
 
-        voca_factory = getUtility(IVocabularyFactory,
-                          name='opengever.ogds.base.OrgUnitsVocabularyFactory')
+        voca_factory = getUtility(
+            IVocabularyFactory,
+            name='opengever.ogds.base.OrgUnitsVocabularyFactory')
 
         self.assertTermKeys(
             ['rr', 'arch', 'afi'], voca_factory(self.portal))
 
         self.assertTerms(
             [(u'afi', u'Informatikamt'),
+             (u'rr', u'Regierungsrat'),
+             (u'arch', u'Staatsarchiv')],
+            voca_factory(self.portal))
+
+
+class TestOrgUnitsVocabularyForTasksFactory(FunctionalTestCase):
+    use_default_fixture = False
+
+    def test_contains_all_org_units(self):
+        admin_unit = create(Builder('admin_unit'))
+        create(Builder('org_unit').id('rr')
+               .having(title="Regierungsrat",
+                       admin_unit=admin_unit))
+        create(Builder('org_unit').id('arch')
+               .having(title="Staatsarchiv",
+                       admin_unit=admin_unit))
+        create(Builder('org_unit').id('afi')
+               .having(title="Informatikamt",
+                       admin_unit=admin_unit))
+
+        voca_factory = getUtility(
+            IVocabularyFactory,
+            name='opengever.ogds.base.OrgUnitsVocabularyForTasksFactory')
+
+        self.assertTermKeys(
+            ['ALL_ORGUNITS', 'rr', 'arch', 'afi'], voca_factory(self.portal))
+
+        self.assertTerms(
+            [(u'ALL_ORGUNITS', u'All'),
+             (u'afi', u'Informatikamt'),
              (u'rr', u'Regierungsrat'),
              (u'arch', u'Staatsarchiv')],
             voca_factory(self.portal))

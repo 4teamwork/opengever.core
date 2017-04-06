@@ -7,6 +7,7 @@ from opengever.task.response_syncer import sync_task_response
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
 from opengever.task.util import getTransitionVocab
+from opengever.task.util import update_reponsible_field_data
 from plone.directives import form
 from plone.z3cform import layout
 from Products.statusmessages.interfaces import IStatusMessage
@@ -37,7 +38,7 @@ class IAssignSchema(form.Schema):
                 default=u'Responsible Client'),
         description=_(u'help_responsible_client',
                       default=u''),
-        vocabulary='opengever.ogds.base.OrgUnitsVocabularyFactory',
+        vocabulary='opengever.ogds.base.OrgUnitsVocabularyForTasksFactory',
         required=True)
 
     responsible = schema.Choice(
@@ -77,6 +78,8 @@ class AssignTaskForm(Form):
     @buttonAndHandler(_(u'button_assign', default=u'Assign'), name='save')
     def handle_assign(self, action):
         data, errors = self.extractData()
+        update_reponsible_field_data(data)
+
         if not errors:
             if self.context.responsible_client == data['responsible_client'] \
                     and self.context.responsible == data['responsible']:
