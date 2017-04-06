@@ -170,6 +170,8 @@ class IDispositionSchema(form.Schema):
 class Disposition(Container):
     implements(IDisposition)
 
+    _ordering = 'unordered'
+
     destroyed_key = 'destroyed_dossiers'
 
     def __init__(self, *args, **kwargs):

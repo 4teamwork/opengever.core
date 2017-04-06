@@ -52,6 +52,8 @@ _marker = object()
 
 class DossierContainer(Container):
 
+    _ordering = 'unordered'
+
     def _getOb(self, id_, default=_marker):
         """We extend `_getObj` in order to change the context for participation
         objects to the `ParticipationWrapper`. That allows us to register views

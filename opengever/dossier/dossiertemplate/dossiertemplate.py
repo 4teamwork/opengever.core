@@ -74,6 +74,8 @@ class DossierTemplateEditForm(dexterity.EditForm):
 class DossierTemplate(Container):
     """Base class for template dossiers."""
 
+    _ordering = 'unordered'
+
     def is_subdossier(self):
         parent = aq_parent(aq_inner(self))
         return bool(IDossierTemplateSchema.providedBy(parent))

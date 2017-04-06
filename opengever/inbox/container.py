@@ -15,6 +15,8 @@ class InboxContainer(Container, TranslatedTitleMixin):
     multiple org_units. Because every org_unit has an inbox.
     """
 
+    _ordering = 'unordered'
+
     Title = TranslatedTitleMixin.Title
 
     def get_current_inbox(self):

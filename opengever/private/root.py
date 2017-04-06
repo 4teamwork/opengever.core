@@ -14,6 +14,8 @@ class PrivateRoot(Container, TranslatedTitleMixin):
     """A private root, the container for all the PrivateFolders.
     """
 
+    _ordering = 'unordered'
+
     implements(IHideFromBreadcrumbs)
 
     Title = TranslatedTitleMixin.Title

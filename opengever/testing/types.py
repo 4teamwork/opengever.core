@@ -54,6 +54,8 @@ alsoProvides(IDummyAnnotationStorageBehavior, form.IFormFieldProvider)
 class Dummy(Container):
     """Dummy type used for testing"""
 
+    _ordering = 'unordered'
+
 
 class IDummyMarker(Interface):
     """Behavior marker interface"""

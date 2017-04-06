@@ -73,6 +73,8 @@ _marker = object()
 class CommitteeContainer(Container, TranslatedTitleMixin):
     """Committee Container class, a container for all committees."""
 
+    _ordering = 'unordered'
+
     Title = TranslatedTitleMixin.Title
 
     def _getOb(self, id_, default=_marker):

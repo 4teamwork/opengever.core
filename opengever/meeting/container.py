@@ -8,6 +8,8 @@ from zope.lifecycleevent import ObjectModifiedEvent
 
 class ModelContainer(Container):
 
+    _ordering = 'unordered'
+
     model_class = None
     model_schema = None
     content_schema = None

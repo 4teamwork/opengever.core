@@ -20,6 +20,8 @@ class PrivateFolder(Container):
     the first login.
     """
 
+    _ordering = 'unordered'
+
     def Title(self):
         return Actor.lookup(
             self.getOwner().getId()).get_label(self).encode('utf-8')
