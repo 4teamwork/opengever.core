@@ -207,3 +207,12 @@ class CustomInitialVersionMessage(object):
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.request[CUSTOM_INITIAL_VERSION_MESSAGE] = None
+
+
+def update_reponsible_field_data(data):
+    """The responsible field always contains the orgunit id and the userid
+    separated by a colon.
+    """
+    client, user = data['responsible'].split(':', 1)
+    data['responsible_client'] = client
+    data['responsible'] = user
