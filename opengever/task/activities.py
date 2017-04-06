@@ -1,4 +1,3 @@
-from opengever.activity import notification_center
 from opengever.activity.base import BaseActivity
 from opengever.activity.model.subscription import TASK_OLD_RESPONSIBLE_ROLE
 from opengever.base.model import get_locale
@@ -9,21 +8,13 @@ from plone import api
 from Products.CMFPlone import PloneMessageFactory
 
 
-class TaskActivity(BaseActivity):
-    """Abstract base class for all task-related activities.
-
-    The TaskActivity class is a representation for every activity which can
-    be done with or on a task. It provides every needed attribute/methods to
-    record the activity in the notification center.
-
+class TaskAddedActivity(BaseActivity):
+    """Activity representation for adding a task.
     """
+
     def __init__(self, context, request, parent):
-        super(TaskActivity, self).__init__(context, request)
+        super(TaskAddedActivity, self).__init__(context, request)
         self.parent = parent
-
-
-class TaskAddedActivity(TaskActivity):
-    """Activity representation for adding a task."""
 
     @property
     def kind(self):
@@ -79,27 +70,17 @@ class TaskAddedActivity(TaskActivity):
         self.center.add_task_issuer(self.context, self.context.issuer)
 
 
-class TaskTransitionActivity(TaskActivity):
-    """Activity which represents a transition task transition change.
+class BaseTaskResponseActivity(BaseActivity):
+    """Abstract base class for all task-response related activities.
+
+    The TaskResponseActivity class is a representation for every activity which
+    can be done on a task. It provides every needed attribute/methods to
+    record the activity in the notification center based on a response object.
     """
 
-    IGNORED_TRANSITIONS = [
-        'transition-add-subtask',
-        'task-transition-reassign',
-        'forwarding-transition-reassign',
-        'forwarding-transition-reassign-refused',
-    ]
-
-    def __init__(self, context, response):
-        self.context = context
-        self.request = self.context.REQUEST
-        self.transition = response.transition
+    def __init__(self, context, request, response):
+        super(BaseTaskResponseActivity, self).__init__(context, request)
         self.response = response
-        self.center = notification_center()
-
-    @property
-    def kind(self):
-        return self.response.transition
 
     @property
     def summary(self):
@@ -112,12 +93,32 @@ class TaskTransitionActivity(TaskActivity):
             ResponseDescription.get(response=self.response).label())
 
     @property
-    def actor(self):
-        return api.user.get_current().getId()
-
-    @property
     def description(self):
         return {get_locale(): self.response.text}
+
+
+class TaskCommentedActivity(BaseTaskResponseActivity):
+    """Activity representation for commenting a task.
+    """
+    @property
+    def kind(self):
+        return PloneMessageFactory(u'task-commented', default=u'Task commented')
+
+
+class TaskTransitionActivity(BaseTaskResponseActivity):
+    """Activity which represents a transition task transition change.
+    """
+
+    IGNORED_TRANSITIONS = [
+        'transition-add-subtask',
+        'task-transition-reassign',
+        'forwarding-transition-reassign',
+        'forwarding-transition-reassign-refused',
+    ]
+
+    @property
+    def kind(self):
+        return self.response.transition
 
     def record(self):
         if self._is_ignored_transition():
@@ -126,7 +127,7 @@ class TaskTransitionActivity(TaskActivity):
         return super(TaskTransitionActivity, self).record()
 
     def _is_ignored_transition(self):
-        return self.transition in self.IGNORED_TRANSITIONS
+        return self.response.transition in self.IGNORED_TRANSITIONS
 
 
 class TaskReassignActivity(TaskTransitionActivity):

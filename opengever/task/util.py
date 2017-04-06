@@ -137,7 +137,7 @@ def add_simple_response(task, text='', field_changes=None, added_object=None,
 
     notify(ObjectModifiedEvent(task))
 
-    TaskTransitionActivity(task, response).record()
+    TaskTransitionActivity(task, task.REQUEST, response).record()
     return response
 
 

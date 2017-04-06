@@ -95,6 +95,26 @@ class TestTaskActivites(FunctionalTestCase):
         self.assertEquals(u'Wird n\xe4chste Woche erledigt.', activity.description)
 
     @browsing
+    def test_task_commented(self, browser):
+        dossier = create(Builder('dossier'))
+        task = create(Builder('task')
+                      .within(dossier)
+                      .titled(u'Abkl\xe4rung Fall Meier')
+                      .having(responsible=TEST_USER_ID))
+
+        browser.login().visit(task, view="addcommentresponse")
+        browser.fill({'Response': u'Wird n\xe4chste Woche erledigt.'})
+        browser.find('Save').click()
+
+        activity = Activity.query.one()
+        self.assertEquals(u'task-commented', activity.kind)
+        self.assertEquals(u'Abkl\xe4rung Fall Meier', activity.title)
+        self.assertEquals(
+            u'Commented by <a href="http://nohost/plone/@@user-details/test_user_1_">Test User (test_user_1_)</a>',
+            activity.summary)
+        self.assertEquals(u'Wird n\xe4chste Woche erledigt.', activity.description)
+
+    @browsing
     def test_activity_actor_is_current_user(self, browser):
         create(Builder('user')
                .with_userid('hugo.boss')

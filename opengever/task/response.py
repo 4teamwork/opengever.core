@@ -9,6 +9,7 @@ from opengever.task import util
 from opengever.task.activities import TaskTransitionActivity
 from opengever.task.adapters import IResponseContainer
 from opengever.task.adapters import Response
+from opengever.task.interfaces import ICommentResponseHandler
 from opengever.task.interfaces import IWorkflowStateSyncer
 from opengever.task.permissions import DEFAULT_ISSUE_MIME_TYPE
 from opengever.task.task import ITask
@@ -16,6 +17,7 @@ from plone.autoform.form import AutoExtensibleForm
 from plone.memoize.view import memoize
 from plone.z3cform import layout
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone import PloneMessageFactory as pmf
 from Products.Five.browser import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form import button
@@ -27,6 +29,7 @@ from z3c.relationfield.relation import RelationValue
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
 from zExceptions import BadRequest
+from zExceptions import Unauthorized
 from zope import schema
 from zope.cachedescriptors.property import Lazy
 from zope.component import getMultiAdapter
@@ -40,8 +43,16 @@ from zope.lifecycleevent import ObjectModifiedEvent
 import datetime
 
 
-class IResponse(Interface):
+class ITaskCommentResponseFormSchema(Interface):
+    text = schema.Text(
+        title=_('label_response', default="Response"),
+        required=True,
+        )
 
+
+class ITaskTransitionResponseFormSchema(Interface):
+    """Schema-interface class for the task transition response form
+    """
     transition = schema.Choice(
         title=_("label_transition", default="Transition"),
         source=util.getTransitionVocab,
@@ -142,11 +153,47 @@ class Base(BrowserView):
         return self.memship.checkPermission('Delete objects', context)
 
 
-class AddForm(form.AddForm, AutoExtensibleForm):
+class TaskCommentResponseAddForm(form.AddForm, AutoExtensibleForm):
+
+    fields = field.Fields(ITaskCommentResponseFormSchema)
+
+    @property
+    def label(self):
+        return translate(
+            pmf('label_add_comment', default='Add Comment'),
+            context=self.request)
+
+    @button.buttonAndHandler(_(u'save', default='Save'), name='save')
+    def handleAdd(self, action):
+        """Registers the default "add"-button of the AddForm as "save"-button
+        """
+        return super(TaskCommentResponseAddForm, self).handleAdd(self, action)
+
+    def createAndAdd(self, data):
+        response_handler = ICommentResponseHandler(self.context)
+        return response_handler.add_response(data.get('text'))
+
+    def nextURL(self):
+        return self.context.absolute_url()
+
+    @button.buttonAndHandler(_(u'cancel', default='Cancel'), name='cancel', )
+    def handle(self, action):
+        self.request.response.redirect(self.nextURL())
+
+
+class TaskCommentResponseAddFormView(layout.FormWrapper, grok.View):
+    grok.context(ITask)
+    grok.name("addcommentresponse")
+    grok.require('opengever.task.AddTaskComment')
+
+    form = TaskCommentResponseAddForm
+
+
+class TaskTransitionResponseAddForm(form.AddForm, AutoExtensibleForm):
 
     allow_prefill_from_GET_request = True  # XXX
 
-    fields = field.Fields(IResponse)
+    fields = field.Fields(ITaskTransitionResponseFormSchema)
     # keep widget for converters (even though field is hidden)
     fields['transition'].widgetFactory = radio.RadioFieldWidget
     fields = fields.omit('date_of_completion')
@@ -168,7 +215,7 @@ class AddForm(form.AddForm, AutoExtensibleForm):
         return self._transition
 
     def updateActions(self):
-        super(AddForm, self).updateActions()
+        super(TaskTransitionResponseAddForm, self).updateActions()
         self.actions["save"].addClass("context")
 
     @button.buttonAndHandler(_(u'save', default='Save'),
@@ -293,15 +340,15 @@ class AddForm(form.AddForm, AutoExtensibleForm):
         return get_current_org_unit() in units
 
     def record_activity(self, response):
-        TaskTransitionActivity(self.context, response).record()
+        TaskTransitionActivity(self.context, self.context.REQUEST, response).record()
 
 
-class SingleAddFormView(layout.FormWrapper, grok.View):
+class TaskTransitionResponseAddFormView(layout.FormWrapper, grok.View):
     grok.context(ITask)
     grok.name("addresponse")
     grok.require('cmf.AddPortalContent')
 
-    form = AddForm
+    form = TaskTransitionResponseAddForm
 
     def __init__(self, context, request):
         layout.FormWrapper.__init__(self, context, request)

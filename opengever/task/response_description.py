@@ -320,6 +320,21 @@ class DocumentAdded(ResponseDescription):
 ResponseDescription.add_description(DocumentAdded)
 
 
+class TaskCommented(ResponseDescription):
+
+    transition = 'task-commented'
+    css_class = 'taskCommented'
+
+    def msg(self):
+        return _('msg_task_commented', u'Commented by ${user}',
+                 mapping=self._msg_mapping)
+
+    def label(self):
+        return _('label_task_commented', u'Task commented')
+
+ResponseDescription.add_description(TaskCommented)
+
+
 class NullResponseDescription(ResponseDescription):
     """Fallback description for responses without any transition information.
     """
