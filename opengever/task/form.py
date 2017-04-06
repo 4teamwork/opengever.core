@@ -5,6 +5,7 @@ from opengever.task.activities import TaskAddedActivity
 from opengever.task.activities import TaskReassignActivity
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
+from opengever.task.util import update_reponsible_field_data
 from plone.directives import dexterity
 from z3c.form.interfaces import HIDDEN_MODE
 from zope.component import getMultiAdapter
@@ -17,6 +18,7 @@ REASSIGN_TRANSITION = 'task-transition-reassign'
 # setting the default value of a RelationField does not work as expected
 # or we don't know how to set it.
 # thus we use an add form hack by injecting the values into the request.
+
 
 class TaskAddForm(dexterity.AddForm):
     grok.name('opengever.task.task')
@@ -42,6 +44,8 @@ class TaskAddForm(dexterity.AddForm):
                 u"help_responsible_single_client_setup", default=u"")
 
     def createAndAdd(self, data):
+        update_reponsible_field_data(data)
+
         task = super(TaskAddForm, self).createAndAdd(data=data)
         activity = TaskAddedActivity(task, self.request, self.context)
         activity.record()
@@ -72,7 +76,10 @@ class TaskEditForm(dexterity.EditForm):
 
     def applyChanges(self, data):
         """Records reassign activity when the responsible has changed.
+        Also update the responsible_cliend and responsible user
         """
+        update_reponsible_field_data(data)
+
         if self.is_reassigned(data):
             response = self.add_reassign_response(data)
             changes = super(TaskEditForm, self).applyChanges(data)

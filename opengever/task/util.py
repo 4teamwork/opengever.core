@@ -207,3 +207,15 @@ class CustomInitialVersionMessage(object):
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.request[CUSTOM_INITIAL_VERSION_MESSAGE] = None
+
+
+def update_reponsible_field_data(data):
+    """Updates the extracted data of a form if the client is ALL_ORGUNITS.
+    This means the responsible field contains the client and the user, which
+    needs to be seperated for the task.
+    """
+    if data['responsible_client'] == 'ALL_ORGUNITS':
+        client, user = data['responsible'].split(':', 1)
+        data['responsible_client'] = client
+        data['responsible'] = user
+
