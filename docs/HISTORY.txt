@@ -15,6 +15,7 @@ Changelog
 - Make (all) PDF views customizable by having them dynamically provide their
   request layers instead of hardcoding them. [lgraf]
 - Meeting: add a "Word implementation" feature flag. [jone]
+- Implement task comment syncing between predecessor successor pairs [elioschmutz]
 - Fix scrollbar of tree view portlet. [Kevin Bieri]
 - Add state filters to user listings. [deiferni]
 - Fix UnicodeDecodeError if uploading a .msg email with an umlaut in the filename

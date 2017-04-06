@@ -2,6 +2,8 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.activity.model import Activity
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
+from opengever.ogds.base.Extensions.plugins import activate_request_layer
+from opengever.ogds.base.interfaces import IInternalOpengeverRequestLayer
 from opengever.task.adapters import IResponseContainer
 from opengever.task.comment_response import CommentResponseHandler
 from opengever.task.interfaces import ICommentResponseHandler
@@ -40,6 +42,19 @@ class TestCommentResponseHandler(FunctionalTestCase):
 
         self.assertEqual(0, len(response_container))
         ICommentResponseHandler(task).add_response("My response")
+        self.assertEqual(1, len(response_container))
+
+    def test_comment_is_synced_to_successor(self):
+        predecessor = create(Builder('task'))
+        successor = create(Builder('task').successor_from(predecessor))
+
+        activate_request_layer(self.portal.REQUEST,
+                               IInternalOpengeverRequestLayer)
+
+        response_container = IResponseContainer(successor)
+
+        self.assertEqual(0, len(response_container))
+        ICommentResponseHandler(predecessor).add_response("My response")
         self.assertEqual(1, len(response_container))
 
     def test_a_Member_can_not_add_task_comment_on_open_dossier(self):
