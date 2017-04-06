@@ -113,9 +113,19 @@ class UsersAndInboxesVocabularyFactory(grok.GlobalUtility):
 
     def __call__(self, context):
         self.context = context
-        vocab = wrap_vocabulary(
-            ContactsVocabulary.create_with_provider(
-                self.key_value_provider))(context)
+
+        if self.get_client() == 'ALL_ORGUNITS':
+            # Fallback to the
+            # opengever.ogds.base.AllUsersAndInboxesVocabulary'
+            all_users_factory = getUtility(
+                IVocabularyFactory,
+                name="opengever.ogds.base.AllUsersAndInboxesVocabulary")
+            vocab = all_users_factory(self.context)
+        else:
+            vocab = wrap_vocabulary(
+                ContactsVocabulary.create_with_provider(
+                    self.key_value_provider))(context)
+
         vocab.hidden_terms = self.hidden_terms
         return vocab
 

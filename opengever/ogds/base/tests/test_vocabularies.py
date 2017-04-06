@@ -173,6 +173,22 @@ class TestUsersAndInboxesVocabulary(FunctionalTestCase):
 
         self.assertTermKeys(['inbox:client2'], self.vocabulary_factory(self.portal))
 
+    def test_use_AllUsersAndInboxesVocabulary_if_clientid_is_ALL_ORGUNITS(self):
+        self.portal.REQUEST.set('form.widgets.responsible_client', 'client2')
+        elephant_vocab = self.vocabulary_factory(self.portal)
+
+        self.assertEquals(
+            'UsersAndInboxesVocabularyFactory',
+            elephant_vocab.vocab._provider.im_self.__class__.__name__)
+
+        self.portal.REQUEST.set('form.widgets.responsible_client',
+                                'ALL_ORGUNITS')
+        elephant_vocab = self.vocabulary_factory(self.portal)
+
+        self.assertEquals(
+            'AllUsersAndInboxesVocabularyFactory',
+            elephant_vocab.vocab._provider.im_self.__class__.__name__)
+
 
 class TestAllUsersAndInboxesVocabulary(FunctionalTestCase):
 
