@@ -254,6 +254,22 @@ class TestTaskIntegration(FunctionalTestCase):
                           'The default value should be the client of the user'
                           ' if there is only one client')
 
+        browser.fill({'Title': 'Task title',
+                      'Task Type': 'To comment',
+                      'Responsible': self.get_org_unit().id() + ':' + TEST_USER_ID})
+        browser.find('Save').click()
+
+        task = dossier.objectValues()[0]
+        self.assertEquals(
+            'client1',
+            task.responsible_client,
+            'The client should be stored after submitting the form')
+        self.assertEquals(
+            TEST_USER_ID,
+            task.responsible,
+            'The user should be stored after submitting the form')
+
+
 
 class TestDossierSequenceNumber(FunctionalTestCase):
 
