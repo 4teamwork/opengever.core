@@ -12,5 +12,5 @@ def is_meeting_feature_enabled():
         registry = getUtility(IRegistry)
         return registry.forInterface(IMeetingSettings).is_feature_enabled
 
-    except KeyError, AttributeError:
+    except (KeyError, AttributeError):
         return  False
