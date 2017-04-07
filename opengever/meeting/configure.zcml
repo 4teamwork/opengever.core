@@ -42,4 +42,6 @@
       permission="zope2.View"
       />
 
+  <adapter factory=".proposaltemplate.UploadValidator" />
+
 </configure>

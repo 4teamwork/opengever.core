@@ -36,6 +36,7 @@
       <element value="opengever.tasktemplates.tasktemplatefolder" />
       <element value="opengever.dossier.dossiertemplate" />
       <element value="opengever.private.root" />
+      <element value="opengever.meeting.proposaltemplate" />
     </property>
   </object>
 

@@ -13,6 +13,7 @@
     <element value="opengever.dossier.templatefolder" />
     <element value="opengever.meeting.sablontemplate" />
     <element value="opengever.dossier.dossiertemplate" />
+    <element value="opengever.meeting.proposaltemplate" />
   </property>
 
   <!-- schema interface -->

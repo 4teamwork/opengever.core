@@ -1,5 +1,4 @@
 from opengever.meeting.interfaces import IMeetingSettings
-from plone import api
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 from zope.i18nmessageid import MessageFactory
@@ -14,7 +13,7 @@ def is_meeting_feature_enabled():
         return registry.forInterface(IMeetingSettings).is_feature_enabled
 
     except (KeyError, AttributeError):
-        return  False
+        return False
 
 
 def is_word_meeting_implementation_enabled():
@@ -34,6 +33,10 @@ def is_word_meeting_implementation_enabled():
     if not is_meeting_feature_enabled():
         return False
 
-    return api.portal.get_registry_record('is_word_implementation_enabled',
-                                          interface=IMeetingSettings,
-                                          default=False)
+    try:
+        registry = getUtility(IRegistry)
+        return (registry.forInterface(IMeetingSettings)
+                .is_word_implementation_enabled)
+
+    except (KeyError, AttributeError):
+        return False
