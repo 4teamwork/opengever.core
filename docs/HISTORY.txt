@@ -7,6 +7,7 @@ Changelog
 
 - OGGBundle import: Make sure persistent changes that re-enable LDAP are
   always committed. [lgraf]
+- Meeting: add proposal template tab to templates folder. [jone]
 - Meeting: add new "Proposal Template" FTI. [jone]
 - OGGBundle import: Don't use a separate ZODB connection to issue sequence
   numbers in order to avoid conflict errors. [lgraf]

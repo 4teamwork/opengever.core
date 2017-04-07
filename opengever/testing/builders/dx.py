@@ -455,3 +455,10 @@ class DispositionBuilder(DexterityBuilder):
 
 
 builder_registry.register('disposition', DispositionBuilder)
+
+
+class ProposalTemplateBuilder(DocumentBuilder):
+
+    portal_type = 'opengever.meeting.proposaltemplate'
+
+builder_registry.register('proposaltemplate', ProposalTemplateBuilder)

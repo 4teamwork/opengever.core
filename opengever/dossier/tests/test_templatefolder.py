@@ -8,6 +8,7 @@ from ftw.testbrowser.pages import plone
 from ftw.testing import freeze
 from ooxml_docprops import read_properties
 from opengever.contact.interfaces import IContactSettings
+from opengever.core.testing import activate_meeting_word_implementation
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_DOSSIER_TEMPLATE_LAYER
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.dossier.docprops import TemporaryDocFile
@@ -560,13 +561,24 @@ class TestTemplateFolderMeetingEnabled(FunctionalTestCase):
         self.grant('Manager')
 
     @browsing
-    def test_addable_types_with_meating_feature(self, browser):
+    def test_addable_types_with_meeting_feature(self, browser):
         templatefolder = create(Builder('templatefolder'))
         browser.login().open(templatefolder)
 
         self.assertEquals(
             ['Document', 'Sablon Template', 'TaskTemplateFolder',
              'Template Folder'],
+            factoriesmenu.addable_types())
+
+    @browsing
+    def test_addable_types_with_meeting_word_implementation(self, browser):
+        activate_meeting_word_implementation()
+        templatefolder = create(Builder('templatefolder'))
+        browser.login().open(templatefolder)
+
+        self.assertEquals(
+            ['Document', 'Proposal Template', 'Sablon Template',
+             'TaskTemplateFolder', 'Template Folder'],
             factoriesmenu.addable_types())
 
 
@@ -591,6 +603,7 @@ TRASH_TAB = 'tabbedview_view-trash'
 JOURNAL_TAB = 'tabbedview_view-journal'
 INFO_TAB = 'tabbedview_view-sharing'
 SABLONTEMPLATES_TAB = 'tabbedview_view-sablontemplates'
+PROPOSALTEMPLATES_TAB = 'tabbedview_view-proposaltemplates'
 
 
 class TestTemplateFolderListings(FunctionalTestCase):
@@ -602,6 +615,8 @@ class TestTemplateFolderListings(FunctionalTestCase):
         self.dossier = create(Builder('dossier'))
         self.template = create(Builder('sablontemplate')
                                .within(self.templatefolder))
+        self.proposaltemplate = create(Builder('proposaltemplate')
+                                       .within(self.templatefolder))
         self.document = create(Builder('document')
                                .within(self.templatefolder))
 
@@ -617,6 +632,15 @@ class TestTemplateFolderListings(FunctionalTestCase):
     @browsing
     def test_receipt_delivery_and_subdossier_column_are_hidden_in_sablon_template_tab(self, browser):
         browser.login().open(self.templatefolder, view=SABLONTEMPLATES_TAB)
+
+        table_heading = browser.css('table.listing').first.lists()[0]
+        self.assertEquals(['', 'Sequence Number', 'Title', 'Document Author',
+                           'Document Date', 'Checked out by', 'Public Trial'],
+                          table_heading)
+
+    @browsing
+    def test_receipt_delivery_and_subdossier_column_are_hidden_in_proposal_templates_tab(self, browser):
+        browser.login().open(self.templatefolder, view=PROPOSALTEMPLATES_TAB)
 
         table_heading = browser.css('table.listing').first.lists()[0]
         self.assertEquals(['', 'Sequence Number', 'Title', 'Document Author',
@@ -664,6 +688,15 @@ class TestTemplateFolderListings(FunctionalTestCase):
             browser.css('.actionMenuContent li').text)
 
     @browsing
+    def test_enabled_actions_are_limited_in_proposaltemplates_tab(self, browser):
+        browser.login().open(self.templatefolder, view=PROPOSALTEMPLATES_TAB)
+
+        self.assertEqual(
+            ['Copy Items', 'Checkin with comment', 'Checkin without comment',
+             'Export selection', 'trashed', 'Export as Zip'],
+            browser.css('.actionMenuContent li').text)
+
+    @browsing
     def test_sablontemplates_tab_lists_only_documents_directly_beneath(self, browser):
         subdossier = create(Builder('templatefolder')
                             .within(self.templatefolder))
@@ -674,6 +707,18 @@ class TestTemplateFolderListings(FunctionalTestCase):
         self.assertEqual(1, len(templates))
         template_link = templates[0]['Title'].css('a').first.get('href')
         self.assertEqual(self.template.absolute_url(), template_link)
+
+    @browsing
+    def test_proposaltemplates_tab_lists_only_documents_directly_beneath(self, browser):
+        subdossier = create(Builder('templatefolder')
+                            .within(self.templatefolder))
+        create(Builder('proposaltemplate').within(subdossier))
+
+        browser.login().open(self.templatefolder, view=PROPOSALTEMPLATES_TAB)
+        templates = browser.css('table.listing').first.dicts(as_text=False)
+        self.assertEqual(1, len(templates))
+        template_link = templates[0]['Title'].css('a').first.get('href')
+        self.assertEqual(self.proposaltemplate.absolute_url(), template_link)
 
     @browsing
     def test_trash_tab_lists_only_documents_directly_beneath(self, browser):
