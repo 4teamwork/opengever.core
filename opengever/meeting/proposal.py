@@ -8,6 +8,7 @@ from opengever.base.source import DossierPathSourceBinder
 from opengever.base.utils import get_preferred_language_code
 from opengever.dossier.utils import get_containing_dossier
 from opengever.meeting import _
+from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.command import CopyProposalDocumentCommand
 from opengever.meeting.command import CreateSubmittedProposalCommand
 from opengever.meeting.command import NullUpdateSubmittedDocumentCommand
@@ -20,11 +21,14 @@ from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from plone import api
 from plone.directives import form
+from plone.directives.form import primary
+from plone.namedfile.field import NamedBlobFile
 from z3c.relationfield.relation import RelationValue
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
 from zope import schema
 from zope.component import getUtility
+from zope.component.hooks import getSite
 from zope.interface import implements
 from zope.interface import Interface
 from zope.interface import provider
@@ -146,6 +150,19 @@ class ISubmittedProposalModel(Interface):
 
 class IProposal(form.Schema):
     """Proposal Proxy Object Schema Interface"""
+
+    # The proposal template is only used when creating the proposal.
+    # It is easier to keep it as a regular schema field
+    # than fiddling the add form.
+    proposal_template_path = schema.Choice(
+        title=_('label_proposal_template', default=u'Proposal template'),
+        source='opengever.meeting.ProposalTemplateVocabulary',
+        required=True)
+
+    primary('file')
+    file = NamedBlobFile(
+        title=_(u'label_proposal_document', default='Proposal document'),
+        required=True)
 
     relatedItems = RelationList(
         title=_(u'label_attachments', default=u'Attachments'),
@@ -549,3 +566,26 @@ class Proposal(ProposalBase):
         create_command.execute()
         for copy_command in copy_commands:
             copy_command.execute()
+
+    def copy_proposal_template_file_to_proposal(self):
+        """This method is called when adding a new proposal.
+        It copies the file of the proposal template into our "file"
+        blob field for futher editing.
+        """
+        if not is_word_meeting_implementation_enabled():
+            raise ValueError('Unexpected call while the word meeting'
+                             ' feature is disabled.')
+
+        if not getattr(self, 'proposal_template_path', None):
+            raise ValueError(
+                'Missing proposal_template_path value for {!r}'.format(self))
+
+        proposal_template = getSite().restrictedTraverse(
+            self.proposal_template_path)
+
+        # This loads the binary data into memory, which is obviously bad.
+        # I couldn't find a better way to clone the blob though.
+        self.file = IProposal['file']._type(
+            data=proposal_template.file.open().read(),
+            contentType=proposal_template.file.contentType,
+            filename=proposal_template.file.filename)

@@ -461,4 +461,8 @@ class ProposalTemplateBuilder(DocumentBuilder):
 
     portal_type = 'opengever.meeting.proposaltemplate'
 
+    def __init__(self, *args, **kwargs):
+        super(ProposalTemplateBuilder, self).__init__(*args, **kwargs)
+        self.with_dummy_content()
+
 builder_registry.register('proposaltemplate', ProposalTemplateBuilder)

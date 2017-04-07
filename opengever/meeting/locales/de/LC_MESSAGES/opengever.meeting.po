@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-04-20 12:19+0000\n"
+"POT-Creation-Date: 2017-04-20 12:32+0000\n"
 "PO-Revision-Date: 2015-04-10 09:01+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -659,7 +659,7 @@ msgstr "Vorlage Traktandenliste"
 #. Default: "Attachments"
 #: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt:27
 #: ./opengever/meeting/browser/submitdocuments.py:36
-#: ./opengever/meeting/proposal.py:151
+#: ./opengever/meeting/proposal.py:168
 msgid "label_attachments"
 msgstr "Anhänge"
 
@@ -687,7 +687,7 @@ msgstr "Gremium erfolgreich reaktiviert."
 #. Default: "Committee"
 #: ./opengever/meeting/browser/meetings/meeting.py:52
 #: ./opengever/meeting/browser/templates/member.pt:49
-#: ./opengever/meeting/proposal.py:51
+#: ./opengever/meeting/proposal.py:55
 msgid "label_committee"
 msgstr "Gremium"
 
@@ -698,13 +698,13 @@ msgstr "Das Protokoll wurde in der Zwischenzeit bearbeitet. Wenn Sie Ihre Änder
 
 #. Default: "Considerations"
 #: ./opengever/meeting/browser/meetings/protocol.py:132
-#: ./opengever/meeting/proposal.py:122
+#: ./opengever/meeting/proposal.py:126
 msgid "label_considerations"
 msgstr "Erwägungen"
 
 #. Default: "Copy for attention"
 #: ./opengever/meeting/browser/meetings/protocol.py:147
-#: ./opengever/meeting/proposal.py:86
+#: ./opengever/meeting/proposal.py:90
 msgid "label_copy_for_attention"
 msgstr "Kopie z.K."
 
@@ -749,17 +749,17 @@ msgstr "Dieses Traktandum beschliessen"
 
 #. Default: "Decision"
 #: ./opengever/meeting/browser/meetings/protocol.py:138
-#: ./opengever/meeting/proposal.py:216
+#: ./opengever/meeting/proposal.py:233
 msgid "label_decision"
 msgstr "Beschluss"
 
 #. Default: "Decision draft"
-#: ./opengever/meeting/proposal.py:71
+#: ./opengever/meeting/proposal.py:75
 msgid "label_decision_draft"
 msgstr "Beschlussentwurf"
 
 #. Default: "Decision number"
-#: ./opengever/meeting/proposal.py:236
+#: ./opengever/meeting/proposal.py:253
 msgid "label_decision_number"
 msgstr "Beschlussnummer"
 
@@ -775,23 +775,23 @@ msgstr "Wollen Sie dieses Traktandum wirklich löschen?"
 
 #. Default: "Disclose to"
 #: ./opengever/meeting/browser/meetings/protocol.py:144
-#: ./opengever/meeting/proposal.py:81
+#: ./opengever/meeting/proposal.py:85
 msgid "label_disclose_to"
 msgstr "Zu eröffnen an"
 
 #. Default: "Discussion"
 #: ./opengever/meeting/browser/meetings/protocol.py:135
-#: ./opengever/meeting/proposal.py:318
+#: ./opengever/meeting/proposal.py:335
 msgid "label_discussion"
 msgstr "Diskussion"
 
 #. Default: "Dossier"
-#: ./opengever/meeting/proposal.py:300
+#: ./opengever/meeting/proposal.py:317
 msgid "label_dossier"
 msgstr "Dossier"
 
 #. Default: "Dossier not available"
-#: ./opengever/meeting/proposal.py:395
+#: ./opengever/meeting/proposal.py:412
 msgid "label_dossier_not_available"
 msgstr "Dossier nicht verfügbar"
 
@@ -880,7 +880,7 @@ msgstr "Gruppe"
 
 #. Default: "Initial position"
 #: ./opengever/meeting/browser/meetings/protocol.py:126
-#: ./opengever/meeting/proposal.py:61
+#: ./opengever/meeting/proposal.py:65
 msgid "label_initial_position"
 msgstr "Ausgangslage"
 
@@ -902,7 +902,7 @@ msgstr "Nachname"
 
 #. Default: "Legal basis"
 #: ./opengever/meeting/browser/meetings/protocol.py:123
-#: ./opengever/meeting/proposal.py:56
+#: ./opengever/meeting/proposal.py:60
 msgid "label_legal_basis"
 msgstr "Rechtsgrundlage"
 
@@ -928,7 +928,7 @@ msgid "label_main_attributes"
 msgstr "Eigenschaften"
 
 #. Default: "Meeting"
-#: ./opengever/meeting/proposal.py:196
+#: ./opengever/meeting/proposal.py:213
 msgid "label_meeting"
 msgstr "Sitzung"
 
@@ -977,14 +977,24 @@ msgstr "Teilnehmende"
 msgid "label_presidency"
 msgstr "Vorsitz"
 
+#. Default: "Proposal document"
+#: ./opengever/meeting/proposal.py:164
+msgid "label_proposal_document"
+msgstr "Antragsdokument"
+
 #. Default: "Reference Number"
 #: ./opengever/meeting/tabs/proposallisting.py:39
 msgid "label_proposal_id"
 msgstr "Laufnummer"
 
+#. Default: "Proposal template"
+#: ./opengever/meeting/proposal.py:158
+msgid "label_proposal_template"
+msgstr "Antragsvorlage"
+
 #. Default: "Proposed action"
 #: ./opengever/meeting/browser/meetings/protocol.py:129
-#: ./opengever/meeting/proposal.py:66
+#: ./opengever/meeting/proposal.py:70
 msgid "label_proposed_action"
 msgstr "Antrag"
 
@@ -995,7 +1005,7 @@ msgstr "Beginn Seitennummerierung Protokoll"
 
 #. Default: "Publish in"
 #: ./opengever/meeting/browser/meetings/protocol.py:141
-#: ./opengever/meeting/proposal.py:76
+#: ./opengever/meeting/proposal.py:80
 msgid "label_publish_in"
 msgstr "Veröffentlichung in"
 
@@ -1096,7 +1106,7 @@ msgid "label_upcoming_meetings"
 msgstr "Kommende Sitzungen"
 
 #. Default: "State"
-#: ./opengever/meeting/proposal.py:232
+#: ./opengever/meeting/proposal.py:249
 msgid "label_workflow_state"
 msgstr "Status"
 
@@ -1105,7 +1115,7 @@ msgid "label_zip_download"
 msgstr "Zip-Datei herunterladen"
 
 #. Default: "Language"
-#: ./opengever/meeting/proposal.py:91
+#: ./opengever/meeting/proposal.py:95
 msgid "language"
 msgstr "Sprache"
 

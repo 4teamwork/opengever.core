@@ -1,9 +1,12 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages import factoriesmenu
+from ftw.testbrowser.pages import statusmessages
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.base.oguid import Oguid
+from opengever.core.testing import activate_meeting_word_implementation
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.locking.lock import MEETING_SUBMITTED_LOCK
 from opengever.meeting.model import Proposal
@@ -819,3 +822,80 @@ class TestProposal(FunctionalTestCase):
         browser.login(username='hugo.boss')
         with self.assertRaises(Unauthorized):
             browser.open(committee)
+
+    @browsing
+    def test_nonword_fields_visible_in_addform(self, browser):
+        """When the "word implementation" feature is not enabled,
+        the "old" trix fields should be visible.
+        """
+        create(Builder('committee_model').having(title=u'Baukomission'))
+        create(Builder('proposaltemplate').titled(u'Baugesuch')
+               .within(create(Builder('templatefolder').titled(u'Vorlagen'))))
+        dossier = create(
+            Builder('dossier').titled(u'D\xf6ssier')
+            .within(create(Builder('repository').titled(u'Stuff')
+                           .within(create(Builder('repository_root'))))))
+
+        browser.login().open(dossier)
+        factoriesmenu.add('Proposal')
+        expected = ('Legal basis',
+                    'Initial position',
+                    'Proposed action',
+                    'Decision draft',
+                    'Publish in',
+                    'Disclose to',
+                    'Copy for attention')
+        missing = tuple(set(expected) - set(browser.forms['form'].field_labels))
+        self.assertEquals((), missing)
+        self.assertNotIn('File', browser.forms['form'].field_labels)
+
+
+class TestProposalWithWord(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestProposalWithWord, self).setUp()
+        activate_meeting_word_implementation()
+
+    @browsing
+    def test_creating_proposal_from_proposal_template(self, browser):
+        create(Builder('committee_model').having(title=u'Baukomission'))
+        create(Builder('proposaltemplate').titled(u'Baugesuch')
+               .attach_file_containing('Word Content', u'file.docx')
+               .within(create(Builder('templatefolder').titled(u'Vorlagen'))))
+        dossier = create(
+            Builder('dossier').titled(u'D\xf6ssier')
+            .within(create(Builder('repository').titled(u'Stuff')
+                           .within(create(Builder('repository_root'))))))
+
+        browser.login().open(dossier)
+        factoriesmenu.add('Proposal')
+        browser.fill({'Title': u'Baugesuch Kreuzachkreisel',
+                      'Committee': u'Baukomission',
+                      'Proposal template': 'Baugesuch'}).save()
+        statusmessages.assert_no_error_messages()
+        self.assertEquals('Word Content', browser.context.file.open().read())
+
+    @browsing
+    def test_visible_fields_in_addform(self, browser):
+        """When the "word implementation" feature is enabled,
+        the "old" trix fields should disappear.
+        """
+        create(Builder('committee_model').having(title=u'Baukomission'))
+        create(Builder('proposaltemplate').titled(u'Baugesuch')
+               .within(create(Builder('templatefolder').titled(u'Vorlagen'))))
+        dossier = create(
+            Builder('dossier').titled(u'D\xf6ssier')
+            .within(create(Builder('repository').titled(u'Stuff')
+                           .within(create(Builder('repository_root'))))))
+
+        browser.login().open(dossier)
+        factoriesmenu.add('Proposal')
+        hidden = ('Legal basis',
+                  'Initial position',
+                  'Proposed action',
+                  'Decision draft',
+                  'Publish in',
+                  'Disclose to',
+                  'Copy for attention')
+        missing = tuple(set(hidden) - set(browser.forms['form'].field_labels))
+        self.assertItemsEqual(hidden, missing)

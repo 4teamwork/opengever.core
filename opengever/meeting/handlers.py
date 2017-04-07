@@ -7,11 +7,13 @@ from opengever.base.security import elevated_privileges
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import IObjectCheckedInEvent
 from opengever.document.interfaces import IObjectRevertedToVersion
+from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.command import UpdateExcerptInDossierCommand
 from opengever.meeting.model import GeneratedExcerpt
 from opengever.meeting.model import Proposal
 from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.proposal import IProposal
+from opengever.meeting.proposal import ISubmittedProposal
 from plone import api
 from zope.component import getUtility
 from zope.component.interfaces import ComponentLookupError
@@ -88,3 +90,18 @@ def sync_moved_proposal(obj, event):
         return
 
     obj.sync_model()
+
+
+@grok.subscribe(IProposal, IObjectAddedEvent)
+def copy_template_on_proposal_add(proposal, event):
+    if ISubmittedProposal.providedBy(proposal):
+        # - Proposals are creted from proposal templates,
+        #   submitted proposals are created from proposals.
+        # - This subscriber copies from proposal templates and therefore cannot
+        #   work for submitted proposals.
+        # - Submitted proposals also provide IProposal because of inheritance,
+        #   therefore we need to abort when we get a submitted proposal.
+        return
+
+    if is_word_meeting_implementation_enabled():
+        proposal.copy_proposal_template_file_to_proposal()
