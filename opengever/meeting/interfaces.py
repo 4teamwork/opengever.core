@@ -11,6 +11,11 @@ class IMeetingSettings(Interface):
         description=u'Whether features from opengever.meeting are enabled',
         default=False)
 
+    is_word_implementation_enabled = schema.Bool(
+        title=u'Enable meeting Word implementation',
+        description=u'Whether meetings are using the Word implementation',
+        default=False)
+
 
 class IMeetingWrapper(ISQLObjectWrapper):
     """Marker interface for meeting object wrappers."""

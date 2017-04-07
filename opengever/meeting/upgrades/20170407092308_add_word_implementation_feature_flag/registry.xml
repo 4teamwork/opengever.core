@@ -1,0 +1,6 @@
+<registry>
+  <record name="opengever.meeting.interfaces.IMeetingSettings.is_word_implementation_enabled">
+    <field type="plone.registry.field.Bool" />
+    <value>False</value>
+  </record>
+</registry>
