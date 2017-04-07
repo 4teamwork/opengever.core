@@ -1,18 +1,22 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
+from opengever.base.command import CreateDocumentCommand
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.base.security import elevated_privileges
 from opengever.base.source import DossierPathSourceBinder
 from opengever.base.utils import get_preferred_language_code
+from opengever.document.widgets.document_link import DocumentLinkWidget
 from opengever.dossier.utils import get_containing_dossier
 from opengever.meeting import _
+from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.command import CopyProposalDocumentCommand
 from opengever.meeting.command import CreateSubmittedProposalCommand
 from opengever.meeting.command import NullUpdateSubmittedDocumentCommand
 from opengever.meeting.command import UpdateSubmittedDocumentCommand
 from opengever.meeting.container import ModelContainer
+from opengever.meeting.exceptions import WordMeetingImplementationDisabledError
 from opengever.meeting.model import proposalhistory
 from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.model.proposal import Proposal as ProposalModel
@@ -20,11 +24,13 @@ from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from plone import api
 from plone.directives import form
+from Products.CMFPlone.utils import safe_unicode
 from z3c.relationfield.relation import RelationValue
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
 from zope import schema
 from zope.component import getUtility
+from zope.i18n import translate
 from zope.interface import implements
 from zope.interface import Interface
 from zope.interface import provider
@@ -185,7 +191,7 @@ class ProposalBase(ModelContainer):
         model = self.load_model()
         assert model, 'missing db-model for {}'.format(self)
 
-        return [
+        attributes = [
             {'label': _(u"label_title", default=u'Title'),
              'value': model.title},
 
@@ -196,39 +202,52 @@ class ProposalBase(ModelContainer):
             {'label': _('label_meeting', default=u'Meeting'),
              'value': model.get_meeting_link(),
              'is_html': True},
+        ]
 
-            {'label': _('label_legal_basis', default=u'Legal basis'),
-             'value': model.legal_basis,
-             'is_html': True},
+        if not is_word_meeting_implementation_enabled():
+            attributes.extend([
+                {'label': _('label_legal_basis',
+                            default=u'Legal basis'),
+                 'value': model.legal_basis,
+                 'is_html': True},
 
-            {'label': _('label_initial_position', default=u'Initial position'),
-             'value': model.initial_position,
-             'is_html': True},
+                {'label': _('label_initial_position',
+                            default=u'Initial position'),
+                 'value': model.initial_position,
+                 'is_html': True},
 
-            {'label': _('label_proposed_action', default=u'Proposed action'),
-             'value': model.proposed_action,
-             'is_html': True},
+                {'label': _('label_proposed_action',
+                            default=u'Proposed action'),
+                 'value': model.proposed_action,
+                 'is_html': True},
 
-            {'label': _('label_decision_draft', default=u'Decision draft'),
-             'value': model.decision_draft,
-             'is_html': True},
+                {'label': _('label_decision_draft',
+                            default=u'Decision draft'),
+                 'value': model.decision_draft,
+                 'is_html': True},
 
-            {'label': _('label_decision', default=u'Decision'),
-             'value': model.get_decision(),
-             'is_html': True},
+                {'label': _('label_decision',
+                            default=u'Decision'),
+                 'value': model.get_decision(),
+                 'is_html': True},
 
-            {'label': _('label_publish_in', default=u'Publish in'),
-             'value': model.publish_in,
-             'is_html': True},
+                {'label': _('label_publish_in',
+                            default=u'Publish in'),
+                 'value': model.publish_in,
+                 'is_html': True},
 
-            {'label': _('label_disclose_to', default=u'Disclose to'),
-             'value': model.disclose_to,
-             'is_html': True},
+                {'label': _('label_disclose_to',
+                            default=u'Disclose to'),
+                 'value': model.disclose_to,
+                 'is_html': True},
 
-            {'label': _('label_copy_for_attention', default=u'Copy for attention'),
-             'value': model.copy_for_attention,
-             'is_html': True},
+                {'label': _('label_copy_for_attention',
+                            default=u'Copy for attention'),
+                 'value': model.copy_for_attention,
+                 'is_html': True},
+            ])
 
+        attributes.extend([
             {'label': _('label_workflow_state', default=u'State'),
              'value': self.get_state().title,
              'is_html': True},
@@ -236,7 +255,9 @@ class ProposalBase(ModelContainer):
             {'label': _('label_decision_number', default=u'Decision number'),
              'value': model.get_decision_number(),
              'is_html': True},
-        ]
+        ])
+
+        return attributes
 
     def can_execute_transition(self, name):
         return self.workflow.can_execute_transition(self.load_model(), name)
@@ -271,6 +292,50 @@ class ProposalBase(ModelContainer):
         admin_unit_id = self.load_model().committee.admin_unit_id
         return ogds_service().fetch_admin_unit(admin_unit_id)
 
+    def get_proposal_document(self):
+        """If the word meeting implemenation feature is enabled,
+        this method returns the proposal document, containing the actual
+        proposal "body".
+        """
+        if not is_word_meeting_implementation_enabled():
+            raise WordMeetingImplementationDisabledError()
+
+        if getattr(self, '_proposal_document_id', None) is None:
+            return None
+
+        return self.restrictedTraverse(self._proposal_document_id, None)
+
+    def create_proposal_document(self, source_blob=None, **kwargs):
+        """Creates a proposal document within this proposal or submitted
+        proposal.
+        Only one proposal document can be created.
+        """
+        if not is_word_meeting_implementation_enabled():
+            raise WordMeetingImplementationDisabledError()
+
+        if self.get_proposal_document():
+            raise ValueError('There is already a proposal document.')
+
+        if source_blob:
+            kwargs.setdefault('filename', source_blob.filename)
+            kwargs.setdefault('data', source_blob.open().read())
+            kwargs.setdefault('content_type', source_blob.contentType)
+
+        kwargs['context'] = self
+        kwargs.setdefault('preserved_as_paper', False)
+
+        title = _(u'proposal_document_title',
+                  default=u'Proposal document ${title}',
+                  mapping={'title': safe_unicode(self.Title())})
+        title = translate(title, context=self.REQUEST).strip()
+        kwargs.setdefault('title', title)
+
+        with elevated_privileges():
+            obj = CreateDocumentCommand(**kwargs).execute()
+
+        self._proposal_document_id = obj.getId()
+        return obj
+
 
 class SubmittedProposal(ProposalBase):
     """Proxy for a proposal in queue with a committee."""
@@ -303,22 +368,24 @@ class SubmittedProposal(ProposalBase):
             }
         )
 
-        # Insert considerations after proposed_action
-        data.insert(
-            7, {
-                'label': _('label_considerations', default=u"Considerations"),
-                'value': model.considerations,
-            }
-        )
+        if not is_word_meeting_implementation_enabled():
+            # Insert considerations after proposed_action
+            data.insert(
+                7, {
+                    'label': _('label_considerations',
+                               default=u"Considerations"),
+                    'value': model.considerations,
+                }
+            )
 
-        # Insert discussion after considerations
-        agenda = model.agenda_item
-        data.insert(
-            8, {
-                'label': _('label_discussion', default=u"Discussion"),
-                'value': agenda and agenda.discussion or ''
-            }
-        )
+            # Insert discussion after considerations
+            agenda = model.agenda_item
+            data.insert(
+                8, {
+                    'label': _('label_discussion', default=u"Discussion"),
+                    'value': agenda and agenda.discussion or ''
+                }
+            )
 
         return data
 
@@ -412,6 +479,18 @@ class Proposal(ProposalBase):
 
     workflow = ProposalModel.workflow.with_visible_transitions(
         ['pending-submitted', 'pending-cancelled', 'cancelled-pending'])
+
+    def get_overview_attributes(self):
+        data = super(Proposal, self).get_overview_attributes()
+        if is_word_meeting_implementation_enabled():
+            proposal_document = self.get_proposal_document()
+            if proposal_document:
+                data.append({
+                    'label': _('proposal_document',
+                               default=u'Proposal document'),
+                    'value': DocumentLinkWidget(proposal_document).render(),
+                    'is_html': True})
+        return data
 
     def _after_model_created(self, model_instance):
         session = create_session()

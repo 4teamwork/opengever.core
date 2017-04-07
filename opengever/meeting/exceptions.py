@@ -8,3 +8,9 @@ class ProtocolAlreadyGenerated(Exception):
     """The protocol could not be generated since another protocl is already
     present.
     """
+
+
+class WordMeetingImplementationDisabledError(Exception):
+    """The word meeting implementation feature is not enabled but a method
+    was called which requires this feature.
+    """

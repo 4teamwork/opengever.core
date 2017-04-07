@@ -7,7 +7,7 @@
             tal:define="documents view/documents;
                         excerpt view/excerpt;">
 
-    <div tal:attributes="class string:boxGroup">
+    <div class="boxGroup bumblebee-document-wrapper">
       <div id="main_attributesBox" class="box">
         <h2 i18n:translate="label_main_attributes">Main Atrributes</h2>
           <table class="vertical listing">
@@ -60,6 +60,13 @@
               </td>
             </tr>
           </table>
+      </div>
+      <div tal:condition="view/show_preview" class="documentPreview">
+        <img class="showroom-item"
+             tal:attributes="data-showroom-target view/get_overlay_url;
+                             data-showroom-title string:${context/title};
+                             src view/get_preview_image_url;
+                             alt context/title" />
       </div>
     </div>
 

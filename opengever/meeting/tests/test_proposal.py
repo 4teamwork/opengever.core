@@ -1,9 +1,12 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages import factoriesmenu
+from ftw.testbrowser.pages import statusmessages
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.base.oguid import Oguid
+from opengever.core.testing import activate_meeting_word_implementation
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.locking.lock import MEETING_SUBMITTED_LOCK
 from opengever.meeting.model import Proposal
@@ -149,6 +152,24 @@ class TestProposal(FunctionalTestCase):
                       browser.css('.portalMessage.info dd').text)
 
         proposal = browser.context
+        browser.open(proposal, view='tabbedview_view-overview')
+        self.assertEquals(
+            [['Title', u'A pr\xf6posal'],
+             ['Committee', ''],
+             ['Meeting', ''],
+             ['Legal basis', 'not possible'],
+             ['Initial position', u'My pr\xf6posal'],
+             ['Proposed action', 'do it'],
+             ['Decision draft', ''],
+             ['Decision', ''],
+             ['Publish in', u'B\xe4rner Zeitung'],
+             ['Disclose to', u'Hansj\xf6rg'],
+             ['Copy for attention', u'P\xe4tra'],
+             ['State', 'Pending'],
+             ['Decision number', ''],
+             ['Attachments', 'A Document']],
+            browser.css('table.listing').first.lists())
+
         self.assertEqual(1, len(proposal.relatedItems))
         self.assertEqual(document, proposal.relatedItems[0].to_object)
 
@@ -819,3 +840,121 @@ class TestProposal(FunctionalTestCase):
         browser.login(username='hugo.boss')
         with self.assertRaises(Unauthorized):
             browser.open(committee)
+
+    @browsing
+    def test_nonword_fields_visible_in_addform(self, browser):
+        """When the "word implementation" feature is not enabled,
+        the "old" trix fields should be visible.
+        """
+        create(Builder('committee_model').having(title=u'Baukomission'))
+        create(Builder('proposaltemplate').titled(u'Baugesuch')
+               .within(create(Builder('templatefolder').titled(u'Vorlagen'))))
+        dossier = create(
+            Builder('dossier').titled(u'D\xf6ssier')
+            .within(create(Builder('repository').titled(u'Stuff')
+                           .within(create(Builder('repository_root'))))))
+
+        browser.login().open(dossier)
+        factoriesmenu.add('Proposal')
+        expected = ('Legal basis',
+                    'Initial position',
+                    'Proposed action',
+                    'Decision draft',
+                    'Publish in',
+                    'Disclose to',
+                    'Copy for attention')
+        missing = tuple(set(expected) - set(browser.forms['form'].field_labels))
+        self.assertEquals((), missing)
+        self.assertNotIn('File', browser.forms['form'].field_labels)
+
+
+class TestProposalWithWord(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestProposalWithWord, self).setUp()
+        activate_meeting_word_implementation()
+
+    @browsing
+    def test_creating_proposal_from_proposal_template(self, browser):
+        create(Builder('committee_model').having(title=u'Baukomission'))
+        create(Builder('proposaltemplate').titled(u'Baugesuch')
+               .attach_file_containing('Word Content', u'file.docx')
+               .within(create(Builder('templatefolder').titled(u'Vorlagen'))))
+        dossier = create(
+            Builder('dossier').titled(u'D\xf6ssier')
+            .within(create(Builder('repository').titled(u'Stuff')
+                           .within(create(Builder('repository_root'))))))
+
+        browser.login().open(dossier)
+        factoriesmenu.add('Proposal')
+        browser.fill({'Title': u'Baugesuch Kreuzachkreisel',
+                      'Committee': u'Baukomission',
+                      'Proposal template': 'Baugesuch'}).save()
+        statusmessages.assert_no_error_messages()
+
+        proposal = browser.context
+        browser.open(proposal, view='tabbedview_view-overview')
+        self.assertEquals(
+            [['Title', u'Baugesuch Kreuzachkreisel'],
+             ['Committee', ''],
+             ['Meeting', ''],
+             ['State', 'Pending'],
+             ['Decision number', ''],
+             ['Proposal document',
+              'Proposal document Baugesuch Kreuzachkreisel']],
+            browser.css('table.listing').first.lists())
+
+        browser.click_on('Proposal document Baugesuch Kreuzachkreisel')
+        browser.open(browser.context, view='tabbedview_view-overview')
+        self.assertDictContainsSubset(
+            {'Title': u'Proposal document Baugesuch Kreuzachkreisel'},
+            dict(browser.css('table.listing').first.lists()))
+
+        self.assertEquals(
+            'Word Content',
+            proposal.get_proposal_document().file.open().read())
+
+    @browsing
+    def test_visible_fields_in_addform(self, browser):
+        """When the "word implementation" feature is enabled,
+        the "old" trix fields should disappear.
+        """
+        create(Builder('committee_model').having(title=u'Baukomission'))
+        create(Builder('proposaltemplate').titled(u'Baugesuch')
+               .within(create(Builder('templatefolder').titled(u'Vorlagen'))))
+        dossier = create(
+            Builder('dossier').titled(u'D\xf6ssier')
+            .within(create(Builder('repository').titled(u'Stuff')
+                           .within(create(Builder('repository_root'))))))
+
+        browser.login().open(dossier)
+        factoriesmenu.add('Proposal')
+        hidden = ('Legal basis',
+                  'Initial position',
+                  'Proposed action',
+                  'Decision draft',
+                  'Publish in',
+                  'Disclose to',
+                  'Copy for attention')
+        missing = tuple(set(hidden) - set(browser.forms['form'].field_labels))
+        self.assertItemsEqual(hidden, missing)
+
+    @browsing
+    def test_word_proposal_can_be_submitted(self, browser):
+        repo, repo_folder = create(Builder('repository_tree'))
+        dossier = create(Builder('dossier').within(repo_folder))
+        committee = create(Builder('committee'))
+        proposal = create(Builder('proposal')
+                          .within(dossier)
+                          .with_proposal_file('Fake proposal file body')
+                          .having(title='Mach doch',
+                                  committee=committee.load_model()))
+
+        browser.login().open(proposal, view='tabbedview_view-overview')
+        browser.css('#pending-submitted').first.click()
+        self.assertEqual(['Proposal successfully submitted.'], info_messages())
+
+        submitted_proposal = proposal.load_model().resolve_sumitted_proposal()
+        self.assertEquals(
+            'Fake proposal file body',
+            submitted_proposal.get_proposal_document().file.open().read())

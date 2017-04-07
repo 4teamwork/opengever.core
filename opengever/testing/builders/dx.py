@@ -7,6 +7,7 @@ from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.document.document import Document
 from opengever.globalindex.handlers.task import sync_task
 from opengever.mail.mail import OGMail
+from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.model import Period
 from opengever.meeting.proposal import Proposal
 from opengever.task.interfaces import ISuccessorTaskController
@@ -307,6 +308,11 @@ class ProposalBuilder(DexterityBuilder):
                           'language': TranslatedTitle.FALLBACK_LANGUAGE}
         self.model_arguments = None
         self._transition = None
+        self._proposal_file_data = 'file body'
+
+    def with_proposal_file(self, data):
+        self._proposal_file_data = data
+        return self
 
     def before_create(self):
         self.arguments, self.model_arguments = Proposal.partition_data(
@@ -317,6 +323,13 @@ class ProposalBuilder(DexterityBuilder):
 
         if self._transition:
             obj.execute_transition(self._transition)
+
+        if is_word_meeting_implementation_enabled():
+            obj.create_proposal_document(
+                filename='proposal_document.docx',
+                data=self._proposal_file_data,
+                content_type='application/vnd.openxmlformats'
+                '-officedocument.wordprocessingml.document')
 
         super(ProposalBuilder, self).after_create(obj)
 
@@ -460,5 +473,9 @@ builder_registry.register('disposition', DispositionBuilder)
 class ProposalTemplateBuilder(DocumentBuilder):
 
     portal_type = 'opengever.meeting.proposaltemplate'
+
+    def __init__(self, *args, **kwargs):
+        super(ProposalTemplateBuilder, self).__init__(*args, **kwargs)
+        self.with_dummy_content()
 
 builder_registry.register('proposaltemplate', ProposalTemplateBuilder)
