@@ -1,0 +1,14 @@
+<object name="portal_javascripts" meta_type="JavaScripts Registry">
+
+  <javascript
+      cacheable="True"
+      compression="none"
+      cookable="True"
+      enabled="on"
+      expression=""
+      id="++resource++opengever.base/ajax-prefilter.js"
+      inline="False"
+      insert-after="++resource++opengever.base/trix-custom.js"
+      />
+
+</object>
