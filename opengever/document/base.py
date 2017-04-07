@@ -6,6 +6,13 @@ from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.inbox.inbox import IInbox
 from opengever.task.task import ITask
 from plone import api
+from plone.dexterity.content import Item
+from Products.CMFCore.utils import getToolByName
+from Products.MimetypesRegistry.common import MimeTypeException
+import logging
+
+
+LOG = logging.getLogger('opengever.document')
 
 
 class BaseDocumentMixin(object):
@@ -65,3 +72,51 @@ class BaseDocumentMixin(object):
 
     def get_filename(self):
         raise NotImplementedError
+
+    def surrender(self, relative_to_portal=1):
+        return Item.getIcon(self, relative_to_portal=relative_to_portal)
+
+    def get_mimetype_icon(self, relative_to_portal=1):
+        """Calculate the icon using the mime type of the file
+        """
+        utool = getToolByName(self, 'portal_url')
+
+        mimetypeitem = self.get_mimetype()
+        if not mimetypeitem:
+            return self.surrender(relative_to_portal)
+
+        icon = mimetypeitem[0].icon_path
+
+        if relative_to_portal:
+            return icon
+        else:
+            # Relative to REQUEST['BASEPATH1']
+            res = utool(relative=1) + '/' + icon
+            while res[:1] == '/':
+                res = res[1:]
+            return res
+
+    def get_mimetype(self):
+        """Return the mimetype as object. If there is no matching mimetype,
+           it returns False.
+        """
+        mtr = getToolByName(self, 'mimetypes_registry', None)
+
+        field = self.file
+        if not field or not field.getSize():
+            # there is no file
+            return False
+
+        # get icon by content type
+        contenttype = field.contentType
+        mimetypeitem = None
+        try:
+            mimetypeitem = mtr.lookup(contenttype)
+        except MimeTypeException, msg:
+            LOG.error(
+                'MimeTypeException for %s. Error is: %s' % (
+                    self.absolute_url(), str(msg)))
+        if not mimetypeitem:
+            # not found
+            return False
+        return mimetypeitem
