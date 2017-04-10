@@ -46,7 +46,7 @@ class TestDossierJournalPDFView(MockTestCase):
             dossierjournal.IDossierJournalLayer.providedBy(request))
 
 
-class TestDossierListingLaTeXView(FunctionalTestCase):
+class TestJournalListingLaTeXView(FunctionalTestCase):
 
     @browsing
     def test_journal_label(self, browser):

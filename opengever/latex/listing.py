@@ -299,12 +299,12 @@ class JournalLaTeXListing(LaTexListing):
             Column('time',
                    journal_mf('label_time', default=u'Time'),
                    '10%',
-                   lambda brain: helper.readable_date_time(brain, brain.get('time'))),
+                   lambda item: helper.readable_date_time(item, item.get('time'))),
 
             Column('title',
                    journal_mf('label_title', default=u'Title'),
                    '45%',
-                   lambda brain: title_helper(brain, brain['action'].get('title'))),
+                   lambda item: title_helper(item, item['action'].get('title'))),
 
             Column('actor',
                    journal_mf('label_actor', default=u'Changed by'),
