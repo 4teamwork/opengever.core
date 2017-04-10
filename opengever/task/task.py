@@ -15,6 +15,7 @@ from opengever.dossier.utils import get_containing_dossier
 from opengever.globalindex.model.task import Task as TaskModel
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
+from opengever.ogds.base.autocomplete_widget import AutocompleteMultiFieldWidget
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
@@ -208,6 +209,20 @@ class ITask(form.Schema):
 validator.WidgetValidatorDiscriminators(
     NoCheckedoutDocsValidator, field=ITask['relatedItems'])
 provideAdapter(NoCheckedoutDocsValidator)
+
+
+class IAddTaskSchema(ITask):
+
+    form.widget(responsible=AutocompleteMultiFieldWidget)
+    responsible = schema.List(
+        title=_(u"label_responsible", default=u"Responsible"),
+        description=_(u"help_responsible", default=""),
+        value_type=schema.Choice(
+            vocabulary=u'opengever.ogds.base.UsersAndInboxesVocabulary'),
+        required=True,
+        missing_value=[],
+        default=[]
+        )
 
 
 class Task(Container):

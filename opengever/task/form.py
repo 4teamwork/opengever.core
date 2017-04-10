@@ -23,6 +23,10 @@ REASSIGN_TRANSITION = 'task-transition-reassign'
 class TaskAddForm(dexterity.AddForm):
     grok.name('opengever.task.task')
 
+    @property
+    def schema(self):
+        return IAddTaskSchema
+
     def update(self):
         # put default value for relatedItems into request
         paths = self.request.get('paths', [])
