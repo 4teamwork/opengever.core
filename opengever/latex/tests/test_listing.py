@@ -308,6 +308,19 @@ class TestJournalListings(BaseLatexListingTest):
          'comments': '',
          'actor': 'peter.mueller',
          'time': DateTime(2016, 4, 25, 10, 0)},
+        {'action': {'visible': False,
+                    'type': 'Dossier modified',
+                    'title': u'label_dossier_modified'},
+         'comments': 'Lorem ipsum',
+         'actor': 'peter.mueller',
+         'time': DateTime(2016, 4, 25, 10, 0)},
+
+        {'action': {'visible': True,
+                    'type': 'Document Sent',
+                    'title': u'label_document_sent'},
+         'actor': 'test_user_1_',
+         'comments': 'Attachments: sample ...',
+         'time': DateTime('2016/04/12 11:35:00 GMT+2')}
     ]
 
     def setUp(self):
@@ -351,3 +364,21 @@ class TestJournalListings(BaseLatexListingTest):
                           rows[0].xpath(CSSSelector('td').path)[0].text)
         self.assertEquals('12.04.2016 12:10',
                           rows[1].xpath(CSSSelector('td').path)[0].text)
+
+    def test_comment_is_included(self):
+        table = lxml.html.fromstring(self.listing.template())
+        rows = table.xpath(CSSSelector('tbody tr').path)
+
+        self.assertEquals('Lorem ipsum',
+                          rows[3].xpath(CSSSelector('td').path)[3].text)
+
+    def test_document_sent_comments_are_skipped(self):
+        table = lxml.html.fromstring(self.listing.template())
+        rows = table.xpath(CSSSelector('tbody tr').path)
+
+        document_sent_row = rows[4]
+        self.assertEquals(
+            'label_document_sent',
+            document_sent_row.xpath(CSSSelector('td').path)[1].text)
+        self.assertIsNone(
+            document_sent_row.xpath(CSSSelector('td').path)[3].text)
