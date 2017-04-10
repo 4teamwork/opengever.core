@@ -1,14 +1,18 @@
+from copy import deepcopy
 from five import grok
 from opengever.ogds.base.utils import ogds_service
 from opengever.task import _
 from opengever.task.activities import TaskAddedActivity
 from opengever.task.activities import TaskReassignActivity
+from opengever.task.task import IAddTaskSchema
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
 from opengever.task.util import update_reponsible_field_data
 from plone.directives import dexterity
 from z3c.form.interfaces import HIDDEN_MODE
 from zope.component import getMultiAdapter
+from zope.event import notify
+from zope.lifecycleevent import ObjectCreatedEvent
 
 
 REASSIGN_TRANSITION = 'task-transition-reassign'
@@ -23,9 +27,13 @@ REASSIGN_TRANSITION = 'task-transition-reassign'
 class TaskAddForm(dexterity.AddForm):
     grok.name('opengever.task.task')
 
+    def __init__(self, *args, **kwargs):
+        super(TaskAddForm, self).__init__(*args, **kwargs)
+        self.instance_schema = IAddTaskSchema
+
     @property
     def schema(self):
-        return IAddTaskSchema
+        return self.instance_schema
 
     def update(self):
         # put default value for relatedItems into request
@@ -48,9 +56,33 @@ class TaskAddForm(dexterity.AddForm):
                 u"help_responsible_single_client_setup", default=u"")
 
     def createAndAdd(self, data):
-        update_reponsible_field_data(data)
+        created = []
+        if isinstance(data['responsible'], basestring):
+            data['responsible'] = [data['responsible']]
 
-        task = super(TaskAddForm, self).createAndAdd(data=data)
+        for responsible in data['responsible']:
+            task_payload = deepcopy(data)
+            task_payload['responsible'] = responsible
+            update_reponsible_field_data(task_payload)
+
+            created.append(self._create_task(task_payload))
+
+        self._set_immediate_view()
+        return created
+
+    def _create_task(self, task_payload):
+
+        view = self.context.restrictedTraverse('++add++opengever.task.task')
+        task_form = view.form_instance
+        task_form.instance_schema = ITask
+
+        task_form.updateFieldsFromSchemata()
+        task_form.updateWidgets()
+
+        task = task_form.create(task_payload)
+        notify(ObjectCreatedEvent(task))
+        task_form.add(task)
+
         activity = TaskAddedActivity(task, self.request, self.context)
         activity.record()
         return task

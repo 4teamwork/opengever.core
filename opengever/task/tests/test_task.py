@@ -269,6 +269,60 @@ class TestTaskIntegration(FunctionalTestCase):
             task.responsible,
             'The user should be stored after submitting the form')
 
+    @browsing
+    def test_create_a_task_for_every_selected_person_with_multiple_orgunits(self, browser):
+        client2 = create(Builder('org_unit')
+                         .with_default_groups()
+                         .id('client2')
+                         .having(title='Client2',
+                                 admin_unit=self.admin_unit))
+        user = create(Builder('ogds_user')
+                      .assign_to_org_units([client2])
+                      .having(userid='some.user'))
+
+        dossier = create(Builder('dossier'))
+
+        responsible_users = [
+            self.get_org_unit().id() + ':' + TEST_USER_ID,
+            client2.id() + ':' + user.userid
+        ]
+
+        browser.login().visit(dossier)
+        factoriesmenu.add('Task')
+        browser.fill({'Title': 'Task title',
+                      'Task Type': 'To comment',
+                      'Responsible': responsible_users})
+        browser.find('Save').click()
+
+        tasks = dossier.objectValues()
+        self.assertEquals(2, len(tasks), 'Expect 2 tasks')
+        self.assertEquals(TEST_USER_ID, tasks[0].responsible)
+        self.assertEquals(user.userid, tasks[1].responsible)
+
+    @browsing
+    def test_create_a_task_for_every_selected_person_with_one_orgunit(self, browser):
+        user = create(Builder('ogds_user')
+                      .assign_to_org_units([self.org_unit])
+                      .having(userid='some.user'))
+
+        dossier = create(Builder('dossier'))
+
+        responsible_users = [
+            TEST_USER_ID,
+            user.userid
+        ]
+
+        browser.login().visit(dossier)
+        factoriesmenu.add('Task')
+        browser.fill({'Title': 'Task title',
+                      'Task Type': 'To comment',
+                      'Responsible': responsible_users})
+        browser.find('Save').click()
+
+        tasks = dossier.objectValues()
+        self.assertEquals(2, len(tasks), 'Expect 2 tasks')
+        self.assertEquals(TEST_USER_ID, tasks[0].responsible)
+        self.assertEquals(user.userid, tasks[1].responsible)
 
 
 class TestDossierSequenceNumber(FunctionalTestCase):
