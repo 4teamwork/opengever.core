@@ -8,9 +8,11 @@ from opengever.task.task import IAddTaskSchema
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
 from opengever.task.util import update_reponsible_field_data
+from plone.dexterity.interfaces import IDexterityFTI
 from plone.directives import dexterity
 from z3c.form.interfaces import HIDDEN_MODE
 from zope.component import getMultiAdapter
+from zope.component import getUtility
 from zope.event import notify
 from zope.lifecycleevent import ObjectCreatedEvent
 
@@ -67,7 +69,7 @@ class TaskAddForm(dexterity.AddForm):
 
             created.append(self._create_task(task_payload))
 
-        self._set_immediate_view()
+        self._set_immediate_view(created)
         return created
 
     def _create_task(self, task_payload):
@@ -86,6 +88,31 @@ class TaskAddForm(dexterity.AddForm):
         activity = TaskAddedActivity(task, self.request, self.context)
         activity.record()
         return task
+
+    def _set_immediate_view(self, created):
+        """The default behavior implemented by the dexterity add form is
+        circumvented by this form. If there's only one task the immediate_view
+        of the task fti is respected. If there is more than one task, a
+        differen TaskRedirector implementation is used."""
+
+        if len(created) == 1:
+            task = created[0]
+            fti = getUtility(IDexterityFTI, name=self.portal_type)
+            if fti.immediate_view:
+                self.immediate_view = "{0}/{1}/{2}".format(
+                    self.context.absolute_url(),
+                    task.id, fti.immediate_view,)
+            else:
+                self.immediate_view = "{0}/{1}".format(
+                    self.context.absolute_url(),
+                    task.id)
+        else:
+            if ITask.providedBy(self.context):
+                redirect_to = '{0}#overview'.format(self.context.absolute_url())
+            else:
+                redirect_to = '{0}#tasks'.format(self.context.absolute_url())
+    
+            self.immediate_view = redirect_to
 
 
 class TaskEditForm(dexterity.EditForm):
