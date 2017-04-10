@@ -1,7 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.base.model import create_session
-from opengever.contact.models import MailAddress
 from opengever.contact.models import Organization
 from opengever.contact.models import OrgRole
 from opengever.contact.models import Person
@@ -195,8 +194,8 @@ class TestMailSyncer(SyncerBaseTest):
                               .having(name=u'Meier AG',
                                       former_contact_id=2344))
 
-        syncer = MailSyncer(self.source_db, 'SELECT * from mails')
-        syncer()
+        MailSyncer(self.source_db, 'SELECT * from mails')()
+        transaction.commit()
 
         organization = Organization.query.first()
         self.assertEquals(2, len(organization.mail_addresses))
@@ -206,9 +205,6 @@ class TestMailSyncer(SyncerBaseTest):
         self.assertEquals(
             [u'foo@example.com', u'bar@example.com'],
             [mail.address for mail in organization.mail_addresses])
-
-        self.assertEqual(2, syncer.stats.get('added'))
-        self.assertEqual(0, syncer.stats.get('updated'))
 
     def test_updates_existing_mailaddresses_properly_by_label(self):
         org_1 = create(Builder('organization')
@@ -225,22 +221,19 @@ class TestMailSyncer(SyncerBaseTest):
                .having(label=u'E-Mail (gesch\xe4ftlich)',
                        address=u'james@example.com'))
 
-        syncer = MailSyncer(self.source_db, 'SELECT * from mails')
-        syncer()
+        MailSyncer(self.source_db, 'SELECT * from mails')()
+        transaction.commit()
 
-        self.assertEquals(3, MailAddress.query.count())
+        org_1, org_2 = Organization.query.all()
+        self.assertEquals(2, len(org_1.mail_addresses))
+        self.assertEquals(1, len(org_2.mail_addresses))
 
-        organization = Organization.query.first()
-        self.assertEquals(2, len(organization.mail_addresses))
         self.assertEquals(
             [u'E-Mail (privat)', u'E-Mail (gesch\xe4ftlich)'],
-            [mail.label for mail in organization.mail_addresses])
+            [mail.label for mail in org_1.mail_addresses])
         self.assertEquals(
             [u'bar@example.com', u'foo@example.com'],
-            [mail.address for mail in organization.mail_addresses])
-
-        self.assertEqual(1, syncer.stats.get('added'))
-        self.assertEqual(1, syncer.stats.get('updated'))
+            [mail.address for mail in org_1.mail_addresses])
 
 
 class TestURLSyncer(SyncerBaseTest):
@@ -251,9 +244,18 @@ class TestURLSyncer(SyncerBaseTest):
                    {u'former_contact_id': 2344,
                     u'url': u'http://www.website.example.com',
                     u'label': u'Website'},
-                   {u'former_contact_id': 2344,
+                   {u'former_contact_id': 30,
                     u'url': u'https://intern.example.com',
                     u'label': u'Intranet'}]
+
+    def setUp(self):
+        super(TestURLSyncer, self).setUp()
+        self.org1 = create(Builder('organization')
+                           .having(name=u'Meier AG',
+                                   former_contact_id=2344))
+        self.org1 = create(Builder('organization')
+                           .having(name=u'Example AG',
+                                   former_contact_id=30))
 
     def create_source_db(self):
         self.source_table = Table("urls",
@@ -264,44 +266,37 @@ class TestURLSyncer(SyncerBaseTest):
         self.source_table.create()
 
     def test_add_urls_properly_while_syncing(self):
-        organization = create(Builder('organization')
-                              .having(name=u'Meier AG',
-                                      former_contact_id=2344))
-
         UrlSyncer(self.source_db, 'SELECT * from urls')()
 
-        organization = Organization.query.first()
-        self.assertEquals(3, len(organization.urls))
+        org1, org2 = Organization.query.all()
         self.assertEquals(
-            [u'Shop', u'Website', u'Intranet'],
-            [url.label for url in organization.urls])
+            [u'Shop', u'Website'], [url.label for url in org1.urls])
         self.assertEquals(
             [u'http://www.shop.example.com',
-             u'http://www.website.example.com',
-             u'https://intern.example.com'],
-            [url.url for url in organization.urls])
+             u'http://www.website.example.com'],
+            [url.url for url in org1.urls])
+
+        self.assertEquals(
+            [u'Intranet'], [url.label for url in org2.urls])
+        self.assertEquals(
+            [u'https://intern.example.com'],
+            [url.url for url in org2.urls])
 
     def test_updates_existing_urls_properly_by_label(self):
-        organization = create(Builder('organization')
-                              .having(name=u'Meier AG',
-                                      former_contact_id=2344))
         create(Builder('url')
-               .for_contact(organization)
+               .for_contact(self.org1)
                .having(label=u'Shop',
                        url=u'http://www.old_shop.example.com'))
 
         UrlSyncer(self.source_db, 'SELECT * from urls')()
 
-        organization = Organization.query.first()
-        self.assertEquals(3, len(organization.urls))
+        org1, org2 = Organization.query.all()
         self.assertEquals(
-            [u'Shop', u'Website', u'Intranet'],
-            [url.label for url in organization.urls])
+            [u'Shop', u'Website'], [url.label for url in org1.urls])
         self.assertEquals(
             [u'http://www.shop.example.com',
-             u'http://www.website.example.com',
-             u'https://intern.example.com'],
-            [url.url for url in organization.urls])
+             u'http://www.website.example.com'],
+            [url.url for url in org1.urls])
 
 
 class TestPhoneNumberSyncer(SyncerBaseTest):
@@ -412,8 +407,8 @@ class TestAddressSyncer(SyncerBaseTest):
                .labeled(u'Hauptsitz')
                .having(street=u'Dammweg 9', zip_code=u'3013', city=u'Bern'))
 
-        syncer = AddressSyncer(self.source_db, 'SELECT * from addresses')
-        syncer()
+        AddressSyncer(self.source_db, 'SELECT * from addresses')()
+        transaction.commit()
 
         organization = Organization.query.first()
         self.assertEquals(2, len(organization.addresses))
@@ -425,28 +420,25 @@ class TestAddressSyncer(SyncerBaseTest):
             [u'Teststrasse 1', u'Rue de Lausanne'],
             [address.street for address in organization.addresses])
 
-        self.assertEquals(1, syncer.stats.get('updated'))
-        self.assertEquals(1, syncer.stats.get('added'))
-
 
 class TestOrganizationRoleSyncer(SyncerBaseTest):
 
     SAMPLE_DATA = [{u'person_id': 1111,
-                    u'organisation_id': 2222,
+                    u'organization_id': 2222,
                     u'function': u'Leitung'},
                    {u'person_id': 3333,
-                    u'organisation_id': 2222,
+                    u'organization_id': 2222,
                     u'function': u'Vorsteher'}]
 
     def create_source_db(self):
         self.source_table = Table("orgroles",
                                   self.source_metadata,
                                   Column("person_id", Integer),
-                                  Column("organisation_id", String),
+                                  Column("organization_id", Integer),
                                   Column("function", String))
         self.source_table.create()
 
-    def test_add_addresses_properly_while_syncing(self):
+    def test_add_organization_roles_properly_while_syncing(self):
         create(Builder('organization')
                .having(name=u'Meier AG', former_contact_id=2222))
 
@@ -458,6 +450,7 @@ class TestOrganizationRoleSyncer(SyncerBaseTest):
                        former_contact_id=3333))
 
         OrgRoleSyncer(self.source_db, 'SELECT * from orgroles')()
+        transaction.commit()
 
         org_roles = Organization.query.first().persons
         self.assertEquals([u'Leitung', u'Vorsteher'],
@@ -465,23 +458,26 @@ class TestOrganizationRoleSyncer(SyncerBaseTest):
         self.assertEquals(['Peter', 'James'],
                           [role.person.firstname for role in org_roles])
 
-    def test_does_not_remove_existing_org_roles(self):
-        organization = create(Builder('organization')
-                              .having(name=u'Meier AG',
-                                      former_contact_id=2222))
+    def test_update_existing_organization_roles(self):
+        org1 = create(Builder('organization')
+                      .having(name=u'Meier AG',
+                              former_contact_id=2222))
+        org2 = create(Builder('organization')
+                      .having(name=u'Search AG',
+                              former_contact_id=4444))
 
-        create(Builder('person')
-               .having(lastname=u'Meier', firstname=u'Peter',
-                       former_contact_id=1111))
+        peter = create(Builder('person')
+                       .having(lastname=u'Meier', firstname=u'Peter',
+                               former_contact_id=1111))
         create(Builder('person')
                .having(lastname=u'Bond', firstname=u'James',
                        former_contact_id=3333))
 
-        # existing OrgRole
-        hans = create(Builder('person')
-                      .having(lastname=u'Hans', firstname=u'Muster'))
         create(Builder('org_role')
-               .having(person=hans, organization=organization))
+               .having(person=peter, organization=org1,
+                       function='Stellv. Leitung'))
 
         OrgRoleSyncer(self.source_db, 'SELECT * from orgroles')()
-        self.assertEquals(3, OrgRole.query.count())
+        self.assertEquals(2, OrgRole.query.count())
+        self.assertEquals([u'Leitung', u'Vorsteher'],
+                          [aa.function for aa in OrgRole.query])
