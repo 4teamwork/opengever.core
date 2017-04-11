@@ -120,6 +120,7 @@ class OfficeConnectorAttachPayload(OfficeConnectorPayload):
         if parent_dossier and parent_dossier.is_open():
             payload['bcc'] = IEmailAddress(
                 self.request).get_email_for_object(parent_dossier)
+        payload['title'] = self.document.title_or_id()
 
         notify(FileAttachedToEmailEvent(self.document))
 

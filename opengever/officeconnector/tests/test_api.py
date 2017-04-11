@@ -232,6 +232,10 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
             self.request).get_email_for_object(self.open_dossier)
         self.assertEquals(bcc, payload['bcc'])
 
+        self.assertIn('title', payload)
+        self.assertEquals(
+            self.doc_with_file_wf_open.title_or_id(), payload['title'])
+
         # Test there is also a journal entry from the attach action
         browser.login()
         browser.open(self.doc_with_file_wf_open, view='tabbedview_view-journal') # noqa
@@ -253,6 +257,10 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
 
         self.assertNotIn('bcc', payload)
 
+        self.assertIn('title', payload)
+        self.assertEquals(
+            self.doc_with_file_wf_resolved.title_or_id(), payload['title'])
+
         # Test there is also a journal entry from the attach action
         browser.login()
         browser.open(self.doc_with_file_wf_resolved, view='tabbedview_view-journal') # noqa
@@ -273,6 +281,10 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
         payload = response.json()
 
         self.assertNotIn('bcc', payload)
+
+        self.assertIn('title', payload)
+        self.assertEquals(
+            self.doc_with_file_wf_inactive.title_or_id(), payload['title'])
 
         # Test there is also a journal entry from the attach action
         browser.login()
