@@ -25,8 +25,10 @@ class DossierCoverPDFView(grok.View, ExportPDFView):
     grok.context(IDossierMarker)
     grok.require('zope2.View')
 
+    request_layer = IDossierCoverLayer
+
     def render(self):
-        provide_request_layer(self.request, IDossierCoverLayer)
+        provide_request_layer(self.request, self.request_layer)
 
         return ExportPDFView.__call__(self)
 
