@@ -4,11 +4,13 @@ from opengever.ogds.base.Extensions.plugins import activate_request_layer
 from opengever.ogds.base.interfaces import IInternalOpengeverRequestLayer
 from opengever.task.adapters import IResponseContainer
 from opengever.task.interfaces import ICommentResponseSyncerSender
+from opengever.task.interfaces import IModifyDeadlineResponseSyncerSender
 from opengever.task.interfaces import IResponseSyncerSender
 from opengever.task.interfaces import IWorkflowResponseSyncerSender
 from opengever.task.syncer import BaseResponseSyncerReceiver
 from opengever.task.syncer import BaseResponseSyncerSender
 from opengever.task.syncer import CommentResponseSyncerSender
+from opengever.task.syncer import ModifyDeadlineResponseSyncerSender
 from opengever.task.syncer import ResponseSyncerSenderException
 from opengever.task.syncer import WorkflowResponseSyncerSender
 from opengever.testing import FunctionalTestCase
@@ -17,6 +19,7 @@ from plone.app.testing import TEST_USER_ID
 from zExceptions import Forbidden
 from zope.component import getMultiAdapter
 from zope.interface.verify import verifyClass
+import datetime
 
 
 class MockDispatchRequest(object):
@@ -226,6 +229,36 @@ class TestWorkflowResponseSyncerSender(FunctionalTestCase):
         self.assertEqual([], sender.get_related_tasks_to_sync(successor))
 
 
+class TestModifyDeadlineResponseSyncerSender(FunctionalTestCase):
+
+    def test_verify_interfaces(self):
+        verifyClass(IModifyDeadlineResponseSyncerSender, ModifyDeadlineResponseSyncerSender)
+
+    def test_raises_sync_exception_raises_modify_deadline_specific_exception_message(self):
+        predecessor = create(Builder('task').in_state('task-state-resolved'))
+
+        sender = ModifyDeadlineResponseSyncerSender(object(), self.request)
+
+        with self.assertRaises(ResponseSyncerSenderException) as exception:
+            sender.raise_sync_exception(
+                predecessor.get_sql_object(),
+                'modify-deadline-transition', 'some text')
+
+        self.assertEqual(
+            'Updating deadline on remote client client1. failed (task-1)',
+            str(exception.exception))
+
+    def test_extend_payload_safes_the_deadline_ordinal_number(self):
+        sender = ModifyDeadlineResponseSyncerSender(object(), self.request)
+
+        new_deadline = datetime.date(2013, 1, 1)
+
+        payload = {}
+        sender.extend_payload(payload, object(), new_deadline=new_deadline)
+
+        self.assertEqual({'new_deadline': new_deadline.toordinal()}, payload)
+
+
 class TestBaseResponseSyncerReceiver(FunctionalTestCase):
 
     def prepare_request(self, task, **kwargs):
@@ -319,6 +352,53 @@ class TestWorkflowSyncerReceiver(FunctionalTestCase):
         self.assertEquals('hugo.boss', task.responsible)
 
 
+class TestModifyDeadlineSyncerReceiver(FunctionalTestCase):
+
+    RECEIVER_VIEW_NAME = '@@sync-task-modify-deadline-response'
+
+    def prepare_request(self, task, **kwargs):
+        for key, value in kwargs.items():
+            task.REQUEST.set(key, value)
+
+        activate_request_layer(task.REQUEST, IInternalOpengeverRequestLayer)
+
+    def test_changes_task_deadline(self):
+        task = create(Builder('task')
+                      .having(issuer=TEST_USER_ID,
+                              deadline=datetime.date(2013, 1, 1)))
+
+        self.prepare_request(task, text=u'I am done!',
+                             transition='task-transition-modify-deadline',
+                             new_deadline=datetime.date(2013, 10, 1).toordinal())
+
+        task.unrestrictedTraverse(self.RECEIVER_VIEW_NAME)()
+
+        self.assertEquals(task.deadline, datetime.date(2013, 10, 1))
+
+    def test_according_response_is_added_when_modify_deadline(self):
+        task = create(Builder('task')
+                      .having(issuer=TEST_USER_ID,
+                              deadline=datetime.date(2013, 1, 1)))
+
+        self.prepare_request(task, text=u'Lorem Ipsum',
+                             transition='task-transition-modify-deadline',
+                             new_deadline=datetime.date(2013, 10, 1).toordinal())
+
+        task.unrestrictedTraverse(self.RECEIVER_VIEW_NAME)()
+
+        container = IResponseContainer(task)
+        response = container[-1]
+
+        self.assertEquals('Lorem Ipsum', response.text)
+        self.assertEquals(TEST_USER_ID, response.creator)
+        self.assertEquals(
+            [{'after': datetime.date(2013, 10, 1),
+              'id': 'deadline',
+              'name': u'label_deadline',
+              'before': datetime.date(2013, 1, 1)}],
+            response.changes)
+
+
 class TestCommentSyncer(FunctionalTestCase):
 
     def setUp(self):
@@ -396,3 +476,37 @@ class TestWorkflowSyncer(FunctionalTestCase):
 
         self.assertEquals('task-state-in-progress',
                           api.content.get_state(successor))
+
+
+class TestModifyDeadlineSyncer(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestModifyDeadlineSyncer, self).setUp()
+        activate_request_layer(self.portal.REQUEST,
+                               IInternalOpengeverRequestLayer)
+
+    def test_sync_deadline_modification_on_successor_to_predecessor(self):
+        predecessor = create(Builder('task').having(deadline=datetime.date(2013, 1, 1)))
+        successor = create(Builder('task').successor_from(predecessor))
+
+        sender = ModifyDeadlineResponseSyncerSender(successor, self.request)
+        sender.sync_related_tasks(
+            'task-transition-modify-deadline',
+            text=u'New deadline',
+            new_deadline=datetime.date(2013, 10, 1))
+
+        self.assertEquals(predecessor.deadline, datetime.date(2013, 10, 1))
+
+    def test_sync_deadline_modification_on_predecessor_to_successor(self):
+        predecessor = create(Builder('task').in_state('task-state-resolved'))
+        successor = create(Builder('task')
+                           .having(deadline=datetime.date(2013, 1, 1))
+                           .successor_from(predecessor))
+
+        sender = ModifyDeadlineResponseSyncerSender(predecessor, self.request)
+        sender.sync_related_tasks(
+            'task-transition-modify-deadline',
+            text=u'New deadline',
+            new_deadline=datetime.date(2013, 10, 1))
+
+        self.assertEquals(successor.deadline, datetime.date(2013, 10, 1))

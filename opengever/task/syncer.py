@@ -1,9 +1,12 @@
+from datetime import date
 from opengever.base.request import dispatch_request
 from opengever.base.utils import ok_response
 from opengever.ogds.base.interfaces import IInternalOpengeverRequestLayer
 from opengever.task import _
 from opengever.task.adapters import IResponseContainer
 from opengever.task.interfaces import ICommentResponseSyncerSender
+from opengever.task.interfaces import IDeadlineModifier
+from opengever.task.interfaces import IModifyDeadlineResponseSyncerSender
 from opengever.task.interfaces import IResponseSyncerSender
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.interfaces import IWorkflowResponseSyncerSender
@@ -116,6 +119,22 @@ class WorkflowResponseSyncerSender(BaseResponseSyncerSender):
             ]
 
 
+class ModifyDeadlineResponseSyncerSender(BaseResponseSyncerSender):
+    implements(IModifyDeadlineResponseSyncerSender)
+
+    TARGET_SYNC_VIEW_NAME = '@@sync-task-modify-deadline-response'
+
+    def raise_sync_exception(self, task, transition, text, **kwargs):
+        raise ResponseSyncerSenderException(
+            'Updating deadline on remote client {}. failed ({})'.format(
+                task.admin_unit_id,
+                task.physical_path))
+
+    def extend_payload(self, payload, task, **kwargs):
+        kwargs['new_deadline'] = kwargs['new_deadline'].toordinal()
+        super(ModifyDeadlineResponseSyncerSender, self).extend_payload(payload, task, **kwargs)
+
+
 class BaseResponseSyncerReceiver(BrowserView):
     """Abstract ResponseSyncerReceiver view for receiving requests from a
     ResponseSyncerSender and updates the current task with the received data
@@ -218,3 +237,18 @@ class WorkflowResponseSyncerReceiver(BaseResponseSyncerReceiver):
 
         response.add_change('review_state', _(u'Issue state'),
                             before, after)
+
+
+class ModifyDeadlineResponseSyncerReceiver(BaseResponseSyncerReceiver):
+    """This view receives a sync-task-modify-deadline-response request from another
+    client after a successor or predecessor has changed the deadline.
+    """
+
+    def _update(self, transition, text):
+        new_deadline = self.request.get('new_deadline', None)
+        new_deadline = date.fromordinal(int(new_deadline))
+        text = self.request.get('text', u'')
+        transition = self.request.get('transition')
+
+        IDeadlineModifier(self.context).update_deadline(
+            new_deadline, text, transition)

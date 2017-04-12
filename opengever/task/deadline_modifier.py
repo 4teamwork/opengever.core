@@ -1,12 +1,11 @@
 from five import grok
-from opengever.base.request import dispatch_request
 from opengever.task.browser.transitioncontroller import get_checker
 from opengever.task.interfaces import IDeadlineModifier
-from opengever.task.interfaces import ISuccessorTaskController
+from opengever.task.interfaces import IModifyDeadlineResponseSyncerSender
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
-from Products.CMFDiffTool.utils import safe_utf8
 from zExceptions import Unauthorized
+from zope.component import getMultiAdapter
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
 
@@ -61,19 +60,6 @@ class DeadlineModifier(grok.Adapter):
         notify(ObjectModifiedEvent(self.context))
 
     def sync_deadline(self, new_deadline, text, transition):
-        sct = ISuccessorTaskController(self.context)
-        for successor in sct.get_successors():
-
-            response = dispatch_request(
-                successor.admin_unit_id,
-                '@@remote_deadline_modifier',
-                successor.physical_path,
-                data={
-                    'new_deadline': new_deadline.toordinal(),
-                    'text': safe_utf8(text),
-                    'transition': transition})
-
-            if response.read().strip() != 'OK':
-                raise Exception(
-                    'Updating deadline on remote client %s. failed (%s)' % (
-                        successor.admin_unit_id, response.read()))
+        sender = getMultiAdapter((self.context, self.context.REQUEST),
+                                 IModifyDeadlineResponseSyncerSender)
+        sender.sync_related_tasks(transition, text, new_deadline=new_deadline)

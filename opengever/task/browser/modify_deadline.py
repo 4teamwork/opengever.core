@@ -1,7 +1,5 @@
-from datetime import date
 from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
-from opengever.base.utils import ok_response
 from opengever.task import _
 from opengever.task.interfaces import IDeadlineModifier
 from opengever.task.task import ITask
@@ -100,20 +98,3 @@ class ModifyDeadlineFormView(layout.FormWrapper, grok.View):
         grok.View.__init__(self, *args, **kwargs)
 
     __call__ = layout.FormWrapper.__call__
-
-
-class RemoteDeadlineModifier(grok.View):
-    grok.context(ITask)
-    grok.name('remote_deadline_modifier')
-    # grok.require('zope.Public')
-
-    def render(self):
-        new_deadline = self.request.get('new_deadline', None)
-        new_deadline = date.fromordinal(int(new_deadline))
-        text = self.request.get('text', u'')
-        transition = self.request.get('transition')
-
-        IDeadlineModifier(self.context).update_deadline(
-            new_deadline, text, transition)
-
-        return ok_response()

@@ -122,6 +122,12 @@ class IWorkflowResponseSyncerSender(IResponseSyncerSender):
     """
 
 
+class IModifyDeadlineResponseSyncerSender(IResponseSyncerSender):
+    """Handles the syncing process for task responses including deadline
+    changes between tasks on different admin-units.different
+    """
+
+
 class ITaskDocumentsTransporter(Interface):
     """Utility for transporting documents related to a task.
     """

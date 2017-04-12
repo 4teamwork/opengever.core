@@ -67,6 +67,13 @@
       class=".syncer.WorkflowResponseSyncerReceiver"
       />
 
+  <browser:page
+      name="sync-task-modify-deadline-response"
+      for="opengever.task.task.ITask"
+      permission="zope.Public"
+      class=".syncer.ModifyDeadlineResponseSyncerReceiver"
+      />
+
   <adapter
       factory=".syncer.CommentResponseSyncerSender"
       for="opengever.task.task.ITask *"
@@ -77,6 +84,12 @@
       factory=".syncer.WorkflowResponseSyncerSender"
       for="opengever.task.task.ITask *"
       provides="opengever.task.interfaces.IWorkflowResponseSyncerSender"
+      />
+
+  <adapter
+      factory=".syncer.ModifyDeadlineResponseSyncerSender"
+      for="opengever.task.task.ITask *"
+      provides="opengever.task.interfaces.IModifyDeadlineResponseSyncerSender"
       />
 
   <adapter
