@@ -1,0 +1,15 @@
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="portal_actions" meta_type="Plone Actions Tool">
+  <object name="object_buttons" meta_type="CMF Action Category">
+
+    <object name="pdf_dossierdetails" meta_type="CMF Action" i18n:domain="opengever.latex">
+      <property name="available_expr">python:here.restrictedTraverse('@@plone_interface_info').provides('opengever.dossier.behaviors.dossier.IDossierMarker') and not here.restrictedTraverse('@@plone_interface_info').provides('opengever.dossier.templatefolder.ITemplateFolder') and not
+      here.restrictedTraverse('@@plone_interface_info').provides('opengever.private.dossier.IPrivateDossier')</property>
+    </object>
+
+    <object name="export_pdf" meta_type="CMF Action" i18n:domain="opengever.latex">
+      <property name="available_expr">python:here.restrictedTraverse('@@plone_interface_info').provides('opengever.dossier.behaviors.dossier.IDossierMarker') and not here.restrictedTraverse('@@plone_interface_info').provides('opengever.dossier.templatefolder.ITemplateFolder') and not
+      here.restrictedTraverse('@@plone_interface_info').provides('opengever.private.dossier.IPrivateDossier')</property>
+    </object>
+
+  </object>
+</object>
