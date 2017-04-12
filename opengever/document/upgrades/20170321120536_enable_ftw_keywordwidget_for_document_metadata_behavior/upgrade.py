@@ -11,8 +11,9 @@ class EnableFtwKeywordwidgetForDocumentMetadataBehavior(UpgradeStep):
 
     def __call__(self):
         self.install_upgrade_profile()
-        self.ensure_utf_8_keywords()
-        self.catalog_reindex_objects(self.query, idxs=['Subject', ])
+        # will be reindexed in 20170411113233
+        # self.ensure_utf_8_keywords()
+        # self.catalog_reindex_objects(self.query, idxs=['Subject', ])
 
     def ensure_utf_8_keywords(self):
         for obj in self.objects(self.query, 'Ensure keywords are utf-8'):
