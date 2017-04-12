@@ -5,6 +5,7 @@ Changelog
 2017.1.2 (unreleased)
 ---------------------
 
+- Replaced disposition tabbedview with a simple browserview. [phgross]
 - Fix translation for the journal pdf title. [phgross]
 - Add the document title to the OC attach payloads. [Rotonen]
 - Skip comment for Document Sent entries in the dossiers journal pdf representation. [phgross]

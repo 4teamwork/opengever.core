@@ -43,7 +43,7 @@ class TestDispositionOverview(FunctionalTestCase):
 
     @browsing
     def test_list_only_all_disposition_dossiers(self, browser):
-        browser.login().open(self.disposition, view='tabbedview_view-overview')
+        browser.login().open(self.disposition, view='overview')
 
         create(Builder('dossier').titled(u'Dossier C'))
 
@@ -53,7 +53,7 @@ class TestDispositionOverview(FunctionalTestCase):
 
     @browsing
     def test_list_details_for_each_dossiers(self, browser):
-        browser.login().open(self.disposition, view='tabbedview_view-overview')
+        browser.login().open(self.disposition, view='overview')
 
         self.assertEquals(
             ['Period: Jan 19, 2016 - Mar 19, 2016',
@@ -71,7 +71,7 @@ class TestDispositionOverview(FunctionalTestCase):
 
     @browsing
     def test_archive_button_is_active_depending_on_the_appraisal(self, browser):
-        browser.login().open(self.disposition, view='tabbedview_view-overview')
+        browser.login().open(self.disposition, view='overview')
 
         self.assertEquals(
             'Archive',
@@ -83,14 +83,14 @@ class TestDispositionOverview(FunctionalTestCase):
     @browsing
     def test_appraisal_buttons_are_only_links_in_progress_state(self, browser):
         self.grant('Archivist')
-        browser.login().open(self.disposition, view='tabbedview_view-overview')
+        browser.login().open(self.disposition, view='overview')
 
         self.assertEquals(
             ['Archive', "Don't archive"],
             [link.get('title') for link in browser.css('.appraisal-button-group').first.css('a')])
         browser.find('disposition-transition-appraise').click()
 
-        browser.login().open(self.disposition, view='tabbedview_view-overview')
+        browser.login().open(self.disposition, view='overview')
         self.assertEquals(
             [],
             [link.get('title') for link in browser.css('.appraisal-button-group').first.css('a')])
@@ -103,7 +103,7 @@ class TestDispositionOverview(FunctionalTestCase):
 
     @browsing
     def test_update_appraisal_displays_buttons_correctly(self, browser):
-        browser.login().open(self.disposition, view='tabbedview_view-overview')
+        browser.login().open(self.disposition, view='overview')
 
         self.assertEquals(
             ['Archive', "Don't archive"],
@@ -116,7 +116,7 @@ class TestDispositionOverview(FunctionalTestCase):
                 'should_be_archived': button.get('data-archive')}
         browser.open(url, data)
 
-        browser.open(self.disposition, view='tabbedview_view-overview')
+        browser.open(self.disposition, view='overview')
         self.assertEquals(
             ['Archive', 'Archive'],
             [link.get('title') for link in browser.css('.appraisal-button-group .active')])
@@ -124,7 +124,7 @@ class TestDispositionOverview(FunctionalTestCase):
     @browsing
     def test_lists_possible_transitions_in_actionmenu_as_buttons(self, browser):
         self.grant('Archivist', 'Records Manager')
-        browser.login().open(self.disposition, view='tabbedview_view-overview')
+        browser.login().open(self.disposition, view='overview')
 
         self.assertEquals(['disposition-transition-appraise',
                            'disposition-transition-refuse'],
@@ -133,25 +133,23 @@ class TestDispositionOverview(FunctionalTestCase):
         self.assertEquals('disposition-state-appraised',
                           api.content.get_state(self.disposition))
 
-        browser.login().open(self.disposition, view='tabbedview_view-overview')
+        browser.login().open(self.disposition, view='overview')
         self.assertEquals(['disposition-transition-dispose'],
                           browser.css('.transitions li').text)
 
     @browsing
     def test_sip_download_is_only_available_in_disposed_state(self, browser):
         self.grant('Archivist', 'Records Manager')
-        browser.login().open(self.disposition, view='tabbedview_view-overview')
+        browser.login().open(self.disposition, view='overview')
+
         self.assertEquals(['Export appraisal list as excel'],
                           browser.css('ul.actions li').text)
 
         browser.find('disposition-transition-appraise').click()
-        self.assertEquals([],
+        self.assertEquals(['Export appraisal list as excel'],
                           browser.css('ul.actions li').text)
 
-        browser.login().open(self.disposition, view='tabbedview_view-overview')
         browser.find('disposition-transition-dispose').click()
-
-        browser.open(self.disposition, view='tabbedview_view-overview')
         self.assertEquals(['Export appraisal list as excel',
                            'Download disposition package'],
                           browser.css('ul.actions li').text)
@@ -162,7 +160,7 @@ class TestDispositionOverview(FunctionalTestCase):
     @browsing
     def test_appraisal_list_download_is_always_available(self, browser):
         self.grant('Records Manager')
-        browser.login().open(self.disposition, view='tabbedview_view-overview')
+        browser.login().open(self.disposition, view='overview')
         self.assertEquals(['Export appraisal list as excel'],
                           browser.css('ul.actions li').text)
         self.assertEquals(
@@ -173,7 +171,7 @@ class TestDispositionOverview(FunctionalTestCase):
     def test_removal_protocol_is_available_in_closed_state(self, browser):
         self.grant('Editor', 'Records Manager')
 
-        browser.login().open(self.disposition, view='tabbedview_view-overview')
+        browser.login().open(self.disposition, view='overview')
         self.assertEquals(['Export appraisal list as excel'],
                           browser.css('ul.actions li').text)
 
@@ -185,7 +183,7 @@ class TestDispositionOverview(FunctionalTestCase):
         disposition_2.set_destroyed_dossiers([dossier])
         transaction.commit()
 
-        browser.login().open(disposition_2, view='tabbedview_view-overview')
+        browser.login().open(disposition_2, view='overview')
 
         self.assertEquals(['Export appraisal list as excel',
                            'Download removal protocol'],
@@ -196,7 +194,7 @@ class TestDispositionOverview(FunctionalTestCase):
 
     @browsing
     def test_states_are_displayed_in_a_wizard_in_the_process_order(self, browser):
-        browser.login().open(self.disposition, view='tabbedview_view-overview')
+        browser.login().open(self.disposition, view='overview')
 
         self.assertEquals(
             ['disposition-state-in-progress',
@@ -208,7 +206,7 @@ class TestDispositionOverview(FunctionalTestCase):
 
     @browsing
     def test_current_state_is_selected(self, browser):
-        browser.login().open(self.disposition, view='tabbedview_view-overview')
+        browser.login().open(self.disposition, view='overview')
 
         self.assertEquals(
             ['disposition-state-in-progress'],
@@ -216,7 +214,7 @@ class TestDispositionOverview(FunctionalTestCase):
 
     @browsing
     def test_displays_archival_value_for_repositories(self, browser):
-        browser.login().open(self.disposition, view='tabbedview_view-overview')
+        browser.login().open(self.disposition, view='overview')
 
         self.assertEquals(
             'Archival value: archival worthy with sampling',
@@ -224,7 +222,7 @@ class TestDispositionOverview(FunctionalTestCase):
 
     @browsing
     def test_displays_active_and_inactive_dossiers_separately(self, browser):
-        browser.login().open(self.disposition, view='tabbedview_view-overview')
+        browser.login().open(self.disposition, view='overview')
 
         resolved_list, inactive_list = browser.css('ul.list-group')
 
@@ -270,7 +268,7 @@ class TestDispositionOverview(FunctionalTestCase):
                                                     dossier_d,
                                                     dossier_e]))
 
-        browser.login().open(self.disposition, view='tabbedview_view-overview')
+        browser.login().open(self.disposition, view='overview')
 
         repos = browser.css('.repository-list-item')
         self.assertEquals(
@@ -314,7 +312,7 @@ class TestClosedDispositionOverview(FunctionalTestCase):
 
     @browsing
     def test_dossier_title_is_not_linked(self, browser):
-        browser.login().open(self.disposition, view='tabbedview_view-overview')
+        browser.login().open(self.disposition, view='overview')
 
         self.assertEquals(
             ['Client1 1 / 1', 'Dossier A', 'Client1 1 / 2', 'Dossier B'],
@@ -324,6 +322,6 @@ class TestClosedDispositionOverview(FunctionalTestCase):
 
     @browsing
     def test_additional_metadata_is_not_displayed(self, browser):
-        browser.login().open(self.disposition, view='tabbedview_view-overview')
+        browser.login().open(self.disposition, view='overview')
 
         self.assertEquals([], browser.css('#disposition_overview div.meta'))

@@ -203,7 +203,7 @@ class TestHistoryListingInOverview(FunctionalTestCase):
 
     @browsing
     def test_is_sorted_chronological(self, browser):
-        browser.login().open(self.disposition, view='tabbedview_view-overview')
+        browser.login().open(self.disposition, view='overview')
 
         self.assertEquals(
             ['Appraisal finalized by Test User (test_user_1_)',
@@ -212,7 +212,7 @@ class TestHistoryListingInOverview(FunctionalTestCase):
 
     @browsing
     def test_details_list_dossier_snapshot(self, browser):
-        browser.login().open(self.disposition, view='tabbedview_view-overview')
+        browser.login().open(self.disposition, view='overview')
 
         appraise = browser.css('div.details ul')[0]
         add = browser.css('div.details ul')[1]
@@ -226,7 +226,7 @@ class TestHistoryListingInOverview(FunctionalTestCase):
 
     @browsing
     def test_is_marked_with_corresponding_css_class(self, browser):
-        browser.login().open(self.disposition, view='tabbedview_view-overview')
+        browser.login().open(self.disposition, view='overview')
 
         self.assertEquals('answer appraise',
                           browser.css('.progress .answer')[0].get('class'))

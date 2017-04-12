@@ -2,7 +2,6 @@ from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_UNWORTHY
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.disposition import _
 from opengever.disposition.interfaces import IHistoryStorage
-from opengever.tabbedview import GeverTabMixin
 from plone import api
 from plone.protect.utils import addTokenToUrl
 from Products.CMFPlone.CatalogTool import num_sort_regex
@@ -16,10 +15,7 @@ def sort_on_sortable_title(item):
     return num_sort_regex.sub(zero_fill, item[0].Title())
 
 
-class DispositionOverview(BrowserView, GeverTabMixin):
-
-    show_searchform = False
-
+class DispositionOverview(BrowserView):
 
     def __call__(self):
         self.init_dossiers()

@@ -1,227 +1,253 @@
-<div id="disposition_overview" i18n:domain="opengever.disposition"
-     tal:attributes="data-appraisal_update_url view/get_update_appraisal_url">
+<metal:page define-macro="master">
+  <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+        xmlns:tal="http://xml.zope.org/namespaces/tal"
+        xmlns:metal="http://xml.zope.org/namespaces/metal"
+        xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+        lang="en"
+        metal:use-macro="context/main_template/macros/master"
+        i18n:domain="ftw.tabbedview">
 
-  <div>
-    <!-- <h3><span i18n:domain="plone" i18n:translate="State">State</span>:</h3> -->
-    <div class="workflow_wizard">
-      <ul class="wizard_steps" tal:define="current_state view/get_current_state" >
-        <li tal:repeat="state view/get_states"
-            tal:content="state"
-            tal:attributes="class python: 'selected' if state == current_state else ''"
-            i18n:domain="plone" i18n:translate="">
-        </li>
-      </ul>
-    </div>
-  </div>
+    <body>
+      <div metal:fill-slot="main">
+        <metal:main-macro define-macro="main">
+          <div id="disposition_overview" i18n:domain="opengever.disposition"
+               tal:attributes="data-appraisal_update_url view/get_update_appraisal_url">
 
-  <ul class="list-group" tal:repeat="dossier_list view/get_dossier_lists">
-    <tal:define tal:define="label python: dossier_list[0];
-                            mappings python: dossier_list[1]"
-                tal:condition="mappings">
+            <!-- necessary for correct display of the watermark-icon -->
+            <div id="tabbedview-header">
+              <div tal:replace="structure provider:plone.abovecontenttitle" />
 
-      <li class="list-group-item label">
-        <div class="list-group-cell data-cell">
-          <h3 tal:content="label" i18n:translate="" />
-        </div>
-        <div class="list-group-cell action-cell">
-          <h3 i18n:translate="label_archive">Archive</h3>
-        </div>
-      </li>
-
-      <li tal:repeat="item mappings"
-          class="repository-list-item collapsible">
-
-        <tal:define tal:define="repository python: item[0]; dossiers python: item[1];">
-
-          <div class="repository_cell">
-            <div class="repository_title" tal:condition="not: context/is_closed">
-              <h3 tal:content="repository/Title" />
-              <div class="meta" i18n:domain="opengever.base" >
-                <span i18n:translate="label_archival_value">Archival value</span>:
-                <span tal:content="repository/get_archival_value" i18n:translate=""/>
-              </div>
-              <div class="collapsible-header dossier-header">
-                <span tal:define="number_of_dossiers python: len(dossiers)">
-                  <span tal:content="number_of_dossiers" />
-                  <span tal:condition="python: number_of_dossiers > 1" i18n:translate="label_dossiers">Dossiers</span>
-                  <span tal:condition="python: number_of_dossiers == 1" i18n:translate="label_dossier">Dossier</span>
-                </span>
-              </div>
-            </div>
-            <div class="repository_title" tal:condition="context/is_closed">
-              <h3 tal:condition="context/is_closed" tal:content="repository" />
-              <div class="collapsible-header dossier-header">
-                <span tal:define="number_of_dossiers python: len(dossiers)">
-                  <span tal:content="number_of_dossiers" />
-                  <span tal:condition="python: number_of_dossiers > 1" i18n:translate="label_dossiers">Dossiers</span>
-                  <span tal:condition="python: number_of_dossiers == 1" i18n:translate="label_dossier">Dossier</span>
-                </span>
-              </div>
+              <metal:title define-slot="title">
+                <h1 class="documentFirstHeading" tal:content="context/Title" />
+              </metal:title>
+              <div tal:replace="structure provider:plone.belowcontenttitle" />
             </div>
 
-            <div class="repo-appraisal-button-group action-cell"
-                 tal:condition="view/appraisal_buttons_available"
-                 tal:attributes="data-intids python:[dossier.intid for dossier in dossiers]">
-              <a href="#" title="Archive all" class="icon_button archive_all"
-                 data-archive="true" i18n:attributes="title label_archive_all" />
-
-              <a href="#" title="Do not archive all" class="icon_button not_archive_all"
-                 data-archive="false" i18n:attributes="title label_dont_archive_all" />
-            </div>
-          </div>
-
-          <ul class="dossiers">
-            <li tal:repeat="dossier dossiers" class="dispositions list-group-item">
-
-              <div class="list-group-cell data-cell">
-
-                <h3 class="title">
-                  <span class="reference_number" tal:content="dossier/reference_number"/>
-
-                  <a href="#" tal:condition="dossier/url"
-                     tal:attributes="href dossier/url" tal:content="dossier/title" />
-
-                  <span tal:condition="not: dossier/url" tal:content="dossier/title" />
-                </h3>
-
-                <div class="meta" tal:condition="dossier/additional_metadata_available">
-                  <span class="meta-value date_period">
-                    <span i18n:translate="period">Period</span>:
-                    <span tal:content="python: view.get_localized_time(dossier.start)"/>
-                    -
-                    <span tal:content="python: view.get_localized_time(dossier.end)"/>
-                  </span>
-                  <span class="meta-value public_trial">
-                    <span i18n:domain="opengever.base" i18n:translate="label_public_trial">Public Trial</span>:
-                    <span i18n:domain="opengever.base" i18n:translate="" tal:content="dossier/public_trial"/>
-                  </span>
-                  <span class="meta-value archival_value">
-                    <span i18n:domain="opengever.base" i18n:translate="label_archival_value">Archival value</span>:
-                    <span i18n:domain="opengever.base" i18n:translate=""
-                          tal:content="dossier/archival_value"/>
-
-                    <span tal:condition="dossier/archival_value_annotation">
-                      (
-                      <span i18n:domain="opengever.base"
-                            tal:content="dossier/archival_value_annotation"/>
-                      )
-                    </span>
-                  </span>
-                </div>
-
-              </div>
-
-              <div class="list-group-cell action-cell">
-                <div class="button-group appraisal-button-group"
-                     tal:condition="view/appraisal_buttons_available">
-
-                  <a href="#"
-                     class="button"
-                     title="Archive"
-                     i18n:attributes="title label_archive"
-                     tal:attributes="class python: 'icon_button archive active' if dossier.appraisal else 'icon_button archive';
-                                     data-intid dossier/intid;
-                                     data-archive string:true">
-                  </a>
-                  <a href="#"
-                     title="Don't archive"
-                     i18n:attributes="title label_dont_archive"
-                     tal:attributes="class python: 'not_archive icon_button active' if dossier.appraisal==False else 'not_archive icon_button';
-                                     data-intid dossier/intid;
-                                     data-archive string:false">
-                  </a>
-
-                </div>
-
-                <div class="button-group appraisal-button-group"
-                     tal:condition="not: view/appraisal_buttons_available">
-
-                  <span tal:condition="dossier/appraisal"
-                        class="icon_button archive active"
-                        title="Archive"
-                        i18n:attributes="title label_archive" />
-                  <span
-                      tal:condition="not: dossier/appraisal"
-                      class="icon_button not_archive active"
-                      title="Don't archive"
-                      i18n:attributes="title label_dont_archive" />
-
-                </div>
-
-              </li>
-            </ul>
-          </tal:define>
-        </li>
-      </tal:define>
-  </ul>
-
-  <div class="actionButtons clearfix">
-    <ul class="transitions">
-      <li tal:repeat="transition view/get_transitions" >
-        <a tal:condition="transition/url"
-           tal:attributes="href transition/url;
-                           title transition/title;
-                           id transition/id | nothing;
-                           class string: ${transition/id} "
-           i18n:domain="plone"
-           i18n:attributes="title">
-          <span tal:content="transition/title" class="transition actionText"
-                i18n:translate="" i18n:domain="plone">
-          </span>
-        </a>
-      </li>
-    </ul>
-    <ul class="actions">
-      <tal:repeat tal:repeat="action view/get_actions">
-        <li tal:condition="action/visible">
-          <a tal:attributes="href action/url;
-                             title action/label;
-                             class python: action.get('class');
-                             id action/id | nothing;"
-             i18n:attributes="title">
-            <span tal:content="action/label" class="actionText"
-                  i18n:translate="" i18n:domain="plone">
-            </span>
-          </a>
-        </li>
-      </tal:repeat>
-    </ul>
-  </div>
-
-  <div class="progress">
-    <h3 i18n:translate="progress">Progress</h3>
-
-    <div class="answers">
-      <tal:repeat tal:repeat="entry view/get_history">
-        <div class="answer" tal:attributes="class string:answer ${entry/css_class}">
-          <div class="answerType">&nbsp;</div>
-          <div class="answerBody">
-            <div class="date" tal:content="entry/date" />
-            <h3 tal:content="structure entry/msg" i18n:translate="">
-              History Transition
-            </h3>
-            <div class="details collapsible">
-              <div class="collapsible-header">
-                <span i18n:translate="label_details">Details:</span>
-              </div>
-              <div class="collapsible-content">
-                <ul>
-                  <li tal:repeat="detail entry/details">
-                    <span class="reference_number" tal:content="detail/reference_number" />
-                    <span class="title" tal:content="detail/title" />
-                    <span class="appraisal" tal:condition="detail/appraisal"
-                          i18n:translate="label_archive">Archive</span>
-                    <span class="appraisal" tal:condition="not: detail/appraisal"
-                          i18n:translate="label_dont_archive">Don't archive</span>
+            <div>
+              <div class="workflow_wizard">
+                <ul class="wizard_steps" tal:define="current_state view/get_current_state" >
+                  <li tal:repeat="state view/get_states"
+                      tal:content="state"
+                      tal:attributes="class python: 'selected' if state == current_state else ''"
+                      i18n:domain="plone" i18n:translate="">
                   </li>
                 </ul>
               </div>
             </div>
-          </div>
-        </div>
-        <div style="clear:both"><!-- --></div>
-      </tal:repeat>
-    </div>
-  </div>
 
-</div>
+            <ul class="list-group" tal:repeat="dossier_list view/get_dossier_lists">
+              <tal:define tal:define="label python: dossier_list[0];
+                                      mappings python: dossier_list[1]"
+                          tal:condition="mappings">
+
+                <li class="list-group-item label">
+                  <div class="list-group-cell data-cell">
+                    <h3 tal:content="label" i18n:translate="" />
+                  </div>
+                  <div class="list-group-cell action-cell">
+                    <h3 i18n:translate="label_archive">Archive</h3>
+                  </div>
+                </li>
+
+                <li tal:repeat="item mappings"
+                    class="repository-list-item collapsible">
+
+                  <tal:define tal:define="repository python: item[0]; dossiers python: item[1];">
+
+                    <div class="repository_cell">
+                      <div class="repository_title" tal:condition="not: context/is_closed">
+                        <h3 tal:content="repository/Title" />
+                        <div class="meta" i18n:domain="opengever.base" >
+                          <span i18n:translate="label_archival_value">Archival value</span>:
+                          <span tal:content="repository/get_archival_value" i18n:translate=""/>
+                        </div>
+                        <div class="collapsible-header dossier-header">
+                          <span tal:define="number_of_dossiers python: len(dossiers)">
+                            <span tal:content="number_of_dossiers" />
+                            <span tal:condition="python: number_of_dossiers > 1" i18n:translate="label_dossiers">Dossiers</span>
+                            <span tal:condition="python: number_of_dossiers == 1" i18n:translate="label_dossier">Dossier</span>
+                          </span>
+                        </div>
+                      </div>
+                      <div class="repository_title" tal:condition="context/is_closed">
+                        <h3 tal:condition="context/is_closed" tal:content="repository" />
+                        <div class="collapsible-header dossier-header">
+                          <span tal:define="number_of_dossiers python: len(dossiers)">
+                            <span tal:content="number_of_dossiers" />
+                            <span tal:condition="python: number_of_dossiers > 1" i18n:translate="label_dossiers">Dossiers</span>
+                            <span tal:condition="python: number_of_dossiers == 1" i18n:translate="label_dossier">Dossier</span>
+                          </span>
+                        </div>
+                      </div>
+
+                      <div class="repo-appraisal-button-group action-cell"
+                           tal:condition="view/appraisal_buttons_available"
+                           tal:attributes="data-intids python:[dossier.intid for dossier in dossiers]">
+                        <a href="#" title="Archive all" class="icon_button archive_all"
+                           data-archive="true" i18n:attributes="title label_archive_all" />
+
+                        <a href="#" title="Do not archive all" class="icon_button not_archive_all"
+                           data-archive="false" i18n:attributes="title label_dont_archive_all" />
+                      </div>
+                    </div>
+
+                    <ul class="dossiers">
+                      <li tal:repeat="dossier dossiers" class="dispositions list-group-item">
+
+                        <div class="list-group-cell data-cell">
+
+                          <h3 class="title">
+                            <span class="reference_number" tal:content="dossier/reference_number"/>
+
+                            <a href="#" tal:condition="dossier/url"
+                               tal:attributes="href dossier/url" tal:content="dossier/title" />
+
+                            <span tal:condition="not: dossier/url" tal:content="dossier/title" />
+                          </h3>
+
+                          <div class="meta" tal:condition="dossier/additional_metadata_available">
+                            <span class="meta-value date_period">
+                              <span i18n:translate="period">Period</span>:
+                              <span tal:content="python: view.get_localized_time(dossier.start)"/>
+                              -
+                              <span tal:content="python: view.get_localized_time(dossier.end)"/>
+                            </span>
+                            <span class="meta-value public_trial">
+                              <span i18n:domain="opengever.base" i18n:translate="label_public_trial">Public Trial</span>:
+                              <span i18n:domain="opengever.base" i18n:translate="" tal:content="dossier/public_trial"/>
+                            </span>
+                            <span class="meta-value archival_value">
+                              <span i18n:domain="opengever.base" i18n:translate="label_archival_value">Archival value</span>:
+                              <span i18n:domain="opengever.base" i18n:translate=""
+                                    tal:content="dossier/archival_value"/>
+
+                              <span tal:condition="dossier/archival_value_annotation">
+                                (
+                                <span i18n:domain="opengever.base"
+                                      tal:content="dossier/archival_value_annotation"/>
+                                )
+                              </span>
+                            </span>
+                          </div>
+
+                        </div>
+
+                        <div class="list-group-cell action-cell">
+                          <div class="button-group appraisal-button-group"
+                               tal:condition="view/appraisal_buttons_available">
+
+                            <a href="#"
+                               class="button"
+                               title="Archive"
+                               i18n:attributes="title label_archive"
+                               tal:attributes="class python: 'icon_button archive active' if dossier.appraisal else 'icon_button archive';
+                                               data-intid dossier/intid;
+                                               data-archive string:true">
+                            </a>
+                            <a href="#"
+                               title="Don't archive"
+                               i18n:attributes="title label_dont_archive"
+                               tal:attributes="class python: 'not_archive icon_button active' if dossier.appraisal==False else 'not_archive icon_button';
+                                               data-intid dossier/intid;
+                                               data-archive string:false">
+                            </a>
+
+                          </div>
+
+                          <div class="button-group appraisal-button-group"
+                               tal:condition="not: view/appraisal_buttons_available">
+
+                            <span tal:condition="dossier/appraisal"
+                                  class="icon_button archive active"
+                                  title="Archive"
+                                  i18n:attributes="title label_archive" />
+                            <span
+                                tal:condition="not: dossier/appraisal"
+                                class="icon_button not_archive active"
+                                title="Don't archive"
+                                i18n:attributes="title label_dont_archive" />
+
+                          </div>
+
+                        </li>
+                      </ul>
+                    </tal:define>
+                  </li>
+                </tal:define>
+              </ul>
+
+              <div class="actionButtons clearfix">
+                <ul class="transitions">
+                  <li tal:repeat="transition view/get_transitions" >
+                    <a tal:condition="transition/url"
+                       tal:attributes="href transition/url;
+                                       title transition/title;
+                                       id transition/id | nothing;
+                                       class string: ${transition/id} "
+                       i18n:domain="plone"
+                       i18n:attributes="title">
+                      <span tal:content="transition/title" class="transition actionText"
+                            i18n:translate="" i18n:domain="plone">
+                      </span>
+                    </a>
+                  </li>
+                </ul>
+                <ul class="actions">
+                  <tal:repeat tal:repeat="action view/get_actions">
+                    <li tal:condition="action/visible">
+                      <a tal:attributes="href action/url;
+                                         title action/label;
+                                         class python: action.get('class');
+                                         id action/id | nothing;"
+                         i18n:attributes="title">
+                        <span tal:content="action/label" class="actionText"
+                              i18n:translate="" i18n:domain="plone">
+                        </span>
+                      </a>
+                    </li>
+                  </tal:repeat>
+                </ul>
+              </div>
+
+              <div class="progress">
+                <h3 i18n:translate="progress">Progress</h3>
+
+                <div class="answers">
+                  <tal:repeat tal:repeat="entry view/get_history">
+                    <div class="answer" tal:attributes="class string:answer ${entry/css_class}">
+                      <div class="answerType">&nbsp;</div>
+                      <div class="answerBody">
+                        <div class="date" tal:content="entry/date" />
+                        <h3 tal:content="structure entry/msg" i18n:translate="">
+                          History Transition
+                        </h3>
+                        <div class="details collapsible">
+                          <div class="collapsible-header">
+                            <span i18n:translate="label_details">Details:</span>
+                          </div>
+                          <div class="collapsible-content">
+                            <ul>
+                              <li tal:repeat="detail entry/details">
+                                <span class="reference_number" tal:content="detail/reference_number" />
+                                <span class="title" tal:content="detail/title" />
+                                <span class="appraisal" tal:condition="detail/appraisal"
+                                      i18n:translate="label_archive">Archive</span>
+                                <span class="appraisal" tal:condition="not: detail/appraisal"
+                                      i18n:translate="label_dont_archive">Don't archive</span>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div style="clear:both"><!-- --></div>
+                  </tal:repeat>
+                </div>
+              </div>
+
+            </div>
+          </metal:main-macro>
+        </div>
+      </body>
+    </html>
+  </metal:page>

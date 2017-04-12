@@ -34,7 +34,7 @@
   <browser:page
       class=".overview.DispositionOverview"
       for="opengever.disposition.interfaces.IDisposition"
-      name="tabbedview_view-overview"
+      name="overview"
       permission="zope2.View"
       template="templates/overview.pt"
       />
