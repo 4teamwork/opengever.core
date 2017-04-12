@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-03-20 15:03+0000\n"
+"POT-Creation-Date: 2017-04-12 05:08+0000\n"
 "PO-Revision-Date: 2016-07-22 15:24+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
@@ -863,10 +863,10 @@ msgstr "Es wurde kein Beginn-Datum gesetzt."
 msgid "time_expired"
 msgstr "abgelaufen"
 
-#. Default: "Dossier Journal ${today}"
-#: ./opengever/dossier/resolve.py:189
+#. Default: "Journal of dossier ${title}, ${timestamp}"
+#: ./opengever/dossier/resolve.py:192
 msgid "title_dossier_journal"
-msgstr "Dossier Journal ${today}"
+msgstr "Dossier Journal ${title}, ${timestamp}"
 
 #. Default: "You didn't select any participants."
 #: ./opengever/dossier/behaviors/participation.py:196

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-03-20 15:03+0000\n"
+"POT-Creation-Date: 2017-04-12 05:08+0000\n"
 "PO-Revision-Date: 2016-09-20 21:24+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/fr/>\n"
@@ -859,8 +859,8 @@ msgstr "Aucune date de début n'a été saisie"
 msgid "time_expired"
 msgstr "Périmé"
 
-#. Default: "Dossier Journal ${today}"
-#: ./opengever/dossier/resolve.py:189
+#. Default: "Journal of dossier ${title}, ${timestamp}"
+#: ./opengever/dossier/resolve.py:192
 msgid "title_dossier_journal"
 msgstr ""
 

@@ -5,6 +5,7 @@ Changelog
 2017.1.2 (unreleased)
 ---------------------
 
+- Fix translation for the journal pdf title. [phgross]
 - Add the document title to the OC attach payloads. [Rotonen]
 - Skip comment for Document Sent entries in the dossiers journal pdf representation. [phgross]
 - Make (all) PDF views customizable by having them dynamically provide their

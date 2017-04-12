@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-03-20 15:03+0000\n"
+"POT-Creation-Date: 2017-04-12 05:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -860,8 +860,8 @@ msgstr ""
 msgid "time_expired"
 msgstr ""
 
-#. Default: "Dossier Journal ${today}"
-#: ./opengever/dossier/resolve.py:189
+#. Default: "Journal of dossier ${title}, ${timestamp}"
+#: ./opengever/dossier/resolve.py:192
 msgid "title_dossier_journal"
 msgstr ""
 
