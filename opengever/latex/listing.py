@@ -2,6 +2,7 @@ from collections import OrderedDict
 from five import grok
 from ftw.table import helper
 from opengever.journal import _ as journal_mf
+from opengever.journal.handlers import DOCUMENT_SENT
 from opengever.journal.tab import title_helper
 from opengever.latex import _
 from opengever.latex.utils import get_issuer_of_task
@@ -275,7 +276,6 @@ class TasksLaTeXListing(DossiersLaTeXListing):
         ]
 
 
-
 class JournalLaTeXListing(LaTexListing):
     grok.provides(ILaTexListing)
     grok.adapts(Interface, Interface, Interface)
@@ -286,17 +286,25 @@ class JournalLaTeXListing(LaTexListing):
     def get_actor_label(self, item):
         return Actor.lookup(item.get('actor')).get_label()
 
+    def get_journal_comment(self, item):
+        """Skip comment for document sent entries.
+        """
+        if item.get('action', {}).get('type') == DOCUMENT_SENT:
+            return
+
+        return item.get('comments')
+
     def get_columns(self):
         return [
             Column('time',
                    journal_mf('label_time', default=u'Time'),
                    '10%',
-                   lambda brain: helper.readable_date_time(brain, brain.get('time'))),
+                   lambda item: helper.readable_date_time(item, item.get('time'))),
 
             Column('title',
                    journal_mf('label_title', default=u'Title'),
                    '45%',
-                   lambda brain: title_helper(brain, brain['action'].get('title'))),
+                   lambda item: title_helper(item, item['action'].get('title'))),
 
             Column('actor',
                    journal_mf('label_actor', default=u'Changed by'),
@@ -306,5 +314,5 @@ class JournalLaTeXListing(LaTexListing):
             Column('comments',
                    journal_mf('label_comments', default='Comments'),
                    '30%',
-                   lambda brain: brain.get('comments'))
+                   self.get_journal_comment)
         ]

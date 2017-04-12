@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Add the document title to the OC attach payloads. [Rotonen]
+- Skip comment for Document Sent entries in the dossiers journal pdf representation. [phgross]
 - Make (all) PDF views customizable by having them dynamically provide their
   request layers instead of hardcoding them. [lgraf]
 - Meeting: add a "Word implementation" feature flag. [jone]

@@ -57,7 +57,7 @@ class DossierListingLaTeXView(grok.MultiAdapter, MakoLaTeXView):
     def get_render_arguments(self):
         self.layout.show_organisation = True
 
-        dossier_listing = getMultiAdapter((self.context, self.request, self),
+        journal_listing = getMultiAdapter((self.context, self.request, self),
                                           ILaTexListing, name='journal')
 
         return {
@@ -67,7 +67,7 @@ class DossierListingLaTeXView(grok.MultiAdapter, MakoLaTeXView):
                   mapping={'title': self.context.title,
                            'reference_number': self.context.get_reference_number()}),
                 context=self.request),
-            'listing': dossier_listing.get_listing(self.get_journal_data())}
+            'listing': journal_listing.get_listing(self.get_journal_data())}
 
     def get_journal_data(self):
         if IAnnotationsJournalizable.providedBy(self.context):
