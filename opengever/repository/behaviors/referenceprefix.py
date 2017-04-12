@@ -6,7 +6,6 @@ from plone.directives import form
 from z3c.form import validator, error
 from z3c.form.interfaces import IAddForm
 from zope import schema
-from zope.component import provideAdapter
 from zope.interface import alsoProvides
 from zope.interface import Interface
 from zope.interface import provider
@@ -66,16 +65,12 @@ validator.WidgetValidatorDiscriminators(
     field=IReferenceNumberPrefix['reference_number_prefix'],
     )
 
-provideAdapter(ReferenceNumberPrefixValidator)
-
-provideAdapter(error.ErrorViewMessage(
-        _('error_sibling_reference_number_existing',
-          default=u'A Sibling with the same reference number is existing'),
-        error=schema.interfaces.ConstraintNotSatisfied,
-        field=IReferenceNumberPrefix['reference_number_prefix'],
-        ),
-        name='message'
-        )
+ReferenceNumberPrefixErrorMessage = error.ErrorViewMessage(
+    _('error_sibling_reference_number_existing',
+      default=u'A Sibling with the same reference number is existing'),
+    error=schema.interfaces.ConstraintNotSatisfied,
+    field=IReferenceNumberPrefix['reference_number_prefix'],
+)
 
 
 class IReferenceNumberPrefixMarker(Interface):

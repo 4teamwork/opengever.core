@@ -3,10 +3,8 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.repository.behaviors.referenceprefix import IReferenceNumberPrefix
 from opengever.repository.behaviors.referenceprefix import IReferenceNumberPrefixMarker
-from opengever.repository.behaviors.referenceprefix import ReferenceNumberPrefixValidator
 from opengever.testing import add_languages
 from opengever.testing import FunctionalTestCase
-from zope.component import provideAdapter
 from ftw.testbrowser.pages import factoriesmenu
 
 
@@ -18,9 +16,6 @@ class TestReferenceBehavior(FunctionalTestCase):
 
     def setUp(self):
         super(TestReferenceBehavior, self).setUp()
-        # Since plone tests sucks, we need to re-register
-        # the reference number validator again.
-        provideAdapter(ReferenceNumberPrefixValidator)
 
         add_languages(['de-ch'])
         self.repo = create(Builder('repository'))
@@ -53,7 +48,7 @@ class TestReferenceBehavior(FunctionalTestCase):
         browser.click_on('Save')
 
         self.assertEquals(
-            ['Constraint not satisfied'],
+            ['A Sibling with the same reference number is existing'],
             browser.css('#formfield-form-widgets-IReferenceNumberPrefix'
                         '-reference_number_prefix .error').text)
 

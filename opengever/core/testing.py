@@ -5,6 +5,7 @@ from ftw.builder.testing import BUILDER_LAYER
 from ftw.builder.testing import set_builder_session_factory
 from ftw.bumblebee.tests.helpers import BumblebeeTestTaskQueue
 from ftw.testing import ComponentRegistryLayer
+from ftw.testing.layer import COMPONENT_REGISTRY_ISOLATION
 from ftw.testing.quickinstaller import snapshots
 from opengever.activity.interfaces import IActivitySettings
 from opengever.base.model import create_session
@@ -18,7 +19,6 @@ from plone import api
 from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
 from plone.app.testing import IntegrationTesting
-from plone.app.testing import PLONE_FIXTURE
 from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
@@ -97,7 +97,7 @@ ANNOTATION_LAYER = AnnotationLayer()
 
 
 class OpengeverFixture(PloneSandboxLayer):
-    defaultBases = (PLONE_FIXTURE, BUILDER_LAYER)
+    defaultBases = (COMPONENT_REGISTRY_ISOLATION, BUILDER_LAYER)
 
     def __init__(self, sql_layer):
         bases = self.defaultBases + (sql_layer, )

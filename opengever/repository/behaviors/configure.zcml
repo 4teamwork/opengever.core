@@ -13,6 +13,12 @@
       marker=".referenceprefix.IReferenceNumberPrefixMarker"
       />
 
+  <adapter factory=".referenceprefix.ReferenceNumberPrefixValidator" />
+  <adapter
+      factory=".referenceprefix.ReferenceNumberPrefixErrorMessage"
+      name="message"
+      />
+
   <plone:behavior
       title="ResponsibleOrgUnit"
       description="OpenGever ResponsibleOrgUnit Behavior"
