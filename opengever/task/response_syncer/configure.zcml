@@ -1,0 +1,48 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    i18n_domain="opengever.task">
+
+  <browser:page
+      name="sync-task-comment-response"
+      for="opengever.task.task.ITask"
+      permission="zope.Public"
+      class=".comment.CommentResponseSyncerReceiver"
+      />
+
+  <browser:page
+      name="sync-task-workflow-response"
+      for="opengever.task.task.ITask"
+      permission="zope.Public"
+      class=".workflow.WorkflowResponseSyncerReceiver"
+      />
+
+  <browser:page
+      name="sync-task-modify-deadline-response"
+      for="opengever.task.task.ITask"
+      permission="zope.Public"
+      class=".deadline.ModifyDeadlineResponseSyncerReceiver"
+      />
+
+  <adapter
+      factory=".comment.CommentResponseSyncerSender"
+      for="opengever.task.task.ITask *"
+      name="comment"
+      provides="opengever.task.interfaces.IResponseSyncerSender"
+      />
+
+  <adapter
+      factory=".workflow.WorkflowResponseSyncerSender"
+      for="opengever.task.task.ITask *"
+      name="workflow"
+      provides="opengever.task.interfaces.IResponseSyncerSender"
+      />
+
+  <adapter
+      factory=".deadline.ModifyDeadlineResponseSyncerSender"
+      for="opengever.task.task.ITask *"
+      name="deadline"
+      provides="opengever.task.interfaces.IResponseSyncerSender"
+      />
+</configure>

@@ -7,7 +7,7 @@ from opengever.task.adapters import IResponseContainer
 from opengever.task.browser.modify_deadline import ModifyDeadlineFormView
 from opengever.task.interfaces import IDeadlineModifier
 from opengever.task.interfaces import ISuccessorTaskController
-from opengever.task.syncer import ModifyDeadlineResponseSyncerReceiver
+from opengever.task.response_syncer.deadline import ModifyDeadlineResponseSyncerReceiver
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import login
 from plone.app.testing import TEST_USER_ID

@@ -16,6 +16,7 @@
   <include file="permissions.zcml" />
   <include file="behaviors.zcml" />
   <include package=".upgrades" />
+  <include package=".response_syncer" />
 
   <grok:grok package="." />
 
@@ -51,48 +52,6 @@
       permission="zope.Public"
       class=".layout.TaskLayoutPolicy"
       allowed_interface="plone.app.layout.globals.interfaces.ILayoutPolicy"
-      />
-
-  <browser:page
-      name="sync-task-comment-response"
-      for="opengever.task.task.ITask"
-      permission="zope.Public"
-      class=".syncer.CommentResponseSyncerReceiver"
-      />
-
-  <browser:page
-      name="sync-task-workflow-response"
-      for="opengever.task.task.ITask"
-      permission="zope.Public"
-      class=".syncer.WorkflowResponseSyncerReceiver"
-      />
-
-  <browser:page
-      name="sync-task-modify-deadline-response"
-      for="opengever.task.task.ITask"
-      permission="zope.Public"
-      class=".syncer.ModifyDeadlineResponseSyncerReceiver"
-      />
-
-  <adapter
-      factory=".syncer.CommentResponseSyncerSender"
-      for="opengever.task.task.ITask *"
-      name="comment"
-      provides="opengever.task.interfaces.IResponseSyncerSender"
-      />
-
-  <adapter
-      factory=".syncer.WorkflowResponseSyncerSender"
-      for="opengever.task.task.ITask *"
-      name="workflow"
-      provides="opengever.task.interfaces.IResponseSyncerSender"
-      />
-
-  <adapter
-      factory=".syncer.ModifyDeadlineResponseSyncerSender"
-      for="opengever.task.task.ITask *"
-      name="deadline"
-      provides="opengever.task.interfaces.IResponseSyncerSender"
       />
 
   <adapter

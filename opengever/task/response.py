@@ -11,7 +11,7 @@ from opengever.task.adapters import IResponseContainer
 from opengever.task.adapters import Response
 from opengever.task.interfaces import ICommentResponseHandler
 from opengever.task.permissions import DEFAULT_ISSUE_MIME_TYPE
-from opengever.task.syncer import sync_task_response
+from opengever.task.response_syncer import sync_task_response
 from opengever.task.task import ITask
 from plone.autoform.form import AutoExtensibleForm
 from plone.memoize.view import memoize

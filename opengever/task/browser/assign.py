@@ -3,7 +3,7 @@ from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task import _
 from opengever.task.activities import TaskReassignActivity
-from opengever.task.syncer import sync_task_response
+from opengever.task.response_syncer import sync_task_response
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
 from opengever.task.util import getTransitionVocab

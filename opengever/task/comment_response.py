@@ -6,7 +6,7 @@ from plone import api
 from zope.event import notify
 from zope.interface import implements
 from zope.lifecycleevent import ObjectModifiedEvent
-from opengever.task.syncer import sync_task_response
+from opengever.task.response_syncer import sync_task_response
 
 
 class CommentResponseHandler(object):

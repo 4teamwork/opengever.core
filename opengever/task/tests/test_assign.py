@@ -4,7 +4,7 @@ from ftw.testbrowser import browser as default_browser
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import error_messages
 from opengever.task.adapters import IResponseContainer
-from opengever.task.syncer import WorkflowResponseSyncerReceiver
+from opengever.task.response_syncer.workflow import WorkflowResponseSyncerReceiver
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
 

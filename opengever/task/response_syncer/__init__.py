@@ -1,22 +1,15 @@
-from datetime import date
 from opengever.base.request import dispatch_request
 from opengever.base.utils import ok_response
 from opengever.ogds.base.interfaces import IInternalOpengeverRequestLayer
-from opengever.task import _
 from opengever.task.adapters import IResponseContainer
-from opengever.task.interfaces import IDeadlineModifier
 from opengever.task.interfaces import IResponseSyncerSender
 from opengever.task.interfaces import ISuccessorTaskController
-from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
-from Products.CMFCore.utils import getToolByName
 from Products.CMFDiffTool.utils import safe_utf8
 from Products.Five import BrowserView
 from zExceptions import Forbidden
 from zope.component import getMultiAdapter
-from zope.event import notify
 from zope.interface import implements
-from zope.lifecycleevent import ObjectModifiedEvent
 import AccessControl
 
 
@@ -26,9 +19,20 @@ class ResponseSyncerSenderException(Exception):
     """
 
 
-def sync_task_response(context, request, syncer_name, transition, text, **kwargs):
+def sync_task_response(task, request, syncer_name, transition, text, **kwargs):
+    """Method to get the responsible IResponseSyncerSender adapter
+    and run the response syncing process for predecessors and successorts
+    of the current task.
+
+    :param task: An object providing the ITask interface
+    :param request: The current request
+    :param syncer_name: A name of a IResponseSyncerSender adapter name
+    :param transition: The transition-name for the task-response obj
+    :param text: The text for the task-response obj
+    :param kwargs: additional arguments for sending to the receiver
+    """
     syncer = getMultiAdapter(
-        (context, request), IResponseSyncerSender, name=syncer_name)
+        (task, request), IResponseSyncerSender, name=syncer_name)
 
     return syncer.sync_related_tasks(transition, text, **kwargs)
 
@@ -88,55 +92,6 @@ class BaseResponseSyncerSender(object):
         return dispatch_request(target_admin_unit_id, viewname, path, data)
 
 
-class CommentResponseSyncerSender(BaseResponseSyncerSender):
-
-    TARGET_SYNC_VIEW_NAME = '@@sync-task-comment-response'
-
-    def raise_sync_exception(self, task, transition, text, **kwargs):
-        raise ResponseSyncerSenderException(
-            'Could not add comment on task on remote admin unit {} ({})'.format(
-                task.admin_unit_id,
-                task.physical_path))
-
-
-class WorkflowResponseSyncerSender(BaseResponseSyncerSender):
-
-    TARGET_SYNC_VIEW_NAME = '@@sync-task-workflow-response'
-
-    def get_related_tasks_to_sync(self, transition):
-        if not self._is_synced_transition(transition):
-            return []
-        return super(WorkflowResponseSyncerSender, self).get_related_tasks_to_sync(transition)
-
-    def raise_sync_exception(self, task, transition, text, **kwargs):
-        raise ResponseSyncerSenderException(
-            'Could not change workflow on remote admin unit {} ({})'.format(
-                task.admin_unit_id,
-                task.physical_path))
-
-    def _is_synced_transition(self, transition):
-        return transition in [
-            'task-transition-resolved-in-progress',
-            'task-transition-resolved-tested-and-closed',
-            'task-transition-reassign',
-            ]
-
-
-class ModifyDeadlineResponseSyncerSender(BaseResponseSyncerSender):
-
-    TARGET_SYNC_VIEW_NAME = '@@sync-task-modify-deadline-response'
-
-    def raise_sync_exception(self, task, transition, text, **kwargs):
-        raise ResponseSyncerSenderException(
-            'Updating deadline on remote client {}. failed ({})'.format(
-                task.admin_unit_id,
-                task.physical_path))
-
-    def extend_payload(self, payload, task, **kwargs):
-        kwargs['new_deadline'] = kwargs['new_deadline'].toordinal()
-        super(ModifyDeadlineResponseSyncerSender, self).extend_payload(payload, task, **kwargs)
-
-
 class BaseResponseSyncerReceiver(BrowserView):
     """Abstract ResponseSyncerReceiver view for receiving requests from a
     ResponseSyncerSender and updates the current task with the received data
@@ -193,64 +148,3 @@ class BaseResponseSyncerReceiver(BrowserView):
 
         else:
             return False
-
-
-class CommentResponseSyncerReceiver(BaseResponseSyncerReceiver):
-    """This view receives a sync-task-comment-response request from another
-    client after new comments have been added to a successor or predecessor.
-    """
-
-
-class WorkflowResponseSyncerReceiver(BaseResponseSyncerReceiver):
-    """This view receives a sync-task-workflow-state request from another
-    client after a successor or predecessor has changed the workflow state.
-    """
-
-    def _update(self, transition, text):
-        response = super(WorkflowResponseSyncerReceiver, self)._update(transition, text)
-
-        transition = self.request.get('transition')
-        responsible = self.request.get('responsible')
-        responsible_client = self.request.get('responsible_client')
-
-        wftool = getToolByName(self.context, 'portal_workflow')
-
-        # change workflow state
-        before = wftool.getInfoFor(self.context, 'review_state')
-        before = wftool.getTitleForStateOnType(before, self.context.Type())
-
-        wftool.doActionFor(self.context, transition)
-
-        after = wftool.getInfoFor(self.context, 'review_state')
-        after = wftool.getTitleForStateOnType(after, self.context.Type())
-
-        if responsible and responsible is not 'None':
-            # special handling for reassign
-            response.add_change(
-                'responsible',
-                _(u"label_responsible", default=u"Responsible"),
-                ITask(self.context).responsible,
-                responsible)
-
-            ITask(self.context).responsible_client = responsible_client
-            ITask(self.context).responsible = responsible
-
-            notify(ObjectModifiedEvent(self.context))
-
-        response.add_change('review_state', _(u'Issue state'),
-                            before, after)
-
-
-class ModifyDeadlineResponseSyncerReceiver(BaseResponseSyncerReceiver):
-    """This view receives a sync-task-modify-deadline-response request from another
-    client after a successor or predecessor has changed the deadline.
-    """
-
-    def _update(self, transition, text):
-        new_deadline = self.request.get('new_deadline', None)
-        new_deadline = date.fromordinal(int(new_deadline))
-        text = self.request.get('text', u'')
-        transition = self.request.get('transition')
-
-        IDeadlineModifier(self.context).update_deadline(
-            new_deadline, text, transition)
