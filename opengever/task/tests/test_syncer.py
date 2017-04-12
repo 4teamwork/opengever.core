@@ -3,10 +3,7 @@ from ftw.builder import create
 from opengever.ogds.base.Extensions.plugins import activate_request_layer
 from opengever.ogds.base.interfaces import IInternalOpengeverRequestLayer
 from opengever.task.adapters import IResponseContainer
-from opengever.task.interfaces import ICommentResponseSyncerSender
-from opengever.task.interfaces import IModifyDeadlineResponseSyncerSender
 from opengever.task.interfaces import IResponseSyncerSender
-from opengever.task.interfaces import IWorkflowResponseSyncerSender
 from opengever.task.syncer import BaseResponseSyncerReceiver
 from opengever.task.syncer import BaseResponseSyncerSender
 from opengever.task.syncer import CommentResponseSyncerSender
@@ -181,7 +178,7 @@ class TestBaseResponseSyncerSender(FunctionalTestCase):
 class TestCommentResponseSyncerSender(FunctionalTestCase):
 
     def test_verify_interfaces(self):
-        verifyClass(ICommentResponseSyncerSender, CommentResponseSyncerSender)
+        verifyClass(IResponseSyncerSender, CommentResponseSyncerSender)
 
     def test_raises_sync_exception_raises_comment_specific_exception_message(self):
         predecessor = create(Builder('task').in_state('task-state-resolved'))
@@ -201,7 +198,7 @@ class TestCommentResponseSyncerSender(FunctionalTestCase):
 class TestWorkflowResponseSyncerSender(FunctionalTestCase):
 
     def test_verify_interfaces(self):
-        verifyClass(IWorkflowResponseSyncerSender, WorkflowResponseSyncerSender)
+        verifyClass(IResponseSyncerSender, WorkflowResponseSyncerSender)
 
     def test_raises_sync_exception_raises_workflow_specific_exception_message(self):
         predecessor = create(Builder('task').in_state('task-state-resolved'))
@@ -232,7 +229,7 @@ class TestWorkflowResponseSyncerSender(FunctionalTestCase):
 class TestModifyDeadlineResponseSyncerSender(FunctionalTestCase):
 
     def test_verify_interfaces(self):
-        verifyClass(IModifyDeadlineResponseSyncerSender, ModifyDeadlineResponseSyncerSender)
+        verifyClass(IResponseSyncerSender, ModifyDeadlineResponseSyncerSender)
 
     def test_raises_sync_exception_raises_modify_deadline_specific_exception_message(self):
         predecessor = create(Builder('task').in_state('task-state-resolved'))
@@ -411,7 +408,7 @@ class TestCommentSyncer(FunctionalTestCase):
         successor = create(Builder('task').successor_from(predecessor))
 
         sender = getMultiAdapter((successor, successor.REQUEST),
-                                 ICommentResponseSyncerSender)
+                                 IResponseSyncerSender, name='comment')
 
         sender.sync_related_tasks('task-commented', text=u'We need more stuff!')
 
@@ -429,7 +426,7 @@ class TestCommentSyncer(FunctionalTestCase):
                            .successor_from(predecessor))
 
         sender = getMultiAdapter((predecessor, predecessor.REQUEST),
-                                 ICommentResponseSyncerSender)
+                                 IResponseSyncerSender, name='comment')
 
         sender.sync_related_tasks('task-commented', text=u'We need more stuff!')
 

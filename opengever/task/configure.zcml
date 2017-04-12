@@ -77,19 +77,22 @@
   <adapter
       factory=".syncer.CommentResponseSyncerSender"
       for="opengever.task.task.ITask *"
-      provides="opengever.task.interfaces.ICommentResponseSyncerSender"
+      name="comment"
+      provides="opengever.task.interfaces.IResponseSyncerSender"
       />
 
   <adapter
       factory=".syncer.WorkflowResponseSyncerSender"
       for="opengever.task.task.ITask *"
-      provides="opengever.task.interfaces.IWorkflowResponseSyncerSender"
+      name="workflow"
+      provides="opengever.task.interfaces.IResponseSyncerSender"
       />
 
   <adapter
       factory=".syncer.ModifyDeadlineResponseSyncerSender"
       for="opengever.task.task.ITask *"
-      provides="opengever.task.interfaces.IModifyDeadlineResponseSyncerSender"
+      name="deadline"
+      provides="opengever.task.interfaces.IResponseSyncerSender"
       />
 
   <adapter

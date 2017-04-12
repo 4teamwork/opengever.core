@@ -2,12 +2,11 @@ from opengever.task.activities import TaskCommentedActivity
 from opengever.task.adapters import IResponseContainer
 from opengever.task.adapters import Response
 from opengever.task.interfaces import ICommentResponseHandler
-from opengever.task.interfaces import ICommentResponseSyncerSender
 from plone import api
-from zope.component import getMultiAdapter
 from zope.event import notify
 from zope.interface import implements
 from zope.lifecycleevent import ObjectModifiedEvent
+from opengever.task.syncer import sync_task_response
 
 
 class CommentResponseHandler(object):
@@ -48,6 +47,5 @@ class CommentResponseHandler(object):
                               response).record()
 
     def _sync_response(self, text):
-        syncer = getMultiAdapter((self.context, self.context.REQUEST),
-                                 ICommentResponseSyncerSender)
-        syncer.sync_related_tasks(self.TRANSITION_TYPE, text=text)
+        sync_task_response(self.context, self.context.REQUEST, 'comment',
+                           self.TRANSITION_TYPE, text)

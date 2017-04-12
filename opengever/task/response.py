@@ -10,8 +10,8 @@ from opengever.task.activities import TaskTransitionActivity
 from opengever.task.adapters import IResponseContainer
 from opengever.task.adapters import Response
 from opengever.task.interfaces import ICommentResponseHandler
-from opengever.task.interfaces import IWorkflowResponseSyncerSender
 from opengever.task.permissions import DEFAULT_ISSUE_MIME_TYPE
+from opengever.task.syncer import sync_task_response
 from opengever.task.task import ITask
 from plone.autoform.form import AutoExtensibleForm
 from plone.memoize.view import memoize
@@ -29,10 +29,8 @@ from z3c.relationfield.relation import RelationValue
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
 from zExceptions import BadRequest
-from zExceptions import Unauthorized
 from zope import schema
 from zope.cachedescriptors.property import Lazy
-from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.event import notify
 from zope.i18n import translate
@@ -312,10 +310,8 @@ class TaskTransitionResponseAddForm(form.AddForm, AutoExtensibleForm):
 
             self.record_activity(new_response)
 
-            sender = getMultiAdapter((self.context, self.request),
-                                     IWorkflowResponseSyncerSender)
-            sender.sync_related_tasks(
-                transition, text=data.get('text'))
+            sync_task_response(self.context, self.request, 'workflow',
+                               transition, data.get('text'))
 
             url = self.context.absolute_url()
             self.request.RESPONSE.redirect(url)

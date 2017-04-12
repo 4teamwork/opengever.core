@@ -1,11 +1,10 @@
 from five import grok
 from opengever.task.browser.transitioncontroller import get_checker
 from opengever.task.interfaces import IDeadlineModifier
-from opengever.task.interfaces import IModifyDeadlineResponseSyncerSender
+from opengever.task.syncer import sync_task_response
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
 from zExceptions import Unauthorized
-from zope.component import getMultiAdapter
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
 
@@ -60,6 +59,5 @@ class DeadlineModifier(grok.Adapter):
         notify(ObjectModifiedEvent(self.context))
 
     def sync_deadline(self, new_deadline, text, transition):
-        sender = getMultiAdapter((self.context, self.context.REQUEST),
-                                 IModifyDeadlineResponseSyncerSender)
-        sender.sync_related_tasks(transition, text, new_deadline=new_deadline)
+        sync_task_response(self.context, self.context.REQUEST, 'deadline',
+                           transition, text, new_deadline=new_deadline)

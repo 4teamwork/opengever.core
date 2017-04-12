@@ -4,18 +4,16 @@ from opengever.base.utils import ok_response
 from opengever.ogds.base.interfaces import IInternalOpengeverRequestLayer
 from opengever.task import _
 from opengever.task.adapters import IResponseContainer
-from opengever.task.interfaces import ICommentResponseSyncerSender
 from opengever.task.interfaces import IDeadlineModifier
-from opengever.task.interfaces import IModifyDeadlineResponseSyncerSender
 from opengever.task.interfaces import IResponseSyncerSender
 from opengever.task.interfaces import ISuccessorTaskController
-from opengever.task.interfaces import IWorkflowResponseSyncerSender
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
 from Products.CMFCore.utils import getToolByName
 from Products.CMFDiffTool.utils import safe_utf8
 from Products.Five import BrowserView
 from zExceptions import Forbidden
+from zope.component import getMultiAdapter
 from zope.event import notify
 from zope.interface import implements
 from zope.lifecycleevent import ObjectModifiedEvent
@@ -26,6 +24,13 @@ class ResponseSyncerSenderException(Exception):
     """An exception raised if something went wrong while syncing
     the response-object.
     """
+
+
+def sync_task_response(context, request, syncer_name, transition, text, **kwargs):
+    syncer = getMultiAdapter(
+        (context, request), IResponseSyncerSender, name=syncer_name)
+
+    return syncer.sync_related_tasks(transition, text, **kwargs)
 
 
 class BaseResponseSyncerSender(object):
@@ -84,7 +89,6 @@ class BaseResponseSyncerSender(object):
 
 
 class CommentResponseSyncerSender(BaseResponseSyncerSender):
-    implements(ICommentResponseSyncerSender)
 
     TARGET_SYNC_VIEW_NAME = '@@sync-task-comment-response'
 
@@ -96,7 +100,6 @@ class CommentResponseSyncerSender(BaseResponseSyncerSender):
 
 
 class WorkflowResponseSyncerSender(BaseResponseSyncerSender):
-    implements(IWorkflowResponseSyncerSender)
 
     TARGET_SYNC_VIEW_NAME = '@@sync-task-workflow-response'
 
@@ -120,7 +123,6 @@ class WorkflowResponseSyncerSender(BaseResponseSyncerSender):
 
 
 class ModifyDeadlineResponseSyncerSender(BaseResponseSyncerSender):
-    implements(IModifyDeadlineResponseSyncerSender)
 
     TARGET_SYNC_VIEW_NAME = '@@sync-task-modify-deadline-response'
 
