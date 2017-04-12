@@ -71,31 +71,6 @@ class ISuccessorTaskController(Interface):
         """
 
 
-class IWorkflowStateSyncer(Interface):
-    """The state syncer syncs workflow states of related tasks (successors and
-    predecessors).
-
-    It is triggered by workflow changes, such as the direct_response view or
-    the response add form. It automatically decides if it is necessary to
-    change the state of a related task and performs the change.
-
-    IStateSyncer is an adapter interface.
-    """
-
-    def __init__(context, request):
-        pass
-
-    def get_tasks_to_sync(transition):
-        """Returns all related tasks which have to be updated when performing
-        this `transition` on the current task in the current state.
-        """
-
-    def change_remote_tasks_workflow_state(transition, text):
-        """Performs `transition` on related tasks and creates a response with
-        `text`.
-        """
-
-
 class IResponseSyncerSender(Interface):
     """Handles the syncing process between tasks on different admin-units.
     """
@@ -134,6 +109,16 @@ class IResponseSyncerSender(Interface):
 class ICommentResponseSyncerSender(IResponseSyncerSender):
     """Handles the syncing process for comments between task on different
     admin-units
+    """
+
+
+class IWorkflowResponseSyncerSender(IResponseSyncerSender):
+    """Handles the syncing process for task responses including workflow states
+    changes between tasks on different admin-units
+
+    It is triggered by workflow changes, such as the direct_response view or
+    the response add form. It automatically decides if it is necessary to
+    change the state of a related task and performs the change.
     """
 
 

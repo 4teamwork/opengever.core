@@ -5,11 +5,15 @@ from opengever.ogds.base.interfaces import IInternalOpengeverRequestLayer
 from opengever.task.adapters import IResponseContainer
 from opengever.task.interfaces import ICommentResponseSyncerSender
 from opengever.task.interfaces import IResponseSyncerSender
+from opengever.task.interfaces import IWorkflowResponseSyncerSender
 from opengever.task.syncer import BaseResponseSyncerReceiver
 from opengever.task.syncer import BaseResponseSyncerSender
 from opengever.task.syncer import CommentResponseSyncerSender
 from opengever.task.syncer import ResponseSyncerSenderException
+from opengever.task.syncer import WorkflowResponseSyncerSender
 from opengever.testing import FunctionalTestCase
+from plone import api
+from plone.app.testing import TEST_USER_ID
 from zExceptions import Forbidden
 from zope.component import getMultiAdapter
 from zope.interface.verify import verifyClass
@@ -191,6 +195,37 @@ class TestCommentResponseSyncerSender(FunctionalTestCase):
             str(exception.exception))
 
 
+class TestWorkflowResponseSyncerSender(FunctionalTestCase):
+
+    def test_verify_interfaces(self):
+        verifyClass(IWorkflowResponseSyncerSender, WorkflowResponseSyncerSender)
+
+    def test_raises_sync_exception_raises_workflow_specific_exception_message(self):
+        predecessor = create(Builder('task').in_state('task-state-resolved'))
+
+        sender = WorkflowResponseSyncerSender(object(), self.request)
+
+        with self.assertRaises(ResponseSyncerSenderException) as exception:
+            sender.raise_sync_exception(
+                predecessor.get_sql_object(),
+                'workflow-transition', 'some text')
+
+        self.assertEqual(
+            'Could not change workflow on remote admin unit client1 (task-1)',
+            str(exception.exception))
+
+    def test_forwarding_predecessors_are_ignored(self):
+        forwarding = create(Builder('forwarding')
+                            .in_state('forwarding-state-closed'))
+        successor = create(Builder('task')
+                           .in_state('task-state-resolved')
+                           .successor_from(forwarding))
+
+        sender = WorkflowResponseSyncerSender(object(), self.request)
+
+        self.assertEqual([], sender.get_related_tasks_to_sync(successor))
+
+
 class TestBaseResponseSyncerReceiver(FunctionalTestCase):
 
     def prepare_request(self, task, **kwargs):
@@ -238,6 +273,52 @@ class TestBaseResponseSyncerReceiver(FunctionalTestCase):
             "Should not add the same response twice")
 
 
+class TestWorkflowSyncerReceiver(FunctionalTestCase):
+
+    RECEIVER_VIEW_NAME = '@@sync-task-workflow-response'
+
+    def prepare_request(self, task, **kwargs):
+        for key, value in kwargs.items():
+            task.REQUEST.set(key, value)
+
+        activate_request_layer(task.REQUEST, IInternalOpengeverRequestLayer)
+
+    def test_changes_workflow_state(self):
+        task = create(Builder('task').in_state('task-state-in-progress'))
+
+        self.prepare_request(task, text=u'I am done!',
+                             transition= 'task-transition-in-progress-resolved')
+
+        task.unrestrictedTraverse(self.RECEIVER_VIEW_NAME)()
+
+        self.assertEquals('task-state-resolved', api.content.get_state(task))
+
+    def test_does_not_reset_responsible_if_no_new_value_is_given(self):
+        task = create(Builder('task')
+                      .in_state('task-state-in-progress'))
+
+        self.prepare_request(task, text=u'I am done!',
+                             transition= 'task-transition-in-progress-resolved')
+        task.unrestrictedTraverse(self.RECEIVER_VIEW_NAME)()
+
+        self.assertEquals('client1', task.responsible_client)
+        self.assertEquals(TEST_USER_ID, task.responsible)
+
+    def test_updates_responsible_if_new_value_is_given(self):
+        create(Builder('ogds_user').id('hugo.boss'))
+        task = create(Builder('task')
+                      .in_state('task-state-in-progress'))
+
+        self.prepare_request(task, text=u'I am done!',
+                             transition='task-transition-reassign',
+                             responsible='hugo.boss',
+                             responsible_client='afi')
+        task.unrestrictedTraverse(self.RECEIVER_VIEW_NAME)()
+
+        self.assertEquals('afi', task.responsible_client)
+        self.assertEquals('hugo.boss', task.responsible)
+
+
 class TestCommentSyncer(FunctionalTestCase):
 
     def setUp(self):
@@ -279,3 +360,39 @@ class TestCommentSyncer(FunctionalTestCase):
 
         self.assertEqual('We need more stuff!', response.text)
         self.assertEqual('task-commented', response.transition)
+
+
+class TestWorkflowSyncer(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestWorkflowSyncer, self).setUp()
+        activate_request_layer(self.portal.REQUEST,
+                               IInternalOpengeverRequestLayer)
+
+    def test_sync_state_change_on_successor_to_predecessor(self):
+        predecessor = create(Builder('task').in_state('task-state-resolved'))
+        successor = create(Builder('task').successor_from(predecessor))
+
+        sender = WorkflowResponseSyncerSender(successor, self.request)
+
+        sender.sync_related_tasks(
+            'task-transition-resolved-in-progress',
+            text=u'Please extend chapter 2.4')
+
+        self.assertEquals('task-state-in-progress',
+                          api.content.get_state(predecessor))
+
+    def test_sync_state_change_on_predecessor_to_successor(self):
+        predecessor = create(Builder('task').in_state('task-state-resolved'))
+        successor = create(Builder('task')
+                           .in_state('task-state-resolved')
+                           .successor_from(predecessor))
+
+        sender = WorkflowResponseSyncerSender(predecessor, self.request)
+
+        sender.sync_related_tasks(
+            'task-transition-resolved-in-progress',
+            text=u'Please extend chapter 2.4.')
+
+        self.assertEquals('task-state-in-progress',
+                          api.content.get_state(successor))

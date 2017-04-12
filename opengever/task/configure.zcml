@@ -60,10 +60,23 @@
       class=".syncer.CommentResponseSyncerReceiver"
       />
 
+  <browser:page
+      name="sync-task-workflow-response"
+      for="opengever.task.task.ITask"
+      permission="zope.Public"
+      class=".syncer.WorkflowResponseSyncerReceiver"
+      />
+
   <adapter
       factory=".syncer.CommentResponseSyncerSender"
       for="opengever.task.task.ITask *"
       provides="opengever.task.interfaces.ICommentResponseSyncerSender"
+      />
+
+  <adapter
+      factory=".syncer.WorkflowResponseSyncerSender"
+      for="opengever.task.task.ITask *"
+      provides="opengever.task.interfaces.IWorkflowResponseSyncerSender"
       />
 
   <adapter

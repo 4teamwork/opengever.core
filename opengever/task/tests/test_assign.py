@@ -4,7 +4,7 @@ from ftw.testbrowser import browser as default_browser
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import error_messages
 from opengever.task.adapters import IResponseContainer
-from opengever.task.statesyncer import SyncTaskWorkflowStateReceiveView
+from opengever.task.syncer import WorkflowResponseSyncerReceiver
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
 
@@ -85,12 +85,12 @@ class TestAssignTaskWithSuccessors(FunctionalTestCase):
                                 .successor_from(self.predecessor))
 
         # disable IInternalOpengeverRequestLayer check in StateSyncer receiver
-        self.org_check = SyncTaskWorkflowStateReceiveView.check_internal_request
-        SyncTaskWorkflowStateReceiveView.check_internal_request = lambda x: True
+        self.org_check = WorkflowResponseSyncerReceiver._check_internal_request
+        WorkflowResponseSyncerReceiver._check_internal_request = lambda x: True
 
     def tearDown(self):
         super(TestAssignTaskWithSuccessors, self).tearDown()
-        SyncTaskWorkflowStateReceiveView.check_internal_request = self.org_check
+        WorkflowResponseSyncerReceiver._check_internal_request = self.org_check
 
     @browsing
     def test_syncs_predecessor_when_reassigning_successor(self, browser):

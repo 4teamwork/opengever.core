@@ -10,7 +10,7 @@ from opengever.task.activities import TaskTransitionActivity
 from opengever.task.adapters import IResponseContainer
 from opengever.task.adapters import Response
 from opengever.task.interfaces import ICommentResponseHandler
-from opengever.task.interfaces import IWorkflowStateSyncer
+from opengever.task.interfaces import IWorkflowResponseSyncerSender
 from opengever.task.permissions import DEFAULT_ISSUE_MIME_TYPE
 from opengever.task.task import ITask
 from plone.autoform.form import AutoExtensibleForm
@@ -312,9 +312,9 @@ class TaskTransitionResponseAddForm(form.AddForm, AutoExtensibleForm):
 
             self.record_activity(new_response)
 
-            syncer = getMultiAdapter((self.context, self.request),
-                                     IWorkflowStateSyncer)
-            syncer.change_remote_tasks_workflow_state(
+            sender = getMultiAdapter((self.context, self.request),
+                                     IWorkflowResponseSyncerSender)
+            sender.sync_related_tasks(
                 transition, text=data.get('text'))
 
             url = self.context.absolute_url()
