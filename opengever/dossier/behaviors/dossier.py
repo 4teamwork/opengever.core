@@ -56,7 +56,7 @@ class IDossier(form.Schema):
         ],
     )
 
-    form.widget(keywords=KeywordFieldWidget)
+    form.widget('keywords', KeywordFieldWidget, new_terms_as_unicode=True)
     keywords = schema.Tuple(
         title=_(u'label_keywords', default=u'Keywords'),
         description=_(u'help_keywords', default=u''),
