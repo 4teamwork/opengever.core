@@ -125,6 +125,17 @@ class TestPrivateDossierTabbedView(FunctionalTestCase):
             browser.css('.formTab').text)
 
     @browsing
+    def test_action_menu_is_displayed_correctly(self, browser):
+        dossier = create(Builder('private_dossier').within(self.folder))
+        browser.login().open(dossier)
+
+        self.assertEqual(
+            ['Export as Zip', 'Properties',
+             'dossier-transition-deactivate', 'dossier-transition-resolve'],
+            browser.css('#plone-contentmenu-actions '
+                        '.actionMenuContent li').text)
+
+    @browsing
     def test_participation_and_task_box_are_hidden_on_overview(self, browser):
         dossier = create(Builder('private_dossier').within(self.folder))
         browser.login().open(dossier, view='tabbedview_view-overview')
