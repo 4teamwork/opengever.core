@@ -104,4 +104,19 @@
       permission="cmf.ModifyPortalContent"
       />
 
+  <!-- ZPT / METAL macros -->
+  <browser:page
+      for="opengever.document.document.IDocumentSchema"
+      name="macros"
+      template="./browser/templates/macros.pt"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.mail.mail.IOGMailMarker"
+      name="macros"
+      template="./browser/templates/macros.pt"
+      permission="zope2.View"
+      />
+
 </configure>
