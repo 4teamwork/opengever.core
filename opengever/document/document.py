@@ -1,7 +1,8 @@
 from AccessControl import ClassSecurityInfo
 from AccessControl import getSecurityManager
 from AccessControl.Permissions import webdav_unlock_items
-from Acquisition import aq_inner, aq_parent
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from collective import dexteritytextindexer
 from five import grok
 from ftw.mail.interfaces import IEmailAddress
@@ -27,6 +28,7 @@ from zope.globalrequest import getRequest
 from zope.interface import implements
 from zope.interface import Invalid
 from zope.interface import invariant
+
 import logging
 import os.path
 
@@ -42,8 +44,7 @@ MAIL_EXTENSIONS = ['.eml', '.msg']
 
 
 class IDocumentSchema(form.Schema):
-    """ Document Schema Interface
-    """
+    """Document Schema Interface."""
 
     form.fieldset(
         u'common',
@@ -77,28 +78,30 @@ class IDocumentSchema(form.Schema):
 
 
 class UploadValidator(validator.SimpleFieldValidator):
+    """Validate document uploads."""
 
     def validate(self, value):
         """An mail upload as og.document should't be possible,
-        it should be added as Mail object (see opengever.mail)"""
-
+        it should be added as Mail object (see opengever.mail).
+        """
         if value and value.filename:
             basename, extension = os.path.splitext(value.filename)
             if extension.lower() in MAIL_EXTENSIONS:
                 if IDossierMarker.providedBy(self.context):
-                    mail_address = IEmailAddress(self.request
-                        ).get_email_for_object(self.context)
+                    mail_address = IEmailAddress(
+                        self.request).get_email_for_object(self.context)
                 else:
                     parent = aq_parent(aq_inner(self.context))
-                    mail_address = IEmailAddress(self.request
-                        ).get_email_for_object(parent)
+                    mail_address = IEmailAddress(
+                        self.request).get_email_for_object(parent)
 
-                raise Invalid(
-                    _(u'error_mail_upload',
+                raise Invalid(_(
+                    u'error_mail_upload',
                     default=u"It's not possible to add E-mails here, please '\
                     'send it to ${mailaddress} or drag it to the dossier '\
                     ' (Dragn'n'Drop).",
-                      mapping={'mailaddress': mail_address}))
+                    mapping={'mailaddress': mail_address}
+                    ))
 
             return
 
@@ -112,6 +115,7 @@ grok.global_adapter(UploadValidator)
 
 
 class Document(Item, BaseDocumentMixin):
+    """Documents, the main data store of GEVER."""
 
     security = ClassSecurityInfo()
 
@@ -131,9 +135,9 @@ class Document(Item, BaseDocumentMixin):
 
     def __contains__(self, key):
         """Used because of a the following contains check in
-        collective.quickupload (https://github.com/collective/collective.quickupload/blob/1.8.2/collective/quickupload/browser/quick_upload.py#L679)
+        collective.quickupload:
+        https://github.com/collective/collective.quickupload/blob/1.8.2/collective/quickupload/browser/quick_upload.py#L679
         """
-
         return False
 
     def related_items(self):
@@ -146,8 +150,7 @@ class Document(Item, BaseDocumentMixin):
         return self.get_mimetype_icon(relative_to_portal)
 
     def icon(self):
-        """for ZMI
-        """
+        """For ZMI."""
         return self.getIcon()
 
     def as_shadow_document(self):
@@ -209,7 +212,6 @@ class Document(Item, BaseDocumentMixin):
 
     def get_current_version(self):
         """Return the current document history version."""
-
         repository = api.portal.get_tool("portal_repository")
         assert repository.isVersionable(self), \
             'Document is not versionable'
@@ -225,12 +227,16 @@ class Document(Item, BaseDocumentMixin):
             filename=filename,
             contentType=content_type)
 
+    def has_file(self):
+        return self.file is not None
+
     def get_filename(self):
-        if not self.file:
-            return None
-        return self.file.filename
+        if self.has_file():
+            return self.file.filename
+        return None
 
     security.declareProtected(webdav_unlock_items, 'UNLOCK')
+
     def UNLOCK(self, REQUEST, RESPONSE):
         """Leave shadow state if a shadow-document is unlocked.
 

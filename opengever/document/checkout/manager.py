@@ -1,4 +1,5 @@
-from AccessControl import getSecurityManager, Unauthorized
+from AccessControl import getSecurityManager
+from AccessControl import Unauthorized
 from datetime import date
 from datetime import datetime
 from five import grok
@@ -25,6 +26,8 @@ CHECKIN_CHECKOUT_ANNOTATIONS_KEY = 'opengever.document.checked_out_by'
 
 
 class CheckinCheckoutManager(grok.MultiAdapter):
+    """Document checkout flow management."""
+
     grok.provides(ICheckinCheckoutManager)
     grok.adapts(IDocumentSchema, IBrowserRequest)
 
@@ -49,7 +52,6 @@ class CheckinCheckoutManager(grok.MultiAdapter):
         """Checks whether checkout is allowed for the current user on the
         adapted document.
         """
-
         # is it already checked out?
         if self.get_checked_out_by():
             return False
@@ -154,9 +156,7 @@ class CheckinCheckoutManager(grok.MultiAdapter):
         notify(ObjectCheckedInEvent(self.context, comment))
 
     def is_cancel_allowed(self):
-        """Checks whether the user is able to cancel a checkout.
-        """
-
+        """Checks whether the user is able to cancel a checkout."""
         # is the document checked out?
         if not self.get_checked_out_by():
             return False
@@ -179,9 +179,7 @@ class CheckinCheckoutManager(grok.MultiAdapter):
             return False
 
     def cancel(self):
-        """Cancel the current checkout.
-        """
-
+        """Cancel the current checkout."""
         # is the user allowed to cancel?
         if not self.is_cancel_allowed():
             raise Unauthorized
@@ -235,7 +233,6 @@ class CheckinCheckoutManager(grok.MultiAdapter):
         """Return wheter reverting a the document to a previous version is
         allowed.
         """
-
         # is it already checked out?
         if self.get_checked_out_by():
             return False

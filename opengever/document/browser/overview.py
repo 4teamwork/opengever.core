@@ -4,9 +4,9 @@ from ftw import bumblebee
 from opengever.base import _ as ogbmf
 from opengever.base.browser import edit_public_trial
 from opengever.base.browser.helper import get_css_class
-from opengever.base.pdfconverter import is_pdfconverter_enabled
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.document import _
+from opengever.document.base import BaseDocumentMixin
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.browser import archival_file_form
 from opengever.document.browser.download import DownloadConfirmationHelper
@@ -28,16 +28,9 @@ from zope.component import getUtility
 from zope.component import queryMultiAdapter
 
 
-try:
-    from opengever.pdfconverter.behaviors.preview import IPreviewMarker
-    from opengever.pdfconverter.behaviors.preview import IPreview
-except ImportError:
-    pass
-
-
 class BaseRow(object):
-    """Base class for metadata row configurations.
-    """
+    """Base class for metadata row configurations."""
+
     def __init__(self):
         self._view = None
 
@@ -52,8 +45,8 @@ class BaseRow(object):
 
 
 class FieldRow(BaseRow):
-    """A metadata row type that gets its information from schema fields.
-    """
+    """A metadata row type that gets its information from schema fields."""
+
     def __init__(self, field, label=None):
         super(FieldRow, self).__init__()
         self.field = field
@@ -95,6 +88,7 @@ class CustomRow(BaseRow):
     """A custom metadata row type that uses a callable `renderer` to
     fetch the row's content.
     """
+
     def __init__(self, renderer, label):
         super(CustomRow, self).__init__()
         self.renderer = renderer
@@ -125,7 +119,11 @@ class TemplateRow(CustomRow):
         return self.renderer(self.view)
 
 
-class Overview(DisplayForm, GeverTabMixin):
+class Overview(DisplayForm, GeverTabMixin, BaseDocumentMixin):
+    """File details overview."""
+
+    on_detail_view = True
+
     grok.context(IDocumentSchema)
     grok.name('tabbedview_view-overview')
     grok.template('overview')
@@ -135,7 +133,7 @@ class Overview(DisplayForm, GeverTabMixin):
     file_template = ViewPageTemplateFile('templates/file.pt')
     archival_file_template = ViewPageTemplateFile('templates/archiv_file.pt')
     public_trial_template = ViewPageTemplateFile('templates/public_trial.pt')
-    submitted_with_template = ViewPageTemplateFile('templates/submitted_with.pt')
+    submitted_with_template = ViewPageTemplateFile('templates/submitted_with.pt')  # noqa
 
     def get_metadata_config(self):
         rows = [
@@ -187,10 +185,11 @@ class Overview(DisplayForm, GeverTabMixin):
         return SubmittedDocument.query.by_source(self.context).all()
 
     def get_update_document_url(self, submitted_document):
-        return '{}/@@submit_additional_document?submitted_document_id={}'.format(
-            self.context.absolute_url(),
-            submitted_document.document_id
-        )
+        return ('{}/@@submit_additional_document'
+                '?submitted_document_id={}').format(
+                    self.context.absolute_url(),
+                    submitted_document.document_id
+                    )
 
     def is_outdated(self, submitted_document):
         return not submitted_document.is_up_to_date(self.context)
@@ -221,32 +220,6 @@ class Overview(DisplayForm, GeverTabMixin):
 
     def get_css_class(self):
         return get_css_class(self.context)
-
-    def is_preview_supported(self):
-        # XXX TODO: should be persistent called two times
-        if is_pdfconverter_enabled():
-            return IPreviewMarker.providedBy(self.context)
-        return False
-
-    def is_pdf_download_available(self):
-        if self.is_preview_supported():
-            return IPreview(self.context).is_downloadable
-
-        return False
-
-    def is_checkout_and_edit_available(self):
-        return self.context.is_checkout_and_edit_available()
-
-    def is_download_copy_available(self):
-        """Disable copy link when the document is checked
-        out by an other user."""
-
-        manager = queryMultiAdapter(
-            (self.context, self.request), ICheckinCheckoutManager)
-        if manager.get_checked_out_by():
-            if manager.get_checked_out_by() != getSecurityManager().getUser().getId():
-                return False
-        return True
 
     def show_modfiy_public_trial_link(self):
         try:

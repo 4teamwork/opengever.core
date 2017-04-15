@@ -10,6 +10,7 @@ from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.bumblebee.interfaces import IBumblebeeOverlay
 from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
 from opengever.bumblebee.interfaces import IVersionedContextMarker
+from opengever.document.base import BaseDocumentMixin
 from opengever.document.browser.versions_tab import translate_link
 from opengever.document.checkout.viewlets import CheckedOutViewlet
 from opengever.document.interfaces import ICheckinCheckoutManager
@@ -29,12 +30,14 @@ from zope.component import queryMultiAdapter
 from zope.i18n import translate
 from zope.interface import alsoProvides
 from zope.interface import implements
+
 import os
 
 
-class BumblebeeBaseDocumentOverlay(object):
+class BumblebeeBaseDocumentOverlay(BaseDocumentMixin):
     """Bumblebee overlay for base documents.
     """
+
     implements(IBumblebeeOverlay)
 
     version_id = None
@@ -93,7 +96,7 @@ class BumblebeeBaseDocumentOverlay(object):
     def get_download_copy_link(self):
         # Because of cyclic dependencies, we can not import
         # DownloadConfirmationHelper in the top of the file.
-        from opengever.document.browser.download import DownloadConfirmationHelper
+        from opengever.document.browser.download import DownloadConfirmationHelper  # noqa
 
         if not self.has_file():
             return None
@@ -113,25 +116,6 @@ class BumblebeeBaseDocumentOverlay(object):
         return u'{}/bumblebee-open-pdf?filename={}'.format(
             self.context.absolute_url(), quote(self._get_pdf_filename()))
 
-    def get_checkin_without_comment_url(self):
-        if not self.has_file():
-            return None
-        return self._get_checkin_url(with_comment=False)
-
-    def get_checkin_with_comment_url(self):
-        if not self.has_file():
-            return None
-        return self._get_checkin_url(with_comment=True)
-
-    def has_file(self):
-        return bool(self.get_file())
-
-    def get_file(self):
-        if not hasattr(self, '_file'):
-            has_file = hasattr(self.context, 'file') and self.context.file
-            self._file = self.context.file if has_file else None
-        return self._file
-
     def render_checked_out_viewlet(self):
         viewlet = CheckedOutViewlet(self.context, self.request, None, None)
         viewlet.update()
@@ -142,11 +126,8 @@ class BumblebeeBaseDocumentOverlay(object):
         viewlet.update()
         return viewlet.render()
 
-    def is_versioned_context(self):
-        return self.version_id is not None
-
     def get_revert_link(self):
-        if self.is_versioned_context():
+        if self.is_versioned():
             return self._get_revert_link()
         return None
 
@@ -158,12 +139,6 @@ class BumblebeeBaseDocumentOverlay(object):
         filename, extenstion = os.path.splitext(self.get_file().filename)
         return u'{}.pdf'.format(filename)
 
-    def _is_checkin_allowed(self):
-        manager = queryMultiAdapter(
-            (self.context, self.request), ICheckinCheckoutManager)
-
-        return manager.is_checkin_allowed()
-
     def _is_checkout_and_edit_available(self):
         manager = queryMultiAdapter(
             (self.context, self.request), ICheckinCheckoutManager)
@@ -173,20 +148,6 @@ class BumblebeeBaseDocumentOverlay(object):
         if not userid:
             return manager.is_checkout_allowed()
         return userid == api.user.get_current().getId()
-
-    def _get_checkin_url(self, with_comment=False):
-        if not self._is_checkin_allowed():
-            return None
-
-        if with_comment:
-            checkin_view = u'@@checkin_document'
-        else:
-            checkin_view = u'@@checkin_without_comment'
-
-        return u"{}/{}?_authenticator={}".format(
-            self.context.absolute_url(),
-            checkin_view,
-            createToken())
 
     def _get_revert_link(self):
         url = u'{}/revert-file-to-version?version_id={}'.format(
@@ -200,8 +161,8 @@ class BumblebeeBaseDocumentOverlay(object):
             css_class='standalone function-revert')
 
     def should_open_in_new_window(self):
-        return api.portal.get_registry_record('open_pdf_in_a_new_window',
-                                              interface=IGeverBumblebeeSettings)
+        return api.portal.get_registry_record(
+            'open_pdf_in_a_new_window', interface=IGeverBumblebeeSettings)
 
 
 class BumblebeeMailOverlay(BumblebeeBaseDocumentOverlay):
@@ -236,14 +197,14 @@ class BumblebeeMailOverlay(BumblebeeBaseDocumentOverlay):
 
     def get_file(self):
         if not hasattr(self, '_file'):
-            has_file = hasattr(self.context, 'message') and self.context.message
+            has_file = hasattr(self.context, 'message') and self.context.message  # noqa
             self._file = self.context.message if has_file else None
         return self._file
 
 
 class BumblebeeDocumentVersionOverlay(BumblebeeBaseDocumentOverlay):
-    """Bumblebee overlay for versioned documents
-    """
+    """Bumblebee overlay for versioned documents"""
+
     def get_checkout_url(self):
         return None
 
@@ -269,12 +230,9 @@ class BumblebeeDocumentVersionOverlay(BumblebeeBaseDocumentOverlay):
         return ''
 
 
-class BumblebeeOverlayBaseView(BrowserView):
+class BumblebeeOverlayBaseView(BrowserView, BaseDocumentMixin):
     """Baseview for the bumblebeeoverlay.
     """
-
-    on_detail_view = False
-    overlay = None
 
     def __call__(self):
         if not is_bumblebee_feature_enabled():
@@ -284,7 +242,8 @@ class BumblebeeOverlayBaseView(BrowserView):
         version_id = self._get_version_id()
 
         if version_id is not None:
-            overlay_context = self._retrieve_version(overlay_context, version_id)
+            overlay_context = self._retrieve_version(
+                overlay_context, version_id)
             alsoProvides(self.request, IVersionedContextMarker)
 
         self.overlay = getMultiAdapter(

@@ -21,8 +21,10 @@ from opengever.mail.interfaces import IAttachmentsDeletedEvent
 from opengever.ogds.models.user import User
 from plone.app.dexterity.behaviors import metadata
 from plone.autoform.interfaces import IFormFieldProvider
-from plone.directives import form, dexterity
+from plone.directives import dexterity
+from plone.directives import form
 from plone.i18n.normalizer.interfaces import IIDNormalizer
+from plone.namedfile.interfaces import HAVE_BLOBS
 from plone.supermodel.interfaces import FIELDSETS_KEY
 from plone.supermodel.model import Fieldset
 from sqlalchemy import func
@@ -33,17 +35,18 @@ from zope.component import getUtility
 from zope.component.hooks import getSite
 from zope.event import notify
 from zope.i18n import translate
-from zope.interface import Interface, alsoProvides
+from zope.interface import alsoProvides
+from zope.interface import Interface
 from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent import Attributes
 from zope.lifecycleevent.interfaces import IObjectCopiedEvent
 from zope.lifecycleevent.interfaces import IObjectCreatedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
+
 import os
 import re
 
 
-from plone.namedfile.interfaces import HAVE_BLOBS
 if HAVE_BLOBS:
     from plone.namedfile import NamedBlobFile as NamedFile
 else:
@@ -63,7 +66,8 @@ class IOGMailMarker(Interface):
 
 class IOGMail(form.Schema):
     """Opengever specific behavior,
-    which add a title Field to the form."""
+    which add a title Field to the form.
+    """
 
     form.fieldset(
         u'common',
@@ -76,6 +80,7 @@ class IOGMail(form.Schema):
         title=_(u'label_title', default=u'Title'),
         required=False,
     )
+
 
 alsoProvides(IOGMail, IFormFieldProvider)
 
@@ -97,7 +102,6 @@ class OGMail(Mail, BaseDocumentMixin):
         Gever adds a title field for mails, so we need to override
         the setter of ftw.mail.mail.Mail and allow changing mail titles.
         """
-
         self._title = value
 
     @Mail.message.setter
@@ -107,26 +111,23 @@ class OGMail(Mail, BaseDocumentMixin):
         THe title is initialized with an event handler on object creation and
         must not be overwritten later since the user might change it.
         """
-
         self._message = message
         self._update_attachment_infos()
         self._reset_header_cache()
 
     def get_extraction_parent(self):
         """Return the parent that accepts extracted attachments."""
-
         return self.get_parent_dossier() or self.get_parent_inbox()
 
     def get_attachments(self):
-        """ Returns a list of dicts describing the attachements.
+        """Returns a list of dicts describing the attachements.
 
         Only attachments with a filename are returned.
         """
         return self.attachment_infos
 
     def has_attachments(self):
-        """ Return whether this mail has attachments."""
-
+        """Return whether this mail has attachments."""
         return len(self.get_attachments()) > 0
 
     def extract_attachments_into_parent(self, positions):
@@ -139,7 +140,6 @@ class OGMail(Mail, BaseDocumentMixin):
         can be obtained from the attachment description returned by
         `get_attachments`.
         """
-
         docs = []
         for position in positions:
             docs.append(self.extract_attachment_into_parent(position))
@@ -155,7 +155,6 @@ class OGMail(Mail, BaseDocumentMixin):
         can be obtained from the attachment description returned by
         `get_attachments`.
         """
-
         parent = self.get_extraction_parent()
         if parent is None:
             raise RuntimeError(
@@ -192,7 +191,6 @@ class OGMail(Mail, BaseDocumentMixin):
 
         The attachments will be removed from the attached message.
         """
-
         self._delete_attachments(self.get_attachments())
 
     def delete_attachments(self, positions):
@@ -202,7 +200,6 @@ class OGMail(Mail, BaseDocumentMixin):
         can be obtained from the attachment description returned by
         `get_attachments`.
         """
-
         attachments = [attachment for attachment in self.get_attachments()
                        if attachment.get('position') in positions]
         self._delete_attachments(attachments)
@@ -231,7 +228,6 @@ class OGMail(Mail, BaseDocumentMixin):
         """Return a tuple: file-data, content-type and filename extracted from
         the attachment at position `pos`.
         """
-
         # get attachment at position pos
         attachment = None
         for i, part in enumerate(self.msg.walk()):
@@ -275,9 +271,13 @@ class OGMail(Mail, BaseDocumentMixin):
         """
         return False
 
+    def is_checkout_and_edit_available(self):
+        """Mail does not support checkin/checkout.
+        """
+        return False
+
     def get_current_version(self):
         """Mails cannot be edited, they are read-only."""
-
         return 0
 
     def update_filename(self):
@@ -288,10 +288,13 @@ class OGMail(Mail, BaseDocumentMixin):
         normalized_subject = normalizer.normalize(self.title)
         self.message.filename = u'{}.eml'.format(normalized_subject)
 
+    def has_file(self):
+        return self.message is not None
+
     def get_filename(self):
-        if not self.message:
-            return None
-        return self.message.filename
+        if self.has_file():
+            return self.message.filename
+        return None
 
 
 class OGMailBase(metadata.MetadataBase):
@@ -380,6 +383,7 @@ def initialize_metadata(mail, event):
 
 class OGMailEditForm(dexterity.EditForm):
     """Standard edit form, but shows the message field only in Display Mode"""
+
     grok.context(IOGMailMarker)
 
     def updateWidgets(self):
