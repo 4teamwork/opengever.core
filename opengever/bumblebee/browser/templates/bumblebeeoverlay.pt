@@ -33,85 +33,11 @@
     </table>
   </main>
   <footer>
-    <ul class="file-actions" i18n:domain="opengever.document">
-      <li tal:define="link view/overlay/get_checkout_url" tal:condition="nocall: link">
-       <tal:cond tal:condition="context/@@officeconnector_settings/is_checkout_enabled">
-         <a tal:attributes="href string:javascript:officeConnectorCheckout('${context/absolute_url}/officeconnector_checkout_url');;"
-             class="function-edit"
-             href="#"
-             i18n:translate="label_checkout_and_edit">
-             Checkout and edit
-         </a>
-       </tal:cond>
-       <tal:cond tal:condition="not: context/@@officeconnector_settings/is_checkout_enabled">
-         <a tal:attributes="href link"
-             class="function-edit"
-             i18n:translate="label_checkout_and_edit">
-             Checkout and edit
-          </a>
-       </tal:cond>
-      </li>
-       <tal:cond tal:condition="context/@@officeconnector_settings/is_attach_enabled">
-        <li>
-         <a tal:attributes="href string:javascript:officeConnectorAttach('${context/absolute_url}/officeconnector_attach_url');;"
-             class="function-attach"
-             href="#"
-             i18n:translate="label_attach_to_email">
-             Attach to email
-         </a>
-        </li>
-       </tal:cond>
-      <li tal:define="link view/overlay/get_checkin_without_comment_url" tal:condition="nocall: link">
-        <a id="action-checkin"
-            tal:attributes="href link"
-            i18n:translate="">
-            Checkin without comment
-         </a>
-      </li>
-      <li tal:define="link view/overlay/get_checkin_with_comment_url" tal:condition="nocall: link">
-        <a id="action-checkin"
-            tal:attributes="href link"
-            i18n:translate="">
-            Checkin with comment
-         </a>
-      </li>
-      <li id="action-revert"
-          tal:define="link view/overlay/get_revert_link"
-          tal:condition="nocall: link"
-          tal:content="structure link">
-      </li>
-      <li tal:define="link view/overlay/get_edit_metadata_url" tal:condition="nocall: link">
-        <a id="action-edit"
-            tal:attributes="href link"
-            i18n:domain="plone"
-            i18n:translate="">
-            Edit metadata
-         </a>
-      </li>
-      <li tal:define="link view/overlay/get_download_copy_link"
-          tal:condition="nocall: link"
-          tal:content="structure link">
-      </li>
-      <li tal:define="link view/overlay/get_open_as_pdf_url" tal:condition="nocall: link">
-        <a tal:define="target python: '_blank' if view.overlay.should_open_in_new_window() else None"
-            id="action-pdf"
-            tal:attributes="href link; target target | nothing;"
-            i18n:domain="opengever.bumblebee"
-            i18n:translate="label_open_document_as_pdf">
-            Open as PDF
-        </a>
-      </li>
-      <li tal:define="link view/overlay/get_detail_view_url" tal:condition="python:not view.on_detail_view and link">
-        <a id="action-view"
-            tal:attributes="href link"
-            i18n:domain="opengever.bumblebee"
-            i18n:translate="label_open_detail_view">Open detail view</a>
-      </li>
-    </ul>
+    <div metal:use-macro="context/@@macros/file_action_buttons" />
     <div class="info-viewlets">
       <div tal:replace="structure view/overlay/render_checked_out_viewlet" />
       <div tal:replace="structure view/overlay/render_lock_info_viewlet" />
-      <div tal:condition="view/overlay/is_versioned_context">
+      <div tal:condition="view/is_versioned">
         <dl class="portalMessage warning">
           <dt i18n:domain="plone" i18n:translate="">Warning</dt>
           <dd i18n:translate="warning_on_versioned_context">
