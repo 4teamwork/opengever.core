@@ -16,6 +16,7 @@ import transaction
 
 
 class TestDocumentDownloadConfirmation(FunctionalTestCase):
+    """Test the document download confirmation overlay."""
 
     def setUp(self):
         super(TestDocumentDownloadConfirmation, self).setUp()
@@ -61,7 +62,7 @@ class TestDocumentDownloadConfirmation(FunctionalTestCase):
         self.assert_download_journal_entry_created(self.document)
 
     @browsing
-    def test_download_copy_without_overlay_creates_journal_entry(self, browser):
+    def test_download_copy_without_overlay_creates_journal_entry(self, browser):  # noqa
         DownloadConfirmationHelper().deactivate()
         transaction.commit()
 
@@ -118,11 +119,12 @@ class TestDocumentDownloadConfirmation(FunctionalTestCase):
         browser.find('label_download').click()
         expected_url = "{}/download_file_version?version_id=1".format(
             self.document.absolute_url())
+
         self.assertEqual(expected_url, browser.url)
         self.assertEqual('bla bla', browser.contents)
 
     @browsing
-    def test_download_view_redirects_to_listing_for_missing_files(self, browser):
+    def test_download_view_redirects_to_listing_for_missing_files(self, browser):  # noqa
         document = create(Builder('document').titled('No Document'))
 
         browser.login().open(document, view='download')

@@ -16,6 +16,7 @@ from zope.interface.verify import verifyClass
 
 
 class TestAdapterRegisteredProperly(FunctionalTestCase):
+    """Test bumblebee overlay adapter registrations."""
 
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 
@@ -32,6 +33,7 @@ class TestAdapterRegisteredProperly(FunctionalTestCase):
 
 
 class TestGetPreviewPdfUrl(FunctionalTestCase):
+    """Test generating a link to the bumblebee instance."""
 
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 
@@ -41,10 +43,12 @@ class TestGetPreviewPdfUrl(FunctionalTestCase):
 
         adapter = getMultiAdapter((document, self.request), IBumblebeeOverlay)
 
-        self.assertIn('not_digitally_available.svg', adapter.get_preview_pdf_url())
+        self.assertIn(
+            'not_digitally_available.svg', adapter.get_preview_pdf_url())
 
 
 class TestGetOpenAsPdfLink(FunctionalTestCase):
+    """Test the integrity of generated bumblebee links."""
 
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 
@@ -57,7 +61,8 @@ class TestGetOpenAsPdfLink(FunctionalTestCase):
         adapter = getMultiAdapter((document, self.request), IBumblebeeOverlay)
 
         self.assertEqual(
-            'http://nohost/plone/dossier-1/document-1/bumblebee-open-pdf?filename=testdokumant.pdf',
+            'http://nohost/plone/dossier-1/document-1/'
+            'bumblebee-open-pdf?filename=testdokumant.pdf',
             adapter.get_open_as_pdf_url())
 
     def test_returns_none_if_no_mimetype_is_available(self):
@@ -81,6 +86,7 @@ class TestGetOpenAsPdfLink(FunctionalTestCase):
 
 
 class TestGetPdfFilename(FunctionalTestCase):
+    """Test we generate bumblebee filenames correctly."""
 
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 
@@ -107,6 +113,7 @@ class TestGetPdfFilename(FunctionalTestCase):
 
 
 class TestGetFileSize(FunctionalTestCase):
+    """Test we agree about filesize with bumblebee."""
 
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 
@@ -132,6 +139,7 @@ class TestGetFileSize(FunctionalTestCase):
 
 
 class TestGetCreator(FunctionalTestCase):
+    """Test we correctly link to the document author."""
 
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 
@@ -148,6 +156,7 @@ class TestGetCreator(FunctionalTestCase):
 
 
 class TestGetDocumentDate(FunctionalTestCase):
+    """Test we correctly fetch the document date."""
 
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 
@@ -173,6 +182,7 @@ class TestGetDocumentDate(FunctionalTestCase):
 
 
 class TestGetContainingDossier(FunctionalTestCase):
+    """Test we correctly fetch the immediate parent dossier."""
 
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 
@@ -188,6 +198,7 @@ class TestGetContainingDossier(FunctionalTestCase):
 
 
 class TestGetSequenceNumber(FunctionalTestCase):
+    """Test we correctly fetch the document sequence number."""
 
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 
@@ -201,6 +212,7 @@ class TestGetSequenceNumber(FunctionalTestCase):
 
 
 class TestGetReferenceNumber(FunctionalTestCase):
+    """Test we correctly fetch the document reference number."""
 
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 
@@ -214,6 +226,7 @@ class TestGetReferenceNumber(FunctionalTestCase):
 
 
 class TestGetCheckoutLink(FunctionalTestCase):
+    """Test we correctly generate the document checkout link."""
 
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 
@@ -261,6 +274,7 @@ class TestGetCheckoutLink(FunctionalTestCase):
 
 
 class TestGetDownloadCopyLink(FunctionalTestCase):
+    """Test we correctly generate the document download link."""
 
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 
@@ -288,6 +302,7 @@ class TestGetDownloadCopyLink(FunctionalTestCase):
 
 
 class TestGetEditMetadataLink(FunctionalTestCase):
+    """Test we correctly generate the document edit metadata link."""
 
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 
@@ -318,6 +333,7 @@ class TestGetEditMetadataLink(FunctionalTestCase):
 
 
 class TestHasFile(FunctionalTestCase):
+    """Test we correctly detect if a document has a file."""
 
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 
@@ -343,6 +359,7 @@ class TestHasFile(FunctionalTestCase):
 
 
 class TestGetFile(FunctionalTestCase):
+    """Test we correctly fetch the file of the document."""
 
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 
@@ -368,6 +385,7 @@ class TestGetFile(FunctionalTestCase):
 
 
 class TestGetCheckinWithoutCommentUrl(FunctionalTestCase):
+    """Test we correctly generate a checkin without comment link."""
 
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 
@@ -390,11 +408,13 @@ class TestGetCheckinWithoutCommentUrl(FunctionalTestCase):
 
         adapter = getMultiAdapter((document, self.request), IBumblebeeOverlay)
         self.assertIn(
-            'http://nohost/plone/dossier-1/document-1/@@checkin_without_comment',
+            'http://nohost/plone/dossier-1/document-1/'
+            '@@checkin_without_comment',
             adapter.get_checkin_without_comment_url())
 
 
 class TestGetCheckinWithCommentUrl(FunctionalTestCase):
+    """Test we correctly generate a checkin with comment link."""
 
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 
@@ -422,6 +442,7 @@ class TestGetCheckinWithCommentUrl(FunctionalTestCase):
 
 
 class TestRenderLockInfoViewlet(FunctionalTestCase):
+    """Test we correctly render the document locking status."""
 
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 
@@ -459,6 +480,7 @@ class TestRenderLockInfoViewlet(FunctionalTestCase):
 
 
 class TestRenderCheckedOutViewlet(FunctionalTestCase):
+    """Test we correctly render the document checkout info viewlet."""
 
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 
@@ -487,6 +509,7 @@ class TestRenderCheckedOutViewlet(FunctionalTestCase):
 
 
 class TestIsVersionedContext(FunctionalTestCase):
+    """Test if we correctly detect if we're on a versioned document or not."""
 
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 
@@ -496,28 +519,29 @@ class TestIsVersionedContext(FunctionalTestCase):
 
         adapter = getMultiAdapter((document, self.request), IBumblebeeOverlay)
 
-        self.assertFalse(adapter.is_versioned_context())
+        self.assertFalse(adapter.is_versioned())
 
     def test_returns_true_if_version_id_is_0(self):
         dossier = create(Builder('dossier'))
         document = create(Builder('document').within(dossier))
 
+        self.request['version_id'] = 0
         adapter = getMultiAdapter((document, self.request), IBumblebeeOverlay)
-        adapter.version_id = 0
 
-        self.assertTrue(adapter.is_versioned_context())
+        self.assertTrue(adapter.is_versioned())
 
     def test_returns_true_if_version_id_is_a_number(self):
         dossier = create(Builder('dossier'))
         document = create(Builder('document').within(dossier))
 
+        self.request['version_id'] = 123
         adapter = getMultiAdapter((document, self.request), IBumblebeeOverlay)
-        adapter.version_id = 123
 
-        self.assertTrue(adapter.is_versioned_context())
+        self.assertTrue(adapter.is_versioned())
 
 
 class TestGetRevertUrl(FunctionalTestCase):
+    """Test we generate proper document version revert links."""
 
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 
@@ -527,6 +551,8 @@ class TestGetRevertUrl(FunctionalTestCase):
 
         alsoProvides(self.request, IVersionedContextMarker)
 
+        # We need to do both in order to fake a real request here
+        self.request['version_id'] = 3
         adapter = getMultiAdapter((document, self.request), IBumblebeeOverlay)
         adapter.version_id = 3
 

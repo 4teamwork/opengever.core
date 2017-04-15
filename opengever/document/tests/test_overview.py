@@ -3,7 +3,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
-from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
+from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY  # noqa
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import FunctionalTestCase
 from plone import api
@@ -19,6 +19,7 @@ import transaction
 
 
 class TestDocumentOverview(FunctionalTestCase):
+    """Test the document overview."""
 
     def setUp(self):
         super(TestDocumentOverview, self).setUp()
@@ -38,11 +39,11 @@ class TestDocumentOverview(FunctionalTestCase):
     def test_overview_has_edit_link(self, browser):
         browser.login().open(self.document, view='tabbedview_view-overview')
         self.assertEquals('Checkout and edit',
-                          browser.css('a.function-edit').first.text)
+                          browser.css('a.function-edit')[1].text)
         self.assertEquals(
             '{0}/editing_document'.format(
                 self.document.absolute_url()),
-            browser.css('a.function-edit').first.attrib['href'].split('?', 1)[0])
+            browser.css('a.function-edit')[1].attrib['href'].split('?', 1)[0])
 
     @browsing
     def test_overview_has_creator_link(self, browser):
@@ -70,9 +71,9 @@ class TestDocumentOverview(FunctionalTestCase):
     def test_overview_self_checked_out(self, browser):
         """Check the document overview when the document is checked out,
         by your self (TEST_USER_ID):
-         - checked out by information
-         - edit link is still available"""
-
+        - checked out by information
+        - edit link is still available
+        """
         manager = queryMultiAdapter(
             (self.document, self.portal.REQUEST), ICheckinCheckoutManager)
         manager.checkout()
@@ -81,8 +82,12 @@ class TestDocumentOverview(FunctionalTestCase):
 
         self.assertEquals('Test User (test_user_1_)',
                           browser.css('[href*="user-details"]').first.text)
+
+        self.assertEquals('Edit metadata',
+                          browser.css('a.function-edit')[0].text)
+
         self.assertEquals('Checkout and edit',
-                          browser.css('a.function-edit').first.text)
+                          browser.css('a.function-edit')[1].text)
 
         self.assertEquals('Download copy',
                           browser.css('a.function-download-copy').first.text)
@@ -115,9 +120,9 @@ class TestDocumentOverview(FunctionalTestCase):
     def test_inactive_links_if_document_is_checked_out(self, browser):
         """Check the document overview when the document is checked out,
         by another user:
-         - checked out information
-         - edit link is inactive"""
-
+        - checked out information
+        - edit link is inactive
+        """
         IAnnotations(self.document)[
             CHECKIN_CHECKOUT_ANNOTATIONS_KEY] = 'hugo.boss'
 
@@ -169,7 +174,8 @@ class TestDocumentOverview(FunctionalTestCase):
         self.assertEquals(
             '',
             browser.css(
-                '#form-widgets-IClassification-public_trial_statement').first.text)
+                '#form-widgets-IClassification-public_trial_statement')
+            .first.text)
 
     @browsing
     def test_modify_public_trial_link_NOT_shown_on_open_dossier(self, browser):
@@ -186,8 +192,10 @@ class TestDocumentOverview(FunctionalTestCase):
 
     @browsing
     def test_modify_public_trial_is_visible_on_closed_dossier(self, browser):
-        dossier = create(
-            Builder('dossier').within(self.repo_folder).in_state('dossier-state-resolved'))
+        dossier = create(Builder('dossier')
+                         .within(self.repo_folder)
+                         .in_state('dossier-state-resolved'))
+
         document = create(Builder('document')
                           .within(dossier)
                           .with_dummy_content())
@@ -199,7 +207,7 @@ class TestDocumentOverview(FunctionalTestCase):
             'Public trial edit link should be visible.')
 
     @browsing
-    def test_modify_public_trial_is_visible_on_closed_dossier_inside_a_task(self, browser):
+    def test_modify_public_trial_is_visible_on_closed_dossier_inside_a_task(self, browser):  # noqa
         dossier = create(Builder('dossier')
                          .within(self.repo_folder)
                          .in_state('dossier-state-resolved'))
@@ -212,9 +220,9 @@ class TestDocumentOverview(FunctionalTestCase):
 
         browser.login().visit(document, view='tabbedview_view-overview')
 
-        self.assertTrue(
-            browser.css('#form-widgets-IClassification-public_trial-edit-link'),
-            'Public trial edit link should be visible.')
+        self.assertTrue(browser.css(
+            '#form-widgets-IClassification-public_trial-edit-link'),
+                        'Public trial edit link should be visible.')
 
     @browsing
     def test_submitted_documents_hidden_when_feature_disabled(self, browser):
@@ -232,7 +240,7 @@ class TestDocumentOverview(FunctionalTestCase):
         self.assertEqual(0, len(proposals))
 
     @browsing
-    def test_archival_file_is_only_available_for_managers_by_default(self, browser):
+    def test_archival_file_is_only_available_for_managers_by_default(self, browser):  # noqa
         doc = create(Builder('document')
                      .attach_archival_file_containing('TEST', name=u'test.pdf')
                      .with_dummy_content())
@@ -253,7 +261,7 @@ class TestDocumentOverview(FunctionalTestCase):
                          'Archival file edit link should not be visible.')
 
     @browsing
-    def test_edit_archival_file_link_is_visible_on_closed_dossier(self, browser):
+    def test_edit_archival_file_link_is_visible_on_closed_dossier(self, browser):  # noqa
         self.grant('Manager')
         dossier = create(
             Builder('dossier')
@@ -270,7 +278,7 @@ class TestDocumentOverview(FunctionalTestCase):
             browser.css('#archival_file_edit_link').first.get('href'))
 
     @browsing
-    def test_edit_archival_file_link_is_visible_on_closed_dossier_inside_a_task(self, browser):
+    def test_edit_archival_file_link_is_visible_on_closed_dossier_inside_a_task(self, browser):  # noqa
         self.grant('Manager')
         dossier = create(Builder('dossier')
                          .within(self.repo_folder)
@@ -292,8 +300,9 @@ class TestDocumentOverview(FunctionalTestCase):
     def test_archival_file_is_extended_with_mimetype_class(self, browser):
         self.grant('Manager')
         doc = create(Builder('document')
-                      .attach_archival_file_containing('TEST', name=u'test.pdf')
-                      .with_dummy_content())
+                     .attach_archival_file_containing(
+                         'TEST', name=u'test.pdf')
+                     .with_dummy_content())
         browser.login().visit(doc, view='tabbedview_view-overview')
 
         archival_file_row = browser.css('.listing tr')[-1]
@@ -306,6 +315,7 @@ class TestDocumentOverview(FunctionalTestCase):
 
 
 class TestOverviewMeetingFeatures(FunctionalTestCase):
+    """Test the document overview also works in a meeting context."""
 
     layer = OPENGEVER_FUNCTIONAL_MEETING_LAYER
 
@@ -339,7 +349,7 @@ class TestOverviewMeetingFeatures(FunctionalTestCase):
                          proposal.css('a').first.get('href'))
 
     @browsing
-    def test_submitted_proposal_link_is_not_shown_for_submitted_documents(self, browser):
+    def test_submitted_proposal_link_is_not_shown_for_submitted_documents(self, browser):  # noqa
         committee = create(Builder('committee'))
         proposal = create(Builder('proposal')
                           .within(self.dossier)
@@ -347,9 +357,10 @@ class TestOverviewMeetingFeatures(FunctionalTestCase):
                                   committee=committee.load_model())
                           .relate_to(self.document)
                           .as_submitted())
-        submitted_document = proposal.load_model().submitted_documents[0].resolve_submitted()
+        submitted_document = proposal.load_model().submitted_documents[0].resolve_submitted()  # noqa
 
-        browser.login().open(submitted_document, view='tabbedview_view-overview')
+        browser.login()
+        browser.open(submitted_document, view='tabbedview_view-overview')
         proposals = browser.css('#proposals_box .proposal')
         self.assertEqual(0, len(proposals))
 
@@ -365,7 +376,8 @@ class TestOverviewMeetingFeatures(FunctionalTestCase):
         browser.find('Submit Attachments').click()
 
         self.assertEqual(
-            [u'A new submitted version of document Testdokum\xe4nt has been created'],
+            [u'A new submitted version of document'
+             u' Testdokum\xe4nt has been created'],
             info_messages())
         self.assertSubmittedDocumentCreated(
             self.proposal, self.document, submitted_version=1)
