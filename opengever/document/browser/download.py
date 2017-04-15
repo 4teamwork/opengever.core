@@ -1,10 +1,8 @@
-from five import grok
 from opengever.base.behaviors.utils import set_attachment_content_disposition
 from opengever.base.viewlets.download import DownloadFileVersion
 from opengever.core import dictstorage
 from opengever.document import _
 from opengever.document.browser.edit import get_redirect_url
-from opengever.document.document import IDocumentSchema
 from opengever.document.events import FileCopyDownloadedEvent
 from plone import api
 from plone.memoize import ram
@@ -13,6 +11,7 @@ from plone.namedfile.browser import Download
 from plone.namedfile.utils import stream_data
 from plone.protect.utils import addTokenToUrl
 from Products.CMFCore.utils import getToolByName
+from Products.Five import BrowserView
 from zope.component import queryUtility
 from zope.component.hooks import getSite
 from zope.event import notify
@@ -60,13 +59,8 @@ class DocumentishDownload(Download):
         return stream_data(named_file)
 
 
-class DownloadConfirmation(grok.View):
-    """Download Confirmation View, allways displayed in a overlay.
-    """
-
-    grok.context(IDocumentSchema)
-    grok.name('file_download_confirmation')
-    grok.require('zope2.View')
+class DownloadConfirmation(BrowserView):
+    """Download Confirmation View, allways displayed in a overlay."""
 
     def download_url(self):
         if self.request.get('version_id'):
@@ -91,19 +85,19 @@ def download_confirmation_user_cache_key(func, ctx):
 
 
 class DownloadConfirmationHelper(object):
+    """Tracks per user state of download confirmations."""
 
     def __init__(self):
         self.request = getRequest()
 
     def get_key(self, user=None):
-        """ User specific key """
+        """User specific key."""
         user = user or api.user.get_current()
         return "download-confirmation-active-%s" % user.getId()
 
     @ram.cache(download_confirmation_user_cache_key)
     def is_active(self):
-        """ Checks if the user has disabled download confirmation
-        """
+        """Checks if the user has disabled download confirmation."""
         key = self.get_key()
         return dictstorage.get(key) != 'False'
 
@@ -147,7 +141,6 @@ class DownloadConfirmationHelper(object):
 
     def process_request_form(self):
         """Process a request containing the rendered form."""
-
         if 'disable_download_confirmation' in self.request.form:
             DownloadConfirmationHelper().deactivate()
 
@@ -157,11 +150,7 @@ class DocumentDownloadFileVersion(DownloadFileVersion):
     but includes notifying FileCopyDownloadedEvent used for journalizing.
     """
 
-    grok.context(IDocumentSchema)
-    grok.require('zope2.View')
-    grok.name('download_file_version')
-
-    def render(self):
+    def __call__(self):
         DownloadConfirmationHelper().process_request_form()
 
         self._init_version_file()
