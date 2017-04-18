@@ -1,10 +1,12 @@
 from collective.transmogrifier.transmogrifier import Transmogrifier
+from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.bundle.ldap import DisabledLDAP
 from opengever.bundle.sections.bundlesource import BUNDLE_KEY
 from opengever.bundle.sections.bundlesource import BUNDLE_PATH_KEY
 from opengever.core.debughelpers import get_first_plone_site
 from opengever.core.debughelpers import setup_plone
 from zope.annotation import IAnnotations
+from zope.interface import alsoProvides
 import logging
 import sys
 import transaction
@@ -22,6 +24,9 @@ def import_oggbundle(app, args):
     log.info("Importing OGGBundle %s" % bundle_path)
 
     plone = setup_plone(get_first_plone_site(app))
+
+    # mark request with GEVER layer
+    alsoProvides(plone.REQUEST, IOpengeverBaseLayer)
 
     transmogrifier = Transmogrifier(plone)
     IAnnotations(transmogrifier)[BUNDLE_PATH_KEY] = bundle_path
