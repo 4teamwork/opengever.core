@@ -24,6 +24,7 @@
     <element value="opengever.meeting.behaviors.namefromtitle.IProposalNameFromTitle" />
     <element value="opengever.base.behaviors.sequence.ISequenceNumberBehavior" />
     <element value="plone.app.lockingbehavior.behaviors.ILocking" />
+    <element value="ftw.bumblebee.interfaces.IBumblebeeable" />
   </property>
 
   <!-- View information -->

@@ -1,11 +1,14 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
+from five import grok
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.base.security import elevated_privileges
 from opengever.base.source import DossierPathSourceBinder
 from opengever.base.utils import get_preferred_language_code
+from opengever.document.base import BaseDocumentMixin
+from opengever.document.checkout.manager import CheckinCheckoutManager
 from opengever.dossier.utils import get_containing_dossier
 from opengever.meeting import _
 from opengever.meeting import is_word_meeting_implementation_enabled
@@ -33,6 +36,7 @@ from zope.interface import implements
 from zope.interface import Interface
 from zope.interface import provider
 from zope.intid.interfaces import IIntIds
+from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.schema.interfaces import IContextAwareDefaultFactory
 
 
@@ -188,7 +192,7 @@ class ISubmittedProposal(IProposal):
     pass
 
 
-class ProposalBase(ModelContainer):
+class ProposalBase(ModelContainer, BaseDocumentMixin):
 
     workflow = None
 
@@ -597,3 +601,10 @@ class Proposal(ProposalBase):
             data=proposal_template.file.open().read(),
             contentType=proposal_template.file.contentType,
             filename=proposal_template.file.filename)
+
+
+class ProposalCheckinCheckoutManager(CheckinCheckoutManager):
+    grok.adapts(IProposal, IBrowserRequest)
+
+    def is_checkout_allowed(self):
+        return super(ProposalCheckinCheckoutManager, self).is_checkout_allowed()

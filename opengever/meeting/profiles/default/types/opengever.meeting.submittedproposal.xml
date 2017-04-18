@@ -24,6 +24,7 @@
   <property name="behaviors" purge="False">
     <element value="collective.dexteritytextindexer.behavior.IDexterityTextIndexer" />
     <element value="plone.app.lockingbehavior.behaviors.ILocking" />
+    <element value="ftw.bumblebee.interfaces.IBumblebeeable" />
   </property>
 
   <!-- View information -->

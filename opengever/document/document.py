@@ -12,7 +12,6 @@ from opengever.document.base import BaseDocumentMixin
 from opengever.document.behaviors.related_docs import IRelatedDocuments
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.dossier.behaviors.dossier import IDossierMarker
-from opengever.meeting.proposal import ISubmittedProposal
 from opengever.task.task import ITask
 from plone import api
 from plone.autoform import directives as form_directives
@@ -203,6 +202,7 @@ class Document(Item, BaseDocumentMixin):
 
     def is_submitted_document(self):
         parent = aq_parent(aq_inner(self))
+        from opengever.meeting.proposal import ISubmittedProposal
         return ISubmittedProposal.providedBy(parent)
 
     def can_be_submitted_as_additional_document(self):
