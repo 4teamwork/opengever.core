@@ -17,21 +17,16 @@ import datetime
 
 class TestDeadlineModificationForm(FunctionalTestCase):
 
+    def setUp(self):
+        super(TestDeadlineModificationForm, self).setUp()
+
+        # disable IInternalOpengeverRequestLayer check in StateSyncer receiver
+        self.org_check = ModifyDeadlineResponseSyncerReceiver._check_internal_request
+        ModifyDeadlineResponseSyncerReceiver._check_internal_request = lambda x: True
+
     def tearDown(self):
         super(TestDeadlineModificationForm, self).tearDown()
-        self.enable_IInternalOpengeverRequestLayer()
-
-    def enable_IInternalOpengeverRequestLayer(self):
-        if not hasattr(self, '_patched_check_internal_request'):
-            return
-
-        ModifyDeadlineResponseSyncerReceiver._check_internal_request = \
-            self._patched_check_internal_request
-
-    def disable_IInternalOpengeverRequestLayer(self):
-        setattr(self, '_patched_check_internal_request',
-                ModifyDeadlineResponseSyncerReceiver._check_internal_request)
-        ModifyDeadlineResponseSyncerReceiver._check_internal_request = lambda x: True
+        ModifyDeadlineResponseSyncerReceiver._check_internal_request = self.org_check
 
     def _change_deadline(self, task, new_deadline, text=u'', browser=default_browser):
         url = ModifyDeadlineFormView.url_for(
@@ -106,7 +101,6 @@ class TestDeadlineModificationForm(FunctionalTestCase):
 
     @browsing
     def test_successor_is_also_updated_when_modify_predecessors_deadline(self, browser):
-        self.disable_IInternalOpengeverRequestLayer()
         predecessor = create(Builder('task')
                              .having(issuer=TEST_USER_ID,
                                      deadline=datetime.date(2013, 1, 1)))
