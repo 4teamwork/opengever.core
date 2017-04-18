@@ -6,9 +6,9 @@ from opengever.base.browser import edit_public_trial
 from opengever.base.browser.helper import get_css_class
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.document import _
-from opengever.document.base import BaseDocumentMixin
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.browser import archival_file_form
+from opengever.document.browser.actionbuttons import ActionButtonRendererMixin
 from opengever.document.browser.download import DownloadConfirmationHelper
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
@@ -119,7 +119,7 @@ class TemplateRow(CustomRow):
         return self.renderer(self.view)
 
 
-class Overview(DisplayForm, GeverTabMixin, BaseDocumentMixin):
+class Overview(DisplayForm, GeverTabMixin, ActionButtonRendererMixin):
     """File details overview."""
 
     on_detail_view = True

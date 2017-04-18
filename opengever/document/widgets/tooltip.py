@@ -1,8 +1,8 @@
-from opengever.document.base import BaseDocumentMixin
+from opengever.document.browser.actionbuttons import ActionButtonRendererMixin
 from plone.app.contentlisting.interfaces import IContentListingObject
 
 
-class TooltipView(BaseDocumentMixin):
+class TooltipView(ActionButtonRendererMixin):
     """File tooltip"""
 
     def __init__(self, context, request):

@@ -28,7 +28,6 @@ from zope.globalrequest import getRequest
 from zope.interface import implements
 from zope.interface import Invalid
 from zope.interface import invariant
-
 import logging
 import os.path
 

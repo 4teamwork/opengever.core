@@ -10,7 +10,7 @@ from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.bumblebee.interfaces import IBumblebeeOverlay
 from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
 from opengever.bumblebee.interfaces import IVersionedContextMarker
-from opengever.document.base import BaseDocumentMixin
+from opengever.document.browser.actionbuttons import ActionButtonRendererMixin
 from opengever.document.browser.versions_tab import translate_link
 from opengever.document.checkout.viewlets import CheckedOutViewlet
 from opengever.document.interfaces import ICheckinCheckoutManager
@@ -30,11 +30,10 @@ from zope.component import queryMultiAdapter
 from zope.i18n import translate
 from zope.interface import alsoProvides
 from zope.interface import implements
-
 import os
 
 
-class BumblebeeBaseDocumentOverlay(BaseDocumentMixin):
+class BumblebeeBaseDocumentOverlay(ActionButtonRendererMixin):
     """Bumblebee overlay for base documents.
     """
 
@@ -230,7 +229,7 @@ class BumblebeeDocumentVersionOverlay(BumblebeeBaseDocumentOverlay):
         return ''
 
 
-class BumblebeeOverlayBaseView(BrowserView, BaseDocumentMixin):
+class BumblebeeOverlayBaseView(BrowserView, ActionButtonRendererMixin):
     """Baseview for the bumblebeeoverlay.
     """
 
