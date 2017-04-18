@@ -474,6 +474,27 @@ class TestWorkflowSyncer(FunctionalTestCase):
         self.assertEquals('task-state-in-progress',
                           api.content.get_state(successor))
 
+    def test_adds_corresponding_response(self):
+        predecessor = create(Builder('task'))
+        successor = create(Builder('task')
+                           .successor_from(predecessor)
+                           .in_state('task-state-in-progress'))
+
+        sender = WorkflowResponseSyncerSender(predecessor, self.request)
+
+        sender.sync_related_tasks(
+            'task-transition-in-progress-resolved',
+            text=u'\xe4\xe4hhh I am done!')
+
+        response = IResponseContainer(successor)[-1]
+        self.assertEquals('task-transition-in-progress-resolved', response.transition)
+        self.assertEquals('\xc3\xa4\xc3\xa4hhh I am done!', response.text)
+        self.assertEquals(TEST_USER_ID, response.creator)
+        self.assertEquals([{'before': 'task-state-in-progress',
+                            'after': 'task-state-resolved',
+                            'id': 'review_state',
+                            'name': u'Issue state'}], response.changes)
+
 
 class TestModifyDeadlineSyncer(FunctionalTestCase):
 

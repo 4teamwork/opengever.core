@@ -19,7 +19,8 @@ class WorkflowResponseSyncerSender(BaseResponseSyncerSender):
 
     def raise_sync_exception(self, task, transition, text, **kwargs):
         raise ResponseSyncerSenderException(
-            'Could not change workflow on remote admin unit {} ({})'.format(
+            'Could not execute workflow transition ({}) on remote admin unit {} ({})'.format(
+                transition,
                 task.admin_unit_id,
                 task.physical_path))
 
