@@ -152,6 +152,24 @@ class TestProposal(FunctionalTestCase):
                       browser.css('.portalMessage.info dd').text)
 
         proposal = browser.context
+        browser.open(proposal, view='tabbedview_view-overview')
+        self.assertEquals(
+            [['Title', u'A pr\xf6posal'],
+             ['Committee', ''],
+             ['Meeting', ''],
+             ['Legal basis', 'not possible'],
+             ['Initial position', u'My pr\xf6posal'],
+             ['Proposed action', 'do it'],
+             ['Decision draft', ''],
+             ['Decision', ''],
+             ['Publish in', u'B\xe4rner Zeitung'],
+             ['Disclose to', u'Hansj\xf6rg'],
+             ['Copy for attention', u'P\xe4tra'],
+             ['State', 'Pending'],
+             ['Decision number', ''],
+             ['Attachments', 'A Document']],
+            browser.css('table.listing').first.lists())
+
         self.assertEqual(1, len(proposal.relatedItems))
         self.assertEqual(document, proposal.relatedItems[0].to_object)
 
@@ -874,6 +892,15 @@ class TestProposalWithWord(FunctionalTestCase):
                       'Proposal template': 'Baugesuch'}).save()
         statusmessages.assert_no_error_messages()
         self.assertEquals('Word Content', browser.context.file.open().read())
+
+        browser.open(browser.context, view='tabbedview_view-overview')
+        self.assertEquals(
+            [['Title', u'Baugesuch Kreuzachkreisel'],
+             ['Committee', ''],
+             ['Meeting', ''],
+             ['State', 'Pending'],
+             ['Decision number', '']],
+            browser.css('table.listing').first.lists())
 
     @browsing
     def test_visible_fields_in_addform(self, browser):

@@ -202,7 +202,7 @@ class ProposalBase(ModelContainer):
         model = self.load_model()
         assert model, 'missing db-model for {}'.format(self)
 
-        return [
+        attributes = [
             {'label': _(u"label_title", default=u'Title'),
              'value': model.title},
 
@@ -213,39 +213,44 @@ class ProposalBase(ModelContainer):
             {'label': _('label_meeting', default=u'Meeting'),
              'value': model.get_meeting_link(),
              'is_html': True},
+        ]
 
-            {'label': _('label_legal_basis', default=u'Legal basis'),
-             'value': model.legal_basis,
-             'is_html': True},
+        if not is_word_meeting_implementation_enabled():
+            attributes.extend([
+                {'label': _('label_legal_basis', default=u'Legal basis'),
+                 'value': model.legal_basis,
+                 'is_html': True},
 
-            {'label': _('label_initial_position', default=u'Initial position'),
-             'value': model.initial_position,
-             'is_html': True},
+                {'label': _('label_initial_position', default=u'Initial position'),
+                 'value': model.initial_position,
+                 'is_html': True},
 
-            {'label': _('label_proposed_action', default=u'Proposed action'),
-             'value': model.proposed_action,
-             'is_html': True},
+                {'label': _('label_proposed_action', default=u'Proposed action'),
+                 'value': model.proposed_action,
+                 'is_html': True},
 
-            {'label': _('label_decision_draft', default=u'Decision draft'),
-             'value': model.decision_draft,
-             'is_html': True},
+                {'label': _('label_decision_draft', default=u'Decision draft'),
+                 'value': model.decision_draft,
+                 'is_html': True},
 
-            {'label': _('label_decision', default=u'Decision'),
-             'value': model.get_decision(),
-             'is_html': True},
+                {'label': _('label_decision', default=u'Decision'),
+                 'value': model.get_decision(),
+                 'is_html': True},
 
-            {'label': _('label_publish_in', default=u'Publish in'),
-             'value': model.publish_in,
-             'is_html': True},
+                {'label': _('label_publish_in', default=u'Publish in'),
+                 'value': model.publish_in,
+                 'is_html': True},
 
-            {'label': _('label_disclose_to', default=u'Disclose to'),
-             'value': model.disclose_to,
-             'is_html': True},
+                {'label': _('label_disclose_to', default=u'Disclose to'),
+                 'value': model.disclose_to,
+                 'is_html': True},
 
-            {'label': _('label_copy_for_attention', default=u'Copy for attention'),
-             'value': model.copy_for_attention,
-             'is_html': True},
+                {'label': _('label_copy_for_attention', default=u'Copy for attention'),
+                 'value': model.copy_for_attention,
+                 'is_html': True},
+            ])
 
+        attributes.extend([
             {'label': _('label_workflow_state', default=u'State'),
              'value': self.get_state().title,
              'is_html': True},
@@ -253,7 +258,9 @@ class ProposalBase(ModelContainer):
             {'label': _('label_decision_number', default=u'Decision number'),
              'value': model.get_decision_number(),
              'is_html': True},
-        ]
+        ])
+
+        return attributes
 
     def can_execute_transition(self, name):
         return self.workflow.can_execute_transition(self.load_model(), name)
@@ -320,22 +327,23 @@ class SubmittedProposal(ProposalBase):
             }
         )
 
-        # Insert considerations after proposed_action
-        data.insert(
-            7, {
-                'label': _('label_considerations', default=u"Considerations"),
-                'value': model.considerations,
-            }
-        )
+        if not is_word_meeting_implementation_enabled():
+            # Insert considerations after proposed_action
+            data.insert(
+                7, {
+                    'label': _('label_considerations', default=u"Considerations"),
+                    'value': model.considerations,
+                }
+            )
 
-        # Insert discussion after considerations
-        agenda = model.agenda_item
-        data.insert(
-            8, {
-                'label': _('label_discussion', default=u"Discussion"),
-                'value': agenda and agenda.discussion or ''
-            }
-        )
+            # Insert discussion after considerations
+            agenda = model.agenda_item
+            data.insert(
+                8, {
+                    'label': _('label_discussion', default=u"Discussion"),
+                    'value': agenda and agenda.discussion or ''
+                }
+            )
 
         return data
 
