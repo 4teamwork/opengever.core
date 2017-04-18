@@ -52,4 +52,19 @@
       allowed_attributes="listing select_all reorder setgridstate set_default_tab msg_unknownresponse"
       />
 
+  <!-- ZPT / METAL macros -->
+  <browser:page
+      for="opengever.document.document.IDocumentSchema"
+      name="macros"
+      template="./templates/macros.pt"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.mail.mail.IOGMailMarker"
+      name="macros"
+      template="./templates/macros.pt"
+      permission="zope2.View"
+      />
+
 </configure>
