@@ -838,7 +838,7 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
                          browser.css('.file-action-buttons a').text)
 
         self.assertIn(self.document.absolute_url() + '/editing_document',
-                      browser.css('a.function-edit')[1].get('href'))
+                      browser.css('a.function-edit').first.get('href'))
 
         api.portal.set_registry_record(
             'attach_to_outlook_enabled',
@@ -859,7 +859,7 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
                       browser.css('a.function-attach')[0].get('href'))
 
         self.assertIn(self.document.absolute_url() + '/editing_document',
-                      browser.css('a.function-edit')[1].get('href'))
+                      browser.css('a.function-edit').first.get('href'))
 
         api.portal.set_registry_record(
             'attach_to_outlook_enabled',
@@ -881,7 +881,7 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
                          browser.css('.file-action-buttons a').text)
 
         self.assertIn("javascript:officeConnectorCheckout('",
-                      browser.css('a.function-edit')[1].get('href'))
+                      browser.css('a.function-edit').first.get('href'))
 
         api.portal.set_registry_record(
             'attach_to_outlook_enabled',
@@ -902,7 +902,7 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
                       browser.css('a.function-attach')[0].get('href'))
 
         self.assertIn("javascript:officeConnectorCheckout('",
-                      browser.css('a.function-edit')[1].get('href'))
+                      browser.css('a.function-edit').first.get('href'))
 
     @browsing
     def test_tooltip(self, browser):
@@ -917,7 +917,7 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
                          browser.css('.file-action-buttons a').text)
 
         self.assertIn(self.document.absolute_url() + '/editing_document',
-                      browser.css('a.function-edit')[1].get('href'))
+                      browser.css('a.function-edit').first.get('href'))
 
         api.portal.set_registry_record(
             'attach_to_outlook_enabled',
@@ -939,7 +939,7 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
                       browser.css('a.function-attach')[0].get('href'))
 
         self.assertIn(self.document.absolute_url() + '/editing_document',
-                      browser.css('a.function-edit')[1].get('href'))
+                      browser.css('a.function-edit').first.get('href'))
 
         api.portal.set_registry_record(
             'attach_to_outlook_enabled',
@@ -962,7 +962,7 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
                          browser.css('.file-action-buttons a').text)
 
         self.assertIn("javascript:officeConnectorCheckout('",
-                      browser.css('a.function-edit')[1].get('href'))
+                      browser.css('a.function-edit').first.get('href'))
 
         api.portal.set_registry_record(
             'attach_to_outlook_enabled',
@@ -984,7 +984,7 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
                       browser.css('a.function-attach')[0].get('href'))
 
         self.assertIn("javascript:officeConnectorCheckout('",
-                      browser.css('a.function-edit')[1].get('href'))
+                      browser.css('a.function-edit').first.get('href'))
 
     @browsing
     def test_bumblebee(self, browser):
@@ -998,9 +998,8 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
                           'Open as PDF',
                           'Open detail view'],
                          browser.css('.file-action-buttons a').text)
-
         self.assertIn(self.document.absolute_url() + '/editing_document',
-                      browser.css('a.function-edit')[1].get('href'))
+                      browser.css('a.function-edit').first.get('href'))
 
         api.portal.set_registry_record(
             'attach_to_outlook_enabled',
@@ -1023,7 +1022,7 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
                       browser.css('a.function-attach')[0].get('href'))
 
         self.assertIn(self.document.absolute_url() + '/editing_document',
-                      browser.css('a.function-edit')[1].get('href'))
+                      browser.css('a.function-edit').first.get('href'))
 
         api.portal.set_registry_record(
             'attach_to_outlook_enabled',
@@ -1047,7 +1046,7 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
                          browser.css('.file-action-buttons a').text)
 
         self.assertIn("javascript:officeConnectorCheckout('",
-                      browser.css('a.function-edit')[1].get('href'))
+                      browser.css('a.function-edit').first.get('href'))
 
         api.portal.set_registry_record(
             'attach_to_outlook_enabled',
@@ -1070,7 +1069,7 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
                       browser.css('a.function-attach')[0].get('href'))
 
         self.assertIn("javascript:officeConnectorCheckout('",
-                      browser.css('a.function-edit')[1].get('href'))
+                      browser.css('a.function-edit').first.get('href'))
 
     @browsing
     def test_tabbed(self, browser):

@@ -39,11 +39,11 @@ class TestDocumentOverview(FunctionalTestCase):
     def test_overview_has_edit_link(self, browser):
         browser.login().open(self.document, view='tabbedview_view-overview')
         self.assertEquals('Checkout and edit',
-                          browser.css('a.function-edit')[1].text)
+                          browser.css('a.function-edit').first.text)
         self.assertEquals(
             '{0}/editing_document'.format(
                 self.document.absolute_url()),
-            browser.css('a.function-edit')[1].attrib['href'].split('?', 1)[0])
+            browser.css('a.function-edit').first.attrib['href'].split('?', 1)[0])
 
     @browsing
     def test_overview_has_creator_link(self, browser):
@@ -84,10 +84,10 @@ class TestDocumentOverview(FunctionalTestCase):
                           browser.css('[href*="user-details"]').first.text)
 
         self.assertEquals('Edit metadata',
-                          browser.css('a.function-edit')[0].text)
+                          browser.css('a.function-edit-metadata').first.text)
 
         self.assertEquals('Checkout and edit',
-                          browser.css('a.function-edit')[1].text)
+                          browser.css('a.function-edit').first.text)
 
         self.assertEquals('Download copy',
                           browser.css('a.function-download-copy').first.text)
