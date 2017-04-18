@@ -108,14 +108,10 @@ class ActionButtonRendererMixin(object):
         return manager.is_checkin_allowed()
 
     def has_file(self):
-        return bool(self.get_file())
+        return self.context.has_file()
 
     def get_file(self):
-        # XXX nah-ah, move to documentmixin
-        if not hasattr(self, '_file'):
-            has_file = hasattr(self.context, 'file') and self.context.file
-            self._file = self.context.file if has_file else None
-        return self._file
+        return self.context.get_file()
 
     def get_url(self):
         return self.context.absolute_url()

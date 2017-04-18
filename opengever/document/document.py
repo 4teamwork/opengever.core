@@ -229,6 +229,9 @@ class Document(Item, BaseDocumentMixin):
     def has_file(self):
         return self.file is not None
 
+    def get_file(self):
+        return self.file
+
     def get_filename(self):
         if self.has_file():
             return self.file.filename

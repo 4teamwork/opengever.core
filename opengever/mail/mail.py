@@ -288,6 +288,9 @@ class OGMail(Mail, BaseDocumentMixin):
         normalized_subject = normalizer.normalize(self.title)
         self.message.filename = u'{}.eml'.format(normalized_subject)
 
+    def get_file(self):
+        return self.message
+
     def has_file(self):
         return self.message is not None
 

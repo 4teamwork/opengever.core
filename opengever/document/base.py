@@ -70,6 +70,9 @@ class BaseDocumentMixin(object):
     def get_filename(self):
         raise NotImplementedError
 
+    def get_file(self):
+        raise NotImplementedError
+
     def surrender(self, relative_to_portal=1):
         return Item.getIcon(self, relative_to_portal=relative_to_portal)
 

@@ -194,12 +194,6 @@ class BumblebeeMailOverlay(BumblebeeBaseDocumentOverlay):
                       domain='opengever.document',
                       context=self.request))
 
-    def get_file(self):
-        if not hasattr(self, '_file'):
-            has_file = hasattr(self.context, 'message') and self.context.message  # noqa
-            self._file = self.context.message if has_file else None
-        return self._file
-
 
 class BumblebeeDocumentVersionOverlay(BumblebeeBaseDocumentOverlay):
     """Bumblebee overlay for versioned documents"""
