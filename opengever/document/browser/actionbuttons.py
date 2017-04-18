@@ -71,11 +71,7 @@ class ActionButtonRendererMixin(object):
             # This is probably a mail
             return False
 
-        checkout = manager.get_checked_out_by()
-        if checkout and checkout == api.user.get_current().getId():
-            return True
-
-        return False
+        return manager.is_checked_out_by_current_user()
 
     def get_checkin_without_comment_url(self):
         if not self.has_file():
