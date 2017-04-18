@@ -21,14 +21,14 @@ class ResponseSyncerSenderException(Exception):
 
 def sync_task_response(task, request, syncer_name, transition, text, **kwargs):
     """Method to get the responsible IResponseSyncerSender adapter
-    and run the response syncing process for predecessors and successorts
+    and run the response syncing process for predecessors and successors
     of the current task.
 
     :param task: An object providing the ITask interface
     :param request: The current request
     :param syncer_name: A name of a IResponseSyncerSender adapter name
-    :param transition: The transition-name for the task-response obj
-    :param text: The text for the task-response obj
+    :param transition: The transition which has been done and should be synced now.
+    :param text: The response text.
     :param kwargs: additional arguments for sending to the receiver
     """
     syncer = getMultiAdapter(
