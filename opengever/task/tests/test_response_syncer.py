@@ -208,10 +208,10 @@ class TestWorkflowResponseSyncerSender(FunctionalTestCase):
         with self.assertRaises(ResponseSyncerSenderException) as exception:
             sender.raise_sync_exception(
                 predecessor.get_sql_object(),
-                'workflow-transition', 'some text')
+                'publish', 'some text')
 
         self.assertEqual(
-            'Could not change workflow on remote admin unit client1 (task-1)',
+            'Could not execute workflow transition (publish) on remote admin unit client1 (task-1)',
             str(exception.exception))
 
     def test_forwarding_predecessors_are_ignored(self):
