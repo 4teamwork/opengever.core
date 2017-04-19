@@ -15,14 +15,17 @@ class ActionButtonRendererMixin(object):
     is_on_detail_view = False
     overlay = None
 
-    def is_edit_metadata_available(self):
-        # XXX object orient me, the object should know some of this stuff
+    def is_edit_metadata_link_visible(self):
         if self.is_overview_tab:
             return False
 
         if self.is_versioned():
             return False
 
+        return True
+
+    def is_edit_metadata_available(self):
+        # XXX object orient me, the object should know some of this stuff
         if self.is_checked_out_by_another_user():
             return False
 

@@ -1,15 +1,26 @@
 <div metal:define-macro="file_action_buttons" i18n:domain="opengever.document">
 
-    <div class="file-action-buttons" tal:define="edit_metadata_available view/is_edit_metadata_available">
+    <div class="file-action-buttons">
 
-        <tal:edit_metadata tal:condition="edit_metadata_available">
-            <a class="function-edit-metadata"
-                tal:attributes="href string:${view/get_url}/edit_checker"
-                i18n:domain="plone"
-                i18n:translate="">
-                Edit metadata
-            </a>
-        </tal:edit_metadata>
+        <tal:edit_metadata_link tal:condition="view/is_edit_metadata_link_visible"
+                tal:define="edit_metadata_available view/is_edit_metadata_available">
+            <tal:edit_metadata tal:condition="edit_metadata_available">
+                <a class="function-edit-metadata"
+                    tal:attributes="href string:${view/get_url}/edit_checker"
+                    i18n:domain="plone"
+                    i18n:translate="">
+                    Edit metadata
+                </a>
+            </tal:edit_metadata>
+
+            <tal:not_edit_metadata tal:condition="not: edit_metadata_available">
+                <span class="function-edit-metadata-inactive discreet"
+                    i18n:domain="plone"
+                    i18n:translate="">
+                    Edit metadata
+                </span>
+            </tal:not_edit_metadata>
+        </tal:edit_metadata_link>
 
         <tal:file tal:condition="context/has_file"
             tal:define="preview_supported view/is_preview_supported;
