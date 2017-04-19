@@ -11,10 +11,14 @@ from zope.component import queryMultiAdapter
 class ActionButtonRendererMixin(object):
     """Mixin for views that render action buttons."""
 
+    is_overview_tab = False
     on_detail_view = False
     overlay = None
 
     def is_edit_metadata_available(self):
+        if self.is_overview_tab:
+            return False
+
         if self.is_versioned():
             return False
 

@@ -33,7 +33,7 @@ class TestOCTemplatesDossierOpenWithoutFile(FunctionalTestCase):
 
         browser.open(self.document, view='tabbedview_view-overview')
 
-        self.assertEqual(['Edit metadata'],
+        self.assertEqual([],
                          browser.css('.file-action-buttons a').text)
 
         api.portal.set_registry_record(
@@ -45,7 +45,7 @@ class TestOCTemplatesDossierOpenWithoutFile(FunctionalTestCase):
 
         browser.open(self.document, view='tabbedview_view-overview')
 
-        self.assertEqual(['Edit metadata'],
+        self.assertEqual([],
                          browser.css('.file-action-buttons a').text)
 
         api.portal.set_registry_record(
@@ -62,7 +62,7 @@ class TestOCTemplatesDossierOpenWithoutFile(FunctionalTestCase):
 
         browser.open(self.document, view='tabbedview_view-overview')
 
-        self.assertEqual(['Edit metadata'],
+        self.assertEqual([],
                          browser.css('.file-action-buttons a').text)
 
         api.portal.set_registry_record(
@@ -74,7 +74,7 @@ class TestOCTemplatesDossierOpenWithoutFile(FunctionalTestCase):
 
         browser.open(self.document, view='tabbedview_view-overview')
 
-        self.assertEqual(['Edit metadata'],
+        self.assertEqual([],
                          browser.css('.file-action-buttons a').text)
 
     @browsing
@@ -313,7 +313,7 @@ class TestOCTemplatesDossierInactiveWithoutFile(FunctionalTestCase):
 
         browser.open(self.document, view='tabbedview_view-overview')
 
-        self.assertEqual(['Edit metadata'],
+        self.assertEqual([],
                          browser.css('.file-action-buttons a').text)
 
         api.portal.set_registry_record(
@@ -325,7 +325,7 @@ class TestOCTemplatesDossierInactiveWithoutFile(FunctionalTestCase):
 
         browser.open(self.document, view='tabbedview_view-overview')
 
-        self.assertEqual(['Edit metadata'],
+        self.assertEqual([],
                          browser.css('.file-action-buttons a').text)
 
         api.portal.set_registry_record(
@@ -342,7 +342,7 @@ class TestOCTemplatesDossierInactiveWithoutFile(FunctionalTestCase):
 
         browser.open(self.document, view='tabbedview_view-overview')
 
-        self.assertEqual(['Edit metadata'],
+        self.assertEqual([],
                          browser.css('.file-action-buttons a').text)
 
         api.portal.set_registry_record(
@@ -354,7 +354,7 @@ class TestOCTemplatesDossierInactiveWithoutFile(FunctionalTestCase):
 
         browser.open(self.document, view='tabbedview_view-overview')
 
-        self.assertEqual(['Edit metadata'],
+        self.assertEqual([],
                          browser.css('.file-action-buttons a').text)
 
     @browsing
@@ -569,7 +569,7 @@ class TestOCTemplatesDossierResolvedWithoutFile(FunctionalTestCase):
 
         browser.open(self.document, view='tabbedview_view-overview')
 
-        self.assertEqual(['Edit metadata'],
+        self.assertEqual([],
                          browser.css('.file-action-buttons a').text)
 
         api.portal.set_registry_record(
@@ -581,7 +581,7 @@ class TestOCTemplatesDossierResolvedWithoutFile(FunctionalTestCase):
 
         browser.open(self.document, view='tabbedview_view-overview')
 
-        self.assertEqual(['Edit metadata'],
+        self.assertEqual([],
                          browser.css('.file-action-buttons a').text)
 
         api.portal.set_registry_record(
@@ -598,7 +598,7 @@ class TestOCTemplatesDossierResolvedWithoutFile(FunctionalTestCase):
 
         browser.open(self.document, view='tabbedview_view-overview')
 
-        self.assertEqual(['Edit metadata'],
+        self.assertEqual([],
                          browser.css('.file-action-buttons a').text)
 
         api.portal.set_registry_record(
@@ -610,7 +610,7 @@ class TestOCTemplatesDossierResolvedWithoutFile(FunctionalTestCase):
 
         browser.open(self.document, view='tabbedview_view-overview')
 
-        self.assertEqual(['Edit metadata'],
+        self.assertEqual([],
                          browser.css('.file-action-buttons a').text)
 
     @browsing
@@ -832,8 +832,7 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
 
         browser.open(self.document, view='tabbedview_view-overview')
 
-        self.assertEqual(['Edit metadata',
-                          'Checkout and edit',
+        self.assertEqual(['Checkout and edit',
                           'Download copy'],
                          browser.css('.file-action-buttons a').text)
 
@@ -849,8 +848,7 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
 
         browser.open(self.document, view='tabbedview_view-overview')
 
-        self.assertEqual(['Edit metadata',
-                          'Attach to email',
+        self.assertEqual(['Attach to email',
                           'Checkout and edit',
                           'Download copy'],
                          browser.css('.file-action-buttons a').text)
@@ -875,8 +873,7 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
 
         browser.open(self.document, view='tabbedview_view-overview')
 
-        self.assertEqual(['Edit metadata',
-                          'Checkout and edit',
+        self.assertEqual(['Checkout and edit',
                           'Download copy'],
                          browser.css('.file-action-buttons a').text)
 
@@ -892,8 +889,7 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
 
         browser.open(self.document, view='tabbedview_view-overview')
 
-        self.assertEqual(['Edit metadata',
-                          'Attach to email',
+        self.assertEqual(['Attach to email',
                           'Checkout and edit',
                           'Download copy'],
                          browser.css('.file-action-buttons a').text)
@@ -1207,8 +1203,7 @@ class TestOCTemplatesDossierInactiveWithFile(FunctionalTestCase):
 
         browser.open(self.document, view='tabbedview_view-overview')
 
-        self.assertEqual(['Edit metadata',
-                          'Download copy'],
+        self.assertEqual(['Download copy'],
                          browser.css('.file-action-buttons a').text)
 
         api.portal.set_registry_record(
@@ -1220,8 +1215,7 @@ class TestOCTemplatesDossierInactiveWithFile(FunctionalTestCase):
 
         browser.open(self.document, view='tabbedview_view-overview')
 
-        self.assertEqual(['Edit metadata',
-                          'Attach to email',
+        self.assertEqual(['Attach to email',
                           'Download copy'],
                          browser.css('.file-action-buttons a').text)
 
@@ -1242,8 +1236,7 @@ class TestOCTemplatesDossierInactiveWithFile(FunctionalTestCase):
 
         browser.open(self.document, view='tabbedview_view-overview')
 
-        self.assertEqual(['Edit metadata',
-                          'Download copy'],
+        self.assertEqual(['Download copy'],
                          browser.css('.file-action-buttons a').text)
 
         api.portal.set_registry_record(
@@ -1255,8 +1248,7 @@ class TestOCTemplatesDossierInactiveWithFile(FunctionalTestCase):
 
         browser.open(self.document, view='tabbedview_view-overview')
 
-        self.assertEqual(['Edit metadata',
-                          'Attach to email',
+        self.assertEqual(['Attach to email',
                           'Download copy'],
                          browser.css('.file-action-buttons a').text)
 
@@ -1511,8 +1503,7 @@ class TestOCTemplatesDossierResolvedWithFile(FunctionalTestCase):
 
         browser.open(self.document, view='tabbedview_view-overview')
 
-        self.assertEqual(['Edit metadata',
-                          'Download copy'],
+        self.assertEqual(['Download copy'],
                          browser.css('.file-action-buttons a').text)
 
         api.portal.set_registry_record(
@@ -1524,8 +1515,7 @@ class TestOCTemplatesDossierResolvedWithFile(FunctionalTestCase):
 
         browser.open(self.document, view='tabbedview_view-overview')
 
-        self.assertEqual(['Edit metadata',
-                          'Attach to email',
+        self.assertEqual(['Attach to email',
                           'Download copy'],
                          browser.css('.file-action-buttons a').text)
 
@@ -1546,8 +1536,7 @@ class TestOCTemplatesDossierResolvedWithFile(FunctionalTestCase):
 
         browser.open(self.document, view='tabbedview_view-overview')
 
-        self.assertEqual(['Edit metadata',
-                          'Download copy'],
+        self.assertEqual(['Download copy'],
                          browser.css('.file-action-buttons a').text)
 
         api.portal.set_registry_record(
@@ -1559,8 +1548,7 @@ class TestOCTemplatesDossierResolvedWithFile(FunctionalTestCase):
 
         browser.open(self.document, view='tabbedview_view-overview')
 
-        self.assertEqual(['Edit metadata',
-                          'Attach to email',
+        self.assertEqual(['Attach to email',
                           'Download copy'],
                          browser.css('.file-action-buttons a').text)
 

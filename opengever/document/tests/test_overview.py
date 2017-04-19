@@ -83,9 +83,6 @@ class TestDocumentOverview(FunctionalTestCase):
         self.assertEquals('Test User (test_user_1_)',
                           browser.css('[href*="user-details"]').first.text)
 
-        self.assertEquals('Edit metadata',
-                          browser.css('a.function-edit-metadata').first.text)
-
         self.assertEquals('Checkout and edit',
                           browser.css('a.function-edit').first.text)
 
