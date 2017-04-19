@@ -114,6 +114,8 @@ class CompleteSuccessorTaskForm(Form):
     fields = Fields(ICompleteSuccessorTaskSchema)
     fields['documents'].widgetFactory = CheckBoxFieldWidget
 
+    allow_prefill_from_GET_request = True  # XXX
+
     label = _(u'title_complete_task', u'Complete task')
     ignoreContext = True
 
