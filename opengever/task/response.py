@@ -179,10 +179,7 @@ class TaskCommentResponseAddForm(form.AddForm, AutoExtensibleForm):
         self.request.response.redirect(self.nextURL())
 
 
-class TaskCommentResponseAddFormView(layout.FormWrapper, grok.View):
-    grok.context(ITask)
-    grok.name("addcommentresponse")
-    grok.require('opengever.task.AddTaskComment')
+class TaskCommentResponseAddFormView(layout.FormWrapper):
 
     form = TaskCommentResponseAddForm
 
