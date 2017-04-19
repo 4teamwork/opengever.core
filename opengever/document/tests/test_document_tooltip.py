@@ -57,7 +57,7 @@ class TestDocumentTooltip(FunctionalTestCase):
                               u'example.docx'))
 
         browser.login().open(document, view='tooltip')
-        metadata, preview, checkout, download, details = browser.css(
+        metadata, checkout, download, preview, details = browser.css(
             '.file-action-buttons a')
 
         # preview
@@ -159,8 +159,8 @@ class TestDocumentTooltip(FunctionalTestCase):
 
         browser.login().open(document, view='tooltip')
         self.assertEquals(['Edit metadata',
-                           'PDF Preview',
                            'Download copy',
+                           'PDF Preview',
                            'Open detail view'],
                           browser.css('.file-action-buttons a').text)
 

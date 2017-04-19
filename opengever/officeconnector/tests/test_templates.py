@@ -848,9 +848,9 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
 
         browser.open(self.document, view='tabbedview_view-overview')
 
-        self.assertEqual(['Attach to email',
-                          'Checkout and edit',
-                          'Download copy'],
+        self.assertEqual(['Checkout and edit',
+                          'Download copy',
+                          'Attach to email'],
                          browser.css('.file-action-buttons a').text)
 
         self.assertIn("javascript:officeConnectorAttach('",
@@ -889,9 +889,9 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
 
         browser.open(self.document, view='tabbedview_view-overview')
 
-        self.assertEqual(['Attach to email',
-                          'Checkout and edit',
-                          'Download copy'],
+        self.assertEqual(['Checkout and edit',
+                          'Download copy',
+                          'Attach to email'],
                          browser.css('.file-action-buttons a').text)
 
         self.assertIn("javascript:officeConnectorAttach('",
@@ -925,9 +925,9 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
         browser.open(self.document, view='tooltip')
 
         self.assertEqual(['Edit metadata',
-                          'Attach to email',
                           'Checkout and edit',
                           'Download copy',
+                          'Attach to email',
                           'Open detail view'],
                          browser.css('.file-action-buttons a').text)
 
@@ -970,9 +970,9 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
         browser.open(self.document, view='tooltip')
 
         self.assertEqual(['Edit metadata',
-                          'Attach to email',
                           'Checkout and edit',
                           'Download copy',
+                          'Attach to email',
                           'Open detail view'],
                          browser.css('.file-action-buttons a').text)
 
@@ -1007,9 +1007,9 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
         browser.open(self.document, view='bumblebee-overlay-listing')
 
         self.assertEqual(['Edit metadata',
-                          'Attach to email',
                           'Checkout and edit',
                           'Download copy',
+                          'Attach to email',
                           'Open as PDF',
                           'Open detail view'],
                          browser.css('.file-action-buttons a').text)
@@ -1054,9 +1054,9 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
         browser.open(self.document, view='bumblebee-overlay-listing')
 
         self.assertEqual(['Edit metadata',
-                          'Attach to email',
                           'Checkout and edit',
                           'Download copy',
+                          'Attach to email',
                           'Open as PDF',
                           'Open detail view'],
                          browser.css('.file-action-buttons a').text)
@@ -1215,8 +1215,8 @@ class TestOCTemplatesDossierInactiveWithFile(FunctionalTestCase):
 
         browser.open(self.document, view='tabbedview_view-overview')
 
-        self.assertEqual(['Attach to email',
-                          'Download copy'],
+        self.assertEqual(['Download copy',
+                          'Attach to email'],
                          browser.css('.file-action-buttons a').text)
 
         self.assertIn("javascript:officeConnectorAttach('",
@@ -1248,8 +1248,8 @@ class TestOCTemplatesDossierInactiveWithFile(FunctionalTestCase):
 
         browser.open(self.document, view='tabbedview_view-overview')
 
-        self.assertEqual(['Attach to email',
-                          'Download copy'],
+        self.assertEqual(['Download copy',
+                          'Attach to email'],
                          browser.css('.file-action-buttons a').text)
 
         self.assertIn("javascript:officeConnectorAttach('",
@@ -1276,8 +1276,8 @@ class TestOCTemplatesDossierInactiveWithFile(FunctionalTestCase):
         browser.open(self.document, view='tooltip')
 
         self.assertEqual(['Edit metadata',
-                          'Attach to email',
                           'Download copy',
+                          'Attach to email',
                           'Open detail view'],
                          browser.css('.file-action-buttons a').text)
 
@@ -1313,8 +1313,8 @@ class TestOCTemplatesDossierInactiveWithFile(FunctionalTestCase):
         browser.open(self.document, view='tooltip')
 
         self.assertEqual(['Edit metadata',
-                          'Attach to email',
                           'Download copy',
+                          'Attach to email',
                           'Open detail view'],
                          browser.css('.file-action-buttons a').text)
 
@@ -1343,8 +1343,8 @@ class TestOCTemplatesDossierInactiveWithFile(FunctionalTestCase):
         browser.open(self.document, view='bumblebee-overlay-listing')
 
         self.assertEqual(['Edit metadata',
-                          'Attach to email',
                           'Download copy',
+                          'Attach to email',
                           'Open as PDF',
                           'Open detail view'],
                          browser.css('.file-action-buttons a').text)
@@ -1382,8 +1382,8 @@ class TestOCTemplatesDossierInactiveWithFile(FunctionalTestCase):
         browser.open(self.document, view='bumblebee-overlay-listing')
 
         self.assertEqual(['Edit metadata',
-                          'Attach to email',
                           'Download copy',
+                          'Attach to email',
                           'Open as PDF',
                           'Open detail view'],
                          browser.css('.file-action-buttons a').text)
@@ -1515,8 +1515,8 @@ class TestOCTemplatesDossierResolvedWithFile(FunctionalTestCase):
 
         browser.open(self.document, view='tabbedview_view-overview')
 
-        self.assertEqual(['Attach to email',
-                          'Download copy'],
+        self.assertEqual(['Download copy',
+                          'Attach to email'],
                          browser.css('.file-action-buttons a').text)
 
         self.assertIn("javascript:officeConnectorAttach('",
@@ -1548,8 +1548,8 @@ class TestOCTemplatesDossierResolvedWithFile(FunctionalTestCase):
 
         browser.open(self.document, view='tabbedview_view-overview')
 
-        self.assertEqual(['Attach to email',
-                          'Download copy'],
+        self.assertEqual(['Download copy',
+                          'Attach to email'],
                          browser.css('.file-action-buttons a').text)
 
         self.assertIn("javascript:officeConnectorAttach('",
@@ -1576,8 +1576,8 @@ class TestOCTemplatesDossierResolvedWithFile(FunctionalTestCase):
         browser.open(self.document, view='tooltip')
 
         self.assertEqual(['Edit metadata',
-                          'Attach to email',
                           'Download copy',
+                          'Attach to email',
                           'Open detail view'],
                          browser.css('.file-action-buttons a').text)
 
@@ -1613,8 +1613,8 @@ class TestOCTemplatesDossierResolvedWithFile(FunctionalTestCase):
         browser.open(self.document, view='tooltip')
 
         self.assertEqual(['Edit metadata',
-                          'Attach to email',
                           'Download copy',
+                          'Attach to email',
                           'Open detail view'],
                          browser.css('.file-action-buttons a').text)
 
@@ -1643,8 +1643,8 @@ class TestOCTemplatesDossierResolvedWithFile(FunctionalTestCase):
         browser.open(self.document, view='bumblebee-overlay-listing')
 
         self.assertEqual(['Edit metadata',
-                          'Attach to email',
                           'Download copy',
+                          'Attach to email',
                           'Open as PDF',
                           'Open detail view'],
                          browser.css('.file-action-buttons a').text)
@@ -1682,8 +1682,8 @@ class TestOCTemplatesDossierResolvedWithFile(FunctionalTestCase):
         browser.open(self.document, view='bumblebee-overlay-listing')
 
         self.assertEqual(['Edit metadata',
-                          'Attach to email',
                           'Download copy',
+                          'Attach to email',
                           'Open as PDF',
                           'Open detail view'],
                          browser.css('.file-action-buttons a').text)
