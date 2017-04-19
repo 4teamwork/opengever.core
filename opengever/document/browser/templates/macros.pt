@@ -15,6 +15,7 @@
             tal:define="preview_supported view/is_preview_supported;
             checkout_and_edit_available view/is_checkout_and_edit_available;
             copy_download_available view/is_download_copy_available;
+            attach_to_email_available view/is_attach_to_email_available;
             checked_out_by_current_user view/is_checked_out_by_current_user">
 
             <tal:checkout_and_edit_enabled tal:condition="checkout_and_edit_available">
@@ -66,14 +67,25 @@
                 </span>
             </tal:download_copy_disabled>
 
-            <tal:oc_attach_to_email tal:condition="context/@@officeconnector_settings/is_attach_enabled">
-                <a tal:attributes="href string:javascript:officeConnectorAttach('${context/absolute_url}/officeconnector_attach_url');;"
-                    class="function-attach"
-                    href="#"
-                    i18n:translate="label_attach_to_email">
-                    Attach to email
-                </a>
-            </tal:oc_attach_to_email>
+            <tal:attach_feature_enabled tal:condition="context/@@officeconnector_settings/is_attach_enabled">
+
+              <tal:oc_attach_to_email_available tal:condition="attach_to_email_available">
+                  <a tal:attributes="href string:javascript:officeConnectorAttach('${context/absolute_url}/officeconnector_attach_url');;"
+                      class="function-attach"
+                      href="#"
+                      i18n:translate="label_attach_to_email">
+                      Attach to email
+                  </a>
+              </tal:oc_attach_to_email_available>
+
+              <tal:oc_attach_to_email_inactive tal:condition="not: attach_to_email_available">
+                  <span class="function-attach-inactive modal discreet"
+                      i18n:translate="label_attach_to_email">
+                      Attach to email
+                  </span>
+              </tal:oc_attach_to_email_inactive>
+
+            </tal:attach_feature_enabled>
 
             <tal:pdf_preview tal:condition="preview_supported">
                 <a class="function-download-pdf" href="#"

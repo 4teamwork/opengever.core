@@ -1,6 +1,7 @@
 from opengever.base.pdfconverter import is_pdfconverter_enabled
 from opengever.document.browser.download import DownloadConfirmationHelper
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.officeconnector.helpers import is_officeconnector_attach_feature_enabled  # noqa
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListingObject
 from plone.locking.interfaces import IRefreshableLockable
@@ -54,11 +55,7 @@ class ActionButtonRendererMixin(object):
             # This is probably a mail
             return True
 
-        checkout = manager.get_checked_out_by()
-        if checkout and checkout != api.user.get_current().getId():
-            return False
-
-        return True
+        return not self.is_checked_out_by_another_user()
 
     def get_download_copy_tag(self):
         dc_helper = DownloadConfirmationHelper()
@@ -67,6 +64,31 @@ class ActionButtonRendererMixin(object):
             additional_classes=['function-download-copy'],
             include_token=True,
             )
+
+    def is_attach_to_email_available(self):
+        if not is_officeconnector_attach_feature_enabled():
+            return False
+
+        manager = queryMultiAdapter(
+            (self.context, self.request), ICheckinCheckoutManager)
+        if manager is None:
+            # This is probably a mail
+            return True
+
+        return not self.is_checked_out_by_another_user()
+
+    def is_checked_out_by_another_user(self):
+        manager = queryMultiAdapter(
+            (self.context, self.request), ICheckinCheckoutManager)
+
+        if not manager:
+            return False
+
+        checked_out_by = manager.get_checked_out_by()
+        if not checked_out_by:
+            return False
+
+        return checked_out_by != api.user.get_current().getId()
 
     def is_checked_out_by_current_user(self):
         manager = queryMultiAdapter(
