@@ -242,6 +242,12 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
         journal_entry = browser.css('.listing').first.lists()[1]
         self.assertEquals(journal_entry[1], 'Dokument mit Mailprogramm versendet')  # noqa
 
+        # Test there is also a journal entry in the dossier
+        browser.login()
+        browser.open(self.open_dossier, view='tabbedview_view-journal') # noqa
+        journal_entry = browser.css('.listing').first.lists()[1]
+        self.assertEquals(journal_entry[1], 'Dokument im Dossier mit Mailprogramm versendet')  # noqa
+
     @browsing
     def test_attach_to_outlook_payload_with_file_and_resolved_dossier(self, browser):  # noqa
         self.enable_attach_to_outlook()
@@ -267,6 +273,12 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
         journal_entry = browser.css('.listing').first.lists()[1]
         self.assertEquals(journal_entry[1], 'Dokument mit Mailprogramm versendet')  # noqa
 
+        # Test there is also a journal entry in the dossier
+        browser.login()
+        browser.open(self.resolved_dossier, view='tabbedview_view-journal') # noqa
+        journal_entry = browser.css('.listing').first.lists()[1]
+        self.assertEquals(journal_entry[1], 'Dokument im Dossier mit Mailprogramm versendet')  # noqa
+
     @browsing
     def test_attach_to_outlook_payload_with_file_and_inactive_dossier(self, browser):  # noqa
         self.enable_attach_to_outlook()
@@ -291,6 +303,12 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
         browser.open(self.doc_with_file_wf_inactive, view='tabbedview_view-journal') # noqa
         journal_entry = browser.css('.listing').first.lists()[1]
         self.assertEquals(journal_entry[1], 'Dokument mit Mailprogramm versendet')  # noqa
+
+        # Test there is also a journal entry in the dossier
+        browser.login()
+        browser.open(self.inactive_dossier, view='tabbedview_view-journal') # noqa
+        journal_entry = browser.css('.listing').first.lists()[1]
+        self.assertEquals(journal_entry[1], 'Dokument im Dossier mit Mailprogramm versendet')  # noqa
 
     def test_attach_to_outlook_get(self):
         self.enable_attach_to_outlook()
