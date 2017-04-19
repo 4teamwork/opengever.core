@@ -16,6 +16,7 @@
   <include file="permissions.zcml" />
   <include file="behaviors.zcml" />
   <include package=".upgrades" />
+  <include package=".response_syncer" />
 
   <grok:grok package="." />
 

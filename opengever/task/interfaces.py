@@ -71,28 +71,38 @@ class ISuccessorTaskController(Interface):
         """
 
 
-class IWorkflowStateSyncer(Interface):
-    """The state syncer syncs workflow states of related tasks (successors and
-    predecessors).
-
-    It is triggered by workflow changes, such as the direct_response view or
-    the response add form. It automatically decides if it is necessary to
-    change the state of a related task and performs the change.
-
-    IStateSyncer is an adapter interface.
+class IResponseSyncerSender(Interface):
+    """Handles the syncing process between tasks on different admin-units.
     """
 
-    def __init__(context, request):
-        pass
-
-    def get_tasks_to_sync(transition):
-        """Returns all related tasks which have to be updated when performing
-        this `transition` on the current task in the current state.
+    def sync_related_tasks(transition, text, **kwargs):
+        """Starts the syncing process of the current task and
+        returns all synced tasks in a list.
         """
 
-    def change_remote_tasks_workflow_state(transition, text):
-        """Performs `transition` on related tasks and creates a response with
-        `text`.
+    def get_related_tasks_to_sync(transition):
+        """Returns all the tasks needed to be synced.
+
+        Each task can have copies of itself (successors) or is a copy
+        of another task (predecessor). This happens, if if a user delegates
+        a task to another admin-unit.
+
+        This function returns all successors/predecessors of a task.
+        """
+
+    def sync_related_task(task, transition, text, **kwargs):
+        """Syncs the given task with its remote task.
+        Raises an exception if syncing failed.
+        """
+
+    def extend_payload(payload, task, **kwargs):
+        """Extends the payload with additional data.
+        Returns the current instance object.
+        """
+
+    def raise_sync_exception(task, transition, text, **kwargs):
+        """Raises the ResponseSyncerSenderException if syncing the
+        task was failed
         """
 
 
@@ -152,4 +162,5 @@ class ICommentResponseHandler(Interface):
             - Create response obj
             - Append response obj to parent
             - Record activity
+            - Sync the response with tasks on other admin-units
         """

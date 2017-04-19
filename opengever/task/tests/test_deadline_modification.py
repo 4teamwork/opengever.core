@@ -7,6 +7,7 @@ from opengever.task.adapters import IResponseContainer
 from opengever.task.browser.modify_deadline import ModifyDeadlineFormView
 from opengever.task.interfaces import IDeadlineModifier
 from opengever.task.interfaces import ISuccessorTaskController
+from opengever.task.response_syncer.deadline import ModifyDeadlineResponseSyncerReceiver
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import login
 from plone.app.testing import TEST_USER_ID
@@ -16,9 +17,21 @@ import datetime
 
 class TestDeadlineModificationForm(FunctionalTestCase):
 
+    def setUp(self):
+        super(TestDeadlineModificationForm, self).setUp()
+
+        # disable IInternalOpengeverRequestLayer check in StateSyncer receiver
+        self.org_check = ModifyDeadlineResponseSyncerReceiver._check_internal_request
+        ModifyDeadlineResponseSyncerReceiver._check_internal_request = lambda x: True
+
+    def tearDown(self):
+        super(TestDeadlineModificationForm, self).tearDown()
+        ModifyDeadlineResponseSyncerReceiver._check_internal_request = self.org_check
+
     def _change_deadline(self, task, new_deadline, text=u'', browser=default_browser):
         url = ModifyDeadlineFormView.url_for(
             task, transition='task-transition-modify-deadline')
+
         browser.login().open(url)
         browser.fill({'New Deadline': new_deadline.strftime('%m/%d/%y'),
                       'Response': text})
@@ -166,53 +179,6 @@ class TestDeadlineModifierController(FunctionalTestCase):
         modifier = IDeadlineModifier(task)
         self.assertFalse(modifier.is_modify_allowed(include_agency=False))
         self.assertTrue(modifier.is_modify_allowed(include_agency=True))
-
-
-class RemoteDeadlineModifier(FunctionalTestCase):
-
-    def test_updating_deadline_of_the_task(self):
-        task = create(Builder('task')
-                      .having(issuer=TEST_USER_ID,
-                              deadline=datetime.date(2013, 1, 1)))
-
-        task.REQUEST.set('new_deadline', datetime.date(2013, 10, 1).toordinal())
-        task.REQUEST.set('text', 'Lorem ipsum')
-        task.REQUEST.set('transition', 'task-transition-modify-deadline')
-        task.unrestrictedTraverse('remote_deadline_modifier')()
-
-        self.assertEquals(task.deadline, datetime.date(2013, 10, 1))
-
-    def test_raise_type_error_when_updating_view_with_missing_deadline(self):
-        task = create(Builder('task')
-                      .having(issuer=TEST_USER_ID,
-                              deadline=datetime.date(2013, 1, 1)))
-
-        task.REQUEST.set('text', 'Lorem Ipsum')
-        task.REQUEST.set('transition', 'task-transition-modify-deadline')
-        with self.assertRaises(TypeError):
-            task.unrestrictedTraverse('remote_deadline_modifier')()
-
-    def test_according_response_is_added_when_modify_deadline(self):
-        task = create(Builder('task')
-                      .having(issuer=TEST_USER_ID,
-                              deadline=datetime.date(2013, 1, 1)))
-
-        task.REQUEST.set('new_deadline', datetime.date(2013, 10, 1).toordinal())
-        task.REQUEST.set('text', 'Lorem Ipsum')
-        task.REQUEST.set('transition', 'task-transition-modify-deadline')
-        task.unrestrictedTraverse('remote_deadline_modifier')()
-
-        container = IResponseContainer(task)
-        response = container[-1]
-
-        self.assertEquals('Lorem Ipsum', response.text)
-        self.assertEquals(TEST_USER_ID, response.creator)
-        self.assertEquals(
-            [{'after': datetime.date(2013, 10, 1),
-              'id': 'deadline',
-              'name': u'label_deadline',
-              'before': datetime.date(2013, 1, 1)}],
-            response.changes)
 
 
 class TestDeadlineModifier(FunctionalTestCase):

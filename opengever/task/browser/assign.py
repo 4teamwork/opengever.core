@@ -3,7 +3,7 @@ from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task import _
 from opengever.task.activities import TaskReassignActivity
-from opengever.task.interfaces import IWorkflowStateSyncer
+from opengever.task.response_syncer import sync_task_response
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
 from opengever.task.util import getTransitionVocab
@@ -113,14 +113,11 @@ class AssignTaskForm(Form):
             transition=kwargs.get('transition'))
 
     def sync_remote_task(self, **kwargs):
-        syncer = getMultiAdapter(
-            (self.context, self.request), IWorkflowStateSyncer)
-
-        syncer.change_remote_tasks_workflow_state(
-            kwargs.get('transition'),
-            text=kwargs.get('text'),
-            responsible=kwargs.get('responsible'),
-            responsible_client=kwargs.get('responsible_client'))
+        sync_task_response(self.context, self.request, 'workflow',
+                           kwargs.get('transition'),
+                           kwargs.get('text'),
+                           responsible=kwargs.get('responsible'),
+                           responsible_client=kwargs.get('responsible_client'))
 
     def record_activity(self, response):
         TaskReassignActivity(self.context, self.context.REQUEST, response).record()
