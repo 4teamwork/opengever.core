@@ -101,7 +101,8 @@ class TestBumblebeeOverlayListing(FunctionalTestCase):
         browser.login().visit(document, view="bumblebee-overlay-listing")
 
         self.assertEqual(
-            ['Checkout and edit',
+            ['Edit metadata',
+             'Checkout and edit',
              'Checkin without comment',
              'Checkin with comment',
              'Download copy',
@@ -247,7 +248,8 @@ class TestBumblebeeOverlayDocument(FunctionalTestCase):
         browser.login().visit(document, view="bumblebee-overlay-document")
 
         self.assertEqual(
-            ['Checkout and edit',
+            ['Edit metadata',
+             'Checkout and edit',
              'Checkin without comment',
              'Checkin with comment',
              'Download copy',

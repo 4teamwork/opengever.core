@@ -3,7 +3,6 @@ from opengever.document.browser.download import DownloadConfirmationHelper
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.officeconnector.helpers import is_officeconnector_attach_feature_enabled  # noqa
 from plone import api
-from plone.app.contentlisting.interfaces import IContentListingObject
 from plone.locking.interfaces import IRefreshableLockable
 from plone.protect import createToken
 from zope.component import queryMultiAdapter
@@ -17,19 +16,21 @@ class ActionButtonRendererMixin(object):
     overlay = None
 
     def is_edit_metadata_available(self):
+        # XXX object orient me, the object should know some of this stuff
         if self.is_overview_tab:
             return False
 
         if self.is_versioned():
             return False
 
-        if self.context.is_checked_out():
+        if self.is_checked_out_by_another_user():
             return False
 
         if IRefreshableLockable(self.context).locked():
             return False
 
-        return not IContentListingObject(self.context).is_trashed
+        return api.user.has_permission(
+                'Modify portal content', obj=self.context)
 
     def is_versioned(self):
         return self.request.get('version_id') is not None

@@ -120,20 +120,6 @@ class TestDocumentTooltip(FunctionalTestCase):
             'PDF Preview', browser.css('.file-action-buttons a').text)
 
     @browsing
-    def test_edit_metadata_link_is_not_available_for_trashed_documents(self, browser):  # noqa
-        self.grant('Administrator')
-        document_a = create(Builder('document').with_dummy_content())
-        document_b = create(Builder('document').with_dummy_content().trashed())
-
-        browser.login().open(document_a, view='tooltip')
-        self.assertIn(
-            'Edit metadata', browser.css('.file-action-buttons a').text)
-
-        browser.open(document_b, view='tooltip')
-        self.assertNotIn(
-            'Edit metadata', browser.css('.file-action-buttons a').text)
-
-    @browsing
     def test_checkout_link_is_only_available_for_documents(self, browser):
         dossier = create(Builder('dossier'))
         document = create(Builder('document')
@@ -158,8 +144,7 @@ class TestDocumentTooltip(FunctionalTestCase):
                           .with_dummy_content())
 
         browser.login().open(document, view='tooltip')
-        self.assertEquals(['Edit metadata',
-                           'Download copy',
+        self.assertEquals(['Download copy',
                            'PDF Preview',
                            'Open detail view'],
                           browser.css('.file-action-buttons a').text)

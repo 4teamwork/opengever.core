@@ -363,8 +363,7 @@ class TestOCTemplatesDossierInactiveWithoutFile(FunctionalTestCase):
 
         browser.open(self.document, view='tooltip')
 
-        self.assertEqual(['Edit metadata',
-                          'Open detail view'],
+        self.assertEqual(['Open detail view'],
                          browser.css('.file-action-buttons a').text)
 
         api.portal.set_registry_record(
@@ -376,8 +375,7 @@ class TestOCTemplatesDossierInactiveWithoutFile(FunctionalTestCase):
 
         browser.open(self.document, view='tooltip')
 
-        self.assertEqual(['Edit metadata',
-                          'Open detail view'],
+        self.assertEqual(['Open detail view'],
                          browser.css('.file-action-buttons a').text)
 
         api.portal.set_registry_record(
@@ -394,8 +392,7 @@ class TestOCTemplatesDossierInactiveWithoutFile(FunctionalTestCase):
 
         browser.open(self.document, view='tooltip')
 
-        self.assertEqual(['Edit metadata',
-                          'Open detail view'],
+        self.assertEqual(['Open detail view'],
                          browser.css('.file-action-buttons a').text)
 
         api.portal.set_registry_record(
@@ -407,8 +404,7 @@ class TestOCTemplatesDossierInactiveWithoutFile(FunctionalTestCase):
 
         browser.open(self.document, view='tooltip')
 
-        self.assertEqual(['Edit metadata',
-                          'Open detail view'],
+        self.assertEqual(['Open detail view'],
                          browser.css('.file-action-buttons a').text)
 
     @browsing
@@ -417,8 +413,7 @@ class TestOCTemplatesDossierInactiveWithoutFile(FunctionalTestCase):
 
         browser.open(self.document, view='bumblebee-overlay-listing')
 
-        self.assertEqual(['Edit metadata',
-                          'Open detail view'],
+        self.assertEqual(['Open detail view'],
                          browser.css('.file-action-buttons a').text)
 
         api.portal.set_registry_record(
@@ -430,8 +425,7 @@ class TestOCTemplatesDossierInactiveWithoutFile(FunctionalTestCase):
 
         browser.open(self.document, view='bumblebee-overlay-listing')
 
-        self.assertEqual(['Edit metadata',
-                          'Open detail view'],
+        self.assertEqual(['Open detail view'],
                          browser.css('.file-action-buttons a').text)
 
         api.portal.set_registry_record(
@@ -448,8 +442,7 @@ class TestOCTemplatesDossierInactiveWithoutFile(FunctionalTestCase):
 
         browser.open(self.document, view='bumblebee-overlay-listing')
 
-        self.assertEqual(['Edit metadata',
-                          'Open detail view'],
+        self.assertEqual(['Open detail view'],
                          browser.css('.file-action-buttons a').text)
 
         api.portal.set_registry_record(
@@ -461,8 +454,7 @@ class TestOCTemplatesDossierInactiveWithoutFile(FunctionalTestCase):
 
         browser.open(self.document, view='bumblebee-overlay-listing')
 
-        self.assertEqual(['Edit metadata',
-                          'Open detail view'],
+        self.assertEqual(['Open detail view'],
                          browser.css('.file-action-buttons a').text)
 
     @browsing
@@ -619,8 +611,7 @@ class TestOCTemplatesDossierResolvedWithoutFile(FunctionalTestCase):
 
         browser.open(self.document, view='tooltip')
 
-        self.assertEqual(['Edit metadata',
-                          'Open detail view'],
+        self.assertEqual(['Open detail view'],
                          browser.css('.file-action-buttons a').text)
 
         api.portal.set_registry_record(
@@ -632,8 +623,7 @@ class TestOCTemplatesDossierResolvedWithoutFile(FunctionalTestCase):
 
         browser.open(self.document, view='tooltip')
 
-        self.assertEqual(['Edit metadata',
-                          'Open detail view'],
+        self.assertEqual(['Open detail view'],
                          browser.css('.file-action-buttons a').text)
 
         api.portal.set_registry_record(
@@ -650,8 +640,7 @@ class TestOCTemplatesDossierResolvedWithoutFile(FunctionalTestCase):
 
         browser.open(self.document, view='tooltip')
 
-        self.assertEqual(['Edit metadata',
-                          'Open detail view'],
+        self.assertEqual(['Open detail view'],
                          browser.css('.file-action-buttons a').text)
 
         api.portal.set_registry_record(
@@ -663,8 +652,7 @@ class TestOCTemplatesDossierResolvedWithoutFile(FunctionalTestCase):
 
         browser.open(self.document, view='tooltip')
 
-        self.assertEqual(['Edit metadata',
-                          'Open detail view'],
+        self.assertEqual(['Open detail view'],
                          browser.css('.file-action-buttons a').text)
 
     @browsing
@@ -673,8 +661,7 @@ class TestOCTemplatesDossierResolvedWithoutFile(FunctionalTestCase):
 
         browser.open(self.document, view='bumblebee-overlay-listing')
 
-        self.assertEqual(['Edit metadata',
-                          'Open detail view'],
+        self.assertEqual(['Open detail view'],
                          browser.css('.file-action-buttons a').text)
 
         api.portal.set_registry_record(
@@ -686,8 +673,7 @@ class TestOCTemplatesDossierResolvedWithoutFile(FunctionalTestCase):
 
         browser.open(self.document, view='bumblebee-overlay-listing')
 
-        self.assertEqual(['Edit metadata',
-                          'Open detail view'],
+        self.assertEqual(['Open detail view'],
                          browser.css('.file-action-buttons a').text)
 
         api.portal.set_registry_record(
@@ -704,8 +690,7 @@ class TestOCTemplatesDossierResolvedWithoutFile(FunctionalTestCase):
 
         browser.open(self.document, view='bumblebee-overlay-listing')
 
-        self.assertEqual(['Edit metadata',
-                          'Open detail view'],
+        self.assertEqual(['Open detail view'],
                          browser.css('.file-action-buttons a').text)
 
         api.portal.set_registry_record(
@@ -717,8 +702,7 @@ class TestOCTemplatesDossierResolvedWithoutFile(FunctionalTestCase):
 
         browser.open(self.document, view='bumblebee-overlay-listing')
 
-        self.assertEqual(['Edit metadata',
-                          'Open detail view'],
+        self.assertEqual(['Open detail view'],
                          browser.css('.file-action-buttons a').text)
 
     @browsing
@@ -1261,8 +1245,7 @@ class TestOCTemplatesDossierInactiveWithFile(FunctionalTestCase):
 
         browser.open(self.document, view='tooltip')
 
-        self.assertEqual(['Edit metadata',
-                          'Download copy',
+        self.assertEqual(['Download copy',
                           'Open detail view'],
                          browser.css('.file-action-buttons a').text)
 
@@ -1275,8 +1258,7 @@ class TestOCTemplatesDossierInactiveWithFile(FunctionalTestCase):
 
         browser.open(self.document, view='tooltip')
 
-        self.assertEqual(['Edit metadata',
-                          'Download copy',
+        self.assertEqual(['Download copy',
                           'Attach to email',
                           'Open detail view'],
                          browser.css('.file-action-buttons a').text)
@@ -1298,8 +1280,7 @@ class TestOCTemplatesDossierInactiveWithFile(FunctionalTestCase):
 
         browser.open(self.document, view='tooltip')
 
-        self.assertEqual(['Edit metadata',
-                          'Download copy',
+        self.assertEqual(['Download copy',
                           'Open detail view'],
                          browser.css('.file-action-buttons a').text)
 
@@ -1312,8 +1293,7 @@ class TestOCTemplatesDossierInactiveWithFile(FunctionalTestCase):
 
         browser.open(self.document, view='tooltip')
 
-        self.assertEqual(['Edit metadata',
-                          'Download copy',
+        self.assertEqual(['Download copy',
                           'Attach to email',
                           'Open detail view'],
                          browser.css('.file-action-buttons a').text)
@@ -1327,8 +1307,7 @@ class TestOCTemplatesDossierInactiveWithFile(FunctionalTestCase):
 
         browser.open(self.document, view='bumblebee-overlay-listing')
 
-        self.assertEqual(['Edit metadata',
-                          'Download copy',
+        self.assertEqual(['Download copy',
                           'Open as PDF',
                           'Open detail view'],
                          browser.css('.file-action-buttons a').text)
@@ -1342,8 +1321,7 @@ class TestOCTemplatesDossierInactiveWithFile(FunctionalTestCase):
 
         browser.open(self.document, view='bumblebee-overlay-listing')
 
-        self.assertEqual(['Edit metadata',
-                          'Download copy',
+        self.assertEqual(['Download copy',
                           'Attach to email',
                           'Open as PDF',
                           'Open detail view'],
@@ -1366,8 +1344,7 @@ class TestOCTemplatesDossierInactiveWithFile(FunctionalTestCase):
 
         browser.open(self.document, view='bumblebee-overlay-listing')
 
-        self.assertEqual(['Edit metadata',
-                          'Download copy',
+        self.assertEqual(['Download copy',
                           'Open as PDF',
                           'Open detail view'],
                          browser.css('.file-action-buttons a').text)
@@ -1381,8 +1358,7 @@ class TestOCTemplatesDossierInactiveWithFile(FunctionalTestCase):
 
         browser.open(self.document, view='bumblebee-overlay-listing')
 
-        self.assertEqual(['Edit metadata',
-                          'Download copy',
+        self.assertEqual(['Download copy',
                           'Attach to email',
                           'Open as PDF',
                           'Open detail view'],
@@ -1561,8 +1537,7 @@ class TestOCTemplatesDossierResolvedWithFile(FunctionalTestCase):
 
         browser.open(self.document, view='tooltip')
 
-        self.assertEqual(['Edit metadata',
-                          'Download copy',
+        self.assertEqual(['Download copy',
                           'Open detail view'],
                          browser.css('.file-action-buttons a').text)
 
@@ -1575,8 +1550,7 @@ class TestOCTemplatesDossierResolvedWithFile(FunctionalTestCase):
 
         browser.open(self.document, view='tooltip')
 
-        self.assertEqual(['Edit metadata',
-                          'Download copy',
+        self.assertEqual(['Download copy',
                           'Attach to email',
                           'Open detail view'],
                          browser.css('.file-action-buttons a').text)
@@ -1598,8 +1572,7 @@ class TestOCTemplatesDossierResolvedWithFile(FunctionalTestCase):
 
         browser.open(self.document, view='tooltip')
 
-        self.assertEqual(['Edit metadata',
-                          'Download copy',
+        self.assertEqual(['Download copy',
                           'Open detail view'],
                          browser.css('.file-action-buttons a').text)
 
@@ -1612,8 +1585,7 @@ class TestOCTemplatesDossierResolvedWithFile(FunctionalTestCase):
 
         browser.open(self.document, view='tooltip')
 
-        self.assertEqual(['Edit metadata',
-                          'Download copy',
+        self.assertEqual(['Download copy',
                           'Attach to email',
                           'Open detail view'],
                          browser.css('.file-action-buttons a').text)
@@ -1627,8 +1599,7 @@ class TestOCTemplatesDossierResolvedWithFile(FunctionalTestCase):
 
         browser.open(self.document, view='bumblebee-overlay-listing')
 
-        self.assertEqual(['Edit metadata',
-                          'Download copy',
+        self.assertEqual(['Download copy',
                           'Open as PDF',
                           'Open detail view'],
                          browser.css('.file-action-buttons a').text)
@@ -1642,8 +1613,7 @@ class TestOCTemplatesDossierResolvedWithFile(FunctionalTestCase):
 
         browser.open(self.document, view='bumblebee-overlay-listing')
 
-        self.assertEqual(['Edit metadata',
-                          'Download copy',
+        self.assertEqual(['Download copy',
                           'Attach to email',
                           'Open as PDF',
                           'Open detail view'],
@@ -1666,8 +1636,7 @@ class TestOCTemplatesDossierResolvedWithFile(FunctionalTestCase):
 
         browser.open(self.document, view='bumblebee-overlay-listing')
 
-        self.assertEqual(['Edit metadata',
-                          'Download copy',
+        self.assertEqual(['Download copy',
                           'Open as PDF',
                           'Open detail view'],
                          browser.css('.file-action-buttons a').text)
@@ -1681,8 +1650,7 @@ class TestOCTemplatesDossierResolvedWithFile(FunctionalTestCase):
 
         browser.open(self.document, view='bumblebee-overlay-listing')
 
-        self.assertEqual(['Edit metadata',
-                          'Download copy',
+        self.assertEqual(['Download copy',
                           'Attach to email',
                           'Open as PDF',
                           'Open detail view'],
