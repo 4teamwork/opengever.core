@@ -48,10 +48,10 @@
             </tal:checkout_and_edit_disabled>
 
             <tal:checked_out tal:condition="checked_out_by_current_user">
-              <a tal:attributes="href view/get_checkin_without_comment_url; class string:function-checkin">
+              <a tal:attributes="href view/get_checkin_without_comment_url; class string:function-checkin" i18n:translate="">
                   Checkin without comment
               </a>
-              <a tal:attributes="href view/get_checkin_with_comment_url; class string:function-checkin">
+              <a tal:attributes="href view/get_checkin_with_comment_url; class string:function-checkin" i18n:translate="">
                   Checkin with comment
               </a>
             </tal:checked_out>
