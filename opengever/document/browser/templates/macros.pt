@@ -102,7 +102,7 @@
 
         </tal:file>
 
-        <tal:details_view tal:define="link context/absolute_url" tal:condition="python:not view.on_detail_view and link">
+        <tal:details_view tal:define="link context/absolute_url" tal:condition="view/is_detail_view_link_available">
             <a class="function-view-details"
                 tal:attributes="href link"
                 i18n:translate="label_open_detail_view">Open detail view

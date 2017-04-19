@@ -12,7 +12,7 @@ class ActionButtonRendererMixin(object):
     """Mixin for views that render action buttons."""
 
     is_overview_tab = False
-    on_detail_view = False
+    is_on_detail_view = False
     overlay = None
 
     def is_edit_metadata_available(self):
@@ -76,6 +76,9 @@ class ActionButtonRendererMixin(object):
             return False
 
         return manager.is_checked_out_by_current_user()
+
+    def is_detail_view_link_available(self):
+        return not self.is_on_detail_view
 
     def get_checkin_without_comment_url(self):
         if not self.has_file():

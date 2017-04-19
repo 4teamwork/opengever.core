@@ -122,7 +122,7 @@ class TemplateRow(CustomRow):
 class Overview(DisplayForm, GeverTabMixin, ActionButtonRendererMixin):
     """File details overview."""
 
-    on_detail_view = True
+    is_on_detail_view = True
     is_overview_tab = True
 
     grok.context(IDocumentSchema)

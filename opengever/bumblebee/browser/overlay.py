@@ -280,4 +280,4 @@ class BumblebeeOverlayDocumentView(BumblebeeOverlayBaseView):
     """Bumblebeeoverlay called from the document itself.
     """
 
-    on_detail_view = True
+    is_on_detail_view = True
