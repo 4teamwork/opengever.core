@@ -789,6 +789,7 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
 
     Dossier: open
     Document: with file
+    Mail: with file
     """
 
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
@@ -810,6 +811,10 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
                                    'example.docx').bytes(),
                                    u'example.docx'))
 
+        self.mail = create(Builder('mail')
+                           .within(self.dossier)
+                           .with_dummy_message())
+
     @browsing
     def test_overview(self, browser):
         browser.login()
@@ -822,6 +827,10 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
 
         self.assertIn(self.document.absolute_url() + '/editing_document',
                       browser.css('a.function-edit').first.get('href'))
+
+        browser.open(self.mail, view='tabbedview_view-overview')
+        self.assertEqual(['Download copy'],
+                         browser.css('.file-action-buttons a').text)
 
         api.portal.set_registry_record(
             'attach_to_outlook_enabled',
@@ -842,6 +851,13 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
 
         self.assertIn(self.document.absolute_url() + '/editing_document',
                       browser.css('a.function-edit').first.get('href'))
+
+        browser.open(self.mail, view='tabbedview_view-overview')
+        self.assertEqual(['Download copy',
+                          'Attach to email'],
+                         browser.css('.file-action-buttons a').text)
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
 
         api.portal.set_registry_record(
             'attach_to_outlook_enabled',
@@ -864,6 +880,10 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
         self.assertIn("javascript:officeConnectorCheckout('",
                       browser.css('a.function-edit').first.get('href'))
 
+        browser.open(self.mail, view='tabbedview_view-overview')
+        self.assertEqual(['Download copy'],
+                         browser.css('.file-action-buttons a').text)
+
         api.portal.set_registry_record(
             'attach_to_outlook_enabled',
             True,
@@ -883,6 +903,13 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
 
         self.assertIn("javascript:officeConnectorCheckout('",
                       browser.css('a.function-edit').first.get('href'))
+
+        browser.open(self.mail, view='tabbedview_view-overview')
+        self.assertEqual(['Download copy',
+                          'Attach to email'],
+                         browser.css('.file-action-buttons a').text)
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
 
     @browsing
     def test_tooltip(self, browser):
@@ -899,6 +926,13 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
         self.assertIn(self.document.absolute_url() + '/editing_document',
                       browser.css('a.function-edit').first.get('href'))
 
+        browser.open(self.mail, view='tooltip')
+
+        self.assertEqual(['Edit metadata',
+                          'Download copy',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
         api.portal.set_registry_record(
             'attach_to_outlook_enabled',
             True,
@@ -920,6 +954,17 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
 
         self.assertIn(self.document.absolute_url() + '/editing_document',
                       browser.css('a.function-edit').first.get('href'))
+
+        browser.open(self.mail, view='tooltip')
+
+        self.assertEqual(['Edit metadata',
+                          'Download copy',
+                          'Attach to email',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
 
         api.portal.set_registry_record(
             'attach_to_outlook_enabled',
@@ -944,6 +989,13 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
         self.assertIn("javascript:officeConnectorCheckout('",
                       browser.css('a.function-edit').first.get('href'))
 
+        browser.open(self.mail, view='tooltip')
+
+        self.assertEqual(['Edit metadata',
+                          'Download copy',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
         api.portal.set_registry_record(
             'attach_to_outlook_enabled',
             True,
@@ -965,6 +1017,17 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
 
         self.assertIn("javascript:officeConnectorCheckout('",
                       browser.css('a.function-edit').first.get('href'))
+
+        browser.open(self.mail, view='tooltip')
+
+        self.assertEqual(['Edit metadata',
+                          'Download copy',
+                          'Attach to email',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
 
     @browsing
     def test_bumblebee(self, browser):
@@ -981,6 +1044,14 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
         self.assertIn(self.document.absolute_url() + '/editing_document',
                       browser.css('a.function-edit').first.get('href'))
 
+        browser.open(self.mail, view='bumblebee-overlay-listing')
+
+        self.assertEqual(['Edit metadata',
+                          'Download copy',
+                          'Open as PDF',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
         api.portal.set_registry_record(
             'attach_to_outlook_enabled',
             True,
@@ -1003,6 +1074,18 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
 
         self.assertIn(self.document.absolute_url() + '/editing_document',
                       browser.css('a.function-edit').first.get('href'))
+
+        browser.open(self.mail, view='bumblebee-overlay-listing')
+
+        self.assertEqual(['Edit metadata',
+                          'Download copy',
+                          'Attach to email',
+                          'Open as PDF',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
 
         api.portal.set_registry_record(
             'attach_to_outlook_enabled',
@@ -1028,6 +1111,14 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
         self.assertIn("javascript:officeConnectorCheckout('",
                       browser.css('a.function-edit').first.get('href'))
 
+        browser.open(self.mail, view='bumblebee-overlay-listing')
+
+        self.assertEqual(['Edit metadata',
+                          'Download copy',
+                          'Open as PDF',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
         api.portal.set_registry_record(
             'attach_to_outlook_enabled',
             True,
@@ -1050,6 +1141,18 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
 
         self.assertIn("javascript:officeConnectorCheckout('",
                       browser.css('a.function-edit').first.get('href'))
+
+        browser.open(self.mail, view='bumblebee-overlay-listing')
+
+        self.assertEqual(['Edit metadata',
+                          'Download copy',
+                          'Attach to email',
+                          'Open as PDF',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
 
     @browsing
     def test_tabbed(self, browser):
@@ -1159,6 +1262,7 @@ class TestOCTemplatesDossierInactiveWithFile(FunctionalTestCase):
 
     Dossier: inactive
     Document: with file
+    Mail: with file
     """
 
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
@@ -1181,11 +1285,20 @@ class TestOCTemplatesDossierInactiveWithFile(FunctionalTestCase):
                                    'example.docx').bytes(),
                                    u'example.docx'))
 
+        self.mail = create(Builder('mail')
+                           .within(self.dossier)
+                           .with_dummy_message())
+
     @browsing
     def test_overview(self, browser):
         browser.login()
 
         browser.open(self.document, view='tabbedview_view-overview')
+
+        self.assertEqual(['Download copy'],
+                         browser.css('.file-action-buttons a').text)
+
+        browser.open(self.mail, view='tabbedview_view-overview')
 
         self.assertEqual(['Download copy'],
                          browser.css('.file-action-buttons a').text)
@@ -1198,6 +1311,15 @@ class TestOCTemplatesDossierInactiveWithFile(FunctionalTestCase):
         transaction.commit()
 
         browser.open(self.document, view='tabbedview_view-overview')
+
+        self.assertEqual(['Download copy',
+                          'Attach to email'],
+                         browser.css('.file-action-buttons a').text)
+
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
+
+        browser.open(self.mail, view='tabbedview_view-overview')
 
         self.assertEqual(['Download copy',
                           'Attach to email'],
@@ -1223,6 +1345,11 @@ class TestOCTemplatesDossierInactiveWithFile(FunctionalTestCase):
         self.assertEqual(['Download copy'],
                          browser.css('.file-action-buttons a').text)
 
+        browser.open(self.mail, view='tabbedview_view-overview')
+
+        self.assertEqual(['Download copy'],
+                         browser.css('.file-action-buttons a').text)
+
         api.portal.set_registry_record(
             'attach_to_outlook_enabled',
             True,
@@ -1231,6 +1358,15 @@ class TestOCTemplatesDossierInactiveWithFile(FunctionalTestCase):
         transaction.commit()
 
         browser.open(self.document, view='tabbedview_view-overview')
+
+        self.assertEqual(['Download copy',
+                          'Attach to email'],
+                         browser.css('.file-action-buttons a').text)
+
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
+
+        browser.open(self.mail, view='tabbedview_view-overview')
 
         self.assertEqual(['Download copy',
                           'Attach to email'],
@@ -1249,6 +1385,12 @@ class TestOCTemplatesDossierInactiveWithFile(FunctionalTestCase):
                           'Open detail view'],
                          browser.css('.file-action-buttons a').text)
 
+        browser.open(self.mail, view='tooltip')
+
+        self.assertEqual(['Download copy',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
         api.portal.set_registry_record(
             'attach_to_outlook_enabled',
             True,
@@ -1257,6 +1399,16 @@ class TestOCTemplatesDossierInactiveWithFile(FunctionalTestCase):
         transaction.commit()
 
         browser.open(self.document, view='tooltip')
+
+        self.assertEqual(['Download copy',
+                          'Attach to email',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
+
+        browser.open(self.mail, view='tooltip')
 
         self.assertEqual(['Download copy',
                           'Attach to email',
@@ -1284,6 +1436,12 @@ class TestOCTemplatesDossierInactiveWithFile(FunctionalTestCase):
                           'Open detail view'],
                          browser.css('.file-action-buttons a').text)
 
+        browser.open(self.mail, view='tooltip')
+
+        self.assertEqual(['Download copy',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
         api.portal.set_registry_record(
             'attach_to_outlook_enabled',
             True,
@@ -1292,6 +1450,16 @@ class TestOCTemplatesDossierInactiveWithFile(FunctionalTestCase):
         transaction.commit()
 
         browser.open(self.document, view='tooltip')
+
+        self.assertEqual(['Download copy',
+                          'Attach to email',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
+
+        browser.open(self.mail, view='tooltip')
 
         self.assertEqual(['Download copy',
                           'Attach to email',
@@ -1312,6 +1480,13 @@ class TestOCTemplatesDossierInactiveWithFile(FunctionalTestCase):
                           'Open detail view'],
                          browser.css('.file-action-buttons a').text)
 
+        browser.open(self.mail, view='bumblebee-overlay-listing')
+
+        self.assertEqual(['Download copy',
+                          'Open as PDF',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
         api.portal.set_registry_record(
             'attach_to_outlook_enabled',
             True,
@@ -1320,6 +1495,17 @@ class TestOCTemplatesDossierInactiveWithFile(FunctionalTestCase):
         transaction.commit()
 
         browser.open(self.document, view='bumblebee-overlay-listing')
+
+        self.assertEqual(['Download copy',
+                          'Attach to email',
+                          'Open as PDF',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
+
+        browser.open(self.mail, view='bumblebee-overlay-listing')
 
         self.assertEqual(['Download copy',
                           'Attach to email',
@@ -1349,6 +1535,13 @@ class TestOCTemplatesDossierInactiveWithFile(FunctionalTestCase):
                           'Open detail view'],
                          browser.css('.file-action-buttons a').text)
 
+        browser.open(self.mail, view='bumblebee-overlay-listing')
+
+        self.assertEqual(['Download copy',
+                          'Open as PDF',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
         api.portal.set_registry_record(
             'attach_to_outlook_enabled',
             True,
@@ -1357,6 +1550,17 @@ class TestOCTemplatesDossierInactiveWithFile(FunctionalTestCase):
         transaction.commit()
 
         browser.open(self.document, view='bumblebee-overlay-listing')
+
+        self.assertEqual(['Download copy',
+                          'Attach to email',
+                          'Open as PDF',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
+
+        browser.open(self.mail, view='bumblebee-overlay-listing')
 
         self.assertEqual(['Download copy',
                           'Attach to email',
@@ -1451,6 +1655,7 @@ class TestOCTemplatesDossierResolvedWithFile(FunctionalTestCase):
 
     Dossier: resolved
     Document: with file
+    Mail: with file
     """
 
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
@@ -1473,11 +1678,20 @@ class TestOCTemplatesDossierResolvedWithFile(FunctionalTestCase):
                                    'example.docx').bytes(),
                                    u'example.docx'))
 
+        self.mail = create(Builder('mail')
+                           .within(self.dossier)
+                           .with_dummy_message())
+
     @browsing
     def test_overview(self, browser):
         browser.login()
 
         browser.open(self.document, view='tabbedview_view-overview')
+
+        self.assertEqual(['Download copy'],
+                         browser.css('.file-action-buttons a').text)
+
+        browser.open(self.mail, view='tabbedview_view-overview')
 
         self.assertEqual(['Download copy'],
                          browser.css('.file-action-buttons a').text)
@@ -1490,6 +1704,15 @@ class TestOCTemplatesDossierResolvedWithFile(FunctionalTestCase):
         transaction.commit()
 
         browser.open(self.document, view='tabbedview_view-overview')
+
+        self.assertEqual(['Download copy',
+                          'Attach to email'],
+                         browser.css('.file-action-buttons a').text)
+
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
+
+        browser.open(self.mail, view='tabbedview_view-overview')
 
         self.assertEqual(['Download copy',
                           'Attach to email'],
@@ -1515,6 +1738,11 @@ class TestOCTemplatesDossierResolvedWithFile(FunctionalTestCase):
         self.assertEqual(['Download copy'],
                          browser.css('.file-action-buttons a').text)
 
+        browser.open(self.mail, view='tabbedview_view-overview')
+
+        self.assertEqual(['Download copy'],
+                         browser.css('.file-action-buttons a').text)
+
         api.portal.set_registry_record(
             'attach_to_outlook_enabled',
             True,
@@ -1523,6 +1751,12 @@ class TestOCTemplatesDossierResolvedWithFile(FunctionalTestCase):
         transaction.commit()
 
         browser.open(self.document, view='tabbedview_view-overview')
+
+        self.assertEqual(['Download copy',
+                          'Attach to email'],
+                         browser.css('.file-action-buttons a').text)
+
+        browser.open(self.mail, view='tabbedview_view-overview')
 
         self.assertEqual(['Download copy',
                           'Attach to email'],
