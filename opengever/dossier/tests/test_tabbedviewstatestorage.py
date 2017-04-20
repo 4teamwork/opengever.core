@@ -1,50 +1,8 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.dictstorage.interfaces import IDictStorage
-from ftw.tabbedview.interfaces import IGridStateStorageKeyGenerator
 from opengever.tabbedview.interfaces import ITabbedViewProxy
 from opengever.testing import FunctionalTestCase
-from zope.component import getMultiAdapter
-
-
-class TestDossierGridStateStorageKeyGenerator(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestDossierGridStateStorageKeyGenerator, self).setUp()
-
-        self.repo, self.repo_folder = create(Builder('repository_tree'))
-
-        self.dossier = create(
-            Builder("dossier")
-            .titled(u"Testd\xf6ssier XY")
-            .within(self.repo_folder))
-
-    def test_get_key_returns_proxy_view_without_postfix_on_dossier(self):
-        view = self.dossier.restrictedTraverse('tabbedview_view-documents-proxy')
-
-        self.assertTrue(ITabbedViewProxy.providedBy(view))
-
-        generator = getMultiAdapter((self.dossier, view, self.request),
-                                    IGridStateStorageKeyGenerator)
-
-        self.assertEqual(
-            'ftw.tabbedview-openever.dossier-tabbedview_view-documents-test_user_1_',
-            generator.get_key())
-
-
-class TestFrontPageDossierGridStateStorageKeyGenerator(FunctionalTestCase):
-
-    def test_get_key_returns_proxy_view_without_postfix_on_front_page(self):
-        view = self.portal.restrictedTraverse('tabbedview_view-mydocuments-proxy')
-
-        self.assertTrue(ITabbedViewProxy.providedBy(view))
-
-        generator = getMultiAdapter((self.portal, view, self.request),
-                                    IGridStateStorageKeyGenerator)
-
-        self.assertEqual(
-            'ftw.tabbedview-openever.dossier-tabbedview_view-mydocuments-test_user_1_',
-            generator.get_key())
 
 
 class TestGeverTabbedviewDictStorage(FunctionalTestCase):

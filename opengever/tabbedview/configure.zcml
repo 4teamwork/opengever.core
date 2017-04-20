@@ -52,4 +52,12 @@
     <implements interface="ftw.dictstorage.interfaces.ISQLAlchemy" />
   </class>
 
+  <adapter
+      for="OFS.interfaces.IItem
+           zope.publisher.interfaces.browser.IBrowserView
+           opengever.base.interfaces.IOpengeverBaseLayer"
+      provides="ftw.tabbedview.interfaces.IGridStateStorageKeyGenerator"
+      factory=".statestorage.GeverGridStateStorageKeyGenerator"
+      />
+
 </configure>

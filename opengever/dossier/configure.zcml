@@ -41,4 +41,12 @@
       for="zope.browser.interfaces.IBrowserView"
       />
 
+  <adapter
+      for="opengever.dossier.behaviors.dossier.IDossierMarker
+           zope.publisher.interfaces.browser.IBrowserView
+           opengever.base.interfaces.IOpengeverBaseLayer"
+      provides="ftw.tabbedview.interfaces.IGridStateStorageKeyGenerator"
+      factory=".tabbedviewstatestorage.DossierGridStateStorageKeyGenerator"
+      />
+
 </configure>
