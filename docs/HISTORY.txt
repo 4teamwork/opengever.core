@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Bundle import: Don't commit "before post-processing". [lgraf]
+- Allow get prefills for the CompleteSuccessorTaskForm. [elioschmutz]
 - Make sure GEVER specific customizations works during bundle import. [phgross]
 - Unify file action button logic. [Rotonen]
 - Replaced disposition tabbedview with a simple browserview. [phgross]
