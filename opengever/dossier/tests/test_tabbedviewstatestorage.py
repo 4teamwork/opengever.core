@@ -1,8 +1,31 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.dictstorage.interfaces import IDictStorage
+from ftw.tabbedview.interfaces import IGridStateStorageKeyGenerator
 from opengever.tabbedview.interfaces import ITabbedViewProxy
 from opengever.testing import FunctionalTestCase
+from zope.component import getMultiAdapter
+
+
+class TestDossierGridStateStorageKeyGenerator(FunctionalTestCase):
+
+    def test_add_static_portal_type_for_dossier_types(self):
+        repo, repo_folder = create(Builder('repository_tree'))
+        dossier = create(Builder("dossier").within(repo_folder))
+
+        view = dossier.restrictedTraverse('tabbedview_view-overview')
+
+        generator = getMultiAdapter((dossier, view, self.request),
+                                    IGridStateStorageKeyGenerator)
+
+        current_type = 'opengever.dossier.businesscasedossier'
+        self.assertEqual(current_type, dossier.portal_type)
+
+        static_type = 'opengever.dossier'
+        self.assertEqual(
+            'ftw.tabbedview-{}-tabbedview_view-overview-test_user_1_'.format(
+                static_type),
+            generator.get_key())
 
 
 class TestGeverTabbedviewDictStorage(FunctionalTestCase):
