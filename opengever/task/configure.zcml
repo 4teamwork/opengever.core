@@ -60,4 +60,11 @@
       provides="opengever.task.interfaces.ICommentResponseHandler"
       />
 
+  <browser:page
+      name="addcommentresponse"
+      class=".response.TaskCommentResponseAddFormView"
+      for="opengever.task.task.ITask"
+      permission="opengever.task.AddTaskComment"
+      />
+
 </configure>
