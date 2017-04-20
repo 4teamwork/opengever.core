@@ -12,4 +12,6 @@
 
   <permission id="opengever.meeting.AddMember" title="opengever.meeting: Add Member" />
 
+  <permission id="opengever.meeting.AddProposalTemplate" title="opengever.meeting: Add Proposal Template" />
+
 </configure>

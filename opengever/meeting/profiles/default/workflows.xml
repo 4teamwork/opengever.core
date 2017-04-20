@@ -24,6 +24,9 @@
     <type type_id="opengever.meeting.meetingdossier">
       <bound-workflow workflow_id="opengever_dossier_workflow" />
     </type>
+    <type type_id="opengever.meeting.proposaltemplate">
+      <bound-workflow workflow_id="opengever_document_workflow" />
+    </type>
   </bindings>
 
 </object>

@@ -17,6 +17,7 @@ from opengever.dossier.dossiertemplate import is_dossier_template_feature_enable
 from opengever.dossier.interfaces import IConstrainTypeDecider
 from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.meeting import is_meeting_feature_enabled
+from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.model import Proposal
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -399,6 +400,9 @@ class DefaultConstrainTypeDecider(grok.MultiAdapter):
         if factory_type in [u'opengever.meeting.proposal',
                             u'opengever.meeting.sablontemplate']:
             return is_meeting_feature_enabled()
+
+        if factory_type in [u'opengever.meeting.proposaltemplate']:
+            return is_word_meeting_implementation_enabled()
 
         if factory_type in [u'opengever.dossier.dossiertemplate']:
             return is_dossier_template_feature_enabled()

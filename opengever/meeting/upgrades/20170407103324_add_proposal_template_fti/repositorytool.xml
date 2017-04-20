@@ -1,8 +1,5 @@
 <repositorytool>
   <policymap purge="false">
-    <type name="opengever.meeting.sablontemplate">
-      <policy name="version_on_revert" />
-    </type>
     <type name="opengever.meeting.proposaltemplate">
       <policy name="version_on_revert" />
     </type>

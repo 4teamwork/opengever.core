@@ -1,0 +1,7 @@
+<object name="opengever.dossier.templatefolder">
+
+  <property name="allowed_content_types" purge="False">
+    <element value="opengever.meeting.proposaltemplate" />
+  </property>
+
+</object>

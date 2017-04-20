@@ -5,6 +5,7 @@ Changelog
 2017.1.2 (unreleased)
 ---------------------
 
+- Meeting: add new "Proposal Template" FTI. [jone]
 - Bundle import: Don't commit "before post-processing". [lgraf]
 - Allow get prefills for the CompleteSuccessorTaskForm. [elioschmutz]
 - Make sure GEVER specific customizations works during bundle import. [phgross]
