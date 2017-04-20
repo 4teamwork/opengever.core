@@ -8,6 +8,7 @@ from OFS.interfaces import IObjectWillBeAddedEvent
 from OFS.interfaces import IObjectWillBeMovedEvent
 from opengever.base.behaviors import classification
 from opengever.base.browser.paste import ICopyPasteRequestLayer
+from opengever.base.oguid import Oguid
 from opengever.bumblebee.interfaces import IPDFDownloadedEvent
 from opengever.document.behaviors import IBaseDocument
 from opengever.document.interfaces import IFileCopyDownloadedEvent
@@ -35,6 +36,8 @@ from opengever.task.task import ITask
 from opengever.trash.trash import ITrashedEvent
 from opengever.trash.trash import IUntrashedEvent
 from persistent.dict import PersistentDict
+from persistent.dict import PersistentDict
+from persistent.list import PersistentList
 from plone.app.versioningbehavior.utils import get_change_note
 from plone.dexterity.interfaces import IDexterityContent
 from Products.CMFCore.interfaces import IActionSucceededEvent
@@ -68,7 +71,8 @@ def propper_string(value):
 
 
 def journal_entry_factory(context, action, title,
-                          visible=True, comment='', actor=None):
+                          visible=True, comment='', actor=None,
+                          documents=None):
     portal_state = getMultiAdapter(
         (context, getRequest()), name=u'plone_portal_state')
     if actor is None:
@@ -77,11 +81,20 @@ def journal_entry_factory(context, action, title,
     title = propper_string(title)
     action = propper_string(action)
     comment = propper_string(comment)
+
+    action_entry = PersistentDict({'type': action,
+                                   'title': title,
+                                   'visible': visible})
+    if documents:
+        action_documents = PersistentList()
+        for doc in documents:
+            action_documents.append(PersistentDict(
+                {'id': Oguid.for_object(doc).id, 'title': doc.title}))
+        action_entry['documents'] = action_documents
+
     entry = {
         'obj': context,
-        'action': PersistentDict({'type': action,
-                                  'title': title,
-                                  'visible': visible}),
+        'action': action_entry,
         'actor': actor,
         'comment': comment}
 
@@ -779,6 +792,8 @@ def document_zipped(context, event):
 
 
 DOCUMENT_ATTACHED = 'Document attached to email via OfficeConnector'
+DOCUMENT_IN_DOSSIER_ATTACHED = 'Document in dossier attached to email '\
+                               'via OfficeConnector'
 
 
 def document_attached_to_email(context, event):
@@ -787,9 +802,20 @@ def document_attached_to_email(context, event):
 
     The document in question is passed into the ObjectEvent.
     """
-    title = _(u'label_document_attached',
-              default=u'Document attached to email via OfficeConnector')
+    document = event.object
 
-    journal_entry_factory(event.object, DOCUMENT_ATTACHED, title)
+    doc_journal = _(u'label_document_attached',
+                    default=u'Document attached to email via OfficeConnector')
+    journal_entry_factory(document, DOCUMENT_ATTACHED, doc_journal)
+
+    parent_dossier = document.get_parent_dossier()
+    if parent_dossier:
+        dossier_journal = _(u'label_document_in_dossier_attached',
+                            default=u'Document in dossier attached to email '
+                                    u'via OfficeConnector')
+
+        journal_entry_factory(
+            parent_dossier, DOCUMENT_IN_DOSSIER_ATTACHED, dossier_journal,
+            visible=True, documents=[document])
 
     return
