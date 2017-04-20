@@ -42,43 +42,41 @@ class DossierTabbedView(GeverTabbedView):
     def subdossiers_tab(self):
         if self.context.show_subdossier:
             return {'id': 'subdossiers',
-                    'title': _(u'label_subdossiers', default=u'Subdossiers'),
-                    }
-
-        return None
+                    'title': _(u'label_subdossiers', default=u'Subdossiers')}
+        else:
+            return None
 
     @property
     def proposals_tab(self):
         if is_meeting_feature_enabled():
             return {'id': 'proposals',
-                    'title': _(u'label_proposals', default=u'Proposals'),
-                    }
-
-        return None
+                    'title': _(u'label_proposals', default=u'Proposals')}
+        else:
+            return None
 
     @property
     def participations_tab(self):
         if is_contact_feature_enabled():
             return {
                 'id': 'participations',
-                'title': _(u'label_participations', default=u'Participations'),
-                }
-
-        return {
-            'id': 'participants',
-            'title': _(u'label_participants', default=u'Participants'),
-            }
+                'title': _(u'label_participations', default=u'Participations')}
+        else:
+            return {
+                'id': 'participants',
+                'title': _(u'label_participants', default=u'Participants')}
 
     def _get_tabs(self):
-        return [self.overview_tab,
-                self.subdossiers_tab,
-                self.documents_tab,
-                self.tasks_tab,
-                self.proposals_tab,
-                self.participations_tab,
-                self.trash_tab,
-                self.journal_tab,
-                self.info_tab]
+        return filter(None, [
+            self.overview_tab,
+            self.subdossiers_tab,
+            self.documents_tab,
+            self.tasks_tab,
+            self.proposals_tab,
+            self.participations_tab,
+            self.trash_tab,
+            self.journal_tab,
+            self.info_tab,
+        ])
 
 
 class TemplateFolderTabbedView(GeverTabbedView):
@@ -99,40 +97,43 @@ class TemplateFolderTabbedView(GeverTabbedView):
         if is_meeting_feature_enabled():
             return {'id': 'sablontemplates',
                     'title': _(u'label_sablon_templates',
-                               default=u'Sablon Templates'),
-                    }
+                               default=u'Sablon Templates')}
+        else:
+            return None
 
     @property
     def proposal_templates_tab(self):
         if is_word_meeting_implementation_enabled():
             return {'id': 'proposaltemplates',
                     'title': _(u'label_proposal_templates',
-                               default=u'Proposal Templates'),
-                    }
+                               default=u'Proposal Templates')}
+        else:
+            return None
 
     @property
     def dossiertemplate_tab(self):
         if is_dossier_template_feature_enabled():
             return {'id': 'dossiertemplates',
                     'title': _(u'label_dossier_templates',
-                               default=u'Dossier templates'),
-                    }
+                               default=u'Dossier templates')}
+        else:
+            return None
 
     def _get_tabs(self):
-        return [
+        return filter(None, [
             self.template_tab,
             self.dossiertemplate_tab,
             self.sablon_tab,
             self.proposal_templates_tab,
-            self.tasktemplate_folders_tab
-        ]
+            self.tasktemplate_folders_tab,
+        ])
 
 
 class DossierTemplateTabbedView(DossierTabbedView):
 
     def _get_tabs(self):
-        return [
+        return filter(None, [
             self.overview_tab,
             self.subdossiers_tab,
             self.documents_tab,
-            ]
+        ])
