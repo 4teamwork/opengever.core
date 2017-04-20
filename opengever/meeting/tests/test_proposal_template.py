@@ -31,9 +31,12 @@ class TestProposalTemplate(FunctionalTestCase):
         baugesuch, = vorlagen.objectValues()
         browser.open(baugesuch, view='tabbedview_view-overview')
         self.assertDictContainsSubset(
-            {'Title': 'Baugesuch',
-             'File': u'baugesuch.docx \u2014 0 KB Checkout and edit Download copy'},
+            {'Title': 'Baugesuch'},
             dict(browser.css('.documentMetadata table').first.lists()))
+
+        self.assertEquals(
+            'baugesuch.docx',
+            browser.css('.documentMetadata span.filename').first.text)
 
     @browsing
     def test_uploading_non_docx_files_is_not_allowed(self, browser):
