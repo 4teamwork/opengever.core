@@ -4,10 +4,27 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="opengever.document">
 
+
+  <!-- Document download views -->
   <browser:page
       name="download"
       for="opengever.document.document.IDocumentSchema"
       class=".download.DocumentishDownload"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="file_download_confirmation"
+      for="opengever.document.document.IDocumentSchema"
+      class=".download.DownloadConfirmation"
+      template="templates/downloadconfirmation.pt"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="download_file_version"
+      for="opengever.document.document.IDocumentSchema"
+      class=".download.DocumentDownloadFileVersion"
       permission="zope2.View"
       />
 
@@ -33,6 +50,21 @@
       class=".tabbed.DocumentTabbedView"
       permission="zope2.View"
       allowed_attributes="listing select_all reorder setgridstate set_default_tab msg_unknownresponse"
+      />
+
+  <!-- ZPT / METAL macros -->
+  <browser:page
+      for="opengever.document.document.IDocumentSchema"
+      name="macros"
+      template="./templates/macros.pt"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.mail.mail.IOGMailMarker"
+      name="macros"
+      template="./templates/macros.pt"
+      permission="zope2.View"
       />
 
 </configure>

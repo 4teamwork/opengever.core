@@ -10,307 +10,1963 @@ from plone import api
 import transaction
 
 
-class TestOfficeConnectorTemplates(FunctionalTestCase):
-    """Test templates to ensure OC can function."""
+class TestOCTemplatesDossierOpenWithoutFile(FunctionalTestCase):
+    """Test templates on documents for OfficeConnector compatibility.
 
-    def setUp(self):
-        super(TestOfficeConnectorTemplates, self).setUp()
-
-        self.root = create(Builder('repository_root'))
-        self.repo = create(Builder('repository').within(self.root))
-        self.dossier = create(Builder('dossier').within(self.repo))
-        self.document = create(Builder('document')
-                               .titled('testdocu')
-                               .within(self.dossier)
-                               .attach_file_containing(
-                                   bumblebee_asset('example.docx')
-                                   .bytes(),
-                                   u'example.docx',
-                                   )
-                               )
-
-    @browsing
-    def test_overview_template_without_officeconnector(self, browser):
-        browser.login().open(self.document, view='tabbedview_view-overview')
-
-        self.assertFalse(
-            'javascript:officeConnectorCheckout('
-            in browser.css('a.function-edit').first.get('href'))
-
-        self.assertEqual(0, len(browser.css('a.function-attach')))
-
-    @browsing
-    def test_tooltip_template_without_officeconnector(self, browser):
-        browser.login().open(self.document, view='tooltip')
-
-        self.assertFalse(
-            'javascript:officeConnectorCheckout('
-            in browser.css('a.function-edit').first.get('href'))
-
-        self.assertEqual(0, len(browser.css('a.function-attach')))
-
-    @browsing
-    def test_tabbedview_template_without_officeconnector(self, browser):
-        browser.login().open(self.dossier, view='tabbedview_view-documents')
-
-        self.assertEqual(
-            0, len(browser.css('a.tabbedview-menu-attach_documents')))
-
-        self.assertEqual(
-            1, len(browser.css('a.tabbedview-menu-send_as_email')))
-
-    @browsing
-    def test_overview_template_with_officeconnector_attach(self, browser):
-        api.portal.set_registry_record(
-            'attach_to_outlook_enabled',
-            True,
-            interface=IOfficeConnectorSettings)
-        transaction.commit()
-
-        browser.login().open(self.document, view='tabbedview_view-overview')
-
-        self.assertFalse(
-            'javascript:officeConnectorCheckout('
-            in browser.css('a.function-edit').first.get('href'))
-
-        self.assertEqual(1, len(browser.css('a.function-attach')))
-
-        self.assertTrue(
-            self.document.absolute_url()
-            in browser.css('a.function-attach').first.get('href'))
-
-    @browsing
-    def test_overview_template_with_officeconnector_checkout(self, browser):
-        api.portal.set_registry_record(
-            'direct_checkout_and_edit_enabled',
-            True,
-            interface=IOfficeConnectorSettings)
-        transaction.commit()
-
-        browser.login().open(self.document, view='tabbedview_view-overview')
-
-        self.assertEqual(0, len(browser.css('a.function-attach')))
-
-        self.assertTrue(
-            'javascript:officeConnectorCheckout('
-            in browser.css('a.function-edit').first.get('href'))
-
-        self.assertTrue(
-            self.document.absolute_url()
-            in browser.css('a.function-edit').first.get('href'))
-
-    @browsing
-    def test_overview_template_with_officeconnector_attach_and_checkout(self, browser): # noqa
-        api.portal.set_registry_record(
-            'direct_checkout_and_edit_enabled',
-            True,
-            interface=IOfficeConnectorSettings)
-        api.portal.set_registry_record(
-            'attach_to_outlook_enabled',
-            True,
-            interface=IOfficeConnectorSettings)
-        transaction.commit()
-
-        browser.login().open(self.document, view='tabbedview_view-overview')
-
-        self.assertEqual(1, len(browser.css('a.function-attach')))
-
-        self.assertTrue(
-            self.document.absolute_url()
-            in browser.css('a.function-attach').first.get('href'))
-
-        self.assertTrue(
-            'javascript:officeConnectorCheckout('
-            in browser.css('a.function-edit').first.get('href'))
-
-        self.assertTrue(
-            self.document.absolute_url()
-            in browser.css('a.function-edit').first.get('href'))
-
-    @browsing
-    def test_tooltip_template_with_officeconnector_attach(self, browser):
-        api.portal.set_registry_record(
-            'attach_to_outlook_enabled',
-            True,
-            interface=IOfficeConnectorSettings)
-        transaction.commit()
-
-        browser.login().open(self.document, view='tooltip')
-
-        self.assertFalse(
-            'javascript:officeConnectorCheckout('
-            in browser.css('a.function-edit').first.get('href'))
-
-        self.assertEqual(1, len(browser.css('a.function-edit')))
-
-        self.assertTrue(
-            self.document.absolute_url()
-            in browser.css('a.function-attach').first.get('href'))
-
-    @browsing
-    def test_tooltip_template_with_officeconnector_checkout(self, browser):
-        api.portal.set_registry_record(
-            'direct_checkout_and_edit_enabled',
-            True,
-            interface=IOfficeConnectorSettings)
-        transaction.commit()
-
-        browser.login().open(self.document, view='tooltip')
-
-        self.assertEqual(0, len(browser.css('a.function-attach')))
-
-        self.assertTrue(
-            'javascript:officeConnectorCheckout('
-            in browser.css('a.function-edit').first.get('href'))
-
-        self.assertTrue(
-            self.document.absolute_url()
-            in browser.css('a.function-edit').first.get('href'))
-
-    @browsing
-    def test_tooltip_template_with_officeconnector_attach_and_checkout(self, browser): #noqa
-        api.portal.set_registry_record(
-            'attach_to_outlook_enabled',
-            True,
-            interface=IOfficeConnectorSettings)
-        api.portal.set_registry_record(
-            'direct_checkout_and_edit_enabled',
-            True,
-            interface=IOfficeConnectorSettings)
-        transaction.commit()
-
-        browser.login().open(self.document, view='tooltip')
-
-        self.assertEqual(1, len(browser.css('a.function-attach')))
-
-        self.assertTrue(
-            self.document.absolute_url()
-            in browser.css('a.function-attach').first.get('href'))
-
-        self.assertTrue(
-            'javascript:officeConnectorCheckout('
-            in browser.css('a.function-edit').first.get('href'))
-
-        self.assertTrue(
-            self.document.absolute_url()
-            in browser.css('a.function-edit').first.get('href'))
-
-    @browsing
-    def test_tabbedview_template_with_officeconnector_attach(self, browser):
-        api.portal.set_registry_record(
-            'attach_to_outlook_enabled',
-            True,
-            interface=IOfficeConnectorSettings)
-        transaction.commit()
-
-        browser.login().open(self.dossier, view='tabbedview_view-documents')
-
-        self.assertEqual(1, len(browser.css('a.tabbedview-menu-attach_documents')))  # noqa
-
-        self.assertIn(
-            'javascript:officeConnectorMultiAttach(',
-            browser.css('a.tabbedview-menu-attach_documents').first.get('href')
-            )
-
-        self.assertEqual(
-            0, len(browser.css('a.tabbedview-menu-send_as_email')))
-
-
-class TestOfficeConnectorBumblebeeTemplates(FunctionalTestCase):
-    """Test Bumblebee templates to ensure OC can function."""
+    Dossier: open
+    Document: without file
+    """
 
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 
     def setUp(self):
-        super(TestOfficeConnectorBumblebeeTemplates, self).setUp()
+        super(TestOCTemplatesDossierOpenWithoutFile, self).setUp()
 
         self.root = create(Builder('repository_root'))
         self.repo = create(Builder('repository').within(self.root))
         self.dossier = create(Builder('dossier').within(self.repo))
+        self.document = create(Builder('document').within(self.dossier))
+
+    @browsing
+    def test_overview(self, browser):
+        browser.login()
+
+        browser.open(self.document, view='tabbedview_view-overview')
+
+        self.assertEqual([],
+                         browser.css('.file-action-buttons a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='tabbedview_view-overview')
+
+        self.assertEqual([],
+                         browser.css('.file-action-buttons a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            False,
+            interface=IOfficeConnectorSettings)
+
+        api.portal.set_registry_record(
+            'direct_checkout_and_edit_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='tabbedview_view-overview')
+
+        self.assertEqual([],
+                         browser.css('.file-action-buttons a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='tabbedview_view-overview')
+
+        self.assertEqual([],
+                         browser.css('.file-action-buttons a').text)
+
+    @browsing
+    def test_tooltip(self, browser):
+        browser.login()
+
+        browser.open(self.document, view='tooltip')
+
+        self.assertEqual(['Edit metadata',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='tooltip')
+
+        self.assertEqual(['Edit metadata',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            False,
+            interface=IOfficeConnectorSettings)
+
+        api.portal.set_registry_record(
+            'direct_checkout_and_edit_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='tooltip')
+
+        self.assertEqual(['Edit metadata',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='tooltip')
+
+        self.assertEqual(['Edit metadata',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+    @browsing
+    def test_bumblebee(self, browser):
+        browser.login()
+
+        browser.open(self.document, view='bumblebee-overlay-listing')
+
+        self.assertEqual(['Edit metadata',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='bumblebee-overlay-listing')
+
+        self.assertEqual(['Edit metadata',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            False,
+            interface=IOfficeConnectorSettings)
+
+        api.portal.set_registry_record(
+            'direct_checkout_and_edit_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='bumblebee-overlay-listing')
+
+        self.assertEqual(['Edit metadata',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='bumblebee-overlay-listing')
+
+        self.assertEqual(['Edit metadata',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+    @browsing
+    def test_tabbed(self, browser):
+        browser.login()
+
+        browser.open(self.dossier, view='tabbedview_view-documents')
+
+        self.assertEqual(['Create Task',
+                          u'More actions \u25bc',
+                          'Copy Items',
+                          'Send as email',
+                          'Checkout',
+                          'Cancel',
+                          'Checkin with comment',
+                          'Checkin without comment',
+                          'Export selection',
+                          'Move Items',
+                          'trashed',
+                          'Export as Zip'],
+                         browser.css('.tabbedview-action-list a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.dossier, view='tabbedview_view-documents')
+
+        self.assertEqual(['Create Task',
+                          u'More actions \u25bc',
+                          'Copy Items',
+                          'Checkout',
+                          'Cancel',
+                          'Checkin with comment',
+                          'Checkin without comment',
+                          'Export selection',
+                          'Attach selection',
+                          'Move Items',
+                          'trashed',
+                          'Export as Zip'],
+                         browser.css('.tabbedview-action-list a').text)
+
+        self.assertIn("javascript:officeConnectorMultiAttach('",
+                      browser.css('a.tabbedview-menu-attach_documents')[0]
+                      .get('href'))
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            False,
+            interface=IOfficeConnectorSettings)
+
+        api.portal.set_registry_record(
+            'direct_checkout_and_edit_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.dossier, view='tabbedview_view-documents')
+
+        self.assertEqual(['Create Task',
+                          u'More actions \u25bc',
+                          'Copy Items',
+                          'Send as email',
+                          'Checkout',
+                          'Cancel',
+                          'Checkin with comment',
+                          'Checkin without comment',
+                          'Export selection',
+                          'Move Items',
+                          'trashed',
+                          'Export as Zip'],
+                         browser.css('.tabbedview-action-list a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.dossier, view='tabbedview_view-documents')
+
+        self.assertEqual(['Create Task',
+                          u'More actions \u25bc',
+                          'Copy Items',
+                          'Checkout',
+                          'Cancel',
+                          'Checkin with comment',
+                          'Checkin without comment',
+                          'Export selection',
+                          'Attach selection',
+                          'Move Items',
+                          'trashed',
+                          'Export as Zip'],
+                         browser.css('.tabbedview-action-list a').text)
+
+        self.assertIn("javascript:officeConnectorMultiAttach('",
+                      browser.css('a.tabbedview-menu-attach_documents')[0]
+                      .get('href'))
+
+
+class TestOCTemplatesDossierInactiveWithoutFile(FunctionalTestCase):
+    """Test templates on documents for OfficeConnector compatibility.
+
+    Dossier: inactive
+    Document: without file
+    """
+
+    layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
+
+    def setUp(self):
+        super(TestOCTemplatesDossierInactiveWithoutFile, self).setUp()
+
+        self.root = create(Builder('repository_root'))
+        self.repo = create(Builder('repository').within(self.root))
+        self.dossier = create(Builder('dossier')
+                              .within(self.repo)
+                              .in_state('dossier-state-inactive'))
+        self.document = create(Builder('document').within(self.dossier))
+
+    @browsing
+    def test_overview(self, browser):
+        browser.login()
+
+        browser.open(self.document, view='tabbedview_view-overview')
+
+        self.assertEqual([],
+                         browser.css('.file-action-buttons a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='tabbedview_view-overview')
+
+        self.assertEqual([],
+                         browser.css('.file-action-buttons a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            False,
+            interface=IOfficeConnectorSettings)
+
+        api.portal.set_registry_record(
+            'direct_checkout_and_edit_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='tabbedview_view-overview')
+
+        self.assertEqual([],
+                         browser.css('.file-action-buttons a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='tabbedview_view-overview')
+
+        self.assertEqual([],
+                         browser.css('.file-action-buttons a').text)
+
+    @browsing
+    def test_tooltip(self, browser):
+        browser.login()
+
+        browser.open(self.document, view='tooltip')
+
+        self.assertEqual(['Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='tooltip')
+
+        self.assertEqual(['Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            False,
+            interface=IOfficeConnectorSettings)
+
+        api.portal.set_registry_record(
+            'direct_checkout_and_edit_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='tooltip')
+
+        self.assertEqual(['Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='tooltip')
+
+        self.assertEqual(['Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+    @browsing
+    def test_bumblebee(self, browser):
+        browser.login()
+
+        browser.open(self.document, view='bumblebee-overlay-listing')
+
+        self.assertEqual(['Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='bumblebee-overlay-listing')
+
+        self.assertEqual(['Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            False,
+            interface=IOfficeConnectorSettings)
+
+        api.portal.set_registry_record(
+            'direct_checkout_and_edit_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='bumblebee-overlay-listing')
+
+        self.assertEqual(['Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='bumblebee-overlay-listing')
+
+        self.assertEqual(['Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+    @browsing
+    def test_tabbed(self, browser):
+        browser.login()
+
+        browser.open(self.dossier, view='tabbedview_view-documents')
+
+        self.assertEqual([u'More actions \u25bc',
+                          'Copy Items',
+                          'Send as email',
+                          'Export selection',
+                          'Move Items',
+                          'Export as Zip'],
+                         browser.css('.tabbedview-action-list a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.dossier, view='tabbedview_view-documents')
+
+        self.assertEqual([u'More actions \u25bc',
+                          'Copy Items',
+                          'Export selection',
+                          'Attach selection',
+                          'Move Items',
+                          'Export as Zip'],
+                         browser.css('.tabbedview-action-list a').text)
+
+        self.assertIn("javascript:officeConnectorMultiAttach('",
+                      browser.css('a.tabbedview-menu-attach_documents')[0]
+                      .get('href'))
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            False,
+            interface=IOfficeConnectorSettings)
+
+        api.portal.set_registry_record(
+            'direct_checkout_and_edit_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.dossier, view='tabbedview_view-documents')
+
+        self.assertEqual([u'More actions \u25bc',
+                          'Copy Items',
+                          'Send as email',
+                          'Export selection',
+                          'Move Items',
+                          'Export as Zip'],
+                         browser.css('.tabbedview-action-list a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.dossier, view='tabbedview_view-documents')
+
+        self.assertEqual([u'More actions \u25bc',
+                          'Copy Items',
+                          'Export selection',
+                          'Attach selection',
+                          'Move Items',
+                          'Export as Zip'],
+                         browser.css('.tabbedview-action-list a').text)
+
+        self.assertIn("javascript:officeConnectorMultiAttach('",
+                      browser.css('a.tabbedview-menu-attach_documents')[0]
+                      .get('href'))
+
+
+class TestOCTemplatesDossierResolvedWithoutFile(FunctionalTestCase):
+    """Test templates on documents for OfficeConnector compatibility.
+
+    Dossier: resolved
+    Document: without file
+    """
+
+    layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
+
+    def setUp(self):
+        super(TestOCTemplatesDossierResolvedWithoutFile, self).setUp()
+
+        self.root = create(Builder('repository_root'))
+        self.repo = create(Builder('repository').within(self.root))
+        self.dossier = create(Builder('dossier')
+                              .within(self.repo)
+                              .in_state('dossier-state-resolved'))
+        self.document = create(Builder('document').within(self.dossier))
+
+    @browsing
+    def test_overview(self, browser):
+        browser.login()
+
+        browser.open(self.document, view='tabbedview_view-overview')
+
+        self.assertEqual([],
+                         browser.css('.file-action-buttons a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='tabbedview_view-overview')
+
+        self.assertEqual([],
+                         browser.css('.file-action-buttons a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            False,
+            interface=IOfficeConnectorSettings)
+
+        api.portal.set_registry_record(
+            'direct_checkout_and_edit_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='tabbedview_view-overview')
+
+        self.assertEqual([],
+                         browser.css('.file-action-buttons a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='tabbedview_view-overview')
+
+        self.assertEqual([],
+                         browser.css('.file-action-buttons a').text)
+
+    @browsing
+    def test_tooltip(self, browser):
+        browser.login()
+
+        browser.open(self.document, view='tooltip')
+
+        self.assertEqual(['Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='tooltip')
+
+        self.assertEqual(['Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            False,
+            interface=IOfficeConnectorSettings)
+
+        api.portal.set_registry_record(
+            'direct_checkout_and_edit_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='tooltip')
+
+        self.assertEqual(['Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='tooltip')
+
+        self.assertEqual(['Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+    @browsing
+    def test_bumblebee(self, browser):
+        browser.login()
+
+        browser.open(self.document, view='bumblebee-overlay-listing')
+
+        self.assertEqual(['Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='bumblebee-overlay-listing')
+
+        self.assertEqual(['Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            False,
+            interface=IOfficeConnectorSettings)
+
+        api.portal.set_registry_record(
+            'direct_checkout_and_edit_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='bumblebee-overlay-listing')
+
+        self.assertEqual(['Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='bumblebee-overlay-listing')
+
+        self.assertEqual(['Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+    @browsing
+    def test_tabbed(self, browser):
+        browser.login()
+
+        browser.open(self.dossier, view='tabbedview_view-documents')
+
+        self.assertEqual([u'More actions \u25bc',
+                          'Copy Items',
+                          'Send as email',
+                          'Export selection',
+                          'Move Items',
+                          'Export as Zip'],
+                         browser.css('.tabbedview-action-list a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.dossier, view='tabbedview_view-documents')
+
+        self.assertEqual([u'More actions \u25bc',
+                          'Copy Items',
+                          'Export selection',
+                          'Attach selection',
+                          'Move Items',
+                          'Export as Zip'],
+                         browser.css('.tabbedview-action-list a').text)
+
+        self.assertIn("javascript:officeConnectorMultiAttach('",
+                      browser.css('a.tabbedview-menu-attach_documents')[0]
+                      .get('href'))
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            False,
+            interface=IOfficeConnectorSettings)
+
+        api.portal.set_registry_record(
+            'direct_checkout_and_edit_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.dossier, view='tabbedview_view-documents')
+
+        self.assertEqual([u'More actions \u25bc',
+                          'Copy Items',
+                          'Send as email',
+                          'Export selection',
+                          'Move Items',
+                          'Export as Zip'],
+                         browser.css('.tabbedview-action-list a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.dossier, view='tabbedview_view-documents')
+
+        self.assertEqual([u'More actions \u25bc',
+                          'Copy Items',
+                          'Export selection',
+                          'Attach selection',
+                          'Move Items',
+                          'Export as Zip'],
+                         browser.css('.tabbedview-action-list a').text)
+
+        self.assertIn("javascript:officeConnectorMultiAttach('",
+                      browser.css('a.tabbedview-menu-attach_documents')[0]
+                      .get('href'))
+
+
+class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
+    """Test templates on documents for OfficeConnector compatibility.
+
+    Dossier: open
+    Document: with file
+    Mail: with file
+    """
+
+    layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
+
+    def setUp(self):
+        super(TestOCTemplatesDossierOpenWithFile, self).setUp()
+
+        self.root = create(Builder('repository_root'))
+
+        self.repo = create(Builder('repository')
+                           .within(self.root))
+
+        self.dossier = create(Builder('dossier')
+                              .within(self.repo))
+
         self.document = create(Builder('document')
-                               .titled('testdocu')
                                .within(self.dossier)
-                               .attach_file_containing(
-                                   bumblebee_asset('example.docx')
-                                   .bytes(),
-                                   u'example.docx',
-                                   )
-                               )
+                               .attach_file_containing(bumblebee_asset(
+                                   'example.docx').bytes(),
+                                   u'example.docx'))
+
+        self.mail = create(Builder('mail')
+                           .within(self.dossier)
+                           .with_dummy_message())
 
     @browsing
-    def test_bumblebeeoverlay_template_without_officeconnector(self, browser):
-        browser.login().open(self.document, view='bumblebee-overlay-listing')
+    def test_overview(self, browser):
+        browser.login()
 
-        self.assertFalse(
-            'javascript:officeConnectorCheckout('
-            in browser.css('a.function-edit').first.get('href'))
+        browser.open(self.document, view='tabbedview_view-overview')
 
-        self.assertEqual(0, len(browser.css('a.function-attach')))
+        self.assertEqual(['Checkout and edit',
+                          'Download copy'],
+                         browser.css('.file-action-buttons a').text)
 
-    @browsing
-    def test_bumblebeeoverlay_template_with_officeconnector_attach(self, browser): #noqa
+        self.assertIn(self.document.absolute_url() + '/editing_document',
+                      browser.css('a.function-edit').first.get('href'))
+
+        browser.open(self.mail, view='tabbedview_view-overview')
+        self.assertEqual(['Download copy'],
+                         browser.css('.file-action-buttons a').text)
+
         api.portal.set_registry_record(
             'attach_to_outlook_enabled',
             True,
             interface=IOfficeConnectorSettings)
+
         transaction.commit()
 
-        browser.login().open(self.document, view='bumblebee-overlay-listing')
+        browser.open(self.document, view='tabbedview_view-overview')
 
-        self.assertFalse(
-            'javascript:officeConnectorCheckout('
-            in browser.css('a.function-edit').first.get('href'))
+        self.assertEqual(['Checkout and edit',
+                          'Download copy',
+                          'Attach to email'],
+                         browser.css('.file-action-buttons a').text)
 
-        self.assertEqual(1, len(browser.css('a.function-edit')))
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
 
-        self.assertTrue(
-            self.document.absolute_url()
-            in browser.css('a.function-attach').first.get('href'))
+        self.assertIn(self.document.absolute_url() + '/editing_document',
+                      browser.css('a.function-edit').first.get('href'))
 
-    @browsing
-    def test_bumblebeeoverlay_template_with_officeconnector_checkout(self, browser): #noqa
+        browser.open(self.mail, view='tabbedview_view-overview')
+        self.assertEqual(['Download copy',
+                          'Attach to email'],
+                         browser.css('.file-action-buttons a').text)
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            False,
+            interface=IOfficeConnectorSettings)
+
         api.portal.set_registry_record(
             'direct_checkout_and_edit_enabled',
             True,
             interface=IOfficeConnectorSettings)
+
         transaction.commit()
 
-        browser.login().open(self.document, view='bumblebee-overlay-listing')
+        browser.open(self.document, view='tabbedview_view-overview')
 
-        self.assertEqual(0, len(browser.css('a.function-attach')))
+        self.assertEqual(['Checkout and edit',
+                          'Download copy'],
+                         browser.css('.file-action-buttons a').text)
 
-        self.assertTrue(
-            'javascript:officeConnectorCheckout('
-            in browser.css('a.function-edit').first.get('href'))
+        self.assertIn("javascript:officeConnectorCheckout('",
+                      browser.css('a.function-edit').first.get('href'))
 
-        self.assertTrue(
-            self.document.absolute_url()
-            in browser.css('a.function-edit').first.get('href'))
+        browser.open(self.mail, view='tabbedview_view-overview')
+        self.assertEqual(['Download copy'],
+                         browser.css('.file-action-buttons a').text)
 
-    @browsing
-    def test_bumblebeeoverlay_template_with_officeconnector_attach_and_checkout(self, browser): #noqa
         api.portal.set_registry_record(
             'attach_to_outlook_enabled',
             True,
             interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='tabbedview_view-overview')
+
+        self.assertEqual(['Checkout and edit',
+                          'Download copy',
+                          'Attach to email'],
+                         browser.css('.file-action-buttons a').text)
+
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
+
+        self.assertIn("javascript:officeConnectorCheckout('",
+                      browser.css('a.function-edit').first.get('href'))
+
+        browser.open(self.mail, view='tabbedview_view-overview')
+        self.assertEqual(['Download copy',
+                          'Attach to email'],
+                         browser.css('.file-action-buttons a').text)
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
+
+    @browsing
+    def test_tooltip(self, browser):
+        browser.login()
+
+        browser.open(self.document, view='tooltip')
+
+        self.assertEqual(['Edit metadata',
+                          'Checkout and edit',
+                          'Download copy',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        self.assertIn(self.document.absolute_url() + '/editing_document',
+                      browser.css('a.function-edit').first.get('href'))
+
+        browser.open(self.mail, view='tooltip')
+
+        self.assertEqual(['Edit metadata',
+                          'Download copy',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='tooltip')
+
+        self.assertEqual(['Edit metadata',
+                          'Checkout and edit',
+                          'Download copy',
+                          'Attach to email',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
+
+        self.assertIn(self.document.absolute_url() + '/editing_document',
+                      browser.css('a.function-edit').first.get('href'))
+
+        browser.open(self.mail, view='tooltip')
+
+        self.assertEqual(['Edit metadata',
+                          'Download copy',
+                          'Attach to email',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            False,
+            interface=IOfficeConnectorSettings)
+
         api.portal.set_registry_record(
             'direct_checkout_and_edit_enabled',
             True,
             interface=IOfficeConnectorSettings)
+
         transaction.commit()
 
-        browser.login().open(self.document, view='bumblebee-overlay-listing')
+        browser.open(self.document, view='tooltip')
 
-        self.assertEqual(1, len(browser.css('a.function-attach')))
+        self.assertEqual(['Edit metadata',
+                          'Checkout and edit',
+                          'Download copy',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
 
-        self.assertTrue(
-            self.document.absolute_url()
-            in browser.css('a.function-attach').first.get('href'))
+        self.assertIn("javascript:officeConnectorCheckout('",
+                      browser.css('a.function-edit').first.get('href'))
 
-        self.assertTrue(
-            'javascript:officeConnectorCheckout('
-            in browser.css('a.function-edit').first.get('href'))
+        browser.open(self.mail, view='tooltip')
 
-        self.assertTrue(
-            self.document.absolute_url()
-            in browser.css('a.function-edit').first.get('href'))
+        self.assertEqual(['Edit metadata',
+                          'Download copy',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='tooltip')
+
+        self.assertEqual(['Edit metadata',
+                          'Checkout and edit',
+                          'Download copy',
+                          'Attach to email',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
+
+        self.assertIn("javascript:officeConnectorCheckout('",
+                      browser.css('a.function-edit').first.get('href'))
+
+        browser.open(self.mail, view='tooltip')
+
+        self.assertEqual(['Edit metadata',
+                          'Download copy',
+                          'Attach to email',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
+
+    @browsing
+    def test_bumblebee(self, browser):
+        browser.login()
+
+        browser.open(self.document, view='bumblebee-overlay-listing')
+
+        self.assertEqual(['Edit metadata',
+                          'Checkout and edit',
+                          'Download copy',
+                          'Open as PDF',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+        self.assertIn(self.document.absolute_url() + '/editing_document',
+                      browser.css('a.function-edit').first.get('href'))
+
+        browser.open(self.mail, view='bumblebee-overlay-listing')
+
+        self.assertEqual(['Edit metadata',
+                          'Download copy',
+                          'Open as PDF',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='bumblebee-overlay-listing')
+
+        self.assertEqual(['Edit metadata',
+                          'Checkout and edit',
+                          'Download copy',
+                          'Attach to email',
+                          'Open as PDF',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
+
+        self.assertIn(self.document.absolute_url() + '/editing_document',
+                      browser.css('a.function-edit').first.get('href'))
+
+        browser.open(self.mail, view='bumblebee-overlay-listing')
+
+        self.assertEqual(['Edit metadata',
+                          'Download copy',
+                          'Attach to email',
+                          'Open as PDF',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            False,
+            interface=IOfficeConnectorSettings)
+
+        api.portal.set_registry_record(
+            'direct_checkout_and_edit_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='bumblebee-overlay-listing')
+
+        self.assertEqual(['Edit metadata',
+                          'Checkout and edit',
+                          'Download copy',
+                          'Open as PDF',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        self.assertIn("javascript:officeConnectorCheckout('",
+                      browser.css('a.function-edit').first.get('href'))
+
+        browser.open(self.mail, view='bumblebee-overlay-listing')
+
+        self.assertEqual(['Edit metadata',
+                          'Download copy',
+                          'Open as PDF',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='bumblebee-overlay-listing')
+
+        self.assertEqual(['Edit metadata',
+                          'Checkout and edit',
+                          'Download copy',
+                          'Attach to email',
+                          'Open as PDF',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
+
+        self.assertIn("javascript:officeConnectorCheckout('",
+                      browser.css('a.function-edit').first.get('href'))
+
+        browser.open(self.mail, view='bumblebee-overlay-listing')
+
+        self.assertEqual(['Edit metadata',
+                          'Download copy',
+                          'Attach to email',
+                          'Open as PDF',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
+
+    @browsing
+    def test_tabbed(self, browser):
+        browser.login()
+
+        browser.open(self.dossier, view='tabbedview_view-documents')
+
+        self.assertEqual(['Create Task',
+                          u'More actions \u25bc',
+                          'Copy Items',
+                          'Send as email',
+                          'Checkout',
+                          'Cancel',
+                          'Checkin with comment',
+                          'Checkin without comment',
+                          'Export selection',
+                          'Move Items',
+                          'trashed',
+                          'Export as Zip'],
+                         browser.css('.tabbedview-action-list a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.dossier, view='tabbedview_view-documents')
+
+        self.assertEqual(['Create Task',
+                          u'More actions \u25bc',
+                          'Copy Items',
+                          'Checkout',
+                          'Cancel',
+                          'Checkin with comment',
+                          'Checkin without comment',
+                          'Export selection',
+                          'Attach selection',
+                          'Move Items',
+                          'trashed',
+                          'Export as Zip'],
+                         browser.css('.tabbedview-action-list a').text)
+
+        self.assertIn("javascript:officeConnectorMultiAttach('",
+                      browser.css('a.tabbedview-menu-attach_documents')[0]
+                      .get('href'))
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            False,
+            interface=IOfficeConnectorSettings)
+
+        api.portal.set_registry_record(
+            'direct_checkout_and_edit_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.dossier, view='tabbedview_view-documents')
+
+        self.assertEqual(['Create Task',
+                          u'More actions \u25bc',
+                          'Copy Items',
+                          'Send as email',
+                          'Checkout',
+                          'Cancel',
+                          'Checkin with comment',
+                          'Checkin without comment',
+                          'Export selection',
+                          'Move Items',
+                          'trashed',
+                          'Export as Zip'],
+                         browser.css('.tabbedview-action-list a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.dossier, view='tabbedview_view-documents')
+
+        self.assertEqual(['Create Task',
+                          u'More actions \u25bc',
+                          'Copy Items',
+                          'Checkout',
+                          'Cancel',
+                          'Checkin with comment',
+                          'Checkin without comment',
+                          'Export selection',
+                          'Attach selection',
+                          'Move Items',
+                          'trashed',
+                          'Export as Zip'],
+                         browser.css('.tabbedview-action-list a').text)
+
+        self.assertIn("javascript:officeConnectorMultiAttach('",
+                      browser.css('a.tabbedview-menu-attach_documents')[0]
+                      .get('href'))
+
+
+class TestOCTemplatesDossierInactiveWithFile(FunctionalTestCase):
+    """Test templates on documents for OfficeConnector compatibility.
+
+    Dossier: inactive
+    Document: with file
+    Mail: with file
+    """
+
+    layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
+
+    def setUp(self):
+        super(TestOCTemplatesDossierInactiveWithFile, self).setUp()
+
+        self.root = create(Builder('repository_root'))
+
+        self.repo = create(Builder('repository')
+                           .within(self.root))
+
+        self.dossier = create(Builder('dossier')
+                              .within(self.repo)
+                              .in_state('dossier-state-inactive'))
+
+        self.document = create(Builder('document')
+                               .within(self.dossier)
+                               .attach_file_containing(bumblebee_asset(
+                                   'example.docx').bytes(),
+                                   u'example.docx'))
+
+        self.mail = create(Builder('mail')
+                           .within(self.dossier)
+                           .with_dummy_message())
+
+    @browsing
+    def test_overview(self, browser):
+        browser.login()
+
+        browser.open(self.document, view='tabbedview_view-overview')
+
+        self.assertEqual(['Download copy'],
+                         browser.css('.file-action-buttons a').text)
+
+        browser.open(self.mail, view='tabbedview_view-overview')
+
+        self.assertEqual(['Download copy'],
+                         browser.css('.file-action-buttons a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='tabbedview_view-overview')
+
+        self.assertEqual(['Download copy',
+                          'Attach to email'],
+                         browser.css('.file-action-buttons a').text)
+
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
+
+        browser.open(self.mail, view='tabbedview_view-overview')
+
+        self.assertEqual(['Download copy',
+                          'Attach to email'],
+                         browser.css('.file-action-buttons a').text)
+
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            False,
+            interface=IOfficeConnectorSettings)
+
+        api.portal.set_registry_record(
+            'direct_checkout_and_edit_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='tabbedview_view-overview')
+
+        self.assertEqual(['Download copy'],
+                         browser.css('.file-action-buttons a').text)
+
+        browser.open(self.mail, view='tabbedview_view-overview')
+
+        self.assertEqual(['Download copy'],
+                         browser.css('.file-action-buttons a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='tabbedview_view-overview')
+
+        self.assertEqual(['Download copy',
+                          'Attach to email'],
+                         browser.css('.file-action-buttons a').text)
+
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
+
+        browser.open(self.mail, view='tabbedview_view-overview')
+
+        self.assertEqual(['Download copy',
+                          'Attach to email'],
+                         browser.css('.file-action-buttons a').text)
+
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
+
+    @browsing
+    def test_tooltip(self, browser):
+        browser.login()
+
+        browser.open(self.document, view='tooltip')
+
+        self.assertEqual(['Download copy',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        browser.open(self.mail, view='tooltip')
+
+        self.assertEqual(['Download copy',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='tooltip')
+
+        self.assertEqual(['Download copy',
+                          'Attach to email',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
+
+        browser.open(self.mail, view='tooltip')
+
+        self.assertEqual(['Download copy',
+                          'Attach to email',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            False,
+            interface=IOfficeConnectorSettings)
+
+        api.portal.set_registry_record(
+            'direct_checkout_and_edit_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='tooltip')
+
+        self.assertEqual(['Download copy',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        browser.open(self.mail, view='tooltip')
+
+        self.assertEqual(['Download copy',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='tooltip')
+
+        self.assertEqual(['Download copy',
+                          'Attach to email',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
+
+        browser.open(self.mail, view='tooltip')
+
+        self.assertEqual(['Download copy',
+                          'Attach to email',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
+
+    @browsing
+    def test_bumblebee(self, browser):
+        browser.login()
+
+        browser.open(self.document, view='bumblebee-overlay-listing')
+
+        self.assertEqual(['Download copy',
+                          'Open as PDF',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        browser.open(self.mail, view='bumblebee-overlay-listing')
+
+        self.assertEqual(['Download copy',
+                          'Open as PDF',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='bumblebee-overlay-listing')
+
+        self.assertEqual(['Download copy',
+                          'Attach to email',
+                          'Open as PDF',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
+
+        browser.open(self.mail, view='bumblebee-overlay-listing')
+
+        self.assertEqual(['Download copy',
+                          'Attach to email',
+                          'Open as PDF',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            False,
+            interface=IOfficeConnectorSettings)
+
+        api.portal.set_registry_record(
+            'direct_checkout_and_edit_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='bumblebee-overlay-listing')
+
+        self.assertEqual(['Download copy',
+                          'Open as PDF',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        browser.open(self.mail, view='bumblebee-overlay-listing')
+
+        self.assertEqual(['Download copy',
+                          'Open as PDF',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='bumblebee-overlay-listing')
+
+        self.assertEqual(['Download copy',
+                          'Attach to email',
+                          'Open as PDF',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
+
+        browser.open(self.mail, view='bumblebee-overlay-listing')
+
+        self.assertEqual(['Download copy',
+                          'Attach to email',
+                          'Open as PDF',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
+
+    @browsing
+    def test_tabbed(self, browser):
+        browser.login()
+
+        browser.open(self.dossier, view='tabbedview_view-documents')
+
+        self.assertEqual([u'More actions \u25bc',
+                          'Copy Items',
+                          'Send as email',
+                          'Export selection',
+                          'Move Items',
+                          'Export as Zip'],
+                         browser.css('.tabbedview-action-list a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.dossier, view='tabbedview_view-documents')
+
+        self.assertEqual([u'More actions \u25bc',
+                          'Copy Items',
+                          'Export selection',
+                          'Attach selection',
+                          'Move Items',
+                          'Export as Zip'],
+                         browser.css('.tabbedview-action-list a').text)
+
+        self.assertIn("javascript:officeConnectorMultiAttach('",
+                      browser.css('a.tabbedview-menu-attach_documents')[0]
+                      .get('href'))
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            False,
+            interface=IOfficeConnectorSettings)
+
+        api.portal.set_registry_record(
+            'direct_checkout_and_edit_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.dossier, view='tabbedview_view-documents')
+
+        self.assertEqual([u'More actions \u25bc',
+                          'Copy Items',
+                          'Send as email',
+                          'Export selection',
+                          'Move Items',
+                          'Export as Zip'],
+                         browser.css('.tabbedview-action-list a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.dossier, view='tabbedview_view-documents')
+
+        self.assertEqual([u'More actions \u25bc',
+                          'Copy Items',
+                          'Export selection',
+                          'Attach selection',
+                          'Move Items',
+                          'Export as Zip'],
+                         browser.css('.tabbedview-action-list a').text)
+
+        self.assertIn("javascript:officeConnectorMultiAttach('",
+                      browser.css('a.tabbedview-menu-attach_documents')[0]
+                      .get('href'))
+
+
+class TestOCTemplatesDossierResolvedWithFile(FunctionalTestCase):
+    """Test templates on documents for OfficeConnector compatibility.
+
+    Dossier: resolved
+    Document: with file
+    Mail: with file
+    """
+
+    layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
+
+    def setUp(self):
+        super(TestOCTemplatesDossierResolvedWithFile, self).setUp()
+
+        self.root = create(Builder('repository_root'))
+
+        self.repo = create(Builder('repository')
+                           .within(self.root))
+
+        self.dossier = create(Builder('dossier')
+                              .within(self.repo)
+                              .in_state('dossier-state-resolved'))
+
+        self.document = create(Builder('document')
+                               .within(self.dossier)
+                               .attach_file_containing(bumblebee_asset(
+                                   'example.docx').bytes(),
+                                   u'example.docx'))
+
+        self.mail = create(Builder('mail')
+                           .within(self.dossier)
+                           .with_dummy_message())
+
+    @browsing
+    def test_overview(self, browser):
+        browser.login()
+
+        browser.open(self.document, view='tabbedview_view-overview')
+
+        self.assertEqual(['Download copy'],
+                         browser.css('.file-action-buttons a').text)
+
+        browser.open(self.mail, view='tabbedview_view-overview')
+
+        self.assertEqual(['Download copy'],
+                         browser.css('.file-action-buttons a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='tabbedview_view-overview')
+
+        self.assertEqual(['Download copy',
+                          'Attach to email'],
+                         browser.css('.file-action-buttons a').text)
+
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
+
+        browser.open(self.mail, view='tabbedview_view-overview')
+
+        self.assertEqual(['Download copy',
+                          'Attach to email'],
+                         browser.css('.file-action-buttons a').text)
+
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            False,
+            interface=IOfficeConnectorSettings)
+
+        api.portal.set_registry_record(
+            'direct_checkout_and_edit_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='tabbedview_view-overview')
+
+        self.assertEqual(['Download copy'],
+                         browser.css('.file-action-buttons a').text)
+
+        browser.open(self.mail, view='tabbedview_view-overview')
+
+        self.assertEqual(['Download copy'],
+                         browser.css('.file-action-buttons a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='tabbedview_view-overview')
+
+        self.assertEqual(['Download copy',
+                          'Attach to email'],
+                         browser.css('.file-action-buttons a').text)
+
+        browser.open(self.mail, view='tabbedview_view-overview')
+
+        self.assertEqual(['Download copy',
+                          'Attach to email'],
+                         browser.css('.file-action-buttons a').text)
+
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
+
+    @browsing
+    def test_tooltip(self, browser):
+        browser.login()
+
+        browser.open(self.document, view='tooltip')
+
+        self.assertEqual(['Download copy',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='tooltip')
+
+        self.assertEqual(['Download copy',
+                          'Attach to email',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            False,
+            interface=IOfficeConnectorSettings)
+
+        api.portal.set_registry_record(
+            'direct_checkout_and_edit_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='tooltip')
+
+        self.assertEqual(['Download copy',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='tooltip')
+
+        self.assertEqual(['Download copy',
+                          'Attach to email',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
+
+    @browsing
+    def test_bumblebee(self, browser):
+        browser.login()
+
+        browser.open(self.document, view='bumblebee-overlay-listing')
+
+        self.assertEqual(['Download copy',
+                          'Open as PDF',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='bumblebee-overlay-listing')
+
+        self.assertEqual(['Download copy',
+                          'Attach to email',
+                          'Open as PDF',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            False,
+            interface=IOfficeConnectorSettings)
+
+        api.portal.set_registry_record(
+            'direct_checkout_and_edit_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='bumblebee-overlay-listing')
+
+        self.assertEqual(['Download copy',
+                          'Open as PDF',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.document, view='bumblebee-overlay-listing')
+
+        self.assertEqual(['Download copy',
+                          'Attach to email',
+                          'Open as PDF',
+                          'Open detail view'],
+                         browser.css('.file-action-buttons a').text)
+
+        self.assertIn("javascript:officeConnectorAttach('",
+                      browser.css('a.function-attach')[0].get('href'))
+
+    @browsing
+    def test_tabbed(self, browser):
+        browser.login()
+
+        browser.open(self.dossier, view='tabbedview_view-documents')
+
+        self.assertEqual([u'More actions \u25bc',
+                          'Copy Items',
+                          'Send as email',
+                          'Export selection',
+                          'Move Items',
+                          'Export as Zip'],
+                         browser.css('.tabbedview-action-list a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.dossier, view='tabbedview_view-documents')
+
+        self.assertEqual([u'More actions \u25bc',
+                          'Copy Items',
+                          'Export selection',
+                          'Attach selection',
+                          'Move Items',
+                          'Export as Zip'],
+                         browser.css('.tabbedview-action-list a').text)
+
+        self.assertIn("javascript:officeConnectorMultiAttach('",
+                      browser.css('a.tabbedview-menu-attach_documents')[0]
+                      .get('href'))
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            False,
+            interface=IOfficeConnectorSettings)
+
+        api.portal.set_registry_record(
+            'direct_checkout_and_edit_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.dossier, view='tabbedview_view-documents')
+
+        self.assertEqual([u'More actions \u25bc',
+                          'Copy Items',
+                          'Send as email',
+                          'Export selection',
+                          'Move Items',
+                          'Export as Zip'],
+                         browser.css('.tabbedview-action-list a').text)
+
+        api.portal.set_registry_record(
+            'attach_to_outlook_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+
+        transaction.commit()
+
+        browser.open(self.dossier, view='tabbedview_view-documents')
+
+        self.assertEqual([u'More actions \u25bc',
+                          'Copy Items',
+                          'Export selection',
+                          'Attach selection',
+                          'Move Items',
+                          'Export as Zip'],
+                         browser.css('.tabbedview-action-list a').text)
+
+        self.assertIn("javascript:officeConnectorMultiAttach('",
+                      browser.css('a.tabbedview-menu-attach_documents')[0]
+                      .get('href'))

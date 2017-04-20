@@ -6,52 +6,7 @@
 </ul>
 
 <div class='tooltip-content'>
-  <ul class='file-actions' i18n:domain="opengever.document">
-    <li tal:condition="view/preview_link_available">
-      <a id="action-pdf"
-          tal:attributes="href string:${view/get_url}/@@download_pdfpreview"
-          i18n:translate="label_pdf_preview">
-          PDF Preview
-      </a>
-    </li>
-    <li tal:condition="view/edit_metadata_link_available">
-      <a id="action-edit"
-          tal:attributes="href string:${view/get_url}/edit_checker"
-          i18n:domain="plone"
-          i18n:translate="">
-          Edit metadata
-      </a>
-    </li>
-    <li tal:condition="view/checkout_and_edit_link_available">
-      <tal:cond tal:condition="context/@@officeconnector_settings/is_checkout_enabled">
-        <a tal:attributes="href string:javascript:officeConnectorCheckout('${context/absolute_url}/officeconnector_checkout_url');;"
-            class="function-edit"
-            href="#"
-            i18n:translate="label_checkout_and_edit">
-            Checkout and edit
-        </a>
-      </tal:cond>
-      <tal:cond tal:condition="not: context/@@officeconnector_settings/is_checkout_enabled">
-        <a class="function-edit"
-            tal:attributes="href view/checkout_and_edit_link"
-            i18n:translate="label_checkout_and_edit">
-            Checkout and edit
-        </a>
-      </tal:cond>
-      <tal:cond tal:condition="context/@@officeconnector_settings/is_attach_enabled">
-        <a tal:attributes="href string:javascript:officeConnectorAttach('${context/absolute_url}/officeconnector_attach_url');;"
-            class="function-attach"
-            href="#"
-            i18n:translate="label_attach_to_email">
-            Attach to email
-        </a>
-      </tal:cond>
-    </li>
-    <li tal:condition="view/download_link_available">
-      <a tal:replace="structure view/download_link" />
-    </li>
-  </ul>
-
+    <div metal:use-macro="context/@@macros/file_action_buttons" />
   <div class="preview" tal:condition="view/document/is_bumblebeeable">
     <a href="#" class="showroom-reference"
        tal:attributes="data-showroom-id string:showroom-id-${view/document/uuid}">

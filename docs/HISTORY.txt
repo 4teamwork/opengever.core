@@ -7,6 +7,7 @@ Changelog
 
 - Bundle import: Don't commit "before post-processing". [lgraf]
 - Make sure GEVER specific customizations works during bundle import. [phgross]
+- Unify file action button logic. [Rotonen]
 - Replaced disposition tabbedview with a simple browserview. [phgross]
 - Refactor: Use ZCML for registering reference number adapters for consistency. [jone]
 - Also whitelist 'customlogoright' for unauthenticated access. [lgraf]

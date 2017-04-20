@@ -1,86 +1,18 @@
 <tal:block xmlns:i18n="http://xml.zope.org/namespaces/i18n"
-           i18n:domain="opengever.document">
+    i18n:domain="opengever.document">
 
-    <tal:file tal:condition="context/file"
-              tal:define="preview_supported view/is_preview_supported;
-                          pdf_download_available view/is_pdf_download_available;
-                          checkout_and_edit_available view/is_checkout_and_edit_available;
-                          copy_download_available view/is_download_copy_available">
-
-        <!-- icon, filename, size -->
-        <span tal:attributes="class view/get_css_class"></span>
-        <span tal:define="filename view/w/file/filename">
+    <!-- icon, filename, size -->
+    <span tal:attributes="class view/get_css_class"></span>
+    <tal:cond tal:condition="context/file">
+        <span tal:define="filename context/file/filename">
             <span class="filename" tal:content="filename">Filename</span>
             <span class="discreet">
-              &mdash; <span tal:define="sizekb view/w/file/file_size" tal:replace="sizekb">100</span>
-              KB
+                &mdash; <span tal:define="size context/file/size" tal:replace="python:size / 1024">100</span>
+                KB
             </span>
         </span>
+    </tal:cond>
 
-        <div class="downloadActions">
-          <tal:preview_support tal:condition="preview_supported">
-            <tal:cond tal:condition="pdf_download_available">
-              <a class="function-download-pdf" href="#"
-                  tal:attributes="href string:${context/absolute_url}/download_pdfpreview?_authenticator=${context/@@authenticator/token}"
-                  i18n:translate="label_pdf_preview">
-                  PDF Preview
-              </a>
-            </tal:cond>
-            <tal:cond tal:condition="not: pdf_download_available">
-              <span class="function-download-pdf-inactive discreet"
-                  i18n:translate="label_pdf_preview">
-                  PDF Preview
-              </span>
-            </tal:cond>
-          </tal:preview_support>
-          <tal:cond tal:condition="checkout_and_edit_available">
-            <tal:cond tal:condition="context/@@officeconnector_settings/is_checkout_enabled">
-              <a tal:attributes="href string:javascript:officeConnectorCheckout('${context/absolute_url}/officeconnector_checkout_url');;"
-                  class="function-edit"
-                  href="#"
-                  i18n:translate="label_checkout_and_edit">
-                  Checkout and edit
-              </a>
-            </tal:cond>
-            <tal:cond tal:condition="not: context/@@officeconnector_settings/is_checkout_enabled">
-              <a tal:attributes="href string:${context/absolute_url}/editing_document?_authenticator=${context/@@authenticator/token}"
-                  class="function-edit"
-                  href="#"
-                  i18n:translate="label_checkout_and_edit">
-                  Checkout and edit
-              </a>
-            </tal:cond>
-            <tal:cond tal:condition="context/@@officeconnector_settings/is_attach_enabled">
-              <a tal:attributes="href string:javascript:officeConnectorAttach('${context/absolute_url}/officeconnector_attach_url');;"
-                  class="function-attach"
-                  href="#"
-                  i18n:translate="label_attach_to_email">
-                  Attach to email
-              </a>
-            </tal:cond>
-          </tal:cond>
-          <tal:cond tal:condition="not: checkout_and_edit_available">
-            <span class="function-edit-inactive discreet"
-                i18n:translate="label_checkout_and_edit">
-                Checkout and edit
-            </span>
-          </tal:cond>
-          <tal:cond tal:condition="copy_download_available">
-            <span tal:replace="structure view/get_download_copy_tag"></span>
-          </tal:cond>
-          <tal:cond tal:condition="not: copy_download_available">
-            <span class="function-download-copy-inactive link-overlay modal discreet"
-              i18n:translate="label_download_copy">
-              Download copy
-            </span>
-          </tal:cond>
-        </div>
-    </tal:file>
-
-    <tal:nofile tal:condition="not:context/file">
-        <span class="discreet" i18n:translate="no_file">
-            No file
-        </span>
-    </tal:nofile>
+    <div metal:use-macro="context/@@macros/file_action_buttons" />
 
 </tal:block>

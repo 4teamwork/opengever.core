@@ -13,6 +13,7 @@ import transaction
 
 
 class TestBumblebeeOverlayListing(FunctionalTestCase):
+    """Test Bumblebee in overlay listings."""
 
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 
@@ -36,8 +37,8 @@ class TestBumblebeeOverlayListing(FunctionalTestCase):
 
         browser.login().visit(document, view="bumblebee-overlay-listing")
 
-        self.assertNotIn('target=',
-                         browser.css('#action-pdf').first.outerHTML)
+        self.assertNotIn(
+            'target=', browser.css('.function-pdf-preview').first.outerHTML)
 
     @browsing
     def test_open_pdf_in_a_new_window_enabled(self, browser):
@@ -54,8 +55,8 @@ class TestBumblebeeOverlayListing(FunctionalTestCase):
 
         browser.login().visit(document, view='bumblebee-overlay-listing')
 
-        self.assertIn('target=',
-                         browser.css('#action-pdf').first.outerHTML)
+        self.assertIn(
+            'target=', browser.css('.function-pdf-preview').first.outerHTML)
 
     @browsing
     def test_actions_with_file(self, browser):
@@ -69,12 +70,12 @@ class TestBumblebeeOverlayListing(FunctionalTestCase):
         browser.login().visit(document, view="bumblebee-overlay-listing")
 
         self.assertEqual(
-            ['Checkout and edit',
-             'Edit metadata',
+            ['Edit metadata',
+             'Checkout and edit',
              'Download copy',
              'Open as PDF',
              'Open detail view'],
-            browser.css('.file-actions a').text)
+            browser.css('.file-action-buttons a').text)
 
     @browsing
     def test_actions_without_file(self, browser):
@@ -85,7 +86,7 @@ class TestBumblebeeOverlayListing(FunctionalTestCase):
 
         self.assertEqual(
             ['Edit metadata', 'Open detail view'],
-            browser.css('.file-actions a').text)
+            browser.css('.file-action-buttons a').text)
 
     @browsing
     def test_actions_with_checked_out_file(self, browser):
@@ -100,20 +101,20 @@ class TestBumblebeeOverlayListing(FunctionalTestCase):
         browser.login().visit(document, view="bumblebee-overlay-listing")
 
         self.assertEqual(
-            ['Checkout and edit',
+            ['Edit metadata',
+             'Checkout and edit',
              'Checkin without comment',
              'Checkin with comment',
-             'Edit metadata',
              'Download copy',
              'Open as PDF',
              'Open detail view'],
-            browser.css('.file-actions a').text)
+            browser.css('.file-action-buttons a').text)
 
     @browsing
     def test_actions_with_file_checked_out_by_another_user(self, browser):
-        hans = create(Builder('user')
-                      .with_userid('hans')
-                      .with_roles('Contributor', 'Editor', 'Reader'))
+        create(Builder('user')
+               .with_userid('hans')
+               .with_roles('Contributor', 'Editor', 'Reader'))
         dossier = create(Builder('dossier'))
         document = create(Builder('document')
                           .within(dossier)
@@ -125,11 +126,9 @@ class TestBumblebeeOverlayListing(FunctionalTestCase):
         browser.login().visit(document, view="bumblebee-overlay-listing")
 
         self.assertEqual(
-            ['Edit metadata',
-             'Download copy',
-             'Open as PDF',
+            ['Open as PDF',
              'Open detail view'],
-            browser.css('.file-actions a').text)
+            browser.css('.file-action-buttons a').text)
 
     @browsing
     def test_actions_with_mail(self, browser):
@@ -145,7 +144,7 @@ class TestBumblebeeOverlayListing(FunctionalTestCase):
              'Download copy',
              'Open as PDF',
              'Open detail view'],
-            browser.css('.file-actions a').text)
+            browser.css('.file-action-buttons a').text)
 
     @browsing
     def test_actions_with_versioned_document(self, browser):
@@ -159,14 +158,16 @@ class TestBumblebeeOverlayListing(FunctionalTestCase):
         create_document_version(document, version_id=1)
         transaction.commit()
 
-        browser.login().visit(document, view="bumblebee-overlay-document?version_id=1")
+        browser.login()
+        browser.open(document, view="bumblebee-overlay-document?version_id=1")
 
         self.assertEqual(
-            ['Revert document', 'Download copy'],
-            browser.css('.file-actions a').text)
+            ['Download copy', 'Revert document'],
+            browser.css('.file-action-buttons a').text)
 
 
 class TestBumblebeeOverlayDocument(FunctionalTestCase):
+    """Test Bumblebee on document overlays."""
 
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 
@@ -183,8 +184,8 @@ class TestBumblebeeOverlayDocument(FunctionalTestCase):
     def test_title_is_linked_to_document_view(self, browser):
         dossier = create(Builder('dossier'))
         document = create(Builder('document')
-                  .titled(u"Anfrage Meier")
-                  .within(dossier))
+                          .titled(u"Anfrage Meier")
+                          .within(dossier))
 
         browser.login().visit(document, view="bumblebee-overlay-document")
 
@@ -217,11 +218,11 @@ class TestBumblebeeOverlayDocument(FunctionalTestCase):
         browser.login().visit(document, view="bumblebee-overlay-document")
 
         self.assertEqual(
-            ['Checkout and edit',
-             'Edit metadata',
+            ['Edit metadata',
+             'Checkout and edit',
              'Download copy',
              'Open as PDF'],
-            browser.css('.file-actions a').text)
+            browser.css('.file-action-buttons a').text)
 
     @browsing
     def test_actions_without_file(self, browser):
@@ -232,7 +233,7 @@ class TestBumblebeeOverlayDocument(FunctionalTestCase):
 
         self.assertEqual(
             ['Edit metadata'],
-            browser.css('.file-actions a').text)
+            browser.css('.file-action-buttons a').text)
 
     @browsing
     def test_actions_with_checked_out_file(self, browser):
@@ -247,19 +248,19 @@ class TestBumblebeeOverlayDocument(FunctionalTestCase):
         browser.login().visit(document, view="bumblebee-overlay-document")
 
         self.assertEqual(
-            ['Checkout and edit',
+            ['Edit metadata',
+             'Checkout and edit',
              'Checkin without comment',
              'Checkin with comment',
-             'Edit metadata',
              'Download copy',
              'Open as PDF'],
-            browser.css('.file-actions a').text)
+            browser.css('.file-action-buttons a').text)
 
     @browsing
     def test_actions_with_file_checked_out_by_another_user(self, browser):
-        hans = create(Builder('user')
-                      .with_userid('hans')
-                      .with_roles('Contributor', 'Editor', 'Reader'))
+        create(Builder('user')
+               .with_userid('hans')
+               .with_roles('Contributor', 'Editor', 'Reader'))
         dossier = create(Builder('dossier'))
         document = create(Builder('document')
                           .within(dossier)
@@ -271,10 +272,8 @@ class TestBumblebeeOverlayDocument(FunctionalTestCase):
         browser.login().visit(document, view="bumblebee-overlay-document")
 
         self.assertEqual(
-            ['Edit metadata',
-             'Download copy',
-             'Open as PDF'],
-            browser.css('.file-actions a').text)
+            ['Open as PDF'],
+            browser.css('.file-action-buttons a').text)
 
     @browsing
     def test_actions_with_mail(self, browser):
@@ -289,7 +288,7 @@ class TestBumblebeeOverlayDocument(FunctionalTestCase):
             ['Edit metadata',
              'Download copy',
              'Open as PDF'],
-            browser.css('.file-actions a').text)
+            browser.css('.file-action-buttons a').text)
 
     @browsing
     def test_actions_with_versioned_document(self, browser):
@@ -303,15 +302,17 @@ class TestBumblebeeOverlayDocument(FunctionalTestCase):
         create_document_version(document, version_id=1)
         transaction.commit()
 
-        browser.login().visit(document, view="bumblebee-overlay-document?version_id=1")
+        browser.login()
+        browser.open(document, view="bumblebee-overlay-document?version_id=1")
 
         self.assertEqual(
-            ['Revert document',
-             'Download copy'],
-            browser.css('.file-actions a').text)
+            ['Download copy',
+             'Revert document'],
+            browser.css('.file-action-buttons a').text)
 
 
 class TestBumblebeeOverlayViewsWithoutBumblebeeFeature(FunctionalTestCase):
+    """Test we can disable Bumblebee."""
 
     @browsing
     def test_calling_view_raise_404_if_feature_is_deactivated(self, browser):

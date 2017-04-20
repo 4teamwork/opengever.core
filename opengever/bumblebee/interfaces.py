@@ -144,6 +144,6 @@ class IBumblebeeOverlay(Interface):
         """Returns the url to retrieve the document.
         """
 
-    def is_versioned_context():
+    def is_versioned():
         """Returns True if the context is a versioned context.
         """

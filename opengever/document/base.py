@@ -38,7 +38,8 @@ class BaseDocumentMixin(object):
 
         """
         parent = aq_parent(aq_inner(self))
-        if IDossierMarker.providedBy(parent) or IDossierTemplateMarker.providedBy(parent):
+        if (IDossierMarker.providedBy(parent)
+                or IDossierTemplateMarker.providedBy(parent)):
             return parent
         if ITask.providedBy(parent):
             return parent.get_containing_dossier()
@@ -47,7 +48,6 @@ class BaseDocumentMixin(object):
 
     def get_parent_inbox(self):
         """Return the document's parent inbox or None."""
-
         parent = aq_parent(aq_inner(self))
         if IInbox.providedBy(parent):
             return parent
@@ -64,13 +64,13 @@ class BaseDocumentMixin(object):
     def checked_out_by(self):
         raise NotImplementedError
 
-    def is_checked_out(self):
-        raise NotImplementedError
-
     def get_current_version(self):
         raise NotImplementedError
 
     def get_filename(self):
+        raise NotImplementedError
+
+    def get_file(self):
         raise NotImplementedError
 
     def surrender(self, relative_to_portal=1):
@@ -98,7 +98,7 @@ class BaseDocumentMixin(object):
 
     def get_mimetype(self):
         """Return the mimetype as object. If there is no matching mimetype,
-           it returns False.
+        it returns False.
         """
         mtr = getToolByName(self, 'mimetypes_registry', None)
 

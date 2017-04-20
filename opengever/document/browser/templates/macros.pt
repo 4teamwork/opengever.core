@@ -1,0 +1,143 @@
+<div metal:define-macro="file_action_buttons" i18n:domain="opengever.document">
+
+    <div class="file-action-buttons">
+
+        <tal:edit_metadata_link tal:condition="view/is_edit_metadata_link_visible"
+                tal:define="edit_metadata_available view/is_edit_metadata_available">
+            <tal:edit_metadata tal:condition="edit_metadata_available">
+                <a class="function-edit-metadata"
+                    tal:attributes="href string:${view/get_url}/edit_checker"
+                    i18n:domain="plone"
+                    i18n:translate="">
+                    Edit metadata
+                </a>
+            </tal:edit_metadata>
+
+            <tal:not_edit_metadata tal:condition="not: edit_metadata_available">
+                <span class="function-edit-metadata-inactive discreet"
+                    i18n:domain="plone"
+                    i18n:translate="">
+                    Edit metadata
+                </span>
+            </tal:not_edit_metadata>
+        </tal:edit_metadata_link>
+
+        <tal:file tal:condition="context/has_file"
+            tal:define="preview_supported view/is_preview_supported;
+            checkout_and_edit_available view/is_checkout_and_edit_available;
+            copy_download_available view/is_download_copy_available;
+            attach_to_email_available view/is_attach_to_email_available;
+            checked_out_by_current_user view/is_checked_out_by_current_user">
+
+            <tal:checkout_and_edit_enabled tal:condition="checkout_and_edit_available">
+
+                <tal:oc_checkout tal:condition="context/@@officeconnector_settings/is_checkout_enabled">
+                    <a tal:attributes="href string:javascript:officeConnectorCheckout('${context/absolute_url}/officeconnector_checkout_url');;"
+                        class="function-edit"
+                        href="#"
+                        i18n:translate="label_checkout_and_edit">
+                        Checkout and edit
+                    </a>
+                </tal:oc_checkout>
+
+                <tal:zem_checkout tal:condition="not: context/@@officeconnector_settings/is_checkout_enabled">
+                    <a tal:attributes="href string:${context/absolute_url}/editing_document?_authenticator=${context/@@authenticator/token}"
+                        class="function-edit"
+                        href="#"
+                        i18n:translate="label_checkout_and_edit">
+                        Checkout and edit
+                    </a>
+                </tal:zem_checkout>
+
+            </tal:checkout_and_edit_enabled>
+
+            <tal:checkout_and_edit_disabled tal:condition="not: checkout_and_edit_available">
+                <span class="function-edit-inactive discreet"
+                    i18n:translate="label_checkout_and_edit">
+                    Checkout and edit
+                </span>
+            </tal:checkout_and_edit_disabled>
+
+            <tal:checked_out tal:condition="checked_out_by_current_user">
+              <a tal:attributes="href view/get_checkin_without_comment_url; class string:function-checkin" i18n:translate="">
+                  Checkin without comment
+              </a>
+              <a tal:attributes="href view/get_checkin_with_comment_url; class string:function-checkin" i18n:translate="">
+                  Checkin with comment
+              </a>
+            </tal:checked_out>
+
+            <tal:download_copy_enabled tal:condition="copy_download_available">
+                <span tal:replace="structure view/get_download_copy_tag"></span>
+            </tal:download_copy_enabled>
+
+            <tal:download_copy_disabled tal:condition="not: copy_download_available">
+                <span class="function-download-copy-inactive modal discreet"
+                    i18n:translate="label_download_copy">
+                    Download copy
+                </span>
+            </tal:download_copy_disabled>
+
+            <tal:attach_feature_enabled tal:condition="context/@@officeconnector_settings/is_attach_enabled">
+
+              <tal:oc_attach_to_email_available tal:condition="attach_to_email_available">
+                  <a tal:attributes="href string:javascript:officeConnectorAttach('${context/absolute_url}/officeconnector_attach_url');;"
+                      class="function-attach"
+                      href="#"
+                      i18n:translate="label_attach_to_email">
+                      Attach to email
+                  </a>
+              </tal:oc_attach_to_email_available>
+
+              <tal:oc_attach_to_email_inactive tal:condition="not: attach_to_email_available">
+                  <span class="function-attach-inactive modal discreet"
+                      i18n:translate="label_attach_to_email">
+                      Attach to email
+                  </span>
+              </tal:oc_attach_to_email_inactive>
+
+            </tal:attach_feature_enabled>
+
+            <tal:pdf_preview tal:condition="preview_supported">
+                <a class="function-download-pdf" href="#"
+                    tal:attributes="href string:${context/absolute_url}/download_pdfpreview?_authenticator=${context/@@authenticator/token}"
+                    i18n:translate="label_pdf_preview">
+                    PDF Preview
+                </a>
+            </tal:pdf_preview>
+
+            <tal:overlay tal:condition="view/overlay">
+                <tal:open_as_pdf
+                    tal:define="link view/overlay/get_open_as_pdf_url; target python: '_blank' if view.overlay.should_open_in_new_window() else None"
+                    tal:condition="nocall: link">
+                    <a tal:attributes="href link; target target | nothing; class string:function-pdf-preview"
+                        i18n:domain="opengever.bumblebee"
+                        i18n:translate="label_open_document_as_pdf">
+                        Open as PDF
+                    </a>
+                </tal:open_as_pdf>
+                <tal:revert
+                    tal:define="link view/overlay/get_revert_link"
+                    tal:condition="nocall: link"
+                    tal:content="structure link">
+                </tal:revert>
+            </tal:overlay>
+
+        </tal:file>
+
+        <tal:details_view tal:define="link context/absolute_url" tal:condition="view/is_detail_view_link_available">
+            <a class="function-view-details"
+                tal:attributes="href link"
+                i18n:translate="label_open_detail_view">Open detail view
+            </a>
+        </tal:details_view>
+
+    </div>
+
+    <tal:nofile tal:condition="not:context/has_file">
+        <span class="discreet" i18n:translate="no_file">
+            No file
+        </span>
+    </tal:nofile>
+
+</div>
