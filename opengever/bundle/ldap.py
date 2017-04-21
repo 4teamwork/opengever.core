@@ -1,3 +1,4 @@
+from persistent.mapping import PersistentMapping
 from plone import api
 import logging
 
@@ -38,7 +39,7 @@ def disable_ldap(portal):
             ldap_plugins.append(plugin.getId())
 
     original_plugins = plugin_registry._plugins
-    plugins_without_ldap = {}
+    plugins_without_ldap = PersistentMapping()
     for interface, plugins in original_plugins.items():
         actives = tuple([p for p in plugins if p not in ldap_plugins])
         plugins_without_ldap[interface] = actives
