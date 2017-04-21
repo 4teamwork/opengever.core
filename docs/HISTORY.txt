@@ -5,6 +5,8 @@ Changelog
 2017.1.2 (unreleased)
 ---------------------
 
+- OGGBundle import: Make sure persistent changes that re-enable LDAP are
+  always committed. [lgraf]
 - Meeting: add new "Proposal Template" FTI. [jone]
 - OGGBundle import: Don't use a separate ZODB connection to issue sequence
   numbers in order to avoid conflict errors. [lgraf]

@@ -1,6 +1,8 @@
 from persistent.mapping import PersistentMapping
 from plone import api
 import logging
+import transaction
+
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
@@ -20,7 +22,15 @@ class DisabledLDAP(object):
         disable_ldap(self.portal)
 
     def __exit__(self, exc_type, exc_val, exc_tb):
+        if exc_val is not None:
+            # Exception happened, make sure transaction is rolled back
+            transaction.abort()
+            transaction.begin()
+
         enable_ldap(self.portal)
+
+        # Make sure persistent changes that re-enable LDAP are committed
+        transaction.commit()
 
 
 def disable_ldap(portal):
