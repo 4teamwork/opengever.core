@@ -91,24 +91,13 @@
 
   <javascript
       cacheable="True"
-      compression="none"
-      cookable="True"
-      enabled="on"
-      expression=""
-      id="++resource++opengever.base/datetimepicker.js"
-      inline="False"
-      insert-after="++resource++opengever.meeting/protocol.js"
-      />
-
-  <javascript
-      cacheable="True"
       compression="safe"
       cookable="True"
       expression=""
       enabled="True"
       id="++resource++opengever.base/prepoverlay.js"
       inline="False"
-      insert-after="++resource++opengever.meeting/datetimepicker.js"
+      insert-after="++resource++opengever.meeting/protocol.js"
       />
 
   <javascript

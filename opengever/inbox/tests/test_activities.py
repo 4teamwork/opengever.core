@@ -39,7 +39,7 @@ class TestForwardingActivites(FunctionalTestCase):
 
         browser.fill({'Title': u'Abkl\xe4rung Fall Meier',
                       'Responsible': u'hugo.boss',
-                      'Deadline': '02/13/15',
+                      'Deadline': '13.02.2015',
                       'Text': 'Lorem ipsum'})
         browser.find('Save').click()
 

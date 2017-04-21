@@ -37,8 +37,8 @@ class TestMemberships(FunctionalTestCase):
 
         browser.login().open(self.committee, view='add-membership')
 
-        browser.fill({'Start date': '1/1/10',
-                      'End date': '12/31/10',
+        browser.fill({'Start date': '01.01.2010',
+                      'End date': '31.12.2010',
                       'Member': str(self.member.member_id),
                       'Role': u'H\xe4nswurscht'}).submit()
 
@@ -56,13 +56,13 @@ class TestMemberships(FunctionalTestCase):
     @browsing
     def test_no_overlapping_memberships_can_be_added(self, browser):
         browser.login().open(self.committee, view='add-membership')
-        browser.fill({'Start date': '1/1/10',
-                      'End date': '12/31/10',
+        browser.fill({'Start date': '01.01.2010',
+                      'End date': '31.12.2010',
                       'Member': str(self.member.member_id)}).submit()
 
         browser.open(self.committee, view='add-membership')
-        browser.fill({'Start date': '6/1/10',
-                      'End date': '12/31/10',
+        browser.fill({'Start date': '01.06.2010',
+                      'End date': '31.12.2010',
                       'Member': str(self.member.member_id)}).submit()
 
         # portal messages
@@ -96,7 +96,7 @@ class TestMemberships(FunctionalTestCase):
 
         browser.login().open(membership.get_edit_url(self.member_wrapper))
         browser.fill({'Role': u'tempor\xe4re Leitung',
-                      'Start date': 'December 31, 2003'}).submit()
+                      'Start date': '31.12.2003'}).submit()
 
         membership = Membership.get(membership.membership_id)
         self.assertEqual(['Changes saved'], info_messages())
@@ -117,7 +117,7 @@ class TestMemberships(FunctionalTestCase):
                                     date_to=date(2014, 01, 01)))
 
         browser.login().open(membership.get_edit_url(self.member_wrapper))
-        browser.fill({'Start date': 'December 31, 2005'}).submit()
+        browser.fill({'Start date': '31.12.2005'}).submit()
 
         self.assertEqual(['There were some errors.'], error_messages())
         self.assertEqual(
