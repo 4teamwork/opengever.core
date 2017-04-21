@@ -1,4 +1,5 @@
 from collective.transmogrifier.transmogrifier import Transmogrifier
+from opengever.base.interfaces import INoSeparateConnectionForSequenceNumbers
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.bundle.ldap import DisabledLDAP
 from opengever.bundle.sections.bundlesource import BUNDLE_KEY
@@ -27,6 +28,10 @@ def import_oggbundle(app, args):
 
     # mark request with GEVER layer
     alsoProvides(plone.REQUEST, IOpengeverBaseLayer)
+
+    # Don't use a separate ZODB connection to issue sequence numbers in
+    # order to avoid conflict errors during OGGBundle import
+    alsoProvides(plone.REQUEST, INoSeparateConnectionForSequenceNumbers)
 
     transmogrifier = Transmogrifier(plone)
     IAnnotations(transmogrifier)[BUNDLE_PATH_KEY] = bundle_path

@@ -23,6 +23,12 @@ class IDontIssueDossierReferenceNumber(Interface):
     """
 
 
+class INoSeparateConnectionForSequenceNumbers(Interface):
+    """Request layer to indicate no separate ZODB connection should be used
+    to issue sequence numbers.
+    """
+
+
 class IOpengeverCatalogBrain(ICatalogBrain):
     """Detailed Interface for opengever CatalogBrain.
     Used for add an opengever specific CatalogContentlisting Adapter.

@@ -1,4 +1,5 @@
 from five import grok
+from opengever.base.interfaces import INoSeparateConnectionForSequenceNumbers
 from opengever.base.interfaces import ISequenceNumber
 from opengever.base.interfaces import ISequenceNumberGenerator
 from opengever.base.protect import unprotected_write
@@ -89,11 +90,16 @@ class SequenceNumberIncrementer(object):
             # thus we don't spawn a new database connection.
             return self._increment_number(portal, sequence_number_key)
 
-        if IDuringSetup.providedBy(request):
+        if any([IDuringSetup.providedBy(request),
+                INoSeparateConnectionForSequenceNumbers(request)]):
             # During setup, the Plone site will just have been created in that
             # very transaction. That means it's not available for us to fetch
             # from a separate ZODB connection during setup. So no separate
             # ZODB connection for sequence numbers during setup.
+            #
+            # In addition, there's other cases where we don't want to use
+            # a separate connection to issue sequence numbers, like during
+            # OGGBundle import
             return self._increment_number(portal, sequence_number_key)
 
         return self._separate_zodb_connection(
