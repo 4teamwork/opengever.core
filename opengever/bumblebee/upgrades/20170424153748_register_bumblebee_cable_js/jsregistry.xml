@@ -1,16 +1,4 @@
 <object name="portal_javascripts" meta_type="JavaScripts Registry" autogroup="False">
-  <!-- GEVER is providing its own handlebars.js. So we have to disable the handlebars
-  provided by ftw.showroom -->
-  <javascript
-      enabled="False"
-      id="++resource++ftw.showroom/handlebars.js"
-      />
-
-  <javascript
-      id="++resource++ftw.showroom/ftw.showroom.js"
-      insert-after="++resource++opengever.base/handlebars.js"
-      />
-
   <javascript
       cacheable="True"
       compression="safe"

@@ -50,7 +50,14 @@
 </aside>
 <article id="file-preview"
          tal:define="pdf_url view/overlay/get_preview_pdf_url;
-                     has_file view/overlay/has_file">
-  <iframe tal:condition="has_file" tal:attributes="src pdf_url" />
-  <img class="bumblebee-thumbnail" tal:condition="not:has_file" tal:attributes="src pdf_url" />
+                     has_file view/overlay/has_file;
+		     checksum view/overlay/get_bumblebee_checksum">
+  <iframe tal:condition="has_file" tal:attributes="data-bumblebee-checksum checksum;
+						   data-bumblebee-src pdf_url;
+						   src pdf_url" />
+  <img class="bumblebee-thumbnail"
+       tal:condition="not:has_file"
+       tal:attributes="data-bumblebee-checksum checksum;
+		       data-bumblebee-src pdf_url;
+		       src pdf_url" />
 </article>

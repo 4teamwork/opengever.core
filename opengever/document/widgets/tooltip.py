@@ -1,3 +1,4 @@
+from ftw.bumblebee.interfaces import IBumblebeeDocument
 from opengever.document.browser.actionbuttons import ActionButtonRendererMixin
 from plone.app.contentlisting.interfaces import IContentListingObject
 
@@ -8,3 +9,6 @@ class TooltipView(ActionButtonRendererMixin):
     def __init__(self, context, request):
         super(TooltipView, self).__init__(context, request)
         self.document = IContentListingObject(self.context)
+
+    def get_bumblebee_checksum(self):
+        return IBumblebeeDocument(self.context).get_checksum()

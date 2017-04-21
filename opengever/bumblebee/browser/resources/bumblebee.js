@@ -9,7 +9,7 @@
       <header class="ftw-showroom-header"> \
         <h1>{{item.title}}</h1> \
         <nav> \
-          <a id="ftw-showroom-prev" class="ftw-showroom-button"></a> \
+          <a class="ftw-showroom-prev ftw-showroom-button"></a> \
           {{#if showroom.options.multiple}} \
             <div class="ftw-showroom-header-tile ftw-showroom-pagecount"> \
               {{#if showroom.options.displayCurrent}} \
@@ -22,8 +22,8 @@
               {{/if}} \
             </div> \
           {{/if}} \
-          <a id="ftw-showroom-next" class="ftw-showroom-button"></a> \
-          <a id="ftw-showroom-close" class="ftw-showroom-button"></a> \
+          <a class="ftw-showroom-next ftw-showroom-button"></a> \
+          <a class="ftw-showroom-close ftw-showroom-button"></a> \
           <a id="ftw-showroom-menu" class="ftw-showroom-button {{#if showroom.options.isMenuOpen}}selected{{/if}}"></a> \
         </nav> \
       </header> \
@@ -283,12 +283,27 @@
   }
 
   $(document)
-    .on("reload", updateShowroom)
+    .on("reload", function() {
+      updateShowroom();
+      if (window.location.origin === "http://localhost:8080") {
+	BumblebeeCable.init("ws://localhost:3000/YnVtYmxlYmVl/api/notifications");
+      } else {
+	BumblebeeCable.init("/YnVtYmxlYmVl/api/notifications");
+      }
+    })
+    .on("tooltip.show", function() {
+      scanForBrokenImages(".bumblebee-thumbnail");
+      BumblebeeCable.gatherNodes();
+    })
+    .on("showroom:shown", () => {
+      BumblebeeCable.gatherNodes();
+    })
     .on("viewReady", updateShowroom)
     .on("agendaItemsReady", updateShowroom)
     .on("click", ".bumblebeeGalleryShowMore", loadNextTabbedviewGalleryView)
     .on("tooltip.show", function() { scanForBrokenImages(".bumblebee-thumbnail"); })
-    .on("click", "#ftw-showroom-menu", toggleMenu);
+    .on("click", "#ftw-showroom-menu", toggleMenu)
+    .on("click", ".ftw-showroom-backdrop", closeShowroom);
   $(init);
 
 })(window, window.ftw.showroom, window.jQuery);

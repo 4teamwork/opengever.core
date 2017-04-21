@@ -5,8 +5,11 @@
                        id preview/uid">
     <span tal:attributes="class string:file-mimetype ${preview/mime_type_css_class}"></span>
 
-    <img tal:attributes="src preview/preview_image_url; alt preview/title"
-         class="file-preview bumblebee-thumbnail" />
+    <img class="file-preview bumblebee-thumbnail"
+	 tal:attributes="src preview/preview_image_url;
+			 alt preview/title;
+			 data-bumblebee-src preview/preview_image_url;
+			 data-bumblebee-checksum preview/checksum" />
 
     <div class="bumblebeeTitle">
         <span tal:content="preview/title" />

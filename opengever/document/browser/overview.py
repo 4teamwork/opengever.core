@@ -1,6 +1,7 @@
 from AccessControl import getSecurityManager
 from five import grok
 from ftw import bumblebee
+from ftw.bumblebee.interfaces import IBumblebeeDocument
 from opengever.base import _ as ogbmf
 from opengever.base.browser import edit_public_trial
 from opengever.base.browser.helper import get_css_class
@@ -248,6 +249,9 @@ class Overview(DisplayForm, GeverTabMixin, ActionButtonRendererMixin):
     def get_preview_image_url(self):
         return bumblebee.get_service_v3().get_representation_url(
             self.context, 'image')
+
+    def get_bumblebee_checksum(self):
+        return IBumblebeeDocument(self.context).get_checksum()
 
     def get_overlay_url(self):
         return '{}/@@bumblebee-overlay-document'.format(

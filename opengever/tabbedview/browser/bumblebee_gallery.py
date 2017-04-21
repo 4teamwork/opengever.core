@@ -47,7 +47,6 @@ class BumblebeeGalleryMixin(object):
 
         from_batch_id = int(self.request.get('documentPointer', 0))
         to_batch_id = from_batch_id + self.pagesize
-
         for brain in brains[from_batch_id:to_batch_id]:
             yield {
                 'title': brain.Title,
@@ -55,6 +54,7 @@ class BumblebeeGalleryMixin(object):
                 'preview_image_url': bumblebee.get_service_v3().get_representation_url(
                     brain, 'thumbnail'),
                 'uid': brain.UID,
+                'checksum': brain.bumblebee_checksum,
                 'mime_type_css_class': get_css_class(brain),
             }
 
