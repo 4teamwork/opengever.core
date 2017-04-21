@@ -37,7 +37,7 @@ def parse_documents(request, context):
         for path in paths:
             # Restricted traversal does not handle unicode paths
             document = api.content.get(path=str(path))
-            if document.file:
+            if document.has_file():
                 documents.append(document)
 
     return documents
