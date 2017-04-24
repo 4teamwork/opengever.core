@@ -91,7 +91,7 @@ class SequenceNumberIncrementer(object):
             return self._increment_number(portal, sequence_number_key)
 
         if any([IDuringSetup.providedBy(request),
-                INoSeparateConnectionForSequenceNumbers(request)]):
+                INoSeparateConnectionForSequenceNumbers.providedBy(request)]):
             # During setup, the Plone site will just have been created in that
             # very transaction. That means it's not available for us to fetch
             # from a separate ZODB connection during setup. So no separate
