@@ -9,41 +9,22 @@ from zope.component import getMultiAdapter
 
 class TestDossierGridStateStorageKeyGenerator(FunctionalTestCase):
 
-    def setUp(self):
-        super(TestDossierGridStateStorageKeyGenerator, self).setUp()
+    def test_add_static_portal_type_for_dossier_types(self):
+        repo, repo_folder = create(Builder('repository_tree'))
+        dossier = create(Builder("dossier").within(repo_folder))
 
-        self.repo, self.repo_folder = create(Builder('repository_tree'))
+        view = dossier.restrictedTraverse('tabbedview_view-overview')
 
-        self.dossier = create(
-            Builder("dossier")
-            .titled(u"Testd\xf6ssier XY")
-            .within(self.repo_folder))
-
-    def test_get_key_returns_proxy_view_without_postfix_on_dossier(self):
-        view = self.dossier.restrictedTraverse('tabbedview_view-documents-proxy')
-
-        self.assertTrue(ITabbedViewProxy.providedBy(view))
-
-        generator = getMultiAdapter((self.dossier, view, self.request),
+        generator = getMultiAdapter((dossier, view, self.request),
                                     IGridStateStorageKeyGenerator)
 
+        current_type = 'opengever.dossier.businesscasedossier'
+        self.assertEqual(current_type, dossier.portal_type)
+
+        static_type = 'opengever.dossier'
         self.assertEqual(
-            'ftw.tabbedview-openever.dossier-tabbedview_view-documents-test_user_1_',
-            generator.get_key())
-
-
-class TestFrontPageDossierGridStateStorageKeyGenerator(FunctionalTestCase):
-
-    def test_get_key_returns_proxy_view_without_postfix_on_front_page(self):
-        view = self.portal.restrictedTraverse('tabbedview_view-mydocuments-proxy')
-
-        self.assertTrue(ITabbedViewProxy.providedBy(view))
-
-        generator = getMultiAdapter((self.portal, view, self.request),
-                                    IGridStateStorageKeyGenerator)
-
-        self.assertEqual(
-            'ftw.tabbedview-openever.dossier-tabbedview_view-mydocuments-test_user_1_',
+            'ftw.tabbedview-{}-tabbedview_view-overview-test_user_1_'.format(
+                static_type),
             generator.get_key())
 
 
