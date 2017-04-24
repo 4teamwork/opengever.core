@@ -51,6 +51,7 @@ Changelog
 - Support simple css colornames in the colorization viewlet. [phgross]
 - Dossierdetails PDF: Fix indentation of dossier metadata table. [lgraf]
 - Move the attach to email action to second position, after the copy action. [elioschmutz]
+- OGIP 15: Implement adding multiple task with the add form. [mathias.leimgruber]
 - OGGBundle import: Make sure persistent changes that re-enable LDAP are
   always committed. [lgraf]
 - Handle oc-attaching of mails. [phgross]
