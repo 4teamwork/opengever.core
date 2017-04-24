@@ -5,6 +5,8 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.dexterity import erroneous_fields
+from opengever.activity.model import Activity
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 from opengever.task.adapters import IResponseContainer
 from opengever.task.interfaces import ITaskSettings
 from opengever.task.response import Response
@@ -24,6 +26,7 @@ import transaction
 
 
 class TestTaskIntegration(FunctionalTestCase):
+    layer = OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 
     def setUp(self):
         super(TestTaskIntegration, self).setUp()
@@ -301,6 +304,13 @@ class TestTaskIntegration(FunctionalTestCase):
         self.assertEquals(user.userid, tasks[1].responsible)
         self.assertEquals('client2', tasks[1].responsible_client)
 
+        activities = Activity.query.all()
+        self.assertEquals(2, len(activities))
+        self.assertEquals(u'task-added', activities[0].kind)
+        self.assertEquals(TEST_USER_ID, activities[0].actor_id)
+        self.assertEquals(u'task-added', activities[1].kind)
+        self.assertEquals(TEST_USER_ID, activities[1].actor_id)
+
     @browsing
     def test_create_a_task_for_every_selected_person_with_one_orgunit(self, browser):
         user = create(Builder('ogds_user')
@@ -327,6 +337,13 @@ class TestTaskIntegration(FunctionalTestCase):
         self.assertEquals('client1', tasks[0].responsible_client)
         self.assertEquals(user.userid, tasks[1].responsible)
         self.assertEquals('client1', tasks[1].responsible_client)
+
+        activities = Activity.query.all()
+        self.assertEquals(2, len(activities))
+        self.assertEquals(u'task-added', activities[0].kind)
+        self.assertEquals(TEST_USER_ID, activities[0].actor_id)
+        self.assertEquals(u'task-added', activities[1].kind)
+        self.assertEquals(TEST_USER_ID, activities[1].actor_id)
 
 
 class TestDossierSequenceNumber(FunctionalTestCase):
