@@ -1,0 +1,19 @@
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="portal_actions" meta_type="Plone Actions Tool">
+  <object name="folder_buttons" meta_type="CMF Action Category">
+
+    <object name="attach_documents" remove="True"></object>
+
+    <object name="attach_documents" meta_type="CMF Action" i18n:domain="opengever.document" insert-after="send_as_email">
+      <property name="title" i18n:translate="">Attach selection</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:javascript:officeConnectorMultiAttach('$portal_url/officeconnector_attach_url');</property>
+      <property name="icon_expr" />
+      <property name="available_expr" />
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+  </object>
+</object>

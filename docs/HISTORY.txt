@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Dossierdetails PDF: Fix indentation of dossier metadata table. [lgraf]
+- Move the attach to email action to second position, after the copy action. [elioschmutz]
 - OGGBundle import: Make sure persistent changes that re-enable LDAP are
   always committed. [lgraf]
 - Meeting: add new "Proposal Template" FTI. [jone]
