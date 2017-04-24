@@ -251,8 +251,8 @@ class TestTaskIntegration(FunctionalTestCase):
 
         self.assertEquals('ALL_ORGUNITS',
                           field.css('select').first.value,
-                          'The default value should be the client of the user'
-                          ' if there is only one client')
+                          'The default value should be ALL_ORGUNITS if '
+                          'there are multiple org_units')
 
         browser.fill({'Title': 'Task title',
                       'Task Type': 'To comment',
@@ -297,7 +297,9 @@ class TestTaskIntegration(FunctionalTestCase):
         tasks = dossier.objectValues()
         self.assertEquals(2, len(tasks), 'Expect 2 tasks')
         self.assertEquals(TEST_USER_ID, tasks[0].responsible)
+        self.assertEquals('client1', tasks[0].responsible_client)
         self.assertEquals(user.userid, tasks[1].responsible)
+        self.assertEquals('client2', tasks[1].responsible_client)
 
     @browsing
     def test_create_a_task_for_every_selected_person_with_one_orgunit(self, browser):
@@ -322,7 +324,9 @@ class TestTaskIntegration(FunctionalTestCase):
         tasks = dossier.objectValues()
         self.assertEquals(2, len(tasks), 'Expect 2 tasks')
         self.assertEquals(TEST_USER_ID, tasks[0].responsible)
+        self.assertEquals('client1', tasks[0].responsible_client)
         self.assertEquals(user.userid, tasks[1].responsible)
+        self.assertEquals('client1', tasks[1].responsible_client)
 
 
 class TestDossierSequenceNumber(FunctionalTestCase):
