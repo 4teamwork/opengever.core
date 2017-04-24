@@ -1,4 +1,4 @@
-from opengever.document.document import IDocumentSchema
+from opengever.document.behaviors import IBaseDocument
 from opengever.officeconnector.interfaces import IOfficeConnectorSettings
 from plone import api
 from Products.CMFCore.utils import getToolByName
@@ -24,10 +24,10 @@ def parse_documents(request, context):
 
     if request['REQUEST_METHOD'] == 'GET':
         # Feature enabled for the wrong content type
-        if not IDocumentSchema.providedBy(context):
+        if not IBaseDocument.providedBy(context):
             raise NotFound
 
-        if not context.file:
+        if not context.has_file():
             raise NotFound
 
         documents.append(context)

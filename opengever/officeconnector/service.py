@@ -88,11 +88,12 @@ class OfficeConnectorPayload(Service):
         # Do not 404 if we do not have a normal user
         if api.user.is_anonymous():
             raise Forbidden
+
         self.document = api.content.get(UID=self.uuid)
-        if not self.document or not self.document.file:
+        if not self.document or not self.document.has_file():
             raise NotFound
         return {
-            'content-type': self.document.file.contentType,
+            'content-type': self.document.get_file().contentType,
             'csrf-token': createToken(),
             'document-url': self.document.absolute_url(),
             'download': 'download',
