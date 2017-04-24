@@ -65,6 +65,7 @@ class TestDefaultLayout(MockTestCase):
                 r'\usepackage{ae,aecompl}',
                 r'\usepackage[ngerman]{babel}',
                 r'\usepackage{fancyhdr}',
+                r'\usepackage{calc}',
                 r'\usepackage[left=35mm, right=10mm, top=55mm, ' + \
                     r'bottom=10.5mm]{geometry}',
                 r'\usepackage{graphicx}',

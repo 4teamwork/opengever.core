@@ -30,6 +30,7 @@ class DefaultLayout(CustomizableLayout, grok.MultiAdapter):
         self.use_package('ae,aecompl')
         self.use_package('babel', 'ngerman', append_options=False)
         self.use_package('fancyhdr')
+        self.use_package('calc')
 
         self.use_package_geometry()
 

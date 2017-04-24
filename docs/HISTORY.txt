@@ -5,6 +5,7 @@ Changelog
 2017.1.2 (unreleased)
 ---------------------
 
+- Dossierdetails PDF: Fix indentation of dossier metadata table. [lgraf]
 - OGGBundle import: Make sure persistent changes that re-enable LDAP are
   always committed. [lgraf]
 - Meeting: add new "Proposal Template" FTI. [jone]
