@@ -282,6 +282,19 @@ class TestMoveItemsWithTestbrowser(FunctionalTestCase):
         self.assertIn(task, self.target_dossier.objectValues())
 
     @browsing
+    def test_move_items_within_templatefolder_is_possible(self, browser):
+        templatefolder = create(Builder('templatefolder'))
+        subtemplatefolder = create(Builder('templatefolder').within(templatefolder))
+
+        document = create(Builder('document').within(templatefolder))
+
+        self.move_items(
+            browser, src=templatefolder,
+            obj=document, target=subtemplatefolder)
+
+        self.assertIn(document, subtemplatefolder.objectValues())
+
+    @browsing
     def test_paste_action_not_visible_for_closed_dossiers(self, browser):
         resolved_dossier = create(Builder('dossier')
                                   .in_state('dossier-state-resolved'))
