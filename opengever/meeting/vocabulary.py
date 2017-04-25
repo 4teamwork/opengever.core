@@ -73,3 +73,17 @@ class LanguagesVocabulary(grok.GlobalUtility):
 
         return SimpleVocabulary(
             [SimpleTerm(language) for language in languages])
+
+
+class ProposalTemplateVocabulary(grok.GlobalUtility):
+    grok.provides(IVocabularyFactory)
+    grok.name('opengever.meeting.ProposalTemplateVocabulary')
+
+    def __call__(self, context):
+        catalog = api.portal.get_tool('portal_catalog')
+        brains = catalog(portal_type='opengever.meeting.proposaltemplate')
+
+        return SimpleVocabulary(
+            [SimpleTerm(value=brain.getPath(),
+                        token=brain.getPath(),
+                        title=brain.Title) for brain in brains])

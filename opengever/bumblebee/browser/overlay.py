@@ -281,3 +281,9 @@ class BumblebeeOverlayDocumentView(BumblebeeOverlayBaseView):
     """
 
     is_on_detail_view = True
+
+
+class BumblebeeProposalOverlay(BumblebeeBaseDocumentOverlay):
+
+    def get_document_date(self):
+        return api.portal.get_localized_time(self.context.created)

@@ -1,0 +1,7 @@
+<object name="opengever.meeting.submittedproposal">
+
+  <property name="behaviors" purge="False">
+    <element value="ftw.bumblebee.interfaces.IBumblebeeable" />
+  </property>
+
+</object>

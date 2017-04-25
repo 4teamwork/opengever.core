@@ -64,6 +64,12 @@
       factory=".overlay.BumblebeeDocumentVersionOverlay"
       />
 
+  <adapter
+      for="opengever.meeting.proposal.IProposal
+           zope.interface.Interface"
+      factory=".overlay.BumblebeeProposalOverlay"
+      />
+
   <browser:page
       for="ftw.bumblebee.interfaces.IBumblebeeable"
       name="archival_file_conversion_callback"

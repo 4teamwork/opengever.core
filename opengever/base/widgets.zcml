@@ -19,6 +19,13 @@
       template="templates/trix_input.pt"
       />
 
+  <z3c:widgetTemplate
+      mode="hidden"
+      widget=".widgets.ITrixWidget"
+      layer="z3c.form.interfaces.IFormLayer"
+      template="templates/trix_hidden.pt"
+      />
+
   <adapter
       factory=".widgets.TableRadioFieldWidget"
       for="opengever.base.schema.ITableChoice

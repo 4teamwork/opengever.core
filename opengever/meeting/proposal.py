@@ -1,13 +1,18 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
+from five import grok
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.base.security import elevated_privileges
 from opengever.base.source import DossierPathSourceBinder
 from opengever.base.utils import get_preferred_language_code
+from opengever.document.base import BaseDocumentMixin
+from opengever.document.checkout.manager import CheckinCheckoutManager
+from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.dossier.utils import get_containing_dossier
 from opengever.meeting import _
+from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.command import CopyProposalDocumentCommand
 from opengever.meeting.command import CreateSubmittedProposalCommand
 from opengever.meeting.command import NullUpdateSubmittedDocumentCommand
@@ -20,15 +25,20 @@ from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from plone import api
 from plone.directives import form
+from plone.directives.form import primary
+from plone.namedfile.field import NamedBlobFile
 from z3c.relationfield.relation import RelationValue
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
 from zope import schema
+from zope.component import getMultiAdapter
 from zope.component import getUtility
+from zope.component.hooks import getSite
 from zope.interface import implements
 from zope.interface import Interface
 from zope.interface import provider
 from zope.intid.interfaces import IIntIds
+from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.schema.interfaces import IContextAwareDefaultFactory
 
 
@@ -147,6 +157,19 @@ class ISubmittedProposalModel(Interface):
 class IProposal(form.Schema):
     """Proposal Proxy Object Schema Interface"""
 
+    # The proposal template is only used when creating the proposal.
+    # It is easier to keep it as a regular schema field
+    # than fiddling the add form.
+    proposal_template_path = schema.Choice(
+        title=_('label_proposal_template', default=u'Proposal template'),
+        source='opengever.meeting.ProposalTemplateVocabulary',
+        required=True)
+
+    primary('file')
+    file = NamedBlobFile(
+        title=_(u'label_proposal_document', default='Proposal document'),
+        required=True)
+
     relatedItems = RelationList(
         title=_(u'label_attachments', default=u'Attachments'),
         default=[],
@@ -171,7 +194,7 @@ class ISubmittedProposal(IProposal):
     pass
 
 
-class ProposalBase(ModelContainer):
+class ProposalBase(ModelContainer, BaseDocumentMixin):
 
     workflow = None
 
@@ -185,7 +208,7 @@ class ProposalBase(ModelContainer):
         model = self.load_model()
         assert model, 'missing db-model for {}'.format(self)
 
-        return [
+        attributes = [
             {'label': _(u"label_title", default=u'Title'),
              'value': model.title},
 
@@ -196,39 +219,44 @@ class ProposalBase(ModelContainer):
             {'label': _('label_meeting', default=u'Meeting'),
              'value': model.get_meeting_link(),
              'is_html': True},
+        ]
 
-            {'label': _('label_legal_basis', default=u'Legal basis'),
-             'value': model.legal_basis,
-             'is_html': True},
+        if not is_word_meeting_implementation_enabled():
+            attributes.extend([
+                {'label': _('label_legal_basis', default=u'Legal basis'),
+                 'value': model.legal_basis,
+                 'is_html': True},
 
-            {'label': _('label_initial_position', default=u'Initial position'),
-             'value': model.initial_position,
-             'is_html': True},
+                {'label': _('label_initial_position', default=u'Initial position'),
+                 'value': model.initial_position,
+                 'is_html': True},
 
-            {'label': _('label_proposed_action', default=u'Proposed action'),
-             'value': model.proposed_action,
-             'is_html': True},
+                {'label': _('label_proposed_action', default=u'Proposed action'),
+                 'value': model.proposed_action,
+                 'is_html': True},
 
-            {'label': _('label_decision_draft', default=u'Decision draft'),
-             'value': model.decision_draft,
-             'is_html': True},
+                {'label': _('label_decision_draft', default=u'Decision draft'),
+                 'value': model.decision_draft,
+                 'is_html': True},
 
-            {'label': _('label_decision', default=u'Decision'),
-             'value': model.get_decision(),
-             'is_html': True},
+                {'label': _('label_decision', default=u'Decision'),
+                 'value': model.get_decision(),
+                 'is_html': True},
 
-            {'label': _('label_publish_in', default=u'Publish in'),
-             'value': model.publish_in,
-             'is_html': True},
+                {'label': _('label_publish_in', default=u'Publish in'),
+                 'value': model.publish_in,
+                 'is_html': True},
 
-            {'label': _('label_disclose_to', default=u'Disclose to'),
-             'value': model.disclose_to,
-             'is_html': True},
+                {'label': _('label_disclose_to', default=u'Disclose to'),
+                 'value': model.disclose_to,
+                 'is_html': True},
 
-            {'label': _('label_copy_for_attention', default=u'Copy for attention'),
-             'value': model.copy_for_attention,
-             'is_html': True},
+                {'label': _('label_copy_for_attention', default=u'Copy for attention'),
+                 'value': model.copy_for_attention,
+                 'is_html': True},
+            ])
 
+        attributes.extend([
             {'label': _('label_workflow_state', default=u'State'),
              'value': self.get_state().title,
              'is_html': True},
@@ -236,7 +264,9 @@ class ProposalBase(ModelContainer):
             {'label': _('label_decision_number', default=u'Decision number'),
              'value': model.get_decision_number(),
              'is_html': True},
-        ]
+        ])
+
+        return attributes
 
     def can_execute_transition(self, name):
         return self.workflow.can_execute_transition(self.load_model(), name)
@@ -271,6 +301,29 @@ class ProposalBase(ModelContainer):
         admin_unit_id = self.load_model().committee.admin_unit_id
         return ogds_service().fetch_admin_unit(admin_unit_id)
 
+    def related_items(self):
+        relations = IProposal(self).relatedItems
+        if relations:
+            return [rel.to_object for rel in relations]
+        else:
+            return []
+
+    def checked_out_by(self):
+        manager = getMultiAdapter((self, self.REQUEST),
+                                  ICheckinCheckoutManager)
+        return manager.get_checked_out_by()
+
+    def is_checked_out(self):
+        return self.checked_out_by() is not None
+
+    def get_current_version(self):
+        raise NotImplementedError()
+
+    def get_filename(self):
+        if is_word_meeting_implementation_enabled():
+            return self.file.filename
+        return None
+
 
 class SubmittedProposal(ProposalBase):
     """Proxy for a proposal in queue with a committee."""
@@ -303,31 +356,37 @@ class SubmittedProposal(ProposalBase):
             }
         )
 
-        # Insert considerations after proposed_action
-        data.insert(
-            7, {
-                'label': _('label_considerations', default=u"Considerations"),
-                'value': model.considerations,
-            }
-        )
+        if not is_word_meeting_implementation_enabled():
+            # Insert considerations after proposed_action
+            data.insert(
+                7, {
+                    'label': _('label_considerations', default=u"Considerations"),
+                    'value': model.considerations,
+                }
+            )
 
-        # Insert discussion after considerations
-        agenda = model.agenda_item
-        data.insert(
-            8, {
-                'label': _('label_discussion', default=u"Discussion"),
-                'value': agenda and agenda.discussion or ''
-            }
-        )
+            # Insert discussion after considerations
+            agenda = model.agenda_item
+            data.insert(
+                8, {
+                    'label': _('label_discussion', default=u"Discussion"),
+                    'value': agenda and agenda.discussion or ''
+                }
+            )
 
         return data
 
     @classmethod
-    def create(cls, proposal, container):
+    def create(cls, proposal, container, file_=None):
+        kwargs = {}
+        if file_ is not None:
+            kwargs['file'] = file_
+
         submitted_proposal = api.content.create(
             type='opengever.meeting.submittedproposal',
             id=cls.generate_submitted_proposal_id(proposal),
-            container=container)
+            container=container,
+            **kwargs)
 
         submitted_proposal.sync_model(proposal_model=proposal)
         return submitted_proposal
@@ -549,3 +608,30 @@ class Proposal(ProposalBase):
         create_command.execute()
         for copy_command in copy_commands:
             copy_command.execute()
+
+    def copy_proposal_template_file_to_proposal(self):
+        """This method is called when adding a new proposal.
+        It copies the file of the proposal template into our "file"
+        blob field for futher editing.
+        """
+        if not is_word_meeting_implementation_enabled():
+            raise ValueError('Unexpected call while the word meeting'
+                             ' feature is disabled.')
+
+        if not getattr(self, 'proposal_template_path', None):
+            raise ValueError(
+                'Missing proposal_template_path value for {!r}'.format(self))
+
+        proposal_template = getSite().restrictedTraverse(
+            self.proposal_template_path)
+
+        # This loads the binary data into memory, which is obviously bad.
+        # I couldn't find a better way to clone the blob though.
+        self.file = IProposal['file']._type(
+            data=proposal_template.file.open().read(),
+            contentType=proposal_template.file.contentType,
+            filename=proposal_template.file.filename)
+
+
+class ProposalCheckinCheckoutManager(CheckinCheckoutManager):
+    grok.adapts(IProposal, IBrowserRequest)

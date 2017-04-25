@@ -307,12 +307,21 @@ class ProposalBuilder(DexterityBuilder):
                           'language': TranslatedTitle.FALLBACK_LANGUAGE}
         self.model_arguments = None
         self._transition = None
+        self._checked_out = None
 
     def before_create(self):
         self.arguments, self.model_arguments = Proposal.partition_data(
             self.arguments)
 
+    def checked_out(self, by=TEST_USER_ID):
+        self._checked_out = by
+        return self
+
     def after_create(self, obj):
+        if self._checked_out:
+            IAnnotations(obj)[CHECKIN_CHECKOUT_ANNOTATIONS_KEY] = self._checked_out
+            obj.reindexObject(idxs=['checked_out'])
+
         obj.create_model(self.model_arguments, self.container)
 
         if self._transition:
@@ -460,5 +469,9 @@ builder_registry.register('disposition', DispositionBuilder)
 class ProposalTemplateBuilder(DocumentBuilder):
 
     portal_type = 'opengever.meeting.proposaltemplate'
+
+    def __init__(self, *args, **kwargs):
+        super(ProposalTemplateBuilder, self).__init__(*args, **kwargs)
+        self.with_dummy_content()
 
 builder_registry.register('proposaltemplate', ProposalTemplateBuilder)
