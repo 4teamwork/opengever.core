@@ -9,6 +9,7 @@ Changelog
 - Move the attach to email action to second position, after the copy action. [elioschmutz]
 - OGGBundle import: Make sure persistent changes that re-enable LDAP are
   always committed. [lgraf]
+- Handle oc-attaching of mails. [phgross]
 - Meeting: add new "Proposal Template" FTI. [jone]
 - OGGBundle import: Don't use a separate ZODB connection to issue sequence
   numbers in order to avoid conflict errors. [lgraf]

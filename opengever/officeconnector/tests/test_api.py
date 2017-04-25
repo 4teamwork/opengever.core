@@ -69,6 +69,11 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
                                             .attach_file_containing(
                                                 self.original_file_content))
 
+        self.mail_with_file_wf_open = create(Builder('mail')
+                                            .titled(u'Mail 2')
+                                            .within(self.open_dossier)
+                                            .with_dummy_message())
+
         self.doc_with_file_wf_open_second = create(Builder('document')
                                                    .titled(u'docu-3')
                                                    .within(self.open_dossier)
@@ -337,7 +342,7 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
             self.open_dossier, view='tabbedview_view-documents')
 
         document_checkboxes = browser.css("input[type='checkbox']")
-        self.assertEquals(3, len(document_checkboxes))
+        self.assertEquals(4, len(document_checkboxes))
 
         document_paths = []
         for checkbox in document_checkboxes:
@@ -355,7 +360,7 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
 
         payload = jwt.decode(token['url'].split(':')[-1], verify=False)
 
-        self.assertEquals(2, len(payload['documents']))
+        self.assertEquals(3, len(payload['documents']))
 
         for document in payload['documents']:
             # Test we can actually fetch an action payload based on the URL JWT
