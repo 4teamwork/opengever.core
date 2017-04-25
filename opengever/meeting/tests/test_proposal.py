@@ -867,6 +867,28 @@ class TestProposal(FunctionalTestCase):
         self.assertEquals((), missing)
         self.assertNotIn('File', browser.forms['form'].field_labels)
 
+    def test_implements_related_items(self):
+        document = create(Builder('document').within(self.dossier))
+        proposal = create(Builder('proposal').within(self.dossier)
+                          .having(relatedItems=[document]))
+
+        self.assertEquals([document], proposal.related_items())
+
+    def test_no_related_items(self):
+        proposal = create(Builder('proposal').within(self.dossier))
+        self.assertEquals([], proposal.related_items())
+
+    def test_checkout_information(self):
+        checked_out = create(Builder('proposal').within(self.dossier)
+                             .checked_out())
+        checked_in = create(Builder('proposal').within(self.dossier))
+
+        self.assertTrue(checked_out.is_checked_out())
+        self.assertEquals(TEST_USER_ID, checked_out.checked_out_by())
+
+        self.assertFalse(checked_in.is_checked_out())
+        self.assertIsNone(checked_in.checked_out_by())
+
 
 class TestProposalWithWord(FunctionalTestCase):
 

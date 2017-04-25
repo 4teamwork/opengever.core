@@ -9,6 +9,7 @@ from opengever.base.source import DossierPathSourceBinder
 from opengever.base.utils import get_preferred_language_code
 from opengever.document.base import BaseDocumentMixin
 from opengever.document.checkout.manager import CheckinCheckoutManager
+from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.dossier.utils import get_containing_dossier
 from opengever.meeting import _
 from opengever.meeting import is_word_meeting_implementation_enabled
@@ -30,6 +31,7 @@ from z3c.relationfield.relation import RelationValue
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
 from zope import schema
+from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.component.hooks import getSite
 from zope.interface import implements
@@ -298,6 +300,29 @@ class ProposalBase(ModelContainer, BaseDocumentMixin):
     def get_committee_admin_unit(self):
         admin_unit_id = self.load_model().committee.admin_unit_id
         return ogds_service().fetch_admin_unit(admin_unit_id)
+
+    def related_items(self):
+        relations = IProposal(self).relatedItems
+        if relations:
+            return [rel.to_object for rel in relations]
+        else:
+            return []
+
+    def checked_out_by(self):
+        manager = getMultiAdapter((self, self.REQUEST),
+                                  ICheckinCheckoutManager)
+        return manager.get_checked_out_by()
+
+    def is_checked_out(self):
+        return self.checked_out_by() is not None
+
+    def get_current_version(self):
+        raise NotImplementedError()
+
+    def get_filename(self):
+        if is_word_meeting_implementation_enabled():
+            return self.file.filename
+        return None
 
 
 class SubmittedProposal(ProposalBase):
@@ -610,6 +635,3 @@ class Proposal(ProposalBase):
 
 class ProposalCheckinCheckoutManager(CheckinCheckoutManager):
     grok.adapts(IProposal, IBrowserRequest)
-
-    def is_checkout_allowed(self):
-        return super(ProposalCheckinCheckoutManager, self).is_checkout_allowed()
