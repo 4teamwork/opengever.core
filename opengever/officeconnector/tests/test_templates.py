@@ -217,12 +217,12 @@ class TestOCTemplatesDossierOpenWithoutFile(FunctionalTestCase):
         self.assertEqual(['Create Task',
                           u'More actions \u25bc',
                           'Copy Items',
+                          'Attach selection',
                           'Checkout',
                           'Cancel',
                           'Checkin with comment',
                           'Checkin without comment',
                           'Export selection',
-                          'Attach selection',
                           'Move Items',
                           'trashed',
                           'Export as Zip'],
@@ -272,12 +272,12 @@ class TestOCTemplatesDossierOpenWithoutFile(FunctionalTestCase):
         self.assertEqual(['Create Task',
                           u'More actions \u25bc',
                           'Copy Items',
+                          'Attach selection',
                           'Checkout',
                           'Cancel',
                           'Checkin with comment',
                           'Checkin without comment',
                           'Export selection',
-                          'Attach selection',
                           'Move Items',
                           'trashed',
                           'Export as Zip'],
@@ -482,8 +482,8 @@ class TestOCTemplatesDossierInactiveWithoutFile(FunctionalTestCase):
 
         self.assertEqual([u'More actions \u25bc',
                           'Copy Items',
-                          'Export selection',
                           'Attach selection',
+                          'Export selection',
                           'Move Items',
                           'Export as Zip'],
                          browser.css('.tabbedview-action-list a').text)
@@ -525,8 +525,8 @@ class TestOCTemplatesDossierInactiveWithoutFile(FunctionalTestCase):
 
         self.assertEqual([u'More actions \u25bc',
                           'Copy Items',
-                          'Export selection',
                           'Attach selection',
+                          'Export selection',
                           'Move Items',
                           'Export as Zip'],
                          browser.css('.tabbedview-action-list a').text)
@@ -730,8 +730,8 @@ class TestOCTemplatesDossierResolvedWithoutFile(FunctionalTestCase):
 
         self.assertEqual([u'More actions \u25bc',
                           'Copy Items',
-                          'Export selection',
                           'Attach selection',
+                          'Export selection',
                           'Move Items',
                           'Export as Zip'],
                          browser.css('.tabbedview-action-list a').text)
@@ -773,8 +773,8 @@ class TestOCTemplatesDossierResolvedWithoutFile(FunctionalTestCase):
 
         self.assertEqual([u'More actions \u25bc',
                           'Copy Items',
-                          'Export selection',
                           'Attach selection',
+                          'Export selection',
                           'Move Items',
                           'Export as Zip'],
                          browser.css('.tabbedview-action-list a').text)
@@ -1186,12 +1186,12 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
         self.assertEqual(['Create Task',
                           u'More actions \u25bc',
                           'Copy Items',
+                          'Attach selection',
                           'Checkout',
                           'Cancel',
                           'Checkin with comment',
                           'Checkin without comment',
                           'Export selection',
-                          'Attach selection',
                           'Move Items',
                           'trashed',
                           'Export as Zip'],
@@ -1241,12 +1241,12 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
         self.assertEqual(['Create Task',
                           u'More actions \u25bc',
                           'Copy Items',
+                          'Attach selection',
                           'Checkout',
                           'Cancel',
                           'Checkin with comment',
                           'Checkin without comment',
                           'Export selection',
-                          'Attach selection',
                           'Move Items',
                           'trashed',
                           'Export as Zip'],
@@ -1596,8 +1596,8 @@ class TestOCTemplatesDossierInactiveWithFile(FunctionalTestCase):
 
         self.assertEqual([u'More actions \u25bc',
                           'Copy Items',
-                          'Export selection',
                           'Attach selection',
+                          'Export selection',
                           'Move Items',
                           'Export as Zip'],
                          browser.css('.tabbedview-action-list a').text)
@@ -1639,8 +1639,8 @@ class TestOCTemplatesDossierInactiveWithFile(FunctionalTestCase):
 
         self.assertEqual([u'More actions \u25bc',
                           'Copy Items',
-                          'Export selection',
                           'Attach selection',
+                          'Export selection',
                           'Move Items',
                           'Export as Zip'],
                          browser.css('.tabbedview-action-list a').text)
@@ -1918,8 +1918,8 @@ class TestOCTemplatesDossierResolvedWithFile(FunctionalTestCase):
 
         self.assertEqual([u'More actions \u25bc',
                           'Copy Items',
-                          'Export selection',
                           'Attach selection',
+                          'Export selection',
                           'Move Items',
                           'Export as Zip'],
                          browser.css('.tabbedview-action-list a').text)
@@ -1961,8 +1961,8 @@ class TestOCTemplatesDossierResolvedWithFile(FunctionalTestCase):
 
         self.assertEqual([u'More actions \u25bc',
                           'Copy Items',
-                          'Export selection',
                           'Attach selection',
+                          'Export selection',
                           'Move Items',
                           'Export as Zip'],
                          browser.css('.tabbedview-action-list a').text)
