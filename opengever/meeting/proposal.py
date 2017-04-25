@@ -352,11 +352,16 @@ class SubmittedProposal(ProposalBase):
         return data
 
     @classmethod
-    def create(cls, proposal, container):
+    def create(cls, proposal, container, file_=None):
+        kwargs = {}
+        if file_ is not None:
+            kwargs['file'] = file_
+
         submitted_proposal = api.content.create(
             type='opengever.meeting.submittedproposal',
             id=cls.generate_submitted_proposal_id(proposal),
-            container=container)
+            container=container,
+            **kwargs)
 
         submitted_proposal.sync_model(proposal_model=proposal)
         return submitted_proposal
