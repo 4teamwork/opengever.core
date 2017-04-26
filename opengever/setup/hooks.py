@@ -1,4 +1,3 @@
-from opengever.private import MEMBERSFOLDER_ID
 from plone.app.portlets.portlets import navigation
 from plone.portlets.constants import CONTEXT_CATEGORY
 from plone.portlets.interfaces import ILocalPortletAssignmentManager
@@ -19,7 +18,6 @@ def default_content_installed(site):
     assign_default_navigation_portlet(site, 'eingangskorb')
     assign_default_navigation_portlet(site, 'vorlagen')
     assign_default_navigation_portlet(site, 'kontakte')
-    block_context_portlets(site, MEMBERSFOLDER_ID)
 
 
 def set_global_roles(site):
