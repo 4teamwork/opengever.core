@@ -73,7 +73,11 @@ def main():
         map(str, set(exitcodes)))
     sys.exit(max(exitcodes))
 
+
 class BufferedPrinter(Thread):
+    """Catch output from subprocesses and colorize that on a per worker basis.
+    """
+
     def __init__(self, output):
         super(BufferedPrinter, self).__init__()
         self.output = output
@@ -91,10 +95,12 @@ class BufferedPrinter(Thread):
                         break
                     print colorization % (
                         '{0}: {1}'.format(prefix, line.rstrip('\n')))
+            time.sleep(0.2)
 
     def __exit__(self, *a, **kw):
         self.running = False
         self.join()
+
 
 def execute_command(command, workername, worker_idx, output_path, exitcodes):
     print '{0}: > {1}'.format(workername, command)
@@ -134,6 +140,7 @@ def processor_commands():
             **locals())
         yield command
 
+
 def packages_for_processors():
     packages = packages_by_size()
     distribution = map(lambda x: x % PROCESSORS,
@@ -145,11 +152,13 @@ def packages_for_processors():
 
     return procs.values()
 
+
 def packages_by_size():
     return map(itemgetter(1),
                sorted(map(lambda pair: (len(list(pair[1])), pair[0]),
                           test_suites_by_packages()),
                       reverse=True))
+
 
 def remove_bytecode_files(path):
     print "Removing bytecode files from %r" % path
@@ -163,6 +172,7 @@ def find_bytecode_files(path):
             if fnmatch(name, '*.py[co]'):
                 yield os.path.join(root, name)
 
+
 def test_suites():
     for dirpath, dirnames, filenames in os.walk(OPENGEVER_PATH):
         for filename in filenames:
@@ -170,8 +180,10 @@ def test_suites():
             if fnmatch(filepath, '**/tests/test*.py'):
                 yield filepath
 
+
 def test_suites_by_packages():
     return groupby(map(split_suite_path, test_suites()), itemgetter(0))
+
 
 def split_suite_path(path):
     pkg, fname = (path.replace(BUILDOUT_PATH + '/', '')
