@@ -95,6 +95,7 @@ class BufferedPrinter(Thread):
                         break
                     print colorization % (
                         '{0}: {1}'.format(prefix, line.rstrip('\n')))
+            time.sleep(0.2)
 
     def __exit__(self, *a, **kw):
         self.running = False
