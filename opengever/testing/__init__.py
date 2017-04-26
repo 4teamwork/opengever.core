@@ -9,7 +9,6 @@ except pkg_resources.DistributionNotFound:
 else:
     from opengever.core.testing import MEMORY_DB_LAYER
     from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
-    from opengever.core.testing import OPENGEVER_INTEGRATION_TESTING
     from opengever.testing.helpers import add_languages
     from opengever.testing.helpers import create_plone_user
     from opengever.testing.helpers import index_data_for
