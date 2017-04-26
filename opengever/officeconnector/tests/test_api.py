@@ -70,9 +70,9 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
                                                 self.original_file_content))
 
         self.mail_with_file_wf_open = create(Builder('mail')
-                                            .titled(u'Mail 2')
-                                            .within(self.open_dossier)
-                                            .with_dummy_message())
+                                             .titled(u'Mail 2')
+                                             .within(self.open_dossier)
+                                             .with_dummy_message())
 
         self.doc_with_file_wf_open_second = create(Builder('document')
                                                    .titled(u'docu-3')

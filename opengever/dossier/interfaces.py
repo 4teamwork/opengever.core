@@ -35,7 +35,7 @@ class IDossierContainerTypes(Interface):
 
 
 class IConstrainTypeDecider(Interface):
-    """ Adapter interface
+    """Adapter interface
     The constrain type decider decides, if a type is addable in the
     current dossier object. This decision depends on the current dossier
     type, the type to be added and the depth (distance to the next parent
@@ -52,14 +52,14 @@ class IConstrainTypeDecider(Interface):
         pass
 
     def addable(self, depth):
-        """ Returns True, if a object of type *fti* can be created in the
+        """Returns True, if a object of type *fti* can be created in the
         current *context*, depending on the *depth*
         """
         pass
 
 
 class IDossierParticipants(Interface):
-    """ Participants configuration (plone.registry)
+    """Participants configuration (plone.registry)
     """
 
     roles = schema.List(
@@ -75,7 +75,7 @@ class IDossierParticipants(Interface):
 
 
 class ITemplateFolderProperties(Interface):
-    """ Document properties configuration.
+    """Document properties configuration.
     """
 
     create_doc_properties = schema.Bool(
@@ -89,8 +89,8 @@ class ITemplateFolderProperties(Interface):
 class ITemplateDossierProperties(ITemplateFolderProperties):
     """XXX Legacy interface from rename TemplateFolder to TemplateDossier.
 
-    Do not remove this interface until each GEVER-installation is updated to the version
-    containing this changes.
+    Do not remove this interface until each GEVER-installation is updated to
+    the version containing this change.
     """
 
 
@@ -113,12 +113,13 @@ class IDisplayedInOverview(Interface):
 
 
 class IFilingNumberMaintenance(Interface):
+    """Allow access to filing number internals."""
 
     def print_mapping():
         """Return the actual filingnumber mapping"""
 
     def print_filing_numbers():
-        """Return a set of all filingnumbers the are used """
+        """Return a set of all filingnumbers the are used"""
 
     def print_filing_prefixes():
         """Reutrns all filing prefixes and their translations"""
@@ -126,7 +127,8 @@ class IFilingNumberMaintenance(Interface):
 
 class IDossierResolver(Interface):
     """Interface for the Dossier resolve, which provide all
-    functionality needed for resolving a dossier."""
+    functionality needed for resolving a dossier.
+    """
 
     def is_resolve_possible():
         """Check if all preconditions are fulfilled.
@@ -151,16 +153,19 @@ class IDossierArchiver(Interface):
 
     def generate_number(prefix, year):
         """Generate the complete filing number and
-        set the number and prefix on the dossier."""
+        set the number and prefix on the dossier.
+        """
 
     def archive(prefix, year, number=None):
         """Generate a correct filing number and
-        set it recursively on every subdossier."""
+        set it recursively on every subdossier.
+        """
 
     def get_indexer_value(searchable=False):
         """Return the filing value for the filing_no indexer.
         For Dossiers without a number and only a prefix it return the half
-        of the number."""
+        of the number.
+        """
 
     def update_prefix(prefix):
         """Update the filing prefix on the dossier and
@@ -180,6 +185,7 @@ class IDocProperties(Interface):
 class IDocPropertyProvider(Interface):
     """May adapt any object that can be a provider for DocProperties.
     """
+
     def get_properties():
         """Return a dictionary of DocProperties for the adapted object.
         """
