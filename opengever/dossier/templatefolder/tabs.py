@@ -79,6 +79,36 @@ class TemplateFolderSablonTemplates(Documents):
     ]
 
 
+class TemplateFolderProposalTemplates(Documents):
+    grok.context(ITemplateFolder)
+    grok.name('tabbedview_view-proposaltemplates')
+
+    types = ['opengever.meeting.proposaltemplate']
+
+    depth = 1
+
+    @property
+    def columns(self):
+        return drop_columns(
+            super(TemplateFolderProposalTemplates, self).columns)
+
+    @property
+    def enabled_actions(self):
+        return filter(
+            lambda x: x not in self.disabled_actions,
+            super(TemplateFolderProposalTemplates, self).enabled_actions)
+
+    disabled_actions = [
+        'cancel',
+        'checkin',
+        'checkout',
+        'create_task',
+        'move_items',
+        'send_as_email',
+        'submit_additional_documents',
+    ]
+
+
 class TemplateFolderTrash(Trash):
     grok.context(ITemplateFolder)
 

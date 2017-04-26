@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-04-12 05:08+0000\n"
+"POT-Creation-Date: 2017-04-26 12:38+0000\n"
 "PO-Revision-Date: 2016-07-22 15:24+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
@@ -514,7 +514,7 @@ msgstr "Erstellt von"
 
 #. Default: "Description"
 #: ./opengever/dossier/browser/overview.py:239
-#: ./opengever/dossier/templatefolder/tabs.py:111
+#: ./opengever/dossier/templatefolder/tabs.py:141
 msgid "label_description"
 msgstr "Beschreibung"
 
@@ -525,7 +525,7 @@ msgstr "Zielposition / Zieldossier"
 
 #. Default: "Documents"
 #: ./opengever/dossier/browser/overview.py:231
-#: ./opengever/dossier/browser/tabbed.py:17
+#: ./opengever/dossier/browser/tabbed.py:18
 msgid "label_documents"
 msgstr "Dokumente"
 
@@ -535,7 +535,7 @@ msgid "label_dossier_note_placeholder"
 msgstr "Kommentar erfassen"
 
 #. Default: "Dossier templates"
-#: ./opengever/dossier/browser/tabbed.py:108
+#: ./opengever/dossier/browser/tabbed.py:117
 msgid "label_dossier_templates"
 msgstr "Dossiervorlagen"
 
@@ -583,12 +583,12 @@ msgid "label_former_reference_number"
 msgstr "Früheres Aktenzeichen"
 
 #. Default: "Info"
-#: ./opengever/dossier/browser/tabbed.py:37
+#: ./opengever/dossier/browser/tabbed.py:38
 msgid "label_info"
 msgstr "Info"
 
 #. Default: "Journal"
-#: ./opengever/dossier/browser/tabbed.py:32
+#: ./opengever/dossier/browser/tabbed.py:33
 msgid "label_journal"
 msgstr "Journal"
 
@@ -630,12 +630,12 @@ msgid "label_number_of_containers"
 msgstr "Anzahl Behältnisse"
 
 #. Default: "Overview"
-#: ./opengever/dossier/browser/tabbed.py:12
+#: ./opengever/dossier/browser/tabbed.py:13
 msgid "label_overview"
 msgstr "Übersicht"
 
 #. Default: "Participants"
-#: ./opengever/dossier/browser/tabbed.py:68
+#: ./opengever/dossier/browser/tabbed.py:66
 msgid "label_participants"
 msgstr "Beteiligungen"
 
@@ -645,7 +645,7 @@ msgid "label_participation"
 msgstr "Beteiligung"
 
 #. Default: "Participations"
-#: ./opengever/dossier/browser/tabbed.py:63
+#: ./opengever/dossier/browser/tabbed.py:62
 msgid "label_participations"
 msgstr "Beteiligungen"
 
@@ -658,6 +658,11 @@ msgstr "Telefonnummer"
 #: ./opengever/dossier/dossiertemplate/behaviors.py:44
 msgid "label_predefined_keywords"
 msgstr "Schlagworte vorausfüllen"
+
+#. Default: "Proposal Templates"
+#: ./opengever/dossier/browser/tabbed.py:108
+msgid "label_proposal_templates"
+msgstr "Antragsvorlagen"
 
 #. Default: "Proposals"
 #: ./opengever/dossier/browser/tabbed.py:53
@@ -704,7 +709,7 @@ msgid "label_roles"
 msgstr "Rollen"
 
 #. Default: "Sablon Templates"
-#: ./opengever/dossier/browser/tabbed.py:100
+#: ./opengever/dossier/browser/tabbed.py:99
 msgid "label_sablon_templates"
 msgstr "Sablon Vorlagen"
 
@@ -736,17 +741,17 @@ msgid "label_start_byline"
 msgstr "Beginn"
 
 #. Default: "Subdossiers"
-#: ./opengever/dossier/browser/tabbed.py:44
+#: ./opengever/dossier/browser/tabbed.py:45
 msgid "label_subdossiers"
 msgstr "Subdossiers"
 
 #. Default: "Tasks"
-#: ./opengever/dossier/browser/tabbed.py:22
+#: ./opengever/dossier/browser/tabbed.py:23
 msgid "label_tasks"
 msgstr "Aufgaben"
 
 #. Default: "Tasktemplate Folders"
-#: ./opengever/dossier/browser/tabbed.py:92
+#: ./opengever/dossier/browser/tabbed.py:91
 msgid "label_tasktemplate_folders"
 msgstr "Standardabläufe"
 
@@ -769,7 +774,7 @@ msgid "label_title_help"
 msgstr "Titelhilfe"
 
 #. Default: "Trash"
-#: ./opengever/dossier/browser/tabbed.py:27
+#: ./opengever/dossier/browser/tabbed.py:28
 msgid "label_trash"
 msgstr "Papierkorb"
 
@@ -864,7 +869,7 @@ msgid "time_expired"
 msgstr "abgelaufen"
 
 #. Default: "Journal of dossier ${title}, ${timestamp}"
-#: ./opengever/dossier/resolve.py:192
+#: ./opengever/dossier/resolve.py:190
 msgid "title_dossier_journal"
 msgstr "Dossier Journal ${title}, ${timestamp}"
 
@@ -872,3 +877,4 @@ msgstr "Dossier Journal ${title}, ${timestamp}"
 #: ./opengever/dossier/behaviors/participation.py:196
 msgid "warning_no_participants_selected"
 msgstr "Sie haben keine Beteiligungen ausgewählt."
+
