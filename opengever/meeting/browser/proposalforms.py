@@ -38,7 +38,7 @@ class SubmittedProposalEditForm(ModelProxyEditForm, dexterity.EditForm):
 
     grok.context(ISubmittedProposal)
     fields = field.Fields(SubmittedProposal.model_schema, ignoreContext=True)
-    content_type = Proposal
+    content_type = SubmittedProposal
 
     fields['legal_basis'].widgetFactory = TrixFieldWidget
     fields['initial_position'].widgetFactory = TrixFieldWidget
