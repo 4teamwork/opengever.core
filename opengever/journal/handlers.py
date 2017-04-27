@@ -36,7 +36,6 @@ from opengever.task.task import ITask
 from opengever.trash.trash import ITrashedEvent
 from opengever.trash.trash import IUntrashedEvent
 from persistent.dict import PersistentDict
-from persistent.dict import PersistentDict
 from persistent.list import PersistentList
 from plone.app.versioningbehavior.utils import get_change_note
 from plone.dexterity.interfaces import IDexterityContent

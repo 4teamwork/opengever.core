@@ -4,10 +4,11 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.widgets.file import DexterityFileWidget
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import FunctionalTestCase
-from plone.app.testing import TEST_USER_NAME
 from plone.app.testing import login
+from plone.app.testing import TEST_USER_NAME
 from urllib2 import HTTPError
 from zope.component import queryMultiAdapter
+
 import transaction
 
 
