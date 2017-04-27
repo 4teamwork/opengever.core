@@ -10,11 +10,6 @@ from opengever.examplecontent.contacts import ExampleContactCreator
 from opengever.private import enable_opengever_private
 from opengever.testing import builders  # keep!
 from plone import api
-from plone.portlets.constants import CONTEXT_CATEGORY
-from plone.portlets.interfaces import ILocalPortletAssignmentManager
-from plone.portlets.interfaces import IPortletManager
-from zope.component import getMultiAdapter
-from zope.component import getUtility
 import pytz
 
 PROPOSED_ACTION_1 = u'''Der Rat stellt der Versammlung den Antrag, der Anstellung von Hans Baumann als Sachbearbeiter mit einem Bescha\u0308ftigungsgrad von 90%, Amtsantritt 01.05.2015, zuzustimmen.'''
