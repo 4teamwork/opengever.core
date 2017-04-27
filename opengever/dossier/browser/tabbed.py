@@ -92,6 +92,11 @@ class TemplateFolderTabbedView(GeverTabbedView):
                    default=u'Tasktemplate Folders'),
         }
 
+    trash_tab = {
+        'id': 'trash',
+        'title': _(u'label_trash', default=u'Trash'),
+        }
+
     @property
     def sablon_tab(self):
         if is_meeting_feature_enabled():
@@ -126,6 +131,7 @@ class TemplateFolderTabbedView(GeverTabbedView):
             self.sablon_tab,
             self.proposal_templates_tab,
             self.tasktemplate_folders_tab,
+            self.trash_tab,
         ])
 
 

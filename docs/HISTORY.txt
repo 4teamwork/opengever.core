@@ -24,6 +24,7 @@ Changelog
   [lgraf]
 
 - Fix manipulating the tag config of the keywordwidget in the dossier template form. [mathias.leimgruber]
+- Add missing trash-tab in template folder. [elioschmutz]
 - Meeting: add proposal template tab to templates folder. [jone]
 - Support simple css colornames in the colorization viewlet. [phgross]
 - Dossierdetails PDF: Fix indentation of dossier metadata table. [lgraf]
