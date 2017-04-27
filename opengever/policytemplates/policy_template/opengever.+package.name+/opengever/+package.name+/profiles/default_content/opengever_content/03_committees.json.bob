@@ -11,6 +11,13 @@
                 "Editor",
                 "Reader"
             ]
+        },
+        "_portlets": {
+          "plone.leftcolumn": {
+            "blacklist_status": {
+              "context": "block"
+            }
+          }
         }
     }
 ]
