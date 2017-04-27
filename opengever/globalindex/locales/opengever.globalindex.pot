@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-11-09 10:25+0000\n"
+"POT-Creation-Date: 2017-04-27 11:21+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.globalindex\n"
 
-#: ./opengever/globalindex/browser/report.py:96
+#: ./opengever/globalindex/browser/report.py:94
 msgid "Could not generate the report"
 msgstr ""
 
@@ -27,61 +27,61 @@ msgid "Export selection"
 msgstr ""
 
 #. Default: "You have not selected any Items"
-#: ./opengever/globalindex/browser/report.py:50
+#: ./opengever/globalindex/browser/report.py:49
 msgid "error_no_items"
 msgstr ""
 
 #. Default: "Forwarding"
-#: ./opengever/globalindex/browser/report.py:24
+#: ./opengever/globalindex/browser/report.py:23
 msgid "forwarding_task_type"
 msgstr ""
 
-#: ./opengever/globalindex/browser/report.py:79
+#: ./opengever/globalindex/browser/report.py:77
 msgid "label_admin_unit_id"
 msgstr ""
 
-#: ./opengever/globalindex/browser/report.py:67
+#: ./opengever/globalindex/browser/report.py:66
 msgid "label_completed"
 msgstr ""
 
-#: ./opengever/globalindex/browser/report.py:65
+#: ./opengever/globalindex/browser/report.py:64
 msgid "label_deadline"
 msgstr ""
 
-#: ./opengever/globalindex/browser/report.py:69
+#: ./opengever/globalindex/browser/report.py:68
 msgid "label_dossier_title"
 msgstr ""
 
-#: ./opengever/globalindex/browser/report.py:70
+#: ./opengever/globalindex/browser/report.py:69
 msgid "label_issuer"
 msgstr ""
 
-#: ./opengever/globalindex/browser/report.py:73
+#: ./opengever/globalindex/browser/report.py:72
 msgid "label_issuing_org_unit"
 msgstr ""
 
-#: ./opengever/globalindex/browser/report.py:75
+#: ./opengever/globalindex/browser/report.py:73
 msgid "label_responsible"
 msgstr ""
 
-#: ./opengever/globalindex/browser/report.py:80
+#: ./opengever/globalindex/browser/report.py:78
 msgid "label_sequence_number"
 msgstr ""
 
-#: ./opengever/globalindex/browser/report.py:61
+#: ./opengever/globalindex/browser/report.py:60
 msgid "label_task_title"
 msgstr ""
 
-#: ./opengever/globalindex/browser/report.py:77
+#: ./opengever/globalindex/browser/report.py:75
 msgid "label_task_type"
 msgstr ""
 
 #. Default: "Tasks"
-#: ./opengever/globalindex/browser/report.py:88
+#: ./opengever/globalindex/browser/report.py:86
 msgid "label_tasks"
 msgstr ""
 
-#: ./opengever/globalindex/browser/report.py:62
+#: ./opengever/globalindex/browser/report.py:61
 msgid "review_state"
 msgstr ""
 

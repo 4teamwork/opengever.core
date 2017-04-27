@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-04-04 09:44+0000\n"
+"POT-Creation-Date: 2017-04-27 11:21+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -55,12 +55,12 @@ msgid "empty_repository"
 msgstr ""
 
 #. Default: "A Sibling with the same reference number is existing"
-#: ./opengever/repository/behaviors/referenceprefix.py:72
+#: ./opengever/repository/behaviors/referenceprefix.py:69
 msgid "error_sibling_reference_number_existing"
 msgstr ""
 
 #. Default: "Common"
-#: ./opengever/repository/behaviors/referenceprefix.py:33
+#: ./opengever/repository/behaviors/referenceprefix.py:32
 #: ./opengever/repository/behaviors/responsibleorg.py:12
 #: ./opengever/repository/repositoryfolder.py:31
 msgid "fieldset_common"
@@ -107,7 +107,7 @@ msgid "label_location"
 msgstr ""
 
 #. Default: "Reference Prefix"
-#: ./opengever/repository/behaviors/referenceprefix.py:40
+#: ./opengever/repository/behaviors/referenceprefix.py:39
 msgid "label_reference_number_prefix"
 msgstr ""
 

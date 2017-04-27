@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-04-06 15:16+0000\n"
+"POT-Creation-Date: 2017-04-27 11:21+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,6 +19,7 @@ msgstr ""
 
 #: ./opengever/document/profiles/default/actions.xml
 #: ./opengever/document/upgrades/20170322142153_add_office_connector_multi_attach_action_to_documents/actions.xml
+#: ./opengever/document/upgrades/20170424163920_adjust_sort_order_of_actions/actions.xml
 msgid "Attach selection"
 msgstr ""
 
@@ -43,11 +44,13 @@ msgstr ""
 msgid "Checked out: ${title}"
 msgstr ""
 
+#: ./opengever/document/browser/templates/macros.pt:65
 #: ./opengever/document/profiles/default/actions.xml
 #: ./opengever/document/upgrades/profiles/4000/actions.xml
 msgid "Checkin with comment"
 msgstr ""
 
+#: ./opengever/document/browser/templates/macros.pt:62
 #: ./opengever/document/profiles/default/actions.xml
 #: ./opengever/document/upgrades/profiles/4000/actions.xml
 msgid "Checkin without comment"
@@ -86,7 +89,7 @@ msgstr ""
 msgid "Create Task"
 msgstr ""
 
-#: ./opengever/document/browser/overview.py:215
+#: ./opengever/document/browser/overview.py:208
 msgid "Current version: ${version}"
 msgstr ""
 
@@ -94,7 +97,7 @@ msgstr ""
 msgid "Document"
 msgstr ""
 
-#: ./opengever/document/browser/download_templates/downloadconfirmation.pt:22
+#: ./opengever/document/browser/templates/downloadconfirmation.pt:22
 msgid "Don't show this message again."
 msgstr ""
 
@@ -125,15 +128,15 @@ msgstr ""
 msgid "Submit additional documents"
 msgstr ""
 
-#: ./opengever/document/browser/overview.py:211
+#: ./opengever/document/browser/overview.py:204
 msgid "Submitted version: ${version}"
 msgstr ""
 
-#: ./opengever/document/browser/overview.py:180
+#: ./opengever/document/browser/overview.py:173
 msgid "Submitted with"
 msgstr ""
 
-#: ./opengever/document/browser/download.py:40
+#: ./opengever/document/browser/download.py:39
 #: ./opengever/document/browser/edit.py:81
 msgid "The Document ${title} has no File"
 msgstr ""
@@ -182,7 +185,7 @@ msgid "copy_of"
 msgstr ""
 
 #. Default: "You're downloading a copy of the document ${filename}"
-#: ./opengever/document/browser/download_templates/downloadconfirmation.pt:12
+#: ./opengever/document/browser/templates/downloadconfirmation.pt:12
 msgid "description_download_confirmation"
 msgstr ""
 
@@ -192,7 +195,7 @@ msgid "error_file_and_preserved_as_paper"
 msgstr ""
 
 #. Default: "It's not possible to add E-mails here, please '                    'send it to ${mailaddress} or drag it to the dossier '                    ' (Dragn'n'Drop)."
-#: ./opengever/document/document.py:100
+#: ./opengever/document/document.py:97
 msgid "error_mail_upload"
 msgstr ""
 
@@ -202,7 +205,7 @@ msgid "error_no_items"
 msgstr ""
 
 #. Default: "Either the title or the file is required."
-#: ./opengever/document/document.py:77
+#: ./opengever/document/document.py:74
 msgid "error_title_or_file_required"
 msgstr ""
 
@@ -214,7 +217,7 @@ msgstr ""
 #. Default: "Common"
 #: ./opengever/document/behaviors/metadata.py:41
 #: ./opengever/document/behaviors/related_docs.py:39
-#: ./opengever/document/document.py:53
+#: ./opengever/document/document.py:50
 msgid "fieldset_common"
 msgstr ""
 
@@ -260,7 +263,7 @@ msgstr ""
 msgid "help_document_date"
 msgstr ""
 
-#: ./opengever/document/document.py:70
+#: ./opengever/document/document.py:67
 msgid "help_file"
 msgstr ""
 
@@ -296,7 +299,7 @@ msgstr ""
 
 #. Default: "Archival File"
 #: ./opengever/document/behaviors/metadata.py:147
-#: ./opengever/document/browser/overview.py:175
+#: ./opengever/document/browser/overview.py:168
 msgid "label_archival_file"
 msgstr ""
 
@@ -306,7 +309,7 @@ msgid "label_archival_file_state"
 msgstr ""
 
 #. Default: "Attach to email"
-#: ./opengever/document/browser/templates/macros.pt:40
+#: ./opengever/document/browser/templates/macros.pt:84
 msgid "label_attach_to_email"
 msgstr ""
 
@@ -321,7 +324,7 @@ msgstr ""
 msgid "label_by_author"
 msgstr ""
 
-#: ./opengever/document/browser/download_templates/downloadconfirmation.pt:26
+#: ./opengever/document/browser/templates/downloadconfirmation.pt:26
 msgid "label_cancel"
 msgstr ""
 
@@ -332,7 +335,7 @@ msgid "label_change_archival_file"
 msgstr ""
 
 #. Default: "Checked out"
-#: ./opengever/document/browser/overview.py:157
+#: ./opengever/document/browser/overview.py:150
 #: ./opengever/document/checkout/viewlets_templates/checkedoutviewlet.pt:5
 msgid "label_checked_out"
 msgstr ""
@@ -343,7 +346,7 @@ msgid "label_checkin_journal_comment"
 msgstr ""
 
 #. Default: "Checkout and edit"
-#: ./opengever/document/browser/templates/macros.pt:51
+#: ./opengever/document/browser/templates/macros.pt:35
 msgid "label_checkout_and_edit"
 msgstr ""
 
@@ -353,7 +356,7 @@ msgid "label_comment"
 msgstr ""
 
 #. Default: "creator"
-#: ./opengever/document/browser/overview.py:153
+#: ./opengever/document/browser/overview.py:146
 msgid "label_creator"
 msgstr ""
 
@@ -412,20 +415,20 @@ msgstr ""
 msgid "label_dossier_title"
 msgstr ""
 
-#: ./opengever/document/browser/download_templates/downloadconfirmation.pt:25
+#: ./opengever/document/browser/templates/downloadconfirmation.pt:25
 msgid "label_download"
 msgstr ""
 
 #. Default: "Download copy"
-#: ./opengever/document/browser/download.py:141
-#: ./opengever/document/browser/download_templates/downloadconfirmation.pt:4
-#: ./opengever/document/browser/templates/macros.pt:82
+#: ./opengever/document/browser/download.py:135
+#: ./opengever/document/browser/templates/downloadconfirmation.pt:4
+#: ./opengever/document/browser/templates/macros.pt:75
 msgid "label_download_copy"
 msgstr ""
 
 #. Default: "File"
-#: ./opengever/document/browser/overview.py:159
-#: ./opengever/document/document.py:69
+#: ./opengever/document/browser/overview.py:152
+#: ./opengever/document/document.py:66
 msgid "label_file"
 msgstr ""
 
@@ -445,16 +448,16 @@ msgid "label_keywords"
 msgstr ""
 
 #. Default: "no"
-#: ./opengever/document/browser/overview.py:91
+#: ./opengever/document/browser/overview.py:83
 msgid "label_no"
 msgstr ""
 
-#: ./opengever/document/browser/download_templates/downloadconfirmation.pt:40
+#: ./opengever/document/browser/templates/downloadconfirmation.pt:40
 msgid "label_ok"
 msgstr ""
 
 #. Default: "Open detail view"
-#: ./opengever/document/browser/templates/macros.pt:89
+#: ./opengever/document/browser/templates/macros.pt:129
 msgid "label_open_detail_view"
 msgstr ""
 
@@ -464,7 +467,7 @@ msgid "label_open_document_preview"
 msgstr ""
 
 #. Default: "PDF Preview"
-#: ./opengever/document/browser/templates/macros.pt:23
+#: ./opengever/document/browser/templates/macros.pt:102
 msgid "label_pdf_preview"
 msgstr ""
 
@@ -525,7 +528,7 @@ msgstr ""
 
 #. Default: "Title"
 #: ./opengever/document/browser/report.py:30
-#: ./opengever/document/document.py:63
+#: ./opengever/document/document.py:60
 msgid "label_title"
 msgstr ""
 
@@ -535,7 +538,7 @@ msgid "label_version"
 msgstr ""
 
 #. Default: "yes"
-#: ./opengever/document/browser/overview.py:90
+#: ./opengever/document/browser/overview.py:82
 msgid "label_yes"
 msgstr ""
 
@@ -551,7 +554,7 @@ msgstr ""
 
 #. Default: "No file"
 #: ./opengever/document/browser/templates/archiv_file.pt:18
-#: ./opengever/document/browser/templates/macros.pt:100
+#: ./opengever/document/browser/templates/macros.pt:138
 msgid "no_file"
 msgstr ""
 
@@ -561,7 +564,7 @@ msgid "overview_not_checked_in_documents"
 msgstr ""
 
 #. Default: "Please note that in this case changes on the document wouldn't be saved in to GEVER."
-#: ./opengever/document/browser/download_templates/downloadconfirmation.pt:17
+#: ./opengever/document/browser/templates/downloadconfirmation.pt:17
 msgid "warning_download_confirmation"
 msgstr ""
 

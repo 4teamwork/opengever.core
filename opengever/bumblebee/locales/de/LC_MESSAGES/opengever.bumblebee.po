@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-02-20 15:28+0000\n"
+"POT-Creation-Date: 2017-04-27 11:20+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,23 +30,13 @@ msgstr "Dossier:"
 msgid "Reference number:"
 msgstr "Aktenzeichen:"
 
-#. Default: "Open detail view"
-#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:107
-msgid "label_open_detail_view"
-msgstr "Detailansicht öffnen"
-
-#. Default: "Open as PDF"
-#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:98
-msgid "label_open_document_as_pdf"
-msgstr "Dokument als PDF öffnen"
-
 #. Default: "Revert document"
-#: ./opengever/bumblebee/browser/overlay.py:199
+#: ./opengever/bumblebee/browser/overlay.py:159
 msgid "label_revert"
 msgstr "Dokument zurücksetzen"
 
 #. Default: "You are looking at a versioned file."
-#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:119
+#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:43
 msgid "warning_on_versioned_context"
 msgstr "Sie sehen sich ein versioniertes Dokument an."
 
