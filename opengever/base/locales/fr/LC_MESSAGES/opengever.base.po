@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-03-28 13:19+0000\n"
+"POT-Creation-Date: 2017-04-27 11:20+0000\n"
 "PO-Revision-Date: 2016-08-10 05:15+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-base/fr/>\n"
@@ -31,7 +31,7 @@ msgstr "Copier"
 msgid "No content"
 msgstr "Pas de contenu"
 
-#: ./opengever/base/viewlets/download.py:26
+#: ./opengever/base/viewlets/download.py:22
 msgid "No file in in this version"
 msgstr "Pas de fichier pour cette version "
 

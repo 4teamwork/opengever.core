@@ -1,52 +1,43 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-07-21 14:08+0000\n"
+"POT-Creation-Date: 2017-04-27 11:21+0000\n"
 "PO-Revision-Date: 2016-08-10 05:14+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
-"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
-"gever/opengever-locking/fr/>\n"
-"Language: fr\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-locking/fr/>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2.7-dev\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
+"Language: fr\n"
+"X-Generator: Weblate 2.7-dev\n"
 
 #. Default: "This protocol will remain locked until the meeting ${meeting} is closed."
 #: ./opengever/locking/templates/meeting_lock.pt:12
 msgid "description_locked_by_meeting"
-msgstr ""
-"Le protocole reste verrouillé jusqu'à la clôture de la séance ${meeting}."
+msgstr "Le protocole reste verrouillé jusqu'à la clôture de la séance ${meeting}."
 
 #. Default: "This document is a copy of an excerpt from a meeting and cannot be edited directly."
 #: ./opengever/locking/templates/excerpt_document_lock_template.pt:22
 msgid "description_locked_excerpt_document"
-msgstr ""
-"Ce document est une copie d'un extrait de procès-verbal d'une séance et ne "
-"peut être directement modifié."
+msgstr "Ce document est une copie d'un extrait de procès-verbal d'une séance et ne peut être directement modifié."
 
 #. Default: "This document is a copy of the excerpt ${document} from the meeting ${meeting} and cannot be edited directly."
 #: ./opengever/locking/templates/excerpt_document_lock_template.pt:17
 msgid "description_locked_linked_excerpt_document"
-msgstr ""
-"Ce document est une copie de l'extrait de procès-verbal ${document} de la "
-"séance ${meeting} et ne peut être directement modifié."
+msgstr "Ce document est une copie de l'extrait de procès-verbal ${document} de la séance ${meeting} et ne peut être directement modifié."
 
 #. Default: "This document has been submitted as a copy of ${document} and cannot be edited directly."
 #: ./opengever/locking/templates/submitted_document_lock_template.pt:12
 msgid "description_locked_linked_submitted_document"
-msgstr ""
-"Ce document a été déposé en tant que copie de ${document} et ne peut être "
-"directement modifié."
+msgstr "Ce document a été déposé en tant que copie de ${document} et ne peut être directement modifié."
 
 #. Default: "This document has been submitted as a copy and cannot be edited directly."
 #: ./opengever/locking/templates/submitted_document_lock_template.pt:17
 msgid "description_locked_submitted_document"
-msgstr ""
-"Ce document a été déposé en tant que copie et ne peut être directement "
-"modifié"
+msgstr "Ce document a été déposé en tant que copie et ne peut être directement modifié"
+
