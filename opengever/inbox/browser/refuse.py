@@ -101,8 +101,8 @@ class ForwardingRefuseForm(Form):
         return self.get_remote_task_url(refusing_unit_id, remote_task)
 
     def get_remote_task_url(self, refusing_client_id, remote_task):
-        refusing_org_unit = ogds_service().fetch_org_unit(refusing_client_id)
-        return '%s/%s' % (refusing_org_unit.public_url, remote_task)
+        refusing_admin_unit = ogds_service().fetch_admin_unit(refusing_client_id)
+        return '%s/%s' % (refusing_admin_unit.public_url, remote_task)
 
 
 class RefuseForwardingView(layout.FormWrapper, grok.View):
