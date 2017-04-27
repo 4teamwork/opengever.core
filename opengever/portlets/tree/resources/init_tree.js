@@ -149,17 +149,10 @@ $(function() {
   function sort_by_text(list_of_nodes) {
     /* Sorts a list of nodes by text in-place. */
     function compare_text(first, second) {
-      var a = first.text;
-      var b = second.text;
-      if (a < b) {
-        return -1;
-      }
-      else if (a > b) {
-        return 1;
-      }
-      else {
-        return 0;
-      }
+      // We do a localeCompare with a numeric strings comparsion.
+      // With this configuration, 1.3 will be sorted before 1.10
+      // To do a language independent comparsion we don't set the language.
+      return first.text.localeCompare(second.text, undefined, {numeric: true});
     }
     list_of_nodes.sort(compare_text);
   }
