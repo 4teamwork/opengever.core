@@ -25,7 +25,7 @@ class CancelDocuments(grok.View):
 
         # using "paths" is mandantory on any objects except for a document
         if not paths and not IDocumentSchema.providedBy(self.context):
-            msg = _(u'You have not selected any documents')
+            msg = _(u'You have not selected any documents.')
             api.portal.show_message(
                 message=msg, request=self.request, type='error')
 
@@ -78,7 +78,7 @@ class CancelDocuments(grok.View):
 
         # is cancel allowed for this document?
         if not manager.is_cancel_allowed():
-            msg = _(u'Could not cancel checkout on document ${title}',
+            msg = _(u'Could not cancel checkout on document ${title}.',
                     mapping=dict(title=obj.Title().decode('utf-8')))
             api.portal.show_message(
                 message=msg, request=self.request, type='error')

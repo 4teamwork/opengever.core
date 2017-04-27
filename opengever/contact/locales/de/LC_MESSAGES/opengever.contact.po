@@ -461,10 +461,10 @@ msgstr "Für diesen Kontakt existiert bereits eine Beteiligung."
 msgid "personal"
 msgstr "Persönliche Angaben"
 
-#. Default: "${amount} matches."
+#. Default: "${amount} matches"
 #: ./opengever/contact/no_selection_amount.pt:3
 msgid "tab_matches"
-msgstr "${amount} Treffer."
+msgstr "${amount} Treffer"
 
 #. Default: "Telefon"
 #: ./opengever/contact/contact.py:44

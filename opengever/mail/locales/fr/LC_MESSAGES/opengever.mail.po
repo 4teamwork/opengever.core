@@ -30,7 +30,7 @@ msgstr "Extraire documents"
 
 #: ./opengever/mail/browser/send_document.py:336
 msgid "Sent mail filed as '${title}'."
-msgstr "Email envoyé classé sous '${title}'"
+msgstr "Email envoyé classé sous '${title}'."
 
 #: ./opengever/mail/validators.py:20
 msgid "The files you selected are larger than the maximum size"
@@ -38,7 +38,7 @@ msgstr "La taille des fichiers séléctionnés dépasse la taille maximum permis
 
 #: ./opengever/mail/browser/send_document.py:129
 msgid "You have to select a intern                             or enter a extern mail-addres"
-msgstr "Sélectionner au minimum une adresse Email interne ou externe"
+msgstr "Sélectionner au minimum une adresse Email interne ou externe."
 
 #. Default: "Send"
 #: ./opengever/mail/browser/send_document.py:199
@@ -73,7 +73,7 @@ msgstr "Vous n'avez sélectionné aucune annexe."
 #. Default: "This mail has no attachments to extract."
 #: ./opengever/mail/browser/extract_attachments.py:117
 msgid "error_no_attachments_to_extract"
-msgstr "Cet Email n'a pas d'annexe à extraire"
+msgstr "Cet Email n'a pas d'annexe à extraire."
 
 #. Default: "Extern receiver"
 #: ./opengever/mail/browser/send_document.py:74
@@ -108,12 +108,12 @@ msgstr "Ajouter les adresses email des destinataires externes. Une adresse par l
 #. Default: "Live Search: search for users and contacts"
 #: ./opengever/mail/browser/send_document.py:62
 msgid "help_intern_receiver"
-msgstr "Recherche en direct : Saisir nom et prénom des collaborateurs internes ou des contacts. Séléction multiple possible. "
+msgstr "Recherche en direct: Saisir nom et prénom des collaborateurs internes ou des contacts. Séléction multiple possible."
 
 #. Default: "Created document ${title}"
 #: ./opengever/mail/browser/extract_attachments.py:149
 msgid "info_extracted_document"
-msgstr "Document créé : ${title}"
+msgstr "Document créé: ${title}"
 
 #. Default: "E-mail has been sent."
 #: ./opengever/mail/browser/send_document.py:246
@@ -133,7 +133,7 @@ msgstr "Fichiers attachés"
 #. Default: "Delete attachments"
 #: ./opengever/mail/browser/extract_attachments_templates/extract_attachments.pt:64
 msgid "label_delete_action"
-msgstr "Effacer les fichiers attachés."
+msgstr "Effacer les fichiers attachés"
 
 #. Default: "Delete all attachments"
 #: ./opengever/mail/browser/extract_attachments_templates/extract_attachments.pt:86
@@ -143,7 +143,7 @@ msgstr "Effacer tous les fichiers attachés de cet email"
 #. Default: "Delete nothing"
 #: ./opengever/mail/browser/extract_attachments_templates/extract_attachments.pt:77
 msgid "label_delete_action_nothing"
-msgstr "N'effacer aucun fichier attaché."
+msgstr "N'effacer aucun fichier attaché"
 
 #. Default: "Delete all selected attachments"
 #: ./opengever/mail/browser/extract_attachments_templates/extract_attachments.pt:95

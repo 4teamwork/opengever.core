@@ -54,7 +54,7 @@ def method_vocabulary_factory(context):
                 SimpleTerm(
                     value=u'forwarding_participate',
                     title=_(u'accept_method_forwarding_participate',
-                            default=u"... store in ${client}'s inbox.",
+                            default=u"... store in ${client}'s inbox",
                             mapping={'client': org_unit.label()})),
 
                 SimpleTerm(

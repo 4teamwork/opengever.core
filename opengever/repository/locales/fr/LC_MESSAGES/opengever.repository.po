@@ -34,7 +34,7 @@ msgstr "Système de classement"
 #: ./opengever/repository/profiles/default/actions.xml
 #: ./opengever/repository/upgrades/profiles/2601/actions.xml
 msgid "Unlock unused repository prefixes."
-msgstr "Déblocage de préfixes de référence inutilisés"
+msgstr "Déblocage de préfixes de référence inutilisés."
 
 #. Default: "Allow add businesscase dossier"
 #: ./opengever/repository/repositoryfolder.py:89
@@ -51,7 +51,7 @@ msgstr ""
 msgid "empty_repository"
 msgstr "Pas de numéros de classement disponible dans cette subdivison."
 
-#. Default: "A Sibling with the same reference number is existing"
+#. Default: "A Sibling with the same reference number is existing."
 #: ./opengever/repository/behaviors/referenceprefix.py:69
 msgid "error_sibling_reference_number_existing"
 msgstr "A ce niveau du classement ce numéro de référence existe déjà."
@@ -66,7 +66,7 @@ msgstr "En général"
 #. Default: "Select all additional dossier types which should be addable in this repository folder."
 #: ./opengever/repository/repositoryfolder.py:81
 msgid "help_addable_dossier_types"
-msgstr "Sélectionnez les types de dossiers à ajouter pour cette position du classeur"
+msgstr "Sélectionnez les types de dossiers à ajouter pour cette position du classeur."
 
 #. Default: "A short summary of the content."
 #: ./opengever/repository/repositoryfolder.py:44
@@ -183,7 +183,7 @@ msgstr ""
 #. Default: "Reference prefix has been unlocked."
 #: ./opengever/repository/browser/referenceprefix_manager.py:32
 msgid "statmsg_prefix_unlocked"
-msgstr "Le préfixe de référence à été débloqué"
+msgstr "Le préfixe de référence à été débloqué."
 
 #. Default: "Documents:"
 #: ./opengever/repository/browser/overview_templates/repositoryrootoverview.pt:16

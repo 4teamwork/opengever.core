@@ -114,7 +114,7 @@ class ForwardingAddForm(AddForm):
             # autocomplete-search request!
             IStatusMessage(self.request).addStatusMessage(
                 _(u'error_no_document_selected',
-                  u'Error: Please select at least one document to forward'),
+                  u'Error: Please select at least one document to forward.'),
                 type='error')
             redir_url = self.request.get('orig_template',
                                          self.context.absolute_url())

@@ -15,7 +15,7 @@ msgstr ""
 "Domain: DOMAIN\n"
 
 #: ./opengever/trash/trash.py:124
-msgid "You have not selected any items"
+msgid "You have not selected any items."
 msgstr "Vous n'avez sélectionné aucun objet."
 
 #: ./opengever/trash/trash.py:99
@@ -23,10 +23,10 @@ msgid "could not trash the object ${obj}, it is already trashed"
 msgstr "L'objet a été déplacé vers la corbeille"
 
 #: ./opengever/trash/trash.py:108
-msgid "could not trash the object ${obj}, it is checked out"
-msgstr "L'objet ${obj} a un checkout. Vous ne pouvez pas le supprimer"
+msgid "could not trash the object ${obj}, it is checked out."
+msgstr "L'objet ${obj} a un checkout. Vous ne pouvez pas le supprimer."
 
-#. Default: "You have not selected any items"
+#. Default: "You have not selected any items."
 #: ./opengever/trash/browser/remove_confirmation.py:35
 msgid "error_no_documents_selected"
 msgstr "Vous n'avez sélectionné aucun élément."
@@ -74,7 +74,7 @@ msgstr "Il existe encore une référence de document ${links} sur le document."
 #. Default: "The document contains relations."
 #: ./opengever/trash/remover.py:60
 msgid "msg_document_has_relations"
-msgstr "Le document fait réference à d'autres documents"
+msgstr "Le document fait réference à d'autres documents."
 
 #. Default: "The document is still checked out."
 #: ./opengever/trash/remover.py:52
@@ -93,7 +93,7 @@ msgstr "Effacer"
 
 #: ./opengever/trash/trash.py:118
 msgid "the object ${obj} trashed"
-msgstr "L'objet ${obj} a été déplacé dans la corbeille"
+msgstr "L'objet ${obj} a été déplacé dans la corbeille."
 
 #: ./opengever/trash/profiles/default/actions.xml
 msgid "trashed"

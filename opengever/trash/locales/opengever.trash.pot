@@ -18,7 +18,7 @@ msgstr ""
 "Domain: opengever.trash\n"
 
 #: ./opengever/trash/trash.py:124
-msgid "You have not selected any items"
+msgid "You have not selected any items."
 msgstr ""
 
 #: ./opengever/trash/trash.py:99
@@ -26,10 +26,10 @@ msgid "could not trash the object ${obj}, it is already trashed"
 msgstr ""
 
 #: ./opengever/trash/trash.py:108
-msgid "could not trash the object ${obj}, it is checked out"
+msgid "could not trash the object ${obj}, it is checked out."
 msgstr ""
 
-#. Default: "You have not selected any items"
+#. Default: "You have not selected any items."
 #: ./opengever/trash/browser/remove_confirmation.py:35
 msgid "error_no_documents_selected"
 msgstr ""

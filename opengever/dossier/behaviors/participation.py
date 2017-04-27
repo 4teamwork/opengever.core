@@ -159,7 +159,7 @@ class ParticipationAddForm(z3c.form.form.Form):
             phandler.append_participiation(part)
             status = IStatusMessage(self.request)
             msg = _(u'info_participation_create',
-                    u'Participation created')
+                    u'Participation created.')
             status.addStatusMessage(msg, type='info')
             return self._redirect_to_participants_tab()
 
@@ -204,7 +204,7 @@ class DeleteParticipants(grok.View):
             phandler.remove_participation(obj)
         status = IStatusMessage(self.request)
         msg = _(u'info_removed_participations',
-                'Removed participations')
+                'Removed participations.')
         status.addStatusMessage(msg, type='info')
         return self.request.RESPONSE.redirect(self.redirect_url)
 

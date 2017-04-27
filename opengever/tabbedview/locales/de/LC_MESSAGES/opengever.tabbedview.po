@@ -424,10 +424,10 @@ msgstr "Beginn"
 msgid "subdossiers"
 msgstr "Subdossiers"
 
-#. Default: "${amount} matches."
+#. Default: "${amount} matches"
 #: ./opengever/tabbedview/browser/no_selection_amount.pt:3
 msgid "tab_matches"
-msgstr "${amount} Treffer."
+msgstr "${amount} Treffer"
 
 #. Default: "Aufgaben"
 msgid "tasks"

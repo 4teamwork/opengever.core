@@ -135,14 +135,14 @@ msgstr "modifier dans un dossier existant dans ${client}"
 #. Default: "... store in  ${client}'s inbox and process in an existing dossier on ${client}"
 #: ./opengever/task/browser/accept/main.py:62
 msgid "accept_method_forwarding_existing_dossier"
-msgstr "… déposer dans la boîte de réception de ${client} et modifier dans un dossier existant de ${client}."
+msgstr "… déposer dans la boîte de réception de ${client} et modifier dans un dossier existant de ${client}"
 
 #. Default: "... store in  ${client}'s inbox and process in a new dossier on ${client}"
 #: ./opengever/task/browser/accept/main.py:68
 msgid "accept_method_forwarding_new_dossier"
-msgstr "… déposer dans la boîte de réception de ${client} et modifier dans un nouveau dossier de ${client}."
+msgstr "… déposer dans la boîte de réception de ${client} et modifier dans un nouveau dossier de ${client}"
 
-#. Default: "... store in ${client}'s inbox."
+#. Default: "... store in ${client}'s inbox"
 #: ./opengever/task/browser/accept/main.py:56
 msgid "accept_method_forwarding_participate"
 msgstr "… déposer dans la boîte de réception de ${client}"
@@ -247,15 +247,15 @@ msgstr "Transmission"
 msgid "help_accept_select_dossier"
 msgstr "Choix du dossier dans lequel vous voulez modifier la tâche."
 
-#. Default: "Select the type for the new dossier."
+#. Default: "Select the type for the new dossier"
 #: ./opengever/task/browser/accept/newdossier.py:213
 msgid "help_accept_select_dossier_type"
-msgstr "Choix du type du nouveau dossier"
+msgstr "Choix du type du nouveau dossier."
 
 #. Default: "Select the repository folder within the dossier should be created."
 #: ./opengever/task/browser/accept/newdossier.py:84
 msgid "help_accept_select_repositoryfolder"
-msgstr "Choix du numéro de classement où le dossier doit être créé"
+msgstr "Choix du numéro de classement où le dossier doit être créé."
 
 #. Default: "Enter a answer text which will be shown as response when the task is accepted."
 #: ./opengever/task/browser/accept/main.py:102
@@ -320,12 +320,12 @@ msgstr "Durée effective en h"
 
 #: ./opengever/task/task.py:122
 msgid "help_responsible"
-msgstr "Choix de la personne responsable, membre du client mentionné ci-dessus"
+msgstr "Choix de la personne responsable, membre du client mentionné ci-dessus."
 
 #: ./opengever/task/browser/assign.py:38
 #: ./opengever/task/task.py:114
 msgid "help_responsible_client"
-msgstr "Sélectionner d'abord le client du mandataire et ensuite le mandataire"
+msgstr "Sélectionner d'abord le client du mandataire et ensuite le mandataire."
 
 #: ./opengever/task/browser/assign.py:45
 #: ./opengever/task/form.py:41
@@ -387,7 +387,7 @@ msgstr "Acheminement attribué à un/une.."
 #. Default: "by"
 #: ./opengever/task/viewlets/byline.py:28
 msgid "label_by_author"
-msgstr "Mandataire: "
+msgstr "Mandataire"
 
 #. Default: "Target dossier"
 #: ./opengever/task/browser/close.py:153

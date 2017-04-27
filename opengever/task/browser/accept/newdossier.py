@@ -211,7 +211,7 @@ class ISelectDossierTypeSchema(Schema):
     dossier_type = schema.Choice(
         title=_('label_accept_select_dossier_type', default=u'Dossier type'),
         description=_(u'help_accept_select_dossier_type',
-                      default=u'Select the type for the new dossier.'),
+                      default=u'Select the type for the new dossier'),
         source=allowed_dossier_types_vocabulary,
         required=True)
 

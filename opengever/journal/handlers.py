@@ -630,7 +630,7 @@ OBJECT_RESTORE = 'Object restore'
 def document_untrashed(context, event):
     title = _(
         u'label_restore',
-        default=u'Object restore: ${title}',
+        default=u'Object restored: ${title}',
         mapping={
             'title': context.title_or_id(),
             })

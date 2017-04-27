@@ -44,7 +44,7 @@ msgstr "En survolant les numéros de classement dans le plan de classement avec 
 #. Default: "Your favorite folders are marked with the favorites icon (${icon}) in the repository tree."
 #: ./opengever/portlets/tree/treeportlet.pt:53
 msgid "tree_favorites_help_marked"
-msgstr "Vos numéros de classement choisis comme favoris sont épinglés dans l'onglet du plan de classement avec le symbole correspondant (${icon})"
+msgstr "Vos numéros de classement choisis comme favoris sont épinglés dans l'onglet du plan de classement avec le symbole correspondant (${icon})."
 
 #. Default: "For removing a favorite, switch back to the repository tree tab and click on the icon for removing a favorite (${icon})."
 #: ./opengever/portlets/tree/treeportlet.pt:60
@@ -54,5 +54,5 @@ msgstr "Pour effacer un favori, retournez sur l'onglet \"Plan de classement\" et
 #. Default: "Adding and removing of favorites is done in the repository tree tab."
 #: ./opengever/portlets/tree/treeportlet.pt:39
 msgid "tree_favorites_help_summary"
-msgstr "L'ajout ou la suppression des favoris se fait dans l'onglet plan de classement"
+msgstr "L'ajout ou la suppression des favoris se fait dans l'onglet plan de classement."
 

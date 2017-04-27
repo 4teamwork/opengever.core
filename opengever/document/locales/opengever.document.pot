@@ -61,7 +61,7 @@ msgid "Checkout"
 msgstr ""
 
 #: ./opengever/document/checkout/cancel.py:81
-msgid "Could not cancel checkout on document ${title}"
+msgid "Could not cancel checkout on document ${title}."
 msgstr ""
 
 #: ./opengever/document/checkout/checkin.py:73
@@ -74,11 +74,11 @@ msgstr ""
 
 #: ./opengever/document/browser/edit.py:121
 #: ./opengever/document/checkout/checkout.py:102
-msgid "Could not check out document ${title}"
+msgid "Could not check out document ${title}."
 msgstr ""
 
 #: ./opengever/document/checkout/checkout.py:60
-msgid "Could not check out object: ${title}, it is not a document"
+msgid "Could not check out object: ${title}, it is not a document."
 msgstr ""
 
 #: ./opengever/document/browser/report.py:81
@@ -112,7 +112,7 @@ msgstr ""
 
 #: ./opengever/document/checkout/manager.py:288
 #: ./opengever/document/checkout/revert.py:26
-msgid "Reverted file to version ${version_id}"
+msgid "Reverted file to version ${version_id}."
 msgstr ""
 
 #: ./opengever/document/forms.py:65
@@ -138,11 +138,11 @@ msgstr ""
 
 #: ./opengever/document/browser/download.py:39
 #: ./opengever/document/browser/edit.py:81
-msgid "The Document ${title} has no File"
+msgid "The Document ${title} has no File."
 msgstr ""
 
 #: ./opengever/document/browser/edit.py:113
-msgid "The Document is allready checked out by: ${userid}"
+msgid "The Document is already checked out by: ${userid}"
 msgstr ""
 
 #: ./opengever/document/browser/templates/submitted_with.pt:18
@@ -150,13 +150,13 @@ msgid "Update document in proposal"
 msgstr ""
 
 #: ./opengever/document/browser/edit.py:59
-msgid "You are not authorized to edit the document ${title}"
+msgid "You are not authorized to edit the document ${title}."
 msgstr ""
 
 #: ./opengever/document/checkout/cancel.py:28
 #: ./opengever/document/checkout/checkin.py:197
 #: ./opengever/document/checkout/checkout.py:34
-msgid "You have not selected any documents"
+msgid "You have not selected any documents."
 msgstr ""
 
 #. Default: "You have not checked in documents. Do you realy want to logout?"

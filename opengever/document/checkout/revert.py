@@ -23,7 +23,7 @@ class RevertFileToVersion(grok.View):
         manager.revert_to_version(version_id)
 
         # create a status message
-        msg = _(u'Reverted file to version ${version_id}',
+        msg = _(u'Reverted file to version ${version_id}.',
                 mapping=dict(version_id=version_id))
         IStatusMessage(self.request).addStatusMessage(msg, type='info')
 

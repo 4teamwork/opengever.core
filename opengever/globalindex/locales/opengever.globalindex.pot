@@ -18,7 +18,7 @@ msgstr ""
 "Domain: opengever.globalindex\n"
 
 #: ./opengever/globalindex/browser/report.py:94
-msgid "Could not generate the report"
+msgid "Could not generate the report."
 msgstr ""
 
 #: ./opengever/globalindex/profiles/default/actions.xml
@@ -26,7 +26,7 @@ msgstr ""
 msgid "Export selection"
 msgstr ""
 
-#. Default: "You have not selected any Items"
+#. Default: "You have not selected any items."
 #: ./opengever/globalindex/browser/report.py:49
 msgid "error_no_items"
 msgstr ""

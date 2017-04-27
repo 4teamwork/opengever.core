@@ -33,7 +33,7 @@ msgstr "Pas de contenu"
 
 #: ./opengever/base/viewlets/download.py:22
 msgid "No file in in this version"
-msgstr "Pas de fichier pour cette version "
+msgstr "Pas de fichier pour cette version"
 
 #: ./opengever/base/profiles/default/actions.xml
 msgid "Properties"
@@ -46,7 +46,7 @@ msgstr "Sauvegarder"
 
 #: ./opengever/base/browser/list_groupmembers.pt:14
 msgid "There are no members in this group."
-msgstr "Ce groupe n'a aucun utilisateur"
+msgstr "Ce groupe n'a aucun utilisateur."
 
 #: ./opengever/base/browser/list_groupmembers.pt:3
 msgid "Users of group:"
@@ -113,7 +113,7 @@ msgstr "Valeur archivistique"
 
 #: ./opengever/base/behaviors/classification.py:72
 msgid "help_classification"
-msgstr "Classification permettant la protection des documents contre la consultation non-autorisée "
+msgstr "Classification permettant la protection des documents contre la consultation non-autorisée"
 
 #: ./opengever/base/behaviors/lifecycle.py:74
 msgid "help_custody_period"
@@ -355,7 +355,7 @@ msgstr "Public"
 #. Default: "Did you not find what you were looking for? Try the ${advanced_search} to refine your search."
 #: ./opengever/base/browser/search.pt:63
 msgid "search_results_advanced"
-msgstr "Vous n'avez pas trouvé ce que vous avez cherché? La ${advanced_search} vous offre des possibilités de recherche précises"
+msgstr "Vous n'avez pas trouvé ce que vous avez cherché? La ${advanced_search} vous offre des possibilités de recherche précises."
 
 #. Default: "Advanced Search"
 #: ./opengever/base/browser/search.pt:64

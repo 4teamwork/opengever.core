@@ -14,7 +14,7 @@ class InboxContainerView(OGDefaultView):
         else:
             msg = _(
                 u'current_inbox_not_available',
-                u'Your not allowed to access the inbox of ${current_org_unit}',
+                u'Your not allowed to access the inbox of ${current_org_unit}.',
                 mapping={'current_org_unit': get_current_org_unit().label()})
 
             IStatusMessage(self.request).addStatusMessage(msg, type='warning')

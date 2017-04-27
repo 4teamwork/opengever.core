@@ -18,7 +18,7 @@ msgstr ""
 "Domain: opengever.meeting\n"
 
 #: ./opengever/meeting/command.py:364
-msgid "A new submitted version of document ${title} has been created"
+msgid "A new submitted version of document ${title} has been created."
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:293
@@ -57,7 +57,7 @@ msgid "Add period"
 msgstr ""
 
 #: ./opengever/meeting/command.py:398
-msgid "Additional document ${title} has been submitted successfully"
+msgid "Additional document ${title} has been submitted successfully."
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:247
@@ -78,11 +78,11 @@ msgid "Are you sure you want to decide this agendaitem?"
 msgstr ""
 
 #: ./opengever/meeting/browser/memberships.py:53
-msgid "Can't add membership, it overlaps an existing membership from ${date_from} to ${date_to}"
+msgid "Can't add membership, it overlaps an existing membership from ${date_from} to ${date_to}."
 msgstr ""
 
 #: ./opengever/meeting/browser/memberships.py:87
-msgid "Can't change membership, it overlaps an existing membership from ${date_from} to ${date_to}"
+msgid "Can't change membership, it overlaps an existing membership from ${date_from} to ${date_to}."
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/excerpt.pt:23
@@ -122,7 +122,7 @@ msgid "Discard"
 msgstr ""
 
 #: ./opengever/meeting/command.py:327
-msgid "Document ${title} has already been submitted in that version"
+msgid "Document ${title} has already been submitted in that version."
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:292
@@ -284,11 +284,11 @@ msgid "Protocol Excerpt"
 msgstr ""
 
 #: ./opengever/meeting/command.py:48
-msgid "Protocol for meeting ${title} has been generated successfully"
+msgid "Protocol for meeting ${title} has been generated successfully."
 msgstr ""
 
 #: ./opengever/meeting/command.py:53
-msgid "Protocol for meeting ${title} has been updated successfully"
+msgid "Protocol for meeting ${title} has been updated successfully."
 msgstr ""
 
 #: ./opengever/meeting/committee.py:49
@@ -1370,7 +1370,7 @@ msgstr ""
 msgid "submittedproposals"
 msgstr ""
 
-#. Default: "${amount} matches."
+#. Default: "${amount} matches"
 #: ./opengever/meeting/browser/templates/no_selection.pt:2
 msgid "tab_matches"
 msgstr ""

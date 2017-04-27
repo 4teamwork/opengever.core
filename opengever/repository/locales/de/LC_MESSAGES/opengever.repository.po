@@ -55,10 +55,10 @@ msgstr "Wählen Sie, ob es in dieser Ordnungsposition erlaubt ist, Geschäftsdos
 msgid "empty_repository"
 msgstr "Keine untergeordnete Ordnungspositionen verfügbar."
 
-#. Default: "A Sibling with the same reference number is existing"
+#. Default: "A Sibling with the same reference number is existing."
 #: ./opengever/repository/behaviors/referenceprefix.py:69
 msgid "error_sibling_reference_number_existing"
-msgstr "Eine Ordnungsposition mit diesem Aktenzeichen existiert bereits auf gleicher Stufe"
+msgstr "Eine Ordnungsposition mit diesem Aktenzeichen existiert bereits auf gleicher Stufe."
 
 #. Default: "Common"
 #: ./opengever/repository/behaviors/referenceprefix.py:32

@@ -33,7 +33,7 @@ class RemoveConfirmation(grok.View):
 
         if not self.context.REQUEST.get('paths'):
             msg = _(u'error_no_documents_selected',
-                    default=u'You have not selected any items')
+                    default=u'You have not selected any items.')
             IStatusMessage(self.request).addStatusMessage(msg, type='error')
             return self.redirect_back()
 

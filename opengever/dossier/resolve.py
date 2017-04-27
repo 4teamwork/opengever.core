@@ -17,7 +17,7 @@ from zope.i18n import translate
 
 
 NOT_SUPPLIED_OBJECTS = _(
-    "not all documents and tasks are stored in a subdossier")
+    "not all documents and tasks are stored in a subdossier.")
 NOT_CHECKED_IN_DOCS = _("not all documents are checked in")
 NOT_CLOSED_TASKS = _("not all task are closed")
 NO_START_DATE = _("the dossier start date is missing.")
@@ -63,11 +63,11 @@ class DossierResolveView(grok.View):
             resolver.resolve()
             if self.context.is_subdossier():
                 ptool.addPortalMessage(
-                    _('The subdossier has been succesfully resolved'),
+                    _('The subdossier has been succesfully resolved.'),
                     type='info')
             else:
                 ptool.addPortalMessage(
-                    _('The dossier has been succesfully resolved'),
+                    _('The dossier has been succesfully resolved.'),
                     type='info')
 
             self.request.RESPONSE.redirect(self.context.absolute_url())

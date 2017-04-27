@@ -37,7 +37,7 @@ class DocumentishDownload(Download):
             named_file = self._getFile()
         except NotFound:
             msg = _(
-                u'The Document ${title} has no File',
+                u'The Document ${title} has no File.',
                 mapping={'title': self.context.Title().decode('utf-8')})
             api.portal.show_message(msg, self.request, type='error')
             return self.request.RESPONSE.redirect(
@@ -74,7 +74,7 @@ class DownloadConfirmation(BrowserView):
         return self.context.file is not None
 
     def msg_no_file_available(self):
-        return _(u'The Document ${title} has no File',
+        return _(u'The Document ${title} has no File.',
                  mapping={'title': self.context.Title().decode('utf-8')})
 
 

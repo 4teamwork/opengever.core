@@ -91,7 +91,7 @@ msgstr "Ordnungsposition"
 #. Default: "Repositoryfolder"
 #: ./opengever/latex/listing.py:157
 msgid "label_repository_title"
-msgstr "Ordnungspos."
+msgstr "Ordnungsposition"
 
 #. Default: "Responsible"
 #: ./opengever/latex/dossierdetails.py:122

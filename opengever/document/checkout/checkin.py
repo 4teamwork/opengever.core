@@ -194,7 +194,7 @@ class CheckinDocuments(layout.FormWrapper, grok.View):
         try:
             return layout.FormWrapper.__call__(self, *args, **kwargs)
         except NoItemsSelected:
-            msg = _(u'You have not selected any documents')
+            msg = _(u'You have not selected any documents.')
             IStatusMessage(self.request).addStatusMessage(
                 msg, type='error')
 
@@ -230,7 +230,7 @@ class CheckinDocumentsWithoutComment(CheckinDocumentWithoutComment):
         try:
             self.checkin_controller.checkin_documents(self.request.get('paths'))
         except NoItemsSelected:
-            msg = _(u'You have not selected any documents')
+            msg = _(u'You have not selected any documents.')
             IStatusMessage(self.request).addStatusMessage(
                 msg, type='error')
 
