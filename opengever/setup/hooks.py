@@ -14,11 +14,6 @@ def default_installed(site):
     disable_site_syndication(site)
 
 
-def default_content_installed(site):
-    assign_default_navigation_portlet(site, 'eingangskorb')
-    assign_default_navigation_portlet(site, 'vorlagen')
-
-
 def set_global_roles(site):
     assign_roles(site, ['og_administratoren'])
 

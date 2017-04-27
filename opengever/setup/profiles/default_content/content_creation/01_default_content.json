@@ -17,14 +17,45 @@
         "_type": "opengever.inbox.inbox",
         "title_de": "Eingangskorb",
         "title_fr": "Boîte de réception",
-        "inbox_group": "og_mandant1_eingangskorb"
+        "inbox_group": "og_mandant1_eingangskorb",
+        "_portlets": {
+          "plone.leftcolumn": {
+            "blacklist_status": {
+              "context": "block"
+            },
+            "assignments": [
+              {"id": "navigation",
+               "portlet_type": "portlets.Navigation",
+               "bottomLevel": 0,
+               "currentFolderOnly": false,
+               "includeTop": false,
+               "topLevel": 1}
+            ]
+          }
+        }
+
     },
     {
         "_path": "vorlagen",
         "_type": "opengever.dossier.templatefolder",
         "title_de": "Vorlagen",
         "title_fr": "Modèles",
-        "responsible": "ogadmin"
+        "responsible": "ogadmin",
+        "_portlets": {
+          "plone.leftcolumn": {
+            "blacklist_status": {
+              "context": "block"
+            },
+            "assignments": [
+              {"id": "navigation",
+               "portlet_type": "portlets.Navigation",
+               "bottomLevel": 0,
+               "currentFolderOnly": false,
+               "includeTop": false,
+               "topLevel": 1}
+            ]
+          }
+        }
     },
     {
         "_path": "kontakte",

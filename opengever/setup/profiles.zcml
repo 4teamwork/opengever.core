@@ -29,11 +29,6 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
-  <profilehook:hook
-      profile="opengever.setup:default_content"
-      handler=".hooks.default_content_installed"
-      />
-
   <genericsetup:registerProfile
       name="casauth"
       title="opengever.setup: casauth"
