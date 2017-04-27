@@ -1,13 +1,14 @@
-from zope.interface import Interface, alsoProvides, noLongerProvides
-from zope.component.interfaces import IObjectEvent, ObjectEvent
-from zope.event import notify
-from plone.indexer import indexer
-from five import grok
-from Acquisition import aq_inner, aq_parent
 from AccessControl import Unauthorized
+from Acquisition import aq_inner, aq_parent
+from five import grok
+from opengever.trash import _
+from plone import api
+from plone.indexer import indexer
 from Products.CMFCore.utils import _checkPermission, getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
-from opengever.trash import _
+from zope.component.interfaces import IObjectEvent, ObjectEvent
+from zope.event import notify
+from zope.interface import Interface, alsoProvides, noLongerProvides
 
 
 class ITrashable(Interface):
@@ -112,6 +113,15 @@ class TrashView(grok.View):
                         msg, type='error')
                     continue
 
+                if not api.user.has_permission(
+                        'opengever.trash: Trash content',
+                        obj=obj):
+                    msg = _(u'Trashing ${title} is forbidden',
+                            mapping={'title': obj.Title().decode('utf-8')})
+                    IStatusMessage(self.request).addStatusMessage(
+                        msg, type='error')
+                    continue
+
                 trasher = ITrashable(obj)
                 trasher.trash()
                 trashed = True
@@ -142,6 +152,16 @@ class UntrashView(grok.View):
         if paths:
             for item in paths:
                 obj = self.context.restrictedTraverse(item)
+                if not api.user.has_permission(
+                        'opengever.trash: Untrash content',
+                        obj=obj):
+                    msg = _(u'Untrashing ${title} is forbidden',
+                            mapping={'title': obj.Title().decode('utf-8')})
+                    IStatusMessage(self.request).addStatusMessage(
+                        msg, type='error')
+                    continue
+
+
                 trasher = ITrashable(obj)
                 trasher.untrash()
 

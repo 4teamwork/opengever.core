@@ -14,6 +14,7 @@ from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.command import CopyProposalDocumentCommand
 from opengever.meeting.command import CreateSubmittedProposalCommand
 from opengever.meeting.command import NullUpdateSubmittedDocumentCommand
+from opengever.meeting.command import RejectProposalCommand
 from opengever.meeting.command import UpdateSubmittedDocumentCommand
 from opengever.meeting.container import ModelContainer
 from opengever.meeting.exceptions import WordMeetingImplementationDisabledError
@@ -443,6 +444,7 @@ class SubmittedProposal(ProposalBase):
         return False
 
     def reject(self, text):
+        RejectProposalCommand(self).execute()
         proposal = self.load_model()
         proposal.reject(text)
 

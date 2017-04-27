@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-04-27 11:21+0000\n"
+"POT-Creation-Date: 2017-05-03 07:37+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,15 +14,23 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ./opengever/trash/trash.py:124
-msgid "You have not selected any items."
-msgstr "Vous n'avez sélectionné aucun objet."
+#: ./opengever/trash/trash.py:119
+msgid "Trashing ${title} is forbidden"
+msgstr ""
 
-#: ./opengever/trash/trash.py:99
+#: ./opengever/trash/trash.py:158
+msgid "Untrashing ${title} is forbidden"
+msgstr ""
+
+#: ./opengever/trash/trash.py:134
+msgid "You have not selected any items."
+msgstr ""
+
+#: ./opengever/trash/trash.py:100
 msgid "could not trash the object ${obj}, it is already trashed"
 msgstr "L'objet a été déplacé vers la corbeille"
 
-#: ./opengever/trash/trash.py:108
+#: ./opengever/trash/trash.py:109
 msgid "could not trash the object ${obj}, it is checked out."
 msgstr "L'objet ${obj} a un checkout. Vous ne pouvez pas le supprimer."
 
@@ -91,7 +99,7 @@ msgstr "Le documents n'est pas encore dans la corbeille."
 msgid "remove"
 msgstr "Effacer"
 
-#: ./opengever/trash/trash.py:118
+#: ./opengever/trash/trash.py:128
 msgid "the object ${obj} trashed"
 msgstr "L'objet ${obj} a été déplacé dans la corbeille."
 

@@ -41,6 +41,7 @@ class Submit(Transition):
             return getRequest().RESPONSE.redirect(obj.absolute_url())
 
         super(Submit, self).execute(obj, model)
+        api.content.transition(obj=obj, transition='proposal-transition-submit')
         obj.submit()
 
         msg = _(u'msg_proposal_submitted',

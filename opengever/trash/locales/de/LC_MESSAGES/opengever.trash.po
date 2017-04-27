@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: opengever.trash 1.0\n"
-"POT-Creation-Date: 2017-04-27 11:21+0000\n"
-"PO-Revision-Date: 2014-11-18 17:19+0100\n"
+"POT-Creation-Date: 2017-05-03 07:37+0000\n"
+"PO-Revision-Date: 2017-05-03 09:38+0200\n"
 "Last-Translator: Julian Infanger <julian.infangner.@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
@@ -15,15 +15,23 @@ msgstr ""
 "Domain: DOMAIN\n"
 "X-Is-Fallback-For: de-at de-li de-lu de-ch de-de\n"
 
-#: ./opengever/trash/trash.py:124
-msgid "You have not selected any items."
-msgstr "Sie haben keine Objekte ausgewählt."
+#: ./opengever/trash/trash.py:119
+msgid "Trashing ${title} is forbidden"
+msgstr "Das Objekt ${title} darf nicht in den Papierkorb verschoben werden."
 
-#: ./opengever/trash/trash.py:99
+#: ./opengever/trash/trash.py:158
+msgid "Untrashing ${title} is forbidden"
+msgstr "Das Objekt ${title} darf nicht aus dem Papierkorb reaktiviert werden."
+
+#: ./opengever/trash/trash.py:134
+msgid "You have not selected any items."
+msgstr "Sie haben keine Objekte ausgewählt"
+
+#: ./opengever/trash/trash.py:100
 msgid "could not trash the object ${obj}, it is already trashed"
 msgstr "Das Objekt ${obj} wurde bereits in den Papierkorb verschoben"
 
-#: ./opengever/trash/trash.py:108
+#: ./opengever/trash/trash.py:109
 msgid "could not trash the object ${obj}, it is checked out."
 msgstr "Das Objekt ${obj} konnte nicht in den Papierkorb verschoben werden, es ist ausgecheckt."
 
@@ -92,7 +100,7 @@ msgstr "Das Dokument ist noch nicht im Papierkorb."
 msgid "remove"
 msgstr "Löschen"
 
-#: ./opengever/trash/trash.py:118
+#: ./opengever/trash/trash.py:128
 msgid "the object ${obj} trashed"
 msgstr "Das Objekt ${obj} wurde in den Papierkorb verschoben."
 
@@ -103,4 +111,3 @@ msgstr "In den Papierkorb verschieben"
 #: ./opengever/trash/profiles/default/actions.xml
 msgid "untrashed"
 msgstr "Reaktivieren"
-

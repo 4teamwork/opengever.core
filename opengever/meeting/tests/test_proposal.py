@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
+from ftw.testbrowser.pages import plone
 from ftw.testbrowser.pages import statusmessages
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
@@ -447,10 +448,16 @@ class TestProposal(FunctionalTestCase):
                           .having(title='Mach doch',
                                   committee=committee.load_model()))
 
+        self.assertEqual(Proposal.STATE_PENDING, proposal.get_state())
+        self.assertEqual('proposal-state-active',
+                         api.content.get_state(proposal))
+
         browser.login().open(proposal, view='tabbedview_view-overview')
         browser.css('#pending-submitted').first.click()
 
         self.assertEqual(Proposal.STATE_SUBMITTED, proposal.get_state())
+        self.assertEqual('proposal-state-submitted',
+                         api.content.get_state(proposal))
 
     @browsing
     def test_proposal_can_be_cancelled(self, browser):
@@ -537,10 +544,12 @@ class TestProposal(FunctionalTestCase):
         submitted_path = proposal.load_model().submitted_physical_path.encode('utf-8')
         self.assertIsNotNone(self.portal.unrestrictedTraverse(submitted_path))
 
+        self.assertEqual('proposal-state-submitted', api.content.get_state(proposal))
         submitted_proposal = proposal.load_model().resolve_sumitted_proposal()
         browser.open(submitted_proposal, view='tabbedview_view-overview')
         browser.find('Reject').click()
         browser.fill({'Comment': u'Bitte \xfcberarbeiten'}).submit()
+        self.assertEqual('proposal-state-active', api.content.get_state(proposal))
 
         with self.assertRaises(KeyError):
             self.portal.unrestrictedTraverse(submitted_path)
@@ -950,11 +959,63 @@ class TestProposalWithWord(FunctionalTestCase):
                           .having(title='Mach doch',
                                   committee=committee.load_model()))
 
+        self.assertEqual(Proposal.STATE_PENDING, proposal.get_state())
+        self.assertEqual('proposal-state-active',
+                         api.content.get_state(proposal))
+
         browser.login().open(proposal, view='tabbedview_view-overview')
         browser.css('#pending-submitted').first.click()
         self.assertEqual(['Proposal successfully submitted.'], info_messages())
+        self.assertEqual(Proposal.STATE_SUBMITTED, proposal.get_state())
+        self.assertEqual('proposal-state-submitted',
+                         api.content.get_state(proposal))
 
         submitted_proposal = proposal.load_model().resolve_sumitted_proposal()
         self.assertEquals(
             'Fake proposal file body',
             submitted_proposal.get_proposal_document().file.open().read())
+
+    @browsing
+    def test_document_of_submitted_proposal_cannot_be_edited(self, browser):
+        repo, repo_folder = create(Builder('repository_tree'))
+        dossier = create(Builder('dossier').within(repo_folder))
+        committee = create(Builder('committee'))
+        proposal = create(Builder('proposal')
+                          .within(dossier)
+                          .with_proposal_file('Fake proposal file body')
+                          .having(title='Mach doch',
+                                  committee=committee.load_model()))
+
+        browser.login().open(proposal.get_proposal_document(), view='edit')
+        self.assertEquals('Edit Document', plone.first_heading(),
+                          'Document should be editable.')
+
+        browser.login().open(proposal, view='tabbedview_view-overview')
+        browser.css('#pending-submitted').first.click()
+        self.assertEqual(['Proposal successfully submitted.'], info_messages())
+
+        with self.assertRaises(Unauthorized):
+            browser.open(proposal.get_proposal_document(), view='edit')
+
+        submitted_proposal = proposal.load_model().resolve_sumitted_proposal()
+        browser.open(submitted_proposal, view='tabbedview_view-overview')
+        browser.find('Reject').click()
+        browser.fill({'Comment': u'Bitte \xfcberarbeiten'}).submit()
+
+        browser.login().open(proposal.get_proposal_document(), view='edit')
+        self.assertEquals('Edit Document', plone.first_heading(),
+                          'Document should be editable again.')
+
+    @browsing
+    def test_prevent_trashing_proposal_document(self, browser):
+        repo, repo_folder = create(Builder('repository_tree'))
+        dossier = create(Builder('dossier').within(repo_folder))
+        committee = create(Builder('committee'))
+        proposal = create(Builder('proposal')
+                          .within(dossier)
+                          .having(title='Mach doch',
+                                  committee=committee.load_model()))
+        self.assertFalse(
+            api.user.has_permission('opengever.trash: Trash content',
+                                    obj=proposal.get_proposal_document()),
+            'The proposal document should not be trashable.')

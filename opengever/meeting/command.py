@@ -2,6 +2,7 @@ from opengever.base.command import CreateDocumentCommand
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.base.request import dispatch_json_request
+from opengever.base.request import dispatch_request
 from opengever.base.transport import REQUEST_KEY
 from opengever.base.transport import Transporter
 from opengever.locking.lock import SYS_LOCK
@@ -321,6 +322,23 @@ class CreateSubmittedProposalCommand(object):
 
         self.submitted_proposal_path = response['path']
         create_session().add(Submitted(proposal=model))
+
+
+class RejectProposalCommand(object):
+
+    def __init__(self, submitted_proposal):
+        self.submitted_proposal = submitted_proposal
+
+    def execute(self):
+        model = self.submitted_proposal.load_model()
+        response = dispatch_request(
+            model.admin_unit_id,
+            '@@reject-proposal',
+            path=model.physical_path)
+        if response.read() != 'OK':
+            raise ValueError(
+                'Unexpected response {!r} when rejecting proposal.'.format(
+                    response))
 
 
 class NullUpdateSubmittedDocumentCommand(object):
