@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Meeting: add proposal template tab to templates folder. [jone]
+- Support simple css colornames in the colorization viewlet. [phgross]
 - Dossierdetails PDF: Fix indentation of dossier metadata table. [lgraf]
 - Move the attach to email action to second position, after the copy action. [elioschmutz]
 - OGGBundle import: Make sure persistent changes that re-enable LDAP are
