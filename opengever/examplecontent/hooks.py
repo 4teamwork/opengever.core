@@ -8,7 +8,6 @@ from ftw.builder import session
 from opengever.base.model import create_session
 from opengever.examplecontent.contacts import ExampleContactCreator
 from opengever.private import enable_opengever_private
-from opengever.setup.hooks import block_context_portlets
 from opengever.testing import builders  # keep!
 from plone import api
 from plone.portlets.constants import CONTEXT_CATEGORY
@@ -206,10 +205,6 @@ class MeetingExampleContentCreator(object):
         self.meeting.schedule_proposal(proposal4.load_model())
 
 
-def block_portlets_for_meetings(site):
-    block_context_portlets(site, 'sitzungen')
-
-
 def municipality_content_profile_installed(site):
     creator = MeetingExampleContentCreator(site)
     creator.create_content()
@@ -217,5 +212,4 @@ def municipality_content_profile_installed(site):
     creator = ExampleContactCreator()
     creator.create()
 
-    block_portlets_for_meetings(site)
     enable_opengever_private()

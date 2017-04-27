@@ -8,7 +8,13 @@
         "excerpt_template": "resolvePath::/vorlagen/sablon-template-2",
         "agendaitem_list_template": "resolvePath::/vorlagen/sablon-template-3",
         "toc_template": "resolvePath::/vorlagen/sablon-template-4",
-
+        "_portlets": {
+          "plone.leftcolumn": {
+            "blacklist_status": {
+              "context": "block"
+            }
+          }
+        },
         "_children": [
             {
                 "_id": "committee-1",
