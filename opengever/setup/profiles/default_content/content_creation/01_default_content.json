@@ -31,6 +31,21 @@
         "_type": "opengever.contact.contactfolder",
         "title_de": "Kontakte",
         "title_fr": "Contacts",
-        "_transitions": "publish"
+      "_transitions": "publish",
+      "_portlets": {
+        "plone.leftcolumn": {
+          "blacklist_status": {
+            "context": "block"
+          },
+          "assignments": [
+            {"id": "navigation",
+             "portlet_type": "portlets.Navigation",
+             "bottomLevel": 0,
+             "currentFolderOnly": false,
+             "includeTop": false,
+             "topLevel": 1}
+          ]
+        }
+      }
     }
 ]
