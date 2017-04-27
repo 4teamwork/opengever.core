@@ -18,7 +18,6 @@ from opengever.private import enable_opengever_private
 from plone import api
 from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
-from plone.app.testing import IntegrationTesting
 from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
@@ -194,12 +193,6 @@ class OpengeverFixture(PloneSandboxLayer):
         portal.portal_types['Plone Site'].filter_content_types = False
 
 
-def integration_session_factory():
-    sess = session.BuilderSession()
-    sess.session = create_session()
-    return sess
-
-
 def functional_session_factory():
     sess = session.BuilderSession()
     sess.auto_commit = True
@@ -226,11 +219,6 @@ OPENGEVER_FIXTURE_SQLITE = OpengeverFixture(
 
 # OPENGEVER_FIXTURE is the default fixture used in policy tests.
 OPENGEVER_FIXTURE = OPENGEVER_FIXTURE_SQLITE
-
-OPENGEVER_INTEGRATION_TESTING = IntegrationTesting(
-    bases=(OPENGEVER_FIXTURE_SQLITE,
-           set_builder_session_factory(integration_session_factory)),
-    name="opengever.core:integration")
 
 OPENGEVER_FUNCTIONAL_TESTING = FunctionalTesting(
     bases=(OPENGEVER_FIXTURE_SQLITE,
