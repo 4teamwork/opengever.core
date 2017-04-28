@@ -157,7 +157,7 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
         self.api.headers.update({'Accept': 'text/html'})
         data = {
             'form.widgets.file.action': 'replace',
-            'form.buttons.save': 'Save',
+            'form.buttons.upload': 'oc-file-upload',
             '_authenticator': payload['csrf-token'],
             }
 

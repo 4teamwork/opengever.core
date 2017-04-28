@@ -140,7 +140,7 @@ class TestDocumentFileUploadForm(FunctionalTestCase):
             'File': ('New file data', 'file.txt', 'text/plain'),
             'form.widgets.file.action': 'replace',
             })
-        browser.find('Save').click()
+        browser.find('oc-file-upload').click()
         self.assertEqual('New file data', self.document.file.data)
 
     @browsing
@@ -151,5 +151,5 @@ class TestDocumentFileUploadForm(FunctionalTestCase):
             'form.widgets.file.action': 'replace',
             })
         with self.assertRaises(HTTPError) as cm:
-            browser.find('Save').click()
+            browser.find('oc-file-upload').click()
         self.assertEqual(412, cm.exception.getcode())
