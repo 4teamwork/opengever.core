@@ -104,6 +104,10 @@ class IParticipationRemoved(IObjectEvent):
     """
 
 
+class IDossierAttachedToEmailEvent(IObjectEvent):
+    """A file from this dossier was attached to an email."""
+
+
 class IDisplayedInOverviewMarker(IDossierMarker):
     """Marker Interface for additional dossier behaviors."""
 

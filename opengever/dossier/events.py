@@ -24,3 +24,13 @@ class ParticipationRemoved(ObjectEvent):
     def __init__(self, obj, participant):
         self.object = obj
         self.participant = participant
+
+
+class DossierAttachedToEmailEvent(ObjectEvent):
+    """The file was attached to an email by OfficeConnector."""
+
+    implements(interfaces.IDossierAttachedToEmailEvent)
+
+    def __init__(self, obj, documents=None):
+        self.object = obj
+        self.documents = documents
