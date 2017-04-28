@@ -1,8 +1,12 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.ogds.base.sources import AllUsersAndInboxesSource
+from opengever.ogds.base.sources import AllUsersSource
+from opengever.ogds.base.sources import AssignedUsersSource
 from opengever.ogds.base.sources import ForwardingResponsibleSource
+from opengever.ogds.base.sources import UsersContactsInboxesSource
 from opengever.testing import FunctionalTestCase
+from plone.app.testing import TEST_USER_ID
 from zope.schema.vocabulary import SimpleTerm
 
 
@@ -226,3 +230,240 @@ class TestForwardingResponsibleSource(FunctionalTestCase):
         source = ForwardingResponsibleSource(self.portal)
         self.assertTermKeys(['inbox:unit1', 'inbox:unit2'],
                             source.search('Inb'))
+
+
+class TestUsersContactsInboxesSource(FunctionalTestCase):
+
+    use_default_fixture = False
+
+    def setUp(self):
+        super(TestUsersContactsInboxesSource, self).setUp()
+
+        self.org_unit, self.admin_unit = create(
+            Builder('fixture').with_admin_unit().with_org_unit())
+
+        org_unit_2 = create(Builder('org_unit')
+                            .id('client2')
+                            .with_default_groups()
+                            .having(title='Client2',
+                                    admin_unit=self.admin_unit))
+
+        create(Builder('ogds_user')
+               .having(firstname=u'Test', lastname=u'User')
+               .assign_to_org_units([self.org_unit]))
+        create(Builder('ogds_user')
+               .id('hugo.boss')
+               .having(firstname=u'Hugo', lastname=u'Boss')
+               .assign_to_org_units([self.org_unit]))
+        create(Builder('ogds_user').id('robin.hood')
+               .having(firstname=u'Robin', lastname=u'Hood')
+               .assign_to_org_units([org_unit_2]))
+
+        create(Builder('contact')
+               .having(firstname=u'Lara', lastname=u'Croft',
+                       email=u'lara.croft@test.ch'))
+        create(Builder('contact')
+               .having(firstname=u'Super', lastname=u'M\xe4n',
+                       email='superman@test.ch'))
+
+        self.source = UsersContactsInboxesSource(self.portal)
+
+    def test_all_ogds_users_are_valid(self):
+        self.assertIn('test_user_1_', self.source)
+        self.assertIn('hugo.boss', self.source)
+        self.assertIn('robin.hood', self.source)
+
+    def test_not_existing_users(self):
+        self.assertNotIn('dummy.user', self.source)
+
+    def test_get_term_by_token(self):
+        term = self.source.getTermByToken('hugo.boss')
+        self.assertEquals('hugo.boss', term.token)
+        self.assertEquals('hugo.boss', term.value)
+        self.assertEquals('Boss Hugo (test@example.org)', term.title)
+
+    def test_inboxes_are_valid(self):
+        self.assertIn('inbox:client1', self.source)
+        self.assertIn('inbox:client2', self.source)
+
+    def test_contacts_are_valid(self):
+        self.assertIn('contact:croft-lara', self.source)
+        self.assertIn('contact:man-super', self.source)
+
+    def test_search_contacts(self):
+        result = self.source.search('Lara')
+
+        self.assertEquals(1, len(result), 'Expect 1 contact in result')
+        self.assertEquals('contact:croft-lara', result[0].token)
+        self.assertEquals('contact:croft-lara', result[0].value)
+        self.assertEquals('Croft Lara (lara.croft@test.ch)', result[0].title)
+
+    def test_search_ogds_users(self):
+        self.assertEquals('hugo.boss', self.source.search('Hugo')[0].token)
+        self.assertEquals('robin.hood', self.source.search('Rob')[0].token)
+
+
+class TestAssignedUsersSource(FunctionalTestCase):
+    use_default_fixture = False
+
+    def setUp(self):
+        super(TestAssignedUsersSource, self).setUp()
+
+        self.admin_unit = create(Builder('admin_unit').as_current_admin_unit())
+
+        user = create(Builder('ogds_user').having(firstname='Test',
+                                                  lastname='User'))
+        additional = create(Builder('admin_unit')
+                            .id('additional')
+                            .having(title='additional'))
+
+        self.org_unit = create(Builder('org_unit').id('client1')
+                               .having(title=u"Client 1",
+                                       admin_unit=self.admin_unit)
+                               .with_default_groups())
+
+        org_unit_2 = create(Builder('org_unit').id('client2')
+                            .having(title=u"Client 2",
+                                    admin_unit=self.admin_unit)
+                            .with_default_groups()
+                            .assign_users([user])
+                            .as_current_org_unit())
+
+        org_unit_3 = create(Builder('org_unit')
+                            .id('client3')
+                            .having(title=u"Client 3", admin_unit=additional)
+                            .with_default_groups())
+
+        create(Builder('ogds_user').id('hugo.boss')
+               .having(firstname='Test', lastname='User')
+               .assign_to_org_units([self.org_unit]))
+
+        create(Builder('ogds_user').id('peter.muster')
+               .having(firstname='Peter', lastname='Muster')
+               .assign_to_org_units([org_unit_2]))
+
+        create(Builder('ogds_user').id('jamie.lannister')
+               .having(firstname='Jamie', lastname='Lannister')
+               .assign_to_org_units([self.org_unit, org_unit_2]))
+
+        create(Builder('ogds_user').id('peter.meier')
+               .having(firstname='Peter', lastname='Meier')
+               .assign_to_org_units([org_unit_3]))
+
+        self.source = AssignedUsersSource(self.portal)
+
+    def test_get_term_by_token(self):
+        term = self.source.getTermByToken(u'hugo.boss')
+        self.assertTrue(isinstance(term, SimpleTerm))
+        self.assertEquals(u'User Test (test@example.org)', term.title)
+
+    def test_get_term_by_token_raises_BadReques_if_no_token(self):
+        with self.assertRaises(LookupError):
+            self.source.getTermByToken(None)
+
+    def test_get_term_by_token_raises_LookupError_if_no_result(self):
+        with self.assertRaises(LookupError):
+            self.source.getTermByToken('dummy:dummy')
+
+    def test_title_token_and_value_of_term(self):
+        result = self.source.search('hugo')
+        self.assertEqual(1, len(result), 'Expect one result. only Hugo')
+        self.assertEquals(u'hugo.boss', result[0].token)
+        self.assertEquals(u'hugo.boss', result[0].value)
+        self.assertEquals(u'User Test (test@example.org)', result[0].title)
+
+    def test_only_users_of_the_current_admin_unit_are_valid(self):
+
+        self.assertIn('hugo.boss', self.source)
+        self.assertIn('peter.muster', self.source)
+        self.assertIn('jamie.lannister', self.source)
+        self.assertIn(TEST_USER_ID, self.source)
+
+    def test_getTerm_handles_inactive_users(self):
+        create(Builder('ogds_user')
+               .id('john.doe')
+               .having(firstname='John', lastname='Doe', active=False)
+               .assign_to_org_units([self.org_unit]))
+
+        self.assertTrue(self.source.getTerm('john.doe'),
+                        'Expect a term from inactive user')
+
+    def test_search_for_inactive_users_is_not_possible(self):
+        create(Builder('ogds_user')
+               .id('john.doe')
+               .having(firstname='John', lastname='Doe', active=False)
+               .assign_to_org_units([self.org_unit]))
+
+        self.assertFalse(self.source.search('Doe'),
+                         'Expect no user, since peter.muster is inactive')
+
+
+class TestAllUsersSource(FunctionalTestCase):
+    use_default_fixture = False
+
+    def setUp(self):
+        super(TestAllUsersSource, self).setUp()
+
+        self.admin_unit = create(Builder('admin_unit').as_current_admin_unit())
+
+        user = create(Builder('ogds_user').having(firstname='Test',
+                                                  lastname='User'))
+        additional = create(Builder('admin_unit')
+                            .id('additional')
+                            .having(title='additional'))
+
+        self.org_unit = create(Builder('org_unit').id('client1')
+                               .having(title=u"Client 1",
+                                       admin_unit=self.admin_unit)
+                               .with_default_groups())
+
+        org_unit_2 = create(Builder('org_unit').id('client2')
+                            .having(title=u"Client 2",
+                                    admin_unit=self.admin_unit)
+                            .with_default_groups()
+                            .assign_users([user])
+                            .as_current_org_unit())
+
+        org_unit_3 = create(Builder('org_unit')
+                            .id('client3')
+                            .having(title=u"Client 3", admin_unit=additional)
+                            .with_default_groups())
+
+        create(Builder('ogds_user').id('hugo.boss')
+               .having(firstname='Test', lastname='User')
+               .assign_to_org_units([self.org_unit]))
+
+        create(Builder('ogds_user').id('peter.muster')
+               .having(firstname='Peter', lastname='Muster')
+               .assign_to_org_units([org_unit_2]))
+
+        create(Builder('ogds_user').id('jamie.lannister')
+               .having(firstname='Jamie', lastname='Lannister')
+               .assign_to_org_units([self.org_unit, org_unit_2]))
+
+        create(Builder('ogds_user').id('peter.meier')
+               .having(firstname='Peter', lastname='Meier')
+               .assign_to_org_units([org_unit_3]))
+
+        create(Builder('ogds_user')
+               .id('john.doe')
+               .having(firstname='John', lastname='Doe', active=False)
+               .assign_to_org_units([self.org_unit]))
+
+        self.source = AllUsersSource(self.portal)
+
+    def test_all_users_are_valid(self):
+
+        self.assertIn('hugo.boss', self.source)
+        self.assertIn('peter.muster', self.source)
+        self.assertIn('jamie.lannister', self.source)
+        self.assertIn(TEST_USER_ID, self.source)
+        self.assertIn('peter.meier', self.source)
+        self.assertIn('john.doe', self.source)
+
+    def test_search_for_inactive_users_is_possible(self):
+        result = self.source.search('Doe')
+        self.assertEquals(1, len(result),
+                          'Expect the inactive user John Doe in result')
+
+        self.assertEquals('john.doe', result[0].token)

@@ -1,10 +1,15 @@
 from opengever.base.model import create_session
+from opengever.contact.service import CONTACT_TYPE
 from opengever.ogds.base import _
+from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.actor import ActorLookup
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.models.group import Group
+from opengever.ogds.models.group import groups_users
 from opengever.ogds.models.org_unit import OrgUnit
 from opengever.ogds.models.query import extend_query_with_textfilter
 from opengever.ogds.models.user import User
+from plone import api
 from sqlalchemy import func
 from sqlalchemy import orm
 from sqlalchemy.sql.expression import asc
@@ -179,3 +184,183 @@ class ForwardingResponsibleSourceBinder(object):
 
     def __call__(self, context):
         return ForwardingResponsibleSource(context)
+
+
+@implementer(IQuerySource)
+class UsersContactsInboxesSource(AllUsersAndInboxesSource):
+
+    @property
+    def base_query(self):
+        return User.query
+
+    def getTerm(self, value, brain=None):
+        # Contacts
+        if ActorLookup(value).is_contact() and brain is None:
+            catalog = api.portal.get_tool('portal_catalog')
+            brain = catalog.unrestrictedSearchResults(
+                portal_type=CONTACT_TYPE,
+                contactid=value)[0]
+
+        if brain and ActorLookup(value).is_contact():
+            actor = Actor.contact(brain.contactid, contact=brain)
+            token = value
+            title = actor.get_label()
+            return SimpleTerm(value, token, title)
+
+        # Inboxes
+        if ActorLookup(value).is_inbox():
+            orgunit_id = value.split(':', 1)[1]
+            orgunit = OrgUnit.query.filter(OrgUnit.unit_id == orgunit_id).one()
+
+            value = token = orgunit.inbox().id()
+            title = translate(_(u'inbox_label',
+                                default=u'Inbox: ${client}',
+                                mapping=dict(client=orgunit.label())),
+                              context=getRequest())
+
+            return SimpleTerm(value, token, title)
+
+        user = self.base_query.filter(User.userid == value).one()
+
+        token = value
+        title = u'{} ({})'.format(user.fullname(),
+                                  user.email)
+        return SimpleTerm(value, token, title)
+
+    def getTermByToken(self, token):
+        """ Should raise LookupError if term could not be found.
+        Check zope.schema.interfaces.IVocabularyTokenized
+        """
+        if not token:
+            raise LookupError('Expect a userid')
+
+        try:
+            value = token
+            return self.getTerm(value)
+        except (IndexError, orm.exc.NoResultFound):
+            raise LookupError
+
+    def search(self, query_string):
+        self.terms = []
+
+        text_filters = query_string.split(' ')
+        query = extend_query_with_textfilter(
+            self.base_query,
+            [User.userid, User.firstname, User.lastname, User.email],
+            text_filters)
+
+        query = query.filter_by(active=True)
+        query = query.order_by(asc(func.lower(User.lastname)),
+                               asc(func.lower(User.firstname)))
+
+        for user in query.all():
+            self.terms.append(
+                self.getTerm(u'{}'.format(user.userid)))
+
+        self._extend_terms_with_persons(query_string)
+        self._extend_terms_with_inboxes(text_filters)
+        return self.terms
+
+    def _extend_terms_with_persons(self, query_string):
+        catalog = api.portal.get_tool('portal_catalog')
+
+        if not query_string.endswith('*'):
+            query_string += '*'
+
+        query = {'portal_type': CONTACT_TYPE,
+                 'SearchableText': query_string}
+
+        for brain in catalog.unrestrictedSearchResults(**query):
+            self.terms.append(self.getTerm(brain.contactid, brain))
+
+
+@implementer(IContextSourceBinder)
+class UsersContactsInboxesSourceBinder(object):
+
+    def __call__(self, context):
+        return UsersContactsInboxesSource(context)
+
+
+@implementer(IQuerySource)
+class AssignedUsersSource(AllUsersAndInboxesSource):
+    """Vocabulary of all users assigned to the current admin unit.
+    """
+
+    @property
+    def search_only_active_users(self):
+        return True
+
+    @property
+    def base_query(self):
+        admin_unit = get_current_admin_unit()
+        return create_session().query(User) \
+            .filter(User.userid == groups_users.columns.userid) \
+            .filter(groups_users.columns.groupid == OrgUnit.users_group_id) \
+            .filter(OrgUnit.admin_unit_id == admin_unit.unit_id)
+
+    def getTermByToken(self, token):
+
+        if not token:
+            raise LookupError('A token "userid" is required.')
+
+        try:
+            value = token
+            return self.getTerm(value)
+        except orm.exc.NoResultFound:
+            raise LookupError
+
+    def getTerm(self, value):
+        user = self.base_query.filter(User.userid == value).one()
+
+        token = value
+        title = u'{} ({})'.format(user.fullname(),
+                                  user.email)
+        return SimpleTerm(value, token, title)
+
+    def search(self, query_string):
+        self.terms = []
+
+        text_filters = query_string.split(' ')
+        query = extend_query_with_textfilter(
+            self.base_query,
+            [User.userid, User.firstname, User.lastname, User.email],
+            text_filters)
+
+        if self.search_only_active_users:
+            query = query.filter_by(active=True)
+
+        query = query.order_by(asc(func.lower(User.lastname)),
+                               asc(func.lower(User.firstname)))
+
+        for user in query.all():
+            self.terms.append(
+                self.getTerm(u'{}'.format(user.userid)))
+        return self.terms
+
+
+@implementer(IContextSourceBinder)
+class AssignedUsersSourceBinder(object):
+
+    def __call__(self, context):
+        return AssignedUsersSource(context)
+
+
+@implementer(IQuerySource)
+class AllUsersSource(AssignedUsersSource):
+    """Vocabulary of all users assigned to the current admin unit.
+    """
+
+    @property
+    def search_only_active_users(self):
+        return False
+
+    @property
+    def base_query(self):
+        return create_session().query(User)
+
+
+@implementer(IContextSourceBinder)
+class AllUsersSourceBinder(object):
+
+    def __call__(self, context):
+        return AllUsersSource(context)
