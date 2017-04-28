@@ -27,7 +27,7 @@ class TestCancelDocuments(FunctionalTestCase):
     @browsing
     def test_shows_message_if_view_is_called_on_a_dossier_without_passing_paths(self, browser):
         browser.login().open(self.dossier, view='cancel_document_checkouts')
-        self.assertEquals(['You have not selected any documents'],
+        self.assertEquals(['You have not selected any documents.'],
                           error_messages())
 
     @browsing
@@ -87,7 +87,7 @@ class TestCancelDocuments(FunctionalTestCase):
                              view='cancel_document_checkouts', )
 
         self.assertEquals(
-            [u'Could not cancel checkout on document Testdokum\xe4nt'],
+            [u'Could not cancel checkout on document Testdokum\xe4nt.'],
             error_messages())
 
     @browsing

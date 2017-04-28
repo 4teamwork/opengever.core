@@ -119,7 +119,7 @@ class TestSubmitAdditionalDocuments(FunctionalTestCase):
 
         self.assertSubmittedDocumentCreated(proposal, self.document)
         self.assertSequenceEqual(
-            ['Additional document A Document has been submitted successfully'],
+            ['Additional document A Document has been submitted successfully.'],
             info_messages())
 
     @browsing
@@ -133,7 +133,7 @@ class TestSubmitAdditionalDocuments(FunctionalTestCase):
 
         self.assertSubmittedDocumentCreated(proposal, self.document)
         self.assertSequenceEqual(
-            ['Additional document A Document has been submitted successfully'],
+            ['Additional document A Document has been submitted successfully.'],
             info_messages())
 
     @browsing
@@ -154,7 +154,7 @@ class TestSubmitAdditionalDocuments(FunctionalTestCase):
         self.assertSubmittedDocumentCreated(
             proposal, self.document, submitted_version=2)
         self.assertSequenceEqual(
-            ['A new submitted version of document A Document has been created'],
+            ['A new submitted version of document A Document has been created.'],
             info_messages())
 
     @browsing
@@ -170,7 +170,7 @@ class TestSubmitAdditionalDocuments(FunctionalTestCase):
 
         self.assertSubmittedDocumentCreated(proposal, self.document)
         self.assertSequenceEqual(
-            ['Additional document A Document has been submitted successfully'],
+            ['Additional document A Document has been submitted successfully.'],
             info_messages(),
             "The document was preselected by the request parameter and should "
             "have been updated without selecting it again.")
@@ -189,7 +189,7 @@ class TestSubmitAdditionalDocuments(FunctionalTestCase):
         browser.find('Submit Attachments').click()
 
         self.assertSequenceEqual(
-            ['A new submitted version of document A Document has been created'],
+            ['A new submitted version of document A Document has been created.'],
             info_messages())
 
     @browsing
@@ -252,7 +252,7 @@ class TestSubmitAdditionalDocuments(FunctionalTestCase):
 
         self.assertSubmittedDocumentCreated(proposal, self.document)
         self.assertSequenceEqual(
-            ['Additional document A Document has been submitted successfully'],
+            ['Additional document A Document has been submitted successfully.'],
             info_messages())
 
     @browsing
@@ -269,5 +269,5 @@ class TestSubmitAdditionalDocuments(FunctionalTestCase):
         browser.find('Submit Attachments').click()
 
         self.assertSequenceEqual(
-            ['A new submitted version of document A Document has been created'],
+            ['A new submitted version of document A Document has been created.'],
             info_messages())

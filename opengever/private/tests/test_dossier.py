@@ -207,7 +207,7 @@ class TestPrivateDossierWorkflow(FunctionalTestCase):
         browser.login().open(self.dossier,
                              {'_authenticator': createToken()},
                              view='transition-resolve')
-        self.assertEquals(['The dossier has been succesfully resolved'],
+        self.assertEquals(['The dossier has been succesfully resolved.'],
                           info_messages())
 
         self.assertEqual('dossier-state-resolved',

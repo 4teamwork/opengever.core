@@ -66,7 +66,7 @@ class TestInboxView(FunctionalTestCase):
         browser.login().open(self.container)
         self.assertEqual(self.container.absolute_url(), browser.url)
         self.assertEquals(
-            ['Your not allowed to access the inbox of Client1'],
+            ['Your not allowed to access the inbox of Client1.'],
             statusmessages.messages().get('warning'))
 
     @browsing

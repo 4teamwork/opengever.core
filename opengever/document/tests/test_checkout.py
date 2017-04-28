@@ -108,7 +108,7 @@ class TestReverting(FunctionalTestCase):
 
         self.assertEquals(4, len(repo_tool.getHistory(self.document)))
         self.assertEqual(self.document.file.data, version2.object.file.data)
-        self.assertEquals(u'Reverted file to version 2',
+        self.assertEquals(u'Reverted file to version 2.',
                           repo_tool.retrieve(self.document, 3).comment)
 
     def test_creates_a_new_blob_instance(self):
@@ -162,7 +162,7 @@ class TestReverting(FunctionalTestCase):
         revert_link = second_row.css('td a')[-1]
         revert_link.click()
 
-        self.assertEquals(['Reverted file to version 1'], info_messages())
+        self.assertEquals(['Reverted file to version 1.'], info_messages())
         self.assertEquals('VERSION 1 DATA', self.document.file.data)
 
     @browsing
@@ -438,7 +438,7 @@ class TestCheckinViews(FunctionalTestCase):
                   'checkin_without_comment:method': 1,
                   '_authenticator': createToken()})
 
-        self.assertEquals(['You have not selected any documents'],
+        self.assertEquals(['You have not selected any documents.'],
                           error_messages())
         self.assertEquals(
             'http://nohost/plone/dossier-1#documents', browser.url)
@@ -450,7 +450,7 @@ class TestCheckinViews(FunctionalTestCase):
                   '_authenticator': createToken()})
         browser.click_on('Checkin')
 
-        self.assertEquals(['You have not selected any documents'],
+        self.assertEquals(['You have not selected any documents.'],
                           error_messages())
         self.assertEquals(
             'http://nohost/plone/dossier-1#documents', browser.url)

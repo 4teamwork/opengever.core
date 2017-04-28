@@ -37,7 +37,7 @@ class TestResolvingDossiers(FunctionalTestCase):
                              view='transition-resolve')
 
         self.assertEquals(dossier.absolute_url(), browser.url)
-        self.assertEquals(['The dossier has been succesfully resolved'],
+        self.assertEquals(['The dossier has been succesfully resolved.'],
                           info_messages())
 
     @browsing
@@ -53,7 +53,7 @@ class TestResolvingDossiers(FunctionalTestCase):
                              view='transition-resolve')
 
         self.assertEquals(subdossier.absolute_url(), browser.url)
-        self.assertEquals(['The subdossier has been succesfully resolved'],
+        self.assertEquals(['The subdossier has been succesfully resolved.'],
                           info_messages())
 
 
@@ -254,7 +254,7 @@ class TestResolveConditions(FunctionalTestCase):
 
         self.assertEquals(dossier.absolute_url(), browser.url)
         self.assertEquals(
-            ['not all documents and tasks are stored in a subdossier',
+            ['not all documents and tasks are stored in a subdossier.',
              'not all documents are checked in'], error_messages())
 
     @browsing
@@ -326,7 +326,7 @@ class TestResolveConditions(FunctionalTestCase):
                              view='transition-resolve')
 
         self.assertEquals(dossier.absolute_url(), browser.url)
-        self.assertEquals(['The dossier has been succesfully resolved'],
+        self.assertEquals(['The dossier has been succesfully resolved.'],
                           info_messages())
 
 

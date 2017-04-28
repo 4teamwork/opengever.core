@@ -94,7 +94,7 @@ class TestDocumentDownloadConfirmation(FunctionalTestCase):
         transaction.commit()
 
         browser.login().open(self.document, view='file_download_confirmation')
-        self.assertEqual(['The Document A letter for you has no File'],
+        self.assertEqual(['The Document A letter for you has no File.'],
                          warning_messages())
 
     @browsing
@@ -128,5 +128,5 @@ class TestDocumentDownloadConfirmation(FunctionalTestCase):
         document = create(Builder('document').titled('No Document'))
 
         browser.login().open(document, view='download')
-        self.assertEqual(['The Document No Document has no File'],
+        self.assertEqual(['The Document No Document has no File.'],
                          error_messages())

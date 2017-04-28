@@ -87,7 +87,7 @@ class TestRemoveConfirmationView(FunctionalTestCase):
 
         self.assertEquals('{}#trash'.format(self.dossier.absolute_url()),
                           browser.url)
-        assert_message('You have not selected any items')
+        assert_message('You have not selected any items.')
 
     @browsing
     def test_submit_button_is_disabled_when_preconditions_are_not_satisfied(self, browser):

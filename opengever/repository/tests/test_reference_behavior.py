@@ -48,7 +48,7 @@ class TestReferenceBehavior(FunctionalTestCase):
         browser.click_on('Save')
 
         self.assertEquals(
-            ['A Sibling with the same reference number is existing'],
+            ['A Sibling with the same reference number is existing.'],
             browser.css('#formfield-form-widgets-IReferenceNumberPrefix'
                         '-reference_number_prefix .error').text)
 

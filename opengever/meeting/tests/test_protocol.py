@@ -368,7 +368,7 @@ class TestProtocol(FunctionalTestCase):
 
         self.assertEquals(
             ['Protocol for meeting My meeting '
-             'has been generated successfully'],
+             'has been generated successfully.'],
             info_messages())
 
         meeting = Meeting.get(self.meeting.meeting_id)  # refresh meeting

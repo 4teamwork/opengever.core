@@ -285,12 +285,12 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         self.check_annotation(
             document,
             action_type='Object restore',
-            action_title='Object restore: %s' % (
+            action_title='Object restored: %s' % (
                 document.title_or_id()), )
         self.check_annotation(
             dossier,
             action_type='Object restore',
-            action_title='Object restore: %s' % (
+            action_title='Object restored: %s' % (
                 document.title_or_id()), )
 
     def test_integration_participation_events(self):
