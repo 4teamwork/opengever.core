@@ -19,7 +19,7 @@ class OfficeConnectorURL(Service):
     """Create oc:<JWT> URLs for javascript to fetch and pass to the OS."""
 
     def create_officeconnector_url_json(self, payload):
-        self.request.response.setHeader('Content-type', 'application/json')
+        self.request.response.setHeader('Content-Type', 'application/json')
 
         url = create_oc_url(self.request, self.context, payload)
 
@@ -113,7 +113,9 @@ class OfficeConnectorAttachPayload(OfficeConnectorPayload):
     """
 
     def render(self):
-        self.request.response.setHeader('Content-type', 'application/json')
+        self.request.response.setHeader('Content-Type', 'application/json')
+
+        payloads = self.get_base_payloads()
 
         payload = self.get_base_payload()
 
