@@ -90,13 +90,8 @@ def create_oc_url(request, context, payload):
     # Create a multi-document payload
     payload['documents'] = []
 
-    # Use plain locators for one document payloads - saves on char count
-    if len(documents) == 1:
-        payload['url'] += '/' + api.content.get_uuid(documents[0])
-        del payload['documents']
-    else:
-        for document in documents:
-            payload['documents'].append(api.content.get_uuid(document))
+    for document in documents:
+        payload['documents'].append(api.content.get_uuid(document))
 
     user_id = api.user.get_current().getId()
 

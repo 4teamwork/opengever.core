@@ -9,8 +9,6 @@ from plone.rest import Service
 from zExceptions import Forbidden
 from zExceptions import NotFound
 from zope.event import notify
-from zope.interface import implements
-from zope.publisher.interfaces import IPublishTraverse
 
 import json
 
@@ -68,37 +66,39 @@ class OfficeConnectorCheckoutURL(OfficeConnectorURL):
 class OfficeConnectorPayload(Service):
     """Issue JSON instruction payloads for OfficeConnector."""
 
-    implements(IPublishTraverse)
 
     def __init__(self, context, request):
         super(OfficeConnectorPayload, self).__init__(context, request)
-        self.uuid = None
-        self.document = None
+        self.uuids = json.loads(request['BODY'])
 
-    def publishTraverse(self, request, name):
-        # This gets called once per path segment
-        if self.uuid is None:
-            self.uuid = name
-        else:
-            # Block traversing further path segments
-            raise NotFound(self, name, request)
-        return self
-
-    def get_base_payload(self):
-        # Do not 404 if we do not have a normal user
+    def get_base_payloads(self):
+        # Require an authenticated user
         if api.user.is_anonymous():
             raise Forbidden
 
-        self.document = api.content.get(UID=self.uuid)
-        if not self.document or not self.document.has_file():
+        documents = []
+        for uuid in self.uuids:
+            document = api.content.get(UID=uuid)
+            if document and document.has_file():
+                documents.append(document)
+
+        if not documents:
             raise NotFound
-        return {
-            'content-type': self.document.get_file().contentType,
-            'csrf-token': createToken(),
-            'document-url': self.document.absolute_url(),
-            'download': 'download',
-            'filename': self.document.get_filename(),
-            }
+
+        payloads = []
+        for document in documents:
+            payloads.append(
+                {
+                    'content-type': document.get_file().contentType,
+                    'csrf-token': createToken(),
+                    'document-url': document.absolute_url(),
+                    'document': document,
+                    'download': 'download',
+                    'filename': document.get_filename(),
+                    }
+                )
+
+        return payloads
 
     def render(self):
         self.request.response.setHeader('Content-type', 'application/json')
@@ -113,21 +113,33 @@ class OfficeConnectorAttachPayload(OfficeConnectorPayload):
     """
 
     def render(self):
-        self.request.response.setHeader('Content-Type', 'application/json')
-
+        self.request.response.setHeader('Content-type', 'application/json')
         payloads = self.get_base_payloads()
 
-        payload = self.get_base_payload()
+        dossier_notifications = {}
 
-        parent_dossier = self.document.get_parent_dossier()
-        if parent_dossier and parent_dossier.is_open():
-            payload['bcc'] = IEmailAddress(
-                self.request).get_email_for_object(parent_dossier)
-        payload['title'] = self.document.title_or_id()
+        for payload in payloads:
+            document = payload['document']
+            parent_dossier = document.get_parent_dossier()
 
-        notify(FileAttachedToEmailEvent(self.document))
+            if parent_dossier:
+                # XXX - this should be unnecessary with dossier journaling
+                if parent_dossier.is_open():
+                    payload['bcc'] = IEmailAddress(
+                        self.request).get_email_for_object(parent_dossier)
 
-        return json.dumps(payload)
+                parent_dossier_uuid = api.content.get_uuid(parent_dossier)
+
+                if parent_dossier_uuid not in dossier_notifications:
+                    dossier_notifications[parent_dossier_uuid] = []
+
+                dossier_notifications[parent_dossier_uuid].append(document)
+
+            payload['title'] = document.title_or_id()
+            del payload['document']
+            notify(FileAttachedToEmailEvent(document))
+
+        return json.dumps(payloads)
 
 
 class OfficeConnectorCheckoutPayload(OfficeConnectorPayload):
@@ -138,21 +150,25 @@ class OfficeConnectorCheckoutPayload(OfficeConnectorPayload):
     """
 
     def render(self):
-        payload = self.get_base_payload()
-
-        # A permission check to verify the user is also able to upload
-        if not api.user.has_permission('Modify portal content',
-                                       obj=self.document):
-            raise Forbidden
+        payloads = self.get_base_payloads()
 
         # Upload API will be included as a registry setting in the future when
         # the plone.api endpoint gets made - for now we've made a custom upload
         # form.
-        payload['checkin-with-comment'] = '@@checkin_document'
-        payload['checkin-without-comment'] = 'checkin_without_comment'
-        payload['checkout'] = '@@checkout_documents'
-        payload['upload-form'] = 'file_upload'
-        payload['upload-api'] = None
+        for payload in payloads:
+            payload['checkin-with-comment'] = '@@checkin_document'
+            payload['checkin-without-comment'] = 'checkin_without_comment'
+            payload['checkout'] = '@@checkout_documents'
+            payload['upload-form'] = 'file_upload'
+            payload['upload-api'] = None
+
+            # A permission check to verify the user is also able to upload
+            if not api.user.has_permission('Modify portal content',
+                                           obj=payload['document']):
+                raise Forbidden
+
+            del payload['document']
 
         self.request.response.setHeader('Content-type', 'application/json')
-        return json.dumps(payload)
+
+        return json.dumps(payloads)
