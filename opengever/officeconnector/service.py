@@ -1,5 +1,6 @@
 from ftw.mail.interfaces import IEmailAddress
 from opengever.document.events import FileAttachedToEmailEvent
+from opengever.dossier.events import DossierAttachedToEmailEvent
 from opengever.officeconnector.helpers import create_oc_url
 from opengever.officeconnector.helpers import is_officeconnector_attach_feature_enabled  # noqa
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
@@ -65,7 +66,6 @@ class OfficeConnectorCheckoutURL(OfficeConnectorURL):
 
 class OfficeConnectorPayload(Service):
     """Issue JSON instruction payloads for OfficeConnector."""
-
 
     def __init__(self, context, request):
         super(OfficeConnectorPayload, self).__init__(context, request)
@@ -138,6 +138,10 @@ class OfficeConnectorAttachPayload(OfficeConnectorPayload):
             payload['title'] = document.title_or_id()
             del payload['document']
             notify(FileAttachedToEmailEvent(document))
+
+        for uuid, documents in dossier_notifications.iteritems():
+            dossier = api.content.get(UID=uuid)
+            notify(DossierAttachedToEmailEvent(dossier, documents))
 
         return json.dumps(payloads)
 
