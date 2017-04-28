@@ -220,11 +220,11 @@ class AddDossierFromTemplateWizardStep(WizzardWrappedAddForm):
                     # possible to manipulate the add_permission directly.
                     # Changing other values like something on a field may
                     # lead to unexpected behavior.
-                    # This is the insecure options - but it feeds for this
+                    # This is the insecure option - but it fits for this
                     # usecase
-                    js_config = json.loads(widget.js_config)
-                    js_config['tags'] = False
-                    widget.js_config = json.dumps(js_config)
+                    select2_config = json.loads(widget.config_json)
+                    select2_config['tags'] = False
+                    widget.config_json = json.dumps(select2_config)
 
                     # The vocabular should only contain the terms from
                     # the template.
