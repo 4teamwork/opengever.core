@@ -156,7 +156,7 @@ msgstr "Vous n'avez pas les droits de modifier le document ${title}."
 #: ./opengever/document/checkout/checkin.py:197
 #: ./opengever/document/checkout/checkout.py:34
 msgid "You have not selected any documents."
-msgstr "Vous n'avez  sélectionné aucun document"
+msgstr "Vous n'avez sélectionné aucun document."
 
 #. Default: "You have not checked in documents. Do you realy want to logout?"
 #: ./opengever/document/browser/templates/logout_overlay.pt:3
