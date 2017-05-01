@@ -14,6 +14,7 @@ Changelog
 
   [lgraf]
 
+- Reworked portlet initialization during setup. [phgross]
 - Meeting: add proposal template tab to templates folder. [jone]
 - Support simple css colornames in the colorization viewlet. [phgross]
 - Dossierdetails PDF: Fix indentation of dossier metadata table. [lgraf]

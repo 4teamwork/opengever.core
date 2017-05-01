@@ -10,6 +10,21 @@
             "Editor",
             "Contributor"
           ]
+        },
+        "_portlets": {
+          "plone.leftcolumn": {
+            "blacklist_status": {
+              "context": "block"
+            },
+            "assignments": [
+              {"id": "navigation",
+               "portlet_type": "portlets.Navigation",
+               "bottomLevel": 0,
+               "currentFolderOnly": false,
+               "includeTop": false,
+               "topLevel": 1}
+            ]
+          }
         }
     },
     {
@@ -25,6 +40,21 @@
                 "Editor",
                 "Reader"
             ]
+        },
+        "_portlets": {
+          "plone.leftcolumn": {
+            "blacklist_status": {
+              "context": "block"
+            },
+            "assignments": [
+              {"id": "navigation",
+               "portlet_type": "portlets.Navigation",
+               "bottomLevel": 0,
+               "currentFolderOnly": false,
+               "includeTop": false,
+               "topLevel": 1}
+            ]
+          }
         }
     },
     {
@@ -41,6 +71,22 @@
                 "Editor",
                 "Reader"
             ]
+        },
+      "_portlets": {
+        "plone.leftcolumn": {
+          "blacklist_status": {
+            "context": "block"
+          },
+          "assignments": [
+            {"id": "navigation",
+             "portlet_type": "portlets.Navigation",
+             "bottomLevel": 0,
+             "currentFolderOnly": false,
+             "includeTop": false,
+             "topLevel": 1}
+          ]
         }
+      }
+        
     }
 ]
