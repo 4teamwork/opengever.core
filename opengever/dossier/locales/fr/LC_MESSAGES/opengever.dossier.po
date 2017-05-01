@@ -841,7 +841,7 @@ msgid "sharing"
 msgstr "Participations enlevées"
 
 msgid "subdossiers"
-msgstr "Sous-dossier"
+msgstr "Sous-dossiers"
 
 msgid "tasks"
 msgstr "Tâches"
