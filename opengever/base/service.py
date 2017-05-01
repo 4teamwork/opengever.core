@@ -1,0 +1,23 @@
+from opengever.document.interfaces import ICheckinCheckoutManager
+from plone.rest import Service
+from zope.app.intid.interfaces import IIntIds
+from zope.component import getUtility
+from zope.component import queryMultiAdapter
+
+import json
+
+
+class DocumentStatus(Service):
+    """Provide information on the current status of a document."""
+
+    def render(self):
+        checkout_manager = queryMultiAdapter(
+            (self.context, self.request), ICheckinCheckoutManager)
+
+        payload = {}
+        payload['int_id'] = getUtility(IIntIds).getId(self.context)
+        payload['title'] = self.context.title_or_id()
+        payload['checked_out'] = self.context.is_checked_out()
+        payload['checked_out_by'] = checkout_manager.get_checked_out_by()
+
+        return json.dumps(payload)

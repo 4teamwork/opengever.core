@@ -97,4 +97,14 @@
       preserveOriginal="True"
       />
 
+  <!-- JSON endpoint for document status -->
+  <plone:service
+      method="GET"
+      for="opengever.document.behaviors.IBaseDocument"
+      accept="application/json"
+      factory=".service.DocumentStatus"
+      name="status"
+      permission="zope2.View"
+      />
+
 </configure>

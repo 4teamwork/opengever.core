@@ -1,0 +1,70 @@
+from ftw.builder import Builder
+from ftw.builder import create
+from opengever.api.testing import RelativeSession
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_ZSERVER_TESTING
+from opengever.testing import FunctionalTestCase
+from plone import api
+from plone.app.testing import TEST_USER_ID
+from plone.app.testing import TEST_USER_NAME
+from plone.app.testing import TEST_USER_PASSWORD
+from plone.protect import createToken
+from zope.app.intid.interfaces import IIntIds
+from zope.component import getUtility
+
+
+class TestBaseDocumentApi(FunctionalTestCase):
+    """Test plone.rest endpoints on base documents."""
+
+    layer = OPENGEVER_FUNCTIONAL_ZSERVER_TESTING
+
+    def setUp(self):
+        super(TestBaseDocumentApi, self).setUp()
+
+        # Set up the requests wrapper
+        self.portal = self.layer['portal']
+        self.api = RelativeSession(self.portal.absolute_url())
+        self.api.headers.update({'Accept': 'application/json'})
+        self.api.auth = (TEST_USER_NAME, TEST_USER_PASSWORD)
+
+        # Set up a minimal GEVER site
+        self.repo = create(Builder('repository_root'))
+        self.repofolder = create(Builder('repository').within(self.repo))
+        self.dossier = create(Builder('dossier').within(self.repofolder))
+        self.document = create(Builder('document').within(self.dossier))
+
+    def test_document_status_json(self):
+        site_id = api.portal.get().id
+        path_segments = [s for s in self.document.getPhysicalPath()
+                         if s != site_id]
+        document_path = '/'.join(path_segments)
+        response = self.api.get(document_path + '/status').json()
+
+        self.assertIn('int_id', response)
+        self.assertEqual(
+            getUtility(IIntIds).getId(self.document), response['int_id'])
+
+        self.assertIn('title', response)
+        self.assertEqual(self.document.title_or_id(), response['title'])
+
+        self.assertIn('checked_out', response)
+        self.assertEqual(False, response['checked_out'])
+
+        self.assertIn('checked_out_by', response)
+        self.assertEqual(None, response['checked_out_by'])
+
+        # Check out the document
+        self.api.headers.update({'Accept': 'text/html'})
+        self.api.get(
+            document_path
+            + '/@@checkout_documents'
+            + '?_authenticator={}'.format(createToken())
+            )
+
+        self.api.headers.update({'Accept': 'application/json'})
+        response = self.api.get(document_path + '/status').json()
+
+        self.assertIn('checked_out', response)
+        self.assertEqual(True, response['checked_out'])
+
+        self.assertIn('checked_out_by', response)
+        self.assertEqual(TEST_USER_ID, response['checked_out_by'])
