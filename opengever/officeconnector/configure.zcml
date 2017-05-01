@@ -48,7 +48,7 @@
       />
 
   <plone:service
-      method="GET"
+      method="POST"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       accept="application/json"
       factory=".service.OfficeConnectorAttachPayload"
@@ -57,7 +57,7 @@
       />
 
   <plone:service
-      method="GET"
+      method="POST"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       accept="application/json"
       factory=".service.OfficeConnectorCheckoutPayload"

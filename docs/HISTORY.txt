@@ -5,6 +5,7 @@ Changelog
 2017.1.2 (unreleased)
 ---------------------
 
+- Add an aggregated per dossier attach to email event on OC attach actions. [Rotonen]
 - Fix some common i18n issues:
 
   - Homogenize full stops at the end of sentences.

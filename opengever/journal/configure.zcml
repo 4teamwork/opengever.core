@@ -74,4 +74,10 @@
       handler=".handlers.document_attached_to_email"
       />
 
+  <subscriber
+      for="opengever.dossier.behaviors.dossier.IDossierMarker
+           opengever.dossier.interfaces.IDossierAttachedToEmailEvent"
+      handler=".handlers.dossier_attached_to_email"
+      />
+
 </configure>

@@ -4,14 +4,16 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.widgets.file import DexterityFileWidget
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import FunctionalTestCase
-from plone.app.testing import TEST_USER_NAME
 from plone.app.testing import login
+from plone.app.testing import TEST_USER_NAME
 from urllib2 import HTTPError
 from zope.component import queryMultiAdapter
+
 import transaction
 
 
 class TestDocumentIntegration(FunctionalTestCase):
+    """Test document forms."""
 
     def setUp(self):
         super(TestDocumentIntegration, self).setUp()
@@ -54,12 +56,15 @@ class TestDocumentIntegration(FunctionalTestCase):
         browser.login().open(self.document, view='edit')
 
         self.assertEqual(
-            '{}/file_download_confirmation'.format(self.document.absolute_url()),
+            '{}/file_download_confirmation'
+            .format(self.document.absolute_url()),
             browser.css('#form-widgets-file a.link-overlay').first.get('href'))
 
         # edit should be posssible
         self.assertEqual(
-            ['Keep existing file', 'Remove existing file', 'Replace with new file'],
+            ['Keep existing file',
+             'Remove existing file',
+             'Replace with new file'],
             browser.css('#form-widgets-file label').text)
 
         manager.cancel()
@@ -93,6 +98,7 @@ class TestDocumentIntegration(FunctionalTestCase):
 
 
 class TestDocumentFileUploadForm(FunctionalTestCase):
+    """Test document file upload forms."""
 
     def setUp(self):
         super(TestDocumentFileUploadForm, self).setUp()
@@ -134,7 +140,7 @@ class TestDocumentFileUploadForm(FunctionalTestCase):
             'File': ('New file data', 'file.txt', 'text/plain'),
             'form.widgets.file.action': 'replace',
             })
-        browser.find('Save').click()
+        browser.find('oc-file-upload').click()
         self.assertEqual('New file data', self.document.file.data)
 
     @browsing
@@ -145,5 +151,5 @@ class TestDocumentFileUploadForm(FunctionalTestCase):
             'form.widgets.file.action': 'replace',
             })
         with self.assertRaises(HTTPError) as cm:
-            browser.find('Save').click()
+            browser.find('oc-file-upload').click()
         self.assertEqual(412, cm.exception.getcode())

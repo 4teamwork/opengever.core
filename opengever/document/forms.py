@@ -5,7 +5,6 @@ from opengever.document.interfaces import NO_DOWNLOAD_DISPLAY_MODE
 from opengever.document.interfaces import NO_DOWNLOAD_INPUT_MODE
 from plone.dexterity.browser.edit import DefaultEditForm
 from plone.dexterity.events import EditFinishedEvent
-from plone.dexterity.i18n import MessageFactory as _
 from plone.directives import form
 from plone.z3cform import layout
 from z3c.form import button
@@ -62,7 +61,7 @@ class DocumentFileUploadForm(DefaultEditForm):
     additionalSchemata = ()
     render_form = True
 
-    @button.buttonAndHandler(_(u'Save'), name='save')
+    @button.buttonAndHandler(u'oc-file-upload', name='upload')
     def handleApply(self, action):
         data, errors = self.extractData()
         if errors:

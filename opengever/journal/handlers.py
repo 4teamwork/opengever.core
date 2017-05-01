@@ -36,7 +36,6 @@ from opengever.task.task import ITask
 from opengever.trash.trash import ITrashedEvent
 from opengever.trash.trash import IUntrashedEvent
 from persistent.dict import PersistentDict
-from persistent.dict import PersistentDict
 from persistent.list import PersistentList
 from plone.app.versioningbehavior.utils import get_change_note
 from plone.dexterity.interfaces import IDexterityContent
@@ -808,14 +807,16 @@ def document_attached_to_email(context, event):
                     default=u'Document attached to email via OfficeConnector')
     journal_entry_factory(document, DOCUMENT_ATTACHED, doc_journal)
 
-    parent_dossier = document.get_parent_dossier()
-    if parent_dossier:
-        dossier_journal = _(u'label_document_in_dossier_attached',
-                            default=u'Document in dossier attached to email '
-                                    u'via OfficeConnector')
+    return
 
-        journal_entry_factory(
-            parent_dossier, DOCUMENT_IN_DOSSIER_ATTACHED, dossier_journal,
-            visible=True, documents=[document])
+
+def dossier_attached_to_email(context, event):
+    dossier_journal = _(u'label_document_in_dossier_attached',
+                        default=u'Document in dossier attached to email '
+                                u'via OfficeConnector')
+
+    journal_entry_factory(
+        event.object, DOCUMENT_IN_DOSSIER_ATTACHED, dossier_journal,
+        visible=True, documents=event.documents)
 
     return
