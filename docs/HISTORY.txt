@@ -5,6 +5,13 @@ Changelog
 2017.1.2 (unreleased)
 ---------------------
 
+- Make OC multiattach behave more gracefully for long URLs:
+
+  - Relax length limit from 500 to 2000 bytes for browsers other than IE11
+  - Inform user via JS alert when they exceed the length limit
+
+  [Rotonen]
+
 - Add an aggregated per dossier attach to email event on OC attach actions. [Rotonen]
 - Fix some common i18n issues:
 
