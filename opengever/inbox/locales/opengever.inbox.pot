@@ -48,12 +48,12 @@ msgstr ""
 msgid "close"
 msgstr ""
 
-#. Default: "Your not allowed to access the inbox of ${current_org_unit}"
+#. Default: "Your not allowed to access the inbox of ${current_org_unit}."
 #: ./opengever/inbox/browser/view.py:15
 msgid "current_inbox_not_available"
 msgstr ""
 
-#. Default: "Error: Please select at least one document to forward"
+#. Default: "Error: Please select at least one document to forward."
 #: ./opengever/inbox/forwarding.py:116
 msgid "error_no_document_selected"
 msgstr ""

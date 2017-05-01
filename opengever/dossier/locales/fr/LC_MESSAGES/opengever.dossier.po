@@ -45,8 +45,8 @@ msgid "Can only move objects from open dossiers!"
 msgstr "Seuls les objets de dossiers actifs peuvent être déplacés!"
 
 #: ./opengever/dossier/browser/report.py:75
-msgid "Could not generate the report"
-msgstr "Impossible de générer l'affichage"
+msgid "Could not generate the report."
+msgstr "Impossible de générer l'affichage."
 
 #: ./opengever/dossier/profiles/default/actions.xml
 msgid "Delete"
@@ -71,7 +71,7 @@ msgstr ""
 
 #: ./opengever/dossier/resolve.py:89
 msgid "Dossiers successfully reactivated."
-msgstr "Le dossier a été à nouveau ouvert avec succès"
+msgstr "Le dossier a été à nouveau ouvert avec succès."
 
 #: ./opengever/dossier/behaviors/dossier.py:257
 #: ./opengever/dossier/dossiertemplate/dossiertemplate.py:66
@@ -92,7 +92,7 @@ msgid "Failed to copy following objects: ${failed_objects}. Locked via WebDAV"
 msgstr "Les objets suivants ne peuvent pas être copiés: ${failed_objects}. Ils sont verrouillés par WebDAV."
 
 #: ./opengever/dossier/move_items.py:212
-msgid "It isn't allowed to add such items there"
+msgid "It isn't allowed to add such items there."
 msgstr "Cet élément ne peut être déplacé ici."
 
 #: ./opengever/dossier/resolve.py:94
@@ -116,8 +116,8 @@ msgid "No Subdossiers"
 msgstr "Aucun sous-dossier"
 
 #: ./opengever/dossier/archive.py:56
-msgid "Not all required fields are filled"
-msgstr "Manque des champs obligatoires"
+msgid "Not all required fields are filled."
+msgstr "Manque des champs obligatoires."
 
 #: ./opengever/dossier/profiles/default/types/opengever.dossier.businesscasedossier.xml
 msgid "Participant"
@@ -170,7 +170,7 @@ msgstr "Ce dossier ne peut pas être annulé, il contient encore des tâches qui
 
 #: ./opengever/dossier/deactivate.py:52
 msgid "The Dossier can't be deactivated, not all containeddocuments are checked in."
-msgstr "Ce dossier ne peut pas être annulé, il contient encore des documents avec le statut checkout"
+msgstr "Ce dossier ne peut pas être annulé, il contient encore des documents avec le statut checkout."
 
 #: ./opengever/dossier/deactivate.py:66
 msgid "The Dossier can't be deactivated, the subdossier ${dossier} is already resolved"
@@ -197,20 +197,20 @@ msgid "The dossier contains active proposals."
 msgstr ""
 
 #: ./opengever/dossier/resolve.py:70
-msgid "The dossier has been succesfully resolved"
-msgstr "Le dossier a été fermé avec succès"
+msgid "The dossier has been succesfully resolved."
+msgstr "Le dossier a été fermé avec succès."
 
 #: ./opengever/dossier/archive.py:259
-msgid "The filing number has been given"
-msgstr "Le numéro d'inventaire va être attribué"
+msgid "The filing number has been given."
+msgstr "Le numéro d'inventaire va être attribué."
 
 #: ./opengever/dossier/archive.py:71
 msgid "The given end date is not valid, it needs to be younger or                  equal than ${date} (the youngest contained object)."
 msgstr "La date de clôture n'est pas valable. Elle doit être plus récente ou égale à la date la plus récente de l'objet contenu."
 
 #: ./opengever/dossier/archive.py:91
-msgid "The given value is not a valid Year"
-msgstr "L'année de dépôt attribuée n'est pas valable"
+msgid "The given value is not a valid Year."
+msgstr "L'année de dépôt attribuée n'est pas valable."
 
 #: ./opengever/dossier/move_items.py:89
 msgid "The selected objects can't be found, please try it again."
@@ -225,8 +225,8 @@ msgid "The start or end date is invalid"
 msgstr "La date de début ou la date de clôture n'est pas valable."
 
 #: ./opengever/dossier/resolve.py:66
-msgid "The subdossier has been succesfully resolved"
-msgstr "Le sous-dossier a été fermé avec succès"
+msgid "The subdossier has been succesfully resolved."
+msgstr "Le sous-dossier a été fermé avec succès."
 
 #: ./opengever/dossier/activate.py:28
 msgid "This subdossier can't be activated,because the main dossiers is inactive"
@@ -234,7 +234,7 @@ msgstr "Ce sous-dossier ne peut pas être réactivé parce que le dossier prinic
 
 #: ./opengever/dossier/archive.py:215
 msgid "When the Action give filing number is selected,                         all fields are required."
-msgstr "Pour l'attribution de numéro d'inventaire, tous les champs sont obligatoires"
+msgstr "Pour l'attribution de numéro d'inventaire, tous les champs sont obligatoires."
 
 #: ./opengever/dossier/move_items.py:195
 msgid "You have not selected any items"
@@ -311,14 +311,14 @@ msgstr "Documents"
 #. Default: "It isn't allowed to add such items there: ${failed_objects}"
 #: ./opengever/dossier/move_items.py:243
 msgid "error_NotInContentTypes ${failed_objects}"
-msgstr "Pas d'objet déplacé. Les objets suivants ne peuvent être insérés dans le classeur choisi : ${failed_objects}"
+msgstr "Pas d'objet déplacé. Les objets suivants ne peuvent être insérés dans le classeur choisi: ${failed_objects}"
 
 #. Default: "The enddate is required."
 #: ./opengever/dossier/archive.py:66
 msgid "error_enddate"
 msgstr "Date de clôture obligatoire"
 
-#. Default: "You have not selected any Items"
+#. Default: "You have not selected any items."
 #: ./opengever/dossier/browser/report.py:59
 msgid "error_no_items"
 msgstr "Vous n'avez sélectionné aucun objet."
@@ -411,7 +411,7 @@ msgstr "Recherche en direct: Recherche de ce client"
 
 #: ./opengever/dossier/filing/advanced_search.py:16
 msgid "help_filing_number"
-msgstr "Saisir le numéro d'inventaire complet"
+msgstr "Saisir le numéro d'inventaire complet."
 
 #: ./opengever/dossier/behaviors/dossier.py:62
 msgid "help_keywords"
@@ -441,15 +441,15 @@ msgstr ""
 msgid "help_title_help"
 msgstr ""
 
-#. Default: "Participation created"
+#. Default: "Participation created."
 #: ./opengever/dossier/behaviors/participation.py:161
 msgid "info_participation_create"
-msgstr "Participation enregistrée"
+msgstr "Participation enregistrée."
 
-#. Default: "Removed participations"
+#. Default: "Removed participations."
 #: ./opengever/dossier/behaviors/participation.py:206
 msgid "info_removed_participations"
-msgstr "Participations enlevées"
+msgstr "Participations enlevées."
 
 #. Default: "Add Note"
 #: ./opengever/dossier/viewlets/templates/note.pt:22
@@ -555,7 +555,7 @@ msgstr "Email"
 #: ./opengever/dossier/behaviors/dossier.py:82
 #: ./opengever/dossier/browser/report.py:32
 msgid "label_end"
-msgstr "Date de fin :"
+msgstr "Date de fin"
 
 #. Default: "to"
 #: ./opengever/dossier/project_templates/byline.pt:38
@@ -801,8 +801,8 @@ msgid "msg_main_dossier_not_found"
 msgstr "L'objet `${title}`n'est déposé dans aucun dossier."
 
 #: ./opengever/dossier/resolve.py:19
-msgid "not all documents and tasks are stored in a subdossier"
-msgstr "Pas de document ni de tâche classés dans le sous-dossier"
+msgid "not all documents and tasks are stored in a subdossier."
+msgstr "Pas de document ni de tâche classés dans le sous-dossier."
 
 #: ./opengever/dossier/resolve.py:21
 msgid "not all documents are checked in"
@@ -857,7 +857,7 @@ msgstr ""
 
 #: ./opengever/dossier/resolve.py:23
 msgid "the dossier start date is missing."
-msgstr "Aucune date de début n'a été saisie"
+msgstr "Aucune date de début n'a été saisie."
 
 #. Default: "expired"
 #: ./opengever/dossier/project_templates/byline.pt:47
@@ -872,5 +872,5 @@ msgstr ""
 #. Default: "You didn't select any participants."
 #: ./opengever/dossier/behaviors/participation.py:196
 msgid "warning_no_participants_selected"
-msgstr "Vous n'avez sélectionné aucune participation"
+msgstr "Vous n'avez sélectionné aucune participation."
 

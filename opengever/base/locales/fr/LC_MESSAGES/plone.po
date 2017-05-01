@@ -48,34 +48,34 @@ msgid "Delegate task"
 msgstr "Déléguer"
 
 msgid "Document state changed to document-state-checked_out"
-msgstr "Etat du document modifié : checkout"
+msgstr "Etat du document modifié: checkout"
 
 msgid "Document state changed to document-state-draft"
-msgstr "Etat du document modifié : ouvert"
+msgstr "Etat du document modifié: ouvert"
 
 msgid "Document state changed to document-state-pending"
-msgstr "Etat du document modifié : en suspend"
+msgstr "Etat du document modifié: en suspend"
 
 msgid "Document state changed to document-state-reject"
-msgstr "Etat du document modifié : rejeté"
+msgstr "Etat du document modifié: rejeté"
 
 msgid "Document state changed to document-state-working_copy"
-msgstr "Etat du document modifié : copie de travail"
+msgstr "Etat du document modifié: copie de travail"
 
 msgid "Dossier state changed to dossier-state-active"
-msgstr "Etat du dossier modifié : En cours de traitement"
+msgstr "Etat du dossier modifié: En cours de traitement"
 
 msgid "Dossier state changed to dossier-state-archived"
-msgstr "Etat du dossier modifié : Archivé"
+msgstr "Etat du dossier modifié: Archivé"
 
 msgid "Dossier state changed to dossier-state-inactive"
-msgstr "Etat du dossier modifié : Annulé"
+msgstr "Etat du dossier modifié: Annulé"
 
 msgid "Dossier state changed to dossier-state-offered"
 msgstr ""
 
 msgid "Dossier state changed to dossier-state-resolved"
-msgstr "Etat du dossier modifié : Fermé"
+msgstr "Etat du dossier modifié: Fermé"
 
 msgid "Dossier with template"
 msgstr ""

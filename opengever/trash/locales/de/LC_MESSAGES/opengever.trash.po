@@ -16,18 +16,18 @@ msgstr ""
 "X-Is-Fallback-For: de-at de-li de-lu de-ch de-de\n"
 
 #: ./opengever/trash/trash.py:124
-msgid "You have not selected any items"
-msgstr "Sie haben keine Objekte ausgewählt"
+msgid "You have not selected any items."
+msgstr "Sie haben keine Objekte ausgewählt."
 
 #: ./opengever/trash/trash.py:99
 msgid "could not trash the object ${obj}, it is already trashed"
 msgstr "Das Objekt ${obj} wurde bereits in den Papierkorb verschoben"
 
 #: ./opengever/trash/trash.py:108
-msgid "could not trash the object ${obj}, it is checked out"
+msgid "could not trash the object ${obj}, it is checked out."
 msgstr "Das Objekt ${obj} konnte nicht in den Papierkorb verschoben werden, es ist ausgecheckt."
 
-#. Default: "You have not selected any items"
+#. Default: "You have not selected any items."
 #: ./opengever/trash/browser/remove_confirmation.py:35
 msgid "error_no_documents_selected"
 msgstr "Sie haben keine Objekte ausgewählt."
@@ -85,7 +85,7 @@ msgstr "Das Dokument ist noch ausgecheckt."
 #. Default: "The document is not trashed."
 #: ./opengever/trash/remover.py:77
 msgid "msg_is_not_trashed"
-msgstr "Das Dokument ist noch nicht im Papierkorb"
+msgstr "Das Dokument ist noch nicht im Papierkorb."
 
 #: ./opengever/trash/profiles/default/actions.xml
 #: ./opengever/trash/upgrades/profiles/4100/actions.xml

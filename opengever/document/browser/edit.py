@@ -57,7 +57,7 @@ class EditCheckerView(grok.View):
                 '%s/edit' % (self.context.absolute_url()))
         else:
             msg = _(
-                u'You are not authorized to edit the document ${title}',
+                u'You are not authorized to edit the document ${title}.',
                 mapping={'title': self.context.Title().decode('utf-8')})
 
             IStatusMessage(self.request).addStatusMessage(msg, type='error')
@@ -79,7 +79,7 @@ class EditingDocument(grok.View):
         # have the document a file
         if not self.context.file:
             msg = _(
-                u'The Document ${title} has no File',
+                u'The Document ${title} has no File.',
                 mapping={'title': self.context.Title().decode('utf-8')})
 
             IStatusMessage(self.request).addStatusMessage(msg, type='error')
@@ -110,7 +110,7 @@ class EditingDocument(grok.View):
                     get_redirect_url(self.context))
 
         elif manager.get_checked_out_by() is not None:
-            msg = _(u"The Document is allready checked out by: ${userid}",
+            msg = _(u"The Document is already checked out by: ${userid}",
                     mapping={'userid':
                              Actor.lookup(manager.get_checked_out_by()).get_label()})
             IStatusMessage(self.request).addStatusMessage(msg, type='error')
@@ -119,7 +119,7 @@ class EditingDocument(grok.View):
 
         elif not manager.is_checkout_allowed():
             msg = _(
-                u'Could not check out document ${title}',
+                u'Could not check out document ${title}.',
                 mapping={'title': self.context.Title().decode('utf-8')})
             IStatusMessage(self.request).addStatusMessage(msg, type='error')
             return self.request.RESPONSE.redirect(

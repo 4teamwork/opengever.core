@@ -31,7 +31,7 @@ class CheckoutDocuments(grok.View):
 
         # using "paths" is mandantory on any objects except for a document
         if not paths and not IDocumentSchema.providedBy(self.context):
-            msg = _(u'You have not selected any documents')
+            msg = _(u'You have not selected any documents.')
             IStatusMessage(self.request).addStatusMessage(
                 msg, type='error')
 
@@ -59,7 +59,7 @@ class CheckoutDocuments(grok.View):
                 # notify the user. we have a no-checkoutable object
                 msg = _(
                     u'Could not check out object: ${title}, '
-                    'it is not a document',
+                    'it is not a document.',
                     mapping={'title': obj.Title().decode('utf-8')})
                 IStatusMessage(
                     self.request).addStatusMessage(msg, type='error')
@@ -99,7 +99,7 @@ class CheckoutDocuments(grok.View):
 
         # is checkout allowed for this document?
         if not manager.is_checkout_allowed():
-            msg = _(u'Could not check out document ${title}',
+            msg = _(u'Could not check out document ${title}.',
                     mapping={'title': obj.Title().decode('utf-8')})
             IStatusMessage(self.request).addStatusMessage(msg, type='error')
 

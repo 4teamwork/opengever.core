@@ -17,18 +17,18 @@ msgstr ""
 "X-Generator: Weblate 2.7-dev\n"
 
 #: ./opengever/globalindex/browser/report.py:94
-msgid "Could not generate the report"
-msgstr "Impossible de générer l'export de tâches"
+msgid "Could not generate the report."
+msgstr "Impossible de générer l'export de tâches."
 
 #: ./opengever/globalindex/profiles/default/actions.xml
 #: ./opengever/globalindex/upgrades/profiles/2601/actions.xml
 msgid "Export selection"
 msgstr "Exporter choix"
 
-#. Default: "You have not selected any Items"
+#. Default: "You have not selected any items."
 #: ./opengever/globalindex/browser/report.py:49
 msgid "error_no_items"
-msgstr "Aucun élément sélectionné"
+msgstr "Aucun élément sélectionné."
 
 #. Default: "Forwarding"
 #: ./opengever/globalindex/browser/report.py:23

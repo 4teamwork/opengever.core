@@ -51,7 +51,7 @@ class AddMembership(ModelAddForm):
 
         if overlapping:
             msg = _("Can't add membership, it overlaps an existing membership "
-                    "from ${date_from} to ${date_to}",
+                    "from ${date_from} to ${date_to}.",
                     mapping=dict(date_from=overlapping.format_date_from(),
                                  date_to=overlapping.format_date_to()))
 
@@ -85,7 +85,7 @@ class EditMembership(ModelEditForm):
 
         if overlapping:
             msg = _("Can't change membership, it overlaps an existing membership "
-                    "from ${date_from} to ${date_to}",
+                    "from ${date_from} to ${date_to}.",
                     mapping=dict(date_from=overlapping.format_date_from(),
                                  date_to=overlapping.format_date_to()))
 

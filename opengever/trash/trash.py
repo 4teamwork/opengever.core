@@ -106,7 +106,7 @@ class TrashView(grok.View):
                 # check that the document isn't checked_out
                 if brains[0].checked_out:
                     msg = _(
-                        u'could not trash the object ${obj}, it is checked out',
+                        u'could not trash the object ${obj}, it is checked out.',
                         mapping={'obj': obj.Title().decode('utf-8')})
                     IStatusMessage(self.request).addStatusMessage(
                         msg, type='error')
@@ -121,7 +121,7 @@ class TrashView(grok.View):
                     msg, type='info')
 
         else:
-            msg = _(u'You have not selected any items')
+            msg = _(u'You have not selected any items.')
             IStatusMessage(self.request).addStatusMessage(
                 msg, type='error')
 
@@ -149,7 +149,7 @@ class UntrashView(grok.View):
                 self.context.absolute_url()))
 
         else:
-            msg = _(u'You have not selected any items')
+            msg = _(u'You have not selected any items.')
             IStatusMessage(self.request).addStatusMessage(
                 msg, type='error')
 

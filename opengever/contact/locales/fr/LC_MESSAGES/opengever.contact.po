@@ -463,7 +463,7 @@ msgstr ""
 msgid "personal"
 msgstr "Coordonnées"
 
-#. Default: "${amount} matches."
+#. Default: "${amount} matches"
 #: ./opengever/contact/no_selection_amount.pt:3
 msgid "tab_matches"
 msgstr "Résultat(s): ${amount}"

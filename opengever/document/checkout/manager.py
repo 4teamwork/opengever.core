@@ -285,7 +285,7 @@ class CheckinCheckoutManager(grok.MultiAdapter):
 
         if create_version:
             # let's create a version
-            msg = _(u'Reverted file to version ${version_id}',
+            msg = _(u'Reverted file to version ${version_id}.',
                     mapping=dict(version_id=version_id))
             comment = translate(msg, context=self.request)
             self.repository.save(obj=self.context, comment=comment)

@@ -45,15 +45,15 @@ msgstr "Jahresordner"
 msgid "close"
 msgstr "Abschliessen"
 
-#. Default: "Your not allowed to access the inbox of ${current_org_unit}"
+#. Default: "Your not allowed to access the inbox of ${current_org_unit}."
 #: ./opengever/inbox/browser/view.py:15
 msgid "current_inbox_not_available"
 msgstr "Sie sind nicht dazu berechtigt auf den Eingangskorb der/des ${current_org_unit} zuzugreifen."
 
-#. Default: "Error: Please select at least one document to forward"
+#. Default: "Error: Please select at least one document to forward."
 #: ./opengever/inbox/forwarding.py:116
 msgid "error_no_document_selected"
-msgstr "Fehler: Bitte wählen Sie mindestens ein Dokument aus das weitergeleitet werden soll"
+msgstr "Fehler: Bitte wählen Sie mindestens ein Dokument aus das weitergeleitet werden soll."
 
 #. Default: "Common"
 #: ./opengever/inbox/inbox.py:20

@@ -25,7 +25,7 @@ class TestForwarding(FunctionalTestCase):
 
         messages = statusmessages.messages()
         self.assertEqual(
-            ['Error: Please select at least one document to forward'],
+            ['Error: Please select at least one document to forward.'],
             messages.get('error'))
 
     @browsing

@@ -209,7 +209,7 @@ class MoveItemsFormView(layout.FormWrapper, grok.View):
 
 
 class NotInContentTypes(Invalid):
-    __doc__ = _(u"It isn't allowed to add such items there")
+    __doc__ = _(u"It isn't allowed to add such items there.")
 
 
 class DestinationValidator(validator.SimpleFieldValidator):

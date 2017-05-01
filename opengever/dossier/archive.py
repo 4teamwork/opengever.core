@@ -53,7 +53,7 @@ FILLING_NO_PATTERN = r'(.*)-(.*)-([0-9]*)-([0-9]*)'
 
 class MissingValue(Invalid):
     """ The Missing value was defined Exception."""
-    __doc__ = _(u"Not all required fields are filled")
+    __doc__ = _(u"Not all required fields are filled.")
 
 
 class EnddateValidator(validator.SimpleFieldValidator):
@@ -88,7 +88,7 @@ def valid_filing_year(value):
         if 1900 < int(value) < 3000:
             if str(int(value)) == value:
                 return True
-    raise Invalid(_(u'The given value is not a valid Year'))
+    raise Invalid(_(u'The given value is not a valid Year.'))
 
 
 @grok.provider(IContextSourceBinder)
@@ -256,7 +256,7 @@ class ArchiveForm(directives_form.Form):
             # allready resolved only give a filing number
             IDossierArchiver(self.context).archive(filing_prefix, filing_year)
             self.ptool.addPortalMessage(
-                _("The filing number has been given"), type="info")
+                _("The filing number has been given."), type="info")
             return self.request.RESPONSE.redirect(self.context.absolute_url())
 
         # archiving must passed to the resolving view

@@ -17,7 +17,7 @@ msgstr ""
 "X-Generator: Weblate 2.7-dev\n"
 
 #: ./opengever/globalindex/browser/report.py:94
-msgid "Could not generate the report"
+msgid "Could not generate the report."
 msgstr "Aufgaben Export konnte nicht erstellt werden."
 
 #: ./opengever/globalindex/profiles/default/actions.xml
@@ -25,7 +25,7 @@ msgstr "Aufgaben Export konnte nicht erstellt werden."
 msgid "Export selection"
 msgstr "Auswahl exportieren"
 
-#. Default: "You have not selected any Items"
+#. Default: "You have not selected any items."
 #: ./opengever/globalindex/browser/report.py:49
 msgid "error_no_items"
 msgstr "Sie haben keine Objekte ausgewählt."
@@ -49,7 +49,7 @@ msgstr "Frist"
 
 #: ./opengever/globalindex/browser/report.py:68
 msgid "label_dossier_title"
-msgstr "Dossier Titel"
+msgstr "Dossier-Titel"
 
 #: ./opengever/globalindex/browser/report.py:69
 msgid "label_issuer"

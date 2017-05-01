@@ -141,7 +141,7 @@ msgstr ""
 msgid "accept_method_forwarding_new_dossier"
 msgstr ""
 
-#. Default: "... store in ${client}'s inbox."
+#. Default: "... store in ${client}'s inbox"
 #: ./opengever/task/browser/accept/main.py:56
 msgid "accept_method_forwarding_participate"
 msgstr ""
@@ -246,7 +246,7 @@ msgstr ""
 msgid "help_accept_select_dossier"
 msgstr ""
 
-#. Default: "Select the type for the new dossier."
+#. Default: "Select the type for the new dossier"
 #: ./opengever/task/browser/accept/newdossier.py:213
 msgid "help_accept_select_dossier_type"
 msgstr ""

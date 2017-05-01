@@ -18,7 +18,7 @@ msgstr ""
 "Domain: DOMAIN\n"
 
 #: ./opengever/meeting/command.py:364
-msgid "A new submitted version of document ${title} has been created"
+msgid "A new submitted version of document ${title} has been created."
 msgstr "Eine neu eingereichte Version des Dokuments ${title} wurde erstellt."
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:293
@@ -58,7 +58,7 @@ msgid "Add period"
 msgstr "Periode hinzufügen"
 
 #: ./opengever/meeting/command.py:398
-msgid "Additional document ${title} has been submitted successfully"
+msgid "Additional document ${title} has been submitted successfully."
 msgstr "Das zusätzliche Dokument ${title} wurde erfolgreich eingereicht."
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:247
@@ -79,11 +79,11 @@ msgid "Are you sure you want to decide this agendaitem?"
 msgstr "Sind Sie sicher das Sie dieses Traktandum beschliessen möchten?"
 
 #: ./opengever/meeting/browser/memberships.py:53
-msgid "Can't add membership, it overlaps an existing membership from ${date_from} to ${date_to}"
+msgid "Can't add membership, it overlaps an existing membership from ${date_from} to ${date_to}."
 msgstr "Die Mitgliedschaft kann nicht erstellt werden, weil sie eine bestehende Mitgliedschaft vom ${date_from} bis ${date_to} überschneidet."
 
 #: ./opengever/meeting/browser/memberships.py:87
-msgid "Can't change membership, it overlaps an existing membership from ${date_from} to ${date_to}"
+msgid "Can't change membership, it overlaps an existing membership from ${date_from} to ${date_to}."
 msgstr "Die Mitgliedschaft kann nicht geändert werden, weil sie eine bestehende Mitgliedschaft vom ${date_from} bis zum ${date_to} überschneidet."
 
 #: ./opengever/meeting/browser/meetings/templates/excerpt.pt:23
@@ -123,8 +123,8 @@ msgid "Discard"
 msgstr "Verwerfen"
 
 #: ./opengever/meeting/command.py:327
-msgid "Document ${title} has already been submitted in that version"
-msgstr "Das Dokument ${title} wurde bereits in dieser Version eingereicht"
+msgid "Document ${title} has already been submitted in that version."
+msgstr "Das Dokument ${title} wurde bereits in dieser Version eingereicht."
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:292
 msgid "Documents"
@@ -285,11 +285,11 @@ msgid "Protocol Excerpt"
 msgstr "Protokollauszug"
 
 #: ./opengever/meeting/command.py:48
-msgid "Protocol for meeting ${title} has been generated successfully"
+msgid "Protocol for meeting ${title} has been generated successfully."
 msgstr "Protokoll für die Sitzung ${title} wurde erfolgreich erstellt."
 
 #: ./opengever/meeting/command.py:53
-msgid "Protocol for meeting ${title} has been updated successfully"
+msgid "Protocol for meeting ${title} has been updated successfully."
 msgstr "Protokoll für die Sitzung ${title} wurde erfolgreich aktualisiert."
 
 #: ./opengever/meeting/committee.py:49
@@ -1371,7 +1371,7 @@ msgstr "Eingereicht"
 msgid "submittedproposals"
 msgstr "Anträge"
 
-#. Default: "${amount} matches."
+#. Default: "${amount} matches"
 #: ./opengever/meeting/browser/templates/no_selection.pt:2
 msgid "tab_matches"
 msgstr "${amount} Treffer"

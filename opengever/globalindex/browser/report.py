@@ -47,7 +47,7 @@ class TaskReporter(grok.View):
 
         if not tasks:
             msg = _(
-                u'error_no_items', default=u'You have not selected any Items')
+                u'error_no_items', default=u'You have not selected any items.')
             IStatusMessage(self.request).addStatusMessage(msg, type='error')
             if self.request.get('orig_template'):
                 return self.request.RESPONSE.redirect(
@@ -91,7 +91,7 @@ class TaskReporter(grok.View):
 
         data = reporter()
         if not data:
-            msg = _(u'Could not generate the report')
+            msg = _(u'Could not generate the report.')
             IStatusMessage(self.request).addStatusMessage(
                 msg, type='error')
             return self.request.RESPONSE.redirect(self.context.absolute_url())

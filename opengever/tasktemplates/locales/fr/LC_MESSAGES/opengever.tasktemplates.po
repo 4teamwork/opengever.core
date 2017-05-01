@@ -65,23 +65,23 @@ msgstr "En général"
 
 #: ./opengever/tasktemplates/content/tasktemplate.py:74
 msgid "help_deadline"
-msgstr "Délai en jours à partir de la date de début de la tâche"
+msgstr "Délai en jours à partir de la date de début de la tâche."
 
 #: ./opengever/tasktemplates/content/tasktemplate.py:40
 msgid "help_issuer"
-msgstr "Choix du client. Vous pouvez aussi choisir les utilisateurs interactifs \"responsables\" ou \"collaborateurs\""
+msgstr "Choix du client. Vous pouvez aussi choisir les utilisateurs interactifs \"responsables\" ou \"collaborateurs\"."
 
 #: ./opengever/tasktemplates/content/tasktemplate.py:88
 msgid "help_preselected"
-msgstr "Ce modèle fait parti du choix standard des procédés standards"
+msgstr "Ce modèle fait parti du choix standard des procédés standards."
 
 #: ./opengever/tasktemplates/content/tasktemplate.py:67
 msgid "help_responsible"
-msgstr "Choix du mandataire. Si vous choisissez l'option \"utilisateur interactif\" dans le champ \"Client du mandataire\" vous pouvez aussi choisir \"responsable\"ou \"collaborateur\" dans ce champ "
+msgstr "Choix du mandataire. Si vous choisissez l'option \"utilisateur interactif\" dans le champ \"Client du mandataire\" vous pouvez aussi choisir \"responsable\"ou \"collaborateur\" dans ce champ."
 
 #: ./opengever/tasktemplates/content/tasktemplate.py:59
 msgid "help_responsible_client"
-msgstr "Choix du client du mandataire ou choisissez \"utilisateur interactif\""
+msgstr "Choix du client du mandataire ou choisissez \"utilisateur interactif\"."
 
 #: ./opengever/tasktemplates/content/tasktemplate.py:48
 msgid "help_task_type"
@@ -89,11 +89,11 @@ msgstr "Choix le type de tâche."
 
 #: ./opengever/tasktemplates/content/tasktemplate.py:81
 msgid "help_text"
-msgstr "Saisie d'une  instruction de travail détaillée ou d'un commentaire"
+msgstr "Saisie d'une  instruction de travail détaillée ou d'un commentaire."
 
 #: ./opengever/tasktemplates/content/tasktemplate.py:33
 msgid "help_title"
-msgstr "Nom de la tâche"
+msgstr "Nom de la tâche."
 
 #. Default: "Current user"
 #: ./opengever/tasktemplates/vocabularies.py:23
@@ -219,7 +219,7 @@ msgstr "Vous n'avez sélectionné aucun modèle."
 #: ./opengever/tasktemplates/browser/form.py:307
 #: ./opengever/tasktemplates/browser/trigger.py:221
 msgid "message_tasks_created"
-msgstr "Toutes les tâches du procédé standard ont été créées"
+msgstr "Toutes les tâches du procédé standard ont été créées."
 
 #. Default: "Currently there are no active task template folders registered."
 #: ./opengever/tasktemplates/browser/form.py:144

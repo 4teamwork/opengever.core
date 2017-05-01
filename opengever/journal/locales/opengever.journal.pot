@@ -259,7 +259,7 @@ msgstr ""
 msgid "label_related_documents"
 msgstr ""
 
-#. Default: "Object restore: ${title}"
+#. Default: "Object restored: ${title}"
 #: ./opengever/journal/handlers.py:631
 msgid "label_restore"
 msgstr ""
@@ -294,7 +294,7 @@ msgstr ""
 msgid "summary_journal"
 msgstr ""
 
-#. Default: "${amount} matches."
+#. Default: "${amount} matches"
 #: ./opengever/journal/templates/journal_selection.pt:9
 msgid "tab_matches"
 msgstr ""

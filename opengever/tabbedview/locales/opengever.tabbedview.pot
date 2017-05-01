@@ -408,7 +408,7 @@ msgstr ""
 msgid "subdossiers"
 msgstr ""
 
-#. Default: "${amount} matches."
+#. Default: "${amount} matches"
 #: ./opengever/tabbedview/browser/no_selection_amount.pt:3
 msgid "tab_matches"
 msgstr ""

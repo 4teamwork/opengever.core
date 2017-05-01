@@ -20,8 +20,8 @@ msgstr ""
 "X-Generator: Weblate 2.7-dev\n"
 
 #: ./opengever/meeting/command.py:364
-msgid "A new submitted version of document ${title} has been created"
-msgstr "Une nouvelle version soumis du document ${title} a été créeé"
+msgid "A new submitted version of document ${title} has been created."
+msgstr "Une nouvelle version soumis du document ${title} a été créeé."
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:293
 msgid "Actions"
@@ -60,8 +60,8 @@ msgid "Add period"
 msgstr ""
 
 #: ./opengever/meeting/command.py:398
-msgid "Additional document ${title} has been submitted successfully"
-msgstr "Le document supplémentaire ${title} a été soumis avec succès"
+msgid "Additional document ${title} has been submitted successfully."
+msgstr "Le document supplémentaire ${title} a été soumis avec succès."
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:247
 msgid "Agenda Items"
@@ -81,11 +81,11 @@ msgid "Are you sure you want to decide this agendaitem?"
 msgstr ""
 
 #: ./opengever/meeting/browser/memberships.py:53
-msgid "Can't add membership, it overlaps an existing membership from ${date_from} to ${date_to}"
-msgstr "Impossible d'ajouter une affiliation, elle se chevauche avec une affiliation existante du ${date_from} jusqu'au ${date_to}"
+msgid "Can't add membership, it overlaps an existing membership from ${date_from} to ${date_to}."
+msgstr "Impossible d'ajouter une affiliation, elle se chevauche avec une affiliation existante du ${date_from} jusqu'au ${date_to}."
 
 #: ./opengever/meeting/browser/memberships.py:87
-msgid "Can't change membership, it overlaps an existing membership from ${date_from} to ${date_to}"
+msgid "Can't change membership, it overlaps an existing membership from ${date_from} to ${date_to}."
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/excerpt.pt:23
@@ -125,7 +125,7 @@ msgid "Discard"
 msgstr ""
 
 #: ./opengever/meeting/command.py:327
-msgid "Document ${title} has already been submitted in that version"
+msgid "Document ${title} has already been submitted in that version."
 msgstr "Le document ${title} a déjà été soumis dans cette version."
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:292
@@ -287,11 +287,11 @@ msgid "Protocol Excerpt"
 msgstr ""
 
 #: ./opengever/meeting/command.py:48
-msgid "Protocol for meeting ${title} has been generated successfully"
+msgid "Protocol for meeting ${title} has been generated successfully."
 msgstr "Procès-verbal pour la séance ${title} a été créé avec succès"
 
 #: ./opengever/meeting/command.py:53
-msgid "Protocol for meeting ${title} has been updated successfully"
+msgid "Protocol for meeting ${title} has been updated successfully."
 msgstr "Procès-verbal pour la séance ${title} a été actualisé avec succès."
 
 #: ./opengever/meeting/committee.py:49
@@ -352,7 +352,7 @@ msgstr ""
 
 #: ./opengever/meeting/browser/submitdocuments.py:201
 msgid "Updated with a newer docment version from proposal's dossier."
-msgstr "Le document a été écrasé par une version plus récente du dossier proposé"
+msgstr "Le document a été écrasé par une version plus récente du dossier proposé."
 
 #: ./opengever/meeting/browser/excerpt.py:44
 msgid "Updated with a newer excerpt version."
@@ -1373,7 +1373,7 @@ msgstr "Soumis"
 msgid "submittedproposals"
 msgstr "Propositions"
 
-#. Default: "${amount} matches."
+#. Default: "${amount} matches"
 #: ./opengever/meeting/browser/templates/no_selection.pt:2
 msgid "tab_matches"
 msgstr "${amount} résultats"

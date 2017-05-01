@@ -46,12 +46,12 @@ class ProtocolOperations(object):
 
     def get_generated_message(self, meeting):
         return _(u'Protocol for meeting ${title} has been generated '
-                 'successfully',
+                 'successfully.',
                  mapping=dict(title=meeting.get_title()))
 
     def get_updated_message(self, meeting):
         return _(u'Protocol for meeting ${title} has been updated '
-                 'successfully',
+                 'successfully.',
                  mapping=dict(title=meeting.get_title()))
 
     def get_title(self, meeting):
@@ -324,7 +324,7 @@ class NullUpdateSubmittedDocumentCommand(object):
     def show_message(self):
         portal = api.portal.get()
         api.portal.show_message(
-            _(u'Document ${title} has already been submitted in that version',
+            _(u'Document ${title} has already been submitted in that version.',
               mapping=dict(title=self.document.title)),
             portal.REQUEST,
             type='warning')
@@ -361,7 +361,7 @@ class UpdateSubmittedDocumentCommand(object):
     def show_message(self):
         portal = api.portal.get()
         api.portal.show_message(
-            _(u'A new submitted version of document ${title} has been created',
+            _(u'A new submitted version of document ${title} has been created.',
               mapping=dict(title=self.document.title)),
             portal.REQUEST)
 
@@ -395,7 +395,7 @@ class CopyProposalDocumentCommand(object):
     def show_message(self):
         portal = api.portal.get()
         api.portal.show_message(
-            _(u'Additional document ${title} has been submitted successfully',
+            _(u'Additional document ${title} has been submitted successfully.',
               mapping=dict(title=self.document.title)),
             portal.REQUEST)
 

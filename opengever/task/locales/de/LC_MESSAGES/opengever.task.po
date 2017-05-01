@@ -128,32 +128,32 @@ msgstr "In dem ausgewählten Dossier können Sie keine Aufgaben erstellen. Entwe
 #. Default: "file in existing dossier in ${client}"
 #: ./opengever/task/browser/accept/main.py:81
 msgid "accept_method_existing_dossier"
-msgstr "in einem bestehenden Dossier auf ${client} bearbeiten."
+msgstr "in einem bestehenden Dossier auf ${client} bearbeiten"
 
 #. Default: "... store in  ${client}'s inbox and process in an existing dossier on ${client}"
 #: ./opengever/task/browser/accept/main.py:62
 msgid "accept_method_forwarding_existing_dossier"
-msgstr "... im Eingangskorb von ${client} ablegen und in bestehendem Dossier auf ${client} bearbeiten."
+msgstr "... im Eingangskorb von ${client} ablegen und in bestehendem Dossier auf ${client} bearbeiten"
 
 #. Default: "... store in  ${client}'s inbox and process in a new dossier on ${client}"
 #: ./opengever/task/browser/accept/main.py:68
 msgid "accept_method_forwarding_new_dossier"
-msgstr "... im Eingangskorb von ${client} ablegen und in neuem Dossier auf ${client} bearbeiten."
+msgstr "... im Eingangskorb von ${client} ablegen und in neuem Dossier auf ${client} bearbeiten"
 
-#. Default: "... store in ${client}'s inbox."
+#. Default: "... store in ${client}'s inbox"
 #: ./opengever/task/browser/accept/main.py:56
 msgid "accept_method_forwarding_participate"
-msgstr "... im Eingangskorb von ${client} ablegen."
+msgstr "... im Eingangskorb von ${client} ablegen"
 
 #. Default: "file in new dossier in ${client}"
 #: ./opengever/task/browser/accept/main.py:87
 msgid "accept_method_new_dossier"
-msgstr "in einem neuen Dossier auf ${client} bearbeiten."
+msgstr "in einem neuen Dossier auf ${client} bearbeiten"
 
 #. Default: "process in issuer's dossier"
 #: ./opengever/task/browser/accept/main.py:76
 msgid "accept_method_participate"
-msgstr "direkt im Dossier des Auftraggebers bearbeiten."
+msgstr "direkt im Dossier des Auftraggebers bearbeiten"
 
 #. Default: "RE"
 #: ./opengever/task/browser/complete.py:309
@@ -218,7 +218,7 @@ msgstr "Die folgenden Dokumente (${title}) müssen noch eingecheckt werden."
 #. Default: "No changes: same responsible selected"
 #: ./opengever/task/browser/assign.py:84
 msgid "error_same_responsible"
-msgstr "Keine Änderung, da kein anderer Auftragnehmer ausgewählt wurde."
+msgstr "Keine Änderung, da kein anderer Auftragnehmer ausgewählt wurde"
 
 #. Default: "existing dossier"
 #: ./opengever/task/browser/assign_dossier.py:44
@@ -245,10 +245,10 @@ msgstr "Weiterleitung"
 msgid "help_accept_select_dossier"
 msgstr "Wählen Sie das Dossier aus, in welchem Sie die Aufgabe bearbeiten wollen."
 
-#. Default: "Select the type for the new dossier."
+#. Default: "Select the type for the new dossier"
 #: ./opengever/task/browser/accept/newdossier.py:213
 msgid "help_accept_select_dossier_type"
-msgstr "Wählen Sie den Typ des neuen Dossiers aus."
+msgstr "Wählen Sie den Typ des neuen Dossiers aus"
 
 #. Default: "Select the repository folder within the dossier should be created."
 #: ./opengever/task/browser/accept/newdossier.py:84

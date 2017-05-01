@@ -60,12 +60,12 @@ msgid "Checkout"
 msgstr "Checkout"
 
 #: ./opengever/document/checkout/cancel.py:81
-msgid "Could not cancel checkout on document ${title}"
-msgstr "Checkout du document ${title} inabouti"
+msgid "Could not cancel checkout on document ${title}."
+msgstr "Checkout du document ${title} inabouti."
 
 #: ./opengever/document/checkout/checkin.py:73
 msgid "Could not check in ${title}, it is not a document."
-msgstr "${title} n'est pas un document, par consequent checkin n'a pas abouti"
+msgstr "${title} n'est pas un document, par consequent checkin n'a pas abouti."
 
 #: ./opengever/document/checkout/checkin.py:55
 msgid "Could not check in document ${title}"
@@ -73,12 +73,12 @@ msgstr "Checkin de ${title} n'a pas abouti"
 
 #: ./opengever/document/browser/edit.py:121
 #: ./opengever/document/checkout/checkout.py:102
-msgid "Could not check out document ${title}"
-msgstr "Checkout de ${title} n'a pas abouti"
+msgid "Could not check out document ${title}."
+msgstr "Checkout de ${title} n'a pas abouti."
 
 #: ./opengever/document/checkout/checkout.py:60
-msgid "Could not check out object: ${title}, it is not a document"
-msgstr "${title} n'est pas un document, par consequet checkout n'a pas abouti"
+msgid "Could not check out object: ${title}, it is not a document."
+msgstr "${title} n'est pas un document, par consequet checkout n'a pas abouti."
 
 #: ./opengever/document/browser/report.py:81
 msgid "Could not generate the report"
@@ -111,8 +111,8 @@ msgstr "Quitter GEVER"
 
 #: ./opengever/document/checkout/manager.py:288
 #: ./opengever/document/checkout/revert.py:26
-msgid "Reverted file to version ${version_id}"
-msgstr "Retour à la version ${version_id}  du document"
+msgid "Reverted file to version ${version_id}."
+msgstr "Retour à la version ${version_id} du document."
 
 #: ./opengever/document/forms.py:65
 msgid "Save"
@@ -137,31 +137,31 @@ msgstr "Soumis par"
 
 #: ./opengever/document/browser/download.py:39
 #: ./opengever/document/browser/edit.py:81
-msgid "The Document ${title} has no File"
-msgstr "Le dodument  ${title} ne contient pas de fichier"
+msgid "The Document ${title} has no File."
+msgstr "Le dodument  ${title} ne contient pas de fichier."
 
 #: ./opengever/document/browser/edit.py:113
-msgid "The Document is allready checked out by: ${userid}"
-msgstr "Le document a déjà un checkout par  ${userid}"
+msgid "The Document is already checked out by: ${userid}"
+msgstr "Le document a déjà un checkout par ${userid}."
 
 #: ./opengever/document/browser/templates/submitted_with.pt:18
 msgid "Update document in proposal"
 msgstr "Actualiser la version soumise"
 
 #: ./opengever/document/browser/edit.py:59
-msgid "You are not authorized to edit the document ${title}"
-msgstr "Vous n'avez pas les droits de modifier le document ${title}"
+msgid "You are not authorized to edit the document ${title}."
+msgstr "Vous n'avez pas les droits de modifier le document ${title}."
 
 #: ./opengever/document/checkout/cancel.py:28
 #: ./opengever/document/checkout/checkin.py:197
 #: ./opengever/document/checkout/checkout.py:34
-msgid "You have not selected any documents"
+msgid "You have not selected any documents."
 msgstr "Vous n'avez  sélectionné aucun document"
 
 #. Default: "You have not checked in documents. Do you realy want to logout?"
 #: ./opengever/document/browser/templates/logout_overlay.pt:3
 msgid "alert_not_checked_in_documents"
-msgstr "Vous avez encore des documents en checkout! Voulez-vous quand même quitter Gever ?"
+msgstr "Vous avez encore des documents en checkout! Voulez-vous quand même quitter GEVER?"
 
 #. Default: "Cancel"
 #: ./opengever/document/checkout/checkin.py:112
@@ -238,7 +238,7 @@ msgstr "Remplacer par un nouveau fichier"
 #. Default: "Checkin Documents"
 #: ./opengever/document/checkout/checkin.py:97
 msgid "heading_checkin_comment_form"
-msgstr "Faire le checkin des documents."
+msgstr "Faire le checkin des documents"
 
 #: ./opengever/document/behaviors/metadata.py:148
 msgid "help_archival_file"
@@ -252,7 +252,7 @@ msgstr "Nom, prénom ou acronyme de l'utilisateur (sera automatiquement créé d
 #. Default: "Describe, why you checkin the selected documents"
 #: ./opengever/document/checkout/checkin.py:86
 msgid "help_checkin_journal_comment"
-msgstr "Modification(s) faite(s) dans le document ?"
+msgstr "Modification(s) faite(s) dans le document?"
 
 #: ./opengever/document/behaviors/metadata.py:109
 msgid "help_delivery_date"
@@ -544,7 +544,7 @@ msgstr "Oui"
 #. Default: "This item is being checked out by ${creator}."
 #: ./opengever/document/checkout/viewlets_templates/checkedoutviewlet.pt:9
 msgid "message_checkout_info"
-msgstr "Ce document a un checkout de ${creator}"
+msgstr "Ce document a un checkout de ${creator}."
 
 #. Default: "Could not cancel checkout on document ${title}, mails does not support the checkin checkout process."
 #: ./opengever/document/checkout/cancel.py:67

@@ -67,7 +67,7 @@ validator.WidgetValidatorDiscriminators(
 
 ReferenceNumberPrefixErrorMessage = error.ErrorViewMessage(
     _('error_sibling_reference_number_existing',
-      default=u'A Sibling with the same reference number is existing'),
+      default=u'A Sibling with the same reference number is existing.'),
     error=schema.interfaces.ConstraintNotSatisfied,
     field=IReferenceNumberPrefix['reference_number_prefix'],
 )

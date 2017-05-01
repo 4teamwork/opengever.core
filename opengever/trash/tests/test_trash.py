@@ -53,7 +53,7 @@ class TestTrash(FunctionalTestCase):
     def test_redirect_back_and_shows_message_when_no_items_is_selected(self, browser):
         browser.login().open(self.dossier, view="trashed")
 
-        self.assertEquals(['You have not selected any items'],
+        self.assertEquals(['You have not selected any items.'],
                           error_messages())
         self.assertEquals(
             'http://nohost/plone/dossier-1#documents', browser.url)
@@ -87,7 +87,7 @@ class TestTrash(FunctionalTestCase):
         browser.login().open(self.dossier, view="trashed", data=data)
 
         self.assertEquals(
-            [u'could not trash the object Dokum\xe4nt C, it is checked out'],
+            [u'could not trash the object Dokum\xe4nt C, it is checked out.'],
             error_messages())
         self.assertEquals(
             'http://nohost/plone/dossier-1#documents', browser.url)
@@ -103,7 +103,7 @@ class TestUntrash(FunctionalTestCase):
     def test_redirect_back_and_shows_message_when_no_items_is_selected(self, browser):
         browser.login().open(self.dossier, view="untrashed")
 
-        self.assertEquals(['You have not selected any items'],
+        self.assertEquals(['You have not selected any items.'],
                           error_messages())
         self.assertEquals('http://nohost/plone/dossier-1#trash', browser.url)
 

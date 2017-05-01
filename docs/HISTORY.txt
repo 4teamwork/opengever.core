@@ -5,6 +5,15 @@ Changelog
 2017.1.2 (unreleased)
 ---------------------
 
+- Fix some common i18n issues:
+
+  - Homogenize full stops at the end of sentences.
+  - Remove trailing spaces
+  - Remove trailing colons appearing only in source or translation
+  - Homogenize use of punctuation marks in french translations (no space before colon / question marks)
+
+  [lgraf]
+
 - Meeting: add proposal template tab to templates folder. [jone]
 - Support simple css colornames in the colorization viewlet. [phgross]
 - Dossierdetails PDF: Fix indentation of dossier metadata table. [lgraf]

@@ -60,7 +60,7 @@ msgid "Checkout"
 msgstr "Auschecken"
 
 #: ./opengever/document/checkout/cancel.py:81
-msgid "Could not cancel checkout on document ${title}"
+msgid "Could not cancel checkout on document ${title}."
 msgstr "Das Auschecken des Dokuments ${title} konnte nicht widerrufen werden."
 
 #: ./opengever/document/checkout/checkin.py:73
@@ -73,11 +73,11 @@ msgstr "Konnte Dokument nicht einchecken: ${title}"
 
 #: ./opengever/document/browser/edit.py:121
 #: ./opengever/document/checkout/checkout.py:102
-msgid "Could not check out document ${title}"
+msgid "Could not check out document ${title}."
 msgstr "Es ist nicht erlaubt, das Dokument ${title} auszuchecken."
 
 #: ./opengever/document/checkout/checkout.py:60
-msgid "Could not check out object: ${title}, it is not a document"
+msgid "Could not check out object: ${title}, it is not a document."
 msgstr "${title} ist kein Dokument und konnte deshalb nicht ausgecheckt werden."
 
 #: ./opengever/document/browser/report.py:81
@@ -111,7 +111,7 @@ msgstr "GEVER verlassen"
 
 #: ./opengever/document/checkout/manager.py:288
 #: ./opengever/document/checkout/revert.py:26
-msgid "Reverted file to version ${version_id}"
+msgid "Reverted file to version ${version_id}."
 msgstr "Datei des Dokuments auf Version ${version_id} zurückgesetzt."
 
 #: ./opengever/document/forms.py:65
@@ -138,11 +138,11 @@ msgstr "Eingereicht bei"
 
 #: ./opengever/document/browser/download.py:39
 #: ./opengever/document/browser/edit.py:81
-msgid "The Document ${title} has no File"
+msgid "The Document ${title} has no File."
 msgstr "Das Dokument ${title} enthält keine Datei."
 
 #: ./opengever/document/browser/edit.py:113
-msgid "The Document is allready checked out by: ${userid}"
+msgid "The Document is already checked out by: ${userid}"
 msgstr "Das Dokument ist bereits von ${userid} ausgecheckt."
 
 #: ./opengever/document/browser/templates/submitted_with.pt:18
@@ -150,13 +150,13 @@ msgid "Update document in proposal"
 msgstr "Eingereichte Version aktualisieren"
 
 #: ./opengever/document/browser/edit.py:59
-msgid "You are not authorized to edit the document ${title}"
+msgid "You are not authorized to edit the document ${title}."
 msgstr "Sie sind nicht berechtigt, das Dokument ${title} zu bearbeiten."
 
 #: ./opengever/document/checkout/cancel.py:28
 #: ./opengever/document/checkout/checkin.py:197
 #: ./opengever/document/checkout/checkout.py:34
-msgid "You have not selected any documents"
+msgid "You have not selected any documents."
 msgstr "Sie haben keine Dokumente ausgewählt."
 
 #. Default: "You have not checked in documents. Do you realy want to logout?"
@@ -249,7 +249,7 @@ msgstr "Archivtaugliche Version der Originaldatei"
 #. Default: "Surname firstname or a userid(would be automatically resolved to fullname)"
 #: ./opengever/document/behaviors/metadata.py:124
 msgid "help_author"
-msgstr "Nachname Vorname oder ein Benutzerkürzel (wird automatisch nach Nachname Vorname aufgelöst)."
+msgstr "Nachname Vorname oder ein Benutzerkürzel (wird automatisch nach Nachname Vorname aufgelöst)"
 
 #. Default: "Describe, why you checkin the selected documents"
 #: ./opengever/document/checkout/checkin.py:86
@@ -418,7 +418,7 @@ msgstr "Dokumenttyp"
 
 #: ./opengever/document/browser/report.py:51
 msgid "label_dossier_title"
-msgstr "Dossier Titel"
+msgstr "Dossier-Titel"
 
 #: ./opengever/document/browser/templates/downloadconfirmation.pt:25
 msgid "label_download"

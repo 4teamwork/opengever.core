@@ -464,7 +464,7 @@ msgstr ""
 msgid "personal"
 msgstr ""
 
-#. Default: "${amount} matches."
+#. Default: "${amount} matches"
 #: ./opengever/contact/no_selection_amount.pt:3
 msgid "tab_matches"
 msgstr ""
