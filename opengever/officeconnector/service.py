@@ -1,6 +1,7 @@
 from ftw.mail.interfaces import IEmailAddress
 from opengever.document.events import FileAttachedToEmailEvent
 from opengever.dossier.events import DossierAttachedToEmailEvent
+from opengever.officeconnector import _
 from opengever.officeconnector.helpers import create_oc_url
 from opengever.officeconnector.helpers import is_officeconnector_attach_feature_enabled  # noqa
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
@@ -27,8 +28,10 @@ class OfficeConnectorURL(Service):
         else:
             self.request.response.setStatus(500)
             return json.dumps(dict(error=dict(
-                type='Generated URL too long',
-                message='The URL is too long for IE11',
+                message=_(u'error_oc_url_too_long',
+                          default=u"Unfortunately it's not currently "
+                          "possible to attach this many documents. Please "
+                          "try again with fewer documents selected."),
             )))
 
 
