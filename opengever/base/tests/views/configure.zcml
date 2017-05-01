@@ -11,4 +11,18 @@
       permission="cmf.ModifyPortalContent"
       />
 
+  <browser:page
+      name="test-traversal-unauthorized"
+      class=".unauthorized.TraversalUnauthorized"
+      for="*"
+      permission="zope2.Public"
+      />
+
+  <browser:page
+      name="test-publishing-unauthorized"
+      class=".unauthorized.PublishingUnauthorized"
+      for="*"
+      permission="zope2.Public"
+      />
+
 </configure>
