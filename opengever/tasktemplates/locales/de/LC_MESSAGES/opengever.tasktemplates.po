@@ -222,7 +222,6 @@ msgstr "Alle Aufgaben aus gewähltem Standardablauf wurden erstellt."
 #. Default: "Currently there are no active task template folders registered."
 #: ./opengever/tasktemplates/browser/form.py:144
 #: ./opengever/tasktemplates/browser/trigger.py:107
-#, fuzzy
 msgid "msg_no_active_tasktemplatefolders"
 msgstr "Zurzeit sind keine aktiven Standardabläufe hinterlegt."
 
