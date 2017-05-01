@@ -11,6 +11,7 @@ from plone.rest import Service
 from zExceptions import Forbidden
 from zExceptions import NotFound
 from zope.event import notify
+from zope.i18n import translate
 
 import json
 
@@ -27,12 +28,15 @@ class OfficeConnectorURL(Service):
             return json.dumps(dict(url=url))
         else:
             self.request.response.setStatus(500)
-            return json.dumps(dict(error=dict(
-                message=_(u'error_oc_url_too_long',
-                          default=u"Unfortunately it's not currently "
-                          "possible to attach this many documents. Please "
-                          "try again with fewer documents selected."),
-            )))
+            message = _(u'error_oc_url_too_long',
+                        default=u"Unfortunately it's not currently possible "
+                        "to attach this many documents. Please try again with "
+                        "fewer documents selected.")
+            return json.dumps(dict(
+                error=dict(
+                    message=translate(message)
+                    )
+                ))
 
 
 class OfficeConnectorAttachURL(OfficeConnectorURL):

@@ -3,6 +3,10 @@ function openOfficeconnector(data) {
     window.location = data['url'];
 }
 
+function alertUser(data) {
+    alert(JSON.parse(data["responseText"])["error"]["message"]);
+}
+
 function officeConnectorCheckout(url) {
     var officeconnector_config = {}
 
@@ -10,7 +14,7 @@ function officeConnectorCheckout(url) {
     officeconnector_config.headers = {};
     officeconnector_config.headers['Accept'] = 'application/json';
 
-    $.ajax(officeconnector_config).done(openOfficeconnector);
+    $.ajax(officeconnector_config).error(alertUser).done(openOfficeconnector);
 }
 
 function officeConnectorAttach(url) {
@@ -20,7 +24,7 @@ function officeConnectorAttach(url) {
     officeconnector_config.headers = {};
     officeconnector_config.headers['Accept'] = 'application/json';
 
-    $.ajax(officeconnector_config).done(openOfficeconnector);
+    $.ajax(officeconnector_config).error(alertUser).done(openOfficeconnector);
 }
 
 function officeConnectorMultiAttach(url) {
@@ -43,7 +47,7 @@ function officeConnectorMultiAttach(url) {
 
     if (officeconnector_config.data.length > 0) {
         officeconnector_config.data = JSON.stringify(officeconnector_config.data);
-        $.ajax(officeconnector_config).done(openOfficeconnector);
+        $.ajax(officeconnector_config).error(alertUser).done(openOfficeconnector);
     }
 
 }
