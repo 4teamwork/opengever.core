@@ -288,7 +288,7 @@ msgstr ""
 
 #: ./opengever/meeting/command.py:48
 msgid "Protocol for meeting ${title} has been generated successfully."
-msgstr "Procès-verbal pour la séance ${title} a été créé avec succès"
+msgstr "Procès-verbal pour la séance ${title} a été créé avec succès."
 
 #: ./opengever/meeting/command.py:53
 msgid "Protocol for meeting ${title} has been updated successfully."
