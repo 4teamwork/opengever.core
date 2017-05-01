@@ -3,6 +3,7 @@ from opengever.officeconnector.interfaces import IOfficeConnectorSettings
 from plone import api
 from Products.CMFCore.utils import getToolByName
 from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlugin  # noqa
+from ua_parser.user_agent_parser import ParseUserAgent
 from zExceptions import Forbidden
 from zExceptions import NotFound
 
@@ -106,10 +107,16 @@ def create_oc_url(request, context, payload):
     # arbitrary and inconsistent results of 506..509.
     #
     # For operational safety we've set the total url + separator + payload
-    # limit at 500 characters.
+    # limit at 500 or 2000 characters.
     url = 'oc:' + token
+    user_agent = ParseUserAgent(request.environ.get('HTTP_USER_AGENT', ''))
 
-    if len(url) <= 500:
+    if user_agent['family'] == u'IE' and user_agent['major'] == '11':
+        limit = 500
+    else:
+        limit = 2000
+
+    if len(url) <= limit:
         return url
     else:
         return None
