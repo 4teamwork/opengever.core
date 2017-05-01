@@ -14,7 +14,6 @@ from opengever.locking.lock import MEETING_SUBMITTED_LOCK
 from opengever.meeting.model import Proposal
 from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.proposal import IProposal
-from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.testing import FunctionalTestCase
 from opengever.testing import index_data_for
 from plone import api
@@ -34,7 +33,12 @@ class TestProposalViewsDisabled(FunctionalTestCase):
     @browsing
     def test_add_form_is_disabled(self, browser):
         browser.login()
+        # XXX This causes an infinite redirection loop between ++add++ and
+        # reqiure_login. By enabling exception_bubbling we can catch the
+        # Unauthorized exception and end the infinite loop.
+        browser.exception_bubbling = True
         with self.assertRaises(Unauthorized):
+            # with browser.expect_unauthorized():
             browser.open(self.dossier,
                          view='++add++opengever.meeting.proposal')
 
@@ -42,6 +46,10 @@ class TestProposalViewsDisabled(FunctionalTestCase):
     def test_edit_form_is_disabled(self, browser):
         proposal = create(Builder('proposal').within(self.dossier))
 
+        # XXX This causes an infinite redirection loop between edit and
+        # reqiure_login. By enabling exception_bubbling we can catch the
+        # Unauthorized exception and end the infinite loop.
+        browser.exception_bubbling = True
         with self.assertRaises(Unauthorized):
             browser.login().visit(proposal, view='edit')
 
@@ -264,7 +272,12 @@ class TestProposal(FunctionalTestCase):
         # cannot edit submitted proposal
         browser.open(proposal)
         self.assertEqual([], browser.css('#content-views li').text)
+        # XXX This causes an infinite redirection loop between ++add++ and
+        # reqiure_login. By enabling exception_bubbling we can catch the
+        # Unauthorized exception and end the infinite loop.
+        browser.exception_bubbling = True
         with self.assertRaises(Unauthorized):
+        # with browser.expect_unauthorized():
             browser.open(proposal, view='edit')
 
     @browsing
@@ -292,7 +305,12 @@ class TestProposal(FunctionalTestCase):
         browser.open(submitted_proposal)
         self.assertEqual([],
                          browser.css('#content-views li').text)
+        # XXX This causes an infinite redirection loop between ++add++ and
+        # reqiure_login. By enabling exception_bubbling we can catch the
+        # Unauthorized exception and end the infinite loop.
+        browser.exception_bubbling = True
         with self.assertRaises(Unauthorized):
+        # with browser.expect_unauthorized():
             browser.open(submitted_proposal, view='edit')
 
     @browsing
@@ -863,7 +881,7 @@ class TestProposal(FunctionalTestCase):
                              roles=['Contributor', 'Editor', 'Reader'])
         transaction.commit()
         browser.login(username='hugo.boss')
-        with self.assertRaises(Unauthorized):
+        with browser.expect_unauthorized():
             browser.open(committee)
 
     @browsing
@@ -1036,7 +1054,7 @@ class TestProposalWithWord(FunctionalTestCase):
         browser.css('#pending-submitted').first.click()
         self.assertEqual(['Proposal successfully submitted.'], info_messages())
 
-        with self.assertRaises(Unauthorized):
+        with browser.expect_unauthorized():
             browser.open(proposal.get_proposal_document(), view='edit')
 
         submitted_proposal = proposal.load_model().resolve_sumitted_proposal()

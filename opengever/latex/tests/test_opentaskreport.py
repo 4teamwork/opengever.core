@@ -128,7 +128,13 @@ class TestOpenTaskReport(FunctionalTestCase):
 
     @browsing
     def test_open_task_report_view_not_allowed_raises_unauthorized(self, browser):
+        # XXX This causes an infinite redirection loop between
+        # pdf-open-task-report and reqiure_login.
+        # By enabling exception_bubbling we can catch the
+        # Unauthorized exception and end the infinite loop.
+        browser.exception_bubbling = True
         with self.assertRaises(Unauthorized):
+        # with browser.expect_unauthorized():
             browser.login('hans.meier').open(view='pdf-open-task-report')
 
     def test_task_report_is_only_available_for_current_inbox_users(self):

@@ -1,4 +1,3 @@
-from AccessControl import Unauthorized
 from ftw.testbrowser import browsing
 from opengever.testing import FunctionalTestCase
 
@@ -7,7 +6,7 @@ class TestAnonymousAccess(FunctionalTestCase):
 
     @browsing
     def test_anonymous_cannot_access_search(self, browser):
-        with self.assertRaises(Unauthorized):
+        with browser.expect_unauthorized():
             browser.visit(self.portal, view='search')
 
     @browsing

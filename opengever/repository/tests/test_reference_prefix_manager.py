@@ -6,7 +6,6 @@ from opengever.base.adapters import ReferenceNumberPrefixAdpater
 from opengever.journal.tests.utils import get_journal_entry
 from opengever.testing import FunctionalTestCase
 from plone import api
-from zExceptions import Unauthorized
 from zope.i18n import translate
 import transaction
 
@@ -96,7 +95,7 @@ class TestReferencePrefixManager(FunctionalTestCase):
     def test_manager_is_hidden_from_user_without_permission(self, browser):
         self.grant('Contributor')
 
-        with self.assertRaises(Unauthorized):
+        with browser.expect_unauthorized():
             browser.login().open(self.repo1, view='referenceprefix_manager')
 
     @browsing

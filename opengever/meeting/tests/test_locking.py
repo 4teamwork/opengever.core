@@ -8,7 +8,6 @@ from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
 from plone.locking.interfaces import ILockable
 from plone.protect import createToken
-from zExceptions import Redirect
 
 
 class TestMeetingLocking(FunctionalTestCase):
@@ -105,12 +104,12 @@ class TestMeetingLocking(FunctionalTestCase):
                       .in_groups('client1_users'))
         browser.login(username='hugo.boss').open(self.meeting.get_url(view='protocol'))
 
-        with self.assertRaises(Redirect) as cm:
-            browser.login().open(self.meeting.get_url(view='protocol'))
+        browser.login().open(self.meeting.get_url(view='protocol'))
 
         self.assertEquals(
             'http://nohost/plone/opengever-meeting-committeecontainer/committee-1/meeting-1',
-            str(cm.exception))
+            browser.url,
+            'Expected redirect')
 
     @browsing
     def test_meeting_view_shows_information_when_is_locked(self, browser):

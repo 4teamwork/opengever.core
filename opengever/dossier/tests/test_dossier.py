@@ -114,7 +114,12 @@ class TestDossier(FunctionalTestCase):
         branch_node = create(Builder('repository'))
         create(Builder('repository').within(branch_node))
 
+        # XXX This causes an infinite redirection loop between ++add++ and
+        # reqiure_login. By enabling exception_bubbling we can catch the
+        # Unauthorized exception and end the infinite loop.
+        browser.exception_bubbling = True
         with self.assertRaises(Unauthorized):
+        # with browser.expect_unauthorized():
             browser.login().open(
                 branch_node, view='++add++{}'.format(self.portal_type))
 

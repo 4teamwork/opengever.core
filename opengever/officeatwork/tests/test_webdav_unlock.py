@@ -5,6 +5,7 @@ from opengever.core.testing import OPENGEVER_FUNCTIONAL_ZSERVER_TESTING
 from opengever.testing import FunctionalTestCase
 from opengever.testing.officeconnector import TestOfficeConnector
 from plone import api
+import transaction
 
 
 class TestWebDAVUnlock(FunctionalTestCase):
@@ -27,6 +28,7 @@ class TestWebDAVUnlock(FunctionalTestCase):
         connector.unlock()
 
         browser.open(self.document)
+        transaction.begin()
         self.assertFalse(browser.context.is_shadow_document())
         self.assertEqual('document-state-draft',
                          api.content.get_state(browser.context))

@@ -133,10 +133,8 @@ class TestSizeQuota(FunctionalTestCase):
 
         user_folder = create_members_folder(create(Builder('private_root')))
         user_dossier = create(Builder('dossier').within(user_folder))
-        browser.login().get_mechbrowser().addheaders.remove((
-            'X-zope-handle-errors', 'False'))
 
-        browser.open(user_dossier)
+        browser.login().open(user_dossier)
         factoriesmenu.add('Document')
         browser.fill({'File': ('Some data', 'file.txt', 'text/plain')}).save()
         statusmessages.assert_no_error_messages()

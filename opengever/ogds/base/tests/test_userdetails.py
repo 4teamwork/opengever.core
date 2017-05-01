@@ -1,7 +1,6 @@
 from opengever.testing import FunctionalTestCase
 from ftw.testbrowser import browsing
 from opengever.testing import create_ogds_user
-from zExceptions import NotFound
 
 
 class TestUserDetails(FunctionalTestCase):
@@ -20,5 +19,5 @@ class TestUserDetails(FunctionalTestCase):
 
     @browsing
     def test_user_details_return_not_found_for_not_exisiting_user(self, browser):
-        with self.assertRaises(NotFound):
+        with browser.expect_http_error(reason='Not Found'):
             browser.login().open(self.portal, view='@@user-details/hugo.boss')

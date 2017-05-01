@@ -12,7 +12,6 @@ from opengever.core.testing import toggle_feature
 from opengever.testing import FunctionalTestCase
 from opengever.testing.helpers import get_contacts_token
 from plone import api
-from zExceptions import Unauthorized
 
 
 class TestDossierParticipation(FunctionalTestCase):
@@ -118,7 +117,7 @@ class TestParticipationWrapper(FunctionalTestCase):
     @browsing
     def test_cross_injection_raises_unauthorized(self, browser):
         dossier2 = create(Builder('dossier'))
-        with self.assertRaises(Unauthorized):
+        with browser.expect_unauthorized():
             browser.login().open('{}/participation-1/edit'.format(
                 dossier2.absolute_url()))
 
@@ -263,7 +262,7 @@ class TestAddForm(FunctionalTestCase):
     @browsing
     def test_raises_unathorized_when_user_is_not_allowed_to_add_content(self, browser):
         self.grant('Reader')
-        with self.assertRaises(Unauthorized):
+        with browser.expect_unauthorized():
             browser.login().open(self.dossier,
                                  view='add-sql-participation')
 

@@ -22,11 +22,13 @@ class TestPrivateRoot(FunctionalTestCase):
 
     @browsing
     def test_is_only_addable_by_manager(self, browser):
+        browser.login().open(
+            self.portal, view='++add++opengever.private.root')
+        browser.fill({'Title (German)': u'Meine Ablage',
+                      'Title (French)': u'Mon d\xe9p\xf4t'})
+
+        browser.exception_bubbling = True
         with self.assertRaises(Unauthorized):
-            browser.login().open(
-                self.portal, view='++add++opengever.private.root')
-            browser.fill({'Title (German)': u'Meine Ablage',
-                          'Title (French)': u'Mon d\xe9p\xf4t'})
             browser.click_on('Save')
 
     @browsing

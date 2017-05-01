@@ -71,6 +71,9 @@ class TestTaskWorkflowAddingDocumentsAndMails(FunctionalTestCase):
 
         browser.visit(self.task, view='++add++opengever.document.document')
         form = browser.fill({'Title': 'foobar'})
+
+        # https://github.com/4teamwork/opengever.core/issues/2923
+        browser.exception_bubbling = True
         with self.assertRaises(Unauthorized) as cm:
             form.save()
         self.assertEquals("Cannot create opengever.document.document",
@@ -85,6 +88,9 @@ class TestTaskWorkflowAddingDocumentsAndMails(FunctionalTestCase):
 
         browser.visit(self.task, view='++add++ftw.mail.mail')
         form = browser.fill({'Title': 'foobar'})
+
+        # https://github.com/4teamwork/opengever.core/issues/2923
+        browser.exception_bubbling = True
         with self.assertRaises(Unauthorized) as cm:
             form.save()
 
@@ -132,12 +138,8 @@ class TestTaskWorkflow(FunctionalTestCase):
         self.wf_tool.doActionFor(dossier, 'dossier-transition-resolve')
         transaction.commit()
 
-        with self.assertRaises(Unauthorized) as cm:
+        with browser.expect_unauthorized():
             browser.login().open(document, view='edit')
-
-        self.assertEquals(
-            'You are not authorized to access this resource.',
-            str(cm.exception))
 
     def test_deleting_task_is_only_allowed_for_managers(self):
         task = create(Builder('task'))

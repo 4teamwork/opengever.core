@@ -3,7 +3,6 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_OFFICEATWORK_LAYER
 from opengever.testing import FunctionalTestCase
-from zExceptions import Unauthorized
 
 
 class TestShadowState(FunctionalTestCase):
@@ -27,5 +26,5 @@ class TestShadowState(FunctionalTestCase):
         user = create(Builder('user').with_roles(
             'Reader', 'Contributor', 'Editor', 'Reviewer', 'Publisher'))
 
-        with self.assertRaises(Unauthorized):
+        with browser.expect_unauthorized():
             browser.login(user.getId()).visit(self.document)

@@ -13,8 +13,6 @@ from plone import api
 from plone.locking.interfaces import ILockable
 from plone.protect import createToken
 from z3c.relationfield.relation import RelationValue
-from zExceptions import NotFound
-from zExceptions import Unauthorized
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
 import json
@@ -193,7 +191,7 @@ class TestAgendaItemEdit(TestAgendaItem):
 
     @browsing
     def test_raises_not_found_for_invalid_agenda_item_id(self, browser):
-        with self.assertRaises(NotFound):
+        with browser.expect_http_error(reason='Not Found'):
             browser.login().open(self.meeting_wrapper,
                                  view='agenda_items/12345/edit')
 
@@ -204,7 +202,7 @@ class TestAgendaItemEdit(TestAgendaItem):
 
         self.meeting.workflow_state = 'closed'
 
-        with self.assertRaises(Unauthorized):
+        with browser.expect_unauthorized():
             browser.login().open(
                 self.meeting_wrapper,
                 view='agenda_items/{}/edit'.format(item.agenda_item_id),
@@ -230,7 +228,7 @@ class TestAgendaItemDelete(TestAgendaItem):
 
     @browsing
     def test_raises_not_found_for_invalid_agenda_item_id(self, browser):
-        with self.assertRaises(NotFound):
+        with browser.expect_http_error(reason='Not Found'):
             browser.login().open(self.meeting_wrapper,
                                  view='agenda_items/12345/delete')
 
@@ -246,7 +244,7 @@ class TestAgendaItemDelete(TestAgendaItem):
         other_item = create(Builder('agenda_item').having(
             title=u'foo', meeting=other_meeting))
 
-        with self.assertRaises(NotFound):
+        with browser.expect_http_error(reason='Not Found'):
             browser.login().open(
                 self.meeting_wrapper,
                 view='agenda_items/{}/delete'.format(other_item.agenda_item_id))
@@ -258,7 +256,7 @@ class TestAgendaItemDelete(TestAgendaItem):
 
         self.meeting.workflow_state = 'closed'
 
-        with self.assertRaises(Unauthorized):
+        with browser.expect_unauthorized():
             browser.login().open(
                 self.meeting_wrapper,
                 view='agenda_items/{}/delete'.format(item.agenda_item_id))
@@ -382,7 +380,7 @@ class TestAgendaItemDecide(TestAgendaItem):
 
     @browsing
     def test_raises_not_found_for_invalid_agenda_item_id(self, browser):
-        with self.assertRaises(NotFound):
+        with browser.expect_http_error(reason='Not Found'):
             browser.login().open(self.meeting_wrapper,
                                  view='agenda_items/12345/decide')
 
@@ -393,7 +391,7 @@ class TestAgendaItemDecide(TestAgendaItem):
 
         self.meeting.workflow_state = 'closed'
 
-        with self.assertRaises(Unauthorized):
+        with browser.expect_unauthorized():
             browser.login().open(
                 self.meeting_wrapper,
                 view='agenda_items/{}/decide'.format(item.agenda_item_id))
@@ -426,7 +424,7 @@ class TestAgendaItemDecide(TestAgendaItem):
 
         self.login(user_id=u'hugo.boss')
         browser.login(username=u'hugo.boss')
-        with self.assertRaises(Unauthorized):
+        with browser.expect_unauthorized():
             browser.open(self.dossier)
 
 
@@ -463,7 +461,7 @@ class TestAgendaItemReopen(TestAgendaItem):
 
     @browsing
     def test_raises_not_found_for_invalid_agenda_item_id(self, browser):
-        with self.assertRaises(NotFound):
+        with browser.expect_http_error(reason='Not Found'):
             browser.login().open(self.meeting_wrapper,
                                  view='agenda_items/12345/reopen')
 
@@ -475,7 +473,7 @@ class TestAgendaItemReopen(TestAgendaItem):
 
         self.meeting.workflow_state = 'closed'
 
-        with self.assertRaises(Unauthorized):
+        with browser.expect_unauthorized():
             browser.login().open(
                 self.meeting_wrapper,
                 view='agenda_items/{}/reopen'.format(item.agenda_item_id))
@@ -538,7 +536,7 @@ class TestAgendaItemRevise(TestAgendaItem):
 
     @browsing
     def test_raises_not_found_for_invalid_agenda_item_id(self, browser):
-        with self.assertRaises(NotFound):
+        with browser.expect_http_error(reason='Not Found'):
             browser.login().open(self.meeting_wrapper,
                                  view='agenda_items/12345/revise')
 
@@ -550,7 +548,7 @@ class TestAgendaItemRevise(TestAgendaItem):
 
         self.meeting.workflow_state = 'closed'
 
-        with self.assertRaises(Unauthorized):
+        with browser.expect_unauthorized():
             browser.login().open(
                 self.meeting_wrapper,
                 view='agenda_items/{}/revise'.format(item.agenda_item_id))
@@ -588,7 +586,7 @@ class TestAgendaItemUpdateOrder(TestAgendaItem):
     def test_raise_unauthorized_when_meeting_is_not_editable(self, browser):
         self.meeting.workflow_state = 'closed'
 
-        with self.assertRaises(Unauthorized):
+        with browser.expect_unauthorized():
             browser.login().open(self.meeting_wrapper,
                                  view='agenda_items/update_order')
 
@@ -611,7 +609,7 @@ class TestScheduleParagraph(TestAgendaItem):
     def test_raise_unauthorized_when_meeting_is_not_editable(self, browser):
         self.meeting.workflow_state = 'closed'
 
-        with self.assertRaises(Unauthorized):
+        with browser.expect_unauthorized():
             browser.login().open(self.meeting_wrapper,
                                  view='agenda_items/schedule_paragraph')
 
@@ -634,6 +632,6 @@ class TestScheduleText(TestAgendaItem):
     def test_raise_unauthorized_when_meeting_is_not_editable(self, browser):
         self.meeting.workflow_state = 'closed'
 
-        with self.assertRaises(Unauthorized):
+        with browser.expect_unauthorized():
             browser.login().open(self.meeting_wrapper,
                                  view='agenda_items/schedule_paragraph')

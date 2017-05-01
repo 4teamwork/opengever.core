@@ -45,11 +45,10 @@ class TestRequireLoginScript(FunctionalTestCase):
 
     @browsing
     def test_unauthorized_visible_when_raised_in_traversal(self, browser):
-        with self.assertRaises(Unauthorized):
+        with browser.expect_unauthorized():
             browser.login().open(view='test-traversal-unauthorized')
 
     @browsing
     def test_unauthorized_visible_when_raised_in_publishing(self, browser):
-        browser.replace_request_header('X-zope-handle-errors', 'True')
         browser.login().open(view='test-publishing-unauthorized')
         self.assertEquals('Insufficient Privileges', plone.first_heading())

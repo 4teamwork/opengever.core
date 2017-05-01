@@ -6,7 +6,6 @@ from opengever.contact.browser.mail import IMailAddressesActions
 from opengever.contact.browser.mail import MailAddressesView
 from opengever.contact.models.mailaddress import MailAddress
 from opengever.testing import FunctionalTestCase
-from zExceptions import NotFound
 from zope.interface.verify import verifyClass
 
 
@@ -208,17 +207,17 @@ class TestMailAddressesView(FunctionalTestCase):
 
     @browsing
     def test_raise_not_found_if_not_an_api_function_and_not_a_number(self, browser):
-        with self.assertRaises(NotFound):
+        with browser.expect_http_error(reason='Not Found'):
             browser.login().visit(self.contactfolder, view='contact-1/mails/bad_name')
 
     @browsing
     def test_raise_not_found_if_mail_address_id_is_already_set_on_view(self, browser):
-        with self.assertRaises(NotFound):
+        with browser.expect_http_error(reason='Not Found'):
             browser.login().visit(self.contactfolder, view='contact-1/mails/10/100')
 
     @browsing
     def test_raise_not_found_if_no_mailaddress_with_the_given_id_exists(self, browser):
-        with self.assertRaises(NotFound):
+        with browser.expect_http_error(reason='Not Found'):
             browser.login().visit(self.contactfolder, view='contact-1/mails/10')
 
     @browsing
@@ -230,7 +229,7 @@ class TestMailAddressesView(FunctionalTestCase):
                        .labeled(u'Home')
                        .having(address=u'peter@example.com'))
 
-        with self.assertRaises(NotFound):
+        with browser.expect_http_error(reason='Not Found'):
             browser.login().visit(
                 self.contactfolder,
                 view='contact-1/mails/{}'.format(email.mailaddress_id))

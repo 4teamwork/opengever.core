@@ -3,7 +3,6 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.base.browser import edit_public_trial
 from opengever.testing import FunctionalTestCase
-from zExceptions import Unauthorized
 from opengever.base.behaviors.classification import PUBLIC_TRIAL_PRIVATE
 
 
@@ -78,7 +77,7 @@ class TestEditPublicTrialForm(FunctionalTestCase):
     def test_raise_aunauthorized_if_the_user_CANNOT_modify(self, browser):
         user = create(Builder('user').with_roles('Contributor'))
 
-        with self.assertRaises(Unauthorized):
+        with browser.expect_unauthorized():
             browser.login(user.getId()).visit(self.document,
                                               view='edit_public_trial')
 

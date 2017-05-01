@@ -178,10 +178,11 @@ class TestReverting(FunctionalTestCase):
         self.manager.checkout()
         transaction.commit()
 
-        with self.assertRaises(Unauthorized):
-            browser.login().open(self.document, view='revert-file-to-version',
-                                 data={'version_id': 2,
-                                       '_authenticator': createToken()})
+        with browser.expect_unauthorized():
+            browser.login().open(
+                self.document,
+                view='revert-file-to-version?version_id=2&_authenticator={}'
+                .format(createToken()))
 
 
 class TestManagerHelpers(FunctionalTestCase):

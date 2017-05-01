@@ -5,8 +5,6 @@ from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.model import Meeting
 from opengever.meeting.wrapper import MeetingWrapper
 from opengever.testing import FunctionalTestCase
-from zExceptions import NotFound
-from zExceptions import Unauthorized
 
 
 class TestUnscheduledProposals(FunctionalTestCase):
@@ -113,11 +111,11 @@ class TestScheduleProposal(TestUnscheduledProposals):
         self.meeting.workflow_state = 'closed'
 
         view = 'unscheduled_proposals/1/schedule'
-        with self.assertRaises(Unauthorized):
+        with browser.expect_unauthorized():
             browser.login().open(self.meeting_wrapper, view=view)
 
     @browsing
     def test_raise_notfound_with_invalid_proposal_id(self, browser):
-        with self.assertRaises(NotFound):
+        with browser.expect_http_error(reason='Not Found'):
             browser.login().open(self.meeting_wrapper,
                                  view='unscheduled_proposals/123/schedule')

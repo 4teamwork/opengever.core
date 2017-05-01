@@ -5,7 +5,6 @@ from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.browser.archival_file_form import can_access_archival_file_form
 from opengever.testing import FunctionalTestCase
 from plone.namedfile.file import NamedBlobFile
-from zExceptions import Unauthorized
 
 
 class TestEditArchivalFormAccess(FunctionalTestCase):
@@ -77,7 +76,7 @@ class TestArchivalFileForm(FunctionalTestCase):
     def test_raise_unauthorized_if_the_user_CANNOT_modify(self, browser):
         user = create(Builder('user').with_roles('Contributor'))
 
-        with self.assertRaises(Unauthorized):
+        with browser.expect_unauthorized():
             browser.login(user.getId()).visit(self.document,
                                               view='edit_archival_file')
 

@@ -18,7 +18,12 @@ class TestCreateWithOfficeatworkFeatureDisabled(FunctionalTestCase):
         document = create(Builder('document')
                           .within(self.dossier)
                           .as_shadow_document())
+        # XXX This causes an infinite redirection loop between ++add++ and
+        # reqiure_login. By enabling exception_bubbling we can catch the
+        # Unauthorized exception and end the infinite loop.
+        browser.exception_bubbling = True
         with self.assertRaises(Unauthorized):
+        # with browser.expect_unauthorized():
             browser.login().open(document, view='create_with_officeatwork')
 
 
@@ -62,5 +67,10 @@ class TestCreateWithOfficeatwork(FunctionalTestCase):
     @browsing
     def test_document_in_non_shadow_state_raises_unauthorized(self, browser):
         document = create(Builder('document').within(self.dossier))
+        # XXX This causes an infinite redirection loop between ++add++ and
+        # reqiure_login. By enabling exception_bubbling we can catch the
+        # Unauthorized exception and end the infinite loop.
+        browser.exception_bubbling = True
         with self.assertRaises(Unauthorized):
+        # with browser.expect_unauthorized():
             browser.login().open(document, view='create_with_officeatwork')

@@ -203,7 +203,6 @@ class TestDispositionWorkflow(FunctionalTestCase):
 
         with self.assertRaises(FormFieldNotFound):
             browser.fill({'Transfer number': 'AB 123'})
-            browser.click_on('Save')
 
         self.grant('Archivist')
         browser.login().open(self.disposition, view='edit')
