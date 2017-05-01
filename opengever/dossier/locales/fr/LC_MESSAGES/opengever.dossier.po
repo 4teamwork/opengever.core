@@ -2,19 +2,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2017-04-27 11:21+0000\n"
-"PO-Revision-Date: 2016-09-20 21:24+0000\n"
-"Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
-"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/fr/>\n"
+"PO-Revision-Date: 2017-05-01 15:56+0000\n"
+"Last-Translator: Lukas Graf <lukas.graf@4teamwork.ch>\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
+"gever/opengever-dossier/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 2.7-dev\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
-"Language: fr\n"
-"X-Generator: Weblate 2.7-dev\n"
 
 #: ./opengever/dossier/move_items.py:149
 msgid "${copied_items} Elements were moved successfully"
@@ -321,7 +322,7 @@ msgstr "Date de clôture obligatoire"
 #. Default: "You have not selected any items."
 #: ./opengever/dossier/browser/report.py:59
 msgid "error_no_items"
-msgstr "Vous n'avez sélectionné aucun objet."
+msgstr "Aucun élément sélectionné."
 
 #. Default: "Common"
 #: ./opengever/dossier/behaviors/dossier.py:48
@@ -464,7 +465,7 @@ msgstr ""
 #. Default: "Address"
 #: ./opengever/dossier/templatefolder/form.py:272
 msgid "label_address"
-msgstr ""
+msgstr "Adresse"
 
 #. Default: "by ${author}"
 #: ./opengever/dossier/project_templates/byline.pt:10
@@ -474,7 +475,7 @@ msgstr "Responsable: ${author}"
 #. Default: "Cancel"
 #: ./opengever/dossier/viewlets/templates/note.pt:55
 msgid "label_cancel"
-msgstr ""
+msgstr "Annuler"
 
 #. Default: "Close"
 #: ./opengever/dossier/viewlets/templates/note.pt:61
@@ -512,7 +513,7 @@ msgstr "Créé par"
 #: ./opengever/dossier/browser/overview.py:239
 #: ./opengever/dossier/templatefolder/tabs.py:141
 msgid "label_description"
-msgstr ""
+msgstr "Description"
 
 #. Default: "Destination"
 #: ./opengever/dossier/move_items.py:26
@@ -777,7 +778,7 @@ msgstr "Corbeille"
 #. Default: "URL"
 #: ./opengever/dossier/templatefolder/form.py:306
 msgid "label_url"
-msgstr ""
+msgstr "Adresse URL"
 
 #. Default: "State"
 #: ./opengever/dossier/project_templates/byline.pt:22
@@ -873,4 +874,3 @@ msgstr ""
 #: ./opengever/dossier/behaviors/participation.py:196
 msgid "warning_no_participants_selected"
 msgstr "Vous n'avez sélectionné aucune participation."
-

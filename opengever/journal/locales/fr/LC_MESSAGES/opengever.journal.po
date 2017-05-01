@@ -2,19 +2,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2017-04-27 11:21+0000\n"
-"PO-Revision-Date: 2016-08-10 05:15+0000\n"
-"Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
-"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-journal/fr/>\n"
+"PO-Revision-Date: 2017-05-01 15:51+0000\n"
+"Last-Translator: Lukas Graf <lukas.graf@4teamwork.ch>\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
+"gever/opengever-journal/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 2.7-dev\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
-"Language: fr\n"
-"X-Generator: Weblate 2.7-dev\n"
 
 #. Default: "Journal"
 #: ./opengever/journal/templates/journalhistory.pt:15
@@ -24,7 +25,7 @@ msgstr "Historique"
 #. Default: "Changed by"
 #: ./opengever/journal/tab.py:75
 msgid "label_actor"
-msgstr "Modifier le"
+msgstr "Modifier par"
 
 #. Default: "Add journal entry"
 #: ./opengever/journal/form.py:54
@@ -45,7 +46,7 @@ msgstr ""
 #. Default: "Comment"
 #: ./opengever/journal/form.py:22
 msgid "label_comment"
-msgstr ""
+msgstr "commentaire"
 
 #. Default: "Comments"
 #: ./opengever/journal/tab.py:79
@@ -161,7 +162,7 @@ msgstr ""
 #. Default: "Documents"
 #: ./opengever/journal/templates/journal_references.pt:17
 msgid "label_documents"
-msgstr ""
+msgstr "Documents"
 
 #. Default: "Dossier added: ${title}"
 #: ./opengever/journal/handlers.py:228
@@ -297,4 +298,3 @@ msgstr "Historique"
 #: ./opengever/journal/templates/journal_selection.pt:9
 msgid "tab_matches"
 msgstr "Résultat(s): ${amount}"
-
