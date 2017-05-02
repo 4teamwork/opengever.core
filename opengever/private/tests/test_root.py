@@ -35,3 +35,16 @@ class TestPrivateRoot(FunctionalTestCase):
         browser.login().open()
         self.assertNotIn('meine-ablage',
                          browser.css('#portal-globalnav li').text)
+
+    @browsing
+    def test_portlet_inheritance_is_blocked(self, browser):
+        self.grant('Manager')
+
+        browser.login().open()
+        factoriesmenu.add('Private Root')
+        browser.fill({'Title (German)': u'Meine Ablage',
+                      'Title (French)': u'Mon d\xe9p\xf4t'})
+        browser.click_on('Save')
+
+        self.assert_portlet_inheritance_blocked(
+            'plone.leftcolumn', browser.context)
