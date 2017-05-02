@@ -13,6 +13,7 @@ Changelog
   [Rotonen]
 
 - Add an aggregated per dossier attach to email event on OC attach actions. [Rotonen]
+- Added a document status JSON REST endpoint [Rotonen]
 - Fix some common i18n issues:
 
   - Homogenize full stops at the end of sentences.
