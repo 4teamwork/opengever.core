@@ -38,6 +38,17 @@ class TestInboxContainer(FunctionalTestCase):
             factoriesmenu.addable_types()
             )
 
+    @browsing
+    def test_portlet_inheritance_is_blocked(self, browser):
+        self.grant('Manager')
+        add_languages(['de-ch'])
+        browser.login().open()
+        factoriesmenu.add('Inbox Container')
+        browser.fill({'Title': 'Inbox Container'}).save()
+
+        self.assert_portlet_inheritance_blocked(
+            'plone.leftcolumn', browser.context)
+
 
 class TestInboxView(FunctionalTestCase):
 
