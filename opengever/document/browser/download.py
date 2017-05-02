@@ -4,6 +4,7 @@ from opengever.core import dictstorage
 from opengever.document import _
 from opengever.document.browser.edit import get_redirect_url
 from opengever.document.events import FileCopyDownloadedEvent
+from opengever.mail.mail import IOGMailMarker
 from plone import api
 from plone.memoize import ram
 from plone.memoize.interfaces import ICacheChooser
@@ -31,7 +32,7 @@ class DocumentishDownload(Download):
     """
 
     def __call__(self):
-        DownloadConfirmationHelper().process_request_form()
+        DownloadConfirmationHelper(self.context).process_request_form()
 
         try:
             named_file = self._getFile()
@@ -87,8 +88,9 @@ def download_confirmation_user_cache_key(func, ctx):
 class DownloadConfirmationHelper(object):
     """Tracks per user state of download confirmations."""
 
-    def __init__(self):
+    def __init__(self, context):
         self.request = getRequest()
+        self.context = context
 
     def get_key(self, user=None):
         """User specific key."""
@@ -117,9 +119,12 @@ class DownloadConfirmationHelper(object):
         dictstorage.set(key, str(True))
         self.invalidate_is_active()
 
-    def get_html_tag(self, file_url, additional_classes=[], url_extension='',
+    def get_html_tag(self, additional_classes=[], url_extension='',
                      viewname='download', include_token=False):
-        if self.is_active():
+        file_url = self.context.absolute_url()
+
+        # Do not display a download confirmation for mail items
+        if self.is_active() and not IOGMailMarker.providedBy(self.context):
             viewname = 'file_download_confirmation'
             clazz = (('link-overlay '
                       'modal '
@@ -142,7 +147,7 @@ class DownloadConfirmationHelper(object):
     def process_request_form(self):
         """Process a request containing the rendered form."""
         if 'disable_download_confirmation' in self.request.form:
-            DownloadConfirmationHelper().deactivate()
+            DownloadConfirmationHelper(self.context).deactivate()
 
 
 class DocumentDownloadFileVersion(DownloadFileVersion):
@@ -151,7 +156,7 @@ class DocumentDownloadFileVersion(DownloadFileVersion):
     """
 
     def __call__(self):
-        DownloadConfirmationHelper().process_request_form()
+        DownloadConfirmationHelper(self.context).process_request_form()
 
         self._init_version_file()
         if self.version_file:

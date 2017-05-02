@@ -16,11 +16,12 @@ MAIL_DATA_CRLF = resource_string('opengever.mail.tests', 'mail_crlf.txt')
 
 
 class TestMailDownloadCopy(FunctionalTestCase):
+    """Test downloading a mail works."""
 
     @browsing
     def test_mail_download_copy_yields_correct_headers(self, browser):
-        DownloadConfirmationHelper().deactivate()
         mail = create(Builder("mail").with_message(MAIL_DATA))
+        DownloadConfirmationHelper(mail).deactivate()
         browser.login().visit(mail, view='tabbedview_view-overview')
         browser.find('Download copy').click()
 
@@ -28,13 +29,14 @@ class TestMailDownloadCopy(FunctionalTestCase):
             'status': '200 Ok',
             'content-length': str(len(browser.contents)),
             'content-type': 'message/rfc822',
-            'content-disposition': 'attachment; filename="die-burgschaft.eml"'},
+            'content-disposition': 'attachment; filename="die-burgschaft.eml"',
+            },
             browser.headers)
 
     @browsing
     def test_mail_download_copy_causes_journal_entry(self, browser):
-        DownloadConfirmationHelper().deactivate()
         mail = create(Builder("mail").with_message(MAIL_DATA))
+        DownloadConfirmationHelper(mail).deactivate()
         browser.login().visit(mail, view='tabbedview_view-overview')
         browser.find('Download copy').click()
 
@@ -58,24 +60,43 @@ class TestMailDownloadCopy(FunctionalTestCase):
 
     @browsing
     def test_mail_download_converts_lf_to_crlf(self, browser):
-        DownloadConfirmationHelper().deactivate()
         mail = create(Builder("mail").with_message(MAIL_DATA_LF))
+        DownloadConfirmationHelper(mail).deactivate()
         browser.login().visit(mail, view='tabbedview_view-overview')
         browser.find('Download copy').click()
 
         self.assertTrue(
-            browser.contents.startswith('Return-Path: <James.Bond@test.ch>\r\n'),
+            browser.contents.startswith(
+                'Return-Path: <James.Bond@test.ch>\r\n'),
             'Lineendings are not converted correctly.')
 
     @browsing
     def test_mail_download_handles_crlf_correctly(self, browser):
         """Mails with already CRLF, should not be converted or changed.
         """
-        DownloadConfirmationHelper().deactivate()
         mail = create(Builder("mail").with_message(MAIL_DATA_CRLF))
+        DownloadConfirmationHelper(mail).deactivate()
         browser.login().visit(mail, view='tabbedview_view-overview')
         browser.find('Download copy').click()
 
         self.assertTrue(
-            browser.contents.startswith('Return-Path: <James.Bond@example.org>\r\n'),
+            browser.contents.startswith(
+                'Return-Path: <James.Bond@example.org>\r\n'),
             'Lineendings are not converted correctly.')
+
+    @browsing
+    def test_mail_download_links_never_have_confirmation(self, browser):
+        mail = create(Builder("mail").with_message(MAIL_DATA_CRLF))
+        dch = DownloadConfirmationHelper(mail)
+
+        browser.login()
+        browser.open(mail, view='tabbedview_view-overview')
+        self.assertNotIn(
+            'confirmation',
+            browser.css('a.function-download-copy').first.get('href'))
+
+        dch.deactivate()
+        browser.open(mail, view='tabbedview_view-overview')
+        self.assertNotIn(
+            'confirmation',
+            browser.css('a.function-download-copy').first.get('href'))
