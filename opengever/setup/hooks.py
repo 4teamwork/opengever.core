@@ -18,7 +18,6 @@ def default_installed(site):
 def default_content_installed(site):
     assign_default_navigation_portlet(site, 'eingangskorb')
     assign_default_navigation_portlet(site, 'vorlagen')
-    assign_default_navigation_portlet(site, 'kontakte')
     block_context_portlets(site, MEMBERSFOLDER_ID)
 
 

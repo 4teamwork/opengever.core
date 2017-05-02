@@ -36,4 +36,10 @@
       name="opengever.contact.ContactsVocabulary"
       />
 
+  <subscriber
+      for="opengever.contact.interfaces.IContactFolder
+           zope.lifecycleevent.interfaces.IObjectAddedEvent"
+      handler=".handlers.configure_contactfolder_portlets"
+      />
+
 </configure>
