@@ -7,11 +7,6 @@ from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.committeecontainer import ICommitteeContainer
 from opengever.testing import add_languages
 from opengever.testing import FunctionalTestCase
-from plone.portlets.constants import CONTEXT_CATEGORY
-from plone.portlets.interfaces import ILocalPortletAssignmentManager
-from plone.portlets.interfaces import IPortletManager
-from zope.component import getMultiAdapter
-from zope.component import getUtility
 
 
 class TestCommitteeContainer(FunctionalTestCase):
