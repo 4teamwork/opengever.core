@@ -16,11 +16,15 @@ def block_context_portlet_inheritance(obj):
         (obj, manager), ILocalPortletAssignmentManager)
     assignable.setBlacklistStatus(CONTEXT_CATEGORY, True)
 
-    
+
 def add_navigation_portlet_assignment(obj, **kwargs):
     """Add a new navigation portlet to given object to the left column."""
 
     manager = getUtility(
         IPortletManager, name=u'plone.leftcolumn', context=obj)
     mapping = getMultiAdapter((obj, manager), IPortletAssignmentMapping)
+
+    if 'navigation' in mapping.keys():
+        del mapping['navigation']
+
     mapping['navigation'] = navigation.Assignment(**kwargs)
