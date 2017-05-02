@@ -7,6 +7,11 @@ from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.committeecontainer import ICommitteeContainer
 from opengever.testing import add_languages
 from opengever.testing import FunctionalTestCase
+from plone.portlets.constants import CONTEXT_CATEGORY
+from plone.portlets.interfaces import ILocalPortletAssignmentManager
+from plone.portlets.interfaces import IPortletManager
+from zope.component import getMultiAdapter
+from zope.component import getUtility
 
 
 class TestCommitteeContainer(FunctionalTestCase):
@@ -81,6 +86,20 @@ class TestCommitteeContainer(FunctionalTestCase):
                 toc_template=toc_template))
 
         self.assertEqual(toc_template, container.get_toc_template())
+
+    @browsing
+    def test_portlets_inheritance_is_blocked(self, browser):
+        toc_template = create(
+            Builder('sablontemplate')
+            .attach_file_containing("blabla", name=u'toc.docx'))
+
+        container = create(
+            Builder('committee_container').having(
+                protocol_template=self.template,
+                excerpt_template=self.template,
+                toc_template=toc_template))
+
+        self.assert_portlet_inheritance_blocked('plone.leftcolumn', container)
 
 
 class TestCommitteesTab(FunctionalTestCase):
