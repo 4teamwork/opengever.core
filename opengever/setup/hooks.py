@@ -1,11 +1,4 @@
-from plone.app.portlets.portlets import navigation
-from plone.portlets.constants import CONTEXT_CATEGORY
-from plone.portlets.interfaces import ILocalPortletAssignmentManager
-from plone.portlets.interfaces import IPortletAssignmentMapping
-from plone.portlets.interfaces import IPortletManager
 from Products.CMFCore.utils import getToolByName
-from zope.component import getMultiAdapter
-from zope.component import getUtility
 
 
 def default_installed(site):
@@ -44,36 +37,3 @@ def assign_roles(context, admin_groups):
         prm.assignRoleToPrincipal('Editor', admin_group.strip())
         prm.assignRoleToPrincipal('Role Manager', admin_group.strip())
         prm.assignRoleToPrincipal('Reviewer', admin_group.strip())
-
-
-def assign_default_navigation_portlet(context, content_id):
-    """Add a new navigation portlet to content."""
-
-    content = context.restrictedTraverse(content_id)
-    manager = getUtility(
-        IPortletManager, name=u'plone.leftcolumn', context=content)
-    mapping = getMultiAdapter((content, manager),
-                              IPortletAssignmentMapping)
-    if 'navigation' not in mapping.keys():
-        mapping['navigation'] = navigation.Assignment(
-            root=None,
-            currentFolderOnly=False,
-            includeTop=False,
-            topLevel=1,
-            bottomLevel=0)
-
-    # Block inherited context portlets on content
-    assignable = getMultiAdapter(
-        (content, manager), ILocalPortletAssignmentManager)
-    assignable.setBlacklistStatus(CONTEXT_CATEGORY, True)
-
-
-def block_context_portlets(site, content_id):
-    content = site.restrictedTraverse(content_id)
-    manager = getUtility(
-        IPortletManager, name=u'plone.leftcolumn', context=content)
-
-    # Block inherited context portlets on content
-    assignable = getMultiAdapter(
-        (content, manager), ILocalPortletAssignmentManager)
-    assignable.setBlacklistStatus(CONTEXT_CATEGORY, True)
