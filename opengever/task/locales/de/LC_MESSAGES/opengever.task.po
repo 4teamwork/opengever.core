@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-04-27 11:21+0000\n"
+"POT-Creation-Date: 2017-05-03 12:23+0000\n"
 "PO-Revision-Date: 2015-02-17 18:41+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -287,39 +287,40 @@ msgid "help_complete_task_response"
 msgstr "Der hier eingegebene Text erscheint in der Antwort, die die Aufgabe abschliesst."
 
 #: ./opengever/task/response.py:67
-#: ./opengever/task/task.py:139
+#: ./opengever/task/task.py:141
 msgid "help_date_of_completion"
 msgstr "Das Datum an dem die Aufgabe beendet wurde"
 
 #. Default: "Deadline"
 #: ./opengever/task/browser/delegate/metadata.py:33
-#: ./opengever/task/task.py:130
+#: ./opengever/task/task.py:132
 msgid "help_deadline"
 msgstr "Tragen Sie ein Datum ein, bis wann die Aufgabe erledigt werden muss"
 
 #. Default: "Cost in CHF"
-#: ./opengever/task/task.py:196
+#: ./opengever/task/task.py:198
 msgid "help_effectiveCost"
 msgstr "Kosten in CHF"
 
 #. Default: "Duration in h"
-#: ./opengever/task/task.py:190
+#: ./opengever/task/task.py:192
 msgid "help_effectiveDuration"
 msgstr "Dauer in h"
 
 #. Default: "Cost in CHF"
-#: ./opengever/task/task.py:184
+#: ./opengever/task/task.py:186
 msgid "help_expectedCost"
 msgstr "Kosten in CHF"
 
 #. Default: "Duration in h"
-#: ./opengever/task/task.py:178
+#: ./opengever/task/task.py:180
 msgid "help_expectedDuration"
 msgstr "Dauer in h"
 
+#. Default: "Select the responsible user from the client chosen above, or the corresponding inbox."
 #: ./opengever/task/task.py:122
 msgid "help_responsible"
-msgstr "Wählen Sie die verantwortliche Person aus, die dem oben gewählten Mandanten angehört."
+msgstr "Wählen Sie die verantwortliche Person aus, die dem oben gewählten Mandanten angehört, oder den zugehörigen Eingangskorb."
 
 #: ./opengever/task/browser/assign.py:38
 #: ./opengever/task/task.py:114
@@ -336,7 +337,7 @@ msgid "help_task_type"
 msgstr "Wählen Sie den Auftragstyp"
 
 #: ./opengever/task/browser/delegate/metadata.py:38
-#: ./opengever/task/task.py:147
+#: ./opengever/task/task.py:149
 msgid "help_text"
 msgstr "Geben Sie eine detaillierte Arbeitsanweisung oder einen Kommentar ein"
 
@@ -416,7 +417,7 @@ msgstr "erstellt am"
 #. Default: "Date of completion"
 #: ./opengever/task/browser/overview.py:103
 #: ./opengever/task/response.py:66
-#: ./opengever/task/task.py:138
+#: ./opengever/task/task.py:140
 msgid "label_date_of_completion"
 msgstr "Erledigungsdatum"
 
@@ -443,12 +444,12 @@ msgid "label_edit_response_not_allowed"
 msgstr "Sie sind nicht berechtigt diese Antwort zu löschen"
 
 #. Default: "effective cost"
-#: ./opengever/task/task.py:195
+#: ./opengever/task/task.py:197
 msgid "label_effectiveCost"
 msgstr "Effektive Kosten (CHF)"
 
 #. Default: "effective duration"
-#: ./opengever/task/task.py:189
+#: ./opengever/task/task.py:191
 msgid "label_effectiveDuration"
 msgstr "Effektive Dauer (h)"
 
@@ -458,17 +459,17 @@ msgid "label_enter_response"
 msgstr "Bitte tragen sie ihre Antwort unten ein"
 
 #. Default: "expected cost"
-#: ./opengever/task/task.py:183
+#: ./opengever/task/task.py:185
 msgid "label_expectedCost"
 msgstr "Geschätzte Kosten (CHF)"
 
 #. Default: "Expected duration"
-#: ./opengever/task/task.py:177
+#: ./opengever/task/task.py:179
 msgid "label_expectedDuration"
 msgstr "Geschätzte Dauer (h)"
 
 #. Default: "Start with work"
-#: ./opengever/task/task.py:172
+#: ./opengever/task/task.py:174
 msgid "label_expectedStartOfWork"
 msgstr "Beginn der Arbeit"
 
@@ -500,7 +501,7 @@ msgid "label_parent_dossier_title"
 msgstr "Dossiertitel"
 
 #. Default: "Predecessor"
-#: ./opengever/task/task.py:202
+#: ./opengever/task/task.py:204
 msgid "label_predecessor"
 msgstr "Vorgänger"
 
@@ -512,7 +513,7 @@ msgstr "Ursprüngliche Aufgabe"
 #. Default: "Related Items"
 #: ./opengever/task/browser/complete.py:216
 #: ./opengever/task/response.py:72
-#: ./opengever/task/task.py:152
+#: ./opengever/task/task.py:154
 msgid "label_related_items"
 msgstr "Verweise"
 

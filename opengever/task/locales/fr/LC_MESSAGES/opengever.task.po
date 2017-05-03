@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-04-27 11:21+0000\n"
+"POT-Creation-Date: 2017-05-03 12:23+0000\n"
 "PO-Revision-Date: 2016-09-20 21:24+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-task/fr/>\n"
@@ -289,36 +289,38 @@ msgid "help_complete_task_response"
 msgstr "Le texte saisi ici apparaît dans la réponse qui clôture cette tâche."
 
 #: ./opengever/task/response.py:67
-#: ./opengever/task/task.py:139
+#: ./opengever/task/task.py:141
 msgid "help_date_of_completion"
 msgstr "Date d'achèvement de la tâche"
 
 #: ./opengever/task/browser/delegate/metadata.py:33
-#: ./opengever/task/task.py:130
+#: ./opengever/task/task.py:132
 msgid "help_deadline"
 msgstr "Saisissez la date d'achèvement de la tâche"
 
 #. Default: "Cost in CHF"
-#: ./opengever/task/task.py:196
+#: ./opengever/task/task.py:198
 msgid "help_effectiveCost"
 msgstr "Coûts effectifs en CHF"
 
 #. Default: "Duration in h"
-#: ./opengever/task/task.py:190
+#: ./opengever/task/task.py:192
 msgid "help_effectiveDuration"
 msgstr "Durée effective en h"
 
 #. Default: "Cost in CHF"
-#: ./opengever/task/task.py:184
+#: ./opengever/task/task.py:186
 msgid "help_expectedCost"
 msgstr "Coûts effectifs en CHF"
 
 #. Default: "Duration in h"
-#: ./opengever/task/task.py:178
+#: ./opengever/task/task.py:180
 msgid "help_expectedDuration"
 msgstr "Durée effective en h"
 
+#. Default: "Select the responsible user from the client chosen above, or the corresponding inbox."
 #: ./opengever/task/task.py:122
+#, fuzzy
 msgid "help_responsible"
 msgstr "Choix de la personne responsable, membre du client mentionné ci-dessus."
 
@@ -337,7 +339,7 @@ msgid "help_task_type"
 msgstr "Choix du type de mandat"
 
 #: ./opengever/task/browser/delegate/metadata.py:38
-#: ./opengever/task/task.py:147
+#: ./opengever/task/task.py:149
 msgid "help_text"
 msgstr "Saisissez une instruction de travail détaillée ou un commentaire"
 
@@ -417,7 +419,7 @@ msgstr "Créé le"
 #. Default: "Date of completion"
 #: ./opengever/task/browser/overview.py:103
 #: ./opengever/task/response.py:66
-#: ./opengever/task/task.py:138
+#: ./opengever/task/task.py:140
 msgid "label_date_of_completion"
 msgstr "Date de réalisation"
 
@@ -444,12 +446,12 @@ msgid "label_edit_response_not_allowed"
 msgstr "Vous n'avez pas les droits pour effacer cette réponse"
 
 #. Default: "effective cost"
-#: ./opengever/task/task.py:195
+#: ./opengever/task/task.py:197
 msgid "label_effectiveCost"
 msgstr "Coûts effectifs (CHF)"
 
 #. Default: "effective duration"
-#: ./opengever/task/task.py:189
+#: ./opengever/task/task.py:191
 msgid "label_effectiveDuration"
 msgstr "Durée effective (h)"
 
@@ -459,17 +461,17 @@ msgid "label_enter_response"
 msgstr "Saisissez votre réponse ci-dessous"
 
 #. Default: "expected cost"
-#: ./opengever/task/task.py:183
+#: ./opengever/task/task.py:185
 msgid "label_expectedCost"
 msgstr "Coûts estimés (CHF)"
 
 #. Default: "Expected duration"
-#: ./opengever/task/task.py:177
+#: ./opengever/task/task.py:179
 msgid "label_expectedDuration"
 msgstr "Durée estimées (h)"
 
 #. Default: "Start with work"
-#: ./opengever/task/task.py:172
+#: ./opengever/task/task.py:174
 msgid "label_expectedStartOfWork"
 msgstr "Début du travail"
 
@@ -501,7 +503,7 @@ msgid "label_parent_dossier_title"
 msgstr "Titre de la dossier"
 
 #. Default: "Predecessor"
-#: ./opengever/task/task.py:202
+#: ./opengever/task/task.py:204
 msgid "label_predecessor"
 msgstr "Prédécesseur"
 
@@ -513,7 +515,7 @@ msgstr "Tâche initiale"
 #. Default: "Related Items"
 #: ./opengever/task/browser/complete.py:216
 #: ./opengever/task/response.py:72
-#: ./opengever/task/task.py:152
+#: ./opengever/task/task.py:154
 msgid "label_related_items"
 msgstr "Renvois"
 
