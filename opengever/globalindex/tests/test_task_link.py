@@ -56,6 +56,24 @@ class TestTaskLinkGeneration(FunctionalTestCase):
         self.assertEquals('(Client1 / Test User (test_user_1_))',
                           link.xpath(css_to_xpath('span'))[2].text)
 
+    def test_task_is_always_linked_when_user_has_administrator_role(self):
+        self.grant('Administrator')
+        link = self.add_task_and_get_link(principals=[])
+        link_tag = link.xpath(css_to_xpath('a'))[0]
+
+        self.assertEquals(
+            'http://example.com/qux/dossier-1/task-2',
+            link_tag.get('href'))
+
+    def test_task_is_always_linked_when_user_has_manager_role(self):
+        self.grant('Manager')
+        link = self.add_task_and_get_link(principals=[])
+        link_tag = link.xpath(css_to_xpath('a'))[0]
+
+        self.assertEquals(
+            'http://example.com/qux/dossier-1/task-2',
+            link_tag.get('href'))
+
     def test_link_title_is_breadcrumb(self):
         link = self.add_task_and_get_link()
         link_tag = link.xpath(css_to_xpath('a'))[0]
