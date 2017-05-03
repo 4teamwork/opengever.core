@@ -117,3 +117,21 @@ class TestAllUsersAndInboxesSource(FunctionalTestCase):
         source = AllUsersAndInboxesSource(self.portal)
         self.assertEquals(source.getTerm('hans').token,
                           source.getTerm('unit2:hans').token)
+
+    def test_getTerm_handles_inactive_users(self):
+        create(Builder('ogds_user')
+               .id('peter.muster')
+               .having(firstname='Peter', lastname='Muster', active=False)
+               .assign_to_org_units([self.org_unit2]))
+
+        self.assertTrue(self.source.getTerm('unit2:peter.muster'),
+                        'Expect a term from inactive user')
+
+    def test_search_for_nactive_users_is_not_possible(self):
+        create(Builder('ogds_user')
+               .id('peter.muster')
+               .having(firstname='Peter', lastname='Muster', active=False)
+               .assign_to_org_units([self.org_unit2]))
+
+        self.assertFalse(self.source.search('muster'),
+                         'Expect no user, since peter.muster is inactive')

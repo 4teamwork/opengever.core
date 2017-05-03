@@ -34,6 +34,7 @@ class AllUsersAndInboxesSource(object):
             self.getTermByToken(token)
         except LookupError:
             return False
+
         return True
 
     def __iter__(self):
@@ -89,6 +90,8 @@ class AllUsersAndInboxesSource(object):
             [OrgUnit.title, OrgUnit.unit_id,
              User.userid, User.firstname, User.lastname, User.email],
             text_filters)
+
+        query = query.filter_by(active=True)
 
         for user, orgunit in query.all():
             self.terms.append(
