@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Tests: Manage monkey patching of PDFCONVERTER_AVAILABLE through a context manager. [lgraf]
+- Remove no longer used ftw.treeview dependency. [phgross]
 - Improve help text for task responsible selection. [lgraf]
 - Fix mail downloads by demanding a context to be passed into DC helpers. [Rotonen]
 - Make OC multiattach behave more gracefully for long URLs:
