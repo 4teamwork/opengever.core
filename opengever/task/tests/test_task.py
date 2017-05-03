@@ -246,17 +246,6 @@ class TestTaskIntegration(FunctionalTestCase):
         browser.login().visit(dossier)
         factoriesmenu.add('Task')
 
-        field = browser.css('[data-fieldname="form.widgets.responsible_client"]')
-        self.assertFalse(
-            field.css('input.hidden-widget'),
-            'There are multiple clients, the responsible_client shoud be '
-            'visible.')
-
-        self.assertEquals('ALL_ORGUNITS',
-                          field.css('select').first.value,
-                          'The default value should be ALL_ORGUNITS if '
-                          'there are multiple org_units')
-
         browser.fill({'Title': 'Task title',
                       'Task Type': 'To comment',
                       'Responsible': self.get_org_unit().id() + ':' + TEST_USER_ID})

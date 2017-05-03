@@ -210,12 +210,9 @@ class CustomInitialVersionMessage(object):
 
 
 def update_reponsible_field_data(data):
-    """Updates the extracted data of a form if the client is ALL_ORGUNITS.
-    This means the responsible field contains the client and the user, which
-    needs to be seperated for the task.
+    """The responsible field always contains the orgunit id and the userid
+    separated by a colon.
     """
-    if data['responsible_client'] == 'ALL_ORGUNITS':
-        client, user = data['responsible'].split(':', 1)
-        data['responsible_client'] = client
-        data['responsible'] = user
-
+    client, user = data['responsible'].split(':', 1)
+    data['responsible_client'] = client
+    data['responsible'] = user

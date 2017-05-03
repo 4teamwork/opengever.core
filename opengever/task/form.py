@@ -53,7 +53,6 @@ class TaskAddForm(dexterity.AddForm):
         # omit the responsible_client field and adjust the field description
         # of the responsible field if there is only one orgunit configured.
         if not ogds_service().has_multiple_org_units():
-            self.groups[0].widgets['responsible_client'].mode = HIDDEN_MODE
             self.groups[0].widgets['responsible'].field.description = _(
                 u"help_responsible_single_client_setup", default=u"")
 
@@ -111,7 +110,7 @@ class TaskAddForm(dexterity.AddForm):
                 redirect_to = '{0}#overview'.format(self.context.absolute_url())
             else:
                 redirect_to = '{0}#tasks'.format(self.context.absolute_url())
-    
+
             self.immediate_view = redirect_to
 
 
