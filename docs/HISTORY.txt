@@ -5,6 +5,7 @@ Changelog
 2017.1.2 (unreleased)
 ---------------------
 
+- Improve help text for task responsible selection. [lgraf]
 - Make OC multiattach behave more gracefully for long URLs:
 
   - Relax length limit from 500 to 2000 bytes for browsers other than IE11
