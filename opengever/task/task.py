@@ -44,6 +44,7 @@ from zope.component import provideAdapter
 from zope.interface import implements
 from zope.schema.vocabulary import getVocabularyRegistry
 
+
 _marker = object()
 
 
@@ -109,6 +110,7 @@ class ITask(form.Schema):
         source=util.getTaskTypeVocabulary,
         )
 
+    form.mode(responsible_client='hidden')
     responsible_client = schema.Choice(
         title=_(u'label_resonsible_client',
                 default=u'Responsible Client'),
