@@ -34,7 +34,7 @@ class TestDocumentDownloadConfirmation(FunctionalTestCase):
         transaction.commit()
 
     def tearDown(self):
-        DownloadConfirmationHelper().activate()
+        DownloadConfirmationHelper(self.document).activate()
         super(TestDocumentDownloadConfirmation, self).tearDown()
 
     def assert_download_journal_entry_created(self, document):
@@ -63,7 +63,7 @@ class TestDocumentDownloadConfirmation(FunctionalTestCase):
 
     @browsing
     def test_download_copy_without_overlay_creates_journal_entry(self, browser):  # noqa
-        DownloadConfirmationHelper().deactivate()
+        DownloadConfirmationHelper(self.document).deactivate()
         transaction.commit()
 
         browser.login().open(self.document,

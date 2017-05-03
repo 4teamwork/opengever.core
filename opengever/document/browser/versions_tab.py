@@ -58,10 +58,11 @@ class VersionDataProxy(object):
     the columns but isn't directly accessible.
     """
 
-    def __init__(self, version_data, url, is_revert_allowed):
+    def __init__(self, version_data, url, context, is_revert_allowed):
         self._version_data = version_data
         self._url = url
         self._is_revert_allowed = is_revert_allowed
+        self._context = context
 
     def __getattr__(self, name):
         """Proxy dotted attribute access to the corresponding value in the
@@ -122,9 +123,8 @@ class VersionDataProxy(object):
         """Returns a formatted link that allows to download a copy of this
         version (opens in an overlay).
         """
-        dc_helper = DownloadConfirmationHelper()
+        dc_helper = DownloadConfirmationHelper(self._context)
         link = dc_helper.get_html_tag(
-            self.url,
             url_extension="?version_id=%s" % self.version,
             additional_classes=['standalone', 'function-download-copy'],
             viewname='download_file_version',
@@ -184,12 +184,13 @@ class LazyHistoryMetadataProxy(object):
     See plone.batching.batch.BaseBatch.__getitem__() for details.
     """
 
-    def __init__(self, history, url, is_revert_allowed=False):
+    def __init__(self, history, url, context, is_revert_allowed=False):
         self._history = history
         self._length = history.getLength(countPurged=False)
 
         self._url = url
         self._is_revert_allowed = is_revert_allowed
+        self._context = context
 
     def __len__(self):
         """Returns the total number of versions
@@ -215,7 +216,8 @@ class LazyHistoryMetadataProxy(object):
         version_id = self._history.getVersionId(selector, countPurged=False)
         vdata = self._history.retrieve(selector, countPurged=False)
         vdata['version_id'] = version_id
-        return VersionDataProxy(vdata, self._url, self._is_revert_allowed)
+        return VersionDataProxy(
+            vdata, self._url, self._context, self._is_revert_allowed)
 
 
 class IVersionsSourceConfig(ITableSourceConfig):
@@ -245,7 +247,7 @@ class VersionsTableSource(GeverTableSource):
 
         return LazyHistoryMetadataProxy(
             shadow_history, obj.absolute_url(),
-            is_revert_allowed=manager.is_revert_allowed())
+            obj, is_revert_allowed=manager.is_revert_allowed())
 
 
 class VersionsTab(BaseListingTab):

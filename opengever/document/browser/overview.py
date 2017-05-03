@@ -235,9 +235,8 @@ class Overview(DisplayForm, GeverTabMixin, ActionButtonRendererMixin):
         return can_edit and state in DOSSIER_STATES_CLOSED
 
     def get_download_copy_tag(self):
-        dc_helper = DownloadConfirmationHelper()
+        dc_helper = DownloadConfirmationHelper(self.context)
         return dc_helper.get_html_tag(
-            self.context.absolute_url(),
             additional_classes=['function-download-copy'],
             include_token=True
             )
