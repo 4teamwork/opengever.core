@@ -112,3 +112,8 @@ class TestAllUsersAndInboxesSource(FunctionalTestCase):
         self.assertNotIn(u'unit2:john', self.source)
         self.assertNotIn(u'', self.source)
 
+    def test_getTerm_can_handle_values_containing_only_a_userid(self):
+        self.portal.REQUEST.set('form.widgets.responsible_client', 'unit2')
+        source = AllUsersAndInboxesSource(self.portal)
+        self.assertEquals(source.getTerm('hans').token,
+                          source.getTerm('unit2:hans').token)

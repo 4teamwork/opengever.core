@@ -5,6 +5,7 @@ from opengever.ogds.models.query import extend_query_with_textfilter
 from opengever.ogds.models.user import User
 from sqlalchemy import orm
 from z3c.formwidget.query.interfaces import IQuerySource
+from zope.globalrequest import getRequest
 from zope.interface import implementer
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleTerm
@@ -18,10 +19,8 @@ class AllUsersAndInboxesSource(object):
 
     def __init__(self, context):
         self.context = context
-        # self.vocab = SimpleVocabulary.fromItems(
-        #     [(x, x) for x in self.keywords])
         self.terms = []
-        self.session = create_session()
+        self.client_id = self.get_client_id()
 
     @property
     def base_query(self):
@@ -44,12 +43,17 @@ class AllUsersAndInboxesSource(object):
         return len(self.terms)
 
     def getTerm(self, value):
-        orgunit_id, userid = value.split(':', 1)
+        data = value.split(':', 1)
+        if len(data) == 2:
+            orgunit_id, userid = data
+        else:
+            userid = value
+            orgunit_id = self.client_id
 
         user, orgunit = self.base_query.filter(OrgUnit.unit_id == orgunit_id) \
                                        .filter(User.userid == userid).one()
 
-        token = value
+        token = u'{}:{}'.format(orgunit_id, userid)
         title = u'{}: {} ({})'.format(orgunit.title,
                                       user.fullname(),
                                       user.email)
@@ -90,6 +94,25 @@ class AllUsersAndInboxesSource(object):
             self.terms.append(
                 self.getTerm(u'{}:{}'.format(orgunit.id(), user.userid)))
         return self.terms
+
+    def get_client_id(self):
+        """Tries to get the client from the request. If no client is found None
+        is returned.
+        """
+
+        request = getRequest()
+        client_id = request.get('client',
+                                request.get('form.widgets.responsible_client',
+                                            getattr(self.context,
+                                                    'responsible_client',
+                                                    None)))
+
+        if not client_id:
+            return None
+        elif type(client_id) in (list, tuple, set):
+            return client_id[0]
+        else:
+            return client_id
 
 
 @implementer(IContextSourceBinder)
