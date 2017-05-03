@@ -1,40 +1,23 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
-# Runs the tests in multiple threads.
+# Runs the tests in configurably many subprocesses.
 
-from collections import defaultdict
-from copy import copy
 from fnmatch import fnmatch
-from itertools import groupby
-from operator import itemgetter
-from operator import methodcaller
-from threading import Thread
-import math
+from random import shuffle
+
+import concurrent.futures
 import os
 import os.path
-import shlex
 import subprocess
 import sys
-import tempfile
-import time
+
 
 os.environ['PYTHONDONTWRITEBYTECODE'] = '1'
 
 PROCESSORS = int(os.environ.get('MTEST_PROCESSORS', '4'))
 
-if os.environ.get('TERM') == 'dumb' \
-        or os.environ.get('MTEST_NOCOLORS', None):
-    # no colors supported, e.g. emacs
-    COLORS = ('%s',) * PROCESSORS
-else:
-    COLORS = (
-        '\033[0;31m%s\033[00m',  # red
-        '\033[0;32m%s\033[00m',  # green
-        '\033[0;33m%s\033[00m',  # yellow
-        '\033[0;34m%s\033[00m',  # blue
-        '\033[0;35m%s\033[00m',  # purple
-        '\033[0;36m%s\033[00m',  # magenta
-        ) * int(math.ceil(PROCESSORS / 6.0))
+MAX_TEST_LAYER_SIZE = int(os.environ.get('MTEST_MAX_TEST_LAYER_SIZE', '500'))
+TEST_CHUNK_SIZE = int(os.environ.get('MTEST_TEST_CHUNK_SIZE', '300'))
 
 BUILDOUT_PATH = os.path.abspath(os.path.join(__file__, '..', '..'))
 OPENGEVER_PATH = os.path.join(BUILDOUT_PATH, 'opengever')
@@ -49,119 +32,60 @@ def main():
     remove_bytecode_files(OPENGEVER_PATH)
     remove_bytecode_files('src')
 
-    threads = []
-    exitcodes = []
-    output = []
+    print("Discovering tests.", flush=True)
 
-    for index, cmd in enumerate(processor_commands()):
-        name = 'WORKER{0}'.format(index)
-        output_file = tempfile.NamedTemporaryFile()
-        output.append((name, COLORS[index], output_file))
-        thread = Thread(
-            target=execute_command,
-            name=name,
-            args=(cmd, name, index, output_file.name, exitcodes))
-        threads.append(thread)
+    tests = subprocess.check_output(('bin/test', '--list')).decode('UTF-8')
 
-    with BufferedPrinter(output):
-        for thread in threads:
-            thread.start()
-            time.sleep(0.0001)  # work around simultaneous print
-        map(methodcaller('join'), threads)
+    layers = [
+        layer.split('\n') for layer in tests.split(':')
+        if 'test_' in layer
+        ]
 
-    print 'FINISHED with exitcodes:', ', '.join(
-        map(str, set(exitcodes)))
-    sys.exit(max(exitcodes))
+    split_layers = []
 
+    for layer in layers:
+        # Split the layer if above the configured layer size limit
+        if len(layer) > MAX_TEST_LAYER_SIZE:
+            # Randomize test chunking within a layer
+            shuffle(layer)
+            # Split into configurable chunks
+            chunks = [
+                layer[i:i + TEST_CHUNK_SIZE]
+                for i in range(0, len(layer), TEST_CHUNK_SIZE)
+                ]
 
-class BufferedPrinter(Thread):
-    """Catch output from subprocesses and colorize that on a per worker basis.
-    """
+            for chunk in chunks:
+                split_layers.append([
+                    test.split(' ')[2] for test in chunk
+                    if test.startswith('  test_')
+                    ])
 
-    def __init__(self, output):
-        super(BufferedPrinter, self).__init__()
-        self.output = output
+        else:
+            split_layers.append([
+                test.split(' ')[2] for test in layer
+                if test.startswith('  test_')
+                ])
 
-    def __enter__(self):
-        self.start()
+    print("Running tests with {} processors.".format(PROCESSORS), flush=True)
+    with concurrent.futures.ThreadPoolExecutor(max_workers=PROCESSORS) as executor:  # noqa
+        outputs = executor.map(run_tests, split_layers)
 
-    def run(self):
-        self.running = True
-        while self.running:
-            for prefix, colorization, fd in self.output:
-                while True:
-                    line = fd.readline()
-                    if not line:
-                        break
-                    print colorization % (
-                        '{0}: {1}'.format(prefix, line.rstrip('\n')))
-            time.sleep(0.2)
+    failed_tests = False
+    for output in outputs:
+        if output:
+            failed_tests = True
+            for line in output:
+                # The output already has newlines from the testrunner
+                print(line.decode('UTF-8'), end='', flush=True)
 
-    def __exit__(self, *a, **kw):
-        self.running = False
-        self.join()
+    if failed_tests:
+        sys.exit(1)
 
-
-def execute_command(command, workername, worker_idx, output_path, exitcodes):
-    print '{0}: > {1}'.format(workername, command)
-
-    with open(output_path, 'wb', 1) as output:
-        args = shlex.split(command)
-        env = get_worker_env(worker_idx)
-        print "Spawning worker {0} with ZSERVER_PORT={1}".format(
-            workername, env['ZSERVER_PORT'])
-        proc = subprocess.Popen(args, stdout=output, stderr=output, env=env)
-        code = proc.wait()
-    exitcodes.append(code)
-    print '{0}: TERMINATED with exitcode {1}'.format(workername, code)
-
-
-def get_worker_env(worker_idx):
-    env = copy(os.environ)
-    env['ZSERVER_PORT'] = get_worker_zserver_port(worker_idx)
-    return env
-
-
-def get_worker_zserver_port(worker_idx):
-    # Use the 8 build-specific ports provided by the Jenkins Port Allocator
-    # Plugin to allocate each mtest worker a different ZSERVER_PORT
-    local_default_port = 55001 + worker_idx
-    zserver_port = int(os.environ.get('PORT%s' % worker_idx,
-                                      local_default_port))
-    return str(zserver_port)
-
-
-def processor_commands():
-    test_path = os.path.relpath(
-        os.path.join(BUILDOUT_PATH, 'bin', 'test'))
-    for packages in packages_for_processors():
-        params = ' '.join(('-m {0}'.format(pkg) for pkg in packages))
-        command = '{test_path} -q --no-progress {params}'.format(
-            **locals())
-        yield command
-
-
-def packages_for_processors():
-    packages = packages_by_size()
-    distribution = map(lambda x: x % PROCESSORS,
-                       range(len(packages)))
-
-    procs = defaultdict(list)
-    for proc, pkg in zip(distribution, packages):
-        procs[proc].append(pkg)
-
-    return procs.values()
-
-
-def packages_by_size():
-    return map(itemgetter(1),
-               sorted(map(lambda pair: (len(list(pair[1])), pair[0]),
-                          test_suites_by_packages()),
-                      reverse=True))
+    print("No failed tests.", flush=True)
 
 
 def remove_bytecode_files(path):
-    print "Removing bytecode files from %r" % path
+    print("Removing bytecode files from {}".format(path), flush=True)
     for filename in find_bytecode_files(path):
         os.unlink(filename)
 
@@ -173,23 +97,23 @@ def find_bytecode_files(path):
                 yield os.path.join(root, name)
 
 
-def test_suites():
-    for dirpath, dirnames, filenames in os.walk(OPENGEVER_PATH):
-        for filename in filenames:
-            filepath = os.path.join(dirpath, filename)
-            if fnmatch(filepath, '**/tests/test*.py'):
-                yield filepath
+def run_tests(tests):
+    arguments = ['bin/test']
+    for test in tests:
+        arguments.append('-t')
+        arguments.append(test)
 
+    test_run = subprocess.Popen(
+        arguments,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        )
 
-def test_suites_by_packages():
-    return groupby(map(split_suite_path, test_suites()), itemgetter(0))
+    test_run.wait()
 
-
-def split_suite_path(path):
-    pkg, fname = (path.replace(BUILDOUT_PATH + '/', '')
-                  .split('/tests/'))
-    pkg = pkg.replace('/', '.')
-    return pkg, fname
+    if test_run.returncode != 0:
+        return test_run.stdout.readlines()
+    return None
 
 
 if __name__ == '__main__':
