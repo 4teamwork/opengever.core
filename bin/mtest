@@ -79,7 +79,7 @@ def main():
     # The jenkins port allocator enumerates starting from 1
     # Default to 55000 + i
     batches = [
-        (os.environ.get('PORT{}'.format(i + 1), str(55000 + i)), batch)
+        (i, os.environ.get('PORT{}'.format(i + 1), str(55000 + i)), batch)
         for i, batch in enumerate(batches)
         if batch
         ]
@@ -118,13 +118,14 @@ def find_bytecode_files(path):
 
 
 def run_tests(runtime_params):
+    worker_no, port, modules = runtime_params
     arguments = ['bin/test']
-    for module in runtime_params[1]:
+    for module in modules:
         arguments.append('-m')
         arguments.append(module)
 
     env = copy(os.environ)
-    env['ZSERVER_PORT'] = runtime_params[0]
+    env['ZSERVER_PORT'] = port
 
     test_run = subprocess.Popen(
         arguments,
@@ -133,8 +134,8 @@ def run_tests(runtime_params):
         env=env,
         )
 
-    # The pipe buffer is only 4k in size, so we need to constantly fetch it
-    output = test_run.communicate()
+    for line in iter(test_run.stdout.readline, b''):
+        sys.stdout.write('WORKER %s: %s' % (worker_no, line.decode(sys.stdout.encoding)))
 
     if test_run.returncode != 0:
         # Only return output if we have a failed test
