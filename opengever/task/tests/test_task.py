@@ -68,14 +68,27 @@ class TestTaskIntegration(FunctionalTestCase):
         browser.login().open(dossier, view='++add++opengever.task.task')
 
         browser.fill({'Title': 257 * 'x',
-                      'Task Type': 'To comment',
-                      'Responsible': TEST_USER_ID})
+                      'Task Type': 'To comment'
+                      })
+
+        # Fill Responible manually
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(
+            self.get_org_unit().id() + ':' + TEST_USER_ID)
         browser.find('Save').click()
 
         self.assertEquals({u'Title': ['Value is too long']},
                           erroneous_fields())
 
         browser.fill({'Title': 256 * 'x'})
+
+        # We need to fill it again, because of a known bug in lxml
+        # https://github.com/4teamwork/ftw.testbrowser/pull/17
+        # https://github.com/4teamwork/ftw.testbrowser/issues/53
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(
+            self.get_org_unit().id() + ':' + TEST_USER_ID)
+
         browser.find('Save').click()
         self.assertTrue(len(dossier.objectValues()),
                         'Expect one item in dossier')
@@ -247,8 +260,10 @@ class TestTaskIntegration(FunctionalTestCase):
         factoriesmenu.add('Task')
 
         browser.fill({'Title': 'Task title',
-                      'Task Type': 'To comment',
-                      'Responsible': self.get_org_unit().id() + ':' + TEST_USER_ID})
+                      'Task Type': 'To comment'})
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(
+            self.get_org_unit().id() + ':' + TEST_USER_ID)
         browser.find('Save').click()
 
         task = dossier.objectValues()[0]
@@ -282,8 +297,11 @@ class TestTaskIntegration(FunctionalTestCase):
         browser.login().visit(dossier)
         factoriesmenu.add('Task')
         browser.fill({'Title': 'Task title',
-                      'Task Type': 'To comment',
-                      'Responsible': responsible_users})
+                      'Task Type': 'To comment'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(responsible_users)
+
         browser.find('Save').click()
 
         tasks = dossier.objectValues()
@@ -309,15 +327,18 @@ class TestTaskIntegration(FunctionalTestCase):
         dossier = create(Builder('dossier'))
 
         responsible_users = [
-            TEST_USER_ID,
-            user.userid
+            self.get_org_unit().id() + ':' + TEST_USER_ID,
+            self.get_org_unit().id() + ':' + user.userid
         ]
 
         browser.login().visit(dossier)
         factoriesmenu.add('Task')
         browser.fill({'Title': 'Task title',
-                      'Task Type': 'To comment',
-                      'Responsible': responsible_users})
+                      'Task Type': 'To comment'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(responsible_users)
+
         browser.find('Save').click()
 
         tasks = dossier.objectValues()
@@ -381,8 +402,11 @@ class TestDeadlineDefaultValue(FunctionalTestCase):
     def test_deadline_is_today_plus_five_days_by_default(self, browser):
         browser.login().open(self.dossier, view='++add++opengever.task.task')
         browser.fill({'Title': 'Test task',
-                      'Responsible': TEST_USER_ID,
                       'Task Type': 'comment'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(
+            self.org_unit.id() + ':' + TEST_USER_ID)
         browser.css('#form-buttons-save').first.click()
 
         expected = date.today() + timedelta(days=5)
@@ -396,8 +420,12 @@ class TestDeadlineDefaultValue(FunctionalTestCase):
 
         browser.login().open(self.dossier, view='++add++opengever.task.task')
         browser.fill({'Title': 'Test task',
-                      'Responsible': TEST_USER_ID,
                       'Task Type': 'comment'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(
+            self.org_unit.id() + ':' + TEST_USER_ID)
+
         browser.css('#form-buttons-save').first.click()
 
         expected = date.today() + timedelta(days=12)

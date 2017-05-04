@@ -46,8 +46,11 @@ class TestEmailNotification(FunctionalTestCase):
     def test_subject_is_title(self, browser):
         browser.login().open(self.dossier, view='++add++opengever.task.task')
         browser.fill({'Title': 'Test Task',
-                      'Responsible': 'hugo.boss',
                       'Task Type': 'comment'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(self.org_unit.id() + ':hugo.boss')
+
         browser.css('#form-buttons-save').first.click()
 
         mail = email.message_from_string(Mailing(self.portal).pop())
@@ -58,8 +61,10 @@ class TestEmailNotification(FunctionalTestCase):
     def test_from_and_to_addresses(self, browser):
         browser.login().open(self.dossier, view='++add++opengever.task.task')
         browser.fill({'Title': 'Test Task',
-                      'Responsible': 'hugo.boss',
                       'Task Type': 'comment'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(self.org_unit.id() + ':hugo.boss')
         browser.css('#form-buttons-save').first.click()
 
         mail = email.message_from_string(Mailing(self.portal).pop())
@@ -71,8 +76,10 @@ class TestEmailNotification(FunctionalTestCase):
     def test_task_title_is_linked_to_resolve_notification_view(self, browser):
         browser.login().open(self.dossier, view='++add++opengever.task.task')
         browser.fill({'Title': 'Test Task',
-                      'Responsible': 'hugo.boss',
                       'Task Type': 'comment'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(self.org_unit.id() + ':hugo.boss')
         browser.css('#form-buttons-save').first.click()
 
         mail = email.message_from_string(Mailing(self.portal).pop())
@@ -90,8 +97,10 @@ class TestEmailNotification(FunctionalTestCase):
         """
         browser.login().open(self.dossier, view='++add++opengever.task.task')
         browser.fill({'Title': 'Test Task',
-                      'Responsible': 'hugo.boss',
                       'Task Type': 'comment'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(self.org_unit.id() + ':hugo.boss')
         browser.css('#form-buttons-save').first.click()
 
         self.assertEquals(1, len(Mailing(self.portal).get_messages()))
@@ -112,8 +121,11 @@ class TestEmailNotification(FunctionalTestCase):
         browser.login().open(self.dossier, view='++add++opengever.task.task')
         browser.fill({'Title': 'Test Task',
                       'Issuer': 'inbox:client1',
-                      'Responsible': 'franz.michel',
                       'Task Type': 'comment'})
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(
+            self.org_unit.id() + ':franz.michel')
+
         browser.css('#form-buttons-save').first.click()
 
         self.assertEquals(1, len(Mailing(self.portal).get_messages()))

@@ -45,8 +45,11 @@ class TestPloneNotificationCenter(FunctionalTestCase):
     def test_add_watcher_adds_subscription_for_each_actor(self, member):
         browser.login().open(self.dossier, view='++add++opengever.task.task')
         browser.fill({'Title': 'Test Task',
-                      'Responsible': 'inbox:client1',
                       'Task Type': 'comment'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill('inbox:client1')
+
         browser.css('#form-buttons-save').first.click()
 
         task = self.dossier.get('task-1')
@@ -85,8 +88,11 @@ class TestNotifactionCenterErrorHandling(FunctionalTestCase):
         browser.login('hugo.boss').open(self.dossier, view='++add++opengever.task.task')
         browser.fill({'Title': 'Test Task',
                       'Issuer': TEST_USER_ID,
-                      'Responsible': 'inbox:client1',
                       'Task Type': 'comment'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill('inbox:client1')
+
         browser.css('#form-buttons-save').first.click()
 
         self.assertEquals(
@@ -103,8 +109,11 @@ class TestNotifactionCenterErrorHandling(FunctionalTestCase):
         browser.login('hugo.boss').open(self.dossier, view='++add++opengever.task.task')
         browser.fill({'Title': 'Test Task',
                       'Issuer': TEST_USER_ID,
-                      'Responsible': 'inbox:client1',
                       'Task Type': 'comment'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill('inbox:client1')
+
         browser.css('#form-buttons-save').first.click()
 
         self.assertEquals([], warning_messages())
@@ -119,8 +128,11 @@ class TestNotifactionCenterErrorHandling(FunctionalTestCase):
         browser.login().open(self.dossier, view='++add++opengever.task.task')
         browser.fill({'Title': 'Test Task',
                       'Issuer': TEST_USER_ID,
-                      'Responsible': u'hugo.boss',
                       'Task Type': 'comment'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill('client1:hugo.boss')
+
         browser.css('#form-buttons-save').first.click()
 
         self.assertEquals(

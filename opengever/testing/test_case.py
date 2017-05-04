@@ -1,5 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.keywordwidget.tests import widget  # keep!
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.base.oguid import Oguid
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
