@@ -14,6 +14,7 @@ Changelog
 
   [Rotonen]
 
+- Avoid unauthorized redirect loops. [jone]
 - Add an aggregated per dossier attach to email event on OC attach actions. [Rotonen]
 - Added a document status JSON REST endpoint [Rotonen]
 - Fix some common i18n issues:
