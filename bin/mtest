@@ -7,6 +7,7 @@ from fnmatch import fnmatch
 
 import concurrent.futures
 import os
+import pty
 import subprocess
 import sys
 
@@ -17,6 +18,16 @@ PROCESSORS = int(os.environ.get('MTEST_PROCESSORS', '4'))
 
 BUILDOUT_PATH = os.path.abspath(os.path.join(__file__, '..', '..'))
 OPENGEVER_PATH = os.path.join(BUILDOUT_PATH, 'opengever')
+
+
+COLORS = (
+    '\033[0;31m%s\033[00m',  # red
+    '\033[0;32m%s\033[00m',  # green
+    '\033[0;33m%s\033[00m',  # yellow
+    '\033[0;34m%s\033[00m',  # blue
+    '\033[0;35m%s\033[00m',  # purple
+    '\033[0;36m%s\033[00m',  # magenta
+)
 
 
 def main():
@@ -119,6 +130,7 @@ def find_bytecode_files(path):
 
 def run_tests(runtime_params):
     worker_no, port, modules = runtime_params
+    color = COLORS[worker_no]
     arguments = ['bin/test']
     for module in modules:
         arguments.append('-m')
@@ -127,15 +139,26 @@ def run_tests(runtime_params):
     env = copy(os.environ)
     env['ZSERVER_PORT'] = port
 
+    # Set up a PTY to capture ANSI color output
+    fd_master, fd_slave = pty.openpty()
+
+    master = os.fdopen(fd_master, 'w')
+    slave = os.fdopen(fd_slave, 'r')
+
     test_run = subprocess.Popen(
         arguments,
-        stdout=subprocess.PIPE,
+        stdout=master,
         stderr=subprocess.PIPE,
         env=env,
         )
 
-    for line in iter(test_run.stdout.readline, b''):
-        sys.stdout.write('WORKER %s: %s' % (worker_no, line.decode(sys.stdout.encoding)))
+    os.close(fd_master)
+
+    for line in iter(slave.readline, ''):
+        prefix = color % ('WORKER %s' % worker_no,)
+        sys.stdout.write('%s: %s' % (prefix, line))
+
+    os.close(fd_slave)
 
     if test_run.returncode != 0:
         # Only return output if we have a failed test
