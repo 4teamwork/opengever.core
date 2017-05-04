@@ -72,6 +72,7 @@ class TestAllUsersAndInboxesSource(FunctionalTestCase):
 
     def test_search_for_orgunit(self):
         result = self.source.search('Informatik')
+        result.pop(0)  # Remove inbox
 
         self.assertEquals(3, len(result), 'Expect 3 items')
         self.assertTermKeys([u'unit1:hans', u'unit1:hugo', u'unit1:john'],
@@ -135,3 +136,30 @@ class TestAllUsersAndInboxesSource(FunctionalTestCase):
 
         self.assertFalse(self.source.search('muster'),
                          'Expect no user, since peter.muster is inactive')
+
+    def test_inboxes_are_in_source_and_in_first_position(self):
+        result = self.source.search('Informatik')
+
+        self.assertEquals(4, len(result),
+                          'Expect 4 results, 1 Inbox and 3 Users')
+
+        self.assertTermKeys([u'inbox:unit1',
+                             u'unit1:hans',
+                             u'unit1:hugo',
+                             u'unit1:john'],
+                            result)
+
+        self.assertEquals('inbox:unit1', result[0].token)
+        self.assertEquals(u'Inbox: Informatik', result[0].title)
+
+        self.assertIn('inbox:unit1', self.source)
+
+    def test_search_for_term_inbox_or_partial_term_that_matches_inbox(self):
+        inboxes = self.source.search('Inbox')
+        self.assertEquals(2, len(inboxes), 'Expect two inboxes')
+        self.assertTermKeys(['inbox:unit1', 'inbox:unit2'], inboxes)
+
+        self.assertEquals(2, len(self.source.search('Inb')))
+        self.assertEquals(2, len(self.source.search('inbo')))
+        self.assertEquals(2, len(self.source.search('box')))
+        self.assertEquals(2, len(self.source.search('nbo')))
