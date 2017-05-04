@@ -337,6 +337,14 @@ class ProposalBase(ModelContainer):
         self._proposal_document_id = obj.getId()
         return obj
 
+    def contains_checked_out_documents(self):
+        for brain in api.content.find(context=self,
+                                      portal_type='opengever.document.document'):
+            if brain.checked_out:
+                return True
+
+        return False
+
 
 class SubmittedProposal(ProposalBase):
     """Proxy for a proposal in queue with a committee."""

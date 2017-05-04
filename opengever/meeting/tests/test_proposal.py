@@ -4,6 +4,7 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages import plone
 from ftw.testbrowser.pages import statusmessages
+from ftw.testbrowser.pages.statusmessages import assert_message
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.base.oguid import Oguid
@@ -829,6 +830,20 @@ class TestProposal(FunctionalTestCase):
 
         self.assertEqual('&lt;p&gt;qux&lt;/p&gt;',
                          browser.css('.listing td').first.innerHTML)
+
+    @browsing
+    def test_proposal_cannot_change_state_when_documents_checked_out(self, browser):
+        committee = create(Builder('committee').titled('My committee'))
+        proposal = create(Builder('proposal')
+                          .within(self.dossier)
+                          .titled(u'<p>qux</p>')
+                          .having(committee=committee.load_model()))
+        create(Builder('document').within(proposal).checked_out())
+
+        browser.login().open(proposal, view='tabbedview_view-overview')
+        browser.click_on('Submit')
+        assert_message('Cannot change the state because the proposal'
+                       ' contains checked out documents.')
 
     def assertSubmittedDocumentCreated(self, proposal, document, submitted_document):
         submitted_document_model = SubmittedDocument.query.get_by_source(

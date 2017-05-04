@@ -25,6 +25,15 @@ class ProposalTransitionController(grok.View):
             context.absolute_url(), cls.__view_name__, transition))
 
     def render(self):
+        if self.context.contains_checked_out_documents():
+            msg = _(u'error_must_checkin_documents_for_transition',
+                    default=u'Cannot change the state because the proposal contains checked'
+                    u' out documents.')
+            api.portal.show_message(message=msg,
+                                    request=self.request,
+                                    type='error')
+            return self.redirect_to_proposal()
+
         transition = self.request.get('transition')
         if not self.is_valid_transition(transition):
             raise NotFound
