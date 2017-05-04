@@ -1,4 +1,6 @@
 from opengever.base.model import create_session
+from opengever.ogds.base import _
+from opengever.ogds.base.actor import ActorLookup
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.org_unit import OrgUnit
 from opengever.ogds.models.query import extend_query_with_textfilter
@@ -6,6 +8,7 @@ from opengever.ogds.models.user import User
 from sqlalchemy import orm
 from z3c.formwidget.query.interfaces import IQuerySource
 from zope.globalrequest import getRequest
+from zope.i18n import translate
 from zope.interface import implementer
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleTerm
@@ -44,12 +47,26 @@ class AllUsersAndInboxesSource(object):
         return len(self.terms)
 
     def getTerm(self, value):
+
         data = value.split(':', 1)
         if len(data) == 2:
             orgunit_id, userid = data
         else:
             userid = value
             orgunit_id = self.client_id
+
+        # Handle special case - Inboxes: in form "inbox:unit_id"
+        if ActorLookup(value).is_inbox():
+            orgunit_id = userid
+            orgunit = OrgUnit.query.filter(OrgUnit.unit_id == orgunit_id).one()
+
+            value = token = orgunit.inbox().id()
+            title = translate(_(u'inbox_label',
+                                default=u'Inbox: ${client}',
+                                mapping=dict(client=orgunit.label())),
+                              context=getRequest())
+
+            return SimpleTerm(value, token, title)
 
         user, orgunit = self.base_query.filter(OrgUnit.unit_id == orgunit_id) \
                                        .filter(User.userid == userid).one()
@@ -75,15 +92,14 @@ class AllUsersAndInboxesSource(object):
             raise LookupError('A token "unit_id:userid" is required.')
 
         try:
-            self.base_query.filter(OrgUnit.unit_id == orgunit_id) \
-                           .filter(User.userid == userid).one()
+            value = token
+            return self.getTerm(value)
         except orm.exc.NoResultFound:
             raise LookupError
 
-        value = token
-        return self.getTerm(value)
-
     def search(self, query_string):
+        self.terms = []
+
         text_filters = query_string.split(' ')
         query = extend_query_with_textfilter(
             self.base_query,
@@ -96,7 +112,27 @@ class AllUsersAndInboxesSource(object):
         for user, orgunit in query.all():
             self.terms.append(
                 self.getTerm(u'{}:{}'.format(orgunit.id(), user.userid)))
+
+        self._extend_terms_with_inboxes(text_filters)
         return self.terms
+
+    def _extend_terms_with_inboxes(self, text_filters):
+        inbox_text = translate(_(u'inbox_label',
+                                 default=u'Inbox: ${client}',
+                                 mapping=dict(client='')),
+                               context=getRequest()).strip().lower()
+
+        text_filters = filter(lambda text: text.lower() not in inbox_text,
+                              text_filters)
+
+        query = OrgUnit.query
+        query = extend_query_with_textfilter(
+            query,
+            [OrgUnit.title, OrgUnit.unit_id],
+            text_filters)
+
+        for orgunit in query.all():
+            self.terms.insert(0, self.getTerm(orgunit.inbox().id()))
 
     def get_client_id(self):
         """Tries to get the client from the request. If no client is found None
