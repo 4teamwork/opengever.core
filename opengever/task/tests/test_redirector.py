@@ -17,8 +17,11 @@ class TestTaskRedirector(FunctionalTestCase):
         browser.login().open(self.dossier)
         factoriesmenu.add('Task')
         browser.fill({'Title': 'Main task',
-                      'Task Type': 'direct-execution',
-                      'Responsible': TEST_USER_ID})
+                      'Task Type': 'direct-execution'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill('client1:' + TEST_USER_ID)
+
         browser.click_on('Save')
 
         self.assertEquals('{}#tasks'.format(self.dossier.absolute_url()),
@@ -37,8 +40,11 @@ class TestTaskRedirector(FunctionalTestCase):
         browser.login().open(task)
         factoriesmenu.add('Subtask')
         browser.fill({'Title': 'Subtask',
-                      'Task Type': 'direct-execution',
-                      'Responsible': TEST_USER_ID})
+                      'Task Type': 'direct-execution'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill('client1:' + TEST_USER_ID)
+
         browser.click_on('Save')
 
         self.assertEquals('{}#overview'.format(task.absolute_url()),

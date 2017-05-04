@@ -57,8 +57,11 @@ class TestAssignForwardignToDossier(FunctionalTestCase):
         # Step 4 - edit task form
         browser.fill({'Task Type': 'comment',
                       'Deadline': '9/24/14',
-                      'Responsible': TEST_USER_ID,
                       'Issuer': 'inbox:client1'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill('client1:' + TEST_USER_ID)
+
         browser.css('#form-buttons-save').first.click()
 
         # Assertions
@@ -99,8 +102,11 @@ class TestAssignForwardignToDossier(FunctionalTestCase):
         # Step 3 - edit task form
         browser.fill({'Task Type': 'comment',
                       'Deadline': '9/24/14',
-                      'Responsible': TEST_USER_ID,
                       'Issuer': 'inbox:client1'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill('client1:' + TEST_USER_ID)
+
         browser.css('#form-buttons-save').first.click()
 
         # Assertions

@@ -6,6 +6,7 @@ from datetime import datetime
 from datetime import timedelta
 from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
+from ftw.keywordwidget.widget import KeywordFieldWidget
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
@@ -16,6 +17,7 @@ from opengever.globalindex.model.task import Task as TaskModel
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from opengever.ogds.base.autocomplete_widget import AutocompleteMultiFieldWidget
+from opengever.ogds.base.sources import AllUsersAndInboxesSourceBinder
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
@@ -119,13 +121,11 @@ class ITask(form.Schema):
         vocabulary='opengever.ogds.base.OrgUnitsVocabularyFactory',
         required=True)
 
-    form.widget(responsible=AutocompleteFieldWidget)
+    form.widget('responsible', KeywordFieldWidget, async=True)
     responsible = schema.Choice(
         title=_(u"label_responsible", default=u"Responsible"),
-        description=_(u"help_responsible", default=u"Select the responsible "
-                      "user from the client chosen above, or the "
-                      "corresponding inbox."),
-        vocabulary=u'opengever.ogds.base.UsersAndInboxesVocabulary',
+        description=_(u"help_responsible", default=""),
+        source=AllUsersAndInboxesSourceBinder(),
         required=True,
         )
 
@@ -215,12 +215,12 @@ provideAdapter(NoCheckedoutDocsValidator)
 
 class IAddTaskSchema(ITask):
 
-    form.widget(responsible=AutocompleteMultiFieldWidget)
+    form.widget('responsible', KeywordFieldWidget, async=True)
     responsible = schema.List(
         title=_(u"label_responsible", default=u"Responsible"),
-        description=_(u"help_responsible", default=""),
+        description=_(u"help_responsible_multiple", default=""),
         value_type=schema.Choice(
-            vocabulary=u'opengever.ogds.base.UsersAndInboxesVocabulary'),
+            source=AllUsersAndInboxesSourceBinder()),
         required=True,
         missing_value=[],
         default=[]

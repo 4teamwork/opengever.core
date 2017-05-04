@@ -701,8 +701,14 @@ class TestTaskDefaults(TestDefaultsBase):
             factoriesmenu.add(u'Task')
             browser.fill({
                 u'Title': TASK_REQUIREDS['title'],
-                u'Responsible': TASK_REQUIREDS['responsible'],
-                u'Task Type': TASK_REQUIREDS['task_type']}).save()
+                u'Task Type': TASK_REQUIREDS['task_type']})
+
+            form = browser.find_form_by_field('Responsible')
+            form.find_widget('Responsible').fill(':'.join(
+                [TASK_REQUIREDS['responsible_client'],
+                 TASK_REQUIREDS['responsible']]))
+            form.save()
+
             task = self.portal['task-1']
 
         persisted_values = get_persisted_values_for_obj(task)
