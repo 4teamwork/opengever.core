@@ -50,12 +50,6 @@ class TaskAddForm(dexterity.AddForm):
             self.request.set('form.widgets.issuer', [member.getId()])
         super(TaskAddForm, self).update()
 
-        # omit the responsible_client field and adjust the field description
-        # of the responsible field if there is only one orgunit configured.
-        if not ogds_service().has_multiple_org_units():
-            self.groups[0].widgets['responsible'].field.description = _(
-                u"help_responsible_single_client_setup", default=u"")
-
     def createAndAdd(self, data):
         created = []
         if isinstance(data['responsible'], basestring):
