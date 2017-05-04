@@ -1,9 +1,9 @@
 from Acquisition import aq_inner, aq_parent
 from datetime import datetime
 from five import grok
+from ftw.keywordwidget.widget import KeywordFieldWidget
 from opengever.inbox import _
 from opengever.inbox.activities import ForwardingAddedActivity
-from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task import _ as task_mf
 from opengever.task.task import ITask, Task
@@ -50,15 +50,7 @@ class IForwarding(ITask):
         required=False,
         )
 
-    responsible_client = schema.Choice(
-        title=task_mf(u'label_resonsible_client',
-                      default=u'Responsible Client'),
-        description=task_mf(u'help_responsible_client',
-                            default=u''),
-        vocabulary='opengever.ogds.base.OrgUnitsVocabularyFactory',
-        required=True)
-
-    form.widget(responsible=AutocompleteFieldWidget)
+    form.widget('responsible', KeywordFieldWidget)
     responsible = schema.Choice(
         title=_(u"label_responsible", default=u"Responsible"),
         description=_(u"help_responsible", default=""),
@@ -115,11 +107,9 @@ class ForwardingAddForm(AddForm):
         paths = self.request.get('paths', [])
 
         if not (paths or
-                self.request.form.get('form.widgets.relatedItems', [])
-        or '@@autocomplete-search' in self.request.get('ACTUAL_URL', '')):
+                self.request.form.get('form.widgets.relatedItems', [])):
             # add status message and redirect current window back to inbox
-            # but ONLY if we're not in a z3cform_inline_validation or
-            # autocomplete-search request!
+            # but ONLY if we're not in a z3cform_inline_validation.
             IStatusMessage(self.request).addStatusMessage(
                 _(u'error_no_document_selected',
                   u'Error: Please select at least one document to forward.'),

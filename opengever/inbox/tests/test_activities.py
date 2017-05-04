@@ -161,8 +161,12 @@ class TestForwardingReassignActivity(FunctionalTestCase):
     def reassign(self, browser, forwarding, responsible):
         browser.login().open(forwarding)
         browser.find('forwarding-transition-reassign').click()
-        browser.fill({'Responsible': responsible,
-                      'Response': u'Peter k\xf6nntest du das \xfcbernehmen.'})
+        browser.fill({'Response': u'Peter k\xf6nntest du das \xfcbernehmen.'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(
+            self.org_unit.id() + ':' + responsible)
+
         browser.find('Assign').click()
 
     @browsing

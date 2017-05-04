@@ -40,7 +40,7 @@ class TestForwarding(FunctionalTestCase):
                              view='++add++opengever.inbox.forwarding')
 
         browser.fill({'Title': u'Test forwarding',
-                      'Responsible': 'inbox:client1'}).submit()
+                      'Responsible': 'inbox:client1'})
         browser.css('#form-buttons-save').first.click()
 
         forwarding = self.inbox.get('forwarding-1')
