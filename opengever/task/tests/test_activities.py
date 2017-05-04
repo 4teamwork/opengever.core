@@ -192,10 +192,14 @@ class TestTaskActivites(FunctionalTestCase):
 
         browser.login().open(task, view='++add++opengever.task.task')
         browser.fill({'Title': u'Abkl\xe4rung Fall Meier',
-                      'Responsible': 'hugo.boss',
                       'Issuer': u'hugo.boss',
                       'Task Type': 'comment',
                       'Text': 'Lorem ipsum'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(
+            self.org_unit.id() + ':hugo.boss')
+
         browser.css('#form-buttons-save').first.click()
 
         activity = Activity.query.one()
@@ -272,18 +276,26 @@ class TestTaskReassignActivity(FunctionalTestCase):
     def add_task(self, browser):
         browser.login().open(self.dossier, view='++add++opengever.task.task')
         browser.fill({'Title': u'Abkl\xe4rung Fall Meier',
-                      'Responsible': 'james.meier',
                       'Issuer': u'peter.meier',
                       'Task Type': 'comment',
                       'Text': 'Lorem ipsum'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(
+            self.org_unit.id() + ':james.meier')
+
         browser.css('#form-buttons-save').first.click()
         return self.dossier.get('task-1')
 
     def reassign(self, browser, responsible, response):
         browser.login().open(self.task)
         browser.css('#workflow-transition-task-transition-reassign').first.click()
-        browser.fill({'Responsible': responsible,
-                      'Response': response})
+        browser.fill({'Response': response})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(
+            self.org_unit.id() + ':' + responsible)
+
         browser.css('#form-buttons-save').first.click()
 
     @browsing
