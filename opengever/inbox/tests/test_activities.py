@@ -38,9 +38,12 @@ class TestForwardingActivites(FunctionalTestCase):
             data={'paths': ['/'.join(self.document.getPhysicalPath())]})
 
         browser.fill({'Title': u'Abkl\xe4rung Fall Meier',
-                      'Responsible': u'hugo.boss',
                       'Deadline': '02/13/15',
                       'Text': 'Lorem ipsum'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill('client1:hugo.boss')
+
         browser.find('Save').click()
 
         activity = Activity.query.first()
@@ -153,8 +156,10 @@ class TestForwardingReassignActivity(FunctionalTestCase):
         browser.login().open(self.inbox, data,
                              view='++add++opengever.inbox.forwarding')
         browser.fill({'Title': u'Abkl\xe4rung Fall Meier',
-                      'Responsible': 'jon.meier',
                       'Issuer': u'hugo.boss'})
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill('client1:jon.meier')
+
         browser.css('#form-buttons-save').first.click()
         return self.inbox.get('forwarding-1')
 

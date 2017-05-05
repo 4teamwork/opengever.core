@@ -50,11 +50,6 @@ class TestForwarding(FunctionalTestCase):
             {'portal_type': 'opengever.document.document'}))
 
     @browsing
-    def test_autocomplete_does_not_raise_notfound(self, browser):
-        browser.login().open(self.inbox,
-            view='++add++opengever.inbox.forwarding/++widget++issuer/@@autocomplete-search?term=sb')
-
-    @browsing
     def test_forwarding_add_form_does_not_render_empty_fieldset_additional(self, browser):
         doc = create(Builder('document').within(self.inbox).titled(u'Doc 1'))
         data = dict(paths=[doc.getPhysicalPath()])
