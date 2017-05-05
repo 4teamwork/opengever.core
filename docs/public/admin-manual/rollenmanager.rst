@@ -203,11 +203,9 @@ Dieses Recht wird in der Regel nur GEVER-Verantwortlichen innerhalb der
 jeweiligen Organisation oder alternativ der Rolle Administrator übertragen.
 
 Entsprechende Rollen (Best Practice) sind:
--   Sachbearbeitende: Zuweisung der Benutzer zu Mandant(en) Rechte für lesen,
-    hinzufügen, bearbeiten und abschliessen von Dossiers
+-   Sachbearbeitende: Zuweisung der Benutzer zu Mandant(en) Rechte für lesen, hinzufügen, bearbeiten und abschliessen von Dossiers
 
--   GEVER-Verantwortliche: Zuweisung der Benutzer zu Mandant(en). Alle Rechte
-    (lesen, hinzufügen, bearbeiten, abschliessen, reaktivieren von Dossiers)
+-   GEVER-Verantwortliche: Zuweisung der Benutzer zu Mandant(en). Alle Rechte (lesen, hinzufügen, bearbeiten, abschliessen, reaktivieren von Dossiers)
 
 .. |img-rollenmanager-1| image:: img/media/img-rollenmanager-1.png
 .. |img-rollenmanager-2| image:: img/media/img-rollenmanager-2.png
