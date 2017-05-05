@@ -20,7 +20,7 @@ Beispiele:
 1. Auf eine Ordnungsposition soll nebst der Leitung auch die Gruppe
    Sekretariat Einsicht nehmen können. Mit der Berechtigung
    Rollenmanager kann diese Erweiterung auf Stufe Ordnungsposition
-   voËrgenommen werden.
+   vorgenommen werden.
 
 2. Unter einer Ordnungsposition befindet sich ein Dossier, das in
    Abweichung zur Regel nicht von allen Gruppen, die auf die übrigen
@@ -138,6 +138,76 @@ Ordnungsposition erfolgen gleich wie bei den Dossiers.
    Erweiterung muss das Häklein nicht entfernt werden. Das weitere
    Vorgehen entspricht demjenigen bei der Bearbeitung von Berechtigungen
    bei Dossiers.
+
+Rollenmodell
+------------
+Nachstehend werden die in OneGov GEVER enthaltenen Rollen erläutert.
+
+Globale Rollen
+~~~~~~~~~~~~~~
+Globale Rollen gelten für einen physischen Mandanten. Die Rolle wird durch
+4teamwork im System konfiguriert. Jeder Rolle wird einer AD-Gruppe zugewiesen.
+
+Die Globalen Rollen und deren Charakteristik sind
+
+-   Administrator: kann Ordnungssystem anpassen/ergänzen, Vorlagen verwalten,
+    Force Checkin ausführen
+
+-   Rollenmanager: kann auf Ordnungspositionen und Dossiers die Berechtigungen
+    anpassen, d.h. einschränken oder erweitern.
+
+-   Records Manager: Diese Rolle wird in der Regel einem kleinen Benutzerkreis,
+    welche für die Aussonderung des entsprechenden Mandants zuständig sind,
+    vergeben. Die Rolle kann Aussonderungsangebot inkl. Selektion von
+    Dossiers für Archivierung und Aussonderung erstellen.
+
+-   Archivist: Die Rolle Archivist wird in der Regel Archiv-Mitarbeitenden
+    vergeben, welche dazu berechtigt sind Angebote des Records Managers zu
+    bewerten und diese ins Langzeitarchiv zu überführen. Benutzer mit der Rolle
+    Archivist können alle angebotenen und archivierten Dossiers sehen, auch wenn
+    Sie nicht dem entsprechenden Mandanten zugewiesen sind. Dies ermöglicht eine
+    Prüfung der Dossiers durch die Archiv Mitarbeitenden während der
+    Bewertungsphase. Dies ist somt die Rolle für die Archivierung von Dossiers
+    sowie zur Bewertung eines Aussonderungsangebots.
+
+-   Sonderrolle Eingangskorb pro physischen und/oder virtuellen Mandanten: Die
+    Rolle wird von 4teamwork konfiguriert. Sie dient auch as unpersönlicher
+    Empfänger pro physischen und virtuellen Mandanten bei Aufgaben. Personen in
+    dieser Rollen können einen Posteingang erfassen, Dokumente weiterleiten,
+    Unpersönliche Aufgaben an Eingangskorb verwalten sowie sind diese
+    Stellvertretung bei Aufgaben. Zudem sind sie automatisch für alle Aufgaben
+    an den Mandanten mitberechtigt.
+
+
+Rollen innerhalb der Ordnungsstruktur
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Innerhalb der Ordnungsstruktur können Rechte zugewiesen werden für
+-   Dossier lesen
+-   Dossier hinzufügen
+-   Dossier bearbeiten
+-   Dossier abschliessen
+-   Dossier reaktivieren
+
+Diese Rechte werden jeweils AD-Gruppen zugewiesen. Damit werden faktisch
+"Benutzergruppen" gebildet.
+
+Best Practice ist, innerhalb der Organisation ein Gruppe von Personen
+(Benutzergruppe) zu bilden die jeweils alle obgenannten Rechte exkl.
+"reaktivieren" besitzt. Dabei handelt es sich um generell formuliert
+"Sachbearbeitende".
+
+Das Recht "reaktivieren" von Dossiers wird in der Regel einer separaten Gruppe
+zugewiesen, da das Reaktivieren Einfluss auf die Rückbehaltungsperiode hat.
+Dieses Recht wird in der Regel nur GEVER-Verantwortlichen innerhalb der
+jeweiligen Organisation oder alternativ der Rolle Administrator übertragen.
+
+Entsprechende Rollen (Best Practice) sind:
+-   Sachbearbeitende: Zuweisung der Benutzer zu Mandant(en) Rechte für lesen,
+    hinzufügen, bearbeiten und abschliessen von Dossiers
+
+-   GEVER-Verantwortliche: Zuweisung der Benutzer zu Mandant(en). Alle Rechte
+    (lesen, hinzufügen, bearbeiten, abschliessen, reaktivieren von Dossiers)
 
 .. |img-rollenmanager-1| image:: img/media/img-rollenmanager-1.png
 .. |img-rollenmanager-2| image:: img/media/img-rollenmanager-2.png

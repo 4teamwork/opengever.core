@@ -22,7 +22,6 @@ Version 1.0 / 13. Januar 2016
    posteingang
    aufgaben
    standardablaeufe
-   rollenmanager
    meine_ablage
    sitzungs-und-protokollverwaltung
 
