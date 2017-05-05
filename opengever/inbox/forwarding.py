@@ -4,9 +4,11 @@ from five import grok
 from ftw.keywordwidget.widget import KeywordFieldWidget
 from opengever.inbox import _
 from opengever.inbox.activities import ForwardingAddedActivity
+from opengever.ogds.base.sources import AllUsersAndInboxesSourceBinder
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task import _ as task_mf
 from opengever.task.task import ITask, Task
+from opengever.task.util import update_reponsible_field_data
 from plone.dexterity.browser.edit import DefaultEditForm
 from plone.directives import form
 from plone.directives.dexterity import AddForm
@@ -50,11 +52,11 @@ class IForwarding(ITask):
         required=False,
         )
 
-    form.widget('responsible', KeywordFieldWidget)
+    form.widget('responsible', KeywordFieldWidget, async=True)
     responsible = schema.Choice(
         title=_(u"label_responsible", default=u"Responsible"),
         description=_(u"help_responsible", default=""),
-        vocabulary=u'opengever.ogds.base.InboxesVocabulary',
+        source=AllUsersAndInboxesSourceBinder(),
         required=True,
         )
 
@@ -140,6 +142,7 @@ class ForwardingAddForm(AddForm):
         _drop_empty_additional_fieldset(self.groups)
 
     def createAndAdd(self, data):
+        update_reponsible_field_data(data)
         forwarding = super(AddForm, self).createAndAdd(data=data)
         ForwardingAddedActivity(
             forwarding, self.request, self.context).record()
@@ -151,6 +154,13 @@ class ForwardingEditForm(DefaultEditForm):
     def updateFieldsFromSchemata(self):
         super(ForwardingEditForm, self).updateFieldsFromSchemata()
         _drop_empty_additional_fieldset(self.groups)
+
+    def applyChanges(self, data):
+        """Records reassign activity when the responsible has changed.
+        Also update the responsible_cliend and responsible user
+        """
+        update_reponsible_field_data(data)
+        super(ForwardingEditForm, self).applyChanges(data)
 
 
 def _drop_empty_additional_fieldset(groups):
