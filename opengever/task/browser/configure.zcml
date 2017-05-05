@@ -3,11 +3,6 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="opengever.task">
 
-  <browser:resource
-      name="opengever.task.responsible.js"
-      file="resources/opengever.task.responsible.js"
-      />
-
   <browser:page
       name="task_transition_controller"
       for="opengever.task.task.ITask"
