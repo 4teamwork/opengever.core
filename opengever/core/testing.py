@@ -8,7 +8,9 @@ from ftw.testing import ComponentRegistryLayer
 from ftw.testing.layer import COMPONENT_REGISTRY_ISOLATION
 from ftw.testing.quickinstaller import snapshots
 from opengever.activity.interfaces import IActivitySettings
+from opengever.base import pdfconverter
 from opengever.base.model import create_session
+from opengever.base.pdfconverter import pdfconverter_available_lock
 from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
 from opengever.core import sqlite_testing
 from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings # noqa
@@ -87,6 +89,34 @@ def deactivate_bumblebee_feature():
 
 def activate_bumblebee_feature():
     toggle_feature(IGeverBumblebeeSettings, enabled=True)
+
+
+class PDFConverterAvailability(object):
+    """Context manager that allows for safeley monkey patching
+    PDFCONVERTER_AVAILABLE during tests, reverting the flag to whatever
+    original value it had.
+    """
+
+    def __init__(self, value):
+        self.value = value
+        self.original_value = pdfconverter.PDFCONVERTER_AVAILABLE
+
+    def __enter__(self):
+        lock_acquired = pdfconverter_available_lock.acquire(False)
+        if not lock_acquired:
+            raise Exception(
+                "Failed to acquire lock for mutating PDFCONVERTER_AVAILABLE."
+                "This means you're probably running tests in several threads ",
+                "which wasn't originall intended. Acquiring this lock in "
+                "blocking mode could lead to lock contention and serious, "
+                "hard to spot performance degradation, which is why we "
+                "won't allow you to do this without looking at it again.")
+
+        pdfconverter.PDFCONVERTER_AVAILABLE = self.value
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        pdfconverter.PDFCONVERTER_AVAILABLE = self.original_value
+        pdfconverter_available_lock.release()
 
 
 class AnnotationLayer(ComponentRegistryLayer):
