@@ -7,6 +7,7 @@ from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.base import pdfconverter
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
+from opengever.core.testing import PDFConverterAvailability
 from opengever.testing import FunctionalTestCase
 
 
@@ -47,77 +48,78 @@ class TestDocumentTooltip(FunctionalTestCase):
 
     @browsing
     def test_tooltip_actions(self, browser):
-        pdfconverter.PDFCONVERTER_AVAILABLE = True
-        dossier = create(Builder('dossier'))
-        document = create(Builder('document')
-                          .within(dossier)
-                          .with_dummy_content()
-                          .attach_file_containing(
-                              bumblebee_asset('example.docx').bytes(),
-                              u'example.docx'))
+        with PDFConverterAvailability(True):
+            dossier = create(Builder('dossier'))
+            document = create(Builder('document')
+                              .within(dossier)
+                              .with_dummy_content()
+                              .attach_file_containing(
+                                  bumblebee_asset('example.docx').bytes(),
+                                  u'example.docx'))
 
-        browser.login().open(document, view='tooltip')
-        metadata, checkout, download, preview, details = browser.css(
-            '.file-action-buttons a')
+            browser.login().open(document, view='tooltip')
+            metadata, checkout, download, preview, details = browser.css(
+                '.file-action-buttons a')
 
-        # preview
-        self.assertEquals('PDF Preview', preview.text)
-        self.assertTrue(preview.get('href').startswith(
-            'http://nohost/plone/dossier-1/document-1'
-            '/download_pdfpreview?_authenticator='))
+            # preview
+            self.assertEquals('PDF Preview', preview.text)
+            self.assertTrue(preview.get('href').startswith(
+                'http://nohost/plone/dossier-1/document-1'
+                '/download_pdfpreview?_authenticator='))
 
-        # metadata
-        self.assertEquals('Edit metadata', metadata.text)
-        self.assertEquals(
-            'http://nohost/plone/dossier-1/document-1'
-            '/edit_checker',
-            metadata.get('href'))
+            # metadata
+            self.assertEquals('Edit metadata', metadata.text)
+            self.assertEquals(
+                'http://nohost/plone/dossier-1/document-1'
+                '/edit_checker',
+                metadata.get('href'))
 
-        # checkout and edit
-        self.assertEquals('Checkout and edit', checkout.text)
-        self.assertTrue(checkout.get('href').startswith(
-            'http://nohost/plone/dossier-1/document-1'
-            '/editing_document?_authenticator='
-            ))
+            # checkout and edit
+            self.assertEquals('Checkout and edit', checkout.text)
+            self.assertTrue(checkout.get('href').startswith(
+                'http://nohost/plone/dossier-1/document-1'
+                '/editing_document?_authenticator='
+                ))
 
-        # download copy
-        self.assertEquals('Download copy', download.text)
-        self.assertTrue(download.get('href').startswith(
-            'http://nohost/plone/dossier-1/document-1'
-            '/file_download_confirmation?_authenticator='))
+            # download copy
+            self.assertEquals('Download copy', download.text)
+            self.assertTrue(download.get('href').startswith(
+                'http://nohost/plone/dossier-1/document-1'
+                '/file_download_confirmation?_authenticator='))
 
-        # link to details
-        self.assertEquals('Open detail view', details.text)
-        self.assertEquals('http://nohost/plone/dossier-1/document-1',
-                          details.get('href'))
+            # link to details
+            self.assertEquals('Open detail view', details.text)
+            self.assertEquals('http://nohost/plone/dossier-1/document-1',
+                              details.get('href'))
 
     @browsing
     def test_preview_link_is_only_available_for_documents(self, browser):
-        pdfconverter.PDFCONVERTER_AVAILABLE = True
-        document = create(Builder('document').with_dummy_content())
-        mail = create(Builder('mail'))
+        with PDFConverterAvailability(False):
+            document = create(Builder('document').with_dummy_content())
+            mail = create(Builder('mail'))
 
-        browser.login().open(document, view='tooltip')
-        self.assertIn(
-            'PDF Preview', browser.css('.file-action-buttons a').text)
+        with PDFConverterAvailability(True):
+            browser.login().open(document, view='tooltip')
+            self.assertIn(
+                'PDF Preview', browser.css('.file-action-buttons a').text)
 
-        browser.open(mail, view='tooltip')
-        self.assertNotIn(
-            'PDF Preview', browser.css('.file-action-buttons a').text)
+            browser.open(mail, view='tooltip')
+            self.assertNotIn(
+                'PDF Preview', browser.css('.file-action-buttons a').text)
 
     @browsing
     def test_preview_link_is_only_available_when_pdfconverter_is_active(self, browser):  # noqa
         document = create(Builder('document').with_dummy_content())
 
-        pdfconverter.PDFCONVERTER_AVAILABLE = True
-        browser.login().open(document, view='tooltip')
-        self.assertIn(
-            'PDF Preview', browser.css('.file-action-buttons a').text)
+        with PDFConverterAvailability(True):
+            browser.login().open(document, view='tooltip')
+            self.assertIn(
+                'PDF Preview', browser.css('.file-action-buttons a').text)
 
-        pdfconverter.PDFCONVERTER_AVAILABLE = False
-        browser.open(document, view='tooltip')
-        self.assertNotIn(
-            'PDF Preview', browser.css('.file-action-buttons a').text)
+        with PDFConverterAvailability(False):
+            browser.open(document, view='tooltip')
+            self.assertNotIn(
+                'PDF Preview', browser.css('.file-action-buttons a').text)
 
     @browsing
     def test_checkout_link_is_only_available_for_documents(self, browser):

@@ -3,8 +3,8 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
-from opengever.base import pdfconverter
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
+from opengever.core.testing import PDFConverterAvailability
 from opengever.testing import FunctionalTestCase
 from opengever.testing.helpers import create_document_version
 from plone import api
@@ -48,105 +48,108 @@ class TestVersionsTabWithoutPDFConverter(TestVersionsTab):
 
     @browsing
     def test_dates_are_formatted_correctly(self, browser):
-        with freeze(datetime(2015, 01, 28, 12, 00)):
-            doc = self._create_doc()
-        with freeze(datetime(2015, 01, 28, 18, 30)):
-            create_document_version(doc, 1)
-        transaction.commit()
+        with PDFConverterAvailability(False):
+            with freeze(datetime(2015, 01, 28, 12, 00)):
+                doc = self._create_doc()
+            with freeze(datetime(2015, 01, 28, 18, 30)):
+                create_document_version(doc, 1)
+            transaction.commit()
 
-        browser.login().open(doc, view='tabbedview_view-versions')
-        listing = browser.css('.listing').first
-        dates = [d['Datum']for d in listing.dicts()]
-        self.assertEquals(['28.01.2015 18:30', '28.01.2015 12:00'], dates)
+            browser.login().open(doc, view='tabbedview_view-versions')
+            listing = browser.css('.listing').first
+            dates = [d['Datum']for d in listing.dicts()]
+            self.assertEquals(['28.01.2015 18:30', '28.01.2015 12:00'], dates)
 
     @browsing
     def test_is_sorted_by_descending_version_id(self, browser):
-        browser.login().open(self.document, view='tabbedview_view-versions')
-        listing = browser.css('.listing').first
-        version_ids = [d['Version'] for d in listing.dicts()]
-        self.assertEquals(['3', '2', '1', '0'], version_ids)
+        with PDFConverterAvailability(False):
+            browser.login().open(self.document, view='tabbedview_view-versions')
+            listing = browser.css('.listing').first
+            version_ids = [d['Version'] for d in listing.dicts()]
+            self.assertEquals(['3', '2', '1', '0'], version_ids)
 
     @browsing
     def test_columns_are_ordered_and_translated(self, browser):
-        browser.login().open(self.document, view='tabbedview_view-versions')
-        listing = browser.css('.listing').first
-        column_headers = listing.lists()[0]
-        self.assertEquals(
-            ['Version',
-             u'Ge\xe4ndert von',
-             'Datum',
-             'Kommentar',
-             'Kopie herunterladen',
-             u'Zur\xfccksetzen'],
-            column_headers)
+        with PDFConverterAvailability(False):
+            browser.login().open(self.document, view='tabbedview_view-versions')
+            listing = browser.css('.listing').first
+            column_headers = listing.lists()[0]
+            self.assertEquals(
+                ['Version',
+                 u'Ge\xe4ndert von',
+                 'Datum',
+                 'Kommentar',
+                 'Kopie herunterladen',
+                 u'Zur\xfccksetzen'],
+                column_headers)
 
     @browsing
     def test_actor_is_linked(self, browser):
-        browser.login().open(self.document, view='tabbedview_view-versions')
-        listing = browser.css('.listing').first
-        first_row = listing.css('tr')[1]
-        actor_link = first_row.css('td a').first
+        with PDFConverterAvailability(False):
+            browser.login().open(self.document, view='tabbedview_view-versions')
+            listing = browser.css('.listing').first
+            first_row = listing.css('tr')[1]
+            actor_link = first_row.css('td a').first
 
-        self.assertEquals('Boss Hugo (test-user)', actor_link.text)
-        self.assertEquals('http://nohost/plone/@@user-details/test-user',
-                          actor_link.attrib['href'])
+            self.assertEquals('Boss Hugo (test-user)', actor_link.text)
+            self.assertEquals('http://nohost/plone/@@user-details/test-user',
+                              actor_link.attrib['href'])
 
     @browsing
     def test_revert_link_is_properly_constructed(self, browser):
-        browser.login().open(self.document, view='tabbedview_view-versions')
-        listing = browser.css('.listing').first
-        first_row = listing.css('tr')[1]
-        revert_link = first_row.css('td a')[-1]
-        url = urlparse(revert_link.attrib['href'])
-        query = parse_qs(url.query)
+        with PDFConverterAvailability(False):
+            browser.login().open(self.document,
+                                 view='tabbedview_view-versions')
+            listing = browser.css('.listing').first
+            first_row = listing.css('tr')[1]
+            revert_link = first_row.css('td a')[-1]
+            url = urlparse(revert_link.attrib['href'])
+            query = parse_qs(url.query)
 
-        self.assertEquals(u'Zur\xfccksetzen', revert_link.text)
-        self.assertEquals(['3'], query['version_id'])
-        self.assertIn('_authenticator', query)
-        self.assertEquals(
-            '/plone/dossier-1/document-1/revert-file-to-version', url.path)
+            self.assertEquals(u'Zur\xfccksetzen', revert_link.text)
+            self.assertEquals(['3'], query['version_id'])
+            self.assertIn('_authenticator', query)
+            self.assertEquals(
+                '/plone/dossier-1/document-1/revert-file-to-version', url.path)
 
     @browsing
     def test_download_link_is_properly_constructed(self, browser):
-        browser.login().open(self.document, view='tabbedview_view-versions')
-        listing = browser.css('.listing').first
-        first_row = listing.css('tr')[1]
-        download_link = first_row.css('td a')[-2]
-        url = urlparse(download_link.attrib['href'])
-        query = parse_qs(url.query)
+        with PDFConverterAvailability(False):
+            browser.login().open(self.document,
+                                 view='tabbedview_view-versions')
+            listing = browser.css('.listing').first
+            first_row = listing.css('tr')[1]
+            download_link = first_row.css('td a')[-2]
+            url = urlparse(download_link.attrib['href'])
+            query = parse_qs(url.query)
 
-        self.assertEquals('Kopie herunterladen', download_link.text)
-        self.assertEquals(['3'], query['version_id'])
-        self.assertIn('_authenticator', query)
-        self.assertEquals(
-            '/plone/dossier-1/document-1/file_download_confirmation', url.path)
+            self.assertEquals('Kopie herunterladen', download_link.text)
+            self.assertEquals(['3'], query['version_id'])
+            self.assertIn('_authenticator', query)
+            self.assertEquals(
+                '/plone/dossier-1/document-1/file_download_confirmation',
+                url.path)
 
 
 class TestVersionsTabWithPDFConverter(TestVersionsTab):
 
-    def setUp(self):
-        super(TestVersionsTabWithPDFConverter, self).setUp()
-        pdfconverter.PDFCONVERTER_AVAILABLE = True
-
-    def tearDown(self):
-        super(TestVersionsTabWithPDFConverter, self).tearDown()
-        pdfconverter.PDFCONVERTER_AVAILABLE = False
-
     @browsing
     def test_download_pdf_link_is_properly_constructed(self, browser):
-        browser.login().open(self.document, view='tabbedview_view-versions')
+        with PDFConverterAvailability(True):
+            browser.login().open(
+                self.document, view='tabbedview_view-versions')
 
-        listing = browser.css('.listing').first
-        first_row = listing.css('tr')[1]
-        pdf_download_link = first_row.css('td a')[-2]
-        url = urlparse(pdf_download_link.attrib['href'])
-        query = parse_qs(url.query)
+            listing = browser.css('.listing').first
+            first_row = listing.css('tr')[1]
+            pdf_download_link = first_row.css('td a')[-2]
+            url = urlparse(pdf_download_link.attrib['href'])
+            query = parse_qs(url.query)
 
-        self.assertEquals('PDF Vorschau', pdf_download_link.text)
-        self.assertEquals(['3'], query['version_id'])
-        self.assertIn('_authenticator', query)
-        self.assertEquals(
-            '/plone/dossier-1/document-1/download_pdf_version', url.path)
+            self.assertEquals('PDF Vorschau', pdf_download_link.text)
+            self.assertEquals(['3'], query['version_id'])
+            self.assertIn('_authenticator', query)
+            self.assertEquals(
+                '/plone/dossier-1/document-1/download_pdf_version', url.path)
 
 
 class TestVersionsTabWithBubmelbeeActivated(TestVersionsTab):
