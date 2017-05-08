@@ -32,8 +32,9 @@
             <tal:checkout_and_edit_enabled tal:condition="checkout_and_edit_available">
 
                 <tal:oc_checkout tal:condition="context/@@officeconnector_settings/is_checkout_enabled">
-                    <a tal:attributes="href string:javascript:officeConnectorCheckout('${context/absolute_url}/officeconnector_checkout_url');;"
-                        class="function-edit"
+                    <a tal:attributes="href string:javascript:officeConnectorCheckout('${context/absolute_url}/officeconnector_checkout_url');;;
+                                       data-document-url context/absolute_url"
+                        class="function-edit oc-checkout"
                         href="#"
                         i18n:translate="label_checkout_and_edit">
                         Checkout and edit
