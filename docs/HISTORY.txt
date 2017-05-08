@@ -5,6 +5,7 @@ Changelog
 2017.1.2 (unreleased)
 ---------------------
 
+- Improve view permissions (ported from 4.15.5). [jone]
 - Tests: Manage monkey patching of PDFCONVERTER_AVAILABLE through a context manager. [lgraf]
 - Improve help text for task responsible selection. [lgraf]
 - Fix mail downloads by demanding a context to be passed into DC helpers. [Rotonen]
@@ -231,6 +232,12 @@ Changelog
 - Add review state column and state filter to disposition listings. [phgross]
 - Fix holey bumblebee fallback svg icon. [Kevin Bieri]
 - Fix rendering of new agenda points in IE11. [Kevin Bieri]
+
+
+4.15.5 (2017-05-09)
+-------------------
+
+- Improve view permissions. [jone]
 
 
 4.15.4 (2017-03-20)

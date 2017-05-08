@@ -54,6 +54,7 @@ class ProposalOverview(OverviewBase, DisplayForm, GeverTabMixin):
     grok.context(IProposal)
     grok.name('tabbedview_view-overview')
     grok.template('proposaloverview')
+    grok.require('zope2.View')
 
     def get_submitted_document(self, document):
         return SubmittedDocument.query.get_by_source(
@@ -84,3 +85,4 @@ class SubmittedProposalOverview(OverviewBase, DisplayForm, GeverTabMixin):
     grok.context(ISubmittedProposal)
     grok.name('tabbedview_view-overview')
     grok.template('proposaloverview')
+    grok.require('zope2.View')

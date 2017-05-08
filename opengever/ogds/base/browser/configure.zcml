@@ -14,7 +14,7 @@
       name="orgunit_selector"
       class=".orgunit_selector.OrgunitSelectorView"
       attribute="has_available_units"
-      permission="zope.Public"
+      permission="zope2.View"
       />
 
 </configure>

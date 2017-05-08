@@ -7,7 +7,7 @@
       name="task_transition_controller"
       for="opengever.inbox.forwarding.IForwarding"
       class=".transitioncontroller.ForwardingTransitionController"
-      permission="zope.Public"
+      permission="zope2.View"
       allowed_interface="opengever.task.browser.transitioncontroller.ITaskTransitionController"
       />
 

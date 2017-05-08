@@ -63,6 +63,7 @@ class PreviewTab(ftwView):
 
 class OverviewTab(Overview):
     grok.context(IMail)
+    grok.require('zope2.View')
 
     # override template lookup, its realive to this file
     file_template = ViewPageTemplateFile('templates/file.pt')

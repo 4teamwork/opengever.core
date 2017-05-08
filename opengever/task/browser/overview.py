@@ -14,6 +14,7 @@ class Overview(grok.View, GeverTabMixin):
     grok.context(ITask)
     grok.name('tabbedview_view-overview')
     grok.template('overview')
+    grok.require('zope2.View')
 
     def documents(self):
         """ Return containing documents and related documents

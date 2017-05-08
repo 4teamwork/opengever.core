@@ -11,7 +11,7 @@ class TestUserDetails(FunctionalTestCase):
         create_ogds_user('hugo.boss', lastname='Boss', firstname='Hugo',
                          groups=('group_a', 'group_b'))
 
-        browser.open(self.portal, view='@@user-details/hugo.boss')
+        browser.login().open(self.portal, view='@@user-details/hugo.boss')
 
         self.assertEquals(['Boss Hugo (hugo.boss)'],
                           browser.css('h1.documentFirstHeading').text)
@@ -21,4 +21,4 @@ class TestUserDetails(FunctionalTestCase):
     @browsing
     def test_user_details_return_not_found_for_not_exisiting_user(self, browser):
         with self.assertRaises(NotFound):
-            browser.open(self.portal, view='@@user-details/hugo.boss')
+            browser.login().open(self.portal, view='@@user-details/hugo.boss')

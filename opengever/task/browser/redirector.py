@@ -10,6 +10,7 @@ class TaskRedirector(grok.View):
 
     grok.context(ITask)
     grok.name('task_redirector')
+    grok.require('zope2.View')
 
     def render(self):
         parent = aq_inner(aq_parent(self.context))
