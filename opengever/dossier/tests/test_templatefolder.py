@@ -25,8 +25,13 @@ from opengever.testing.helpers import get_contacts_token
 from opengever.testing.pages import sharing_tab_data
 from plone import api
 from plone.app.testing import TEST_USER_ID
+from plone.portlets.constants import CONTEXT_CATEGORY
+from plone.portlets.interfaces import ILocalPortletAssignmentManager
+from plone.portlets.interfaces import IPortletAssignmentMapping
+from plone.portlets.interfaces import IPortletManager
 from plone.registry.interfaces import IRegistry
 from zope.app.intid.interfaces import IIntIds
+from zope.component import getMultiAdapter
 from zope.component import getUtility
 import transaction
 
@@ -550,6 +555,52 @@ class TestTemplateFolder(FunctionalTestCase):
             'Test User (test_user_1_)',
             browser.css('#formfield-form-widgets-IDossier-responsible span.label').first.text
             )
+
+    @browsing
+    def test_portlet_inheritance_is_blocked(self, browser):
+        self.grant('Manager')
+        add_languages(['de-ch'])
+        browser.login().open(self.portal)
+        factoriesmenu.add('Template Folder')
+        browser.fill({'Title': 'Templates'}).save()
+
+        self.assert_portlet_inheritance_blocked(
+            'plone.leftcolumn', browser.context)
+
+    @browsing
+    def test_navigation_portlet_is_added(self, browser):
+        self.grant('Manager')
+        add_languages(['de-ch'])
+        browser.login().open(self.portal)
+        factoriesmenu.add('Template Folder')
+        browser.fill({'Title': 'Templates'}).save()
+
+        manager = getUtility(
+            IPortletManager, name=u'plone.leftcolumn', context=browser.context)
+        mapping = getMultiAdapter(
+            (browser.context, manager), IPortletAssignmentMapping)
+
+        portlet = mapping.get('navigation')
+
+        self.assertIsNotNone(
+            portlet, 'Navigation portlet not added to Templatefolder')
+        self.assertEqual(0, portlet.topLevel)
+        self.assertEquals('opengever-dossier-templatefolder', portlet.root)
+
+    @browsing
+    def test_portlets_are_inherited_on_sub_templatefolder(self, browser):
+        templatefolder = create(Builder('templatefolder'))
+        self.grant('Manager')
+        add_languages(['de-ch'])
+        browser.login().open(templatefolder)
+        factoriesmenu.add('Template Folder')
+        browser.fill({'Title': 'Templates'}).save()
+
+        manager = getUtility(
+            IPortletManager, name=u'plone.leftcolumn', context=browser.context)
+        assignable = getMultiAdapter(
+            (browser.context, manager), ILocalPortletAssignmentManager)
+        self.assertFalse(assignable.getBlacklistStatus(CONTEXT_CATEGORY))
 
 
 class TestTemplateFolderMeetingEnabled(FunctionalTestCase):

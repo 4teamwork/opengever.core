@@ -44,4 +44,10 @@
 
   <adapter factory=".proposaltemplate.UploadValidator" />
 
+  <subscriber
+      for="opengever.meeting.committeecontainer.ICommitteeContainer
+           zope.lifecycleevent.interfaces.IObjectAddedEvent"
+      handler=".handlers.configure_committee_container_portlets"
+      />
+
 </configure>

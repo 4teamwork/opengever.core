@@ -3,6 +3,7 @@ from OFS.interfaces import IObjectWillBeRemovedEvent
 from opengever.base.browser.paste import ICopyPasteRequestLayer
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
+from opengever.base.portlets import block_context_portlet_inheritance
 from opengever.base.security import elevated_privileges
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import IObjectCheckedInEvent
@@ -17,7 +18,6 @@ from zope.component import getUtility
 from zope.component.interfaces import ComponentLookupError
 from zope.globalrequest import getRequest
 from zope.intid.interfaces import IIntIds
-from zope.lifecycleevent.interfaces import IObjectAddedEvent
 from zope.lifecycleevent.interfaces import IObjectCopiedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 from zope.lifecycleevent.interfaces import IObjectMovedEvent
@@ -88,3 +88,9 @@ def sync_moved_proposal(obj, event):
         return
 
     obj.sync_model()
+
+
+def configure_committee_container_portlets(container, event):
+    """Do not acquire portlets.
+    """
+    block_context_portlet_inheritance(container)

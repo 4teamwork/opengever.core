@@ -32,3 +32,14 @@ class TestContactFolder(FunctionalTestCase):
 
         browser.find('DE').click()
         self.assertEquals("Kontakte", browser.css('h1').first.text)
+
+    @browsing
+    def test_portlets_inheritance_is_blocked(self, browser):
+        browser.login().open()
+        factoriesmenu.add('ContactFolder')
+        browser.fill({'Title (German)': u'Kontakte',
+                      'Title (French)': u'Contacts'})
+        browser.find('Save').click()
+
+        self.assert_portlet_inheritance_blocked(
+            'plone.leftcolumn', browser.context)

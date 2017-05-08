@@ -82,6 +82,20 @@ class TestCommitteeContainer(FunctionalTestCase):
 
         self.assertEqual(toc_template, container.get_toc_template())
 
+    @browsing
+    def test_portlets_inheritance_is_blocked(self, browser):
+        toc_template = create(
+            Builder('sablontemplate')
+            .attach_file_containing("blabla", name=u'toc.docx'))
+
+        container = create(
+            Builder('committee_container').having(
+                protocol_template=self.template,
+                excerpt_template=self.template,
+                toc_template=toc_template))
+
+        self.assert_portlet_inheritance_blocked('plone.leftcolumn', container)
+
 
 class TestCommitteesTab(FunctionalTestCase):
 

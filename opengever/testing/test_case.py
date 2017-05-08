@@ -16,8 +16,12 @@ from plone.app.testing import login
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
+from plone.portlets.constants import CONTEXT_CATEGORY
+from plone.portlets.interfaces import ILocalPortletAssignmentManager
+from plone.portlets.interfaces import IPortletManager
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
+from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.i18n import translate
 from zope.interface import alsoProvides
@@ -191,3 +195,10 @@ class FunctionalTestCase(TestCase):
         got_json = json.dumps(got, **pretty)
         self.maxDiff = None
         self.assertMultiLineEqual(expected_json, got_json, msg)
+
+    def assert_portlet_inheritance_blocked(self, manager, obj):
+        manager = getUtility(
+            IPortletManager, name=u'plone.leftcolumn', context=obj)
+        assignable = getMultiAdapter(
+            (obj, manager), ILocalPortletAssignmentManager)
+        self.assertTrue(assignable.getBlacklistStatus(CONTEXT_CATEGORY))

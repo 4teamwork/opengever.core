@@ -5,6 +5,10 @@ from ftw.testbrowser.pages import factoriesmenu
 from opengever.inbox.inbox import IInbox
 from opengever.testing import add_languages
 from opengever.testing import FunctionalTestCase
+from plone.portlets.interfaces import IPortletAssignmentMapping
+from plone.portlets.interfaces import IPortletManager
+from zope.component import getMultiAdapter
+from zope.component import getUtility
 import transaction
 
 
@@ -73,3 +77,36 @@ class TestInbox(FunctionalTestCase):
         browser.find('DE').click()
         self.assertEquals(u'Eingangskorb',
                           browser.css('h1').first.text)
+
+    @browsing
+    def test_portlet_inheritance_is_blocked(self, browser):
+        self.grant('Manager')
+        add_languages(['de-ch'])
+        browser.login().open()
+        factoriesmenu.add('Inbox')
+        browser.fill({'Title': 'Inbox'}).save()
+
+        self.assert_portlet_inheritance_blocked(
+            'plone.leftcolumn', browser.context)
+
+    @browsing
+    def test_navigation_portlet_is_added(self, browser):
+        inboxcontainer = create(Builder('inbox_container'))
+
+        self.grant('Manager')
+        add_languages(['de-ch'])
+        browser.login().open(inboxcontainer)
+        factoriesmenu.add('Inbox')
+        browser.fill({'Title': 'Inbox'}).save()
+
+        manager = getUtility(
+            IPortletManager, name=u'plone.leftcolumn', context=browser.context)
+        mapping = getMultiAdapter(
+            (browser.context, manager), IPortletAssignmentMapping)
+        portlet = mapping.get('navigation')
+
+        self.assertIsNotNone(portlet, 'Navigation portlet not added to Inbox.')
+        self.assertFalse(portlet.currentFolderOnly)
+        self.assertEquals(0, portlet.topLevel)
+        self.assertEquals('opengever-inbox-container/opengever-inbox-inbox',
+                          portlet.root)

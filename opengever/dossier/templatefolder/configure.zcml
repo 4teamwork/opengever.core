@@ -17,4 +17,10 @@
       permission="zope2.View"
       />
 
+  <subscriber
+      for="opengever.dossier.templatefolder.ITemplateFolder
+           zope.lifecycleevent.interfaces.IObjectAddedEvent"
+      handler=".subscribers.configure_templatefolder_portlets"
+      />
+
 </configure>
