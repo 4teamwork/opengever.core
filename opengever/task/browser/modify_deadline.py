@@ -105,7 +105,7 @@ class ModifyDeadlineFormView(layout.FormWrapper, grok.View):
 class RemoteDeadlineModifier(grok.View):
     grok.context(ITask)
     grok.name('remote_deadline_modifier')
-    # grok.require('zope.Public')
+    grok.require('zope2.View')
 
     def render(self):
         new_deadline = self.request.get('new_deadline', None)

@@ -1,10 +1,9 @@
 from AccessControl import Unauthorized
-from AccessControl.SecurityManagement import getSecurityManager
-from Acquisition import aq_parent
 from five import grok
-from ftw.tabbedview.browser.tabbed import TabbedView
+from OFS.interfaces import IItem
 from OFS.interfaces import IObjectClonedEvent
 from opengever.base import _
+from plone import api
 from plone.app.lockingbehavior.behaviors import ILocking
 from plone.app.relationfield.event import extract_relations
 from plone.dexterity.interfaces import IDexterityContent
@@ -130,15 +129,15 @@ def disallow_anonymous_views_on_site_root(event):
        The same applies for tabbed_view attributes of a tabbed_view that is
        displayed for the portal root.
     """
-    user = getSecurityManager().getUser()
-    if user is None or user.getUserName() == 'Anonymous User':
-        context = event.request['PARENTS'][0]
+    if not api.user.is_anonymous():
+        return
 
-        is_site_root = ISiteRoot.providedBy(context)
-        is_tabbed_view_on_site_root = isinstance(context, TabbedView) and \
-            ISiteRoot.providedBy(aq_parent(context))
+    # Find the first physical / persistent object in the PARENTS
+    # by filtering all non-persist parents (views, widgets, ...).
+    context = filter(IItem.providedBy, event.request['PARENTS'])[0]
+    if not ISiteRoot.providedBy(context):
+        return
 
-        if is_site_root or is_tabbed_view_on_site_root:
-            endpoint_name = event.request['PUBLISHED'].__name__
-            if endpoint_name not in ALLOWED_ENDPOINTS:
-                raise Unauthorized
+    endpoint_name = event.request['PUBLISHED'].__name__
+    if endpoint_name not in ALLOWED_ENDPOINTS:
+        raise Unauthorized

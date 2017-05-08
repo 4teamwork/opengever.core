@@ -774,7 +774,7 @@ class TestProposal(FunctionalTestCase):
                           .titled(u'<p>qux</p>')
                           .having(committee=committee.load_model()))
 
-        browser.open(proposal, view='tabbedview_view-overview')
+        browser.login().open(proposal, view='tabbedview_view-overview')
 
         self.assertEqual('&lt;p&gt;qux&lt;/p&gt;',
                          browser.css('.listing td').first.innerHTML)

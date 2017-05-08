@@ -89,6 +89,7 @@ class SyncTaskWorkflowStateReceiveView(grok.View):
 
     grok.context(ITask)
     grok.name('sync-task-workflow-state-receive')
+    grok.require('zope2.View')
 
     # WARNING: The security is done here by using the request layer
     # IInternalOpengeverRequestLayer provided by the ogds PAS plugin.

@@ -38,6 +38,7 @@ class OrgUnitSelectorViewlet(common.ViewletBase):
 class ChangeOrgUnitView(grok.View):
     grok.name('change_org_unit')
     grok.context(Interface)
+    grok.require('zope2.View')
 
     def render(self):
         unit_id = self.request.get('unit_id')
