@@ -128,6 +128,7 @@ class Overview(DisplayForm, GeverTabMixin, ActionButtonRendererMixin):
     grok.context(IDocumentSchema)
     grok.name('tabbedview_view-overview')
     grok.template('overview')
+    grok.require('zope2.View')
 
     show_searchform = False
 
