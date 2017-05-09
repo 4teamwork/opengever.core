@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.15.5 (unreleased)
+4.15.5 (2017-05-09)
 -------------------
 
 - Improve view permissions. [jone]
@@ -3242,7 +3242,7 @@ miscellaneous
     field in NO_DOWNLOAD_DISPLAY_MODE.
     [lgraf]
   - Changed German wording for value `unchecked` for both public_trial and archival_value:
-    "Noch nicht geprüft" -> "Nicht geprüft"
+    "Noch nicht geprĂźft" -> "Nicht geprĂźft"
     [lgraf]
   - Change german wording for descriptions of `public_trial` and `public_trial_statement`
     [lgraf]
