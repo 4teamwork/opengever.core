@@ -15,7 +15,14 @@ class WorkflowResponseSyncerSender(BaseResponseSyncerSender):
     def get_related_tasks_to_sync(self, transition):
         if not self._is_synced_transition(transition):
             return []
-        return super(WorkflowResponseSyncerSender, self).get_related_tasks_to_sync(transition)
+
+        tasks = super(WorkflowResponseSyncerSender, self).get_related_tasks_to_sync(
+            transition)
+
+        # Skip forwardings. Workflow state changes should never be
+        # synced to the successor forwarding, because a forwarding predecessor
+        # is allways closed and stored in the yearfolder.
+        return [task for task in tasks if not task.is_forwarding]
 
     def raise_sync_exception(self, task, transition, text, **kwargs):
         raise ResponseSyncerSenderException(

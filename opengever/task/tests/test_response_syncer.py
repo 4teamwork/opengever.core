@@ -218,12 +218,24 @@ class TestWorkflowResponseSyncerSender(FunctionalTestCase):
         forwarding = create(Builder('forwarding')
                             .in_state('forwarding-state-closed'))
         successor = create(Builder('task')
-                           .in_state('task-state-resolved')
+                           .in_state('task-state-in-progress')
                            .successor_from(forwarding))
 
-        sender = WorkflowResponseSyncerSender(object(), self.request)
+        sender = WorkflowResponseSyncerSender(successor, self.request)
+        self.assertEqual(
+            [], sender.get_related_tasks_to_sync(transition='task-transition-reassign'))
 
-        self.assertEqual([], sender.get_related_tasks_to_sync(successor))
+    def test_task_predecessors_are_synced(self):
+        task = create(Builder('task')
+                            .in_state('task-state-in-progress'))
+        successor = create(Builder('task')
+                           .in_state('task-state-in-progress')
+                           .successor_from(task))
+
+        sender = WorkflowResponseSyncerSender(successor, self.request)
+        self.assertEqual(
+            [task.get_sql_object()],
+            sender.get_related_tasks_to_sync(transition='task-transition-reassign'))
 
 
 class TestModifyDeadlineResponseSyncerSender(FunctionalTestCase):

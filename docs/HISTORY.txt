@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Improve view permissions (ported from 4.15.5). [jone]
+- Do not sync task workflow changes to forwarding predecessors. [phgross]
 - Tests: Manage monkey patching of PDFCONVERTER_AVAILABLE through a context manager. [lgraf]
 - Remove no longer used ftw.treeview dependency. [phgross]
 - Improve help text for task responsible selection. [lgraf]
