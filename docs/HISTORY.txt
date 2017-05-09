@@ -2,10 +2,10 @@
 Changelog
 =========
 
-4.15.6 (unreleased)
+4.15.6 (2017-05-09)
 -------------------
 
-- Nothing changed yet.
+- Allow upgrades-api access through command line tool. [jone]
 
 
 4.15.5 (2017-05-09)
