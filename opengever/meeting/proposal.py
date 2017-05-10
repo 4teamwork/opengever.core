@@ -24,7 +24,9 @@ from opengever.meeting.model.proposal import Proposal as ProposalModel
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from plone import api
+from plone.app.uuid.utils import uuidToObject
 from plone.directives import form
+from plone.uuid.interfaces import IUUID
 from Products.CMFPlone.utils import safe_unicode
 from z3c.relationfield.relation import RelationValue
 from z3c.relationfield.schema import RelationChoice
@@ -301,10 +303,17 @@ class ProposalBase(ModelContainer):
         if not is_word_meeting_implementation_enabled():
             raise WordMeetingImplementationDisabledError()
 
-        if getattr(self, '_proposal_document_id', None) is None:
+        if getattr(self, '_proposal_document_uuid', None) is None:
             return None
 
-        return self.restrictedTraverse(self._proposal_document_id, None)
+        document = uuidToObject(self._proposal_document_uuid)
+        if document is None:
+            raise ValueError('Proposal document seems to have vanished.')
+
+        if aq_parent(aq_inner(document)) != self:
+            raise ValueError('Proposal document is in wrong location.')
+
+        return document
 
     def create_proposal_document(self, source_blob=None, **kwargs):
         """Creates a proposal document within this proposal or submitted
@@ -334,7 +343,7 @@ class ProposalBase(ModelContainer):
         with elevated_privileges():
             obj = CreateDocumentCommand(**kwargs).execute()
 
-        self._proposal_document_id = obj.getId()
+        self._proposal_document_uuid = IUUID(obj)
         return obj
 
     def contains_checked_out_documents(self):
