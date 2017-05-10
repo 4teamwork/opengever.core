@@ -163,3 +163,40 @@ class AllUsersAndInboxesSourceBinder(object):
 
     def __call__(self, context):
         return AllUsersAndInboxesSource(context)
+
+
+@implementer(IQuerySource)
+class ForwardingResponsibleSource(AllUsersAndInboxesSource):
+    """Return only users of the current orgunit and all inboxes"""
+
+    @property
+    def base_query(self):
+        query = super(ForwardingResponsibleSource, self).base_query
+        return query.filter(OrgUnit.unit_id == self.client_id)
+
+    # def search(self, query_string):
+    #     self.terms = []
+
+    #     text_filters = query_string.split(' ')
+    #     query = extend_query_with_textfilter(
+    #         self.base_query,
+    #         [User.userid, User.firstname, User.lastname, User.email],
+    #         text_filters)
+
+    #     query = query.filter_by(active=True)
+    #     query = query.order_by(asc(func.lower(User.lastname)),
+    #                            asc(func.lower(User.firstname)))
+
+    #     for user, orgunit in query.all():
+    #         self.terms.append(
+    #             self.getTerm(u'{}:{}'.format(orgunit.id(), user.userid)))
+
+    #     self._extend_terms_with_inboxes(text_filters)
+    #     return self.terms
+
+
+@implementer(IContextSourceBinder)
+class ForwardingResponsibleSourceBinder(object):
+
+    def __call__(self, context):
+        return ForwardingResponsibleSource(context)
