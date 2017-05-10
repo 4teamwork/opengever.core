@@ -294,7 +294,7 @@ class ProposalBase(ModelContainer):
         return ogds_service().fetch_admin_unit(admin_unit_id)
 
     def get_proposal_document(self):
-        """If the word meeting implemenation feature is enabled,
+        """If the word meeting implementation feature is enabled,
         this method returns the proposal document, containing the actual
         proposal "body".
         """
