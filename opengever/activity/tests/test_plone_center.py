@@ -87,11 +87,11 @@ class TestNotifactionCenterErrorHandling(FunctionalTestCase):
 
         browser.login('hugo.boss').open(self.dossier, view='++add++opengever.task.task')
         browser.fill({'Title': 'Test Task',
-                      'Issuer': TEST_USER_ID,
                       'Task Type': 'comment'})
 
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Responsible').fill('inbox:client1')
+        form.find_widget('Issuer').fill(TEST_USER_ID)
 
         browser.css('#form-buttons-save').first.click()
 
@@ -108,11 +108,11 @@ class TestNotifactionCenterErrorHandling(FunctionalTestCase):
 
         browser.login('hugo.boss').open(self.dossier, view='++add++opengever.task.task')
         browser.fill({'Title': 'Test Task',
-                      'Issuer': TEST_USER_ID,
                       'Task Type': 'comment'})
 
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Responsible').fill('inbox:client1')
+        form.find_widget('Issuer').fill(TEST_USER_ID)
 
         browser.css('#form-buttons-save').first.click()
 
@@ -127,11 +127,11 @@ class TestNotifactionCenterErrorHandling(FunctionalTestCase):
 
         browser.login().open(self.dossier, view='++add++opengever.task.task')
         browser.fill({'Title': 'Test Task',
-                      'Issuer': TEST_USER_ID,
                       'Task Type': 'comment'})
 
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Responsible').fill('client1:hugo.boss')
+        form.find_widget('Issuer').fill(TEST_USER_ID)
 
         browser.css('#form-buttons-save').first.click()
 

@@ -149,10 +149,11 @@ class AllUsersAndInboxesSource(object):
         """
 
         request = getRequest()
-        client_id = request.get('form.widgets.responsible_client',
-                                getattr(self.context,
-                                        'responsible_client',
-                                        None))
+        client_id = request.get('client',
+                                request.get('form.widgets.responsible_client',
+                                            getattr(self.context,
+                                                    'responsible_client',
+                                                    None)))
 
         if not client_id:
             return None

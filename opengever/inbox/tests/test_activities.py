@@ -155,10 +155,10 @@ class TestForwardingReassignActivity(FunctionalTestCase):
         data = {'paths:list': ['/'.join(self.document.getPhysicalPath())]}
         browser.login().open(self.inbox, data,
                              view='++add++opengever.inbox.forwarding')
-        browser.fill({'Title': u'Abkl\xe4rung Fall Meier',
-                      'Issuer': u'hugo.boss'})
+        browser.fill({'Title': u'Abkl\xe4rung Fall Meier'})
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Responsible').fill('client1:jon.meier')
+        form.find_widget('Issuer').fill(u'hugo.boss')
 
         browser.css('#form-buttons-save').first.click()
         return self.inbox.get('forwarding-1')

@@ -192,13 +192,13 @@ class TestTaskActivites(FunctionalTestCase):
 
         browser.login().open(task, view='++add++opengever.task.task')
         browser.fill({'Title': u'Abkl\xe4rung Fall Meier',
-                      'Issuer': u'hugo.boss',
                       'Task Type': 'comment',
                       'Text': 'Lorem ipsum'})
 
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Responsible').fill(
             self.org_unit.id() + ':hugo.boss')
+        form.find_widget('Issuer').fill(u'hugo.boss')
 
         browser.css('#form-buttons-save').first.click()
 
@@ -278,13 +278,13 @@ class TestTaskReassignActivity(FunctionalTestCase):
     def add_task(self, browser):
         browser.login().open(self.dossier, view='++add++opengever.task.task')
         browser.fill({'Title': u'Abkl\xe4rung Fall Meier',
-                      'Issuer': u'peter.meier',
                       'Task Type': 'comment',
                       'Text': 'Lorem ipsum'})
 
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Responsible').fill(
             self.org_unit.id() + ':james.meier')
+        form.find_widget('Issuer').fill(u'peter.meier')
 
         browser.css('#form-buttons-save').first.click()
         return self.dossier.get('task-1')

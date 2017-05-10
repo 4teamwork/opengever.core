@@ -120,11 +120,11 @@ class TestEmailNotification(FunctionalTestCase):
 
         browser.login().open(self.dossier, view='++add++opengever.task.task')
         browser.fill({'Title': 'Test Task',
-                      'Issuer': 'inbox:client1',
                       'Task Type': 'comment'})
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Responsible').fill(
             self.org_unit.id() + ':franz.michel')
+        form.find_widget('Issuer').fill('inbox:client1')
 
         browser.css('#form-buttons-save').first.click()
 

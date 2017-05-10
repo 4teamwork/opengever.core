@@ -60,15 +60,6 @@ class TestAutoCompleteWidget(FunctionalTestCase):
 
         self.assertEquals([], source.hidden_terms)
 
-    def test_not_existing_term_in_vocabulary_is_not_shown_in_listing(self):
-        task = create(Builder('task').having(issuer='not.existing'))
-
-        self.widget.context = task
-
-        self.assertItemsEqual(
-            [u'hugo.boss', u'franz.michel', TEST_USER_ID, u'inbox:client1'],
-            [i.value for i in self.widget.bound_source])
-
     def test_not_existing_term_in_vocabulary_is_included_in_hidden_terms(self):
         task = create(Builder('task').having(issuer='not.existing'))
 
