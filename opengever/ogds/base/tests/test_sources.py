@@ -70,6 +70,27 @@ class TestAllUsersAndInboxesSource(FunctionalTestCase):
         self.assertEquals(u'Informatik: Doe John (test@example.org)',
                           result[0].title)
 
+    def test_users_in_result_are_ordered_by_user_lastname_and_firstname(self):
+        self.john = create(Builder('ogds_user')
+                           .id('user1')
+                           .having(firstname=u'cccc', lastname=u'aaaa')
+                           .assign_to_org_units([self.org_unit1]))
+
+        self.john = create(Builder('ogds_user')
+                           .id('user2')
+                           .having(firstname=u'bbbbb', lastname=u'aaaa')
+                           .assign_to_org_units([self.org_unit1]))
+
+        self.john = create(Builder('ogds_user')
+                           .id('user3')
+                           .having(firstname=u'YYYY', lastname=u'ZZZZ')
+                           .assign_to_org_units([self.org_unit1]))
+
+        self.assertEquals(
+            ['inbox:unit1', 'unit1:user2', 'unit1:user1', 'unit1:hugo',
+             'unit1:john', 'unit1:hans', 'unit1:user3'],
+            [term.token for term in self.source.search('Informatik')])
+
     def test_search_for_orgunit(self):
         result = self.source.search('Informatik')
         result.pop(0)  # Remove inbox

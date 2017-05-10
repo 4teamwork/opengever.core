@@ -5,7 +5,9 @@ from opengever.ogds.models.group import Group
 from opengever.ogds.models.org_unit import OrgUnit
 from opengever.ogds.models.query import extend_query_with_textfilter
 from opengever.ogds.models.user import User
+from sqlalchemy import func
 from sqlalchemy import orm
+from sqlalchemy.sql.expression import asc
 from z3c.formwidget.query.interfaces import IQuerySource
 from zope.globalrequest import getRequest
 from zope.i18n import translate
@@ -108,6 +110,8 @@ class AllUsersAndInboxesSource(object):
             text_filters)
 
         query = query.filter_by(active=True)
+        query = query.order_by(asc(func.lower(User.lastname)),
+                               asc(func.lower(User.firstname)))
 
         for user, orgunit in query.all():
             self.terms.append(
