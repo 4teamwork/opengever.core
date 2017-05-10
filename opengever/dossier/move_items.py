@@ -94,8 +94,7 @@ class MoveItemsForm(form.Form):
                 parent = aq_parent(aq_inner(obj))
 
                 if IDocumentSchema.providedBy(obj) and not obj.is_movable():
-                    msg = _(u'Document ${name} is connected to a Task. '
-                            'Please move the Task.',
+                    msg = _(u'Document ${name} is not movable.',
                             mapping=dict(name=obj.title))
                     IStatusMessage(self.request).addStatusMessage(msg, type='error')
                     continue

@@ -1,23 +1,22 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-04-27 11:21+0000\n"
+"POT-Creation-Date: 2017-05-10 12:27+0000\n"
 "PO-Revision-Date: 2017-05-01 15:56+0000\n"
 "Last-Translator: Lukas Graf <lukas.graf@4teamwork.ch>\n"
-"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
-"gever/opengever-dossier/fr/>\n"
-"Language: fr\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/fr/>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2.7-dev\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
+"Language: fr\n"
+"X-Generator: Weblate 2.7-dev\n"
 
-#: ./opengever/dossier/move_items.py:149
+#: ./opengever/dossier/move_items.py:148
 msgid "${copied_items} Elements were moved successfully"
 msgstr "${copied_items} éléments déplacés avec succès"
 
@@ -41,7 +40,7 @@ msgstr ""
 msgid "Business Case Dossier"
 msgstr "Dossier"
 
-#: ./opengever/dossier/move_items.py:185
+#: ./opengever/dossier/move_items.py:184
 msgid "Can only move objects from open dossiers!"
 msgstr "Seuls les objets de dossiers actifs peuvent être déplacés!"
 
@@ -58,8 +57,8 @@ msgid "Description"
 msgstr "Description"
 
 #: ./opengever/dossier/move_items.py:97
-msgid "Document ${name} is connected to a Task. Please move the Task."
-msgstr "Document ${name} est lié avec une tâche, déplacer la tâche, svp."
+msgid "Document ${name} is not movable."
+msgstr ""
 
 #: ./opengever/dossier/browser/overview_templates/overview.pt:8
 msgid "Dossier structure"
@@ -84,15 +83,15 @@ msgstr "Modifier le sous-dossier"
 msgid "Export selection"
 msgstr "Exporter le choix"
 
-#: ./opengever/dossier/move_items.py:155
+#: ./opengever/dossier/move_items.py:154
 msgid "Failed to copy following objects: ${failed_objects}"
 msgstr "Impossible de déplacer les éléments suivants: ${failed_objects}"
 
-#: ./opengever/dossier/move_items.py:161
+#: ./opengever/dossier/move_items.py:160
 msgid "Failed to copy following objects: ${failed_objects}. Locked via WebDAV"
 msgstr "Les objets suivants ne peuvent pas être copiés: ${failed_objects}. Ils sont verrouillés par WebDAV."
 
-#: ./opengever/dossier/move_items.py:212
+#: ./opengever/dossier/move_items.py:211
 msgid "It isn't allowed to add such items there."
 msgstr "Cet élément ne peut être déplacé ici."
 
@@ -237,7 +236,7 @@ msgstr "Ce sous-dossier ne peut pas être réactivé parce que le dossier prinic
 msgid "When the Action give filing number is selected,                         all fields are required."
 msgstr "Pour l'attribution de numéro d'inventaire, tous les champs sont obligatoires."
 
-#: ./opengever/dossier/move_items.py:195
+#: ./opengever/dossier/move_items.py:194
 msgid "You have not selected any items"
 msgstr "Pas d'élément sélectionné"
 
@@ -310,7 +309,7 @@ msgid "documents"
 msgstr "Documents"
 
 #. Default: "It isn't allowed to add such items there: ${failed_objects}"
-#: ./opengever/dossier/move_items.py:243
+#: ./opengever/dossier/move_items.py:242
 msgid "error_NotInContentTypes ${failed_objects}"
 msgstr "Pas d'objet déplacé. Les objets suivants ne peuvent être insérés dans le classeur choisi: ${failed_objects}"
 
@@ -532,7 +531,7 @@ msgid "label_dossier_note_placeholder"
 msgstr ""
 
 #. Default: "Dossier templates"
-#: ./opengever/dossier/browser/tabbed.py:117
+#: ./opengever/dossier/browser/tabbed.py:122
 msgid "label_dossier_templates"
 msgstr ""
 
@@ -657,7 +656,7 @@ msgid "label_predefined_keywords"
 msgstr ""
 
 #. Default: "Proposal Templates"
-#: ./opengever/dossier/browser/tabbed.py:108
+#: ./opengever/dossier/browser/tabbed.py:113
 msgid "label_proposal_templates"
 msgstr ""
 
@@ -706,7 +705,7 @@ msgid "label_roles"
 msgstr "Rôles"
 
 #. Default: "Sablon Templates"
-#: ./opengever/dossier/browser/tabbed.py:99
+#: ./opengever/dossier/browser/tabbed.py:104
 msgid "label_sablon_templates"
 msgstr "Sablon Modèles"
 
@@ -874,3 +873,4 @@ msgstr ""
 #: ./opengever/dossier/behaviors/participation.py:196
 msgid "warning_no_participants_selected"
 msgstr "Vous n'avez sélectionné aucune participation."
+

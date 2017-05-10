@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-04-27 11:21+0000\n"
+"POT-Creation-Date: 2017-05-10 12:27+0000\n"
 "PO-Revision-Date: 2016-07-22 15:24+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Language: de\n"
 "X-Generator: Weblate 2.7-dev\n"
 
-#: ./opengever/dossier/move_items.py:149
+#: ./opengever/dossier/move_items.py:148
 msgid "${copied_items} Elements were moved successfully"
 msgstr "${copied_items} Elemente wurden erfolgreich verschoben"
 
@@ -42,7 +42,7 @@ msgstr "Dossier hinzufügen"
 msgid "Business Case Dossier"
 msgstr "Geschäftsdossier"
 
-#: ./opengever/dossier/move_items.py:185
+#: ./opengever/dossier/move_items.py:184
 msgid "Can only move objects from open dossiers!"
 msgstr "Es können nur Objekte aus aktiven Dossiers verschoben werden!"
 
@@ -59,8 +59,8 @@ msgid "Description"
 msgstr "Beschreibung"
 
 #: ./opengever/dossier/move_items.py:97
-msgid "Document ${name} is connected to a Task. Please move the Task."
-msgstr "Dokument ${name} ist mit einer Aufgabe verbunden, bitte Aufgabe verschieben."
+msgid "Document ${name} is not movable."
+msgstr "Das Dokument «${name}» ist nicht verschiebbar."
 
 #: ./opengever/dossier/browser/overview_templates/overview.pt:8
 msgid "Dossier structure"
@@ -85,15 +85,15 @@ msgstr "Subdossier bearbeiten"
 msgid "Export selection"
 msgstr "Auswahl exportieren"
 
-#: ./opengever/dossier/move_items.py:155
+#: ./opengever/dossier/move_items.py:154
 msgid "Failed to copy following objects: ${failed_objects}"
 msgstr "Folgende Elemente konnten nicht verschoben werden: ${failed_objects}"
 
-#: ./opengever/dossier/move_items.py:161
+#: ./opengever/dossier/move_items.py:160
 msgid "Failed to copy following objects: ${failed_objects}. Locked via WebDAV"
 msgstr "Die folgenden Objekte konnten nicht kopiert werden: ${failed_objects}. Sie sind via WebDAV gesperrt."
 
-#: ./opengever/dossier/move_items.py:212
+#: ./opengever/dossier/move_items.py:211
 msgid "It isn't allowed to add such items there."
 msgstr "Sie dürfen dieses Objekt nicht an den Zielort verschieben."
 
@@ -240,7 +240,7 @@ msgstr "Dieses Subdossier kann nicht wieder aktiviert werden, da das Hauptdossie
 msgid "When the Action give filing number is selected,                         all fields are required."
 msgstr "Für die Vergabe der Ablagenummer, werden alle Felder benötigt."
 
-#: ./opengever/dossier/move_items.py:195
+#: ./opengever/dossier/move_items.py:194
 msgid "You have not selected any items"
 msgstr "Sie haben kein Element ausgewählt"
 
@@ -313,7 +313,7 @@ msgid "documents"
 msgstr "Dokumente"
 
 #. Default: "It isn't allowed to add such items there: ${failed_objects}"
-#: ./opengever/dossier/move_items.py:243
+#: ./opengever/dossier/move_items.py:242
 msgid "error_NotInContentTypes ${failed_objects}"
 msgstr "Es wurden keine Objekte verschoben. Folgende Objekte dürfen nicht in den Zielordner eingefügt werden: ${failed_objects}"
 
@@ -535,7 +535,7 @@ msgid "label_dossier_note_placeholder"
 msgstr "Kommentar erfassen"
 
 #. Default: "Dossier templates"
-#: ./opengever/dossier/browser/tabbed.py:117
+#: ./opengever/dossier/browser/tabbed.py:122
 msgid "label_dossier_templates"
 msgstr "Dossiervorlagen"
 
@@ -660,7 +660,7 @@ msgid "label_predefined_keywords"
 msgstr "Schlagworte vorausfüllen"
 
 #. Default: "Proposal Templates"
-#: ./opengever/dossier/browser/tabbed.py:108
+#: ./opengever/dossier/browser/tabbed.py:113
 msgid "label_proposal_templates"
 msgstr "Antragsvorlagen"
 
@@ -709,7 +709,7 @@ msgid "label_roles"
 msgstr "Rollen"
 
 #. Default: "Sablon Templates"
-#: ./opengever/dossier/browser/tabbed.py:99
+#: ./opengever/dossier/browser/tabbed.py:104
 msgid "label_sablon_templates"
 msgstr "Sablon Vorlagen"
 
@@ -877,4 +877,3 @@ msgstr "Dossier Journal ${title}, ${timestamp}"
 #: ./opengever/dossier/behaviors/participation.py:196
 msgid "warning_no_participants_selected"
 msgstr "Sie haben keine Beteiligungen ausgewählt."
-
