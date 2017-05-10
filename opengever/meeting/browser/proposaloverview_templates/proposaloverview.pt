@@ -60,6 +60,8 @@
               </td>
             </tr>
           </table>
+          <metal:use use-macro="context/@@meeting-macros/workflow_actions" />
+
       </div>
       <div tal:condition="view/show_preview" class="documentPreview">
         <img class="showroom-item"
@@ -85,8 +87,6 @@
     </div>
 
     <div class="visualClear"><!----></div>
-
-    <metal:use use-macro="context/@@meeting-macros/workflow_actions" />
 
     <div tal:replace="structure provider:plone.belowcontentbody" />
     <div class="visualClear"><!----></div>
