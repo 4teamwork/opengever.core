@@ -6,6 +6,7 @@ from opengever.inbox import _
 from opengever.inbox.activities import ForwardingAddedActivity
 from opengever.ogds.base.sources import ForwardingResponsibleSourceBinder
 from opengever.ogds.base.utils import get_current_org_unit
+from opengever.ogds.base.utils import get_ou_selector
 from opengever.task import _ as task_mf
 from opengever.task.task import ITask, Task
 from opengever.task.util import update_reponsible_field_data
@@ -50,7 +51,7 @@ class IForwarding(ITask):
         title=task_mf(u"label_deadline", default=u"Deadline"),
         description=task_mf(u"help_deadline", default=u""),
         required=False,
-        )
+    )
 
     form.widget('responsible', KeywordFieldWidget, async=True)
     responsible = schema.Choice(
@@ -58,7 +59,7 @@ class IForwarding(ITask):
         description=_(u"help_responsible", default=""),
         source=ForwardingResponsibleSourceBinder(),
         required=True,
-        )
+    )
 
 
 class Forwarding(Task):
@@ -72,7 +73,6 @@ class Forwarding(Task):
         return None
 
     def get_static_task_type(self):
-
         """Provide a marker string, which will be translated
            in the tabbedview helper method.
         """
@@ -132,7 +132,8 @@ class ForwardingAddForm(AddForm):
 
         # put the default responsible into the request
         if not self.request.get('form.widgets.responsible_client', None):
-            org_unit = get_current_org_unit()
+            org_unit = get_ou_selector(
+                ignore_anonymous=True).get_current_unit()
             self.request.set('form.widgets.responsible_client', org_unit.id())
             self.request.set('form.widgets.responsible',
                              [org_unit.inbox().id()])
