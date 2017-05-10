@@ -135,10 +135,11 @@ ANNOTATION_LAYER = AnnotationLayer()
 class OpengeverFixture(PloneSandboxLayer):
     defaultBases = (COMPONENT_REGISTRY_ISOLATION, BUILDER_LAYER)
 
-    def __init__(self, sql_layer):
-        bases = self.defaultBases + (sql_layer, )
-        name = ':'.join((self.__class__.__name__,
-                         sql_layer.__class__.__name__))
+    def __init__(self, bases=None, name=None,
+                 sql_layer=sqlite_testing.SQLITE_MEMORY_FIXTURE):
+        bases = (bases or self.defaultBases) + (sql_layer, )
+        name = name or ':'.join((self.__class__.__name__,
+                                 sql_layer.__class__.__name__))
         super(OpengeverFixture, self).__init__(bases=bases, name=name)
 
     def setUpZope(self, app, configurationContext):
@@ -245,7 +246,7 @@ MEMORY_DB_LAYER = sqlite_testing.StandaloneMemoryDBLayer(
     name='opengever:core:memory_db')
 
 OPENGEVER_FIXTURE_SQLITE = OpengeverFixture(
-    sqlite_testing.SQLITE_MEMORY_FIXTURE)
+    sql_layer=sqlite_testing.SQLITE_MEMORY_FIXTURE)
 
 # OPENGEVER_FIXTURE is the default fixture used in policy tests.
 OPENGEVER_FIXTURE = OPENGEVER_FIXTURE_SQLITE
