@@ -207,7 +207,16 @@ class ProposalBase(ModelContainer):
              'is_html': True},
         ]
 
-        if not is_word_meeting_implementation_enabled():
+        if is_word_meeting_implementation_enabled():
+            proposal_document = self.get_proposal_document()
+            if proposal_document:
+                attributes.append({
+                    'label': _('proposal_document',
+                               default=u'Proposal document'),
+                    'value': DocumentLinkWidget(proposal_document).render(),
+                    'is_html': True})
+
+        else:
             attributes.extend([
                 {'label': _('label_legal_basis',
                             default=u'Legal basis'),
@@ -450,9 +459,12 @@ class SubmittedProposal(ProposalBase):
             sort_on='modified',
             sort_order='reverse')
 
-        excerpt = self.get_excerpt()
+        ignored_documents = [self.get_excerpt()]
+        if is_word_meeting_implementation_enabled():
+            ignored_documents.append(self.get_proposal_document())
+
         all_docs = [document.getObject() for document in documents]
-        return [doc for doc in all_docs if doc != excerpt]
+        return [doc for doc in all_docs if doc not in ignored_documents]
 
     def get_excerpt(self):
         return self.load_model().resolve_submitted_excerpt_document()
@@ -498,18 +510,6 @@ class Proposal(ProposalBase):
 
     workflow = ProposalModel.workflow.with_visible_transitions(
         ['pending-submitted', 'pending-cancelled', 'cancelled-pending'])
-
-    def get_overview_attributes(self):
-        data = super(Proposal, self).get_overview_attributes()
-        if is_word_meeting_implementation_enabled():
-            proposal_document = self.get_proposal_document()
-            if proposal_document:
-                data.append({
-                    'label': _('proposal_document',
-                               default=u'Proposal document'),
-                    'value': DocumentLinkWidget(proposal_document).render(),
-                    'is_html': True})
-        return data
 
     def _after_model_created(self, model_instance):
         session = create_session()

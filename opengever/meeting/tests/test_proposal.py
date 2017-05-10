@@ -14,6 +14,7 @@ from opengever.locking.lock import MEETING_SUBMITTED_LOCK
 from opengever.meeting.model import Proposal
 from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.proposal import IProposal
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.testing import FunctionalTestCase
 from opengever.testing import index_data_for
 from plone import api
@@ -922,10 +923,10 @@ class TestProposalWithWord(FunctionalTestCase):
             [['Title', u'Baugesuch Kreuzachkreisel'],
              ['Committee', ''],
              ['Meeting', ''],
-             ['State', 'Pending'],
-             ['Decision number', ''],
              ['Proposal document',
-              'Proposal document Baugesuch Kreuzachkreisel']],
+              'Proposal document Baugesuch Kreuzachkreisel'],
+             ['State', 'Pending'],
+             ['Decision number', '']],
             browser.css('table.listing').first.lists())
 
         browser.click_on('Proposal document Baugesuch Kreuzachkreisel')
@@ -937,6 +938,32 @@ class TestProposalWithWord(FunctionalTestCase):
         self.assertEquals(
             'Word Content',
             proposal.get_proposal_document().file.open().read())
+
+    @browsing
+    def test_proposal_document_is_visible_on_submitted_proposal(self, browser):
+        committee = create(Builder('committee').titled('My committee'))
+        repo, repo_folder = create(Builder('repository_tree'))
+        dossier = create(Builder('dossier').within(repo_folder)
+                         .titled(u'An important dossier'))
+        proposal = create(Builder('proposal')
+                          .titled(u'An important proposal')
+                          .within(dossier)
+                          .having(committee=committee.load_model()))
+        submitted_proposal = create(Builder('submitted_proposal')
+                                    .submitting(proposal))
+        transaction.commit()
+
+        browser.login().open(submitted_proposal, view='tabbedview_view-overview')
+        self.assertEquals(
+            [['Title', u'An important proposal'],
+             ['Committee', 'My committee'],
+             ['Dossier', 'An important dossier'],
+             ['Meeting', ''],
+             ['Proposal document',
+              'Proposal document An important proposal'],
+             ['State', 'Submitted'],
+             ['Decision number', '']],
+            browser.css('table.listing').first.lists())
 
     @browsing
     def test_visible_fields_in_addform(self, browser):
