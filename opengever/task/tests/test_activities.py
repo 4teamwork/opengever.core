@@ -233,7 +233,9 @@ class TestTaskActivites(FunctionalTestCase):
         browser.login().open(task)
         browser.find('task-transition-delegate').click()
         # fill responsibles step
-        browser.fill({'Responsibles': ['client1:hugo.boss']})
+        form = browser.find_form_by_field('Responsibles')
+        form.find_widget('Responsibles').fill(['client1:hugo.boss'])
+
         browser.find('Continue').click()
         # fill medatata step and submit
         browser.find('Save').click()
