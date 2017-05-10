@@ -4,7 +4,7 @@ from five import grok
 from ftw.keywordwidget.widget import KeywordFieldWidget
 from opengever.inbox import _
 from opengever.inbox.activities import ForwardingAddedActivity
-from opengever.ogds.base.sources import AllUsersAndInboxesSourceBinder
+from opengever.ogds.base.sources import ForwardingResponsibleSourceBinder
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task import _ as task_mf
 from opengever.task.task import ITask, Task
@@ -56,7 +56,7 @@ class IForwarding(ITask):
     responsible = schema.Choice(
         title=_(u"label_responsible", default=u"Responsible"),
         description=_(u"help_responsible", default=""),
-        source=AllUsersAndInboxesSourceBinder(),
+        source=ForwardingResponsibleSourceBinder(),
         required=True,
         )
 
@@ -107,8 +107,10 @@ class ForwardingAddForm(AddForm):
            objects will later be moved insed the forwarding
         """
         paths = self.request.get('paths', [])
+        search_endpoint = '++widget++form.widgets.responsible/search' in \
+            self.request.get('ACTUAL_URL', '')
 
-        if not (paths or
+        if not (search_endpoint or paths or
                 self.request.form.get('form.widgets.relatedItems', [])):
             # add status message and redirect current window back to inbox
             # but ONLY if we're not in a z3cform_inline_validation.
