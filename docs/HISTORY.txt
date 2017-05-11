@@ -5,7 +5,7 @@ Changelog
 2017.2.2 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Word meeting: replace proposal textfields with a document. [jone]
 
 
 2017.2.1 (2017-05-11)
@@ -23,7 +23,6 @@ Changelog
 - Remove no longer used ftw.treeview dependency. [phgross]
 - Improve help text for task responsible selection. [lgraf]
 - Fix mail downloads by demanding a context to be passed into DC helpers. [Rotonen]
-- Word meeting: replace proposal textfields with a document. [jone]
 - Make OC multiattach behave more gracefully for long URLs:
 
   - Relax length limit from 500 to 2000 bytes for browsers other than IE11
