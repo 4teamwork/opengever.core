@@ -5,7 +5,9 @@ Changelog
 2017.2.2 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Wizard Session Storage: Extract response body into the local namespace so
+  sentry can log it in case of failure.
+  [lgraf]
 
 
 2017.2.1 (2017-05-11)
