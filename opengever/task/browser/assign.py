@@ -69,6 +69,8 @@ class AssignTaskForm(Form):
     @buttonAndHandler(_(u'button_assign', default=u'Assign'), name='save')
     def handle_assign(self, action):
         data, errors = self.extractData()
+        update_reponsible_field_data(data)
+
         if not errors:
             if self.context.responsible_client == data['responsible_client'] \
                     and self.context.responsible == data['responsible']:
@@ -120,11 +122,6 @@ class AssignTaskForm(Form):
 
     def updateWidgets(self):
         super(AssignTaskForm, self).updateWidgets()
-
-        # Prefill the responsible_client based on forwarding
-        # fwd = self.context
-        # self.widgets['responsible_client'].value = [fwd.responsible_client]
-        # self.widgets['responsible_client'].mode = HIDDEN_MODE
         self.widgets['transition'].mode = HIDDEN_MODE
 
 
