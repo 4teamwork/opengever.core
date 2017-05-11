@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2017.1.2 (unreleased)
+2017.2.0 (2017-05-11)
 ---------------------
 
 - Improve view permissions (ported from 4.15.5). [jone]
