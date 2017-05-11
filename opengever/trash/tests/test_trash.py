@@ -1,3 +1,4 @@
+from AccessControl.Permission import Permission
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -7,6 +8,7 @@ from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
 from opengever.trash.trash import ITrashed
 from plone.protect import createToken
+import transaction
 
 
 class TestTrash(FunctionalTestCase):
@@ -92,6 +94,30 @@ class TestTrash(FunctionalTestCase):
         self.assertEquals(
             'http://nohost/plone/dossier-1#documents', browser.url)
 
+    @browsing
+    def test_error_for_untrashable_documents(self, browser):
+        trashable = create(Builder('document')
+                           .within(self.dossier)
+                           .titled(u'Trashable document'))
+        untrashable = create(Builder('document')
+                             .within(self.dossier)
+                             .titled(u'Untrashable document'))
+        # Remove trash permission from all users.
+        Permission('opengever.trash: Trash content', [], untrashable).setRoles(())
+        transaction.commit()
+
+        data = {'paths:list': ['/'.join(trashable.getPhysicalPath()),
+                               '/'.join(untrashable.getPhysicalPath())],
+                '_authenticator': createToken()}
+        browser.login().open(self.dossier, view="trashed", data=data)
+
+        self.assertEquals([u'the object Trashable document trashed'],
+                          info_messages())
+        self.assertEquals([u'Trashing Untrashable document is forbidden'],
+                          error_messages())
+        self.assertEquals(
+            'http://nohost/plone/dossier-1#documents', browser.url)
+
 
 class TestUntrash(FunctionalTestCase):
 
@@ -141,3 +167,21 @@ class TestUntrash(FunctionalTestCase):
 
         self.assertEquals(
             'http://nohost/plone/dossier-1#documents', browser.url)
+
+    @browsing
+    def test_error_when_untrashing_not_allowed(self, browser):
+        document = create(Builder('document')
+                          .within(self.dossier)
+                          .trashed()
+                          .titled(u'The document'))
+        # Remove trash permission from all users.
+        Permission('opengever.trash: Untrash content',
+                   [], document).setRoles(())
+        transaction.commit()
+
+        data = {'paths:list': ['/'.join(document.getPhysicalPath())],
+                '_authenticator': createToken()}
+        browser.login().open(self.dossier, view="untrashed", data=data)
+
+        self.assertEquals([u'Untrashing The document is forbidden'],
+                          error_messages())

@@ -2,7 +2,8 @@
       xmlns:tal="http://xml.zope.org/namespaces/tal"
       tal:omit-tag="">
 
-<div tal:content="structure view/render_table" tal:condition="view/has_items" />
+<div tal:content="structure view/render_table" tal:condition="view/has_items"
+     class="tableradio-widget-wrapper" />
 <div class="empty_message" tal:content="view/empty_message" tal:condition="not: view/has_items" />
 
 <input name="field-empty-marker" type="hidden" value="1"

@@ -145,4 +145,11 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="opengever.meeting.proposal.IProposal"
+      name="reject-proposal"
+      class=".rejectproposal.RejectProposal"
+      permission="cmf.ModifyPortalContent"
+      />
+
 </configure>

@@ -196,7 +196,7 @@ class TestMoveItemsWithTestbrowser(FunctionalTestCase):
         self.assertIn(document, task.objectValues())
         self.assertNotIn(document, self.target_dossier.objectValues())
         self.assertEqual(
-            'Document Doc A is connected to a Task. Please move the Task.',
+            'Document Doc A is not movable.',
             error_messages()[0])
 
     @browsing

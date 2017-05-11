@@ -5,7 +5,7 @@ Changelog
 2017.2.2 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Word meeting: replace proposal textfields with a document. [jone]
 
 
 2017.2.1 (2017-05-11)

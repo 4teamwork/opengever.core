@@ -2,10 +2,12 @@ from opengever.base.command import CreateDocumentCommand
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.base.request import dispatch_json_request
+from opengever.base.request import dispatch_request
 from opengever.base.transport import REQUEST_KEY
 from opengever.base.transport import Transporter
 from opengever.locking.lock import SYS_LOCK
 from opengever.meeting import _
+from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.exceptions import ProtocolAlreadyGenerated
 from opengever.meeting.model.generateddocument import GeneratedExcerpt
 from opengever.meeting.model.generateddocument import GeneratedProtocol
@@ -21,6 +23,7 @@ from plone.locking.interfaces import ILockable
 from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.i18n import translate
+import base64
 import json
 
 
@@ -305,12 +308,37 @@ class CreateSubmittedProposalCommand(object):
         model = self.proposal.load_model()
         jsondata = {'committee_oguid': model.committee.oguid.id,
                     'proposal_oguid': model.oguid.id}
+
+        if is_word_meeting_implementation_enabled():
+            blob = self.proposal.get_proposal_document().file
+            jsondata['file'] = {
+                'filename': blob.filename,
+                'contentType': blob.contentType,
+                'data': base64.encodestring(blob.data)}
+
         request_data = {REQUEST_KEY: json.dumps(jsondata)}
         response = dispatch_json_request(
             self.admin_unit_id, '@@create_submitted_proposal', data=request_data)
 
         self.submitted_proposal_path = response['path']
         create_session().add(Submitted(proposal=model))
+
+
+class RejectProposalCommand(object):
+
+    def __init__(self, submitted_proposal):
+        self.submitted_proposal = submitted_proposal
+
+    def execute(self):
+        model = self.submitted_proposal.load_model()
+        response = dispatch_request(
+            model.admin_unit_id,
+            '@@reject-proposal',
+            path=model.physical_path)
+        if response.read() != 'OK':
+            raise ValueError(
+                'Unexpected response {!r} when rejecting proposal.'.format(
+                    response))
 
 
 class NullUpdateSubmittedDocumentCommand(object):

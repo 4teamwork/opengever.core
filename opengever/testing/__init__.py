@@ -23,3 +23,4 @@ else:
     from opengever.testing.test_case import TestCase
     import opengever.testing.testbrowser_autocomplete_widget
     import opengever.testing.testbrowser_datetime_widget
+    import opengever.testing.testbrowser_tablechoice_widget

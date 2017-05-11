@@ -4,6 +4,7 @@ from opengever.base.browser.helper import get_css_class
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.inbox.inbox import IInbox
+from opengever.meeting.proposal import IProposal
 from opengever.task.task import ITask
 from plone import api
 from plone.dexterity.content import Item
@@ -42,6 +43,8 @@ class BaseDocumentMixin(object):
                 or IDossierTemplateMarker.providedBy(parent)):
             return parent
         if ITask.providedBy(parent):
+            return parent.get_containing_dossier()
+        if IProposal.providedBy(parent):
             return parent.get_containing_dossier()
 
         return None

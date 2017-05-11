@@ -12,6 +12,7 @@ from opengever.document.base import BaseDocumentMixin
 from opengever.document.behaviors.related_docs import IRelatedDocuments
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.meeting.proposal import IProposal
 from opengever.meeting.proposal import ISubmittedProposal
 from opengever.task.task import ITask
 from plone import api
@@ -195,11 +196,15 @@ class Document(Item, BaseDocumentMixin):
         return self.checked_out_by() is not None
 
     def is_movable(self):
-        return not self.is_inside_a_task() and not self.is_submitted_document()
+        return not self.is_inside_a_task() and not self.is_inside_a_proposal()
 
     def is_inside_a_task(self):
         parent = aq_parent(aq_inner(self))
         return ITask.providedBy(parent)
+
+    def is_inside_a_proposal(self):
+        parent = aq_parent(aq_inner(self))
+        return IProposal.providedBy(parent)
 
     def is_submitted_document(self):
         parent = aq_parent(aq_inner(self))
