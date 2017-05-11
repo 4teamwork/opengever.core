@@ -18,6 +18,7 @@
   <include package="plone.directives.form" />
   <include package="plone.directives.form" file="meta.zcml" />
   <include package="plone.formwidget.namedfile" />
+  <include package="plone.rest" file="meta.zcml" />
   <include package="ftw.profilehook" />
 
   <include package=".behaviors" />
