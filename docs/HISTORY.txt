@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2017.2.1 (unreleased)
+2017.2.1 (2017-05-11)
 ---------------------
 
 - Make sure `plone.rest` directives are loaded when used. [deiferni]
