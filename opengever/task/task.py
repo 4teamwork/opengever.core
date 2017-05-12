@@ -15,8 +15,6 @@ from opengever.base.source import DossierPathSourceBinder
 from opengever.dossier.utils import get_containing_dossier
 from opengever.globalindex.model.task import Task as TaskModel
 from opengever.ogds.base.actor import Actor
-from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
-from opengever.ogds.base.autocomplete_widget import AutocompleteMultiFieldWidget
 from opengever.ogds.base.sources import AllUsersAndInboxesSourceBinder
 from opengever.ogds.base.sources import UsersContactsInboxesSourceBinder
 from opengever.ogds.base.utils import get_current_admin_unit
