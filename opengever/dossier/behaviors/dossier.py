@@ -1,6 +1,5 @@
 from AccessControl import getSecurityManager
 from Acquisition import aq_inner, aq_parent
-from collective import dexteritytextindexer
 from collective.elephantvocabulary import wrap_vocabulary
 from datetime import date
 from five import grok
@@ -12,7 +11,7 @@ from opengever.base.behaviors.utils import hide_fields_from_behavior
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.dossier import _
 from opengever.dossier.widget import referenceNumberWidgetFactory
-from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
+from opengever.ogds.base.sources import AssignedUsersSourceBinder
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.dexterity.i18n import MessageFactory as pd_mf  # noqa
 from plone.dexterity.interfaces import IDexterityFTI
@@ -88,10 +87,10 @@ class IDossier(form.Schema):
         required=False,
     )
 
-    form.widget(responsible=AutocompleteFieldWidget)
+    form.widget('responsible', KeywordFieldWidget, async=True)
     responsible = schema.Choice(
         title=_(u"label_responsible", default="Responsible"),
-        vocabulary=u'opengever.ogds.base.AssignedUsersVocabulary',
+        source=AssignedUsersSourceBinder(),
         required=True,
     )
 

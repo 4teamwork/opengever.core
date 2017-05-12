@@ -592,7 +592,10 @@ class TestDossierTemplateAddWizard(FunctionalTestCase):
         token = browser.css(
             'input[name="form.widgets.template"]').first.attrib.get('value')
         browser.fill({'form.widgets.template': token}).submit()
-        browser.fill({'Responsible': 'peter.meier'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill('peter.meier')
+
         browser.click_on('Save')
 
         subdossier = browser.context.listFolderContents()[0]
