@@ -10,6 +10,7 @@ Changelog
 - Use CreatEmailCommand to create email upon mail-in. [deiferni]
 - Fix typo in method name: resolve_sumitted_proposal -> resolve_submitted_proposal. [mathias.leimgruber]
 - Use chameleon as the templating engine for better performance. [Rotonen]
+- Respect `maximum_dossier_depth` registry record in DefaultConstrainTypeDecider [mathias.leimgruber]
 - Handle require_login error where came_from_did not exist. [jone]
 - Word meeting: replace proposal textfields with a document. [jone]
 
