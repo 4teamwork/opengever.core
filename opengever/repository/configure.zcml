@@ -15,6 +15,8 @@
   <!-- Grok the package to initialise schema interfaces and content classes -->
   <grok:grok package="." />
 
+  <adapter factory=".constrains.RepositoryFolderConstrainTypes" />
+
   <!-- Register locales translations -->
   <i18n:registerTranslations directory="locales" />
 
