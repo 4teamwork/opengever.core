@@ -170,10 +170,10 @@ f\xc3\xbcr Ernst Franz\r\n\r\nBesten Dank im Voraus"""
 
         self.send_documents(dossier, [document], file_copy_in_dossier=True)
 
-        self.assertIn('test-subject', dossier,
+        self.assertIn('document-2', dossier,
                       "Sent mail should be archived in dossier")
 
-        filed_mail = dossier.restrictedTraverse('test-subject')
+        filed_mail = dossier.restrictedTraverse('document-2')
         self.assertEquals(date.today(), filed_mail.delivery_date,
                           "Filed mail should have a delivery date of today")
 

@@ -51,10 +51,9 @@ class CreateDocumentCommand(BaseObjectCreatorCommand):
 
 
 class CreateEmailCommand(CreateDocumentCommand):
-    """Create a new ftw.mail.mail object and update its fields
-    with default values.
+    """Create a new ftw.mail.mail object.
 
-    Also convert *.msg messages to *.eml.
+    Also convert *.msg messages to *.eml, if necessary.
 
     """
     portal_type = 'ftw.mail.mail'

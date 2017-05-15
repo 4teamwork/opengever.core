@@ -1,24 +1,27 @@
 from ftw.mail.create import CreateMailInContainer
-from zope.component import getUtility
-from plone.registry.interfaces import IRegistry
+from opengever.base.command import CreateEmailCommand
 from opengever.document.interfaces import IDocumentSettings
+from plone import api
 
 
 class OGCreateMailInContainer(CreateMailInContainer):
+    """This adapter is called form ftw.mail when creating mailed-in mails.
 
-    def create_mail_object(self, message):
-        content = super(OGCreateMailInContainer, self).create_mail_object(
-            message)
+    We override it and create mail with `CreateEmailCommand` to make sure
+    that creating content programmatically always uses the same code-path.
 
-        content.preserved_as_paper = self.get_preserved_as_paper_default()
-        return content
+    """
+    def create_mail(self, message):
+        """Use `CreateEmailCommand` to create the mailed-in mail."""
+
+        self.check_permission()
+        self.check_addable_types()
+
+        command = CreateEmailCommand(
+            self.context, 'message.eml', message,
+            preserved_as_paper=self.get_preserved_as_paper_default())
+        return command.execute()
 
     def get_preserved_as_paper_default(self):
-        registry = getUtility(IRegistry)
-        document_settings = registry.forInterface(IDocumentSettings)
-        return document_settings.preserved_as_paper_default
-
-    def set_defaults(self, obj):
-        """Defaults should already set with our patches, so there should be no
-        need to do something here."""
-        pass
+        return api.portal.get_registry_record(
+            'preserved_as_paper_default', interface=IDocumentSettings)
