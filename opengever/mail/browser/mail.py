@@ -18,6 +18,7 @@ from zope.component import getUtility
 
 
 class PreviewTab(ftwView):
+    """Render a preview of a mail."""
 
     template = ViewPageTemplateFile('templates/previewtab.pt')
 
@@ -62,6 +63,8 @@ class PreviewTab(ftwView):
 
 
 class OverviewTab(Overview):
+    """Render an overview of the mailitem."""
+
     grok.context(IMail)
     grok.require('zope2.View')
 

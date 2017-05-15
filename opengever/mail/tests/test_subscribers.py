@@ -5,6 +5,7 @@ from opengever.testing import FunctionalTestCase
 
 
 class TestSubscribers(FunctionalTestCase):
+    """Test mail update events fire as designed."""
 
     def setUp(self):
         super(TestSubscribers, self).setUp()

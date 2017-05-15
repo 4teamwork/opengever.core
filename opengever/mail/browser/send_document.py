@@ -49,12 +49,15 @@ CHARSET = 'utf-8'
 
 
 class NoMail(Invalid):
-    """ The No Mail was defined Exception."""
+    """This is a dummy class to raise an exception in the lack of a mail
+    address.
+    """
+
     __doc__ = _(u"No Mail Address")
 
 
 class ISendDocumentSchema(Interface):
-    """ The Send Document Form Schema."""
+    """The Send Document Form Schema."""
 
     intern_receiver = schema.Tuple(
         title=_('intern_receiver', default="Intern receiver"),
@@ -72,8 +75,8 @@ class ISendDocumentSchema(Interface):
     extern_receiver = schema.List(
         title=_('extern_receiver', default="Extern receiver"),
         description=_('help_extern_receiver',
-                      default="email addresses of the receivers. " +
-                          "Enter manually the addresses, one per each line."),
+                      default="email addresses of the receivers. "
+                      "Enter manually the addresses, one per each line."),
         value_type=schema.TextLine(title=_('receiver'), ),
         required=False,
         )
@@ -120,10 +123,9 @@ class ISendDocumentSchema(Interface):
         default=True,
         )
 
-
     @invariant
     def validateHasEmail(self):
-        """ check if minium one e-mail-address is given."""
+        """Check if minium one e-mail-address is given."""
         if len(self.intern_receiver) == 0 and not self.extern_receiver:
             raise NoMail(_(u'You have to select a intern \
                             or enter a extern mail-addres'))
@@ -132,7 +134,6 @@ class ISendDocumentSchema(Interface):
 @default_value(field=ISendDocumentSchema['documents_as_links'])
 def default_documents_as_links(data):
     """Set the client specific default (configured in the registry)."""
-
     registry = getUtility(IRegistry)
     proxy = registry.forInterface(ISendDocumentConf)
     return proxy.documents_as_links_default
@@ -154,7 +155,7 @@ provideAdapter(AddressValidator)
 
 
 class SendDocumentForm(form.Form):
-    """ The Send Documents per Mail Formular """
+    """A form to send documents over mail with."""
 
     fields = field.Fields(ISendDocumentSchema)
     ignoreContext = True
@@ -168,10 +169,8 @@ class SendDocumentForm(form.Form):
         = SingleCheckBoxFieldWidget
 
     def update(self):
-        """ put default value for documents field, into the request,
-
+        """Put default value for documents field, into the request,
         because this view would call from the document tab in the dossier view
-
         """
         paths = self.request.get('paths', [])
         if paths:
@@ -197,7 +196,7 @@ class SendDocumentForm(form.Form):
 
     @button.buttonAndHandler(_(u'button_send', default=u'Send'))
     def send_button_handler(self, action):
-        """ create and Send the Email """
+        """Create and Send the Email."""
         data, errors = self.extractData()
 
         if len(errors) == 0:
@@ -238,7 +237,8 @@ class SendDocumentForm(form.Form):
             mh.send(msg, mfrom=mfrom, mto=','.join(addresses))
 
             # Store a copy of the sent mail in dossier
-            if data.get('file_copy_in_dossier', False) and self._allow_save_file_copy_in_context():
+            if (data.get('file_copy_in_dossier', False)
+                    and self._allow_save_file_copy_in_context()):
                 self.file_sent_mail_in_dossier(msg)
 
             # let the user know that the mail was sent
@@ -264,8 +264,11 @@ class SendDocumentForm(form.Form):
         return self.request.RESPONSE.redirect(url)
 
     def create_mail(self, text='', objs=[], only_links=''):
-        """Create the mail and attach the the files. For object without a file
-        it include a Link to the Object in to the message"""
+        """Create the mail and attach the the files.
+
+        For object without a file it include a Link to the Object in to the
+        message.
+        """
         attachment_parts = []
         msg = MIMEMultipart()
         msg['Date'] = formatdate(localtime=True)
@@ -347,10 +350,9 @@ class SendDocumentForm(form.Form):
 
 
 class SendDocumentFormView(layout.FormWrapper, grok.View):
-    """ The View wich display the SendDocument-Form.
+    """The View wich display the SendDocument-Form.
 
     For sending documents with per mail.
-
     """
 
     grok.context(ISendableDocsContainer)
