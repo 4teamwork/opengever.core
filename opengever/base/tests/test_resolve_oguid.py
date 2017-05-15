@@ -4,7 +4,6 @@ from ftw.testbrowser import browsing
 from opengever.base.browser.resolveoguid import ResolveOGUIDView
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import logout
-from zExceptions import Unauthorized
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
 
@@ -29,7 +28,7 @@ class TestResolveOGUIDView(FunctionalTestCase):
         logout()
         url = ResolveOGUIDView.url_for('client1:{}'.format(self.task_id),
                                        self.admin_unit)
-        with self.assertRaises(Unauthorized):
+        with browser.expect_unauthorized():
             browser.open(url)
 
     @browsing

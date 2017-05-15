@@ -1,3 +1,4 @@
+from ftw.testbrowser import LIB_REQUESTS
 from xml.etree import ElementTree
 
 WEBDAV_TIMEOUT = 'Infinite, Second-4100000000'
@@ -33,8 +34,9 @@ class TestOfficeConnector(object):
 
     def _request(self, method, body=None, headers=None):
         url = self.browser._normalize_url(self.context)
-        return self.browser.requests_session.request(
-            method, url, data=body, headers=headers)
+        driver = self.browser.get_driver(LIB_REQUESTS)
+        driver.make_request(method, url, data=body, headers=headers)
+        return driver.response
 
     def lock(self):
         """Issue a LOCK request for context.

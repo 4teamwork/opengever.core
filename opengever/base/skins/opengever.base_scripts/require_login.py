@@ -9,6 +9,7 @@
 ##
 
 from AccessControl import Unauthorized
+from zExceptions import NotFound
 
 portal = context.portal_url.getPortalObject()
 portal_url = portal.absolute_url().rstrip('/') + '/'
@@ -49,6 +50,9 @@ try:
 except Unauthorized:
     # This is expected to be the standard use case, where the user
     # actually has insufficient privileges.
+    return portal.restrictedTraverse('insufficient_privileges')()
+except (KeyError, AttributeError, NotFound):
+    # The content could not be found.
     return portal.restrictedTraverse('insufficient_privileges')()
 else:
     # We've had an Unauthorized exception on the previous resource although

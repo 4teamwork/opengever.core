@@ -165,7 +165,7 @@ class TestRemoveConfirmationView(FunctionalTestCase):
             self.dossier.absolute_url(),
             '/'.join(self.doc1.getPhysicalPath()))
 
-        with self.assertRaises(Unauthorized):
+        with browser.expect_unauthorized():
             browser.login().open(url)
 
 

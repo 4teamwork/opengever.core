@@ -2,7 +2,6 @@ from datetime import date
 from dateutil.relativedelta import relativedelta
 from ftw.builder import Builder
 from ftw.builder import create
-from ftw.testbrowser import browser
 from ftw.testbrowser import browsing
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.tabbedview.helper import linked
@@ -152,12 +151,14 @@ class TestDossierListing(FunctionalTestCase):
         self.assertEquals(['label_tabbedview_filter_all', 'Active'],
                           browser.css('.state_filters a').text)
 
-    def test_linked_helper_adds_uid_data_attribute_using_obj(self):
+    @browsing
+    def test_linked_helper_adds_uid_data_attribute_using_obj(self, browser):
         browser.open_html(linked(self.dossier_c, 'Title'))
         self.assertEquals(browser.css('a').first.attrib['data-uid'],
                           IUUID(self.dossier_c))
 
-    def test_linked_helper_adds_uid_data_attribute_using_brain(self):
+    @browsing
+    def test_linked_helper_adds_uid_data_attribute_using_brain(self, browser):
         uid = IUUID(self.dossier_c)
         brain = self.portal.portal_catalog(UID=uid)[0]
 

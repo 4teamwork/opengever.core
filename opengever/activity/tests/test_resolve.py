@@ -6,8 +6,6 @@ from opengever.activity.browser import resolve_notification_url
 from opengever.base.oguid import Oguid
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
-from zExceptions import NotFound
-from zExceptions import Unauthorized
 
 
 class TestResolveNotificationView(FunctionalTestCase):
@@ -23,12 +21,12 @@ class TestResolveNotificationView(FunctionalTestCase):
 
     @browsing
     def test_raises_notfound_when_notification_id_is_missing(self, browser):
-        with self.assertRaises(NotFound):
+        with browser.expect_http_error(reason='Not Found'):
             browser.login().open(self.portal, view='resolve_notification')
 
     @browsing
     def test_raises_notfound_when_notification_id_is_invalid(self, browser):
-        with self.assertRaises(NotFound):
+        with browser.expect_http_error(reason='Not Found'):
             browser.login().open(self.portal, view='resolve_notification',
                                  data={'notification_id': '123'})
 
@@ -42,10 +40,11 @@ class TestResolveNotificationView(FunctionalTestCase):
         notification = create(Builder('notification')
                               .having(activity=activity, userid='hugo.boss'))
 
-        with self.assertRaises(Unauthorized):
+        with browser.expect_unauthorized():
             browser.login().open(
-                self.portal, view='resolve_notification',
-                data={'notification_id': notification.notification_id})
+                self.portal,
+                view='resolve_notification?notification_id={}'.format(
+                    notification.notification_id))
 
     @browsing
     def test_mark_notification_as_read(self, browser):
@@ -96,7 +95,7 @@ class TestResolveNotificationView(FunctionalTestCase):
         # raise an NotFound exception,  because the view redirects to the
         # foreign admin_unit. But we can't setup a second plone site
         # in this test.
-        with self.assertRaises(NotFound):
+        with browser.expect_http_error(reason='Not Found'):
             browser.login().open(
                 self.portal, view='resolve_notification',
                 data={'notification_id': notification.notification_id})

@@ -82,7 +82,7 @@ class TestMarkAsRead(FunctionalTestCase):
 
     @browsing
     def test_read_raise_exception_when_parameter_is_missing(self, browser):
-        with self.assertRaises(Exception):
+        with browser.expect_http_error():
             browser.login().open(self.portal, view='notifications/read')
 
 

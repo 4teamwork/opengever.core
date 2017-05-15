@@ -6,9 +6,7 @@ from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import login
 from plone.app.testing import TEST_USER_NAME
-from urllib2 import HTTPError
 from zope.component import queryMultiAdapter
-
 import transaction
 
 
@@ -150,6 +148,5 @@ class TestDocumentFileUploadForm(FunctionalTestCase):
             'File': ('New file data', 'file.txt', 'text/plain'),
             'form.widgets.file.action': 'replace',
             })
-        with self.assertRaises(HTTPError) as cm:
+        with browser.expect_http_error(code=412):
             browser.find('oc-file-upload').click()
-        self.assertEqual(412, cm.exception.getcode())

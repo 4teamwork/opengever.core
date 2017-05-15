@@ -3,8 +3,6 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import statusmessages
 from opengever.testing import FunctionalTestCase
-from zExceptions import Unauthorized
-from zope.component import getMultiAdapter
 
 
 class TestTaskCommentResponseAddFormView(FunctionalTestCase):
@@ -137,7 +135,7 @@ class TestTaskCommentResponseAddFormView(FunctionalTestCase):
 
         task = create(Builder('task').titled('Task 1').within(dossier))
 
-        with self.assertRaises(Unauthorized):
+        with browser.expect_unauthorized():
             browser.login().open(task, view='addcommentresponse')
 
     @browsing
@@ -148,7 +146,7 @@ class TestTaskCommentResponseAddFormView(FunctionalTestCase):
 
         task = create(Builder('task').titled('Task 1').within(dossier))
 
-        with self.assertRaises(Unauthorized):
+        with browser.expect_unauthorized():
             browser.login().open(task, view='addcommentresponse')
 
     @browsing
@@ -159,7 +157,7 @@ class TestTaskCommentResponseAddFormView(FunctionalTestCase):
 
         task = create(Builder('task').titled('Task 1').within(dossier))
 
-        with self.assertRaises(Unauthorized):
+        with browser.expect_unauthorized():
             browser.login().open(task, view='addcommentresponse')
 
     @browsing
@@ -170,7 +168,7 @@ class TestTaskCommentResponseAddFormView(FunctionalTestCase):
 
         task = create(Builder('task').titled('Task 1').within(dossier))
 
-        with self.assertRaises(Unauthorized):
+        with browser.expect_unauthorized():
             browser.login().open(task, view='addcommentresponse')
 
     @browsing
@@ -181,7 +179,7 @@ class TestTaskCommentResponseAddFormView(FunctionalTestCase):
 
         task = create(Builder('task').titled('Task 1').within(dossier))
 
-        with self.assertRaises(Unauthorized):
+        with browser.expect_unauthorized():
             browser.login().open(task, view='addcommentresponse')
 
     def get_latest_answer(self, browser):

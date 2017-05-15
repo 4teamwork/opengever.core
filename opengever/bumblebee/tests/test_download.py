@@ -5,15 +5,12 @@ from ftw.bumblebee.interfaces import IBumblebeeDocument
 from ftw.bumblebee.tests.helpers import asset as bumblebee_asset
 from ftw.bumblebee.tests.helpers import DOCX_CHECKSUM
 from ftw.bumblebee.tests.helpers import download_token_for
-from ftw.bumblebee.tests.helpers import set_file
 from ftw.testbrowser import browsing
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 from opengever.testing import FunctionalTestCase
 from plone.namedfile.file import NamedBlobFile
 from plone.uuid.interfaces import IUUID
 from Products.Archetypes.event import ObjectEditedEvent
-from zExceptions import BadRequest
-from zExceptions import NotFound
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
 import transaction
@@ -80,11 +77,8 @@ class TestBumblebeeDownloadView(FunctionalTestCase):
 
     @browsing
     def test_parameters_required(self, browser):
-        with self.assertRaises(BadRequest) as cm:
+        with browser.expect_http_error(reason='Bad Request'):
             browser.open(view='bumblebee_download')
-
-        self.assertEquals('missing params: checksum, token, uuid',
-                          str(cm.exception))
 
     @browsing
     def test_download_version_after_a_change(self, browser):
@@ -121,10 +115,8 @@ class TestBumblebeeDownloadView(FunctionalTestCase):
                      .attach_file_containing(u'The Content', name=u'file.pdf')
                      .within(self.dossier))
 
-        with self.assertRaises(NotFound) as cm:
+        with browser.expect_http_error(reason='Not Found'):
             browser.open(view='bumblebee_download',
                          data={'token': download_token_for(doc),
                                'uuid': IUUID(doc),
                                'checksum': 'wrong-checksum'})
-
-        self.assertEquals('Version not found by checksum.', str(cm.exception))

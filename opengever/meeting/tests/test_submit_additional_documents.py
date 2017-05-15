@@ -9,7 +9,6 @@ from opengever.meeting.model import SubmittedDocument
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.testing import FunctionalTestCase
 from plone import api
-from zExceptions import Unauthorized
 import transaction
 
 
@@ -53,7 +52,7 @@ class TestSubmitAdditionalDocuments(FunctionalTestCase):
                              roles=['Contributor', 'Editor', 'Reader'])
         transaction.commit()
         browser.login(username='hugo.boss')
-        with self.assertRaises(Unauthorized):
+        with browser.expect_unauthorized():
             browser.open(self.committee)
 
     def test_cannot_submit_new_document_versions_outside_proposals(self):

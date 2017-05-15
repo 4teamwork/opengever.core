@@ -5,6 +5,7 @@ Changelog
 2017.2.2 (unreleased)
 ---------------------
 
+- Handle require_login error where came_from_did not exist. [jone]
 - Word meeting: replace proposal textfields with a document. [jone]
 
 

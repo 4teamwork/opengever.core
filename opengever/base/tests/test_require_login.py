@@ -45,11 +45,19 @@ class TestRequireLoginScript(FunctionalTestCase):
 
     @browsing
     def test_unauthorized_visible_when_raised_in_traversal(self, browser):
-        with self.assertRaises(Unauthorized):
+        with browser.expect_unauthorized():
             browser.login().open(view='test-traversal-unauthorized')
 
     @browsing
     def test_unauthorized_visible_when_raised_in_publishing(self, browser):
-        browser.replace_request_header('X-zope-handle-errors', 'True')
         browser.login().open(view='test-publishing-unauthorized')
+        self.assertEquals('Insufficient Privileges', plone.first_heading())
+
+    @browsing
+    def test_unauthorized_when_came_from_does_not_exist(self, browser):
+        # When the came_from URL does not exist, we want the regular unauthorized
+        # page to appear when logged in.
+        url = ('{0}/acl_users/credentials_cookie_auth/require_login'
+               '?came_from={0}/does/not/exist').format(self.portal.absolute_url())
+        browser.login().open(url)
         self.assertEquals('Insufficient Privileges', plone.first_heading())

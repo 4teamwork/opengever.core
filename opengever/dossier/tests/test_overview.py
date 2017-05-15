@@ -255,6 +255,7 @@ class TestOverview(FunctionalTestCase):
         dossier_data = IDossier(self.dossier)
         self.assertEquals("New comment", dossier_data.comments)
 
+        browser.exception_bubbling = True
         with self.assertRaises(KeyError):
             payload = '{"invalidkey": "New comment"}'
             browser.login().visit(self.dossier,

@@ -89,7 +89,12 @@ class TestRepositoryDeletion(FunctionalTestCase):
     @browsing
     def test_raise_unauthorized_when_preconditions_not_satisfied(self, browser):
         create(Builder('dossier').within(self.repository))
+        # XXX This causes an infinite redirection loop between ++add++ and
+        # reqiure_login. By enabling exception_bubbling we can catch the
+        # Unauthorized exception and end the infinite loop.
+        browser.exception_bubbling = True
         with self.assertRaises(Unauthorized):
+        # with browser.expect_unauthorized():
             browser.login().open(self.repository, view='delete_repository')
 
     @browsing
@@ -112,5 +117,5 @@ class TestRepositoryDeletion(FunctionalTestCase):
         url = '{}/delete_repository?form.buttons.delete=true'.format(
             self.repository.absolute_url())
 
-        with self.assertRaises(Unauthorized):
+        with browser.expect_unauthorized():
             browser.login().open(url)

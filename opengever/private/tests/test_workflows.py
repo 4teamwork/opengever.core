@@ -5,7 +5,6 @@ from ftw.testbrowser.pages import factoriesmenu
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_PRIVATE_FOLDER_LAYER
 from opengever.private.tests import create_members_folder
 from opengever.testing import FunctionalTestCase
-from zExceptions import Unauthorized
 
 
 class TestPrivateFolderWorkflow(FunctionalTestCase):
@@ -28,7 +27,7 @@ class TestPrivateFolderWorkflow(FunctionalTestCase):
     def test_only_owner_and_admin_can_see_private_folder(self, browser):
         browser.login().open(self.folder)
         browser.login(self.admin).open(self.folder)
-        with self.assertRaises(Unauthorized):
+        with browser.expect_unauthorized():
             browser.login(self.hugo).open(self.folder)
 
     @browsing
@@ -58,7 +57,7 @@ class TestPrivateFolderWorkflow(FunctionalTestCase):
 
         browser.login().visit(dossier)
         browser.login(self.admin).visit(dossier)
-        with self.assertRaises(Unauthorized):
+        with browser.expect_unauthorized():
             browser.login(self.hugo).visit(dossier)
 
     @browsing
@@ -73,7 +72,7 @@ class TestPrivateFolderWorkflow(FunctionalTestCase):
 
         browser.login().visit(document)
         browser.login(self.admin).visit(document)
-        with self.assertRaises(Unauthorized):
+        with browser.expect_unauthorized():
             browser.login(self.hugo).visit(document)
 
     def test_make_sure_private_root_has_no_additional_local_roles(self):
