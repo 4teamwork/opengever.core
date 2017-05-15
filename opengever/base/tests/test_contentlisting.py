@@ -189,12 +189,14 @@ class TestBrainContentListingRenderLink(FunctionalTestCase):
     def test_uses_simple_renderer_for_dossiers(self):
         dossier = create(Builder('dossier').titled(u'D\xf6ssier A'))
 
-        self.assertEquals(
-            u'<a href="http://nohost/plone/dossier-1" '
-            u'alt="D\xf6ssier A" '
-            u'class="contenttype-opengever-dossier-businesscasedossier">'
-            u'D\xf6ssier A</a>\n',
-            IContentListingObject(obj2brain(dossier)).render_link())
+        simple_link = IContentListingObject(obj2brain(dossier)).render_link()
+        self.assertIn(u'href="http://nohost/plone/dossier-1"', simple_link)
+        self.assertIn(u'alt="D\xf6ssier A"', simple_link)
+        self.assertIn(
+            u'class="contenttype-opengever-dossier-businesscasedossier"',
+            simple_link,
+            )
+        self.assertIn(u'>D\xf6ssier A</a>\n', simple_link)
 
 
 class TestOpengeverContentListingWithDisabledBumblebee(FunctionalTestCase):
