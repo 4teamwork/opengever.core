@@ -565,7 +565,7 @@ class TestProposal(FunctionalTestCase):
         self.assertIsNotNone(self.portal.unrestrictedTraverse(submitted_path))
 
         self.assertEqual('proposal-state-submitted', api.content.get_state(proposal))
-        submitted_proposal = proposal.load_model().resolve_sumitted_proposal()
+        submitted_proposal = proposal.load_model().resolve_submitted_proposal()
         browser.open(submitted_proposal, view='tabbedview_view-overview')
         browser.find('Reject').click()
         browser.fill({'Comment': u'Bitte \xfcberarbeiten'}).submit()
@@ -779,7 +779,7 @@ class TestProposal(FunctionalTestCase):
                           .having(committee=committee.load_model())
                           .as_submitted())
 
-        submitted_proposal = proposal.load_model().resolve_sumitted_proposal()
+        submitted_proposal = proposal.load_model().resolve_submitted_proposal()
 
         self.assertEqual(
             self.dossier, submitted_proposal.get_containing_dossier())
@@ -793,7 +793,7 @@ class TestProposal(FunctionalTestCase):
                           .as_submitted())
 
         model = proposal.load_model()
-        submitted_proposal = model.resolve_sumitted_proposal()
+        submitted_proposal = model.resolve_submitted_proposal()
 
         model.admin_unit_id = u'client2'
 
@@ -808,7 +808,7 @@ class TestProposal(FunctionalTestCase):
                           .having(committee=committee.load_model())
                           .as_submitted())
 
-        submitted_proposal = proposal.load_model().resolve_sumitted_proposal()
+        submitted_proposal = proposal.load_model().resolve_submitted_proposal()
 
         browser.open_html(submitted_proposal.get_dossier_link())
 
@@ -830,7 +830,7 @@ class TestProposal(FunctionalTestCase):
 
         model = proposal.load_model()
 
-        submitted_proposal = proposal.load_model().resolve_sumitted_proposal()
+        submitted_proposal = proposal.load_model().resolve_submitted_proposal()
 
         model.admin_unit_id = u'client2'
 
@@ -1030,7 +1030,7 @@ class TestProposalWithWord(FunctionalTestCase):
         self.assertEqual('proposal-state-submitted',
                          api.content.get_state(proposal))
 
-        submitted_proposal = proposal.load_model().resolve_sumitted_proposal()
+        submitted_proposal = proposal.load_model().resolve_submitted_proposal()
         self.assertEquals(
             'Fake proposal file body',
             submitted_proposal.get_proposal_document().file.open().read())
@@ -1057,7 +1057,7 @@ class TestProposalWithWord(FunctionalTestCase):
         with browser.expect_unauthorized():
             browser.open(proposal.get_proposal_document(), view='edit')
 
-        submitted_proposal = proposal.load_model().resolve_sumitted_proposal()
+        submitted_proposal = proposal.load_model().resolve_submitted_proposal()
         browser.open(submitted_proposal, view='tabbedview_view-overview')
         browser.find('Reject').click()
         browser.fill({'Comment': u'Bitte \xfcberarbeiten'}).submit()

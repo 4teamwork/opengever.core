@@ -84,7 +84,7 @@ class TestProposalHistory(FunctionalTestCase):
         proposal = browser.context
 
         # reject submitted proposal
-        submitted_proposal = proposal.load_model().resolve_sumitted_proposal()
+        submitted_proposal = proposal.load_model().resolve_submitted_proposal()
         browser.open(submitted_proposal, view='tabbedview_view-overview')
         browser.find('Reject').click()
         browser.fill({'Comment': u'Bitte \xfcberarbeiten'}).submit()
