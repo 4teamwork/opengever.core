@@ -1,7 +1,5 @@
 from ftw.mail.create import CreateMailInContainer
 from opengever.base.command import CreateEmailCommand
-from opengever.document.interfaces import IDocumentSettings
-from plone import api
 
 
 class OGCreateMailInContainer(CreateMailInContainer):
@@ -17,11 +15,5 @@ class OGCreateMailInContainer(CreateMailInContainer):
         self.check_permission()
         self.check_addable_types()
 
-        command = CreateEmailCommand(
-            self.context, 'message.eml', message,
-            preserved_as_paper=self.get_preserved_as_paper_default())
+        command = CreateEmailCommand(self.context, 'message.eml', message)
         return command.execute()
-
-    def get_preserved_as_paper_default(self):
-        return api.portal.get_registry_record(
-            'preserved_as_paper_default', interface=IDocumentSettings)
