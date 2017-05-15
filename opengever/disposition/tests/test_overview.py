@@ -9,6 +9,7 @@ import transaction
 
 
 class TestDispositionOverview(FunctionalTestCase):
+    """Test disposition overviews function as intended."""
 
     def setUp(self):
         super(TestDispositionOverview, self).setUp()
@@ -16,7 +17,8 @@ class TestDispositionOverview(FunctionalTestCase):
         self.root = create(Builder('repository_root'))
         self.repository = create(Builder('repository')
                                  .titled(u'Repository A')
-                                 .having(archival_value=ARCHIVAL_VALUE_SAMPLING)
+                                 .having(
+                                     archival_value=ARCHIVAL_VALUE_SAMPLING)
                                  .within(self.root))
         self.dossier1 = create(Builder('dossier')
                                .as_expired()
@@ -36,10 +38,14 @@ class TestDispositionOverview(FunctionalTestCase):
                                        end=date(2015, 3, 19),
                                        public_trial='public',
                                        archival_value='not archival worthy',
-                                       archival_value_annotation=u'In Absprache mit ARCH.'))
+                                       archival_value_annotation=u''
+                                       u'In Absprache mit ARCH.'))
 
         self.disposition = create(Builder('disposition')
-                                  .having(dossiers=[self.dossier1, self.dossier2]))
+                                  .having(dossiers=[
+                                      self.dossier1,
+                                      self.dossier2,
+                                      ]))
 
     @browsing
     def test_list_only_all_disposition_dossiers(self, browser):
@@ -70,7 +76,7 @@ class TestDispositionOverview(FunctionalTestCase):
             browser.css('.dispositions .archival_value').text)
 
     @browsing
-    def test_archive_button_is_active_depending_on_the_appraisal(self, browser):
+    def test_archive_button_is_active_depending_on_the_appraisal(self, browser):  # noqa
         browser.login().open(self.disposition, view='overview')
 
         self.assertEquals(
@@ -87,19 +93,23 @@ class TestDispositionOverview(FunctionalTestCase):
 
         self.assertEquals(
             ['Archive', "Don't archive"],
-            [link.get('title') for link in browser.css('.appraisal-button-group').first.css('a')])
+            [link.get('title') for link
+             in browser.css('.appraisal-button-group').first.css('a')])
         browser.find('disposition-transition-appraise').click()
 
         browser.login().open(self.disposition, view='overview')
         self.assertEquals(
             [],
-            [link.get('title') for link in browser.css('.appraisal-button-group').first.css('a')])
+            [link.get('title') for link
+             in browser.css('.appraisal-button-group').first.css('a')])
 
         buttons = browser.css('.appraisal-button-group')
         self.assertEquals(['Archive'],
-                          [link.get('title') for link in buttons[0].css('span')])
+                          [link.get('title') for link
+                           in buttons[0].css('span')])
         self.assertEquals(["Don't archive"],
-                          [link.get('title') for link in buttons[1].css('span')])
+                          [link.get('title') for link
+                           in buttons[1].css('span')])
 
     @browsing
     def test_update_appraisal_displays_buttons_correctly(self, browser):
@@ -107,7 +117,8 @@ class TestDispositionOverview(FunctionalTestCase):
 
         self.assertEquals(
             ['Archive', "Don't archive"],
-            [link.get('title') for link in browser.css('.appraisal-button-group .active')])
+            [link.get('title') for link
+             in browser.css('.appraisal-button-group .active')])
 
         button = browser.css('.appraisal-button-group .archive')[1]
         url = browser.css('#disposition_overview').first.get(
@@ -119,10 +130,11 @@ class TestDispositionOverview(FunctionalTestCase):
         browser.open(self.disposition, view='overview')
         self.assertEquals(
             ['Archive', 'Archive'],
-            [link.get('title') for link in browser.css('.appraisal-button-group .active')])
+            [link.get('title') for link
+             in browser.css('.appraisal-button-group .active')])
 
     @browsing
-    def test_lists_possible_transitions_in_actionmenu_as_buttons(self, browser):
+    def test_lists_possible_transitions_in_actionmenu_as_buttons(self, browser):  # noqa
         self.grant('Archivist', 'Records Manager')
         browser.login().open(self.disposition, view='overview')
 
@@ -193,7 +205,7 @@ class TestDispositionOverview(FunctionalTestCase):
             browser.find('Download removal protocol').get('href'))
 
     @browsing
-    def test_states_are_displayed_in_a_wizard_in_the_process_order(self, browser):
+    def test_states_are_displayed_in_a_wizard_in_the_process_order(self, browser):  # noqa
         browser.login().open(self.disposition, view='overview')
 
         self.assertEquals(
@@ -281,6 +293,7 @@ class TestDispositionOverview(FunctionalTestCase):
 
 
 class TestClosedDispositionOverview(FunctionalTestCase):
+    """Test workflow state does not break disposition overviews."""
 
     def setUp(self):
         super(TestClosedDispositionOverview, self).setUp()
@@ -304,7 +317,10 @@ class TestClosedDispositionOverview(FunctionalTestCase):
 
         self.disposition = create(Builder('disposition')
                                   .in_state('disposition-state-archived')
-                                  .having(dossiers=[self.dossier1, self.dossier2]))
+                                  .having(dossiers=[
+                                      self.dossier1,
+                                      self.dossier2,
+                                      ]))
         self.disposition.mark_dossiers_as_archived()
         api.content.transition(obj=self.disposition,
                                transition='disposition-transition-close')

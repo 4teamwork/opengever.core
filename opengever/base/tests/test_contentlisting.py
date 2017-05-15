@@ -8,6 +8,7 @@ from plone.app.contentlisting.interfaces import IContentListingObject
 
 
 class TestOpengeverContentListing(FunctionalTestCase):
+    """Test basic content listing functionality."""
 
     def test_getIcon_returns_none_for_every_contenttype(self):
         dossier = create(Builder('dossier'))
@@ -40,14 +41,14 @@ class TestOpengeverContentListing(FunctionalTestCase):
             'Testdossier',
             IContentListingObject(obj2brain(dossier)).containing_dossier())
 
-    def test_containing_dossier_returns_empty_string_for_object_not_in_a_dossier(self):
+    def test_containing_dossier_returns_empty_string_for_object_not_in_a_dossier(self):  # noqa
         repository = create(Builder('repository'))
 
         self.assertEquals(
             '',
             IContentListingObject(obj2brain(repository)).containing_dossier())
 
-    def test_containing_dossier_returns_the_title_of_the_containing_dossier(self):
+    def test_containing_dossier_returns_the_title_of_the_containing_dossier(self):  # noqa
         dossier = create(Builder('dossier').titled(u'Testdossier'))
         document = create(Builder('document').within(dossier))
 
@@ -61,7 +62,9 @@ class TestOpengeverContentListing(FunctionalTestCase):
         document = create(Builder('document').within(dossier))
 
         self.assertCropping(
-            201, IContentListingObject(obj2brain(document)).containing_dossier())
+            201,
+            IContentListingObject(obj2brain(document)).containing_dossier(),
+            )
 
     def test_cropped_title_returns_title_cropped_to_near_200_chars(self):
         document = create(Builder('document')
@@ -70,18 +73,22 @@ class TestOpengeverContentListing(FunctionalTestCase):
         self.assertCropping(
             201, IContentListingObject(obj2brain(document)).CroppedTitle())
 
-    def test_cropped_description_returns_description_cropped_to_near_400_chars(self):
+    def test_cropped_description_returns_description_cropped_to_near_400_chars(self):  # noqa
         document = create(Builder('document')
                           .having(description=50 * 'lorem ipsum '))
 
         self.assertCropping(
-            399, IContentListingObject(obj2brain(document)).CroppedDescription())
+            399,
+            IContentListingObject(obj2brain(document)).CroppedDescription(),
+            )
 
-    def test_cropped_description_returns_empty_string_for_objs_without_description(self):
+    def test_cropped_description_returns_empty_string_for_objs_without_description(self):  # noqa
         document = create(Builder('document'))
 
         self.assertEquals(
-            '', IContentListingObject(obj2brain(document)).CroppedDescription())
+            '',
+            IContentListingObject(obj2brain(document)).CroppedDescription(),
+            )
 
     def assertCropping(self, size, value):
         self.assertEquals(
@@ -103,9 +110,11 @@ class TestOpengeverContentListing(FunctionalTestCase):
 
         dossier = create(Builder('dossier'))
 
-        self.assertFalse(IContentListingObject(obj2brain(document_a)).is_trashed)
+        self.assertFalse(
+            IContentListingObject(obj2brain(document_a)).is_trashed)
         self.assertTrue(
-            IContentListingObject(obj2brain(document_b, unrestricted=True)).is_trashed)
+            IContentListingObject(obj2brain(document_b, unrestricted=True))
+            .is_trashed)
         self.assertFalse(IContentListingObject(obj2brain(dossier)).is_trashed)
 
     def test_is_removed(self):
@@ -113,9 +122,11 @@ class TestOpengeverContentListing(FunctionalTestCase):
         document_b = create(Builder('document').removed())
         dossier = create(Builder('dossier'))
 
-        self.assertFalse(IContentListingObject(obj2brain(document_a)).is_removed)
+        self.assertFalse(
+            IContentListingObject(obj2brain(document_a)).is_removed)
         self.assertTrue(
-            IContentListingObject(obj2brain(document_b, unrestricted=True)).is_removed)
+            IContentListingObject(obj2brain(document_b, unrestricted=True))
+            .is_removed)
         self.assertFalse(IContentListingObject(obj2brain(dossier)).is_removed)
 
     def test_get_breadcrumbs_returns_a_tuple_of_dicts_with_title_and_url(self):
@@ -136,14 +147,15 @@ class TestOpengeverContentListing(FunctionalTestCase):
               'Title': 'Ordnungssystem'},
              {'absolute_url': 'http://nohost/plone/ordnungssystem/ablage-1',
               'Title': '1. Ablage 1'},
-             {'absolute_url': 'http://nohost/plone/ordnungssystem/ablage-1/dossier-1',
+             {'absolute_url': 'http://nohost/plone/ordnungssystem/ablage-1/dossier-1',  # noqa
               'Title': 'hans m\xc3\xbcller'},
-             {'absolute_url': 'http://nohost/plone/ordnungssystem/ablage-1/dossier-1/document-1',
+             {'absolute_url': 'http://nohost/plone/ordnungssystem/ablage-1/dossier-1/document-1',  # noqa
               'Title': 'Anfrage Meier'}),
             IContentListingObject(obj2brain(document)).get_breadcrumbs())
 
 
 class TestBrainContentListingRenderLink(FunctionalTestCase):
+    """Test we render appropriate content listing links per content type."""
 
     def setUp(self):
         super(TestBrainContentListingRenderLink, self).setUp()
@@ -178,11 +190,15 @@ class TestBrainContentListingRenderLink(FunctionalTestCase):
         dossier = create(Builder('dossier').titled(u'D\xf6ssier A'))
 
         self.assertEquals(
-            u'<a href="http://nohost/plone/dossier-1" alt="D\xf6ssier A" class="contenttype-opengever-dossier-businesscasedossier">D\xf6ssier A</a>\n',
+            u'<a href="http://nohost/plone/dossier-1" '
+            u'alt="D\xf6ssier A" '
+            u'class="contenttype-opengever-dossier-businesscasedossier">'
+            u'D\xf6ssier A</a>\n',
             IContentListingObject(obj2brain(dossier)).render_link())
 
 
 class TestOpengeverContentListingWithDisabledBumblebee(FunctionalTestCase):
+    """Test we do not trip up in the lack of a bumblebee installation."""
 
     def setUp(self):
         super(TestOpengeverContentListingWithDisabledBumblebee, self).setUp()
@@ -208,6 +224,7 @@ class TestOpengeverContentListingWithDisabledBumblebee(FunctionalTestCase):
 
 
 class TestOpengeverContentListingWithEnabledBumblebee(FunctionalTestCase):
+    """Test we do not trip up in the presence of a bumblebee installation."""
 
     layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 
@@ -234,5 +251,7 @@ class TestOpengeverContentListingWithEnabledBumblebee(FunctionalTestCase):
         self.assertEqual(u'Testdokum\xe4nt', self.obj.get_overlay_title())
 
     def test_get_overlay_url(self):
-        self.assertEqual('http://nohost/plone/document-1/@@bumblebee-overlay-listing',
-                         self.obj.get_overlay_url())
+        self.assertEqual(
+            'http://nohost/plone/document-1/@@bumblebee-overlay-listing',
+            self.obj.get_overlay_url(),
+            )
