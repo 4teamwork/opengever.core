@@ -24,6 +24,12 @@
       />
 
   <adapter
+      for="*
+           opengever.base.interfaces.IOpengeverBaseLayer"
+      factory=".create.OGCreateMailInContainer"
+      />
+
+  <adapter
       factory=".contentlisting.MailContentListingObject"
       for="ftw.mail.mail.IMail"
       />
