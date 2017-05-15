@@ -4,7 +4,6 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import info_messages
-from ftw.testbrowser.utils import normalize_spaces
 from opengever.core.testing import activate_bumblebee_feature
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_DOSSIER_TEMPLATE_LAYER
 from opengever.core.testing import toggle_feature
@@ -13,7 +12,6 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.dossiertemplate import is_dossier_template_feature_enabled
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateSchema
 from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings
-from opengever.ogds.base.autocomplete_widget import AutocompleteSelectionWidget
 from opengever.ogds.base.interfaces import ISyncStamp
 from opengever.testing import FunctionalTestCase
 from plone import api
@@ -493,14 +491,6 @@ class TestDossierTemplateAddWizard(FunctionalTestCase):
         browser.click_on('Save')
 
         self.assertEqual(self.leaf_node.listFolderContents()[0], browser.context)
-
-    def test_traversing_to_autocomplete_selection_widget_in_add_dossier_template_view_is_possible(self):
-        autocomplete_selection_widget = self.leaf_node.unrestrictedTraverse(
-            'add-dossier-from-template/++widget++IDossier.responsible')
-
-        self.assertIsInstance(
-            autocomplete_selection_widget,
-            AutocompleteSelectionWidget)
 
     @browsing
     def test_redirects_to_first_step_if_the_user_skips_the_first_wizard_step(self, browser):

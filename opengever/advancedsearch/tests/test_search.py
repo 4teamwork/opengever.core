@@ -176,8 +176,11 @@ class TestSearchWithoutContent(FunctionalTestCase):
                       'form.widgets.reference': "OG 14.2",
                       'form.widgets.sequence_number': "5",
                       'form.widgets.searchable_filing_no': "14",
-                      'Responsible': "foo@example.com",
                       'form.widgets.dossier_review_state:list': 'dossier-state-active'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill('foo@example.com')
+
         browser.css('#form-buttons-button_search').first.click()
 
         self.assertBrowserUrlContainsSearchParams(browser, [
