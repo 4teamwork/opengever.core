@@ -1,8 +1,8 @@
 from Acquisition import aq_inner
 from five import grok
 from ftw.mail import utils
-from ftw.mail.mail import IMail
 from ftw.mail.mail import View as ftwView
+from ftw.mail.mail import IMail
 from opengever.base import _ as ogbmf
 from opengever.document import _ as ogdmf
 from opengever.document.browser.overview import CustomRow
