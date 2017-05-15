@@ -1,15 +1,17 @@
-from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
-from opengever.ogds.base import autocomplete_widget
+from ftw.keywordwidget.widget import KeywordWidget
+from opengever.ogds.base.sources import UsersContactsInboxesSourceBinder
 from opengever.task import _
 from opengever.task.browser.delegate.main import DelegateWizardFormMixin
 from opengever.task.browser.delegate.utils import create_subtasks
 from opengever.task.task import ITask
+from plone.autoform.widgets import ParameterizedWidget
 from plone.directives import form
 from plone.directives.form import Form
 from plone.directives.form import Schema
 from plone.z3cform.layout import FormWrapper
+from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
 from zope import schema
@@ -25,7 +27,7 @@ class IUpdateMetadata(Schema):
 
     issuer = schema.Choice(
         title=_(u"label_issuer", default=u"Issuer"),
-        vocabulary=u'opengever.ogds.base.ContactsAndUsersVocabulary',
+        source=UsersContactsInboxesSourceBinder(),
         required=True)
 
     deadline = schema.Date(
@@ -59,8 +61,10 @@ class UpdateMetadataForm(DelegateWizardFormMixin, Form):
     grok.context(ITask)
 
     fields = Fields(IUpdateMetadata)
-    fields['issuer'].widgetFactory = \
-        autocomplete_widget.AutocompleteFieldWidget
+    fields['issuer'].widgetFactory = ParameterizedWidget(
+        KeywordWidget,
+        async=True
+    )
     fields['deadline'].widgetFactory = DatePickerFieldWidget
 
     step_name = 'delegate_metadata'
