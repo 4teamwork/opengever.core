@@ -1,5 +1,4 @@
 from .cmf_catalog_aware import PatchCMFCatalogAware
-from .create_mail_defaults import PatchCreateMailInContainer
 from .default_values import PatchBuilderCreate
 from .default_values import PatchDexterityContentGetattr
 from .default_values import PatchDexterityDefaultAddForm
@@ -23,7 +22,6 @@ PatchBuilderCreate()()
 PatchCatalogToFilterTrashedDocs()()
 PatchCMFEditonsHistoryHandlerTool()()
 PatchCopyContainerVerifyObjectPaste()()
-PatchCreateMailInContainer()()
 PatchDexterityContentGetattr()()
 PatchDexterityDefaultAddForm()()
 PatchDXContainerPastePermission()()

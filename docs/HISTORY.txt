@@ -5,6 +5,7 @@ Changelog
 2017.2.2 (unreleased)
 ---------------------
 
+- Use CreatEmailCommand to create email upon mail-in. [deiferni]
 - Handle require_login error where came_from_did not exist. [jone]
 - Word meeting: replace proposal textfields with a document. [jone]
 
