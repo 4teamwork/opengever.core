@@ -1,3 +1,5 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
 from opengever.testing import FunctionalTestCase
@@ -101,3 +103,17 @@ class TestTaskTemplatesWithBrowser(FunctionalTestCase):
         browser.login().open(template1)
         self.assertEquals(['TaskTemplate 1'],
                           browser.css('.documentFirstHeading').text)
+
+    @browsing
+    def test_tasktemplate_can_be_edited_when_activated(self, browser):
+        templatefolder = create(Builder('tasktemplatefolder')
+                                .titled(u'Task templates')
+                                .in_state('tasktemplatefolder-state-activ'))
+
+        browser.login().visit(templatefolder)
+        self.assertTrue(browser.css('#contentview-edit'),
+                        'Task template folder should be editable in '
+                        'active state')
+        browser.css('#contentview-edit a').first.click()
+        browser.find_button_by_label('Save').click()
+        self.assertEquals(templatefolder.absolute_url(), browser.url)

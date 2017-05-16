@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Display attachments on mail overviews. [Rotonen]
+- Allow the same Users to edit Tasktemplatefolders in active state as in inactice state. [mathias.leimgruber]
 - Use CreatEmailCommand to create email upon mail-in. [deiferni]
 - Fix typo in method name: resolve_sumitted_proposal -> resolve_submitted_proposal. [mathias.leimgruber]
 - Handle require_login error where came_from_did not exist. [jone]
