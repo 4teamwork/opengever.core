@@ -240,7 +240,7 @@ class Proposal(Base):
 
         return self.physical_path
 
-    def resolve_sumitted_proposal(self):
+    def resolve_submitted_proposal(self):
         return self.submitted_oguid.resolve_object()
 
     def resolve_submitted_documents(self):
@@ -315,7 +315,7 @@ class Proposal(Base):
         from opengever.meeting.command import CreateGeneratedDocumentCommand
         from opengever.meeting.command import ExcerptOperations
 
-        proposal_obj = self.resolve_sumitted_proposal()
+        proposal_obj = self.resolve_submitted_proposal()
         operations = ExcerptOperations(agenda_item)
         CreateGeneratedDocumentCommand(
             proposal_obj, agenda_item.meeting, operations).execute()

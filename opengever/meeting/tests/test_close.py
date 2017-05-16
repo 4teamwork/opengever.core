@@ -53,7 +53,7 @@ class TestCloseMeeting(FunctionalTestCase):
         browser.login().open(self.meeting.get_url())
         browser.css('#pending-closed').first.click()
 
-        submitted_proposal = self.proposal_a.load_model().resolve_sumitted_proposal()
+        submitted_proposal = self.proposal_a.load_model().resolve_submitted_proposal()
         excerpt = submitted_proposal.listFolderContents()[0]
         self.assertEquals('Proposal A - C\xc3\xb6mmunity meeting',
                           excerpt.Title())
