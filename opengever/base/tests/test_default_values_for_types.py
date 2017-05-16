@@ -163,7 +163,8 @@ MAIL_MISSING_VALUES = {
     'document_type': None,
     'foreign_reference': None,
     'preview': None,
-    'thumbnail': None
+    'thumbnail': None,
+    'original_message': None,
 }
 
 

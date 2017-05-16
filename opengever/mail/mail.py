@@ -15,7 +15,8 @@ from opengever.base.model import create_session
 from opengever.document.base import BaseDocumentMixin
 from opengever.document.behaviors import metadata as ogmetadata
 from opengever.document.behaviors.related_docs import IRelatedDocuments
-from opengever.dossier import _
+from opengever.dossier import _ as dossier_mf
+from opengever.mail import _
 from opengever.mail.events import AttachmentsDeleted
 from opengever.mail.interfaces import IAttachmentsDeletedEvent
 from opengever.ogds.models.user import User
@@ -24,6 +25,7 @@ from plone.autoform.interfaces import IFormFieldProvider
 from plone.directives import dexterity
 from plone.directives import form
 from plone.i18n.normalizer.interfaces import IIDNormalizer
+from plone.namedfile import field
 from plone.namedfile.interfaces import HAVE_BLOBS
 from plone.supermodel.interfaces import FIELDSETS_KEY
 from plone.supermodel.model import Fieldset
@@ -42,7 +44,6 @@ from zope.lifecycleevent import Attributes
 from zope.lifecycleevent.interfaces import IObjectCopiedEvent
 from zope.lifecycleevent.interfaces import IObjectCreatedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
-
 import os
 import re
 
@@ -72,15 +73,23 @@ class IOGMail(form.Schema):
     form.fieldset(
         u'common',
         label=base_mf(u'fieldset_common', u'Common'),
-        fields=[u'title'])
+        fields=[u'title', 'original_message'])
 
     form.order_before(title='message')
     dexteritytextindexer.searchable('title')
     title = schema.TextLine(
-        title=_(u'label_title', default=u'Title'),
+        title=dossier_mf(u'label_title', default=u'Title'),
         required=False,
     )
 
+    form.mode(original_message=DISPLAY_MODE)
+    form.read_permission(original_message='cmf.ManagePortal')
+    form.write_permission(original_message='cmf.ManagePortal')
+    original_message = field.NamedBlobFile(
+        title=_(u"label_original_message",
+               default=u"Raw *.msg message before conversion"),
+        required=False,
+    )
 
 alsoProvides(IOGMail, IFormFieldProvider)
 
@@ -313,6 +322,9 @@ class OGMailBase(metadata.MetadataBase):
         self.context.title = value
 
     title = property(_get_title, _set_title)
+
+    original_message = metadata.DCFieldProperty(IOGMail[
+        'original_message'])
 
 
 @grok.subscribe(IOGMailMarker, IObjectCreatedEvent)
