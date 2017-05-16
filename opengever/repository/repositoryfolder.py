@@ -1,4 +1,3 @@
-from Acquisition import aq_inner, aq_parent
 from five import grok
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.base.behaviors.translated_title import ITranslatedTitle
@@ -9,16 +8,12 @@ from opengever.base.interfaces import IReferenceNumber
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.repository import _
 from opengever.repository.interfaces import IRepositoryFolder
-from opengever.repository.interfaces import IRepositoryFolderRecords
 from plone import api
 from plone.app.content.interfaces import INameFromTitle
 from plone.dexterity import content
 from plone.directives import form
-from plone.registry.interfaces import IRegistry
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from zope import schema
-from zope.component import queryUtility
 from zope.interface import implements
 
 
@@ -137,71 +132,6 @@ class RepositoryFolder(content.Container):
             if obj.portal_type == self.portal_type:
                 return False
         return True
-
-    def allowedContentTypes(self, *args, **kwargs):
-        """
-        We have to follow some rules:
-        1. If this RepositoryFolder contains another RF, we should not be
-        able to add other types than RFs.
-        2. If we are reaching the maximum depth of repository folders
-        (Configured in plone.registry), we should not be able to add
-        any more RFs, but then we should be able to add the other configured
-        types in any case. If the maximum_repository_depth is set to 0,
-        we do not have a depth limit.
-        """
-        # get the default types
-        types = super(
-            RepositoryFolder, self).allowedContentTypes(*args, **kwargs)
-        # get fti of myself
-        fti = self.portal_types.get(self.portal_type)
-        # get maximum depth of repository folders
-        registry = queryUtility(IRegistry)
-        proxy = registry.forInterface(IRepositoryFolderRecords)
-        # 0 -> no restriction
-        maximum_depth = getattr(proxy, 'maximum_repository_depth', 0)
-        current_depth = 0
-        # if we have a maximum depth, we need to know the current depth
-        if maximum_depth > 0:
-            obj = self
-            while IRepositoryFolder.providedBy(obj):
-                current_depth += 1
-                obj = aq_parent(aq_inner(obj))
-                if IPloneSiteRoot.providedBy(obj):
-                    break
-            if maximum_depth <= current_depth:
-                # depth exceeded
-                # RepositoryFolder not allowed, but any other type
-                types = filter(lambda a: a != fti, types)
-
-        # filter content types, if required
-        if not self.is_leaf_node():
-            # only allow same types
-            types = filter(lambda a: a == fti, types)
-
-        # finally: remove not enabled resticted content types
-        marker_behavior = 'opengever.dossier.behaviors.restricteddossier.' + \
-            'IRestrictedDossier'
-
-        allowed = self.addable_dossier_types \
-            and self.addable_dossier_types or []
-
-        def _filterer(fti):
-            if fti.id in allowed:
-                # fti is enabled in repository folder
-                return True
-
-            elif getattr(fti, 'behaviors', None) \
-                    and marker_behavior in fti.behaviors:
-                # fti has marker interface and is not enabled
-                return False
-
-            else:
-                # normal type - we don't care
-                return True
-
-        types = filter(_filterer, types)
-
-        return types
 
 
 class AddForm(TranslatedTitleAddForm):
