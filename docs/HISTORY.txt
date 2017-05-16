@@ -8,6 +8,7 @@ Changelog
 - Display attachments on mail overviews. [Rotonen]
 - Use CreatEmailCommand to create email upon mail-in. [deiferni]
 - Fix typo in method name: resolve_sumitted_proposal -> resolve_submitted_proposal. [mathias.leimgruber]
+- Use chameleon as the templating engine for better performance. [Rotonen]
 - Handle require_login error where came_from_did not exist. [jone]
 - Word meeting: replace proposal textfields with a document. [jone]
 
