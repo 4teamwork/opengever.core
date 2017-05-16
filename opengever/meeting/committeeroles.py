@@ -15,6 +15,8 @@ class CommitteeRoles(object):
 
     def _add_managed_local_roles(self, principal):
         """Add managed roles to context for principal."""
+        if isinstance(principal, unicode):
+            principal = principal.encode('utf8')
 
         self.context.manage_addLocalRoles(principal, self.managed_roles)
 
