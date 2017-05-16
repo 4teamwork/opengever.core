@@ -45,7 +45,7 @@
         <div tal:replace="structure view/html_safe_body">Body</div>
 
         <tal:attachments condition="view/attachments">
-        <h2 i18n:translate="">Attachments</h2>
+        <h2 i18n:domain="opengever.mail" i18n:translate="label_documents">Attachments</h2>
         <tal:items tal:repeat="item view/attachments">
             <div class="mailAttachment">
                 <a href=""

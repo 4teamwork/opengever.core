@@ -1,0 +1,17 @@
+<tal:block xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    i18n:domain="opengever.mail">
+
+    <tal:attachments tal:condition="view/attachments">
+        <tal:attachment tal:repeat="attachment view/attachments">
+            <div class="mailAttachment">
+                <a href=""
+                    tal:define="position python:attachment['position']"
+                    tal:attributes="href string:${here/absolute_url}/get_attachment?position=${position};
+                    class attachment/class">
+                    <span tal:content="python:attachment['filename']">filename</span>
+                </a>
+                <span tal:content="python:context.getObjSize(size=attachment['size'])">0Kb</span>
+        </tal:attachment>
+    </tal:attachments>
+
+</tal:block>

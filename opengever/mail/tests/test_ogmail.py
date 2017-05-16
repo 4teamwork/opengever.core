@@ -34,6 +34,7 @@ w6TDtsOcCg==
 
 
 class TestOGMailAddition(FunctionalTestCase):
+    """Test mail uploads."""
 
     def setUp(self):
         super(TestOGMailAddition, self).setUp()
@@ -131,7 +132,7 @@ class TestOGMailAddition(FunctionalTestCase):
         },)
         self.assertEqual(expected_description, mail.get_attachments())
 
-    def test_get_attachments_returns_empty_list_for_mails_without_attachments(self):
+    def test_get_attachments_returns_empty_list_for_mails_without_attachments(self):  # noqa
         mail = create(Builder('mail')
                       .within(self.dossier)
                       .with_message(MAIL_DATA))
@@ -153,7 +154,8 @@ class TestOGMailAddition(FunctionalTestCase):
     def test_delete_all_attachments(self):
         mail = create(Builder('mail')
                       .within(self.dossier)
-                      .with_asset_message('mail_with_multiple_attachments.eml'))
+                      .with_asset_message(
+                          'mail_with_multiple_attachments.eml'))
 
         mail.delete_all_attachments()
         self.assertFalse(mail.has_attachments())
@@ -161,7 +163,8 @@ class TestOGMailAddition(FunctionalTestCase):
     def test_delete_one_attachment(self):
         mail = create(Builder('mail')
                       .within(self.dossier)
-                      .with_asset_message('mail_with_multiple_attachments.eml'))
+                      .with_asset_message(
+                          'mail_with_multiple_attachments.eml'))
 
         self.assertEqual(3, len(mail.get_attachments()))
         mail.delete_attachments([2])
@@ -176,6 +179,7 @@ class TestOGMailAddition(FunctionalTestCase):
 
 
 class TestExtractMailInDossier(FunctionalTestCase):
+    """Test the conversion of emails into OG data types."""
 
     def setUp(self):
         super(TestExtractMailInDossier, self).setUp()
@@ -184,7 +188,7 @@ class TestExtractMailInDossier(FunctionalTestCase):
     def setup_parent(self):
         return create(Builder('dossier'))
 
-    def test_extract_attachment_sets_default_values_correctly_on_document(self):
+    def test_extract_attachment_sets_default_values_correctly_on_document(self):  # noqa
         registry = getUtility(IRegistry)
         proxy = registry.forInterface(IDocumentSettings)
         proxy.preserved_as_paper_default = False
@@ -231,7 +235,8 @@ class TestExtractMailInDossier(FunctionalTestCase):
     def test_extract_multiple_attachments(self):
         mail = create(Builder('mail')
                       .within(self.parent)
-                      .with_asset_message('mail_with_multiple_attachments.eml'))
+                      .with_asset_message(
+                          'mail_with_multiple_attachments.eml'))
 
         positions = [attachment['position'] for attachment in
                      mail.get_attachments()]
@@ -257,12 +262,14 @@ class TestExtractMailInDossier(FunctionalTestCase):
 
 
 class TestExtractMailInInbox(TestExtractMailInDossier):
+    """Test email to OG conversion from the inbox."""
 
     def setup_parent(self):
         return create(Builder('inbox'))
 
 
 class TestExtractMailInTask(TestExtractMailInDossier):
+    """Test email to OG conversion from a task."""
 
     def setup_parent(self):
         self.dossier = create(Builder('dossier'))

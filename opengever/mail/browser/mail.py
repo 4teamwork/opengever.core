@@ -2,7 +2,7 @@ from Acquisition import aq_inner
 from five import grok
 from ftw.mail import utils
 from ftw.mail.mail import IMail
-from ftw.mail.mail import View as ftwView
+from ftw.mail.mail import View
 from opengever.base import _ as ogbmf
 from opengever.document import _ as ogdmf
 from opengever.document.browser.overview import CustomRow
@@ -17,32 +17,29 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.component import getUtility
 
 
-class PreviewTab(ftwView):
-
-    template = ViewPageTemplateFile('templates/previewtab.pt')
-
-    def __call__(self):
-        self.normalizer = getUtility(IIDNormalizer)
-        self.mtr = getToolByName(self.context, 'mimetypes_registry')
-        return super(PreviewTab, self).__call__()
+class MailAttachmentsMixin(object):
+    """List the attachments of a mailitem."""
 
     def lookup_mimetype_registry(self, attachment):
+        mtr = getToolByName(self.context, 'mimetypes_registry')
         if attachment.get('content-type') == 'application/octet-stream':
-            lookup = self.mtr.globFilename(attachment.get('filename'))
+            lookup = mtr.globFilename(attachment.get('filename'))
         else:
-            lookup = self.mtr.lookup(attachment['content-type'])
+            lookup = mtr.lookup(attachment['content-type'])
 
         if lookup and (isinstance(lookup, list) or isinstance(lookup, tuple)):
             lookup = lookup[0]
 
         return lookup
 
-    def get_css_class(self, lookup):
+    def get_attachment_css_class(self, lookup):
         # copied from opengever.base.browser.utils.get_css_class, should be
         # removed when the sprite problematic is solved complety for opengever
+        # also duplicated under a different name to sidestep MRO
         icon_path = lookup.icon_path
         filetype = icon_path[:icon_path.rfind('.')].replace('icon_', '')
-        css_class = 'icon-%s' % self.normalizer.normalize(filetype)
+        normalizer = getUtility(IIDNormalizer)
+        css_class = 'icon-{}'.format(normalizer.normalize(filetype))
         return css_class
 
     @instance.memoize
@@ -52,7 +49,7 @@ class PreviewTab(ftwView):
         for attachment in attachments:
             lookup = self.lookup_mimetype_registry(attachment)
             if lookup:
-                attachment['class'] = self.get_css_class(lookup)
+                attachment['class'] = self.get_attachment_css_class(lookup)
                 attachment['type-name'] = lookup.name()
             else:
                 attachment['class'] = ''
@@ -61,12 +58,25 @@ class PreviewTab(ftwView):
         return attachments
 
 
-class OverviewTab(Overview):
+class PreviewTab(MailAttachmentsMixin, View):
+    """Render a preview of a mail.
+
+    We need to be mindful of the MRO C3 here as we need the mixin to override
+    methods of the ftw.mail.mail.View.
+    """
+
+    template = ViewPageTemplateFile('templates/previewtab.pt')
+
+
+class OverviewTab(MailAttachmentsMixin, Overview):
+    """Render an overview of the mailitem."""
+
     grok.context(IMail)
     grok.require('zope2.View')
 
     # override template lookup, its realive to this file
     file_template = ViewPageTemplateFile('templates/file.pt')
+    attachments_template = ViewPageTemplateFile('templates/attachments.pt')
 
     def get_metadata_config(self):
         return [
@@ -81,6 +91,9 @@ class OverviewTab(Overview):
             TemplateRow(self.file_template,
                         label=_('label_org_message',
                                 default='Original message')),
+            TemplateRow(self.attachments_template,
+                        label=_('label_documents',
+                                default='Attachments')),
             FieldRow('IDocumentMetadata.digitally_available'),
             FieldRow('IDocumentMetadata.preserved_as_paper'),
             FieldRow('IDocumentMetadata.receipt_date'),
