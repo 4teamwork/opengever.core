@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-04-27 11:21+0000\n"
+"POT-Creation-Date: 2017-05-16 08:24+0000\n"
 "PO-Revision-Date: 2016-07-22 16:52+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-mail/de/>\n"
@@ -36,17 +36,17 @@ msgstr "Versandtes E-Mail wurde als '${title}' abgelegt."
 msgid "The files you selected are larger than the maximum size"
 msgstr "Die Grösse der ausgewählten Dateien überschreitet die erlaubte Maximalgrösse."
 
-#: ./opengever/mail/browser/send_document.py:129
+#: ./opengever/mail/browser/send_document.py:128
 msgid "You have to select a intern                             or enter a extern mail-addres"
 msgstr "Wählen Sie mindestens eine interne oder eine externe E-Mail Adresse."
 
 #. Default: "Send"
-#: ./opengever/mail/browser/send_document.py:199
+#: ./opengever/mail/browser/send_document.py:195
 msgid "button_send"
 msgstr "Senden"
 
 #. Default: "Cancel"
-#: ./opengever/mail/browser/send_document.py:256
+#: ./opengever/mail/browser/send_document.py:253
 msgid "cancel_back"
 msgstr "Abbrechen"
 
@@ -81,12 +81,12 @@ msgid "extern_receiver"
 msgstr "Externer Empfänger"
 
 #. Default: "(only possible for open dossiers)"
-#: ./opengever/mail/browser/send_document.py:189
+#: ./opengever/mail/browser/send_document.py:185
 msgid "file_copy_widget_disabled_hint_text"
 msgstr "(nur für aktive Dossiers möglich)"
 
 #. Default: "Send as email"
-#: ./opengever/mail/browser/send_document.py:162
+#: ./opengever/mail/browser/send_document.py:160
 msgid "heading_send_as_email"
 msgstr "Dokumente als E-Mail versenden"
 
@@ -116,7 +116,7 @@ msgid "info_extracted_document"
 msgstr "Dokument wurde erstellt: ${title}"
 
 #. Default: "E-mail has been sent."
-#: ./opengever/mail/browser/send_document.py:246
+#: ./opengever/mail/browser/send_document.py:243
 msgid "info_mail_sent"
 msgstr "E-Mail wurde versendet."
 
@@ -150,8 +150,10 @@ msgstr "Keine Anhänge löschen"
 msgid "label_delete_action_selected"
 msgstr "Alle oben ausgewählten Anhänge aus dieser E-Mail löschen"
 
-#. Default: "Documents"
+#. Default: "Attachments"
+#: ./opengever/mail/browser/mail.py:95
 #: ./opengever/mail/browser/send_document.py:93
+#: ./opengever/mail/browser/templates/previewtab.pt:48
 msgid "label_documents"
 msgstr "Anhänge"
 
@@ -176,7 +178,7 @@ msgid "label_message"
 msgstr "Mitteilung"
 
 #. Default: "Original message"
-#: ./opengever/mail/browser/mail.py:81
+#: ./opengever/mail/browser/mail.py:92
 msgid "label_org_message"
 msgstr "Originalnachricht"
 

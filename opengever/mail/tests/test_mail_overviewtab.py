@@ -14,10 +14,14 @@ def date_format_helper(dateobj):
 
 
 class TestOverview(FunctionalTestCase):
+    """Test the overview view of uploaded emails."""
 
     @browsing
     def test_mail_overview_tab(self, browser):
-        mail = create(Builder("mail").with_message(MAIL_DATA))
+        mail = create(Builder('mail')
+                      .with_message(MAIL_DATA)
+                      .with_asset_message(
+                          'mail_with_multiple_attachments.eml'))
         browser.login().visit(mail, view='tabbedview_view-overview')
 
         view = mail.restrictedTraverse('tabbedview_view-overview')
@@ -44,8 +48,12 @@ class TestOverview(FunctionalTestCase):
                   ['Description', ''],
                   ['Foreign Reference', ''],
                   ['Original message',
-                   u'die-burgschaft.eml \u2014 1 KB Checkout and edit '
-                   u'Download copy PDF Preview'],
+                   u'mehrere-anhange.eml \u2014 32 KB '
+                   u'Checkout and edit Download copy PDF Preview'],
+                  ['Attachments',
+                   'Inneres Testma?il ohne Attachments.eml 1 KB '
+                   'word_document.docx 22.4 KB '
+                   'Text.txt 1 KB'],
                   ['Digital Available', 'yes'],
                   ['Preserved as paper', 'yes'],
                   ['Date of receipt', date_format_helper(date.today())],

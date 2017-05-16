@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-04-27 11:21+0000\n"
+"POT-Creation-Date: 2017-05-16 08:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -37,17 +37,17 @@ msgstr ""
 msgid "The files you selected are larger than the maximum size"
 msgstr ""
 
-#: ./opengever/mail/browser/send_document.py:129
+#: ./opengever/mail/browser/send_document.py:128
 msgid "You have to select a intern                             or enter a extern mail-addres"
 msgstr ""
 
 #. Default: "Send"
-#: ./opengever/mail/browser/send_document.py:199
+#: ./opengever/mail/browser/send_document.py:195
 msgid "button_send"
 msgstr ""
 
 #. Default: "Cancel"
-#: ./opengever/mail/browser/send_document.py:256
+#: ./opengever/mail/browser/send_document.py:253
 msgid "cancel_back"
 msgstr ""
 
@@ -82,12 +82,12 @@ msgid "extern_receiver"
 msgstr ""
 
 #. Default: "(only possible for open dossiers)"
-#: ./opengever/mail/browser/send_document.py:189
+#: ./opengever/mail/browser/send_document.py:185
 msgid "file_copy_widget_disabled_hint_text"
 msgstr ""
 
 #. Default: "Send as email"
-#: ./opengever/mail/browser/send_document.py:162
+#: ./opengever/mail/browser/send_document.py:160
 msgid "heading_send_as_email"
 msgstr ""
 
@@ -117,7 +117,7 @@ msgid "info_extracted_document"
 msgstr ""
 
 #. Default: "E-mail has been sent."
-#: ./opengever/mail/browser/send_document.py:246
+#: ./opengever/mail/browser/send_document.py:243
 msgid "info_mail_sent"
 msgstr ""
 
@@ -151,8 +151,10 @@ msgstr ""
 msgid "label_delete_action_selected"
 msgstr ""
 
-#. Default: "Documents"
+#. Default: "Attachments"
+#: ./opengever/mail/browser/mail.py:95
 #: ./opengever/mail/browser/send_document.py:93
+#: ./opengever/mail/browser/templates/previewtab.pt:48
 msgid "label_documents"
 msgstr ""
 
@@ -177,7 +179,7 @@ msgid "label_message"
 msgstr ""
 
 #. Default: "Original message"
-#: ./opengever/mail/browser/mail.py:81
+#: ./opengever/mail/browser/mail.py:92
 msgid "label_org_message"
 msgstr ""
 

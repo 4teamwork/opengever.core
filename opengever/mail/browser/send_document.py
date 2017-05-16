@@ -92,7 +92,7 @@ class ISendDocumentSchema(Interface):
         )
 
     documents = RelationList(
-        title=_(u'label_documents', default=u'Documents'),
+        title=_(u'label_documents', default=u'Attachments'),
         default=[],
         missing_value=[],
         value_type=RelationChoice(
@@ -276,7 +276,7 @@ class SendDocumentForm(form.Form):
         # iterate over object list (which can include documents and mails),
         # create attachement parts for them and prepare docs_links
         docs_links = '%s:\r\n' % (translate(
-                _('label_documents', default=u'Documents'),
+                _('label_documents', default=u'Attachments'),
                 context=self.request))
 
         for obj in objs:

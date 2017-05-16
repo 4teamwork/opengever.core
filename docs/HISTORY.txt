@@ -5,6 +5,7 @@ Changelog
 2017.2.2 (unreleased)
 ---------------------
 
+- Display attachments on mail overviews. [Rotonen]
 - Use CreatEmailCommand to create email upon mail-in. [deiferni]
 - Fix typo in method name: resolve_sumitted_proposal -> resolve_submitted_proposal. [mathias.leimgruber]
 - Handle require_login error where came_from_did not exist. [jone]
