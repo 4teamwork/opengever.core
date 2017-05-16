@@ -144,11 +144,10 @@ class AllUsersAndInboxesSource(object):
         """
 
         request = getRequest()
-        client_id = request.get('client',
-                                request.get('form.widgets.responsible_client',
-                                            getattr(self.context,
-                                                    'responsible_client',
-                                                    None)))
+        client_id = request.get('form.widgets.responsible_client',
+                                getattr(self.context,
+                                        'responsible_client',
+                                        None))
 
         if not client_id:
             return None
@@ -173,26 +172,6 @@ class ForwardingResponsibleSource(AllUsersAndInboxesSource):
     def base_query(self):
         query = super(ForwardingResponsibleSource, self).base_query
         return query.filter(OrgUnit.unit_id == self.client_id)
-
-    # def search(self, query_string):
-    #     self.terms = []
-
-    #     text_filters = query_string.split(' ')
-    #     query = extend_query_with_textfilter(
-    #         self.base_query,
-    #         [User.userid, User.firstname, User.lastname, User.email],
-    #         text_filters)
-
-    #     query = query.filter_by(active=True)
-    #     query = query.order_by(asc(func.lower(User.lastname)),
-    #                            asc(func.lower(User.firstname)))
-
-    #     for user, orgunit in query.all():
-    #         self.terms.append(
-    #             self.getTerm(u'{}:{}'.format(orgunit.id(), user.userid)))
-
-    #     self._extend_terms_with_inboxes(text_filters)
-    #     return self.terms
 
 
 @implementer(IContextSourceBinder)

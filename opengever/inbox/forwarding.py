@@ -160,7 +160,7 @@ class ForwardingEditForm(DefaultEditForm):
 
     def applyChanges(self, data):
         """Records reassign activity when the responsible has changed.
-        Also update the responsible_cliend and responsible user
+        Also update the responsible_client and responsible user
         """
         update_reponsible_field_data(data)
         super(ForwardingEditForm, self).applyChanges(data)

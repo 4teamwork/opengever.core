@@ -51,7 +51,7 @@ class TestAllUsersAndInboxesSource(FunctionalTestCase):
         self.assertEquals(u'Informatik: Peter Hans (test@example.org)',
                           term.title)
 
-    def test_get_term_by_token_raises_BadReques_if_no_token(self):
+    def test_get_term_by_token_raises_BadRequest_if_no_token(self):
         with self.assertRaises(LookupError):
             self.source.getTermByToken(None)
 
@@ -150,7 +150,7 @@ class TestAllUsersAndInboxesSource(FunctionalTestCase):
         self.assertTrue(self.source.getTerm('unit2:peter.muster'),
                         'Expect a term from inactive user')
 
-    def test_search_for_nactive_users_is_not_possible(self):
+    def test_search_for_inactive_users_is_not_possible(self):
         create(Builder('ogds_user')
                .id('peter.muster')
                .having(firstname='Peter', lastname='Muster', active=False)
