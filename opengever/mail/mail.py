@@ -86,10 +86,11 @@ class IOGMail(form.Schema):
     form.read_permission(original_message='cmf.ManagePortal')
     form.write_permission(original_message='cmf.ManagePortal')
     original_message = field.NamedBlobFile(
-        title=_(u"label_original_message",
-               default=u"Raw *.msg message before conversion"),
+        title=_(u'label_original_message',
+                default=u'Raw *.msg message before conversion'),
         required=False,
     )
+
 
 alsoProvides(IOGMail, IFormFieldProvider)
 

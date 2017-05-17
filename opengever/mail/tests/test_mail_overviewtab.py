@@ -16,6 +16,8 @@ def date_format_helper(dateobj):
 class TestOverview(FunctionalTestCase):
     """Test the overview view of uploaded emails."""
 
+    expected_original_msg_label = 'Raw *.msg message before conversion'
+
     @browsing
     def test_mail_overview_tab(self, browser):
         mail = create(Builder('mail')
@@ -64,3 +66,26 @@ class TestOverview(FunctionalTestCase):
 
         self.assertEquals(expect,
                           browser.css('table').first.lists())
+
+    @browsing
+    def test_origial_message_info_is_omitted_for_non_managers(self, browser):
+        mail = create(Builder('mail')
+                      .with_message(MAIL_DATA)
+                      .with_dummy_message()
+                      .with_dummy_original_message())
+        browser.login().visit(mail, view='tabbedview_view-overview')
+
+        by_label = dict(browser.css('table').first.lists())
+        self.assertNotIn(self.expected_original_msg_label, by_label)
+
+    @browsing
+    def test_original_message_info_is_displayed_for_managers(self, browser):
+        self.grant('Manager')
+        mail = create(Builder('mail')
+                      .with_message(MAIL_DATA)
+                      .with_dummy_message()
+                      .with_dummy_original_message())
+
+        browser.login().visit(mail, view='tabbedview_view-overview')
+        by_label = dict(browser.css('table').first.lists())
+        self.assertIn(self.expected_original_msg_label, by_label)

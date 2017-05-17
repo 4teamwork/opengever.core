@@ -10,6 +10,7 @@ from opengever.document.browser.overview import FieldRow
 from opengever.document.browser.overview import Overview
 from opengever.document.browser.overview import TemplateRow
 from opengever.mail import _
+from plone import api
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize import instance
 from Products.CMFCore.utils import getToolByName
@@ -79,7 +80,7 @@ class OverviewTab(MailAttachmentsMixin, Overview):
     attachments_template = ViewPageTemplateFile('templates/attachments.pt')
 
     def get_metadata_config(self):
-        return [
+        rows = [
             FieldRow('title'),
             FieldRow('IDocumentMetadata.document_date'),
             FieldRow('IDocumentMetadata.document_type'),
@@ -106,3 +107,8 @@ class OverviewTab(MailAttachmentsMixin, Overview):
                                     default='Public Trial')),
             FieldRow('IClassification.public_trial_statement'),
         ]
+
+        if api.user.has_permission('cmf.ManagePortal'):
+            rows.append(FieldRow('IOGMail.original_message'))
+
+        return rows
