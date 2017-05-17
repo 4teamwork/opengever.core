@@ -20,7 +20,6 @@
   <property name="behaviors" purge="False">
     <element value="collective.dexteritytextindexer.behavior.IDexterityTextIndexer" />
     <element value="ftw.journal.interfaces.IAnnotationsJournalizable" />
-    <element value="opengever.base.behaviors.creator.ICreator" />
     <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
     <element value="opengever.base.behaviors.classification.IClassification" />
     <element value="opengever.document.behaviors.related_docs.IRelatedDocuments" />
