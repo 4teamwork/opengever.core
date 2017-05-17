@@ -1,7 +1,7 @@
-from five import grok
 from opengever.base import _
 from opengever.base.clipboard import Clipboard
 from plone import api
+from Products.Five import BrowserView
 from zope.container.interfaces import INameChooser
 from zope.interface import alsoProvides
 from zope.interface import Interface
@@ -9,21 +9,17 @@ from zope.interface import Interface
 
 class ICopyPasteRequestLayer(Interface):
     """This request layer is activiated during the copy & paste process.
-    This allow us to skip automatic renames etc. in the journal."""
+    This allow us to skip automatic renames etc. in the journal.
+    """
 
 
-class PasteClipboardView(grok.View):
+class PasteClipboardView(BrowserView):
     """A view that pastes objects from our own clipboard to the current context.
     It replaces the default Plone `objectPaste.cpy`. This allows us to use
     our own ID format for pasted objects instead of the default Plone
     (`copy_of_dossier-19`).
     """
-
-    grok.name('paste_clipboard')
-    grok.context(Interface)
-    grok.require('zope2.View')
-
-    def render(self):
+    def __call__(self):
         objs = Clipboard(self.request).get_objs()
         if not objs:
             msg = _(u"msg_empty_clipboard",
@@ -33,9 +29,17 @@ class PasteClipboardView(grok.View):
             return self.redirect()
 
         if not self.is_pasting_objects_allowed(objs):
-            msg = _(u"msg_pasting_not_allowed",
+            msg = _(u"msg_pasting_type_not_allowed",
                     default=u"Can't paste items, it's not allowed to add "
                     "objects of this type.")
+            api.portal.show_message(
+                message=msg, request=self.request, type='error')
+            return self.redirect()
+
+        if not self.is_pasting_on_context_allowed():
+            msg = _(u"msg_pasting_not_allowed",
+                    default=u"Can't paste items, the context does not allow "
+                    "pasting items.")
             api.portal.show_message(
                 message=msg, request=self.request, type='error')
             return self.redirect()
@@ -46,6 +50,16 @@ class PasteClipboardView(grok.View):
                 default=u"Objects from clipboard successfully pasted.")
         api.portal.show_message(message=msg, request=self.request, type='info')
         return self.redirect()
+
+    def is_pasting_on_context_allowed(self):
+        is_pasting_allowed_view = self.context.restrictedTraverse(
+            '@@is_pasting_allowed')
+
+        if not is_pasting_allowed_view:
+            # the is_pasting_allowed_view should always be available, but if
+            # not we probably cannot paste
+            return False
+        return is_pasting_allowed_view()
 
     def is_pasting_objects_allowed(self, objs):
         allowed_content_types = [

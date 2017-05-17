@@ -37,6 +37,13 @@
       />
 
   <browser:page
+      name="paste_clipboard"
+      for="*"
+      class=".paste.PasteClipboardView"
+      permission="zope2.View"
+      />
+
+  <browser:page
       name="confirm-action"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       template="confirm.pt"
