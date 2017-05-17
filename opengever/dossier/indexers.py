@@ -163,7 +163,7 @@ class SearchableTextExtender(grok.Adapter):
 
         # filing_no
         if IFilingNumberMarker.providedBy(self.context):
-            filing_no = getattr(IFilingNumber(self.contxt), 'filing_no', None)
+            filing_no = getattr(IFilingNumber(self.context), 'filing_no', None)
             if filing_no:
                 searchable.append(filing_no.encode('utf-8'))
 

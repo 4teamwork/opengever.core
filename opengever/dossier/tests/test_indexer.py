@@ -177,3 +177,15 @@ class TestFilingNumberIndexer(FunctionalTestCase):
                           index_data_for(dossier).get('filing_no'))
         self.assertEquals(['ska', 'arch', 'administration', '2012', '3'],
                           index_data_for(dossier).get('searchable_filing_no'))
+
+    def test_filing_no_is_also_in_searchable_text(self):
+        dossier = create(Builder("dossier")
+                         .having(filing_prefix='directorate',
+                                 filing_no='SKA ARCH-Administration-2012-3'))
+
+        searchable_text_data = index_data_for(dossier).get('SearchableText')
+        self.assertIn('ska', searchable_text_data)
+        self.assertIn('arch', searchable_text_data)
+        self.assertIn('administration', searchable_text_data)
+        self.assertIn('2012', searchable_text_data)
+        self.assertIn('3', searchable_text_data)
