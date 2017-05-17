@@ -49,7 +49,6 @@ REPOFOLDER_REQUIREDS = {
 REPOFOLDER_DEFAULTS = {
     'archival_value': u'unchecked',
     'classification': u'unprotected',
-    'creators': (),
     'custody_period': 30,
     'description': u'',
     'privacy_layer': u'privacy_layer_no',
@@ -117,7 +116,6 @@ DOCUMENT_REQUIREDS = {
 }
 DOCUMENT_DEFAULTS = {
     'classification': u'unprotected',
-    'creators': (),
     'description': u'',
     'digitally_available': False,
     'document_date': FROZEN_TODAY,
