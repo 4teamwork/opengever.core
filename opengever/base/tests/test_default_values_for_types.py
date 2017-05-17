@@ -8,7 +8,7 @@ from ftw.testbrowser.pages import factoriesmenu
 from ftw.testing import freeze
 from opengever.base.default_values import get_persisted_values_for_obj
 from opengever.core.testing import toggle_feature
-from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings
+from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings  # noqa
 from opengever.testing import FunctionalTestCase
 from plone import api
 from plone.app.testing import setRoles
@@ -227,6 +227,7 @@ CONTACT_MISSING_VALUES = {
 
 
 class TestDefaultsBase(FunctionalTestCase):
+    """Test our base classes have expected default values."""
 
     requireds = None
     type_defaults = None
@@ -269,6 +270,7 @@ class TestDefaultsBase(FunctionalTestCase):
 
 
 class TestRepositoryRootDefaults(TestDefaultsBase):
+    """Test our repository roots come with expected default values."""
 
     requireds = REPOROOT_REQUIREDS
     type_defaults = REPOROOT_DEFAULTS
@@ -317,6 +319,7 @@ class TestRepositoryRootDefaults(TestDefaultsBase):
 
 
 class TestRepositoryFolderDefaults(TestDefaultsBase):
+    """Test our repository folders come with expected default values."""
 
     requireds = REPOFOLDER_REQUIREDS
     type_defaults = REPOFOLDER_DEFAULTS
@@ -375,6 +378,7 @@ class TestRepositoryFolderDefaults(TestDefaultsBase):
 
 
 class TestDossierDefaults(TestDefaultsBase):
+    """Test dossiers come with expected default values."""
 
     requireds = DOSSIER_REQUIREDS
     type_defaults = DOSSIER_DEFAULTS
@@ -439,7 +443,7 @@ class TestDossierDefaults(TestDefaultsBase):
             factoriesmenu.add(u'Dossier with template')
 
             token = browser.css(
-                'input[name="form.widgets.template"]').first.attrib.get('value')
+                'input[name="form.widgets.template"]').first.attrib.get('value')  # noqa
 
             browser.fill({'form.widgets.template': token}).submit()
             browser.click_on('Save')
@@ -461,15 +465,15 @@ class TestDossierDefaults(TestDefaultsBase):
         leaf_node = create(Builder('repository').within(root))
         template = create(Builder("dossiertemplate")
                           .titled(u'Main template'))
-        subdossier_template = create(Builder("dossiertemplate")
-                                     .within(template)
-                                     .titled(DOSSIER_REQUIREDS['title']))
+        create(Builder("dossiertemplate")
+               .within(template)
+               .titled(DOSSIER_REQUIREDS['title']))
 
         with freeze(FROZEN_NOW):
             browser.login().open(leaf_node)
             factoriesmenu.add(u'Dossier with template')
             token = browser.css(
-                'input[name="form.widgets.template"]').first.attrib.get('value')
+                'input[name="form.widgets.template"]').first.attrib.get('value')  # noqa
             browser.fill({'form.widgets.template': token}).submit()
             browser.click_on('Save')
 
@@ -488,6 +492,7 @@ class TestDossierDefaults(TestDefaultsBase):
 
 
 class TestDocumentDefaults(TestDefaultsBase):
+    """Test documents come with expected default values."""
 
     requireds = DOCUMENT_REQUIREDS
     type_defaults = DOCUMENT_DEFAULTS
@@ -564,7 +569,7 @@ class TestDocumentDefaults(TestDefaultsBase):
             browser.login().open(leaf_node)
             factoriesmenu.add(u'Dossier with template')
             token = browser.css(
-                'input[name="form.widgets.template"]').first.attrib.get('value')
+                'input[name="form.widgets.template"]').first.attrib.get('value')  # noqa
             browser.fill({'form.widgets.template': token}).submit()
             browser.click_on('Save')
 
@@ -580,6 +585,7 @@ class TestDocumentDefaults(TestDefaultsBase):
 
 
 class TestMailDefaults(TestDefaultsBase):
+    """Test mails come with expected default values."""
 
     requireds = MAIL_REQUIREDS
     type_defaults = MAIL_DEFAULTS
@@ -653,6 +659,7 @@ class TestMailDefaults(TestDefaultsBase):
 
 
 class TestTaskDefaults(TestDefaultsBase):
+    """Test tasks come with expected default values."""
 
     requireds = TASK_REQUIREDS
     type_defaults = TASK_DEFAULTS
@@ -712,6 +719,7 @@ class TestTaskDefaults(TestDefaultsBase):
 
 
 class TestContactDefaults(TestDefaultsBase):
+    """Test contacts come with expected default values."""
 
     requireds = CONTACT_REQUIREDS
     type_defaults = CONTACT_DEFAULTS
