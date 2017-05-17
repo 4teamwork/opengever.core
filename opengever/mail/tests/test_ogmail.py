@@ -4,6 +4,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.document.interfaces import IDocumentSettings
 from opengever.mail.mail import IOGMailMarker
+from opengever.mail.mail import NO_SUBJECT_TITLE_FALLBACK
 from opengever.mail.tests import MAIL_DATA
 from opengever.testing import FunctionalTestCase
 from plone import api
@@ -49,8 +50,8 @@ class TestOGMailAddition(FunctionalTestCase):
 
     def test_title_accessor(self):
         mail = create(Builder("mail"))
-        self.assertEquals(u'[No Subject]', mail.title)
-        self.assertEquals('[No Subject]', mail.Title())
+        self.assertEquals(NO_SUBJECT_TITLE_FALLBACK, mail.title)
+        self.assertEquals(NO_SUBJECT_TITLE_FALLBACK, mail.Title())
 
         mail = create(Builder("mail").with_message(MAIL_DATA))
 

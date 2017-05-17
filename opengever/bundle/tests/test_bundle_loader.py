@@ -30,7 +30,7 @@ class TestBundleLoader(TestCase):
 
     def test_loads_correct_number_of_items(self):
         bundle = self.load_bundle()
-        self.assertEqual(10, len(list(bundle)))
+        self.assertEqual(11, len(list(bundle)))
 
     def test_loads_items_in_correct_order(self):
         bundle = self.load_bundle()
@@ -44,6 +44,7 @@ class TestBundleLoader(TestCase):
              ('document', 'Bewerbung Hanspeter M\xc3\xbcller'),
              ('document', 'Entlassung Hanspeter M\xc3\xbcller'),
              ('mail', 'Ein Mail'),
+             ('mail', ''),
              ('document', 'Document referenced via UNC-Path')],
             [(get_portal_type(i), get_title(i)) for i in list(bundle)])
 
@@ -69,6 +70,7 @@ class TestBundleLoader(TestCase):
             ('document', 'Bewerbung Hanspeter M\xc3\xbcller'),
             ('document', 'Document referenced via UNC-Path'),
             ('document', 'Entlassung Hanspeter M\xc3\xbcller'),
+            ('mail', ''),
             ('mail', 'Ein Mail'),
             ('repositoryfolder', 'Organigramm, Prozesse'),
             ('repositoryfolder', 'Organisation'),

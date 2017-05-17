@@ -58,6 +58,7 @@ else:
 
 MESSAGE_SOURCE_DRAG_DROP_UPLOAD = 'upload'
 MESSAGE_SOURCE_MAILIN = 'mailin'
+NO_SUBJECT_TITLE_FALLBACK = '[No Subject]'
 
 
 IMail.setTaggedValue(FIELDSETS_KEY, [
@@ -370,7 +371,8 @@ def initalize_title(mail, event):
             value = subject.decode('utf8')
         else:
             value = translate(
-                ftw_mf(u'no_subject', default=u'[No Subject]'),
+                ftw_mf(u'no_subject',
+                       default=NO_SUBJECT_TITLE_FALLBACK.decode('utf-8')),
                 context=getSite().REQUEST)
 
         IOGMail(mail).title = value
