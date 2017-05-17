@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-05-16 15:00+0000\n"
+"POT-Creation-Date: 2017-05-17 09:46+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -152,7 +152,7 @@ msgid "label_delete_action_selected"
 msgstr ""
 
 #. Default: "Attachments"
-#: ./opengever/mail/browser/mail.py:95
+#: ./opengever/mail/browser/mail.py:96
 #: ./opengever/mail/browser/send_document.py:95
 #: ./opengever/mail/browser/templates/previewtab.pt:48
 msgid "label_documents"
@@ -178,13 +178,28 @@ msgstr ""
 msgid "label_message"
 msgstr ""
 
+#. Default: "Message source"
+#: ./opengever/mail/mail.py:116
+msgid "label_message_source"
+msgstr ""
+
+#. Default: "Drag and drop upload"
+#: ./opengever/mail/mail.py:80
+msgid "label_message_source_d_n_d_upload"
+msgstr ""
+
+#. Default: "Mail-in"
+#: ./opengever/mail/mail.py:77
+msgid "label_message_source_mailin"
+msgstr ""
+
 #. Default: "Original message"
-#: ./opengever/mail/browser/mail.py:92
+#: ./opengever/mail/browser/mail.py:93
 msgid "label_org_message"
 msgstr ""
 
 #. Default: "Raw *.msg message before conversion"
-#: ./opengever/mail/mail.py:89
+#: ./opengever/mail/mail.py:107
 msgid "label_original_message"
 msgstr ""
 

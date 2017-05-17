@@ -17,6 +17,7 @@ class TestOverview(FunctionalTestCase):
     """Test the overview view of uploaded emails."""
 
     expected_original_msg_label = 'Raw *.msg message before conversion'
+    expected_message_source_label = 'Message source'
 
     @browsing
     def test_mail_overview_tab(self, browser):
@@ -77,6 +78,7 @@ class TestOverview(FunctionalTestCase):
 
         by_label = dict(browser.css('table').first.lists())
         self.assertNotIn(self.expected_original_msg_label, by_label)
+        self.assertNotIn(self.expected_message_source_label, by_label)
 
     @browsing
     def test_original_message_info_is_displayed_for_managers(self, browser):
@@ -89,3 +91,4 @@ class TestOverview(FunctionalTestCase):
         browser.login().visit(mail, view='tabbedview_view-overview')
         by_label = dict(browser.css('table').first.lists())
         self.assertIn(self.expected_original_msg_label, by_label)
+        self.assertIn(self.expected_message_source_label, by_label)

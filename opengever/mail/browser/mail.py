@@ -110,5 +110,6 @@ class OverviewTab(MailAttachmentsMixin, Overview):
 
         if api.user.has_permission('cmf.ManagePortal'):
             rows.append(FieldRow('IOGMail.original_message'))
+            rows.append(FieldRow('IOGMail.message_source'))
 
         return rows
