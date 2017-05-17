@@ -6,9 +6,11 @@ from Products.CMFPlone.interfaces.constrains import ENABLED
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.repository.interfaces import IRepositoryFolderRecords
+from plone.memoize.view import memoize_contextless
 from plone.registry.interfaces import IRegistry
 from zope.component import adapts
 from zope.component import queryUtility
+from zope.globalrequest import getRequest
 from zope.interface import implements
 
 
@@ -20,6 +22,7 @@ class RepositoryFolderConstrainTypes(object):
 
     def __init__(self, context):
         self.context = context
+        self.request = getRequest()
 
     def getConstrainTypesMode(self):
         """Find out if add-restrictions are enabled."""
@@ -50,6 +53,7 @@ class RepositoryFolderConstrainTypes(object):
         return [t for t in result if my_type.allowType(t.getId()) and
                 t.isConstructionAllowed(self.context)]
 
+    @memoize_contextless
     def allowedContentTypes(self):
         """Return the list of currently permitted FTIs."""
 
