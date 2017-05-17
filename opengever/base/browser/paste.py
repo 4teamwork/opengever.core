@@ -1,7 +1,7 @@
-from five import grok
 from opengever.base import _
 from opengever.base.clipboard import Clipboard
 from plone import api
+from Products.Five import BrowserView
 from zope.container.interfaces import INameChooser
 from zope.interface import alsoProvides
 from zope.interface import Interface
@@ -9,21 +9,17 @@ from zope.interface import Interface
 
 class ICopyPasteRequestLayer(Interface):
     """This request layer is activiated during the copy & paste process.
-    This allow us to skip automatic renames etc. in the journal."""
+    This allow us to skip automatic renames etc. in the journal.
+    """
 
 
-class PasteClipboardView(grok.View):
+class PasteClipboardView(BrowserView):
     """A view that pastes objects from our own clipboard to the current context.
     It replaces the default Plone `objectPaste.cpy`. This allows us to use
     our own ID format for pasted objects instead of the default Plone
     (`copy_of_dossier-19`).
     """
-
-    grok.name('paste_clipboard')
-    grok.context(Interface)
-    grok.require('zope2.View')
-
-    def render(self):
+    def __call__(self):
         objs = Clipboard(self.request).get_objs()
         if not objs:
             msg = _(u"msg_empty_clipboard",
