@@ -40,7 +40,7 @@ class TestForwarding(FunctionalTestCase):
                              view='++add++opengever.inbox.forwarding')
 
         browser.fill({'Title': u'Test forwarding',
-                      'Responsible': 'inbox:client1'}).submit()
+                      'Responsible': 'inbox:client1'})
         browser.css('#form-buttons-save').first.click()
 
         forwarding = self.inbox.get('forwarding-1')
@@ -48,11 +48,6 @@ class TestForwarding(FunctionalTestCase):
         self.assertEqual([doc1, doc3], forwarding.listFolderContents())
         self.assertEqual([doc2], self.inbox.listFolderContents(
             {'portal_type': 'opengever.document.document'}))
-
-    @browsing
-    def test_autocomplete_does_not_raise_notfound(self, browser):
-        browser.login().open(self.inbox,
-            view='++add++opengever.inbox.forwarding/++widget++issuer/@@autocomplete-search?term=sb')
 
     @browsing
     def test_forwarding_add_form_does_not_render_empty_fieldset_additional(self, browser):

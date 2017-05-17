@@ -30,15 +30,6 @@ class TestAssingForwarding(FunctionalTestCase):
             .in_state('forwarding-state-refused'))
 
     @browsing
-    def test_its_possible_to_select_an_different_client(self, browser):
-        browser.login().open(self.forwarding)
-        browser.click_on('forwarding-transition-reassign-refused')
-
-        self.assertEquals(
-            [('client1', 'Client1'), ('client2', 'Client2')],
-            browser.find('Responsible Client').options)
-
-    @browsing
     def test_updates_responsible_and_responsible_client(self, browser):
         self.assign_forwarding('client2', 'Fake Response')
 
@@ -99,7 +90,9 @@ class TestAssingForwarding(FunctionalTestCase):
     def assign_forwarding(self, new_client, response, browser=default_browser):
         browser.login().open(self.forwarding)
         browser.click_on('forwarding-transition-reassign-refused')
-        browser.fill({'Responsible Client': new_client,
-                      'Responsible': 'inbox:client2',
-                      'Response': 'Fake response'})
+        browser.fill({'Response': 'Fake response'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill('inbox:' + new_client)
+
         browser.click_on('Assign')

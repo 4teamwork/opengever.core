@@ -34,7 +34,9 @@ class TestTaskEditForm(FunctionalTestCase):
                               responsible='peter.meier'))
 
         browser.login().open(task, view='edit')
-        browser.fill({'Responsible': 'james.meier'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill('client1:james.meier')
         browser.find('Save').click()
 
         browser.open(task, view='tabbedview_view-overview')
@@ -49,13 +51,17 @@ class TestTaskEditForm(FunctionalTestCase):
     def test_edit_responsible_records_activity(self, browser):
         browser.login().open(self.dossier, view='++add++opengever.task.task')
         browser.fill({'Title': u'Abkl\xe4rung Fall Meier',
-                      'Responsible': u'peter.meier',
                       'Task Type': 'comment',
                       'Text': 'Lorem ipsum'})
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill('client1:peter.meier')
+
         browser.find('Save').click()
 
         browser.open(browser.context.get('task-1'), view='edit')
-        browser.fill({'Responsible': 'james.meier'})
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill('client1:james.meier')
+
         browser.find('Save').click()
 
         activity = Activity.query.order_by(Activity.created.desc()).first()

@@ -176,8 +176,9 @@ class TestResponseDescriptions(FunctionalTestCase):
         # Reassign task
         self.click_task_button(browser, 'reassign', save_and_reload=False)
 
-        user, = browser.find('Responsible').query('other_user')
-        browser.fill({'Responsible': user[0]})
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill('client1:other_user')
+
         browser.find('Assign').click()
         self.visit_overview(browser)
 
@@ -213,8 +214,9 @@ class TestResponseDescriptions(FunctionalTestCase):
         #
         # Step 1 - Select new responsible(s)
         self.click_task_button(browser, 'delegate', save_and_reload=False)
-        user, = browser.find('Responsibles').query('test_user')
-        browser.fill({'Responsibles': user[0]})
+        form = browser.find_form_by_field('Responsibles')
+        form.find_widget('Responsibles').fill('client1:test_user_1_')
+
         browser.find('Continue').click()
 
         # Step 2 - Update metadata of new subtask

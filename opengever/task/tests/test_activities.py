@@ -38,6 +38,10 @@ class TestTaskActivites(FunctionalTestCase):
                       'Task Type': 'comment',
                       'Deadline': '02/13/15',
                       'Text': 'Lorem ipsum'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(self.org_unit.id() + ':hugo.boss')
+
         browser.css('#form-buttons-save').first.click()
 
         activity = Activity.query.one()
@@ -60,9 +64,11 @@ class TestTaskActivites(FunctionalTestCase):
     def test_adding_task_adds_responsible_and_issuer_to_watchers(self, browser):
         browser.login().open(self.dossier, view='++add++opengever.task.task')
         browser.fill({'Title': u'Abkl\xe4rung Fall Meier',
-                      'Responsible': u'hugo.boss',
                       'Task Type': 'comment',
                       'Text': 'Lorem ipsum'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(self.org_unit.id() + ':hugo.boss')
         browser.css('#form-buttons-save').first.click()
 
         center = notification_center()
@@ -186,10 +192,14 @@ class TestTaskActivites(FunctionalTestCase):
 
         browser.login().open(task, view='++add++opengever.task.task')
         browser.fill({'Title': u'Abkl\xe4rung Fall Meier',
-                      'Responsible': 'hugo.boss',
                       'Issuer': u'hugo.boss',
                       'Task Type': 'comment',
                       'Text': 'Lorem ipsum'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(
+            self.org_unit.id() + ':hugo.boss')
+
         browser.css('#form-buttons-save').first.click()
 
         activity = Activity.query.one()
@@ -223,7 +233,9 @@ class TestTaskActivites(FunctionalTestCase):
         browser.login().open(task)
         browser.find('task-transition-delegate').click()
         # fill responsibles step
-        browser.fill({'Responsibles': ['client1:hugo.boss']})
+        form = browser.find_form_by_field('Responsibles')
+        form.find_widget('Responsibles').fill(['client1:hugo.boss'])
+
         browser.find('Continue').click()
         # fill medatata step and submit
         browser.find('Save').click()
@@ -266,18 +278,26 @@ class TestTaskReassignActivity(FunctionalTestCase):
     def add_task(self, browser):
         browser.login().open(self.dossier, view='++add++opengever.task.task')
         browser.fill({'Title': u'Abkl\xe4rung Fall Meier',
-                      'Responsible': 'james.meier',
                       'Issuer': u'peter.meier',
                       'Task Type': 'comment',
                       'Text': 'Lorem ipsum'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(
+            self.org_unit.id() + ':james.meier')
+
         browser.css('#form-buttons-save').first.click()
         return self.dossier.get('task-1')
 
     def reassign(self, browser, responsible, response):
         browser.login().open(self.task)
         browser.css('#workflow-transition-task-transition-reassign').first.click()
-        browser.fill({'Responsible': responsible,
-                      'Response': response})
+        browser.fill({'Response': response})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(
+            self.org_unit.id() + ':' + responsible)
+
         browser.css('#form-buttons-save').first.click()
 
     @browsing

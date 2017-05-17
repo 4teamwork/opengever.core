@@ -18,9 +18,11 @@ class TestDelegateTaskForm(FunctionalTestCase):
 
         # pre-fill responsibles
         selected_user = '{}:{}'.format(self.org_unit.id(), self.user.userid)
-        url = "{}/@@delegate_recipients?form.widgets.responsibles={}".format(
-            task.absolute_url(), selected_user)
-        browser.login().open(url)
+        browser.login().visit(task, view='delegate_recipients')
+
+        form = browser.find_form_by_field('Responsibles')
+        form.find_widget('Responsibles').fill(selected_user)
+
         browser.css('#form-buttons-save').first.click()  # can't use submit()
 
         browser.fill({'Issuer': self.user.userid})

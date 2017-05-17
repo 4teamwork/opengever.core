@@ -17,6 +17,7 @@ Changelog
 - Respect `maximum_dossier_depth` registry record in DefaultConstrainTypeDecider [mathias.leimgruber]
 - Handle require_login error where came_from_did not exist. [jone]
 - Word meeting: replace proposal textfields with a document. [jone]
+- OGIP 15: Implement adding multiple task with the add form. [mathias.leimgruber]
 
 
 2017.2.1 (2017-05-11)

@@ -1,10 +1,14 @@
 from five import grok
-from opengever.ogds.base import autocomplete_widget
+from ftw.keywordwidget.widget import KeywordFieldWidget
+from ftw.keywordwidget.widget import KeywordWidget
+from opengever.ogds.base.sources import AllUsersAndInboxesSourceBinder
 from opengever.task import _
 from opengever.task.browser.delegate import vocabulary
 from opengever.task.browser.delegate.main import DelegateWizardFormMixin
 from opengever.task.browser.delegate.utils import encode_data
 from opengever.task.task import ITask
+from plone.autoform.widgets import ParameterizedWidget
+from plone.directives import form
 from plone.directives.form import Form
 from plone.directives.form import Schema
 from plone.z3cform.layout import FormWrapper
@@ -17,6 +21,7 @@ from zope import schema
 
 class ISelectRecipientsSchema(Schema):
 
+    form.widget('responsibles', KeywordFieldWidget, async=True)
     responsibles = schema.List(
         title=_(u'delegate_label_responsibles', default=u'Responsibles'),
         description=_(
@@ -24,9 +29,8 @@ class ISelectRecipientsSchema(Schema):
             default=u'Select one or more responsibles. For each selected '
             u'responsible a subtask will be created and assigned.'),
         required=True,
-        min_length=1,
         value_type=schema.Choice(
-            vocabulary=u'opengever.ogds.base.AllUsersAndInboxesVocabulary'))
+            source=AllUsersAndInboxesSourceBinder()))
 
     documents = schema.List(
         title=_(u'delegate_label_documents', default=u'Attach documents'),
@@ -40,11 +44,12 @@ class ISelectRecipientsSchema(Schema):
 class SelectRecipientsForm(DelegateWizardFormMixin, Form):
     grok.context(ITask)
 
-    allow_prefill_from_GET_request = True  # XXX
-
     fields = Fields(ISelectRecipientsSchema)
-    fields['responsibles'].widgetFactory = \
-        autocomplete_widget.AutocompleteMultiFieldWidget
+    fields['responsibles'].widgetFactory = ParameterizedWidget(
+        KeywordWidget,
+        async=True
+    )
+
     fields['documents'].widgetFactory = CheckBoxFieldWidget
 
     step_name = 'delegate_recipients'

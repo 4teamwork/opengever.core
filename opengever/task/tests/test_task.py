@@ -3,7 +3,10 @@ from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.dexterity import erroneous_fields
+from opengever.activity.model import Activity
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 from opengever.task.adapters import IResponseContainer
 from opengever.task.interfaces import ITaskSettings
 from opengever.task.response import Response
@@ -22,6 +25,7 @@ import transaction
 
 
 class TestTaskIntegration(FunctionalTestCase):
+    layer = OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 
     def setUp(self):
         super(TestTaskIntegration, self).setUp()
@@ -63,14 +67,27 @@ class TestTaskIntegration(FunctionalTestCase):
         browser.login().open(dossier, view='++add++opengever.task.task')
 
         browser.fill({'Title': 257 * 'x',
-                      'Task Type': 'To comment',
-                      'Responsible': TEST_USER_ID})
+                      'Task Type': 'To comment'
+                      })
+
+        # Fill Responible manually
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(
+            self.get_org_unit().id() + ':' + TEST_USER_ID)
         browser.find('Save').click()
 
         self.assertEquals({u'Title': ['Value is too long']},
                           erroneous_fields())
 
         browser.fill({'Title': 256 * 'x'})
+
+        # We need to fill it again, because of a known bug in lxml
+        # https://github.com/4teamwork/ftw.testbrowser/pull/17
+        # https://github.com/4teamwork/ftw.testbrowser/issues/53
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(
+            self.get_org_unit().id() + ':' + TEST_USER_ID)
+
         browser.find('Save').click()
         self.assertTrue(len(dossier.objectValues()),
                         'Expect one item in dossier')
@@ -212,6 +229,115 @@ class TestTaskIntegration(FunctionalTestCase):
         self.assertEquals(intids.getId(document), response.added_object.to_id)
         self.assertEquals('transition-add-document', response.transition)
 
+    @browsing
+    def test_responsible_client_for_multiple_orgunits(self, browser):
+        create(Builder('org_unit')
+               .with_default_groups()
+               .id('client2')
+               .having(title='Client2',
+                       admin_unit=self.admin_unit))
+
+        dossier = create(Builder('dossier'))
+
+        browser.login().visit(dossier)
+        factoriesmenu.add('Task')
+
+        browser.fill({'Title': 'Task title',
+                      'Task Type': 'To comment'})
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(
+            self.get_org_unit().id() + ':' + TEST_USER_ID)
+        browser.find('Save').click()
+
+        task = dossier.objectValues()[0]
+        self.assertEquals(
+            'client1',
+            task.responsible_client,
+            'The client should be stored after submitting the form')
+        self.assertEquals(
+            TEST_USER_ID,
+            task.responsible,
+            'The user should be stored after submitting the form')
+
+    @browsing
+    def test_create_a_task_for_every_selected_person_with_multiple_orgunits(self, browser):
+        client2 = create(Builder('org_unit')
+                         .with_default_groups()
+                         .id('client2')
+                         .having(title='Client2',
+                                 admin_unit=self.admin_unit))
+        user = create(Builder('ogds_user')
+                      .assign_to_org_units([client2])
+                      .having(userid='some.user'))
+
+        dossier = create(Builder('dossier'))
+
+        responsible_users = [
+            self.get_org_unit().id() + ':' + TEST_USER_ID,
+            client2.id() + ':' + user.userid
+        ]
+
+        browser.login().visit(dossier)
+        factoriesmenu.add('Task')
+        browser.fill({'Title': 'Task title',
+                      'Task Type': 'To comment'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(responsible_users)
+
+        browser.find('Save').click()
+
+        tasks = dossier.objectValues()
+        self.assertEquals(2, len(tasks), 'Expect 2 tasks')
+        self.assertEquals(TEST_USER_ID, tasks[0].responsible)
+        self.assertEquals('client1', tasks[0].responsible_client)
+        self.assertEquals(user.userid, tasks[1].responsible)
+        self.assertEquals('client2', tasks[1].responsible_client)
+
+        activities = Activity.query.all()
+        self.assertEquals(2, len(activities))
+        self.assertEquals(u'task-added', activities[0].kind)
+        self.assertEquals(TEST_USER_ID, activities[0].actor_id)
+        self.assertEquals(u'task-added', activities[1].kind)
+        self.assertEquals(TEST_USER_ID, activities[1].actor_id)
+
+    @browsing
+    def test_create_a_task_for_every_selected_person_with_one_orgunit(self, browser):
+        user = create(Builder('ogds_user')
+                      .assign_to_org_units([self.org_unit])
+                      .having(userid='some.user'))
+
+        dossier = create(Builder('dossier'))
+
+        responsible_users = [
+            self.get_org_unit().id() + ':' + TEST_USER_ID,
+            self.get_org_unit().id() + ':' + user.userid
+        ]
+
+        browser.login().visit(dossier)
+        factoriesmenu.add('Task')
+        browser.fill({'Title': 'Task title',
+                      'Task Type': 'To comment'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(responsible_users)
+
+        browser.find('Save').click()
+
+        tasks = dossier.objectValues()
+        self.assertEquals(2, len(tasks), 'Expect 2 tasks')
+        self.assertEquals(TEST_USER_ID, tasks[0].responsible)
+        self.assertEquals('client1', tasks[0].responsible_client)
+        self.assertEquals(user.userid, tasks[1].responsible)
+        self.assertEquals('client1', tasks[1].responsible_client)
+
+        activities = Activity.query.all()
+        self.assertEquals(2, len(activities))
+        self.assertEquals(u'task-added', activities[0].kind)
+        self.assertEquals(TEST_USER_ID, activities[0].actor_id)
+        self.assertEquals(u'task-added', activities[1].kind)
+        self.assertEquals(TEST_USER_ID, activities[1].actor_id)
+
 
 class TestDossierSequenceNumber(FunctionalTestCase):
 
@@ -259,8 +385,11 @@ class TestDeadlineDefaultValue(FunctionalTestCase):
     def test_deadline_is_today_plus_five_days_by_default(self, browser):
         browser.login().open(self.dossier, view='++add++opengever.task.task')
         browser.fill({'Title': 'Test task',
-                      'Responsible': TEST_USER_ID,
                       'Task Type': 'comment'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(
+            self.org_unit.id() + ':' + TEST_USER_ID)
         browser.css('#form-buttons-save').first.click()
 
         expected = date.today() + timedelta(days=5)
@@ -274,8 +403,12 @@ class TestDeadlineDefaultValue(FunctionalTestCase):
 
         browser.login().open(self.dossier, view='++add++opengever.task.task')
         browser.fill({'Title': 'Test task',
-                      'Responsible': TEST_USER_ID,
                       'Task Type': 'comment'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(
+            self.org_unit.id() + ':' + TEST_USER_ID)
+
         browser.css('#form-buttons-save').first.click()
 
         expected = date.today() + timedelta(days=12)

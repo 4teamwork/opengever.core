@@ -77,13 +77,13 @@ class CookieStorage(DictMixin):
         return expiration_date.strftime("%a, %d-%b-%Y %H:%M:%S GMT")
 
 
-def get_ou_selector():
+def get_ou_selector(ignore_anonymous=False):
     site = api.portal.get()
     storage = CookieStorage(getRequest())
     mtool = getToolByName(site, 'portal_membership')
     member = mtool.getAuthenticatedMember()
 
-    if mtool.isAnonymousUser():
+    if mtool.isAnonymousUser() and not ignore_anonymous:
         return AnonymousOrgUnitSelector()
 
     if member.has_role('Manager'):

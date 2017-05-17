@@ -1,12 +1,15 @@
 from Acquisition import aq_inner, aq_parent
 from datetime import datetime
 from five import grok
+from ftw.keywordwidget.widget import KeywordFieldWidget
 from opengever.inbox import _
 from opengever.inbox.activities import ForwardingAddedActivity
-from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
+from opengever.ogds.base.sources import ForwardingResponsibleSourceBinder
 from opengever.ogds.base.utils import get_current_org_unit
+from opengever.ogds.base.utils import get_ou_selector
 from opengever.task import _ as task_mf
 from opengever.task.task import ITask, Task
+from opengever.task.util import update_reponsible_field_data
 from plone.dexterity.browser.edit import DefaultEditForm
 from plone.directives import form
 from plone.directives.dexterity import AddForm
@@ -48,15 +51,15 @@ class IForwarding(ITask):
         title=task_mf(u"label_deadline", default=u"Deadline"),
         description=task_mf(u"help_deadline", default=u""),
         required=False,
-        )
+    )
 
-    form.widget(responsible=AutocompleteFieldWidget)
+    form.widget('responsible', KeywordFieldWidget, async=True)
     responsible = schema.Choice(
         title=_(u"label_responsible", default=u"Responsible"),
         description=_(u"help_responsible", default=""),
-        vocabulary=u'opengever.ogds.base.InboxesVocabulary',
+        source=ForwardingResponsibleSourceBinder(),
         required=True,
-        )
+    )
 
 
 class Forwarding(Task):
@@ -70,7 +73,6 @@ class Forwarding(Task):
         return None
 
     def get_static_task_type(self):
-
         """Provide a marker string, which will be translated
            in the tabbedview helper method.
         """
@@ -105,13 +107,13 @@ class ForwardingAddForm(AddForm):
            objects will later be moved insed the forwarding
         """
         paths = self.request.get('paths', [])
+        search_endpoint = '++widget++form.widgets.responsible/search' in \
+            self.request.get('ACTUAL_URL', '')
 
-        if not (paths or
-                self.request.form.get('form.widgets.relatedItems', [])
-        or '@@autocomplete-search' in self.request.get('ACTUAL_URL', '')):
+        if not (search_endpoint or paths or
+                self.request.form.get('form.widgets.relatedItems', [])):
             # add status message and redirect current window back to inbox
-            # but ONLY if we're not in a z3cform_inline_validation or
-            # autocomplete-search request!
+            # but ONLY if we're not in a z3cform_inline_validation.
             IStatusMessage(self.request).addStatusMessage(
                 _(u'error_no_document_selected',
                   u'Error: Please select at least one document to forward.'),
@@ -130,7 +132,8 @@ class ForwardingAddForm(AddForm):
 
         # put the default responsible into the request
         if not self.request.get('form.widgets.responsible_client', None):
-            org_unit = get_current_org_unit()
+            org_unit = get_ou_selector(
+                ignore_anonymous=True).get_current_unit()
             self.request.set('form.widgets.responsible_client', org_unit.id())
             self.request.set('form.widgets.responsible',
                              [org_unit.inbox().id()])
@@ -142,6 +145,7 @@ class ForwardingAddForm(AddForm):
         _drop_empty_additional_fieldset(self.groups)
 
     def createAndAdd(self, data):
+        update_reponsible_field_data(data)
         forwarding = super(AddForm, self).createAndAdd(data=data)
         ForwardingAddedActivity(
             forwarding, self.request, self.context).record()
@@ -153,6 +157,13 @@ class ForwardingEditForm(DefaultEditForm):
     def updateFieldsFromSchemata(self):
         super(ForwardingEditForm, self).updateFieldsFromSchemata()
         _drop_empty_additional_fieldset(self.groups)
+
+    def applyChanges(self, data):
+        """Records reassign activity when the responsible has changed.
+        Also update the responsible_client and responsible user
+        """
+        update_reponsible_field_data(data)
+        super(ForwardingEditForm, self).applyChanges(data)
 
 
 def _drop_empty_additional_fieldset(groups):

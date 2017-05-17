@@ -47,6 +47,11 @@ msgstr ""
 msgid "label_address"
 msgstr ""
 
+#. Default: "All"
+#: ./opengever/ogds/base/vocabularies.py:459
+msgid "label_all"
+msgstr ""
+
 #. Default: "Department:"
 #: ./opengever/ogds/base/browser/userdetails_templates/userdetails.pt:59
 msgid "label_department"

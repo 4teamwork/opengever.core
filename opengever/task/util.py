@@ -1,5 +1,6 @@
 from collective.elephantvocabulary import wrap_vocabulary
 from five import grok
+from opengever.ogds.base.actor import ActorLookup
 from opengever.task import _
 from opengever.task.activities import TaskTransitionActivity
 from persistent.list import PersistentList
@@ -16,6 +17,7 @@ from zope.schema.vocabulary import SimpleVocabulary
 import AccessControl
 import opengever.task
 import types
+
 
 CUSTOM_INITIAL_VERSION_MESSAGE = 'custom_inital_version_message'
 TASK_TYPE_CATEGORIES = ['unidirectional_by_reference',
@@ -207,3 +209,18 @@ class CustomInitialVersionMessage(object):
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.request[CUSTOM_INITIAL_VERSION_MESSAGE] = None
+
+
+def update_reponsible_field_data(data):
+    """The responsible field always contains the orgunit id and the userid
+    separated by a colon.
+    """
+    if ActorLookup(data['responsible']).is_inbox():
+        client = data['responsible'].split(':', 1)[1]
+        data['responsible_client'] = client
+        data['responsible'] = data['responsible']
+
+    else:
+        client, user = data['responsible'].split(':', 1)
+        data['responsible_client'] = client
+        data['responsible'] = user

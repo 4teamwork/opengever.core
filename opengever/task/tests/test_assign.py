@@ -62,7 +62,12 @@ class TestAssignTask(FunctionalTestCase):
     def assign_task(self, name, userid, response, browser=default_browser):
         data = {'form.widgets.transition': 'task-transition-reassign'}
         browser.login().open(self.task, data, view='assign-task')
-        browser.fill({'Responsible': userid, 'Response': response})
+        browser.fill({'Response': response})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(
+            self.org_unit.id() + ':' + userid)
+
         browser.click_on('Assign')
 
 
@@ -96,8 +101,12 @@ class TestAssignTaskWithSuccessors(FunctionalTestCase):
     def test_syncs_predecessor_when_reassigning_successor(self, browser):
         browser.login().open(self.successor)
         browser.find('task-transition-reassign').click()
-        browser.fill({'Responsible': 'james.bond',
-                      'Response': u'Bitte \xfcbernehmen Sie, Danke!'})
+        browser.fill({'Response': u'Bitte \xfcbernehmen Sie, Danke!'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(
+            self.org_unit.id() + ':james.bond')
+
         browser.find('Assign').click()
 
         browser.open(self.predecessor, view='tabbedview_view-overview')
@@ -112,8 +121,12 @@ class TestAssignTaskWithSuccessors(FunctionalTestCase):
     def test_syncs_successor_when_reassigning_successor(self, browser):
         browser.login().open(self.predecessor)
         browser.find('task-transition-reassign').click()
-        browser.fill({'Responsible': 'james.bond',
-                      'Response': u'Bitte \xfcbernehmen Sie, Danke!'})
+        browser.fill({'Response': u'Bitte \xfcbernehmen Sie, Danke!'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(
+            self.org_unit.id() + ':james.bond')
+
         browser.find('Assign').click()
 
         browser.open(self.successor, view='tabbedview_view-overview')

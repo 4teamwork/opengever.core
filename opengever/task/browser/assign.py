@@ -1,5 +1,6 @@
 from five import grok
-from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
+from ftw.keywordwidget.widget import KeywordWidget
+from opengever.ogds.base.sources import AllUsersAndInboxesSourceBinder
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task import _
 from opengever.task.activities import TaskReassignActivity
@@ -7,6 +8,8 @@ from opengever.task.response_syncer import sync_task_response
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
 from opengever.task.util import getTransitionVocab
+from opengever.task.util import update_reponsible_field_data
+from plone.autoform.widgets import ParameterizedWidget
 from plone.directives import form
 from plone.z3cform import layout
 from Products.statusmessages.interfaces import IStatusMessage
@@ -16,7 +19,6 @@ from z3c.form.form import Form
 from z3c.form.interfaces import HIDDEN_MODE
 from z3c.form.interfaces import INPUT_MODE
 from zope import schema
-from zope.component import getMultiAdapter
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
 
@@ -32,18 +34,10 @@ class IAssignSchema(form.Schema):
         required=True,
         )
 
-    responsible_client = schema.Choice(
-        title=_(u'label_resonsible_client',
-                default=u'Responsible Client'),
-        description=_(u'help_responsible_client',
-                      default=u''),
-        vocabulary='opengever.ogds.base.OrgUnitsVocabularyFactory',
-        required=True)
-
     responsible = schema.Choice(
         title=_(u"label_responsible", default=u"Responsible"),
         description=_(u"help_responsible_single_client_setup", default=""),
-        vocabulary=u'opengever.ogds.base.UsersAndInboxesVocabulary',
+        source=AllUsersAndInboxesSourceBinder(),
         required=True,
         )
 
@@ -53,18 +47,16 @@ class IAssignSchema(form.Schema):
         )
 
 
-@form.default_value(field=IAssignSchema['responsible_client'])
-def responsible_client_default_value(data):
-    return data.context.responsible_client
-
-
 class AssignTaskForm(Form):
     """Form for assigning task.
     """
 
     fields = Fields(IAssignSchema)
-    fields['responsible'].widgetFactory[INPUT_MODE] = \
-        AutocompleteFieldWidget
+    fields['responsible'].widgetFactory[INPUT_MODE] = ParameterizedWidget(
+        KeywordWidget,
+        async=True
+    )
+
     ignoreContext = True
     allow_prefill_from_GET_request = True  # XXX
 
@@ -77,6 +69,8 @@ class AssignTaskForm(Form):
     @buttonAndHandler(_(u'button_assign', default=u'Assign'), name='save')
     def handle_assign(self, action):
         data, errors = self.extractData()
+        update_reponsible_field_data(data)
+
         if not errors:
             if self.context.responsible_client == data['responsible_client'] \
                     and self.context.responsible == data['responsible']:
@@ -128,11 +122,6 @@ class AssignTaskForm(Form):
 
     def updateWidgets(self):
         super(AssignTaskForm, self).updateWidgets()
-
-        # Prefill the responsible_client based on forwarding
-        fwd = self.context
-        self.widgets['responsible_client'].value = [fwd.responsible_client]
-        self.widgets['responsible_client'].mode = HIDDEN_MODE
         self.widgets['transition'].mode = HIDDEN_MODE
 
 
