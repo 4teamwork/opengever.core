@@ -1,36 +1,20 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
 from opengever.testing import FunctionalTestCase
 from plone.dexterity.interfaces import IDexterityFTI
-from plone.dexterity.utils import createContent, addContentToContainer
 from Products.CMFCore.utils import getToolByName
 from zope.component import createObject
 from zope.component import queryUtility
-from zope.event import notify
-from zope.lifecycleevent import ObjectCreatedEvent, ObjectAddedEvent
-import transaction
-
-
-def create_testobject(parent, ptype, **kwargs):
-    createContent(ptype)
-    obj = createContent(ptype, **kwargs)
-    notify(ObjectCreatedEvent(obj))
-    obj = addContentToContainer(parent, obj, checkConstraints=False)
-    notify(ObjectAddedEvent(obj))
-    return obj
 
 
 class TestTaskTemplates(FunctionalTestCase):
 
     def test_adding(self):
-        parent = self.layer['portal']
-
-        t1 = create_testobject(
-            parent,
-            'opengever.tasktemplates.tasktemplate',
-            title='TaskTemplate 1')
-
-        self.failUnless(ITaskTemplate.providedBy(t1))
+        tasktemplate = create(Builder('tasktemplate')
+                              .titled(u'TaskTemplate 1'))
+        self.failUnless(ITaskTemplate.providedBy(tasktemplate))
 
     def test_fti(self):
         fti = queryUtility(
@@ -70,34 +54,35 @@ class TestTaskTemplates(FunctionalTestCase):
             'opengever_tasktemplate_workflow' in workflow.getWorkflowsFor(
                 'opengever.tasktemplates.tasktemplate')[0].getId())
 
-
-class TestTaskTemplatesWithBrowser(FunctionalTestCase):
-
     @browsing
     def test_view(self, browser):
-        portal = self.layer['portal']
-
         self.grant('Manager')
 
         # Folders and templates
-        template_folder_1 = create_testobject(
-            portal,
-            'opengever.tasktemplates.tasktemplatefolder',
-            title='TaskTemplateFolder 1')
+        template_folder = create(Builder('tasktemplatefolder')
+                                 .titled(u'TaskTemplateFolder 1'))
 
-        template1 = create_testobject(
-            template_folder_1,
-            'opengever.tasktemplates.tasktemplate',
-            title='TaskTemplate 1',
-            text='Test Text',
-            preselected=True,
-            task_type='unidirectional_by_value',
-            issuer='responsible',
-            responsible_client='interactive_users',
-            deadline=7,
-            responsible='current_user', )
-        transaction.commit()
+        template = create(Builder('tasktemplate')
+                          .within(template_folder)
+                          .titled(u'TaskTemplate 1')
+                          .having(text=u'Test Text',
+                                  preselected=True,
+                                  task_type='unidirectional_by_value',
+                                  issuer='responsible',
+                                  responsible_client='interactive_users',
+                                  deadline=7,
+                                  responsible='current_user'))
 
-        browser.login().open(template1)
+        browser.login().open(template)
         self.assertEquals(['TaskTemplate 1'],
                           browser.css('.documentFirstHeading').text)
+
+    @browsing
+    def test_tasktemplatefolder_can_be_edited_when_activated(self, browser):
+        templatefolder = create(Builder('tasktemplatefolder')
+                                .titled(u'Task templates')
+                                .in_state('tasktemplatefolder-state-activ'))
+
+        browser.login().visit(templatefolder, view='@@edit')
+        browser.find_button_by_label('Save').click()
+        self.assertEquals(templatefolder.absolute_url(), browser.url)
