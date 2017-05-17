@@ -29,9 +29,17 @@ class PasteClipboardView(BrowserView):
             return self.redirect()
 
         if not self.is_pasting_objects_allowed(objs):
-            msg = _(u"msg_pasting_not_allowed",
+            msg = _(u"msg_pasting_type_not_allowed",
                     default=u"Can't paste items, it's not allowed to add "
                     "objects of this type.")
+            api.portal.show_message(
+                message=msg, request=self.request, type='error')
+            return self.redirect()
+
+        if not self.is_pasting_on_context_allowed():
+            msg = _(u"msg_pasting_not_allowed",
+                    default=u"Can't paste items, the context does not allow "
+                    "pasting items.")
             api.portal.show_message(
                 message=msg, request=self.request, type='error')
             return self.redirect()
@@ -42,6 +50,16 @@ class PasteClipboardView(BrowserView):
                 default=u"Objects from clipboard successfully pasted.")
         api.portal.show_message(message=msg, request=self.request, type='info')
         return self.redirect()
+
+    def is_pasting_on_context_allowed(self):
+        is_pasting_allowed_view = self.context.restrictedTraverse(
+            '@@is_pasting_allowed')
+
+        if not is_pasting_allowed_view:
+            # the is_pasting_allowed_view should always be available, but if
+            # not we probably cannot paste
+            return False
+        return is_pasting_allowed_view()
 
     def is_pasting_objects_allowed(self, objs):
         allowed_content_types = [

@@ -177,3 +177,19 @@ class TestCopyPaste(FunctionalTestCase):
             ["Can't paste items, it's not allowed to add objects of this type."],
             error_messages())
         self.assertEqual(branch_node.absolute_url(), browser.url)
+
+    @browsing
+    def test_copy_document_from_repository_into_private_folder_fails(self, browser):  # noqa
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document').within(dossier))
+        private_dossier = create(Builder('private_dossier'))
+
+        browser.login().open(
+            dossier, view="copy_items",
+            data={'paths:list': ['/'.join(document.getPhysicalPath())]})
+        browser.css('#contentActionMenus a#paste').first.click()
+
+        browser.open(private_dossier, view='paste_clipboard')
+        self.assertEqual(
+            ["Can't paste items, the context does not allow pasting items."],
+            error_messages())

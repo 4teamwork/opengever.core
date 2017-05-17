@@ -5,6 +5,7 @@ Changelog
 2017.2.2 (unreleased)
 ---------------------
 
+- Make sure that pasting is allowed before pasting. [deiferni]
 - Remove an unused creator behaviour from the codebase. [Rotonen]
 - Keep *.msg file after conversion and store message source for mails. [deiferni]
 - Fix addable types constrain for repository folders in API calls [buchi]
