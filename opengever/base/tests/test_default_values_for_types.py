@@ -165,6 +165,7 @@ MAIL_MISSING_VALUES = {
     'preview': None,
     'thumbnail': None,
     'original_message': None,
+    'message_source': None,
 }
 
 

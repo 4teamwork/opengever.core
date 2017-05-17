@@ -44,6 +44,8 @@ from zope.lifecycleevent import Attributes
 from zope.lifecycleevent.interfaces import IObjectCopiedEvent
 from zope.lifecycleevent.interfaces import IObjectCreatedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
+from zope.schema.vocabulary import SimpleTerm
+from zope.schema.vocabulary import SimpleVocabulary
 import os
 import re
 
@@ -52,6 +54,10 @@ if HAVE_BLOBS:
     from plone.namedfile import NamedBlobFile as NamedFile
 else:
     from plone.namedfile import NamedFile
+
+
+MESSAGE_SOURCE_DRAG_DROP_UPLOAD = 'upload'
+MESSAGE_SOURCE_MAILIN = 'mailin'
 
 
 IMail.setTaggedValue(FIELDSETS_KEY, [
@@ -65,6 +71,18 @@ class IOGMailMarker(Interface):
     """Marker Interface for opengever mails."""
 
 
+def get_message_source_vocabulary():
+    terms = [
+        SimpleTerm(MESSAGE_SOURCE_MAILIN,
+                   title=_('label_message_source_mailin',
+                           default='Mail-in')),
+        SimpleTerm(MESSAGE_SOURCE_DRAG_DROP_UPLOAD,
+                   title=_('label_message_source_d_n_d_upload',
+                           default='Drag and drop upload')),
+    ]
+    return SimpleVocabulary(terms)
+
+
 class IOGMail(form.Schema):
     """Opengever specific behavior,
     which add a title Field to the form.
@@ -73,7 +91,7 @@ class IOGMail(form.Schema):
     form.fieldset(
         u'common',
         label=base_mf(u'fieldset_common', u'Common'),
-        fields=[u'title', 'original_message'])
+        fields=[u'title', 'original_message', 'message_source'])
 
     form.order_before(title='message')
     dexteritytextindexer.searchable('title')
@@ -91,6 +109,15 @@ class IOGMail(form.Schema):
         required=False,
     )
 
+    form.mode(message_source=DISPLAY_MODE)
+    form.read_permission(message_source='cmf.ManagePortal')
+    form.write_permission(message_source='cmf.ManagePortal')
+    message_source = schema.Choice(
+        title=_('label_message_source',
+                default='Message source'),
+        source=get_message_source_vocabulary(),
+        required=False,
+    )
 
 alsoProvides(IOGMail, IFormFieldProvider)
 
@@ -326,6 +353,8 @@ class OGMailBase(metadata.MetadataBase):
 
     original_message = metadata.DCFieldProperty(IOGMail[
         'original_message'])
+    message_source = metadata.DCFieldProperty(IOGMail[
+        'message_source'])
 
 
 @grok.subscribe(IOGMailMarker, IObjectCreatedEvent)
