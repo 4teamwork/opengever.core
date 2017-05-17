@@ -259,7 +259,7 @@ class DossierContainer(Container):
             'review_state': [
                 'dossier-state-active',
                 'dossier-state-resolved', ],
-            })
+        })
 
         end_dates = []
         # main dossier
@@ -370,24 +370,23 @@ class DefaultConstrainTypeDecider(grok.MultiAdapter):
     grok.adapts(Interface, IDossierMarker, IDexterityFTI)
     grok.name('')
 
-    CONSTRAIN_CONFIGURATION = {
-        'opengever.dossier.businesscasedossier': {
-            'opengever.dossier.businesscasedossier': 2,
-            'opengever.dossier.projectdossier': 1,
-            },
-        'opengever.private.dossier': {
-            'opengever.private.dossier': 2
-        },
-        'opengever.dossier.projectdossier': {
-            'opengever.dossier.projectdossier': 1,
-            'opengever.dossier.businesscasedossier': 1,
-            },
-        }
-
     def __init__(self, request, context, fti):
         self.context = context
         self.request = request
         self.fti = fti
+
+        max_dossier_depth = api.portal.get_registry_record(
+            'maximum_dossier_depth',
+            interface=IDossierContainerTypes) + 1
+
+        self.constrain_configuration = {
+            'opengever.dossier.businesscasedossier': {
+                'opengever.dossier.businesscasedossier': max_dossier_depth,
+            },
+            'opengever.private.dossier': {
+                'opengever.private.dossier': max_dossier_depth
+            },
+        }
 
     def addable(self, depth):
         container_type = self.context.portal_type
@@ -411,7 +410,7 @@ class DefaultConstrainTypeDecider(grok.MultiAdapter):
 
     @property
     def constrain_type_mapping(self):
-        conf = self.CONSTRAIN_CONFIGURATION
+        conf = self.constrain_configuration
         for container_type, type_constr in conf.items():
             for factory_type, max_depth in type_constr.items():
                 yield container_type, max_depth, factory_type

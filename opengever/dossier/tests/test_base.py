@@ -4,8 +4,11 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testing import freeze
 from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.testing import FunctionalTestCase
 from plone import api
+from plone.registry.interfaces import IRegistry
+from zope.component import getUtility
 
 
 class TestDossierContainer(FunctionalTestCase):
@@ -76,6 +79,19 @@ class TestDossierContainer(FunctionalTestCase):
 
         self.assertNotIn('opengever.dossier.businesscasedossier',
                          [fti.id for fti in subdossier.allowedContentTypes()])
+
+    def test_get_subdossier_depth_from_registry(self):
+        registry = getUtility(IRegistry)
+        proxy = registry.forInterface(IDossierContainerTypes)
+        proxy.maximum_dossier_depth = 2
+
+        dossier = create(Builder('dossier'))
+        subdossier = create(Builder('dossier').within(dossier))
+        subsubdossier = create(Builder('dossier').within(subdossier))
+
+        self.assertNotIn(
+            'opengever.dossier.businesscasedossier',
+            [fti.id for fti in subsubdossier.allowedContentTypes()])
 
     def test_get_subdossiers_returns_subsubdossiers_as_well(self):
         dossier = create(Builder('dossier'))
