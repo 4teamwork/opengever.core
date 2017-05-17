@@ -15,7 +15,8 @@ from opengever.base.model import create_session
 from opengever.document.base import BaseDocumentMixin
 from opengever.document.behaviors import metadata as ogmetadata
 from opengever.document.behaviors.related_docs import IRelatedDocuments
-from opengever.dossier import _
+from opengever.dossier import _ as dossier_mf
+from opengever.mail import _
 from opengever.mail.events import AttachmentsDeleted
 from opengever.mail.interfaces import IAttachmentsDeletedEvent
 from opengever.ogds.models.user import User
@@ -24,6 +25,7 @@ from plone.autoform.interfaces import IFormFieldProvider
 from plone.directives import dexterity
 from plone.directives import form
 from plone.i18n.normalizer.interfaces import IIDNormalizer
+from plone.namedfile import field
 from plone.namedfile.interfaces import HAVE_BLOBS
 from plone.supermodel.interfaces import FIELDSETS_KEY
 from plone.supermodel.model import Fieldset
@@ -42,7 +44,8 @@ from zope.lifecycleevent import Attributes
 from zope.lifecycleevent.interfaces import IObjectCopiedEvent
 from zope.lifecycleevent.interfaces import IObjectCreatedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
-
+from zope.schema.vocabulary import SimpleTerm
+from zope.schema.vocabulary import SimpleVocabulary
 import os
 import re
 
@@ -51,6 +54,10 @@ if HAVE_BLOBS:
     from plone.namedfile import NamedBlobFile as NamedFile
 else:
     from plone.namedfile import NamedFile
+
+
+MESSAGE_SOURCE_DRAG_DROP_UPLOAD = 'upload'
+MESSAGE_SOURCE_MAILIN = 'mailin'
 
 
 IMail.setTaggedValue(FIELDSETS_KEY, [
@@ -64,6 +71,18 @@ class IOGMailMarker(Interface):
     """Marker Interface for opengever mails."""
 
 
+def get_message_source_vocabulary():
+    terms = [
+        SimpleTerm(MESSAGE_SOURCE_MAILIN,
+                   title=_('label_message_source_mailin',
+                           default='Mail-in')),
+        SimpleTerm(MESSAGE_SOURCE_DRAG_DROP_UPLOAD,
+                   title=_('label_message_source_d_n_d_upload',
+                           default='Drag and drop upload')),
+    ]
+    return SimpleVocabulary(terms)
+
+
 class IOGMail(form.Schema):
     """Opengever specific behavior,
     which add a title Field to the form.
@@ -72,15 +91,33 @@ class IOGMail(form.Schema):
     form.fieldset(
         u'common',
         label=base_mf(u'fieldset_common', u'Common'),
-        fields=[u'title'])
+        fields=[u'title', 'original_message', 'message_source'])
 
     form.order_before(title='message')
     dexteritytextindexer.searchable('title')
     title = schema.TextLine(
-        title=_(u'label_title', default=u'Title'),
+        title=dossier_mf(u'label_title', default=u'Title'),
         required=False,
     )
 
+    form.mode(original_message=DISPLAY_MODE)
+    form.read_permission(original_message='cmf.ManagePortal')
+    form.write_permission(original_message='cmf.ManagePortal')
+    original_message = field.NamedBlobFile(
+        title=_(u'label_original_message',
+                default=u'Raw *.msg message before conversion'),
+        required=False,
+    )
+
+    form.mode(message_source=DISPLAY_MODE)
+    form.read_permission(message_source='cmf.ManagePortal')
+    form.write_permission(message_source='cmf.ManagePortal')
+    message_source = schema.Choice(
+        title=_('label_message_source',
+                default='Message source'),
+        source=get_message_source_vocabulary(),
+        required=False,
+    )
 
 alsoProvides(IOGMail, IFormFieldProvider)
 
@@ -313,6 +350,11 @@ class OGMailBase(metadata.MetadataBase):
         self.context.title = value
 
     title = property(_get_title, _set_title)
+
+    original_message = metadata.DCFieldProperty(IOGMail[
+        'original_message'])
+    message_source = metadata.DCFieldProperty(IOGMail[
+        'message_source'])
 
 
 @grok.subscribe(IOGMailMarker, IObjectCreatedEvent)

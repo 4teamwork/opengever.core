@@ -64,7 +64,10 @@ class CreateEmailCommand(CreateDocumentCommand):
         self.transform = transform or Msg2MimeTransform()
 
         if self.is_msg_upload(filename):
-                filename, data = self.convert_to_mime(filename, data)
+            kwargs['original_message'] = NamedBlobFile(
+                data=data, filename=safe_unicode(filename),
+                contentType=content_type)
+            filename, data = self.convert_to_mime(filename, data)
 
         super(CreateEmailCommand, self).__init__(
             context, filename, data, title, content_type, **kwargs)

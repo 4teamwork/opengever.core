@@ -8,6 +8,7 @@ from five import grok
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.command import CreateEmailCommand
+from opengever.mail.mail import MESSAGE_SOURCE_DRAG_DROP_UPLOAD
 from opengever.quota.exceptions import ForbiddenByQuota
 from plone.protect import createToken
 from plone.protect.interfaces import IDisableCSRFProtection
@@ -81,7 +82,8 @@ class OGQuickUploadCapableFileFactory(grok.Adapter):
 
         if self.is_email_upload(filename):
             command = CreateEmailCommand(
-                self.context, filename, data, description=description)
+                self.context, filename, data, description=description,
+                message_source=MESSAGE_SOURCE_DRAG_DROP_UPLOAD)
         else:
             command = CreateDocumentCommand(
                 self.context, filename, data, description=description)

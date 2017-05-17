@@ -3,6 +3,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.mail import inbound
 from ftw.mail.interfaces import IEmailAddress
+from opengever.mail.mail import MESSAGE_SOURCE_MAILIN
 from opengever.testing import FunctionalTestCase
 from plone import api
 
@@ -41,3 +42,4 @@ class TestMailInbound(FunctionalTestCase):
         obj = inbound.createMailInContainer(dossier, message)
         self.assertTrue(obj.preserved_as_paper)
         self.assertEqual(message, obj.message.data)
+        self.assertEqual(MESSAGE_SOURCE_MAILIN, obj.message_source)

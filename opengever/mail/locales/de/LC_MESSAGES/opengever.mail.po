@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-05-16 08:24+0000\n"
+"POT-Creation-Date: 2017-05-17 09:46+0000\n"
 "PO-Revision-Date: 2016-07-22 16:52+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-mail/de/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: ./opengever/mail/browser/send_document.py:54
+#: ./opengever/mail/browser/send_document.py:56
 msgid "No Mail Address"
 msgstr "Keine E-Mail Adresse"
 
@@ -28,7 +28,7 @@ msgstr "Keine E-Mail Adresse"
 msgid "Save attachments"
 msgstr "Anhänge speichern"
 
-#: ./opengever/mail/browser/send_document.py:336
+#: ./opengever/mail/browser/send_document.py:338
 msgid "Sent mail filed as '${title}'."
 msgstr "Versandtes E-Mail wurde als '${title}' abgelegt."
 
@@ -36,17 +36,17 @@ msgstr "Versandtes E-Mail wurde als '${title}' abgelegt."
 msgid "The files you selected are larger than the maximum size"
 msgstr "Die Grösse der ausgewählten Dateien überschreitet die erlaubte Maximalgrösse."
 
-#: ./opengever/mail/browser/send_document.py:128
+#: ./opengever/mail/browser/send_document.py:130
 msgid "You have to select a intern                             or enter a extern mail-addres"
 msgstr "Wählen Sie mindestens eine interne oder eine externe E-Mail Adresse."
 
 #. Default: "Send"
-#: ./opengever/mail/browser/send_document.py:195
+#: ./opengever/mail/browser/send_document.py:197
 msgid "button_send"
 msgstr "Senden"
 
 #. Default: "Cancel"
-#: ./opengever/mail/browser/send_document.py:253
+#: ./opengever/mail/browser/send_document.py:255
 msgid "cancel_back"
 msgstr "Abbrechen"
 
@@ -76,17 +76,17 @@ msgid "error_no_attachments_to_extract"
 msgstr "Diese E-Mail hat keine Anhänge, die extrahiert werden könnten."
 
 #. Default: "Extern receiver"
-#: ./opengever/mail/browser/send_document.py:74
+#: ./opengever/mail/browser/send_document.py:76
 msgid "extern_receiver"
 msgstr "Externer Empfänger"
 
 #. Default: "(only possible for open dossiers)"
-#: ./opengever/mail/browser/send_document.py:185
+#: ./opengever/mail/browser/send_document.py:187
 msgid "file_copy_widget_disabled_hint_text"
 msgstr "(nur für aktive Dossiers möglich)"
 
 #. Default: "Send as email"
-#: ./opengever/mail/browser/send_document.py:160
+#: ./opengever/mail/browser/send_document.py:162
 msgid "heading_send_as_email"
 msgstr "Dokumente als E-Mail versenden"
 
@@ -101,12 +101,12 @@ msgid "help_delete_action"
 msgstr "Wählen Sie aus, ob und welche Anhänge aus dieser E-Mail gelöscht werden sollen."
 
 #. Default: "email addresses of the receivers. Enter manually the addresses, one per each line."
-#: ./opengever/mail/browser/send_document.py:75
+#: ./opengever/mail/browser/send_document.py:77
 msgid "help_extern_receiver"
 msgstr "E-Mail Adressen der externen Empfänger manuell eintragen. Pro Zeile eine Adresse eingeben."
 
 #. Default: "Live Search: search for users and contacts"
-#: ./opengever/mail/browser/send_document.py:62
+#: ./opengever/mail/browser/send_document.py:64
 msgid "help_intern_receiver"
 msgstr "Live Search: Nachname/Vorname der internen Mitarbeiter oder Kontakte eingeben. Mehrauswahl möglich."
 
@@ -116,12 +116,12 @@ msgid "info_extracted_document"
 msgstr "Dokument wurde erstellt: ${title}"
 
 #. Default: "E-mail has been sent."
-#: ./opengever/mail/browser/send_document.py:243
+#: ./opengever/mail/browser/send_document.py:245
 msgid "info_mail_sent"
 msgstr "E-Mail wurde versendet."
 
 #. Default: "Intern receiver"
-#: ./opengever/mail/browser/send_document.py:61
+#: ./opengever/mail/browser/send_document.py:63
 msgid "intern_receiver"
 msgstr "Interne Empfänger"
 
@@ -151,19 +151,19 @@ msgid "label_delete_action_selected"
 msgstr "Alle oben ausgewählten Anhänge aus dieser E-Mail löschen"
 
 #. Default: "Attachments"
-#: ./opengever/mail/browser/mail.py:95
-#: ./opengever/mail/browser/send_document.py:93
+#: ./opengever/mail/browser/mail.py:96
+#: ./opengever/mail/browser/send_document.py:95
 #: ./opengever/mail/browser/templates/previewtab.pt:48
 msgid "label_documents"
 msgstr "Anhänge"
 
 #. Default: "Send documents only als links"
-#: ./opengever/mail/browser/send_document.py:112
+#: ./opengever/mail/browser/send_document.py:114
 msgid "label_documents_as_link"
 msgstr "Dokumente nur als Link versenden"
 
 #. Default: "File a copy of the sent mail in dossier"
-#: ./opengever/mail/browser/send_document.py:118
+#: ./opengever/mail/browser/send_document.py:120
 msgid "label_file_copy_in_dossier"
 msgstr "Kopie des versandten Mails in Dossier ablegen"
 
@@ -173,35 +173,50 @@ msgid "label_journal_initialized"
 msgstr "Dokument migriert"
 
 #. Default: "Message"
-#: ./opengever/mail/browser/send_document.py:88
+#: ./opengever/mail/browser/send_document.py:90
 msgid "label_message"
 msgstr "Mitteilung"
 
+#. Default: "Message source"
+#: ./opengever/mail/mail.py:116
+msgid "label_message_source"
+msgstr "Quelle Originalnachricht"
+
+#. Default: "Drag and drop upload"
+#: ./opengever/mail/mail.py:80
+msgid "label_message_source_d_n_d_upload"
+msgstr "Drag & Drop Upload"
+
+#. Default: "Mail-in"
+#: ./opengever/mail/mail.py:77
+msgid "label_message_source_mailin"
+msgstr "Mail-In"
+
 #. Default: "Original message"
-#: ./opengever/mail/browser/mail.py:92
+#: ./opengever/mail/browser/mail.py:93
 msgid "label_org_message"
 msgstr "Originalnachricht"
 
+#. Default: "Raw *.msg message before conversion"
+#: ./opengever/mail/mail.py:107
+msgid "label_original_message"
+msgstr "Quelldatei im *.msg Format vor der Konvertierung"
+
 #. Default: "see attachment"
-#: ./opengever/mail/browser/send_document.py:301
+#: ./opengever/mail/browser/send_document.py:303
 msgid "label_see_attachment"
 msgstr "siehe Anhänge"
 
 #. Default: "Subject"
-#: ./opengever/mail/browser/send_document.py:83
+#: ./opengever/mail/browser/send_document.py:85
 msgid "label_subject"
 msgstr "Betreff"
 
-#. Default: "Title"
-#: ./opengever/mail/mail.py:80
-msgid "label_title"
-msgstr "Titel"
-
-#: ./opengever/mail/browser/send_document.py:66
+#: ./opengever/mail/browser/send_document.py:68
 msgid "mails"
 msgstr "E-Mails"
 
-#: ./opengever/mail/browser/send_document.py:78
+#: ./opengever/mail/browser/send_document.py:80
 msgid "receiver"
 msgstr "Empfänger"
 

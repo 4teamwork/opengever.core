@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-05-16 08:24+0000\n"
+"POT-Creation-Date: 2017-05-17 09:46+0000\n"
 "PO-Revision-Date: 2016-08-10 05:15+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-mail/fr/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 msgid "Cancel"
 msgstr "Annuler"
 
-#: ./opengever/mail/browser/send_document.py:54
+#: ./opengever/mail/browser/send_document.py:56
 msgid "No Mail Address"
 msgstr "Pas d'adresse Email"
 
@@ -28,7 +28,7 @@ msgstr "Pas d'adresse Email"
 msgid "Save attachments"
 msgstr "Extraire documents"
 
-#: ./opengever/mail/browser/send_document.py:336
+#: ./opengever/mail/browser/send_document.py:338
 msgid "Sent mail filed as '${title}'."
 msgstr "Email envoyé classé sous '${title}'."
 
@@ -36,17 +36,17 @@ msgstr "Email envoyé classé sous '${title}'."
 msgid "The files you selected are larger than the maximum size"
 msgstr "La taille des fichiers séléctionnés dépasse la taille maximum permise."
 
-#: ./opengever/mail/browser/send_document.py:128
+#: ./opengever/mail/browser/send_document.py:130
 msgid "You have to select a intern                             or enter a extern mail-addres"
 msgstr "Sélectionner au minimum une adresse Email interne ou externe."
 
 #. Default: "Send"
-#: ./opengever/mail/browser/send_document.py:195
+#: ./opengever/mail/browser/send_document.py:197
 msgid "button_send"
 msgstr "Envoyer"
 
 #. Default: "Cancel"
-#: ./opengever/mail/browser/send_document.py:253
+#: ./opengever/mail/browser/send_document.py:255
 msgid "cancel_back"
 msgstr "Annuler"
 
@@ -76,17 +76,17 @@ msgid "error_no_attachments_to_extract"
 msgstr "Cet Email n'a pas d'annexe à extraire."
 
 #. Default: "Extern receiver"
-#: ./opengever/mail/browser/send_document.py:74
+#: ./opengever/mail/browser/send_document.py:76
 msgid "extern_receiver"
 msgstr "Destinataire externe"
 
 #. Default: "(only possible for open dossiers)"
-#: ./opengever/mail/browser/send_document.py:185
+#: ./opengever/mail/browser/send_document.py:187
 msgid "file_copy_widget_disabled_hint_text"
 msgstr "(possible uniquement pour les dossiers ouverts)"
 
 #. Default: "Send as email"
-#: ./opengever/mail/browser/send_document.py:160
+#: ./opengever/mail/browser/send_document.py:162
 msgid "heading_send_as_email"
 msgstr "Envoyer les documents comme Email"
 
@@ -101,12 +101,12 @@ msgid "help_delete_action"
 msgstr "Sélectionnez les annexes à effacer."
 
 #. Default: "email addresses of the receivers. Enter manually the addresses, one per each line."
-#: ./opengever/mail/browser/send_document.py:75
+#: ./opengever/mail/browser/send_document.py:77
 msgid "help_extern_receiver"
 msgstr "Ajouter les adresses email des destinataires externes. Une adresse par ligne."
 
 #. Default: "Live Search: search for users and contacts"
-#: ./opengever/mail/browser/send_document.py:62
+#: ./opengever/mail/browser/send_document.py:64
 msgid "help_intern_receiver"
 msgstr "Recherche en direct: Saisir nom et prénom des collaborateurs internes ou des contacts. Séléction multiple possible."
 
@@ -116,12 +116,12 @@ msgid "info_extracted_document"
 msgstr "Document créé: ${title}"
 
 #. Default: "E-mail has been sent."
-#: ./opengever/mail/browser/send_document.py:243
+#: ./opengever/mail/browser/send_document.py:245
 msgid "info_mail_sent"
 msgstr "Email envoyé."
 
 #. Default: "Intern receiver"
-#: ./opengever/mail/browser/send_document.py:61
+#: ./opengever/mail/browser/send_document.py:63
 msgid "intern_receiver"
 msgstr "Destinataires internes"
 
@@ -151,20 +151,20 @@ msgid "label_delete_action_selected"
 msgstr "Effacer tous les fichiers attachés séléctionnés"
 
 #. Default: "Attachments"
-#: ./opengever/mail/browser/mail.py:95
-#: ./opengever/mail/browser/send_document.py:93
+#: ./opengever/mail/browser/mail.py:96
+#: ./opengever/mail/browser/send_document.py:95
 #: ./opengever/mail/browser/templates/previewtab.pt:48
 #, fuzzy
 msgid "label_documents"
 msgstr "Fichiers attachés"
 
 #. Default: "Send documents only als links"
-#: ./opengever/mail/browser/send_document.py:112
+#: ./opengever/mail/browser/send_document.py:114
 msgid "label_documents_as_link"
 msgstr "Envoyer seulement le lien du document"
 
 #. Default: "File a copy of the sent mail in dossier"
-#: ./opengever/mail/browser/send_document.py:118
+#: ./opengever/mail/browser/send_document.py:120
 msgid "label_file_copy_in_dossier"
 msgstr "Classer une copie de l'email envoyé dans le dossier"
 
@@ -174,35 +174,50 @@ msgid "label_journal_initialized"
 msgstr "Document migré"
 
 #. Default: "Message"
-#: ./opengever/mail/browser/send_document.py:88
+#: ./opengever/mail/browser/send_document.py:90
 msgid "label_message"
 msgstr "Message"
 
+#. Default: "Message source"
+#: ./opengever/mail/mail.py:116
+msgid "label_message_source"
+msgstr ""
+
+#. Default: "Drag and drop upload"
+#: ./opengever/mail/mail.py:80
+msgid "label_message_source_d_n_d_upload"
+msgstr ""
+
+#. Default: "Mail-in"
+#: ./opengever/mail/mail.py:77
+msgid "label_message_source_mailin"
+msgstr ""
+
 #. Default: "Original message"
-#: ./opengever/mail/browser/mail.py:92
+#: ./opengever/mail/browser/mail.py:93
 msgid "label_org_message"
 msgstr "Message original"
 
+#. Default: "Raw *.msg message before conversion"
+#: ./opengever/mail/mail.py:107
+msgid "label_original_message"
+msgstr ""
+
 #. Default: "see attachment"
-#: ./opengever/mail/browser/send_document.py:301
+#: ./opengever/mail/browser/send_document.py:303
 msgid "label_see_attachment"
 msgstr "Voir  fichiers attachés"
 
 #. Default: "Subject"
-#: ./opengever/mail/browser/send_document.py:83
+#: ./opengever/mail/browser/send_document.py:85
 msgid "label_subject"
 msgstr "Objet"
 
-#. Default: "Title"
-#: ./opengever/mail/mail.py:80
-msgid "label_title"
-msgstr "Titre"
-
-#: ./opengever/mail/browser/send_document.py:66
+#: ./opengever/mail/browser/send_document.py:68
 msgid "mails"
 msgstr "Email"
 
-#: ./opengever/mail/browser/send_document.py:78
+#: ./opengever/mail/browser/send_document.py:80
 msgid "receiver"
 msgstr "Destinataire"
 

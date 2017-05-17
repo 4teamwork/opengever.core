@@ -1,5 +1,6 @@
 from ftw.mail.create import CreateMailInContainer
 from opengever.base.command import CreateEmailCommand
+from opengever.mail.mail import MESSAGE_SOURCE_MAILIN
 
 
 class OGCreateMailInContainer(CreateMailInContainer):
@@ -15,5 +16,6 @@ class OGCreateMailInContainer(CreateMailInContainer):
         self.check_permission()
         self.check_addable_types()
 
-        command = CreateEmailCommand(self.context, 'message.eml', message)
+        command = CreateEmailCommand(self.context, 'message.eml', message,
+                                     message_source=MESSAGE_SOURCE_MAILIN)
         return command.execute()

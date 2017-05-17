@@ -6,6 +6,7 @@ from ftw.testbrowser import browser
 from opengever.document.interfaces import IDocumentSettings
 from opengever.mail.mail import extract_email
 from opengever.mail.mail import get_author_by_email
+from opengever.mail.mail import MESSAGE_SOURCE_DRAG_DROP_UPLOAD
 from opengever.mail.tests import MAIL_DATA
 from opengever.mail.tests.utils import get_header_date
 from opengever.testing import FunctionalTestCase
@@ -124,6 +125,11 @@ class TestMailMetadataWithQuickupload(TestMailMetadataWithBuilder):
                       .within(dossier)
                       .with_message(MAIL_DATA))
         return mail
+
+    def test_mail_message_source(self):
+        mail = self.create_mail()
+
+        self.assertEqual(MESSAGE_SOURCE_DRAG_DROP_UPLOAD, mail.message_source)
 
 
 class TestMailMetadataWithAddView(TestMailMetadataWithBuilder):

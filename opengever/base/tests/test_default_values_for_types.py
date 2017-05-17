@@ -30,6 +30,9 @@ OMITTED_FORM_FIELDS = [
     'thumbnail', 'former_reference_number', 'reference_number',
     'temporary_former_reference_number'
 ]
+DISPLAY_MODE_FORM_FIELDS = [
+    'message_source', 'original_message',
+]
 
 REPOROOT_REQUIREDS = {
     'title_de': DEFAULT_TITLE,
@@ -163,7 +166,9 @@ MAIL_MISSING_VALUES = {
     'document_type': None,
     'foreign_reference': None,
     'preview': None,
-    'thumbnail': None
+    'thumbnail': None,
+    'original_message': None,
+    'message_source': None,
 }
 
 
@@ -262,6 +267,9 @@ class TestDefaultsBase(FunctionalTestCase):
         defaults.update(self.requireds)
 
         for key in OMITTED_FORM_FIELDS:
+            defaults.pop(key, None)
+
+        for key in DISPLAY_MODE_FORM_FIELDS:
             defaults.pop(key, None)
 
         return defaults

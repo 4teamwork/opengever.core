@@ -225,6 +225,11 @@ class MailBuilder(DexterityBuilder):
         self.arguments["message"] = file_
         return self
 
+    def with_dummy_original_message(self):
+        file_ = NamedBlobFile(data='dummy', filename=u'dummy.msg')
+        self.arguments["original_message"] = file_
+        return self
+
     def with_asset_message(self, filename):
         self.with_message(assets.load(filename), unicode(filename))
         return self
