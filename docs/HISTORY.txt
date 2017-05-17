@@ -9,6 +9,7 @@ Changelog
 - Remove an unused creator behaviour from the codebase. [Rotonen]
 - Keep *.msg file after conversion and store message source for mails. [deiferni]
 - Fix string type in bundle loader [buchi]
+- Fix translation for the Open as PDF action. [phgross]
 - Fix addable types constrain for repository folders in API calls [buchi]
 - Cache addable types constrains for repository folders per request [buchi]
 - Fix typo in dossier SearchableTextExtender, which results in a empty SearchableText if IFilingNumber behavior was activated. [mathias.leimgruber]

@@ -1,21 +1,20 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-04-27 11:21+0000\n"
+"POT-Creation-Date: 2017-05-17 11:42+0000\n"
 "PO-Revision-Date: 2017-05-01 15:48+0000\n"
 "Last-Translator: Lukas Graf <lukas.graf@4teamwork.ch>\n"
-"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
-"gever/opengever-document/fr/>\n"
-"Language: fr\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-document/fr/>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2.7-dev\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
+"Language: fr\n"
+"X-Generator: Weblate 2.7-dev\n"
 
 #: ./opengever/document/profiles/default/actions.xml
 #: ./opengever/document/upgrades/20170322142153_add_office_connector_multi_attach_action_to_documents/actions.xml
@@ -44,13 +43,13 @@ msgstr "Checkin du document:  ${title}"
 msgid "Checked out: ${title}"
 msgstr "Checkout du document:  ${title}"
 
-#: ./opengever/document/browser/templates/macros.pt:65
+#: ./opengever/document/browser/templates/macros.pt:66
 #: ./opengever/document/profiles/default/actions.xml
 #: ./opengever/document/upgrades/profiles/4000/actions.xml
 msgid "Checkin with comment"
 msgstr "Checkin avec commentaire"
 
-#: ./opengever/document/browser/templates/macros.pt:62
+#: ./opengever/document/browser/templates/macros.pt:63
 #: ./opengever/document/profiles/default/actions.xml
 #: ./opengever/document/upgrades/profiles/4000/actions.xml
 msgid "Checkin without comment"
@@ -89,7 +88,7 @@ msgstr ""
 msgid "Create Task"
 msgstr "Créer une tâche"
 
-#: ./opengever/document/browser/overview.py:208
+#: ./opengever/document/browser/overview.py:209
 msgid "Current version: ${version}"
 msgstr "Version actuelle: ${version}"
 
@@ -115,10 +114,6 @@ msgstr "Quitter GEVER"
 msgid "Reverted file to version ${version_id}."
 msgstr "Retour à la version ${version_id} du document."
 
-#: ./opengever/document/forms.py:65
-msgid "Save"
-msgstr "Sauvegarder"
-
 #: ./opengever/document/profiles/default/actions.xml
 msgid "Send as email"
 msgstr "Envoyer par E-Mail"
@@ -128,15 +123,15 @@ msgstr "Envoyer par E-Mail"
 msgid "Submit additional documents"
 msgstr "Soumettre des documents additionnels"
 
-#: ./opengever/document/browser/overview.py:204
+#: ./opengever/document/browser/overview.py:205
 msgid "Submitted version: ${version}"
 msgstr "Version soumise: ${version}"
 
-#: ./opengever/document/browser/overview.py:173
+#: ./opengever/document/browser/overview.py:174
 msgid "Submitted with"
 msgstr "Soumis par"
 
-#: ./opengever/document/browser/download.py:39
+#: ./opengever/document/browser/download.py:40
 #: ./opengever/document/browser/edit.py:81
 msgid "The Document ${title} has no File."
 msgstr "Le dodument  ${title} ne contient pas de fichier."
@@ -195,7 +190,7 @@ msgid "error_file_and_preserved_as_paper"
 msgstr "Vous n'avez pas sélectionné un fichier ni conservé un document en version papier. Merci de corriger cela."
 
 #. Default: "It's not possible to add E-mails here, please '                    'send it to ${mailaddress} or drag it to the dossier '                    ' (Dragn'n'Drop)."
-#: ./opengever/document/document.py:97
+#: ./opengever/document/document.py:98
 msgid "error_mail_upload"
 msgstr "Il n'est pas possible d'insérer des Email à cet endroit. Pour le faire, utilisez l'adresse E-Mail ${mailaddress}  ou glissez-le dans le dossier (Drag'n'Drop)."
 
@@ -205,7 +200,7 @@ msgid "error_no_items"
 msgstr "Aucun élément sélectionné."
 
 #. Default: "Either the title or the file is required."
-#: ./opengever/document/document.py:74
+#: ./opengever/document/document.py:75
 msgid "error_title_or_file_required"
 msgstr "Un titre ou un fichier est requis."
 
@@ -217,7 +212,7 @@ msgstr ""
 #. Default: "Common"
 #: ./opengever/document/behaviors/metadata.py:41
 #: ./opengever/document/behaviors/related_docs.py:39
-#: ./opengever/document/document.py:50
+#: ./opengever/document/document.py:51
 msgid "fieldset_common"
 msgstr "En général"
 
@@ -263,7 +258,7 @@ msgstr "Date, à laquelle le document a été envoyé par écrit"
 msgid "help_document_date"
 msgstr "Date de création du document"
 
-#: ./opengever/document/document.py:67
+#: ./opengever/document/document.py:68
 msgid "help_file"
 msgstr "Ficher, ajouté dans un dossier"
 
@@ -293,13 +288,13 @@ msgid "initial_document_version_change_note"
 msgstr "Document créé (version initiale)"
 
 #. Default: "Changed by"
-#: ./opengever/document/browser/versions_tab.py:279
+#: ./opengever/document/browser/versions_tab.py:281
 msgid "label_actor"
 msgstr "Modifier par"
 
 #. Default: "Archival File"
 #: ./opengever/document/behaviors/metadata.py:147
-#: ./opengever/document/browser/overview.py:168
+#: ./opengever/document/browser/overview.py:169
 msgid "label_archival_file"
 msgstr "Fichier archivé"
 
@@ -309,7 +304,7 @@ msgid "label_archival_file_state"
 msgstr ""
 
 #. Default: "Attach to email"
-#: ./opengever/document/browser/templates/macros.pt:84
+#: ./opengever/document/browser/templates/macros.pt:85
 msgid "label_attach_to_email"
 msgstr ""
 
@@ -335,7 +330,7 @@ msgid "label_change_archival_file"
 msgstr ""
 
 #. Default: "Checked out"
-#: ./opengever/document/browser/overview.py:150
+#: ./opengever/document/browser/overview.py:151
 #: ./opengever/document/checkout/viewlets_templates/checkedoutviewlet.pt:5
 msgid "label_checked_out"
 msgstr "Avec checkout"
@@ -351,17 +346,17 @@ msgid "label_checkout_and_edit"
 msgstr ""
 
 #. Default: "Comment"
-#: ./opengever/document/browser/versions_tab.py:287
+#: ./opengever/document/browser/versions_tab.py:289
 msgid "label_comment"
 msgstr "commentaire"
 
 #. Default: "creator"
-#: ./opengever/document/browser/overview.py:146
+#: ./opengever/document/browser/overview.py:147
 msgid "label_creator"
 msgstr "Créateur"
 
 #. Default: "Date"
-#: ./opengever/document/browser/versions_tab.py:283
+#: ./opengever/document/browser/versions_tab.py:285
 msgid "label_date"
 msgstr "Date"
 
@@ -420,15 +415,15 @@ msgid "label_download"
 msgstr "Télécharger"
 
 #. Default: "Download copy"
-#: ./opengever/document/browser/download.py:135
+#: ./opengever/document/browser/download.py:140
 #: ./opengever/document/browser/templates/downloadconfirmation.pt:4
-#: ./opengever/document/browser/templates/macros.pt:75
+#: ./opengever/document/browser/templates/macros.pt:76
 msgid "label_download_copy"
 msgstr "Télécharger une copie"
 
 #. Default: "File"
-#: ./opengever/document/browser/overview.py:152
-#: ./opengever/document/document.py:66
+#: ./opengever/document/browser/overview.py:153
+#: ./opengever/document/document.py:67
 msgid "label_file"
 msgstr "Fichier"
 
@@ -461,13 +456,18 @@ msgstr "Ok"
 msgid "label_open_detail_view"
 msgstr ""
 
+#. Default: "Open as PDF"
+#: ./opengever/document/browser/templates/macros.pt:114
+msgid "label_open_document_as_pdf"
+msgstr ""
+
 #. Default: "Open document preview"
 #: ./opengever/document/widgets/tooltip.pt:15
 msgid "label_open_document_preview"
 msgstr ""
 
 #. Default: "PDF Preview"
-#: ./opengever/document/browser/templates/macros.pt:102
+#: ./opengever/document/browser/templates/macros.pt:103
 msgid "label_pdf_preview"
 msgstr ""
 
@@ -478,7 +478,7 @@ msgstr "Conserver sous forme papier"
 
 #. Default: "Preview"
 #: ./opengever/document/behaviors/metadata.py:166
-#: ./opengever/document/browser/versions_tab.py:305
+#: ./opengever/document/browser/versions_tab.py:307
 msgid "label_preview"
 msgstr "Aperçu"
 
@@ -507,7 +507,7 @@ msgid "label_reset"
 msgstr "Remettre"
 
 #. Default: "Revert"
-#: ./opengever/document/browser/versions_tab.py:300
+#: ./opengever/document/browser/versions_tab.py:302
 msgid "label_revert"
 msgstr "Reculer"
 
@@ -528,12 +528,12 @@ msgstr "Vignette"
 
 #. Default: "Title"
 #: ./opengever/document/browser/report.py:30
-#: ./opengever/document/document.py:60
+#: ./opengever/document/document.py:61
 msgid "label_title"
 msgstr "Titre"
 
 #. Default: "Version"
-#: ./opengever/document/browser/versions_tab.py:275
+#: ./opengever/document/browser/versions_tab.py:277
 msgid "label_version"
 msgstr "Version"
 
@@ -577,3 +577,4 @@ msgstr "Avec commentaire"
 #: ./opengever/document/upgrades/profiles/4000/actions.xml
 msgid "without comment"
 msgstr "Sans commentaire"
+
