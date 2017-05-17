@@ -19,7 +19,6 @@ class TestOverview(FunctionalTestCase):
     @browsing
     def test_mail_overview_tab(self, browser):
         mail = create(Builder('mail')
-                      .with_message(MAIL_DATA)
                       .with_asset_message(
                           'mail_with_multiple_attachments.eml'))
         browser.login().visit(mail, view='tabbedview_view-overview')
