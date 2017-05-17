@@ -1,7 +1,7 @@
 Meine Ablage
 ============
 
-Unter dem Reiter "Meine Ablage" wird jedem Benutzer eine Möglichkeit geboten,
+Unter dem Reiterenrnrn "Meine Ablage" wird jedem Benutzer eine Möglichkeit geboten,
 wichtige persönliche Dokumente in einem privaten Bereich in OneGov GEVER
 ablegen und verwalten zu können.
 
