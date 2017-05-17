@@ -13,15 +13,6 @@
       for="plone.dexterity.interfaces.IDexterityContent"
       />
 
-  <plone:behavior
-      title="Creator Aware"
-      description="Remembers the creator in a hidden creators field"
-      provides="opengever.base.behaviors.creator.ICreator"
-      factory="plone.behavior.AnnotationStorage"
-      marker=".creator.ICreatorAware"
-      for="plone.dexterity.interfaces.IDexterityContent"
-      />
-
   <!-- Classification Behavior -->
   <plone:behavior
       title="Classification"

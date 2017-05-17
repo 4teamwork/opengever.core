@@ -5,6 +5,7 @@ Changelog
 2017.2.2 (unreleased)
 ---------------------
 
+- Remove an unused creator behaviour from the codebase. [Rotonen]
 - Fix addable types constrain for repository folders in API calls [buchi]
 - Fix typo in dossier SearchableTextExtender, which results in a empty SearchableText if IFilingNumber behavior was activated. [mathias.leimgruber]
 - Display attachments on mail overviews. [Rotonen]
