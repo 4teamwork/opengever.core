@@ -123,6 +123,8 @@ class FileLoaderSection(object):
                     continue
 
                 filename = os.path.basename(abs_filepath)
+                if isinstance(filename, str):
+                    filename = filename.decode('utf8')
 
                 # TODO: Check for this in OGGBundle validation
                 if any(abs_filepath.lower().endswith(ext) for ext in INVALID_FILE_EXTENSIONS):  # noqa
