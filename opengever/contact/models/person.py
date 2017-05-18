@@ -5,20 +5,11 @@ from opengever.contact.utils import get_contactfolder_url
 from opengever.contact.wrapper import PersonWrapper
 from opengever.ogds.models import FIRSTNAME_LENGTH
 from opengever.ogds.models import LASTNAME_LENGTH
-from opengever.ogds.models.query import BaseQuery
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy.orm import relationship
-
-
-class PersonQuery(BaseQuery):
-
-    searchable_fields = ['firstname', 'lastname']
-
-    def get_by_former_contact_id(self, former_contact_id):
-        return self.filter_by(former_contact_id=former_contact_id).first()
 
 
 class Person(Contact):
@@ -62,6 +53,3 @@ class Person(Contact):
 
     def get_doc_property_provider(self, prefix):
         return PersonDocPropertyProvider(self, prefix)
-
-
-Person.query_cls = PersonQuery
