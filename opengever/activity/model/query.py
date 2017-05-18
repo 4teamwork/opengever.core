@@ -1,5 +1,6 @@
 from opengever.activity.model import Activity
 from opengever.activity.model import Notification
+from opengever.activity.model import NotificationDefault
 from opengever.activity.model import Resource
 from opengever.activity.model.subscription import Subscription
 from opengever.ogds.models.query import BaseQuery
@@ -35,3 +36,18 @@ class ResourceQuery(BaseQuery):
         return self.filter_by(oguid=oguid).first()
 
 Resource.query_cls = ResourceQuery
+
+
+class NotificationDefaultQuery(BaseQuery):
+
+    def is_dispatch_needed(self, dispatch_setting, kind):
+        setting = self.filter_by(kind=kind).first()
+        if not setting:
+            return False
+
+        return getattr(setting, dispatch_setting, False)
+
+    def by_kind(self, kind):
+        return self.filter_by(kind=kind)
+
+NotificationDefault.query_cls = NotificationDefaultQuery
