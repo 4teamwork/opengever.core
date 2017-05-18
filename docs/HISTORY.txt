@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Replace changed_security with elevated_privileges. [deiferni]
+- Implement safe_call decorator for better errorhandling/debugging remote requests. [mathias.leimgruber]
 - Make sure that pasting is allowed before pasting. [deiferni]
 - Remove an unused creator behaviour from the codebase. [Rotonen]
 - Keep *.msg file after conversion and store message source for mails. [deiferni]
