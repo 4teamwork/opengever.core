@@ -6,7 +6,8 @@ from ftw.journal.interfaces import IAnnotationsJournalizable
 from ftw.journal.interfaces import IJournalizable
 from ftw.journal.interfaces import IWorkflowHistoryJournalizable
 from ftw.table import helper
-from ftw.table.interfaces import ITableSourceConfig, ITableSource
+from ftw.table.interfaces import ITableSource
+from ftw.table.interfaces import ITableSourceConfig
 from opengever.contact.utils import get_contactfolder_url
 from opengever.journal import _
 from opengever.tabbedview import BaseListingTab
@@ -18,7 +19,8 @@ from zope.annotation.interfaces import IAnnotations
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.globalrequest import getRequest
 from zope.i18n import translate
-from zope.interface import implements, Interface
+from zope.interface import implements
+from zope.interface import Interface
 
 
 def tooltip_helper(item, value):
