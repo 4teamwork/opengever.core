@@ -3,6 +3,7 @@ from opengever.activity.model import Notification
 from opengever.activity.model import NotificationDefault
 from opengever.activity.model import Resource
 from opengever.activity.model import Subscription
+from opengever.activity.model import Watcher
 from opengever.ogds.models.query import BaseQuery
 
 
@@ -67,3 +68,11 @@ class SubscriptionQuery(BaseQuery):
             Subscription.role.in_(roles))
 
 Subscription.query_cls = SubscriptionQuery
+
+
+class WatcherQuery(BaseQuery):
+
+    def get_by_actorid(self, actorid):
+        return self.filter_by(actorid=actorid).first()
+
+Watcher.query_cls = WatcherQuery
