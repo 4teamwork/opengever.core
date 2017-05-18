@@ -88,7 +88,8 @@ class WizardDataStorage(grok.GlobalUtility):
                                     '@@receive-wizard-data-set',
                                     data=req_data)
 
-        if response.read().strip() != 'OK':
+        response_body = response.read()
+        if response_body.strip() != 'OK':
             raise Exception('Could not push session data to admin_unit %s' % (
                             admin_unit_id))
 

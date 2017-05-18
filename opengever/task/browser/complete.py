@@ -235,7 +235,8 @@ class CompleteSuccessorTaskForm(Form):
             predecessor.physical_path,
             data=request_data)
 
-        if response.read().strip() != 'OK':
+        response_body = response.read()
+        if response_body.strip() != 'OK':
             raise Exception('Delivering documents and updating task failed '
                             'on remote client %s.' % predecessor.admin_unit_id)
 

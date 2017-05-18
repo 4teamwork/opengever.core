@@ -154,7 +154,8 @@ def accept_forwarding_with_successor(
                                 path=predecessor.physical_path,
                                 data=request_data)
 
-    if response.read().strip() != 'OK':
+    response_body = response.read()
+    if response_body.strip() != 'OK':
         raise TaskRemoteRequestError(
             'Adding the response and changing the workflow state on the '
             'predecessor forwarding failed.')
@@ -283,7 +284,8 @@ def accept_task_with_successor(dossier, predecessor_oguid, response_text):
                                 path=predecessor.physical_path,
                                 data=request_data)
 
-    if response.read().strip() != 'OK':
+    response_body = response.read()
+    if response_body.strip() != 'OK':
         raise TaskRemoteRequestError(
             'Adding the response and changing the workflow state on the '
             'predecessor task failed.')

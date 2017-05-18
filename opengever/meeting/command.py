@@ -335,7 +335,9 @@ class RejectProposalCommand(object):
             model.admin_unit_id,
             '@@reject-proposal',
             path=model.physical_path)
-        if response.read() != 'OK':
+
+        response_body = response.read()
+        if response_body != 'OK':
             raise ValueError(
                 'Unexpected response {!r} when rejecting proposal.'.format(
                     response))

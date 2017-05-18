@@ -18,6 +18,8 @@ Changelog
 - Use chameleon as the templating engine for better performance. [Rotonen]
 - Respect `maximum_dossier_depth` registry record in DefaultConstrainTypeDecider [mathias.leimgruber]
 - Handle require_login error where came_from_did not exist. [jone]
+- Inter-Admin-Unit Requests: Extract response body into the local namespace so
+  Sentry can log it as a local in case of failure. [lgraf]
 - Word meeting: replace proposal textfields with a document. [jone]
 - OGIP 15: Implement adding multiple task with the add form. [mathias.leimgruber]
 
