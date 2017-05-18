@@ -1,7 +1,7 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from five import grok
-from opengever.base.security import changed_security
+from opengever.base.security import elevated_privileges
 from opengever.document.handlers import DISABLE_DOCPROPERTY_UPDATE_FLAG
 from opengever.task.browser.accept.utils import get_current_yearfolder
 from opengever.task.interfaces import IYearfolderStorer
@@ -20,6 +20,6 @@ class YearfolderStorer(grok.Adapter):
 
         self.context.REQUEST.set(DISABLE_DOCPROPERTY_UPDATE_FLAG, True)
 
-        with changed_security():
+        with elevated_privileges():
             clipboard = inbox.manage_cutObjects((self.context.getId(),))
             yearfolder.manage_pasteObjects(clipboard)

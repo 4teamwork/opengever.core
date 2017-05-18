@@ -5,6 +5,7 @@ Changelog
 2017.2.2 (unreleased)
 ---------------------
 
+- Replace changed_security with elevated_privileges. [deiferni]
 - Make sure that pasting is allowed before pasting. [deiferni]
 - Remove an unused creator behaviour from the codebase. [Rotonen]
 - Keep *.msg file after conversion and store message source for mails. [deiferni]
