@@ -119,7 +119,7 @@ class TestDossier(FunctionalTestCase):
         # Unauthorized exception and end the infinite loop.
         browser.exception_bubbling = True
         with self.assertRaises(Unauthorized):
-        # with browser.expect_unauthorized():
+            # with browser.expect_unauthorized():
             browser.login().open(
                 branch_node, view='++add++{}'.format(self.portal_type))
 
@@ -148,6 +148,34 @@ class TestDossier(FunctionalTestCase):
         keywords = browser.find_field_by_text(u'Keywords')
         self.assertTupleEqual(('New Item 2', 'NewItem1', 'N=C3=B6i 3'),
                               tuple(keywords.value))
+
+    @browsing
+    def test_keyords_are_linked_to_search_on_overview(self, browser):
+        self.grant('Manager')
+        dossier1 = create(Builder(self.builder_id)
+                          .titled(u'Test Dossier')
+                          .having(responsible=TEST_USER_ID,
+                                  keywords=(u'new 1', u'n\xf6i 2')))
+        dossier2 = create(Builder(self.builder_id)
+                          .titled(u'Test Dossier 2')
+                          .having(responsible=TEST_USER_ID,
+                                  keywords=(u'n\xf6i 2', )))
+
+        browser.exception_bubbling = True
+        browser.login().visit(dossier1, view='@@tabbedview_view-overview')
+        browser.find_link_by_text('new 1').click()
+        search_result = browser.css('.searchResults dt a')
+
+        self.assertEquals(1, len(search_result), 'Expect one result')
+        self.assertEquals(dossier1.Title(), search_result.first.text)
+
+        browser.visit(dossier1, view='@@tabbedview_view-overview')
+        browser.find_link_by_text(u'n\xf6i 2').click()
+        search_result = browser.css('.searchResults dt a')
+
+        self.assertEquals(2, len(search_result), 'Expect two result')
+        self.assertIn(dossier1.Title(), search_result.text)
+        self.assertIn(dossier2.Title(), search_result.text)
 
 
 class TestMeetingFeatureTypes(FunctionalTestCase):

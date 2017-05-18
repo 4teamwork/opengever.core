@@ -10,6 +10,7 @@ Changelog
 - Implement tracebackify decorator for better errorhandling/debugging remote requests. [mathias.leimgruber]
 - Implement safe_call decorator for better errhandling/debugging remove requests. [mathias.leimgruber]
 - Refactor SQL models, move Query classes to query module. [deiferni]
+- Link keywords on dossier overview. [mathias.leimgruber]
 - Make sure that pasting is allowed before pasting. [deiferni]
 - Remove an unused creator behaviour from the codebase. [Rotonen]
 - Keep *.msg file after conversion and store message source for mails. [deiferni]
