@@ -16,7 +16,7 @@ Kommission / Gremium erfassen
 Eine neue Kommission kann im Bereich *Sitzungen* erstellt werden.
 
 1. Pro Kommission kann eine eigene Berechtigungsgruppe festgelegt werden, die
-   diese Kommission verwalten und einsehen kann.
+   diese Kommission verwaltet und einsehen kann.
 
 2. Zusätzlich muss auch eine Ablageposition im Ordnungssystem definiert werden.
    Dort wird dann automatisch ein neues Sitzungsdossier erstellt, in welches
@@ -111,22 +111,19 @@ durch den zuständigen Sachbearbeiter/in des Geschäftsdossiers
       den Antrag eingereicht hat, lauten soll.
 
    f. **Veröffentlichung in**: Angabe, wo Beschluss kommuniziert werden soll
-      (z.B. Pressemitteilung a Auflistung aller an Antrag beteiligten Stellen
-      und Personen, welche primär über Beschluss informiert werden müssen
-      (Website, Zeitung, intern etc.).
+      (z.B. Pressemitteilung, Website, Zeitung, intern etc.).
 
    g. **Zu eröffnen an**: Auflistung aller an Antrag beteiligten Stellen und
-      Personen, welche primär über Beschluss informiert werden müssen.
+      Personen, welche primär über den Beschluss informiert werden müssen.
 
    h. **Kopie z.K.**: Auflistung aller sekundär zu informierenden Stellen und
-      Personen. Die Informationen können mittels Bold, Italic, Auflistung
-      (unorderd) und Aufzählung (ordered) nach Bedarf formatiert werden.
+      Personen.
 
 4. **Anhänge**: Wenn zusätzlich zu den Informationen noch weitere relevante
-   Dokumente dem Antrag beigelegt werden möchte, können diese unter Anhänge
+   Dokumente dem Antrag beigelegt werden möchten, können diese unter Anhänge
    ausgesucht werden.
 
-5. Mittels „Speichern“ den Vorgang abschliessen.
+5. Mittels „Speichern“ wird der Vorgang abgeschlossen.
 
 |img-sitzungs-und-protokollverwaltung-8|
 |img-sitzungs-und-protokollverwaltung-9|
@@ -152,15 +149,20 @@ Traktanden erstellen
    öffnet.
 
 2. Alle eingereichten Anträge erscheinen in der Übersicht. Mittels Klick auf
-   „Traktandieren“ können diese der Sitzung hinzugefügt werden. Über der Liste
-   besteht zusätzlich die Möglichkeit, nach Anträgen zu filtern.
+   „Traktandieren“ können diese der Sitzung hinzugefügt werden. Oberhalb der
+   Liste besteht zusätzlich die Möglichkeit, nach Anträgen zu filtern.
 
 3. Für eine bessere Strukturierung der Traktandenliste ist es auch möglich,
    Abschnitte zu definieren.
 
-4. Mittels dem Feld „Freitext“ können zusätzliche Traktanden ergänzt werden.
+4. Mittels dem Feld „Freitext“ können zusätzliche (ad-hoc) Traktanden ergänzt
+   werden.
 
 |img-sitzungs-und-protokollverwaltung-11|
+
+Traktanden bearbeiten
+~~~~~~~~~~~~~~~~~~~~~
+
 |img-sitzungs-und-protokollverwaltung-12|
 
 1. Titel anpassen von Traktanden und Abschnitten
@@ -181,6 +183,8 @@ Die Sitzungs- und Protokollverwaltung von OneGov GEVER unterscheidet nicht
 zwischen einem Vorprotokoll und Protokoll. Es werden stattdessen einfach
 automatisch neuere Versionen des gleichen Protokolls (Dokument) erzeugt.
 
+|img-sitzungs-und-protokollverwaltung-13|
+
 1. Sitzung bearbeiten
 
 2. Status ändern (durchführen, abschliessen)
@@ -188,8 +192,6 @@ automatisch neuere Versionen des gleichen Protokolls (Dokument) erzeugt.
 3. Protokoll generieren
 
 4. Protokollauszüge erstellen
-
-|img-sitzungs-und-protokollverwaltung-13|
 
 Die (Vor-)Protokollierung einer Sitzung geschieht in der webbasierten
 Protokollansicht einer Sitzung. Diese erreicht man über den Link *Bearbeiten*
@@ -201,9 +203,10 @@ auf der Sitzungsansicht.
 2. Wird das „+“-Zeichen bei Sitzungsangaben geöffnet, können Details zur
    Sitzung wie Vorsitz, Protokollführung, Teilnehmende etc. ergänzt werden.
 
-3. In der Protokollansicht stehen für jedes Traktandum alle Felder für die
-   direkte Bearbeitung zur Verfügung. Während der Sitzung kann so das Protokoll
-   pro Traktandum laufend ergänzt werden.
+3. In der Protokollansicht stehen für jedes Traktandum alle Felder
+   (Rechtsgrundlage, Ausgangslage etc.) für die direkte Bearbeitung zur
+   Verfügung. Während der Sitzung kann so das Protokoll pro Traktandum laufend
+   ergänzt werden.
 
 |img-sitzungs-und-protokollverwaltung-14|
 
@@ -225,13 +228,13 @@ Protokoll erzeugen und aktualisieren
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 1. Sobald ein Traktandum einer Sitzung abgeschlossen ist, wechselt der Status
-   der Sitzung auf „Durchgeführt. Ab diesem Zeitpunkt können keine neuen
+   der Sitzung auf „Durchgeführt". Ab diesem Zeitpunkt können keine neuen
    Traktanden mehr hinzugefügt werden sowie kann die Reihenfolge nicht mehr
    angepasst werden.
 
 2. Zugleich kann ab da ein Protokoll zur Sitzung generiert werden. Das
    generierte Protokoll wird automatisch im hinterlegten Sitzungsdossier
-   abgelegt. Das Word-Protokoll kann immer wieder aktualisiert werden Dabei
+   abgelegt. Das Word-Protokoll kann immer wieder aktualisiert werden. Dabei
    wird standardmässig vom bestehenden Protokoll eine neue Dokumentversion
    mit den aktuellen Sitzungsinformationen erzeugt. Das Word-Protokoll kann mit
    einem Klick auf den Download-Link direkt heruntergeladen werden.
@@ -264,6 +267,35 @@ Geschäft.
 |img-sitzungs-und-protokollverwaltung-16|
 |img-sitzungs-und-protokollverwaltung-17|
 
+
+Periode abschliessen
+--------------------
+
+Um zum Jahresabschluss die definierte Periode abzuschliessen, kann
+folgendermassen vorgegangen werden:
+
+Die aktuelle Periode wird in der Übersicht jeweils angezeigt:
+
+|img-sitzungs-und-protokollverwaltung-18|
+
+Um diese abzuschliessen, muss auf das Tab "Periode" geklickt werden und
+anschliessend auf "Aktionen" und "Aktuelle Periode abschliessen".
+
+|img-sitzungs-und-protokollverwaltung-19|
+
+Zuerst wird die aktuelle Periode abgeschlossen:
+
+|img-sitzungs-und-protokollverwaltung-20|
+
+Anschliessend wird direkt die neue Periode eröffnet.
+
+|img-sitzungs-und-protokollverwaltung-21|
+
+Nun kann das Inhaltsverzeichnis (alphabetisch oder nach Ordnungsposition)
+gedownloadet werden.
+
+|img-sitzungs-und-protokollverwaltung-22|
+
 .. |img-sitzungs-und-protokollverwaltung-1| image:: img/media/img-sitzungs-und-protokollverwaltung-1.png
 .. |img-sitzungs-und-protokollverwaltung-2| image:: img/media/img-sitzungs-und-protokollverwaltung-2.png
 .. |img-sitzungs-und-protokollverwaltung-3| image:: img/media/img-sitzungs-und-protokollverwaltung-3.png
@@ -281,5 +313,10 @@ Geschäft.
 .. |img-sitzungs-und-protokollverwaltung-15| image:: img/media/img-sitzungs-und-protokollverwaltung-15.png
 .. |img-sitzungs-und-protokollverwaltung-16| image:: img/media/img-sitzungs-und-protokollverwaltung-16.png
 .. |img-sitzungs-und-protokollverwaltung-17| image:: img/media/img-sitzungs-und-protokollverwaltung-17.png
+.. |img-sitzungs-und-protokollverwaltung-18| image:: img/media/img-sitzungs-und-protokollverwaltung-18.png
+.. |img-sitzungs-und-protokollverwaltung-19| image:: img/media/img-sitzungs-und-protokollverwaltung-19.png
+.. |img-sitzungs-und-protokollverwaltung-20| image:: img/media/img-sitzungs-und-protokollverwaltung-20.png
+.. |img-sitzungs-und-protokollverwaltung-21| image:: img/media/img-sitzungs-und-protokollverwaltung-21.png
+.. |img-sitzungs-und-protokollverwaltung-22| image:: img/media/img-sitzungs-und-protokollverwaltung-22.png
 
 .. disqus::
