@@ -2,6 +2,7 @@ from five import grok
 from opengever.activity import notification_center
 from opengever.base.oguid import Oguid
 from opengever.base.request import dispatch_request
+from opengever.base.request import safe_call
 from opengever.base.transport import Transporter
 from opengever.base.utils import ok_response
 from opengever.globalindex.model.task import Task
@@ -297,6 +298,7 @@ def accept_task_with_successor(dossier, predecessor_oguid, response_text):
     return successor
 
 
+@safe_call
 class AcceptTaskWorkflowTransitionView(grok.View):
     """A remote request view called by another adminunit, to accept a task,
     during the SuccessorTask creation process.

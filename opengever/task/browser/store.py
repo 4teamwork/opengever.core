@@ -1,6 +1,7 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from five import grok
+from opengever.base.request import safe_call
 from opengever.base.utils import ok_response
 from opengever.task.interfaces import IYearfolderStorer
 from opengever.task.task import ITask
@@ -9,6 +10,7 @@ from Products.CMFCore.utils import getToolByName
 from zExceptions import Unauthorized
 
 
+@safe_call
 class StoreForwardingInYearfolderView(grok.View):
     grok.name('store_forwarding_in_yearfolder')
     grok.context(ITask)

@@ -4,6 +4,7 @@ from datetime import datetime
 from five import grok
 from opengever.base.request import dispatch_json_request
 from opengever.base.request import dispatch_request
+from opengever.base.request import safe_call
 from opengever.base.transport import ORIGINAL_INTID_ANNOTATION_KEY
 from opengever.base.transport import Transporter
 from opengever.base.utils import ok_response
@@ -199,6 +200,7 @@ class ResponseTransporter(grok.Adapter):
         return val
 
 
+@safe_call
 class ReceiveResponses(grok.View):
     """Receives a json request cotnaining one or more responses to
     add to the context task.
@@ -228,6 +230,7 @@ class ReceiveResponses(grok.View):
         return ok_response(self.request)
 
 
+@safe_call
 class ExtractResponses(grok.View):
     grok.context(ITask)
     grok.name('task-responses-extract')

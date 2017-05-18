@@ -7,6 +7,7 @@ from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.request import dispatch_request
+from opengever.base.request import safe_call
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.base.utils import ok_response
 from opengever.dossier.base import DOSSIER_STATES_OPEN
@@ -291,6 +292,7 @@ class ChooseDosserStepRedirecter(grok.View):
         return self.request.RESPONSE.redirect(url)
 
 
+@safe_call
 class CloseTaskView(grok.View):
     """This view closes the task. It is either called directly, if no
     documents are selected to be copied or after choosing the target dossier

@@ -9,6 +9,7 @@ from five import grok
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.request import dispatch_request
+from opengever.base.request import safe_call
 from opengever.base.transport import Transporter
 from opengever.base.utils import ok_response
 from opengever.globalindex.model.task import Task
@@ -253,6 +254,7 @@ class CompleteSuccessorTask(FormWrapper, grok.View):
         grok.View.__init__(self, *args, **kwargs)
 
 
+@safe_call
 class CompleteSuccessorTaskReceiveDelivery(grok.View):
     """This view is called by the complete-sucessor-task form while
     completeing the task. It is called on the client of the predecessor and
