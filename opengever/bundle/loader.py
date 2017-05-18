@@ -1,3 +1,5 @@
+from collections import Iterable
+from collections import Mapping
 from collections import OrderedDict
 from datetime import datetime
 from jsonschema import FormatChecker
@@ -117,7 +119,7 @@ class BundleLoader(object):
     def _load_items(self):
         self._items = []
         for json_name, portal_type in BUNDLE_JSON_TYPES.items():
-            items = self._load_json(json_name)
+            items = unicode2bytes(self._load_json(json_name))
             if items is None:
                 continue
 
@@ -244,3 +246,17 @@ class IngestionSettingsReader(object):
             log.info('No ingestion settings found at %s' % settings_path)
             return {}
         return settings
+
+
+def unicode2bytes(data):
+    """Converts unicode strings to byte strings."""
+    if isinstance(data, unicode):
+        return data.encode('utf8')
+    elif isinstance(data, str):
+        return data
+    elif isinstance(data, Mapping):
+        return type(data)(map(unicode2bytes, data.iteritems()))
+    elif isinstance(data, Iterable):
+        return type(data)(map(unicode2bytes, data))
+    else:
+        return data

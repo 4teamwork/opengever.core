@@ -1,10 +1,12 @@
 from opengever.bundle.loader import BundleLoader
 from opengever.bundle.loader import IngestionSettingsReader
 from opengever.bundle.loader import ItemPreprocessor
+from opengever.bundle.loader import unicode2bytes
 from opengever.bundle.tests.helpers import get_portal_type
 from opengever.bundle.tests.helpers import get_title
 from pkg_resources import resource_filename as rf
 from unittest2 import TestCase
+import collections
 import jsonschema
 import tempfile
 
@@ -33,31 +35,45 @@ class TestBundleLoader(TestCase):
     def test_loads_items_in_correct_order(self):
         bundle = self.load_bundle()
         self.assertEqual(
-            [('repositoryroot', u'Ordnungssystem'),
-             ('repositoryfolder', u'Personal'),
-             ('repositoryfolder', u'Organigramm, Prozesse'),
-             ('repositoryfolder', u'Organisation'),
-             ('businesscasedossier', u'Dossier Vreni Meier'),
-             ('businesscasedossier', u'Hanspeter M\xfcller'),
-             ('document', u'Bewerbung Hanspeter M\xfcller'),
-             ('document', u'Entlassung Hanspeter M\xfcller'),
-             ('mail', u'Ein Mail'),
-             ('document', u'Document referenced via UNC-Path')],
+            [('repositoryroot', 'Ordnungssystem'),
+             ('repositoryfolder', 'Personal'),
+             ('repositoryfolder', 'Organigramm, Prozesse'),
+             ('repositoryfolder', 'Organisation'),
+             ('businesscasedossier', 'Dossier Vreni Meier'),
+             ('businesscasedossier', 'Hanspeter M\xc3\xbcller'),
+             ('document', 'Bewerbung Hanspeter M\xc3\xbcller'),
+             ('document', 'Entlassung Hanspeter M\xc3\xbcller'),
+             ('mail', 'Ein Mail'),
+             ('document', 'Document referenced via UNC-Path')],
             [(get_portal_type(i), get_title(i)) for i in list(bundle)])
+
+    def test_loaded_items_contain_bytestrings(self):
+        def fail_if_unicode(data):
+            if isinstance(data, str):
+                return
+            elif isinstance(data, unicode):
+                self.fail("Data contains unicode string")
+            elif isinstance(data, collections.Mapping):
+                map(fail_if_unicode, data.iteritems())
+            elif isinstance(data, collections.Iterable):
+                map(fail_if_unicode, data)
+
+        bundle = self.load_bundle()
+        fail_if_unicode(list(bundle))
 
     def test_inserts_portal_type(self):
         bundle = self.load_bundle()
         self.assertEqual([
-            ('businesscasedossier', u'Dossier Vreni Meier'),
-            ('businesscasedossier', u'Hanspeter M\xfcller'),
-            ('document', u'Bewerbung Hanspeter M\xfcller'),
-            ('document', u'Document referenced via UNC-Path'),
-            ('document', u'Entlassung Hanspeter M\xfcller'),
-            ('mail', u'Ein Mail'),
-            ('repositoryfolder', u'Organigramm, Prozesse'),
-            ('repositoryfolder', u'Organisation'),
-            ('repositoryfolder', u'Personal'),
-            ('repositoryroot', u'Ordnungssystem')],
+            ('businesscasedossier', 'Dossier Vreni Meier'),
+            ('businesscasedossier', 'Hanspeter M\xc3\xbcller'),
+            ('document', 'Bewerbung Hanspeter M\xc3\xbcller'),
+            ('document', 'Document referenced via UNC-Path'),
+            ('document', 'Entlassung Hanspeter M\xc3\xbcller'),
+            ('mail', 'Ein Mail'),
+            ('repositoryfolder', 'Organigramm, Prozesse'),
+            ('repositoryfolder', 'Organisation'),
+            ('repositoryfolder', 'Personal'),
+            ('repositoryroot', 'Ordnungssystem')],
             sorted([(get_portal_type(i), get_title(i)) for i in list(bundle)]))
 
     def test_validates_schemas(self):
@@ -143,3 +159,45 @@ class TestIngestionSettingsReader(TestCase):
         reader = IngestionSettingsReader('/missing/directory/file.json')
         settings = reader()
         self.assertEqual({}, settings)
+
+
+class TestUnicode2Bytes(TestCase):
+
+    def test_unicode_string(self):
+        self.assertEqual('foo', unicode2bytes(u'foo'))
+        self.assertTrue(isinstance(unicode2bytes(u'foo'), str))
+
+    def test_byte_string(self):
+        self.assertEqual('foo', unicode2bytes('foo'))
+        self.assertTrue(isinstance(unicode2bytes('foo'), str))
+
+    def test_list(self):
+        data = unicode2bytes([
+            u'foo',
+            u'bar',
+        ])
+        self.assertEqual(['foo', 'bar'], data)
+        for item in data:
+            self.assertTrue(isinstance(item, str))
+
+    def test_dict(self):
+        data = unicode2bytes({
+            u'foo': u'bar',
+            u'spam': u'eggs',
+        })
+        self.assertEqual({'foo': 'bar', 'spam': 'eggs'}, data)
+        for k, v in data.items():
+            self.assertTrue(isinstance(k, str))
+            self.assertTrue(isinstance(v, str))
+
+    def test_nested(self):
+        data = unicode2bytes({
+            u'foo': {
+                u'bar': [u'baz', u'qux'],
+            },
+        })
+        self.assertEqual({'foo': {'bar': ['baz', 'qux']}}, data)
+        self.assertTrue(isinstance(data.keys()[0], str))
+        self.assertTrue(isinstance(data['foo'].keys()[0], str))
+        for item in data['foo']['bar']:
+            self.assertTrue(isinstance(item, str))
