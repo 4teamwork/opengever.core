@@ -13,6 +13,7 @@ Changelog
 - Fix typo in dossier SearchableTextExtender, which results in a empty SearchableText if IFilingNumber behavior was activated. [mathias.leimgruber]
 - Display attachments on mail overviews. [Rotonen]
 - Allow the same Users to edit Tasktemplatefolders in active state as in inactice state. [mathias.leimgruber]
+- Make sure local roles of committees are stored as byte strings [buchi]
 - Use CreatEmailCommand to create email upon mail-in. [deiferni]
 - Fix typo in method name: resolve_sumitted_proposal -> resolve_submitted_proposal. [mathias.leimgruber]
 - Use chameleon as the templating engine for better performance. [Rotonen]

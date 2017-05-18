@@ -384,7 +384,7 @@ class CommitteeBuilder(DexterityBuilder):
 
     def __init__(self, session):
         super(CommitteeBuilder, self).__init__(session)
-        self.arguments = {'title': 'My Committee', 'group_id': 'client1_users'}
+        self.arguments = {'title': 'My Committee', 'group_id': u'client1_users'}
 
     def link_with(self, repository_folder):
         self.arguments['repository_folder'] = repository_folder

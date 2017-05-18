@@ -43,6 +43,10 @@ class TestCommitteeTabs(FunctionalTestCase):
             ['Contributor'],
             local_roles['client1_users'])
 
+    def test_principal_of_managed_roles_is_a_bytestring(self):
+        for principal, roles in self.committee.get_local_roles():
+            self.assertTrue(isinstance(principal, str), 'Not a byte string')
+
 
 class TestCommitteeGroupsVocabulary(FunctionalTestCase):
 
