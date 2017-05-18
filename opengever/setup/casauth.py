@@ -1,7 +1,9 @@
+from Products.LDAPMultiPlugins.interfaces import ILDAPMultiPlugin
+from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlugin
+from Products.PluggableAuthService.interfaces.plugins import IChallengePlugin
 from ftw.casauth.plugin import CASAuthenticationPlugin
 from opengever.base.casauth import build_cas_server_url
 from plone import api
-from Products.PluggableAuthService.interfaces.plugins import IChallengePlugin
 
 
 SESSION_DEFAULT_TIMEOUT = 24 * 60 * 60
@@ -36,6 +38,13 @@ def install_cas_auth_plugin():
         # Move challenge plugin to top position
         while not acl_users.plugins.listPluginIds(IChallengePlugin)[0] == 'cas_auth':
             acl_users.plugins.movePluginsUp(IChallengePlugin, ['cas_auth'])
+
+    # Deactivate LDAP authentication
+    auth_plugins = acl_users.plugins.listPlugins(IAuthenticationPlugin)
+    for plugin_id, plugin in auth_plugins:
+        if ILDAPMultiPlugin.providedBy(plugin):
+            acl_users.plugins.deactivatePlugin(
+                IAuthenticationPlugin, plugin_id)
 
 
 def rename_session_cookie(site):
