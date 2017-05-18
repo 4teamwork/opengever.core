@@ -85,5 +85,4 @@ class TaskQuery(BaseQuery):
     def in_pending_state(self):
         return self.filter(Task.review_state.in_(Task.PENDING_STATES))
 
-
 Task.query_cls = TaskQuery
