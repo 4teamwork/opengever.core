@@ -274,6 +274,10 @@ class Task(Base):
         if not member:
             return False
 
+        roles = api.user.get_roles(user=member)
+        if 'Administrator' in roles or 'Manager' in roles:
+            return True
+
         principals = set(member.getGroups() + [member.getId()])
         allowed_principals = set(self.principals)
         return len(principals & allowed_principals) > 0

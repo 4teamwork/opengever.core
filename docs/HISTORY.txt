@@ -37,6 +37,9 @@ Changelog
 - Remove no longer used ftw.treeview dependency. [phgross]
 - Improve help text for task responsible selection. [lgraf]
 - Fix mail downloads by demanding a context to be passed into DC helpers. [Rotonen]
+- Always render a task link for administrators or managers. [phgross]
+- Improve help text for task responsible selection. [lgraf]
+
 - Make OC multiattach behave more gracefully for long URLs:
 
   - Relax length limit from 500 to 2000 bytes for browsers other than IE11
