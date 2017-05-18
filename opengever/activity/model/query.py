@@ -2,7 +2,7 @@ from opengever.activity.model import Activity
 from opengever.activity.model import Notification
 from opengever.activity.model import NotificationDefault
 from opengever.activity.model import Resource
-from opengever.activity.model.subscription import Subscription
+from opengever.activity.model import Subscription
 from opengever.ogds.models.query import BaseQuery
 
 
@@ -51,3 +51,19 @@ class NotificationDefaultQuery(BaseQuery):
         return self.filter_by(kind=kind)
 
 NotificationDefault.query_cls = NotificationDefaultQuery
+
+
+class SubscriptionQuery(BaseQuery):
+
+    def fetch(self, resource, watcher, role):
+        return self.filter_by(
+            resource=resource, watcher=watcher, role=role).first()
+
+    def get_by_watcher_resource(self, resource, watcher):
+        return self.filter_by(resource=resource, watcher=watcher).first()
+
+    def by_resource_and_role(self, resource, roles):
+        return self.filter_by(resource=resource).filter(
+            Subscription.role.in_(roles))
+
+Subscription.query_cls = SubscriptionQuery
