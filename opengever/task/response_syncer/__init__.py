@@ -93,7 +93,7 @@ class BaseResponseSyncerSender(object):
         return dispatch_request(target_admin_unit_id, viewname, path, data)
 
 
-@safe_call
+@safe_call(to_re_raise=Forbidden)
 class BaseResponseSyncerReceiver(BrowserView):
     """Abstract ResponseSyncerReceiver view for receiving requests from a
     ResponseSyncerSender and updates the current task with the received data
