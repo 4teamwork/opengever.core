@@ -1,5 +1,6 @@
 from opengever.activity.model import Activity
 from opengever.activity.model import Notification
+from opengever.activity.model import Resource
 from opengever.activity.model.subscription import Subscription
 from opengever.ogds.models.query import BaseQuery
 
@@ -26,3 +27,11 @@ class NotificationQuery(BaseQuery):
             Notification.userid.in_(user_ids))
 
 Notification.query_cls = NotificationQuery
+
+
+class ResourceQuery(BaseQuery):
+
+    def get_by_oguid(self, oguid):
+        return self.filter_by(oguid=oguid).first()
+
+Resource.query_cls = ResourceQuery
