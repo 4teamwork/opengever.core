@@ -11,6 +11,7 @@ from zope import schema
 
 
 class IManualJournalEntry(form.Schema):
+    """Provide a z3c.form.Schema to enter a manual journal entry."""
 
     category = schema.Choice(
         title=_(u'label_category', default=u'Category'),
@@ -51,6 +52,8 @@ class IManualJournalEntry(form.Schema):
 
 
 class ManualJournalEntryAddForm(AddForm):
+    """Provide a z3c.form to enter a manual journal entry."""
+
     label = _(u'label_add_journal_entry', default=u'Add journal entry')
     fields = Fields(IManualJournalEntry)
 

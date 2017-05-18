@@ -24,13 +24,17 @@ from zope.interface import Interface
 
 
 def tooltip_helper(item, value):
-    text = ''.join(BeautifulSoup(value, fromEncoding='utf8').findAll(text=True))
+    text = ''.join(
+        BeautifulSoup(value, fromEncoding='utf8').findAll(text=True))
     return '<span title="%s">%s</span>' % (text.encode('utf-8'), value)
 
 
 def title_helper(item, value):
-    return translate(item['action'].get('title'),
-                    context=getRequest())
+    return translate(item['action'].get('title'), context=getRequest())
+
+
+def empty_template_helper(self, *args, **kwargs):
+    return ''
 
 
 class IJournalSourceConfig(ITableSourceConfig):
@@ -44,14 +48,15 @@ class JournalTab(BaseListingTab):
 
     implements(IJournalSourceConfig)
 
-    reference_template = ViewPageTemplateFile('templates/journal_references.pt')
+    reference_template = ViewPageTemplateFile(
+        'templates/journal_references.pt')
 
     grok.name('tabbedview_view-journal')
     grok.require('zope2.View')
     grok.context(IJournalizable)
 
-    # do not select
-    select_all_template = lambda *a, **kw: ''
+    # This is a bound method on purpose so it can be called down the line
+    select_all_template = empty_template_helper
 
     sort_on = 'time'
     sort_reverse = True
@@ -125,6 +130,7 @@ def actor_column_sorter(a, b):
 
 
 class JournalTableSource(GeverTableSource):
+    """Generate a table to display in the journal tab view."""
 
     grok.implements(ITableSource)
     grok.adapts(IJournalSourceConfig, Interface)
