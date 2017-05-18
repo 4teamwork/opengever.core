@@ -22,7 +22,7 @@
         />
 
     <upgrade-step:directory
-        profile="opengever.setup:default"
+        profile="opengever.setup:casauth"
         directory="."
         />
 
