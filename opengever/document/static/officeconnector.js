@@ -2,10 +2,12 @@
 
     "use strict";
 
+    var OFFICE_CONNECTOR_TIMEOUT = 5 * 1000;
+
     function poll(fn, options) {
 
         options = $.extend({
-            interval: 2000,
+            interval: 2 * 1000,
             timeout: 15 * 1000
         }, options);
 
@@ -43,23 +45,36 @@
         });
     }
 
-    function checkout(trigger, documentURL) {
-        if(trigger.hasClass("oc-loading")) {
-            return false;
-        }
-        trigger.addClass("oc-loading");
+    function checkout(documentURL) {
         return poll(function() {
             return isDocumentCheckedOut(documentURL)
         });
     }
 
+    function edit() {
+        var promise = $.Deferred();
+        setTimeout(function() {
+            promise.reject();
+        }, OFFICE_CONNECTOR_TIMEOUT);
+        return promise;
+    }
+
     $(document).on("click", ".oc-checkout", function(event) {
         var checkoutButton = $(event.currentTarget);
         var documentURL = checkoutButton.data("document-url");
-        var checkoutRequest = checkout(checkoutButton, documentURL);
-        checkoutRequest.done(function() {
-            location.reload();
-        }).always(function() {
+        if(checkoutButton.hasClass('oc-loading')) {
+            return false;
+        }
+        checkoutButton.addClass("oc-loading");
+        isDocumentCheckedOut(documentURL).pipe(function(status) {
+            if(status) {
+                return edit();
+            } else {
+                return checkout(documentURL);
+            }
+        })
+        .done(function() { location.reload(); })
+        .fail(function() {
             checkoutButton.removeClass("oc-loading");
         });
     });
