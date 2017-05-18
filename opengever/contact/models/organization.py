@@ -3,20 +3,11 @@ from opengever.contact.docprops import OrganizationDocPropertProvider
 from opengever.contact.models.contact import Contact
 from opengever.contact.utils import get_contactfolder_url
 from opengever.contact.wrapper import OrganizationWrapper
-from opengever.ogds.models.query import BaseQuery
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy.orm import relationship
-
-
-class OrganizationQuery(BaseQuery):
-
-    searchable_fields = ['name']
-
-    def get_by_former_contact_id(self, former_contact_id):
-        return self.filter_by(former_contact_id=former_contact_id).first()
 
 
 class Organization(Contact):
@@ -53,5 +44,3 @@ class Organization(Contact):
 
     def get_doc_property_provider(self, prefix):
         return OrganizationDocPropertProvider(self, prefix)
-
-Organization.query_cls = OrganizationQuery
