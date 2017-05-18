@@ -8,10 +8,10 @@ from opengever.base.request import dispatch_request
 from opengever.base.request import safe_call
 from opengever.base.utils import ok_response
 from persistent.dict import PersistentDict
+from Products.Five.browser import BrowserView
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
 from zope.component.hooks import getSite
-from zope.interface import Interface
 import json
 
 
@@ -96,16 +96,12 @@ class WizardDataStorage(grok.GlobalUtility):
 
 
 @safe_call
-class ReceiveWizardDataSet(grok.View):
+class ReceiveWizardDataSet(BrowserView):
     """Receives a IWizardDataStorage data set from a remote client and stores
     it on the target client.
     """
 
-    grok.context(Interface)
-    grok.name('receive-wizard-data-set')
-    grok.require('zope2.View')
-
-    def render(self):
+    def __call__(self):
         jsondata = self.request.get('data-set')
         key = self.request.get('key')
         data = json.loads(jsondata)

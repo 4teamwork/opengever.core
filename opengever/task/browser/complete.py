@@ -25,6 +25,7 @@ from persistent.list import PersistentList
 from plone.directives.form import Schema
 from plone.z3cform.layout import FormWrapper
 from Products.CMFCore.utils import getToolByName
+from Products.Five.browser import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form import validator
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
@@ -255,7 +256,7 @@ class CompleteSuccessorTask(FormWrapper, grok.View):
 
 
 @safe_call
-class CompleteSuccessorTaskReceiveDelivery(grok.View):
+class CompleteSuccessorTaskReceiveDelivery(BrowserView):
     """This view is called by the complete-sucessor-task form while
     completeing the task. It is called on the client of the predecessor and
     makes the necessary changes regarding the predecessor task:
@@ -266,11 +267,7 @@ class CompleteSuccessorTaskReceiveDelivery(grok.View):
     documents and containing the entered response text.
     """
 
-    grok.context(ITask)
-    grok.name('complete_successor_task-receive_delivery')
-    grok.require('zope2.View')
-
-    def render(self):
+    def __call__(self):
         data = self.request.get('data', None)
         assert data is not None, 'Bad request: no delivery data found'
         data = json.loads(data)

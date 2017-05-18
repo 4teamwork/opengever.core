@@ -16,6 +16,7 @@ from opengever.task.task import ITask
 from opengever.task.util import get_documents_of_task
 from persistent.dict import PersistentDict
 from persistent.list import PersistentList
+from Products.Five.browser import BrowserView
 from z3c.relationfield import RelationValue
 from zope.annotation.interfaces import IAnnotations
 from zope.app.intid.interfaces import IIntIds
@@ -201,16 +202,12 @@ class ResponseTransporter(grok.Adapter):
 
 
 @safe_call
-class ReceiveResponses(grok.View):
+class ReceiveResponses(BrowserView):
     """Receives a json request cotnaining one or more responses to
     add to the context task.
     """
 
-    grok.context(ITask)
-    grok.name('task-responses-receive')
-    grok.require('zope2.View')
-
-    def render(self):
+    def __call__(self):
         rawdata = self.request.get('responses')
         data = json.loads(rawdata)
 
@@ -231,14 +228,11 @@ class ReceiveResponses(grok.View):
 
 
 @safe_call
-class ExtractResponses(grok.View):
-    grok.context(ITask)
-    grok.name('task-responses-extract')
-    grok.require('zope2.View')
+class ExtractResponses(BrowserView):
 
-    def render(self):
+    def __call__(self):
         intids_mapping = json.loads(self.request.get(
-                'intids_mapping', '{}'))
+            'intids_mapping', '{}'))
 
         # json converts dict-keys to strings - but we need
         # keys and values as int

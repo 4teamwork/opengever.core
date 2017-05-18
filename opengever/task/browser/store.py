@@ -1,22 +1,18 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
-from five import grok
 from opengever.base.request import safe_call
 from opengever.base.utils import ok_response
 from opengever.task.interfaces import IYearfolderStorer
-from opengever.task.task import ITask
 from opengever.task.util import change_task_workflow_state
 from Products.CMFCore.utils import getToolByName
+from Products.Five.browser import BrowserView
 from zExceptions import Unauthorized
 
 
 @safe_call
-class StoreForwardingInYearfolderView(grok.View):
-    grok.name('store_forwarding_in_yearfolder')
-    grok.context(ITask)
-    grok.require('zope2.View')
+class StoreForwardingInYearfolderView(BrowserView):
 
-    def render(self):
+    def __call__(self):
         if self.is_already_done():
             return ok_response()
 
@@ -32,9 +28,9 @@ class StoreForwardingInYearfolderView(grok.View):
 
         if transition:
             change_task_workflow_state(self.context,
-                                      transition,
-                                      text=response_text,
-                                      successor_oguid=successor_oguid)
+                                       transition,
+                                       text=response_text,
+                                       successor_oguid=successor_oguid)
 
         IYearfolderStorer(self.context).store_in_yearfolder()
 

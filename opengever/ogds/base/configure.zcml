@@ -13,6 +13,7 @@
 
   <include package=".browser" />
   <include package=".viewlets" />
+  <include package=".sync" />
 
   <grok:grok package="." />
 

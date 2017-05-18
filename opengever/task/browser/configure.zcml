@@ -3,12 +3,35 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="opengever.task">
 
+  <include package=".accept" />
+
   <browser:page
       name="task_transition_controller"
       for="opengever.task.task.ITask"
       class=".transitioncontroller.TaskTransitionController"
       permission="zope2.View"
       allowed_interface=".transitioncontroller.ITaskTransitionController"
+      />
+
+  <browser:page
+      name="store_forwarding_in_yearfolder"
+      for="opengever.task.task.ITask"
+      class=".store.StoreForwardingInYearfolderView"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="close-task-wizard-remote_close"
+      for="opengever.task.task.ITask"
+      class=".close.CloseTaskView"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="complete_successor_task-receive_delivery"
+      for="opengever.task.task.ITask"
+      class=".complete.CompleteSuccessorTaskReceiveDelivery"
+      permission="zope2.View"
       />
 
 </configure>
