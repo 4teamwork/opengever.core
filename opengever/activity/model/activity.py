@@ -5,7 +5,6 @@ from opengever.base.model import DEFAULT_LOCALE
 from opengever.base.model import SUPPORTED_LOCALES
 from opengever.base.model import UTCDateTime
 from opengever.ogds.models import USER_ID_LENGTH
-from opengever.ogds.models.query import BaseQuery
 from opengever.ogds.models.types import UnicodeCoercingText
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
@@ -17,13 +16,7 @@ from sqlalchemy_i18n import Translatable
 from sqlalchemy_i18n import translation_base
 
 
-class ActivityQuery(BaseQuery):
-    pass
-
-
 class Activity(Base, Translatable):
-
-    query_cls = ActivityQuery
 
     __tablename__ = 'activities'
     __translatable__ = {'locales': SUPPORTED_LOCALES,
