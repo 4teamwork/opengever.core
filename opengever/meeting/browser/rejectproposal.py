@@ -1,9 +1,9 @@
-from opengever.base.request import safe_call
+from opengever.base.request import tracebackify
 from plone import api
 from Products.Five import BrowserView
 
 
-@safe_call
+@tracebackify
 class RejectProposal(BrowserView):
 
     def __call__(self):

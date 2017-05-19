@@ -2,7 +2,7 @@ from datetime import datetime
 from five import grok
 from opengever.base.protect import unprotected_write
 from opengever.base.request import dispatch_request
-from opengever.base.request import safe_call
+from opengever.base.request import tracebackify
 from opengever.core import dictstorage
 from opengever.ogds.base.interfaces import ISyncStamp
 from opengever.ogds.base.utils import ogds_service
@@ -83,7 +83,7 @@ class SyncStampUtility(grok.GlobalUtility):
         logger.info("Stored sync_stamp %s in annotations" % stamp)
 
 
-@safe_call
+@tracebackify
 class UpdateSyncStamp(BrowserView):
     """View wich is called from the ogds, after the LDAP Synchronisation"""
 

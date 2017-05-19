@@ -5,7 +5,7 @@ from datetime import timedelta
 from five import grok
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.request import dispatch_request
-from opengever.base.request import safe_call
+from opengever.base.request import tracebackify
 from opengever.base.utils import ok_response
 from persistent.dict import PersistentDict
 from Products.Five.browser import BrowserView
@@ -95,7 +95,7 @@ class WizardDataStorage(grok.GlobalUtility):
                             admin_unit_id))
 
 
-@safe_call
+@tracebackify
 class ReceiveWizardDataSet(BrowserView):
     """Receives a IWizardDataStorage data set from a remote client and stores
     it on the target client.

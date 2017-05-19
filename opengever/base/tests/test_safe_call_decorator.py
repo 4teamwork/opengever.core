@@ -1,41 +1,41 @@
-from opengever.base.request import safe_call
+from opengever.base.request import tracebackify
 from Products.Five.browser import BrowserView
 from unittest2 import TestCase
 from ZODB.POSException import ConflictError
 from zope.publisher.browser import TestRequest
 
 
-@safe_call
+@tracebackify
 class ValidView(BrowserView):
     def __call__(self):
         return 'OK'
 
 
-@safe_call
+@tracebackify
 class RaiseErrorView(BrowserView):
     def __call__(self):
         raise
 
 
-@safe_call
+@tracebackify
 class RaiseConflictErrorErrorView(BrowserView):
     def __call__(self):
         raise ConflictError
 
 
-@safe_call
+@tracebackify
 class RaiseKeyboardInterruptErrorView(BrowserView):
     def __call__(self):
         raise KeyboardInterrupt
 
 
-@safe_call(to_re_raise=ValueError)
+@tracebackify(to_re_raise=ValueError)
 class RaiseValueErrorErrorView(BrowserView):
     def __call__(self):
         raise ValueError
 
 
-@safe_call(to_re_raise=[ValueError, KeyError])
+@tracebackify(to_re_raise=[ValueError, KeyError])
 class RaiseMultipleErrorView(BrowserView):
     def __call__(self, keyerror):
         if keyerror:

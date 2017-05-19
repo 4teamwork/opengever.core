@@ -1,5 +1,5 @@
 from opengever.base.request import dispatch_request
-from opengever.base.request import safe_call
+from opengever.base.request import tracebackify
 from opengever.base.utils import ok_response
 from opengever.ogds.base.interfaces import IInternalOpengeverRequestLayer
 from opengever.task.adapters import IResponseContainer
@@ -93,7 +93,7 @@ class BaseResponseSyncerSender(object):
         return dispatch_request(target_admin_unit_id, viewname, path, data)
 
 
-@safe_call(to_re_raise=Forbidden)
+@tracebackify(to_re_raise=Forbidden)
 class BaseResponseSyncerReceiver(BrowserView):
     """Abstract ResponseSyncerReceiver view for receiving requests from a
     ResponseSyncerSender and updates the current task with the received data

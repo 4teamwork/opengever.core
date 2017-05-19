@@ -1,6 +1,6 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
-from opengever.base.request import safe_call
+from opengever.base.request import tracebackify
 from opengever.base.utils import ok_response
 from opengever.task.interfaces import IYearfolderStorer
 from opengever.task.util import change_task_workflow_state
@@ -9,7 +9,7 @@ from Products.Five.browser import BrowserView
 from zExceptions import Unauthorized
 
 
-@safe_call
+@tracebackify
 class StoreForwardingInYearfolderView(BrowserView):
 
     def __call__(self):

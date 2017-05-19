@@ -156,9 +156,7 @@ def _remote_request(target_admin_unit_id, viewname, path, data, headers):
                               urllib.urlencode(data),
                               headers)
 
-    response = opener.open(request)
-    content = response.read().strip()
-    response.seek(0)
+    content = opener.open(request).read().strip()
 
     try:
         json.loads(content)
@@ -168,13 +166,14 @@ def _remote_request(target_admin_unit_id, viewname, path, data, headers):
         is_json = True
 
     if content == 'OK' or is_json:
-        return response
+        # Other code depends on a io obj.
+        return StringIO(content)
     else:
         # Otherwise expect a traceback as response from the remote server
-        raise RemoteRequestFailed(url, response)
+        raise RemoteRequestFailed(url, content)
 
 
-def safe_call(*args, **kwargs):
+def tracebackify(*args, **kwargs):
     """Decorator for remote endpoints
     The decorator safely calls the View and returns the traceback as string.
     Plus: Also try to report the traceback to sentry, so the original
@@ -196,7 +195,7 @@ def safe_call(*args, **kwargs):
                     raise
                 except tuple(to_re_raise):
                     raise
-                except Exception as exc:
+                except Exception:
                     self.request.response.setHeader("Content-type",
                                                     "text/plain")
                     e_type, e_value, tb = sys.exc_info()
