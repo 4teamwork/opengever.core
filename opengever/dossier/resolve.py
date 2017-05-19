@@ -31,16 +31,14 @@ class DossierResolveView(grok.View):
     grok.require('zope2.View')
 
     def render(self):
-
-        ptool = getToolByName(self, 'plone_utils')
-
         resolver = IDossierResolver(self.context)
 
         # check preconditions
         errors = resolver.is_resolve_possible()
         if errors:
             for msg in errors:
-                ptool.addPortalMessage(msg, type="error")
+                api.portal.show_message(
+                    message=msg, request=self.request, type='error')
 
             return self.request.RESPONSE.redirect(
                 self.context.absolute_url())
@@ -49,10 +47,10 @@ class DossierResolveView(grok.View):
         invalid_dates = resolver.are_enddates_valid()
         if invalid_dates:
             for title in invalid_dates:
-                ptool.addPortalMessage(
-                    _("The dossier ${dossier} has a invalid end_date",
-                      mapping=dict(dossier=title,)),
-                    type="error")
+                msg = _("The dossier ${dossier} has a invalid end_date",
+                        mapping=dict(dossier=title,))
+                api.portal.show_message(
+                    message=msg, request=self.request, type='error')
 
             return self.request.RESPONSE.redirect(
                 self.context.absolute_url())
@@ -62,13 +60,13 @@ class DossierResolveView(grok.View):
         else:
             resolver.resolve()
             if self.context.is_subdossier():
-                ptool.addPortalMessage(
-                    _('The subdossier has been succesfully resolved.'),
-                    type='info')
+                api.portal.show_message(
+                    message=_('The subdossier has been succesfully resolved.'),
+                    request=self.request, type='info')
             else:
-                ptool.addPortalMessage(
-                    _('The dossier has been succesfully resolved.'),
-                    type='info')
+                api.portal.show_message(
+                    message=_('The dossier has been succesfully resolved.'),
+                    request=self.request, type='info')
 
             self.request.RESPONSE.redirect(self.context.absolute_url())
 
