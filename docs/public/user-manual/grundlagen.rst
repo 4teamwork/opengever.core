@@ -5,7 +5,7 @@ Tabellen
 --------
 
 Tabellen enthalten Reiter, Spalten und Zeilen, die je nach Anwendung
-(Dossier, Aufgaben, etc) unterschiedliche Inhalte aufnehmen.
+(Dossier, Aufgaben, etc.) unterschiedliche Inhalte aufnehmen.
 
 |img-grundlagen-1|
 
@@ -23,7 +23,7 @@ Markierungszeichen ☑ in der entsprechenden Zeile.
 
 .. note::
    - Klicken Sie in die Auswahl, um eine Zeile zu markieren.
-   - Halten Sie :kbd:`Ctrl` gedrückt, und klicken Sie, um eine
+   - Halten Sie :kbd:`Ctrl` gedrückt und klicken Sie, um eine
      weitere bzw. mehrere nicht zusammenhängende Zeilen zu markieren.
    - Halten Sie :kbd:`Ctrl Shift` gedrückt und klicken Sie, um einen
      zusammenhängenden Bereich zu selektieren.
@@ -49,12 +49,12 @@ Spalten sortieren
 
   Führen Sie den Cursor in die Spaltenüberschrift und drücken Sie die
   linke Maustaste. Die Zeilen werden aufsteigend sortiert. Klicken Sie
-  nochmals in die Spaltenüberschrift werden die Zeilen absteigend
+  nochmals in die Spaltenüberschrift, werden die Zeilen absteigend
   sortiert.
 
 - Variante 2)
 
-  Führen Sie den Cursor in der Spaltenüberschrift an den rechte Begrenzung,
+  Führen Sie den Cursor in der Spaltenüberschrift an die rechte Begrenzung,
   bis das Auswahlzeichen angezeigt wird und wählen Sie die
   gewünschte Sortierung:
 
@@ -136,7 +136,7 @@ Standard-Ansicht
 ~~~~~~~~~~~~~~~~
 
 Standardmässig ist bei Dokumentauflistungen nach wie vor die bestehende
-Tabellendarstellung dargestellt. Für den Wechsel zur Galerieansicht stehen
+Tabellenansicht dargestellt. Für den Wechsel zur Galerieansicht stehen
 dem Benutzer entsprechende Bedienelemente zur Verfügung. Wird die Ansicht
 gewechselt, so speichert OneGov GEVER die neue Einstellung im Profil des
 Benutzers und verwendet diese für künftige Auflistungen.
@@ -144,7 +144,7 @@ Benutzers und verwendet diese für künftige Auflistungen.
 |img-grundlagen-10|
 
 Bei Mouse-Over erscheint eine erste kleine Dokument-Vorschau sowie die
-Möglichkeit, die Metadaten des Dokumentes zu bearbeiten, diese auszuchecken
+Möglichkeit, die Metadaten des Dokumentes zu bearbeiten, dieses auszuchecken
 sowie eine Kopie davon zu machen.
 
 |img-grundlagen-11|
@@ -189,11 +189,11 @@ Nachfolgend einige generelle Inputs zum Handling:
 
 - Mehrere Reiter verwenden: Wir empfehlen, für jedes Dossier einen eigenen
   Reiter im Browser zu verwenden, um das parallele Arbeiten in mehreren Dossiers
-  zu erleichtern.
+  zu erleichtern. Dies sind die Shortcuts dazu:
 
-  Dies sind die Shortcuts dazu:
-  Mac: :kbd:`cmd` + Klick
-  Windows: :kbd:`ctrl` + Klick
+  - Mac: :kbd:`cmd` + Klick
+
+  - Windows: :kbd:`ctrl` + Klick
 
 - Lesezeichen im Browser (Favoriten) verwenden: Es empfiehlt sich, im Browser
   für häufig benutzte Dossiers und Ordnungspositionen ein Lesezeichen zu setzen,
@@ -202,9 +202,9 @@ Nachfolgend einige generelle Inputs zum Handling:
 - Schriftgrösse anpassen: Bei Bedarf kann mit folgenden Tastaturkürzeln
   die Schriftgrösse im Webbrowser individuell angepasst werden:
 
-  - Grössere Schrift: :kbd:`Ctrl +` (Windows) bzw. :kbd:`Cmd +` (Mac)
+  - Grössere Schrift: :kbd:`ctrl +` (Windows) bzw. :kbd:`cmd +` (Mac)
 
-  - Kleinere Schrift: :kbd:`Cmd -` (Windows) bzw. :kbd:`Cmd -` (Mac)
+  - Kleinere Schrift: :kbd:`cmd -` (Windows) bzw. :kbd:`cmd -` (Mac)
 
 - Nachstehend noch eine Übersicht aller in OneGov GEVER verwendeten Icons
   als Übersicht:

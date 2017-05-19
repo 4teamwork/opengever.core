@@ -95,7 +95,7 @@ Drittsysteme ist die standardisierte :term:`Dossierschnittstelle` eCH-0039
 vorgesehen. OneGov GEVER kann für einen einzelnen Mandanten bzw. eine
 Amtsstelle oder ein Organ eingesetzt werden, aber auch für beliebig
 viele Mandanten in grossen und arbeitsteilig gegliederten Verwaltungen.
-Die Applikation ist modular erweiterbar und kann so Kundenbedürfnissen
+Die Applikation ist modular erweiterbar und kann so auf Kundenbedürfnissen
 angepasst werden.
 
 Initiale Lizenzgebühren für die Software entfallen, da OneGov GEVER
