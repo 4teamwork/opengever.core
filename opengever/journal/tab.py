@@ -1,5 +1,4 @@
 from BeautifulSoup import BeautifulSoup
-from copy import deepcopy
 from five import grok
 from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from ftw.journal.interfaces import IAnnotationsJournalizable
@@ -21,6 +20,8 @@ from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.interface import implements
 from zope.interface import Interface
+
+import cPickle
 
 
 def tooltip_helper(item, value):
@@ -139,6 +140,8 @@ class JournalTableSource(GeverTableSource):
               'title': title_column_sorter,
               'actor': actor_column_sorter}
 
+    batching_enabled = True
+
     def validate_base_query(self, query):
         context = self.config.context
         if IAnnotationsJournalizable.providedBy(context):
@@ -147,7 +150,9 @@ class JournalTableSource(GeverTableSource):
         elif IWorkflowHistoryJournalizable.providedBy(context):
             raise NotImplemented
 
-        data = deepcopy(data)
+        # XXX - a performance hack to replace deepcopy(data)
+        # This only works as persistent objects are guaranteed to be picklable
+        data = cPickle.loads(cPickle.dumps(data))
         return data
 
     def extend_query_with_ordering(self, results):
