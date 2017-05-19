@@ -1,5 +1,5 @@
 from datetime import datetime
-from opengever.base.security import changed_security
+from opengever.base.security import elevated_privileges
 from opengever.inbox import _
 from opengever.inbox.utils import get_current_inbox
 from plone.dexterity.utils import createContentInContainer
@@ -32,7 +32,7 @@ def get_current_yearfolder(context=None, inbox=None):
 def _create_yearfolder(inbox, year):
     """creates the yearfolder for the given year"""
 
-    with changed_security():
+    with elevated_privileges():
         # for creating the folder, we need to be a superuser since
         # normal user should not be able to add year folders.
         # --- help i18ndude ---
