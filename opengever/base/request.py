@@ -33,7 +33,7 @@ class RemoteRequestFailed(Exception):
         self.tb = tb
 
     def __str__(self):
-        return 'Remote request to "{url}": Traceback: {tb}'.format(
+        return 'Remote request to "{url}" failed: Traceback: {tb}'.format(
             **{'url': self.url, 'tb': self.tb})
 
 
@@ -156,21 +156,13 @@ def _remote_request(target_admin_unit_id, viewname, path, data, headers):
                               urllib.urlencode(data),
                               headers)
 
-    content = opener.open(request).read().strip()
+    response = opener.open(request)
+    content = response.read().strip()
 
-    try:
-        json.loads(content)
-    except ValueError:
-        is_json = False
-    else:
-        is_json = True
-
-    if content == 'OK' or is_json:
-        # Other code depends on a io obj.
-        return StringIO(content)
-    else:
-        # Otherwise expect a traceback as response from the remote server
+    if response.headers.type == 'text/traceback':
         raise RemoteRequestFailed(url, content)
+    else:
+        return StringIO(content)
 
 
 def tracebackify(*args, **kwargs):
@@ -197,7 +189,7 @@ def tracebackify(*args, **kwargs):
                     raise
                 except Exception:
                     self.request.response.setHeader("Content-type",
-                                                    "text/plain")
+                                                    "text/traceback")
                     e_type, e_value, tb = sys.exc_info()
 
                     if HAS_RAVEN:
