@@ -112,7 +112,6 @@
                     tal:define="link view/overlay/get_open_as_pdf_url; target python: '_blank' if view.overlay.should_open_in_new_window() else None"
                     tal:condition="nocall: link">
                     <a tal:attributes="href link; target target | nothing; class string:function-pdf-preview"
-                        i18n:domain="opengever.bumblebee"
                         i18n:translate="label_open_document_as_pdf">
                         Open as PDF
                     </a>
