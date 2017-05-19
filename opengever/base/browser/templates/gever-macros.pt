@@ -35,7 +35,11 @@
                 <span tal:content="box/content" />
               </tal:item>
               <tal:item tal:condition="not: box/content">
-                <span tal:condition="python: box.get('has_empty_marker', True)" i18n:translate="" >No content</span>
+                <span tal:condition="python: box.get('has_empty_marker', True)"
+                    i18n:translate=""
+                    i18n:domain="opengever.base">
+                    No content
+                </span>
               </tal:item>
             </tal:box>
 
@@ -99,11 +103,17 @@
 
                   <li class="moreLink" tal:condition="exists: box/href">
                     <a tal:attributes="href string:#${box/href}"
-                       i18n:translate="">
-                    show all</a>
+                       i18n:translate=""
+                       i18n:domain="opengever.base">
+                       show all
+                   </a>
                   </li>
                 </ul>
-                <span tal:condition="not: items" i18n:translate="">No content</span>
+                <span tal:condition="not: items"
+                    i18n:domain="opengever.base"
+                    i18n:translate="">
+                    No content
+                </span>
               </tal:items>
             </tal:box>
           </tal:condition>
