@@ -14,7 +14,11 @@ from opengever.dossier.interfaces import IDossierResolver
 from plone import api
 from Products.CMFCore.utils import getToolByName
 from zope.component import getAdapter
+from zope.component import getSiteManager
 from zope.i18n import translate
+from zope.interface import implements
+from zope.schema.interfaces import IVocabularyFactory
+from zope.schema.vocabulary import SimpleVocabulary
 
 
 NOT_SUPPLIED_OBJECTS = _(
@@ -25,8 +29,25 @@ NO_START_DATE = _("the dossier start date is missing.")
 MSG_ACTIVE_PROPOSALS = _("The dossier contains active proposals.")
 
 
-def get_resolver(obj):
-    return getAdapter(obj, IDossierResolver, name='strict')
+def get_resolver(dossier):
+    """Return the currently configured dossier-resolver."""
+
+    resolver_name = api.portal.get_registry_record(
+        'resolver_name', IDossierResolveProperties)
+    return getAdapter(dossier, IDossierResolver, name=resolver_name)
+
+
+class ValidResolverNamesVocabularyFactory(object):
+    """Return a vocabulary that contains the names of all named-adapters
+    registered as IDossierResolver for IDossierMarker.
+    """
+    implements(IVocabularyFactory)
+
+    def __call__(self, context):
+        sitemanager = getSiteManager()
+        resolver_adapter_names = sitemanager.adapters.names(
+            [IDossierMarker], IDossierResolver)
+        return SimpleVocabulary.fromValues(resolver_adapter_names)
 
 
 class DossierResolveView(grok.View):

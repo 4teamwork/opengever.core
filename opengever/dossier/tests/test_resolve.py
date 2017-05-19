@@ -21,7 +21,25 @@ from plone import api
 from plone.app.testing import applyProfile
 from plone.protect import createToken
 from plone.uuid.interfaces import IUUID
+from zope.component import getUtility
+from zope.schema.interfaces import IVocabularyFactory
 import transaction
+
+
+def get_resolver_vocabulary():
+    voca_factory = getUtility(
+        IVocabularyFactory,
+        name='opengever.dossier.ValidResolverNamesVocabulary')
+    return voca_factory(api.portal.get())
+
+
+class TestResolverVocabulary(FunctionalTestCase):
+
+    def test_resolver_vocabulary(self):
+        vocabulary = get_resolver_vocabulary()
+        self.assertItemsEqual(
+            [u'strict'],
+            vocabulary.by_value.keys())
 
 
 class TestResolvingDossiers(FunctionalTestCase):
