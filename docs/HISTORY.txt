@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2017.2.2 (unreleased)
+2017.3.0 (unreleased)
 ---------------------
 
 - Replace changed_security with elevated_privileges. [deiferni]
