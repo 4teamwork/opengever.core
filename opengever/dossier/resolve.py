@@ -252,6 +252,17 @@ class StrictDossierResolver(grok.Adapter):
         Reactivator(self.context).reactivate_dossier()
 
 
+class LenientDossierResolver(StrictDossierResolver):
+    """The lenient dossier resolver does not enforce that documents and tasks
+    are filed in subdossiers if the main dossier has subdossiers.
+    """
+    grok.implements(IDossierResolver)
+    grok.context(IDossierMarker)
+    grok.name('lenient')
+
+    strict = False
+
+
 class Resolver(object):
 
     def __init__(self, context):
