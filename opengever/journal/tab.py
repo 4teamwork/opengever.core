@@ -1,12 +1,12 @@
 from BeautifulSoup import BeautifulSoup
-from copy import deepcopy
 from five import grok
 from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from ftw.journal.interfaces import IAnnotationsJournalizable
 from ftw.journal.interfaces import IJournalizable
 from ftw.journal.interfaces import IWorkflowHistoryJournalizable
 from ftw.table import helper
-from ftw.table.interfaces import ITableSourceConfig, ITableSource
+from ftw.table.interfaces import ITableSource
+from ftw.table.interfaces import ITableSourceConfig
 from opengever.contact.utils import get_contactfolder_url
 from opengever.journal import _
 from opengever.tabbedview import BaseListingTab
@@ -18,17 +18,24 @@ from zope.annotation.interfaces import IAnnotations
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.globalrequest import getRequest
 from zope.i18n import translate
-from zope.interface import implements, Interface
+from zope.interface import implements
+from zope.interface import Interface
+
+import cPickle
 
 
 def tooltip_helper(item, value):
-    text = ''.join(BeautifulSoup(value, fromEncoding='utf8').findAll(text=True))
+    text = ''.join(
+        BeautifulSoup(value, fromEncoding='utf8').findAll(text=True))
     return '<span title="%s">%s</span>' % (text.encode('utf-8'), value)
 
 
 def title_helper(item, value):
-    return translate(item['action'].get('title'),
-                    context=getRequest())
+    return translate(item['action'].get('title'), context=getRequest())
+
+
+def empty_template_helper(self, *args, **kwargs):
+    return ''
 
 
 class IJournalSourceConfig(ITableSourceConfig):
@@ -42,14 +49,15 @@ class JournalTab(BaseListingTab):
 
     implements(IJournalSourceConfig)
 
-    reference_template = ViewPageTemplateFile('templates/journal_references.pt')
+    reference_template = ViewPageTemplateFile(
+        'templates/journal_references.pt')
 
     grok.name('tabbedview_view-journal')
     grok.require('zope2.View')
     grok.context(IJournalizable)
 
-    # do not select
-    select_all_template = lambda *a, **kw: ''
+    # This is a bound method on purpose so it can be called down the line
+    select_all_template = empty_template_helper
 
     sort_on = 'time'
     sort_reverse = True
@@ -123,6 +131,7 @@ def actor_column_sorter(a, b):
 
 
 class JournalTableSource(GeverTableSource):
+    """Generate a table to display in the journal tab view."""
 
     grok.implements(ITableSource)
     grok.adapts(IJournalSourceConfig, Interface)
@@ -130,6 +139,8 @@ class JournalTableSource(GeverTableSource):
     sorter = {'time': time_column_sorter,
               'title': title_column_sorter,
               'actor': actor_column_sorter}
+
+    batching_enabled = True
 
     def validate_base_query(self, query):
         context = self.config.context
@@ -139,7 +150,9 @@ class JournalTableSource(GeverTableSource):
         elif IWorkflowHistoryJournalizable.providedBy(context):
             raise NotImplemented
 
-        data = deepcopy(data)
+        # XXX - a performance hack to replace deepcopy(data)
+        # This only works as persistent objects are guaranteed to be picklable
+        data = cPickle.loads(cPickle.dumps(data))
         return data
 
     def extend_query_with_ordering(self, results):
