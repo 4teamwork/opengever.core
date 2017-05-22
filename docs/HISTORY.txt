@@ -11,28 +11,7 @@ Changelog
 2017.2.2 (2017-05-22)
 ---------------------
 
-- Nothing changed yet.
-- Replace changed_security with elevated_privileges. [deiferni]
-- Make sure that pasting is allowed before pasting. [deiferni]
-- Remove an unused creator behaviour from the codebase. [Rotonen]
-- Keep *.msg file after conversion and store message source for mails. [deiferni]
-- Fix string type in bundle loader [buchi]
 - Fix translation for the Open as PDF action. [phgross]
-- Fix addable types constrain for repository folders in API calls [buchi]
-- Cache addable types constrains for repository folders per request [buchi]
-- Fix typo in dossier SearchableTextExtender, which results in a empty SearchableText if IFilingNumber behavior was activated. [mathias.leimgruber]
-- Display attachments on mail overviews. [Rotonen]
-- Allow the same Users to edit Tasktemplatefolders in active state as in inactice state. [mathias.leimgruber]
-- Make sure local roles of committees are stored as byte strings [buchi]
-- Use CreatEmailCommand to create email upon mail-in. [deiferni]
-- Fix typo in method name: resolve_sumitted_proposal -> resolve_submitted_proposal. [mathias.leimgruber]
-- Use chameleon as the templating engine for better performance. [Rotonen]
-- Respect `maximum_dossier_depth` registry record in DefaultConstrainTypeDecider [mathias.leimgruber]
-- Handle require_login error where came_from_did not exist. [jone]
-- Inter-Admin-Unit Requests: Extract response body into the local namespace so
-  Sentry can log it as a local in case of failure. [lgraf]
-- Word meeting: replace proposal textfields with a document. [jone]
-- OGIP 15: Implement adding multiple task with the add form. [mathias.leimgruber]
 
 
 2017.2.1 (2017-05-11)
