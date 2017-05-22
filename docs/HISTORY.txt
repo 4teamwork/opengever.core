@@ -28,6 +28,12 @@ Changelog
 - OGIP 15: Implement adding multiple task with the add form. [mathias.leimgruber]
 
 
+2017.2.2 (2017-05-22)
+---------------------
+
+- Fix translation for the Open as PDF action. [phgross]
+
+
 2017.2.1 (2017-05-11)
 ---------------------
 
