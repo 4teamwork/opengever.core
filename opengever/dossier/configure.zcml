@@ -49,4 +49,9 @@
       factory=".statestorage.DossierGridStateStorageKeyGenerator"
       />
 
+  <utility
+      factory=".resolve.ValidResolverNamesVocabularyFactory"
+      name="opengever.dossier.ValidResolverNamesVocabulary"
+      />
+
 </configure>

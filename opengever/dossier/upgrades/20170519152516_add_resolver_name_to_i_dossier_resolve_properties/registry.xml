@@ -1,0 +1,5 @@
+<registry>
+    <records interface="opengever.dossier.interfaces.IDossierResolveProperties">
+      <value key="resolver_name">strict</value>
+    </records>
+</registry>

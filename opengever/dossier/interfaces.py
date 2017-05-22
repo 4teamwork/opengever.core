@@ -216,3 +216,9 @@ class IDossierResolveProperties(Interface):
         description=u'Select if GEVER should trigger the archival file '
         'conversion for each document, when a dossier gets resolved.',
         default=False)
+
+    resolver_name = schema.Choice(
+        title=u"Dossier resolver name",
+        vocabulary=u'opengever.dossier.ValidResolverNamesVocabulary',
+        default='strict'
+    )

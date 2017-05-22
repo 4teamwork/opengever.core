@@ -21,7 +21,25 @@ from plone import api
 from plone.app.testing import applyProfile
 from plone.protect import createToken
 from plone.uuid.interfaces import IUUID
+from zope.component import getUtility
+from zope.schema.interfaces import IVocabularyFactory
 import transaction
+
+
+def get_resolver_vocabulary():
+    voca_factory = getUtility(
+        IVocabularyFactory,
+        name='opengever.dossier.ValidResolverNamesVocabulary')
+    return voca_factory(api.portal.get())
+
+
+class TestResolverVocabulary(FunctionalTestCase):
+
+    def test_resolver_vocabulary(self):
+        vocabulary = get_resolver_vocabulary()
+        self.assertItemsEqual(
+            [u'strict', u'lenient'],
+            vocabulary.by_value.keys())
 
 
 class TestResolvingDossiers(FunctionalTestCase):
@@ -367,6 +385,31 @@ class TestResolving(FunctionalTestCase):
                           api.content.get_state(dossier))
         self.assertEquals('dossier-state-resolved',
                           api.content.get_state(subdossier))
+
+    @browsing
+    def test_lenient_resolver_skips_document_and_task_filing_check(self, browser):  # noqa
+        api.portal.set_registry_record(
+            'resolver_name', 'lenient', IDossierResolveProperties)
+
+        dossier = create(Builder('dossier'))
+        subdossier = create(Builder('dossier').within(dossier))
+        create(Builder('document').within(dossier))
+        create(Builder('mail').within(dossier))
+        create(Builder('task')
+               .within(dossier)
+               .in_state('task-state-tested-and-closed'))
+
+        browser.login().open(dossier,
+                             {'_authenticator': createToken()},
+                             view='transition-resolve')
+
+        self.assertEquals(dossier.absolute_url(), browser.url)
+        self.assertEquals('dossier-state-resolved',
+                          api.content.get_state(dossier))
+        self.assertEquals('dossier-state-resolved',
+                          api.content.get_state(subdossier))
+        self.assertEquals(
+            ['The dossier has been succesfully resolved.'], info_messages())
 
     @browsing
     def test_handles_already_resolved_subdossiers(self, browser):

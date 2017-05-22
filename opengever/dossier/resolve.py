@@ -13,7 +13,12 @@ from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.dossier.interfaces import IDossierResolver
 from plone import api
 from Products.CMFCore.utils import getToolByName
+from zope.component import getAdapter
+from zope.component import getSiteManager
 from zope.i18n import translate
+from zope.interface import implements
+from zope.schema.interfaces import IVocabularyFactory
+from zope.schema.vocabulary import SimpleVocabulary
 
 
 NOT_SUPPLIED_OBJECTS = _(
@@ -24,6 +29,27 @@ NO_START_DATE = _("the dossier start date is missing.")
 MSG_ACTIVE_PROPOSALS = _("The dossier contains active proposals.")
 
 
+def get_resolver(dossier):
+    """Return the currently configured dossier-resolver."""
+
+    resolver_name = api.portal.get_registry_record(
+        'resolver_name', IDossierResolveProperties)
+    return getAdapter(dossier, IDossierResolver, name=resolver_name)
+
+
+class ValidResolverNamesVocabularyFactory(object):
+    """Return a vocabulary that contains the names of all named-adapters
+    registered as IDossierResolver for IDossierMarker.
+    """
+    implements(IVocabularyFactory)
+
+    def __call__(self, context):
+        sitemanager = getSiteManager()
+        resolver_adapter_names = sitemanager.adapters.names(
+            [IDossierMarker], IDossierResolver)
+        return SimpleVocabulary.fromValues(resolver_adapter_names)
+
+
 class DossierResolveView(grok.View):
 
     grok.context(IDossierMarker)
@@ -31,16 +57,14 @@ class DossierResolveView(grok.View):
     grok.require('zope2.View')
 
     def render(self):
-
-        ptool = getToolByName(self, 'plone_utils')
-
-        resolver = IDossierResolver(self.context)
+        resolver = get_resolver(self.context)
 
         # check preconditions
         errors = resolver.is_resolve_possible()
         if errors:
             for msg in errors:
-                ptool.addPortalMessage(msg, type="error")
+                api.portal.show_message(
+                    message=msg, request=self.request, type='error')
 
             return self.request.RESPONSE.redirect(
                 self.context.absolute_url())
@@ -49,10 +73,10 @@ class DossierResolveView(grok.View):
         invalid_dates = resolver.are_enddates_valid()
         if invalid_dates:
             for title in invalid_dates:
-                ptool.addPortalMessage(
-                    _("The dossier ${dossier} has a invalid end_date",
-                      mapping=dict(dossier=title,)),
-                    type="error")
+                msg = _("The dossier ${dossier} has a invalid end_date",
+                        mapping=dict(dossier=title,))
+                api.portal.show_message(
+                    message=msg, request=self.request, type='error')
 
             return self.request.RESPONSE.redirect(
                 self.context.absolute_url())
@@ -62,13 +86,13 @@ class DossierResolveView(grok.View):
         else:
             resolver.resolve()
             if self.context.is_subdossier():
-                ptool.addPortalMessage(
-                    _('The subdossier has been succesfully resolved.'),
-                    type='info')
+                api.portal.show_message(
+                    message=_('The subdossier has been succesfully resolved.'),
+                    request=self.request, type='info')
             else:
-                ptool.addPortalMessage(
-                    _('The dossier has been succesfully resolved.'),
-                    type='info')
+                api.portal.show_message(
+                    message=_('The dossier has been succesfully resolved.'),
+                    request=self.request, type='info')
 
             self.request.RESPONSE.redirect(self.context.absolute_url())
 
@@ -81,7 +105,7 @@ class DossierReactivateView(grok.View):
     def render(self):
         ptool = getToolByName(self, 'plone_utils')
 
-        resolver = IDossierResolver(self.context)
+        resolver = get_resolver(self.context)
 
         # check preconditions
         if resolver.is_reactivate_possible():
@@ -96,12 +120,17 @@ class DossierReactivateView(grok.View):
             self.request.RESPONSE.redirect(self.context.absolute_url())
 
 
-class DossierResolver(grok.Adapter):
+class StrictDossierResolver(grok.Adapter):
+    """The strict dossier resolver enforces that documents and tasks
+    are filed in subdossiers if the dossier contains at least one subdossier.
+    """
     grok.implements(IDossierResolver)
     grok.context(IDossierMarker)
+    grok.name('strict')
 
     preconditions_fulfilled = False
     enddates_valid = False
+    strict = True
 
     def get_property(self, name):
         return api.portal.get_registry_record(
@@ -111,7 +140,8 @@ class DossierResolver(grok.Adapter):
         """Check if all preconditions are fulfilled.
         Return a list of errors, or a empty list when resolving is possible.
         """
-        errors = ResolveConditions(self.context).check_preconditions()
+        errors = ResolveConditions(
+            self.context, self.strict).check_preconditions()
 
         if not errors:
             self.preconditions_fulfilled = True
@@ -222,6 +252,17 @@ class DossierResolver(grok.Adapter):
         Reactivator(self.context).reactivate_dossier()
 
 
+class LenientDossierResolver(StrictDossierResolver):
+    """The lenient dossier resolver does not enforce that documents and tasks
+    are filed in subdossiers if the main dossier has subdossiers.
+    """
+    grok.implements(IDossierResolver)
+    grok.context(IDossierMarker)
+    grok.name('lenient')
+
+    strict = False
+
+
 class Resolver(object):
 
     def __init__(self, context):
@@ -280,8 +321,9 @@ class Reactivator(object):
 
 class ResolveConditions(object):
 
-    def __init__(self, context):
+    def __init__(self, context, strict=True):
         self.context = context
+        self.strict = strict
 
     def check_preconditions(self):
         """Check if all preconditions are fulfilled:
@@ -292,7 +334,7 @@ class ResolveConditions(object):
 
         errors = []
 
-        if not self.context.is_all_supplied():
+        if self.strict and not self.context.is_all_supplied():
             errors.append(NOT_SUPPLIED_OBJECTS)
         if not self.context.is_all_checked_in():
             errors.append(NOT_CHECKED_IN_DOCS)
