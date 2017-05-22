@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2017.2.2 (unreleased)
+2017.3.0 (unreleased)
 ---------------------
 
 - Replace changed_security with elevated_privileges. [deiferni]
@@ -26,6 +26,12 @@ Changelog
   Sentry can log it as a local in case of failure. [lgraf]
 - Word meeting: replace proposal textfields with a document. [jone]
 - OGIP 15: Implement adding multiple task with the add form. [mathias.leimgruber]
+
+
+2017.2.2 (2017-05-22)
+---------------------
+
+- Fix translation for the Open as PDF action. [phgross]
 
 
 2017.2.1 (2017-05-11)
