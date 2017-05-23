@@ -7,10 +7,3 @@ extends =
 {{% endif %}}
 
 ogds-db-name = opengever{{{package.name}}}
-
-
-{{% if setup.enable_meeting_feature %}}
-[instance]
-environment-vars +=
-    SABLON_BIN ${buildout:sablon-executable}
-{{% endif %}}
