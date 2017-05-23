@@ -159,7 +159,7 @@ def _remote_request(target_admin_unit_id, viewname, path, data, headers):
     response = opener.open(request)
     content = response.read().strip()
 
-    if response.headers.type == 'text/traceback':
+    if response.headers.type == 'text/x.traceback':
         raise RemoteRequestFailed(url, content)
     else:
         return StringIO(content)
@@ -189,7 +189,7 @@ def tracebackify(*args, **kwargs):
                     raise
                 except Exception:
                     self.request.response.setHeader("Content-type",
-                                                    "text/traceback")
+                                                    "text/x.traceback")
                     e_type, e_value, tb = sys.exc_info()
 
                     if HAS_RAVEN:
