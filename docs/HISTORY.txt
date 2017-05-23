@@ -5,6 +5,7 @@ Changelog
 2017.3.0 (unreleased)
 ---------------------
 
+- Use latest ftw.datepicker for all datetime widgets. [mathias.leimgruber]
 - Make `resolving` a dossier customizable and provide two implementations (strict and lenient). [deiferni]
 - Replace changed_security with elevated_privileges. [deiferni]
 - Make sure that pasting is allowed before pasting. [deiferni]
