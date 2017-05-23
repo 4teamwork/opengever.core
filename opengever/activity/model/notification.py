@@ -1,7 +1,5 @@
-from opengever.activity.model.subscription import Subscription
 from opengever.base.model import Base
 from opengever.ogds.models import USER_ID_LENGTH
-from opengever.ogds.models.query import BaseQuery
 from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
@@ -11,25 +9,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
 
 
-class NotificationQuery(BaseQuery):
-
-    def by_user(self, userid):
-        return self.filter_by(userid=userid)
-
-    def by_subscription_roles(self, roles, activity):
-        subscriptions = Subscription.query.by_resource_and_role(
-            activity.resource, roles)
-        user_ids = []
-        for subscription in subscriptions:
-            user_ids += subscription.watcher.get_user_ids()
-
-        return self.filter_by(activity_id=activity.id).filter(
-            Notification.userid.in_(user_ids))
-
-
 class Notification(Base):
-
-    query_cls = NotificationQuery
 
     __tablename__ = 'notifications'
 

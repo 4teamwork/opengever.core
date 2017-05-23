@@ -1,5 +1,4 @@
 from opengever.base.model import Base
-from opengever.ogds.models.query import BaseQuery
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
@@ -15,22 +14,7 @@ DISPOSITION_ARCHIVIST_ROLE = 'archivist'
 WATCHER_ROLE = 'regular_watcher'
 
 
-class SubscriptionQuery(BaseQuery):
-
-    def fetch(self, resource, watcher, role):
-        return self.filter_by(
-            resource=resource, watcher=watcher, role=role).first()
-
-    def get_by_watcher_resource(self, resource, watcher):
-        return self.filter_by(resource=resource, watcher=watcher).first()
-
-    def by_resource_and_role(self, resource, roles):
-        return self.filter_by(resource=resource).filter(
-            Subscription.role.in_(roles))
-
-
 class Subscription(Base):
-    query_cls = SubscriptionQuery
     __tablename__ = 'subscriptions'
 
     resource_id = Column(Integer, ForeignKey('resources.id'), primary_key=True)

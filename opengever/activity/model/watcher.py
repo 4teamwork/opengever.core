@@ -1,6 +1,5 @@
 from opengever.base.model import Base
 from opengever.ogds.models import USER_ID_LENGTH
-from opengever.ogds.models.query import BaseQuery
 from opengever.ogds.models.service import OGDSService
 from sqlalchemy import Column
 from sqlalchemy import Integer
@@ -9,16 +8,8 @@ from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.schema import Sequence
 
 
-class WatcherQuery(BaseQuery):
-
-    def get_by_actorid(self, actorid):
-        return self.filter_by(actorid=actorid).first()
-
-
 class Watcher(Base):
-    """A user
-    """
-    query_cls = WatcherQuery
+    """Associates a user with a resource that he is watching."""
 
     __tablename__ = 'watchers'
 

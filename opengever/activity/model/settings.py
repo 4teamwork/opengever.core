@@ -1,5 +1,4 @@
 from opengever.base.model import Base
-from opengever.ogds.models.query import BaseQuery
 from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import Integer
@@ -9,22 +8,7 @@ from sqlalchemy.schema import Sequence
 import json
 
 
-class NotificationDefaultQuery(BaseQuery):
-
-    def is_dispatch_needed(self, dispatch_setting, kind):
-        setting = self.filter_by(kind=kind).first()
-        if not setting:
-            return False
-
-        return getattr(setting, dispatch_setting, False)
-
-    def by_kind(self, kind):
-        return self.filter_by(kind=kind)
-
-
 class NotificationDefault(Base):
-
-    query_cls = NotificationDefaultQuery
 
     __tablename__ = 'notification_defaults'
 
