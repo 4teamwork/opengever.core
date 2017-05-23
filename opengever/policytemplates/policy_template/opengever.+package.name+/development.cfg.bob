@@ -5,15 +5,5 @@ extends =
 {{% if setup.enable_bumblebee_feature %}}
     https://raw.githubusercontent.com/4teamwork/ftw-buildouts/master/bumblebee.cfg
 {{% endif %}}
-{{% if setup.enable_meeting_feature %}}
-  http://buildout-proxy.4teamwork.ch/4teamwork/opengever-buildouts/master/ruby-gems.cfg
-{{% endif %}}
 
 ogds-db-name = opengever{{{package.name}}}
-
-
-{{% if setup.enable_meeting_feature %}}
-[instance]
-environment-vars +=
-    SABLON_BIN ${buildout:sablon-executable}
-{{% endif %}}
