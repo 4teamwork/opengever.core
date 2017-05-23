@@ -2,11 +2,13 @@ from datetime import datetime
 from five import grok
 from opengever.base.protect import unprotected_write
 from opengever.base.request import dispatch_request
+from opengever.base.request import tracebackify
 from opengever.core import dictstorage
 from opengever.ogds.base.interfaces import ISyncStamp
 from opengever.ogds.base.utils import ogds_service
 from plone import api
 from Products.CMFPlone.interfaces import IPloneSiteRoot
+from Products.Five.browser import BrowserView
 from urllib2 import URLError
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
@@ -81,16 +83,13 @@ class SyncStampUtility(grok.GlobalUtility):
         logger.info("Stored sync_stamp %s in annotations" % stamp)
 
 
-class UpdateSyncStamp(grok.View):
+@tracebackify
+class UpdateSyncStamp(BrowserView):
     """View wich is called from the ogds, after the LDAP Synchronisation"""
-
-    grok.context(IPloneSiteRoot)
-    grok.name('update_sync_stamp')
-    grok.require('zope2.View')
 
     INTERN_SYNC_KEY = 'ldap_sync_key'
 
-    def render(self):
+    def __call__(self):
         """read the actual timestamp(isoformat) and save it into a annotation.
         """
 

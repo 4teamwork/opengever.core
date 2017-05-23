@@ -1,0 +1,13 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser">
+
+  <browser:page
+      name="accept_task_workflow_transition"
+      for="opengever.task.task.ITask"
+      class=".utils.AcceptTaskWorkflowTransitionView"
+      permission="cmf.AddPortalContent"
+      />
+
+
+</configure>

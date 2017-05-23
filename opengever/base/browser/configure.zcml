@@ -2,6 +2,8 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser">
 
+  <include package=".wizard" />
+
   <browser:page
       name="list_groupmembers"
       for="*"

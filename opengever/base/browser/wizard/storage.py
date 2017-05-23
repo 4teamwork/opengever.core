@@ -5,12 +5,13 @@ from datetime import timedelta
 from five import grok
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.request import dispatch_request
+from opengever.base.request import tracebackify
 from opengever.base.utils import ok_response
 from persistent.dict import PersistentDict
+from Products.Five.browser import BrowserView
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
 from zope.component.hooks import getSite
-from zope.interface import Interface
 import json
 
 
@@ -94,16 +95,13 @@ class WizardDataStorage(grok.GlobalUtility):
                             admin_unit_id))
 
 
-class ReceiveWizardDataSet(grok.View):
+@tracebackify
+class ReceiveWizardDataSet(BrowserView):
     """Receives a IWizardDataStorage data set from a remote client and stores
     it on the target client.
     """
 
-    grok.context(Interface)
-    grok.name('receive-wizard-data-set')
-    grok.require('zope2.View')
-
-    def render(self):
+    def __call__(self):
         jsondata = self.request.get('data-set')
         key = self.request.get('key')
         data = json.loads(jsondata)

@@ -47,6 +47,20 @@
       />
 
   <browser:page
+      name="task-responses-extract"
+      for="opengever.task.task.ITask"
+      permission="zope2.View"
+      class=".transporter.ExtractResponses"
+      />
+
+  <browser:page
+      name="task-responses-receive"
+      for="opengever.task.task.ITask"
+      permission="zope2.View"
+      class=".transporter.ReceiveResponses"
+      />
+
+  <browser:page
       name="plone_layout"
       for="opengever.task.task.ITask"
       permission="zope.Public"

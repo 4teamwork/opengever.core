@@ -1,7 +1,7 @@
-from five import grok
 from opengever.activity import notification_center
 from opengever.base.oguid import Oguid
 from opengever.base.request import dispatch_request
+from opengever.base.request import tracebackify
 from opengever.base.transport import Transporter
 from opengever.base.utils import ok_response
 from opengever.globalindex.model.task import Task
@@ -20,6 +20,7 @@ from opengever.task.transporter import IResponseTransporter
 from opengever.task.util import change_task_workflow_state
 from opengever.task.util import CustomInitialVersionMessage
 from plone.dexterity.utils import createContentInContainer
+from Products.Five.browser import BrowserView
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
 import AccessControl
@@ -297,7 +298,8 @@ def accept_task_with_successor(dossier, predecessor_oguid, response_text):
     return successor
 
 
-class AcceptTaskWorkflowTransitionView(grok.View):
+@tracebackify
+class AcceptTaskWorkflowTransitionView(BrowserView):
     """A remote request view called by another adminunit, to accept a task,
     during the SuccessorTask creation process.
 
@@ -306,11 +308,7 @@ class AcceptTaskWorkflowTransitionView(grok.View):
     the task will watch the successor.
     """
 
-    grok.context(ITask)
-    grok.name('accept_task_workflow_transition')
-    grok.require('cmf.AddPortalContent')
-
-    def render(self):
+    def __call__(self):
         if self.is_already_accepted():
             return ok_response()
 

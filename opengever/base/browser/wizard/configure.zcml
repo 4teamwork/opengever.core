@@ -1,0 +1,12 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser">
+
+  <browser:page
+      name="receive-wizard-data-set"
+      for="*"
+      class=".storage.ReceiveWizardDataSet"
+      permission="zope2.View"
+      />
+
+</configure>

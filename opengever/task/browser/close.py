@@ -7,6 +7,7 @@ from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.request import dispatch_request
+from opengever.base.request import tracebackify
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.base.utils import ok_response
 from opengever.dossier.base import DOSSIER_STATES_OPEN
@@ -24,6 +25,7 @@ from plone.directives.form import Schema
 from plone.z3cform.layout import FormWrapper
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
+from Products.Five.browser import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from z3c.form.button import buttonAndHandler
@@ -291,20 +293,17 @@ class ChooseDosserStepRedirecter(grok.View):
         return self.request.RESPONSE.redirect(url)
 
 
-class CloseTaskView(grok.View):
+@tracebackify
+class CloseTaskView(BrowserView):
     """This view closes the task. It is either called directly, if no
     documents are selected to be copied or after choosing the target dossier
     and copying the documents.
     It is not context sensitive.
     """
 
-    grok.context(ITask)
-    grok.name('close-task-wizard-remote_close')
-    grok.require('zope2.View')
-
     transition = 'task-transition-open-tested-and-closed'
 
-    def render(self):
+    def __call__(self):
         text = self.request.get('text')
         if self.is_already_done():
             return ok_response(self.request)

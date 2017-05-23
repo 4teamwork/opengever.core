@@ -3,13 +3,38 @@ from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from Products.CMFCore.utils import getToolByName
 from StringIO import StringIO
+from ZODB.POSException import ConflictError
 from zope.component.hooks import getSite
 from zope.component.hooks import setSite
 from zope.globalrequest import getRequest
 import json
 import os.path
+import pkg_resources
+import sys
+import traceback
 import urllib
 import urllib2
+
+
+try:
+    pkg_resources.get_distribution('ftw.raven')
+    from ftw.raven.reporter import maybe_report_exception
+except pkg_resources.DistributionNotFound:
+    HAS_RAVEN = False
+else:
+    HAS_RAVEN = True
+
+
+class RemoteRequestFailed(Exception):
+    """Exception class for remote requests"""
+
+    def __init__(self, url, tb):
+        self.url = url
+        self.tb = tb
+
+    def __str__(self):
+        return 'Remote request to "{url}" failed: Traceback: {tb}'.format(
+            **{'url': self.url, 'tb': self.tb})
 
 
 def dispatch_json_request(target_admin_unit_id, viewname, path='',
@@ -120,7 +145,8 @@ def _remote_request(target_admin_unit_id, viewname, path, data, headers):
     handler = urllib2.ProxyHandler({})
     opener = urllib2.build_opener(handler)
 
-    viewname = viewname if viewname.startswith('@@') else '@@{}'.format(viewname)
+    viewname = viewname if viewname.startswith(
+        '@@') else '@@{}'.format(viewname)
     if path:
         url = os.path.join(target_unit.site_url, path, viewname)
     else:
@@ -129,4 +155,55 @@ def _remote_request(target_admin_unit_id, viewname, path, data, headers):
     request = urllib2.Request(url,
                               urllib.urlencode(data),
                               headers)
-    return opener.open(request)
+
+    response = opener.open(request)
+    content = response.read().strip()
+
+    if response.headers.type == 'text/x.traceback':
+        raise RemoteRequestFailed(url, content)
+    else:
+        return StringIO(content)
+
+
+def tracebackify(*args, **kwargs):
+    """Decorator for remote endpoints
+    The decorator safely calls the View and returns the traceback as string.
+    Plus: Also try to report the traceback to sentry, so the original
+    traceback from the remote view is reported too"""
+
+    to_re_raise = kwargs.pop('to_re_raise', None)
+
+    if not isinstance(to_re_raise, list):
+        to_re_raise = [to_re_raise]
+
+    def wrapper(Cls):
+
+        class SafeCall(Cls):
+            def __call__(self, *args, **kwargs):
+
+                try:
+                    return super(SafeCall, self).__call__(*args, **kwargs)
+                except (ConflictError, KeyboardInterrupt):
+                    raise
+                except tuple(to_re_raise):
+                    raise
+                except Exception:
+                    self.request.response.setHeader("Content-type",
+                                                    "text/x.traceback")
+                    e_type, e_value, tb = sys.exc_info()
+
+                    if HAS_RAVEN:
+                        maybe_report_exception(self.context, self.request,
+                                               e_type, e_value, tb)
+
+                    return ''.join(traceback.format_exception(e_type, e_value,
+                                                              tb))
+        return SafeCall
+
+    if args:
+        Cls = args[0]
+        return wrapper(Cls)
+    else:
+        def decorator(Cls):
+            return wrapper(Cls)
+        return decorator

@@ -1,0 +1,12 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser">
+
+  <browser:page
+      name="update_sync_stamp"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      class=".import_stamp.UpdateSyncStamp"
+      permission="zope2.View"
+      />
+
+</configure>
