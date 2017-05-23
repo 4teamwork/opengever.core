@@ -4,10 +4,12 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-05-04 09:02+0000\n"
-"PO-Revision-Date: 2016-08-10 05:19+0000\n"
-"Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
-"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
+"POT-Creation-Date: 2017-04-27 11:21+0000\n"
+"PO-Revision-Date: 2017-05-23 04:58+0000\n"
+"Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
+"gever/opengever-meeting/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -678,7 +680,7 @@ msgstr "Annuler"
 #. Default: "Close"
 #: ./opengever/meeting/browser/meetings/protocol.py:239
 msgid "label_close"
-msgstr ""
+msgstr "Fermer"
 
 #. Default: "Committee deactivated successfully"
 #: ./opengever/meeting/browser/committee.py:89
@@ -1420,4 +1422,3 @@ msgstr ""
 #: ./opengever/meeting/model/proposal.py:164
 msgid "un-schedule"
 msgstr "Enlever le point de l'ordre du jour"
-
