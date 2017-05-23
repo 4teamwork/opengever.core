@@ -6,6 +6,7 @@ from plone.app.search.browser import EVER
 from plone.app.search.browser import quote_chars
 from plone.app.search.browser import Search
 from Products.CMFPlone.browser.navtree import getNavigationRoot
+from Products.CMFPlone.utils import safe_unicode
 from zope.component import getMultiAdapter
 
 
@@ -151,5 +152,11 @@ class OpengeverSearch(Search):
         # respect navigation root
         if 'path' not in query:
             query['path'] = getNavigationRoot(self.context)
+
+        # Special treatment for the Subject index
+        # The index only stores unicode values, so we have to search
+        # for unicode values.
+        if 'Subject' in query:
+            query['Subject'] = safe_unicode(query['Subject'])
 
         return query

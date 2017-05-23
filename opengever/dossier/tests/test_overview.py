@@ -276,5 +276,5 @@ class TestOverview(FunctionalTestCase):
                                  keywords=(u'secret', u'special')))
 
         browser.login().visit(dossier, view='tabbedview_view-overview')
-        self.assertEquals(['secret, special'],
-                          browser.css('#keywordsBox span').text)
+        self.assertEquals([u'secret', u'special'],
+                          browser.css('#keywordsBox li span').text)

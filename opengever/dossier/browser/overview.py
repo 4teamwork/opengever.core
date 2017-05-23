@@ -18,6 +18,7 @@ from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.tabbedview import GeverTabMixin
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListing
+from Products.CMFPlone.utils import safe_unicode
 from sqlalchemy import desc
 from zc.relation.interfaces import ICatalog
 from zope.component import getUtility
@@ -206,7 +207,18 @@ class DossierOverview(BoxesViewMixin, grok.View, GeverTabMixin):
         return [relation.from_id for relation in relations]
 
     def get_keywords(self):
-        return ', '.join(IDossier(self.context).keywords)
+        linked_keywords = []
+        for keyword in IDossier(self.context).keywords:
+            url = u'{}/@@search?Subject={}'.format(
+                api.portal.get().absolute_url(), safe_unicode(keyword))
+            linked_keywords.append(
+                {
+                    'getURL': url,
+                    'Title': keyword,
+                    'css_class': '',
+                }
+            )
+        return linked_keywords
 
     def make_keyword_box(self):
         return dict(id='keywords', content=self.get_keywords(),

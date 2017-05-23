@@ -670,10 +670,10 @@ class TestDossierTemplateOverview(FunctionalTestCase):
                          browser.css('#descriptionBox span').first.text)
 
     @browsing
-    def test_keywords_box_shows_keywords_joined_by_comma(self, browser):
+    def test_keywords_box_shows_keywords_as_list(self, browser):
         browser.login().open(self.dossiertemplate, view=OVERVIEW_TAB)
-        self.assertEqual(u'chuck, james',
-                         browser.css('#keywordsBox span').first.text)
+        self.assertEqual([u'chuck', u'james'],
+                         browser.css('#keywordsBox li span').text)
 
     @browsing
     def test_comments_box_shows_comment(self, browser):
