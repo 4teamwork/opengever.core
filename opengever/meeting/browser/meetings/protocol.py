@@ -1,11 +1,12 @@
 from calendar import timegm
+from ftw.datepicker.widget import DatePickerFieldWidget
+from opengever.base.browser.modelforms import ModelEditForm
 from opengever.base.date_time import as_utc
 from opengever.base.response import JSONResponse
 from opengever.base.schema import UTCDatetime
 from opengever.meeting import _
 from opengever.meeting.command import MIME_DOCX
 from opengever.meeting.command import ProtocolOperations
-from opengever.base.browser.modelforms import ModelEditForm
 from opengever.meeting.model import Meeting
 from opengever.meeting.sablon import Sablon
 from opengever.meeting.vocabulary import get_committee_member_vocabulary
@@ -63,10 +64,12 @@ class IMeetingMetadata(form.Schema):
         max_length=256,
         required=False)
 
+    form.widget('start', DatePickerFieldWidget)
     start = UTCDatetime(
         title=_('label_start', default=u"Start"),
         required=True)
 
+    form.widget('end', DatePickerFieldWidget)
     end = UTCDatetime(
         title=_('label_end', default=u"End"),
         required=False)

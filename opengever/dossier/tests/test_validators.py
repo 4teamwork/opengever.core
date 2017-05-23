@@ -33,7 +33,7 @@ class TestStardEndValidator(FunctionalTestCase):
                                  end=date(2013, 01, 01)))
 
         browser.login().open(dossier, view='edit')
-        browser.fill({'Closing Date': 'February 2, 2013'})
+        browser.fill({'Closing Date': '02.02.2013'})
         browser.click_on('Save')
 
         self.assertEquals(['Changes saved'], info_messages())

@@ -33,7 +33,7 @@ class TestDeadlineModificationForm(FunctionalTestCase):
             task, transition='task-transition-modify-deadline')
 
         browser.login().open(url)
-        browser.fill({'New Deadline': new_deadline.strftime('%m/%d/%y'),
+        browser.fill({'New Deadline': new_deadline.strftime('%d.%m.%Y'),
                       'Response': text})
         browser.click_on('Save')
 
@@ -47,7 +47,7 @@ class TestDeadlineModificationForm(FunctionalTestCase):
         url = ModifyDeadlineFormView.url_for(
             task, transition='task-transition-modify-deadline')
         browser.login().open(url)
-        browser.fill({'New Deadline': new_deadline.strftime('%m/%d/%y'), })
+        browser.fill({'New Deadline': new_deadline.strftime('%d.%m.%Y'), })
         browser.click_on('Save')
 
         self.assertEquals(task.deadline, datetime.date(2013, 10, 1))
@@ -62,7 +62,7 @@ class TestDeadlineModificationForm(FunctionalTestCase):
         url = ModifyDeadlineFormView.url_for(task,
             transition='task-transition-modify-deadline')
         browser.login().open(url)
-        browser.fill({'New Deadline': current_deadline.strftime('%m/%d/%y')})
+        browser.fill({'New Deadline': current_deadline.strftime('%d.%m.%Y')})
         browser.click_on('Save')
 
         self.assertEquals('{}/@@modify_deadline'.format(task.absolute_url()),

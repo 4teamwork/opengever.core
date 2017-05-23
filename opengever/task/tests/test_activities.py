@@ -36,7 +36,7 @@ class TestTaskActivites(FunctionalTestCase):
         browser.fill({'Title': u'Abkl\xe4rung Fall Meier',
                       'Responsible': u'hugo.boss',
                       'Task Type': 'comment',
-                      'Deadline': '02/13/15',
+                      'Deadline': '13.02.2015',
                       'Text': 'Lorem ipsum'})
 
         form = browser.find_form_by_field('Responsible')
@@ -170,7 +170,7 @@ class TestTaskActivites(FunctionalTestCase):
             data={'form.widgets.transition': 'task-transition-modify-deadline'})
 
         browser.fill({
-            'New Deadline': '03/20/16',
+            'New Deadline': '20.03.2016',
             'Response': u'nicht dring\xe4nd'}).save()
 
         activity = Activity.query.one()

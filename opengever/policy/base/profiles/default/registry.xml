@@ -36,4 +36,7 @@
     </value>
   </record>
 
+  <record name="ftw.datepicker.interfaces.IDatetimeRegistry.various">
+    <value>{"dayOfWeekStart": 1, "scrollMonth": false, "scrollTime": false, "scrollInput": false}</value>
+  </record>
 </registry>

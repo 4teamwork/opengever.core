@@ -1,5 +1,7 @@
 from datetime import date
 from five import grok
+from ftw.datepicker.widget import DatePickerFieldWidget
+from opengever.base.browser.modelforms import ModelAddForm
 from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.form import WizzardWrappedAddForm
@@ -10,7 +12,6 @@ from opengever.meeting.browser.periods import IPeriodModel
 from opengever.meeting.committee import Committee
 from opengever.meeting.committee import ICommittee
 from opengever.meeting.committeecontainer import ICommitteeContainer
-from opengever.base.browser.modelforms import ModelAddForm
 from opengever.meeting.form import ModelProxyAddForm
 from opengever.meeting.form import ModelProxyEditForm
 from opengever.meeting.model import Period
@@ -95,6 +96,8 @@ class AddInitialPeriodStep(BaseWizardStepForm, ModelProxyAddForm, DefaultAddForm
     content_type = Committee
     schema = IPeriodModel
     fields = Fields(IPeriodModel)
+    fields['date_from'].widgetFactory = DatePickerFieldWidget
+    fields['date_to'].widgetFactory = DatePickerFieldWidget
 
     @property
     def additionalSchemata(self):
