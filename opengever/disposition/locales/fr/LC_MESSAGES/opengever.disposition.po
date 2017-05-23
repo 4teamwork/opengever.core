@@ -2,13 +2,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2017-04-27 11:21+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2017-05-23 09:09+0000\n"
+"Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
+"gever/opengever-disposition/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 2.13.1\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
@@ -52,7 +55,7 @@ msgstr ""
 #. Default: "Common"
 #: ./opengever/disposition/disposition.py:132
 msgid "fieldset_common"
-msgstr ""
+msgstr "En général"
 
 #. Default: "Action"
 #: ./opengever/disposition/browser/removal_protocol.py:90
@@ -160,7 +163,7 @@ msgstr ""
 #. Default: "Reference number"
 #: ./opengever/disposition/browser/removal_protocol.py:60
 msgid "label_reference_number"
-msgstr ""
+msgstr "Numéro de référence"
 
 #. Default: "Removal protocol"
 #: ./opengever/disposition/browser/removal_protocol.py:118
@@ -175,7 +178,7 @@ msgstr ""
 #. Default: "Review state"
 #: ./opengever/disposition/browser/listing.py:53
 msgid "label_review_state"
-msgstr ""
+msgstr "Etat"
 
 #. Default: "Time"
 #: ./opengever/disposition/browser/removal_protocol.py:82
@@ -187,7 +190,7 @@ msgstr ""
 #: ./opengever/disposition/browser/removal_protocol.py:64
 #: ./opengever/disposition/disposition.py:138
 msgid "label_title"
-msgstr ""
+msgstr "Titre"
 
 #. Default: "Transfer number"
 #: ./opengever/disposition/browser/removal_protocol.py:135
@@ -264,4 +267,3 @@ msgstr ""
 #: ./opengever/disposition/browser/removal_protocol.py:40
 msgid "title_removal_protocol"
 msgstr ""
-
