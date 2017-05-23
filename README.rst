@@ -171,7 +171,7 @@ and the `ruby-build <https://github.com/sstephenson/ruby-build>`_ plugin:
     gem install bundler
 
 The installation of the ``Sablon`` gem can then be performed by buildout (by
-extending from `ruby-gems.cfg <http://buildout-proxy.4teamwork.ch/4teamwork/opengever-buildouts/master/ruby-gems.cfg>`_).
+extending from `ruby-gems.cfg <https://raw.githubusercontent.com/4teamwork/gever-buildouts/master/ruby-gems.cfg>`_).
 
 
 LDAP credentials
