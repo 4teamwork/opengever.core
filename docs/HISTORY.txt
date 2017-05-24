@@ -5,6 +5,7 @@ Changelog
 2017.3.0 (unreleased)
 ---------------------
 
+- Fix get_retention_expiration_date on dossier. retention_period may be a unicode. [mathias.leimgruber]
 - Use latest ftw.datepicker for all datetime widgets. [mathias.leimgruber]
 - Make `resolving` a dossier customizable and provide two implementations (strict and lenient). [deiferni]
 - Replace changed_security with elevated_privileges. [deiferni]

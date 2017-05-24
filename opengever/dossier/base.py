@@ -321,7 +321,8 @@ class DossierContainer(Container):
         retention period.
         """
         if IDossier(self).end:
-            year = IDossier(self).end.year + ILifeCycle(self).retention_period
+            year = IDossier(self).end.year + \
+                int(ILifeCycle(self).retention_period)
             return date(year + 1, 1, 1)
 
         return None
