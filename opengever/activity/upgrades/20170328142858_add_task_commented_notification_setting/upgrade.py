@@ -37,9 +37,11 @@ class AddTaskCommentedNotificationSetting(SchemaMigration):
                 # We don't want to reset already inserted settings
                 continue
 
-            self.execute(defaults_table
-                         .insert()
-                         .values(id=self.execute(seq),
-                                 kind=item['kind'],
-                                 mail_notification=item['mail_notification'],
-                                 mail_notification_roles=json.dumps(item['mail_notification_roles'])))
+            values = dict(kind=item['kind'],
+                          mail_notification=item['mail_notification'],
+                          mail_notification_roles=json.dumps(
+                                    item['mail_notification_roles']))
+            if self.supports_sequences:
+                values['id'] = self.execute(seq)
+
+            self.execute(defaults_table.insert().values(**values))
