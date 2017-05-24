@@ -5,6 +5,7 @@ Changelog
 2017.3.0 (unreleased)
 ---------------------
 
+- Render subdossier tree collapsed initially. [Kevin Bieri]
 - Implement and enable the org unit selector etag adapter. [phgross]
 - Hard-code base profiles to be installed for every deployment. [deiferni]
 - Add api_group deployment configuration option. [deiferni]

@@ -10,7 +10,8 @@ function Tree(nodes, config) {
   configuration = $.extend(true, {
     'render_condition': function(){ return true; },
     'onclick': function(node, event){},
-    'components': []
+    'components': [],
+    expanded: true
   }, config);
   $(configuration['components']).each(function(_, component) {
     if(component !== null) {
@@ -68,7 +69,7 @@ function Tree(nodes, config) {
     this['link'] = $link;
     tree.render_children.apply(this);
 
-    if(this.parent) {
+    if(configuration.expanded && this.parent) {
       tree.expand(this.parent, true);
     }
   };
