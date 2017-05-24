@@ -5,6 +5,7 @@ Changelog
 2017.2.3 (unreleased)
 ---------------------
 
+- Fix task-commented schema upgrade and make it both mysql and psql-compatible. [deiferni]
 - Fix get_retention_expiration_date on dossier. retention_period may be a unicode. [mathias.leimgruber]
 
 
