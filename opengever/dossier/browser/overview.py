@@ -20,6 +20,7 @@ from plone import api
 from plone.app.contentlisting.interfaces import IContentListing
 from Products.CMFPlone.utils import safe_unicode
 from sqlalchemy import desc
+from urllib import quote_plus
 from zc.relation.interfaces import ICatalog
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
@@ -210,7 +211,8 @@ class DossierOverview(BoxesViewMixin, grok.View, GeverTabMixin):
         linked_keywords = []
         for keyword in IDossier(self.context).keywords:
             url = u'{}/@@search?Subject={}'.format(
-                api.portal.get().absolute_url(), safe_unicode(keyword))
+                api.portal.get().absolute_url(),
+                quote_plus(safe_unicode(keyword).encode('utf-8')))
             linked_keywords.append(
                 {
                     'getURL': url,

@@ -5,6 +5,7 @@ Changelog
 2017.3.0 (unreleased)
 ---------------------
 
+- Fix Subject link on dossier overview. [mathias.leimgruber]
 - Fix get_retention_expiration_date on dossier. retention_period may be a unicode. [mathias.leimgruber]
 - Install ftw.copymovepatches for better move performance. [mathias.leimgruber]
 - Use latest ftw.datepicker for all datetime widgets. [mathias.leimgruber]
