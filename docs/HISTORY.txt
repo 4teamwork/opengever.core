@@ -5,7 +5,7 @@ Changelog
 2017.2.3 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Fix get_retention_expiration_date on dossier. retention_period may be a unicode. [mathias.leimgruber]
 
 
 2017.2.2 (2017-05-22)
