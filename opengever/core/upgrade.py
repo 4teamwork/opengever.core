@@ -311,6 +311,10 @@ class SchemaMigration(SQLUpgradeStep):
         return foreign_keys.pop().name
 
     @property
+    def supports_sequences(self):
+        return self.op.impl.dialect.supports_sequences
+
+    @property
     def is_oracle(self):
         # Could be 'oracle' or 'oracle+cx_oracle'
         return 'oracle' in self.dialect_name
