@@ -23,6 +23,7 @@ class GeverTabMixin(object):
 
     show_searchform = True
     filterlist_available = False
+    type_filterlist_available = False
 
     def get_css_classes(self):
         if self.show_searchform:

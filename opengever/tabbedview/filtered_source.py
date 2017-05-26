@@ -15,5 +15,14 @@ class FilteredTableSourceMixin(object):
         """When the filterlist is active, we update the query with
         the current filter."""
 
+        # statefilter
         selected_filter_id = self.request.get(self.config.filterlist_name)
-        return self.config.filterlist.update_query(query, selected_filter_id)
+        query = self.config.filterlist.update_query(query, selected_filter_id)
+
+        # typefilter
+        if self.config.type_filterlist_available:
+            type_filter_id = self.request.get(self.config.type_filterlist_name)
+            query  = self.config.type_filterlist.update_query(
+                query, type_filter_id)
+
+        return query

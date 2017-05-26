@@ -7,6 +7,8 @@ from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.bumblebee import set_preferred_listing_view
 from opengever.dossier.base import DOSSIER_STATES_CLOSED
 from opengever.dossier.base import DOSSIER_STATES_OPEN
+from opengever.dossier.businesscase import IBusinessCaseDossier
+from opengever.dossier.contract import IContracDossierSchema
 from opengever.dossier.interfaces import IDossierMarker
 from opengever.globalindex.model.task import Task
 from opengever.meeting.model.proposal import Proposal
@@ -286,6 +288,24 @@ class Dossiers(BaseCatalogListingTab):
     filterlist_name = 'dossier_state_filter'
     filterlist_available = True
 
+    all_types_filter = Filter('filter_all', _('label_tabbedview_filter_all'),
+                              default=True)
+    businesscase_filter = CatalogQueryFilter(
+        'filter_businesscasedossier',
+        _('label_businesscasedossier', default=u'Businesscase dossier'),
+        default=False,
+        query_extension={
+            'object_provides': IBusinessCaseDossier.__identifier__})
+    contract_filter = CatalogQueryFilter(
+        'filter_contractdossier',
+        _('label_contractdossier', default=u'Contractdossier'),
+        default=False,
+        query_extension={
+            'object_provides': IContracDossierSchema.__identifier__})
+
+    type_filterlist_name = 'dossier_type_filter'
+    type_filterlist_available = True
+
     @property
     def filterlist(self):
         filters = [self.all_filter, self.active_filter]
@@ -294,6 +314,13 @@ class Dossiers(BaseCatalogListingTab):
             filters.append(self.expired_filter)
 
         return FilterList(*filters)
+
+    @property
+    def type_filterlist(self):
+        return FilterList(
+            *[self.all_types_filter,
+              self.businesscase_filter,
+              self.contract_filter])
 
 
 class SubDossiers(Dossiers):

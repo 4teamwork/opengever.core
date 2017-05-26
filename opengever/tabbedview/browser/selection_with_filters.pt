@@ -10,6 +10,7 @@
       </span>
     </tal:condition>
 
+    <!-- statefilter -->
     <tal:condition tal:condition="view/filterlist_available">
       <span tal:define="filterlist_name python: view.filterlist_name;
                         filter_id python: view.request.get(filterlist_name)"
@@ -19,6 +20,26 @@
         <span i18n:translate="" i18n:domain="opengever.tabbedview">State</span>
 
         <a tal:repeat="filter python: view.filterlist.filters()"
+           tal:attributes="id filter/id;
+                           class python: filter.is_active(filter_id) and 'active'"
+           tal:content="filter/label"
+           href="javascript:void(0);"
+           i18n:domain="opengever.tabbedview">
+        </a>
+
+      </span>
+    </tal:condition>
+
+    <!-- typefilter -->
+    <tal:condition tal:condition="view/type_filterlist_available">
+      <span tal:define="filterlist_name python: view.type_filterlist_name;
+                        filter_id python: view.request.get(filterlist_name)"
+            tal:attributes="id filterlist_name" class="type_filters">
+        <span tal:condition="view/show_selects"> | </span>
+
+        <span i18n:translate="" i18n:domain="opengever.tabbedview">Type</span>
+
+        <a tal:repeat="filter python: view.type_filterlist.filters()"
            tal:attributes="id filter/id;
                            class python: filter.is_active(filter_id) and 'active'"
            tal:content="filter/label"
