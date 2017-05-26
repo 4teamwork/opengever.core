@@ -11,8 +11,24 @@
       />
 
   <browser:viewlet
+      name="plone.belowcontenttitle.documentbyline"
+      for="opengever.dossier.contract.IContracDossierSchema"
+      manager="plone.app.layout.viewlets.interfaces.IBelowContentTitle"
+      class=".byline.ContractDossierByline"
+      permission="zope2.View"
+      />
+
+  <browser:viewlet
       name="opengever.dossier.comment"
       for="opengever.dossier.businesscase.IBusinessCaseDossier"
+      manager="plone.app.layout.viewlets.interfaces.IBelowContentTitle"
+      class=".comment.BusinessCaseCommentViewlet"
+      permission="zope2.View"
+      />
+
+  <browser:viewlet
+      name="opengever.dossier.comment"
+      for="opengever.dossier.contract.IContracDossierSchema"
       manager="plone.app.layout.viewlets.interfaces.IBelowContentTitle"
       class=".comment.BusinessCaseCommentViewlet"
       permission="zope2.View"

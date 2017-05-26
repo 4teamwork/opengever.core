@@ -78,3 +78,8 @@ class BusinessCaseByline(BylineBase):
         ]
 
         return items
+
+
+class ContractDossierByline(BusinessCaseByline):
+    """Byline for contract dossiers.
+    """
