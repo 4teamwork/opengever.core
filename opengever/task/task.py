@@ -15,9 +15,8 @@ from opengever.base.source import DossierPathSourceBinder
 from opengever.dossier.utils import get_containing_dossier
 from opengever.globalindex.model.task import Task as TaskModel
 from opengever.ogds.base.actor import Actor
-from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
-from opengever.ogds.base.autocomplete_widget import AutocompleteMultiFieldWidget
 from opengever.ogds.base.sources import AllUsersAndInboxesSourceBinder
+from opengever.ogds.base.sources import UsersContactsInboxesSourceBinder
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
@@ -94,10 +93,10 @@ class ITask(form.Schema):
         max_length=256,
         )
 
-    form.widget(issuer=AutocompleteFieldWidget)
+    form.widget('issuer', KeywordFieldWidget, async=True)
     issuer = schema.Choice(
         title=_(u"label_issuer", default=u"Issuer"),
-        vocabulary=u'opengever.ogds.base.ContactsAndUsersVocabulary',
+        source=UsersContactsInboxesSourceBinder(),
         required=True,
         )
 

@@ -6,6 +6,7 @@
 
   <configure zcml:condition="installed plone.restapi">
     <adapter factory=".summary.GeverJSONSummarySerializer" />
+    <adapter factory=".fields.ChoiceFieldDeserializer" />
   </configure>
 
 </configure>

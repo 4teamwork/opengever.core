@@ -1,6 +1,6 @@
 from five import grok
 from opengever.document import _
-from opengever.base.utils import find_parent_dossier
+from opengever.dossier.utils import find_parent_dossier
 from opengever.document.behaviors import IBaseDocument
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.dossier.base import DOSSIER_STATES_OPEN

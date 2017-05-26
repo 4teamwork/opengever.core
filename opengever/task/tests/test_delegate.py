@@ -25,5 +25,7 @@ class TestDelegateTaskForm(FunctionalTestCase):
 
         browser.css('#form-buttons-save').first.click()  # can't use submit()
 
-        browser.fill({'Issuer': self.user.userid})
+        form = browser.find_form_by_field('Issuer')
+        form.find_widget('Issuer').fill(self.user.userid)
+
         browser.css('#form-buttons-save').first.click()  # can't use submit()

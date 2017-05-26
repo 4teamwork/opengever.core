@@ -2,11 +2,14 @@ from datetime import date
 from datetime import timedelta
 from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
+from ftw.keywordwidget.widget import KeywordWidget
 from opengever.advancedsearch import _
-from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
+from opengever.ogds.base.sources import AllUsersSourceBinder
+from opengever.ogds.base.sources import UsersContactsInboxesSourceBinder
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.task.util import getTaskTypeVocabulary
+from plone.autoform.widgets import ParameterizedWidget
 from plone.directives import form as directives_form
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import PloneMessageFactory as PMF
@@ -18,7 +21,6 @@ from zope import schema
 from zope.interface import Interface
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
-import datetime
 import urllib
 
 
@@ -157,10 +159,9 @@ class IAdvancedSearch(directives_form.Schema):
         required=False,
     )
 
-    directives_form.widget(responsible=AutocompleteFieldWidget)
     responsible = schema.Choice(
         title=_('label_reponsible', default='Responsible'),
-        vocabulary=u'opengever.ogds.base.AllUsersVocabulary',
+        source=AllUsersSourceBinder(),
         required=False,
     )
 
@@ -211,10 +212,9 @@ class IAdvancedSearch(directives_form.Schema):
         required=False,
     )
 
-    directives_form.widget(responsible=AutocompleteFieldWidget)
     checked_out = schema.Choice(
         title=_('label_checked_out', default='Checked out by'),
-        vocabulary=u'opengever.ogds.base.UsersVocabulary',
+        source=AllUsersSourceBinder(),
         required=False,
     )
 
@@ -224,11 +224,10 @@ class IAdvancedSearch(directives_form.Schema):
     )
 
     # Task
-    directives_form.widget(issuer=AutocompleteFieldWidget)
     issuer = schema.Choice(
         title=_(u"label_issuer", default=u"Issuer"),
         description=_('help_issuer', default=u""),
-        vocabulary=u'opengever.ogds.base.ContactsAndUsersVocabulary',
+        source=UsersContactsInboxesSourceBinder(),
         required=False,
     )
 
@@ -280,12 +279,18 @@ class AdvancedSearchForm(directives_form.Form):
 
         fields = Fields(*self.schemas)
 
-        fields['responsible'].widgetFactory[INPUT_MODE] \
-            = AutocompleteFieldWidget
-        fields['checked_out'].widgetFactory[INPUT_MODE] \
-            = AutocompleteFieldWidget
-        fields['issuer'].widgetFactory[INPUT_MODE] \
-            = AutocompleteFieldWidget
+        fields['responsible'].widgetFactory[INPUT_MODE] = ParameterizedWidget(
+            KeywordWidget,
+            async=True
+        )
+        fields['checked_out'].widgetFactory[INPUT_MODE] = ParameterizedWidget(
+            KeywordWidget,
+            async=True
+        )
+        fields['issuer'].widgetFactory[INPUT_MODE] = ParameterizedWidget(
+            KeywordWidget,
+            async=True
+        )
         fields['object_provides'].widgetFactory[INPUT_MODE] \
             = radio.RadioFieldWidget
         fields['dossier_review_state'].widgetFactory[INPUT_MODE] \
