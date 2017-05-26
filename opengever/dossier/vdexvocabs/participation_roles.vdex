@@ -30,5 +30,21 @@
             <langstring language="fr">Prise de connaissance</langstring>
         </caption>
     </term>
+    <term>
+        <termIdentifier>contractual_partner</termIdentifier>
+        <caption>
+            <langstring language="en">Contractual partner</langstring>
+            <langstring language="de-ch">Vertragspartner</langstring>
+            <langstring language="de">Vertragspartner</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>contact_person</termIdentifier>
+        <caption>
+            <langstring language="en">Contractual partner</langstring>
+            <langstring language="de-ch">Kontaktperson</langstring>
+            <langstring language="de">Kontaktperson</langstring>
+        </caption>
+    </term>
 
 </vdex>
