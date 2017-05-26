@@ -151,15 +151,13 @@ Nach dem Speichern ist eine Aufgabe im Status *Offen*.
 
 **Typische Reihenfolge der Aufgabenerledigung:**
 
-***Akteur Aktion Status Icon***
+-   Auftragsgeber erstellt eine Aufgabe: Status Offen
 
-Auftragsgeber erstellt eine Aufgabe Offen |image146|
+-   Auftragnehmer akzeptiert die Aufgabe: Status In Arbeit
 
-Auftragnehmer akzeptiert die Aufgabe In Arbeit |image147|
+-   Auftragnehmer erledigt die Aufgabe: Status Erledigt
 
-Auftragnehmer erledigt die Aufgabe Erledigt |image148|
-
-Auftraggeber schliesst die Aufgabe ab Abgeschlossen |image149|
+-   Auftraggeber schliesst die Aufgabe ab: Status Abgeschlossen
 
 .. note::
    Bei den Auftragstypen "Zur Kenntnisnahme" sowie "Zur direkten Erledigung"
@@ -177,39 +175,14 @@ Auftraggeber schliesst die Aufgabe ab Abgeschlossen |image149|
 
 **Spezialfälle:**
 
-***Akteur Aktion Status Icon***
+-   Auftragnehmer lehnt eine Aufgabe ab: Status Zurückgewiesen
 
-Auftragsnehmer: lehnt eine Aufgabe ab Zurückgewiesen |image152|
+-   Auftraggeber storniert eine Aufgabe: Status Storniert
 
-Auftraggeber: storniert eine Aufgabe Storniert |image153|
+-   Auftragsgeber öffnet eine Aufgabe nochmals, nachdem sie bereits
+    erledigt war oder zurückgewiesen worden ist: Status Offen
 
-Auftragsgeber: öffnet eine Aufgabe Offen |image154|
-
-nochmals, nachdem sie
-
-bereits erledigt war oder
-
-    zurückgewiesen worden.
-
-System: Automatische Markierung Überfällig |image155|
-
-    in der Spalte “Zu erledigen
-
-    bis”, wenn eine Aufgabe
-
-    überfällig ist. Die Markierung
-
-    wird wieder ausgeblendet,
-
-    wenn der Auftragsgeber,
-
-    die Aufgabe abgeschlossen
-
-    hat.
-
-Auftragsgeber: Neu zuweisen (an einen Status bleibt un-
-
-od. nehmer anderen Auftragnehmer) verändert
+-   Auftraggeber weist Aufgabe neuer Person zu: Status Offen
 
 Eine empfangene Aufgabe als Verantwortlicher bearbeiten
 -------------------------------------------------------
@@ -218,19 +191,16 @@ Nach der Erstellung befindet sich eine Aufgabe im Status *Offen*. Der
 Aufgabe beigefügte Dokumente befinden sich unter dem Reiter *Dokumente*;
 gleichzeitig werden sie unter dem Titel "Dokumente" aufgelistet:
 
-|image156|
+|img-aufgaben-8|
 
 Aufgabe akzeptieren
 ~~~~~~~~~~~~~~~~~~~
 
 Mit *Aktionen → Aufgabe akzeptieren* übernimmt der Auftragnehmer die
-Aufgabe.\ |image157|
+Aufgabe. Bei Bedarf kann ein Kommentar hinzugefügt werden. Der Status wechselt
+nun von *Offen* auf *In Arbeit*.
 
-Bei Bedarf kann ein Kommentar hinzugefügt werden.
-
-Der Status wechselt nun von *Offen* auf *In Arbeit*.\ |image158|
-
-|image159|
+|img-aufgaben-8b|
 
 Aufgabe ablehnen
 ~~~~~~~~~~~~~~~~
@@ -238,7 +208,8 @@ Aufgabe ablehnen
 Wird die Aufgabe abgelehnt (z.B. wegen Ferien) wechselt der Status auf
 "Abgelehnt".
 
-|image160|
+|img-aufgaben-22|
+|img-aufgaben-23|
 
 Der Auftraggeber hat die Möglichkeit, die Aufgabe wieder zu öffnen und
 einem neuen Sachbearbeiter zuzuweisen.
@@ -249,18 +220,19 @@ Aufgabe neu zuweisen
 Eine Aufgabe kann auch einem anderen Sachbearbeiter bzw. einer anderen
 Sachbearbeiterin zugewiesen werden. Wählen Sie dazu *Aktionen → Neu
 zuweisen*. Diese Möglichkeit besteht auch im späteren
-Arbeitsverlauf.\ |image161|
+Arbeitsverlauf.
+
+|img-aufgaben-10|
 
 Mit den Aufgaben verknüpfte Dokumente (Verweise) bearbeiten
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Mit den Aufgaben verknüpfte Dokumente können direkt aus der Aufgabe
-heraus bearbeitet werden. Klicken Sie unter dem Reiter *Dokumente* auf
-das Bleistift-Icon, um das referenzierte Dokument auszuchecken und zu
-bearbeiten. Die Änderungen werden nach dem Einchecken als neue Version
-gespeichert.
+heraus bearbeitet werden. Fahren Sie unter dem Reiter *Dokumente* über den
+Titel, um das referenzierte Dokument auszuchecken und zu bearbeiten. Die
+Änderungen werden nach dem Einchecken als neue Version gespeichert.
 
-|image162|
+|img-aufgaben-12|
 
 Dokumente in einer Aufgabe
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -269,7 +241,9 @@ Dokument hinzufügen
 ^^^^^^^^^^^^^^^^^^^
 
 Mit *Hinzufügen → Dokument* kann eine Datei aus dem Filesystem
-importiert werden. |image163|
+importiert werden.
+
+|img-aufgaben-13|
 
 Neu hinzugefügte Dokumente werden sowohl unter dem Reiter *Dokumente*
 der Aufgabe angezeigt als auch unter der Rubrik "Dokumente" und in der
@@ -280,52 +254,45 @@ Auf bestehendes Dokument verweisen
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Eine bereits in OneGov GEVER vorhandene Datei kann beim Erledigen im
-Feld *Verweise* referenziert werden.
+Feld *Verweise* referenziert werden. (Siehe nächster Schritt)
 
 Aufgabe erledigen
 ~~~~~~~~~~~~~~~~~
 
-|image164|
+Wählen Sie *Erledigen*.
 
-Wählen Sie *Aktionen → Erledigen*.
-
-|image165|
+|img-aufgaben-16|
 
 Falls Sie auf ein im Dossier befindliches Dokument verweisen möchten,
-ist dies im Feld Verweis möglich. Ein Antworttext ist fakultativ. Je
-nach Aufgabenstellung kann ein Auftrag auch nur durch eine Antwort
-erledigt werden. |image166|
+ist dies im Feld Verweis möglich. Ein Antworttext ist fakultativ. Je nach
+Aufgabenstellung kann ein Auftrag auch nur durch eine Antwort erledigt werden.
 
-Nach dem Speichern wechselt der Aufgabenstatus auf *Erledigt*.
+|img-aufgaben-17|
 
-|image167|
-
-Soll der Antwort nochmals etwas hinzugefügt werden, kann die Aufgabe mit
+Nach dem Speichern wechselt der Aufgabenstatus auf *Erledigt*. Soll der Antwort
+nochmals etwas hinzugefügt werden, kann die Aufgabe mit
 *Aktion → Überarbeiten* wieder in den Status *In Arbeit* gesetzt werden.
 
-|image168|
+|img-aufgaben-18|
 
 Erledigte Aufgabe abschliessen oder überarbeiten
 ------------------------------------------------
 
 Ist der Auftraggeber mit der Aufgabenerledigung zufrieden, schliesst er
-die Aufgabe mit *Aktionen → Abschliessen* ab. |image169|
+die Aufgabe mit *Aktionen → Abschliessen* ab (siehe Bild oben). Fakultativ kann
+im Antwortfeld ein Text eingegeben werden.
 
-Fakultativ kann im Antwortfeld ein Text eingegeben werden.
+|img-aufgaben-19|
 
-|image170|
+Mit dem Speichern wird automatisch das Erledigungsdatum gesetzt, und der Status
+der Aufgabe wechselt auf *Abgeschlossen*. Ist die Aufgabe einmal im Status
+*Abgeschlossen* kann sie nicht mehr bearbeitet werden.
 
-Mit dem Speichern wird automatisch das Erledigungsdatum gesetzt, und der
-Status der Aufgabe wechselt auf *Abgeschlossen*. Ist die Aufgabe einmal
-im Status *Abgeschlossen* kann sie nicht mehr bearbeitet werden.
-
-|image171|
+|img-aufgaben-20|
 
 Soll die vom Auftragnehmer erledigte Aufgabe nochmals überarbeitet
 werden, kann der Auftraggeber, statt die Aufgabe abzuschliessen, mit der
 Aktion *Überarbeiten* wieder in den Status *In Bearbeitung setzen*.
-
-|image172|
 
 Auflistung von Statusänderungen, Antworten und Dokumenten
 ---------------------------------------------------------
@@ -335,7 +302,7 @@ unteren Teil der Aufgabenmaske aufgelistet. Dadurch kann der ganze
 Verlauf nachvollzogen werden. Die neueste Antwort befindet sich dabei
 immer zuoberst.
 
-|image173|
+|img-aufgaben-21|
 
 Mandantenübergreifende Zusammenarbeit
 -------------------------------------
@@ -346,7 +313,9 @@ Eine mandantenübergreifende Aufgabe erstellen
 Das Erstellen einer mandantenübergreifenden Aufgabe unterscheidet sich
 nur wenig von einer Aufgabe, die von jemandem innerhalb desselben
 Mandanten erledigt werden soll. Zur Kennzeichnung einer
-mandantenübergreifenden Aufgabe wird das Icon verwendet. |image174|
+mandantenübergreifenden Aufgabe wird das Icon verwendet.
+
+|image174|
 
 Im folgenden Beispiel geht es um eine verwaltungsinterne Vernehmlassung
 des Amts für Raumplanung.
@@ -362,11 +331,13 @@ des Amts für Raumplanung.
 -  Als Auftragnehmer wird im Normalfall der Eingangskorb des zuständigen
    Mandanten eingetragen (z.B. *Eingangskorb SKA-ARCH*). Gegebenenfalls
    kann aber auch der zuständige Sachbearbeiter gewählt
-   werden.\ |image175|
+   werden.
+
+   |image175|
 
 -  Wenn Sie den Eingangskorb als Auftragnehmer gewählt haben, gelangt
    die Aufgabe in den Eingangskorb des betreffenden Mandanten (Reiter
-   *Aufgaben aus anderem Mandant*). Personen mit Sekretariatsrechten
+   *Erhaltene Aufgaben*). Personen mit Sekretariatsrechten
    können die Aufgabe vom Eingangskorb aus der zuständigen Person
    zuweisen.
 
@@ -406,7 +377,9 @@ weitergeleitet, indem im Browser ein neuer Tab geöffnet wird. Der
 Auftragnehmer sieht nur diejenigen Dokumente des Dossiers, auf die in
 der Aufgabe verwiesen wurde. Auch das Ordnungssystem ist nur reduziert
 sichtbar. Damit die Übersicht gewahrt bleibt, wird der "Gastmandant"
-verblasst dargestellt.\ |image177|
+verblasst dargestellt.
+
+|image177|
 
 |image178|
 
@@ -632,8 +605,6 @@ Vorgehen:
 Aufgaben überwachen (Pendenzenkontrolle)
 ----------------------------------------
 
-
-
 Unter der Komponente Übersicht werden die persönlichen Aufgaben sowie
 diejenigen des ganzen Amtes aufgelistet. Dies ermöglicht eine
 persönliche und eine zentrale Pendenzenkontrolle. Mandantenübergreifende
@@ -754,21 +725,23 @@ Aufgaben verhindern.
 .. |img-aufgaben-5| image:: img/media/img-aufgaben-5.png
 .. |img-aufgaben-6| image:: img/media/img-aufgaben-6.png
 .. |img-aufgaben-7| image:: img/media/img-aufgaben-7.png
-
-..
- .. |img-aufgaben-8| image:: img/media/img-aufgaben-8.png
- .. |img-aufgaben-9| image:: img/media/img-aufgaben-9.png
- .. |img-aufgaben-10| image:: img/media/img-aufgaben-10.png
- .. |img-aufgaben-11| image:: img/media/img-aufgaben-11.png
- .. |img-aufgaben-12| image:: img/media/img-aufgaben-12.png
- .. |img-aufgaben-13| image:: img/media/img-aufgaben-13.png
- .. |img-aufgaben-14| image:: img/media/img-aufgaben-14.png
- .. |img-aufgaben-15| image:: img/media/img-aufgaben-15.png
- .. |img-aufgaben-16| image:: img/media/img-aufgaben-16.png
- .. |img-aufgaben-17| image:: img/media/img-aufgaben-17.png
- .. |img-aufgaben-18| image:: img/media/img-aufgaben-18.png
- .. |img-aufgaben-19| image:: img/media/img-aufgaben-19.png
- .. |img-aufgaben-20| image:: img/media/img-aufgaben-20.png
+.. |img-aufgaben-8| image:: img/media/img-aufgaben-8.png
+.. |img-aufgaben-8b| image:: img/media/img-aufgaben-8b.png
+.. |img-aufgaben-9| image:: img/media/img-aufgaben-9.png
+.. |img-aufgaben-10| image:: img/media/img-aufgaben-10.png
+.. |img-aufgaben-11| image:: img/media/img-aufgaben-11.png
+.. |img-aufgaben-12| image:: img/media/img-aufgaben-12.png
+.. |img-aufgaben-13| image:: img/media/img-aufgaben-13.png
+.. |img-aufgaben-14| image:: img/media/img-aufgaben-14.png
+.. |img-aufgaben-15| image:: img/media/img-aufgaben-15.png
+.. |img-aufgaben-16| image:: img/media/img-aufgaben-16.png
+.. |img-aufgaben-17| image:: img/media/img-aufgaben-17.png
+.. |img-aufgaben-18| image:: img/media/img-aufgaben-18.png
+.. |img-aufgaben-19| image:: img/media/img-aufgaben-19.png
+.. |img-aufgaben-20| image:: img/media/img-aufgaben-20.png
+.. |img-aufgaben-21| image:: img/media/img-aufgaben-21.png
+.. |img-aufgaben-22| image:: img/media/img-aufgaben-22.png
+.. |img-aufgaben-23| image:: img/media/img-aufgaben-23.png
 
 
 .. |image138| image:: img/media/image134.png

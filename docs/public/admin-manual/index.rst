@@ -14,6 +14,7 @@ Power-User und Administratoren von OneGov GEVER.
    :maxdepth: 2
 
    aussonderung.rst
+   rollenmanager.rst
    docproperties/index.rst
    meeting/index.rst
    officeconnector/index.rst

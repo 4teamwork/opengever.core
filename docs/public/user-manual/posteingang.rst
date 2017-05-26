@@ -1,8 +1,8 @@
 Posteingänge erfassen und weiterleiten
 ======================================
 
-Funktion Posteingang
---------------------
+Funktion Eingangskorb
+---------------------
 
 Posteingänge, die auf Stufe Amt/Direktion nachgewiesen werden sollen,
 werden im Eingangskorb erfasst und von dort aus entweder einem
@@ -20,64 +20,77 @@ Einen Posteingang erfassen
 Als erstes wird die zu erfassende Unterlage importiert. Handelt es sich
 um ein Dokument, wird es mit *Hinzufügen → Dokument* hinaufgeladen.
 
-|image225|\ |image226|
+|img-eingangskorb-1|
 
 Handelt es sich um eine E-Mail, wird das Dokument über die
 E-Mail-Adresse des Eingangskorbs importiert.
 
-Interne Posteingänge
-~~~~~~~~~~~~~~~~~~~~
+Die Dokumente erscheinen nun unter dem Reiter :guilabel:`Dokumente`.
 
-Posteingang direkt einem Dossier zuweisen (einfachster Weg)
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+|img-eingangskorb-2|
 
-- Kreuzen Sie unter dem Reiter :guilabel:`Dokumente` das erfasste Dokument an
-  und wählen Sie :menuselection:`Weiterleiten`.
 
-|image227|
+Posteingang weiterleiten
+------------------------
 
-- Hierauf öffnet sich folgende Maske, in welcher der Titel, der
-  Verantwortliche, die Frist und weitere Angaben erfasst werden
-  können. Obligatorisch sind nur rot gekennzeichnete Felder. Kennt
-  man das Zieldossier, ist es am einfachsten, wenn man zunächst den
-  Eingangskorb als Verantwortlichen belässt.
+Kreuzen Sie unter dem Reiter :guilabel:`Dokumente` das erfasste Dokument an und
+wählen Sie :menuselection:`Weiterleiten`.
 
-  |image228|
+|img-eingangskorb-3|
 
-  Nach dem Speichern erscheint der Posteingang unter dem Reiter
-  :guilabel:`Weiterleitung`.
+Hierauf öffnet sich folgende Maske, in welcher der Titel, der Verantwortliche,
+die Frist und weitere Angaben erfasst werden können. Obligatorisch sind nur rot
+gekennzeichnete Felder. Kennt man das Zieldossier, ist es am einfachsten, wenn
+man zunächst den Eingangskorb als Verantwortlichen belässt.
 
-| |image229|\ |image230|
+  |img-eingangskorb-4|
 
-- Durch Klick auf den Titel öffnet sich der Posteingang:
+Nach dem Speichern erscheint der Posteingang unter dem Reiter
+:guilabel:`Erteilte Aufgaben`.
 
-  |image231|
+  |img-eingangskorb-5|
 
-- Mit der Aktion :menuselection:`Einem Dossier zuweisen` können Sie wählen, ob die
-  Weiterleitung einem bestehenden oder einem neuen Dossier zugewiesen
-  werden soll. Klicken Sie dann :guilabel:`Weiter`.
+Anstelle der Weiterleitung kann mit dem Dokument auch folgende Aktionen
+durchgeführt werden: Kopieren, Als E-Mail versenden, Auswahl exportieren,
+In den Papierkorb verschieben, Als Zip-Datei exportieren.
 
-  |image232|
+  |img-eingangskorb-6|
 
-Einem bestehenden Dossier zuweisen
-""""""""""""""""""""""""""""""""""
+Posteingang einem Dossier zuweisen
+----------------------------------
 
-Haben Sie die Zuweisung an ein bestehendes Dossier gewählt, können Sie
-das Dossier mit folgender Maske auswählen:
+Durch die Weiterleitung wurde aus dem Posteingang eine Aufgabe generiert. Nun
+kann diese zusätzlich einem neuen oder einem bestehenden Dossier zugewiesen
+werden. Durch Klick auf den Titel öffnet sich eine neue Maske, auf welcher die
+Dossierzuweisung durchgeführt werden kann. Dafür kann unten links auf
+"Einem Dossier zuweisen" geklickt werden.
 
-|image233|
+|img-eingangskorb-7|
+
+Posteingang einem bestehenden Dossier zuweisen
+""""""""""""""""""""""""""""""""""""""""""""""
+
+Nach Klick auf "einem Dossier zuweisen" gelangt man auf die nächste Übersicht,
+wo die Zuweisung auf ein bestehendes Dossier vorgenommen werden kann. Danach
+kann das Ordnungssystem durchsucht werden, damit auf das korrekte Dossier
+navigiert werden kann.
+
+|img-eingangskorb-8|
+|img-eingangskorb-9|
+|img-eingangskorb-10|
+|img-eingangskorb-11|
 
 Nach dem Speichern wird eine Aufgabenmaske aufgerufen, die mit den
 notwendigen Angaben (Auftraggeber, Auftragnehmer, Termin) ergänzt werden
 kann.
 
-|image234|
+|img-eingangskorb-12|
 
 Die gespeicherte Aufgabe wird im entsprechenden Dossier sowie in der
 Anwendungskomponente Übersicht dargestellt und kann weiterverarbeitet
-werden (siehe Kapitel 0)
+werden.
 
-|image235|
+|img-eingangskorb-13|
 
 Einem neuen Dossier zuweisen
 """"""""""""""""""""""""""""
@@ -86,32 +99,21 @@ Haben Sie die Zuweisung an ein neues Dossier gewählt, können Sie im
 nächsten Schritt die Ordnungsposition auswählen, unter der das neue
 Dossier erstellt werden soll. Klicken Sie dann auf *Weiter*.
 
-|image236|
+|img-eingangskorb-14|
+|img-eingangskorb-15|
+|img-eingangskorb-16|
+|img-eingangskorb-17|
 
-|image237|
+Nun wird ein Dossierformular geöffnet. Ändern Sie den Titel und passen Sie die
+weiteren Angaben an. Schliessen Sie den Vorgang mit Speichern ab.
 
-Nun wird ein Dossierformular geöffnet. Ändern Sie den Titel (bei
-Weiterleitungen standardmässig "Eingangskorb") und passen Sie die
-weiteren Angaben an. Speichern Sie.
+|img-eingangskorb-18|
 
-|image238|
+Nun öffnet sich ein Aufgabenformular, bei welchem Sie weitere Aktionen wie
+"neu zuweisen" und "abschliessen" vornehmen können.
 
-Nun öffnet sich ein Aufgabenformular, das Sie durch die noch benötigten
-Angaben ergänzen können.
+|img-eingangskorb-19|
 
-Nach dem Speichervorgang sind sowohl das neue Dossier als auch die
-entsprechende Aufgabe erstellt und zur Bearbeitung bereit.
-
-|image239|
-
-Im Eingangskorb wird die Weiterleitung durch den Speichervorgang
-abgeschlossen und automatisch in den Jahresordner der erledigten
-Weiterleitungen gelegt.
-
-|image240|
-
-In der Weiterleitung wird auf die daraus erstellte Aufgabe verwiesen und
-in der Aufgabe auf die Weiterleitung.
 
 Posteingänge abschliessen
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -119,7 +121,8 @@ Posteingänge abschliessen
 Ist ein Posteingang nicht dossierrelevant, kann er direkt abgeschlossen
 werden. Er wird darauf automatisch in den Jahresordner gelegt.
 
-|image241|
+|img-eingangskorb-22|
+|img-eingangskorb-23|
 
 Posteingänge neu zuweisen
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -127,21 +130,23 @@ Posteingänge neu zuweisen
 Mit der Aktion *neu zuweisen* können Sie den Posteingang einer anderen
 Person zuweisen.
 
-|image242|
+|img-eingangskorb-20|
+|img-eingangskorb-21|
 
 Der Posteingang wird darauf im Reiter *Übersicht → Meine Aufgaben*
 angezeigt und kann wie eine normale Aufgabe weiterbearbeitet werden.
+
 
 Mandantenübergreifende Posteingänge
 -----------------------------------
 
 Den Posteingang erfassen
-~~~~~~~~~~~~~~~~~~~~~~~~
+""""""""""""""""""""""""
 
 Siehe hierzu Abschnitt 9.2.
 
 Den Posteingang weiterleiten
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+""""""""""""""""""""""""""""
 
 Kreuzen Sie den Posteingang an und wählen Sie *Weiterleiten.*
 
@@ -166,7 +171,7 @@ Einen Posteingang aus einem anderen Mandanten bearbeiten
 --------------------------------------------------------
 
 Posteingang akzeptieren
-~~~~~~~~~~~~~~~~~~~~~~~
+"""""""""""""""""""""""
 
 Noch nicht verarbeitete Posteingänge aus anderen Mandanten erscheinen im
 Eingangskorb unter dem Reiter *Eingang* (die neusten Elemente auch im
@@ -202,7 +207,7 @@ Möglichkeiten an, wie Sie die Weiterleitung bearbeiten können:
    belassen.
 
 Posteingang durch Sekretariat weiterverarbeiten
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+"""""""""""""""""""""""""""""""""""""""""""""""
 
 Weiterleitung im Eingangskorb ablegen
 """""""""""""""""""""""""""""""""""""
@@ -306,24 +311,32 @@ abgeschlossen und im Eingangskorb unter dem jeweiligen Jahresordner
 abgelegt.
 
 
-.. |image225| image:: img/media/image208.png
-.. |image226| image:: img/media/image209.png
-.. |image227| image:: img/media/image210.png
-.. |image228| image:: img/media/image211.png
-.. |image229| image:: img/media/image212.png
-.. |image230| image:: img/media/image208.png
-.. |image231| image:: img/media/image213.png
-.. |image232| image:: img/media/image214.png
-.. |image233| image:: img/media/image215.png
-.. |image234| image:: img/media/image216.png
-.. |image235| image:: img/media/image217.png
-.. |image236| image:: img/media/image218.png
-.. |image237| image:: img/media/image219.png
-.. |image238| image:: img/media/image220.png
-.. |image239| image:: img/media/image221.png
-.. |image240| image:: img/media/image222.png
-.. |image241| image:: img/media/image223.png
-.. |image242| image:: img/media/image224.png
+.. |img-eingangskorb-1| image:: img/media/img-eingangskorb-1.png
+.. |img-eingangskorb-2| image:: img/media/img-eingangskorb-2.png
+.. |img-eingangskorb-3| image:: img/media/img-eingangskorb-3.png
+.. |img-eingangskorb-4| image:: img/media/img-eingangskorb-4.png
+.. |img-eingangskorb-5| image:: img/media/img-eingangskorb-5.png
+.. |img-eingangskorb-6| image:: img/media/img-eingangskorb-6.png
+.. |img-eingangskorb-7| image:: img/media/img-eingangskorb-7.png
+.. |img-eingangskorb-8| image:: img/media/img-eingangskorb-8.png
+.. |img-eingangskorb-9| image:: img/media/img-eingangskorb-9.png
+.. |img-eingangskorb-10| image:: img/media/img-eingangskorb-10.png
+.. |img-eingangskorb-11| image:: img/media/img-eingangskorb-11.png
+.. |img-eingangskorb-12| image:: img/media/img-eingangskorb-12.png
+.. |img-eingangskorb-13| image:: img/media/img-eingangskorb-13.png
+.. |img-eingangskorb-14| image:: img/media/img-eingangskorb-14.png
+.. |img-eingangskorb-15| image:: img/media/img-eingangskorb-15.png
+.. |img-eingangskorb-16| image:: img/media/img-eingangskorb-16.png
+.. |img-eingangskorb-17| image:: img/media/img-eingangskorb-17.png
+.. |img-eingangskorb-18| image:: img/media/img-eingangskorb-18.png
+.. |img-eingangskorb-19| image:: img/media/img-eingangskorb-19.png
+.. |img-eingangskorb-20| image:: img/media/img-eingangskorb-20.png
+.. |img-eingangskorb-21| image:: img/media/img-eingangskorb-21.png
+.. |img-eingangskorb-22| image:: img/media/img-eingangskorb-22.png
+.. |img-eingangskorb-23| image:: img/media/img-eingangskorb-23.png
+
+
+
 .. |image244| image:: img/media/image208.png
 .. |image245| image:: img/media/image226.png
 .. |image247| image:: img/media/image228.png
