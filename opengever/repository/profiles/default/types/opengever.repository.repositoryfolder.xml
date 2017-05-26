@@ -10,6 +10,7 @@
   <property name="allowed_content_types" purge="False">
     <element value="opengever.repository.repositoryfolder" />
     <element value="opengever.dossier.businesscasedossier" />
+    <element value="opengever.dossier.contractdossier" />
     <element value="opengever.disposition.disposition" />
   </property>
 
