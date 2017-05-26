@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2017.2.3 (unreleased)
+2017.2.3 (2017-05-26)
 ---------------------
 
 - Fix task-commented schema upgrade and make it both mysql and psql-compatible. [deiferni]
