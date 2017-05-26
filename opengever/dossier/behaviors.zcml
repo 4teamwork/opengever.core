@@ -21,6 +21,14 @@
       for="plone.dexterity.interfaces.IDexterityContent"
       />
 
+  <!-- Contract -->
+  <plone:behavior
+      title="Contract dossier behavior"
+      description="Adds contract specific fields"
+      provides=".behaviors.contract.IContract"
+      for="*"
+      />
+
   <!-- ParticipationAware -->
   <plone:behavior
       title="OpenGever Participation Aware"

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vdex xmlns="http://www.imsglobal.org/xsd/imsvdex_v1p0"
+      orderSignificant="false" language="en">
+    <vocabIdentifier>opengever.dossier.contract_renewal_types</vocabIdentifier>
+
+    <term>
+        <termIdentifier>manual</termIdentifier>
+        <caption>
+            <langstring language="en">Manual</langstring>
+            <langstring language="de-ch">Manuell</langstring>
+            <langstring language="de">Manuell</langstring>
+        </caption>
+    </term>
+
+    <term>
+        <termIdentifier>automatic</termIdentifier>
+        <caption>
+            <langstring language="en">Automatic</langstring>
+            <langstring language="de-ch">Automatisch</langstring>
+            <langstring language="de">Automatisch</langstring>
+        </caption>
+    </term>
+
+</vdex>

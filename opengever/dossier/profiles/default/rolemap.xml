@@ -20,5 +20,10 @@
       <role name="Contributor" />
       <role name="Administrator" />
     </permission>
+    <permission name="opengever.dossier: Add contractdossier" acquire="True">
+      <role name="Manager" />
+      <role name="Contributor" />
+      <role name="Administrator" />
+    </permission>
   </permissions>
 </rolemap>

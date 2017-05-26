@@ -12,4 +12,6 @@
 
   <permission id="opengever.dossier.DestroyDossier" title="opengever.dossier: Destroy dossier" />
 
+  <permission id="opengever.dossier.AddContractDossier" title="opengever.dossier: Add contractdossier" />
+
 </configure>

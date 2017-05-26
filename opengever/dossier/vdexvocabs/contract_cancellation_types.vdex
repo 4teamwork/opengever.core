@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vdex xmlns="http://www.imsglobal.org/xsd/imsvdex_v1p0"
+      orderSignificant="false" language="en">
+    <vocabIdentifier>opengever.dossier.contract_cancellation_types</vocabIdentifier>
+
+    <term>
+        <termIdentifier>end_of_month</termIdentifier>
+        <caption>
+            <langstring language="en">End of month</langstring>
+            <langstring language="de-ch">Ende Monat</langstring>
+            <langstring language="de">Ende Monat</langstring>
+        </caption>
+    </term>
+
+    <term>
+        <termIdentifier>end_of_year</termIdentifier>
+        <caption>
+            <langstring language="en">End of year</langstring>
+            <langstring language="de-ch">Ende Jahr</langstring>
+            <langstring language="de">Ende Jahr</langstring>
+        </caption>
+    </term>
+
+</vdex>
