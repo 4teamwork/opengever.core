@@ -1,16 +1,15 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.contact.ogdsuser import OgdsUserToContactAdapter
+from opengever.contact.sources import ContactsSource
 from opengever.ogds.base.utils import ogds_service
 from opengever.testing import FunctionalTestCase
-from zope.component import getUtility
-from zope.schema.interfaces import IVocabularyFactory
 
 
-class TestContactsVocabulary(FunctionalTestCase):
+class TestContactsSource(FunctionalTestCase):
 
     def setUp(self):
-        super(TestContactsVocabulary, self).setUp()
+        super(TestContactsSource, self).setUp()
 
         self.peter_a = create(Builder('person')
                               .having(firstname=u'Peter',
@@ -40,13 +39,12 @@ class TestContactsVocabulary(FunctionalTestCase):
                             .having(person=self.peter_a,
                                     organization=self.teamwork_ag,
                                     function='Scheffe'))
-        self.ogds_user = OgdsUserToContactAdapter(ogds_service().all_users()[0])
+        self.ogds_user = OgdsUserToContactAdapter(
+            ogds_service().all_users()[0])
+
+        self.source = ContactsSource(self.portal)
 
     def test_contains_only_active_organizations_and_persons_and_org_roles(self):
-        voca_factory = getUtility(IVocabularyFactory,
-                                  name='opengever.contact.ContactsVocabulary')
-        vocabulary = voca_factory(self.portal)
-
         self.assertTerms(
             [(self.peter_a, u'M\xfcller Peter [1111]'),
              (self.role1, u'M\xfcller Peter [1111] - Meier AG (Developer)'),
@@ -55,37 +53,34 @@ class TestContactsVocabulary(FunctionalTestCase):
              (self.meier_ag, u'Meier AG [2222]'),
              (self.teamwork_ag, u'4teamwork AG'),
              (self.ogds_user, u'Test User (test_user_1_)')],
-            vocabulary.search('*'))
+            self.source.search('*'))
 
     def test_supports_fuzzy_search(self):
-        voca_factory = getUtility(IVocabularyFactory,
-                                  name='opengever.contact.ContactsVocabulary')
-        vocabulary = voca_factory(self.portal)
 
         self.assertTerms(
             [(self.meier_ag, 'Meier AG [2222]')],
-            vocabulary.search('Meier'))
+            self.source.search('Meier'))
 
         self.assertTerms(
             [(self.peter_a, u'M\xfcller Peter [1111]'),
              (self.role1, u'M\xfcller Peter [1111] - Meier AG (Developer)'),
              (self.role2, u'M\xfcller Peter [1111] - 4teamwork AG (Scheffe)'),
              (self.peter_b, u'Fl\xfcckiger Peter')],
-            vocabulary.search('Peter'))
+            self.source.search('Peter'))
 
         self.assertTerms(
             [(self.peter_b, u'Fl\xfcckiger Peter')],
-            vocabulary.search('Peter Fl'))
+            self.source.search('Peter Fl'))
 
         self.assertTerms(
             [(self.peter_b, u'Fl\xfcckiger Peter')],
-            vocabulary.search('Pe Fl'))
+            self.source.search('Pe Fl'))
 
         self.assertTerms(
             [(self.peter_a, u'M\xfcller Peter [1111]'),
              (self.role1, u'M\xfcller Peter [1111] - Meier AG (Developer)'),
              (self.role2, u'M\xfcller Peter [1111] - 4teamwork AG (Scheffe)')],
-            vocabulary.search('1111'))
+            self.source.search('1111'))
 
         self.assertTerms(
-            [(self.meier_ag, u'Meier AG [2222]')], vocabulary.search('2222'))
+            [(self.meier_ag, u'Meier AG [2222]')], self.source.search('2222'))
