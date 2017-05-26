@@ -1,0 +1,9 @@
+<object name="portal_workflow" meta_type="Plone Workflow Tool">
+
+  <bindings>
+    <type type_id="opengever.dossier.contractdossier">
+      <bound-workflow workflow_id="opengever_dossier_workflow" />
+    </type>
+  </bindings>
+
+</object>
