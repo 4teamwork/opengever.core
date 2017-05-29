@@ -19,6 +19,7 @@ Changelog
 - Improve visual search on customer request. [Kevin Bieri]
 - Merge Generic Setup profiles into a new opengever.core:default profile. [phgross]
 - Replace the AutocompleteField(Multi)Widget with the KeywordWidget. This makes the AutocompleteWidget obsolete. [mathias.leimgruber]
+- Respect lookup_groups_base during OGDS group sync. [phgross]
 - Use our own forks of Products.LDAPUserFolder and Products.LDAPMultiPlugins. [phgross]
 - Fix Subject link on dossier overview. [mathias.leimgruber]
 - Fix tasktemplate view by adding a missing </table> tag. [mathias.leimgruber]
