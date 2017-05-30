@@ -4,13 +4,8 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.contact.ogdsuser import OgdsUserToContactAdapter
-from opengever.journal.tests.utils import get_journal_entry
 from opengever.testing import FunctionalTestCase
-from opengever.testing.helpers import get_contacts_vocabulary
-
-
-def get_token(obj):
-    return get_contacts_vocabulary().getTerm(obj).token
+from opengever.testing.helpers import get_contacts_token
 
 
 class TestManualJournalEntry(FunctionalTestCase):
@@ -78,7 +73,7 @@ class TestManualJournalEntry(FunctionalTestCase):
         browser.fill({
             'Category': u'phone-call',
             'Comment': u'Anfrage bez\xfcglich dem Jahr 2016 von Herr Meier',
-            'Contacts': [get_token(peter), get_token(meierag)]})
+            'Contacts': [get_contacts_token(peter), get_contacts_token(meierag)]})
         browser.css('#form-buttons-add').first.click()
 
         browser.open(self.dossier, view=u'tabbedview_view-journal')
@@ -104,7 +99,7 @@ class TestManualJournalEntry(FunctionalTestCase):
         browser.fill({
             'Category': u'phone-call',
             'Comment': u'Anfrage bez\xfcglich dem Jahr 2016 von Herr Meier',
-            'Contacts': [get_token(OgdsUserToContactAdapter(peter))]})
+            'Contacts': [get_contacts_token(OgdsUserToContactAdapter(peter))]})
         browser.css('#form-buttons-add').first.click()
 
         browser.open(self.dossier, view=u'tabbedview_view-journal')
@@ -126,7 +121,7 @@ class TestManualJournalEntry(FunctionalTestCase):
 
         browser.login().open(self.dossier, view='add-journal-entry')
         browser.fill({'Category': u'phone-call',
-                      'Contacts': [get_token(peter)]})
+                      'Contacts': [get_contacts_token(peter)]})
         browser.css('#form-buttons-add').first.click()
 
         browser.open(self.dossier, view=u'tabbedview_view-journal')

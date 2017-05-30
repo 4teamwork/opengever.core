@@ -1,11 +1,10 @@
 from datetime import datetime
 from lxml.cssselect import LxmlTranslator
 from opengever.base.date_time import as_utc
+from opengever.contact.sources import ContactsSource
 from plone import api
 from Products.CMFCore.utils import getToolByName
 from Products.PloneLanguageTool.LanguageTool import LanguageBinding
-from zope.component import getUtility
-from zope.schema.interfaces import IVocabularyFactory
 import pytz
 import transaction
 
@@ -78,14 +77,12 @@ def css_to_xpath(css):
     return LxmlTranslator().css_to_xpath(css)
 
 
-def get_contacts_vocabulary():
-    voca_factory = getUtility(IVocabularyFactory,
-                              name='opengever.contact.ContactsVocabulary')
-    return voca_factory(api.portal.get())
+def get_contacts_source():
+    return ContactsSource(api.portal.get())
 
 
 def get_contacts_token(obj):
-    return get_contacts_vocabulary().getTerm(obj).token
+    return get_contacts_source().getTerm(obj).token
 
 
 def obj2paths(objs):
