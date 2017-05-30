@@ -1,5 +1,5 @@
 from opengever.tabbedview.helper import readable_ogds_author
-from opengever.tasktemplates.vocabularies import interactive_users
+from opengever.tasktemplates.sources import interactive_users
 from plone.memoize import ram
 
 
@@ -11,7 +11,7 @@ def interactive_user_helper(item, value):
     """
 
     # create a interactive users mapping
-    iuser_map = dict(interactive_users({}))
+    iuser_map = interactive_users()
     # is it a interactive user?
     if value in iuser_map:
         return iuser_map.get(value)
