@@ -268,6 +268,11 @@ f\xc3\xbcr Ernst Franz\r\n\r\nBesten Dank im Voraus"""
         if attr.get('extern_receiver', ''):
             browser.fill({'Extern receiver': attr.get('extern_receiver')})
 
+        if attr.get('intern_receiver', None):
+            form = browser.find_form_by_field('Intern receiver')
+            form.find_widget('Intern receiver').fill(
+                attr.get('intern_receiver'))
+
         browser.click_on('Send')
 
         return self.get_mail()
