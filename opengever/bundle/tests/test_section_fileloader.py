@@ -140,3 +140,17 @@ class TestFileLoader(FunctionalTestCase):
         self.assertEqual('message/rfc822', mail.message.contentType)
         self.assertEqual('lorem-ipsum.eml', mail.message.filename)
         self.assertEqual(True, mail.digitally_available)
+
+    def test_uses_subject_as_title_only_when_no_title_is_given(self):
+        mail2 = create(Builder('mail').titled(u'Test Mail'))
+        item = {
+            u"guid": u"12345",
+            u"_type": u"ftw.mail.mail",
+            u"_path": '/'.join(mail2.getPhysicalPath()[2:]),
+            u"filepath": u"files/sample.eml",
+            u"_object": mail2,
+            u"title": 'Test Mail',
+        }
+        section = self.setup_section(previous=[item])
+        list(section)
+        self.assertEqual(u'Test Mail', mail2.title)

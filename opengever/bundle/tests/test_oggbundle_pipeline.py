@@ -344,8 +344,9 @@ class TestOggBundlePipeline(FunctionalTestCase):
     def assert_documents_created(self, parent):
         self.assert_document_1_created(parent)
         self.assert_document_2_created(parent)
-        self.assert_mail_created(parent)
-        self.assert_document_4_created(parent)
+        self.assert_mail_1_created(parent)
+        self.assert_mail_2_created(parent)
+        self.assert_document_5_created(parent)
 
     def assert_document_1_created(self, parent):
         document_1 = parent.get('document-1')
@@ -423,21 +424,21 @@ class TestOggBundlePipeline(FunctionalTestCase):
         history = repo_tool.getHistoryMetadata(document_2)
         self.assertEqual(1, len(history))
 
-    def assert_document_4_created(self, parent):
-        document_4 = parent.get('document-4')
+    def assert_document_5_created(self, parent):
+        document_5 = parent.get('document-5')
 
-        self.assertTrue(document_4.digitally_available)
-        self.assertIsNotNone(document_4.file)
-        self.assertEqual(24390, len(document_4.file.data))
+        self.assertTrue(document_5.digitally_available)
+        self.assertIsNotNone(document_5.file)
+        self.assertEqual(24390, len(document_5.file.data))
 
         self.assertEqual(
             'document-state-draft',
-            api.content.get_state(document_4))
+            api.content.get_state(document_5))
         self.assertEqual(
             u'Document referenced via UNC-Path',
-            document_4.title)
+            document_5.title)
 
-    def assert_mail_created(self, parent):
+    def assert_mail_1_created(self, parent):
         mail = parent.get('document-3')
 
         self.assertTrue(mail.digitally_available)
@@ -472,12 +473,19 @@ class TestOggBundlePipeline(FunctionalTestCase):
             api.content.get_state(mail))
 
         self.assertEqual(
-            u'Lorem Ipsum',
+            u'Ein Mail',
             mail.title)
 
         repo_tool = api.portal.get_tool('portal_repository')
         history = repo_tool.getHistoryMetadata(mail)
         self.assertEqual(0, len(history))
+
+    def assert_mail_2_created(self, parent):
+        mail = parent.get('document-4')
+
+        self.assertIsNotNone(mail.message)
+        self.assertEqual(920, len(mail.message.data))
+        self.assertEqual(u'Lorem Ipsum', mail.title)
 
     def assert_report_data_collected(self, bundle):
         report_data = bundle.report_data
@@ -502,4 +510,4 @@ class TestOggBundlePipeline(FunctionalTestCase):
         self.assertEqual(3, len(repofolders))
         self.assertEqual(2, len(dossiers))
         self.assertEqual(3, len(documents))
-        self.assertEqual(1, len(mails))
+        self.assertEqual(2, len(mails))

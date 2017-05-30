@@ -10,6 +10,7 @@ from opengever.document.subscribers import set_digitally_available
 from opengever.document.subscribers import sync_title_and_filename_handler
 from opengever.mail.mail import initalize_title
 from opengever.mail.mail import initialize_metadata
+from opengever.mail.mail import NO_SUBJECT_TITLE_FALLBACK
 from zope.annotation.interfaces import IAnnotations
 from zope.interface import classProvides
 from zope.interface import implements
@@ -176,9 +177,11 @@ class FileLoaderSection(object):
                 # too early before (when the file contents weren't loaded yet)
                 if self.is_mail(item):
                     initialize_metadata(obj, None)
-                    # Reset the [No Subject] placeholder
-                    obj.title = None
-                    initalize_title(obj, None)
+
+                    if obj.title == NO_SUBJECT_TITLE_FALLBACK:
+                        # Reset the [No Subject] placeholder
+                        obj.title = None
+                        initalize_title(obj, None)
                 else:
                     sync_title_and_filename_handler(obj, None)
                     set_digitally_available(obj, None)
