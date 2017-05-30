@@ -1,9 +1,0 @@
-<object name="portal_catalog">
-  <column value="css_icon_class" />
-  <index name="reference" meta_type="FieldIndex">
-    <indexed_attr value="reference" />
-  </index>
-  <column value="reference" />
-  <column value="title_de" />
-  <column value="title_fr" />
-</object>

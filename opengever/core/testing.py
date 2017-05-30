@@ -196,7 +196,7 @@ class OpengeverFixture(PloneSandboxLayer):
         os.environ['BUMBLEBEE_DEACTIVATE'] = "True"
 
     def installOpengeverProfiles(self, portal):
-        applyProfile(portal, 'opengever.policy.base:default')
+        applyProfile(portal, 'opengever.core:default')
         applyProfile(portal, 'opengever.testing:testing')
 
     def createMemberFolder(self, portal):

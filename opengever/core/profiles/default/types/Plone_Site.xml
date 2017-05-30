@@ -1,0 +1,25 @@
+<object name="Plone Site">
+  <property name="filter_content_types">True</property>
+  <property name="allowed_content_types">
+    <element value="opengever.contact.contactfolder" />
+    <element value="opengever.dossier.templatefolder" />
+    <element value="opengever.repository.repositoryroot" />
+    <element value="opengever.inbox.inbox" />
+    <element value="opengever.inbox.container" />
+    <element value="opengever.meeting.committeecontainer" />
+    <element value="opengever.private.root" />
+  </property>
+
+
+  <!--migrated from opengever/latex/profiles/default/types/Plone_Site.xml-->
+  <action
+      action_id="pdf-open-task-report"
+      visible="True"
+      title="Open tasks report"
+      category="object_buttons"
+      url_expr="string:${object_url}/@@pdf-open-task-report"
+      condition_expr="object/@@pdf-open-task-report-allowed">
+    <permission value="View" />
+  </action>
+
+</object>

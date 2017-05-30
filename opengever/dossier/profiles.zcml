@@ -14,11 +14,6 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
-  <profilehook:hook
-      profile="opengever.dossier:default"
-      handler=".hooks.installed"
-      />
-
   <!-- filing profile -->
   <genericsetup:registerProfile
       name="filing"

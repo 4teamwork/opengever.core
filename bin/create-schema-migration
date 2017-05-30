@@ -2,10 +2,9 @@
 set -e
 
 buildout_dir=$( cd "$(dirname "$BASH_SOURCE")/.." ; pwd -P )
-package=$1; shift
 
 set -o pipefail
-result=$($buildout_dir/bin/create-upgrade $package "$@" | tee /dev/tty) || exit $?
+result=$($buildout_dir/bin/create-upgrade "$@" | tee /dev/tty) || exit $?
 
 search="Created upgrade step at: "
 if [[ $result != *"$search"* ]]; then

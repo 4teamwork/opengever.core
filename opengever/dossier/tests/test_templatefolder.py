@@ -712,7 +712,7 @@ class TestTemplateFolderListings(FunctionalTestCase):
     def test_enabled_actions_are_limited_in_document_tab(self, browser):
         browser.login().open(self.templatefolder, view=DOCUMENT_TAB)
 
-        self.assertEqual(
+        self.assertItemsEqual(
             ['Copy Items', 'Checkin with comment', 'Checkin without comment',
              'Export selection', 'trashed', 'Export as Zip'],
             browser.css('.actionMenuContent li').text)
@@ -733,7 +733,7 @@ class TestTemplateFolderListings(FunctionalTestCase):
     def test_enabled_actions_are_limited_in_sablontemplates_tab(self, browser):
         browser.login().open(self.templatefolder, view=SABLONTEMPLATES_TAB)
 
-        self.assertEqual(
+        self.assertItemsEqual(
             ['Copy Items', 'Checkin with comment', 'Checkin without comment',
              'Export selection', 'trashed', 'Export as Zip'],
             browser.css('.actionMenuContent li').text)
@@ -742,7 +742,7 @@ class TestTemplateFolderListings(FunctionalTestCase):
     def test_enabled_actions_are_limited_in_proposaltemplates_tab(self, browser):
         browser.login().open(self.templatefolder, view=PROPOSALTEMPLATES_TAB)
 
-        self.assertEqual(
+        self.assertItemsEqual(
             ['Copy Items', 'Checkin with comment', 'Checkin without comment',
              'Export selection', 'trashed', 'Export as Zip'],
             browser.css('.actionMenuContent li').text)

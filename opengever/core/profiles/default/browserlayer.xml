@@ -1,0 +1,9 @@
+<layers>
+
+  <!--migrated from opengever/base/profiles/default/browserlayer.xml-->
+  <layer name="opengever.base.layer" interface="opengever.base.interfaces.IOpengeverBaseLayer" />
+
+
+  <!--migrated from opengever/sharing/profiles/default/browserlayer.xml-->
+  <layer name="opengever.sharing" interface="opengever.sharing.interfaces.IOpengeverSharing" />
+</layers>

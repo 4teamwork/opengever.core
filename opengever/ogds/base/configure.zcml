@@ -48,11 +48,6 @@
       />
 
   <profilehook:hook
-      profile="opengever.ogds.base:default"
-      handler=".hooks.default_installed"
-      />
-
-  <profilehook:hook
       profile="opengever.ogds.base:example"
       handler=".hooks.example_installed"
       />

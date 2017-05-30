@@ -1,0 +1,25 @@
+<metadata>
+  <dependencies>
+    <dependency>profile-plone.app.dexterity:default</dependency>
+    <dependency>profile-plone.app.relationfield:default</dependency>
+    <dependency>profile-ftw.keywordwidget:default</dependency>
+    <dependency>profile-ftw.keywordwidget:select2js</dependency>
+    <dependency>profile-collective.mtrsetup:default</dependency>
+    <dependency>profile-plone.app.versioningbehavior:default</dependency>
+    <dependency>profile-ftw.mail:default</dependency>
+    <dependency>profile-ftw.tabbedview:extjs</dependency>
+    <dependency>profile-ftw.tabbedview:quickupload</dependency>
+    <dependency>profile-collective.jqcookie:default</dependency>
+    <dependency>profile-ftw.bumblebee:default</dependency>
+    <dependency>profile-ftw.showroom:default</dependency>
+    <dependency>profile-ftw.datepicker:default</dependency>
+    <dependency>profile-ftw.contentmenu:default</dependency>
+    <dependency>profile-ftw.zipexport:default</dependency>
+    <dependency>profile-plone.formwidget.autocomplete:default</dependency>
+    <dependency>profile-plone.formwidget.contenttree:default</dependency>
+    <dependency>profile-collective.js.timeago:default</dependency>
+    <dependency>profile-plone.app.caching:default</dependency>
+    <dependency>profile-plone.app.caching:without-caching-proxy</dependency>
+    <dependency>profile-plone.restapi:default</dependency>
+  </dependencies>
+</metadata>

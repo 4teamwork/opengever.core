@@ -10,6 +10,9 @@ class InstallOpengeverPrivate(UpgradeStep):
 
     def __call__(self):
         self.install_upgrade_profile()
+        mtool = api.portal.get_tool('portal_membership')
+        mtool.setMembersFolderById(MEMBERSFOLDER_ID)
+        mtool.setMemberAreaType('opengever.private.folder')
         if not api.portal.get().get(MEMBERSFOLDER_ID):
             self.create_private_root()
 
