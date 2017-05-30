@@ -72,8 +72,12 @@ class TestManualJournalEntry(FunctionalTestCase):
         browser.login().open(self.dossier, view='add-journal-entry')
         browser.fill({
             'Category': u'phone-call',
-            'Comment': u'Anfrage bez\xfcglich dem Jahr 2016 von Herr Meier',
-            'Contacts': [get_contacts_token(peter), get_contacts_token(meierag)]})
+            'Comment': u'Anfrage bez\xfcglich dem Jahr 2016 von Herr Meier'})
+
+        form = browser.find_form_by_field('Contacts')
+        form.find_widget('Contacts').fill(
+            [get_contacts_token(peter), get_contacts_token(meierag)])
+
         browser.css('#form-buttons-add').first.click()
 
         browser.open(self.dossier, view=u'tabbedview_view-journal')
@@ -98,8 +102,11 @@ class TestManualJournalEntry(FunctionalTestCase):
         browser.login().open(self.dossier, view='add-journal-entry')
         browser.fill({
             'Category': u'phone-call',
-            'Comment': u'Anfrage bez\xfcglich dem Jahr 2016 von Herr Meier',
-            'Contacts': [get_contacts_token(OgdsUserToContactAdapter(peter))]})
+            'Comment': u'Anfrage bez\xfcglich dem Jahr 2016 von Herr Meier'})
+        form = browser.find_form_by_field('Contacts')
+        form.find_widget('Contacts').fill(
+            [get_contacts_token(OgdsUserToContactAdapter(peter))])
+
         browser.css('#form-buttons-add').first.click()
 
         browser.open(self.dossier, view=u'tabbedview_view-journal')
@@ -120,8 +127,11 @@ class TestManualJournalEntry(FunctionalTestCase):
                        .having(firstname=u'H\xfcgo', lastname='Boss'))
 
         browser.login().open(self.dossier, view='add-journal-entry')
-        browser.fill({'Category': u'phone-call',
-                      'Contacts': [get_contacts_token(peter)]})
+        browser.fill({'Category': u'phone-call'})
+
+        form = browser.find_form_by_field('Contacts')
+        form.find_widget('Contacts').fill([get_contacts_token(peter)])
+
         browser.css('#form-buttons-add').first.click()
 
         browser.open(self.dossier, view=u'tabbedview_view-journal')
