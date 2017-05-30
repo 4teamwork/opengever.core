@@ -360,64 +360,6 @@ class TestContactsAndUsersVocabulary(FunctionalTestCase):
                           vocabulary.getTerm('hugo.boss').title)
 
 
-class TestEmailContactsAndUsersVocabularyFactory(FunctionalTestCase):
-    use_default_fixture = False
-
-    def setUp(self):
-        super(TestEmailContactsAndUsersVocabularyFactory, self).setUp()
-
-        create(Builder('fixture').with_admin_unit())
-
-        self.vocabulary_factory = getUtility(
-            IVocabularyFactory,
-            name='opengever.ogds.base.EmailContactsAndUsersVocabulary')
-
-    def test_terms_contains_fullname_and_principal_and_email_in_parentheses(self):
-        create_ogds_user('hugo.boss', firstname=u'H\xfcgo',
-                         lastname=u'Boss', email='hugo@boss.local')
-        create(Builder('contact')
-               .having(firstname=u'Elisabeth', lastname=u'K\xe4ppeli',
-                       email= 'elisabeth.kaeppeli@test.ch'))
-
-        self.assertTerms(
-            [(u'hugo@boss.local:hugo.boss',
-              u'Boss H\xfcgo (hugo.boss, hugo@boss.local)'),
-             (u'elisabeth.kaeppeli@test.ch:kappeli-elisabeth',
-              u'K\xe4ppeli Elisabeth (elisabeth.kaeppeli@test.ch)')],
-            self.vocabulary_factory(self.portal))
-
-    def test_contains_emails_for_all_users(self):
-        create_ogds_user('hugo.boss', firstname=u'H\xfcgo',
-                         lastname=u'Boss', email='hugo@boss.local')
-        create_ogds_user('robin.hood', firstname=u'Robin',
-                         lastname=u'Hood', email='robin@hood.tld')
-
-        self.assertTermKeys(
-            [u'hugo@boss.local:hugo.boss', u'robin@hood.tld:robin.hood'],
-            self.vocabulary_factory(self.portal))
-
-    def test_contains_emails_for_all_contacts(self):
-        create(Builder('contact')
-               .having(firstname=u'Lara', lastname=u'Croft',
-                       email=u'lara.croft@test.ch'))
-        create(Builder('contact')
-               .having(firstname=u'Super', lastname=u'M\xe4n',
-                       email= 'superman@test.ch'))
-
-        self.assertTermKeys(
-            ['lara.croft@test.ch:croft-lara',
-             'superman@test.ch:man-super'],
-            self.vocabulary_factory(self.portal))
-
-    def test_has_an_entry_for_each_mail_address(self):
-        create_ogds_user('hugo.boss', firstname=u'Hugo', lastname=u'Boss',
-                         email='hugo@boss.local', email2='hugo@private.ch')
-
-        self.assertTermKeys(
-            ['hugo@boss.local:hugo.boss', 'hugo@private.ch:hugo.boss'],
-            self.vocabulary_factory(self.portal))
-
-
 class TestAssignedClientsVocabularies(FunctionalTestCase):
     use_default_fixture = False
 
