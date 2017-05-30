@@ -1,4 +1,5 @@
 from five import grok
+from ftw.keywordwidget.widget import KeywordFieldWidget
 from ftw.table import helper
 from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
@@ -7,6 +8,7 @@ from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.base.schema import TableChoice
 from opengever.contact import is_contact_feature_enabled
+from opengever.contact.sources import ContactsSourceBinder
 from opengever.dossier import _
 from opengever.dossier.command import CreateDocumentFromTemplateCommand
 from opengever.dossier.templatefolder import get_template_folder
@@ -14,7 +16,6 @@ from opengever.tabbedview.helper import document_with_icon
 from plone import api
 from plone.autoform.form import AutoExtensibleForm
 from plone.directives import form
-from plone.formwidget.autocomplete import AutocompleteFieldWidget
 from plone.z3cform.layout import FormWrapper
 from sqlalchemy import inspect
 from sqlalchemy.exc import NoInspectionAvailable
@@ -78,10 +79,10 @@ class ICreateDocumentFromTemplate(form.Schema):
         title=_(u"label_title", default=u"Title"),
         required=True)
 
-    form.widget(recipient=AutocompleteFieldWidget)
+    form.widget('recipient', KeywordFieldWidget, async=True)
     recipient = schema.Choice(
         title=_(u'label_recipient', default=u'Recipient'),
-        vocabulary=u'opengever.contact.ContactsVocabulary',
+        source=ContactsSourceBinder(),
         required=False,
     )
 
@@ -170,9 +171,6 @@ class SelectTemplateDocumentWizardStep(
     @property
     def schema(self):
         """Create the schema dynammically and omit recipient if necessary.
-
-        There seems to be an issue with AutocompleteFieldWidget's HIDDEN_MODE
-        so we omit the field completely if the feature is not enabled.
         """
 
         return ICreateDocumentFromTemplate
