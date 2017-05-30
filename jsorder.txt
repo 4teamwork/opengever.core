@@ -1,10 +1,14 @@
 ++resource++plone.app.jquery.js
+++resource++datetimepicker/js/datetimepicker-2.4.5/jquery.datetimepicker.js
+++resource++datetimepicker/js/datetimepicker_widget.js
 ++resource++ftw.showroom/handlebars.js
 ++resource++opengever.base/notify.js
 ++resource++opengever.base/MessageFactory.js
 ++resource++opengever.base/Storage.js
 ++resource++opengever.base/MeetingStorage.js
 ++resource++opengever.meeting/Pin.js
+++resource++ftw.keywordwidget/select2/dist/js/select2.min.js
+++resource++ftw.keywordwidget/js/keywordwidget.js
 ++resource++opengever.base/Synchronizer.js
 ++resource++opengever.base/handlebars.js
 ++resource++ftw.showroom/ftw.showroom.js
@@ -58,8 +62,6 @@ collective.js.jqueryui.custom.min.js
 ++resource++opengever.ogds.base/ogds_base.js
 ++resource++opengever.base/SelectAutocomplete.js
 ++resource++opengever.meeting/protocol.js
-++resource++opengever.base/datetimepicker.js
-++resource++opengever.meeting/datetimepicker.js
 ++resource++opengever.base/prepoverlay.js
 ++resource++opengever.base/qtip.js
 ++resource++opengever.base/tooltip.js
@@ -95,7 +97,7 @@ collective.js.jqueryui.custom.min.js
 ++resource++opengever.advancedsearch.resources/advanced_search.js
 ++resource++collective.js.timeago/jquery.timeago.js
 ++resource++opengever.document/startredirect.js
-++resource++opengever.task.responsible.js
+++resource++opengever.meeting/datetimepicker.js
 ++resource++opengever.bumblebee.resources/bumblebee.js
 ++resource++ftw.mobilenavigation/navigation.js
 ++resource++ftw.mobilenavigation/expand_navigation.js
