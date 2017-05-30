@@ -1,8 +1,8 @@
 diff --git a/opengever/dossier/tests/test_templatefolder.py b/opengever/dossier/tests/test_templatefolder.py
-index 99232fd..64de2a1 100644
+index c90caf9..6b12f32 100644
 --- a/opengever/dossier/tests/test_templatefolder.py
 +++ b/opengever/dossier/tests/test_templatefolder.py
-@@ -606,7 +606,7 @@ class TestTemplatefolderListings(FunctionalTestCase):
+@@ -712,7 +712,7 @@ class TestTemplateFolderListings(FunctionalTestCase):
      def test_enabled_actions_are_limited_in_document_tab(self, browser):
          browser.login().open(self.templatefolder, view=DOCUMENT_TAB)
  
@@ -11,9 +11,18 @@ index 99232fd..64de2a1 100644
              ['Copy Items', 'Checkin with comment', 'Checkin without comment',
               'Export selection', 'trashed', 'Export as Zip'],
              browser.css('.actionMenuContent li').text)
-@@ -627,7 +627,7 @@ class TestTemplatefolderListings(FunctionalTestCase):
+@@ -733,7 +733,7 @@ class TestTemplateFolderListings(FunctionalTestCase):
      def test_enabled_actions_are_limited_in_sablontemplates_tab(self, browser):
          browser.login().open(self.templatefolder, view=SABLONTEMPLATES_TAB)
+ 
+-        self.assertEqual(
++        self.assertItemsEqual(
+             ['Copy Items', 'Checkin with comment', 'Checkin without comment',
+              'Export selection', 'trashed', 'Export as Zip'],
+             browser.css('.actionMenuContent li').text)
+@@ -742,7 +742,7 @@ class TestTemplateFolderListings(FunctionalTestCase):
+     def test_enabled_actions_are_limited_in_proposaltemplates_tab(self, browser):
+         browser.login().open(self.templatefolder, view=PROPOSALTEMPLATES_TAB)
  
 -        self.assertEqual(
 +        self.assertItemsEqual(

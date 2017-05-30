@@ -1,0 +1,372 @@
+diff --git a/opengever/officeconnector/tests/test_templates.py b/opengever/officeconnector/tests/test_templates.py
+index eb35436..6c427a8 100644
+--- a/opengever/officeconnector/tests/test_templates.py
++++ b/opengever/officeconnector/tests/test_templates.py
+@@ -193,6 +193,7 @@ class TestOCTemplatesDossierOpenWithoutFile(FunctionalTestCase):
+ 
+         self.assertEqual(['Create Task',
+                           u'More actions \u25bc',
++                          'Export as Zip',
+                           'Copy Items',
+                           'Send as email',
+                           'Checkout',
+@@ -201,8 +202,7 @@ class TestOCTemplatesDossierOpenWithoutFile(FunctionalTestCase):
+                           'Checkin without comment',
+                           'Export selection',
+                           'Move Items',
+-                          'trashed',
+-                          'Export as Zip'],
++                          'trashed'],
+                          browser.css('.tabbedview-action-list a').text)
+ 
+         api.portal.set_registry_record(
+@@ -216,6 +216,7 @@ class TestOCTemplatesDossierOpenWithoutFile(FunctionalTestCase):
+ 
+         self.assertEqual(['Create Task',
+                           u'More actions \u25bc',
++                          'Export as Zip',
+                           'Copy Items',
+                           'Attach selection',
+                           'Checkout',
+@@ -224,8 +225,7 @@ class TestOCTemplatesDossierOpenWithoutFile(FunctionalTestCase):
+                           'Checkin without comment',
+                           'Export selection',
+                           'Move Items',
+-                          'trashed',
+-                          'Export as Zip'],
++                          'trashed'],
+                          browser.css('.tabbedview-action-list a').text)
+ 
+         self.assertIn("javascript:officeConnectorMultiAttach('",
+@@ -248,6 +248,7 @@ class TestOCTemplatesDossierOpenWithoutFile(FunctionalTestCase):
+ 
+         self.assertEqual(['Create Task',
+                           u'More actions \u25bc',
++                          'Export as Zip',
+                           'Copy Items',
+                           'Send as email',
+                           'Checkout',
+@@ -256,8 +257,7 @@ class TestOCTemplatesDossierOpenWithoutFile(FunctionalTestCase):
+                           'Checkin without comment',
+                           'Export selection',
+                           'Move Items',
+-                          'trashed',
+-                          'Export as Zip'],
++                          'trashed'],
+                          browser.css('.tabbedview-action-list a').text)
+ 
+         api.portal.set_registry_record(
+@@ -271,6 +271,7 @@ class TestOCTemplatesDossierOpenWithoutFile(FunctionalTestCase):
+ 
+         self.assertEqual(['Create Task',
+                           u'More actions \u25bc',
++                          'Export as Zip',
+                           'Copy Items',
+                           'Attach selection',
+                           'Checkout',
+@@ -279,8 +280,7 @@ class TestOCTemplatesDossierOpenWithoutFile(FunctionalTestCase):
+                           'Checkin without comment',
+                           'Export selection',
+                           'Move Items',
+-                          'trashed',
+-                          'Export as Zip'],
++                          'trashed'],
+                          browser.css('.tabbedview-action-list a').text)
+ 
+         self.assertIn("javascript:officeConnectorMultiAttach('",
+@@ -464,11 +464,11 @@ class TestOCTemplatesDossierInactiveWithoutFile(FunctionalTestCase):
+         browser.open(self.dossier, view='tabbedview_view-documents')
+ 
+         self.assertEqual([u'More actions \u25bc',
++                          'Export as Zip',
+                           'Copy Items',
+                           'Send as email',
+                           'Export selection',
+-                          'Move Items',
+-                          'Export as Zip'],
++                          'Move Items'],
+                          browser.css('.tabbedview-action-list a').text)
+ 
+         api.portal.set_registry_record(
+@@ -481,11 +481,11 @@ class TestOCTemplatesDossierInactiveWithoutFile(FunctionalTestCase):
+         browser.open(self.dossier, view='tabbedview_view-documents')
+ 
+         self.assertEqual([u'More actions \u25bc',
++                          'Export as Zip',
+                           'Copy Items',
+                           'Attach selection',
+                           'Export selection',
+-                          'Move Items',
+-                          'Export as Zip'],
++                          'Move Items'],
+                          browser.css('.tabbedview-action-list a').text)
+ 
+         self.assertIn("javascript:officeConnectorMultiAttach('",
+@@ -507,11 +507,11 @@ class TestOCTemplatesDossierInactiveWithoutFile(FunctionalTestCase):
+         browser.open(self.dossier, view='tabbedview_view-documents')
+ 
+         self.assertEqual([u'More actions \u25bc',
++                          'Export as Zip',
+                           'Copy Items',
+                           'Send as email',
+                           'Export selection',
+-                          'Move Items',
+-                          'Export as Zip'],
++                          'Move Items'],
+                          browser.css('.tabbedview-action-list a').text)
+ 
+         api.portal.set_registry_record(
+@@ -524,11 +524,11 @@ class TestOCTemplatesDossierInactiveWithoutFile(FunctionalTestCase):
+         browser.open(self.dossier, view='tabbedview_view-documents')
+ 
+         self.assertEqual([u'More actions \u25bc',
++                          'Export as Zip',
+                           'Copy Items',
+                           'Attach selection',
+                           'Export selection',
+-                          'Move Items',
+-                          'Export as Zip'],
++                          'Move Items'],
+                          browser.css('.tabbedview-action-list a').text)
+ 
+         self.assertIn("javascript:officeConnectorMultiAttach('",
+@@ -712,11 +712,11 @@ class TestOCTemplatesDossierResolvedWithoutFile(FunctionalTestCase):
+         browser.open(self.dossier, view='tabbedview_view-documents')
+ 
+         self.assertEqual([u'More actions \u25bc',
++                          'Export as Zip',
+                           'Copy Items',
+                           'Send as email',
+                           'Export selection',
+-                          'Move Items',
+-                          'Export as Zip'],
++                          'Move Items'],
+                          browser.css('.tabbedview-action-list a').text)
+ 
+         api.portal.set_registry_record(
+@@ -729,11 +729,11 @@ class TestOCTemplatesDossierResolvedWithoutFile(FunctionalTestCase):
+         browser.open(self.dossier, view='tabbedview_view-documents')
+ 
+         self.assertEqual([u'More actions \u25bc',
++                          'Export as Zip',
+                           'Copy Items',
+                           'Attach selection',
+                           'Export selection',
+-                          'Move Items',
+-                          'Export as Zip'],
++                          'Move Items'],
+                          browser.css('.tabbedview-action-list a').text)
+ 
+         self.assertIn("javascript:officeConnectorMultiAttach('",
+@@ -755,11 +755,11 @@ class TestOCTemplatesDossierResolvedWithoutFile(FunctionalTestCase):
+         browser.open(self.dossier, view='tabbedview_view-documents')
+ 
+         self.assertEqual([u'More actions \u25bc',
++                          'Export as Zip',
+                           'Copy Items',
+                           'Send as email',
+                           'Export selection',
+-                          'Move Items',
+-                          'Export as Zip'],
++                          'Move Items'],
+                          browser.css('.tabbedview-action-list a').text)
+ 
+         api.portal.set_registry_record(
+@@ -772,11 +772,11 @@ class TestOCTemplatesDossierResolvedWithoutFile(FunctionalTestCase):
+         browser.open(self.dossier, view='tabbedview_view-documents')
+ 
+         self.assertEqual([u'More actions \u25bc',
++                          'Export as Zip',
+                           'Copy Items',
+                           'Attach selection',
+                           'Export selection',
+-                          'Move Items',
+-                          'Export as Zip'],
++                          'Move Items'],
+                          browser.css('.tabbedview-action-list a').text)
+ 
+         self.assertIn("javascript:officeConnectorMultiAttach('",
+@@ -1162,6 +1162,7 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
+ 
+         self.assertEqual(['Create Task',
+                           u'More actions \u25bc',
++                          'Export as Zip',
+                           'Copy Items',
+                           'Send as email',
+                           'Checkout',
+@@ -1170,8 +1171,7 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
+                           'Checkin without comment',
+                           'Export selection',
+                           'Move Items',
+-                          'trashed',
+-                          'Export as Zip'],
++                          'trashed'],
+                          browser.css('.tabbedview-action-list a').text)
+ 
+         api.portal.set_registry_record(
+@@ -1185,6 +1185,7 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
+ 
+         self.assertEqual(['Create Task',
+                           u'More actions \u25bc',
++                          'Export as Zip',
+                           'Copy Items',
+                           'Attach selection',
+                           'Checkout',
+@@ -1193,8 +1194,7 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
+                           'Checkin without comment',
+                           'Export selection',
+                           'Move Items',
+-                          'trashed',
+-                          'Export as Zip'],
++                          'trashed'],
+                          browser.css('.tabbedview-action-list a').text)
+ 
+         self.assertIn("javascript:officeConnectorMultiAttach('",
+@@ -1217,6 +1217,7 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
+ 
+         self.assertEqual(['Create Task',
+                           u'More actions \u25bc',
++                          'Export as Zip',
+                           'Copy Items',
+                           'Send as email',
+                           'Checkout',
+@@ -1225,8 +1226,7 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
+                           'Checkin without comment',
+                           'Export selection',
+                           'Move Items',
+-                          'trashed',
+-                          'Export as Zip'],
++                          'trashed'],
+                          browser.css('.tabbedview-action-list a').text)
+ 
+         api.portal.set_registry_record(
+@@ -1240,6 +1240,7 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
+ 
+         self.assertEqual(['Create Task',
+                           u'More actions \u25bc',
++                          'Export as Zip',
+                           'Copy Items',
+                           'Attach selection',
+                           'Checkout',
+@@ -1248,8 +1249,7 @@ class TestOCTemplatesDossierOpenWithFile(FunctionalTestCase):
+                           'Checkin without comment',
+                           'Export selection',
+                           'Move Items',
+-                          'trashed',
+-                          'Export as Zip'],
++                          'trashed'],
+                          browser.css('.tabbedview-action-list a').text)
+ 
+         self.assertIn("javascript:officeConnectorMultiAttach('",
+@@ -1578,11 +1578,11 @@ class TestOCTemplatesDossierInactiveWithFile(FunctionalTestCase):
+         browser.open(self.dossier, view='tabbedview_view-documents')
+ 
+         self.assertEqual([u'More actions \u25bc',
++                          'Export as Zip',
+                           'Copy Items',
+                           'Send as email',
+                           'Export selection',
+-                          'Move Items',
+-                          'Export as Zip'],
++                          'Move Items'],
+                          browser.css('.tabbedview-action-list a').text)
+ 
+         api.portal.set_registry_record(
+@@ -1595,11 +1595,11 @@ class TestOCTemplatesDossierInactiveWithFile(FunctionalTestCase):
+         browser.open(self.dossier, view='tabbedview_view-documents')
+ 
+         self.assertEqual([u'More actions \u25bc',
++                          'Export as Zip',
+                           'Copy Items',
+                           'Attach selection',
+                           'Export selection',
+-                          'Move Items',
+-                          'Export as Zip'],
++                          'Move Items'],
+                          browser.css('.tabbedview-action-list a').text)
+ 
+         self.assertIn("javascript:officeConnectorMultiAttach('",
+@@ -1621,11 +1621,11 @@ class TestOCTemplatesDossierInactiveWithFile(FunctionalTestCase):
+         browser.open(self.dossier, view='tabbedview_view-documents')
+ 
+         self.assertEqual([u'More actions \u25bc',
++                          'Export as Zip',
+                           'Copy Items',
+                           'Send as email',
+                           'Export selection',
+-                          'Move Items',
+-                          'Export as Zip'],
++                          'Move Items'],
+                          browser.css('.tabbedview-action-list a').text)
+ 
+         api.portal.set_registry_record(
+@@ -1638,11 +1638,11 @@ class TestOCTemplatesDossierInactiveWithFile(FunctionalTestCase):
+         browser.open(self.dossier, view='tabbedview_view-documents')
+ 
+         self.assertEqual([u'More actions \u25bc',
++                          'Export as Zip',
+                           'Copy Items',
+                           'Attach selection',
+                           'Export selection',
+-                          'Move Items',
+-                          'Export as Zip'],
++                          'Move Items'],
+                          browser.css('.tabbedview-action-list a').text)
+ 
+         self.assertIn("javascript:officeConnectorMultiAttach('",
+@@ -1900,11 +1900,11 @@ class TestOCTemplatesDossierResolvedWithFile(FunctionalTestCase):
+         browser.open(self.dossier, view='tabbedview_view-documents')
+ 
+         self.assertEqual([u'More actions \u25bc',
++                          'Export as Zip',
+                           'Copy Items',
+                           'Send as email',
+                           'Export selection',
+-                          'Move Items',
+-                          'Export as Zip'],
++                          'Move Items'],
+                          browser.css('.tabbedview-action-list a').text)
+ 
+         api.portal.set_registry_record(
+@@ -1917,11 +1917,11 @@ class TestOCTemplatesDossierResolvedWithFile(FunctionalTestCase):
+         browser.open(self.dossier, view='tabbedview_view-documents')
+ 
+         self.assertEqual([u'More actions \u25bc',
++                          'Export as Zip',
+                           'Copy Items',
+                           'Attach selection',
+                           'Export selection',
+-                          'Move Items',
+-                          'Export as Zip'],
++                          'Move Items'],
+                          browser.css('.tabbedview-action-list a').text)
+ 
+         self.assertIn("javascript:officeConnectorMultiAttach('",
+@@ -1943,11 +1943,11 @@ class TestOCTemplatesDossierResolvedWithFile(FunctionalTestCase):
+         browser.open(self.dossier, view='tabbedview_view-documents')
+ 
+         self.assertEqual([u'More actions \u25bc',
++                          'Export as Zip',
+                           'Copy Items',
+                           'Send as email',
+                           'Export selection',
+-                          'Move Items',
+-                          'Export as Zip'],
++                          'Move Items'],
+                          browser.css('.tabbedview-action-list a').text)
+ 
+         api.portal.set_registry_record(
+@@ -1960,11 +1960,11 @@ class TestOCTemplatesDossierResolvedWithFile(FunctionalTestCase):
+         browser.open(self.dossier, view='tabbedview_view-documents')
+ 
+         self.assertEqual([u'More actions \u25bc',
++                          'Export as Zip',
+                           'Copy Items',
+                           'Attach selection',
+                           'Export selection',
+-                          'Move Items',
+-                          'Export as Zip'],
++                          'Move Items'],
+                          browser.css('.tabbedview-action-list a').text)
+ 
+         self.assertIn("javascript:officeConnectorMultiAttach('",
