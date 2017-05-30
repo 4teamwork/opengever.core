@@ -18,11 +18,6 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
-  <profilehook:hook
-      profile="opengever.private:default"
-      handler=".hooks.configure_members_area"
-      />
-
   <include package=".upgrades" />
   <include package=".browser" />
   <include package=".viewlets" />
@@ -38,8 +33,7 @@
   <adapter factory=".quota.PrivateFolderQuotaSizeSettings" />
 
   <subscriber
-      for="opengever.private.root.IPrivateRoot
-           zope.lifecycleevent.interfaces.IObjectAddedEvent"
+      for="opengever.private.root.IPrivateRoot            zope.lifecycleevent.interfaces.IObjectAddedEvent"
       handler=".subscribers.configure_private_root_portlets"
       />
 

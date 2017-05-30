@@ -1,0 +1,32 @@
+<configure
+      xmlns="http://namespaces.zope.org/zope"
+      xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+      xmlns:profilehook="http://namespaces.zope.org/profilehook"
+      xmlns:upgrade-step="http://namespaces.zope.org/ftw.upgrade"
+      i18n_domain="opengever.core">
+
+    <include package="ftw.profilehook" />
+    <include package="ftw.upgrade" file="meta.zcml" />
+
+    <genericsetup:registerProfile
+          name="default"
+          title="opengever.core"
+          directory="profiles/default"
+          provides="Products.GenericSetup.interfaces.EXTENSION" />
+
+    <upgrade-step:directory
+          profile="opengever.core:default"
+          directory="upgrades"
+          soft_dependencies="opengever.policy.base:default"
+          />
+
+    <profilehook:hook
+          profile="opengever.core:default"
+          handler=".hooks.installed"
+          />
+
+    <subscriber
+          for="Products.GenericSetup.interfaces.IBeforeProfileImportEvent"
+          handler=".hooks.awoid_profile_reinstallation" />
+
+</configure>

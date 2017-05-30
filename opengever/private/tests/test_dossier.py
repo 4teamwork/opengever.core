@@ -83,13 +83,13 @@ class TestPrivateDossier(FunctionalTestCase):
                             .within(dossier)
                             .having(responsible=TEST_USER_ID))
 
-        self.assertSequenceEqual(
+        self.assertItemsEqual(
             ['opengever.document.document',
              'ftw.mail.mail',
              'opengever.private.dossier'],
             [fti.id for fti in dossier.allowedContentTypes()])
 
-        self.assertSequenceEqual(
+        self.assertItemsEqual(
             ['opengever.document.document', 'ftw.mail.mail'],
             [fti.id for fti in subdossier.allowedContentTypes()])
 

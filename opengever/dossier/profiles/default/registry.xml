@@ -1,7 +1,0 @@
-<registry>
-  <records interface="opengever.dossier.interfaces.IDossierContainerTypes" />
-  <records interface="opengever.dossier.interfaces.IDossierParticipants" />
-  <records interface="opengever.dossier.interfaces.ITemplateFolderProperties" />
-  <records interface="opengever.dossier.interfaces.IDossierResolveProperties" />
-  <records interface="opengever.dossier.dossiertemplate.interfaces.IDossierTemplateSettings" />
-</registry>

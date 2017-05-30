@@ -1,7 +1,0 @@
-<object name="opengever.repository.repositoryfolder">
-
-  <property name="allowed_content_types" purge="False">
-    <element value="opengever.meeting.meetingdossier" />
-  </property>
-
-</object>

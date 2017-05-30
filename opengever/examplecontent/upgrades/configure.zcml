@@ -37,6 +37,7 @@
   <upgrade-step:directory
       profile="opengever.examplecontent:default"
       directory="."
+      soft_dependencies="opengever.core:default"
       />
 
   <!-- Do not add more upgrade steps here.

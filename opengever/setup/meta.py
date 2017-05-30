@@ -22,7 +22,7 @@ class IDeploymentDirective(Interface):
 
     base_profile = TextLine(
         title=u'Base Profile',
-        default=u'opengever.policy.base:default',
+        default=u'opengever.core:default',
         required=True)
 
     policy_profile = TextLine(

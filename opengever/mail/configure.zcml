@@ -24,8 +24,7 @@
       />
 
   <adapter
-      for="*
-           opengever.base.interfaces.IOpengeverBaseLayer"
+      for="*            opengever.base.interfaces.IOpengeverBaseLayer"
       factory=".create.OGCreateMailInContainer"
       />
 
@@ -57,10 +56,5 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
   <include package=".upgrades" />
-
-  <profilehook:hook
-      profile="opengever.mail:default"
-      handler=".hooks.installed"
-      />
 
 </configure>

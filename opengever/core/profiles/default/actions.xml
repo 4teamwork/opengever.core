@@ -1,0 +1,722 @@
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="portal_actions" meta_type="Plone Actions Tool">
+
+
+  <!-- ###################################################### /-->
+  <object name="document_actions" meta_type="CMF Action Category">
+
+    <!--migrated from opengever/policy/base/profiles/default/actions.xml-->
+    <object name="watch" meta_type="CMF Action">
+      <property name="visible">False</property>
+    </object>
+
+    <object name="addtofavorites" meta_type="CMF Action">
+      <property name="visible">False</property>
+    </object>
+
+  </object>
+
+
+  <!-- ###################################################### /-->
+  <object name="site_actions" meta_type="CMF Action Category">
+
+    <!--migrated from opengever/base/profiles/default/actions.xml-->
+    <object name="sitemap" meta_type="CMF Action" i18n:domain="plone">
+      <property name="visible">False</property>
+    </object>
+
+  </object>
+
+
+  <!-- ###################################################### /-->
+  <object name="folder_buttons" meta_type="CMF Action Category">
+
+    <!--migrated from opengever/globalindex/profiles/default/actions.xml-->
+    <object name="export_tasks" meta_type="CMF Action" i18n:domain="opengever.globalindex">
+      <property name="title" i18n:translate="">Export selection</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:@@task_report:method</property>
+      <property name="icon_expr" />
+      <property name="available_expr" />
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <!--migrated from opengever/base/profiles/default/actions.xml-->
+    <object name="copy_items" meta_type="CMF Action" i18n:domain="opengever.base">
+      <property name="title" i18n:translate="">Copy Items</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:copy_items:method</property>
+      <property name="icon_expr" />
+      <property name="available_expr" />
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="change_state" meta_type="CMF Action" i18n:domain="plone">
+      <property name="title" i18n:translate="">Change State</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:content_status_history:method</property>
+      <property name="link_target" />
+      <property name="icon_expr" />
+      <property name="available_expr">python:checkPermission("Modify portal content", object) or checkPermission("Review portal content", object)</property>
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">False</property>
+    </object>
+
+    <object name="cut" meta_type="CMF Action" i18n:domain="plone">
+      <property name="title" i18n:translate="">Cut</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:${globals_view/getCurrentObjectUrl}/object_cut</property>
+      <property name="icon_expr" />
+      <property name="available_expr">python:checkPermission("Delete objects", globals_view.getParentObject()) and checkPermission("Copy or Move", object) and not globals_view.isPortalOrPortalDefaultPage()</property>
+      <property name="permissions">
+        <element value="Manage portal" />
+      </property>
+      <property name="visible">False</property>
+    </object>
+
+    <object name="copy" meta_type="CMF Action" i18n:domain="plone">
+      <property name="title" i18n:translate="">Copy</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:${globals_view/getCurrentObjectUrl}/object_copy</property>
+      <property name="icon_expr" />
+      <property name="available_expr">python:checkPermission("Copy or Move", object) and not globals_view.isPortalOrPortalDefaultPage()</property>
+      <property name="permissions">
+        <element value="Manage portal" />
+      </property>
+      <property name="visible">False</property>
+    </object>
+
+    <!--migrated from opengever/document/profiles/default/actions.xml-->
+    <object name="send_as_email" meta_type="CMF Action" i18n:domain="opengever.document">
+      <property name="title" i18n:translate="">Send as email</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:send_documents:method</property>
+      <property name="icon_expr" />
+      <property name="available_expr" />
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="attach_documents" meta_type="CMF Action" i18n:domain="opengever.document">
+      <property name="title" i18n:translate="">Attach selection</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:javascript:officeConnectorMultiAttach('$portal_url/officeconnector_attach_url');</property>
+      <property name="icon_expr" />
+      <property name="available_expr" />
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="checkout" meta_type="CMF Action" i18n:domain="opengever.document">
+      <property name="title" i18n:translate="">Checkout</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:checkout_documents:method</property>
+      <property name="icon_expr" />
+      <property name="available_expr" />
+      <property name="permissions">
+        <element value="opengever.document: Checkout" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="create_task" meta_type="CMF Action" i18n:domain="opengever.document">
+      <property name="title" i18n:translate="">Create Task</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:++add++opengever.task.task:method</property>
+      <property name="icon_expr" />
+      <property name="available_expr" />
+      <property name="permissions">
+        <element value="opengever.task: Add task" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="cancel" meta_type="CMF Action" i18n:domain="opengever.document">
+      <property name="title" i18n:translate="">Cancel</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:cancel_document_checkouts:method</property>
+      <property name="icon_expr" />
+      <property name="available_expr" />
+      <property name="permissions">
+        <element value="opengever.document: Cancel" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="checkin_with_comment" meta_type="CMF Action" i18n:domain="opengever.document">
+      <property name="title" i18n:translate="">Checkin with comment</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:checkin_documents:method</property>
+      <property name="icon_expr" />
+      <property name="available_expr" />
+      <property name="permissions">
+        <element value="opengever.document: Checkin" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="checkin_without_comment" meta_type="CMF Action" i18n:domain="opengever.document">
+      <property name="title" i18n:translate="">Checkin without comment</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:checkin_without_comment:method</property>
+      <property name="icon_expr" />
+      <property name="available_expr" />
+      <property name="permissions">
+        <element value="opengever.document: Checkin" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="submit_additional_documents" meta_type="CMF Action" i18n:domain="opengever.document">
+      <property name="title" i18n:translate="">Submit additional documents</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:submit_additional_documents:method</property>
+      <property name="icon_expr" />
+      <property name="available_expr">object/@@submit_additional_documents/available</property>
+      <property name="permissions">
+        <element value="opengever.meeting: Add Proposal" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="export_documents" meta_type="CMF Action" i18n:domain="opengever.document">
+      <property name="title" i18n:translate="">Export selection</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:@@document_report:method</property>
+      <property name="icon_expr" />
+      <property name="available_expr" />
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <!--migrated from opengever/dossier/profiles/default/actions.xml-->
+    <object name="delete_participants" meta_type="CMF Action" i18n:domain="opengever.dossier">
+      <property name="title" i18n:translate="">Delete</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:delete_participants:method</property>
+      <property name="icon_expr" />
+      <property name="available_expr" />
+      <property name="permissions">
+        <element value="Modify portal content" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="add_participant" meta_type="CMF Action" i18n:domain="opengever.dossier">
+      <property name="title" i18n:translate="">Add Participant</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:@@add-participation:method</property>
+      <property name="icon_expr" />
+      <property name="available_expr" />
+      <property name="permissions">
+        <element value="Add portal content" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="move_items" meta_type="CMF Action" i18n:domain="opengever.dossier">
+      <property name="title" i18n:translate="">Move Items</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:@@move_items:method</property>
+      <property name="icon_expr" />
+      <property name="available_expr" />
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="export_dossiers" meta_type="CMF Action" i18n:domain="opengever.dossier">
+      <property name="title" i18n:translate="">Export selection</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:@@dossier_report:method</property>
+      <property name="icon_expr" />
+      <property name="available_expr" />
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <!--migrated from opengever/trash/profiles/default/actions.xml-->
+    <object name="trashed" meta_type="CMF Action" i18n:domain="opengever.trash">
+      <property name="title" i18n:translate="">trashed</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:./trashed:method</property>
+      <property name="icon_expr" />
+      <property name="available_expr" />
+      <property name="permissions">
+        <element value="opengever.trash: Trash content" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="untrashed" meta_type="CMF Action" i18n:domain="opengever.trash">
+      <property name="title" i18n:translate="">untrashed</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:./untrashed:method</property>
+      <property name="icon_expr" />
+      <property name="available_expr" />
+      <property name="permissions">
+        <element value="opengever.trash: Untrash content" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="remove" meta_type="CMF Action" i18n:domain="opengever.trash">
+      <property name="title" i18n:translate="">remove</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:./remove_confirmation:method</property>
+      <property name="icon_expr" />
+      <property name="available_expr" />
+      <property name="permissions">
+        <element value="Remove GEVER content" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <!--migrated from opengever/inbox/profiles/default/actions.xml-->
+    <object name="create_forwarding" meta_type="CMF Action" i18n:domain="opengever.inbox">
+      <property name="title" i18n:translate="">Forward</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:++add++opengever.inbox.forwarding:method</property>
+      <property name="icon_expr" />
+      <property name="available_expr" />
+      <property name="permissions">
+        <element value="opengever.inbox: Add Forwarding" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <!--migrated from opengever/latex/profiles/default/actions.xml-->
+    <object name="pdf_dossierlisting" meta_type="CMF Action" i18n:domain="opengever.latex">
+      <property name="title" i18n:translate="">Print selection (PDF)</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:pdf-dossier-listing:method</property>
+      <property name="icon_expr" />
+      <property name="available_expr" />
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="pdf_taskslisting" meta_type="CMF Action" i18n:domain="opengever.latex">
+      <property name="title" i18n:translate="">Print selection (PDF)</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:pdf-tasks-listing:method</property>
+      <property name="icon_expr" />
+      <property name="available_expr" />
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <!--migrated from opengever/disposition/profiles/default/actions.xml-->
+    <object name="create_disposition" meta_type="CMF Action" i18n:domain="opengever.disposition">
+      <property name="title" i18n:translate="">Create Disposition</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:++add++opengever.disposition.disposition:method</property>
+      <property name="icon_expr" />
+      <property name="available_expr" />
+      <property name="permissions">
+        <element value="opengever.disposition: Add disposition" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+  </object>
+
+
+  <!-- ###################################################### /-->
+  <object name="object" meta_type="CMF Action Category">
+
+    <!--migrated from opengever/policy/base/profiles/default/actions.xml-->
+    <object name="local_roles" meta_type="CMF Action">
+      <property name="visible">False</property>
+    </object>
+
+    <object name="folderContents" meta_type="CMF Action">
+      <property name="permissions">
+        <element value="List folder contents" />
+      </property>
+    </object>
+
+  </object>
+
+
+  <!-- ###################################################### /-->
+  <object name="object_buttons" meta_type="CMF Action Category">
+
+    <!--migrated from opengever/base/profiles/default/actions.xml-->
+    <object name="cut" meta_type="CMF Action" i18n:domain="plone">
+      <property name="title" i18n:translate="">Cut</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:${globals_view/getCurrentObjectUrl}/object_cut</property>
+      <property name="icon_expr" />
+      <property name="available_expr">python:checkPermission("Delete objects", globals_view.getParentObject()) and checkPermission("Copy or Move", object) and not globals_view.isPortalOrPortalDefaultPage()</property>
+      <property name="permissions">
+        <element value="Manage portal" />
+      </property>
+      <property name="visible">False</property>
+    </object>
+
+    <object name="copy" meta_type="CMF Action" i18n:domain="plone">
+      <property name="title" i18n:translate="">Copy</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:${globals_view/getCurrentObjectUrl}/object_copy</property>
+      <property name="icon_expr" />
+      <property name="available_expr">python:checkPermission("Copy or Move", object) and not globals_view.isPortalOrPortalDefaultPage()</property>
+      <property name="permissions">
+        <element value="Manage portal" />
+      </property>
+      <property name="visible">False</property>
+    </object>
+
+    <object name="paste" meta_type="CMF Action" i18n:domain="plone">
+      <property name="title" i18n:translate="">Paste</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:${globals_view/getCurrentFolderUrl}/paste_clipboard?_authenticator=${object/@@authenticator/token}</property>
+      <property name="icon_expr" />
+      <property name="available_expr">object/is_pasting_allowed</property>
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="delete" meta_type="CMF Action" i18n:domain="plone">
+      <property name="title" i18n:translate="">Delete</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:${globals_view/getCurrentObjectUrl}/delete_confirmation</property>
+      <property name="icon_expr" />
+      <property name="available_expr">python:checkPermission("Delete objects", globals_view.getParentObject()) and not globals_view.isPortalOrPortalDefaultPage()</property>
+      <property name="permissions">
+        <element value="Delete objects" />
+      </property>
+      <property name="visible">False</property>
+    </object>
+
+    <object name="rename" meta_type="CMF Action" i18n:domain="plone">
+      <property name="title" i18n:translate="">Rename</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:${globals_view/getCurrentObjectUrl}/object_rename</property>
+      <property name="icon_expr" />
+      <property name="available_expr">python:checkPermission("Delete objects", globals_view.getParentObject()) and checkPermission("Copy or Move", object) and checkPermission("Add portal content", object) and not globals_view.isPortalOrPortalDefaultPage()</property>
+      <property name="permissions">
+        <element value="Add portal content" />
+      </property>
+      <property name="visible">False</property>
+    </object>
+
+    <object name="properties" meta_type="CMF Action" i18n:domain="opengever.base">
+      <property name="title" i18n:translate="">Properties</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:${object_url}/view</property>
+      <property name="icon_expr" />
+      <property name="available_expr">
+                python: here.restrictedTraverse('@@plone_context_state').view_template_id() != 'view' and here.portal_type not in ('opengever.contact.contactfolder', 'opengever.inbox.yearfolder')
+            </property>
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="folderContents" meta_type="CMF Action" i18n:domain="plone">
+      <property name="title" i18n:translate="">Contents</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:${globals_view/getCurrentFolderUrl}/folder_contents</property>
+      <property name="icon_expr" />
+      <property name="available_expr">object/displayContentsTab</property>
+      <property name="permissions">
+        <element value="List folder contents" />
+      </property>
+      <property name="visible">False</property>
+    </object>
+
+    <object name="syndication" meta_type="CMF Action" i18n:domain="plone">
+      <property name="title" i18n:translate="">Syndication</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:${folder_url}/synPropertiesForm</property>
+      <property name="icon_expr" />
+      <property name="available_expr">python:folder is object and portal.portal_syndication.isSiteSyndicationAllowed()</property>
+      <property name="permissions">
+        <element value="Manage properties" />
+      </property>
+      <property name="visible">False</property>
+    </object>
+
+    <object name="contentrules" meta_type="CMF Action" i18n:domain="plone">
+      <property name="title" i18n:translate="">Rules</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:${plone_context_state/canonical_object_url}/@@manage-content-rules</property>
+      <property name="icon_expr" />
+      <property name="available_expr">python:plone_context_state.canonical_object().restrictedTraverse('@@plone_contentrules_info').show_rules_tab()</property>
+      <property name="permissions">
+        <element value="Content rules: Manage rules" />
+      </property>
+      <property name="visible">False</property>
+    </object>
+
+    <object name="local_roles" meta_type="CMF Action" i18n:domain="plone">
+      <property name="title" i18n:translate="">Sharing</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:${object_url}/@@sharing</property>
+      <property name="icon_expr" />
+      <property name="available_expr" />
+      <property name="permissions">
+        <element value="Sharing page: Delegate roles" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <!--migrated from opengever/repository/profiles/default/actions.xml-->
+    <object name="prefix_manager" meta_type="CMF Action" i18n:domain="opengever.repository">
+      <property name="title" i18n:translate="">Prefix Manager</property>
+      <property name="description" i18n:translate="">Unlock unused repository prefixes.</property>
+      <property name="url_expr">string:${object_url}/referenceprefix_manager</property>
+      <property name="link_target" />
+      <property name="icon_expr" />
+      <property name="available_expr">python:context.restrictedTraverse('@@plone_interface_info').provides('opengever.repository.repositoryroot.IRepositoryRoot') or context.restrictedTraverse('@@plone_interface_info').provides('opengever.repository.interfaces.IRepositoryFolder')</property>
+      <property name="permissions">
+        <element value="opengever.repository: Unlock Reference Prefix" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="delete_repository" meta_type="CMF Action" i18n:domain="plone">
+      <property name="title" i18n:translate="">Delete</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:${globals_view/getCurrentObjectUrl}/delete_repository</property>
+      <property name="link_target" />
+      <property name="icon_expr" />
+      <property name="available_expr">python: here.restrictedTraverse('is_deletion_allowed')()</property>
+      <property name="permissions">
+        <element value="Delete objects" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <!--migrated from opengever/latex/profiles/default/actions.xml-->
+    <object name="pdf_dossierdetails" meta_type="CMF Action" i18n:domain="opengever.latex">
+      <property name="title" i18n:translate="">Print details (PDF)</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:@@pdf-dossier-details</property>
+      <property name="icon_expr" />
+      <property name="available_expr">python:here.restrictedTraverse('@@plone_interface_info').provides('opengever.dossier.behaviors.dossier.IDossierMarker') and not here.restrictedTraverse('@@plone_interface_info').provides('opengever.dossier.templatefolder.ITemplateFolder') and not
+      here.restrictedTraverse('@@plone_interface_info').provides('opengever.private.dossier.IPrivateDossier')</property>
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="export_pdf" meta_type="CMF Action" i18n:domain="opengever.latex">
+      <property name="title" i18n:translate="">Cover (PDF)</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:${object_url}/dossier_cover_pdf</property>
+      <property name="icon_expr" />
+      <property name="available_expr">python:here.restrictedTraverse('@@plone_interface_info').provides('opengever.dossier.behaviors.dossier.IDossierMarker') and not here.restrictedTraverse('@@plone_interface_info').provides('opengever.dossier.templatefolder.ITemplateFolder') and not
+      here.restrictedTraverse('@@plone_interface_info').provides('opengever.private.dossier.IPrivateDossier')</property>
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+  </object>
+
+
+  <!-- ###################################################### /-->
+  <object name="portal_tabs" meta_type="CMF Action Category">
+
+    <!--migrated from opengever/base/profiles/default/actions.xml-->
+    <object name="index_html" meta_type="CMF Action" i18n:domain="plone">
+      <property name="title" i18n:translate="">Overview</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:${globals_view/navigationRootUrl}</property>
+      <property name="link_target" />
+      <property name="icon_expr" />
+      <property name="available_expr">here/personal_overview/user_is_allowed_to_view</property>
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <!--migrated from opengever/private/profiles/default/actions.xml-->
+    <object name="my_repository" meta_type="CMF Action" i18n:domain="opengever.private">
+      <property name="title" i18n:translate="">My repository</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:${portal/portal_membership/getHomeUrl}</property>
+      <property name="link_target" />
+      <property name="icon_expr" />
+      <property name="available_expr">portal/portal_membership/getHomeFolder</property>
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+  </object>
+
+
+  <!-- ###################################################### /-->
+  <object name="user" meta_type="CMF Action Category">
+
+    <!--migrated from opengever/policy/base/profiles/default/actions.xml-->
+    <object name="dashboard" meta_type="CMF Action" i18n:domain="plone">
+      <property name="title" i18n:translate="">Dashboard</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:${portal_url}/dashboard</property>
+      <property name="link_target" />
+      <property name="icon_expr" />
+      <property name="available_expr">python:member is not None</property>
+      <property name="permissions">
+        <element value="Portlets: Manage own portlets" />
+      </property>
+      <property name="visible">False</property>
+    </object>
+
+    <object name="preferences" meta_type="CMF Action" i18n:domain="plone">
+      <property name="title" i18n:translate="">Preferences</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:${globals_view/navigationRootUrl}/@@personal-preferences</property>
+      <property name="link_target" />
+      <property name="icon_expr" />
+      <property name="available_expr">python:member is not None</property>
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">False</property>
+    </object>
+
+    <object name="plone_setup" meta_type="CMF Action" i18n:domain="plone">
+      <property name="title" i18n:translate="">Site Setup</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:${portal_url}/plone_control_panel</property>
+      <property name="link_target" />
+      <property name="icon_expr" />
+      <property name="available_expr" />
+      <property name="permissions">
+        <element value="Manage portal" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="login" meta_type="CMF Action" i18n:domain="plone">
+      <property name="title" i18n:translate="">Log in</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:${globals_view/navigationRootUrl}/login_form</property>
+      <property name="link_target" />
+      <property name="icon_expr" />
+      <property name="available_expr">python:member is None</property>
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="join" meta_type="CMF Action" i18n:domain="plone">
+      <property name="title" i18n:translate="">Register</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:${globals_view/navigationRootUrl}/@@register</property>
+      <property name="link_target" />
+      <property name="icon_expr" />
+      <property name="available_expr">python:member is None</property>
+      <property name="permissions">
+        <element value="Add portal member" />
+      </property>
+      <property name="visible">False</property>
+    </object>
+
+    <object name="logout" meta_type="CMF Action" i18n:domain="plone">
+      <property name="title" i18n:translate="">Log out</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:${globals_view/navigationRootUrl}/logout_overlay</property>
+      <property name="link_target" />
+      <property name="icon_expr" />
+      <property name="available_expr">python:member is not None</property>
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+  </object>
+
+
+  <!-- ###################################################### /-->
+  <object name="controlpanel" meta_type="CMF Action Category" />
+
+
+  <!-- ###################################################### /-->
+  <object name="jqueryui_panels" meta_type="CMF Action Category" />
+
+
+  <!-- ###################################################### /-->
+  <object name="mobile_buttons" meta_type="CMF Action Category">
+
+    <!--migrated from opengever/ogds/base/profiles/default/actions.xml-->
+    <object name="toggle_orgunitselector" meta_type="CMF Action" i18n:domain="opengever.ogds.base">
+      <property name="title" i18n:translate="">Toggle orgunit selector</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:#</property>
+      <property name="icon_expr" />
+      <property name="available_expr">portal/orgunit_selector/has_available_units|nothing</property>
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+  </object>
+
+
+  <!-- ###################################################### /-->
+  <object name="object_checkin_menu" meta_type="CMF Action Category">
+
+    <!--migrated from opengever/document/profiles/default/actions.xml-->
+    <object name="checkin_with_comment" meta_type="CMF Action" i18n:domain="opengever.document">
+      <property name="title" i18n:translate="">with comment</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:$object_url/@@checkin_document</property>
+      <property name="icon_expr" />
+      <property name="available_expr">python:path('object/@@checkout_control').is_checkin_allowed()</property>
+      <property name="permissions">
+        <element value="opengever.document: Checkin" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="checkin_without_comment" meta_type="CMF Action" i18n:domain="opengever.document">
+      <property name="title" i18n:translate="">without comment</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:$object_url/@@checkin_without_comment?_authenticator=${object/@@authenticator/token}</property>
+      <property name="icon_expr" />
+      <property name="available_expr">python:path('object/@@checkout_control').is_checkin_allowed()</property>
+      <property name="permissions">
+        <element value="opengever.document: Checkin" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+  </object>
+
+
+</object>

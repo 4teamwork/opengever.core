@@ -1,0 +1,415 @@
+<object name="portal_javascripts" meta_type="JavaScripts Registry">
+
+  <javascript
+      enabled="False"
+      id="++resource++ftw.showroom/handlebars.js"
+      insert-after="++resource++datetimepicker/js/datetimepicker_widget.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="none"
+      cookable="True"
+      expression=""
+      enabled="True"
+      id="++resource++opengever.base/notify.js"
+      inline="False"
+      insert-after="++resource++ftw.showroom/handlebars.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      expression=""
+      enabled="True"
+      id="++resource++opengever.base/MessageFactory.js"
+      inline="False"
+      insert-after="++resource++opengever.base/notify.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      expression=""
+      enabled="True"
+      id="++resource++opengever.base/Storage.js"
+      inline="False"
+      insert-after="++resource++opengever.base/MessageFactory.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      expression=""
+      enabled="True"
+      id="++resource++opengever.base/MeetingStorage.js"
+      inline="False"
+      insert-after="++resource++opengever.base/Storage.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      expression=""
+      enabled="True"
+      id="++resource++opengever.meeting/Pin.js"
+      inline="False"
+      insert-after="++resource++opengever.base/MeetingStorage.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      expression=""
+      enabled="True"
+      id="++resource++opengever.base/Synchronizer.js"
+      inline="False"
+      insert-after="++resource++ftw.keywordwidget/js/keywordwidget.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="none"
+      cookable="True"
+      enabled="on"
+      expression=""
+      id="++resource++opengever.base/handlebars.js"
+      inline="False"
+      insert-after="++resource++opengever.base/Synchronizer.js"
+      />
+
+  <javascript
+      id="++resource++ftw.showroom/ftw.showroom.js"
+      insert-after="++resource++opengever.base/handlebars.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      enabled="on"
+      expression=""
+      id="++resource++opengever.activity.resources/notifications.js"
+      insert-after="++resource++ftw.showroom/ftw.showroom.js"
+      inline="False"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      expression=""
+      enabled="True"
+      id="++resource++opengever.base/Controller.js"
+      inline="False"
+      insert-after="++resource++opengever.activity.resources/notifications.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      expression=""
+      enabled="True"
+      id="++resource++opengever.meeting/Scrollspy.js"
+      inline="False"
+      insert-after="++resource++opengever.base/Controller.js"
+      />
+
+  <javascript
+      id="inline_validation.js"
+      enabled="False"
+      insert-after="dropdown.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      expression=""
+      enabled="True"
+      id="++resource++opengever.contact/contact.js"
+      inline="False"
+      insert-after="collective.js.jqueryui.custom.min.js"
+      />
+
+  <javascript
+      id="++resource++opengever.ogds.base/ogds_base.js"
+      insert-after="++resource++plone.formwidget.contenttree/contenttree.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="none"
+      cookable="True"
+      enabled="on"
+      expression=""
+      id="++resource++opengever.base/SelectAutocomplete.js"
+      inline="False"
+      insert-after="++resource++opengever.ogds.base/ogds_base.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      expression=""
+      enabled="True"
+      id="++resource++opengever.meeting/protocol.js"
+      inline="False"
+      insert-after="++resource++opengever.base/SelectAutocomplete.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      expression=""
+      enabled="True"
+      id="++resource++opengever.base/prepoverlay.js"
+      inline="False"
+      insert-after="++resource++opengever.meeting/protocol.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      expression=""
+      enabled="True"
+      id="++resource++opengever.base/qtip.js"
+      inline="False"
+      insert-after="++resource++opengever.base/prepoverlay.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      expression=""
+      enabled="True"
+      id="++resource++opengever.base/tooltip.js"
+      inline="False"
+      insert-after="++resource++opengever.base/qtip.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      enabled="on"
+      expression=""
+      id="++resource++opengever.base/livesearch.js"
+      inline="False"
+      insert-after="++resource++opengever.base/tooltip.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      expression=""
+      enabled="True"
+      id="++resource++opengever.meeting/Editor.js"
+      inline="False"
+      insert-after="++resource++opengever.base/livesearch.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      expression=""
+      enabled="True"
+      id="++resource++opengever.meeting/Editbox.js"
+      inline="False"
+      insert-after="++resource++opengever.meeting/Editor.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      expression=""
+      enabled="True"
+      id="++resource++opengever.meeting/meeting.js"
+      inline="False"
+      insert-after="++resource++opengever.meeting/Editbox.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      expression=""
+      enabled="True"
+      id="++resource++opengever.base/base.js"
+      inline="False"
+      insert-after="++resource++opengever.meeting/meeting.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="none"
+      cookable="True"
+      enabled="on"
+      expression=""
+      id="++resource++opengever.base/quickupload.js"
+      inline="False"
+      insert-after="++resource++opengever.base/base.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="none"
+      cookable="True"
+      enabled="on"
+      expression=""
+      id="++resource++opengever.base/trix.js"
+      inline="False"
+      insert-after="++resource++opengever.base/quickupload.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="none"
+      cookable="True"
+      enabled="on"
+      expression=""
+      id="++resource++opengever.base/trix-custom.js"
+      inline="False"
+      insert-after="++resource++opengever.base/trix.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      expression=""
+      enabled="True"
+      id="++resource++opengever.disposition/disposition.js"
+      inline="False"
+      insert-after="++resource++opengever.base/trix-custom.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      expression=""
+      enabled="True"
+      id="++resource++opengever.document/logout_overlay.js"
+      inline="False"
+      insert-after="++resource++opengever.disposition/disposition.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      expression=""
+      enabled="True"
+      id="++resource++opengever.document/download_confirmation.js"
+      inline="False"
+      insert-after="++resource++opengever.document/logout_overlay.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      expression=""
+      enabled="True"
+      id="++resource++opengever.document/officeconnector.js"
+      inline="False"
+      insert-after="++resource++opengever.document/download_confirmation.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      enabled="on"
+      expression=""
+      id="++resource++opengever.dossier.resources/edit_note.js"
+      inline="False"
+      insert-after="++resource++opengever.document/officeconnector.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      enabled="on"
+      expression=""
+      id="++resource++opengever.tabbedview-resources/statefilter.js"
+      insert-after="++resource++ftw.tabbedview-resources/tabbedview.js"
+      inline="False"
+      />
+
+  <javascript
+      id="++resource++opengever.portlets.tree-resources/tree.js"
+      insert-after="++resource++jquery.cookie.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      enabled="on"
+      expression=""
+      id="++resource++opengever.portlets.tree-resources/init_tree.js"
+      inline="False"
+      insert-after="++resource++opengever.portlets.tree-resources/tree.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      expression="python:context.restrictedTraverse('@@plone_context_state').current_base_url().endswith('advanced_search')"
+      enabled="True"
+      id="++resource++opengever.advancedsearch.resources/advanced_search.js"
+      inline="False"
+      insert-after="++resource++opengever.portlets.tree-resources/init_tree.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      expression=""
+      enabled="True"
+      id="++resource++opengever.document/startredirect.js"
+      inline="False"
+      insert-after="++resource++collective.js.timeago/jquery.timeago.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      expression=""
+      enabled="True"
+      id="++resource++opengever.meeting/datetimepicker.js"
+      inline="False"
+      insert-after="++resource++opengever.document/startredirect.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      enabled="True"
+      expression=""
+      id="++resource++opengever.bumblebee.resources/bumblebee.js"
+      insert-after="++resource++opengever.meeting/datetimepicker.js"
+      inline="False"
+      />
+
+</object>

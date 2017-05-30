@@ -11,11 +11,6 @@
 
   <include package=".browser" />
 
-  <profilehook:hook
-      profile="opengever.policy.base:default"
-      handler=".hooks.policy_installed"
-      />
-
   <plone:behavior
       title="Size quota"
       description="Enables a size quota for a container."
@@ -34,32 +29,27 @@
       />
 
   <subscriber
-      for="opengever.quota.primary.IQuotaSubject
-           zope.lifecycleevent.interfaces.IObjectAddedEvent"
+      for="opengever.quota.primary.IQuotaSubject            zope.lifecycleevent.interfaces.IObjectAddedEvent"
       handler=".subscribers.update_size_usage_for_object"
       />
 
   <subscriber
-      for="opengever.quota.primary.IQuotaSubject
-           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      for="opengever.quota.primary.IQuotaSubject            zope.lifecycleevent.interfaces.IObjectModifiedEvent"
       handler=".subscribers.update_size_usage_for_object"
       />
 
   <subscriber
-      for="opengever.quota.primary.IQuotaSubject
-           opengever.trash.trash.ITrashedEvent"
+      for="opengever.quota.primary.IQuotaSubject            opengever.trash.trash.ITrashedEvent"
       handler=".subscribers.update_size_usage_for_object"
       />
 
   <subscriber
-      for="opengever.quota.primary.IQuotaSubject
-           opengever.trash.trash.IUntrashedEvent"
+      for="opengever.quota.primary.IQuotaSubject            opengever.trash.trash.IUntrashedEvent"
       handler=".subscribers.update_size_usage_for_object"
       />
 
   <subscriber
-      for="opengever.quota.primary.IQuotaSubject
-           zope.lifecycleevent.interfaces.IObjectMovedEvent"
+      for="opengever.quota.primary.IQuotaSubject            zope.lifecycleevent.interfaces.IObjectMovedEvent"
       handler=".subscribers.update_size_usage_when_moving_object"
       />
 
