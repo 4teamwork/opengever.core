@@ -1,0 +1,29 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="opengever.tasktemplates">
+
+  <browser:page
+      for=".tasktemplate.ITaskTemplate"
+      name="edit"
+      class=".tasktemplate.TaskTemplateEditForm"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <adapter
+      for="Products.CMFCore.interfaces.IFolderish
+           zope.publisher.interfaces.browser.IDefaultBrowserLayer
+           plone.dexterity.interfaces.IDexterityFTI"
+      provides="zope.publisher.interfaces.browser.IBrowserPage"
+      factory=".tasktemplate.TaskTemplateAddView"
+      name="opengever.tasktemplates.tasktemplate"
+      />
+
+  <class class=".tasktemplate.TaskTemplateAddView">
+    <require
+        permission="cmf.AddPortalContent"
+        interface="zope.publisher.interfaces.browser.IBrowserPage"
+        />
+  </class>
+
+</configure>
