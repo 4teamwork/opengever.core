@@ -9,7 +9,7 @@ from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.task.activities import TaskAddedActivity
 from opengever.tasktemplates import _
-from opengever.tasktemplates.content.tasktemplate import MAIN_TASK_DEADLINE_DELTA
+from opengever.tasktemplates.config import MAIN_TASK_DEADLINE_DELTA
 from opengever.tasktemplates.interfaces import IFromTasktemplateGenerated
 from plone import api
 from plone.dexterity.utils import createContent, addContentToContainer

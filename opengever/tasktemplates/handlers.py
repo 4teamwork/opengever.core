@@ -1,9 +1,8 @@
-from datetime import timedelta
 from Acquisition import aq_inner, aq_parent
+from datetime import timedelta
 from five import grok
 from opengever.task.task import ITask
-from opengever.tasktemplates.content.tasktemplate import \
-    MAIN_TASK_DEADLINE_DELTA
+from opengever.tasktemplates.config import MAIN_TASK_DEADLINE_DELTA
 from opengever.tasktemplates.interfaces import IFromTasktemplateGenerated
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
