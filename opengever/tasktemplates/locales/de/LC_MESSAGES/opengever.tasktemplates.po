@@ -75,7 +75,7 @@ msgstr "Diese Vorlage gehört zur Standardauswahl des Standardablaufs."
 
 #: ./opengever/tasktemplates/content/tasktemplate.py:67
 msgid "help_responsible"
-msgstr "Wählen Sie den Auftragnehmer aus. Wenn Sie im Feld \"Mandanten des Auftragnehmers\" die Option \"Interaktiver Benutzer\" auswählen, können Sie in diesem Feld auch \"Federführender\" oder \"Sachbearbeiter\" auswählen."
+msgstr "Wählen Sie einen Auftragnehmer aus. Sie können auch die interaktiven Benutzer \"Federführender\" oder \"Sachbearbeiter\" auswählen."
 
 #: ./opengever/tasktemplates/content/tasktemplate.py:59
 msgid "help_responsible_client"

@@ -77,7 +77,7 @@ msgstr "Ce modèle fait parti du choix standard des procédés standards."
 
 #: ./opengever/tasktemplates/content/tasktemplate.py:67
 msgid "help_responsible"
-msgstr "Choix du mandataire. Si vous choisissez l'option \"utilisateur interactif\" dans le champ \"Client du mandataire\" vous pouvez aussi choisir \"responsable\"ou \"collaborateur\" dans ce champ."
+msgstr "Choix du mandataire. Vous pouvez aussi choisir les utilisateurs interactifs \"responsables\" ou \"collaborateurs\"."
 
 #: ./opengever/tasktemplates/content/tasktemplate.py:59
 msgid "help_responsible_client"
