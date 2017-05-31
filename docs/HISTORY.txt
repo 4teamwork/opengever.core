@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Merge Generic Setup profiles into a new opengever.core:default profile. [phgross]
+- Replace the AutocompleteField(Multi)Widget with the KeywordWidget. This makes the AutocompleteWidget obsolete. [mathias.leimgruber]
 - Fix Subject link on dossier overview. [mathias.leimgruber]
 - Fix tasktemplate view by adding a missing </table> tag. [mathias.leimgruber]
 - Install ftw.copymovepatches for better move performance. [mathias.leimgruber]
