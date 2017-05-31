@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Fix Subject link on dossier overview. [mathias.leimgruber]
+- Fix tasktemplate view by adding a missing </table> tag. [mathias.leimgruber]
 - Install ftw.copymovepatches for better move performance. [mathias.leimgruber]
 - Use latest ftw.datepicker for all datetime widgets. [mathias.leimgruber]
 - Make `resolving` a dossier customizable and provide two implementations (strict and lenient). [deiferni]
