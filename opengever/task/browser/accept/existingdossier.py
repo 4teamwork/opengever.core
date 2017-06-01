@@ -2,22 +2,27 @@
 views for the method when a user wants to work within an existing dossier and
 the task needs to be copied to this dossier (successor task).
 """
-
+from five import grok
+from ftw.referencewidget.selectable import DefaultSelectable
+from ftw.referencewidget.widget import ReferenceWidgetFactory
+from opengever.base.browser.wizard.interfaces import IWizardDataStorage
+from opengever.base.source import DEFAULT_TRAVERSABLE_PARAMS
+from opengever.base.source import RepositoryPathSourceBinder
+from opengever.dossier.base import DOSSIER_STATES_OPEN
+from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.task import _
+from opengever.task.browser.accept.main import AcceptWizardFormMixin
+from opengever.task.browser.accept.utils import \
+    accept_forwarding_with_successor
+from opengever.task.browser.accept.utils import accept_task_with_successor
+from opengever.task.browser.accept.utils import assign_forwarding_to_dossier
+from plone import api
+from plone.autoform.widgets import ParameterizedWidget
+from plone.directives.form import Schema
+from plone.z3cform.layout import FormWrapper
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from Products.statusmessages.interfaces import IStatusMessage
-from five import grok
-from opengever.base.browser.wizard.interfaces import IWizardDataStorage
-from opengever.base.source import RepositoryPathSourceBinder
-from opengever.dossier.base import DOSSIER_STATES_OPEN
-from opengever.task import _
-from opengever.task.browser.accept.main import AcceptWizardFormMixin
-from opengever.task.browser.accept.utils import accept_task_with_successor
-from opengever.task.browser.accept.utils import \
-    accept_forwarding_with_successor
-from opengever.task.browser.accept.utils import assign_forwarding_to_dossier
-from plone.directives.form import Schema
-from plone.z3cform.layout import FormWrapper
 from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
 from z3c.form.form import Form
@@ -29,6 +34,13 @@ from zope.interface import Interface
 from zope.interface import Invalid
 
 
+class DossierSelectableClass(DefaultSelectable):
+
+    def is_selectable(self):
+        return IDossierMarker.providedBy(self.content) and \
+            api.content.get_state(obj=self.content) in DOSSIER_STATES_OPEN
+
+
 class IChooseDossierSchema(Schema):
 
     dossier = RelationChoice(
@@ -38,22 +50,8 @@ class IChooseDossierSchema(Schema):
                       default=u'Select the target dossier where you like to '
                       'handle the task.'),
         required=True,
-
         source=RepositoryPathSourceBinder(
-            object_provides='opengever.dossier.behaviors.dossier.'
-            'IDossierMarker',
-            review_state=DOSSIER_STATES_OPEN,
-            navigation_tree_query={
-                'object_provides': [
-                    'opengever.repository.repositoryroot.IRepositoryRoot',
-                    'opengever.repository.repositoryfolder.'
-                    'IRepositoryFolderSchema',
-                    'opengever.dossier.behaviors.dossier.IDossierMarker',
-                    ],
-                'review_state': ['repositoryroot-state-active',
-                                 'repositoryfolder-state-active'] +
-                                 DOSSIER_STATES_OPEN,
-                }))
+            selectable_class=DossierSelectableClass))
 
 
 class DossierValidator(SimpleFieldValidator):
@@ -89,6 +87,10 @@ class ChooseDossierStepForm(AcceptWizardFormMixin, Form):
         ('accept_choose_dossier',
          _(u'step_2', default=u'Step 2')),
         )
+
+    fields['dossier'].widgetFactory = ParameterizedWidget(
+        ReferenceWidgetFactory,
+        **DEFAULT_TRAVERSABLE_PARAMS)
 
     @buttonAndHandler(_(u'button_save', default=u'Save'),
                       name='save')
