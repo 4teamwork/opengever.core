@@ -85,6 +85,11 @@ class IDeploymentDirective(Interface):
         required=False,
         max_length=GROUP_ID_LENGTH)
 
+    api_group = TextLine(
+        title=u'API group',
+        required=False,
+        max_length=GROUP_ID_LENGTH)
+
 
 def register_ldap(context, **kwargs):
     title = kwargs.get('title')
