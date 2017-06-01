@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2017-04-27 11:21+0000\n"
-"PO-Revision-Date: 2017-05-23 09:09+0000\n"
+"PO-Revision-Date: 2017-06-01 20:12+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
 "gever/opengever-dossier/fr/>\n"
@@ -121,12 +121,10 @@ msgid "Not all required fields are filled."
 msgstr "Manque des champs obligatoires."
 
 #: ./opengever/dossier/profiles/default/types/opengever.dossier.businesscasedossier.xml
-#, fuzzy
 msgid "Participant"
 msgstr "Participation"
 
 #: ./opengever/dossier/browser/overview.py:81
-#, fuzzy
 msgid "Participants"
 msgstr "Participations"
 
@@ -392,7 +390,6 @@ msgstr "Classer le dossier"
 
 #. Default: "${title} notes / comments"
 #: ./opengever/dossier/viewlets/templates/note.pt:40
-#, fuzzy
 msgid "heading_dossier_note"
 msgstr "Commentaire sur le dossier `${title}`"
 
@@ -668,9 +665,8 @@ msgstr "Mots-clés prédéfinis"
 
 #. Default: "Proposal Templates"
 #: ./opengever/dossier/browser/tabbed.py:108
-#, fuzzy
 msgid "label_proposal_templates"
-msgstr "Modèles de proposition"
+msgstr "Modèles pour soumission de demande"
 
 #. Default: "Proposals"
 #: ./opengever/dossier/browser/tabbed.py:53
@@ -778,7 +774,6 @@ msgstr "Titre"
 
 #. Default: "Title help"
 #: ./opengever/dossier/dossiertemplate/behaviors.py:34
-#, fuzzy
 msgid "label_title_help"
 msgstr "Aide pour le choix du titre"
 
@@ -866,9 +861,10 @@ msgid "temporary_former_reference_number"
 msgstr "Ancien numéro de référence temporaire"
 
 #: ./opengever/dossier/viewlets/templates/note.pt:57
-#, fuzzy
 msgid "text_delete_note"
-msgstr "Supprimer le commentaire (supprime le commentaire et ferme le Overlay)."
+msgstr ""
+"Supprimer le commentaire (supprime le commentaire et ferme les infos à "
+"superposition)."
 
 #: ./opengever/dossier/resolve.py:23
 msgid "the dossier start date is missing."
