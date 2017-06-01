@@ -1,7 +1,13 @@
+from ftw.referencewidget.selectable import DefaultSelectable
+from ftw.referencewidget.widget import ReferenceWidgetFactory
+from opengever.base.source import DEFAULT_TRAVERSABLE_PARAMS
+from opengever.base.source import RepositoryPathSourceBinder
+from opengever.dossier.base import DOSSIER_STATES_OPEN
+from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.meeting import _
 from opengever.meeting.command import CreateGeneratedDocumentCommand
 from opengever.meeting.command import ManualExcerptOperations
-from opengever.meeting.sources import all_open_dossiers_source
+from plone import api
 from plone.autoform.form import AutoExtensibleForm
 from plone.directives import form
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
@@ -14,10 +20,19 @@ from zope.interface import Invalid
 from zope.interface import invariant
 
 
+class DossierSelectableClass(DefaultSelectable):
+
+    def is_selectable(self):
+        return IDossierMarker.providedBy(self.content) and \
+            api.content.get_state(obj=self.content) in DOSSIER_STATES_OPEN
+
+
 class IGenerateExcerpt(form.Schema):
     """Schema interface with configuration options for excerpt generation.
     """
 
+    form.widget('dossier', ReferenceWidgetFactory,
+                **DEFAULT_TRAVERSABLE_PARAMS)
     dossier = RelationChoice(
         title=_(u'label_select_dossier',
                 default=u'Target dossier'),
@@ -25,7 +40,9 @@ class IGenerateExcerpt(form.Schema):
                       default=u'Select the target dossier where the '
                               'excerpts should be created.'),
         required=True,
-        source=all_open_dossiers_source)
+        source=RepositoryPathSourceBinder(
+            selectable_class=DossierSelectableClass)
+        )
 
     title = schema.TextLine(
         title=_(u"label_title", default=u"Title"),

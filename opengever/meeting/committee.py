@@ -1,6 +1,10 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from five import grok
+from ftw.referencewidget.selectable import DefaultSelectable
+from ftw.referencewidget.widget import ReferenceWidgetFactory
+from opengever.base.source import REPO_TRAVERSABLE_PARAMS
+from opengever.base.source import RepositoryPathSourceBinder
 from opengever.base.validators import BaseRepositoryfolderValidator
 from opengever.meeting import _
 from opengever.meeting.committeeroles import CommitteeRoles
@@ -9,11 +13,11 @@ from opengever.meeting.model import Committee as CommitteeModel
 from opengever.meeting.model import Meeting
 from opengever.meeting.model import Period
 from opengever.meeting.service import meeting_service
-from opengever.meeting.sources import repository_folder_source
 from opengever.meeting.sources import sablon_template_source
 from opengever.meeting.wrapper import MeetingWrapper
 from opengever.meeting.wrapper import PeriodWrapper
 from opengever.ogds.base.utils import ogds_service
+from opengever.repository.repositoryfolder import IRepositoryFolderSchema
 from plone import api
 from plone.directives import form
 from plone.i18n.normalizer.interfaces import IIDNormalizer
@@ -47,6 +51,14 @@ def get_group_vocabulary(context):
     return SimpleVocabulary(terms)
 
 
+class RepoFolderSelectableClass(DefaultSelectable):
+
+    def is_selectable(self):
+        content_state = api.content.get_state(obj=self.content)
+        return IRepositoryFolderSchema.providedBy(self.content) and \
+            content_state == 'repositoryfolder-state-active'
+
+
 class ICommittee(form.Schema):
     """Base schema for the committee.
     """
@@ -77,13 +89,16 @@ class ICommittee(form.Schema):
         required=False,
     )
 
+    form.widget('repository_folder', ReferenceWidgetFactory,
+                **REPO_TRAVERSABLE_PARAMS)
     repository_folder = RelationChoice(
         title=_(u'Linked repository folder'),
         description=_(
             u'label_linked_repository_folder',
             default=u'Contains automatically generated dossiers and documents '
                     u'for this committee.'),
-        source=repository_folder_source,
+        source=RepositoryPathSourceBinder(
+            selectable_class=RepoFolderSelectableClass),
         required=True)
 
 
