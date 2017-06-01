@@ -1,9 +1,10 @@
 from Acquisition import aq_inner, aq_parent
 from datetime import timedelta
 from five import grok
+from opengever.task.interfaces import ITaskSettings
 from opengever.task.task import ITask
-from opengever.tasktemplates.config import MAIN_TASK_DEADLINE_DELTA
 from opengever.tasktemplates.interfaces import IFromTasktemplateGenerated
+from plone import api
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
 
@@ -15,7 +16,9 @@ def update_deadline(task, event):
             if attr == 'deadline':
                 parent = aq_parent(aq_inner(task))
                 if ITask.providedBy(parent):
-                    temp = task.deadline + timedelta(MAIN_TASK_DEADLINE_DELTA)
+                    offset = api.portal.get_registry_record(
+                        'deadline_timedelta', interface=ITaskSettings)
+                    temp = task.deadline + timedelta(offset)
                     if parent.deadline < temp:
                         parent.deadline = temp
                         parent.reindexObject()
