@@ -1,0 +1,274 @@
+<dc-workflow
+    workflow_id="opengever_disposition_workflow"
+    title="DC Workflow Definition"
+    description=""
+    state_variable="review_state"
+    initial_state="disposition-state-in-progress"
+    manager_bypass="False">
+  <permission>Modify portal content</permission>
+  <permission>View</permission>
+  <permission>opengever.disposition: Download SIP Package</permission>
+  <permission>opengever.disposition: Edit transfer number</permission>
+  <state
+      state_id="disposition-state-appraised"
+      title="disposition-state-appraised">
+    <exit-transition transition_id="disposition-transition-dispose" />
+    <exit-transition transition_id="disposition-transition-appraised-to-closed" />
+
+    <permission-map
+        name="View"
+        acquired="False">
+      <permission-role>Records Manager</permission-role>
+      <permission-role>Archivist</permission-role>
+      <permission-role>Manager</permission-role>
+    </permission-map>
+
+    <permission-map
+        name="Modify portal content"
+        acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+
+    <permission-map
+        name="opengever.disposition: Download SIP Package"
+        acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+
+    <permission-map
+        name="opengever.disposition: Edit transfer number"
+        acquired="False">
+      <permission-role>Manager</permission-role>
+      <permission-role>Archivist</permission-role>
+    </permission-map>
+  </state>
+  <state
+      state_id="disposition-state-archived"
+      title="disposition-state-archived">
+    <exit-transition transition_id="disposition-transition-close" />
+
+    <permission-map
+        name="View"
+        acquired="False">
+      <permission-role>Records Manager</permission-role>
+      <permission-role>Archivist</permission-role>
+      <permission-role>Manager</permission-role>
+    </permission-map>
+
+    <permission-map
+        name="Modify portal content"
+        acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+
+    <permission-map
+        name="opengever.disposition: Download SIP Package"
+        acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+
+    <permission-map
+        name="opengever.disposition: Edit transfer number"
+        acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+
+  </state>
+  <state
+      state_id="disposition-state-closed"
+      title="disposition-state-closed">
+
+    <permission-map
+        name="View"
+        acquired="False">
+      <permission-role>Records Manager</permission-role>
+      <permission-role>Archivist</permission-role>
+      <permission-role>Manager</permission-role>
+    </permission-map>
+
+    <permission-map
+        name="Modify portal content"
+        acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+
+    <permission-map
+        name="opengever.disposition: Download SIP Package"
+        acquired="False">
+    </permission-map>
+
+    <permission-map
+        name="opengever.disposition: Edit transfer number"
+        acquired="False">
+    </permission-map>
+
+  </state>
+  <state
+      state_id="disposition-state-disposed"
+      title="disposition-state-disposed">
+    <exit-transition transition_id="disposition-transition-archive" />
+    <exit-transition transition_id="disposition-transition-refuse" />
+    <permission-map
+        name="View"
+        acquired="False">
+      <permission-role>Records Manager</permission-role>
+      <permission-role>Archivist</permission-role>
+      <permission-role>Manager</permission-role>
+    </permission-map>
+
+    <permission-map
+        name="Modify portal content"
+        acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+
+    <permission-map
+        name="opengever.disposition: Download SIP Package"
+        acquired="False">
+      <permission-role>Archivist</permission-role>
+      <permission-role>Manager</permission-role>
+      <permission-role>Records Manager</permission-role>
+    </permission-map>
+
+    <permission-map
+        name="opengever.disposition: Edit transfer number"
+        acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+
+  </state>
+  <state
+      state_id="disposition-state-in-progress"
+      title="disposition-state-in-progress">
+    <exit-transition transition_id="disposition-transition-appraise" />
+    <exit-transition transition_id="disposition-transition-refuse" />
+
+    <permission-map
+        name="View"
+        acquired="False">
+      <permission-role>Records Manager</permission-role>
+      <permission-role>Archivist</permission-role>
+      <permission-role>Manager</permission-role>
+    </permission-map>
+
+    <permission-map
+        name="Modify portal content"
+        acquired="False">
+      <permission-role>Manager</permission-role>
+      <permission-role>Records Manager</permission-role>
+      <permission-role>Archivist</permission-role>
+    </permission-map>
+
+    <permission-map
+        name="opengever.disposition: Download SIP Package"
+        acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+
+    <permission-map
+        name="opengever.disposition: Edit transfer number"
+        acquired="False">
+      <permission-role>Manager</permission-role>
+      <permission-role>Archivist</permission-role>
+    </permission-map>
+
+  </state>
+  <transition
+      transition_id="disposition-transition-appraise"
+      title="Appraise"
+      new_state="disposition-state-appraised"
+      trigger="USER"
+      before_script=""
+      after_script="">
+    <action
+        url="%(content_url)s/appraise-transition"
+        category="workflow"
+        icon="">disposition-transition-appraise</action>
+    <guard>
+      <guard-role>Archivist</guard-role>
+      <guard-role>Manager</guard-role>
+    </guard>
+  </transition>
+  <transition
+      transition_id="disposition-transition-archive"
+      title=""
+      new_state="disposition-state-archived"
+      trigger="USER"
+      before_script=""
+      after_script="">
+    <action
+        url="%(content_url)s/content_status_modify?workflow_action=disposition-transition-archive"
+        category="workflow"
+        icon="">disposition-transition-archive</action>
+    <guard>
+      <guard-role>Archivist</guard-role>
+      <guard-role>Manager</guard-role>
+    </guard>
+  </transition>
+  <transition
+      transition_id="disposition-transition-close"
+      title=""
+      new_state="disposition-state-closed"
+      trigger="USER"
+      before_script=""
+      after_script="">
+    <action
+        url="%(content_url)s/content_status_modify?workflow_action=disposition-transition-close"
+        category="workflow"
+        icon="">disposition-transition-close</action>
+    <guard>
+      <guard-role>Records Manager</guard-role>
+      <guard-role>Manager</guard-role>
+    </guard>
+  </transition>
+  <transition
+      transition_id="disposition-transition-dispose"
+      title=""
+      new_state="disposition-state-disposed"
+      trigger="USER"
+      before_script=""
+      after_script="">
+    <action
+        url="%(content_url)s/content_status_modify?workflow_action=disposition-transition-dispose"
+        category="workflow"
+        icon="">disposition-transition-dispose</action>
+    <guard>
+      <guard-expression>python: here.restrictedTraverse('@@guards').is_dispose_transition_available()</guard-expression>
+      <guard-role>Records Manager</guard-role>
+      <guard-role>Manager</guard-role>
+    </guard>
+  </transition>
+  <transition
+      transition_id="disposition-transition-refuse"
+      title=""
+      new_state="disposition-state-in-progress"
+      trigger="USER"
+      before_script=""
+      after_script="">
+    <action
+        url="%(content_url)s/content_status_modify?workflow_action=disposition-transition-refuse"
+        category="workflow"
+        icon="">disposition-transition-refuse</action>
+    <guard>
+      <guard-role>Archivist</guard-role>
+      <guard-role>Manager</guard-role>
+    </guard>
+  </transition>
+  <transition
+      transition_id="disposition-transition-appraised-to-closed"
+      title=""
+      new_state="disposition-state-closed"
+      trigger="USER"
+      before_script=""
+      after_script="">
+    <action
+        url="%(content_url)s/content_status_modify?workflow_action=disposition-transition-appraised-to-closed"
+        category="workflow"
+        icon="">disposition-transition-appraised-to-closed</action>
+    <guard>
+      <guard-expression>python: here.restrictedTraverse('@@guards').is_appraised_to_closed_transition_available()</guard-expression>
+      <guard-role>Records Manager</guard-role>
+      <guard-role>Manager</guard-role>
+    </guard>
+  </transition>
+</dc-workflow>

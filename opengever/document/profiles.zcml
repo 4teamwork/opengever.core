@@ -14,9 +14,4 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
-  <profilehook:hook
-      profile="opengever.document:default"
-      handler=".hooks.installed"
-      />
-
 </configure>

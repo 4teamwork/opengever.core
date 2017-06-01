@@ -1,0 +1,41 @@
+<object>
+
+  <hidden manager="plone.contentviews" skinname="*">
+    <viewlet name="plone.contentviews" />
+  </hidden>
+  <order manager="plone.contentviews" skinname="*">
+    <viewlet name="opengever.contentviews" insert-before="*" />
+  </order>
+
+  <hidden manager="plone.abovecontent" skinname="*">
+    <viewlet name="plone.path_bar" />
+  </hidden>
+  <order manager="plone.abovecontent" skinname="*">
+    <viewlet name="opengever.path_bar" insert-before="*" />
+  </order>
+
+
+  <!-- skinname="*" is buggy and only seems to work sometimes, but not reliably,
+     so we explicitely hide the viewlet for all the skins -->
+
+  <hidden manager="plone.belowcontenttitle" skinname="Plone Classic Theme">
+    <viewlet name="ftw.mail.mail-in" />
+  </hidden>
+
+  <hidden manager="plone.belowcontenttitle" skinname="Sunburst Theme">
+    <viewlet name="ftw.mail.mail-in" />
+  </hidden>
+
+  <hidden manager="plone.belowcontenttitle" skinname="iZug Base Theme">
+    <viewlet name="ftw.mail.mail-in" />
+  </hidden>
+
+  <hidden manager="plone.belowcontenttitle" skinname="Teamraum Theme">
+    <viewlet name="ftw.mail.mail-in" />
+  </hidden>
+
+
+  <order manager="plone.portalheader" skinname="*">
+    <viewlet name="opengever.activity.notification" insert-after="plone.personal_bar" />
+  </order>
+</object>

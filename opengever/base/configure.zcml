@@ -42,11 +42,6 @@
       />
   <include package=".upgrades" />
 
-  <profilehook:hook
-      profile="opengever.base:default"
-      handler=".hooks.installed"
-      />
-
   <class class="Products.ZCatalog.CatalogBrains.AbstractCatalogBrain">
     <implements interface="opengever.base.interfaces.IOpengeverCatalogBrain" />
   </class>

@@ -1,0 +1,12 @@
+<portlets>
+
+  <!--migrated from opengever/portlets/tree/profiles/default/portlets.xml-->
+  <!-- Portlet type registrations -->
+
+  <portlet
+      addview="opengever.portlets.tree.TreePortlet"
+      title="Tree portlet"
+      description=""
+      />
+
+</portlets>

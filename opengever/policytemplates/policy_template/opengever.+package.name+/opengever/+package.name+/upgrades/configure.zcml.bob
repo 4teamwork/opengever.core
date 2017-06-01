@@ -4,14 +4,15 @@
     xmlns:upgrade-step="http://namespaces.zope.org/ftw.upgrade"
     i18n_domain="opengever.{{{package.name}}}">
 
-    <include package="ftw.upgrade" file="meta.zcml" />
+  <include package="ftw.upgrade" file="meta.zcml" />
 
-    <upgrade-step:directory
-        profile="opengever.{{{package.name}}}:default"
-        directory="."
-        />
+  <upgrade-step:directory
+      profile="opengever.{{{package.name}}}:default"
+      directory="."
+      soft_dependencies="opengever.core:default"
+      />
 
-    <!-- Do not add more upgrade steps here.
+  <!-- Do not add more upgrade steps here.
          use ./bin/upgrade create "Upgrade description"
          /-->
 

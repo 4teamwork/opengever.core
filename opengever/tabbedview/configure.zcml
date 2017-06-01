@@ -38,11 +38,6 @@
       />
   <include package=".upgrades" />
 
-  <profilehook:hook
-      profile="opengever.tabbedview:default"
-      handler=".hooks.installed"
-      />
-
   <class class="ftw.tabbedview.browser.tabbed.TabbedView">
     <!-- This avoids having write transactions when visiting /tabbed_view for the
            very first time (mostly relevant for tests).
@@ -53,9 +48,7 @@
   </class>
 
   <adapter
-      for="OFS.interfaces.IItem
-           zope.publisher.interfaces.browser.IBrowserView
-           opengever.base.interfaces.IOpengeverBaseLayer"
+      for="OFS.interfaces.IItem            zope.publisher.interfaces.browser.IBrowserView            opengever.base.interfaces.IOpengeverBaseLayer"
       provides="ftw.tabbedview.interfaces.IGridStateStorageKeyGenerator"
       factory=".statestorage.GeverGridStateStorageKeyGenerator"
       />

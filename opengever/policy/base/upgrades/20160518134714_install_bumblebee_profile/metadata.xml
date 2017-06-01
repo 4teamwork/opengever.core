@@ -1,6 +1,6 @@
-<?xml version="1.0"?>
 <metadata>
   <dependencies>
-    <dependency>profile-opengever.bumblebee:default</dependency>
+    <dependency>profile-ftw.bumblebee:default</dependency>
+    <dependency>profile-ftw.showroom:default</dependency>
   </dependencies>
 </metadata>

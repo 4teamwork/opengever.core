@@ -1,3 +1,0 @@
-<layers>
-  <layer name="opengever.base.layer" interface="opengever.base.interfaces.IOpengeverBaseLayer" />
-</layers>

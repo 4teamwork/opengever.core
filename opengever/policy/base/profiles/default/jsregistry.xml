@@ -1,8 +1,0 @@
-<object name="portal_javascripts" meta_type="JavaScripts Registry">
-
-  <javascript
-      id="inline_validation.js"
-      enabled="False"
-      />
-
-</object>

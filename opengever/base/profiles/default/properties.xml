@@ -1,4 +1,0 @@
-<site>
-  <property name="layout" type="string">@@personal_overview</property>
-  <property name="search_label" type="string">Search OneGov Gever</property>
-</site>
