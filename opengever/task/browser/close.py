@@ -3,14 +3,18 @@ related documents to his own client with this wizard.
 
 """
 from five import grok
+from ftw.referencewidget.selectable import DefaultSelectable
+from ftw.referencewidget.widget import ReferenceWidgetFactory
 from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.request import dispatch_request
 from opengever.base.request import tracebackify
+from opengever.base.source import DEFAULT_TRAVERSABLE_PARAMS
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.base.utils import ok_response
 from opengever.dossier.base import DOSSIER_STATES_OPEN
+from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.globalindex.model.task import Task
 from opengever.task import _
 from opengever.task.adapters import IResponseContainer
@@ -21,7 +25,8 @@ from opengever.task.util import change_task_workflow_state
 from opengever.task.util import CustomInitialVersionMessage
 from opengever.task.util import get_documents_of_task
 from plone import api
-from plone.directives.form import Schema
+from plone.autoform.widgets import ParameterizedWidget
+from plone.directives import form as directives_form
 from plone.z3cform.layout import FormWrapper
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
@@ -73,7 +78,7 @@ def related_documents_vocabulary(task):
     return SimpleVocabulary(terms)
 
 
-class ISelectDocumentsSchema(Schema):
+class ISelectDocumentsSchema(directives_form.Schema):
 
     text = schema.Text(
         title=_(u'label_response', default=u'Response'),
@@ -149,7 +154,14 @@ class SelectDocumentsStepView(FormWrapper, grok.View):
         grok.View.__init__(self, *args, **kwargs)
 
 
-class IChooseDossierSchema(Schema):
+class DossierSelectableClass(DefaultSelectable):
+
+    def is_selectable(self):
+        return IDossierMarker.providedBy(self.content) and \
+            api.content.get_state(obj=self.content) in DOSSIER_STATES_OPEN
+
+
+class IChooseDossierSchema(directives_form.Schema):
 
     dossier = RelationChoice(
         title=_(u'label_close_choose_dossier',
@@ -158,22 +170,8 @@ class IChooseDossierSchema(Schema):
                       default=u'Choose the target dossier where the '
                       'documents should be filed.'),
         required=True,
-
         source=RepositoryPathSourceBinder(
-            object_provides='opengever.dossier.behaviors.dossier.'
-            'IDossierMarker',
-            review_state=DOSSIER_STATES_OPEN,
-            navigation_tree_query={
-                'object_provides': [
-                    'opengever.repository.repositoryroot.IRepositoryRoot',
-                    'opengever.repository.repositoryfolder.'
-                    'IRepositoryFolderSchema',
-                    'opengever.dossier.behaviors.dossier.IDossierMarker',
-                    ],
-                'review_state': ['repositoryroot-state-active',
-                                 'repositoryfolder-state-active'] +
-                                 DOSSIER_STATES_OPEN,
-                }))
+            selectable_class=DossierSelectableClass))
 
 
 class DossierValidator(SimpleFieldValidator):
@@ -201,6 +199,9 @@ grok.global_adapter(DossierValidator)
 class ChooseDossierStepForm(CloseTaskWizardStepFormMixin, Form):
     fields = Fields(IChooseDossierSchema)
     step_name = 'close-task-wizard_choose-dossier'
+
+    fields['dossier'].widgetFactory = ParameterizedWidget(
+        ReferenceWidgetFactory, **DEFAULT_TRAVERSABLE_PARAMS)
 
     @buttonAndHandler(_(u'button_save', default=u'Save'),
                       name='save')
