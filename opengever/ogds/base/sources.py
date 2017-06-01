@@ -258,11 +258,11 @@ class UsersContactsInboxesSource(AllUsersAndInboxesSource):
             self.terms.append(
                 self.getTerm(u'{}'.format(user.userid)))
 
-        self._extend_terms_with_persons(query_string)
+        self._extend_terms_with_contacts(query_string)
         self._extend_terms_with_inboxes(text_filters)
         return self.terms
 
-    def _extend_terms_with_persons(self, query_string):
+    def _extend_terms_with_contacts(self, query_string):
         catalog = api.portal.get_tool('portal_catalog')
 
         if not query_string.endswith('*'):
@@ -443,10 +443,10 @@ class AllEmailContactsAndUsersSource(UsersContactsInboxesSource):
                 self.terms.append(
                     self.getTerm(u'{}:{}'.format(user.email2, user.userid)))
 
-        self._extend_terms_with_persons(query_string)
+        self._extend_terms_with_contacts(query_string)
         return self.terms
 
-    def _extend_terms_with_persons(self, query_string):
+    def _extend_terms_with_contacts(self, query_string):
         catalog = api.portal.get_tool('portal_catalog')
 
         if not query_string.endswith('*'):
