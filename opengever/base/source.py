@@ -22,6 +22,18 @@ DEFAULT_TRAVERSABLE_PARAMS = {
 }
 
 
+# Allow only traversable on the repo tree and dossiers
+DOSSIER_TRAVERSABLE_PARAMS = {
+    'start': 'parent',
+    'traversal_query': {
+        'object_provides': [
+            'opengever.repository.repositoryroot.IRepositoryRoot',
+            'opengever.repository.repositoryfolder.IRepositoryFolderSchema',
+            'opengever.dossier.behaviors.dossier.IDossierMarker',
+        ]
+    }
+}
+
 
 def get_root_path(context):
     root_path = ''

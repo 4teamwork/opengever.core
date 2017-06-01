@@ -6,8 +6,11 @@ from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
 from ftw.keywordwidget.field import ChoicePlus
 from ftw.keywordwidget.widget import KeywordFieldWidget
+from ftw.referencewidget.selectable import DefaultSelectable
+from ftw.referencewidget.widget import ReferenceWidgetFactory
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.base.behaviors.utils import hide_fields_from_behavior
+from opengever.base.source import DOSSIER_TRAVERSABLE_PARAMS
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.dossier import _
 from opengever.dossier.widget import referenceNumberWidgetFactory
@@ -35,6 +38,12 @@ class IDossierMarker(Interface, ITabbedviewUploadable):
 
 def start_date_default():
     return date.today()
+
+
+class RelatedDossierSelectableClass(DefaultSelectable):
+
+    def is_selectable(self):
+        return IDossierMarker.providedBy(self.content)
 
 
 class IDossier(form.Schema):
@@ -154,6 +163,8 @@ class IDossier(form.Schema):
         required=False,
     )
 
+    form.widget('relatedDossier', ReferenceWidgetFactory,
+                **DOSSIER_TRAVERSABLE_PARAMS)
     relatedDossier = RelationList(
         title=_(u'label_related_dossier', default=u'Related Dossier'),
         default=[],
@@ -161,16 +172,7 @@ class IDossier(form.Schema):
         value_type=RelationChoice(
             title=u"Related",
             source=RepositoryPathSourceBinder(
-                object_provides='opengever.dossier.behaviors.dossier.'
-                'IDossierMarker',
-                navigation_tree_query={
-                    'object_provides': [
-                        'opengever.repository.repositoryroot.IRepositoryRoot',
-                        'opengever.repository.repositoryfolder.'
-                        'IRepositoryFolderSchema',
-                        'opengever.dossier.behaviors.dossier.IDossierMarker',
-                    ]
-                }),
+                selectable_class=RelatedDossierSelectableClass),
         ),
         required=False,
     )
