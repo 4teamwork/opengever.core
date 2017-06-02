@@ -8,16 +8,21 @@ msgstr ""
 "PO-Revision-Date: 2016-08-10 05:15+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-base/fr/>\n"
+"POT-Creation-Date: 2017-04-27 11:20+0000\n"
+"PO-Revision-Date: 2017-06-03 16:29+0000\n"
+"Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
+"gever/opengever-base/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 2.13.1\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
-"Language: fr\n"
-"X-Generator: Weblate 2.7-dev\n"
 
 #: ./opengever/base/browser/list_groupmembers.pt:5
 msgid "(INACTIVE)"
@@ -300,7 +305,7 @@ msgstr "Aucun objet ne peut être ajouté, le presse-papier est vide."
 #. Default: "No items available"
 #: ./opengever/base/widgets.py:78
 msgid "msg_no_items_available"
-msgstr ""
+msgstr "Il n'y a pas d'objets disponibles."
 
 #. Default: "Can't paste items, the context does not allow pasting items."
 #: ./opengever/base/browser/paste.py:40
@@ -309,8 +314,8 @@ msgstr ""
 
 #. Default: "Can't paste items, it's not allowed to add objects of this type."
 #: ./opengever/base/browser/paste.py:36
-msgid "msg_pasting_type_not_allowed"
-msgstr ""
+msgid "msg_pasting_not_allowed"
+msgstr "Il n'est pas permis d'insérer des objets de ce type."
 
 #. Default: "Selected objects successfully copied."
 #: ./opengever/base/browser/copy_items.py:36
@@ -385,4 +390,3 @@ msgstr "Non contrôlé"
 #: opengever/repository/classification.py
 msgid "unprotected"
 msgstr "Non classé"
-
