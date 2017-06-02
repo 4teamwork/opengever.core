@@ -4,13 +4,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-05-17 15:37+0000\n"
-"PO-Revision-Date: 2016-08-10 05:15+0000\n"
-"Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
-"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-base/fr/>\n"
 "POT-Creation-Date: 2017-04-27 11:20+0000\n"
 "PO-Revision-Date: 2017-06-05 14:47+0000\n"
-"Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
+"Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
 "gever/opengever-base/fr/>\n"
 "Language: fr\n"
@@ -317,11 +313,6 @@ msgstr "Aucun objet ne peut être ajouté; le presse-papier est vide."
 #: ./opengever/base/widgets.py:78
 msgid "msg_no_items_available"
 msgstr "Il n'y a pas d'objets disponibles."
-
-#. Default: "Can't paste items, the context does not allow pasting items."
-#: ./opengever/base/browser/paste.py:40
-msgid "msg_pasting_not_allowed"
-msgstr ""
 
 #. Default: "Can't paste items, it's not allowed to add objects of this type."
 #: ./opengever/base/browser/paste.py:36
