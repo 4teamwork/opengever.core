@@ -269,8 +269,10 @@ class TestAddForm(FunctionalTestCase):
     @browsing
     def test_add_participation_for_person(self, browser):
         browser.login().open(self.dossier, view='add-sql-participation')
-        browser.fill({'Contact': get_contacts_token(self.peter),
-                      'Roles': ['Regard']})
+        browser.fill({'Roles': ['Regard']})
+        form = browser.find_form_by_field('Contact')
+        form.find_widget('Contact').fill(get_contacts_token(self.peter))
+
         browser.click_on('Save')
 
         participation = Participation.query.first()
@@ -283,8 +285,10 @@ class TestAddForm(FunctionalTestCase):
     @browsing
     def test_add_participation_for_ogds_user(self, browser):
         browser.login().open(self.dossier, view='add-sql-participation')
-        browser.fill({'Contact': get_contacts_token(self.hans),
-                      'Roles': ['Regard']})
+        browser.fill({'Roles': ['Regard']})
+        form = browser.find_form_by_field('Contact')
+        form.find_widget('Contact').fill(get_contacts_token(self.hans))
+
         browser.click_on('Save')
 
         participation = Participation.query.first()
@@ -297,8 +301,10 @@ class TestAddForm(FunctionalTestCase):
     @browsing
     def test_add_participation_for_organization(self, browser):
         browser.login().open(self.dossier, view='add-sql-participation')
-        browser.fill({'Contact': get_contacts_token(self.meier_ag),
-                      'Roles': ['Final drawing', 'Regard']})
+        browser.fill({'Roles': ['Final drawing', 'Regard']})
+        form = browser.find_form_by_field('Contact')
+        form.find_widget('Contact').fill(get_contacts_token(self.meier_ag))
+
         browser.click_on('Save')
 
         participation = Participation.query.first()
@@ -314,8 +320,10 @@ class TestAddForm(FunctionalTestCase):
             person=self.peter, organization=self.meier_ag, function=u'cheffe'))
 
         browser.login().open(self.dossier, view='add-sql-participation')
-        browser.fill({'Contact': get_contacts_token(org_role),
-                      'Roles': ['Final drawing']})
+        browser.fill({'Roles': ['Final drawing']})
+        form = browser.find_form_by_field('Contact')
+        form.find_widget('Contact').fill(get_contacts_token(org_role))
+
         browser.click_on('Save')
 
         participation = Participation.query.first()
@@ -333,8 +341,10 @@ class TestAddForm(FunctionalTestCase):
 
         browser.login().open(self.dossier, view='add-sql-participation')
 
-        browser.fill({'Contact': get_contacts_token(self.peter),
-                      'Roles': ['Final drawing', 'Regard']})
+        browser.fill({'Roles': ['Final drawing', 'Regard']})
+        form = browser.find_form_by_field('Contact')
+        form.find_widget('Contact').fill(get_contacts_token(self.peter))
+
         browser.click_on('Save')
 
         self.assertEquals(['There were some errors.'], error_messages())

@@ -26,9 +26,9 @@
       />
   <include package=".upgrades" />
 
-  <utility
-      factory=".vocabularies.ContactsVocabularyFactory"
-      name="opengever.contact.ContactsVocabulary"
+  <profilehook:hook
+      profile="opengever.contact:default"
+      handler=".hooks.installed"
       />
 
   <subscriber

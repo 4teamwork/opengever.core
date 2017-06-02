@@ -6,6 +6,7 @@ from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
 from email.Utils import formatdate
 from five import grok
+from ftw.keywordwidget.widget import KeywordWidget
 from ftw.mail.inbound import createMailInContainer
 from ftw.mail.mail import IMail
 from opengever.base.source import DossierPathSourceBinder
@@ -17,11 +18,12 @@ from opengever.mail.interfaces import ISendDocumentConf
 from opengever.mail.utils import make_addr_header
 from opengever.mail.validators import AddressValidator
 from opengever.mail.validators import DocumentSizeValidator
+from opengever.ogds.base.sources import AllEmailContactsAndUsersSourceBinder
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.tabbedview.utils import get_containing_document_tab_url
+from plone.autoform.widgets import ParameterizedWidget
 from plone.directives.form import default_value
-from plone.formwidget.autocomplete import AutocompleteMultiFieldWidget
 from plone.registry.interfaces import IRegistry
 from plone.z3cform import layout
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
@@ -66,7 +68,7 @@ class ISendDocumentSchema(Interface):
 
         value_type=schema.Choice(
             title=_(u"mails"),
-            source=u'opengever.ogds.base.EmailContactsAndUsersVocabulary'),
+            source=AllEmailContactsAndUsersSourceBinder()),
         required=False,
         missing_value=(),  # important!
         default=(),
@@ -163,8 +165,10 @@ class SendDocumentForm(form.Form):
 
     fields['extern_receiver'].widgetFactory[INPUT_MODE] \
         = TextLinesFieldWidget
-    fields['intern_receiver'].widgetFactory[INPUT_MODE] \
-        = AutocompleteMultiFieldWidget
+    fields['intern_receiver'].widgetFactory[INPUT_MODE] = ParameterizedWidget(
+        KeywordWidget,
+        async=True)
+
     fields['documents_as_links'].widgetFactory[INPUT_MODE] \
         = SingleCheckBoxFieldWidget
 

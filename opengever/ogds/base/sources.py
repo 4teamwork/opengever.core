@@ -258,11 +258,11 @@ class UsersContactsInboxesSource(AllUsersAndInboxesSource):
             self.terms.append(
                 self.getTerm(u'{}'.format(user.userid)))
 
-        self._extend_terms_with_persons(query_string)
+        self._extend_terms_with_contacts(query_string)
         self._extend_terms_with_inboxes(text_filters)
         return self.terms
 
-    def _extend_terms_with_persons(self, query_string):
+    def _extend_terms_with_contacts(self, query_string):
         catalog = api.portal.get_tool('portal_catalog')
 
         if not query_string.endswith('*'):
@@ -365,3 +365,110 @@ class AllUsersSourceBinder(object):
 
     def __call__(self, context):
         return AllUsersSource(context)
+
+
+@implementer(IQuerySource)
+class AllEmailContactsAndUsersSource(UsersContactsInboxesSource):
+    """Source of all users and contacts with all email addresses.
+
+    Format:
+    token = mail-address:id eg. hugo@boss.ch:hugo.boss
+    title for users = Fullname (userid, address), eg. Hugo Boss (hugo.boss, hugo@boss.ch)
+    title for contacts Fullname (address), eg. James Bond (007@bond.ch)
+    """
+
+    @property
+    def base_query(self):
+        return create_session().query(User)
+
+    def getTerm(self, value, brain=None):
+        email, id_ = value.split(':', 1)
+
+        query = self.base_query.filter(User.userid == id_)
+        query = query.filter((User.email == email) | (User.email2 == email))
+        user_result = query.all()
+        if user_result:
+            user = user_result[0]
+            title = u'{} ({}, {})'.format(user.fullname(),
+                                          user.userid, email)
+
+        else:
+            if not brain:
+                catalog = api.portal.get_tool('portal_catalog')
+                brain = catalog.unrestrictedSearchResults(
+                    portal_type=CONTACT_TYPE,
+                    id=id_)[0]
+
+            if email not in [brain.email, brain.email2]:
+                raise ValueError
+
+            title = u'{} ({})'.format(brain.Title.decode('utf-8'), email)
+
+        token = value
+        return SimpleTerm(value, token, title)
+
+    def getTermByToken(self, token):
+        if not token:
+            raise LookupError('Expect a userid')
+
+        try:
+            first, second = token.split(':', 1)
+        except ValueError:
+            raise LookupError('A token "userid:email" is required.')
+
+        try:
+            value = token
+            return self.getTerm(value)
+        except (ValueError, IndexError):
+            raise LookupError
+
+    def search(self, query_string):
+        self.terms = []
+
+        text_filters = query_string.split(' ')
+        query = extend_query_with_textfilter(
+            self.base_query,
+            [User.userid, User.firstname, User.lastname, User.email],
+            text_filters)
+
+        query = query.filter_by(active=True)
+        query = query.order_by(asc(func.lower(User.lastname)),
+                               asc(func.lower(User.firstname)))
+
+        for user in query.all():
+            if user.email:
+                self.terms.append(
+                    self.getTerm(u'{}:{}'.format(user.email, user.userid)))
+            if user.email2:
+                self.terms.append(
+                    self.getTerm(u'{}:{}'.format(user.email2, user.userid)))
+
+        self._extend_terms_with_contacts(query_string)
+        return self.terms
+
+    def _extend_terms_with_contacts(self, query_string):
+        catalog = api.portal.get_tool('portal_catalog')
+
+        if not query_string.endswith('*'):
+            query_string += '*'
+
+        query = {'portal_type': CONTACT_TYPE,
+                 'SearchableText': query_string}
+
+        for brain in catalog.unrestrictedSearchResults(**query):
+            if brain.email:
+                self.terms.append(self.getTerm(
+                    u'{}:{}'.format(brain.email, brain.id.decode('utf-8')),
+                    brain))
+
+            if brain.email2:
+                self.terms.append(self.getTerm(
+                    u'{}:{}'.format(brain.email2, brain.id.decode('utf-8')),
+                    brain))
+
+
+@implementer(IContextSourceBinder)
+class AllEmailContactsAndUsersSourceBinder(object):
+
+    def __call__(self, context):
+        return AllEmailContactsAndUsersSource(context)

@@ -11,8 +11,8 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.task.activities import TaskAddedActivity
+from opengever.task.interfaces import ITaskSettings
 from opengever.tasktemplates import _
-from opengever.tasktemplates.content.tasktemplate import MAIN_TASK_DEADLINE_DELTA
 from opengever.tasktemplates.interfaces import IFromTasktemplateGenerated
 from plone import api
 from plone.dexterity.utils import addContentToContainer
@@ -231,6 +231,9 @@ class SelectTaskTemplatesWizardStep(BaseWizardStepForm, Form):
         highest_deadline = max(
             [template.deadline for template in selected_templates])
 
+        deadline_timedelta = api.portal.get_registry_record(
+            'deadline_timedelta', interface=ITaskSettings)
+
         data = dict(
             title=templatefolder.title,
             issuer=self.replace_interactive_user('current_user'),
@@ -238,7 +241,7 @@ class SelectTaskTemplatesWizardStep(BaseWizardStepForm, Form):
             responsible_client=get_current_org_unit().id(),
             task_type='direct-execution',
             deadline=date.today() +
-            timedelta(highest_deadline + MAIN_TASK_DEADLINE_DELTA),
+            timedelta(highest_deadline + deadline_timedelta),
         )
 
         main_task = createContent('opengever.task.task', **data)

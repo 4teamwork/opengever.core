@@ -1,12 +1,13 @@
 from Acquisition import aq_parent
 from collective.elephantvocabulary import wrap_vocabulary
+from ftw.keywordwidget.widget import KeywordWidget
 from opengever.base.browser.modelforms import ModelAddForm
 from opengever.base.browser.modelforms import ModelEditForm
-from opengever.base.oguid import Oguid
 from opengever.contact import _
+from opengever.contact.sources import ContactsSourceBinder
 from plone import api
+from plone.autoform.widgets import ParameterizedWidget
 from plone.directives import form
-from plone.formwidget.autocomplete import AutocompleteFieldWidget
 from z3c.form import button
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from z3c.form.interfaces import ActionExecutionError
@@ -22,7 +23,7 @@ class IParticipation(form.Schema):
 
     contact = schema.Choice(
         title=_(u'label_contact', default=u'Contact'),
-        vocabulary=u'opengever.contact.ContactsVocabulary',
+        source=ContactsSourceBinder(),
         required=True,
     )
 
@@ -43,7 +44,10 @@ class ParticipationAddForm(ModelAddForm):
     label = _(u'label_add_participation', default=u'Add Participation')
     fields = z3c.form.field.Fields(IParticipation)
 
-    fields['contact'].widgetFactory = AutocompleteFieldWidget
+    fields['contact'].widgetFactory = ParameterizedWidget(
+        KeywordWidget,
+        async=True
+    )
     fields['roles'].widgetFactory = CheckBoxFieldWidget
 
     @property

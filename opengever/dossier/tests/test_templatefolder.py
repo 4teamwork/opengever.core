@@ -262,8 +262,10 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
             # submit first wizard step
             browser.login().open(self.dossier, view='document_with_template')
             browser.fill({'form.widgets.template': _make_token(template_word),
-                          'Recipient': get_contacts_token(peter),
-                          'Title': 'Test Docx'}).save()
+                          'Title': 'Test Docx'})
+            form = browser.find_form_by_field('Recipient')
+            form.find_widget('Recipient').fill(get_contacts_token(peter))
+            form.save()
             # submit second wizard step
             browser.fill(
                 {'form.widgets.address': str(address1.address_id),
@@ -333,8 +335,10 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
             # submit first wizard step
             browser.login().open(self.dossier, view='document_with_template')
             browser.fill({'form.widgets.template': _make_token(template_word),
-                          'Recipient': get_contacts_token(org_role),
-                          'Title': 'Test Docx'}).save()
+                          'Title': 'Test Docx'})
+            form = browser.find_form_by_field('Recipient')
+            form.find_widget('Recipient').fill(get_contacts_token(org_role))
+            form.save()
             # submit second wizard step
             browser.fill(
                 {'form.widgets.address': address_id,
@@ -386,8 +390,10 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
             # submit first wizard step
             browser.login().open(self.dossier, view='document_with_template')
             browser.fill({'form.widgets.template': _make_token(template_word),
-                          'Recipient': get_contacts_token(ogds_user),
-                          'Title': 'Test Docx'}).save()
+                          'Title': 'Test Docx'})
+            form = browser.find_form_by_field('Recipient')
+            form.find_widget('Recipient').fill(get_contacts_token(ogds_user))
+            form.save()
             # submit second wizard step
             browser.fill(
                 {'form.widgets.address': '{}_1'.format(ogds_user.id),

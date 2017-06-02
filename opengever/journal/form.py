@@ -1,8 +1,10 @@
+from ftw.keywordwidget.widget import KeywordWidget
 from opengever.base.source import DossierPathSourceBinder
+from opengever.contact.sources import ContactsSourceBinder
 from opengever.journal import _
 from opengever.journal.entry import ManualJournalEntry
+from plone.autoform.widgets import ParameterizedWidget
 from plone.directives import form
-from plone.formwidget.autocomplete import AutocompleteMultiFieldWidget
 from z3c.form.field import Fields
 from z3c.form.form import AddForm
 from z3c.relationfield.schema import RelationChoice
@@ -27,7 +29,7 @@ class IManualJournalEntry(form.Schema):
     contacts = schema.List(
         title=_(u'label_contacts', default=u'Contacts'),
         value_type=schema.Choice(
-            vocabulary=u'opengever.contact.ContactsVocabulary'),
+            source=ContactsSourceBinder()),
         required=False,
     )
 
@@ -57,7 +59,10 @@ class ManualJournalEntryAddForm(AddForm):
     label = _(u'label_add_journal_entry', default=u'Add journal entry')
     fields = Fields(IManualJournalEntry)
 
-    fields['contacts'].widgetFactory = AutocompleteMultiFieldWidget
+    fields['contacts'].widgetFactory = ParameterizedWidget(
+        KeywordWidget,
+        async=True
+    )
 
     def createAndAdd(self, data):
         contacts, users = self.split_contacts_and_users(data.get('contacts'))

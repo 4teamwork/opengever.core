@@ -1,11 +1,13 @@
 from collective.elephantvocabulary import wrap_vocabulary
 from five import grok
+from ftw.keywordwidget.widget import KeywordWidget
 from opengever.dossier import _
 from opengever.dossier import events
+from opengever.ogds.base.sources import UsersContactsInboxesSourceBinder
 from persistent import Persistent
 from persistent.list import PersistentList
+from plone.autoform.widgets import ParameterizedWidget
 from plone.directives import form
-from plone.formwidget.autocomplete import AutocompleteFieldWidget
 from plone.z3cform import layout
 from Products.statusmessages.interfaces import IStatusMessage
 from rwproperty import getproperty, setproperty
@@ -90,7 +92,7 @@ class IParticipation(form.Schema):
     contact = schema.Choice(
         title=_(u'label_contact', default=u'Contact'),
         description=_(u'help_contact', default=u''),
-        vocabulary=u'opengever.ogds.base.ContactsAndUsersVocabulary',
+        source=UsersContactsInboxesSourceBinder(),
         required=True,
         )
 
@@ -147,7 +149,11 @@ class ParticipationAddForm(z3c.form.form.Form):
     fields = z3c.form.field.Fields(IParticipation)
     label = _(u'label_participation', default=u'Participation')
     ignoreContext = True
-    fields['contact'].widgetFactory = AutocompleteFieldWidget
+    fields['contact'].widgetFactory = ParameterizedWidget(
+        KeywordWidget,
+        async=True
+    )
+
     fields['roles'].widgetFactory = CheckBoxFieldWidget
 
     @z3c.form.button.buttonAndHandler(_(u'button_add', default=u'Add'))

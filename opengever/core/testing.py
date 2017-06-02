@@ -154,7 +154,6 @@ class OpengeverFixture(PloneSandboxLayer):
             '  <includePlugins package="plone" />'
             '  <includePluginsOverrides package="plone" />'
 
-            '  <include package="opengever.core.tests" file="tests.zcml" />'
             '  <include package="opengever.ogds.base" file="tests.zcml" />'
             '  <include package="opengever.base.tests" file="tests.zcml" />'
             '  <include package="opengever.testing" file="tests.zcml" />'

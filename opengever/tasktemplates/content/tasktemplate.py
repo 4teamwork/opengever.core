@@ -1,14 +1,18 @@
-from opengever.tasktemplates import _
-from plone.directives import form
-from plone.dexterity.content import Item
-from zope.interface import implements
-from zope import schema
-from plone.formwidget.autocomplete import AutocompleteFieldWidget
+from ftw.keywordwidget.widget import KeywordFieldWidget
+from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task import util
+from opengever.task.util import update_reponsible_field_data
+from opengever.tasktemplates import _
+from opengever.tasktemplates.sources import TaskResponsibleSourceBinder
+from opengever.tasktemplates.sources import TaskTemplateIssuerSourceBinder
+from plone.dexterity.browser.add import DefaultAddForm
+from plone.dexterity.browser.add import DefaultAddView
+from plone.dexterity.browser.edit import DefaultEditForm
+from plone.dexterity.content import Item
+from plone.directives import form
 from z3c.form.browser import checkbox
-
-# days wich are summized for calculating the main task deadline
-MAIN_TASK_DEADLINE_DELTA = 5
+from zope import schema
+from zope.interface import implements
 
 
 class ITaskTemplate(form.Schema):
@@ -25,8 +29,8 @@ class ITaskTemplate(form.Schema):
             u'deadline',
             u'text',
             u'preselected'
-                ],
-            )
+        ],
+    )
 
     title = schema.TextLine(
         title=_(u"label_title", default=u"Title"),
@@ -34,13 +38,13 @@ class ITaskTemplate(form.Schema):
         required=True,
     )
 
-    form.widget(issuer=AutocompleteFieldWidget)
+    form.widget('issuer', KeywordFieldWidget, async=True)
     issuer = schema.Choice(
         title=_(u"label_issuer", default=u"Issuer"),
         description=_('help_issuer', default=u""),
-        vocabulary=u'opengever.tasktemplates.IssuerVocabulary',
+        source=TaskTemplateIssuerSourceBinder(),
         required=True,
-        )
+    )
 
     form.widget(task_type='z3c.form.browser.radio.RadioFieldWidget')
     task_type = schema.Choice(
@@ -53,6 +57,7 @@ class ITaskTemplate(form.Schema):
         source=util.getTaskTypeVocabulary,
     )
 
+    form.mode(responsible_client='hidden')
     responsible_client = schema.Choice(
         title=_(u'label_resonsible_client',
                 default=u'Responsible Client'),
@@ -61,13 +66,13 @@ class ITaskTemplate(form.Schema):
         vocabulary='opengever.tasktemplates.ResponsibleOrgUnitVocabulary',
         required=True)
 
-    form.widget(responsible=AutocompleteFieldWidget)
+    form.widget('responsible', KeywordFieldWidget, async=True)
     responsible = schema.Choice(
         title=_(u"label_responsible", default="Responsible"),
         description=_(u"help_responsible", default=""),
-        vocabulary=u'opengever.tasktemplates.ResponsibleVocabulary',
+        source=TaskResponsibleSourceBinder(),
         required=True,
-        )
+    )
 
     deadline = schema.Int(
         title=_(u"label_deadline", default=u"Deadline in Days"),
@@ -80,15 +85,36 @@ class ITaskTemplate(form.Schema):
         title=_(u"label_text", default=u"Text"),
         description=_(u"help_text", default=u""),
         required=False,
-        )
+    )
 
     form.widget(preselected=checkbox.SingleCheckBoxFieldWidget)
     preselected = schema.Bool(
         title=_(u'label_preselected', default='Preselect'),
         description=_(u'help_preselected', default=''),
         required=False,
-        )
+    )
 
 
 class TaskTemplate(Item):
     implements(ITaskTemplate)
+
+
+@form.default_value(field=ITaskTemplate['responsible_client'])
+def responsible_client_default_value(data):
+    return get_current_org_unit().id()
+
+
+class TaskTemplateAddForm(DefaultAddForm):
+    def createAndAdd(self, data):
+        update_reponsible_field_data(data)
+        return super(TaskTemplateAddForm, self).createAndAdd(data)
+
+
+class TaskTemplateAddView(DefaultAddView):
+    form = TaskTemplateAddForm
+
+
+class TaskTemplateEditForm(DefaultEditForm):
+    def applyChanges(self, data):
+        update_reponsible_field_data(data)
+        return super(TaskTemplateEditForm, self).applyChanges(data)

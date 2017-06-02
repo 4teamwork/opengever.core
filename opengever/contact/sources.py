@@ -4,23 +4,17 @@ from opengever.contact.models import OrgRole
 from opengever.contact.models import Person
 from opengever.contact.ogdsuser import OgdsUserToContactAdapter
 from opengever.ogds.base.utils import ogds_service
+from z3c.formwidget.query.interfaces import IQuerySource
 from zope.interface import implementer
 from zope.interface import implements
+from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.interfaces import IVocabularyFactory
-from zope.schema.interfaces import IVocabularyTokenized
 from zope.schema.vocabulary import SimpleTerm
 
 
-@implementer(IVocabularyTokenized)
-class ContactsVocabulary(object):
-    """A vocabulary of all active contacts (all persons and organizations).
-
-    Providing a search method, which allows using the vocabulary in an
-    autocomplete field.
-
-    Note: this vocabulary will only work with autocommplete-widgets, i.e.
-    `plone.formwidget.autocomplete.AutocompleteFieldWidget`.
-
+@implementer(IQuerySource)
+class ContactsSource(object):
+    """A source of all active contacts (all persons and organizations).
     """
 
     by_type = {'person': Person,
@@ -29,10 +23,20 @@ class ContactsVocabulary(object):
                'ogds_user': OgdsUserToContactAdapter}
     by_class = {v: k for k, v in by_type.iteritems()}
 
+    def __init__(self, context):
+        self.context = context
+        self.terms = []
+
     def __contains__(self, value):
         """Currently all Contacts and OrgRoles are considered valid.
         """
         return value.__class__ in self.by_class
+
+    def __iter__(self):
+        return self.terms.__iter__()
+
+    def __len__(self):
+        return len(self.terms)
 
     def getTerm(self, value):
         term_type = self.by_class[value.__class__]
@@ -53,26 +57,32 @@ class ContactsVocabulary(object):
         return self.getTerm(contact)
 
     def search(self, query_string):
+        self.terms = []
+
         text_filters = query_string.split()
-        query = Contact.query.filter(Contact.is_active==True)
+        query = Contact.query.filter(Contact.is_active == True)
         query = query.polymorphic_by_searchable_text(
             text_filters=text_filters)
 
         for contact in query.order_by(Contact.contact_id):
-            yield self.getTerm(contact)
+            self.terms.append(self.getTerm(contact))
             if hasattr(contact, 'organizations'):
                 for org_role in contact.organizations:
-                    yield(self.getTerm(org_role))
+                    self.terms.append(self.getTerm(org_role))
 
         for ogds_user in ogds_service().filter_users(text_filters):
-            yield self.getTerm(OgdsUserToContactAdapter(ogds_user))
+            self.terms.append(
+                self.getTerm(OgdsUserToContactAdapter(ogds_user)))
+
+        return self.terms
 
 
-class ContactsVocabularyFactory(object):
+@implementer(IContextSourceBinder)
+class ContactsSourceBinder(object):
     """A vocabulary factory for the ContactsVocabulary.
     """
 
     implements(IVocabularyFactory)
 
     def __call__(self, context):
-        return ContactsVocabulary()
+        return ContactsSource(context)

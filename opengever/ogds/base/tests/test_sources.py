@@ -5,6 +5,7 @@ from opengever.ogds.base.sources import AllUsersSource
 from opengever.ogds.base.sources import AssignedUsersSource
 from opengever.ogds.base.sources import ForwardingResponsibleSource
 from opengever.ogds.base.sources import UsersContactsInboxesSource
+from opengever.ogds.base.sources import AllEmailContactsAndUsersSource
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
 from zope.schema.vocabulary import SimpleTerm
@@ -467,3 +468,92 @@ class TestAllUsersSource(FunctionalTestCase):
                           'Expect the inactive user John Doe in result')
 
         self.assertEquals('john.doe', result[0].token)
+
+
+class TestAllEmailContactsAndUsersSource(FunctionalTestCase):
+
+    use_default_fixture = False
+
+    def setUp(self):
+        super(TestAllEmailContactsAndUsersSource, self).setUp()
+
+        self.org_unit, self.admin_unit = create(
+            Builder('fixture').with_admin_unit().with_org_unit())
+
+        create(Builder('ogds_user')
+               .having(firstname=u'Test', lastname=u'User')
+               .having(email='onlyone@mail.com')
+               .assign_to_org_units([self.org_unit]))
+        create(Builder('ogds_user')
+               .id('hugo.boss')
+               .having(firstname=u'Hugo', lastname=u'Boss')
+               .having(email='hugos@mail.com', email2='huegeler@mail.com')
+               .assign_to_org_units([self.org_unit]))
+
+        create(Builder('contact')
+               .having(firstname=u'Lara', lastname=u'Croft',
+                       email=u'lara.croft@test.ch'))
+        create(Builder('contact')
+               .having(firstname=u'Super', lastname=u'M\xe4n',
+                       email='superman@test.ch',
+                       email2='superman@dc.com'))
+
+        self.source = AllEmailContactsAndUsersSource(self.portal)
+
+    def test_ogds_users_are_valid(self):
+        self.assertIn('onlyone@mail.com:test_user_1_', self.source)
+
+        self.assertIn('hugos@mail.com:hugo.boss', self.source)
+        self.assertIn('huegeler@mail.com:hugo.boss', self.source)
+
+    def test_invalid_ogds_tokens(self):
+        self.assertNotIn('notthere@mail.com:hugo-boss', self.source)
+        self.assertNotIn('boss-hugo', self.source)
+        self.assertNotIn('hugo:boss', self.source)
+        self.assertNotIn('hugo.boss', self.source)
+        self.assertNotIn('hugos@mail.com', self.source)
+        self.assertNotIn('lara@mail.com:lara-croft', self.source)
+
+    def test_contacts_are_valid(self):
+        self.assertIn('lara.croft@test.ch:croft-lara', self.source)
+
+        self.assertIn('superman@test.ch:man-super', self.source)
+        self.assertIn('superman@dc.com:man-super', self.source)
+
+    def test_invalid_contact_tokens(self):
+        self.assertNotIn('lara.croft@test.ch:lara-croft', self.source)
+        self.assertNotIn('man-super:superman@test.ch', self.source)
+        self.assertNotIn('notthere@dc.com:man-super', self.source)
+
+    def test_search_returns_one_entry_for_each_email_address(self):
+        ogds_result = self.source.search('Hugo')
+
+        self.assertEquals(
+            2, len(ogds_result),
+            'Expect 2 results, since the user has 2 email addresses')
+
+        self.assertEquals('hugos@mail.com:hugo.boss', ogds_result[0].token)
+        self.assertEquals('hugos@mail.com:hugo.boss', ogds_result[0].value)
+        self.assertEquals('Boss Hugo (hugo.boss, hugos@mail.com)',
+                          ogds_result[0].title)
+
+        self.assertEquals('huegeler@mail.com:hugo.boss', ogds_result[1].token)
+        self.assertEquals('huegeler@mail.com:hugo.boss', ogds_result[1].value)
+        self.assertEquals('Boss Hugo (hugo.boss, huegeler@mail.com)',
+                          ogds_result[1].title)
+
+        person_result = self.source.search('Super')
+
+        self.assertEquals(
+            2, len(person_result),
+            'Expect 2 results, since the user has 2 email addresses')
+
+        self.assertEquals('superman@test.ch:man-super', person_result[0].token)
+        self.assertEquals('superman@test.ch:man-super', person_result[0].value)
+        self.assertEquals(u'M\xe4n Super (superman@test.ch)',
+                          person_result[0].title)
+
+        self.assertEquals('superman@dc.com:man-super', person_result[1].token)
+        self.assertEquals('superman@dc.com:man-super', person_result[1].value)
+        self.assertEquals(u'M\xe4n Super (superman@dc.com)',
+                          person_result[1].title)
