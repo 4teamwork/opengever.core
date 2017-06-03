@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2017-04-27 11:21+0000\n"
-"PO-Revision-Date: 2017-05-23 09:09+0000\n"
+"PO-Revision-Date: 2017-06-04 08:49+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
 "gever/opengever-latex/fr/>\n"
@@ -57,7 +57,7 @@ msgstr "Documents"
 #. Default: "Journal of dossier ${title} (${reference_number})"
 #: ./opengever/latex/dossierjournal.py:65
 msgid "label_dossier_journal"
-msgstr ""
+msgstr "Journal du dossier ${title} (${reference_number})"
 
 #. Default: "End"
 #: ./opengever/latex/dossierdetails.py:128
@@ -78,7 +78,7 @@ msgstr "Participants"
 #. Default: "Receipt date"
 #: ./opengever/latex/listing.py:221
 msgid "label_receipt_date"
-msgstr "Date de réception"
+msgstr "Date d'entrée"
 
 #. Default: "Reference number"
 #: ./opengever/latex/dossierdetails.py:106
