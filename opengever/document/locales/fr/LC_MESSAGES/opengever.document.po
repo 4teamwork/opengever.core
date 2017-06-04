@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2017-04-27 11:21+0000\n"
-"PO-Revision-Date: 2017-06-03 19:16+0000\n"
+"PO-Revision-Date: 2017-06-04 12:50+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
 "gever/opengever-document/fr/>\n"
@@ -198,7 +198,7 @@ msgstr "Il n'est pas possible d'insérer des Email à cet endroit. Pour le faire
 #. Default: "You have not selected any Items"
 #: ./opengever/document/browser/report.py:65
 msgid "error_no_items"
-msgstr "Aucun élément sélectionné."
+msgstr "Vous n'avez sélectionné aucun élément."
 
 #. Default: "Either the title or the file is required."
 #: ./opengever/document/document.py:75
@@ -475,7 +475,7 @@ msgstr "Aperçu en pdf"
 #. Default: "Preserved as paper"
 #: ./opengever/document/behaviors/metadata.py:138
 msgid "label_preserved_as_paper"
-msgstr "Conserver sous forme papier"
+msgstr "Conservé sous forme papier"
 
 #. Default: "Preview"
 #: ./opengever/document/behaviors/metadata.py:166
@@ -490,7 +490,7 @@ msgstr "Statut public"
 #. Default: "Date of receipt"
 #: ./opengever/document/behaviors/metadata.py:100
 msgid "label_receipt_date"
-msgstr "Date de réception"
+msgstr "Date d'entrée"
 
 #. Default: "Reference Number"
 #: ./opengever/document/viewlets/byline.py:35
@@ -546,12 +546,14 @@ msgstr "Oui"
 #. Default: "This item is being checked out by ${creator}."
 #: ./opengever/document/checkout/viewlets_templates/checkedoutviewlet.pt:9
 msgid "message_checkout_info"
-msgstr "Ce document a un checkout de ${creator}."
+msgstr "Ce document a été verrouillé par ${creator}."
 
 #. Default: "Could not cancel checkout on document ${title}, mails does not support the checkin checkout process."
 #: ./opengever/document/checkout/cancel.py:67
 msgid "msg_cancel_checkout_on_mail_not_possible"
-msgstr "Le document `${title}` n'a pas pu être sorti, car les e-mails ne sont pas supportés par le processus check'in/checkout."
+msgstr ""
+"Le document `${title}` n'a pas pu être verrouillé, car les e-mails ne sont "
+"pas supportés par le processus de check-in / check-out."
 
 #. Default: "No file"
 #: ./opengever/document/browser/templates/archiv_file.pt:18
@@ -562,12 +564,14 @@ msgstr "Aucun fichier trouvé"
 #. Default: "Following documents are checked out:"
 #: ./opengever/document/browser/templates/logout_overlay.pt:8
 msgid "overview_not_checked_in_documents"
-msgstr "Les documents suivants sont en checkout:"
+msgstr "Les documents suivants ont été verrouillés:"
 
 #. Default: "Please note that in this case changes on the document wouldn't be saved in to GEVER."
 #: ./opengever/document/browser/templates/downloadconfirmation.pt:17
 msgid "warning_download_confirmation"
-msgstr "Attention ! En ouvrant le document de cette manière, toutes les modifications apportées ne seront pas sauvegardées."
+msgstr ""
+"Attention! En ouvrant le document de cette manière, toutes les "
+"modifications apportées ne seront PAS sauvegardées en GEVER."
 
 #: ./opengever/document/profiles/default/actions.xml
 #: ./opengever/document/upgrades/profiles/4000/actions.xml
