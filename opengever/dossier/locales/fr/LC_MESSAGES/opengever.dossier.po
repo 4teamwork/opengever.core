@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2017-04-27 11:21+0000\n"
-"PO-Revision-Date: 2017-06-01 20:12+0000\n"
+"PO-Revision-Date: 2017-06-04 17:25+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
 "gever/opengever-dossier/fr/>\n"
@@ -98,11 +98,13 @@ msgstr "Cet élément ne peut être déplacé ici."
 
 #: ./opengever/dossier/resolve.py:94
 msgid "It isn't possible to reactivate a sub dossier."
-msgstr "Il n'est pas possible d'ouvrir un sous-dossier, le dossier principale doit être ouvert à nouveau."
+msgstr ""
+"Il n'est pas possible rouvrir un sous-dossier, le dossier principale doit "
+"être ouvert à nouveau."
 
 #: ./opengever/dossier/profiles/default/actions.xml
 msgid "Move Items"
-msgstr "Déplacer l'élément"
+msgstr "Déplacer d'éléments"
 
 #: ./opengever/dossier/browser/overview.py:96
 msgid "Newest documents"
@@ -177,7 +179,9 @@ msgstr "Ce dossier ne peut pas être annulé, il contient encore des documents a
 
 #: ./opengever/dossier/deactivate.py:66
 msgid "The Dossier can't be deactivated, the subdossier ${dossier} is already resolved"
-msgstr "Impossible d'annuler le dossier, parce que le sous-dossier ${dossier} est déja fermé. Le sous-dossier doit d'abord être réouvert."
+msgstr ""
+"Impossible d'annuler le dossier, parce que le sous-dossier ${dossier} est "
+"déja fermé. Le sous-dossier doit d'abord être rouvert."
 
 #: ./opengever/dossier/activate.py:41
 msgid "The Dossier has been activated"
@@ -189,7 +193,7 @@ msgstr "Le dossier a été annulé."
 
 #: ./opengever/dossier/archive.py:288
 msgid "The Dossier has been resolved"
-msgstr "Dossier a été fermé avec succès"
+msgstr "Le dossier a été fermé avec succès"
 
 #: ./opengever/dossier/resolve.py:53
 msgid "The dossier ${dossier} has a invalid end_date"
@@ -213,7 +217,7 @@ msgstr "La date de clôture n'est pas valable. Elle doit être plus récente ou 
 
 #: ./opengever/dossier/archive.py:91
 msgid "The given value is not a valid Year."
-msgstr "L'année de dépôt attribuée n'est pas valable."
+msgstr "L'année d'archivage indiquée n'est pas valable."
 
 #: ./opengever/dossier/move_items.py:89
 msgid "The selected objects can't be found, please try it again."
@@ -237,7 +241,8 @@ msgstr "Ce sous-dossier ne peut pas être réactivé parce que le dossier prinic
 
 #: ./opengever/dossier/archive.py:215
 msgid "When the Action give filing number is selected,                         all fields are required."
-msgstr "Pour l'attribution de numéro d'inventaire, tous les champs sont obligatoires."
+msgstr ""
+"Pour l'attribution du numéro d'inventaire, tous les champs sont obligatoires."
 
 #: ./opengever/dossier/move_items.py:194
 msgid "You have not selected any items"
@@ -329,7 +334,7 @@ msgstr "Date de clôture obligatoire"
 #. Default: "You have not selected any items."
 #: ./opengever/dossier/browser/report.py:59
 msgid "error_no_items"
-msgstr "Aucun élément sélectionné."
+msgstr "Vous n'avez sélectionné aucun élément."
 
 #. Default: "Common"
 #: ./opengever/dossier/behaviors/dossier.py:48
