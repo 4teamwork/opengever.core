@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2017-04-27 11:21+0000\n"
-"PO-Revision-Date: 2017-05-16 08:36+0000\n"
+"PO-Revision-Date: 2017-06-04 17:04+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
 "gever/opengever-task/fr/>\n"
@@ -571,7 +571,7 @@ msgstr "Nouvelle tâche ajoutée par ${user}"
 #. Default: "Task commented"
 #: ./opengever/task/response_description.py:333
 msgid "label_task_commented"
-msgstr ""
+msgstr "La tâche a été commentée"
 
 #. Default: "Task title"
 #: ./opengever/task/activities.py:56
@@ -624,7 +624,7 @@ msgstr "Le délai a été modifié avec succès."
 #. Default: "Commented by ${user}"
 #: ./opengever/task/response_description.py:329
 msgid "msg_task_commented"
-msgstr ""
+msgstr "Commenté par ${user}"
 
 msgid "mytasks"
 msgstr "Mes tâches"
