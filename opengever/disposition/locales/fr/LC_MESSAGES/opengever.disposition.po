@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2017-04-27 11:21+0000\n"
-"PO-Revision-Date: 2017-06-02 05:27+0000\n"
-"Last-Translator: Pascal Habegger <pascal.habegger@gmail.com>\n"
+"PO-Revision-Date: 2017-06-04 17:02+0000\n"
+"Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
 "gever/opengever-disposition/fr/>\n"
 "Language: fr\n"
@@ -31,7 +31,7 @@ msgstr ""
 
 #: ./opengever/disposition/browser/listing.py:30
 msgid "active"
-msgstr ""
+msgstr "Actif"
 
 #: ./opengever/disposition/browser/listing.py:28
 msgid "all"
@@ -40,7 +40,7 @@ msgstr ""
 #. Default: "Sequence Number"
 #: ./opengever/disposition/browser/listing.py:43
 msgid "document_sequence_number"
-msgstr ""
+msgstr "Numéro courant"
 
 #. Default: "The dossier ${title} is already offered in a different disposition."
 #: ./opengever/disposition/validators.py:29
@@ -133,7 +133,7 @@ msgstr ""
 #: ./opengever/disposition/browser/templates/overview.pt:67
 #: ./opengever/disposition/disposition.py:145
 msgid "label_dossiers"
-msgstr ""
+msgstr "Dossiers"
 
 #. Default: "Download removal protocol"
 #: ./opengever/disposition/browser/overview.py:83
@@ -158,7 +158,7 @@ msgstr ""
 #. Default: "No"
 #: ./opengever/disposition/browser/removal_protocol.py:55
 msgid "label_no"
-msgstr ""
+msgstr "Non"
 
 #. Default: "Reference number"
 #: ./opengever/disposition/browser/removal_protocol.py:60
@@ -201,7 +201,7 @@ msgstr ""
 #. Default: "Yes"
 #: ./opengever/disposition/browser/removal_protocol.py:53
 msgid "label_yes"
-msgstr ""
+msgstr "Oui"
 
 #. Default: "The appraisal is incomplete, appraisal could not be finalized."
 #: ./opengever/disposition/browser/views.py:37
