@@ -154,7 +154,6 @@ msgstr "Effacer tous les fichiers attachés séléctionnés"
 #: ./opengever/mail/browser/mail.py:96
 #: ./opengever/mail/browser/send_document.py:95
 #: ./opengever/mail/browser/templates/previewtab.pt:48
-#, fuzzy
 msgid "label_documents"
 msgstr "Fichiers attachés"
 
@@ -220,4 +219,3 @@ msgstr "Email"
 #: ./opengever/mail/browser/send_document.py:80
 msgid "receiver"
 msgstr "Destinataire"
-
