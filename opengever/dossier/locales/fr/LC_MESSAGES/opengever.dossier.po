@@ -1,20 +1,21 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-05-10 12:27+0000\n"
-"PO-Revision-Date: 2017-05-01 15:56+0000\n"
-"Last-Translator: Lukas Graf <lukas.graf@4teamwork.ch>\n"
-"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/fr/>\n"
+"POT-Creation-Date: 2017-04-27 11:21+0000\n"
+"PO-Revision-Date: 2017-06-01 20:12+0000\n"
+"Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
+"gever/opengever-dossier/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 2.13.1\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
-"Language: fr\n"
-"X-Generator: Weblate 2.7-dev\n"
 
 #: ./opengever/dossier/move_items.py:148
 msgid "${copied_items} Elements were moved successfully"
@@ -34,7 +35,7 @@ msgstr "Insérer un sous-dossier"
 
 #: ./opengever/dossier/dossiertemplate/form.py:114
 msgid "Add dossier"
-msgstr ""
+msgstr "Ajouter le dossier"
 
 #: ./opengever/dossier/profiles/default/types/opengever.dossier.businesscasedossier.xml
 msgid "Business Case Dossier"
@@ -67,7 +68,7 @@ msgstr "Structure du dossier"
 #: ./opengever/dossier/profiles/default/types/opengever.dossier.dossiertemplate.xml
 #: ./opengever/dossier/upgrades/20161122103454_add_dossier_templates/types/opengever.dossier.dossiertemplate.xml
 msgid "Dossier template"
-msgstr ""
+msgstr "Modèle de dossier"
 
 #: ./opengever/dossier/resolve.py:89
 msgid "Dossiers successfully reactivated."
@@ -121,11 +122,11 @@ msgstr "Manque des champs obligatoires."
 
 #: ./opengever/dossier/profiles/default/types/opengever.dossier.businesscasedossier.xml
 msgid "Participant"
-msgstr ""
+msgstr "Participation"
 
 #: ./opengever/dossier/browser/overview.py:81
 msgid "Participants"
-msgstr "Participants"
+msgstr "Participations"
 
 #: ./opengever/dossier/browser/overview.py:74
 msgid "Participations"
@@ -137,15 +138,15 @@ msgstr "Dossier du projet"
 
 #: ./opengever/dossier/templatefolder/form.py:112
 msgid "Select document"
-msgstr ""
+msgstr "Choisir un dossier"
 
 #: ./opengever/dossier/dossiertemplate/form.py:113
 msgid "Select dossiertemplate"
-msgstr ""
+msgstr "Choisir un modèle"
 
 #: ./opengever/dossier/templatefolder/form.py:113
 msgid "Select recipient address"
-msgstr ""
+msgstr "Choisir l'adresse du destinataire"
 
 #: ./opengever/dossier/dossiertemplate/menu.py:15
 #: ./opengever/dossier/menu.py:19
@@ -194,7 +195,7 @@ msgstr "La date du dossier ${dossier} n'est pas valable."
 
 #: ./opengever/dossier/resolve.py:24
 msgid "The dossier contains active proposals."
-msgstr ""
+msgstr "Le dossier contient des propositions actives."
 
 #: ./opengever/dossier/resolve.py:70
 msgid "The dossier has been succesfully resolved."
@@ -268,7 +269,7 @@ msgstr "Continuer"
 #. Default: "Save"
 #: ./opengever/dossier/templatefolder/form.py:180
 msgid "button_save"
-msgstr ""
+msgstr "Enregistrer"
 
 #. Default: "Move"
 #: ./opengever/dossier/move_items.py:74
@@ -293,17 +294,22 @@ msgstr "Créer un document à partir d'un modèle"
 #. Default: "Create dossier from template"
 #: ./opengever/dossier/dossiertemplate/form.py:109
 msgid "create_dossier_with_template"
-msgstr ""
+msgstr "Créer un dossier à partir du modèle"
 
 #. Default: "The defined keywords will be preselected for new dossies from template."
 #: ./opengever/dossier/dossiertemplate/behaviors.py:45
 msgid "description_predefined_keywords"
 msgstr ""
+"En activant cette option, les mots-clés définis seront présélectionnés lors "
+"de la création de nouveau dossier à partir du modèle."
 
 #. Default: "The user can choose only from the defined keywords in a new dossier from template. It also prevents the user for creating new keywords"
 #: ./opengever/dossier/dossiertemplate/behaviors.py:56
 msgid "description_restrict_keywords"
 msgstr ""
+"En activant cette option lors de la création du nouveau dossier seuls les "
+"mots-clés figurant dans le modèle peuvent être choisis.<br> Ainsi, "
+"l'utilisateur ne peut pas non plus créer de nouveaux mots-clés."
 
 msgid "documents"
 msgstr "Documents"
@@ -385,7 +391,7 @@ msgstr "Classer le dossier"
 #. Default: "${title} notes / comments"
 #: ./opengever/dossier/viewlets/templates/note.pt:40
 msgid "heading_dossier_note"
-msgstr ""
+msgstr "Commentaire sur le dossier `${title}`"
 
 #. Default: "Move Items"
 #: ./opengever/dossier/move_items.py:56
@@ -424,22 +430,24 @@ msgstr "Nombre de conteneurs contenant des dossiers imprimés (volumineux)"
 #. Default: "Create a new note"
 #: ./opengever/dossier/viewlets/templates/note.pt:19
 msgid "help_text_add_note"
-msgstr ""
+msgstr "Saisir un nouveau commentaire."
 
 #. Default: "There is a note"
 #: ./opengever/dossier/viewlets/templates/note.pt:11
 msgid "help_text_edit_note"
-msgstr ""
+msgstr "Un commentaire a été saisi!"
 
 #. Default: "View note"
 #: ./opengever/dossier/viewlets/templates/note.pt:28
 msgid "help_text_view_note"
-msgstr ""
+msgstr "Afficher le commentaire."
 
 #. Default: "Recommendation for the title. Will be displayed as a help text if you create a dossier from template"
 #: ./opengever/dossier/dossiertemplate/behaviors.py:35
 msgid "help_title_help"
 msgstr ""
+"Recommandation pour le titre. Affiché comme texte d'aide lors de la saisie "
+"d'un nouveau dossier à partir du modèle."
 
 #. Default: "Participation created."
 #: ./opengever/dossier/behaviors/participation.py:161
@@ -454,12 +462,12 @@ msgstr "Participations enlevées."
 #. Default: "Add Note"
 #: ./opengever/dossier/viewlets/templates/note.pt:22
 msgid "label_add_note"
-msgstr ""
+msgstr "Saisir"
 
 #. Default: "Addable dossier templates"
 #: ./opengever/dossier/dossiertemplate/behaviors.py:107
 msgid "label_addable_dossier_templates"
-msgstr ""
+msgstr "Modèles de dossier autorisés"
 
 #. Default: "Address"
 #: ./opengever/dossier/templatefolder/form.py:272
@@ -479,7 +487,7 @@ msgstr "Annuler"
 #. Default: "Close"
 #: ./opengever/dossier/viewlets/templates/note.pt:61
 msgid "label_close"
-msgstr ""
+msgstr "Fermer"
 
 #. Default: "Comments"
 #: ./opengever/dossier/behaviors/dossier.py:87
@@ -528,12 +536,12 @@ msgstr "Documents"
 #. Default: "Create Dossier note"
 #: ./opengever/dossier/viewlets/templates/note.pt:45
 msgid "label_dossier_note_placeholder"
-msgstr ""
+msgstr "Saisir un commentaire"
 
 #. Default: "Dossier templates"
 #: ./opengever/dossier/browser/tabbed.py:122
 msgid "label_dossier_templates"
-msgstr ""
+msgstr "Modèles de dossier"
 
 #. Default: "Edit after creation"
 #: ./opengever/dossier/templatefolder/form.py:90
@@ -543,7 +551,7 @@ msgstr "Modifier après avoir créé"
 #. Default: "Edit Note"
 #: ./opengever/dossier/viewlets/templates/note.pt:14
 msgid "label_edit_note"
-msgstr ""
+msgstr "Editer"
 
 #. Default: "E-Mail"
 #: ./opengever/dossier/viewlets/byline.py:74
@@ -555,7 +563,7 @@ msgstr "Email"
 #: ./opengever/dossier/behaviors/dossier.py:82
 #: ./opengever/dossier/browser/report.py:32
 msgid "label_end"
-msgstr "Date de fin"
+msgstr "Fin"
 
 #. Default: "to"
 #: ./opengever/dossier/project_templates/byline.pt:38
@@ -597,7 +605,7 @@ msgstr "Mots-clés"
 #. Default: "Label"
 #: ./opengever/dossier/templatefolder/form.py:277
 msgid "label_label"
-msgstr ""
+msgstr "label"
 
 #. Default: "Linked Dossiers"
 #: ./opengever/dossier/browser/overview.py:92
@@ -607,7 +615,7 @@ msgstr "Dossiers liés"
 #. Default: "Mail-Address"
 #: ./opengever/dossier/templatefolder/form.py:284
 msgid "label_mail_address"
-msgstr ""
+msgstr "Adresse e-mail"
 
 #. Default: "Modified"
 #: ./opengever/dossier/dossiertemplate/form.py:100
@@ -648,17 +656,17 @@ msgstr "Participation"
 #. Default: "Phonenumber"
 #: ./opengever/dossier/templatefolder/form.py:295
 msgid "label_phonenumber"
-msgstr ""
+msgstr "Numéro de téléphone"
 
 #. Default: "Predefined Keywords"
 #: ./opengever/dossier/dossiertemplate/behaviors.py:44
 msgid "label_predefined_keywords"
-msgstr ""
+msgstr "Mots-clés prédéfinis"
 
 #. Default: "Proposal Templates"
-#: ./opengever/dossier/browser/tabbed.py:113
+#: ./opengever/dossier/browser/tabbed.py:108
 msgid "label_proposal_templates"
-msgstr ""
+msgstr "Modèles pour soumission de demande"
 
 #. Default: "Proposals"
 #: ./opengever/dossier/browser/tabbed.py:53
@@ -668,7 +676,7 @@ msgstr "Propositions"
 #. Default: "Recipient"
 #: ./opengever/dossier/templatefolder/form.py:83
 msgid "label_recipient"
-msgstr ""
+msgstr "Destinataire"
 
 #. Default: "Reference Number"
 #: ./opengever/dossier/behaviors/dossier.py:182
@@ -692,7 +700,7 @@ msgstr "Responsable"
 #. Default: "Restrict Keywords"
 #: ./opengever/dossier/dossiertemplate/behaviors.py:55
 msgid "label_restrict_keywords"
-msgstr ""
+msgstr "Restreindre la liste des mots-clés"
 
 #. Default: "Review state"
 #: ./opengever/dossier/browser/report.py:38
@@ -712,7 +720,7 @@ msgstr "Sablon Modèles"
 #. Default: "Save"
 #: ./opengever/dossier/viewlets/templates/note.pt:53
 msgid "label_save"
-msgstr ""
+msgstr "Sauvegarder"
 
 #. Default: "Sequence Number"
 #: ./opengever/dossier/viewlets/byline.py:61
@@ -722,13 +730,13 @@ msgstr "Numéro courant"
 #. Default: "Show Note"
 #: ./opengever/dossier/viewlets/templates/note.pt:31
 msgid "label_show_note"
-msgstr ""
+msgstr "Afficher"
 
 #. Default: "Opening Date"
 #: ./opengever/dossier/behaviors/dossier.py:74
 #: ./opengever/dossier/browser/report.py:29
 msgid "label_start"
-msgstr "Date début"
+msgstr "Début"
 
 #. Default: "from"
 #: ./opengever/dossier/project_templates/byline.pt:29
@@ -755,7 +763,7 @@ msgstr "Déroulements standards"
 #: ./opengever/dossier/dossiertemplate/form.py:89
 #: ./opengever/dossier/templatefolder/form.py:60
 msgid "label_template"
-msgstr ""
+msgstr "Modèle"
 
 #. Default: "Title"
 #: ./opengever/dossier/browser/report.py:26
@@ -767,7 +775,7 @@ msgstr "Titre"
 #. Default: "Title help"
 #: ./opengever/dossier/dossiertemplate/behaviors.py:34
 msgid "label_title_help"
-msgstr ""
+msgstr "Aide pour le choix du titre"
 
 #. Default: "Trash"
 #: ./opengever/dossier/browser/tabbed.py:28
@@ -788,12 +796,12 @@ msgstr "Etat"
 #. Default: "Changes not saved"
 #: ./opengever/dossier/viewlets/comment.py:28
 msgid "message_body_error"
-msgstr ""
+msgstr "Les modifications n'ont pas été sauvegardées"
 
 #. Default: "Changes saved"
 #: ./opengever/dossier/viewlets/comment.py:27
 msgid "message_body_info"
-msgstr ""
+msgstr "Modifications sauvegardées"
 
 #. Default: "The object `${title}` is not stored inside a dossier."
 #: ./opengever/dossier/browser/redirect_to_maindossier.py:16
@@ -816,6 +824,7 @@ msgstr "Toutes les tâches ne sont pas fermées"
 #: ./opengever/dossier/viewlets/comment.py:24
 msgid "note_text_confirm_abord"
 msgstr ""
+"Vous avez des modifications non sauvegardées. Voulez-vous vraiment annuler?"
 
 #: ./opengever/dossier/archive.py:36
 msgid "only resolve, set filing no later"
@@ -854,6 +863,8 @@ msgstr "Ancien numéro de référence temporaire"
 #: ./opengever/dossier/viewlets/templates/note.pt:57
 msgid "text_delete_note"
 msgstr ""
+"Supprimer le commentaire (supprime le commentaire et ferme les infos à "
+"superposition)."
 
 #: ./opengever/dossier/resolve.py:23
 msgid "the dossier start date is missing."
@@ -867,10 +878,9 @@ msgstr "Périmé"
 #. Default: "Journal of dossier ${title}, ${timestamp}"
 #: ./opengever/dossier/resolve.py:190
 msgid "title_dossier_journal"
-msgstr ""
+msgstr "Journal du dossier ${title}, ${timestamp}"
 
 #. Default: "You didn't select any participants."
 #: ./opengever/dossier/behaviors/participation.py:196
 msgid "warning_no_participants_selected"
 msgstr "Vous n'avez sélectionné aucune participation."
-
