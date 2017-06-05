@@ -2,13 +2,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2017-04-27 11:21+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2017-06-04 16:13+0000\n"
+"Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
+"gever/opengever-quota/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 2.13.1\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
@@ -16,30 +19,31 @@ msgstr ""
 
 #: ./opengever/quota/browser/templates/usage.pt:35
 msgid "Back"
-msgstr ""
+msgstr "Retour"
 
 #: ./opengever/quota/sizequota.py:87
 msgid "Can not add this item because it exhausts the quota."
 msgstr ""
+"Ce contenu ne peut pas être ajouté, parce que cela mènerait à un dépassement "
+"de l'espace de mémoire à votre disposition."
 
 #: ./opengever/quota/browser/templates/usage.pt:27
 msgid "Hard limit"
-msgstr ""
+msgstr "limite stricte"
 
 #: ./opengever/quota/browser/templates/usage.pt:23
 msgid "Soft limit"
-msgstr ""
+msgstr "limite non stricte"
 
 #: ./opengever/quota/browser/templates/usage.pt:19
 msgid "Usage"
-msgstr ""
+msgstr "Usage"
 
 #: ./opengever/quota/browser/usage.py:18
 msgid "unlimited"
-msgstr ""
+msgstr "illimité"
 
 #. Default: "Usage of «${title}»"
 #: ./opengever/quota/browser/templates/usage.pt:12
 msgid "usage_title"
-msgstr ""
-
+msgstr "Usage en «${title}»"

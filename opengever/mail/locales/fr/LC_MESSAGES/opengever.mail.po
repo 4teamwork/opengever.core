@@ -150,8 +150,10 @@ msgstr "N'effacer aucun fichier attaché"
 msgid "label_delete_action_selected"
 msgstr "Effacer tous les fichiers attachés séléctionnés"
 
-#. Default: "Documents"
-#: ./opengever/mail/browser/send_document.py:93
+#. Default: "Attachments"
+#: ./opengever/mail/browser/mail.py:96
+#: ./opengever/mail/browser/send_document.py:95
+#: ./opengever/mail/browser/templates/previewtab.pt:48
 msgid "label_documents"
 msgstr "Fichiers attachés"
 
@@ -202,4 +204,3 @@ msgstr "Email"
 #: ./opengever/mail/browser/send_document.py:78
 msgid "receiver"
 msgstr "Destinataire"
-

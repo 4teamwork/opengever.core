@@ -1,20 +1,21 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-05-03 12:23+0000\n"
-"PO-Revision-Date: 2016-09-20 21:24+0000\n"
+"POT-Creation-Date: 2017-04-27 11:21+0000\n"
+"PO-Revision-Date: 2017-06-04 17:04+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
-"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-task/fr/>\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
+"gever/opengever-task/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 2.13.1\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
-"Language: fr\n"
-"X-Generator: Weblate 2.7-dev\n"
 
 #: ./opengever/task/browser/close.py:254
 msgid "${num} documents were copied."
@@ -186,7 +187,7 @@ msgstr "Continuer"
 #: ./opengever/task/browser/accept/newdossier.py:276
 #: ./opengever/task/browser/close.py:203
 msgid "button_save"
-msgstr "Sauvegarder"
+msgstr "Enregistrer"
 
 #. Default: "Cancel"
 #: ./opengever/task/response.py:177
@@ -567,7 +568,7 @@ msgstr "Nouvelle tâche ajoutée par ${user}"
 #. Default: "Task commented"
 #: ./opengever/task/response_description.py:333
 msgid "label_task_commented"
-msgstr ""
+msgstr "La tâche a été commentée"
 
 #. Default: "Task title"
 #: ./opengever/task/activities.py:56
@@ -620,7 +621,7 @@ msgstr "Le délai a été modifié avec succès."
 #. Default: "Commented by ${user}"
 #: ./opengever/task/response_description.py:329
 msgid "msg_task_commented"
-msgstr ""
+msgstr "Commenté par ${user}"
 
 msgid "mytasks"
 msgstr "Mes tâches"
@@ -900,4 +901,3 @@ msgstr "Document copié de la tâche (tâche finie)"
 #: ./opengever/task/browser/complete.py:292
 msgid "version_message_resolved_task"
 msgstr "Document copié de la tâche (tâche achevée)"
-
