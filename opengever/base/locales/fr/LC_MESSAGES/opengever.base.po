@@ -9,8 +9,8 @@ msgstr ""
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-base/fr/>\n"
 "POT-Creation-Date: 2017-04-27 11:20+0000\n"
-"PO-Revision-Date: 2017-06-03 20:44+0000\n"
-"Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
+"PO-Revision-Date: 2017-06-05 14:47+0000\n"
+"Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
 "gever/opengever-base/fr/>\n"
 "Language: fr\n"
@@ -243,7 +243,6 @@ msgstr "Statut public"
 
 #. Default: "Public trial statement"
 #: ./opengever/base/behaviors/classification.py:93
-#, fuzzy
 msgid "label_public_trial_statement"
 msgstr "Justification pour le retrait du statut public"
 
