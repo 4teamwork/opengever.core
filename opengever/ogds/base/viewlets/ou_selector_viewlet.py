@@ -1,9 +1,12 @@
 from five import grok
 from opengever.ogds.base.utils import get_ou_selector
 from opengever.ogds.base.utils import ogds_service
+from plone.app.caching.interfaces import IETagValue
 from plone.app.layout.viewlets import common
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from sqlalchemy.exc import OperationalError
+from zope.component import adapts
+from zope.interface import implements
 from zope.interface import Interface
 import logging
 
@@ -47,3 +50,15 @@ class ChangeOrgUnitView(grok.View):
             get_ou_selector().set_current_unit(unit_id)
 
         return self.request.RESPONSE.redirect(self.context.absolute_url())
+
+
+class OrgUnitSelectorETagValue(object):
+    implements(IETagValue)
+    adapts(Interface, Interface)
+
+    def __init__(self, published, request):
+        self.published = published
+        self.request = request
+
+    def __call__(self):
+        return get_ou_selector().get_current_unit().id()

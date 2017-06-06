@@ -2,7 +2,9 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.testing import FunctionalTestCase
+from plone.app.caching.interfaces import IETagValue
 from plone.app.testing import TEST_USER_ID
+from zope.component import getMultiAdapter
 
 
 class TestOrgUnitSelectorViewletIsAvailable(FunctionalTestCase):
@@ -142,3 +144,19 @@ class TestOrgUnitSelectorViewlet(FunctionalTestCase):
         active_unit = browser.css('.orgunitMenu dt a')
         self.assertEquals(
             ['Client 4'], active_unit.text)
+
+    def test_etag_value_returns_current_org_unit_id(self):
+        view = self.repo_root.unrestrictedTraverse('@@view')
+        self.assertEquals('client1', self.get_etag_value_for(view))
+
+        self.portal.REQUEST['unit_id'] = 'client4'
+        self.portal.unrestrictedTraverse('change_org_unit')()
+
+        view = self.repo_root.unrestrictedTraverse('@@view')
+        self.assertEquals('client4', self.get_etag_value_for(view))
+
+    def get_etag_value_for(self, view):
+        adapter = getMultiAdapter((view, self.request),
+                                  IETagValue,
+                                  name='ouselector')
+        return adapter()

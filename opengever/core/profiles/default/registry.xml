@@ -130,6 +130,7 @@
     <value purge="False">
       <element>tabbedview</element>
       <element>quotawarning</element>
+      <element>ouselector</element>
     </value>
   </record>
 
@@ -137,6 +138,7 @@
     <value purge="False">
       <element>tabbedview</element>
       <element>quotawarning</element>
+      <element>ouselector</element>
     </value>
   </record>
 
