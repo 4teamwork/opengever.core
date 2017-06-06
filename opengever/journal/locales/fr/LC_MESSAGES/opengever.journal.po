@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2017-04-27 11:21+0000\n"
-"PO-Revision-Date: 2017-05-01 15:51+0000\n"
-"Last-Translator: Lukas Graf <lukas.graf@4teamwork.ch>\n"
+"PO-Revision-Date: 2017-06-04 12:59+0000\n"
+"Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
 "gever/opengever-journal/fr/>\n"
 "Language: fr\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2.7-dev\n"
+"X-Generator: Weblate 2.13.1\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
@@ -31,7 +31,7 @@ msgstr "Modifier par"
 #: ./opengever/journal/form.py:54
 #: ./opengever/journal/templates/journal_selection.pt:2
 msgid "label_add_journal_entry"
-msgstr ""
+msgstr "Ajouter une entrée de journal"
 
 #. Default: "Attachments deleted: ${filenames}"
 #: ./opengever/journal/handlers.py:337
@@ -41,7 +41,7 @@ msgstr "Fichiers attachés effacés: ${filenames}"
 #. Default: "Category"
 #: ./opengever/journal/form.py:16
 msgid "label_category"
-msgstr ""
+msgstr "Catégorie"
 
 #. Default: "Comment"
 #: ./opengever/journal/form.py:22
@@ -57,7 +57,7 @@ msgstr "Commentaire"
 #: ./opengever/journal/form.py:27
 #: ./opengever/journal/templates/journal_references.pt:3
 msgid "label_contacts"
-msgstr ""
+msgstr "Contacts"
 
 #. Default: "DocProperties updated."
 #: ./opengever/journal/handlers.py:326
@@ -72,7 +72,7 @@ msgstr "Document ajouté: ${title}"
 #. Default: "Document attached to email via OfficeConnector"
 #: ./opengever/journal/handlers.py:807
 msgid "label_document_attached"
-msgstr ""
+msgstr "Document envoyé par le programme de messagerie"
 
 #. Default: "Document checked in"
 #: ./opengever/journal/handlers.py:467
@@ -117,7 +117,7 @@ msgstr "Fichier du document remis à la version ${version_id}"
 #. Default: "Document in dossier attached to email via OfficeConnector"
 #: ./opengever/journal/handlers.py:813
 msgid "label_document_in_dossier_attached"
-msgstr ""
+msgstr "Document du dossier envoyé par le programme de messagerie."
 
 #. Default: "Changed metadata"
 #: ./opengever/journal/handlers.py:426
@@ -157,7 +157,7 @@ msgstr "Annexes:  ${documents} | Récepteur ${receiver} | Message ${message}"
 #. Default: "Document included in a zip export: ${title}"
 #: ./opengever/journal/handlers.py:783
 msgid "label_document_zipped"
-msgstr ""
+msgstr "Document ajouté à l'export ZIP: ${title}"
 
 #. Default: "Documents"
 #: ./opengever/journal/templates/journal_references.pt:17
@@ -177,7 +177,7 @@ msgstr "Dossier modifié: ${title}"
 #. Default: "Dossier included in a zip export: ${title}"
 #: ./opengever/journal/handlers.py:770
 msgid "label_dossier_zipped"
-msgstr ""
+msgstr "Dossier ajouté à l'export ZIP: ${title}"
 
 #. Default: "Download copy"
 #: ./opengever/journal/handlers.py:508
@@ -217,7 +217,7 @@ msgstr "Rôles à l'intérne pour ${repository} modifiés."
 #. Default: "Manual entry: ${category}"
 #: ./opengever/journal/entry.py:81
 msgid "label_manual_journal_entry"
-msgstr ""
+msgstr "Entrée manuelle: ${category}"
 
 #. Default: "Object cut: ${title}"
 #: ./opengever/journal/handlers.py:754
@@ -252,12 +252,12 @@ msgstr "Référence ${prefix} dans ${repository} a été débloqué."
 #. Default: "References"
 #: ./opengever/journal/tab.py:84
 msgid "label_references"
-msgstr ""
+msgstr "Références"
 
 #. Default: "Related Documents"
 #: ./opengever/journal/form.py:34
 msgid "label_related_documents"
-msgstr ""
+msgstr "Références documentaires"
 
 #. Default: "Object restored: ${title}"
 #: ./opengever/journal/handlers.py:631

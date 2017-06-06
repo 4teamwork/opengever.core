@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2017-04-27 11:21+0000\n"
-"PO-Revision-Date: 2017-06-04 17:00+0000\n"
+"PO-Revision-Date: 2017-06-04 17:01+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
 "gever/opengever-tabbedview/fr/>\n"
@@ -24,7 +24,7 @@ msgstr "Actif"
 
 #: ./opengever/tabbedview/browser/tabs_templates/generic.pt:13
 msgid "All visible entries chosen <a href=\"#\">x</a>"
-msgstr "Choix de toutes les entrées visibles"
+msgstr "Choix de toutes les entrées visibles <a href=\"#\">x</a>"
 
 msgid "Choose:"
 msgstr "Choix"
