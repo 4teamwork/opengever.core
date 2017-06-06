@@ -60,13 +60,21 @@ def avoid_profile_reinstallation(event):
     if key not in annotations:
         annotations[key] = []
 
-    if profile.startswith('opengever.') or profile.startswith('ftw.'):
+    if should_prevent_duplicate_installation(profile):
         assert profile not in annotations[key], \
             'Profile {!r} should not be installed twice.'.format(profile)
     elif profile in annotations[key]:
         LOG.warning('{!r} installed twice'.format(profile))
 
     annotations[key].append(profile)
+
+
+def should_prevent_duplicate_installation(profile):
+    return (
+        profile.startswith('opengever.') or
+        profile.startswith('ftw.') or
+        profile.startswith('plonetheme.teamraum')
+    )
 
 
 def installed(site):
