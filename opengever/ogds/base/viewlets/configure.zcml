@@ -9,4 +9,9 @@
       permission="zope2.View"
       />
 
+  <adapter
+      factory=".ou_selector_viewlet.OrgUnitSelectorETagValue"
+      name="ouselector"
+      />
+
 </configure>
