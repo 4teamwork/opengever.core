@@ -49,14 +49,14 @@ FORBIDDEN_PROFILES = (
     'opengever.policy.base:default')
 
 
-def awoid_profile_reinstallation(event):
+def avoid_profile_reinstallation(event):
     profile = re.sub('^profile-', '', event.profile_id)
     assert profile not in FORBIDDEN_PROFILES, \
         'It is not allowed to install the profile {!r}.'.format(profile)
 
     request = getSite().REQUEST
     annotations = IAnnotations(request)
-    key = 'opengever.core:awoid_profile_reinstallation'
+    key = 'opengever.core:avoid_profile_reinstallation'
     if key not in annotations:
         annotations[key] = []
 

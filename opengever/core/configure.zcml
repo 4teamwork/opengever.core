@@ -28,7 +28,7 @@
 
   <subscriber
       for="Products.GenericSetup.interfaces.IBeforeProfileImportEvent"
-      handler=".hooks.awoid_profile_reinstallation"
+      handler=".hooks.avoid_profile_reinstallation"
       />
 
 </configure>
