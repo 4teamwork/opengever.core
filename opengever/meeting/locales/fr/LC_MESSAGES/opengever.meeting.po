@@ -194,7 +194,6 @@ msgid "Include decision"
 msgstr "Insérer une décision"
 
 #: ./opengever/meeting/browser/meetings/excerpt.py:64
-#, fuzzy
 msgid "Include disclose to"
 msgstr "Insérer \"à l'information de\""
 
@@ -224,7 +223,6 @@ msgstr "Répertoire d'archivage"
 
 #: ./opengever/meeting/profiles/default/types/opengever.meeting.meetingdossier.xml
 #: ./opengever/meeting/upgrades/profiles/4604/types/opengever.meeting.meetingdossier.xml
-#, fuzzy
 msgid "Meeting Dossier"
 msgstr "Dossier de réunion"
 
@@ -255,7 +253,6 @@ msgstr ""
 "clôture. Les actions suivantes seront exécutées lors de la clôture:"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:288
-#, fuzzy
 msgid "Order"
 msgstr "Tri"
 
@@ -314,7 +311,6 @@ msgstr "Modèle du protocole"
 
 #: ./opengever/meeting/profiles/default/types/opengever.meeting.sablontemplate.xml
 #: ./opengever/meeting/upgrades/profiles/4301/types/opengever.meeting.sablontemplate.xml
-#, fuzzy
 msgid "Sablon Template"
 msgstr "Modèle Sablon"
 
