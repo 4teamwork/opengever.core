@@ -1,6 +1,5 @@
 <metadata>
   <dependencies>
-    <dependency>profile-plonetheme.teamraum:gever</dependency>
     <dependency>profile-ftw.tika:default</dependency>
   </dependencies>
 </metadata>

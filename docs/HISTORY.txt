@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Implement and enable the org unit selector etag adapter. [phgross]
+- Hard-code base profiles to be installed for every deployment. [deiferni]
 - Add api_group deployment configuration option. [deiferni]
 - Merge Generic Setup profiles into a new opengever.core:default profile. [phgross]
 - Replace the AutocompleteField(Multi)Widget with the KeywordWidget. This makes the AutocompleteWidget obsolete. [mathias.leimgruber]
