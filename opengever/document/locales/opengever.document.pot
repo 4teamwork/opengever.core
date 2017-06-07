@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-05-17 11:42+0000\n"
+"POT-Creation-Date: 2017-06-07 12:34+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,6 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.document\n"
 
-#: ./opengever/document/profiles/default/actions.xml
 #: ./opengever/document/upgrades/20170322142153_add_office_connector_multi_attach_action_to_documents/actions.xml
 #: ./opengever/document/upgrades/20170424163920_adjust_sort_order_of_actions/actions.xml
 msgid "Attach selection"
@@ -25,10 +24,6 @@ msgstr ""
 
 #: ./opengever/document/browser/edit.py:104
 msgid "Can't edit the document at moment, beacuse it's locked."
-msgstr ""
-
-#: ./opengever/document/profiles/default/actions.xml
-msgid "Cancel"
 msgstr ""
 
 #: ./opengever/document/checkout/cancel.py:89
@@ -45,19 +40,13 @@ msgid "Checked out: ${title}"
 msgstr ""
 
 #: ./opengever/document/browser/templates/macros.pt:66
-#: ./opengever/document/profiles/default/actions.xml
 #: ./opengever/document/upgrades/profiles/4000/actions.xml
 msgid "Checkin with comment"
 msgstr ""
 
 #: ./opengever/document/browser/templates/macros.pt:63
-#: ./opengever/document/profiles/default/actions.xml
 #: ./opengever/document/upgrades/profiles/4000/actions.xml
 msgid "Checkin without comment"
-msgstr ""
-
-#: ./opengever/document/profiles/default/actions.xml
-msgid "Checkout"
 msgstr ""
 
 #: ./opengever/document/checkout/cancel.py:81
@@ -85,23 +74,14 @@ msgstr ""
 msgid "Could not generate the report"
 msgstr ""
 
-#: ./opengever/document/profiles/default/actions.xml
-msgid "Create Task"
-msgstr ""
-
 #: ./opengever/document/browser/overview.py:209
 msgid "Current version: ${version}"
-msgstr ""
-
-#: ./opengever/document/profiles/default/types/opengever.document.document.xml
-msgid "Document"
 msgstr ""
 
 #: ./opengever/document/browser/templates/downloadconfirmation.pt:22
 msgid "Don't show this message again."
 msgstr ""
 
-#: ./opengever/document/profiles/default/actions.xml
 #: ./opengever/document/upgrades/20161111090446_add_document_export_actions/actions.xml
 msgid "Export selection"
 msgstr ""
@@ -115,11 +95,6 @@ msgstr ""
 msgid "Reverted file to version ${version_id}."
 msgstr ""
 
-#: ./opengever/document/profiles/default/actions.xml
-msgid "Send as email"
-msgstr ""
-
-#: ./opengever/document/profiles/default/actions.xml
 #: ./opengever/document/upgrades/profiles/4200/actions.xml
 msgid "Submit additional documents"
 msgstr ""
@@ -569,12 +544,10 @@ msgstr ""
 msgid "warning_download_confirmation"
 msgstr ""
 
-#: ./opengever/document/profiles/default/actions.xml
 #: ./opengever/document/upgrades/profiles/4000/actions.xml
 msgid "with comment"
 msgstr ""
 
-#: ./opengever/document/profiles/default/actions.xml
 #: ./opengever/document/upgrades/profiles/4000/actions.xml
 msgid "without comment"
 msgstr ""

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-04-27 11:21+0000\n"
+"POT-Creation-Date: 2017-06-07 12:34+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,18 +16,6 @@ msgstr ""
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.latex\n"
-
-#: ./opengever/latex/profiles/default/actions.xml
-msgid "Cover (PDF)"
-msgstr ""
-
-#: ./opengever/latex/profiles/default/actions.xml
-msgid "Print details (PDF)"
-msgstr ""
-
-#: ./opengever/latex/profiles/default/actions.xml
-msgid "Print selection (PDF)"
-msgstr ""
 
 #. Default: "Deadline"
 #: ./opengever/latex/listing.py:273

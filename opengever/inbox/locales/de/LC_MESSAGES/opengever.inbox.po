@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-04-27 11:21+0000\n"
+"POT-Creation-Date: 2017-06-07 12:34+0000\n"
 "PO-Revision-Date: 2015-03-30 08:56+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,27 +18,13 @@ msgstr ""
 msgid "Documents"
 msgstr "Dokumente"
 
-#: ./opengever/inbox/profiles/default/actions.xml
-msgid "Forward"
-msgstr "Weiterleiten"
-
-#: ./opengever/inbox/profiles/default/types/opengever.inbox.forwarding.xml
-msgid "Forwarding"
-msgstr "Weiterleitung"
-
-#: ./opengever/inbox/profiles/default/types/opengever.inbox.inbox.xml
 #: ./opengever/inbox/upgrades/profiles/2603/types/opengever.inbox.inbox.xml
 msgid "Inbox"
 msgstr "Eingangskorb"
 
-#: ./opengever/inbox/profiles/default/types/opengever.inbox.container.xml
 #: ./opengever/inbox/upgrades/profiles/4003/types/opengever.inbox.container.xml
 msgid "Inbox Container"
 msgstr "Eingangskorb Ordner"
-
-#: ./opengever/inbox/profiles/default/types/opengever.inbox.yearfolder.xml
-msgid "YearFolder"
-msgstr "Jahresordner"
 
 #. Default: "Close"
 #: ./opengever/inbox/browser/close.py:37
@@ -51,7 +37,7 @@ msgid "current_inbox_not_available"
 msgstr "Sie sind nicht dazu berechtigt auf den Eingangskorb der/des ${current_org_unit} zuzugreifen."
 
 #. Default: "Error: Please select at least one document to forward."
-#: ./opengever/inbox/forwarding.py:116
+#: ./opengever/inbox/forwarding.py:118
 msgid "error_no_document_selected"
 msgstr "Fehler: Bitte wählen Sie mindestens ein Dokument aus das weitergeleitet werden soll."
 
@@ -61,7 +47,7 @@ msgid "fieldset_common"
 msgstr "Allgemein"
 
 #. Default: "Forwarding"
-#: ./opengever/inbox/forwarding.py:87
+#: ./opengever/inbox/forwarding.py:89
 msgid "forwarding_task_type"
 msgstr "Weiterleitung"
 
@@ -69,7 +55,7 @@ msgstr "Weiterleitung"
 msgid "help_inbox_group"
 msgstr "Diese Gruppe wird berechtigt, wenn dem Eingangskorb eine Aufgabe zugewiesen wird."
 
-#: ./opengever/inbox/forwarding.py:56
+#: ./opengever/inbox/forwarding.py:59
 msgid "help_responsible"
 msgstr "Wählen Sie die verantwortliche Person bzw. den Eingangskorb des oben gewählten Mandanten aus."
 
@@ -104,7 +90,7 @@ msgid "label_refuse_forwarding"
 msgstr "Weiterleitung ablehnen"
 
 #. Default: "Responsible"
-#: ./opengever/inbox/forwarding.py:55
+#: ./opengever/inbox/forwarding.py:58
 msgid "label_responsible"
 msgstr "Auftragnehmer"
 
@@ -114,7 +100,7 @@ msgid "msg_forwarding_added"
 msgstr "Neue Weiterleitung hinzugefügt durch ${user}"
 
 #. Default: "Assign Forwarding"
-#: ./opengever/inbox/browser/assign.py:35
+#: ./opengever/inbox/browser/assign.py:39
 msgid "title_assign_forwarding"
 msgstr "Weiterleitung weiterleiten"
 

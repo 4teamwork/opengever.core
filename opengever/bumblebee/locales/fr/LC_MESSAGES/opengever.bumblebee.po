@@ -43,4 +43,3 @@ msgstr "Reculer le document"
 #: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:40
 msgid "warning_on_versioned_context"
 msgstr "Vous regardez un fichier versionné."
-

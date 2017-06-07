@@ -1,23 +1,21 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-04-27 11:21+0000\n"
+"POT-Creation-Date: 2017-06-07 12:34+0000\n"
 "PO-Revision-Date: 2017-06-04 13:05+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
-"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
-"gever/opengever-ogds-base/fr/>\n"
-"Language: fr\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-ogds-base/fr/>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2.13.1\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
+"Language: fr\n"
+"X-Generator: Weblate 2.13.1\n"
 
-#: ./opengever/ogds/base/profiles/default/actions.xml
 #: ./opengever/ogds/base/upgrades/profiles/4002/actions.xml
 msgid "Toggle orgunit selector"
 msgstr "commuter l'agent public"
@@ -34,6 +32,7 @@ msgstr "Oui"
 
 #. Default: "Inbox: ${client}"
 #: ./opengever/ogds/base/actor.py:143
+#: ./opengever/ogds/base/sources.py:71
 msgid "inbox_label"
 msgstr "Boîte de réception"
 
@@ -46,11 +45,6 @@ msgstr "Actif"
 #: ./opengever/ogds/base/browser/userdetails_templates/userdetails.pt:103
 msgid "label_address"
 msgstr "Adresse"
-
-#. Default: "All"
-#: ./opengever/ogds/base/vocabularies.py:459
-msgid "label_all"
-msgstr ""
 
 #. Default: "Department:"
 #: ./opengever/ogds/base/browser/userdetails_templates/userdetails.pt:59
@@ -116,3 +110,4 @@ msgstr "Site Internet"
 #: ./opengever/ogds/base/browser/userdetails_templates/userdetails.pt:22
 msgid "link_all_users"
 msgstr "Afficher tous les utilisateurs"
+

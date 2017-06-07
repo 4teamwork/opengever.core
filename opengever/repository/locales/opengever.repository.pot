@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-04-27 11:21+0000\n"
+"POT-Creation-Date: 2017-06-07 12:34+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,31 +21,21 @@ msgstr ""
 msgid "In use"
 msgstr ""
 
-#: ./opengever/repository/profiles/default/actions.xml
 #: ./opengever/repository/upgrades/profiles/2601/actions.xml
 msgid "Prefix Manager"
 msgstr ""
 
-#: ./opengever/repository/profiles/default/types/opengever.repository.repositoryfolder.xml
-msgid "RepositoryFolder"
-msgstr ""
-
-#: ./opengever/repository/profiles/default/types/opengever.repository.repositoryroot.xml
-msgid "RepositoryRoot"
-msgstr ""
-
-#: ./opengever/repository/profiles/default/actions.xml
 #: ./opengever/repository/upgrades/profiles/2601/actions.xml
 msgid "Unlock unused repository prefixes."
 msgstr ""
 
 #. Default: "Allow add businesscase dossier"
-#: ./opengever/repository/repositoryfolder.py:89
+#: ./opengever/repository/repositoryfolder.py:84
 msgid "allow_add_businesscase_dossier"
 msgstr ""
 
 #. Default: "Choose if the user is allowed to add businesscase dossiers or only dossiers from a  dossiertemplate."
-#: ./opengever/repository/repositoryfolder.py:91
+#: ./opengever/repository/repositoryfolder.py:86
 msgid "description_allow_add_businesscase_dossier"
 msgstr ""
 
@@ -62,22 +52,22 @@ msgstr ""
 #. Default: "Common"
 #: ./opengever/repository/behaviors/referenceprefix.py:32
 #: ./opengever/repository/behaviors/responsibleorg.py:12
-#: ./opengever/repository/repositoryfolder.py:31
+#: ./opengever/repository/repositoryfolder.py:26
 msgid "fieldset_common"
 msgstr ""
 
 #. Default: "Select all additional dossier types which should be addable in this repository folder."
-#: ./opengever/repository/repositoryfolder.py:81
+#: ./opengever/repository/repositoryfolder.py:76
 msgid "help_addable_dossier_types"
 msgstr ""
 
 #. Default: "A short summary of the content."
-#: ./opengever/repository/repositoryfolder.py:44
+#: ./opengever/repository/repositoryfolder.py:39
 msgid "help_description"
 msgstr ""
 
 #. Default: "Addable dossier types"
-#: ./opengever/repository/repositoryfolder.py:79
+#: ./opengever/repository/repositoryfolder.py:74
 msgid "label_addable_dossier_types"
 msgstr ""
 
@@ -92,17 +82,17 @@ msgid "label_delete_repository"
 msgstr ""
 
 #. Default: "Description"
-#: ./opengever/repository/repositoryfolder.py:43
+#: ./opengever/repository/repositoryfolder.py:38
 msgid "label_description"
 msgstr ""
 
 #. Default: "Former reference"
-#: ./opengever/repository/repositoryfolder.py:73
+#: ./opengever/repository/repositoryfolder.py:68
 msgid "label_former_reference"
 msgstr ""
 
 #. Default: "Location"
-#: ./opengever/repository/repositoryfolder.py:61
+#: ./opengever/repository/repositoryfolder.py:56
 msgid "label_location"
 msgstr ""
 
@@ -112,7 +102,7 @@ msgid "label_reference_number_prefix"
 msgstr ""
 
 #. Default: "Referenced activity"
-#: ./opengever/repository/repositoryfolder.py:66
+#: ./opengever/repository/repositoryfolder.py:61
 msgid "label_referenced_activity"
 msgstr ""
 
@@ -122,13 +112,13 @@ msgid "label_successfully_deleted"
 msgstr ""
 
 #. Default: "Valid from"
-#: ./opengever/repository/repositoryfolder.py:51
+#: ./opengever/repository/repositoryfolder.py:46
 #: ./opengever/repository/repositoryroot.py:22
 msgid "label_valid_from"
 msgstr ""
 
 #. Default: "Valid until"
-#: ./opengever/repository/repositoryfolder.py:56
+#: ./opengever/repository/repositoryfolder.py:51
 #: ./opengever/repository/repositoryroot.py:27
 msgid "label_valid_until"
 msgstr ""
@@ -154,7 +144,7 @@ msgid "msg_delete_confirmation"
 msgstr ""
 
 #. Default: "You are adding a repositoryfolder to a leafnode which already contains dossiers. This is only temporarily allowed and all dossiers must be moved into a new leafnode afterwards."
-#: ./opengever/repository/repositoryfolder.py:212
+#: ./opengever/repository/repositoryfolder.py:142
 msgid "msg_leafnode_warning"
 msgstr ""
 

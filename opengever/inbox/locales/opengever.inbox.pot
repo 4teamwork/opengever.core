@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-04-27 11:21+0000\n"
+"POT-Creation-Date: 2017-06-07 12:34+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,26 +21,12 @@ msgstr ""
 msgid "Documents"
 msgstr ""
 
-#: ./opengever/inbox/profiles/default/actions.xml
-msgid "Forward"
-msgstr ""
-
-#: ./opengever/inbox/profiles/default/types/opengever.inbox.forwarding.xml
-msgid "Forwarding"
-msgstr ""
-
-#: ./opengever/inbox/profiles/default/types/opengever.inbox.inbox.xml
 #: ./opengever/inbox/upgrades/profiles/2603/types/opengever.inbox.inbox.xml
 msgid "Inbox"
 msgstr ""
 
-#: ./opengever/inbox/profiles/default/types/opengever.inbox.container.xml
 #: ./opengever/inbox/upgrades/profiles/4003/types/opengever.inbox.container.xml
 msgid "Inbox Container"
-msgstr ""
-
-#: ./opengever/inbox/profiles/default/types/opengever.inbox.yearfolder.xml
-msgid "YearFolder"
 msgstr ""
 
 #. Default: "Close"
@@ -54,7 +40,7 @@ msgid "current_inbox_not_available"
 msgstr ""
 
 #. Default: "Error: Please select at least one document to forward."
-#: ./opengever/inbox/forwarding.py:116
+#: ./opengever/inbox/forwarding.py:118
 msgid "error_no_document_selected"
 msgstr ""
 
@@ -64,7 +50,7 @@ msgid "fieldset_common"
 msgstr ""
 
 #. Default: "Forwarding"
-#: ./opengever/inbox/forwarding.py:87
+#: ./opengever/inbox/forwarding.py:89
 msgid "forwarding_task_type"
 msgstr ""
 
@@ -72,7 +58,7 @@ msgstr ""
 msgid "help_inbox_group"
 msgstr ""
 
-#: ./opengever/inbox/forwarding.py:56
+#: ./opengever/inbox/forwarding.py:59
 msgid "help_responsible"
 msgstr ""
 
@@ -107,7 +93,7 @@ msgid "label_refuse_forwarding"
 msgstr ""
 
 #. Default: "Responsible"
-#: ./opengever/inbox/forwarding.py:55
+#: ./opengever/inbox/forwarding.py:58
 msgid "label_responsible"
 msgstr ""
 
@@ -117,7 +103,7 @@ msgid "msg_forwarding_added"
 msgstr ""
 
 #. Default: "Assign Forwarding"
-#: ./opengever/inbox/browser/assign.py:35
+#: ./opengever/inbox/browser/assign.py:39
 msgid "title_assign_forwarding"
 msgstr ""
 

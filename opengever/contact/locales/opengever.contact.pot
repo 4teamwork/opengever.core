@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-04-27 11:21+0000\n"
+"POT-Creation-Date: 2017-06-07 12:34+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,16 +23,7 @@ msgid "Add Person"
 msgstr ""
 
 #: ./opengever/contact/contact.py:187
-#: ./opengever/contact/profiles/default/types/opengever.contact.contact.xml
 msgid "Contact"
-msgstr ""
-
-#: ./opengever/contact/profiles/default/types/opengever.contact.contactfolder.xml
-msgid "Contact Folder"
-msgstr ""
-
-#: ./opengever/contact/profiles/default/types/opengever.contact.contactfolder.xml
-msgid "ContactFolder"
 msgstr ""
 
 #: ./opengever/contact/browser/templates/person_edit.pt:26
@@ -55,7 +46,7 @@ msgstr ""
 msgid "Label"
 msgstr ""
 
-#: ./opengever/contact/browser/participation_forms.py:121
+#: ./opengever/contact/browser/participation_forms.py:125
 msgid "Remove"
 msgstr ""
 
@@ -147,7 +138,7 @@ msgid "info_mailaddress_created"
 msgstr ""
 
 #. Default: "Participation removed"
-#: ./opengever/contact/browser/participation_forms.py:130
+#: ./opengever/contact/browser/participation_forms.py:134
 msgid "info_participation_removed"
 msgstr ""
 
@@ -170,7 +161,7 @@ msgid "label_active"
 msgstr ""
 
 #. Default: "Add Participation"
-#: ./opengever/contact/browser/participation_forms.py:43
+#: ./opengever/contact/browser/participation_forms.py:44
 msgid "label_add_participation"
 msgstr ""
 
@@ -219,7 +210,7 @@ msgid "label_archived_phone_numbers"
 msgstr ""
 
 #. Default: "Cancel"
-#: ./opengever/contact/browser/participation_forms.py:136
+#: ./opengever/contact/browser/participation_forms.py:140
 #: ./opengever/contact/browser/templates/person_edit.pt:28
 msgid "label_cancel"
 msgstr ""
@@ -235,7 +226,7 @@ msgid "label_company"
 msgstr ""
 
 #. Default: "Contact"
-#: ./opengever/contact/browser/participation_forms.py:24
+#: ./opengever/contact/browser/participation_forms.py:25
 msgid "label_contact"
 msgstr ""
 
@@ -261,7 +252,7 @@ msgid "label_description"
 msgstr ""
 
 #. Default: "Edit ${title}"
-#: ./opengever/contact/browser/participation_forms.py:83
+#: ./opengever/contact/browser/participation_forms.py:87
 msgid "label_edit_participation"
 msgstr ""
 
@@ -349,7 +340,7 @@ msgid "label_organizations"
 msgstr ""
 
 #. Default: "Participation of ${contact_title}"
-#: ./opengever/contact/models/participation.py:101
+#: ./opengever/contact/models/participation.py:54
 msgid "label_participation_of"
 msgstr ""
 
@@ -397,12 +388,12 @@ msgid "label_picture"
 msgstr ""
 
 #. Default: "Remove ${title}"
-#: ./opengever/contact/browser/participation_forms.py:117
+#: ./opengever/contact/browser/participation_forms.py:121
 msgid "label_remove_participation"
 msgstr ""
 
 #. Default: "Roles"
-#: ./opengever/contact/browser/participation_forms.py:30
+#: ./opengever/contact/browser/participation_forms.py:31
 msgid "label_roles"
 msgstr ""
 
@@ -455,7 +446,7 @@ msgid "mail_address_deleted"
 msgstr ""
 
 #. Default: "There already exists a participation for this contact."
-#: ./opengever/contact/browser/participation_forms.py:60
+#: ./opengever/contact/browser/participation_forms.py:64
 msgid "msg_participation_already_exists"
 msgstr ""
 

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-04-27 11:21+0000\n"
+"POT-Creation-Date: 2017-06-07 12:34+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,14 +16,6 @@ msgstr ""
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.disposition\n"
-
-#: ./opengever/disposition/profiles/default/actions.xml
-msgid "Create Disposition"
-msgstr ""
-
-#: ./opengever/disposition/profiles/default/types/opengever.disposition.disposition.xml
-msgid "Disposition"
-msgstr ""
 
 #: ./opengever/disposition/browser/excel_export.py:75
 msgid "The report could not been generated."
@@ -88,7 +80,7 @@ msgid "label_archived"
 msgstr ""
 
 #. Default: "Details:"
-#: ./opengever/disposition/browser/templates/overview.pt:226
+#: ./opengever/disposition/browser/templates/overview.pt:227
 msgid "label_details"
 msgstr ""
 
@@ -254,7 +246,7 @@ msgid "period"
 msgstr ""
 
 #. Default: "Progress"
-#: ./opengever/disposition/browser/templates/overview.pt:213
+#: ./opengever/disposition/browser/templates/overview.pt:214
 msgid "progress"
 msgstr ""
 

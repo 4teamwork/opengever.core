@@ -46,4 +46,3 @@ msgstr ""
 #: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:40
 msgid "warning_on_versioned_context"
 msgstr ""
-

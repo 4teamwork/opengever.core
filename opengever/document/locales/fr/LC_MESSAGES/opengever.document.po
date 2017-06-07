@@ -1,23 +1,21 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-04-27 11:21+0000\n"
+"POT-Creation-Date: 2017-06-07 12:34+0000\n"
 "PO-Revision-Date: 2017-06-04 12:50+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
-"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
-"gever/opengever-document/fr/>\n"
-"Language: fr\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-document/fr/>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2.13.1\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
+"Language: fr\n"
+"X-Generator: Weblate 2.13.1\n"
 
-#: ./opengever/document/profiles/default/actions.xml
 #: ./opengever/document/upgrades/20170322142153_add_office_connector_multi_attach_action_to_documents/actions.xml
 #: ./opengever/document/upgrades/20170424163920_adjust_sort_order_of_actions/actions.xml
 msgid "Attach selection"
@@ -26,10 +24,6 @@ msgstr "Envoyer par le programme de messagerie"
 #: ./opengever/document/browser/edit.py:104
 msgid "Can't edit the document at moment, beacuse it's locked."
 msgstr "Impossible de modifier le document en ce moment car il est verrouillé."
-
-#: ./opengever/document/profiles/default/actions.xml
-msgid "Cancel"
-msgstr "Annuler"
 
 #: ./opengever/document/checkout/cancel.py:89
 msgid "Cancel checkout: ${title}"
@@ -45,20 +39,14 @@ msgid "Checked out: ${title}"
 msgstr "Checkout du document:  ${title}"
 
 #: ./opengever/document/browser/templates/macros.pt:66
-#: ./opengever/document/profiles/default/actions.xml
 #: ./opengever/document/upgrades/profiles/4000/actions.xml
 msgid "Checkin with comment"
 msgstr "Checkin avec commentaire"
 
 #: ./opengever/document/browser/templates/macros.pt:63
-#: ./opengever/document/profiles/default/actions.xml
 #: ./opengever/document/upgrades/profiles/4000/actions.xml
 msgid "Checkin without comment"
 msgstr "Checkin sans commentaire"
-
-#: ./opengever/document/profiles/default/actions.xml
-msgid "Checkout"
-msgstr "Checkout"
 
 #: ./opengever/document/checkout/cancel.py:81
 msgid "Could not cancel checkout on document ${title}."
@@ -85,23 +73,14 @@ msgstr "${title} n'est pas un document, par consequet checkout n'a pas abouti."
 msgid "Could not generate the report"
 msgstr "Le rapport n'a pas pu être généré."
 
-#: ./opengever/document/profiles/default/actions.xml
-msgid "Create Task"
-msgstr "Créer une tâche"
-
 #: ./opengever/document/browser/overview.py:209
 msgid "Current version: ${version}"
 msgstr "Version actuelle: ${version}"
-
-#: ./opengever/document/profiles/default/types/opengever.document.document.xml
-msgid "Document"
-msgstr "Document"
 
 #: ./opengever/document/browser/templates/downloadconfirmation.pt:22
 msgid "Don't show this message again."
 msgstr "Ne plus afficher ce message."
 
-#: ./opengever/document/profiles/default/actions.xml
 #: ./opengever/document/upgrades/20161111090446_add_document_export_actions/actions.xml
 msgid "Export selection"
 msgstr "Exporter le choix"
@@ -115,11 +94,6 @@ msgstr "Quitter GEVER"
 msgid "Reverted file to version ${version_id}."
 msgstr "Retour à la version ${version_id} du document."
 
-#: ./opengever/document/profiles/default/actions.xml
-msgid "Send as email"
-msgstr "Envoyer par E-Mail"
-
-#: ./opengever/document/profiles/default/actions.xml
 #: ./opengever/document/upgrades/profiles/4200/actions.xml
 msgid "Submit additional documents"
 msgstr "Soumettre des documents additionnels"
@@ -551,9 +525,7 @@ msgstr "Ce document a été verrouillé par ${creator}."
 #. Default: "Could not cancel checkout on document ${title}, mails does not support the checkin checkout process."
 #: ./opengever/document/checkout/cancel.py:67
 msgid "msg_cancel_checkout_on_mail_not_possible"
-msgstr ""
-"Le document `${title}` n'a pas pu être verrouillé, car les e-mails ne sont "
-"pas supportés par le processus de check-in / check-out."
+msgstr "Le document `${title}` n'a pas pu être verrouillé, car les e-mails ne sont pas supportés par le processus de check-in / check-out."
 
 #. Default: "No file"
 #: ./opengever/document/browser/templates/archiv_file.pt:18
@@ -569,16 +541,13 @@ msgstr "Les documents suivants ont été verrouillés:"
 #. Default: "Please note that in this case changes on the document wouldn't be saved in to GEVER."
 #: ./opengever/document/browser/templates/downloadconfirmation.pt:17
 msgid "warning_download_confirmation"
-msgstr ""
-"Attention! En ouvrant le document de cette manière, toutes les "
-"modifications apportées ne seront PAS sauvegardées en GEVER."
+msgstr "Attention! En ouvrant le document de cette manière, toutes les modifications apportées ne seront PAS sauvegardées en GEVER."
 
-#: ./opengever/document/profiles/default/actions.xml
 #: ./opengever/document/upgrades/profiles/4000/actions.xml
 msgid "with comment"
 msgstr "Avec commentaire"
 
-#: ./opengever/document/profiles/default/actions.xml
 #: ./opengever/document/upgrades/profiles/4000/actions.xml
 msgid "without comment"
 msgstr "Sans commentaire"
+

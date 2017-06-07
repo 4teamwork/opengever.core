@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-04-27 11:21+0000\n"
+"POT-Creation-Date: 2017-06-07 12:34+0000\n"
 "PO-Revision-Date: 2016-07-22 15:25+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-globalindex/de/>\n"
@@ -20,7 +20,6 @@ msgstr ""
 msgid "Could not generate the report."
 msgstr "Aufgaben Export konnte nicht erstellt werden."
 
-#: ./opengever/globalindex/profiles/default/actions.xml
 #: ./opengever/globalindex/upgrades/profiles/2601/actions.xml
 msgid "Export selection"
 msgstr "Auswahl exportieren"

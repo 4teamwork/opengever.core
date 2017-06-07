@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-04-27 11:21+0000\n"
+"POT-Creation-Date: 2017-06-07 12:34+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,6 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.ogds.base\n"
 
-#: ./opengever/ogds/base/profiles/default/actions.xml
 #: ./opengever/ogds/base/upgrades/profiles/4002/actions.xml
 msgid "Toggle orgunit selector"
 msgstr ""
@@ -34,6 +33,7 @@ msgstr ""
 
 #. Default: "Inbox: ${client}"
 #: ./opengever/ogds/base/actor.py:143
+#: ./opengever/ogds/base/sources.py:71
 msgid "inbox_label"
 msgstr ""
 
@@ -45,11 +45,6 @@ msgstr ""
 #. Default: "Address:"
 #: ./opengever/ogds/base/browser/userdetails_templates/userdetails.pt:103
 msgid "label_address"
-msgstr ""
-
-#. Default: "All"
-#: ./opengever/ogds/base/vocabularies.py:459
-msgid "label_all"
 msgstr ""
 
 #. Default: "Department:"

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-05-17 15:37+0000\n"
+"POT-Creation-Date: 2017-06-07 12:33+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,20 +21,12 @@ msgstr ""
 msgid "(INACTIVE)"
 msgstr ""
 
-#: ./opengever/base/profiles/default/actions.xml
-msgid "Copy Items"
-msgstr ""
-
 #: ./opengever/base/browser/templates/gever-macros.pt:38
 msgid "No content"
 msgstr ""
 
 #: ./opengever/base/viewlets/download.py:22
 msgid "No file in in this version"
-msgstr ""
-
-#: ./opengever/base/profiles/default/actions.xml
-msgid "Properties"
 msgstr ""
 
 #. Default: "Save"
@@ -173,11 +165,6 @@ msgstr ""
 msgid "label_created"
 msgstr ""
 
-#. Default: "Creators"
-#: ./opengever/base/behaviors/creator.py:18
-msgid "label_creators"
-msgstr ""
-
 #. Default: "Custody period (years)"
 #: ./opengever/base/behaviors/lifecycle.py:73
 msgid "label_custody_period"
@@ -194,7 +181,7 @@ msgid "label_dateofsubmission"
 msgstr ""
 
 #. Default: "An unexpected error has occured"
-#: ./opengever/base/browser/templates/gever-macros.pt:120
+#: ./opengever/base/browser/templates/gever-macros.pt:130
 msgid "label_default_error_message"
 msgstr ""
 
@@ -244,7 +231,7 @@ msgid "label_search"
 msgstr ""
 
 #. Default: "Error"
-#: ./opengever/base/browser/templates/gever-macros.pt:119
+#: ./opengever/base/browser/templates/gever-macros.pt:129
 msgid "label_severity_error"
 msgstr ""
 
@@ -290,7 +277,7 @@ msgid "message_title_info"
 msgstr ""
 
 #. Default: "Can't paste items, the clipboard is emtpy"
-#: ./opengever/base/browser/paste.py:29
+#: ./opengever/base/browser/paste.py:25
 msgid "msg_empty_clipboard"
 msgstr ""
 
@@ -305,7 +292,7 @@ msgid "msg_pasting_not_allowed"
 msgstr ""
 
 #. Default: "Can't paste items, it's not allowed to add objects of this type."
-#: ./opengever/base/browser/paste.py:36
+#: ./opengever/base/browser/paste.py:32
 msgid "msg_pasting_type_not_allowed"
 msgstr ""
 
@@ -315,7 +302,7 @@ msgid "msg_successfuly_copied"
 msgstr ""
 
 #. Default: "Objects from clipboard successfully pasted."
-#: ./opengever/base/browser/paste.py:45
+#: ./opengever/base/browser/paste.py:49
 msgid "msg_successfuly_pasted"
 msgstr ""
 
@@ -364,7 +351,7 @@ msgstr ""
 msgid "search_results_advanced_link"
 msgstr ""
 
-#: ./opengever/base/browser/templates/gever-macros.pt:101
+#: ./opengever/base/browser/templates/gever-macros.pt:105
 msgid "show all"
 msgstr ""
 
