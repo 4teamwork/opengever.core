@@ -117,17 +117,17 @@ msgstr "Bitte geben Sie eine gültige E-Mail-Adresse ein."
 #. Default: "Please specify an email address"
 #: ./opengever/contact/browser/mail.py:149
 msgid "error_no_email"
-msgstr "Bitte geben Sie eine eine E-Mail-Adresse ein."
+msgstr "Bitte geben Sie eine E-Mail-Adresse ein."
 
 #. Default: "Please specify a label for your email address"
 #: ./opengever/contact/browser/mail.py:145
 msgid "error_no_label"
-msgstr "Bitte geben Sie ein Label für ihre E-Mail-Adresse ein."
+msgstr "Bitte geben Sie ein Label für Ihre E-Mail-Adresse ein."
 
 #. Default: "Please specify a label and an email address."
 #: ./opengever/contact/browser/mail.py:139
 msgid "error_no_label_and_email"
-msgstr "Bitte geben Sie ein Labe sowie eine E-Mail-Adresse ein."
+msgstr "Bitte geben Sie ein Label sowie eine E-Mail-Adresse ein."
 
 #. Default: "The email address was created successfully"
 #: ./opengever/contact/browser/mail.py:93
@@ -188,7 +188,7 @@ msgstr "Archivierte Adressen"
 #: ./opengever/contact/browser/templates/organization.pt:165
 #: ./opengever/contact/browser/templates/person.pt:167
 msgid "label_archived_mail"
-msgstr "Archivierte Mail Adressen"
+msgstr "Archivierte E-Mail-Adressen"
 
 #. Default: "Archived Information"
 #: ./opengever/contact/browser/templates/organization.pt:124
@@ -307,7 +307,7 @@ msgstr "Lokal"
 #: ./opengever/contact/browser/templates/organization.pt:44
 #: ./opengever/contact/browser/templates/person.pt:54
 msgid "label_mail"
-msgstr "Mail Addressen"
+msgstr "E-Mail-Addressen"
 
 #. Default: "Mobile"
 #: ./opengever/contact/ogdsuser.py:218
@@ -461,4 +461,3 @@ msgstr "${amount} Treffer"
 #: ./opengever/contact/contact.py:44
 msgid "telefon"
 msgstr "Telefon"
-
