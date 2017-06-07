@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-06-07 12:34+0000\n"
+"POT-Creation-Date: 2017-06-07 14:40+0000\n"
 "PO-Revision-Date: 2015-04-10 09:01+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -72,11 +72,11 @@ msgstr "Ein unerwarteter Fehler ist aufgetreten"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:67
 msgid "Are you sure you want to close this meeting?"
-msgstr "Wollen sie diese Sitzung wirklich abschliessen?"
+msgstr "Wollen Sie diese Sitzung wirklich abschliessen?"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:83
 msgid "Are you sure you want to decide this agendaitem?"
-msgstr "Sind Sie sicher das Sie dieses Traktandum beschliessen möchten?"
+msgstr "Sind Sie sicher, dass Sie dieses Traktandum beschliessen möchten?"
 
 #: ./opengever/meeting/browser/memberships.py:53
 msgid "Can't add membership, it overlaps an existing membership from ${date_from} to ${date_to}."
@@ -91,8 +91,8 @@ msgid "Choose Agenda Items"
 msgstr "Traktanden auswählen"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:63
-msgid "Close all proposals"
-msgstr "Alle Anträge werden abgeschlossen"
+msgid "Close all proposals."
+msgstr "Alle Anträge werden abgeschlossen."
 
 #: ./opengever/meeting/browser/periods.py:68
 msgid "Close currently active period"
@@ -156,12 +156,20 @@ msgid "Export settings"
 msgstr "Export-Einstellungen"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:64
-msgid "Generate excerpts for all proposals"
-msgstr "Für alle Anträge wird ein Protokollauszug generiert und ins Antragsdossier zurückgespielt"
+msgid "Generate excerpts for all proposals."
+msgstr "Für alle Anträge wird ein Protokollauszug generiert und ins Antragsdossier zurückgespielt."
 
 #: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt:94
 msgid "History"
 msgstr "Verlauf"
+
+#: ./opengever/meeting/browser/meetings/excerpt.py:64
+msgid "Include \"disclose to\""
+msgstr "\"Zu eröffnen\" an einfügen"
+
+#: ./opengever/meeting/browser/meetings/excerpt.py:60
+msgid "Include \"publish in\""
+msgstr "\"Veröffentlichung\" in einfügen"
 
 #: ./opengever/meeting/browser/meetings/excerpt.py:44
 msgid "Include considerations"
@@ -174,10 +182,6 @@ msgstr "Kopie z.K. einfügen"
 #: ./opengever/meeting/browser/meetings/excerpt.py:56
 msgid "Include decision"
 msgstr "Entscheid einfügen"
-
-#: ./opengever/meeting/browser/meetings/excerpt.py:64
-msgid "Include disclose to"
-msgstr "Zu eröffnen an einfügen"
 
 #: ./opengever/meeting/browser/meetings/excerpt.py:52
 msgid "Include discussion"
@@ -194,10 +198,6 @@ msgstr "Rechtsgrundlage einfügen"
 #: ./opengever/meeting/browser/meetings/excerpt.py:48
 msgid "Include proposed action"
 msgstr "Antrag einfügen"
-
-#: ./opengever/meeting/browser/meetings/excerpt.py:60
-msgid "Include publish in"
-msgstr "Veröffentlichung in einfügen"
 
 #: ./opengever/meeting/committee.py:75
 msgid "Linked repository folder"
@@ -329,8 +329,8 @@ msgid "Unschedule proposal"
 msgstr "Traktandum detraktandieren"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:65
-msgid "Update or create the protocol"
-msgstr "Das Protokoll wird erstellt oder aktualisiert"
+msgid "Update or create the protocol."
+msgstr "Das Protokoll wird erstellt oder aktualisiert."
 
 #: ./opengever/meeting/browser/submitdocuments.py:201
 msgid "Updated with a newer docment version from proposal's dossier."
@@ -1079,10 +1079,10 @@ msgstr "Vorlage Inhaltsverzeichnis"
 msgid "label_transition_executed"
 msgstr "Statusänderung ${transition} ausgeführt"
 
-#. Default: "You have unsaved changes"
+#. Default: "You have unsaved changes."
 #: ./opengever/meeting/browser/meetings/templates/protocol.pt:26
 msgid "label_unsaved_changes"
-msgstr "Sie haben nicht gespeicherte lokale Änderungen"
+msgstr "Sie haben nicht gespeicherte lokale Änderungen."
 
 #. Default: "Are you sure you want to unschedule this agendaitem?"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:45

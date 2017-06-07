@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-06-07 12:34+0000\n"
+"POT-Creation-Date: 2017-06-07 14:40+0000\n"
 "PO-Revision-Date: 2017-06-04 12:43+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -93,7 +93,7 @@ msgid "Choose Agenda Items"
 msgstr "Choisir les points du l'ordre du jour"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:63
-msgid "Close all proposals"
+msgid "Close all proposals."
 msgstr "Toutes les propositions sont clôturées."
 
 #: ./opengever/meeting/browser/periods.py:68
@@ -158,12 +158,20 @@ msgid "Export settings"
 msgstr "Paramètres de l'export"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:64
-msgid "Generate excerpts for all proposals"
-msgstr "Pour toutes les propositions un extrait de protocole sera généré et renvoyé au dossier"
+msgid "Generate excerpts for all proposals."
+msgstr "Pour toutes les propositions un extrait de protocole sera généré et renvoyé au dossier."
 
 #: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt:94
 msgid "History"
 msgstr "Historique"
+
+#: ./opengever/meeting/browser/meetings/excerpt.py:64
+msgid "Include \"disclose to\""
+msgstr "Insérer \"à l'information de\""
+
+#: ./opengever/meeting/browser/meetings/excerpt.py:60
+msgid "Include \"publish in\""
+msgstr "Insérer \"publication dans\""
 
 #: ./opengever/meeting/browser/meetings/excerpt.py:44
 msgid "Include considerations"
@@ -176,10 +184,6 @@ msgstr "Insérer une copie pour information"
 #: ./opengever/meeting/browser/meetings/excerpt.py:56
 msgid "Include decision"
 msgstr "Insérer une décision"
-
-#: ./opengever/meeting/browser/meetings/excerpt.py:64
-msgid "Include disclose to"
-msgstr "Insérer \"à l'information de\""
 
 #: ./opengever/meeting/browser/meetings/excerpt.py:52
 msgid "Include discussion"
@@ -196,10 +200,6 @@ msgstr "Insérer des fondements juridiques"
 #: ./opengever/meeting/browser/meetings/excerpt.py:48
 msgid "Include proposed action"
 msgstr "Insérer une proposition"
-
-#: ./opengever/meeting/browser/meetings/excerpt.py:60
-msgid "Include publish in"
-msgstr "Insérer \"publication dans\""
 
 #: ./opengever/meeting/committee.py:75
 msgid "Linked repository folder"
@@ -331,8 +331,8 @@ msgid "Unschedule proposal"
 msgstr "Enlever une proposition de l'ordre du jour"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:65
-msgid "Update or create the protocol"
-msgstr "Le protocole est créé ou mis à jour"
+msgid "Update or create the protocol."
+msgstr "Le protocole est créé ou mis à jour."
 
 #: ./opengever/meeting/browser/submitdocuments.py:201
 msgid "Updated with a newer docment version from proposal's dossier."
@@ -1081,7 +1081,7 @@ msgstr "Modèle de la table de matière"
 msgid "label_transition_executed"
 msgstr "Modification de l'état ${transition} exécutée"
 
-#. Default: "You have unsaved changes"
+#. Default: "You have unsaved changes."
 #: ./opengever/meeting/browser/meetings/templates/protocol.pt:26
 msgid "label_unsaved_changes"
 msgstr "Vous avez des modifications locales non sauvegardées."

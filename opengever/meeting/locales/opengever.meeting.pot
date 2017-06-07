@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-06-07 12:34+0000\n"
+"POT-Creation-Date: 2017-06-07 14:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -90,7 +90,7 @@ msgid "Choose Agenda Items"
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:63
-msgid "Close all proposals"
+msgid "Close all proposals."
 msgstr ""
 
 #: ./opengever/meeting/browser/periods.py:68
@@ -155,11 +155,19 @@ msgid "Export settings"
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:64
-msgid "Generate excerpts for all proposals"
+msgid "Generate excerpts for all proposals."
 msgstr ""
 
 #: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt:94
 msgid "History"
+msgstr ""
+
+#: ./opengever/meeting/browser/meetings/excerpt.py:64
+msgid "Include \"disclose to\""
+msgstr ""
+
+#: ./opengever/meeting/browser/meetings/excerpt.py:60
+msgid "Include \"publish in\""
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/excerpt.py:44
@@ -172,10 +180,6 @@ msgstr ""
 
 #: ./opengever/meeting/browser/meetings/excerpt.py:56
 msgid "Include decision"
-msgstr ""
-
-#: ./opengever/meeting/browser/meetings/excerpt.py:64
-msgid "Include disclose to"
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/excerpt.py:52
@@ -192,10 +196,6 @@ msgstr ""
 
 #: ./opengever/meeting/browser/meetings/excerpt.py:48
 msgid "Include proposed action"
-msgstr ""
-
-#: ./opengever/meeting/browser/meetings/excerpt.py:60
-msgid "Include publish in"
 msgstr ""
 
 #: ./opengever/meeting/committee.py:75
@@ -328,7 +328,7 @@ msgid "Unschedule proposal"
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:65
-msgid "Update or create the protocol"
+msgid "Update or create the protocol."
 msgstr ""
 
 #: ./opengever/meeting/browser/submitdocuments.py:201
@@ -1078,7 +1078,7 @@ msgstr ""
 msgid "label_transition_executed"
 msgstr ""
 
-#. Default: "You have unsaved changes"
+#. Default: "You have unsaved changes."
 #: ./opengever/meeting/browser/meetings/templates/protocol.pt:26
 msgid "label_unsaved_changes"
 msgstr ""

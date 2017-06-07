@@ -23,7 +23,7 @@
                 </span>
                 <div id="changes-hint" class="spv-label warning">
                   <i></i>
-                  <span i18n:translate="label_unsaved_changes">You have unsaved changes</span>
+                  <span i18n:translate="label_unsaved_changes">You have unsaved changes.</span>
                 </div>
               </div>
               <div class="list-group-item navigation">
