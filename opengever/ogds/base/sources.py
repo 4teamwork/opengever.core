@@ -201,23 +201,6 @@ class AllUsersAndInboxesSourceBinder(object):
 
 
 @implementer(IQuerySource)
-class ForwardingResponsibleSource(AllUsersAndInboxesSource):
-    """Return only users of the current orgunit and all inboxes"""
-
-    @property
-    def base_query(self):
-        query = super(ForwardingResponsibleSource, self).base_query
-        return query.filter(OrgUnit.unit_id == self.client_id)
-
-
-@implementer(IContextSourceBinder)
-class ForwardingResponsibleSourceBinder(object):
-
-    def __call__(self, context):
-        return ForwardingResponsibleSource(context)
-
-
-@implementer(IQuerySource)
 class UsersContactsInboxesSource(AllUsersAndInboxesSource):
 
     @property

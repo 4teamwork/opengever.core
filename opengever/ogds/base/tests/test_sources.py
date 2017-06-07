@@ -3,7 +3,6 @@ from ftw.builder import create
 from opengever.ogds.base.sources import AllUsersAndInboxesSource
 from opengever.ogds.base.sources import AllUsersSource
 from opengever.ogds.base.sources import AssignedUsersSource
-from opengever.ogds.base.sources import ForwardingResponsibleSource
 from opengever.ogds.base.sources import UsersContactsInboxesSource
 from opengever.ogds.base.sources import AllEmailContactsAndUsersSource
 from opengever.testing import FunctionalTestCase
@@ -217,47 +216,6 @@ class TestAllUsersAndInboxesSource(FunctionalTestCase):
         self.assertNotIn('inbox:unit2', source)
 
         self.assertTermKeys([u'inbox:unit1'],
-                            source.search('Inb'))
-
-
-class TestForwardingResponsibleSource(FunctionalTestCase):
-
-    use_default_fixture = False
-
-    def setUp(self):
-        super(TestForwardingResponsibleSource, self).setUp()
-
-        self.admin_unit = create(Builder('admin_unit'))
-        self.org_unit1 = create(Builder('org_unit')
-                                .id('unit1')
-                                .having(title=u'Informatik',
-                                        admin_unit=self.admin_unit)
-                                .with_default_groups())
-        self.org_unit2 = create(Builder('org_unit')
-                                .id('unit2')
-                                .having(title=u'Finanzdirektion',
-                                        admin_unit=self.admin_unit)
-                                .with_default_groups())
-
-        self.hugo = create(Builder('ogds_user')
-                           .id('hugo')
-                           .having(firstname=u'Hugo', lastname=u'Boss')
-                           .assign_to_org_units([self.org_unit1]))
-        self.hans = create(Builder('ogds_user')
-                           .id('hans')
-                           .having(firstname=u'Hans', lastname=u'Peter')
-                           .assign_to_org_units([self.org_unit1,
-                                                 self.org_unit2]))
-
-    def test_search_returns_only_users_of_the_given_client(self):
-        self.portal.REQUEST.set('form.widgets.responsible_client', 'unit1')
-        source = ForwardingResponsibleSource(self.portal)
-        self.assertTermKeys(['unit1:hans'], source.search('hans'))
-
-    def test_search_all_inboxes(self):
-        self.portal.REQUEST.set('form.widgets.responsible_client', 'unit1')
-        source = ForwardingResponsibleSource(self.portal)
-        self.assertTermKeys(['inbox:unit1', 'inbox:unit2'],
                             source.search('Inb'))
 
 
