@@ -1,4 +1,4 @@
-<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.meeting.sablontemplate" meta_type="Dexterity FTI" i18n:domain="opengever.meeting">
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.meeting.sablontemplate" meta_type="Dexterity FTI" i18n:domain="opengever.core">
 
   <!-- Basic metadata -->
   <property name="title" i18n:translate="">Sablon Template</property>
@@ -104,7 +104,7 @@
   </action>
 
   <action
-      i18n:domain="opengever.dossier"
+      i18n:domain="opengever.core"
       title="Sharing"
       action_id="sharing"
       category="tabbedview-tabs"

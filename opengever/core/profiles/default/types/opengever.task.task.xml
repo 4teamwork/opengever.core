@@ -1,4 +1,4 @@
-<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.task.task" meta_type="Dexterity FTI" i18n:domain="opengever.task">
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.task.task" meta_type="Dexterity FTI" i18n:domain="opengever.core">
 
   <!-- Basic metadata -->
   <property name="title" i18n:translate="">Task</property>
@@ -72,7 +72,7 @@
   </action>
 
   <action
-      i18n:domain="opengever.task"
+      i18n:domain="opengever.core"
       title="Overview"
       action_id="overview"
       category="tabbedview-tabs"
@@ -82,7 +82,7 @@
     <permission value="View" />
   </action>
   <action
-      i18n:domain="opengever.task"
+      i18n:domain="opengever.core"
       title="Related Documents"
       action_id="relateddocuments"
       category="tabbedview-tabs"

@@ -1,4 +1,4 @@
-<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.repository.repositoryroot" meta_type="Dexterity FTI" i18n:domain="opengever.repository">
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.repository.repositoryroot" meta_type="Dexterity FTI" i18n:domain="opengever.core">
 
   <!-- Basic metadata -->
   <property name="title" i18n:translate="">RepositoryRoot</property>
@@ -98,7 +98,7 @@
       category="tabbedview-tabs"
       url_expr="string:#"
       condition_expr=""
-      i18n:domain="opengever.repository">
+      i18n:domain="opengever.core">
     <permission value="opengever.disposition: Add disposition" />
   </action>
 
@@ -109,12 +109,12 @@
       category="tabbedview-tabs"
       url_expr="string:#"
       condition_expr=""
-      i18n:domain="opengever.dossier">
+      i18n:domain="opengever.core">
     <permission value="View" />
   </action>
 
   <action
-      i18n:domain="opengever.dossier"
+      i18n:domain="opengever.core"
       title="Journal"
       action_id="journal"
       category="tabbedview-tabs"

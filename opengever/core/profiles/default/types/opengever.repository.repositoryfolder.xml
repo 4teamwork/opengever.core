@@ -1,4 +1,4 @@
-<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.repository.repositoryfolder" meta_type="Dexterity FTI" i18n:domain="opengever.repository">
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.repository.repositoryfolder" meta_type="Dexterity FTI" i18n:domain="opengever.core">
 
   <!-- Basic metadata -->
   <property name="title" i18n:translate="">RepositoryFolder</property>
@@ -79,7 +79,7 @@
       url_expr="string:${object_url}/dossier_with_template"
       icon_expr=""
       condition_expr="object/@@dossier_with_template/is_available"
-      i18n:domain="opengever.dossier">
+      i18n:domain="opengever.core">
     <permission value="opengever.dossier: Add businesscasedossier" />
   </action>
 
@@ -102,7 +102,7 @@
       category="tabbedview-tabs"
       url_expr="string:#"
       condition_expr=""
-      i18n:domain="opengever.dossier">
+      i18n:domain="opengever.core">
     <permission value="View" />
   </action>
 
