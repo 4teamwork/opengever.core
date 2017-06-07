@@ -20,10 +20,9 @@ msgstr "Der Ihnen zur Verfügung stehende Speicherplatz für die persönlichen A
 
 #: ./opengever/private/viewlets/quotawarning.py:37
 msgid "The quota of your private folder will exceed soon."
-msgstr "Der Ihnen zur Verfügung stehende Speicherplatz für die persönlichen Ablage ist nächstens ausgeschöpft. Löschen Sie Dateien um mehr freien Speicherplatz zu schaffen."
+msgstr "Der Ihnen zur Verfügung stehende Speicherplatz für die persönlichen Ablage ist nächstens ausgeschöpft. Löschen Sie Dateien, um mehr freien Speicherplatz zu schaffen."
 
 #. Default: "Dossiers"
 #: ./opengever/private/browser/tabbed.py:15
 msgid "label_dossiers"
 msgstr "Dossiers"
-
