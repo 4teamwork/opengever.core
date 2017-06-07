@@ -85,7 +85,7 @@ def main():
         ]
 
     print("Running tests with {} processors.".format(PROCESSORS), flush=True)
-    with concurrent.futures.ThreadPoolExecutor(max_workers=PROCESSORS) as executor:  # noqa
+    with concurrent.futures.ProcessPoolExecutor(max_workers=PROCESSORS) as executor:  # noqa
         outputs = executor.map(run_tests, batches)
 
     failed_tests = False
