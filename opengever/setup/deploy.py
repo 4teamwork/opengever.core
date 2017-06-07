@@ -10,11 +10,12 @@ from plone.registry.interfaces import IRegistry
 from Products.CMFPlone.factory import _DEFAULT_PROFILE
 from Products.CMFPlone.factory import addPloneSite
 from Products.CMFPlone.utils import getToolByName
-from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlugin
+from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlugin  # noqa
 from Products.PluggableAuthService.interfaces.plugins import IPropertiesPlugin
 from sqlalchemy import MetaData
 from zope.component import getAdapter
 from zope.component import getUtility
+
 
 # these profiles will be installed automatically
 EXTENSION_PROFILES = (
@@ -22,8 +23,12 @@ EXTENSION_PROFILES = (
     'plonetheme.sunburst:default',
 )
 
-
-MIMETYPE_FIX_PROFILE = 'profile-opengever.policy.base:mimetype'
+# these profiles must always be installed in that order
+BASE_PROFILES = (
+    'opengever.core:default',
+    'plonetheme.teamraum:gever',
+    'opengever.policy.base:mimetype',
+)
 
 
 class GeverDeployment(object):
@@ -64,7 +69,7 @@ class GeverDeployment(object):
     def setup_plone_site(self):
         config = self.config
         ext_profiles = list(EXTENSION_PROFILES)
-        ext_profiles.append(config['base_profile'])
+        ext_profiles.extend(BASE_PROFILES)
 
         return addPloneSite(
             self.context,
@@ -138,8 +143,6 @@ class GeverDeployment(object):
         stool = getToolByName(self.site, 'portal_setup')
         stool.runAllImportStepsFromProfile(
             'profile-{}'.format(policy_profile))
-        # fix mime-type definitions by overriding temaraum-theme mimetypes
-        stool.runAllImportStepsFromProfile(MIMETYPE_FIX_PROFILE)
 
     def configure_plone_site(self):
         # configure mail settings

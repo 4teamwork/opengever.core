@@ -20,11 +20,6 @@ class IDeploymentDirective(Interface):
         description=u'Displayed in deployment selection dropdown.',
         required=True)
 
-    base_profile = TextLine(
-        title=u'Base Profile',
-        default=u'opengever.core:default',
-        required=True)
-
     policy_profile = TextLine(
         title=u'Policy Profile',
         required=True)
