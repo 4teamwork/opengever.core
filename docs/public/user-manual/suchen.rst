@@ -132,6 +132,8 @@ wird das Suchformular in einer neuen Registerkarte (Tab) geöffnet. So
 kann man eine Suche durchführen, ohne dass die aktuelle Ansicht in OneGov GEVER
 verlassen werden muss.
 
+|img-suchen-6|
+
 .. note::
    Bei Installationen von OneGov GEVER mit mehreren Mandanten gilt es
    zu beachten, dass sich die Suche nach Aufgaben nur auf Aufgaben bezieht,

@@ -236,6 +236,25 @@ nachträglich unten im Verlauf nachvollzogen werden.
 |img-aufgaben-26|
 
 
+Aufgabe delegieren
+~~~~~~~~~~~~~~~~~~
+
+Eine Aufgabe kann einer anderen Person delegiert werden. Akzeptieren Sie dazu
+zuerst die Aufgabe und gehen Sie dann auf *Aktionen → Delegieren*.
+
+|img-aufgaben-30|
+
+Wählen Sie in einem ersten Schritt zuerst die Personen aus, an welche die
+Aufgab delegiert werden soll.
+
+|img-aufgaben-31|
+
+In einem zweiten Schritt kann dann der Auftraggeber gewählt werden.
+Schliessen Sie die Delegation der Aufgabe wie gewohnt mit "Speichern" ab.
+
+|img-aufgaben-32|
+
+
 Mit den Aufgaben verknüpfte Dokumente (Verweise) bearbeiten
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -790,9 +809,9 @@ Aufgaben verhindern.
 .. |img-aufgaben-24| image:: img/media/img-aufgaben-24.png
 .. |img-aufgaben-25| image:: img/media/img-aufgaben-25.png
 .. |img-aufgaben-26| image:: img/media/img-aufgaben-26.png
-.. |img-aufgaben-27| image:: img/media/img-aufgaben-27.png
-.. |img-aufgaben-28| image:: img/media/img-aufgaben-28.png
-.. |img-aufgaben-29| image:: img/media/img-aufgaben-29.png
+.. |img-aufgaben-30| image:: img/media/img-aufgaben-30.png
+.. |img-aufgaben-31| image:: img/media/img-aufgaben-31.png
+.. |img-aufgaben-32| image:: img/media/img-aufgaben-32.png
 
 
 .. |image138| image:: img/media/image134.png
