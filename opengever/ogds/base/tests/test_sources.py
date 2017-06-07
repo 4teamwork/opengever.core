@@ -191,6 +191,34 @@ class TestAllUsersAndInboxesSource(FunctionalTestCase):
         self.assertEquals(2, len(self.source.search('box')))
         self.assertEquals(2, len(self.source.search('nbo')))
 
+    def test_only_users_of_the_current_orgunit_and_inboxes_are_valid(self):
+        self.portal.REQUEST.set('form.widgets.responsible_client', 'unit1')
+        source = self.source = AllUsersAndInboxesSource(
+            self.portal,
+            only_current_orgunit=True)
+
+        self.assertIn(u'unit1:john', source)
+        self.assertIn(u'unit1:hugo', source)
+        self.assertIn(u'unit1:hans', source)
+        self.assertNotIn(u'unit2:hans', source)
+        self.assertNotIn(u'unit2:reto', source)
+
+        self.assertTermKeys([u'inbox:unit1', u'inbox:unit2', u'unit1:john',
+                            u'unit1:hugo', u'unit1:hans'],
+                            source.search('unit'))
+
+    def test_only_the_current_inbox_is_valid(self):
+        self.portal.REQUEST.set('form.widgets.responsible_client', 'unit1')
+        source = self.source = AllUsersAndInboxesSource(
+            self.portal,
+            only_current_inbox=True)
+
+        self.assertIn('inbox:unit1', source)
+        self.assertNotIn('inbox:unit2', source)
+
+        self.assertTermKeys([u'inbox:unit1'],
+                            source.search('Inb'))
+
 
 class TestForwardingResponsibleSource(FunctionalTestCase):
 
