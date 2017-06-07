@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-06-07 12:33+0000\n"
+"POT-Creation-Date: 2017-06-07 14:47+0000\n"
 "PO-Revision-Date: 2017-06-05 14:47+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-base/fr/>\n"
@@ -279,7 +279,7 @@ msgstr "Erreur"
 msgid "message_title_info"
 msgstr "Information"
 
-#. Default: "Can't paste items, the clipboard is emtpy"
+#. Default: "Can't paste items; the clipboard is emtpy"
 #: ./opengever/base/browser/paste.py:25
 msgid "msg_empty_clipboard"
 msgstr "Aucun objet ne peut être ajouté; le presse-papier est vide."
@@ -291,7 +291,6 @@ msgstr "Il n'y a pas d'objets disponibles."
 
 #. Default: "Can't paste items, the context does not allow pasting items."
 #: ./opengever/base/browser/paste.py:40
-#, fuzzy
 msgid "msg_pasting_not_allowed"
 msgstr "Il n'est pas permis d'insérer des objets de ce type."
 
@@ -373,4 +372,3 @@ msgstr "Non contrôlé"
 #: opengever/repository/classification.py
 msgid "unprotected"
 msgstr "Non classé"
-

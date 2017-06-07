@@ -23,7 +23,7 @@ class PasteClipboardView(BrowserView):
         objs = Clipboard(self.request).get_objs()
         if not objs:
             msg = _(u"msg_empty_clipboard",
-                    default=u"Can't paste items, the clipboard is emtpy")
+                    default=u"Can't paste items; the clipboard is emtpy")
             api.portal.show_message(message=msg,
                                     request=self.request, type='error')
             return self.redirect()
