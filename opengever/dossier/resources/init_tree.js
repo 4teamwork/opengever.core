@@ -15,7 +15,8 @@ $(function() {
 
   function render_tree(tree_data) {
     var navtree = make_tree(tree_data, {
-      components: [new BusinessCaseDossierIconLinks()]
+      components: [new BusinessCaseDossierIconLinks()],
+      expanded: false
     });
     var tree_root = tree_container.find('>ul');
 
