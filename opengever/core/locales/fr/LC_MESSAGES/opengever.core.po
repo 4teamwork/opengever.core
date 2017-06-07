@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-05-17 11:42+0000\n"
+"POT-Creation-Date: 2017-06-07 12:17+0000\n"
 "PO-Revision-Date: 2013-03-27 10:44+0100\n"
 "Last-Translator: Philippe Gross <p.gross@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -13,4 +13,234 @@ msgstr ""
 "Language-Name: French\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Add Participant"
+msgstr "Participant"
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Attach selection"
+msgstr "Envoyer par le programme de messagerie"
+
+#: ./opengever/core/profiles/default/types/opengever.dossier.businesscasedossier.xml
+msgid "Business Case Dossier"
+msgstr "Dossier"
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Cancel"
+msgstr "Annuler"
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Checkin with comment"
+msgstr "Checkin avec commentaire"
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Checkin without comment"
+msgstr "Checkin sans commentaire"
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Checkout"
+msgstr "Checkout"
+
+#: ./opengever/core/profiles/default/types/opengever.meeting.committee.xml
+msgid "Committee"
+msgstr "Commission"
+
+#: ./opengever/core/profiles/default/types/opengever.meeting.committeecontainer.xml
+msgid "Committee Container"
+msgstr "Conteneur avec commission"
+
+#: ./opengever/core/profiles/default/types/opengever.contact.contact.xml
+msgid "Contact"
+msgstr "Contact"
+
+#: ./opengever/core/profiles/default/types/opengever.contact.contactfolder.xml
+msgid "Contact Folder"
+msgstr "Répertoire de contact"
+
+#: ./opengever/core/profiles/default/types/opengever.contact.contactfolder.xml
+msgid "ContactFolder"
+msgstr "Répertoire de contact"
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Copy Items"
+msgstr "Copier"
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Cover (PDF)"
+msgstr "Couvertrure (PDF)"
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Create Disposition"
+msgstr ""
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Create Task"
+msgstr "Créer une tâche"
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Delete"
+msgstr "Supprimer"
+
+#: ./opengever/core/profiles/default/types/opengever.disposition.disposition.xml
+msgid "Disposition"
+msgstr ""
+
+#: ./opengever/core/profiles/default/types/opengever.document.document.xml
+msgid "Document"
+msgstr "Document"
+
+#: ./opengever/core/profiles/default/types/opengever.dossier.dossiertemplate.xml
+msgid "Dossier template"
+msgstr "Modèle de dossier"
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Export selection"
+msgstr "Exporter le choix"
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Forward"
+msgstr "Transmettre"
+
+#: ./opengever/core/profiles/default/types/opengever.inbox.forwarding.xml
+msgid "Forwarding"
+msgstr "Transmission"
+
+#: ./opengever/core/profiles/default/types/opengever.inbox.inbox.xml
+msgid "Inbox"
+msgstr "Boîte de réception"
+
+#: ./opengever/core/profiles/default/types/opengever.inbox.container.xml
+msgid "Inbox Container"
+msgstr "Conteneur de la boîte de réception"
+
+#: ./opengever/core/profiles/default/types/opengever.meeting.meetingdossier.xml
+msgid "Meeting Dossier"
+msgstr "Dossier de réunion"
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Move Items"
+msgstr "Déplacer d'éléments"
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "My repository"
+msgstr "Mon référentiel"
+
+#: ./opengever/core/profiles/default/types/opengever.dossier.businesscasedossier.xml
+#: ./opengever/core/profiles/default/types/opengever.meeting.meetingdossier.xml
+msgid "Participant"
+msgstr "Participation"
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Prefix Manager"
+msgstr "Gestionnaire de préfixes de référence"
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Print details (PDF)"
+msgstr "Imprimer les détails (PDF)"
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Print selection (PDF)"
+msgstr "Imprimer"
+
+#: ./opengever/core/profiles/default/types/opengever.private.dossier.xml
+msgid "Private Dossier"
+msgstr "Dossier personnel"
+
+#: ./opengever/core/profiles/default/types/opengever.private.root.xml
+msgid "Private Root"
+msgstr "Répertoire personnel"
+
+#: ./opengever/core/profiles/default/types/opengever.private.folder.xml
+msgid "Private folder"
+msgstr "Dossier personnel"
+
+#: ./opengever/core/profiles/default/types/opengever.dossier.projectdossier.xml
+msgid "Project Dossier"
+msgstr "Dossier du projet"
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Properties"
+msgstr "Propriétés"
+
+#. Default: "Proposal"
+#: ./opengever/core/profiles/default/types/opengever.meeting.proposal.xml
+msgid "Proposal"
+msgstr "Proposition"
+
+#: ./opengever/core/profiles/default/types/opengever.meeting.proposaltemplate.xml
+msgid "Proposal Template"
+msgstr "Modèle de proposition"
+
+#: ./opengever/core/profiles/default/types/opengever.repository.repositoryfolder.xml
+msgid "RepositoryFolder"
+msgstr "Numéro de classement"
+
+#: ./opengever/core/profiles/default/types/opengever.repository.repositoryroot.xml
+msgid "RepositoryRoot"
+msgstr "Système de classement"
+
+#: ./opengever/core/profiles/default/types/opengever.meeting.sablontemplate.xml
+msgid "Sablon Template"
+msgstr "Modèle Sablon"
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Send as email"
+msgstr "Envoyer par E-Mail"
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Submit additional documents"
+msgstr "Soumettre des documents additionnels"
+
+#: ./opengever/core/profiles/default/types/opengever.meeting.submittedproposal.xml
+msgid "Submitted Proposal"
+msgstr "Proposition soumise"
+
+#: ./opengever/core/profiles/default/types/opengever.task.task.xml
+msgid "Task"
+msgstr "Tâche"
+
+#: ./opengever/core/profiles/default/types/opengever.tasktemplates.tasktemplate.xml
+msgid "TaskTemplate"
+msgstr "Modèle de tâches"
+
+#: ./opengever/core/profiles/default/types/opengever.tasktemplates.tasktemplatefolder.xml
+msgid "TaskTemplateFolder"
+msgstr "Déroulement standard"
+
+#: ./opengever/core/profiles/default/types/opengever.dossier.templatefolder.xml
+msgid "Template Folder"
+msgstr "Dossier des modèles"
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Toggle orgunit selector"
+msgstr "commuter l'agent public"
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Unlock unused repository prefixes."
+msgstr "Déblocage de préfixes de référence inutilisés."
+
+#: ./opengever/core/profiles/default/types/opengever.inbox.yearfolder.xml
+msgid "YearFolder"
+msgstr "Classeur pour l'année"
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "remove"
+msgstr "Effacer"
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "trashed"
+msgstr "Déplacer dans la corbeille"
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "untrashed"
+msgstr "Réactiver"
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "with comment"
+msgstr "Avec commentaire"
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "without comment"
+msgstr "Sans commentaire"
 
