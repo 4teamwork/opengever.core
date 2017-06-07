@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-06-07 12:34+0000\n"
+"POT-Creation-Date: 2017-06-07 15:10+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -71,7 +71,7 @@ msgid "Could not check out object: ${title}, it is not a document."
 msgstr ""
 
 #: ./opengever/document/browser/report.py:81
-msgid "Could not generate the report"
+msgid "Could not generate the report."
 msgstr ""
 
 #: ./opengever/document/browser/overview.py:209
@@ -477,13 +477,8 @@ msgstr ""
 msgid "label_related_documents"
 msgstr ""
 
-#. Default: "reset"
-#: ./opengever/document/browser/versions_tab.py:158
-msgid "label_reset"
-msgstr ""
-
 #. Default: "Revert"
-#: ./opengever/document/browser/versions_tab.py:302
+#: ./opengever/document/browser/versions_tab.py:158
 msgid "label_revert"
 msgstr ""
 

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-06-07 12:34+0000\n"
+"POT-Creation-Date: 2017-06-07 15:10+0000\n"
 "PO-Revision-Date: 2017-06-04 12:50+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-document/fr/>\n"
@@ -70,7 +70,7 @@ msgid "Could not check out object: ${title}, it is not a document."
 msgstr "${title} n'est pas un document, par consequet checkout n'a pas abouti."
 
 #: ./opengever/document/browser/report.py:81
-msgid "Could not generate the report"
+msgid "Could not generate the report."
 msgstr "Le rapport n'a pas pu être généré."
 
 #: ./opengever/document/browser/overview.py:209
@@ -476,13 +476,8 @@ msgstr "Numéro de référence"
 msgid "label_related_documents"
 msgstr "Documents liés"
 
-#. Default: "reset"
-#: ./opengever/document/browser/versions_tab.py:158
-msgid "label_reset"
-msgstr "Remettre"
-
 #. Default: "Revert"
-#: ./opengever/document/browser/versions_tab.py:302
+#: ./opengever/document/browser/versions_tab.py:158
 msgid "label_revert"
 msgstr "Reculer"
 
@@ -550,4 +545,3 @@ msgstr "Avec commentaire"
 #: ./opengever/document/upgrades/profiles/4000/actions.xml
 msgid "without comment"
 msgstr "Sans commentaire"
-

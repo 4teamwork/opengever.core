@@ -166,12 +166,12 @@ class TestReverting(FunctionalTestCase):
         self.assertEquals('VERSION 1 DATA', self.document.file.data)
 
     @browsing
-    def test_reset_link_discreet_when_reverting_disallowed(self, browser):
+    def test_revert_link_discreet_when_reverting_disallowed(self, browser):
         self.manager.checkout()
         transaction.commit()
 
         browser.login().open(self.document, view='tabbedview_view-versions')
-        self.assertEqual('reset', browser.css('span.discreet').first.text)
+        self.assertEqual('Revert', browser.css('span.discreet').first.text)
 
     @browsing
     def test_browser_revert_view_raises_unauthorized_when_revert_disallowed(self, browser):  # noqa

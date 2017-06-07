@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-06-07 12:34+0000\n"
+"POT-Creation-Date: 2017-06-07 15:10+0000\n"
 "PO-Revision-Date: 2013-03-27 10:44+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -68,8 +68,8 @@ msgid "Could not check out object: ${title}, it is not a document."
 msgstr "${title} ist kein Dokument und konnte deshalb nicht ausgecheckt werden."
 
 #: ./opengever/document/browser/report.py:81
-msgid "Could not generate the report"
-msgstr "Report konnte nicht generiert werden"
+msgid "Could not generate the report."
+msgstr "Rapport konnte nicht generiert werden."
 
 #: ./opengever/document/browser/overview.py:209
 msgid "Current version: ${version}"
@@ -145,7 +145,7 @@ msgstr "Einchecken"
 #. Default: "PDF"
 #: ./opengever/document/browser/versions_tab.py:143
 msgid "button_pdf"
-msgstr "PDF Vorschau"
+msgstr "PDF-Vorschau"
 
 #. Default: "copy of"
 #: ./opengever/document/subscribers.py:93
@@ -180,7 +180,7 @@ msgstr "Ein Titel oder eine Datei muss angegeben werden."
 #. Default: "Archive file"
 #: ./opengever/document/behaviors/metadata.py:60
 msgid "fieldset_archive_file"
-msgstr "Archiv Datei"
+msgstr "Archivdatei"
 
 #. Default: "Common"
 #: ./opengever/document/behaviors/metadata.py:41
@@ -447,7 +447,7 @@ msgstr "Dokumentvorschau öffnen"
 #. Default: "PDF Preview"
 #: ./opengever/document/browser/templates/macros.pt:103
 msgid "label_pdf_preview"
-msgstr "PDF Vorschau"
+msgstr "PDF-Vorschau"
 
 #. Default: "Preserved as paper"
 #: ./opengever/document/behaviors/metadata.py:138
@@ -479,13 +479,8 @@ msgstr "Aktenzeichen"
 msgid "label_related_documents"
 msgstr "Verwandte Dokumente"
 
-#. Default: "reset"
-#: ./opengever/document/browser/versions_tab.py:158
-msgid "label_reset"
-msgstr "Zurücksetzen"
-
 #. Default: "Revert"
-#: ./opengever/document/browser/versions_tab.py:302
+#: ./opengever/document/browser/versions_tab.py:158
 msgid "label_revert"
 msgstr "Zurücksetzen"
 
@@ -528,7 +523,7 @@ msgstr "Dieses Dokument wurde von ${creator} ausgecheckt."
 #. Default: "Could not cancel checkout on document ${title}, mails does not support the checkin checkout process."
 #: ./opengever/document/checkout/cancel.py:67
 msgid "msg_cancel_checkout_on_mail_not_possible"
-msgstr "Das Dokument `${title}` konnte nicht ausgecheckt werden, da Mails den Checkin/Checkout Prozess nicht unterstützen."
+msgstr "Das Dokument `${title}` konnte nicht ausgecheckt werden, da Mails den Check-in-/Check-out-Prozess nicht unterstützen."
 
 #. Default: "No file"
 #: ./opengever/document/browser/templates/archiv_file.pt:18
@@ -553,4 +548,3 @@ msgstr "Mit Kommentar"
 #: ./opengever/document/upgrades/profiles/4000/actions.xml
 msgid "without comment"
 msgstr "Ohne Kommentar"
-

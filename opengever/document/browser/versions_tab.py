@@ -155,11 +155,11 @@ class VersionDataProxy(object):
             url = url.format(self.url, self.version_id)
             url = addTokenToUrl(url)
             link = translate_link(
-                url, _(u'label_reset', default=u'reset'),
+                url, _(u'label_revert', default=u'Revert'),
                 css_class='standalone function-revert')
             return link
         else:
-            label = translate_text(_(u'label_reset', default=u'reset'))
+            label = translate_text(_(u'label_revert', default=u'Revert'))
             return u'<span class="discreet">{}</span>'.format(label)
 
 
