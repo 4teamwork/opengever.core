@@ -37,7 +37,9 @@ class IAssignSchema(form.Schema):
     responsible = schema.Choice(
         title=_(u"label_responsible", default=u"Responsible"),
         description=_(u"help_responsible_single_client_setup", default=""),
-        source=AllUsersAndInboxesSourceBinder(),
+        source=AllUsersAndInboxesSourceBinder(
+            only_current_inbox=True,
+            only_current_orgunit=True),
         required=True,
         )
 
@@ -69,9 +71,9 @@ class AssignTaskForm(Form):
     @buttonAndHandler(_(u'button_assign', default=u'Assign'), name='save')
     def handle_assign(self, action):
         data, errors = self.extractData()
-        update_reponsible_field_data(data)
 
         if not errors:
+            update_reponsible_field_data(data)
             if self.context.responsible_client == data['responsible_client'] \
                     and self.context.responsible == data['responsible']:
                 # no changes

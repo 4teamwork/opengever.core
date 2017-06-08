@@ -4,7 +4,7 @@ from five import grok
 from ftw.keywordwidget.widget import KeywordFieldWidget
 from opengever.inbox import _
 from opengever.inbox.activities import ForwardingAddedActivity
-from opengever.ogds.base.sources import ForwardingResponsibleSourceBinder
+from opengever.ogds.base.sources import AllUsersAndInboxesSourceBinder
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import get_ou_selector
 from opengever.task import _ as task_mf
@@ -57,7 +57,8 @@ class IForwarding(ITask):
     responsible = schema.Choice(
         title=_(u"label_responsible", default=u"Responsible"),
         description=_(u"help_responsible", default=""),
-        source=ForwardingResponsibleSourceBinder(),
+        source=AllUsersAndInboxesSourceBinder(
+            only_current_orgunit=True),
         required=True,
     )
 

@@ -27,16 +27,24 @@ class AllUsersAndInboxesSource(object):
     plone.formwidget.autocomplete
     """
 
-    def __init__(self, context):
+    def __init__(self, context, **kwargs):
         self.context = context
         self.terms = []
         self.client_id = self.get_client_id()
 
+        self.only_current_orgunit = kwargs.get('only_current_orgunit', False)
+        self.only_current_inbox = kwargs.get('only_current_inbox', False)
+
     @property
     def base_query(self):
-        return create_session().query(User, OrgUnit) \
-                               .join(OrgUnit.users_group) \
-                               .join(Group.users)
+        query = create_session().query(User, OrgUnit) \
+                                .join(OrgUnit.users_group) \
+                                .join(Group.users)
+
+        if self.only_current_orgunit:
+            query = query.filter(OrgUnit.unit_id == self.client_id)
+
+        return query
 
     def __contains__(self, value):
         token = value
@@ -65,7 +73,15 @@ class AllUsersAndInboxesSource(object):
         # Handle special case - Inboxes: in form "inbox:unit_id"
         if ActorLookup(value).is_inbox():
             orgunit_id = userid
-            orgunit = OrgUnit.query.filter(OrgUnit.unit_id == orgunit_id).one()
+            query = OrgUnit.query
+
+            if self.only_current_inbox:
+                orgunit = query.filter(OrgUnit.unit_id == self.client_id) \
+                               .filter(OrgUnit.unit_id == orgunit_id) \
+                               .one()
+            else:
+                orgunit = query.filter(OrgUnit.unit_id == orgunit_id) \
+                               .one()
 
             value = token = orgunit.inbox().id()
             title = translate(_(u'inbox_label',
@@ -135,6 +151,10 @@ class AllUsersAndInboxesSource(object):
                               text_filters)
 
         query = OrgUnit.query
+
+        if self.only_current_inbox:
+            query = query.filter(OrgUnit.unit_id == self.client_id)
+
         query = extend_query_with_textfilter(
             query,
             [OrgUnit.title, OrgUnit.unit_id],
@@ -166,25 +186,18 @@ class AllUsersAndInboxesSource(object):
 @implementer(IContextSourceBinder)
 class AllUsersAndInboxesSourceBinder(object):
 
-    def __call__(self, context):
-        return AllUsersAndInboxesSource(context)
+    def __init__(self,
+                 only_current_orgunit=False,
+                 only_current_inbox=False):
 
-
-@implementer(IQuerySource)
-class ForwardingResponsibleSource(AllUsersAndInboxesSource):
-    """Return only users of the current orgunit and all inboxes"""
-
-    @property
-    def base_query(self):
-        query = super(ForwardingResponsibleSource, self).base_query
-        return query.filter(OrgUnit.unit_id == self.client_id)
-
-
-@implementer(IContextSourceBinder)
-class ForwardingResponsibleSourceBinder(object):
+        self.only_current_orgunit = only_current_orgunit
+        self.only_current_inbox = only_current_inbox
 
     def __call__(self, context):
-        return ForwardingResponsibleSource(context)
+        return AllUsersAndInboxesSource(
+            context,
+            only_current_orgunit=self.only_current_orgunit,
+            only_current_inbox=self.only_current_inbox)
 
 
 @implementer(IQuerySource)
