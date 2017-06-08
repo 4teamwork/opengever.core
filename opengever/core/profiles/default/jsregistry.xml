@@ -417,4 +417,14 @@
       enabled="False"
       />
 
+  <javascript
+      id="++resource++plone.formwidget.autocomplete/formwidget-autocomplete.js"
+      insert-after="collective.js.jqueryui.custom.min.js"
+      />
+
+  <javascript
+      id="++resource++plone.formwidget.autocomplete/jquery.autocomplete.min.js"
+      insert-after="collective.js.jqueryui.custom.min.js"
+      />
+
 </object>
