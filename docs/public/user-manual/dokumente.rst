@@ -160,7 +160,8 @@ Sie können diesen für Windows und Mac unter nachstehendem Link herunterladen:
 https://www.4teamwork.ch/office-connector.
 
 Der Office Connector unter Windows bietet zusätzliche Funktionen, welche
-nach dem Basis-Teil im Kapitel "Zusätzliche Funktionen Windows" erläutert wird.
+nach dem Basis-Teil im Kapitel "Zusätzliche Funktionen Windows" erläutert
+werden.
 
 Grundlagen
 ~~~~~~~~~~
