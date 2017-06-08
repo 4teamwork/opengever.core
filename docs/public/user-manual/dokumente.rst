@@ -202,13 +202,13 @@ auch auf der Eigenschaftenmaske des Dokuments.)
 
 Die Datei wird nun durch den External Editor / Office Connector mit der
 entsprechenden Anwendung geöffnet und kann bearbeitet werden. Während der
-Bearbeitung setzt der External Editor einen temporären Dateinamen, der nach dem
-Einchecken wieder verschwindet, ein.
+Bearbeitung erstellt der External Editor eine temporäre Datei, die nach dem
+Einchecken wieder verschwindet.
 
 Speichern Sie während der Bearbeitung die Datei regelmässig,
 insbesondere bevor Sie den Arbeitsplatz für längere Zeit verlassen. Wenn
 Sie mit der Bearbeitung fertig sind, schliessen Sie bitte die Datei und
-die Anwendung (z.B. Microsoft Word). In der Version 0.9.5 zeigt der
+die Anwendung (z.B. Microsoft Word). Ab der Version 0.9.5 zeigt der
 External Editor / Office Connector nach Abschluss der Bearbeitung, je nachdem,
 ob Änderungen gemacht wurden oder nicht, eine entsprechende Hinweismeldung an.
 
@@ -235,8 +235,8 @@ Zugelassene Dokumenttypen
 
 Der External Editor und der Office Connector unterstützen die gängigen Datei-
 formate zur Bearbeitung von Text und Tabellen (Microsoft Word, Microsoft Excel,
-Microsoft Powerpoint, OpenOffice, Adobe Acrobat) sowie zusätzlich einige
-viel verwendete Anwendungen (MindManager, Microsoft Project, Microsoft
+Microsoft Powerpoint, OpenOffice (nur Mac), Adobe Acrobat) sowie zusätzlich
+einige viel verwendete Anwendungen (MindManager, Microsoft Project, Microsoft
 Visio). Bedingung dazu ist, dass die jeweilige Anwendung auf dem PC
 installiert ist.
 
