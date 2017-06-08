@@ -71,9 +71,9 @@ class AssignTaskForm(Form):
     @buttonAndHandler(_(u'button_assign', default=u'Assign'), name='save')
     def handle_assign(self, action):
         data, errors = self.extractData()
-        update_reponsible_field_data(data)
 
         if not errors:
+            update_reponsible_field_data(data)
             if self.context.responsible_client == data['responsible_client'] \
                     and self.context.responsible == data['responsible']:
                 # no changes

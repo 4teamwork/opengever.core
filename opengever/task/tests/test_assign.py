@@ -59,6 +59,27 @@ class TestAssignTask(FunctionalTestCase):
             response.changes)
         self.assertEquals('Please make that for me.', response.text)
 
+    @browsing
+    def test_assign_task_only_to_users_of_the_current_orgunit(self, browser):
+
+        org_unit2 = create(Builder('org_unit')
+                           .id('unit2')
+                           .having(title=u'Finanzdirektion',
+                                   admin_unit=self.admin_unit)
+                           .with_default_groups())
+
+        self.hans = create(Builder('ogds_user')
+                           .id('hans')
+                           .having(firstname=u'Hans', lastname=u'Peter')
+                           .assign_to_org_units([org_unit2]))
+
+        self.org_unit = org_unit2
+        self.assign_task('Peter Hans', 'hans.peter', 'Do something')
+
+        self.assertEquals(TEST_USER_ID,
+                          self.task.responsible,
+                          'Responsible should remain the same.')
+
     def assign_task(self, name, userid, response, browser=default_browser):
         data = {'form.widgets.transition': 'task-transition-reassign'}
         browser.login().open(self.task, data, view='assign-task')
