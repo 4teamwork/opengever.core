@@ -222,7 +222,19 @@ Sachbearbeiterin zugewiesen werden. Wählen Sie dazu *Aktionen → Neu
 zuweisen*. Diese Möglichkeit besteht auch im späteren
 Arbeitsverlauf.
 
-|img-aufgaben-10|
+|img-aufgaben-24|
+
+In der neuen Maske kann die Person ausgewählt werden, welcher die Aufgabe
+zugewiesen werden soll. Im Kommentar-Feld können bei Bedarf noch weitere Inputs
+gegeben werden. Die Aktion mit "Zuweisen" abschliessen.
+
+|img-aufgaben-25|
+
+In der Detailansicht der Aufgabe kann die Neuzuweisung des Auftragnehmers
+nachträglich unten im Verlauf nachvollzogen werden.
+
+|img-aufgaben-26|
+
 
 Mit den Aufgaben verknüpfte Dokumente (Verweise) bearbeiten
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -742,6 +754,9 @@ Aufgaben verhindern.
 .. |img-aufgaben-21| image:: img/media/img-aufgaben-21.png
 .. |img-aufgaben-22| image:: img/media/img-aufgaben-22.png
 .. |img-aufgaben-23| image:: img/media/img-aufgaben-23.png
+.. |img-aufgaben-24| image:: img/media/img-aufgaben-24.png
+.. |img-aufgaben-25| image:: img/media/img-aufgaben-25.png
+.. |img-aufgaben-26| image:: img/media/img-aufgaben-26.png
 
 
 .. |image138| image:: img/media/image134.png
