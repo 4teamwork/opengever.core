@@ -1,4 +1,4 @@
-<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.private.dossier" meta_type="Dexterity FTI" i18n:domain="opengever.private">
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.private.dossier" meta_type="Dexterity FTI" i18n:domain="opengever.core">
 
   <!-- Basic metadata -->
   <property name="title" i18n:translate="">Private Dossier</property>
@@ -81,7 +81,7 @@
       url_expr="string:${object_url}/document_with_template"
       icon_expr=""
       condition_expr=""
-      i18n:domain="opengever.dossier">
+      i18n:domain="opengever.core">
     <permission value="Add portal content" />
   </action>
 
@@ -93,7 +93,7 @@
       url_expr="string:${object_url}/document_from_officeatwork"
       icon_expr=""
       condition_expr="object/@@is_officeatwork_feature_enabled"
-      i18n:domain="opengever.dossier">
+      i18n:domain="opengever.core">
     <permission value="Add portal content" />
   </action>
 

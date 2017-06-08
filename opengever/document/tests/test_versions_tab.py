@@ -145,7 +145,7 @@ class TestVersionsTabWithPDFConverter(TestVersionsTab):
             url = urlparse(pdf_download_link.attrib['href'])
             query = parse_qs(url.query)
 
-            self.assertEquals('PDF Vorschau', pdf_download_link.text)
+            self.assertEquals('PDF-Vorschau', pdf_download_link.text)
             self.assertEquals(['3'], query['version_id'])
             self.assertIn('_authenticator', query)
             self.assertEquals(

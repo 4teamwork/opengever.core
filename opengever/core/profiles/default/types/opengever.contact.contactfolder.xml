@@ -1,4 +1,4 @@
-<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.contact.contactfolder" meta_type="Dexterity FTI" i18n:domain="opengever.contact">
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.contact.contactfolder" meta_type="Dexterity FTI" i18n:domain="opengever.core">
 
   <!-- Basic metadata -->
   <property name="title" i18n:translate="">ContactFolder</property>

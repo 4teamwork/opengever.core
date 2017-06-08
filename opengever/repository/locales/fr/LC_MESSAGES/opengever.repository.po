@@ -1,56 +1,42 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-04-27 11:21+0000\n"
+"POT-Creation-Date: 2017-06-07 12:34+0000\n"
 "PO-Revision-Date: 2017-06-04 17:05+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
-"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
-"gever/opengever-repository/fr/>\n"
-"Language: fr\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-repository/fr/>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2.13.1\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
+"Language: fr\n"
+"X-Generator: Weblate 2.13.1\n"
 
 #: ./opengever/repository/browser/templates/referenceprefixmanager.pt:40
 msgid "In use"
 msgstr "Est utilisé"
 
-#: ./opengever/repository/profiles/default/actions.xml
 #: ./opengever/repository/upgrades/profiles/2601/actions.xml
 msgid "Prefix Manager"
 msgstr "Gestionnaire de préfixes de référence"
 
-#: ./opengever/repository/profiles/default/types/opengever.repository.repositoryfolder.xml
-msgid "RepositoryFolder"
-msgstr "Numéro de classement"
-
-#: ./opengever/repository/profiles/default/types/opengever.repository.repositoryroot.xml
-msgid "RepositoryRoot"
-msgstr "Système de classement"
-
-#: ./opengever/repository/profiles/default/actions.xml
 #: ./opengever/repository/upgrades/profiles/2601/actions.xml
 msgid "Unlock unused repository prefixes."
 msgstr "Déblocage de préfixes de référence inutilisés."
 
 #. Default: "Allow add businesscase dossier"
-#: ./opengever/repository/repositoryfolder.py:89
+#: ./opengever/repository/repositoryfolder.py:84
 msgid "allow_add_businesscase_dossier"
 msgstr "Permettre l'ajout de dossiers commerciaux"
 
 #. Default: "Choose if the user is allowed to add businesscase dossiers or only dossiers from a  dossiertemplate."
-#: ./opengever/repository/repositoryfolder.py:91
+#: ./opengever/repository/repositoryfolder.py:86
 msgid "description_allow_add_businesscase_dossier"
-msgstr ""
-"Déterminez s'il est permis d'ajouter des dossiers commerciaux à ce niveau. "
-"Si cette option est désactivée, l'utilisateur ne peut créer que des dossiers "
-"spéciaux ou bien des dossiers à partir d'un modèle."
+msgstr "Déterminez s'il est permis d'ajouter des dossiers commerciaux à ce niveau. Si cette option est désactivée, l'utilisateur ne peut créer que des dossiers spéciaux ou bien des dossiers à partir d'un modèle."
 
 #. Default: "No nested repositorys available."
 #: ./opengever/repository/browser/templates/referenceprefixmanager.pt:29
@@ -65,22 +51,22 @@ msgstr "A ce niveau du classement ce numéro de référence existe déjà."
 #. Default: "Common"
 #: ./opengever/repository/behaviors/referenceprefix.py:32
 #: ./opengever/repository/behaviors/responsibleorg.py:12
-#: ./opengever/repository/repositoryfolder.py:31
+#: ./opengever/repository/repositoryfolder.py:26
 msgid "fieldset_common"
 msgstr "En général"
 
 #. Default: "Select all additional dossier types which should be addable in this repository folder."
-#: ./opengever/repository/repositoryfolder.py:81
+#: ./opengever/repository/repositoryfolder.py:76
 msgid "help_addable_dossier_types"
 msgstr "Sélectionnez les types de dossiers à ajouter pour cette position du classeur."
 
 #. Default: "A short summary of the content."
-#: ./opengever/repository/repositoryfolder.py:44
+#: ./opengever/repository/repositoryfolder.py:39
 msgid "help_description"
 msgstr "Brève description du contenu."
 
 #. Default: "Addable dossier types"
-#: ./opengever/repository/repositoryfolder.py:79
+#: ./opengever/repository/repositoryfolder.py:74
 msgid "label_addable_dossier_types"
 msgstr "Types de dossiers à ajouter"
 
@@ -95,17 +81,17 @@ msgid "label_delete_repository"
 msgstr "Effacer le numéro de la position"
 
 #. Default: "Description"
-#: ./opengever/repository/repositoryfolder.py:43
+#: ./opengever/repository/repositoryfolder.py:38
 msgid "label_description"
 msgstr "Description"
 
 #. Default: "Former reference"
-#: ./opengever/repository/repositoryfolder.py:73
+#: ./opengever/repository/repositoryfolder.py:68
 msgid "label_former_reference"
 msgstr "Ancien numéro de référence"
 
 #. Default: "Location"
-#: ./opengever/repository/repositoryfolder.py:61
+#: ./opengever/repository/repositoryfolder.py:56
 msgid "label_location"
 msgstr "Site"
 
@@ -115,7 +101,7 @@ msgid "label_reference_number_prefix"
 msgstr "Préfixe référence"
 
 #. Default: "Referenced activity"
-#: ./opengever/repository/repositoryfolder.py:66
+#: ./opengever/repository/repositoryfolder.py:61
 msgid "label_referenced_activity"
 msgstr "Performance"
 
@@ -125,13 +111,13 @@ msgid "label_successfully_deleted"
 msgstr "Le numéro de la position a été effacé avec succès."
 
 #. Default: "Valid from"
-#: ./opengever/repository/repositoryfolder.py:51
+#: ./opengever/repository/repositoryfolder.py:46
 #: ./opengever/repository/repositoryroot.py:22
 msgid "label_valid_from"
 msgstr "Valable de :"
 
 #. Default: "Valid until"
-#: ./opengever/repository/repositoryfolder.py:56
+#: ./opengever/repository/repositoryfolder.py:51
 #: ./opengever/repository/repositoryroot.py:27
 msgid "label_valid_until"
 msgstr "Valable jusqu'à :"
@@ -157,12 +143,9 @@ msgid "msg_delete_confirmation"
 msgstr "Voulez-vous vraiment effacer le numéro de la position actuel?"
 
 #. Default: "You are adding a repositoryfolder to a leafnode which already contains dossiers. This is only temporarily allowed and all dossiers must be moved into a new leafnode afterwards."
-#: ./opengever/repository/repositoryfolder.py:212
+#: ./opengever/repository/repositoryfolder.py:142
 msgid "msg_leafnode_warning"
-msgstr ""
-"Vous ajoutez un dossier du référentiel à un nœud feuille contenant déjà des "
-"dossiers. Ceci n'est permis que temporairement et les dossiers s'y trouvant "
-"doivent ensuite être déplacés dans un nœud feuille."
+msgstr "Vous ajoutez un dossier du référentiel à un nœud feuille contenant déjà des dossiers. Ceci n'est permis que temporairement et les dossiers s'y trouvant doivent ensuite être déplacés dans un nœud feuille."
 
 #. Default: "Name"
 #: ./opengever/repository/browser/templates/referenceprefixmanager.pt:24
@@ -213,3 +196,4 @@ msgstr "Tâches"
 #: ./opengever/repository/browser/templates/referenceprefixmanager.pt:25
 msgid "unlock"
 msgstr "Libérer"
+

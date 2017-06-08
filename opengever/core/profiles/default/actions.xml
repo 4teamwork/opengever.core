@@ -31,7 +31,7 @@
   <object name="folder_buttons" meta_type="CMF Action Category">
 
     <!--migrated from opengever/globalindex/profiles/default/actions.xml-->
-    <object name="export_tasks" meta_type="CMF Action" i18n:domain="opengever.globalindex">
+    <object name="export_tasks" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">Export selection</property>
       <property name="description" i18n:translate="" />
       <property name="url_expr">string:@@task_report:method</property>
@@ -44,7 +44,7 @@
     </object>
 
     <!--migrated from opengever/base/profiles/default/actions.xml-->
-    <object name="copy_items" meta_type="CMF Action" i18n:domain="opengever.base">
+    <object name="copy_items" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">Copy Items</property>
       <property name="description" i18n:translate="" />
       <property name="url_expr">string:copy_items:method</property>
@@ -94,7 +94,7 @@
     </object>
 
     <!--migrated from opengever/document/profiles/default/actions.xml-->
-    <object name="send_as_email" meta_type="CMF Action" i18n:domain="opengever.document">
+    <object name="send_as_email" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">Send as email</property>
       <property name="description" i18n:translate="" />
       <property name="url_expr">string:send_documents:method</property>
@@ -106,7 +106,7 @@
       <property name="visible">True</property>
     </object>
 
-    <object name="attach_documents" meta_type="CMF Action" i18n:domain="opengever.document">
+    <object name="attach_documents" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">Attach selection</property>
       <property name="description" i18n:translate="" />
       <property name="url_expr">string:javascript:officeConnectorMultiAttach('$portal_url/officeconnector_attach_url');</property>
@@ -118,7 +118,7 @@
       <property name="visible">True</property>
     </object>
 
-    <object name="checkout" meta_type="CMF Action" i18n:domain="opengever.document">
+    <object name="checkout" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">Checkout</property>
       <property name="description" i18n:translate="" />
       <property name="url_expr">string:checkout_documents:method</property>
@@ -130,7 +130,7 @@
       <property name="visible">True</property>
     </object>
 
-    <object name="create_task" meta_type="CMF Action" i18n:domain="opengever.document">
+    <object name="create_task" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">Create Task</property>
       <property name="description" i18n:translate="" />
       <property name="url_expr">string:++add++opengever.task.task:method</property>
@@ -142,7 +142,7 @@
       <property name="visible">True</property>
     </object>
 
-    <object name="cancel" meta_type="CMF Action" i18n:domain="opengever.document">
+    <object name="cancel" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">Cancel</property>
       <property name="description" i18n:translate="" />
       <property name="url_expr">string:cancel_document_checkouts:method</property>
@@ -154,7 +154,7 @@
       <property name="visible">True</property>
     </object>
 
-    <object name="checkin_with_comment" meta_type="CMF Action" i18n:domain="opengever.document">
+    <object name="checkin_with_comment" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">Checkin with comment</property>
       <property name="description" i18n:translate="" />
       <property name="url_expr">string:checkin_documents:method</property>
@@ -166,7 +166,7 @@
       <property name="visible">True</property>
     </object>
 
-    <object name="checkin_without_comment" meta_type="CMF Action" i18n:domain="opengever.document">
+    <object name="checkin_without_comment" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">Checkin without comment</property>
       <property name="description" i18n:translate="" />
       <property name="url_expr">string:checkin_without_comment:method</property>
@@ -178,7 +178,7 @@
       <property name="visible">True</property>
     </object>
 
-    <object name="submit_additional_documents" meta_type="CMF Action" i18n:domain="opengever.document">
+    <object name="submit_additional_documents" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">Submit additional documents</property>
       <property name="description" i18n:translate="" />
       <property name="url_expr">string:submit_additional_documents:method</property>
@@ -190,7 +190,7 @@
       <property name="visible">True</property>
     </object>
 
-    <object name="export_documents" meta_type="CMF Action" i18n:domain="opengever.document">
+    <object name="export_documents" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">Export selection</property>
       <property name="description" i18n:translate="" />
       <property name="url_expr">string:@@document_report:method</property>
@@ -203,7 +203,7 @@
     </object>
 
     <!--migrated from opengever/dossier/profiles/default/actions.xml-->
-    <object name="delete_participants" meta_type="CMF Action" i18n:domain="opengever.dossier">
+    <object name="delete_participants" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">Delete</property>
       <property name="description" i18n:translate="" />
       <property name="url_expr">string:delete_participants:method</property>
@@ -215,7 +215,7 @@
       <property name="visible">True</property>
     </object>
 
-    <object name="add_participant" meta_type="CMF Action" i18n:domain="opengever.dossier">
+    <object name="add_participant" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">Add Participant</property>
       <property name="description" i18n:translate="" />
       <property name="url_expr">string:@@add-participation:method</property>
@@ -227,7 +227,7 @@
       <property name="visible">True</property>
     </object>
 
-    <object name="move_items" meta_type="CMF Action" i18n:domain="opengever.dossier">
+    <object name="move_items" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">Move Items</property>
       <property name="description" i18n:translate="" />
       <property name="url_expr">string:@@move_items:method</property>
@@ -239,7 +239,7 @@
       <property name="visible">True</property>
     </object>
 
-    <object name="export_dossiers" meta_type="CMF Action" i18n:domain="opengever.dossier">
+    <object name="export_dossiers" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">Export selection</property>
       <property name="description" i18n:translate="" />
       <property name="url_expr">string:@@dossier_report:method</property>
@@ -252,7 +252,7 @@
     </object>
 
     <!--migrated from opengever/trash/profiles/default/actions.xml-->
-    <object name="trashed" meta_type="CMF Action" i18n:domain="opengever.trash">
+    <object name="trashed" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">trashed</property>
       <property name="description" i18n:translate="" />
       <property name="url_expr">string:./trashed:method</property>
@@ -264,7 +264,7 @@
       <property name="visible">True</property>
     </object>
 
-    <object name="untrashed" meta_type="CMF Action" i18n:domain="opengever.trash">
+    <object name="untrashed" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">untrashed</property>
       <property name="description" i18n:translate="" />
       <property name="url_expr">string:./untrashed:method</property>
@@ -276,7 +276,7 @@
       <property name="visible">True</property>
     </object>
 
-    <object name="remove" meta_type="CMF Action" i18n:domain="opengever.trash">
+    <object name="remove" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">remove</property>
       <property name="description" i18n:translate="" />
       <property name="url_expr">string:./remove_confirmation:method</property>
@@ -289,7 +289,7 @@
     </object>
 
     <!--migrated from opengever/inbox/profiles/default/actions.xml-->
-    <object name="create_forwarding" meta_type="CMF Action" i18n:domain="opengever.inbox">
+    <object name="create_forwarding" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">Forward</property>
       <property name="description" i18n:translate="" />
       <property name="url_expr">string:++add++opengever.inbox.forwarding:method</property>
@@ -302,7 +302,7 @@
     </object>
 
     <!--migrated from opengever/latex/profiles/default/actions.xml-->
-    <object name="pdf_dossierlisting" meta_type="CMF Action" i18n:domain="opengever.latex">
+    <object name="pdf_dossierlisting" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">Print selection (PDF)</property>
       <property name="description" i18n:translate="" />
       <property name="url_expr">string:pdf-dossier-listing:method</property>
@@ -314,7 +314,7 @@
       <property name="visible">True</property>
     </object>
 
-    <object name="pdf_taskslisting" meta_type="CMF Action" i18n:domain="opengever.latex">
+    <object name="pdf_taskslisting" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">Print selection (PDF)</property>
       <property name="description" i18n:translate="" />
       <property name="url_expr">string:pdf-tasks-listing:method</property>
@@ -327,7 +327,7 @@
     </object>
 
     <!--migrated from opengever/disposition/profiles/default/actions.xml-->
-    <object name="create_disposition" meta_type="CMF Action" i18n:domain="opengever.disposition">
+    <object name="create_disposition" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">Create Disposition</property>
       <property name="description" i18n:translate="" />
       <property name="url_expr">string:++add++opengever.disposition.disposition:method</property>
@@ -423,7 +423,7 @@
       <property name="visible">False</property>
     </object>
 
-    <object name="properties" meta_type="CMF Action" i18n:domain="opengever.base">
+    <object name="properties" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">Properties</property>
       <property name="description" i18n:translate="" />
       <property name="url_expr">string:${object_url}/view</property>
@@ -486,7 +486,7 @@
     </object>
 
     <!--migrated from opengever/repository/profiles/default/actions.xml-->
-    <object name="prefix_manager" meta_type="CMF Action" i18n:domain="opengever.repository">
+    <object name="prefix_manager" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">Prefix Manager</property>
       <property name="description" i18n:translate="">Unlock unused repository prefixes.</property>
       <property name="url_expr">string:${object_url}/referenceprefix_manager</property>
@@ -513,7 +513,7 @@
     </object>
 
     <!--migrated from opengever/latex/profiles/default/actions.xml-->
-    <object name="pdf_dossierdetails" meta_type="CMF Action" i18n:domain="opengever.latex">
+    <object name="pdf_dossierdetails" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">Print details (PDF)</property>
       <property name="description" i18n:translate="" />
       <property name="url_expr">string:@@pdf-dossier-details</property>
@@ -526,7 +526,7 @@
       <property name="visible">True</property>
     </object>
 
-    <object name="export_pdf" meta_type="CMF Action" i18n:domain="opengever.latex">
+    <object name="export_pdf" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">Cover (PDF)</property>
       <property name="description" i18n:translate="" />
       <property name="url_expr">string:${object_url}/dossier_cover_pdf</property>
@@ -560,7 +560,7 @@
     </object>
 
     <!--migrated from opengever/private/profiles/default/actions.xml-->
-    <object name="my_repository" meta_type="CMF Action" i18n:domain="opengever.private">
+    <object name="my_repository" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">My repository</property>
       <property name="description" i18n:translate="" />
       <property name="url_expr">string:${portal/portal_membership/getHomeUrl}</property>
@@ -673,7 +673,7 @@
   <object name="mobile_buttons" meta_type="CMF Action Category">
 
     <!--migrated from opengever/ogds/base/profiles/default/actions.xml-->
-    <object name="toggle_orgunitselector" meta_type="CMF Action" i18n:domain="opengever.ogds.base">
+    <object name="toggle_orgunitselector" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">Toggle orgunit selector</property>
       <property name="description" i18n:translate="" />
       <property name="url_expr">string:#</property>
@@ -692,7 +692,7 @@
   <object name="object_checkin_menu" meta_type="CMF Action Category">
 
     <!--migrated from opengever/document/profiles/default/actions.xml-->
-    <object name="checkin_with_comment" meta_type="CMF Action" i18n:domain="opengever.document">
+    <object name="checkin_with_comment" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">with comment</property>
       <property name="description" i18n:translate="" />
       <property name="url_expr">string:$object_url/@@checkin_document</property>
@@ -704,7 +704,7 @@
       <property name="visible">True</property>
     </object>
 
-    <object name="checkin_without_comment" meta_type="CMF Action" i18n:domain="opengever.document">
+    <object name="checkin_without_comment" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">without comment</property>
       <property name="description" i18n:translate="" />
       <property name="url_expr">string:$object_url/@@checkin_without_comment?_authenticator=${object/@@authenticator/token}</property>

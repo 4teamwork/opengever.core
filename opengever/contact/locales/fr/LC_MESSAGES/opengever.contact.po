@@ -1,21 +1,20 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-04-27 11:21+0000\n"
+"POT-Creation-Date: 2017-06-07 12:34+0000\n"
 "PO-Revision-Date: 2017-06-02 16:00+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
-"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
-"gever/opengever-contact/fr/>\n"
-"Language: fr\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-contact/fr/>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2.13.1\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
+"Language: fr\n"
+"X-Generator: Weblate 2.13.1\n"
 
 #. Default: "Add Person"
 #: ./opengever/contact/browser/person.py:123
@@ -23,17 +22,8 @@ msgid "Add Person"
 msgstr "Ajouter une personne"
 
 #: ./opengever/contact/contact.py:187
-#: ./opengever/contact/profiles/default/types/opengever.contact.contact.xml
 msgid "Contact"
 msgstr "Contact"
-
-#: ./opengever/contact/profiles/default/types/opengever.contact.contactfolder.xml
-msgid "Contact Folder"
-msgstr "Répertoire de contact"
-
-#: ./opengever/contact/profiles/default/types/opengever.contact.contactfolder.xml
-msgid "ContactFolder"
-msgstr "Répertoire de contact"
 
 #: ./opengever/contact/browser/templates/person_edit.pt:26
 msgid "Delete"
@@ -55,7 +45,7 @@ msgstr "Adresses e-mail"
 msgid "Label"
 msgstr "Libellé"
 
-#: ./opengever/contact/browser/participation_forms.py:121
+#: ./opengever/contact/browser/participation_forms.py:125
 msgid "Remove"
 msgstr "Effacer"
 
@@ -147,7 +137,7 @@ msgid "info_mailaddress_created"
 msgstr "L'adresse électronique a été créée avec succès."
 
 #. Default: "Participation removed"
-#: ./opengever/contact/browser/participation_forms.py:130
+#: ./opengever/contact/browser/participation_forms.py:134
 msgid "info_participation_removed"
 msgstr "Participation supprimée"
 
@@ -170,7 +160,7 @@ msgid "label_active"
 msgstr "Actif"
 
 #. Default: "Add Participation"
-#: ./opengever/contact/browser/participation_forms.py:43
+#: ./opengever/contact/browser/participation_forms.py:44
 msgid "label_add_participation"
 msgstr "Ajouter une participation"
 
@@ -219,7 +209,7 @@ msgid "label_archived_phone_numbers"
 msgstr "Numéros de téléphones archivés"
 
 #. Default: "Cancel"
-#: ./opengever/contact/browser/participation_forms.py:136
+#: ./opengever/contact/browser/participation_forms.py:140
 #: ./opengever/contact/browser/templates/person_edit.pt:28
 msgid "label_cancel"
 msgstr "Annuler"
@@ -235,7 +225,7 @@ msgid "label_company"
 msgstr "Entreprise"
 
 #. Default: "Contact"
-#: ./opengever/contact/browser/participation_forms.py:24
+#: ./opengever/contact/browser/participation_forms.py:25
 msgid "label_contact"
 msgstr "Contact"
 
@@ -261,7 +251,7 @@ msgid "label_description"
 msgstr "Description"
 
 #. Default: "Edit ${title}"
-#: ./opengever/contact/browser/participation_forms.py:83
+#: ./opengever/contact/browser/participation_forms.py:87
 msgid "label_edit_participation"
 msgstr "Editer la participation de ${title}"
 
@@ -349,7 +339,7 @@ msgid "label_organizations"
 msgstr "Organisations"
 
 #. Default: "Participation of ${contact_title}"
-#: ./opengever/contact/models/participation.py:101
+#: ./opengever/contact/models/participation.py:54
 msgid "label_participation_of"
 msgstr "Participation de ${contact_title}"
 
@@ -397,12 +387,12 @@ msgid "label_picture"
 msgstr "Image"
 
 #. Default: "Remove ${title}"
-#: ./opengever/contact/browser/participation_forms.py:117
+#: ./opengever/contact/browser/participation_forms.py:121
 msgid "label_remove_participation"
 msgstr "Effacer ${title}"
 
 #. Default: "Roles"
-#: ./opengever/contact/browser/participation_forms.py:30
+#: ./opengever/contact/browser/participation_forms.py:31
 msgid "label_roles"
 msgstr "Rôles"
 
@@ -455,7 +445,7 @@ msgid "mail_address_deleted"
 msgstr "L'adresse électronique a été effacée."
 
 #. Default: "There already exists a participation for this contact."
-#: ./opengever/contact/browser/participation_forms.py:60
+#: ./opengever/contact/browser/participation_forms.py:64
 msgid "msg_participation_already_exists"
 msgstr "Il y a déjà une participation pour ce contact."
 
@@ -473,3 +463,4 @@ msgstr "Résultat(s): ${amount}"
 #: ./opengever/contact/contact.py:44
 msgid "telefon"
 msgstr "Téléphone"
+

@@ -1,4 +1,4 @@
-<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.meeting.submittedproposal" meta_type="Dexterity FTI" i18n:domain="opengever.meeting">
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.meeting.submittedproposal" meta_type="Dexterity FTI" i18n:domain="opengever.core">
 
   <!-- Basic metadata -->
   <property name="title" i18n:translate="">Submitted Proposal</property>
@@ -73,7 +73,7 @@
       />
 
   <action
-      i18n:domain="opengever.meeting"
+      i18n:domain="opengever.core"
       title="Sharing"
       action_id="sharing"
       category="tabbedview-tabs"

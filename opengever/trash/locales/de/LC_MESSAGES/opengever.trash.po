@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: opengever.trash 1.0\n"
-"POT-Creation-Date: 2017-05-03 07:37+0000\n"
+"POT-Creation-Date: 2017-06-07 12:34+0000\n"
 "PO-Revision-Date: 2017-05-03 09:38+0200\n"
 "Last-Translator: Julian Infanger <julian.infangner.@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -95,7 +95,6 @@ msgstr "Das Dokument ist noch ausgecheckt."
 msgid "msg_is_not_trashed"
 msgstr "Das Dokument ist noch nicht im Papierkorb."
 
-#: ./opengever/trash/profiles/default/actions.xml
 #: ./opengever/trash/upgrades/profiles/4100/actions.xml
 msgid "remove"
 msgstr "Löschen"
@@ -104,10 +103,3 @@ msgstr "Löschen"
 msgid "the object ${obj} trashed"
 msgstr "Das Objekt ${obj} wurde in den Papierkorb verschoben."
 
-#: ./opengever/trash/profiles/default/actions.xml
-msgid "trashed"
-msgstr "In den Papierkorb verschieben"
-
-#: ./opengever/trash/profiles/default/actions.xml
-msgid "untrashed"
-msgstr "Reaktivieren"

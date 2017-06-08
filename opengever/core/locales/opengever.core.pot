@@ -1,0 +1,249 @@
+# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
+# SOME DESCRIPTIVE TITLE.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2017-06-07 12:17+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: opengever.core\n"
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Add Participant"
+msgstr ""
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Attach selection"
+msgstr ""
+
+#: ./opengever/core/profiles/default/types/opengever.dossier.businesscasedossier.xml
+msgid "Business Case Dossier"
+msgstr ""
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Cancel"
+msgstr ""
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Checkin with comment"
+msgstr ""
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Checkin without comment"
+msgstr ""
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Checkout"
+msgstr ""
+
+#: ./opengever/core/profiles/default/types/opengever.meeting.committee.xml
+msgid "Committee"
+msgstr ""
+
+#: ./opengever/core/profiles/default/types/opengever.meeting.committeecontainer.xml
+msgid "Committee Container"
+msgstr ""
+
+#: ./opengever/core/profiles/default/types/opengever.contact.contact.xml
+msgid "Contact"
+msgstr ""
+
+#: ./opengever/core/profiles/default/types/opengever.contact.contactfolder.xml
+msgid "Contact Folder"
+msgstr ""
+
+#: ./opengever/core/profiles/default/types/opengever.contact.contactfolder.xml
+msgid "ContactFolder"
+msgstr ""
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Copy Items"
+msgstr ""
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Cover (PDF)"
+msgstr ""
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Create Disposition"
+msgstr ""
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Create Task"
+msgstr ""
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Delete"
+msgstr ""
+
+#: ./opengever/core/profiles/default/types/opengever.disposition.disposition.xml
+msgid "Disposition"
+msgstr ""
+
+#: ./opengever/core/profiles/default/types/opengever.document.document.xml
+msgid "Document"
+msgstr ""
+
+#: ./opengever/core/profiles/default/types/opengever.dossier.dossiertemplate.xml
+msgid "Dossier template"
+msgstr ""
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Export selection"
+msgstr ""
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Forward"
+msgstr ""
+
+#: ./opengever/core/profiles/default/types/opengever.inbox.forwarding.xml
+msgid "Forwarding"
+msgstr ""
+
+#: ./opengever/core/profiles/default/types/opengever.inbox.inbox.xml
+msgid "Inbox"
+msgstr ""
+
+#: ./opengever/core/profiles/default/types/opengever.inbox.container.xml
+msgid "Inbox Container"
+msgstr ""
+
+#: ./opengever/core/profiles/default/types/opengever.meeting.meetingdossier.xml
+msgid "Meeting Dossier"
+msgstr ""
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Move Items"
+msgstr ""
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "My repository"
+msgstr ""
+
+#: ./opengever/core/profiles/default/types/opengever.dossier.businesscasedossier.xml
+#: ./opengever/core/profiles/default/types/opengever.meeting.meetingdossier.xml
+msgid "Participant"
+msgstr ""
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Prefix Manager"
+msgstr ""
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Print details (PDF)"
+msgstr ""
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Print selection (PDF)"
+msgstr ""
+
+#: ./opengever/core/profiles/default/types/opengever.private.dossier.xml
+msgid "Private Dossier"
+msgstr ""
+
+#: ./opengever/core/profiles/default/types/opengever.private.root.xml
+msgid "Private Root"
+msgstr ""
+
+#: ./opengever/core/profiles/default/types/opengever.private.folder.xml
+msgid "Private folder"
+msgstr ""
+
+#: ./opengever/core/profiles/default/types/opengever.dossier.projectdossier.xml
+msgid "Project Dossier"
+msgstr ""
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Properties"
+msgstr ""
+
+#. Default: "Proposal"
+#: ./opengever/core/profiles/default/types/opengever.meeting.proposal.xml
+msgid "Proposal"
+msgstr ""
+
+#: ./opengever/core/profiles/default/types/opengever.meeting.proposaltemplate.xml
+msgid "Proposal Template"
+msgstr ""
+
+#: ./opengever/core/profiles/default/types/opengever.repository.repositoryfolder.xml
+msgid "RepositoryFolder"
+msgstr ""
+
+#: ./opengever/core/profiles/default/types/opengever.repository.repositoryroot.xml
+msgid "RepositoryRoot"
+msgstr ""
+
+#: ./opengever/core/profiles/default/types/opengever.meeting.sablontemplate.xml
+msgid "Sablon Template"
+msgstr ""
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Send as email"
+msgstr ""
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Submit additional documents"
+msgstr ""
+
+#: ./opengever/core/profiles/default/types/opengever.meeting.submittedproposal.xml
+msgid "Submitted Proposal"
+msgstr ""
+
+#: ./opengever/core/profiles/default/types/opengever.task.task.xml
+msgid "Task"
+msgstr ""
+
+#: ./opengever/core/profiles/default/types/opengever.tasktemplates.tasktemplate.xml
+msgid "TaskTemplate"
+msgstr ""
+
+#: ./opengever/core/profiles/default/types/opengever.tasktemplates.tasktemplatefolder.xml
+msgid "TaskTemplateFolder"
+msgstr ""
+
+#: ./opengever/core/profiles/default/types/opengever.dossier.templatefolder.xml
+msgid "Template Folder"
+msgstr ""
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Toggle orgunit selector"
+msgstr ""
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Unlock unused repository prefixes."
+msgstr ""
+
+#: ./opengever/core/profiles/default/types/opengever.inbox.yearfolder.xml
+msgid "YearFolder"
+msgstr ""
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "remove"
+msgstr ""
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "trashed"
+msgstr ""
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "untrashed"
+msgstr ""
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "with comment"
+msgstr ""
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "without comment"
+msgstr ""
+

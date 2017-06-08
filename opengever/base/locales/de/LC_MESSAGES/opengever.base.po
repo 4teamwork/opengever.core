@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-05-17 15:37+0000\n"
+"POT-Creation-Date: 2017-06-07 14:47+0000\n"
 "PO-Revision-Date: 2014-09-04 01:03+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -22,10 +22,6 @@ msgstr ""
 msgid "(INACTIVE)"
 msgstr "(INAKTIV)"
 
-#: ./opengever/base/profiles/default/actions.xml
-msgid "Copy Items"
-msgstr "Kopieren"
-
 #: ./opengever/base/browser/templates/gever-macros.pt:38
 msgid "No content"
 msgstr "Keine Inhalte"
@@ -33,10 +29,6 @@ msgstr "Keine Inhalte"
 #: ./opengever/base/viewlets/download.py:22
 msgid "No file in in this version"
 msgstr "In dieser Version ist keine Datei vorhanden"
-
-#: ./opengever/base/profiles/default/actions.xml
-msgid "Properties"
-msgstr "Eigenschaften anzeigen"
 
 #. Default: "Save"
 #: ./opengever/base/browser/modelforms.py:41
@@ -113,20 +105,20 @@ msgstr "Archivwürdigkeit"
 #. Default: ""
 #: ./opengever/base/behaviors/classification.py:72
 msgid "help_classification"
-msgstr "Grad, in dem die Unterlagen vor unberechtigter Einsicht geschützt werden müssen"
+msgstr "Grad, in dem die Unterlagen vor unberechtigter Einsicht geschützt werden müssen."
 
 #: ./opengever/base/behaviors/lifecycle.py:74
 msgid "help_custody_period"
-msgstr "Dauer, während der nach der Archivierung die Dokumente vor öffentlicher Einsichtnahme geschützt sind"
+msgstr "Dauer, während der nach der Archivierung die Dokumente vor öffentlicher Einsichtnahme geschützt sind."
 
 #. Default: ""
 #: ./opengever/base/behaviors/classification.py:79
 msgid "help_privacy_layer"
-msgstr "Markierung, die angibt, ob die Unterlagen besonders schützenswerte Personendaten oder Persönlichkeitsprofile gemäss Datenschutzrecht enthalten"
+msgstr "Markierung, die angibt, ob die Unterlagen besonders schützenswerte Personendaten oder Persönlichkeitsprofile gemäss Datenschutzrecht enthalten."
 
 #: ./opengever/base/behaviors/classification.py:86
 msgid "help_public_trial"
-msgstr "Angabe, ob die Unterlagen gemäss Öffentlichkeitsgesetz zugänglich sind oder nicht"
+msgstr "Angabe, ob die Unterlagen gemäss Öffentlichkeitsgesetz zugänglich sind oder nicht."
 
 #: ./opengever/base/behaviors/classification.py:95
 msgid "help_public_trial_statement"
@@ -134,7 +126,7 @@ msgstr "Datum Gesuch, Gesuchsteller, Datum Entscheid, Verweis auf GEVER-Gesuchdo
 
 #: ./opengever/base/behaviors/lifecycle.py:44
 msgid "help_retention_period"
-msgstr "Zeitraum zwischen dem jüngsten Dokumentdatum eines in einem Dossier enthaltenen Dokuments und dem Zeitpunkt, an dem dieses für die Geschäftstätigkeit der Verwaltungseinheit nicht mehr benötigt wird"
+msgstr "Zeitraum zwischen dem jüngsten Dokumentdatum eines in einem Dossier enthaltenen Dokuments und dem Zeitpunkt, an dem dieses für die Geschäftstätigkeit der Verwaltungseinheit nicht mehr benötigt wird."
 
 #. Default: "-- Already removed object --"
 #: ./opengever/base/adapters.py:209
@@ -176,11 +168,6 @@ msgstr "Aktion bestätigen"
 msgid "label_created"
 msgstr "Erstellt am"
 
-#. Default: "Creators"
-#: ./opengever/base/behaviors/creator.py:18
-msgid "label_creators"
-msgstr "Autoren"
-
 #. Default: "Custody period (years)"
 #: ./opengever/base/behaviors/lifecycle.py:73
 msgid "label_custody_period"
@@ -197,9 +184,9 @@ msgid "label_dateofsubmission"
 msgstr "Anbietezeitpunkt"
 
 #. Default: "An unexpected error has occured"
-#: ./opengever/base/browser/templates/gever-macros.pt:120
+#: ./opengever/base/browser/templates/gever-macros.pt:130
 msgid "label_default_error_message"
-msgstr "Ein unerwarteter Fehler ist aufgetreten"
+msgstr "Ein unerwarteter Fehler ist aufgetreten."
 
 #. Default: "Description"
 #: ./opengever/base/behaviors/base.py:30
@@ -247,7 +234,7 @@ msgid "label_search"
 msgstr "Suche"
 
 #. Default: "Error"
-#: ./opengever/base/browser/templates/gever-macros.pt:119
+#: ./opengever/base/browser/templates/gever-macros.pt:129
 msgid "label_severity_error"
 msgstr "Fehler"
 
@@ -293,10 +280,10 @@ msgstr "Fehler"
 msgid "message_title_info"
 msgstr "Information"
 
-#. Default: "Can't paste items, the clipboard is emtpy"
-#: ./opengever/base/browser/paste.py:29
+#. Default: "Can't paste items; the clipboard is emtpy"
+#: ./opengever/base/browser/paste.py:25
 msgid "msg_empty_clipboard"
-msgstr "Es können keine Objekte eingefügt werden, die Zwischenablage ist leer."
+msgstr "Es können keine Objekte eingefügt werden; die Zwischenablage ist leer."
 
 #. Default: "No items available"
 #: ./opengever/base/widgets.py:78
@@ -309,24 +296,24 @@ msgid "msg_pasting_not_allowed"
 msgstr "Es ist nicht erlaubt die Objekte an diesem Ort einzufügen."
 
 #. Default: "Can't paste items, it's not allowed to add objects of this type."
-#: ./opengever/base/browser/paste.py:36
+#: ./opengever/base/browser/paste.py:32
 msgid "msg_pasting_type_not_allowed"
 msgstr "Es ist nicht erlaubt Objekte dieses Typs einzufügen."
 
 #. Default: "Selected objects successfully copied."
 #: ./opengever/base/browser/copy_items.py:36
 msgid "msg_successfuly_copied"
-msgstr "Die selektieren Objekte wurden kopiert."
+msgstr "Die selektierten Objekte wurden kopiert."
 
 #. Default: "Objects from clipboard successfully pasted."
-#: ./opengever/base/browser/paste.py:45
+#: ./opengever/base/browser/paste.py:49
 msgid "msg_successfuly_pasted"
 msgstr "Die Objekte der Zwischenablage wurden eingefügt."
 
 #. Default: "Careful, it's possible someone is executing an exploit against you. Verify you just performed an action on this site and that you were not referred here by a different website or email."
 #: ./opengever/base/browser/confirm.pt:27
 msgid "msg_verify_you_performed_this_action"
-msgstr "Bitte bestätigen Sie, dass Sie selbst diese Aktion durchgeführt haben und nicht durch einen Link in einem E-Mail oder von einer externen Website auf GEVER weitergeleitet wurden. Dies ist eine Sicherheitsmassnahme um sogenannte CSRF Angriffe zu verhindern. Falls Sie diese Meldung sehen, obwohl Sie eine Aktion innerhalb GEVER durchgeführt haben, teilen Sie dies bitte dem Support mit (inkl. einem Screenshot dieser Meldung und der untenstehenden URL)."
+msgstr "Bitte bestätigen Sie, dass Sie selbst diese Aktion durchgeführt haben und nicht durch einen Link in einem E-Mail oder von einer externen Website auf GEVER weitergeleitet wurden. Dies ist eine Sicherheitsmassnahme, um sogenannte CSRF-Angriffe zu verhindern. Falls Sie diese Meldung sehen, obwohl Sie eine Aktion innerhalb GEVER durchgeführt haben, teilen Sie dies bitte dem Support mit (inkl. einem Screenshot dieser Meldung und der untenstehenden URL)."
 
 #. Default ""
 #: opengever/repository/classification.py
@@ -368,7 +355,7 @@ msgstr "Haben Sie nicht gefunden, wonach Sie gesucht haben? Die ${advanced_searc
 msgid "search_results_advanced_link"
 msgstr "erweiterte Suche"
 
-#: ./opengever/base/browser/templates/gever-macros.pt:101
+#: ./opengever/base/browser/templates/gever-macros.pt:105
 msgid "show all"
 msgstr "Alle anzeigen"
 
@@ -387,4 +374,3 @@ msgstr "Nicht geprüft"
 #: opengever/repository/classification.py
 msgid "unprotected"
 msgstr "Nicht klassifiziert"
-

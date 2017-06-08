@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-04-27 11:21+0000\n"
+"POT-Creation-Date: 2017-06-07 12:34+0000\n"
 "PO-Revision-Date: 2016-08-10 04:54+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-inbox/fr/>\n"
@@ -20,27 +20,13 @@ msgstr ""
 msgid "Documents"
 msgstr "Documents"
 
-#: ./opengever/inbox/profiles/default/actions.xml
-msgid "Forward"
-msgstr "Transmettre"
-
-#: ./opengever/inbox/profiles/default/types/opengever.inbox.forwarding.xml
-msgid "Forwarding"
-msgstr "Transmission"
-
-#: ./opengever/inbox/profiles/default/types/opengever.inbox.inbox.xml
 #: ./opengever/inbox/upgrades/profiles/2603/types/opengever.inbox.inbox.xml
 msgid "Inbox"
 msgstr "Boîte de réception"
 
-#: ./opengever/inbox/profiles/default/types/opengever.inbox.container.xml
 #: ./opengever/inbox/upgrades/profiles/4003/types/opengever.inbox.container.xml
 msgid "Inbox Container"
 msgstr "Conteneur de la boîte de réception"
-
-#: ./opengever/inbox/profiles/default/types/opengever.inbox.yearfolder.xml
-msgid "YearFolder"
-msgstr "Classeur pour l'année"
 
 #. Default: "Close"
 #: ./opengever/inbox/browser/close.py:37
@@ -53,7 +39,7 @@ msgid "current_inbox_not_available"
 msgstr "Vous n'avez pas accès à la boîte de réception de ${current_org_unit}."
 
 #. Default: "Error: Please select at least one document to forward."
-#: ./opengever/inbox/forwarding.py:116
+#: ./opengever/inbox/forwarding.py:118
 msgid "error_no_document_selected"
 msgstr "Erreur: Choisissez au minimum un document à transmettre."
 
@@ -63,7 +49,7 @@ msgid "fieldset_common"
 msgstr "En général"
 
 #. Default: "Forwarding"
-#: ./opengever/inbox/forwarding.py:87
+#: ./opengever/inbox/forwarding.py:89
 msgid "forwarding_task_type"
 msgstr "Transmission"
 
@@ -71,7 +57,7 @@ msgstr "Transmission"
 msgid "help_inbox_group"
 msgstr "Ce goupe est autorisé, dès qu'une tâche est attribuée à la boîte de réception."
 
-#: ./opengever/inbox/forwarding.py:56
+#: ./opengever/inbox/forwarding.py:59
 msgid "help_responsible"
 msgstr "Choix de la personne responsable ou la boîte de réception du client mentionné ci-dessus."
 
@@ -106,7 +92,7 @@ msgid "label_refuse_forwarding"
 msgstr "Refuser le transfert"
 
 #. Default: "Responsible"
-#: ./opengever/inbox/forwarding.py:55
+#: ./opengever/inbox/forwarding.py:58
 msgid "label_responsible"
 msgstr "Mandataire"
 
@@ -116,7 +102,7 @@ msgid "msg_forwarding_added"
 msgstr "Nouvelle transmission ajoutée par ${user}"
 
 #. Default: "Assign Forwarding"
-#: ./opengever/inbox/browser/assign.py:35
+#: ./opengever/inbox/browser/assign.py:39
 msgid "title_assign_forwarding"
 msgstr "Envoyer le transfert"
 

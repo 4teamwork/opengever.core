@@ -1,4 +1,4 @@
-<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.dossier.projectdossier" meta_type="Dexterity FTI" i18n:domain="opengever.dossier">
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.dossier.projectdossier" meta_type="Dexterity FTI" i18n:domain="opengever.core">
 
   <!-- Basic metadata -->
   <property name="title" i18n:translate="">Project Dossier</property>
@@ -84,7 +84,7 @@
       category="folder_factories"
       url_expr="string:${object_url}/add-tasktemplate"
       icon_expr=""
-      i18n:domain="opengever.tasktemplates">
+      i18n:domain="opengever.core">
     <permission value="Add portal content" />
   </action>
 

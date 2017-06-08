@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-05-17 11:42+0000\n"
+"POT-Creation-Date: 2017-06-07 15:10+0000\n"
 "PO-Revision-Date: 2013-03-27 10:44+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -14,7 +14,6 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ./opengever/document/profiles/default/actions.xml
 #: ./opengever/document/upgrades/20170322142153_add_office_connector_multi_attach_action_to_documents/actions.xml
 #: ./opengever/document/upgrades/20170424163920_adjust_sort_order_of_actions/actions.xml
 msgid "Attach selection"
@@ -23,11 +22,6 @@ msgstr "Mit Mailprogramm versenden"
 #: ./opengever/document/browser/edit.py:104
 msgid "Can't edit the document at moment, beacuse it's locked."
 msgstr "Das Dokument kann momentan nicht bearbeitet werden, es ist gesperrt."
-
-#. Default: "Cancel"
-#: ./opengever/document/profiles/default/actions.xml
-msgid "Cancel"
-msgstr "Widerrufen"
 
 #: ./opengever/document/checkout/cancel.py:89
 msgid "Cancel checkout: ${title}"
@@ -43,21 +37,14 @@ msgid "Checked out: ${title}"
 msgstr "Dokument ausgecheckt: ${title}"
 
 #: ./opengever/document/browser/templates/macros.pt:66
-#: ./opengever/document/profiles/default/actions.xml
 #: ./opengever/document/upgrades/profiles/4000/actions.xml
 msgid "Checkin with comment"
 msgstr "Mit Kommentar einchecken"
 
 #: ./opengever/document/browser/templates/macros.pt:63
-#: ./opengever/document/profiles/default/actions.xml
 #: ./opengever/document/upgrades/profiles/4000/actions.xml
 msgid "Checkin without comment"
 msgstr "Ohne Kommentar einchecken"
-
-#. Default: "Checkout"
-#: ./opengever/document/profiles/default/actions.xml
-msgid "Checkout"
-msgstr "Auschecken"
 
 #: ./opengever/document/checkout/cancel.py:81
 msgid "Could not cancel checkout on document ${title}."
@@ -81,26 +68,17 @@ msgid "Could not check out object: ${title}, it is not a document."
 msgstr "${title} ist kein Dokument und konnte deshalb nicht ausgecheckt werden."
 
 #: ./opengever/document/browser/report.py:81
-msgid "Could not generate the report"
-msgstr "Report konnte nicht generiert werden"
-
-#: ./opengever/document/profiles/default/actions.xml
-msgid "Create Task"
-msgstr "Aufgabe erstellen"
+msgid "Could not generate the report."
+msgstr "Rapport konnte nicht generiert werden."
 
 #: ./opengever/document/browser/overview.py:209
 msgid "Current version: ${version}"
 msgstr "Aktuelle Version: ${version}"
 
-#: ./opengever/document/profiles/default/types/opengever.document.document.xml
-msgid "Document"
-msgstr "Dokument"
-
 #: ./opengever/document/browser/templates/downloadconfirmation.pt:22
 msgid "Don't show this message again."
 msgstr "Diese Meldung nicht mehr anzeigen."
 
-#: ./opengever/document/profiles/default/actions.xml
 #: ./opengever/document/upgrades/20161111090446_add_document_export_actions/actions.xml
 msgid "Export selection"
 msgstr "Auswahl exportieren"
@@ -114,12 +92,6 @@ msgstr "GEVER verlassen"
 msgid "Reverted file to version ${version_id}."
 msgstr "Datei des Dokuments auf Version ${version_id} zurückgesetzt."
 
-#. Default: "Send as email"
-#: ./opengever/document/profiles/default/actions.xml
-msgid "Send as email"
-msgstr "Als E-Mail versenden"
-
-#: ./opengever/document/profiles/default/actions.xml
 #: ./opengever/document/upgrades/profiles/4200/actions.xml
 msgid "Submit additional documents"
 msgstr "Zusätzliche Anhänge einreichen"
@@ -173,7 +145,7 @@ msgstr "Einchecken"
 #. Default: "PDF"
 #: ./opengever/document/browser/versions_tab.py:143
 msgid "button_pdf"
-msgstr "PDF Vorschau"
+msgstr "PDF-Vorschau"
 
 #. Default: "copy of"
 #: ./opengever/document/subscribers.py:93
@@ -208,7 +180,7 @@ msgstr "Ein Titel oder eine Datei muss angegeben werden."
 #. Default: "Archive file"
 #: ./opengever/document/behaviors/metadata.py:60
 msgid "fieldset_archive_file"
-msgstr "Archiv Datei"
+msgstr "Archivdatei"
 
 #. Default: "Common"
 #: ./opengever/document/behaviors/metadata.py:41
@@ -475,7 +447,7 @@ msgstr "Dokumentvorschau öffnen"
 #. Default: "PDF Preview"
 #: ./opengever/document/browser/templates/macros.pt:103
 msgid "label_pdf_preview"
-msgstr "PDF Vorschau"
+msgstr "PDF-Vorschau"
 
 #. Default: "Preserved as paper"
 #: ./opengever/document/behaviors/metadata.py:138
@@ -507,13 +479,8 @@ msgstr "Aktenzeichen"
 msgid "label_related_documents"
 msgstr "Verwandte Dokumente"
 
-#. Default: "reset"
-#: ./opengever/document/browser/versions_tab.py:158
-msgid "label_reset"
-msgstr "Zurücksetzen"
-
 #. Default: "Revert"
-#: ./opengever/document/browser/versions_tab.py:302
+#: ./opengever/document/browser/versions_tab.py:158
 msgid "label_revert"
 msgstr "Zurücksetzen"
 
@@ -556,7 +523,7 @@ msgstr "Dieses Dokument wurde von ${creator} ausgecheckt."
 #. Default: "Could not cancel checkout on document ${title}, mails does not support the checkin checkout process."
 #: ./opengever/document/checkout/cancel.py:67
 msgid "msg_cancel_checkout_on_mail_not_possible"
-msgstr "Das Dokument `${title}` konnte nicht ausgecheckt werden, da Mails den Checkin/Checkout Prozess nicht unterstützen."
+msgstr "Das Dokument `${title}` konnte nicht ausgecheckt werden, da Mails den Check-in-/Check-out-Prozess nicht unterstützen."
 
 #. Default: "No file"
 #: ./opengever/document/browser/templates/archiv_file.pt:18
@@ -574,12 +541,10 @@ msgstr "Folgende Dokumente sind ausgecheckt:"
 msgid "warning_download_confirmation"
 msgstr "Bitte beachten Sie, dass in diesem Fall Änderungen an diesem Dokument NICHT in GEVER gespeichert werden."
 
-#: ./opengever/document/profiles/default/actions.xml
 #: ./opengever/document/upgrades/profiles/4000/actions.xml
 msgid "with comment"
 msgstr "Mit Kommentar"
 
-#: ./opengever/document/profiles/default/actions.xml
 #: ./opengever/document/upgrades/profiles/4000/actions.xml
 msgid "without comment"
 msgstr "Ohne Kommentar"

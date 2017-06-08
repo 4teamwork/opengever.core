@@ -78,7 +78,7 @@ class DocumentReporter(grok.View):
 
         data = reporter()
         if not data:
-            msg = _(u'Could not generate the report')
+            msg = _(u'Could not generate the report.')
             IStatusMessage(self.request).addStatusMessage(
                 msg, type='error')
             return self.request.RESPONSE.redirect(self.context.absolute_url())

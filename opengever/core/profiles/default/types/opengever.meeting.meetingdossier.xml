@@ -1,4 +1,4 @@
-<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.meeting.meetingdossier" meta_type="Dexterity FTI" i18n:domain="opengever.meeting">
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.meeting.meetingdossier" meta_type="Dexterity FTI" i18n:domain="opengever.core">
 
   <!-- Basic metadata -->
   <property name="title" i18n:translate="">Meeting Dossier</property>
@@ -86,7 +86,7 @@
       url_expr="string:${object_url}/document_with_template"
       icon_expr=""
       condition_expr=""
-      i18n:domain="opengever.dossier">
+      i18n:domain="opengever.core">
     <permission value="Add portal content" />
   </action>
 
@@ -98,7 +98,7 @@
       url_expr="string:${object_url}/document_from_officeatwork"
       icon_expr=""
       condition_expr="object/@@is_officeatwork_feature_enabled"
-      i18n:domain="opengever.dossier">
+      i18n:domain="opengever.core">
     <permission value="Add portal content" />
   </action>
 
@@ -110,13 +110,13 @@
       url_expr="string:${object_url}/@@add-participation"
       icon_expr=""
       condition_expr=""
-      i18n:domain="opengever.dossier"
+      i18n:domain="opengever.core"
       i18n:attributes="title">
     <permission value="Add portal content" />
   </action>
 
   <action
-      i18n:domain="opengever.dossier"
+      i18n:domain="opengever.core"
       title="Give Filing Number"
       action_id="filing_nr"
       category="object_buttons"
@@ -135,7 +135,7 @@
       category="folder_factories"
       url_expr="string:${object_url}/add-tasktemplate"
       icon_expr=""
-      i18n:domain="opengever.tasktemplates">
+      i18n:domain="opengever.core">
     <permission value="Add portal content" />
   </action>
 

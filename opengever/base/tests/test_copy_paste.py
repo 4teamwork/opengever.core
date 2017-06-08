@@ -41,7 +41,7 @@ class TestCopyPaste(FunctionalTestCase):
         browser.login().open(dossier, view='paste_clipboard')
 
         self.assertEqual(dossier.absolute_url(), browser.url)
-        self.assertEqual([u"Can't paste items, the clipboard is emtpy"],
+        self.assertEqual([u"Can't paste items; the clipboard is emtpy"],
                          error_messages())
 
     @browsing

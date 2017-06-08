@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-04-27 11:21+0000\n"
+"POT-Creation-Date: 2017-06-07 12:34+0000\n"
 "PO-Revision-Date: 2016-07-22 16:54+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-ogds-base/de/>\n"
@@ -16,7 +16,6 @@ msgstr ""
 "Language: de\n"
 "X-Generator: Weblate 2.7-dev\n"
 
-#: ./opengever/ogds/base/profiles/default/actions.xml
 #: ./opengever/ogds/base/upgrades/profiles/4002/actions.xml
 msgid "Toggle orgunit selector"
 msgstr "Amtswechsler umschalten"
@@ -33,6 +32,7 @@ msgstr "Ja"
 
 #. Default: "Inbox: ${client}"
 #: ./opengever/ogds/base/actor.py:143
+#: ./opengever/ogds/base/sources.py:71
 msgid "inbox_label"
 msgstr "Eingangskorb: ${client}"
 
@@ -45,11 +45,6 @@ msgstr "Aktiv"
 #: ./opengever/ogds/base/browser/userdetails_templates/userdetails.pt:103
 msgid "label_address"
 msgstr "Adresse"
-
-#. Default: "All"
-#: ./opengever/ogds/base/vocabularies.py:459
-msgid "label_all"
-msgstr "Alle"
 
 #. Default: "Department:"
 #: ./opengever/ogds/base/browser/userdetails_templates/userdetails.pt:59

@@ -57,11 +57,11 @@ class IGenerateExcerpt(form.Schema):
         required=True, default=True)
 
     include_publish_in = schema.Bool(
-        title=_(u'Include publish in'),
+        title=_(u'Include "publish in"'),
         required=True, default=False)
 
     include_disclose_to = schema.Bool(
-        title=_(u'Include disclose to'),
+        title=_(u'Include "disclose to"'),
         required=True, default=False)
 
     include_copy_for_attention = schema.Bool(

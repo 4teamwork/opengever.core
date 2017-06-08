@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-04-27 11:21+0000\n"
+"POT-Creation-Date: 2017-06-07 12:34+0000\n"
 "PO-Revision-Date: 2011-01-05 15:15+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -20,17 +20,8 @@ msgid "Add Person"
 msgstr "Person hinzufügen"
 
 #: ./opengever/contact/contact.py:187
-#: ./opengever/contact/profiles/default/types/opengever.contact.contact.xml
 msgid "Contact"
 msgstr "Kontakt"
-
-#: ./opengever/contact/profiles/default/types/opengever.contact.contactfolder.xml
-msgid "Contact Folder"
-msgstr "Kontaktordner"
-
-#: ./opengever/contact/profiles/default/types/opengever.contact.contactfolder.xml
-msgid "ContactFolder"
-msgstr "Kontaktordner"
 
 #: ./opengever/contact/browser/templates/person_edit.pt:26
 msgid "Delete"
@@ -52,7 +43,7 @@ msgstr "E-Mail-Adressen"
 msgid "Label"
 msgstr "Label"
 
-#: ./opengever/contact/browser/participation_forms.py:121
+#: ./opengever/contact/browser/participation_forms.py:125
 msgid "Remove"
 msgstr "Löschen"
 
@@ -126,17 +117,17 @@ msgstr "Bitte geben Sie eine gültige E-Mail-Adresse ein."
 #. Default: "Please specify an email address"
 #: ./opengever/contact/browser/mail.py:149
 msgid "error_no_email"
-msgstr "Bitte geben Sie eine eine E-Mail-Adresse ein."
+msgstr "Bitte geben Sie eine E-Mail-Adresse ein."
 
 #. Default: "Please specify a label for your email address"
 #: ./opengever/contact/browser/mail.py:145
 msgid "error_no_label"
-msgstr "Bitte geben Sie ein Label für ihre E-Mail-Adresse ein."
+msgstr "Bitte geben Sie ein Label für Ihre E-Mail-Adresse ein."
 
 #. Default: "Please specify a label and an email address."
 #: ./opengever/contact/browser/mail.py:139
 msgid "error_no_label_and_email"
-msgstr "Bitte geben Sie ein Labe sowie eine E-Mail-Adresse ein."
+msgstr "Bitte geben Sie ein Label sowie eine E-Mail-Adresse ein."
 
 #. Default: "The email address was created successfully"
 #: ./opengever/contact/browser/mail.py:93
@@ -144,7 +135,7 @@ msgid "info_mailaddress_created"
 msgstr "Die E-Mail-Adresse wurde erstellt."
 
 #. Default: "Participation removed"
-#: ./opengever/contact/browser/participation_forms.py:130
+#: ./opengever/contact/browser/participation_forms.py:134
 msgid "info_participation_removed"
 msgstr "Beteiligung gelöscht"
 
@@ -167,7 +158,7 @@ msgid "label_active"
 msgstr "Aktiv"
 
 #. Default: "Add Participation"
-#: ./opengever/contact/browser/participation_forms.py:43
+#: ./opengever/contact/browser/participation_forms.py:44
 msgid "label_add_participation"
 msgstr "Beteiligung hinzufügen"
 
@@ -197,7 +188,7 @@ msgstr "Archivierte Adressen"
 #: ./opengever/contact/browser/templates/organization.pt:165
 #: ./opengever/contact/browser/templates/person.pt:167
 msgid "label_archived_mail"
-msgstr "Archivierte Mail Adressen"
+msgstr "Archivierte E-Mail-Adressen"
 
 #. Default: "Archived Information"
 #: ./opengever/contact/browser/templates/organization.pt:124
@@ -216,7 +207,7 @@ msgid "label_archived_phone_numbers"
 msgstr "Archivierte Telefonnummern"
 
 #. Default: "Cancel"
-#: ./opengever/contact/browser/participation_forms.py:136
+#: ./opengever/contact/browser/participation_forms.py:140
 #: ./opengever/contact/browser/templates/person_edit.pt:28
 msgid "label_cancel"
 msgstr "Abbrechen"
@@ -232,7 +223,7 @@ msgid "label_company"
 msgstr "Firma"
 
 #. Default: "Contact"
-#: ./opengever/contact/browser/participation_forms.py:24
+#: ./opengever/contact/browser/participation_forms.py:25
 msgid "label_contact"
 msgstr "Kontakt"
 
@@ -258,7 +249,7 @@ msgid "label_description"
 msgstr "Beschreibung"
 
 #. Default: "Edit ${title}"
-#: ./opengever/contact/browser/participation_forms.py:83
+#: ./opengever/contact/browser/participation_forms.py:87
 msgid "label_edit_participation"
 msgstr "Beteiligung von ${title} bearbeiten"
 
@@ -316,7 +307,7 @@ msgstr "Lokal"
 #: ./opengever/contact/browser/templates/organization.pt:44
 #: ./opengever/contact/browser/templates/person.pt:54
 msgid "label_mail"
-msgstr "Mail Addressen"
+msgstr "E-Mail-Addressen"
 
 #. Default: "Mobile"
 #: ./opengever/contact/ogdsuser.py:218
@@ -346,7 +337,7 @@ msgid "label_organizations"
 msgstr "Organisationen"
 
 #. Default: "Participation of ${contact_title}"
-#: ./opengever/contact/models/participation.py:101
+#: ./opengever/contact/models/participation.py:54
 msgid "label_participation_of"
 msgstr "Beteiligung von ${contact_title}"
 
@@ -394,12 +385,12 @@ msgid "label_picture"
 msgstr "Bild"
 
 #. Default: "Remove ${title}"
-#: ./opengever/contact/browser/participation_forms.py:117
+#: ./opengever/contact/browser/participation_forms.py:121
 msgid "label_remove_participation"
 msgstr "${title} löschen"
 
 #. Default: "Roles"
-#: ./opengever/contact/browser/participation_forms.py:30
+#: ./opengever/contact/browser/participation_forms.py:31
 msgid "label_roles"
 msgstr "Rollen"
 
@@ -452,7 +443,7 @@ msgid "mail_address_deleted"
 msgstr "Die E-Mail-Adresse wurde gelöscht."
 
 #. Default: "There already exists a participation for this contact."
-#: ./opengever/contact/browser/participation_forms.py:60
+#: ./opengever/contact/browser/participation_forms.py:64
 msgid "msg_participation_already_exists"
 msgstr "Für diesen Kontakt existiert bereits eine Beteiligung."
 
@@ -470,4 +461,3 @@ msgstr "${amount} Treffer"
 #: ./opengever/contact/contact.py:44
 msgid "telefon"
 msgstr "Telefon"
-
