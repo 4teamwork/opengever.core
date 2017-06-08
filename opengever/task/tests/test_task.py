@@ -271,6 +271,8 @@ class TestTaskIntegration(FunctionalTestCase):
                       .having(userid='some.user'))
 
         dossier = create(Builder('dossier'))
+        doc = create(Builder("document").titled("test-doc")
+                                        .within(dossier))
 
         responsible_users = [
             self.get_org_unit().id() + ':' + TEST_USER_ID,
@@ -280,14 +282,16 @@ class TestTaskIntegration(FunctionalTestCase):
         browser.login().visit(dossier)
         factoriesmenu.add('Task')
         browser.fill({'Title': 'Task title',
-                      'Task Type': 'To comment'})
+                      'Task Type': 'To comment',
+                      'Related Items': doc})
 
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Responsible').fill(responsible_users)
 
         browser.find('Save').click()
 
-        tasks = dossier.objectValues()
+        tasks = filter(lambda item: ITask.providedBy(item),
+                       dossier.objectValues())
         self.assertEquals(2, len(tasks), 'Expect 2 tasks')
         self.assertEquals(TEST_USER_ID, tasks[0].responsible)
         self.assertEquals('client1', tasks[0].responsible_client)

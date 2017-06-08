@@ -1,4 +1,3 @@
-from copy import deepcopy
 from five import grok
 from opengever.ogds.base.utils import ogds_service
 from opengever.task import _
@@ -55,12 +54,14 @@ class TaskAddForm(dexterity.AddForm):
         if isinstance(data['responsible'], basestring):
             data['responsible'] = [data['responsible']]
 
-        for responsible in data['responsible']:
-            task_payload = deepcopy(data)
-            task_payload['responsible'] = responsible
-            update_reponsible_field_data(task_payload)
+        all_responsible_users = data['responsible']
+        for responsible in all_responsible_users:
+            data['responsible'] = responsible
+            update_reponsible_field_data(data)
+            created.append(self._create_task(data))
 
-            created.append(self._create_task(task_payload))
+        # Restore responsible in data
+        data['responsible'] = all_responsible_users
 
         self._set_immediate_view(created)
         return created
