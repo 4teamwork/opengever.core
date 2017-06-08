@@ -5,6 +5,8 @@ Changelog
 2017.3.0 (unreleased)
 ---------------------
 
+- Fix task assign form: Only users and the inbox of the current user is selectable. [mathias.leimgruber]
+- Fix for OGIP 15: no longer make a deepcopy of the payload. [mathias.leimgruber]
 - Render subdossier tree collapsed initially. [Kevin Bieri]
 - Implement and enable the org unit selector etag adapter. [phgross]
 - Hard-code base profiles to be installed for every deployment. [deiferni]
