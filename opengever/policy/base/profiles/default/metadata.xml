@@ -6,7 +6,6 @@
 
     <dependency>profile-ftw.keywordwidget:default</dependency>
     <dependency>profile-ftw.keywordwidget:select2js</dependency>
-    <dependency>profile-ftw.referencewidget:default</dependency>
 
     <dependency>profile-opengever.ogds.base:default</dependency>
     <dependency>profile-opengever.globalindex:default</dependency>
