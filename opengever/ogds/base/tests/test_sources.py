@@ -1,10 +1,11 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.ogds.base.sources import AllEmailContactsAndUsersSource
 from opengever.ogds.base.sources import AllUsersAndInboxesSource
 from opengever.ogds.base.sources import AllUsersSource
 from opengever.ogds.base.sources import AssignedUsersSource
+from opengever.ogds.base.sources import ContactsSource
 from opengever.ogds.base.sources import UsersContactsInboxesSource
-from opengever.ogds.base.sources import AllEmailContactsAndUsersSource
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
 from zope.schema.vocabulary import SimpleTerm
@@ -543,3 +544,54 @@ class TestAllEmailContactsAndUsersSource(FunctionalTestCase):
         self.assertEquals('superman@dc.com:man-super', person_result[1].value)
         self.assertEquals(u'M\xe4n Super (superman@dc.com)',
                           person_result[1].title)
+
+
+class TestContactsSource(FunctionalTestCase):
+
+    use_default_fixture = False
+
+    def setUp(self):
+        super(TestContactsSource, self).setUp()
+
+        self.org_unit, self.admin_unit = create(
+            Builder('fixture').with_admin_unit().with_org_unit())
+
+        create(Builder('ogds_user')
+               .id('hugo.boss')
+               .having(firstname=u'Hugo', lastname=u'Boss')
+               .assign_to_org_units([self.org_unit]))
+        create(Builder('contact')
+               .having(firstname=u'Lara', lastname=u'Croft',
+                       email=u'lara.croft@test.ch'))
+        create(Builder('contact')
+               .having(firstname=u'Super', lastname=u'M\xe4n',
+                       email='superman@test.ch'))
+
+        self.source = ContactsSource(self.portal)
+
+    def test_ogds_users_are_invalid(self):
+        self.assertNotIn('test_user_1_', self.source)
+
+    def test_all_contacts_are_valid(self):
+        self.assertIn('contact:croft-lara', self.source)
+        self.assertIn('contact:man-super', self.source)
+
+    def test_not_existing_contact_is_invalid(self):
+        self.assertNotIn('contact:not-existing', self.source)
+
+    def test_get_term_by_token(self):
+        term = self.source.getTermByToken('contact:man-super')
+        self.assertEquals('contact:man-super', term.token)
+        self.assertEquals('contact:man-super', term.value)
+        self.assertEquals(u'M\xe4n Super (superman@test.ch)', term.title)
+
+    def test_search_contacts(self):
+        result = self.source.search('Lara')
+
+        self.assertEquals(1, len(result), 'Expect 1 contact in result')
+        self.assertEquals('contact:croft-lara', result[0].token)
+        self.assertEquals('contact:croft-lara', result[0].value)
+        self.assertEquals('Croft Lara (lara.croft@test.ch)', result[0].title)
+
+    def test_search_ogds_users_is_empty(self):
+        self.assertEquals([], self.source.search('Hugo'))
