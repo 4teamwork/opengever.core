@@ -18,7 +18,7 @@ class ModelContainer(Container):
 
         """
         obj_data = {}
-        for field_name in cls.content_schema.names():
+        for field_name in cls.content_schema.names(all=True):
             if field_name in data:
                 obj_data[field_name] = data.pop(field_name)
 

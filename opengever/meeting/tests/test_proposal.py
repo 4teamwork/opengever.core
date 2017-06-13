@@ -115,19 +115,19 @@ class TestProposal(FunctionalTestCase):
         self.assertEqual('proposal-1', proposal.getId())
         self.assertEqual(1, len(proposal.relatedItems))
         self.assertEqual(document, proposal.relatedItems[0].to_object)
+        self.assertEqual(u'A pr\xf6posal', proposal.title)
+        self.assertEqual(u'<div>possible</div>', proposal.legal_basis)
+        self.assertEqual(u'<div>Lorem ips\xfcm</div>', proposal.proposed_action)
+        self.assertEqual(u'<div>My pr\xf6posal</div>', proposal.initial_position)
+        self.assertEqual(u'<div>Project allowed.</div>', proposal.decision_draft)
+        self.assertEqual(u'<div>B\xe4rner Zeitung</div>', proposal.publish_in)
+        self.assertEqual(u'<div>Hansj\xf6rg</div>', proposal.disclose_to)
+        self.assertEqual(u'<div></div>', proposal.copy_for_attention)
 
         model = proposal.load_model()
         self.assertIsNotNone(model)
         self.assertEqual(Oguid.for_object(proposal), model.oguid)
         self.assertEqual(TEST_USER_ID, model.creator)
-        self.assertEqual(u'A pr\xf6posal', model.title)
-        self.assertEqual(u'<div>possible</div>', model.legal_basis)
-        self.assertEqual(u'<div>Lorem ips\xfcm</div>', model.proposed_action)
-        self.assertEqual(u'<div>My pr\xf6posal</div>', model.initial_position)
-        self.assertEqual(u'<div>Project allowed.</div>', model.decision_draft)
-        self.assertEqual(u'<div>B\xe4rner Zeitung</div>', model.publish_in)
-        self.assertEqual(u'<div>Hansj\xf6rg</div>', model.disclose_to)
-        self.assertEqual(u'<div></div>', model.copy_for_attention)
         self.assertEqual(u'Stuff', model.repository_folder_title)
         self.assertEqual(u'en', model.language)
 
@@ -185,14 +185,14 @@ class TestProposal(FunctionalTestCase):
 
         self.assertEqual(1, len(proposal.relatedItems))
         self.assertEqual(document, proposal.relatedItems[0].to_object)
+        self.assertEqual(u'A pr\xf6posal', proposal.title)
+        self.assertEqual(u'<div>not possible</div>', proposal.legal_basis)
+        self.assertEqual(u'<div>My pr\xf6posal</div>', proposal.initial_position)
+        self.assertEqual(u'<div>do it</div>', proposal.proposed_action)
 
         model = proposal.load_model()
         self.assertIsNotNone(model)
         self.assertEqual(Oguid.for_object(proposal), model.oguid)
-        self.assertEqual(u'A pr\xf6posal', model.title)
-        self.assertEqual(u'<div>not possible</div>', model.legal_basis)
-        self.assertEqual(u'<div>My pr\xf6posal</div>', model.initial_position)
-        self.assertEqual(u'<div>do it</div>', model.proposed_action)
 
     @browsing
     def test_proposal_language_field_with_multiple_languages(self, browser):
@@ -764,14 +764,21 @@ class TestProposal(FunctionalTestCase):
 
     def test_get_meeting_link_returns_link_if_scheduled(self):
         admin_unit = create(Builder('admin_unit'))
-        proposal = create(Builder('proposal_model'))
-        committee = create(Builder('committee_model')
-                           .having(admin_unit_id=admin_unit.unit_id))
+        self.repository_root, self.repository_folder = create(
+            Builder('repository_tree'))
+        dossier = create(Builder('dossier').within(self.repository_folder))
+        committee = create(Builder('committee').titled('My committee'))
+        proposal = create(Builder('proposal')
+                          .within(dossier)
+                          .having(committee=committee.load_model())
+                          .as_submitted())
+        proposal_model = proposal.load_model()
         meeting = create(Builder('meeting').having(committee=committee))
-        create(Builder('agenda_item').having(meeting=meeting, proposal=proposal))
+        create(Builder('agenda_item').having(
+            meeting=meeting, proposal=proposal_model))
 
         self.assertEqual(
-            proposal.get_meeting_link(),
+            proposal_model.get_meeting_link(),
             meeting.get_link(),
             "The method should return the meeting link.")
 

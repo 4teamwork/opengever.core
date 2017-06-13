@@ -66,7 +66,9 @@ class AgendaItem(Base):
         """
         proposal = kwargs.get('proposal')
         if proposal and not kwargs.get('decision'):
-            kwargs.update({'decision': proposal.decision_draft})
+            submitted_proposal = proposal.resolve_submitted_proposal()
+            decision_draft = submitted_proposal.decision_draft
+            kwargs.update({'decision': decision_draft})
 
         super(AgendaItem, self).__init__(*args, **kwargs)
 

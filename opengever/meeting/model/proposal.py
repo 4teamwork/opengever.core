@@ -115,17 +115,7 @@ class Proposal(Base):
         backref=backref('submitted_proposal', uselist=False),
         primaryjoin="GeneratedExcerpt.document_id==Proposal.submitted_excerpt_document_id")
 
-    title = Column(String(256), nullable=False)
     workflow_state = Column(String(WORKFLOW_STATE_LENGTH), nullable=False)
-    legal_basis = Column(UnicodeCoercingText)
-    initial_position = Column(UnicodeCoercingText)
-    proposed_action = Column(UnicodeCoercingText)
-
-    considerations = Column(UnicodeCoercingText)
-    decision_draft = Column(UnicodeCoercingText)
-    publish_in = Column(UnicodeCoercingText)
-    disclose_to = Column(UnicodeCoercingText)
-    copy_for_attention = Column(UnicodeCoercingText)
 
     committee_id = Column(Integer, ForeignKey('committees.id'))
     committee = relationship('Committee', backref='proposals')
@@ -194,8 +184,8 @@ class Proposal(Base):
         return 'contenttype-opengever-meeting-proposal'
 
     def get_searchable_text(self):
-        searchable = filter(None, [self.title, self.initial_position])
-        return ' '.join([term.encode('utf-8') for term in searchable])
+        # XXX: we no longer have additional searchable text
+        return ''
 
     def get_decision(self):
         if self.agenda_item:
@@ -220,14 +210,17 @@ class Proposal(Base):
         return '/'.join((admin_unit.public_url, physical_path))
 
     def get_link(self, include_icon=True):
-        return self._get_link(self.get_url(), include_icon=include_icon)
+        return self._get_link(self.get_url(),
+                              self.resolve_proposal().title,
+                              include_icon=include_icon)
 
     def get_submitted_link(self, include_icon=True):
         return self._get_link(self.get_submitted_url(),
+                              self.resolve_submitted_proposal().title,
                               include_icon=include_icon)
 
-    def _get_link(self, url, include_icon=True):
-        title = escape_html(self.title)
+    def _get_link(self, url, title, include_icon=True):
+        title = escape_html(title)
         if include_icon:
             link = u'<a href="{0}" title="{1}" class="{2}">{1}</a>'.format(
                 url, title, self.css_class)

@@ -14,7 +14,6 @@ from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import GeneratedProtocol
 from opengever.meeting.model import Meeting
 from opengever.meeting.model import Member
-from opengever.meeting.model import Proposal
 from opengever.testing import FunctionalTestCase
 from plone.locking.interfaces import ILockable
 from plone.locking.interfaces import STEALABLE_LOCK
@@ -49,11 +48,12 @@ class TestProtocol(FunctionalTestCase):
             Builder('committee')
             .within(container)
             .having(repository_folder=self.repository_folder))
-        self.proposal = create(Builder('proposal')
-                               .within(self.dossier)
-                               .having(title='Mach doch',
-                                       committee=self.committee.load_model())
-                               .as_submitted())
+        self.proposal, self.submitted_proposal = create(
+            Builder('proposal')
+                    .within(self.dossier)
+                    .having(title='Mach doch',
+                            committee=self.committee.load_model())
+                    .with_submitted())
 
         self.committee_model = self.committee.load_model()
         self.meeting = create(Builder('meeting')
@@ -228,8 +228,8 @@ class TestProtocol(FunctionalTestCase):
             '<div onload="alert(\'qux\');">Hans<script>alert("qux");</script></div>'
         }).submit()
 
-        proposal = Proposal.query.get(self.proposal_model.proposal_id)
-        self.assertEqual('<div>Hans</div>', proposal.legal_basis)
+        self.assertEqual('<div>Hans</div>',
+                         self.submitted_proposal.legal_basis)
 
     @browsing
     def test_protocol_can_be_edited_and_strips_whitespace(self, browser):
@@ -259,14 +259,20 @@ class TestProtocol(FunctionalTestCase):
         self.assertGreater(meeting.modified, prev_modified)
         self.assertEqual('The Meeting', meeting.title)
 
-        proposal = Proposal.query.get(self.proposal_model.proposal_id)
-        self.assertEqual('<div>Yes we can</div>', proposal.legal_basis)
-        self.assertEqual('<div>Still the same</div>', proposal.initial_position)
-        self.assertEqual('<div>It is important</div>', proposal.considerations)
-        self.assertEqual('<div>Accept it</div>', proposal.proposed_action)
-        self.assertEqual('<div>there</div>', proposal.publish_in)
-        self.assertEqual('<div></div>', proposal.disclose_to)
-        self.assertEqual('<div>Hanspeter</div>', proposal.copy_for_attention)
+        self.assertEqual('<div>Yes we can</div>',
+                         self.submitted_proposal.legal_basis)
+        self.assertEqual('<div>Still the same</div>',
+                         self.submitted_proposal.initial_position)
+        self.assertEqual('<div>It is important</div>',
+                         self.submitted_proposal.considerations)
+        self.assertEqual('<div>Accept it</div>',
+                         self.submitted_proposal.proposed_action)
+        self.assertEqual('<div>there</div>',
+                         self.submitted_proposal.publish_in)
+        self.assertEqual('<div></div>',
+                         self.submitted_proposal.disclose_to)
+        self.assertEqual('<div>Hanspeter</div>',
+                         self.submitted_proposal.copy_for_attention)
 
         agenda_item = AgendaItem.get(self.agenda_item.agenda_item_id)
         self.assertEqual('<div>We should accept it</div>', agenda_item.discussion)

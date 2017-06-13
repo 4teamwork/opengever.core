@@ -49,52 +49,10 @@ def default_title(context):
 class IProposalModel(Interface):
     """Proposal model schema interface."""
 
-    title = schema.TextLine(
-        title=_(u"label_title", default=u"Title"),
-        required=True,
-        max_length=256,
-        defaultFactory=default_title
-        )
-
     committee = schema.Choice(
         title=_('label_committee', default=u'Committee'),
         source='opengever.meeting.ActiveCommitteeVocabulary',
         required=True)
-
-    legal_basis = schema.Text(
-        title=_('label_legal_basis', default=u"Legal basis"),
-        required=False,
-        )
-
-    initial_position = schema.Text(
-        title=_('label_initial_position', default=u"Initial position"),
-        required=False,
-        )
-
-    proposed_action = schema.Text(
-        title=_('label_proposed_action', default=u"Proposed action"),
-        required=False,
-        )
-
-    decision_draft = schema.Text(
-        title=_('label_decision_draft', default=u"Decision draft"),
-        required=False,
-        )
-
-    publish_in = schema.Text(
-        title=_('label_publish_in', default=u"Publish in"),
-        required=False,
-        )
-
-    disclose_to = schema.Text(
-        title=_('label_disclose_to', default=u"Disclose to"),
-        required=False,
-        )
-
-    copy_for_attention = schema.Text(
-        title=_('label_copy_for_attention', default=u"Copy for attention"),
-        required=False,
-        )
 
     language = schema.Choice(
         title=_('language', default=u'Language'),
@@ -106,10 +64,15 @@ class IProposalModel(Interface):
 class ISubmittedProposalModel(Interface):
     """Submitted proposal model schema interface."""
 
+
+class IProposal(form.Schema):
+    """Proposal Proxy Object Schema Interface"""
+
     title = schema.TextLine(
         title=_(u"label_title", default=u"Title"),
         required=True,
         max_length=256,
+        defaultFactory=default_title
         )
 
     legal_basis = schema.Text(
@@ -124,11 +87,6 @@ class ISubmittedProposalModel(Interface):
 
     proposed_action = schema.Text(
         title=_('label_proposed_action', default=u"Proposed action"),
-        required=False,
-        )
-
-    considerations = schema.Text(
-        title=_('label_considerations', default=u"Considerations"),
         required=False,
         )
 
@@ -151,10 +109,6 @@ class ISubmittedProposalModel(Interface):
         title=_('label_copy_for_attention', default=u"Copy for attention"),
         required=False,
         )
-
-
-class IProposal(form.Schema):
-    """Proposal Proxy Object Schema Interface"""
 
     relatedItems = RelationList(
         title=_(u'label_attachments', default=u'Attachments'),
@@ -177,7 +131,11 @@ class IProposal(form.Schema):
 
 
 class ISubmittedProposal(IProposal):
-    pass
+
+    considerations = schema.Text(
+        title=_('label_considerations', default=u"Considerations"),
+        required=False,
+        )
 
 
 class ProposalBase(ModelContainer):
@@ -185,10 +143,7 @@ class ProposalBase(ModelContainer):
     workflow = None
 
     def Title(self):
-        model = self.load_model()
-        if not model:
-            return ''
-        return model.title.encode('utf-8')
+        return self.title.encode('utf-8')
 
     def get_overview_attributes(self):
         model = self.load_model()
@@ -196,7 +151,7 @@ class ProposalBase(ModelContainer):
 
         attributes = [
             {'label': _(u"label_title", default=u'Title'),
-             'value': model.title},
+             'value': self.title},
 
             {'label': _('label_committee', default=u'Committee'),
              'value': model.committee.get_link(),
@@ -220,22 +175,22 @@ class ProposalBase(ModelContainer):
             attributes.extend([
                 {'label': _('label_legal_basis',
                             default=u'Legal basis'),
-                 'value': model.legal_basis,
+                 'value': self.legal_basis,
                  'is_html': True},
 
                 {'label': _('label_initial_position',
                             default=u'Initial position'),
-                 'value': model.initial_position,
+                 'value': self.initial_position,
                  'is_html': True},
 
                 {'label': _('label_proposed_action',
                             default=u'Proposed action'),
-                 'value': model.proposed_action,
+                 'value': self.proposed_action,
                  'is_html': True},
 
                 {'label': _('label_decision_draft',
                             default=u'Decision draft'),
-                 'value': model.decision_draft,
+                 'value': self.decision_draft,
                  'is_html': True},
 
                 {'label': _('label_decision',
@@ -245,17 +200,17 @@ class ProposalBase(ModelContainer):
 
                 {'label': _('label_publish_in',
                             default=u'Publish in'),
-                 'value': model.publish_in,
+                 'value': self.publish_in,
                  'is_html': True},
 
                 {'label': _('label_disclose_to',
                             default=u'Disclose to'),
-                 'value': model.disclose_to,
+                 'value': self.disclose_to,
                  'is_html': True},
 
                 {'label': _('label_copy_for_attention',
                             default=u'Copy for attention'),
-                 'value': model.copy_for_attention,
+                 'value': self.copy_for_attention,
                  'is_html': True},
             ])
 
@@ -401,7 +356,7 @@ class SubmittedProposal(ProposalBase):
                 7, {
                     'label': _('label_considerations',
                                default=u"Considerations"),
-                    'value': model.considerations,
+                    'value': self.considerations,
                 }
             )
 

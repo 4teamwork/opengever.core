@@ -9,7 +9,7 @@ SAMPLE_MEETING_DATA = {
     '_sablon': {'properties': {'start_page_number': 42}},
     'agenda_items': [{
         'description': u'Strafbefehl wegen Bauens ohne Bewilligung',
-        'dossier_reference_number': 'FD 2.6.8/1',
+        'dossier_reference_number': u'Client1 1 / 1',
         'repository_folder_title': u'Strafwesen',
         'html:considerations': u'<div>Die Bauten sind eindeutig Baubewilligungspflichtig. Gem\xe4ss \xa7 59 des Baugesetzes bed\xfcrfen alle Bauten und ihre im Hinblick auf die Anliegen der Raumplanung, des Umweltschutzes oder der Baupolizei wesentliche Umgestaltung, Erweiterung oder Zweck\xe4nderung sowie die Beseitigung von Geb\xe4uden der Bewilligung durch den Gemeinderat. Das Bauen ohne Baubewilligung stellt eine strafbare Handlung nach \xa7 160 Baugesetz dar. Strafbar ist die vors\xe4tzliche oder fahrl\xe4ssige Widerhandlung, begangen durch Bauherren, Eigent\xfcmer, sonstige Berechtigte, Projektverfasser, Unternehmer und Bauleiter. Im vorliegenden Fall ist der Straftatbestand durch den Bauherrn und seinen Sohn erf\xfcllt. Aus Gr\xfcnden der Gleichbehandlung mit anderen F\xe4llen ist der Gemeinderat gezwungen, die \xdcbertretung angemessen zu bestrafen.</div><ul><li>UL Eintrag</li><li>UL Eintrag<ul><li>UL Einger\xfcckt</li></ul></li></ul>',
         'html:decision_draft':u'<div>Der Gemeinderat erstattet Strafanzeige gegen Unbekannt und informiert zudem den Vermieter (Herr. Meier).</div>',
@@ -26,14 +26,14 @@ SAMPLE_MEETING_DATA = {
         'is_paragraph': False,
         'decision_number': 1,
         'attachments': [{
-            "title": "Beweisaufn\xc3\xa4hme",
-            "filename": u"beweisaufna-hme.txt"
+            "title": u"L\xf6rem",
+            "filename": u"lorem.eml"
             }, {
             "title": "Strafbefehl"
             }, {
-            "title": u"L\xf6rem",
-            "filename": u"lorem.eml"
-        }]
+            "title": u'Beweisaufn\xe4hme',
+            "filename": u"beweisaufnahme.txt"
+            }]
     }, {
         'description': u'R\xfccktritt Hans Muster',
         'dossier_reference_number': None,

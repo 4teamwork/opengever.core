@@ -19,7 +19,7 @@ class ISubmittedProposalTableSourceConfig(ITableSourceConfig):
 class SubmittedProposalListingTab(ProposalListingTab):
     implements(ISubmittedProposalTableSourceConfig)
 
-    sort_on = 'title'
+    sort_on = ''
 
     def get_base_query(self):
         return Proposal.query.visible_for_committee(
@@ -42,4 +42,4 @@ class SubmittedProposalTableSource(SqlTableSource):
     grok.implements(ITableSource)
     grok.adapts(SubmittedProposalListingTab, Interface)
 
-    searchable_columns = [Proposal.title, ]
+    searchable_columns = []

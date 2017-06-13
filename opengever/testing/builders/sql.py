@@ -167,7 +167,6 @@ class ProposalModelBuilder(SqlObjectBuilder):
         self.arguments['admin_unit_id'] = 'foo'
         self.arguments['int_id'] = 1234
         self.arguments['physical_path'] = '/bar'
-        self.arguments['title'] = 'Bar'
         self.arguments['workflow_state'] = Proposal.workflow.default_state.name
         self.arguments['dossier_reference_number'] = 'FD 1.2.3 / 1'
         self.arguments['language'] = 'en'
