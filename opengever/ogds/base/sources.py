@@ -485,3 +485,45 @@ class AllEmailContactsAndUsersSourceBinder(object):
 
     def __call__(self, context):
         return AllEmailContactsAndUsersSource(context)
+
+
+@implementer(IQuerySource)
+class ContactsSource(UsersContactsInboxesSource):
+
+    def getTerm(self, value, brain=None):
+        if not ActorLookup(value).is_contact():
+            raise ValueError('Value is not a contact token')
+
+        catalog = api.portal.get_tool('portal_catalog')
+        brain = catalog.unrestrictedSearchResults(
+            portal_type=CONTACT_TYPE,
+            contactid=value)[0]
+        actor = Actor.contact(brain.contactid, contact=brain)
+        token = value
+        title = actor.get_label()
+        return SimpleTerm(value, token, title)
+
+    def getTermByToken(self, token):
+        """Should raise LookupError if term could not be found.
+        Check zope.schema.interfaces.IVocabularyTokenized
+        """
+        if not token:
+            raise LookupError('Expect a userid')
+
+        try:
+            value = token
+            return self.getTerm(value)
+        except (IndexError, ValueError):
+            raise LookupError
+
+    def search(self, query_string):
+        self.terms = []
+        self._extend_terms_with_contacts(query_string)
+        return self.terms
+
+
+@implementer(IContextSourceBinder)
+class ContactsSourceBinder(object):
+
+    def __call__(self, context):
+        return ContactsSource(context)
