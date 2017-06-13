@@ -158,3 +158,11 @@ class TestManualJournalEntry(FunctionalTestCase):
         self.assertEquals(
             ['Test A'],
             browser.css('#form-widgets-related_documents-autocomplete .option').text)
+
+    @browsing
+    def test_cancel_the_form_redirects_back_to_journal_tab(self, browser):
+        browser.login().open(self.dossier, view='add-journal-entry')
+        browser.css('#form-buttons-cancel').first.click()
+
+        self.assertEquals(
+            '{}#journal'.format(self.dossier.absolute_url()), browser.url)
