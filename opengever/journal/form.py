@@ -83,6 +83,10 @@ class ManualJournalEntryAddForm(AddForm):
         return self.request.RESPONSE.redirect(
             '{}#journal'.format(self.context.absolute_url()))
 
+    def updateActions(self):
+        super(ManualJournalEntryAddForm, self).updateActions()
+        self.actions['add'].addClass("context")
+
     def createAndAdd(self, data):
         contacts, users = self.split_contacts_and_users(data.get('contacts'))
         entry = ManualJournalEntry(self.context,
