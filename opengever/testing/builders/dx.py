@@ -21,6 +21,7 @@ from Products.CMFCore.utils import getToolByName
 from zope.annotation.interfaces import IAnnotations
 from zope.event import notify
 from zope.lifecycleevent import ObjectCreatedEvent
+import transaction
 
 
 class DossierBuilder(DexterityBuilder):
@@ -368,6 +369,10 @@ class SubmittedProposalBuilder(object):
         self.proposal.execute_transition('pending-submitted')
         proposal_model = self.proposal.load_model()
         path = proposal_model.submitted_physical_path.encode('utf-8')
+
+        if self.session.auto_commit:
+            transaction.commit()
+
         return api.portal.get().restrictedTraverse(path)
 
 builder_registry.register('submitted_proposal', SubmittedProposalBuilder)
