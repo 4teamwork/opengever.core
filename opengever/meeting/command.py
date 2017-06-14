@@ -114,13 +114,17 @@ class ExcerptOperations(object):
                  mapping=dict(title=meeting.get_title()))
 
     def get_title(self, meeting):
-        return u"{} - {}".format(self.proposal.title, meeting.get_title())
+        return u"{} - {}".format(
+            self.proposal.resolve_submitted_proposal().title,
+            meeting.get_title())
 
     def get_filename(self, meeting):
         normalizer = getUtility(IIDNormalizer)
         return u"{}-{}.docx".format(
-            normalizer.normalize(self.proposal.title),
-            normalizer.normalize(meeting.get_title()))
+            normalizer.normalize(
+                self.proposal.resolve_submitted_proposal().title),
+            normalizer.normalize(
+                meeting.get_title()))
 
 
 class ManualExcerptOperations(object):

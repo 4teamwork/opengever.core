@@ -89,13 +89,13 @@ class AgendaItem(Base):
             return trix_strip_whitespace(markup)
 
         if self.has_proposal:
-            self.proposal.legal_basis = to_safe_html(data.get('legal_basis'))
-            self.proposal.initial_position = to_safe_html(data.get('initial_position'))
-            self.proposal.considerations = to_safe_html(data.get('considerations'))
-            self.proposal.proposed_action = to_safe_html(data.get('proposed_action'))
-            self.proposal.publish_in = to_safe_html(data.get('publish_in'))
-            self.proposal.disclose_to = to_safe_html(data.get('disclose_to'))
-            self.proposal.copy_for_attention = to_safe_html(data.get('copy_for_attention'))
+            self.submitted_proposal.legal_basis = to_safe_html(data.get('legal_basis'))
+            self.submitted_proposal.initial_position = to_safe_html(data.get('initial_position'))
+            self.submitted_proposal.considerations = to_safe_html(data.get('considerations'))
+            self.submitted_proposal.proposed_action = to_safe_html(data.get('proposed_action'))
+            self.submitted_proposal.publish_in = to_safe_html(data.get('publish_in'))
+            self.submitted_proposal.disclose_to = to_safe_html(data.get('disclose_to'))
+            self.submitted_proposal.copy_for_attention = to_safe_html(data.get('copy_for_attention'))
 
         self.discussion = to_safe_html(data.get('discussion'))
         self.decision = to_safe_html(data.get('decision'))
@@ -168,8 +168,15 @@ class AgendaItem(Base):
 
         return text
 
+    @property
+    def submitted_proposal(self):
+        if not hasattr(self, '_submitted_proposal'):
+            self._submitted_proposal = self.proposal.resolve_submitted_proposal()  # noqa
+        return self._submitted_proposal
+
     def get_title(self, include_number=False):
-        title = self.proposal.title if self.has_proposal else self.title
+        title = (self.submitted_proposal.title
+                 if self.has_proposal else self.title)
         if include_number and self.number:
             title = u"{} {}".format(self.number, title)
 
@@ -177,13 +184,13 @@ class AgendaItem(Base):
 
     def set_title(self, title):
         if self.has_proposal:
-            self.proposal.title = title
+            self.submitted_proposal.title = title
         else:
             self.title = title
 
     def get_decision_draft(self):
         if self.has_proposal:
-            return self.proposal.decision_draft
+            return self.submitted_proposal.decision_draft
 
     def get_dossier_reference_number(self):
         if self.has_proposal:
@@ -246,31 +253,31 @@ class AgendaItem(Base):
 
     @property
     def legal_basis(self):
-        return self.proposal.legal_basis if self.has_proposal else None
+        return self.submitted_proposal.legal_basis if self.has_proposal else None
 
     @property
     def initial_position(self):
-        return self.proposal.initial_position if self.has_proposal else None
+        return self.submitted_proposal.initial_position if self.has_proposal else None
 
     @property
     def considerations(self):
-        return self.proposal.considerations if self.has_proposal else None
+        return self.submitted_proposal.considerations if self.has_proposal else None
 
     @property
     def proposed_action(self):
-        return self.proposal.proposed_action if self.has_proposal else None
+        return self.submitted_proposal.proposed_action if self.has_proposal else None
 
     @property
     def publish_in(self):
-        return self.proposal.publish_in if self.has_proposal else None
+        return self.submitted_proposal.publish_in if self.has_proposal else None
 
     @property
     def disclose_to(self):
-        return self.proposal.disclose_to if self.has_proposal else None
+        return self.submitted_proposal.disclose_to if self.has_proposal else None
 
     @property
     def copy_for_attention(self):
-        return self.proposal.copy_for_attention if self.has_proposal else None
+        return self.submitted_proposal.copy_for_attention if self.has_proposal else None
 
     @property
     def name(self):
