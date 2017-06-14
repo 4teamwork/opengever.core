@@ -1,5 +1,6 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
+from collective import dexteritytextindexer
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.model import create_session
@@ -68,6 +69,7 @@ class ISubmittedProposalModel(Interface):
 class IProposal(form.Schema):
     """Proposal Proxy Object Schema Interface"""
 
+    dexteritytextindexer.searchable('title')
     title = schema.TextLine(
         title=_(u"label_title", default=u"Title"),
         required=True,
@@ -75,36 +77,43 @@ class IProposal(form.Schema):
         defaultFactory=default_title
         )
 
+    dexteritytextindexer.searchable('legal_basis')
     legal_basis = schema.Text(
         title=_('label_legal_basis', default=u"Legal basis"),
         required=False,
         )
 
+    dexteritytextindexer.searchable('initial_position')
     initial_position = schema.Text(
         title=_('label_initial_position', default=u"Initial position"),
         required=False,
         )
 
+    dexteritytextindexer.searchable('proposed_action')
     proposed_action = schema.Text(
         title=_('label_proposed_action', default=u"Proposed action"),
         required=False,
         )
 
+    dexteritytextindexer.searchable('decision_draft')
     decision_draft = schema.Text(
         title=_('label_decision_draft', default=u"Decision draft"),
         required=False,
         )
 
+    dexteritytextindexer.searchable('publish_in')
     publish_in = schema.Text(
         title=_('label_publish_in', default=u"Publish in"),
         required=False,
         )
 
+    dexteritytextindexer.searchable('disclose_to')
     disclose_to = schema.Text(
         title=_('label_disclose_to', default=u"Disclose to"),
         required=False,
         )
 
+    dexteritytextindexer.searchable('copy_for_attention')
     copy_for_attention = schema.Text(
         title=_('label_copy_for_attention', default=u"Copy for attention"),
         required=False,
@@ -132,6 +141,7 @@ class IProposal(form.Schema):
 
 class ISubmittedProposal(IProposal):
 
+    dexteritytextindexer.searchable('considerations')
     considerations = schema.Text(
         title=_('label_considerations', default=u"Considerations"),
         required=False,
