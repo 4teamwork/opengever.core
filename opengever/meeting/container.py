@@ -54,6 +54,7 @@ class ModelContainer(Container):
         self._after_model_created(model_instance)
 
         notify(ObjectModifiedEvent(aq_wrapped_self))
+        return model_instance
 
     def _after_model_created(self, model_instance):
         """Hook called right after creating a model instance."""

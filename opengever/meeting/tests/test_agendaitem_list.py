@@ -120,22 +120,21 @@ class TestAgendaItemList(FunctionalTestCase):
         meeting = create(Builder('meeting')
                          .having(committee=self.committee_model)
                          .link_with(self.meeting_dossier))
-
-        proposal = create(Builder('proposal')
-                          .within(self.dossier)
+        committee = create(Builder('committee'))
+        proposal = create(Builder('submitted_proposal')
+                          .within(committee)
                           .having(title='Mach doch',
-                                  committee=self.committee.load_model(),
+                                  committee=committee,
                                   legal_basis=u'We may do it',
                                   decision_draft=u'Proposal approved',
                                   initial_position=u'We should do it.',
                                   proposed_action=u'Do it.',
-                                  considerations=u'Uhm....')
-                          .as_submitted())
+                                  considerations=u'Uhm....'))
 
         create(Builder('agenda_item')
                .having(title=u'foo', number=u'2', meeting=meeting))
         create(Builder('agenda_item')
-               .having(meeting=meeting, proposal=proposal.load_model(),
+               .having(meeting=meeting, proposal=proposal,
                        discussion=u'I say Nay!', number=u'1'))
 
         browser.login().open(meeting.get_url(view='agenda_item_list/as_json'))
@@ -143,7 +142,7 @@ class TestAgendaItemList(FunctionalTestCase):
         self.assertEqual(
             [{u'decision_number': None,
               u'description': u'Mach doch',
-              u'dossier_reference_number': u'Client1 1 / 1',
+              u'dossier_reference_number': u'123',
               u'html:considerations': u'Uhm....',
               u'html:copy_for_attention': None,
               u'html:decision': u'Proposal approved',
@@ -156,7 +155,7 @@ class TestAgendaItemList(FunctionalTestCase):
               u'html:publish_in': None,
               u'is_paragraph': False,
               u'number': u'1.',
-              u'repository_folder_title': u'',
+              u'repository_folder_title': u'repo',
               u'title': u'Mach doch'},
              {u'decision_number': None,
               u'description': u'foo',

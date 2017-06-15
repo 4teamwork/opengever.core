@@ -174,7 +174,8 @@ class TestAgendaItemEdit(TestAgendaItem):
 
     @browsing
     def test_when_title_is_too_long_returns_json_error(self, browser):
-        proposal = create(Builder('proposal_model'))
+        committee = create(Builder('committee'))
+        proposal = create(Builder('submitted_proposal').within(committee))
         item = create(Builder('agenda_item').having(
             title=u'foo', meeting=self.meeting, proposal=proposal))
 

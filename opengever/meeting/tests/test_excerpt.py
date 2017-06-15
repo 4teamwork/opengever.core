@@ -117,20 +117,17 @@ class TestExcerpt(FunctionalTestCase):
 
         self.committee = create(Builder('committee').within(container).having(
             repository_folder=self.repository_folder))
-        self.proposal = create(Builder('proposal')
-                               .within(self.dossier)
+        self.proposal = create(Builder('submitted_proposal')
+                               .within(self.committee)
                                .having(title='Mach doch',
-                                       committee=self.committee.load_model(),
                                        legal_basis=u'We may do it',
                                        initial_position=u'We should do it.',
                                        proposed_action=u'Do it.',
                                        considerations=u'Uhm....',
-                                       )
-                               .as_submitted())
+                                       ))
 
-        self.committee_model = self.committee.load_model()
         self.meeting = create(Builder('meeting')
-                              .having(committee=self.committee_model)
+                              .having(committee=self.committee)
                               .link_with(self.meeting_dossier))
         self.proposal_model = self.proposal.load_model()
 

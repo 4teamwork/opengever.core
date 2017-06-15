@@ -8,12 +8,15 @@ from opengever.document.document import Document
 from opengever.globalindex.handlers.task import sync_task
 from opengever.mail.mail import OGMail
 from opengever.meeting import is_word_meeting_implementation_enabled
+from opengever.meeting.committee import ICommittee
 from opengever.meeting.model import Period
 from opengever.meeting.proposal import Proposal
+from opengever.meeting.proposal import SubmittedProposal
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.testing import assets
 from opengever.testing.builders.base import TEST_USER_ID
 from opengever.testing.builders.translated import TranslatedTitleBuilderMixin
+from opengever.testing.model import TransparentModelLoader
 from opengever.trash.trash import ITrashable
 from plone import api
 from plone.namedfile.file import NamedBlobFile
@@ -21,7 +24,6 @@ from Products.CMFCore.utils import getToolByName
 from zope.annotation.interfaces import IAnnotations
 from zope.event import notify
 from zope.lifecycleevent import ObjectCreatedEvent
-import transaction
 
 
 class DossierBuilder(DexterityBuilder):
@@ -305,8 +307,9 @@ class InboxContainerBuilder(TranslatedTitleBuilderMixin, DexterityBuilder):
 builder_registry.register('inbox_container', InboxContainerBuilder)
 
 
-class ProposalBuilder(DexterityBuilder):
+class ProposalBuilder(TransparentModelLoader, DexterityBuilder):
     portal_type = 'opengever.meeting.proposal'
+    auto_loaded_models = ('committee', )
 
     def __init__(self, session):
         super(ProposalBuilder, self).__init__(session)
@@ -322,6 +325,12 @@ class ProposalBuilder(DexterityBuilder):
         return self
 
     def before_create(self):
+        if ICommittee.providedBy(self.container):
+            if 'committee' not in self.arguments:
+                self.argumets['committee'] = self.container
+
+        super(ProposalBuilder, self).before_create()
+
         self.arguments, self.model_arguments = Proposal.partition_data(
             self.arguments)
 
@@ -371,6 +380,39 @@ class ProposalBuilder(DexterityBuilder):
         return self
 
 builder_registry.register('proposal', ProposalBuilder)
+
+
+class SubmittedProposalBuilder(TransparentModelLoader, DexterityBuilder):
+
+    portal_type = 'opengever.meeting.submittedproposal'
+    auto_loaded_models = ('committee',)
+
+    def __init__(self, session):
+        super(SubmittedProposalBuilder, self).__init__(session)
+        self.arguments = {'title': 'Fooo',
+                          'language': TranslatedTitle.FALLBACK_LANGUAGE,
+                          'physical_path': 'i-am-a-fake',
+                          'workflow_state': 'invalid',
+                          'dossier_reference_number': '123',
+                          'repository_folder_title': 'repo',
+                          'creator': TEST_USER_ID}
+        self.model_arguments = None
+
+    def before_create(self):
+
+        super(SubmittedProposalBuilder, self).before_create()
+
+        # hackishly create the proposal model when creating the submitted
+        # proposal. This is only for testing and not done so in production.
+        self.arguments, self.model_arguments = SubmittedProposal.partition_data(
+            self.arguments)
+
+    def after_create(self, obj):
+        model = obj.create_model(self.model_arguments, self.container)
+        obj.sync_model(proposal_model=model)
+        super(SubmittedProposalBuilder, self).after_create(obj)
+
+builder_registry.register('submitted_proposal', SubmittedProposalBuilder)
 
 
 class CommitteeContainerBuilder(TranslatedTitleBuilderMixin, DexterityBuilder):

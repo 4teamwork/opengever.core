@@ -24,7 +24,6 @@ from opengever.contact.models import URL
 from opengever.contact.ogdsuser import OgdsUserToContactAdapter
 from opengever.globalindex.model.task import Task
 from opengever.locking.model import Lock
-from opengever.meeting.committee import ICommittee
 from opengever.meeting.interfaces import IMeetingDossier
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import Committee
@@ -46,6 +45,7 @@ from opengever.ogds.models.tests.builders import SqlObjectBuilder
 from opengever.ogds.models.tests.builders import UserBuilder
 from opengever.testing.builders.base import TEST_USER_ID
 from opengever.testing.helpers import localized_datetime
+from opengever.testing.model import TransparentModelLoader
 from plone import api
 from plone.locking.interfaces import ILockable
 from plone.registry.interfaces import IRegistry
@@ -230,9 +230,10 @@ class MemberBuilder(SqlObjectBuilder):
 builder_registry.register('member', MemberBuilder)
 
 
-class MemberShipBuilder(SqlObjectBuilder):
+class MemberShipBuilder(TransparentModelLoader, SqlObjectBuilder):
 
     mapped_class = Membership
+    auto_loaded_models = ('committee', )
 
     def __init__(self, session):
         super(MemberShipBuilder, self).__init__(session)
@@ -252,9 +253,10 @@ class MemberShipBuilder(SqlObjectBuilder):
 builder_registry.register('membership', MemberShipBuilder)
 
 
-class MeetingBuilder(SqlObjectBuilder):
+class MeetingBuilder(TransparentModelLoader, SqlObjectBuilder):
 
     mapped_class = Meeting
+    auto_loaded_models = ('committee', )
 
     def __init__(self, session):
         super(MeetingBuilder, self).__init__(session)
@@ -265,14 +267,6 @@ class MeetingBuilder(SqlObjectBuilder):
         self.arguments['end'] = localized_datetime(2011, 12, 13, 11, 45)
         self.arguments['location'] = u'B\xe4rn'
         self.arguments['title'] = u'C\xf6mmunity meeting'
-
-    def before_create(self):
-        committee = self.arguments.get('committee')
-        if not committee:
-            return
-
-        if ICommittee.providedBy(committee):
-            self.arguments['committee'] = committee.load_model()
 
     def link_with(self, dossier):
         del self.arguments['dossier_admin_unit_id']
@@ -320,7 +314,9 @@ class GeneratedExcerptBuilder(GeneratedProtocolBuilder):
 builder_registry.register('generated_excerpt', GeneratedExcerptBuilder)
 
 
-class AgendaItemBuilder(SqlObjectBuilder):
+class AgendaItemBuilder(TransparentModelLoader, SqlObjectBuilder):
+
+    auto_loaded_models = ('proposal', )
 
     def after_create(self, obj):
         obj.meeting.reorder_agenda_items()
