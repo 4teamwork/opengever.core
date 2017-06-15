@@ -412,4 +412,9 @@
       inline="False"
       />
 
+  <javascript
+      id="++resource++quickupload_static/swfobject.js"
+      enabled="False"
+      />
+
 </object>
