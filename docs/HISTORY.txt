@@ -17,6 +17,7 @@ Changelog
 - Show userid instead of E-Mail address on all sources (except EMailSource). [mathias.leimgruber]
 - Fix "leave GEVER" on logout overlay. [mathias.leimgruber]
 - Disbale swfobject.js - no longer load Flash Fallback for multiuploads. [mathias.leimgruber]
+- Fix schema migration EnlargeProfileidInMigrationTrackingTable for oracle backend. [phgross]
 - Add missing contacts only sources, used by customer special dossiers. [phgross]
 - Reset journal after copy a document. [mathias.leimgruber]
 - Switch back to the orginal plone.formwidget.autocomplete package from our fork. [phgross]
