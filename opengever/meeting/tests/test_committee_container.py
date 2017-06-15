@@ -244,10 +244,10 @@ class TestCommitteesTab(FunctionalTestCase):
         dossier = create(Builder('dossier').within(repo_folder))
 
         for i in range(0, 5):
-            proposal_a = create(Builder('proposal')
-                                .within(dossier)
-                                .having(committee=self.committee_model))
-            create(Builder('submitted_proposal').submitting(proposal_a))
+            create(Builder('proposal')
+                   .within(dossier)
+                   .having(committee=self.committee_model)
+                   .as_submitted())
 
         browser.login().open(self.container, view='tabbedview_view-committees')
 
@@ -260,10 +260,10 @@ class TestCommitteesTab(FunctionalTestCase):
         repo, repo_folder = create(Builder('repository_tree'))
         dossier = create(Builder('dossier').within(repo_folder))
 
-        proposal_a = create(Builder('proposal')
-                            .within(dossier)
-                            .having(committee=self.committee_model))
-        create(Builder('submitted_proposal').submitting(proposal_a))
+        create(Builder('proposal')
+               .within(dossier)
+               .having(committee=self.committee_model)
+               .as_submitted())
 
         browser.login().open(self.container, view='tabbedview_view-committees')
         link = browser.css('#committees_view .unscheduled_proposals a').first
@@ -277,10 +277,10 @@ class TestCommitteesTab(FunctionalTestCase):
     def test_unscheduled_proposal_number_class(self, browser):
         repo, repo_folder = create(Builder('repository_tree'))
         dossier = create(Builder('dossier').within(repo_folder))
-        proposal_a = create(Builder('proposal')
-                            .within(dossier)
-                            .having(committee=self.committee_model))
-        create(Builder('submitted_proposal').submitting(proposal_a))
+        create(Builder('proposal')
+               .within(dossier)
+               .having(committee=self.committee_model)
+               .as_submitted())
 
         create(Builder('committee').within(self.container)
                .titled(u'Xenophoben-Kommission'))

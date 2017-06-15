@@ -727,14 +727,11 @@ class TestProposal(FunctionalTestCase):
 
     def test_attributes_sort_order_for_submitted_proposal(self):
         committee = create(Builder('committee').titled('My committee'))
-        proposal = create(Builder('proposal')
-                          .within(self.dossier)
-                          .titled(u'My Proposal')
-                          .having(committee=committee.load_model())
-                          .as_submitted())
-
-        submitted_proposal = api.portal.get().restrictedTraverse(
-            proposal.load_model().submitted_physical_path.encode('utf-8'))
+        proposal, submitted_proposal = create(Builder('proposal')
+            .within(self.dossier)
+            .titled(u'My Proposal')
+            .having(committee=committee.load_model())
+            .with_submitted())
 
         attributes = submitted_proposal.get_overview_attributes()
         self.assertEqual(
@@ -974,13 +971,11 @@ class TestProposalWithWord(FunctionalTestCase):
         repo, repo_folder = create(Builder('repository_tree'))
         dossier = create(Builder('dossier').within(repo_folder)
                          .titled(u'An important dossier'))
-        proposal = create(Builder('proposal')
+        proposal, submitted_proposal = create(Builder('proposal')
                           .titled(u'An important proposal')
                           .within(dossier)
-                          .having(committee=committee.load_model()))
-        submitted_proposal = create(Builder('submitted_proposal')
-                                    .submitting(proposal))
-        transaction.commit()
+                          .having(committee=committee.load_model())
+                          .with_submitted())
 
         browser.login().open(submitted_proposal, view='tabbedview_view-overview')
         self.assertEquals(

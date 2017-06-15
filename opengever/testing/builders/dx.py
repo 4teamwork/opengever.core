@@ -315,6 +315,7 @@ class ProposalBuilder(DexterityBuilder):
         self.model_arguments = None
         self._transition = None
         self._proposal_file_data = 'file body'
+        self._also_return_submitted_proposal = False
 
     def with_proposal_file(self, data):
         self._proposal_file_data = data
@@ -327,9 +328,6 @@ class ProposalBuilder(DexterityBuilder):
     def after_create(self, obj):
         obj.create_model(self.model_arguments, self.container)
 
-        if self._transition:
-            obj.execute_transition(self._transition)
-
         if is_word_meeting_implementation_enabled():
             obj.create_proposal_document(
                 filename='proposal_document.docx',
@@ -337,7 +335,22 @@ class ProposalBuilder(DexterityBuilder):
                 content_type='application/vnd.openxmlformats'
                 '-officedocument.wordprocessingml.document')
 
+        if self._transition:
+            obj.execute_transition(self._transition)
+
         super(ProposalBuilder, self).after_create(obj)
+
+    def create(self):
+        proposal = super(ProposalBuilder, self).create()
+
+        if not self._also_return_submitted_proposal:
+            return proposal
+
+        proposal_model = proposal.load_model()
+        path = proposal_model.submitted_physical_path.encode('utf-8')
+        submitted_proposal = api.portal.get().restrictedTraverse(path)
+
+        return proposal, submitted_proposal
 
     def relate_to(self, *documents):
         return self.having(relatedItems=documents)
@@ -350,32 +363,14 @@ class ProposalBuilder(DexterityBuilder):
         self._transition = 'pending-cancelled'
         return self
 
-builder_registry.register('proposal', ProposalBuilder)
+    def with_submitted(self):
+        """Will return proposal and submitted proposal after creating."""
 
-
-class SubmittedProposalBuilder(object):
-
-    def __init__(self, session):
-        self.session = session
-        self.proposal = None
-
-    def submitting(self, proposal):
-        self.proposal = proposal
+        self.as_submitted()
+        self._also_return_submitted_proposal = True
         return self
 
-    def create(self):
-        assert self.proposal, 'source proposal must be specified'
-
-        self.proposal.execute_transition('pending-submitted')
-        proposal_model = self.proposal.load_model()
-        path = proposal_model.submitted_physical_path.encode('utf-8')
-
-        if self.session.auto_commit:
-            transaction.commit()
-
-        return api.portal.get().restrictedTraverse(path)
-
-builder_registry.register('submitted_proposal', SubmittedProposalBuilder)
+builder_registry.register('proposal', ProposalBuilder)
 
 
 class CommitteeContainerBuilder(TranslatedTitleBuilderMixin, DexterityBuilder):

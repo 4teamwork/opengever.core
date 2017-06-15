@@ -25,12 +25,11 @@ class TestProposalAgendaItem(FunctionalTestCase):
         self.meeting = create(Builder('meeting')
                               .having(committee=self.committee.load_model())
                               .link_with(self.meeting_dossier))
-        self.proposal = create(Builder('proposal')
+        self.proposal, self.submitted_proposal = create(Builder('proposal')
                                .within(self.dossier)
                                .having(title=u'Pr\xf6posal',
-                                       committee=self.committee.load_model()))
-        self.submitted_proposal = create(
-            Builder('submitted_proposal').submitting(self.proposal))
+                                       committee=self.committee.load_model())
+                               .with_submitted())
         self.agenda_item = create(
             Builder('agenda_item')
             .having(proposal=self.proposal.load_model(),

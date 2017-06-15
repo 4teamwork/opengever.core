@@ -73,13 +73,12 @@ class TestSubmitAdditionalDocuments(FunctionalTestCase):
 
     def test_database_entry_is_deleted_when_removing_submitted_proposal(self):
         self.grant('Manager')
-        proposal = create(Builder('proposal')
-                          .within(self.dossier)
-                          .having(title='Mach doch',
-                                  committee=self.committee.load_model())
-                          .relate_to(self.document))
-        submitted_proposal = create(
-            Builder('submitted_proposal').submitting(proposal))
+        proposal, submitted_proposal = create(Builder('proposal')
+            .within(self.dossier)
+            .having(title='Mach doch',
+                    committee=self.committee.load_model())
+            .relate_to(self.document)
+            .with_submitted())
         submitted_document = submitted_proposal.get_documents()[0]
 
         self.assertIsNotNone(
@@ -92,12 +91,12 @@ class TestSubmitAdditionalDocuments(FunctionalTestCase):
 
     def test_database_entry_is_deleted_when_removing_proposal(self):
         self.grant('Manager')
-        proposal = create(Builder('proposal')
-                          .within(self.dossier)
-                          .having(title='Mach doch',
-                                  committee=self.committee.load_model())
-                          .relate_to(self.document))
-        create(Builder('submitted_proposal').submitting(proposal))
+        proposal, submitted_proposal = create(Builder('proposal')
+            .within(self.dossier)
+            .having(title='Mach doch',
+                    committee=self.committee.load_model())
+            .relate_to(self.document)
+            .with_submitted())
 
         self.assertIsNotNone(
             SubmittedDocument.query.get_by_source(proposal, self.document))
@@ -204,14 +203,12 @@ class TestSubmitAdditionalDocuments(FunctionalTestCase):
 
     @browsing
     def test_do_not_show_link_to_update_outdated_document_on_submitted_proposal_view(self, browser):
-        proposal = create(Builder('proposal')
-                          .within(self.dossier)
-                          .having(title='Mach doch',
-                                  committee=self.committee.load_model())
-                          .relate_to(self.document))
-
-        submitted_proposal = create(
-            Builder('submitted_proposal').submitting(proposal))
+        proposal, submitted_proposal = create(Builder('proposal')
+            .within(self.dossier)
+            .having(title='Mach doch',
+                    committee=self.committee.load_model())
+            .relate_to(self.document)
+            .with_submitted())
 
         repository = api.portal.get_tool('portal_repository')
         repository.save(self.document)

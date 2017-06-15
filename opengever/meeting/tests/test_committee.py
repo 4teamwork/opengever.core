@@ -212,8 +212,8 @@ class TestCommitteeWorkflow(FunctionalTestCase):
         committee = create(Builder('committee').titled(u'My Committee'))
         proposal = create(Builder('proposal')
                           .within(dossier)
-                          .having(committee=committee.load_model()))
-        create(Builder('submitted_proposal').submitting(proposal))
+                          .having(committee=committee.load_model())
+                          .as_submitted())
 
         browser.login().open(committee)
         browser.find('Deactivate').click()

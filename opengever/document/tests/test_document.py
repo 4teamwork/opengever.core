@@ -216,14 +216,13 @@ class TestDocument(FunctionalTestCase):
         dossier = create(Builder('dossier').within(repo_folder))
         document = create(Builder('document').within(dossier))
         committee = create(Builder('committee'))
-        proposal = create(Builder('proposal')
-                          .within(dossier)
-                          .having(title='Mach doch',
-                                  committee=committee.load_model())
-                          .relate_to(document))
+        proposal, submitted_proposal = create(
+            Builder('proposal').within(dossier)
+                               .having(title='Mach doch',
+                                       committee=committee.load_model())
+                               .relate_to(document)
+                               .with_submitted())
 
-        submitted_proposal = create(
-            Builder('submitted_proposal').submitting(proposal))
         submitted_document = submitted_proposal.get_documents()[0]
         self.assertFalse(submitted_document.is_movable())
 
