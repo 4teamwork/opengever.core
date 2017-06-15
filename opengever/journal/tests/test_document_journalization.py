@@ -3,6 +3,8 @@ from ftw.builder import create
 from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from ftw.testbrowser import browsing
 from opengever.base.behaviors.classification import PUBLIC_TRIAL_PRIVATE
+from opengever.journal.entry import ManualJournalEntry
+from opengever.journal.handlers import DOCUMENT_ADDED_ACTION
 from opengever.journal.handlers import DOCUMENT_MODIIFED_ACTION
 from opengever.journal.handlers import PUBLIC_TRIAL_MODIFIED_ACTION
 from opengever.testing import FunctionalTestCase
@@ -117,3 +119,32 @@ class TestDocumentEventJournalizations(FunctionalTestCase):
 
         self.assert_journal_entry(
             DOCUMENT_MODIIFED_ACTION, u'Changed metadata', entries[-1])
+
+    def test_reset_journal_after_creating_a_copy(self):
+        dossier = create(Builder('dossier').titled(u'Dossier'))
+        document = create(Builder('document')
+                          .within(dossier)
+                          .titled("File to copy"))
+
+        entry = ManualJournalEntry(document,
+                                   'meeting',
+                                   'comment',
+                                   [], [], [])
+        entry.save()
+
+        cb = dossier.manage_copyObjects(document.getId())
+        dossier.manage_pasteObjects(cb)
+        clone = dossier.objectValues()[-1]
+
+        journal = IAnnotations(document).get(JOURNAL_ENTRIES_ANNOTATIONS_KEY)
+        journal_clone = IAnnotations(clone).get(
+            JOURNAL_ENTRIES_ANNOTATIONS_KEY)
+
+        self.assertNotEquals(len(journal), len(journal_clone))
+        self.assertEquals(
+            1,
+            len(journal_clone),
+            'Exepct exactly on entry in the journal of the cloned document')
+
+        self.assertEquals(DOCUMENT_ADDED_ACTION,
+                          journal_clone[0]['action']['type'])
