@@ -167,6 +167,7 @@ setup(name='opengever.core',
         'z3c.relationfield',
         'z3c.saconfig',
         'zc.relation',
+        'zeep',
         'zope.globalrequest',
         # -*- Extra requirements: -*-
         ],
