@@ -280,7 +280,7 @@ msgstr "Fehler"
 msgid "message_title_info"
 msgstr "Information"
 
-#. Default: "Can't paste items; the clipboard is emtpy"
+#. Default: "Can't paste items, the clipboard is emtpy"
 #: ./opengever/base/browser/paste.py:25
 msgid "msg_empty_clipboard"
 msgstr "Es können keine Objekte eingefügt werden; die Zwischenablage ist leer."
@@ -374,4 +374,3 @@ msgstr "Nicht geprüft"
 #: opengever/repository/classification.py
 msgid "unprotected"
 msgstr "Nicht klassifiziert"
-
