@@ -29,8 +29,11 @@ class TestPrivateFolder(FunctionalTestCase):
     def test_object_id_is_userid(self):
         self.assertEquals(TEST_USER_ID, self.folder.getId())
 
-    def test_title_is_corresponding_users_label(self):
+    def test_Title_is_corresponding_users_label(self):
         self.assertEquals('Test User (test_user_1_)', self.folder.Title())
+
+    def test_Title_returns_string(self):
+        self.assertTrue(isinstance(self.folder.Title(), str))
 
     def test_uses_userid_as_reference_number_part(self):
         self.assertEquals('Client1 test_user_1_',
