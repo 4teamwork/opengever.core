@@ -162,6 +162,12 @@ class OpengeverFixture(PloneSandboxLayer):
             '</configure>',
             context=configurationContext)
 
+        import opengever.briefbutler.tests
+        xmlconfig.includeOverrides(
+            configurationContext,
+            file='overrides.zcml',
+            package=opengever.briefbutler.tests)
+
         z2.installProduct(app, 'plone.app.versioningbehavior')
         z2.installProduct(app, 'collective.taskqueue.pasplugin')
 
