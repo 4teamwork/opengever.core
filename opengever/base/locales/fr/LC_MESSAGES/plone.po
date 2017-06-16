@@ -115,6 +115,9 @@ msgstr "Résultat de la recherche"
 msgid "Search results for ${term}"
 msgstr "Résultat de la recherche pour"
 
+msgid "Send with BriefButler"
+msgstr "Envoyer avec BriefButler"
+
 msgid "Submit additional document"
 msgstr ""
 

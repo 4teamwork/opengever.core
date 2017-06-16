@@ -4,29 +4,24 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-04-27 11:20+0000\n"
+"POT-Creation-Date: 2017-06-15 12:09+0000\n"
 "PO-Revision-Date: 2017-06-05 14:47+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
-"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
-"gever/opengever-base/fr/>\n"
-"Language: fr\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-base/fr/>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2.13.1\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
+"Language: fr\n"
+"X-Generator: Weblate 2.13.1\n"
 
 #: ./opengever/base/browser/list_groupmembers.pt:5
 msgid "(INACTIVE)"
 msgstr "(INACTIF)"
-
-#: ./opengever/base/profiles/default/actions.xml
-msgid "Copy Items"
-msgstr "Copier"
 
 #: ./opengever/base/browser/templates/gever-macros.pt:38
 msgid "No content"
@@ -35,10 +30,6 @@ msgstr "Pas de contenu"
 #: ./opengever/base/viewlets/download.py:22
 msgid "No file in in this version"
 msgstr "Pas de fichier pour cette version"
-
-#: ./opengever/base/profiles/default/actions.xml
-msgid "Properties"
-msgstr "Afficher les propriétés"
 
 #. Default: "Save"
 #: ./opengever/base/browser/modelforms.py:41
@@ -114,27 +105,19 @@ msgstr "Valeur archivistique"
 
 #: ./opengever/base/behaviors/classification.py:72
 msgid "help_classification"
-msgstr ""
-"Degré de besoin de protection des documents contre la consultation non-"
-"autorisée."
+msgstr "Degré de besoin de protection des documents contre la consultation non-autorisée."
 
 #: ./opengever/base/behaviors/lifecycle.py:74
 msgid "help_custody_period"
-msgstr ""
-"Délai de protection des documents contre la consultation publique après "
-"l'archivage."
+msgstr "Délai de protection des documents contre la consultation publique après l'archivage."
 
 #: ./opengever/base/behaviors/classification.py:79
 msgid "help_privacy_layer"
-msgstr ""
-"Marquage des documents contenant des données sensibles ou des profils de la "
-"personnalité selon la loi sur la protection des données."
+msgstr "Marquage des documents contenant des données sensibles ou des profils de la personnalité selon la loi sur la protection des données."
 
 #: ./opengever/base/behaviors/classification.py:86
 msgid "help_public_trial"
-msgstr ""
-"Mention, si les documents sont accessibles ou non selon la loi sur la "
-"protection des données."
+msgstr "Mention, si les documents sont accessibles ou non selon la loi sur la protection des données."
 
 #: ./opengever/base/behaviors/classification.py:95
 msgid "help_public_trial_statement"
@@ -142,10 +125,7 @@ msgstr "Date de la requête, requérant, date de la décision, Référence vers 
 
 #: ./opengever/base/behaviors/lifecycle.py:44
 msgid "help_retention_period"
-msgstr ""
-"Durée entre la date du document plus récent contenu dans un dossier et la "
-"date à partir de laquelle le document n'est plus requis pour les activités "
-"administratives."
+msgstr "Durée entre la date du document plus récent contenu dans un dossier et la date à partir de laquelle le document n'est plus requis pour les activités administratives."
 
 #. Default: "-- Already removed object --"
 #: ./opengever/base/adapters.py:209
@@ -187,11 +167,6 @@ msgstr "Confirmer l'action"
 msgid "label_created"
 msgstr "Créé le"
 
-#. Default: "Creators"
-#: ./opengever/base/behaviors/creator.py:18
-msgid "label_creators"
-msgstr "Auteurs"
-
 #. Default: "Custody period (years)"
 #: ./opengever/base/behaviors/lifecycle.py:73
 msgid "label_custody_period"
@@ -208,7 +183,7 @@ msgid "label_dateofsubmission"
 msgstr "Date de proposition (des documents)"
 
 #. Default: "An unexpected error has occured"
-#: ./opengever/base/browser/templates/gever-macros.pt:120
+#: ./opengever/base/browser/templates/gever-macros.pt:130
 msgid "label_default_error_message"
 msgstr "Une erreur inattendue est survenue."
 
@@ -258,7 +233,7 @@ msgid "label_search"
 msgstr "Recherche"
 
 #. Default: "Error"
-#: ./opengever/base/browser/templates/gever-macros.pt:119
+#: ./opengever/base/browser/templates/gever-macros.pt:129
 msgid "label_severity_error"
 msgstr "Erreur"
 
@@ -305,7 +280,7 @@ msgid "message_title_info"
 msgstr "Information"
 
 #. Default: "Can't paste items, the clipboard is emtpy"
-#: ./opengever/base/browser/paste.py:29
+#: ./opengever/base/browser/paste.py:25
 msgid "msg_empty_clipboard"
 msgstr "Aucun objet ne peut être ajouté; le presse-papier est vide."
 
@@ -314,10 +289,16 @@ msgstr "Aucun objet ne peut être ajouté; le presse-papier est vide."
 msgid "msg_no_items_available"
 msgstr "Il n'y a pas d'objets disponibles."
 
-#. Default: "Can't paste items, it's not allowed to add objects of this type."
-#: ./opengever/base/browser/paste.py:36
+#. Default: "Can't paste items, the context does not allow pasting items."
+#: ./opengever/base/browser/paste.py:40
+#, fuzzy
 msgid "msg_pasting_not_allowed"
 msgstr "Il n'est pas permis d'insérer des objets de ce type."
+
+#. Default: "Can't paste items, it's not allowed to add objects of this type."
+#: ./opengever/base/browser/paste.py:32
+msgid "msg_pasting_type_not_allowed"
+msgstr ""
 
 #. Default: "Selected objects successfully copied."
 #: ./opengever/base/browser/copy_items.py:36
@@ -325,20 +306,14 @@ msgid "msg_successfuly_copied"
 msgstr "Les objets sélectionnés ont été copiés."
 
 #. Default: "Objects from clipboard successfully pasted."
-#: ./opengever/base/browser/paste.py:45
+#: ./opengever/base/browser/paste.py:49
 msgid "msg_successfuly_pasted"
 msgstr "Les objets du presse-papiers ont été ajoutés."
 
 #. Default: "Careful, it's possible someone is executing an exploit against you. Verify you just performed an action on this site and that you were not referred here by a different website or email."
 #: ./opengever/base/browser/confirm.pt:27
 msgid "msg_verify_you_performed_this_action"
-msgstr ""
-"Veuillez confirmer que vous êtes à l'origine de cette action et que la "
-"requête ne provient ni d'un lien courriel, ni d'un site web externe à GEVER. "
-"Cette mesure de protection permet de prévenir les éventuelles attaques CSRF. "
-"Si ce message apparaît suite à une action entreprise dans l'espace GEVER, "
-"veuillez en informer le support (avec capture d'écran du message et le lien "
-"URL correspondant)."
+msgstr "Veuillez confirmer que vous êtes à l'origine de cette action et que la requête ne provient ni d'un lien courriel, ni d'un site web externe à GEVER. Cette mesure de protection permet de prévenir les éventuelles attaques CSRF. Si ce message apparaît suite à une action entreprise dans l'espace GEVER, veuillez en informer le support (avec capture d'écran du message et le lien URL correspondant)."
 
 #. Default ""
 #: opengever/repository/classification.py
@@ -373,16 +348,14 @@ msgstr "Public"
 #. Default: "Did you not find what you were looking for? Try the ${advanced_search} to refine your search."
 #: ./opengever/base/browser/search.pt:63
 msgid "search_results_advanced"
-msgstr ""
-"Vous n'avez pas trouvé ce que vous avez cherché? La ${advanced_search} vous "
-"offre des possibilités de recherche plus précises."
+msgstr "Vous n'avez pas trouvé ce que vous avez cherché? La ${advanced_search} vous offre des possibilités de recherche plus précises."
 
 #. Default: "Advanced Search"
 #: ./opengever/base/browser/search.pt:64
 msgid "search_results_advanced_link"
 msgstr "Recherche avancée"
 
-#: ./opengever/base/browser/templates/gever-macros.pt:101
+#: ./opengever/base/browser/templates/gever-macros.pt:105
 msgid "show all"
 msgstr "Tout afficher"
 
@@ -400,3 +373,4 @@ msgstr "Non contrôlé"
 #: opengever/repository/classification.py
 msgid "unprotected"
 msgstr "Non classé"
+

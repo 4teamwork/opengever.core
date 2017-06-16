@@ -371,3 +371,6 @@ msgstr ""
 
 msgid "disposition-transition-refuse"
 msgstr ""
+
+msgid "Send with BriefButler"
+msgstr ""

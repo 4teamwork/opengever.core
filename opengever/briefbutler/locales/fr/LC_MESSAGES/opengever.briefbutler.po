@@ -1,0 +1,76 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2017-06-15 10:21+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+
+#: ./opengever/briefbutler/form.py:19
+msgid "Invalid email address"
+msgstr "Adresse de courriel invalide"
+
+#: ./opengever/briefbutler/form.py:75
+msgid "Recipient Information"
+msgstr "Destinataire"
+
+#: ./opengever/briefbutler/form.py:82
+msgid "Sender Information"
+msgstr "Expéditeur"
+
+#: ./opengever/briefbutler/form.py:126
+msgid "Unsupported content type: briefbutler supports only PDF documents"
+msgstr "Type de fichier non supporté: BriefButler accepte que des fichiers PDF"
+
+#: ./opengever/briefbutler/form.py:49
+msgid "City"
+msgstr "Ville"
+
+#: ./opengever/briefbutler/form.py:57
+msgid "Company Name"
+msgstr "Nom"
+
+#: ./opengever/briefbutler/form.py:115
+msgid "Document submitted to BriefButler"
+msgstr "Fichier livré à BriefButler"
+
+#: ./opengever/briefbutler/form.py:43
+msgid "Door Number"
+msgstr "Complément d'adresse"
+
+#: ./opengever/briefbutler/form.py:52
+msgid "Email"
+msgstr "Courriel"
+
+#: ./opengever/briefbutler/form.py:37
+msgid "Family Name"
+msgstr "Nom de famille"
+
+#: ./opengever/briefbutler/form.py:34
+msgid "Given Name"
+msgstr "Prénom"
+
+#: ./opengever/briefbutler/form.py:46
+msgid "Postal Code"
+msgstr "Code postal"
+
+#: ./opengever/briefbutler/form.py:97
+msgid "Send"
+msgstr "Envoyer"
+
+#: ./opengever/briefbutler/form.py:92
+msgid "Send with BriefButler"
+msgstr "Envoyer avec BriefButler"
+
+#: ./opengever/briefbutler/form.py:40
+msgid "Street"
+msgstr "Adresse (rue / numéro)"
+
