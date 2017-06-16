@@ -80,4 +80,11 @@
       handler=".handlers.dossier_attached_to_email"
       />
 
+  <subscriber
+      for="opengever.document.behaviors.IBaseDocument
+           zope.lifecycleevent.interfaces.IObjectCopiedEvent"
+      handler=".handlers.reset_journal_history_after_clone"
+      />
+
+
 </configure>

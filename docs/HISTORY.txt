@@ -8,6 +8,7 @@ Changelog
 - Fix "leave GEVER" on logout overlay. [mathias.leimgruber]
 - Disbale swfobject.js - no longer load Flash Fallback for multiuploads. [mathias.leimgruber]
 - Add missing contacts only sources, used by customer special dossiers. [phgross]
+- Reset journal after copy a document. [mathias.leimgruber]
 - Fix task assign form: Only users and the inbox of the current user is selectable. [mathias.leimgruber]
 - Fix for OGIP 15: no longer make a deepcopy of the payload. [mathias.leimgruber]
 - Render subdossier tree collapsed initially. [Kevin Bieri]

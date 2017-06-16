@@ -1,6 +1,7 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from five import grok
+from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from ftw.journal.events.events import JournalEntryEvent
 from ftw.journal.interfaces import IJournalizable
 from ftw.mail.mail import IMail
@@ -41,6 +42,7 @@ from plone.app.versioningbehavior.utils import get_change_note
 from plone.dexterity.interfaces import IDexterityContent
 from Products.CMFCore.interfaces import IActionSucceededEvent
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
+from zope.annotation.interfaces import IAnnotations
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.event import notify
@@ -358,6 +360,12 @@ def document_added(context, event):
     journal_entry_factory(
         context.aq_inner.aq_parent, DOCUMENT_ADDED_ACTION, title)
     return
+
+
+def reset_journal_history_after_clone(document, event):
+    annotations = IAnnotations(document)
+    if JOURNAL_ENTRIES_ANNOTATIONS_KEY in annotations:
+        del annotations[JOURNAL_ENTRIES_ANNOTATIONS_KEY]
 
 
 DOCUMENT_MODIIFED_ACTION = 'Document modified'
