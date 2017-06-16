@@ -193,6 +193,7 @@ class Documents(BaseCatalogListingTab):
     def enabled_actions(self):
         actions = [
             'send_as_email',
+            'send_with_briefbutler',
             'checkout',
             'checkin_with_comment',
             'checkin_without_comment',
