@@ -558,7 +558,7 @@ class TestTemplateFolder(FunctionalTestCase):
         factoriesmenu.add('Template Folder')
 
         self.assertEqual(
-            'Test User (test@example.org)',
+            'Test User (test_user_1_)',
             browser.css('#formfield-form-widgets-IDossier-responsible option[selected]').first.text
             )
 

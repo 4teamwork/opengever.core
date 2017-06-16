@@ -53,7 +53,7 @@ class TestAllUsersAndInboxesSource(FunctionalTestCase):
     def test_get_term_by_token(self):
         term = self.source.getTermByToken(u'unit1:hans')
         self.assertTrue(isinstance(term, SimpleTerm))
-        self.assertEquals(u'Informatik: Peter Hans (test@example.org)',
+        self.assertEquals(u'Informatik: Peter Hans (hans)',
                           term.title)
 
     def test_get_term_by_token_raises_BadRequest_if_no_token(self):
@@ -73,7 +73,7 @@ class TestAllUsersAndInboxesSource(FunctionalTestCase):
         self.assertEqual(1, len(result), 'Expect one result. only John')
         self.assertEquals(u'unit1:john', result[0].token)
         self.assertEquals(u'unit1:john', result[0].value)
-        self.assertEquals(u'Informatik: Doe John (test@example.org)',
+        self.assertEquals(u'Informatik: Doe John (john)',
                           result[0].title)
 
     def test_users_in_result_are_ordered_by_user_lastname_and_firstname(self):
@@ -268,7 +268,7 @@ class TestUsersContactsInboxesSource(FunctionalTestCase):
         term = self.source.getTermByToken('hugo.boss')
         self.assertEquals('hugo.boss', term.token)
         self.assertEquals('hugo.boss', term.value)
-        self.assertEquals('Boss Hugo (test@example.org)', term.title)
+        self.assertEquals('Boss Hugo (hugo.boss)', term.title)
 
     def test_inboxes_are_valid(self):
         self.assertIn('inbox:client1', self.source)
@@ -343,7 +343,7 @@ class TestAssignedUsersSource(FunctionalTestCase):
     def test_get_term_by_token(self):
         term = self.source.getTermByToken(u'hugo.boss')
         self.assertTrue(isinstance(term, SimpleTerm))
-        self.assertEquals(u'User Test (test@example.org)', term.title)
+        self.assertEquals(u'User Test (hugo.boss)', term.title)
 
     def test_get_term_by_token_raises_BadReques_if_no_token(self):
         with self.assertRaises(LookupError):
@@ -358,7 +358,7 @@ class TestAssignedUsersSource(FunctionalTestCase):
         self.assertEqual(1, len(result), 'Expect one result. only Hugo')
         self.assertEquals(u'hugo.boss', result[0].token)
         self.assertEquals(u'hugo.boss', result[0].value)
-        self.assertEquals(u'User Test (test@example.org)', result[0].title)
+        self.assertEquals(u'User Test (hugo.boss)', result[0].title)
 
     def test_only_users_of_the_current_admin_unit_are_valid(self):
 
