@@ -4,6 +4,11 @@
     xmlns:i18n="http://namespaces.zope.org/i18n"
     i18n_domain="opengever.briefbutler">
 
+  <utility
+      provides="opengever.briefbutler.interfaces.IBriefButler"
+      factory=".butler.BriefButler"
+      />
+
   <browser:page
       name="send_with_briefbutler"
       for="*"
