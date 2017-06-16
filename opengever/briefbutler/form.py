@@ -5,8 +5,11 @@ from Products.CMFDefault.exceptions import EmailAddressInvalid
 from Products.CMFDefault.utils import checkEmailAddress
 from z3c.form import button
 from z3c.form import form
+from zeep.exceptions import Fault as ZeepFault
 from zope import schema
+from zope.component import getUtility
 
+from opengever.briefbutler.interfaces import IBriefButler
 from opengever.briefbutler import _
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -100,6 +103,15 @@ class SendForm(AutoExtensibleForm, form.Form):
             return
 
         else:
+            butler = getUtility(IBriefButler)
+            try:
+                butler.send(self.context, data)
+            except ZeepFault as e:
+                self.context
+                show_message(e.message, self.request, type='error')
+                self.request.response.redirect(self.context.absolute_url())
+                return
+
             show_message(_(u'Document submitted to BriefButler'),
                          self.request,
                          type='info')
