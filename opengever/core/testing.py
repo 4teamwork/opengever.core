@@ -5,6 +5,7 @@ from ftw.builder.testing import BUILDER_LAYER
 from ftw.builder.testing import set_builder_session_factory
 from ftw.bumblebee.tests.helpers import BumblebeeTestTaskQueue
 from ftw.testing import ComponentRegistryLayer
+from ftw.testing import TransactionInterceptor
 from ftw.testing.layer import COMPONENT_REGISTRY_ISOLATION
 from ftw.testing.quickinstaller import snapshots
 from opengever.activity.interfaces import IActivitySettings
@@ -20,6 +21,7 @@ from opengever.private import enable_opengever_private
 from plone import api
 from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
+from plone.app.testing import IntegrationTesting
 from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
@@ -30,6 +32,8 @@ from Products.CMFCore.utils import getToolByName
 from Testing.ZopeTestCase.utils import setupCoreSessions
 from zope.component import getSiteManager
 from zope.configuration import xmlconfig
+from zope.globalrequest import setRequest
+from zope.sqlalchemy.datamanager import mark_changed
 import logging
 import os
 import sys
@@ -380,3 +384,114 @@ class OfficeatworkLayer(PloneSandboxLayer):
 
 
 OPENGEVER_FUNCTIONAL_OFFICEATWORK_LAYER = OfficeatworkLayer()
+
+
+class ContentFixtureLayer(OpengeverFixture):
+    """The content fixture layer extends the regular OpengeverFixture with a
+    content fixture.
+    The content fixture is a set of objects which are constructed on layer setup
+    time and can be used by all tests, saving us the per-test creation time.
+
+    SQL:
+    This fixture does only work with sqlite at the moment. It cannot base on the
+    SQLITE_MEMORY_FIXTURE because this will break savepoint support because the
+    engine would be created before the ZCML is loaded, registering engine
+    creation event handlers.
+
+    Builder session:
+    ftw.builder provides testing layers and functions for using builders within
+    tests.
+    It does not provide infrastructure for setting up buliders in layer setup.
+    Therefore we cannot reuse ftw.builder's testing layers but configure the
+    builder manually in a non-committing integration testing mode.
+
+    Warning:
+    Do not create another fixture layer based on this fixture layer.
+    It won't work without fixing transactionality issues.
+    The current setup works because the fixture state is commited to the database.
+    Commited state cannot be rolled back.
+    Uncommitted state will get lost when IntegrationTesting.testSetUp begins
+    a new transaction.
+    """
+
+
+    defaultBases = (COMPONENT_REGISTRY_ISOLATION, )
+
+    def __init__(self):
+        # By super-super-calling the __init__ we remove the SQL bases,
+        # since we are implementing SQL setup in this layer directly.
+        PloneSandboxLayer.__init__(self)
+
+    def setUpZope(self, app, configurationContext):
+        super(ContentFixtureLayer, self).setUpZope(app, configurationContext)
+        # Setting up the database, which creates a new engine, must happen after
+        # opengever's ZCML is loaded in order to have engine creation event
+        # handlers already registered, which enable support for rolling back
+        # to savepoints.
+        sqlite_testing.setup_memory_database()
+        sqlite_testing.create_tables()
+
+    def setUpPloneSite(self, portal):
+        session.current_session = session.BuilderSession()
+        session.current_session.session = create_session()
+        super(ContentFixtureLayer, self).setUpPloneSite(portal)
+        # Avoid circular imports:
+        from opengever.testing.fixtures import OpengeverContentFixture
+        setRequest(portal.REQUEST)
+        OpengeverContentFixture()()
+        setRequest(None)
+
+    def tearDown(self):
+        sqlite_testing.model.Session.close_all()
+        sqlite_testing.truncate_tables()
+        super(ContentFixtureLayer, self).tearDown()
+        session.current_session = None
+
+    def allowAllTypes(self, portal):
+        """In the fixture layer, the fixture objects should be used and
+        we want them to be at the correct place hirearchically.
+        When additional objects need to be created anyway, they can be placed
+        in the correct spot easily by using the fixture objects as parents.
+        Therefore we do not allow to create objects at the portal.
+        """
+        pass
+
+
+class GEVERIntegrationTesting(IntegrationTesting):
+    """Custom integration testing extension:
+    1. Make savepoint at test begin and rollback after the test.
+    2. Prevent all interaction with transactions, primarely in order to avoid
+       having data committed which can then not be rolled back anymore.
+    """
+
+    def setUp(self):
+        super(GEVERIntegrationTesting, self).setUp()
+        transaction.commit()
+        self.interceptor = TransactionInterceptor().install()
+
+    def tearDown(self):
+        self.interceptor.uninstall()
+        super(GEVERIntegrationTesting, self).tearDown()
+
+    def testSetUp(self):
+        super(GEVERIntegrationTesting, self).testSetUp()
+        # In order to let the SQL transaction manager make a savepoint of no
+        # changes we need to mark the session as changed first.
+        mark_changed(create_session())
+        self.savepoint = transaction.savepoint()
+        self.interceptor.intercept(self.interceptor.BEGIN
+                                   | self.interceptor.COMMIT
+                                   | self.interceptor.ABORT)
+
+    def testTearDown(self):
+        self.savepoint.rollback()
+        self.savepoint = None
+        self.interceptor.clear().intercept(self.interceptor.COMMIT)
+        super(GEVERIntegrationTesting, self).testTearDown()
+
+
+OPENGEVER_INTEGRATION_TESTING = GEVERIntegrationTesting(
+    # Warning: do not try to base other layers on ContentFixtureLayer.
+    # See docstring of ContentFixtureLayer.
+    bases=(ContentFixtureLayer(), ),
+    name="opengever.core:integration")
