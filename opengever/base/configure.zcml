@@ -13,6 +13,8 @@
 
   <meta:provides feature="opengever" />
 
+  <include package="Products.CMFCore" file="permissions.zcml" />
+
   <include package="plone.app.workflow" />
   <include package="plone.behavior" file="meta.zcml" />
   <include package="plone.directives.form" />
