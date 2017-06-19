@@ -44,8 +44,6 @@ class TestAssignForwardignToDossier(FunctionalTestCase):
              'Response': 'Sample response'}).submit()
 
         # Step 2 - choose repository
-        browser.fill(
-            {'form.widgets.repositoryfolder.widgets.query': 'Repo A'}).submit()
         browser.fill({'form.widgets.repositoryfolder':
                       '/plone/ordnungssystem/repo-a'})
         browser.css('#form-buttons-save').first.click()
@@ -94,8 +92,6 @@ class TestAssignForwardignToDossier(FunctionalTestCase):
              'Response': 'Sample response'}).submit()
 
         # Step 2 - choose dossier
-        browser.fill(
-            {'form.widgets.dossier.widgets.query': 'Dossier A'}).submit()
         browser.fill({'form.widgets.dossier': '/plone/dossier-1'})
         browser.css('#form-buttons-save').first.click()
 

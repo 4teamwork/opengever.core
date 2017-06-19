@@ -4,19 +4,23 @@ dossier where the task is then filed.
 """
 
 from five import grok
+from ftw.referencewidget.selectable import DefaultSelectable
+from ftw.referencewidget.widget import ReferenceWidgetFactory
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.form import WizzardWrappedAddForm
+from opengever.base.source import REPO_TRAVERSABLE_PARAMS
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.base.validators import BaseRepositoryfolderValidator
 from opengever.globalindex.model.task import Task
 from opengever.repository.interfaces import IRepositoryFolder
+from opengever.repository.repositoryfolder import IRepositoryFolderSchema
 from opengever.task import _
 from opengever.task.browser.accept.main import AcceptWizardFormMixin
 from opengever.task.browser.accept.utils import accept_forwarding_with_successor
 from opengever.task.browser.accept.utils import accept_task_with_successor
 from opengever.task.browser.accept.utils import assign_forwarding_to_dossier
+from plone.autoform.widgets import ParameterizedWidget
 from plone.dexterity.i18n import MessageFactory as dexterityMF
-from plone.dexterity.i18n import MessageFactory as pd_mf
 from plone.directives.form import Schema
 from plone.z3cform.layout import FormWrapper
 from Products.CMFCore.utils import getToolByName
@@ -25,15 +29,12 @@ from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
 from z3c.form.form import Form
-from z3c.form.validator import SimpleFieldValidator
 from z3c.form.validator import WidgetValidatorDiscriminators
 from z3c.relationfield.schema import RelationChoice
 from zope import schema
 from zope.component import getUtility
-from zope.component import queryMultiAdapter
 from zope.i18nmessageid import MessageFactory
 from zope.interface import Interface
-from zope.interface import Invalid
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
@@ -76,6 +77,13 @@ class AcceptWizardNewDossierFormMixin(AcceptWizardFormMixin):
 
 # ------------------- SELECT REPOSITORY FOLDER --------------------------
 
+
+class RepoFolderSelectableClass(DefaultSelectable):
+
+    def is_selectable(self):
+        return IRepositoryFolderSchema.providedBy(self.content)
+
+
 class ISelectRepositoryfolderSchema(Schema):
 
     repositoryfolder = RelationChoice(
@@ -85,17 +93,9 @@ class ISelectRepositoryfolderSchema(Schema):
                       default=u'Select the repository folder within the '
                       'dossier should be created.'),
         required=True,
-
         source=RepositoryPathSourceBinder(
-            object_provides='opengever.repository.repositoryfolder.'
-                'IRepositoryFolderSchema',
-            navigation_tree_query={
-                'object_provides': [
-                    'opengever.repository.repositoryroot.IRepositoryRoot',
-                    'opengever.repository.repositoryfolder.'
-                        'IRepositoryFolderSchema',
-                    ]
-                }))
+            selectable_class=RepoFolderSelectableClass)
+        )
 
 
 class RepositoryfolderValidator(BaseRepositoryfolderValidator):
@@ -111,6 +111,10 @@ class SelectRepositoryfolderStepForm(AcceptWizardNewDossierFormMixin, Form):
     fields = Fields(ISelectRepositoryfolderSchema)
 
     step_name = 'accept_select_repositoryfolder'
+
+    fields['repositoryfolder'].widgetFactory = ParameterizedWidget(
+        ReferenceWidgetFactory,
+        **REPO_TRAVERSABLE_PARAMS)
 
     @buttonAndHandler(_(u'button_continue', default=u'Continue'),
                       name='save')
