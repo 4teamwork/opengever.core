@@ -158,13 +158,12 @@ class TestProtocol(FunctionalTestCase):
     def test_protocol_is_generated_when_closing_meetings(self, browser):
         self.setup_protocol(browser)
 
-        self.assertFalse(browser.context.model.has_protocol_document())
+        self.assertFalse(self.meeting.has_protocol_document())
 
         browser.find('Close meeting').click()
 
-        browser.open(self.meeting.get_url())
-
-        self.assertTrue(browser.context.model.has_protocol_document())
+        meeting = Meeting.query.get(self.meeting.meeting_id)
+        self.assertTrue(meeting.has_protocol_document())
 
     @browsing
     def test_protocol_shows_validation_errors(self, browser):
