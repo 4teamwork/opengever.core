@@ -70,12 +70,6 @@ class TestSimpleAgendaItem(TestCase):
 
         create(Builder('admin_unit').id('fd'))
 
-        self.proposal = create(
-            Builder('proposal_model').having(
-                title=u'Pr\xf6posal',
-                submitted_physical_path='meetings/proposal-1'))
-
-        self.proposal.submitted_admin_unit_id = 'fd'
         self.simple_agenda_item = create(
             Builder('agenda_item')
             .having(title=u'Simple',
@@ -86,7 +80,7 @@ class TestSimpleAgendaItem(TestCase):
 
     def test_agenda_item_title_correctly_contains_number(self):
         self.assertEqual(
-            u'2. Simple',
+            u'1. Simple',
             self.simple_agenda_item.get_title(include_number=True))
 
     def test_number_is_not_included_when_none(self):
@@ -101,8 +95,8 @@ class TestSimpleAgendaItem(TestCase):
 
     def test_serialize(self):
         self.assertEqual({'css_class': '',
-                          'number': '2.',
-                          'id': 2,
+                          'number': '1.',
+                          'id': 1,
                           'title': u'Simple',
                           'has_proposal': False,
                           'link': u'Simple',
