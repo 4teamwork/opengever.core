@@ -263,9 +263,9 @@ class LDAPSearch(grok.Adapter):
 
         return mapped_results
 
-    def get_groups(self):
+    def get_groups(self, use_lookup_base=False):
         """Return all LDAP groups below the adapted LDAPUserFolder's
-        groups_base.
+        `groups_base` (or the `lookup_groups_base` if `use_lookup_base` is True).
 
         If defined, the `group_filter` property on the adapted LDAPUserFolder
         is used to further filter the results.
@@ -285,8 +285,13 @@ class LDAPSearch(grok.Adapter):
         custom_filter = self.get_group_filter()
         search_filter = self._combine_filters(custom_filter, search_filter)
 
-        results = self.search(base_dn=self.context.groups_base,
-                              filter=search_filter)
+        if use_lookup_base:
+            base_dn = self.context.lookup_groups_base
+        else:
+            base_dn = self.context.groups_base
+
+        results = self.search(base_dn=base_dn, filter=search_filter)
+
         mapped_results = []
         for result in results:
             dn, entry = result
@@ -303,7 +308,7 @@ class LDAPSearch(grok.Adapter):
         children = []
 
         if self._cached_groups is None:
-            self._cached_groups = self.get_groups()
+            self._cached_groups = self.get_groups(use_lookup_base=True)
 
         all_groups = self._cached_groups
 
@@ -333,7 +338,7 @@ class LDAPSearch(grok.Adapter):
             group_info['dn'] = group_dn
 
             if self._cached_groups is None:
-                self._cached_groups = self.get_groups()
+                self._cached_groups = self.get_groups(use_lookup_base=True)
 
             child_groups = self.get_children(group_dn)
             child_groups.append(group_dn)
