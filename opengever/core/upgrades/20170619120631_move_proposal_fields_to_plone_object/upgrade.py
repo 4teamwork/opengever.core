@@ -1,5 +1,6 @@
 from opengever.base.oguid import Oguid
 from opengever.core.upgrade import SchemaMigration
+from sqlalchemy.sql import select
 from sqlalchemy.sql.expression import column
 from sqlalchemy.sql.expression import table
 
@@ -45,8 +46,18 @@ class MoveProposalFieldsToPloneObjects(SchemaMigration):
         self.migrate_data()
         self.drop_sql_columns()
 
+    def has_proposals_for_multiple_admin_units(self):
+        statement = select([proposal_table.c.admin_unit_id]).distinct()
+        results = list(self.execute(statement))
+        return len(results) > 1
+
     def migrate_data(self):
-        for proposal in self.execute(proposal_table.select()):
+        proposals = self.execute(proposal_table.select()).fetchall()
+        if proposals:
+            msg = 'data migration supports only one admin-unit!'
+            assert not self.has_proposals_for_multiple_admin_units(), msg
+
+        for proposal in proposals:
             self.migrate_proposal_fields_to_plone_objects(proposal)
 
     def migrate_proposal_fields_to_plone_objects(self, sql_proposal):
