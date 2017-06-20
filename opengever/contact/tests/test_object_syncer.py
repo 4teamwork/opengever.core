@@ -21,6 +21,7 @@ from sqlalchemy import Integer
 from sqlalchemy import MetaData
 from sqlalchemy import String
 from sqlalchemy import Table
+from sqlalchemy import Text
 from sqlalchemy.orm import sessionmaker
 import os
 import transaction
@@ -65,14 +66,17 @@ class TestPersonSyncer(SyncerBaseTest):
 
     SAMPLE_DATA = [{u'is_active': True, u'former_contact_id': 1,
                     u'firstname': u'Frank G.', u'lastname': u'Dippel',
-                    u'salutation': u'Herr', u'title': u'Dr.'},
+                    u'salutation': u'Herr', u'title': u'Dr.',
+                    u'description': u'Lorem ipsum'},
                    {u'is_active': False, u'former_contact_id': 2,
                     u'firstname': u'Christiane',
                     u'lastname': u'W\xfcrsd\xf6rfer',
+                    u'description': u'Bla',
                     u'salutation': u'Frau', u'title': u'B.Sc.'},
                    {u'is_active': True, u'former_contact_id': 3,
                     u'firstname': u'Dolorene', u'lastname': u'Dolores',
-                    u'salutation': u'Frau', u'title': u''}]
+                    u'salutation': u'Frau', u'title': u'',
+                    u'description': u'Lorem ipsum sit'}]
 
     def create_source_db(self):
         self.source_table = Table("persons",
@@ -82,6 +86,7 @@ class TestPersonSyncer(SyncerBaseTest):
                                   Column("title", String),
                                   Column("firstname", String),
                                   Column("lastname", String),
+                                  Column("description", Text),
                                   Column("is_active", Boolean))
         self.source_table.create()
 
@@ -93,15 +98,17 @@ class TestPersonSyncer(SyncerBaseTest):
 
         person = Person.query.get_by_former_contact_id(2)
         self.assertItemsEqual(
-            [u'Frau', u'B.Sc.', u'Christiane', u'W\xfcrsd\xf6rfer', False, 2],
+            [u'Frau', u'B.Sc.', u'Christiane',
+             u'W\xfcrsd\xf6rfer', False, 2, u'Bla'],
             [person.salutation, person.academic_title, person.firstname,
-             person.lastname, person.is_active, person.former_contact_id])
+             person.lastname, person.is_active, person.former_contact_id,
+             person.description])
 
         person = Person.query.get_by_former_contact_id(1)
         self.assertItemsEqual(
-            [u'Herr', u'Dr.', u'Frank G.', u'Dippel', True],
+            [u'Herr', u'Dr.', u'Frank G.', u'Dippel', True, u'Lorem ipsum'],
             [person.salutation, person.academic_title, person.firstname,
-             person.lastname, person.is_active])
+             person.lastname, person.is_active, person.description])
 
     def test_update_object_properly_while_syncing(self):
         syncer = PersonSyncer(self.source_db, 'SELECT * from persons')
@@ -112,13 +119,14 @@ class TestPersonSyncer(SyncerBaseTest):
         self.source_db.execute(
             self.source_table.update().where(
                 self.source_table.c.former_contact_id == 3).values(
-                    lastname=u'Meier', is_active=False))
+                    lastname=u'Meier', is_active=False, description=u''))
 
         PersonSyncer(self.source_db, 'SELECT * from persons')()
 
         self.assertEqual(3, len(Person.query.all()))
         person = Person.query.get_by_former_contact_id(3)
         self.assertEquals('Meier', person.lastname)
+        self.assertEquals('', person.description)
         self.assertFalse(person.is_active)
 
 
@@ -126,9 +134,11 @@ class TestOrganizationSyncer(SyncerBaseTest):
 
     SAMPLE_DATA = [{u'is_active': True,
                     u'former_contact_id': 2344,
+                    u'description': u'lorem ipsum dolor sit amet',
                     u'name': u'Soziale Dienste'},
                    {u'is_active': False,
                     u'former_contact_id': 5637,
+                    u'description': u'Foo',
                     u'name': u'Poliz\xe4iwache'}]
 
     def create_source_db(self):
@@ -136,6 +146,7 @@ class TestOrganizationSyncer(SyncerBaseTest):
                                   self.source_metadata,
                                   Column("former_contact_id", Integer),
                                   Column("name", String),
+                                  Column("description", Text),
                                   Column("is_active", Boolean))
         self.source_table.create()
 
@@ -151,6 +162,9 @@ class TestOrganizationSyncer(SyncerBaseTest):
         self.assertEqual(
             [2344, 5637],
             [org.former_contact_id for org in organizations])
+        self.assertEquals(
+            [u'lorem ipsum dolor sit amet', u'Foo'],
+            [org.description for org in organizations])
 
     def test_update_existing_objects_properly_while_syncing(self):
         OrganizationSyncer(self.source_db, 'SELECT * from organizations')()

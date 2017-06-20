@@ -147,6 +147,7 @@ class OrganizationSyncer(SQLObjectSyncer):
     model = Organization
     default_values = {'contact_type': 'organization'}
     attributes = {'name': 'name',
+                  'description': 'description',
                   'former_contact_id': 'former_contact_id',
                   'is_active': lambda row: bool(getattr(row, 'is_active'))}
 
@@ -179,6 +180,7 @@ class PersonSyncer(SQLObjectSyncer):
                   'academic_title': 'title',
                   'firstname': 'firstname',
                   'lastname': 'lastname',
+                  'description': 'description',
                   'former_contact_id': 'former_contact_id',
                   'is_active': lambda row: bool(getattr(row, 'is_active'))}
 
