@@ -5,6 +5,7 @@ Changelog
 2017.3.0 (unreleased)
 ---------------------
 
+- Add reference column to document listings. [tarnap]
 - Include missing permission definitions from Products.CMFCore. [phgross]
 - Fix PrivateFolders Title encoding. [phgross]
 - Fix "leave GEVER" on logout overlay. [mathias.leimgruber]

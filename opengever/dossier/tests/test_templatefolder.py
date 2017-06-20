@@ -683,7 +683,8 @@ class TestTemplateFolderListings(FunctionalTestCase):
 
         table_heading = browser.css('table.listing').first.lists()[0]
         self.assertEquals(['', 'Sequence Number', 'Title', 'Document Author',
-                           'Document Date', 'Checked out by', 'Public Trial'],
+                           'Document Date', 'Checked out by', 'Public Trial',
+                           'Reference Number'],
                           table_heading)
 
     @browsing
@@ -692,7 +693,8 @@ class TestTemplateFolderListings(FunctionalTestCase):
 
         table_heading = browser.css('table.listing').first.lists()[0]
         self.assertEquals(['', 'Sequence Number', 'Title', 'Document Author',
-                           'Document Date', 'Checked out by', 'Public Trial'],
+                           'Document Date', 'Checked out by', 'Public Trial',
+                           'Reference Number'],
                           table_heading)
 
     @browsing
@@ -701,7 +703,8 @@ class TestTemplateFolderListings(FunctionalTestCase):
 
         table_heading = browser.css('table.listing').first.lists()[0]
         self.assertEquals(['', 'Sequence Number', 'Title', 'Document Author',
-                           'Document Date', 'Checked out by', 'Public Trial'],
+                           'Document Date', 'Checked out by', 'Public Trial',
+                           'Reference Number'],
                           table_heading)
 
     @browsing
@@ -711,7 +714,8 @@ class TestTemplateFolderListings(FunctionalTestCase):
         browser.login().open(self.templatefolder, view=TRASH_TAB)
         table_heading = browser.css('table.listing').first.lists()[0]
         self.assertEquals(['', 'Sequence Number', 'Title', 'Document Author',
-                          'Document Date', 'Public Trial'],
+                           'Document Date', 'Public Trial',
+                           'Reference Number'],
                           table_heading)
 
     @browsing

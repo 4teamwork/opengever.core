@@ -173,6 +173,9 @@ class Documents(BaseCatalogListingTab):
         {'column': 'public_trial',
          'column_title': _('label_public_trial', default="Public Trial"),
          'transform': translate_public_trial_options},
+
+        {'column': 'reference',
+         'column_title': _(u'label_reference', default=u'Reference Number')},
         )
 
     major_actions = [
