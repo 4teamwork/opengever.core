@@ -192,8 +192,8 @@ class SendDocumentForm(form.Form):
                   default='(only possible for open dossiers)'),
                 context=self.request)
 
+            file_copy_widget.value = []
             checkbox = file_copy_widget.items[0]
-            checkbox['checked'] = False
             checkbox['label'] = u'{} {}'.format(
                 checkbox['label'], disabled_hint_text)
             file_copy_widget.disabled = 'disabled'
