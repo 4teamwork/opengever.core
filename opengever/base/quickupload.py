@@ -73,20 +73,17 @@ class OGQuickUploadCapableFileFactory(grok.Adapter):
     def __init__(self, context):
         self.context = aq_inner(context)
 
-    def __call__(self,
-                 filename,
-                 title,
-                 description,
-                 content_type,
+    def __call__(self, filename, title, description, content_type,
                  data, portal_type):
-
+        """Quickupload description inputs are hidden in gever
+        therefore we skip the description.
+        """
         if self.is_email_upload(filename):
             command = CreateEmailCommand(
-                self.context, filename, data, description=description,
+                self.context, filename, data,
                 message_source=MESSAGE_SOURCE_DRAG_DROP_UPLOAD)
         else:
-            command = CreateDocumentCommand(
-                self.context, filename, data, description=description)
+            command = CreateDocumentCommand(self.context, filename, data)
 
         try:
             obj = command.execute()
