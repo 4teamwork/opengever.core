@@ -79,6 +79,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
         self.templatefolder = create(Builder('templatefolder'))
         self.template_a = create(Builder('document')
                                  .titled('Template A')
+                                 .with_dummy_content()
                                  .within(self.templatefolder)
                                  .with_modification_date(self.modification_date))
         self.template_b = create(Builder('document')
@@ -833,7 +834,7 @@ class TestTemplateDocumentTabs(FunctionalTestCase):
 
         browser.open(self.template, view=INFO_TAB)
         self.assertEquals([['Logged-in users', False, False, False],
-                           [TEST_USER_ID, True, True, True]],
+                           ['test-user (test_user_1_)', True, True, True]],
                           sharing_tab_data())
 
 
