@@ -97,7 +97,7 @@ class AllUsersAndInboxesSource(object):
         token = u'{}:{}'.format(orgunit_id, userid)
         title = u'{}: {} ({})'.format(orgunit.title,
                                       user.fullname(),
-                                      user.email)
+                                      user.userid)
         return SimpleTerm(value, token, title)
 
     def getTermByToken(self, token):
@@ -238,7 +238,7 @@ class UsersContactsInboxesSource(AllUsersAndInboxesSource):
 
         token = value
         title = u'{} ({})'.format(user.fullname(),
-                                  user.email)
+                                  user.userid)
         return SimpleTerm(value, token, title)
 
     def getTermByToken(self, token):
@@ -328,7 +328,7 @@ class AssignedUsersSource(AllUsersAndInboxesSource):
 
         token = value
         title = u'{} ({})'.format(user.fullname(),
-                                  user.email)
+                                  user.userid)
         return SimpleTerm(value, token, title)
 
     def search(self, query_string):
