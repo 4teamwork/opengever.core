@@ -19,6 +19,13 @@ CONTENT_LOOKUP_TABLE = flatten_content_lookup_table({
         'dossier':  ('dossier-1', {
             'subdossier': 'dossier-2'}),
         'archive_dossier': 'dossier-3'}),
+
+    'committee': 'opengever-meeting-committeecontainer/committee-1',
+    'committee_container': 'opengever-meeting-committeecontainer',
+
+    'templates': ('vorlagen', {
+        'sablon_template': 'document-1',
+    }),
 })
 
 

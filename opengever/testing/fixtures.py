@@ -8,6 +8,8 @@ from ftw.builder import create
 from ftw.builder import ticking_creator
 from ftw.testing import freeze
 from ftw.testing import staticuid
+from opengever.ogds.base.utils import ogds_service
+from operator import methodcaller
 from plone.app.testing import login
 from time import time
 from zope.component.hooks import getSite
@@ -27,8 +29,10 @@ class OpengeverContentFixture(object):
         with self.freeze_at_hour(8):
             with self.login(self.administrator):
                 self.create_repository_tree()
+                self.create_templates()
+                self.create_committees()
 
-        with self.freeze_at_hour(9):
+        with self.freeze_at_hour(14):
             with self.login(self.dossier_responsible):
                 self.create_treaty_dossiers()
 
@@ -79,8 +83,34 @@ class OpengeverContentFixture(object):
 
         self.repo1 = create(
             Builder('repository').within(self.root)
-            .having(title_de=u'Bev\xf6lkerung und Sicherheit',
-                    title_fr=u'Population et de la s\xe9curit\xe9'))
+            .having(title_de=u'Rechnungspr\xfcfungskommission',
+                    title_fr=u'Commission de v\xe9rification'))
+
+    @staticuid()
+    def create_templates(self):
+        templates = create(
+            Builder('templatefolder')
+            .titled(u'Vorlagen')
+            .having(id='vorlagen'))
+
+        self.sablon_template = create(
+            Builder('sablontemplate')
+            .within(templates)
+            .with_asset_file('sablon_template.docx'))
+
+    @staticuid()
+    def create_committees(self):
+        self.committee_container = create(
+            Builder('committee_container')
+            .titled(u'Sitzungen')
+            .having(protocol_template=self.sablon_template,
+                    excerpt_template=self.sablon_template))
+
+        self.create_committee(
+            title=u'Rechnungspr\xfcfungskommission',
+            repository_folder=self.repo1,
+            group_id='committee_rpk_group',
+            members=[self.administrator])
 
     @staticuid()
     def create_treaty_dossiers(self):
@@ -142,6 +172,23 @@ class OpengeverContentFixture(object):
                .assign_to_org_units([self.org_unit]))
 
         return plone_user
+
+    def create_committee(self, title, repository_folder, group_id, members):
+        # XXX I would have expected the commitee builder to do all of that.
+        ogds_members = map(ogds_service().find_user,
+                           map(methodcaller('getId'), members))
+
+        create(Builder('ogds_group')
+               .having(groupid=group_id,
+                       users=ogds_members))
+        create(Builder('group')
+               .with_groupid(group_id)
+               .with_members(*members))
+        create(Builder('committee')
+               .titled(title)
+               .within(self.committee_container)
+               .having(repository_folder=repository_folder,
+                       group_id=group_id))
 
     @contextmanager
     def login(self, user):
