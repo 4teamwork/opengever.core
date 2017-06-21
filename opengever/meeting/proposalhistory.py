@@ -37,7 +37,7 @@ class ProposalHistory(object):
         if history is None:
             history = OOBTree()
 
-        for key, val in history.items():
+        for key, val in reversed(history.items()):
             name = val.get('name')
             if not name:
                 continue
@@ -47,12 +47,12 @@ class ProposalHistory(object):
 
             yield(clazz(self.context, timestamp=key, data=val))
 
-    def append_record(self, name, timestamp=None):
+    def append_record(self, name, timestamp=None, **kwargs):
         clazz = self.record_classes[name]
 
         history = IAnnotations(self.context).setdefault(
             self.annotation_key, OOBTree())
-        entry = clazz(self.context, timestamp=timestamp)
+        entry = clazz(self.context, timestamp=timestamp, **kwargs)
         entry.append_to(history)
 
         return entry
@@ -65,7 +65,7 @@ class BaseHistoryRecord(object):
     """
     name = None
 
-    def __init__(self, context, timestamp=None, data=None):
+    def __init__(self, context, timestamp=None, data=None, **kwargs):
         self.context = context
 
         if timestamp is None:
@@ -73,16 +73,16 @@ class BaseHistoryRecord(object):
         self.timestamp = timestamp
 
         if data is None:
-            data = self.init_data()
+            data = self.init_data(**kwargs)
         self.data = data
 
-    def init_data(self):
+    def init_data(self, **kwargs):
         return PersistentMapping(
             created=self.timestamp,
             userid=api.user.get_current().getId(),
             name=self.name,
             id=uuid4(),
-        )
+            **kwargs)
 
     def append_to(self, history):
         if self.timestamp in history:
@@ -133,3 +133,25 @@ class ProposalSubmitted(BaseHistoryRecord):
 
 ProposalHistory.register(ProposalSubmitted)
 
+
+class DocumentSubmitted(BaseHistoryRecord):
+
+    name = 'document_submitted'
+    css_class = 'documentAdded'
+
+    @property
+    def document_title(self):
+        return self.data.get('document_title')
+
+    @property
+    def submitted_version(self):
+        return self.data.get('submitted_version')
+
+    def message(self):
+        return _(u'proposal_history_label_document_submitted',
+                 u'Document ${title} submitted in version ${version} by ${user}',
+                 mapping={'user': self.get_actor_link(),
+                          'title': self.document_title or '',
+                          'version': self.submitted_version})
+
+ProposalHistory.register(DocumentSubmitted)

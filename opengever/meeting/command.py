@@ -13,7 +13,7 @@ from opengever.meeting.exceptions import ProtocolAlreadyGenerated
 from opengever.meeting.interfaces import IHistory
 from opengever.meeting.model.generateddocument import GeneratedExcerpt
 from opengever.meeting.model.generateddocument import GeneratedProtocol
-from opengever.meeting.model.proposalhistory import Submitted, DocumentUpdated, DocumentSubmitted
+from opengever.meeting.model.proposalhistory import DocumentUpdated
 from opengever.meeting.model.submitteddocument import SubmittedDocument
 from opengever.meeting.protocol import AgendaItemListProtocolData
 from opengever.meeting.protocol import ExcerptProtocolData
@@ -456,11 +456,11 @@ class CopyProposalDocumentCommand(object):
                                 submitted_version=submitted_version)
         session.add(doc)
 
-        session.add(DocumentSubmitted(
-            proposal=proposal_model,
-            submitted_document=doc,
+        IHistory(self.proposal).append_record(
+            'document_submitted',
+            document_title=self.document.title,
             submitted_version=submitted_version,
-            document_title=self.document.title))
+        )
 
     def copy_document(self, target_path, target_admin_unit_id):
         return SubmitDocumentCommand(
