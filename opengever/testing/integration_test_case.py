@@ -36,14 +36,20 @@ USER_LOOKUP_TABLE = {
 }
 
 
+FEATURE_FLAGS = {
+    'meeting': 'opengever.meeting.interfaces.IMeetingSettings.is_feature_enabled',
+}
+
+
 class IntegrationTestCase(TestCase):
     layer = OPENGEVER_INTEGRATION_TESTING
+    features = ()
 
     def setUp(self):
         super(IntegrationTestCase, self).setUp()
         self.portal = self.layer['portal']
         self.request = self.layer['request']
-
+        map(self.activate_feature, self.features)
         self.login(self.regular_user)
 
     def login(self, user):
@@ -54,6 +60,11 @@ class IntegrationTestCase(TestCase):
         >>> self.login(self.dossier_responsible)
         """
         login(self.portal, user.getId())
+
+    def activate_feature(self, feature):
+        """Activate a feature flag.
+        """
+        api.portal.set_registry_record(FEATURE_FLAGS[feature], True)
 
     def __getattr__(self, name):
         """Make it possible to access objects from the content lookup table
