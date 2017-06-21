@@ -58,6 +58,7 @@ else:
 
 MESSAGE_SOURCE_DRAG_DROP_UPLOAD = 'upload'
 MESSAGE_SOURCE_MAILIN = 'mailin'
+NO_SUBJECT_FALLBACK_ID = 'no_subject'
 NO_SUBJECT_TITLE_FALLBACK = '[No Subject]'
 
 
@@ -361,8 +362,8 @@ class OGMailBase(metadata.MetadataBase):
 @grok.subscribe(IOGMailMarker, IObjectCreatedEvent)
 @grok.subscribe(IOGMailMarker, IObjectModifiedEvent)
 def initalize_title(mail, event):
-
-    if not IOGMail(mail).title:
+    title = IOGMail(mail).title
+    if not title or title == NO_SUBJECT_FALLBACK_ID:
         subject = utils.get_header(mail.msg, 'Subject')
         if subject:
             # long headers may contain line breaks with tabs.
@@ -371,7 +372,7 @@ def initalize_title(mail, event):
             value = subject.decode('utf8')
         else:
             value = translate(
-                ftw_mf(u'no_subject',
+                ftw_mf(NO_SUBJECT_FALLBACK_ID,
                        default=NO_SUBJECT_TITLE_FALLBACK.decode('utf-8')),
                 context=getSite().REQUEST)
 
