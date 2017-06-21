@@ -15,6 +15,9 @@ class TestIntegrationTestSetup(IntegrationTestCase):
         self.assertEquals('Changed Repository Root Title',
                           self.repository_root.Title())
 
+    # By duplicating the method pointer on the class this test will be
+    # executed twice. The test is built so that it detects leaks from
+    # a prior run when the isolation does not work.
     test_zodb_changes_are_isolated_2 = test_zodb_changes_are_isolated_1
 
     def test_sql_changes_are_isolated_1(self):
@@ -30,6 +33,9 @@ class TestIntegrationTestSetup(IntegrationTestCase):
         create(Builder('ogds_user').having(**args))
         self.assertTrue(ogds_service().fetch_user(args['userid']))
 
+    # By duplicating the method pointer on the class this test will be
+    # executed twice. The test is built so that it detects leaks from
+    # a prior run when the isolation does not work.
     test_sql_changes_are_isolated_2 = test_sql_changes_are_isolated_1
 
     def test_rollback_nested_sql_savepoints(self):

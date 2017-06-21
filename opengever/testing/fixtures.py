@@ -28,12 +28,12 @@ class OpengeverContentFixture(object):
         """Freeze the time when creating content with builders, so that
         we can rely on consistent creation times.
         Since we can sort consistently when all objects have the exact same
-        creation times we need to move the clock forward whenevery things are
+        creation times we need to move the clock forward whenever things are
         created, using ftw.builder's ticking creator in combination with a
-        freezed clock.
+        frozen clock.
 
         In order to be able to insert new objects in the fixture without
-        scrambling up all timestamps, we group the builders and let each group
+        mixing up all timestamps, we group the builders and let each group
         start at a given hour, moving the clock two minutes for each builder.
         We move it two minutes because the catalog rounds times sometimes to
         minute precision and we want to be more precise.

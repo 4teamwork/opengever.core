@@ -401,15 +401,15 @@ class ContentFixtureLayer(OpengeverFixture):
     Builder session:
     ftw.builder provides testing layers and functions for using builders within
     tests.
-    It does not provide infrastructure for setting up buliders in layer setup.
+    It does not provide infrastructure for setting up builders in layer setup.
     Therefore we cannot reuse ftw.builder's testing layers but configure the
     builder manually in a non-committing integration testing mode.
 
     Warning:
     Do not create another fixture layer based on this fixture layer.
     It won't work without fixing transactionality issues.
-    The current setup works because the fixture state is commited to the database.
-    Commited state cannot be rolled back.
+    The current setup works because the fixture state is committed to the database.
+    Committed state cannot be rolled back.
     Uncommitted state will get lost when IntegrationTesting.testSetUp begins
     a new transaction.
     """
@@ -449,7 +449,7 @@ class ContentFixtureLayer(OpengeverFixture):
 
     def allowAllTypes(self, portal):
         """In the fixture layer, the fixture objects should be used and
-        we want them to be at the correct place hirearchically.
+        we want them to be at the correct place hierarchically.
         When additional objects need to be created anyway, they can be placed
         in the correct spot easily by using the fixture objects as parents.
         Therefore we do not allow to create objects at the portal.
@@ -460,7 +460,7 @@ class ContentFixtureLayer(OpengeverFixture):
 class GEVERIntegrationTesting(IntegrationTesting):
     """Custom integration testing extension:
     1. Make savepoint at test begin and rollback after the test.
-    2. Prevent all interaction with transactions, primarely in order to avoid
+    2. Prevent all interaction with transactions, primarily in order to avoid
        having data committed which can then not be rolled back anymore.
     """
 
