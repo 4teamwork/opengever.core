@@ -10,6 +10,7 @@ from opengever.locking.lock import SYS_LOCK
 from opengever.meeting import _
 from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.exceptions import ProtocolAlreadyGenerated
+from opengever.meeting.interfaces import IHistory
 from opengever.meeting.model.generateddocument import GeneratedExcerpt
 from opengever.meeting.model.generateddocument import GeneratedProtocol
 from opengever.meeting.model.proposalhistory import Submitted, DocumentUpdated, DocumentSubmitted
@@ -333,7 +334,7 @@ class CreateSubmittedProposalCommand(object):
             self.admin_unit_id, '@@create_submitted_proposal', data=request_data)
 
         self.submitted_proposal_path = response['path']
-        create_session().add(Submitted(proposal=model))
+        IHistory(self.proposal).append_record('submitted')
 
 
 class RejectProposalCommand(object):

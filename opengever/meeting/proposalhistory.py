@@ -120,3 +120,16 @@ class ProposalCreated(BaseHistoryRecord):
                  mapping={'user': self.get_actor_link()})
 
 ProposalHistory.register(ProposalCreated)
+
+
+class ProposalSubmitted(BaseHistoryRecord):
+
+    name = 'submitted'
+
+    def message(self):
+        return _(u'proposal_history_label_submitted',
+                 u'Submitted by ${user}',
+                 mapping={'user': self.get_actor_link()})
+
+ProposalHistory.register(ProposalSubmitted)
+
