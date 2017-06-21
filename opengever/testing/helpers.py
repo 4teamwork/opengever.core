@@ -89,3 +89,20 @@ def obj2paths(objs):
     """Returns a list of paths (string) for the given objects.
     """
     return ['/'.join(obj.getPhysicalPath()) for obj in objs]
+
+
+def flatten_content_lookup_table(input, path_prefix=None):
+    output = {}
+    for name, value in input.items():
+        if isinstance(value, tuple):
+            path, subtable = value
+        else:
+            path, subtable = value, None
+
+        if path_prefix is not None:
+            path = '/'.join((path_prefix, path))
+
+        output[name] = path
+        if subtable is not None:
+            output.update(flatten_content_lookup_table(subtable, path))
+    return output

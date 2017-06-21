@@ -4,6 +4,7 @@ from ftw.builder import session
 from ftw.builder.testing import BUILDER_LAYER
 from ftw.builder.testing import set_builder_session_factory
 from ftw.bumblebee.tests.helpers import BumblebeeTestTaskQueue
+from ftw.testbrowser import TRAVERSAL_BROWSER_FIXTURE
 from ftw.testing import ComponentRegistryLayer
 from ftw.testing import TransactionInterceptor
 from ftw.testing.layer import COMPONENT_REGISTRY_ISOLATION
@@ -493,5 +494,5 @@ class GEVERIntegrationTesting(IntegrationTesting):
 OPENGEVER_INTEGRATION_TESTING = GEVERIntegrationTesting(
     # Warning: do not try to base other layers on ContentFixtureLayer.
     # See docstring of ContentFixtureLayer.
-    bases=(ContentFixtureLayer(), ),
+    bases=(ContentFixtureLayer(), TRAVERSAL_BROWSER_FIXTURE),
     name="opengever.core:integration")

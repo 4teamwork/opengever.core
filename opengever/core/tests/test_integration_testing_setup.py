@@ -8,8 +8,9 @@ import transaction
 class TestIntegrationTestSetup(IntegrationTestCase):
 
     def test_zodb_changes_are_isolated_1(self):
+        self.login(self.administrator)
         self.assertEquals(
-            'Repository Root', self.repository_root.Title(),
+            'Ordnungssystem', self.repository_root.Title(),
             'ZODB changes seem not to be isolated between tests.')
         self.repository_root.title_de = 'Changed Repository Root Title'
         self.assertEquals('Changed Repository Root Title',
@@ -21,6 +22,7 @@ class TestIntegrationTestSetup(IntegrationTestCase):
     test_zodb_changes_are_isolated_2 = test_zodb_changes_are_isolated_1
 
     def test_sql_changes_are_isolated_1(self):
+        self.login(self.administrator)
         args = {
             'firstname': u'Leak',
             'lastname': u'Officer',
@@ -39,6 +41,7 @@ class TestIntegrationTestSetup(IntegrationTestCase):
     test_sql_changes_are_isolated_2 = test_sql_changes_are_isolated_1
 
     def test_rollback_nested_sql_savepoints(self):
+        self.login(self.administrator)
         args = {
             'firstname': u'Transaction',
             'lastname': u'Manager',
