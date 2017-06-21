@@ -131,6 +131,7 @@
       <element>tabbedview</element>
       <element>quotawarning</element>
       <element>ouselector</element>
+      <element>redirector</element>
     </value>
   </record>
 
@@ -139,6 +140,7 @@
       <element>tabbedview</element>
       <element>quotawarning</element>
       <element>ouselector</element>
+      <element>redirector</element>
     </value>
   </record>
 
