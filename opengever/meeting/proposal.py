@@ -19,6 +19,7 @@ from opengever.meeting.command import RejectProposalCommand
 from opengever.meeting.command import UpdateSubmittedDocumentCommand
 from opengever.meeting.container import ModelContainer
 from opengever.meeting.exceptions import WordMeetingImplementationDisabledError
+from opengever.meeting.interfaces import IHistory
 from opengever.meeting.model import proposalhistory
 from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.model.proposal import Proposal as ProposalModel
@@ -465,8 +466,7 @@ class Proposal(ProposalBase):
         ['pending-submitted', 'pending-cancelled', 'cancelled-pending'])
 
     def _after_model_created(self, model_instance):
-        session = create_session()
-        session.add(proposalhistory.Created(proposal=model_instance))
+        IHistory(self).append_record('created')
 
     def is_editable(self):
         """A proposal in a dossier is only editable while not submitted.
