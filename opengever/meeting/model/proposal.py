@@ -4,6 +4,7 @@ from opengever.base.oguid import Oguid
 from opengever.base.utils import escape_html
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
+from opengever.meeting.interfaces import IHistory
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import proposalhistory
 from opengever.meeting.model.generateddocument import GeneratedExcerpt
@@ -288,8 +289,7 @@ class Proposal(Base):
         # set workflow state directly for once, the transition is used to
         # redirect to a form.
         self.workflow_state = self.STATE_PENDING.name
-        session = create_session()
-        session.add(proposalhistory.Rejected(proposal=self, text=text))
+        IHistory(self.resolve_proposal()).append_record('rejected', text=text)
 
     def remove_scheduled(self, meeting):
         self.execute_transition('scheduled-submitted')

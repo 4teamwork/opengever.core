@@ -155,3 +155,15 @@ class DocumentSubmitted(BaseHistoryRecord):
                           'version': self.submitted_version})
 
 ProposalHistory.register(DocumentSubmitted)
+
+
+class ProposalRejected(BaseHistoryRecord):
+
+    name = 'rejected'
+
+    def message(self):
+        return _(u'proposal_history_label_rejected',
+                 u'Rejected by ${user}',
+                 mapping={'user': self.get_actor_link()})
+
+ProposalHistory.register(ProposalRejected)
