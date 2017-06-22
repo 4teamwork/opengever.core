@@ -252,19 +252,6 @@ class ProposalBase(ModelContainer):
         url_tool = api.portal.get_tool(name="portal_url")
         return '/'.join(url_tool.getRelativeContentPath(self))
 
-    def get_searchable_text(self):
-        """Return the searchable text for this proposal.
-
-        This method is called during object-creation, thus the model might not
-        yet be created (e.g. when the object is added to its parent).
-
-        """
-        model = self.load_model()
-        if not model:
-            return ''
-
-        return model.get_searchable_text()
-
     def get_committee_admin_unit(self):
         admin_unit_id = self.load_model().committee.admin_unit_id
         return ogds_service().fetch_admin_unit(admin_unit_id)

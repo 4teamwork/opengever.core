@@ -183,10 +183,6 @@ class Proposal(Base):
     def css_class(self):
         return 'contenttype-opengever-meeting-proposal'
 
-    def get_searchable_text(self):
-        # XXX: we no longer have additional searchable text
-        return ''
-
     def get_decision(self):
         if self.agenda_item:
             return self.agenda_item.decision
