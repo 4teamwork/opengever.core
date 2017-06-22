@@ -1,39 +1,8 @@
 from AccessControl import getSecurityManager
 from opengever.core.testing import OPENGEVER_INTEGRATION_TESTING
-from opengever.testing.helpers import flatten_content_lookup_table
 from plone import api
 from plone.app.testing import login
 from unittest2 import TestCase
-
-
-"""The CONTENT_LOOKUP_TABLE is used for looking up objects when accessed as
-attribute in a test.
-In order to keep things organized and paths short, the lookup table is defined
-recursively.
-"""
-CONTENT_LOOKUP_TABLE = flatten_content_lookup_table({
-    'repository_root': 'ordnungssystem',
-    'branch_repository': 'ordnungssystem/fuhrung',
-
-    'leaf_repository': ('ordnungssystem/fuhrung/vertrage-und-vereinbarungen', {
-        'dossier':  ('dossier-1', {
-            'subdossier': 'dossier-2'}),
-        'archive_dossier': 'dossier-3'}),
-
-    'committee': 'opengever-meeting-committeecontainer/committee-1',
-    'committee_container': 'opengever-meeting-committeecontainer',
-
-    'templates': ('vorlagen', {
-        'sablon_template': 'document-1',
-    }),
-})
-
-
-USER_LOOKUP_TABLE = {
-    'administrator': 'nicole.kohler',
-    'dossier_responsible': 'robert.ziegler',
-    'regular_user': 'kathi.barfuss',
-}
 
 
 FEATURE_FLAGS = {
@@ -70,14 +39,33 @@ class IntegrationTestCase(TestCase):
         """Make it possible to access objects from the content lookup table
         directly with attribute access on the test case.
         """
-        if name in CONTENT_LOOKUP_TABLE:
-            path = CONTENT_LOOKUP_TABLE[name]
+        obj = self._lookup_from_table(name)
+        if obj is not None:
+            return obj
+        else:
+            return self.__getattribute__(name)
+
+    def _lookup_from_table(self, name):
+        """This method helps to look up persistent objects or user objects which
+        were created in the fixture and registered there with a name.
+        """
+        try:
+            table = self.layer['fixture_lookup_table']
+        except KeyError:
+            # The layer has not yet set up the fixture.
+            return None
+        if name not in table:
+            return None
+
+        type_, value = table[name]
+        if type_ == 'object':
             locals()['__traceback_info__'] = {
-                'path': path,
+                'path': value,
                 'current user': getSecurityManager().getUser()}
-            return self.portal.restrictedTraverse(path)
+            return self.portal.restrictedTraverse(value)
 
-        if name in USER_LOOKUP_TABLE:
-            return api.user.get(USER_LOOKUP_TABLE[name])
+        elif type_ == 'user':
+            return api.user.get(value)
 
-        return self.__getattribute__(name)
+        else:
+            raise ValueError('Unsupport lookup entry type {!r}'.format(type_))

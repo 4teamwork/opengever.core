@@ -439,7 +439,7 @@ class ContentFixtureLayer(OpengeverFixture):
         # Avoid circular imports:
         from opengever.testing.fixtures import OpengeverContentFixture
         setRequest(portal.REQUEST)
-        OpengeverContentFixture()()
+        self['fixture_lookup_table'] = OpengeverContentFixture()()
         setRequest(None)
 
     def tearDown(self):

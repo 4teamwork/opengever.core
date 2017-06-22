@@ -19,6 +19,7 @@ class OpengeverContentFixture(object):
 
     def __call__(self):
         start = time()
+        self._lookup_table = {}
 
         with self.freeze_at_hour(6):
             self.create_units()
@@ -39,6 +40,8 @@ class OpengeverContentFixture(object):
         end = time()
         print '(fixture setup in {}s) '.format(round(end-start, 3)),
 
+        return self._lookup_table
+
     def create_units(self):
         self.admin_unit = create(
             Builder('admin_unit')
@@ -57,29 +60,31 @@ class OpengeverContentFixture(object):
 
     def create_users(self):
         self.administrator = self.create_user(
-            u'Nicole', u'Kohler', ['Administrator'])
-        self.dossier_responsible = self.create_user(u'Robert', u'Ziegler')
-        self.regular_user = self.create_user(u'K\xe4thi', u'B\xe4rfuss')
+            'administrator', u'Nicole', u'Kohler', ['Administrator'])
+        self.dossier_responsible = self.create_user(
+            'dossier_responsible', u'Robert', u'Ziegler')
+        self.regular_user = self.create_user(
+            'regular_user', u'K\xe4thi', u'B\xe4rfuss')
 
     @staticuid()
     def create_repository_tree(self):
-        self.root = create(
+        self.root = self.register('repository_root', create(
             Builder('repository_root')
             .having(title_de=u'Ordnungssystem',
-                    title_fr=u'Syst\xe8me de classement'))
+                    title_fr=u'Syst\xe8me de classement')))
         self.root.manage_setLocalRoles(self.org_unit.users_group_id,
                                        ('Reader', 'Contributor', 'Editor'))
         self.root.reindexObjectSecurity()
 
-        self.repo0 = create(
+        self.repo0 = self.register('branch_repository', create(
             Builder('repository').within(self.root)
             .having(title_de=u'F\xfchrung',
-                    title_fr=u'Direction'))
+                    title_fr=u'Direction')))
 
-        self.repo00 = create(
+        self.repo00 = self.register('leaf_repository', create(
             Builder('repository').within(self.repo0)
             .having(title_de=u'Vertr\xe4ge und Vereinbarungen',
-                    title_fr=u'Contrats et accords'))
+                    title_fr=u'Contrats et accords')))
 
         self.repo1 = create(
             Builder('repository').within(self.root)
@@ -88,33 +93,33 @@ class OpengeverContentFixture(object):
 
     @staticuid()
     def create_templates(self):
-        templates = create(
+        templates = self.register('templates', create(
             Builder('templatefolder')
             .titled(u'Vorlagen')
-            .having(id='vorlagen'))
+            .having(id='vorlagen')))
 
-        self.sablon_template = create(
+        self.sablon_template = self.register('sablon_template', create(
             Builder('sablontemplate')
             .within(templates)
-            .with_asset_file('sablon_template.docx'))
+            .with_asset_file('sablon_template.docx')))
 
     @staticuid()
     def create_committees(self):
-        self.committee_container = create(
+        self.committee_container = self.register('committee_container', create(
             Builder('committee_container')
             .titled(u'Sitzungen')
             .having(protocol_template=self.sablon_template,
-                    excerpt_template=self.sablon_template))
+                    excerpt_template=self.sablon_template)))
 
-        self.create_committee(
+        self.register('committee', self.create_committee(
             title=u'Rechnungspr\xfcfungskommission',
             repository_folder=self.repo1,
             group_id='committee_rpk_group',
-            members=[self.administrator])
+            members=[self.administrator]))
 
     @staticuid()
     def create_treaty_dossiers(self):
-        dossier = create(
+        dossier = self.register('dossier', create(
             Builder('dossier').within(self.repo00)
             .titled(u'Vertr\xe4ge mit der kantonalen Finanzverwaltung')
             .having(description=u'Alle aktuellen Vertr\xe4ge mit der'
@@ -122,10 +127,11 @@ class OpengeverContentFixture(object):
                     u' Vertr\xe4ge vor 2016 geh\xf6ren ins Archiv.',
                     keywords=(u'Finanzverwaltung', u'Vertr\xe4ge'),
                     start=date(2016, 1, 1),
-                    responsible='hugo.boss'))
-        create(Builder('dossier').within(dossier).titled(u'2016'))
+                    responsible='hugo.boss')))
+        self.register('subdossier',
+                      create(Builder('dossier').within(dossier).titled(u'2016')))
 
-        create(
+        self.register('archive_dossier', create(
             Builder('dossier').within(self.repo00)
             .titled(u'Archiv Vertr\xe4ge')
             .having(description=u'Archiv der Vertr\xe4ge vor 2016.',
@@ -133,7 +139,7 @@ class OpengeverContentFixture(object):
                     start=date(2000, 1, 1),
                     end=date(2015, 12, 31),
                     responsible='hugo.boss')
-            .in_state('dossier-state-resolved')).absolute_url()
+            .in_state('dossier-state-resolved')))
 
     @contextmanager
     def freeze_at_hour(self, hour):
@@ -154,7 +160,20 @@ class OpengeverContentFixture(object):
             with ticking_creator(clock, minutes=2):
                 yield
 
-    def create_user(self, firstname, lastname, globalroles=()):
+    def register(self, attrname, obj):
+        """Add an object to the lookup table so that it can be accessed from
+        within the name under the attribute with name ``attrname``.
+        Return the object for chaining convenience.
+        """
+        self._lookup_table[attrname] = ('object', '/'.join(obj.getPhysicalPath()))
+        return obj
+
+    def create_user(self, attrname, firstname, lastname, globalroles=()):
+        """Create an OGDS user and a Plone user.
+        The user is member of the current org unit user group.
+        The ``attrname`` is the attribute name used to access this user
+        from within tests.
+        """
         globalroles = ['Member'] + list(globalroles)
         builder = (
             Builder('user')
@@ -171,6 +190,7 @@ class OpengeverContentFixture(object):
                .having(firstname=firstname, lastname=lastname, email=email)
                .assign_to_org_units([self.org_unit]))
 
+        self._lookup_table[attrname] = ('user', plone_user.getId())
         return plone_user
 
     def create_committee(self, title, repository_folder, group_id, members):
@@ -184,11 +204,12 @@ class OpengeverContentFixture(object):
         create(Builder('group')
                .with_groupid(group_id)
                .with_members(*members))
-        create(Builder('committee')
-               .titled(title)
-               .within(self.committee_container)
-               .having(repository_folder=repository_folder,
-                       group_id=group_id))
+        return create(
+            Builder('committee')
+            .titled(title)
+            .within(self.committee_container)
+            .having(repository_folder=repository_folder,
+                    group_id=group_id))
 
     @contextmanager
     def login(self, user):
