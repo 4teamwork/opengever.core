@@ -18,6 +18,7 @@ from opengever.dossier.templatefolder.interfaces import ITemplateFolder
 from opengever.dossier.tests import OGDS_USER_ATTRIBUTES
 from opengever.journal.handlers import DOC_PROPERTIES_UPDATED
 from opengever.journal.tests.utils import get_journal_entry
+from opengever.officeconnector.interfaces import IOfficeConnectorSettings
 from opengever.ogds.base.actor import Actor
 from opengever.testing import add_languages
 from opengever.testing import FunctionalTestCase
@@ -33,6 +34,7 @@ from plone.registry.interfaces import IRegistry
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getMultiAdapter
 from zope.component import getUtility
+import re
 import transaction
 
 
@@ -499,6 +501,26 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
             ['Template A', 'Template B'],
             [row.get('Title')
              for row in browser.css('table.listing').first.dicts()])
+
+    @browsing
+    def test_opens_doc_with_officeconnector_when_feature_flaged(self, browser):
+        api.portal.set_registry_record('direct_checkout_and_edit_enabled',
+                                       True,
+                                       interface=IOfficeConnectorSettings)
+
+        template_word = create(Builder('document')
+                               .titled('Word Docx template')
+                               .within(self.templatefolder)
+                               .with_dummy_content())
+
+        browser.login().open(self.dossier, view='document_with_template')
+        browser.fill({'form.widgets.template': _make_token(template_word),
+                      'Title': 'Test OfficeConnector'}).save()
+
+        self.assertIn(
+            "'oc:",
+            browser.css('script.redirector').first.text,
+            'OfficeConnector redirection script not found')
 
 
 class TestTemplateFolder(FunctionalTestCase):

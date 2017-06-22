@@ -13,6 +13,8 @@ from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.dossier import _
 from opengever.dossier.command import CreateDocumentFromTemplateCommand
 from opengever.dossier.templatefolder import get_template_folder
+from opengever.officeconnector.helpers import create_oc_url
+from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
 from opengever.tabbedview.helper import document_with_icon
 from plone import api
 from plone.autoform.form import AutoExtensibleForm
@@ -138,10 +140,18 @@ class CreateDocumentMixin(object):
         # Add redirect to the zem-file download,
         # in order to start editing with external editor.
         redirector = IRedirector(self.request)
-        redirector.redirect(
-            '%s/external_edit' % new_doc.absolute_url(),
-            target='_self',
-            timeout=1000)
+
+        if not is_officeconnector_checkout_feature_enabled():
+            redirector.redirect(
+                '%s/external_edit' % new_doc.absolute_url(),
+                target='_self',
+                timeout=1000)
+        else:
+            redirector.redirect(create_oc_url(
+                self.request,
+                new_doc,
+                dict(action='checkout'),
+            ))
 
     def create_document(self, data):
         """Create a new document based on a template."""
