@@ -86,10 +86,10 @@ class OpengeverContentFixture(object):
             .having(title_de=u'Vertr\xe4ge und Vereinbarungen',
                     title_fr=u'Contrats et accords')))
 
-        self.repo1 = create(
+        self.repo1 = self.register('empty_repository', create(
             Builder('repository').within(self.root)
             .having(title_de=u'Rechnungspr\xfcfungskommission',
-                    title_fr=u'Commission de v\xe9rification'))
+                    title_fr=u'Commission de v\xe9rification')))
 
     @staticuid()
     def create_templates(self):
