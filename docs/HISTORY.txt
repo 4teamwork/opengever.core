@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Add reference column to document listings. [tarnap]
+- Do not display templates without an assigned file in the CreateDocumentFromTemplate form. [tarnap]
 - Include missing permission definitions from Products.CMFCore. [phgross]
 - Fix PrivateFolders Title encoding. [phgross]
 - Show userid instead of E-Mail address on all sources (except EMailSource). [mathias.leimgruber]

@@ -80,6 +80,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
         self.template_a = create(Builder('document')
                                  .titled('Template A')
                                  .within(self.templatefolder)
+                                 .with_dummy_content()
                                  .with_modification_date(self.modification_date))
         self.template_b = create(Builder('document')
                                  .titled('Template B')
@@ -145,6 +146,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
         create(Builder('document')
                .titled('Template C')
                .within(subtemplatefolder)
+               .with_dummy_content()
                .with_modification_date(self.modification_date))
 
         browser.login().open(self.dossier, view='document_with_template')
@@ -483,6 +485,19 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
         self.assertEquals(u'test-docx.docx', document.file.filename)
         with TemporaryDocFile(document.file) as tmpfile:
             self.assertItemsEqual([], read_properties(tmpfile.path))
+
+    @browsing
+    def test_templates_without_a_file_are_not_listed(self, browser):
+        create(Builder('document')
+               .titled(u'Template with no content')
+               .within(self.templatefolder))
+
+        browser.login().open(self.dossier, view='document_with_template')
+
+        self.assertEquals(
+            ['Template A', 'Template B'],
+            [row.get('Title')
+             for row in browser.css('table.listing').first.dicts()])
 
 
 class TestTemplateFolder(FunctionalTestCase):
