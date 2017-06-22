@@ -11,6 +11,7 @@ from plone.memoize import ram
 from plone.uuid.interfaces import IUUID
 from Products.CMFCore.interfaces._tools import IMemberData
 from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
+from Products.ZCatalog.interfaces import ICatalogBrain
 from zope.component import getUtility
 from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
@@ -101,7 +102,12 @@ def linked_containing_subdossier(item, value):
     if not subdossier_title:
         return ''
 
-    url = "{}/redirect_to_parent_dossier".format(item.getURL())
+    if ICatalogBrain.providedBy(item):
+        url_method = item.getURL
+    else:
+        url_method = item.absolute_url
+
+    url = "{}/redirect_to_parent_dossier".format(url_method())
     title = escape_html(subdossier_title)
 
     link = '<a href="{}" title="{}" class="subdossierLink">{}</a>'.format(
