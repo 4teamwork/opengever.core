@@ -67,4 +67,4 @@ class TestDocumentReporter(FunctionalTestCase):
              u'unchecked',
              u'Dossier A',
              ],
-            [cell.value for cell in workbook.active.rows[1]])
+            [cell.value for cell in list(workbook.active.rows)[1]])

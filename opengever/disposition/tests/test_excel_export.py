@@ -51,7 +51,7 @@ class TestDispositionExcelExport(FunctionalTestCase):
                 [u'Reference Number', u'title', u'Opening Date',
                  u'Closing Date', u'Public Trial', u'Archival value',
                  u'archivalValueAnnotation', u'Appraisal'],
-                [cell.value for cell in workbook.active.rows[0]])
+                [cell.value for cell in list(workbook.active.rows)[0]])
             self.assertTrue(workbook.active.cell('A1').font.bold)
 
     @browsing
@@ -64,15 +64,17 @@ class TestDispositionExcelExport(FunctionalTestCase):
             tmpfile.flush()
             workbook = load_workbook(tmpfile.name)
 
+            rows = list(workbook.active.rows)
+
             self.assertEquals(
                 [u'Client1 1 / 1', u'Dossier A', datetime(2016, 1, 19, 0, 0),
                  datetime(2016, 3, 19, 0, 0), u'limited-public',
                  u'archival worthy', None, u'archival worthy'],
-                [cell.value for cell in workbook.active.rows[1]])
+                [cell.value for cell in rows[1]])
 
             self.assertEquals(
                 [u'Client1 1 / 2', u'Dossier B', datetime(2015, 1, 19, 0, 0),
                  datetime(2015, 3, 19, 0, 0), u'limited-public',
                  u'not archival worthy', u'In Absprache mit ARCH.',
                  u'not archival worthy'],
-                [cell.value for cell in workbook.active.rows[2]])
+                [cell.value for cell in rows[2]])
