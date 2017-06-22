@@ -96,7 +96,7 @@ def linked_ogds_author(item, author):
     return Actor.lookup(author).get_link()
 
 
-def linked_document_subdossier(item, value):
+def linked_containing_subdossier(item, value):
     subdossier_title = item.containing_subdossier
     if not subdossier_title:
         return ''

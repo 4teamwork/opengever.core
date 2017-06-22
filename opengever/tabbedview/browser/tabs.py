@@ -23,7 +23,7 @@ from opengever.tabbedview.helper import escape_html_transform
 from opengever.tabbedview.helper import external_edit_link
 from opengever.tabbedview.helper import linked
 from opengever.tabbedview.helper import linked_document
-from opengever.tabbedview.helper import linked_document_subdossier
+from opengever.tabbedview.helper import linked_containing_subdossier
 from opengever.tabbedview.helper import readable_ogds_author
 from opengever.tabbedview.helper import readable_ogds_user
 from opengever.tabbedview.helper import workflow_state
@@ -168,7 +168,7 @@ class Documents(BaseCatalogListingTab):
 
         {'column': 'containing_subdossier',
          'column_title': _('label_subdossier', default="Subdossier"),
-         'transform': linked_document_subdossier},
+         'transform': linked_containing_subdossier},
 
         {'column': 'public_trial',
          'column_title': _('label_public_trial', default="Public Trial"),
