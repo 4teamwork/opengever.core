@@ -109,12 +109,23 @@ exakten Begriff enthalten. Die Trefferliste ist entsprechend kürzer.
 Erweiterte Suche
 ----------------
 
-Mit Klick auf die *Erweiterte Suche* wird ein detailliertes Suchformular
-geöffnet. Pro Objekttyp werden spezifische Suchfelder zur Verfügung
-gestellt, beispielsweise der Status für das Objekt Dossier oder der
-Autor beim Objekt Dokument. Die Felder auf einer Maske können beliebig
-ausgefüllt und kombiniert werden. Die Suche wird dadurch eingegrenzt und
-die Treffermenge übersichtlicher.
+Auf die *Erweiterte Suche* gelangt der User entweder über das Suchfeld oben
+rechts, indem er auf *Erweiterte Suche* klickt.
+
+|img-suchen-6|
+
+Oder ist der Benutzer bereits auf der Suchresultat-Seite, kann er auch von da
+auf die *Erweiterte Suche* wechseln:
+
+|img-suchen-7|
+
+Auf der Maske der *Erweiterten Suche* werden pro Objekttyp spezifische
+Suchfelder zur Verfügung gestellt, beispielsweise der Status für das Objekt
+Dossier oder der Autor beim Objekt Dokument. Die Felder auf einer Maske können
+beliebig ausgefüllt und kombiniert werden. Die Suche wird dadurch eingegrenzt
+und die Treffermenge übersichtlicher.
+
+|img-suchen-8|
 
 Tipp: Klickt man mit dem Mausrad auf den Link "Erweiterte Suche", so
 wird das Suchformular in einer neuen Registerkarte (Tab) geöffnet. So
@@ -126,6 +137,24 @@ verlassen werden muss.
    zu beachten, dass sich die Suche nach Aufgaben nur auf Aufgaben bezieht,
    die im eigenen Mandanten gespeichert sind, d.h. zu denen im eigenen
    Mandanten Dossiers vorhanden sind.
+
+Suchabfrage speichern
+~~~~~~~~~~~~~~~~~~~~~~~
+Abgesetzten Suchabfrage können als Lesezeichen gespeichert und zu einem späteren
+Zeitpunkt erneut abgefragt werden. Beim erneuten Aufruf der URL werden jeweils
+die aktuellen Resultate anzeigt.
+
+So ist es z.B. möglich in der erweiterten Suche ein Suchabfrage "nach offenen
+Dossiers des Jahres 2017" (Status, Start-Datum) zu erstellen und als Lesezeichen
+zu speichern. Dieses Lesezeichen kann anschliessen immer wieder verwendet werden.
+
+|img-suchen-9|
+
+Die URL die nach Klick auf "Suchen" oben angezeigt wird, enthält die
+gespeicherten Suchparameter und kann als Lesezeichen im Browser gespeichert
+werden.
+
+|img-suchen-10|
 
 Filtern
 -------
@@ -177,5 +206,11 @@ durchsucht.
 .. |img-suchen-3| image:: img/media/img-suchen-3.png
 .. |img-suchen-4| image:: img/media/img-suchen-4.png
 .. |img-suchen-5| image:: img/media/img-suchen-5.png
+.. |img-suchen-6| image:: img/media/img-suchen-6.png
+.. |img-suchen-7| image:: img/media/img-suchen-7.png
+.. |img-suchen-8| image:: img/media/img-suchen-8.png
+.. |img-suchen-9| image:: img/media/img-suchen-9.png
+.. |img-suchen-10| image:: img/media/img-suchen-10.png
+
 
 .. disqus::
