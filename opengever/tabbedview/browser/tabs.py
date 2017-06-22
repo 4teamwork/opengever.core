@@ -321,7 +321,9 @@ class Tasks(GlobalTaskListingTab):
 
     columns = GlobalTaskListingTab.columns + (
         {'column': 'containing_subdossier',
-         'column_title': _('label_subdossier', default="Subdossier"), },
+         'column_title': _('label_subdossier', default="Subdossier"),
+         'transform': linked_containing_subdossier},
+
     )
 
     enabled_actions = [

@@ -49,3 +49,16 @@ class TestTaskRedirector(FunctionalTestCase):
 
         self.assertEquals('{}#overview'.format(task.absolute_url()),
                           browser.url)
+
+
+class TestRedirectToContainingDossier(FunctionalTestCase):
+
+    @browsing
+    def test_redirect_to_the_containing_dossier(self, browser):
+        dossier = create(Builder('dossier'))
+        subdossier = create(Builder('dossier').within(dossier))
+        task = create(Builder('task').within(subdossier))
+
+        browser.login().open(task, view='redirect_to_parent_dossier')
+
+        self.assertEqual(subdossier, browser.context)
