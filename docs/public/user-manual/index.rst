@@ -7,8 +7,7 @@ Anwender-Dokumentation
 ======================
 
 Release 3.10
-
-Version 1.0 / 13. Januar 2016
+22. Juni 2017
 
 .. toctree::
    :maxdepth: 2
