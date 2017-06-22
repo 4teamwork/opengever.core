@@ -48,7 +48,7 @@ class TestTaskListing(FunctionalTestCase):
         browser.login().open(
             self.dossier, view='tabbedview_view-tasks')
         table = browser.css('.listing').first
-        second_row_dossier_cell = table.rows[1].css('td:nth-child(10)').first
+        second_row_dossier_cell = table.rows[1].css('td:nth-child(10) .maindossierLink').first
         self.assertEquals(
             '&lt;b&gt;Bold title&lt;/b&gt;',
             second_row_dossier_cell.innerHTML.strip().strip('\n'))

@@ -1,5 +1,6 @@
 from Acquisition import aq_inner, aq_parent
 from five import grok
+from opengever.dossier.utils import get_main_dossier
 from opengever.task.task import ITask
 from Products.Five import BrowserView
 
@@ -21,6 +22,14 @@ class TaskRedirector(grok.View):
             redirect_to = '%s#tasks' % parent.absolute_url()
 
         return self.request.RESPONSE.redirect(redirect_to)
+
+
+class RedirectToContainingMainDossier(BrowserView):
+    """Redirects the user to the containing maindossier.
+    """
+    def __call__(self):
+        self.request.RESPONSE.redirect(
+            get_main_dossier(self.context).absolute_url())
 
 
 class RedirectToContainingDossier(BrowserView):

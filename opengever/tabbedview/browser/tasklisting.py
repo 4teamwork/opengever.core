@@ -12,7 +12,7 @@ from opengever.tabbedview.filters import Filter
 from opengever.tabbedview.filters import FilterList
 from opengever.tabbedview.filters import PendingTasksFilter
 from opengever.tabbedview.helper import display_org_unit_title_condition
-from opengever.tabbedview.helper import escape_html_transform
+from opengever.tabbedview.helper import linked_containing_maindossier
 from opengever.tabbedview.helper import org_unit_title_helper
 from opengever.tabbedview.helper import readable_date_set_invisibles
 from opengever.tabbedview.helper import readable_ogds_author
@@ -107,7 +107,7 @@ class GlobalTaskListingTab(BaseListingTab):
 
         {'column': 'containing_dossier',
          'column_title': _('containing_dossier', 'Dossier'),
-         'transform': escape_html_transform},
+         'transform': linked_containing_maindossier},
 
         {'column': 'issuing_org_unit',
          'column_title': _('column_issuing_org_unit',

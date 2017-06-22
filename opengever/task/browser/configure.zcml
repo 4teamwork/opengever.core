@@ -35,6 +35,13 @@
       />
 
   <browser:page
+      name="redirect_to_main_dossier"
+      for="opengever.task.task.ITask"
+      class=".redirector.RedirectToContainingMainDossier"
+      permission="zope2.View"
+      />
+
+  <browser:page
       name="redirect_to_parent_dossier"
       for="opengever.task.task.ITask"
       class=".redirector.RedirectToContainingDossier"

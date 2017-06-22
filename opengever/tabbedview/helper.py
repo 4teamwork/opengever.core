@@ -114,6 +114,19 @@ def linked_containing_subdossier(item, value):
     return link
 
 
+def linked_containing_maindossier(item, value):
+    title = escape_html(item.containing_dossier)
+
+    url = get_url(item)
+    if not url:
+        return title
+
+    redirect_url = "{}/redirect_to_main_dossier".format(get_url(item))
+    link = '<a href="{}" title="{}" class="maindossierLink">{}</a>'.format(
+        redirect_url, title, title)
+    return link
+
+
 def linked(item, value):
     """Takes an item (object or brain) and returns a HTML snippet that
     contains a link to the item, it's icon and breadcrumbs in the tooltip.
