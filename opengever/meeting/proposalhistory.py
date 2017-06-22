@@ -9,13 +9,13 @@ from zope.annotation.interfaces import IAnnotations
 
 
 class ProposalHistory(object):
-    """Adapter to keep track of a proposals history.
+    """Adapter to keep track of a proposals history. Factory for new entries.
 
     Lists history records for an object and crates new ones. Records are stored
     in the objects annotations. Keeps a registry of supported history entries.
 
-    History records are stored with their timestamp as key and their data
-    as value.
+    History records are stored in the objects annotations with their timestamp
+    as key and their data as value.
     """
     record_classes = {}
     annotation_key = 'object_history'
@@ -33,9 +33,7 @@ class ProposalHistory(object):
         for record in self.context.load_model().history_records:
             yield record
 
-        history = IAnnotations(self.context).get(self.annotation_key)
-        if history is None:
-            history = OOBTree()
+        history = self._get_history_for_reading()
 
         for key, val in reversed(history.items()):
             name = val.get('name')
@@ -45,44 +43,57 @@ class ProposalHistory(object):
             if not clazz:
                 continue
 
-            yield(clazz(self.context, timestamp=key, data=val))
+            yield clazz.re_populate(self.context, key, val)
 
     def append_record(self, name, timestamp=None, **kwargs):
         clazz = self.record_classes[name]
 
-        history = IAnnotations(self.context).setdefault(
-            self.annotation_key, OOBTree())
-        entry = clazz(self.context, timestamp=timestamp, **kwargs)
-        entry.append_to(history)
+        history = self._get_history_for_writing()
+        record = clazz(self.context, timestamp=timestamp, **kwargs)
+        record.append_to(history)
 
-        return entry
+        return record
+
+    def _get_history_for_writing(self):
+        return IAnnotations(self.context).setdefault(
+            self.annotation_key, OOBTree())
+
+    def _get_history_for_reading(self):
+        return IAnnotations(self.context).get(self.annotation_key, OOBTree())
 
 
 class BaseHistoryRecord(object):
     """Basic implementation of a history record.
 
-    Contains required data and abstract implementation.
+    Contains basic set of required data and abstract implementation. Can
+    re-populate iself from data by invoking the __new__ method directly and
+    then re-populating the attributes on the instance instead of calling
+    __init__.
+
+    Each record must have a unique `name` from which it can be built via
+    IHistory.append_record.
+
+    If `needs_syncing` is `True` a records that is created on the
+    `SubmittedProposal` side is automatically added to its corresponding
+    `Proposal`.
     """
+
     name = None
 
-    def __init__(self, context, timestamp=None, data=None, **kwargs):
+    @classmethod
+
+
+
+    def __init__(self, context, timestamp=None):
+        timestamp = timestamp or utcnow_tz_aware()
+
         self.context = context
-
-        if timestamp is None:
-            timestamp = utcnow_tz_aware()
         self.timestamp = timestamp
-
-        if data is None:
-            data = self.init_data(**kwargs)
-        self.data = data
-
-    def init_data(self, **kwargs):
-        return PersistentMapping(
-            created=self.timestamp,
+        self.data = PersistentMapping(
+            created=timestamp,
             userid=api.user.get_current().getId(),
             name=self.name,
-            id=uuid4(),
-            **kwargs)
+            id=uuid4())
 
     def append_to(self, history):
         if self.timestamp in history:
@@ -139,6 +150,13 @@ class DocumentSubmitted(BaseHistoryRecord):
     name = 'document_submitted'
     css_class = 'documentAdded'
 
+    def __init__(self, context, document_title, submitted_version,
+                 timestamp=None):
+        super(DocumentSubmitted, self).__init__(
+            context, timestamp=timestamp)
+        self.data['document_title'] = document_title
+        self.data['submitted_version'] = submitted_version
+
     @property
     def document_title(self):
         return self.data.get('document_title')
@@ -161,9 +179,15 @@ class ProposalRejected(BaseHistoryRecord):
 
     name = 'rejected'
 
+    def __init__(self, context, text, timestamp=None):
+        super(ProposalRejected, self).__init__(
+            context, timestamp=timestamp)
+        self.data['text'] = text
+
     def message(self):
         return _(u'proposal_history_label_rejected',
                  u'Rejected by ${user}',
                  mapping={'user': self.get_actor_link()})
 
 ProposalHistory.register(ProposalRejected)
+
