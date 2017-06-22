@@ -53,6 +53,11 @@
       for="opengever.base.interfaces.IOpengeverCatalogBrain"
       />
 
+  <adapter
+      factory=".redirector.RedirectorETagValue"
+      name="redirector"
+      />
+
   <configure package="collective.quickupload.browser">
     <browser:page
         class="opengever.base.quickupload.OGQuickUploadView"

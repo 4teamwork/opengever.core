@@ -1,8 +1,12 @@
 from five import grok
 from opengever.base.interfaces import IRedirector
+from plone.app.caching.interfaces import IETagValue
 from plone.app.layout.viewlets.interfaces import IAboveContentTitle
+from zope.component import adapts
+from zope.interface import implements
 from zope.interface import Interface
 from zope.publisher.interfaces.browser import IBrowserRequest
+import hashlib
 import json
 
 
@@ -26,7 +30,7 @@ class RedirectorCookie(object):
             self._set([])
         return value
 
-    def _get(self):
+    def get_value(self):
         # Load from response cookie in case this request added or updated the
         # cookie
         cookie = self.request.response.cookies.get(REDIRECTOR_COOKIE_NAME, {})
@@ -37,6 +41,11 @@ class RedirectorCookie(object):
         # Load from request cookie in case a prior request added the cookie
         if not value:
             value = self.request.get(REDIRECTOR_COOKIE_NAME)
+
+        return value
+
+    def _get(self):
+        value = self.get_value()
 
         if value:
             return json.loads(value)
@@ -122,3 +131,24 @@ $(function() {
             html.append(RedirectorViewlet.JS_TEMPLATE % redirect)
 
         return ''.join(html)
+
+
+class RedirectorETagValue(object):
+    implements(IETagValue)
+    adapts(Interface, Interface)
+
+    def __init__(self, published, request):
+        self.published = published
+        self.request = request
+
+    def compute_md5hash(self, value):
+        m = hashlib.md5()
+        m.update(value.encode('utf-8'))
+        return m.hexdigest()
+
+    def __call__(self):
+        value = RedirectorCookie(self.request).get_value()
+        if not value:
+            return None
+
+        return self.compute_md5hash(value)
