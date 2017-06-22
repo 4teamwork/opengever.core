@@ -3,7 +3,6 @@ from ftw.keywordwidget.widget import KeywordFieldWidget
 from ftw.table import helper
 from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
-from opengever.base.interfaces import IRedirector
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.base.schema import TableChoice
@@ -13,8 +12,6 @@ from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.dossier import _
 from opengever.dossier.command import CreateDocumentFromTemplateCommand
 from opengever.dossier.templatefolder import get_template_folder
-from opengever.officeconnector.helpers import create_oc_url
-from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
 from opengever.tabbedview.helper import document_with_icon
 from plone import api
 from plone.autoform.form import AutoExtensibleForm
@@ -137,21 +134,7 @@ class CreateDocumentMixin(object):
         manager = self.context.restrictedTraverse('checkout_documents')
         manager.checkout(new_doc)
 
-        # Add redirect to the zem-file download,
-        # in order to start editing with external editor.
-        redirector = IRedirector(self.request)
-
-        if not is_officeconnector_checkout_feature_enabled():
-            redirector.redirect(
-                '%s/external_edit' % new_doc.absolute_url(),
-                target='_self',
-                timeout=1000)
-        else:
-            redirector.redirect(create_oc_url(
-                self.request,
-                new_doc,
-                dict(action='checkout'),
-            ))
+        new_doc.setup_external_edit_redirect(self.request)
 
     def create_document(self, data):
         """Create a new document based on a template."""

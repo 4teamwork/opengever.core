@@ -7,6 +7,7 @@ from collective import dexteritytextindexer
 from five import grok
 from ftw.mail.interfaces import IEmailAddress
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
+from opengever.base.interfaces import IRedirector
 from opengever.document import _
 from opengever.document.base import BaseDocumentMixin
 from opengever.document.behaviors.related_docs import IRelatedDocuments
@@ -14,6 +15,8 @@ from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.meeting.proposal import IProposal
 from opengever.meeting.proposal import ISubmittedProposal
+from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
+from opengever.officeconnector.helpers import create_oc_url
 from opengever.task.task import ITask
 from plone import api
 from plone.autoform import directives as form_directives
@@ -258,3 +261,17 @@ class Document(Item, BaseDocumentMixin):
                 self, transition='document-transition-initialize')
 
         return response
+
+    def setup_external_edit_redirect(self, request):
+        redirector = IRedirector(request)
+        if is_officeconnector_checkout_feature_enabled():
+            redirector.redirect(create_oc_url(
+                request,
+                self,
+                dict(action='checkout'),
+            ))
+        else:
+            redirector.redirect(
+                '%s/external_edit' % self.absolute_url(),
+                target='_self',
+                timeout=1000)
