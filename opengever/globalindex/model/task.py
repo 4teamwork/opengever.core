@@ -282,6 +282,12 @@ class Task(Base):
         allowed_principals = set(self.principals)
         return len(principals & allowed_principals) > 0
 
+    def absolute_url(self):
+        admin_unit = self.get_admin_unit()
+        if not admin_unit:
+            return ''
+        return '/'.join((admin_unit.public_url, self.physical_path))
+
     def get_link(self, with_state_icon=True, with_responsible_info=True):
         title = escape_html(self.title)
         admin_unit = self.get_admin_unit()
@@ -290,7 +296,7 @@ class Task(Base):
             return u'<span class="{}">{}</span>'.format(
                 self.get_css_class(), title)
 
-        url = '/'.join((admin_unit.public_url, self.physical_path))
+        url = self.absolute_url()
         breadcrumb_titles = u"[{}] > {}".format(
             admin_unit.title, escape_html(self.breadcrumb_title))
 
