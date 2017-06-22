@@ -102,16 +102,15 @@ def linked_containing_subdossier(item, value):
     if not subdossier_title:
         return ''
 
-    if ICatalogBrain.providedBy(item):
-        url_method = item.getURL
-    else:
-        url_method = item.absolute_url
-
-    url = "{}/redirect_to_parent_dossier".format(url_method())
     title = escape_html(subdossier_title)
 
+    url = get_url(item)
+    if not url:
+        return title
+
+    redirect_url = "{}/redirect_to_parent_dossier".format(get_url(item))
     link = '<a href="{}" title="{}" class="subdossierLink">{}</a>'.format(
-        url, title, title)
+        redirect_url, title, title)
     return link
 
 
@@ -123,13 +122,11 @@ def linked(item, value):
     if isinstance(value, unicode):
         value = value.encode('utf-8')
 
-    # Determine URL method and UID
-    url_method = lambda: '#'
-    if hasattr(item, 'getURL'):
-        url_method = item.getURL
+    # Determine URL and UID
+    url = get_url(item)
+    if ICatalogBrain.providedBy(item):
         uid = item.UID
-    elif hasattr(item, 'absolute_url'):
-        url_method = item.absolute_url
+    else:
         uid = IUUID(item)
 
     # Construct CSS class
@@ -139,7 +136,7 @@ def linked(item, value):
     value = escape_html(value)
 
     link = '<a class="rollover-breadcrumb %s" href="%s" data-uid="%s">%s</a>' % (
-        css_class, url_method(), uid, value)
+        css_class, url, uid, value)
 
     wrapper = '<span class="linkWrapper">%s</span>' % link
     return wrapper
@@ -252,11 +249,9 @@ def external_edit_link(item, value):
     with the external_edit mode selected """
     if item.portal_type != 'opengever.document.document':
         return ''
-    if hasattr(item, 'getURL'):
-        url = item.getURL()
-    elif hasattr(item, 'absolute_url'):
-        url = item.absolute_url()
-    else:
+
+    url = get_url(item)
+    if not url:
         return ''
 
     url = '%s/editing_document' % url
@@ -275,6 +270,15 @@ def translated_string(domain='plone'):
         return translate(
             value, context=getRequest(), domain=domain)
     return _translate
+
+
+def get_url(item):
+    if hasattr(item, 'getURL'):
+        return item.getURL()
+    elif hasattr(item, 'absolute_url'):
+        return item.absolute_url()
+    else:
+        return ''
 
 
 def escape_html_transform(item, value):
