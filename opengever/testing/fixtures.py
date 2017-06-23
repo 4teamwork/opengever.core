@@ -79,7 +79,8 @@ class OpengeverContentFixture(object):
         self.repo0 = self.register('branch_repository', create(
             Builder('repository').within(self.root)
             .having(title_de=u'F\xfchrung',
-                    title_fr=u'Direction')))
+                    title_fr=u'Direction',
+                    description=u'Alles zum Thema F\xfchrung.')))
 
         self.repo00 = self.register('leaf_repository', create(
             Builder('repository').within(self.repo0)
