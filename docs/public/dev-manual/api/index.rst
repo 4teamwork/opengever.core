@@ -15,6 +15,7 @@ Inhalt:
    searching.rst
    workflow.rst
    content_types.rst
+   metadata.rst
    examples/index.rst
    docs_changelog.rst
 
