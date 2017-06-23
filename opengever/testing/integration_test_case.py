@@ -7,6 +7,8 @@ from unittest2 import TestCase
 
 FEATURE_FLAGS = {
     'meeting': 'opengever.meeting.interfaces.IMeetingSettings.is_feature_enabled',
+    'dossiertemplate': ('opengever.dossier.dossiertemplate'
+                        '.interfaces.IDossierTemplateSettings.is_feature_enabled'),
 }
 
 
