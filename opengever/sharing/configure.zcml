@@ -32,14 +32,12 @@
       title="OpenGever Standard Sharing"
       description="Adds OpenGever Standard Sharing View"
       provides=".behaviors.IStandard"
-      for="plone.dexterity.interfaces.IDexterityContent"
       />
 
   <plone:behavior
       title="OpenGever Dossier Sharing"
       description="Adds OpenGever Dossier Sharing View"
       provides=".behaviors.IDossier"
-      for="plone.dexterity.interfaces.IDexterityContent"
       />
 
 
