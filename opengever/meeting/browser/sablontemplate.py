@@ -66,12 +66,13 @@ SAMPLE_MEETING_DATA = {
         'secretary': {'fullname': u'Franz M\xfcller',
                       'email': 'mueller@example.com',
                       'role': None},
-        'members': [{'fullname': u'Peter M\xfcller',
+        'members': [{'fullname': u'Franz M\xfcller',
+                     'role': None,
+                     'email': u'mueller@example.com'},
+                    {'fullname': u'Peter M\xfcller',
                      'role': u'F\xfcrst',
                      'email': None},
-                   {'fullname': u'Franz M\xfcller',
-                    'role': None,
-                    'email': u'mueller@example.com'}],
+                    ],
         'other': [u'Hans M\xfcller', u'Heidi Muster']},
     'protocol': {'type': u'Protocol'}}
 
