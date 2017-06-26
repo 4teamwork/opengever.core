@@ -5,6 +5,7 @@ Changelog
 2017.3.0 (unreleased)
 ---------------------
 
+- CSRF: Update plone.protect to 3.0.20 and plone4.csrffixes to 1.1. [mathias.leimgruber]
 - Implement and enable redirector etag adapter. [phgross]
 - Add reference column to document listings. [tarnap]
 - Do not display templates without an assigned file in the CreateDocumentFromTemplate form. [tarnap]
