@@ -62,8 +62,8 @@ class TestMemberListing(FunctionalTestCase):
             'http://nohost/plone/opengever-meeting-committeecontainer/member-1',
             link.get('href'))
         self.assertEqual('contenttype-opengever-meeting-member', link.get('class'))
-        self.assertEqual(u'Peter M\xfcller', link.get('title'))
-        self.assertEqual(u'Peter M\xfcller', link.text)
+        self.assertEqual(u'M\xfcller Peter', link.get('title'))
+        self.assertEqual(u'M\xfcller Peter', link.text)
 
 
 class TestMemberView(FunctionalTestCase):
@@ -96,7 +96,7 @@ class TestMemberView(FunctionalTestCase):
     def test_site_title_is_member_title(self, browser):
         browser.login().open(self.member.get_url(self.container))
         self.assertEquals(
-            u'Peter M\xfcller \u2014 Plone site',
+            u'M\xfcller Peter \u2014 Plone site',
             browser.css('title').first.text)
 
     @browsing

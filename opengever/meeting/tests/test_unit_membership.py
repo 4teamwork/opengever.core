@@ -22,7 +22,7 @@ class TestUnitMembership(TestCase):
         membership = create(Builder('membership').having(
             committee=self.committee, member=self.member))
 
-        expected = "<Membership u'Peter M\\xfcller' in u'\\xdcbungskommission' 2010-01-01:2014-01-01>"
+        expected = "<Membership u'M\\xfcller Peter' in u'\\xdcbungskommission' 2010-01-01:2014-01-01>"
         self.assertEqual(expected, str(membership))
         self.assertEqual(expected, repr(membership))
 

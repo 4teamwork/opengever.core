@@ -136,7 +136,7 @@ class TestMeetingView(FunctionalTestCase):
     def test_participants_listing_precidency_is_existing(self, browser):
         browser.login().open(self.meeting.get_url())
         self.assertEquals(
-            [u'h\xfcgo Boss (boss@foo.ch)'],
+            [u'Boss h\xfcgo (boss@foo.ch)'],
             browser.css("#meeting_presidency + dd").text)
 
     @browsing
@@ -150,7 +150,7 @@ class TestMeetingView(FunctionalTestCase):
     def test_participants_listing_secretary_is_existing(self, browser):
         browser.login().open(self.meeting.get_url())
         self.assertEquals(
-            [u'Silvia Pangani (pangani@foo.ch)'],
+            [u'Pangani Silvia (pangani@foo.ch)'],
             browser.css("#meeting_secretary + dd").text)
 
     @browsing
@@ -164,7 +164,7 @@ class TestMeetingView(FunctionalTestCase):
     def test_participants_listing_participants_is_existing(self, browser):
         browser.login().open(self.meeting.get_url())
         self.assertEquals(
-            ['Peter Meter (meter@foo.ch) Hans Besen Roland Kuppler'],
+            ['Meter Peter (meter@foo.ch) Besen Hans Kuppler Roland'],
             browser.css("#meeting_participants + dd").text)
 
     @browsing

@@ -45,7 +45,7 @@ class TestPathBar(FunctionalTestCase):
         self.assertEqual(
             [u'Client1',
              u'opengever-meeting-committeecontainer',
-             u'Peter M\xfcller'],
+             u'M\xfcller Peter'],
             browser.css('#portal-breadcrumbs a').text)
 
     @browsing
@@ -65,6 +65,6 @@ class TestPathBar(FunctionalTestCase):
         self.assertEqual(
             [u'Client1',
              u'opengever-meeting-committeecontainer',
-             u'Peter M\xfcller',
-             u'Peter M\xfcller, Jan 01, 2014 - Jan 01, 2015'],
+             u'M\xfcller Peter',
+             u'M\xfcller Peter, Jan 01, 2014 - Jan 01, 2015'],
             browser.css('#portal-breadcrumbs a').text)
