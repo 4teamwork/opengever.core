@@ -25,13 +25,16 @@ from plone.directives import form
 from plone.namedfile import field
 from plone.namedfile.file import NamedBlobFile
 from z3c.form import validator
+from zc.relation.interfaces import ICatalog
 from zope import schema
 from zope.component import getMultiAdapter
+from zope.component import getUtility
 from zope.component import queryMultiAdapter
 from zope.globalrequest import getRequest
 from zope.interface import implements
 from zope.interface import Invalid
 from zope.interface import invariant
+from zope.intid.interfaces import IIntIds
 import logging
 import os.path
 
@@ -143,11 +146,26 @@ class Document(Item, BaseDocumentMixin):
         """
         return False
 
-    def related_items(self):
+    def related_items(self, bidirectional=False):
+
+        _related_items = []
+
         relations = IRelatedDocuments(self).relatedItems
+
         if relations:
-            return [rel.to_object for rel in relations]
-        return []
+            _related_items += [rel.to_object for rel in relations]
+
+        if bidirectional:
+            catalog = getUtility(ICatalog)
+            doc_id = getUtility(IIntIds).getId(aq_inner(self))
+            _related_items += [
+                r.from_object
+                for r in catalog.findRelations(
+                    {'to_id': doc_id, 'from_attribute': 'relatedItems'}
+                )
+            ]
+
+        return _related_items
 
     def getIcon(self, relative_to_portal=1):
         return self.get_mimetype_icon(relative_to_portal)

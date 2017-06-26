@@ -1,5 +1,4 @@
 from AccessControl import getSecurityManager
-from Acquisition import aq_inner
 from five import grok
 from ftw import bumblebee
 from opengever.base import _ as ogbmf
@@ -24,11 +23,9 @@ from plone.i18n.normalizer.interfaces import IIDNormalizer
 from Products.CMFCore.utils import getToolByName
 from Products.MimetypesRegistry.common import MimeTypeException
 from z3c.form.browser.checkbox import SingleCheckBoxWidget
-from zc.relation.interfaces import ICatalog
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import getUtility
 from zope.component import queryMultiAdapter
-from zope.intid.interfaces import IIntIds
 
 
 class BaseRow(object):
@@ -201,19 +198,15 @@ class Overview(DisplayForm, GeverTabMixin, ActionButtonRendererMixin):
 
     def linked_documents(self):
         """Returns a list documents related to the context document."""
-        catalog = getUtility(ICatalog)
-        doc_id = getUtility(IIntIds).getId(aq_inner(self.context))
-        related_objects = self.context.related_items() + [
-            r.from_object
-            for r in catalog.findRelations(
-                {'to_id': doc_id, 'from_attribute': 'relatedItems'}
-            )
-        ]
+
         return [{
             'class': self.get_css_class(obj),
             'title': obj.Title(),
             'url': obj.absolute_url(),
-        } for obj in sorted(related_objects, key=lambda obj: obj.Title())]
+        } for obj in sorted(
+            self.context.related_items(bidirectional=True),
+            key=lambda obj: obj.Title()
+        )]
 
     def is_outdated(self, submitted_document):
         return not submitted_document.is_up_to_date(self.context)
