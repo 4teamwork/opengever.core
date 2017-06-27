@@ -9,7 +9,8 @@ class UseRelatedDocumentsProxyView(UpgradeStep):
     old_action_id = 'relateddocuments'
     new_action_id = 'relateddocuments-proxy'
 
-    type_names = ['opengever.task.task']
+    type_names = ['opengever.task.task',
+                  'opengever.inbox.forwarding']
 
     def __call__(self):
         self.install_upgrade_profile()
