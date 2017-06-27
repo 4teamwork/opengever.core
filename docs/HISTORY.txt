@@ -5,6 +5,7 @@ Changelog
 2017.3.0 (unreleased)
 ---------------------
 
+- XSS: Escape html for manual journal entries' comment. [tarnap]
 - Allow move items in the documents tab within the templatefolder. [elioschmutz]
 - XSS: Escape html for Dossier title on task listing. [mathias.leimgruber]
 - XSS: Escape html for the breadcrumbs part for get_link on tasks. [mathias.leimgruber]

@@ -4,6 +4,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages import statusmessages
 from ftw.testing import freeze
 from opengever.journal.tests.utils import get_journal_entry
 from opengever.testing import FunctionalTestCase
@@ -102,6 +103,23 @@ class TestJournalTab(FunctionalTestCase):
 
         browser.login().open(dossier_b, view=u'tabbedview_view-journal')
         self.assertEquals([], browser.css('.add_journal_entry'))
+
+    @browsing
+    def test_add_journal_entry_is_xss_safe(self, browser):
+        dossier = create(Builder('dossier'))
+
+        browser.login().open(dossier, view=u'add-journal-entry')
+        browser.fill({
+            'Category': 'information',
+            'Comment': '<img src="http://not.found/" onerror="script:alert(\'XSS\');" />'
+        })
+        browser.css('[name="form.buttons.add"]').first.click()
+        statusmessages.assert_no_error_messages()
+
+        browser.open(dossier, view=u'tabbedview_view-journal')
+        self.assertIn(
+            '&lt;img src="http://not.found/" onerror="script:alert(\'XSS\');" /&gt;',
+            browser.contents)
 
 
 class TestJournalTabSorting(FunctionalTestCase):
