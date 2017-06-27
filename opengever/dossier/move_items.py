@@ -1,4 +1,6 @@
-from Acquisition import aq_inner, aq_parent
+from Acquisition import aq_chain
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from five import grok
 from OFS.CopySupport import CopyError, ResourceLockedError
 from opengever.base.source import RepositoryPathSourceBinder
@@ -6,10 +8,14 @@ from opengever.document.document import IDocumentSchema
 from opengever.dossier import _
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
+from opengever.dossier.templatefolder.interfaces import ITemplateFolder
 from opengever.globalindex.model.task import Task
 from plone.dexterity.interfaces import IDexterityContainer
+from plone.formwidget.contenttree import ObjPathSourceBinder
 from plone.z3cform import layout
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form import form, field
 from z3c.form import validator
@@ -47,6 +53,22 @@ class IMoveItemsSchema(Interface):
         )
     #We Use TextLine here because Tuple and List have no hidden_mode.
     request_paths = schema.TextLine(title=u"request_paths")
+
+
+class IMoveTemplateItemsSchema(IMoveItemsSchema):
+    destination_folder = RelationChoice(
+        title=_('label_destination', default="Destination"),
+        description=_('help_destination',
+                      default="Live Search: search the Plone Site"),
+        source=ObjPathSourceBinder(
+            navigation_tree_query={
+                'object_provides': [
+                    ITemplateFolder.__identifier__,
+                    IDossierTemplateMarker.__identifier__,
+                    ]}
+            ),
+        required=True,
+        )
 
 
 class MoveItemsForm(form.Form):
@@ -165,6 +187,10 @@ class MoveItemsForm(form.Form):
                 msg, type='error')
 
 
+class MoveTemplateItemsForm(MoveItemsForm):
+    fields = field.Fields(IMoveTemplateItemsSchema)
+
+
 class MoveItemsFormView(layout.FormWrapper, grok.View):
     """ View to move selected items into another location
     """
@@ -175,12 +201,16 @@ class MoveItemsFormView(layout.FormWrapper, grok.View):
     form = MoveItemsForm
 
     def __init__(self, context, request):
+        if self.within_template_folder(context):
+            self.form = MoveTemplateItemsForm
+
         layout.FormWrapper.__init__(self, context, request)
         grok.View.__init__(self, context, request)
 
     def assert_valid_container_state(self):
         container = self.context
-        if IDossierMarker.providedBy(container) and not container.is_open():
+        if not self.within_template_folder(container) and \
+                IDossierMarker.providedBy(container) and not container.is_open():
             msg = _(u'Can only move objects from open dossiers!')
             IStatusMessage(self.request).addStatusMessage(
                 msg, type='error')
@@ -205,6 +235,11 @@ class MoveItemsFormView(layout.FormWrapper, grok.View):
                 return self.request.RESPONSE.redirect(
                     '%s#documents' % self.context.absolute_url())
         return super(MoveItemsFormView, self).render()
+
+    def within_template_folder(self, context):
+        """ This method checks if the current context is within a templatefolder.
+        """
+        return bool(filter(ITemplateFolder.providedBy, aq_chain(context)))
 
 
 class NotInContentTypes(Invalid):

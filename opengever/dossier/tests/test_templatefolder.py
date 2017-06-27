@@ -740,7 +740,7 @@ class TestTemplateFolderListings(FunctionalTestCase):
 
         self.assertItemsEqual(
             ['Copy Items', 'Checkin with comment', 'Checkin without comment',
-             'Export selection', 'trashed', 'Export as Zip'],
+             'Export selection', 'Move Items', 'trashed', 'Export as Zip'],
             browser.css('.actionMenuContent li').text)
 
     @browsing

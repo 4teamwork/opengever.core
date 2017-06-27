@@ -43,7 +43,6 @@ class TemplateFolderDocuments(Documents):
         'checkin',
         'checkout',
         'create_task',
-        'move_items',
         'send_as_email',
         'submit_additional_documents',
     ]
