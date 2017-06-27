@@ -79,17 +79,18 @@ class OpengeverContentFixture(object):
         self.repo0 = self.register('branch_repository', create(
             Builder('repository').within(self.root)
             .having(title_de=u'F\xfchrung',
-                    title_fr=u'Direction')))
+                    title_fr=u'Direction',
+                    description=u'Alles zum Thema F\xfchrung.')))
 
         self.repo00 = self.register('leaf_repository', create(
             Builder('repository').within(self.repo0)
             .having(title_de=u'Vertr\xe4ge und Vereinbarungen',
                     title_fr=u'Contrats et accords')))
 
-        self.repo1 = create(
+        self.repo1 = self.register('empty_repository', create(
             Builder('repository').within(self.root)
             .having(title_de=u'Rechnungspr\xfcfungskommission',
-                    title_fr=u'Commission de v\xe9rification'))
+                    title_fr=u'Commission de v\xe9rification')))
 
     @staticuid()
     def create_templates(self):

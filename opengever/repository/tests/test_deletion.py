@@ -1,121 +1,101 @@
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
-from ftw.testbrowser.pages.statusmessages import assert_message
+from ftw.testbrowser.pages import statusmessages
 from opengever.repository.deleter import RepositoryDeleter
-from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from plone import api
 from zExceptions import Unauthorized
 
 
-class TestRepositoryDeleter(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestRepositoryDeleter, self).setUp()
-
-        self.repository_root, self.repository = create(
-            Builder('repository_tree'))
-
-        self.grant('Administrator')
+class TestRepositoryDeleter(IntegrationTestCase):
 
     def test_deletion_is_not_allowed_when_repository_is_not_empty(self):
-        create(Builder('dossier').within(self.repository))
-        deleter = RepositoryDeleter(self.repository)
-
-        self.assertFalse(deleter.is_deletion_allowed())
+        self.login(self.administrator)
+        self.assertTrue(self.branch_repository.objectIds(),
+                        'Precondition: Assumed repofolder to have children.')
+        self.assertFalse(RepositoryDeleter(self.branch_repository)
+                         .is_deletion_allowed())
 
     def test_deletion_is_allowed_when_repository_is_empty(self):
-        deleter = RepositoryDeleter(self.repository)
-
-        self.assertTrue(deleter.is_deletion_allowed())
+        self.login(self.administrator)
+        self.assertFalse(self.empty_repository.objectIds(),
+                         'Precondition: Assumed repofolder to have no children.')
+        self.assertTrue(RepositoryDeleter(self.empty_repository)
+                        .is_deletion_allowed())
 
     def test_repository_deletion(self):
-        deleter = RepositoryDeleter(self.repository)
-        deleter.delete()
+        self.login(self.administrator)
+        parent = aq_parent(aq_inner(self.empty_repository))
+        repo_id = self.empty_repository.getId()
 
-        self.assertEquals([], self.repository_root.listFolderContents())
+        self.assertIn(repo_id, parent.objectIds())
+        RepositoryDeleter(self.empty_repository).delete()
+        self.assertNotIn(repo_id, parent.objectIds())
 
-    def test_repository_deletion_raises_unauthorized_when_preconditions_not_satisfied(self):
-        create(Builder('dossier').within(self.repository))
-        deleter = RepositoryDeleter(self.repository)
-
-        with self.assertRaises(Unauthorized):
-            deleter.delete()
-
-
-class TestRepositoryDeletion(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestRepositoryDeletion, self).setUp()
-
-        self.repository_root, self.repository = create(
-            Builder('repository_tree'))
-
-        self.grant('Administrator')
-
-    @browsing
-    def test_deletion_is_only_be_possible_with_admin_or_manager_role(self, browser):
+    def test_deletion_denied_without_admin_or_manager_role(self):
         acl_users = api.portal.get_tool('acl_users')
         valid_roles = list(acl_users.portal_role_manager.valid_roles())
         valid_roles.remove('Administrator')
         valid_roles.remove('Manager')
-        self.grant(*valid_roles)
 
+        user = create(Builder('user').with_roles(*valid_roles))
+        self.login(user)
         with self.assertRaises(Unauthorized):
-            api.content.delete(obj=self.repository)
+            api.content.delete(obj=self.empty_repository)
 
     @browsing
-    def test_delete_action_is_not_available_when_preconditions_not_satisfied(self, browser):
-        create(Builder('dossier').within(self.repository))
-        browser.login().open(self.repository)
-        self.assertEquals(
-            ['Prefix Manager',
-             'Properties',
-             'Sharing',
-             'repositoryfolder-transition-inactivate'],
-            browser.css('#plone-contentmenu-actions .actionMenuContent a').text)
+    def test_delete_action_is_only_available_when_preconditions_satisfied(
+            self, browser):
+        self.login(self.administrator, browser)
 
-    @browsing
-    def test_delete_action_is_available_when_preconditions_satisfied(self, browser):
-        browser.login().open(self.repository)
-        self.assertEquals(
-            ['Delete',
-             'Prefix Manager',
-             'Properties',
-             'Sharing',
-             'repositoryfolder-transition-inactivate'],
-            browser.css('#plone-contentmenu-actions .actionMenuContent a').text)
+        browser.open(self.empty_repository)
+        self.assertIn(
+            'Delete',
+            browser.css('#plone-contentmenu-actions .actionMenuContent a').text,
+            'Expected "Delete" action to be visible on {!r}.'.format(
+                self.empty_repository))
+
+        browser.open(self.branch_repository)
+        self.assertNotIn(
+            'Delete',
+            browser.css('#plone-contentmenu-actions .actionMenuContent a').text,
+            'Expected "Delete" action to be invisible on {!r}.'.format(
+                self.branch_repository))
 
     @browsing
     def test_raise_unauthorized_when_preconditions_not_satisfied(self, browser):
-        create(Builder('dossier').within(self.repository))
-        # XXX This causes an infinite redirection loop between ++add++ and
+        self.login(self.administrator, browser)
+        # This causes an infinite redirection loop between ++add++ and
         # reqiure_login. By enabling exception_bubbling we can catch the
         # Unauthorized exception and end the infinite loop.
         browser.exception_bubbling = True
         with self.assertRaises(Unauthorized):
-        # with browser.expect_unauthorized():
-            browser.login().open(self.repository, view='delete_repository')
+            browser.open(self.branch_repository, view='delete_repository')
 
     @browsing
     def test_cancel_redirects_back_to_repository(self, browser):
-        browser.login().open(self.repository, view='delete_repository')
-        browser.css('#form-buttons-cancel').first.click()
-
-        self.assertEquals(self.repository.absolute_url(), browser.url)
+        self.login(self.administrator, browser)
+        browser.open(self.empty_repository, view='delete_repository')
+        browser.click_on('Cancel')
+        self.assertEquals(self.empty_repository, browser.context)
 
     @browsing
     def test_submit_redirects_to_parent(self, browser):
-        browser.login().open(self.repository, view='delete_repository')
-        browser.css('#form-buttons-delete').first.click()
-
-        self.assertEquals(self.repository_root.absolute_url(), browser.url)
-        assert_message("The repository have been successfully deleted.")
+        self.login(self.administrator, browser)
+        browser.open(self.empty_repository, view='delete_repository')
+        browser.click_on('Delete')
+        statusmessages.assert_message(
+            'The repository have been successfully deleted.')
+        self.assertEquals(self.repository_root, browser.context)
 
     @browsing
     def test_form_is_csrf_safe(self, browser):
+        self.login(self.administrator, browser)
         url = '{}/delete_repository?form.buttons.delete=true'.format(
-            self.repository.absolute_url())
+            self.empty_repository.absolute_url())
 
         with browser.expect_unauthorized():
-            browser.login().open(url)
+            browser.open(url)

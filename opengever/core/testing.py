@@ -436,6 +436,10 @@ class ContentFixtureLayer(OpengeverFixture):
         session.current_session = session.BuilderSession()
         session.current_session.session = create_session()
         super(ContentFixtureLayer, self).setUpPloneSite(portal)
+
+        portal.portal_languages.use_combined_language_codes = True
+        portal.portal_languages.addSupportedLanguage('de-ch')
+
         # Avoid circular imports:
         from opengever.testing.fixtures import OpengeverContentFixture
         setRequest(portal.REQUEST)
