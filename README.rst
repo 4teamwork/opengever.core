@@ -353,6 +353,9 @@ Once a new policy has been generated the following things need to be added manua
 Tests
 -----
 
+Parallelisation
+~~~~~~~~~~~~~~~
+
 Use ``bin/mtest`` for running all test in multiple processes. Alternatively ``bin/test`` runs the tests in sequence.
 The multi process script distributes the packages (e.g. ``opengever.task``, ``opengever.base``, etc) into multiple processes,
 trying to balance the amount of test suites, so that it speeds up the test run.
