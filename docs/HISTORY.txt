@@ -6,7 +6,8 @@ Changelog
 ---------------------
 
 - Allow move items in the documents tab within the templatefolder. [elioschmutz]
-- CSRF: Escape html for the breadcrumbs part for get_link on tasks. [mathias.leimgruber]
+- XSS: Escape html for Dossier title on task listing. [mathias.leimgruber]
+- XSS: Escape html for the breadcrumbs part for get_link on tasks. [mathias.leimgruber]
 - Implement and enable redirector etag adapter. [phgross]
 - Add reference column to document listings. [tarnap]
 - Do not display templates without an assigned file in the CreateDocumentFromTemplate form. [tarnap]
