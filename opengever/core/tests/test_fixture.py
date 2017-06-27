@@ -25,21 +25,21 @@ class TestTestingFixture(IntegrationTestCase):
         browser.login(self.administrator).open(self.repository_root)
         self.assertEquals('Ordnungssystem', plone.first_heading())
 
-    def test_leaf_repository_has_no_subrepositories(self):
+    def test_leaf_repofolder_has_no_subrepositories(self):
         self.assertFalse(
             filter(IRepositoryFolder.providedBy,
-                   self.leaf_repository.objectValues()),
+                   self.leaf_repofolder.objectValues()),
             'The "leaf repository" {!r} should not have sub'
             ' repositories as it wouldnt be a "leaf" anymore.'.format(
-                self.leaf_repository))
+                self.leaf_repofolder))
 
-    def test_branch_repository_has_subrepositories(self):
+    def test_branch_repofolder_has_subrepositories(self):
         self.assertTrue(
             filter(IRepositoryFolder.providedBy,
-                   self.branch_repository.objectValues()),
-            'The "branch repository" {!r} must have sub'
+                   self.branch_repofolder.objectValues()),
+            'The "branch repository folder" {!r} must have sub'
             ' repositories as it wouldnt be a "branch" anymore.'.format(
-                self.branch_repository))
+                self.branch_repofolder))
 
     def test_dossiers(self):
         """This test makes sure that the objects are not acceidentally

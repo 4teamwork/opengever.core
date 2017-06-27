@@ -8,12 +8,12 @@ class TestRepositoryFolderFactoryMenu(IntegrationTestCase):
     @browsing
     def test_businesscase_dossier_is_addable_by_default(self, browser):
         self.login(self.regular_user, browser)
-        browser.open(self.leaf_repository)
+        browser.open(self.leaf_repofolder)
         self.assertIn('Business Case Dossier', factoriesmenu.addable_types())
 
     @browsing
     def test_businesscase_dossier_is_not_addable_when_disallowed(self, browser):
         self.login(self.regular_user, browser)
-        self.leaf_repository.allow_add_businesscase_dossier = False
-        browser.open(self.leaf_repository)
+        self.leaf_repofolder.allow_add_businesscase_dossier = False
+        browser.open(self.leaf_repofolder)
         self.assertNotIn('Business Case Dossier', factoriesmenu.addable_types())

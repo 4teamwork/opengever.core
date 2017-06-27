@@ -12,13 +12,13 @@ class TestReferencePrefixManager(IntegrationTestCase):
     def setUp(self):
         super(TestReferencePrefixManager, self).setUp()
         # move repo1 to prefix 3 which leaves prefix 1 unused
-        manager = ReferenceNumberPrefixAdpater(self.branch_repository)
-        manager.set_number(self.leaf_repository, 3)
+        manager = ReferenceNumberPrefixAdpater(self.branch_repofolder)
+        manager.set_number(self.leaf_repofolder, 3)
 
     @browsing
     def test_list_and_unlock_unused_prefixes(self, browser):
         self.login(self.administrator, browser)
-        browser.open(self.branch_repository, view='referenceprefix_manager')
+        browser.open(self.branch_repofolder, view='referenceprefix_manager')
         self.assertEquals(
             [['1', u'Vertr\xe4ge und Vereinbarungen', 'Unlock'],
              ['3', u'Vertr\xe4ge und Vereinbarungen', 'In use']],
@@ -32,15 +32,15 @@ class TestReferencePrefixManager(IntegrationTestCase):
             browser.css('#reference_prefix_manager_table').first.lists())
 
     def test_manager_throws_error_when_delete_request_for_used_prefix_occurs(self):
-        manager = ReferenceNumberPrefixAdpater(self.branch_repository)
+        manager = ReferenceNumberPrefixAdpater(self.branch_repofolder)
         with self.assertRaises(Exception):
             manager.free_number(19)
 
     @browsing
     def test_manager_handles_deleted_repositories_correctly(self, browser):
         self.login(self.administrator, browser)
-        api.content.delete(obj=self.leaf_repository)
-        browser.open(self.branch_repository, view='referenceprefix_manager')
+        api.content.delete(obj=self.leaf_repofolder)
+        browser.open(self.branch_repofolder, view='referenceprefix_manager')
         self.assertEquals(
             [['1', '-- Already removed object --', 'Unlock'],
              ['3', '-- Already removed object --', 'Unlock']],
@@ -49,7 +49,7 @@ class TestReferencePrefixManager(IntegrationTestCase):
     @browsing
     def test_manager_shows_default_message_when_no_repository_available(self, browser):
         self.login(self.administrator, browser)
-        browser.open(self.leaf_repository, view='referenceprefix_manager')
+        browser.open(self.leaf_repofolder, view='referenceprefix_manager')
 
         self.assertEquals(
             'No nested repositorys available.',
@@ -59,12 +59,12 @@ class TestReferencePrefixManager(IntegrationTestCase):
     def test_manager_is_hidden_from_users_without_permission(self, browser):
         self.login(self.regular_user, browser)
         with browser.expect_unauthorized():
-            browser.open(self.branch_repository, view='referenceprefix_manager')
+            browser.open(self.branch_repofolder, view='referenceprefix_manager')
 
     @browsing
     def test_unlock_actions_are_journalized(self, browser):
         self.login(self.administrator, browser)
-        browser.open(self.branch_repository, view='referenceprefix_manager')
+        browser.open(self.branch_repofolder, view='referenceprefix_manager')
         browser.click_on('Unlock')
         statusmessages.assert_no_error_messages()
 
@@ -77,7 +77,7 @@ class TestReferencePrefixManager(IntegrationTestCase):
     @browsing
     def test_error_while_unlock_shows_statusmessage(self, browser):
         self.login(self.administrator, browser)
-        browser.open(self.branch_repository,
+        browser.open(self.branch_repofolder,
                      view='referenceprefix_manager?prefix=3')
         statusmessages.assert_message(
             'The reference you try to unlock is still in use.')
