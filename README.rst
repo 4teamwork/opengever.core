@@ -395,38 +395,6 @@ Then you can use the ``Builder`` function in your test cases:
 Note that when using the ``OPENGEVER_FUNCTIONAL_TESTING`` Layer the ``Builder`` will automatically do a ``transaction.commit()`` when ``create()`` is called.
 
 
-Browser API
-~~~~~~~~~~~
-
-The center of the `Browser API` is the ``OGBrowser`` class. It's a
-simple subclass of ``plone.testing.z2.Browser`` and the easiest way to
-use it is to extend ``opengever.testing.FunctionalTestCase``:
-
-.. code:: python
-
-    from opengever.testing import FunctionalTestCase
-
-
-    class TestExample(FunctionalTestCase):
-        use_browser = True
-
-        def test_first_example(self):
-          self.browser # => instance of OGBrowser
-
-Now you can use the ``self.browser`` instance:
-
-.. code:: python
-
-    self.browser.fill({'Title': "My first Dossier",
-                       'Description': "This is my first Dossier"})
-    self.browser.click('Save')
-    self.browser.assert_url("http://nohost/plone/dossier-1")
-
-Have a look at the `opengever.testing.browser module
-<https://github.com/4teamwork/opengever.core/blob/master/opengever/testing/browser.py>`_
-to see the complete API.
-
-
 Testing Inbound Mail
 --------------------
 
