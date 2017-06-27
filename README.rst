@@ -368,6 +368,210 @@ The ``bin/mtest`` script can be configured with environment variables:
   The colorization is useful for the visual separation of the output of the various processes,
   but it is not useful in a environment without color support.
 
+Functional or integration testing?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We are shifting the tests from the older functional testing layer to the newer
+integration testing layer.
+
+**Integration testing:**
+
+- Should be used for new tests!
+- Comes with a preinstalled `testing fixtures`_.
+- Transactions are disabled for isolation purposes: `transaction.commit` is not allowed in tests.
+- Uses ``ftw.testbrowser``'s ``TraversalDriver``.
+
+**Functional testing:**
+
+- Should *not be used* for new tests, when possible.
+- Is factory-based, using ``ftw.builder``.
+- Uses transactions.
+- Limited / slow database isolation: a fresh setup is necessary for each test.
+
+
+Example integration test with browser:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code:: python
+
+   from ftw.testbrowser import browsing
+   from ftw.testbrowser.pages import statusmessages
+   from opengever.testing import IntegrationTestCase
+
+   class TestExampleView(IntegrationTestCase):
+
+       @browsing
+       def test_example_view(self, browser):
+           self.login(self.dossier_responsible)
+           browser.login(self.dossier_responsible)
+           browser.open(self.dossier, view='example_view')
+           statusmessages.assert_no_error_messages()
+
+
+Best practices
+~~~~~~~~~~~~~~
+
+These best practices apply to the new **integration testing** layer.
+
+Do not commit the transaction
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Committing the transaction will break isolation.
+The testing layer will prevent you from interacting with the transaction.
+
+Use the fixture objects
+^^^^^^^^^^^^^^^^^^^^^^^
+
+The `testing fixtures`_ create content objects, users, groups and client
+configurations (admin units, org units) which are available for all tests.
+They can and should be modified to the needs of the test.
+
+Avoid creating objects (with ``ftw.builder``)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Creating objects with ``ftw.builder`` or with ``ftw.testbrowser`` is expensive
+because it takes a moment to index the object.
+Therefore we want to avoid creating unnecessary objects within the tests
+so that the tests are faster overall.
+
+Tests which have the job to test object creation (e.g. through the browser)
+obviously need to actually create an object, all other tests should try to
+reuse objects from the fixture and modify them as needed.
+
+Use users from fixture
+^^^^^^^^^^^^^^^^^^^^^^
+
+The fixture provides a set of standard users which should be used in tests.
+Do not use ``plone.app.testing``'s test user with global roles as it does
+not reflect properly how the security model of GEVER works.
+In order to test features which can only be executed by the system or by a
+``Manager``-user, the ``plone.app.testing``'s site owner may be used.
+
+Login
+^^^^^
+
+Integration tests start with logging in / assuming the security context of a
+user with minimal privileges (``self.regular_user``) on the server side.
+On the client side (browser), no user is logged in by default (Anonymous).
+
+Use the ``self.login`` method for setting up the needed security context
+within the test code.
+As a shorthand we can pass the browser instance into ``self.login``, which
+will then log in the browser too.
+
+.. code:: python
+
+   from opengever.testing import IntegrationTestCase
+   from ftw.testbrowser import browsing
+
+   class TestExampleView(IntegrationTestCase):
+
+       @browsing
+       def test_label(self, browser):
+           self.login(self.administrator, browser)
+
+
+Do not assert ``browser.contents``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The statement `self.assertIn('The label', browser.contents)` will print the
+complete HTML document as failure message.
+This is distracting and not useful at all.
+
+Instead you should select specific nodes and do assertions on those nodes, e.g.
+
+.. code:: python
+
+   from opengever.testing import IntegrationTestCase
+   from ftw.testbrowser import browsing
+
+   class TestExampleView(IntegrationTestCase):
+
+       @browsing
+       def test_label(self, browser):
+           self.assertEquals('The label',
+                             browser.css('label.foo').first.text)
+
+This allows the browser to help when print a nice error message when the node
+was not found:
+``NoElementFound: Empty result set: browser.css("label.foo") did not match any nodes.``
+
+When the view does not return a complete HTML document but, for example, a status
+only (``OK``), or it is some kind of API endpoint, ``browser.contents`` may be
+asserted.
+
+
+Use ``tearDown`` carefully
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Do not tear down changes which are taken care of by some kind of isolation:
+
+- Do *not* tear down ZODB changes: the ZODB is isolated by ``plone.app.testing``.
+- Do *not* tear down SQL changes: we take care of that in the SQL testing layer
+  with savepoints / rollbacks.
+- Do *not* tear down component registry changes (e.g. new adapters, utilities,
+  event handlers) as this is taken care of by the
+  `COMPONENT_REGISTRY_ISOLATION`_ layer.
+- *Do* tear down modifications in environment variables (``os.environ``).
+- *Do* tear down modifications stored in module globals (e.g.
+  transmogrifier sections).
+
+Use guard assertions
+^^^^^^^^^^^^^^^^^^^^
+
+When your test expects a specific state in order to work properly, this state
+should be ensured by using guard assertions.
+
+.. code:: python
+
+    def test_closing_dossier(self):
+        self.assertTrue(self.dossier.is_open(),
+                        'Precondition: assumed dossier to be open')
+        self.dossier.close()
+        self.assertFalse(self.dossier.is_open())
+
+If the ``self.dossier`` is changed to be not open by default anymore, the failure
+should tell us that a precondition was no longer met rather than implying that
+the ``close()`` method is broken.
+The statement also acts as "given"-statement and a reader can easily figure out
+what the precondition is, because it is visually separated.
+
+Alternatively a precondition can be ensured by setting the state of the object:
+
+.. code:: python
+
+    def test_title_is_journalized_on_action(self):
+        self.dossier.title = u'The dossier'
+        action(self.dossier)
+        self.assertEquals(u'The dossier',
+                          last_journal_entry(self.dossier).title)
+
+Activating feature flags
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+Feature flags can by activated test-case-wide by setting a tuple of all
+required flags:
+
+.. code:: python
+
+    class TestDossierTemplate(IntegrationTestCase):
+        features = ('dossiertemplate',)
+
+When a feature should not be activated test-case-wide it can be activated
+within a single test:
+
+.. code:: python
+
+    class TestTemplates(IntegrationTestCase):
+
+        def test_adding_dossier_template(self):
+            self.activate_feature('meeting')
+
+
+See the `list of feature flags <https://github.com/4teamwork/opengever.core/blob/master/opengever/testing/integration_test_case.py>`_.
+
+
+
 Builder API
 ~~~~~~~~~~~
 
@@ -550,3 +754,7 @@ Example configuration:
           }
       }
   ]
+
+
+.. _testing fixtures: https://github.com/4teamwork/opengever.core/blob/master/opengever/testing/fixtures.py
+.. _COMPONENT_REGISTRY_ISOLATION: https://github.com/4teamwork/ftw.testing#component-registry-isolation-layer
