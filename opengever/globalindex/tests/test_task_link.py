@@ -145,6 +145,20 @@ class TestTaskLinkGeneration(FunctionalTestCase):
             '<span class="contenttype-opengever-task-task">Foo &lt;b onmouseover=alert(\'Wufff!\')&gt;click me!&lt;/b&gt;</span>',
             tostring(link_tag))
 
+    def test_link_breadcrumb_part_is_xss_safe(self):
+        link = self.add_task_and_get_link(
+            breadcrumb_title='0 Allg. > <b>4tw</b> > Task')
+
+        link_tag = link.xpath(css_to_xpath('a'))[0]
+
+        #INFO: link_tag.attr['titles'] automatically decodes html entities
+        self.assertEquals(
+            '<a href="http://example.com/qux/dossier-1/task-2" '
+            'title="[Client1] &gt; 0 Allg. &gt; &lt;b&gt;4tw&lt;/b&gt; &gt; '
+            'Task"><span class="contenttype-opengever-task-task">Do it!</span>'
+            '</a>  ',
+            tostring(link_tag))
+
     def test_handles_non_ascii_characters_correctly(self):
         link = self.add_task_and_get_link(title=u'D\xfc it')
         span_tag = link.xpath(css_to_xpath('a span'))[0]
