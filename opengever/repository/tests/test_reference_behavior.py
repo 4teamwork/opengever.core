@@ -14,13 +14,13 @@ class TestReferenceBehavior(IntegrationTestCase):
 
     def test_repositories_provide_marker_interface(self):
         self.assertTrue(IReferenceNumberPrefixMarker.providedBy(
-            self.leaf_repository))
-        verifyObject(IReferenceNumberPrefixMarker, self.leaf_repository)
+            self.leaf_repofolder))
+        verifyObject(IReferenceNumberPrefixMarker, self.leaf_repofolder)
 
     @browsing
     def test_set_next_reference_number_as_default_value(self, browser):
         self.login(self.administrator, browser)
-        browser.open(self.branch_repository)
+        browser.open(self.branch_repofolder)
         factoriesmenu.add('RepositoryFolder')
         self.assertEquals('2', browser.find('Reference Prefix').value)
 

@@ -76,18 +76,18 @@ class OpengeverContentFixture(object):
                                        ('Reader', 'Contributor', 'Editor'))
         self.root.reindexObjectSecurity()
 
-        self.repo0 = self.register('branch_repository', create(
+        self.repofolder0 = self.register('branch_repofolder', create(
             Builder('repository').within(self.root)
             .having(title_de=u'F\xfchrung',
                     title_fr=u'Direction',
                     description=u'Alles zum Thema F\xfchrung.')))
 
-        self.repo00 = self.register('leaf_repository', create(
-            Builder('repository').within(self.repo0)
+        self.repofolder00 = self.register('leaf_repofolder', create(
+            Builder('repository').within(self.repofolder0)
             .having(title_de=u'Vertr\xe4ge und Vereinbarungen',
                     title_fr=u'Contrats et accords')))
 
-        self.repo1 = self.register('empty_repository', create(
+        self.repofolder1 = self.register('empty_repofolder', create(
             Builder('repository').within(self.root)
             .having(title_de=u'Rechnungspr\xfcfungskommission',
                     title_fr=u'Commission de v\xe9rification')))
@@ -114,14 +114,14 @@ class OpengeverContentFixture(object):
 
         self.register('committee', self.create_committee(
             title=u'Rechnungspr\xfcfungskommission',
-            repository_folder=self.repo1,
+            repository_folder=self.repofolder1,
             group_id='committee_rpk_group',
             members=[self.administrator]))
 
     @staticuid()
     def create_treaty_dossiers(self):
         dossier = self.register('dossier', create(
-            Builder('dossier').within(self.repo00)
+            Builder('dossier').within(self.repofolder00)
             .titled(u'Vertr\xe4ge mit der kantonalen Finanzverwaltung')
             .having(description=u'Alle aktuellen Vertr\xe4ge mit der'
                     u' kantonalen Finanzverwaltung sind hier abzulegen.'
@@ -133,7 +133,7 @@ class OpengeverContentFixture(object):
                       create(Builder('dossier').within(dossier).titled(u'2016')))
 
         self.register('archive_dossier', create(
-            Builder('dossier').within(self.repo00)
+            Builder('dossier').within(self.repofolder00)
             .titled(u'Archiv Vertr\xe4ge')
             .having(description=u'Archiv der Vertr\xe4ge vor 2016.',
                     keywords=(u'Finanzverwaltung', u'Vertr\xe4ge'),
