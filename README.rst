@@ -211,6 +211,73 @@ with these contents:
 respective user in our development LDAP tree.
 
 
+Setting up a multi-admin environment
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you need a multi-admin environment, make sure the basic development dependencies above are satisfied and run the following steps:
+
+Pleace note that the default database-name for multi-admin environment is ``opengever-multi-admin``
+
+.. code::
+
+    $ git clone git@github.com:4teamwork/opengever.core.git
+    $ cd opengever.core
+    $ ln -s development-multi-admin.cfg buildout.cfg
+    $ python bootstrap.py
+    $ bin/buildout
+    $ bin/instance fg
+
+Go to ``http://localhost:8080/manage_main`` and click on ``Install OneGov GEVER``,
+
+For the first admin-unit choose the following settings:
+
++----------------------------------+------------------------------------------+
+| Property                         | Value                                    |
++==================================+==========================================+
+| Deployment profile               | Choose the **Finanzdirektion (FD) (DEV)**|
++----------------------------------+------------------------------------------+
+| LDAP configuration profile       | OneGovGEVER-Demo LDAP                    |
++----------------------------------+------------------------------------------+
+| Import users from LDAP into OGDS | **True**                                 |
++----------------------------------+------------------------------------------+
+| Development mode                 | False                                    |
++----------------------------------+------------------------------------------+
+| Purge SQL                        | **True**                                 |
++----------------------------------+------------------------------------------+
+
+For the second admin-unit choose the following settings:
+
++----------------------------------+--------------------------------------+
+| Property                         | Value                                |
++==================================+======================================+
+| Deployment profile               | Choose the **Ratskanzlei (RK) (DEV)**|
++----------------------------------+--------------------------------------+
+| LDAP configuration profile       | OneGovGEVER-Demo LDAP                |
++----------------------------------+--------------------------------------+
+| Import users from LDAP into OGDS | **False**                            |
++----------------------------------+--------------------------------------+
+| Development mode                 | False                                |
++----------------------------------+--------------------------------------+
+| Purge SQL                        | **False**                            |
++----------------------------------+--------------------------------------+
+
+After installing both admin-units, you have to set a shared session-secret to share login-sessions between admin-units. To do this, do the following steps for both admin-units:
+
+- Goto: ``{admin-unit}/acl_users/session/manage_secret``
+- Set a ``Shared secret``
+
+Lastly you have to change the admin-unit urls in the database to localhost.
+
+- Table: ``admin_units``
+- Properties: ``site_url`` and ``public_url``
+
+PostgreSQL-Example:
+
+.. code:: postgresql
+
+    UPDATE admin_units SET site_url = replace("site_url", 'https://dev.onegovgever.ch', 'http://localhost:8080'), public_url = replace("public_url", 'https://dev.onegovgever.ch', 'http://localhost:8080');
+
+
 OGDS synchronization
 --------------------
 
