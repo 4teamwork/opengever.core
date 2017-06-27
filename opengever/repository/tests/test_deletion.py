@@ -49,8 +49,7 @@ class TestRepositoryDeleter(IntegrationTestCase):
     @browsing
     def test_delete_action_is_only_available_when_preconditions_satisfied(
             self, browser):
-        self.login(self.administrator)
-        browser.login(self.administrator)
+        self.login(self.administrator, browser)
 
         browser.open(self.empty_repository)
         self.assertIn(
@@ -68,8 +67,7 @@ class TestRepositoryDeleter(IntegrationTestCase):
 
     @browsing
     def test_raise_unauthorized_when_preconditions_not_satisfied(self, browser):
-        self.login(self.administrator)
-        browser.login(self.administrator)
+        self.login(self.administrator, browser)
         # This causes an infinite redirection loop between ++add++ and
         # reqiure_login. By enabling exception_bubbling we can catch the
         # Unauthorized exception and end the infinite loop.
@@ -79,16 +77,14 @@ class TestRepositoryDeleter(IntegrationTestCase):
 
     @browsing
     def test_cancel_redirects_back_to_repository(self, browser):
-        self.login(self.administrator)
-        browser.login(self.administrator)
+        self.login(self.administrator, browser)
         browser.open(self.empty_repository, view='delete_repository')
         browser.click_on('Cancel')
         self.assertEquals(self.empty_repository, browser.context)
 
     @browsing
     def test_submit_redirects_to_parent(self, browser):
-        self.login(self.administrator)
-        browser.login(self.administrator)
+        self.login(self.administrator, browser)
         browser.open(self.empty_repository, view='delete_repository')
         browser.click_on('Delete')
         statusmessages.assert_message(
@@ -97,9 +93,9 @@ class TestRepositoryDeleter(IntegrationTestCase):
 
     @browsing
     def test_form_is_csrf_safe(self, browser):
-        self.login(self.administrator)
+        self.login(self.administrator, browser)
         url = '{}/delete_repository?form.buttons.delete=true'.format(
             self.empty_repository.absolute_url())
 
         with browser.expect_unauthorized():
-            browser.login(self.administrator).open(url)
+            browser.open(url)

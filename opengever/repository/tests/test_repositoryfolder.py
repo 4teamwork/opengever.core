@@ -48,8 +48,8 @@ class TestRepositoryFolder(IntegrationTestCase):
 
     @browsing
     def test_create_repository_folder(self, browser):
-        self.login(self.administrator)
-        browser.login(self.administrator).open(self.branch_repository)
+        self.login(self.administrator, browser)
+        browser.open(self.branch_repository)
         factoriesmenu.add('RepositoryFolder')
         browser.fill({'Title': 'Custody'}).save()
         statusmessages.assert_no_error_messages()
@@ -67,8 +67,7 @@ class TestRepositoryFolder(IntegrationTestCase):
         contain dossiers.
         But a warning message should be displayed in this situation.
         """
-        self.login(self.administrator)
-        browser.login(self.administrator)
+        self.login(self.administrator, browser)
 
         warning = u'You are adding a repositoryfolder to a leafnode ' \
                   u'which already contains dossiers. This is only ' \
@@ -102,8 +101,7 @@ class TestRepositoryFolder(IntegrationTestCase):
         dossiers at the same time.
         Therefore dossiers should not be addable in branch repository folders.
         """
-        self.login(self.administrator)
-        browser.login(self.administrator)
+        self.login(self.administrator, browser)
 
         self.assertTrue(any(filter(IRepositoryFolder.providedBy,
                                    self.branch_repository.objectValues())),
@@ -119,8 +117,7 @@ class TestRepositoryFolder(IntegrationTestCase):
         dossiers at the same time.
         Therefore dossiers should be addable in empty repository folders.
         """
-        self.login(self.administrator)
-        browser.login(self.administrator)
+        self.login(self.administrator, browser)
 
         self.assertFalse(any(filter(IRepositoryFolder.providedBy,
                                     self.empty_repository.objectValues())),
@@ -132,8 +129,7 @@ class TestRepositoryFolder(IntegrationTestCase):
 
     @browsing
     def test_max_depth_causes_repositories_to_not_be_addable(self, browser):
-        self.login(self.administrator)
-        browser.login(self.administrator)
+        self.login(self.administrator, browser)
 
         browser.open(self.leaf_repository)
         self.assertIn('RepositoryFolder', factoriesmenu.addable_types())
@@ -155,12 +151,12 @@ class TestDossierTemplateFactoryMenu(IntegrationTestCase):
 
     @browsing
     def test_adding_from_template_allowed_on_leaf_nodes(self, browser):
-        self.login(self.administrator)
-        browser.login(self.administrator).open(self.leaf_repository)
+        self.login(self.administrator, browser)
+        browser.open(self.leaf_repository)
         self.assertIn(self.factory_label, factoriesmenu.addable_types())
 
     @browsing
     def test_adding_from_template_not_allowed_on_branch_nodes(self, browser):
-        self.login(self.administrator)
-        browser.login(self.administrator).open(self.branch_repository)
+        self.login(self.administrator, browser)
+        browser.open(self.branch_repository)
         self.assertNotIn(self.factory_label, factoriesmenu.addable_types())

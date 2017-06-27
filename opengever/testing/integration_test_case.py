@@ -2,6 +2,7 @@ from AccessControl import getSecurityManager
 from opengever.core.testing import OPENGEVER_INTEGRATION_TESTING
 from plone import api
 from plone.app.testing import login
+from plone.app.testing import SITE_OWNER_NAME
 from unittest2 import TestCase
 
 
@@ -23,14 +24,27 @@ class IntegrationTestCase(TestCase):
         map(self.activate_feature, self.features)
         self.login(self.regular_user)
 
-    def login(self, user):
+    def login(self, user, browser=None):
         """Login a user by passing in the user object.
         Common users are available through the USER_LOOKUP_TABLE.
 
-        Example:
+        Log in security manager and browser:
+        >>> self.login(self.dossier_responsible, browser)
+        Log in only security manager:
         >>> self.login(self.dossier_responsible)
         """
-        login(self.portal, user.getId())
+        if hasattr(user, 'getId'):
+            userid = user.getId()
+        else:
+            userid = user
+
+        if userid == SITE_OWNER_NAME:
+            login(self.layer['app'], userid)
+        else:
+            login(self.portal, userid)
+
+        if browser is not None:
+            browser.login(userid)
 
     def activate_feature(self, feature):
         """Activate a feature flag.

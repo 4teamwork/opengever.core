@@ -19,15 +19,15 @@ class TestReferenceBehavior(IntegrationTestCase):
 
     @browsing
     def test_set_next_reference_number_as_default_value(self, browser):
-        self.login(self.administrator)
-        browser.login(self.administrator).open(self.branch_repository)
+        self.login(self.administrator, browser)
+        browser.open(self.branch_repository)
         factoriesmenu.add('RepositoryFolder')
         self.assertEquals('2', browser.find('Reference Prefix').value)
 
     @browsing
     def test_using_already_used_prefix_is_not_possible(self, browser):
-        self.login(self.administrator)
-        browser.login(self.administrator).open(self.repository_root)
+        self.login(self.administrator, browser)
+        browser.open(self.repository_root)
         factoriesmenu.add('RepositoryFolder')
         browser.fill({
             'Title': 'Test repository',
@@ -41,12 +41,12 @@ class TestReferenceBehavior(IntegrationTestCase):
 
     @browsing
     def test_using_a_free_value_lower_than_the_next_one_is_valid(self, browser):
-        self.login(self.administrator)
+        self.login(self.administrator, browser)
         create(Builder('repository')
                .within(self.repository_root)
                .having(reference_number_prefix='27'))
 
-        browser.login(self.administrator).open(self.repository_root)
+        browser.open(self.repository_root)
         factoriesmenu.add('RepositoryFolder')
         browser.fill({
             'Title': u'Test repository',
@@ -59,8 +59,8 @@ class TestReferenceBehavior(IntegrationTestCase):
 
     @browsing
     def test_works_also_with_alpha_numeric_prefixes(self, browser):
-        self.login(self.administrator)
-        browser.login(self.administrator).open(self.repository_root)
+        self.login(self.administrator, browser)
+        browser.open(self.repository_root)
         factoriesmenu.add('RepositoryFolder')
         browser.fill({
             'Title': u'Test repository',

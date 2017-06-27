@@ -7,24 +7,22 @@ class TestRepositoryWorkflow(IntegrationTestCase):
 
     @browsing
     def test_list_folder_contents_on_repository_is_not_available_for_adminstrators(self, browser):
-        self.login(self.administrator)
-        browser.login(self.administrator)
+        self.login(self.administrator, browser)
         with browser.expect_unauthorized():
             browser.open(self.branch_repository, view='folder_contents')
 
     @browsing
     def test_list_folder_contents_on_repository_is_available_for_managers(self, browser):
-        browser.login(SITE_OWNER_NAME)
+        self.login(SITE_OWNER_NAME, browser)
         browser.open(self.branch_repository, view='folder_contents')
 
     @browsing
     def test_list_folder_contents_on_repositoryroot_is_not_available_for_adminstrators(self, browser):
-        self.login(self.administrator)
-        browser.login(self.administrator)
+        self.login(self.administrator, browser)
         with browser.expect_unauthorized():
             browser.open(self.repository_root, view='folder_contents')
 
     @browsing
     def test_list_folder_contents_on_repositoryroot_is_available_for_managers(self, browser):
-        browser.login(SITE_OWNER_NAME)
+        self.login(SITE_OWNER_NAME, browser)
         browser.open(self.repository_root, view='folder_contents')

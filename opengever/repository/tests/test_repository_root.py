@@ -9,7 +9,7 @@ class TestRepositoryRoot(IntegrationTestCase):
 
     @browsing
     def test_adding(self, browser):
-        browser.login(SITE_OWNER_NAME)
+        self.login(SITE_OWNER_NAME, browser)
         browser.open(view='++add++opengever.repository.repositoryroot')
         browser.fill({'Title': u'Foob\xe4r'}).save()
         statusmessages.assert_no_error_messages()
@@ -18,6 +18,6 @@ class TestRepositoryRoot(IntegrationTestCase):
 
     @browsing
     def test_is_not_addable_by_administrator(self, browser):
-        browser.login(self.administrator)
+        self.login(self.administrator, browser)
         with browser.expect_unauthorized():
             browser.open(view='++add++opengever.repository.repositoryroot')
