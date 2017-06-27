@@ -1,6 +1,7 @@
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from datetime import datetime
+from opengever.base.jsonencoder import AdvancedJSONEncoder
 from opengever.base.pathfinder import PathFinder
 from opengever.bundle.report import ASCIISummaryBuilder
 from opengever.bundle.report import DataCollector
@@ -96,20 +97,3 @@ class ReportSection(object):
 
         builder = XLSXValidationReportBuilder(bundle)
         builder.build_and_save(report_path)
-
-
-class AdvancedJSONEncoder(json.JSONEncoder):
-    """A custom JSONEncoder that can serialize some additional types:
-
-    - datetime -> ISO-format string
-    - set      -> list
-    """
-
-    def default(self, obj):
-        if isinstance(obj, datetime):
-            return obj.isoformat()
-        elif isinstance(obj, set):
-            return list(obj)
-        else:
-            # Delegate to the base class
-            return json.JSONEncoder.default(self, obj)
