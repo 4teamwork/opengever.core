@@ -40,7 +40,7 @@ class TestPrivateFolder(FunctionalTestCase):
                           IReferenceNumber(self.folder).get_number())
 
     def test_adds_additonal_roles_after_creation(self):
-        self.assertEquals(
+        self.assertItemsEqual(
             ['Publisher', 'Authenticated', 'Owner', 'Editor', 'Reader',
              'Contributor', 'Reviewer'],
             api.user.get_roles(username=TEST_USER_ID, obj=self.folder))

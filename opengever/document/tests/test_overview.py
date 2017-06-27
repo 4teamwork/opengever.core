@@ -307,7 +307,7 @@ class TestDocumentOverview(FunctionalTestCase):
                           archival_file_row.css('th').first.text)
         self.assertEquals('icon-pdf',
                           archival_file_row.css('td span')[0].get('class'))
-        self.assertEquals(u'test.pdf \u2014 0 KB',
+        self.assertEquals(u'test.pdf \u2014 1 KB',
                           archival_file_row.css('td span')[1].text)
 
 

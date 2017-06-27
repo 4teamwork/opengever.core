@@ -28,7 +28,9 @@ class TestProposalViewsDisabled(FunctionalTestCase):
     def setUp(self):
         super(TestProposalViewsDisabled, self).setUp()
         self.repo, self.repo_folder = create(Builder('repository_tree'))
-        self.dossier = create(Builder('dossier').within(self.repo_folder))
+        self.dossier = create(Builder('dossier')
+                              .titled(u'Dossier A')
+                              .within(self.repo_folder))
 
     @browsing
     def test_add_form_is_disabled(self, browser):
@@ -439,7 +441,9 @@ class TestProposal(FunctionalTestCase):
     @browsing
     def test_proposal_stores_reference_number_of_main_dossier(self, browser):
         committee = create(Builder('committee_model'))
-        subdossier = create(Builder('dossier').within(self.dossier))
+        subdossier = create(Builder('dossier')
+                            .titled(u'Sub A')
+                            .within(self.dossier))
         document = create(Builder('document')
                           .within(subdossier)
                           .titled('A Document'))

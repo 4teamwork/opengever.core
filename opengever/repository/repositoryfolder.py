@@ -40,6 +40,7 @@ class IRepositoryFolderSchema(form.Schema):
             u'help_description',
             default=u'A short summary of the content.'),
         required=False,
+        missing_value=u'',
         )
 
     valid_from = schema.Date(

@@ -144,6 +144,7 @@ class IContact(form.Schema):
     description = schema.Text(
         title=_(u'label_description', default=u'Description'),
         required=False,
+        missing_value=u'',
         )
 
     address1 = schema.TextLine(

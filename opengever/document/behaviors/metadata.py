@@ -65,6 +65,7 @@ class IDocumentMetadata(form.Schema):
     description = schema.Text(
         title=_(u'label_description', default=u'Description'),
         required=False,
+        missing_value=u'',
         )
 
     form.widget('keywords', KeywordFieldWidget, new_terms_as_unicode=True)

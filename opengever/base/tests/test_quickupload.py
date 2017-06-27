@@ -33,7 +33,7 @@ class TestOGQuickupload(FunctionalTestCase):
 
         self.assertEquals('document', content.Title())
         self.assertEquals('text', content.file.data)
-        self.assertIsNone(content.description)
+        self.assertEquals(u'', content.description)
 
     def test_expect_one_journal_entry_after_upload(self):
         content = create(Builder('quickuploaded_document')

@@ -40,4 +40,4 @@ class TestTaskReporter(FunctionalTestCase):
              u'To comment',
              u'client1',
              1L],
-            [cell.value for cell in workbook.active.rows[1]])
+            [cell.value for cell in list(workbook.active.rows)[1]])

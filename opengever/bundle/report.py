@@ -11,8 +11,8 @@ from opengever.bundle.sections.map_local_roles import NAME_ROLE_MAPPING
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.ogds.base.utils import get_current_admin_unit
 from openpyxl import Workbook
-from openpyxl.cell import get_column_letter
 from openpyxl.styles import Font
+from openpyxl.utils import get_column_letter
 from os.path import basename
 from plone import api
 from zope.annotation import IAnnotations
