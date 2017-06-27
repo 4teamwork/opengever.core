@@ -9,6 +9,7 @@ from opengever.tabbedview.browser.personal_overview import MyDocuments
 from opengever.tabbedview.browser.tabs import Documents
 from opengever.tabbedview.browser.tabs import Trash
 from opengever.task.browser.related_documents import RelatedDocuments
+from plone.memoize.view import memoize
 from zExceptions import NotFound
 
 
@@ -59,14 +60,13 @@ class BumblebeeGalleryMixin(object):
                 'mime_type_css_class': get_css_class(brain),
             }
 
+    @memoize
     def get_brains(self):
         self.table_source.config.filter_text = self.request.get(
             'searchable_text', '')
 
-        if not hasattr(self, '_brains'):
-            catalog = getToolByName(self.context, 'portal_catalog')
-            setattr(self, '_brains', catalog(self.table_source.build_query()))
-        return getattr(self, '_brains')
+        catalog = getToolByName(self.context, 'portal_catalog')
+        return catalog(self.table_source.build_query())
 
     def fetch(self):
         """Action for retrieving more events (based on `next_event_id` in
@@ -164,6 +164,7 @@ class RelatedDocumentsGallery(BumblebeeGalleryMixin, RelatedDocuments):
     def list_view_name(self):
         return "relateddocuments"
 
+    @memoize
     def get_brains(self):
         # The build_query of the RelatedDocuments-View returns the brains instead
         # a query object. So we have to override the get_brains-function to
@@ -171,9 +172,7 @@ class RelatedDocumentsGallery(BumblebeeGalleryMixin, RelatedDocuments):
         self.table_source.config.filter_text = self.request.get(
             'searchable_text', '')
 
-        if not hasattr(self, '_brains'):
-            setattr(self, '_brains', self.table_source.build_query())
-        return getattr(self, '_brains')
+        return self.table_source.build_query()
 
 
 class RelatedDocumentsGalleryFetch(RelatedDocumentsGallery):
