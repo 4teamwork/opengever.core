@@ -65,8 +65,8 @@ class BumblebeeGalleryMixin(object):
         self.table_source.config.filter_text = self.request.get(
             'searchable_text', '')
 
-        catalog = getToolByName(self.context, 'portal_catalog')
-        return catalog(self.table_source.build_query())
+        query = self.table_source.build_query()
+        return self.table_source.search_results(query)
 
     def fetch(self):
         """Action for retrieving more events (based on `next_event_id` in
@@ -163,16 +163,6 @@ class RelatedDocumentsGallery(BumblebeeGalleryMixin, RelatedDocuments):
     @property
     def list_view_name(self):
         return "relateddocuments"
-
-    @memoize
-    def get_brains(self):
-        # The build_query of the RelatedDocuments-View returns the brains instead
-        # a query object. So we have to override the get_brains-function to
-        # handle this exception
-        self.table_source.config.filter_text = self.request.get(
-            'searchable_text', '')
-
-        return self.table_source.build_query()
 
 
 class RelatedDocumentsGalleryFetch(RelatedDocumentsGallery):
