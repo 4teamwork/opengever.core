@@ -8,6 +8,7 @@ from opengever.bumblebee import set_preferred_listing_view
 from opengever.tabbedview.browser.personal_overview import MyDocuments
 from opengever.tabbedview.browser.tabs import Documents
 from opengever.tabbedview.browser.tabs import Trash
+from opengever.task.browser.related_documents import RelatedDocuments
 from zExceptions import NotFound
 
 
@@ -151,6 +152,41 @@ class TrashGalleryFetch(TrashGallery):
     soon as the parent views are registered as Zope 3 BrowserViews.
     """
     grok.name('tabbedview_view-trash-gallery-fetch')
+
+    def __call__(self):
+        return self.fetch()
+
+
+class RelatedDocumentsGallery(BumblebeeGalleryMixin, RelatedDocuments):
+    grok.name('tabbedview_view-relateddocuments-gallery')
+
+    @property
+    def list_view_name(self):
+        return "relateddocuments"
+
+    def get_brains(self):
+        # The build_query of the RelatedDocuments-View returns the brains instead
+        # a query object. So we have to override the get_brains-function to
+        # handle this exception
+        self.table_source.config.filter_text = self.request.get(
+            'searchable_text', '')
+
+        if not hasattr(self, '_brains'):
+            setattr(self, '_brains', self.table_source.build_query())
+        return getattr(self, '_brains')
+
+
+class RelatedDocumentsGalleryFetch(RelatedDocumentsGallery):
+    """Returns the next gallery-items.
+
+    Unfortunately it's not possible to use a traversable method with
+    five.grok-views. Therefore we have to register an own browserview
+    to fetch the next gallery-items.
+
+    This browserview can be removed and implemented with allowed-attributes as
+    soon as the parent views are registered as Zope 3 BrowserViews.
+    """
+    grok.name('tabbedview_view-relateddocuments-gallery-fetch')
 
     def __call__(self):
         return self.fetch()

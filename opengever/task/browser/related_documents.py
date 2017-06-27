@@ -3,6 +3,7 @@ from ftw.table.catalog_source import default_custom_sort
 from ftw.table.interfaces import ICatalogTableSourceConfig
 from ftw.table.interfaces import ITableSource
 from opengever.tabbedview import GeverCatalogTableSource
+from opengever.tabbedview.browser.tabs import BaseTabProxy
 from opengever.tabbedview.browser.tabs import Documents
 from opengever.task.task import ITask
 from operator import attrgetter
@@ -214,6 +215,13 @@ class RelatedDocumentsCatalogTableSource(GeverCatalogTableSource):
                 return column
 
         return {}
+
+
+class RelatedDocumentsProxy(BaseTabProxy):
+    """This proxyview is looking for the last used documents
+    view (list or gallery) and reopens this view.
+    """
+    grok.name('tabbedview_view-relateddocuments-proxy')
 
 
 class RelatedDocuments(Documents):
