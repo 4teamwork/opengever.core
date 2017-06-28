@@ -450,14 +450,17 @@ In order to test features which can only be executed by the system or by a
 Login
 ^^^^^
 
-Integration tests start with logging in / assuming the security context of a
-user with minimal privileges (``self.regular_user``) on the server side.
-On the client side (browser), no user is logged in by default (Anonymous).
+Integration tests start with *no user logged in*.
+The first thing each test should do, is to log in the user with the fewest
+privileges required for doing the task under test.
 
-Use the ``self.login`` method for setting up the needed security context
-within the test code.
-As a shorthand we can pass the browser instance into ``self.login``, which
-will then log in the browser too.
+The login command should *not* be moved to the ``setUp`` method; it should be
+clearly visible at the beginning of each test, so that a reader has the necessary
+context without scrolling to the top of the file.
+
+When authenticated preparations are required in the ``setUp`` method, use
+``self.login`` as a context manager in order to cleanup the authentication
+on exit, so that the tests still start anonymously.
 
 .. code:: python
 
@@ -466,9 +469,21 @@ will then log in the browser too.
 
    class TestExampleView(IntegrationTestCase):
 
+       def setUp(self):
+           super(TestExampleView, self).setUp()
+           with self.login(self.administrator):
+               self.dossier.prepare_for_test()
+
+       def test_server_side(self):
+           self.login(self.dossier_responsible)
+           self.assertTrue(self.dossier.can_do_important_things())
+
        @browsing
-       def test_label(self, browser):
-           self.login(self.administrator, browser)
+       def test_client_side_with_browser(self, browser):
+           self.login(self.regular_user, browser)
+           browser.open(self.dossier)
+           browser.click_on('Do important things')
+
 
 
 Do not assert ``browser.contents``

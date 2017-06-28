@@ -19,10 +19,12 @@ from zope.component import getUtility
 class TestRepositoryFolder(IntegrationTestCase):
 
     def test_Title_is_prefixed_with_reference_number(self):
+        self.login(self.regular_user)
         self.assertEquals('1.1. Vertr\xc3\xa4ge und Vereinbarungen',
                           self.leaf_repofolder.Title())
 
     def test_Title_accessor_use_reference_formatters_seperator(self):
+        self.login(self.regular_user)
         registry = getUtility(IRegistry)
         proxy = registry.forInterface(IReferenceNumberSettings)
         proxy.formatter = 'grouped_by_three'
@@ -30,6 +32,7 @@ class TestRepositoryFolder(IntegrationTestCase):
                           self.leaf_repofolder.Title())
 
     def test_Title_returns_title_in_current_language(self):
+        self.login(self.regular_user)
         set_preferred_language(self.portal.REQUEST, 'fr-ch')
         self.assertEquals('1.1. Contrats et accords', self.leaf_repofolder.Title())
 
@@ -38,11 +41,13 @@ class TestRepositoryFolder(IntegrationTestCase):
                           self.leaf_repofolder.Title())
 
     def test_title_indexes(self):
+        self.login(self.regular_user)
         brain = obj2brain(self.leaf_repofolder)
         self.assertEquals(u'1.1. Contrats et accords', brain.title_fr)
         self.assertEquals(u'1.1. Vertr\xe4ge und Vereinbarungen', brain.title_de)
 
     def test_get_archival_value(self):
+        self.login(self.regular_user)
         self.assertEquals(ARCHIVAL_VALUE_UNCHECKED,
                           self.leaf_repofolder.get_archival_value())
 

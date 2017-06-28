@@ -23,6 +23,7 @@ from plone import api
 from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
 from plone.app.testing import IntegrationTesting
+from plone.app.testing import logout
 from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
@@ -487,6 +488,7 @@ class GEVERIntegrationTesting(IntegrationTesting):
         self.interceptor.intercept(self.interceptor.BEGIN
                                    | self.interceptor.COMMIT
                                    | self.interceptor.ABORT)
+        logout()
 
     def testTearDown(self):
         self.savepoint.rollback()

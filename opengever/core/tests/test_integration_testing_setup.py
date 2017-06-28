@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.ogds.base.utils import ogds_service
 from opengever.testing import IntegrationTestCase
+from plone import api
 import transaction
 
 
@@ -58,3 +59,6 @@ class TestIntegrationTestSetup(IntegrationTestCase):
         self.assertFalse(
             ogds_service().fetch_user(args['userid']),
             'Could not rollback SQL properly.')
+
+    def test_serverside_default_user_is_anonymous(self):
+        self.assertTrue(api.user.is_anonymous())

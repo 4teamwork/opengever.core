@@ -11,9 +11,10 @@ class TestReferencePrefixManager(IntegrationTestCase):
 
     def setUp(self):
         super(TestReferencePrefixManager, self).setUp()
-        # move repo1 to prefix 3 which leaves prefix 1 unused
-        manager = ReferenceNumberPrefixAdpater(self.branch_repofolder)
-        manager.set_number(self.leaf_repofolder, 3)
+        with self.login(self.administrator):
+            # move repo1 to prefix 3 which leaves prefix 1 unused
+            manager = ReferenceNumberPrefixAdpater(self.branch_repofolder)
+            manager.set_number(self.leaf_repofolder, 3)
 
     @browsing
     def test_list_and_unlock_unused_prefixes(self, browser):
@@ -32,6 +33,7 @@ class TestReferencePrefixManager(IntegrationTestCase):
             browser.css('#reference_prefix_manager_table').first.lists())
 
     def test_manager_throws_error_when_delete_request_for_used_prefix_occurs(self):
+        self.login(self.administrator)
         manager = ReferenceNumberPrefixAdpater(self.branch_repofolder)
         with self.assertRaises(Exception):
             manager.free_number(19)
