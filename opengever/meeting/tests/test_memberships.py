@@ -83,7 +83,7 @@ class TestMemberships(FunctionalTestCase):
 
         browser.login().open(membership.get_edit_url(self.member_wrapper))
         self.assertEquals(
-            u'Peter M\xfcller, Jan 01, 2003 - Dec 31, 2007 \u2014 Plone site',
+            u'M\xfcller Peter, Jan 01, 2003 - Dec 31, 2007 \u2014 Plone site',
             browser.css('title').first.text)
 
     @browsing

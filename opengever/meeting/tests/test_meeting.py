@@ -183,7 +183,7 @@ class TestCommitteeMemberVocabulary(FunctionalTestCase):
             MeetingWrapper(self.committee, self.meeting))
 
         self.assertEqual(
-            u'Hans M\xfcller',
+            u'M\xfcller Hans',
             vocabulary._terms[0].title)
 
     def test_return_fullname_with_email_as_value(self):
@@ -200,5 +200,5 @@ class TestCommitteeMemberVocabulary(FunctionalTestCase):
             MeetingWrapper(self.committee, self.meeting))
 
         self.assertEqual(
-            u'Hans M\xfcller (mueller@example.com)',
+            u'M\xfcller Hans (mueller@example.com)',
             vocabulary._terms[0].title)

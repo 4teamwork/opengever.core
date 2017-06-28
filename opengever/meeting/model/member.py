@@ -19,7 +19,7 @@ class Member(Base, SQLFormSupport):
                        primary_key=True)
     firstname = Column(String(FIRSTNAME_LENGTH), nullable=False)
     lastname = Column(String(LASTNAME_LENGTH), nullable=False)
-    fullname = column_property(firstname + " " + lastname)
+    fullname = column_property(lastname + " " + firstname)
     email = Column(String(EMAIL_LENGTH))
 
     def __repr__(self):

@@ -9,6 +9,8 @@ Changelog
 - XSS: Escape html for Dossier title on task listing. [mathias.leimgruber]
 - XSS: Escape html for the breadcrumbs part for get_link on tasks. [mathias.leimgruber]
 - Fix meeting TOC, correctly limit TOC to committee. [deiferni]
+- Change Member fullname to `Lastname Firstname` instead of `Firstname Lastname` to be consistent with Actor/Contact et cetera. [deiferni]
+- Sort meeting participants alphabetically. [deiferni]
 - Implement and enable redirector etag adapter. [phgross]
 - Add reference column to document listings. [tarnap]
 - Do not display templates without an assigned file in the CreateDocumentFromTemplate form. [tarnap]

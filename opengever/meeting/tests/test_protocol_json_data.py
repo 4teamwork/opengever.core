@@ -51,6 +51,10 @@ class TestProtocolJsonData(FunctionalTestCase):
                                    .having(firstname=u'Franz',
                                            lastname=u'M\xfcller',
                                            email="mueller@example.com"))
+        self.member_anna = create(Builder('member')
+                                  .having(firstname=u'Anna',
+                                          lastname=u'B\xe4nni',
+                                          email="baenni@example.com"))
         self.membership_peter = create(Builder('membership').having(
             member=self.member_peter,
             committee=self.committee,
@@ -63,9 +67,17 @@ class TestProtocolJsonData(FunctionalTestCase):
             date_from=date(2010, 1, 1),
             date_to=date(2012, 1, 1),
             role=None))
+        self.membership_anna = create(Builder('membership').having(
+            member=self.member_anna,
+            committee=self.committee,
+            date_from=date(2010, 1, 1),
+            date_to=date(2012, 1, 1),
+            role=None))
         self.meeting = create(Builder('meeting').having(
             committee=self.committee,
-            participants=[self.member_peter, self.member_franz],
+            participants=[self.member_peter,
+                          self.member_franz,
+                          self.member_anna],
             other_participants=u'Hans M\xfcller\nHeidi Muster',
             protocol_start_page_number=42,
             meeting_number=11,
@@ -96,12 +108,16 @@ class TestProtocolJsonData(FunctionalTestCase):
         create_session().delete(self.membership_peter)
 
         self.assertEquals(
-            {'members': [{'fullname': u'Peter M\xfcller',
+            {'members': [{'fullname': u'B\xe4nni Anna',
+                          'email': 'baenni@example.com',
+                         'role': None},
+                         {'fullname': u'M\xfcller Franz',
+                          'role': None,
+                          'email': u'mueller@example.com'},
+                         {'fullname': u'M\xfcller Peter',
                           'role': None,
                           'email': None},
-                         {'fullname': u'Franz M\xfcller',
-                          'role': None,
-                          'email': u'mueller@example.com'}]},
+                         ]},
             ProtocolData(self.meeting).add_members())
 
 
