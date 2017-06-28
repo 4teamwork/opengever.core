@@ -11,6 +11,7 @@ from ftw.testing import staticuid
 from opengever.ogds.base.utils import ogds_service
 from operator import methodcaller
 from plone.app.testing import login
+from plone.app.testing import SITE_OWNER_NAME
 from time import time
 from zope.component.hooks import getSite
 
@@ -19,7 +20,8 @@ class OpengeverContentFixture(object):
 
     def __call__(self):
         start = time()
-        self._lookup_table = {}
+        self._lookup_table = {
+            'manager': ('user', SITE_OWNER_NAME)}
 
         with self.freeze_at_hour(6):
             self.create_units()
