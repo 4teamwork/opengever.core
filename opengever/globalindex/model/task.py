@@ -292,7 +292,8 @@ class Task(Base):
 
         url = '/'.join((admin_unit.public_url, self.physical_path))
         breadcrumb_titles = u"[{}] > {}".format(
-            admin_unit.title, self.breadcrumb_title)
+            admin_unit.title, escape_html(self.breadcrumb_title))
+
         responsible_info = u' <span class="discreet">({})</span>'.format(
             self.get_responsible_label(linked=False))
         link_content = u'<span class="{}">{}</span>'.format(

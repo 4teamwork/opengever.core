@@ -9,7 +9,8 @@ class TestTaskListing(FunctionalTestCase):
     def setUp(self):
         super(TestTaskListing, self).setUp()
 
-        self.dossier = create(Builder('dossier'))
+        self.dossier = create(Builder('dossier')
+                              .titled(u'<b>Bold title</b>'))
         self.task1 = create(Builder('task')
                             .within(self.dossier)
                             .in_state('task-state-open')
@@ -32,7 +33,6 @@ class TestTaskListing(FunctionalTestCase):
         self.assertEquals(['Task 1', 'Task 3'],
                           [row.get('Title') for row in table.dicts()])
 
-
     @browsing
     def test_list_every_dossiers_with_the_all_filter(self, browser):
         browser.login().open(
@@ -42,3 +42,13 @@ class TestTaskListing(FunctionalTestCase):
         table = browser.css('.listing').first
         self.assertEquals(['Task 1', 'Task 2', 'Task 3'],
                           [row.get('Title') for row in table.dicts()])
+
+    @browsing
+    def test_escape_dossier_title_to_prevent_xss(self, browser):
+        browser.login().open(
+            self.dossier, view='tabbedview_view-tasks')
+        table = browser.css('.listing').first
+        second_row_dossier_cell = table.rows[1].css('td:nth-child(10)').first
+        self.assertEquals(
+            '&lt;b&gt;Bold title&lt;/b&gt;',
+            second_row_dossier_cell.innerHTML.strip().strip('\n'))
