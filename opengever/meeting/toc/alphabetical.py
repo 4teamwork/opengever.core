@@ -64,7 +64,9 @@ class AlphabeticalToc(object):
         # we only have a look at the start-date of a meeting to decide the
         # relevant day for the toc
         query = query.filter(Meeting.start >= datetime_from,
-                             Meeting.start < datetime_to)
+                             Meeting.start < datetime_to,
+                             Meeting.committee == self.period.committee
+                             )
         return query
 
     def get_json(self):
