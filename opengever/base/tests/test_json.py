@@ -1,4 +1,5 @@
 from datetime import datetime
+from opengever.base.jsondecoder import AdvancedJSONDecoder
 from opengever.base.jsonencoder import AdvancedJSONEncoder
 from unittest import TestCase
 import pytz
@@ -29,3 +30,27 @@ class TestAdvancedJSONEncoder(TestCase):
         data = set(['foo'])
         self.assertEquals('[["foo"]]',
                           encoder.encode([data]))
+
+
+class TestAdvancedJSONDecoder(TestCase):
+
+    def test_deserializes_naive_datetime(self):
+        decoder = AdvancedJSONDecoder()
+        obj = decoder.decode('{"dt": "2014-12-31T15:45:30.000999"}')
+        self.assertEquals(
+            {'dt': datetime(2014, 12, 31, 15, 45, 30, 999)},
+            obj)
+
+    def test_deserializes_aware_datetime(self):
+        decoder = AdvancedJSONDecoder()
+        obj = decoder.decode('{"dt": "2014-12-31T15:45:30.000999+00:00"}')
+        self.assertEquals(
+            {'dt': datetime(2014, 12, 31, 15, 45, 30, 999, tzinfo=pytz.UTC)},
+            obj)
+
+    def test_returns_deserialized_aware_datetimes_as_utc(self):
+        decoder = AdvancedJSONDecoder()
+        obj = decoder.decode('{"dt": "2010-01-01T12:00:00+01:00"}')
+        self.assertEquals(
+            {'dt': datetime(2010, 1, 1, 11, 0, tzinfo=pytz.UTC)},
+            obj)
