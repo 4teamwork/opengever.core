@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-06-07 12:17+0000\n"
+"POT-Creation-Date: 2017-06-28 12:54+0000\n"
 "PO-Revision-Date: 2013-03-27 10:44+0100\n"
 "Last-Translator: Philippe Gross <p.gross@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -64,6 +64,11 @@ msgstr "Kontaktordner"
 #: ./opengever/core/profiles/default/types/opengever.contact.contactfolder.xml
 msgid "ContactFolder"
 msgstr "Kontaktordner"
+
+#: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20170628144821_add_copy_action_for_single_documents/actions.xml
+msgid "Copy Item"
+msgstr "Kopieren"
 
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Copy Items"
