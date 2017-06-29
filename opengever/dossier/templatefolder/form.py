@@ -3,7 +3,6 @@ from ftw.keywordwidget.widget import KeywordFieldWidget
 from ftw.table import helper
 from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
-from opengever.base.interfaces import IRedirector
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.base.schema import TableChoice
@@ -135,13 +134,7 @@ class CreateDocumentMixin(object):
         manager = self.context.restrictedTraverse('checkout_documents')
         manager.checkout(new_doc)
 
-        # Add redirect to the zem-file download,
-        # in order to start editing with external editor.
-        redirector = IRedirector(self.request)
-        redirector.redirect(
-            '%s/external_edit' % new_doc.absolute_url(),
-            target='_self',
-            timeout=1000)
+        new_doc.setup_external_edit_redirect(self.request)
 
     def create_document(self, data):
         """Create a new document based on a template."""

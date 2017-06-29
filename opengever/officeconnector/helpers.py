@@ -23,7 +23,8 @@ def is_officeconnector_checkout_feature_enabled():
 def parse_documents(request, context):
     documents = []
 
-    if request['REQUEST_METHOD'] == 'GET':
+    if (request['REQUEST_METHOD'] == 'GET' or
+            request['REQUEST_METHOD'] == 'POST' and 'BODY' not in request):
         # Feature enabled for the wrong content type
         if not IBaseDocument.providedBy(context):
             raise NotFound
@@ -33,7 +34,8 @@ def parse_documents(request, context):
 
         documents.append(context)
 
-    if request['REQUEST_METHOD'] == 'POST':
+    if request['REQUEST_METHOD'] == 'POST' and 'BODY' in request:
+
         paths = json.loads(request['BODY'])
         for path in paths:
             # Restricted traversal does not handle unicode paths

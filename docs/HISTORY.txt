@@ -11,6 +11,7 @@ Changelog
 - Fix meeting TOC, correctly limit TOC to committee. [deiferni]
 - Change Member fullname to `Lastname Firstname` instead of `Firstname Lastname` to be consistent with Actor/Contact et cetera. [deiferni]
 - Sort meeting participants alphabetically. [deiferni]
+- Use officeconnector to edit a newly created document from template. [tarnap]
 - Implement and enable redirector etag adapter. [phgross]
 - Add reference column to document listings. [tarnap]
 - Do not display templates without an assigned file in the CreateDocumentFromTemplate form. [tarnap]
