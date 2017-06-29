@@ -29,7 +29,8 @@ from zope.component import queryMultiAdapter
 
 
 class BaseRow(object):
-    """Base class for metadata row configurations."""
+    """Base class for metadata row configurations.
+    """
 
     def __init__(self):
         self._view = None
@@ -45,7 +46,8 @@ class BaseRow(object):
 
 
 class FieldRow(BaseRow):
-    """A metadata row type that gets its information from schema fields."""
+    """A metadata row type that gets its information from schema fields.
+    """
 
     def __init__(self, field, label=None):
         super(FieldRow, self).__init__()
@@ -120,7 +122,8 @@ class TemplateRow(CustomRow):
 
 
 class Overview(DisplayForm, GeverTabMixin, ActionButtonRendererMixin):
-    """File details overview."""
+    """File details overview.
+    """
 
     is_on_detail_view = True
     is_overview_tab = True
@@ -197,7 +200,8 @@ class Overview(DisplayForm, GeverTabMixin, ActionButtonRendererMixin):
                     )
 
     def linked_documents(self):
-        """Returns a list documents related to the context document."""
+        """Returns a list documents related to the context document.
+        """
 
         return [{
             'class': self.get_css_class(obj),
