@@ -4,6 +4,7 @@ from contextlib import contextmanager
 from ftw.flamegraph import flamegraph
 from functools import wraps
 from opengever.core.testing import OPENGEVER_INTEGRATION_TESTING
+from operator import methodcaller
 from plone import api
 from plone.app.testing import login
 from plone.app.testing import SITE_OWNER_NAME
@@ -175,3 +176,59 @@ class IntegrationTestCase(TestCase):
         catalog = api.portal.get_tool('portal_catalog')
         rid = catalog.getrid('/'.join(obj.getPhysicalPath()))
         return catalog.getMetadataForRID(rid)
+
+    def set_workflow_state(self, new_workflow_state_id, *objects):
+        """Set the workflow state of one or many objects.
+        When the state is changed for multiple nested objects at once, the
+        method can optimize reindexing security so that it is not executed
+        multiple times for the same object.
+        """
+        wftool = api.portal.get_tool('portal_workflow')
+
+        for obj in objects:
+            chain = wftool.getChainFor(obj)
+            self.assertEquals(
+                1, len(chain),
+                'set_workflow_state does only support objects with'
+                ' exactly one workflow, but {!r} has {!r}.'.format(obj, chain))
+            workflow = wftool[chain[0]]
+            self.assertIn(new_workflow_state_id, workflow.states)
+
+            wftool.setStatusOf(chain[0], obj, {
+                'review_state': new_workflow_state_id,
+                'action': '',
+                'actor': ''})
+            workflow.updateRoleMappingsFor(obj)
+            obj.reindexObject(idxs=['review_state'])
+
+        # reindexObjectSecurity is recursive. We should avoid updating the same
+        # object twice when the parent is changed too.
+        security_reindexed = []
+        for obj in sorted(objects, key=methodcaller('getPhysicalPath')):
+            current_path = '/'.join(obj.getPhysicalPath())
+            if any(filter(lambda path: current_path.startswith(path),
+                          security_reindexed)):
+                # We just have updated the security of a parent recursively,
+                # thus the security of ``obj`` must be up to date at this point.
+                break
+
+            obj.reindexObjectSecurity()
+            security_reindexed.append(current_path)
+
+    def assert_workflow_state(self, workflow_state_id, obj):
+        """Assert the workflow state of an object and of its brain.
+        """
+
+        expected = {
+            'object': workflow_state_id,
+            'catalog index': workflow_state_id,
+            'catalog metadata': workflow_state_id}
+
+        got = {
+            'object': api.content.get_state(obj),
+            'catalog index': self.get_catalog_indexdata(obj)['review_state'],
+            'catalog metadata': self.get_catalog_metadata(obj)['review_state']}
+
+        self.assertEqual(
+            expected, got,
+            'Object {!r} has an incorrect workflow state.'.format(obj))
