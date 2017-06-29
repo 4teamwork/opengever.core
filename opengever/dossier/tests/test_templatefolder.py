@@ -589,18 +589,6 @@ class TestTemplateFolder(FunctionalTestCase):
         self.assertEqual(0, len(browser.css('.formTab #tab-dossiertemplates')))
 
     @browsing
-    def test_prefill_responsible_user(self, browser):
-        self.grant('Manager')
-        add_languages(['de-ch'])
-        browser.login().open(self.portal)
-        factoriesmenu.add('Template Folder')
-
-        self.assertEqual(
-            'Test User (test_user_1_)',
-            browser.css('#formfield-form-widgets-IDossier-responsible option[selected]').first.text
-            )
-
-    @browsing
     def test_portlet_inheritance_is_blocked(self, browser):
         self.grant('Manager')
         add_languages(['de-ch'])

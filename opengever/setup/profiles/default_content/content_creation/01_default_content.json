@@ -16,8 +16,7 @@
         "_path": "vorlagen",
         "_type": "opengever.dossier.templatefolder",
         "title_de": "Vorlagen",
-        "title_fr": "Modèles",
-        "responsible": "ogadmin"
+        "title_fr": "Modèles"
     },
     {
         "_path": "kontakte",
