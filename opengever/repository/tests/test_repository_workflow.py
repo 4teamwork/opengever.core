@@ -1,6 +1,5 @@
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
-from plone.app.testing import SITE_OWNER_NAME
 
 
 class TestRepositoryWorkflow(IntegrationTestCase):
@@ -13,7 +12,7 @@ class TestRepositoryWorkflow(IntegrationTestCase):
 
     @browsing
     def test_list_folder_contents_on_repofolder_is_available_for_managers(self, browser):
-        self.login(SITE_OWNER_NAME, browser)
+        self.login(self.manager, browser)
         browser.open(self.branch_repofolder, view='folder_contents')
 
     @browsing
@@ -24,5 +23,5 @@ class TestRepositoryWorkflow(IntegrationTestCase):
 
     @browsing
     def test_list_folder_contents_on_repositoryroot_is_available_for_managers(self, browser):
-        self.login(SITE_OWNER_NAME, browser)
+        self.login(self.manager, browser)
         browser.open(self.repository_root, view='folder_contents')
