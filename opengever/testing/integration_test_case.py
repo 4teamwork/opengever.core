@@ -161,3 +161,17 @@ class IntegrationTestCase(TestCase):
 
         else:
             raise ValueError('Unsupport lookup entry type {!r}'.format(type_))
+
+    def get_catalog_indexdata(self, obj):
+        """Return the catalog index data for an object as dict.
+        """
+        catalog = api.portal.get_tool('portal_catalog')
+        rid = catalog.getrid('/'.join(obj.getPhysicalPath()))
+        return catalog.getIndexDataForRID(rid)
+
+    def get_catalog_metadata(self, obj):
+        """Return the catalog metadata for an object as dict.
+        """
+        catalog = api.portal.get_tool('portal_catalog')
+        rid = catalog.getrid('/'.join(obj.getPhysicalPath()))
+        return catalog.getMetadataForRID(rid)
