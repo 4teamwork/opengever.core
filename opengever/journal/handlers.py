@@ -12,6 +12,7 @@ from opengever.base.browser.paste import ICopyPasteRequestLayer
 from opengever.base.oguid import Oguid
 from opengever.bumblebee.interfaces import IPDFDownloadedEvent
 from opengever.document.behaviors import IBaseDocument
+from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import IFileCopyDownloadedEvent
 from opengever.document.interfaces import IObjectCheckedInEvent
 from opengever.document.interfaces import IObjectCheckedOutEvent
@@ -516,8 +517,29 @@ FILE_COPY_DOWNLOADED = 'File copy downloaded'
 
 @grok.subscribe(IBaseDocument, IFileCopyDownloadedEvent)
 def file_copy_downloaded(context, event):
-    title = _(u'label_file_copy_downloaded',
-              default=u'Download copy')
+
+    title_unversioned = _(u'label_file_copy_downloaded',
+                          default=u'Download copy')
+
+    if IDocumentSchema.providedBy(context):
+        version_id = getattr(event, 'version_id')
+
+        if version_id is not None:
+            version_string = _(u'label_file_copy_downloaded_version',
+                               default=u'version ${version_id}',
+                               mapping={'version_id': version_id})
+        else:
+            version_string = _(u'label_file_copy_downloaded_actual_version',
+                               default=u'current version (${version_id})',
+                               mapping={'version_id': context.version_id})
+
+        title = _(u'label_file_copy_downloaded_with_version',
+                  default=u'${title} ${version_string}',
+                  mapping={'title': title_unversioned,
+                           'version_string': version_string})
+    else:
+        title = title_unversioned
+
     journal_entry_factory(context, FILE_COPY_DOWNLOADED, title)
 
 

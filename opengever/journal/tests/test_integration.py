@@ -517,9 +517,11 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
             )
 
     def check_document_copy_downloaded(self, obj):
+        title = u'Download copy current version ({version_id})'.format(
+            version_id=obj.version_id)
         self.check_annotation(
             obj,
             action_type='File copy downloaded',
-            action_title=u'Download copy',
+            action_title=title,
             actor=TEST_USER_ID,
             )

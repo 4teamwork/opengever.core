@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-06-07 12:34+0000\n"
+"POT-Creation-Date: 2017-07-03 12:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,10 @@ msgstr ""
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.journal\n"
+
+#: ./opengever/journal/handlers.py:513
+msgid "label_file_copy_downloaded"
+msgstr ""
 
 #. Default: "Journal"
 #: ./opengever/journal/templates/journalhistory.pt:15
@@ -179,9 +183,19 @@ msgstr ""
 msgid "label_dossier_zipped"
 msgstr ""
 
-#. Default: "Download copy"
-#: ./opengever/journal/handlers.py:507
+#. Default: "Download copy ${version_string}"
+#: ./opengever/journal/handlers.py:520
 msgid "label_file_copy_downloaded"
+msgstr ""
+
+#. Default: "current version (${version_id})"
+#: ./opengever/journal/handlers.py:513
+msgid "label_file_copy_downloaded_actual_version"
+msgstr ""
+
+#. Default: "version ${version_id}"
+#: ./opengever/journal/handlers.py:516
+msgid "label_file_copy_downloaded_version"
 msgstr ""
 
 #. Default: "Local roles aquistion activated."
