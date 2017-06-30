@@ -1,5 +1,6 @@
 from ftw.journal.events.events import JournalEntryEvent
 from opengever.base.oguid import Oguid
+from opengever.base.utils import escape_html
 from opengever.journal import _
 from persistent.dict import PersistentDict
 from persistent.list import PersistentList
@@ -28,7 +29,10 @@ class ManualJournalEntry(object):
         self.documents = documents
 
     def save(self):
-        comment = self.comment.encode('utf-8') if self.comment else ''
+        if self.comment:
+            comment = escape_html(self.comment).encode('utf-8')
+        else:
+            comment = ''
         entry = {'obj': self.context,
                  'action': PersistentDict({
                      'type': MANUAL_JOURNAL_ENTRY,
