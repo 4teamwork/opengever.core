@@ -1,76 +1,51 @@
 from datetime import date
-from ftw.builder import Builder
-from ftw.builder import create
 from ftw.testbrowser import browsing
-from ftw.testbrowser.pages.statusmessages import error_messages
-from ftw.testbrowser.pages.statusmessages import info_messages
+from ftw.testbrowser.pages import editbar
+from ftw.testbrowser.pages import statusmessages
 from opengever.dossier.behaviors.dossier import IDossier
-from opengever.testing import FunctionalTestCase
-from plone import api
-from plone.protect import createToken
+from opengever.testing import IntegrationTestCase
 
 
-class TestDossierActivation(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestDossierActivation, self).setUp()
-        self.grant('Editor', 'Publisher')
-        self.dossier = create(Builder('dossier')
-                              .in_state('dossier-state-inactive'))
+class TestDossierActivation(IntegrationTestCase):
 
     @browsing
     def test_recursively_activates_subdossier(self, browser):
-        subdossier = create(Builder('dossier')
-                            .within(self.dossier)
-                            .in_state('dossier-state-inactive'))
-        subsubdossier = create(Builder('dossier')
-                               .within(subdossier)
-                               .in_state('dossier-state-inactive'))
+        self.login(self.secretariat_user, browser)
+        self.set_workflow_state('dossier-state-inactive',
+                                self.dossier, self.subdossier)
 
-        browser.login().open(self.dossier, view='transition-activate',
-                             data={'_authenticator': createToken()})
+        browser.open(self.dossier)
+        editbar.menu_option('Actions', 'dossier-transition-activate').click()
+        statusmessages.assert_message('The Dossier has been activated')
 
-        self.assertEqual('dossier-state-active',
-                         api.content.get_state(self.dossier))
-        self.assertEqual('dossier-state-active',
-                         api.content.get_state(subdossier))
-        self.assertEqual('dossier-state-active',
-                         api.content.get_state(subsubdossier))
-
-        self.assertEqual('The Dossier has been activated', info_messages()[0])
+        self.assert_workflow_state('dossier-state-active', self.dossier)
+        self.assert_workflow_state('dossier-state-active', self.subdossier)
 
     @browsing
-    def test_activating_a_subdossier_is_disallowed_when_main_dossier_is_inactive(self, browser):
-        subdossier = create(Builder('dossier')
-                            .within(self.dossier)
-                            .in_state('dossier-state-inactive'))
-
-        browser.login().open(subdossier, view='transition-activate',
-                             data={'_authenticator': createToken()})
-
-        self.assertEqual('dossier-state-inactive',
-                         api.content.get_state(subdossier))
-        self.assertEqual("This subdossier can't be activated,"
-                         "because the main dossiers is inactive",
-                         error_messages()[0])
+    def test_activate_subdossier_is_disallowed_when_main_dossier_is_inactive(
+            self, browser):
+        self.login(self.secretariat_user, browser)
+        self.set_workflow_state('dossier-state-inactive',
+                                self.dossier, self.subdossier)
+        browser.open(self.subdossier, view='transition-activate',
+                     send_authenticator=True)
+        statusmessages.assert_message("This subdossier can't be activated,"
+                                      "because the main dossiers is inactive")
+        self.assert_workflow_state('dossier-state-inactive', self.subdossier)
 
     @browsing
     def test_resets_end_dates_recursively(self, browser):
-        dossier = create(Builder('dossier')
-                         .having(end=date(2013, 2, 21))
-                         .in_state('dossier-state-inactive'))
-        sub = create(Builder('dossier')
-                     .within(dossier)
-                     .having(end=date(2013, 2, 21))
-                     .in_state('dossier-state-inactive'))
-        subsub = create(Builder('dossier')
-                        .within(sub)
-                        .having(end=date(2013, 2, 21))
-                        .in_state('dossier-state-inactive'))
+        self.login(self.secretariat_user, browser)
+        IDossier(self.dossier).end = date(2013, 2, 21)
+        IDossier(self.subdossier).end = date(2013, 2, 21)
+        self.set_workflow_state('dossier-state-inactive',
+                                self.dossier, self.subdossier)
+        self.assertIsNotNone(IDossier(self.dossier).end)
+        self.assertIsNotNone(IDossier(self.subdossier).end)
 
-        browser.login().open(dossier, view=u'transition-activate',
-                             data={'_authenticator': createToken()})
-
-        self.assertIsNone(IDossier(dossier).end)
-        self.assertIsNone(IDossier(sub).end)
-        self.assertIsNone(IDossier(subsub).end)
+        browser.open(self.dossier)
+        editbar.menu_option('Actions', 'dossier-transition-activate').click()
+        self.assert_workflow_state('dossier-state-active', self.dossier)
+        self.assert_workflow_state('dossier-state-active', self.subdossier)
+        self.assertIsNone(IDossier(self.dossier).end)
+        self.assertIsNone(IDossier(self.subdossier).end)
