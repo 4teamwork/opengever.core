@@ -316,7 +316,7 @@ class Proposal(Base):
 
     def reopen(self, agenda_item):
         assert self.get_state() == self.STATE_DECIDED
-        self.session.add(proposalhistory.ProposalReopened(proposal=self))
+        IHistory(self.resolve_submitted_proposal()).append_record('reopened')
 
     def cancel(self):
         self.session.add(proposalhistory.Cancelled(proposal=self))

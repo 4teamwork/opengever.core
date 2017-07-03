@@ -74,15 +74,15 @@ class ProposalHistory(object):
         return record
 
     def receive_record(self, timestamp, data):
-        history = unprotected_write(self._get_history_for_writing())
+        history = self._get_history_for_writing()
         history[timestamp] = data
 
     def _get_history_for_writing(self):
         """Return the history for writing and make sure a default is also
         initialized if it is the first time the history is accessed.
         """
-        return IAnnotations(self.context).setdefault(
-            self.annotation_key, OOBTree())
+        return unprotected_write(IAnnotations(self.context).setdefault(
+            self.annotation_key, OOBTree()))
 
     def _get_history_for_reading(self):
         """"Return the history for reading and make sure to not cause a write
@@ -224,6 +224,19 @@ class ProposalRejected(BaseHistoryRecord):
                  mapping={'user': self.get_actor_link()})
 
 ProposalHistory.register(ProposalRejected)
+
+
+class ProposalReopened(BaseHistoryRecord):
+
+    name = 'reopened'
+    needs_syncing = True
+
+    def message(self):
+        return _(u'proposal_history_label_reopened',
+                 u'Proposal reopened by ${user}',
+                 mapping={'user': self.get_actor_link()})
+
+ProposalHistory.register(ProposalReopened)
 
 
 class ProposalScheduled(BaseHistoryRecord):
