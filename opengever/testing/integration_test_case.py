@@ -1,4 +1,6 @@
 from AccessControl import getSecurityManager
+from AccessControl.SecurityManagement import setSecurityManager
+from contextlib import contextmanager
 from opengever.core.testing import OPENGEVER_INTEGRATION_TESTING
 from plone import api
 from plone.app.testing import login
@@ -22,7 +24,6 @@ class IntegrationTestCase(TestCase):
         self.portal = self.layer['portal']
         self.request = self.layer['request']
         map(self.activate_feature, self.features)
-        self.login(self.regular_user)
 
     def login(self, user, browser=None):
         """Login a user by passing in the user object.
@@ -32,19 +33,40 @@ class IntegrationTestCase(TestCase):
         >>> self.login(self.dossier_responsible, browser)
         Log in only security manager:
         >>> self.login(self.dossier_responsible)
+
+        The method may also be used used as context manager, ensuring that
+        after leaving the same user is logged in as before.
         """
+
         if hasattr(user, 'getId'):
             userid = user.getId()
         else:
             userid = user
 
+        security_manager = getSecurityManager()
         if userid == SITE_OWNER_NAME:
             login(self.layer['app'], userid)
         else:
             login(self.portal, userid)
 
         if browser is not None:
+            browser_auth_headers = filter(
+                lambda item: item[0] == 'Authorization',
+                browser.session_headers)
             browser.login(userid)
+
+        @contextmanager
+        def login_context_manager():
+            try:
+                yield
+            finally:
+                setSecurityManager(security_manager)
+                if browser is not None:
+                    browser.clear_request_header('Authorization')
+                    [browser.append_request_header(name, value)
+                     for (name, value) in browser_auth_headers]
+
+        return login_context_manager()
 
     def activate_feature(self, feature):
         """Activate a feature flag.

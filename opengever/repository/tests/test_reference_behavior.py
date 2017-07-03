@@ -13,6 +13,7 @@ from zope.interface.verify import verifyObject
 class TestReferenceBehavior(IntegrationTestCase):
 
     def test_repositories_provide_marker_interface(self):
+        self.login(self.regular_user)
         self.assertTrue(IReferenceNumberPrefixMarker.providedBy(
             self.leaf_repofolder))
         verifyObject(IReferenceNumberPrefixMarker, self.leaf_repofolder)
