@@ -39,8 +39,9 @@ class TestProposalHistory(FunctionalTestCase):
                                        committee=self.committee.load_model())
                                .relate_to(self.document))
 
-    def open_overview(self, browser):
-        browser.open(self.proposal, view='tabbedview_view-overview')
+    def open_overview(self, browser, proposal=None):
+        proposal = proposal or self.proposal
+        browser.open(proposal, view='tabbedview_view-overview')
 
     def get_latest_history_entry_text(self, browser):
         return browser.css('div.answers .answer h3').first.text
@@ -153,6 +154,12 @@ class TestProposalHistory(FunctionalTestCase):
         self.submit_proposal()
         browser.login().open(
             self.meeting.get_url(view='unscheduled_proposals/1/schedule'))
+
+        submitted_proposal = self.proposal.load_model().resolve_submitted_proposal()
+        self.open_overview(browser, submitted_proposal)
+        self.assertEqual(
+            u'Scheduled for meeting C\xf6mmunity meeting by Test User (test_user_1_)',
+            self.get_latest_history_entry_text(browser))
 
         self.open_overview(browser)
         self.assertEqual(

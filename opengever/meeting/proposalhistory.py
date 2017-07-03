@@ -1,11 +1,16 @@
 from BTrees.OOBTree import OOBTree
 from opengever.base.date_time import utcnow_tz_aware
+from opengever.base.jsonencoder import AdvancedJSONEncoder
+from opengever.base.protect import unprotected_write
+from opengever.base.request import dispatch_request
 from opengever.meeting import _
+from opengever.meeting.model import Meeting
 from opengever.ogds.base.actor import Actor
 from persistent.mapping import PersistentMapping
 from plone import api
 from uuid import uuid4
 from zope.annotation.interfaces import IAnnotations
+import json
 
 
 class ProposalHistory(object):
@@ -52,13 +57,37 @@ class ProposalHistory(object):
         record = clazz(self.context, timestamp=timestamp, **kwargs)
         record.append_to(history)
 
+        if record.needs_syncing:
+            # currently we only sync from the submitted side
+            # to the dossier
+            path = self.context.load_model().physical_path
+            request_data = {'data': json.dumps({
+                'timestamp': record.timestamp,
+                'data': record.data,
+            }, cls=AdvancedJSONEncoder)}
+            dispatch_request(
+                self.context.get_source_admin_unit_id(),
+                '@@receive-proposal-history',
+                path=path,
+                data=request_data,)
+
         return record
 
+    def receive_record(self, timestamp, data):
+        history = unprotected_write(self._get_history_for_writing())
+        history[timestamp] = data
+
     def _get_history_for_writing(self):
+        """Return the history for writing and make sure a default is also
+        initialized if it is the first time the history is accessed.
+        """
         return IAnnotations(self.context).setdefault(
             self.annotation_key, OOBTree())
 
     def _get_history_for_reading(self):
+        """"Return the history for reading and make sure to not cause a write
+        on display by initialization. Instead just return a default value.
+        """
         return IAnnotations(self.context).get(self.annotation_key, OOBTree())
 
 
@@ -79,10 +108,15 @@ class BaseHistoryRecord(object):
     """
 
     name = None
+    needs_syncing = False
 
     @classmethod
-
-
+    def re_populate(cls, context, timestamp, data):
+        record = cls.__new__(cls)
+        record.context = context
+        record.timestamp = timestamp
+        record.data = data
+        return record
 
     def __init__(self, context, timestamp=None):
         timestamp = timestamp or utcnow_tz_aware()
@@ -191,3 +225,28 @@ class ProposalRejected(BaseHistoryRecord):
 
 ProposalHistory.register(ProposalRejected)
 
+
+class ProposalScheduled(BaseHistoryRecord):
+
+    name = 'scheduled'
+    needs_syncing = True
+
+    def __init__(self, context, meeting_id, timestamp=None):
+        super(ProposalScheduled, self).__init__(
+            context, timestamp=timestamp)
+        self.data['meeting_id'] = meeting_id
+
+    @property
+    def meeting_title(self):
+        meeting_id = self.data.get('meeting_id')
+        meeting = Meeting.query.get(meeting_id)
+        meeting_title = meeting.get_title() if meeting else u''
+        return meeting_title
+
+    def message(self):
+        return _(u'proposal_history_label_scheduled',
+                 u'Scheduled for meeting ${meeting} by ${user}',
+                 mapping={'user': self.get_actor_link(),
+                          'meeting': self.meeting_title})
+
+ProposalHistory.register(ProposalScheduled)

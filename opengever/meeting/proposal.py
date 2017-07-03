@@ -329,6 +329,9 @@ class SubmittedProposal(ProposalBase):
     workflow = ProposalModel.workflow.with_visible_transitions(
         ['submitted-pending'])
 
+    def get_source_admin_unit_id(self):
+        return self.load_model().admin_unit_id
+
     def is_editable(self):
         """A proposal in a meeting/committee is editable when submitted but not
         yet decided.
