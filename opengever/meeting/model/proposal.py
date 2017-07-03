@@ -319,7 +319,7 @@ class Proposal(Base):
         IHistory(self.resolve_submitted_proposal()).append_record('reopened')
 
     def cancel(self):
-        self.session.add(proposalhistory.Cancelled(proposal=self))
+        IHistory(self.resolve_proposal()).append_record('cancelled')
 
     def reactivate(self):
         self.session.add(proposalhistory.Reactivated(proposal=self))
