@@ -1,15 +1,15 @@
 from datetime import datetime
 from json import JSONEncoder
+from persistent.mapping import PersistentMapping
 from uuid import UUID
 
 
 class AdvancedJSONEncoder(JSONEncoder):
     """A custom JSONEncoder that can serialize some additional types:
 
-    - datetime -> ISO-format string
     - datetime          -> ISO-format string
-    - set      -> list
     - UUID              -> str
+    - PersistentMapping -> dict
     - set               -> list
     """
 
@@ -20,5 +20,7 @@ class AdvancedJSONEncoder(JSONEncoder):
             return str(obj)
         elif isinstance(obj, set):
             return list(obj)
+        elif isinstance(obj, PersistentMapping):
+            return dict(obj)
         else:
             return super(AdvancedJSONEncoder, self).default(obj)

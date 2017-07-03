@@ -1,6 +1,7 @@
 from datetime import datetime
 from opengever.base.jsondecoder import AdvancedJSONDecoder
 from opengever.base.jsonencoder import AdvancedJSONEncoder
+from persistent.mapping import PersistentMapping
 from unittest import TestCase
 from uuid import UUID
 import pytz
@@ -37,6 +38,12 @@ class TestAdvancedJSONEncoder(TestCase):
         encoder = AdvancedJSONEncoder()
         self.assertEquals('["61df790e-e547-416f-b661-d236a13250de"]',
                           encoder.encode([uuid]))
+
+    def test_serializes_persistent_mapping_as_dict(self):
+        data = PersistentMapping(foo='bar')
+        encoder = AdvancedJSONEncoder()
+        self.assertEquals('[{"foo": "bar"}]',
+                          encoder.encode([data]))
 
 
 class TestAdvancedJSONDecoder(TestCase):
