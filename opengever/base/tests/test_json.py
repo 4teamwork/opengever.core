@@ -2,6 +2,7 @@ from datetime import datetime
 from opengever.base.jsondecoder import AdvancedJSONDecoder
 from opengever.base.jsonencoder import AdvancedJSONEncoder
 from unittest import TestCase
+from uuid import UUID
 import pytz
 
 
@@ -30,6 +31,12 @@ class TestAdvancedJSONEncoder(TestCase):
         data = set(['foo'])
         self.assertEquals('[["foo"]]',
                           encoder.encode([data]))
+
+    def test_serializes_uuid(self):
+        uuid = UUID('61df790e-e547-416f-b661-d236a13250de')
+        encoder = AdvancedJSONEncoder()
+        self.assertEquals('["61df790e-e547-416f-b661-d236a13250de"]',
+                          encoder.encode([uuid]))
 
 
 class TestAdvancedJSONDecoder(TestCase):
