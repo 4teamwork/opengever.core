@@ -1,5 +1,6 @@
 from AccessControl import getSecurityManager
 from opengever.base.utils import get_preferred_language_code
+from opengever.repository.repositoryfolder import REPOSITORY_FOLDER_STATE_INACTIVE
 from pkg_resources import get_distribution
 from Products.CMFCore.utils import getToolByName
 from Products.Five import BrowserView
@@ -88,7 +89,8 @@ class JSONNavigation(BrowserView):
         return {'text': brain.Title,
                 'description': brain.Description,
                 'url': brain.getURL(),
-                'uid': brain.UID}
+                'uid': brain.UID,
+                'active': brain.review_state != REPOSITORY_FOLDER_STATE_INACTIVE, }
 
     def _navigation_cache_key(self):
         last_modified = self._get_newest_modification_timestamp()

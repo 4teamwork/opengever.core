@@ -52,7 +52,8 @@ class TestNavigation(FunctionalTestCase):
         subfolder = create(Builder('repository')
                            .having(title_de=u'The Sub Folder',
                                    description='A secondary folder')
-                           .within(folder))
+                           .within(folder)
+                           .in_state('repositoryfolder-state-inactive'))
 
         browser.login().open()
         browser.click_on('DE')
@@ -62,11 +63,13 @@ class TestNavigation(FunctionalTestCase):
               "description": "A primary folder",
               "uid": IUUID(folder),
               "url": folder.absolute_url(),
+              "active": True,
               "nodes": [{"text": "1.1. The Sub Folder",
                          "description": "A secondary folder",
                          "nodes": [],
                          "uid": IUUID(subfolder),
                          "url": subfolder.absolute_url(),
+                         "active": False,
                          }],
               }],
             browser.json)

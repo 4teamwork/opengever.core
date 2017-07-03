@@ -16,6 +16,8 @@ from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from zope import schema
 from zope.interface import implements
 
+REPOSITORY_FOLDER_STATE_INACTIVE = 'repositoryfolder-state-inactive'
+
 
 class IRepositoryFolderSchema(form.Schema):
     """ A Repository Folder
