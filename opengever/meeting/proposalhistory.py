@@ -250,3 +250,18 @@ class ProposalScheduled(BaseHistoryRecord):
                           'meeting': self.meeting_title})
 
 ProposalHistory.register(ProposalScheduled)
+
+
+class ProposalRemovedFromSchedule(ProposalScheduled):
+
+    name = 'remove_scheduled'
+    css_class = 'scheduleRemoved'
+    needs_syncing = True
+
+    def message(self):
+        return _(u'proposal_history_label_remove_scheduled',
+                 u'Removed from schedule of meeting ${meeting} by ${user}',
+                 mapping={'user': self.get_actor_link(),
+                          'meeting': self.meeting_title})
+
+ProposalHistory.register(ProposalRemovedFromSchedule)

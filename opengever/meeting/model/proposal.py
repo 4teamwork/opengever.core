@@ -294,9 +294,8 @@ class Proposal(Base):
 
     def remove_scheduled(self, meeting):
         self.execute_transition('scheduled-submitted')
-        session = create_session()
-        session.add(
-            proposalhistory.RemoveScheduled(proposal=self, meeting=meeting))
+        IHistory(self.resolve_submitted_proposal()).append_record(
+            'remove_scheduled', meeting_id=meeting.meeting_id)
 
     def resolve_proposal(self):
         return self.oguid.resolve_object()
