@@ -179,6 +179,18 @@ class ProposalCancelled(BaseHistoryRecord):
 ProposalHistory.register(ProposalCancelled)
 
 
+class ProposalReactivated(BaseHistoryRecord):
+
+    name = 'reactivated'
+
+    def message(self):
+        return _(u'proposal_history_label_reactivated',
+                 u'Proposal reactivated by ${user}',
+                 mapping={'user': self.get_actor_link()})
+
+ProposalHistory.register(ProposalReactivated)
+
+
 class ProposalSubmitted(BaseHistoryRecord):
 
     name = 'submitted'

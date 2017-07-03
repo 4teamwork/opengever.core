@@ -322,7 +322,7 @@ class Proposal(Base):
         IHistory(self.resolve_proposal()).append_record('cancelled')
 
     def reactivate(self):
-        self.session.add(proposalhistory.Reactivated(proposal=self))
+        IHistory(self.resolve_proposal()).append_record('reactivated')
 
     def update_excerpt(self, agenda_item):
         from opengever.meeting.command import ExcerptOperations
