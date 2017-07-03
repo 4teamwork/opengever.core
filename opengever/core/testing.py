@@ -488,9 +488,12 @@ class GEVERIntegrationTesting(IntegrationTesting):
         self.interceptor.intercept(self.interceptor.BEGIN
                                    | self.interceptor.COMMIT
                                    | self.interceptor.ABORT)
+        self.interceptor.begin_savepoint_simulation()
+        self.interceptor.begin()
         logout()
 
     def testTearDown(self):
+        self.interceptor.stop_savepoint_simulation()
         self.savepoint.rollback()
         self.savepoint = None
         self.interceptor.clear().intercept(self.interceptor.COMMIT)
