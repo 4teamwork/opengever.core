@@ -179,6 +179,130 @@ class TestTaskOverview(FunctionalTestCase):
         )
 
     @browsing
+    def test_task_text_linebreaks_are_transformed(self, browser):
+        dossier = create(Builder('dossier').titled(u'Dossier'))
+
+        text = 'Description\nThis is a description'
+
+        task = create(Builder("task")
+                      .within(dossier)
+                      .titled(u'Aufgabe')
+                      .having(text=text,
+                              task_type='comment'))
+
+        browser.login().open(task, view='tabbedview_view-overview')
+
+        expected = u'Description<br>This is a description'
+        result = (browser.css('table.listing').find('Text').first.row
+                         .css('td').first.innerHTML)
+
+        self.assertEqual(expected, result)
+
+    @browsing
+    def test_task_text_simple_urls_in_sentences_are_transformed(self, browser):
+        dossier = create(Builder('dossier').titled(u'Dossier'))
+
+        text = 'Is http://u.rl.\nIs http://u.rl?\nIs http://u.rl!'
+
+        task = create(Builder("task")
+                      .within(dossier)
+                      .titled(u'Aufgabe')
+                      .having(text=text,
+                              task_type='comment'))
+
+        browser.login().open(task, view='tabbedview_view-overview')
+
+        expected = (u'Is <a href="http://u.rl" rel="nofollow">http://u.rl</a>.<br>'  # noqa
+                    u'Is <a href="http://u.rl" rel="nofollow">http://u.rl</a>?<br>'  # noqa
+                    u'Is <a href="http://u.rl" rel="nofollow">http://u.rl</a>!')  # noqa
+
+        result = (browser.css('table.listing').find('Text').first.row
+                         .css('td').first.innerHTML)
+
+        self.assertEqual(expected, result)
+
+    @browsing
+    def test_task_text_urls_in_sentences_are_transformed(self, browser):
+        dossier = create(Builder('dossier').titled(u'Dossier'))
+
+        text = 'Is http://u.rl/.\nIs http://u.rl/?\nIs http://u.rl/!'
+
+        task = create(Builder("task")
+                      .within(dossier)
+                      .titled(u'Aufgabe')
+                      .having(text=text,
+                              task_type='comment'))
+
+        browser.login().open(task, view='tabbedview_view-overview')
+
+        expected = (u'Is <a href="http://u.rl/" rel="nofollow">http://u.rl/</a>.<br>'  # noqa
+                    u'Is <a href="http://u.rl/" rel="nofollow">http://u.rl/</a>?<br>'  # noqa
+                    u'Is <a href="http://u.rl/" rel="nofollow">http://u.rl/</a>!')  # noqa
+
+        result = (browser.css('table.listing').find('Text').first.row
+                         .css('td').first.innerHTML)
+
+        self.assertEqual(expected, result)
+
+    @browsing
+    def test_task_text_urls_with_get_arguments_in_sentences_are_transformed(
+            self, browser):
+        dossier = create(Builder('dossier').titled(u'Dossier'))
+
+        text = ('Is http://u.rl/with?get=arguments.\n'
+                'Is http://u.rl/with?get=arguments?\n'
+                'Is http://u.rl/with?get=arguments!\n'
+                'Is http://u.rl/with?sev=eral&get=args.\n'
+                'Is http://u.rl/with?sev=eral&get=args?\n'
+                'Is http://u.rl/with?sev=eral&get=args!')
+
+        task = create(Builder("task")
+                      .within(dossier)
+                      .titled(u'Aufgabe')
+                      .having(text=text,
+                              task_type='comment'))
+
+        browser.login().open(task, view='tabbedview_view-overview')
+
+        expected = (u'Is <a href="http://u.rl/with?get=arguments" rel="nofollow">http://u.rl/with?get=arguments</a>.<br>'  # noqa
+                    u'Is <a href="http://u.rl/with?get=arguments" rel="nofollow">http://u.rl/with?get=arguments</a>?<br>'  # noqa
+                    u'Is <a href="http://u.rl/with?get=arguments" rel="nofollow">http://u.rl/with?get=arguments</a>!<br>'  # noqa
+                    u'Is <a href="http://u.rl/with?sev=eral&amp;get=args" rel="nofollow">http://u.rl/with?sev=eral&amp;get=args</a>.<br>'  # noqa
+                    u'Is <a href="http://u.rl/with?sev=eral&amp;get=args" rel="nofollow">http://u.rl/with?sev=eral&amp;get=args</a>?<br>'  # noqa
+                    u'Is <a href="http://u.rl/with?sev=eral&amp;get=args" rel="nofollow">http://u.rl/with?sev=eral&amp;get=args</a>!')  # noqa
+
+        result = (browser.css('table.listing').find('Text').first.row
+                         .css('td').first.innerHTML)
+
+        self.assertEqual(expected, result)
+
+    @browsing
+    def test_task_text_urls_with_anchors_in_sentences_are_transformed(
+            self, browser):
+        dossier = create(Builder('dossier').titled(u'Dossier'))
+
+        text = ('Is http://u.rl/with#goto.\n'
+                'Is http://u.rl/with#goto?\n'
+                'Is http://u.rl/with#goto!')
+
+        task = create(Builder("task")
+                      .within(dossier)
+                      .titled(u'Aufgabe')
+                      .having(text=text,
+                              task_type='comment'))
+
+        browser.login().open(task, view='tabbedview_view-overview')
+
+        expected = (u'Is <a href="http://u.rl/with#goto" rel="nofollow">http://u.rl/with#goto</a>.<br>'  # noqa
+                    u'Is <a href="http://u.rl/with#goto" rel="nofollow">http://u.rl/with#goto</a>?<br>'  # noqa
+                    u'Is <a href="http://u.rl/with#goto" rel="nofollow">http://u.rl/with#goto</a>!')  # noqa
+
+        result = (browser.css('table.listing').find('Text').first.row
+                         .css('td').first.innerHTML)
+
+        self.assertEqual(expected, result)
+
+    @browsing
     def test_subtasks_are_shown_on_parent_task_page(self, browser):
         dossier = create(Builder('dossier').titled(u'Dossier'))
         task = create(Builder("task")
