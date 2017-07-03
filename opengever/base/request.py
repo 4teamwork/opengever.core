@@ -1,4 +1,5 @@
 from opengever.ogds.base.exceptions import ClientNotFound
+from opengever.ogds.base.interfaces import IInternalOpengeverRequestLayer
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from Products.CMFCore.utils import getToolByName
@@ -7,6 +8,7 @@ from ZODB.POSException import ConflictError
 from zope.component.hooks import getSite
 from zope.component.hooks import setSite
 from zope.globalrequest import getRequest
+from zope.interface import alsoProvides
 import json
 import os.path
 import pkg_resources
@@ -85,6 +87,7 @@ def dispatch_request(target_admin_unit_id, viewname, path='',
 def _local_request(viewname, path, data):
     # do not connect to the site itself but do a restrictedTraverse
     request = getRequest()
+    alsoProvides(request, IInternalOpengeverRequestLayer)
     site = getSite()
 
     # we need to back up the request data and set them new for the
