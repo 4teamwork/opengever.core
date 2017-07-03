@@ -340,7 +340,7 @@ class Proposal(Base):
         self.generate_excerpt(agenda_item)
         document_intid = self.copy_excerpt_to_proposal_dossier()
         self.register_excerpt(document_intid)
-        self.session.add(proposalhistory.ProposalDecided(proposal=self))
+        IHistory(self.resolve_submitted_proposal()).append_record('decided')
         self.execute_transition('scheduled-decided')
 
     def register_excerpt(self, document_intid):

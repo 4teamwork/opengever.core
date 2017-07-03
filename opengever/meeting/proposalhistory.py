@@ -265,6 +265,19 @@ class ProposalScheduled(BaseHistoryRecord):
 ProposalHistory.register(ProposalScheduled)
 
 
+class ProposalDecided(BaseHistoryRecord):
+
+    name = 'decided'
+    needs_syncing = True
+
+    def message(self):
+        return _(u'proposal_history_label_decided',
+                 u'Proposal decided by ${user}',
+                 mapping={'user': self.get_actor_link()})
+
+ProposalHistory.register(ProposalDecided)
+
+
 class ProposalRemovedFromSchedule(ProposalScheduled):
 
     name = 'remove_scheduled'

@@ -214,6 +214,26 @@ class TestProposalHistory(FunctionalTestCase):
             self.get_latest_history_entry_text(browser))
 
     @browsing
+    def test_deciding_creates_history_entry(self, browser):
+        self.submit_proposal()
+        transaction.commit()
+        browser.login().open(
+            self.meeting.get_url(view='unscheduled_proposals/1/schedule'))
+        browser.open(self.meeting.get_url(view='agenda_items/1/decide'),
+                     data={'_authenticator': createToken()})
+
+        submitted_proposal = self.proposal.load_model().resolve_submitted_proposal()
+        self.open_overview(browser, submitted_proposal)
+        self.assertEqual(
+            u'Proposal decided by Test User (test_user_1_)',
+            self.get_latest_history_entry_text(browser))
+
+        self.open_overview(browser)
+        self.assertEqual(
+            u'Proposal decided by Test User (test_user_1_)',
+            self.get_latest_history_entry_text(browser))
+
+    @browsing
     def test_revising_creates_history_entry(self, browser):
         self.submit_proposal()
         transaction.commit()
