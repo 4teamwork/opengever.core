@@ -73,6 +73,8 @@ class OpengeverContentFixture(object):
             'dossier_responsible', u'Robert', u'Ziegler')
         self.regular_user = self.create_user(
             'regular_user', u'K\xe4thi', u'B\xe4rfuss')
+        self.secretariat_user = self.create_user(
+            'secretariat_user', u'J\xfcrgen', u'K\xf6nig')
 
     @staticuid()
     def create_repository_tree(self):
@@ -82,6 +84,8 @@ class OpengeverContentFixture(object):
                     title_fr=u'Syst\xe8me de classement')))
         self.root.manage_setLocalRoles(self.org_unit.users_group_id,
                                        ('Reader', 'Contributor', 'Editor'))
+        self.root.manage_setLocalRoles(self.secretariat_user.getId(),
+                                       ('Reviewer', 'Publisher'))
         self.root.reindexObjectSecurity()
 
         self.repofolder0 = self.register('branch_repofolder', create(
