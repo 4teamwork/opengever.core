@@ -4,9 +4,12 @@ from opengever.contact.sources import ContactsSourceBinder
 from opengever.journal import _
 from opengever.journal.entry import ManualJournalEntry
 from plone.autoform.widgets import ParameterizedWidget
+from plone.dexterity.i18n import MessageFactory as pd_mf
 from plone.directives import form
+from z3c.form import button
 from z3c.form.field import Fields
 from z3c.form.form import AddForm
+from z3c.form.i18n import MessageFactory as z3c_mf
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
 from zope import schema
@@ -63,6 +66,26 @@ class ManualJournalEntryAddForm(AddForm):
         KeywordWidget,
         async=True
     )
+
+    @button.buttonAndHandler(z3c_mf('Add'), name='add')
+    def handleAdd(self, action):
+        data, errors = self.extractData()
+        if errors:
+            self.status = self.formErrorsMessage
+            return
+        obj = self.createAndAdd(data)
+        if obj is not None:
+            # mark only as finished if we get the new object
+            self._finishedAdd = True
+
+    @button.buttonAndHandler(pd_mf(u'Cancel'), name='cancel')
+    def handleCancel(self, action):
+        return self.request.RESPONSE.redirect(
+            '{}#journal'.format(self.context.absolute_url()))
+
+    def updateActions(self):
+        super(ManualJournalEntryAddForm, self).updateActions()
+        self.actions['add'].addClass("context")
 
     def createAndAdd(self, data):
         contacts, users = self.split_contacts_and_users(data.get('contacts'))
