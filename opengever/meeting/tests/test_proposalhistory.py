@@ -144,6 +144,12 @@ class TestProposalHistory(FunctionalTestCase):
         browser.fill({'Attachments': self.document})
         browser.find('Submit Attachments').click()
 
+        submitted_proposal = self.proposal.load_model().resolve_submitted_proposal()
+        self.open_overview(browser, submitted_proposal)
+        self.assertEqual(
+            u'Submitted document A Document updated to version 1 by Test User (test_user_1_)',
+            self.get_latest_history_entry_text(browser))
+
         self.open_overview(browser)
         self.assertEqual(
             u'Submitted document A Document updated to version 1 by Test User (test_user_1_)',

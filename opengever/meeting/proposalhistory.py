@@ -265,3 +265,19 @@ class ProposalRemovedFromSchedule(ProposalScheduled):
                           'meeting': self.meeting_title})
 
 ProposalHistory.register(ProposalRemovedFromSchedule)
+
+
+class DocumentUpdated(DocumentSubmitted):
+
+    name = 'document_updated'
+    css_class = 'documentUpdated'
+    needs_syncing = True
+
+    def message(self):
+        return _(u'proposal_history_label_document_updated',
+                 u'Submitted document ${title} updated to version ${version} by ${user}',
+                 mapping={'user': self.get_actor_link(),
+                          'title': self.document_title or '',
+                          'version': self.submitted_version})
+
+ProposalHistory.register(DocumentUpdated)

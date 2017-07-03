@@ -387,7 +387,6 @@ class UpdateSubmittedDocumentCommand(object):
             self.submitted_document.submitted_physical_path,
             view='update-submitted-document')
 
-        session = create_session()
         proposal_model = self.proposal.load_model()
 
         submitted_version = self.document.get_current_version()
@@ -395,11 +394,11 @@ class UpdateSubmittedDocumentCommand(object):
             self.proposal, self.document)
         submitted_document.submitted_version = submitted_version
 
-        session.add(DocumentUpdated(
-            proposal=proposal_model,
-            submitted_document=submitted_document,
+        IHistory(proposal_model.resolve_submitted_proposal()).append_record(
+            'document_updated',
+            document_title=self.document.title,
             submitted_version=submitted_version,
-            document_title=self.document.title))
+        )
 
     def show_message(self):
         portal = api.portal.get()
