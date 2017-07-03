@@ -312,7 +312,7 @@ class Proposal(Base):
     def revise(self, agenda_item):
         assert self.get_state() == self.STATE_DECIDED
         self.update_excerpt(agenda_item)
-        self.session.add(proposalhistory.ProposalRevised(proposal=self))
+        IHistory(self.resolve_submitted_proposal()).append_record('revised')
 
     def reopen(self, agenda_item):
         assert self.get_state() == self.STATE_DECIDED
