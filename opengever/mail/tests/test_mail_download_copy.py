@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from ftw.testbrowser import browsing
+from opengever.base.command import CreateEmailCommand
 from opengever.document.browser.download import DownloadConfirmationHelper
 from opengever.mail.tests import MAIL_DATA
 from opengever.testing import FunctionalTestCase
@@ -9,6 +10,7 @@ from pkg_resources import resource_string
 from plone.app.testing import TEST_USER_ID
 from zope.annotation import IAnnotations
 from zope.i18n import translate
+import transaction
 
 
 MAIL_DATA_LF = resource_string('opengever.mail.tests', 'mail_lf.txt')
@@ -100,3 +102,31 @@ class TestMailDownloadCopy(FunctionalTestCase):
         self.assertNotIn(
             'confirmation',
             browser.css('a.function-download-copy').first.get('href'))
+
+    @browsing
+    def test_download_copy_delivers_msg_if_available(self, browser):
+        dossier = create(Builder('dossier'))
+
+        class MockMsg2MimeTransform(object):
+
+            def transform(self, data):
+                return 'mock-eml-body'
+
+        command = CreateEmailCommand(dossier,
+                                     'testm\xc3\xa4il.msg',
+                                     'mock-msg-body',
+                                     transform=MockMsg2MimeTransform())
+        mail = command.execute()
+        transaction.commit()
+
+        DownloadConfirmationHelper(mail).deactivate()
+        browser.login().visit(mail, view='tabbedview_view-overview')
+        browser.find('Download copy').click()
+
+        self.assertDictContainsSubset({
+            'status': '200 Ok',
+            'content-length': str(len(browser.contents)),
+            'content-type': 'application/vnd.ms-outlook',
+            'content-disposition': 'attachment; filename="testm\xc3\xa4il.msg"',
+            },
+            browser.headers)

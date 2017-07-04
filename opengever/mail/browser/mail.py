@@ -5,17 +5,20 @@ from ftw.mail.mail import IMail
 from ftw.mail.mail import View
 from opengever.base import _ as ogbmf
 from opengever.document import _ as ogdmf
+from opengever.document.browser.download import DownloadConfirmationHelper
 from opengever.document.browser.overview import CustomRow
 from opengever.document.browser.overview import FieldRow
 from opengever.document.browser.overview import Overview
 from opengever.document.browser.overview import TemplateRow
 from opengever.mail import _
+from opengever.mail.mail import IOGMail
 from plone import api
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize import instance
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.component import getUtility
+from zope.size import byteDisplay
 
 
 class MailAttachmentsMixin(object):
@@ -78,6 +81,34 @@ class OverviewTab(MailAttachmentsMixin, Overview):
     # override template lookup, its realive to this file
     file_template = ViewPageTemplateFile('templates/file.pt')
     attachments_template = ViewPageTemplateFile('templates/attachments.pt')
+
+    def __init__(self, *args, **kwargs):
+        super(OverviewTab, self).__init__(*args, **kwargs)
+
+        self.ogmail = IOGMail(self.context)
+        if self.ogmail.original_message:
+            self.field = self.ogmail.original_message
+        else:
+            self.field = self.context.message
+
+    @property
+    def file_size(self):
+        return byteDisplay(self.field.getSize())
+
+    def get_download_copy_tag(self):
+        dc_helper = DownloadConfirmationHelper(self.context)
+
+        if self.ogmail.original_message:
+            return dc_helper.get_html_tag(
+                additional_classes=['function-download-copy'],
+                viewname="@@download/original_message",
+                include_token=True
+                )
+        else:
+            return dc_helper.get_html_tag(
+                additional_classes=['function-download-copy'],
+                include_token=True
+                )
 
     def get_metadata_config(self):
         rows = [

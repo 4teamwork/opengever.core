@@ -5,6 +5,7 @@ Changelog
 2017.3.1 (unreleased)
 ---------------------
 
+- Always download MSG file if avaiable. [mathias.leimgruber]
 - Do not sync comments to a predecessor forwarding. [phgross]
 - Ignore LocalRolesModified events in repositoryfolder ModifiedEvent subscribers. [phgross]
 - Fixed translation for portal message type, when adding a DX object. [phgross]
