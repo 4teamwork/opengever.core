@@ -141,8 +141,48 @@ class OpengeverContentFixture(object):
                     keywords=(u'Finanzverwaltung', u'Vertr\xe4ge'),
                     start=date(2016, 1, 1),
                     responsible='hugo.boss')))
-        self.register('subdossier',
-                      create(Builder('dossier').within(self.dossier).titled(u'2016')))
+
+        document = self.register('document', create(
+            Builder('document').within(self.dossier)
+            .titled(u'Vertr\xe4gsentwurf')
+            .attach_file_containing('Word dummy content',
+                                    u'vertrasentwurf.docx')))
+
+        task = self.register('task', create(
+            Builder('task').within(self.dossier)
+            .titled(u'Vertragsentwurf \xdcberpr\xfcfen')
+            .having(responsible_client=self.org_unit.id(),
+                    responsible=self.regular_user.getId(),
+                    issuer=self.dossier_responsible.getId(),
+                    task_type='correction',
+                    deadline=date(2016, 11, 1))
+            .in_state('task-state-in-progress')
+            .relate_to(document)))
+
+        self.register('subtask', create(
+            Builder('task').within(task)
+            .titled(u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen')
+            .having(responsible_client=self.org_unit.id(),
+                    responsible=self.regular_user.getId(),
+                    issuer=self.dossier_responsible.getId(),
+                    task_type='correction',
+                    deadline=date(2016, 11, 1))
+            .in_state('task-state-resolved')
+            .relate_to(document)))
+
+        self.register('taskdocument', create(
+            Builder('document').within(task)
+            .titled(u'Feedback zum Vertragsentwurf')
+            .attach_file_containing('Feedback text',
+                                    u'vertr\xe4g sentwurf.docx')))
+
+        subdossier = self.register('subdossier', create(
+            Builder('dossier').within(self.dossier).titled(u'2016')))
+
+        self.register('subdocument', create(
+            Builder('document').within(subdossier)
+            .titled(u'\xdcbersicht der Vertr\xe4ge von 2016')
+            .attach_file_containing('Excel dummy content', u'tab\xe4lle.xlsx')))
 
         self.register('archive_dossier', create(
             Builder('dossier').within(self.repofolder00)
