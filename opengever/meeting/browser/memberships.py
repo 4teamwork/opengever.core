@@ -104,7 +104,7 @@ class RemoveMembership(RemoveModelView):
     @property
     def success_message(self):
         return _('msg_membership_deleted',
-                 default=u'The membership was deleted successfully')
+                 default=u'The membership was deleted successfully.')
 
     def nextURL(self):
         return MemberView.url_for(self.context.parent.parent,

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-06-07 14:40+0000\n"
+"POT-Creation-Date: 2017-07-04 06:48+0000\n"
 "PO-Revision-Date: 2015-04-10 09:01+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -75,7 +75,7 @@ msgid "Are you sure you want to close this meeting?"
 msgstr "Wollen Sie diese Sitzung wirklich abschliessen?"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:83
-msgid "Are you sure you want to decide this agendaitem?"
+msgid "Are you sure, you want to decide this agendaitem?"
 msgstr "Sind Sie sicher, dass Sie dieses Traktandum beschliessen möchten?"
 
 #: ./opengever/meeting/browser/memberships.py:53
@@ -169,7 +169,7 @@ msgstr "\"Zu eröffnen\" an einfügen"
 
 #: ./opengever/meeting/browser/meetings/excerpt.py:60
 msgid "Include \"publish in\""
-msgstr "\"Veröffentlichung\" in einfügen"
+msgstr "\"Veröffentlichung in\" einfügen"
 
 #: ./opengever/meeting/browser/meetings/excerpt.py:44
 msgid "Include considerations"
@@ -245,7 +245,7 @@ msgstr "Bitte wählen Sie mindestens ein Traktandum aus."
 
 #: ./opengever/meeting/browser/meetings/excerpt.py:85
 msgid "Please select at least one field for the excerpt."
-msgstr "Bitte wählen Sie mindestens einen Feld für den Protokollauszug aus."
+msgstr "Bitte wählen Sie mindestens ein Feld für den Protokollauszug aus."
 
 #: ./opengever/meeting/browser/templates/member.pt:19
 msgid "Properties"
@@ -573,7 +573,7 @@ msgstr "Der Freitext darf nicht leer sein."
 #. Default: "Cannot change the state because the proposal contains checked out documents."
 #: ./opengever/meeting/browser/proposaltransitions.py:29
 msgid "error_must_checkin_documents_for_transition"
-msgstr "Der Status kann ich geändert werden solange der Antrag ausgecheckte Dokumente enthält."
+msgstr "Der Status kann nicht geändert werden solange der Antrag ausgecheckte Dokumente enthält."
 
 #. Default: "Only word files (.docx) can be added here."
 #: ./opengever/meeting/proposaltemplate.py:36
@@ -612,10 +612,10 @@ msgstr "Antrag zurückweisen"
 msgid "held"
 msgstr "Durchgeführt"
 
-#. Default: "Describe why the proposal is rejected"
+#. Default: "Describe, why the proposal is rejected"
 #: ./opengever/meeting/browser/proposaltransitions.py:60
 msgid "help_reject_proposal_text"
-msgstr "Beschreiben Sie warum der Antrag zurückgewiesen wird"
+msgstr "Beschreiben Sie, warum der Antrag zurückgewiesen wird"
 
 #. Default: "Select the target dossier where the excerpts should be created."
 #: ./opengever/meeting/browser/meetings/excerpt.py:24
@@ -771,7 +771,7 @@ msgstr "Wollen Sie dieses Traktandum wirklich löschen?"
 #: ./opengever/meeting/browser/meetings/protocol.py:147
 #: ./opengever/meeting/proposal.py:90
 msgid "label_disclose_to"
-msgstr "Zu eröffnen an"
+msgstr "\"Zu eröffnen\" an"
 
 #. Default: "Discussion"
 #: ./opengever/meeting/browser/meetings/protocol.py:138
@@ -934,7 +934,7 @@ msgstr "Mitglied"
 #. Default: "Modified"
 #: ./opengever/meeting/browser/proposalforms.py:117
 msgid "label_modified"
-msgstr "Zuletzt Bearbeitet"
+msgstr "Zuletzt bearbeitet"
 
 #. Default: "Next Meeting:"
 #: ./opengever/meeting/browser/committeecontainertabs_templates/committee.pt:53
@@ -1166,7 +1166,7 @@ msgstr "Das ausgewählte Gremium wurde deaktiviert, der Antrag konnte nicht eing
 msgid "msg_meeting_successfully_closed"
 msgstr "Die Sitzung ${title} wurde erfolgreich abgeschlossen, die Protokollauszüge wurden generiert und an die Urprungsdossiers zurückgespielt."
 
-#. Default: "The membership was deleted successfully"
+#. Default: "The membership was deleted successfully."
 #: ./opengever/meeting/browser/memberships.py:106
 msgid "msg_membership_deleted"
 msgstr "Die Mitgliedschaft wurde erfolgreich gelöscht"
@@ -1201,10 +1201,10 @@ msgstr "Der Antrag wurde wieder eröffnet."
 msgid "msg_proposal_submitted"
 msgstr "Antrag erfolgreich eingereicht."
 
-#. Default: "The object was deleted successfully"
+#. Default: "The object was deleted successfully."
 #: ./opengever/meeting/browser/views.py:21
 msgid "msg_successfully_deleted"
-msgstr "Das Objekt wurde erfolgreich gelöscht"
+msgstr "Das Objekt wurde erfolgreich gelöscht."
 
 #. Default: "There are unscheduled proposals submitted to this committee."
 #: ./opengever/meeting/browser/committee.py:80
@@ -1403,4 +1403,3 @@ msgstr "Zeit"
 #: ./opengever/meeting/model/proposal.py:164
 msgid "un-schedule"
 msgstr "Traktandum entfernen"
-

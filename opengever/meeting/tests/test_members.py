@@ -170,7 +170,7 @@ class TestMemberView(FunctionalTestCase):
         link = browser.css('a.remove_membership').first
         link.click()
 
-        self.assertEqual(['The membership was deleted successfully'],
+        self.assertEqual(['The membership was deleted successfully.'],
                          info_messages())
 
         # I do not know why we need to reload. Feel free to fix this.

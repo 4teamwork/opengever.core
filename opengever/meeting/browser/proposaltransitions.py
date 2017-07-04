@@ -58,7 +58,7 @@ class IRejectProposalSchema(Interface):
     text = schema.Text(
         title=_(u'label_reject_proposal_text', default=u'Comment'),
         description=_(u'help_reject_proposal_text',
-                      default=u'Describe why the proposal is rejected'),
+                      default=u'Describe, why the proposal is rejected'),
         required=False)
 
 
