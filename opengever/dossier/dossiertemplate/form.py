@@ -82,6 +82,19 @@ def get_wizard_storage(context):
     return storage.get_data(get_wizard_storage_key(context))
 
 
+def save_template_obj(context, template):
+    set_wizard_storage(context,
+                       {'template_path': '/'.join(template.getPhysicalPath())})
+
+
+def get_saved_template_obj(context):
+    template_path = get_wizard_storage(context).get('template_path')
+    if not template_path:
+        return None
+
+    return api.portal.get().restrictedTraverse(template_path, default=None)
+
+
 class ICreateDossierFromTemplate(form.Schema):
     """Schema for first wizard step to select the dossiertemplate
     """
@@ -141,7 +154,8 @@ class SelectDossierTemplateWizardStep(
             self.status = self.formErrorsMessage
             return
 
-        set_wizard_storage(self.context, data)
+        save_template_obj(self.context, data.get('template'))
+
         return self.request.RESPONSE.redirect(
             "{}/add-dossier-from-template".format(self.context.absolute_url()))
 
@@ -174,7 +188,7 @@ class AddDossierFromTemplateWizardStep(WizzardWrappedAddForm):
 
                 self.is_available()
 
-                template_obj = get_wizard_storage(self.context).get('template')
+                template_obj = get_saved_template_obj(self.context)
 
                 if not template_obj:
                     # This happens if the user access the step directly and
@@ -213,7 +227,7 @@ class AddDossierFromTemplateWizardStep(WizzardWrappedAddForm):
                             self._modify_keyword_widget_according_to_template(widget)
 
             def _modify_keyword_widget_according_to_template(self, widget):
-                template_obj = get_wizard_storage(self.context).get('template')
+                template_obj = get_saved_template_obj(self.context)
 
                 if template_obj.restrict_keywords:
                     # since the widget gets somehow reinitialized it's not
@@ -264,7 +278,7 @@ class AddDossierFromTemplateWizardStep(WizzardWrappedAddForm):
                 container = self.createAndAdd(data)
                 if container is not None:
                     container = self.context.get(container.getId())
-                    template_container = get_wizard_storage(self.context).get('template')
+                    template_container = get_saved_template_obj(self.context)
 
                     with DeactivatedCatalogIndexing():
                         # While generating content, each newly created object
