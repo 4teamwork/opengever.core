@@ -29,7 +29,8 @@ from zope.component import queryMultiAdapter
 
 
 class BaseRow(object):
-    """Base class for metadata row configurations."""
+    """Base class for metadata row configurations.
+    """
 
     def __init__(self):
         self._view = None
@@ -45,7 +46,8 @@ class BaseRow(object):
 
 
 class FieldRow(BaseRow):
-    """A metadata row type that gets its information from schema fields."""
+    """A metadata row type that gets its information from schema fields.
+    """
 
     def __init__(self, field, label=None):
         super(FieldRow, self).__init__()
@@ -120,7 +122,8 @@ class TemplateRow(CustomRow):
 
 
 class Overview(DisplayForm, GeverTabMixin, ActionButtonRendererMixin):
-    """File details overview."""
+    """File details overview.
+    """
 
     is_on_detail_view = True
     is_overview_tab = True
@@ -133,6 +136,8 @@ class Overview(DisplayForm, GeverTabMixin, ActionButtonRendererMixin):
     show_searchform = False
 
     file_template = ViewPageTemplateFile('templates/file.pt')
+    related_documents_template = ViewPageTemplateFile(
+        'templates/related_documents.pt')
     archival_file_template = ViewPageTemplateFile('templates/archiv_file.pt')
     public_trial_template = ViewPageTemplateFile('templates/public_trial.pt')
     submitted_with_template = ViewPageTemplateFile('templates/submitted_with.pt')  # noqa
@@ -155,7 +160,8 @@ class Overview(DisplayForm, GeverTabMixin, ActionButtonRendererMixin):
             FieldRow('IDocumentMetadata.preserved_as_paper'),
             FieldRow('IDocumentMetadata.receipt_date'),
             FieldRow('IDocumentMetadata.delivery_date'),
-            FieldRow('IRelatedDocuments.relatedItems'),
+            TemplateRow(self.related_documents_template, label=_(
+                u'label_related_documents', default=u'Related Documents')),
             FieldRow('IClassification.classification'),
             FieldRow('IClassification.privacy_layer'),
             TemplateRow(self.public_trial_template,
@@ -193,6 +199,19 @@ class Overview(DisplayForm, GeverTabMixin, ActionButtonRendererMixin):
                     submitted_document.document_id
                     )
 
+    def linked_documents(self):
+        """Returns a list documents related to the context document.
+        """
+
+        return [{
+            'class': self.get_css_class(obj),
+            'title': obj.Title(),
+            'url': obj.absolute_url(),
+        } for obj in sorted(
+            self.context.related_items(bidirectional=True),
+            key=lambda obj: obj.Title()
+        )]
+
     def is_outdated(self, submitted_document):
         return not submitted_document.is_up_to_date(self.context)
 
@@ -220,8 +239,8 @@ class Overview(DisplayForm, GeverTabMixin, ActionButtonRendererMixin):
             return Actor.user(manager.get_checked_out_by()).get_link()
         return ''
 
-    def get_css_class(self):
-        return get_css_class(self.context)
+    def get_css_class(self, context=None):
+        return get_css_class(context or self.context)
 
     def show_modfiy_public_trial_link(self):
         try:

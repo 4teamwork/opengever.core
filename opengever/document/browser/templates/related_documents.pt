@@ -1,0 +1,12 @@
+<tal:block xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    i18n:domain="opengever.document">
+
+    <ul class="related_documents">
+        <li tal:repeat="doc view/linked_documents">
+            <span tal:attributes="class doc/class" />
+            <a tal:attributes="href doc/url"
+               tal:content="doc/title"/>
+        </li>
+    </ul>
+
+</tal:block>

@@ -36,6 +36,24 @@ class TestDocumentOverview(FunctionalTestCase):
         super(TestDocumentOverview, self).tearDown()
 
     @browsing
+    def test_overview_displays_related_documents(self, browser):
+        self.doc_a = create(Builder('document')
+                            .having(title=u'A\xf6'))
+        self.doc_b = create(Builder('document')
+                            .having(title=u'B\xf6')
+                            .relate_to(self.doc_a))
+        self.doc_c = create(Builder('document')
+                            .having(title=u'C\xf6')
+                            .relate_to(self.doc_b))
+
+        browser.login().open(self.doc_b, view='tabbedview_view-overview')
+
+        self.assertEquals(
+            [self.doc_a.title, self.doc_c.title],
+            browser.css('ul.related_documents a').text
+        )
+
+    @browsing
     def test_overview_has_edit_link(self, browser):
         browser.login().open(self.document, view='tabbedview_view-overview')
         self.assertEquals('Checkout and edit',

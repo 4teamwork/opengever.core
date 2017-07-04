@@ -17,6 +17,7 @@ Changelog
 - Sort meeting participants alphabetically. [deiferni]
 - Use officeconnector to edit a newly created document from template. [tarnap]
 - Add bumblebee gallery view for related-documents tab on tasks. [elioschmutz]
+- List bidirectionally related documents in the document's overview. [tarnap]
 - Implement and enable redirector etag adapter. [phgross]
 - Add reference column to document listings. [tarnap]
 - Do not display templates without an assigned file in the CreateDocumentFromTemplate form. [tarnap]
