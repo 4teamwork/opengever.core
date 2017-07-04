@@ -550,7 +550,7 @@ msgstr "Numéro d'inventaire"
 #. Default: "Reference Number"
 #: ./opengever/dossier/behaviors/dossier.py:174
 msgid "label_former_reference_number"
-msgstr "Ancienne numéro référence"
+msgstr "Ancien numéro référence"
 
 #. Default: "Info"
 #: ./opengever/dossier/browser/tabbed.py:38
