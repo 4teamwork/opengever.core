@@ -5,60 +5,13 @@ Changelog
 2017.2.5 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Include missing permission definitions from Products.CMFCore. [phgross]
 
 
 2017.2.4 (2017-06-14)
 ---------------------
 
 - Added french translations [j-sposato, phgross]
-- Include missing permission definitions from Products.CMFCore. [phgross]
-- Fix PrivateFolders Title encoding. [phgross]
-- Fix "leave GEVER" on logout overlay. [mathias.leimgruber]
-- Disbale swfobject.js - no longer load Flash Fallback for multiuploads. [mathias.leimgruber]
-- Add missing contacts only sources, used by customer special dossiers. [phgross]
-- Reset journal after copy a document. [mathias.leimgruber]
-- Fix task assign form: Only users and the inbox of the current user is selectable. [mathias.leimgruber]
-- Fix for OGIP 15: no longer make a deepcopy of the payload. [mathias.leimgruber]
-- Render subdossier tree collapsed initially. [Kevin Bieri]
-- Implement and enable the org unit selector etag adapter. [phgross]
-- Hard-code base profiles to be installed for every deployment. [deiferni]
-- Add api_group deployment configuration option. [deiferni]
-- Improve visual search on customer request. [Kevin Bieri]
-- Merge Generic Setup profiles into a new opengever.core:default profile. [phgross]
-- Replace the AutocompleteField(Multi)Widget with the KeywordWidget. This makes the AutocompleteWidget obsolete. [mathias.leimgruber]
-- Fix Subject link on dossier overview. [mathias.leimgruber]
-- Fix tasktemplate view by adding a missing </table> tag. [mathias.leimgruber]
-- Install ftw.copymovepatches for better move performance. [mathias.leimgruber]
-- Use latest ftw.datepicker for all datetime widgets. [mathias.leimgruber]
-- Make `resolving` a dossier customizable and provide two implementations (strict and lenient). [deiferni]
-- Replace changed_security with elevated_privileges. [deiferni]
-- Implement tracebackify decorator for better errorhandling/debugging remote requests. [mathias.leimgruber]
-- Implement safe_call decorator for better errhandling/debugging remove requests. [mathias.leimgruber]
-- Refactor SQL models, move Query classes to query module. [deiferni]
-- Link keywords on dossier overview. [mathias.leimgruber]
-- Fix checkout behavior of already checked out documents. [Kevin Bieri]
-- Make sure that pasting is allowed before pasting. [deiferni]
-- Remove an unused creator behaviour from the codebase. [Rotonen]
-- Keep *.msg file after conversion and store message source for mails. [deiferni]
-- Fix string type in bundle loader [buchi]
-- Fix translation for the Open as PDF action. [phgross]
-- OGGBundle: Do not initialize the mail title for mails with a title given. [phgross]
-- Fix addable types constrain for repository folders in API calls [buchi]
-- Cache addable types constrains for repository folders per request [buchi]
-- Fix typo in dossier SearchableTextExtender, which results in a empty SearchableText if IFilingNumber behavior was activated. [mathias.leimgruber]
-- Display attachments on mail overviews. [Rotonen]
-- Allow the same Users to edit Tasktemplatefolders in active state as in inactice state. [mathias.leimgruber]
-- Make sure local roles of committees are stored as byte strings [buchi]
-- Use CreatEmailCommand to create email upon mail-in. [deiferni]
-- Fix typo in method name: resolve_sumitted_proposal -> resolve_submitted_proposal. [mathias.leimgruber]
-- Use chameleon as the templating engine for better performance. [Rotonen]
-- Respect `maximum_dossier_depth` registry record in DefaultConstrainTypeDecider [mathias.leimgruber]
-- Handle require_login error where came_from_did not exist. [jone]
-- Inter-Admin-Unit Requests: Extract response body into the local namespace so
-  Sentry can log it as a local in case of failure. [lgraf]
-- Word meeting: replace proposal textfields with a document. [jone]
-- OGIP 15: Implement adding multiple task with the add form. [mathias.leimgruber]
 
 
 2017.2.3 (2017-05-26)
