@@ -10,6 +10,7 @@ from opengever.meeting import _
 from opengever.meeting import is_meeting_feature_enabled
 from opengever.meeting.browser.documents.submit import ISubmitAdditionalDocument
 from opengever.meeting.exceptions import NoSubmittedDocument
+from opengever.meeting.proposal import ISubmittedProposal
 from opengever.tabbedview.utils import get_containing_document_tab_url
 from plone import api
 from plone.autoform.form import AutoExtensibleForm
@@ -219,7 +220,7 @@ class RecieveSubmittedDocumentView(PrivilegedReceiveObject):
 
     grok.name('recieve-submitted-document')
     grok.require('cmf.AddPortalContent')
-    grok.context(Interface)
+    grok.context(ISubmittedProposal)
 
     def receive(self):
         document = super(RecieveSubmittedDocumentView, self).receive()
