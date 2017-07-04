@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-06-07 14:40+0000\n"
+"POT-Creation-Date: 2017-07-04 06:48+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -74,7 +74,7 @@ msgid "Are you sure you want to close this meeting?"
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:83
-msgid "Are you sure you want to decide this agendaitem?"
+msgid "Are you sure, you want to decide this agendaitem?"
 msgstr ""
 
 #: ./opengever/meeting/browser/memberships.py:53
@@ -611,7 +611,7 @@ msgstr ""
 msgid "held"
 msgstr ""
 
-#. Default: "Describe why the proposal is rejected"
+#. Default: "Describe, why the proposal is rejected"
 #: ./opengever/meeting/browser/proposaltransitions.py:60
 msgid "help_reject_proposal_text"
 msgstr ""
@@ -1165,7 +1165,7 @@ msgstr ""
 msgid "msg_meeting_successfully_closed"
 msgstr ""
 
-#. Default: "The membership was deleted successfully"
+#. Default: "The membership was deleted successfully."
 #: ./opengever/meeting/browser/memberships.py:106
 msgid "msg_membership_deleted"
 msgstr ""
@@ -1200,7 +1200,7 @@ msgstr ""
 msgid "msg_proposal_submitted"
 msgstr ""
 
-#. Default: "The object was deleted successfully"
+#. Default: "The object was deleted successfully."
 #: ./opengever/meeting/browser/views.py:21
 msgid "msg_successfully_deleted"
 msgstr ""

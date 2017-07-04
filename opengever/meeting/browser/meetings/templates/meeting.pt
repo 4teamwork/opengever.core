@@ -81,7 +81,7 @@
             When deciding an agendaitem the meeting will sent to hold state. Once the meeting is held, the agenda list is no longer editable.
           </p>
           <p i18n:translate="">
-            Are you sure you want to decide this agendaitem?
+            Are you sure, you want to decide this agendaitem?
           </p>
           <div class="button-group">
             <button class="button confirm"
