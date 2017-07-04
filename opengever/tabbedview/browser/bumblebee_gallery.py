@@ -8,6 +8,8 @@ from opengever.bumblebee import set_preferred_listing_view
 from opengever.tabbedview.browser.personal_overview import MyDocuments
 from opengever.tabbedview.browser.tabs import Documents
 from opengever.tabbedview.browser.tabs import Trash
+from opengever.task.browser.related_documents import RelatedDocuments
+from plone.memoize.view import memoize
 from zExceptions import NotFound
 
 
@@ -58,14 +60,13 @@ class BumblebeeGalleryMixin(object):
                 'mime_type_css_class': get_css_class(brain),
             }
 
+    @memoize
     def get_brains(self):
         self.table_source.config.filter_text = self.request.get(
             'searchable_text', '')
 
-        if not hasattr(self, '_brains'):
-            catalog = getToolByName(self.context, 'portal_catalog')
-            setattr(self, '_brains', catalog(self.table_source.build_query()))
-        return getattr(self, '_brains')
+        query = self.table_source.build_query()
+        return self.table_source.search_results(query)
 
     def fetch(self):
         """Action for retrieving more events (based on `next_event_id` in
@@ -151,6 +152,30 @@ class TrashGalleryFetch(TrashGallery):
     soon as the parent views are registered as Zope 3 BrowserViews.
     """
     grok.name('tabbedview_view-trash-gallery-fetch')
+
+    def __call__(self):
+        return self.fetch()
+
+
+class RelatedDocumentsGallery(BumblebeeGalleryMixin, RelatedDocuments):
+    grok.name('tabbedview_view-relateddocuments-gallery')
+
+    @property
+    def list_view_name(self):
+        return "relateddocuments"
+
+
+class RelatedDocumentsGalleryFetch(RelatedDocumentsGallery):
+    """Returns the next gallery-items.
+
+    Unfortunately it's not possible to use a traversable method with
+    five.grok-views. Therefore we have to register an own browserview
+    to fetch the next gallery-items.
+
+    This browserview can be removed and implemented with allowed-attributes as
+    soon as the parent views are registered as Zope 3 BrowserViews.
+    """
+    grok.name('tabbedview_view-relateddocuments-gallery-fetch')
 
     def __call__(self):
         return self.fetch()

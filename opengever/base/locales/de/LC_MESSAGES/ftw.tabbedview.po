@@ -188,6 +188,9 @@ msgstr "Verwande Dokumente"
 msgid "relateddocuments"
 msgstr "Dokumente"
 
+msgid "relateddocuments-proxy"
+msgstr "Dokumente"
+
 msgid "reports"
 msgstr "Arbeitsrapporte"
 

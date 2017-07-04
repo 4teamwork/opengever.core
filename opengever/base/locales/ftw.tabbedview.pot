@@ -197,6 +197,9 @@ msgstr ""
 msgid "related_documents"
 msgstr ""
 
+msgid "relateddocuments-proxy"
+msgstr ""
+
 msgid "relateddocuments"
 msgstr ""
 

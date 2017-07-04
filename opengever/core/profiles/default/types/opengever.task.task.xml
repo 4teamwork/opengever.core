@@ -84,7 +84,7 @@
   <action
       i18n:domain="opengever.core"
       title="Related Documents"
-      action_id="relateddocuments"
+      action_id="relateddocuments-proxy"
       category="tabbedview-tabs"
       condition_expr=""
       url_expr="string:#"

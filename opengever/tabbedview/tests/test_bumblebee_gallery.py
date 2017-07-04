@@ -478,6 +478,14 @@ class TestProxyViewsWithDeactivatedFeature(FunctionalTestCase):
         browser.login().visit(dossier, view="tabbedview_view-trash-proxy")
         self.assertIsNone(browser.cookies.get(BUMBLEBEE_VIEW_COOKIE_NAME))
 
+    @browsing
+    def test_do_not_set_cookie_on_related_documents_tab(self, browser):
+        dossier = create(Builder('dossier'))
+        task = create(Builder('task').within(dossier))
+
+        browser.login().visit(task, view="tabbedview_view-relateddocuments-proxy")
+        self.assertIsNone(browser.cookies.get(BUMBLEBEE_VIEW_COOKIE_NAME))
+
 
 class TestProxyViewsWithActivatedFeature(FunctionalTestCase):
 
@@ -555,6 +563,26 @@ class TestProxyViewsWithActivatedFeature(FunctionalTestCase):
         browser.login().visit(dossier, view="tabbedview_view-trash-gallery")
 
         browser.login().visit(dossier, view="tabbedview_view-trash-proxy")
+
+        self.assertEqual(
+            'Gallery',
+            browser.css('.ViewChooser .active').first.text)
+
+    @browsing
+    def test_relateddocuments_proxy_tab(self, browser):
+        dossier = create(Builder('dossier'))
+        task = create(Builder('task').within(dossier))
+
+        browser.login().visit(task, view="tabbedview_view-relateddocuments-proxy")
+
+        self.assertEqual(
+            'List',
+            browser.css('.ViewChooser .active').first.text)
+
+        # Set cookie for gallery-view
+        browser.login().visit(task, view="tabbedview_view-relateddocuments-gallery")
+
+        browser.login().visit(task, view="tabbedview_view-relateddocuments-proxy")
 
         self.assertEqual(
             'Gallery',
