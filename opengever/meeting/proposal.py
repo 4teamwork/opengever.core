@@ -3,7 +3,6 @@ from Acquisition import aq_parent
 from collective import dexteritytextindexer
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.interfaces import IReferenceNumber
-from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.base.security import elevated_privileges
 from opengever.base.source import DossierPathSourceBinder
@@ -20,7 +19,6 @@ from opengever.meeting.command import UpdateSubmittedDocumentCommand
 from opengever.meeting.container import ModelContainer
 from opengever.meeting.exceptions import WordMeetingImplementationDisabledError
 from opengever.meeting.interfaces import IHistory
-from opengever.meeting.model import proposalhistory
 from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.model.proposal import Proposal as ProposalModel
 from opengever.ogds.base.utils import get_current_admin_unit

@@ -35,10 +35,6 @@ class ProposalHistory(object):
         self.context = context
 
     def __iter__(self):
-        # fallback, old history entries, will mess up order, will go away
-        for record in self.context.load_model().history_records:
-            yield record
-
         history = self._get_history_for_reading()
 
         for key, val in reversed(history.items()):

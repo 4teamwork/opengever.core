@@ -589,12 +589,6 @@ class TestProposal(FunctionalTestCase):
         self.assertIsNone(proposal_model.submitted_int_id)
         self.assertIsNone(proposal_model.submitted_admin_unit_id)
 
-        for record in proposal_model.history_records:
-            self.assertIsNone(
-                record.submitted_document,
-                "reference to submitted document on {} should be removed".format(
-                    record))
-
     def test_copying_proposals_is_prevented(self):
         committee = create(Builder('committee').titled('My committee'))
         proposal = create(Builder('proposal')

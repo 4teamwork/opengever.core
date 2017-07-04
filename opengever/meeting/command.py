@@ -14,7 +14,6 @@ from opengever.meeting.exceptions import ProtocolAlreadyGenerated
 from opengever.meeting.interfaces import IHistory
 from opengever.meeting.model.generateddocument import GeneratedExcerpt
 from opengever.meeting.model.generateddocument import GeneratedProtocol
-from opengever.meeting.model.proposalhistory import DocumentUpdated
 from opengever.meeting.model.submitteddocument import SubmittedDocument
 from opengever.meeting.protocol import AgendaItemListProtocolData
 from opengever.meeting.protocol import ExcerptProtocolData
