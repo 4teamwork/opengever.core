@@ -18,7 +18,6 @@ Changelog
 - Implement and enable redirector etag adapter. [phgross]
 - Add reference column to document listings. [tarnap]
 - Do not display templates without an assigned file in the CreateDocumentFromTemplate form. [tarnap]
-- Include missing permission definitions from Products.CMFCore. [phgross]
 - Fix PrivateFolders Title encoding. [phgross]
 - Show userid instead of E-Mail address on all sources (except EMailSource). [mathias.leimgruber]
 - Mark inactive repository folders in navigation tree. [Kevin Bieri]
@@ -71,6 +70,19 @@ Changelog
   Sentry can log it as a local in case of failure. [lgraf]
 - Word meeting: replace proposal textfields with a document. [jone]
 - OGIP 15: Implement adding multiple task with the add form. [mathias.leimgruber]
+
+
+2017.2.5 (2017-07-04)
+---------------------
+
+- Add missing french translation. [phgross]
+- Include missing permission definitions from Products.CMFCore. [phgross]
+
+
+2017.2.4 (2017-06-14)
+---------------------
+
+- Added french translations [j-sposato, phgross]
 
 
 2017.2.3 (2017-05-26)
