@@ -21,6 +21,7 @@ Changelog
 - Implement and enable redirector etag adapter. [phgross]
 - Add reference column to document listings. [tarnap]
 - Do not display templates without an assigned file in the CreateDocumentFromTemplate form. [tarnap]
+- Add dossier and subdossier link in task listings. [elioschmutz]
 - Fix PrivateFolders Title encoding. [phgross]
 - Show userid instead of E-Mail address on all sources (except EMailSource). [mathias.leimgruber]
 - Mark inactive repository folders in navigation tree. [Kevin Bieri]

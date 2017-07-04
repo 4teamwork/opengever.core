@@ -197,3 +197,17 @@ class TestGlobalindexTask(TestCase):
 
         self.assertTrue(isinstance(issuer_actor, InboxActor))
         self.assertEqual(org_unit, issuer_actor.org_unit)
+
+    def test_absolute_url_returns_the_absolute_url_of_the_plone_task(self):
+        create(Builder('admin_unit').id(u'client1'))
+        task = create(Builder('globalindex_task').having(admin_unit_id="client1",
+                                                         physical_path="path/to/task"))
+
+        self.assertEqual(task.absolute_url(),
+                         u'http://example.com/public/path/to/task')
+
+    def test_absolute_url_returns_an_empty_string_if_no_admin_unit_is_available(self):
+        task = create(Builder('globalindex_task')
+                      .having(admin_unit_id='not-existing'))
+
+        self.assertEqual(task.absolute_url(), '')
