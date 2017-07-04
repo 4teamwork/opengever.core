@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2017.2.5 (unreleased)
+2017.2.5 (2017-07-04)
 ---------------------
 
 - Add missing french translation. [phgross]
