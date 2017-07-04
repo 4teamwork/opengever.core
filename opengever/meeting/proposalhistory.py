@@ -8,6 +8,7 @@ from opengever.meeting.model import Meeting
 from opengever.ogds.base.actor import Actor
 from persistent.mapping import PersistentMapping
 from plone import api
+from uuid import UUID
 from uuid import uuid4
 from zope.annotation.interfaces import IAnnotations
 import json
@@ -118,8 +119,12 @@ class BaseHistoryRecord(object):
         record.data = data
         return record
 
-    def __init__(self, context, timestamp=None):
+    def __init__(self, context, timestamp=None, uuid=None):
         timestamp = timestamp or utcnow_tz_aware()
+        if uuid is None:
+            uuid = uuid4()
+        elif isinstance(uuid, basestring):
+            uuid = UUID(uuid)
 
         self.context = context
         self.timestamp = timestamp
@@ -127,7 +132,7 @@ class BaseHistoryRecord(object):
             created=timestamp,
             userid=api.user.get_current().getId(),
             name=self.name,
-            id=uuid4())
+            uuid=uuid)
 
     def append_to(self, history):
         if self.timestamp in history:
@@ -149,6 +154,10 @@ class BaseHistoryRecord(object):
     @property
     def text(self):
         return self.data.get('text')
+
+    @property
+    def uuid(self):
+        return self.data.get('uuid')
 
     def get_actor_link(self):
         return Actor.lookup(self.data['userid']).get_link()
@@ -209,9 +218,9 @@ class DocumentSubmitted(BaseHistoryRecord):
     css_class = 'documentAdded'
 
     def __init__(self, context, document_title, submitted_version,
-                 timestamp=None):
+                 timestamp=None, uuid=None):
         super(DocumentSubmitted, self).__init__(
-            context, timestamp=timestamp)
+            context, timestamp=timestamp, uuid=uuid)
         self.data['document_title'] = document_title
         self.data['submitted_version'] = submitted_version
 
@@ -237,9 +246,9 @@ class ProposalRejected(BaseHistoryRecord):
 
     name = 'rejected'
 
-    def __init__(self, context, text, timestamp=None):
+    def __init__(self, context, text, timestamp=None, uuid=None):
         super(ProposalRejected, self).__init__(
-            context, timestamp=timestamp)
+            context, timestamp=timestamp, uuid=uuid)
         self.data['text'] = text
 
     def message(self):
@@ -268,9 +277,9 @@ class ProposalScheduled(BaseHistoryRecord):
     name = 'scheduled'
     needs_syncing = True
 
-    def __init__(self, context, meeting_id, timestamp=None):
+    def __init__(self, context, meeting_id, timestamp=None, uuid=None):
         super(ProposalScheduled, self).__init__(
-            context, timestamp=timestamp)
+            context, timestamp=timestamp, uuid=uuid)
         self.data['meeting_id'] = meeting_id
 
     @property

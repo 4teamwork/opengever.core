@@ -22,7 +22,7 @@ class ReceiveProposalHistory(BrowserView):
         timestamp = data['timestamp']
 
         data = data['data']
-        data['id'] = UUID(data['id'])
+        data['uuid'] = UUID(data['uuid'])
         data = PersistentMapping(data)
         IHistory(self.context).receive_record(timestamp, data)
 

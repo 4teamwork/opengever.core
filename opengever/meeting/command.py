@@ -1,5 +1,6 @@
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.interfaces import IDataCollector
+from opengever.base.jsonencoder import AdvancedJSONEncoder
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.base.request import dispatch_json_request
@@ -455,27 +456,37 @@ class CopyProposalDocumentCommand(object):
                                 submitted_version=submitted_version)
         session.add(doc)
 
-        IHistory(self.proposal).append_record(
+    def copy_document(self, target_path, target_admin_unit_id):
+        submitted_version = self.document.get_current_version()
+
+        record = IHistory(self.proposal).append_record(
             'document_submitted',
             document_title=self.document.title,
             submitted_version=submitted_version,
         )
 
-    def copy_document(self, target_path, target_admin_unit_id):
+        history_data = json.dumps({
+            'submitted_version': submitted_version,
+            'uuid': record.uuid,
+            }, cls=AdvancedJSONEncoder)
+
         return SubmitDocumentCommand(
-            self.document, target_admin_unit_id, target_path).execute()
+            self.document, target_admin_unit_id, target_path,
+            history_data=history_data).execute()
 
 
 class OgCopyCommand(object):
 
-    def __init__(self, source, target_admin_unit_id, target_path):
+    def __init__(self, source, target_admin_unit_id, target_path, **kwargs):
         self.source = source
         self.target_path = target_path
         self.target_admin_unit_id = target_admin_unit_id
+        self.kwargs = kwargs
 
     def execute(self):
         return Transporter().transport_to(
-            self.source, self.target_admin_unit_id, self.target_path)
+            self.source, self.target_admin_unit_id, self.target_path,
+            **self.kwargs)
 
 
 class SubmitDocumentCommand(OgCopyCommand):
@@ -483,7 +494,7 @@ class SubmitDocumentCommand(OgCopyCommand):
     def execute(self):
         return Transporter().transport_to(
             self.source, self.target_admin_unit_id, self.target_path,
-            view='recieve-submitted-document')
+            view='recieve-submitted-document', **self.kwargs)
 
 
 class CreateExcerptCommand(OgCopyCommand):
@@ -491,4 +502,4 @@ class CreateExcerptCommand(OgCopyCommand):
     def execute(self):
         return Transporter().transport_to(
             self.source, self.target_admin_unit_id, self.target_path,
-            view='recieve-excerpt-document')
+            view='recieve-excerpt-document', **self.kwargs)

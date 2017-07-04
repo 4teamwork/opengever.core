@@ -1,4 +1,5 @@
 from five import grok
+from opengever.base.jsondecoder import AdvancedJSONDecoder
 from opengever.base.security import elevated_privileges
 from opengever.base.source import DossierPathSourceBinder
 from opengever.base.transport import PrivilegedReceiveObject
@@ -10,6 +11,7 @@ from opengever.meeting import _
 from opengever.meeting import is_meeting_feature_enabled
 from opengever.meeting.browser.documents.submit import ISubmitAdditionalDocument
 from opengever.meeting.exceptions import NoSubmittedDocument
+from opengever.meeting.interfaces import IHistory
 from opengever.meeting.proposal import ISubmittedProposal
 from opengever.tabbedview.utils import get_containing_document_tab_url
 from plone import api
@@ -25,7 +27,6 @@ from zExceptions import Unauthorized
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
 from zope.i18n import translate
-from zope.interface import Interface
 from zope.schema import TextLine
 import json
 
@@ -224,6 +225,17 @@ class RecieveSubmittedDocumentView(PrivilegedReceiveObject):
 
     def receive(self):
         document = super(RecieveSubmittedDocumentView, self).receive()
-        ILockable(document).lock(MEETING_SUBMITTED_LOCK)
-        return document
 
+        history_data = json.loads(self.request.get('history_data'),
+                                  cls=AdvancedJSONDecoder)
+
+        with elevated_privileges():
+            IHistory(self.context).append_record(
+                'document_submitted',
+                document_title=document.title,
+                submitted_version=history_data['submitted_version'],
+                uuid=history_data['uuid']
+            )
+            ILockable(document).lock(MEETING_SUBMITTED_LOCK)
+
+        return document
