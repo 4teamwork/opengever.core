@@ -5,6 +5,7 @@ Changelog
 2017.2.5 (unreleased)
 ---------------------
 
+- Add missing french translation. [phgross]
 - Include missing permission definitions from Products.CMFCore. [phgross]
 
 

@@ -460,7 +460,7 @@ msgstr "Ouvrir l'aperçu détaillé"
 #. Default: "Open as PDF"
 #: ./opengever/document/browser/templates/macros.pt:114
 msgid "label_open_document_as_pdf"
-msgstr ""
+msgstr "Ouvrir au format PDF"
 
 #. Default: "Open document preview"
 #: ./opengever/document/widgets/tooltip.pt:15
