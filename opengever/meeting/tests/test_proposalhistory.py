@@ -53,35 +53,64 @@ class TestProposalHistory(FunctionalTestCase):
         self.proposal.execute_transition('pending-submitted')
         transaction.commit()  # also make change visible in browser
 
+    def assert_proposal_history_records(self, expected_records, browser,
+                                        with_submitted=False):
+        """Assert that the last history entries of a proposal are correct.
+
+        The parameter expected_records can be a string to assert for only the
+        last history record or a list of entries to assert that the last n
+        entries are correct.
+
+        If with_submitted is True also assert that the history entries are
+        present for the submitted proposal.
+
+        """
+        self.open_overview(browser)
+        if isinstance(expected_records, basestring):
+            self.assertEqual(
+                expected_records,
+                self.get_latest_history_entry_text(browser))
+        else:
+            nof_records = len(expected_records)
+            self.assertSequenceEqual(
+                expected_records,
+                self.get_history_entries_text(browser)[:nof_records])
+
+        if not with_submitted:
+            return
+
+        proposal_model = self.proposal.load_model()
+        submitted_proposal = proposal_model.resolve_submitted_proposal()
+        self.open_overview(browser, submitted_proposal)
+
+        if isinstance(expected_records, basestring):
+            self.assertEqual(
+                expected_records,
+                self.get_latest_history_entry_text(browser))
+        else:
+            nof_records = len(expected_records)
+            self.assertSequenceEqual(
+                expected_records,
+                self.get_history_entries_text(browser)[:nof_records])
+
     @browsing
     def test_creation_creates_history_entry(self, browser):
         browser.login()
-
-        self.open_overview(browser)
-        self.assertEqual(
-            u'Created by Test User (test_user_1_)',
-            self.get_latest_history_entry_text(browser))
+        self.assert_proposal_history_records(
+            u'Created by Test User (test_user_1_)', browser)
 
     @browsing
     def test_submitting_proposal_creates_history_entries(self, browser):
         browser.login()
         self.open_overview(browser)
-
         # submit proposal
         browser.css('#pending-submitted').first.click()
 
-        self.open_overview(browser)
-        self.assertSequenceEqual(
-            [u'Document A Document submitted in version 0 by Test User (test_user_1_)',
+        self.assert_proposal_history_records(
+            [u'Document A Document submitted in version 0 by Test User '
+             u'(test_user_1_)',
              u'Submitted by Test User (test_user_1_)'],
-            self.get_history_entries_text(browser)[:2])
-
-        submitted_proposal = self.proposal.load_model().resolve_submitted_proposal()
-        self.open_overview(browser, submitted_proposal)
-        self.assertSequenceEqual(
-            [u'Document A Document submitted in version 0 by Test User (test_user_1_)',
-             u'Submitted by Test User (test_user_1_)'],
-            self.get_history_entries_text(browser)[:2])
+            browser, with_submitted=True)
 
     @browsing
     def test_rejecting_proposals_creates_history_entries(self, browser):
@@ -98,10 +127,8 @@ class TestProposalHistory(FunctionalTestCase):
         browser.find('Reject').click()
         browser.fill({'Comment': u'Bitte \xfcberarbeiten'}).submit()
 
-        self.open_overview(browser)
-        self.assertSequenceEqual(
-            u'Rejected by Test User (test_user_1_)',
-            self.get_history_entries_text(browser)[0])
+        self.assert_proposal_history_records(
+            u'Rejected by Test User (test_user_1_)', browser)
 
     @browsing
     def test_cancelling_and_reactivating_proposal_creates_history_entry(self, browser):
@@ -110,17 +137,13 @@ class TestProposalHistory(FunctionalTestCase):
 
         # cancel proposal
         browser.css('#pending-cancelled').first.click()
-        self.open_overview(browser)
-        self.assertEqual(
-            u'Proposal cancelled by Test User (test_user_1_)',
-            self.get_latest_history_entry_text(browser))
+        self.assert_proposal_history_records(
+            u'Proposal cancelled by Test User (test_user_1_)', browser)
 
         # reactivate proposal
         browser.css('#cancelled-pending').first.click()
-        self.open_overview(browser)
-        self.assertEqual(
-            u'Proposal reactivated by Test User (test_user_1_)',
-            self.get_latest_history_entry_text(browser))
+        self.assert_proposal_history_records(
+            u'Proposal reactivated by Test User (test_user_1_)', browser)
 
     @browsing
     def test_submitting_additional_document_creates_history_entry(self, browser):
@@ -134,16 +157,10 @@ class TestProposalHistory(FunctionalTestCase):
         browser.fill({'Attachments': document})
         browser.find('Submit Attachments').click()
 
-        submitted_proposal = self.proposal.load_model().resolve_submitted_proposal()
-        self.open_overview(browser, submitted_proposal)
-        self.assertEqual(
-            u'Document Another document submitted in version 0 by Test User (test_user_1_)',
-            self.get_latest_history_entry_text(browser))
-
-        self.open_overview(browser)
-        self.assertEqual(
-            u'Document Another document submitted in version 0 by Test User (test_user_1_)',
-            self.get_latest_history_entry_text(browser))
+        self.assert_proposal_history_records(
+            u'Document Another document submitted in version 0 by Test User '
+            u'(test_user_1_)',
+            browser, with_submitted=True)
 
     @browsing
     def test_updating_existing_document_creates_history_entry(self, browser):
@@ -157,16 +174,10 @@ class TestProposalHistory(FunctionalTestCase):
         browser.fill({'Attachments': self.document})
         browser.find('Submit Attachments').click()
 
-        submitted_proposal = self.proposal.load_model().resolve_submitted_proposal()
-        self.open_overview(browser, submitted_proposal)
-        self.assertEqual(
-            u'Submitted document A Document updated to version 1 by Test User (test_user_1_)',
-            self.get_latest_history_entry_text(browser))
-
-        self.open_overview(browser)
-        self.assertEqual(
-            u'Submitted document A Document updated to version 1 by Test User (test_user_1_)',
-            self.get_latest_history_entry_text(browser))
+        self.assert_proposal_history_records(
+            u'Submitted document A Document updated to version 1 by Test User '
+            u'(test_user_1_)',
+            browser, with_submitted=True)
 
     @browsing
     def test_scheduling_creates_history_entry(self, browser):
@@ -174,16 +185,10 @@ class TestProposalHistory(FunctionalTestCase):
         browser.login().open(
             self.meeting.get_url(view='unscheduled_proposals/1/schedule'))
 
-        submitted_proposal = self.proposal.load_model().resolve_submitted_proposal()
-        self.open_overview(browser, submitted_proposal)
-        self.assertEqual(
-            u'Scheduled for meeting C\xf6mmunity meeting by Test User (test_user_1_)',
-            self.get_latest_history_entry_text(browser))
-
-        self.open_overview(browser)
-        self.assertEqual(
-            u'Scheduled for meeting C\xf6mmunity meeting by Test User (test_user_1_)',
-            self.get_latest_history_entry_text(browser))
+        self.assert_proposal_history_records(
+            u'Scheduled for meeting C\xf6mmunity meeting by Test User '
+            u'(test_user_1_)',
+            browser, with_submitted=True)
 
     @browsing
     def test_removing_from_schedule_creates_history_entry(self, browser):
@@ -193,16 +198,10 @@ class TestProposalHistory(FunctionalTestCase):
 
         browser.login().open(self.meeting.get_url(view='agenda_items/1/delete'))
 
-        submitted_proposal = self.proposal.load_model().resolve_submitted_proposal()
-        self.open_overview(browser, submitted_proposal)
-        self.assertEqual(
-            u'Removed from schedule of meeting C\xf6mmunity meeting by Test User (test_user_1_)',
-            self.get_latest_history_entry_text(browser))
-
-        self.open_overview(browser)
-        self.assertEqual(
-            u'Removed from schedule of meeting C\xf6mmunity meeting by Test User (test_user_1_)',
-            self.get_latest_history_entry_text(browser))
+        self.assert_proposal_history_records(
+            u'Removed from schedule of meeting C\xf6mmunity meeting by Test '
+            u'User (test_user_1_)',
+            browser, with_submitted=True)
 
     @browsing
     def test_reopening_creates_history_entry(self, browser):
@@ -215,16 +214,9 @@ class TestProposalHistory(FunctionalTestCase):
         browser.open(self.meeting.get_url(view='agenda_items/1/reopen'),
                      data={'_authenticator': createToken()})
 
-        submitted_proposal = self.proposal.load_model().resolve_submitted_proposal()
-        self.open_overview(browser, submitted_proposal)
-        self.assertEqual(
+        self.assert_proposal_history_records(
             u'Proposal reopened by Test User (test_user_1_)',
-            self.get_latest_history_entry_text(browser))
-
-        self.open_overview(browser)
-        self.assertEqual(
-            u'Proposal reopened by Test User (test_user_1_)',
-            self.get_latest_history_entry_text(browser))
+            browser, with_submitted=True)
 
     @browsing
     def test_deciding_creates_history_entry(self, browser):
@@ -235,16 +227,9 @@ class TestProposalHistory(FunctionalTestCase):
         browser.open(self.meeting.get_url(view='agenda_items/1/decide'),
                      data={'_authenticator': createToken()})
 
-        submitted_proposal = self.proposal.load_model().resolve_submitted_proposal()
-        self.open_overview(browser, submitted_proposal)
-        self.assertEqual(
+        self.assert_proposal_history_records(
             u'Proposal decided by Test User (test_user_1_)',
-            self.get_latest_history_entry_text(browser))
-
-        self.open_overview(browser)
-        self.assertEqual(
-            u'Proposal decided by Test User (test_user_1_)',
-            self.get_latest_history_entry_text(browser))
+            browser, with_submitted=True)
 
     @browsing
     def test_revising_creates_history_entry(self, browser):
@@ -259,13 +244,6 @@ class TestProposalHistory(FunctionalTestCase):
         browser.open(self.meeting.get_url(view='agenda_items/1/revise'),
                      data={'_authenticator': createToken()})
 
-        submitted_proposal = self.proposal.load_model().resolve_submitted_proposal()
-        self.open_overview(browser, submitted_proposal)
-        self.assertEqual(
+        self.assert_proposal_history_records(
             u'Proposal revised by Test User (test_user_1_)',
-            self.get_latest_history_entry_text(browser))
-
-        self.open_overview(browser)
-        self.assertEqual(
-            u'Proposal revised by Test User (test_user_1_)',
-            self.get_latest_history_entry_text(browser))
+            browser, with_submitted=True)
