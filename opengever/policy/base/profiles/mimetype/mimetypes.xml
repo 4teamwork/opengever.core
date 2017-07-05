@@ -73,6 +73,16 @@
 
   <!-- Microsoft Office Formats -->
 
+  <!-- MS Outlook -->
+  <mimetype
+      name="Microsoft Outlook Message"
+      binary="True"
+      extensions="msg"
+      globs="*.msg"
+      icon_path="icon_dokument_email.gif"
+      mimetypes="application/vnd.ms-outlook"
+      />
+
   <!-- MS Excel -->
   <mimetype
       name="Microsoft Excel Spreadsheet"

@@ -1,0 +1,13 @@
+<object name="mimetypes_registry" meta_type="MimeTypes Registry">
+
+  <!-- MS Outlook -->
+  <mimetype
+      name="Microsoft Outlook Message"
+      binary="True"
+      extensions="msg"
+      globs="*.msg"
+      icon_path="icon_dokument_email.gif"
+      mimetypes="application/vnd.ms-outlook"
+      />
+
+</object>

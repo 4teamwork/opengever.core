@@ -1,6 +1,7 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:upgrade-step="http://namespaces.zope.org/ftw.upgrade"
     i18n_domain="opengever.policy.base">
 
   <genericsetup:registerProfile
@@ -17,6 +18,11 @@
       directory="profiles/mimetype"
       description="Separate profile which installs gever specific mimetypes."
       provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <upgrade-step:directory
+      profile="opengever.policy.base:mimetype"
+      directory="upgrades_mimetypes"
       />
 
 </configure>
