@@ -339,7 +339,6 @@ class DocumentUpdated(DocumentSubmitted):
 
     name = 'document_updated'
     css_class = 'documentUpdated'
-    needs_syncing = True
 
     def message(self):
         return _(u'proposal_history_label_document_updated',

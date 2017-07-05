@@ -1,5 +1,6 @@
 from five import grok
 from opengever.base.interfaces import IDataCollector
+from opengever.base.jsondecoder import AdvancedJSONDecoder
 from opengever.base.oguid import Oguid
 from opengever.base.security import elevated_privileges
 from opengever.base.transport import REQUEST_KEY
@@ -42,7 +43,10 @@ class CreateSubmittedProposal(grok.View):
                     content_type=data['file']['contentType'].encode('utf-8'),
                     data=base64.decodestring(data['file']['data']))
 
-            IHistory(submitted_proposal).append_record('submitted')
+            history_data = json.loads(self.request.get('history_data'),
+                                      cls=AdvancedJSONDecoder)
+            IHistory(submitted_proposal).append_record(
+                'submitted', uuid=history_data['uuid'])
 
             self.request.response.setHeader("Content-type", "application/json")
             return json.dumps(

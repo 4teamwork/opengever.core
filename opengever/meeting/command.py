@@ -329,12 +329,17 @@ class CreateSubmittedProposalCommand(object):
                 'contentType': blob.contentType,
                 'data': base64.encodestring(blob.data)}
 
-        request_data = {REQUEST_KEY: json.dumps(decode_for_json(jsondata))}
+        record = IHistory(self.proposal).append_record('submitted')
+        history_data = json.dumps({'uuid': record.uuid},
+                                  cls=AdvancedJSONEncoder)
+
+        request_data = {
+            REQUEST_KEY: json.dumps(decode_for_json(jsondata)),
+            'history_data': history_data}
         response = dispatch_json_request(
             self.admin_unit_id, '@@create_submitted_proposal', data=request_data)
 
         self.submitted_proposal_path = response['path']
-        IHistory(self.proposal).append_record('submitted')
 
 
 class RejectProposalCommand(object):
@@ -381,24 +386,28 @@ class UpdateSubmittedDocumentCommand(object):
         self.submitted_document = submitted_document
 
     def execute(self):
-        Transporter().transport_to(
-            self.document,
-            self.submitted_document.submitted_admin_unit_id,
-            self.submitted_document.submitted_physical_path,
-            view='update-submitted-document')
-
-        proposal_model = self.proposal.load_model()
-
         submitted_version = self.document.get_current_version()
-        submitted_document = SubmittedDocument.query.get_by_source(
-            self.proposal, self.document)
-        submitted_document.submitted_version = submitted_version
 
-        IHistory(proposal_model.resolve_submitted_proposal()).append_record(
+        record = IHistory(self.proposal).append_record(
             'document_updated',
             document_title=self.document.title,
             submitted_version=submitted_version,
         )
+        history_data = json.dumps({
+            'submitted_version': submitted_version,
+            'uuid': record.uuid,
+            }, cls=AdvancedJSONEncoder)
+
+        Transporter().transport_to(
+            self.document,
+            self.submitted_document.submitted_admin_unit_id,
+            self.submitted_document.submitted_physical_path,
+            view='update-submitted-document',
+            history_data=history_data)
+
+        submitted_document = SubmittedDocument.query.get_by_source(
+            self.proposal, self.document)
+        submitted_document.submitted_version = submitted_version
 
     def show_message(self):
         portal = api.portal.get()
