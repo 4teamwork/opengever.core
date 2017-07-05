@@ -76,6 +76,13 @@ class TestProposalHistory(FunctionalTestCase):
              u'Submitted by Test User (test_user_1_)'],
             self.get_history_entries_text(browser)[:2])
 
+        submitted_proposal = self.proposal.load_model().resolve_submitted_proposal()
+        self.open_overview(browser, submitted_proposal)
+        self.assertSequenceEqual(
+            [u'Document A Document submitted in version 0 by Test User (test_user_1_)',
+             u'Submitted by Test User (test_user_1_)'],
+            self.get_history_entries_text(browser)[:2])
+
     @browsing
     def test_rejecting_proposals_creates_history_entries(self, browser):
         browser.login()
