@@ -587,6 +587,18 @@
       <property name="visible">True</property>
     </object>
 
+    <object name="send_with_briefbutler" meta_type="CMF Action" i18n:domain="plone">
+      <property name="title" i18n:translate="">Send with BriefButler</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:${globals_view/getCurrentObjectUrl}/send_with_briefbutler</property>
+      <property name="icon_expr" />
+      <property name="available_expr">python:object.portal_type == "opengever.document.document"</property>
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
   </object>
 
 
