@@ -809,6 +809,9 @@ Aufgaben verhindern.
 .. |img-aufgaben-24| image:: img/media/img-aufgaben-24.png
 .. |img-aufgaben-25| image:: img/media/img-aufgaben-25.png
 .. |img-aufgaben-26| image:: img/media/img-aufgaben-26.png
+.. |img-aufgaben-27| image:: img/media/img-aufgaben-27.png
+.. |img-aufgaben-28| image:: img/media/img-aufgaben-28.png
+.. |img-aufgaben-29| image:: img/media/img-aufgaben-29.png
 .. |img-aufgaben-30| image:: img/media/img-aufgaben-30.png
 .. |img-aufgaben-31| image:: img/media/img-aufgaben-31.png
 .. |img-aufgaben-32| image:: img/media/img-aufgaben-32.png
