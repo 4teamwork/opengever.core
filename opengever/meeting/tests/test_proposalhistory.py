@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
+from opengever.meeting.interfaces import IHistory
 from opengever.testing import FunctionalTestCase
 from plone import api
 from plone.protect import createToken
@@ -62,9 +63,11 @@ class TestProposalHistory(FunctionalTestCase):
         entries are correct.
 
         If with_submitted is True also assert that the history entries are
-        present for the submitted proposal.
+        present for the submitted proposal. In that case also assert that uuids
+        of history entries from proposal and submitted proposal match.
 
         """
+        # assert proposal record(s)
         self.open_overview(browser)
         if isinstance(expected_records, basestring):
             self.assertEqual(
@@ -79,6 +82,7 @@ class TestProposalHistory(FunctionalTestCase):
         if not with_submitted:
             return
 
+        # assert submitted proposal record(s)
         proposal_model = self.proposal.load_model()
         submitted_proposal = proposal_model.resolve_submitted_proposal()
         self.open_overview(browser, submitted_proposal)
@@ -92,6 +96,15 @@ class TestProposalHistory(FunctionalTestCase):
             self.assertSequenceEqual(
                 expected_records,
                 self.get_history_entries_text(browser)[:nof_records])
+
+        # assert uuid of proposal and submitted proposal record match
+        proposal_history = IHistory(self.proposal)
+        s_proposal_history = IHistory(submitted_proposal)
+        proposal_history_record = list(proposal_history)[0]
+        s_proposal_history_record = list(s_proposal_history)[0]
+
+        self.assertEqual(proposal_history_record.uuid,
+                         s_proposal_history_record.uuid)
 
     @browsing
     def test_creation_creates_history_entry(self, browser):
