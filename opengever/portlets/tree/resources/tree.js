@@ -11,7 +11,7 @@ function Tree(nodes, config) {
     'render_condition': function(){ return true; },
     'onclick': function(node, event){},
     'components': [],
-    expanded: true
+    expandActive: false
   }, config);
   $(configuration['components']).each(function(_, component) {
     if(component !== null) {
@@ -70,7 +70,7 @@ function Tree(nodes, config) {
     this['link'] = $link;
     tree.render_children.apply(this);
 
-    if(configuration.expanded && this.parent) {
+    if(!configuration.expandActive && this.parent) {
       tree.expand(this.parent, true);
     }
   };
@@ -197,6 +197,10 @@ function Tree(nodes, config) {
 
     node.link.addClass('current');
     node.link.parent('li:first').addClass('current');
+
+    if(configuration.expandActive) {
+      this.expand(node);
+    }
   };
 
   this.clone_node = function(node) {
