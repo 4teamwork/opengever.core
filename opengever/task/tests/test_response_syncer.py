@@ -485,6 +485,8 @@ class TestWorkflowSyncer(FunctionalTestCase):
 
         self.assertEquals('task-state-in-progress',
                           api.content.get_state(successor))
+        self.assertEquals('task-state-in-progress',
+                          successor.get_sql_object().review_state)
 
     def test_adds_corresponding_response(self):
         predecessor = create(Builder('task'))

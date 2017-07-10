@@ -1,6 +1,6 @@
 from opengever.task import _
-from opengever.task.response_syncer import BaseResponseSyncerSender
 from opengever.task.response_syncer import BaseResponseSyncerReceiver
+from opengever.task.response_syncer import BaseResponseSyncerSender
 from opengever.task.response_syncer import ResponseSyncerSenderException
 from opengever.task.task import ITask
 from Products.CMFCore.utils import getToolByName
@@ -74,7 +74,5 @@ class WorkflowResponseSyncerReceiver(BaseResponseSyncerReceiver):
             ITask(self.context).responsible_client = responsible_client
             ITask(self.context).responsible = responsible
 
-            notify(ObjectModifiedEvent(self.context))
-
-        response.add_change('review_state', _(u'Issue state'),
-                            before, after)
+        notify(ObjectModifiedEvent(self.context))
+        response.add_change('review_state', _(u'Issue state'), before, after)
