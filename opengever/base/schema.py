@@ -24,6 +24,8 @@ class UTCDatetimeDataConverter(DateTimeDataConverter):
     """
     def toFieldValue(self, value):
         value = super(UTCDatetimeDataConverter, self).toFieldValue(value)
+        if value is None:
+            return value
 
         try:
             local_dt = get_localzone().localize(value)
