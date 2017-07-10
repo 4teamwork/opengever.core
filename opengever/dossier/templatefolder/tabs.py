@@ -3,7 +3,7 @@ from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateSchema
 from opengever.tabbedview import BaseCatalogListingTab
 from opengever.tabbedview.browser.bumblebee_gallery import BumblebeeGalleryMixin
 from opengever.tabbedview.browser.tabs import BaseTabProxy
-from opengever.tabbedview.browser.tabs import Documents, Trash
+from opengever.tabbedview.browser.tabs import Documents
 from opengever.tabbedview.helper import linked
 
 
@@ -40,6 +40,7 @@ class TemplateFolderDocuments(Documents):
         'cancel',
         'checkin',
         'checkout',
+        'trashed',
         'create_task',
         'send_as_email',
         'submit_additional_documents',
@@ -74,6 +75,7 @@ class TemplateFolderSablonTemplates(Documents):
         'checkin',
         'checkout',
         'create_task',
+        'trashed',
         'move_items',
         'send_as_email',
         'submit_additional_documents',
@@ -113,6 +115,7 @@ class TemplateFolderProposalTemplates(Documents):
         'checkin',
         'checkout',
         'create_task',
+        'trashed',
         'move_items',
         'send_as_email',
         'submit_additional_documents',
@@ -122,15 +125,6 @@ class TemplateFolderProposalTemplates(Documents):
 class TemplateFolderProposalTemplatesGallery(BumblebeeGalleryMixin, TemplateFolderProposalTemplates):
 
     sort_on = 'sortable_title'
-
-
-class TemplateFolderTrash(Trash):
-    depth = 1
-
-    @property
-    def columns(self):
-        return drop_columns(
-            super(TemplateFolderTrash, self).columns)
 
 
 class TemplateFolderDossierTemplates(BaseCatalogListingTab):
