@@ -128,4 +128,12 @@
       provides="zope.interface.Interface"
       />
 
+  <browser:page
+      name="folder_delete_confirmation"
+      for="*"
+      permission="zope2.DeleteObjects"
+      class=".folder_delete_confirmation.FolderDeleteConfirmation"
+      template="templates/folder_delete_confirmation.pt"
+      />
+
 </configure>

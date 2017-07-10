@@ -23,6 +23,10 @@ msgstr ""
 msgid "(INACTIVE)"
 msgstr "(INACTIF)"
 
+#: ./opengever/base/browser/templates/folder_delete_confirmation.pt:35
+msgid "Are you sure you want to deleted this items?"
+msgstr ""
+
 #: ./opengever/base/browser/templates/gever-macros.pt:38
 msgid "No content"
 msgstr "Pas de contenu"
@@ -31,10 +35,22 @@ msgstr "Pas de contenu"
 msgid "No file in in this version"
 msgstr "Pas de fichier pour cette version"
 
+#: ./opengever/base/browser/templates/folder_delete_confirmation.pt:43
+msgid "No items to delete"
+msgstr ""
+
 #. Default: "Save"
 #: ./opengever/base/browser/modelforms.py:41
 msgid "Save"
 msgstr "Sauvegarder"
+
+#: ./opengever/base/browser/templates/folder_delete_confirmation.pt:19
+msgid "Some items won't be deleted!"
+msgstr ""
+
+#: ./opengever/base/browser/templates/folder_delete_confirmation.pt:21
+msgid "The following items are referenced by another item and will not be deleted"
+msgstr ""
 
 #: ./opengever/base/browser/list_groupmembers.pt:14
 msgid "There are no members in this group."
@@ -159,6 +175,7 @@ msgstr "Commentaire concernant la valeur archivistique"
 
 #. Default: "Cancel"
 #: ./opengever/base/browser/modelforms.py:53
+#: ./opengever/base/browser/templates/folder_delete_confirmation.pt:62
 msgid "label_cancel"
 msgstr "Annuler"
 
@@ -383,6 +400,11 @@ msgstr ""
 msgid "title_confirming_user_action"
 msgstr "Confirmation de l'action"
 
+#. Default: "You are not allowed to see this reference"
+#: ./opengever/base/browser/folder_delete_confirmation.py:132
+msgid "unauthorized_backreference"
+msgstr ""
+
 #. Default ""
 #: opengever/repository/classification.py
 msgid "unchecked"
@@ -392,4 +414,3 @@ msgstr "Non contrôlé"
 #: opengever/repository/classification.py
 msgid "unprotected"
 msgstr "Non classé"
-

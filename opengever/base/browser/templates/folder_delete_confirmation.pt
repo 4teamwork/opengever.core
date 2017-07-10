@@ -1,0 +1,77 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="opengever.base">
+
+  <head>
+    <metal:block
+        fill-slot="top_slot"
+        tal:define="dummy python:request.set('disable_border',1)" />
+  </head>
+
+  <body>
+    <div metal:fill-slot="main"
+        tal:define='objs_with_backrefs view/objs_with_backrefs;
+                    objs_without_backrefs view/objs_without_backrefs'>
+
+      <tal:info-backreferences condition="objs_with_backrefs">
+        <dl class="portalMessage warning">
+          <dt i18n:domain="plone" i18n:translate="">Warning</dt>
+          <dd i18n:translate="">Some items won't be deleted!</dd>
+        </dl>
+        <h2 i18n:translate="">The following items are referenced by another item and will not be deleted</h2>
+        <tal:backrefs repeat="backrefs objs_with_backrefs">
+         <span tal:content="python:backrefs[0].title"></span>
+          <ul id="items-with-backlinks">
+            <li tal:repeat="backref python:backrefs[1]">
+              <span tal:replace="structure backref/get_html_link"></span>
+            </li>
+          </ul>
+
+        </tal:backrefs>
+
+      </tal:info-backreferences>
+
+      <tal:info-objects-to-delete>
+        <h2 i18n:translate="">Are you sure you want to deleted this items?</h2>
+
+        <ul tal:condition="objs_without_backrefs" id="items-to-delete">
+          <li tal:repeat="obj objs_without_backrefs">
+            <span tal:content="obj/pretty_title_or_id"></span>
+          </li>
+        </ul>
+
+        <span tal:condition="not: objs_without_backrefs" i18n:translate="">No items to delete</span>
+      </tal:info-objects-to-delete>
+
+      <form method="POST"
+        action="#"
+        tal:attributes="action context/@@plone_context_state/current_page_url"
+        id="folder_delete_confirmation">
+        <div class="formControls">
+
+          <input type="hidden" name="form.submitted" value="1" />
+          <input type="hidden" name="orig_template" tal:attributes="value request/form/orig_template | context/absolute_url" />
+          <input type="hidden" name="paths:list" tal:repeat="path view/request/form/paths" tal:attributes="value path"/>
+
+          <input class="destructive"
+          type="submit"
+          value="Delete"
+          i18n:attributes="value"
+          i18n:domain="plone"
+          />
+          <input class="standalone"
+          type="submit"
+          value="Cancel"
+          name="form.button.Cancel"
+          i18n:attributes="value label_cancel;"
+          />
+        </div>
+
+        <input tal:replace="structure context/@@authenticator/authenticator" />
+
+      </form>
+
+    </div>
+
+  </body>
+</html>
