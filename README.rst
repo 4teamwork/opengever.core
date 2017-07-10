@@ -385,6 +385,40 @@ are then used by the ``docs-build-api`` script to render restructured text
 schema docs.
 
 
+Versions
+--------
+
+Versions are pinned in the file ``versions.cfg`` in the ``opengever.core``
+package.
+
+Versions in development
+~~~~~~~~~~~~~~~~~~~~~~~
+
+In order to add a new dependency or to update one or many dependencies,
+follow these steps:
+
+1. Append new and changed version pinnings at the end of the ``[versions]``
+   section in the ``versions.cfg`` in your local ``opengever.core`` checkout.
+2. Run ``bin/cleanup-versions-cfg``, review and confirm the changes.
+   This script removes duplicates and sorts the dependencies.
+3. Commit the changes to your branch and submit it along with other changes as
+   pull request.
+
+
+Versions in producion
+~~~~~~~~~~~~~~~~~~~~~
+
+For production deployments, the ``versions.cfg`` of a tag can be included
+with a raw github url in buildout like this:
+
+.. code:: ini
+
+    [buildout]
+    extends =
+        https://raw.githubusercontent.com/4teamwork/opengever.core/2017.4.0/versions.cfg
+
+
+
 Scripts
 -------
 Scripts are located in ``/scripts``.

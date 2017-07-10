@@ -3,3 +3,4 @@
 !mtest
 !create-upgrade
 !create-schema-migration
+!cleanup-versions-cfg
