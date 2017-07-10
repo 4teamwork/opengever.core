@@ -738,7 +738,7 @@ class TestTemplateFolderListings(FunctionalTestCase):
         browser.login().open(self.templatefolder, view=DOCUMENT_TAB)
 
         self.assertItemsEqual(
-            ['Copy Items', 'Checkin with comment', 'Checkin without comment',
+            ['Copy Items', 'Checkin with comment', 'Delete', 'Checkin without comment',
              'Export selection', 'Move Items', 'Export as Zip'],
             browser.css('.actionMenuContent li').text)
 
@@ -759,7 +759,7 @@ class TestTemplateFolderListings(FunctionalTestCase):
         browser.login().open(self.templatefolder, view=SABLONTEMPLATES_TAB)
 
         self.assertItemsEqual(
-            ['Copy Items', 'Checkin with comment', 'Checkin without comment',
+            ['Copy Items', 'Checkin with comment', 'Delete', 'Checkin without comment',
              'Export selection', 'Export as Zip'],
             browser.css('.actionMenuContent li').text)
 
@@ -768,7 +768,7 @@ class TestTemplateFolderListings(FunctionalTestCase):
         browser.login().open(self.templatefolder, view=PROPOSALTEMPLATES_TAB)
 
         self.assertItemsEqual(
-            ['Copy Items', 'Checkin with comment', 'Checkin without comment',
+            ['Copy Items', 'Checkin with comment', 'Delete', 'Checkin without comment',
              'Export selection', 'Export as Zip'],
             browser.css('.actionMenuContent li').text)
 

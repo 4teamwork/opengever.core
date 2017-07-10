@@ -1,3 +1,4 @@
+from ftw.table.helper import path_checkbox
 from opengever.dossier import _
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateSchema
 from opengever.tabbedview import BaseCatalogListingTab
@@ -32,9 +33,11 @@ class TemplateFolderDocuments(Documents):
 
     @property
     def enabled_actions(self):
-        return filter(
+        actions = filter(
             lambda x: x not in self.disabled_actions,
             super(TemplateFolderDocuments, self).enabled_actions)
+
+        return actions + ['folder_delete_confirmation']
 
     disabled_actions = [
         'cancel',
@@ -66,9 +69,11 @@ class TemplateFolderSablonTemplates(Documents):
 
     @property
     def enabled_actions(self):
-        return filter(
+        actions = filter(
             lambda x: x not in self.disabled_actions,
             super(TemplateFolderSablonTemplates, self).enabled_actions)
+
+        return actions + ['folder_delete_confirmation']
 
     disabled_actions = [
         'cancel',
@@ -106,9 +111,11 @@ class TemplateFolderProposalTemplates(Documents):
 
     @property
     def enabled_actions(self):
-        return filter(
+        actions = filter(
             lambda x: x not in self.disabled_actions,
             super(TemplateFolderProposalTemplates, self).enabled_actions)
+
+        return actions + ['folder_delete_confirmation']
 
     disabled_actions = [
         'cancel',
@@ -138,7 +145,12 @@ class TemplateFolderDossierTemplates(BaseCatalogListingTab):
     search_options = {'is_subdossier': False}
 
     columns = (
-
+        {'column': '',
+         'column_title': '',
+         'transform': path_checkbox,
+         'sortable': False,
+         'groupable': False,
+         'width': 30},
         {'column': 'Title',
          'column_title': _(u'label_title', default=u'Title'),
          'sort_index': 'sortable_title',
@@ -149,5 +161,5 @@ class TemplateFolderDossierTemplates(BaseCatalogListingTab):
 
         )
 
-    enabled_actions = []
+    enabled_actions = ['folder_delete_confirmation']
     major_actions = []

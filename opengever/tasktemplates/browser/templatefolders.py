@@ -28,6 +28,6 @@ class TaskTemplateFoldersTab(BaseCatalogListingTab):
 
     types = ['opengever.tasktemplates.tasktemplatefolder', ]
 
-    enabled_actions = []
+    enabled_actions = ['folder_delete_confirmation']
 
     major_actions = []
