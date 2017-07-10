@@ -64,6 +64,23 @@ class TestMeeting(FunctionalTestCase):
         self.assertEqual(u'C\xf6mmunity meeting', link.text)
 
     @browsing
+    def test_regression_add_meeting_without_end_date_does_not_fail(self, browser):
+        # create meeting
+        browser.login().open(self.committee, view='add-meeting')
+        browser.fill({
+            'Start': '01.01.2010 10:00',
+            'End': '',
+            'Location': u'B\xe4rn',
+        }).submit()
+        # create dossier
+        browser.find('Save').click()
+
+        committee_model = self.committee.load_model()
+        self.assertEqual(1, len(committee_model.meetings))
+        meeting = committee_model.meetings[0]
+        self.assertIsNone(meeting.end)
+
+    @browsing
     def test_add_meeting_and_dossier(self, browser):
         # create meeting
         browser.login().open(self.committee, view='add-meeting')

@@ -5,6 +5,7 @@ Changelog
 2017.3.0 (unreleased)
 ---------------------
 
+- Fix datetime converter when input is empty. [deiferni]
 - Make sure that remote task state changes are synced to globalindex. [phgross]
 - Expand just the selected item in the subdossier tree. [Kevin Bieri]
 - Added missing cancel button for the manual journal entry form. [phgross]
