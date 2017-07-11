@@ -6,6 +6,7 @@ from functools import wraps
 from opengever.core.testing import OPENGEVER_INTEGRATION_TESTING
 from operator import methodcaller
 from plone import api
+from plone.app.testing import applyProfile
 from plone.app.testing import login
 from plone.app.testing import SITE_OWNER_NAME
 from time import clock
@@ -16,6 +17,10 @@ FEATURE_FLAGS = {
     'meeting': 'opengever.meeting.interfaces.IMeetingSettings.is_feature_enabled',
     'dossiertemplate': ('opengever.dossier.dossiertemplate'
                         '.interfaces.IDossierTemplateSettings.is_feature_enabled'),
+}
+
+FEATURE_PROFILES = {
+    'filing_number': 'opengever.dossier:filing',
 }
 
 
@@ -126,7 +131,12 @@ class IntegrationTestCase(TestCase):
     def activate_feature(self, feature):
         """Activate a feature flag.
         """
-        api.portal.set_registry_record(FEATURE_FLAGS[feature], True)
+        if feature in FEATURE_FLAGS:
+            api.portal.set_registry_record(FEATURE_FLAGS[feature], True)
+        elif feature in FEATURE_PROFILES:
+            applyProfile(self.portal, FEATURE_PROFILES[feature])
+        else:
+            raise ValueError('Invalid {!r}'.format(feature))
 
     def __getattr__(self, name):
         """Make it possible to access objects from the content lookup table

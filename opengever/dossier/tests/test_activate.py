@@ -11,8 +11,9 @@ class TestDossierActivation(IntegrationTestCase):
     @browsing
     def test_recursively_activates_subdossier(self, browser):
         self.login(self.secretariat_user, browser)
-        self.set_workflow_state('dossier-state-inactive',
-                                self.dossier, self.subdossier)
+        self.set_workflow_state(
+            'dossier-state-inactive',
+            self.dossier, self.subdossier, self.subdossier2)
 
         browser.open(self.dossier)
         editbar.menu_option('Actions', 'dossier-transition-activate').click()
@@ -20,6 +21,7 @@ class TestDossierActivation(IntegrationTestCase):
 
         self.assert_workflow_state('dossier-state-active', self.dossier)
         self.assert_workflow_state('dossier-state-active', self.subdossier)
+        self.assert_workflow_state('dossier-state-active', self.subdossier2)
 
     @browsing
     def test_activate_subdossier_is_disallowed_when_main_dossier_is_inactive(
@@ -38,8 +40,9 @@ class TestDossierActivation(IntegrationTestCase):
         self.login(self.secretariat_user, browser)
         IDossier(self.dossier).end = date(2013, 2, 21)
         IDossier(self.subdossier).end = date(2013, 2, 21)
-        self.set_workflow_state('dossier-state-inactive',
-                                self.dossier, self.subdossier)
+        self.set_workflow_state(
+            'dossier-state-inactive',
+            self.dossier, self.subdossier, self.subdossier2)
         self.assertIsNotNone(IDossier(self.dossier).end)
         self.assertIsNotNone(IDossier(self.subdossier).end)
 

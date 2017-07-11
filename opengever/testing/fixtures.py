@@ -179,6 +179,9 @@ class OpengeverContentFixture(object):
         subdossier = self.register('subdossier', create(
             Builder('dossier').within(self.dossier).titled(u'2016')))
 
+        self.register('subdossier2', create(
+            Builder('dossier').within(self.dossier).titled(u'2015')))
+
         self.register('subdocument', create(
             Builder('document').within(subdossier)
             .titled(u'\xdcbersicht der Vertr\xe4ge von 2016')
