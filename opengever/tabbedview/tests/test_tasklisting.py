@@ -10,7 +10,10 @@ class TestTaskListing(FunctionalTestCase):
         super(TestTaskListing, self).setUp()
 
         self.dossier = create(Builder('dossier')
-                              .titled(u'<b>Bold title</b>'))
+                              .titled(u'<b>B\xf6ld title</b>'))
+        self.subdossier = create(Builder('dossier')
+                                 .within(self.dossier)
+                                 .titled(u'S\xfcb'))
         self.task1 = create(Builder('task')
                             .within(self.dossier)
                             .in_state('task-state-open')
@@ -20,7 +23,7 @@ class TestTaskListing(FunctionalTestCase):
                             .in_state('task-state-tested-and-closed')
                             .titled('Task 2'))
         self.task3 = create(Builder('task')
-                            .within(self.dossier)
+                            .within(self.subdossier)
                             .in_state('task-state-in-progress')
                             .titled('Task 3'))
 
@@ -49,6 +52,7 @@ class TestTaskListing(FunctionalTestCase):
             self.dossier, view='tabbedview_view-tasks')
         table = browser.css('.listing').first
         second_row_dossier_cell = table.rows[1].css('td:nth-child(10) .maindossierLink').first
+
         self.assertEquals(
-            '&lt;b&gt;Bold title&lt;/b&gt;',
+            u'&lt;b&gt;B\xf6ld title&lt;/b&gt;',
             second_row_dossier_cell.innerHTML.strip().strip('\n'))
