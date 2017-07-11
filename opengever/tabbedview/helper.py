@@ -10,6 +10,7 @@ from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize import ram
 from plone.uuid.interfaces import IUUID
 from Products.CMFCore.interfaces._tools import IMemberData
+from Products.CMFPlone.utils import safe_unicode
 from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
 from Products.ZCatalog.interfaces import ICatalogBrain
 from zope.component import getUtility
@@ -102,27 +103,27 @@ def linked_containing_subdossier(item, value):
     if not subdossier_title:
         return ''
 
-    title = escape_html(subdossier_title)
+    title = safe_unicode(escape_html(subdossier_title))
 
     url = get_url(item)
     if not url:
         return title
 
-    redirect_url = "{}/redirect_to_parent_dossier".format(get_url(item))
-    link = '<a href="{}" title="{}" class="subdossierLink">{}</a>'.format(
+    redirect_url = u"{}/redirect_to_parent_dossier".format(safe_unicode(url))
+    link = u'<a href="{}" title="{}" class="subdossierLink">{}</a>'.format(
         redirect_url, title, title)
     return link
 
 
 def linked_containing_maindossier(item, value):
-    title = escape_html(item.containing_dossier)
+    title = safe_unicode(escape_html(item.containing_dossier))
 
     url = get_url(item)
     if not url:
         return title
 
-    redirect_url = "{}/redirect_to_main_dossier".format(get_url(item))
-    link = '<a href="{}" title="{}" class="maindossierLink">{}</a>'.format(
+    redirect_url = u"{}/redirect_to_main_dossier".format(safe_unicode(get_url(item)))
+    link = u'<a href="{}" title="{}" class="maindossierLink">{}</a>'.format(
         redirect_url, title, title)
     return link
 
