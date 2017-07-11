@@ -2,7 +2,10 @@ from five import grok
 from ftw.contentmenu.interfaces import IContentmenuPostFactoryMenu
 from ftw.contentmenu.menu import CombinedActionsWorkflowMenu
 from opengever.meeting import is_meeting_feature_enabled
+from plone.app.contentmenu.interfaces import IDisplaySubMenuItem
+from plone.app.contentmenu.menu import DisplaySubMenuItem
 from Products.CMFPlone.interfaces import IPloneSiteRoot
+from zope.interface import implements
 from zope.interface import Interface
 
 
@@ -101,3 +104,14 @@ class OGCombinedActionsWorkflowMenu(CombinedActionsWorkflowMenu):
                   .getWorkflowMenuItems(context, request))
         return filter(lambda item: (item.get('extra', {})
                                     .get('id', None) != 'advanced'), result)
+
+
+class OGDisplaySubMenuItem(DisplaySubMenuItem):
+    """Disable display sub menu item for GEVER in general.
+    It should never be possible to change the layout property in the UI.
+    """
+
+    implements(IDisplaySubMenuItem)
+
+    def available(self):
+        return False

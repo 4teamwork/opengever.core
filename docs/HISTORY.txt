@@ -5,6 +5,7 @@ Changelog
 2017.3.0 (unreleased)
 ---------------------
 
+- Disable the displaymenu-item in contentmenu for all types. [phgross]
 - Fix datetime converter when input is empty. [deiferni]
 - Fix UnicodeEncodeError in task listings. [phgross]
 - Make sure that remote task state changes are synced to globalindex. [phgross]
