@@ -1,0 +1,176 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:lawgiver="http://namespaces.zope.org/lawgiver"
+    i18n_domain="ftw.lawgiver">
+
+  <include package="ftw.lawgiver" file="lawgiver.zcml" />
+
+  <!--
+      When inventing new action groups, please add a translation in
+      opengever/core/locales/ftw.lawgiver.pot
+      and the corresponding po-files.
+  -->
+
+  <lawgiver:map_permissions
+      action_group="view"
+      permissions="
+                   CMFEditions: Access previous versions,
+                   "
+      />
+
+
+  <lawgiver:map_permissions
+      action_group="add"
+      permissions="
+                   opengever.contact: Add contact,
+                   opengever.contact: Add person,
+                   opengever.document: Add document,
+                   opengever.dossier: Add businesscasedossier,
+                   opengever.dossier: Add dossiertemplate,
+                   opengever.dossier: Add projectdossier,
+                   opengever.dossier: Add templatefolder,
+                   opengever.inbox: Add Forwarding,
+                   opengever.inbox: Add Year Folder,
+                   opengever.meeting: Add Committee,
+                   opengever.meeting: Add Member,
+                   opengever.meeting: Add Proposal Template,
+                   opengever.meeting: Add Proposal,
+                   opengever.meeting: Add Sablon Template,
+                   opengever.private: Add private dossier,
+                   opengever.task: Add task comment,
+                   opengever.task: Add task,
+                   "
+      />
+
+
+  <lawgiver:map_permissions
+      action_group="edit"
+      permissions="
+                   Edit date of submission,
+                   Poi: Edit response,
+                   Poi: Modify issue assignment,
+                   Poi: Modify issue severity,
+                   Poi: Modify issue state,
+                   Poi: Modify issue tags,
+                   Poi: Modify issue target release,
+                   Poi: Modify issue watchers,
+                   Poi: Upload attachment,
+                   opengever.contact: Edit person,
+                   opengever.disposition: Edit transfer number,
+                   opengever.document: Cancel,
+                   opengever.document: Checkin,
+                   opengever.document: Checkout,
+                   opengever.document: Force Checkin,
+                   opengever.task: Edit task,
+                   "
+      />
+
+
+  <lawgiver:map_permissions
+      action_group="trash"
+      permissions="
+                   opengever.trash: Trash content,
+                   opengever.trash: Untrash content,
+                   "
+      />
+
+
+  <lawgiver:map_permissions
+      action_group="manage the repository"
+      permissions="
+                   opengever.repository: Add repositoryfolder,
+                   opengever.repository: Unlock Reference Prefix,
+                   "
+      />
+
+
+  <lawgiver:map_permissions
+      action_group="dispose"
+      permissions="
+                   Edit date of cassation,
+                   opengever.disposition: Add disposition,
+                   opengever.disposition: Download SIP Package,
+                   opengever.document: Modify archival file,
+                   opengever.dossier: Destroy dossier,
+                   "
+      />
+
+
+  <lawgiver:map_permissions
+      action_group="use the REST API"
+      permissions="
+                   plone.restapi: Access Plone vocabularies,
+                   plone.restapi: Use REST API,
+                   "
+      />
+
+
+  <!-- The "ftw.keywordwidget: Add new term" permission is checked on the
+       dossier add form (repository folder context) as well as on the dossier
+       edit form (dossier context).
+       In order for both to work we must add the permission to both, the "add"
+       and the "edit" action group. -->
+  <include package="ftw.keywordwidget" file="lawgiver.zcml" />
+  <lawgiver:map_permissions
+      action_group="add"
+      permissions="ftw.keywordwidget: Add new term"
+      />
+  <lawgiver:map_permissions
+      action_group="edit"
+      move="False"
+      permissions="ftw.keywordwidget: Add new term"
+      />
+
+  <!-- The "use developer tools" contains all permissions for features we only
+       want to use in developer. Only the Manager role should have this action
+       group. -->
+  <lawgiver:map_permissions
+      action_group="use the developer tools"
+      permissions="
+                   Delete objects,
+                   List folder contents,
+                   Modify constrain types,
+                   Modify view template,
+                   Portlets: Manage portlets,
+                   opengever.contact: Add contactfolder,
+                   opengever.inbox: Add Inbox,
+                   opengever.meeting: Add CommitteeContainer,
+                   opengever.private: Add private folder,
+                   opengever.private: Add private root,
+                   opengever.repository: Add repositoryroot,
+                   plone.portlet.collection: Add collection portlet,
+                   plone.portlet.static: Add static portlet,
+                   "
+      />
+
+
+  <!-- Remove GEVER content is only managed globally in rolemap.xml. -->
+  <lawgiver:ignore
+      permissions="
+                   Remove GEVER content,
+                   "
+      />
+
+
+  <!-- Ignore default Plone permissions. This means we are not managing in the
+       workflows. This does not mean that the permissions are disabled: disabling
+       can be done in the rolemap.xml. -->
+  <lawgiver:ignore
+      permissions="
+                   ATContentTypes: Add Document,
+                   ATContentTypes: Add Event,
+                   ATContentTypes: Add File,
+                   ATContentTypes: Add Folder,
+                   ATContentTypes: Add Image,
+                   ATContentTypes: Add Large Plone Folder,
+                   ATContentTypes: Add Link,
+                   ATContentTypes: Add News Item,
+                   Add Folders,
+                   Add portal events,
+                   Add portal folders,
+                   Add portal topics,
+                   plone.app.collection: Add Collection,
+                   "
+      />
+
+</configure>
