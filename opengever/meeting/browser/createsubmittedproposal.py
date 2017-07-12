@@ -1,6 +1,6 @@
 from five import grok
+from opengever.base.advancedjson import AdvancedJSONDecoder
 from opengever.base.interfaces import IDataCollector
-from opengever.base.jsondecoder import AdvancedJSONDecoder
 from opengever.base.oguid import Oguid
 from opengever.base.security import elevated_privileges
 from opengever.base.transport import REQUEST_KEY

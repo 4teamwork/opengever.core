@@ -1,4 +1,4 @@
-from opengever.base.jsondecoder import AdvancedJSONDecoder
+from opengever.base.advancedjson import AdvancedJSONDecoder
 from opengever.base.request import tracebackify
 from opengever.meeting.interfaces import IHistory
 from persistent.mapping import PersistentMapping

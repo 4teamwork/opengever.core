@@ -1,6 +1,6 @@
+from opengever.base.advancedjson import AdvancedJSONEncoder
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.interfaces import IDataCollector
-from opengever.base.jsonencoder import AdvancedJSONEncoder
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.base.request import dispatch_json_request
