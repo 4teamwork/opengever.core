@@ -5,6 +5,10 @@
 
   <include package="ftw.lawgiver" file="lawgiver.zcml" />
 
+  <lawgiver:role name="CommitteeAdministrator" />
+  <lawgiver:role name="CommitteeResponsible" />
+  <lawgiver:role name="MeetingUser" />
+
   <!--
       When inventing new action groups, please add a translation in
       opengever/core/locales/ftw.lawgiver.pot

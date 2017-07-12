@@ -3,7 +3,10 @@
     <role name="Administrator" />
     <role name="APIUser" />
     <role name="Archivist" />
+    <role name="CommitteeAdministrator" />
     <role name="CommitteeGroupMember" />
+    <role name="CommitteeResponsible" />
+    <role name="MeetingUser" />
     <role name="Publisher" />
     <role name="Records Manager" />
     <role name="Role Manager" />
