@@ -12,6 +12,7 @@ Changelog
 - Introduce versioning for Proposal/SubmittedProposal. [deiferni]
 - Cleanup rolemap, don't redefine plone roles. [deiferni]
 - Use OGMail original_message-file for bumblebee-conversion if available. [elioschmutz]
+- Amend the OfficeConnector javascript to refresh the page based on the lock status. [Rotonen]
 - Add the document lock status to the document status end point. [Rotonen]
 
 
