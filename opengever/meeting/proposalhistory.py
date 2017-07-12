@@ -29,8 +29,8 @@ class ProposalHistory(object):
 
     @classmethod
     def register(cls, clazz):
-        assert clazz.name not in cls.record_classes
-        cls.record_classes[clazz.name] = clazz
+        assert clazz.history_type not in cls.record_classes
+        cls.record_classes[clazz.history_type] = clazz
 
     def __init__(self, context):
         self.context = context
@@ -39,23 +39,24 @@ class ProposalHistory(object):
         history = self._get_history_for_reading()
 
         for key, val in reversed(history.items()):
-            name = val.get('name')
-            if not name:
+            history_type = val.get('history_type')
+            if not history_type:
                 continue
-            clazz = self.record_classes.get(name)
+            clazz = self.record_classes.get(history_type)
             if not clazz:
                 continue
 
             yield clazz.re_populate(self.context, key, val)
 
-    def append_record(self, name, timestamp=None, **kwargs):
+    def append_record(self, history_type, timestamp=None, **kwargs):
         if timestamp and not isinstance(timestamp, datetime):
             raise TypeError("Invalid type for timestamp: {}".format(
                 timestamp.__class__))
-        if name not in self.record_classes:
-            raise ValueError('No record class registered for {}'.format(name))
+        if history_type not in self.record_classes:
+            raise ValueError('No record class registered for {}'.format(
+                history_type))
 
-        clazz = self.record_classes[name]
+        clazz = self.record_classes[history_type]
 
         history = self._get_history_for_writing()
         record = clazz(self.context, timestamp=timestamp, **kwargs)
@@ -110,15 +111,15 @@ class BaseHistoryRecord(object):
     then re-populating the attributes on the instance instead of calling
     __init__.
 
-    Each record must have a unique `name` from which it can be built via
-    IHistory.append_record.
+    Each record must have a unique `history_type` from which it can be built
+    with IHistory.append_record.
 
     If `needs_syncing` is `True` a records that is created on the
     `SubmittedProposal` side is automatically added to its corresponding
     `Proposal`.
     """
 
-    name = None
+    history_type = None
     needs_syncing = False
 
     @classmethod
@@ -141,7 +142,7 @@ class BaseHistoryRecord(object):
         self.data = PersistentMapping(
             created=timestamp,
             userid=api.user.get_current().getId(),
-            name=self.name,
+            history_type=self.history_type,
             uuid=uuid)
 
     def append_to(self, history):
@@ -155,7 +156,7 @@ class BaseHistoryRecord(object):
 
     @property
     def css_class(self):
-        return self.name
+        return self.history_type
 
     @property
     def created(self):
@@ -176,7 +177,7 @@ class BaseHistoryRecord(object):
 class ProposalCreated(BaseHistoryRecord):
     """A Proposal has been created."""
 
-    name = 'created'
+    history_type = 'created'
 
     def message(self):
         return _(u'proposal_history_label_created',
@@ -188,7 +189,7 @@ ProposalHistory.register(ProposalCreated)
 
 class ProposalCancelled(BaseHistoryRecord):
 
-    name = 'cancelled'
+    history_type = 'cancelled'
 
     def message(self):
         return _(u'proposal_history_label_cancelled',
@@ -200,7 +201,7 @@ ProposalHistory.register(ProposalCancelled)
 
 class ProposalReactivated(BaseHistoryRecord):
 
-    name = 'reactivated'
+    history_type = 'reactivated'
 
     def message(self):
         return _(u'proposal_history_label_reactivated',
@@ -212,7 +213,7 @@ ProposalHistory.register(ProposalReactivated)
 
 class ProposalSubmitted(BaseHistoryRecord):
 
-    name = 'submitted'
+    history_type = 'submitted'
 
     def message(self):
         return _(u'proposal_history_label_submitted',
@@ -224,7 +225,7 @@ ProposalHistory.register(ProposalSubmitted)
 
 class DocumentSubmitted(BaseHistoryRecord):
 
-    name = 'document_submitted'
+    history_type = 'document_submitted'
     css_class = 'documentAdded'
 
     def __init__(self, context, document_title, submitted_version,
@@ -254,7 +255,7 @@ ProposalHistory.register(DocumentSubmitted)
 
 class ProposalRejected(BaseHistoryRecord):
 
-    name = 'rejected'
+    history_type = 'rejected'
 
     def __init__(self, context, text, timestamp=None, uuid=None):
         super(ProposalRejected, self).__init__(
@@ -271,7 +272,7 @@ ProposalHistory.register(ProposalRejected)
 
 class ProposalReopened(BaseHistoryRecord):
 
-    name = 'reopened'
+    history_type = 'reopened'
     needs_syncing = True
 
     def message(self):
@@ -284,7 +285,7 @@ ProposalHistory.register(ProposalReopened)
 
 class ProposalScheduled(BaseHistoryRecord):
 
-    name = 'scheduled'
+    history_type = 'scheduled'
     needs_syncing = True
 
     def __init__(self, context, meeting_id, timestamp=None, uuid=None):
@@ -310,7 +311,7 @@ ProposalHistory.register(ProposalScheduled)
 
 class ProposalDecided(BaseHistoryRecord):
 
-    name = 'decided'
+    history_type = 'decided'
     needs_syncing = True
 
     def message(self):
@@ -323,7 +324,7 @@ ProposalHistory.register(ProposalDecided)
 
 class ProposalRevised(BaseHistoryRecord):
 
-    name = 'revised'
+    history_type = 'revised'
     needs_syncing = True
 
     def message(self):
@@ -336,7 +337,7 @@ ProposalHistory.register(ProposalRevised)
 
 class ProposalRemovedFromSchedule(ProposalScheduled):
 
-    name = 'remove_scheduled'
+    history_type = 'remove_scheduled'
     css_class = 'scheduleRemoved'
     needs_syncing = True
 
@@ -351,7 +352,7 @@ ProposalHistory.register(ProposalRemovedFromSchedule)
 
 class DocumentUpdated(DocumentSubmitted):
 
-    name = 'document_updated'
+    history_type = 'document_updated'
     css_class = 'documentUpdated'
 
     def message(self):
