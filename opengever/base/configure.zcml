@@ -110,4 +110,12 @@
       permission="zope2.View"
       />
 
+  <adapter
+      for="*
+           opengever.base.interfaces.IOpengeverBaseLayer"
+      name="plone.contentmenu.display"
+      factory=".menu.OGDisplaySubMenuItem"
+      provides="plone.app.contentmenu.interfaces.IContentMenuItem"
+      />
+
 </configure>
