@@ -1,5 +1,7 @@
 from datetime import datetime
+from opengever.meeting.proposalhistory import BaseHistoryRecord
 from opengever.meeting.proposalhistory import ProposalHistory
+from opengever.testing import IntegrationTestCase
 from persistent.mapping import PersistentMapping
 from unittest2 import TestCase
 
@@ -26,3 +28,15 @@ class TestUnitPorposalHistory(TestCase):
         with self.assertRaises(TypeError):
             self.history.receive_record(
                 timestamp=datetime.now(), data=PersistentMapping())
+
+
+class TestBaseHistoryRecord(IntegrationTestCase):
+
+    def test_registering_record_with_already_used_timestamp_raises_error(self):
+        history = PersistentMapping()
+        history[datetime(2010, 1, 1)] = object()
+        record = BaseHistoryRecord(
+            context=None, timestamp=datetime(2010, 1, 1))
+
+        with self.assertRaises(ValueError):
+            record.append_to(history)

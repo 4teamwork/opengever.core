@@ -147,7 +147,8 @@ class BaseHistoryRecord(object):
 
     def append_to(self, history):
         if self.timestamp in history:
-            return  # XXX raise?
+            raise ValueError('Timestamp {} already in use'.format(
+                self.timestamp))
 
         history[self.timestamp] = self.data
 
