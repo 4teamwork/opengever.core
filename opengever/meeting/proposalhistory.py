@@ -1,4 +1,5 @@
 from BTrees.OOBTree import OOBTree
+from datetime import datetime
 from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.jsonencoder import AdvancedJSONEncoder
 from opengever.base.protect import unprotected_write
@@ -48,6 +49,12 @@ class ProposalHistory(object):
             yield clazz.re_populate(self.context, key, val)
 
     def append_record(self, name, timestamp=None, **kwargs):
+        if timestamp and not isinstance(timestamp, datetime):
+            raise TypeError("Invalid type for timestamp: {}".format(
+                timestamp.__class__))
+        if name not in self.record_classes:
+            raise ValueError('No record class registered for {}'.format(name))
+
         clazz = self.record_classes[name]
 
         history = self._get_history_for_writing()
@@ -71,6 +78,13 @@ class ProposalHistory(object):
         return record
 
     def receive_record(self, timestamp, data):
+        if not isinstance(timestamp, datetime):
+            raise TypeError("Invalid type for timestamp: {}".format(
+                timestamp.__class__))
+        if not isinstance(data, PersistentMapping):
+            raise TypeError("Invalid type for data: {}".format(
+                data.__class__))
+
         history = self._get_history_for_writing()
         history[timestamp] = data
 
