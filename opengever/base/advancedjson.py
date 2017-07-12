@@ -1,14 +1,13 @@
 from datetime import datetime
 from dateutil import parser
-from json import JSONDecoder
-from json import JSONEncoder
 from opengever.base.date_time import as_utc
 from persistent.mapping import PersistentMapping
 from uuid import UUID
+import json
 
 
-class AdvancedJSONDecoder(JSONDecoder):
-    """A custom JSONEncoder that can deserialize some additional types:
+class AdvancedJSONDecoder(json.JSONDecoder):
+    """A custom JSONDecoder that can deserialize some additional types:
 
     - ISO-format string -> datetime
     """
@@ -32,7 +31,17 @@ class AdvancedJSONDecoder(JSONDecoder):
         return obj
 
 
-class AdvancedJSONEncoder(JSONEncoder):
+def load(*args, **kwargs):
+    kwargs['cls'] = AdvancedJSONDecoder
+    return json.load(*args, **kwargs)
+
+
+def loads(*args, **kwargs):
+    kwargs['cls'] = AdvancedJSONDecoder
+    return json.loads(*args, **kwargs)
+
+
+class AdvancedJSONEncoder(json.JSONEncoder):
     """A custom JSONEncoder that can serialize some additional types:
 
     - datetime          -> ISO-format string
@@ -52,3 +61,13 @@ class AdvancedJSONEncoder(JSONEncoder):
             return dict(obj)
         else:
             return super(AdvancedJSONEncoder, self).default(obj)
+
+
+def dump(*args, **kwargs):
+    kwargs['cls'] = AdvancedJSONEncoder
+    return json.dump(*args, **kwargs)
+
+
+def dumps(*args, **kwargs):
+    kwargs['cls'] = AdvancedJSONEncoder
+    return json.dumps(*args, **kwargs)

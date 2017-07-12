@@ -1,4 +1,4 @@
-from opengever.base.advancedjson import AdvancedJSONEncoder
+from opengever.base import advancedjson
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.interfaces import IDataCollector
 from opengever.base.model import create_session
@@ -330,8 +330,7 @@ class CreateSubmittedProposalCommand(object):
                 'data': base64.encodestring(blob.data)}
 
         record = IHistory(self.proposal).append_record('submitted')
-        history_data = json.dumps({'uuid': record.uuid},
-                                  cls=AdvancedJSONEncoder)
+        history_data = advancedjson.dumps({'uuid': record.uuid})
 
         request_data = {
             REQUEST_KEY: json.dumps(decode_for_json(jsondata)),
@@ -393,10 +392,10 @@ class UpdateSubmittedDocumentCommand(object):
             document_title=self.document.title,
             submitted_version=submitted_version,
         )
-        history_data = json.dumps({
+        history_data = advancedjson.dumps({
             'submitted_version': submitted_version,
             'uuid': record.uuid,
-            }, cls=AdvancedJSONEncoder)
+            })
 
         Transporter().transport_to(
             self.document,
@@ -473,10 +472,10 @@ class CopyProposalDocumentCommand(object):
             submitted_version=submitted_version,
         )
 
-        history_data = json.dumps({
+        history_data = advancedjson.dumps({
             'submitted_version': submitted_version,
             'uuid': record.uuid,
-            }, cls=AdvancedJSONEncoder)
+            })
 
         return SubmitDocumentCommand(
             self.document, target_admin_unit_id, target_path,

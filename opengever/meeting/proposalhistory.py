@@ -1,6 +1,6 @@
 from BTrees.OOBTree import OOBTree
 from datetime import datetime
-from opengever.base.advancedjson import AdvancedJSONEncoder
+from opengever.base import advancedjson
 from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.protect import unprotected_write
 from opengever.base.request import dispatch_request
@@ -12,7 +12,6 @@ from plone import api
 from uuid import UUID
 from uuid import uuid4
 from zope.annotation.interfaces import IAnnotations
-import json
 
 
 class ProposalHistory(object):
@@ -67,10 +66,10 @@ class ProposalHistory(object):
             # currently we only sync from the submitted side
             # to the dossier
             path = self.context.load_model().physical_path
-            request_data = {'data': json.dumps({
+            request_data = {'data': advancedjson.dumps({
                 'timestamp': record.timestamp,
                 'data': record.data,
-            }, cls=AdvancedJSONEncoder)}
+            })}
             dispatch_request(
                 self.context.get_source_admin_unit_id(),
                 '@@receive-proposal-history',

@@ -1,10 +1,9 @@
-from opengever.base.advancedjson import AdvancedJSONDecoder
+from opengever.base import advancedjson
 from opengever.base.request import tracebackify
 from opengever.meeting.interfaces import IHistory
 from persistent.mapping import PersistentMapping
 from Products.Five import BrowserView
 from uuid import UUID
-import json
 
 
 @tracebackify
@@ -18,7 +17,7 @@ class ReceiveProposalHistory(BrowserView):
     """
 
     def __call__(self):
-        data = json.loads(self.request.get('data'), cls=AdvancedJSONDecoder)
+        data = advancedjson.loads(self.request.get('data'))
         timestamp = data['timestamp']
 
         data = data['data']

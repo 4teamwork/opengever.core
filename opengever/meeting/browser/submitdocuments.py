@@ -1,7 +1,7 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from five import grok
-from opengever.base.advancedjson import AdvancedJSONDecoder
+from opengever.base import advancedjson
 from opengever.base.security import elevated_privileges
 from opengever.base.source import DossierPathSourceBinder
 from opengever.base.transport import PrivilegedReceiveObject
@@ -195,8 +195,7 @@ class UpdateSubmittedDocumentView(grok.View):
             raise Unauthorized()
 
         submitted_proposal = aq_parent(aq_inner(self.context))
-        history_data = json.loads(self.request.get('history_data'),
-                                  cls=AdvancedJSONDecoder)
+        history_data = advancedjson.loads(self.request.get('history_data'))
 
         with elevated_privileges():
             transporter = Transporter()
@@ -239,8 +238,7 @@ class RecieveSubmittedDocumentView(PrivilegedReceiveObject):
     def receive(self):
         document = super(RecieveSubmittedDocumentView, self).receive()
 
-        history_data = json.loads(self.request.get('history_data'),
-                                  cls=AdvancedJSONDecoder)
+        history_data = advancedjson.loads(self.request.get('history_data'))
 
         with elevated_privileges():
             IHistory(self.context).append_record(

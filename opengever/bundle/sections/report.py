@@ -1,7 +1,7 @@
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from datetime import datetime
-from opengever.base.advancedjson import AdvancedJSONEncoder
+from opengever.base import advancedjson
 from opengever.base.pathfinder import PathFinder
 from opengever.bundle.report import ASCIISummaryBuilder
 from opengever.bundle.report import DataCollector
@@ -11,7 +11,6 @@ from opengever.bundle.sections.bundlesource import BUNDLE_KEY
 from zope.annotation import IAnnotations
 from zope.interface import classProvides
 from zope.interface import implements
-import json
 import logging
 import os
 import tempfile
@@ -78,8 +77,8 @@ class ReportSection(object):
         """
         json_path = os.path.join(self.report_dir, filename)
         with open(json_path, 'w') as json_file:
-            json.dump(data, json_file, cls=AdvancedJSONEncoder,
-                      sort_keys=True, indent=4, separators=(',', ': '))
+            advancedjson.dump(data, json_file, sort_keys=True,
+                              indent=4, separators=(',', ': '))
         log.info('Stored %s' % json_path)
 
     def build_ascii_summary(self, bundle):
