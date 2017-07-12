@@ -36,15 +36,26 @@ class TestDocumentOverview(FunctionalTestCase):
         super(TestDocumentOverview, self).tearDown()
 
     @browsing
-    def test_overview_displays_related_documents(self, browser):
+    def test_overview_displays_related_documents_but_only_documents(self, browser):
         self.doc_a = create(Builder('document')
+                            .within(self.dossier)
                             .having(title=u'A\xf6'))
         self.doc_b = create(Builder('document')
+                            .within(self.dossier)
                             .having(title=u'B\xf6')
                             .relate_to(self.doc_a))
         self.doc_c = create(Builder('document')
+                            .within(self.dossier)
                             .having(title=u'C\xf6')
                             .relate_to(self.doc_b))
+        self.task = create(Builder('task')
+                           .within(self.dossier)
+                           .having(title=u'C\xf6')
+                           .relate_to(self.doc_b))
+        self.proposal = create(Builder('proposal')
+                               .within(self.dossier)
+                               .having(title=u'C\xf6')
+                               .relate_to(self.doc_b))
 
         browser.login().open(self.doc_b, view='tabbedview_view-overview')
 

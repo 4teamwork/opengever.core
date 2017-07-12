@@ -10,13 +10,14 @@ from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.base.interfaces import IRedirector
 from opengever.document import _
 from opengever.document.base import BaseDocumentMixin
+from opengever.document.behaviors import IBaseDocument
 from opengever.document.behaviors.related_docs import IRelatedDocuments
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.meeting.proposal import IProposal
 from opengever.meeting.proposal import ISubmittedProposal
-from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
 from opengever.officeconnector.helpers import create_oc_url
+from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
 from opengever.task.task import ITask
 from plone import api
 from plone.autoform import directives as form_directives
@@ -146,8 +147,7 @@ class Document(Item, BaseDocumentMixin):
         """
         return False
 
-    def related_items(self, bidirectional=False):
-
+    def related_items(self, bidirectional=False, documents_only=False):
         _related_items = []
 
         relations = IRelatedDocuments(self).relatedItems
@@ -158,12 +158,15 @@ class Document(Item, BaseDocumentMixin):
         if bidirectional:
             catalog = getUtility(ICatalog)
             doc_id = getUtility(IIntIds).getId(aq_inner(self))
-            _related_items += [
-                r.from_object
-                for r in catalog.findRelations(
-                    {'to_id': doc_id, 'from_attribute': 'relatedItems'}
-                )
-            ]
+            relations = catalog.findRelations(
+                {'to_id': doc_id, 'from_attribute': 'relatedItems'})
+
+            if documents_only:
+                relations = filter(
+                    lambda rel: IBaseDocument.providedBy(rel.from_object),
+                    relations)
+
+            _related_items += [rel.from_object for rel in relations]
 
         return _related_items
 

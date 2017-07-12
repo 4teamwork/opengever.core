@@ -208,7 +208,7 @@ class Overview(DisplayForm, GeverTabMixin, ActionButtonRendererMixin):
             'title': obj.Title(),
             'url': obj.absolute_url(),
         } for obj in sorted(
-            self.context.related_items(bidirectional=True),
+            self.context.related_items(bidirectional=True, documents_only=True),
             key=lambda obj: obj.Title()
         )]
 
