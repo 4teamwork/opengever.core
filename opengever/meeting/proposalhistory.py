@@ -31,6 +31,7 @@ class ProposalHistory(object):
     def register(cls, clazz):
         assert clazz.history_type not in cls.record_classes
         cls.record_classes[clazz.history_type] = clazz
+        return clazz
 
     def __init__(self, context):
         self.context = context
@@ -175,6 +176,7 @@ class BaseHistoryRecord(object):
         return Actor.lookup(self.data['userid']).get_link()
 
 
+@ProposalHistory.register
 class ProposalCreated(BaseHistoryRecord):
     """A Proposal has been created."""
 
@@ -185,9 +187,8 @@ class ProposalCreated(BaseHistoryRecord):
                  u'Created by ${user}',
                  mapping={'user': self.get_actor_link()})
 
-ProposalHistory.register(ProposalCreated)
 
-
+@ProposalHistory.register
 class ProposalCancelled(BaseHistoryRecord):
 
     history_type = 'cancelled'
@@ -197,9 +198,8 @@ class ProposalCancelled(BaseHistoryRecord):
                  u'Proposal cancelled by ${user}',
                  mapping={'user': self.get_actor_link()})
 
-ProposalHistory.register(ProposalCancelled)
 
-
+@ProposalHistory.register
 class ProposalReactivated(BaseHistoryRecord):
 
     history_type = 'reactivated'
@@ -209,9 +209,8 @@ class ProposalReactivated(BaseHistoryRecord):
                  u'Proposal reactivated by ${user}',
                  mapping={'user': self.get_actor_link()})
 
-ProposalHistory.register(ProposalReactivated)
 
-
+@ProposalHistory.register
 class ProposalSubmitted(BaseHistoryRecord):
 
     history_type = 'submitted'
@@ -221,9 +220,8 @@ class ProposalSubmitted(BaseHistoryRecord):
                  u'Submitted by ${user}',
                  mapping={'user': self.get_actor_link()})
 
-ProposalHistory.register(ProposalSubmitted)
 
-
+@ProposalHistory.register
 class DocumentSubmitted(BaseHistoryRecord):
 
     history_type = 'document_submitted'
@@ -251,9 +249,8 @@ class DocumentSubmitted(BaseHistoryRecord):
                           'title': self.document_title or '',
                           'version': self.submitted_version})
 
-ProposalHistory.register(DocumentSubmitted)
 
-
+@ProposalHistory.register
 class ProposalRejected(BaseHistoryRecord):
 
     history_type = 'rejected'
@@ -268,9 +265,8 @@ class ProposalRejected(BaseHistoryRecord):
                  u'Rejected by ${user}',
                  mapping={'user': self.get_actor_link()})
 
-ProposalHistory.register(ProposalRejected)
 
-
+@ProposalHistory.register
 class ProposalReopened(BaseHistoryRecord):
 
     history_type = 'reopened'
@@ -281,9 +277,8 @@ class ProposalReopened(BaseHistoryRecord):
                  u'Proposal reopened by ${user}',
                  mapping={'user': self.get_actor_link()})
 
-ProposalHistory.register(ProposalReopened)
 
-
+@ProposalHistory.register
 class ProposalScheduled(BaseHistoryRecord):
 
     history_type = 'scheduled'
@@ -307,9 +302,8 @@ class ProposalScheduled(BaseHistoryRecord):
                  mapping={'user': self.get_actor_link(),
                           'meeting': self.meeting_title})
 
-ProposalHistory.register(ProposalScheduled)
 
-
+@ProposalHistory.register
 class ProposalDecided(BaseHistoryRecord):
 
     history_type = 'decided'
@@ -320,9 +314,8 @@ class ProposalDecided(BaseHistoryRecord):
                  u'Proposal decided by ${user}',
                  mapping={'user': self.get_actor_link()})
 
-ProposalHistory.register(ProposalDecided)
 
-
+@ProposalHistory.register
 class ProposalRevised(BaseHistoryRecord):
 
     history_type = 'revised'
@@ -333,9 +326,8 @@ class ProposalRevised(BaseHistoryRecord):
                  u'Proposal revised by ${user}',
                  mapping={'user': self.get_actor_link()})
 
-ProposalHistory.register(ProposalRevised)
 
-
+@ProposalHistory.register
 class ProposalRemovedFromSchedule(ProposalScheduled):
 
     history_type = 'remove_scheduled'
@@ -348,9 +340,8 @@ class ProposalRemovedFromSchedule(ProposalScheduled):
                  mapping={'user': self.get_actor_link(),
                           'meeting': self.meeting_title})
 
-ProposalHistory.register(ProposalRemovedFromSchedule)
 
-
+@ProposalHistory.register
 class DocumentUpdated(DocumentSubmitted):
 
     history_type = 'document_updated'
@@ -363,4 +354,3 @@ class DocumentUpdated(DocumentSubmitted):
                           'title': self.document_title or '',
                           'version': self.submitted_version})
 
-ProposalHistory.register(DocumentUpdated)
