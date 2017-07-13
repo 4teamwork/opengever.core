@@ -6,10 +6,26 @@ from uuid import UUID
 import json
 
 
-class AdvancedJSONDecoder(json.JSONDecoder):
-    """A custom JSONDecoder that can deserialize some additional types:
+TYPE_KEY = u'_advancedjson_type'
+VALUE_KEY = u'_advancedjson_value'
 
-    - ISO-format string -> datetime
+
+class CannotDecodeJsonType(Exception):
+    """Raised when a decoder receives an unknown type."""
+
+    def __init__(self, unknown_type, unnown_value):
+        super(CannotDecodeJsonType, self).__init__(
+            "Unknown advanced json type {} and value {}".format(
+                unknown_type, unnown_value))
+        self.unknown_type = unknown_type
+        self.uknown_value = unnown_value
+
+
+class AdvancedJSONDecoder(json.JSONDecoder):
+    """A custom JSONDecoder that can deserialize some additional types.
+
+    Should always be symmetrical in decoding to what AdvancedJSONEncoder
+    encodes.
     """
 
     def __init__(self, *args, **kargs):
@@ -17,18 +33,24 @@ class AdvancedJSONDecoder(json.JSONDecoder):
             *args, object_hook=self._dict_to_object, **kargs)
 
     def _dict_to_object(self, obj):
-        for key, val in obj.items():
-            if not isinstance(val, basestring):
-                continue
-            try:
-                dt = parser.parse(val)
-            except ValueError:
-                continue
-            else:
-                if dt.tzinfo:
-                    dt = as_utc(dt)
-                obj[key] = dt
-        return obj
+        if TYPE_KEY not in obj:
+            return obj
+
+        decode_as = obj[TYPE_KEY]
+        value = obj[VALUE_KEY]
+        if decode_as == u'datetime':
+            dt = parser.parse(value)
+            if dt.tzinfo:
+                dt = as_utc(dt)
+            return dt
+        elif decode_as == u'UUID':
+            return UUID(value)
+        elif decode_as == u'set':
+            return set(value)
+        elif decode_as == u'PersistentMapping':
+            return PersistentMapping(value)
+
+        raise CannotDecodeJsonType(decode_as, value)
 
 
 def load(*args, **kwargs):
@@ -42,23 +64,38 @@ def loads(*args, **kwargs):
 
 
 class AdvancedJSONEncoder(json.JSONEncoder):
-    """A custom JSONEncoder that can serialize some additional types:
+    """A custom JSONEncoder that can serialize some additional types.
 
-    - datetime          -> ISO-format string
-    - UUID              -> str
-    - PersistentMapping -> dict
-    - set               -> list
+    The additional types are stored in a custom object/dict with the following
+    format:
+
+    {
+        u'_advancedjson_type': 'unique identifier',
+        u'_advancedjson_value': 'serialized value'
+    }
     """
 
     def default(self, obj):
         if isinstance(obj, datetime):
-            return obj.isoformat()
+            return {
+                TYPE_KEY: u'datetime',
+                VALUE_KEY: obj.isoformat(),
+            }
         elif isinstance(obj, UUID):
-            return str(obj)
+            return {
+                TYPE_KEY: u'UUID',
+                VALUE_KEY: str(obj),
+            }
         elif isinstance(obj, set):
-            return list(obj)
+            return {
+                TYPE_KEY: u'set',
+                VALUE_KEY: list(obj),
+            }
         elif isinstance(obj, PersistentMapping):
-            return dict(obj)
+            return {
+                TYPE_KEY: u'PersistentMapping',
+                VALUE_KEY: dict(obj),
+            }
         else:
             return super(AdvancedJSONEncoder, self).default(obj)
 
