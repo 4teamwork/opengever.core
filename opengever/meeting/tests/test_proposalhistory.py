@@ -50,6 +50,7 @@ class TestProposalHistory(FunctionalTestCase):
 
     def submit_proposal(self):
         self.proposal.execute_transition('pending-submitted')
+        transaction.commit()  # also make change visible in browser
 
     @browsing
     def test_creation_creates_history_entry(self, browser):

@@ -122,27 +122,27 @@ class TestAlphabeticalTOC(FunctionalTestCase):
             start=pytz.UTC.localize(datetime(2011, 1, 1, 0, 0)),
             protocol_start_page_number=99))
 
-        proposal1_1 = create(Builder('proposal_model').having(
+        proposal1_1 = create(Builder('submitted_proposal').having(
             title=u'proposal 1',
             repository_folder_title='Business',
             dossier_reference_number='1.1.4 / 1',
-            int_id=1))
-        proposal1_2 = create(Builder('proposal_model').having(
+            int_id=1).within(self.committee))
+        proposal1_2 = create(Builder('submitted_proposal').having(
             title=u'\xdchhh',
             repository_folder_title='Business',
             dossier_reference_number='1.1.4 / 2',
-            int_id=2))
+            int_id=2).within(self.committee))
 
-        proposal2_1 = create(Builder('proposal_model').having(
+        proposal2_1 = create(Builder('submitted_proposal').having(
             title=u'Proposal 3',
             repository_folder_title='Stuff',
             dossier_reference_number='2.1.4 / 1',
-            int_id=3))
-        proposal2_2 = create(Builder('proposal_model').having(
+            int_id=3).within(self.committee))
+        proposal2_2 = create(Builder('submitted_proposal').having(
             title=u'Anything goes',
             repository_folder_title='Other Stuff',
             dossier_reference_number='3.1.4 / 77',
-            int_id=4))
+            int_id=4).within(self.committee))
 
         create(Builder('agenda_item').having(
             meeting=self.meeting_before,

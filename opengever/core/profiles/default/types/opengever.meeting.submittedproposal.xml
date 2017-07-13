@@ -12,7 +12,7 @@
   </property>
 
   <!-- schema interface -->
-  <property name="schema">opengever.meeting.proposal.IProposal</property>
+  <property name="schema">opengever.meeting.proposal.ISubmittedProposal</property>
 
   <!-- class used for content items -->
   <property name="klass">opengever.meeting.proposal.SubmittedProposal</property>

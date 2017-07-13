@@ -1,6 +1,6 @@
 from opengever.base.response import JSONResponse
 from opengever.meeting import _
-from opengever.meeting.proposal import ISubmittedProposalModel
+from opengever.meeting.proposal import ISubmittedProposal
 from opengever.meeting.service import meeting_service
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListing
@@ -185,7 +185,7 @@ class AgendaItemsView(BrowserView):
 
         title = title.decode('utf-8')
         if self.agenda_item.has_proposal:
-            if len(title) > ISubmittedProposalModel['title'].max_length:
+            if len(title) > ISubmittedProposal['title'].max_length:
                 return JSONResponse(self.request).error(
                     _('agenda_item_update_too_long_title',
                       default=u"Agenda Item title is too long.")

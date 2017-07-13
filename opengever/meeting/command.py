@@ -1,4 +1,5 @@
 from opengever.base.command import CreateDocumentCommand
+from opengever.base.interfaces import IDataCollector
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.base.request import dispatch_json_request
@@ -17,9 +18,11 @@ from opengever.meeting.protocol import AgendaItemListProtocolData
 from opengever.meeting.protocol import ExcerptProtocolData
 from opengever.meeting.protocol import ProtocolData
 from opengever.meeting.sablon import Sablon
+from opengever.ogds.base.utils import decode_for_json
 from plone import api
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.locking.interfaces import ILockable
+from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.i18n import translate
@@ -111,13 +114,17 @@ class ExcerptOperations(object):
                  mapping=dict(title=meeting.get_title()))
 
     def get_title(self, meeting):
-        return u"{} - {}".format(self.proposal.title, meeting.get_title())
+        return u"{} - {}".format(
+            self.proposal.resolve_submitted_proposal().title,
+            meeting.get_title())
 
     def get_filename(self, meeting):
         normalizer = getUtility(IIDNormalizer)
         return u"{}-{}.docx".format(
-            normalizer.normalize(self.proposal.title),
-            normalizer.normalize(meeting.get_title()))
+            normalizer.normalize(
+                self.proposal.resolve_submitted_proposal().title),
+            normalizer.normalize(
+                meeting.get_title()))
 
 
 class ManualExcerptOperations(object):
@@ -309,6 +316,11 @@ class CreateSubmittedProposalCommand(object):
         jsondata = {'committee_oguid': model.committee.oguid.id,
                     'proposal_oguid': model.oguid.id}
 
+        # XXX use Transporter or API?
+        collector = getMultiAdapter((self.proposal,), IDataCollector,
+                                    name='field-data')
+        jsondata['field-data'] = collector.extract()
+
         if is_word_meeting_implementation_enabled():
             blob = self.proposal.get_proposal_document().file
             jsondata['file'] = {
@@ -316,7 +328,7 @@ class CreateSubmittedProposalCommand(object):
                 'contentType': blob.contentType,
                 'data': base64.encodestring(blob.data)}
 
-        request_data = {REQUEST_KEY: json.dumps(jsondata)}
+        request_data = {REQUEST_KEY: json.dumps(decode_for_json(jsondata))}
         response = dispatch_json_request(
             self.admin_unit_id, '@@create_submitted_proposal', data=request_data)
 

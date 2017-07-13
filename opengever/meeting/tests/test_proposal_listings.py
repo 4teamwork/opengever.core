@@ -61,18 +61,30 @@ class TestDossierProposalListing(ProposalListingTests):
         meeting_dossier = create(
             Builder('meeting_dossier').within(self.repository_folder))
 
-        create(Builder('submitted_proposal').submitting(self.proposal))
+        proposal = create(Builder('proposal')
+                          .within(self.dossier)
+                          .titled(u'My Proposal')
+                          .having(committee=self.committee.load_model(),
+                                  initial_position=u'My p\xf6sition is',
+                                  proposed_action=u'My proposed acti\xf6n')
+                          .as_submitted())
+
         create(Builder('meeting')
                .having(committee=self.committee)
                .link_with(meeting_dossier)
-               .scheduled_proposals([self.proposal, ]))
+               .scheduled_proposals([proposal, ]))
 
         browser.login().open(self.dossier, view='tabbedview_view-proposals')
         table = browser.css('table.listing').first
 
         self.assertEquals(
-            [{'State': 'Scheduled',
+            [{'State': 'Pending',
               'Reference Number': '1',
+              'Comittee': 'My committee',
+              'Title': 'My Proposal',
+              'Meeting': u''},
+             {'State': 'Scheduled',
+              'Reference Number': '2',
               'Comittee': 'My committee',
               'Title': 'My Proposal',
               'Meeting': u'C\xf6mmunity meeting'}],
@@ -106,8 +118,9 @@ class TestDossierProposalListing(ProposalListingTests):
                              view='tabbedview_view-proposals',
                              data={'proposal_state_filter': 'filter_all'})
         table = browser.css('.listing').first
-        self.assertEquals([u'Cancelled Proposal', u'My Proposal'],
-                          [row.get('Title') for row in table.dicts()])
+        self.assertItemsEqual(
+            [u'Cancelled Proposal', u'My Proposal'],
+            [row.get('Title') for row in table.dicts()])
 
 
 class TestMyProposals(ProposalListingTests):
@@ -135,13 +148,27 @@ class TestMyProposals(ProposalListingTests):
                           [row.get('Title') for row in table.dicts()])
 
 
-class TestSubmittedProposals(ProposalListingTests):
+class TestSubmittedProposals(FunctionalTestCase):
 
     def setUp(self):
         super(TestSubmittedProposals, self).setUp()
+        self.repository_root, self.repository_folder = create(
+            Builder('repository_tree'))
+        self.dossier = create(Builder('dossier')
+                              .within(self.repository_folder)
+                              .titled(u'Dossier A'))
+        self.committee_container = create(Builder('committee_container'))
+        self.committee = create(Builder('committee')
+                                .within(self.committee_container)
+                                .titled('My committee'))
 
-        self.submitted_proposal = create(Builder('submitted_proposal')
-                                         .submitting(self.proposal))
+        self.proposal, self.submitted_proposal = create(Builder('proposal')
+            .within(self.dossier)
+            .titled(u'My Proposal')
+            .having(committee=self.committee.load_model(),
+                    initial_position=u'My p\xf6sition is',
+                    proposed_action=u'My proposed acti\xf6n')
+            .with_submitted())
 
     @browsing
     def test_listing(self, browser):

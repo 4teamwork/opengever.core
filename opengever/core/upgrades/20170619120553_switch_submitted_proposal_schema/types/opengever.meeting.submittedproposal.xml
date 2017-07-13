@@ -1,0 +1,6 @@
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.meeting.submittedproposal" meta_type="Dexterity FTI" i18n:domain="opengever.core">
+
+  <!-- schema interface -->
+  <property name="schema">opengever.meeting.proposal.ISubmittedProposal</property>
+
+</object>

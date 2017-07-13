@@ -18,7 +18,7 @@ class ModelContainer(Container):
 
         """
         obj_data = {}
-        for field_name in cls.content_schema.names():
+        for field_name in cls.content_schema.names(all=True):
             if field_name in data:
                 obj_data[field_name] = data.pop(field_name)
 
@@ -54,6 +54,7 @@ class ModelContainer(Container):
         self._after_model_created(model_instance)
 
         notify(ObjectModifiedEvent(aq_wrapped_self))
+        return model_instance
 
     def _after_model_created(self, model_instance):
         """Hook called right after creating a model instance."""
