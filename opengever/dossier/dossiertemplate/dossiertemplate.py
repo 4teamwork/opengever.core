@@ -6,6 +6,7 @@ from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateSchema
+from opengever.ogds.base.actor import Actor
 from plone import api
 from plone.dexterity.content import Container
 from plone.dexterity.utils import getAdditionalSchemata
@@ -117,3 +118,10 @@ class DossierTemplate(Container):
     def get_filing_prefix_label(self):
         return voc_term_title(IDossier['filing_prefix'],
                               IDossier(self).filing_prefix)
+
+    def get_responsible_actor(self):
+        return Actor.user(IDossier(self).responsible)
+
+    @property
+    def responsible_label(self):
+        return self.get_responsible_actor().get_label()

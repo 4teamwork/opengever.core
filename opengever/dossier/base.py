@@ -13,11 +13,9 @@ from opengever.document.behaviors import IBaseDocument
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.participation import IParticipationAwareMarker
-from opengever.dossier.dossiertemplate import is_dossier_template_feature_enabled
 from opengever.dossier.interfaces import IConstrainTypeDecider
 from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.meeting import is_meeting_feature_enabled
-from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.model import Proposal
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -397,15 +395,8 @@ class DefaultConstrainTypeDecider(grok.MultiAdapter):
             if const_ctype == container_type and const_ftype == factory_type:
                 return depth < const_depth or const_depth == 0
 
-        if factory_type in [u'opengever.meeting.proposal',
-                            u'opengever.meeting.sablontemplate']:
+        if factory_type in [u'opengever.meeting.proposal']:
             return is_meeting_feature_enabled()
-
-        if factory_type in [u'opengever.meeting.proposaltemplate']:
-            return is_word_meeting_implementation_enabled()
-
-        if factory_type in [u'opengever.dossier.dossiertemplate']:
-            return is_dossier_template_feature_enabled()
 
         return True
 

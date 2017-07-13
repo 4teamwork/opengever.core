@@ -10,7 +10,7 @@ def configure_templatefolder_portlets(templatefolder, event):
      - Add navigation portlet assignments as context portlet
     """
 
-    if templatefolder.is_subdossier():
+    if templatefolder.is_subtemplatefolder():
         return
 
     block_context_portlet_inheritance(templatefolder)

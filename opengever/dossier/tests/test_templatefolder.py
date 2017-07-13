@@ -48,18 +48,18 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
     document_date = datetime(2015, 9, 28, 0, 0)
 
     expected_doc_properties = {
-         'Document.ReferenceNumber': 'Client1 / 2 / 4',
+         'Document.ReferenceNumber': 'Client1 / 1 / 4',
          'Document.SequenceNumber': '4',
-         'Dossier.ReferenceNumber': 'Client1 / 2',
+         'Dossier.ReferenceNumber': 'Client1 / 1',
          'Dossier.Title': 'My Dossier',
          'User.FullName': 'Test User',
          'User.ID': TEST_USER_ID,
          'ogg.document.document_date': document_date,
-         'ogg.document.reference_number': 'Client1 / 2 / 4',
+         'ogg.document.reference_number': 'Client1 / 1 / 4',
          'ogg.document.sequence_number': '4',
          'ogg.document.title': 'Test Docx',
-         'ogg.dossier.reference_number': 'Client1 / 2',
-         'ogg.dossier.sequence_number': '2',
+         'ogg.dossier.reference_number': 'Client1 / 1',
+         'ogg.dossier.sequence_number': '1',
          'ogg.dossier.title': 'My Dossier',
          'ogg.user.email': 'test@example.org',
          'ogg.user.firstname': 'User',
@@ -587,18 +587,6 @@ class TestTemplateFolder(FunctionalTestCase):
         browser.login().visit(templatefolder)
 
         self.assertEqual(0, len(browser.css('.formTab #tab-dossiertemplates')))
-
-    @browsing
-    def test_prefill_responsible_user(self, browser):
-        self.grant('Manager')
-        add_languages(['de-ch'])
-        browser.login().open(self.portal)
-        factoriesmenu.add('Template Folder')
-
-        self.assertEqual(
-            'Test User (test_user_1_)',
-            browser.css('#formfield-form-widgets-IDossier-responsible option[selected]').first.text
-            )
 
     @browsing
     def test_portlet_inheritance_is_blocked(self, browser):

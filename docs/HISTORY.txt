@@ -5,6 +5,7 @@ Changelog
 2017.3.1 (unreleased)
 ---------------------
 
+- Remove dossier inheritance of templatefolder [elioschmutz]
 - Move data for most text-fields of Proposal (SQL) to their corresponding plone-objects Proposal/SubmittedProposal. [deiferni]
 - Introduce versioning for Proposal/SubmittedProposal. [deiferni]
 - Cleanup rolemap, don't redefine plone roles. [deiferni]
