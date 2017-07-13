@@ -31,6 +31,7 @@ Changelog
 - Allow to copy-paste single documents. [tarnap]
 - Enable secure flag for cookies. [phgross]
 - Always download MSG file if avaiable. [mathias.leimgruber]
+- Move data for the history of a proposal from SQL to their corresponding plone-objects Proposal/SubmittedProposal. [deiferni]
 - Remove dossier inheritance of templatefolder [elioschmutz]
 - Move data for most text-fields of Proposal (SQL) to their corresponding plone-objects Proposal/SubmittedProposal. [deiferni]
 - Introduce versioning for Proposal/SubmittedProposal. [deiferni]
