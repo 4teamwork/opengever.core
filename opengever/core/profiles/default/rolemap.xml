@@ -1,32 +1,12 @@
 <rolemap>
   <roles>
-
-    <!--migrated from opengever/sharing/profiles/default/rolemap.xml-->
     <role name="Administrator" />
-    <role name="Anonymous" />
-    <role name="Authenticated" />
-    <role name="Contributor" />
-    <role name="Editor" />
-    <role name="Manager" />
-    <role name="Member" />
-    <role name="Owner" />
-    <role name="Reader" />
-    <role name="Reviewer" />
-    <role name="Publisher" />
-    <role name="Role Manager" />
-
-
-    <!--migrated from opengever/meeting/profiles/default/rolemap.xml-->
-    <role name="CommitteeGroupMember" />
-
-
-    <!--migrated from opengever/disposition/profiles/default/rolemap.xml-->
-    <role name="Records Manager" />
-    <role name="Archivist" />
-
-
-    <!--migrated from opengever/policy/base/profiles/default/rolemap.xml-->
     <role name="APIUser" />
+    <role name="Archivist" />
+    <role name="CommitteeGroupMember" />
+    <role name="Publisher" />
+    <role name="Records Manager" />
+    <role name="Role Manager" />
   </roles>
   <permissions>
 
