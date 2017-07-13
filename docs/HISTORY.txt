@@ -58,6 +58,7 @@ Changelog
 - Fix ArchiveForm when resolving a Dossier. [phgross]
 - Allow sort by member-name on memberhips-listing view. [elioschmutz]
 - Extend tabbedview with sqlsource: Implement sorting by sqlalchemy columns instead only by string. [elioschmutz]
+- Allow remove templatefolder content. [elioschmutz]
 - Handle unknown asynchronous tooltip response. [Kevin Bieri]
 - Move language selector into the user menu (dropdown) - Implemented in plonetheme.teamraum. [mathias.leimgruber]
 - Only the Manager can access the folder_contents on the plone root. [mathias.leimgruber]
