@@ -1,5 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browsing
+from ftw.testbrowser.pages import plone
 from opengever.ogds.base.utils import ogds_service
 from opengever.testing import IntegrationTestCase
 from plone import api
@@ -62,3 +64,10 @@ class TestIntegrationTestSetup(IntegrationTestCase):
 
     def test_serverside_default_user_is_anonymous(self):
         self.assertTrue(api.user.is_anonymous())
+
+    @browsing
+    def test_preparing_changes_do_not_trigger_csrf_protection(self, browser):
+        self.login(self.administrator, browser)
+        self.repository_root.title_de = 'New Repository Root Title'
+        browser.open(self.repository_root)
+        self.assertEquals('New Repository Root Title', plone.first_heading())
