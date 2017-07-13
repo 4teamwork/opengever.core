@@ -40,6 +40,7 @@ class OpengeverContentFixture(object):
         with self.freeze_at_hour(14):
             with self.login(self.dossier_responsible):
                 self.create_treaty_dossiers()
+                self.create_empty_dossier()
 
         with self.freeze_at_hour(15):
             with self.login(self.dossier_responsible):
@@ -196,6 +197,14 @@ class OpengeverContentFixture(object):
                     end=date(2015, 12, 31),
                     responsible='hugo.boss')
             .in_state('dossier-state-resolved')))
+
+    @staticuid()
+    def create_empty_dossier(self):
+        self.register('empty_dossier', create(
+            Builder('dossier').within(self.repofolder00)
+            .titled(u'An empty dossier')
+            .having(start=date(2016, 1, 1),
+                    responsible='hugo.boss')))
 
     @staticuid()
     def create_emails(self):

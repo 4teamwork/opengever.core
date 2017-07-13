@@ -4,6 +4,7 @@ from contextlib import contextmanager
 from ftw.flamegraph import flamegraph
 from functools import wraps
 from opengever.core.testing import OPENGEVER_INTEGRATION_TESTING
+from opengever.task.task import ITask
 from operator import methodcaller
 from plone import api
 from plone.app.testing import applyProfile
@@ -148,6 +149,13 @@ class IntegrationTestCase(TestCase):
         else:
             return self.__getattribute__(name)
 
+    @property
+    def dossier_tasks(self):
+        """All tasks within self.dossier.
+        """
+        return map(self.brain_to_object,
+                   api.content.find(self.dossier, object_provides=ITask))
+
     def _lookup_from_table(self, name):
         """This method helps to look up persistent objects or user objects which
         were created in the fixture and registered there with a name.
@@ -242,3 +250,8 @@ class IntegrationTestCase(TestCase):
         self.assertEqual(
             expected, got,
             'Object {!r} has an incorrect workflow state.'.format(obj))
+
+    def brain_to_object(self, brain):
+        """Return the object of a brain.
+        """
+        return brain.getObject()
