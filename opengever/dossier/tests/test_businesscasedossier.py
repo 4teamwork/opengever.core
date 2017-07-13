@@ -1,39 +1,37 @@
+from ftw.testbrowser import browsing
+from ftw.testbrowser.pages import factoriesmenu
+from ftw.testbrowser.pages import statusmessages
 from opengever.dossier.businesscase import IBusinessCaseDossier
-from opengever.testing import FunctionalTestCase
-from plone.dexterity.interfaces import IDexterityFTI
-from plone.dexterity.utils import createContentInContainer
-from zope.component import createObject
-from zope.component import queryUtility
+from opengever.testing import IntegrationTestCase
 
 
-class TestBusinessCaseDossierIntegration(FunctionalTestCase):
+class TestBusinessCaseDossierIntegration(IntegrationTestCase):
 
-    def test_adding(self):
-        portal = self.layer['portal']
-        portal.invokeFactory('opengever.dossier.businesscasedossier', 'dossier1')
-        d1 = portal['dossier1']
-        self.failUnless(IBusinessCaseDossier.providedBy(d1))
+    @browsing
+    def test_add_business_case_dossier(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.leaf_repofolder)
+        factoriesmenu.add('Business Case Dossier')
+        browser.fill({'Title': u'\xc4s Dossier'}).save()
+        statusmessages.assert_no_error_messages()
+        statusmessages.assert_message('Item created')
 
-    def test_fti(self):
-        fti = queryUtility(IDexterityFTI, name='opengever.dossier.businesscasedossier')
-        self.assertNotEquals(None, fti)
+    def test_provides_interface(self):
+        self.login(self.dossier_responsible)
+        self.assertTrue(IBusinessCaseDossier.providedBy(self.dossier))
 
-    def test_schema(self):
-        fti = queryUtility(IDexterityFTI, name='opengever.dossier.businesscasedossier')
-        schema = fti.lookupSchema()
-        self.assertEquals(IBusinessCaseDossier, schema)
+    def test_Title_accessor(self):
+        self.login(self.dossier_responsible)
+        self.assertEquals(
+            'Vertr\xc3\xa4ge mit der kantonalen Finanzverwaltung',
+            self.dossier.Title())
+        self.assertEquals(str, type(self.dossier.Title()))
 
-    def test_factory(self):
-        fti = queryUtility(IDexterityFTI, name='opengever.dossier.businesscasedossier')
-        factory = fti.factory
-        new_object = createObject(factory)
-        self.failUnless(IBusinessCaseDossier.providedBy(new_object))
-
-    def test_accessors(self):
-        """Test title and descprition accessors."""
-        portal = self.layer['portal']
-        d1 = createContentInContainer(
-            portal, 'opengever.dossier.businesscasedossier',
-            title=u'Test title', description=u'Lorem ipsum')
-        self.assertEquals(d1.Title(), 'Test title')
-        self.assertEquals(d1.Description(), 'Lorem ipsum')
+    def test_Description_accessor(self):
+        self.login(self.dossier_responsible)
+        self.assertEquals(
+            'Alle aktuellen Vertr\xc3\xa4ge mit der kantonalen Finanzverwaltung'
+            ' sind hier abzulegen.'
+            ' Vertr\xc3\xa4ge vor 2016 geh\xc3\xb6ren ins Archiv.',
+            self.dossier.Description())
+        self.assertEquals(str, type(self.dossier.Description()))
