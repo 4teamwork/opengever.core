@@ -1,6 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.bumblebee.interfaces import IBumblebeeDocument
+from opengever.mail.tests import MAIL_DATA
 from opengever.testing import FunctionalTestCase
 
 
@@ -15,3 +16,27 @@ class TestDocumentAdapter(FunctionalTestCase):
         document_without_file = create(Builder("document"))
         self.assertFalse(
             IBumblebeeDocument(document_without_file).is_convertable())
+
+
+class TestMailDocumentAdapter(FunctionalTestCase):
+
+    def test_use_original_message_as_primary_field_if_available(self):
+        mail_with_original_message = create(Builder('mail')
+                                            .with_message(MAIL_DATA)
+                                            .with_dummy_message()
+                                            .with_dummy_original_message())
+
+        bumblebee_document = IBumblebeeDocument(mail_with_original_message)
+        self.assertEqual(
+            'dummy.msg',
+            bumblebee_document.get_primary_field().filename)
+
+    def test_use_default_primary_field_without_original_message_available(self):
+        mail_with_original_message = create(Builder('mail')
+                                            .with_message(MAIL_DATA)
+                                            .with_dummy_message())
+
+        bumblebee_document = IBumblebeeDocument(mail_with_original_message)
+        self.assertEqual(
+            'no-subject.eml',
+            bumblebee_document.get_primary_field().filename)

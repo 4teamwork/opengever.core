@@ -9,6 +9,7 @@ Changelog
 - Move data for most text-fields of Proposal (SQL) to their corresponding plone-objects Proposal/SubmittedProposal. [deiferni]
 - Introduce versioning for Proposal/SubmittedProposal. [deiferni]
 - Cleanup rolemap, don't redefine plone roles. [deiferni]
+- Use OGMail original_message-file for bumblebee-conversion if available. [elioschmutz]
 
 
 2017.3.0 (2017-07-12)
