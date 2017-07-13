@@ -202,7 +202,7 @@ class UpdateSubmittedDocumentView(grok.View):
             transporter.update(self.context, self.request)
 
             IHistory(submitted_proposal).append_record(
-                'document_updated',
+                u'document_updated',
                 document_title=self.context.title,
                 submitted_version=history_data['submitted_version'],
                 uuid=history_data['uuid']
@@ -242,7 +242,7 @@ class RecieveSubmittedDocumentView(PrivilegedReceiveObject):
 
         with elevated_privileges():
             IHistory(self.context).append_record(
-                'document_submitted',
+                u'document_submitted',
                 document_title=document.title,
                 submitted_version=history_data['submitted_version'],
                 uuid=history_data['uuid']

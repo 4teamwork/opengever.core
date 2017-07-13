@@ -141,7 +141,7 @@ class BaseHistoryRecord(object):
         self.timestamp = timestamp
         self.data = PersistentMapping(
             created=timestamp,
-            userid=api.user.get_current().getId(),
+            userid=unicode(api.user.get_current().getId()),
             history_type=self.history_type,
             uuid=uuid)
 
@@ -179,7 +179,7 @@ class BaseHistoryRecord(object):
 class ProposalCreated(BaseHistoryRecord):
     """A Proposal has been created."""
 
-    history_type = 'created'
+    history_type = u'created'
 
     def message(self):
         return _(u'proposal_history_label_created',
@@ -190,7 +190,7 @@ class ProposalCreated(BaseHistoryRecord):
 @ProposalHistory.register
 class ProposalCancelled(BaseHistoryRecord):
 
-    history_type = 'cancelled'
+    history_type = u'cancelled'
 
     def message(self):
         return _(u'proposal_history_label_cancelled',
@@ -201,7 +201,7 @@ class ProposalCancelled(BaseHistoryRecord):
 @ProposalHistory.register
 class ProposalReactivated(BaseHistoryRecord):
 
-    history_type = 'reactivated'
+    history_type = u'reactivated'
 
     def message(self):
         return _(u'proposal_history_label_reactivated',
@@ -212,7 +212,7 @@ class ProposalReactivated(BaseHistoryRecord):
 @ProposalHistory.register
 class ProposalSubmitted(BaseHistoryRecord):
 
-    history_type = 'submitted'
+    history_type = u'submitted'
 
     def message(self):
         return _(u'proposal_history_label_submitted',
@@ -223,7 +223,7 @@ class ProposalSubmitted(BaseHistoryRecord):
 @ProposalHistory.register
 class DocumentSubmitted(BaseHistoryRecord):
 
-    history_type = 'document_submitted'
+    history_type = u'document_submitted'
     css_class = 'documentAdded'
 
     def __init__(self, context, document_title, submitted_version,
@@ -252,7 +252,7 @@ class DocumentSubmitted(BaseHistoryRecord):
 @ProposalHistory.register
 class ProposalRejected(BaseHistoryRecord):
 
-    history_type = 'rejected'
+    history_type = u'rejected'
 
     def __init__(self, context, text, timestamp=None, uuid=None):
         super(ProposalRejected, self).__init__(
@@ -268,7 +268,7 @@ class ProposalRejected(BaseHistoryRecord):
 @ProposalHistory.register
 class ProposalReopened(BaseHistoryRecord):
 
-    history_type = 'reopened'
+    history_type = u'reopened'
     needs_syncing = True
 
     def message(self):
@@ -280,7 +280,7 @@ class ProposalReopened(BaseHistoryRecord):
 @ProposalHistory.register
 class ProposalScheduled(BaseHistoryRecord):
 
-    history_type = 'scheduled'
+    history_type = u'scheduled'
     needs_syncing = True
 
     def __init__(self, context, meeting_id, timestamp=None, uuid=None):
@@ -305,7 +305,7 @@ class ProposalScheduled(BaseHistoryRecord):
 @ProposalHistory.register
 class ProposalDecided(BaseHistoryRecord):
 
-    history_type = 'decided'
+    history_type = u'decided'
     needs_syncing = True
 
     def message(self):
@@ -317,7 +317,7 @@ class ProposalDecided(BaseHistoryRecord):
 @ProposalHistory.register
 class ProposalRevised(BaseHistoryRecord):
 
-    history_type = 'revised'
+    history_type = u'revised'
     needs_syncing = True
 
     def message(self):
@@ -329,7 +329,7 @@ class ProposalRevised(BaseHistoryRecord):
 @ProposalHistory.register
 class ProposalRemovedFromSchedule(ProposalScheduled):
 
-    history_type = 'remove_scheduled'
+    history_type = u'remove_scheduled'
     css_class = 'scheduleRemoved'
     needs_syncing = True
 
@@ -343,7 +343,7 @@ class ProposalRemovedFromSchedule(ProposalScheduled):
 @ProposalHistory.register
 class DocumentUpdated(DocumentSubmitted):
 
-    history_type = 'document_updated'
+    history_type = u'document_updated'
     css_class = 'documentUpdated'
 
     def message(self):

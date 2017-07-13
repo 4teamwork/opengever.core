@@ -45,7 +45,7 @@ class CreateSubmittedProposal(grok.View):
 
             history_data = advancedjson.loads(self.request.get('history_data'))
             IHistory(submitted_proposal).append_record(
-                'submitted', uuid=history_data['uuid'])
+                u'submitted', uuid=history_data['uuid'])
 
             self.request.response.setHeader("Content-type", "application/json")
             return json.dumps(

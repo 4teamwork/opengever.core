@@ -467,7 +467,7 @@ class Proposal(ProposalBase):
         ['pending-submitted', 'pending-cancelled', 'cancelled-pending'])
 
     def _after_model_created(self, model_instance):
-        IHistory(self).append_record('created')
+        IHistory(self).append_record(u'created')
 
     def is_editable(self):
         """A proposal in a dossier is only editable while not submitted.

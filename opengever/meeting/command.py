@@ -329,7 +329,7 @@ class CreateSubmittedProposalCommand(object):
                 'contentType': blob.contentType,
                 'data': base64.encodestring(blob.data)}
 
-        record = IHistory(self.proposal).append_record('submitted')
+        record = IHistory(self.proposal).append_record(u'submitted')
         history_data = advancedjson.dumps({'uuid': record.uuid})
 
         request_data = {
@@ -388,7 +388,7 @@ class UpdateSubmittedDocumentCommand(object):
         submitted_version = self.document.get_current_version()
 
         record = IHistory(self.proposal).append_record(
-            'document_updated',
+            u'document_updated',
             document_title=self.document.title,
             submitted_version=submitted_version,
         )
@@ -467,7 +467,7 @@ class CopyProposalDocumentCommand(object):
         submitted_version = self.document.get_current_version()
 
         record = IHistory(self.proposal).append_record(
-            'document_submitted',
+            u'document_submitted',
             document_title=self.document.title,
             submitted_version=submitted_version,
         )

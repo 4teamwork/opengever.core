@@ -47,9 +47,9 @@ class PropsosalHistoryEntryMigrator(object):
     """Migrate one proposal history entry."""
 
     polymorphic_identity_to_name = {
-        'removescheduled': 'remove_scheduled',
-        'documentsubmitted': 'document_submitted',
-        'documentupdated': 'document_updated',
+        u'removescheduled': u'remove_scheduled',
+        u'documentsubmitted': u'document_submitted',
+        u'documentupdated': u'document_updated',
     }
 
     def __init__(self, row):

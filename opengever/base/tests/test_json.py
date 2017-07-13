@@ -1,3 +1,4 @@
+from collections import namedtuple
 from datetime import datetime
 from opengever.base.advancedjson import AdvancedJSONDecoder
 from opengever.base.advancedjson import AdvancedJSONEncoder
@@ -62,9 +63,52 @@ class TestAdvancedJSONEncoder(TestCase):
         with self.assertRaises(TypeError):
             encoder.encode(data)
 
+    def test_raises_value_error_for_non_unicode_values(self):
+        encoder = AdvancedJSONEncoder()
+        with self.assertRaises(ValueError):
+            encoder.encode('foo')
+
+    def test_raises_value_error_for_non_unicode_dict_values(self):
+        encoder = AdvancedJSONEncoder()
+        data = {'uhoh': {'nested_uhoh': 'mehh'}}
+        with self.assertRaises(ValueError):
+            encoder.encode(data)
+
+    def test_raises_value_error_for_non_unicode_persistent_mapping_values(self):
+        encoder = AdvancedJSONEncoder()
+        data = PersistentMapping(
+            {'uhoh': PersistentMapping({'nested_ouch': 'nope'})})
+        with self.assertRaises(ValueError):
+            encoder.encode(data)
+
+    def test_raises_value_error_for_non_unicode_list_items(self):
+        encoder = AdvancedJSONEncoder()
+        data = ['mehh']
+        with self.assertRaises(ValueError):
+            encoder.encode(data)
+
+    def test_raises_value_error_for_non_unicode_tuple_items(self):
+        encoder = AdvancedJSONEncoder()
+        data = ('nahhh',)
+        with self.assertRaises(ValueError):
+            encoder.encode(data)
+
+    def test_raises_value_error_for_non_unicode_namedtuple_items(self):
+        encoder = AdvancedJSONEncoder()
+        Thing = namedtuple('Thing', ['attr'])
+        data = Thing(attr='fail')
+        with self.assertRaises(ValueError):
+            encoder.encode(data)
+
+    def test_raises_value_error_for_non_unicode_set_items(self):
+        encoder = AdvancedJSONEncoder()
+        data = set(['mehh'])
+        with self.assertRaises(ValueError):
+            encoder.encode(data)
+
     def test_serializes_set(self):
         encoder = AdvancedJSONEncoder()
-        data = set(['foo'])
+        data = set([u'foo'])
 
         self.assertEquals(
             '[{'
@@ -85,7 +129,7 @@ class TestAdvancedJSONEncoder(TestCase):
             encoder.encode([uuid]))
 
     def test_serializes_persistent_mapping_as_dict(self):
-        data = PersistentMapping(foo='bar')
+        data = PersistentMapping(foo=u'bar')
         encoder = AdvancedJSONEncoder()
 
         self.assertEquals(

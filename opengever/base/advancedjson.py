@@ -75,16 +75,41 @@ class AdvancedJSONEncoder(json.JSONEncoder):
     }
     """
 
+    def encode(self, obj):
+        self.ensure_unicode_values(obj)
+        return super(AdvancedJSONEncoder, self).encode(obj)
+
+    def ensure_unicode_values(self, obj):
+        """Be defensive about encoding issues and only allow unicode strings as
+        input value for now.
+        """
+
+        if isinstance(obj, str):
+            raise ValueError('Expecting unicode value {!r}'.format(obj))
+        # it looks like a dict
+        # minimal method interface for dict includes keys and __getitem__, so
+        # we use those here, according to:
+        # https://docs.python.org/2/library/userdict.html#UserDict.DictMixin
+        elif hasattr(obj, 'keys'):
+            for key in obj.keys():
+                self.ensure_unicode_values(obj[key])
+        # it looks like an iterable
+        elif hasattr(obj, '__iter__'):
+            for item in obj:
+                self.ensure_unicode_values(item)
+        # if it is none of above it is most likely a built-in datatype or
+        # something that cannot be encoded in json at all
+
     def default(self, obj):
         if isinstance(obj, datetime):
             return {
                 TYPE_KEY: u'datetime',
-                VALUE_KEY: obj.isoformat(),
+                VALUE_KEY: unicode(obj.isoformat()),
             }
         elif isinstance(obj, UUID):
             return {
                 TYPE_KEY: u'UUID',
-                VALUE_KEY: str(obj),
+                VALUE_KEY: unicode(obj),
             }
         elif isinstance(obj, set):
             return {

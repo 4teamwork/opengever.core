@@ -266,7 +266,7 @@ class Proposal(Base):
         meeting.agenda_items.append(AgendaItem(proposal=self))
 
         IHistory(self.resolve_submitted_proposal()).append_record(
-            'scheduled', meeting_id=meeting.meeting_id)
+            u'scheduled', meeting_id=meeting.meeting_id)
 
     def reject(self, text):
         assert self.workflow.can_execute_transition(self, 'submitted-pending')
@@ -278,12 +278,12 @@ class Proposal(Base):
         # set workflow state directly for once, the transition is used to
         # redirect to a form.
         self.workflow_state = self.STATE_PENDING.name
-        IHistory(self.resolve_proposal()).append_record('rejected', text=text)
+        IHistory(self.resolve_proposal()).append_record(u'rejected', text=text)
 
     def remove_scheduled(self, meeting):
         self.execute_transition('scheduled-submitted')
         IHistory(self.resolve_submitted_proposal()).append_record(
-            'remove_scheduled', meeting_id=meeting.meeting_id)
+            u'remove_scheduled', meeting_id=meeting.meeting_id)
 
     def resolve_proposal(self):
         return self.oguid.resolve_object()
@@ -300,17 +300,17 @@ class Proposal(Base):
     def revise(self, agenda_item):
         assert self.get_state() == self.STATE_DECIDED
         self.update_excerpt(agenda_item)
-        IHistory(self.resolve_submitted_proposal()).append_record('revised')
+        IHistory(self.resolve_submitted_proposal()).append_record(u'revised')
 
     def reopen(self, agenda_item):
         assert self.get_state() == self.STATE_DECIDED
-        IHistory(self.resolve_submitted_proposal()).append_record('reopened')
+        IHistory(self.resolve_submitted_proposal()).append_record(u'reopened')
 
     def cancel(self):
-        IHistory(self.resolve_proposal()).append_record('cancelled')
+        IHistory(self.resolve_proposal()).append_record(u'cancelled')
 
     def reactivate(self):
-        IHistory(self.resolve_proposal()).append_record('reactivated')
+        IHistory(self.resolve_proposal()).append_record(u'reactivated')
 
     def update_excerpt(self, agenda_item):
         from opengever.meeting.command import ExcerptOperations
@@ -328,7 +328,7 @@ class Proposal(Base):
         self.generate_excerpt(agenda_item)
         document_intid = self.copy_excerpt_to_proposal_dossier()
         self.register_excerpt(document_intid)
-        IHistory(self.resolve_submitted_proposal()).append_record('decided')
+        IHistory(self.resolve_submitted_proposal()).append_record(u'decided')
         self.execute_transition('scheduled-decided')
 
     def register_excerpt(self, document_intid):

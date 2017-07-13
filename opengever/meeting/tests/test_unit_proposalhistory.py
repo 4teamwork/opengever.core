@@ -13,11 +13,11 @@ class TestUnitPorposalHistory(TestCase):
 
     def test_append_record_raises_when_timestamp_is_not_datetime(self):
         with self.assertRaises(TypeError):
-            self.history.append_record('created', timestamp=object())
+            self.history.append_record(u'created', timestamp=object())
 
     def test_append_record_raises_when_name_is_not_registered(self):
         with self.assertRaises(ValueError):
-            self.history.append_record('foo')
+            self.history.append_record(u'foo')
 
     def test_receive_record_raises_when_timestamp_is_not_datetime(self):
         with self.assertRaises(TypeError):
