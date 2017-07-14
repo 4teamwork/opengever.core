@@ -1,10 +1,13 @@
 from AccessControl import getSecurityManager
 from AccessControl.SecurityManagement import setSecurityManager
 from contextlib import contextmanager
+from ftw.flamegraph import flamegraph
+from functools import wraps
 from opengever.core.testing import OPENGEVER_INTEGRATION_TESTING
 from plone import api
 from plone.app.testing import login
 from plone.app.testing import SITE_OWNER_NAME
+from time import clock
 from unittest2 import TestCase
 
 
@@ -24,6 +27,57 @@ class IntegrationTestCase(TestCase):
         self.portal = self.layer['portal']
         self.request = self.layer['request']
         map(self.activate_feature, self.features)
+        self._start_time = clock()
+        self._max_duration = 3000
+
+    def tearDown(self):
+        super(IntegrationTestCase, self).tearDown()
+        duration = (clock() - self._start_time) * 1000
+        self.assertLess(
+            duration, self._max_duration,
+            'The test took to long. It should not take longer'' than {} ms.'
+            ' Use the @IntegrationTestCase.open_flamegraph decorator for'
+            ' investigating what you can optimize.'.format(self._max_duration))
+
+    @staticmethod
+    def im_sorry_this_test_is_slow(expected_duration, reason):
+        """If you cannot optimize a test to meet the speed limits but you
+        believe that the test is so important that it is an exception to the
+        speed limit, you can use this decorator for increasing the limit
+        for a certain test, providing a good reason as string why you think this
+        exception is reasonable.
+
+        Example:
+
+        @IntegrationTestCase.im_sorry_this_test_is_slow(
+            5000,  # new limit in milliseconds
+            'This test tests a critical business feature and must build 10 objects'
+        )
+        def test_critical_feature(self):
+            pass
+        """
+        def decorator(func):
+            @wraps(func)
+            def wrapper(self, *args, **kwargs):
+                self._max_duration = expected_duration
+                return func(self, *args, **kwargs)
+            return wrapper
+        return decorator
+
+    @staticmethod
+    def open_flamegraph(func):
+        """Test decorator for opening a flamegraph for creating a flamegraph of
+        the decorated test and opening it in the default browser using OS X's
+        "open" command.
+
+        Example:
+
+        @IntegrationTestCase.open_flamegraph
+        def test_critical_feature(self):
+            pass
+
+        """
+        return flamegraph(open_svg=True)(func)
 
     def login(self, user, browser=None):
         """Login a user by passing in the user object.
