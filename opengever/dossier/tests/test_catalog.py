@@ -1,34 +1,75 @@
-from opengever.core.testing import OPENGEVER_FUNCTIONAL_FILING_LAYER
-from opengever.testing import FunctionalTestCase
-from plone import api
+from opengever.dossier.interfaces import IDossierArchiver
+from opengever.testing import IntegrationTestCase
 
 
-class TestCatalog(FunctionalTestCase):
+class TestCatalog(IntegrationTestCase):
 
-    def setUp(self):
-        super(TestCatalog, self).setUp()
-        self.catalog = api.portal.get_tool('portal_catalog')
+    def test_is_subdossier_index(self):
+        """The ``is_subdossier`` index indicates whether a dossier is
+        a subdossier.
+        """
+        self.login(self.dossier_responsible)
+        self.assert_index_value(False, 'is_subdossier', self.dossier)
+        self.assert_index_value(True, 'is_subdossier', self.subdossier)
+        self.assert_index_value('', 'is_subdossier', self.leaf_repofolder)
 
-    def test_is_subdossier_index_registered(self):
-        self.assertIn('is_subdossier', self.catalog.indexes())
+    def test_containing_dossier_index_and_metadata(self):
+        """The ``containing_dossier`` index contains the title of the main
+        dossier if the object is the main dossier or any parent is the main
+        dossier.
+        """
+        self.login(self.regular_user)
+        self.assert_index_and_metadata(
+            None,
+            'containing_dossier',
+            self.leaf_repofolder)
 
-    def test_containing_subdossier_index_registered(self):
-        self.assertIn('containing_subdossier', self.catalog.indexes())
+        self.assert_index_and_metadata(
+            self.dossier.Title(),
+            'containing_dossier',
+            self.dossier,
+            self.document,
+            self.subdossier,
+            self.subdocument,
+            self.task,
+            self.subtask,
+            self.taskdocument)
 
-    def test_containing_dossier_index_registered(self):
-        self.assertIn('containing_dossier', self.catalog.indexes())
+    def test_containing_subdossier_index_and_metadata(self):
+        """The ``containing_subdossier`` index contains the title of the
+        subdossier if a parent of the object is a subdossier.
+        """
+        self.login(self.regular_user)
+        self.assert_index_and_metadata(
+            '',
+            'containing_subdossier',
+            self.leaf_repofolder,
+            self.dossier,
+            self.subdossier,
+            self.document,
+            self.task,
+            self.subtask,
+            self.taskdocument)
+
+        self.assert_index_and_metadata(
+            self.subdossier.Title(),
+            'containing_subdossier',
+            self.subdocument)
 
 
-class TestFilingCatalog(FunctionalTestCase):
+class TestFilingCatalog(IntegrationTestCase):
+    features = ('filing_number',)
 
-    layer = OPENGEVER_FUNCTIONAL_FILING_LAYER
+    def test_filing_no_index_and_metadata(self):
+        self.login(self.regular_user)
+        IDossierArchiver(self.dossier).archive('admin', '2013', 'Foo')
+        self.assert_index_and_metadata('Foo', 'filing_no', self.dossier)
+        self.assert_index_and_metadata('Foo.1', 'filing_no', self.subdossier)
+        self.assert_index_and_metadata('Foo.2', 'filing_no', self.subdossier2)
 
-    def setUp(self):
-        super(TestFilingCatalog, self).setUp()
-        self.catalog = api.portal.get_tool('portal_catalog')
-
-    def test_filing_no_index_registered(self):
-        self.assertIn('filing_no', self.catalog.indexes())
-
-    def test_searchable_filing_no_index_registered(self):
-        self.assertIn('searchable_filing_no', self.catalog.indexes())
+    def test_searchable_filing_no_index(self):
+        self.login(self.regular_user)
+        IDossierArchiver(self.dossier).archive('admin', '2013', 'Foo')
+        self.assert_index_value(['foo'], 'searchable_filing_no', self.dossier)
+        self.assert_index_value(['foo', u'1'], 'searchable_filing_no', self.subdossier)
+        self.assert_index_value(['foo', u'2'], 'searchable_filing_no', self.subdossier2)

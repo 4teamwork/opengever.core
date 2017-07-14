@@ -188,12 +188,47 @@ class IntegrationTestCase(TestCase):
         rid = catalog.getrid('/'.join(obj.getPhysicalPath()))
         return catalog.getIndexDataForRID(rid)
 
+    def assert_index_value(self, expected_value, index_name, *objects):
+        """Asserts that an index exists and has a specific value for a
+        given object.
+        """
+        for obj in objects:
+            index_data = self.get_catalog_indexdata(obj)
+            self.assertIn(
+                index_name, index_data,
+                'Index {!r} does not exist.'.format(index_name))
+            self.assertEquals(
+                expected_value, index_data[index_name],
+                'Unexpected index value {!r} in index {!r} for {!r}'.format(
+                    index_data[index_name], index_name, obj))
+
     def get_catalog_metadata(self, obj):
         """Return the catalog metadata for an object as dict.
         """
         catalog = api.portal.get_tool('portal_catalog')
         rid = catalog.getrid('/'.join(obj.getPhysicalPath()))
         return catalog.getMetadataForRID(rid)
+
+    def assert_metadata_value(self, expected_value, metadata_name, *objects):
+        """Asserts that an metadata exists and has a specific value for a
+        given object.
+        """
+        for obj in objects:
+            metadata = self.get_catalog_metadata(obj)
+            self.assertIn(
+                metadata_name, metadata,
+                'Metadata {!r} does not exist.'.format(metadata_name))
+            self.assertEquals(
+                expected_value, metadata[metadata_name],
+                'Unexpected metadata value {!r} in metadata {!r} for {!r}'.format(
+                    metadata[metadata_name], metadata_name, obj))
+
+    def assert_index_and_metadata(self, expected_value, name, *objects):
+        """Assert that an index and a metadata with the same name both exist
+        and have the same value for a given object.
+        """
+        self.assert_index_value(expected_value, name, *objects)
+        self.assert_metadata_value(expected_value, name, *objects)
 
     def set_workflow_state(self, new_workflow_state_id, *objects):
         """Set the workflow state of one or many objects.
