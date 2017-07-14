@@ -57,6 +57,19 @@ class TestCommentResponseHandler(FunctionalTestCase):
         ICommentResponseHandler(predecessor).add_response("My response")
         self.assertEqual(1, len(response_container))
 
+    def test_comment_is_not_synced_to_forwarding_predecessor(self):
+        predecessor = create(Builder('forwarding'))
+        successor = create(Builder('task').successor_from(predecessor))
+
+        activate_request_layer(self.portal.REQUEST,
+                               IInternalOpengeverRequestLayer)
+
+        response_container = IResponseContainer(predecessor)
+
+        self.assertEqual(0, len(response_container))
+        ICommentResponseHandler(successor).add_response("My response")
+        self.assertEqual(0, len(response_container))
+
     def test_a_Member_can_not_add_task_comment_on_open_dossier(self):
         create(Builder('user')
                .having(firstname='Hugo', lastname='Boss')
