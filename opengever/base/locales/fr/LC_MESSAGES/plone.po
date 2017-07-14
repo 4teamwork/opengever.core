@@ -360,3 +360,5 @@ msgstr "Activer"
 msgid "transition-add-document"
 msgstr ""
 
+msgid "Info success"
+msgstr "Info"
