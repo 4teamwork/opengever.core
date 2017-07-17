@@ -6,6 +6,7 @@ from opengever.base.interfaces import IBaseCustodyPeriods
 from opengever.base.interfaces import IRetentionPeriodRegister
 from opengever.base.restricted_vocab import propagate_vocab_restrictions
 from opengever.base.restricted_vocab import RestrictedVocabularyFactory
+from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
 from plone.autoform.directives import write_permission
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.directives import form
@@ -96,6 +97,9 @@ alsoProvides(ILifeCycle, IFormFieldProvider)
 
 @grok.subscribe(ILifeCycleMarker, IObjectModifiedEvent)
 def propagate_vocab_restrictions_to_children(container, event):
+    if ILocalrolesModifiedEvent.providedBy(event):
+        return
+
     restricted_fields = [
         ILifeCycle['retention_period'],
         ILifeCycle['archival_value'],

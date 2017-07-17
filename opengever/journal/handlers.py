@@ -39,6 +39,7 @@ from opengever.trash.trash import IUntrashedEvent
 from persistent.dict import PersistentDict
 from persistent.list import PersistentList
 from plone.app.versioningbehavior.utils import get_change_note
+from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
 from plone.dexterity.interfaces import IDexterityContent
 from Products.CMFCore.interfaces import IActionSucceededEvent
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
@@ -239,6 +240,9 @@ DOSSIER_MODIIFED_ACTION = 'Dossier modified'
 
 @grok.subscribe(IDossierMarker, IObjectModifiedEvent)
 def dossier_modified(context, event):
+    if ILocalrolesModifiedEvent.providedBy(event):
+        return
+
     title = _(
         u'label_dossier_modified',
         default=u'Dossier modified: ${title}',

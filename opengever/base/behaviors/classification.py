@@ -6,6 +6,7 @@ from opengever.base.restricted_vocab import RestrictedVocabularyFactory
 from opengever.base.utils import language_cache_key
 from plone import api
 from plone.app.dexterity.behaviors import metadata
+from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.directives import form
 from plone.memoize import ram
@@ -120,6 +121,9 @@ class IClassificationSettings(Interface):
 
 @grok.subscribe(IClassificationMarker, IObjectModifiedEvent)
 def propagate_vocab_restrictions_to_children(container, event):
+    if ILocalrolesModifiedEvent.providedBy(event):
+        return
+
     restricted_fields = [
         IClassification['classification'],
         IClassification['privacy_layer']]
