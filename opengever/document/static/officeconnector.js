@@ -39,15 +39,15 @@
         });
     }
 
-    function isDocumentCheckedOut(documentURL) {
+    function isDocumentLocked(documentURL) {
         return requestJSON(documentURL + "/status").pipe(function(data) {
-            return JSON.parse(data)["checked_out"];
+            return JSON.parse(data)["locked"];
         });
     }
 
     function checkout(documentURL) {
         return poll(function() {
-            return isDocumentCheckedOut(documentURL)
+            return isDocumentLocked(documentURL)
         });
     }
 
@@ -66,7 +66,7 @@
             return false;
         }
         checkoutButton.addClass("oc-loading");
-        isDocumentCheckedOut(documentURL).pipe(function(status) {
+        isDocumentLocked(documentURL).pipe(function(status) {
             if(status) {
                 return edit();
             } else {

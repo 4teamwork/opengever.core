@@ -52,6 +52,12 @@ class TestBaseDocumentApi(FunctionalTestCase):
         self.assertIn('checked_out_by', response)
         self.assertEqual(None, response['checked_out_by'])
 
+        self.assertIn('locked', response)
+        self.assertEqual(False, response['locked'])
+
+        self.assertIn('locked_by', response)
+        self.assertEqual(None, response['locked_by'])
+
         # Check out the document
         self.api.headers.update({'Accept': 'text/html'})
         self.api.get(
@@ -68,3 +74,37 @@ class TestBaseDocumentApi(FunctionalTestCase):
 
         self.assertIn('checked_out_by', response)
         self.assertEqual(TEST_USER_ID, response['checked_out_by'])
+
+        # Lock the document
+        self.api.headers.update({
+            'Content-Type': 'text/xml; charset="utf-8"',
+            'Timeout': 'Infinite, Second-4100000000',
+            'Depth': '0',
+        })
+
+        body = (
+            '<?xml version="1.0" encoding="utf-8"?>\n'
+            '<D:lockinfo xmlns:D="DAV:">\n'
+            '  <D:lockscope><D:exclusive/></D:lockscope>\n'
+            '  <D:locktype><D:write/></D:locktype>\n'
+            '  <D:owner>\n'
+            '  <D:href>Office Connector</D:href>\n'
+            '  </D:owner>\n'
+            '</D:lockinfo>'
+        )
+
+        self.api.headers.update({'Accept': 'text/html'})
+        self.api.request(
+            'LOCK',
+            document_path,
+            data=body,
+            )
+
+        self.api.headers.update({'Accept': 'application/json'})
+        response = self.api.get(document_path + '/status').json()
+
+        self.assertIn('locked', response)
+        self.assertEqual(True, response['locked'])
+
+        self.assertIn('locked_by', response)
+        self.assertEqual(TEST_USER_ID, response['locked_by'])
