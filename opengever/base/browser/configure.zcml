@@ -108,4 +108,11 @@
       class=".breadcrumb_by_uid.ResolveUIDToBreadcrumb"
       />
 
+  <browser:page
+      name="copy_item"
+      for="plone.dexterity.interfaces.IDexterityContent"
+      class=".copy_items.CopyItemView"
+      permission="zope2.CopyOrMove"
+      />
+
 </configure>
