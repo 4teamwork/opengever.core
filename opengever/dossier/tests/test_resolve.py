@@ -140,9 +140,9 @@ class TestResolveJobs(FunctionalTestCase):
                                    transition='dossier-transition-resolve')
 
         journal_pdf = self.dossier.get('document-1')
-        self.assertEquals(u'Journal of dossier Anfragen, Apr 25, 2016 01:00 AM',
+        self.assertEquals(u'Journal of dossier Anfragen, Apr 25, 2016 12:00 AM',
                           journal_pdf.title)
-        self.assertEquals(u'journal-of-dossier-anfragen-apr-25-2016-01-00-am.pdf',
+        self.assertEquals(u'journal-of-dossier-anfragen-apr-25-2016-12-00-am.pdf',
                           journal_pdf.file.filename)
         self.assertEquals(u'application/pdf',
                           journal_pdf.file.contentType)
