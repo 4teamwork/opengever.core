@@ -5,6 +5,7 @@ Changelog
 2017.3.1 (unreleased)
 ---------------------
 
+- Fix: remove ftw.showroom CSS on fresh installations too. [jone]
 - Add version of downloaded file to journal's entry. [tarnap]
 - Allow to copy-paste single documents. [tarnap]
 - Expand current subdossier in subdossier tree. [Kevin Bieri]
