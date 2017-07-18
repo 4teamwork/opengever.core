@@ -16,6 +16,7 @@ from plone.app.testing import login
 from plone.app.testing import SITE_OWNER_NAME
 from time import time
 from zope.component.hooks import getSite
+import pytz
 
 
 class OpengeverContentFixture(object):
@@ -125,7 +126,7 @@ class OpengeverContentFixture(object):
             .having(protocol_template=self.sablon_template,
                     excerpt_template=self.sablon_template)))
 
-        self.register('committee', self.create_committee(
+        self.committee = self.register('committee', self.create_committee(
             title=u'Rechnungspr\xfcfungskommission',
             repository_folder=self.repofolder1,
             group_id='committee_rpk_group',
@@ -176,6 +177,12 @@ class OpengeverContentFixture(object):
             .titled(u'Feedback zum Vertragsentwurf')
             .attach_file_containing('Feedback text',
                                     u'vertr\xe4g sentwurf.docx')))
+
+        self.register('proposal', create(
+            Builder('proposal').within(self.dossier)
+            .having(title=u'Vertragsentwurf f\xfcr weitere Bearbeitung bewilligen',
+                    committee=self.committee.load_model())
+            .relate_to(document)))
 
         subdossier = self.register('subdossier', create(
             Builder('dossier').within(self.dossier).titled(u'2016')))
@@ -239,7 +246,7 @@ class OpengeverContentFixture(object):
         We move it two minutes because the catalog rounds times sometimes to
         minute precision and we want to be more precise.
         """
-        with freeze(datetime(2016, 8, 31, hour, 1, 33)) as clock:
+        with freeze(datetime(2016, 8, 31, hour, 1, 33, tzinfo=pytz.UTC)) as clock:
             with ticking_creator(clock, minutes=2):
                 yield
 
