@@ -10,16 +10,19 @@ from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.base.oguid import Oguid
 from opengever.core.testing import activate_meeting_word_implementation
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
+from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.locking.lock import MEETING_SUBMITTED_LOCK
 from opengever.meeting.model import Proposal
 from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.proposal import IProposal
+from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
 from opengever.testing import FunctionalTestCase
 from opengever.testing import index_data_for
 from plone import api
 from plone.app.testing import TEST_USER_ID
 from plone.locking.interfaces import ILockable
 from zExceptions import Unauthorized
+from zope.component import getMultiAdapter
 import transaction
 
 
@@ -940,8 +943,11 @@ class TestProposalWithWord(FunctionalTestCase):
         factoriesmenu.add('Proposal')
         browser.fill({'Title': u'Baugesuch Kreuzachkreisel',
                       'Committee': u'Baukomission',
-                      'Proposal template': 'Baugesuch'}).save()
+                      'Proposal template': 'Baugesuch',
+                      'Edit after creation': True}).save()
         statusmessages.assert_no_error_messages()
+        self.assertIn('external_edit', browser.css('.redirector').first.text,
+                      'External editor should have been triggered.')
 
         proposal = browser.context
         browser.open(proposal, view='tabbedview_view-overview')
@@ -964,6 +970,17 @@ class TestProposalWithWord(FunctionalTestCase):
         self.assertEquals(
             'Word Content',
             proposal.get_proposal_document().file.open().read())
+
+        self.assertFalse(
+            is_officeconnector_checkout_feature_enabled(),
+            'Office connector checkout feature is now active: this means'
+            ' that the document will no longer be checked out in the proposal'
+            ' creation wizard and therefore the assertion "document is checked'
+            ' out" will therefore fail.')
+        self.assertEquals(
+            TEST_USER_ID,
+            getMultiAdapter((proposal.get_proposal_document(), self.request),
+                            ICheckinCheckoutManager).get_checked_out_by())
 
     @browsing
     def test_proposal_document_is_visible_on_submitted_proposal(self, browser):

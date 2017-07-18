@@ -2,6 +2,7 @@ from five import grok
 from ftw.table import helper
 from opengever.base.schema import TableChoice
 from opengever.base.widgets import TrixFieldWidget
+from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.dossier.templatefolder import get_template_folder
 from opengever.meeting import _
 from opengever.meeting import is_word_meeting_implementation_enabled
@@ -11,14 +12,19 @@ from opengever.meeting.proposal import IProposal
 from opengever.meeting.proposal import ISubmittedProposal
 from opengever.meeting.proposal import Proposal
 from opengever.meeting.proposal import SubmittedProposal
+from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
 from opengever.tabbedview.helper import document_with_icon
 from plone import api
 from plone.directives import dexterity
+from plone.directives.form import widget
 from plone.uuid.interfaces import IUUID
 from plone.z3cform.fieldsets.utils import move
 from z3c.form import field
+from z3c.form.browser.checkbox import SingleCheckBoxFieldWidget
 from z3c.form.interfaces import HIDDEN_MODE
+from zope.component import getMultiAdapter
 from zope.interface import provider
+from zope.schema import Bool
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
 
@@ -117,6 +123,12 @@ class IAddProposal(IProposal):
              'column_title': _(u'label_modified', default=u'Modified'),
              'transform': helper.readable_date}))
 
+    widget(edit_after_creation=SingleCheckBoxFieldWidget)
+    edit_after_creation = Bool(
+        title=_(u'label_edit_after_creation', default=u'Edit after creation'),
+        default=True,
+        required=False)
+
 
 class AddForm(FieldConfigurationMixin, ModelProxyAddForm, dexterity.AddForm):
     grok.name('opengever.meeting.proposal')
@@ -156,8 +168,25 @@ class AddForm(FieldConfigurationMixin, ModelProxyAddForm, dexterity.AddForm):
             return super(AddForm, self).createAndAdd(data)
 
         proposal_template = data.pop('proposal_template')
+        edit_after_creation = data.pop('edit_after_creation')
         self.instance_schema = IProposal
         noaq_proposal = super(AddForm, self).createAndAdd(data)
         proposal = self.context.get(noaq_proposal.getId())
-        proposal.create_proposal_document(proposal_template.file)
+        proposal_doc = proposal.create_proposal_document(proposal_template.file)
+        if edit_after_creation:
+            self.checkout_and_external_edit(proposal_doc)
         return proposal
+
+    def checkout_and_external_edit(self, document):
+        """Checkout the document and invoke an external editing session.
+        """
+
+        # When the officeconnector checkout feature is enabled,
+        # office connector will checkout the document before opening the
+        # document in word, so there is no need to checkout the document
+        # at this point.
+        if not is_officeconnector_checkout_feature_enabled():
+            getMultiAdapter((document, self.request),
+                            ICheckinCheckoutManager).checkout()
+
+        document.setup_external_edit_redirect(self.request)
