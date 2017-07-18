@@ -5,6 +5,7 @@ Changelog
 2017.3.1 (unreleased)
 ---------------------
 
+- Expand current subdossier in subdossier tree. [Kevin Bieri]
 - Always download MSG file if avaiable. [mathias.leimgruber]
 - Do not sync comments to a predecessor forwarding. [phgross]
 - Ignore LocalRolesModified events in repositoryfolder ModifiedEvent subscribers. [phgross]
