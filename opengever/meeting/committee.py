@@ -16,11 +16,14 @@ from opengever.meeting.wrapper import PeriodWrapper
 from opengever.ogds.base.utils import ogds_service
 from plone import api
 from plone.directives import form
+from plone.i18n.normalizer.interfaces import IIDNormalizer
 from z3c.form.validator import WidgetValidatorDiscriminators
 from z3c.relationfield.schema import RelationChoice
 from zope import schema
+from zope.component import getUtility
 from zope.interface import Interface
 from zope.schema.interfaces import IContextSourceBinder
+from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
 
 
@@ -28,6 +31,7 @@ from zope.schema.vocabulary import SimpleVocabulary
 def get_group_vocabulary(context):
     service = ogds_service()
     userid = api.user.get_current().getId()
+    normalize = getUtility(IIDNormalizer).normalize
     terms = []
 
     if api.user.has_permission('cmf.ManagePortal', obj=context):
@@ -36,8 +40,10 @@ def get_group_vocabulary(context):
         groups = service.assigned_groups(userid)
 
     for group in groups:
-        terms.append(SimpleVocabulary.createTerm(
-            group.groupid, group.groupid, group.title))
+        terms.append(SimpleTerm(
+            group.groupid,
+            token=normalize(group.groupid),
+            title=group.title or group.groupid))
     return SimpleVocabulary(terms)
 
 
