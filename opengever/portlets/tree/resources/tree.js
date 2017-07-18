@@ -122,7 +122,8 @@ function Tree(nodes, config) {
   };
 
   this.is_expanded = function(node) {
-    return !$(node.link).parent('li').find('>ul').hasClass('folded');
+    var childList = $(node.link).parent('li').find('>ul');
+    return childList.length === 0 ? false : !childList.hasClass('folded');
   };
 
   this.dump_expanded_uids = function() {
