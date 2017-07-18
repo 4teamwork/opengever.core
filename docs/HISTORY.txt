@@ -5,7 +5,7 @@ Changelog
 2017.3.1 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Fixed translation for portal message type, when adding a DX object. [phgross]
 
 
 2017.3.0 (2017-07-12)
