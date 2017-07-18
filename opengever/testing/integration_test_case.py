@@ -12,6 +12,7 @@ from plone.app.testing import login
 from plone.app.testing import SITE_OWNER_NAME
 from time import clock
 from unittest2 import TestCase
+import timeit
 
 
 FEATURE_FLAGS = {
@@ -85,6 +86,32 @@ class IntegrationTestCase(TestCase):
 
         """
         return flamegraph(open_svg=True)(func)
+
+    @staticmethod
+    def clock(func):
+        """Decorator for measuring the duration of a test and printing the result.
+        This function is meant to be used temporarily in development.
+
+        Example:
+        @IntegrationTestCase.clock
+        def test_something(self):
+            pass
+        """
+
+        @wraps(func)
+        def wrapper(self, *args, **kwargs):
+            timer = timeit.default_timer
+            start = timer()
+            try:
+                return func(self, *args, **kwargs)
+            finally:
+                end = timer()
+                print ''
+                print '{}.{} took {:.3f} ms'.format(
+                    type(self).__name__,
+                    func.__name__,
+                    (end-start) * 1000)
+        return wrapper
 
     def login(self, user, browser=None):
         """Login a user by passing in the user object.
