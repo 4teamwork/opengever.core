@@ -5,4 +5,9 @@
       id="++resource++plone.formwidget.autocomplete/jquery.autocomplete.css"
       />
 
+  <stylesheet
+      id="++resource++ftw.showroom/style.css"
+      remove="True"
+      />
+
 </object>
