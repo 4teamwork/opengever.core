@@ -61,7 +61,8 @@ class CookieStorage(DictMixin):
 
     def __setitem__(self, key, value):
         self.request.cookies[key] = value
-        self.request.RESPONSE.setCookie(key, value, expires=self.expires)
+        self.request.RESPONSE.setCookie(
+            key, value, expires=self.expires, path='/')
 
     def __delitem__(self, key):
         del self.request.cookies[key]

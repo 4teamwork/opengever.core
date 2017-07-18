@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Fix: remove ftw.showroom CSS on fresh installations too. [jone]
+- Define cookie path when setting the current orgunit id in the cookie. [phgross]
 - Add version of downloaded file to journal's entry. [tarnap]
 - Allow to copy-paste single documents. [tarnap]
 - Always download MSG file if avaiable. [mathias.leimgruber]
