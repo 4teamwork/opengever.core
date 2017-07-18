@@ -2,16 +2,12 @@
 Changelog
 =========
 
-2017.3.1 (unreleased)
+2017.4.0 (unreleased)
 ---------------------
 
 - Add version of downloaded file to journal's entry. [tarnap]
 - Allow to copy-paste single documents. [tarnap]
-- Expand current subdossier in subdossier tree. [Kevin Bieri]
 - Always download MSG file if avaiable. [mathias.leimgruber]
-- Do not sync comments to a predecessor forwarding. [phgross]
-- Ignore LocalRolesModified events in repositoryfolder ModifiedEvent subscribers. [phgross]
-- Fixed translation for portal message type, when adding a DX object. [phgross]
 - Remove dossier inheritance of templatefolder [elioschmutz]
 - Move data for most text-fields of Proposal (SQL) to their corresponding plone-objects Proposal/SubmittedProposal. [deiferni]
 - Introduce versioning for Proposal/SubmittedProposal. [deiferni]
@@ -19,6 +15,15 @@ Changelog
 - Use OGMail original_message-file for bumblebee-conversion if available. [elioschmutz]
 - Amend the OfficeConnector javascript to refresh the page based on the lock status. [Rotonen]
 - Add the document lock status to the document status end point. [Rotonen]
+
+
+2017.3.1 (2017-07-18)
+---------------------
+
+- Expand current subdossier in subdossier tree. [Kevin Bieri]
+- Ignore LocalRolesModified events in repositoryfolder ModifiedEvent subscribers. [phgross]
+- Do not sync comments to a predecessor forwarding. [phgross]
+- Fixed translation for portal message type, when adding a DX object. [phgross]
 
 
 2017.3.0 (2017-07-12)
