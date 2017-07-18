@@ -45,6 +45,10 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
                                    .within(self.repofolder)
                                    .titled(u'Mein Dossier'))
 
+        self.open_subdossier = create(Builder('dossier')
+                                      .within(self.open_dossier)
+                                      .titled(u'Mein Subdossier'))
+
         self.resolved_dossier = create(Builder('dossier')
                                        .within(self.repofolder)
                                        .titled(u'Abgeschlossenes Dossier')
@@ -78,23 +82,30 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
                                                    .attach_file_containing(
                                                    self.original_file_content))
 
-        self.doc_without_file_wf_resolved = create(Builder('document')
+        self.doc_with_file_wf_open_second = create(Builder('document')
                                                    .titled(u'docu-4')
+                                                   .within(
+                                                       self.open_subdossier)
+                                                   .attach_file_containing(
+                                                   self.original_file_content))
+
+        self.doc_without_file_wf_resolved = create(Builder('document')
+                                                   .titled(u'docu-5')
                                                    .within(
                                                        self.resolved_dossier))
 
         self.doc_with_file_wf_resolved = create(Builder('document')
-                                                .titled(u'docu-5')
+                                                .titled(u'docu-6')
                                                 .within(self.resolved_dossier)
                                                 .attach_file_containing(self.original_file_content))  # noqa
 
         self.doc_without_file_wf_inactive = create(Builder('document')
-                                                   .titled(u'docu-6')
+                                                   .titled(u'docu-7')
                                                    .within(
                                                        self.inactive_dossier))
 
         self.doc_with_file_wf_inactive = create(Builder('document')
-                                                .titled(u'docu-7')
+                                                .titled(u'docu-8')
                                                 .within(self.inactive_dossier)
                                                 .attach_file_containing(self.original_file_content))  # noqa
 
@@ -420,7 +431,22 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
             self.open_dossier, view='tabbedview_view-documents')
 
         document_checkboxes = browser.css("input[type='checkbox']")
-        self.assertEqual(4, len(document_checkboxes))
+        self.assertEqual(5, len(document_checkboxes))
+
+        self.api.headers.update({
+            'Accept': 'application/json',
+            })
+
+        site_id = api.portal.get().id
+        path_segments = [
+            s for s
+            in self.open_dossier.getPhysicalPath()
+            if s != site_id
+            ]
+        path_segments.append('attributes')
+        path = '/'.join(path_segments)
+
+        bcc = self.api.get(path).json()['email']
 
         document_paths = []
         for checkbox in document_checkboxes:
@@ -433,17 +459,24 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
 
         token = self.api.post(
             '/officeconnector_attach_url',
-            json=document_paths,
+            json=dict(
+                documents=document_paths,
+                bcc=bcc,
+                ),
             ).json()
 
         payload = jwt.decode(token['url'].split(':')[-1], verify=False)
+
+        # Test we actually get the bcc parametre back for OC to handle
+        self.assertIn('bcc', payload)
+        self.assertIn(bcc, payload['bcc'])
 
         # Test we can actually fetch an action payload based on the JWT payload
         response = self.get_oc_payload_response(payload)
         self.assertEqual(200, response.status_code)
 
         payload = response.json()
-        self.assertEqual(3, len(payload))
+        self.assertEqual(4, len(payload))
 
         for document in payload:
             # Test there is also a journal entry from the attach action

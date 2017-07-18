@@ -113,7 +113,8 @@ function officeConnectorAttach(url) {
 function officeConnectorMultiAttach(url) {
     var officeconnector_config = {}
 
-    officeconnector_config.data = [];
+    officeconnector_config.data = {};
+    officeconnector_config.data.documents = [];
     officeconnector_config.dataType = 'json';
     officeconnector_config.headers = {};
     officeconnector_config.headers['Accept'] = 'application/json';
@@ -123,14 +124,28 @@ function officeConnectorMultiAttach(url) {
 
     $('form[name="tabbedview_form"] :checkbox').each(function(i, checkbox) {
         if (checkbox.checked) {
-            officeconnector_config.data.push(checkbox.value);
+            officeconnector_config.data.documents.push(checkbox.value);
         }
     });
 
+    if (officeconnector_config.data.documents.length > 0) {
+        var dossier_config = {}
 
-    if (officeconnector_config.data.length > 0) {
-        officeconnector_config.data = JSON.stringify(officeconnector_config.data);
-        $.ajax(officeconnector_config).error(alertUser).done(openOfficeconnector);
+        dossier_config.dataType = 'json';
+        dossier_config.headers = {};
+        dossier_config.headers['Accept'] = 'application/json';
+        dossier_config.type = 'GET';
+        dossier_config.url = window.location.pathname + '/attributes';
+
+        dossier_attributes = $.ajax(dossier_config);
+
+        $.when(dossier_attributes.done()).then(function(attributes){
+            officeconnector_config.data.bcc = attributes.email;
+        });
+
+        $.when(dossier_attributes.complete()).then(function(){
+            officeconnector_config.data = JSON.stringify(officeconnector_config.data);
+            $.ajax(officeconnector_config).error(alertUser).done(openOfficeconnector);
+        });
     }
-
 }
