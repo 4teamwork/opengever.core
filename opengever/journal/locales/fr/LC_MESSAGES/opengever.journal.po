@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-06-07 12:34+0000\n"
+"POT-Creation-Date: 2017-07-03 12:27+0000\n"
 "PO-Revision-Date: 2017-06-04 12:59+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-journal/fr/>\n"
@@ -179,9 +179,24 @@ msgid "label_dossier_zipped"
 msgstr "Dossier ajouté à l'export ZIP: ${title}"
 
 #. Default: "Download copy"
-#: ./opengever/journal/handlers.py:507
+#: ./opengever/journal/handlers.py:520
 msgid "label_file_copy_downloaded"
 msgstr "Télécharger une copie"
+
+#. Default: "current version (${version_id})"
+#: ./opengever/journal/handlers.py:513
+msgid "label_file_copy_downloaded_actual_version"
+msgstr "version actuelle (${version_id})"
+
+#. Default: "version ${version_id}"
+#: ./opengever/journal/handlers.py:516
+msgid "label_file_copy_downloaded_version"
+msgstr "version ${version_id}"
+
+#. Default: "${title} ${version_string}"
+#: ./opengever/journal/handlers.py:525
+msgid "label_file_copy_downloaded_with_version"
+msgstr "${title} ${version_string}"
 
 #. Default: "Local roles aquistion activated."
 #: ./opengever/journal/handlers.py:296

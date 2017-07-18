@@ -6,6 +6,7 @@ from ftw.testbrowser.pages.statusmessages import warning_messages
 from opengever.document.browser.download import DownloadConfirmationHelper
 from opengever.journal.browser import JournalHistory
 from opengever.testing import FunctionalTestCase
+from opengever.testing.helpers import create_document_version
 from plone.app.testing import login
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
@@ -37,14 +38,19 @@ class TestDocumentDownloadConfirmation(FunctionalTestCase):
         DownloadConfirmationHelper(self.document).activate()
         super(TestDocumentDownloadConfirmation, self).tearDown()
 
-    def assert_download_journal_entry_created(self, document):
+    def assert_download_journal_entry_created(
+            self, document, expected_title=None):
+        if expected_title is None:
+            expected_title = u'Download copy current version ({version_id})'.format(  # noqa
+                version_id=document.version_id)
+
         request = self.layer['request']
 
         journal = JournalHistory(document, request)
         entry = journal.data()[-1]
         translated_action_title = translate(entry['action']['title'],
                                             context=request)
-        self.assertEqual(u'Download copy', translated_action_title)
+        self.assertEqual(expected_title, translated_action_title)
         self.assertEquals(TEST_USER_ID, entry['actor'])
         self.assertDictContainsSubset({'type': 'File copy downloaded',
                                        'visible': True},
@@ -60,6 +66,27 @@ class TestDocumentDownloadConfirmation(FunctionalTestCase):
         browser.find('label_download').click()
 
         self.assert_download_journal_entry_created(self.document)
+
+    @browsing
+    def test_download_versioned_copy_creates_journal_entries_with_versions_in_title(self, browser):  # noqa
+        browser.login().open(self.document, view='tabbedview_view-versions')
+        browser.css('a.function-download-copy').first.click()
+        browser.find('label_download').click()
+
+        self.assert_download_journal_entry_created(
+            self.document,
+            u'Download copy version 1')
+
+        create_document_version(self.document, 2)
+        transaction.commit()
+
+        browser.login().open(self.document, view='tabbedview_view-versions')
+        browser.css('a.function-download-copy').first.click()
+        browser.find('label_download').click()
+
+        self.assert_download_journal_entry_created(
+            self.document,
+            u'Download copy version 2')
 
     @browsing
     def test_download_copy_without_overlay_creates_journal_entry(self, browser):  # noqa
