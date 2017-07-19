@@ -318,7 +318,7 @@ class MeetingView(BrowserView):
                 _('label_reopen_action', default='Reopen this agenda item'),
                 _('label_revise_action', default='Revise this agenda item'),
             ),
-            max_proposal_title_lengt=ISubmittedProposal['title'].max_length)
+            max_proposal_title_length=ISubmittedProposal['title'].max_length)
 
     def render_handlebars_proposals_template(self):
         label_schedule = translate(_('label_schedule', default='Schedule'), context=self.request)
