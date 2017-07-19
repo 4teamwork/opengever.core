@@ -52,7 +52,7 @@ class TestDispositionExcelExport(FunctionalTestCase):
                  u'Closing Date', u'Public Trial', u'Archival value',
                  u'archivalValueAnnotation', u'Appraisal'],
                 [cell.value for cell in list(workbook.active.rows)[0]])
-            self.assertTrue(workbook.active.cell('A1').font.bold)
+            self.assertTrue(workbook.active['A1'].font.bold)
 
     @browsing
     def test_value_rows(self, browser):
