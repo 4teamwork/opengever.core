@@ -5,6 +5,7 @@ Changelog
 2017.4.0 (unreleased)
 ---------------------
 
+- Move handlebar templates to template files. [jone]
 - Fix: remove ftw.showroom CSS on fresh installations too. [jone]
 - Define cookie path when setting the current orgunit id in the cookie. [phgross]
 - Add version of downloaded file to journal's entry. [tarnap]
