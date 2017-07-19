@@ -17,7 +17,7 @@ from zope.annotation.interfaces import IAnnotations
 class ProposalHistory(object):
     """Adapter to keep track of a proposals history. Factory for new entries.
 
-    Lists history records for an object and crates new ones. Records are stored
+    Lists history records for an object and creates new ones. Records are stored
     in the objects annotations. Keeps a registry of supported history entries.
 
     History records are stored in the objects annotations with their timestamp
@@ -352,4 +352,3 @@ class DocumentUpdated(DocumentSubmitted):
                  mapping={'user': self.get_actor_link(),
                           'title': self.document_title or '',
                           'version': self.submitted_version})
-
