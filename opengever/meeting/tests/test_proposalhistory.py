@@ -1,5 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browser as default_browser
 from ftw.testbrowser import browsing
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.interfaces import IHistory
@@ -54,7 +55,8 @@ class TestProposalHistory(FunctionalTestCase):
         self.proposal.execute_transition('pending-submitted')
         transaction.commit()  # also make change visible in browser
 
-    def assert_proposal_history_records(self, expected_records, browser,
+    def assert_proposal_history_records(self, expected_records,
+                                        browser=default_browser,
                                         with_submitted=False):
         """Assert that the last history entries of a proposal are correct.
 
@@ -110,7 +112,7 @@ class TestProposalHistory(FunctionalTestCase):
     def test_creation_creates_history_entry(self, browser):
         browser.login()
         self.assert_proposal_history_records(
-            u'Created by Test User (test_user_1_)', browser)
+            u'Created by Test User (test_user_1_)')
 
     @browsing
     def test_submitting_proposal_creates_history_entries(self, browser):
@@ -123,7 +125,7 @@ class TestProposalHistory(FunctionalTestCase):
             [u'Document A Document submitted in version 0 by Test User '
              u'(test_user_1_)',
              u'Submitted by Test User (test_user_1_)'],
-            browser, with_submitted=True)
+            with_submitted=True)
 
     @browsing
     def test_rejecting_proposals_creates_history_entries(self, browser):
@@ -141,7 +143,7 @@ class TestProposalHistory(FunctionalTestCase):
         browser.fill({'Comment': u'Bitte \xfcberarbeiten'}).submit()
 
         self.assert_proposal_history_records(
-            u'Rejected by Test User (test_user_1_)', browser)
+            u'Rejected by Test User (test_user_1_)')
 
     @browsing
     def test_cancelling_and_reactivating_proposal_creates_history_entry(self, browser):
@@ -151,12 +153,12 @@ class TestProposalHistory(FunctionalTestCase):
         # cancel proposal
         browser.css('#pending-cancelled').first.click()
         self.assert_proposal_history_records(
-            u'Proposal cancelled by Test User (test_user_1_)', browser)
+            u'Proposal cancelled by Test User (test_user_1_)')
 
         # reactivate proposal
         browser.css('#cancelled-pending').first.click()
         self.assert_proposal_history_records(
-            u'Proposal reactivated by Test User (test_user_1_)', browser)
+            u'Proposal reactivated by Test User (test_user_1_)')
 
     @browsing
     def test_submitting_additional_document_creates_history_entry(self, browser):
@@ -173,7 +175,7 @@ class TestProposalHistory(FunctionalTestCase):
         self.assert_proposal_history_records(
             u'Document Another document submitted in version 0 by Test User '
             u'(test_user_1_)',
-            browser, with_submitted=True)
+            with_submitted=True)
 
     @browsing
     def test_updating_existing_document_creates_history_entry(self, browser):
@@ -190,7 +192,7 @@ class TestProposalHistory(FunctionalTestCase):
         self.assert_proposal_history_records(
             u'Submitted document A Document updated to version 1 by Test User '
             u'(test_user_1_)',
-            browser, with_submitted=True)
+            with_submitted=True)
 
     @browsing
     def test_scheduling_creates_history_entry(self, browser):
@@ -201,7 +203,7 @@ class TestProposalHistory(FunctionalTestCase):
         self.assert_proposal_history_records(
             u'Scheduled for meeting C\xf6mmunity meeting by Test User '
             u'(test_user_1_)',
-            browser, with_submitted=True)
+            with_submitted=True)
 
     @browsing
     def test_removing_from_schedule_creates_history_entry(self, browser):
@@ -214,7 +216,7 @@ class TestProposalHistory(FunctionalTestCase):
         self.assert_proposal_history_records(
             u'Removed from schedule of meeting C\xf6mmunity meeting by Test '
             u'User (test_user_1_)',
-            browser, with_submitted=True)
+            with_submitted=True)
 
     @browsing
     def test_reopening_creates_history_entry(self, browser):
@@ -229,7 +231,7 @@ class TestProposalHistory(FunctionalTestCase):
 
         self.assert_proposal_history_records(
             u'Proposal reopened by Test User (test_user_1_)',
-            browser, with_submitted=True)
+            with_submitted=True)
 
     @browsing
     def test_deciding_creates_history_entry(self, browser):
@@ -242,7 +244,7 @@ class TestProposalHistory(FunctionalTestCase):
 
         self.assert_proposal_history_records(
             u'Proposal decided by Test User (test_user_1_)',
-            browser, with_submitted=True)
+            with_submitted=True)
 
     @browsing
     def test_revising_creates_history_entry(self, browser):
@@ -259,4 +261,4 @@ class TestProposalHistory(FunctionalTestCase):
 
         self.assert_proposal_history_records(
             u'Proposal revised by Test User (test_user_1_)',
-            browser, with_submitted=True)
+            with_submitted=True)
