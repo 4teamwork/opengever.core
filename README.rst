@@ -465,9 +465,6 @@ The ``bin/mtest`` script can be configured with environment variables:
 
 - ``MTEST_PROCESSORS`` - The amount of processors used in parallel. It should be no greater than the amount
   of available CPU cores. Defaults to ``4``.
-- ``MTEST_NOCOLORS`` - Set this to a positive value (``true``) for disabling the colorization of the output.
-  The colorization is useful for the visual separation of the output of the various processes,
-  but it is not useful in a environment without color support.
 
 Functional or integration testing?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
