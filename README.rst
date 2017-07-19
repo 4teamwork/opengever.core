@@ -336,7 +336,7 @@ changelog entries:
 2. Add your ``[name]`` onto the *same line*, it should never be on a standalone
    line, otherwise it might be deleted by the union merge.
 3. Do *not* insert any empty lines.
-4. Awoid nested lists in your entry, because it makes auto-merging brittle.
+4. Avoid nested lists in your entry, because it makes auto-merging brittle.
    It is better to add each change as a separate changelog entry and prefix
    them, as shown below (see `Feature x`).
    If you must use nested lists, make sure to add an empty line before and
