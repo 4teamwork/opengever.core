@@ -5,7 +5,7 @@ from ftw.testbrowser.pages import plone
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_NAME
 from plone.app.testing import TEST_USER_PASSWORD
-from zExceptions import Unauthorized
+import transaction
 import urllib
 
 
@@ -32,6 +32,11 @@ class TestRequireLoginScript(FunctionalTestCase):
 
     @browsing
     def test_require_login_displays_login_form_and_redirecs_upon_login(self, browser):
+        # Disable the `cookie only over https flag, activated
+        # by `opengever.core.hooks.installed`.
+        self.portal.acl_users.session.secure = False
+        transaction.commit()
+
         browser.open(
             view='require_login?came_from={}'.format(
                 urllib.quote(self.document.absolute_url())))

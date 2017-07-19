@@ -79,6 +79,7 @@ def should_prevent_duplicate_installation(profile):
 
 def installed(site):
     trigger_subpackage_hooks(site)
+    enable_secure_flag_for_cookies(site)
 
 
 def trigger_subpackage_hooks(site):
@@ -97,3 +98,8 @@ def trigger_subpackage_hooks(site):
     opengever.activity.hooks.insert_notification_defaults(site)
     opengever.private.hooks.configure_members_area(site)
     opengever.quota.hooks.policy_installed(site)
+
+
+def enable_secure_flag_for_cookies(context):
+    session_plugin = context.acl_users.session
+    session_plugin.secure = True
