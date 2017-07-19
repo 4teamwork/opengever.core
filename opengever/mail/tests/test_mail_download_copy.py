@@ -104,6 +104,8 @@ class TestMailDownloadCopy(FunctionalTestCase):
 
     @browsing
     def test_download_copy_delivers_msg_if_available(self, browser):
+        msg_data = 'mock-msg-body'
+
         dossier = create(Builder('dossier'))
 
         class MockMsg2MimeTransform(object):
@@ -113,7 +115,7 @@ class TestMailDownloadCopy(FunctionalTestCase):
 
         command = CreateEmailCommand(dossier,
                                      'testm\xc3\xa4il.msg',
-                                     'mock-msg-body',
+                                     msg_data,
                                      transform=MockMsg2MimeTransform())
         mail = command.execute()
         transaction.commit()
@@ -129,3 +131,5 @@ class TestMailDownloadCopy(FunctionalTestCase):
             'content-disposition': 'attachment; filename="testm\xc3\xa4il.msg"',
             },
             browser.headers)
+
+        self.assertEquals(msg_data, browser.contents)

@@ -7,6 +7,7 @@ Changelog
 
 - Move handlebar templates to template files. [jone]
 - Disable reference number column in the document listing of the inbox. [phgross]
+- Fix mail download: Convert LF to CRLF only for EML mails. [phgross]
 - Fix: remove ftw.showroom CSS on fresh installations too. [jone]
 - Define cookie path when setting the current orgunit id in the cookie. [phgross]
 - Make sure unicode is stored in proposal sql. [jone]
