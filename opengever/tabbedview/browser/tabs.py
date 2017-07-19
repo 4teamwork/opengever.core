@@ -175,7 +175,8 @@ class Documents(BaseCatalogListingTab):
          'transform': translate_public_trial_options},
 
         {'column': 'reference',
-         'column_title': _(u'label_reference', default=u'Reference Number')},
+         'column_title': _(u'label_document_reference',
+                           default=u'Reference Number')},
         )
 
     major_actions = [
