@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import info_messages
+from opengever.core.testing import activate_meeting_word_implementation
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.locking.lock import MEETING_EXCERPT_LOCK
 from opengever.meeting.model import Meeting
@@ -136,6 +137,26 @@ class TestAgendaItemList(TestAgendaItem):
         item = browser.json.get('items')[0]
 
         self.assertTrue(item.get('has_documents'))
+
+    @browsing
+    def test_agendaitem_list_with_word_feature_contains_document_link(self, browser):
+        activate_meeting_word_implementation()
+        self.setup_excerpt_template()
+        proposal = self.setup_proposal()
+        item = self.schedule_proposal(proposal, browser)
+
+        browser.login().open(
+            self.meeting_wrapper,
+            view='agenda_items/{}/list'.format(item.agenda_item_id))
+
+        proposal_document_link_html = (
+            browser.json['items'][0].get('proposal_document_link'))
+        self.assertIn('Proposal document Fooo',
+                      proposal_document_link_html)
+        submitted_proposal = item.proposal.submitted_oguid.resolve_object()
+        submitted_proposal_document = submitted_proposal.get_proposal_document()
+        self.assertIn(submitted_proposal_document.absolute_url() + '/tooltip',
+                      proposal_document_link_html)
 
 
 class TestAgendaItemEdit(TestAgendaItem):

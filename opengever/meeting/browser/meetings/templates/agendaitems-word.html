@@ -1,18 +1,32 @@
 <script id="agendaitemsTemplate" type="text/x-handlebars-template">
   {{#each agendaitems}}
-  <tr class="{{css_class}}" data-uid={{id}}>
+  <tr class="{{css_class}} word-feature" data-uid={{id}}>
     {{#if ../agendalist_editable}}<td class="sortable-handle"></td>{{/if}}
-    <td class="number">{{number}}</td>
+    <td class="number">
+      {{number}}
+      {{#if has_documents}}
+      <div class="toggle-attachements">
+        <a class="toggle-attachements-btn"></a>
+      </div>
+      {{/if}}
+    </td>
     <td class="title">
-      <span>{{{link}}}</span>
+      <span class="proposal_title">{{{link}}}</span>
       {{#if has_proposal}}
-      <ul class="attachements">
-        {{#each documents}}
-        <li>
-          {{{link}}}
-        </li>
-        {{/each}}
-      </ul>
+      <div class="proposal_document">{{{proposal_document_link}}}</div>
+
+      {{#if has_documents}}
+      <div class="attachements">
+        <div class="label_attachments">%(label_attachments)s:</div>
+        <ul>
+          {{#each documents}}
+          <li>
+            {{{link}}}
+          </li>
+          {{/each}}
+        </ul>
+      </div>
+      {{/if}}
       {{/if}}
       {{#if excerpt}}
       <div class="summary">
@@ -28,11 +42,6 @@
           </div>
         </div>
       </div>
-    </td>
-    <td class="toggle-attachements">
-      {{#if has_documents}}
-      <a class="toggle-attachements-btn"></a>
-      {{/if}}
     </td>
     {{#if ../editable}}
     <td class="actions">

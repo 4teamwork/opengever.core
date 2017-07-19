@@ -319,6 +319,7 @@ class MeetingView(BrowserView):
                 _('label_decide_action', default='Decide this agenda item'),
                 _('label_reopen_action', default='Reopen this agenda item'),
                 _('label_revise_action', default='Revise this agenda item'),
+                _('label_attachments', default='Attachments'),
             ),
             max_proposal_title_length=ISubmittedProposal['title'].max_length)
 
@@ -360,3 +361,7 @@ class MeetingView(BrowserView):
         return translate(_('An unexpected error has occurred',
                            default='An unexpected error has occurred'),
                          context=self.request)
+
+    def is_word_meeting_implementation_enabled(self):
+        # Make feature flag available in meeting.pt
+        return is_word_meeting_implementation_enabled()

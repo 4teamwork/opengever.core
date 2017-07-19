@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Bundle import: Display current memory usage (RSS) in progress logger. [lgraf]
+- Word meeting: show proposal files in meeting view. [jone]
 - Format line breaks in task descriptions. [tarnap]
 
 
