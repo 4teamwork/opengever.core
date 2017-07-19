@@ -37,7 +37,7 @@ class TestInboxTabbedview(FunctionalTestCase):
         self.assertEquals([document_2],
                           [brain.getObject() for brain in view.contents])
 
-    def test_document_listings_does_not_contain_subdossier_and_checked_out_column(self):
+    def test_document_listings_does_not_contain_subdossier_checked_out_and_reference_column(self):
         document_view = self.inbox.restrictedTraverse('tabbedview_view-documents')
 
         columns = [col.get('column') for col in document_view.columns
@@ -45,6 +45,7 @@ class TestInboxTabbedview(FunctionalTestCase):
 
         self.assertNotIn('containing_subdossier', columns)
         self.assertNotIn('checked_out', columns)
+        self.assertNotIn('reference', columns)
 
     def test_documents_listing_only_show_documents_from_the_current_inbox(self):
         second_inbox = create(Builder('inbox'))
