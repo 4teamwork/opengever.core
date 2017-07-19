@@ -77,22 +77,6 @@ ADD_MEETING_STEPS = (
 
 TEMPLATES_DIR = Path(__file__).joinpath('..', 'templates').abspath()
 
-PROPOSALS_TEMPLATE = '''
-<script tal:condition="view/unscheduled_proposals" id="proposalsTemplate" type="text/x-handlebars-template">
-  {{#each proposals}}
-    <div class="list-group-item submit">
-      <a href="{{submitted_proposal_url}}" class="title">{{title}}</a>
-      <div class="button-group">
-        <a class="button schedule-proposal" href="{{schedule_url}}">%(label_schedule)s</a>
-      </div>
-    </div>
-  {{/each}}
-  {{#unless proposals}}
-    <span>%(label_no_proposals)s</span>
-  {{/unless}}
-</script>
-'''
-
 
 def get_dm_key(committee_oguid=None):
     """Return the key used to store meeting-data in the wizard-storage."""
@@ -321,10 +305,11 @@ class MeetingView(BrowserView):
             max_proposal_title_length=ISubmittedProposal['title'].max_length)
 
     def render_handlebars_proposals_template(self):
-        label_schedule = translate(_('label_schedule', default='Schedule'), context=self.request)
-        label_no_proposals = translate(_('label_no_proposals', default='No proposals submitted'), context=self.request)
-        return PROPOSALS_TEMPLATE % {'label_schedule': label_schedule,
-                                     'label_no_proposals': label_no_proposals}
+        return prepare_handlebars_template(
+            TEMPLATES_DIR.joinpath('proposals.html'),
+            translations=(
+                _('label_schedule', default='Schedule'),
+                _('label_no_proposals', default='No proposals submitted')))
 
     def json_is_editable(self):
         return json.dumps(self.model.is_editable())
