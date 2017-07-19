@@ -9,6 +9,7 @@ from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.base.schema import UTCDatetime
 from opengever.meeting import _
+from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.browser.meetings.transitions import MeetingTransitionController
 from opengever.meeting.browser.protocol import GenerateProtocol
 from opengever.meeting.browser.protocol import UpdateProtocol
@@ -291,8 +292,25 @@ class MeetingView(BrowserView):
         return IContentListing(docs)
 
     def render_handlebars_agendaitems_template(self):
+        if is_word_meeting_implementation_enabled():
+            return self.render_handlebars_agendaitems_template_word()
+
         return prepare_handlebars_template(
             TEMPLATES_DIR.joinpath('agendaitems.html'),
+            translations=(
+                _('label_edit_cancel', default='Cancel'),
+                _('label_edit_save', default='Save'),
+                _('label_edit_action', default='edit title'),
+                _('label_delete_action', default='delete this agenda item'),
+                _('label_decide_action', default='Decide this agenda item'),
+                _('label_reopen_action', default='Reopen this agenda item'),
+                _('label_revise_action', default='Revise this agenda item'),
+            ),
+            max_proposal_title_length=ISubmittedProposal['title'].max_length)
+
+    def render_handlebars_agendaitems_template_word(self):
+        return prepare_handlebars_template(
+            TEMPLATES_DIR.joinpath('agendaitems-word.html'),
             translations=(
                 _('label_edit_cancel', default='Cancel'),
                 _('label_edit_save', default='Save'),
