@@ -60,16 +60,6 @@
       class=".contentviews.ModelContentViewsViewlet"
       />
 
-  <!-- Language selector -->
-  <browser:viewlet
-      name="plone.app.i18n.locales.languageselector"
-      manager="plone.app.layout.viewlets.interfaces.IPortalHeader"
-      class=".selector.LanguageSelectorMenu"
-      permission="zope2.View"
-      template="language_selector.pt"
-      layer="opengever.base.interfaces.IOpengeverBaseLayer"
-      />
-
   <!-- Expose language as data attribute on span HTML element -->
   <browser:viewlet
       name="opengever.base.langaugeexposer"

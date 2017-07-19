@@ -31,6 +31,7 @@ Changelog
 - Disable reference number column in the document listing of the inbox. [phgross]
 - Enable \*.msg download for all download copy links. [phgross]
 - Fix mail download: Convert LF to CRLF only for EML mails. [phgross]
+- Move language selector into the user menu (dropdown) - Implemented in plonetheme.teamraum. [mathias.leimgruber]
 - Fix: remove ftw.showroom CSS on fresh installations too. [jone]
 - Define cookie path when setting the current orgunit id in the cookie. [phgross]
 - Make sure unicode is stored in proposal sql. [jone]
