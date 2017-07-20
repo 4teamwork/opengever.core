@@ -4,6 +4,7 @@ from opengever.base.browser.helper import get_css_class
 from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.form import WizzardWrappedAddForm
+from opengever.base.handlebars import prepare_handlebars_template
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.base.schema import UTCDatetime
@@ -15,6 +16,7 @@ from opengever.meeting.committee import ICommittee
 from opengever.meeting.model import Meeting
 from opengever.meeting.proposal import ISubmittedProposal
 from opengever.repository.interfaces import IRepositoryFolder
+from path import Path
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListing
 from plone.app.contentlisting.interfaces import IContentListingObject
@@ -73,82 +75,7 @@ ADD_MEETING_STEPS = (
     ('add-meeting-dossier', _(u'Add Dossier for Meeting'))
 )
 
-AGENDAITEMS_TEMPLATE = '''
-<script id="agendaitemsTemplate" type="text/x-handlebars-template">
-  {{#each agendaitems}}
-    <tr class="{{css_class}}" data-uid={{id}}>
-      {{#if ../agendalist_editable}}<td class="sortable-handle"></td>{{/if}}
-      <td class="number">{{number}}</td>
-      <td class="title">
-        <span>{{{link}}}</span>
-        {{#if has_proposal}}
-          <ul class="attachements">
-            {{#each documents}}
-              <li>
-                {{{link}}}
-              </li>
-            {{/each}}
-          </ul>
-        {{/if}}
-        {{#if excerpt}}
-          <div class="summary">
-            {{{excerpt}}}
-          </div>
-        {{/if}}
-        <div class="edit-box">
-          <div class="input-group">
-            <input type="text" {{#if has_proposal}}maxlength="%(max_proposal_title_lengt)i"{{/if}} />
-            <div class="button-group">
-              <input value="%(label_edit_save)s" type="button" class="button edit-save" />
-              <input value="%(label_edit_cancel)s" type="button" class="button edit-cancel" />
-            </div>
-          </div>
-        </div>
-      </td>
-      <td class="toggle-attachements">
-        {{#if has_documents}}
-          <a class="toggle-attachements-btn"></a>
-        {{/if}}
-      </td>
-      {{#if ../editable}}
-      <td class="actions">
-        <div class="button-group">
-          {{#if ../agendalist_editable}}
-              <a href="{{edit_link}}" title="%(label_edit_action)s" class="button edit-agenda-item"></a>
-              <a href="{{delete_link}}" title="%(label_delete_action)s" class="button delete-agenda-item"></a>
-          {{/if}}
-          {{#if decide_link}}
-            <a href="{{decide_link}}" title="%(label_decide_action)s" class="button decide-agenda-item"><span></span></a>
-          {{/if}}
-          {{#if reopen_link}}
-            <a href="{{reopen_link}}" title="%(label_reopen_action)s" class="button reopen-agenda-item"><span></span></a>
-          {{/if}}
-          {{#if revise_link}}
-            <a href="{{revise_link}}" title="%(label_revise_action)s" class="button revise-agenda-item"><span></span></a>
-          {{/if}}
-        </div>
-      </td>
-      {{/if}}
-    </tr>
-  {{/each}}
-</script>
-'''
-
-PROPOSALS_TEMPLATE = '''
-<script tal:condition="view/unscheduled_proposals" id="proposalsTemplate" type="text/x-handlebars-template">
-  {{#each proposals}}
-    <div class="list-group-item submit">
-      <a href="{{submitted_proposal_url}}" class="title">{{title}}</a>
-      <div class="button-group">
-        <a class="button schedule-proposal" href="{{schedule_url}}">%(label_schedule)s</a>
-      </div>
-    </div>
-  {{/each}}
-  {{#unless proposals}}
-    <span>%(label_no_proposals)s</span>
-  {{/unless}}
-</script>
-'''
+TEMPLATES_DIR = Path(__file__).joinpath('..', 'templates').abspath()
 
 
 def get_dm_key(committee_oguid=None):
@@ -364,35 +291,25 @@ class MeetingView(BrowserView):
         return IContentListing(docs)
 
     def render_handlebars_agendaitems_template(self):
-        label_edit_cancel = translate(_('label_edit_cancel', default='Cancel'), context=self.request)
-        label_edit_save = translate(_('label_edit_save', default='Save'), context=self.request)
-        label_edit_action = translate(_('label_edit_action', default='edit title'), context=self.request)
-        label_delete_action = translate(_('label_delete_action', default='delete this agenda item'), context=self.request)
-        label_decide_action = translate(
-            _('label_decide_action', default='Decide this agenda item'),
-            context=self.request)
-        label_reopen_action = translate(
-            _('label_reopen_action', default='Reopen this agenda item'),
-            context=self.request)
-        label_revise_action = translate(
-            _('label_revise_action', default='Revise this agenda item'),
-            context=self.request)
-        return AGENDAITEMS_TEMPLATE % {
-            'max_proposal_title_lengt': ISubmittedProposal['title'].max_length,
-            'label_edit_cancel': label_edit_cancel,
-            'label_edit_save': label_edit_save,
-            'label_edit_action': label_edit_action,
-            'label_delete_action': label_delete_action,
-            'label_decide_action': label_decide_action,
-            'label_reopen_action': label_reopen_action,
-            'label_revise_action': label_revise_action,
-        }
+        return prepare_handlebars_template(
+            TEMPLATES_DIR.joinpath('agendaitems.html'),
+            translations=(
+                _('label_edit_cancel', default='Cancel'),
+                _('label_edit_save', default='Save'),
+                _('label_edit_action', default='edit title'),
+                _('label_delete_action', default='delete this agenda item'),
+                _('label_decide_action', default='Decide this agenda item'),
+                _('label_reopen_action', default='Reopen this agenda item'),
+                _('label_revise_action', default='Revise this agenda item'),
+            ),
+            max_proposal_title_length=ISubmittedProposal['title'].max_length)
 
     def render_handlebars_proposals_template(self):
-        label_schedule = translate(_('label_schedule', default='Schedule'), context=self.request)
-        label_no_proposals = translate(_('label_no_proposals', default='No proposals submitted'), context=self.request)
-        return PROPOSALS_TEMPLATE % {'label_schedule': label_schedule,
-                                     'label_no_proposals': label_no_proposals}
+        return prepare_handlebars_template(
+            TEMPLATES_DIR.joinpath('proposals.html'),
+            translations=(
+                _('label_schedule', default='Schedule'),
+                _('label_no_proposals', default='No proposals submitted')))
 
     def json_is_editable(self):
         return json.dumps(self.model.is_editable())
