@@ -8,6 +8,7 @@ Changelog
 - Move handlebar templates to template files. [jone]
 - Fix: remove ftw.showroom CSS on fresh installations too. [jone]
 - Define cookie path when setting the current orgunit id in the cookie. [phgross]
+- Make sure unicode is stored in proposal sql. [jone]
 - Add version of downloaded file to journal's entry. [tarnap]
 - Allow to copy-paste single documents. [tarnap]
 - Enable secure flag for cookies. [phgross]

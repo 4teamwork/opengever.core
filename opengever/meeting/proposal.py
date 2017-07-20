@@ -29,6 +29,7 @@ from plone.app.uuid.utils import uuidToObject
 from plone.directives import form
 from plone.uuid.interfaces import IUUID
 from Products.CMFPlone.utils import safe_unicode
+from Products.CMFPlone.utils import safe_unicode
 from z3c.relationfield.relation import RelationValue
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
@@ -505,8 +506,8 @@ class Proposal(ProposalBase):
             context.get_main_dossier()).get_number()
 
         language = data.get('language')
-        repository_folder_title = aq_wrapped_self.get_repository_folder_title(
-            language)
+        repository_folder_title = safe_unicode(
+            aq_wrapped_self.get_repository_folder_title(language))
 
         data.update(dict(workflow_state=workflow_state,
                          physical_path=aq_wrapped_self.get_physical_path(),
