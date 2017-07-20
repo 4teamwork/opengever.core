@@ -167,7 +167,7 @@ and the `ruby-build <https://github.com/sstephenson/ruby-build>`_ plugin:
     echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bash_profile
     echo 'eval "$(rbenv init -)"' >> ~/.bash_profile
     source ~/.bash_profile
-    rbenv install 2.1.5
+    rbenv install 2.3.3
     gem install bundler
 
 The installation of the ``Sablon`` gem can then be performed by buildout (by
@@ -336,7 +336,7 @@ changelog entries:
 2. Add your ``[name]`` onto the *same line*, it should never be on a standalone
    line, otherwise it might be deleted by the union merge.
 3. Do *not* insert any empty lines.
-4. Awoid nested lists in your entry, because it makes auto-merging brittle.
+4. Avoid nested lists in your entry, because it makes auto-merging brittle.
    It is better to add each change as a separate changelog entry and prefix
    them, as shown below (see `Feature x`).
    If you must use nested lists, make sure to add an empty line before and
@@ -465,9 +465,6 @@ The ``bin/mtest`` script can be configured with environment variables:
 
 - ``MTEST_PROCESSORS`` - The amount of processors used in parallel. It should be no greater than the amount
   of available CPU cores. Defaults to ``4``.
-- ``MTEST_NOCOLORS`` - Set this to a positive value (``true``) for disabling the colorization of the output.
-  The colorization is useful for the visual separation of the output of the various processes,
-  but it is not useful in a environment without color support.
 
 Functional or integration testing?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
