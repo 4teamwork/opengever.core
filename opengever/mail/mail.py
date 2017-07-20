@@ -154,6 +154,10 @@ class OGMail(Mail, BaseDocumentMixin):
         self._update_attachment_infos()
         self._reset_header_cache()
 
+    @property
+    def is_mail(self):
+        return True
+
     def get_extraction_parent(self):
         """Return the parent that accepts extracted attachments."""
         return self.get_parent_dossier() or self.get_parent_inbox()

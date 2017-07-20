@@ -5,7 +5,6 @@ from ftw.mail.mail import IMail
 from ftw.mail.mail import View
 from opengever.base import _ as ogbmf
 from opengever.document import _ as ogdmf
-from opengever.document.browser.download import DownloadConfirmationHelper
 from opengever.document.browser.overview import CustomRow
 from opengever.document.browser.overview import FieldRow
 from opengever.document.browser.overview import Overview
@@ -94,21 +93,6 @@ class OverviewTab(MailAttachmentsMixin, Overview):
     @property
     def file_size(self):
         return byteDisplay(self.field.getSize())
-
-    def get_download_copy_tag(self):
-        dc_helper = DownloadConfirmationHelper(self.context)
-
-        if self.ogmail.original_message:
-            return dc_helper.get_html_tag(
-                additional_classes=['function-download-copy'],
-                viewname="@@download/original_message",
-                include_token=True
-                )
-        else:
-            return dc_helper.get_html_tag(
-                additional_classes=['function-download-copy'],
-                include_token=True
-                )
 
     def get_metadata_config(self):
         rows = [

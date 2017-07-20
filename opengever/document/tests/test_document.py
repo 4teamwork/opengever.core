@@ -70,6 +70,10 @@ class TestDocument(FunctionalTestCase):
         field.set(document, file)
         self.assertTrue(field.get(document).data == 'bla bla')
 
+    def test_is_not_a_mail(self):
+        document = create(Builder('document'))
+        self.assertFalse(document.is_mail)
+
     def test_filename_getter_returns_filename_if_file_is_available(self):
         document = create(Builder('document')
                           .titled('Foo')

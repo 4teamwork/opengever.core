@@ -63,6 +63,10 @@ class BaseDocumentMixin(object):
     def is_removed(self):
         return api.content.get_state(obj=self) == self.removed_state
 
+    @property
+    def is_mail(self):
+        return False
+
     def related_items(self):
         raise NotImplementedError
 
