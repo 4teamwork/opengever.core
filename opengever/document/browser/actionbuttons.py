@@ -1,6 +1,7 @@
 from opengever.base.pdfconverter import is_pdfconverter_enabled
 from opengever.document.browser.download import DownloadConfirmationHelper
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.mail.mail import IOGMail
 from opengever.officeconnector.helpers import is_officeconnector_attach_feature_enabled  # noqa
 from plone import api
 from plone.locking.interfaces import IRefreshableLockable
@@ -62,11 +63,21 @@ class ActionButtonRendererMixin(object):
         return not self.is_checked_out_by_another_user()
 
     def get_download_copy_tag(self):
+        """Returns the DownloadConfirmationHelper tag containing
+        the donwload link. For mails, containing an original_message, the tag
+        links to the orginal message download view.
+        """
+
+        viewname = 'download'
+        if self.context.is_mail and IOGMail(self.context).original_message:
+            viewname = '@@download/original_message'
+
         dc_helper = DownloadConfirmationHelper(self.context)
         return dc_helper.get_html_tag(
             additional_classes=['function-download-copy'],
+            viewname=viewname,
             include_token=True,
-            )
+        )
 
     def is_attach_to_email_available(self):
         if not is_officeconnector_attach_feature_enabled():

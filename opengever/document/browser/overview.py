@@ -9,7 +9,6 @@ from opengever.document import _
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.browser import archival_file_form
 from opengever.document.browser.actionbuttons import ActionButtonRendererMixin
-from opengever.document.browser.download import DownloadConfirmationHelper
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.dossier.base import DOSSIER_STATES_CLOSED
@@ -253,13 +252,6 @@ class Overview(DisplayForm, GeverTabMixin, ActionButtonRendererMixin):
         state = api.content.get_state(
             self.context.get_parent_dossier(), default=None)
         return can_edit and state in DOSSIER_STATES_CLOSED
-
-    def get_download_copy_tag(self):
-        dc_helper = DownloadConfirmationHelper(self.context)
-        return dc_helper.get_html_tag(
-            additional_classes=['function-download-copy'],
-            include_token=True
-            )
 
     def show_preview(self):
         return is_bumblebee_feature_enabled()
