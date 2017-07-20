@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-04-27 11:21+0000\n"
+"POT-Creation-Date: 2017-07-19 08:51+0000\n"
 "PO-Revision-Date: 2012-11-22 14:19+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ./opengever/tabbedview/browser/tabs.py:278
+#: ./opengever/tabbedview/browser/tabs.py:282
 #: ./opengever/tabbedview/browser/users.py:62
 msgid "Active"
 msgstr "Aktiv"
@@ -72,42 +72,42 @@ msgid "checkout_and_edit"
 msgstr "Auschecken / Bearbeiten"
 
 #. Default: "Date of completion"
-#: ./opengever/tabbedview/browser/tasklisting.py:91
+#: ./opengever/tabbedview/browser/tasklisting.py:92
 msgid "column_date_of_completion"
 msgstr "Erledigt am"
 
 #. Default: "Deadline"
-#: ./opengever/tabbedview/browser/tasklisting.py:87
+#: ./opengever/tabbedview/browser/tasklisting.py:88
 msgid "column_deadline"
 msgstr "Zu erledigen bis"
 
 #. Default: "Issued at"
-#: ./opengever/tabbedview/browser/tasklisting.py:104
+#: ./opengever/tabbedview/browser/tasklisting.py:105
 msgid "column_issued_at"
 msgstr "Erstellt am"
 
 #. Default: "Organisational Unit"
-#: ./opengever/tabbedview/browser/tasklisting.py:111
+#: ./opengever/tabbedview/browser/tasklisting.py:113
 msgid "column_issuing_org_unit"
 msgstr "Organisationseinheit"
 
 #. Default: "Review state"
-#: ./opengever/tabbedview/browser/tasklisting.py:75
+#: ./opengever/tabbedview/browser/tasklisting.py:76
 msgid "column_review_state"
 msgstr "Status"
 
 #. Default: "Sequence number"
-#: ./opengever/tabbedview/browser/tasklisting.py:117
+#: ./opengever/tabbedview/browser/tasklisting.py:119
 msgid "column_sequence_number"
 msgstr "Laufnummer"
 
 #. Default: "Task type"
-#: ./opengever/tabbedview/browser/tasklisting.py:83
+#: ./opengever/tabbedview/browser/tasklisting.py:84
 msgid "column_task_type"
 msgstr "Auftragstyp"
 
 #. Default: "Title"
-#: ./opengever/tabbedview/browser/tasklisting.py:79
+#: ./opengever/tabbedview/browser/tasklisting.py:80
 msgid "column_title"
 msgstr "Titel"
 
@@ -122,7 +122,7 @@ msgid "contact"
 msgstr "Beteiligter"
 
 #. Default: "Dossier"
-#: ./opengever/tabbedview/browser/tasklisting.py:108
+#: ./opengever/tabbedview/browser/tasklisting.py:109
 msgid "containing_dossier"
 msgstr "Dossier"
 
@@ -184,7 +184,7 @@ msgstr "Ende"
 msgid "events"
 msgstr "Termine"
 
-#: ./opengever/tabbedview/browser/tabs.py:281
+#: ./opengever/tabbedview/browser/tabs.py:285
 msgid "expired"
 msgstr "Abgelaufen"
 
@@ -233,18 +233,23 @@ msgstr "Autor"
 msgid "label_document_date"
 msgstr "Dokumentdatum"
 
+#. Default: "Reference Number"
+#: ./opengever/tabbedview/browser/tabs.py:178
+msgid "label_document_reference"
+msgstr "Aktenzeichen"
+
 #. Default: "Responsible"
-#: ./opengever/tabbedview/browser/tabs.py:251
+#: ./opengever/tabbedview/browser/tabs.py:255
 msgid "label_dossier_responsible"
 msgstr "Federführung"
 
 #. Default: "End"
-#: ./opengever/tabbedview/browser/tabs.py:260
+#: ./opengever/tabbedview/browser/tabs.py:264
 msgid "label_end"
 msgstr "Ende"
 
 #. Default: "Issuer"
-#: ./opengever/tabbedview/browser/tasklisting.py:100
+#: ./opengever/tabbedview/browser/tasklisting.py:101
 msgid "label_issuer"
 msgstr "Auftraggeber"
 
@@ -264,12 +269,12 @@ msgid "label_no_contents"
 msgstr "Keine Inhalte"
 
 #. Default: "Pending"
-#: ./opengever/tabbedview/browser/tasklisting.py:65
+#: ./opengever/tabbedview/browser/tasklisting.py:66
 msgid "label_pending"
 msgstr "Pendent"
 
 #. Default: "Preview"
-#: ./opengever/tabbedview/helper.py:181
+#: ./opengever/tabbedview/helper.py:198
 msgid "label_preview"
 msgstr "Vorschau"
 
@@ -284,27 +289,27 @@ msgid "label_receipt_date"
 msgstr "Eingangsdatum"
 
 #. Default: "Reference Number"
-#: ./opengever/tabbedview/browser/tabs.py:239
+#: ./opengever/tabbedview/browser/tabs.py:243
 msgid "label_reference"
 msgstr "Aktenzeichen"
 
 #. Default: "Responsible"
-#: ./opengever/tabbedview/browser/tasklisting.py:96
+#: ./opengever/tabbedview/browser/tasklisting.py:97
 msgid "label_responsible_task"
 msgstr "Auftragnehmer"
 
 #. Default: "Review state"
-#: ./opengever/tabbedview/browser/tabs.py:247
+#: ./opengever/tabbedview/browser/tabs.py:251
 msgid "label_review_state"
 msgstr "Status"
 
 #. Default: "Version ${version} of ${timestamp}"
-#: ./opengever/tabbedview/helper.py:171
+#: ./opengever/tabbedview/helper.py:188
 msgid "label_showroom_version_title"
 msgstr "Version ${version} vom ${timestamp}"
 
 #. Default: "Start"
-#: ./opengever/tabbedview/browser/tabs.py:256
+#: ./opengever/tabbedview/browser/tabs.py:260
 msgid "label_start"
 msgstr "Beginn"
 
@@ -313,8 +318,8 @@ msgstr "Beginn"
 msgid "label_subdossier"
 msgstr "Subdossier"
 
-#: ./opengever/tabbedview/browser/tabs.py:276
-#: ./opengever/tabbedview/browser/tasklisting.py:63
+#: ./opengever/tabbedview/browser/tabs.py:280
+#: ./opengever/tabbedview/browser/tasklisting.py:64
 #: ./opengever/tabbedview/browser/users.py:61
 msgid "label_tabbedview_filter_all"
 msgstr "Alle"
@@ -443,4 +448,3 @@ msgstr "Titel"
 
 msgid "trash"
 msgstr "Papierkorb"
-

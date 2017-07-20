@@ -103,7 +103,7 @@ class InboxDocuments(Documents):
         """Remove default columns `containing_subdossier`, `checked_out`
         and `external_edit`.
         """
-        remove_columns = ['containing_subdossier', 'checked_out']
+        remove_columns = ['containing_subdossier', 'checked_out', 'reference']
         columns = []
 
         for col in super(InboxDocuments, self).columns:
