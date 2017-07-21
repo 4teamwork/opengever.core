@@ -323,6 +323,15 @@ Alternatively it's also possible to only update a single subpackage, for example
     bin/i18n-build opengever.dossier
 
 
+Using translations on the frontend
+----------------------------------
+
+There is an REST endpoint at `@i18n` to get all translations configured for the frontend.
+To add new translations simply update the `frontend_translations.py` in `opengever.base`.
+
+On the frontend the messages can be fetched through the `i18n(key)` function by providing
+a message key.
+
 Updating the history file
 -------------------------
 

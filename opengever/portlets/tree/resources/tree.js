@@ -356,14 +356,15 @@ RepositoryFavorites = function(url, cache_param) {
   var local_storage = new LocalStorageJSONCache(
       'favorites', url + '/list?' + cache_param);
 
-  var i18n_add = $('[data-i18n-add-to-favorites]').data('i18n-add-to-favorites') || '';
-  var i18n_remove = $('[data-i18n-remove-from-favorites]').data('i18n-remove-from-favorites') || '';
-
   function annotate_link_title(favorite_link) {
     if(favorite_link.hasClass('bookmarked')) {
-      favorite_link.attr('title', i18n_remove);
+      i18n('label_remove_from_favorites').done(function(label) {
+        favorite_link.attr('title', label);
+      });
     } else {
-      favorite_link.attr('title', i18n_add);
+      i18n('label_add_to_favorites').done(function(label) {
+        favorite_link.attr('title', label);
+      });
     }
   }
 

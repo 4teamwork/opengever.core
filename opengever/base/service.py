@@ -1,17 +1,17 @@
+from frontend_translations import get_translations
 from opengever.document.interfaces import ICheckinCheckoutManager
-from plone.rest import Service
+from plone.restapi.services import Service
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.component import queryMultiAdapter
-
 import json
 
 
 class DocumentStatus(Service):
     """Provide information on the current status of a document."""
 
-    def render(self):
+    def reply(self):
         checkout_manager = queryMultiAdapter(
             (self.context, self.request), ICheckinCheckoutManager)
 
@@ -30,3 +30,10 @@ class DocumentStatus(Service):
             payload['locked_by'] = None
 
         return json.dumps(payload)
+
+
+class Internationalization(Service):
+    """Provide translations in json format to use them on the frontend"""
+
+    def reply(self):
+        return json.dumps(get_translations(self.request))

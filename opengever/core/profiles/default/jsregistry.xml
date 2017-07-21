@@ -12,9 +12,20 @@
       cookable="True"
       expression=""
       enabled="True"
-      id="++resource++opengever.base/notify.js"
+      id="++resource++opengever.base/i18n.js"
       inline="False"
       insert-after="++resource++ftw.showroom/handlebars.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="none"
+      cookable="True"
+      expression=""
+      enabled="True"
+      id="++resource++opengever.base/notify.js"
+      inline="False"
+      insert-after="++resource++opengever.base/translate.js"
       />
 
   <javascript

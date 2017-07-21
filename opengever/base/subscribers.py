@@ -24,6 +24,7 @@ ALLOWED_ENDPOINTS = set([
     'POST_application_json_@login',
     'POST_application_json_@logout',
     'POST_application_json_@login-renew',
+    'GET_application_json_@i18n',
     'customlogo',
     'customlogo_right',
     'favicon',
