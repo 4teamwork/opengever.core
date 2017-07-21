@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2017.3.2 (unreleased)
+2017.3.2 (2017-07-21)
 ---------------------
 
 - Add upgradestep to cleanup no longer existing interfaces from zc.relation catalog. [phgross]
