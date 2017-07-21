@@ -35,16 +35,24 @@
 
   function spinner() { return '<img src="' + $("head > base").attr("href") + '/spinner.gif" class="spinner"/>'; }
 
-  function failure(status, error) { return status + ": " + error; }
+  function isTooltipResponse(data, status, jqXHR) {
+    if(jqXHR.getResponseHeader('X-Tooltip-Response') !== "True") {
+      return $.Deferred().reject(jqXHR, "error");
+    }
+    return $.Deferred().resolve(data, status, jqXHR);
+  }
 
   function tooltipContent(event, api) {
     $.get($(event.currentTarget).data("tooltip-url"))
+      .pipe(isTooltipResponse)
       .done(function(data) {
         api.set("content.text", data);
         $(document).trigger("tooltip.show", [api]);
         $(".showroom-reference").on("click", function() { api.hide(); });
       })
-      .fail(function(xhr, status, error) { api.set("content.text", failure(status, error)); });
+      .fail(function() {
+        location.reload();
+      });
     return spinner();
   }
 
