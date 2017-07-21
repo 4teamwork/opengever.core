@@ -14,7 +14,7 @@
         "classification": {
             "type": "string",
             "title": "Klassifikation",
-            "description": "Grad, in dem die Unterlagen vor unberechtigter Einsicht gesch\u00fctzt werden m\u00fcssen",
+            "description": "Grad, in dem die Unterlagen vor unberechtigter Einsicht gesch\u00fctzt werden m\u00fcssen.",
             "_zope_schema_type": "Choice",
             "default": "unprotected",
             "enum": [
@@ -33,7 +33,7 @@
         "retention_period": {
             "type": "integer",
             "title": "Aufbewahrungsdauer (Jahre)",
-            "description": "Zeitraum zwischen dem j\u00fcngsten Dokumentdatum eines in einem Dossier enthaltenen Dokuments und dem Zeitpunkt, an dem dieses f\u00fcr die Gesch\u00e4ftst\u00e4tigkeit der Verwaltungseinheit nicht mehr ben\u00f6tigt wird",
+            "description": "Zeitraum zwischen dem j\u00fcngsten Dokumentdatum eines in einem Dossier enthaltenen Dokuments und dem Zeitpunkt, an dem dieses f\u00fcr die Gesch\u00e4ftst\u00e4tigkeit der Verwaltungseinheit nicht mehr ben\u00f6tigt wird.",
             "_zope_schema_type": "Choice",
             "default": 5,
             "enum": [
@@ -103,7 +103,7 @@
         "custody_period": {
             "type": "integer",
             "title": "Archivische Schutzfrist (Jahre)",
-            "description": "Dauer, w\u00e4hrend der nach der Archivierung die Dokumente vor \u00f6ffentlicher Einsichtnahme gesch\u00fctzt sind",
+            "description": "Dauer, w\u00e4hrend der nach der Archivierung die Dokumente vor \u00f6ffentlicher Einsichtnahme gesch\u00fctzt sind.",
             "_zope_schema_type": "Choice",
             "default": 30,
             "enum": [
@@ -157,7 +157,7 @@
         "public_trial": {
             "type": "string",
             "title": "\u00d6ffentlichkeitsstatus",
-            "description": "Angabe, ob die Unterlagen gem\u00e4ss \u00d6ffentlichkeitsgesetz zug\u00e4nglich sind oder nicht",
+            "description": "Angabe, ob die Unterlagen gem\u00e4ss \u00d6ffentlichkeitsgesetz zug\u00e4nglich sind oder nicht.",
             "_zope_schema_type": "Choice",
             "default": "unchecked",
             "enum": [
@@ -201,7 +201,7 @@
         "privacy_layer": {
             "type": "string",
             "title": "Datenschutzstufe",
-            "description": "Markierung, die angibt, ob die Unterlagen besonders sch\u00fctzenswerte Personendaten oder Pers\u00f6nlichkeitsprofile gem\u00e4ss Datenschutzrecht enthalten",
+            "description": "Markierung, die angibt, ob die Unterlagen besonders sch\u00fctzenswerte Personendaten oder Pers\u00f6nlichkeitsprofile gem\u00e4ss Datenschutzrecht enthalten.",
             "_zope_schema_type": "Choice",
             "default": "privacy_layer_no",
             "enum": [
