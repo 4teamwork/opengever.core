@@ -5,7 +5,6 @@ Changelog
 2017.4.0 (unreleased)
 ---------------------
 
-- Add upgradestep to cleanup no longer existing interfaces from zc.relation catalog. [phgross]
 - Move handlebar templates to template files. [jone]
 - Disable reference number column in the document listing of the inbox. [phgross]
 - Enable \*.msg download for all download copy links. [phgross]
@@ -24,6 +23,12 @@ Changelog
 - Use OGMail original_message-file for bumblebee-conversion if available. [elioschmutz]
 - Amend the OfficeConnector javascript to refresh the page based on the lock status. [Rotonen]
 - Add the document lock status to the document status end point. [Rotonen]
+
+
+2017.3.2 (2017-07-21)
+---------------------
+
+- Add upgradestep to cleanup no longer existing interfaces from zc.relation catalog. [phgross]
 
 
 2017.3.1 (2017-07-18)
