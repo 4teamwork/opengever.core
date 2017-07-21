@@ -12,10 +12,10 @@
       my: "center left",
       adjust: {
         mouse: false, // Do not track the mouse
-        x: 20, // Slighly shift the location in x direction
-        y: 20 // Slighly shift the location in y direction
+        x: 20, // Slightly shift the location in x direction
+        y: 20 // Slightly shift the location in y direction
       },
-      effect: false // Do not animate the tooltip loaction changes
+      effect: false // Do not animate the tooltip location changes
     },
     show: {
       solo: true, // Make sure that only one tooltip is visible
