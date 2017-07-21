@@ -10,6 +10,7 @@ from opengever.document.subscribers import set_digitally_available
 from opengever.document.subscribers import sync_title_and_filename_handler
 from opengever.mail.mail import initalize_title
 from opengever.mail.mail import initialize_metadata
+from opengever.mail.mail import IOGMail
 from opengever.mail.mail import NO_SUBJECT_TITLE_FALLBACK
 from zope.annotation.interfaces import IAnnotations
 from zope.interface import classProvides
@@ -23,7 +24,7 @@ import posixpath
 logger = logging.getLogger('opengever.setup.sections.fileloader')
 
 
-INVALID_FILE_EXTENSIONS = ('.msg', '.exe', '.dll')
+INVALID_FILE_EXTENSIONS = ('.exe', '.dll')
 
 
 class FileLoadingFailed(Exception):
@@ -58,12 +59,11 @@ class FileLoaderSection(object):
     def __iter__(self):
         for item in self.previous:
             guid = item['guid']
-            file_field = self.get_file_field(item)
 
-            try:
-                abs_filepath, path = self.get_abs_filepath(item)
-                self.validate_filepath(item, abs_filepath, path)
-            except FileLoadingFailed:
+            pathkey = self.pathkey(*item.keys())[0]
+            path = item.get(pathkey)
+            if not path:
+                logger.warning("Missing path key for file %s" % guid)
                 yield item
                 continue
 
@@ -74,16 +74,32 @@ class FileLoaderSection(object):
                 yield item
                 continue
 
-            try:
-                self.add_namedblob_file(abs_filepath, file_field, obj)
-            except EnvironmentError as e:
-                # TODO: Check for this in OGGBundle validation
-                logger.warning(
-                    "Can't open file %s. %s." % (abs_filepath, str(e)))
-                error = (guid, abs_filepath, str(e), path)
-                self.bundle.errors['files_io_errors'].append(error)
+            file_added = False
+            for file_field, file_pathkey in self.get_supported_fields(item):
+                try:
+                    abs_filepath = self.get_abs_filepath(
+                        item, file_pathkey, path)
+                    self.validate_filepath(item, abs_filepath, path)
+                except FileLoadingFailed:
+                    continue
 
-            self.run_after_creation_jobs(item, obj)
+                try:
+                    self.add_namedblob_file(abs_filepath, file_field, obj)
+
+                    # Mark file_added as successfull only for the primary
+                    # fields, `file` fo
+                    if file_pathkey == 'filepath':
+                        file_added = True
+
+                except EnvironmentError as e:
+                    # TODO: Check for this in OGGBundle validation
+                    logger.warning(
+                        "Can't open file %s. %s." % (abs_filepath, str(e)))
+                    error = (guid, abs_filepath, str(e), path)
+                    self.bundle.errors['files_io_errors'].append(error)
+
+            if file_added:
+                self.run_after_creation_jobs(item, obj)
 
             yield item
 
@@ -128,10 +144,14 @@ class FileLoaderSection(object):
 
         return filepath
 
-    def get_file_field(self, item):
+    def get_supported_fields(self, item):
+        """Returns a list of tuples (field, bundle_key).
+        """
         if self.is_mail(item):
-            return IMail['message']
-        return IDocumentSchema['file']
+            return [(IMail['message'], 'filepath'),
+                    (IOGMail['original_message'], 'original_message_path')]
+
+        return [(IDocumentSchema['file'], 'filepath')]
 
     def add_namedblob_file(self, abs_filepath, field, obj):
         mimetype, _encoding = guess_type(abs_filepath, strict=False)
@@ -161,15 +181,9 @@ class FileLoaderSection(object):
             sync_title_and_filename_handler(obj, None)
             set_digitally_available(obj, None)
 
-    def get_abs_filepath(self, item):
-        _filepath = item.get(self.key)
+    def get_abs_filepath(self, item, filepath_key, path):
+        _filepath = item.get(filepath_key)
         if not _filepath:
-            raise FileLoadingFailed()
-
-        pathkey = self.pathkey(*item.keys())[0]
-        path = item.get(pathkey)
-        if not path:
-            logger.warning("Missing path key for file %s" % _filepath)
             raise FileLoadingFailed()
 
         abs_filepath = self.build_absolute_filepath(_filepath)
@@ -179,7 +193,7 @@ class FileLoaderSection(object):
             self.bundle.errors['files_unresolvable_path'].append(error)
             raise FileLoadingFailed
 
-        return abs_filepath, path
+        return abs_filepath
 
     def validate_filepath(self, item, abs_filepath, path):
         # TODO: Move does checks to OGGBundle validation
