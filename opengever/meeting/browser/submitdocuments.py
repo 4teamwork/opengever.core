@@ -239,7 +239,6 @@ class RecieveSubmittedDocumentView(PrivilegedReceiveObject):
         document = super(RecieveSubmittedDocumentView, self).receive()
 
         history_data = advancedjson.loads(self.request.get('history_data'))
-
         with elevated_privileges():
             IHistory(self.context).append_record(
                 u'document_submitted',
@@ -247,6 +246,6 @@ class RecieveSubmittedDocumentView(PrivilegedReceiveObject):
                 submitted_version=history_data['submitted_version'],
                 uuid=history_data['uuid']
             )
-            ILockable(document).lock(MEETING_SUBMITTED_LOCK)
 
+        ILockable(document).lock(MEETING_SUBMITTED_LOCK)
         return document
