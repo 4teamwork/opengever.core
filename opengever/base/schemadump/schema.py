@@ -344,6 +344,8 @@ class OGGBundleJSONSchemaBuilder(object):
                                'Dokumentes.'
             }
             core_schema['required'].extend(['title', 'filepath'])
+            core_schema['properties']['original_message_path'] = {
+                'type': 'string'}
             # XXX: Documents without files?
 
         if portal_type == 'opengever.dossier.businesscasedossier':

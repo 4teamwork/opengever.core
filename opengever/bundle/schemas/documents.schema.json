@@ -10,6 +10,12 @@
             "title": "Dokument",
             "additionalProperties": false,
             "properties": {
+                "original_message_path": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                },
                 "classification": {
                     "type": [
                         "null",
