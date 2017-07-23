@@ -683,6 +683,35 @@ within a single test:
 See the `list of feature flags <https://github.com/4teamwork/opengever.core/blob/master/opengever/testing/integration_test_case.py>`_.
 
 
+Cache integration testing setup
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When developing ``opengever.core``, a developer often runs a single test module,
+with ``bin/test -m opengever.dossier.tests.test_activate`` for instance.
+This will set up a complete fixture each time.
+In order to speed up the feedback loop when developing,
+we try to cache the database after setting up the fixture.
+This will speed up the test runs, but it also makes the result inaccurate:
+if the cachekeys do not detect a relevant change, we may not realize
+that something breaks.
+
+Because the results are not accurate and this is an experiment, the feature is
+considered experimental and therefore disabled by default.
+
+You can enable the feature by setting an environment variable:
+
+.. code:: sh
+
+    GEVER_CACHE_TEST_DB=true bin/test -m opengever.dossier.tests.test_activate
+
+You can manually remove / rebuild the caches:
+
+.. code:: sh
+
+    ./bin/remove-test-cache
+
+This feature is disabled on the CI server.
+
 
 Builder API
 ~~~~~~~~~~~

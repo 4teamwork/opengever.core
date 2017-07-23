@@ -15,6 +15,10 @@ from opengever.base.model import create_session
 from opengever.base.pdfconverter import pdfconverter_available_lock
 from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
 from opengever.core import sqlite_testing
+from opengever.core.cached_testing import CACHE_GEVER_FIXTURE
+from opengever.core.cached_testing import CACHE_GEVER_INSTALLATION
+from opengever.core.cached_testing import CACHED_COMPONENT_REGISTRY_ISOLATION
+from opengever.core.cached_testing import DB_CACHE_MANAGER
 from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings # noqa
 from opengever.meeting.interfaces import IMeetingSettings
 from opengever.officeatwork.interfaces import IOfficeatworkSettings
@@ -39,6 +43,7 @@ from zope.component import getMultiAdapter
 from zope.component import getSiteManager
 from zope.configuration import xmlconfig
 from zope.globalrequest import setRequest
+from zope.sqlalchemy import datamanager
 from zope.sqlalchemy.datamanager import mark_changed
 from ZPublisher.interfaces import IPubAfterTraversal
 import logging
@@ -422,7 +427,7 @@ class ContentFixtureLayer(OpengeverFixture):
     """
 
 
-    defaultBases = (COMPONENT_REGISTRY_ISOLATION, )
+    defaultBases = (CACHED_COMPONENT_REGISTRY_ISOLATION, )
 
     def __init__(self):
         # By super-super-calling the __init__ we remove the SQL bases,
@@ -436,7 +441,8 @@ class ContentFixtureLayer(OpengeverFixture):
         # handlers already registered, which enable support for rolling back
         # to savepoints.
         sqlite_testing.setup_memory_database()
-        sqlite_testing.create_tables()
+        if 'sqlite' in datamanager.NO_SAVEPOINT_SUPPORT:
+            datamanager.NO_SAVEPOINT_SUPPORT.remove('sqlite')
 
     def setUpPloneSite(self, portal):
         session.current_session = session.BuilderSession()
@@ -446,11 +452,27 @@ class ContentFixtureLayer(OpengeverFixture):
         portal.portal_languages.use_combined_language_codes = True
         portal.portal_languages.addSupportedLanguage('de-ch')
 
-        # Avoid circular imports:
-        from opengever.testing.fixtures import OpengeverContentFixture
-        setRequest(portal.REQUEST)
-        self['fixture_lookup_table'] = OpengeverContentFixture()()
-        setRequest(None)
+        if not DB_CACHE_MANAGER.is_loaded_from_cache(CACHE_GEVER_FIXTURE):
+            sqlite_testing.create_tables()
+            # Avoid circular imports:
+            from opengever.testing.fixtures import OpengeverContentFixture
+            setRequest(portal.REQUEST)
+            self['fixture_lookup_table'] = OpengeverContentFixture()()
+            setRequest(None)
+            DB_CACHE_MANAGER.data['fixture_lookup_table'] = (
+                self['fixture_lookup_table'])
+            DB_CACHE_MANAGER.dump_to_cache(self['zodbDB'], CACHE_GEVER_FIXTURE)
+        else:
+            DB_CACHE_MANAGER.apply_cache_fixes(CACHE_GEVER_FIXTURE)
+            self['fixture_lookup_table'] = (
+                DB_CACHE_MANAGER.data['fixture_lookup_table'])
+
+    def installOpengeverProfiles(self, portal):
+        if not DB_CACHE_MANAGER.is_loaded_from_cache(CACHE_GEVER_INSTALLATION):
+            super(ContentFixtureLayer, self).installOpengeverProfiles(portal)
+            DB_CACHE_MANAGER.dump_to_cache(self['zodbDB'], CACHE_GEVER_INSTALLATION)
+        else:
+            DB_CACHE_MANAGER.apply_cache_fixes(CACHE_GEVER_INSTALLATION)
 
     def tearDown(self):
         sqlite_testing.model.Session.close_all()
