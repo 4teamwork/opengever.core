@@ -10,7 +10,7 @@ from opengever.document.subscribers import set_digitally_available
 from opengever.document.subscribers import sync_title_and_filename_handler
 from opengever.mail.mail import initalize_title
 from opengever.mail.mail import initialize_metadata
-from opengever.mail.mail import NO_SUBJECT_TITLE_FALLBACK
+from opengever.mail.mail import sdfoiNO_SUBJECT_TITLE_FALLBACK
 from zope.annotation.interfaces import IAnnotations
 from zope.interface import classProvides
 from zope.interface import implements
