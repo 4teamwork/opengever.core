@@ -33,6 +33,8 @@
       for="ftw.mail.mail.IMail"
       />
 
+  <adapter factory=".zipexport.OGMailZipExport" />
+
   <plone:behavior
       title="ISendableDocsContainer behavior"
       description="generates an email adress for a dossier"
