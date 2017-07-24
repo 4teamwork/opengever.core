@@ -500,8 +500,7 @@ Example integration test with browser:
 
        @browsing
        def test_example_view(self, browser):
-           self.login(self.dossier_responsible)
-           browser.login(self.dossier_responsible)
+           self.login(self.dossier_responsible, browser)
            browser.open(self.dossier, view='example_view')
            statusmessages.assert_no_error_messages()
 
