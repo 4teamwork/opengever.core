@@ -13,6 +13,18 @@
   </roles>
   <permissions>
 
+    <permission name="Sharing page: Delegate Administrator role" acquire="True">
+      <role name="Administrator" />
+      <role name="Manager" />
+      <role name="Role Manager" />
+    </permission>
+
+    <permission name="Sharing page: Delegate Publisher role" acquire="True">
+      <role name="Administrator" />
+      <role name="Manager" />
+      <role name="Role Manager" />
+    </permission>
+
     <!--migrated from opengever/base/profiles/default/rolemap.xml-->
     <permission name="Remove GEVER content" acquire="True">
       <role name="Manager" />

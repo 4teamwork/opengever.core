@@ -37,14 +37,4 @@
       provides=".behaviors.IDossier"
       />
 
-  <utility
-      factory=".utilities.AdministratorRole"
-      name="Administrator"
-      />
-
-  <utility
-      factory=".utilities.PublisherRole"
-      name="Publisher"
-      />
-
 </configure>
