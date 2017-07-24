@@ -5,6 +5,7 @@ Changelog
 2017.4.1 (unreleased)
 ---------------------
 
+- Upgrade plone.app.jquery from 1.7.2.1 to 1.11.2. [elioschmutz]
 - Bundle import: Display current memory usage (RSS) in progress logger. [lgraf]
 - Format line breaks in task descriptions. [tarnap]
 
@@ -16,7 +17,6 @@ Changelog
 - Export msg in OGmail zip represenation if the original_message is available. [mathias.leimgruber]
 - Add original_message support to bundle import. [phgross]
 - Rename current orgunit cookie, to invalidate existing cookies. [phgross]
-- Upgrade plone.app.jquery from 1.7.2.1 to 1.11.2. [elioschmutz]
 - Move handlebar templates to template files. [jone]
 - Disable reference number column in the document listing of the inbox. [phgross]
 - Enable \*.msg download for all download copy links. [phgross]
