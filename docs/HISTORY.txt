@@ -5,6 +5,7 @@ Changelog
 2017.4.0 (unreleased)
 ---------------------
 
+- Refactor the function: earliest_possible_end_date. [elioschmutz]
 - Move handlebar templates to template files. [jone]
 - Disable reference number column in the document listing of the inbox. [phgross]
 - Enable \*.msg download for all download copy links. [phgross]
