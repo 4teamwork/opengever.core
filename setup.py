@@ -12,6 +12,7 @@ api_require = []
 
 tests_require = [
     'ftw.builder',
+    'ftw.flamegraph',
     'ftw.journal',
     'ftw.tabbedview',
     'ftw.table',
