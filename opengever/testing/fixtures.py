@@ -8,6 +8,8 @@ from ftw.builder import create
 from ftw.builder import ticking_creator
 from ftw.testing import freeze
 from ftw.testing import staticuid
+from opengever.base.command import CreateEmailCommand
+from opengever.mail.tests import MAIL_DATA
 from opengever.ogds.base.utils import ogds_service
 from operator import methodcaller
 from plone.app.testing import login
@@ -38,6 +40,10 @@ class OpengeverContentFixture(object):
         with self.freeze_at_hour(14):
             with self.login(self.dossier_responsible):
                 self.create_treaty_dossiers()
+
+        with self.freeze_at_hour(15):
+            with self.login(self.dossier_responsible):
+                self.create_emails()
 
         end = time()
         print '(fixture setup in {}s) '.format(round(end-start, 3)),
@@ -122,7 +128,7 @@ class OpengeverContentFixture(object):
 
     @staticuid()
     def create_treaty_dossiers(self):
-        dossier = self.register('dossier', create(
+        self.dossier = self.register('dossier', create(
             Builder('dossier').within(self.repofolder00)
             .titled(u'Vertr\xe4ge mit der kantonalen Finanzverwaltung')
             .having(description=u'Alle aktuellen Vertr\xe4ge mit der'
@@ -132,7 +138,7 @@ class OpengeverContentFixture(object):
                     start=date(2016, 1, 1),
                     responsible='hugo.boss')))
         self.register('subdossier',
-                      create(Builder('dossier').within(dossier).titled(u'2016')))
+                      create(Builder('dossier').within(self.dossier).titled(u'2016')))
 
         self.register('archive_dossier', create(
             Builder('dossier').within(self.repofolder00)
@@ -143,6 +149,24 @@ class OpengeverContentFixture(object):
                     end=date(2015, 12, 31),
                     responsible='hugo.boss')
             .in_state('dossier-state-resolved')))
+
+    @staticuid()
+    def create_emails(self):
+        self.mail_eml = self.register('mail_eml', create(
+            Builder("mail")
+            .with_message(MAIL_DATA)
+            .within(self.dossier)))
+
+        class MockMsg2MimeTransform(object):
+
+            def transform(self, data):
+                return 'mock-eml-body'
+
+        command = CreateEmailCommand(self.dossier,
+                                     'testm\xc3\xa4il.msg',
+                                     'mock-msg-body',
+                                     transform=MockMsg2MimeTransform())
+        self.mail_msg = self.register('mail_msg', command.execute())
 
     @contextmanager
     def freeze_at_hour(self, hour):
