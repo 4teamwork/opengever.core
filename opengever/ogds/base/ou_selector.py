@@ -2,7 +2,7 @@ from collections import OrderedDict
 from Products.CMFPlone import PloneMessageFactory as pmf
 
 
-CURRENT_ORG_UNIT_KEY = 'current_org_unit'
+CURRENT_ORG_UNIT_KEY = 'current_org_unit_v2'
 
 
 class OrgUnitSelector(object):
