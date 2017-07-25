@@ -286,7 +286,8 @@ class LDAPSearch(grok.Adapter):
         search_filter = self._combine_filters(custom_filter, search_filter)
 
         if use_lookup_base:
-            base_dn = self.context.lookup_groups_base
+            base_dn = getattr(
+                self.context, 'lookup_groups_base', self.context.groups_base)
         else:
             base_dn = self.context.groups_base
 
