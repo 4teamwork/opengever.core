@@ -19,7 +19,7 @@ Release 3.10
    kontakte
    suchen
    posteingang
-   aufgaben
+   aufgaben/index
    standardablaeufe
    meine_ablage
    sitzungs-und-protokollverwaltung
