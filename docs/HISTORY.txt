@@ -5,6 +5,7 @@ Changelog
 2017.4.0 (unreleased)
 ---------------------
 
+- Fixed OGDS group sync, when lookup_groups_base is not defined. [phgross]
 - Export msg in OGmail zip represenation if the original_message is available. [mathias.leimgruber]
 - Add original_message support to bundle import. [phgross]
 - Rename current orgunit cookie, to invalidate existing cookies. [phgross]
