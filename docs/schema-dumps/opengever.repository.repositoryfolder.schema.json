@@ -20,7 +20,7 @@
         "classification": {
             "type": "string",
             "title": "Klassifikation",
-            "description": "Grad, in dem die Unterlagen vor unberechtigter Einsicht gesch\u00fctzt werden m\u00fcssen",
+            "description": "Grad, in dem die Unterlagen vor unberechtigter Einsicht gesch\u00fctzt werden m\u00fcssen.",
             "_zope_schema_type": "Choice",
             "default": "unprotected",
             "enum": [
@@ -32,7 +32,7 @@
         "retention_period": {
             "type": "integer",
             "title": "Aufbewahrungsdauer (Jahre)",
-            "description": "Zeitraum zwischen dem j\u00fcngsten Dokumentdatum eines in einem Dossier enthaltenen Dokuments und dem Zeitpunkt, an dem dieses f\u00fcr die Gesch\u00e4ftst\u00e4tigkeit der Verwaltungseinheit nicht mehr ben\u00f6tigt wird",
+            "description": "Zeitraum zwischen dem j\u00fcngsten Dokumentdatum eines in einem Dossier enthaltenen Dokuments und dem Zeitpunkt, an dem dieses f\u00fcr die Gesch\u00e4ftst\u00e4tigkeit der Verwaltungseinheit nicht mehr ben\u00f6tigt wird.",
             "_zope_schema_type": "Choice",
             "default": 5,
             "enum": [
@@ -72,7 +72,7 @@
         "privacy_layer": {
             "type": "string",
             "title": "Datenschutzstufe",
-            "description": "Markierung, die angibt, ob die Unterlagen besonders sch\u00fctzenswerte Personendaten oder Pers\u00f6nlichkeitsprofile gem\u00e4ss Datenschutzrecht enthalten",
+            "description": "Markierung, die angibt, ob die Unterlagen besonders sch\u00fctzenswerte Personendaten oder Pers\u00f6nlichkeitsprofile gem\u00e4ss Datenschutzrecht enthalten.",
             "_zope_schema_type": "Choice",
             "default": "privacy_layer_no",
             "enum": [
@@ -83,7 +83,7 @@
         "custody_period": {
             "type": "integer",
             "title": "Archivische Schutzfrist (Jahre)",
-            "description": "Dauer, w\u00e4hrend der nach der Archivierung die Dokumente vor \u00f6ffentlicher Einsichtnahme gesch\u00fctzt sind",
+            "description": "Dauer, w\u00e4hrend der nach der Archivierung die Dokumente vor \u00f6ffentlicher Einsichtnahme gesch\u00fctzt sind.",
             "_zope_schema_type": "Choice",
             "default": 30,
             "enum": [
@@ -116,7 +116,7 @@
         "public_trial": {
             "type": "string",
             "title": "\u00d6ffentlichkeitsstatus",
-            "description": "Angabe, ob die Unterlagen gem\u00e4ss \u00d6ffentlichkeitsgesetz zug\u00e4nglich sind oder nicht",
+            "description": "Angabe, ob die Unterlagen gem\u00e4ss \u00d6ffentlichkeitsgesetz zug\u00e4nglich sind oder nicht.",
             "_zope_schema_type": "Choice",
             "default": "unchecked",
             "enum": [
@@ -137,13 +137,20 @@
             "type": "string",
             "title": "Beschreibung",
             "description": "Eine kurze Beschreibung des Inhalts.",
-            "_zope_schema_type": "Text"
+            "_zope_schema_type": "Text",
+            "default": null
         },
         "referenced_activity": {
             "type": "string",
             "title": "Leistung",
             "description": "",
             "_zope_schema_type": "TextLine"
+        },
+        "allow_add_businesscase_dossier": {
+            "type": "boolean",
+            "title": "Hinzuf\u00fcgen von Gesch\u00e4ftsdossiers erlauben",
+            "description": "W\u00e4hlen Sie, ob es in dieser Ordnungsposition erlaubt ist, Gesch\u00e4ftsdossiers hinzuzuf\u00fcgen. Ist diese Option deaktiviert, kann der Benutzer nur Dossiers aus einer Vorlage oder Spezialdossiers erstellen.",
+            "_zope_schema_type": "Bool"
         },
         "archival_value_annotation": {
             "type": "string",
@@ -164,6 +171,13 @@
             "description": "W\u00e4hlen Sie die Spezialdossiers aus, die in dieser Ordnungsposition erlaubt sind.",
             "_zope_schema_type": "List"
         },
+        "addable_dossier_templates": {
+            "type": "array",
+            "title": "Erlaubte Dossiervorlagen",
+            "description": "",
+            "_zope_schema_type": "RelationList",
+            "default": []
+        },
         "former_reference": {
             "type": "string",
             "title": "Fr\u00fcheres Zeichen",
@@ -176,12 +190,6 @@
             "description": "",
             "_zope_schema_type": "TextLine",
             "default": "<H\u00f6chste auf dieser Ebene vergebene Nummer + 1>"
-        },
-        "creators": {
-            "type": "array",
-            "title": "Autoren",
-            "description": "",
-            "_zope_schema_type": "Tuple"
         }
     },
     "anyOf": [
@@ -204,13 +212,13 @@
         "referenced_activity",
         "former_reference",
         "addable_dossier_types",
+        "allow_add_businesscase_dossier",
         "classification",
         "privacy_layer",
         "public_trial",
         "public_trial_statement",
         "title_de",
         "title_fr",
-        "creators",
         "retention_period",
         "retention_period_annotation",
         "archival_value",
@@ -218,6 +226,7 @@
         "custody_period",
         "date_of_cassation",
         "date_of_submission",
-        "reference_number_prefix"
+        "reference_number_prefix",
+        "addable_dossier_templates"
     ]
 }

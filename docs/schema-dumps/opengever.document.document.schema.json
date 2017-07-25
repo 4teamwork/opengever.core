@@ -4,74 +4,6 @@
     "title": "Dokument",
     "additionalProperties": false,
     "properties": {
-        "document_date": {
-            "type": "string",
-            "title": "Dokumentdatum",
-            "format": "date",
-            "description": "Datum des Dokuments",
-            "_zope_schema_type": "Date",
-            "default": "<Aktuelles Datum>"
-        },
-        "receipt_date": {
-            "type": "string",
-            "title": "Eingangsdatum",
-            "format": "date",
-            "description": "Datum, an dem das Dokument \u00fcber den Korrespondenzweg angekommen ist",
-            "_zope_schema_type": "Date"
-        },
-        "foreign_reference": {
-            "type": "string",
-            "title": "Fremdzeichen",
-            "description": "Referenz auf das entsprechende Dossier des Absenders",
-            "_zope_schema_type": "TextLine"
-        },
-        "file": {
-            "type": "string",
-            "title": "Datei",
-            "description": "Datei, die zu einem Dossier hinzugef\u00fcgt wird",
-            "_zope_schema_type": "NamedBlobFile"
-        },
-        "classification": {
-            "type": "string",
-            "title": "Klassifikation",
-            "description": "Grad, in dem die Unterlagen vor unberechtigter Einsicht gesch\u00fctzt werden m\u00fcssen",
-            "_zope_schema_type": "Choice",
-            "default": "unprotected",
-            "enum": [
-                "unprotected",
-                "confidential",
-                "classified"
-            ]
-        },
-        "privacy_layer": {
-            "type": "string",
-            "title": "Datenschutzstufe",
-            "description": "Markierung, die angibt, ob die Unterlagen besonders sch\u00fctzenswerte Personendaten oder Pers\u00f6nlichkeitsprofile gem\u00e4ss Datenschutzrecht enthalten",
-            "_zope_schema_type": "Choice",
-            "default": "privacy_layer_no",
-            "enum": [
-                "privacy_layer_no",
-                "privacy_layer_yes"
-            ]
-        },
-        "document_author": {
-            "type": "string",
-            "title": "Autor",
-            "description": "Nachname Vorname oder ein Benutzerk\u00fcrzel (wird automatisch nach Nachname Vorname aufgel\u00f6st).",
-            "_zope_schema_type": "TextLine"
-        },
-        "title": {
-            "type": "string",
-            "title": "Titel",
-            "description": "",
-            "_zope_schema_type": "TextLine"
-        },
-        "archival_file": {
-            "type": "string",
-            "title": "Archivdatei",
-            "description": "Archivtaugliche Version der Originaldatei",
-            "_zope_schema_type": "NamedBlobFile"
-        },
         "document_type": {
             "type": "string",
             "title": "Dokumenttyp",
@@ -87,6 +19,68 @@
                 "contract",
                 "directive"
             ]
+        },
+        "receipt_date": {
+            "type": "string",
+            "title": "Eingangsdatum",
+            "format": "date",
+            "description": "Datum, an dem das Dokument \u00fcber den Korrespondenzweg angekommen ist",
+            "_zope_schema_type": "Date"
+        },
+        "document_date": {
+            "type": "string",
+            "title": "Dokumentdatum",
+            "format": "date",
+            "description": "Datum des Dokuments",
+            "_zope_schema_type": "Date",
+            "default": "<Aktuelles Datum>"
+        },
+        "file": {
+            "type": "string",
+            "title": "Datei",
+            "description": "Datei, die zu einem Dossier hinzugef\u00fcgt wird",
+            "_zope_schema_type": "NamedBlobFile"
+        },
+        "classification": {
+            "type": "string",
+            "title": "Klassifikation",
+            "description": "Grad, in dem die Unterlagen vor unberechtigter Einsicht gesch\u00fctzt werden m\u00fcssen.",
+            "_zope_schema_type": "Choice",
+            "default": "unprotected",
+            "enum": [
+                "unprotected",
+                "confidential",
+                "classified"
+            ]
+        },
+        "privacy_layer": {
+            "type": "string",
+            "title": "Datenschutzstufe",
+            "description": "Markierung, die angibt, ob die Unterlagen besonders sch\u00fctzenswerte Personendaten oder Pers\u00f6nlichkeitsprofile gem\u00e4ss Datenschutzrecht enthalten.",
+            "_zope_schema_type": "Choice",
+            "default": "privacy_layer_no",
+            "enum": [
+                "privacy_layer_no",
+                "privacy_layer_yes"
+            ]
+        },
+        "document_author": {
+            "type": "string",
+            "title": "Autor",
+            "description": "Nachname Vorname oder ein Benutzerk\u00fcrzel (wird automatisch nach Nachname Vorname aufgel\u00f6st)",
+            "_zope_schema_type": "TextLine"
+        },
+        "title": {
+            "type": "string",
+            "title": "Titel",
+            "description": "",
+            "_zope_schema_type": "TextLine"
+        },
+        "archival_file": {
+            "type": "string",
+            "title": "Archivdatei",
+            "description": "Archivtaugliche Version der Originaldatei",
+            "_zope_schema_type": "NamedBlobFile"
         },
         "relatedItems": {
             "type": "array",
@@ -105,7 +99,7 @@
         "public_trial": {
             "type": "string",
             "title": "\u00d6ffentlichkeitsstatus",
-            "description": "Angabe, ob die Unterlagen gem\u00e4ss \u00d6ffentlichkeitsgesetz zug\u00e4nglich sind oder nicht",
+            "description": "Angabe, ob die Unterlagen gem\u00e4ss \u00d6ffentlichkeitsgesetz zug\u00e4nglich sind oder nicht.",
             "_zope_schema_type": "Choice",
             "default": "unchecked",
             "enum": [
@@ -118,7 +112,7 @@
         "keywords": {
             "type": "array",
             "title": "Schlagworte",
-            "description": "",
+            "description": "Schlagw\u00f6rter zur Umschreibung eines Dossiers. Nicht zu verwechseln mit der Ordnungsposition",
             "_zope_schema_type": "Tuple"
         },
         "archival_file_state": {
@@ -127,11 +121,11 @@
             "description": "",
             "_zope_schema_type": "Int"
         },
-        "creators": {
-            "type": "array",
-            "title": "Autoren",
-            "description": "",
-            "_zope_schema_type": "Tuple"
+        "foreign_reference": {
+            "type": "string",
+            "title": "Fremdzeichen",
+            "description": "Referenz auf das entsprechende Dossier des Absenders",
+            "_zope_schema_type": "TextLine"
         },
         "preserved_as_paper": {
             "type": "boolean",
@@ -151,13 +145,13 @@
             "type": "string",
             "title": "Beschreibung",
             "description": "",
-            "_zope_schema_type": "Text"
+            "_zope_schema_type": "Text",
+            "default": null
         }
     },
     "field_order": [
         "title",
         "file",
-        "creators",
         "classification",
         "privacy_layer",
         "public_trial",

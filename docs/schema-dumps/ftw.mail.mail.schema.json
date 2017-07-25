@@ -4,6 +4,16 @@
     "title": "E-Mail",
     "additionalProperties": false,
     "properties": {
+        "message_source": {
+            "type": "string",
+            "title": "Quelle Originalnachricht",
+            "description": "",
+            "_zope_schema_type": "Choice",
+            "enum": [
+                "mailin",
+                "upload"
+            ]
+        },
         "document_type": {
             "type": "string",
             "title": "Dokumenttyp",
@@ -31,12 +41,13 @@
             "type": "string",
             "title": "Beschreibung",
             "description": "",
-            "_zope_schema_type": "Text"
+            "_zope_schema_type": "Text",
+            "default": null
         },
         "classification": {
             "type": "string",
             "title": "Klassifikation",
-            "description": "Grad, in dem die Unterlagen vor unberechtigter Einsicht gesch\u00fctzt werden m\u00fcssen",
+            "description": "Grad, in dem die Unterlagen vor unberechtigter Einsicht gesch\u00fctzt werden m\u00fcssen.",
             "_zope_schema_type": "Choice",
             "default": "unprotected",
             "enum": [
@@ -48,7 +59,7 @@
         "privacy_layer": {
             "type": "string",
             "title": "Datenschutzstufe",
-            "description": "Markierung, die angibt, ob die Unterlagen besonders sch\u00fctzenswerte Personendaten oder Pers\u00f6nlichkeitsprofile gem\u00e4ss Datenschutzrecht enthalten",
+            "description": "Markierung, die angibt, ob die Unterlagen besonders sch\u00fctzenswerte Personendaten oder Pers\u00f6nlichkeitsprofile gem\u00e4ss Datenschutzrecht enthalten.",
             "_zope_schema_type": "Choice",
             "default": "privacy_layer_no",
             "enum": [
@@ -59,7 +70,7 @@
         "document_author": {
             "type": "string",
             "title": "Autor",
-            "description": "Nachname Vorname oder ein Benutzerk\u00fcrzel (wird automatisch nach Nachname Vorname aufgel\u00f6st).",
+            "description": "Nachname Vorname oder ein Benutzerk\u00fcrzel (wird automatisch nach Nachname Vorname aufgel\u00f6st)",
             "_zope_schema_type": "TextLine"
         },
         "archival_file_state": {
@@ -67,6 +78,12 @@
             "title": "Status Archivdatei",
             "description": "",
             "_zope_schema_type": "Int"
+        },
+        "original_message": {
+            "type": "string",
+            "title": "Quelldatei im *.msg Format vor der Konvertierung",
+            "description": "",
+            "_zope_schema_type": "NamedBlobFile"
         },
         "archival_file": {
             "type": "string",
@@ -84,7 +101,7 @@
         "public_trial": {
             "type": "string",
             "title": "\u00d6ffentlichkeitsstatus",
-            "description": "Angabe, ob die Unterlagen gem\u00e4ss \u00d6ffentlichkeitsgesetz zug\u00e4nglich sind oder nicht",
+            "description": "Angabe, ob die Unterlagen gem\u00e4ss \u00d6ffentlichkeitsgesetz zug\u00e4nglich sind oder nicht.",
             "_zope_schema_type": "Choice",
             "default": "unchecked",
             "enum": [
@@ -97,7 +114,7 @@
         "keywords": {
             "type": "array",
             "title": "Schlagworte",
-            "description": "",
+            "description": "Schlagw\u00f6rter zur Umschreibung eines Dossiers. Nicht zu verwechseln mit der Ordnungsposition",
             "_zope_schema_type": "Tuple"
         },
         "title": {
@@ -158,6 +175,8 @@
         "preserved_as_paper",
         "archival_file",
         "archival_file_state",
-        "title"
+        "title",
+        "original_message",
+        "message_source"
     ]
 }
