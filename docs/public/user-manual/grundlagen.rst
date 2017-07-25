@@ -167,15 +167,15 @@ In der Detail-Ansicht kann folgendes ausgeführt werden:
 1. Mittels den Pfeilen kann zwischen den verschiedenen Dokumenten geswitcht
    werden.
 
-2. Auschecken / bearbeiten
+2. Metadaten bearbeiten
 
-3. Metadaten bearbeiten
+3. Auschecken / Bearbeiten
 
 4. Kopie herunterladen
 
 5. Dokument als PDF öfnnen
 
-6. Dokumentvorschau öffnen
+6. Detailansicht öffnen
 
 |img-grundlagen-13|
 
