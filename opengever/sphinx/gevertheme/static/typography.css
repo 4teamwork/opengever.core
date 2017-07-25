@@ -82,3 +82,7 @@ div.sphinxsidebar h3, div.sphinxsidebar h4 {
 div.sphinxsidebar p.logo {
     margin-top: 0px;
 }
+
+div.sphinxsidebar li.current a.current {
+    font-weight: bold;
+}
