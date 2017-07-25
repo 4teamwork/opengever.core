@@ -15,7 +15,7 @@ Release 3.10
    overview
    grundlagen
    dossiers
-   dokumente
+   dokumente/index
    kontakte
    suchen
    posteingang
