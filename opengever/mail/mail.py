@@ -117,7 +117,7 @@ class IOGMail(form.Schema):
     message_source = schema.Choice(
         title=_('label_message_source',
                 default='Message source'),
-        source=get_message_source_vocabulary(),
+        vocabulary=get_message_source_vocabulary(),
         required=False,
     )
 
