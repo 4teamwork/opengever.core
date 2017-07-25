@@ -3,8 +3,6 @@
                     data-favorites-url view/favorites_url;
                     data-favorites-cache-param view/favorites_cache_param;
                     data-context-url view/context_url"
-    i18n:attributes="data-i18n-add-to-favorites label_add_to_favorites;
-                     data-i18n-remove-from-favorites label_remove_from_favorites;"
     i18n:domain="opengever.portlets.tree"
     tal:define="portal_url context/@@plone_portal_state/portal_url">
 

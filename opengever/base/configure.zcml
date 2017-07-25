@@ -110,6 +110,15 @@
       permission="zope2.View"
       />
 
+  <!-- JSON endpoint for javascript translations -->
+  <plone:service
+      method="GET"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".service.Internationalization"
+      name="@i18n"
+      permission="zope2.View"
+      />
+
   <adapter
       for="*
            opengever.base.interfaces.IOpengeverBaseLayer"

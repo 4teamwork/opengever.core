@@ -45,6 +45,7 @@ graph = {
     'pin': ['jquery'],
     'prepoverlay': ['jquery'],
     'ajax-prefilter': ['jquery'],
+    'i18n': ['jquery'],
 }
 
 print tarjan(graph)
