@@ -43,7 +43,7 @@ class TestOrgUnitSelector(unittest2.TestCase):
                                    [self.unit_a, self.unit_b])
 
         self.assertEquals(self.unit_a, selector.get_current_unit())
-        self.assertEquals({'current_org_unit': 'clienta'}, storage)
+        self.assertEquals({CURRENT_ORG_UNIT_KEY: 'clienta'}, storage)
 
     def test_fallback_is_first_of_intersection_between_users_and_current_adminunit_units(self):
         selector = OrgUnitSelector({},
