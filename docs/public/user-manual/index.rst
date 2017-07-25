@@ -14,7 +14,7 @@ Release 3.10
 
    overview
    grundlagen
-   dossiers
+   dossiers/index
    dokumente/index
    kontakte
    suchen
