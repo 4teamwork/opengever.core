@@ -19,9 +19,9 @@ Office bekannten Vorlagen-Formaten und deren Anwendungsmöglichkeiten.
 Die in OneGov GEVER abgelegten Vorlagen werden deshalb anders als die
 Office-Vorlagenformate (.dot, .xlt, .pot) im normalen Office-Format
 (.doc, .xls, .ppt) in OneGov GEVER gespeichert und verwendet. Beim
-Erstellen eines Dokuments aus einer Vorlage (siehe :ref:`dokument-aus-vorlage`)
-wird denn auch „nur“ eine Kopie der abgelegten Vorlage geöffnet und zur
-Bearbeitung als neues Dokument in OneGov GEVER angelegt.
+Erstellen eines Dokuments aus einer Vorlage wird denn auch „nur“ eine Kopie der
+abgelegten Vorlage geöffnet und zur Bearbeitung als neues Dokument in
+OneGov GEVER angelegt.
 
 Eine neue Dokumentvorlage erstellen
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

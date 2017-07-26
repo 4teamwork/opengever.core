@@ -13,7 +13,7 @@ importiert werden, gehen Sie wie folgt vor:
 
 - Darauf wird in Outlook ein neues E-Mail-Formular geöffnet. Klicken
   Sie auf *Element anfügen* und wählen Sie anschliessend aus dem
-  Posteingang das zu importierende E-Mail aus und bestätigen Sie mit
+  Posteingang das zu importierende E-Mail aus und bestätigend Sie mit
   *OK*.
 
 - Fügen Sie das E-Mail immer als Anhang hinzu, selbst wenn dem E-Mail
