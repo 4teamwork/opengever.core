@@ -16,6 +16,7 @@ from plone.app.testing import login
 from plone.app.testing import SITE_OWNER_NAME
 from time import time
 from zope.component.hooks import getSite
+import pytz
 
 
 class OpengeverContentFixture(object):
@@ -40,6 +41,7 @@ class OpengeverContentFixture(object):
         with self.freeze_at_hour(14):
             with self.login(self.dossier_responsible):
                 self.create_treaty_dossiers()
+                self.create_empty_dossier()
 
         with self.freeze_at_hour(15):
             with self.login(self.dossier_responsible):
@@ -73,6 +75,8 @@ class OpengeverContentFixture(object):
             'dossier_responsible', u'Robert', u'Ziegler')
         self.regular_user = self.create_user(
             'regular_user', u'K\xe4thi', u'B\xe4rfuss')
+        self.secretariat_user = self.create_user(
+            'secretariat_user', u'J\xfcrgen', u'K\xf6nig')
 
     @staticuid()
     def create_repository_tree(self):
@@ -82,6 +86,8 @@ class OpengeverContentFixture(object):
                     title_fr=u'Syst\xe8me de classement')))
         self.root.manage_setLocalRoles(self.org_unit.users_group_id,
                                        ('Reader', 'Contributor', 'Editor'))
+        self.root.manage_setLocalRoles(self.secretariat_user.getId(),
+                                       ('Reviewer', 'Publisher'))
         self.root.reindexObjectSecurity()
 
         self.repofolder0 = self.register('branch_repofolder', create(
@@ -120,7 +126,7 @@ class OpengeverContentFixture(object):
             .having(protocol_template=self.sablon_template,
                     excerpt_template=self.sablon_template)))
 
-        self.register('committee', self.create_committee(
+        self.committee = self.register('committee', self.create_committee(
             title=u'Rechnungspr\xfcfungskommission',
             repository_folder=self.repofolder1,
             group_id='committee_rpk_group',
@@ -137,8 +143,57 @@ class OpengeverContentFixture(object):
                     keywords=(u'Finanzverwaltung', u'Vertr\xe4ge'),
                     start=date(2016, 1, 1),
                     responsible='hugo.boss')))
-        self.register('subdossier',
-                      create(Builder('dossier').within(self.dossier).titled(u'2016')))
+
+        document = self.register('document', create(
+            Builder('document').within(self.dossier)
+            .titled(u'Vertr\xe4gsentwurf')
+            .attach_file_containing('Word dummy content',
+                                    u'vertrasentwurf.docx')))
+
+        task = self.register('task', create(
+            Builder('task').within(self.dossier)
+            .titled(u'Vertragsentwurf \xdcberpr\xfcfen')
+            .having(responsible_client=self.org_unit.id(),
+                    responsible=self.regular_user.getId(),
+                    issuer=self.dossier_responsible.getId(),
+                    task_type='correction',
+                    deadline=date(2016, 11, 1))
+            .in_state('task-state-in-progress')
+            .relate_to(document)))
+
+        self.register('subtask', create(
+            Builder('task').within(task)
+            .titled(u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen')
+            .having(responsible_client=self.org_unit.id(),
+                    responsible=self.regular_user.getId(),
+                    issuer=self.dossier_responsible.getId(),
+                    task_type='correction',
+                    deadline=date(2016, 11, 1))
+            .in_state('task-state-resolved')
+            .relate_to(document)))
+
+        self.register('taskdocument', create(
+            Builder('document').within(task)
+            .titled(u'Feedback zum Vertragsentwurf')
+            .attach_file_containing('Feedback text',
+                                    u'vertr\xe4g sentwurf.docx')))
+
+        self.register('proposal', create(
+            Builder('proposal').within(self.dossier)
+            .having(title=u'Vertragsentwurf f\xfcr weitere Bearbeitung bewilligen',
+                    committee=self.committee.load_model())
+            .relate_to(document)))
+
+        subdossier = self.register('subdossier', create(
+            Builder('dossier').within(self.dossier).titled(u'2016')))
+
+        self.register('subdossier2', create(
+            Builder('dossier').within(self.dossier).titled(u'2015')))
+
+        self.register('subdocument', create(
+            Builder('document').within(subdossier)
+            .titled(u'\xdcbersicht der Vertr\xe4ge von 2016')
+            .attach_file_containing('Excel dummy content', u'tab\xe4lle.xlsx')))
 
         self.register('archive_dossier', create(
             Builder('dossier').within(self.repofolder00)
@@ -149,6 +204,14 @@ class OpengeverContentFixture(object):
                     end=date(2015, 12, 31),
                     responsible='hugo.boss')
             .in_state('dossier-state-resolved')))
+
+    @staticuid()
+    def create_empty_dossier(self):
+        self.register('empty_dossier', create(
+            Builder('dossier').within(self.repofolder00)
+            .titled(u'An empty dossier')
+            .having(start=date(2016, 1, 1),
+                    responsible='hugo.boss')))
 
     @staticuid()
     def create_emails(self):
@@ -183,7 +246,7 @@ class OpengeverContentFixture(object):
         We move it two minutes because the catalog rounds times sometimes to
         minute precision and we want to be more precise.
         """
-        with freeze(datetime(2016, 8, 31, hour, 1, 33)) as clock:
+        with freeze(datetime(2016, 8, 31, hour, 1, 33, tzinfo=pytz.UTC)) as clock:
             with ticking_creator(clock, minutes=2):
                 yield
 

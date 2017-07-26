@@ -1,38 +1,36 @@
-from ftw.builder import Builder
-from ftw.builder import create
-from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from zope.component import getAdapter
 
 
-class TestParentDossierFinder(FunctionalTestCase):
+class TestParentDossierFinder(IntegrationTestCase):
 
     def test_find_dossier_returns_first_dossierish_parent(self):
-        dossier = create(Builder('dossier'))
-        document_1 = create(Builder('document').within(dossier))
+        self.login(self.dossier_responsible)
+        self.assertEquals(
+            self.dossier,
+            getAdapter(self.document,
+                       name='parent-dossier-finder').find_dossier())
 
-        subdossier = create(Builder('dossier').within(dossier))
-        document_2 = create(Builder('document').within(subdossier))
-
-        finder = getAdapter(document_1, name='parent-dossier-finder')
-        self.assertEquals(dossier, finder.find_dossier())
-
-        finder = getAdapter(document_2, name='parent-dossier-finder')
-        self.assertEquals(subdossier, finder.find_dossier())
+        self.assertEquals(
+            self.subdossier,
+            getAdapter(self.subdocument,
+                       name='parent-dossier-finder').find_dossier())
 
     def test_find_dossier_works_for_tasks_and_subtask(self):
-        dossier = create(Builder('dossier'))
-        task = create(Builder('task').within(dossier))
-        subtask = create(Builder('task').within(task))
+        self.login(self.dossier_responsible)
+        self.assertEquals(
+            self.dossier,
+            getAdapter(self.task,
+                       name='parent-dossier-finder').find_dossier())
 
-        finder = getAdapter(task, name='parent-dossier-finder')
-        self.assertEquals(dossier, finder.find_dossier())
-        finder = getAdapter(subtask, name='parent-dossier-finder')
-        self.assertEquals(dossier, finder.find_dossier())
+        self.assertEquals(
+            self.dossier,
+            getAdapter(self.subtask,
+                       name='parent-dossier-finder').find_dossier())
 
-    def test_find_dossier_handles_document_inside_a_task_correclty(self):
-        dossier = create(Builder('dossier'))
-        task = create(Builder('task').within(dossier))
-        document = create(Builder('document').within(task))
-
-        finder = getAdapter(document, name='parent-dossier-finder')
-        self.assertEquals(dossier, finder.find_dossier())
+    def test_find_dossier_handles_document_inside_a_task_correctly(self):
+        self.login(self.dossier_responsible)
+        self.assertEquals(
+            self.dossier,
+            getAdapter(self.taskdocument,
+                       name='parent-dossier-finder').find_dossier())

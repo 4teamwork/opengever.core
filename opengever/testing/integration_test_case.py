@@ -4,17 +4,25 @@ from contextlib import contextmanager
 from ftw.flamegraph import flamegraph
 from functools import wraps
 from opengever.core.testing import OPENGEVER_INTEGRATION_TESTING
+from opengever.task.task import ITask
+from operator import methodcaller
 from plone import api
+from plone.app.testing import applyProfile
 from plone.app.testing import login
 from plone.app.testing import SITE_OWNER_NAME
 from time import clock
 from unittest2 import TestCase
+import timeit
 
 
 FEATURE_FLAGS = {
     'meeting': 'opengever.meeting.interfaces.IMeetingSettings.is_feature_enabled',
     'dossiertemplate': ('opengever.dossier.dossiertemplate'
                         '.interfaces.IDossierTemplateSettings.is_feature_enabled'),
+}
+
+FEATURE_PROFILES = {
+    'filing_number': 'opengever.dossier:filing',
 }
 
 
@@ -79,6 +87,32 @@ class IntegrationTestCase(TestCase):
         """
         return flamegraph(open_svg=True)(func)
 
+    @staticmethod
+    def clock(func):
+        """Decorator for measuring the duration of a test and printing the result.
+        This function is meant to be used temporarily in development.
+
+        Example:
+        @IntegrationTestCase.clock
+        def test_something(self):
+            pass
+        """
+
+        @wraps(func)
+        def wrapper(self, *args, **kwargs):
+            timer = timeit.default_timer
+            start = timer()
+            try:
+                return func(self, *args, **kwargs)
+            finally:
+                end = timer()
+                print ''
+                print '{}.{} took {:.3f} ms'.format(
+                    type(self).__name__,
+                    func.__name__,
+                    (end-start) * 1000)
+        return wrapper
+
     def login(self, user, browser=None):
         """Login a user by passing in the user object.
         Common users are available through the USER_LOOKUP_TABLE.
@@ -125,7 +159,12 @@ class IntegrationTestCase(TestCase):
     def activate_feature(self, feature):
         """Activate a feature flag.
         """
-        api.portal.set_registry_record(FEATURE_FLAGS[feature], True)
+        if feature in FEATURE_FLAGS:
+            api.portal.set_registry_record(FEATURE_FLAGS[feature], True)
+        elif feature in FEATURE_PROFILES:
+            applyProfile(self.portal, FEATURE_PROFILES[feature])
+        else:
+            raise ValueError('Invalid {!r}'.format(feature))
 
     def __getattr__(self, name):
         """Make it possible to access objects from the content lookup table
@@ -136,6 +175,13 @@ class IntegrationTestCase(TestCase):
             return obj
         else:
             return self.__getattribute__(name)
+
+    @property
+    def dossier_tasks(self):
+        """All tasks within self.dossier.
+        """
+        return map(self.brain_to_object,
+                   api.content.find(self.dossier, object_provides=ITask))
 
     def _lookup_from_table(self, name):
         """This method helps to look up persistent objects or user objects which
@@ -161,3 +207,113 @@ class IntegrationTestCase(TestCase):
 
         else:
             raise ValueError('Unsupport lookup entry type {!r}'.format(type_))
+
+    def get_catalog_indexdata(self, obj):
+        """Return the catalog index data for an object as dict.
+        """
+        catalog = api.portal.get_tool('portal_catalog')
+        rid = catalog.getrid('/'.join(obj.getPhysicalPath()))
+        return catalog.getIndexDataForRID(rid)
+
+    def assert_index_value(self, expected_value, index_name, *objects):
+        """Asserts that an index exists and has a specific value for a
+        given object.
+        """
+        for obj in objects:
+            index_data = self.get_catalog_indexdata(obj)
+            self.assertIn(
+                index_name, index_data,
+                'Index {!r} does not exist.'.format(index_name))
+            self.assertEquals(
+                expected_value, index_data[index_name],
+                'Unexpected index value {!r} in index {!r} for {!r}'.format(
+                    index_data[index_name], index_name, obj))
+
+    def get_catalog_metadata(self, obj):
+        """Return the catalog metadata for an object as dict.
+        """
+        catalog = api.portal.get_tool('portal_catalog')
+        rid = catalog.getrid('/'.join(obj.getPhysicalPath()))
+        return catalog.getMetadataForRID(rid)
+
+    def assert_metadata_value(self, expected_value, metadata_name, *objects):
+        """Asserts that an metadata exists and has a specific value for a
+        given object.
+        """
+        for obj in objects:
+            metadata = self.get_catalog_metadata(obj)
+            self.assertIn(
+                metadata_name, metadata,
+                'Metadata {!r} does not exist.'.format(metadata_name))
+            self.assertEquals(
+                expected_value, metadata[metadata_name],
+                'Unexpected metadata value {!r} in metadata {!r} for {!r}'.format(
+                    metadata[metadata_name], metadata_name, obj))
+
+    def assert_index_and_metadata(self, expected_value, name, *objects):
+        """Assert that an index and a metadata with the same name both exist
+        and have the same value for a given object.
+        """
+        self.assert_index_value(expected_value, name, *objects)
+        self.assert_metadata_value(expected_value, name, *objects)
+
+    def set_workflow_state(self, new_workflow_state_id, *objects):
+        """Set the workflow state of one or many objects.
+        When the state is changed for multiple nested objects at once, the
+        method can optimize reindexing security so that it is not executed
+        multiple times for the same object.
+        """
+        wftool = api.portal.get_tool('portal_workflow')
+
+        for obj in objects:
+            chain = wftool.getChainFor(obj)
+            self.assertEquals(
+                1, len(chain),
+                'set_workflow_state does only support objects with'
+                ' exactly one workflow, but {!r} has {!r}.'.format(obj, chain))
+            workflow = wftool[chain[0]]
+            self.assertIn(new_workflow_state_id, workflow.states)
+
+            wftool.setStatusOf(chain[0], obj, {
+                'review_state': new_workflow_state_id,
+                'action': '',
+                'actor': ''})
+            workflow.updateRoleMappingsFor(obj)
+            obj.reindexObject(idxs=['review_state'])
+
+        # reindexObjectSecurity is recursive. We should avoid updating the same
+        # object twice when the parent is changed too.
+        security_reindexed = []
+        for obj in sorted(objects, key=methodcaller('getPhysicalPath')):
+            current_path = '/'.join(obj.getPhysicalPath())
+            if any(filter(lambda path: current_path.startswith(path),
+                          security_reindexed)):
+                # We just have updated the security of a parent recursively,
+                # thus the security of ``obj`` must be up to date at this point.
+                break
+
+            obj.reindexObjectSecurity()
+            security_reindexed.append(current_path)
+
+    def assert_workflow_state(self, workflow_state_id, obj):
+        """Assert the workflow state of an object and of its brain.
+        """
+
+        expected = {
+            'object': workflow_state_id,
+            'catalog index': workflow_state_id,
+            'catalog metadata': workflow_state_id}
+
+        got = {
+            'object': api.content.get_state(obj),
+            'catalog index': self.get_catalog_indexdata(obj)['review_state'],
+            'catalog metadata': self.get_catalog_metadata(obj)['review_state']}
+
+        self.assertEqual(
+            expected, got,
+            'Object {!r} has an incorrect workflow state.'.format(obj))
+
+    def brain_to_object(self, brain):
+        """Return the object of a brain.
+        """
+        return brain.getObject()
