@@ -354,7 +354,9 @@ class TestOverviewMeetingFeatures(FunctionalTestCase):
         self.document = create(Builder('document').within(self.dossier))
 
         container = create(Builder('committee_container'))
+        self.grant('MeetingUser', on=container)
         self.committee = create(Builder('committee').within(container))
+        self.grant('CommitteeResponsible', on=self.committee)
         self.proposal = create(Builder('proposal')
                                .within(self.dossier)
                                .having(title=u'Pr\xf6posal',

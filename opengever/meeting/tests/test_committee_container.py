@@ -103,8 +103,8 @@ class TestCommitteesTab(FunctionalTestCase):
 
     def setUp(self):
         super(TestCommitteesTab, self).setUp()
-
         self.container = create(Builder('committee_container'))
+        self.grant('MeetingUser', on=self.container)
         self.committee = create(Builder('committee')
                                 .within(self.container)
                                 .titled(u'Kleiner Burgerrat'))
@@ -133,8 +133,7 @@ class TestCommitteesTab(FunctionalTestCase):
         create(Builder('group')
                .with_groupid('kom_wirtschaft')
                .with_members(user))
-        # make committee-container accessible
-        self.container.manage_setLocalRoles('kom_wirtschaft', ['Reader'])
+        self.grant('MeetingUser', user_id='kom_wirtschaft', on=self.container)
 
         create(Builder('committee')
                .within(self.container)

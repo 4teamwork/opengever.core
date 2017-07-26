@@ -57,6 +57,8 @@ class TestPathBar(FunctionalTestCase):
                          .having(committee=committee.load_model())
                          .link_with(self.meeting_dossier))
 
+        self.grant('MeetingUser', on=container)
+        self.grant('CommitteeGroupMember', on=committee)
         browser.login().open(meeting.get_url())
         last_link = browser.css('#portal-breadcrumbs a')[-1]
         self.assertEqual(

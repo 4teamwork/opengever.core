@@ -223,6 +223,7 @@ class TestDocument(FunctionalTestCase):
         dossier = create(Builder('dossier').within(repo_folder))
         document = create(Builder('document').within(dossier))
         committee = create(Builder('committee'))
+        self.grant('CommitteeResponsible', on=committee)
         proposal, submitted_proposal = create(
             Builder('proposal').within(dossier)
                                .having(title='Mach doch',
