@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2017.4.0 (unreleased)
+2017.4.0 (2017-07-26)
 ---------------------
 
 - Fixed OGDS group sync, when lookup_groups_base is not defined. [phgross]
