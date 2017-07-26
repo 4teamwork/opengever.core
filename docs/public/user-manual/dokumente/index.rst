@@ -1,16 +1,13 @@
 Mit Dokumenten arbeiten
 =======================
 
-lorem ipsum
-
 .. toctree::
    :maxdepth: 2
 
    erstellen
+   ablegen
+   metadatenpflegen
    bearbeiten
    finden
-   einsehen
-   versenden
-   ablegen
-   zip
+   diverseaktionen
    verwalten

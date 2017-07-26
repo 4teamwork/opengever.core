@@ -1,5 +1,5 @@
-Eine E-Mail im Dossier ablegen
-------------------------------
+E-Mail als Dokument ablegen
+===========================
 
 Eine E-Mail importieren
 ~~~~~~~~~~~~~~~~~~~~~~~

@@ -1,7 +1,7 @@
 .. _label-dokument-checkin:
 
-Dokumente bearbeiten (einchecken / auschecken )
----------------------------------------------------------------
+Dokumente bearbeiten
+====================
 
 External Editor / Office Connector
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

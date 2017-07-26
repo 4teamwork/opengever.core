@@ -1,5 +1,5 @@
 Ausgecheckte Dokumente finden
------------------------------
+=============================
 
 Wenn Sie OneGov GEVER über "GEVER verlassen" beenden, wird Ihnen
 untenstehende Meldung angezeigt, falls Sie noch ausgecheckte
