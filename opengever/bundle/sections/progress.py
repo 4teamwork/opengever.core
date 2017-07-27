@@ -5,9 +5,23 @@ from zope.annotation.interfaces import IAnnotations
 from zope.interface import classProvides
 from zope.interface import implements
 import logging
+import os
+import subprocess
+
 
 logger = logging.getLogger('opengever.bundle.progress')
 logger.setLevel(logging.INFO)
+
+
+def get_rss():
+    """Get current memory usage (RSS) of this process.
+    """
+    out = subprocess.check_output(
+        ["ps", "-p", "%s" % os.getpid(), "-o", "rss"])
+    try:
+        return int(out.splitlines()[-1].strip())
+    except ValueError:
+        return 0
 
 
 class ProgressSection(object):
@@ -34,6 +48,9 @@ class ProgressSection(object):
                 percentage = 100 * float(self.count) / float(self.total)
                 logger.info("%s of %s items (%.2f%%) processed." % (
                     self.count, self.total, percentage))
+
+                rss = get_rss() / 1024.0
+                logger.info("Current memory usage (RSS): %0.2f MB" % rss)
             yield item
 
         logger.info("Done. Processed %s items total." % self.count)
