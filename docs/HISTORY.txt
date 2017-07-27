@@ -5,6 +5,7 @@ Changelog
 2017.4.1 (unreleased)
 ---------------------
 
+- Bundle import: Display current memory usage (RSS) in progress logger. [lgraf]
 - Format line breaks in task descriptions. [tarnap]
 
 
