@@ -150,7 +150,7 @@
        :Datentyp: ``Choice``
        
        :Default: "unprotected"
-       :Beschreibung: Grad, in dem die Unterlagen vor unberechtigter Einsicht geschützt werden müssen
+       :Beschreibung: Grad, in dem die Unterlagen vor unberechtigter Einsicht geschützt werden müssen.
        :Wertebereich: ["unprotected", "confidential", "classified"]
 
 
@@ -160,7 +160,7 @@
        :Datentyp: ``Choice``
        
        :Default: "privacy_layer_no"
-       :Beschreibung: Markierung, die angibt, ob die Unterlagen besonders schützenswerte Personendaten oder Persönlichkeitsprofile gemäss Datenschutzrecht enthalten
+       :Beschreibung: Markierung, die angibt, ob die Unterlagen besonders schützenswerte Personendaten oder Persönlichkeitsprofile gemäss Datenschutzrecht enthalten.
        :Wertebereich: ["privacy_layer_no", "privacy_layer_yes"]
 
 
@@ -170,7 +170,7 @@
        :Datentyp: ``Choice``
        
        :Default: "unchecked"
-       :Beschreibung: Angabe, ob die Unterlagen gemäss Öffentlichkeitsgesetz zugänglich sind oder nicht
+       :Beschreibung: Angabe, ob die Unterlagen gemäss Öffentlichkeitsgesetz zugänglich sind oder nicht.
        :Wertebereich: ["unchecked", "public", "limited-public", "private"]
 
 
@@ -190,7 +190,7 @@
        :Datentyp: ``Choice``
        
        :Default: 5
-       :Beschreibung: Zeitraum zwischen dem jüngsten Dokumentdatum eines in einem Dossier enthaltenen Dokuments und dem Zeitpunkt, an dem dieses für die Geschäftstätigkeit der Verwaltungseinheit nicht mehr benötigt wird
+       :Beschreibung: Zeitraum zwischen dem jüngsten Dokumentdatum eines in einem Dossier enthaltenen Dokuments und dem Zeitpunkt, an dem dieses für die Geschäftstätigkeit der Verwaltungseinheit nicht mehr benötigt wird.
        :Wertebereich: [5, 10, 15, 20, 25]
 
 
@@ -230,7 +230,7 @@
        :Datentyp: ``Choice``
        
        :Default: 30
-       :Beschreibung: Dauer, während der nach der Archivierung die Dokumente vor öffentlicher Einsichtnahme geschützt sind
+       :Beschreibung: Dauer, während der nach der Archivierung die Dokumente vor öffentlicher Einsichtnahme geschützt sind.
        :Wertebereich: [0, 30, 100, 150]
 
 

@@ -3,8 +3,6 @@
 Mit Aufgaben arbeiten
 =====================
 
-Hier sind Aufgaben beschrieben.
-
 .. toctree::
    :maxdepth: 2
 
@@ -19,3 +17,5 @@ Hier sind Aufgaben beschrieben.
    mandantenuebergreifende_zusammenarbeit
    pendenzenkontrolle
    stellvertretung
+
+.. disqus::
