@@ -315,6 +315,8 @@ class MeetingView(BrowserView):
                 _('label_edit_cancel', default='Cancel'),
                 _('label_edit_save', default='Save'),
                 _('label_edit_action', default='edit title'),
+                _('label_edit_document_action',
+                  default='Checkout and edit word document.'),
                 _('label_delete_action', default='delete this agenda item'),
                 _('label_decide_action', default='Decide this agenda item'),
                 _('label_reopen_action', default='Reopen this agenda item'),

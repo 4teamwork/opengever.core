@@ -24,6 +24,7 @@ Changelog
   over the lifetime of the entire import. This lets the garbage collector
   do its job, and reduces growth of memory usage during import. [lgraf]
 - Bundle import: Display current memory usage (RSS) in progress logger. [lgraf]
+- Word meeting: quick edit proposal file in meeting view. [jone]
 - Word meeting: show proposal files in meeting view. [jone]
 - Reworked contact syncer functionality, to improve speed with bulk insert and updates. [phgross]
 - Format line breaks in task descriptions. [tarnap]

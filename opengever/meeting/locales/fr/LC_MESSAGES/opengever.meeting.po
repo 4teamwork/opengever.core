@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-07-28 09:01+0000\n"
+"POT-Creation-Date: 2017-07-28 13:53+0000\n"
 "PO-Revision-Date: 2017-06-22 09:02+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -68,7 +68,7 @@ msgid "Agenda Items"
 msgstr "Points de l'ordre du jour"
 
 #. Default: "An unexpected error has occurred"
-#: ./opengever/meeting/browser/meetings/meeting.py:361
+#: ./opengever/meeting/browser/meetings/meeting.py:363
 msgid "An unexpected error has occurred"
 msgstr "Une erreur imprévue est apparue"
 
@@ -353,52 +353,52 @@ msgid "active"
 msgstr "Actif"
 
 #. Default: "Agenda Item decided."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:238
+#: ./opengever/meeting/browser/meetings/agendaitem.py:255
 msgid "agenda_item_decided"
 msgstr "Le point de l'ordre du jour a été fixé."
 
 #. Default: "Agenda Item Successfully deleted"
-#: ./opengever/meeting/browser/meetings/agendaitem.py:218
+#: ./opengever/meeting/browser/meetings/agendaitem.py:235
 msgid "agenda_item_deleted"
 msgstr "Le point a été enlevé avec succès de l'ordre du jour."
 
 #. Default: "Agendaitem has been decided and the meeting has been held."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:243
+#: ./opengever/meeting/browser/meetings/agendaitem.py:260
 msgid "agenda_item_meeting_held"
 msgstr "Le point de l'ordre du jour a été fixé et la réunion a eu lieu."
 
 #. Default: "Agenda Item order updated."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:177
+#: ./opengever/meeting/browser/meetings/agendaitem.py:194
 msgid "agenda_item_order_updated"
 msgstr "L'ordre des points de l'ordre du jour a été actualisé."
 
 #. Default: "Agenda Item decided and excerpt generated."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:235
+#: ./opengever/meeting/browser/meetings/agendaitem.py:252
 msgid "agenda_item_proposal_decided"
 msgstr "Le point de l'ordre du jour a été fixé, l'extrait de protocole a été généré et renvoyé."
 
 #. Default: "Agenda Item successfully reopened."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:259
+#: ./opengever/meeting/browser/meetings/agendaitem.py:276
 msgid "agenda_item_reopened"
 msgstr "Le point d'ordre du jour a été rouvert."
 
 #. Default: "Agenda Item revised successfully."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:272
+#: ./opengever/meeting/browser/meetings/agendaitem.py:289
 msgid "agenda_item_revised"
 msgstr "Le point d'ordre du jour a été révisé avec succès."
 
 #. Default: "Agenda Item title must not be empty."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:190
+#: ./opengever/meeting/browser/meetings/agendaitem.py:207
 msgid "agenda_item_update_empty_string"
 msgstr "Le titre d'un point d'ordre du jour ne peut pas être laissé vide."
 
 #. Default: "Agenda Item title is too long."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:197
+#: ./opengever/meeting/browser/meetings/agendaitem.py:214
 msgid "agenda_item_update_too_long_title"
 msgstr "Le titre du point de l'ordre du jour est trop long."
 
 #. Default: "Agenda Item updated."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:203
+#: ./opengever/meeting/browser/meetings/agendaitem.py:220
 msgid "agenda_item_updated"
 msgstr "Le point de l'ordre du jour a été mis à jour avec succès."
 
@@ -553,6 +553,11 @@ msgstr "Décidé"
 msgid "description_group"
 msgstr "Pour ce groupe, les autorisations sont attribuées automatiquement au comité."
 
+#. Default: "You are not allowed to checkout the document."
+#: ./opengever/meeting/browser/meetings/agendaitem.py:306
+msgid "document_checkout_not_allowed"
+msgstr ""
+
 #. Default: "Dossier"
 #: ./opengever/meeting/tabs/meetinglisting.py:71
 msgid "dossier"
@@ -563,12 +568,12 @@ msgid "download protocol"
 msgstr "Télécharger le protocole"
 
 #. Default: "Paragraph must not be empty."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:284
+#: ./opengever/meeting/browser/meetings/agendaitem.py:323
 msgid "empty_paragraph"
 msgstr "Ce paragraphe ne doit pas rester vide."
 
 #. Default: "Proposal must not be empty."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:299
+#: ./opengever/meeting/browser/meetings/agendaitem.py:338
 msgid "empty_proposal"
 msgstr "Ce texte libre ne doit pas être vide."
 
@@ -648,7 +653,7 @@ msgid "label_agendaitem_list_template"
 msgstr "Modèle de la liste des points du jour"
 
 #. Default: "Attachments"
-#: ./opengever/meeting/browser/meetings/meeting.py:322
+#: ./opengever/meeting/browser/meetings/meeting.py:324
 #: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt:27
 #: ./opengever/meeting/browser/submitdocuments.py:40
 msgid "label_attachments"
@@ -826,6 +831,11 @@ msgstr "Modifier après avoir créé"
 msgid "label_edit_cancel"
 msgstr "Annuler"
 
+#. Default: "Checkout and edit word document."
+#: ./opengever/meeting/browser/meetings/meeting.py:318
+msgid "label_edit_document_action"
+msgstr ""
+
 #. Default: "Edit Membership"
 #: ./opengever/meeting/browser/memberships.py:73
 msgid "label_edit_membership"
@@ -959,7 +969,7 @@ msgid "label_no_memberships"
 msgstr "Cet utilisateur n'a pas d'adhésion."
 
 #. Default: "No proposals submitted"
-#: ./opengever/meeting/browser/meetings/meeting.py:331
+#: ./opengever/meeting/browser/meetings/meeting.py:333
 msgid "label_no_proposals"
 msgstr "Aucune proposition n'a été soumise."
 
@@ -1047,7 +1057,7 @@ msgid "label_sablon_template_file"
 msgstr "Fichier-modèle"
 
 #. Default: "Schedule"
-#: ./opengever/meeting/browser/meetings/meeting.py:330
+#: ./opengever/meeting/browser/meetings/meeting.py:332
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt:255
 msgid "label_schedule"
 msgstr "Mettre à l'ordre du jour"
@@ -1229,7 +1239,7 @@ msgid "overview"
 msgstr "Sommaire"
 
 #. Default: "Paragraph successfully added."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:288
+#: ./opengever/meeting/browser/meetings/agendaitem.py:327
 msgid "paragraph_added"
 msgstr "Paragraphe ajouté avec succès."
 
@@ -1398,7 +1408,7 @@ msgid "tab_matches"
 msgstr "${amount} résultats"
 
 #. Default: "Text successfully added."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:303
+#: ./opengever/meeting/browser/meetings/agendaitem.py:342
 msgid "text_added"
 msgstr "Texte libre ajouté avec succès."
 
