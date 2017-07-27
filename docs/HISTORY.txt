@@ -6,6 +6,9 @@ Changelog
 ---------------------
 
 - Upgrade plone.app.jquery from 1.7.2.1 to 1.11.2. [elioschmutz]
+- Bundle import: Don't unnecessarily keep references to persistent objects
+  over the lifetime of the entire import. This lets the garbage collector
+  do its job, and reduces growth of memory usage during import. [lgraf]
 - Bundle import: Display current memory usage (RSS) in progress logger. [lgraf]
 - Word meeting: show proposal files in meeting view. [jone]
 - Format line breaks in task descriptions. [tarnap]

@@ -1,6 +1,7 @@
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.utils import defaultMatcher
+from collective.transmogrifier.utils import traverse
 from ftw.mail.mail import IMail
 from mimetypes import guess_type
 from opengever.bundle.sections.bundlesource import BUNDLE_KEY
@@ -12,6 +13,7 @@ from opengever.mail.mail import initalize_title
 from opengever.mail.mail import initialize_metadata
 from opengever.mail.mail import IOGMail
 from opengever.mail.mail import NO_SUBJECT_TITLE_FALLBACK
+from plone import api
 from zope.annotation.interfaces import IAnnotations
 from zope.interface import classProvides
 from zope.interface import implements
@@ -41,6 +43,7 @@ class FileLoaderSection(object):
     def __init__(self, transmogrifier, name, options, previous):
         self.previous = previous
         self.context = transmogrifier.context
+        self.site = api.portal.get()
 
         # TODO: Might want to also use defaultMatcher for this key to make it
         # configurable instead of hard coding it here.
@@ -67,7 +70,7 @@ class FileLoaderSection(object):
                 yield item
                 continue
 
-            obj = item.get('_object')
+            obj = traverse(self.site, path, None)
             if obj is None:
                 logger.warning(
                     "Cannot set file. Document %s doesn't exist." % path)

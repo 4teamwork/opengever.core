@@ -48,7 +48,6 @@ class TestFileLoader(FunctionalTestCase):
             u"_type": u"opengever.document.document",
             u"_path": relative_path,
             u"filepath": u"files/beschluss.pdf",
-            u"_object": doc,
         }
         section = self.setup_section(previous=[item])
         list(section)
@@ -66,7 +65,6 @@ class TestFileLoader(FunctionalTestCase):
             u"_type": u"opengever.document.document",
             u"_path": relative_path,
             u"filepath": u"files/beschluss.pdf",
-            u"_object": doc,
         }
         section = self.setup_section(previous=[item])
         list(section)
@@ -81,7 +79,6 @@ class TestFileLoader(FunctionalTestCase):
             u"_type": u"opengever.document.document",
             u"_path": '/'.join(mail.getPhysicalPath()[2:]),
             u"filepath": u"files/missing.file",
-            u"_object": mail,
         }
         section = self.setup_section(previous=[item])
         list(section)
@@ -98,7 +95,6 @@ class TestFileLoader(FunctionalTestCase):
             u"_type": u"opengever.document.document",
             u"_path": '/'.join(mail.getPhysicalPath()[2:]),
             u"filepath": u'\\\\host\\unmapped\\foo.docx',
-            u"_object": mail,
         }
         section = self.setup_section(previous=[item])
         list(section)
@@ -120,7 +116,6 @@ class TestFileLoader(FunctionalTestCase):
             u"_type": u"ftw.mail.mail",
             u"_path": relative_path,
             u"filepath": u"files/sample.eml",
-            u"_object": mail,
         }
         section = self.setup_section(previous=[item])
         list(section)
@@ -141,7 +136,6 @@ class TestFileLoader(FunctionalTestCase):
             u"_path": relative_path,
             u"filepath": u"files/sample.eml",
             u"original_message_path": u"files/sample.msg",
-            u"_object": mail,
         }
         section = self.setup_section(previous=[item])
         list(section)
@@ -158,7 +152,6 @@ class TestFileLoader(FunctionalTestCase):
             u"_type": u"ftw.mail.mail",
             u"_path": '/'.join(mail2.getPhysicalPath()[2:]),
             u"filepath": u"files/sample.eml",
-            u"_object": mail2,
             u"title": 'Test Mail',
         }
         section = self.setup_section(previous=[item])
