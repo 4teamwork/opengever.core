@@ -14,7 +14,8 @@ class TestIntegrationTestCase(IntegrationTestCase):
 
     @browsing
     def test_login_browser(self, browser):
-        browser.open()
+        with browser.expect_unauthorized():
+            browser.open()
         self.assertFalse(plone.logged_in())
         self.login(self.regular_user, browser)
         browser.open()
@@ -39,7 +40,8 @@ class TestIntegrationTestCase(IntegrationTestCase):
 
     @browsing
     def test_login_as_context_manager_in_browser(self, browser):
-        browser.open()
+        with browser.expect_unauthorized():
+            browser.open()
         self.assertFalse(plone.logged_in())
 
         with self.login(self.regular_user, browser):
@@ -56,7 +58,8 @@ class TestIntegrationTestCase(IntegrationTestCase):
             self.assertEquals(self.regular_user.getProperty('fullname'),
                               plone.logged_in().encode('utf-8'))
 
-        browser.open()
+        with browser.expect_unauthorized():
+            browser.open()
         self.assertFalse(plone.logged_in())
 
     def test_get_catalog_indexdata(self):
