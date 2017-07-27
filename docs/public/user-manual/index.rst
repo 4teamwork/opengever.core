@@ -14,12 +14,12 @@ Release 3.10
 
    overview
    grundlagen
-   dossiers
-   dokumente
+   dossiers/index
+   dokumente/index
    kontakte
    suchen
    posteingang
-   aufgaben
+   aufgaben/index
    standardablaeufe
    meine_ablage
    sitzungs-und-protokollverwaltung
