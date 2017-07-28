@@ -1,8 +1,10 @@
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
+from collective.transmogrifier.utils import traverse
 from datetime import datetime
 from opengever.bundle.sections.bundlesource import BUNDLE_KEY
 from opengever.document.checkout.handlers import create_initial_version
+from plone import api
 from zope.annotation import IAnnotations
 from zope.interface import classProvides
 from zope.interface import implements
@@ -35,6 +37,7 @@ class PostProcessingSection(object):
     def __init__(self, transmogrifier, name, options, previous):
         self.previous = previous
         self.context = transmogrifier.context
+        self.site = api.portal.get()
         self.bundle = IAnnotations(transmogrifier)[BUNDLE_KEY]
 
     def __iter__(self):
@@ -50,7 +53,8 @@ class PostProcessingSection(object):
         for count, item in enumerate(items_to_post_process, start=1):
             if item['_type'] in VERSIONABLE_TYPES:
                 log.info("Creating initial version: %s" % item['_path'])
-                create_initial_version(item['_object'])
+                obj = traverse(self.site, item['_path'], None)
+                create_initial_version(obj)
 
             if count % INTERMEDIATE_COMMIT_INTERVAL == 0:
                 self.commit_and_log(
