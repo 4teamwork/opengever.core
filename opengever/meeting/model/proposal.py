@@ -1,11 +1,10 @@
 from opengever.base.model import Base
-from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.base.utils import escape_html
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
+from opengever.meeting.interfaces import IHistory
 from opengever.meeting.model import AgendaItem
-from opengever.meeting.model import proposalhistory
 from opengever.meeting.model.generateddocument import GeneratedExcerpt
 from opengever.meeting.workflow import State
 from opengever.meeting.workflow import Transition
@@ -122,9 +121,6 @@ class Proposal(Base):
     dossier_reference_number = Column(UnicodeCoercingText, nullable=False)
     repository_folder_title = Column(UnicodeCoercingText, nullable=False)
     language = Column(String(8), nullable=False)
-
-    history_records = relationship('ProposalHistory',
-                                   order_by="desc(ProposalHistory.created)")
 
     # workflow definition
     STATE_PENDING = State('pending', is_default=True,
@@ -267,9 +263,10 @@ class Proposal(Base):
         assert self.can_be_scheduled()
 
         self.execute_transition('submitted-scheduled')
-        session = create_session()
         meeting.agenda_items.append(AgendaItem(proposal=self))
-        session.add(proposalhistory.Scheduled(proposal=self, meeting=meeting))
+
+        IHistory(self.resolve_submitted_proposal()).append_record(
+            u'scheduled', meeting_id=meeting.meeting_id)
 
     def reject(self, text):
         assert self.workflow.can_execute_transition(self, 'submitted-pending')
@@ -278,24 +275,15 @@ class Proposal(Base):
         self.submitted_admin_unit_id = None
         self.submitted_int_id = None
 
-        # kill references to submitted documents (i.e. copies), they will be
-        # deleted.
-        query = proposalhistory.ProposalHistory.query.filter_by(
-            proposal=self)
-        for record in query.all():
-            record.submitted_document = None
-
         # set workflow state directly for once, the transition is used to
         # redirect to a form.
         self.workflow_state = self.STATE_PENDING.name
-        session = create_session()
-        session.add(proposalhistory.Rejected(proposal=self, text=text))
+        IHistory(self.resolve_proposal()).append_record(u'rejected', text=text)
 
     def remove_scheduled(self, meeting):
         self.execute_transition('scheduled-submitted')
-        session = create_session()
-        session.add(
-            proposalhistory.RemoveScheduled(proposal=self, meeting=meeting))
+        IHistory(self.resolve_submitted_proposal()).append_record(
+            u'remove_scheduled', meeting_id=meeting.meeting_id)
 
     def resolve_proposal(self):
         return self.oguid.resolve_object()
@@ -312,17 +300,17 @@ class Proposal(Base):
     def revise(self, agenda_item):
         assert self.get_state() == self.STATE_DECIDED
         self.update_excerpt(agenda_item)
-        self.session.add(proposalhistory.ProposalRevised(proposal=self))
+        IHistory(self.resolve_submitted_proposal()).append_record(u'revised')
 
     def reopen(self, agenda_item):
         assert self.get_state() == self.STATE_DECIDED
-        self.session.add(proposalhistory.ProposalReopened(proposal=self))
+        IHistory(self.resolve_submitted_proposal()).append_record(u'reopened')
 
     def cancel(self):
-        self.session.add(proposalhistory.Cancelled(proposal=self))
+        IHistory(self.resolve_proposal()).append_record(u'cancelled')
 
     def reactivate(self):
-        self.session.add(proposalhistory.Reactivated(proposal=self))
+        IHistory(self.resolve_proposal()).append_record(u'reactivated')
 
     def update_excerpt(self, agenda_item):
         from opengever.meeting.command import ExcerptOperations
@@ -340,7 +328,7 @@ class Proposal(Base):
         self.generate_excerpt(agenda_item)
         document_intid = self.copy_excerpt_to_proposal_dossier()
         self.register_excerpt(document_intid)
-        self.session.add(proposalhistory.ProposalDecided(proposal=self))
+        IHistory(self.resolve_submitted_proposal()).append_record(u'decided')
         self.execute_transition('scheduled-decided')
 
     def register_excerpt(self, document_intid):

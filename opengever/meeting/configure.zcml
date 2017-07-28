@@ -50,4 +50,10 @@
       handler=".handlers.configure_committee_container_portlets"
       />
 
+  <adapter
+      for=".proposal.IProposal"
+      provides=".interfaces.IHistory"
+      factory=".proposalhistory.ProposalHistory"
+      />
+
 </configure>

@@ -1,3 +1,4 @@
+from opengever.base import advancedjson
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.interfaces import IDataCollector
 from opengever.base.model import create_session
@@ -10,9 +11,9 @@ from opengever.locking.lock import SYS_LOCK
 from opengever.meeting import _
 from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.exceptions import ProtocolAlreadyGenerated
+from opengever.meeting.interfaces import IHistory
 from opengever.meeting.model.generateddocument import GeneratedExcerpt
 from opengever.meeting.model.generateddocument import GeneratedProtocol
-from opengever.meeting.model.proposalhistory import Submitted, DocumentUpdated, DocumentSubmitted
 from opengever.meeting.model.submitteddocument import SubmittedDocument
 from opengever.meeting.protocol import AgendaItemListProtocolData
 from opengever.meeting.protocol import ExcerptProtocolData
@@ -328,12 +329,16 @@ class CreateSubmittedProposalCommand(object):
                 'contentType': blob.contentType,
                 'data': base64.encodestring(blob.data)}
 
-        request_data = {REQUEST_KEY: json.dumps(decode_for_json(jsondata))}
+        record = IHistory(self.proposal).append_record(u'submitted')
+        history_data = advancedjson.dumps({'uuid': record.uuid})
+
+        request_data = {
+            REQUEST_KEY: json.dumps(decode_for_json(jsondata)),
+            'history_data': history_data}
         response = dispatch_json_request(
             self.admin_unit_id, '@@create_submitted_proposal', data=request_data)
 
         self.submitted_proposal_path = response['path']
-        create_session().add(Submitted(proposal=model))
 
 
 class RejectProposalCommand(object):
@@ -380,25 +385,28 @@ class UpdateSubmittedDocumentCommand(object):
         self.submitted_document = submitted_document
 
     def execute(self):
+        submitted_version = self.document.get_current_version()
+
+        record = IHistory(self.proposal).append_record(
+            u'document_updated',
+            document_title=self.document.title,
+            submitted_version=submitted_version,
+        )
+        history_data = advancedjson.dumps({
+            'submitted_version': submitted_version,
+            'uuid': record.uuid,
+            })
+
         Transporter().transport_to(
             self.document,
             self.submitted_document.submitted_admin_unit_id,
             self.submitted_document.submitted_physical_path,
-            view='update-submitted-document')
+            view='update-submitted-document',
+            history_data=history_data)
 
-        session = create_session()
-        proposal_model = self.proposal.load_model()
-
-        submitted_version = self.document.get_current_version()
         submitted_document = SubmittedDocument.query.get_by_source(
             self.proposal, self.document)
         submitted_document.submitted_version = submitted_version
-
-        session.add(DocumentUpdated(
-            proposal=proposal_model,
-            submitted_document=submitted_document,
-            submitted_version=submitted_version,
-            document_title=self.document.title))
 
     def show_message(self):
         portal = api.portal.get()
@@ -455,27 +463,37 @@ class CopyProposalDocumentCommand(object):
                                 submitted_version=submitted_version)
         session.add(doc)
 
-        session.add(DocumentSubmitted(
-            proposal=proposal_model,
-            submitted_document=doc,
-            submitted_version=submitted_version,
-            document_title=self.document.title))
-
     def copy_document(self, target_path, target_admin_unit_id):
+        submitted_version = self.document.get_current_version()
+
+        record = IHistory(self.proposal).append_record(
+            u'document_submitted',
+            document_title=self.document.title,
+            submitted_version=submitted_version,
+        )
+
+        history_data = advancedjson.dumps({
+            'submitted_version': submitted_version,
+            'uuid': record.uuid,
+            })
+
         return SubmitDocumentCommand(
-            self.document, target_admin_unit_id, target_path).execute()
+            self.document, target_admin_unit_id, target_path,
+            history_data=history_data).execute()
 
 
 class OgCopyCommand(object):
 
-    def __init__(self, source, target_admin_unit_id, target_path):
+    def __init__(self, source, target_admin_unit_id, target_path, **kwargs):
         self.source = source
         self.target_path = target_path
         self.target_admin_unit_id = target_admin_unit_id
+        self.kwargs = kwargs
 
     def execute(self):
         return Transporter().transport_to(
-            self.source, self.target_admin_unit_id, self.target_path)
+            self.source, self.target_admin_unit_id, self.target_path,
+            **self.kwargs)
 
 
 class SubmitDocumentCommand(OgCopyCommand):
@@ -483,7 +501,7 @@ class SubmitDocumentCommand(OgCopyCommand):
     def execute(self):
         return Transporter().transport_to(
             self.source, self.target_admin_unit_id, self.target_path,
-            view='recieve-submitted-document')
+            view='recieve-submitted-document', **self.kwargs)
 
 
 class CreateExcerptCommand(OgCopyCommand):
@@ -491,4 +509,4 @@ class CreateExcerptCommand(OgCopyCommand):
     def execute(self):
         return Transporter().transport_to(
             self.source, self.target_admin_unit_id, self.target_path,
-            view='recieve-excerpt-document')
+            view='recieve-excerpt-document', **self.kwargs)

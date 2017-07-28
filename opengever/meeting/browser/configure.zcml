@@ -152,4 +152,12 @@
       permission="cmf.ModifyPortalContent"
       />
 
+  <browser:page
+      for="opengever.meeting.proposal.IProposal"
+      name="receive-proposal-history"
+      class=".receiveproposalhistory.ReceiveProposalHistory"
+      permission="zope2.View"
+      layer="opengever.ogds.base.interfaces.IInternalOpengeverRequestLayer"
+      />
+
 </configure>

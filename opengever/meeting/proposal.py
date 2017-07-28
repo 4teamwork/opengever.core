@@ -3,7 +3,6 @@ from Acquisition import aq_parent
 from collective import dexteritytextindexer
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.interfaces import IReferenceNumber
-from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.base.security import elevated_privileges
 from opengever.base.source import DossierPathSourceBinder
@@ -19,7 +18,7 @@ from opengever.meeting.command import RejectProposalCommand
 from opengever.meeting.command import UpdateSubmittedDocumentCommand
 from opengever.meeting.container import ModelContainer
 from opengever.meeting.exceptions import WordMeetingImplementationDisabledError
-from opengever.meeting.model import proposalhistory
+from opengever.meeting.interfaces import IHistory
 from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.model.proposal import Proposal as ProposalModel
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -328,6 +327,9 @@ class SubmittedProposal(ProposalBase):
     workflow = ProposalModel.workflow.with_visible_transitions(
         ['submitted-pending'])
 
+    def get_source_admin_unit_id(self):
+        return self.load_model().admin_unit_id
+
     def is_editable(self):
         """A proposal in a meeting/committee is editable when submitted but not
         yet decided.
@@ -465,8 +467,7 @@ class Proposal(ProposalBase):
         ['pending-submitted', 'pending-cancelled', 'cancelled-pending'])
 
     def _after_model_created(self, model_instance):
-        session = create_session()
-        session.add(proposalhistory.Created(proposal=model_instance))
+        IHistory(self).append_record(u'created')
 
     def is_editable(self):
         """A proposal in a dossier is only editable while not submitted.

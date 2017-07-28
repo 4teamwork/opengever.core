@@ -1,9 +1,11 @@
 from five import grok
+from opengever.base import advancedjson
 from opengever.base.interfaces import IDataCollector
 from opengever.base.oguid import Oguid
 from opengever.base.security import elevated_privileges
 from opengever.base.transport import REQUEST_KEY
 from opengever.meeting import is_word_meeting_implementation_enabled
+from opengever.meeting.interfaces import IHistory
 from opengever.meeting.proposal import SubmittedProposal
 from opengever.meeting.service import meeting_service
 from opengever.ogds.base.utils import encode_after_json
@@ -40,6 +42,10 @@ class CreateSubmittedProposal(grok.View):
                     filename=data['file']['filename'],
                     content_type=data['file']['contentType'].encode('utf-8'),
                     data=base64.decodestring(data['file']['data']))
+
+            history_data = advancedjson.loads(self.request.get('history_data'))
+            IHistory(submitted_proposal).append_record(
+                u'submitted', uuid=history_data['uuid'])
 
             self.request.response.setHeader("Content-type", "application/json")
             return json.dumps(

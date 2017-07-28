@@ -5,6 +5,7 @@ from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.document import _ as document_mf
 from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.browser.proposaltransitions import ProposalTransitionController
+from opengever.meeting.interfaces import IHistory
 from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.proposal import IProposal
 from opengever.meeting.proposal import ISubmittedProposal
@@ -41,7 +42,7 @@ class OverviewBase(object):
         return self.context.get_excerpt()
 
     def history(self):
-        return self.context.load_model().history_records
+        return IHistory(self.context)
 
     def is_update_outdated_endabled(self):
         """We don't want to display the link to update outdated
