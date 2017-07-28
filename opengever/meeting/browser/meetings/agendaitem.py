@@ -1,5 +1,6 @@
 from opengever.base.response import JSONResponse
 from opengever.meeting import _
+from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.proposal import ISubmittedProposal
 from opengever.meeting.service import meeting_service
 from plone import api
@@ -138,6 +139,12 @@ class AgendaItemsView(BrowserView):
             if item.is_revise_possible():
                 data['revise_link'] = meeting.get_url(
                     view='agenda_items/{}/revise'.format(item.agenda_item_id))
+
+            if item.proposal and is_word_meeting_implementation_enabled():
+                proposal = item.proposal.submitted_oguid.resolve_object()
+                proposal_document = proposal.get_proposal_document()
+                data['proposal_document_link'] = (
+                    IContentListingObject(proposal_document).render_link())
 
             agenda_items.append(data)
         return agenda_items

@@ -1,0 +1,67 @@
+<script id="agendaitemsTemplate" type="text/x-handlebars-template">
+  {{#each agendaitems}}
+  <tr class="{{css_class}} word-feature" data-uid={{id}}>
+    {{#if ../agendalist_editable}}<td class="sortable-handle"></td>{{/if}}
+    <td class="number">
+      {{number}}
+      {{#if has_documents}}
+      <div class="toggle-attachements">
+        <a class="toggle-attachements-btn"></a>
+      </div>
+      {{/if}}
+    </td>
+    <td class="title">
+      <span class="proposal_title">{{{link}}}</span>
+      {{#if has_proposal}}
+      <div class="proposal_document">{{{proposal_document_link}}}</div>
+
+      {{#if has_documents}}
+      <div class="attachements">
+        <div class="label_attachments">%(label_attachments)s:</div>
+        <ul>
+          {{#each documents}}
+          <li>
+            {{{link}}}
+          </li>
+          {{/each}}
+        </ul>
+      </div>
+      {{/if}}
+      {{/if}}
+      {{#if excerpt}}
+      <div class="summary">
+        {{{excerpt}}}
+      </div>
+      {{/if}}
+      <div class="edit-box">
+        <div class="input-group">
+          <input type="text" {{#if has_proposal}}maxlength="%(max_proposal_title_length)i"{{/if}} />
+          <div class="button-group">
+            <input value="%(label_edit_save)s" type="button" class="button edit-save" />
+            <input value="%(label_edit_cancel)s" type="button" class="button edit-cancel" />
+          </div>
+        </div>
+      </div>
+    </td>
+    {{#if ../editable}}
+    <td class="actions">
+      <div class="button-group">
+        {{#if ../agendalist_editable}}
+        <a href="{{edit_link}}" title="%(label_edit_action)s" class="button edit-agenda-item"></a>
+        <a href="{{delete_link}}" title="%(label_delete_action)s" class="button delete-agenda-item"></a>
+        {{/if}}
+        {{#if decide_link}}
+        <a href="{{decide_link}}" title="%(label_decide_action)s" class="button decide-agenda-item"><span></span></a>
+        {{/if}}
+        {{#if reopen_link}}
+        <a href="{{reopen_link}}" title="%(label_reopen_action)s" class="button reopen-agenda-item"><span></span></a>
+        {{/if}}
+        {{#if revise_link}}
+        <a href="{{revise_link}}" title="%(label_revise_action)s" class="button revise-agenda-item"><span></span></a>
+        {{/if}}
+      </div>
+    </td>
+    {{/if}}
+  </tr>
+  {{/each}}
+</script>
