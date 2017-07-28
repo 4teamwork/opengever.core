@@ -9,6 +9,7 @@ Changelog
 - Bundle import: Display current memory usage (RSS) in progress logger. [lgraf]
 - Word meeting: show proposal files in meeting view. [jone]
 - Format line breaks in task descriptions. [tarnap]
+- SPV word: checkout proposal document after creating proposal. [jone]
 
 
 2017.4.0 (2017-07-26)

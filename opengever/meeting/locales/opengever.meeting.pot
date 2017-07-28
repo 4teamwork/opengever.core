@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-07-04 06:48+0000\n"
+"POT-Creation-Date: 2017-07-18 14:53+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.meeting\n"
 
-#: ./opengever/meeting/command.py:394
+#: ./opengever/meeting/command.py:406
 msgid "A new submitted version of document ${title} has been created."
 msgstr ""
 
@@ -56,7 +56,7 @@ msgstr ""
 msgid "Add period"
 msgstr ""
 
-#: ./opengever/meeting/command.py:428
+#: ./opengever/meeting/command.py:440
 msgid "Additional document ${title} has been submitted successfully."
 msgstr ""
 
@@ -113,7 +113,7 @@ msgstr ""
 msgid "Discard"
 msgstr ""
 
-#: ./opengever/meeting/command.py:357
+#: ./opengever/meeting/command.py:369
 msgid "Document ${title} has already been submitted in that version."
 msgstr ""
 
@@ -125,19 +125,19 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
-#: ./opengever/meeting/command.py:104
+#: ./opengever/meeting/command.py:107
 msgid "Excerpt for agenda item ${title} has been generated successfully"
 msgstr ""
 
-#: ./opengever/meeting/command.py:109
+#: ./opengever/meeting/command.py:112
 msgid "Excerpt for agenda item ${title} has been updated successfully"
 msgstr ""
 
-#: ./opengever/meeting/command.py:168
+#: ./opengever/meeting/command.py:175
 msgid "Excerpt for meeting ${title} has been generated successfully"
 msgstr ""
 
-#: ./opengever/meeting/command.py:173
+#: ./opengever/meeting/command.py:180
 msgid "Excerpt for meeting ${title} has been updated successfully"
 msgstr ""
 
@@ -272,11 +272,11 @@ msgstr ""
 msgid "Protocol Excerpt"
 msgstr ""
 
-#: ./opengever/meeting/command.py:51
+#: ./opengever/meeting/command.py:54
 msgid "Protocol for meeting ${title} has been generated successfully."
 msgstr ""
 
-#: ./opengever/meeting/command.py:56
+#: ./opengever/meeting/command.py:59
 msgid "Protocol for meeting ${title} has been updated successfully."
 msgstr ""
 
@@ -339,7 +339,7 @@ msgstr ""
 msgid "Updated with a newer excerpt version."
 msgstr ""
 
-#: ./opengever/meeting/command.py:262
+#: ./opengever/meeting/command.py:269
 msgid "Updated with a newer generated version from meeting ${title}."
 msgstr ""
 
@@ -424,12 +424,12 @@ msgid "button_submit_attachments"
 msgstr ""
 
 #. Default: "Cancel"
-#: ./opengever/meeting/model/proposal.py:168
+#: ./opengever/meeting/model/proposal.py:158
 msgid "cancel"
 msgstr ""
 
 #. Default: "Cancelled"
-#: ./opengever/meeting/model/proposal.py:148
+#: ./opengever/meeting/model/proposal.py:138
 msgid "cancelled"
 msgstr ""
 
@@ -530,7 +530,7 @@ msgstr ""
 
 #. Default: "Decide"
 #: ./opengever/meeting/model/agendaitem.py:37
-#: ./opengever/meeting/model/proposal.py:166
+#: ./opengever/meeting/model/proposal.py:156
 msgid "decide"
 msgstr ""
 
@@ -541,7 +541,7 @@ msgstr ""
 
 #. Default: "Decided"
 #: ./opengever/meeting/model/agendaitem.py:31
-#: ./opengever/meeting/model/proposal.py:146
+#: ./opengever/meeting/model/proposal.py:136
 msgid "decided"
 msgstr ""
 
@@ -647,7 +647,7 @@ msgstr ""
 #. Default: "Attachments"
 #: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt:27
 #: ./opengever/meeting/browser/submitdocuments.py:36
-#: ./opengever/meeting/proposal.py:160
+#: ./opengever/meeting/proposal.py:123
 msgid "label_attachments"
 msgstr ""
 
@@ -675,7 +675,7 @@ msgstr ""
 #. Default: "Committee"
 #: ./opengever/meeting/browser/meetings/meeting.py:53
 #: ./opengever/meeting/browser/templates/member.pt:49
-#: ./opengever/meeting/proposal.py:60
+#: ./opengever/meeting/proposal.py:54
 msgid "label_committee"
 msgstr ""
 
@@ -686,18 +686,18 @@ msgstr ""
 
 #. Default: "Considerations"
 #: ./opengever/meeting/browser/meetings/protocol.py:135
-#: ./opengever/meeting/proposal.py:131
+#: ./opengever/meeting/proposal.py:146
 msgid "label_considerations"
 msgstr ""
 
 #. Default: "Copy for attention"
 #: ./opengever/meeting/browser/meetings/protocol.py:150
-#: ./opengever/meeting/proposal.py:95
+#: ./opengever/meeting/proposal.py:118
 msgid "label_copy_for_attention"
 msgstr ""
 
 #. Default: "Creator"
-#: ./opengever/meeting/browser/proposalforms.py:114
+#: ./opengever/meeting/browser/proposalforms.py:117
 msgid "label_creator"
 msgstr ""
 
@@ -742,17 +742,17 @@ msgstr ""
 
 #. Default: "Decision"
 #: ./opengever/meeting/browser/meetings/protocol.py:141
-#: ./opengever/meeting/proposal.py:241
+#: ./opengever/meeting/proposal.py:206
 msgid "label_decision"
 msgstr ""
 
 #. Default: "Decision draft"
-#: ./opengever/meeting/proposal.py:80
+#: ./opengever/meeting/proposal.py:100
 msgid "label_decision_draft"
 msgstr ""
 
 #. Default: "Decision number"
-#: ./opengever/meeting/proposal.py:267
+#: ./opengever/meeting/proposal.py:232
 msgid "label_decision_number"
 msgstr ""
 
@@ -768,23 +768,23 @@ msgstr ""
 
 #. Default: "Disclose to"
 #: ./opengever/meeting/browser/meetings/protocol.py:147
-#: ./opengever/meeting/proposal.py:90
+#: ./opengever/meeting/proposal.py:112
 msgid "label_disclose_to"
 msgstr ""
 
 #. Default: "Discussion"
 #: ./opengever/meeting/browser/meetings/protocol.py:138
-#: ./opengever/meeting/proposal.py:412
+#: ./opengever/meeting/proposal.py:364
 msgid "label_discussion"
 msgstr ""
 
 #. Default: "Dossier"
-#: ./opengever/meeting/proposal.py:392
+#: ./opengever/meeting/proposal.py:344
 msgid "label_dossier"
 msgstr ""
 
 #. Default: "Dossier not available"
-#: ./opengever/meeting/proposal.py:493
+#: ./opengever/meeting/proposal.py:445
 msgid "label_dossier_not_available"
 msgstr ""
 
@@ -811,6 +811,11 @@ msgstr ""
 #. Default: "edit title"
 #: ./opengever/meeting/browser/meetings/meeting.py:369
 msgid "label_edit_action"
+msgstr ""
+
+#. Default: "Edit after creation"
+#: ./opengever/meeting/browser/proposalforms.py:125
+msgid "label_edit_after_creation"
 msgstr ""
 
 #. Default: "Cancel"
@@ -873,7 +878,7 @@ msgstr ""
 
 #. Default: "Initial position"
 #: ./opengever/meeting/browser/meetings/protocol.py:129
-#: ./opengever/meeting/proposal.py:70
+#: ./opengever/meeting/proposal.py:88
 msgid "label_initial_position"
 msgstr ""
 
@@ -895,7 +900,7 @@ msgstr ""
 
 #. Default: "Legal basis"
 #: ./opengever/meeting/browser/meetings/protocol.py:126
-#: ./opengever/meeting/proposal.py:65
+#: ./opengever/meeting/proposal.py:82
 msgid "label_legal_basis"
 msgstr ""
 
@@ -921,7 +926,7 @@ msgid "label_main_attributes"
 msgstr ""
 
 #. Default: "Meeting"
-#: ./opengever/meeting/proposal.py:205
+#: ./opengever/meeting/proposal.py:170
 msgid "label_meeting"
 msgstr ""
 
@@ -931,7 +936,7 @@ msgid "label_member"
 msgstr ""
 
 #. Default: "Modified"
-#: ./opengever/meeting/browser/proposalforms.py:117
+#: ./opengever/meeting/browser/proposalforms.py:120
 msgid "label_modified"
 msgstr ""
 
@@ -981,13 +986,13 @@ msgid "label_proposal_id"
 msgstr ""
 
 #. Default: "Proposal template"
-#: ./opengever/meeting/browser/proposalforms.py:105
+#: ./opengever/meeting/browser/proposalforms.py:108
 msgid "label_proposal_template"
 msgstr ""
 
 #. Default: "Proposed action"
 #: ./opengever/meeting/browser/meetings/protocol.py:132
-#: ./opengever/meeting/proposal.py:75
+#: ./opengever/meeting/proposal.py:94
 msgid "label_proposed_action"
 msgstr ""
 
@@ -998,7 +1003,7 @@ msgstr ""
 
 #. Default: "Publish in"
 #: ./opengever/meeting/browser/meetings/protocol.py:144
-#: ./opengever/meeting/proposal.py:85
+#: ./opengever/meeting/proposal.py:106
 msgid "label_publish_in"
 msgstr ""
 
@@ -1099,7 +1104,7 @@ msgid "label_upcoming_meetings"
 msgstr ""
 
 #. Default: "State"
-#: ./opengever/meeting/proposal.py:263
+#: ./opengever/meeting/proposal.py:228
 msgid "label_workflow_state"
 msgstr ""
 
@@ -1108,7 +1113,7 @@ msgid "label_zip_download"
 msgstr ""
 
 #. Default: "Language"
-#: ./opengever/meeting/proposal.py:100
+#: ./opengever/meeting/proposal.py:59
 msgid "language"
 msgstr ""
 
@@ -1232,7 +1237,7 @@ msgstr ""
 #. Default: "Pending"
 #: ./opengever/meeting/model/agendaitem.py:30
 #: ./opengever/meeting/model/meeting.py:69
-#: ./opengever/meeting/model/proposal.py:141
+#: ./opengever/meeting/model/proposal.py:131
 msgid "pending"
 msgstr ""
 
@@ -1246,12 +1251,12 @@ msgid "presidency"
 msgstr ""
 
 #. Default: "Proposal document"
-#: ./opengever/meeting/proposal.py:214
+#: ./opengever/meeting/proposal.py:179
 msgid "proposal_document"
 msgstr ""
 
 #. Default: "Proposal document ${title}"
-#: ./opengever/meeting/proposal.py:346
+#: ./opengever/meeting/proposal.py:298
 msgid "proposal_document_title"
 msgstr ""
 
@@ -1326,13 +1331,13 @@ msgid "protocol_excerpt"
 msgstr ""
 
 #. Default: "Reactivate"
-#: ./opengever/meeting/model/proposal.py:170
+#: ./opengever/meeting/model/proposal.py:160
 msgid "reactivate"
 msgstr ""
 
 #. Default: "Reject"
 #: ./opengever/meeting/browser/proposaltransitions.py:70
-#: ./opengever/meeting/model/proposal.py:160
+#: ./opengever/meeting/model/proposal.py:150
 msgid "reject"
 msgstr ""
 
@@ -1352,12 +1357,12 @@ msgid "revision"
 msgstr ""
 
 #. Default: "Schedule"
-#: ./opengever/meeting/model/proposal.py:162
+#: ./opengever/meeting/model/proposal.py:152
 msgid "schedule"
 msgstr ""
 
 #. Default: "Scheduled"
-#: ./opengever/meeting/model/proposal.py:145
+#: ./opengever/meeting/model/proposal.py:135
 msgid "scheduled"
 msgstr ""
 
@@ -1370,12 +1375,12 @@ msgid "status"
 msgstr ""
 
 #. Default: "Submit"
-#: ./opengever/meeting/model/proposal.py:158
+#: ./opengever/meeting/model/proposal.py:148
 msgid "submit"
 msgstr ""
 
 #. Default: "Submitted"
-#: ./opengever/meeting/model/proposal.py:143
+#: ./opengever/meeting/model/proposal.py:133
 msgid "submitted"
 msgstr ""
 
@@ -1399,7 +1404,7 @@ msgid "time"
 msgstr ""
 
 #. Default: "Remove from schedule"
-#: ./opengever/meeting/model/proposal.py:164
+#: ./opengever/meeting/model/proposal.py:154
 msgid "un-schedule"
 msgstr ""
 
