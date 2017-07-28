@@ -119,9 +119,10 @@ class ConstructorSection(object):
             else:
                 context = self.site
 
+            parent_path = '/'.join(context.getPhysicalPath())
+
             try:
                 obj = self._construct_object(context, portal_type, item)
-                parent_path = '/'.join(context.getPhysicalPath())
                 logger.info("Constructed %r" % obj)
             except ValueError as e:
                 logger.warning(

@@ -6,13 +6,30 @@ from opengever.bundle.sections.bundlesource import BUNDLE_PATH_KEY
 from opengever.testing import FunctionalTestCase
 from pkg_resources import resource_filename
 from plone import api
+from StringIO import StringIO
 from zope.annotation import IAnnotations
+import logging
 
 
 FROZEN_NOW = datetime(2016, 12, 20, 9, 40)
 
 
 class TestBusinessRuleViolations(FunctionalTestCase):
+
+    def setUp(self):
+        # Capture logging output for test assertions
+        self.log = StringIO()
+        self.logger = logging.getLogger('opengever.bundle.constructor')
+        self.logger.setLevel(logging.DEBUG)
+
+        self.handler = logging.StreamHandler(self.log)
+        self.logger.addHandler(self.handler)
+
+        super(TestBusinessRuleViolations, self).setUp()
+
+    def tearDown(self):
+        super(TestBusinessRuleViolations, self).tearDown()
+        self.logger.removeHandler(self.handler)
 
     def test_oggbundle_transmogrifier(self):
         # this is a bit hackish, but since builders currently don't work in
@@ -44,6 +61,7 @@ class TestBusinessRuleViolations(FunctionalTestCase):
             'ordnungsposition-1/ordnungsposition-1.1')
         self.assert_deeply_nested_subdossier_created(folder)
         self.assert_resolved_dossier_with_violations_created(folder)
+        self.assert_disallowed_subobject_type_not_created(root)
 
     def assert_repo_root_created(self):
         root = self.portal.get('ordnungssystem-a')
@@ -98,3 +116,15 @@ class TestBusinessRuleViolations(FunctionalTestCase):
             document.Title())
 
         return dossier
+
+    def assert_disallowed_subobject_type_not_created(self, root):
+        folder = root.restrictedTraverse('ordnungsposition-1')
+        subobject_types = [o.portal_type for o in folder.objectValues()]
+
+        self.assertNotIn('opengever.document.document', subobject_types)
+        self.assertIn(
+            'Could not create object at '
+            '/plone/ordnungssystem-a/ordnungsposition-1 with guid '
+            'GUID-document-A-1-disallowed-subobject-type. '
+            'Disallowed subobject type: opengever.document.document',
+            self.log.getvalue())

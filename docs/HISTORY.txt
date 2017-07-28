@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Upgrade plone.app.jquery from 1.7.2.1 to 1.11.2. [elioschmutz]
+- Bundle import: Fix logging in case of disallowed subobject type. [lgraf]
 - Bundle import: Don't unnecessarily keep references to persistent objects
   over the lifetime of the entire import. This lets the garbage collector
   do its job, and reduces growth of memory usage during import. [lgraf]
