@@ -1,5 +1,6 @@
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
+from collective.transmogrifier.utils import traverse
 from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.base.behaviors.translated_title import TRANSLATED_TITLE_NAMES
 from opengever.base.interfaces import IDontIssueDossierReferenceNumber
@@ -113,13 +114,15 @@ class ConstructorSection(object):
 
             parent_guid = item.get(u'parent_guid')
             if parent_guid:
-                context = self.bundle.item_by_guid[parent_guid][u'_object']
+                path = self.bundle.item_by_guid[parent_guid][u'_path']
+                context = traverse(self.site, path, None)
             else:
                 context = self.site
 
+            parent_path = '/'.join(context.getPhysicalPath())
+
             try:
                 obj = self._construct_object(context, portal_type, item)
-                parent_path = '/'.join(context.getPhysicalPath())
                 logger.info("Constructed %r" % obj)
             except ValueError as e:
                 logger.warning(
@@ -129,6 +132,5 @@ class ConstructorSection(object):
 
             # build path relative to plone site
             item[u'_path'] = '/'.join(obj.getPhysicalPath()[2:])
-            item[u'_object'] = obj
 
             yield item

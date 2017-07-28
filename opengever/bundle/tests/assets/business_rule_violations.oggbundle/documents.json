@@ -34,5 +34,14 @@
     "filepath": "files/sample.msg",
     "review_state": "document-state-draft",
     "title": "Document whose file has an disallowed extension"
+  },
+  {
+    "guid": "GUID-document-A-1-disallowed-subobject-type",
+    "parent_guid": "GUID-repofolder-A-1",
+    "document_author": "lukas.graf",
+    "document_date": "2007-01-01",
+    "filepath": "files/word.docx",
+    "review_state": "document-state-draft",
+    "title": "Document directly in repofolder (disallowed subobject type)"
   }
 ]
