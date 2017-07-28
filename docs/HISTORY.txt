@@ -5,6 +5,7 @@ Changelog
 2017.4.1 (unreleased)
 ---------------------
 
+- Upgrade plone.app.jquery from 1.7.2.1 to 1.11.2. [elioschmutz]
 - Bundle import: Display current memory usage (RSS) in progress logger. [lgraf]
 - Word meeting: show proposal files in meeting view. [jone]
 - Format line breaks in task descriptions. [tarnap]
