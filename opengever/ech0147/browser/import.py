@@ -11,7 +11,7 @@ class IECH0147ImportFormSchema(Interface):
 
     message = namedfile.NamedBlobFile(
         title=_(u'label_message', default=u'Message'),
-        description=_(u'help_file', default=u''),
+        description=_(u'help_message', default=u''),
         required=True,
         )
 

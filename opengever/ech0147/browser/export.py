@@ -22,32 +22,36 @@ from zope.schema.vocabulary import SimpleVocabulary
 class IECH0147ExportFormSchema(Schema):
 
     recipients = schema.List(
-        title=_('label_recipients', default='Recipients'),
+        title=_(u'label_recipients', default=u'Recipient(s)'),
+        description=_(u'help_recipients',
+                      default=u'Recipients of the message. Enter one recipient'
+                              ' per line.'),
         value_type=schema.TextLine(),
         required=False,
     )
 
     action = schema.Choice(
-        title=_('label_action', default='Action'),
+        title=_(u'label_action', default=u'Action'),
+        description=_(u'help_action', default=u''),
         vocabulary=SimpleVocabulary([
-            SimpleTerm(1, '1', 'neu'),
-            SimpleTerm(3, '3', 'Widerruf'),
-            SimpleTerm(4, '4', 'Korrektur'),
-            SimpleTerm(5, '5', 'Anfrage'),
-            SimpleTerm(6, '6', 'Antwort'),
-            SimpleTerm(7, '7', 'Schlüsselaustausch'),
-            SimpleTerm(10, '10', 'Weiterleitung'),
-            SimpleTerm(12, '12', 'Mahnung'),
+            SimpleTerm(1, '1', _(u'term_action_1', default=u'new')),
+            SimpleTerm(3, '3', _(u'term_action_3', default=u'revocation')),
+            SimpleTerm(4, '4', _(u'term_action_4', default=u'correction')),
+            SimpleTerm(5, '5', _(u'term_action_5', default=u'inquiry')),
+            SimpleTerm(6, '6', _(u'term_action_6', default=u'response')),
+            SimpleTerm(7, '7', _(u'term_action_7', default=u'key exchange')),
+            SimpleTerm(10, '10', _(u'term_action_10', default=u'forwarding')),
+            SimpleTerm(12, '12', _(u'term_action_12', default=u'reminder')),
         ])
     )
 
     subject = schema.TextLine(
-        title=_('label_subject', default=u'Subject'),
+        title=_(u'label_subject', default=u'Subject'),
         required=False,
     )
 
     comment = schema.TextLine(
-        title=_('label_comment', default=u'Kommentar'),
+        title=_(u'label_comment', default=u'Comment'),
         required=False,
     )
 

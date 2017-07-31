@@ -1,0 +1,140 @@
+# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
+# SOME DESCRIPTIVE TITLE.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2017-07-31 13:12+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: opengever.ech0147\n"
+
+#: ./opengever/ech0147/browser/import.py:36
+msgid "Invalid message. Missing message.xml"
+msgstr ""
+
+#: ./opengever/ech0147/browser/import.py:51
+msgid "Message has been imported"
+msgstr ""
+
+#: ./opengever/ech0147/browser/import.py:43
+msgid "Messages containing toplevel dossiers and toplevel documents are not supported"
+msgstr ""
+
+#: ./opengever/ech0147/browser/export.py:35
+msgid "help_action"
+msgstr ""
+
+#: ./opengever/ech0147/browser/import.py:14
+msgid "help_message"
+msgstr ""
+
+#. Default: "Recipients of the message. Enter one recipient per line."
+#: ./opengever/ech0147/browser/export.py:26
+msgid "help_recipients"
+msgstr ""
+
+#. Default: "Action"
+#: ./opengever/ech0147/browser/export.py:34
+msgid "label_action"
+msgstr ""
+
+#. Default: "Cancel"
+#: ./opengever/ech0147/browser/export.py:131
+#: ./opengever/ech0147/browser/import.py:54
+msgid "label_cancel"
+msgstr ""
+
+#. Default: "Comment"
+#: ./opengever/ech0147/browser/export.py:54
+msgid "label_comment"
+msgstr ""
+
+#. Default: "eCH 0147 Export"
+#: ./opengever/ech0147/browser/export.py:83
+msgid "label_ech0147_export_form"
+msgstr ""
+
+#. Default: "eCH 0147 Import"
+#: ./opengever/ech0147/browser/import.py:22
+msgid "label_ech0147_import_form"
+msgstr ""
+
+#. Default: "Export"
+#: ./opengever/ech0147/browser/export.py:87
+msgid "label_export"
+msgstr ""
+
+#. Default: "Import"
+#: ./opengever/ech0147/browser/import.py:24
+msgid "label_import"
+msgstr ""
+
+#. Default: "Message"
+#: ./opengever/ech0147/browser/import.py:13
+msgid "label_message"
+msgstr ""
+
+#. Default: "Paths"
+#: ./opengever/ech0147/browser/export.py:60
+msgid "label_paths"
+msgstr ""
+
+#. Default: "Recipient(s)"
+#: ./opengever/ech0147/browser/export.py:25
+msgid "label_recipients"
+msgstr ""
+
+#. Default: "Subject"
+#: ./opengever/ech0147/browser/export.py:49
+msgid "label_subject"
+msgstr ""
+
+#. Default: "new"
+#: ./opengever/ech0147/browser/export.py:37
+msgid "term_action_1"
+msgstr ""
+
+#. Default: "forwarding"
+#: ./opengever/ech0147/browser/export.py:43
+msgid "term_action_10"
+msgstr ""
+
+#. Default: "reminder"
+#: ./opengever/ech0147/browser/export.py:44
+msgid "term_action_12"
+msgstr ""
+
+#. Default: "revocation"
+#: ./opengever/ech0147/browser/export.py:38
+msgid "term_action_3"
+msgstr ""
+
+#. Default: "correction"
+#: ./opengever/ech0147/browser/export.py:39
+msgid "term_action_4"
+msgstr ""
+
+#. Default: "inquiry"
+#: ./opengever/ech0147/browser/export.py:40
+msgid "term_action_5"
+msgstr ""
+
+#. Default: "response"
+#: ./opengever/ech0147/browser/export.py:41
+msgid "term_action_6"
+msgstr ""
+
+#. Default: "key exchange"
+#: ./opengever/ech0147/browser/export.py:42
+msgid "term_action_7"
+msgstr ""
+
