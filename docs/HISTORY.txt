@@ -12,6 +12,7 @@ Changelog
   do its job, and reduces growth of memory usage during import. [lgraf]
 - Bundle import: Display current memory usage (RSS) in progress logger. [lgraf]
 - Word meeting: show proposal files in meeting view. [jone]
+- Reworked contact syncer functionality, to improve speed with bulk insert and updates. [phgross]
 - Format line breaks in task descriptions. [tarnap]
 - SPV word: checkout proposal document after creating proposal. [jone]
 
