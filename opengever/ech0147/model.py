@@ -38,8 +38,12 @@ class MessageT1(object):
         self.action = 1
         self.test_delivery_flag = False
 
-        self.sender_id = api.user.get_current().getProperty('email').decode(
-            'utf8')
+        user = api.user.get_current()
+        email = user.getProperty('email').decode('utf8')
+        if email:
+            self.sender_id = email
+        else:
+            self.sender_id = user.getId()
 
         # Sending application
         self.app_manufacturer = u'4teamwork AG'
