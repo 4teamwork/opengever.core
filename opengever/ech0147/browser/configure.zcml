@@ -7,7 +7,6 @@
       name="ech0147_export"
       for="*"
       class=".export.ECH0147ExportForm"
-      allowed_attributes="available"
       permission="zope2.View"
       />
 

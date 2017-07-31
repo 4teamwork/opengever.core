@@ -339,6 +339,18 @@
       <property name="visible">True</property>
     </object>
 
+    <object name="ech0147_export" meta_type="CMF Action" i18n:domain="opengever.core">
+      <property name="title" i18n:translate="">eCH-0147/eCH-0039 Export</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:@@ech0147_export:method</property>
+      <property name="icon_expr" />
+      <property name="available_expr" />
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
   </object>
 
 
@@ -545,6 +557,18 @@
       <property name="icon_expr" />
       <property name="available_expr">python:here.restrictedTraverse('@@plone_interface_info').provides('opengever.dossier.behaviors.dossier.IDossierMarker') and not here.restrictedTraverse('@@plone_interface_info').provides('opengever.dossier.templatefolder.ITemplateFolder') and not
       here.restrictedTraverse('@@plone_interface_info').provides('opengever.private.dossier.IPrivateDossier')</property>
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="ech0147_export" meta_type="CMF Action" i18n:domain="opengever.core">
+      <property name="title" i18n:translate="">eCH-0147/eCH-0039 Export</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:${object_url}/@@ech0147_export</property>
+      <property name="icon_expr" />
+      <property name="available_expr">object/@@ech0147_export/available</property>
       <property name="permissions">
         <element value="View" />
       </property>
