@@ -42,7 +42,7 @@ class IECH0147ExportFormSchema(Schema):
             SimpleTerm(7, '7', _(u'term_action_7', default=u'key exchange')),
             SimpleTerm(10, '10', _(u'term_action_10', default=u'forwarding')),
             SimpleTerm(12, '12', _(u'term_action_12', default=u'reminder')),
-        ])
+        ]),
     )
 
     subject = schema.TextLine(
@@ -52,6 +52,49 @@ class IECH0147ExportFormSchema(Schema):
 
     comment = schema.TextLine(
         title=_(u'label_comment', default=u'Comment'),
+        required=False,
+    )
+
+    directive = schema.Choice(
+        title=_(u'label_directive', default=u'Directive'),
+        description=_(u'help_directive', default=u''),
+        vocabulary=SimpleVocabulary([
+            SimpleTerm(u'process', 'process',
+                       _(u'term_directive_process', default=u'process')),
+            SimpleTerm(u'external_process', 'external_process',
+                       _(u'term_directive_external_process',
+                         default=u'external process')),
+            SimpleTerm(u'information', 'information',
+                       _(u'term_directive_information',
+                         default=u'informationrocess')),
+            SimpleTerm(u'comment', 'comment',
+                       _(u'term_directive_comment', default=u'comment')),
+            SimpleTerm(u'approve', 'approve',
+                       _(u'term_directive_approve', default=u'approve')),
+            SimpleTerm(u'sign', 'sign',
+                       _(u'term_directive_sign', default=u'sign')),
+            SimpleTerm(u'send', 'send',
+                       _(u'term_directive_send', default=u'send')),
+            SimpleTerm(u'complete', 'complete',
+                       _(u'term_directive_complete', default=u'complete')),
+        ]),
+        required=False,
+    )
+
+    priority = schema.Choice(
+        title=_(u'label_priority', default=u'Priority'),
+        vocabulary=SimpleVocabulary([
+            SimpleTerm(u'undefined', 'undefined',
+                       _(u'term_priority_undefined', default=u'undefined')),
+            SimpleTerm(u'medium', 'medium',
+                       _(u'term_priority_medium', default=u'medium')),
+            SimpleTerm(u'high', 'high',
+                       _(u'term_priority_high', default=u'high')),
+        ]),
+    )
+
+    deadline = schema.Date(
+        title=_(u'label_deadline', default=u'Deadline'),
         required=False,
     )
 
@@ -105,6 +148,12 @@ class ECH0147ExportForm(AutoExtensibleForm, form.Form):
         if data['comment'] is not None:
             message.comments = [data['comment']]
 
+        if data['directive']:
+            directive = model.Directive(data['directive'])
+            directive.priority = data['priority']
+            directive.deadline = data['deadline']
+            message.directive = directive
+
         for obj in objs:
             message.add_object(obj)
 
@@ -113,8 +162,10 @@ class ECH0147ExportForm(AutoExtensibleForm, form.Form):
 
         tmpfile = TemporaryFile()
         with ZipFile(tmpfile, 'w', ZIP_DEFLATED, True) as zipfile:
-            zipfile.writestr('header.xml', header_dom.toprettyxml(encoding='UTF-8'))
-            zipfile.writestr('message.xml', message_dom.toprettyxml(encoding='UTF-8'))
+            zipfile.writestr(
+                'header.xml', header_dom.toprettyxml(encoding='UTF-8'))
+            zipfile.writestr(
+                'message.xml', message_dom.toprettyxml(encoding='UTF-8'))
             message.add_to_zip(zipfile)
 
         size = tmpfile.tell()

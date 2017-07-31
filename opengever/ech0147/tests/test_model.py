@@ -1,8 +1,11 @@
+from opengever.ech0147.model import Directive
 from opengever.ech0147.model import Document
 from opengever.ech0147.model import Dossier
 from opengever.ech0147.model import MessageT1
 from opengever.testing import IntegrationTestCase
 from plone import api
+
+import unittest
 
 
 class DummyZipFile(object):
@@ -131,3 +134,10 @@ class TestDocumentModel(IntegrationTestCase):
         doc = Document(self.document, base_path)
         self.assertEqual(
             base_path + '/' + self.document.file.filename, doc.path)
+
+
+class TestDirectiveModel(unittest.TestCase):
+
+    def test_directive_binding_is_valid(self):
+        directive = Directive(u'process')
+        self.assertTrue(directive.binding().validateBinding())

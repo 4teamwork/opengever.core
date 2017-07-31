@@ -284,3 +284,20 @@ class Document(object):
         d.applicationCustom = None
 
         return d
+
+
+class Directive(object):
+
+    def __init__(self, instruction):
+        self.uuid = unicode(uuid4())
+        self.instruction = instruction
+        self.priority = u'undefined'
+        self.deadline = None
+
+    def binding(self):
+        d = ech0147t1.directiveType()
+        d.uuid = self.uuid
+        d.instruction = self.instruction
+        d.priority = self.priority
+        d.deadline = self.deadline
+        return d
