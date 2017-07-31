@@ -1,9 +1,13 @@
 from opengever.ech0147 import _
 from opengever.ech0147.bindings import ech0147t1
+from opengever.ech0147.interfaces import IECH0147Settings
 from opengever.ech0147.utils import create_dossier
 from plone.namedfile import field as namedfile
+from plone.registry.interfaces import IRegistry
 from z3c.form import form, field, button
+from zExceptions import NotFound
 from zipfile import ZipFile
+from zope.component import getUtility
 from zope.interface import Interface
 
 
@@ -58,3 +62,13 @@ class ECH0147ImportForm(form.Form):
     def updateWidgets(self):
         super(ECH0147ImportForm, self).updateWidgets()
         self.widgets['message'].value = None
+
+    def render(self):
+        if not self.enabled():
+            raise NotFound()
+        return super(ECH0147ImportForm, self).render()
+
+    def enabled(self):
+        registry = getUtility(IRegistry)
+        ech0147_settings = registry.forInterface(IECH0147Settings, check=False)
+        return ech0147_settings.ech0147_import_enabled

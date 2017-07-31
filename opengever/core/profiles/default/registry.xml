@@ -101,6 +101,7 @@
   <!--migrated from opengever/private/profiles/default/registry.xml-->
   <records interface="opengever.private.interfaces.IPrivateFolderQuotaSettings" />
 
+  <records interface="opengever.ech0147.interfaces.IECH0147Settings" />
 
   <!--migrated from opengever/policy/base/profiles/default/registry.xml-->
   <records interface="ftw.zipexport.interfaces.IZipExportSettings">

@@ -3,18 +3,22 @@ from opengever.base.stream import TempfileStreamIterator
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.ech0147 import _
 from opengever.ech0147 import model
+from opengever.ech0147.interfaces import IECH0147Settings
 from plone.autoform import directives
 from plone.autoform.form import AutoExtensibleForm
 from plone.formwidget.contenttree import ObjPathSourceBinder
+from plone.registry.interfaces import IRegistry
 from plone.supermodel.model import Schema
 from tempfile import TemporaryFile
 from z3c.form import button
 from z3c.form import form
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
+from zExceptions import NotFound
 from zipfile import ZIP_DEFLATED
 from zipfile import ZipFile
 from zope import schema
+from zope.component import getUtility
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
 
@@ -193,11 +197,20 @@ class ECH0147ExportForm(AutoExtensibleForm, form.Form):
         return super(ECH0147ExportForm, self).update()
 
     def render(self):
+        if not self.enabled():
+            raise NotFound()
         if self.response_body is None:
             return super(ECH0147ExportForm, self).render()
         return self.response_body
 
     def available(self):
+        if not self.enabled():
+            return False
         if IDossierMarker.providedBy(self.context):
             return True
         return False
+
+    def enabled(self):
+        registry = getUtility(IRegistry)
+        ech0147_settings = registry.forInterface(IECH0147Settings, check=False)
+        return ech0147_settings.ech0147_export_enabled
