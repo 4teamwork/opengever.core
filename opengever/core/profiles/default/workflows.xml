@@ -28,9 +28,6 @@
     <type type_id="opengever.dossier.businesscasedossier">
       <bound-workflow workflow_id="opengever_dossier_workflow" />
     </type>
-    <type type_id="opengever.dossier.projectdossier">
-      <bound-workflow workflow_id="opengever_dossier_workflow" />
-    </type>
     <type type_id="opengever.dossier.templatefolder">
       <bound-workflow workflow_id="opengever_templatefolder_workflow" />
     </type>
@@ -88,7 +85,7 @@
 
   <!--migrated from opengever/tasktemplates/profiles/default/workflows.xml-->
   <property name="title">Contains workflow definitions for your portal</property>
-    
+
   <object name="opengever_tasktemplatefolder_workflow" meta_type="Workflow" />
   <object name="opengever_tasktemplate_workflow" meta_type="Workflow" />
 

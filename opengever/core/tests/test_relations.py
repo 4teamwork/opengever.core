@@ -135,7 +135,6 @@ EXPECTED_INTERFACES = [
 # to be added here!
 EXPECTED_TYPES_WITH_RELATIONS = [
     'opengever.document.document',
-    'opengever.dossier.projectdossier', # ignore
     'opengever.dossier.businesscasedossier',
     'opengever.dossier.dossiertemplate',
     'opengever.repository.repositoryfolder',

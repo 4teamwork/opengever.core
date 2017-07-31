@@ -25,6 +25,7 @@ Changelog
 - Update ftw.keyowordwidget to 1.3.3, to fix a problem while select/search new keywords. [mathias.leimgruber]
 - Upgrade ftw.zopemaster which uses the new ftw.slacker for slack notifications. [elioschmutz]
 - Refactor the function: earliest_possible_end_date. [elioschmutz]
+- Remove unused projectdossier contenttype. [elioschmutz]
 - Upgrade plone.app.jquery from 1.7.2.1 to 1.11.2. [elioschmutz]
 - Bundle import: Fix logging in case of disallowed subobject type. [lgraf]
 - Bundle import: Don't unnecessarily keep references to persistent objects
