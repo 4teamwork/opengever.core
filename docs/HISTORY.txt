@@ -5,6 +5,7 @@ Changelog
 2017.4.1 (unreleased)
 ---------------------
 
+- Upgrade ftw.zopemaster which uses the new ftw.slacker for slack notifications. [elioschmutz]
 - Refactor the function: earliest_possible_end_date. [elioschmutz]
 - Upgrade plone.app.jquery from 1.7.2.1 to 1.11.2. [elioschmutz]
 - Bundle import: Fix logging in case of disallowed subobject type. [lgraf]
