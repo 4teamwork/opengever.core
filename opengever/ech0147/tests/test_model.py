@@ -70,6 +70,20 @@ class TestMessageModel(IntegrationTestCase):
              u'files/vertragsentwurf.docx'],
             zipfile.arcnames)
 
+    def test_message_with_subjects(self):
+        msg = MessageT1()
+        msg.subjects = [u'A Subject']
+        self.assertTrue(msg.binding().validateBinding())
+        header = msg.header()
+        self.assertEqual(u'A Subject', header.subjects.subject[0].value())
+
+    def test_message_with_comments(self):
+        msg = MessageT1()
+        msg.comments = [u'A comment']
+        self.assertTrue(msg.binding().validateBinding())
+        header = msg.header()
+        self.assertEqual(u'A comment', header.comments.comment[0].value())
+
 
 class TestDossierModel(IntegrationTestCase):
 

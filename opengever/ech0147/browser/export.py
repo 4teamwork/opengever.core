@@ -41,6 +41,16 @@ class IECH0147ExportFormSchema(Schema):
         ])
     )
 
+    subject = schema.TextLine(
+        title=_('label_subject', default=u'Subject'),
+        required=False,
+    )
+
+    comment = schema.TextLine(
+        title=_('label_comment', default=u'Kommentar'),
+        required=False,
+    )
+
     directives.mode(paths='hidden')
     paths = RelationList(
         title=_(u'label_paths', default=u'Paths'),
@@ -86,6 +96,11 @@ class ECH0147ExportForm(AutoExtensibleForm, form.Form):
         message = model.MessageT1()
         message.action = data['action']
         message.recipient_id = data['recipients']
+        if data['subject'] is not None:
+            message.subjects = [data['subject']]
+        if data['comment'] is not None:
+            message.comments = [data['comment']]
+
         for obj in objs:
             message.add_object(obj)
 

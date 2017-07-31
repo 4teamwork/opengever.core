@@ -62,6 +62,8 @@ class MessageT1(object):
         self.event_date = None
         self.event_period = None
         self.modification_date = None
+        self.subjects = []
+        self.comments = []
 
     def add_object(self, obj):
         if IDossierMarker.providedBy(obj):
@@ -120,6 +122,16 @@ class MessageT1(object):
 
         h.action = self.action
         h.testDeliveryFlag = self.test_delivery_flag
+
+        if self.subjects:
+            h.subjects = ech0039.subjectsType()
+            for subject in self.subjects:
+                h.subjects.append(ech0039.subjectType(subject))
+
+        if self.comments:
+            h.comments = ech0039.commentsType()
+            for comment in self.comments:
+                h.comments.append(ech0039.commentType(comment))
 
         return h
 
