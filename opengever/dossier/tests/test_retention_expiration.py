@@ -39,6 +39,7 @@ class TestRetentionExpirationDate(FunctionalTestCase):
 
         with freeze(datetime(2015, 2, 21)):
             IDossier(self.dossier).end = date(2015, 2, 25)
+            self.dossier.reindexObject(idxs=['end'])
             transaction.commit()
 
             browser.login().open(self.dossier)

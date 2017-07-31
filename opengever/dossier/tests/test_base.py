@@ -212,12 +212,14 @@ class TestDateCalculations(IntegrationTestCase):
         self.login(self.dossier_responsible)
         IDossier(self.empty_dossier).start = None
         IDossier(self.empty_dossier).end = None
+        self.empty_dossier.reindexObject(idxs=['end', 'start'])
         self.assertIsNone(self.empty_dossier.earliest_possible_end_date())
 
     def test_earliest_possible_is_end_date_of_a_dossiers(self):
         self.login(self.dossier_responsible)
         IDossier(self.empty_dossier).start = None
         IDossier(self.empty_dossier).end = date(2029, 9, 18)
+        self.empty_dossier.reindexObject(idxs=['end', 'start'])
         self.assertEquals(date(2029, 9, 18),
                           self.empty_dossier.earliest_possible_end_date())
 
@@ -257,6 +259,7 @@ class TestDateCalculations(IntegrationTestCase):
         self.login(self.dossier_responsible)
         IDossier(self.empty_dossier).start = None
         IDossier(self.empty_dossier).end = None
+        self.empty_dossier.reindexObject(idxs=['end', 'start'])
         self.assertIsNone(self.empty_dossier.earliest_possible_end_date())
         self.assertFalse(self.empty_dossier.has_valid_startdate())
 
