@@ -28,7 +28,6 @@ from plone.app.uuid.utils import uuidToObject
 from plone.directives import form
 from plone.uuid.interfaces import IUUID
 from Products.CMFPlone.utils import safe_unicode
-from Products.CMFPlone.utils import safe_unicode
 from z3c.relationfield.relation import RelationValue
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
@@ -519,8 +518,8 @@ class Proposal(ProposalBase):
 
     def update_model(self, data):
         language = data.get('language')
-        data['repository_folder_title'] = self.get_repository_folder_title(
-            language)
+        data['repository_folder_title'] = safe_unicode(
+            self.get_repository_folder_title(language))
         return super(Proposal, self).update_model(data)
 
     def get_edit_values(self, fieldnames):
