@@ -15,8 +15,10 @@ from zope.interface import Interface
 class IECH0147ImportFormSchema(Interface):
 
     message = namedfile.NamedBlobFile(
-        title=_(u'label_message', default=u'Message'),
-        description=_(u'help_message', default=u''),
+        title=_(u'label_message', default=u'File'),
+        description=_(
+            u'help_message',
+            default=u'A ZIP file containing an eCH-147 message.'),
         required=True,
         )
 

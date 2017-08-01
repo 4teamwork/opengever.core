@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-07-31 13:41+0000\n"
+"POT-Creation-Date: 2017-08-01 15:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,198 +17,199 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.ech0147\n"
 
-#: ./opengever/ech0147/browser/import.py:36
+#: ./opengever/ech0147/browser/import.py:43
 msgid "Invalid message. Missing message.xml"
 msgstr ""
 
-#: ./opengever/ech0147/browser/import.py:51
+#: ./opengever/ech0147/browser/import.py:58
 msgid "Message has been imported"
 msgstr ""
 
-#: ./opengever/ech0147/browser/import.py:43
+#: ./opengever/ech0147/browser/import.py:50
 msgid "Messages containing toplevel dossiers and toplevel documents are not supported"
 msgstr ""
 
-#: ./opengever/ech0147/browser/export.py:35
+#: ./opengever/ech0147/browser/export.py:39
 msgid "help_action"
 msgstr ""
 
-#: ./opengever/ech0147/browser/export.py:60
+#: ./opengever/ech0147/browser/export.py:64
 msgid "help_directive"
 msgstr ""
 
-#: ./opengever/ech0147/browser/import.py:14
+#. Default: "A ZIP file containing an eCH-147 message."
+#: ./opengever/ech0147/browser/import.py:19
 msgid "help_message"
 msgstr ""
 
 #. Default: "Recipients of the message. Enter one recipient per line."
-#: ./opengever/ech0147/browser/export.py:26
+#: ./opengever/ech0147/browser/export.py:30
 msgid "help_recipients"
 msgstr ""
 
 #. Default: "Action"
-#: ./opengever/ech0147/browser/export.py:34
+#: ./opengever/ech0147/browser/export.py:38
 msgid "label_action"
 msgstr ""
 
 #. Default: "Cancel"
-#: ./opengever/ech0147/browser/export.py:171
-#: ./opengever/ech0147/browser/import.py:54
+#: ./opengever/ech0147/browser/export.py:186
+#: ./opengever/ech0147/browser/import.py:61
 msgid "label_cancel"
 msgstr ""
 
 #. Default: "Comment"
-#: ./opengever/ech0147/browser/export.py:54
+#: ./opengever/ech0147/browser/export.py:58
 msgid "label_comment"
 msgstr ""
 
 #. Default: "Deadline"
-#: ./opengever/ech0147/browser/export.py:94
+#: ./opengever/ech0147/browser/export.py:101
 msgid "label_deadline"
 msgstr ""
 
 #. Default: "Directive"
-#: ./opengever/ech0147/browser/export.py:59
+#: ./opengever/ech0147/browser/export.py:63
 msgid "label_directive"
 msgstr ""
 
 #. Default: "eCH 0147 Export"
-#: ./opengever/ech0147/browser/export.py:123
+#: ./opengever/ech0147/browser/export.py:130
 msgid "label_ech0147_export_form"
 msgstr ""
 
 #. Default: "eCH 0147 Import"
-#: ./opengever/ech0147/browser/import.py:22
+#: ./opengever/ech0147/browser/import.py:29
 msgid "label_ech0147_import_form"
 msgstr ""
 
 #. Default: "Export"
-#: ./opengever/ech0147/browser/export.py:127
+#: ./opengever/ech0147/browser/export.py:134
 msgid "label_export"
 msgstr ""
 
 #. Default: "Import"
-#: ./opengever/ech0147/browser/import.py:24
+#: ./opengever/ech0147/browser/import.py:31
 msgid "label_import"
 msgstr ""
 
-#. Default: "Message"
-#: ./opengever/ech0147/browser/import.py:13
+#. Default: "File"
+#: ./opengever/ech0147/browser/import.py:18
 msgid "label_message"
 msgstr ""
 
 #. Default: "Paths"
-#: ./opengever/ech0147/browser/export.py:100
+#: ./opengever/ech0147/browser/export.py:107
 msgid "label_paths"
 msgstr ""
 
 #. Default: "Priority"
-#: ./opengever/ech0147/browser/export.py:85
+#: ./opengever/ech0147/browser/export.py:89
 msgid "label_priority"
 msgstr ""
 
 #. Default: "Recipient(s)"
-#: ./opengever/ech0147/browser/export.py:25
+#: ./opengever/ech0147/browser/export.py:29
 msgid "label_recipients"
 msgstr ""
 
 #. Default: "Subject"
-#: ./opengever/ech0147/browser/export.py:49
+#: ./opengever/ech0147/browser/export.py:53
 msgid "label_subject"
 msgstr ""
 
 #. Default: "new"
-#: ./opengever/ech0147/browser/export.py:37
+#: ./opengever/ech0147/browser/export.py:41
 msgid "term_action_1"
 msgstr ""
 
 #. Default: "forwarding"
-#: ./opengever/ech0147/browser/export.py:43
+#: ./opengever/ech0147/browser/export.py:47
 msgid "term_action_10"
 msgstr ""
 
 #. Default: "reminder"
-#: ./opengever/ech0147/browser/export.py:44
+#: ./opengever/ech0147/browser/export.py:48
 msgid "term_action_12"
 msgstr ""
 
 #. Default: "revocation"
-#: ./opengever/ech0147/browser/export.py:38
+#: ./opengever/ech0147/browser/export.py:42
 msgid "term_action_3"
 msgstr ""
 
 #. Default: "correction"
-#: ./opengever/ech0147/browser/export.py:39
+#: ./opengever/ech0147/browser/export.py:43
 msgid "term_action_4"
 msgstr ""
 
 #. Default: "inquiry"
-#: ./opengever/ech0147/browser/export.py:40
+#: ./opengever/ech0147/browser/export.py:44
 msgid "term_action_5"
 msgstr ""
 
 #. Default: "response"
-#: ./opengever/ech0147/browser/export.py:41
+#: ./opengever/ech0147/browser/export.py:45
 msgid "term_action_6"
 msgstr ""
 
 #. Default: "key exchange"
-#: ./opengever/ech0147/browser/export.py:42
+#: ./opengever/ech0147/browser/export.py:46
 msgid "term_action_7"
 msgstr ""
 
 #. Default: "approve"
-#: ./opengever/ech0147/browser/export.py:73
+#: ./opengever/ech0147/browser/export.py:77
 msgid "term_directive_approve"
 msgstr ""
 
 #. Default: "comment"
-#: ./opengever/ech0147/browser/export.py:71
+#: ./opengever/ech0147/browser/export.py:75
 msgid "term_directive_comment"
 msgstr ""
 
 #. Default: "complete"
-#: ./opengever/ech0147/browser/export.py:79
+#: ./opengever/ech0147/browser/export.py:83
 msgid "term_directive_complete"
 msgstr ""
 
 #. Default: "external process"
-#: ./opengever/ech0147/browser/export.py:65
+#: ./opengever/ech0147/browser/export.py:69
 msgid "term_directive_external_process"
 msgstr ""
 
 #. Default: "informationrocess"
-#: ./opengever/ech0147/browser/export.py:68
+#: ./opengever/ech0147/browser/export.py:72
 msgid "term_directive_information"
 msgstr ""
 
 #. Default: "process"
-#: ./opengever/ech0147/browser/export.py:63
+#: ./opengever/ech0147/browser/export.py:67
 msgid "term_directive_process"
 msgstr ""
 
 #. Default: "send"
-#: ./opengever/ech0147/browser/export.py:77
+#: ./opengever/ech0147/browser/export.py:81
 msgid "term_directive_send"
 msgstr ""
 
 #. Default: "sign"
-#: ./opengever/ech0147/browser/export.py:75
+#: ./opengever/ech0147/browser/export.py:79
 msgid "term_directive_sign"
 msgstr ""
 
 #. Default: "high"
-#: ./opengever/ech0147/browser/export.py:89
+#: ./opengever/ech0147/browser/export.py:96
 msgid "term_priority_high"
 msgstr ""
 
 #. Default: "medium"
-#: ./opengever/ech0147/browser/export.py:88
+#: ./opengever/ech0147/browser/export.py:94
 msgid "term_priority_medium"
 msgstr ""
 
 #. Default: "undefined"
-#: ./opengever/ech0147/browser/export.py:87
+#: ./opengever/ech0147/browser/export.py:92
 msgid "term_priority_undefined"
 msgstr ""
 
