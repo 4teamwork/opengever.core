@@ -2,6 +2,7 @@ from opengever.ech0147 import _
 from opengever.ech0147.bindings import ech0147t1
 from opengever.ech0147.interfaces import IECH0147Settings
 from opengever.ech0147.utils import create_dossier
+from opengever.repository.interfaces import IRepositoryFolder
 from plone.namedfile import field as namedfile
 from plone.registry.interfaces import IRegistry
 from z3c.form import form, field, button
@@ -67,6 +68,15 @@ class ECH0147ImportForm(form.Form):
         if not self.enabled():
             raise NotFound()
         return super(ECH0147ImportForm, self).render()
+
+    def available(self):
+        if not self.enabled():
+            return False
+        if not IRepositoryFolder.providedBy(self.context):
+            return False
+        if self.context.is_leaf_node():
+            return True
+        return False
 
     def enabled(self):
         registry = getUtility(IRegistry)
