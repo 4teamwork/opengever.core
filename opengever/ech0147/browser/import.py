@@ -66,6 +66,10 @@ class ECH0147ImportForm(form.Form):
         super(ECH0147ImportForm, self).updateWidgets()
         self.widgets['message'].value = None
 
+    def update(self):
+        self.request.set('disable_border', 1)
+        return super(ECH0147ImportForm, self).update()
+
     def render(self):
         if not self.enabled():
             raise NotFound()
