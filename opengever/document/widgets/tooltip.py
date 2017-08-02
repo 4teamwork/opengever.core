@@ -8,3 +8,4 @@ class TooltipView(ActionButtonRendererMixin):
     def __init__(self, context, request):
         super(TooltipView, self).__init__(context, request)
         self.document = IContentListingObject(self.context)
+        self.request.response.setHeader('X-Tooltip-Response', True)
