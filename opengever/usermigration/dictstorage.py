@@ -65,7 +65,7 @@ class DictstorageMigrator(object):
                     new_key = rreplace(old_key, old_userid, new_userid, 1)
                     entry.key = new_key
                     moved.append((old_key, old_userid, new_userid))
-                    print new_key
+                    logger.info(new_key)
         return moved
 
     def migrate(self):
