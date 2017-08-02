@@ -107,6 +107,7 @@ class Meeting(Base, SQLFormSupport):
     other_participants = Column(UnicodeCoercingText)
     participants = relationship('Member',
                                 secondary=meeting_participants,
+                                order_by='Member.lastname, Member.firstname',
                                 backref='meetings')
 
     dossier_admin_unit_id = Column(String(UNIT_ID_LENGTH), nullable=False)

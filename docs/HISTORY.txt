@@ -21,6 +21,7 @@ Changelog
 - Ensure we append the originating dossier's mail in address as BCC to OfficeConnector multiattach payloads. [Rotonen]
 - Add an attributes REST endpoint to dossiers. [Rotonen]
 - Update ftw.keyowordwidget to 1.3.3, to fix a problem while select/search new keywords. [mathias.leimgruber]
+- Sort meeting participants alphabetically in meeting-view. [elioschmutz]
 - Upgrade ftw.zopemaster which uses the new ftw.slacker for slack notifications. [elioschmutz]
 - Refactor the function: earliest_possible_end_date. [elioschmutz]
 - Upgrade plone.app.jquery from 1.7.2.1 to 1.11.2. [elioschmutz]
