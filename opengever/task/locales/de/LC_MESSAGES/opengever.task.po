@@ -70,7 +70,7 @@ msgstr "Unteraufgabe"
 
 #: ./opengever/task/browser/complete.py:136
 msgid "The documents were delivered to the issuer and the tasks were completed."
-msgstr "Die Dokumente wurde an den Auftraggeber geliefert und die Aufgaben wurden abgeschlossen."
+msgstr "Die Dokumente wurden an den Auftraggeber geliefert und die Aufgaben wurden abgeschlossen."
 
 #: ./opengever/task/browser/accept/inbox.py:33
 msgid "The forwarding has been stored in the local inbox"
@@ -895,4 +895,3 @@ msgstr "Dokument von Aufgabe kopiert (Aufgabe abgeschlossen)"
 #: ./opengever/task/browser/complete.py:292
 msgid "version_message_resolved_task"
 msgstr "Dokument von Aufgabe kopiert (Aufgabe erledigt)"
-
