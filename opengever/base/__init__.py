@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from opengever.base import monkey  # noqa
 from plone.i18n.locales import languages
 from zope.i18nmessageid import MessageFactory
@@ -21,5 +23,5 @@ csv.register_dialect(u'OpenGeverCSV', OpenGeverCSVDialect)
 
 # configure visible language codes. Unfortunately this cannot be done in a .po
 # file.
-languages._combinedlanguagelist['de-ch']['native'] = u'DE'
-languages._combinedlanguagelist['fr-ch']['native'] = u'FR'
+languages._combinedlanguagelist['de-ch']['native'] = u'Deutsch'
+languages._combinedlanguagelist['fr-ch']['native'] = u'Français'

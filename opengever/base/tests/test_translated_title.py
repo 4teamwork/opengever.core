@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -104,10 +106,10 @@ class TestTranslatedTitle(FunctionalTestCase):
 
         browser.login().open(repository_root)
 
-        browser.find('FR').click()
+        browser.find(u'Français').click()
         self.assertEquals(u"syst\xe8me d'ordre", browser.css('h1').first.text)
 
-        browser.find('DE').click()
+        browser.find('Deutsch').click()
         self.assertEquals("Ablage", browser.css('h1').first.text)
 
     @browsing

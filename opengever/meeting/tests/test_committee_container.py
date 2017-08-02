@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
@@ -63,10 +65,10 @@ class TestCommitteeContainer(FunctionalTestCase):
 
         browser.find('Save').click()
 
-        browser.find('FR').click()
+        browser.find(u'Français').click()
         self.assertEquals(u's\xe9ance', browser.css('h1').first.text)
 
-        browser.find('DE').click()
+        browser.find('Deutsch').click()
         self.assertEquals(u'Sitzungen', browser.css('h1').first.text)
 
     def test_get_toc_template(self):
