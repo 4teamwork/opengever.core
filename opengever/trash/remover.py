@@ -85,7 +85,11 @@ class RemoveConditionsChecker(object):
         relations = catalog.findRelations(
             {'to_id': intids.getId(self.document),
              'from_attribute': 'relatedItems'})
+
         for relation in relations:
+            if not relation.from_object:
+                continue
+
             objs.append(intids.queryObject(relation.from_id))
 
         return objs
