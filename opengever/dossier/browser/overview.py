@@ -205,7 +205,7 @@ class DossierOverview(BoxesViewMixin, grok.View, GeverTabMixin):
         relations = catalog.findRelations(
             {'to_id': intids.getId(aq_inner(self.context)),
              'from_attribute': 'relatedDossier'})
-        return [relation.from_id for relation in relations]
+        return [relation.from_id for relation in relations if relation.from_object]
 
     def get_keywords(self):
         linked_keywords = []

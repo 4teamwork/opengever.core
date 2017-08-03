@@ -4,10 +4,12 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from lxml.etree import tostring
+from opengever.base.security import elevated_privileges
 from opengever.contact.interfaces import IContactSettings
 from opengever.core.testing import toggle_feature
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import FunctionalTestCase
+from plone import api
 from plone.protect import createToken
 import json
 import transaction
@@ -185,6 +187,26 @@ class TestOverview(FunctionalTestCase):
         references = browser.css('#referencesBox a')
         self.assertEquals(['Dossier B'], references.text)
         self.assertEquals([dossier_b.absolute_url()],
+                          [link.get('href') for link in references])
+
+    @browsing
+    def test_removed_back_refs_are_no_longer_listed(self, browser):
+        dossier_b = create(Builder('dossier')
+                           .having(relatedDossier=[self.dossier],
+                                   title=u"Dossier B"))
+        dossier_c = create(Builder('dossier')
+                           .having(relatedDossier=[self.dossier],
+                                   title=u"Dossier C"))
+
+        with elevated_privileges():
+            api.content.delete(obj=dossier_b)
+
+        transaction.commit()
+
+        browser.login().open(self.dossier, view='tabbedview_view-overview')
+        references = browser.css('#referencesBox a')
+        self.assertEquals(['Dossier C'], references.text)
+        self.assertEquals([dossier_c.absolute_url()],
                           [link.get('href') for link in references])
 
     @browsing
