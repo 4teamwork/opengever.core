@@ -1,9 +1,12 @@
 from Acquisition import aq_inner
 from opengever.base import _
 from plone import api
+from plone.protect import CheckAuthenticator
+from plone.protect import protect
 from Products.CMFPlone import PloneMessageFactory as pmf
 from Products.Five import BrowserView
 from zc.relation.interfaces import ICatalog
+from zExceptions import Forbidden
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
 from zope.security import checkPermission
@@ -37,12 +40,19 @@ class FolderDeleteConfirmation(BrowserView):
 
         # Delete the given objects
         if 'form.submitted' in self.request.form:
-            api.portal.show_message(pmf(u'Items successfully deleted.'), self.request, type="info")
-            self._delete_objs(self.objs_without_backrefs)
-            return self._redirect_to_orig_template()
+            try:
+                return self._handle_form_submitted(self.request)
+            except Forbidden:
+                return self._redirect_to_orig_template()
 
         # Returns a confirmation-template
         return super(FolderDeleteConfirmation, self).__call__()
+
+    @protect(CheckAuthenticator)
+    def _handle_form_submitted(self, REQUEST=None):
+        api.portal.show_message(pmf(u'Items successfully deleted.'), self.request, type="info")
+        self._delete_objs(self.objs_without_backrefs)
+        return self._redirect_to_orig_template()
 
     def _delete_objs(self, objs):
         """Deletes all the given objects
