@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-08-01 15:54+0000\n"
+"POT-Creation-Date: 2017-08-03 14:45+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,15 +14,19 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ./opengever/ech0147/browser/import.py:43
+#: ./opengever/ech0147/browser/import.py:60
 msgid "Invalid message. Missing message.xml"
 msgstr "Ungültige eCH-0147 Nachricht. message.xml fehlt."
 
-#: ./opengever/ech0147/browser/import.py:58
+#: ./opengever/ech0147/browser/import.py:86
 msgid "Message has been imported"
 msgstr "Nachricht wurde importiert."
 
-#: ./opengever/ech0147/browser/import.py:50
+#: ./opengever/ech0147/browser/import.py:82
+msgid "Message import failed. ${details}"
+msgstr "Import fehlgeschlagen. ${details}"
+
+#: ./opengever/ech0147/browser/import.py:67
 msgid "Messages containing toplevel dossiers and toplevel documents are not supported"
 msgstr "Nachrichten mit Dossiers und Dokumenten ausserhalb von Dossiers werden nicht unterstützt."
 
@@ -35,7 +39,7 @@ msgid "help_directive"
 msgstr "Bearbeitungsanweisung für den Empfänger der Nachricht."
 
 #. Default: "A ZIP file containing an eCH-147 message."
-#: ./opengever/ech0147/browser/import.py:19
+#: ./opengever/ech0147/browser/import.py:26
 msgid "help_message"
 msgstr "Eine eCH-0147 konforme ZIP-Datei"
 
@@ -44,6 +48,11 @@ msgstr "Eine eCH-0147 konforme ZIP-Datei"
 msgid "help_recipients"
 msgstr "Empfänger der Nachricht (z.B. E-Mail-Adresse). Pro Zeile ein Empfänger."
 
+#. Default: "Responsible for dossiers created by eCH-0147 import."
+#: ./opengever/ech0147/browser/import.py:35
+msgid "help_responsible"
+msgstr "Federführende Person bei Dossiers, die durch den eCH-0147 Import erstellt werden."
+
 #. Default: "Action"
 #: ./opengever/ech0147/browser/export.py:38
 msgid "label_action"
@@ -51,7 +60,7 @@ msgstr "Aktion"
 
 #. Default: "Cancel"
 #: ./opengever/ech0147/browser/export.py:186
-#: ./opengever/ech0147/browser/import.py:61
+#: ./opengever/ech0147/browser/import.py:89
 msgid "label_cancel"
 msgstr "Abbrechen"
 
@@ -76,7 +85,7 @@ msgid "label_ech0147_export_form"
 msgstr "eCH-0147/eCH-0039 Export"
 
 #. Default: "eCH 0147 Import"
-#: ./opengever/ech0147/browser/import.py:29
+#: ./opengever/ech0147/browser/import.py:46
 msgid "label_ech0147_import_form"
 msgstr "eCH-0147 Import"
 
@@ -86,12 +95,12 @@ msgid "label_export"
 msgstr "Exportiern"
 
 #. Default: "Import"
-#: ./opengever/ech0147/browser/import.py:31
+#: ./opengever/ech0147/browser/import.py:48
 msgid "label_import"
 msgstr "Importieren"
 
 #. Default: "File"
-#: ./opengever/ech0147/browser/import.py:18
+#: ./opengever/ech0147/browser/import.py:25
 msgid "label_message"
 msgstr "Datei"
 
@@ -109,6 +118,11 @@ msgstr "Priorität"
 #: ./opengever/ech0147/browser/export.py:29
 msgid "label_recipients"
 msgstr "Empfänger"
+
+#. Default: "Responsible"
+#: ./opengever/ech0147/browser/import.py:34
+msgid "label_reponsible"
+msgstr "Federführend"
 
 #. Default: "Subject"
 #: ./opengever/ech0147/browser/export.py:53

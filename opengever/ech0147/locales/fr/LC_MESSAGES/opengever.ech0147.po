@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-08-01 15:54+0000\n"
+"POT-Creation-Date: 2017-08-03 14:45+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,15 +14,19 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ./opengever/ech0147/browser/import.py:43
+#: ./opengever/ech0147/browser/import.py:60
 msgid "Invalid message. Missing message.xml"
 msgstr ""
 
-#: ./opengever/ech0147/browser/import.py:58
+#: ./opengever/ech0147/browser/import.py:86
 msgid "Message has been imported"
 msgstr ""
 
-#: ./opengever/ech0147/browser/import.py:50
+#: ./opengever/ech0147/browser/import.py:82
+msgid "Message import failed. ${details}"
+msgstr ""
+
+#: ./opengever/ech0147/browser/import.py:67
 msgid "Messages containing toplevel dossiers and toplevel documents are not supported"
 msgstr ""
 
@@ -35,13 +39,18 @@ msgid "help_directive"
 msgstr ""
 
 #. Default: "A ZIP file containing an eCH-147 message."
-#: ./opengever/ech0147/browser/import.py:19
+#: ./opengever/ech0147/browser/import.py:26
 msgid "help_message"
 msgstr ""
 
 #. Default: "Recipients of the message. Enter one recipient per line."
 #: ./opengever/ech0147/browser/export.py:30
 msgid "help_recipients"
+msgstr ""
+
+#. Default: "Responsible for dossiers created by eCH-0147 import."
+#: ./opengever/ech0147/browser/import.py:35
+msgid "help_responsible"
 msgstr ""
 
 #. Default: "Action"
@@ -51,7 +60,7 @@ msgstr ""
 
 #. Default: "Cancel"
 #: ./opengever/ech0147/browser/export.py:186
-#: ./opengever/ech0147/browser/import.py:61
+#: ./opengever/ech0147/browser/import.py:89
 msgid "label_cancel"
 msgstr ""
 
@@ -76,7 +85,7 @@ msgid "label_ech0147_export_form"
 msgstr ""
 
 #. Default: "eCH 0147 Import"
-#: ./opengever/ech0147/browser/import.py:29
+#: ./opengever/ech0147/browser/import.py:46
 msgid "label_ech0147_import_form"
 msgstr ""
 
@@ -86,12 +95,12 @@ msgid "label_export"
 msgstr ""
 
 #. Default: "Import"
-#: ./opengever/ech0147/browser/import.py:31
+#: ./opengever/ech0147/browser/import.py:48
 msgid "label_import"
 msgstr ""
 
 #. Default: "File"
-#: ./opengever/ech0147/browser/import.py:18
+#: ./opengever/ech0147/browser/import.py:25
 msgid "label_message"
 msgstr ""
 
@@ -108,6 +117,11 @@ msgstr ""
 #. Default: "Recipient(s)"
 #: ./opengever/ech0147/browser/export.py:29
 msgid "label_recipients"
+msgstr ""
+
+#. Default: "Responsible"
+#: ./opengever/ech0147/browser/import.py:34
+msgid "label_reponsible"
 msgstr ""
 
 #. Default: "Subject"
