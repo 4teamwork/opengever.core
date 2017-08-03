@@ -11,13 +11,13 @@ from opengever.document.widgets.document_link import DocumentLinkWidget
 from opengever.dossier.utils import get_containing_dossier
 from opengever.meeting import _
 from opengever.meeting import is_word_meeting_implementation_enabled
+from opengever.meeting import require_word_meeting_feature
 from opengever.meeting.command import CopyProposalDocumentCommand
 from opengever.meeting.command import CreateSubmittedProposalCommand
 from opengever.meeting.command import NullUpdateSubmittedDocumentCommand
 from opengever.meeting.command import RejectProposalCommand
 from opengever.meeting.command import UpdateSubmittedDocumentCommand
 from opengever.meeting.container import ModelContainer
-from opengever.meeting.exceptions import WordMeetingImplementationDisabledError
 from opengever.meeting.interfaces import IHistory
 from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.model.proposal import Proposal as ProposalModel
@@ -255,14 +255,12 @@ class ProposalBase(ModelContainer):
         admin_unit_id = self.load_model().committee.admin_unit_id
         return ogds_service().fetch_admin_unit(admin_unit_id)
 
+    @require_word_meeting_feature
     def get_proposal_document(self):
         """If the word meeting implementation feature is enabled,
         this method returns the proposal document, containing the actual
         proposal "body".
         """
-        if not is_word_meeting_implementation_enabled():
-            raise WordMeetingImplementationDisabledError()
-
         if getattr(self, '_proposal_document_uuid', None) is None:
             return None
 
@@ -275,14 +273,12 @@ class ProposalBase(ModelContainer):
 
         return document
 
+    @require_word_meeting_feature
     def create_proposal_document(self, source_blob=None, **kwargs):
         """Creates a proposal document within this proposal or submitted
         proposal.
         Only one proposal document can be created.
         """
-        if not is_word_meeting_implementation_enabled():
-            raise WordMeetingImplementationDisabledError()
-
         if self.get_proposal_document():
             raise ValueError('There is already a proposal document.')
 
