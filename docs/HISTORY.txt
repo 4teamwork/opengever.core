@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Fix encoding error when syncing proposals with SQL. [jone]
+- Remove "Properties"-action on personal overview. [elioschmutz]
 - Ungrok opengever.advancedsearch. [phgross]
 - Fix showroom overlay within an activated exposator. [elioschmutz]
 - Handle unknown asynchronous tooltip response. [Kevin Bieri]
