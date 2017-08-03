@@ -51,7 +51,7 @@ class TestDossierDeactivation(IntegrationTestCase):
     @browsing
     def test_not_possible_with_active_proposals(self, browser):
         self.login(self.dossier_responsible, browser)
-        self.assert_workflow_state('proposal-state-active', self.proposal)
+        self.assert_workflow_state('proposal-state-active', self.draft_proposal)
         browser.open(self.dossier, view='transition-deactivate',
                      send_authenticator=True)
         self.assert_workflow_state('dossier-state-active', self.dossier)

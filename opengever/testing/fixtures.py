@@ -1,6 +1,7 @@
 from AccessControl.SecurityManagement import getSecurityManager
 from AccessControl.SecurityManagement import setSecurityManager
 from contextlib import contextmanager
+from contextlib import nested
 from datetime import date
 from datetime import datetime
 from ftw.builder import Builder
@@ -8,10 +9,15 @@ from ftw.builder import create
 from ftw.builder import ticking_creator
 from ftw.testing import freeze
 from ftw.testing import staticuid
+from functools import wraps
 from opengever.base.command import CreateEmailCommand
+from opengever.base.model import create_session
 from opengever.mail.tests import MAIL_DATA
+from opengever.meeting.proposalhistory import BaseHistoryRecord
 from opengever.ogds.base.utils import ogds_service
+from opengever.testing.integration_test_case import FEATURE_FLAGS
 from operator import methodcaller
+from plone import api
 from plone.app.testing import login
 from plone.app.testing import SITE_OWNER_NAME
 from time import time
@@ -36,7 +42,8 @@ class OpengeverContentFixture(object):
             with self.login(self.administrator):
                 self.create_repository_tree()
                 self.create_templates()
-                self.create_committees()
+                with self.features('meeting'):
+                    self.create_committees()
 
         with self.freeze_at_hour(14):
             with self.login(self.dossier_responsible):
@@ -47,8 +54,12 @@ class OpengeverContentFixture(object):
             with self.login(self.dossier_responsible):
                 self.create_emails()
 
+        with self.freeze_at_hour(16):
+            with self.login(self.committee_responsible):
+                self.create_meeting()
+
         end = time()
-        print '(fixture setup in {}s) '.format(round(end-start, 3)),
+        print '(fixture setup in {}s) '.format(round(end - start, 3)),
 
         return self._lookup_table
 
@@ -77,6 +88,8 @@ class OpengeverContentFixture(object):
             'regular_user', u'K\xe4thi', u'B\xe4rfuss')
         self.secretariat_user = self.create_user(
             'secretariat_user', u'J\xfcrgen', u'K\xf6nig')
+        self.committee_responsible = self.create_user(
+            'committee_responsible', u'Fr\xe4nzi', u'M\xfcller')
 
     @staticuid()
     def create_repository_tree(self):
@@ -112,11 +125,21 @@ class OpengeverContentFixture(object):
             Builder('templatefolder')
             .titled(u'Vorlagen')
             .having(id='vorlagen')))
+        templates.manage_setLocalRoles(self.org_unit.users_group_id,
+                                       ('Reader',))
+        templates.reindexObjectSecurity()
 
         self.sablon_template = self.register('sablon_template', create(
             Builder('sablontemplate')
             .within(templates)
             .with_asset_file('sablon_template.docx')))
+
+        with self.features('meeting', 'word-meeting'):
+            self.register('proposal_template', create(
+                Builder('proposaltemplate')
+                .titled(u'Baugesuch')
+                .attach_file_containing('Word Content', u'file.docx')
+                .within(templates)))
 
     @staticuid()
     def create_committees(self):
@@ -125,12 +148,26 @@ class OpengeverContentFixture(object):
             .titled(u'Sitzungen')
             .having(protocol_template=self.sablon_template,
                     excerpt_template=self.sablon_template)))
+        self.committee_container.manage_setLocalRoles(
+            self.committee_responsible.getId(),
+            ('Reader',))
+        self.committee_container.reindexObjectSecurity()
 
         self.committee = self.register('committee', self.create_committee(
             title=u'Rechnungspr\xfcfungskommission',
             repository_folder=self.repofolder1,
             group_id='committee_rpk_group',
-            members=[self.administrator]))
+            members=[self.administrator, self.committee_responsible]))
+        self.register_raw('committee_id', self.committee.load_model().committee_id)
+
+        self.empty_committee = self.register(
+            'empty_committee', self.create_committee(
+                title=u'Kommission f\xfcr Verkehr',
+                repository_folder=self.repofolder1,
+                group_id='committee_ver_group',
+                members=[self.administrator, self.committee_responsible]))
+        self.register_raw('empty_committee_id',
+                          self.empty_committee.load_model().committee_id)
 
     @staticuid()
     def create_treaty_dossiers(self):
@@ -148,7 +185,7 @@ class OpengeverContentFixture(object):
             Builder('document').within(self.dossier)
             .titled(u'Vertr\xe4gsentwurf')
             .attach_file_containing('Word dummy content',
-                                    u'vertrasentwurf.docx')))
+                                    u'vertragsentwurf.docx')))
 
         task = self.register('task', create(
             Builder('task').within(self.dossier)
@@ -178,11 +215,36 @@ class OpengeverContentFixture(object):
             .attach_file_containing('Feedback text',
                                     u'vertr\xe4g sentwurf.docx')))
 
-        self.register('proposal', create(
+        proposal = self.register('proposal', create(
             Builder('proposal').within(self.dossier)
             .having(title=u'Vertragsentwurf f\xfcr weitere Bearbeitung bewilligen',
                     committee=self.committee.load_model())
-            .relate_to(document)))
+            .relate_to(document)
+            .as_submitted()))
+        self.register_path(
+            'submitted_proposal',
+            proposal.load_model().submitted_physical_path.encode('utf-8'))
+
+        self.register('draft_proposal', create(
+            Builder('proposal').within(self.dossier)
+            .having(title=u'Antrag f\xfcr Kreiselbau',
+                    committee=self.empty_committee.load_model())))
+
+        with self.features('meeting', 'word-meeting'):
+            word_proposal = self.register('word_proposal', create(
+                Builder('proposal').within(self.dossier)
+                .having(title=u'\xc4nderungen am Personalreglement',
+                        committee=self.committee.load_model())
+                .relate_to(document)
+                .as_submitted()))
+            self.register_path(
+                'submitted_word_proposal',
+                word_proposal.load_model().submitted_physical_path.encode('utf-8'))
+
+            self.register('draft_word_proposal', create(
+                Builder('proposal').within(self.dossier)
+                .having(title=u'\xdcberarbeitung der GAV',
+                        committee=self.empty_committee.load_model())))
 
         subdossier = self.register('subdossier', create(
             Builder('dossier').within(self.dossier).titled(u'2016')))
@@ -219,6 +281,7 @@ class OpengeverContentFixture(object):
             Builder("mail")
             .with_message(MAIL_DATA)
             .within(self.dossier)))
+        self.register('mail', self.mail_eml)
 
         class MockMsg2MimeTransform(object):
 
@@ -230,6 +293,24 @@ class OpengeverContentFixture(object):
                                      'mock-msg-body',
                                      transform=MockMsg2MimeTransform())
         self.mail_msg = self.register('mail_msg', command.execute())
+
+    @staticuid()
+    def create_meeting(self):
+        meeting_dossier = self.register('meeting_dossier', create(
+            Builder('meeting_dossier').within(self.repofolder00)
+            .titled(u'Sitzungsdossier 9/2017')
+            .having(start=date(2016, 9, 12),
+                    responsible=self.committee_responsible.getId())))
+        meeting = create(
+            Builder('meeting')
+            .having(title=u'9. Sitzung der Rechnungspr\xfcfungskommission',
+                    committee=self.committee.load_model(),
+                    location=u'B\xfcren an der Aare',
+                    start=datetime(2016, 9, 12, 15, 30, tzinfo=pytz.UTC),
+                    end=datetime(2016, 9, 12, 17, 0, tzinfo=pytz.UTC))
+            .link_with(meeting_dossier))
+        create_session().flush()  # trigger id generation, part of path
+        self.register_path('meeting', meeting.physical_path.encode('utf-8'))
 
     @contextmanager
     def freeze_at_hour(self, hour):
@@ -248,15 +329,56 @@ class OpengeverContentFixture(object):
         """
         with freeze(datetime(2016, 8, 31, hour, 1, 33, tzinfo=pytz.UTC)) as clock:
             with ticking_creator(clock, minutes=2):
-                yield
+                with self.ticking_proposal_history(clock, seconds=1):
+                    yield
+
+    @contextmanager
+    def ticking_proposal_history(self, clock, **forward):
+        """The proposal history entries must be unique.
+        This context manager applies patches so that creating a proposal
+        history record will move the freezed clock forward a bit.
+        This context manager must not be nested.
+        """
+        marker_name = '_fixture_patched'
+
+        if getattr(BaseHistoryRecord, marker_name, None):
+            yield
+            return
+
+        original_init = BaseHistoryRecord.__init__
+
+        @wraps(original_init)
+        def patched_init(*args, **kwargs):
+            result = original_init(*args, **kwargs)
+            clock.forward(**forward)
+            return result
+
+        BaseHistoryRecord.__init__ = patched_init
+        setattr(BaseHistoryRecord, marker_name, True)
+        try:
+            yield
+        finally:
+            BaseHistoryRecord.__init__ = original_init
+            delattr(BaseHistoryRecord, marker_name)
 
     def register(self, attrname, obj):
         """Add an object to the lookup table so that it can be accessed from
         within the name under the attribute with name ``attrname``.
         Return the object for chaining convenience.
         """
-        self._lookup_table[attrname] = ('object', '/'.join(obj.getPhysicalPath()))
+        self.register_path(attrname, '/'.join(obj.getPhysicalPath()))
         return obj
+
+    def register_path(self, attrname, path):
+        """Add an object to the lookup table by path.
+        """
+        self._lookup_table[attrname] = ('object', path)
+
+    def register_raw(self, attrname, value):
+        """Register a raw value in the lookup table for later lookup.
+        The value must be JSON compatible.
+        """
+        self._lookup_table[attrname] = ('raw', value)
 
     def create_user(self, attrname, firstname, lastname, globalroles=()):
         """Create an OGDS user and a Plone user.
@@ -309,3 +431,18 @@ class OpengeverContentFixture(object):
             yield
         finally:
             setSecurityManager(old_manager)
+
+    @contextmanager
+    def feature(self, feature):
+        if feature not in FEATURE_FLAGS:
+            raise ValueError('Invalid {!r}'.format(feature))
+
+        before = api.portal.get_registry_record(FEATURE_FLAGS[feature])
+        api.portal.set_registry_record(FEATURE_FLAGS[feature], True)
+        try:
+            yield
+        finally:
+            api.portal.set_registry_record(FEATURE_FLAGS[feature], before)
+
+    def features(self, *features):
+        return nested(*map(self.feature, features))
