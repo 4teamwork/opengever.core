@@ -1,6 +1,5 @@
 from datetime import date
 from datetime import timedelta
-from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
 from ftw.keywordwidget.widget import KeywordWidget
 from opengever.advancedsearch import _
@@ -18,13 +17,13 @@ from z3c.form.browser import radio, checkbox
 from z3c.form.field import Fields
 from z3c.form.interfaces import INPUT_MODE
 from zope import schema
-from zope.interface import Interface
+from zope.interface import provider
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
 import urllib
 
 
-@grok.provider(IContextSourceBinder)
+@provider(IContextSourceBinder)
 def get_possible_dossier_states(context):
     wftool = getToolByName(context, 'portal_workflow')
     chain = wftool.getChainForPortalType(
@@ -35,7 +34,7 @@ def get_possible_dossier_states(context):
     return SimpleVocabulary(states)
 
 
-@grok.provider(IContextSourceBinder)
+@provider(IContextSourceBinder)
 def get_possible_task_states(context):
     wftool = getToolByName(context, 'portal_workflow')
     chain = wftool.getChainForPortalType(
@@ -46,7 +45,7 @@ def get_possible_task_states(context):
     return SimpleVocabulary(states)
 
 
-@grok.provider(IContextSourceBinder)
+@provider(IContextSourceBinder)
 def get_types(context):
     types = []
     types.append(SimpleVocabulary.createTerm(
@@ -258,9 +257,6 @@ class IAdvancedSearch(directives_form.Schema):
 
 
 class AdvancedSearchForm(directives_form.Form):
-    grok.context(Interface)
-    grok.name('advanced_search')
-    grok.require('zope2.View')
 
     label = _('advanced_search', default='advanced search')
 
