@@ -20,6 +20,32 @@
                  tal:define="dummy python:request.set('disable_border',1);
                              disable_column_one python:request.set('disable_plone.leftcolumn',1);
                              disable_column_two python:request.set('disable_plone.rightcolumn',1);" />
+
+<metal:js fill-slot="javascript_head_slot">
+        <script type="text/javascript">
+
+          (function($) {
+            // The .highlightSearchTerms function is only called once on a pagereload
+            // (see jquery.highlightsearchterms.js#L212)
+            //
+            // Fetching new searchresults by ajax will not call highlightSearchTerms again.
+            //
+            // The search.js does not trigger an event after reloading the searchview.
+            // The only possiblity call the hightlightSearchTerms-function again
+            // is to listen on the ajaxComplete event which will be triggered after every ajax request.
+            $(document).ajaxComplete(function(event, jqXHR, params) {
+              if (params.url.indexOf("@@updated_search") !== -1) {
+                  // Highlight search results, but ignore referrals from our own domain
+                  // when displaying search results.
+                  $('#region-content,#content').highlightSearchTerms({
+                    includeOwnDomain: $('dl.searchResults').length === 0
+                  });
+                }
+              });
+          })(window.jQuery);
+
+        </script>
+      </metal:js>
   </head>
 
   <body>
