@@ -19,6 +19,11 @@ def is_officeconnector_checkout_feature_enabled():
     return api.portal.get_registry_record('direct_checkout_and_edit_enabled',
                                           interface=IOfficeConnectorSettings)
 
+def parse_bcc(request):
+    body = request.get('BODY', None)
+    if body and 'bcc' in body:
+        return json.loads(body).get('bcc', None)
+    return None
 
 def parse_documents(request, context):
     documents = []
@@ -35,8 +40,9 @@ def parse_documents(request, context):
         documents.append(context)
 
     if request['REQUEST_METHOD'] == 'POST' and 'BODY' in request:
+        payload = json.loads(request['BODY'])
+        paths = payload.get('documents', None)
 
-        paths = json.loads(request['BODY'])
         for path in paths:
             # Restricted traversal does not handle unicode paths
             document = api.content.get(path=str(path))
@@ -67,19 +73,22 @@ def get_auth_plugin(context):
 
 
 def create_oc_url(request, context, payload):
+    auth_plugin = get_auth_plugin(context)
+
+    if not auth_plugin:
+        raise Forbidden
+    action = payload.get('action', None)
+
     # Feature used wrong - an action is always required
-    if 'action' not in payload:
+    if not action:
         raise NotFound
+
+    bcc = parse_bcc(request)
 
     documents = parse_documents(request, context)
 
     if not documents:
         raise NotFound
-
-    auth_plugin = get_auth_plugin(context)
-
-    if not auth_plugin:
-        raise Forbidden
 
     # Create a JWT for OfficeConnector - contents:
     # action - tells OfficeConnector which code path to take
@@ -95,6 +104,9 @@ def create_oc_url(request, context, payload):
 
     for document in documents:
         payload['documents'].append(api.content.get_uuid(document))
+
+    if bcc:
+        payload['bcc'] = bcc
 
     user_id = api.user.get_current().getId()
 
