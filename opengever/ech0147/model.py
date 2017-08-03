@@ -1,18 +1,21 @@
 """eCH-0147T1 model"""
+from Products.CMFCore.utils import getToolByName
 from datetime import datetime
-from opengever.document.document import IDocumentSchema
+from opengever.base.behaviors.classification import IClassification
+from opengever.base.interfaces import IReferenceNumber
 from opengever.document.behaviors.metadata import IDocumentMetadata
+from opengever.document.document import IDocumentSchema
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.ech0147.bindings import ech0039
 from opengever.ech0147.bindings import ech0058
 from opengever.ech0147.bindings import ech0147t0
 from opengever.ech0147.bindings import ech0147t1
+from opengever.ech0147.mappings import CLASSIFICATION_MAPPING
+from opengever.ech0147.mappings import DOSSIER_STATUS_MAPPING
+from opengever.ech0147.mappings import PRIVACY_LAYER_MAPPING
 from opengever.ech0147.utils import file_checksum
-from opengever.base.behaviors.classification import IClassification
-from opengever.base.interfaces import IReferenceNumber
 from plone import api
-from Products.CMFCore.utils import getToolByName
 from pyxb.utils.domutils import BindingDOMSupport
 from uuid import uuid4
 
@@ -146,26 +149,6 @@ class MessageT1(object):
             zipfile.write(document.blobpath, document.path)
 
 
-DOSSIER_STATUS_MAPPING = {
-    u'dossier-state-active': u'in_process',
-    u'dossier-state-archived': u'archived',
-    u'dossier-state-inactive': u'canceled',
-    u'dossier-state-resolved': u'closed',
-    u'dossier-state-offered': u'in_selection',
-}
-
-CLASSIFICATION_MAPPING = {
-    u'unprotected': u'unclassified',
-    u'confidential': u'confidential',
-    u'classified': u'secret',
-}
-
-PRIVACY_LAYER_MAPPING = {
-    u'privacy_layer_no': False,
-    u'privacy_layer_yes': True,
-}
-
-
 class Dossier(object):
 
     def __init__(self, obj, base_path):
@@ -225,7 +208,6 @@ class Dossier(object):
 
         # Optional, currently not supported properties
         d.openToThePublic = None
-        d.keywords = None
         d.comments = None
         d.links = None
         d.folders = None

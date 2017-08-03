@@ -1,7 +1,11 @@
-from opengever.dossier.behaviors.dossier import IDossier
-from random import randint
-from zope.container.interfaces import INameChooser
 from opengever.document.document import IDocumentSchema
+from opengever.ech0147.mappings import INV_CLASSIFICATION_MAPPING
+from opengever.ech0147.mappings import INV_PRIVACY_LAYER_MAPPING
+from plone.restapi.interfaces import IDeserializeFromJson
+from random import randint
+from zope.component import queryMultiAdapter
+from zope.container.interfaces import INameChooser
+
 import hashlib
 import transaction
 import os.path
@@ -18,16 +22,28 @@ def file_checksum(filename, chunksize=65536):
         return u'MD5', h.hexdigest()
 
 
-def create_dossier(container, dossier, zipfile):
+def create_dossier(container, dossier, zipfile, responsible):
     temp_id = 'dossier.temp.{}'.format(randint(0, 999999))
     id_ = container.invokeFactory(
         'opengever.dossier.businesscasedossier', temp_id)
     obj = container[id_]
 
-    obj.title = dossier.titles.title[0].value()
+    data = {
+        'title': dossier.titles.title[0].value(),
+        'start': dossier.openingDate,
+        'classification': INV_CLASSIFICATION_MAPPING.get(
+            dossier.classification),
+        'privacy_layer': INV_PRIVACY_LAYER_MAPPING.get(
+            dossier.hasPrivacyProtection),
+        'responsible': responsible,
+    }
+    if dossier.keywords:
+        data.update({
+            'keywords': [k.value() for k in dossier.keywords.keyword]})
 
-    dossier_obj = IDossier(obj)
-    dossier_obj.start = dossier.openingDate
+    deserializer = queryMultiAdapter((obj, obj.REQUEST),
+                                     IDeserializeFromJson)
+    deserializer(validate_all=True, data=data)
 
     # Rename dossier
     chooser = INameChooser(container)
@@ -37,7 +53,7 @@ def create_dossier(container, dossier, zipfile):
 
     if dossier.dossiers:
         for subdossier in dossier.dossiers.dossier:
-            create_dossier(obj, subdossier, zipfile)
+            create_dossier(obj, subdossier, zipfile, responsible)
 
     if dossier.documents:
         for document in dossier.documents.document:
@@ -50,7 +66,23 @@ def create_document(container, document, zipfile):
         'opengever.document.document', temp_id)
     obj = container[id_]
 
-    obj.title = document.titles.title[0].value()
+    data = {
+        'title': document.titles.title[0].value(),
+        'classification': INV_CLASSIFICATION_MAPPING.get(
+            document.classification),
+        'privacy_layer': INV_PRIVACY_LAYER_MAPPING.get(
+            document.hasPrivacyProtection),
+        'document_date': document.openingDate,
+        'document_author': document.owner,
+        'foreign_reference': document.ourRecordReference,
+    }
+    if document.keywords:
+        data.update({
+            'keywords': [k.value() for k in document.keywords.keyword]})
+
+    deserializer = queryMultiAdapter((obj, obj.REQUEST),
+                                     IDeserializeFromJson)
+    deserializer(validate_all=True, data=data)
 
     if document.files:
         file_ = document.files.file[0]

@@ -5,14 +5,21 @@ from opengever.ech0147.utils import create_dossier
 from opengever.repository.interfaces import IRepositoryFolder
 from plone.namedfile import field as namedfile
 from plone.registry.interfaces import IRegistry
-from z3c.form import form, field, button
+from z3c.form import form, button
 from zExceptions import NotFound
+from zExceptions import BadRequest
 from zipfile import ZipFile
 from zope.component import getUtility
-from zope.interface import Interface
+from zope import schema
+from opengever.ogds.base.sources import AllUsersSourceBinder
+from opengever.ogds.base.utils import ogds_service
+from plone.autoform import directives
+from plone.supermodel.model import Schema
+from plone.autoform.form import AutoExtensibleForm
+from ftw.keywordwidget.widget import KeywordFieldWidget
 
 
-class IECH0147ImportFormSchema(Interface):
+class IECH0147ImportFormSchema(Schema):
 
     message = namedfile.NamedBlobFile(
         title=_(u'label_message', default=u'File'),
@@ -22,9 +29,19 @@ class IECH0147ImportFormSchema(Interface):
         required=True,
         )
 
+    directives.widget('responsible', KeywordFieldWidget, async=True)
+    responsible = schema.Choice(
+        title=_(u'label_reponsible', default=u'Responsible'),
+        description=_(u'help_responsible',
+                      default=u'Responsible for dossiers created by eCH-0147 '
+                      'import.'),
+        source=AllUsersSourceBinder(),
+        required=True,
+    )
 
-class ECH0147ImportForm(form.Form):
-    fields = field.Fields(IECH0147ImportFormSchema)
+
+class ECH0147ImportForm(AutoExtensibleForm, form.Form):
+    schema = IECH0147ImportFormSchema
     ignoreContext = True  # don't use context to get widget data
     label = _(u'label_ech0147_import_form', u'eCH 0147 Import')
 
@@ -53,7 +70,18 @@ class ECH0147ImportForm(form.Form):
 
             if message.content_.dossiers:
                 for dossier in message.content_.dossiers.dossier:
-                    create_dossier(self.context, dossier, zipfile)
+                    try:
+                        create_dossier(
+                            self.context, dossier, zipfile,
+                            data['responsible'])
+                    except BadRequest as exc:
+                        error_msg = ''
+                        for error in exc.message:
+                            error_msg += '%s: %s' % (
+                                error['field'], error['message'])
+                        self.status = _(u'Message import failed. ${details}',
+                                        mapping={'details': error_msg})
+                        return
 
         self.status = _(u"Message has been imported")
         return self.render()
@@ -65,6 +93,13 @@ class ECH0147ImportForm(form.Form):
     def updateWidgets(self):
         super(ECH0147ImportForm, self).updateWidgets()
         self.widgets['message'].value = None
+
+        # Set default responsible to current user
+        if not self.request.form.get('form.widgets.responsible'):
+            user = ogds_service().fetch_current_user()
+            if user is not None:
+                self.widgets['responsible'].value = [user.userid]
+                self.widgets['responsible'].update()
 
     def update(self):
         self.request.set('disable_border', 1)
