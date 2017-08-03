@@ -27,6 +27,10 @@
         <tal:extjs condition="view/extjs_enabled">
           <div id="listing_container"
                class="ftwtable +extjs tab_container"><!--iefix--></div>
+
+          <!-- CUSTOM -->
+          <div id="batching_container" class="ftwtable"><!--iefix--></div>
+          <!-- END CUSTOM -->
           <div id="menu_container" class="ftwtable"><!--iefix--></div>
         </tal:extjs>
 
