@@ -535,8 +535,8 @@ class Proposal(ProposalBase):
 
         reference_number = IReferenceNumber(
             self.get_containing_dossier().get_main_dossier()).get_number()
-        repository_folder_title = self.get_repository_folder_title(
-            proposal_model.language)
+        repository_folder_title = safe_unicode(self.get_repository_folder_title(
+            proposal_model.language))
 
         proposal_model.physical_path = self.get_physical_path()
         proposal_model.dossier_reference_number = reference_number

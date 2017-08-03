@@ -5,6 +5,7 @@ Changelog
 2017.4.1 (unreleased)
 ---------------------
 
+- Fix encoding error when syncing proposals with SQL. [jone]
 - Ungrok opengever.advancedsearch. [phgross]
 - Fix showroom overlay within an activated exposator. [elioschmutz]
 - Handle unknown asynchronous tooltip response. [Kevin Bieri]
