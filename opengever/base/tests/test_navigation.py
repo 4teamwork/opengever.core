@@ -56,7 +56,7 @@ class TestNavigation(FunctionalTestCase):
                            .in_state('repositoryfolder-state-inactive'))
 
         browser.login().open()
-        browser.click_on('DE')
+        browser.click_on('Deutsch')
         browser.visit(root, view='navigation.json')
         self.assert_json_equal(
             [{"text": "1. The Folder",

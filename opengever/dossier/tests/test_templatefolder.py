@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from datetime import date
 from datetime import datetime
 from ftw.builder import Builder
@@ -574,10 +576,10 @@ class TestTemplateFolder(FunctionalTestCase):
                       'Title (French)': u'mod\xe8le'})
         browser.find('Save').click()
 
-        browser.find('FR').click()
+        browser.find(u'Français').click()
         self.assertEquals(u'mod\xe8le', browser.css('h1').first.text)
 
-        browser.find('DE').click()
+        browser.find('Deutsch').click()
         self.assertEquals(u'Vorlagen', browser.css('h1').first.text)
 
     @browsing

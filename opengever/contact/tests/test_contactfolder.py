@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -27,10 +29,10 @@ class TestContactFolder(FunctionalTestCase):
                       'Title (French)': u'Contacts'})
         browser.find('Save').click()
 
-        browser.find('FR').click()
+        browser.find(u'Français').click()
         self.assertEquals(u"Contacts", browser.css('h1').first.text)
 
-        browser.find('DE').click()
+        browser.find('Deutsch').click()
         self.assertEquals("Kontakte", browser.css('h1').first.text)
 
     @browsing
