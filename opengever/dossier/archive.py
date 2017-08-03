@@ -6,7 +6,7 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.filing import IFilingNumber
 from opengever.dossier.interfaces import IDossierArchiver
-from opengever.dossier.interfaces import IDossierResolver
+from opengever.dossier.resolve import get_resolver
 from opengever.ogds.base.utils import get_current_admin_unit
 from persistent.dict import PersistentDict
 from plone.directives import form as directives_form
@@ -260,7 +260,7 @@ class ArchiveForm(directives_form.Form):
             return self.request.RESPONSE.redirect(self.context.absolute_url())
 
         # archiving must passed to the resolving view
-        resolver = IDossierResolver(self.context)
+        resolver = get_resolver(self.context)
         if resolver.is_resolve_possible():
             raise TypeError
         if resolver.are_enddates_valid():

@@ -8,6 +8,7 @@ Changelog
 - Fix encoding error when syncing proposals with SQL. [jone]
 - Ungrok opengever.advancedsearch. [phgross]
 - Fix showroom overlay within an activated exposator. [elioschmutz]
+- Fix ArchiveForm when resolving a Dossier. [phgross]
 - Handle unknown asynchronous tooltip response. [Kevin Bieri]
 - Move language selector into the user menu (dropdown) - Implemented in plonetheme.teamraum. [mathias.leimgruber]
 - Only the Manager can access the folder_contents on the plone root. [mathias.leimgruber]

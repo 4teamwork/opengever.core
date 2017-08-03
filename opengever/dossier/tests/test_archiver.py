@@ -3,6 +3,7 @@ from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages import statusmessages
 from ftw.testing import MockTestCase
 from grokcore.component.testing import grok
 from opengever.core.testing import ANNOTATION_LAYER
@@ -267,3 +268,98 @@ class TestArchiveFormDefaults(IntegrationTestCase):
         browser.open(self.dossier, view='transition-archive')
         self.assertEqual(date(2021, 2, 2),
                          self._get_form_date(browser, 'dossier_enddate'))
+
+
+class TestArchiveForm(IntegrationTestCase):
+
+    features = ('filing_number', )
+
+    @browsing
+    def test_resolving_and_add_filing_number(self, browser):
+        self.login(self.secretariat_user, browser)
+        browser.open(self.empty_dossier, view='transition-archive')
+
+        browser.fill({'filing prefix': 'Government',
+                      'filing Year': u'2017',
+                      'Action': 'resolve and set filing no'})
+        browser.click_on('Archive')
+
+        self.assert_workflow_state(
+            'dossier-state-resolved', self.empty_dossier)
+        statusmessages.assert_message('The Dossier has been resolved')
+        self.assertEquals('Hauptmandant-Government-2017-1',
+                          IFilingNumber(self.empty_dossier).filing_no)
+
+    @browsing
+    def test_resolving_use_existing_filing_number(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        former_filing_number = u'Hauptmandant-Administration-2013-1'
+        IFilingNumber(self.empty_dossier).filing_no = former_filing_number
+        browser.open(self.empty_dossier, view='transition-archive')
+
+        browser.fill({'filing prefix': 'Government',
+                      'filing Year': u'2017',
+                      'Action': 'resolve and take the existing filing no'})
+        browser.click_on('Archive')
+
+        self.assert_workflow_state(
+            'dossier-state-resolved', self.empty_dossier)
+        statusmessages.assert_message('The Dossier has been resolved')
+        self.assertEquals(former_filing_number,
+                          IFilingNumber(self.empty_dossier).filing_no)
+
+    @browsing
+    def test_resolving_and_use_existing_filing_number(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        former_filing_number = u'Hauptmandant-Administration-2013-1'
+        IFilingNumber(self.empty_dossier).filing_no = former_filing_number
+        browser.open(self.empty_dossier, view='transition-archive')
+
+        browser.fill({'filing prefix': 'Government',
+                      'filing Year': u'2017',
+                      'Action': 'resolve and take the existing filing no'})
+        browser.click_on('Archive')
+
+        self.assert_workflow_state(
+            'dossier-state-resolved', self.empty_dossier)
+        statusmessages.assert_message('The Dossier has been resolved')
+        self.assertEquals(former_filing_number,
+                          IFilingNumber(self.empty_dossier).filing_no)
+
+    @browsing
+    def test_resolving_and_set_new_filing_number(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        former_filing_number = u'Hauptmandant-Administration-2013-1'
+        IFilingNumber(self.empty_dossier).filing_no = former_filing_number
+        browser.open(self.empty_dossier, view='transition-archive')
+
+        browser.fill({'filing prefix': 'Government',
+                      'filing Year': u'2017',
+                      'Action': 'resolve and set a new filing no'})
+        browser.click_on('Archive')
+
+        self.assert_workflow_state(
+            'dossier-state-resolved', self.empty_dossier)
+        statusmessages.assert_message('The Dossier has been resolved')
+        self.assertEquals('Hauptmandant-Government-2017-1',
+                          IFilingNumber(self.empty_dossier).filing_no)
+
+    @browsing
+    def test_only_give_filing_number_on_resolved_dossier(self, browser):
+        self.login(self.secretariat_user, browser)
+        self.set_workflow_state('dossier-state-resolved', self.empty_dossier)
+        browser.open(self.empty_dossier, view='transition-archive')
+
+        browser.fill({'filing prefix': 'Government',
+                      'filing Year': u'2017',
+                      'Action': 'set a filing no'})
+        browser.click_on('Archive')
+
+        self.assert_workflow_state(
+            'dossier-state-resolved', self.empty_dossier)
+        statusmessages.assert_message('The filing number has been given.')
+        self.assertEquals('Hauptmandant-Government-2017-1',
+                          IFilingNumber(self.empty_dossier).filing_no)
