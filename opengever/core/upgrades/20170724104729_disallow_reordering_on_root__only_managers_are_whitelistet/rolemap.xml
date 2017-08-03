@@ -1,0 +1,10 @@
+<rolemap>
+
+  <permissions>
+
+    <permission name="List folder contents" acquire="True">
+      <role name="Manager" />
+    </permission>
+
+  </permissions>
+</rolemap>

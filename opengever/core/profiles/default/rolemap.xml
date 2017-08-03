@@ -199,5 +199,10 @@
       <role name="Manager" />
       <role name="APIUser" />
     </permission>
+
+    <permission name="List folder contents" acquire="True">
+      <role name="Manager" />
+    </permission>
+
   </permissions>
 </rolemap>

@@ -9,6 +9,7 @@ Changelog
 - Fix showroom overlay within an activated exposator. [elioschmutz]
 - Handle unknown asynchronous tooltip response. [Kevin Bieri]
 - Move language selector into the user menu (dropdown) - Implemented in plonetheme.teamraum. [mathias.leimgruber]
+- Only the Manager can access the folder_contents on the plone root. [mathias.leimgruber]
 - Update ftw.keyowordwidget to 1.3.3, to fix a problem while select/search new keywords. [mathias.leimgruber]
 - Upgrade ftw.zopemaster which uses the new ftw.slacker for slack notifications. [elioschmutz]
 - Refactor the function: earliest_possible_end_date. [elioschmutz]
