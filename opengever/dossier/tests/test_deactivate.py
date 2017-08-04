@@ -6,10 +6,8 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import editbar
 from ftw.testbrowser.pages import statusmessages
 from ftw.testing import freeze
-from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import IntegrationTestCase
-from zope.component import getMultiAdapter
 
 
 class TestDossierDeactivation(IntegrationTestCase):
@@ -28,8 +26,7 @@ class TestDossierDeactivation(IntegrationTestCase):
     @browsing
     def test_fails_with_checked_out_documents(self, browser):
         self.login(self.dossier_responsible, browser)
-        getMultiAdapter((self.document, self.request),
-                        ICheckinCheckoutManager).checkout()
+        self.checkout_document(self.document)
         browser.open(self.dossier, view='transition-deactivate',
                      send_authenticator=True)
         self.assert_workflow_state('dossier-state-active', self.dossier)

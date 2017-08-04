@@ -59,8 +59,8 @@ class TestProposalWithWord(IntegrationTestCase):
             ' out" will therefore fail.')
         self.assertEquals(
             self.dossier_responsible.getId(),
-            getMultiAdapter((proposal.get_proposal_document(), self.request),
-                            ICheckinCheckoutManager).get_checked_out_by())
+            self.get_checkout_manager(
+                proposal.get_proposal_document()).get_checked_out_by())
 
     @browsing
     def test_proposal_document_is_visible_on_submitted_proposal(self, browser):
@@ -169,7 +169,7 @@ class TestProposalWithWord(IntegrationTestCase):
     def test_proposal_cannot_change_state_when_documents_checked_out(self, browser):
         self.login(self.dossier_responsible, browser)
         document = self.draft_word_proposal.get_proposal_document()
-        getMultiAdapter((document, self.request), ICheckinCheckoutManager).checkout()
+        self.checkout_document(document)
         self.assertTrue(self.draft_word_proposal.contains_checked_out_documents())
         browser.open(self.draft_word_proposal, view='tabbedview_view-overview')
         browser.click_on('Submit')
