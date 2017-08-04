@@ -104,6 +104,7 @@ DOSSIER_MISSING_VALUES = {
     'date_of_cassation': None,
     'date_of_submission': None,
     'end': None,
+    'external_reference': None,
     'filing_prefix': None,
     'former_reference_number': None,
     'number_of_containers': None,

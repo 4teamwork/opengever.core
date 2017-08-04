@@ -180,6 +180,10 @@ class SearchableTextExtender(grok.Adapter):
                 else keyword
                 for keyword in keywords)
 
+        external_reference = IDossier(self.context).external_reference
+        if external_reference:
+            searchable.append(external_reference.encode('utf-8'))
+
         return ' '.join(searchable)
 
 

@@ -125,6 +125,17 @@ class TestIndexers(FunctionalTestCase):
             [u'1', u'3', 'client1', 'dossier', 'keyword', 'me', 'pick'],
             index_data_for(dossier_with_keywords).get('SearchableText'))
 
+    def test_dossier_searchable_text_contains_external_reference(self):
+        dossier = create(
+            Builder("dossier")
+            .titled(u"Dossier")
+            .having(external_reference=u'22900-2017')
+            .within(self.repo_folder))
+
+        self.assertItemsEqual(
+            [u'1', u'3', 'client1', 'dossier', '22900', '2017'],
+            index_data_for(dossier).get('SearchableText'))
+
     def test_dossiertemplate_searchable_text_contains_keywords(self):
         folder = create(Builder('templatefolder'))
         template_with_keywords = create(

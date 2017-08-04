@@ -74,6 +74,16 @@
        :Wertebereich: <Gültige User-ID>
 
 
+   .. py:attribute:: external_reference
+
+       :Feldname: :field-title:`Externe Referenz`
+       :Datentyp: ``TextLine``
+       
+       
+       
+       
+
+
    .. py:attribute:: filing_prefix
 
        :Feldname: :field-title:`Ablage Präfix`

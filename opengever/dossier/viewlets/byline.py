@@ -30,6 +30,9 @@ class BusinessCaseByline(BylineBase):
                                     ).get_email_for_object(self.context)
             return '<a href="mailto:%s">%s</a>' % (address, address)
 
+    def external_reference(self):
+        return IDossier(self.context).external_reference
+
     def get_items(self):
         items = [
             {
@@ -74,6 +77,13 @@ class BusinessCaseByline(BylineBase):
                 'label': _('label_email_address', default='E-Mail'),
                 'content': self.mailto_link(),
                 'replace': True
+            },
+            {
+                'class': 'external_reference',
+                'label': _('label_external_reference',
+                           default=u'External Reference'),
+                'content': self.external_reference(),
+                'replace': False
             }
         ]
 
