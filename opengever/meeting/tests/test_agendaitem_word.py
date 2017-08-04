@@ -85,3 +85,71 @@ class TestWordAgendaItem(IntegrationTestCase):
             browser.json)
         self.assertEquals(self.committee_responsible.getId(),
                           self.get_checkout_manager(document).get_checked_out_by())
+
+    @browsing
+    def test_decide_agenda_item_checks_in_documents(self, browser):
+        self.login(self.committee_responsible, browser)
+        item = self.schedule_proposal(self.meeting,
+                                      self.submitted_word_proposal)
+
+        document = self.submitted_word_proposal.get_proposal_document()
+        self.checkout_document(document)
+        self.assertEqual(self.committee_responsible.getId(),
+                         self.get_checkout_manager(document).get_checked_out_by())
+
+        proposal_model = self.submitted_word_proposal.load_model()
+        self.assertEquals(proposal_model.STATE_SCHEDULED, proposal_model.get_state())
+
+        browser.open(
+            self.meeting,
+            view='agenda_items/{}/decide'.format(item.agenda_item_id),
+            send_authenticator=True)
+        self.assertEquals(
+            {u'redirectUrl': u'http://nohost/plone'
+             '/opengever-meeting-committeecontainer/committee-1/meeting-1',
+             u'messages': [
+                 {u'messageTitle': u'Information',
+                  u'message': u'Agenda Item decided and excerpt generated.',
+                  u'messageClass': u'info'}]},
+            browser.json)
+
+        self.assertEquals(proposal_model.STATE_DECIDED, proposal_model.get_state())
+        self.assertIsNone(self.get_checkout_manager(document).get_checked_out_by())
+
+    @browsing
+    def test_decide_agenda_item_disallowed_when_doc_checked_out(self, browser):
+        """When an agenda items' proposal document is checkout by someone else,
+        deciding the document is not allowed, since the system should not
+        check in the documents checked out by other users.
+        """
+
+        self.login(self.committee_responsible, browser)
+        item = self.schedule_proposal(self.meeting,
+                                      self.submitted_word_proposal)
+
+        self.login(self.administrator, browser)
+        document = self.submitted_word_proposal.get_proposal_document()
+        self.checkout_document(document)
+        self.assertEqual(self.administrator.getId(),
+                         self.get_checkout_manager(document).get_checked_out_by())
+
+        self.login(self.committee_responsible, browser)
+        proposal_model = self.submitted_word_proposal.load_model()
+        self.assertEquals(proposal_model.STATE_SCHEDULED, proposal_model.get_state())
+
+        browser.open(
+            self.meeting,
+            view='agenda_items/{}/decide'.format(item.agenda_item_id),
+            send_authenticator=True)
+        self.assertEquals(
+            {u'messages': [
+                {u'messageTitle': u'Error',
+                 u'message': u'Cannot decide agenda item: someone else has'
+                 u' checked out the document.',
+                 u'messageClass': u'error'}],
+             u'proceed': False},
+            browser.json)
+
+        self.assertEquals(proposal_model.STATE_SCHEDULED, proposal_model.get_state())
+        self.assertEqual(self.administrator.getId(),
+                         self.get_checkout_manager(document).get_checked_out_by())

@@ -176,3 +176,22 @@ class TestProposalWithWord(IntegrationTestCase):
         statusmessages.assert_message(
             'Cannot change the state because the proposal'
             ' contains checked out documents.')
+
+    def test_decide_not_allowed_when_documents_checked_out(self):
+        """When deciding the proposal on the proposal model, the proposal
+        document must already be checked in.
+        This also applies to the current user: the auto-checkin-feature is
+        the job of the agenda item controller, not of the proposal model.
+        """
+        self.login(self.committee_responsible)
+        item = self.schedule_proposal(self.meeting,
+                                      self.submitted_word_proposal)
+        self.checkout_document(self.submitted_word_proposal.get_proposal_document())
+
+        model = self.submitted_word_proposal.load_model()
+        with self.assertRaises(ValueError) as cm:
+            model.decide(item)
+
+        self.assertEquals(
+            'Cannot decide proposal when proposal document is checked out.',
+            str(cm.exception))

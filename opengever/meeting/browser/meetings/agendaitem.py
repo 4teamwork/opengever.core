@@ -244,6 +244,10 @@ class AgendaItemsView(BrowserView):
         if not self.context.model.is_editable():
             raise Unauthorized("Editing is not allowed")
 
+        error_response = self._checkin_proposal_document_before_deciding()
+        if error_response:
+            return error_response
+
         self.agenda_item.decide()
 
         response = JSONResponse(self.request)
@@ -262,6 +266,31 @@ class AgendaItemsView(BrowserView):
             api.portal.show_message(message=msg, request=self.request, type='info')
 
         return response.dump()
+
+    def _checkin_proposal_document_before_deciding(self):
+        if not is_word_meeting_implementation_enabled():
+            # old implementation: there is no proposal document
+            return
+
+        if not self.agenda_item.has_proposal:
+            # no proposal => no document to checkin
+            return
+
+        submitted_proposal = self.agenda_item.proposal.resolve_submitted_proposal()
+        document = submitted_proposal.get_proposal_document()
+        checkout_manager = getMultiAdapter((document, self.request),
+                                           ICheckinCheckoutManager)
+        if checkout_manager.get_checked_out_by() is None:
+            # document is not checked out
+            return
+
+        if not checkout_manager.is_checkin_allowed():
+            return JSONResponse(self.request).error(
+                _('agenda_item_cannot_decide_document_checked_out',
+                  default=u'Cannot decide agenda item: someone else has'
+                  u' checked out the document.')).remain().dump()
+
+        checkout_manager.checkin()
 
     def reopen(self):
         """Reopen the current agendaitem. Set the workflow state to revision
