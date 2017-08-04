@@ -5,6 +5,7 @@ Changelog
 2017.4.1 (unreleased)
 ---------------------
 
+- Improve warning when opening an old version of a document. [tarnap]
 - Fix encoding error when syncing proposals with SQL. [jone]
 - Remove "Properties"-action on personal overview. [elioschmutz]
 - Ungrok opengever.advancedsearch. [phgross]
