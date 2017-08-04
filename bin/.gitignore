@@ -5,3 +5,4 @@
 !create-schema-migration
 !cleanup-versions-cfg
 !remove-test-cache
+!pinchecker
