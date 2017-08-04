@@ -1,4 +1,5 @@
 from contextlib import nested
+from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
 
 
@@ -22,3 +23,65 @@ class TestWordAgendaItem(IntegrationTestCase):
 
         self.assertEquals((), tuple(dossier_children['added']))
         self.assertEquals((), tuple(meeting_dossier_children['added']))
+
+    @browsing
+    def test_proposal_document_in_meeting_item_data(self, browser):
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_proposal(self.meeting,
+                                             self.submitted_word_proposal)
+        browser.open(self.meeting, view='agenda_items/{}/list'.format(
+            agenda_item.agenda_item_id))
+        item_data = browser.json['items'][0]
+
+        document_link_html = item_data.get('proposal_document_link')
+        self.assertIn(
+            u'Proposal document \xc4nderungen am Personalreglement',
+            document_link_html)
+        document = self.submitted_word_proposal.get_proposal_document()
+        self.assertIn(document.absolute_url() + '/tooltip', document_link_html)
+
+    @browsing
+    def test_proposal_document_checkout_info_in_item_data(self, browser):
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_proposal(self.meeting,
+                                             self.submitted_word_proposal)
+        browser.open(self.meeting, view='agenda_items/{}/list'.format(
+            agenda_item.agenda_item_id))
+        item_data = browser.json['items'][0]
+
+        self.assertDictContainsSubset(
+            {'proposal_document_checked_out': False,
+             'edit_document_possible': True,
+             'edit_document_link': '{}/agenda_items/1/edit_document'.format(
+                 self.meeting.absolute_url())},
+            item_data)
+
+        document = self.submitted_word_proposal.get_proposal_document()
+        self.checkout_document(document)
+        browser.reload()
+        item_data = browser.json['items'][0]
+        self.assertDictContainsSubset(
+            {'proposal_document_checked_out': True,
+             'edit_document_possible': True},
+            item_data)
+
+    @browsing
+    def test_edit_document_checks_out_and_provides_OC_url(self, browser):
+        self.login(self.committee_responsible, browser)
+        item = self.schedule_proposal(self.meeting,
+                                      self.submitted_word_proposal)
+        document = self.submitted_word_proposal.get_proposal_document()
+
+        self.assertIsNone(self.get_checkout_manager(document).get_checked_out_by())
+        browser.open(
+            self.meeting,
+            view='agenda_items/{}/edit_document'.format(item.agenda_item_id),
+            send_authenticator=True)
+
+        self.assertEquals(
+            {u'proceed': True,
+             u'officeConnectorURL': u'{}/external_edit'.format(
+                 document.absolute_url())},
+            browser.json)
+        self.assertEquals(self.committee_responsible.getId(),
+                          self.get_checkout_manager(document).get_checked_out_by())
