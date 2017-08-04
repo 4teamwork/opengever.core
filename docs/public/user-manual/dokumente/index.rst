@@ -7,6 +7,7 @@ Mit Dokumenten arbeiten
    erstellen
    ablegen
    metadatenpflegen
+   anschauen
    bearbeiten
    finden
    diverseaktionen
