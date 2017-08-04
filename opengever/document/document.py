@@ -283,6 +283,22 @@ class Document(Item, BaseDocumentMixin):
 
         return response
 
+    def checkout_and_get_office_connector_url(self):
+        """Checkout the document and return an office connector url.
+        With the officeconnector checkout feature enabled, the checkout
+        happens when the link is used.
+        """
+        if is_officeconnector_checkout_feature_enabled():
+            return create_oc_url(self.REQUEST, self, {'action': 'checkout'})
+
+        else:
+            checkout_manager = getMultiAdapter((self, self.REQUEST),
+                                               ICheckinCheckoutManager)
+            if not checkout_manager.is_checked_out_by_current_user():
+                checkout_manager.checkout()
+
+            return '{}/external_edit'.format(self.absolute_url())
+
     def setup_external_edit_redirect(self, request):
         redirector = IRedirector(request)
         if is_officeconnector_checkout_feature_enabled():

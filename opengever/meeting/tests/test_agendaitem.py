@@ -4,6 +4,7 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.core.testing import activate_meeting_word_implementation
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
+from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.locking.lock import MEETING_EXCERPT_LOCK
 from opengever.meeting.model import Meeting
 from opengever.meeting.model import Proposal
@@ -11,9 +12,11 @@ from opengever.meeting.model.agendaitem import AgendaItem
 from opengever.meeting.wrapper import MeetingWrapper
 from opengever.testing import FunctionalTestCase
 from plone import api
+from plone.app.testing import TEST_USER_ID
 from plone.locking.interfaces import ILockable
 from plone.protect import createToken
 from z3c.relationfield.relation import RelationValue
+from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
 import json
@@ -139,7 +142,7 @@ class TestAgendaItemList(TestAgendaItem):
         self.assertTrue(item.get('has_documents'))
 
     @browsing
-    def test_agendaitem_list_with_word_feature_contains_document_link(self, browser):
+    def test_word_feature_agendaitem_data(self, browser):
         activate_meeting_word_implementation()
         self.setup_excerpt_template()
         proposal = self.setup_proposal()
@@ -149,14 +152,61 @@ class TestAgendaItemList(TestAgendaItem):
             self.meeting_wrapper,
             view='agenda_items/{}/list'.format(item.agenda_item_id))
 
-        proposal_document_link_html = (
-            browser.json['items'][0].get('proposal_document_link'))
+        item_data = browser.json['items'][0]
+
+        proposal_document_link_html = item_data.get('proposal_document_link')
         self.assertIn('Proposal document Fooo',
                       proposal_document_link_html)
         submitted_proposal = item.proposal.submitted_oguid.resolve_object()
         submitted_proposal_document = submitted_proposal.get_proposal_document()
         self.assertIn(submitted_proposal_document.absolute_url() + '/tooltip',
                       proposal_document_link_html)
+
+        self.assertDictContainsSubset(
+            {'proposal_document_checked_out': False,
+             'edit_document_possible': True,
+             'edit_document_link': '{}/agenda_items/1/edit_document'.format(
+                 self.meeting_wrapper.absolute_url())},
+            item_data)
+
+        getMultiAdapter((submitted_proposal_document, self.request),
+                        ICheckinCheckoutManager).checkout()
+        transaction.commit()
+        browser.reload()
+        item_data = browser.json['items'][0]
+        self.assertDictContainsSubset(
+            {'proposal_document_checked_out': True,
+             'edit_document_possible': True},
+            item_data)
+
+
+class TestAgendaItemEditDocument(TestAgendaItem):
+
+    @browsing
+    def test_edit_document_checks_out_and_provides_OC_url(self, browser):
+        activate_meeting_word_implementation()
+        self.setup_excerpt_template()
+        proposal = self.setup_proposal()
+        item = self.schedule_proposal(proposal, browser)
+        submitted_proposal = item.proposal.submitted_oguid.resolve_object()
+        submitted_proposal_document = submitted_proposal.get_proposal_document()
+
+        checkout_manager = getMultiAdapter(
+            (submitted_proposal_document, self.request),
+            ICheckinCheckoutManager)
+        self.assertIsNone(checkout_manager.get_checked_out_by())
+
+        browser.login().open(
+            self.meeting_wrapper,
+            view='agenda_items/{}/edit_document'.format(item.agenda_item_id),
+            send_authenticator=True)
+
+        self.assertEquals(
+            {u'proceed': True,
+             u'officeConnectorURL': u'{}/external_edit'.format(
+                 submitted_proposal_document.absolute_url())},
+            browser.json)
+        self.assertEquals(TEST_USER_ID, checkout_manager.get_checked_out_by())
 
 
 class TestAgendaItemEdit(TestAgendaItem):

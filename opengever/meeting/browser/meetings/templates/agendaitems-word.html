@@ -13,7 +13,7 @@
     <td class="title">
       <span class="proposal_title">{{{link}}}</span>
       {{#if has_proposal}}
-      <div class="proposal_document">{{{proposal_document_link}}}</div>
+      <div class="proposal_document {{#if proposal_document_checked_out}}checked-out{{/if}}">{{{proposal_document_link}}}</div>
 
       {{#if has_documents}}
       <div class="attachements">
@@ -46,6 +46,9 @@
     {{#if ../editable}}
     <td class="actions">
       <div class="button-group">
+        {{#if edit_document_link}}
+        <a href="{{edit_document_link}}" title="%(label_edit_document_action)s" class="button edit-document" {{#unless edit_document_possible}}disabled{{/unless}}><span></span></a>
+        {{/if}}
         {{#if ../agendalist_editable}}
         <a href="{{edit_link}}" title="%(label_edit_action)s" class="button edit-agenda-item"></a>
         <a href="{{delete_link}}" title="%(label_delete_action)s" class="button delete-agenda-item"></a>

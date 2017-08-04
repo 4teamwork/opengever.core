@@ -207,7 +207,21 @@
       return $.post(target.attr("href"));
     };
 
+    this.editDocument = function(target) {
+      return $.get(target.attr("href")).done(function(response) {
+        if(response.proceed === true) {
+          window.location = response.officeConnectorURL;
+          $(target).parents('tr').find('.proposal_document').addClass('checked-out');
+        }
+      });
+    };
+
     this.events = [
+      {
+        method: "click",
+        target: ".edit-document",
+        callback: this.editDocument
+      },
       {
         method: "click",
         target: ".delete-agenda-item",

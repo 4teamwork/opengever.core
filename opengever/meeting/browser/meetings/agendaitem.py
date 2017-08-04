@@ -1,4 +1,5 @@
 from opengever.base.response import JSONResponse
+from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.meeting import _
 from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.proposal import ISubmittedProposal
@@ -9,6 +10,7 @@ from plone.app.contentlisting.interfaces import IContentListingObject
 from Products.Five.browser import BrowserView
 from zExceptions import NotFound
 from zExceptions import Unauthorized
+from zope.component import getMultiAdapter
 from zope.interface import implements
 from zope.interface import Interface
 from zope.publisher.interfaces import IPublishTraverse
@@ -63,6 +65,10 @@ class IAgendaItemActions(Interface):
     def revise():
         """Revise a reopened agenda-item by updating excerpts and prevent
         further editing.
+        """
+
+    def edit_document():
+        """Checkout and open the document with office connector.
         """
 
 
@@ -143,8 +149,19 @@ class AgendaItemsView(BrowserView):
             if item.proposal and is_word_meeting_implementation_enabled():
                 proposal = item.proposal.submitted_oguid.resolve_object()
                 proposal_document = proposal.get_proposal_document()
+                checkout_manager = getMultiAdapter(
+                    (proposal_document, self.request),
+                    ICheckinCheckoutManager)
                 data['proposal_document_link'] = (
                     IContentListingObject(proposal_document).render_link())
+                data['proposal_document_checked_out'] = bool(
+                    checkout_manager.get_checked_out_by())
+                data['edit_document_possible'] = (
+                    checkout_manager.is_checkout_allowed() or
+                    checkout_manager.is_checked_out_by_current_user())
+                data['edit_document_link'] = meeting.get_url(
+                    view='agenda_items/{}/edit_document'.format(
+                        item.agenda_item_id))
 
             agenda_items.append(data)
         return agenda_items
@@ -271,6 +288,28 @@ class AgendaItemsView(BrowserView):
         return JSONResponse(self.request).info(
             _(u'agenda_item_revised',
               default=u'Agenda Item revised successfully.')).dump()
+
+    def edit_document(self):
+        """Checkout and open the document with office connector.
+        """
+        self.check_editable()
+
+        proposal = self.agenda_item.proposal.submitted_oguid.resolve_object()
+        proposal_document = proposal.get_proposal_document()
+        checkout_manager = getMultiAdapter((proposal_document, self.request),
+                                           ICheckinCheckoutManager)
+        response = JSONResponse(self.request)
+
+        if not checkout_manager.is_checked_out_by_current_user() \
+           and not checkout_manager.is_checkout_allowed():
+            response.remain().error(
+                _(u'document_checkout_not_allowed',
+                  default=u'You are not allowed to checkout the document.'))
+        else:
+            url = proposal_document.checkout_and_get_office_connector_url()
+            response.proceed().data(officeConnectorURL=url)
+
+        return response.dump()
 
     def schedule_paragraph(self):
         """Schedule the given Paragraph (request parameter `title`) for the current
