@@ -454,6 +454,67 @@ Once a new policy has been generated the following things need to be added manua
 Tests
 -----
 
+Fixture Objects
+~~~~~~~~~~~~~~~
+
+The fixture objects can be accessed on test-classes subclassing
+``IntegrationTestCase`` with attribute access (``self.dossier``).
+
+Users
+^^^^^
+
+.. <fixture:users>
+
+- ``self.administrator``: ``nicole.kohler``
+- ``self.dossier_responsible``: ``robert.ziegler``
+- ``self.manager``: ``admin``
+- ``self.regular_user``: ``kathi.barfuss``
+- ``self.secretariat_user``: ``jurgen.konig``
+
+.. </fixture:users>
+
+Objects
+^^^^^^^
+
+.. <fixture:objects>
+
+.. code::
+
+  - self.repository_root
+    - self.empty_repofolder
+    - self.branch_repofolder
+      - self.leaf_repofolder
+        - self.empty_dossier
+        - self.archive_dossier
+        - self.dossier
+          - self.document
+          - self.task
+            - self.subtask
+            - self.taskdocument
+          - self.subdossier
+            - self.subdocument
+          - self.subdossier2
+          - self.mail_eml
+          - self.mail_msg
+          - self.proposal
+  - self.committee_container
+    - self.committee
+  - self.templates
+    - self.sablon_template
+
+.. </fixture:objects>
+
+Other values
+^^^^^^^^^^^^
+
+.. <fixture:raw>
+
+
+
+.. </fixture:raw>
+
+
+
 Parallelisation
 ~~~~~~~~~~~~~~~
 
