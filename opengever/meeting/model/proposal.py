@@ -3,6 +3,7 @@ from opengever.base.oguid import Oguid
 from opengever.base.utils import escape_html
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
+from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.interfaces import IHistory
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model.generateddocument import GeneratedExcerpt
@@ -325,9 +326,11 @@ class Proposal(Base):
         UpdateExcerptInDossierCommand(self).execute()
 
     def decide(self, agenda_item):
-        self.generate_excerpt(agenda_item)
-        document_intid = self.copy_excerpt_to_proposal_dossier()
-        self.register_excerpt(document_intid)
+        if not is_word_meeting_implementation_enabled():
+            self.generate_excerpt(agenda_item)
+            document_intid = self.copy_excerpt_to_proposal_dossier()
+            self.register_excerpt(document_intid)
+
         IHistory(self.resolve_submitted_proposal()).append_record(u'decided')
         self.execute_transition('scheduled-decided')
 
