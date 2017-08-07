@@ -3,7 +3,7 @@
 
 Nach dem Speichern ist eine Aufgabe im Status *Offen*.
 
-**Typische Reihenfolge der Aufgabenerledigung:**
+**Typische Reihenfolge der Aufgabenerledigung**
 
 -   Auftragsgeber erstellt eine Aufgabe: Status Offen
 
@@ -27,7 +27,7 @@ Nach dem Speichern ist eine Aufgabe im Status *Offen*.
    Mitarbeitende, die Zugriff auf den Eingangskorb haben, können zusätzliche
    Aufgabenaktionen auslösen, auch wenn sie nicht Auftragnehmer sind.
 
-**Spezialfälle:**
+**Spezialfälle**
 
 -   Auftragnehmer lehnt eine Aufgabe ab: Status Zurückgewiesen
 
@@ -37,5 +37,37 @@ Nach dem Speichern ist eine Aufgabe im Status *Offen*.
     erledigt war oder zurückgewiesen worden ist: Status Offen
 
 -   Auftraggeber weist Aufgabe neuer Person zu: Status Offen
+
+**Berechtigung bei den verschiedenen Auftragstypen**
+
+Die nachfolgend über Aufgaben definierten Rechte an Dokumenten ergänzen die
+bestehenden Berechtigungen auf Stufe Ordnungsposition und Dossier.
+
+======================== ================= ===================================
+Auftragstyp               Auftragnehmende   Dokument bleibt bei
+                          Person ist        auftragnehmende Person
+                          berechtigt
+======================== ================= ===================================
+Zur Kenntnisnahme         zu lesen          Lesbar bis zum Abschluss
+                                            des Dossiers/Subdossiers
+
+Zur direkten Erledigung   zu lesen          Lesbar bis zum Abschluss
+                                            des Dossiers/Subdossiers
+
+Zum Bericht/Antrag        zu überarbeiten   Bearbeitbar bis zum Abschluss
+                                            des Dossiers/Subdossiers
+
+Zur Genehmigung           zu überarbeiten   Bearbeitbar bis zum Abschluss
+                                            des Dossiers/Subdossiers
+
+Zur Prüfung/Korrektur     zu überarbeiten   Bearbeitbar bis zum Abschluss
+                                            des Dossiers/Subdossiers
+
+Zur Stellungnahme         zu überarbeiten   Bearbeitbar bis zum Abschluss
+                                            des Dossiers/Subdossiers
+======================== ================= ===================================
+
+Mit der auftragnehmenden Person wird auch die Eingangskorbgruppe dessen
+Mandanten mitberechtigt. Dies im Sinne der Stellvertreter-Regelung.
 
 .. disqus::
