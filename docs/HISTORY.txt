@@ -5,6 +5,7 @@ Changelog
 2017.4.1 (unreleased)
 ---------------------
 
+- Fix leaking reference in RestrictedVocabularyFactory. [lgraf]
 - Improve warning when opening an old version of a document. [tarnap]
 - Highlight search terms after fetching new search results per ajax. [elioschmutz]
 - Fix encoding error when syncing proposals with SQL. [jone]
