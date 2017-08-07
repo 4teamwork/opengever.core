@@ -56,6 +56,17 @@
       permission="cmf.ModifyPortalContent"
       />
 
+  <!-- journal tab -->
+  <browser:page
+      name="tabbedview_view-journal"
+      for="ftw.journal.interfaces.IJournalizable"
+      class=".tab.JournalTab"
+      permission="zope2.View"
+      />
+
+  <adapter factory=".tab.JournalTableSource" />
+
+
   <subscriber
       for="opengever.document.behaviors.IBaseDocument
            ftw.zipexport.interfaces.IItemZippedEvent"
