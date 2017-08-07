@@ -332,14 +332,23 @@ class OGMail(Mail, BaseDocumentMixin):
         self.message.filename = u'{}.eml'.format(normalized_subject)
 
     def get_file(self):
-        return self.message
+        """An opengever mail has two fields for storing the mail-data.
+
+        - The primary-field contains the .eml file which is either a converted
+          version of a .msg-file or a directly uploaded .eml-file.
+
+        - The original_message-field contains the original .msg-file, but only
+          if the user uploaded one. This file will be used to generate the .eml-file
+          for the primary-field.
+        """
+        return self.original_message or self.message
 
     def has_file(self):
         return self.message is not None
 
     def get_filename(self):
         if self.has_file():
-            return self.message.filename
+            return self.get_file().filename
         return None
 
 

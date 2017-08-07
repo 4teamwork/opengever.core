@@ -10,7 +10,6 @@ from opengever.document.browser.overview import FieldRow
 from opengever.document.browser.overview import Overview
 from opengever.document.browser.overview import TemplateRow
 from opengever.mail import _
-from opengever.mail.mail import IOGMail
 from plone import api
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize import instance
@@ -83,12 +82,7 @@ class OverviewTab(MailAttachmentsMixin, Overview):
 
     def __init__(self, *args, **kwargs):
         super(OverviewTab, self).__init__(*args, **kwargs)
-
-        self.ogmail = IOGMail(self.context)
-        if self.ogmail.original_message:
-            self.field = self.ogmail.original_message
-        else:
-            self.field = self.context.message
+        self.field = self.context.get_file()
 
     @property
     def file_size(self):

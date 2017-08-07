@@ -15,6 +15,7 @@ Changelog
 - Word meeting: Automatically checkin document when deciding an agenda item. [jone]
 - Word meeting: Update submitted proposal workflow: let group members checkout documents. [jone]
 - Fix leaking reference in RestrictedVocabularyFactory. [lgraf]
+- Refactoring: Use mail get_file method to receive either the original_message or the message field. [elioschmutz]
 - Improve warning when opening an old version of a document. [tarnap]
 - Highlight search terms after fetching new search results per ajax. [elioschmutz]
 - Fixed bug in search when sorting on relevance. [phgross]
