@@ -8,5 +8,6 @@ Inhalt:
 
    user-manual/index.rst
    admin-manual/index.rst
+   systemadmin-manual/index.rst
    dev-manual/index.rst
    user-manual/glossary.rst
