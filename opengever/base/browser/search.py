@@ -113,12 +113,15 @@ class OpengeverSearch(Search):
             'range': usage
         }
 
-    def filter_query(self, query):
-        """The filter query of the standard search view (plone.app.search)
+    def _filter_query(self, query):
+        """The _filter_query of the standard search view (plone.app.search)
         cancel the query generation if not SearchableText is given.
         In some case (for example in opengever.advancedsearch), we generate
         also searches without a searchabletext. So we temporarily fake
         the SearchableText.
+
+        Besides that we also handle date range queries and subject queries
+        separately.
 
         XXX This method should be removed, after the solr integration
         meta-XXX should it? now it contains custom stuff.
