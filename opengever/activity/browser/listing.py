@@ -1,4 +1,3 @@
-from five import grok
 from ftw.table.interfaces import ITableSource
 from ftw.table.interfaces import ITableSourceConfig
 from opengever.activity import _
@@ -8,6 +7,8 @@ from opengever.ogds.base.actor import Actor
 from opengever.tabbedview import BaseListingTab
 from opengever.tabbedview import GeverTableSource
 from plone import api
+from zope.component import adapter
+from zope.interface import implementer
 from zope.interface import implements
 from zope.interface import Interface
 
@@ -59,13 +60,12 @@ class NotificationListingTab(BaseListingTab):
     )
 
 
+@implementer(ITableSource)
+@adapter(INotificationTableSourceConfig, Interface)
 class NotificationTableSource(GeverTableSource):
     """Base table source adapter for notification listings, which get their
     data from the notification center.
     """
-
-    grok.implements(ITableSource)
-    grok.adapts(INotificationTableSourceConfig, Interface)
 
     def extend_query_with_ordering(self, query):
         if self.config.sort_on:

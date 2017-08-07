@@ -1,11 +1,9 @@
-from five import grok
 from opengever.activity import notification_center
 from opengever.activity.browser import resolve_notification_url
 from opengever.activity.browser.listing import NotificationListingTab
 from plone import api
 from Products.Five import BrowserView
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
-from zope.interface import Interface
 import json
 import pytz
 
@@ -81,8 +79,6 @@ class NotificationView(BrowserView):
 
 
 class MyNotifications(NotificationListingTab):
-    grok.name('tabbedview_view-mynotifications')
-    grok.context(Interface)
 
     enabled_actions = []
     major_actions = []
