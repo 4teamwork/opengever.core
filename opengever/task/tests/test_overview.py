@@ -66,7 +66,7 @@ class TestTaskOverview(FunctionalTestCase):
 
         browser.login().open(task, view='tabbedview_view-overview')
 
-        main_attributes_table = browser.css('#main_attributesBox .listing').first #noqa
+        main_attributes_table = browser.css('#main_attributesBox .listing').first  #noqa
         date_of_completion_row = main_attributes_table.lists()[-1]
         self.assertEquals(['Date of completion', 'Feb 02, 2015'],
                           date_of_completion_row)
