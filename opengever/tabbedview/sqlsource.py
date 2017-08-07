@@ -40,6 +40,16 @@ class SqlTableSource(GeverTableSource):
 
         if self.config.sort_on:
             sort_on = self.config.sort_on
+
+            # sqlalchemy_sort_indexes is a dict on the TableSourceConfig which
+            # defines a mapping between default sort_on attributes based on
+            # strings and sqlalchemy sort-indexes based on an sqlalchemy column.
+            # This allows us to sort by joined table columns.
+            if hasattr(self.config, 'sqlalchemy_sort_indexes'):
+                sqlalchemy_sort_index = self.config.sqlalchemy_sort_indexes.get(sort_on)
+                if sqlalchemy_sort_index:
+                    sort_on = sqlalchemy_sort_index
+
             # Don't plug column names as literal strings into an order_by
             # clause, but use a ColumnClause instead to allow SQLAlchemy to
             # properly quote the identifier name depending on the dialect
