@@ -15,6 +15,7 @@ Changelog
 - Word meeting: Automatically checkin document when deciding an agenda item. [jone]
 - Word meeting: Update submitted proposal workflow: let group members checkout documents. [jone]
 - Fix leaking reference in RestrictedVocabularyFactory. [lgraf]
+- Use get_file-method in send_document method to use original_message file data if available. [elioschmutz]
 - Refactoring: Add new method get_download_view_name for mail and documents. [elioschmutz]
 - Refactoring: Use mail get_file method to receive either the original_message or the message field. [elioschmutz]
 - Improve warning when opening an old version of a document. [tarnap]

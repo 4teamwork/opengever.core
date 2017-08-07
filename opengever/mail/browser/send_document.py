@@ -284,11 +284,7 @@ class SendDocumentForm(form.Form):
                 context=self.request))
 
         for obj in objs:
-
-            if IMail.providedBy(obj):
-                obj_file = obj.message
-            else:
-                obj_file = obj.file
+            obj_file = obj.get_file()
 
             if only_links or not obj_file:
                 # rewrite the url with current adminunit's public url

@@ -12,6 +12,7 @@ from plone.app.testing import TEST_USER_NAME
 from plone.app.testing import TEST_USER_PASSWORD
 
 import jwt
+import requests
 import transaction
 
 
@@ -513,6 +514,41 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
             self.assertEqual(
                 response.headers['content-disposition'],
                 'attachment; filename="{}"'.format(filename))
+
+    def test_attach_mail_to_outlook_uses_original_message(self):
+        mail = create(Builder('mail')
+                      .titled(u'Mail')
+                      .within(self.open_dossier)
+                      .with_dummy_message()
+                      .with_dummy_original_message())
+
+        response = requests.post(
+            '{}/oc_attach'.format(self.portal.absolute_url()),
+            headers={'Accept': 'application/json'},
+            auth=(TEST_USER_NAME, TEST_USER_PASSWORD),
+            json=[mail.UID()],
+        )
+
+        data = response.json()[0]
+        self.assertEqual('application/vnd.ms-outlook', data.get('content-type'))
+        self.assertEqual('dummy.msg', data.get('filename'))
+
+    def test_attach_mail_to_outlook_uses_message_if_no_original_message_is_available(self):
+        mail = create(Builder('mail')
+                      .titled(u'Mail')
+                      .within(self.open_dossier)
+                      .with_dummy_message())
+
+        response = requests.post(
+            '{}/oc_attach'.format(self.portal.absolute_url()),
+            headers={'Accept': 'application/json'},
+            auth=(TEST_USER_NAME, TEST_USER_PASSWORD),
+            json=[mail.UID()],
+        )
+
+        data = response.json()[0]
+        self.assertEqual('message/rfc822', data.get('content-type'))
+        self.assertEqual('mail.eml', data.get('filename'))
 
     def test_document_checkout_url_without_file(self):
         self.enable_oc_checkout()
