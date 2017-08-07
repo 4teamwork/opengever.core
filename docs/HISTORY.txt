@@ -21,6 +21,7 @@ Changelog
 - Use get_file-method in send_document method to use original_message file data if available. [elioschmutz]
 - Refactoring: Add new method get_download_view_name for mail and documents. [elioschmutz]
 - Refactoring: Use mail get_file method to receive either the original_message or the message field. [elioschmutz]
+- Reindex is_subdossier-index after moving the dossier. [elioschmutz]
 - Improve warning when opening an old version of a document. [tarnap]
 - Highlight search terms after fetching new search results per ajax. [elioschmutz]
 - Fixed bug in search when sorting on relevance. [phgross]

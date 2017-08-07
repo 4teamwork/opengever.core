@@ -133,6 +133,13 @@ def reindex_containing_dossier(dossier, event):
                             sync_task(brain.getObject(), event)
 
 
+@grok.subscribe(IDossierMarker, IObjectMovedEvent)
+def reindex_is_subdossier(dossier, event):
+    """Reindex the is_subdossier index after the dossier have been moved.
+    """
+    dossier.reindexObject(idxs=['is_subdossier'])
+
+
 @grok.subscribe(IDossierMarker, IObjectCopiedEvent)
 def purge_reference_number_mappings(copied_dossier, event):
     """Reset the reference number mapping when copying (or actually pasting)
