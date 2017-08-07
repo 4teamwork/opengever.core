@@ -4,13 +4,13 @@ Ein neues Dokument erstellen
 OneGov GEVER bietet vier Möglichkeiten, ein neues Dokument zu erzeugen resp.
 hinzuzufügen:
 
-1. Dokument mit Drag'n'Drop hinzufügen
+1. `Dokument mit Drag'n'Drop hinzufügen <https://docs.onegovgever.ch/user-manual/dokumente/erstellen/#dokument-mit-drag-n-drop-hinzufugen>`_
 
-2. Dokument heraufladen (importieren)
+2. `Dokument heraufladen (importieren) <https://docs.onegovgever.ch/user-manual/dokumente/erstellen/#ein-dokument-heraufladen-importieren>`_
 
-3. Dokument aus Vorlage erstellen
+3. `Dokument aus Vorlage erstellen <https://docs.onegovgever.ch/user-manual/dokumente/erstellen/#dokument-aus-vorlage-erstellen>`_
 
-4. E-Mail als Dokument hinzufügen
+4. `E-Mail als Dokument hinzufügen <https://docs.onegovgever.ch/user-manual/dokumente/ablegen/>`_
 
 
 Dokument mit Drag'n'Drop hinzufügen
@@ -69,7 +69,7 @@ Sie die Datei ein.
 E-Mail als Dokument hinzufügen
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Diese Variante wird hier detailliert beschrieben.
+Diese Variante wird `hier <https://docs.onegovgever.ch/user-manual/dokumente/ablegen/>`_ detailliert beschrieben.
 
 
 .. |img-dokumente-4| image:: ../img/media/img-dokumente-4.png
