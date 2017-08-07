@@ -67,4 +67,14 @@
       permission="zope2.View"
       />
 
+  <!-- versions tab -->
+  <adapter factory=".versions_tab.VersionsTableSource" />
+
+  <browser:page
+      for="opengever.document.document.IDocumentSchema"
+      name="tabbedview_view-versions"
+      class=".versions_tab.VersionsTab"
+      permission="zope2.View"
+      />
+
 </configure>
