@@ -64,6 +64,22 @@ Sie wie folgt vor:
 
    |img-dokumente-33|
 
+Eine Mail aus Outlook in OneGov GEVER ziehen (Drag'n'Drop for Outlook)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Das Zusatzmodul „OneGov GEVER Drag’n’Drop for Outlook“ ermöglicht das einfache
+Reinziehen von E-Mails und/oder Anhängen aus Microsoft Outlook in OneGov GEVER
+in ein beliebiges Dossier via Drag’n’Drop. Ist das Produkt Visual Search
+aktiviert, wird In OneGov GEVER für jedes E-Mail sowie deren Anhänge eine
+PDF-Vorschau erzeugt.
+
+Eine E-Mail via Drag'n'Drop in OneGov GEVER ziehen:
+
+  |img-dokumente-40|
+
+Einen Anhang via Drag'n'Drop in OneGov GEVER ziehen:
+
+  |img-dokumente-41|
+
 .. |img-dokumente-27| image:: ../img/media/img-dokumente-27.png
 .. |image84| image:: ../img/media/image84.png
 .. |img-dokumente-29| image:: ../img/media/img-dokumente-29.png
@@ -71,5 +87,7 @@ Sie wie folgt vor:
 .. |img-dokumente-31| image:: ../img/media/img-dokumente-31.png
 .. |img-dokumente-32| image:: ../img/media/img-dokumente-32.png
 .. |img-dokumente-33| image:: ../img/media/img-dokumente-33.png
+.. |img-dokumente-40| image:: ../img/media/img-dokumente-40.png
+.. |img-dokumente-41| image:: ../img/media/img-dokumente-41.png
 
 .. disqus::
