@@ -351,6 +351,11 @@ class OGMail(Mail, BaseDocumentMixin):
             return self.get_file().filename
         return None
 
+    def get_download_view_name(self):
+        if self.original_message:
+            return '@@download/original_message'
+        return 'download'
+
 
 class OGMailBase(metadata.MetadataBase):
     """Behavior that adds a title field.
