@@ -35,6 +35,7 @@ tests_require = [
     'z3c.saconfig',
     'zope.globalrequest',
     'zope.testing',
+    'glob2',
 ]
 
 setup(name='opengever.core',
