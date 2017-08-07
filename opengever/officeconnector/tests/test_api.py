@@ -532,6 +532,7 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
         data = response.json()[0]
         self.assertEqual('application/vnd.ms-outlook', data.get('content-type'))
         self.assertEqual('dummy.msg', data.get('filename'))
+        self.assertEqual('@@download/original_message', data.get('download'))
 
     def test_attach_mail_to_outlook_uses_message_if_no_original_message_is_available(self):
         mail = create(Builder('mail')
@@ -549,6 +550,7 @@ class TestOfficeconnectorAPI(FunctionalTestCase):
         data = response.json()[0]
         self.assertEqual('message/rfc822', data.get('content-type'))
         self.assertEqual('mail.eml', data.get('filename'))
+        self.assertEqual('download', data.get('download'))
 
     def test_document_checkout_url_without_file(self):
         self.enable_oc_checkout()
