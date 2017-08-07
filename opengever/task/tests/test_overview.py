@@ -9,7 +9,6 @@ from plone import api
 from plone.app.testing import TEST_USER_ID
 from StringIO import StringIO
 import transaction
-import unittest
 
 
 class TestTaskOverview(FunctionalTestCase):
@@ -67,7 +66,7 @@ class TestTaskOverview(FunctionalTestCase):
 
         browser.login().open(task, view='tabbedview_view-overview')
 
-        main_attributes_table = browser.css('#main_attributesBox .listing').first #noqa
+        main_attributes_table = browser.css('#main_attributesBox .listing').first  #noqa
         date_of_completion_row = main_attributes_table.lists()[-1]
         self.assertEquals(['Date of completion', 'Feb 02, 2015'],
                           date_of_completion_row)
@@ -222,11 +221,6 @@ class TestTaskOverview(FunctionalTestCase):
 
         self.assertEqual(expected, result)
 
-    @unittest.skip(
-        """Fails because we expect URLs which are embedded at the end of the
-        sentences should not contain the punctuation mark.
-        This is issued in
-        https://github.com/plone/plone.intelligenttext/issues/4""")
     @browsing
     def test_task_text_urls_in_sentences_are_transformed(self, browser):
         dossier = create(Builder('dossier').titled(u'Dossier'))
@@ -250,11 +244,6 @@ class TestTaskOverview(FunctionalTestCase):
 
         self.assertEqual(expected, result)
 
-    @unittest.skip(
-        """Fails because we expect URLs which are embedded at the end of the
-        sentences should not contain the punctuation mark.
-        This is issued in
-        https://github.com/plone/plone.intelligenttext/issues/4""")
     @browsing
     def test_task_text_urls_with_get_arguments_in_sentences_are_transformed(
             self, browser):
@@ -287,11 +276,6 @@ class TestTaskOverview(FunctionalTestCase):
 
         self.assertEqual(expected, result)
 
-    @unittest.skip(
-        """Fails because we expect URLs which are embedded at the end of the
-        sentences should not contain the punctuation mark.
-        This is issued in
-        https://github.com/plone/plone.intelligenttext/issues/4""")
     @browsing
     def test_task_text_urls_with_anchors_in_sentences_are_transformed(
             self, browser):
