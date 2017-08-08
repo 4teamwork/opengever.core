@@ -5,6 +5,7 @@ Changelog
 2017.4.1 (unreleased)
 ---------------------
 
+- Fix leaking reference in RestrictedVocabularyFactory. [lgraf]
 - Fixed bug in search when sorting on relevance. [phgross]
 - Bundle import: Fix logging in case of disallowed subobject type. [lgraf]
 - Bundle import: Don't unnecessarily keep references to persistent objects
