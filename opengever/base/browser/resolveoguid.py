@@ -1,33 +1,28 @@
 from AccessControl.SecurityManagement import SpecialUsers
-from five import grok
 from opengever.base.oguid import Oguid
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from Products.CMFCore.utils import getToolByName
+from Products.Five import BrowserView
 from zExceptions import Unauthorized
 from zope.component import getUtility
-from zope.interface import Interface
 from zope.intid.interfaces import IIntIds
 
 
-class ResolveOGUIDView(grok.View):
-
-    grok.name('resolve_oguid')
-    grok.context(Interface)
-    grok.require('zope2.View')
+class ResolveOGUIDView(BrowserView):
 
     @classmethod
     def url_for(cls, oguid, admin_unit=None):
         if not admin_unit:
             admin_unit = get_current_admin_unit()
-        return "{}/@@{}?oguid={}".format(admin_unit.public_url,
-                                         cls.__view_name__,
-                                         oguid)
+
+        return "{}/@@resolve_oguid?oguid={}".format(admin_unit.public_url,
+                                                    oguid)
 
     def _is_on_different_admin_unit(self, admin_unit_id):
         return admin_unit_id != get_current_admin_unit().id()
 
-    def render(self):
+    def __call__(self):
         oguid = Oguid.parse(self.request.get('oguid'))
 
         if self._is_on_different_admin_unit(oguid.admin_unit_id):

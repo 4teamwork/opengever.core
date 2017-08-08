@@ -23,6 +23,13 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      name="resolve_notification"
+      class=".resolve.ResolveNotificationView"
+      permission="zope2.View"
+      />
+
   <adapter factory=".listing.NotificationTableSource" />
 
 </configure>
