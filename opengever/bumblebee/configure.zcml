@@ -18,20 +18,9 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
-  <adapter
-      for="opengever.base.interfaces.IOpengeverBaseLayer"
-      factory=".service.GeverBumblebeeService"
-      />
-
-  <adapter
-      for="opengever.document.document.IDocumentSchema"
-      factory=".document.DocumentBumblebeeDocument"
-      />
-
-  <adapter
-      for="opengever.mail.mail.IOGMailMarker"
-      factory=".document.OGMailBumblebeeDocument"
-      />
+  <adapter factory=".service.GeverBumblebeeService" />
+  <adapter factory=".document.DocumentBumblebeeDocument" />
+  <adapter factory=".document.OGMailBumblebeeDocument" />
 
   <include package=".upgrades" />
 
