@@ -14,6 +14,7 @@ Changelog
 - Word meeting: Replace excerpt generation with new word implementation. [jone]
 - Word meeting: Automatically checkin document when deciding an agenda item. [jone]
 - Word meeting: Update submitted proposal workflow: let group members checkout documents. [jone]
+- Fix error in earliest_possible_end_date if there are date and datetime objects to process. [elioschmutz]
 - Fix leaking reference in RestrictedVocabularyFactory. [lgraf]
 - Improve warning when opening an old version of a document. [tarnap]
 - Highlight search terms after fetching new search results per ajax. [elioschmutz]

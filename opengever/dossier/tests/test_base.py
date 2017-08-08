@@ -314,3 +314,12 @@ class TestDateCalculations(IntegrationTestCase):
     def test_get_former_state_returns_none_for_dossiers_was_never_in_an_end_state(self):
         self.login(self.dossier_responsible)
         self.assertIsNone(self.dossier.get_former_state())
+
+    def test_earliest_possible_can_handle_datetime_objs(self):
+        self.login(self.dossier_responsible)
+
+        IDocumentMetadata(self.document).document_date = datetime(2020, 1, 1, 10, 10)
+        self.document.reindexObject(idxs=['document_date'])
+        IDossier(self.subdossier).end = date(2020, 2, 2)
+        self.subdossier.reindexObject(idxs=['end'])
+        self.assertEquals(date(2020, 2, 2), self.dossier.earliest_possible_end_date())
