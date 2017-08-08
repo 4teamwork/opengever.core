@@ -43,31 +43,30 @@ Nach dem Speichern ist eine Aufgabe im Status *Offen*.
 Die nachfolgend über Aufgaben definierten Rechte an Dokumenten ergänzen die
 bestehenden Berechtigungen auf Stufe Ordnungsposition und Dossier.
 
-======================== ================= ===================================
-Auftragstyp               Auftragnehmende   Dokument bleibt bei
-                          Person ist        auftragnehmende Person
+======================== =================
+Auftragstyp               Auftragnehmende
+                          Person ist
                           berechtigt
-======================== ================= ===================================
-Zur Kenntnisnahme         zu lesen          Lesbar bis zum Abschluss
-                                            des Dossiers/Subdossiers
+======================== =================
+Zur Kenntnisnahme         zu lesen
 
-Zur direkten Erledigung   zu lesen          Lesbar bis zum Abschluss
-                                            des Dossiers/Subdossiers
+Zur direkten Erledigung   zu lesen
 
-Zum Bericht/Antrag        zu überarbeiten   Bearbeitbar bis zum Abschluss
-                                            des Dossiers/Subdossiers
+Zum Bericht/Antrag        zu überarbeiten
 
-Zur Genehmigung           zu überarbeiten   Bearbeitbar bis zum Abschluss
-                                            des Dossiers/Subdossiers
 
-Zur Prüfung/Korrektur     zu überarbeiten   Bearbeitbar bis zum Abschluss
-                                            des Dossiers/Subdossiers
+Zur Genehmigung           zu überarbeiten
 
-Zur Stellungnahme         zu überarbeiten   Bearbeitbar bis zum Abschluss
-                                            des Dossiers/Subdossiers
-======================== ================= ===================================
 
-Mit der auftragnehmenden Person wird auch die Eingangskorbgruppe dessen
-Mandanten mitberechtigt. Dies im Sinne der Stellvertreter-Regelung.
+Zur Prüfung/Korrektur     zu überarbeiten
+
+
+Zur Stellungnahme         zu überarbeiten
+
+======================== =================
+
+Mit der auftragnehmenden Person wird auch die Eingangskorbgruppe des
+auftragnehmenden Mandanten mitberechtigt. Dies im Sinne der
+Stellvertreter-Regelung.
 
 .. disqus::
