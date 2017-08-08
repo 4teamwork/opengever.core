@@ -4,6 +4,7 @@ from ftw.testbrowser.pages import plone
 from ftw.testbrowser.pages import statusmessages
 from opengever.meeting.command import MIME_DOCX
 from opengever.meeting.model import Proposal
+from opengever.meeting.proposal import ISubmittedProposal
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
 from opengever.testing import IntegrationTestCase
 from plone import api
@@ -197,10 +198,18 @@ class TestProposalWithWord(IntegrationTestCase):
 
     def test_generate_excerpt_copies_document_to_target(self):
         self.login(self.administrator)
+        self.assertEquals(
+            [],
+            ISubmittedProposal(self.submitted_word_proposal).excerpts)
+
         with self.observe_children(self.meeting_dossier) as children:
             self.submitted_word_proposal.generate_excerpt(self.meeting_dossier)
 
-        self.assertEquals(1, len(children['added']))
+        self.assertEquals(1, len(children['added']),
+                          'An excerpt document should have been added to the'
+                          ' meeting dossier.')
+
+        # The document should contain a copy of the proposal document file.
         excerpt_document ,= children['added']
         self.assertEquals('Excerpt \xc3\x84nderungen am Personalreglement',
                           excerpt_document.Title())
@@ -208,3 +217,9 @@ class TestProposalWithWord(IntegrationTestCase):
                           excerpt_document.file.filename)
         self.assertEquals(MIME_DOCX, excerpt_document.file.contentType)
         self.assertEquals('file body', excerpt_document.file.data)
+
+        # The excerpt document should be referenced as relation.
+        excerpts = ISubmittedProposal(self.submitted_word_proposal).excerpts
+        self.assertEquals(1, len(excerpts))
+        relation, = excerpts
+        self.assertEquals(excerpt_document, relation.to_object)

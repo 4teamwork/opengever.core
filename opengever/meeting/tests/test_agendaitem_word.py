@@ -236,6 +236,26 @@ class TestWordAgendaItem(IntegrationTestCase):
              u'proceed': False},
             browser.json)
 
+    @browsing
+    def test_excerpts_listed_in_meeting_item_data(self, browser):
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_proposal(self.meeting,
+                                             self.submitted_word_proposal)
+        agenda_item.decide()
+
+        browser.open(self.meeting, view='agenda_items/list')
+        item_data = browser.json['items'][0]
+        self.assertFalse(item_data.get('excerpts'))
+
+        excerpt = self.submitted_word_proposal.generate_excerpt(
+            self.meeting_dossier)
+
+        browser.open(self.meeting, view='agenda_items/list')
+        item_data = browser.json['items'][0]
+        excerpt_links = item_data.get('excerpts', None)
+        self.assertEquals(1, len(excerpt_links))
+        self.assertIn('href="{}"'.format(excerpt.absolute_url()), excerpt_links[0])
+
     def agenda_item_url(self, agenda_item, endpoint):
         return '{}/agenda_items/{}/{}'.format(
             agenda_item.meeting.get_url(view=None),

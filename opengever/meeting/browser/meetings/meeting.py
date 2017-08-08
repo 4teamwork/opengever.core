@@ -323,6 +323,7 @@ class MeetingView(BrowserView):
                 _('label_reopen_action', default='Reopen this agenda item'),
                 _('label_revise_action', default='Revise this agenda item'),
                 _('label_attachments', default='Attachments'),
+                _('label_excerpts', default='Excerpts'),
             ),
             max_proposal_title_length=ISubmittedProposal['title'].max_length)
 

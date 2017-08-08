@@ -2,6 +2,7 @@ from opengever.base.response import JSONResponse
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.meeting import _
 from opengever.meeting import is_word_meeting_implementation_enabled
+from opengever.meeting import require_word_meeting_feature
 from opengever.meeting.proposal import ISubmittedProposal
 from opengever.meeting.service import meeting_service
 from plone import api
@@ -129,6 +130,15 @@ class AgendaItemsView(BrowserView):
         if excerpt:
             return IContentListingObject(excerpt).render_link()
 
+    @require_word_meeting_feature
+    def _serialize_excerpts(self, item):
+        if not item.has_proposal:
+            return []
+
+        submitted_proposal = item.proposal.resolve_submitted_proposal()
+        docs = IContentListing(submitted_proposal.get_excerpts())
+        return [doc.render_link() for doc in docs]
+
     def _get_agenda_items(self):
         meeting = self.context.model
         agenda_items = []
@@ -171,6 +181,7 @@ class AgendaItemsView(BrowserView):
                     data['generate_excerpt_link'] = meeting.get_url(
                         view='agenda_items/{}/generate_excerpt'.format(
                             item.agenda_item_id))
+                data['excerpts'] = self._serialize_excerpts(item)
 
             agenda_items.append(data)
         return agenda_items

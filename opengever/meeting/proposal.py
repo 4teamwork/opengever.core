@@ -1,3 +1,4 @@
+from AccessControl import getSecurityManager
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from collective import dexteritytextindexer
@@ -145,6 +146,22 @@ class ISubmittedProposal(IProposal):
         title=_('label_considerations', default=u"Considerations"),
         required=False,
         )
+
+    excerpts = RelationList(
+        title=_(u'label_excerpts', default=u'Excerpts'),
+        default=[],
+        missing_value=[],
+        value_type=RelationChoice(
+            title=u'Excerpt',
+            source=DossierPathSourceBinder(
+                portal_type=('opengever.document.document',),
+                navigation_tree_query={
+                    'object_provides':
+                    ['opengever.dossier.behaviors.dossier.IDossierMarker',
+                     'opengever.document.document.IDocumentSchema'],
+                }),
+        ),
+        required=False)
 
 
 class ProposalBase(ModelContainer):
@@ -461,12 +478,38 @@ class SubmittedProposal(ProposalBase):
                   mapping={'title': safe_unicode(self.Title())})
         title = translate(title, context=target_dossier.REQUEST).strip()
 
-        return CreateDocumentCommand(
+        excerpt_document = CreateDocumentCommand(
             context=target_dossier,
             filename=source_document.file.filename,
             data=source_document.file.data,
             content_type=source_document.file.contentType,
             title=title).execute()
+
+        self.append_excerpt(excerpt_document)
+        return excerpt_document
+
+    @require_word_meeting_feature
+    def get_excerpts(self):
+        """Return a restricted list of document objects which are excerpts
+        of the current proposal.
+        """
+        excerpts = []
+        checkPermission = getSecurityManager().checkPermission
+        for relation_value in getattr(self, 'excerpts', ()):
+            obj = relation_value.to_object
+            if checkPermission('View', obj):
+                excerpts.append(obj)
+
+        return excerpts
+
+    @require_word_meeting_feature
+    def append_excerpt(self, excerpt_document):
+        """Add a relation to a new excerpt document.
+        """
+        intid = getUtility(IIntIds).getId(excerpt_document)
+        excerpts = getattr(self, 'excerpts', [])
+        excerpts.append(RelationValue(intid))
+        self.excerpts = excerpts
 
 
 class Proposal(ProposalBase):
