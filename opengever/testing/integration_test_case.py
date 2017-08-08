@@ -7,16 +7,21 @@ from opengever.core.testing import OPENGEVER_INTEGRATION_TESTING
 from opengever.task.task import ITask
 from operator import methodcaller
 from plone import api
+from plone.app.relationfield.event import update_behavior_relations
 from plone.app.testing import applyProfile
 from plone.app.testing import login
 from plone.app.testing import SITE_OWNER_NAME
 from time import clock
 from unittest2 import TestCase
+from z3c.relationfield.relation import RelationValue
+from zope.component import getUtility
+from zope.intid.interfaces import IIntIds
 import timeit
 
 
 FEATURE_FLAGS = {
     'meeting': 'opengever.meeting.interfaces.IMeetingSettings.is_feature_enabled',
+    'word-meeting': 'opengever.meeting.interfaces.IMeetingSettings.is_word_implementation_enabled',
     'dossiertemplate': ('opengever.dossier.dossiertemplate'
                         '.interfaces.IDossierTemplateSettings.is_feature_enabled'),
 }
@@ -110,7 +115,7 @@ class IntegrationTestCase(TestCase):
                 print '{}.{} took {:.3f} ms'.format(
                     type(self).__name__,
                     func.__name__,
-                    (end-start) * 1000)
+                    (end - start) * 1000)
         return wrapper
 
     def login(self, user, browser=None):
@@ -205,8 +210,30 @@ class IntegrationTestCase(TestCase):
         elif type_ == 'user':
             return api.user.get(value)
 
+        elif type_ == 'raw':
+            return value
+
         else:
             raise ValueError('Unsupport lookup entry type {!r}'.format(type_))
+
+    @contextmanager
+    def observe_children(self, obj, check_security=True):
+        """Observe the children of an object for testing that children were
+        added or removed within the context manager.
+        """
+        if check_security:
+            def allowed(obj):
+                return getSecurityManager().checkPermission(
+                    'Access contents information', obj)
+        else:
+            def allowed(obj):
+                return True
+
+        children = {'before': filter(allowed, obj.objectValues())}
+        yield children
+        children['after'] = filter(allowed, obj.objectValues())
+        children['added'] = set(children['after']) - set(children['before'])
+        children['removed'] = set(children['before']) - set(children['after'])
 
     def get_catalog_indexdata(self, obj):
         """Return the catalog index data for an object as dict.
@@ -317,3 +344,33 @@ class IntegrationTestCase(TestCase):
         """Return the object of a brain.
         """
         return brain.getObject()
+
+    def enable_languages(self):
+        """Enable a multi-language configuration with German and French.
+        """
+        lang_tool = api.portal.get_tool('portal_languages')
+        lang_tool.use_combined_language_codes = True
+        lang_tool.addSupportedLanguage('de-ch')
+        lang_tool.addSupportedLanguage('fr-ch')
+        lang_tool.addSupportedLanguage('en')
+
+    def set_related_items(self, obj, items, fieldname='relatedItems',
+                          append=False):
+        """Set the related items on an object and update the relation catalog.
+        """
+        assert isinstance(items, (list, tuple)), 'items must be list or tuple'
+        if append:
+            relations = getattr(obj, fieldname, [])
+        else:
+            relations = []
+
+        intids = map(getUtility(IIntIds).getId, items)
+        relations += map(RelationValue, intids)
+        setattr(obj, fieldname, relations)
+        update_behavior_relations(obj, None)
+
+    def add_related_item(self, obj, related_obj, fieldname='relatedItems'):
+        """Add a relation from obj to related_obj.
+        """
+        self.set_related_items(obj, [related_obj], fieldname=fieldname,
+                               append=True)
