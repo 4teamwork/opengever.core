@@ -18,4 +18,40 @@
       permission="zope2.View"
       />
 
+  <!-- tabs -->
+  <browser:page
+      name="tabbedview_view-assigned_inbox_tasks"
+      for="opengever.inbox.inbox.IInbox"
+      class=".tabs.AssignedInboxTasks"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="tabbedview_view-issued_inbox_tasks"
+      for="opengever.inbox.inbox.IInbox"
+      class=".tabs.IssuedInboxTasks"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="tabbedview_view-closed-forwardings"
+      for="opengever.inbox.yearfolder.IYearFolder"
+      class=".tabs.ClosedForwardings"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="tabbedview_view-documents"
+      for="opengever.inbox.inbox.IInbox"
+      class=".tabs.InboxDocuments"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="tabbedview_view-trash"
+      for="opengever.inbox.inbox.IInbox"
+      class=".tabs.InboxTrash"
+      permission="zope2.View"
+      />
+
 </configure>
