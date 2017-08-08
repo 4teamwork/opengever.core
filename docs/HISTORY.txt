@@ -60,6 +60,7 @@ Changelog
 - Format line breaks in task descriptions. [tarnap]
 - SPV word: checkout proposal document after creating proposal. [jone]
 - Implement REST API endpoints for document checkout/checkin. [buchi]
+- Implement eCH-0147/eCH-0039 import and export [buchi]
 
 
 2017.4.0 (2017-07-26)
