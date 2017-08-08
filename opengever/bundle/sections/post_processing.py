@@ -3,6 +3,7 @@ from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.utils import traverse
 from datetime import datetime
 from opengever.bundle.sections.bundlesource import BUNDLE_KEY
+from opengever.bundle.sections.progress import get_rss
 from opengever.document.checkout.handlers import create_initial_version
 from plone import api
 from zope.annotation import IAnnotations
@@ -17,6 +18,7 @@ log.setLevel(logging.INFO)
 
 
 INTERMEDIATE_COMMIT_INTERVAL = 200
+PROGRESS_INTERVAL = 100
 VERSIONABLE_TYPES = ('opengever.document.document',)
 
 
@@ -60,6 +62,16 @@ class PostProcessingSection(object):
                 self.commit_and_log(
                     "Intermediate commit during OGGBundle post-processing. "
                     "%s of %s items." % (count, len(items_to_post_process)))
+
+            if count % PROGRESS_INTERVAL == 0:
+                total = len(items_to_post_process)
+                percentage = 100 * float(count) / float(total)
+                log.info(
+                    "Post-processing: %s of %s items (%.2f%%) processed." % (
+                        count, total, percentage))
+
+                rss = get_rss() / 1024.0
+                log.info("Current memory usage (RSS): %0.2f MB" % rss)
 
         self.commit_and_log(
             "Final commit after OGGBundle post-processing. "
