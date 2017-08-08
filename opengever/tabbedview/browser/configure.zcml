@@ -172,13 +172,7 @@
       name="tabbedview_view-documents-gallery"
       class=".bumblebee_gallery.DocumentsGallery"
       permission="zope2.View"
-      />
-
-  <browser:page
-      for="*"
-      name="tabbedview_view-documents-gallery-fetch"
-      class=".bumblebee_gallery.DocumentsGalleryFetch"
-      permission="zope2.View"
+      allowed_attributes="fetch"
       />
 
   <browser:page
@@ -186,13 +180,7 @@
       name="tabbedview_view-mydocuments-gallery"
       class=".bumblebee_gallery.MyDocumentsGallery"
       permission="zope2.View"
-      />
-
-  <browser:page
-      for="*"
-      name="tabbedview_view-mydocuments-gallery-fetch"
-      class=".bumblebee_gallery.MyDocumentsGalleryFetch"
-      permission="zope2.View"
+      allowed_attributes="fetch"
       />
 
   <browser:page
@@ -200,13 +188,7 @@
       name="tabbedview_view-trash-gallery"
       class=".bumblebee_gallery.TrashGallery"
       permission="zope2.View"
-      />
-
-  <browser:page
-      for="*"
-      name="tabbedview_view-trash-gallery-fetch"
-      class=".bumblebee_gallery.TrashGalleryFetch"
-      permission="zope2.View"
+      allowed_attributes="fetch"
       />
 
   <browser:page
@@ -214,13 +196,7 @@
       name="tabbedview_view-relateddocuments-gallery"
       class=".bumblebee_gallery.RelatedDocumentsGallery"
       permission="zope2.View"
-      />
-
-  <browser:page
-      for="*"
-      name="tabbedview_view-relateddocuments-gallery-fetch"
-      class=".bumblebee_gallery.RelatedDocumentsGalleryFetch"
-      permission="zope2.View"
+      allowed_attributes="fetch"
       />
 
   <browser:resourceDirectory

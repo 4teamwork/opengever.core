@@ -14,6 +14,7 @@ Changelog
 - Fix typo in contact detail view. [elioschmutz]
 - Bundle import: Reduce memory high-water-mark by periodically re-setting the
   Plone site using setSite(), and garbage collecting the cPickleCache. [lgraf]
+- Remove separate bumblebee fetch-views since they are no longer necessary because we no longer use grok. [elioschmutz]
 - Bundle import: Also log progress and RSS during post-processing. [lgraf]
 - Word meeting: List excerpts per agenda item in meeting view. [jone]
 - Word meeting: Replace excerpt generation with new word implementation. [jone]

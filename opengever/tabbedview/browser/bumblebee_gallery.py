@@ -35,7 +35,7 @@ class BumblebeeGalleryMixin(object):
         return self._extract_base_view_name(self.__name__)
 
     def get_fetch_url(self):
-        return '{}/{}-fetch'.format(self.context.absolute_url(), self.__name__)
+        return '{}/{}/fetch'.format(self.context.absolute_url(), self.__name__)
 
     def available(self):
         return self.number_of_documents() > 0
@@ -95,41 +95,9 @@ class DocumentsGallery(BumblebeeGalleryMixin, Documents):
     """
 
 
-class DocumentsGalleryFetch(DocumentsGallery):
-    """Returns the next gallery-items.
-
-    Unfortunately it's not possible to use a traversable method with
-    five.grok-views. Therefore we have to register an own browserview
-    to fetch the next gallery-items.
-
-    This browserview can be removed and implemented with allowed-attributes as
-    soon as the parent views are registered as Zope 3 BrowserViews.
-    """
-    # XXX implement as and traversable method instead of a separate view.
-
-    def __call__(self):
-        return self.fetch()
-
-
 class MyDocumentsGallery(BumblebeeGalleryMixin, MyDocuments):
     """
     """
-
-
-class MyDocumentsGalleryFetch(MyDocumentsGallery):
-    """Returns the next gallery-items.
-
-    Unfortunately it's not possible to use a traversable method with
-    five.grok-views. Therefore we have to register an own browserview
-    to fetch the next gallery-items.
-
-    This browserview can be removed and implemented with allowed-attributes as
-    soon as the parent views are registered as Zope 3 BrowserViews.
-    """
-    # XXX implement as and traversable method instead of a separate view.
-
-    def __call__(self):
-        return self.fetch()
 
 
 class TrashGallery(BumblebeeGalleryMixin, Trash):
@@ -137,39 +105,6 @@ class TrashGallery(BumblebeeGalleryMixin, Trash):
     """
 
 
-class TrashGalleryFetch(TrashGallery):
-    """Returns the next gallery-items.
-
-    Unfortunately it's not possible to use a traversable method with
-    five.grok-views. Therefore we have to register an own browserview
-    to fetch the next gallery-items.
-
-    This browserview can be removed and implemented with allowed-attributes as
-    soon as the parent views are registered as Zope 3 BrowserViews.
-    """
-    # XXX implement as and traversable method instead of a separate view.
-
-    def __call__(self):
-        return self.fetch()
-
-
 class RelatedDocumentsGallery(BumblebeeGalleryMixin, RelatedDocuments):
     """
     """
-
-
-class RelatedDocumentsGalleryFetch(RelatedDocumentsGallery):
-    """Returns the next gallery-items.
-
-    Unfortunately it's not possible to use a traversable method with
-    five.grok-views. Therefore we have to register an own browserview
-    to fetch the next gallery-items.
-
-    This browserview can be removed and implemented with allowed-attributes as
-    soon as the parent views are registered as Zope 3 BrowserViews.
-    """
-
-    # XXX implement as and traversable method instead of a separate view.
-
-    def __call__(self):
-        return self.fetch()
