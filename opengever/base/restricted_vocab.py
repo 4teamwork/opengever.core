@@ -61,10 +61,8 @@ class RestrictedVocabularyFactory(object):
         return self._choices
 
     def __call__(self, context):
-        self.context = context
-
         terms = []
-        for name in self.get_allowed_choice_names():
+        for name in self.get_allowed_choice_names(context):
             title = name
             if self.message_factory:
                 title = self.message_factory(name)
@@ -72,8 +70,8 @@ class RestrictedVocabularyFactory(object):
                 zope.schema.vocabulary.SimpleTerm(name, title=title))
         return zope.schema.vocabulary.SimpleVocabulary(terms)
 
-    def get_allowed_choice_names(self):
-        acquired_value = self._acquire_value()
+    def get_allowed_choice_names(self, context):
+        acquired_value = self._acquire_value(context)
 
         if not self.restricted:
             return self.choice_names
@@ -91,14 +89,13 @@ class RestrictedVocabularyFactory(object):
 
         return allowed_choice_names
 
-    def _acquire_value(self):
-        context = self.context
+    def _acquire_value(self, context):
         if isinstance(context, MetadataBase) or context is None:
             # we do not test the factory, it is not acquisition wrapped and
             # we cant get the request...
             return None
 
-        request = self.context.REQUEST
+        request = context.REQUEST
         if IDuringContentCreation.providedBy(request):
             # object does not yet exist, context is container (add)
             container = context
