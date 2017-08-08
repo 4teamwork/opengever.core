@@ -1,4 +1,5 @@
 <configure
+    xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="opengever.activity">
 
@@ -14,5 +15,14 @@
       permission="zope2.View"
       allowed_attributes="read list"
       />
+
+  <browser:page
+      for="*"
+      name="tabbedview_view-mynotifications"
+      class=".views.MyNotifications"
+      permission="zope2.View"
+      />
+
+  <adapter factory=".listing.NotificationTableSource" />
 
 </configure>

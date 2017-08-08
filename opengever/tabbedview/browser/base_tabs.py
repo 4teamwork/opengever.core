@@ -1,4 +1,3 @@
-from five import grok
 from ftw.dictstorage.interfaces import ISQLAlchemy
 from ftw.tabbedview.interfaces import ITabbedView
 from opengever.base.behaviors.classification import translated_public_trial_terms
@@ -153,11 +152,8 @@ class GeverTabMixin(object):
         return filter.strip().split(' ')
 
 
-class BaseListingTab(grok.View, GeverTabMixin, ListingView):
+class BaseListingTab(GeverTabMixin, ListingView):
     """Base listing tab."""
-
-    grok.context(Interface)
-    grok.require('zope2.View')
 
     selection = ViewPageTemplateFile("selection_with_filters.pt")
 
@@ -172,18 +168,10 @@ class BaseListingTab(grok.View, GeverTabMixin, ListingView):
 
     model = None
 
-    # seems like grok cannot inherit these:
-    __call__ = ListingView.__call__
-    update = ListingView.update
-    render = __call__
 
-
-class BaseCatalogListingTab(grok.View, GeverTabMixin, CatalogListingView):
+class BaseCatalogListingTab(CatalogListingView, GeverTabMixin):
     """Base view for catalog listing tabs.
     """
-
-    grok.context(ITabbedView)
-    grok.require('zope2.View')
 
     selection = ViewPageTemplateFile("selection_with_filters.pt")
 
@@ -192,7 +180,3 @@ class BaseCatalogListingTab(grok.View, GeverTabMixin, CatalogListingView):
     search_index = 'SearchableText'
     sort_on = 'modified'
     sort_order = 'reverse'
-
-    __call__ = CatalogListingView.__call__
-    update = CatalogListingView.update
-    render = __call__

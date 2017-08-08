@@ -1,4 +1,3 @@
-from five import grok
 from ftw.table import helper
 from opengever.tabbedview import BaseCatalogListingTab
 from opengever.tabbedview.helper import linked, translated_string
@@ -8,8 +7,6 @@ from opengever.tasktemplates import _
 class TaskTemplateFoldersTab(BaseCatalogListingTab):
     """Tab for listing all task template folders on the template folder.
     """
-
-    grok.name('tabbedview_view-tasktemplatefolders')
 
     columns = (
 

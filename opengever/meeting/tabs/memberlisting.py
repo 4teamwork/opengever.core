@@ -1,10 +1,11 @@
-from five import grok
 from ftw.table.interfaces import ITableSource
 from ftw.table.interfaces import ITableSourceConfig
 from opengever.meeting import _
 from opengever.meeting.model import Member
 from opengever.tabbedview import BaseListingTab
 from opengever.tabbedview import SqlTableSource
+from zope.component import adapter
+from zope.interface import implementer
 from zope.interface import implements
 from zope.interface import Interface
 
@@ -46,8 +47,8 @@ class MemberListingTab(BaseListingTab):
         return Member.query
 
 
+@implementer(ITableSource)
+@adapter(IMemberTableSourceConfig, Interface)
 class MemberTableSource(SqlTableSource):
-    grok.implements(ITableSource)
-    grok.adapts(MemberListingTab, Interface)
 
     searchable_columns = [Member.firstname, Member.lastname, Member.email]

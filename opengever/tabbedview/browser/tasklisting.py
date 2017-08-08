@@ -1,4 +1,3 @@
-from five import grok
 from ftw.journal.interfaces import IJournalizable
 from ftw.table import helper
 from ftw.table.interfaces import ITableSource, ITableSourceConfig
@@ -21,6 +20,8 @@ from opengever.tabbedview.helper import workflow_state
 from opengever.task.helper import task_type_helper
 from sqlalchemy import and_, or_
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
+from zope.component import adapter
+from zope.interface import implementer
 from zope.interface import implements
 from zope.interface import Interface
 
@@ -39,9 +40,6 @@ class GlobalTaskListingTab(BaseListingTab):
     """
 
     implements(IGlobalTaskTableSourceConfig)
-
-    grok.context(IJournalizable)
-    grok.require('zope2.View')
 
     template = ViewPageTemplateFile("generic_with_filters.pt")
 
@@ -122,12 +120,11 @@ class GlobalTaskListingTab(BaseListingTab):
         )
 
 
+@implementer(ITableSource)
+@adapter(IGlobalTaskTableSourceConfig, Interface)
 class GlobalTaskTableSource(SqlTableSource):
     """Source adapter for Tasks we got from SQL
     """
-
-    grok.implements(ITableSource)
-    grok.adapts(IGlobalTaskTableSourceConfig, Interface)
 
     searchable_columns = [Task.title, Task.text,
                           Task.sequence_number, Task.responsible]

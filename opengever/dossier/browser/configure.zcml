@@ -64,4 +64,14 @@
       permission="cmf.ModifyPortalContent"
       />
 
+  <!-- participants tab -->
+  <adapter factory=".participants.ParticipantsTableSource" />
+
+  <browser:page
+      for="opengever.dossier.behaviors.participation.IParticipationAwareMarker"
+      name="tabbedview_view-participants"
+      class=".participants.Participants"
+      permission="zope2.View"
+      />
+
 </configure>

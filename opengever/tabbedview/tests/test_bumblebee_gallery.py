@@ -25,7 +25,7 @@ def set_cookie(request, value):
 
 
 class MockProxyTabView(BaseTabProxy):
-    __view_name__ = 'tabbedview_view-mocktab-proxy'
+    __name__ = 'tabbedview_view-mocktab-proxy'
 
 
 class TestBaseTabProxyWithDeactivatedFeature(FunctionalTestCase):

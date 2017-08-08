@@ -25,6 +25,13 @@
   </class>
 
   <browser:page
+      class=".listing.Dispositions"
+      for="*"
+      name="tabbedview_view-dispositions"
+      permission="zope2.View"
+      />
+
+  <browser:page
       class=".ech0160.ECH0160ExportView"
       for="opengever.disposition.interfaces.IDisposition"
       name="ech0160_export"

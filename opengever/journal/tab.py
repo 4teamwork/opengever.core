@@ -1,8 +1,6 @@
 from BeautifulSoup import BeautifulSoup
-from five import grok
 from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from ftw.journal.interfaces import IAnnotationsJournalizable
-from ftw.journal.interfaces import IJournalizable
 from ftw.journal.interfaces import IWorkflowHistoryJournalizable
 from ftw.table import helper
 from ftw.table.interfaces import ITableSource
@@ -16,11 +14,12 @@ from opengever.tabbedview.helper import readable_ogds_user
 from plone import api
 from zope.annotation.interfaces import IAnnotations
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
+from zope.component import adapter
 from zope.globalrequest import getRequest
 from zope.i18n import translate
+from zope.interface import implementer
 from zope.interface import implements
 from zope.interface import Interface
-
 import cPickle
 
 
@@ -51,10 +50,6 @@ class JournalTab(BaseListingTab):
 
     reference_template = ViewPageTemplateFile(
         'templates/journal_references.pt')
-
-    grok.name('tabbedview_view-journal')
-    grok.require('zope2.View')
-    grok.context(IJournalizable)
 
     # This is a bound method on purpose so it can be called down the line
     select_all_template = empty_template_helper
@@ -130,11 +125,10 @@ def actor_column_sorter(a, b):
                readable_ogds_user(b, b.get('actor')))
 
 
+@implementer(ITableSource)
+@adapter(IJournalSourceConfig, Interface)
 class JournalTableSource(GeverTableSource):
     """Generate a table to display in the journal tab view."""
-
-    grok.implements(ITableSource)
-    grok.adapts(IJournalSourceConfig, Interface)
 
     sorter = {'time': time_column_sorter,
               'title': title_column_sorter,

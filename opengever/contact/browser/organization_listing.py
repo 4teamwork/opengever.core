@@ -1,9 +1,7 @@
-from five import grok
 from ftw.table.interfaces import ITableSource
 from ftw.table.interfaces import ITableSourceConfig
 from opengever.contact import _
 from opengever.contact.browser.person_listing import ActiveOnlyFilter
-from opengever.contact.interfaces import IContactFolder
 from opengever.contact.models import Contact
 from opengever.contact.models import Organization
 from opengever.tabbedview import _ as tmf
@@ -13,6 +11,8 @@ from opengever.tabbedview.filters import Filter
 from opengever.tabbedview.filters import FilterList
 from opengever.tabbedview.helper import boolean_helper
 from opengever.tabbedview.helper import linked_sql_object
+from zope.component import adapter
+from zope.interface import implementer
 from zope.interface import implements
 from zope.interface import Interface
 
@@ -47,17 +47,14 @@ class OrganizationListingTab(BaseListingTab):
         return Organization.query
 
 
+@implementer(ITableSource)
+@adapter(IOrganizationTableSourceConfig, Interface)
 class OrganizationTableSource(SqlTableSource):
-    grok.implements(ITableSource)
-    grok.adapts(OrganizationListingTab, Interface)
 
     searchable_columns = [Organization.name, Contact.former_contact_id]
 
 
 class Organizations(OrganizationListingTab):
-    grok.name('tabbedview_view-organizations')
-    grok.context(IContactFolder)
-
     sort_on = 'name'
 
     show_selects = False

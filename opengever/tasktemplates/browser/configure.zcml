@@ -1,0 +1,20 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="opengever.tasktemplates">
+
+  <browser:page
+      for="*"
+      name="tabbedview_view-tasktemplates"
+      class=".tasktemplates.TaskTemplates"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="*"
+      name="tabbedview_view-tasktemplatefolders"
+      class=".templatefolders.TaskTemplateFoldersTab"
+      permission="zope2.View"
+      />
+
+</configure>

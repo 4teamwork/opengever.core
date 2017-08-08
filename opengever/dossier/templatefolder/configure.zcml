@@ -17,6 +17,41 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="*"
+      name="tabbedview_view-dossiertemplates"
+      class=".tabs.TemplateFolderDossierTemplates"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.dossier.templatefolder.interfaces.ITemplateFolder"
+      name="tabbedview_view-documents"
+      class=".tabs.TemplateFolderDocuments"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.dossier.templatefolder.interfaces.ITemplateFolder"
+      name="tabbedview_view-sablontemplates"
+      class=".tabs.TemplateFolderSablonTemplates"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.dossier.templatefolder.interfaces.ITemplateFolder"
+      name="tabbedview_view-proposaltemplates"
+      class=".tabs.TemplateFolderProposalTemplates"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.dossier.templatefolder.interfaces.ITemplateFolder"
+      name="tabbedview_view-trash"
+      class=".tabs.TemplateFolderTrash"
+      permission="zope2.View"
+      />
+
   <subscriber
       for="opengever.dossier.templatefolder.ITemplateFolder
            zope.lifecycleevent.interfaces.IObjectAddedEvent"
