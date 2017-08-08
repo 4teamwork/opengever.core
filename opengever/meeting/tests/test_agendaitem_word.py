@@ -27,10 +27,9 @@ class TestWordAgendaItem(IntegrationTestCase):
     @browsing
     def test_proposal_document_in_meeting_item_data(self, browser):
         self.login(self.committee_responsible, browser)
-        agenda_item = self.schedule_proposal(self.meeting,
-                                             self.submitted_word_proposal)
-        browser.open(self.meeting, view='agenda_items/{}/list'.format(
-            agenda_item.agenda_item_id))
+        self.schedule_proposal(self.meeting,
+                               self.submitted_word_proposal)
+        browser.open(self.meeting, view='agenda_items/list')
         item_data = browser.json['items'][0]
 
         document_link_html = item_data.get('proposal_document_link')
@@ -45,15 +44,13 @@ class TestWordAgendaItem(IntegrationTestCase):
         self.login(self.committee_responsible, browser)
         agenda_item = self.schedule_proposal(self.meeting,
                                              self.submitted_word_proposal)
-        browser.open(self.meeting, view='agenda_items/{}/list'.format(
-            agenda_item.agenda_item_id))
+        browser.open(self.meeting, view='agenda_items/list')
         item_data = browser.json['items'][0]
 
         self.assertDictContainsSubset(
             {'proposal_document_checked_out': False,
              'edit_document_possible': True,
-             'edit_document_link': '{}/agenda_items/1/edit_document'.format(
-                 self.meeting.absolute_url())},
+             'edit_document_link': self.agenda_item_url(agenda_item, 'edit_document')},
             item_data)
 
         document = self.submitted_word_proposal.get_proposal_document()
@@ -68,14 +65,13 @@ class TestWordAgendaItem(IntegrationTestCase):
     @browsing
     def test_edit_document_checks_out_and_provides_OC_url(self, browser):
         self.login(self.committee_responsible, browser)
-        item = self.schedule_proposal(self.meeting,
-                                      self.submitted_word_proposal)
+        agenda_item = self.schedule_proposal(self.meeting,
+                                             self.submitted_word_proposal)
         document = self.submitted_word_proposal.get_proposal_document()
 
         self.assertIsNone(self.get_checkout_manager(document).get_checked_out_by())
         browser.open(
-            self.meeting,
-            view='agenda_items/{}/edit_document'.format(item.agenda_item_id),
+            self.agenda_item_url(agenda_item, 'edit_document'),
             send_authenticator=True)
 
         self.assertEquals(
@@ -89,8 +85,8 @@ class TestWordAgendaItem(IntegrationTestCase):
     @browsing
     def test_decide_agenda_item_checks_in_documents(self, browser):
         self.login(self.committee_responsible, browser)
-        item = self.schedule_proposal(self.meeting,
-                                      self.submitted_word_proposal)
+        agenda_item = self.schedule_proposal(self.meeting,
+                                             self.submitted_word_proposal)
 
         document = self.submitted_word_proposal.get_proposal_document()
         self.checkout_document(document)
@@ -101,8 +97,7 @@ class TestWordAgendaItem(IntegrationTestCase):
         self.assertEquals(proposal_model.STATE_SCHEDULED, proposal_model.get_state())
 
         browser.open(
-            self.meeting,
-            view='agenda_items/{}/decide'.format(item.agenda_item_id),
+            self.agenda_item_url(agenda_item, 'decide'),
             send_authenticator=True)
         self.assertEquals(
             {u'redirectUrl': u'http://nohost/plone'
@@ -124,8 +119,8 @@ class TestWordAgendaItem(IntegrationTestCase):
         """
 
         self.login(self.committee_responsible, browser)
-        item = self.schedule_proposal(self.meeting,
-                                      self.submitted_word_proposal)
+        agenda_item = self.schedule_proposal(self.meeting,
+                                             self.submitted_word_proposal)
 
         self.login(self.administrator, browser)
         document = self.submitted_word_proposal.get_proposal_document()
@@ -138,8 +133,7 @@ class TestWordAgendaItem(IntegrationTestCase):
         self.assertEquals(proposal_model.STATE_SCHEDULED, proposal_model.get_state())
 
         browser.open(
-            self.meeting,
-            view='agenda_items/{}/decide'.format(item.agenda_item_id),
+            self.agenda_item_url(agenda_item, 'decide'),
             send_authenticator=True)
         self.assertEquals(
             {u'messages': [
@@ -153,3 +147,97 @@ class TestWordAgendaItem(IntegrationTestCase):
         self.assertEquals(proposal_model.STATE_SCHEDULED, proposal_model.get_state())
         self.assertEqual(self.administrator.getId(),
                          self.get_checkout_manager(document).get_checked_out_by())
+
+    @browsing
+    def test_create_excerpt(self, browser):
+        """When creating an excerpt of an agenda item, it should copy the
+        proposal document into the meeting dossier for further editing.
+        """
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_proposal(self.meeting,
+                                             self.submitted_word_proposal)
+        agenda_item.decide()
+        self.assertEquals(self.meeting.model.STATE_HELD,
+                          self.meeting.model.get_state())
+
+        browser.open(self.meeting, view='agenda_items/list')
+        item_data = browser.json['items'][0]
+
+        # The generate excerpt link is available on decided agenda items.
+        self.assertDictContainsSubset(
+            {'generate_excerpt_link': self.agenda_item_url(agenda_item, 'generate_excerpt')},
+            item_data)
+
+        # Create an excerpt.
+        with self.observe_children(self.meeting_dossier) as children:
+            browser.open(item_data['generate_excerpt_link'], send_authenticator=True)
+
+        # Generating the excerpt is confirmed with a status message.
+        self.assertEquals(
+            {u'proceed': True,
+             u'messages': [
+                 {u'messageTitle': u'Information',
+                  u'message': u'Excerpt was created successfully.',
+                  u'messageClass': u'info'}]},
+            browser.json)
+
+        # The excerpt was created in the meeting dossier and contains the exact
+        # original document.
+        self.assertEquals(1, len(children['added']))
+        excerpt_document ,= children['added']
+        self.assertEquals('Excerpt \xc3\x84nderungen am Personalreglement',
+                          excerpt_document.Title())
+        self.assertEquals('file body', excerpt_document.file.data)
+
+    @browsing
+    def test_cannot_create_excerpt_when_meeting_closed(self, browser):
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_proposal(self.meeting,
+                                             self.submitted_word_proposal)
+        agenda_item.decide()
+        self.meeting.model.execute_transition('held-closed')
+        self.assertEquals(self.meeting.model.STATE_CLOSED,
+                          self.meeting.model.get_state())
+
+        with browser.expect_unauthorized():
+            browser.open(self.agenda_item_url(agenda_item, 'generate_excerpt'))
+
+    @browsing
+    def test_cannot_create_excerpt_when_item_not_decided(self, browser):
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_proposal(self.meeting,
+                                             self.submitted_word_proposal)
+        with browser.expect_http_error(reason='Forbidden'):
+            browser.open(self.agenda_item_url(agenda_item, 'generate_excerpt'))
+
+    @browsing
+    def test_error_when_no_access_to_meeting_dossier(self, browser):
+        with self.login(self.administrator):
+            self.committee_container.manage_setLocalRoles(
+                self.regular_user.getId(), ('Reader',))
+            self.committee.manage_setLocalRoles(
+                self.regular_user.getId(), ('CommitteeGroupMember', 'Editor'))
+            self.committee_container.reindexObjectSecurity()
+            # Let regular_user have no access to meeting_dossier
+            self.meeting_dossier.__ac_local_roles_block__ = True
+
+        self.login(self.regular_user, browser)
+        agenda_item = self.schedule_proposal(self.meeting,
+                                             self.submitted_word_proposal)
+        agenda_item.decide()
+
+        browser.open(self.agenda_item_url(agenda_item, 'generate_excerpt'))
+        self.assertEquals(
+            {u'messages': [
+                {u'messageTitle': u'Error',
+                 u'message': u'Insufficient privileges to add a document'
+                 u' to the meeting dossier.',
+                 u'messageClass': u'error'}],
+             u'proceed': False},
+            browser.json)
+
+    def agenda_item_url(self, agenda_item, endpoint):
+        return '{}/agenda_items/{}/{}'.format(
+            agenda_item.meeting.get_url(view=None),
+            agenda_item.agenda_item_id,
+            endpoint)

@@ -2,12 +2,11 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages import plone
 from ftw.testbrowser.pages import statusmessages
-from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.meeting.command import MIME_DOCX
 from opengever.meeting.model import Proposal
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
 from opengever.testing import IntegrationTestCase
 from plone import api
-from zope.component import getMultiAdapter
 
 
 class TestProposalWithWord(IntegrationTestCase):
@@ -195,3 +194,17 @@ class TestProposalWithWord(IntegrationTestCase):
         self.assertEquals(
             'Cannot decide proposal when proposal document is checked out.',
             str(cm.exception))
+
+    def test_generate_excerpt_copies_document_to_target(self):
+        self.login(self.administrator)
+        with self.observe_children(self.meeting_dossier) as children:
+            self.submitted_word_proposal.generate_excerpt(self.meeting_dossier)
+
+        self.assertEquals(1, len(children['added']))
+        excerpt_document ,= children['added']
+        self.assertEquals('Excerpt \xc3\x84nderungen am Personalreglement',
+                          excerpt_document.Title())
+        self.assertEquals(u'excerpt-anderungen-am-personalreglement.docx',
+                          excerpt_document.file.filename)
+        self.assertEquals(MIME_DOCX, excerpt_document.file.contentType)
+        self.assertEquals('file body', excerpt_document.file.data)

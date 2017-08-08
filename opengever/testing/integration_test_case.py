@@ -391,7 +391,6 @@ class IntegrationTestCase(TestCase):
         return getMultiAdapter((document, document.REQUEST),
                                ICheckinCheckoutManager)
 
-
     def schedule_proposal(self, meeting, submitted_proposal):
         """Meeting: schedule a proposal for a meeting and return the
         agenda item.

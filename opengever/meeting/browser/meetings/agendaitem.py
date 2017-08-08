@@ -8,6 +8,7 @@ from plone import api
 from plone.app.contentlisting.interfaces import IContentListing
 from plone.app.contentlisting.interfaces import IContentListingObject
 from Products.Five.browser import BrowserView
+from zExceptions import Forbidden
 from zExceptions import NotFound
 from zExceptions import Unauthorized
 from zope.component import getMultiAdapter
@@ -69,6 +70,10 @@ class IAgendaItemActions(Interface):
 
     def edit_document():
         """Checkout and open the document with office connector.
+        """
+
+    def generate_excerpt():
+        """Create a new excerpt from a agenda item.
         """
 
 
@@ -162,6 +167,10 @@ class AgendaItemsView(BrowserView):
                 data['edit_document_link'] = meeting.get_url(
                     view='agenda_items/{}/edit_document'.format(
                         item.agenda_item_id))
+                if self.can_generate_excerpt(item):
+                    data['generate_excerpt_link'] = meeting.get_url(
+                        view='agenda_items/{}/generate_excerpt'.format(
+                            item.agenda_item_id))
 
             agenda_items.append(data)
         return agenda_items
@@ -373,3 +382,40 @@ class AgendaItemsView(BrowserView):
     def check_editable(self):
         if not self.meeting.is_editable():
             raise Unauthorized("Editing is not allowed")
+
+    def generate_excerpt(self):
+        """Generate an excerpt of an agenda item and store it in
+        the meeting dossier.
+        """
+        if not self.context.model.is_editable():
+            raise Unauthorized("Editing is not allowed")
+
+        if not self.can_generate_excerpt(self.agenda_item):
+            raise Forbidden('Generating excerpt is not allowed in this state.')
+
+        meeting_dossier = self.meeting.get_dossier()
+        if not api.user.get_current().checkPermission(
+                'opengever.document: Add document', meeting_dossier):
+            return (JSONResponse(self.request)
+                    .error(_('error_no_permission_to_add_document',
+                             default=u'Insufficient privileges to add a'
+                             u' document to the meeting dossier.'))
+                    .remain()
+                    .dump())
+
+        proposal = self.agenda_item.proposal.resolve_submitted_proposal()
+        proposal.generate_excerpt(meeting_dossier)
+        return (JSONResponse(self.request)
+                .info(_('excerpt_generated',
+                        default=u'Excerpt was created successfully.'))
+                .proceed()
+                .dump())
+
+    def can_generate_excerpt(self, agenda_item):
+        """Returns True when agenda item and proposal are in a state which
+        allows to generate excerpts.
+        """
+        if not self.context.model.is_editable():
+            return False
+
+        return agenda_item.get_state() == agenda_item.STATE_DECIDED

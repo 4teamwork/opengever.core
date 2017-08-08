@@ -216,6 +216,10 @@
       });
     };
 
+    this.generateExcerpt = function(target) {
+      return $.get(target.attr("href"));
+    };
+
     this.events = [
       {
         method: "click",
@@ -253,6 +257,15 @@
         method: "click",
         target: ".revise-agenda-item",
         callback: this.revise,
+        options: {
+          update: true,
+          loading: true
+        }
+      },
+      {
+        method: "click",
+        target: ".generate-excerpt",
+        callback: this.generateExcerpt,
         options: {
           update: true,
           loading: true
