@@ -12,11 +12,25 @@
       />
 
   <browser:page
+      for="opengever.private.folder.IPrivateFolder"
+      name="tabbedview_view-dossiers"
+      class=".tabbed.PrivateFolderDossiers"
+      permission="zope2.View"
+      />
+
+  <browser:page
       for="opengever.private.dossier.IPrivateDossier"
       name="tabbed_view"
       class=".tabbed.PrivateDossierTabbedView"
       permission="zope2.View"
       allowed_interface="ftw.tabbedview.interfaces.ITabbedViewEndpoints"
+      />
+
+  <browser:page
+      for="opengever.private.dossier.IPrivateDossier"
+      name="tabbedview_view-documents"
+      class=".tabbed.PrivateDossierDocuments"
+      permission="zope2.View"
       />
 
 </configure>
