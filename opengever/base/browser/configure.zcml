@@ -115,4 +115,11 @@
       permission="zope2.CopyOrMove"
       />
 
+  <browser:page
+      name="resolve_oguid"
+      for="*"
+      class=".resolveoguid.ResolveOGUIDView"
+      permission="zope2.View"
+      />
+
 </configure>
