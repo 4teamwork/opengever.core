@@ -4,6 +4,7 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.ech0147 import _
 from opengever.ech0147 import model
 from opengever.ech0147.interfaces import IECH0147Settings
+from opengever.journal.handlers import journal_entry_factory
 from plone.autoform import directives
 from plone.autoform.form import AutoExtensibleForm
 from plone.formwidget.contenttree import ObjPathSourceBinder
@@ -158,8 +159,11 @@ class ECH0147ExportForm(AutoExtensibleForm, form.Form):
             directive.deadline = data['deadline']
             message.directive = directive
 
+        journal_entry = _(u'label_exported_as_ech0147',
+                          default=u'Exported as eCH-0147 message')
         for obj in objs:
             message.add_object(obj)
+            journal_entry_factory(obj, 'eCH-0147 Export', journal_entry)
 
         header_dom = message.header().toDOM(element_name='eCH-0147T0:header')
         message_dom = message.binding().toDOM()
