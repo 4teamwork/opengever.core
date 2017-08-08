@@ -12,6 +12,10 @@ class TempfileStreamIterator(object):
         self.file = tmpfile
         self.chunksize = chunksize
 
+    def __iter__(self):
+        self.file.seek(0)
+        return self
+
     def next(self):
         data = self.file.read(self.chunksize)
         if not data:
