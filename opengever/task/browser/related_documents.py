@@ -1,16 +1,17 @@
-from five import grok
 from ftw.table.catalog_source import default_custom_sort
 from ftw.table.interfaces import ICatalogTableSourceConfig
 from ftw.table.interfaces import ITableSource
 from opengever.tabbedview import GeverCatalogTableSource
 from opengever.tabbedview.browser.tabs import BaseTabProxy
 from opengever.tabbedview.browser.tabs import Documents
-from opengever.task.task import ITask
 from operator import attrgetter
 from plone.app.uuid.utils import uuidToCatalogBrain
 from plone.uuid.interfaces import IUUID
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.CatalogTool import sortable_title
+from zope.component import adapter
+from zope.interface import implementer
+from zope.interface import implements
 from zope.interface import Interface
 
 
@@ -42,12 +43,11 @@ class IRelatedDocumentsCatalogTableSourceConfig(ICatalogTableSourceConfig):
     """
 
 
+@implementer(ITableSource)
+@adapter(IRelatedDocumentsCatalogTableSourceConfig, Interface)
 class RelatedDocumentsCatalogTableSource(GeverCatalogTableSource):
     """Related documents table source adapter
     """
-
-    grok.implements(ITableSource)
-    grok.adapts(IRelatedDocumentsCatalogTableSourceConfig, Interface)
 
     def build_query(self):
         """Builds the query based on `get_base_query()` method of config.
@@ -221,16 +221,14 @@ class RelatedDocumentsProxy(BaseTabProxy):
     """This proxyview is looking for the last used documents
     view (list or gallery) and reopens this view.
     """
-    grok.name('tabbedview_view-relateddocuments-proxy')
 
 
 class RelatedDocuments(Documents):
     """Display all documents related to the given context or
     documents contained in the context
     """
-    grok.name('tabbedview_view-relateddocuments')
-    grok.context(ITask)
-    grok.implements(IRelatedDocumentsCatalogTableSourceConfig)
+
+    implements(IRelatedDocumentsCatalogTableSourceConfig)
 
     enabled_actions = [
         'send_as_email',

@@ -47,4 +47,22 @@
       class=".redirector.RedirectToContainingDossier"
       permission="zope2.View"
       />
+
+  <!-- related documents tab -->
+  <adapter factory=".related_documents.RelatedDocumentsCatalogTableSource" />
+
+  <browser:page
+      for="opengever.task.task.ITask"
+      name="tabbedview_view-relateddocuments-proxy"
+      class=".related_documents.RelatedDocumentsProxy"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.task.task.ITask"
+      name="tabbedview_view-relateddocuments"
+      class=".related_documents.RelatedDocuments"
+      permission="zope2.View"
+      />
+
 </configure>
