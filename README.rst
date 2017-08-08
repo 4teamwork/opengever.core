@@ -466,6 +466,7 @@ Users
 .. <fixture:users>
 
 - ``self.administrator``: ``nicole.kohler``
+- ``self.committee_responsible``: ``franzi.muller``
 - ``self.dossier_responsible``: ``robert.ziegler``
 - ``self.manager``: ``admin``
 - ``self.regular_user``: ``kathi.barfuss``
@@ -480,27 +481,36 @@ Objects
 
 .. code::
 
+  - self.meeting
+  - self.templates
+    - self.proposal_template
+    - self.sablon_template
   - self.repository_root
     - self.empty_repofolder
     - self.branch_repofolder
       - self.leaf_repofolder
-        - self.empty_dossier
+        - self.meeting_dossier
         - self.archive_dossier
+        - self.empty_dossier
         - self.dossier
-          - self.document
           - self.task
-            - self.subtask
             - self.taskdocument
+            - self.subtask
+          - self.mail_eml
+          - self.mail_msg
+          - self.draft_proposal
           - self.subdossier
             - self.subdocument
           - self.subdossier2
-          - self.mail_eml
-          - self.mail_msg
+          - self.draft_word_proposal
           - self.proposal
+          - self.word_proposal
+          - self.document
+  - self.submitted_word_proposal
+  - self.submitted_proposal
   - self.committee_container
+    - self.empty_committee
     - self.committee
-  - self.templates
-    - self.sablon_template
 
 .. </fixture:objects>
 
@@ -509,7 +519,8 @@ Other values
 
 .. <fixture:raw>
 
-
+- ``self.committee_id``: ``1``
+- ``self.empty_committee_id``: ``2``
 
 .. </fixture:raw>
 
