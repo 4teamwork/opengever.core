@@ -65,6 +65,8 @@ Zur Stellungnahme         zu überarbeiten
 
 ======================== =================
 
+Die oben beschriebenen Rechte bleiben auch nach Abschluss der Aufgabe bestehen.
+
 Mit der auftragnehmenden Person wird auch die Eingangskorbgruppe des
 auftragnehmenden Mandanten mitberechtigt. Dies im Sinne der
 Stellvertreter-Regelung.
