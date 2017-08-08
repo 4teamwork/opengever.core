@@ -1,3 +1,4 @@
+from opengever.base.security import elevated_privileges
 from opengever.task import _
 from opengever.task.response_syncer import BaseResponseSyncerReceiver
 from opengever.task.response_syncer import BaseResponseSyncerSender
@@ -58,7 +59,8 @@ class WorkflowResponseSyncerReceiver(BaseResponseSyncerReceiver):
         before = wftool.getInfoFor(self.context, 'review_state')
         before = wftool.getTitleForStateOnType(before, self.context.Type())
 
-        wftool.doActionFor(self.context, transition)
+        with elevated_privileges():
+            wftool.doActionFor(self.context, transition)
 
         after = wftool.getInfoFor(self.context, 'review_state')
         after = wftool.getTitleForStateOnType(after, self.context.Type())

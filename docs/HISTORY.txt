@@ -20,6 +20,7 @@ Changelog
 - Word meeting: Automatically checkin document when deciding an agenda item. [jone]
 - Word meeting: Update submitted proposal workflow: let group members checkout documents. [jone]
 - Fix error in earliest_possible_end_date if there are date and datetime objects to process. [elioschmutz]
+- Fix change workflow on remote tasks if the successor has no write-permission on the remote task does no longer fail with unauthorized. [elioschmutz]
 - Do no more send None as text while syncing tasks if there is no text. [elioschmutz]
 - Fix leaking reference in RestrictedVocabularyFactory. [lgraf]
 - Use get_download_view_name in oc_attach restapi view to download original_message file if available. [elioschmutz]
