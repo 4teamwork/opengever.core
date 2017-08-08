@@ -1,3 +1,5 @@
+from docx import Document
+from docxmerge.builder import DocumentBuilder
 from opengever.base import advancedjson
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.interfaces import IDataCollector
@@ -19,7 +21,9 @@ from opengever.meeting.protocol import AgendaItemListProtocolData
 from opengever.meeting.protocol import ExcerptProtocolData
 from opengever.meeting.protocol import ProtocolData
 from opengever.meeting.sablon import Sablon
+from opengever.meeting.sablon import Sablon
 from opengever.ogds.base.utils import decode_for_json
+from os.path import join
 from plone import api
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.locking.interfaces import ILockable
@@ -29,6 +33,8 @@ from zope.globalrequest import getRequest
 from zope.i18n import translate
 import base64
 import json
+import shutil
+import tempfile
 
 
 MIME_DOCX = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
@@ -243,6 +249,94 @@ class CreateGeneratedDocumentCommand(CreateDocumentCommand):
         api.portal.show_message(
             self.document_operations.get_generated_message(self.meeting),
             portal.REQUEST)
+
+
+class MergeDocxProtocolCommand(CreateGeneratedDocumentCommand):
+    """Create or update a merged protocol word file.
+
+    Create a master file based on a sablon template (the master contains
+    the first page with participants and agenda item list.)
+
+    Then append all partial protocols for each agenda item in sequential order.
+    """
+
+    def __init__(self, context, meeting, document_operations,
+                 lock_document_after_creation=False):
+        super(MergeDocxProtocolCommand, self).__init__(
+            context, meeting, document_operations,
+            lock_document_after_creation=lock_document_after_creation)
+
+        self.has_protocol = meeting.protocol_document is not None
+
+    def execute(self):
+        if self.has_protocol:
+            return self.update_protocol_document()
+
+        return super(MergeDocxProtocolCommand, self).execute()
+
+    def show_message(self):
+        if self.has_protocol:
+            portal = api.portal.get()
+            api.portal.show_message(
+                self.document_operations.get_updated_message(self.meeting),
+                portal.REQUEST)
+            return
+
+        return super(MergeDocxProtocolCommand, self).show_message()
+
+    def update_protocol_document(self):
+        document = self.meeting.protocol_document.resolve_document()
+        document.file.data = self.generate_file_data()
+
+        repository = api.portal.get_tool('portal_repository')
+        comment = translate(
+            _(u'Updated with a newer generated version from meeting ${title}.',
+              mapping=dict(title=self.meeting.get_title())),
+            context=getRequest())
+        repository.save(obj=document, comment=comment)
+
+        new_version = document.get_current_version()
+        self.meeting.protocol_document.generated_version = new_version
+
+        return document
+
+    def generate_file_data(self):
+        template = self.document_operations.get_sablon_template(self.meeting)
+        sablon = Sablon(template)
+        sablon.process(self.document_operations.get_meeting_data(
+            self.meeting).as_json())
+
+        tmpdir_path = tempfile.mkdtemp(prefix='opengever.core.doxcmerge_')
+        master_path = join(tmpdir_path, 'master.docx')
+        output_path = join(tmpdir_path, 'protocol.docx')
+
+        try:
+            # XXX: this is a bit dumb since sablon would already have generated
+            # a temporary file
+            with open(master_path, 'wb') as master_file:
+                master_file.write(sablon.file_data)
+            builder = DocumentBuilder(Document(master_path))
+
+            for index, item in enumerate(self.meeting.agenda_items):
+                if not item.has_proposal:
+                    continue
+
+                proposal = item.proposal.submitted_oguid.resolve_object()
+                proposal_document = proposal.get_proposal_document()
+                proposal_path = join(
+                    tmpdir_path, 'proposal{}.docx'.format(index))
+
+                with open(proposal_path, 'wb') as proposal_file:
+                    proposal_file.write(proposal_document.file.data)
+                builder.append(Document(proposal_path))
+
+            builder.save(output_path)
+            with open(output_path, 'rb') as merged_file:
+                data = merged_file.read()
+        finally:
+            shutil.rmtree(tmpdir_path)
+
+        return data
 
 
 class UpdateGeneratedDocumentCommand(object):

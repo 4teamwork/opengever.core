@@ -12,6 +12,7 @@ from opengever.meeting import _
 from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.browser.meetings.transitions import MeetingTransitionController
 from opengever.meeting.browser.protocol import GenerateProtocol
+from opengever.meeting.browser.protocol import MergeDocxProtocol
 from opengever.meeting.browser.protocol import UpdateProtocol
 from opengever.meeting.committee import ICommittee
 from opengever.meeting.model import Meeting
@@ -258,10 +259,16 @@ class MeetingView(BrowserView):
         return self.model.get_url(view='protocol')
 
     def url_generate_protocol(self):
+        if self.is_word_meeting_implementation_enabled():
+            return self.url_merge_docx_protocol()
+
         if not self.model.has_protocol_document():
             return GenerateProtocol.url_for(self.model)
         else:
             return UpdateProtocol.url_for(self.model)
+
+    def url_merge_docx_protocol(self):
+        return MergeDocxProtocol.url_for(self.model)
 
     def has_protocol_document(self):
         return self.model.has_protocol_document()
