@@ -5,6 +5,7 @@ Changelog
 2017.4.1 (unreleased)
 ---------------------
 
+- Bundle import: Also log progress and RSS during post-processing. [lgraf]
 - Fix leaking reference in RestrictedVocabularyFactory. [lgraf]
 - Improve warning when opening an old version of a document. [tarnap]
 - Highlight search terms after fetching new search results per ajax. [elioschmutz]
