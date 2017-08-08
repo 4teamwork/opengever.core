@@ -160,4 +160,34 @@
       layer="opengever.ogds.base.interfaces.IInternalOpengeverRequestLayer"
       />
 
+  <!-- committee tabs -->
+  <browser:page
+      name="tabbedview_view-meetings"
+      for="opengever.meeting.committee.ICommittee"
+      class=".committeetabs.Meetings"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="tabbedview_view-submittedproposals"
+      for="opengever.meeting.committee.ICommittee"
+      class=".committeetabs.SubmittedProposals"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="tabbedview_view-memberships"
+      for="opengever.meeting.committee.ICommittee"
+      class=".committeetabs.Memberships"
+      permission="zope2.View"
+      />
+
+  <!-- committee container tabs -->
+  <browser:page
+      name="tabbedview_view-members"
+      for="opengever.meeting.committeecontainer.ICommitteeContainer"
+      class=".committeecontainertabs.Members"
+      permission="zope2.View"
+      />
+
 </configure>

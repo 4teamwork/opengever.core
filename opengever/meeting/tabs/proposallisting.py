@@ -57,8 +57,9 @@ class ProposalListingTab(BaseListingTab):
 
         )
 
+
 @implementer(ITableSource)
-@adapter(ProposalListingTab, Interface)
+@adapter(IProposalTableSourceConfig, Interface)
 class ProposalTableSource(SqlTableSource):
 
     searchable_columns = []

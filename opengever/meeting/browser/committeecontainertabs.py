@@ -66,8 +66,6 @@ class Committees(grok.View, GeverTabMixin):
 
 
 class Members(MemberListingTab):
-    grok.name('tabbedview_view-members')
-    grok.context(ICommitteeContainer)
 
     selection = ViewPageTemplateFile("templates/no_selection.pt")
     sort_on = 'lastname'

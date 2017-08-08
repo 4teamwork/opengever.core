@@ -1,9 +1,10 @@
-from five import grok
 from ftw.table.interfaces import ITableSource
 from ftw.table.interfaces import ITableSourceConfig
 from opengever.meeting.model import Proposal
 from opengever.meeting.tabs.proposallisting import ProposalListingTab
 from opengever.tabbedview import SqlTableSource
+from zope.component import adapter
+from zope.interface import implementer
 from zope.interface import implements
 from zope.interface import Interface
 
@@ -38,8 +39,8 @@ class SubmittedProposalListingTab(ProposalListingTab):
         return columns
 
 
+@implementer(ITableSource)
+@adapter(ISubmittedProposalTableSourceConfig, Interface)
 class SubmittedProposalTableSource(SqlTableSource):
-    grok.implements(ITableSource)
-    grok.adapts(SubmittedProposalListingTab, Interface)
 
     searchable_columns = []
