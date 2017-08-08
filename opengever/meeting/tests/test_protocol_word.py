@@ -34,3 +34,17 @@ class TestProtocolWithWord(IntegrationTestCase):
             u'Rechnungspr\xfcfungskommission has been updated successfully.')
         self.assertIsNotNone(meeting.protocol_document)
         self.assertEqual(1, meeting.protocol_document.generated_version)
+
+    @browsing
+    def test_protocol_is_generated_when_closing_meetings(self, browser):
+        self.login(self.committee_responsible, browser)
+        self.schedule_proposal(self.meeting, self.submitted_word_proposal)
+        meeting = self.meeting.model
+
+        self.assertIsNone(meeting.protocol_document)
+
+        browser.open(meeting.get_url())
+        browser.find('Close meeting').click()
+
+        self.assertIsNotNone(meeting.protocol_document)
+        self.assertEqual(0, meeting.protocol_document.generated_version)

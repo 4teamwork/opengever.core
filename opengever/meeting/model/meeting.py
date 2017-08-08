@@ -7,6 +7,7 @@ from opengever.base.oguid import Oguid
 from opengever.base.utils import escape_html
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
+from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import Period
 from opengever.meeting.model.membership import Membership
@@ -169,17 +170,23 @@ class Meeting(Base, SQLFormSupport):
     def update_protocol_document(self):
         """Update or create meeting's protocol."""
         from opengever.meeting.command import CreateGeneratedDocumentCommand
+        from opengever.meeting.command import MergeDocxProtocolCommand
         from opengever.meeting.command import ProtocolOperations
         from opengever.meeting.command import UpdateGeneratedDocumentCommand
 
         operations = ProtocolOperations()
-        if self.has_protocol_document():
-            command = UpdateGeneratedDocumentCommand(
-                self.protocol_document, self, operations)
+
+        if is_word_meeting_implementation_enabled():
+            command = MergeDocxProtocolCommand(
+                self.get_dossier(), self, operations)
         else:
-            command = CreateGeneratedDocumentCommand(
-                self.get_dossier(), self, operations,
-                lock_document_after_creation=True)
+            if self.has_protocol_document():
+                command = UpdateGeneratedDocumentCommand(
+                    self.protocol_document, self, operations)
+            else:
+                command = CreateGeneratedDocumentCommand(
+                    self.get_dossier(), self, operations,
+                    lock_document_after_creation=True)
 
         command.execute()
 
