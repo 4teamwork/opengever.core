@@ -163,9 +163,14 @@ class TestMeetingView(FunctionalTestCase):
     @browsing
     def test_participants_listing_participants_is_existing(self, browser):
         browser.login().open(self.meeting.get_url())
+        self.assertEquals(3, len(browser.css("#meeting_participants + dd li")))
+
+    @browsing
+    def test_participants_listing_participants_are_listed_alphabetically(self, browser):
+        browser.login().open(self.meeting.get_url())
         self.assertEquals(
-            ['Meter Peter (meter@foo.ch) Besen Hans Kuppler Roland'],
-            browser.css("#meeting_participants + dd").text)
+            ['Besen Hans', 'Kuppler Roland', 'Meter Peter (meter@foo.ch)'],
+            browser.css("#meeting_participants + dd li").text)
 
     @browsing
     def test_participants_listing_empty_participants_must_not_raise(self, browser):
