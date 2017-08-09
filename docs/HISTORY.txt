@@ -7,6 +7,7 @@ Changelog
 
 - SPV word: merge multiple word files into one protocol. [deiferni]
 - Add add bumblebee gallery view for proposaltemplate. [elioschmutz]
+- Word meeting: Improve edit-document-button behavior in meeting view. [jone]
 - Bundle import: Also log progress and RSS during post-processing. [lgraf]
 - Word meeting: List excerpts per agenda item in meeting view. [jone]
 - Word meeting: Replace excerpt generation with new word implementation. [jone]

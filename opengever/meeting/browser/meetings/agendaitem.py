@@ -139,6 +139,30 @@ class AgendaItemsView(BrowserView):
         docs = IContentListing(submitted_proposal.get_excerpts())
         return [doc.render_link() for doc in docs]
 
+    @require_word_meeting_feature
+    def _get_edit_document_options(self, meeting, agenda_item):
+        """Return the agenda item options for the template regarding
+        editing the document and its lock.
+        """
+        proposal = agenda_item.proposal.submitted_oguid.resolve_object()
+        document = proposal.get_proposal_document()
+        checkout_manager = getMultiAdapter((document, self.request),
+                                           ICheckinCheckoutManager)
+
+        button = {}
+        button['visible'] = bool(checkout_manager.check_permission(
+            'Modify portal content'))
+        button['active'] = button['visible'] and (
+            checkout_manager.is_checkout_allowed() or
+            checkout_manager.is_checked_out_by_current_user())
+        button['url'] = meeting.get_url(
+            view='agenda_items/{}/edit_document'.format(
+                agenda_item.agenda_item_id))
+        return {
+            'proposal_document_checked_out': bool(
+                checkout_manager.get_checked_out_by()),
+            'edit_proposal_document_button': button}
+
     def _get_agenda_items(self):
         meeting = self.context.model
         agenda_items = []
@@ -164,24 +188,14 @@ class AgendaItemsView(BrowserView):
             if item.proposal and is_word_meeting_implementation_enabled():
                 proposal = item.proposal.submitted_oguid.resolve_object()
                 proposal_document = proposal.get_proposal_document()
-                checkout_manager = getMultiAdapter(
-                    (proposal_document, self.request),
-                    ICheckinCheckoutManager)
                 data['proposal_document_link'] = (
                     IContentListingObject(proposal_document).render_link())
-                data['proposal_document_checked_out'] = bool(
-                    checkout_manager.get_checked_out_by())
-                data['edit_document_possible'] = (
-                    checkout_manager.is_checkout_allowed() or
-                    checkout_manager.is_checked_out_by_current_user())
-                data['edit_document_link'] = meeting.get_url(
-                    view='agenda_items/{}/edit_document'.format(
-                        item.agenda_item_id))
+                data.update(self._get_edit_document_options(meeting, item))
+                data['excerpts'] = self._serialize_excerpts(item)
                 if self.can_generate_excerpt(item):
                     data['generate_excerpt_link'] = meeting.get_url(
                         view='agenda_items/{}/generate_excerpt'.format(
                             item.agenda_item_id))
-                data['excerpts'] = self._serialize_excerpts(item)
 
             agenda_items.append(data)
         return agenda_items
