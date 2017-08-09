@@ -1,0 +1,23 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="opengever.debug">
+
+  <browser:page
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      name="manage-csrf-tracing"
+      class=".manage_csrf_tracing.ManageCSRFTracing"
+      permission="cmf.ManagePortal"
+      template="templates/managecsrftracing.pt"
+      />
+
+  <browser:page
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      name="trigger-csrf"
+      class=".trigger_csrf.TriggerCSRF"
+      permission="cmf.ManagePortal"
+      template="templates/triggercsrf.pt"
+      />
+
+</configure>
