@@ -40,8 +40,22 @@
 
   <browser:page
       for="opengever.dossier.templatefolder.interfaces.ITemplateFolder"
+      name="tabbedview_view-proposaltemplates-proxy"
+      class=".tabs.TemplateFolderProposalTemplatesProxy"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.dossier.templatefolder.interfaces.ITemplateFolder"
       name="tabbedview_view-proposaltemplates"
       class=".tabs.TemplateFolderProposalTemplates"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.dossier.templatefolder.interfaces.ITemplateFolder"
+      name="tabbedview_view-proposaltemplates-gallery"
+      class=".tabs.TemplateFolderProposalTemplatesGallery"
       permission="zope2.View"
       />
 

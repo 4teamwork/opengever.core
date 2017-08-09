@@ -1,6 +1,8 @@
 from opengever.dossier import _
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateSchema
 from opengever.tabbedview import BaseCatalogListingTab
+from opengever.tabbedview.browser.bumblebee_gallery import BumblebeeGalleryMixin
+from opengever.tabbedview.browser.tabs import BaseTabProxy
 from opengever.tabbedview.browser.tabs import Documents, Trash
 from opengever.tabbedview.helper import linked
 
@@ -72,6 +74,12 @@ class TemplateFolderSablonTemplates(Documents):
     ]
 
 
+class TemplateFolderProposalTemplatesProxy(BaseTabProxy):
+    """This proxyview is looking for the last used documents
+    view (list or gallery) and reopens this view.
+    """
+
+
 class TemplateFolderProposalTemplates(Documents):
 
     types = ['opengever.meeting.proposaltemplate']
@@ -98,6 +106,15 @@ class TemplateFolderProposalTemplates(Documents):
         'send_as_email',
         'submit_additional_documents',
     ]
+
+
+class TemplateFolderProposalTemplatesGallery(BumblebeeGalleryMixin, TemplateFolderProposalTemplates):
+
+    sort_on = 'sortable_title'
+
+    @property
+    def list_view_name(self):
+        return 'proposaltemplates'
 
 
 class TemplateFolderTrash(Trash):
