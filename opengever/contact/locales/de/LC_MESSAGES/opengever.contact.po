@@ -307,7 +307,7 @@ msgstr "Lokal"
 #: ./opengever/contact/browser/templates/organization.pt:44
 #: ./opengever/contact/browser/templates/person.pt:54
 msgid "label_mail"
-msgstr "E-Mail-Addressen"
+msgstr "E-Mail-Adressen"
 
 #. Default: "Mobile"
 #: ./opengever/contact/ogdsuser.py:218
