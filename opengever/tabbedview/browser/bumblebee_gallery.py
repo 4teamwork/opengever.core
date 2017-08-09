@@ -9,6 +9,7 @@ from opengever.task.browser.related_documents import RelatedDocuments
 from plone.memoize.view import memoize
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zExceptions import NotFound
+import re
 
 
 class BumblebeeGalleryMixin(object):
@@ -31,7 +32,7 @@ class BumblebeeGalleryMixin(object):
 
     @property
     def list_view_name(self):
-        raise NotImplementedError
+        return self._extract_base_view_name(self.__name__)
 
     def get_fetch_url(self):
         return '{}/{}-fetch'.format(self.context.absolute_url(), self.__name__)
@@ -82,12 +83,16 @@ class BumblebeeGalleryMixin(object):
             return ''
         return self.previews_template().strip()
 
+    def _extract_base_view_name(self, view_name):
+        """Extracts the base-view-name without tabbedview_view- and -gallery.
+        """
+        result = re.search("tabbedview_view-(.*?)-gallery", view_name)
+        return result.group(1) if result else view_name
+
 
 class DocumentsGallery(BumblebeeGalleryMixin, Documents):
-
-    @property
-    def list_view_name(self):
-        return "documents"
+    """
+    """
 
 
 class DocumentsGalleryFetch(DocumentsGallery):
@@ -107,10 +112,8 @@ class DocumentsGalleryFetch(DocumentsGallery):
 
 
 class MyDocumentsGallery(BumblebeeGalleryMixin, MyDocuments):
-
-    @property
-    def list_view_name(self):
-        return "mydocuments"
+    """
+    """
 
 
 class MyDocumentsGalleryFetch(MyDocumentsGallery):
@@ -130,10 +133,8 @@ class MyDocumentsGalleryFetch(MyDocumentsGallery):
 
 
 class TrashGallery(BumblebeeGalleryMixin, Trash):
-
-    @property
-    def list_view_name(self):
-        return "trash"
+    """
+    """
 
 
 class TrashGalleryFetch(TrashGallery):
@@ -153,10 +154,8 @@ class TrashGalleryFetch(TrashGallery):
 
 
 class RelatedDocumentsGallery(BumblebeeGalleryMixin, RelatedDocuments):
-
-    @property
-    def list_view_name(self):
-        return "relateddocuments"
+    """
+    """
 
 
 class RelatedDocumentsGalleryFetch(RelatedDocumentsGallery):

@@ -112,10 +112,6 @@ class TemplateFolderProposalTemplatesGallery(BumblebeeGalleryMixin, TemplateFold
 
     sort_on = 'sortable_title'
 
-    @property
-    def list_view_name(self):
-        return 'proposaltemplates'
-
 
 class TemplateFolderTrash(Trash):
     depth = 1
