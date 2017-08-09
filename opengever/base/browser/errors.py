@@ -5,6 +5,7 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.component import adapts
 from zope.component.hooks import getSite
 from zope.interface import Interface
+import sys
 
 
 class ErrorHandlingView(BrowserView):
@@ -34,13 +35,21 @@ class ErrorHandlingView(BrowserView):
             return api.user.has_permission('cmf.ManagePortal')
 
     def get_error_log(self):
-        log = ''
-        if self.__parent__:
+        log = None
+        published = self.__parent__
+        if published:
             try:
-                log = aq_acquire(self.__parent__,
-                                 '__error_log__',
-                                 containment=1)
+                error_log = aq_acquire(published,
+                                       '__error_log__',
+                                       containment=1)
+
+                error_type, error_value, traceback = sys.exc_info()
+                error_log_url = error_log.raising((error_type,
+                                                   error_value,
+                                                   traceback))
+                log = {'url': error_log_url,
+                       'errorid': error_log_url.split('?id=')[1]}
             except AttributeError:
-                log = ''
+                log = None
 
         return log

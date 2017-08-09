@@ -99,6 +99,23 @@
                         </p>
                 </tal:noentry>
 
+                <tal:hasentry condition="error_log">
+                    <p tal:condition="not: is_manager"
+                       i18n:translate="description_error_has_been_logged">
+                    The error has been logged as entry number
+                    <code i18n:name="entryid" tal:content="error_log/errorid">1174791474.310.489098092344</code>.
+                    </p>
+
+                    <p tal:condition="not: is_manager"
+                       i18n:translate="description_include_error_in_admin_message">
+                    If you need to report this to the
+                    <span i18n:name="site_admin">
+                    <a href="#"
+                       i18n:translate="label_site_admin"
+                       tal:attributes="href string:${portal_url}/contact-info">Site Administration</a></span>,
+                    please include this entry number in your message.
+                    </p>
+                </tal:hasentry>
             </div>
         </metal:othererror>
 

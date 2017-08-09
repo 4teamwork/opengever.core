@@ -50,3 +50,21 @@ class TestErrorPage(IntegrationTestCase):
                           u'address but are encountering an error, please '
                           u'contact the Site Administration.',
                           browser.css('.error-body').first.text)
+
+    @browsing
+    def test_show_error_number_to_user_for_regular_errors(self, browser):
+        self.login(self.regular_user, browser)
+
+        # Provoke a AttributeError by calling the breadcrumb_by_uid view
+        # without a uid
+        with browser.expect_http_error(code=500):
+            browser.open(view='breadcrumb_by_uid')
+
+        self.assertTrue(browser.css('#content.gever-error-page'),
+                        'Expect to be on the gever error page')
+        self.assertEquals(u'We\u2019re sorry, but there seems to be an '
+                          u'error\u2026',
+                          browser.css('h1').first.text)
+
+        self.assertEquals(browser.css('.error-body').first.text.startswith(
+            u'The error has been logged as entry number'))
