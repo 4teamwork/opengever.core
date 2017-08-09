@@ -16,6 +16,8 @@ Changelog
 - Word meeting: Improve edit-document-button behavior in meeting view. [jone]
 - Fix typo in contact detail view. [elioschmutz]
 - Remove separate bumblebee fetch-views since they are no longer necessary because we no longer use grok. [elioschmutz]
+- Implement custom error page. [mathias.leimgruber]
+- Bundle import: Also log progress and RSS during post-processing. [lgraf]
 - Word meeting: List excerpts per agenda item in meeting view. [jone]
 - Word meeting: Replace excerpt generation with new word implementation. [jone]
 - Word meeting: Automatically checkin document when deciding an agenda item. [jone]
