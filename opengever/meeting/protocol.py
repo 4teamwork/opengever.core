@@ -69,7 +69,6 @@ class ProtocolData(object):
                 "email": participant.email,
                 "role": membership.role if membership else None
             })
-        members.sort(key=lambda item: item['fullname'])
         participants = {
             'members': members
         }
