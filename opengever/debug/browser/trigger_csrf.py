@@ -1,14 +1,9 @@
-from five import grok
-from Products.CMFPlone.interfaces import IPloneSiteRoot
+from Products.Five import BrowserView
 
 
-class TriggerCSRF(grok.View):
+class TriggerCSRF(BrowserView):
     """A view to trigger a plone.protect confirmation dialog.
     """
-
-    grok.name('trigger-csrf')
-    grok.context(IPloneSiteRoot)
-    grok.require('cmf.ManagePortal')
 
     def __call__(self):
         plone = self.context

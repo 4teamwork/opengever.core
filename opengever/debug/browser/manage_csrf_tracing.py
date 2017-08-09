@@ -1,9 +1,8 @@
 from collections import namedtuple
 from datetime import datetime
 from datetime import timedelta
-from five import grok
 from opengever.base.protect import OGProtectTransform
-from Products.CMFPlone.interfaces import IPloneSiteRoot
+from Products.Five import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
 from ZODB.Connection import Connection
 from ZODB.POSException import ConflictError
@@ -153,7 +152,7 @@ def _is_patched(func, orig_func):
     return (False, '')
 
 
-class ManageCSRFTracing(grok.View):
+class ManageCSRFTracing(BrowserView):
     """This view allows to enable CSRF tracing, which will monkey patch
     the method for object registration on the ZODB connection in order to
     save a stack trace at the point a persistent object has been registered
@@ -173,10 +172,6 @@ class ManageCSRFTracing(grok.View):
     Additionally, there is a timeout after which the patches will expire, and
     remove themselves the next time they're called.
     """
-
-    grok.name('manage-csrf-tracing')
-    grok.context(IPloneSiteRoot)
-    grok.require('cmf.ManagePortal')
 
     def __call__(self):
         action = self.request.form.get('submit')
@@ -240,5 +235,5 @@ class ManageCSRFTracing(grok.View):
         return _patches_expire_at
 
     def documentation(self):
-        doc = self.__doc__
+        doc = ManageCSRFTracing.__doc__
         return doc.replace('\n\n', '<br/><br/>')
