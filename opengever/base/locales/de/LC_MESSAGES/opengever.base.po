@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-07-21 07:47+0000\n"
+"POT-Creation-Date: 2017-08-08 14:07+0000\n"
 "PO-Revision-Date: 2014-09-04 01:03+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -71,6 +71,11 @@ msgstr "Vertraulich"
 #: ./opengever/base/browser/confirm.pt:20
 msgid "desc_confirm_action"
 msgstr "Bestätigen Sie bitte, dass Sie diese Aktion durchführen möchten."
+
+#. Default: "We apologize for the inconvenience, but the page you were trying to access is not at this address."
+#: ./opengever/base/browser/templates/error.pt:67
+msgid "description_site_error"
+msgstr "Entschuldigung, aber die Webseite die Sie versucht haben zu erreichen ist hier nicht verfügbar."
 
 #. Default: "You have not selected any Items."
 #: ./opengever/base/browser/copy_items.py:23

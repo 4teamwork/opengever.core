@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-07-21 07:47+0000\n"
+"POT-Creation-Date: 2017-08-08 14:07+0000\n"
 "PO-Revision-Date: 2017-06-05 14:47+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-base/fr/>\n"
@@ -72,6 +72,11 @@ msgstr "Confidentiel"
 #: ./opengever/base/browser/confirm.pt:20
 msgid "desc_confirm_action"
 msgstr "Veuillez confirmer que vous souhaitez effectuer cette action."
+
+#. Default: "We apologize for the inconvenience, but the page you were trying to access is not at this address."
+#: ./opengever/base/browser/templates/error.pt:67
+msgid "description_site_error"
+msgstr "Nous nous excusons pour la gêne occasionnée, mais la page à laquelle vous tentez d'accéder n'est pas à cette adresse."
 
 #. Default: "You have not selected any Items."
 #: ./opengever/base/browser/copy_items.py:23

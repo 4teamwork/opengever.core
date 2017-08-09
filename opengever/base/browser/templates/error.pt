@@ -1,0 +1,94 @@
+<tal:doctype tal:replace="structure string:&lt;!DOCTYPE html&gt;" />
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      i18n:domain="plone"
+      tal:define="portal_state view/portal_state;
+                  lang view/language;
+                  portal_url view/portal_url"
+      tal:attributes="lang lang;">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <link rel="stylesheet"
+          tal:attributes="href string:${portal_url}/++theme++plonetheme.teamraum/css/gever/gever.css" />
+    <link rel="stylesheet"
+          tal:attributes="href string:${portal_url}/++theme++plonetheme.teamraum/css/main.css" />
+    <style>
+        body {
+            height: auto;
+        }
+
+        #content {
+            margin: auto auto;
+            width: 75%;
+            position: relative;
+            top: 200px;
+        }
+
+        #header {
+            margin-bottom: 2em;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="content" class="gever-error-page">
+        <div id="header">
+            <a id="portal-logo" tal:attributes="href portal_url | python: '/'">
+                <img tal:attributes="src string:${portal_url}/++resource++opengever.base/images/errorpage_logo.png" alt="Logo Onegovgever"/>
+            </a>
+        </div>
+
+
+        <metal:notfound tal:condition="python:view.error_type=='NotFound'">
+            <tal:redirect define="redirection_view context/@@plone_redirector_view">
+
+                <tal:redirect define="redirect_success redirection_view/attempt_redirect|nothing" replace="nothing">
+                    If the attempt succeeds, we won't see any more of this template
+                </tal:redirect>
+
+                <h1 class="documentFirstHeading"
+                    i18n:translate="heading_site_there_seems_to_be_an_error">
+                    This page does not seem to exist&hellip;
+                </h1>
+
+                <div class="error-body">
+                    <p i18n:translate="description_site_error" i18n:domain="opengever.base">
+                        We apologize for the inconvenience, but the page you were trying to access is not at this address.
+                     </p>
+
+                    <p i18n:translate="description_site_error_mail_site_admin">
+                        If you are certain you have the correct web address but are encountering an error, please
+                        contact the <span i18n:name="site_admin">
+                        <a href="#"
+                           i18n:translate="label_site_admin"
+                           tal:attributes="href string:${portal_url}/contact-info">Site Administration</a></span>.
+                    </p>
+
+                    <p i18n:translate="description_site_error_thank_you">
+                    Thank you.
+                    </p>
+
+                </div>
+            </tal:redirect>
+        </metal:notfound>
+
+        <metal:othererror tal:condition="python:view.error_type!='NotFound'"
+                          tal:define="is_manager view/is_manager">
+
+                <h1 class="documentFirstHeading"
+                    i18n:translate="heading_site_error_sorry">
+                    We&#8217;re sorry, but there seems to be an error&hellip;
+                </h1>
+
+        </metal:othererror>
+
+    </div>
+</body>
+</html>

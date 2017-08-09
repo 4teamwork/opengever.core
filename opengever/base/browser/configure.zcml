@@ -122,4 +122,10 @@
       permission="zope2.View"
       />
 
+  <adapter
+      factory=".errors.ErrorHandlingView"
+      name="index.html"
+      provides="zope.interface.Interface"
+      />
+
 </configure>
