@@ -66,5 +66,23 @@ class TestErrorPage(IntegrationTestCase):
                           u'error\u2026',
                           browser.css('h1').first.text)
 
-        self.assertEquals(browser.css('.error-body').first.text.startswith(
+        self.assertTrue(browser.css('.error-body').first.text.startswith(
             u'The error has been logged as entry number'))
+
+    @browsing
+    def test_show_traceback_to_managers_for_regular_errors(self, browser):
+        self.login(self.manager, browser)
+
+        # Provoke a AttributeError by calling the breadcrumb_by_uid view
+        # without a uid
+        with browser.expect_http_error(code=500):
+            browser.open(view='breadcrumb_by_uid')
+
+        self.assertTrue(browser.css('#content.gever-error-page'),
+                        'Expect to be on the gever error page')
+        self.assertEquals(u'We\u2019re sorry, but there seems to be an '
+                          u'error\u2026',
+                          browser.css('h1').first.text)
+
+        self.assertTrue(browser.css('.traceback').first.text.startswith(
+            'Traceback (most recent call last):'))

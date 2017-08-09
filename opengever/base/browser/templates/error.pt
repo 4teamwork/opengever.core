@@ -100,8 +100,7 @@
                 </tal:noentry>
 
                 <tal:hasentry condition="error_log">
-                    <p tal:condition="not: is_manager"
-                       i18n:translate="description_error_has_been_logged">
+                    <p i18n:translate="description_error_has_been_logged">
                     The error has been logged as entry number
                     <code i18n:name="entryid" tal:content="error_log/errorid">1174791474.310.489098092344</code>.
                     </p>
@@ -115,6 +114,19 @@
                        tal:attributes="href string:${portal_url}/contact-info">Site Administration</a></span>,
                     please include this entry number in your message.
                     </p>
+
+                    <div tal:condition="is_manager">
+                       <p i18n:translate="description_site_admin_full_error">
+                       Here is the full error message:
+                       </p>
+
+                       <p ><a href="" tal:attributes="href
+                                      string:error_log/getLogEntryAsText?id=${error_log/errorid}"
+                                      i18n:translate="label_traceback_as_text">Display traceback as text</a></p>
+
+                       <pre class="traceback" tal:content="structure error_log/traceback" />
+                    </div>
+
                 </tal:hasentry>
             </div>
         </metal:othererror>

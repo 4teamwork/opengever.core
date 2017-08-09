@@ -6,6 +6,7 @@ from zope.component import adapts
 from zope.component.hooks import getSite
 from zope.interface import Interface
 import sys
+import traceback
 
 
 class ErrorHandlingView(BrowserView):
@@ -43,12 +44,17 @@ class ErrorHandlingView(BrowserView):
                                        '__error_log__',
                                        containment=1)
 
-                error_type, error_value, traceback = sys.exc_info()
+                error_type, error_value, tb = sys.exc_info()
                 error_log_url = error_log.raising((error_type,
                                                    error_value,
-                                                   traceback))
+                                                   tb))
                 log = {'url': error_log_url,
-                       'errorid': error_log_url.split('?id=')[1]}
+                       'errorid': error_log_url.split('?id=')[1],
+                       'traceback': ''.join(traceback.format_exception(
+                                            error_type,
+                                            error_value,
+                                            tb))
+                       }
             except AttributeError:
                 log = None
 
