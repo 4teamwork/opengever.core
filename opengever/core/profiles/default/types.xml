@@ -9,7 +9,6 @@
 
 
   <!--migrated from opengever/dossier/profiles/default/types.xml-->
-  <object name="opengever.dossier.projectdossier" meta_type="Dexterity FTI" />
   <object name="opengever.dossier.businesscasedossier" meta_type="Dexterity FTI" />
   <object name="opengever.dossier.templatefolder" meta_type="Dexterity FTI" />
   <object name="opengever.dossier.dossiertemplate" meta_type="Dexterity FTI" />
