@@ -1,16 +1,15 @@
-from five import grok
 from ftw.pdfgenerator.browser.views import ExportPDFView
 from ftw.pdfgenerator.interfaces import ILaTeXLayout
-from ftw.pdfgenerator.interfaces import ILaTeXView
 from ftw.pdfgenerator.utils import provide_request_layer
 from ftw.pdfgenerator.view import MakoLaTeXView
 from opengever.disposition import _
-from opengever.disposition.disposition import IDisposition
 from opengever.latex.listing import Column
 from opengever.latex.listing import ILaTexListing
 from opengever.latex.listing import LaTexListing
+from zope.component import adapter
 from zope.component import getMultiAdapter
 from zope.i18n import translate
+from zope.interface import implementer
 from zope.interface import Interface
 
 
@@ -19,17 +18,13 @@ class IRemovalProtocolLayer(Interface):
     """
 
 
-class RemovalProtocol(grok.View, ExportPDFView):
-    grok.name('removal_protocol')
-    grok.context(IDisposition)
-    grok.require('zope2.View')
+class RemovalProtocol(ExportPDFView):
 
     request_layer = IRemovalProtocolLayer
 
-    def render(self):
+    def __call__(self):
         provide_request_layer(self.request, self.request_layer)
-
-        return ExportPDFView.__call__(self)
+        return super(RemovalProtocol, self).__call__()
 
     def get_build_arguments(self):
         args = super(RemovalProtocol, self).get_build_arguments()
@@ -43,10 +38,9 @@ class RemovalProtocol(grok.View, ExportPDFView):
         return translate(title, context=self.request)
 
 
+@implementer(ILaTexListing)
+@adapter(Interface, Interface, Interface)
 class DestroyedDossierListing(LaTexListing):
-    grok.provides(ILaTexListing)
-    grok.adapts(Interface, Interface, Interface)
-    grok.name('destroyed_dossiers')
 
     def get_archived_label(self, item):
         if item.appraisal:
@@ -71,10 +65,9 @@ class DestroyedDossierListing(LaTexListing):
         ]
 
 
+@implementer(ILaTexListing)
+@adapter(Interface, Interface, Interface)
 class DispositionHistoryLaTeXListing(LaTexListing):
-    grok.provides(ILaTexListing)
-    grok.adapts(Interface, Interface, Interface)
-    grok.name('disposition_history')
 
     def get_columns(self):
         return [
@@ -92,9 +85,8 @@ class DispositionHistoryLaTeXListing(LaTexListing):
         ]
 
 
-class RemovalProtocolLaTeXView(grok.MultiAdapter, MakoLaTeXView):
-    grok.provides(ILaTeXView)
-    grok.adapts(Interface, IRemovalProtocolLayer, ILaTeXLayout)
+@adapter(Interface, IRemovalProtocolLayer, ILaTeXLayout)
+class RemovalProtocolLaTeXView(MakoLaTeXView):
 
     template_directories = ['latex_templates']
     template_name = 'removal_protocol.tex'
