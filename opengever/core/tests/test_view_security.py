@@ -31,6 +31,11 @@ WHITELIST = (
     # Add-form views are special adapters were the permission is stored
     # differently. These views are verified manually:
     'opengever.disposition.browser.form.DispositionAddView',
+
+    # The custom error page needs to be public, since errors may happen
+    # during traversal or publish, in both cases security may not yet
+    # properly set up
+    'opengever.base.browser.errors.ErrorHandlingView',
 )
 
 
