@@ -80,6 +80,14 @@ def isSubdossierIndexer(obj):
 grok.global_adapter(isSubdossierIndexer, name="is_subdossier")
 
 
+@indexer(IDossierMarker)
+def external_reference(obj):
+    """Return the external reference of a dossier."""
+    context = aq_inner(obj)
+    return IDossier(context).external_reference
+grok.global_adapter(external_reference, name="external_reference")
+
+
 @indexer(IDexterityContent)
 def main_dossier_title(obj):
     """Return the title of the main dossier."""

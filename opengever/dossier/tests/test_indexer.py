@@ -148,6 +148,17 @@ class TestIndexers(FunctionalTestCase):
             [u'1', 'client1', 'dossiertemplate', 'keyword', 'thingy'],
             index_data_for(template_with_keywords).get('SearchableText'))
 
+    def test_external_reference(self):
+        dossier = create(
+            Builder("dossier")
+            .titled(u"Dossier")
+            .having(external_reference=u'qpr-900-9001-\xf7')
+            .within(self.repo_folder))
+
+        self.assertEquals(
+            u'qpr-900-9001-\xf7',
+            index_data_for(dossier).get('external_reference'))
+
 
 class TestFilingNumberIndexer(FunctionalTestCase):
 

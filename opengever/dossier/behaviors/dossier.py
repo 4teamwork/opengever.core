@@ -47,10 +47,10 @@ class IDossier(form.Schema):
         label=_(u'fieldset_common', u'Common'),
         fields=[
             u'keywords',
-            u'external_reference',
             u'start',
             u'end',
             u'comments',
+            u'external_reference',
             u'responsible',
             u'relatedDossier',
         ],
