@@ -1,5 +1,6 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
+    xmlns:plone="http://namespaces.plone.org/plone"
     xmlns:zcml="http://namespaces.zope.org/zcml"
     xmlns:i18n="http://namespaces.zope.org/i18n"
     i18n_domain="opengever.api">
@@ -8,5 +9,31 @@
     <adapter factory=".summary.GeverJSONSummarySerializer" />
     <adapter factory=".fields.ChoiceFieldDeserializer" />
   </configure>
+
+  <include package="opengever.document" file="permissions.zcml" />
+
+  <plone:service
+      method="POST"
+      name="@checkout"
+      for="opengever.document.document.IDocumentSchema"
+      factory=".checkout.Checkout"
+      permission="opengever.document.Checkout"
+      />
+
+  <plone:service
+      method="POST"
+      name="@checkin"
+      for="opengever.document.document.IDocumentSchema"
+      factory=".checkin.Checkin"
+      permission="opengever.document.Checkin"
+      />
+
+  <plone:service
+      method="POST"
+      name="@cancelcheckout"
+      for="opengever.document.document.IDocumentSchema"
+      factory=".cancelcheckout.CancelCheckout"
+      permission="opengever.document.Cancel"
+      />
 
 </configure>

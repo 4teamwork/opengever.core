@@ -36,6 +36,7 @@ Changelog
 - Reworked contact syncer functionality, to improve speed with bulk insert and updates. [phgross]
 - Format line breaks in task descriptions. [tarnap]
 - SPV word: checkout proposal document after creating proposal. [jone]
+- Implement REST API endpoints for document checkout/checkin. [buchi]
 
 
 2017.4.0 (2017-07-26)

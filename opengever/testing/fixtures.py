@@ -81,7 +81,7 @@ class OpengeverContentFixture(object):
 
     def create_users(self):
         self.administrator = self.create_user(
-            'administrator', u'Nicole', u'Kohler', ['Administrator'])
+            'administrator', u'Nicole', u'Kohler', ['Administrator', 'APIUser'])
         self.dossier_responsible = self.create_user(
             'dossier_responsible', u'Robert', u'Ziegler')
         self.regular_user = self.create_user(
