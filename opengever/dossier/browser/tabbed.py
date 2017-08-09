@@ -109,7 +109,7 @@ class TemplateFolderTabbedView(GeverTabbedView):
     @property
     def proposal_templates_tab(self):
         if is_word_meeting_implementation_enabled():
-            return {'id': 'proposaltemplates',
+            return {'id': 'proposaltemplates-proxy',
                     'title': _(u'label_proposal_templates',
                                default=u'Proposal Templates')}
         else:
