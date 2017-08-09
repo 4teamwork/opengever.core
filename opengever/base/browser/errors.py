@@ -1,3 +1,4 @@
+from Acquisition import aq_acquire
 from plone import api
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
@@ -31,3 +32,15 @@ class ErrorHandlingView(BrowserView):
     def is_manager(self):
         if self.plone:
             return api.user.has_permission('cmf.ManagePortal')
+
+    def get_error_log(self):
+        log = ''
+        if self.__parent__:
+            try:
+                log = aq_acquire(self.__parent__,
+                                 '__error_log__',
+                                 containment=1)
+            except AttributeError:
+                log = ''
+
+        return log

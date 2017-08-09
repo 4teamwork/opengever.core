@@ -31,3 +31,22 @@ class TestErrorPage(IntegrationTestCase):
         browser.visit(self.document)
         self.assertEquals(self.document.absolute_url(),
                           browser.url)
+
+    @browsing
+    def test_exception_while_publish_shows_custom_error_page(self, browser):
+        self.login(self.regular_user, browser)
+        url = self.dossier.absolute_url() + '?foo:int=not_a_int'
+        with browser.expect_http_error(code=500):
+            browser.open(url)
+
+        self.assertTrue(browser.css('#content.gever-error-page'),
+                        'Expect to be on the gever error page')
+        self.assertEquals(u'We\u2019re sorry, but there seems to be an '
+                          u'error\u2026',
+                          browser.css('h1').first.text)
+
+        # The error happens too early the error log is no yet available
+        self.assertEquals(u'If you are certain you have the correct web '
+                          u'address but are encountering an error, please '
+                          u'contact the Site Administration.',
+                          browser.css('.error-body').first.text)
