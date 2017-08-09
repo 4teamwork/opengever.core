@@ -15,6 +15,7 @@ from opengever.base.model import create_session
 from opengever.mail.tests import MAIL_DATA
 from opengever.meeting.proposalhistory import BaseHistoryRecord
 from opengever.ogds.base.utils import ogds_service
+from opengever.testing import assets
 from opengever.testing.integration_test_case import FEATURE_FLAGS
 from operator import methodcaller
 from plone import api
@@ -184,8 +185,7 @@ class OpengeverContentFixture(object):
         document = self.register('document', create(
             Builder('document').within(self.dossier)
             .titled(u'Vertr\xe4gsentwurf')
-            .attach_file_containing('Word dummy content',
-                                    u'vertragsentwurf.docx')))
+            .with_asset_file('vertragsentwurf.docx')))
 
         task = self.register('task', create(
             Builder('task').within(self.dossier)
@@ -236,6 +236,7 @@ class OpengeverContentFixture(object):
                 .having(title=u'\xc4nderungen am Personalreglement',
                         committee=self.committee.load_model())
                 .relate_to(document)
+                .with_proposal_file(assets.load('vertragsentwurf.docx'))
                 .as_submitted()))
             self.register_path(
                 'submitted_word_proposal',
