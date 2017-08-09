@@ -20,4 +20,31 @@
       />
   <include package=".upgrades" />
 
+  <adapter factory=".listing.LaTexListing" />
+
+  <adapter
+      factory=".listing.DossiersLaTeXListing"
+      name="dossiers"
+      />
+
+  <adapter
+      factory=".listing.SubDossiersLaTeXListing"
+      name="subdossiers"
+      />
+
+  <adapter
+      factory=".listing.DocumentsLaTeXListing"
+      name="documents"
+      />
+
+  <adapter
+      factory=".listing.TasksLaTeXListing"
+      name="tasks"
+      />
+
+  <adapter
+      factory=".listing.JournalLaTeXListing"
+      name="journal"
+      />
+
 </configure>
