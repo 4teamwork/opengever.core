@@ -13,8 +13,6 @@ from plone import api
 class TestProposalWithWord(IntegrationTestCase):
     features = ('meeting', 'word-meeting')
 
-    @IntegrationTestCase.im_sorry_this_test_is_slow(
-        4000, 'Creating a word proposal just takes so long :-/')
     @browsing
     def test_creating_proposal_from_proposal_template(self, browser):
         self.login(self.dossier_responsible, browser)
