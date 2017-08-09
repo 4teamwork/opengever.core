@@ -339,7 +339,7 @@ class ProposalBuilder(TransparentModelLoader, DexterityBuilder):
 
         if is_word_meeting_implementation_enabled():
             obj.create_proposal_document(
-                filename='proposal_document.docx',
+                filename=u'proposal_document.docx',
                 data=self._proposal_file_data,
                 content_type='application/vnd.openxmlformats'
                 '-officedocument.wordprocessingml.document')

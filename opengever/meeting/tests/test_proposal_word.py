@@ -214,7 +214,9 @@ class TestProposalWithWord(IntegrationTestCase):
         self.assertEquals(u'excerpt-anderungen-am-personalreglement.docx',
                           excerpt_document.file.filename)
         self.assertEquals(MIME_DOCX, excerpt_document.file.contentType)
-        self.assertEquals('file body', excerpt_document.file.data)
+        self.assertEquals(
+            self.submitted_word_proposal.get_proposal_document().file.data,
+            excerpt_document.file.data)
 
         # The excerpt document should be referenced as relation.
         excerpts = ISubmittedProposal(self.submitted_word_proposal).excerpts

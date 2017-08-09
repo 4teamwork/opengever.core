@@ -2,6 +2,7 @@ from five import grok
 from opengever.document.document import IDocumentSchema
 from opengever.meeting import _
 from opengever.meeting.command import CreateGeneratedDocumentCommand
+from opengever.meeting.command import MergeDocxProtocolCommand
 from opengever.meeting.command import ProtocolOperations
 from opengever.meeting.command import UpdateGeneratedDocumentCommand
 from opengever.meeting.exceptions import ProtocolAlreadyGenerated
@@ -10,7 +11,32 @@ from opengever.meeting.model import GeneratedProtocol
 from opengever.meeting.model import Meeting
 from plone import api
 from plone.protect.utils import addTokenToUrl
+from Products.Five.browser import BrowserView
 from zExceptions import NotFound
+
+
+class MergeDocxProtocol(BrowserView):
+    """Create a protocol merged from several partial protocols."""
+
+    operations = ProtocolOperations()
+
+    @classmethod
+    def url_for(cls, meeting):
+        dossier = meeting.get_dossier()
+
+        url = '{}/@@merge_docx_protocol?meeting-id={}'.format(
+            dossier.absolute_url(), meeting.meeting_id)
+        return addTokenToUrl(url)
+
+    def __call__(self):
+        meeting = self.context.get_meeting()
+        command = MergeDocxProtocolCommand(
+            self.context, meeting, self.operations,
+            lock_document_after_creation=True)
+        command.execute()
+        command.show_message()
+
+        return self.request.RESPONSE.redirect(meeting.get_url())
 
 
 class GenerateProtocol(grok.View):
@@ -40,7 +66,6 @@ class GenerateProtocol(grok.View):
 
     def render(self):
         meeting = self.get_meeting()
-
         command = CreateGeneratedDocumentCommand(
             self.context, meeting, self.operations,
             lock_document_after_creation=True)

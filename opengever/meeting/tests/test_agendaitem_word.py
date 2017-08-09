@@ -187,7 +187,9 @@ class TestWordAgendaItem(IntegrationTestCase):
         excerpt_document ,= children['added']
         self.assertEquals('Excerpt \xc3\x84nderungen am Personalreglement',
                           excerpt_document.Title())
-        self.assertEquals('file body', excerpt_document.file.data)
+        self.assertEquals(
+            self.submitted_word_proposal.get_proposal_document().file.data,
+            excerpt_document.file.data)
 
     @browsing
     def test_cannot_create_excerpt_when_meeting_closed(self, browser):
