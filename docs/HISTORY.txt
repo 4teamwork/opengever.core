@@ -6,6 +6,10 @@ Changelog
 ---------------------
 
 - Bundle import: Also log progress and RSS during post-processing. [lgraf]
+- Word meeting: List excerpts per agenda item in meeting view. [jone]
+- Word meeting: Replace excerpt generation with new word implementation. [jone]
+- Word meeting: Automatically checkin document when deciding an agenda item. [jone]
+- Word meeting: Update submitted proposal workflow: let group members checkout documents. [jone]
 - Fix leaking reference in RestrictedVocabularyFactory. [lgraf]
 - Improve warning when opening an old version of a document. [tarnap]
 - Highlight search terms after fetching new search results per ajax. [elioschmutz]

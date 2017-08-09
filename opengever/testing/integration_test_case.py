@@ -4,6 +4,9 @@ from contextlib import contextmanager
 from ftw.flamegraph import flamegraph
 from functools import wraps
 from opengever.core.testing import OPENGEVER_INTEGRATION_TESTING
+from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.meeting.model.agendaitem import AgendaItem
+from opengever.meeting.wrapper import MeetingWrapper
 from opengever.task.task import ITask
 from operator import methodcaller
 from plone import api
@@ -11,9 +14,11 @@ from plone.app.relationfield.event import update_behavior_relations
 from plone.app.testing import applyProfile
 from plone.app.testing import login
 from plone.app.testing import SITE_OWNER_NAME
+from sqlalchemy.sql.expression import desc
 from time import clock
 from unittest2 import TestCase
 from z3c.relationfield.relation import RelationValue
+from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
 import timeit
@@ -374,3 +379,28 @@ class IntegrationTestCase(TestCase):
         """
         self.set_related_items(obj, [related_obj], fieldname=fieldname,
                                append=True)
+
+    def checkout_document(self, document):
+        """Checkout the given document.
+        """
+        return self.get_checkout_manager(document).checkout()
+
+    def get_checkout_manager(self, document):
+        """Returns the checkin checkout manager for a document.
+        """
+        return getMultiAdapter((document, document.REQUEST),
+                               ICheckinCheckoutManager)
+
+    def schedule_proposal(self, meeting, submitted_proposal):
+        """Meeting: schedule a proposal for a meeting and return the
+        agenda item.
+        """
+        if isinstance(meeting, MeetingWrapper):
+            meeting = meeting.model
+
+        proposal_model = submitted_proposal.load_model()
+        meeting.schedule_proposal(proposal_model)
+        self.assertEquals(proposal_model.STATE_SCHEDULED,
+                          proposal_model.get_state())
+        agenda_item = AgendaItem.query.order_by(desc('id')).first()
+        return agenda_item

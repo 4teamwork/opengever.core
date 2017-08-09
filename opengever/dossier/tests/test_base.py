@@ -6,13 +6,11 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testing import freeze
 from opengever.document.behaviors.metadata import IDocumentMetadata
-from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.registry.interfaces import IRegistry
-from zope.component import getMultiAdapter
 from zope.component import getUtility
 
 
@@ -186,15 +184,13 @@ class TestDossierChecks(IntegrationTestCase):
     def test_is_all_checked_in_is_false_when_document_in_dossier_checked_out(self):
         self.login(self.dossier_responsible)
         self.assertTrue(self.dossier.is_all_checked_in())
-        getMultiAdapter((self.document, self.request),
-                        ICheckinCheckoutManager).checkout()
+        self.checkout_document(self.document)
         self.assertFalse(self.dossier.is_all_checked_in())
 
     def test_is_all_checked_in_is_false_when_document_in_subdossier_checked_out(self):
         self.login(self.dossier_responsible)
         self.assertTrue(self.dossier.is_all_checked_in())
-        getMultiAdapter((self.subdocument, self.request),
-                        ICheckinCheckoutManager).checkout()
+        self.checkout_document(self.document)
         self.assertFalse(self.dossier.is_all_checked_in())
 
 

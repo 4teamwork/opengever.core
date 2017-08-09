@@ -1,8 +1,10 @@
 from opengever.base.model import Base
 from opengever.base.oguid import Oguid
 from opengever.base.utils import escape_html
+from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
+from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.interfaces import IHistory
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model.generateddocument import GeneratedExcerpt
@@ -23,6 +25,7 @@ from sqlalchemy.orm import backref
 from sqlalchemy.orm import composite
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
+from zope.component import getMultiAdapter
 from zope.globalrequest import getRequest
 
 
@@ -325,9 +328,18 @@ class Proposal(Base):
         UpdateExcerptInDossierCommand(self).execute()
 
     def decide(self, agenda_item):
-        self.generate_excerpt(agenda_item)
-        document_intid = self.copy_excerpt_to_proposal_dossier()
-        self.register_excerpt(document_intid)
+        if is_word_meeting_implementation_enabled():
+            document = self.resolve_submitted_proposal().get_proposal_document()
+            checkout_manager = getMultiAdapter((document, document.REQUEST),
+                                               ICheckinCheckoutManager)
+            if checkout_manager.get_checked_out_by() is not None:
+                raise ValueError(
+                    'Cannot decide proposal when proposal document is checked out.')
+        else:
+            self.generate_excerpt(agenda_item)
+            document_intid = self.copy_excerpt_to_proposal_dossier()
+            self.register_excerpt(document_intid)
+
         IHistory(self.resolve_submitted_proposal()).append_record(u'decided')
         self.execute_transition('scheduled-decided')
 

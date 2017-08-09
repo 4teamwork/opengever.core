@@ -2,12 +2,12 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages import plone
 from ftw.testbrowser.pages import statusmessages
-from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.meeting.command import MIME_DOCX
 from opengever.meeting.model import Proposal
+from opengever.meeting.proposal import ISubmittedProposal
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
 from opengever.testing import IntegrationTestCase
 from plone import api
-from zope.component import getMultiAdapter
 
 
 class TestProposalWithWord(IntegrationTestCase):
@@ -59,8 +59,8 @@ class TestProposalWithWord(IntegrationTestCase):
             ' out" will therefore fail.')
         self.assertEquals(
             self.dossier_responsible.getId(),
-            getMultiAdapter((proposal.get_proposal_document(), self.request),
-                            ICheckinCheckoutManager).get_checked_out_by())
+            self.get_checkout_manager(
+                proposal.get_proposal_document()).get_checked_out_by())
 
     @browsing
     def test_proposal_document_is_visible_on_submitted_proposal(self, browser):
@@ -169,10 +169,57 @@ class TestProposalWithWord(IntegrationTestCase):
     def test_proposal_cannot_change_state_when_documents_checked_out(self, browser):
         self.login(self.dossier_responsible, browser)
         document = self.draft_word_proposal.get_proposal_document()
-        getMultiAdapter((document, self.request), ICheckinCheckoutManager).checkout()
+        self.checkout_document(document)
         self.assertTrue(self.draft_word_proposal.contains_checked_out_documents())
         browser.open(self.draft_word_proposal, view='tabbedview_view-overview')
         browser.click_on('Submit')
         statusmessages.assert_message(
             'Cannot change the state because the proposal'
             ' contains checked out documents.')
+
+    def test_decide_not_allowed_when_documents_checked_out(self):
+        """When deciding the proposal on the proposal model, the proposal
+        document must already be checked in.
+        This also applies to the current user: the auto-checkin-feature is
+        the job of the agenda item controller, not of the proposal model.
+        """
+        self.login(self.committee_responsible)
+        item = self.schedule_proposal(self.meeting,
+                                      self.submitted_word_proposal)
+        self.checkout_document(self.submitted_word_proposal.get_proposal_document())
+
+        model = self.submitted_word_proposal.load_model()
+        with self.assertRaises(ValueError) as cm:
+            model.decide(item)
+
+        self.assertEquals(
+            'Cannot decide proposal when proposal document is checked out.',
+            str(cm.exception))
+
+    def test_generate_excerpt_copies_document_to_target(self):
+        self.login(self.administrator)
+        self.assertEquals(
+            [],
+            ISubmittedProposal(self.submitted_word_proposal).excerpts)
+
+        with self.observe_children(self.meeting_dossier) as children:
+            self.submitted_word_proposal.generate_excerpt(self.meeting_dossier)
+
+        self.assertEquals(1, len(children['added']),
+                          'An excerpt document should have been added to the'
+                          ' meeting dossier.')
+
+        # The document should contain a copy of the proposal document file.
+        excerpt_document ,= children['added']
+        self.assertEquals('Excerpt \xc3\x84nderungen am Personalreglement',
+                          excerpt_document.Title())
+        self.assertEquals(u'excerpt-anderungen-am-personalreglement.docx',
+                          excerpt_document.file.filename)
+        self.assertEquals(MIME_DOCX, excerpt_document.file.contentType)
+        self.assertEquals('file body', excerpt_document.file.data)
+
+        # The excerpt document should be referenced as relation.
+        excerpts = ISubmittedProposal(self.submitted_word_proposal).excerpts
+        self.assertEquals(1, len(excerpts))
+        relation, = excerpts
+        self.assertEquals(excerpt_document, relation.to_object)

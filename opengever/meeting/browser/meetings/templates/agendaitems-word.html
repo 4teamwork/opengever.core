@@ -15,6 +15,19 @@
       {{#if has_proposal}}
       <div class="proposal_document {{#if proposal_document_checked_out}}checked-out{{/if}}">{{{proposal_document_link}}}</div>
 
+      {{#if excerpts}}
+      <div class="documents">
+        <div class="label_attachments">%(label_excerpts)s:</div>
+        <ul>
+          {{#each excerpts}}
+          <li>
+            {{{link}}}
+          </li>
+          {{/each}}
+        </ul>
+      </div>
+      {{/if}}
+
       {{#if has_documents}}
       <div class="attachements">
         <div class="label_attachments">%(label_attachments)s:</div>
@@ -27,6 +40,7 @@
         </ul>
       </div>
       {{/if}}
+
       {{/if}}
       {{#if excerpt}}
       <div class="summary">
@@ -61,6 +75,9 @@
         {{/if}}
         {{#if revise_link}}
         <a href="{{revise_link}}" title="%(label_revise_action)s" class="button revise-agenda-item"><span></span></a>
+        {{/if}}
+        {{#if generate_excerpt_link}}
+        <a href="{{generate_excerpt_link}}" title="%(label_generate_excerpt)s" class="button generate-excerpt"><span></span></a>
         {{/if}}
       </div>
     </td>

@@ -1,3 +1,4 @@
+from AccessControl import getSecurityManager
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from collective import dexteritytextindexer
@@ -11,13 +12,13 @@ from opengever.document.widgets.document_link import DocumentLinkWidget
 from opengever.dossier.utils import get_containing_dossier
 from opengever.meeting import _
 from opengever.meeting import is_word_meeting_implementation_enabled
+from opengever.meeting import require_word_meeting_feature
 from opengever.meeting.command import CopyProposalDocumentCommand
 from opengever.meeting.command import CreateSubmittedProposalCommand
 from opengever.meeting.command import NullUpdateSubmittedDocumentCommand
 from opengever.meeting.command import RejectProposalCommand
 from opengever.meeting.command import UpdateSubmittedDocumentCommand
 from opengever.meeting.container import ModelContainer
-from opengever.meeting.exceptions import WordMeetingImplementationDisabledError
 from opengever.meeting.interfaces import IHistory
 from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.model.proposal import Proposal as ProposalModel
@@ -146,6 +147,22 @@ class ISubmittedProposal(IProposal):
         required=False,
         )
 
+    excerpts = RelationList(
+        title=_(u'label_excerpts', default=u'Excerpts'),
+        default=[],
+        missing_value=[],
+        value_type=RelationChoice(
+            title=u'Excerpt',
+            source=DossierPathSourceBinder(
+                portal_type=('opengever.document.document',),
+                navigation_tree_query={
+                    'object_provides':
+                    ['opengever.dossier.behaviors.dossier.IDossierMarker',
+                     'opengever.document.document.IDocumentSchema'],
+                }),
+        ),
+        required=False)
+
 
 class ProposalBase(ModelContainer):
 
@@ -255,14 +272,12 @@ class ProposalBase(ModelContainer):
         admin_unit_id = self.load_model().committee.admin_unit_id
         return ogds_service().fetch_admin_unit(admin_unit_id)
 
+    @require_word_meeting_feature
     def get_proposal_document(self):
         """If the word meeting implementation feature is enabled,
         this method returns the proposal document, containing the actual
         proposal "body".
         """
-        if not is_word_meeting_implementation_enabled():
-            raise WordMeetingImplementationDisabledError()
-
         if getattr(self, '_proposal_document_uuid', None) is None:
             return None
 
@@ -275,14 +290,12 @@ class ProposalBase(ModelContainer):
 
         return document
 
+    @require_word_meeting_feature
     def create_proposal_document(self, source_blob=None, **kwargs):
         """Creates a proposal document within this proposal or submitted
         proposal.
         Only one proposal document can be created.
         """
-        if not is_word_meeting_implementation_enabled():
-            raise WordMeetingImplementationDisabledError()
-
         if self.get_proposal_document():
             raise ValueError('There is already a proposal document.')
 
@@ -450,6 +463,53 @@ class SubmittedProposal(ProposalBase):
         return u'<a href="{0}" title="{1}">{1}</a>'.format(
             dossier.absolute_url(),
             dossier.title)
+
+    @require_word_meeting_feature
+    def generate_excerpt(self, target_dossier):
+        """Create a new excerpt from this agenda item by copying it's
+        proposal document into the target dossier.
+        """
+        source_document = self.get_proposal_document()
+        if not source_document:
+            raise ValueError('The proposal has no proposal document.')
+
+        title = _(u'excerpt_document_title',
+                  default=u'Excerpt ${title}',
+                  mapping={'title': safe_unicode(self.Title())})
+        title = translate(title, context=target_dossier.REQUEST).strip()
+
+        excerpt_document = CreateDocumentCommand(
+            context=target_dossier,
+            filename=source_document.file.filename,
+            data=source_document.file.data,
+            content_type=source_document.file.contentType,
+            title=title).execute()
+
+        self.append_excerpt(excerpt_document)
+        return excerpt_document
+
+    @require_word_meeting_feature
+    def get_excerpts(self):
+        """Return a restricted list of document objects which are excerpts
+        of the current proposal.
+        """
+        excerpts = []
+        checkPermission = getSecurityManager().checkPermission
+        for relation_value in getattr(self, 'excerpts', ()):
+            obj = relation_value.to_object
+            if checkPermission('View', obj):
+                excerpts.append(obj)
+
+        return excerpts
+
+    @require_word_meeting_feature
+    def append_excerpt(self, excerpt_document):
+        """Add a relation to a new excerpt document.
+        """
+        intid = getUtility(IIntIds).getId(excerpt_document)
+        excerpts = getattr(self, 'excerpts', [])
+        excerpts.append(RelationValue(intid))
+        self.excerpts = excerpts
 
 
 class Proposal(ProposalBase):

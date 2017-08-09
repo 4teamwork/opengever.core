@@ -220,7 +220,8 @@
 
             </div>
 
-            <div class="list-group-item excerpts" tal:define="excerpts view/manually_generated_excerpts">
+            <div tal:condition="not:meeting_word_enabled"
+                 class="list-group-item excerpts" tal:define="excerpts view/manually_generated_excerpts">
               <div class="item">
                 <span class="title" i18n:translate="">Excerpts</span>
 
