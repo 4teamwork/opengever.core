@@ -21,7 +21,7 @@ class TestProposalWithWord(IntegrationTestCase):
         browser.fill(
             {'Title': u'Baugesuch Kreuzachkreisel',
              'Committee': u'Rechnungspr\xfcfungskommission',
-             'Proposal template': u'Baugesuch',
+             'Proposal template': u'Geb\xfchren',
              'Edit after creation': True}).save()
         statusmessages.assert_no_error_messages()
         self.assertIn('external_edit', browser.css('.redirector').first.text,

@@ -19,6 +19,7 @@ from plone.directives import dexterity
 from plone.directives.form import widget
 from plone.uuid.interfaces import IUUID
 from plone.z3cform.fieldsets.utils import move
+from Products.CMFPlone.utils import safe_unicode
 from z3c.form import field
 from z3c.form.browser.checkbox import SingleCheckBoxFieldWidget
 from z3c.form.interfaces import HIDDEN_MODE
@@ -101,7 +102,7 @@ def get_proposal_template_vocabulary(context):
         terms.append(SimpleVocabulary.createTerm(
             template,
             IUUID(template),
-            brain.Title))
+            safe_unicode(brain.Title)))
     return SimpleVocabulary(terms)
 
 

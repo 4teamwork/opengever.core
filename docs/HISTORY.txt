@@ -5,6 +5,7 @@ Changelog
 2017.4.1 (unreleased)
 ---------------------
 
+- SPV word: fix a unicode error when creating proposals from a template. [deiferni]
 - SPV word: merge multiple word files into one protocol. [deiferni]
 - Bundle import: Also log progress and RSS during post-processing. [lgraf]
 - Word meeting: List excerpts per agenda item in meeting view. [jone]
