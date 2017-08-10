@@ -66,6 +66,19 @@
       permission="zope2.View"
       />
 
+  <adapter
+      name="opengever.dossier.templatefolder"
+      provides="zope.publisher.interfaces.browser.IBrowserPage"
+      factory=".templatefolder.AddView"
+      />
+
+  <browser:page
+      name="edit"
+      for="opengever.dossier.templatefolder.ITemplateFolder"
+      class=".templatefolder.EditForm"
+      permission="cmf.ModifyPortalContent"
+      />
+
   <subscriber
       for="opengever.dossier.templatefolder.ITemplateFolder
            zope.lifecycleevent.interfaces.IObjectAddedEvent"

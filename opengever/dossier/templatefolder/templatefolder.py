@@ -1,6 +1,5 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
-from five import grok
 from opengever.base.behaviors.translated_title import TranslatedTitleMixin
 from opengever.base.browser.translated_title import TranslatedTitleAddForm
 from opengever.base.browser.translated_title import TranslatedTitleEditForm
@@ -8,15 +7,27 @@ from opengever.dossier.dossiertemplate import is_dossier_template_feature_enable
 from opengever.dossier.templatefolder import ITemplateFolder
 from opengever.meeting import is_meeting_feature_enabled
 from opengever.meeting import is_word_meeting_implementation_enabled
+from plone.dexterity.browser.add import DefaultAddView
 from plone.dexterity.content import Container
+from plone.dexterity.interfaces import IDexterityFTI
+from Products.CMFCore.interfaces import IFolderish
+from zope.component import adapter
+from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 
 
-class TemplateFolderAddForm(TranslatedTitleAddForm):
-    grok.name('opengever.dossier.templatefolder')
+class AddForm(TranslatedTitleAddForm):
+    """
+    """
 
 
-class TemplateFolderEditForm(TranslatedTitleEditForm):
-    grok.context(ITemplateFolder)
+@adapter(IFolderish, IDefaultBrowserLayer, IDexterityFTI)
+class AddView(DefaultAddView):
+    form = AddForm
+
+
+class EditForm(TranslatedTitleEditForm):
+    """
+    """
 
 
 class TemplateFolder(Container, TranslatedTitleMixin):
