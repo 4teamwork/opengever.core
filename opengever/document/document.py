@@ -266,6 +266,9 @@ class Document(Item, BaseDocumentMixin):
             return self.file.filename
         return None
 
+    def get_download_view_name(self):
+        return 'download'
+
     security.declareProtected(webdav_unlock_items, 'UNLOCK')
 
     def UNLOCK(self, REQUEST, RESPONSE):

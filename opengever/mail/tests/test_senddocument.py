@@ -162,6 +162,18 @@ f\xc3\xbcr Ernst Franz\r\n\r\nBesten Dank im Voraus"""
         self.assertEquals(event.intids, map(intids.getId, documents))
 
     @browsing
+    def test_send_msg_if_there_is_a_original_message(self, browser):
+        dossier = create(Builder("dossier"))
+        mail = create(Builder("mail").within(dossier)
+                      .with_dummy_message()
+                      .with_dummy_original_message())
+
+        mail = self.send_documents(dossier, [mail])
+
+        self.assert_attachment(mail, 'dummy.msg', 'application/vnd.ms-outlook')
+
+
+    @browsing
     def test_sent_mail_gets_filed_in_dossier(self, browser):
         dossier = create(Builder("dossier"))
         document = create(Builder("document")
