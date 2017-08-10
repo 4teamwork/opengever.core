@@ -60,8 +60,8 @@
     {{#if ../editable}}
     <td class="actions">
       <div class="button-group">
-        {{#if edit_document_link}}
-        <a href="{{edit_document_link}}" title="%(label_edit_document_action)s" class="button edit-document" {{#unless edit_document_possible}}disabled{{/unless}}><span></span></a>
+        {{#if edit_proposal_document_button.visible}}
+        <a href="{{edit_proposal_document_button.url}}" title="%(label_edit_document_action)s" class="button edit-document" {{#unless edit_proposal_document_button.active}}disabled{{/unless}}><span></span></a>
         {{/if}}
         {{#if ../agendalist_editable}}
         <a href="{{edit_link}}" title="%(label_edit_action)s" class="button edit-agenda-item"></a>

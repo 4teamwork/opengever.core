@@ -40,26 +40,73 @@ class TestWordAgendaItem(IntegrationTestCase):
         self.assertIn(document.absolute_url() + '/tooltip', document_link_html)
 
     @browsing
-    def test_proposal_document_checkout_info_in_item_data(self, browser):
+    def test_edit_document_possible_when_item_proposed(self, browser):
         self.login(self.committee_responsible, browser)
         agenda_item = self.schedule_proposal(self.meeting,
                                              self.submitted_word_proposal)
         browser.open(self.meeting, view='agenda_items/list')
         item_data = browser.json['items'][0]
-
         self.assertDictContainsSubset(
             {'proposal_document_checked_out': False,
-             'edit_document_possible': True,
-             'edit_document_link': self.agenda_item_url(agenda_item, 'edit_document')},
+             'edit_proposal_document_button': {
+                 'visible': True,
+                 'active': True,
+                 'url': self.agenda_item_url(agenda_item, 'edit_document')}},
             item_data)
 
-        document = self.submitted_word_proposal.get_proposal_document()
-        self.checkout_document(document)
-        browser.reload()
+    @browsing
+    def test_edit_document_possible_when_i_have_checked_it_out(self, browser):
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_proposal(self.meeting,
+                                             self.submitted_word_proposal)
+        self.checkout_document(self.submitted_word_proposal.get_proposal_document())
+
+        browser.open(self.meeting, view='agenda_items/list')
         item_data = browser.json['items'][0]
         self.assertDictContainsSubset(
             {'proposal_document_checked_out': True,
-             'edit_document_possible': True},
+             'edit_proposal_document_button': {
+                 'visible': True,
+                 'active': True,
+                 'url': self.agenda_item_url(agenda_item, 'edit_document')}},
+            item_data)
+
+    @browsing
+    def test_edit_document_not_possible_when_sb_else_checked_it_out(self, browser):
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_proposal(self.meeting,
+                                             self.submitted_word_proposal)
+
+        with self.login(self.administrator):
+            self.checkout_document(
+                self.submitted_word_proposal.get_proposal_document())
+
+        browser.open(self.meeting, view='agenda_items/list')
+        item_data = browser.json['items'][0]
+        self.assertDictContainsSubset(
+            {'proposal_document_checked_out': True,
+             'edit_proposal_document_button': {
+                 'visible': True,
+                 'active': False,
+                 'url': self.agenda_item_url(agenda_item, 'edit_document')}},
+            item_data)
+
+    @browsing
+    def test_edit_document_possible_when_agenda_item_in_revision(self, browser):
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_proposal(self.meeting,
+                                             self.submitted_word_proposal)
+        agenda_item.decide()
+        agenda_item.reopen()
+
+        browser.open(self.meeting, view='agenda_items/list')
+        item_data = browser.json['items'][0]
+        self.assertDictContainsSubset(
+            {'proposal_document_checked_out': False,
+             'edit_proposal_document_button': {
+                 'visible': True,
+                 'active': True,
+                 'url': self.agenda_item_url(agenda_item, 'edit_document')}},
             item_data)
 
     @browsing
