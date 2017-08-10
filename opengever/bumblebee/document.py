@@ -1,7 +1,11 @@
 from ftw.bumblebee.dexterity.document import DXBumblebeeDocument
+from opengever.document.document import IDocumentSchema
 from opengever.mail.mail import IOGMail
+from opengever.mail.mail import IOGMailMarker
+from zope.component import adapter
 
 
+@adapter(IDocumentSchema)
 class DocumentBumblebeeDocument(DXBumblebeeDocument):
     """Customized bumblebee document adapter for opengever.document.document.
 
@@ -22,6 +26,7 @@ class DocumentBumblebeeDocument(DXBumblebeeDocument):
                 super(DocumentBumblebeeDocument, self).is_convertable())
 
 
+@adapter(IOGMailMarker)
 class OGMailBumblebeeDocument(DXBumblebeeDocument):
     """Customized bumblebee document adapter for opengever.mail.mail.
     """
