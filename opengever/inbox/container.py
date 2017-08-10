@@ -1,7 +1,4 @@
-from five import grok
 from opengever.base.behaviors.translated_title import TranslatedTitleMixin
-from opengever.base.browser.translated_title import TranslatedTitleAddForm
-from opengever.base.browser.translated_title import TranslatedTitleEditForm
 from opengever.ogds.base.utils import get_current_org_unit
 from plone.dexterity.content import Container
 from plone.directives import form
@@ -10,14 +7,6 @@ from plone.directives import form
 class IInboxContainer(form.Schema):
     """Base schema for a the inbox container.
     """
-
-
-class InboxContainerAddForm(TranslatedTitleAddForm):
-    grok.name('opengever.inbox.container')
-
-
-class InboxContainerEditForm(TranslatedTitleEditForm):
-    grok.context(IInboxContainer)
 
 
 class InboxContainer(Container, TranslatedTitleMixin):

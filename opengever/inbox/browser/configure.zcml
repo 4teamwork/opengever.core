@@ -54,4 +54,30 @@
       permission="zope2.View"
       />
 
+  <adapter
+      name="opengever.inbox.container"
+      provides="zope.publisher.interfaces.browser.IBrowserPage"
+      factory=".inboxcontainer_forms.AddView"
+      />
+
+  <browser:page
+      name="edit"
+      for="opengever.inbox.container.IInboxContainer"
+      class=".inboxcontainer_forms.EditForm"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <adapter
+      name="opengever.inbox.inbox"
+      provides="zope.publisher.interfaces.browser.IBrowserPage"
+      factory=".inbox_forms.AddView"
+      />
+
+  <browser:page
+      name="edit"
+      for="opengever.inbox.inbox.IInbox"
+      class=".inbox_forms.EditForm"
+      permission="cmf.ModifyPortalContent"
+      />
+
 </configure>
