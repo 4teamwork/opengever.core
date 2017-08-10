@@ -7,6 +7,7 @@ Changelog
 
 - Add external_reference field and index [tarnap]
 - Show mimetype-icon of proposaltemplate in bumblebee-listing. [elioschmutz]
+- Add add bumblebee gallery view for sablontemplate. [elioschmutz]
 - SPV word: fix a unicode error when creating proposals from a template. [deiferni]
 - SPV word: merge multiple word files into one protocol. [deiferni]
 - Add add bumblebee gallery view for proposaltemplate. [elioschmutz]

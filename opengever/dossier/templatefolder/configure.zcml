@@ -33,8 +33,22 @@
 
   <browser:page
       for="opengever.dossier.templatefolder.interfaces.ITemplateFolder"
+      name="tabbedview_view-sablontemplates-proxy"
+      class=".tabs.TemplateFolderSablonTemplatesProxy"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.dossier.templatefolder.interfaces.ITemplateFolder"
       name="tabbedview_view-sablontemplates"
       class=".tabs.TemplateFolderSablonTemplates"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.dossier.templatefolder.interfaces.ITemplateFolder"
+      name="tabbedview_view-sablontemplates-gallery"
+      class=".tabs.TemplateFolderSablonTemplatesGallery"
       permission="zope2.View"
       />
 

@@ -100,7 +100,7 @@ class TemplateFolderTabbedView(GeverTabbedView):
     @property
     def sablon_tab(self):
         if is_meeting_feature_enabled():
-            return {'id': 'sablontemplates',
+            return {'id': 'sablontemplates-proxy',
                     'title': _(u'label_sablon_templates',
                                default=u'Sablon Templates')}
         else:
