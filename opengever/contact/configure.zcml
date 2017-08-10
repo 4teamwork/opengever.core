@@ -2,7 +2,6 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:five="http://namespaces.zope.org/five"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
-    xmlns:grok="http://namespaces.zope.org/grok"
     xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:plone="http://namespaces.plone.org/plone"
     xmlns:profilehook="http://namespaces.zope.org/profilehook"
@@ -12,7 +11,6 @@
 
   <include file="permissions.zcml" />
 
-  <grok:grok package="." />
   <include package=".browser" />
 
   <i18n:registerTranslations directory="locales" />
@@ -32,8 +30,35 @@
       />
 
   <subscriber
-      for="opengever.contact.interfaces.IContactFolder            zope.lifecycleevent.interfaces.IObjectAddedEvent"
+      for="opengever.contact.interfaces.IContactFolder
+           zope.lifecycleevent.interfaces.IObjectAddedEvent"
       handler=".handlers.configure_contactfolder_portlets"
+      />
+
+  <subscriber
+      for="opengever.dossier.behaviors.dossier.IDossierMarker
+           zope.lifecycleevent.interfaces.IObjectCopiedEvent"
+      handler=".handlers.copy_participations"
+      />
+
+  <adapter
+      factory=".contact.contactid"
+      name="contactid"
+      />
+
+  <adapter
+      factory=".contact.phone_office"
+      name="phone_office"
+      />
+
+  <adapter
+      factory=".contact.firstname"
+      name="firstname"
+      />
+
+  <adapter
+      factory=".contact.lastname"
+      name="lastname"
       />
 
 </configure>

@@ -13,6 +13,14 @@
       />
 
   <browser:page
+      for="opengever.contact.contact.IContact"
+      name="contact_view"
+      class=".contact_view.View"
+      permission="zope2.View"
+      template="templates/contact_view.pt"
+      />
+
+  <browser:page
       name="tabbedview_view-local"
       for="plone.dexterity.interfaces.IDexterityContainer"
       class=".contacts_tab.Contacts"
