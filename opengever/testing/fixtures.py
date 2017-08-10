@@ -138,7 +138,7 @@ class OpengeverContentFixture(object):
         with self.features('meeting', 'word-meeting'):
             self.register('proposal_template', create(
                 Builder('proposaltemplate')
-                .titled(u'Baugesuch')
+                .titled(u'Geb\xfchren')
                 .attach_file_containing('Word Content', u'file.docx')
                 .within(templates)))
 

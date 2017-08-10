@@ -24,7 +24,7 @@ class TestProposalTemplate(FunctionalTestCase):
         factoriesmenu.add('Proposal Template')
 
         browser.fill({
-            'Title': u'Baugesuch',
+            'Title': 'Baugesuch',
             'File': ('Binary Data', 'Baugesuch.docx', MIME_DOCX)}).save()
         statusmessages.assert_no_error_messages()
 
@@ -45,7 +45,7 @@ class TestProposalTemplate(FunctionalTestCase):
         factoriesmenu.add('Proposal Template')
 
         browser.fill({
-            'Title': u'Baugesuch',
+            'Title': u'Geb\xfchren',
             'File': ('DATA', 'Wrong.txt', 'text/plain')}).save()
         statusmessages.assert_message('There were some errors.')
         self.assertEquals(
