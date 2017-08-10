@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.base.stream import TempfileStreamIterator
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.ech0147 import _
@@ -98,6 +99,7 @@ class IECH0147ExportFormSchema(Schema):
         ]),
     )
 
+    directives.widget(deadline=DatePickerFieldWidget)
     deadline = schema.Date(
         title=_(u'label_deadline', default=u'Deadline'),
         required=False,
