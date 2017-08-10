@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<dc-workflow workflow_id="opengever_committeecontainer_workflow" title="Committee container workflow" description="" initial_state="opengever_committeecontainer_workflow--STATUS--active" state_variable="review_state" manager_bypass="True">
+<dc-workflow workflow_id="opengever_committee_workflow" title="Committee workflow" description="" initial_state="opengever_committee_workflow--STATUS--active" state_variable="review_state" manager_bypass="True">
   <permission>Access contents information</permission>
   <permission>Add portal content</permission>
   <permission>CMFEditions: Access previous versions</permission>
@@ -83,37 +83,46 @@
   <permission>plone.portlet.static: Add static portlet</permission>
   <permission>plone.restapi: Access Plone vocabularies</permission>
   <permission>plone.restapi: Use REST API</permission>
-  <state state_id="opengever_committeecontainer_workflow--STATUS--active" title="Active">
+  <state state_id="opengever_committee_workflow--STATUS--active" title="Active">
+    <exit-transition transition_id="opengever_committee_workflow--TRANSITION--deactivate--active_inactive"/>
     <permission-map name="Access contents information" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeGroupMember</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
       <permission-role>Manager</permission-role>
-      <permission-role>MeetingUser</permission-role>
     </permission-map>
     <permission-map name="Add portal content" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
     </permission-map>
     <permission-map name="CMFEditions: Access previous versions" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeGroupMember</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
       <permission-role>Manager</permission-role>
-      <permission-role>MeetingUser</permission-role>
     </permission-map>
     <permission-map name="CMFEditions: Apply version control" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="CMFEditions: Checkout to location" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="CMFEditions: Revert to previous versions" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="CMFEditions: Save new version" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="Change local roles" acquired="False">
+      <permission-role>CommitteeAdministrator</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="Delete objects" acquired="False">
@@ -121,11 +130,13 @@
     </permission-map>
     <permission-map name="Edit comments" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="Edit date of cassation" acquired="False"/>
     <permission-map name="Edit date of submission" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="List folder contents" acquired="False">
@@ -133,6 +144,7 @@
     </permission-map>
     <permission-map name="Manage properties" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="Modify constrain types" acquired="False">
@@ -140,6 +152,7 @@
     </permission-map>
     <permission-map name="Modify portal content" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="Modify view template" acquired="False">
@@ -147,157 +160,191 @@
     </permission-map>
     <permission-map name="Poi: Edit response" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="Poi: Modify issue assignment" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="Poi: Modify issue severity" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="Poi: Modify issue state" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="Poi: Modify issue tags" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="Poi: Modify issue target release" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="Poi: Modify issue watchers" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="Poi: Upload attachment" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="Portlets: Manage portlets" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="Sharing page: Delegate Administrator role" acquired="False"/>
-    <permission-map name="Sharing page: Delegate CommitteeAdministrator role" acquired="False">
+    <permission-map name="Sharing page: Delegate CommitteeAdministrator role" acquired="False"/>
+    <permission-map name="Sharing page: Delegate CommitteeResponsible role" acquired="False">
+      <permission-role>CommitteeAdministrator</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
-    <permission-map name="Sharing page: Delegate CommitteeResponsible role" acquired="False"/>
     <permission-map name="Sharing page: Delegate Contributor role" acquired="False"/>
     <permission-map name="Sharing page: Delegate Editor role" acquired="False"/>
-    <permission-map name="Sharing page: Delegate MeetingUser role" acquired="False">
-      <permission-role>Manager</permission-role>
-    </permission-map>
+    <permission-map name="Sharing page: Delegate MeetingUser role" acquired="False"/>
     <permission-map name="Sharing page: Delegate Publisher role" acquired="False"/>
     <permission-map name="Sharing page: Delegate Reader role" acquired="False"/>
     <permission-map name="Sharing page: Delegate Reviewer role" acquired="False"/>
     <permission-map name="Sharing page: Delegate roles" acquired="False">
+      <permission-role>CommitteeAdministrator</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="Take ownership" acquired="False">
+      <permission-role>CommitteeAdministrator</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="View" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeGroupMember</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
       <permission-role>Manager</permission-role>
-      <permission-role>MeetingUser</permission-role>
     </permission-map>
     <permission-map name="ftw.keywordwidget: Add new term" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
-      <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="ftw.mail: Add Inbound Mail" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
     </permission-map>
     <permission-map name="iterate : Check in content" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="iterate : Check out content" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="opengever.contact: Add contact" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
     </permission-map>
     <permission-map name="opengever.contact: Add contactfolder" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="opengever.contact: Add person" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
     </permission-map>
     <permission-map name="opengever.contact: Edit person" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="opengever.disposition: Add disposition" acquired="False"/>
     <permission-map name="opengever.disposition: Download SIP Package" acquired="False"/>
     <permission-map name="opengever.disposition: Edit transfer number" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="opengever.document: Add document" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
     </permission-map>
     <permission-map name="opengever.document: Cancel" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="opengever.document: Checkin" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="opengever.document: Checkout" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="opengever.document: Force Checkin" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="opengever.document: Modify archival file" acquired="False"/>
     <permission-map name="opengever.dossier: Add businesscasedossier" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
     </permission-map>
     <permission-map name="opengever.dossier: Add dossiertemplate" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
     </permission-map>
     <permission-map name="opengever.dossier: Add templatefolder" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
     </permission-map>
     <permission-map name="opengever.dossier: Destroy dossier" acquired="False"/>
     <permission-map name="opengever.inbox: Add Forwarding" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
     </permission-map>
     <permission-map name="opengever.inbox: Add Inbox" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="opengever.inbox: Add Year Folder" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
     </permission-map>
     <permission-map name="opengever.meeting: Add Committee" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
     </permission-map>
     <permission-map name="opengever.meeting: Add CommitteeContainer" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="opengever.meeting: Add Member" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
     </permission-map>
     <permission-map name="opengever.meeting: Add Proposal" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
     </permission-map>
     <permission-map name="opengever.meeting: Add Proposal Template" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
     </permission-map>
     <permission-map name="opengever.meeting: Add Sablon Template" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
     </permission-map>
     <permission-map name="opengever.private: Add private dossier" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
     </permission-map>
     <permission-map name="opengever.private: Add private folder" acquired="False">
       <permission-role>Manager</permission-role>
@@ -312,12 +359,15 @@
     <permission-map name="opengever.repository: Unlock Reference Prefix" acquired="False"/>
     <permission-map name="opengever.task: Add task" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
     </permission-map>
     <permission-map name="opengever.task: Add task comment" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
     </permission-map>
     <permission-map name="opengever.task: Edit task" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="opengever.trash: Trash content" acquired="False"/>
@@ -335,6 +385,212 @@
       <permission-role>Manager</permission-role>
     </permission-map>
   </state>
+  <state state_id="opengever_committee_workflow--STATUS--inactive" title="Inactive">
+    <exit-transition transition_id="opengever_committee_workflow--TRANSITION--reactivate--inactive_active"/>
+    <permission-map name="Access contents information" acquired="False">
+      <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="Add portal content" acquired="False"/>
+    <permission-map name="CMFEditions: Access previous versions" acquired="False">
+      <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="CMFEditions: Apply version control" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="CMFEditions: Checkout to location" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="CMFEditions: Revert to previous versions" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="CMFEditions: Save new version" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="Change local roles" acquired="False">
+      <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="Delete objects" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="Edit comments" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="Edit date of cassation" acquired="False"/>
+    <permission-map name="Edit date of submission" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="List folder contents" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="Manage properties" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="Modify constrain types" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="Modify portal content" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="Modify view template" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="Poi: Edit response" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="Poi: Modify issue assignment" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="Poi: Modify issue severity" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="Poi: Modify issue state" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="Poi: Modify issue tags" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="Poi: Modify issue target release" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="Poi: Modify issue watchers" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="Poi: Upload attachment" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="Portlets: Manage portlets" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="Sharing page: Delegate Administrator role" acquired="False"/>
+    <permission-map name="Sharing page: Delegate CommitteeAdministrator role" acquired="False"/>
+    <permission-map name="Sharing page: Delegate CommitteeResponsible role" acquired="False">
+      <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="Sharing page: Delegate Contributor role" acquired="False"/>
+    <permission-map name="Sharing page: Delegate Editor role" acquired="False"/>
+    <permission-map name="Sharing page: Delegate MeetingUser role" acquired="False"/>
+    <permission-map name="Sharing page: Delegate Publisher role" acquired="False"/>
+    <permission-map name="Sharing page: Delegate Reader role" acquired="False"/>
+    <permission-map name="Sharing page: Delegate Reviewer role" acquired="False"/>
+    <permission-map name="Sharing page: Delegate roles" acquired="False">
+      <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="Take ownership" acquired="False">
+      <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="View" acquired="False">
+      <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="ftw.keywordwidget: Add new term" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="ftw.mail: Add Inbound Mail" acquired="False"/>
+    <permission-map name="iterate : Check in content" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="iterate : Check out content" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="opengever.contact: Add contact" acquired="False"/>
+    <permission-map name="opengever.contact: Add contactfolder" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="opengever.contact: Add person" acquired="False"/>
+    <permission-map name="opengever.contact: Edit person" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="opengever.disposition: Add disposition" acquired="False"/>
+    <permission-map name="opengever.disposition: Download SIP Package" acquired="False"/>
+    <permission-map name="opengever.disposition: Edit transfer number" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="opengever.document: Add document" acquired="False"/>
+    <permission-map name="opengever.document: Cancel" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="opengever.document: Checkin" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="opengever.document: Checkout" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="opengever.document: Force Checkin" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="opengever.document: Modify archival file" acquired="False"/>
+    <permission-map name="opengever.dossier: Add businesscasedossier" acquired="False"/>
+    <permission-map name="opengever.dossier: Add dossiertemplate" acquired="False"/>
+    <permission-map name="opengever.dossier: Add templatefolder" acquired="False"/>
+    <permission-map name="opengever.dossier: Destroy dossier" acquired="False"/>
+    <permission-map name="opengever.inbox: Add Forwarding" acquired="False"/>
+    <permission-map name="opengever.inbox: Add Inbox" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="opengever.inbox: Add Year Folder" acquired="False"/>
+    <permission-map name="opengever.meeting: Add Committee" acquired="False"/>
+    <permission-map name="opengever.meeting: Add CommitteeContainer" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="opengever.meeting: Add Member" acquired="False"/>
+    <permission-map name="opengever.meeting: Add Proposal" acquired="False"/>
+    <permission-map name="opengever.meeting: Add Proposal Template" acquired="False"/>
+    <permission-map name="opengever.meeting: Add Sablon Template" acquired="False"/>
+    <permission-map name="opengever.private: Add private dossier" acquired="False"/>
+    <permission-map name="opengever.private: Add private folder" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="opengever.private: Add private root" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="opengever.repository: Add repositoryfolder" acquired="False"/>
+    <permission-map name="opengever.repository: Add repositoryroot" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="opengever.repository: Unlock Reference Prefix" acquired="False"/>
+    <permission-map name="opengever.task: Add task" acquired="False"/>
+    <permission-map name="opengever.task: Add task comment" acquired="False"/>
+    <permission-map name="opengever.task: Edit task" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="opengever.trash: Trash content" acquired="False"/>
+    <permission-map name="opengever.trash: Untrash content" acquired="False"/>
+    <permission-map name="plone.portlet.collection: Add collection portlet" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="plone.portlet.static: Add static portlet" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="plone.restapi: Access Plone vocabularies" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="plone.restapi: Use REST API" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+  </state>
+  <transition new_state="opengever_committee_workflow--STATUS--inactive" title="deactivate" transition_id="opengever_committee_workflow--TRANSITION--deactivate--active_inactive" after_script="" before_script="" trigger="USER">
+    <action category="workflow" icon="" url="%(content_url)s/content_status_modify?workflow_action=opengever_committee_workflow--TRANSITION--deactivate--active_inactive">deactivate</action>
+    <guard>
+      <guard-role>CommitteeAdministrator</guard-role>
+      <guard-role>CommitteeResponsible</guard-role>
+    </guard>
+  </transition>
+  <transition new_state="opengever_committee_workflow--STATUS--active" title="reactivate" transition_id="opengever_committee_workflow--TRANSITION--reactivate--inactive_active" after_script="" before_script="" trigger="USER">
+    <action category="workflow" icon="" url="%(content_url)s/content_status_modify?workflow_action=opengever_committee_workflow--TRANSITION--reactivate--inactive_active">reactivate</action>
+    <guard>
+      <guard-role>CommitteeAdministrator</guard-role>
+      <guard-role>CommitteeResponsible</guard-role>
+    </guard>
+  </transition>
   <variable variable_id="action" for_catalog="False" for_status="True" update_always="True">
     <description>Previous transition</description>
     <default>
