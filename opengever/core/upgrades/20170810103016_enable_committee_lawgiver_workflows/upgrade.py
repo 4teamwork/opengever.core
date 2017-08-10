@@ -12,8 +12,14 @@ class EnableCommitteeLawgiverWorkflows(UpgradeStep):
                 'opengever.meeting.committeecontainer', {
                     ('opengever_committeecontainer_workflow',
                      'opengever_committeecontainer_workflow'): {
-                         'committeecontainer-state-active': \
+                         'committeecontainer-state-active':
                          'opengever_committeecontainer_workflow--STATUS--active'}}):
+            with self.activate_lawgiver_workflow(
+                    'opengever.meeting.committee', {
+                        ('opengever_committee_workflow',
+                         'opengever_committee_workflow'): {
+                             'committee-state-active':
+                             'opengever_committee_workflow--STATUS--active'}}):
                 self.install_upgrade_profile()
 
     @contextmanager
