@@ -27,4 +27,30 @@
       layer="opengever.base.interfaces.IOpengeverBaseLayer"
       />
 
+  <adapter
+      factory=".repositoryroot_forms.AddView"
+      provides="zope.publisher.interfaces.browser.IBrowserPage"
+      name="opengever.repository.repositoryroot"
+      />
+
+  <browser:page
+      name="edit"
+      for="opengever.repository.repositoryroot.IRepositoryRoot"
+      class=".repositoryroot_forms.EditForm"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <adapter
+      factory=".repositoryfolder_forms.AddView"
+      provides="zope.publisher.interfaces.browser.IBrowserPage"
+      name="opengever.repository.repositoryfolder"
+      />
+
+  <browser:page
+      name="edit"
+      for="opengever.repository.repositoryfolder.IRepositoryFolder"
+      class=".repositoryfolder_forms.EditForm"
+      permission="cmf.ModifyPortalContent"
+      />
+
 </configure>
