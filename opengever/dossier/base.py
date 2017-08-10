@@ -276,6 +276,8 @@ class DossierContainer(Container):
             dates.append(document_brain.document_date)
 
         dates = filter(None, dates)
+        dates = map(self._convert_to_date, dates)
+
         return max(dates) if dates else None
 
     def get_responsible_actor(self):
@@ -347,6 +349,13 @@ class DossierContainer(Container):
                 return entry.get('review_state')
 
         return None
+
+    def _convert_to_date(self, datetime_obj):
+        if isinstance(datetime_obj, datetime):
+            return datetime_obj.date()
+
+        # It is already a date-object
+        return datetime_obj
 
 
 class DefaultConstrainTypeDecider(grok.MultiAdapter):
