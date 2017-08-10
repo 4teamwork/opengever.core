@@ -191,6 +191,10 @@ class ECH0147ExportForm(AutoExtensibleForm, form.Form):
     def handleCancel(self, action):
         self.request.response.redirect(self.context.absolute_url())
 
+    def updateActions(self):
+        super(ECH0147ExportForm, self).updateActions()
+        self.actions['label_export'].addClass("context")
+
     def update(self):
         self.request.set('disable_border', 1)
 

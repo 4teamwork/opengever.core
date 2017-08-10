@@ -90,6 +90,10 @@ class ECH0147ImportForm(AutoExtensibleForm, form.Form):
     def handleCancel(self, action):
         self.request.response.redirect(self.context.absolute_url())
 
+    def updateActions(self):
+        super(ECH0147ImportForm, self).updateActions()
+        self.actions['label_import'].addClass("context")
+
     def updateWidgets(self):
         super(ECH0147ImportForm, self).updateWidgets()
         self.widgets['message'].value = None
