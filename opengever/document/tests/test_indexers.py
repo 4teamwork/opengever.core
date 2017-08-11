@@ -94,6 +94,16 @@ class TestDocumentIndexers(FunctionalTestCase):
             index_data_for(doc1).get('SearchableText')
             )
 
+    def test_external_reference(self):
+        doc = create(Builder('document').having(
+            author=u'Hugo Boss',
+            title=u'Docment',
+            foreign_reference=u'qpr-900-9001-\xf8'))
+
+        self.assertEquals(
+            u'qpr-900-9001-\xf8',
+            index_data_for(doc).get('external_reference'))
+
     def test_full_text_indexing_with_plain_text(self):
         sample_file = NamedBlobFile('foobar barfoo', filename=u'test.txt')
         doc1 = createContentInContainer(

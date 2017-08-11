@@ -362,7 +362,7 @@ Updating API docs
 -----------------
 
 In order to build the Sphinx API docs locally, use the provided
-``bin/docs-build-api`` script:
+``bin/docs-build-public`` script:
 
 .. code::
 
@@ -370,18 +370,18 @@ In order to build the Sphinx API docs locally, use the provided
 
 This will build the docs (using the ``html`` target by default). If you'd like
 to build a different output format, supply it as the fist argument to the
-script (e.g. ``bin/docs-build-api latexpdf``).
+script (e.g. ``bin/docs-build-public latexpdf``).
 
 If you made changes to any schema interfaces that need to make their way into
 the docs, you need to run the ``bin/instance dump_schemas`` script before
-running the ``docs-build-api`` script:
+running the ``docs-build-public`` script:
 
 .. code::
 
     bin/instance dump_schemas
 
 This will update the respective schema dumps in ``docs/schema-dumps/`` that
-are then used by the ``docs-build-api`` script to render restructured text
+are then used by the ``docs-build-public`` script to render restructured text
 schema docs.
 
 

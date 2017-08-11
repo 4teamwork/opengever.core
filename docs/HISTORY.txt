@@ -5,6 +5,7 @@ Changelog
 2017.4.1 (unreleased)
 ---------------------
 
+- Add external_reference field and index [tarnap]
 - Show mimetype-icon of proposaltemplate in bumblebee-listing. [elioschmutz]
 - SPV word: fix a unicode error when creating proposals from a template. [deiferni]
 - SPV word: merge multiple word files into one protocol. [deiferni]

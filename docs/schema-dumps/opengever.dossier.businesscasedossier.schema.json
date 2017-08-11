@@ -198,6 +198,12 @@
             "description": "",
             "_zope_schema_type": "TextLine"
         },
+        "external_reference": {
+            "type": "string",
+            "title": "Externe Referenz",
+            "description": "",
+            "_zope_schema_type": "TextLine"
+        },
         "privacy_layer": {
             "type": "string",
             "title": "Datenschutzstufe",
@@ -228,6 +234,7 @@
         "end",
         "comments",
         "responsible",
+        "external_reference",
         "filing_prefix",
         "container_type",
         "number_of_containers",

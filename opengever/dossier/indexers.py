@@ -80,6 +80,14 @@ def isSubdossierIndexer(obj):
 grok.global_adapter(isSubdossierIndexer, name="is_subdossier")
 
 
+@indexer(IDossierMarker)
+def external_reference(obj):
+    """Return the external reference of a dossier."""
+    context = aq_inner(obj)
+    return IDossier(context).external_reference
+grok.global_adapter(external_reference, name="external_reference")
+
+
 @indexer(IDexterityContent)
 def main_dossier_title(obj):
     """Return the title of the main dossier."""
@@ -179,6 +187,10 @@ class SearchableTextExtender(grok.Adapter):
                 keyword.encode('utf-8') if isinstance(keyword, unicode)
                 else keyword
                 for keyword in keywords)
+
+        external_reference = IDossier(self.context).external_reference
+        if external_reference:
+            searchable.append(external_reference.encode('utf-8'))
 
         return ' '.join(searchable)
 
