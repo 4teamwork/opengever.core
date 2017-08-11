@@ -1,5 +1,6 @@
 from opengever.dossier.interfaces import IDossierArchiver
 from opengever.testing import IntegrationTestCase
+from plone import api
 
 
 class TestCatalog(IntegrationTestCase):
@@ -12,6 +13,11 @@ class TestCatalog(IntegrationTestCase):
         self.assert_index_value(False, 'is_subdossier', self.dossier)
         self.assert_index_value(True, 'is_subdossier', self.subdossier)
         self.assert_index_value('', 'is_subdossier', self.leaf_repofolder)
+
+    def test_reindex_is_subdossier_index_after_moving_subdossier(self):
+        self.login(self.dossier_responsible)
+        api.content.move(source=self.subdossier, target=self.leaf_repofolder)
+        self.assert_index_value(False, 'is_subdossier', self.subdossier)
 
     def test_containing_dossier_index_and_metadata(self):
         """The ``containing_dossier`` index contains the title of the main
