@@ -19,6 +19,11 @@
       />
 
   <utility
+      component=".sections.set_site.SetSiteSection"
+      name="opengever.bundle.set_site"
+      />
+
+  <utility
       component=".sections.disabled_indexing.DisabledCatalogIndexing"
       name="opengever.bundle.disabled_indexing"
       />

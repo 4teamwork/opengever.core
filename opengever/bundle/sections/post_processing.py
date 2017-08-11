@@ -7,8 +7,10 @@ from opengever.bundle.sections.progress import get_rss
 from opengever.document.checkout.handlers import create_initial_version
 from plone import api
 from zope.annotation import IAnnotations
+from zope.component.hooks import setSite
 from zope.interface import classProvides
 from zope.interface import implements
+import gc
 import logging
 import transaction
 
@@ -19,6 +21,8 @@ log.setLevel(logging.INFO)
 
 INTERMEDIATE_COMMIT_INTERVAL = 200
 PROGRESS_INTERVAL = 100
+GARBAGE_COLLECT_INTERVAL = 100
+
 VERSIONABLE_TYPES = ('opengever.document.document',)
 
 
@@ -38,7 +42,7 @@ class PostProcessingSection(object):
 
     def __init__(self, transmogrifier, name, options, previous):
         self.previous = previous
-        self.context = transmogrifier.context
+        self.transmogrifier = transmogrifier
         self.site = api.portal.get()
         self.bundle = IAnnotations(transmogrifier)[BUNDLE_KEY]
 
@@ -72,6 +76,18 @@ class PostProcessingSection(object):
 
                 rss = get_rss() / 1024.0
                 log.info("Current memory usage (RSS): %0.2f MB" % rss)
+
+            if count % GARBAGE_COLLECT_INTERVAL == 0:
+                # Periodically set the Plone site in order to reduce
+                # memory usage (high-water-mark). This, in combination with
+                # regular cPickleCache garbage collection, seems to get rid of
+                # leaking references that then can be collected by the Python
+                # garbage collector.
+                setSite(self.transmogrifier.context)
+
+                # Garbage collect the cPickleCache
+                self.transmogrifier.context._p_jar.cacheGC()
+                gc.collect()
 
         self.commit_and_log(
             "Final commit after OGGBundle post-processing. "
