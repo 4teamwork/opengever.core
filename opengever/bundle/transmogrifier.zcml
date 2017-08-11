@@ -54,6 +54,11 @@
       />
 
   <utility
+      component=".sections.savepoint.SavepointSection"
+      name="opengever.bundle.savepoint"
+      />
+
+  <utility
       component=".sections.progress.ProgressSection"
       name="opengever.bundle.progress"
       />
