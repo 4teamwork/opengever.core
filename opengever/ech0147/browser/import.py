@@ -1,22 +1,23 @@
+from ftw.keywordwidget.widget import KeywordFieldWidget
 from opengever.ech0147 import _
 from opengever.ech0147.bindings import ech0147t1
 from opengever.ech0147.interfaces import IECH0147Settings
 from opengever.ech0147.utils import create_dossier
-from opengever.repository.interfaces import IRepositoryFolder
-from plone.namedfile import field as namedfile
-from plone.registry.interfaces import IRegistry
-from z3c.form import form, button
-from zExceptions import NotFound
-from zExceptions import BadRequest
-from zipfile import ZipFile
-from zope.component import getUtility
-from zope import schema
 from opengever.ogds.base.sources import AllUsersSourceBinder
 from opengever.ogds.base.utils import ogds_service
+from opengever.repository.interfaces import IRepositoryFolder
 from plone.autoform import directives
-from plone.supermodel.model import Schema
 from plone.autoform.form import AutoExtensibleForm
-from ftw.keywordwidget.widget import KeywordFieldWidget
+from plone.namedfile import field as namedfile
+from plone.registry.interfaces import IRegistry
+from plone.supermodel.model import Schema
+from Products.statusmessages.interfaces import IStatusMessage
+from z3c.form import form, button
+from zExceptions import BadRequest
+from zExceptions import NotFound
+from zipfile import ZipFile
+from zope import schema
+from zope.component import getUtility
 
 
 class IECH0147ImportFormSchema(Schema):
@@ -44,6 +45,7 @@ class ECH0147ImportForm(AutoExtensibleForm, form.Form):
     schema = IECH0147ImportFormSchema
     ignoreContext = True  # don't use context to get widget data
     label = _(u'label_ech0147_import_form', u'eCH 0147 Import')
+    import_successful = False
 
     @button.buttonAndHandler(_(u'label_import', default=u'Import'))
     def handleSave(self, action):
@@ -83,8 +85,7 @@ class ECH0147ImportForm(AutoExtensibleForm, form.Form):
                                         mapping={'details': error_msg})
                         return
 
-        self.status = _(u"Message has been imported")
-        return self.render()
+        self.import_successful = True
 
     @button.buttonAndHandler(_(u'label_cancel', default=u'Cancel'))
     def handleCancel(self, action):
@@ -112,6 +113,10 @@ class ECH0147ImportForm(AutoExtensibleForm, form.Form):
     def render(self):
         if not self.enabled():
             raise NotFound()
+        if self.import_successful:
+            IStatusMessage(self.request).addStatusMessage(
+                _(u"Message has been imported"), type='info')
+            self.request.response.redirect(self.context.absolute_url())
         return super(ECH0147ImportForm, self).render()
 
     def available(self):
