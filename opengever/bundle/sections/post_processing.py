@@ -3,6 +3,7 @@ from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.utils import traverse
 from datetime import datetime
 from opengever.bundle.sections.bundlesource import BUNDLE_KEY
+from opengever.bundle.sections.garbage_collect import garbage_collect
 from opengever.bundle.sections.progress import get_rss
 from opengever.document.checkout.handlers import create_initial_version
 from plone import api
@@ -19,6 +20,7 @@ log.setLevel(logging.INFO)
 
 INTERMEDIATE_COMMIT_INTERVAL = 200
 PROGRESS_INTERVAL = 100
+GARBAGE_COLLECT_INTERVAL = 100
 VERSIONABLE_TYPES = ('opengever.document.document',)
 
 
@@ -38,7 +40,7 @@ class PostProcessingSection(object):
 
     def __init__(self, transmogrifier, name, options, previous):
         self.previous = previous
-        self.context = transmogrifier.context
+        self.transmogrifier = transmogrifier
         self.site = api.portal.get()
         self.bundle = IAnnotations(transmogrifier)[BUNDLE_KEY]
 
@@ -62,6 +64,10 @@ class PostProcessingSection(object):
                 self.commit_and_log(
                     "Intermediate commit during OGGBundle post-processing. "
                     "%s of %s items." % (count, len(items_to_post_process)))
+
+            if count % GARBAGE_COLLECT_INTERVAL == 0:
+                # Periodically help garbage collection along
+                garbage_collect(self.transmogrifier)
 
             if count % PROGRESS_INTERVAL == 0:
                 total = len(items_to_post_process)
