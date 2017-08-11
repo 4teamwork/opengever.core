@@ -29,6 +29,11 @@
       />
 
   <utility
+      component=".sections.garbage_collect.GarbageCollectSection"
+      name="opengever.bundle.garbage_collect"
+      />
+
+  <utility
       component=".sections.constructor.ConstructorSection"
       name="opengever.bundle.constructor"
       />
