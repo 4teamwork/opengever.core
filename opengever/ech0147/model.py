@@ -14,6 +14,7 @@ from opengever.ech0147.bindings import ech0147t1
 from opengever.ech0147.mappings import CLASSIFICATION_MAPPING
 from opengever.ech0147.mappings import DOSSIER_STATUS_MAPPING
 from opengever.ech0147.mappings import PRIVACY_LAYER_MAPPING
+from opengever.ech0147.mappings import PUBLIC_TRIAL_MAPPING
 from opengever.ech0147.utils import file_checksum
 from plone import api
 from pyxb.utils.domutils import BindingDOMSupport
@@ -249,6 +250,7 @@ class Document(object):
         d.classification = ech0039.classificationType(
             CLASSIFICATION_MAPPING[c_obj.classification])
         d.hasPrivacyProtection = PRIVACY_LAYER_MAPPING[c_obj.privacy_layer]
+        d.openToThePublic = PUBLIC_TRIAL_MAPPING[c_obj.public_trial]
 
         md = IDocumentMetadata(self.obj)
         d.documentKind = md.document_type
@@ -262,7 +264,6 @@ class Document(object):
                 d.keywords.append(ech0039.keywordType(keyword, lang=u'DE'))
 
         # Optional, currently not supported properties
-        d.openToThePublic = None
         d.signer = None
         d.comments = None
         d.isLeadingDocument = None

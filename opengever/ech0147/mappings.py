@@ -1,3 +1,7 @@
+from opengever.base.behaviors.classification import PUBLIC_TRIAL_LIMITED_PUBLIC
+from opengever.base.behaviors.classification import PUBLIC_TRIAL_PRIVATE
+from opengever.base.behaviors.classification import PUBLIC_TRIAL_PUBLIC
+from opengever.base.behaviors.classification import PUBLIC_TRIAL_UNCHECKED
 
 
 DOSSIER_STATUS_MAPPING = {
@@ -24,3 +28,16 @@ PRIVACY_LAYER_MAPPING = {
 }
 INV_PRIVACY_LAYER_MAPPING = {
     v: k for k, v in PRIVACY_LAYER_MAPPING.iteritems()}
+
+PUBLIC_TRIAL_MAPPING = {
+    PUBLIC_TRIAL_LIMITED_PUBLIC: u'not_public',
+    PUBLIC_TRIAL_PRIVATE: u'not_public',
+    PUBLIC_TRIAL_PUBLIC: u'public',
+    PUBLIC_TRIAL_UNCHECKED: u'undefined',
+}
+
+INV_PUBLIC_TRIAL_MAPPING = {
+    u'not_public': PUBLIC_TRIAL_PRIVATE,
+    u'public': PUBLIC_TRIAL_PUBLIC,
+    u'undefined': PUBLIC_TRIAL_UNCHECKED,
+}

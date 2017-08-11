@@ -1,6 +1,7 @@
 from opengever.document.document import IDocumentSchema
 from opengever.ech0147.mappings import INV_CLASSIFICATION_MAPPING
 from opengever.ech0147.mappings import INV_PRIVACY_LAYER_MAPPING
+from opengever.ech0147.mappings import INV_PUBLIC_TRIAL_MAPPING
 from plone.restapi.interfaces import IDeserializeFromJson
 from random import randint
 from zope.component import queryMultiAdapter
@@ -79,6 +80,10 @@ def create_document(container, document, zipfile):
     if document.keywords:
         data.update({
             'keywords': [k.value() for k in document.keywords.keyword]})
+
+    public_trial = INV_PUBLIC_TRIAL_MAPPING.get(document.openToThePublic)
+    if public_trial is not None:
+        data.update({'public_trial': public_trial})
 
     deserializer = queryMultiAdapter((obj, obj.REQUEST),
                                      IDeserializeFromJson)
