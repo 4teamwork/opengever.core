@@ -15,7 +15,7 @@ from opengever.ech0147.mappings import CLASSIFICATION_MAPPING
 from opengever.ech0147.mappings import DOSSIER_STATUS_MAPPING
 from opengever.ech0147.mappings import PRIVACY_LAYER_MAPPING
 from opengever.ech0147.mappings import PUBLIC_TRIAL_MAPPING
-from opengever.ech0147.utils import file_checksum
+from opengever.base.utils import file_checksum
 from plone import api
 from pyxb.utils.domutils import BindingDOMSupport
 from uuid import uuid4
