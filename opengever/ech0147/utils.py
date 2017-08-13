@@ -17,22 +17,33 @@ def create_dossier(container, dossier, zipfile, responsible):
         'opengever.dossier.businesscasedossier', temp_id)
     obj = container[id_]
 
-    data = {
+    # Mandatory metadata
+    metadata = {
         'title': dossier.titles.title[0].value(),
-        'start': dossier.openingDate,
-        'classification': INV_CLASSIFICATION_MAPPING.get(
-            dossier.classification),
-        'privacy_layer': INV_PRIVACY_LAYER_MAPPING.get(
-            dossier.hasPrivacyProtection),
         'responsible': responsible,
     }
-    if dossier.keywords:
-        data.update({
-            'keywords': [k.value() for k in dossier.keywords.keyword]})
+
+    # Optional metadata
+    if dossier.openingDate is not None:
+        metadata['start'] = dossier.openingDate
+
+    if dossier.classification is not None:
+        metadata['classification'] = INV_CLASSIFICATION_MAPPING.get(
+            dossier.classification)
+    if dossier.hasPrivacyProtection is not None:
+        metadata['privacy_layer'] = INV_PRIVACY_LAYER_MAPPING.get(
+            dossier.hasPrivacyProtection)
+
+    if dossier.keywords is not None:
+        metadata['keywords'] = [k.value() for k in dossier.keywords.keyword]
+
+    if dossier.comments is not None:
+        metadata['comments'] = u'\n'.join(
+            [k.value() for k in dossier.comments.comment])
 
     deserializer = queryMultiAdapter((obj, obj.REQUEST),
                                      IDeserializeFromJson)
-    deserializer(validate_all=True, data=data)
+    deserializer(validate_all=True, data=metadata)
 
     # Rename dossier
     chooser = INameChooser(container)
@@ -55,27 +66,35 @@ def create_document(container, document, zipfile):
         'opengever.document.document', temp_id)
     obj = container[id_]
 
-    data = {
+    # Mandatory metadata
+    metadata = {
         'title': document.titles.title[0].value(),
-        'classification': INV_CLASSIFICATION_MAPPING.get(
-            document.classification),
-        'privacy_layer': INV_PRIVACY_LAYER_MAPPING.get(
-            document.hasPrivacyProtection),
-        'document_date': document.openingDate,
-        'document_author': document.owner,
-        'foreign_reference': document.ourRecordReference,
     }
-    if document.keywords:
-        data.update({
-            'keywords': [k.value() for k in document.keywords.keyword]})
 
-    public_trial = INV_PUBLIC_TRIAL_MAPPING.get(document.openToThePublic)
-    if public_trial is not None:
-        data.update({'public_trial': public_trial})
+    # Optional metadata
+    if document.openingDate is not None:
+        metadata['document_date'] = document.openingDate
+    if document.owner is not None:
+        metadata['document_author'] = document.owner
+    if document.ourRecordReference is not None:
+        metadata['foreign_reference'] = document.ourRecordReference
+
+    if document.classification is not None:
+        metadata['classification'] = INV_CLASSIFICATION_MAPPING.get(
+            document.classification)
+    if document.hasPrivacyProtection is not None:
+        metadata['privacy_layer'] = INV_PRIVACY_LAYER_MAPPING.get(
+            document.hasPrivacyProtection)
+    if document.openToThePublic is not None:
+        metadata['public_trial'] = INV_PUBLIC_TRIAL_MAPPING.get(
+            document.openToThePublic)
+
+    if document.keywords:
+        metadata['keywords'] = [k.value() for k in document.keywords.keyword]
 
     deserializer = queryMultiAdapter((obj, obj.REQUEST),
                                      IDeserializeFromJson)
-    deserializer(validate_all=True, data=data)
+    deserializer(validate_all=True, data=metadata)
 
     if document.files:
         file_ = document.files.file[0]

@@ -20,7 +20,11 @@ CLASSIFICATION_MAPPING = {
     u'classified': u'secret',
 }
 INV_CLASSIFICATION_MAPPING = {
-    v: k for k, v in CLASSIFICATION_MAPPING.iteritems()}
+    u'unclassified': u'unprotected',
+    u'confidential': u'confidential',
+    u'secret': u'classified',
+    u'in_house': u'confidential',
+}
 
 PRIVACY_LAYER_MAPPING = {
     u'privacy_layer_no': False,

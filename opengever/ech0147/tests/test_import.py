@@ -56,3 +56,27 @@ class TestImport(IntegrationTestCase):
                 'File': file_,
             }).submit()
         self.assertIn('Invalid message. Missing message.xml', browser.contents)
+
+    @browsing
+    def test_import_dossier_with_minimal_set_of_metadata(self, browser):
+        self.activate_feature('ech0147-import')
+        self.login(self.regular_user, browser)
+        browser.open(self.leaf_repofolder, view='ech0147_import')
+        with open(get_path('message_min.zip')) as file_:
+            browser.forms['form'].fill({
+                'File': file_,
+            }).submit()
+        dossier = self.leaf_repofolder.objectValues()[-1]
+        self.assertEqual(dossier.Title(), 'Neubau Schwimmbad 50m')
+
+    @browsing
+    def test_import_dossier_with_full_set_of_metadata(self, browser):
+        self.activate_feature('ech0147-import')
+        self.login(self.regular_user, browser)
+        browser.open(self.leaf_repofolder, view='ech0147_import')
+        with open(get_path('message_full.zip')) as file_:
+            browser.forms['form'].fill({
+                'File': file_,
+            }).submit()
+        dossier = self.leaf_repofolder.objectValues()[-1]
+        self.assertEqual(dossier.Title(), 'Neubau Schwimmbad 50m')
