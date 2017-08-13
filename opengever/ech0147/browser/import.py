@@ -18,6 +18,7 @@ from zExceptions import NotFound
 from zipfile import ZipFile
 from zope import schema
 from zope.component import getUtility
+import transaction
 
 
 class IECH0147ImportFormSchema(Schema):
@@ -77,6 +78,7 @@ class ECH0147ImportForm(AutoExtensibleForm, form.Form):
                             self.context, dossier, zipfile,
                             data['responsible'])
                     except BadRequest as exc:
+                        transaction.abort()
                         error_msg = ''
                         for error in exc.message:
                             error_msg += '%s: %s' % (
