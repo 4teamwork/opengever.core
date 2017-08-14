@@ -87,3 +87,21 @@ class TestIntegrationTestCase(IntegrationTestCase):
                                 self.dossier, self.subdossier)
         self.assert_workflow_state('dossier-state-inactive', self.dossier)
         self.assert_workflow_state('dossier-state-inactive', self.subdossier)
+
+    def test_extjs_is_disabled_by_default(self):
+        """ExtJS is disabled by default in the integration test case,
+        so that tabbedview listings render the table as simple HTML,
+        which is testable with the testbrowser.
+        """
+        self.assertFalse(api.portal.get_registry_record(
+            'ftw.tabbedview.interfaces.ITabbedView.extjs_enabled'))
+
+    def test_extjs_can_be_enabled_as_feature(self):
+        """In order for actually testing ExtJS behavior, ExtJS can be enabled
+        like a feature.
+        """
+        self.assertFalse(api.portal.get_registry_record(
+            'ftw.tabbedview.interfaces.ITabbedView.extjs_enabled'))
+        self.activate_feature('extjs')
+        self.assertTrue(api.portal.get_registry_record(
+            'ftw.tabbedview.interfaces.ITabbedView.extjs_enabled'))
