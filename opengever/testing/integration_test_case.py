@@ -30,6 +30,7 @@ FEATURE_FLAGS = {
                         '.interfaces.IDossierTemplateSettings.is_feature_enabled'),
     'ech0147-export': 'opengever.ech0147.interfaces.IECH0147Settings.ech0147_export_enabled',
     'ech0147-import': 'opengever.ech0147.interfaces.IECH0147Settings.ech0147_import_enabled',
+    'extjs': 'ftw.tabbedview.interfaces.ITabbedView.extjs_enabled',
 }
 
 FEATURE_PROFILES = {
@@ -45,6 +46,7 @@ class IntegrationTestCase(TestCase):
         super(IntegrationTestCase, self).setUp()
         self.portal = self.layer['portal']
         self.request = self.layer['request']
+        self.deactivate_extjs()
         map(self.activate_feature, self.features)
 
     @staticmethod
@@ -130,6 +132,17 @@ class IntegrationTestCase(TestCase):
                      for (name, value) in browser_auth_headers]
 
         return login_context_manager()
+
+    def deactivate_extjs(self):
+        """ExtJS is JavaScript and therefore currently untestable with
+        ftw.testbrowser.
+        In order to test listing tabs, we disable ExtJS in tests by default.
+        It can be reactivated by activating the fature "extjs":
+
+        >>> self.activate_feature('extjs')
+        """
+        api.portal.set_registry_record(
+            'ftw.tabbedview.interfaces.ITabbedView.extjs_enabled', False)
 
     def activate_feature(self, feature):
         """Activate a feature flag.
