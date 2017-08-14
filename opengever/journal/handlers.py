@@ -1,48 +1,23 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
-from five import grok
 from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from ftw.journal.events.events import JournalEntryEvent
-from ftw.journal.interfaces import IJournalizable
-from ftw.mail.mail import IMail
 from OFS.interfaces import IObjectWillBeAddedEvent
-from OFS.interfaces import IObjectWillBeMovedEvent
 from opengever.base.behaviors import classification
 from opengever.base.browser.paste import ICopyPasteRequestLayer
 from opengever.base.oguid import Oguid
-from opengever.bumblebee.interfaces import IPDFDownloadedEvent
-from opengever.document.behaviors import IBaseDocument
 from opengever.document.document import IDocumentSchema
-from opengever.document.interfaces import IFileCopyDownloadedEvent
-from opengever.document.interfaces import IObjectCheckedInEvent
-from opengever.document.interfaces import IObjectCheckedOutEvent
-from opengever.document.interfaces import IObjectCheckoutCanceledEvent
-from opengever.document.interfaces import IObjectRevertedToVersion
-from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.browser.participants import role_list_helper
-from opengever.dossier.interfaces import IParticipationCreated
-from opengever.dossier.interfaces import IParticipationRemoved
 from opengever.journal import _
 from opengever.mail.interfaces import IAttachmentsDeletedEvent
-from opengever.mail.interfaces import IDocumentSent
-from opengever.repository.events import IRepositoryPrefixUnlocked
-from opengever.repository.repositoryfolder import IRepositoryFolderSchema
 from opengever.repository.repositoryroot import IRepositoryRoot
 from opengever.sharing.behaviors import IStandard
 from opengever.sharing.browser.sharing import ROLE_MAPPING
-from opengever.sharing.interfaces import ILocalRolesAcquisitionActivated
-from opengever.sharing.interfaces import ILocalRolesAcquisitionBlocked
-from opengever.sharing.interfaces import ILocalRolesModified
 from opengever.tabbedview.helper import readable_ogds_author
-from opengever.task.task import ITask
-from opengever.trash.trash import ITrashedEvent
-from opengever.trash.trash import IUntrashedEvent
 from persistent.dict import PersistentDict
 from persistent.list import PersistentList
 from plone.app.versioningbehavior.utils import get_change_note
 from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
-from plone.dexterity.interfaces import IDexterityContent
-from Products.CMFCore.interfaces import IActionSucceededEvent
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getMultiAdapter
@@ -54,8 +29,6 @@ from zope.i18nmessageid import MessageFactory
 from zope.i18nmessageid.message import Message
 from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent.interfaces import IObjectAddedEvent
-from zope.lifecycleevent.interfaces import IObjectModifiedEvent
-from zope.lifecycleevent.interfaces import IObjectMovedEvent
 
 
 pmf = MessageFactory('plone')
@@ -154,7 +127,6 @@ def get_repository_root(context):
 LOCAL_ROLES_AQUISITION_BLOCKED = 'Local roles Aquisition Blocked'
 
 
-@grok.subscribe(IRepositoryFolderSchema, IRepositoryPrefixUnlocked)
 def repository_prefix_unlock(context, event):
     title = _(u'label_prefix_unlocked',
               default=u'Unlocked prefix ${prefix} in ${repository}.',
@@ -170,7 +142,6 @@ def repository_prefix_unlock(context, event):
 REPOSITORY_PREFIX_UNLOCKED = 'Repository prefix unlocked'
 
 
-@grok.subscribe(IRepositoryFolderSchema, ILocalRolesAcquisitionBlocked)
 def repositoryfolder_local_roles_acquisition_blocked(context, event):
     title = _(u'label_local_roles_acquisition_blocked_at',
               default=u'Local roles aquistion blocked at ${repository}.',
@@ -187,7 +158,6 @@ def repositoryfolder_local_roles_acquisition_blocked(context, event):
 LOCALROLES_AQUISITION_ACTIVATED = 'Local roles Aquisition Activated'
 
 
-@grok.subscribe(IRepositoryFolderSchema, ILocalRolesAcquisitionActivated)
 def repositoryfolder_local_roles_acquisition_activated(context, event):
 
     title = _(u'label_local_roles_acquisition_activated_at',
@@ -205,7 +175,6 @@ def repositoryfolder_local_roles_acquisition_activated(context, event):
 LOCAL_ROLES_MODIFIED = 'Local roles modified'
 
 
-@grok.subscribe(IRepositoryFolderSchema, ILocalRolesModified)
 def repositoryfolder_local_roles_modified(context, event):
 
     title = _(u'label_local_roles_modified_at',
@@ -226,7 +195,6 @@ def repositoryfolder_local_roles_modified(context, event):
 DOSSIER_ADDED_ACTION = 'Dossier added'
 
 
-@grok.subscribe(IDossierMarker, IObjectAddedEvent)
 def dossier_added(context, event):
     title = _(
         u'label_dossier_added',
@@ -239,7 +207,6 @@ def dossier_added(context, event):
 DOSSIER_MODIIFED_ACTION = 'Dossier modified'
 
 
-@grok.subscribe(IDossierMarker, IObjectModifiedEvent)
 def dossier_modified(context, event):
     if ILocalrolesModifiedEvent.providedBy(event):
         return
@@ -264,7 +231,6 @@ def dossier_modified(context, event):
 DOSSIER_STATE_CHANGED = 'Dossier state changed'
 
 
-@grok.subscribe(IDossierMarker, IActionSucceededEvent)
 def dossier_state_changed(context, event):
     skip_transactions = [
         ]
@@ -279,7 +245,6 @@ def dossier_state_changed(context, event):
 LOCAL_ROLES_AQUISITION_BLOCKED = 'Local roles Aquisition Blocked'
 
 
-@grok.subscribe(IDossierMarker, ILocalRolesAcquisitionBlocked)
 def dossier_local_roles_acquisition_blocked(context, event):
 
     journal_entry_factory(
@@ -294,7 +259,6 @@ def dossier_local_roles_acquisition_blocked(context, event):
 LOCAL_ROLES_AQUISITION_ACTIVATED = 'Local roles Aquisition Activated'
 
 
-@grok.subscribe(IDossierMarker, ILocalRolesAcquisitionActivated)
 def dossier_local_roles_acquisition_activated(context, event):
 
     journal_entry_factory(
@@ -309,7 +273,6 @@ def dossier_local_roles_acquisition_activated(context, event):
 LOCAL_ROLES_MODIFIED = 'Local roles modified'
 
 
-@grok.subscribe(IDossierMarker, ILocalRolesModified)
 def dossier_local_roles_modified(context, event):
 
     journal_entry_factory(
@@ -337,7 +300,6 @@ def doc_properties_updated(context):
 ATTACHMENTS_DELETED_ACTION = 'Attachments deleted'
 
 
-@grok.subscribe(IMail, IAttachmentsDeletedEvent)
 def attachments_deleted(context, event):
     attachment_names = event.attachments
     title = _(
@@ -353,7 +315,6 @@ def attachments_deleted(context, event):
 DOCUMENT_ADDED_ACTION = 'Document added'
 
 
-@grok.subscribe(IBaseDocument, IObjectAddedEvent)
 def document_added(context, event):
     title = _(
         u'label_document_added',
@@ -377,7 +338,6 @@ DOCUMENT_MODIIFED_ACTION = 'Document modified'
 PUBLIC_TRIAL_MODIFIED_ACTION = 'Public trial modified'
 
 
-@grok.subscribe(IBaseDocument, IObjectModifiedEvent)
 def document_modified(context, event):
 
     if IAttachmentsDeletedEvent.providedBy(event):
@@ -460,7 +420,6 @@ def document_modified(context, event):
 DOCUMENT_CHECKED_OUT = 'Document checked out'
 
 
-@grok.subscribe(IBaseDocument, IObjectCheckedOutEvent)
 def document_checked_out(context, event):
     user_comment = event.comment
     title = _(u'label_document_checkout',
@@ -473,7 +432,6 @@ def document_checked_out(context, event):
 DOCUMENT_CHECKED_IN = 'Document checked in'
 
 
-@grok.subscribe(IBaseDocument, IObjectCheckedInEvent)
 def document_checked_in(context, event):
     user_comment = event.comment
     title = _(u'label_document_checkin',
@@ -486,7 +444,6 @@ def document_checked_in(context, event):
 DOCUMENT_CHECKOUT_CANCEL = 'Canceled document checkout'
 
 
-@grok.subscribe(IBaseDocument, IObjectCheckoutCanceledEvent)
 def document_checkout_canceled(context, event):
     title = _(u'label_document_checkout_cancel',
               default=u'Canceled document checkout')
@@ -496,7 +453,6 @@ def document_checkout_canceled(context, event):
 DOCUMENT_FILE_REVERTED = 'Reverted document file'
 
 
-@grok.subscribe(IBaseDocument, IObjectRevertedToVersion)
 def document_file_reverted(context, event):
     try:
         create = event.create_version
@@ -515,7 +471,6 @@ def document_file_reverted(context, event):
 FILE_COPY_DOWNLOADED = 'File copy downloaded'
 
 
-@grok.subscribe(IBaseDocument, IFileCopyDownloadedEvent)
 def file_copy_downloaded(context, event):
 
     title_unversioned = _(u'label_file_copy_downloaded',
@@ -546,7 +501,6 @@ def file_copy_downloaded(context, event):
 PDF_DOWNLOADED = 'PDF downloaded'
 
 
-@grok.subscribe(IBaseDocument, IPDFDownloadedEvent)
 def pdf_downloaded(context, event):
     title = _(u'label_pdf_downloaded', default=u'PDF downloaded')
     journal_entry_factory(context, PDF_DOWNLOADED, title)
@@ -555,7 +509,6 @@ def pdf_downloaded(context, event):
 DOCUMENT_SENT = 'Document Sent'
 
 
-@grok.subscribe(IDexterityContent, IDocumentSent)
 def document_sent(context, event):
     def make_document_event_list(context, items):
         urlstring = ''
@@ -601,7 +554,6 @@ def document_sent(context, event):
 TASK_ADDED_EVENT = 'Task added'
 
 
-@grok.subscribe(ITask, IObjectAddedEvent)
 def task_added(context, event):
     title = _(
         u'label_task_added',
@@ -618,7 +570,6 @@ def task_added(context, event):
 TASK_MODIIFED_ACTION = 'Task modified'
 
 
-@grok.subscribe(ITask, IObjectModifiedEvent)
 def task_modified(context, event):
     title = _(
         u'label_task_modified',
@@ -641,7 +592,6 @@ def task_modified(context, event):
 OBJECT_MOVE_TO_TRASH = 'Object moved to trash'
 
 
-@grok.subscribe(IJournalizable, ITrashedEvent)
 def document_trashed(context, event):
     title = _(
         u'label_to_trash',
@@ -659,7 +609,6 @@ def document_trashed(context, event):
 OBJECT_RESTORE = 'Object restore'
 
 
-@grok.subscribe(IJournalizable, IUntrashedEvent)
 def document_untrashed(context, event):
     title = _(
         u'label_restore',
@@ -675,7 +624,6 @@ def document_untrashed(context, event):
 OBJECT_REMOVED = 'Object removed'
 
 
-@grok.subscribe(IBaseDocument, IActionSucceededEvent)
 def document_removed(context, event):
     if event.action == context.remove_transition:
         title = _(u'label_document_removed',
@@ -692,7 +640,6 @@ def document_removed(context, event):
 OBJECT_RESTORED = 'Object restored'
 
 
-@grok.subscribe(IBaseDocument, IActionSucceededEvent)
 def document_restored(context, event):
     if event.action == context.restore_transition:
         title = _(u'label_document_restored',
@@ -711,7 +658,6 @@ def document_restored(context, event):
 PARTICIPANT_ADDED = 'Participant added'
 
 
-@grok.subscribe(IDossierMarker, IParticipationCreated)
 def participation_created(context, event):
     author = readable_ogds_author(event.participant,
                                   event.participant.contact)
@@ -731,7 +677,6 @@ def participation_created(context, event):
 PARTICIPANT_REMOVED = 'Participant removed'
 
 
-@grok.subscribe(IDossierMarker, IParticipationRemoved)
 def participation_removed(context, event):
     title = _(
         u'label_participant_removed',
@@ -750,7 +695,6 @@ def participation_removed(context, event):
 OBJECT_MOVED_EVENT = 'Object moved'
 
 
-@grok.subscribe(IDexterityContent, IObjectMovedEvent)
 def object_moved(context, event):
     # Since IObjectAddedEvent subclasses IObjectMovedEvent this event
     # handler is also called for IObjectAddedEvent but we should not
@@ -775,7 +719,6 @@ def object_moved(context, event):
 OBJECT_WILL_BE_MOVED_EVENT = 'Object cut'
 
 
-@grok.subscribe(IDexterityContent, IObjectWillBeMovedEvent)
 def object_will_be_moved(context, event):
     if IObjectWillBeAddedEvent.providedBy(event):
         return
