@@ -1,11 +1,12 @@
 from __future__ import absolute_import
-from five import grok
 from ldap.controls import SimplePagedResultsControl
 from opengever.ogds.base.interfaces import ILDAPSearch
 from Products.LDAPMultiPlugins import ActiveDirectoryMultiPlugin
 from Products.LDAPUserFolder.interfaces import ILDAPUserFolder
 from Products.LDAPUserFolder.LDAPDelegate import filter_format
 from Products.LDAPUserFolder.utils import GROUP_MEMBER_MAP
+from zope.component import adapter
+from zope.interface import implementer
 import ldap
 import logging
 import re
@@ -30,13 +31,13 @@ SUBSCHEMA_ATTRS = ['attributeTypes', 'dITContentRules', 'dITStructureRules',
                    'objectClasses']
 
 
-class LDAPSearch(grok.Adapter):
+@implementer(ILDAPSearch)
+@adapter(ILDAPUserFolder)
+class LDAPSearch(object):
     """Adapter to search LDAP for users and groups.
 
     Uses connection settings defined in the adapted LDAPUserFolder.
     """
-    grok.provides(ILDAPSearch)
-    grok.context(ILDAPUserFolder)
 
     def __init__(self, context):
         self.is_ad = False
@@ -111,7 +112,6 @@ class LDAPSearch(grok.Adapter):
         """Return the LDAP schema of the server we're currently connected to
         as an instance of ldap.schema.subentry.SubSchema.
         """
-
         if not hasattr(self, '_schema'):
             # Cache information about which attributes are multivalued.
             # This is schema dependent, so we initialize this cache the first
@@ -212,12 +212,11 @@ class LDAPSearch(grok.Adapter):
     def search(self, base_dn=None, scope=ldap.SCOPE_SUBTREE,
                filter='(objectClass=*)', attrs=[]):
         """Search LDAP for entries matching the given criteria, using result
-        pagination if apprpriate, and return the results immediately.
+        pagination if appropriate, and return the results immediately.
 
         `base_dn`, `scope`, `filter` and `attrs` have the same meaning as the
         corresponding arguments on the ldap.search* methods.
         """
-
         if base_dn is None:
             base_dn = self.base_dn
 

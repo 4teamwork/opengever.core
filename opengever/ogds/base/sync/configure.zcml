@@ -3,6 +3,7 @@
     xmlns:browser="http://namespaces.zope.org/browser">
 
   <utility factory=".import_stamp.SyncStampUtility" />
+  <adapter factory=".ldap_util.LDAPSearch" />
 
   <browser:page
       name="update_sync_stamp"
