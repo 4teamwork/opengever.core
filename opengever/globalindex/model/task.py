@@ -4,7 +4,6 @@ from opengever.base.model import Base
 from opengever.base.model import Session
 from opengever.base.oguid import Oguid
 from opengever.base.utils import escape_html
-from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
@@ -30,6 +29,9 @@ from sqlalchemy.schema import Sequence
 from sqlalchemy.sql import functions
 from zope.globalrequest import getRequest
 from zope.i18n import translate
+
+
+WORKFLOW_STATE_LENGTH = 255
 
 
 class Task(Base):
