@@ -17,4 +17,12 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      name="ldap_controlpanel"
+      class=".ldapcontrolpanel.LDAPControlPanel"
+      permission="cmf.ManagePortal"
+      template="templates/ldapcontrolpanel.pt"
+      />
+
 </configure>

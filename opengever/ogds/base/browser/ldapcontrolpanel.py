@@ -7,18 +7,16 @@ from opengever.ogds.base.sync.import_stamp import set_remote_import_stamp
 from opengever.ogds.base.sync.ogds_updater import LOG_FORMAT
 from opengever.ogds.base.sync.ogds_updater import sync_ogds
 from Products.CMFPlone.interfaces import IPloneSiteRoot
+from Products.Five import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
 from zope.component import getUtility
 import logging
 
 
-class LDAPControlPanel(grok.View):
+class LDAPControlPanel(BrowserView):
     """Displays infos and links about and for the ldap synchronisation
     """
 
-    grok.name('ldap_controlpanel')
-    grok.context(IPloneSiteRoot)
-    grok.require('cmf.ManagePortal')
 
     def get_local_sync_stamp(self):
         """Return the current local sync stamp
