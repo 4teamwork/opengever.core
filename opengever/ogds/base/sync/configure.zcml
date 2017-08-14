@@ -4,6 +4,7 @@
 
   <utility factory=".import_stamp.SyncStampUtility" />
   <adapter factory=".ldap_util.LDAPSearch" />
+  <adapter factory=".ogds_updater.OGDSUpdater" />
 
   <browser:page
       name="update_sync_stamp"
