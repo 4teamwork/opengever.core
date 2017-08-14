@@ -46,6 +46,12 @@ class TemplateFolderDocuments(Documents):
     ]
 
 
+class TemplateFolderSablonTemplatesProxy(BaseTabProxy):
+    """This proxyview is looking for the last used documents
+    view (list or gallery) and reopens this view.
+    """
+
+
 class TemplateFolderSablonTemplates(Documents):
 
     types = ['opengever.meeting.sablontemplate']
@@ -72,6 +78,11 @@ class TemplateFolderSablonTemplates(Documents):
         'send_as_email',
         'submit_additional_documents',
     ]
+
+
+class TemplateFolderSablonTemplatesGallery(BumblebeeGalleryMixin, TemplateFolderSablonTemplates):
+
+    sort_on = 'sortable_title'
 
 
 class TemplateFolderProposalTemplatesProxy(BaseTabProxy):
