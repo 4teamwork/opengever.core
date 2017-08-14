@@ -1,6 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
-from opengever.ogds.base.vocabulary import ContactsVocabulary
+from opengever.ogds.base.vocabularies import ContactsVocabulary
 from opengever.testing import FunctionalTestCase
 from zope.component import getUtility
 from zope.schema.interfaces import IVocabularyFactory
