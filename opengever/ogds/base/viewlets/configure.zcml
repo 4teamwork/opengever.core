@@ -9,6 +9,13 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="*"
+      name="change_org_unit"
+      class=".ou_selector_viewlet.ChangeOrgUnitView"
+      permission="zope2.View"
+      />
+
   <adapter
       factory=".ou_selector_viewlet.OrgUnitSelectorETagValue"
       name="ouselector"
