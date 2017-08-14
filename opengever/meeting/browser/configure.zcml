@@ -197,4 +197,16 @@
       permission="zope2.View"
       />
 
+  <adapter
+      name="opengever.meeting.committeecontainer"
+      provides="zope.publisher.interfaces.browser.IBrowserPage"
+      factory=".committeecontainer_forms.AddView"
+      />
+
+  <browser:page
+      name="edit"
+      for="opengever.meeting.committeecontainer.ICommitteeContainer"
+      class=".committeecontainer_forms.EditForm"
+      permission="cmf.ModifyPortalContent"
+      />
 </configure>

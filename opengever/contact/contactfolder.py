@@ -1,7 +1,4 @@
-from five import grok
 from opengever.base.behaviors.translated_title import TranslatedTitleMixin
-from opengever.base.browser.translated_title import TranslatedTitleAddForm
-from opengever.base.browser.translated_title import TranslatedTitleEditForm
 from opengever.contact.interfaces import IContactFolder
 from opengever.contact.models import Contact
 from plone.dexterity.content import Container
@@ -38,11 +35,3 @@ class ContactFolder(Container, TranslatedTitleMixin):
         if default is _marker:
             raise KeyError(id_)
         return default
-
-
-class ContactFolderAddForm(TranslatedTitleAddForm):
-    grok.name('opengever.contact.contactfolder')
-
-
-class ContactFolderEditForm(TranslatedTitleEditForm):
-    grok.context(IContactFolder)

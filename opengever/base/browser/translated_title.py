@@ -1,9 +1,8 @@
 from opengever.base import _
 from opengever.base.behaviors.translated_title import TranslatedTitle
 from plone import api
-from plone.directives.dexterity import AddForm
-from plone.directives.dexterity import EditForm
-import martian
+from plone.dexterity.browser.add import DefaultAddForm
+from plone.dexterity.browser.edit import DefaultEditForm
 
 
 class TranslatedTitleFormMixin(object):
@@ -36,27 +35,23 @@ class TranslatedTitleFormMixin(object):
             self.widgets[fieldname].label = _(u"label_title", default=u"Title")
 
 
-class TranslatedTitleAddForm(AddForm, TranslatedTitleFormMixin):
-
-    martian.baseclass()
+class TranslatedTitleAddForm(DefaultAddForm, TranslatedTitleFormMixin):
 
     def updateFields(self):
-        super(AddForm, self).updateFields()
+        super(DefaultAddForm, self).updateFields()
         self.omit_non_active_language_fields()
 
     def updateWidgets(self):
-        super(AddForm, self).updateWidgets()
+        super(DefaultAddForm, self).updateWidgets()
         self.adjust_title_on_language_fields()
 
 
-class TranslatedTitleEditForm(EditForm, TranslatedTitleFormMixin):
-
-    martian.baseclass()
+class TranslatedTitleEditForm(DefaultEditForm, TranslatedTitleFormMixin):
 
     def updateFields(self):
-        super(EditForm, self).updateFields()
+        super(DefaultEditForm, self).updateFields()
         self.omit_non_active_language_fields()
 
     def updateWidgets(self):
-        super(EditForm, self).updateWidgets()
+        super(DefaultEditForm, self).updateWidgets()
         self.adjust_title_on_language_fields()

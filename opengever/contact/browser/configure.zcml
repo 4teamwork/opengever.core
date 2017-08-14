@@ -13,6 +13,14 @@
       />
 
   <browser:page
+      for="opengever.contact.contact.IContact"
+      name="contact_view"
+      class=".contact_view.View"
+      permission="zope2.View"
+      template="templates/contact_view.pt"
+      />
+
+  <browser:page
       name="tabbedview_view-local"
       for="plone.dexterity.interfaces.IDexterityContainer"
       class=".contacts_tab.Contacts"
@@ -152,4 +160,16 @@
       allowed_interface="opengever.contact.browser.mail.IMailAddressesActions"
       />
 
+  <adapter
+      factory=".contactfolder_forms.AddView"
+      provides="zope.publisher.interfaces.browser.IBrowserPage"
+      name="opengever.contact.contactfolder"
+      />
+
+  <browser:page
+      name="edit"
+      for="opengever.contact.interfaces.IContactFolder"
+      class=".contactfolder_forms.EditForm"
+      permission="cmf.ModifyPortalContent"
+      />
 </configure>
