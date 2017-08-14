@@ -1,11 +1,10 @@
-from five import grok
 from z3c.formwidget.query.interfaces import IQuerySource
+from zope.interface import implementer
 from zope.schema.vocabulary import SimpleVocabulary
 
 
+@implementer(IQuerySource)
 class ContactsVocabulary(SimpleVocabulary):
-
-    grok.implements(IQuerySource)
 
     def search(self, query_string):
         """search method for `z3c.formwidget.autocomplete` support. Returns
