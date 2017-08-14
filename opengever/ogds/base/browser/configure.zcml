@@ -46,4 +46,12 @@
       permission="cmf.ManagePortal"
       />
 
+  <browser:page
+      for="*"
+      name="user-details"
+      class=".userdetails.UserDetails"
+      permission="zope2.View"
+      template="templates/userdetails.pt"
+      />
+
 </configure>
