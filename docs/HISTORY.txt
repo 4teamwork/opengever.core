@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2017.4.1 (unreleased)
+2017.5.0 (unreleased)
 ---------------------
 
 - Add external_reference field and index [tarnap]
@@ -13,10 +13,7 @@ Changelog
 - Add add bumblebee gallery view for proposaltemplate. [elioschmutz]
 - Word meeting: Improve edit-document-button behavior in meeting view. [jone]
 - Fix typo in contact detail view. [elioschmutz]
-- Bundle import: Reduce memory high-water-mark by periodically re-setting the
-  Plone site using setSite(), and garbage collecting the cPickleCache. [lgraf]
 - Remove separate bumblebee fetch-views since they are no longer necessary because we no longer use grok. [elioschmutz]
-- Bundle import: Also log progress and RSS during post-processing. [lgraf]
 - Word meeting: List excerpts per agenda item in meeting view. [jone]
 - Word meeting: Replace excerpt generation with new word implementation. [jone]
 - Word meeting: Automatically checkin document when deciding an agenda item. [jone]
@@ -32,7 +29,6 @@ Changelog
 - Reindex is_subdossier-index after moving the dossier. [elioschmutz]
 - Improve warning when opening an old version of a document. [tarnap]
 - Highlight search terms after fetching new search results per ajax. [elioschmutz]
-- Fixed bug in search when sorting on relevance. [phgross]
 - Fix broken remove-condition-checker if backreferences were deleted. [elioschmutz]
 - Fix broken overview-listing if backreferences were deleted. [elioschmutz]
 - Fix encoding error when syncing proposals with SQL. [jone]
@@ -53,11 +49,6 @@ Changelog
 - Refactor the function: earliest_possible_end_date. [elioschmutz]
 - Remove unused projectdossier contenttype. [elioschmutz]
 - Upgrade plone.app.jquery from 1.7.2.1 to 1.11.2. [elioschmutz]
-- Bundle import: Fix logging in case of disallowed subobject type. [lgraf]
-- Bundle import: Don't unnecessarily keep references to persistent objects
-  over the lifetime of the entire import. This lets the garbage collector
-  do its job, and reduces growth of memory usage during import. [lgraf]
-- Bundle import: Display current memory usage (RSS) in progress logger. [lgraf]
 - Word meeting: quick edit proposal file in meeting view. [jone]
 - Word meeting: show proposal files in meeting view. [jone]
 - Reworked contact syncer functionality, to improve speed with bulk insert and updates. [phgross]
@@ -65,6 +56,21 @@ Changelog
 - SPV word: checkout proposal document after creating proposal. [jone]
 - Implement REST API endpoints for document checkout/checkin. [buchi]
 - Implement eCH-0147/eCH-0039 import and export [buchi]
+
+
+2017.4.1 (2017-08-14)
+---------------------
+
+- Bundle import: Reduce memory high-water-mark by periodically re-setting the
+  Plone site using setSite(), and garbage collecting the cPickleCache. [lgraf]
+- Bundle import: Also log progress and RSS during post-processing. [lgraf]
+- Fix leaking reference in RestrictedVocabularyFactory. [lgraf]
+- Fixed bug in search when sorting on relevance. [phgross]
+- Bundle import: Fix logging in case of disallowed subobject type. [lgraf]
+- Bundle import: Don't unnecessarily keep references to persistent objects
+  over the lifetime of the entire import. This lets the garbage collector
+  do its job, and reduces growth of memory usage during import. [lgraf]
+- Bundle import: Display current memory usage (RSS) in progress logger. [lgraf]
 
 
 2017.4.0 (2017-07-26)
