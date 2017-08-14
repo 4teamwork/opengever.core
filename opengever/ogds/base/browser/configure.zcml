@@ -25,4 +25,18 @@
       template="templates/ldapcontrolpanel.pt"
       />
 
+  <browser:page
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      name="sync_users"
+      class=".ldapcontrolpanel.UserSyncView"
+      permission="cmf.ManagePortal"
+      />
+
+  <browser:page
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      name="sync_groups"
+      class=".ldapcontrolpanel.GroupSyncView"
+      permission="cmf.ManagePortal"
+      />
+
 </configure>

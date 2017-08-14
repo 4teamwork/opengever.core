@@ -17,7 +17,6 @@ class LDAPControlPanel(BrowserView):
     """Displays infos and links about and for the ldap synchronisation
     """
 
-
     def get_local_sync_stamp(self):
         """Return the current local sync stamp
         which is used by the different cachekeys"""
@@ -29,13 +28,10 @@ class LDAPControlPanel(BrowserView):
         return timestamp
 
 
-class LDAPSyncView(grok.View):
+class LDAPSyncView(BrowserView):
     """Base class for LDAP synchronization views (UserSyncView and
     GroupSyncView).
     """
-
-    grok.context(IPloneSiteRoot)
-    grok.require('cmf.ManagePortal')
 
     def run_update(self, **kwargs):
         # Set up logging to HTTPResponse
@@ -55,7 +51,7 @@ class LDAPSyncView(grok.View):
             # are short-lived
             logger.removeHandler(response_handler)
 
-    def render(self):
+    def __call__(self):
         raise NotImplementedError
 
 
@@ -63,9 +59,7 @@ class UserSyncView(LDAPSyncView):
     """Browser view that starts an LDAP user import.
     """
 
-    grok.name('sync_users')
-
-    def render(self):
+    def __call__(self):
         self.run_update(groups=False)
 
 
@@ -73,9 +67,7 @@ class GroupSyncView(LDAPSyncView):
     """Browser view that starts an LDAP group import.
     """
 
-    grok.name('sync_groups')
-
-    def render(self):
+    def __call__(self):
         self.run_update(users=False)
 
 
