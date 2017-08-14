@@ -123,7 +123,7 @@ class TestBumblebeeGalleryMixinGetFetchUrl(FunctionalTestCase):
             (dossier, self.request), name=viewname)
 
         self.assertEqual(
-            'http://nohost/plone/dossier-1/tabbedview_view-documents-gallery-fetch',
+            'http://nohost/plone/dossier-1/tabbedview_view-documents-gallery/fetch',
             view.get_fetch_url())
 
         viewname = "tabbedview_view-mydocuments-gallery"
@@ -131,7 +131,7 @@ class TestBumblebeeGalleryMixinGetFetchUrl(FunctionalTestCase):
             (dossier, self.request), name=viewname)
 
         self.assertEqual(
-            'http://nohost/plone/dossier-1/tabbedview_view-mydocuments-gallery-fetch',
+            'http://nohost/plone/dossier-1/tabbedview_view-mydocuments-gallery/fetch',
             view.get_fetch_url())
 
 
@@ -435,7 +435,7 @@ class TestDocumentsGalleryFetch(FunctionalTestCase):
         create(Builder('document').within(dossier))
         create(Builder('document').within(dossier))
 
-        browser.login().visit(dossier, view="tabbedview_view-documents-gallery-fetch")
+        browser.login().visit(dossier, view="tabbedview_view-documents-gallery/fetch")
 
         self.assertEqual(
             3, len(browser.css('.imageContainer')))
@@ -451,7 +451,7 @@ class TestMyDocumentsGalleryFetch(FunctionalTestCase):
         create(Builder('document').within(dossier))
         create(Builder('document').within(dossier))
 
-        browser.login().visit(dossier, view="tabbedview_view-mydocuments-gallery-fetch")
+        browser.login().visit(dossier, view="tabbedview_view-mydocuments-gallery/fetch")
 
         self.assertEqual(
             3, len(browser.css('.imageContainer')))
