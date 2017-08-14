@@ -39,8 +39,12 @@ class TestDumpFixtureStrutureToReadme(IntegrationTestCase):
                                   level=1)))
 
         md5_after = self._readme_md5()
-        self.assertEquals(md5_before, md5_after,
-                          'Fixture has changed and readme was not updated.')
+        self.assertEquals(
+            md5_before, md5_after,
+            'Fixture has changed and readme was not updated.\n'
+            'run:\n'
+            ' $ bin/test -t TestDumpFixtureStrutureToReadme\n'
+            'then commit the changes in the README.rst.')
 
     def _build_tree(self, name_to_path):
         nodes_by_path = {path: {'name': name, 'children': []}
