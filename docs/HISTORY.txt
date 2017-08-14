@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2017.4.1 (unreleased)
+2017.4.1 (2017-08-14)
 ---------------------
 
 - Bundle import: Reduce memory high-water-mark by periodically re-setting the
