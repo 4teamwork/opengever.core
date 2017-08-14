@@ -481,36 +481,36 @@ Objects
 
 .. code::
 
-  - self.meeting
-  - self.templates
-    - self.proposal_template
-    - self.sablon_template
+  - self.committee_container
+    - self.committee
+      - self.meeting
+      - self.submitted_proposal
+      - self.submitted_word_proposal
+    - self.empty_committee
   - self.repository_root
-    - self.empty_repofolder
     - self.branch_repofolder
       - self.leaf_repofolder
-        - self.meeting_dossier
         - self.archive_dossier
-        - self.empty_dossier
         - self.dossier
-          - self.task
-            - self.taskdocument
-            - self.subtask
+          - self.document
+          - self.draft_proposal
+          - self.draft_word_proposal
           - self.mail_eml
           - self.mail_msg
-          - self.draft_proposal
+          - self.proposal
           - self.subdossier
             - self.subdocument
           - self.subdossier2
-          - self.draft_word_proposal
-          - self.proposal
+          - self.task
+            - self.subtask
+            - self.taskdocument
           - self.word_proposal
-          - self.document
-  - self.submitted_word_proposal
-  - self.submitted_proposal
-  - self.committee_container
-    - self.empty_committee
-    - self.committee
+        - self.empty_dossier
+        - self.meeting_dossier
+    - self.empty_repofolder
+  - self.templates
+    - self.proposal_template
+    - self.sablon_template
 
 .. </fixture:objects>
 
