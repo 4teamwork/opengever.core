@@ -1,4 +1,3 @@
-from five import grok
 from logging import StreamHandler
 from opengever.core import dictstorage
 from opengever.ogds.base.interfaces import ISyncStamp
@@ -6,7 +5,6 @@ from opengever.ogds.base.sync.import_stamp import DICTSTORAGE_SYNC_KEY
 from opengever.ogds.base.sync.import_stamp import set_remote_import_stamp
 from opengever.ogds.base.sync.ogds_updater import LOG_FORMAT
 from opengever.ogds.base.sync.ogds_updater import sync_ogds
-from Products.CMFPlone.interfaces import IPloneSiteRoot
 from Products.Five import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
 from zope.component import getUtility
@@ -19,8 +17,8 @@ class LDAPControlPanel(BrowserView):
 
     def get_local_sync_stamp(self):
         """Return the current local sync stamp
-        which is used by the different cachekeys"""
-
+        which is used by the different cachekeys.
+        """
         return getUtility(ISyncStamp).get_sync_stamp()
 
     def get_db_sync_stamp(self):
@@ -71,15 +69,12 @@ class GroupSyncView(LDAPSyncView):
         self.run_update(users=False)
 
 
-class ResetStampView(grok.View):
-    """A view wich reset the actual syncstamp with a actual stamp
-    on every client registered in the ogds """
+class ResetSyncStampView(BrowserView):
+    """A view that resets the current sync stamp with a new stamp
+    on every client registered in the OGDS.
+    """
 
-    grok.name('reset_syncstamp')
-    grok.context(IPloneSiteRoot)
-    grok.require('cmf.ManagePortal')
-
-    def render(self):
+    def __call__(self):
         set_remote_import_stamp(self.context)
         IStatusMessage(self.context.REQUEST).addStatusMessage(
             u"Successfully reset the Syncstamp on every client", "info")

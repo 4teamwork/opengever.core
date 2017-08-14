@@ -39,4 +39,11 @@
       permission="cmf.ManagePortal"
       />
 
+  <browser:page
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      name="reset_syncstamp"
+      class=".ldapcontrolpanel.ResetSyncStampView"
+      permission="cmf.ManagePortal"
+      />
+
 </configure>
