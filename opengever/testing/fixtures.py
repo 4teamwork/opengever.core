@@ -82,15 +82,20 @@ class OpengeverContentFixture(object):
 
     def create_users(self):
         self.administrator = self.create_user(
-            'administrator', u'Nicole', u'Kohler', ['Administrator', 'APIUser'])
+            'administrator', u'Nicole', u'Kohler',
+            ['Administrator', 'APIUser'])
         self.dossier_responsible = self.create_user(
             'dossier_responsible', u'Robert', u'Ziegler')
         self.regular_user = self.create_user(
             'regular_user', u'K\xe4thi', u'B\xe4rfuss')
+        self.meeting_user = self.create_user(
+            'meeting_user', u'Herbert', u'J\xe4ger',
+            ['MeetingUser'])
         self.secretariat_user = self.create_user(
             'secretariat_user', u'J\xfcrgen', u'K\xf6nig')
         self.committee_responsible = self.create_user(
-            'committee_responsible', u'Fr\xe4nzi', u'M\xfcller')
+            'committee_responsible', u'Fr\xe4nzi', u'M\xfcller',
+            ['MeetingUser', 'CommitteeAdministrator'])
 
     @staticuid()
     def create_repository_tree(self):

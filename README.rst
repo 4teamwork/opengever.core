@@ -469,6 +469,7 @@ Users
 - ``self.committee_responsible``: ``franzi.muller``
 - ``self.dossier_responsible``: ``robert.ziegler``
 - ``self.manager``: ``admin``
+- ``self.meeting_user``: ``herbert.jager``
 - ``self.regular_user``: ``kathi.barfuss``
 - ``self.secretariat_user``: ``jurgen.konig``
 
