@@ -1,4 +1,5 @@
 from opengever.testing import IntegrationTestCase
+from operator import itemgetter
 from path import Path
 import hashlib
 import os.path
@@ -61,7 +62,7 @@ class TestDumpFixtureStrutureToReadme(IntegrationTestCase):
     def _render_tree(self, nodes, level=0):
         lines = []
         indent = ' ' * 2 * level
-        for node in nodes:
+        for node in sorted(nodes, key=itemgetter('name')):
             lines.append('{}- self.{}'.format(indent, node['name']))
             lines.extend(self._render_tree(node['children'], level=level+1))
         return lines
