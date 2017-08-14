@@ -373,6 +373,9 @@ class OpengeverContentFixture(object):
     def register_path(self, attrname, path):
         """Add an object to the lookup table by path.
         """
+        portal_path = '/'.join(api.portal.get().getPhysicalPath())
+        if path.startswith(portal_path):
+            path = path[len(portal_path):].lstrip('/')
         self._lookup_table[attrname] = ('object', path)
 
     def register_raw(self, attrname, value):

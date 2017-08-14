@@ -1,5 +1,6 @@
 from opengever.testing import IntegrationTestCase
 from path import Path
+import hashlib
 import os.path
 import re
 
@@ -9,10 +10,15 @@ class TestDumpFixtureStrutureToReadme(IntegrationTestCase):
     def test_dump_fixure(self):
         """This test dumps the fixture structure into the readme for
         documentation purposes.
+        It also will fail every time it changes the readme,
+        so that we can detect fixture changes without readme update in
+        pull requests.
         """
         data = {'user': {}, 'object': {}, 'raw': {}}
         for name, (type_, value) in self.layer['fixture_lookup_table'].items():
             data[type_][name] = value
+
+        md5_before = self._readme_md5()
 
         self._update_in_readme(
             'users',
@@ -31,6 +37,10 @@ class TestDumpFixtureStrutureToReadme(IntegrationTestCase):
             '.. code::\n\n' + '\n'.join(
                 self._render_tree(self._build_tree(data['object']),
                                   level=1)))
+
+        md5_after = self._readme_md5()
+        self.assertEquals(md5_before, md5_after,
+                          'Fixture has changed and readme was not updated.')
 
     def _build_tree(self, name_to_path):
         nodes_by_path = {path: {'name': name, 'children': []}
@@ -61,3 +71,12 @@ class TestDumpFixtureStrutureToReadme(IntegrationTestCase):
         text = match.group(1) + '\n\n' + text.strip() + '\n\n' + match.group(2).strip()
         readme = readme[:match.start()] + text + readme[match.end():]
         readme_file.write_bytes(readme)
+
+    def _readme_md5(self):
+        buildout_dir = Path(__file__).joinpath('..', '..', '..', '..').abspath()
+        readme_file = buildout_dir.joinpath('README.rst')
+        hash_md5 = hashlib.md5()
+        with readme_file.open('rb') as fio:
+            for chunk in iter(lambda: fio.read(4096), b""):
+                hash_md5.update(chunk)
+        return hash_md5.hexdigest()
