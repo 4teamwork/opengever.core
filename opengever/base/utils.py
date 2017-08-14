@@ -2,6 +2,7 @@ from plone import api
 from Products.CMFCore.utils import getToolByName
 from xml.sax.saxutils import escape
 from zope.component import getMultiAdapter
+import hashlib
 import json
 
 
@@ -116,3 +117,14 @@ def to_safe_html(markup):
 
     transformer = api.portal.get_tool('portal_transforms')
     return transformer.convert('safe_html', markup).getData()
+
+
+def file_checksum(filename, chunksize=65536, algorithm=u'MD5'):
+    """Calculates a checksum for the given file."""
+    h = getattr(hashlib, algorithm.lower())()
+    with open(filename, 'rb') as f:
+        chunk = f.read(chunksize)
+        while len(chunk) > 0:
+            h.update(chunk)
+            chunk = f.read(chunksize)
+        return algorithm, h.hexdigest()

@@ -1,0 +1,11 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    i18n_domain="opengever.document">
+
+  <include package=".browser" />
+
+  <i18n:registerTranslations directory="locales" />
+
+</configure>

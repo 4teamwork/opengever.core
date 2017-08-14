@@ -263,6 +263,7 @@ class Dossiers(BaseCatalogListingTab):
                        'move_items',
                        'copy_items',
                        'create_disposition',
+                       'ech0147_export',
                        ]
 
     major_actions = ['change_state', ]
