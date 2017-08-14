@@ -360,6 +360,24 @@ class TestWorkflowSyncerReceiver(FunctionalTestCase):
         self.assertEquals('afi', task.responsible_client)
         self.assertEquals('hugo.boss', task.responsible)
 
+    def test_allow_workflow_changes_on_remote_system_if_user_has_no_write_permission(self):
+        create(Builder('ogds_user').id('hugo.boss'))
+        task = create(Builder('task')
+                      .in_state('task-state-in-progress')
+                      .having(issuer=TEST_USER_ID,
+                              responsible='hugo.boss'))
+
+        self.prepare_request(task, text=u'I am done!',
+                             transition= 'task-transition-in-progress-resolved')
+
+        self.grant()
+        task.manage_delLocalRoles([TEST_USER_ID])
+        task.__ac_local_roles_block__ = True
+
+        task.restrictedTraverse(self.RECEIVER_VIEW_NAME)()
+
+        self.assertEquals('task-state-resolved', api.content.get_state(task))
+
 
 class TestModifyDeadlineSyncerReceiver(FunctionalTestCase):
 

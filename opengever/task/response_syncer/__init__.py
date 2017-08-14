@@ -70,7 +70,7 @@ class BaseResponseSyncerSender(object):
 
     def sync_related_task(self, task, transition, text, **kwargs):
         payload = {'transition': transition,
-                   'text': safe_utf8(text)}
+                   'text': safe_utf8(text or '')}
         self.extend_payload(payload, task, **kwargs)
 
         response = self._dispatch_request(
