@@ -160,22 +160,6 @@ class TestCommittee(FunctionalTestCase):
         self.assertIsNotNone(model)
         self.assertEqual(u'A c\xf6mmittee', model.title)
 
-    @browsing
-    def test_committee_group_is_not_editable_for_users_with_missing_permission(self, browser):
-        create(Builder('user')
-               .named('Hugo', 'Boss')
-               .in_groups('client1_users'))
-
-        committee = create(Builder('committee')
-                           .within(self.container)
-                           .titled(u'My Committee')
-                           .having(group_id='client1_users')
-                           .link_with(self.repository_folder))
-
-        browser.login(username='hugo.boss').visit(committee, view='edit')
-        with self.assertRaises(FormFieldNotFound):
-            browser.fill({self.group_field_name: 'client1_users'})
-
 
 class TestCommitteeWorkflow(IntegrationTestCase):
 

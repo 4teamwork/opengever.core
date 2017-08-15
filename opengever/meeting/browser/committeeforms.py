@@ -163,9 +163,3 @@ class EditForm(ModelProxyEditForm, dexterity.EditForm):
     grok.context(ICommittee)
     fields = field.Fields(Committee.model_schema, ignoreContext=True)
     content_type = Committee
-
-    def updateWidgets(self):
-        if not self.context.is_group_editable():
-            self.fields['group_id'].mode = HIDDEN_MODE
-
-        super(EditForm, self).updateWidgets()

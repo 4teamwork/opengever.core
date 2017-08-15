@@ -195,10 +195,6 @@ class Committee(ModelContainer):
 
         return True
 
-    def is_group_editable(self):
-        return api.user.has_permission(
-            'Modify portal content', obj=self.get_committee_container())
-
     def get_upcoming_meetings(self):
         committee_model = self.load_model()
         return Meeting.query.all_upcoming_meetings(committee_model)
