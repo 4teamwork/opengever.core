@@ -479,11 +479,6 @@ class OpengeverContentFixture(object):
             .within(self.committee_container)
             .having(repository_folder=repository_folder,
                     group_id=group_id))
-        # XXX In order to make it possible for users to edit proposal document when
-        # the word-meeting-feature is enabled, we need to give the Editor role
-        # for now. This must be fixed when lawgiver workflows are introduced.
-        committee.manage_setLocalRoles(
-            group_id, ('CommitteeGroupMember', 'Editor'))
         return committee
 
     @contextmanager

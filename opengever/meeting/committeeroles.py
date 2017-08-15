@@ -8,7 +8,12 @@ class CommitteeRoles(object):
     in the add/edit forms.
 
     """
-    managed_roles = ('CommitteeGroupMember',)
+
+    # XXX In order to make it possible for users to edit proposal document when
+    # the word-meeting-feature is enabled, we need to give the Editor role
+    # for now. This must be fixed when lawgiver workflows for proposals and/or
+    # meetings are introduced.
+    managed_roles = ('CommitteeGroupMember', 'Editor')
 
     def __init__(self, committee):
         self.context = committee
