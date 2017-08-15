@@ -35,6 +35,16 @@
 
   <adapter factory=".zipexport.OGMailZipExport" />
 
+  <adapter
+      factory=".indexer.checked_out"
+      name="checked_out"
+      />
+
+  <adapter
+      factory=".indexer.SearchableTextExtender"
+      name="IOGMail"
+      />
+
   <plone:behavior
       title="ISendableDocsContainer behavior"
       description="generates an email adress for a dossier"
@@ -59,4 +69,27 @@
       />
   <include package=".upgrades" />
 
+  <subscriber
+      for="ftw.mail.mail.IMail
+           zope.lifecycleevent.interfaces.IObjectCreatedEvent"
+      handler=".subscribers.set_digitally_available"
+      />
+
+  <subscriber
+      for="opengever.mail.mail.IOGMailMarker
+           zope.lifecycleevent.interfaces.IObjectCreatedEvent"
+      handler=".mail.initalize_title"
+      />
+
+  <subscriber
+      for="opengever.mail.mail.IOGMailMarker
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".mail.initalize_title"
+      />
+
+  <subscriber
+      for="opengever.mail.mail.IOGMailMarker
+           zope.lifecycleevent.interfaces.IObjectCreatedEvent"
+      handler=".mail.initialize_metadata"
+      />
 </configure>

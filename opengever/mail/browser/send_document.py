@@ -5,14 +5,11 @@ from email.MIMEBase import MIMEBase
 from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
 from email.Utils import formatdate
-from five import grok
 from ftw.keywordwidget.widget import KeywordWidget
 from ftw.mail.inbound import createMailInContainer
-from ftw.mail.mail import IMail
 from opengever.base.source import DossierPathSourceBinder
 from opengever.dossier.interfaces import IDossierMarker
 from opengever.mail import _
-from opengever.mail.behaviors import ISendableDocsContainer
 from opengever.mail.events import DocumentSent
 from opengever.mail.interfaces import ISendDocumentConf
 from opengever.mail.utils import make_addr_header
@@ -349,17 +346,10 @@ class SendDocumentForm(form.Form):
         return False
 
 
-class SendDocumentFormView(layout.FormWrapper, grok.View):
+class SendDocumentFormView(layout.FormWrapper):
     """The View wich display the SendDocument-Form.
 
     For sending documents with per mail.
     """
 
-    grok.context(ISendableDocsContainer)
-    grok.name('send_documents')
-    grok.require('zope2.View')
     form = SendDocumentForm
-
-    def __init__(self, context, request):
-        layout.FormWrapper.__init__(self, context, request)
-        grok.View.__init__(self, context, request)

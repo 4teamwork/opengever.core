@@ -1,7 +1,6 @@
 from collective import dexteritytextindexer
 from datetime import date
 from datetime import datetime
-from five import grok
 from ftw.mail import _ as ftw_mf
 from ftw.mail import utils
 from ftw.mail.mail import IMail
@@ -22,7 +21,6 @@ from opengever.mail.interfaces import IAttachmentsDeletedEvent
 from opengever.ogds.models.user import User
 from plone.app.dexterity.behaviors import metadata
 from plone.autoform.interfaces import IFormFieldProvider
-from plone.directives import dexterity
 from plone.directives import form
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.namedfile import field
@@ -42,8 +40,6 @@ from zope.interface import Interface
 from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent import Attributes
 from zope.lifecycleevent.interfaces import IObjectCopiedEvent
-from zope.lifecycleevent.interfaces import IObjectCreatedEvent
-from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
 import os
@@ -377,8 +373,6 @@ class OGMailBase(metadata.MetadataBase):
         'message_source'])
 
 
-@grok.subscribe(IOGMailMarker, IObjectCreatedEvent)
-@grok.subscribe(IOGMailMarker, IObjectModifiedEvent)
 def initalize_title(mail, event):
     title = IOGMail(mail).title
     if not title or title == NO_SUBJECT_FALLBACK_ID:
@@ -431,7 +425,6 @@ def get_author_by_email(mail):
     return u'{0} {1}'.format(principal.lastname, principal.firstname)
 
 
-@grok.subscribe(IOGMailMarker, IObjectCreatedEvent)
 def initialize_metadata(mail, event):
     if not ogmetadata.IDocumentMetadata.providedBy(mail):
         return
@@ -445,14 +438,3 @@ def initialize_metadata(mail, event):
     mail_metadata.document_date = date_time.date()
     mail_metadata.receipt_date = date.today()
     mail_metadata.document_author = get_author_by_email(mail)
-
-
-class OGMailEditForm(dexterity.EditForm):
-    """Standard edit form, but shows the message field only in Display Mode"""
-
-    grok.context(IOGMailMarker)
-
-    def updateWidgets(self):
-        super(OGMailEditForm, self).updateWidgets()
-
-        self.groups[0].fields.get('message').mode = DISPLAY_MODE
