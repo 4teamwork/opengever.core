@@ -37,6 +37,19 @@ class TestCommittee(IntegrationTestCase):
         self.assertEqual(
             self.sablon_template, self.committee.get_toc_template())
 
+    def test_get_excerpt_template_returns_committee_template_if_available(self):
+        self.committee.excerpt_template = self.sablon_template
+
+        self.assertEqual(
+            self.sablon_template, self.committee.get_excerpt_template())
+
+    def test_get_excerpt_template_falls_back_to_container(self):
+        self.assertIsNone(self.committee.excerpt_template)
+        self.assertIsNotNone(self.committee_container.excerpt_template)
+
+        self.assertEqual(
+            self.sablon_template, self.committee.get_excerpt_template())
+
     @browsing
     def test_committee_repository_is_validated(self, browser):
         self.login(self.committee_responsible, browser)

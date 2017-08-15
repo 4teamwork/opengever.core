@@ -139,26 +139,6 @@ class TestExcerpt(FunctionalTestCase):
                     decision=u'We say yay.',
                     number=u'1'))
 
-    def test_default_excerpt_is_configured_on_commitee_container(self):
-        self.assertEqual(self.sablon_template,
-                         self.committee.get_excerpt_template())
-
-    @browsing
-    def test_excerpt_template_can_be_configured_per_commitee(self, browser):
-        self.grant("Administrator")
-        custom_template = create(
-            Builder('sablontemplate')
-            .within(self.templates)
-            .with_asset_file('sablon_template.docx'))
-
-        browser.login().open(self.committee, view='edit')
-        browser.fill({'Excerpt template': custom_template})
-        browser.css('#form-buttons-save').first.click()
-        self.assertEqual([], error_messages())
-
-        self.assertEqual(custom_template,
-                         self.committee.get_excerpt_template())
-
     @browsing
     def test_manual_excerpt_pre_fills_fields(self, browser):
         browser.login().open(self.meeting.get_url())
