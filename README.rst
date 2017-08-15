@@ -776,6 +776,12 @@ You can enable the feature by setting an environment variable:
 
     GEVER_CACHE_TEST_DB=true bin/test -m opengever.dossier.tests.test_activate
 
+There is also a binary which does that for you for just one run for convenience:
+
+.. code:: sh
+
+    bin/test-cached -m opengever.dossier.tests.test_activate
+
 You can manually remove / rebuild the caches:
 
 .. code:: sh
