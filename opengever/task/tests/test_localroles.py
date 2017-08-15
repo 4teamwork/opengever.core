@@ -153,17 +153,16 @@ class TestLocalRolesSetter(FunctionalTestCase):
         create(Builder('user').with_userid('hugo.boss'))
 
         dossier = create(Builder('dossier'))
-        task1 = create(Builder('task')
+        task = create(Builder('task')
                        .within(dossier))
         referenced_document = create(Builder('document')
-                                     .within(task1)
+                                     .within(task)
                                      .with_dummy_content()
                                      .checked_out_by('hugo.boss'))
-        task2 = create(Builder('task')
-                       .within(dossier)
-                       .relate_to(referenced_document)
-                       .having(responsible='hugo.boss',
-                               responsible_client='client1'))
+        create(Builder('task')
+               .within(dossier)
+               .relate_to(referenced_document)
+               .having(responsible='hugo.boss', responsible_client='client1'))
 
         browser.login('hugo.boss')
         # this will fail if permissions are set incorrectly

@@ -306,7 +306,7 @@ class TestOpenToClose(BaseTransitionActionTest):
         task = create(Builder('task')
                       .having(task_type='information',
                               responsible_client='additional'))
-        document = create(Builder('document').within(task))
+        create(Builder('document').within(task))
 
         self.do_transition(task)
 

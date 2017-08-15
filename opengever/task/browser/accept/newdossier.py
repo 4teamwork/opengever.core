@@ -16,7 +16,6 @@ from opengever.task.browser.accept.utils import accept_forwarding_with_successor
 from opengever.task.browser.accept.utils import accept_task_with_successor
 from opengever.task.browser.accept.utils import assign_forwarding_to_dossier
 from plone.dexterity.i18n import MessageFactory as dexterityMF
-from plone.dexterity.i18n import MessageFactory as pd_mf
 from plone.directives.form import Schema
 from plone.z3cform.layout import FormWrapper
 from Products.CMFCore.utils import getToolByName
@@ -25,15 +24,12 @@ from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
 from z3c.form.form import Form
-from z3c.form.validator import SimpleFieldValidator
 from z3c.form.validator import WidgetValidatorDiscriminators
 from z3c.relationfield.schema import RelationChoice
 from zope import schema
 from zope.component import getUtility
-from zope.component import queryMultiAdapter
 from zope.i18nmessageid import MessageFactory
 from zope.interface import Interface
-from zope.interface import Invalid
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
