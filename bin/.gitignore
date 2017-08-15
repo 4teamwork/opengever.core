@@ -1,8 +1,8 @@
 *
 !.gitignore
-!mtest
-!create-upgrade
-!create-schema-migration
 !cleanup-versions-cfg
-!remove-test-cache
+!create-schema-migration
+!create-upgrade
+!mtest
 !pinchecker
+!remove-test-cache
