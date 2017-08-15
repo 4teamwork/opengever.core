@@ -4,7 +4,6 @@ control panel.
 """
 
 from ftw.tabbedview.browser.tabbed import TabbedView
-from opengever.globalindex import Session
 from opengever.globalindex.model.task import Task
 from opengever.tabbedview.browser.tasklisting import GlobalTaskListingTab
 

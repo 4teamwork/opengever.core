@@ -146,7 +146,7 @@ class TestBumblebeeGalleryMixinGetBrains(FunctionalTestCase):
             (dossier, self.request), name="tabbedview_view-documents-gallery")
 
         document = create(Builder('document').within(dossier))
-        other_document = create(Builder('document').within(other_dossier))
+        create(Builder('document').within(other_dossier))
 
         brains = view.get_brains()
 
@@ -324,7 +324,7 @@ class TestBumblebeeGalleryMixinPreviews(FunctionalTestCase):
 
         self.request.set('documentPointer', 1)
 
-        document0 = create(Builder('document').within(dossier))
+        create(Builder('document').within(dossier))
         document1 = create(Builder('document').within(dossier))
         document2 = create(Builder('document').within(dossier))
 
@@ -341,7 +341,7 @@ class TestBumblebeeGalleryMixinPreviews(FunctionalTestCase):
 
         document0 = create(Builder('document').within(dossier))
         document1 = create(Builder('document').within(dossier))
-        document2 = create(Builder('document').within(dossier))
+        create(Builder('document').within(dossier))
 
         self.assertEqual(
             [document0.UID(), document1.UID()],

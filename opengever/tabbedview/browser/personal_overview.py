@@ -20,7 +20,6 @@ from plone.memoize.view import memoize_contextless
 from Products.CMFPlone.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from sqlalchemy.exc import OperationalError
-from zope.interface import Interface
 import AccessControl
 
 
