@@ -30,6 +30,9 @@ import json
 import transaction
 import unittest2
 
+# Squelch pyflakes about unused exports
+widget
+builders
 
 class TestCase(unittest2.TestCase):
     pass

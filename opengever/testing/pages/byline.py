@@ -1,5 +1,4 @@
 from ftw.testbrowser import browser as default_browser
-from operator import attrgetter
 
 
 def text_dict(browser=default_browser):
