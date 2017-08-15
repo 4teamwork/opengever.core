@@ -89,7 +89,6 @@ class TrashView(grok.View):
     def __call__(self):
         paths = self.request.get('paths')
         catalog = getToolByName(self.context, 'portal_catalog')
-        trashed = False
         if paths:
             for item in paths:
                 obj = self.context.restrictedTraverse(item)
@@ -124,7 +123,6 @@ class TrashView(grok.View):
 
                 trasher = ITrashable(obj)
                 trasher.trash()
-                trashed = True
                 msg = _(u'the object ${obj} trashed',
                     mapping={'obj': obj.Title().decode('utf-8')})
                 IStatusMessage(self.request).addStatusMessage(
