@@ -3,12 +3,15 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.exceptions import FormFieldNotFound
+from ftw.testbrowser.pages import editbar
+from ftw.testbrowser.pages import statusmessages
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.base.oguid import Oguid
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.model import Committee
 from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 import transaction
 
 
@@ -174,94 +177,74 @@ class TestCommittee(FunctionalTestCase):
             browser.fill({self.group_field_name: 'client1_users'})
 
 
-class TestCommitteeWorkflow(FunctionalTestCase):
+class TestCommitteeWorkflow(IntegrationTestCase):
 
-    def test_initial_state_is_active(self):
-        committee = create(Builder('committee').titled(u'My Committee'))
-        self.assertEqual(Committee.STATE_ACTIVE,
-                         committee.load_model().get_state())
+    features = ('meeting',)
 
     @browsing
-    def test_can_be_deactivated(self, browser):
-        committee = create(Builder('committee').titled(u'My Committee'))
+    def test_active_committee_can_be_deactivated(self, browser):
+        self.login(self.committee_responsible, browser)
+        browser.open(self.empty_committee)
 
-        browser.login().open(committee)
-        browser.find('Deactivate').click()
+        editbar.menu_option('Actions', 'deactivate').click()
 
         self.assertEqual(Committee.STATE_INACTIVE,
-                         committee.load_model().get_state())
-        self.assertEqual(['Committee deactivated successfully'],
-                         info_messages())
+                         self.empty_committee.load_model().get_state())
+        statusmessages.assert_message('Committee deactivated successfully')
+
+    def test_initial_state_is_active(self):
+        self.login(self.committee_responsible)
+        self.assertEqual(Committee.STATE_ACTIVE,
+                         self.empty_committee.load_model().get_state())
 
     @browsing
-    def test_deactivating_is_not_possible_when_pending_meetings_exists(self, browser):
-        committee = create(Builder('committee').titled(u'My Committee'))
-        create(Builder('meeting').having(committee=committee))
+    def test_deactivating_is_not_possible_when_pending_meetings_exists(
+            self, browser):
+        self.login(self.committee_responsible, browser)
+        browser.open(self.committee)
 
-        browser.login().open(committee)
-        browser.find('Deactivate').click()
+        editbar.menu_option('Actions', 'deactivate').click()
 
-        self.assertEqual(['Not all meetings are closed.'], error_messages())
         self.assertEqual(Committee.STATE_ACTIVE,
-                         committee.load_model().get_state())
+                         self.committee.load_model().get_state())
+        statusmessages.assert_message('Not all meetings are closed.')
 
     @browsing
-    def test_when_unscheduled_proposals_exist(self, browser):
-        repo = create(Builder('repository'))
-        dossier = create(Builder('dossier').within(repo))
-        committee = create(Builder('committee').titled(u'My Committee'))
-        create(Builder('proposal')
-               .within(dossier)
-               .having(committee=committee.load_model())
-               .as_submitted())
+    def test_deactivating_not_possible_when_unscheduled_proposals_exist(
+            self, browser):
+        self.login(self.committee_responsible, browser)
+        create(
+            Builder('proposal').within(self.dossier)
+            .having(title=u'Non-scheduled proposal',
+                    committee=self.empty_committee.load_model())
+            .as_submitted())
+        browser.open(self.empty_committee)
 
-        browser.login().open(committee)
-        browser.find('Deactivate').click()
+        editbar.menu_option('Actions', 'deactivate').click()
 
-        self.assertEqual(
-            ['There are unscheduled proposals submitted to this committee.'],
-            error_messages())
         self.assertEqual(Committee.STATE_ACTIVE,
-                         committee.load_model().get_state())
+                         self.committee.load_model().get_state())
+        statusmessages.assert_message(
+            'There are unscheduled proposals submitted to this committee.')
 
     @browsing
     def test_deactivated_comittee_can_be_reactivated(self, browser):
-        committee = create(Builder('committee')
-                           .titled(u'My Committee'))
+        self.login(self.committee_responsible, browser)
+        browser.open(self.empty_committee)
 
-        committee.load_model().deactivate()
-        transaction.commit()
-
-        browser.login().open(committee)
-        browser.find('Activate').click()
+        editbar.menu_option('Actions', 'deactivate').click()
+        editbar.menu_option('Actions', 'reactivate').click()
 
         self.assertEqual(Committee.STATE_ACTIVE,
-                         committee.load_model().get_state())
-        self.assertEqual(['Committee reactivated successfully'],
-                         info_messages())
+                         self.empty_committee.load_model().get_state())
+        statusmessages.assert_message('Committee reactivated successfully')
 
     @browsing
-    def test_add_meeting_is_not_available_on_inactive_committee(self, browser):
-        committee = create(Builder('committee')
-                           .titled(u'My Committee'))
+    def test_adding_is_not_available_in_inactive_committee(self, browser):
+        self.login(self.committee_responsible, browser)
+        browser.open(self.empty_committee)
 
-        committee.load_model().deactivate()
-        transaction.commit()
+        self.assertEqual([u'Add new', u'Actions'], editbar.menus())
 
-        browser.login().open(committee)
-        self.assertEqual(
-            [],
-            browser.css('#plone-contentmenu-factories #add-meeting'))
-
-    @browsing
-    def test_add_membership_is_not_available_on_inactive_committee(self, browser):
-        committee = create(Builder('committee')
-                           .titled(u'My Committee'))
-
-        committee.load_model().deactivate()
-        transaction.commit()
-
-        browser.login().open(committee)
-        self.assertEqual(
-            [],
-            browser.css('#plone-contentmenu-factories #add-membership'))
+        editbar.menu_option('Actions', 'deactivate').click()
+        self.assertEqual([u'Actions'], editbar.menus())

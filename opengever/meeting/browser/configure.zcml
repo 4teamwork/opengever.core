@@ -107,19 +107,10 @@
       />
 
   <browser:page
-      name="deactivate"
       for="opengever.meeting.committee.ICommittee"
+      name="committee_transition_controller"
+      class=".committeetransitioncontroller.CommitteeTransitionController"
       permission="cmf.ModifyPortalContent"
-      class=".committee.DeactivateCommittee"
-      allowed_attributes="available"
-      />
-
-  <browser:page
-      name="reactivate"
-      for="opengever.meeting.committee.ICommittee"
-      permission="cmf.ModifyPortalContent"
-      class=".committee.ReactivateCommittee"
-      allowed_attributes="available"
       />
 
   <browser:page

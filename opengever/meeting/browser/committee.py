@@ -3,8 +3,6 @@ from opengever.meeting import _
 from opengever.meeting.committee import ICommittee
 from opengever.meeting.model import Period
 from opengever.tabbedview import GeverTabMixin
-from plone import api
-from Products.Five import BrowserView
 
 
 class CommitteeOverview(grok.View, GeverTabMixin):
@@ -58,63 +56,3 @@ class CommitteeOverview(grok.View, GeverTabMixin):
     def period(self):
         period = Period.query.get_current(self.context.load_model())
         return period.get_title()
-
-
-class DeactivateCommittee(BrowserView):
-
-    transition_id = 'active-inactive'
-
-    def __call__(self):
-        model = self.context.load_model()
-
-        if model.has_pending_meetings():
-            api.portal.show_message(
-                message=_('msg_pending_meetings',
-                          default=u'Not all meetings are closed.'),
-                request=self.request, type='error')
-
-            return self.redirect()
-
-        if model.has_unscheduled_proposals():
-            api.portal.show_message(
-                message=_('msg_unscheduled_proposals',
-                          default=u'There are unscheduled proposals submitted'
-                          ' to this committee.'),
-                request=self.request, type='error')
-
-            return self.redirect()
-
-        model.deactivate()
-        api.portal.show_message(
-            message=_(u'label_committe_deactivated',
-                      default="Committee deactivated successfully"),
-            request=self.request, type='info')
-
-        return self.redirect()
-
-    def redirect(self):
-        return self.request.RESPONSE.redirect(self.context.absolute_url())
-
-    def available(self):
-        model = self.context.load_model()
-        transition = model.workflow.transitions.get(self.transition_id)
-        return transition in model.get_state().transitions
-
-
-class ReactivateCommittee(BrowserView):
-
-    transition_id = 'inactive-active'
-
-    def __call__(self):
-        self.context.load_model().reactivate()
-        api.portal.show_message(
-            message=_(u'label_committe_reactivated',
-                      default="Committee reactivated successfully"),
-            request=self.request, type='info')
-
-        return self.request.RESPONSE.redirect(self.context.absolute_url())
-
-    def available(self):
-        model = self.context.load_model()
-        transition = model.workflow.transitions.get(self.transition_id)
-        return transition in model.get_state().transitions

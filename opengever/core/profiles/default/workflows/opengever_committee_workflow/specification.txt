@@ -19,10 +19,12 @@ Committee member role description:
   such as meetings and proposals.
 
 
-
 Transitions:
   deactivate (Active => Inactive)
   reactivate (Inactive => Active)
+
+
+transition-url = %%(content_url)s/@@committee_transition_controller?transition=%(transition)s
 
 
 General:
@@ -47,4 +49,5 @@ Status Active:
 
 Status Inactive:
   A committee responsible can view.
+  A committee responsible can edit.
   A committee responsible can reactivate.
