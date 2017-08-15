@@ -1,20 +1,16 @@
-from five import grok
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models.exceptions import RecordNotFound
+from Products.Five import BrowserView
 from zExceptions import NotFound
 from zope.component.hooks import getSite
-from zope.interface import Interface
+from zope.interface import implementer
 from zope.publisher.interfaces import IPublishTraverse
 
 
-class UserDetails(grok.View):
+@implementer(IPublishTraverse)
+class UserDetails(BrowserView):
     """Displays infos about a user.
     """
-
-    grok.name('user-details')
-    grok.context(Interface)
-    grok.require('zope2.View')
-    grok.implements(IPublishTraverse)
 
     @classmethod
     def url_for(cls, userid):
@@ -33,7 +29,7 @@ class UserDetails(grok.View):
         return {'user': user,
                 'groups': user.groups}
 
-    def publishTraverse(self, request, name):
+    def publishTraverse(self, request, name):  # noqa
         """The name is the userid of the user who should be displayed.
         """
         self.userid = name

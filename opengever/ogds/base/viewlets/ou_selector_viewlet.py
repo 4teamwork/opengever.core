@@ -1,8 +1,8 @@
-from five import grok
 from opengever.ogds.base.utils import get_ou_selector
 from opengever.ogds.base.utils import ogds_service
 from plone.app.caching.interfaces import IETagValue
 from plone.app.layout.viewlets import common
+from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from sqlalchemy.exc import OperationalError
 from zope.component import adapts
@@ -38,12 +38,9 @@ class OrgUnitSelectorViewlet(common.ViewletBase):
         return get_ou_selector().available_units()
 
 
-class ChangeOrgUnitView(grok.View):
-    grok.name('change_org_unit')
-    grok.context(Interface)
-    grok.require('zope2.View')
+class ChangeOrgUnitView(BrowserView):
 
-    def render(self):
+    def __call__(self):
         unit_id = self.request.get('unit_id')
 
         if unit_id:
