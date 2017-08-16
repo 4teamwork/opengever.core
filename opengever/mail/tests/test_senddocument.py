@@ -231,8 +231,6 @@ f\xc3\xbcr Ernst Franz\r\n\r\nBesten Dank im Voraus"""
 
     @browsing
     def test_file_copy_field_not_shown_for_closed_dossier(self, browser):
-        fieldname = 'file_copy_in_dossier'
-
         dossier = create(Builder("dossier").in_state('dossier-state-resolved'))
 
         browser.login().open(dossier, view="send_documents")
