@@ -83,7 +83,7 @@ class OpengeverContentFixture(object):
     def create_users(self):
         self.administrator = self.create_user(
             'administrator', u'Nicole', u'Kohler',
-            ['Administrator', 'APIUser'])
+            ['Administrator', 'APIUser', 'CommitteeAdministrator'])
         self.dossier_responsible = self.create_user(
             'dossier_responsible', u'Robert', u'Ziegler')
         self.regular_user = self.create_user(
@@ -95,7 +95,7 @@ class OpengeverContentFixture(object):
             'secretariat_user', u'J\xfcrgen', u'K\xf6nig')
         self.committee_responsible = self.create_user(
             'committee_responsible', u'Fr\xe4nzi', u'M\xfcller',
-            ['MeetingUser', 'CommitteeAdministrator'])
+            ['MeetingUser', 'CommitteeResponsible'])
 
     @staticuid()
     def create_repository_tree(self):
@@ -163,7 +163,9 @@ class OpengeverContentFixture(object):
             title=u'Rechnungspr\xfcfungskommission',
             repository_folder=self.repofolder1,
             group_id='committee_rpk_group',
-            members=[self.administrator, self.committee_responsible]))
+            members=[self.administrator,
+                     self.committee_responsible,
+                     self.meeting_user]))
         self.register_raw('committee_id', self.committee.load_model().committee_id)
 
         self.committee_president = self.create_committee_membership(
@@ -199,7 +201,9 @@ class OpengeverContentFixture(object):
                 title=u'Kommission f\xfcr Verkehr',
                 repository_folder=self.repofolder1,
                 group_id='committee_ver_group',
-                members=[self.administrator, self.committee_responsible]))
+                members=[self.administrator,
+                         self.committee_responsible,
+                         self.meeting_user]))
         self.register_raw('empty_committee_id',
                           self.empty_committee.load_model().committee_id)
 

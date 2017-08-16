@@ -17,33 +17,44 @@ class TestCommittee(IntegrationTestCase):
     group_field_name = 'Group'
 
     def test_committee_id_is_generated(self):
+        self.login(self.administrator)
         self.assertEqual('committee-1', self.committee.getId())
 
     def test_committee_model_is_initialized_correctly(self):
+        self.login(self.administrator)
         model = self.committee.load_model()
+
         self.assertIsNotNone(model)
         self.assertEqual(Oguid.for_object(self.committee), model.oguid)
 
     def test_get_toc_template_returns_committee_template_if_available(self):
-        self.committee.toc_template = self.sablon_template
+        self.login(self.administrator)
+        self.committee.toc_template = self.as_relation_value(
+            self.sablon_template)
 
         self.assertEqual(
             self.sablon_template, self.committee.get_toc_template())
 
     def test_get_toc_template_falls_back_to_container(self):
-        self.committee_container.toc_template = self.sablon_template
+        self.login(self.administrator)
+        self.committee_container.toc_template = self.as_relation_value(
+            self.sablon_template)
 
         self.assertIsNone(self.committee.toc_template)
         self.assertEqual(
             self.sablon_template, self.committee.get_toc_template())
 
     def test_get_excerpt_template_returns_committee_template_if_available(self):
-        self.committee.excerpt_template = self.sablon_template
+        self.login(self.administrator)
+        self.committee.excerpt_template = self.as_relation_value(
+            self.sablon_template)
 
         self.assertEqual(
             self.sablon_template, self.committee.get_excerpt_template())
 
     def test_get_excerpt_template_falls_back_to_container(self):
+        self.login(self.administrator)
+
         self.assertIsNone(self.committee.excerpt_template)
         self.assertIsNotNone(self.committee_container.excerpt_template)
 
@@ -52,7 +63,7 @@ class TestCommittee(IntegrationTestCase):
 
     @browsing
     def test_committee_repository_is_validated(self, browser):
-        self.login(self.committee_responsible, browser)
+        self.login(self.administrator, browser)
 
         browser.open(self.committee_container,
                      view='++add++opengever.meeting.committee')
@@ -71,7 +82,7 @@ class TestCommittee(IntegrationTestCase):
 
     @browsing
     def test_committee_can_be_created_in_browser(self, browser):
-        self.login(self.committee_responsible, browser)
+        self.login(self.administrator, browser)
 
         browser.open(self.committee_container,
                      view='++add++opengever.meeting.committee')
