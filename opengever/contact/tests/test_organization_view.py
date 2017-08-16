@@ -25,9 +25,9 @@ class TestOrganizationView(FunctionalTestCase):
     @browsing
     def test_shows_archived_organizations(self, browser):
         organization = create(Builder('organization').named(u'4teamwork'))
-        archived_organization = create(Builder('archived_organization').having(
-            contact=organization,
-            name=u'habegger b\xfchlmann & co'))
+        create(Builder('archived_organization')
+               .having(contact=organization,
+                       name=u'habegger b\xfchlmann & co'))
 
         browser.login().open(organization.get_url())
 

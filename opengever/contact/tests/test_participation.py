@@ -64,22 +64,17 @@ class TestDossierParticipation(FunctionalTestCase):
                            .id('peter')
                            .having(firstname=u'Hans', lastname=u'Peter')
                            .as_contact_adapter())
-        ogds_participation = create(
-            Builder('ogds_user_participation')
-            .for_dossier(dossier)
-            .for_ogds_user(ogds_user))
-        peters_participation = create(
-            Builder('contact_participation').having(
-                contact=peter,
-                dossier_oguid=Oguid.for_object(dossier)))
-        organization_participation = create(
-            Builder('contact_participation').having(
-                contact=organization,
-                dossier_oguid=Oguid.for_object(dossier)))
-        org_role_participation = create(
-            Builder('org_role_participation').having(
-                org_role=org_role,
-                dossier_oguid=Oguid.for_object(dossier)))
+        create(Builder('ogds_user_participation')
+               .for_dossier(dossier)
+               .for_ogds_user(ogds_user))
+        create(Builder('contact_participation')
+               .having(contact=peter, dossier_oguid=Oguid.for_object(dossier)))
+        create(Builder('contact_participation')
+               .having(contact=organization,
+                       dossier_oguid=Oguid.for_object(dossier)))
+        create(Builder('org_role_participation')
+               .having(org_role=org_role,
+                       dossier_oguid=Oguid.for_object(dossier)))
 
         original_participations = Participation.query.by_dossier(dossier).all()
 
@@ -469,9 +464,9 @@ class TestEditForm(FunctionalTestCase):
                            .id('peter')
                            .having(firstname=u'Hans', lastname=u'Peter')
                            .as_contact_adapter())
-        participation = create(Builder('ogds_user_participation')
-                               .for_dossier(self.dossier)
-                               .for_ogds_user(ogds_user))
+        create(Builder('ogds_user_participation')
+               .for_dossier(self.dossier)
+               .for_ogds_user(ogds_user))
 
         browser.login().open(self.dossier,
                              view=u'tabbedview_view-participations')
