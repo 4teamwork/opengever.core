@@ -1,7 +1,5 @@
 from Acquisition import aq_inner
-from five import grok
 from ftw.mail import utils
-from ftw.mail.mail import IMail
 from ftw.mail.mail import View
 from opengever.base import _ as ogbmf
 from opengever.document import _ as ogdmf
@@ -72,9 +70,6 @@ class PreviewTab(MailAttachmentsMixin, View):
 
 class OverviewTab(MailAttachmentsMixin, Overview):
     """Render an overview of the mailitem."""
-
-    grok.context(IMail)
-    grok.require('zope2.View')
 
     # override template lookup, its realive to this file
     file_template = ViewPageTemplateFile('templates/file.pt')

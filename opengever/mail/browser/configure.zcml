@@ -69,4 +69,15 @@
       class=".mail_forms.EditForm"
       permission="cmf.ModifyPortalContent"
       />
+
+  <configure package="opengever.document.browser">
+    <browser:page
+        name="tabbedview_view-overview"
+        for="opengever.mail.mail.IMail"
+        class="opengever.mail.browser.mail.OverviewTab"
+        permission="zope2.View"
+        template="templates/overview.pt"
+        />
+  </configure>
+
 </configure>
