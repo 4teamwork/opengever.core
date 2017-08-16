@@ -91,6 +91,7 @@
     </permission-map>
     <permission-map name="Add portal content" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="CMFEditions: Access previous versions" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
@@ -208,9 +209,11 @@
       <permission-role>CommitteeAdministrator</permission-role>
       <permission-role>CommitteeAdministrator</permission-role>
       <permission-role>Manager</permission-role>
+      <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="ftw.mail: Add Inbound Mail" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="iterate : Check in content" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
@@ -222,12 +225,14 @@
     </permission-map>
     <permission-map name="opengever.contact: Add contact" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="opengever.contact: Add contactfolder" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="opengever.contact: Add person" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="opengever.contact: Edit person" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
@@ -241,6 +246,7 @@
     </permission-map>
     <permission-map name="opengever.document: Add document" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="opengever.document: Cancel" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
@@ -261,43 +267,54 @@
     <permission-map name="opengever.document: Modify archival file" acquired="False"/>
     <permission-map name="opengever.dossier: Add businesscasedossier" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="opengever.dossier: Add dossiertemplate" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="opengever.dossier: Add templatefolder" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="opengever.dossier: Destroy dossier" acquired="False"/>
     <permission-map name="opengever.inbox: Add Forwarding" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="opengever.inbox: Add Inbox" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="opengever.inbox: Add Year Folder" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="opengever.meeting: Add Committee" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="opengever.meeting: Add CommitteeContainer" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="opengever.meeting: Add Member" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="opengever.meeting: Add Proposal" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="opengever.meeting: Add Proposal Template" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="opengever.meeting: Add Sablon Template" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="opengever.private: Add private dossier" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="opengever.private: Add private folder" acquired="False">
       <permission-role>Manager</permission-role>
@@ -312,9 +329,11 @@
     <permission-map name="opengever.repository: Unlock Reference Prefix" acquired="False"/>
     <permission-map name="opengever.task: Add task" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="opengever.task: Add task comment" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="opengever.task: Edit task" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>

@@ -41,13 +41,20 @@ General:
 Initial Status: Active
 Status Active:
   A committee member can view.
+
   A committee responsible can view.
   A committee responsible can add.
   A committee responsible can edit.
   A committee responsible can deactivate.
 
+  A manager can perform the same actions as a committee responsible.
+
 
 Status Inactive:
+  A committee member can view.
+
   A committee responsible can view.
   A committee responsible can edit.
   A committee responsible can reactivate.
+
+  A manager can perform the same actions as a committee responsible.

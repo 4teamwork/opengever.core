@@ -19,6 +19,7 @@ Meeting user role description:
 
 
 General:
+  A manager can always add.
   A manager can always view.
   A manager can always edit.
   A manager can always manage security.
