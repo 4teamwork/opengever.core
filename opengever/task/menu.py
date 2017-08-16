@@ -1,17 +1,16 @@
-from five import grok
 from opengever.base.menu import FilteredPostFactoryMenu
 from opengever.task import _
 from opengever.task.task import ITask
 from zope.interface import Interface
+from zope.component import adapter
 
 
+@adapter(ITask, Interface)
 class TaskPostFactoryMenu(FilteredPostFactoryMenu):
     """Change the name of a task that appears in the add menu of task to
     subtask.
 
     """
-    grok.adapts(ITask, Interface)
-
     def is_filtered(self, factory):
         return factory['extra']['id'] == u'ftw-mail-mail'
 

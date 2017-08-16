@@ -31,6 +31,8 @@
 
   <adapter factory=".repositoryroot.RepositoryRootNameFromTitle" />
 
+  <adapter factory=".menu.RepositoryFolderPostFactoryMenu" />
+
   <utility
       factory=".vocabularies.RestrictedAddableDossiersVocabularyFactory"
       name="opengever.repository.RestrictedAddableDossiersVocabulary"

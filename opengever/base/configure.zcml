@@ -118,4 +118,8 @@
       provides="plone.app.contentmenu.interfaces.IContentMenuItem"
       />
 
+  <adapter factory=".menu.FilteredPostFactoryMenu" />
+
+  <adapter factory=".menu.PloneSitePostFactoryMenu" />
+
 </configure>

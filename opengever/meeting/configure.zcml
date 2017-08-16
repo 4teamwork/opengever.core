@@ -63,4 +63,5 @@
   <adapter factory=".tabs.proposallisting.ProposalTableSource" />
   <adapter factory=".tabs.submittedproposallisting.SubmittedProposalTableSource" />
 
+  <adapter factory=".menu.CommitteePostFactoryMenu" />
 </configure>

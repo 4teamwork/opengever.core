@@ -80,4 +80,6 @@
       permission="cmf.ModifyPortalContent"
       />
 
+  <adapter factory=".menu.InboxPostFactoryMenu" />
+
 </configure>

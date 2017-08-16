@@ -1,10 +1,11 @@
-from five import grok
 from ftw.contentmenu.interfaces import IContentmenuPostFactoryMenu
 from ftw.contentmenu.menu import CombinedActionsWorkflowMenu
 from opengever.meeting import is_meeting_feature_enabled
 from plone.app.contentmenu.interfaces import IDisplaySubMenuItem
 from plone.app.contentmenu.menu import DisplaySubMenuItem
 from Products.CMFPlone.interfaces import IPloneSiteRoot
+from zope.component import adapter
+from zope.interface import implementer
 from zope.interface import implements
 from zope.interface import Interface
 
@@ -44,15 +45,14 @@ def order_factories(context, factories):
     return all_factories
 
 
-class FilteredPostFactoryMenu(grok.MultiAdapter):
+@implementer(IContentmenuPostFactoryMenu)
+@adapter(Interface, Interface)
+class FilteredPostFactoryMenu(object):
     """Build a customized factory menu by allowing factories to be filtered and
     renamed.
 
     Concrete filtering / renaming can be implemented by subclasses.
     """
-
-    grok.adapts(Interface, Interface)
-    grok.implements(IContentmenuPostFactoryMenu)
 
     def __init__(self, context, request):
         self.context = context
@@ -81,8 +81,8 @@ class FilteredPostFactoryMenu(grok.MultiAdapter):
         return order_factories(self.context, filtered_factories)
 
 
+@adapter(IPloneSiteRoot, Interface)
 class PloneSitePostFactoryMenu(FilteredPostFactoryMenu):
-    grok.adapts(IPloneSiteRoot, Interface)
 
     def is_filtered(self, factory):
         factory_id = factory.get('id')

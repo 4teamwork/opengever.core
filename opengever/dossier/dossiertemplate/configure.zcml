@@ -39,5 +39,6 @@
       permission="zope2.View"
       />
 
+  <adapter factory=".menu.DossierTemplatePostFactoryMenu" />
 
 </configure>

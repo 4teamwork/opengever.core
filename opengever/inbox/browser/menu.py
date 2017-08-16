@@ -1,15 +1,14 @@
-from five import grok
 from opengever.base.menu import FilteredPostFactoryMenu
 from opengever.inbox.inbox import IInbox
+from zope.component import adapter
 from zope.interface import Interface
 
 
+@adapter(IInbox, Interface)
 class InboxPostFactoryMenu(FilteredPostFactoryMenu):
     """Remove the mail, forwarding and yearfolder action from the factory menu.
     And use the standard ordering.
     """
-
-    grok.adapts(IInbox, Interface)
 
     def is_filtered(self, factory):
         return factory['extra']['id'] in [
