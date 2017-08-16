@@ -1,102 +1,52 @@
-# -*- coding: utf-8 -*-
-
 from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
-from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
-from opengever.meeting.committeecontainer import ICommitteeContainer
 from opengever.testing import add_languages
 from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 
 
-class TestCommitteeContainer(FunctionalTestCase):
+class TestCommitteeContainer(IntegrationTestCase):
 
-    layer = OPENGEVER_FUNCTIONAL_MEETING_LAYER
-
-    def setUp(self):
-        super(TestCommitteeContainer, self).setUp()
-        self.grant('Manager')
-        self.template = create(
-            Builder('sablontemplate')
-            .without_default_title()
-            .attach_file_containing("blub blub", name=u't\xf6st.txt'))
-
-    @browsing
-    def test_adding(self, browser):
-        self.grant('Manager')
-        add_languages(['de-ch'])
-        browser.login().open()
-        factoriesmenu.add('Committee Container')
-        browser.fill({'Title': u'Committee Container',
-                      'Protocol template': self.template,
-                      'Excerpt template': self.template}).save()
-
-        self.assertTrue(ICommitteeContainer.providedBy(browser.context))
-
-    @browsing
-    def test_is_only_addable_by_manager(self, browser):
-        browser.login().open()
-
-        self.grant('Administrator')
-        browser.reload()
-        self.assertNotIn(
-            'Committee Container',
-            factoriesmenu.addable_types()
-            )
-
-        self.grant('Manager')
-        browser.reload()
-        self.assertIn(
-            'Committee Container',
-            factoriesmenu.addable_types()
-            )
+    features = ('meeting',)
 
     @browsing
     def test_supports_translated_title(self, browser):
+        self.login(self.manager, browser)
         add_languages(['de-ch', 'fr-ch'])
-        browser.login().open(view='++add++opengever.meeting.committeecontainer')
+        browser.open()
+        factoriesmenu.add('Committee Container')
         browser.fill({'Title (German)': u'Sitzungen',
                       'Title (French)': u's\xe9ance',
-                      'Protocol template': self.template,
-                      'Excerpt template': self.template,
-                      'Table of contents template': self.template})
-
+                      'Protocol template': self.sablon_template,
+                      'Excerpt template': self.sablon_template,
+                      'Table of contents template': self.sablon_template})
         browser.find('Save').click()
 
-        browser.find(u'Français').click()
+        browser.find(u'Fran\xe7ais').click()
         self.assertEquals(u's\xe9ance', browser.css('h1').first.text)
 
         browser.find('Deutsch').click()
         self.assertEquals(u'Sitzungen', browser.css('h1').first.text)
 
     def test_get_toc_template(self):
-        toc_template = create(
-            Builder('sablontemplate')
-            .attach_file_containing("blabla", name=u'toc.docx'))
+        self.login(self.manager)
 
-        container = create(
-            Builder('committee_container').having(
-                protocol_template=self.template,
-                excerpt_template=self.template,
-                toc_template=toc_template))
+        self.assertIsNone(self.committee_container.toc_template)
+        self.assertIsNone(self.committee_container.get_toc_template())
 
-        self.assertEqual(toc_template, container.get_toc_template())
+        self.committee_container.toc_template = self.as_relation_value(
+            self.sablon_template)
 
-    @browsing
-    def test_portlets_inheritance_is_blocked(self, browser):
-        toc_template = create(
-            Builder('sablontemplate')
-            .attach_file_containing("blabla", name=u'toc.docx'))
+        self.assertEqual(
+            self.sablon_template, self.committee_container.get_toc_template())
 
-        container = create(
-            Builder('committee_container').having(
-                protocol_template=self.template,
-                excerpt_template=self.template,
-                toc_template=toc_template))
-
-        self.assert_portlet_inheritance_blocked('plone.leftcolumn', container)
+    def test_portlets_inheritance_is_blocked(self):
+        self.login(self.manager)
+        self.assert_portlet_inheritance_blocked(
+            'plone.leftcolumn', self.committee_container)
 
 
 class TestCommitteesTab(FunctionalTestCase):
