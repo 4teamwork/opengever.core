@@ -77,7 +77,7 @@ class PatchCMFCatalogAware(MonkeyPatch):
             return original_reindexObject(self, idxs)
 
         from Products.CMFCore.CMFCatalogAware import CMFCatalogAware
-        __patch_refs__ = False
+        locals()['__patch_refs__'] = False
         original_indexObject = CMFCatalogAware.indexObject
         original_unindexObject = CMFCatalogAware.unindexObject
         original_reindexObject = CMFCatalogAware.reindexObject

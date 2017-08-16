@@ -6,7 +6,6 @@ from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.testing import add_languages
 from opengever.testing import FunctionalTestCase
-from opengever.testing import set_preferred_language
 from plone.uuid.interfaces import IUUID
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent

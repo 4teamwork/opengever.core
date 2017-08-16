@@ -68,13 +68,13 @@ class TestTransporter(FunctionalTestCase):
 
     def test_transports_tasks_correctly(self):
         source_dossier = create(Builder("dossier").titled(u"Source"))
-        target_dossier = create(Builder("dossier").titled(u"Target"))
+        create(Builder("dossier").titled(u"Target"))
         task = create(Builder("task")
                       .within(source_dossier)
                       .titled(u'Fo\xf6')
                       .having(deadline=date(2014, 7, 1)))
 
-        transported_task = Transporter().transport_from(
+        Transporter().transport_from(
             source_dossier, 'client1', '/'.join(task.getPhysicalPath()))
 
     def test_transport_to_with_elevated_privileges(self):
