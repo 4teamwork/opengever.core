@@ -1,7 +1,6 @@
 from opengever.base.pdfconverter import is_pdfconverter_enabled
 from opengever.document.browser.download import DownloadConfirmationHelper
 from opengever.document.interfaces import ICheckinCheckoutManager
-from opengever.mail.mail import IOGMail
 from opengever.officeconnector.helpers import is_officeconnector_attach_feature_enabled  # noqa
 from plone import api
 from plone.locking.interfaces import IRefreshableLockable

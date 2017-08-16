@@ -6,7 +6,6 @@ from five import grok
 from opengever.document.document import IDocumentSchema
 from plone.dexterity import filerepresentation
 from plone.memoize.instance import memoize
-from rwproperty import getproperty, setproperty
 from StringIO import StringIO
 from zope.filerepresentation.interfaces import IRawReadFile, IRawWriteFile
 import tempfile
@@ -72,23 +71,23 @@ class DocumentWriteFile(filerepresentation.DefaultWriteFile, grok.Adapter):
     def filefield(self):
         return IDocumentSchema.get('file').get(self.context)
 
-    @getproperty
+    @property
     def mimeType(self):
         return self.filefield.contentType
 
-    @setproperty
+    @mimeType.setter
     def mimeType(self, value):
         self.filefield.contentType = value
 
-    @getproperty
+    @property
     def encoding(self):
         return 'utf8'
 
-    @getproperty
+    @property
     def name(self):
         return self.filefield.filename
 
-    @setproperty
+    @name.setter
     def name(self, value):
         self.filefield.filename = value
 
