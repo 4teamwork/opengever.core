@@ -1,11 +1,12 @@
 from collective import dexteritytextindexer
-from five import grok
 from ftw.mail.mail import IMail
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from plone.indexer import indexer
 from Products.CMFDiffTool.utils import safe_utf8
+from zope.component import adapter
 from zope.component import getAdapter, getUtility
+from zope.interface import implementer
 
 
 @indexer(IMail)
@@ -15,15 +16,12 @@ def checked_out(obj):
     empty string."""
 
     return ''
-grok.global_adapter(checked_out, name='checked_out')
 
 
-class SearchableTextExtender(grok.Adapter):
+@implementer(dexteritytextindexer.IDynamicTextIndexExtender)
+@adapter(IMail)
+class SearchableTextExtender(object):
     """Specifix SearchableText Extender for the mail"""
-
-    grok.context(IMail)
-    grok.name('IOGMail')
-    grok.implements(dexteritytextindexer.IDynamicTextIndexExtender)
 
     def __init__(self, context):
         self.context = context

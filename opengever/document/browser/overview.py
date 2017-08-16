@@ -1,5 +1,4 @@
 from AccessControl import getSecurityManager
-from five import grok
 from ftw import bumblebee
 from opengever.base import _ as ogbmf
 from opengever.base.browser import edit_public_trial
@@ -9,7 +8,6 @@ from opengever.document import _
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.browser import archival_file_form
 from opengever.document.browser.actionbuttons import ActionButtonRendererMixin
-from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.dossier.base import DOSSIER_STATES_CLOSED
 from opengever.meeting import is_meeting_feature_enabled
@@ -17,7 +15,7 @@ from opengever.meeting.model import SubmittedDocument
 from opengever.ogds.base.actor import Actor
 from opengever.tabbedview import GeverTabMixin
 from plone import api
-from plone.directives.dexterity import DisplayForm
+from plone.dexterity.browser.view import DefaultView
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from Products.CMFCore.utils import getToolByName
 from Products.MimetypesRegistry.common import MimeTypeException
@@ -120,17 +118,12 @@ class TemplateRow(CustomRow):
         return self.renderer(self.view)
 
 
-class Overview(DisplayForm, GeverTabMixin, ActionButtonRendererMixin):
+class Overview(DefaultView, GeverTabMixin, ActionButtonRendererMixin):
     """File details overview.
     """
 
     is_on_detail_view = True
     is_overview_tab = True
-
-    grok.context(IDocumentSchema)
-    grok.name('tabbedview_view-overview')
-    grok.template('overview')
-    grok.require('zope2.View')
 
     show_searchform = False
 

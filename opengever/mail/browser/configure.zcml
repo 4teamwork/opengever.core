@@ -48,4 +48,36 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      name="extract_attachments"
+      for="ftw.mail.mail.IMail"
+      class=".extract_attachments.ExtractAttachments"
+      permission="zope2.View"
+      template="templates/extract_attachments.pt"
+      />
+
+  <browser:page
+      name="send_documents"
+      for="opengever.mail.behaviors.ISendableDocsContainer"
+      class=".send_document.SendDocumentFormView"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="edit"
+      for="opengever.mail.mail.IOGMailMarker"
+      class=".mail_forms.EditForm"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <configure package="opengever.document.browser">
+    <browser:page
+        name="tabbedview_view-overview"
+        for="opengever.mail.mail.IMail"
+        class="opengever.mail.browser.mail.OverviewTab"
+        permission="zope2.View"
+        template="templates/overview.pt"
+        />
+  </configure>
+
 </configure>
