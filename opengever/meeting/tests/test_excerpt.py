@@ -2,48 +2,37 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import statusmessages
-from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.document.interfaces import ICheckinCheckoutManager
-from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
 from zope.component import getMultiAdapter
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
 
 
-class TestSyncExcerpt(FunctionalTestCase):
+class TestSyncExcerpt(IntegrationTestCase):
 
-    layer = OPENGEVER_FUNCTIONAL_MEETING_LAYER
+    features = ('meeting',)
 
     def setUp(self):
         super(TestSyncExcerpt, self).setUp()
-        self.repository_root, self.repository_folder = create(
-            Builder('repository_tree'))
-        self.dossier = create(
-            Builder('dossier').within(self.repository_folder))
-        self.container = create(Builder('committee_container'))
-        self.committee = create(Builder('committee').within(self.container))
 
-        self.document_in_dossier = create(
-            Builder('document').within(self.dossier))
+        # XXX OMG - this should be in the fixture somehow, or at least be
+        # build-able in fewer lines.
+        self.login(self.committee_responsible)
+
+        self.document_in_dossier = self.document
         self.excerpt_in_dossier = create(
             Builder('generated_excerpt')
             .for_document(self.document_in_dossier))
-        self.proposal = create(
-            Builder('proposal')
-            .within(self.dossier)
-            .having(
-                committee=self.committee.load_model(),
-                excerpt_document=self.excerpt_in_dossier)
-            .as_submitted())
-        self.submitted_proposal = self.proposal.load_model().submitted_oguid.resolve_object()
+        self.submitted_proposal.load_model().excerpt_document = self.excerpt_in_dossier
+
         self.document_in_proposal = create(
             Builder('document')
             .within(self.submitted_proposal))
         self.excerpt_in_proposal = create(
             Builder('generated_excerpt')
             .for_document(self.document_in_proposal))
-        self.proposal.load_model().submitted_excerpt_document = self.excerpt_in_proposal
+        self.submitted_proposal.load_model().submitted_excerpt_document = self.excerpt_in_proposal
 
     def test_updates_excerpt_in_dossier_after_checkin(self):
         self.assertEqual(0, self.document_in_proposal.get_current_version())
