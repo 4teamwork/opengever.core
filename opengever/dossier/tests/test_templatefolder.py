@@ -36,7 +36,6 @@ from plone.registry.interfaces import IRegistry
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getMultiAdapter
 from zope.component import getUtility
-import re
 import transaction
 
 
@@ -250,11 +249,10 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
                                   zip_code=u'1234',
                                   city=u'Hinterkappelen',
                                   country=u'Schweiz'))
-        address2 = create(Builder('address')
-                          .for_contact(peter)
-                          .labeled(u'Home')
-                          .having(street=u'Hauptstrasse 1',
-                                  city=u'Vorkappelen'))
+        create(Builder('address')
+               .for_contact(peter)
+               .labeled(u'Home')
+               .having(street=u'Hauptstrasse 1', city=u'Vorkappelen'))
         mailaddress = create(Builder('mailaddress')
                              .for_contact(peter)
                              .having(address=u'foo@example.com'))
@@ -320,13 +318,13 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
         org_role = create(Builder('org_role').having(
             person=peter, organization=organization, function=u'cheffe'))
 
-        address1 = create(Builder('address')
-                          .for_contact(organization)
-                          .labeled(u'Home')
-                          .having(street=u'Musterstrasse 283',
-                                  zip_code=u'1234',
-                                  city=u'Hinterkappelen',
-                                  country=u'Schweiz'))
+        create(Builder('address')
+               .for_contact(organization)
+               .labeled(u'Home')
+               .having(street=u'Musterstrasse 283',
+                       zip_code=u'1234',
+                       city=u'Hinterkappelen',
+                       country=u'Schweiz'))
         mailaddress = create(Builder('mailaddress')
                              .for_contact(organization)
                              .having(address=u'foo@example.com'))

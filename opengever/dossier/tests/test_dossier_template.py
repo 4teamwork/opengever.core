@@ -362,9 +362,9 @@ class TestDossierTemplateAddWizard(FunctionalTestCase):
 
     @browsing
     def test_selectable_templates_are_restricted_when_addable_templates_are_selected(self, browser):
-        template1 = create(Builder("dossiertemplate")
-                           .within(self.templatefolder)
-                           .titled(u"Template 1"))
+        create(Builder("dossiertemplate")
+               .within(self.templatefolder)
+               .titled(u"Template 1"))
         template2 = create(Builder("dossiertemplate")
                            .within(self.templatefolder)
                            .titled(u"Template 2"))
@@ -571,9 +571,9 @@ class TestDossierTemplateAddWizard(FunctionalTestCase):
                           .within(self.templatefolder)
                           .titled(u'Template'))
 
-        template_subdossier = create(Builder("dossiertemplate")
-                                     .within(template)
-                                     .titled(u'Subdossier'))
+        create(Builder("dossiertemplate")
+               .within(template)
+               .titled(u'Subdossier'))
 
         self.leaf_node.restrictedTraverse(
             'add-dossier-from-template').form.recursive_content_creation
