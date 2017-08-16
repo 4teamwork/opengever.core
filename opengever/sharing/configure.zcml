@@ -1,7 +1,6 @@
 <configure
-    xmlns:zope="http://namespaces.zope.org/zope"
+    xmlns="http://namespaces.zope.org/zope"
     xmlns:plone="http://namespaces.plone.org/plone"
-    xmlns:grok="http://namespaces.zope.org/grok"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     xmlns:five="http://namespaces.zope.org/five"
     xmlns:i18n="http://namespaces.zope.org/i18n"
@@ -12,8 +11,6 @@
 
   <include package="plone.app.workflow" />
   <include package=".browser" />
-
-  <grok:grok package="." />
 
   <i18n:registerTranslations directory="locales" />
 
@@ -40,5 +37,14 @@
       provides=".behaviors.IDossier"
       />
 
+  <utility
+      factory=".utilities.AdministratorRole"
+      name="Administrator"
+      />
+
+  <utility
+      factory=".utilities.PublisherRole"
+      name="Publisher"
+      />
 
 </configure>
