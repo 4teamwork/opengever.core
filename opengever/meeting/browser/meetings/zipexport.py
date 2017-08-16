@@ -7,7 +7,6 @@ from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
 from StringIO import StringIO
 from ZPublisher.Iterators import filestream_iterator
-import cgi
 import os
 import pytz
 

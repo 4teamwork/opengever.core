@@ -51,8 +51,7 @@ class TestCommittee(FunctionalTestCase):
     def test_committee_repository_is_validated(self, browser):
         parent_repo = create(Builder('repository')
                              .within(self.repo_root))
-        leaf_repo = create(Builder('repository')
-                           .within(parent_repo))
+        create(Builder('repository').within(parent_repo))
 
         self.grant('Administrator')
         browser.login()
@@ -160,9 +159,10 @@ class TestCommittee(FunctionalTestCase):
 
     @browsing
     def test_committee_group_is_not_editable_for_users_with_missing_permission(self, browser):
-        user = create(Builder('user')
-                      .named('Hugo', 'Boss')
-                      .in_groups('client1_users'))
+        create(Builder('user')
+               .named('Hugo', 'Boss')
+               .in_groups('client1_users'))
+
         committee = create(Builder('committee')
                            .within(self.container)
                            .titled(u'My Committee')
@@ -210,10 +210,10 @@ class TestCommitteeWorkflow(FunctionalTestCase):
         repo = create(Builder('repository'))
         dossier = create(Builder('dossier').within(repo))
         committee = create(Builder('committee').titled(u'My Committee'))
-        proposal = create(Builder('proposal')
-                          .within(dossier)
-                          .having(committee=committee.load_model())
-                          .as_submitted())
+        create(Builder('proposal')
+               .within(dossier)
+               .having(committee=committee.load_model())
+               .as_submitted())
 
         browser.login().open(committee)
         browser.find('Deactivate').click()

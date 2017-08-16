@@ -21,7 +21,6 @@ from opengever.meeting.protocol import AgendaItemListProtocolData
 from opengever.meeting.protocol import ExcerptProtocolData
 from opengever.meeting.protocol import ProtocolData
 from opengever.meeting.sablon import Sablon
-from opengever.meeting.sablon import Sablon
 from opengever.ogds.base.utils import decode_for_json
 from os.path import join
 from plone import api

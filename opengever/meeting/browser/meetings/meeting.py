@@ -168,7 +168,7 @@ class AddMeetingDossierView(WizzardWrappedAddForm):
 
                 committee_oguid = get_committee_oguid()
                 dossier = self.create_meeting_dossier(data)
-                meeting = self.create_meeting(dossier, committee_oguid)
+                self.create_meeting(dossier, committee_oguid)
 
                 api.portal.show_message(
                     _(u"The meeting and its dossier were created successfully"),

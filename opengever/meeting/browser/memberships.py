@@ -6,9 +6,7 @@ from opengever.base.browser.modelforms import ModelAddForm
 from opengever.base.browser.modelforms import ModelEditForm
 from opengever.meeting.model import Membership
 from plone.directives import form
-from z3c.form import field
 from z3c.form.interfaces import ActionExecutionError
-from z3c.form.interfaces import INPUT_MODE
 from zope import schema
 from zope.interface import Invalid
 

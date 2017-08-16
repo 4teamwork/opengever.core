@@ -8,13 +8,11 @@ from opengever.base.security import elevated_privileges
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import IObjectCheckedInEvent
 from opengever.document.interfaces import IObjectRevertedToVersion
-from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.command import UpdateExcerptInDossierCommand
 from opengever.meeting.model import GeneratedExcerpt
 from opengever.meeting.model import Proposal
 from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.proposal import IProposal
-from opengever.meeting.proposal import ISubmittedProposal
 from plone import api
 from zope.component import getUtility
 from zope.component.interfaces import ComponentLookupError

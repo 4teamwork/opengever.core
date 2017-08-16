@@ -1,7 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
-from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.meeting.model import Meeting
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.testing import FunctionalTestCase
