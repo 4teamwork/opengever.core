@@ -77,4 +77,12 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="opengever.document.document.IDocumentSchema"
+      name="tabbedview_view-overview"
+      class=".overview.Overview"
+      permission="zope2.View"
+      template="templates/overview.pt"
+      />
+
 </configure>
