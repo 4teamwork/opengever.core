@@ -1,13 +1,11 @@
 from AccessControl.users import nobody
 from datetime import date
 from datetime import timedelta
-from five import grok
 from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.oguid import Oguid
 from opengever.base.source import DossierPathSourceBinder
 from opengever.dossier.behaviors.dossier import IDossier
-from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.task.activities import TaskAddedActivity
@@ -134,17 +132,10 @@ class SelectTaskTemplateFolderWizardStep(BaseWizardStepForm, Form):
             review_state='tasktemplatefolder-state-activ'))
 
 
-class TriggerTaskTemlateFolderView(FormWrapper, grok.View):
+class TriggerTaskTemlateFolderView(FormWrapper):
     """View to render the form to create a new period."""
 
-    grok.context(IDossierMarker)
-    grok.name('add-tasktemplate')
-    grok.require('cmf.AddPortalContent')
     form = SelectTaskTemplateFolderWizardStep
-
-    def __init__(self, *args, **kwargs):
-        FormWrapper.__init__(self, *args, **kwargs)
-        grok.View.__init__(self, *args, **kwargs)
 
 
 @provider(IContextAwareDefaultFactory)
@@ -322,12 +313,5 @@ class SelectTaskTemplatesWizardStep(BaseWizardStepForm, Form):
         alsoProvides(task, IFromTasktemplateGenerated)
 
 
-class SelectTaskTemplatesView(FormWrapper, grok.View):
-    grok.context(IDossierMarker)
-    grok.name('select-tasktemplates')
-    grok.require('cmf.AddPortalContent')
+class SelectTaskTemplatesView(FormWrapper):
     form = SelectTaskTemplatesWizardStep
-
-    def __init__(self, *args, **kwargs):
-        FormWrapper.__init__(self, *args, **kwargs)
-        grok.View.__init__(self, *args, **kwargs)
