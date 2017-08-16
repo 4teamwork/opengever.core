@@ -17,6 +17,31 @@
 
   <adapter factory=".constrains.RepositoryFolderConstrainTypes" />
 
+  <adapter
+      factory=".indexers.title_de_indexer"
+      name="title_de"
+      />
+
+  <adapter
+      factory=".indexers.title_fr_indexer"
+      name="title_fr"
+      />
+
+  <adapter factory=".repositoryfolder.NameFromTitle" />
+
+  <adapter factory=".repositoryroot.RepositoryRootNameFromTitle" />
+
+  <utility
+      factory=".vocabularies.RestrictedAddableDossiersVocabularyFactory"
+      name="opengever.repository.RestrictedAddableDossiersVocabulary"
+      />
+
+  <subscriber
+      for="opengever.repository.interfaces.IRepositoryFolder
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".subscribers.update_reference_prefixes"
+      />
+
   <!-- Register locales translations -->
   <i18n:registerTranslations directory="locales" />
 

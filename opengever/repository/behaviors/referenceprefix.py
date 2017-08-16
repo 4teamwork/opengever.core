@@ -1,5 +1,4 @@
 from Acquisition import aq_parent, aq_inner
-from five import grok
 from opengever.base.interfaces import IReferenceNumberPrefix as PrefixAdapter
 from opengever.repository import _
 from plone.directives import form
@@ -9,8 +8,6 @@ from zope import schema
 from zope.interface import alsoProvides
 from zope.interface import Interface
 from zope.interface import provider
-from zope.lifecycleevent.interfaces import IObjectAddedEvent
-from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 from zope.schema.interfaces import IContextAwareDefaultFactory
 
 
@@ -79,8 +76,6 @@ class IReferenceNumberPrefixMarker(Interface):
     """
 
 
-@grok.subscribe(IReferenceNumberPrefixMarker, IObjectAddedEvent)
-@grok.subscribe(IReferenceNumberPrefixMarker, IObjectModifiedEvent)
 def saveReferenceNumberPrefix(obj, event):
     """When an object providing IReferenceNumberPrefixMarker (repository
     folders) gets added or has been modified, make sure it has

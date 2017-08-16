@@ -1,11 +1,12 @@
 from zope.schema.vocabulary import SimpleVocabulary
 from Products.CMFCore.PortalFolder import PortalFolderBase
-from five import grok
-from zope.schema.interfaces import IVocabularyFactory
 from zope.i18n import translate
+from zope.schema.interfaces import IVocabularyFactory
+from zope.interface import implementer
 
 
-class RestrictedAddableDossiersVocabularyFactory(grok.GlobalUtility):
+@implementer(IVocabularyFactory)
+class RestrictedAddableDossiersVocabularyFactory(object):
     """A list of content types which are restricted addable on the context.
     Those types have the
     `opengever.dossier.behaviors.restricteddossier.IRestrictedDossier`
@@ -13,11 +14,7 @@ class RestrictedAddableDossiersVocabularyFactory(grok.GlobalUtility):
     the current context.
     """
 
-    grok.provides(IVocabularyFactory)
-    grok.name('opengever.repository.RestrictedAddableDossiersVocabulary')
-
-    marker_behavior = 'opengever.dossier.behaviors.restricteddossier.' + \
-        'IRestrictedDossier'
+    marker_behavior = 'opengever.dossier.behaviors.restricteddossier.IRestrictedDossier'
 
     def __call__(self, context):
         # catch some bad contexts (such as KSS validator)

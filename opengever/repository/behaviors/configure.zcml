@@ -1,7 +1,6 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:plone="http://namespaces.plone.org/plone"
-    xmlns:grok="http://namespaces.zope.org/grok"
     i18n_domain="opengever.base">
 
   <plone:behavior
@@ -25,6 +24,18 @@
       provides=".responsibleorg.IResponsibleOrgUnit"
       factory="plone.behavior.AnnotationStorage"
       for="plone.dexterity.interfaces.IDexterityContent"
+      />
+
+  <subscriber
+      for="opengever.repository.behaviors.referenceprefix.IReferenceNumberPrefixMarker
+           zope.lifecycleevent.interfaces.IObjectAddedEvent"
+      handler=".referenceprefix.saveReferenceNumberPrefix"
+      />
+
+  <subscriber
+      for="opengever.repository.behaviors.referenceprefix.IReferenceNumberPrefixMarker
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".referenceprefix.saveReferenceNumberPrefix"
       />
 
 </configure>

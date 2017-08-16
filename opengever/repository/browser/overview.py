@@ -1,14 +1,9 @@
-from five import grok
-from opengever.repository.repositoryroot import IRepositoryRoot
 from opengever.tabbedview import GeverTabMixin
 from Products.CMFCore.utils import getToolByName
+from Products.Five import BrowserView
 
 
-class RepositoryRootOverview(grok.View, GeverTabMixin):
-
-    grok.context(IRepositoryRoot)
-    grok.name('tabbedview_view-overview')
-    grok.require('zope2.View')
+class RepositoryRootOverview(BrowserView, GeverTabMixin):
 
     show_searchform = False
 
