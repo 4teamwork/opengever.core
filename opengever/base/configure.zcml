@@ -122,4 +122,8 @@
 
   <adapter factory=".menu.PloneSitePostFactoryMenu" />
 
+  <adapter factory=".reference.BasicReferenceNumber" />
+
+  <adapter factory=".reference.PlatformReferenceNumber" />
+
 </configure>

@@ -67,4 +67,8 @@
 
   <adapter factory=".menu.DossierPostFactoryMenu" />
 
+  <adapter factory=".reference.DossierReferenceNumber" />
+
+  <adapter factory=".reference.TemplateFolderReferenceNumber" />
+
 </configure>
