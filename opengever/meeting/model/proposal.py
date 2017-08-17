@@ -125,6 +125,10 @@ class Proposal(Base):
     repository_folder_title = Column(UnicodeCoercingText, nullable=False)
     language = Column(String(8), nullable=False)
 
+    __mapper_args__ = {
+        "order_by": proposal_id
+    }
+
     # workflow definition
     STATE_PENDING = State('pending', is_default=True,
                           title=_('pending', default='Pending'))
