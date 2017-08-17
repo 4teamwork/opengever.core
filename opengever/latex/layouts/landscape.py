@@ -1,12 +1,12 @@
-from five import grok
 from ftw.pdfgenerator.interfaces import IBuilder
 from opengever.latex.interfaces import ILandscapeLayer
 from opengever.latex.layouts.default import DefaultLayout
+from zope.component import adapter
 from zope.interface import Interface
 
 
+@adapter(Interface, ILandscapeLayer, IBuilder)
 class LandscapeLayout(DefaultLayout):
-    grok.adapts(Interface, ILandscapeLayer, IBuilder)
 
     template_name = 'landscape.tex'
 

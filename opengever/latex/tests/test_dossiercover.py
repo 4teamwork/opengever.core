@@ -122,5 +122,5 @@ class TestDossierCoverPDFView(MockTestCase):
 
         self.replay()
 
-        view.render()
+        view()
         self.assertTrue(IDossierCoverLayer.providedBy(request))

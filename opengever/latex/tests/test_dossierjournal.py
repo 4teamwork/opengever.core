@@ -41,7 +41,7 @@ class TestDossierJournalPDFView(MockTestCase):
 
         self.replay()
 
-        view.render()
+        view()
         self.assertTrue(
             dossierjournal.IDossierJournalLayer.providedBy(request))
 

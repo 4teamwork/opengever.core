@@ -43,7 +43,7 @@ class TestDossierDetailsPDFView(MockTestCase):
 
         self.replay()
 
-        view.render()
+        view()
         self.assertTrue(dossierdetails.IDossierDetailsLayer.providedBy(
                         request))
 

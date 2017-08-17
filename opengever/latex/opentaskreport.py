@@ -1,7 +1,5 @@
-from five import grok
 from ftw.pdfgenerator.browser.views import ExportPDFView
 from ftw.pdfgenerator.interfaces import ILaTeXLayout
-from ftw.pdfgenerator.interfaces import ILaTeXView
 from ftw.pdfgenerator.utils import provide_request_layer
 from ftw.pdfgenerator.view import MakoLaTeXView
 from ftw.table import helper
@@ -14,10 +12,12 @@ from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.task.helper import task_type_helper
+from Products.Five import BrowserView
 from sqlalchemy import and_
 from sqlalchemy import or_
 from sqlalchemy.sql.expression import asc
 from zExceptions import Unauthorized
+from zope.component import adapter
 from zope.interface import Interface
 
 
@@ -35,24 +35,20 @@ class IOpenTaskReportLayer(ILandscapeLayer):
     """
 
 
-class OpenTaskReportPDFView(grok.View, ExportPDFView):
-    grok.name('pdf-open-task-report')
-    grok.context(Interface)
-    grok.require('zope2.View')
+class OpenTaskReportPDFView(ExportPDFView):
 
     request_layer = IOpenTaskReportLayer
 
-    def render(self):
+    def __call__(self):
         if not is_open_task_report_allowed():
             raise Unauthorized()
 
         provide_request_layer(self.request, self.request_layer)
-        return ExportPDFView.__call__(self)
+        return super(OpenTaskReportPDFView, self).__call__()
 
 
-class OpenTaskReportLaTeXView(grok.MultiAdapter, MakoLaTeXView):
-    grok.provides(ILaTeXView)
-    grok.adapts(Interface, IOpenTaskReportLayer, ILaTeXLayout)
+@adapter(Interface, IOpenTaskReportLayer, ILaTeXLayout)
+class OpenTaskReportLaTeXView(MakoLaTeXView):
 
     template_directories = ['templates']
     template_name = 'opentaskreport.tex'
@@ -172,12 +168,9 @@ class OpenTaskReportLaTeXView(grok.MultiAdapter, MakoLaTeXView):
         return ' & '.join([self.convert_plain(cell) for cell in row])
 
 
-class OpenTaskReportPDFAllowed(grok.View):
-    grok.name('pdf-open-task-report-allowed')
-    grok.context(Interface)
-    grok.require('zope2.View')
+class OpenTaskReportPDFAllowed(BrowserView):
 
-    def render(self):
+    def __call__(self):
         return is_open_task_report_allowed()
 
 

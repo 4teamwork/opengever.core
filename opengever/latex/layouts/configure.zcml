@@ -1,0 +1,15 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    i18n_domain="opengever.latex">
+
+  <adapter
+      factory=".default.DefaultLayout"
+      provides="ftw.pdfgenerator.interfaces.ILaTeXLayout"
+      />
+
+  <adapter
+      factory=".landscape.LandscapeLayout"
+      provides="ftw.pdfgenerator.interfaces.ILaTeXLayout"
+      />
+
+</configure>
