@@ -1,17 +1,15 @@
 from Acquisition import aq_parent, aq_inner
-from five import grok
-from opengever.base.interfaces import IReferenceNumber, IReferenceNumberPrefix
+from opengever.base.interfaces import IReferenceNumberPrefix
 from opengever.base.reference import BasicReferenceNumber
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.templatefolder import ITemplateFolder
+from zope.component import adapter
 
 
+@adapter(IDossierMarker)
 class DossierReferenceNumber(BasicReferenceNumber):
     """ Reference number for dossier types
     """
-    grok.provides(IReferenceNumber)
-    grok.context(IDossierMarker)
-
     ref_type = 'dossier'
 
     def get_local_number(self):
@@ -21,11 +19,10 @@ class DossierReferenceNumber(BasicReferenceNumber):
         return prefix or ''
 
 
+@adapter(ITemplateFolder)
 class TemplateFolderReferenceNumber(BasicReferenceNumber):
     """ Reference number for template folder.
     """
-    grok.provides(IReferenceNumber)
-    grok.context(ITemplateFolder)
 
     ref_type = 'dossier'
 

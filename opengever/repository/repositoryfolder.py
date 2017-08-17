@@ -1,4 +1,3 @@
-from five import grok
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.base.interfaces import IReferenceNumber
@@ -9,6 +8,8 @@ from plone.dexterity import content
 from plone.directives import form
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from zope import schema
+from zope.component import adapter
+from zope.interface import implementer
 from zope.interface import implements
 
 REPOSITORY_FOLDER_STATE_INACTIVE = 'repositoryfolder-state-inactive'
@@ -132,12 +133,12 @@ class RepositoryFolder(content.Container):
         return True
 
 
-class NameFromTitle(grok.Adapter):
+@implementer(INameFromTitle)
+@adapter(IRepositoryFolder)
+class NameFromTitle(object):
     """ An INameFromTitle adapter for namechooser gets the name from the
     translated_title.
     """
-    grok.implements(INameFromTitle)
-    grok.context(IRepositoryFolder)
 
     def __init__(self, context):
         self.context = context

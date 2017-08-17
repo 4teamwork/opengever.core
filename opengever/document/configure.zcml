@@ -104,4 +104,6 @@
       permission="cmf.ModifyPortalContent"
       />
 
+  <adapter factory=".reference.DocumentReferenceNumber" />
+
 </configure>

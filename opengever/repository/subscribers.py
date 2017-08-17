@@ -1,8 +1,5 @@
-from five import grok
-from opengever.repository.interfaces import IRepositoryFolder
 from plone import api
 from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
-from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
 
 def is_reference_number_prefix_changed(descriptions):
@@ -13,7 +10,6 @@ def is_reference_number_prefix_changed(descriptions):
     return False
 
 
-@grok.subscribe(IRepositoryFolder, IObjectModifiedEvent)
 def update_reference_prefixes(obj, event):
     """A eventhandler which reindex all contained objects, if the
     reference prefix has been changed.

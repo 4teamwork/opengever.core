@@ -1,6 +1,5 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
-from five import grok
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import IReferenceNumberFormatter
 from opengever.base.interfaces import IReferenceNumberSettings
@@ -8,17 +7,21 @@ from opengever.ogds.base.utils import get_current_admin_unit
 from plone.dexterity.interfaces import IDexterityContent
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.interfaces import ISiteRoot
+from zope.component import adapter
 from zope.component import getUtility
 from zope.component import queryAdapter
+from zope.interface import implementer
 
 
-class BasicReferenceNumber(grok.Adapter):
+@implementer(IReferenceNumber)
+@adapter(IDexterityContent)
+class BasicReferenceNumber(object):
     """ Basic reference number adapter
     """
-    grok.provides(IReferenceNumber)
-    grok.context(IDexterityContent)
-
     ref_type = 'basic'
+
+    def __init__(self, context):
+        self.context = context
 
     def get_number(self):
         numbers = self.get_parent_numbers()
@@ -54,14 +57,11 @@ class BasicReferenceNumber(grok.Adapter):
         return numbers
 
 
+@adapter(ISiteRoot)
 class PlatformReferenceNumber(BasicReferenceNumber):
     """ Reference number generator for the plone site. The reference
     number part of a PloneSite is the current_admin_unit's abbreviation.
     """
-
-    grok.provides(IReferenceNumber)
-    grok.context(ISiteRoot)
-
     ref_type = 'site'
 
     def get_local_number(self):
