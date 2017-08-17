@@ -15,11 +15,10 @@ class TestErrorPage(IntegrationTestCase):
                         'Expect to be on the gever error page')
         self.assertEquals(u'This page does not seem to exist\u2026',
                           browser.css('h1').first.text)
-        self.assertEquals(u'We apologize for the inconvenience, but the page'
-                          u' you were trying to access is not at this address.'
-                          u'\n\nIf you are certain you have the correct web '
-                          u'address but are encountering an error, please '
-                          u'contact the Site Administration.\n\nThank you.',
+        self.assertEquals(u'We apologize for the inconvenience, but the page '
+                          u'you were trying to access is not at this '
+                          u'address.\n\nPlease contact the responsible person '
+                          u'if this problem persists.\n\nBack to the portal',
                           browser.css('.error-body').first.text)
 
     @browsing
@@ -46,9 +45,8 @@ class TestErrorPage(IntegrationTestCase):
                           browser.css('h1').first.text)
 
         # The error happens too early the error log is no yet available
-        self.assertEquals(u'If you are certain you have the correct web '
-                          u'address but are encountering an error, please '
-                          u'contact the Site Administration.',
+        self.assertEquals(u'Please contact the responsible person if this '
+                          u'problem persists.',
                           browser.css('.error-body').first.text)
 
     @browsing
