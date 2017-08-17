@@ -305,9 +305,12 @@ class MeetingView(BrowserView):
     def render_handlebars_agendaitems_template(self):
         if is_word_meeting_implementation_enabled():
             return self.render_handlebars_agendaitems_template_word()
+        else:
+            return self.render_handlebars_agendaitems_template_noword()
 
+    def render_handlebars_agendaitems_template_noword(self):
         return prepare_handlebars_template(
-            TEMPLATES_DIR.joinpath('agendaitems.html'),
+            TEMPLATES_DIR.joinpath('agendaitems-noword.html'),
             translations=(
                 _('label_edit_cancel', default='Cancel'),
                 _('label_edit_save', default='Save'),
