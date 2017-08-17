@@ -40,6 +40,7 @@ class AllUsersAndInboxesSource(object):
         query = create_session().query(User, OrgUnit) \
                                 .join(OrgUnit.users_group) \
                                 .join(Group.users)
+        query = query.filter(OrgUnit.enabled)
 
         if self.only_current_orgunit:
             query = query.filter(OrgUnit.unit_id == self.client_id)
@@ -151,6 +152,7 @@ class AllUsersAndInboxesSource(object):
                               text_filters)
 
         query = OrgUnit.query
+        query = query.filter(OrgUnit.enabled)
 
         if self.only_current_inbox:
             query = query.filter(OrgUnit.unit_id == self.client_id)
@@ -205,7 +207,11 @@ class UsersContactsInboxesSource(AllUsersAndInboxesSource):
 
     @property
     def base_query(self):
-        return User.query
+        query = create_session().query(User)
+        query = query.join(OrgUnit.users_group) \
+                                .join(Group.users)
+        query = query.filter(OrgUnit.enabled)
+        return query
 
     def getTerm(self, value, brain=None):
         # Contacts
@@ -310,7 +316,8 @@ class AssignedUsersSource(AllUsersAndInboxesSource):
         return create_session().query(User) \
             .filter(User.userid == groups_users.columns.userid) \
             .filter(groups_users.columns.groupid == OrgUnit.users_group_id) \
-            .filter(OrgUnit.admin_unit_id == admin_unit.unit_id)
+            .filter(OrgUnit.admin_unit_id == admin_unit.unit_id) \
+            .filter(OrgUnit.enabled)
 
     def getTermByToken(self, token):
 
@@ -370,8 +377,11 @@ class AllUsersSource(AssignedUsersSource):
 
     @property
     def base_query(self):
-        return create_session().query(User)
-
+        query = create_session().query(User)
+        query = query.join(OrgUnit.users_group) \
+                                .join(Group.users)
+        query = query.filter(OrgUnit.enabled)
+        return query
 
 @implementer(IContextSourceBinder)
 class AllUsersSourceBinder(object):
@@ -392,7 +402,11 @@ class AllEmailContactsAndUsersSource(UsersContactsInboxesSource):
 
     @property
     def base_query(self):
-        return create_session().query(User)
+        query = create_session().query(User)
+        query = query.join(OrgUnit.users_group) \
+                                .join(Group.users)
+        query = query.filter(OrgUnit.enabled)
+        return query
 
     def getTerm(self, value, brain=None):
         email, id_ = value.split(':', 1)
