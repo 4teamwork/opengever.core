@@ -135,6 +135,8 @@ class FileLoaderSection(object):
         # mounted on the POSIX system (Linux / OS X)
         posix_mountpoint = unc_mount_mapping[mount]
         relative_path = rest.replace('\\', '/').lstrip('/')
+        if not isinstance(relative_path, unicode):
+            relative_path = relative_path.decode('utf-8')
         abs_filepath = os.path.join(posix_mountpoint, relative_path)
         return abs_filepath
 

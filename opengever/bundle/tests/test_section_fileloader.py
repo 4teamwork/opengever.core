@@ -157,3 +157,24 @@ class TestFileLoader(FunctionalTestCase):
         section = self.setup_section(previous=[item])
         list(section)
         self.assertEqual(u'Test Mail', mail2.title)
+
+    def test_handles_filepaths_with_umlauts(self):
+        doc = create(Builder('document').titled('Foo Bar'))
+        self.assertIsNone(doc.file)
+
+        filepath = u'\\\\host\\unmapped\\ordn\xe4r\\beschl\xfcsse.pdf'
+        item = {
+            u"guid": u"12345",
+            u"_type": u"opengever.document.document",
+            u"_path": '/'.join(doc.getPhysicalPath()[2:]),
+            u"filepath": filepath.encode('utf-8'),
+        }
+        section = self.setup_section(previous=[item])
+        self.bundle.ingestion_settings['unc_mounts'] = {
+            u'\\\\host\\unmapped': u'{}/f\xe4iles/'.format(self.bundle_path)}
+
+        list(section)
+
+        self.assertEqual('Lorem Ipsum\n', doc.file.data)
+        self.assertEqual('application/pdf', doc.file.contentType)
+        self.assertEqual('foo-bar.pdf', doc.file.filename)

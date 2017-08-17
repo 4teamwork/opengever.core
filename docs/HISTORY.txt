@@ -5,6 +5,7 @@ Changelog
 2017.5.0 (unreleased)
 ---------------------
 
+- OGGBundle: handle filepaths with non ascii characters. [phgross]
 - Add bin/test-cached helper script to execute a chached test-run. [deiferni]
 - Ungrok opengever.ogds.base [lgraf]
 - Add external_reference field and index [tarnap]
