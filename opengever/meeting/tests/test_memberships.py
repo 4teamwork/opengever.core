@@ -23,6 +23,11 @@ class TestMemberships(FunctionalTestCase):
         self.member = create(Builder('member'))
         self.member_wrapper = MemberWrapper.wrap(self.container, self.member)
 
+        # CommitteeResponsible is assigned globally here for the sake of
+        # simplicity
+        self.grant('Contributor', 'Editor', 'Reader', 'MeetingUser',
+                   'CommitteeAdministrator', 'CommitteeResponsible')
+
     def test_get_url(self):
         membership = create(Builder('membership').having(
             committee=self.committee.load_model(), member=self.member))
