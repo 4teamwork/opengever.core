@@ -38,11 +38,14 @@ class TestAgendaItem(FunctionalTestCase):
         self.container = create(Builder('committee_container')
                                 .having(excerpt_template=self.excerpt_template))
         self.committee = create(Builder('committee').within(self.container))
+        self.grant('CommitteeResponsible', on=self.committee)
         self.meeting = create(Builder('meeting')
                               .having(committee=self.committee.load_model())
                               .link_with(self.meeting_dossier))
 
         self.meeting_wrapper = MeetingWrapper.wrap(self.committee, self.meeting)
+
+        self.grant('Contributor', 'Editor', 'Reader', 'MeetingUser')
 
     def setup_proposal(self, has_document=False):
         builder = (Builder('proposal')
@@ -420,7 +423,8 @@ class TestAgendaItemDecide(TestAgendaItem):
         create(Builder('user').named('Hugo', 'Boss'))
         api.user.grant_roles(
             username=u'hugo.boss', obj=self.committee,
-            roles=['Contributor', 'Editor', 'Reader', 'CommitteeGroupMember'])
+            roles=['Contributor', 'Editor', 'Reader', 'CommitteeGroupMember',
+                   'CommitteeResponsible'])
         transaction.commit()
 
         self.login(user_id=u'hugo.boss')

@@ -270,11 +270,11 @@ class TestWordAgendaItem(IntegrationTestCase):
             # Let regular_user have no access to meeting_dossier
             self.meeting_dossier.__ac_local_roles_block__ = True
 
-        self.login(self.regular_user, browser)
-        agenda_item = self.schedule_proposal(self.meeting,
-                                             self.submitted_word_proposal)
-        agenda_item.decide()
+            agenda_item = self.schedule_proposal(self.meeting,
+                                                 self.submitted_word_proposal)
+            agenda_item.decide()
 
+        self.login(self.regular_user, browser)
         browser.open(self.agenda_item_url(agenda_item, 'generate_excerpt'))
         self.assertEquals(
             {u'messages': [
