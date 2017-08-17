@@ -16,7 +16,6 @@
   <metal:content-core fill-slot="content-core">
       <metal:content-core define-macro="content-core"
                           tal:define="meeting view/model;
-                                      meeting_word_enabled view/is_word_meeting_implementation_enabled;
                                       unscheduled_proposals view/unscheduled_proposals">
       <div id="opengever_meeting_meeting"
            tal:attributes="data-update-agenda-item-order-url view/url_update_agenda_item_order;
@@ -220,8 +219,7 @@
 
             </div>
 
-            <div tal:condition="not:meeting_word_enabled"
-                 class="list-group-item excerpts" tal:define="excerpts view/manually_generated_excerpts">
+            <div class="list-group-item excerpts" tal:define="excerpts view/manually_generated_excerpts">
               <div class="item">
                 <span class="title" i18n:translate="">Excerpts</span>
 
@@ -291,7 +289,7 @@
                     tal:condition="meeting/is_agendalist_editable">Order</th>
                 <th i18n:translate="">Number</th>
                 <th i18n:translate="">Title</th>
-                <th i18n:translate="" tal:condition="not:meeting_word_enabled">Documents</th>
+                <th i18n:translate="">Documents</th>
                 <th i18n:translate=""
                     tal:condition="meeting/is_editable">Actions</th>
               </tr>

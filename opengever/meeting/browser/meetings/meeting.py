@@ -263,7 +263,7 @@ class MeetingView(BrowserView):
         return self.model.get_url(view='protocol')
 
     def url_generate_protocol(self):
-        if self.is_word_meeting_implementation_enabled():
+        if is_word_meeting_implementation_enabled():
             return self.url_merge_docx_protocol()
 
         if not self.model.has_protocol_document():
@@ -376,7 +376,3 @@ class MeetingView(BrowserView):
         return translate(_('An unexpected error has occurred',
                            default='An unexpected error has occurred'),
                          context=self.request)
-
-    def is_word_meeting_implementation_enabled(self):
-        # Make feature flag available in meeting.pt
-        return is_word_meeting_implementation_enabled()
