@@ -1,20 +1,18 @@
-from five import grok
 from ftw.pdfgenerator.interfaces import IBuilder
-from ftw.pdfgenerator.interfaces import ILaTeXLayout
 from ftw.pdfgenerator.layout.customizable import CustomizableLayout
 from opengever.latex.interfaces import ILaTeXSettings
 from opengever.ogds.base.utils import get_current_admin_unit
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
+from zope.component import adapter
 from zope.component import getUtility
 from zope.interface import Interface
 
 
-class DefaultLayout(CustomizableLayout, grok.MultiAdapter):
+@adapter(Interface, Interface, IBuilder)
+class DefaultLayout(CustomizableLayout):
     """Opengever default layout.
     """
-    grok.adapts(Interface, Interface, IBuilder)
-    grok.provides(ILaTeXLayout)
 
     template_directories = ['resources']
     template_name = 'default_layout.tex'

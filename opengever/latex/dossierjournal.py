@@ -1,10 +1,8 @@
 from copy import deepcopy
-from five import grok
 from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from ftw.journal.interfaces import IAnnotationsJournalizable
 from ftw.pdfgenerator.browser.views import ExportPDFView
 from ftw.pdfgenerator.interfaces import ILaTeXLayout
-from ftw.pdfgenerator.interfaces import ILaTeXView
 from ftw.pdfgenerator.interfaces import IPDFAssembler
 from ftw.pdfgenerator.utils import provide_request_layer
 from ftw.pdfgenerator.view import MakoLaTeXView
@@ -12,6 +10,7 @@ from opengever.latex import _
 from opengever.latex.interfaces import ILandscapeLayer
 from opengever.latex.listing import ILaTexListing
 from zope.annotation.interfaces import IAnnotations
+from zope.component import adapter
 from zope.component import getMultiAdapter
 from zope.i18n import translate
 from zope.interface import Interface
@@ -24,19 +23,16 @@ class IDossierJournalLayer(ILandscapeLayer):
     """
 
 
-class DossierJournalPDFView(grok.View, ExportPDFView):
-    grok.name('pdf-dossier-journal')
-    grok.context(Interface)
-    grok.require('zope2.View')
+class DossierJournalPDFView(ExportPDFView):
 
     request_layer = IDossierJournalLayer
 
-    def render(self):
+    def __call__(self):
         # use the landscape layout
         # let the request provide IDossierListingLayer
         provide_request_layer(self.request, self.request_layer)
 
-        return ExportPDFView.__call__(self)
+        return super(DossierJournalPDFView, self).__call__()
 
     def get_data(self):
         # let the request provide IDossierListingLayer
@@ -47,9 +43,8 @@ class DossierJournalPDFView(grok.View, ExportPDFView):
         return assembler.build_pdf()
 
 
-class DossierListingLaTeXView(grok.MultiAdapter, MakoLaTeXView):
-    grok.provides(ILaTeXView)
-    grok.adapts(Interface, IDossierJournalLayer, ILaTeXLayout)
+@adapter(Interface, IDossierJournalLayer, ILaTeXLayout)
+class DossierJorunalLaTeXView(MakoLaTeXView):
 
     template_directories = ['templates', ]
     template_name = 'dossierjournal.tex'

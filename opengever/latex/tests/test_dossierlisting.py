@@ -35,7 +35,7 @@ class TestDossierListingPDFView(MockTestCase):
 
         self.replay()
 
-        view.render()
+        view()
         self.assertTrue(dossierlisting.IDossierListingLayer.providedBy(
                 request))
 

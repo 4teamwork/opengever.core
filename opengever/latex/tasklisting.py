@@ -1,7 +1,5 @@
-from five import grok
 from ftw.pdfgenerator.browser.views import ExportPDFView
 from ftw.pdfgenerator.interfaces import ILaTeXLayout
-from ftw.pdfgenerator.interfaces import ILaTeXView
 from ftw.pdfgenerator.utils import provide_request_layer
 from ftw.pdfgenerator.view import MakoLaTeXView
 from ftw.table import helper
@@ -12,6 +10,7 @@ from opengever.latex.utils import workflow_state
 from opengever.ogds.base.actor import Actor
 from opengever.task.helper import task_type_helper
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from zope.component import adapter
 from zope.interface import Interface
 
 
@@ -22,25 +21,21 @@ class ITaskListingLayer(ILandscapeLayer):
     """
 
 
-class TaskListingPDFView(grok.View, ExportPDFView):
-    grok.name('pdf-tasks-listing')
-    grok.require('zope2.View')
-    grok.context(Interface)
+class TaskListingPDFView(ExportPDFView):
 
     index = ViewPageTemplateFile('templates/export_pdf.pt')
 
     request_layer = ITaskListingLayer
 
-    def render(self):
+    def __call__(self):
         # let the request provide ITaskListingLayer
         provide_request_layer(self.request, self.request_layer)
 
-        return ExportPDFView.__call__(self)
+        return super(TaskListingPDFView, self).__call__()
 
 
-class TaskListingLaTeXView(grok.MultiAdapter, MakoLaTeXView):
-    grok.provides(ILaTeXView)
-    grok.adapts(Interface, ITaskListingLayer, ILaTeXLayout)
+@adapter(Interface, ITaskListingLayer, ILaTeXLayout)
+class TaskListingLaTeXView(MakoLaTeXView):
 
     template_directories = ['templates']
     template_name = 'tasklisting.tex'

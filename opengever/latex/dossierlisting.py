@@ -1,12 +1,11 @@
-from five import grok
 from ftw.pdfgenerator.browser.views import ExportPDFView
 from ftw.pdfgenerator.interfaces import ILaTeXLayout
-from ftw.pdfgenerator.interfaces import ILaTeXView
 from ftw.pdfgenerator.utils import provide_request_layer
 from ftw.pdfgenerator.view import MakoLaTeXView
 from opengever.latex.interfaces import ILandscapeLayer
 from opengever.latex.listing import ILaTexListing
 from opengever.latex.utils import get_selected_items_from_catalog
+from zope.component import adapter
 from zope.component import getMultiAdapter
 from zope.interface import Interface
 
@@ -18,24 +17,19 @@ class IDossierListingLayer(ILandscapeLayer):
     """
 
 
-class DossierListingPDFView(grok.View, ExportPDFView):
-    grok.name('pdf-dossier-listing')
-    grok.context(Interface)
-    grok.require('zope2.View')
-
+class DossierListingPDFView(ExportPDFView):
     request_layer = IDossierListingLayer
 
-    def render(self):
+    def __call__(self):
         # use the landscape layout
         # let the request provide IDossierListingLayer
         provide_request_layer(self.request, self.request_layer)
 
-        return ExportPDFView.__call__(self)
+        return super(DossierListingPDFView, self).__call__()
 
 
-class DossierListingLaTeXView(grok.MultiAdapter, MakoLaTeXView):
-    grok.provides(ILaTeXView)
-    grok.adapts(Interface, IDossierListingLayer, ILaTeXLayout)
+@adapter(Interface, IDossierListingLayer, ILaTeXLayout)
+class DossierListingLaTeXView(MakoLaTeXView):
 
     template_directories = ['templates', ]
     template_name = 'dossierlisting.tex'
