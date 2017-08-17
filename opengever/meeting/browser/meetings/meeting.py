@@ -230,14 +230,18 @@ class MeetingView(BrowserView):
 
     has_model_breadcrumbs = True
 
-    template = ViewPageTemplateFile('templates/meeting.pt')
+    noword_template = ViewPageTemplateFile('templates/meeting-noword.pt')
+    word_template = ViewPageTemplateFile('templates/meeting-word.pt')
 
     def __init__(self, context, request):
         super(MeetingView, self).__init__(context, request)
         self.model = self.context.model
 
     def __call__(self):
-        return self.template()
+        if is_word_meeting_implementation_enabled():
+            return self.word_template()
+        else:
+            return self.noword_template()
 
     def get_css_class(self, document):
         """used for display icons in the view"""
