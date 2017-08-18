@@ -161,6 +161,34 @@ class OpengeverContentFixture(object):
             members=[self.administrator, self.committee_responsible]))
         self.register_raw('committee_id', self.committee.load_model().committee_id)
 
+        self.committee_president = self.create_committee_membership(
+            self.committee,
+            'committee_president_id',
+            firstname=u'Heidrun',
+            lastname=u'Sch\xf6ller',
+            email='h.schoeller@web.de')
+
+        self.committee_secretary = self.create_committee_membership(
+            self.committee,
+            'committee_secretary_id',
+            firstname=u'Henning',
+            lastname=u'M\xfcller',
+            email='h.mueller@gmx.ch')
+
+        self.committee_participant_1 = self.create_committee_membership(
+            self.committee,
+            'committee_participant_1',
+            firstname=u'Gerda',
+            lastname=u'W\xf6lfl',
+            email='g.woelfl@hotmail.com')
+
+        self.committee_participant_2 = self.create_committee_membership(
+            self.committee,
+            'committee_participant_2',
+            firstname=u'Jens',
+            lastname=u'Wendler',
+            email='jens-wendler@gmail.com')
+
         self.empty_committee = self.register(
             'empty_committee', self.create_committee(
                 title=u'Kommission f\xfcr Verkehr',
@@ -308,7 +336,11 @@ class OpengeverContentFixture(object):
                     committee=self.committee.load_model(),
                     location=u'B\xfcren an der Aare',
                     start=datetime(2016, 9, 12, 15, 30, tzinfo=pytz.UTC),
-                    end=datetime(2016, 9, 12, 17, 0, tzinfo=pytz.UTC))
+                    end=datetime(2016, 9, 12, 17, 0, tzinfo=pytz.UTC),
+                    presidency=self.committee_president,
+                    secretary=self.committee_secretary,
+                    participants=[self.committee_participant_1,
+                                  self.committee_participant_2])
             .link_with(meeting_dossier))
         create_session().flush()  # trigger id generation, part of path
         self.register_path('meeting', meeting.physical_path.encode('utf-8'))
@@ -408,6 +440,22 @@ class OpengeverContentFixture(object):
 
         self._lookup_table[attrname] = ('user', plone_user.getId())
         return plone_user
+
+    def create_committee_membership(self,
+                                    committee,
+                                    member_id_register_name,
+                                    firstname,
+                                    lastname,
+                                    email):
+        member = create(
+            Builder('member')
+            .having(firstname=firstname, lastname=lastname, email=email))
+
+        create(Builder('membership')
+               .having(committee=committee, member=member))
+
+        self.register_raw(member_id_register_name, member.member_id)
+        return member
 
     def create_committee(self, title, repository_folder, group_id, members):
         # XXX I would have expected the commitee builder to do all of that.

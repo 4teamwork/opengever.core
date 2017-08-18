@@ -520,6 +520,10 @@ Other values
 .. <fixture:raw>
 
 - ``self.committee_id``: ``1``
+- ``self.committee_participant_1``: ``3``
+- ``self.committee_participant_2``: ``4``
+- ``self.committee_president_id``: ``1``
+- ``self.committee_secretary_id``: ``2``
 - ``self.empty_committee_id``: ``2``
 
 .. </fixture:raw>

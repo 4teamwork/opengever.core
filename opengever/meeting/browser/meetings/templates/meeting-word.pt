@@ -9,15 +9,17 @@
   <metal:title metal:fill-slot="content-title">
     <metal:use use-macro="context/@@gever-macros/js_default_error_messages" />
     <div id="tabbedview-header">
-      <h1 class="memberHeading documentFirstHeading" tal:content="view/model/get_title" />
+      <h1 class="memberHeading meeting-view-heading documentFirstHeading" tal:content="view/model/get_title" />
     </div>
   </metal:title>
 
   <metal:content-core fill-slot="content-core">
-      <metal:content-core define-macro="content-core"
-                          tal:define="meeting view/model;
-                                      unscheduled_proposals view/unscheduled_proposals">
+    <metal:content-core define-macro="content-core"
+                        tal:define="meeting view/model;
+                                    unscheduled_proposals view/unscheduled_proposals">
+
       <div id="opengever_meeting_meeting"
+           class="word-feature"
            tal:attributes="data-update-agenda-item-order-url view/url_update_agenda_item_order;
                            data-list-agenda-items-url view/url_list_agenda_items;
                            data-list-unscheduled-proposals-url view/url_list_unscheduled_proposals;
@@ -91,6 +93,120 @@
           </div>
         </div>
 
+        <div class="meeting-metadata">
+          <table class="meeting-metadata">
+
+            <tr>
+              <th i18n:translate="view_label_meeting_start">Meeting start:</th>
+              <td tal:content="meeting/get_start" />
+            </tr>
+
+            <tr tal:define="end meeting/get_end"
+                tal:condition="end">
+              <th i18n:translate="view_label_meeting_end">Meeting end:</th>
+              <td tal:content="end" />
+            </tr>
+
+            <tr>
+              <th i18n:translate="view_label_meeting_location">Location:</th>
+              <td tal:content="meeting/location" />
+            </tr>
+
+            <tr>
+              <th i18n:translate="view_label_meeting_number">Meeting number:</th>
+              <td tal:content="meeting/meeting_number" />
+            </tr>
+
+          </table>
+          <table class="meeting-metadata">
+
+            <tr tal:define="presidency meeting/presidency">
+              <th i18n:translate="view_label_presidency">Presidency:</th>
+              <td tal:condition="presidency"
+                  tal:content="structure meeting/presidency/get_title" />
+              <td tal:condition="not:presidency">-</td>
+            </tr>
+
+            <tr tal:define="secretary meeting/secretary">
+              <th i18n:translate="view_label_secretary">Secretary:</th>
+              <td tal:condition="secretary"
+                  tal:content="structure meeting/secretary/get_title" />
+              <td tal:condition="not:secretary">-</td>
+            </tr>
+
+            <tr>
+              <th i18n:translate="view_label_participants">Participants:</th>
+              <td>
+                <ul>
+                  <li tal:repeat="participant meeting/participants"
+                      tal:content="structure participant/get_title"></li>
+                </ul>
+              </td>
+            </tr>
+
+          </table>
+
+          <table class="meeting-metadata">
+
+            <tr>
+              <th i18n:translate="view_label_dossier">Meeting dossier:</th>
+              <td tal:define="dossier meeting/get_dossier">
+                <a tal:attributes="href dossier/absolute_url;
+                                   class python: view.get_css_class(dossier)"
+                   tal:content="dossier/title" />
+              </td>
+              <td></td>
+            </tr>
+
+            <tr>
+              <th i18n:translate="view_label_agendaitem_list">Agenda item list:</th>
+              <td>
+                <a tal:attributes="href view/url_agendaitem_list"
+                   i18n:translate="view_label_download_agendaitem_list">
+                  Download agenda item list
+                </a>
+              </td>
+              <td></td>
+            </tr>
+
+            <tr tal:define="protocol_document view/get_protocol_document">
+              <th i18n:translate="view_label_protocol">Protocol:</th>
+              <td class="protocol">
+                <div tal:condition="not:protocol_document"
+                     i18n:translate="label_no_protocol">No protocol has been generated yet.</div>
+
+                <div tal:condition="protocol_document"
+                     class="protocol-file">
+                  <a tal:replace="structure protocol_document/render_link" />
+                </div>
+              </td>
+              <td class="protocol-buttons">
+                <span>
+                  <a class="generate-protocol"
+                     tal:condition="python: meeting.is_editable() and not view.has_protocol_document()"
+                     tal:attributes="href view/url_generate_protocol;"
+                     i18n:attributes="title"
+                     title="generate new protocol as word document" />
+
+                  <a class="download-protocol-btn"
+                     tal:condition="python: meeting.is_editable() and protocol_document"
+                     tal:attributes="href view/url_download_protocol"
+                     i18n:attributes="title"
+                     title="download protocol" />
+
+                  <a class="refresh-protocol"
+                     tal:condition="python: meeting.is_editable() and view.has_protocol_document()"
+                     tal:attributes="href view/url_generate_protocol;"
+                     i18n:attributes="title"
+                     title="generate new version as word document" />
+                </span>
+              </td>
+            </tr>
+
+          </table>
+        </div>
+
+
         <div class="sidebar">
           <div tal:attributes="class python: 'list-group metadata' if meeting.is_editable() else 'full-width list-group metadata'">
             <div class="list-group-item submit">
@@ -105,108 +221,10 @@
                     i18n:attributes="title"
                     title="status"></dt>
                 <dd tal:content="python: meeting.get_state().title"></dd>
-
-                <dt id="meeting_location"
-                    i18n:attributes="title"
-                    title="location"></dt>
-                <dd tal:content="meeting/location"></dd>
-
-                <dt id="meeting_date"></dt>
-                <dd tal:content="meeting/get_date"></dd>
-
-                <dt id="meeting_time"
-                    i18n:attributes="title"
-                    title="time"></dt>
-                <dd>
-                  <span tal:replace="python: meeting.get_start_time()"></span>
-                  -
-                  <span tal:replace="python: meeting.get_end_time()"></span>
-                </dd>
-
-                <dt id="meeting_presidency"
-                    tal:condition="meeting/presidency"
-                    i18n:attributes="title"
-                    title="presidency"></dt>
-                <dd tal:condition="meeting/presidency"
-                    tal:content="structure meeting/presidency/get_title"></dd>
-
-                <dt id="meeting_secretary"
-                    tal:condition="meeting/secretary"
-                    i18n:attributes="title"
-                    title="secretary"></dt>
-                <dd tal:condition="meeting/secretary"
-                    tal:content="structure meeting/secretary/get_title"></dd>
-
-                <dt id="meeting_participants"
-                    i18n:attributes="title"
-                    title="participants"></dt>
-                <dd>
-                  <ul>
-                    <li tal:repeat="participant meeting/participants"
-                        tal:content="structure participant/get_title"></li>
-                  </ul>
-                </dd>
-
-                <dt id="related_dossier"
-                    i18n:attributes="title"
-                    title="meetingdossier"></dt>
-                <dd>
-                  <a tal:attributes="href meeting/get_dossier_url"
-                     tal:content="python: meeting.get_dossier().title"></a>
-                </dd>
-
-                <dt id="meeting_number" i18n:attributes="title" title="Meeting number"></dt>
-                <dd>
-                  <tal:block tal:condition="meeting/meeting_number">
-                    <tal:inline i18n:translate="">Meeting number</tal:inline>:
-                    <tal:inline tal:replace="meeting/meeting_number"></tal:inline>
-                  </tal:block>
-                </dd>
               </dl>
             </div>
             <div class="list-group-item documents"
                  tal:define="protocol_document view/get_protocol_document">
-
-              <div class="item agendaitem_list">
-                <span class="title" i18n:translate="label_agendaitem_list">Agendaitem list</span>
-                <a href="#" class="download-agendaitem-list-btn"
-                   tal:attributes="href view/url_agendaitem_list"
-                   title="label_download_agendaitem_list"
-                   i18n:attributes="title">
-                </a>
-              </div>
-
-              <div class="item protocol">
-                <div>
-                  <span class="title" i18n:translate="">Protocol</span>
-                  <a tal:condition="python: meeting.is_editable() and not view.has_protocol_document()"
-                     tal:attributes="href view/url_generate_protocol;"
-                     i18n:attributes="title"
-                     title="generate new protocol as word document"
-                     class="generate-protocol"></a>
-
-                  <a class="download-protocol-btn"
-                     tal:condition="python: meeting.is_editable() and protocol_document"
-                     tal:attributes="href view/url_download_protocol"
-                     i18n:attributes="title"
-                     title="download protocol"></a>
-
-                  <a tal:condition="python: meeting.is_editable() and view.has_protocol_document()"
-                     tal:attributes="href view/url_generate_protocol;"
-                     i18n:attributes="title"
-                     title="generate new version as word document"
-                     class="refresh-protocol"></a>
-                </div>
-
-                <div class="fileinfo">
-                  <span tal:condition="not:protocol_document"
-                        i18n:translate="label_no_protocol">No protocol has been generated yet.</span>
-
-                  <span tal:condition="protocol_document">
-                    <a tal:replace="structure protocol_document/render_link" />
-                  </span>
-                </div>
-              </div>
 
               <div class="item zip-download">
                 <span class="title" i18n:translate="" i18n:domain="ftw.zipexport">Export as Zip</span>
@@ -222,47 +240,7 @@
 
         </div>
         <div class="content">
-          <div class="collapsible"
-               tal:condition="meeting/is_agendalist_editable">
-            <div class="collapsible-header">
-              <button class="button fa fa-plus"></button>
-              <span class="label" i18n:translate="">Agenda Items</span>
-            </div>
-            <div class="collapsible-content">
-              <div class="input-group">
-                <label i18n:translate="" for="schedule-text">Text:</label>
-                <input id="schedule-text" type="text" />
-                <div class="button-group">
-                  <input type="submit"
-                         value="Schedule"
-                         i18n:attributes="value label_schedule"
-                         tal:attributes="data-url view/url_schedule_text"
-                         class="schedule-text allowMultiSubmit" />
-                </div>
-              </div>
-              <div class="input-group">
-                <label i18n:translate="" for="schedule-paragraph">Paragraph:</label>
-                <input id="schedule-paragraph" type="text" />
-                <div class="button-group">
-                  <input type="submit"
-                         value="Insert"
-                         i18n:attributes="value label_insert"
-                         tal:attributes="data-url view/url_schedule_paragraph"
-                         class="schedule-paragraph allowMultiSubmit" />
-                </div>
-              </div>
-              <label i18n:translate="">Proposals:</label>
-              <div class="input-group plain search-form">
-                <input id="filter-proposals"
-                       type="search"
-                       placeholder="Filter"
-                       i18n:attributes="placeholder label_filter_proposal"/>
-              </div>
-              <div id="unscheduled_porposals" class="list-group">
-                <tal:block tal:replace="structure view/render_handlebars_proposals_template"></tal:block>
-              </div>
-            </div>
-          </div>
+
 
           <table id="agenda_items">
             <thead>
@@ -279,6 +257,67 @@
               <tal:block tal:replace="structure view/render_handlebars_agendaitems_template"></tal:block>
             </tbody>
           </table>
+
+
+
+          <div class="collapsible add-agenda-items"
+               tal:condition="meeting/is_agendalist_editable">
+            <div class="collapsible-header">
+              <button class="button fa fa-plus"></button>
+              <span class="label" i18n:translate="view_label_add">
+                Add
+              </span>
+            </div>
+            <div class="collapsible-content">
+
+              <div class="input-group">
+                <label i18n:translate="view_label_schedule_proposal">
+                  Schedule proposal:
+                </label>
+                <div class="input-group plain search-form">
+                  <input id="filter-proposals"
+                         type="search"
+                         placeholder="Filter"
+                         i18n:attributes="placeholder label_filter_proposal"/>
+                </div>
+                <div id="unscheduled_porposals" class="list-group">
+                  <tal:block tal:replace="structure view/render_handlebars_proposals_template"></tal:block>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label i18n:translate="view_label_schedule_ad_hoc"
+                       for="schedule-text">
+                  Schedule ad hoc agenda item:
+                </label>
+                <input id="schedule-text" type="text" />
+                <div class="button-group">
+                  <input type="submit"
+                         value="Schedule"
+                         i18n:attributes="value label_schedule"
+                         tal:attributes="data-url view/url_schedule_text"
+                         class="schedule-text allowMultiSubmit" />
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label i18n:translate="view_label_add_section_header"
+                       for="schedule-paragraph">
+                  Add section header:
+                </label>
+                <input id="schedule-paragraph" type="text" />
+                <div class="button-group">
+                  <input type="submit"
+                         value="Insert"
+                         i18n:attributes="value label_insert"
+                         tal:attributes="data-url view/url_schedule_paragraph"
+                         class="schedule-paragraph allowMultiSubmit" />
+                </div>
+              </div>
+
+            </div>
+          </div>
+
         </div>
         <div class="visualClear"><!----></div>
       </div>
