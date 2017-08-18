@@ -22,9 +22,8 @@ class TestContactParticipation(unittest2.TestCase):
         participation = create(Builder('contact_participation').having(
             contact=self.contact,
             dossier_oguid=Oguid('foo', 1234)))
-        role = create(Builder('participation_role').having(
-            participation=participation,
-            role=u'Sch\xf6ff'))
+        create(Builder('participation_role')
+               .having(participation=participation, role=u'Sch\xf6ff'))
 
         copied_participation = participation.copy()
         self.assertEqual(self.contact, copied_participation.contact)

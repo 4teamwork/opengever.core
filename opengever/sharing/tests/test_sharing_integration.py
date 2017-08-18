@@ -11,7 +11,6 @@ from opengever.testing.event_recorder import register_event_recorder
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
-from zope.component import provideHandler
 
 
 class TestOpengeverSharingIntegration(FunctionalTestCase):

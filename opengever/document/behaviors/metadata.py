@@ -11,7 +11,6 @@ from opengever.document.interfaces import IDocumentSettings
 from plone import api
 from plone.directives import form
 from plone.namedfile.field import NamedBlobFile
-from plone.z3cform.textlines.textlines import TextLinesFieldWidget
 from z3c.form import validator
 from z3c.form.browser import checkbox
 from zope import schema

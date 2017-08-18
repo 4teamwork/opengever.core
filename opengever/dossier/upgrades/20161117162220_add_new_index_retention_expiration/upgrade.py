@@ -1,5 +1,4 @@
 from ftw.upgrade import UpgradeStep
-from opengever.dossier.behaviors.dossier import IDossierMarker
 
 
 class AddNewIndexRetentionExpiration(UpgradeStep):

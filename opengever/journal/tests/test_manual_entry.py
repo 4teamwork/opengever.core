@@ -142,14 +142,14 @@ class TestManualJournalEntry(FunctionalTestCase):
 
     @browsing
     def test_only_documents_from_the_dossier_are_selectable(self, browser):
-        doc1 = create(Builder('document')
-                      .titled(u'Test A')
-                      .within(self.dossier))
+        create(Builder('document')
+               .titled(u'Test A')
+               .within(self.dossier))
 
         dossier2 = create(Builder('dossier'))
-        doc2 = create(Builder('document')
-                      .titled(u'Test B')
-                      .within(dossier2))
+        create(Builder('document')
+               .titled(u'Test B')
+               .within(dossier2))
 
         browser.login().open(self.dossier, view='add-journal-entry')
         browser.fill(

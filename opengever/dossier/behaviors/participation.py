@@ -10,7 +10,6 @@ from plone.autoform.widgets import ParameterizedWidget
 from plone.directives import form
 from plone.z3cform import layout
 from Products.statusmessages.interfaces import IStatusMessage
-from rwproperty import getproperty, setproperty
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from zope import schema
 from zope.annotation.interfaces import IAnnotations
@@ -123,17 +122,17 @@ class Participation(Persistent):
         self.contact = contact
         self.roles = roles
 
-    @setproperty
+    @property
+    def roles(self):
+        return self._roles
+
+    @roles.setter
     def roles(self, value):
         if value is None:
             pass
         elif not isinstance(value, PersistentList):
             value = PersistentList(value)
         self._roles = value
-
-    @getproperty
-    def roles(self):
-        return self._roles
 
     @property
     def role_list(self):

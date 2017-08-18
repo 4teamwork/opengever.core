@@ -45,13 +45,11 @@ class PatchCopyContainerVerifyObjectPaste(MonkeyPatch):
                       message = 'Cannot paste into this object.',
                       action  = 'manage_main'))
 
-            method_name = None
             mt_permission = None
             meta_types = absattr(self.all_meta_types)
 
             for d in meta_types:
                 if d['name'] == object.meta_type:
-                    method_name = d['action']
                     mt_permission = d.get('permission')
                     break
 

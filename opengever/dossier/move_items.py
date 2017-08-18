@@ -15,7 +15,6 @@ from plone.dexterity.interfaces import IDexterityContainer
 from plone.formwidget.contenttree import ObjPathSourceBinder
 from plone.z3cform import layout
 from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form import form, field
 from z3c.form import validator

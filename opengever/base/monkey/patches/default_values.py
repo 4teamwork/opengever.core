@@ -240,7 +240,7 @@ class PatchZ3CFormChangedField(MonkeyPatch):
             return False
 
         from z3c.form import util
-        __patch_refs__ = False
+        locals()['__patch_refs__'] = False
         original_changedField = util.changedField
         self.patch_refs(util, 'changedField', changedField)
 
@@ -257,7 +257,7 @@ class PatchDexterityDefaultAddForm(MonkeyPatch):
             return original_update(self)
 
         from plone.dexterity.browser.add import DefaultAddForm
-        __patch_refs__ = False
+        locals()['__patch_refs__'] = False
         original_update = DefaultAddForm.update
         self.patch_refs(DefaultAddForm, 'update', update)
 
@@ -288,7 +288,7 @@ class PatchBuilderCreate(MonkeyPatch):
 
         import ftw.builder
         original_create = ftw.builder.create
-        __patch_refs__ = False
+        locals()['__patch_refs__'] = False
         self.patch_refs(ftw.builder, 'create', create)
 
 

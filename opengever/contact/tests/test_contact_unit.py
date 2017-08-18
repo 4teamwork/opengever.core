@@ -11,7 +11,7 @@ class TestPolymorphicQuery(unittest2.TestCase):
 
     def test_returns_organizations(self):
         meier_ag = create(Builder('organization').named(u'Meier AG'))
-        other_ag = create(Builder('organization').named(u'Other AG'))
+        create(Builder('organization').named(u'Other AG'))
 
         query = Contact.query.polymorphic_by_searchable_text(
             text_filters=['Meier*'])
@@ -21,9 +21,8 @@ class TestPolymorphicQuery(unittest2.TestCase):
         peter = create(
             Builder('person').having(firstname=u'Peter',
                                      lastname=u'M\xfcller'))
-        hans = create(
-            Builder('person').having(firstname=u'Hans',
-                                     lastname=u'M\xfcller'))
+        create(Builder('person')
+               .having(firstname=u'Hans', lastname=u'M\xfcller'))
 
         query = Contact.query.polymorphic_by_searchable_text(
             text_filters=['Pete*'])
@@ -33,12 +32,11 @@ class TestPolymorphicQuery(unittest2.TestCase):
         peter = create(
             Builder('person').having(firstname=u'Peter',
                                      lastname=u'M\xfcller'))
-        hans = create(
-            Builder('person').having(firstname=u'Hans',
-                                     lastname=u'M\xfcller'))
+        create(Builder('person')
+               .having(firstname=u'Hans', lastname=u'M\xfcller'))
 
         peter_co = create(Builder('organization').named(u'Peter & Co.'))
-        meier_ag = create(Builder('organization').named(u'Meier AG'))
+        create(Builder('organization').named(u'Meier AG'))
 
         query = Contact.query.polymorphic_by_searchable_text(
             text_filters=['Pete*'])
@@ -56,10 +54,8 @@ class TestPolymorphicQuery(unittest2.TestCase):
                                organization=meier_ag,
                                function='Developer'))
 
-        role2 = create(Builder('org_role')
-                       .having(person=peter,
-                               organization=ftw,
-                               function='Member'))
+        create(Builder('org_role')
+               .having(person=peter, organization=ftw, function='Member'))
 
         query = Contact.query.polymorphic_by_searchable_text(
             text_filters=['Develop*'])
@@ -82,19 +78,16 @@ class TestPolymorphicQuery(unittest2.TestCase):
                                organization=meier_ag,
                                function='Developer'))
 
-        role2 = create(Builder('org_role')
-                       .having(person=peter,
-                               organization=ftw,
-                               function='Member'))
+        create(Builder('org_role')
+               .having(person=peter, organization=ftw, function='Member'))
 
         role3 = create(Builder('org_role')
                        .having(person=hans,
                                organization=meier_ag,
                                function='Developer'))
 
-        role4 = create(Builder('org_role')
-                       .having(person=hans,
-                               organization=ftw,))
+        create(Builder('org_role')
+               .having(person=hans, organization=ftw,))
 
         query = Contact.query.polymorphic_by_searchable_text(
             text_filters=['Develop*'])

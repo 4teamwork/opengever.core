@@ -30,7 +30,7 @@ class TestUnitMembershipQuery(TestCase):
                          committee=self.committee,
                          start=localized_datetime(2014, 7, 1),
                          end=None))
-        membership_before = create(Builder('membership').having(
+        create(Builder('membership').having(
             date_from=date(2013, 1, 1),
             date_to=date(2013, 12, 31),
             member=self.member,
@@ -40,7 +40,7 @@ class TestUnitMembershipQuery(TestCase):
             date_to=date(2014, 12, 31),
             member=self.member,
             committee=self.committee))
-        membership_after = create(Builder('membership').having(
+        create(Builder('membership').having(
             date_from=date(2015, 1, 1),
             date_to=date(2015, 12, 31),
             member=self.member,
@@ -53,14 +53,14 @@ class TestUnitMembershipQuery(TestCase):
     def test_only_active(self):
         yesterday = date.today() - timedelta(days=1)
         tomorrow = date.today() + timedelta(days=1)
-        inactive = self.setup_membership(date(2010, 1, 1), yesterday)
+        self.setup_membership(date(2010, 1, 1), yesterday)
         active = self.setup_membership(yesterday, tomorrow)
         self.assertEqual([active], Membership.query.only_active().all())
 
     def test_by_meeting(self):
-        prev = self.setup_membership(date(2004, 1, 20), date(2010, 1, 19))
+        self.setup_membership(date(2004, 1, 20), date(2010, 1, 19))
         active = self.setup_membership(date(2010, 1, 20), date(2013, 7, 21))
-        post = self.setup_membership(date(2013, 7, 22), date(2016, 1, 1))
+        self.setup_membership(date(2013, 7, 22), date(2016, 1, 1))
 
         meeting = create(Builder('meeting').having(
                          committee=self.committee,

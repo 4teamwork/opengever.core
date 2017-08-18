@@ -1,6 +1,5 @@
 from ftw.builder import Builder
 from ftw.builder import create
-from opengever.contact.models.org_role import OrgRoleAddress
 from opengever.contact.ogdsuser import OgdsUserToContactAdapter
 from opengever.dossier.tests import OGDS_USER_ATTRIBUTES
 from opengever.testing import FunctionalTestCase
@@ -130,13 +129,13 @@ class TestContactDocPropertyProvider(FunctionalTestCase):
                                academic_title='Prof. Dr.',
                                description='blablabla'))
         organization = create(Builder('organization').having(name=u'Foo'))
-        address = create(Builder('address')
-                         .for_contact(organization)
-                         .labeled(u'Main')
-                         .having(street=u'Musterstrasse 1234',
-                                 zip_code=u'7335',
-                                 city=u'Obermumpf',
-                                 country=u'Schweiz'))
+        create(Builder('address')
+               .for_contact(organization)
+               .labeled(u'Main')
+               .having(street=u'Musterstrasse 1234',
+                       zip_code=u'7335',
+                       city=u'Obermumpf',
+                       country=u'Schweiz'))
         org_role = create(Builder('org_role')
                           .having(organization=organization,
                                   person=peter,

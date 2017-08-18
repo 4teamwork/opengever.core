@@ -6,7 +6,6 @@ from opengever.testing import add_languages
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
 from plone import api
-from Products.CMFCore.utils import getToolByName
 
 
 class TestContact(FunctionalTestCase):

@@ -1,17 +1,7 @@
-from collective.dexteritytextindexer.interfaces import IDynamicTextIndexExtender
 from ftw.builder import Builder
 from ftw.builder import create
-from ftw.mail.mail import IMail
-from ftw.testing import MockTestCase
-from grokcore.component.testing import grok
-from opengever.base.interfaces import IReferenceNumber
-from opengever.base.interfaces import ISequenceNumber
-from opengever.mail.indexer import checked_out
 from opengever.testing import FunctionalTestCase
 from opengever.testing import index_data_for
-from zope.component import getAdapter
-from zope.component import getAdapters
-from zope.interface import Interface
 
 
 class TestSablonTemplateIndexers(FunctionalTestCase):

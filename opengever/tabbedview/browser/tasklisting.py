@@ -1,4 +1,3 @@
-from ftw.journal.interfaces import IJournalizable
 from ftw.table import helper
 from ftw.table.interfaces import ITableSource, ITableSourceConfig
 from opengever.globalindex.model.task import Task

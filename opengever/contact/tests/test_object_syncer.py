@@ -476,9 +476,8 @@ class TestOrganizationRoleSyncer(SyncerBaseTest):
         org1 = create(Builder('organization')
                       .having(name=u'Meier AG',
                               former_contact_id=2222))
-        org2 = create(Builder('organization')
-                      .having(name=u'Search AG',
-                              former_contact_id=4444))
+        create(Builder('organization')
+               .having(name=u'Search AG', former_contact_id=4444))
 
         peter = create(Builder('person')
                        .having(lastname=u'Meier', firstname=u'Peter',

@@ -3,7 +3,6 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import assert_no_error_messages
 from ftw.testbrowser.pages.statusmessages import error_messages
-from opengever.base.interfaces import IReferenceNumber
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID

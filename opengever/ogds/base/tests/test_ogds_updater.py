@@ -6,7 +6,6 @@ from opengever.ogds.base.tests.ldaphelpers import FakeLDAPSearchUtility
 from opengever.ogds.base.tests.ldaphelpers import FakeLDAPUserFolder
 from opengever.ogds.base.utils import ogds_service
 from opengever.testing import FunctionalTestCase
-from zope.component import provideAdapter
 
 
 FAKE_LDAP_USERFOLDER = FakeLDAPUserFolder()

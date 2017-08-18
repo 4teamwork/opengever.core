@@ -12,6 +12,9 @@ from opengever.testing import builders  # keep!
 from plone import api
 import pytz
 
+# Please pyflakes
+builders
+
 PROPOSED_ACTION_1 = u'''Der Rat stellt der Versammlung den Antrag, der Anstellung von Hans Baumann als Sachbearbeiter mit einem Bescha\u0308ftigungsgrad von 90%, Amtsantritt 01.05.2015, zuzustimmen.'''
 
 INITIAL_POSITION_2 = u'''Der Vorbericht zum Finanzplan wurde erarbeitet und liegt vor.'''

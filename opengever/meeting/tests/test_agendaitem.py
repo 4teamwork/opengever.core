@@ -2,9 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import info_messages
-from opengever.core.testing import activate_meeting_word_implementation
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
-from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.locking.lock import MEETING_EXCERPT_LOCK
 from opengever.meeting.model import Meeting
 from opengever.meeting.model import Proposal
@@ -12,11 +10,9 @@ from opengever.meeting.model.agendaitem import AgendaItem
 from opengever.meeting.wrapper import MeetingWrapper
 from opengever.testing import FunctionalTestCase
 from plone import api
-from plone.app.testing import TEST_USER_ID
 from plone.locking.interfaces import ILockable
 from plone.protect import createToken
 from z3c.relationfield.relation import RelationValue
-from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
 import json

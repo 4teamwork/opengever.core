@@ -92,12 +92,11 @@ class TestDossierProposalListing(ProposalListingTests):
 
     @browsing
     def test_only_shows_active_proposals_by_default(self, browser):
-        cancelled_proposal = create(
-            Builder('proposal')
-            .within(self.dossier)
-            .titled(u'Cancelled Proposal')
-            .having(committee=self.committee.load_model())
-            .as_cancelled())
+        create(Builder('proposal')
+               .within(self.dossier)
+               .titled(u'Cancelled Proposal')
+               .having(committee=self.committee.load_model())
+               .as_cancelled())
 
         browser.login().open(self.dossier,
                              view='tabbedview_view-proposals')
@@ -107,12 +106,11 @@ class TestDossierProposalListing(ProposalListingTests):
 
     @browsing
     def test_all_filter_shows_all_proposals(self, browser):
-        cancelled_proposal = create(
-            Builder('proposal')
-            .within(self.dossier)
-            .titled(u'Cancelled Proposal')
-            .having(committee=self.committee.load_model())
-            .as_cancelled())
+        create(Builder('proposal')
+               .within(self.dossier)
+               .titled(u'Cancelled Proposal')
+               .having(committee=self.committee.load_model())
+               .as_cancelled())
 
         browser.login().open(self.dossier,
                              view='tabbedview_view-proposals',

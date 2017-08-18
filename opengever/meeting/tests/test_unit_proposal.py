@@ -60,10 +60,10 @@ class TestUnitProposal(TestCase):
         scheduled_proposal = create(Builder('proposal_model').having(
             int_id=3, workflow_state=Proposal.STATE_SCHEDULED.name,
             ))
-        decided_proposal = create(Builder('proposal_model').having(
+        create(Builder('proposal_model').having(
             int_id=4, workflow_state=Proposal.STATE_DECIDED.name,
             ))
-        cancelled_proposal = create(Builder('proposal_model').having(
+        create(Builder('proposal_model').having(
             int_id=5, workflow_state=Proposal.STATE_CANCELLED.name,
             ))
 

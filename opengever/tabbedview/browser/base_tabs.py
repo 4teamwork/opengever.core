@@ -1,5 +1,4 @@
 from ftw.dictstorage.interfaces import ISQLAlchemy
-from ftw.tabbedview.interfaces import ITabbedView
 from opengever.base.behaviors.classification import translated_public_trial_terms
 from opengever.base.interfaces import IReferenceNumberFormatter
 from opengever.base.interfaces import IReferenceNumberSettings
@@ -13,7 +12,6 @@ from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import getUtility
 from zope.component import queryAdapter
 from zope.interface import implements
-from zope.interface import Interface
 import re
 
 

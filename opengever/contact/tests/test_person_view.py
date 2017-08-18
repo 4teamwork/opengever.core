@@ -58,12 +58,12 @@ class TestPersonView(FunctionalTestCase):
                                firstname=u'Peter',
                                lastname=u'M\xfcller',
                                academic_title='Dr. rer. nat.'))
-        archived_peter = create(Builder('archived_person').having(
-                                contact=peter,
-                                salutation='Herr',
-                                firstname=u'Peter',
-                                lastname=u'Hanssen',
-                                academic_title='Magister'))
+        create(Builder('archived_person')
+               .having(contact=peter,
+                       salutation='Herr',
+                       firstname=u'Peter',
+                       lastname=u'Hanssen',
+                       academic_title='Magister'))
 
         browser.login().open(self.contactfolder, view=peter.wrapper_id)
         table = browser.css('#contactHistory .contact_details').first

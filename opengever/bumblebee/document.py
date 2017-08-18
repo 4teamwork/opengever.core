@@ -1,6 +1,5 @@
 from ftw.bumblebee.dexterity.document import DXBumblebeeDocument
 from opengever.document.document import IDocumentSchema
-from opengever.mail.mail import IOGMail
 from opengever.mail.mail import IOGMailMarker
 from zope.component import adapter
 
