@@ -53,7 +53,7 @@ class AllUsersAndInboxesSource(object):
         query = create_session().query(*models) \
                                 .join(OrgUnit.users_group) \
                                 .join(Group.users)
-        query = query.filter(OrgUnit.enabled)
+        query = query.filter(OrgUnit.enabled == True)
 
         if self.only_current_orgunit:
             query = query.filter(OrgUnit.unit_id == self.client_id)
@@ -165,7 +165,7 @@ class AllUsersAndInboxesSource(object):
                               text_filters)
 
         query = OrgUnit.query
-        query = query.filter(OrgUnit.enabled)
+        query = query.filter(OrgUnit.enabled == True)
 
         if self.only_current_inbox:
             query = query.filter(OrgUnit.unit_id == self.client_id)
@@ -386,7 +386,7 @@ class AssignedUsersSource(AllUsersSource):
             .filter(User.userid == groups_users.columns.userid) \
             .filter(groups_users.columns.groupid == OrgUnit.users_group_id) \
             .filter(OrgUnit.admin_unit_id == admin_unit.unit_id) \
-            .filter(OrgUnit.enabled)
+            .filter(OrgUnit.enabled == True)
 
 
 @implementer(IContextSourceBinder)
