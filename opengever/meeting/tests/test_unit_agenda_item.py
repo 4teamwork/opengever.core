@@ -12,6 +12,12 @@ class TestProposalAgendaItem(FunctionalTestCase):
 
     def setUp(self):
         super(TestProposalAgendaItem, self).setUp()
+
+        # CommitteeResponsible is assigned globally here for the sake of
+        # simplicity
+        self.grant('Contributor', 'Editor', 'Reader', 'MeetingUser',
+                   'CommitteeResponsible')
+
         self.admin_unit.public_url = 'http://nohost/plone'
 
         self.repository_root, self.repository_folder = create(
