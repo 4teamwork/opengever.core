@@ -16,6 +16,12 @@ class TestProposalHistory(FunctionalTestCase):
 
     def setUp(self):
         super(TestProposalHistory, self).setUp()
+
+        # CommitteeResponsible is assigned globally here for the sake of
+        # simplicity
+        self.grant('Contributor', 'Editor', 'Reader', 'MeetingUser',
+                   'CommitteeResponsible')
+
         self.admin_unit.public_url = 'http://nohost/plone'
         self.repo, self.repo_folder = create(Builder('repository_tree'))
         self.dossier = create(Builder('dossier').within(self.repo_folder))
