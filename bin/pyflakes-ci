@@ -1,0 +1,61 @@
+#!/bin/bash
+set -eo pipefail
+fork_point=$(bin/git-fork-point)
+
+only_modified_and_added=(
+    "| grep -E '^(M|A)'"
+    )
+
+include_files=(
+    "| grep -E '\.py$'"
+    )
+
+exclude_files=(
+    "| grep -v '__init__.py'"
+    "| grep -v 'bootstrap.py'"
+    "| grep -v 'pyxbgen.py'"
+    )
+
+exclude_directories=(
+    "| grep -v '/bindings/'"
+    "| grep -v '/skins/'"
+    )
+
+files_lister=(
+    "git diff --name-status $fork_point"
+    "${only_modified_and_added[*]}"
+    "${include_files[*]}"
+    "${exclude_files[*]}"
+    "${exclude_directories[*]}"
+    "| cut -d$'\t' -f 2"
+    )
+
+# Roll your own eval
+files=($(/bin/bash -c "${files_lister[*]}"))
+
+echo ''
+if [ "${files[*]}" ]; then
+    echo 'Detected changes in this branch in the following Python files:'
+    for file in "${files[@]}"; do
+        echo "$file"
+    done
+    echo ''
+    echo 'Running pyflakes.'
+    echo ''
+    bin/pyflakes "${files[*]}"
+    success=$?
+else
+    echo "Found nothing to complain about, well done!"
+    success=0
+fi
+
+echo ''
+
+if [ "$success" == "0" ]; then
+    exit 0
+fi
+
+# Fail per default
+exit 1
+
+# EOF

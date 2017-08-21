@@ -3,7 +3,9 @@
 !cleanup-versions-cfg
 !create-schema-migration
 !create-upgrade
+!git-fork-point
 !mtest
 !pinchecker
 !remove-test-cache
 !test-cached
+!pyflakes-ci
