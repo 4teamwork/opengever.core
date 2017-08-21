@@ -164,7 +164,8 @@ class TestSearchWithoutContent(FunctionalTestCase):
     def test_validate_searchstring_for_dossiers(self, browser):
         create(Builder('ogds_user')
                .having(firstname='Foo', lastname='Boss',
-                       userid='foo@example.com'))
+                       userid='foo@example.com')
+               .assign_to_org_units([self.org_unit]))
 
         browser.login().open(view='advanced_search')
         browser.fill({'form.widgets.searchableText': "dossier1",

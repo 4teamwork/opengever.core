@@ -36,10 +36,24 @@ class AllUsersAndInboxesSource(object):
         self.only_current_inbox = kwargs.get('only_current_inbox', False)
 
     @property
+    def only_users(self):
+        return False
+
+    @property
     def base_query(self):
-        query = create_session().query(User, OrgUnit) \
+        """A base query which joins the user and orgunits together and also
+        filters the query based on some options:
+            - only_users: Decide if only the user model will be returned
+            - only_current_orgunit: Decide if only the current Orgunit will
+              be queried.
+
+        The base_query also filtes results from disabled orgunits by default.
+        """
+        models = (User, ) if self.only_users else (User, OrgUnit)
+        query = create_session().query(*models) \
                                 .join(OrgUnit.users_group) \
                                 .join(Group.users)
+        query = query.filter(OrgUnit.enabled == True)
 
         if self.only_current_orgunit:
             query = query.filter(OrgUnit.unit_id == self.client_id)
@@ -151,6 +165,7 @@ class AllUsersAndInboxesSource(object):
                               text_filters)
 
         query = OrgUnit.query
+        query = query.filter(OrgUnit.enabled == True)
 
         if self.only_current_inbox:
             query = query.filter(OrgUnit.unit_id == self.client_id)
@@ -204,8 +219,8 @@ class AllUsersAndInboxesSourceBinder(object):
 class UsersContactsInboxesSource(AllUsersAndInboxesSource):
 
     @property
-    def base_query(self):
-        return User.query
+    def only_users(self):
+        return True
 
     def getTerm(self, value, brain=None):
         # Contacts
@@ -296,21 +311,17 @@ class UsersContactsInboxesSourceBinder(object):
 
 
 @implementer(IQuerySource)
-class AssignedUsersSource(AllUsersAndInboxesSource):
+class AllUsersSource(AllUsersAndInboxesSource):
     """Vocabulary of all users assigned to the current admin unit.
     """
 
     @property
     def search_only_active_users(self):
-        return True
+        return False
 
     @property
-    def base_query(self):
-        admin_unit = get_current_admin_unit()
-        return create_session().query(User) \
-            .filter(User.userid == groups_users.columns.userid) \
-            .filter(groups_users.columns.groupid == OrgUnit.users_group_id) \
-            .filter(OrgUnit.admin_unit_id == admin_unit.unit_id)
+    def only_users(self):
+        return True
 
     def getTermByToken(self, token):
 
@@ -353,31 +364,36 @@ class AssignedUsersSource(AllUsersAndInboxesSource):
 
 
 @implementer(IContextSourceBinder)
-class AssignedUsersSourceBinder(object):
+class AllUsersSourceBinder(object):
 
     def __call__(self, context):
-        return AssignedUsersSource(context)
+        return AllUsersSource(context)
 
 
 @implementer(IQuerySource)
-class AllUsersSource(AssignedUsersSource):
+class AssignedUsersSource(AllUsersSource):
     """Vocabulary of all users assigned to the current admin unit.
     """
 
     @property
     def search_only_active_users(self):
-        return False
+        return True
 
     @property
     def base_query(self):
-        return create_session().query(User)
+        admin_unit = get_current_admin_unit()
+        return create_session().query(User) \
+            .filter(User.userid == groups_users.columns.userid) \
+            .filter(groups_users.columns.groupid == OrgUnit.users_group_id) \
+            .filter(OrgUnit.admin_unit_id == admin_unit.unit_id) \
+            .filter(OrgUnit.enabled == True)
 
 
 @implementer(IContextSourceBinder)
-class AllUsersSourceBinder(object):
+class AssignedUsersSourceBinder(object):
 
     def __call__(self, context):
-        return AllUsersSource(context)
+        return AssignedUsersSource(context)
 
 
 @implementer(IQuerySource)
@@ -391,8 +407,8 @@ class AllEmailContactsAndUsersSource(UsersContactsInboxesSource):
     """
 
     @property
-    def base_query(self):
-        return create_session().query(User)
+    def only_users(self):
+        return True
 
     def getTerm(self, value, brain=None):
         email, id_ = value.split(':', 1)

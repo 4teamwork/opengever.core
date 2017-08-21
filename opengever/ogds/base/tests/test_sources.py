@@ -30,6 +30,13 @@ class TestAllUsersAndInboxesSource(FunctionalTestCase):
                                         admin_unit=self.admin_unit)
                                 .with_default_groups())
 
+        self.disabled_unit = create(Builder('org_unit')
+                                    .id('unit3')
+                                    .having(title=u'Steueramt',
+                                            enabled=False,
+                                            admin_unit=self.admin_unit)
+                                    .with_default_groups())
+
         self.john = create(Builder('ogds_user')
                            .id('john')
                            .having(firstname=u'John', lastname=u'Doe')
@@ -42,11 +49,17 @@ class TestAllUsersAndInboxesSource(FunctionalTestCase):
                            .id('hans')
                            .having(firstname=u'Hans', lastname=u'Peter')
                            .assign_to_org_units([self.org_unit1,
-                                                 self.org_unit2]))
+                                                 self.org_unit2,
+                                                 self.disabled_unit]))
         self.reto = create(Builder('ogds_user')
                            .id('reto')
                            .having(firstname=u'Reto', lastname=u'Rageto')
                            .assign_to_org_units([self.org_unit2]))
+
+        self.simon = create(Builder('ogds_user')
+                            .id('simon')
+                            .having(firstname=u'Simon', lastname=u'Says')
+                            .assign_to_org_units([self.disabled_unit]))
 
         self.source = AllUsersAndInboxesSource(self.portal)
 
@@ -105,7 +118,13 @@ class TestAllUsersAndInboxesSource(FunctionalTestCase):
         self.assertTermKeys([u'unit1:hans', u'unit1:hugo', u'unit1:john'],
                             result)
 
-    def test_user_is_once_per_orgunit_in_resultset(self):
+    def test_return_no_search_result_for_inactive_orgunits(self):
+        result = self.source.search('Steueramt')
+
+        self.assertFalse(result,
+                         'Expect no result, since the Steueramt is disabled')
+
+    def test_user_is_once_per_active_orgunit_in_resultset(self):
         result = self.source.search('Hans')
 
         self.assertEquals(2, len(result), 'Expect 3 items')
@@ -139,6 +158,9 @@ class TestAllUsersAndInboxesSource(FunctionalTestCase):
         self.assertNotIn(u'malformed', self.source)
         self.assertNotIn(u'unit2:john', self.source)
         self.assertNotIn(u'', self.source)
+
+    def test_users_from_inactive_orgunits_are_not_valid(self):
+        self.assertNotIn('simon.says', self.source)
 
     def test_getTerm_can_handle_values_containing_only_a_userid(self):
         self.portal.REQUEST.set('form.widgets.responsible_client', 'unit2')
@@ -181,6 +203,12 @@ class TestAllUsersAndInboxesSource(FunctionalTestCase):
 
         self.assertIn('inbox:unit1', self.source)
 
+    def test_do_not_return_inboxes_of_inactive_orgunits(self):
+        result = self.source.search('Inbox Steueramt')
+
+        self.assertFalse(result,
+                         'Expect no Inbox for the inactive OrgUnit Steueramt')
+
     def test_search_for_term_inbox_or_partial_term_that_matches_inbox(self):
         inboxes = self.source.search('Inbox')
         self.assertEquals(2, len(inboxes), 'Expect two inboxes')
@@ -204,7 +232,7 @@ class TestAllUsersAndInboxesSource(FunctionalTestCase):
         self.assertNotIn(u'unit2:reto', source)
 
         self.assertTermKeys([u'inbox:unit1', u'inbox:unit2', u'unit1:john',
-                            u'unit1:hugo', u'unit1:hans'],
+                             u'unit1:hugo', u'unit1:hans'],
                             source.search('unit'))
 
     def test_only_the_current_inbox_is_valid(self):
@@ -236,6 +264,13 @@ class TestUsersContactsInboxesSource(FunctionalTestCase):
                             .having(title='Client2',
                                     admin_unit=self.admin_unit))
 
+        disabled_unit = create(Builder('org_unit')
+                               .id('client3')
+                               .having(title=u'Steueramt',
+                                       enabled=False,
+                                       admin_unit=self.admin_unit)
+                               .with_default_groups())
+
         create(Builder('ogds_user')
                .having(firstname=u'Test', lastname=u'User')
                .assign_to_org_units([self.org_unit]))
@@ -246,6 +281,10 @@ class TestUsersContactsInboxesSource(FunctionalTestCase):
         create(Builder('ogds_user').id('robin.hood')
                .having(firstname=u'Robin', lastname=u'Hood')
                .assign_to_org_units([org_unit_2]))
+
+        create(Builder('ogds_user').id('simon.says')
+               .having(firstname='Simon', lastname='Says')
+               .assign_to_org_units([disabled_unit]))
 
         create(Builder('contact')
                .having(firstname=u'Lara', lastname=u'Croft',
@@ -260,6 +299,15 @@ class TestUsersContactsInboxesSource(FunctionalTestCase):
         self.assertIn('test_user_1_', self.source)
         self.assertIn('hugo.boss', self.source)
         self.assertIn('robin.hood', self.source)
+
+    def test_users_from_inactive_orgunits_are_not_valid(self):
+        self.assertNotIn('simon.says', self.source)
+
+    def test_return_no_search_result_for_inactive_orgunits(self):
+        result = self.source.search('Steueramt')
+
+        self.assertFalse(result,
+                         'Expect no result, since the Steueramt is disabled')
 
     def test_not_existing_users(self):
         self.assertNotIn('dummy.user', self.source)
@@ -322,6 +370,13 @@ class TestAssignedUsersSource(FunctionalTestCase):
                             .having(title=u"Client 3", admin_unit=additional)
                             .with_default_groups())
 
+        disabled_unit = create(Builder('org_unit')
+                               .id('client4')
+                               .having(title=u'Steueramt',
+                                       enabled=False,
+                                       admin_unit=self.admin_unit)
+                               .with_default_groups())
+
         create(Builder('ogds_user').id('hugo.boss')
                .having(firstname='Test', lastname='User')
                .assign_to_org_units([self.org_unit]))
@@ -337,6 +392,10 @@ class TestAssignedUsersSource(FunctionalTestCase):
         create(Builder('ogds_user').id('peter.meier')
                .having(firstname='Peter', lastname='Meier')
                .assign_to_org_units([org_unit_3]))
+
+        create(Builder('ogds_user').id('simon.says')
+               .having(firstname='Simon', lastname='Says')
+               .assign_to_org_units([disabled_unit]))
 
         self.source = AssignedUsersSource(self.portal)
 
@@ -366,6 +425,9 @@ class TestAssignedUsersSource(FunctionalTestCase):
         self.assertIn('peter.muster', self.source)
         self.assertIn('jamie.lannister', self.source)
         self.assertIn(TEST_USER_ID, self.source)
+
+    def test_users_from_inactive_orgunits_are_not_valid(self):
+        self.assertNotIn('simon.says', self.source)
 
     def test_getTerm_handles_inactive_users(self):
         create(Builder('ogds_user')
@@ -417,6 +479,13 @@ class TestAllUsersSource(FunctionalTestCase):
                             .having(title=u"Client 3", admin_unit=additional)
                             .with_default_groups())
 
+        disabled_unit = create(Builder('org_unit')
+                               .id('client4')
+                               .having(title=u'Steueramt',
+                                       enabled=False,
+                                       admin_unit=self.admin_unit)
+                               .with_default_groups())
+
         create(Builder('ogds_user').id('hugo.boss')
                .having(firstname='Test', lastname='User')
                .assign_to_org_units([self.org_unit]))
@@ -438,6 +507,10 @@ class TestAllUsersSource(FunctionalTestCase):
                .having(firstname='John', lastname='Doe', active=False)
                .assign_to_org_units([self.org_unit]))
 
+        create(Builder('ogds_user').id('simon.says')
+               .having(firstname='Simon', lastname='Says')
+               .assign_to_org_units([disabled_unit]))
+
         self.source = AllUsersSource(self.portal)
 
     def test_all_users_are_valid(self):
@@ -448,6 +521,15 @@ class TestAllUsersSource(FunctionalTestCase):
         self.assertIn(TEST_USER_ID, self.source)
         self.assertIn('peter.meier', self.source)
         self.assertIn('john.doe', self.source)
+
+    def test_users_from_inactive_orgunits_are_not_valid(self):
+        self.assertNotIn('simon.says', self.source)
+
+    def test_return_no_search_result_for_inactive_orgunits(self):
+        result = self.source.search('Simon')
+
+        self.assertFalse(result,
+                         'Expect no result, since the Steueramt is disabled')
 
     def test_search_for_inactive_users_is_possible(self):
         result = self.source.search('Doe')
@@ -467,6 +549,13 @@ class TestAllEmailContactsAndUsersSource(FunctionalTestCase):
         self.org_unit, self.admin_unit = create(
             Builder('fixture').with_admin_unit().with_org_unit())
 
+        disabled_unit = create(Builder('org_unit')
+                               .id('unit4')
+                               .having(title=u'Steueramt',
+                                       enabled=False,
+                                       admin_unit=self.admin_unit)
+                               .with_default_groups())
+
         create(Builder('ogds_user')
                .having(firstname=u'Test', lastname=u'User')
                .having(email='onlyone@mail.com')
@@ -476,6 +565,10 @@ class TestAllEmailContactsAndUsersSource(FunctionalTestCase):
                .having(firstname=u'Hugo', lastname=u'Boss')
                .having(email='hugos@mail.com', email2='huegeler@mail.com')
                .assign_to_org_units([self.org_unit]))
+
+        create(Builder('ogds_user').id('simon.says')
+               .having(firstname='Simon', lastname='Says')
+               .assign_to_org_units([disabled_unit]))
 
         create(Builder('contact')
                .having(firstname=u'Lara', lastname=u'Croft',
@@ -492,6 +585,15 @@ class TestAllEmailContactsAndUsersSource(FunctionalTestCase):
 
         self.assertIn('hugos@mail.com:hugo.boss', self.source)
         self.assertIn('huegeler@mail.com:hugo.boss', self.source)
+
+    def test_users_from_inactive_orgunits_are_not_valid(self):
+        self.assertNotIn('simon.says', self.source)
+
+    def test_return_no_search_result_for_inactive_orgunits(self):
+        result = self.source.search('Simon')
+
+        self.assertFalse(result,
+                         'Expect no result, since the Steueramt is disabled')
 
     def test_invalid_ogds_tokens(self):
         self.assertNotIn('notthere@mail.com:hugo-boss', self.source)

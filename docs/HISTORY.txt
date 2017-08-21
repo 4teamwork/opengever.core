@@ -5,6 +5,7 @@ Changelog
 2017.5.0 (unreleased)
 ---------------------
 
+- Filter results for disabled OrgUnits in all sources. [mathias.leimgruber]
 - Ungrok opengever.latex. [elioschmutz]
 - Add a CI script to check incoming python files for pyflakes issues. [Rotonen]
 - Update ftw.zipexport to include empty folders. [elioschmutz]
