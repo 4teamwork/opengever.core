@@ -17,4 +17,26 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      name="view"
+      for="opengever.tasktemplates.content.tasktemplate.ITaskTemplate"
+      class=".tasktemplates.View"
+      template="templates/view.pt"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="add-tasktemplate"
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      class=".trigger.TriggerTaskTemlateFolderView"
+      permission="cmf.AddPortalContent"
+      />
+
+  <browser:page
+      name="select-tasktemplates"
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      class=".trigger.SelectTaskTemplatesView"
+      permission="cmf.AddPortalContent"
+      />
+
 </configure>
