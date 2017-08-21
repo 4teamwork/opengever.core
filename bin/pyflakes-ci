@@ -42,7 +42,7 @@ if [ "${files[*]}" ]; then
     echo ''
     echo 'Running pyflakes.'
     echo ''
-    bin/pyflakes "${files[*]}"
+    bin/pyflakes "${files[@]}"
     success=$?
 else
     echo "Found nothing to complain about, well done!"
