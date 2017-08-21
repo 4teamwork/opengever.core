@@ -95,7 +95,7 @@ class TestAgendaItemList(TestAgendaItem):
 
     @browsing
     def test_agendaitem_with_attachements_has_documents(self, browser):
-        item = self.setup_proposal(has_document = True)
+        item = self.setup_proposal(has_document=True)
         item = self.schedule_proposal(item, browser)
 
         browser.login().open(
@@ -109,7 +109,7 @@ class TestAgendaItemList(TestAgendaItem):
     @browsing
     def test_agendaitem_with_excerpts_and_documents_has_documents(self, browser):
         self.setup_excerpt_template()
-        item = self.setup_proposal(has_document = True)
+        item = self.setup_proposal(has_document=True)
         item = self.schedule_proposal(item, browser)
         browser.login().open(
             self.meeting_wrapper, {'_authenticator': createToken()},
@@ -185,7 +185,7 @@ class TestAgendaItemEdit(TestAgendaItem):
         browser.login().open(
             self.meeting_wrapper,
             view='agenda_items/{}/edit'.format(item.agenda_item_id),
-            data={'title': 257*u'a'})
+            data={'title': 257 * u'a'})
 
         self.assertEquals([{u'message': u'Agenda Item title is too long.',
                             u'messageClass': u'error',

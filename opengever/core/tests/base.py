@@ -13,7 +13,6 @@ class GeverWorkflowTest(WorkflowTest):
         else:
             return super(GeverWorkflowTest, self)._is_base_test()
 
-
     @property
     def workflow_path(self):
         self.assertIsNotNone(self.workflow_name, 'No workflow_name defined.')

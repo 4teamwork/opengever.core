@@ -49,7 +49,7 @@ class TestOpengeverSharingIntegration(FunctionalTestCase):
             u'Editor',
             u'Contributor',
             u'Reviewer',
-            u'Publisher',]
+            u'Publisher', ]
         self._check_roles(expect, self.view_dossier.available_roles())
 
     def test_manageable_roles_with_reader_and_owner(self):

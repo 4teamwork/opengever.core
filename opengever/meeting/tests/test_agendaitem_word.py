@@ -231,7 +231,7 @@ class TestWordAgendaItem(IntegrationTestCase):
         # The excerpt was created in the meeting dossier and contains the exact
         # original document.
         self.assertEquals(1, len(children['added']))
-        excerpt_document ,= children['added']
+        excerpt_document, = children['added']
         self.assertEquals('Excerpt \xc3\x84nderungen am Personalreglement',
                           excerpt_document.Title())
         self.assertEquals(

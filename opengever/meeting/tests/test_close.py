@@ -121,6 +121,6 @@ class TestCloseMeeting(FunctionalTestCase):
             "messages": [{
               "messageTitle": "Information",
               "message": "Transition Close meeting executed",
-              "messageClass": "info" }]
+              "messageClass": "info"}]
           }, browser.json
         )

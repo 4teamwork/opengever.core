@@ -56,10 +56,10 @@ class TestProtocol(FunctionalTestCase):
             .having(repository_folder=self.repository_folder))
         self.proposal, self.submitted_proposal = create(
             Builder('proposal')
-                    .within(self.dossier)
-                    .having(title='Mach doch',
-                            committee=self.committee.load_model())
-                    .with_submitted())
+            .within(self.dossier)
+            .having(title='Mach doch',
+                    committee=self.committee.load_model())
+            .with_submitted())
 
         self.committee_model = self.committee.load_model()
         self.meeting = create(Builder('meeting')

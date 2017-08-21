@@ -90,6 +90,7 @@ class ICommittee(form.Schema):
 class RepositoryfolderValidator(BaseRepositoryfolderValidator):
     pass
 
+
 WidgetValidatorDiscriminators(
     RepositoryfolderValidator,
     field=ICommittee['repository_folder'])

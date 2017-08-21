@@ -102,7 +102,6 @@ class TestMemberView(FunctionalTestCase):
                                            date_from=date(2003, 01, 01),
                                            date_to=date(2007, 12, 31)))
 
-
     @browsing
     def test_site_title_is_member_title(self, browser):
         browser.login().open(self.member.get_url(self.container))

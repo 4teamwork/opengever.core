@@ -80,7 +80,6 @@ class Reactivate(Transition):
         api.portal.show_message(msg, request=getRequest(), type='info')
 
 
-
 class Proposal(Base):
     """Sql representation of a proposal."""
 
