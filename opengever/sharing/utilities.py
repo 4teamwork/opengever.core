@@ -1,21 +1,16 @@
-from five import grok
-from plone.app.workflow import PloneMessageFactory as _
 from plone.app.workflow import permissions
+from plone.app.workflow import PloneMessageFactory as _
 from plone.app.workflow.interfaces import ISharingPageRole
-from zope.interface import implements
+from zope.interface import implementer
 
 
-class AdministratorRole(grok.GlobalUtility):
-    grok.name('Administrator')
-    implements(ISharingPageRole)
-
+@implementer(ISharingPageRole)
+class AdministratorRole(object):
     title = _(u"title_can_administrate", default=u"Can administrate")
     required_permission = permissions.DelegateRoles
 
 
-class PublisherRole(grok.GlobalUtility):
-    grok.name('Publisher')
-    implements(ISharingPageRole)
-
+@implementer(ISharingPageRole)
+class PublisherRole(object):
     title = _(u"title_can_publish", default=u"Can publish")
     required_permission = permissions.DelegateRoles
