@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-07-21 07:47+0000\n"
+"POT-Creation-Date: 2017-08-17 12:42+0000\n"
 "PO-Revision-Date: 2014-09-04 01:03+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -71,6 +71,21 @@ msgstr "Vertraulich"
 #: ./opengever/base/browser/confirm.pt:20
 msgid "desc_confirm_action"
 msgstr "Bestätigen Sie bitte, dass Sie diese Aktion durchführen möchten."
+
+#. Default: "If you need to report this to the responsible person, please include this entry number in your message."
+#: ./opengever/base/browser/templates/error.pt:101
+msgid "description_include_error_in_admin_message"
+msgstr "Wenn Sie diesen Fehler dem Fachapplikationsverantwortlichen melden wollen, fügen Sie bitte die Fehlernummer hinzu."
+
+#. Default: "We apologize for the inconvenience, but the page you were trying to access is not at this address."
+#: ./opengever/base/browser/templates/error.pt:62
+msgid "description_site_error"
+msgstr "Entschuldigung, aber die Webseite die Sie versucht haben zu erreichen ist hier nicht verfügbar."
+
+#. Default: "Please contact the responsible person if this problem persists."
+#: ./opengever/base/browser/templates/error.pt:66
+msgid "description_site_error_site_admin"
+msgstr "Bitte kontaktieren Sie den Fachapplikationsverantwortlichen, wenn dieses Problem längerfristig besteht."
 
 #. Default: "You have not selected any Items."
 #: ./opengever/base/browser/copy_items.py:23
@@ -194,7 +209,7 @@ msgid "label_description"
 msgstr "Beschreibung"
 
 #. Default: "Dossier:"
-#: ./opengever/base/browser/search.pt:305
+#: ./opengever/base/browser/search.pt:331
 msgid "label_dossier"
 msgstr "Dossier:"
 
@@ -229,7 +244,7 @@ msgid "label_retention_period_annotation"
 msgstr "Kommentar zur Aufbewahrungsdauer"
 
 #. Default: "Search"
-#: ./opengever/base/browser/search.pt:39
+#: ./opengever/base/browser/search.pt:65
 msgid "label_search"
 msgstr "Suche"
 
@@ -240,7 +255,7 @@ msgstr "Fehler"
 
 #. Default: "Title"
 #: ./opengever/base/behaviors/base.py:24
-#: ./opengever/base/browser/translated_title.py:36
+#: ./opengever/base/browser/translated_title.py:35
 #: ./opengever/base/widgets.py:106
 msgid "label_title"
 msgstr "Titel"
@@ -346,18 +361,23 @@ msgid "public"
 msgstr "Öffentlich"
 
 #. Default: "Did you not find what you were looking for? Try the ${advanced_search} to refine your search."
-#: ./opengever/base/browser/search.pt:63
+#: ./opengever/base/browser/search.pt:89
 msgid "search_results_advanced"
 msgstr "Haben Sie nicht gefunden, wonach Sie gesucht haben? Die ${advanced_search} bietet Ihnen präzisere Suchmöglichkeiten."
 
 #. Default: "Advanced Search"
-#: ./opengever/base/browser/search.pt:64
+#: ./opengever/base/browser/search.pt:90
 msgid "search_results_advanced_link"
 msgstr "erweiterte Suche"
 
 #: ./opengever/base/browser/templates/gever-macros.pt:105
 msgid "show all"
 msgstr "Alle anzeigen"
+
+#. Default: "Back to the portal"
+#: ./opengever/base/browser/templates/error.pt:69
+msgid "text_back_to_portal"
+msgstr "Zurück zum Portal"
 
 #. Default: "Confirming User Action."
 #: ./opengever/base/browser/confirm.pt:14

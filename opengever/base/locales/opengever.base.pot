@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-07-21 07:47+0000\n"
+"POT-Creation-Date: 2017-08-17 12:42+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -69,6 +69,21 @@ msgstr ""
 #. Default: "Confirm that you'd like to perform this action."
 #: ./opengever/base/browser/confirm.pt:20
 msgid "desc_confirm_action"
+msgstr ""
+
+#. Default: "If you need to report this to the responsible person, please include this entry number in your message."
+#: ./opengever/base/browser/templates/error.pt:101
+msgid "description_include_error_in_admin_message"
+msgstr ""
+
+#. Default: "We apologize for the inconvenience, but the page you were trying to access is not at this address."
+#: ./opengever/base/browser/templates/error.pt:62
+msgid "description_site_error"
+msgstr ""
+
+#. Default: "Please contact the responsible person if this problem persists."
+#: ./opengever/base/browser/templates/error.pt:66
+msgid "description_site_error_site_admin"
 msgstr ""
 
 #. Default: "You have not selected any Items."
@@ -191,7 +206,7 @@ msgid "label_description"
 msgstr ""
 
 #. Default: "Dossier:"
-#: ./opengever/base/browser/search.pt:305
+#: ./opengever/base/browser/search.pt:331
 msgid "label_dossier"
 msgstr ""
 
@@ -226,7 +241,7 @@ msgid "label_retention_period_annotation"
 msgstr ""
 
 #. Default: "Search"
-#: ./opengever/base/browser/search.pt:39
+#: ./opengever/base/browser/search.pt:65
 msgid "label_search"
 msgstr ""
 
@@ -237,7 +252,7 @@ msgstr ""
 
 #. Default: "Title"
 #: ./opengever/base/behaviors/base.py:24
-#: ./opengever/base/browser/translated_title.py:36
+#: ./opengever/base/browser/translated_title.py:35
 #: ./opengever/base/widgets.py:106
 msgid "label_title"
 msgstr ""
@@ -342,17 +357,22 @@ msgid "public"
 msgstr ""
 
 #. Default: "Did you not find what you were looking for? Try the ${advanced_search} to refine your search."
-#: ./opengever/base/browser/search.pt:63
+#: ./opengever/base/browser/search.pt:89
 msgid "search_results_advanced"
 msgstr ""
 
 #. Default: "Advanced Search"
-#: ./opengever/base/browser/search.pt:64
+#: ./opengever/base/browser/search.pt:90
 msgid "search_results_advanced_link"
 msgstr ""
 
 #: ./opengever/base/browser/templates/gever-macros.pt:105
 msgid "show all"
+msgstr ""
+
+#. Default: "Back to the portal"
+#: ./opengever/base/browser/templates/error.pt:69
+msgid "text_back_to_portal"
 msgstr ""
 
 #. Default: "Confirming User Action."
