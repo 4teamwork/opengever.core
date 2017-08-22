@@ -6,6 +6,6 @@
 !git-fork-point
 !mtest
 !pinchecker
+!pyflakes-ci
 !remove-test-cache
 !test-cached
-!pyflakes-ci
