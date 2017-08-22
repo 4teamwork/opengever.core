@@ -3,17 +3,12 @@ class CommitteeRoles(object):
 
     Preserves other roles that are set for the principal.
 
-    There is currently one special role CommitteeGroupMember. This role will
+    There is currently one special role CommitteeResponsible. This role will
     be added as local role on a committee for the group that can be selected
     in the add/edit forms.
 
     """
-
-    # XXX In order to make it possible for users to edit proposal document when
-    # the word-meeting-feature is enabled, we need to give the Editor role
-    # for now. This must be fixed when lawgiver workflows for proposals and/or
-    # meetings are introduced.
-    managed_roles = ('CommitteeGroupMember', 'Editor')
+    managed_roles = ('CommitteeResponsible',)
 
     def __init__(self, committee):
         self.context = committee

@@ -4,7 +4,7 @@
     <role name="APIUser" />
     <role name="Archivist" />
     <role name="CommitteeAdministrator" />
-    <role name="CommitteeGroupMember" />
+    <role name="CommitteeMember" />
     <role name="CommitteeResponsible" />
     <role name="MeetingUser" />
     <role name="Publisher" />

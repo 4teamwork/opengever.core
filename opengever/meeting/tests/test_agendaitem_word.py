@@ -265,7 +265,7 @@ class TestWordAgendaItem(IntegrationTestCase):
             self.committee_container.manage_setLocalRoles(
                 self.regular_user.getId(), ('Reader',))
             self.committee.manage_setLocalRoles(
-                self.regular_user.getId(), ('CommitteeGroupMember', 'Editor'))
+                self.regular_user.getId(), ('CommitteeResponsible', 'Editor'))
             self.committee_container.reindexObjectSecurity()
             # Let regular_user have no access to meeting_dossier
             self.meeting_dossier.__ac_local_roles_block__ = True

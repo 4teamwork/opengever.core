@@ -8,6 +8,7 @@
   <lawgiver:role name="Administrator" />
   <lawgiver:role name="CommitteeAdministrator" />
   <lawgiver:role name="CommitteeResponsible" />
+  <lawgiver:role name="CommitteeMember" />
   <lawgiver:role name="MeetingUser" />
   <lawgiver:role name="Publisher" />
 

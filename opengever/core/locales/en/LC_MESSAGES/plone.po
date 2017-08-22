@@ -34,7 +34,7 @@ msgstr "committee admin"
 
 #. Default: "committee member"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
-msgid "opengever_committee_workflow--ROLE--CommitteeGroupMember"
+msgid "opengever_committee_workflow--ROLE--CommitteeMember"
 msgstr "committee member"
 
 #. Default: "committee responsible"
@@ -49,7 +49,7 @@ msgstr "manager"
 
 #. Default: "A committe member is part of a committee and can view the committee data, such as meetings and proposals."
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
-msgid "opengever_committee_workflow--ROLE-DESCRIPTION--CommitteeGroupMember"
+msgid "opengever_committee_workflow--ROLE-DESCRIPTION--CommitteeMember"
 msgstr "A committe member is part of a committee and can view the committee data, such as meetings and proposals."
 
 #. Default: "The committe responsible is in charge of a committee. This involves creating, planing and hold meetings as well as configuring and deactivating the committee."

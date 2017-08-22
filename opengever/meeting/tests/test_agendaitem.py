@@ -423,8 +423,7 @@ class TestAgendaItemDecide(TestAgendaItem):
         create(Builder('user').named('Hugo', 'Boss'))
         api.user.grant_roles(
             username=u'hugo.boss', obj=self.committee,
-            roles=['Contributor', 'Editor', 'Reader', 'CommitteeGroupMember',
-                   'CommitteeResponsible'])
+            roles=['Contributor', 'Editor', 'Reader', 'CommitteeResponsible'])
         transaction.commit()
 
         self.login(user_id=u'hugo.boss')
