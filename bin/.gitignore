@@ -6,6 +6,7 @@
 !git-changed
 !git-changed-files
 !git-changed-py
+!git-changed-sh
 !git-fork-point
 !mtest
 !pinchecker
