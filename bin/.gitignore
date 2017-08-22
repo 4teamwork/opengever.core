@@ -3,6 +3,7 @@
 !cleanup-versions-cfg
 !create-schema-migration
 !create-upgrade
+!git-changed
 !git-fork-point
 !mtest
 !pinchecker
