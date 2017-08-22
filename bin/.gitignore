@@ -13,4 +13,5 @@
 !pinchecker
 !pyflakes-ci
 !remove-test-cache
+!shellcheck
 !test-cached
