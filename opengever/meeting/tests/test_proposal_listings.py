@@ -77,7 +77,7 @@ class TestDossierProposalListing(ProposalListingTests):
         browser.login().open(self.dossier, view='tabbedview_view-proposals')
         table = browser.css('table.listing').first
 
-        self.assertEquals(
+        self.assertItemsEqual(
             [{'State': 'Pending',
               'Reference Number': '1',
               'Comittee': 'My committee',
