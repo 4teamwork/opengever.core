@@ -28,6 +28,7 @@
   <permission>Portlets: Manage portlets</permission>
   <permission>Sharing page: Delegate Administrator role</permission>
   <permission>Sharing page: Delegate CommitteeAdministrator role</permission>
+  <permission>Sharing page: Delegate CommitteeMember role</permission>
   <permission>Sharing page: Delegate CommitteeResponsible role</permission>
   <permission>Sharing page: Delegate Contributor role</permission>
   <permission>Sharing page: Delegate Editor role</permission>
@@ -87,7 +88,7 @@
     <exit-transition transition_id="opengever_committee_workflow--TRANSITION--deactivate--active_inactive"/>
     <permission-map name="Access contents information" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
-      <permission-role>CommitteeGroupMember</permission-role>
+      <permission-role>CommitteeMember</permission-role>
       <permission-role>CommitteeResponsible</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
@@ -98,7 +99,7 @@
     </permission-map>
     <permission-map name="CMFEditions: Access previous versions" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
-      <permission-role>CommitteeGroupMember</permission-role>
+      <permission-role>CommitteeMember</permission-role>
       <permission-role>CommitteeResponsible</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
@@ -204,6 +205,10 @@
     </permission-map>
     <permission-map name="Sharing page: Delegate Administrator role" acquired="False"/>
     <permission-map name="Sharing page: Delegate CommitteeAdministrator role" acquired="False"/>
+    <permission-map name="Sharing page: Delegate CommitteeMember role" acquired="False">
+      <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>Manager</permission-role>
+    </permission-map>
     <permission-map name="Sharing page: Delegate CommitteeResponsible role" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
       <permission-role>Manager</permission-role>
@@ -224,7 +229,7 @@
     </permission-map>
     <permission-map name="View" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
-      <permission-role>CommitteeGroupMember</permission-role>
+      <permission-role>CommitteeMember</permission-role>
       <permission-role>CommitteeResponsible</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
@@ -407,14 +412,14 @@
     <exit-transition transition_id="opengever_committee_workflow--TRANSITION--reactivate--inactive_active"/>
     <permission-map name="Access contents information" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
-      <permission-role>CommitteeGroupMember</permission-role>
+      <permission-role>CommitteeMember</permission-role>
       <permission-role>CommitteeResponsible</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="Add portal content" acquired="False"/>
     <permission-map name="CMFEditions: Access previous versions" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
-      <permission-role>CommitteeGroupMember</permission-role>
+      <permission-role>CommitteeMember</permission-role>
       <permission-role>CommitteeResponsible</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
@@ -520,6 +525,10 @@
     </permission-map>
     <permission-map name="Sharing page: Delegate Administrator role" acquired="False"/>
     <permission-map name="Sharing page: Delegate CommitteeAdministrator role" acquired="False"/>
+    <permission-map name="Sharing page: Delegate CommitteeMember role" acquired="False">
+      <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>Manager</permission-role>
+    </permission-map>
     <permission-map name="Sharing page: Delegate CommitteeResponsible role" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
       <permission-role>Manager</permission-role>
@@ -540,7 +549,7 @@
     </permission-map>
     <permission-map name="View" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
-      <permission-role>CommitteeGroupMember</permission-role>
+      <permission-role>CommitteeMember</permission-role>
       <permission-role>CommitteeResponsible</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>

@@ -28,6 +28,7 @@
   <permission>Portlets: Manage portlets</permission>
   <permission>Sharing page: Delegate Administrator role</permission>
   <permission>Sharing page: Delegate CommitteeAdministrator role</permission>
+  <permission>Sharing page: Delegate CommitteeMember role</permission>
   <permission>Sharing page: Delegate CommitteeResponsible role</permission>
   <permission>Sharing page: Delegate Contributor role</permission>
   <permission>Sharing page: Delegate Editor role</permission>
@@ -185,6 +186,7 @@
     <permission-map name="Sharing page: Delegate CommitteeAdministrator role" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>
+    <permission-map name="Sharing page: Delegate CommitteeMember role" acquired="False"/>
     <permission-map name="Sharing page: Delegate CommitteeResponsible role" acquired="False"/>
     <permission-map name="Sharing page: Delegate Contributor role" acquired="False"/>
     <permission-map name="Sharing page: Delegate Editor role" acquired="False"/>

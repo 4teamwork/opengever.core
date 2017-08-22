@@ -3,7 +3,7 @@ Role mapping:
   manager => Manager
   committee admin => CommitteeAdministrator
   committee responsible => CommitteeResponsible
-  committee member => CommitteeGroupMember
+  committee member => CommitteeMember
 
 Visible roles:
   committee responsible
