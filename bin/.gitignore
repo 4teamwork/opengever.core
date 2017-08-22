@@ -11,7 +11,7 @@
 !git-fork-point
 !mtest
 !pinchecker
-!pyflakes-ci
+!qa
 !remove-test-cache
 !shellcheck
 !test-cached
