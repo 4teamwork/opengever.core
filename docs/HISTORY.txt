@@ -9,6 +9,7 @@ Changelog
 - Ungrok opengever.latex. [elioschmutz]
 - Add a CI script to check incoming python files for pyflakes issues. [Rotonen]
 - Update ftw.zipexport to include empty folders. [elioschmutz]
+- Word meeting: update styling and placement of meeting view components. [jone]
 - Add bin/test-cached helper script to execute a chached test-run. [deiferni]
 - Ungrok opengever.ogds.base [lgraf]
 - Add external_reference field and index [tarnap]

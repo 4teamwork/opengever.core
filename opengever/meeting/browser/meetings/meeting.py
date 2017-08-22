@@ -230,14 +230,18 @@ class MeetingView(BrowserView):
 
     has_model_breadcrumbs = True
 
-    template = ViewPageTemplateFile('templates/meeting.pt')
+    noword_template = ViewPageTemplateFile('templates/meeting-noword.pt')
+    word_template = ViewPageTemplateFile('templates/meeting-word.pt')
 
     def __init__(self, context, request):
         super(MeetingView, self).__init__(context, request)
         self.model = self.context.model
 
     def __call__(self):
-        return self.template()
+        if is_word_meeting_implementation_enabled():
+            return self.word_template()
+        else:
+            return self.noword_template()
 
     def get_css_class(self, document):
         """used for display icons in the view"""
@@ -259,7 +263,7 @@ class MeetingView(BrowserView):
         return self.model.get_url(view='protocol')
 
     def url_generate_protocol(self):
-        if self.is_word_meeting_implementation_enabled():
+        if is_word_meeting_implementation_enabled():
             return self.url_merge_docx_protocol()
 
         if not self.model.has_protocol_document():
@@ -301,9 +305,12 @@ class MeetingView(BrowserView):
     def render_handlebars_agendaitems_template(self):
         if is_word_meeting_implementation_enabled():
             return self.render_handlebars_agendaitems_template_word()
+        else:
+            return self.render_handlebars_agendaitems_template_noword()
 
+    def render_handlebars_agendaitems_template_noword(self):
         return prepare_handlebars_template(
-            TEMPLATES_DIR.joinpath('agendaitems.html'),
+            TEMPLATES_DIR.joinpath('agendaitems-noword.html'),
             translations=(
                 _('label_edit_cancel', default='Cancel'),
                 _('label_edit_save', default='Save'),
@@ -372,7 +379,3 @@ class MeetingView(BrowserView):
         return translate(_('An unexpected error has occurred',
                            default='An unexpected error has occurred'),
                          context=self.request)
-
-    def is_word_meeting_implementation_enabled(self):
-        # Make feature flag available in meeting.pt
-        return is_word_meeting_implementation_enabled()
