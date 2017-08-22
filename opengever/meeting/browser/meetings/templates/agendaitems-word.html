@@ -1,24 +1,35 @@
 <script id="agendaitemsTemplate" type="text/x-handlebars-template">
   {{#each agendaitems}}
-  <tr class="{{css_class}} word-feature" data-uid={{id}}>
+  <tr class="{{css_class}} word-feature agenda_item" data-uid={{id}}>
     {{#if ../agendalist_editable}}<td class="sortable-handle"></td>{{/if}}
-    <td class="number">
-      {{number}}
+    <td class="title">
       {{#if has_documents}}
       <div class="toggle-attachements">
-        <a class="toggle-attachements-btn"></a>
+        <a class="toggle-attachements-btn"
+           title="%(label_toggle_attachments)s" />
       </div>
       {{/if}}
-    </td>
-    <td class="title">
+      <span class="number"
+            title="%(label_agenda_item_number)s">
+        {{number}}
+      </span>
       <span class="proposal_title">{{{link}}}</span>
+      <div class="edit-box">
+        <div class="input-group">
+          <input type="text" {{#if has_proposal}}maxlength="%(max_proposal_title_length)i"{{/if}} />
+          <div class="button-group">
+            <input value="%(label_edit_save)s" type="button" class="button edit-save" />
+            <input value="%(label_edit_cancel)s" type="button" class="button edit-cancel" />
+          </div>
+        </div>
+      </div>
       {{#if has_proposal}}
       <div class="proposal_document {{#if proposal_document_checked_out}}checked-out{{/if}}">{{{proposal_document_link}}}</div>
 
       {{#if excerpts}}
-      <div class="documents">
-        <div class="label_attachments">%(label_excerpts)s:</div>
-        <ul>
+      <div>
+        <div class="documents_label">%(label_excerpts)s:</div>
+        <ul class="documents-list">
           {{#each excerpts}}
           <li>
             {{{link}}}
@@ -30,8 +41,8 @@
 
       {{#if has_documents}}
       <div class="attachements">
-        <div class="label_attachments">%(label_attachments)s:</div>
-        <ul>
+        <div class="documents_label">%(label_attachments)s:</div>
+        <ul class="documents-list">
           {{#each documents}}
           <li>
             {{{link}}}
@@ -47,15 +58,6 @@
         {{{excerpt}}}
       </div>
       {{/if}}
-      <div class="edit-box">
-        <div class="input-group">
-          <input type="text" {{#if has_proposal}}maxlength="%(max_proposal_title_length)i"{{/if}} />
-          <div class="button-group">
-            <input value="%(label_edit_save)s" type="button" class="button edit-save" />
-            <input value="%(label_edit_cancel)s" type="button" class="button edit-cancel" />
-          </div>
-        </div>
-      </div>
     </td>
     {{#if ../editable}}
     <td class="actions">
