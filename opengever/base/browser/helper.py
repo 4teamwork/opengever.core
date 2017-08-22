@@ -18,15 +18,20 @@ def _get_task_css_class(task):
 
 
 # XXX object orient me!
-def get_css_class(item):
+def get_css_class(item, type_icon_only=False):
     """Returns the content-type icon css class for `item`.
 
     Arguments:
     `item` -- obj or brain
+    `type_icon_only` -- bool if it should only return the simple object
+    type icon or the detailed content icon(mimetypes for document etc.).
     """
     css_class = None
 
     normalize = getUtility(IIDNormalizer).normalize
+    if type_icon_only:
+        return "contenttype-%s" % normalize(item.portal_type)
+
     if isinstance(type(item), DeclarativeMeta) or \
             item.portal_type == 'opengever.task.task':
 

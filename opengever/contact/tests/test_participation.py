@@ -90,7 +90,8 @@ class TestParticipationWrapper(FunctionalTestCase):
 
     def setUp(self):
         super(TestParticipationWrapper, self).setUp()
-        self.dossier = create(Builder('dossier'))
+        self.dossier = create(Builder('dossier')
+                              .titled(u'Dossier'))
         self.hans = create(Builder('person')
                            .having(firstname=u'Hans', lastname=u'M\xfcller'))
         self.participation = create(Builder('contact_participation')
@@ -106,8 +107,8 @@ class TestParticipationWrapper(FunctionalTestCase):
             [u'Edit Participation of M\xfcller Hans'],
             browser.css('h1').text)
         self.assertEqual(
-            [u'You are here: Client1 / dossier-1 / Participation of M\xfcller Hans'],
-            browser.css('#portal-breadcrumbs').text)
+            ['Client1', u'Dossier', u'Participation of M\xfcller Hans'],
+            browser.css('#portal-breadcrumbs li').text)
 
     @browsing
     def test_cross_injection_raises_unauthorized(self, browser):

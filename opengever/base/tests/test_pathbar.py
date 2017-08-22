@@ -14,20 +14,48 @@ class TestPathBar(FunctionalTestCase):
         self.repo = create(Builder('repository')
                            .within(self.root)
                            .titled(u'Testposition'))
-        self.dossier = create(Builder('dossier')
+        self.subrepo = create(Builder('repository')
                               .within(self.repo)
+                              .titled(u'Subposition'))
+        self.dossier = create(Builder('dossier')
+                              .within(self.subrepo)
                               .titled(u'Dossier 1'))
         self.meeting_dossier = create(
-            Builder('meeting_dossier').within(self.repo))
+            Builder('meeting_dossier').within(self.subrepo))
 
     @browsing
     def test_first_part_is_org_unit_title(self, browser):
         browser.login().open(self.dossier)
 
-        breadcrumb_links = browser.css('#portal-breadcrumbs a')
+        first_part = browser.css('#portal-breadcrumbs li a')[0]
+        self.assertEquals('Client1', first_part.text)
+        self.assertEquals(self.portal.absolute_url(), first_part.get('href'))
+
+    @browsing
+    def test_contains_contenttype_icon_class(self, browser):
+        browser.login().open(self.dossier)
+
         self.assertEquals(
-            ['Client1', 'Repository', '1. Testposition', 'Dossier 1'],
-            breadcrumb_links.text)
+            ['contenttype-plone-site',
+             'contenttype-opengever-repository-repositoryfolder',
+             'contenttype-opengever-repository-repositoryfolder',
+             'contenttype-opengever-repository-repositoryroot',
+             'contenttype-opengever-dossier-businesscasedossier'],
+            [crumb.get('class') for crumb in
+             browser.css('#portal-breadcrumbs li a i')])
+
+    @browsing
+    def test_repositories_are_grouped_in_a_sublist(self, browser):
+        browser.login().open(self.dossier)
+
+        self.assertEquals(
+            ['Client1',
+             '1.1. Subposition', '1. Testposition', 'Repository',
+             'Dossier 1'],
+            browser.css('#portal-breadcrumbs li a').text)
+
+        self.assertEquals(['1. Testposition', 'Repository'],
+                          browser.css('#portal-breadcrumbs li ul a').text)
 
     @browsing
     def test_last_part_is_linked(self, browser):
@@ -63,5 +91,6 @@ class TestPathBar(FunctionalTestCase):
         last_link = browser.css('#portal-breadcrumbs a')[-1]
         self.assertEqual(
             'http://nohost/plone/opengever-meeting-committeecontainer/committee-1/meeting-1',
-            last_link.node.attrib['href'])
-        self.assertEqual(meeting.get_title(), last_link.node.text)
+            last_link.get('href'))
+
+        self.assertEqual(meeting.get_title(), last_link.text)

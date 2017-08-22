@@ -26,9 +26,10 @@ class SQLWrapperBase(ExtensionClass.Base, Implicit, Traversable):
     def absolute_url(self):
         return self.model.get_url(view=None)
 
-    def get_breadcrumbs(self):
-        return ({'absolute_url': self.absolute_url(),
-                 'Title': self.get_title()},)
+    def get_breadcrumb(self):
+        return {'absolute_url': self.absolute_url(),
+                'title': self.get_title(),
+                'css_class': getattr(self.model, 'css_class', '')}
 
     def get_title(self):
         return self.model.get_title()

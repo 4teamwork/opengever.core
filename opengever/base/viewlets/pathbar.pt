@@ -1,35 +1,43 @@
 <div id="portal-breadcrumbs"
      i18n:domain="plone"
-     tal:define="breadcrumbs view/breadcrumbs;
-                 is_rtl view/is_rtl">
+     tal:define="breadcrumbs view/obj_chain;
+                 repository_chain view/repository_chain;
+                 leaf_node view/leaf_node">
 
-    <span id="breadcrumbs-you-are-here" i18n:translate="you_are_here">You
-are here:</span>
-    <span id="breadcrumbs-home">
-        <a tal:attributes="href view/navigation_root_url" tal:content="view/admin_unit_label">Home</a>
-        <span tal:condition="breadcrumbs" class="breadcrumbSeparator">
-            <tal:ltr condition="not: is_rtl">/</tal:ltr>
-            <tal:rtl condition="is_rtl">\</tal:rtl>
-        </span>
-    </span>
+  <ul class="breadcrumb">
+    <li>
+      <a href=""
+         tal:attributes="href context/@@plone_portal_state/portal_url">
+        <i class="contenttype-plone-site" />
+        <span tal:content="view/admin_unit_label" />
+      </a>
+    </li>
 
-    <span tal:repeat="crumb breadcrumbs"
-          tal:attributes="dir python:is_rtl and 'rtl' or 'ltr';
-                          id string:breadcrumbs-${repeat/crumb/number}">
-        <tal:item tal:define="is_last repeat/crumb/end;
-                              url crumb/absolute_url;
-                              title crumb/Title">
-            <a href="#"
-               tal:omit-tag="not: url"
-               tal:attributes="href url"
-               tal:content="title">
-                crumb
-            </a>
-            <span class="breadcrumbSeparator" tal:condition="not: is_last">
-                <tal:ltr condition="not: is_rtl">/</tal:ltr>
-                <tal:rtl condition="is_rtl">\</tal:rtl>
-            </span>
-         </tal:item>
-    </span>
+    <li tal:condition="leaf_node">
+      <a tal:attributes="href leaf_node/absolute_url">
+        <i tal:attributes="class leaf_node/css_class" />
+        <span tal:content="leaf_node/title" label="for" />
+        <label for="repo-dropdown-toggler" class="repo-dropdown-toggle"
+               tal:condition="repository_chain" />
+      </a>
+      <input type="checkbox" id="repo-dropdown-toggler" />
+      <ul class="repo-dropdown" tal:condition="repository_chain">
+        <li tal:repeat="crumb repository_chain">
+          <a tal:attributes="href crumb/absolute_url; class crumb/css_class" tal:content="crumb/title" />
+        </li>
+      </ul>
+
+    </li>
+
+    <li tal:repeat="crumb breadcrumbs">
+      <tal:item tal:define="url crumb/absolute_url; title crumb/title">
+        <a href="#" tal:omit-tag="not: url" tal:attributes="href url">
+          <i tal:attributes="class crumb/css_class" />
+          <span tal:content="title" />
+        </a>
+      </tal:item>
+    </li>
+
+  </ul>
 
 </div>

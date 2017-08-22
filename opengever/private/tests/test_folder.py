@@ -52,7 +52,7 @@ class TestPrivateFolderTabbedView(FunctionalTestCase):
 
     def setUp(self):
         super(TestPrivateFolderTabbedView, self).setUp()
-        self.root = create(Builder('private_root'))
+        self.root = create(Builder('private_root').titled(u'Private root'))
         self.folder = create_members_folder(self.root)
 
     @browsing
@@ -66,8 +66,8 @@ class TestPrivateFolderTabbedView(FunctionalTestCase):
     def test_private_root_is_hidden_from_breadcrumbs(self, browser):
         browser.login().open(self.folder)
         self.assertEqual(
-            'You are here: Client1 / Test User (test_user_1_)',
-            browser.css('#portal-breadcrumbs').first.text)
+            ['Client1', 'Test User (test_user_1_)'],
+            browser.css('#portal-breadcrumbs li').text)
 
     @browsing
     def test_dossier_tab_lists_all_containig_private_dossiers(self, browser):

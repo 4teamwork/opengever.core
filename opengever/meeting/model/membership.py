@@ -43,6 +43,10 @@ class Membership(Base, SQLFormSupport):
             self.date_from,
             self.date_to)
 
+    @property
+    def css_class(self):
+        return 'contenttype-opengever-meeting-membership'
+
     def is_removable(self):
         return True
 
