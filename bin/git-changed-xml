@@ -1,0 +1,4 @@
+#!/bin/bash
+# Exclude deleted files
+bin/git-changed-files | grep -E '\.xml$'
+# EOF
