@@ -5,6 +5,7 @@ Changelog
 2017.5.0 (unreleased)
 ---------------------
 
+- Add upgrade step which fixes potential missing titles on opengever.private.root objects. [mathias.leimgruber]
 - Filter results for disabled OrgUnits in all sources. [mathias.leimgruber]
 - Install ftw.tika if necessary. [mathias.leimgruber]
 - Ungrok opengever.latex. [elioschmutz]
