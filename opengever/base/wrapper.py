@@ -1,7 +1,6 @@
 from Acquisition import Implicit
 from OFS.Traversable import Traversable
 from opengever.base.interfaces import ISQLObjectWrapper
-from Products.CMFPlone.interfaces import IHideFromBreadcrumbs
 from zope.interface import implements
 import ExtensionClass
 
@@ -10,7 +9,7 @@ class SQLWrapperBase(ExtensionClass.Base, Implicit, Traversable):
     """SQL objects Wrapper class to fake a context.
     """
 
-    implements(IHideFromBreadcrumbs, ISQLObjectWrapper)
+    implements(ISQLObjectWrapper)
 
     default_view = 'view'
 
