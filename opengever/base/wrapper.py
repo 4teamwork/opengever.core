@@ -40,7 +40,6 @@ class SQLWrapperBase(ExtensionClass.Base, Implicit, Traversable):
         Means that if a sql wrapper gets accessed directly without a view,
         the pre-traversal hook make sure that a default view gets displayed.
         """
-
         # XXX hack around a bug(?) in BeforeTraverse.MultiHook
         # see Products.CMFCore.DynamicType.__before_publishing_traverse__
         REQUEST = arg2 or arg1

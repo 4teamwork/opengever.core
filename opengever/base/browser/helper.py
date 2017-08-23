@@ -10,7 +10,6 @@ def _get_task_css_class(task):
     of a task. The task may be a brain, a dexterity object or a sql alchemy
     globalindex object.
     """
-
     if ICatalogBrain.providedBy(task):
         task = Task.query.by_brain(task)
 

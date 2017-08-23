@@ -8,11 +8,15 @@ from zope.interface import implements
 
 
 class MeetingWrapper(SQLWrapperBase):
+    """SQLWrapper for meeting objects.
+    """
 
     implements(IMeetingWrapper, ISQLLockable)
 
 
 class PeriodWrapper(SQLWrapperBase):
+    """SQLWrapper for period objects.
+    """
 
     implements(IPeriodWrapper)
 
@@ -23,6 +27,8 @@ class PeriodWrapper(SQLWrapperBase):
 
 
 class MemberWrapper(SQLWrapperBase):
+    """SQLWrapper for member objects.
+    """
 
     implements(IMemberWrapper)
 
@@ -34,6 +40,8 @@ class MemberWrapper(SQLWrapperBase):
 
 
 class MembershipWrapper(SQLWrapperBase):
+    """SQLWrapper for membership objects.
+    """
 
     implements(IMembershipWrapper)
 
