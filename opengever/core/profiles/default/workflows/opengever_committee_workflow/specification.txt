@@ -6,13 +6,14 @@ Role mapping:
   committee member => CommitteeMember
 
 Visible roles:
-  committee responsible
   committee member
 
 Committee responsible role description:
   The committe responsible is in charge of a committee.
   This involves creating, planing and hold meetings
   as well as configuring and deactivating the committee.
+  The committee responsible role is assigned automatically
+  to the group that can be configured per committee.
 
 Committee member role description:
   A committe member is part of a committee and can view the committee data,

@@ -209,10 +209,7 @@
       <permission-role>CommitteeAdministrator</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
-    <permission-map name="Sharing page: Delegate CommitteeResponsible role" acquired="False">
-      <permission-role>CommitteeAdministrator</permission-role>
-      <permission-role>Manager</permission-role>
-    </permission-map>
+    <permission-map name="Sharing page: Delegate CommitteeResponsible role" acquired="False"/>
     <permission-map name="Sharing page: Delegate Contributor role" acquired="False"/>
     <permission-map name="Sharing page: Delegate Editor role" acquired="False"/>
     <permission-map name="Sharing page: Delegate MeetingUser role" acquired="False"/>
@@ -529,10 +526,7 @@
       <permission-role>CommitteeAdministrator</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
-    <permission-map name="Sharing page: Delegate CommitteeResponsible role" acquired="False">
-      <permission-role>CommitteeAdministrator</permission-role>
-      <permission-role>Manager</permission-role>
-    </permission-map>
+    <permission-map name="Sharing page: Delegate CommitteeResponsible role" acquired="False"/>
     <permission-map name="Sharing page: Delegate Contributor role" acquired="False"/>
     <permission-map name="Sharing page: Delegate Editor role" acquired="False"/>
     <permission-map name="Sharing page: Delegate MeetingUser role" acquired="False"/>

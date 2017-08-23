@@ -1,6 +1,7 @@
 from contextlib import nested
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
+from plone import api
 
 
 class TestWordAgendaItem(IntegrationTestCase):
@@ -59,7 +60,8 @@ class TestWordAgendaItem(IntegrationTestCase):
         self.login(self.committee_responsible, browser)
         agenda_item = self.schedule_proposal(self.meeting,
                                              self.submitted_word_proposal)
-        self.checkout_document(self.submitted_word_proposal.get_proposal_document())
+        proposal_document = self.submitted_word_proposal.get_proposal_document()
+        self.checkout_document(proposal_document)
 
         browser.open(self.meeting, view='agenda_items/list')
         item_data = browser.json['items'][0]
@@ -70,6 +72,10 @@ class TestWordAgendaItem(IntegrationTestCase):
                  'active': True,
                  'url': self.agenda_item_url(agenda_item, 'edit_document')}},
             item_data)
+        self.assertTrue(
+            api.user.has_permission('WebDAV Lock items',
+                                    obj=proposal_document),
+            'Should be able to lock documents after checkout.')
 
     @browsing
     def test_edit_document_not_possible_when_sb_else_checked_it_out(self, browser):
@@ -99,6 +105,7 @@ class TestWordAgendaItem(IntegrationTestCase):
         agenda_item.decide()
         agenda_item.reopen()
 
+        proposal_document = self.submitted_word_proposal.get_proposal_document()
         browser.open(self.meeting, view='agenda_items/list')
         item_data = browser.json['items'][0]
         self.assertDictContainsSubset(
@@ -108,6 +115,10 @@ class TestWordAgendaItem(IntegrationTestCase):
                  'active': True,
                  'url': self.agenda_item_url(agenda_item, 'edit_document')}},
             item_data)
+        self.assertTrue(
+            api.user.has_permission('WebDAV Lock items',
+                                    obj=proposal_document),
+            'Should be able to lock documents after checkout.')
 
     @browsing
     def test_edit_document_checks_out_and_provides_OC_url(self, browser):
@@ -128,6 +139,10 @@ class TestWordAgendaItem(IntegrationTestCase):
             browser.json)
         self.assertEquals(self.committee_responsible.getId(),
                           self.get_checkout_manager(document).get_checked_out_by())
+        self.assertTrue(
+            api.user.has_permission('WebDAV Lock items',
+                                    obj=document),
+            'Should be able to lock documents after checkout.')
 
     @browsing
     def test_decide_agenda_item_checks_in_documents(self, browser):
