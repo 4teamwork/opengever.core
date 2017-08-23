@@ -389,9 +389,9 @@ class IntegrationTestCase(TestCase):
     def as_relation_value(self, obj):
         return RelationValue(getUtility(IIntIds).getId(obj))
 
-    def assert_portlet_inheritance_blocked(self, manager, obj):
+    def assert_portlet_inheritance_blocked(self, manager_name, obj):
         manager = getUtility(
-            IPortletManager, name=u'plone.leftcolumn', context=obj)
+            IPortletManager, name=manager_name, context=obj)
         assignable = getMultiAdapter(
             (obj, manager), ILocalPortletAssignmentManager)
         self.assertTrue(assignable.getBlacklistStatus(CONTEXT_CATEGORY))
