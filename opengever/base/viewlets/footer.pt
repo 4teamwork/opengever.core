@@ -2,8 +2,7 @@
     <div id="footer-column-1" class="column cell position-0 width-4">
         <h2>OneGov GEVER</h2>
         <p><a href="https://onegovgever.ch">Über OneGov GEVER</a></p>
-        <p><a href="https://github.com/OneGov/onegov.gever">Quellcode</a></p>
-        <p><a href="https://jenkins.4teamwork.ch/view/OneGov%20GEVER/">Software Tests</a></p>
+        <p><a href="https://github.com/4teamwork/opengever.core">Quellcode</a></p>
         <p><a href="https://onegovgever.ch/aktuell">Release-Informationen</a></p>
         <p>Version: <span tal:content="view/get_gever_version" /></p>
     </div>
