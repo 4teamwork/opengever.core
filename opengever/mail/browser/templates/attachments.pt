@@ -11,6 +11,7 @@
                     <span tal:content="python:attachment['filename']">filename</span>
                 </a>
                 <span tal:content="python:context.getObjSize(size=attachment['size'])">0Kb</span>
+            </div>
         </tal:attachment>
     </tal:attachments>
 
