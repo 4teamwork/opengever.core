@@ -3,9 +3,15 @@
 !cleanup-versions-cfg
 !create-schema-migration
 !create-upgrade
+!git-changed
+!git-changed-files
+!git-changed-py
+!git-changed-sh
+!git-changed-xml
 !git-fork-point
 !mtest
 !pinchecker
+!qa
 !remove-test-cache
+!shellcheck
 !test-cached
-!pyflakes-ci

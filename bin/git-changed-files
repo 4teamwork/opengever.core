@@ -1,0 +1,3 @@
+#!/bin/bash
+bin/git-changed | grep -E '^(M|A)' | cut -d$'\t' -f2
+# EOF
