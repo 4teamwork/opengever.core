@@ -156,7 +156,7 @@ class OpengeverContentFixture(object):
                     excerpt_template=self.sablon_template)))
         self.committee_container.manage_setLocalRoles(
             self.committee_responsible.getId(),
-            ('Reader',))
+            ('MeetingUser',))
         self.committee_container.reindexObjectSecurity()
 
         self.committee = self.register('committee', self.create_committee(
