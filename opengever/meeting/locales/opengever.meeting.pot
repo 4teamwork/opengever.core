@@ -1294,7 +1294,7 @@ msgstr ""
 msgid "msg_unscheduled_proposals"
 msgstr ""
 
-#. Default: "New unschedulded proposals:"
+#. Default: "New unscheduled proposals:"
 #: ./opengever/meeting/browser/committeecontainertabs_templates/committee.pt:32
 msgid "new_unscheduled_proposals"
 msgstr ""

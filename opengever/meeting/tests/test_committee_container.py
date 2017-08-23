@@ -169,8 +169,8 @@ class TestCommitteesTab(IntegrationTestCase):
                      view='tabbedview_view-committees')
 
         self.assertEquals(
-            ['New unschedulded proposals: 0',
-             'New unschedulded proposals: 2'],
+            ['New unscheduled proposals: 0',
+             'New unscheduled proposals: 2'],
             browser.css('#committees_view .unscheduled_proposals').text)
 
     @browsing

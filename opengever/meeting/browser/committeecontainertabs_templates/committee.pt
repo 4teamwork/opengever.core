@@ -30,7 +30,7 @@
     <div class="unscheduled_proposals"
          tal:define="unscheduled_number committee/number_unscheduled_proposals">
       <span i18n:translate="new_unscheduled_proposals">
-        New unschedulded proposals:
+        New unscheduled proposals:
       </span>
       <a class="number"
          tal:attributes="href string:${committee/url}#submittedproposals;
