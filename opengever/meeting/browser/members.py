@@ -71,8 +71,6 @@ class MemberView(BrowserView):
     template = ViewPageTemplateFile('templates/member.pt')
     implements(IBrowserView, IPublishTraverse)
 
-    has_model_breadcrumbs = True
-
     @classmethod
     def url_for(cls, context, member):
         return member.get_url(context)

@@ -114,7 +114,6 @@ class DownloadProtocolJson(DownloadGeneratedProtocol):
 
 class EditProtocol(ModelEditForm):
 
-    has_model_breadcrumbs = True
     ignoreContext = True
     schema = IMeetingMetadata
     content_type = Meeting
