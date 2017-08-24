@@ -340,6 +340,7 @@ class MeetingView(BrowserView):
                 _('label_excerpts', default='Excerpts'),
                 _('label_toggle_attachments', default='Toggle attachments'),
                 _('label_agenda_item_number', default='Agenda item number'),
+                _('label_decision_number', default=u'Decision number'),
             ),
             max_proposal_title_length=ISubmittedProposal['title'].max_length)
 

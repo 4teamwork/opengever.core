@@ -305,6 +305,45 @@ class TestWordAgendaItem(IntegrationTestCase):
         self.assertEquals(1, len(excerpt_links))
         self.assertIn('href="{}"'.format(excerpt.absolute_url()), excerpt_links[0])
 
+    @browsing
+    def test_decision_number_in_meeting_item_data(self, browser):
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_proposal(self.meeting,
+                                             self.submitted_word_proposal)
+
+        browser.open(self.meeting, view='agenda_items/list')
+        self.assertDictContainsSubset(
+            {'title': u'\xc4nderungen am Personalreglement',
+             'decision_number': None},
+            browser.json['items'][0])
+
+        agenda_item.decide()
+        browser.reload()
+        self.assertDictContainsSubset(
+            {'title': u'\xc4nderungen am Personalreglement',
+             'decision_number': 1},
+            browser.json['items'][0])
+
+    @browsing
+    def test_decision_number_for_adhoc_agenda_item(self, browser):
+        self.login(self.committee_responsible, browser)
+        browser.open(self.meeting, view='agenda_items/schedule_text',
+                     data={'title': u'Tisch Traktandum'})
+        self.assertDictContainsSubset({'proceed': True}, browser.json)
+
+        browser.open(self.meeting, view='agenda_items/list')
+        self.assertDictContainsSubset(
+            {'title': u'Tisch Traktandum',
+             'decision_number': None},
+            browser.json['items'][0])
+
+        browser.open(browser.json['items'][0]['decide_link'])
+        browser.open(self.meeting, view='agenda_items/list')
+        self.assertDictContainsSubset(
+            {'title': u'Tisch Traktandum',
+             'decision_number': 1},
+            browser.json['items'][0])
+
     def agenda_item_url(self, agenda_item, endpoint):
         return '{}/agenda_items/{}/{}'.format(
             agenda_item.meeting.get_url(view=None),
