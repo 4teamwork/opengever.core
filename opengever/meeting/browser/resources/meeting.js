@@ -152,12 +152,19 @@
     this.showEditbox = function(target) {
       var row = target.parents("tr");
       row.removeClass("expanded");
-      var source;
-      if($(".title > span > a", row).length) {
-        source = $(".title > span > a", row);
-      } else {
-        source = $(".title > span", row);
-      }
+      var source_selectors = [
+            /* Word: */
+            ".title > span.proposal_title > a",
+            ".title > span.proposal_title",
+            /* Non-word: */
+            ".title > span > a",
+            ".title > span"
+      ];
+      var source_selector = source_selectors.filter(function(selector) {
+        return $(selector, row).length > 0;
+      })[0];
+      var source = $(source_selector, row);
+
       new EditboxController({
         editbox: $(".edit-box", row),
         source: source,

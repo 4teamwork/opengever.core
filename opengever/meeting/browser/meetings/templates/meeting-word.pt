@@ -245,10 +245,11 @@
           <table id="agenda_items">
             <thead>
               <tr>
-                <th i18n:translate=""
-                    tal:condition="meeting/is_agendalist_editable">Order</th>
-                <th i18n:translate="">Number</th>
-                <th i18n:translate="">Title</th>
+                <th i18n:translate="view_label_agenda_items"
+                    tal:define="has_sort_column meeting/is_agendalist_editable"
+                    tal:attributes="colspan python: '2' if has_sort_column else '1'">
+                  Agenda items
+                </th>
                 <th i18n:translate=""
                     tal:condition="meeting/is_editable">Actions</th>
               </tr>
