@@ -80,7 +80,6 @@ class Reactivate(Transition):
         api.portal.show_message(msg, request=getRequest(), type='info')
 
 
-
 class Proposal(Base):
     """Sql representation of a proposal."""
 
@@ -124,6 +123,10 @@ class Proposal(Base):
     dossier_reference_number = Column(UnicodeCoercingText, nullable=False)
     repository_folder_title = Column(UnicodeCoercingText, nullable=False)
     language = Column(String(8), nullable=False)
+
+    __mapper_args__ = {
+        "order_by": proposal_id
+    }
 
     # workflow definition
     STATE_PENDING = State('pending', is_default=True,

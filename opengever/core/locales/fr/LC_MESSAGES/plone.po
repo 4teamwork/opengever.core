@@ -1,0 +1,92 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+
+#. Default: "Active"
+#: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
+#: opengever/core/profiles/default/workflows/opengever_committeecontainer_workflow/specification.txt
+msgid "Active"
+msgstr ""
+
+#. Default: "Inactive"
+#: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
+msgid "Inactive"
+msgstr ""
+
+#. Default: "deactivate"
+#: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
+msgid "deactivate"
+msgstr ""
+
+#. Default: "committee admin"
+#: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
+msgid "opengever_committee_workflow--ROLE--CommitteeAdministrator"
+msgstr ""
+
+#. Default: "committee member"
+#: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
+msgid "opengever_committee_workflow--ROLE--CommitteeMember"
+msgstr ""
+
+#. Default: "committee responsible"
+#: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
+msgid "opengever_committee_workflow--ROLE--CommitteeResponsible"
+msgstr ""
+
+#. Default: "manager"
+#: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
+msgid "opengever_committee_workflow--ROLE--Manager"
+msgstr ""
+
+#. Default: "A committe member is part of a committee and can view the committee data, such as meetings and proposals."
+#: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
+msgid "opengever_committee_workflow--ROLE-DESCRIPTION--CommitteeMember"
+msgstr ""
+
+#. Default: "The committe responsible is in charge of a committee. This involves creating, planing and hold meetings as well as configuring and deactivating the committee."
+#: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
+msgid "opengever_committee_workflow--ROLE-DESCRIPTION--CommitteeResponsible"
+msgstr ""
+
+#. Default: "committee admin"
+#: opengever/core/profiles/default/workflows/opengever_committeecontainer_workflow/specification.txt
+msgid "opengever_committeecontainer_workflow--ROLE--CommitteeAdministrator"
+msgstr ""
+
+#. Default: "manager"
+#: opengever/core/profiles/default/workflows/opengever_committeecontainer_workflow/specification.txt
+msgid "opengever_committeecontainer_workflow--ROLE--Manager"
+msgstr ""
+
+#. Default: "meeting user"
+#: opengever/core/profiles/default/workflows/opengever_committeecontainer_workflow/specification.txt
+msgid "opengever_committeecontainer_workflow--ROLE--MeetingUser"
+msgstr ""
+
+#. Default: "The committee admin is responsible for creating and managing committees and manging the roles of the committees."
+#: opengever/core/profiles/default/workflows/opengever_committeecontainer_workflow/specification.txt
+msgid "opengever_committeecontainer_workflow--ROLE-DESCRIPTION--CommitteeAdministrator"
+msgstr ""
+
+#. Default: "Anyone who works with the meeting module is a meeting user. Meeting users have read access to the meeting area. Additional roles on committe level are required for accessing the committees."
+#: opengever/core/profiles/default/workflows/opengever_committeecontainer_workflow/specification.txt
+msgid "opengever_committeecontainer_workflow--ROLE-DESCRIPTION--MeetingUser"
+msgstr ""
+
+#. Default: "reactivate"
+#: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
+msgid "reactivate"
+msgstr ""
+

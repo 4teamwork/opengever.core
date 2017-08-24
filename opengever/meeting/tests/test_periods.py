@@ -58,6 +58,11 @@ class TestPeriod(FunctionalTestCase):
 
     @browsing
     def test_edit_period(self, browser):
+        # CommitteeResponsible is assigned globally here for the sake of
+        # simplicity
+        self.grant('Contributor', 'Editor', 'Reader', 'MeetingUser',
+                   'CommitteeResponsible')
+
         browser.login().open(self.committee, view='tabbedview_view-periods')
         browser.find('Edit').click()
         browser.fill({'Start date': '20.01.2016'}).submit()
@@ -67,6 +72,11 @@ class TestPeriod(FunctionalTestCase):
 
     @browsing
     def test_close_and_create_new_period(self, browser):
+        # CommitteeResponsible is assigned globally here for the sake of
+        # simplicity
+        self.grant('Contributor', 'Editor', 'Reader', 'MeetingUser',
+                   'CommitteeResponsible')
+
         browser.login()
         browser.open(self.committee)
         browser.find('Close current period').click()

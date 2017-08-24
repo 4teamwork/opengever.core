@@ -2,112 +2,119 @@ from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
-from ftw.testbrowser.exceptions import FormFieldNotFound
-from ftw.testbrowser.pages.statusmessages import error_messages
-from ftw.testbrowser.pages.statusmessages import info_messages
+from ftw.testbrowser.pages import dexterity
+from ftw.testbrowser.pages import editbar
+from ftw.testbrowser.pages import statusmessages
 from opengever.base.oguid import Oguid
-from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.model import Committee
-from opengever.testing import FunctionalTestCase
-import transaction
+from opengever.testing import IntegrationTestCase
 
 
-class TestCommittee(FunctionalTestCase):
+class TestCommittee(IntegrationTestCase):
 
-    layer = OPENGEVER_FUNCTIONAL_MEETING_LAYER
+    features = ('meeting',)
 
     group_field_name = 'Group'
 
-    def setUp(self):
-        super(TestCommittee, self).setUp()
-        self.repo_root = create(Builder('repository_root'))
-        self.repository_folder = create(Builder('repository')
-                                        .within(self.repo_root)
-                                        .titled('Repo'))
-        self.template = create(Builder('sablontemplate'))
-        self.container = create(Builder('committee_container')
-                                .having(toc_template=self.template))
+    def test_committee_id_is_generated(self):
+        self.login(self.administrator)
+        self.assertEqual('committee-1', self.committee.getId())
 
-    def test_committee_can_be_added(self):
-        committee = create(Builder('committee').within(self.container))
-        self.assertEqual('committee-1', committee.getId())
+    def test_committee_model_is_initialized_correctly(self):
+        self.login(self.administrator)
+        model = self.committee.load_model()
 
-        model = committee.load_model()
         self.assertIsNotNone(model)
-        self.assertEqual(Oguid.for_object(committee), model.oguid)
+        self.assertEqual(Oguid.for_object(self.committee), model.oguid)
 
     def test_get_toc_template_returns_committee_template_if_available(self):
-        committee = create(
-            Builder('committee')
-            .having(toc_template=self.template)
-            .within(self.container))
-        self.assertEqual(self.template, committee.get_toc_template())
+        self.login(self.administrator)
+        self.committee.toc_template = self.as_relation_value(
+            self.sablon_template)
+
+        self.assertEqual(
+            self.sablon_template, self.committee.get_toc_template())
 
     def test_get_toc_template_falls_back_to_container(self):
-        committee = create(Builder('committee').within(self.container))
-        self.assertEqual(self.template, committee.get_toc_template())
+        self.login(self.administrator)
+        self.committee_container.toc_template = self.as_relation_value(
+            self.sablon_template)
+
+        self.assertIsNone(self.committee.toc_template)
+        self.assertEqual(
+            self.sablon_template, self.committee.get_toc_template())
+
+    def test_get_excerpt_template_returns_committee_template_if_available(self):
+        self.login(self.administrator)
+        self.committee.excerpt_template = self.as_relation_value(
+            self.sablon_template)
+
+        self.assertEqual(
+            self.sablon_template, self.committee.get_excerpt_template())
+
+    def test_get_excerpt_template_falls_back_to_container(self):
+        self.login(self.administrator)
+
+        self.assertIsNone(self.committee.excerpt_template)
+        self.assertIsNotNone(self.committee_container.excerpt_template)
+
+        self.assertEqual(
+            self.sablon_template, self.committee.get_excerpt_template())
 
     @browsing
     def test_committee_repository_is_validated(self, browser):
-        parent_repo = create(Builder('repository')
-                             .within(self.repo_root))
-        create(Builder('repository').within(parent_repo))
+        self.login(self.administrator, browser)
 
-        self.grant('Administrator')
-        browser.login()
-        browser.open(self.container, view='++add++opengever.meeting.committee')
+        browser.open(self.committee_container,
+                     view='++add++opengever.meeting.committee')
 
         browser.fill(
             {'Title': u'A c\xf6mmittee',
-             'Linked repository folder': parent_repo,
-             self.group_field_name: 'client1_users'})
+             'Linked repository folder': self.branch_repofolder,
+             self.group_field_name: 'committee_rpk_group'})
         browser.css('#form-buttons-save').first.click()
 
-        error = browser.css("#formfield-form-widgets-repository_folder div.error").first.text
         self.assertEqual('You cannot add dossiers in the selected repository '
                          'folder. Either you do not have the privileges or '
                          'the repository folder contains another repository '
                          'folder.',
-                         error)
+                         dexterity.erroneous_fields()['fuhrung'][0])
 
     @browsing
     def test_committee_can_be_created_in_browser(self, browser):
-        self.grant('Administrator')
+        self.login(self.administrator, browser)
 
-        templates = create(Builder('templatefolder'))
-        sablon_template = create(
-            Builder('sablontemplate')
-            .within(templates)
-            .with_asset_file('sablon_template.docx'))
-
-        browser.login()
-        browser.open(self.container, view='++add++opengever.meeting.committee')
+        browser.open(self.committee_container,
+                     view='++add++opengever.meeting.committee')
 
         browser.fill(
             {'Title': u'A c\xf6mmittee',
-             'Protocol template': sablon_template,
-             'Excerpt template': sablon_template,
-             'Table of contents template': sablon_template,
-             'Linked repository folder': self.repository_folder,
-             self.group_field_name: 'client1_users'})
+             'Protocol template': self.sablon_template,
+             'Excerpt template': self.sablon_template,
+             'Table of contents template': self.sablon_template,
+             'Linked repository folder': self.leaf_repofolder,
+             self.group_field_name: 'committee_rpk_group'})
         browser.css('#form-buttons-save').first.click()
 
         browser.fill({'Title': u'Initial',
                       'Start date': '01.01.2012',
                       'End date': '31.12.2012'}).submit()
 
-        self.assertIn('Item created',
-                      browser.css('.portalMessage.info dd').text)
+        statusmessages.assert_message('Item created')
 
         committee = browser.context
-        self.assertEqual('committee-1', committee.getId())
+        self.assertEqual('committee-3', committee.getId())
         self.assertEqual(
-            ('CommitteeGroupMember',),
-            dict(committee.get_local_roles()).get('client1_users'))
-        self.assertEqual(self.repository_folder,
+            ('CommitteeResponsible', 'Editor', 'Reader'),
+            dict(committee.get_local_roles()).get('committee_rpk_group'))
+        self.assertEqual(self.leaf_repofolder,
                          committee.get_repository_folder())
-        self.assertEqual(sablon_template, committee.get_protocol_template())
-        self.assertEqual(sablon_template, committee.get_excerpt_template())
+        self.assertEqual(self.sablon_template,
+                         committee.get_protocol_template())
+        self.assertEqual(self.sablon_template,
+                         committee.get_excerpt_template())
+        self.assertEqual(self.sablon_template,
+                         committee.get_toc_template())
 
         model = committee.load_model()
         self.assertIsNotNone(model)
@@ -123,145 +130,104 @@ class TestCommittee(FunctionalTestCase):
 
     @browsing
     def test_committee_can_be_edited_in_browser(self, browser):
-        self.grant('Administrator')
-        committee = create(Builder('committee')
-                           .within(self.container)
-                           .titled(u'My Committee')
-                           .link_with(self.repository_folder))
+        self.login(self.committee_responsible, browser)
 
-        self.assertEqual(
-            ('CommitteeGroupMember',),
-            dict(committee.get_local_roles()).get('client1_users'))
+        local_roles = dict(self.committee.get_local_roles())
+        self.assertIn('committee_rpk_group', local_roles)
+        self.assertNotIn('committee_ver_group', local_roles)
 
-        browser.login().visit(committee, view='edit')
-        form = browser.css('#content-core form').first
+        browser.open(self.committee, view='edit')
+        form = browser.forms['form']
 
-        self.assertEqual(u'My Committee', form.find_field('Title').value)
+        self.assertEqual(u'Rechnungspr\xfcfungskommission',
+                         form.find_field('Title').value)
 
         browser.fill({'Title': u'A c\xf6mmittee',
-                      self.group_field_name: u'client1_inbox_users'})
+                      self.group_field_name: u'committee_ver_group'})
         browser.css('#form-buttons-save').first.click()
-        self.assertIn('Changes saved',
-                      browser.css('.portalMessage.info dd').text)
+
+        statusmessages.assert_message('Changes saved')
 
         committee = browser.context
-        self.assertEqual('committee-1', committee.getId())
         local_roles = dict(committee.get_local_roles())
-        self.assertNotIn('client1_users', local_roles,
-                         local_roles.get('client1_users'))
-        self.assertEqual(
-            ('CommitteeGroupMember',),
-            local_roles.get('client1_inbox_users'))
+        self.assertEqual('committee-1', committee.getId())
+        self.assertNotIn('committee_rpk_group', local_roles,)
+        self.assertEqual(('CommitteeResponsible', 'Editor', 'Reader'),
+                         local_roles.get('committee_ver_group'))
 
         model = committee.load_model()
         self.assertIsNotNone(model)
         self.assertEqual(u'A c\xf6mmittee', model.title)
 
-    @browsing
-    def test_committee_group_is_not_editable_for_users_with_missing_permission(self, browser):
-        create(Builder('user')
-               .named('Hugo', 'Boss')
-               .in_groups('client1_users'))
 
-        committee = create(Builder('committee')
-                           .within(self.container)
-                           .titled(u'My Committee')
-                           .having(group_id='client1_users')
-                           .link_with(self.repository_folder))
+class TestCommitteeWorkflow(IntegrationTestCase):
 
-        browser.login(username='hugo.boss').visit(committee, view='edit')
-        with self.assertRaises(FormFieldNotFound):
-            browser.fill({self.group_field_name: 'client1_users'})
-
-
-class TestCommitteeWorkflow(FunctionalTestCase):
-
-    def test_initial_state_is_active(self):
-        committee = create(Builder('committee').titled(u'My Committee'))
-        self.assertEqual(Committee.STATE_ACTIVE,
-                         committee.load_model().get_state())
+    features = ('meeting',)
 
     @browsing
-    def test_can_be_deactivated(self, browser):
-        committee = create(Builder('committee').titled(u'My Committee'))
+    def test_active_committee_can_be_deactivated(self, browser):
+        self.login(self.committee_responsible, browser)
+        browser.open(self.empty_committee)
 
-        browser.login().open(committee)
-        browser.find('Deactivate').click()
+        editbar.menu_option('Actions', 'deactivate').click()
 
         self.assertEqual(Committee.STATE_INACTIVE,
-                         committee.load_model().get_state())
-        self.assertEqual(['Committee deactivated successfully'],
-                         info_messages())
+                         self.empty_committee.load_model().get_state())
+        statusmessages.assert_message('Committee deactivated successfully')
+
+    def test_initial_state_is_active(self):
+        self.login(self.committee_responsible)
+        self.assertEqual(Committee.STATE_ACTIVE,
+                         self.empty_committee.load_model().get_state())
 
     @browsing
-    def test_deactivating_is_not_possible_when_pending_meetings_exists(self, browser):
-        committee = create(Builder('committee').titled(u'My Committee'))
-        create(Builder('meeting').having(committee=committee))
+    def test_deactivating_is_not_possible_when_pending_meetings_exists(
+            self, browser):
+        self.login(self.committee_responsible, browser)
+        browser.open(self.committee)
 
-        browser.login().open(committee)
-        browser.find('Deactivate').click()
+        editbar.menu_option('Actions', 'deactivate').click()
 
-        self.assertEqual(['Not all meetings are closed.'], error_messages())
         self.assertEqual(Committee.STATE_ACTIVE,
-                         committee.load_model().get_state())
+                         self.committee.load_model().get_state())
+        statusmessages.assert_message('Not all meetings are closed.')
 
     @browsing
-    def test_when_unscheduled_proposals_exist(self, browser):
-        repo = create(Builder('repository'))
-        dossier = create(Builder('dossier').within(repo))
-        committee = create(Builder('committee').titled(u'My Committee'))
-        create(Builder('proposal')
-               .within(dossier)
-               .having(committee=committee.load_model())
-               .as_submitted())
+    def test_deactivating_not_possible_when_unscheduled_proposals_exist(
+            self, browser):
+        self.login(self.committee_responsible, browser)
+        create(
+            Builder('proposal').within(self.dossier)
+            .having(title=u'Non-scheduled proposal',
+                    committee=self.empty_committee.load_model())
+            .as_submitted())
+        browser.open(self.empty_committee)
 
-        browser.login().open(committee)
-        browser.find('Deactivate').click()
+        editbar.menu_option('Actions', 'deactivate').click()
 
-        self.assertEqual(
-            ['There are unscheduled proposals submitted to this committee.'],
-            error_messages())
         self.assertEqual(Committee.STATE_ACTIVE,
-                         committee.load_model().get_state())
+                         self.committee.load_model().get_state())
+        statusmessages.assert_message(
+            'There are unscheduled proposals submitted to this committee.')
 
     @browsing
     def test_deactivated_comittee_can_be_reactivated(self, browser):
-        committee = create(Builder('committee')
-                           .titled(u'My Committee'))
+        self.login(self.committee_responsible, browser)
+        browser.open(self.empty_committee)
 
-        committee.load_model().deactivate()
-        transaction.commit()
-
-        browser.login().open(committee)
-        browser.find('Activate').click()
+        editbar.menu_option('Actions', 'deactivate').click()
+        editbar.menu_option('Actions', 'reactivate').click()
 
         self.assertEqual(Committee.STATE_ACTIVE,
-                         committee.load_model().get_state())
-        self.assertEqual(['Committee reactivated successfully'],
-                         info_messages())
+                         self.empty_committee.load_model().get_state())
+        statusmessages.assert_message('Committee reactivated successfully')
 
     @browsing
-    def test_add_meeting_is_not_available_on_inactive_committee(self, browser):
-        committee = create(Builder('committee')
-                           .titled(u'My Committee'))
+    def test_adding_is_not_available_in_inactive_committee(self, browser):
+        self.login(self.committee_responsible, browser)
+        browser.open(self.empty_committee)
 
-        committee.load_model().deactivate()
-        transaction.commit()
+        self.assertEqual([u'Add new', u'Actions'], editbar.menus())
 
-        browser.login().open(committee)
-        self.assertEqual(
-            [],
-            browser.css('#plone-contentmenu-factories #add-meeting'))
-
-    @browsing
-    def test_add_membership_is_not_available_on_inactive_committee(self, browser):
-        committee = create(Builder('committee')
-                           .titled(u'My Committee'))
-
-        committee.load_model().deactivate()
-        transaction.commit()
-
-        browser.login().open(committee)
-        self.assertEqual(
-            [],
-            browser.css('#plone-contentmenu-factories #add-membership'))
+        editbar.menu_option('Actions', 'deactivate').click()
+        self.assertEqual([u'Actions'], editbar.menus())

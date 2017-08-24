@@ -1297,7 +1297,7 @@ msgstr "L'objet a été supprimé avec succès."
 msgid "msg_unscheduled_proposals"
 msgstr "Des propositions qui ne figurent pas à l'ordre du jour ont été attribuées à ce comité."
 
-#. Default: "New unschedulded proposals:"
+#. Default: "New unscheduled proposals:"
 #: ./opengever/meeting/browser/committeecontainertabs_templates/committee.pt:32
 msgid "new_unscheduled_proposals"
 msgstr "Nouvelles propositions soumises"

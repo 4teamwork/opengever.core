@@ -34,6 +34,7 @@ import unittest2
 widget
 builders
 
+
 class TestCase(unittest2.TestCase):
     pass
 
@@ -115,7 +116,14 @@ class FunctionalTestCase(TestCase):
 
     def grant(self, *roles, **kwargs):
         user_id = kwargs.get('user_id', TEST_USER_ID)
-        setRoles(self.portal, user_id, list(roles))
+        context = kwargs.get('on', None)
+
+        if context is None:
+            setRoles(self.portal, user_id, list(roles))
+        else:
+            context.manage_setLocalRoles(user_id, tuple(roles))
+            context.reindexObjectSecurity()
+
         transaction.commit()
 
     def login(self, user_id=TEST_USER_NAME):
@@ -200,9 +208,9 @@ class FunctionalTestCase(TestCase):
         self.maxDiff = None
         self.assertMultiLineEqual(expected_json, got_json, msg)
 
-    def assert_portlet_inheritance_blocked(self, manager, obj):
+    def assert_portlet_inheritance_blocked(self, manager_name, obj):
         manager = getUtility(
-            IPortletManager, name=u'plone.leftcolumn', context=obj)
+            IPortletManager, name=manager_name, context=obj)
         assignable = getMultiAdapter(
             (obj, manager), ILocalPortletAssignmentManager)
         self.assertTrue(assignable.getBlacklistStatus(CONTEXT_CATEGORY))

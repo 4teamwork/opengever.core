@@ -42,9 +42,9 @@ setup(name='opengever.core',
       version=version,
       description="OpenGever Core (Maintainer: %s)" % maintainer,
       long_description=(
-          open("README.rst").read() + "\n" + open(
-              os.path.join("docs", "HISTORY.txt")).read()
-      ),
+          open("README.rst").read() + "\n" +
+          open(os.path.join("docs", "HISTORY.txt")).read()
+          ),
       # Get more strings from
       # http://pypi.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
@@ -99,6 +99,7 @@ setup(name='opengever.core',
           'ftw.inflator',
           'ftw.journal',
           'ftw.keywordwidget',
+          'ftw.lawgiver',
           'ftw.mail',
           'ftw.pdfgenerator',
           'ftw.profilehook',

@@ -3,12 +3,12 @@ class CommitteeRoles(object):
 
     Preserves other roles that are set for the principal.
 
-    There is currently one special role CommitteeGroupMember. This role will
+    There is currently one special role CommitteeResponsible. This role will
     be added as local role on a committee for the group that can be selected
     in the add/edit forms.
 
     """
-    managed_roles = ('CommitteeGroupMember',)
+    managed_roles = ('CommitteeResponsible', 'Editor', 'Reader')
 
     def __init__(self, committee):
         self.context = committee

@@ -1,6 +1,7 @@
 from contextlib import nested
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
+from plone import api
 
 
 class TestWordAgendaItem(IntegrationTestCase):
@@ -59,7 +60,8 @@ class TestWordAgendaItem(IntegrationTestCase):
         self.login(self.committee_responsible, browser)
         agenda_item = self.schedule_proposal(self.meeting,
                                              self.submitted_word_proposal)
-        self.checkout_document(self.submitted_word_proposal.get_proposal_document())
+        proposal_document = self.submitted_word_proposal.get_proposal_document()
+        self.checkout_document(proposal_document)
 
         browser.open(self.meeting, view='agenda_items/list')
         item_data = browser.json['items'][0]
@@ -70,6 +72,10 @@ class TestWordAgendaItem(IntegrationTestCase):
                  'active': True,
                  'url': self.agenda_item_url(agenda_item, 'edit_document')}},
             item_data)
+        self.assertTrue(
+            api.user.has_permission('WebDAV Lock items',
+                                    obj=proposal_document),
+            'Should be able to lock documents after checkout.')
 
     @browsing
     def test_edit_document_not_possible_when_sb_else_checked_it_out(self, browser):
@@ -99,6 +105,7 @@ class TestWordAgendaItem(IntegrationTestCase):
         agenda_item.decide()
         agenda_item.reopen()
 
+        proposal_document = self.submitted_word_proposal.get_proposal_document()
         browser.open(self.meeting, view='agenda_items/list')
         item_data = browser.json['items'][0]
         self.assertDictContainsSubset(
@@ -108,6 +115,10 @@ class TestWordAgendaItem(IntegrationTestCase):
                  'active': True,
                  'url': self.agenda_item_url(agenda_item, 'edit_document')}},
             item_data)
+        self.assertTrue(
+            api.user.has_permission('WebDAV Lock items',
+                                    obj=proposal_document),
+            'Should be able to lock documents after checkout.')
 
     @browsing
     def test_edit_document_checks_out_and_provides_OC_url(self, browser):
@@ -128,6 +139,10 @@ class TestWordAgendaItem(IntegrationTestCase):
             browser.json)
         self.assertEquals(self.committee_responsible.getId(),
                           self.get_checkout_manager(document).get_checked_out_by())
+        self.assertTrue(
+            api.user.has_permission('WebDAV Lock items',
+                                    obj=document),
+            'Should be able to lock documents after checkout.')
 
     @browsing
     def test_decide_agenda_item_checks_in_documents(self, browser):
@@ -231,7 +246,7 @@ class TestWordAgendaItem(IntegrationTestCase):
         # The excerpt was created in the meeting dossier and contains the exact
         # original document.
         self.assertEquals(1, len(children['added']))
-        excerpt_document ,= children['added']
+        excerpt_document, = children['added']
         self.assertEquals('Excerpt \xc3\x84nderungen am Personalreglement',
                           excerpt_document.Title())
         self.assertEquals(
@@ -265,16 +280,16 @@ class TestWordAgendaItem(IntegrationTestCase):
             self.committee_container.manage_setLocalRoles(
                 self.regular_user.getId(), ('Reader',))
             self.committee.manage_setLocalRoles(
-                self.regular_user.getId(), ('CommitteeGroupMember', 'Editor'))
+                self.regular_user.getId(), ('CommitteeResponsible', 'Editor'))
             self.committee_container.reindexObjectSecurity()
             # Let regular_user have no access to meeting_dossier
             self.meeting_dossier.__ac_local_roles_block__ = True
 
-        self.login(self.regular_user, browser)
-        agenda_item = self.schedule_proposal(self.meeting,
-                                             self.submitted_word_proposal)
-        agenda_item.decide()
+            agenda_item = self.schedule_proposal(self.meeting,
+                                                 self.submitted_word_proposal)
+            agenda_item.decide()
 
+        self.login(self.regular_user, browser)
         browser.open(self.agenda_item_url(agenda_item, 'generate_excerpt'))
         self.assertEquals(
             {u'messages': [

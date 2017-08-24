@@ -90,6 +90,7 @@ class ICommittee(form.Schema):
 class RepositoryfolderValidator(BaseRepositoryfolderValidator):
     pass
 
+
 WidgetValidatorDiscriminators(
     RepositoryfolderValidator,
     field=ICommittee['repository_folder'])
@@ -194,10 +195,6 @@ class Committee(ModelContainer):
         """A committee is always editable."""
 
         return True
-
-    def is_group_editable(self):
-        return api.user.has_permission(
-            'Modify portal content', obj=self.get_committee_container())
 
     def get_upcoming_meetings(self):
         committee_model = self.load_model()

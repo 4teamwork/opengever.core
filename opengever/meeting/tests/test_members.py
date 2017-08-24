@@ -19,9 +19,14 @@ class TestMemberListing(FunctionalTestCase):
         self.container = create(Builder('committee_container'))
         self.member = create(Builder('member'))
 
+        # CommitteeResponsible is assigned globally here for the sake of
+        # simplicity
+        self.grant('Contributor', 'Editor', 'Reader', 'MeetingUser',
+                   'CommitteeAdministrator', 'CommitteeResponsible')
+
     @browsing
     def test_members_can_be_added_in_browser(self, browser):
-        self.grant("Administrator")
+        self.grant("Administrator", "CommitteeAdministrator")
         browser.login().open(self.container, view='add-member')
         browser.fill({'Firstname': u'Hanspeter',
                       'Lastname': u'Hansj\xf6rg',
@@ -72,6 +77,11 @@ class TestMemberView(FunctionalTestCase):
 
     def setUp(self):
         super(TestMemberView, self).setUp()
+        # CommitteeResponsible is assigned globally here for the sake of
+        # simplicity
+        self.grant('Contributor', 'Editor', 'Reader', 'MeetingUser',
+                   'CommitteeAdministrator', 'CommitteeResponsible')
+
         self.container = create(Builder('committee_container'))
         self.member = create(Builder('member')
                              .having(email='p.meier@example.com'))

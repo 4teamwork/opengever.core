@@ -82,11 +82,15 @@ class OpengeverContentFixture(object):
 
     def create_users(self):
         self.administrator = self.create_user(
-            'administrator', u'Nicole', u'Kohler', ['Administrator', 'APIUser'])
+            'administrator', u'Nicole', u'Kohler',
+            ['Administrator', 'APIUser'])
         self.dossier_responsible = self.create_user(
             'dossier_responsible', u'Robert', u'Ziegler')
         self.regular_user = self.create_user(
             'regular_user', u'K\xe4thi', u'B\xe4rfuss')
+        self.meeting_user = self.create_user(
+            'meeting_user', u'Herbert', u'J\xe4ger',
+            ['MeetingUser'])
         self.secretariat_user = self.create_user(
             'secretariat_user', u'J\xfcrgen', u'K\xf6nig')
         self.committee_responsible = self.create_user(
@@ -151,14 +155,19 @@ class OpengeverContentFixture(object):
                     excerpt_template=self.sablon_template)))
         self.committee_container.manage_setLocalRoles(
             self.committee_responsible.getId(),
-            ('Reader',))
+            ('MeetingUser',))
+        self.committee_container.manage_setLocalRoles(
+            self.administrator.getId(),
+            ('CommitteeAdministrator',))
         self.committee_container.reindexObjectSecurity()
 
         self.committee = self.register('committee', self.create_committee(
             title=u'Rechnungspr\xfcfungskommission',
             repository_folder=self.repofolder1,
             group_id='committee_rpk_group',
-            members=[self.administrator, self.committee_responsible]))
+            members=[self.administrator,
+                     self.committee_responsible,
+                     self.meeting_user]))
         self.register_raw('committee_id', self.committee.load_model().committee_id)
 
         self.committee_president = self.create_committee_membership(
@@ -194,7 +203,9 @@ class OpengeverContentFixture(object):
                 title=u'Kommission f\xfcr Verkehr',
                 repository_folder=self.repofolder1,
                 group_id='committee_ver_group',
-                members=[self.administrator, self.committee_responsible]))
+                members=[self.administrator,
+                         self.committee_responsible,
+                         self.meeting_user]))
         self.register_raw('empty_committee_id',
                           self.empty_committee.load_model().committee_id)
 
@@ -474,11 +485,6 @@ class OpengeverContentFixture(object):
             .within(self.committee_container)
             .having(repository_folder=repository_folder,
                     group_id=group_id))
-        # XXX In order to make it possible for users to edit proposal document when
-        # the word-meeting-feature is enabled, we need to give the Editor role
-        # for now. This must be fixed when lawgiver workflows are introduced.
-        committee.manage_setLocalRoles(
-            group_id, ('CommitteeGroupMember', 'Editor'))
         return committee
 
     @contextmanager

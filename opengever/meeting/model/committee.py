@@ -25,7 +25,6 @@ class Committee(Base):
     __tablename__ = 'committees'
     __table_args__ = (UniqueConstraint('admin_unit_id', 'int_id'), {})
 
-
     STATE_ACTIVE = State('active', is_default=True,
                          title=_('active', default='Active'))
     STATE_INACTIVE = State('inactive', title=_('inactive', default='Inactive'))

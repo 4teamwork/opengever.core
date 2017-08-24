@@ -26,6 +26,12 @@ class TestProtocol(FunctionalTestCase):
 
     def setUp(self):
         super(TestProtocol, self).setUp()
+
+        # CommitteeResponsible is assigned globally here for the sake of
+        # simplicity
+        self.grant('Contributor', 'Editor', 'Reader', 'MeetingUser',
+                   'CommitteeAdministrator', 'CommitteeResponsible')
+
         self.admin_unit.public_url = 'http://nohost/plone'
 
         self.repository_root, self.repository_folder = create(
@@ -50,10 +56,10 @@ class TestProtocol(FunctionalTestCase):
             .having(repository_folder=self.repository_folder))
         self.proposal, self.submitted_proposal = create(
             Builder('proposal')
-                    .within(self.dossier)
-                    .having(title='Mach doch',
-                            committee=self.committee.load_model())
-                    .with_submitted())
+            .within(self.dossier)
+            .having(title='Mach doch',
+                    committee=self.committee.load_model())
+            .with_submitted())
 
         self.committee_model = self.committee.load_model()
         self.meeting = create(Builder('meeting')
@@ -92,7 +98,6 @@ class TestProtocol(FunctionalTestCase):
 
     @browsing
     def test_protocol_template_can_be_configured_per_commitee(self, browser):
-        self.grant("Administrator")
         custom_template = create(
             Builder('sablontemplate')
             .within(self.templates)

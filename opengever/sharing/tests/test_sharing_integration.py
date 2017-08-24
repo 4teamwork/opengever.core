@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.sharing.browser.sharing import OpengeverSharingView
+from opengever.sharing.browser.sharing import SharingTab
 from opengever.sharing.interfaces import ILocalRolesAcquisitionActivated
 from opengever.sharing.interfaces import ILocalRolesAcquisitionBlocked
 from opengever.sharing.interfaces import ILocalRolesModified
@@ -27,16 +28,12 @@ class TestOpengeverSharingIntegration(FunctionalTestCase):
 
         self.view_repo = OpengeverSharingView(self.repo, self.portal.REQUEST)
         self.view_dossier = OpengeverSharingView(self.dossier, self.portal.REQUEST)
+        self.tab_dossier = SharingTab(self.dossier, self.portal.REQUEST)
 
-    def _check_roles(self, expect, roles):
+    def _check_roles(self, expected, roles):
         """ Base method to check the received roles
         """
-        # Check the roles and sort order
-        for role in roles:
-            self.assertTrue(role.get('id') in expect)
-            expect.remove(role.get('id'))
-
-        self.assertTrue(len(expect) == 0)
+        self.assertItemsEqual(expected, [role['id'] for role in roles])
 
         # Reset the roles
         setRoles(
@@ -52,7 +49,7 @@ class TestOpengeverSharingIntegration(FunctionalTestCase):
             u'Editor',
             u'Contributor',
             u'Reviewer',
-            u'Publisher',]
+            u'Publisher', ]
         self._check_roles(expect, self.view_dossier.available_roles())
 
     def test_manageable_roles_with_reader_and_owner(self):
@@ -80,8 +77,8 @@ class TestOpengeverSharingIntegration(FunctionalTestCase):
             u'Contributor',
             u'Reviewer',
             u'Publisher',
-            u'Administrator', ]
-        self._check_roles(expect, self.view_dossier.roles(check_permission=False))
+        ]
+        self._check_roles(expect, self.tab_dossier.available_roles())
 
     def test_update_inherit(self):
         """ tests update inherit method

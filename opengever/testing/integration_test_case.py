@@ -14,6 +14,9 @@ from plone.app.relationfield.event import update_behavior_relations
 from plone.app.testing import applyProfile
 from plone.app.testing import login
 from plone.app.testing import SITE_OWNER_NAME
+from plone.portlets.constants import CONTEXT_CATEGORY
+from plone.portlets.interfaces import ILocalPortletAssignmentManager
+from plone.portlets.interfaces import IPortletManager
 from sqlalchemy.sql.expression import desc
 from unittest2 import TestCase
 from z3c.relationfield.relation import RelationValue
@@ -382,3 +385,13 @@ class IntegrationTestCase(TestCase):
                           proposal_model.get_state())
         agenda_item = AgendaItem.query.order_by(desc('id')).first()
         return agenda_item
+
+    def as_relation_value(self, obj):
+        return RelationValue(getUtility(IIntIds).getId(obj))
+
+    def assert_portlet_inheritance_blocked(self, manager_name, obj):
+        manager = getUtility(
+            IPortletManager, name=manager_name, context=obj)
+        assignable = getMultiAdapter(
+            (obj, manager), ILocalPortletAssignmentManager)
+        self.assertTrue(assignable.getBlacklistStatus(CONTEXT_CATEGORY))

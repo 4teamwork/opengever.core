@@ -12,6 +12,12 @@ class TestProposalAgendaItem(FunctionalTestCase):
 
     def setUp(self):
         super(TestProposalAgendaItem, self).setUp()
+
+        # CommitteeResponsible is assigned globally here for the sake of
+        # simplicity
+        self.grant('Contributor', 'Editor', 'Reader', 'MeetingUser',
+                   'CommitteeResponsible')
+
         self.admin_unit.public_url = 'http://nohost/plone'
 
         self.repository_root, self.repository_folder = create(
@@ -52,7 +58,7 @@ class TestProposalAgendaItem(FunctionalTestCase):
              'id': 1,
              'title': u'Pr\xf6posal',
              'has_proposal': True,
-             'link': u'<a href="http://nohost/plone/opengever-meeting-committeecontainer/committee-1/submitted-proposal-1" title="Pr\xf6posal">Pr\xf6posal</a>'}, # noqa
+             'link': u'<a href="http://nohost/plone/opengever-meeting-committeecontainer/committee-1/submitted-proposal-1" title="Pr\xf6posal">Pr\xf6posal</a>'},  # noqa
             self.agenda_item.serialize())
 
 

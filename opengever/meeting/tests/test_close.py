@@ -25,7 +25,9 @@ class TestCloseMeeting(FunctionalTestCase):
         container = create(Builder('committee_container').having(
             excerpt_template=self.sablon_template,
             protocol_template=self.sablon_template))
+        self.grant('MeetingUser', on=container)
         self.committee = create(Builder('committee').within(container))
+        self.grant('CommitteeResponsible', on=self.committee)
 
         self.proposal_a = create(Builder('proposal')
                                  .titled(u'Proposal A')
@@ -119,6 +121,6 @@ class TestCloseMeeting(FunctionalTestCase):
             "messages": [{
               "messageTitle": "Information",
               "message": "Transition Close meeting executed",
-              "messageClass": "info" }]
+              "messageClass": "info"}]
           }, browser.json
         )

@@ -44,7 +44,7 @@ class TestAgendaItemList(FunctionalTestCase):
 
     @browsing
     def test_template_can_be_configured_per_committee(self, browser):
-        self.grant("Administrator")
+        self.grant("Administrator", "CommitteeResponsible")
         custom_template = create(
             Builder('sablontemplate')
             .within(self.templates)

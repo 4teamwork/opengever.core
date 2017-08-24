@@ -137,6 +137,11 @@ class TestMeetingZipExportView(FunctionalTestCase):
                     protocol_document=generated_protocol)
             .link_with(self.meeting_dossier))
 
+        # CommitteeResponsible is assigned globally here for the sake of
+        # simplicity
+        self.grant('Contributor', 'Editor', 'Reader', 'MeetingUser',
+                   'CommitteeResponsible')
+
         # Do a modification
         browser.login().open(meeting.get_url(view='protocol'))
         browser.fill({'Title': u'This is the modified different title than '

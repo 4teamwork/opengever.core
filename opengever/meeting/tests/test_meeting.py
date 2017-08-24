@@ -129,6 +129,11 @@ class TestMeeting(FunctionalTestCase):
                                              title='Oebbis in revision',
                                              workflow_state='revision'))
 
+        # CommitteeResponsible is assigned globally here for the sake of
+        # simplicity
+        self.grant('Contributor', 'Editor', 'Reader', 'MeetingUser',
+                   'CommitteeResponsible')
+
         browser.login().open(meeting.get_url())
         browser.find(close_meeting_button_name).click()
 
