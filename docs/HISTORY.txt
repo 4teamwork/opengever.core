@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Word meeting: Show decision number in meeting view. [jone]
+- Add lawgiver workflows for committee and committee-container. [deiferni]
 - Add a file action button for extracting mail attachments. [Rotonen]
 - Add upgrade step which fixes potential missing titles on opengever.private.root objects. [mathias.leimgruber]
 - Point footer source-code link to 4teamwork/opengever.core, drop link to CI. [deiferni]
