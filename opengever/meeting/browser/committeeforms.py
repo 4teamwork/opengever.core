@@ -6,6 +6,7 @@ from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.meeting import _
+from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.browser.periods import IPeriodModel
 from opengever.meeting.committee import Committee
 from opengever.meeting.committee import ICommittee
@@ -19,6 +20,7 @@ from plone.z3cform.layout import FormWrapper
 from z3c.form import field
 from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
+from z3c.form.interfaces import HIDDEN_MODE
 from z3c.form.interfaces import IDataConverter
 from zope.component import getUtility
 
@@ -48,6 +50,12 @@ class AddForm(BaseWizardStepForm, dexterity.AddForm):
 
     step_name = 'add-meeting-dossier'
     steps = ADD_COMMITTEE_STEPS
+
+    def updateWidgets(self):
+        super(AddForm, self).updateWidgets()
+
+        if not is_word_meeting_implementation_enabled():
+            self.widgets['ad_hoc_template'].mode = HIDDEN_MODE
 
     @buttonAndHandler(_(u'button_continue', default=u'Continue'), name='save')
     def handle_continue(self, action):
@@ -162,3 +170,9 @@ class EditForm(ModelProxyEditForm, dexterity.EditForm):
     grok.context(ICommittee)
     fields = field.Fields(Committee.model_schema, ignoreContext=True)
     content_type = Committee
+
+    def updateWidgets(self):
+        super(EditForm, self).updateWidgets()
+
+        if not is_word_meeting_implementation_enabled():
+            self.widgets['ad_hoc_template'].mode = HIDDEN_MODE
