@@ -6,17 +6,20 @@ class ReplaceCommitteeGroupMemberRole(UpgradeStep):
 
     The role is replaced with CommitteeResponsible which has approximately
     the same permissions as CommitteeGroupMember used to have and
-    CommitteeMember which can only view (at the moment). The Editor role is
-    necessary at the moment due to document workflow permission assignment.
-    Without editor the responsible does not have the necessary CMFEditions*
-    permissions.
+    CommitteeMember which can only view (at the moment).
+
+    The Editor role is necessary at the moment due to document workflow
+    permission assignment. Without Editor the responsible does not have the
+    necessary CMFEditions* permissions.
+    The Reader role is necessary at the moment due to mail workflow
+    permission assignment.
 
     CommitteeMember is not assigned automatically for now, so no migration is
     necessary.
     """
 
     role_to_remove = 'CommitteeGroupMember'
-    roles_to_add = ('CommitteeResponsible', 'Editor', )
+    roles_to_add = ('CommitteeResponsible', 'Editor', 'Reader')
 
     def __call__(self):
         self.remove_role()

@@ -105,7 +105,7 @@ class TestCommittee(IntegrationTestCase):
         committee = browser.context
         self.assertEqual('committee-3', committee.getId())
         self.assertEqual(
-            ('CommitteeResponsible', 'Editor'),
+            ('CommitteeResponsible', 'Editor', 'Reader'),
             dict(committee.get_local_roles()).get('committee_rpk_group'))
         self.assertEqual(self.leaf_repofolder,
                          committee.get_repository_folder())
@@ -152,7 +152,7 @@ class TestCommittee(IntegrationTestCase):
         local_roles = dict(committee.get_local_roles())
         self.assertEqual('committee-1', committee.getId())
         self.assertNotIn('committee_rpk_group', local_roles,)
-        self.assertEqual(('CommitteeResponsible', 'Editor'),
+        self.assertEqual(('CommitteeResponsible', 'Editor', 'Reader'),
                          local_roles.get('committee_ver_group'))
 
         model = committee.load_model()
