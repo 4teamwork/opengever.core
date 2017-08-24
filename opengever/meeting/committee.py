@@ -3,6 +3,7 @@ from Acquisition import aq_parent
 from five import grok
 from opengever.base.validators import BaseRepositoryfolderValidator
 from opengever.meeting import _
+from opengever.meeting import require_word_meeting_feature
 from opengever.meeting.committeeroles import CommitteeRoles
 from opengever.meeting.container import ModelContainer
 from opengever.meeting.model import Committee as CommitteeModel
@@ -10,6 +11,7 @@ from opengever.meeting.model import Meeting
 from opengever.meeting.model import Membership
 from opengever.meeting.model import Period
 from opengever.meeting.service import meeting_service
+from opengever.meeting.sources import proposal_template_source
 from opengever.meeting.sources import repository_folder_source
 from opengever.meeting.sources import sablon_template_source
 from opengever.meeting.wrapper import MeetingWrapper
@@ -87,6 +89,13 @@ class ICommittee(form.Schema):
                     u'for this committee.'),
         source=repository_folder_source,
         required=True)
+
+    ad_hoc_template = RelationChoice(
+        title=_('label_ad_hoc_template',
+                default=u'Ad hoc agenda item template'),
+        source=proposal_template_source,
+        required=False,
+    )
 
 
 class RepositoryfolderValidator(BaseRepositoryfolderValidator):
@@ -234,6 +243,13 @@ class Committee(ModelContainer):
             return self.toc_template.to_object
 
         return self.get_committee_container().get_toc_template()
+
+    @require_word_meeting_feature
+    def get_ad_hoc_template(self):
+        if self.ad_hoc_template:
+            return self.ad_hoc_template.to_object
+
+        return self.get_committee_container().get_ad_hoc_template()
 
     def get_repository_folder(self):
         return self.repository_folder.to_object
