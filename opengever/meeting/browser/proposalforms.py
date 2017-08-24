@@ -3,7 +3,6 @@ from ftw.table import helper
 from opengever.base.schema import TableChoice
 from opengever.base.widgets import TrixFieldWidget
 from opengever.document.interfaces import ICheckinCheckoutManager
-from opengever.dossier.templatefolder import get_template_folder
 from opengever.meeting import _
 from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.form import ModelProxyAddForm
@@ -12,22 +11,18 @@ from opengever.meeting.proposal import IProposal
 from opengever.meeting.proposal import ISubmittedProposal
 from opengever.meeting.proposal import Proposal
 from opengever.meeting.proposal import SubmittedProposal
+from opengever.meeting.vocabulary import get_proposal_template_vocabulary
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
 from opengever.tabbedview.helper import document_with_icon
 from plone import api
 from plone.directives import dexterity
 from plone.directives.form import widget
-from plone.uuid.interfaces import IUUID
 from plone.z3cform.fieldsets.utils import move
-from Products.CMFPlone.utils import safe_unicode
 from z3c.form import field
 from z3c.form.browser.checkbox import SingleCheckBoxFieldWidget
 from z3c.form.interfaces import HIDDEN_MODE
 from zope.component import getMultiAdapter
-from zope.interface import provider
 from zope.schema import Bool
-from zope.schema.interfaces import IContextSourceBinder
-from zope.schema.vocabulary import SimpleVocabulary
 
 
 class FieldConfigurationMixin(object):
@@ -80,30 +75,6 @@ class SubmittedProposalEditForm(FieldConfigurationMixin,
     def updateWidgets(self):
         super(SubmittedProposalEditForm, self).updateWidgets()
         self.widgets['relatedItems'].mode = HIDDEN_MODE
-
-
-@provider(IContextSourceBinder)
-def get_proposal_template_vocabulary(context):
-    template_folder = get_template_folder()
-    if template_folder is None:
-        # this may happen when the user does not have permissions to
-        # view templates and/or during ++widget++ traversal
-        return SimpleVocabulary([])
-
-    templates = api.content.find(
-        context=template_folder,
-        depth=-1,
-        portal_type="opengever.meeting.proposaltemplate",
-        sort_on='sortable_title', sort_order='ascending')
-
-    terms = []
-    for brain in templates:
-        template = brain.getObject()
-        terms.append(SimpleVocabulary.createTerm(
-            template,
-            IUUID(template),
-            safe_unicode(brain.Title)))
-    return SimpleVocabulary(terms)
 
 
 class IAddProposal(IProposal):
