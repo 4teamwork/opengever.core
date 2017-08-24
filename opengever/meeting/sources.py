@@ -14,6 +14,17 @@ sablon_template_source = ObjPathSourceBinder(
 )
 
 
+proposal_template_source = ObjPathSourceBinder(
+    portal_type=("opengever.meeting.proposaltemplate"),
+    navigation_tree_query={
+        'object_provides':
+            ['opengever.dossier.templatefolder.interfaces.ITemplateFolder',
+             'opengever.meeting.proposaltemplate.IProposalTemplate',
+             ],
+        }
+)
+
+
 all_open_dossiers_source = RepositoryPathSourceBinder(
     object_provides='opengever.dossier.behaviors.dossier.IDossierMarker',
     review_state=DOSSIER_STATES_OPEN,
