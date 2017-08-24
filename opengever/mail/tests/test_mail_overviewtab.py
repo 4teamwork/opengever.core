@@ -55,7 +55,8 @@ class TestOverview(FunctionalTestCase):
                   ['Attachments',
                    'Inneres Testma?il ohne Attachments.eml 1 KB '
                    'word_document.docx 22.4 KB '
-                   'Text.txt 1 KB'],
+                   'Text.txt 1 KB '
+                   'Save attachments'],
                   ['Digital Available', 'yes'],
                   ['Preserved as paper', 'yes'],
                   ['Date of receipt', date_format_helper(date.today())],
