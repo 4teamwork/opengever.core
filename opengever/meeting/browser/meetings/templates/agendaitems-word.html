@@ -3,6 +3,11 @@
   <tr class="{{css_class}} word-feature agenda_item" data-uid={{id}}>
     {{#if ../agendalist_editable}}<td class="sortable-handle"></td>{{/if}}
     <td class="title">
+      {{#if decision_number}}
+      <span class="decision_number" title="%(label_decision_number)s">
+        # {{decision_number}}
+      </span>
+      {{/if}}
       {{#if has_documents}}
       <div class="toggle-attachements">
         <a class="toggle-attachements-btn"
