@@ -83,7 +83,7 @@ class OpengeverContentFixture(object):
     def create_users(self):
         self.administrator = self.create_user(
             'administrator', u'Nicole', u'Kohler',
-            ['Administrator', 'APIUser', 'CommitteeAdministrator'])
+            ['Administrator', 'APIUser'])
         self.dossier_responsible = self.create_user(
             'dossier_responsible', u'Robert', u'Ziegler')
         self.regular_user = self.create_user(
@@ -94,8 +94,7 @@ class OpengeverContentFixture(object):
         self.secretariat_user = self.create_user(
             'secretariat_user', u'J\xfcrgen', u'K\xf6nig')
         self.committee_responsible = self.create_user(
-            'committee_responsible', u'Fr\xe4nzi', u'M\xfcller',
-            ['MeetingUser', 'CommitteeResponsible'])
+            'committee_responsible', u'Fr\xe4nzi', u'M\xfcller')
 
     @staticuid()
     def create_repository_tree(self):
@@ -157,6 +156,9 @@ class OpengeverContentFixture(object):
         self.committee_container.manage_setLocalRoles(
             self.committee_responsible.getId(),
             ('MeetingUser',))
+        self.committee_container.manage_setLocalRoles(
+            self.administrator.getId(),
+            ('CommitteeAdministrator',))
         self.committee_container.reindexObjectSecurity()
 
         self.committee = self.register('committee', self.create_committee(
