@@ -35,4 +35,10 @@
       marker="opengever.trash.trash.ITrashableMarker"
       for="plone.dexterity.interfaces.IDexterityContent"
       />
+
+  <adapter
+      factory=".indexers.trashed_indexer"
+      name="trashed"
+      />
+
 </configure>

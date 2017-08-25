@@ -3,11 +3,11 @@ from Acquisition import aq_inner, aq_parent
 from five import grok
 from opengever.trash import _
 from plone import api
-from plone.indexer import indexer
 from Products.CMFCore.utils import _checkPermission, getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
 from zope.component.interfaces import IObjectEvent, ObjectEvent
 from zope.event import notify
+from zope.interface import implements
 from zope.interface import Interface, alsoProvides, noLongerProvides
 
 
@@ -37,11 +37,11 @@ class IUntrashedEvent(IObjectEvent):
 
 
 class TrashedEvent(ObjectEvent):
-    grok.implements(ITrashedEvent)
+    implements(ITrashedEvent)
 
 
 class UntrashedEvent(ObjectEvent):
-    grok.implements(IUntrashedEvent)
+    implements(IUntrashedEvent)
 
 
 class Trasher(object):
@@ -70,15 +70,6 @@ class Trasher(object):
         noLongerProvides(self.context, ITrashed)
         self.context.reindexObject()
         notify(UntrashedEvent(self.context))
-
-
-@indexer(Interface)
-def trashIndexer(obj):
-    # This index is used to filter trashed documents from catalog search
-    # results by default. For that we monkey patch the catalog tool's
-    # searchResults(), see the patch in opengever.base.monkey
-    return ITrashed.providedBy(obj)
-grok.global_adapter(trashIndexer, name="trashed")
 
 
 class TrashView(grok.View):
