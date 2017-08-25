@@ -11,4 +11,18 @@
       template="templates/remove_confirmation.pt"
       />
 
+  <browser:page
+      name="trashed"
+      for="opengever.trash.trash.ITrashableMarker"
+      class=".trash.TrashView"
+      permission="opengever.trash.TrashContent"
+      />
+
+  <browser:page
+      name="untrashed"
+      for="opengever.trash.trash.ITrashableMarker"
+      class=".trash.UntrashView"
+      permission="opengever.trash.UntrashContent"
+      />
+
 </configure>
