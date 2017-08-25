@@ -13,7 +13,11 @@ from opengever.repository.behaviors.referenceprefix import IReferenceNumberPrefi
 from opengever.testing import FunctionalTestCase
 from pkg_resources import resource_filename
 from plone import api
+from plone.portlets.interfaces import IPortletAssignmentMapping
+from plone.portlets.interfaces import IPortletManager
 from zope.annotation import IAnnotations
+from zope.component import getMultiAdapter
+from zope.component import getUtility
 
 
 FROZEN_NOW = datetime(2016, 12, 20, 9, 40)
@@ -66,6 +70,7 @@ class TestOggBundlePipeline(FunctionalTestCase):
         self.assertEqual(date(2000, 1, 1), root.valid_from)
         self.assertEqual(date(2099, 12, 31), root.valid_until)
         self.assertIsNone(getattr(root, 'guid', None))
+        self.assert_navigation_portlet_assigned(root)
         return root
 
     def assert_repo_folders_created(self, root):
@@ -511,3 +516,12 @@ class TestOggBundlePipeline(FunctionalTestCase):
         self.assertEqual(2, len(dossiers))
         self.assertEqual(3, len(documents))
         self.assertEqual(2, len(mails))
+
+    def assert_navigation_portlet_assigned(self, root):
+        manager = getUtility(
+            IPortletManager, name=u'plone.leftcolumn', context=root)
+        mapping = getMultiAdapter(
+            (root, manager,), IPortletAssignmentMapping)
+        tree_portlet_assignment = mapping.get(
+            'opengever-portlets-tree-TreePortlet')
+        self.assertEqual('ordnungssystem', tree_portlet_assignment.root_path)
