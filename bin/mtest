@@ -1,130 +1,91 @@
-#!/usr/bin/env python3
-
-# Runs the tests in configurably many subprocesses.
-
+#!/usr/bin/env python
+"""Run tests in configurably many subprocesses and preconfigurable buckets."""
+from __future__ import print_function
 from copy import copy
 from fnmatch import fnmatch
-
-import concurrent.futures
+from multiprocessing import cpu_count
+from multiprocessing import Pool
 import os
 import subprocess
 import sys
 
 
-os.environ['PYTHONDONTWRITEBYTECODE'] = '1'
-
-PROCESSORS = int(os.environ.get('MTEST_PROCESSORS', '4'))
-
-BUILDOUT_PATH = os.path.abspath(os.path.join(__file__, '..', '..'))
-OPENGEVER_PATH = os.path.join(BUILDOUT_PATH, 'opengever')
-
-
 def main():
-    # Remove *.py[co] files to avoid race conditions with parallel workers
-    # stepping on each other's toes when trying to clean up stale bytecode.
-    #
-    # Setting PYTHONDONTWRITEBYTECODE is not enough, because running buildout
-    # also already precompiles bytecode for some eggs.
-    remove_bytecode_files(OPENGEVER_PATH)
+    """Discover and run tests.
+
+    Remove *.py[co] files to avoid race conditions with parallel workers
+    stepping on each other's toes when trying to clean up stale bytecode.
+
+    Setting PYTHONDONTWRITEBYTECODE is not enough, because running buildout
+    also already precompiles bytecode for some eggs.
+    """
+    os.environ['PYTHONDONTWRITEBYTECODE'] = '1'
+
+    buildout_path = os.path.abspath(os.path.join(__file__, '..', '..'))
+    opengever_path = os.path.join(buildout_path, 'opengever')
+
+    remove_bytecode_files(opengever_path)
     remove_bytecode_files('src')
 
-    print("Discovering modules.", flush=True)
+    print('Discovering modules.')
 
-    known_very_slow_modules = [
-        'opengever.meeting',
-    ]
+    # Assuming hyperthreading and non-dedicated use for the default core count
+    worker_count = int(
+        os.environ.get('MTEST_PROCESSORS', cpu_count() // 2 - 1))
 
-    known_slow_modules = [
-        'opengever.base',
-        'opengever.document',
-        'opengever.dossier',
-        'opengever.task',
-        ]
+    buckets = discover_and_bucket_modules()
+    batches = split_buckets_to_batches(buckets, worker_count)
 
-    modules = []
-    for name in os.listdir('opengever'):
-        if name[0].isalpha():
-            complete_name = 'opengever.' + name
-            if complete_name not in known_slow_modules:
-                if complete_name not in known_very_slow_modules:
-                    modules.append(complete_name)
+    print('Running tests with {} workers.'.format(worker_count))
 
-    free_cores = PROCESSORS - len(known_very_slow_modules)
+    pool = Pool(worker_count)
+    results = pool.map(run_tests, batches)
 
-    if PROCESSORS == 1:
-        # Just run everything sequentially in one job
-        batches = known_very_slow_modules + known_slow_modules + modules
+    if not any([result.get('returncode', None) != 0 for result in results]):
+        print('No failed tests.')
+        sys.exit(0)
 
-    elif free_cores > 0:
-        # Create as many test batches as there are non-dedicated runners
-        batches = [[] for n in range(free_cores)]
+    for result in results:
+        # UTF-8 is explicitly expected as the runtime locale!
+        output = result.get('output')
+        for line in output:
+            print(line.decode('UTF-8'), end='')
 
-        # Round robin the known slow modules across the test runners
-        for i, module in enumerate(known_slow_modules + modules):
-            batches[i % free_cores].append(module)
-
-        # Append the known very slow modules as their dedicated test runners
-        for module in known_very_slow_modules:
-            batches.append([module])
-
-    else:
-        # We can only run the dedicated very slow ones separate from the rest
-        batches = []
-        for module in known_very_slow_modules:
-            batches.append(known_very_slow_modules)
-        batches.append(modules)
-
-    # Guard against empty batches in case of more processors than modules
-    # Get worker ZSERVER_PORT from the jenkins port allocator
-    # The jenkins port allocator enumerates starting from 1
-    # Default to 55000 + i
-    batches = [
-        (os.environ.get('PORT{}'.format(i + 1), str(55000 + i)), batch)
-        for i, batch in enumerate(batches)
-        if batch
-        ]
-
-    print("Running tests with {} processors.".format(PROCESSORS), flush=True)
-    with concurrent.futures.ProcessPoolExecutor(max_workers=PROCESSORS) as executor:  # noqa
-        outputs = executor.map(run_tests, batches)
-
-    failed_tests = False
-    for output in outputs:
-        if output:
-            # This is a tuple of stdout and stderr as bytestrings
-            for out in output:
-                if out:
-                    failed_tests = True
-                    # This explicitly expects UTF-8 as the runtime locale!
-                    print(out.decode('UTF-8'), end='', flush=True)
-
-    if failed_tests:
-        sys.exit(1)
-
-    print("No failed tests.", flush=True)
+    # Fail per default.
+    sys.exit(1)
 
 
 def remove_bytecode_files(path):
-    print("Removing bytecode files from {}".format(path), flush=True)
+    """Ensure clean test runs by nuking prcompiled bytecode."""
+    print('Removing bytecode files from {}'.format(path))
     for filename in find_bytecode_files(path):
         os.unlink(filename)
 
 
 def find_bytecode_files(path):
-    for root, dirs, files in os.walk(path):
+    """Discover bytecode files."""
+    for root, _, files in os.walk(path):
         for name in files:
             if fnmatch(name, '*.py[co]'):
                 yield os.path.join(root, name)
 
 
-def run_tests(runtime_params):
+def run_tests(batch):
+    """Run tests for a batch of modules."""
     arguments = ['bin/test']
-    for module in runtime_params[1]:
-        arguments.append('-m')
-        arguments.append(module)
+
+    module_arguments = tuple([
+        ('-m', module, )
+        for module in batch.get('modules', None)
+        if module
+    ])
+
+    # Unpack the module argument tuples flat
+    arguments.extend(sum(module_arguments, ()))
 
     env = copy(os.environ)
-    env['ZSERVER_PORT'] = runtime_params[0]
+    # We need a port provided or we hard fail
+    env['ZSERVER_PORT'] = batch.get('port')
 
     test_run = subprocess.Popen(
         arguments,
@@ -135,11 +96,86 @@ def run_tests(runtime_params):
 
     # The pipe buffer is only 4k in size, so we need to constantly fetch it
     output = test_run.communicate()
+    returncode = test_run.returncode
 
-    if test_run.returncode != 0:
+    if returncode == 0:
         # Only return output if we have a failed test
-        return output
-    return None
+        output = None
+
+    result = dict(
+        output=output,
+        returncode=returncode,
+        )
+
+    return result
+
+
+def discover_and_bucket_modules():
+    """Discover modules and manually prebucket them per expected runtime."""
+    very_slow = (
+        'meeting',
+        )
+
+    slow = (
+        'base',
+        'document',
+        'dossier',
+        'task',
+        )
+
+    normal = tuple([
+        name
+        for name in os.listdir('opengever')
+        if name[0].isalpha()
+        if name not in slow
+        if name not in very_slow
+        ])
+
+    buckets = dict(
+        slow=slow,
+        very_slow=very_slow,
+        normal=normal,
+    )
+
+    return buckets
+
+
+def split_buckets_to_batches(buckets, worker_count):
+    normal = buckets.get('normal', [])
+    slow = buckets.get('slow', [])
+    very_slow = buckets.get('very_slow', [])
+
+    if worker_count < 2:
+        # Just run everything sequentially in one job
+        batches = sum(buckets, ())
+
+    else:
+        # Create as many test batches as there are non-dedicated runners
+        free_cores = worker_count - len(very_slow)
+        batches = [[] for _ in range(free_cores)]
+
+        # Round robin the known slow modules across the test runners
+        for i, module in enumerate(slow + normal):
+            batches[i % free_cores].append(module)
+
+        # Append the known very slow modules as their dedicated test runners
+        for module in very_slow:
+            batches.append([module])
+
+    # Guard against empty batches in case of more workers than modules
+    # Get worker ZSERVER_PORT from the jenkins port allocator
+    # The jenkins port allocator enumerates starting from 1
+    # Default to 55000 + i
+    batches = [
+        dict(
+            modules=batch,
+            port=os.environ.get('PORT{}'.format(i + 1), str(55000 + i)),
+            )
+        for i, batch in enumerate(batches)
+        if batch
+        ]
+
+    return batches
 
 
 if __name__ == '__main__':
