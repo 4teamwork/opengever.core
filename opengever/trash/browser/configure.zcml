@@ -1,0 +1,14 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="opengever.trash">
+
+  <browser:page
+      name="remove_confirmation"
+      for="*"
+      class=".remove_confirmation.RemoveConfirmation"
+      permission="opengever.base.RemoveGEVERContent"
+      template="templates/remove_confirmation.pt"
+      />
+
+</configure>

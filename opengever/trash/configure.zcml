@@ -20,6 +20,8 @@
 
   <include package=".upgrades" />
 
+  <include package=".browser" />
+
   <!-- Include custom permissions -->
   <include file="permissions.zcml" />
 
