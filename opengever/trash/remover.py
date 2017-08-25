@@ -8,7 +8,6 @@ from zope.intid.interfaces import IIntIds
 
 
 class Remover(object):
-
     def __init__(self, documents):
         self.documents = documents
 

@@ -7,6 +7,10 @@ from Products.statusmessages.interfaces import IStatusMessage
 
 
 class TrashView(BrowserView):
+    """The trash view gets called via the `trash` action in a document listing.
+
+    The selected documents are passed in via the `paths` request variable.
+    """
 
     def __call__(self):
         paths = self.request.get('paths')
@@ -60,6 +64,11 @@ class TrashView(BrowserView):
 
 
 class UntrashView(BrowserView):
+    """The untrash view gets called via the `untrash` action in a trash
+    listing.
+
+    The selected documents are passed in via the `paths` request variable.
+    """
 
     def __call__(self):
         paths = self.request.get('paths')

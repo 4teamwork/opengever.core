@@ -9,5 +9,4 @@ def trashed_indexer(obj):
     documents from catalog search results by default. For that we monkey patch
     the catalog tool's searchResults(), see the patch in opengever.base.monkey.
     """
-
     return ITrashed.providedBy(obj)
