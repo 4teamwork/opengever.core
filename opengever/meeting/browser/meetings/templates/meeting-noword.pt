@@ -223,7 +223,7 @@
               <div class="item">
                 <span class="title" i18n:translate="">Excerpts</span>
 
-                <a class="generate-excerpt"
+                <a class="generate-manual-excerpt"
                    tal:attributes="href view/url_manually_generate_excerpt"
                    i18n:attributes="title"
                    title="generate new excerpt"></a>
