@@ -7,6 +7,7 @@ Changelog
 
 - Bundle import: Fix tree portlet assignment to repo roots. [lgraf]
 - Fix an issue with conflicting css classes breaking a link. [deiferni]
+- Fix textfilter for sql table listings when using oracle backends. [phgross]
 - Word meeting: Show decision number in meeting view. [jone]
 - Add lawgiver workflows for committee and committee-container. [deiferni]
 - Add a file action button for extracting mail attachments. [Rotonen]
