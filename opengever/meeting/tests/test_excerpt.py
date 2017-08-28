@@ -86,7 +86,7 @@ class TestExcerpt(IntegrationTestCase):
     def test_manual_excerpt_pre_fills_fields(self, browser):
         self.login(self.committee_responsible, browser)
         browser.open(self.meeting.model.get_url())
-        browser.css('.generate-excerpt').first.click()
+        browser.css('.generate-manual-excerpt').first.click()
 
         title_field = browser.find('Title')
 
@@ -105,7 +105,7 @@ class TestExcerpt(IntegrationTestCase):
                                self.submitted_word_proposal)
         browser.open(self.meeting.model.get_url())
 
-        browser.css('.generate-excerpt').first.click()
+        browser.css('.generate-manual-excerpt').first.click()
         browser.fill({'agenda_item-1.include:record': True,
                       'Target dossier': self.dossier})
         browser.find('Save').click()
@@ -133,7 +133,7 @@ class TestExcerpt(IntegrationTestCase):
         self.login(self.committee_responsible, browser)
         browser.open(self.meeting.model.get_url())
 
-        browser.css('.generate-excerpt').first.click()
+        browser.css('.generate-manual-excerpt').first.click()
         browser.find('form.buttons.cancel').click()
 
         self.assertEqual(self.meeting.model.get_url(), browser.url)
@@ -145,7 +145,7 @@ class TestExcerpt(IntegrationTestCase):
                                self.submitted_word_proposal)
         browser.open(self.meeting.model.get_url())
 
-        browser.css('.generate-excerpt').first.click()
+        browser.css('.generate-manual-excerpt').first.click()
         # de-select pre-selected field-checkboxes
         browser.fill({'form.widgets.include_initial_position:list': False,
                       'form.widgets.include_decision:list': False,
@@ -164,7 +164,7 @@ class TestExcerpt(IntegrationTestCase):
                                self.submitted_word_proposal)
         browser.open(self.meeting.model.get_url())
 
-        browser.css('.generate-excerpt').first.click()
+        browser.css('.generate-manual-excerpt').first.click()
         browser.fill({'Target dossier': self.dossier})
         browser.find('Save').click()
 
