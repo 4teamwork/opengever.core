@@ -1,9 +1,11 @@
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from ftw.datepicker.widget import DatePickerFieldWidget
+from opengever.base.browser.modelforms import ModelAddForm
+from opengever.base.browser.modelforms import ModelEditForm
 from opengever.meeting import _
 from opengever.meeting.browser.members import MemberView
 from opengever.meeting.browser.views import RemoveModelView
-from opengever.base.browser.modelforms import ModelAddForm
-from opengever.base.browser.modelforms import ModelEditForm
 from opengever.meeting.model import Membership
 from plone.directives import form
 from z3c.form.interfaces import ActionExecutionError
@@ -90,8 +92,9 @@ class EditMembership(ModelEditForm):
             raise(ActionExecutionError(Invalid(msg)))
 
     def nextURL(self):
-        return MemberView.url_for(self.context.parent.parent,
-                                  self.model.member)
+        committee = self.context.model.committee.resolve_committee()
+        container = aq_parent(aq_inner(committee))
+        return MemberView.url_for(container, self.model.member)
 
 
 class RemoveMembership(RemoveModelView):
@@ -105,5 +108,6 @@ class RemoveMembership(RemoveModelView):
                  default=u'The membership was deleted successfully.')
 
     def nextURL(self):
-        return MemberView.url_for(self.context.parent.parent,
-                                  self.model.member)
+        committee = self.context.model.committee.resolve_committee()
+        container = aq_parent(aq_inner(committee))
+        return MemberView.url_for(container, self.model.member)

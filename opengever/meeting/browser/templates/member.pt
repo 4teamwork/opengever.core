@@ -60,11 +60,11 @@
               <td class="role" tal:content="membership/role" />
               <td>
                 <a title="Edit" i18n:attributes="title label_edit"
-                   tal:attributes="href python: membership.get_edit_url(context)" class="edit_membership" />
+                   tal:attributes="href python: membership.get_edit_url()" class="edit_membership" />
               </td>
               <td>
                 <a title="Remove" i18n:attributes="title label_remove"
-                   tal:attributes="href python: membership.get_remove_url(context)" class="remove_membership" />
+                   tal:attributes="href python: membership.get_remove_url();" class="remove_membership" />
               </td>
             </tr>
           </tbody>

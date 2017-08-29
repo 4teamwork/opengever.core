@@ -3,7 +3,6 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.base.model import create_session
-from opengever.meeting.wrapper import MemberWrapper
 from opengever.testing import IntegrationTestCase
 from opengever.testing.pages import breadcrumbs
 
@@ -48,17 +47,11 @@ class TestPathBar(IntegrationTestCase):
                                         date_to=date(2015, 1, 1)))
             create_session().flush()  # XXX maybe auto-flush here ...
 
-        # XXX the permissions currently don't work well. this checks
-        # modify poral content on committee-container, so we need to be
-        # an admin for now. see #2829.
-        self.login(self.administrator, browser)
-        wrapped_member = MemberWrapper.wrap(self.committee_container, member)
-        # NOTE: this opens the edit view! there is no separate view for
-        # a single membership, they are all listed on the member view.
-        browser.open(membership.get_url(wrapped_member))
+        self.login(self.committee_responsible, browser)
+        browser.open(membership.get_edit_url())
         self.assertEqual(
             [u'Hauptmandant',
              u'Sitzungen',
-             u'M\xfcller Peter',
+             u'Rechnungspr\xfcfungskommission',
              u'M\xfcller Peter, Jan 01, 2014 - Jan 01, 2015'],
             breadcrumbs.text_items())

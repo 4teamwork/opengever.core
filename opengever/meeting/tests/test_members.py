@@ -160,16 +160,14 @@ class TestMemberView(FunctionalTestCase):
         browser.login().open(self.member.get_url(self.container))
 
         link = browser.css('a.edit_membership').first
-        self.assertEqual(self.membership_2.get_edit_url(self.member_wrapper),
-                         link.get('href'))
+        self.assertEqual(self.membership_2.get_edit_url(), link.get('href'))
 
     @browsing
     def test_remove_membership_link_is_correct(self, browser):
         browser.login().open(self.member.get_url(self.container))
 
         link = browser.css('a.remove_membership').first
-        self.assertEqual(self.membership_2.get_remove_url(self.member_wrapper),
-                         link.get('href'))
+        self.assertEqual(self.membership_2.get_remove_url(), link.get('href'))
 
     @browsing
     def test_remove_membership_works_correctly(self, browser):

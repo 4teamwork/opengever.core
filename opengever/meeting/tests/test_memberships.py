@@ -86,7 +86,7 @@ class TestMemberships(FunctionalTestCase):
                                     date_from=date(2003, 01, 01),
                                     date_to=date(2007, 12, 31)))
 
-        browser.login().open(membership.get_edit_url(self.member_wrapper))
+        browser.login().open(membership.get_edit_url())
         self.assertEquals(
             u'M\xfcller Peter, Jan 01, 2003 - Dec 31, 2007 \u2014 Plone site',
             browser.css('title').first.text)
@@ -99,7 +99,7 @@ class TestMemberships(FunctionalTestCase):
                                     date_from=date(2003, 01, 01),
                                     date_to=date(2007, 12, 31)))
 
-        browser.login().open(membership.get_edit_url(self.member_wrapper))
+        browser.login().open(membership.get_edit_url())
         browser.fill({'Role': u'tempor\xe4re Leitung',
                       'Start date': '31.12.2003'}).submit()
 
@@ -121,7 +121,7 @@ class TestMemberships(FunctionalTestCase):
                                     date_from=date(2008, 01, 01),
                                     date_to=date(2014, 01, 01)))
 
-        browser.login().open(membership.get_edit_url(self.member_wrapper))
+        browser.login().open(membership.get_edit_url())
         browser.fill({'Start date': '31.12.2005'}).submit()
 
         self.assertEqual(['There were some errors.'], error_messages())
