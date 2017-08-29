@@ -10,6 +10,23 @@ from opengever.meeting.model import Member
 from opengever.meeting.model import Membership
 from opengever.meeting.wrapper import MemberWrapper
 from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
+
+
+class TestPathBar(IntegrationTestCase):
+
+    features = ('meeting',)
+
+    @browsing
+    def test_committee_member_cant_see_membership_edit_links(self, browser):
+        self.login(self.meeting_user, browser)
+        browser.open(self.committee_participant)
+
+        table = browser.css('#membership_listing').first
+        self.assertEqual(
+            [[u'Rechnungspr\xfcfungskommission',
+              'Jan 01, 2010', 'Jan 01, 2014', '']],
+            table.lists())
 
 
 class TestMemberships(FunctionalTestCase):
