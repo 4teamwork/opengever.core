@@ -1,8 +1,8 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
-from opengever.meeting import _
 from opengever.base.browser.modelforms import ModelAddForm
 from opengever.base.browser.modelforms import ModelEditForm
+from opengever.meeting import _
 from opengever.meeting.model import Member
 from opengever.ogds.models import EMAIL_LENGTH
 from opengever.ogds.models import FIRSTNAME_LENGTH
@@ -83,6 +83,18 @@ class MemberView(BrowserView):
 
     def __call__(self):
         return self.template()
+
+    def can_edit_any_memberships(self):
+        """Return whether the current user can edit any membership."""
+
+        return any(self.can_edit_membership(membership)
+                   for membership in self.model.memberships)
+
+    def can_edit_membership(self, membership):
+        """Return whether the current user can edit the membership."""
+
+        return membership.is_editable_by_current_user(
+            membership.committee.resolve_committee())
 
     def prepare_model_tabs(self, viewlet):
         if not self.model.is_editable():

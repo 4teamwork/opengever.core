@@ -75,6 +75,9 @@ class SQLFormSupport(object):
     def is_editable(self):
         return True
 
+    def is_editable_by_current_user(self, container):
+        return api.user.has_permission('Modify portal content', obj=container)
+
     def get_edit_url(self, context):
         return self.get_url(context, view='edit')
 
