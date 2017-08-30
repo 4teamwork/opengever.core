@@ -8,6 +8,25 @@ from ftw.testing import freeze
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.model import Period
 from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
+
+
+class TestPathBar(IntegrationTestCase):
+
+    features = ('meeting',)
+
+    @browsing
+    def test_committee_member_cant_see_period_edit_links(self, browser):
+        self.login(self.meeting_user, browser)
+
+        browser.open(self.committee, view='tabbedview_view-periods')
+        listing = browser.css('#period_listing').first
+        self.assertEqual(
+            '2016 (Jan 01, 2016 - Dec 31, 2016) '
+            'download TOC alphabetical '
+            'download TOC by repository',
+            listing.text
+            )
 
 
 class TestPeriod(FunctionalTestCase):
