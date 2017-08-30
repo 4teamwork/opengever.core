@@ -89,9 +89,12 @@ class SqlTableSource(GeverTableSource):
                 # Issue #759
                 query.session
 
-                query = query.filter(or_(
-                    *[cast(field, String).ilike(term)
-                      for field in self.searchable_columns]))
+                expressions = []
+                for field in self.searchable_columns:
+                    if not issubclass(field.type.python_type, basestring):
+                        field = cast(field, String)
+                    expressions.append(field.ilike(term))
+                query = query.filter(or_(*expressions))
 
         return query
 
