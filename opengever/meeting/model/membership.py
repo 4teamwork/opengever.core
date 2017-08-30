@@ -71,5 +71,12 @@ class Membership(Base, SQLFormSupport):
             parts.append(view)
         return '/'.join(parts)
 
-    def get_remove_url(self, context):
-        return self.get_url(context, view='remove')
+    def get_remove_url(self):
+        committee = self.committee.resolve_committee()
+        if committee:
+            return self.get_url(committee, view='remove')
+
+    def get_edit_url(self):
+        committee = self.committee.resolve_committee()
+        if committee:
+            return self.get_url(committee, view='edit')

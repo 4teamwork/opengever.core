@@ -50,22 +50,28 @@
             <th i18n:translate="label_date_from">Start date</th>
             <th i18n:translate="label_date_to">End date</th>
             <th i18n:translate="label_role">Role</th>
-            <th></th>
-            <th></th>
+            <tal:block tal:condition="view/can_edit_any_memberships">
+              <th></th>
+              <th></th>
+            </tal:block>
 
             <tr tal:repeat="membership memberships">
               <td class="committee" tal:content="structure membership/committee/get_link" />
               <td class="date_from" tal:content="membership/format_date_from" />
               <td class="date_to" tal:content="membership/format_date_to" />
               <td class="role" tal:content="membership/role" />
-              <td>
-                <a title="Edit" i18n:attributes="title label_edit"
-                   tal:attributes="href python: membership.get_edit_url(context)" class="edit_membership" />
-              </td>
-              <td>
-                <a title="Remove" i18n:attributes="title label_remove"
-                   tal:attributes="href python: membership.get_remove_url(context)" class="remove_membership" />
-              </td>
+              <tal:block tal:condition="view/can_edit_any_memberships">
+                <td>
+                  <a tal:condition="python: view.can_edit_membership(membership)"
+                     title="Edit" i18n:attributes="title label_edit"
+                     tal:attributes="href python: membership.get_edit_url()" class="edit_membership" />
+                </td>
+                <td>
+                  <a tal:condition="python: view.can_edit_membership(membership)"
+                     title="Remove" i18n:attributes="title label_remove"
+                     tal:attributes="href python: membership.get_remove_url();" class="remove_membership" />
+                </td>
+              </tal:block>
             </tr>
           </tbody>
         </table>
