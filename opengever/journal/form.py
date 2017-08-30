@@ -1,5 +1,6 @@
 from ftw.keywordwidget.widget import KeywordWidget
 from opengever.base.source import DossierPathSourceBinder
+from opengever.contact import is_contact_feature_enabled
 from opengever.contact.sources import ContactsSourceBinder
 from opengever.journal import _
 from opengever.journal.entry import ManualJournalEntry
@@ -10,6 +11,7 @@ from z3c.form import button
 from z3c.form.field import Fields
 from z3c.form.form import AddForm
 from z3c.form.i18n import MessageFactory as z3c_mf
+from z3c.form.interfaces import HIDDEN_MODE
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
 from zope import schema
@@ -66,6 +68,11 @@ class ManualJournalEntryAddForm(AddForm):
         KeywordWidget,
         async=True
     )
+
+    def updateWidgets(self, prefix=None):
+        super(ManualJournalEntryAddForm, self).updateWidgets(prefix=prefix)
+        if not is_contact_feature_enabled():
+            self.widgets['contacts'].mode = HIDDEN_MODE
 
     @button.buttonAndHandler(z3c_mf('Add'), name='add')
     def handleAdd(self, action):

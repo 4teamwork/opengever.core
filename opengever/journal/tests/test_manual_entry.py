@@ -3,7 +3,9 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
+from opengever.contact.interfaces import IContactSettings
 from opengever.contact.ogdsuser import OgdsUserToContactAdapter
+from opengever.core.testing import toggle_feature
 from opengever.testing import FunctionalTestCase
 from opengever.testing.helpers import get_contacts_token
 
@@ -14,6 +16,7 @@ class TestManualJournalEntry(FunctionalTestCase):
         super(TestManualJournalEntry, self).setUp()
         self.dossier = create(Builder('dossier'))
         self.contactfolder = create(Builder('contactfolder'))
+        toggle_feature(IContactSettings, enabled=True)
 
     @browsing
     def test_adds_entry_to_context_journal(self, browser):
@@ -166,3 +169,11 @@ class TestManualJournalEntry(FunctionalTestCase):
 
         self.assertEquals(
             '{}#journal'.format(self.dossier.absolute_url()), browser.url)
+
+    @browsing
+    def test_contact_field_is_hidden_when_contact_feature_is_disabled(self, browser):
+        toggle_feature(IContactSettings, enabled=False)
+
+        browser.login().open(self.dossier, view='add-journal-entry')
+
+        self.assertIsNone(browser.find_field_by_text('Contacts'))
