@@ -118,8 +118,8 @@ class CloseCurrentPeriodStepView(FormWrapper, grok.View):
     form = CloseCurrentPeriodStep
 
     def __init__(self, *args, **kwargs):
-         FormWrapper.__init__(self, *args, **kwargs)
-         grok.View.__init__(self, *args, **kwargs)
+        FormWrapper.__init__(self, *args, **kwargs)
+        grok.View.__init__(self, *args, **kwargs)
 
     def available(self):
         return is_meeting_feature_enabled()
@@ -191,8 +191,8 @@ class AddNewPeriodStepView(FormWrapper, grok.View):
     form = AddNewPeriodStep
 
     def __init__(self, *args, **kwargs):
-         FormWrapper.__init__(self, *args, **kwargs)
-         grok.View.__init__(self, *args, **kwargs)
+        FormWrapper.__init__(self, *args, **kwargs)
+        grok.View.__init__(self, *args, **kwargs)
 
     def available(self):
         return is_meeting_feature_enabled()
