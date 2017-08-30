@@ -12,6 +12,7 @@ from opengever.meeting import is_meeting_feature_enabled
 from opengever.meeting.committee import ICommittee
 from opengever.meeting.model import Period
 from opengever.tabbedview import GeverTabMixin
+from plone import api
 from plone.directives import form
 from plone.z3cform.layout import FormWrapper
 from Products.Five.browser import BrowserView
@@ -226,3 +227,9 @@ class PeriodsTab(BrowserView, GeverTabMixin):
         """
         return Period.query.by_committee(
             self.context.load_model()).order_by(desc(Period.date_from))
+
+    def is_editable_by_current_user(self):
+        """Return whether the current user can edit periods."""
+
+        return api.user.has_permission(
+            'Modify portal content', obj=self.context)

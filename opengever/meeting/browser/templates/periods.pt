@@ -22,7 +22,7 @@
           </a>
         </li>
       </ul>
-      <ul class="actions">
+      <ul class="actions" tal:condition="view/is_editable_by_current_user">
         <li>
           <a class="edit_period"
              tal:attributes="href string:${context/absolute_url}/${period/wrapper_id}/edit"
