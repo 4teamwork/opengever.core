@@ -89,8 +89,7 @@ class OpengeverContentFixture(object):
         self.regular_user = self.create_user(
             'regular_user', u'K\xe4thi', u'B\xe4rfuss')
         self.meeting_user = self.create_user(
-            'meeting_user', u'Herbert', u'J\xe4ger',
-            ['MeetingUser'])
+            'meeting_user', u'Herbert', u'J\xe4ger')
         self.secretariat_user = self.create_user(
             'secretariat_user', u'J\xfcrgen', u'K\xf6nig')
         self.committee_responsible = self.create_user(
@@ -154,11 +153,11 @@ class OpengeverContentFixture(object):
             .having(protocol_template=self.sablon_template,
                     excerpt_template=self.sablon_template)))
         self.committee_container.manage_setLocalRoles(
-            self.committee_responsible.getId(),
-            ('MeetingUser',))
+            self.committee_responsible.getId(), ('MeetingUser',))
         self.committee_container.manage_setLocalRoles(
-            self.administrator.getId(),
-            ('CommitteeAdministrator',))
+            self.meeting_user.getId(), ('MeetingUser',))
+        self.committee_container.manage_setLocalRoles(
+            self.administrator.getId(), ('CommitteeAdministrator',))
         self.committee_container.reindexObjectSecurity()
 
         self.committee = self.register('committee', self.create_committee(
@@ -168,6 +167,8 @@ class OpengeverContentFixture(object):
             responsibles=[self.administrator,
                           self.committee_responsible]))
         self.register_raw('committee_id', self.committee.load_model().committee_id)
+        self.committee.manage_setLocalRoles(
+            self.meeting_user.getId(), ('CommitteeMember',))
 
         self.committee_president = self.create_committee_membership(
             self.committee,
@@ -206,6 +207,8 @@ class OpengeverContentFixture(object):
                               self.committee_responsible]))
         self.register_raw('empty_committee_id',
                           self.empty_committee.load_model().committee_id)
+        self.empty_committee.manage_setLocalRoles(
+            self.meeting_user.getId(), ('CommitteeMember',))
 
     @staticuid()
     def create_treaty_dossiers(self):
