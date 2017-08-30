@@ -165,9 +165,8 @@ class OpengeverContentFixture(object):
             title=u'Rechnungspr\xfcfungskommission',
             repository_folder=self.repofolder1,
             group_id='committee_rpk_group',
-            members=[self.administrator,
-                     self.committee_responsible,
-                     self.meeting_user]))
+            responsibles=[self.administrator,
+                          self.committee_responsible]))
         self.register_raw('committee_id', self.committee.load_model().committee_id)
 
         self.committee_president = self.create_committee_membership(
@@ -203,9 +202,8 @@ class OpengeverContentFixture(object):
                 title=u'Kommission f\xfcr Verkehr',
                 repository_folder=self.repofolder1,
                 group_id='committee_ver_group',
-                members=[self.administrator,
-                         self.committee_responsible,
-                         self.meeting_user]))
+                responsibles=[self.administrator,
+                              self.committee_responsible]))
         self.register_raw('empty_committee_id',
                           self.empty_committee.load_model().committee_id)
 
@@ -487,17 +485,18 @@ class OpengeverContentFixture(object):
             member.get_url(self.committee_container).encode('utf-8'))
         return member
 
-    def create_committee(self, title, repository_folder, group_id, members):
+    def create_committee(self, title, repository_folder, group_id,
+                         responsibles):
         # XXX I would have expected the commitee builder to do all of that.
         ogds_members = map(ogds_service().find_user,
-                           map(methodcaller('getId'), members))
+                           map(methodcaller('getId'), responsibles))
 
         create(Builder('ogds_group')
                .having(groupid=group_id,
                        users=ogds_members))
         create(Builder('group')
                .with_groupid(group_id)
-               .with_members(*members))
+               .with_members(*responsibles))
         committee = create(
             Builder('committee')
             .titled(title)
