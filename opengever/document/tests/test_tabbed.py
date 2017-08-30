@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.testing import FunctionalTestCase
+from plone.app.testing import TEST_USER_ID
 from plone.locking.interfaces import IRefreshableLockable
 
 
@@ -35,4 +36,25 @@ class TestDocumentQuickupload(FunctionalTestCase):
                           .checked_out())
 
         browser.login().open(document)
-        self.assertIsNotNone(browser.css('#uploadbox'))
+        self.assertNotEquals(0, len(browser.css('#uploadbox')),
+                             'Uploadbox is not displayed, but should.')
+
+    @browsing
+    def test_upload_box_is_also_shown_in_a_resolved_task(self, browser):
+        create(Builder('ogds_user').id(u'hugo.boss'))
+        task = create(Builder('task')
+                      .having(responsible='hugo.boss', issuer='hugo.boss')
+                      .within(self.dossier)
+                      .in_state('task-state-tested-and-closed'))
+        document = create(Builder('document')
+                          .within(task)
+                          .checked_out())
+
+        self.grant('Reader')
+        self.dossier.manage_setLocalRoles(
+            TEST_USER_ID, ['Reader', 'Contributor', 'Editor'])
+        self.dossier.reindexObjectSecurity()
+
+        browser.login().open(document)
+        self.assertNotEquals(0, len(browser.css('#uploadbox')),
+                             'Uploadbox is not displayed, but should.')
