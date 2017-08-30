@@ -5,6 +5,7 @@ Changelog
 2017.5.0 (unreleased)
 ---------------------
 
+- Hide contact field in the manual journal entry form, when contact feature is disabled. [phgross]
 - Bundle import: Fix tree portlet assignment to repo roots. [lgraf]
 - Fix an issue with conflicting css classes breaking a link. [deiferni]
 - Word meeting: Show decision number in meeting view. [jone]
