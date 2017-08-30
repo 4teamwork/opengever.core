@@ -106,7 +106,7 @@ class TestExcerpt(IntegrationTestCase):
         browser.open(self.meeting.model.get_url())
 
         browser.css('.generate-manual-excerpt').first.click()
-        browser.fill({'agenda_item-1.include:record': True,
+        browser.fill({'agenda_item-2.include:record': True,
                       'Target dossier': self.dossier})
         browser.find('Save').click()
 
@@ -149,7 +149,7 @@ class TestExcerpt(IntegrationTestCase):
         # de-select pre-selected field-checkboxes
         browser.fill({'form.widgets.include_initial_position:list': False,
                       'form.widgets.include_decision:list': False,
-                      'agenda_item-1.include:record': True,
+                      'agenda_item-2.include:record': True,
                       'Target dossier': self.dossier})
         browser.find('Save').click()
 

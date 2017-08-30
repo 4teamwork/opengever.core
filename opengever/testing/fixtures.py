@@ -57,7 +57,7 @@ class OpengeverContentFixture(object):
 
         with self.freeze_at_hour(16):
             with self.login(self.committee_responsible):
-                self.create_meeting()
+                self.create_meetings()
 
         end = time()
         print '(fixture setup in {}s) '.format(round(end - start, 3)),
@@ -275,6 +275,15 @@ class OpengeverContentFixture(object):
             .having(title=u'Antrag f\xfcr Kreiselbau',
                     committee=self.empty_committee.load_model())))
 
+        self.decided_proposal = create(
+                Builder('proposal').within(self.dossier)
+                .having(title=u'Initialvertrag f\xfcr Bearbeitung',
+                        committee=self.committee.load_model())
+                .as_submitted())
+        self.register_path(
+            'decided_proposal',
+            self.decided_proposal.load_model().submitted_physical_path.encode('utf-8'))
+
         with self.features('meeting', 'word-meeting'):
             word_proposal = self.register('word_proposal', create(
                 Builder('proposal').within(self.dossier)
@@ -341,13 +350,13 @@ class OpengeverContentFixture(object):
         self.mail_msg = self.register('mail_msg', command.execute())
 
     @staticuid()
-    def create_meeting(self):
+    def create_meetings(self):
         meeting_dossier = self.register('meeting_dossier', create(
             Builder('meeting_dossier').within(self.repofolder00)
             .titled(u'Sitzungsdossier 9/2017')
             .having(start=date(2016, 9, 12),
                     responsible=self.committee_responsible.getId())))
-        meeting = create(
+        self.meeting = create(
             Builder('meeting')
             .having(title=u'9. Sitzung der Rechnungspr\xfcfungskommission',
                     committee=self.committee.load_model(),
@@ -360,7 +369,35 @@ class OpengeverContentFixture(object):
                                   self.committee_participant_2])
             .link_with(meeting_dossier))
         create_session().flush()  # trigger id generation, part of path
-        self.register_path('meeting', meeting.physical_path.encode('utf-8'))
+        self.register_path(
+            'meeting', self.meeting.physical_path.encode('utf-8'))
+
+        decided_meeting_dossier = self.register(
+            'decided_meeting_dossier', create(
+                Builder('meeting_dossier').within(self.repofolder00)
+                .titled(u'Sitzungsdossier 8/2017')
+                .having(start=date(2016, 8, 17),
+                        responsible=self.committee_responsible.getId())))
+        self.decided_meeting = create(
+            Builder('meeting')
+            .having(title=u'8. Sitzung der Rechnungspr\xfcfungskommission',
+                    committee=self.committee.load_model(),
+                    location=u'B\xfcren an der Aare',
+                    start=datetime(2016, 7, 17, 15, 30, tzinfo=pytz.UTC),
+                    end=datetime(2016, 7, 17, 16, 30, tzinfo=pytz.UTC),
+                    presidency=self.committee_president,
+                    secretary=self.committee_secretary,
+                    participants=[self.committee_participant_1,
+                                  self.committee_participant_2])
+            .link_with(decided_meeting_dossier))
+        create_session().flush()  # trigger id generation, part of path
+        self.register_path(
+            'decided_meeting',
+            self.decided_meeting.physical_path.encode('utf-8'))
+
+        self.decided_meeting.schedule_proposal(
+            self.decided_proposal.load_model())
+        self.decided_meeting.close()
 
     @contextmanager
     def freeze_at_hour(self, hour):

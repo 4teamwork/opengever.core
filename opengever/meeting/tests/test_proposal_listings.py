@@ -132,7 +132,7 @@ class TestSubmittedProposals(IntegrationTestCase):
         self.login(self.committee_responsible, browser)
         browser.open(self.committee, view='tabbedview_view-submittedproposals')
 
-        self.assertEquals(SUBMITTED_PROPOSALS, proposal_dicts(browser)),
+        self.assertEquals(SUBMITTED_PROPOSALS, proposal_dicts(browser))
 
     @browsing
     def test_proposals_are_linked_correctly_to_the_submitted_proposal(self, browser):

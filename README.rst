@@ -484,6 +484,8 @@ Objects
 
   - self.committee_container
     - self.committee
+      - self.decided_meeting
+      - self.decided_proposal
       - self.meeting
       - self.submitted_proposal
       - self.submitted_word_proposal
@@ -495,6 +497,7 @@ Objects
     - self.branch_repofolder
       - self.leaf_repofolder
         - self.archive_dossier
+        - self.decided_meeting_dossier
         - self.dossier
           - self.document
           - self.draft_proposal
