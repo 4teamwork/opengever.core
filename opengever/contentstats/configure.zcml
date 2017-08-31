@@ -1,0 +1,10 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    i18n_domain="opengever.contentstats">
+
+  <adapter
+      factory=".filters.PortalTypesFilter"
+      name="portal_types"
+      />
+
+</configure>
