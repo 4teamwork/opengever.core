@@ -202,6 +202,19 @@
       <property name="visible">True</property>
     </object>
 
+    <object name="folder_delete_confirmation" meta_type="CMF Action" i18n:domain="plone">
+      <property name="title" i18n:translate="">Delete</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:folder_delete_confirmation:method</property>
+      <property name="link_target" />
+      <property name="icon_expr" />
+      <property name="available_expr" />
+      <property name="permissions">
+        <element value="Delete objects" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
     <!--migrated from opengever/dossier/profiles/default/actions.xml-->
     <object name="delete_participants" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">Delete</property>

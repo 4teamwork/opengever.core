@@ -734,23 +734,12 @@ class TestTemplateFolderListings(FunctionalTestCase):
                           table_heading)
 
     @browsing
-    def test_receipt_delivery_and_subdossier_column_are_hidden_in_trash_tab(self, browser):
-        create(Builder('document').within(self.templatefolder).trashed())
-
-        browser.login().open(self.templatefolder, view=TRASH_TAB)
-        table_heading = browser.css('table.listing').first.lists()[0]
-        self.assertEquals(['', 'Sequence Number', 'Title', 'Document Author',
-                           'Document Date', 'Public Trial',
-                           'Reference Number'],
-                          table_heading)
-
-    @browsing
     def test_enabled_actions_are_limited_in_document_tab(self, browser):
         browser.login().open(self.templatefolder, view=DOCUMENT_TAB)
 
         self.assertItemsEqual(
-            ['Copy Items', 'Checkin with comment', 'Checkin without comment',
-             'Export selection', 'Move Items', 'trashed', 'Export as Zip'],
+            ['Copy Items', 'Checkin with comment', 'Delete', 'Checkin without comment',
+             'Export selection', 'Move Items', 'Export as Zip'],
             browser.css('.actionMenuContent li').text)
 
     @browsing
@@ -770,8 +759,8 @@ class TestTemplateFolderListings(FunctionalTestCase):
         browser.login().open(self.templatefolder, view=SABLONTEMPLATES_TAB)
 
         self.assertItemsEqual(
-            ['Copy Items', 'Checkin with comment', 'Checkin without comment',
-             'Export selection', 'trashed', 'Export as Zip'],
+            ['Copy Items', 'Checkin with comment', 'Delete', 'Checkin without comment',
+             'Export selection', 'Export as Zip'],
             browser.css('.actionMenuContent li').text)
 
     @browsing
@@ -779,8 +768,8 @@ class TestTemplateFolderListings(FunctionalTestCase):
         browser.login().open(self.templatefolder, view=PROPOSALTEMPLATES_TAB)
 
         self.assertItemsEqual(
-            ['Copy Items', 'Checkin with comment', 'Checkin without comment',
-             'Export selection', 'trashed', 'Export as Zip'],
+            ['Copy Items', 'Checkin with comment', 'Delete', 'Checkin without comment',
+             'Export selection', 'Export as Zip'],
             browser.css('.actionMenuContent li').text)
 
     @browsing
@@ -806,20 +795,6 @@ class TestTemplateFolderListings(FunctionalTestCase):
         self.assertEqual(1, len(templates))
         template_link = templates[0]['Title'].css('a').first.get('href')
         self.assertEqual(self.proposaltemplate.absolute_url(), template_link)
-
-    @browsing
-    def test_trash_tab_lists_only_documents_directly_beneath(self, browser):
-        trashed = create(
-            Builder('document').trashed().within(self.templatefolder))
-        subdossier = create(Builder('templatefolder')
-                            .within(self.templatefolder))
-        create(Builder('document').trashed().within(subdossier))
-
-        browser.login().open(self.templatefolder, view=TRASH_TAB)
-        templates = browser.css('table.listing').first.dicts(as_text=False)
-        self.assertEqual(1, len(templates))
-        trashed_link = templates[0]['Title'].css('a').first.get('href')
-        self.assertEqual(trashed.absolute_url(), trashed_link)
 
 
 class TestTemplateDocumentTabs(FunctionalTestCase):

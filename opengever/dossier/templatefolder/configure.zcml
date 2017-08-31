@@ -73,13 +73,6 @@
       permission="zope2.View"
       />
 
-  <browser:page
-      for="opengever.dossier.templatefolder.interfaces.ITemplateFolder"
-      name="tabbedview_view-trash"
-      class=".tabs.TemplateFolderTrash"
-      permission="zope2.View"
-      />
-
   <adapter
       name="opengever.dossier.templatefolder"
       provides="zope.publisher.interfaces.browser.IBrowserPage"

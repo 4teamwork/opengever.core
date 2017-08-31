@@ -22,6 +22,10 @@ msgstr ""
 msgid "(INACTIVE)"
 msgstr "(INAKTIV)"
 
+#: ./opengever/base/browser/templates/folder_delete_confirmation.pt:35
+msgid "Are you sure you want to deleted this items?"
+msgstr "Wollen Sie diese Inhalte wirklich löschen?"
+
 #: ./opengever/base/browser/templates/gever-macros.pt:38
 msgid "No content"
 msgstr "Keine Inhalte"
@@ -30,10 +34,22 @@ msgstr "Keine Inhalte"
 msgid "No file in in this version"
 msgstr "In dieser Version ist keine Datei vorhanden"
 
+#: ./opengever/base/browser/templates/folder_delete_confirmation.pt:43
+msgid "No items to delete"
+msgstr "Es werden keine Inhalte gelöscht"
+
 #. Default: "Save"
 #: ./opengever/base/browser/modelforms.py:41
 msgid "Save"
 msgstr "Speichern"
+
+#: ./opengever/base/browser/templates/folder_delete_confirmation.pt:19
+msgid "Some items won't be deleted!"
+msgstr "Einige Inhalte werden nicht gelöscht!"
+
+#: ./opengever/base/browser/templates/folder_delete_confirmation.pt:21
+msgid "The following items are referenced by another item and will not be deleted"
+msgstr "Die folgenden Inhalte werden von anderen Inhalten referenziert und werden deshalb nicht gelöscht."
 
 #: ./opengever/base/browser/list_groupmembers.pt:14
 msgid "There are no members in this group."
@@ -160,6 +176,7 @@ msgstr "Kommentar zur Archivwürdigkeit"
 
 #. Default: "Cancel"
 #: ./opengever/base/browser/modelforms.py:53
+#: ./opengever/base/browser/templates/folder_delete_confirmation.pt:62
 msgid "label_cancel"
 msgstr "Abbrechen"
 
@@ -384,6 +401,11 @@ msgstr "Zurück zum Portal"
 msgid "title_confirming_user_action"
 msgstr "Benutzer-Aktion bestätigen"
 
+#. Default: "You are not allowed to see this reference"
+#: ./opengever/base/browser/folder_delete_confirmation.py:132
+msgid "unauthorized_backreference"
+msgstr "Sie sind nicht berechtig, diese Referenz zu sehen."
+
 #. Default: "unchecked"
 #. Default ""
 #: opengever/repository/classification.py
@@ -394,4 +416,3 @@ msgstr "Nicht geprüft"
 #: opengever/repository/classification.py
 msgid "unprotected"
 msgstr "Nicht klassifiziert"
-
