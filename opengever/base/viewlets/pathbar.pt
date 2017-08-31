@@ -17,13 +17,15 @@
       <a tal:attributes="href leaf_node/absolute_url">
         <i tal:attributes="class leaf_node/css_class" />
         <span tal:content="leaf_node/title" label="for" />
-        <label for="repo-dropdown-toggler" class="repo-dropdown-toggle"
+        <div for="repo-dropdown-toggler" class="repo-dropdown-toggle"
                tal:condition="repository_chain" />
       </a>
-      <input type="checkbox" id="repo-dropdown-toggler" />
       <ul class="repo-dropdown" tal:condition="repository_chain">
         <li tal:repeat="crumb repository_chain">
-          <a tal:attributes="href crumb/absolute_url; class crumb/css_class" tal:content="crumb/title" />
+          <a tal:attributes="href crumb/absolute_url">
+            <i tal:attributes="class crumb/css_class"></i>
+            <span tal:content="crumb/title"></span>
+          </a>
         </li>
       </ul>
 
