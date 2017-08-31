@@ -55,6 +55,7 @@ class ProposalQuery(BaseQuery):
     def by_creator(self, creator_id):
         return self.filter(Proposal.creator == creator_id)
 
+
 Proposal.query_cls = ProposalQuery
 
 
@@ -224,5 +225,6 @@ class PeriodQuery(BaseQuery):
 
     def get_current_for_update(self, committee):
         return self.with_for_update().get_current(committee)
+
 
 Period.query_cls = PeriodQuery
