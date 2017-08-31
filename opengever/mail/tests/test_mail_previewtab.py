@@ -1,7 +1,9 @@
 from ftw.testbrowser import browsing
+from opengever.mail.interfaces import IMailTabbedviewSettings
 from opengever.mail.tests import MAIL_DATA
 from opengever.testing import IntegrationTestCase
 from pkg_resources import resource_string
+from plone import api
 
 
 class TestPreviewTab(IntegrationTestCase):
@@ -31,3 +33,21 @@ class TestPreviewTab(IntegrationTestCase):
 
         self.assertEquals([u'B\xfccher.txt'],
                           browser.css('div.mailAttachment a').text)
+
+    @browsing
+    def test_preview_tab_can_be_disabled_by_registry_flag(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.mail, view='tabbed_view')
+
+        self.assertEquals(
+            ['Overview', 'Preview', 'Journal', 'Sharing'],
+            browser.css('.formTab').text)
+
+        api.portal.set_registry_record(
+            name='preview_tab_visible', interface=IMailTabbedviewSettings,
+            value=False)
+
+        browser.open(self.mail, view='tabbed_view')
+        self.assertEquals(
+            ['Overview', 'Journal', 'Sharing'],
+            browser.css('.formTab').text)

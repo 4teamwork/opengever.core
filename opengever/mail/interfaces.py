@@ -36,3 +36,11 @@ class IAttachmentsDeletedEvent(IObjectModifiedEvent):
     """
 
     attachments = Attribute("List of attachments that have been removed")
+
+
+class IMailTabbedviewSettings(Interface):
+
+    preview_tab_visible = schema.Bool(
+        title=u'Is the preview tab in the mail tabbedview visible',
+        default=True,
+    )
