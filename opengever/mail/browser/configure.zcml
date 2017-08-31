@@ -27,6 +27,14 @@
       />
 
   <browser:page
+      for="ftw.mail.mail.IMail"
+      name="tabbed_view"
+      class=".tabbed.MailTabbedView"
+      permission="zope2.View"
+      allowed_interface="ftw.tabbedview.interfaces.ITabbedViewEndpoints"
+      />
+
+  <browser:page
       name="edit"
       for="ftw.mail.mail.IMail"
       class=".edit.MailEditView"
