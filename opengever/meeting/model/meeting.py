@@ -1,4 +1,5 @@
 from collections import OrderedDict
+from opengever.base.command import CreateDocumentCommand
 from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.model import Base
 from opengever.base.model import SQLFormSupport
@@ -8,6 +9,9 @@ from opengever.base.utils import escape_html
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
 from opengever.meeting import is_word_meeting_implementation_enabled
+from opengever.meeting import require_word_meeting_feature
+from opengever.meeting.exceptions import MissingAdHocTemplate
+from opengever.meeting.exceptions import MissingMeetingDossierPermissions
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import Period
 from opengever.meeting.model.membership import Membership
@@ -342,6 +346,31 @@ class Meeting(Base, SQLFormSupport):
     def schedule_text(self, title, is_paragraph=False):
         self.agenda_items.append(AgendaItem(title=title,
                                             is_paragraph=is_paragraph))
+        self.reorder_agenda_items()
+
+    @require_word_meeting_feature
+    def schedule_ad_hoc(self, title):
+        committee = self.committee.resolve_committee()
+        ad_hoc_template = committee.get_ad_hoc_template()
+        if not ad_hoc_template:
+            raise MissingAdHocTemplate
+
+        meeting_dossier = self.get_dossier()
+        if not api.user.get_current().checkPermission(
+            'opengever.document: Add document', meeting_dossier):
+            raise MissingMeetingDossierPermissions
+
+        ad_hoc_document = CreateDocumentCommand(
+            context=meeting_dossier,
+            filename=ad_hoc_template.file.filename,
+            data=ad_hoc_template.file.data,
+            content_type=ad_hoc_template.file.contentType,
+            title=title).execute()
+
+        self.agenda_items.append(
+            AgendaItem(title=title,
+                       document=ad_hoc_document,
+                       is_paragraph=False))
         self.reorder_agenda_items()
 
     def _set_agenda_item_order(self, new_order):

@@ -3,6 +3,8 @@ from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.meeting import _
 from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting import require_word_meeting_feature
+from opengever.meeting.exceptions import MissingAdHocTemplate
+from opengever.meeting.exceptions import MissingMeetingDossierPermissions
 from opengever.meeting.proposal import ISubmittedProposal
 from opengever.meeting.service import meeting_service
 from plone import api
@@ -140,12 +142,10 @@ class AgendaItemsView(BrowserView):
         return [doc.render_link() for doc in docs]
 
     @require_word_meeting_feature
-    def _get_edit_document_options(self, meeting, agenda_item):
+    def _get_edit_document_options(self, document, agenda_item, meeting):
         """Return the agenda item options for the template regarding
         editing the document and its lock.
         """
-        proposal = agenda_item.proposal.submitted_oguid.resolve_object()
-        document = proposal.get_proposal_document()
         checkout_manager = getMultiAdapter((document, self.request),
                                            ICheckinCheckoutManager)
 
@@ -159,7 +159,7 @@ class AgendaItemsView(BrowserView):
             view='agenda_items/{}/edit_document'.format(
                 agenda_item.agenda_item_id))
         return {
-            'proposal_document_checked_out': bool(
+            'document_checked_out': bool(
                 checkout_manager.get_checked_out_by()),
             'edit_proposal_document_button': button}
 
@@ -186,12 +186,20 @@ class AgendaItemsView(BrowserView):
                 data['revise_link'] = meeting.get_url(
                     view='agenda_items/{}/revise'.format(item.agenda_item_id))
 
-            if item.proposal and is_word_meeting_implementation_enabled():
-                proposal = item.proposal.submitted_oguid.resolve_object()
-                proposal_document = proposal.get_proposal_document()
-                data['proposal_document_link'] = (
-                    IContentListingObject(proposal_document).render_link())
-                data.update(self._get_edit_document_options(meeting, item))
+            if is_word_meeting_implementation_enabled():
+                document = None
+                if item.proposal:
+                    proposal = item.proposal.submitted_oguid.resolve_object()
+                    document = proposal.get_proposal_document()
+                elif item.has_document:
+                    document = item.resolve_document()
+
+                if document:
+                    data['document_link'] = (
+                        IContentListingObject(document).render_link())
+                    data.update(self._get_edit_document_options(
+                        document, item, meeting))
+
                 data['excerpts'] = self._serialize_excerpts(item)
                 if self.can_generate_excerpt(item):
                     data['generate_excerpt_link'] = meeting.get_url(
@@ -202,6 +210,10 @@ class AgendaItemsView(BrowserView):
         return agenda_items
 
     def has_documents(self, item):
+        if is_word_meeting_implementation_enabled():
+            if item.has_document:
+                return True
+
         if not item.has_proposal:
             return False
 
@@ -358,9 +370,8 @@ class AgendaItemsView(BrowserView):
         """
         self.check_editable()
 
-        proposal = self.agenda_item.proposal.submitted_oguid.resolve_object()
-        proposal_document = proposal.get_proposal_document()
-        checkout_manager = getMultiAdapter((proposal_document, self.request),
+        document = self.agenda_item.resolve_document()
+        checkout_manager = getMultiAdapter((document, self.request),
                                            ICheckinCheckoutManager)
         response = JSONResponse(self.request)
 
@@ -370,7 +381,7 @@ class AgendaItemsView(BrowserView):
                 _(u'document_checkout_not_allowed',
                   default=u'You are not allowed to checkout the document.'))
         else:
-            url = proposal_document.checkout_and_get_office_connector_url()
+            url = document.checkout_and_get_office_connector_url()
             response.proceed().data(officeConnectorURL=url)
 
         return response.dump()
@@ -399,9 +410,28 @@ class AgendaItemsView(BrowserView):
         title = self.request.get('title')
         if not title:
             return JSONResponse(self.request).error(
-                _('empty_proposal', default=u"Proposal must not be empty.")).proceed().dump()
+                    _('empty_proposal', default=u"Proposal must not be empty.")
+                ).proceed().dump()
 
-        self.meeting.schedule_text(title)
+        if is_word_meeting_implementation_enabled():
+            try:
+                self.meeting.schedule_ad_hoc(title)
+            except MissingAdHocTemplate:
+                return JSONResponse(self.request).error(
+                        _('missing_ad_hoc_template',
+                          default=u"No ad-hoc agenda-item template has been "
+                                  u"configured.")
+                    ).proceed().dump()
+            except MissingMeetingDossierPermissions:
+                return JSONResponse(self.request).error(
+                        _('error_no_permission_to_add_document',
+                          default=u'Insufficient privileges to add a'
+                                  u' document to the meeting dossier.')
+                       ).proceed().dump()
+
+        else:
+            self.meeting.schedule_text(title)
+
         return JSONResponse(self.request).info(
             _('text_added', default=u"Text successfully added.")).proceed().dump()
 

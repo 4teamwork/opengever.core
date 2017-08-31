@@ -1,12 +1,16 @@
 from opengever.base.model import Base
 from opengever.base.model import create_session
+from opengever.base.oguid import Oguid
 from opengever.base.transforms import trix2sablon
 from opengever.base.widgets import trix_strip_whitespace
+from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
+from opengever.meeting import require_word_meeting_feature
 from opengever.meeting.workflow import State
 from opengever.meeting.workflow import Transition
 from opengever.meeting.workflow import Workflow
+from opengever.ogds.models import UNIT_ID_LENGTH
 from opengever.ogds.models.types import UnicodeCoercingText
 from sqlalchemy import Boolean
 from sqlalchemy import Column
@@ -14,8 +18,10 @@ from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy.orm import backref
+from sqlalchemy.orm import composite
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
+from zope.component import getMultiAdapter
 
 
 class AgendaItem(Base):
@@ -49,6 +55,12 @@ class AgendaItem(Base):
     proposal_id = Column(Integer, ForeignKey('proposals.id'))
     proposal = relationship("Proposal", uselist=False,
                             backref=backref('agenda_item', uselist=False))
+
+    ad_hoc_document_admin_unit_id = Column(String(UNIT_ID_LENGTH))
+    ad_hoc_document_int_id = Column(Integer)
+    ad_hoc_document_oguid = composite(
+        Oguid, ad_hoc_document_admin_unit_id, ad_hoc_document_int_id)
+
     decision_number = Column(Integer)
 
     title = Column(UnicodeCoercingText)
@@ -69,6 +81,12 @@ class AgendaItem(Base):
             submitted_proposal = proposal.resolve_submitted_proposal()
             decision_draft = submitted_proposal.decision_draft
             kwargs.update({'decision': decision_draft})
+
+        document = kwargs.pop('document', None)
+        if document:
+            assert not proposal, 'must only have one of proposal and document'
+            kwargs.update(
+                {'ad_hoc_document_oguid': Oguid.for_object(document)})
 
         super(AgendaItem, self).__init__(*args, **kwargs)
 
@@ -250,6 +268,30 @@ class AgendaItem(Base):
     @property
     def has_proposal(self):
         return self.proposal is not None
+
+    @property
+    def has_document(self):
+        return self.has_proposal or self.ad_hoc_document_int_id is not None
+
+    def resolve_document(self):
+        if not self.has_document:
+            return None
+
+        if self.has_proposal:
+            proposal = self.proposal.resolve_submitted_proposal()
+            return proposal.get_proposal_document()
+
+        return self.ad_hoc_document_oguid.resolve_object()
+
+    @require_word_meeting_feature
+    def checkin_document(self):
+        document = self.resolve_document()
+        if not document:
+            return
+
+        checkout_manager = getMultiAdapter((document, document.REQUEST),
+                                           ICheckinCheckoutManager)
+        checkout_manager.checkin()
 
     @property
     def legal_basis(self):
