@@ -7,4 +7,9 @@
       name="portal_types"
       />
 
+  <adapter
+      factory=".filters.ReviewStatesFilter"
+      name="review_states"
+      />
+
 </configure>

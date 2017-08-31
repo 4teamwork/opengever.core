@@ -1,5 +1,6 @@
 from ftw.contentstats.interfaces import IStatsKeyFilter
 from opengever.testing import IntegrationTestCase
+from plone import api
 from zope.component import getMultiAdapter
 
 
@@ -58,3 +59,96 @@ class TestContentStatsIntegration(IntegrationTestCase):
 
         # But any potential future type in opengever.* should be kept
         self.assertTrue(flt.keep('opengever.doesnt.exist.just.yet'))
+
+    def test_review_states_filter(self):
+        self.login(self.regular_user)
+        flt = getMultiAdapter(
+            (self.portal, self.portal.REQUEST),
+            IStatsKeyFilter, name='review_states')
+
+        states_to_keep = [
+            'contact-state-active',
+            'disposition-state-appraised',
+            'disposition-state-archived',
+            'disposition-state-closed',
+            'disposition-state-disposed',
+            'disposition-state-in-progress',
+            'document-state-draft',
+            'document-state-removed',
+            'document-state-shadow',
+            'dossier-state-active',
+            'dossier-state-archived',
+            'dossier-state-inactive',
+            'dossier-state-offered',
+            'dossier-state-resolved',
+            'folder-state-active',
+            'forwarding-state-closed',
+            'forwarding-state-open',
+            'forwarding-state-refused',
+            'mail-state-active',
+            'mail-state-removed',
+            'opengever_committee_workflow--STATUS--active',
+            'opengever_committee_workflow--STATUS--inactive',
+            'proposal-state-active',
+            'proposal-state-submitted',
+            'repositoryfolder-state-active',
+            'repositoryfolder-state-inactive',
+            'task-state-cancelled',
+            'task-state-in-progress',
+            'task-state-open',
+            'task-state-rejected',
+            'task-state-resolved',
+            'task-state-tested-and-closed',
+            'tasktemplate-state-active',
+        ]
+
+        states_to_ignore = [
+            # Stock Plone type states
+            'external',
+            'internal',
+            'internally_published',
+            'pending',
+            'private',
+            'published',
+            'visible',
+
+            # Uninteresting top level GEVER type states
+            'contactfolder-state-active',
+            'inbox-state-default',
+            'opengever_committeecontainer_workflow--STATUS--active',
+            'repositoryroot-state-active',
+            'tasktemplatefolder-state-activ',
+            'tasktemplatefolder-state-inactiv',
+            'templatefolder-state-active',
+        ]
+
+        for state in states_to_keep:
+            self.assertTrue(
+                flt.keep(state),
+                'Expected state %r to be kept by filter (was ignored)' % state)
+
+        for state in states_to_ignore:
+            self.assertFalse(
+                flt.keep(state),
+                'Expected state %r to be ignored by filter (was kept)' % state)
+
+        # Collect a list of ALL the currently possible workflow states
+        all_possible_workflow_states = set()
+        wftool = api.portal.get_tool('portal_workflow')
+        for workflow in wftool.objectValues():
+            for wfstate in workflow.states.objectIds():
+                all_possible_workflow_states.add(wfstate)
+
+        covered_states = set(states_to_keep + states_to_ignore)
+        non_existing_states = covered_states - all_possible_workflow_states
+
+        self.assertEquals(
+            set(), non_existing_states,
+            'Found test for one or more non-existent '
+            'workflow states:\n %r' % non_existing_states)
+
+        self.assertEquals(
+            all_possible_workflow_states, covered_states,
+            'Missing test assertion for one or more states. Please add '
+            'explicit assertions for the following workflow states:\n'
+            '%r' % (all_possible_workflow_states - covered_states))
