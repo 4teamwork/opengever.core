@@ -10,6 +10,7 @@ from opengever.meeting.service import meeting_service
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListing
 from plone.app.contentlisting.interfaces import IContentListingObject
+from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
 from zExceptions import Forbidden
 from zExceptions import NotFound
@@ -187,33 +188,24 @@ class AgendaItemsView(BrowserView):
                     view='agenda_items/{}/revise'.format(item.agenda_item_id))
 
             if is_word_meeting_implementation_enabled():
-                document = None
-                if item.proposal:
-                    proposal = item.proposal.submitted_oguid.resolve_object()
-                    document = proposal.get_proposal_document()
-                elif item.has_document:
-                    document = item.resolve_document()
-
+                document = item.resolve_document()
                 if document:
                     data['document_link'] = (
                         IContentListingObject(document).render_link())
                     data.update(self._get_edit_document_options(
                         document, item, meeting))
 
-                data['excerpts'] = self._serialize_excerpts(item)
-                if self.can_generate_excerpt(item):
-                    data['generate_excerpt_link'] = meeting.get_url(
-                        view='agenda_items/{}/generate_excerpt'.format(
-                            item.agenda_item_id))
+                if item.has_proposal:
+                    data['excerpts'] = self._serialize_excerpts(item)
+                    if self.can_generate_excerpt(item):
+                        data['generate_excerpt_link'] = meeting.get_url(
+                            view='agenda_items/{}/generate_excerpt'.format(
+                                item.agenda_item_id))
 
             agenda_items.append(data)
         return agenda_items
 
     def has_documents(self, item):
-        if is_word_meeting_implementation_enabled():
-            if item.has_document:
-                return True
-
         if not item.has_proposal:
             return False
 
@@ -407,7 +399,7 @@ class AgendaItemsView(BrowserView):
         meeting.
         """
         self.check_editable()
-        title = self.request.get('title')
+        title = safe_unicode(self.request.get('title'))
         if not title:
             return JSONResponse(self.request).error(
                     _('empty_proposal', default=u"Proposal must not be empty.")

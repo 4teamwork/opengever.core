@@ -139,7 +139,7 @@ class OpengeverContentFixture(object):
             .with_asset_file('sablon_template.docx')))
 
         with self.features('meeting', 'word-meeting'):
-            self.register('proposal_template', create(
+            self.proposal_template = self.register('proposal_template', create(
                 Builder('proposaltemplate')
                 .titled(u'Geb\xfchren')
                 .attach_file_containing('Word Content', u'file.docx')
@@ -151,7 +151,8 @@ class OpengeverContentFixture(object):
             Builder('committee_container')
             .titled(u'Sitzungen')
             .having(protocol_template=self.sablon_template,
-                    excerpt_template=self.sablon_template)))
+                    excerpt_template=self.sablon_template,
+                    ad_hoc_template=self.proposal_template)))
         self.committee_container.manage_setLocalRoles(
             self.committee_responsible.getId(), ('MeetingUser',))
         self.committee_container.manage_setLocalRoles(

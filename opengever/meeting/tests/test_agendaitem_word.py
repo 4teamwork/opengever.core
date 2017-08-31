@@ -2,9 +2,11 @@ from contextlib import nested
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
 from plone import api
+from plone.protect import createToken
 
 
 class TestWordAgendaItem(IntegrationTestCase):
+
     features = ('meeting', 'word-meeting')
 
     def test_deciding_meeting_item_does_not_create_an_excerpt(self):
@@ -33,7 +35,7 @@ class TestWordAgendaItem(IntegrationTestCase):
         browser.open(self.meeting, view='agenda_items/list')
         item_data = browser.json['items'][0]
 
-        document_link_html = item_data.get('proposal_document_link')
+        document_link_html = item_data.get('document_link')
         self.assertIn(
             u'Proposal document \xc4nderungen am Personalreglement',
             document_link_html)
@@ -48,7 +50,7 @@ class TestWordAgendaItem(IntegrationTestCase):
         browser.open(self.meeting, view='agenda_items/list')
         item_data = browser.json['items'][0]
         self.assertDictContainsSubset(
-            {'proposal_document_checked_out': False,
+            {'document_checked_out': False,
              'edit_proposal_document_button': {
                  'visible': True,
                  'active': True,
@@ -66,7 +68,7 @@ class TestWordAgendaItem(IntegrationTestCase):
         browser.open(self.meeting, view='agenda_items/list')
         item_data = browser.json['items'][0]
         self.assertDictContainsSubset(
-            {'proposal_document_checked_out': True,
+            {'document_checked_out': True,
              'edit_proposal_document_button': {
                  'visible': True,
                  'active': True,
@@ -90,7 +92,7 @@ class TestWordAgendaItem(IntegrationTestCase):
         browser.open(self.meeting, view='agenda_items/list')
         item_data = browser.json['items'][0]
         self.assertDictContainsSubset(
-            {'proposal_document_checked_out': True,
+            {'document_checked_out': True,
              'edit_proposal_document_button': {
                  'visible': True,
                  'active': False,
@@ -109,7 +111,7 @@ class TestWordAgendaItem(IntegrationTestCase):
         browser.open(self.meeting, view='agenda_items/list')
         item_data = browser.json['items'][0]
         self.assertDictContainsSubset(
-            {'proposal_document_checked_out': False,
+            {'document_checked_out': False,
              'edit_proposal_document_button': {
                  'visible': True,
                  'active': True,
@@ -343,7 +345,8 @@ class TestWordAgendaItem(IntegrationTestCase):
     def test_decision_number_for_adhoc_agenda_item(self, browser):
         self.login(self.committee_responsible, browser)
         browser.open(self.meeting, view='agenda_items/schedule_text',
-                     data={'title': u'Tisch Traktandum'})
+                     data={'title': u'Tisch Traktandum',
+                           '_authenticator': createToken()})
         self.assertDictContainsSubset({'proceed': True}, browser.json)
 
         browser.open(self.meeting, view='agenda_items/list')

@@ -12,7 +12,6 @@ class TestCommitteeWord(IntegrationTestCase):
         self.login(self.committee_responsible, browser)
 
         self.assertIsNone(self.committee.ad_hoc_template)
-        self.assertIsNone(self.committee.get_ad_hoc_template())
 
         browser.open(self.committee, view='edit')
         browser.fill({'Ad hoc agenda item template': self.proposal_template})

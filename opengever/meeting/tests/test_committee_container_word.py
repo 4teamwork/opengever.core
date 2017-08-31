@@ -11,6 +11,7 @@ class TestCommitteeContainer(IntegrationTestCase):
     @browsing
     def test_can_configure_ad_hoc_template(self, browser):
         self.login(self.administrator, browser)
+        self.committee_container.ad_hoc_template = None
 
         self.assertIsNone(self.committee_container.ad_hoc_template)
         self.assertIsNone(self.committee_container.get_ad_hoc_template())
