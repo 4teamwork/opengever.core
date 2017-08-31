@@ -389,7 +389,7 @@ class UpdateExcerptInDossierCommand(object):
         self.document = self.submitted_excerpt.resolve_document()
 
     def execute(self):
-        #XXX handle errors when executing across admin units.
+        # XXX handle errors when executing across admin units.
         Transporter().transport_to(
             self.document,
             self.excerpt.admin_unit_id,
