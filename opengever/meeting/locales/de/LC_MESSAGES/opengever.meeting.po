@@ -678,7 +678,7 @@ msgstr "Inaktiv"
 #: ./opengever/meeting/committee.py:94
 #: ./opengever/meeting/committeecontainer.py:44
 msgid "label_ad_hoc_template"
-msgstr ""
+msgstr "Ad Hoc Vorlage"
 
 #. Default: "Agenda item number"
 #: ./opengever/meeting/browser/meetings/meeting.py:342
@@ -1238,7 +1238,7 @@ msgstr "Die Änderungen konnten nicht gespeichert werden, das Protokoll wurde in
 #. Default: "No ad-hoc agenda-item template has been configured."
 #: ./opengever/meeting/browser/meetings/agendaitem.py:417
 msgid "missing_ad_hoc_template"
-msgstr ""
+msgstr "Es konnte keine Vorlage für ein Ad Hoc Traktandum gefunden werden."
 
 #. Default: "The protocol for meeting ${title} has already been generated."
 #: ./opengever/meeting/browser/protocol.py:76
