@@ -182,9 +182,20 @@
       cookable="True"
       expression=""
       enabled="True"
-      id="++resource++opengever.base/qtip.js"
+      id="++resource++opengever.base/breadcrumbs.js"
       inline="False"
       insert-after="++resource++opengever.base/prepoverlay.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      expression=""
+      enabled="True"
+      id="++resource++opengever.base/qtip.js"
+      inline="False"
+      insert-after="++resource++opengever.base/breadcrumbs.js"
       />
 
   <javascript

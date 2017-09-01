@@ -228,8 +228,6 @@ class AddMeetingDossierView(WizzardWrappedAddForm):
 
 class MeetingView(BrowserView):
 
-    has_model_breadcrumbs = True
-
     noword_template = ViewPageTemplateFile('templates/meeting-noword.pt')
     word_template = ViewPageTemplateFile('templates/meeting-word.pt')
 

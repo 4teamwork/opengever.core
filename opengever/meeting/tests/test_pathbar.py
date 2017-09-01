@@ -1,57 +1,68 @@
-from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
-from opengever.base.model import create_session
-from opengever.testing import IntegrationTestCase
-from opengever.testing.pages import breadcrumbs
+from opengever.testing import FunctionalTestCase
 
 
-class TestPathBar(IntegrationTestCase):
+class TestPathBar(FunctionalTestCase):
 
-    features = ('meeting',)
+    def setUp(self):
+        super(TestPathBar, self).setUp()
+        self.admin_unit.public_url = 'http://nohost/plone'
 
-    @browsing
-    def test_committee_pathbar_is_correct(self, browser):
-        self.login(self.meeting_user, browser)
-
-        browser.open(self.meeting.model.get_url())
-        self.assertEqual(
-            ['Hauptmandant',
-             'Sitzungen',
-             u'Rechnungspr\xfcfungskommission',
-             u'9. Sitzung der Rechnungspr\xfcfungskommission'],
-            breadcrumbs.text_items())
+        self.root = create(Builder('repository_root').titled(u'Repository'))
+        self.repo = create(Builder('repository')
+                           .within(self.root)
+                           .titled(u'Testposition'))
+        self.dossier = create(Builder('dossier')
+                              .within(self.repo)
+                              .titled(u'Dossier 1'))
+        self.meeting_dossier = create(
+            Builder('meeting_dossier').within(self.repo))
 
     @browsing
-    def test_member_pathbar_is_correct(self, browser):
-        with self.login(self.administrator):
-            member = create(Builder('member'))
-            create_session().flush()  # XXX maybe auto-flush here ...
+    def test_first_part_is_org_unit_title(self, browser):
+        browser.login().open(self.dossier)
 
-        self.login(self.meeting_user, browser)
-        browser.open(member.get_url(self.committee_container))
-        self.assertEqual(
-            [u'Hauptmandant', u'Sitzungen', u'M\xfcller Peter'],
-            breadcrumbs.text_items())
+        breadcrumb_links = browser.css('#portal-breadcrumbs a')
+        self.assertEquals(
+            ['Client1', '1. Testposition', 'Repository', 'Dossier 1'],
+            breadcrumb_links.text)
 
     @browsing
-    def test_membership_pathbar_is_correct(self, browser):
-        with self.login(self.administrator):
-            committee_model = self.committee.load_model()
-            member = create(Builder('member'))
-            membership = create(Builder('membership')
-                                .having(member=member,
-                                        committee=committee_model,
-                                        date_from=date(2014, 1, 1),
-                                        date_to=date(2015, 1, 1)))
-            create_session().flush()  # XXX maybe auto-flush here ...
+    def test_last_part_is_linked(self, browser):
+        browser.login().open(self.dossier)
 
-        self.login(self.committee_responsible, browser)
-        browser.open(membership.get_edit_url())
+        last_link = browser.css('#portal-breadcrumbs a')[-1]
+        self.assertEqual(self.dossier.absolute_url(),
+                         last_link.node.attrib['href'])
+
+    @browsing
+    def test_proposal_is_linked_with_title(self, browser):
+        proposal = create(Builder('proposal')
+                          .within(self.dossier)
+                          .titled('My Proposal'))
+
+        browser.login().open(proposal)
+        last_link = browser.css('#portal-breadcrumbs a')[-1]
+        self.assertEqual(proposal.absolute_url(),
+                         last_link.node.attrib['href'])
+        self.assertEqual('My Proposal', last_link.text)
+
+    @browsing
+    def test_meeting_is_linked_with_title(self, browser):
+        container = create(Builder('committee_container'))
+        committee = create(Builder('committee').within(container))
+        meeting = create(Builder('meeting')
+                         .having(committee=committee.load_model())
+                         .link_with(self.meeting_dossier))
+
+        self.grant('MeetingUser', on=container)
+        self.grant('CommitteeMember', on=committee)
+        browser.login().open(meeting.get_url())
+        last_link = browser.css('#portal-breadcrumbs a')[-1]
+
         self.assertEqual(
-            [u'Hauptmandant',
-             u'Sitzungen',
-             u'Rechnungspr\xfcfungskommission',
-             u'M\xfcller Peter, Jan 01, 2014 - Jan 01, 2015'],
-            breadcrumbs.text_items())
+            'http://nohost/plone/opengever-meeting-committeecontainer/committee-1/meeting-1',
+            last_link.get('href'))
+        self.assertEqual(meeting.get_title(), last_link.text)

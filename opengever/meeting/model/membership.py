@@ -15,8 +15,8 @@ from sqlalchemy.schema import Sequence
 
 class Membership(Base, SQLFormSupport):
     """Associate members with their commmission for a certain timespan.
-
     """
+
     __tablename__ = 'memberships'
     __mapper_args__ = {'order_by': 'date_from'}
     __table_args__ = (UniqueConstraint('committee_id',
@@ -42,6 +42,10 @@ class Membership(Base, SQLFormSupport):
             repr(self.committee.title),
             self.date_from,
             self.date_to)
+
+    @property
+    def css_class(self):
+        return 'contenttype-opengever-meeting-membership'
 
     def is_removable(self):
         return True
