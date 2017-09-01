@@ -1,4 +1,7 @@
 from ftw.contentstats.interfaces import IStatsKeyFilter
+from ftw.contentstats.interfaces import IStatsProvider
+from ftw.testbrowser import browsing
+from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import IntegrationTestCase
 from plone import api
 from zope.component import getMultiAdapter
@@ -152,3 +155,41 @@ class TestContentStatsIntegration(IntegrationTestCase):
             'Missing test assertion for one or more states. Please add '
             'explicit assertions for the following workflow states:\n'
             '%r' % (all_possible_workflow_states - covered_states))
+
+    def test_checked_out_docs_stats_provider(self):
+        self.login(self.regular_user)
+        stats_provider = getMultiAdapter(
+            (self.portal, self.portal.REQUEST),
+            IStatsProvider, name='checked_out_docs')
+
+        self.assertEqual({'checked_out': 0, 'checked_in': 12},
+                         stats_provider.get_raw_stats())
+
+        # Check out a document
+        getMultiAdapter((self.document, self.document.REQUEST),
+                        ICheckinCheckoutManager).checkout()
+
+        self.assertEqual({'checked_out': 1, 'checked_in': 11},
+                         stats_provider.get_raw_stats())
+
+    @browsing
+    def test_checked_out_docs_stats_provider_in_view(self, browser):
+        self.login(self.manager, browser)
+
+        browser.open(self.portal, view='@@content-stats')
+        table = browser.css('#content-stats-checked_out_docs').first
+
+        self.assertEquals(
+            [['', 'checked_in', '12'], ['', 'checked_out', '0']],
+            table.lists())
+
+        # Check out a document
+        getMultiAdapter((self.document, self.document.REQUEST),
+                        ICheckinCheckoutManager).checkout()
+
+        browser.open(self.portal, view='@@content-stats')
+        table = browser.css('#content-stats-checked_out_docs').first
+
+        self.assertEquals(
+            [['', 'checked_in', '11'], ['', 'checked_out', '1']],
+            table.lists())

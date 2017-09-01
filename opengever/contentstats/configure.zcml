@@ -12,4 +12,9 @@
       name="review_states"
       />
 
+  <adapter
+      factory=".providers.CheckedOutDocsProvider"
+      name="checked_out_docs"
+      />
+
 </configure>
