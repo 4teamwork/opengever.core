@@ -2,6 +2,7 @@ from AccessControl import getSecurityManager
 from AccessControl.SecurityManagement import setSecurityManager
 from contextlib import contextmanager
 from ftw.flamegraph import flamegraph
+from ftw.mail.mail import IMail
 from functools import wraps
 from opengever.core.testing import OPENGEVER_INTEGRATION_TESTING
 from opengever.document.interfaces import ICheckinCheckoutManager
@@ -14,6 +15,7 @@ from plone.app.relationfield.event import update_behavior_relations
 from plone.app.testing import applyProfile
 from plone.app.testing import login
 from plone.app.testing import SITE_OWNER_NAME
+from plone.namedfile.file import NamedBlobFile
 from plone.portlets.constants import CONTEXT_CATEGORY
 from plone.portlets.interfaces import ILocalPortletAssignmentManager
 from plone.portlets.interfaces import IPortletManager
@@ -395,3 +397,8 @@ class IntegrationTestCase(TestCase):
         assignable = getMultiAdapter(
             (obj, manager), ILocalPortletAssignmentManager)
         self.assertTrue(assignable.getBlacklistStatus(CONTEXT_CATEGORY))
+
+    def change_mail_data(self, mail, data):
+        old_file = IMail(self.mail).message
+        IMail(self.mail).message = NamedBlobFile(
+            data=data, filename=old_file.filename)

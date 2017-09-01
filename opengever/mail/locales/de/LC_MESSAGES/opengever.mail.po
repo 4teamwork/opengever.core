@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-08-23 12:12+0000\n"
+"POT-Creation-Date: 2017-08-31 09:32+0000\n"
 "PO-Revision-Date: 2016-07-22 16:52+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-mail/de/>\n"
@@ -167,6 +167,11 @@ msgstr "Dokumente nur als Link versenden"
 msgid "label_file_copy_in_dossier"
 msgstr "Kopie des versandten Mails in Dossier ablegen"
 
+#. Default: "Journal"
+#: ./opengever/mail/browser/tabbed.py:19
+msgid "label_journal"
+msgstr "Journal"
+
 #. Default: "Journal initialized"
 #: ./opengever/mail/upgrades/to3406.py:7
 msgid "label_journal_initialized"
@@ -202,6 +207,16 @@ msgstr "Originalnachricht"
 msgid "label_original_message"
 msgstr "Quelldatei im *.msg Format vor der Konvertierung"
 
+#. Default: "Overview"
+#: ./opengever/mail/browser/tabbed.py:9
+msgid "label_overview"
+msgstr "Übersicht"
+
+#. Default: "Preview"
+#: ./opengever/mail/browser/tabbed.py:14
+msgid "label_preview"
+msgstr "Vorschau"
+
 #. Default: "Save attachments"
 #: ./opengever/mail/browser/templates/attachments.pt:17
 msgid "label_save_attachments"
@@ -211,6 +226,11 @@ msgstr "Anhänge speichern"
 #: ./opengever/mail/browser/send_document.py:300
 msgid "label_see_attachment"
 msgstr "siehe Anhänge"
+
+#. Default: "Sharing"
+#: ./opengever/mail/browser/tabbed.py:24
+msgid "label_sharing"
+msgstr "Info"
 
 #. Default: "Subject"
 #: ./opengever/mail/browser/send_document.py:84

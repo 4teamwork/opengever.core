@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-08-23 12:12+0000\n"
+"POT-Creation-Date: 2017-08-31 09:32+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -168,6 +168,11 @@ msgstr ""
 msgid "label_file_copy_in_dossier"
 msgstr ""
 
+#. Default: "Journal"
+#: ./opengever/mail/browser/tabbed.py:19
+msgid "label_journal"
+msgstr ""
+
 #. Default: "Journal initialized"
 #: ./opengever/mail/upgrades/to3406.py:7
 msgid "label_journal_initialized"
@@ -203,6 +208,16 @@ msgstr ""
 msgid "label_original_message"
 msgstr ""
 
+#. Default: "Overview"
+#: ./opengever/mail/browser/tabbed.py:9
+msgid "label_overview"
+msgstr ""
+
+#. Default: "Preview"
+#: ./opengever/mail/browser/tabbed.py:14
+msgid "label_preview"
+msgstr ""
+
 #. Default: "Save attachments"
 #: ./opengever/mail/browser/templates/attachments.pt:17
 msgid "label_save_attachments"
@@ -211,6 +226,11 @@ msgstr ""
 #. Default: "see attachment"
 #: ./opengever/mail/browser/send_document.py:300
 msgid "label_see_attachment"
+msgstr ""
+
+#. Default: "Sharing"
+#: ./opengever/mail/browser/tabbed.py:24
+msgid "label_sharing"
 msgstr ""
 
 #. Default: "Subject"

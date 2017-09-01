@@ -5,6 +5,7 @@ Changelog
 2017.5.0 (unreleased)
 ---------------------
 
+- Add configuration option to hide the mail preview tab. [phgross]
 - Hide contact field in the manual journal entry form, when contact feature is disabled. [phgross]
 - Only show membership edit links for CommitteeResponsibles. [deiferni]
 - Fix Drag'n'Drop replacing for documents inside a resolved task. [phgross]

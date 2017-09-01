@@ -18,6 +18,7 @@
 
   <!--migrated from opengever/mail/profiles/default/registry.xml-->
   <records interface="opengever.mail.interfaces.ISendDocumentConf" />
+  <records interface="opengever.mail.interfaces.IMailTabbedviewSettings" />
 
 
   <!--migrated from opengever/dossier/profiles/default/registry.xml-->

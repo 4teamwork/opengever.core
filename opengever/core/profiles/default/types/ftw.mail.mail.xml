@@ -24,40 +24,6 @@
     <permission value="Modify portal content" />
   </action>
 
-  <!-- Tab Actions -->
-  <action
-      title="overview"
-      action_id="overview"
-      category="tabbedview-tabs"
-      condition_expr=""
-      url_expr="string:#"
-      visible="True"
-      />
-  <action
-      title="preview"
-      action_id="preview"
-      category="tabbedview-tabs"
-      condition_expr=""
-      url_expr="string:#"
-      visible="True"
-      />
-  <action
-      title="journal"
-      action_id="journal"
-      category="tabbedview-tabs"
-      condition_expr=""
-      url_expr="string:#"
-      visible="True"
-      />
-  <action
-      title="sharing"
-      action_id="sharing"
-      category="tabbedview-tabs"
-      condition_expr=""
-      url_expr="string:#"
-      visible="True"
-      />
-
   <!-- View information -->
   <property name="default_view">tabbed_view</property>
   <property name="default_view_fallback">False</property>
