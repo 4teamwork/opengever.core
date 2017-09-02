@@ -1,19 +1,14 @@
-from five import grok
 from opengever.activity import notification_center
 from opengever.base.browser.resolveoguid import ResolveOGUIDView
 from opengever.ogds.base.utils import ogds_service
 from plone import api
-from Products.CMFPlone.interfaces import IPloneSiteRoot
 from zExceptions import NotFound
 from zExceptions import Unauthorized
 
 
 class ResolveNotificationView(ResolveOGUIDView):
-    grok.name('resolve_notification')
-    grok.context(IPloneSiteRoot)
-    grok.require('zope2.View')
 
-    def render(self):
+    def __call__(self):
         notification_id = self.request.get('notification_id', '')
         center = notification_center()
         self.notification = center.get_notification(notification_id)

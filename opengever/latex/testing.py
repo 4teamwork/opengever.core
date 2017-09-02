@@ -1,5 +1,4 @@
 from ftw.testing.layer import ComponentRegistryLayer
-from grokcore.component.testing import grok
 from plone.testing import zca
 
 
@@ -18,10 +17,11 @@ class LatexZCMLLayer(ComponentRegistryLayer):
         import ftw.pdfgenerator
         self.load_zcml_file('configure.zcml', ftw.pdfgenerator)
 
-        import five.grok
-        self.load_zcml_file('meta.zcml', five.grok)
+        import Products.GenericSetup
+        self.load_zcml_file('meta.zcml', Products.GenericSetup)
 
-        grok('opengever.latex')
+        import opengever.latex
+        self.load_zcml_file('configure.zcml', opengever.latex)
 
 
 LATEX_ZCML_LAYER = LatexZCMLLayer()

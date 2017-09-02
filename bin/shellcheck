@@ -1,0 +1,7 @@
+#!/bin/bash
+if hash shellcheck &> /dev/null; then
+    shellcheck "$@"
+else
+    echo "Shellcheck not installed!"
+fi
+# EOF

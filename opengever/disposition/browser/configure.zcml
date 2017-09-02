@@ -25,6 +25,13 @@
   </class>
 
   <browser:page
+      class=".listing.Dispositions"
+      for="*"
+      name="tabbedview_view-dispositions"
+      permission="zope2.View"
+      />
+
+  <browser:page
       class=".ech0160.ECH0160ExportView"
       for="opengever.disposition.interfaces.IDisposition"
       name="ech0160_export"
@@ -68,4 +75,25 @@
       allowed_attributes="is_appraised_to_closed_transition_available is_dispose_transition_available"
       />
 
+  <browser:page
+      for="opengever.disposition.interfaces.IDisposition"
+      name="removal_protocol"
+      class=".removal_protocol.RemovalProtocol"
+      permission="zope2.View"
+      />
+
+  <adapter
+      factory=".removal_protocol.DestroyedDossierListing"
+      name="destroyed_dossiers"
+      />
+
+  <adapter
+      factory=".removal_protocol.DispositionHistoryLaTeXListing"
+      name="disposition_history"
+      />
+
+  <adapter
+      factory=".removal_protocol.RemovalProtocolLaTeXView"
+      provides="ftw.pdfgenerator.interfaces.ILaTeXView"
+      />
 </configure>

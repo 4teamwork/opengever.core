@@ -1,5 +1,4 @@
 from collections import OrderedDict
-from five import grok
 from ftw.table import helper
 from opengever.journal import _ as journal_mf
 from opengever.journal.handlers import DOCUMENT_SENT
@@ -14,6 +13,8 @@ from opengever.repository.interfaces import IRepositoryFolder
 from opengever.task.helper import task_type_helper
 from plone import api
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from zope.component import adapter
+from zope.interface import implementer
 from zope.interface import Interface
 
 
@@ -57,9 +58,9 @@ class ILaTexListing(Interface):
         containing label, width, getter."""
 
 
-class LaTexListing(grok.MultiAdapter):
-    grok.provides(ILaTexListing)
-    grok.adapts(Interface, Interface, Interface)
+@implementer(ILaTexListing)
+@adapter(Interface, Interface, Interface)
+class LaTexListing(object):
 
     template = ViewPageTemplateFile('templates/listing.pt')
 
@@ -133,10 +134,9 @@ class LaTexListing(grok.MultiAdapter):
         return obj.Title()
 
 
+@implementer(ILaTexListing)
+@adapter(Interface, Interface, Interface)
 class DossiersLaTeXListing(LaTexListing):
-    grok.provides(ILaTexListing)
-    grok.adapts(Interface, Interface, Interface)
-    grok.name('dossiers')
 
     template = ViewPageTemplateFile('templates/listing.pt')
 
@@ -185,10 +185,9 @@ class DossiersLaTeXListing(LaTexListing):
         ]
 
 
+@implementer(ILaTexListing)
+@adapter(Interface, Interface, Interface)
 class SubDossiersLaTeXListing(DossiersLaTeXListing):
-    grok.provides(ILaTexListing)
-    grok.adapts(Interface, Interface, Interface)
-    grok.name('subdossiers')
 
     def update_column_dict(self, columns):
         del columns['reference']
@@ -196,10 +195,9 @@ class SubDossiersLaTeXListing(DossiersLaTeXListing):
         return columns
 
 
+@implementer(ILaTexListing)
+@adapter(Interface, Interface, Interface)
 class DocumentsLaTeXListing(DossiersLaTeXListing):
-    grok.provides(ILaTexListing)
-    grok.adapts(Interface, Interface, Interface)
-    grok.name('documents')
 
     def get_columns(self):
         return [
@@ -233,10 +231,9 @@ class DocumentsLaTeXListing(DossiersLaTeXListing):
         ]
 
 
+@implementer(ILaTexListing)
+@adapter(Interface, Interface, Interface)
 class TasksLaTeXListing(DossiersLaTeXListing):
-    grok.provides(ILaTexListing)
-    grok.adapts(Interface, Interface, Interface)
-    grok.name('tasks')
 
     def get_columns(self):
         return [
@@ -276,10 +273,9 @@ class TasksLaTeXListing(DossiersLaTeXListing):
         ]
 
 
+@implementer(ILaTexListing)
+@adapter(Interface, Interface, Interface)
 class JournalLaTeXListing(LaTexListing):
-    grok.provides(ILaTexListing)
-    grok.adapts(Interface, Interface, Interface)
-    grok.name('journal')
 
     template = ViewPageTemplateFile('templates/listing.pt')
 

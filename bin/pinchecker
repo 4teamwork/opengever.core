@@ -1,0 +1,3 @@
+#!/bin/bash
+bin/buildout -vvv annotate | pcregrep -M -C 1 -e '\n\n.*IN\ versions.cfg.*\n.*OVERRIDE.*\n.*dist\.plone\.org(.\n?)*SET\ VALUE' | less
+# EOF

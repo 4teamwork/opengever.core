@@ -160,5 +160,7 @@ class DocumentDownloadFileVersion(DownloadFileVersion):
 
         self._init_version_file()
         if self.version_file:
-            notify(FileCopyDownloadedEvent(self.context))
+            notify(FileCopyDownloadedEvent(
+                self.context,
+                getattr(self.request, 'version_id', None)))
         return super(DocumentDownloadFileVersion, self).render()

@@ -14,14 +14,14 @@
                 "_id": "committee-1",
                 "_type": "opengever.meeting.committee",
                 "title": "Kommission für Rechtsfragen",
-                "repository_folder": "resolvePath::/ordnungssystem/fuehrung/kommissionen-mit-selbstaendigen-verwaltungsbefugnissen/kommission-fuer-rechtsfragen",
+                "repository_folder": "resolvePath::/ordnungssystem/fuehrung/kommissionen-mit-selbstaendigen-verwaltungsbefugnissen/kommission-fuer-rechtsfragen/sitzungen",
                 "group_id": "og_demo-ftw_users"
             },
             {
                 "_id": "committee-2",
                 "_type": "opengever.meeting.committee",
                 "title": "Rechnungsprüfungskommission",
-                "repository_folder": "resolvePath::/ordnungssystem/fuehrung/kommissionen-mit-selbstaendigen-verwaltungsbefugnissen/rechnungspruefungskommission",
+                "repository_folder": "resolvePath::/ordnungssystem/fuehrung/kommissionen-mit-selbstaendigen-verwaltungsbefugnissen/rechnungspruefungskommission/sitzungen",
                 "group_id": "og_demo-ftw_users"
             },
             {

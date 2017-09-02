@@ -1,21 +1,16 @@
 from AccessControl import Unauthorized
 from Acquisition import aq_inner
 from Acquisition import aq_parent
-from five import grok
 from opengever.repository import _
 from opengever.repository.deleter import RepositoryDeleter
 from opengever.repository.repositoryfolder import IRepositoryFolderSchema
+from Products.Five import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
-from zope.interface import Interface
 
 
-class RepositoryDeletionView(grok.View):
+class RepositoryDeletionView(BrowserView):
     """Repository deletion view, including a delete confirmation.
     """
-    grok.context(IRepositoryFolderSchema)
-    grok.name('delete_repository')
-    grok.require('zope2.DeleteObjects')
-    grok.template('deletion')
 
     def __call__(self):
         self.parent = aq_parent(aq_inner(self.context))
@@ -51,12 +46,9 @@ class RepositoryDeletionView(grok.View):
             self.context.absolute_url())
 
 
-class RepositoryDeletionAllowed(grok.View):
-    grok.context(Interface)
-    grok.name('is_deletion_allowed')
-    grok.require('zope2.View')
+class RepositoryDeletionAllowed(BrowserView):
 
-    def render(self):
+    def __call__(self):
         if IRepositoryFolderSchema.providedBy(self.context):
             deleter = RepositoryDeleter(self.context)
             return deleter.is_deletion_allowed()

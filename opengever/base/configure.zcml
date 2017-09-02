@@ -13,6 +13,8 @@
 
   <meta:provides feature="opengever" />
 
+  <include package="Products.CMFCore" file="permissions.zcml" />
+
   <include package="plone.app.workflow" />
   <include package="plone.behavior" file="meta.zcml" />
   <include package="plone.directives.form" />
@@ -49,6 +51,11 @@
   <adapter
       factory=".contentlisting.OpengeverCatalogContentListingObject"
       for="opengever.base.interfaces.IOpengeverCatalogBrain"
+      />
+
+  <adapter
+      factory=".redirector.RedirectorETagValue"
+      name="redirector"
       />
 
   <configure package="collective.quickupload.browser">
@@ -102,5 +109,21 @@
       name="status"
       permission="zope2.View"
       />
+
+  <adapter
+      for="*
+           opengever.base.interfaces.IOpengeverBaseLayer"
+      name="plone.contentmenu.display"
+      factory=".menu.OGDisplaySubMenuItem"
+      provides="plone.app.contentmenu.interfaces.IContentMenuItem"
+      />
+
+  <adapter factory=".menu.FilteredPostFactoryMenu" />
+
+  <adapter factory=".menu.PloneSitePostFactoryMenu" />
+
+  <adapter factory=".reference.BasicReferenceNumber" />
+
+  <adapter factory=".reference.PlatformReferenceNumber" />
 
 </configure>

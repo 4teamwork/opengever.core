@@ -9,6 +9,8 @@
   <include package="ftw.profilehook" />
   <include package="ftw.upgrade" file="meta.zcml" />
 
+  <include file="lawgiver.zcml" />
+
   <genericsetup:registerProfile
       name="default"
       title="opengever.core"

@@ -1,6 +1,3 @@
-from Products.CMFPlone.utils import getToolByName
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from five import grok
 from ftw import bumblebee
 from opengever.base.browser.helper import get_css_class
 from opengever.bumblebee import is_bumblebee_feature_enabled
@@ -8,7 +5,11 @@ from opengever.bumblebee import set_preferred_listing_view
 from opengever.tabbedview.browser.personal_overview import MyDocuments
 from opengever.tabbedview.browser.tabs import Documents
 from opengever.tabbedview.browser.tabs import Trash
+from opengever.task.browser.related_documents import RelatedDocuments
+from plone.memoize.view import memoize
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zExceptions import NotFound
+import re
 
 
 class BumblebeeGalleryMixin(object):
@@ -31,10 +32,10 @@ class BumblebeeGalleryMixin(object):
 
     @property
     def list_view_name(self):
-        raise NotImplementedError
+        return self._extract_base_view_name(self.__name__)
 
     def get_fetch_url(self):
-        return '{}/{}-fetch'.format(self.context.absolute_url(), self.__name__)
+        return '{}/{}/fetch'.format(self.context.absolute_url(), self.__name__)
 
     def available(self):
         return self.number_of_documents() > 0
@@ -58,14 +59,13 @@ class BumblebeeGalleryMixin(object):
                 'mime_type_css_class': get_css_class(brain),
             }
 
+    @memoize
     def get_brains(self):
         self.table_source.config.filter_text = self.request.get(
             'searchable_text', '')
 
-        if not hasattr(self, '_brains'):
-            catalog = getToolByName(self.context, 'portal_catalog')
-            setattr(self, '_brains', catalog(self.table_source.build_query()))
-        return getattr(self, '_brains')
+        query = self.table_source.build_query()
+        return self.table_source.search_results(query)
 
     def fetch(self):
         """Action for retrieving more events (based on `next_event_id` in
@@ -83,74 +83,28 @@ class BumblebeeGalleryMixin(object):
             return ''
         return self.previews_template().strip()
 
+    def _extract_base_view_name(self, view_name):
+        """Extracts the base-view-name without tabbedview_view- and -gallery.
+        """
+        result = re.search("tabbedview_view-(.*?)-gallery", view_name)
+        return result.group(1) if result else view_name
+
 
 class DocumentsGallery(BumblebeeGalleryMixin, Documents):
-    grok.name('tabbedview_view-documents-gallery')
-
-    @property
-    def list_view_name(self):
-        return "documents"
-
-
-class DocumentsGalleryFetch(DocumentsGallery):
-    """Returns the next gallery-items.
-
-    Unfortunately it's not possible to use a traversable method with
-    five.grok-views. Therefore we have to register an own browserview
-    to fetch the next gallery-items.
-
-    This browserview can be removed and implemented with allowed-attributes as
-    soon as the parent views are registered as Zope 3 BrowserViews.
     """
-    grok.name('tabbedview_view-documents-gallery-fetch')
-
-    def __call__(self):
-        return self.fetch()
+    """
 
 
 class MyDocumentsGallery(BumblebeeGalleryMixin, MyDocuments):
-    grok.name('tabbedview_view-mydocuments-gallery')
-
-    @property
-    def list_view_name(self):
-        return "mydocuments"
-
-
-class MyDocumentsGalleryFetch(MyDocumentsGallery):
-    """Returns the next gallery-items.
-
-    Unfortunately it's not possible to use a traversable method with
-    five.grok-views. Therefore we have to register an own browserview
-    to fetch the next gallery-items.
-
-    This browserview can be removed and implemented with allowed-attributes as
-    soon as the parent views are registered as Zope 3 BrowserViews.
     """
-    grok.name('tabbedview_view-mydocuments-gallery-fetch')
-
-    def __call__(self):
-        return self.fetch()
+    """
 
 
 class TrashGallery(BumblebeeGalleryMixin, Trash):
-    grok.name('tabbedview_view-trash-gallery')
-
-    @property
-    def list_view_name(self):
-        return "trash"
-
-
-class TrashGalleryFetch(TrashGallery):
-    """Returns the next gallery-items.
-
-    Unfortunately it's not possible to use a traversable method with
-    five.grok-views. Therefore we have to register an own browserview
-    to fetch the next gallery-items.
-
-    This browserview can be removed and implemented with allowed-attributes as
-    soon as the parent views are registered as Zope 3 BrowserViews.
     """
-    grok.name('tabbedview_view-trash-gallery-fetch')
+    """
 
-    def __call__(self):
-        return self.fetch()
+
+class RelatedDocumentsGallery(BumblebeeGalleryMixin, RelatedDocuments):
+    """
+    """

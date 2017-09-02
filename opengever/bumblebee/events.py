@@ -1,6 +1,6 @@
-from five import grok
 from opengever.bumblebee.interfaces import IPDFDownloadedEvent
 from zope.component.interfaces import ObjectEvent
+from zope.interface import implements
 
 
 class PDFDownloadedEvent(ObjectEvent):
@@ -8,4 +8,4 @@ class PDFDownloadedEvent(ObjectEvent):
     object is downloaded from bumblebee.
     """
 
-    grok.implements(IPDFDownloadedEvent)
+    implements(IPDFDownloadedEvent)

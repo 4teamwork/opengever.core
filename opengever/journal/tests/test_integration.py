@@ -159,26 +159,6 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
             comment='ratman: sharing_dossier_reader; test_user: '
                     'sharing_dossier_reader, sharing_dossier_publisher')
 
-    def test_integration_templatefolder_event(self):
-        templatefolder = create(Builder('templatefolder'))
-
-        # Local roles Modified
-        notify(
-            LocalRolesModified(
-                templatefolder, 'old roles',
-                (['catman', ['Owner']],
-                 ['ratman', ['Owner', 'Reader']],
-                 ['test_user', ['Reader', 'Editor']])
-            ))
-
-        # CheckLocalRolesModified
-        self.check_annotation(
-            templatefolder,
-            action_type='Local roles modified',
-            action_title='Local roles modified.',
-            comment='ratman: sharing_reader; test_user: '
-                    'sharing_reader, sharing_editor')
-
     def test_integration_document_events(self):
         """ Trigger every event of a document at least one times
         and check the journalentries.
@@ -537,9 +517,11 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
             )
 
     def check_document_copy_downloaded(self, obj):
+        title = u'Download copy current version ({version_id})'.format(
+            version_id=obj.version_id)
         self.check_annotation(
             obj,
             action_type='File copy downloaded',
-            action_title=u'Download copy',
+            action_title=title,
             actor=TEST_USER_ID,
             )

@@ -123,12 +123,12 @@ class FieldDumper(object):
 
             elif field.vocabulary:
                 if IVocabularyFactory.providedBy(field.vocabulary):
-                    vf = field.vocabulary
-                # we (sometimes) use IContextSourceBinder independent of
-                # context - for fields where we don't we should define an
-                # override
+                    vocabulary = field.vocabulary(None)
                 elif IContextSourceBinder.providedBy(field.vocabulary):
-                    vf = field.vocabulary
+                    vocabulary = field.vocabulary(None)
+                else:
+                    vocabulary = field.vocabulary
+
             elif field.vocabularyName:
                 try:
                     vf = getUtility(
@@ -136,9 +136,9 @@ class FieldDumper(object):
                 except ComponentLookupError:
                     pass
 
-            if vf is not None:
-                # Ignore context dependent vocabularies
                 vocabulary = vf(None)
+
+            if vocabulary is not None:
                 terms = [t.value for t in vocabulary._terms]
                 field_vocab = terms
         return field_vocab

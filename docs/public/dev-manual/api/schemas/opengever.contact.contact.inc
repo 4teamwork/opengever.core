@@ -159,7 +159,7 @@
        :Feldname: :field-title:`Beschreibung`
        :Datentyp: ``Text``
        
-       
+       :Default: null
        
        
 

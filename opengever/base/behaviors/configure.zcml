@@ -73,7 +73,6 @@
       title="SequenceNumber"
       description="Adds the sequence number indexer"
       provides=".sequence.ISequenceNumberBehavior"
-      for="plone.dexterity.interfaces.IDexterityContent"
       />
 
   <plone:behavior

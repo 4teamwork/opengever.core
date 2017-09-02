@@ -95,6 +95,26 @@ class TestDossierByline(TestBylineBase):
                           self.get_byline_value_by_label('Filing Number:'))
 
 
+class TestBusinessCaseDossierByline(TestDossierByline):
+
+    def create_dossier(self):
+        return create(Builder('dossier')
+                      .in_state('dossier-state-active')
+                      .having(reference_number_prefix='5',
+                              responsible='hugo.boss',
+                              start=date(2013, 11, 6),
+                              end=date(2013, 11, 7),
+                              external_reference='22900-2017'))
+
+    @browsing
+    def test_dossier_byline_external_reference_display(self, browser):
+        browser.login().open(self.dossier)
+
+        external_reference = self.get_byline_value_by_label(
+                'External Reference:')
+        self.assertEquals('22900-2017', external_reference.text)
+
+
 class TestFilingBusinessCaseByline(TestBylineBase):
 
     def setUp(self):

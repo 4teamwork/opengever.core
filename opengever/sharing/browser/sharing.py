@@ -2,6 +2,7 @@ from AccessControl.SecurityManagement import getSecurityManager
 from AccessControl.SecurityManagement import newSecurityManager
 from AccessControl.SecurityManagement import setSecurityManager
 from Acquisition import aq_base
+from ftw.lawgiver.utils import get_specification_for
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.sharing import _
 from opengever.sharing.behaviors import IDossier, IStandard
@@ -68,6 +69,12 @@ class OpengeverSharingView(SharingView):
         return pairs
 
     def available_roles(self):
+        if get_specification_for(self.context) is not None:
+            # In lawgiver workflow specifications we can configure the
+            # "visible roles", therefore we dont need to overwrite the
+            # behavior here.
+            return self.roles()
+
         result = []
         for key, value in ROLE_MAPPING:
             if key.providedBy(self.context) or key is IStandard:

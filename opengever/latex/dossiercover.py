@@ -1,16 +1,14 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
-from five import grok
 from ftw.pdfgenerator.browser.views import ExportPDFView
 from ftw.pdfgenerator.interfaces import ILaTeXLayout
-from ftw.pdfgenerator.interfaces import ILaTeXView
 from ftw.pdfgenerator.utils import provide_request_layer
 from ftw.pdfgenerator.view import MakoLaTeXView
 from opengever.base.interfaces import IReferenceNumber
 from opengever.dossier.behaviors.dossier import IDossier
-from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.repository.repositoryroot import IRepositoryRoot
+from zope.component import adapter
 from zope.component import getAdapter
 from zope.interface import Interface
 
@@ -20,22 +18,18 @@ class IDossierCoverLayer(Interface):
     """
 
 
-class DossierCoverPDFView(grok.View, ExportPDFView):
-    grok.name('dossier_cover_pdf')
-    grok.context(IDossierMarker)
-    grok.require('zope2.View')
+class DossierCoverPDFView(ExportPDFView):
 
     request_layer = IDossierCoverLayer
 
-    def render(self):
+    def __call__(self):
         provide_request_layer(self.request, self.request_layer)
 
-        return ExportPDFView.__call__(self)
+        return super(DossierCoverPDFView, self).__call__()
 
 
-class DossierCoverLaTeXView(grok.MultiAdapter, MakoLaTeXView):
-    grok.provides(ILaTeXView)
-    grok.adapts(Interface, IDossierCoverLayer, ILaTeXLayout)
+@adapter(Interface, IDossierCoverLayer, ILaTeXLayout)
+class DossierCoverLaTeXView(MakoLaTeXView):
 
     template_directories = ['templates']
     template_name = 'dossiercover.tex'

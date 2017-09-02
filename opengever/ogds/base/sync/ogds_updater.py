@@ -1,4 +1,3 @@
-from five import grok
 from ldap import NO_SUCH_OBJECT
 from logging.handlers import TimedRotatingFileHandler
 from opengever.base.model import create_session
@@ -14,6 +13,8 @@ from Products.CMFPlone.interfaces import IPloneSiteRoot
 from Products.LDAPMultiPlugins.interfaces import ILDAPMultiPlugin
 from sqlalchemy.orm.exc import MultipleResultsFound
 from sqlalchemy.orm.exc import NoResultFound
+from zope.component import adapter
+from zope.interface import implementer
 import logging
 import os
 import time
@@ -43,7 +44,6 @@ def sync_ogds(plone, users=True, groups=True):
     NOTE: This function does *not* commit the transaction. Depending on from
     where you use it, you'll need to take care of that yourself, if necessary.
     """
-
     # Set up logging to a rotating ogds-update.log
     setup_ogds_sync_logfile(logger)
 
@@ -79,11 +79,11 @@ def setup_ogds_sync_logfile(logger):
     logger.addHandler(file_handler)
 
 
-class OGDSUpdater(grok.Adapter):
+@implementer(IOGDSUpdater)
+@adapter(IPloneSiteRoot)
+class OGDSUpdater(object):
     """Adapter to synchronize users and groups from LDAP into OGDS.
     """
-    grok.provides(IOGDSUpdater)
-    grok.context(IPloneSiteRoot)
 
     def __init__(self, context):
         self.context = context

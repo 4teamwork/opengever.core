@@ -1,5 +1,3 @@
-from five import grok
-from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.dossier.templatefolder.tabs import TemplateFolderDocuments
 from opengever.dossier.templatefolder.tabs import TemplateFolderDossierTemplates
 from opengever.tabbedview.browser.bumblebee_gallery import DocumentsGallery
@@ -7,20 +5,16 @@ from opengever.tabbedview.browser.tabs import DocumentsProxy
 
 
 class DossierTemplateSubDossiers(TemplateFolderDossierTemplates):
-    grok.context(IDossierTemplateMarker)
-    grok.name('tabbedview_view-subdossiers')
 
     search_options = {'is_subdossier': True}
 
 
 class DossierTemplateDocumentsProxy(DocumentsProxy):
-    grok.context(IDossierTemplateMarker)
-    grok.name('tabbedview_view-documents-proxy')
+    """Document proxy view for the document tab of a dossier template.
+    """
 
 
 class DossierTemplateDocuments(TemplateFolderDocuments):
-    grok.context(IDossierTemplateMarker)
-    grok.name('tabbedview_view-documents')
 
     # Reset depth from super-class because we want do display
     # all sub-docouments in the dossiertemplate.
@@ -29,7 +23,5 @@ class DossierTemplateDocuments(TemplateFolderDocuments):
 
 
 class DossierTemplateDocumentsGallery(DocumentsGallery):
-    grok.context(IDossierTemplateMarker)
-    grok.name('tabbedview_view-documents-gallery')
 
     sort_on = 'sortable_title'

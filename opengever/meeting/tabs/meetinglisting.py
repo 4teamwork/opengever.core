@@ -1,4 +1,3 @@
-from five import grok
 from ftw.table.interfaces import ITableSource
 from ftw.table.interfaces import ITableSourceConfig
 from opengever.base.browser.helper import get_css_class
@@ -7,8 +6,10 @@ from opengever.meeting import _
 from opengever.meeting.model import Meeting
 from opengever.tabbedview import BaseListingTab
 from opengever.tabbedview import SqlTableSource
+from zope.component import adapter
 from zope.globalrequest import getRequest
 from zope.i18n import translate
+from zope.interface import implementer
 from zope.interface import implements
 from zope.interface import Interface
 
@@ -77,8 +78,8 @@ class MeetingListingTab(BaseListingTab):
         return Meeting.query.filter_by(committee=self.context.load_model())
 
 
+@implementer(ITableSource)
+@adapter(IMeetingTableSourceConfig, Interface)
 class MeetingTableSource(SqlTableSource):
-    grok.implements(ITableSource)
-    grok.adapts(MeetingListingTab, Interface)
 
     searchable_columns = [Meeting.location]

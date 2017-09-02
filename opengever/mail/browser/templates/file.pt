@@ -1,13 +1,12 @@
 <tal:block xmlns:i18n="http://xml.zope.org/namespaces/i18n"
            i18n:domain="opengever.mail">
 
-  <tal:file tal:condition="context/message">
+  <tal:file tal:condition="view/field">
     <!-- icon, filename, size -->
-    <span tal:attributes="class view/get_css_class" tal:define="filename view/w/message/filename">
+    <span tal:attributes="class view/get_css_class" tal:define="filename python:view.field.filename">
       <span class="filename" tal:content="filename">Filename</span>
       <span class="discreet">
-        &mdash; <span tal:define="sizekb view/w/message/file_size" tal:replace="sizekb">100</span>
-        KB
+        &mdash; <span tal:define="sizekb python:view.file_size" tal:replace="sizekb">100</span>
       </span>
     </span>
   </tal:file>

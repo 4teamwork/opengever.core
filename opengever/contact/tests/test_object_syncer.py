@@ -1,7 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.base.model import create_session
-from opengever.contact.models import MailAddress
 from opengever.contact.models import Organization
 from opengever.contact.models import OrgRole
 from opengever.contact.models import Person
@@ -22,6 +21,7 @@ from sqlalchemy import Integer
 from sqlalchemy import MetaData
 from sqlalchemy import String
 from sqlalchemy import Table
+from sqlalchemy import Text
 from sqlalchemy.orm import sessionmaker
 import os
 import transaction
@@ -66,14 +66,17 @@ class TestPersonSyncer(SyncerBaseTest):
 
     SAMPLE_DATA = [{u'is_active': True, u'former_contact_id': 1,
                     u'firstname': u'Frank G.', u'lastname': u'Dippel',
-                    u'salutation': u'Herr', u'title': u'Dr.'},
+                    u'salutation': u'Herr', u'title': u'Dr.',
+                    u'description': u'Lorem ipsum'},
                    {u'is_active': False, u'former_contact_id': 2,
                     u'firstname': u'Christiane',
                     u'lastname': u'W\xfcrsd\xf6rfer',
+                    u'description': u'Bla',
                     u'salutation': u'Frau', u'title': u'B.Sc.'},
                    {u'is_active': True, u'former_contact_id': 3,
                     u'firstname': u'Dolorene', u'lastname': u'Dolores',
-                    u'salutation': u'Frau', u'title': u''}]
+                    u'salutation': u'Frau', u'title': u'',
+                    u'description': u'Lorem ipsum sit'}]
 
     def create_source_db(self):
         self.source_table = Table("persons",
@@ -83,6 +86,7 @@ class TestPersonSyncer(SyncerBaseTest):
                                   Column("title", String),
                                   Column("firstname", String),
                                   Column("lastname", String),
+                                  Column("description", Text),
                                   Column("is_active", Boolean))
         self.source_table.create()
 
@@ -94,15 +98,17 @@ class TestPersonSyncer(SyncerBaseTest):
 
         person = Person.query.get_by_former_contact_id(2)
         self.assertItemsEqual(
-            [u'Frau', u'B.Sc.', u'Christiane', u'W\xfcrsd\xf6rfer', False, 2],
+            [u'Frau', u'B.Sc.', u'Christiane',
+             u'W\xfcrsd\xf6rfer', False, 2, u'Bla'],
             [person.salutation, person.academic_title, person.firstname,
-             person.lastname, person.is_active, person.former_contact_id])
+             person.lastname, person.is_active, person.former_contact_id,
+             person.description])
 
         person = Person.query.get_by_former_contact_id(1)
         self.assertItemsEqual(
-            [u'Herr', u'Dr.', u'Frank G.', u'Dippel', True],
+            [u'Herr', u'Dr.', u'Frank G.', u'Dippel', True, u'Lorem ipsum'],
             [person.salutation, person.academic_title, person.firstname,
-             person.lastname, person.is_active])
+             person.lastname, person.is_active, person.description])
 
     def test_update_object_properly_while_syncing(self):
         syncer = PersonSyncer(self.source_db, 'SELECT * from persons')
@@ -113,13 +119,14 @@ class TestPersonSyncer(SyncerBaseTest):
         self.source_db.execute(
             self.source_table.update().where(
                 self.source_table.c.former_contact_id == 3).values(
-                    lastname=u'Meier', is_active=False))
+                    lastname=u'Meier', is_active=False, description=u''))
 
         PersonSyncer(self.source_db, 'SELECT * from persons')()
 
         self.assertEqual(3, len(Person.query.all()))
         person = Person.query.get_by_former_contact_id(3)
         self.assertEquals('Meier', person.lastname)
+        self.assertEquals('', person.description)
         self.assertFalse(person.is_active)
 
 
@@ -127,9 +134,11 @@ class TestOrganizationSyncer(SyncerBaseTest):
 
     SAMPLE_DATA = [{u'is_active': True,
                     u'former_contact_id': 2344,
+                    u'description': u'lorem ipsum dolor sit amet',
                     u'name': u'Soziale Dienste'},
                    {u'is_active': False,
                     u'former_contact_id': 5637,
+                    u'description': u'Foo',
                     u'name': u'Poliz\xe4iwache'}]
 
     def create_source_db(self):
@@ -137,6 +146,7 @@ class TestOrganizationSyncer(SyncerBaseTest):
                                   self.source_metadata,
                                   Column("former_contact_id", Integer),
                                   Column("name", String),
+                                  Column("description", Text),
                                   Column("is_active", Boolean))
         self.source_table.create()
 
@@ -152,6 +162,9 @@ class TestOrganizationSyncer(SyncerBaseTest):
         self.assertEqual(
             [2344, 5637],
             [org.former_contact_id for org in organizations])
+        self.assertEquals(
+            [u'lorem ipsum dolor sit amet', u'Foo'],
+            [org.description for org in organizations])
 
     def test_update_existing_objects_properly_while_syncing(self):
         OrganizationSyncer(self.source_db, 'SELECT * from organizations')()
@@ -195,8 +208,8 @@ class TestMailSyncer(SyncerBaseTest):
                               .having(name=u'Meier AG',
                                       former_contact_id=2344))
 
-        syncer = MailSyncer(self.source_db, 'SELECT * from mails')
-        syncer()
+        MailSyncer(self.source_db, 'SELECT * from mails')()
+        transaction.commit()
 
         organization = Organization.query.first()
         self.assertEquals(2, len(organization.mail_addresses))
@@ -206,9 +219,6 @@ class TestMailSyncer(SyncerBaseTest):
         self.assertEquals(
             [u'foo@example.com', u'bar@example.com'],
             [mail.address for mail in organization.mail_addresses])
-
-        self.assertEqual(2, syncer.stats.get('added'))
-        self.assertEqual(0, syncer.stats.get('updated'))
 
     def test_updates_existing_mailaddresses_properly_by_label(self):
         org_1 = create(Builder('organization')
@@ -225,22 +235,19 @@ class TestMailSyncer(SyncerBaseTest):
                .having(label=u'E-Mail (gesch\xe4ftlich)',
                        address=u'james@example.com'))
 
-        syncer = MailSyncer(self.source_db, 'SELECT * from mails')
-        syncer()
+        MailSyncer(self.source_db, 'SELECT * from mails')()
+        transaction.commit()
 
-        self.assertEquals(3, MailAddress.query.count())
+        org_1, org_2 = Organization.query.all()
+        self.assertEquals(2, len(org_1.mail_addresses))
+        self.assertEquals(1, len(org_2.mail_addresses))
 
-        organization = Organization.query.first()
-        self.assertEquals(2, len(organization.mail_addresses))
         self.assertEquals(
             [u'E-Mail (privat)', u'E-Mail (gesch\xe4ftlich)'],
-            [mail.label for mail in organization.mail_addresses])
+            [mail.label for mail in org_1.mail_addresses])
         self.assertEquals(
             [u'bar@example.com', u'foo@example.com'],
-            [mail.address for mail in organization.mail_addresses])
-
-        self.assertEqual(1, syncer.stats.get('added'))
-        self.assertEqual(1, syncer.stats.get('updated'))
+            [mail.address for mail in org_1.mail_addresses])
 
 
 class TestURLSyncer(SyncerBaseTest):
@@ -251,9 +258,18 @@ class TestURLSyncer(SyncerBaseTest):
                    {u'former_contact_id': 2344,
                     u'url': u'http://www.website.example.com',
                     u'label': u'Website'},
-                   {u'former_contact_id': 2344,
+                   {u'former_contact_id': 30,
                     u'url': u'https://intern.example.com',
                     u'label': u'Intranet'}]
+
+    def setUp(self):
+        super(TestURLSyncer, self).setUp()
+        self.org1 = create(Builder('organization')
+                           .having(name=u'Meier AG',
+                                   former_contact_id=2344))
+        self.org1 = create(Builder('organization')
+                           .having(name=u'Example AG',
+                                   former_contact_id=30))
 
     def create_source_db(self):
         self.source_table = Table("urls",
@@ -264,44 +280,37 @@ class TestURLSyncer(SyncerBaseTest):
         self.source_table.create()
 
     def test_add_urls_properly_while_syncing(self):
-        organization = create(Builder('organization')
-                              .having(name=u'Meier AG',
-                                      former_contact_id=2344))
-
         UrlSyncer(self.source_db, 'SELECT * from urls')()
 
-        organization = Organization.query.first()
-        self.assertEquals(3, len(organization.urls))
+        org1, org2 = Organization.query.all()
         self.assertEquals(
-            [u'Shop', u'Website', u'Intranet'],
-            [url.label for url in organization.urls])
+            [u'Shop', u'Website'], [url.label for url in org1.urls])
         self.assertEquals(
             [u'http://www.shop.example.com',
-             u'http://www.website.example.com',
-             u'https://intern.example.com'],
-            [url.url for url in organization.urls])
+             u'http://www.website.example.com'],
+            [url.url for url in org1.urls])
+
+        self.assertEquals(
+            [u'Intranet'], [url.label for url in org2.urls])
+        self.assertEquals(
+            [u'https://intern.example.com'],
+            [url.url for url in org2.urls])
 
     def test_updates_existing_urls_properly_by_label(self):
-        organization = create(Builder('organization')
-                              .having(name=u'Meier AG',
-                                      former_contact_id=2344))
         create(Builder('url')
-               .for_contact(organization)
+               .for_contact(self.org1)
                .having(label=u'Shop',
                        url=u'http://www.old_shop.example.com'))
 
         UrlSyncer(self.source_db, 'SELECT * from urls')()
 
-        organization = Organization.query.first()
-        self.assertEquals(3, len(organization.urls))
+        org1, org2 = Organization.query.all()
         self.assertEquals(
-            [u'Shop', u'Website', u'Intranet'],
-            [url.label for url in organization.urls])
+            [u'Shop', u'Website'], [url.label for url in org1.urls])
         self.assertEquals(
             [u'http://www.shop.example.com',
-             u'http://www.website.example.com',
-             u'https://intern.example.com'],
-            [url.url for url in organization.urls])
+             u'http://www.website.example.com'],
+            [url.url for url in org1.urls])
 
 
 class TestPhoneNumberSyncer(SyncerBaseTest):
@@ -412,8 +421,8 @@ class TestAddressSyncer(SyncerBaseTest):
                .labeled(u'Hauptsitz')
                .having(street=u'Dammweg 9', zip_code=u'3013', city=u'Bern'))
 
-        syncer = AddressSyncer(self.source_db, 'SELECT * from addresses')
-        syncer()
+        AddressSyncer(self.source_db, 'SELECT * from addresses')()
+        transaction.commit()
 
         organization = Organization.query.first()
         self.assertEquals(2, len(organization.addresses))
@@ -425,28 +434,25 @@ class TestAddressSyncer(SyncerBaseTest):
             [u'Teststrasse 1', u'Rue de Lausanne'],
             [address.street for address in organization.addresses])
 
-        self.assertEquals(1, syncer.stats.get('updated'))
-        self.assertEquals(1, syncer.stats.get('added'))
-
 
 class TestOrganizationRoleSyncer(SyncerBaseTest):
 
     SAMPLE_DATA = [{u'person_id': 1111,
-                    u'organisation_id': 2222,
+                    u'organization_id': 2222,
                     u'function': u'Leitung'},
                    {u'person_id': 3333,
-                    u'organisation_id': 2222,
+                    u'organization_id': 2222,
                     u'function': u'Vorsteher'}]
 
     def create_source_db(self):
         self.source_table = Table("orgroles",
                                   self.source_metadata,
                                   Column("person_id", Integer),
-                                  Column("organisation_id", String),
+                                  Column("organization_id", Integer),
                                   Column("function", String))
         self.source_table.create()
 
-    def test_add_addresses_properly_while_syncing(self):
+    def test_add_organization_roles_properly_while_syncing(self):
         create(Builder('organization')
                .having(name=u'Meier AG', former_contact_id=2222))
 
@@ -458,6 +464,7 @@ class TestOrganizationRoleSyncer(SyncerBaseTest):
                        former_contact_id=3333))
 
         OrgRoleSyncer(self.source_db, 'SELECT * from orgroles')()
+        transaction.commit()
 
         org_roles = Organization.query.first().persons
         self.assertEquals([u'Leitung', u'Vorsteher'],
@@ -465,23 +472,25 @@ class TestOrganizationRoleSyncer(SyncerBaseTest):
         self.assertEquals(['Peter', 'James'],
                           [role.person.firstname for role in org_roles])
 
-    def test_does_not_remove_existing_org_roles(self):
-        organization = create(Builder('organization')
-                              .having(name=u'Meier AG',
-                                      former_contact_id=2222))
+    def test_update_existing_organization_roles(self):
+        org1 = create(Builder('organization')
+                      .having(name=u'Meier AG',
+                              former_contact_id=2222))
+        create(Builder('organization')
+               .having(name=u'Search AG', former_contact_id=4444))
 
-        create(Builder('person')
-               .having(lastname=u'Meier', firstname=u'Peter',
-                       former_contact_id=1111))
+        peter = create(Builder('person')
+                       .having(lastname=u'Meier', firstname=u'Peter',
+                               former_contact_id=1111))
         create(Builder('person')
                .having(lastname=u'Bond', firstname=u'James',
                        former_contact_id=3333))
 
-        # existing OrgRole
-        hans = create(Builder('person')
-                      .having(lastname=u'Hans', firstname=u'Muster'))
         create(Builder('org_role')
-               .having(person=hans, organization=organization))
+               .having(person=peter, organization=org1,
+                       function='Stellv. Leitung'))
 
         OrgRoleSyncer(self.source_db, 'SELECT * from orgroles')()
-        self.assertEquals(3, OrgRole.query.count())
+        self.assertEquals(2, OrgRole.query.count())
+        self.assertEquals([u'Leitung', u'Vorsteher'],
+                          [aa.function for aa in OrgRole.query])

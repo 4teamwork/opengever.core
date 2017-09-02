@@ -1,9 +1,10 @@
-from five import grok
+from ftw.table.helper import path_checkbox
 from opengever.dossier import _
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateSchema
-from opengever.dossier.templatefolder.interfaces import ITemplateFolder
 from opengever.tabbedview import BaseCatalogListingTab
-from opengever.tabbedview.browser.tabs import Documents, Trash
+from opengever.tabbedview.browser.bumblebee_gallery import BumblebeeGalleryMixin
+from opengever.tabbedview.browser.tabs import BaseTabProxy
+from opengever.tabbedview.browser.tabs import Documents
 from opengever.tabbedview.helper import linked
 
 
@@ -23,8 +24,6 @@ def drop_columns(columns):
 
 
 class TemplateFolderDocuments(Documents):
-    grok.context(ITemplateFolder)
-
     depth = 1
 
     @property
@@ -34,24 +33,30 @@ class TemplateFolderDocuments(Documents):
 
     @property
     def enabled_actions(self):
-        return filter(
+        actions = filter(
             lambda x: x not in self.disabled_actions,
             super(TemplateFolderDocuments, self).enabled_actions)
+
+        return actions + ['folder_delete_confirmation']
 
     disabled_actions = [
         'cancel',
         'checkin',
         'checkout',
+        'trashed',
         'create_task',
-        'move_items',
         'send_as_email',
         'submit_additional_documents',
     ]
 
 
+class TemplateFolderSablonTemplatesProxy(BaseTabProxy):
+    """This proxyview is looking for the last used documents
+    view (list or gallery) and reopens this view.
+    """
+
+
 class TemplateFolderSablonTemplates(Documents):
-    grok.context(ITemplateFolder)
-    grok.name('tabbedview_view-sablontemplates')
 
     types = ['opengever.meeting.sablontemplate']
 
@@ -64,24 +69,36 @@ class TemplateFolderSablonTemplates(Documents):
 
     @property
     def enabled_actions(self):
-        return filter(
+        actions = filter(
             lambda x: x not in self.disabled_actions,
             super(TemplateFolderSablonTemplates, self).enabled_actions)
+
+        return actions + ['folder_delete_confirmation']
 
     disabled_actions = [
         'cancel',
         'checkin',
         'checkout',
         'create_task',
+        'trashed',
         'move_items',
         'send_as_email',
         'submit_additional_documents',
     ]
 
 
+class TemplateFolderSablonTemplatesGallery(BumblebeeGalleryMixin, TemplateFolderSablonTemplates):
+
+    sort_on = 'sortable_title'
+
+
+class TemplateFolderProposalTemplatesProxy(BaseTabProxy):
+    """This proxyview is looking for the last used documents
+    view (list or gallery) and reopens this view.
+    """
+
+
 class TemplateFolderProposalTemplates(Documents):
-    grok.context(ITemplateFolder)
-    grok.name('tabbedview_view-proposaltemplates')
 
     types = ['opengever.meeting.proposaltemplate']
 
@@ -94,34 +111,30 @@ class TemplateFolderProposalTemplates(Documents):
 
     @property
     def enabled_actions(self):
-        return filter(
+        actions = filter(
             lambda x: x not in self.disabled_actions,
             super(TemplateFolderProposalTemplates, self).enabled_actions)
+
+        return actions + ['folder_delete_confirmation']
 
     disabled_actions = [
         'cancel',
         'checkin',
         'checkout',
         'create_task',
+        'trashed',
         'move_items',
         'send_as_email',
         'submit_additional_documents',
     ]
 
 
-class TemplateFolderTrash(Trash):
-    grok.context(ITemplateFolder)
+class TemplateFolderProposalTemplatesGallery(BumblebeeGalleryMixin, TemplateFolderProposalTemplates):
 
-    depth = 1
-
-    @property
-    def columns(self):
-        return drop_columns(
-            super(TemplateFolderTrash, self).columns)
+    sort_on = 'sortable_title'
 
 
 class TemplateFolderDossierTemplates(BaseCatalogListingTab):
-    grok.name('tabbedview_view-dossiertemplates')
 
     filterlist_available = False
     sort_on = 'sortable_title'
@@ -132,7 +145,12 @@ class TemplateFolderDossierTemplates(BaseCatalogListingTab):
     search_options = {'is_subdossier': False}
 
     columns = (
-
+        {'column': '',
+         'column_title': '',
+         'transform': path_checkbox,
+         'sortable': False,
+         'groupable': False,
+         'width': 30},
         {'column': 'Title',
          'column_title': _(u'label_title', default=u'Title'),
          'sort_index': 'sortable_title',
@@ -143,5 +161,5 @@ class TemplateFolderDossierTemplates(BaseCatalogListingTab):
 
         )
 
-    enabled_actions = []
+    enabled_actions = ['folder_delete_confirmation']
     major_actions = []

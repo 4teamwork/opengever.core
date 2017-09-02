@@ -1,5 +1,4 @@
 from datetime import datetime
-from five import grok
 from opengever.base.behaviors.utils import set_attachment_content_disposition
 from opengever.base.reporter import DATE_NUMBER_FORMAT
 from opengever.base.reporter import readable_author
@@ -9,10 +8,10 @@ from opengever.globalindex import _
 from opengever.globalindex.utils import get_selected_items
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.task.util import getTaskTypeVocabulary
+from Products.Five import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
 from zope.component.hooks import getSite
 from zope.i18n import translate
-from zope.interface import Interface
 
 
 def task_type_helper(value):
@@ -31,16 +30,12 @@ def task_type_helper(value):
         return term.title
 
 
-class TaskReporter(grok.View):
+class TaskReporter(BrowserView):
     """View that generate an excel spreadsheet which list all selected
     task and their important attributes from the globalindex.
     """
 
-    grok.context(Interface)
-    grok.name('task_report')
-    grok.require('zope2.View')
-
-    def render(self):
+    def __call__(self):
 
         tasks = get_selected_items(self.context, self.request)
         tasks = [tt for tt in tasks]

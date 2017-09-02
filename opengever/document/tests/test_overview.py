@@ -36,6 +36,35 @@ class TestDocumentOverview(FunctionalTestCase):
         super(TestDocumentOverview, self).tearDown()
 
     @browsing
+    def test_overview_displays_related_documents_but_only_documents(self, browser):
+        self.doc_a = create(Builder('document')
+                            .within(self.dossier)
+                            .having(title=u'A\xf6'))
+        self.doc_b = create(Builder('document')
+                            .within(self.dossier)
+                            .having(title=u'B\xf6')
+                            .relate_to(self.doc_a))
+        self.doc_c = create(Builder('document')
+                            .within(self.dossier)
+                            .having(title=u'C\xf6')
+                            .relate_to(self.doc_b))
+        self.task = create(Builder('task')
+                           .within(self.dossier)
+                           .having(title=u'C\xf6')
+                           .relate_to(self.doc_b))
+        self.proposal = create(Builder('proposal')
+                               .within(self.dossier)
+                               .having(title=u'C\xf6')
+                               .relate_to(self.doc_b))
+
+        browser.login().open(self.doc_b, view='tabbedview_view-overview')
+
+        self.assertEquals(
+            [self.doc_a.title, self.doc_c.title],
+            browser.css('ul.related_documents a').text
+        )
+
+    @browsing
     def test_overview_has_edit_link(self, browser):
         browser.login().open(self.document, view='tabbedview_view-overview')
         self.assertEquals('Checkout and edit',
@@ -307,7 +336,7 @@ class TestDocumentOverview(FunctionalTestCase):
                           archival_file_row.css('th').first.text)
         self.assertEquals('icon-pdf',
                           archival_file_row.css('td span')[0].get('class'))
-        self.assertEquals(u'test.pdf \u2014 0 KB',
+        self.assertEquals(u'test.pdf \u2014 1 KB',
                           archival_file_row.css('td span')[1].text)
 
 
@@ -325,7 +354,9 @@ class TestOverviewMeetingFeatures(FunctionalTestCase):
         self.document = create(Builder('document').within(self.dossier))
 
         container = create(Builder('committee_container'))
+        self.grant('MeetingUser', on=container)
         self.committee = create(Builder('committee').within(container))
+        self.grant('CommitteeResponsible', on=self.committee)
         self.proposal = create(Builder('proposal')
                                .within(self.dossier)
                                .having(title=u'Pr\xf6posal',

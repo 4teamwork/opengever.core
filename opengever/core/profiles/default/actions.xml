@@ -202,6 +202,19 @@
       <property name="visible">True</property>
     </object>
 
+    <object name="folder_delete_confirmation" meta_type="CMF Action" i18n:domain="plone">
+      <property name="title" i18n:translate="">Delete</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:folder_delete_confirmation:method</property>
+      <property name="link_target" />
+      <property name="icon_expr" />
+      <property name="available_expr" />
+      <property name="permissions">
+        <element value="Delete objects" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
     <!--migrated from opengever/dossier/profiles/default/actions.xml-->
     <object name="delete_participants" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">Delete</property>
@@ -339,6 +352,18 @@
       <property name="visible">True</property>
     </object>
 
+    <object name="ech0147_export" meta_type="CMF Action" i18n:domain="opengever.core">
+      <property name="title" i18n:translate="">eCH-0147/eCH-0039 Export</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:@@ech0147_export:method</property>
+      <property name="icon_expr" />
+      <property name="available_expr">object/@@ech0147_export/enabled</property>
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
   </object>
 
 
@@ -373,6 +398,18 @@
         <element value="Manage portal" />
       </property>
       <property name="visible">False</property>
+    </object>
+
+    <object name="copy_item" meta_type="CMF Action" i18n:domain="opengever.core">
+      <property name="title" i18n:translate="">Copy Item</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:${globals_view/getCurrentObjectUrl}/copy_item</property>
+      <property name="icon_expr" />
+      <property name="available_expr">python:object.restrictedTraverse('@@plone_interface_info').provides('opengever.document.behaviors.IBaseDocument')</property>
+      <property name="permissions">
+        <element value="Copy or Move" />
+      </property>
+      <property name="visible">True</property>
     </object>
 
     <object name="copy" meta_type="CMF Action" i18n:domain="plone">
@@ -429,7 +466,7 @@
       <property name="url_expr">string:${object_url}/view</property>
       <property name="icon_expr" />
       <property name="available_expr">
-                python: here.restrictedTraverse('@@plone_context_state').view_template_id() != 'view' and here.portal_type not in ('opengever.contact.contactfolder', 'opengever.inbox.yearfolder')
+                python: here.restrictedTraverse('@@plone_context_state').view_template_id() != 'view' and here.portal_type not in ('opengever.contact.contactfolder', 'opengever.inbox.yearfolder') and not globals_view.isPortalOrPortalDefaultPage()
             </property>
       <property name="permissions">
         <element value="View" />
@@ -535,6 +572,30 @@
       here.restrictedTraverse('@@plone_interface_info').provides('opengever.private.dossier.IPrivateDossier')</property>
       <property name="permissions">
         <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="ech0147_export" meta_type="CMF Action" i18n:domain="opengever.core">
+      <property name="title" i18n:translate="">eCH-0147/eCH-0039 Export</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:${object_url}/@@ech0147_export</property>
+      <property name="icon_expr" />
+      <property name="available_expr">object/@@ech0147_export/available</property>
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="ech0147_import" meta_type="CMF Action" i18n:domain="opengever.core">
+      <property name="title" i18n:translate="">eCH-0147 Import</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:${object_url}/@@ech0147_import</property>
+      <property name="icon_expr" />
+      <property name="available_expr">object/@@ech0147_import/available</property>
+      <property name="permissions">
+        <element value="opengever.dossier: Add businesscasedossier" />
       </property>
       <property name="visible">True</property>
     </object>

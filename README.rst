@@ -167,7 +167,7 @@ and the `ruby-build <https://github.com/sstephenson/ruby-build>`_ plugin:
     echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bash_profile
     echo 'eval "$(rbenv init -)"' >> ~/.bash_profile
     source ~/.bash_profile
-    rbenv install 2.1.5
+    rbenv install 2.3.3
     gem install bundler
 
 The installation of the ``Sablon`` gem can then be performed by buildout (by
@@ -209,6 +209,73 @@ with these contents:
 
 ``<bind_dn>`` and ``<bind_pw>`` refer to the username and password for the
 respective user in our development LDAP tree.
+
+
+Setting up a multi-admin environment
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you need a multi-admin environment, make sure the basic development dependencies above are satisfied and run the following steps:
+
+Pleace note that the default database-name for multi-admin environment is ``opengever-multi-admin``
+
+.. code::
+
+    $ git clone git@github.com:4teamwork/opengever.core.git
+    $ cd opengever.core
+    $ ln -s development-multi-admin.cfg buildout.cfg
+    $ python bootstrap.py
+    $ bin/buildout
+    $ bin/instance fg
+
+Go to ``http://localhost:8080/manage_main`` and click on ``Install OneGov GEVER``,
+
+For the first admin-unit choose the following settings:
+
++----------------------------------+------------------------------------------+
+| Property                         | Value                                    |
++==================================+==========================================+
+| Deployment profile               | Choose the **Finanzdirektion (FD) (DEV)**|
++----------------------------------+------------------------------------------+
+| LDAP configuration profile       | OneGovGEVER-Demo LDAP                    |
++----------------------------------+------------------------------------------+
+| Import users from LDAP into OGDS | **True**                                 |
++----------------------------------+------------------------------------------+
+| Development mode                 | False                                    |
++----------------------------------+------------------------------------------+
+| Purge SQL                        | **True**                                 |
++----------------------------------+------------------------------------------+
+
+For the second admin-unit choose the following settings:
+
++----------------------------------+--------------------------------------+
+| Property                         | Value                                |
++==================================+======================================+
+| Deployment profile               | Choose the **Ratskanzlei (RK) (DEV)**|
++----------------------------------+--------------------------------------+
+| LDAP configuration profile       | OneGovGEVER-Demo LDAP                |
++----------------------------------+--------------------------------------+
+| Import users from LDAP into OGDS | **False**                            |
++----------------------------------+--------------------------------------+
+| Development mode                 | False                                |
++----------------------------------+--------------------------------------+
+| Purge SQL                        | **False**                            |
++----------------------------------+--------------------------------------+
+
+After installing both admin-units, you have to set a shared session-secret to share login-sessions between admin-units. To do this, do the following steps for both admin-units:
+
+- Goto: ``{admin-unit}/acl_users/session/manage_secret``
+- Set a ``Shared secret``
+
+Lastly you have to change the admin-unit urls in the database to localhost.
+
+- Table: ``admin_units``
+- Properties: ``site_url`` and ``public_url``
+
+PostgreSQL-Example:
+
+.. code:: postgresql
+
+    UPDATE admin_units SET site_url = replace("site_url", 'https://dev.onegovgever.ch', 'http://localhost:8080'), public_url = replace("public_url", 'https://dev.onegovgever.ch', 'http://localhost:8080');
 
 
 OGDS synchronization
@@ -269,7 +336,7 @@ changelog entries:
 2. Add your ``[name]`` onto the *same line*, it should never be on a standalone
    line, otherwise it might be deleted by the union merge.
 3. Do *not* insert any empty lines.
-4. Awoid nested lists in your entry, because it makes auto-merging brittle.
+4. Avoid nested lists in your entry, because it makes auto-merging brittle.
    It is better to add each change as a separate changelog entry and prefix
    them, as shown below (see `Feature x`).
    If you must use nested lists, make sure to add an empty line before and
@@ -295,7 +362,7 @@ Updating API docs
 -----------------
 
 In order to build the Sphinx API docs locally, use the provided
-``bin/docs-build-api`` script:
+``bin/docs-build-public`` script:
 
 .. code::
 
@@ -303,19 +370,53 @@ In order to build the Sphinx API docs locally, use the provided
 
 This will build the docs (using the ``html`` target by default). If you'd like
 to build a different output format, supply it as the fist argument to the
-script (e.g. ``bin/docs-build-api latexpdf``).
+script (e.g. ``bin/docs-build-public latexpdf``).
 
 If you made changes to any schema interfaces that need to make their way into
 the docs, you need to run the ``bin/instance dump_schemas`` script before
-running the ``docs-build-api`` script:
+running the ``docs-build-public`` script:
 
 .. code::
 
     bin/instance dump_schemas
 
 This will update the respective schema dumps in ``docs/schema-dumps/`` that
-are then used by the ``docs-build-api`` script to render restructured text
+are then used by the ``docs-build-public`` script to render restructured text
 schema docs.
+
+
+Versions
+--------
+
+Versions are pinned in the file ``versions.cfg`` in the ``opengever.core``
+package.
+
+Versions in development
+~~~~~~~~~~~~~~~~~~~~~~~
+
+In order to add a new dependency or to update one or many dependencies,
+follow these steps:
+
+1. Append new and changed version pinnings at the end of the ``[versions]``
+   section in the ``versions.cfg`` in your local ``opengever.core`` checkout.
+2. Run ``bin/cleanup-versions-cfg``, review and confirm the changes.
+   This script removes duplicates and sorts the dependencies.
+3. Commit the changes to your branch and submit it along with other changes as
+   pull request.
+
+
+Versions in producion
+~~~~~~~~~~~~~~~~~~~~~
+
+For production deployments, the ``versions.cfg`` of a tag can be included
+with a raw github url in buildout like this:
+
+.. code:: ini
+
+    [buildout]
+    extends =
+        https://raw.githubusercontent.com/4teamwork/opengever.core/2017.4.0/versions.cfg
+
 
 
 Scripts
@@ -353,6 +454,85 @@ Once a new policy has been generated the following things need to be added manua
 Tests
 -----
 
+Fixture Objects
+~~~~~~~~~~~~~~~
+
+The fixture objects can be accessed on test-classes subclassing
+``IntegrationTestCase`` with attribute access (``self.dossier``).
+
+Users
+^^^^^
+
+.. <fixture:users>
+
+- ``self.administrator``: ``nicole.kohler``
+- ``self.committee_responsible``: ``franzi.muller``
+- ``self.dossier_responsible``: ``robert.ziegler``
+- ``self.manager``: ``admin``
+- ``self.meeting_user``: ``herbert.jager``
+- ``self.regular_user``: ``kathi.barfuss``
+- ``self.secretariat_user``: ``jurgen.konig``
+
+.. </fixture:users>
+
+Objects
+^^^^^^^
+
+.. <fixture:objects>
+
+.. code::
+
+  - self.committee_container
+    - self.committee
+      - self.meeting
+      - self.submitted_proposal
+      - self.submitted_word_proposal
+    - self.committee_participant
+    - self.committee_president
+    - self.committee_secretary
+    - self.empty_committee
+  - self.repository_root
+    - self.branch_repofolder
+      - self.leaf_repofolder
+        - self.archive_dossier
+        - self.dossier
+          - self.document
+          - self.draft_proposal
+          - self.draft_word_proposal
+          - self.mail_eml
+          - self.mail_msg
+          - self.proposal
+          - self.subdossier
+            - self.subdocument
+          - self.subdossier2
+          - self.task
+            - self.subtask
+            - self.taskdocument
+          - self.word_proposal
+        - self.empty_dossier
+        - self.meeting_dossier
+    - self.empty_repofolder
+  - self.templates
+    - self.proposal_template
+    - self.sablon_template
+
+.. </fixture:objects>
+
+Other values
+^^^^^^^^^^^^
+
+.. <fixture:raw>
+
+- ``self.committee_id``: ``1``
+- ``self.empty_committee_id``: ``2``
+
+.. </fixture:raw>
+
+
+
+Parallelisation
+~~~~~~~~~~~~~~~
+
 Use ``bin/mtest`` for running all test in multiple processes. Alternatively ``bin/test`` runs the tests in sequence.
 The multi process script distributes the packages (e.g. ``opengever.task``, ``opengever.base``, etc) into multiple processes,
 trying to balance the amount of test suites, so that it speeds up the test run.
@@ -361,9 +541,259 @@ The ``bin/mtest`` script can be configured with environment variables:
 
 - ``MTEST_PROCESSORS`` - The amount of processors used in parallel. It should be no greater than the amount
   of available CPU cores. Defaults to ``4``.
-- ``MTEST_NOCOLORS`` - Set this to a positive value (``true``) for disabling the colorization of the output.
-  The colorization is useful for the visual separation of the output of the various processes,
-  but it is not useful in a environment without color support.
+
+Functional or integration testing?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We are shifting the tests from the older functional testing layer to the newer
+integration testing layer.
+
+**Integration testing:**
+
+- Should be used for new tests!
+- Comes with a preinstalled `testing fixtures`_.
+- Transactions are disabled for isolation purposes: `transaction.commit` is not allowed in tests.
+- Uses ``ftw.testbrowser``'s ``TraversalDriver``.
+
+**Functional testing:**
+
+- Should *not be used* for new tests, when possible.
+- Is factory-based, using ``ftw.builder``.
+- Uses transactions.
+- Limited / slow database isolation: a fresh setup is necessary for each test.
+
+
+Example integration test with browser:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code:: python
+
+   from ftw.testbrowser import browsing
+   from ftw.testbrowser.pages import statusmessages
+   from opengever.testing import IntegrationTestCase
+
+   class TestExampleView(IntegrationTestCase):
+
+       @browsing
+       def test_example_view(self, browser):
+           self.login(self.dossier_responsible, browser)
+           browser.open(self.dossier, view='example_view')
+           statusmessages.assert_no_error_messages()
+
+
+Best practices
+~~~~~~~~~~~~~~
+
+These best practices apply to the new **integration testing** layer.
+
+Do not commit the transaction
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Committing the transaction will break isolation.
+The testing layer will prevent you from interacting with the transaction.
+
+Use the fixture objects
+^^^^^^^^^^^^^^^^^^^^^^^
+
+The `testing fixtures`_ create content objects, users, groups and client
+configurations (admin units, org units) which are available for all tests.
+They can and should be modified to the needs of the test.
+
+Avoid creating objects (with ``ftw.builder``)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Creating objects with ``ftw.builder`` or with ``ftw.testbrowser`` is expensive
+because it takes a moment to index the object.
+Therefore we want to avoid creating unnecessary objects within the tests
+so that the tests are faster overall.
+
+Tests which have the job to test object creation (e.g. through the browser)
+obviously need to actually create an object, all other tests should try to
+reuse objects from the fixture and modify them as needed.
+
+Use users from fixture
+^^^^^^^^^^^^^^^^^^^^^^
+
+The fixture provides a set of standard users which should be used in tests.
+Do not use ``plone.app.testing``'s test user with global roles as it does
+not reflect properly how the security model of GEVER works.
+In order to test features which can only be executed by the system or by a
+``Manager``-user, the ``plone.app.testing``'s site owner may be used.
+
+Login
+^^^^^
+
+Integration tests start with *no user logged in*.
+The first thing each test should do, is to log in the user with the fewest
+privileges required for doing the task under test.
+
+The login command should *not* be moved to the ``setUp`` method; it should be
+clearly visible at the beginning of each test, so that a reader has the necessary
+context without scrolling to the top of the file.
+
+When authenticated preparations are required in the ``setUp`` method, use
+``self.login`` as a context manager in order to cleanup the authentication
+on exit, so that the tests still start anonymously.
+
+.. code:: python
+
+   from opengever.testing import IntegrationTestCase
+   from ftw.testbrowser import browsing
+
+   class TestExampleView(IntegrationTestCase):
+
+       def setUp(self):
+           super(TestExampleView, self).setUp()
+           with self.login(self.administrator):
+               self.dossier.prepare_for_test()
+
+       def test_server_side(self):
+           self.login(self.dossier_responsible)
+           self.assertTrue(self.dossier.can_do_important_things())
+
+       @browsing
+       def test_client_side_with_browser(self, browser):
+           self.login(self.regular_user, browser)
+           browser.open(self.dossier)
+           browser.click_on('Do important things')
+
+
+
+Do not assert ``browser.contents``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The statement `self.assertIn('The label', browser.contents)` will print the
+complete HTML document as failure message.
+This is distracting and not useful at all.
+
+Instead you should select specific nodes and do assertions on those nodes, e.g.
+
+.. code:: python
+
+   from opengever.testing import IntegrationTestCase
+   from ftw.testbrowser import browsing
+
+   class TestExampleView(IntegrationTestCase):
+
+       @browsing
+       def test_label(self, browser):
+           self.assertEquals('The label',
+                             browser.css('label.foo').first.text)
+
+This allows the browser to help when print a nice error message when the node
+was not found:
+``NoElementFound: Empty result set: browser.css("label.foo") did not match any nodes.``
+
+When the view does not return a complete HTML document but, for example, a status
+only (``OK``), or it is some kind of API endpoint, ``browser.contents`` may be
+asserted.
+
+
+Use ``tearDown`` carefully
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Do not tear down changes which are taken care of by some kind of isolation:
+
+- Do *not* tear down ZODB changes: the ZODB is isolated by ``plone.app.testing``.
+- Do *not* tear down SQL changes: we take care of that in the SQL testing layer
+  with savepoints / rollbacks.
+- Do *not* tear down component registry changes (e.g. new adapters, utilities,
+  event handlers) as this is taken care of by the
+  `COMPONENT_REGISTRY_ISOLATION`_ layer.
+- *Do* tear down modifications in environment variables (``os.environ``).
+- *Do* tear down modifications stored in module globals (e.g.
+  transmogrifier sections).
+
+Use guard assertions
+^^^^^^^^^^^^^^^^^^^^
+
+When your test expects a specific state in order to work properly, this state
+should be ensured by using guard assertions.
+
+.. code:: python
+
+    def test_closing_dossier(self):
+        self.assertTrue(self.dossier.is_open(),
+                        'Precondition: assumed dossier to be open')
+        self.dossier.close()
+        self.assertFalse(self.dossier.is_open())
+
+If the ``self.dossier`` is changed to be not open by default anymore, the failure
+should tell us that a precondition was no longer met rather than implying that
+the ``close()`` method is broken.
+The statement also acts as "given"-statement and a reader can easily figure out
+what the precondition is, because it is visually separated.
+
+Alternatively a precondition can be ensured by setting the state of the object:
+
+.. code:: python
+
+    def test_title_is_journalized_on_action(self):
+        self.dossier.title = u'The dossier'
+        action(self.dossier)
+        self.assertEquals(u'The dossier',
+                          last_journal_entry(self.dossier).title)
+
+Activating feature flags
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+Feature flags can by activated test-case-wide by setting a tuple of all
+required flags:
+
+.. code:: python
+
+    class TestDossierTemplate(IntegrationTestCase):
+        features = ('dossiertemplate',)
+
+When a feature should not be activated test-case-wide it can be activated
+within a single test:
+
+.. code:: python
+
+    class TestTemplates(IntegrationTestCase):
+
+        def test_adding_dossier_template(self):
+            self.activate_feature('meeting')
+
+
+See the `list of feature flags <https://github.com/4teamwork/opengever.core/blob/master/opengever/testing/integration_test_case.py>`_.
+
+
+Cache integration testing setup
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When developing ``opengever.core``, a developer often runs a single test module,
+with ``bin/test -m opengever.dossier.tests.test_activate`` for instance.
+This will set up a complete fixture each time.
+In order to speed up the feedback loop when developing,
+we try to cache the database after setting up the fixture.
+This will speed up the test runs, but it also makes the result inaccurate:
+if the cachekeys do not detect a relevant change, we may not realize
+that something breaks.
+
+Because the results are not accurate and this is an experiment, the feature is
+considered experimental and therefore disabled by default.
+
+You can enable the feature by setting an environment variable:
+
+.. code:: sh
+
+    GEVER_CACHE_TEST_DB=true bin/test -m opengever.dossier.tests.test_activate
+
+There is also a binary which does that for you for just one run for convenience:
+
+.. code:: sh
+
+    bin/test-cached -m opengever.dossier.tests.test_activate
+
+You can manually remove / rebuild the caches:
+
+.. code:: sh
+
+    ./bin/remove-test-cache
+
+This feature is disabled on the CI server.
+
 
 Builder API
 ~~~~~~~~~~~
@@ -390,38 +820,6 @@ Then you can use the ``Builder`` function in your test cases:
                        .attach_file_containing("test_data"))
 
 Note that when using the ``OPENGEVER_FUNCTIONAL_TESTING`` Layer the ``Builder`` will automatically do a ``transaction.commit()`` when ``create()`` is called.
-
-
-Browser API
-~~~~~~~~~~~
-
-The center of the `Browser API` is the ``OGBrowser`` class. It's a
-simple subclass of ``plone.testing.z2.Browser`` and the easiest way to
-use it is to extend ``opengever.testing.FunctionalTestCase``:
-
-.. code:: python
-
-    from opengever.testing import FunctionalTestCase
-
-
-    class TestExample(FunctionalTestCase):
-        use_browser = True
-
-        def test_first_example(self):
-          self.browser # => instance of OGBrowser
-
-Now you can use the ``self.browser`` instance:
-
-.. code:: python
-
-    self.browser.fill({'Title': "My first Dossier",
-                       'Description': "This is my first Dossier"})
-    self.browser.click('Save')
-    self.browser.assert_url("http://nohost/plone/dossier-1")
-
-Have a look at the `opengever.testing.browser module
-<https://github.com/4teamwork/opengever.core/blob/master/opengever/testing/browser.py>`_
-to see the complete API.
 
 
 Testing Inbound Mail
@@ -579,3 +977,7 @@ Example configuration:
           }
       }
   ]
+
+
+.. _testing fixtures: https://github.com/4teamwork/opengever.core/blob/master/opengever/testing/fixtures.py
+.. _COMPONENT_REGISTRY_ISOLATION: https://github.com/4teamwork/ftw.testing#component-registry-isolation-layer

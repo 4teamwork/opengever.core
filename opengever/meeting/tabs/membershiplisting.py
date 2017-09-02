@@ -1,12 +1,14 @@
-from five import grok
 from ftw.table.interfaces import ITableSource
 from ftw.table.interfaces import ITableSourceConfig
 from opengever.meeting import _
 from opengever.meeting.model import Membership
 from opengever.tabbedview import BaseListingTab
 from opengever.tabbedview import SqlTableSource
+from zope.component import adapter
+from zope.interface import implementer
 from zope.interface import implements
 from zope.interface import Interface
+from opengever.meeting.model import Member
 
 
 class IMembershipTableSourceConfig(ITableSourceConfig):
@@ -17,6 +19,7 @@ class MembershipListingTab(BaseListingTab):
     implements(IMembershipTableSourceConfig)
 
     model = Membership
+    sqlalchemy_sort_indexes = {'member_id': Member.fullname}
 
     @property
     def columns(self):
@@ -39,14 +42,15 @@ class MembershipListingTab(BaseListingTab):
         )
 
     def get_base_query(self):
-        return Membership.query.filter_by(committee=self.context.load_model())
+        return Membership.query.filter_by(
+            committee=self.context.load_model()).join(Membership.member)
 
     def get_member_link(self, item, value):
         return item.member.get_link(self.context)
 
 
+@implementer(ITableSource)
+@adapter(IMembershipTableSourceConfig, Interface)
 class MembershipTableSource(SqlTableSource):
-    grok.implements(ITableSource)
-    grok.adapts(MembershipListingTab, Interface)
 
     searchable_columns = []

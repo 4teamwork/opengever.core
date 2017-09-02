@@ -6,7 +6,6 @@ $(function() {
 
   $(document).bind('tree:rendered', function() {
     limit_treeportlet_height();
-    scroll_to_selected_item(portlet.find('.portlet-tabs > .tab'));
   });
 
 
@@ -41,6 +40,7 @@ $(function() {
           navtree.render(tree_node);
           navtree.selectCurrent(find_parent_node_for_url(
               navtree, portlet.data('context-url')));
+          scroll_to_selected_item();
         });
   });
 
@@ -139,11 +139,12 @@ $(function() {
     tabs.css('max-height', 'calc(100vh - ' + offset + 'px');
   }
 
-  function scroll_to_selected_item(tree) {
-    var position = tree.find('a.current').position();
-    if (position) {
-      $('.portletTreePortlet dd.portletItem').scrollTop(position.top - 60);
-    }
+  function scroll_to_selected_item() {
+    var tree = $("#tree-complete");
+    var portletHeader = $(".portlet-header-tabs");
+    var current = tree.find("a.current");
+    if(!current.length) { return; }
+    tree.scrollTop(tree.scrollTop() + current.position().top - portletHeader.height());
   }
 
   function sort_by_text(list_of_nodes) {

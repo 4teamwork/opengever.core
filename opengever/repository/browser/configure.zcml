@@ -27,4 +27,61 @@
       layer="opengever.base.interfaces.IOpengeverBaseLayer"
       />
 
+  <adapter
+      factory=".repositoryroot_forms.AddView"
+      provides="zope.publisher.interfaces.browser.IBrowserPage"
+      name="opengever.repository.repositoryroot"
+      />
+
+  <browser:page
+      name="edit"
+      for="opengever.repository.repositoryroot.IRepositoryRoot"
+      class=".repositoryroot_forms.EditForm"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <adapter
+      factory=".repositoryfolder_forms.AddView"
+      provides="zope.publisher.interfaces.browser.IBrowserPage"
+      name="opengever.repository.repositoryfolder"
+      />
+
+  <browser:page
+      name="edit"
+      for="opengever.repository.repositoryfolder.IRepositoryFolder"
+      class=".repositoryfolder_forms.EditForm"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <browser:page
+      for="opengever.repository.repositoryfolder.IRepositoryFolderSchema"
+      name="delete_repository"
+      class=".deletion.RepositoryDeletionView"
+      permission="zope2.DeleteObjects"
+      template="templates/deletion.pt"
+      />
+
+  <browser:page
+      for="*"
+      name="is_deletion_allowed"
+      class=".deletion.RepositoryDeletionAllowed"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.repository.repositoryroot.IRepositoryRoot"
+      name="tabbedview_view-overview"
+      class=".overview.RepositoryRootOverview"
+      template="templates/repositoryrootoverview.pt"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="*"
+      name="primary_repository_root"
+      class=".primary_repository_root.PrimaryRepositoryRoot"
+      template="templates/repositoryrootoverview.pt"
+      permission="zope2.View"
+      />
+
 </configure>

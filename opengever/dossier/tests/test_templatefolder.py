@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from datetime import date
 from datetime import datetime
 from ftw.builder import Builder
@@ -18,6 +20,7 @@ from opengever.dossier.templatefolder.interfaces import ITemplateFolder
 from opengever.dossier.tests import OGDS_USER_ATTRIBUTES
 from opengever.journal.handlers import DOC_PROPERTIES_UPDATED
 from opengever.journal.tests.utils import get_journal_entry
+from opengever.officeconnector.interfaces import IOfficeConnectorSettings
 from opengever.ogds.base.actor import Actor
 from opengever.testing import add_languages
 from opengever.testing import FunctionalTestCase
@@ -46,18 +49,18 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
     document_date = datetime(2015, 9, 28, 0, 0)
 
     expected_doc_properties = {
-         'Document.ReferenceNumber': 'Client1 / 2 / 4',
+         'Document.ReferenceNumber': 'Client1 / 1 / 4',
          'Document.SequenceNumber': '4',
-         'Dossier.ReferenceNumber': 'Client1 / 2',
+         'Dossier.ReferenceNumber': 'Client1 / 1',
          'Dossier.Title': 'My Dossier',
          'User.FullName': 'Test User',
          'User.ID': TEST_USER_ID,
          'ogg.document.document_date': document_date,
-         'ogg.document.reference_number': 'Client1 / 2 / 4',
+         'ogg.document.reference_number': 'Client1 / 1 / 4',
          'ogg.document.sequence_number': '4',
          'ogg.document.title': 'Test Docx',
-         'ogg.dossier.reference_number': 'Client1 / 2',
-         'ogg.dossier.sequence_number': '2',
+         'ogg.dossier.reference_number': 'Client1 / 1',
+         'ogg.dossier.sequence_number': '1',
          'ogg.dossier.title': 'My Dossier',
          'ogg.user.email': 'test@example.org',
          'ogg.user.firstname': 'User',
@@ -79,7 +82,9 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
         self.templatefolder = create(Builder('templatefolder'))
         self.template_a = create(Builder('document')
                                  .titled('Template A')
+                                 .with_dummy_content()
                                  .within(self.templatefolder)
+                                 .with_dummy_content()
                                  .with_modification_date(self.modification_date))
         self.template_b = create(Builder('document')
                                  .titled('Template B')
@@ -145,6 +150,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
         create(Builder('document')
                .titled('Template C')
                .within(subtemplatefolder)
+               .with_dummy_content()
                .with_modification_date(self.modification_date))
 
         browser.login().open(self.dossier, view='document_with_template')
@@ -243,11 +249,10 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
                                   zip_code=u'1234',
                                   city=u'Hinterkappelen',
                                   country=u'Schweiz'))
-        address2 = create(Builder('address')
-                          .for_contact(peter)
-                          .labeled(u'Home')
-                          .having(street=u'Hauptstrasse 1',
-                                  city=u'Vorkappelen'))
+        create(Builder('address')
+               .for_contact(peter)
+               .labeled(u'Home')
+               .having(street=u'Hauptstrasse 1', city=u'Vorkappelen'))
         mailaddress = create(Builder('mailaddress')
                              .for_contact(peter)
                              .having(address=u'foo@example.com'))
@@ -313,13 +318,13 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
         org_role = create(Builder('org_role').having(
             person=peter, organization=organization, function=u'cheffe'))
 
-        address1 = create(Builder('address')
-                          .for_contact(organization)
-                          .labeled(u'Home')
-                          .having(street=u'Musterstrasse 283',
-                                  zip_code=u'1234',
-                                  city=u'Hinterkappelen',
-                                  country=u'Schweiz'))
+        create(Builder('address')
+               .for_contact(organization)
+               .labeled(u'Home')
+               .having(street=u'Musterstrasse 283',
+                       zip_code=u'1234',
+                       city=u'Hinterkappelen',
+                       country=u'Schweiz'))
         mailaddress = create(Builder('mailaddress')
                              .for_contact(organization)
                              .having(address=u'foo@example.com'))
@@ -484,6 +489,39 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
         with TemporaryDocFile(document.file) as tmpfile:
             self.assertItemsEqual([], read_properties(tmpfile.path))
 
+    @browsing
+    def test_templates_without_a_file_are_not_listed(self, browser):
+        create(Builder('document')
+               .titled(u'Template with no content')
+               .within(self.templatefolder))
+
+        browser.login().open(self.dossier, view='document_with_template')
+
+        self.assertEquals(
+            ['Template A', 'Template B'],
+            [row.get('Title')
+             for row in browser.css('table.listing').first.dicts()])
+
+    @browsing
+    def test_opens_doc_with_officeconnector_when_feature_flaged(self, browser):
+        api.portal.set_registry_record('direct_checkout_and_edit_enabled',
+                                       True,
+                                       interface=IOfficeConnectorSettings)
+
+        template_word = create(Builder('document')
+                               .titled('Word Docx template')
+                               .within(self.templatefolder)
+                               .with_dummy_content())
+
+        browser.login().open(self.dossier, view='document_with_template')
+        browser.fill({'form.widgets.template': _make_token(template_word),
+                      'Title': 'Test OfficeConnector'}).save()
+
+        self.assertIn(
+            "'oc:",
+            browser.css('script.redirector').first.text,
+            'OfficeConnector redirection script not found')
+
 
 class TestTemplateFolder(FunctionalTestCase):
 
@@ -536,10 +574,10 @@ class TestTemplateFolder(FunctionalTestCase):
                       'Title (French)': u'mod\xe8le'})
         browser.find('Save').click()
 
-        browser.find('FR').click()
+        browser.find(u'Français').click()
         self.assertEquals(u'mod\xe8le', browser.css('h1').first.text)
 
-        browser.find('DE').click()
+        browser.find('Deutsch').click()
         self.assertEquals(u'Vorlagen', browser.css('h1').first.text)
 
     @browsing
@@ -549,18 +587,6 @@ class TestTemplateFolder(FunctionalTestCase):
         browser.login().visit(templatefolder)
 
         self.assertEqual(0, len(browser.css('.formTab #tab-dossiertemplates')))
-
-    @browsing
-    def test_prefill_responsible_user(self, browser):
-        self.grant('Manager')
-        add_languages(['de-ch'])
-        browser.login().open(self.portal)
-        factoriesmenu.add('Template Folder')
-
-        self.assertEqual(
-            'Test User (test@example.org)',
-            browser.css('#formfield-form-widgets-IDossier-responsible option[selected]').first.text
-            )
 
     @browsing
     def test_portlet_inheritance_is_blocked(self, browser):
@@ -683,7 +709,8 @@ class TestTemplateFolderListings(FunctionalTestCase):
 
         table_heading = browser.css('table.listing').first.lists()[0]
         self.assertEquals(['', 'Sequence Number', 'Title', 'Document Author',
-                           'Document Date', 'Checked out by', 'Public Trial'],
+                           'Document Date', 'Checked out by', 'Public Trial',
+                           'Reference Number'],
                           table_heading)
 
     @browsing
@@ -692,7 +719,8 @@ class TestTemplateFolderListings(FunctionalTestCase):
 
         table_heading = browser.css('table.listing').first.lists()[0]
         self.assertEquals(['', 'Sequence Number', 'Title', 'Document Author',
-                           'Document Date', 'Checked out by', 'Public Trial'],
+                           'Document Date', 'Checked out by', 'Public Trial',
+                           'Reference Number'],
                           table_heading)
 
     @browsing
@@ -701,17 +729,8 @@ class TestTemplateFolderListings(FunctionalTestCase):
 
         table_heading = browser.css('table.listing').first.lists()[0]
         self.assertEquals(['', 'Sequence Number', 'Title', 'Document Author',
-                           'Document Date', 'Checked out by', 'Public Trial'],
-                          table_heading)
-
-    @browsing
-    def test_receipt_delivery_and_subdossier_column_are_hidden_in_trash_tab(self, browser):
-        create(Builder('document').within(self.templatefolder).trashed())
-
-        browser.login().open(self.templatefolder, view=TRASH_TAB)
-        table_heading = browser.css('table.listing').first.lists()[0]
-        self.assertEquals(['', 'Sequence Number', 'Title', 'Document Author',
-                          'Document Date', 'Public Trial'],
+                           'Document Date', 'Checked out by', 'Public Trial',
+                           'Reference Number'],
                           table_heading)
 
     @browsing
@@ -719,8 +738,8 @@ class TestTemplateFolderListings(FunctionalTestCase):
         browser.login().open(self.templatefolder, view=DOCUMENT_TAB)
 
         self.assertItemsEqual(
-            ['Copy Items', 'Checkin with comment', 'Checkin without comment',
-             'Export selection', 'trashed', 'Export as Zip'],
+            ['Copy Items', 'Checkin with comment', 'Delete', 'Checkin without comment',
+             'Export selection', 'Move Items', 'Export as Zip'],
             browser.css('.actionMenuContent li').text)
 
     @browsing
@@ -740,8 +759,8 @@ class TestTemplateFolderListings(FunctionalTestCase):
         browser.login().open(self.templatefolder, view=SABLONTEMPLATES_TAB)
 
         self.assertItemsEqual(
-            ['Copy Items', 'Checkin with comment', 'Checkin without comment',
-             'Export selection', 'trashed', 'Export as Zip'],
+            ['Copy Items', 'Checkin with comment', 'Delete', 'Checkin without comment',
+             'Export selection', 'Export as Zip'],
             browser.css('.actionMenuContent li').text)
 
     @browsing
@@ -749,8 +768,8 @@ class TestTemplateFolderListings(FunctionalTestCase):
         browser.login().open(self.templatefolder, view=PROPOSALTEMPLATES_TAB)
 
         self.assertItemsEqual(
-            ['Copy Items', 'Checkin with comment', 'Checkin without comment',
-             'Export selection', 'trashed', 'Export as Zip'],
+            ['Copy Items', 'Checkin with comment', 'Delete', 'Checkin without comment',
+             'Export selection', 'Export as Zip'],
             browser.css('.actionMenuContent li').text)
 
     @browsing
@@ -776,20 +795,6 @@ class TestTemplateFolderListings(FunctionalTestCase):
         self.assertEqual(1, len(templates))
         template_link = templates[0]['Title'].css('a').first.get('href')
         self.assertEqual(self.proposaltemplate.absolute_url(), template_link)
-
-    @browsing
-    def test_trash_tab_lists_only_documents_directly_beneath(self, browser):
-        trashed = create(
-            Builder('document').trashed().within(self.templatefolder))
-        subdossier = create(Builder('templatefolder')
-                            .within(self.templatefolder))
-        create(Builder('document').trashed().within(subdossier))
-
-        browser.login().open(self.templatefolder, view=TRASH_TAB)
-        templates = browser.css('table.listing').first.dicts(as_text=False)
-        self.assertEqual(1, len(templates))
-        trashed_link = templates[0]['Title'].css('a').first.get('href')
-        self.assertEqual(trashed.absolute_url(), trashed_link)
 
 
 class TestTemplateDocumentTabs(FunctionalTestCase):
@@ -833,7 +838,7 @@ class TestTemplateDocumentTabs(FunctionalTestCase):
 
         browser.open(self.template, view=INFO_TAB)
         self.assertEquals([['Logged-in users', False, False, False],
-                           [TEST_USER_ID, True, True, True]],
+                           ['test-user (test_user_1_)', True, True, True]],
                           sharing_tab_data())
 
 

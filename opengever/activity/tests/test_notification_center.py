@@ -23,7 +23,7 @@ class TestResourceHandling(ActivityTestCase):
 
     def test_add_watcher_to_a_resource(self):
         hugo = create(Builder('watcher').having(actorid='hugo'))
-        peter = create(Builder('watcher').having(actorid='peter'))
+        create(Builder('watcher').having(actorid='peter'))
         res = create(Builder('resource').oguid('fd:1234'))
 
         res.add_watcher('hugo', TASK_ISSUER_ROLE)
@@ -124,6 +124,12 @@ class TestWatcherHandling(ActivityTestCase):
                             .oguid('fd:123').watchers([hugo, fritz]))
         resource_2 = create(Builder('resource')
                             .oguid('fd:456').watchers([peter]))
+
+        # A weakref gets reaped unless we keep a reference to the resources.
+        # https://stackoverflow.com/questions/30044069/stale-association-proxy-parent-object-has-gone-out-of-scope-with-flask-sqlalc
+        # So to squelch pyflakes we do trivial asserts on them here.
+        self.assertEquals(123, resource_1.int_id)
+        self.assertEquals(456, resource_2.int_id)
 
         self.assertEquals([hugo, fritz], self.center.get_watchers(Oguid('fd', '123')))
         self.assertEquals([peter],

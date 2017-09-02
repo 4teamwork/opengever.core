@@ -169,6 +169,17 @@ class TestDocumentTooltip(FunctionalTestCase):
         self.assertNotIn(
             'Download copy', browser.css('.file-action-buttons a').text)
 
+    @browsing
+    def test_download_link_redirects_to_orginal_message_when_exists(self, browser):  # noqa
+        mail = create(Builder('mail')
+                      .with_dummy_message()
+                      .with_dummy_original_message())
+        browser.login().open(mail, view='tooltip')
+
+        self.assertTrue(
+            browser.find('Download copy').get('href').startswith(
+                'http://nohost/plone/document-1/@@download/original_message?'))
+
 
 class TestDocumentLinkWidgetWithActivatedBumblebee(FunctionalTestCase):
     """Test document link widget interactions with Bumblebee."""

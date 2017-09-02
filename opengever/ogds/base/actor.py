@@ -26,7 +26,6 @@ from opengever.ogds.base import _
 from opengever.ogds.base.browser.userdetails import UserDetails
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
-from plone import api
 from Products.CMFCore.interfaces._tools import IMemberData
 from Products.CMFCore.utils import getToolByName
 from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser

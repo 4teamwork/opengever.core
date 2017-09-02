@@ -21,7 +21,6 @@ tables = [
     'members',
     'memberships',
     'periods',
-    'proposalhistory',
     'proposals',
     'submitteddocuments',
 ]

@@ -1,12 +1,12 @@
-from five import grok
 from opengever.base.menu import FilteredPostFactoryMenu
 from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from zope.component import adapter
 from zope.interface import Interface
 
 
+@adapter(IDossierMarker, Interface)
 class DossierPostFactoryMenu(FilteredPostFactoryMenu):
-    grok.adapts(IDossierMarker, Interface)
 
     dossier_types = [u'opengever.dossier.businesscasedossier',
                      u'opengever.private.dossier']

@@ -2,7 +2,6 @@ from opengever.base.model import create_session
 from opengever.base.response import JSONResponse
 from opengever.base.utils import to_safe_html
 from opengever.contact import _
-from opengever.contact.models.contact import Contact
 from opengever.contact.models.mailaddress import MailAddress
 from plone import api
 from Products.Five.browser import BrowserView

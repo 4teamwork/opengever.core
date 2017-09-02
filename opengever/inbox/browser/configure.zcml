@@ -18,4 +18,68 @@
       permission="zope2.View"
       />
 
+  <!-- tabs -->
+  <browser:page
+      name="tabbedview_view-assigned_inbox_tasks"
+      for="opengever.inbox.inbox.IInbox"
+      class=".tabs.AssignedInboxTasks"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="tabbedview_view-issued_inbox_tasks"
+      for="opengever.inbox.inbox.IInbox"
+      class=".tabs.IssuedInboxTasks"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="tabbedview_view-closed-forwardings"
+      for="opengever.inbox.yearfolder.IYearFolder"
+      class=".tabs.ClosedForwardings"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="tabbedview_view-documents"
+      for="opengever.inbox.inbox.IInbox"
+      class=".tabs.InboxDocuments"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="tabbedview_view-trash"
+      for="opengever.inbox.inbox.IInbox"
+      class=".tabs.InboxTrash"
+      permission="zope2.View"
+      />
+
+  <adapter
+      name="opengever.inbox.container"
+      provides="zope.publisher.interfaces.browser.IBrowserPage"
+      factory=".inboxcontainer_forms.AddView"
+      />
+
+  <browser:page
+      name="edit"
+      for="opengever.inbox.container.IInboxContainer"
+      class=".inboxcontainer_forms.EditForm"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <adapter
+      name="opengever.inbox.inbox"
+      provides="zope.publisher.interfaces.browser.IBrowserPage"
+      factory=".inbox_forms.AddView"
+      />
+
+  <browser:page
+      name="edit"
+      for="opengever.inbox.inbox.IInbox"
+      class=".inbox_forms.EditForm"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <adapter factory=".menu.InboxPostFactoryMenu" />
+
 </configure>

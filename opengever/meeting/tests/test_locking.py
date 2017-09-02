@@ -36,6 +36,7 @@ class TestMeetingLocking(FunctionalTestCase):
             excerpt_template=self.sablon_template))
 
         self.committee = create(Builder('committee').within(container))
+        self.grant('CommitteeResponsible', on=self.committee)
         self.proposal = create(Builder('proposal')
                                .within(self.dossier)
                                .having(title='Mach doch',
@@ -54,6 +55,8 @@ class TestMeetingLocking(FunctionalTestCase):
             Builder('agenda_item')
             .having(meeting=self.meeting,
                     proposal=self.proposal_model))
+
+        self.grant('Contributor', 'Editor', 'Reader', 'MeetingUser')
 
     @browsing
     def test_editing_a_protocol_locks_meeting(self, browser):
@@ -99,9 +102,13 @@ class TestMeetingLocking(FunctionalTestCase):
 
     @browsing
     def test_protocol_raise_redirect_back_to_meeting_view_when_protocol_is_locked(self, browser):
-        user = create(Builder('user')
-                      .named('Hugo', 'Boss')
-                      .in_groups('client1_users'))
+        create(Builder('user')
+               .named('Hugo', 'Boss')
+               .in_groups('client1_users'))
+        # CommitteeResponsible is assigned globally here for the sake of
+        # simplicity
+        self.grant('Contributor', 'Editor', 'Reader', 'MeetingUser',
+                   'CommitteeResponsible', user_id='hugo.boss')
         browser.login(username='hugo.boss').open(self.meeting.get_url(view='protocol'))
 
         browser.login().open(self.meeting.get_url(view='protocol'))
@@ -113,9 +120,13 @@ class TestMeetingLocking(FunctionalTestCase):
 
     @browsing
     def test_meeting_view_shows_information_when_is_locked(self, browser):
-        user = create(Builder('user')
-                      .named('Hugo', 'Boss')
-                      .in_groups('client1_users'))
+        create(Builder('user')
+               .named('Hugo', 'Boss')
+               .in_groups('client1_users'))
+        # CommitteeResponsible is assigned globally here for the sake of
+        # simplicity
+        self.grant('Contributor', 'Editor', 'Reader', 'MeetingUser',
+                   'CommitteeResponsible', user_id='hugo.boss')
         browser.login(username='hugo.boss').open(self.meeting.get_url(view='protocol'))
 
         browser.login().open(self.meeting.get_url(),

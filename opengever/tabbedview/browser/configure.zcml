@@ -3,12 +3,200 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="opengever.tabbedview">
 
+  <adapter factory=".tasklisting.GlobalTaskTableSource" />
+  <adapter factory=".users.UsersListingTableSource" />
+
+  <browser:page
+      for="plone.dexterity.interfaces.IDexterityContainer"
+      name="document-redirector"
+      class=".tabs.DocumentRedirector"
+      permission="cmf.AddPortalContent"
+      />
+
   <browser:page
       for="*"
       name="personal_overview"
       class=".personal_overview.PersonalOverview"
       permission="zope2.View"
       allowed_interface="ftw.tabbedview.interfaces.ITabbedViewEndpoints"
+      />
+
+  <browser:page
+      for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot"
+      name="ogds-controlpanel"
+      class=".ogdscontrolpanel.OGDSControlPanel"
+      permission="cmf.ManagePortal"
+      allowed_interface="ftw.tabbedview.interfaces.ITabbedViewEndpoints"
+      />
+
+  <browser:page
+      for="*"
+      name="ogds-controlpanel"
+      class=".watchers.Watchers"
+      permission="cmf.ManagePortal"
+      />
+
+  <!-- tabs -->
+  <browser:page
+      for="*"
+      name="tabbedview_view-dossiers"
+      class=".tabs.Dossiers"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="*"
+      name="tabbedview_view-subdossiers"
+      class=".tabs.SubDossiers"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="ftw.tabbedview.interfaces.ITabbedView"
+      name="tabbedview_view-documents-proxy"
+      class=".tabs.DocumentsProxy"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="*"
+      name="tabbedview_view-documents"
+      class=".tabs.Documents"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="ftw.tabbedview.interfaces.ITabbedView"
+      name="tabbedview_view-trash-proxy"
+      class=".tabs.TrashProxy"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="*"
+      name="tabbedview_view-trash"
+      class=".tabs.Trash"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="*"
+      name="tabbedview_view-tasks"
+      class=".tabs.Tasks"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.dossier.interfaces.IDossierMarker"
+      name="tabbedview_view-proposals"
+      class=".tabs.Proposals"
+      permission="zope2.View"
+      />
+
+  <!-- contactfolder tabs -->
+  <browser:page
+      for="*"
+      name="tabbedview_view-users"
+      class=".users.UsersListing"
+      permission="zope2.View"
+      />
+
+  <!-- personal overview tabs -->
+  <browser:page
+      for="*"
+      name="tabbedview_view-mydossiers"
+      class=".personal_overview.MyDossiers"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="*"
+      name="tabbedview_view-mydocuments-proxy"
+      class=".personal_overview.MyDocumentsProxy"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="*"
+      name="tabbedview_view-mydocuments"
+      class=".personal_overview.MyDocuments"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="*"
+      name="tabbedview_view-mytasks"
+      class=".personal_overview.MyTasks"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="*"
+      name="tabbedview_view-myissuedtasks"
+      class=".personal_overview.IssuedTasks"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="*"
+      name="tabbedview_view-myproposals"
+      class=".personal_overview.MyProposals"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="*"
+      name="tabbedview_view-alltasks"
+      class=".personal_overview.AllTasks"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="*"
+      name="tabbedview_view-allissuedtasks"
+      class=".personal_overview.AllIssuedTasks"
+      permission="zope2.View"
+      />
+
+  <!-- ogds control panel tabs -->
+  <browser:page
+      for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot"
+      name="tabbedview_view-ogds-cp-alltasks"
+      class=".ogdscontrolpanel.OGDSAllTasks"
+      permission="cmf.ManagePortal"
+      />
+
+  <!-- bumblebee gallery tabs and views -->
+  <browser:page
+      for="*"
+      name="tabbedview_view-documents-gallery"
+      class=".bumblebee_gallery.DocumentsGallery"
+      permission="zope2.View"
+      allowed_attributes="fetch"
+      />
+
+  <browser:page
+      for="*"
+      name="tabbedview_view-mydocuments-gallery"
+      class=".bumblebee_gallery.MyDocumentsGallery"
+      permission="zope2.View"
+      allowed_attributes="fetch"
+      />
+
+  <browser:page
+      for="*"
+      name="tabbedview_view-trash-gallery"
+      class=".bumblebee_gallery.TrashGallery"
+      permission="zope2.View"
+      allowed_attributes="fetch"
+      />
+
+  <browser:page
+      for="*"
+      name="tabbedview_view-relateddocuments-gallery"
+      class=".bumblebee_gallery.RelatedDocumentsGallery"
+      permission="zope2.View"
+      allowed_attributes="fetch"
       />
 
   <browser:resourceDirectory

@@ -35,3 +35,7 @@ class IPeriodWrapper(ISQLObjectWrapper):
 
 class IMeetingDossier(form.Schema):
     """Marker interface for MeetingDossier"""
+
+
+class IHistory(Interface):
+    """History for an object."""

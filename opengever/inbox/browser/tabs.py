@@ -1,7 +1,4 @@
-from five import grok
 from opengever.globalindex.model.task import Task
-from opengever.inbox.inbox import IInbox
-from opengever.inbox.yearfolder import IYearFolder
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.tabbedview.browser.tabs import Documents
 from opengever.tabbedview.browser.tabs import Tasks
@@ -26,10 +23,6 @@ class AssignedInboxTasks(GlobalTaskListingTab):
     """Listing of tasks (including forwardings) which the
     responsible is the inbox of the current selected org unit."""
 
-    grok.name('tabbedview_view-assigned_inbox_tasks')
-    grok.require('zope2.View')
-    grok.context(IInbox)
-
     enabled_actions = [
         'pdf_taskslisting',
         'export_tasks',
@@ -51,10 +44,6 @@ class IssuedInboxTasks(GlobalTaskListingTab):
     """Listing of tasks (including forwardings) which the
     the inbox of the current selected org unit is the issuer."""
 
-    grok.name('tabbedview_view-issued_inbox_tasks')
-    grok.require('zope2.View')
-    grok.context(IInbox)
-
     enabled_actions = [
         'pdf_taskslisting',
         'export_tasks',
@@ -74,10 +63,6 @@ class IssuedInboxTasks(GlobalTaskListingTab):
 
 class ClosedForwardings(Tasks):
 
-    grok.name('tabbedview_view-closed-forwardings')
-    grok.context(IYearFolder)
-    grok.require('zope2.View')
-
     types = ['opengever.inbox.forwarding', ]
     enabled_actions = []
     major_actions = []
@@ -88,8 +73,6 @@ class InboxDocuments(Documents):
     """Lists documents directly inside the inbox, which are marked
     with the current org unit.
     """
-
-    grok.context(IInbox)
 
     # do not list documents in forwardings
     depth = 1
@@ -103,7 +86,7 @@ class InboxDocuments(Documents):
         """Remove default columns `containing_subdossier`, `checked_out`
         and `external_edit`.
         """
-        remove_columns = ['containing_subdossier', 'checked_out']
+        remove_columns = ['containing_subdossier', 'checked_out', 'reference']
         columns = []
 
         for col in super(InboxDocuments, self).columns:
@@ -143,8 +126,6 @@ class InboxTrash(Trash):
 
     Columns: the default columns `containing_subdossier` and `checked_out`
     are removed."""
-
-    grok.context(IInbox)
 
     search_options = {'trashed': True}
 

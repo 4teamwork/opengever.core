@@ -1,10 +1,7 @@
 from five import grok
-from opengever.base.interfaces import IRedirector
 from opengever.document import _
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
-from opengever.officeconnector.helpers import create_oc_url
-from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
 from Products.CMFCore.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
 from zope.component import getMultiAdapter
@@ -70,21 +67,11 @@ class CheckoutDocuments(grok.View):
         # lets register a redirector for starting external
         # editor - if requested
         external_edit = self.request.get('mode') == 'external'
-        if len(objects) == 1 and external_edit:
-            redirector = IRedirector(self.request)
-            if not is_officeconnector_checkout_feature_enabled():
-                redirector.redirect(
-                    '%s/external_edit' % objects[0].absolute_url(),
-                    target='_self',
-                    timeout=1000)
-            else:
-                redirector.redirect(create_oc_url(
-                    self.request,
-                    self.context,
-                    dict(action='checkout'),
-                    ))
+
         # now lets redirect to an appropriate target..
         if len(objects) == 1:
+            if external_edit:
+                objects[0].setup_external_edit_redirect(self.request)
             return self.request.RESPONSE.redirect(
                 objects[0].absolute_url())
 

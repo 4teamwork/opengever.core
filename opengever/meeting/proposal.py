@@ -1,8 +1,9 @@
+from AccessControl import getSecurityManager
 from Acquisition import aq_inner
 from Acquisition import aq_parent
+from collective import dexteritytextindexer
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.interfaces import IReferenceNumber
-from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.base.security import elevated_privileges
 from opengever.base.source import DossierPathSourceBinder
@@ -11,14 +12,14 @@ from opengever.document.widgets.document_link import DocumentLinkWidget
 from opengever.dossier.utils import get_containing_dossier
 from opengever.meeting import _
 from opengever.meeting import is_word_meeting_implementation_enabled
+from opengever.meeting import require_word_meeting_feature
 from opengever.meeting.command import CopyProposalDocumentCommand
 from opengever.meeting.command import CreateSubmittedProposalCommand
 from opengever.meeting.command import NullUpdateSubmittedDocumentCommand
 from opengever.meeting.command import RejectProposalCommand
 from opengever.meeting.command import UpdateSubmittedDocumentCommand
 from opengever.meeting.container import ModelContainer
-from opengever.meeting.exceptions import WordMeetingImplementationDisabledError
-from opengever.meeting.model import proposalhistory
+from opengever.meeting.interfaces import IHistory
 from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.model.proposal import Proposal as ProposalModel
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -49,52 +50,10 @@ def default_title(context):
 class IProposalModel(Interface):
     """Proposal model schema interface."""
 
-    title = schema.TextLine(
-        title=_(u"label_title", default=u"Title"),
-        required=True,
-        max_length=256,
-        defaultFactory=default_title
-        )
-
     committee = schema.Choice(
         title=_('label_committee', default=u'Committee'),
         source='opengever.meeting.ActiveCommitteeVocabulary',
         required=True)
-
-    legal_basis = schema.Text(
-        title=_('label_legal_basis', default=u"Legal basis"),
-        required=False,
-        )
-
-    initial_position = schema.Text(
-        title=_('label_initial_position', default=u"Initial position"),
-        required=False,
-        )
-
-    proposed_action = schema.Text(
-        title=_('label_proposed_action', default=u"Proposed action"),
-        required=False,
-        )
-
-    decision_draft = schema.Text(
-        title=_('label_decision_draft', default=u"Decision draft"),
-        required=False,
-        )
-
-    publish_in = schema.Text(
-        title=_('label_publish_in', default=u"Publish in"),
-        required=False,
-        )
-
-    disclose_to = schema.Text(
-        title=_('label_disclose_to', default=u"Disclose to"),
-        required=False,
-        )
-
-    copy_for_attention = schema.Text(
-        title=_('label_copy_for_attention', default=u"Copy for attention"),
-        required=False,
-        )
 
     language = schema.Choice(
         title=_('language', default=u'Language'),
@@ -106,55 +65,59 @@ class IProposalModel(Interface):
 class ISubmittedProposalModel(Interface):
     """Submitted proposal model schema interface."""
 
+
+class IProposal(form.Schema):
+    """Proposal Proxy Object Schema Interface"""
+
+    dexteritytextindexer.searchable('title')
     title = schema.TextLine(
         title=_(u"label_title", default=u"Title"),
         required=True,
         max_length=256,
+        defaultFactory=default_title
         )
 
+    dexteritytextindexer.searchable('legal_basis')
     legal_basis = schema.Text(
         title=_('label_legal_basis', default=u"Legal basis"),
         required=False,
         )
 
+    dexteritytextindexer.searchable('initial_position')
     initial_position = schema.Text(
         title=_('label_initial_position', default=u"Initial position"),
         required=False,
         )
 
+    dexteritytextindexer.searchable('proposed_action')
     proposed_action = schema.Text(
         title=_('label_proposed_action', default=u"Proposed action"),
         required=False,
         )
 
-    considerations = schema.Text(
-        title=_('label_considerations', default=u"Considerations"),
-        required=False,
-        )
-
+    dexteritytextindexer.searchable('decision_draft')
     decision_draft = schema.Text(
         title=_('label_decision_draft', default=u"Decision draft"),
         required=False,
         )
 
+    dexteritytextindexer.searchable('publish_in')
     publish_in = schema.Text(
         title=_('label_publish_in', default=u"Publish in"),
         required=False,
         )
 
+    dexteritytextindexer.searchable('disclose_to')
     disclose_to = schema.Text(
         title=_('label_disclose_to', default=u"Disclose to"),
         required=False,
         )
 
+    dexteritytextindexer.searchable('copy_for_attention')
     copy_for_attention = schema.Text(
         title=_('label_copy_for_attention', default=u"Copy for attention"),
         required=False,
         )
-
-
-class IProposal(form.Schema):
-    """Proposal Proxy Object Schema Interface"""
 
     relatedItems = RelationList(
         title=_(u'label_attachments', default=u'Attachments'),
@@ -177,7 +140,28 @@ class IProposal(form.Schema):
 
 
 class ISubmittedProposal(IProposal):
-    pass
+
+    dexteritytextindexer.searchable('considerations')
+    considerations = schema.Text(
+        title=_('label_considerations', default=u"Considerations"),
+        required=False,
+        )
+
+    excerpts = RelationList(
+        title=_(u'label_excerpts', default=u'Excerpts'),
+        default=[],
+        missing_value=[],
+        value_type=RelationChoice(
+            title=u'Excerpt',
+            source=DossierPathSourceBinder(
+                portal_type=('opengever.document.document',),
+                navigation_tree_query={
+                    'object_provides':
+                    ['opengever.dossier.behaviors.dossier.IDossierMarker',
+                     'opengever.document.document.IDocumentSchema'],
+                }),
+        ),
+        required=False)
 
 
 class ProposalBase(ModelContainer):
@@ -185,10 +169,7 @@ class ProposalBase(ModelContainer):
     workflow = None
 
     def Title(self):
-        model = self.load_model()
-        if not model:
-            return ''
-        return model.title.encode('utf-8')
+        return self.title.encode('utf-8')
 
     def get_overview_attributes(self):
         model = self.load_model()
@@ -196,7 +177,7 @@ class ProposalBase(ModelContainer):
 
         attributes = [
             {'label': _(u"label_title", default=u'Title'),
-             'value': model.title},
+             'value': self.title},
 
             {'label': _('label_committee', default=u'Committee'),
              'value': model.committee.get_link(),
@@ -220,22 +201,22 @@ class ProposalBase(ModelContainer):
             attributes.extend([
                 {'label': _('label_legal_basis',
                             default=u'Legal basis'),
-                 'value': model.legal_basis,
+                 'value': self.legal_basis,
                  'is_html': True},
 
                 {'label': _('label_initial_position',
                             default=u'Initial position'),
-                 'value': model.initial_position,
+                 'value': self.initial_position,
                  'is_html': True},
 
                 {'label': _('label_proposed_action',
                             default=u'Proposed action'),
-                 'value': model.proposed_action,
+                 'value': self.proposed_action,
                  'is_html': True},
 
                 {'label': _('label_decision_draft',
                             default=u'Decision draft'),
-                 'value': model.decision_draft,
+                 'value': self.decision_draft,
                  'is_html': True},
 
                 {'label': _('label_decision',
@@ -245,17 +226,17 @@ class ProposalBase(ModelContainer):
 
                 {'label': _('label_publish_in',
                             default=u'Publish in'),
-                 'value': model.publish_in,
+                 'value': self.publish_in,
                  'is_html': True},
 
                 {'label': _('label_disclose_to',
                             default=u'Disclose to'),
-                 'value': model.disclose_to,
+                 'value': self.disclose_to,
                  'is_html': True},
 
                 {'label': _('label_copy_for_attention',
                             default=u'Copy for attention'),
-                 'value': model.copy_for_attention,
+                 'value': self.copy_for_attention,
                  'is_html': True},
             ])
 
@@ -287,31 +268,16 @@ class ProposalBase(ModelContainer):
         url_tool = api.portal.get_tool(name="portal_url")
         return '/'.join(url_tool.getRelativeContentPath(self))
 
-    def get_searchable_text(self):
-        """Return the searchable text for this proposal.
-
-        This method is called during object-creation, thus the model might not
-        yet be created (e.g. when the object is added to its parent).
-
-        """
-        model = self.load_model()
-        if not model:
-            return ''
-
-        return model.get_searchable_text()
-
     def get_committee_admin_unit(self):
         admin_unit_id = self.load_model().committee.admin_unit_id
         return ogds_service().fetch_admin_unit(admin_unit_id)
 
+    @require_word_meeting_feature
     def get_proposal_document(self):
         """If the word meeting implementation feature is enabled,
         this method returns the proposal document, containing the actual
         proposal "body".
         """
-        if not is_word_meeting_implementation_enabled():
-            raise WordMeetingImplementationDisabledError()
-
         if getattr(self, '_proposal_document_uuid', None) is None:
             return None
 
@@ -324,14 +290,12 @@ class ProposalBase(ModelContainer):
 
         return document
 
+    @require_word_meeting_feature
     def create_proposal_document(self, source_blob=None, **kwargs):
         """Creates a proposal document within this proposal or submitted
         proposal.
         Only one proposal document can be created.
         """
-        if not is_word_meeting_implementation_enabled():
-            raise WordMeetingImplementationDisabledError()
-
         if self.get_proposal_document():
             raise ValueError('There is already a proposal document.')
 
@@ -375,6 +339,9 @@ class SubmittedProposal(ProposalBase):
     workflow = ProposalModel.workflow.with_visible_transitions(
         ['submitted-pending'])
 
+    def get_source_admin_unit_id(self):
+        return self.load_model().admin_unit_id
+
     def is_editable(self):
         """A proposal in a meeting/committee is editable when submitted but not
         yet decided.
@@ -401,7 +368,7 @@ class SubmittedProposal(ProposalBase):
                 7, {
                     'label': _('label_considerations',
                                default=u"Considerations"),
-                    'value': model.considerations,
+                    'value': self.considerations,
                 }
             )
 
@@ -497,6 +464,53 @@ class SubmittedProposal(ProposalBase):
             dossier.absolute_url(),
             dossier.title)
 
+    @require_word_meeting_feature
+    def generate_excerpt(self, target_dossier):
+        """Create a new excerpt from this agenda item by copying it's
+        proposal document into the target dossier.
+        """
+        source_document = self.get_proposal_document()
+        if not source_document:
+            raise ValueError('The proposal has no proposal document.')
+
+        title = _(u'excerpt_document_title',
+                  default=u'Excerpt ${title}',
+                  mapping={'title': safe_unicode(self.Title())})
+        title = translate(title, context=target_dossier.REQUEST).strip()
+
+        excerpt_document = CreateDocumentCommand(
+            context=target_dossier,
+            filename=source_document.file.filename,
+            data=source_document.file.data,
+            content_type=source_document.file.contentType,
+            title=title).execute()
+
+        self.append_excerpt(excerpt_document)
+        return excerpt_document
+
+    @require_word_meeting_feature
+    def get_excerpts(self):
+        """Return a restricted list of document objects which are excerpts
+        of the current proposal.
+        """
+        excerpts = []
+        checkPermission = getSecurityManager().checkPermission
+        for relation_value in getattr(self, 'excerpts', ()):
+            obj = relation_value.to_object
+            if checkPermission('View', obj):
+                excerpts.append(obj)
+
+        return excerpts
+
+    @require_word_meeting_feature
+    def append_excerpt(self, excerpt_document):
+        """Add a relation to a new excerpt document.
+        """
+        intid = getUtility(IIntIds).getId(excerpt_document)
+        excerpts = getattr(self, 'excerpts', [])
+        excerpts.append(RelationValue(intid))
+        self.excerpts = excerpts
+
 
 class Proposal(ProposalBase):
     """Act as proxy for the proposal stored in the database.
@@ -512,8 +526,7 @@ class Proposal(ProposalBase):
         ['pending-submitted', 'pending-cancelled', 'cancelled-pending'])
 
     def _after_model_created(self, model_instance):
-        session = create_session()
-        session.add(proposalhistory.Created(proposal=model_instance))
+        IHistory(self).append_record(u'created')
 
     def is_editable(self):
         """A proposal in a dossier is only editable while not submitted.
@@ -553,8 +566,8 @@ class Proposal(ProposalBase):
             context.get_main_dossier()).get_number()
 
         language = data.get('language')
-        repository_folder_title = aq_wrapped_self.get_repository_folder_title(
-            language)
+        repository_folder_title = safe_unicode(
+            aq_wrapped_self.get_repository_folder_title(language))
 
         data.update(dict(workflow_state=workflow_state,
                          physical_path=aq_wrapped_self.get_physical_path(),
@@ -565,8 +578,8 @@ class Proposal(ProposalBase):
 
     def update_model(self, data):
         language = data.get('language')
-        data['repository_folder_title'] = self.get_repository_folder_title(
-            language)
+        data['repository_folder_title'] = safe_unicode(
+            self.get_repository_folder_title(language))
         return super(Proposal, self).update_model(data)
 
     def get_edit_values(self, fieldnames):
@@ -582,8 +595,8 @@ class Proposal(ProposalBase):
 
         reference_number = IReferenceNumber(
             self.get_containing_dossier().get_main_dossier()).get_number()
-        repository_folder_title = self.get_repository_folder_title(
-            proposal_model.language)
+        repository_folder_title = safe_unicode(self.get_repository_folder_title(
+            proposal_model.language))
 
         proposal_model.physical_path = self.get_physical_path()
         proposal_model.dossier_reference_number = reference_number

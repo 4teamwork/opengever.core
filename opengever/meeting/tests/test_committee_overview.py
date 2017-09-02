@@ -42,7 +42,7 @@ class TestCommitteeOverview(FunctionalTestCase):
 
         browser.login().open(self.committee, view='tabbedview_view-overview')
 
-        self.assertEquals([u'Peter M\xfcller', u'Hans M\xfcller'],
+        self.assertEquals([u'M\xfcller Peter', u'M\xfcller Hans'],
                           browser.css('#current_membersBox li:not(.moreLink)').text)
 
     @browsing
@@ -123,11 +123,11 @@ class TestCommitteeOverview(FunctionalTestCase):
     def test_proposal_box_only_lists_unscheduled_proposals(self, browser):
         repo, repo_folder = create(Builder('repository_tree'))
         dossier = create(Builder('dossier').within(repo_folder))
-        proposal_a = create(Builder('proposal')
-                            .within(dossier)
-                            .having(title=u'Proposal A',
-                                    committee=self.committee_model))
-        create(Builder('submitted_proposal').submitting(proposal_a))
+        create(Builder('proposal')
+               .within(dossier)
+               .having(title=u'Proposal A',
+                       committee=self.committee_model)
+               .as_submitted())
 
         create(Builder('proposal')
                .within(dossier)
@@ -144,11 +144,11 @@ class TestCommitteeOverview(FunctionalTestCase):
     def test_proposals_are_linked_correctly(self, browser):
         repo, repo_folder = create(Builder('repository_tree'))
         dossier = create(Builder('dossier').within(repo_folder))
-        proposal_a = create(Builder('proposal')
-                            .within(dossier)
-                            .having(title=u'Mach doch',
-                                    committee=self.committee_model))
-        create(Builder('submitted_proposal').submitting(proposal_a))
+        create(Builder('proposal')
+               .within(dossier)
+               .having(title=u'Mach doch',
+                       committee=self.committee_model)
+               .as_submitted())
 
         browser.login().open(self.committee, view='tabbedview_view-overview')
 

@@ -1,4 +1,3 @@
-from five import grok
 from ftw.table import helper
 from opengever.tabbedview import BaseCatalogListingTab
 from opengever.tabbedview.helper import linked
@@ -7,10 +6,9 @@ from opengever.task.helper import task_type_helper
 from opengever.tasktemplates import _
 from opengever.tasktemplates.browser.helper import interactive_user_helper
 from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
-from plone.directives import dexterity
+from plone.dexterity.browser.view import DefaultView
 from zope.component.hooks import getSite
 from zope.i18n import translate
-from zope.interface import implements, Interface
 
 
 def preselected_helper(item, value):
@@ -23,7 +21,6 @@ def preselected_helper(item, value):
 
 
 class TaskTemplates(BaseCatalogListingTab):
-    grok.name('tabbedview_view-tasktemplates')
 
     columns = (
         {'column': '',
@@ -65,14 +62,7 @@ class TaskTemplates(BaseCatalogListingTab):
     major_actions = []
 
 
-class ITasktemplatesView(Interface):
-    pass
-
-
-class View(dexterity.DisplayForm):
-    implements(ITasktemplatesView)
-    grok.context(ITaskTemplate)
-    grok.require('zope2.View')
+class View(DefaultView):
 
     def responsible_link(self):
         task = ITaskTemplate(self.context)

@@ -1,4 +1,7 @@
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from five import grok
+from opengever.base import advancedjson
 from opengever.base.security import elevated_privileges
 from opengever.base.source import DossierPathSourceBinder
 from opengever.base.transport import PrivilegedReceiveObject
@@ -10,6 +13,8 @@ from opengever.meeting import _
 from opengever.meeting import is_meeting_feature_enabled
 from opengever.meeting.browser.documents.submit import ISubmitAdditionalDocument
 from opengever.meeting.exceptions import NoSubmittedDocument
+from opengever.meeting.interfaces import IHistory
+from opengever.meeting.proposal import ISubmittedProposal
 from opengever.tabbedview.utils import get_containing_document_tab_url
 from plone import api
 from plone.autoform.form import AutoExtensibleForm
@@ -24,7 +29,6 @@ from zExceptions import Unauthorized
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
 from zope.i18n import translate
-from zope.interface import Interface
 from zope.schema import TextLine
 import json
 
@@ -190,9 +194,19 @@ class UpdateSubmittedDocumentView(grok.View):
         if self.context.is_checked_out():
             raise Unauthorized()
 
+        submitted_proposal = aq_parent(aq_inner(self.context))
+        history_data = advancedjson.loads(self.request.get('history_data'))
+
         with elevated_privileges():
             transporter = Transporter()
             transporter.update(self.context, self.request)
+
+            IHistory(submitted_proposal).append_record(
+                u'document_updated',
+                document_title=self.context.title,
+                submitted_version=history_data['submitted_version'],
+                uuid=history_data['uuid']
+            )
 
             portal_path = '/'.join(api.portal.get().getPhysicalPath())
             intids = getUtility(IIntIds)
@@ -219,10 +233,19 @@ class RecieveSubmittedDocumentView(PrivilegedReceiveObject):
 
     grok.name('recieve-submitted-document')
     grok.require('cmf.AddPortalContent')
-    grok.context(Interface)
+    grok.context(ISubmittedProposal)
 
     def receive(self):
         document = super(RecieveSubmittedDocumentView, self).receive()
+
+        history_data = advancedjson.loads(self.request.get('history_data'))
+        with elevated_privileges():
+            IHistory(self.context).append_record(
+                u'document_submitted',
+                document_title=document.title,
+                submitted_version=history_data['submitted_version'],
+                uuid=history_data['uuid']
+            )
+
         ILockable(document).lock(MEETING_SUBMITTED_LOCK)
         return document
-

@@ -47,7 +47,7 @@ class TestPastingAllowed(FunctionalTestCase):
         browser.open(mail)
         actions = browser.css('#plone-contentmenu-actions li').text
         self.assertSequenceEqual(
-            ['Properties', 'save attachments'], actions)
+            ['Copy Item', 'Properties', 'save attachments'], actions)
 
     @browsing
     def test_pasting_not_allowed_if_disallowed_subobject_type(self, browser):

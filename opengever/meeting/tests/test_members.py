@@ -19,9 +19,14 @@ class TestMemberListing(FunctionalTestCase):
         self.container = create(Builder('committee_container'))
         self.member = create(Builder('member'))
 
+        # CommitteeResponsible is assigned globally here for the sake of
+        # simplicity
+        self.grant('Contributor', 'Editor', 'Reader', 'MeetingUser',
+                   'CommitteeAdministrator', 'CommitteeResponsible')
+
     @browsing
     def test_members_can_be_added_in_browser(self, browser):
-        self.grant("Administrator")
+        self.grant("Administrator", "CommitteeAdministrator")
         browser.login().open(self.container, view='add-member')
         browser.fill({'Firstname': u'Hanspeter',
                       'Lastname': u'Hansj\xf6rg',
@@ -62,8 +67,8 @@ class TestMemberListing(FunctionalTestCase):
             'http://nohost/plone/opengever-meeting-committeecontainer/member-1',
             link.get('href'))
         self.assertEqual('contenttype-opengever-meeting-member', link.get('class'))
-        self.assertEqual(u'Peter M\xfcller', link.get('title'))
-        self.assertEqual(u'Peter M\xfcller', link.text)
+        self.assertEqual(u'M\xfcller Peter', link.get('title'))
+        self.assertEqual(u'M\xfcller Peter', link.text)
 
 
 class TestMemberView(FunctionalTestCase):
@@ -72,6 +77,11 @@ class TestMemberView(FunctionalTestCase):
 
     def setUp(self):
         super(TestMemberView, self).setUp()
+        # CommitteeResponsible is assigned globally here for the sake of
+        # simplicity
+        self.grant('Contributor', 'Editor', 'Reader', 'MeetingUser',
+                   'CommitteeAdministrator', 'CommitteeResponsible')
+
         self.container = create(Builder('committee_container'))
         self.member = create(Builder('member')
                              .having(email='p.meier@example.com'))
@@ -96,7 +106,7 @@ class TestMemberView(FunctionalTestCase):
     def test_site_title_is_member_title(self, browser):
         browser.login().open(self.member.get_url(self.container))
         self.assertEquals(
-            u'Peter M\xfcller \u2014 Plone site',
+            u'M\xfcller Peter \u2014 Plone site',
             browser.css('title').first.text)
 
     @browsing
@@ -150,16 +160,14 @@ class TestMemberView(FunctionalTestCase):
         browser.login().open(self.member.get_url(self.container))
 
         link = browser.css('a.edit_membership').first
-        self.assertEqual(self.membership_2.get_edit_url(self.member_wrapper),
-                         link.get('href'))
+        self.assertEqual(self.membership_2.get_edit_url(), link.get('href'))
 
     @browsing
     def test_remove_membership_link_is_correct(self, browser):
         browser.login().open(self.member.get_url(self.container))
 
         link = browser.css('a.remove_membership').first
-        self.assertEqual(self.membership_2.get_remove_url(self.member_wrapper),
-                         link.get('href'))
+        self.assertEqual(self.membership_2.get_remove_url(), link.get('href'))
 
     @browsing
     def test_remove_membership_works_correctly(self, browser):
@@ -170,7 +178,7 @@ class TestMemberView(FunctionalTestCase):
         link = browser.css('a.remove_membership').first
         link.click()
 
-        self.assertEqual(['The membership was deleted successfully'],
+        self.assertEqual(['The membership was deleted successfully.'],
                          info_messages())
 
         # I do not know why we need to reload. Feel free to fix this.

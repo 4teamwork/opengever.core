@@ -11,7 +11,17 @@
                     <span tal:content="python:attachment['filename']">filename</span>
                 </a>
                 <span tal:content="python:context.getObjSize(size=attachment['size'])">0Kb</span>
+            </div>
         </tal:attachment>
+        <div class="file-action-buttons">
+            <a href=""
+                tal:attributes="href string:${here/absolute_url}/extract_attachments;
+                class string:function-extract-attachments"
+                i18n:translate="label_save_attachments"
+                >
+                Save attachments
+            </a>
+        </div>
     </tal:attachments>
 
 </tal:block>

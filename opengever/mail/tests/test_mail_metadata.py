@@ -42,8 +42,7 @@ class TestMailMetadataWithBuilder(FunctionalTestCase):
 
     def test_fill_metadata_of_new_mail(self):
         mail = self.create_mail()
-        self.assertIsNone(mail.description,
-                          'Description should have no value')
+        self.assertEquals(u'', mail.description)
 
         self.assertEquals((), mail.keywords, 'Expected no keywords')
 

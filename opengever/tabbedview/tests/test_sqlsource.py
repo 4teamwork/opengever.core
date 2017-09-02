@@ -2,6 +2,43 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.testing import FunctionalTestCase
+from opengever.tabbedview.browser.base_tabs import BaseListingTab
+from opengever.tabbedview.sqlsource import SqlTableSource
+from opengever.meeting.model import Membership
+
+
+class DummySQLTableSourceConfig(BaseListingTab):
+    """
+    """
+    sort_on = "member_id"
+
+    def __init__(self, context, request, sql_indexes=None):
+        super(DummySQLTableSourceConfig, self).__init__(context, request)
+
+        if sql_indexes:
+            # We can set sqlalchemy sort indexes dynamically in tests.
+            self.sqlalchemy_sort_indexes = sql_indexes
+
+    def get_base_query(self):
+        return Membership.query
+
+
+class TestSQLAlchemySortIndexes(FunctionalTestCase):
+
+    def test_use_default_sort_index_if_no_sqlalchemy_sort_index_mapping_exists(self):
+        config = DummySQLTableSourceConfig(self.portal, self.request)
+        source = SqlTableSource(config, self.request)
+        self.assertIn('ORDER BY member_id',
+                      str(source.build_query()))
+
+    def test_use_sqlalchemy_sort_index_if_mapping_exists(self):
+        config = DummySQLTableSourceConfig(self.portal,
+                                           self.request,
+                                           sql_indexes={'member_id': Membership.member_id})
+        source = SqlTableSource(config, self.request)
+
+        self.assertIn('ORDER BY memberships.member_id',
+                      str(source.build_query()))
 
 
 class TestTextFilter(FunctionalTestCase):

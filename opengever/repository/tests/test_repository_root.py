@@ -1,42 +1,22 @@
-from ftw.builder import Builder
-from ftw.builder import create
 from ftw.testbrowser import browsing
-from ftw.testbrowser.pages import factoriesmenu
+from ftw.testbrowser.pages import statusmessages
 from opengever.repository.repositoryroot import IRepositoryRoot
-from opengever.testing import add_languages
-from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 
 
-class TestRepositoryRoot(FunctionalTestCase):
+class TestRepositoryRoot(IntegrationTestCase):
 
     @browsing
     def test_adding(self, browser):
-        self.grant('Manager')
-        add_languages(['de-ch'])
-        browser.login().open()
-        factoriesmenu.add('RepositoryRoot')
-        browser.fill({'Title': 'RepositoryRoot'}).save()
-
+        self.login(self.manager, browser)
+        browser.open(view='++add++opengever.repository.repositoryroot')
+        browser.fill({'Title': u'Foob\xe4r'}).save()
+        statusmessages.assert_no_error_messages()
         self.assertTrue(IRepositoryRoot.providedBy(browser.context))
+        self.assertEqual('foobar', browser.context.getId())
 
     @browsing
-    def test_is_only_addable_by_manager(self, browser):
-        browser.login().open()
-
-        self.grant('Administrator')
-        browser.reload()
-        self.assertNotIn(
-            'RepositoryRoot',
-            factoriesmenu.addable_types()
-            )
-
-        self.grant('Manager')
-        browser.reload()
-        self.assertIn(
-            'RepositoryRoot',
-            factoriesmenu.addable_types()
-            )
-
-    def test_repository_root_name_from_title(self):
-        root = create(Builder('repository_root').having(title_de=u'Foob\xe4r'))
-        self.assertEqual('foobar', root.getId())
+    def test_is_not_addable_by_administrator(self, browser):
+        self.login(self.administrator, browser)
+        with browser.expect_unauthorized():
+            browser.open(view='++add++opengever.repository.repositoryroot')

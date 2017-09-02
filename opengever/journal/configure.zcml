@@ -2,14 +2,10 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
-    xmlns:grok="http://namespaces.zope.org/grok"
     xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:plone="http://namespaces.plone.org/plone"
     xmlns:vdex="http://namespaces.zope.org/vdex"
     i18n_domain="opengever.journal">
-
-  <!-- Grok the package to initialise schema interfaces and content classes -->
-  <grok:grok package="." />
 
   <!-- register translations -->
   <i18n:registerTranslations directory="locales" />
@@ -56,6 +52,197 @@
       permission="cmf.ModifyPortalContent"
       />
 
+  <!-- journal tab -->
+  <browser:page
+      name="tabbedview_view-journal"
+      for="ftw.journal.interfaces.IJournalizable"
+      class=".tab.JournalTab"
+      permission="zope2.View"
+      />
+
+  <adapter factory=".tab.JournalTableSource" />
+
+
+  <subscriber
+      for="opengever.repository.repositoryfolder.IRepositoryFolderSchema
+           opengever.repository.events.IRepositoryPrefixUnlocked"
+      handler=".handlers.repository_prefix_unlock"
+      />
+
+  <subscriber
+      for="opengever.repository.repositoryfolder.IRepositoryFolderSchema
+           opengever.sharing.interfaces.ILocalRolesAcquisitionBlocked"
+      handler=".handlers.repositoryfolder_local_roles_acquisition_blocked"
+      />
+
+  <subscriber
+      for="opengever.repository.repositoryfolder.IRepositoryFolderSchema
+           opengever.sharing.interfaces.ILocalRolesAcquisitionActivated"
+      handler=".handlers.repositoryfolder_local_roles_acquisition_activated"
+      />
+
+  <subscriber
+      for="opengever.repository.repositoryfolder.IRepositoryFolderSchema
+           opengever.sharing.interfaces.ILocalRolesModified"
+      handler=".handlers.repositoryfolder_local_roles_modified"
+      />
+
+  <subscriber
+      for="opengever.dossier.behaviors.dossier.IDossierMarker
+           zope.lifecycleevent.interfaces.IObjectAddedEvent"
+      handler=".handlers.dossier_added"
+      />
+
+  <subscriber
+      for="opengever.dossier.behaviors.dossier.IDossierMarker
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".handlers.dossier_modified"
+      />
+
+  <subscriber
+      for="opengever.dossier.behaviors.dossier.IDossierMarker
+           Products.CMFCore.interfaces.IActionSucceededEvent"
+      handler=".handlers.dossier_state_changed"
+      />
+
+  <subscriber
+      for="opengever.dossier.behaviors.dossier.IDossierMarker
+           opengever.sharing.interfaces.ILocalRolesAcquisitionBlocked"
+      handler=".handlers.dossier_local_roles_acquisition_blocked"
+      />
+
+  <subscriber
+      for="opengever.dossier.behaviors.dossier.IDossierMarker
+           opengever.sharing.interfaces.ILocalRolesAcquisitionActivated"
+      handler=".handlers.dossier_local_roles_acquisition_activated"
+      />
+
+  <subscriber
+      for="opengever.dossier.behaviors.dossier.IDossierMarker
+           opengever.sharing.interfaces.ILocalRolesModified"
+      handler=".handlers.dossier_local_roles_modified"
+      />
+
+  <subscriber
+      for="ftw.mail.mail.IMail
+           opengever.mail.interfaces.IAttachmentsDeletedEvent"
+      handler=".handlers.attachments_deleted"
+      />
+
+  <subscriber
+      for="opengever.document.behaviors.IBaseDocument
+           zope.lifecycleevent.interfaces.IObjectAddedEvent"
+      handler=".handlers.document_added"
+      />
+
+  <subscriber
+      for="opengever.document.behaviors.IBaseDocument
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".handlers.document_modified"
+      />
+
+  <subscriber
+      for="opengever.document.behaviors.IBaseDocument
+           opengever.document.interfaces.IObjectCheckedOutEvent"
+      handler=".handlers.document_checked_out"
+      />
+
+  <subscriber
+      for="opengever.document.behaviors.IBaseDocument
+           opengever.document.interfaces.IObjectCheckedInEvent"
+      handler=".handlers.document_checked_in"
+      />
+
+  <subscriber
+      for="opengever.document.behaviors.IBaseDocument
+           opengever.document.interfaces.IObjectCheckoutCanceledEvent"
+      handler=".handlers.document_checkout_canceled"
+      />
+
+  <subscriber
+      for="opengever.document.behaviors.IBaseDocument
+           opengever.document.interfaces.IObjectRevertedToVersion"
+      handler=".handlers.document_file_reverted"
+      />
+
+  <subscriber
+      for="opengever.document.behaviors.IBaseDocument
+           opengever.document.interfaces.IFileCopyDownloadedEvent"
+      handler=".handlers.file_copy_downloaded"
+      />
+
+  <subscriber
+      for="opengever.document.behaviors.IBaseDocument
+           opengever.bumblebee.interfaces.IPDFDownloadedEvent"
+      handler=".handlers.pdf_downloaded"
+      />
+
+  <subscriber
+      for="plone.dexterity.interfaces.IDexterityContent
+           opengever.mail.interfaces.IDocumentSent"
+      handler=".handlers.document_sent"
+      />
+
+  <subscriber
+      for="opengever.task.task.ITask
+           zope.lifecycleevent.interfaces.IObjectAddedEvent"
+      handler=".handlers.task_added"
+      />
+
+  <subscriber
+      for="opengever.task.task.ITask
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".handlers.task_modified"
+      />
+
+  <subscriber
+      for="ftw.journal.interfaces.IJournalizable
+           opengever.trash.trash.ITrashedEvent"
+      handler=".handlers.document_trashed"
+      />
+
+  <subscriber
+      for="ftw.journal.interfaces.IJournalizable
+           opengever.trash.trash.IUntrashedEvent"
+      handler=".handlers.document_untrashed"
+      />
+
+  <subscriber
+      for="opengever.document.behaviors.IBaseDocument
+           Products.CMFCore.interfaces.IActionSucceededEvent"
+      handler=".handlers.document_removed"
+      />
+
+  <subscriber
+      for="opengever.document.behaviors.IBaseDocument
+           Products.CMFCore.interfaces.IActionSucceededEvent"
+      handler=".handlers.document_restored"
+      />
+
+  <subscriber
+      for="opengever.dossier.behaviors.dossier.IDossierMarker
+           opengever.dossier.interfaces.IParticipationCreated"
+      handler=".handlers.participation_created"
+      />
+
+  <subscriber
+      for="opengever.dossier.behaviors.dossier.IDossierMarker
+           opengever.dossier.interfaces.IParticipationRemoved"
+      handler=".handlers.participation_removed"
+      />
+
+  <subscriber
+      for="plone.dexterity.interfaces.IDexterityContent
+           zope.lifecycleevent.interfaces.IObjectMovedEvent"
+      handler=".handlers.object_moved"
+      />
+
+  <subscriber
+      for="plone.dexterity.interfaces.IDexterityContent
+           OFS.interfaces.IObjectWillBeMovedEvent"
+      handler=".handlers.object_will_be_moved"
+      />
+
   <subscriber
       for="opengever.document.behaviors.IBaseDocument
            ftw.zipexport.interfaces.IItemZippedEvent"
@@ -79,5 +266,12 @@
            opengever.dossier.interfaces.IDossierAttachedToEmailEvent"
       handler=".handlers.dossier_attached_to_email"
       />
+
+  <subscriber
+      for="opengever.document.behaviors.IBaseDocument
+           zope.lifecycleevent.interfaces.IObjectCopiedEvent"
+      handler=".handlers.reset_journal_history_after_clone"
+      />
+
 
 </configure>

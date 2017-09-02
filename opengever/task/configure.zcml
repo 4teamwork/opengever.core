@@ -81,4 +81,5 @@
       permission="opengever.task.AddTaskComment"
       />
 
+  <adapter factory=".menu.TaskPostFactoryMenu" />
 </configure>

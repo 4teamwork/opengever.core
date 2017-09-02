@@ -24,23 +24,13 @@
        
 
 
-   .. py:attribute:: creators
-
-       :Feldname: :field-title:`Autoren`
-       :Datentyp: ``Tuple``
-       
-       
-       
-       
-
-
    .. py:attribute:: classification
 
        :Feldname: :field-title:`Klassifikation`
        :Datentyp: ``Choice``
        
        :Default: "unprotected"
-       :Beschreibung: Grad, in dem die Unterlagen vor unberechtigter Einsicht geschützt werden müssen
+       :Beschreibung: Grad, in dem die Unterlagen vor unberechtigter Einsicht geschützt werden müssen.
        :Wertebereich: ["unprotected", "confidential", "classified"]
 
 
@@ -50,7 +40,7 @@
        :Datentyp: ``Choice``
        
        :Default: "privacy_layer_no"
-       :Beschreibung: Markierung, die angibt, ob die Unterlagen besonders schützenswerte Personendaten oder Persönlichkeitsprofile gemäss Datenschutzrecht enthalten
+       :Beschreibung: Markierung, die angibt, ob die Unterlagen besonders schützenswerte Personendaten oder Persönlichkeitsprofile gemäss Datenschutzrecht enthalten.
        :Wertebereich: ["privacy_layer_no", "privacy_layer_yes"]
 
 
@@ -60,7 +50,7 @@
        :Datentyp: ``Choice``
        
        :Default: "unchecked"
-       :Beschreibung: Angabe, ob die Unterlagen gemäss Öffentlichkeitsgesetz zugänglich sind oder nicht
+       :Beschreibung: Angabe, ob die Unterlagen gemäss Öffentlichkeitsgesetz zugänglich sind oder nicht.
        :Wertebereich: ["unchecked", "public", "limited-public", "private"]
 
 
@@ -89,7 +79,7 @@
        :Feldname: :field-title:`Beschreibung`
        :Datentyp: ``Text``
        
-       
+       :Default: null
        
        
 
@@ -100,7 +90,7 @@
        :Datentyp: ``Tuple``
        
        
-       
+       :Beschreibung: Schlagwörter zur Umschreibung eines Dossiers. Nicht zu verwechseln mit der Ordnungsposition
        
 
 
@@ -160,7 +150,7 @@
        :Datentyp: ``TextLine``
        
        
-       :Beschreibung: Nachname Vorname oder ein Benutzerkürzel (wird automatisch nach Nachname Vorname aufgelöst).
+       :Beschreibung: Nachname Vorname oder ein Benutzerkürzel (wird automatisch nach Nachname Vorname aufgelöst)
        
 
 

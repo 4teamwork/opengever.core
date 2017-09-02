@@ -1,13 +1,18 @@
 from opengever.base.response import JSONResponse
+from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.meeting import _
-from opengever.meeting.proposal import ISubmittedProposalModel
+from opengever.meeting import is_word_meeting_implementation_enabled
+from opengever.meeting import require_word_meeting_feature
+from opengever.meeting.proposal import ISubmittedProposal
 from opengever.meeting.service import meeting_service
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListing
 from plone.app.contentlisting.interfaces import IContentListingObject
 from Products.Five.browser import BrowserView
+from zExceptions import Forbidden
 from zExceptions import NotFound
 from zExceptions import Unauthorized
+from zope.component import getMultiAdapter
 from zope.interface import implements
 from zope.interface import Interface
 from zope.publisher.interfaces import IPublishTraverse
@@ -64,6 +69,14 @@ class IAgendaItemActions(Interface):
         further editing.
         """
 
+    def edit_document():
+        """Checkout and open the document with office connector.
+        """
+
+    def generate_excerpt():
+        """Create a new excerpt from a agenda item.
+        """
+
 
 class AgendaItemsView(BrowserView):
 
@@ -117,6 +130,39 @@ class AgendaItemsView(BrowserView):
         if excerpt:
             return IContentListingObject(excerpt).render_link()
 
+    @require_word_meeting_feature
+    def _serialize_excerpts(self, item):
+        if not item.has_proposal:
+            return []
+
+        submitted_proposal = item.proposal.resolve_submitted_proposal()
+        docs = IContentListing(submitted_proposal.get_excerpts())
+        return [doc.render_link() for doc in docs]
+
+    @require_word_meeting_feature
+    def _get_edit_document_options(self, meeting, agenda_item):
+        """Return the agenda item options for the template regarding
+        editing the document and its lock.
+        """
+        proposal = agenda_item.proposal.submitted_oguid.resolve_object()
+        document = proposal.get_proposal_document()
+        checkout_manager = getMultiAdapter((document, self.request),
+                                           ICheckinCheckoutManager)
+
+        button = {}
+        button['visible'] = bool(checkout_manager.check_permission(
+            'Modify portal content'))
+        button['active'] = button['visible'] and (
+            checkout_manager.is_checkout_allowed() or
+            checkout_manager.is_checked_out_by_current_user())
+        button['url'] = meeting.get_url(
+            view='agenda_items/{}/edit_document'.format(
+                agenda_item.agenda_item_id))
+        return {
+            'proposal_document_checked_out': bool(
+                checkout_manager.get_checked_out_by()),
+            'edit_proposal_document_button': button}
+
     def _get_agenda_items(self):
         meeting = self.context.model
         agenda_items = []
@@ -129,6 +175,7 @@ class AgendaItemsView(BrowserView):
                 view='agenda_items/{}/delete'.format(item.agenda_item_id))
             data['edit_link'] = meeting.get_url(
                 view='agenda_items/{}/edit'.format(item.agenda_item_id))
+            data['decision_number'] = item.decision_number
             if item.is_decide_possible():
                 data['decide_link'] = meeting.get_url(
                     view='agenda_items/{}/decide'.format(item.agenda_item_id))
@@ -138,6 +185,18 @@ class AgendaItemsView(BrowserView):
             if item.is_revise_possible():
                 data['revise_link'] = meeting.get_url(
                     view='agenda_items/{}/revise'.format(item.agenda_item_id))
+
+            if item.proposal and is_word_meeting_implementation_enabled():
+                proposal = item.proposal.submitted_oguid.resolve_object()
+                proposal_document = proposal.get_proposal_document()
+                data['proposal_document_link'] = (
+                    IContentListingObject(proposal_document).render_link())
+                data.update(self._get_edit_document_options(meeting, item))
+                data['excerpts'] = self._serialize_excerpts(item)
+                if self.can_generate_excerpt(item):
+                    data['generate_excerpt_link'] = meeting.get_url(
+                        view='agenda_items/{}/generate_excerpt'.format(
+                            item.agenda_item_id))
 
             agenda_items.append(data)
         return agenda_items
@@ -185,7 +244,7 @@ class AgendaItemsView(BrowserView):
 
         title = title.decode('utf-8')
         if self.agenda_item.has_proposal:
-            if len(title) > ISubmittedProposalModel['title'].max_length:
+            if len(title) > ISubmittedProposal['title'].max_length:
                 return JSONResponse(self.request).error(
                     _('agenda_item_update_too_long_title',
                       default=u"Agenda Item title is too long.")
@@ -220,6 +279,10 @@ class AgendaItemsView(BrowserView):
         if not self.context.model.is_editable():
             raise Unauthorized("Editing is not allowed")
 
+        error_response = self._checkin_proposal_document_before_deciding()
+        if error_response:
+            return error_response
+
         self.agenda_item.decide()
 
         response = JSONResponse(self.request)
@@ -238,6 +301,31 @@ class AgendaItemsView(BrowserView):
             api.portal.show_message(message=msg, request=self.request, type='info')
 
         return response.dump()
+
+    def _checkin_proposal_document_before_deciding(self):
+        if not is_word_meeting_implementation_enabled():
+            # old implementation: there is no proposal document
+            return
+
+        if not self.agenda_item.has_proposal:
+            # no proposal => no document to checkin
+            return
+
+        submitted_proposal = self.agenda_item.proposal.resolve_submitted_proposal()
+        document = submitted_proposal.get_proposal_document()
+        checkout_manager = getMultiAdapter((document, self.request),
+                                           ICheckinCheckoutManager)
+        if checkout_manager.get_checked_out_by() is None:
+            # document is not checked out
+            return
+
+        if not checkout_manager.is_checkin_allowed():
+            return JSONResponse(self.request).error(
+                _('agenda_item_cannot_decide_document_checked_out',
+                  default=u'Cannot decide agenda item: someone else has'
+                  u' checked out the document.')).remain().dump()
+
+        checkout_manager.checkin()
 
     def reopen(self):
         """Reopen the current agendaitem. Set the workflow state to revision
@@ -264,6 +352,28 @@ class AgendaItemsView(BrowserView):
         return JSONResponse(self.request).info(
             _(u'agenda_item_revised',
               default=u'Agenda Item revised successfully.')).dump()
+
+    def edit_document(self):
+        """Checkout and open the document with office connector.
+        """
+        self.check_editable()
+
+        proposal = self.agenda_item.proposal.submitted_oguid.resolve_object()
+        proposal_document = proposal.get_proposal_document()
+        checkout_manager = getMultiAdapter((proposal_document, self.request),
+                                           ICheckinCheckoutManager)
+        response = JSONResponse(self.request)
+
+        if not checkout_manager.is_checked_out_by_current_user() \
+           and not checkout_manager.is_checkout_allowed():
+            response.remain().error(
+                _(u'document_checkout_not_allowed',
+                  default=u'You are not allowed to checkout the document.'))
+        else:
+            url = proposal_document.checkout_and_get_office_connector_url()
+            response.proceed().data(officeConnectorURL=url)
+
+        return response.dump()
 
     def schedule_paragraph(self):
         """Schedule the given Paragraph (request parameter `title`) for the current
@@ -298,3 +408,40 @@ class AgendaItemsView(BrowserView):
     def check_editable(self):
         if not self.meeting.is_editable():
             raise Unauthorized("Editing is not allowed")
+
+    def generate_excerpt(self):
+        """Generate an excerpt of an agenda item and store it in
+        the meeting dossier.
+        """
+        if not self.context.model.is_editable():
+            raise Unauthorized("Editing is not allowed")
+
+        if not self.can_generate_excerpt(self.agenda_item):
+            raise Forbidden('Generating excerpt is not allowed in this state.')
+
+        meeting_dossier = self.meeting.get_dossier()
+        if not api.user.get_current().checkPermission(
+                'opengever.document: Add document', meeting_dossier):
+            return (JSONResponse(self.request)
+                    .error(_('error_no_permission_to_add_document',
+                             default=u'Insufficient privileges to add a'
+                             u' document to the meeting dossier.'))
+                    .remain()
+                    .dump())
+
+        proposal = self.agenda_item.proposal.resolve_submitted_proposal()
+        proposal.generate_excerpt(meeting_dossier)
+        return (JSONResponse(self.request)
+                .info(_('excerpt_generated',
+                        default=u'Excerpt was created successfully.'))
+                .proceed()
+                .dump())
+
+    def can_generate_excerpt(self, agenda_item):
+        """Returns True when agenda item and proposal are in a state which
+        allows to generate excerpts.
+        """
+        if not self.context.model.is_editable():
+            return False
+
+        return agenda_item.get_state() == agenda_item.STATE_DECIDED

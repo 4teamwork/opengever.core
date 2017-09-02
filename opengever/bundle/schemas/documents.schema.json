@@ -10,13 +10,19 @@
             "title": "Dokument",
             "additionalProperties": false,
             "properties": {
+                "original_message_path": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                },
                 "classification": {
                     "type": [
                         "null",
                         "string"
                     ],
                     "title": "Klassifikation",
-                    "description": "Grad, in dem die Unterlagen vor unberechtigter Einsicht gesch\u00fctzt werden m\u00fcssen",
+                    "description": "Grad, in dem die Unterlagen vor unberechtigter Einsicht gesch\u00fctzt werden m\u00fcssen.",
                     "_zope_schema_type": "Choice",
                     "default": "unprotected",
                     "enum": [
@@ -35,7 +41,7 @@
                         "array"
                     ],
                     "title": "Schlagworte",
-                    "description": "",
+                    "description": "Schlagw\u00f6rter zur Umschreibung eines Dossiers. Nicht zu verwechseln mit der Ordnungsposition",
                     "_zope_schema_type": "Tuple"
                 },
                 "guid": {
@@ -68,7 +74,7 @@
                         "string"
                     ],
                     "title": "Datenschutzstufe",
-                    "description": "Markierung, die angibt, ob die Unterlagen besonders sch\u00fctzenswerte Personendaten oder Pers\u00f6nlichkeitsprofile gem\u00e4ss Datenschutzrecht enthalten",
+                    "description": "Markierung, die angibt, ob die Unterlagen besonders sch\u00fctzenswerte Personendaten oder Pers\u00f6nlichkeitsprofile gem\u00e4ss Datenschutzrecht enthalten.",
                     "_zope_schema_type": "Choice",
                     "default": "privacy_layer_no",
                     "enum": [
@@ -83,7 +89,7 @@
                         "string"
                     ],
                     "title": "Autor",
-                    "description": "Nachname Vorname oder ein Benutzerk\u00fcrzel (wird automatisch nach Nachname Vorname aufgel\u00f6st).",
+                    "description": "Nachname Vorname oder ein Benutzerk\u00fcrzel (wird automatisch nach Nachname Vorname aufgel\u00f6st)",
                     "_zope_schema_type": "TextLine"
                 },
                 "relatedItems": {
@@ -112,7 +118,7 @@
                         "string"
                     ],
                     "title": "\u00d6ffentlichkeitsstatus",
-                    "description": "Angabe, ob die Unterlagen gem\u00e4ss \u00d6ffentlichkeitsgesetz zug\u00e4nglich sind oder nicht",
+                    "description": "Angabe, ob die Unterlagen gem\u00e4ss \u00d6ffentlichkeitsgesetz zug\u00e4nglich sind oder nicht.",
                     "_zope_schema_type": "Choice",
                     "default": "unchecked",
                     "enum": [
@@ -145,7 +151,8 @@
                     ],
                     "title": "Beschreibung",
                     "description": "",
-                    "_zope_schema_type": "Text"
+                    "_zope_schema_type": "Text",
+                    "default": null
                 },
                 "document_type": {
                     "type": [
@@ -194,15 +201,6 @@
                     "description": "Fortlaufend gez\u00e4hlte Nummer eines Dokumentes.",
                     "title": "Laufnummer"
                 },
-                "creators": {
-                    "type": [
-                        "null",
-                        "array"
-                    ],
-                    "title": "Autoren",
-                    "description": "",
-                    "_zope_schema_type": "Tuple"
-                },
                 "delivery_date": {
                     "type": [
                         "null",
@@ -217,7 +215,6 @@
             "field_order": [
                 "title",
                 "file",
-                "creators",
                 "classification",
                 "privacy_layer",
                 "public_trial",

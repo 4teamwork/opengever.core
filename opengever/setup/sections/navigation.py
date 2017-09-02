@@ -1,5 +1,6 @@
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
+from collective.transmogrifier.utils import traverse
 from opengever.portlets.tree import treeportlet
 from plone.portlets.constants import CONTEXT_CATEGORY
 from plone.portlets.interfaces import ILocalPortletAssignmentManager
@@ -15,12 +16,14 @@ class AssignRepoRootNavigation(object):
     """Assigns appropriate navigation tree portlets.
 
     - For the Plone Site:
-        Assign a tree portlet with the first repository root encountered
-        in the pipeline (assumed to be the primary repo)
+        If there isn't one already, assign a tree portlet with the first
+        repository root encountered in the pipeline (assumed to be the
+        primary repo)
 
-    - For (all) repository roots:
+    - For (all) repository roots in the pipeline:
         Assign tree portlets with their respective location as the root.
     """
+
     classProvides(ISectionBlueprint)
     implements(ISection)
 
@@ -29,19 +32,20 @@ class AssignRepoRootNavigation(object):
         self.context = transmogrifier.context
         self.has_assigned_primary_portlet = False
 
-    def _get_repo_root_id(self, item):
+    def _get_repo_root_id(self, item, portal):
         if '_repo_root_id' in item:
             # Classic og.setup
             return item['_repo_root_id']
-        elif '_object' in item:
+        else:
             # OGGBundle import
-            return item['_object'].id
+            obj = traverse(portal, item['_path'])
+            return obj.id
 
     def __iter__(self):
         portal = self.context
         for item in self.previous:
             if item.get('_type') == 'opengever.repository.repositoryroot':
-                repository_id = self._get_repo_root_id(item)
+                repository_id = self._get_repo_root_id(item, portal)
                 if repository_id is not None:
                     # Plone Site
                     if not self.has_assigned_primary_portlet:
@@ -49,11 +53,10 @@ class AssignRepoRootNavigation(object):
                         self.has_assigned_primary_portlet = True
 
                     # Repo root
-                    if '_object' in item:
-                        obj = item['_object']
-                        assign_tree_portlet(
-                            context=obj, root_path=repository_id,
-                            remove_nav=True, block_inheritance=True)
+                    obj = traverse(portal, item['_path'])
+                    assign_tree_portlet(
+                        context=obj, root_path=repository_id,
+                        remove_nav=True, block_inheritance=True)
 
             yield item
 

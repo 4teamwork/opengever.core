@@ -1,0 +1,42 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="opengever.tasktemplates">
+
+  <browser:page
+      for="*"
+      name="tabbedview_view-tasktemplates"
+      class=".tasktemplates.TaskTemplates"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="*"
+      name="tabbedview_view-tasktemplatefolders"
+      class=".templatefolders.TaskTemplateFoldersTab"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="view"
+      for="opengever.tasktemplates.content.tasktemplate.ITaskTemplate"
+      class=".tasktemplates.View"
+      template="templates/view.pt"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="add-tasktemplate"
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      class=".trigger.TriggerTaskTemlateFolderView"
+      permission="cmf.AddPortalContent"
+      />
+
+  <browser:page
+      name="select-tasktemplates"
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      class=".trigger.SelectTaskTemplatesView"
+      permission="cmf.AddPortalContent"
+      />
+
+</configure>

@@ -86,6 +86,9 @@ msgstr "Modifier les méta-données"
 msgid "Give Filing Number"
 msgstr "Attribuer un numéro d'inventaire"
 
+msgid "Info success"
+msgstr "Info"
+
 msgid "Meeting"
 msgstr "Séance"
 

@@ -29,15 +29,18 @@ class TestPrivateFolder(FunctionalTestCase):
     def test_object_id_is_userid(self):
         self.assertEquals(TEST_USER_ID, self.folder.getId())
 
-    def test_title_is_corresponding_users_label(self):
+    def test_Title_is_corresponding_users_label(self):
         self.assertEquals('Test User (test_user_1_)', self.folder.Title())
+
+    def test_Title_returns_string(self):
+        self.assertTrue(isinstance(self.folder.Title(), str))
 
     def test_uses_userid_as_reference_number_part(self):
         self.assertEquals('Client1 test_user_1_',
                           IReferenceNumber(self.folder).get_number())
 
     def test_adds_additonal_roles_after_creation(self):
-        self.assertEquals(
+        self.assertItemsEqual(
             ['Publisher', 'Authenticated', 'Owner', 'Editor', 'Reader',
              'Contributor', 'Reviewer'],
             api.user.get_roles(username=TEST_USER_ID, obj=self.folder))
@@ -49,7 +52,7 @@ class TestPrivateFolderTabbedView(FunctionalTestCase):
 
     def setUp(self):
         super(TestPrivateFolderTabbedView, self).setUp()
-        self.root = create(Builder('private_root'))
+        self.root = create(Builder('private_root').titled(u'Private root'))
         self.folder = create_members_folder(self.root)
 
     @browsing
@@ -63,8 +66,8 @@ class TestPrivateFolderTabbedView(FunctionalTestCase):
     def test_private_root_is_hidden_from_breadcrumbs(self, browser):
         browser.login().open(self.folder)
         self.assertEqual(
-            'You are here: Client1 / Test User (test_user_1_)',
-            browser.css('#portal-breadcrumbs').first.text)
+            ['Client1', 'Test User (test_user_1_)'],
+            browser.css('#portal-breadcrumbs li').text)
 
     @browsing
     def test_dossier_tab_lists_all_containig_private_dossiers(self, browser):

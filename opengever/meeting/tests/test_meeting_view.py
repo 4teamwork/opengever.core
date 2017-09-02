@@ -136,7 +136,7 @@ class TestMeetingView(FunctionalTestCase):
     def test_participants_listing_precidency_is_existing(self, browser):
         browser.login().open(self.meeting.get_url())
         self.assertEquals(
-            [u'h\xfcgo Boss (boss@foo.ch)'],
+            [u'Boss h\xfcgo (boss@foo.ch)'],
             browser.css("#meeting_presidency + dd").text)
 
     @browsing
@@ -150,7 +150,7 @@ class TestMeetingView(FunctionalTestCase):
     def test_participants_listing_secretary_is_existing(self, browser):
         browser.login().open(self.meeting.get_url())
         self.assertEquals(
-            [u'Silvia Pangani (pangani@foo.ch)'],
+            [u'Pangani Silvia (pangani@foo.ch)'],
             browser.css("#meeting_secretary + dd").text)
 
     @browsing
@@ -163,9 +163,14 @@ class TestMeetingView(FunctionalTestCase):
     @browsing
     def test_participants_listing_participants_is_existing(self, browser):
         browser.login().open(self.meeting.get_url())
+        self.assertEquals(3, len(browser.css("#meeting_participants + dd li")))
+
+    @browsing
+    def test_participants_listing_participants_are_listed_alphabetically(self, browser):
+        browser.login().open(self.meeting.get_url())
         self.assertEquals(
-            ['Peter Meter (meter@foo.ch) Hans Besen Roland Kuppler'],
-            browser.css("#meeting_participants + dd").text)
+            ['Besen Hans', 'Kuppler Roland', 'Meter Peter (meter@foo.ch)'],
+            browser.css("#meeting_participants + dd li").text)
 
     @browsing
     def test_participants_listing_empty_participants_must_not_raise(self, browser):

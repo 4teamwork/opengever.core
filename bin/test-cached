@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+#
+# USAGE:
+# bin/test-cached [any options/arguments supplied to bin/test]
+#
+set -euo pipefail
+
+GEVER_CACHE_TEST_DB=true bin/test "$@"

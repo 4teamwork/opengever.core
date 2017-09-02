@@ -1,4 +1,3 @@
-from five import grok
 from ftw.table.interfaces import ITableSource
 from opengever.tabbedview import GeverTableSource
 from opengever.tabbedview.interfaces import IGeverTableSourceConfig
@@ -9,18 +8,19 @@ from sqlalchemy.sql.expression import asc
 from sqlalchemy.sql.expression import cast
 from sqlalchemy.sql.expression import column
 from sqlalchemy.sql.expression import desc
+from zope.component import adapter
+from zope.interface import implementer
 from zope.interface import Interface
 
 
+@implementer(ITableSource)
+@adapter(IGeverTableSourceConfig, Interface)
 class SqlTableSource(GeverTableSource):
     """Base table source adapter for every listing,
        that gets the content from sql.
     """
 
     searchable_columns = []
-
-    grok.implements(ITableSource)
-    grok.adapts(IGeverTableSourceConfig, Interface)
 
     def validate_base_query(self, query):
         """Validates and fixes the base query. Returns the query object.
@@ -40,6 +40,16 @@ class SqlTableSource(GeverTableSource):
 
         if self.config.sort_on:
             sort_on = self.config.sort_on
+
+            # sqlalchemy_sort_indexes is a dict on the TableSourceConfig which
+            # defines a mapping between default sort_on attributes based on
+            # strings and sqlalchemy sort-indexes based on an sqlalchemy column.
+            # This allows us to sort by joined table columns.
+            if hasattr(self.config, 'sqlalchemy_sort_indexes'):
+                sqlalchemy_sort_index = self.config.sqlalchemy_sort_indexes.get(sort_on)
+                if sqlalchemy_sort_index:
+                    sort_on = sqlalchemy_sort_index
+
             # Don't plug column names as literal strings into an order_by
             # clause, but use a ColumnClause instead to allow SQLAlchemy to
             # properly quote the identifier name depending on the dialect
@@ -79,9 +89,12 @@ class SqlTableSource(GeverTableSource):
                 # Issue #759
                 query.session
 
-                query = query.filter(or_(
-                    *[cast(field, String).ilike(term)
-                      for field in self.searchable_columns]))
+                expressions = []
+                for field in self.searchable_columns:
+                    if not issubclass(field.type.python_type, basestring):
+                        field = cast(field, String)
+                    expressions.append(field.ilike(term))
+                query = query.filter(or_(*expressions))
 
         return query
 

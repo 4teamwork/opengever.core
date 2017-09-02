@@ -37,4 +37,6 @@
       handler=".subscribers.configure_private_root_portlets"
       />
 
+  <adapter factory=".reference.PrivateFolderReferenceNumber" />
+
 </configure>

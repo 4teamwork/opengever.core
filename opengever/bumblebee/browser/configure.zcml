@@ -46,23 +46,9 @@
       layer="opengever.base.interfaces.IOpengeverBaseLayer"
       />
 
-  <adapter
-      for="opengever.document.document.IDocumentSchema
-           zope.interface.Interface"
-      factory=".overlay.BumblebeeBaseDocumentOverlay"
-      />
-
-  <adapter
-      for="opengever.mail.mail.IOGMailMarker
-           zope.interface.Interface"
-      factory=".overlay.BumblebeeMailOverlay"
-      />
-
-  <adapter
-      for="opengever.document.document.IDocumentSchema
-           opengever.bumblebee.interfaces.IVersionedContextMarker"
-      factory=".overlay.BumblebeeDocumentVersionOverlay"
-      />
+  <adapter factory=".overlay.BumblebeeBaseDocumentOverlay" />
+  <adapter factory=".overlay.BumblebeeMailOverlay" />
+  <adapter factory=".overlay.BumblebeeDocumentVersionOverlay" />
 
   <browser:page
       for="ftw.bumblebee.interfaces.IBumblebeeable"

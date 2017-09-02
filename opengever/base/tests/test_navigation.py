@@ -6,7 +6,6 @@ from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.testing import add_languages
 from opengever.testing import FunctionalTestCase
-from opengever.testing import set_preferred_language
 from plone.uuid.interfaces import IUUID
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
@@ -52,21 +51,24 @@ class TestNavigation(FunctionalTestCase):
         subfolder = create(Builder('repository')
                            .having(title_de=u'The Sub Folder',
                                    description='A secondary folder')
-                           .within(folder))
+                           .within(folder)
+                           .in_state('repositoryfolder-state-inactive'))
 
         browser.login().open()
-        browser.click_on('DE')
+        browser.click_on('Deutsch')
         browser.visit(root, view='navigation.json')
         self.assert_json_equal(
             [{"text": "1. The Folder",
               "description": "A primary folder",
               "uid": IUUID(folder),
               "url": folder.absolute_url(),
+              "active": True,
               "nodes": [{"text": "1.1. The Sub Folder",
                          "description": "A secondary folder",
                          "nodes": [],
                          "uid": IUUID(subfolder),
                          "url": subfolder.absolute_url(),
+                         "active": False,
                          }],
               }],
             browser.json)

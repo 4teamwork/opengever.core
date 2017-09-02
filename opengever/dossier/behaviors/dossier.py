@@ -50,6 +50,7 @@ class IDossier(form.Schema):
             u'start',
             u'end',
             u'comments',
+            u'external_reference',
             u'responsible',
             u'relatedDossier',
         ],
@@ -92,6 +93,11 @@ class IDossier(form.Schema):
         title=_(u"label_responsible", default="Responsible"),
         source=AssignedUsersSourceBinder(),
         required=True,
+    )
+
+    external_reference = schema.TextLine(
+        title=_(u'label_external_reference', default=u'External Reference'),
+        required=False,
     )
 
     form.fieldset(

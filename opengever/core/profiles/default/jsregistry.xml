@@ -182,9 +182,20 @@
       cookable="True"
       expression=""
       enabled="True"
-      id="++resource++opengever.base/qtip.js"
+      id="++resource++opengever.base/breadcrumbs.js"
       inline="False"
       insert-after="++resource++opengever.base/prepoverlay.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      expression=""
+      enabled="True"
+      id="++resource++opengever.base/qtip.js"
+      inline="False"
+      insert-after="++resource++opengever.base/breadcrumbs.js"
       />
 
   <javascript
@@ -410,6 +421,34 @@
       id="++resource++opengever.bumblebee.resources/bumblebee.js"
       insert-after="++resource++opengever.meeting/datetimepicker.js"
       inline="False"
+      />
+
+  <javascript
+      id="++resource++quickupload_static/swfobject.js"
+      enabled="False"
+      />
+
+  <javascript
+      id="++resource++plone.formwidget.autocomplete/formwidget-autocomplete.js"
+      insert-after="collective.js.jqueryui.custom.min.js"
+      />
+
+  <javascript
+      id="++resource++plone.formwidget.autocomplete/jquery.autocomplete.min.js"
+      insert-after="collective.js.jqueryui.custom.min.js"
+      />
+
+  <!-- Required for the jquery 1.11.2 version. -->
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      enabled="True"
+      inline="False"
+      expression=""
+      insert-after="++resource++plone.app.jquery.js"
+      bundle="jquery"
+      id="++resource++opengever.base/jquery-migrate.min.js"
       />
 
 </object>

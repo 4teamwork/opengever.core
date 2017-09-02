@@ -9,7 +9,7 @@
        :Feldname: :field-title:`Beschreibung`
        :Datentyp: ``Text``
        
-       
+       :Default: null
        :Beschreibung: Eine kurze Beschreibung des Inhalts.
        
 
@@ -74,13 +74,23 @@
        
 
 
+   .. py:attribute:: allow_add_businesscase_dossier
+
+       :Feldname: :field-title:`Hinzufügen von Geschäftsdossiers erlauben`
+       :Datentyp: ``Bool``
+       
+       
+       :Beschreibung: Wählen Sie, ob es in dieser Ordnungsposition erlaubt ist, Geschäftsdossiers hinzuzufügen. Ist diese Option deaktiviert, kann der Benutzer nur Dossiers aus einer Vorlage oder Spezialdossiers erstellen.
+       
+
+
    .. py:attribute:: classification
 
        :Feldname: :field-title:`Klassifikation`
        :Datentyp: ``Choice``
        
        :Default: "unprotected"
-       :Beschreibung: Grad, in dem die Unterlagen vor unberechtigter Einsicht geschützt werden müssen
+       :Beschreibung: Grad, in dem die Unterlagen vor unberechtigter Einsicht geschützt werden müssen.
        :Wertebereich: ["unprotected", "confidential", "classified"]
 
 
@@ -90,7 +100,7 @@
        :Datentyp: ``Choice``
        
        :Default: "privacy_layer_no"
-       :Beschreibung: Markierung, die angibt, ob die Unterlagen besonders schützenswerte Personendaten oder Persönlichkeitsprofile gemäss Datenschutzrecht enthalten
+       :Beschreibung: Markierung, die angibt, ob die Unterlagen besonders schützenswerte Personendaten oder Persönlichkeitsprofile gemäss Datenschutzrecht enthalten.
        :Wertebereich: ["privacy_layer_no", "privacy_layer_yes"]
 
 
@@ -100,7 +110,7 @@
        :Datentyp: ``Choice``
        
        :Default: "unchecked"
-       :Beschreibung: Angabe, ob die Unterlagen gemäss Öffentlichkeitsgesetz zugänglich sind oder nicht
+       :Beschreibung: Angabe, ob die Unterlagen gemäss Öffentlichkeitsgesetz zugänglich sind oder nicht.
        :Wertebereich: ["unchecked", "public", "limited-public", "private"]
 
 
@@ -134,23 +144,13 @@
        
 
 
-   .. py:attribute:: creators
-
-       :Feldname: :field-title:`Autoren`
-       :Datentyp: ``Tuple``
-       
-       
-       
-       
-
-
    .. py:attribute:: retention_period
 
        :Feldname: :field-title:`Aufbewahrungsdauer (Jahre)`
        :Datentyp: ``Choice``
        
        :Default: 5
-       :Beschreibung: Zeitraum zwischen dem jüngsten Dokumentdatum eines in einem Dossier enthaltenen Dokuments und dem Zeitpunkt, an dem dieses für die Geschäftstätigkeit der Verwaltungseinheit nicht mehr benötigt wird
+       :Beschreibung: Zeitraum zwischen dem jüngsten Dokumentdatum eines in einem Dossier enthaltenen Dokuments und dem Zeitpunkt, an dem dieses für die Geschäftstätigkeit der Verwaltungseinheit nicht mehr benötigt wird.
        :Wertebereich: [5, 10, 15, 20, 25]
 
 
@@ -190,7 +190,7 @@
        :Datentyp: ``Choice``
        
        :Default: 30
-       :Beschreibung: Dauer, während der nach der Archivierung die Dokumente vor öffentlicher Einsichtnahme geschützt sind
+       :Beschreibung: Dauer, während der nach der Archivierung die Dokumente vor öffentlicher Einsichtnahme geschützt sind.
        :Wertebereich: [0, 30, 100, 150]
 
 
@@ -220,5 +220,15 @@
        :Datentyp: ``TextLine``
        
        :Default: <Höchste auf dieser Ebene vergebene Nummer + 1>
+       
+       
+
+
+   .. py:attribute:: addable_dossier_templates
+
+       :Feldname: :field-title:`Erlaubte Dossiervorlagen`
+       :Datentyp: ``RelationList``
+       
+       :Default: []
        
        

@@ -2,340 +2,324 @@ from datetime import date
 from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browsing
+from ftw.testbrowser.pages import factoriesmenu
 from ftw.testing import freeze
+from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.interfaces import IDossierContainerTypes
-from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 
 
-class TestDossierContainer(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestDossierContainer, self).setUp()
+class TestDossierContainer(IntegrationTestCase):
 
     def test_is_all_supplied_without_any_subdossiers(self):
-        dossier = create(Builder("dossier"))
-        create(Builder("document").within(dossier))
-
-        self.assertTrue(dossier.is_all_supplied())
+        self.login(self.dossier_responsible)
+        create(Builder('document').within(self.empty_dossier))
+        self.assertTrue(self.empty_dossier.is_all_supplied())
 
     def test_is_not_all_supplied_with_subdossier_and_document(self):
-        dossier = create(Builder("dossier"))
-        create(Builder("dossier").within(dossier))
-        create(Builder("document").within(dossier))
-
-        self.assertFalse(dossier.is_all_supplied())
+        self.login(self.dossier_responsible)
+        create(Builder('dossier').within(self.empty_dossier))
+        create(Builder('document').within(self.empty_dossier))
+        self.assertFalse(self.empty_dossier.is_all_supplied())
 
     def test_is_not_all_supplied_with_subdossier_and_tasks(self):
-        dossier = create(Builder("dossier"))
-        create(Builder("dossier").within(dossier))
-        create(Builder("task").within(dossier))
-
-        self.assertFalse(dossier.is_all_supplied())
+        self.login(self.dossier_responsible)
+        create(Builder('dossier').within(self.empty_dossier))
+        create(Builder('task').within(self.empty_dossier)
+               .having(responsible=self.regular_user.getId()))
+        self.assertFalse(self.empty_dossier.is_all_supplied())
 
     def test_is_not_all_supplied_with_subdossier_and_mails(self):
-        dossier = create(Builder("dossier"))
-        create(Builder("dossier").within(dossier))
-        create(Builder("mail").within(dossier)
-               .with_dummy_message())
-
-        self.assertFalse(dossier.is_all_supplied())
+        self.login(self.dossier_responsible)
+        create(Builder('dossier').within(self.empty_dossier))
+        create(Builder('mail').within(self.empty_dossier).with_dummy_message())
+        self.assertFalse(self.empty_dossier.is_all_supplied())
 
     def test_is_all_supplied_with_subdossier_containing_tasks_or_documents(self):
-        dossier = create(Builder("dossier"))
-        subdossier = create(Builder("dossier").within(dossier))
-        create(Builder("task").within(subdossier))
-        create(Builder("document").within(subdossier))
-
-        self.assertTrue(dossier.is_all_supplied())
+        self.login(self.dossier_responsible)
+        subdossier = create(Builder('dossier').within(self.empty_dossier))
+        create(Builder('task').within(subdossier)
+               .having(responsible=self.regular_user.getId()))
+        create(Builder('document').within(subdossier))
+        self.assertTrue(self.empty_dossier.is_all_supplied())
 
     def test_get_parents_dossier_returns_none_for_main_dossier(self):
-        dossier = create(Builder('dossier'))
-        self.assertEquals(None, dossier.get_parent_dossier())
+        self.login(self.dossier_responsible)
+        self.assertEquals(None, self.dossier.get_parent_dossier())
 
     def test_get_parents_dossier_returns_main_dossier_for_a_subdossier(self):
-        dossier = create(Builder('dossier'))
-        subdossier = create(Builder('dossier').within(dossier))
-        self.assertEquals(dossier, subdossier.get_parent_dossier())
+        self.login(self.dossier_responsible)
+        self.assertEquals(self.dossier, self.subdossier.get_parent_dossier())
 
     def test_is_subdossier_is_false_for_main_dossiers(self):
-        dossier = create(Builder('dossier'))
-        self.assertFalse(dossier.is_subdossier())
+        self.login(self.dossier_responsible)
+        self.assertFalse(self.dossier.is_subdossier())
 
     def test_is_subdossier_is_true_for_dossiers_inside_a_dossier(self):
-        dossier = create(Builder('dossier'))
-        subdossier = create(Builder('dossier').within(dossier))
-        self.assertTrue(subdossier.is_subdossier())
+        self.login(self.dossier_responsible)
+        self.assertTrue(self.subdossier.is_subdossier())
 
-    def test_maximum_dossier_level_is_2_by_default(self):
-        dossier = create(Builder('dossier'))
-        subdossier = create(Builder('dossier').within(dossier))
-
+    def test_max_subdossier_depth_is_1_by_default(self):
+        self.login(self.dossier_responsible)
         self.assertIn('opengever.dossier.businesscasedossier',
-                      [fti.id for fti in dossier.allowedContentTypes()])
+                      [fti.id for fti in self.dossier.allowedContentTypes()])
 
         self.assertNotIn('opengever.dossier.businesscasedossier',
-                         [fti.id for fti in subdossier.allowedContentTypes()])
+                         [fti.id for fti in self.subdossier.allowedContentTypes()])
 
-    def test_get_subdossier_depth_from_registry(self):
-        registry = getUtility(IRegistry)
-        proxy = registry.forInterface(IDossierContainerTypes)
+    def test_max_subdossier_depth_is_configurable(self):
+        self.login(self.dossier_responsible)
+        self.assertNotIn('opengever.dossier.businesscasedossier',
+                         [fti.id for fti in self.subdossier.allowedContentTypes()])
+
+        proxy = getUtility(IRegistry).forInterface(IDossierContainerTypes)
         proxy.maximum_dossier_depth = 2
+        self.assertIn('opengever.dossier.businesscasedossier',
+                      [fti.id for fti in self.subdossier.allowedContentTypes()])
 
-        dossier = create(Builder('dossier'))
-        subdossier = create(Builder('dossier').within(dossier))
-        subsubdossier = create(Builder('dossier').within(subdossier))
-
-        self.assertNotIn(
-            'opengever.dossier.businesscasedossier',
-            [fti.id for fti in subsubdossier.allowedContentTypes()])
-
-    def test_get_subdossiers_returns_subsubdossiers_as_well(self):
-        dossier = create(Builder('dossier'))
-        subdossier = create(Builder('dossier').within(dossier))
-        subsubdossier = create(Builder('dossier').within(subdossier))
+    def test_get_subdossiers_is_recursive_by_default(self):
+        self.login(self.dossier_responsible)
+        subsubdossier = create(Builder('dossier').within(self.subdossier))
+        self.assertSequenceEqual(
+            [self.subdossier, self.subdossier2, subsubdossier],
+            map(self.brain_to_object, self.dossier.get_subdossiers()))
 
         self.assertSequenceEqual(
-            [subdossier, subsubdossier],
-            self.brains_to_objects(dossier.get_subdossiers()))
-
-    def test_get_subdossiers_depth(self):
-        dossier = create(Builder('dossier'))
-        subdossier = create(Builder('dossier').within(dossier))
-        create(Builder('dossier').within(subdossier))
-
-        self.assertSequenceEqual(
-            [subdossier],
-            self.brains_to_objects(dossier.get_subdossiers(depth=1)))
+            [self.subdossier, self.subdossier2],
+            map(self.brain_to_object, self.dossier.get_subdossiers(depth=1)))
 
     def test_sequence_number(self):
-        dossier_1 = create(Builder("dossier"))
-        subdossier = create(Builder("dossier"))
-        dossier_2 = create(Builder("dossier"))
-
-        self.assertEquals(1, dossier_1.get_sequence_number())
-        self.assertEquals(2, subdossier.get_sequence_number())
-        self.assertEquals(3, dossier_2.get_sequence_number())
+        self.login(self.dossier_responsible)
+        expected = {
+            'dossier': 1,
+            'subdossier': 2,
+            'subdossier2': 3,
+            'archive_dossier': 4,
+            'empty_dossier': 5}
+        got = {name: getattr(self, name).get_sequence_number()
+               for name in expected.keys()}
+        self.assertDictEqual(expected, got)
 
     def test_support_participations(self):
-        dossier = create(Builder("dossier"))
-        self.assertTrue(dossier.has_participation_support())
+        self.login(self.dossier_responsible)
+        self.assertTrue(self.dossier.has_participation_support())
 
     def test_support_tasks(self):
-        dossier = create(Builder("dossier"))
-        self.assertTrue(dossier.has_task_support())
+        self.login(self.dossier_responsible)
+        self.assertTrue(self.dossier.has_task_support())
 
     def test_reference_number(self):
-        root = create(Builder('repository_root'))
-        repo = create(Builder('repository').within(root))
-        dossier_1 = create(Builder("dossier").within(repo))
-        subdossier = create(Builder("dossier").within(dossier_1))
-        dossier_2 = create(Builder("dossier").within(repo))
+        self.login(self.dossier_responsible)
+        expected = {
+            'dossier': 'Client1 1.1 / 1',
+            'subdossier': 'Client1 1.1 / 1.1',
+            'subdossier2': 'Client1 1.1 / 1.2',
+            'archive_dossier': 'Client1 1.1 / 2',
+            'empty_dossier': 'Client1 1.1 / 3'}
+        got = {name: getattr(self, name).get_reference_number()
+               for name in expected.keys()}
+        self.assertDictEqual(expected, got)
 
-        self.assertEquals('Client1 1 / 1', dossier_1.get_reference_number())
-        self.assertEquals('Client1 1 / 1.1', subdossier.get_reference_number())
-        self.assertEquals('Client1 1 / 2', dossier_2.get_reference_number())
 
-
-class TestDossierChecks(FunctionalTestCase):
+class TestDossierChecks(IntegrationTestCase):
 
     def test_it_has_no_active_task_when_no_task_exists(self):
-        dossier = create(Builder("dossier"))
-        self.assertFalse(dossier.has_active_tasks())
+        self.login(self.dossier_responsible)
+        self.assertFalse(self.empty_dossier.has_active_tasks())
 
-    def test_it_has_no_active_task_if_all_task_are_in_an_inactive_state(self):
-        dossier = create(Builder("dossier"))
-        create(Builder("task").within(dossier)
-               .in_state('task-state-cancelled'))
-        create(Builder("task").within(dossier)
-               .in_state('task-state-tested-and-closed'))
-        create(Builder("task").within(dossier)
-               .in_state('task-state-tested-and-closed'))
+    def test_has_active_tasks_false_when_states_cancelled(self):
+        self.login(self.dossier_responsible)
+        self.set_workflow_state('task-state-cancelled', *self.dossier_tasks)
+        self.assertFalse(self.dossier.has_active_tasks())
 
-        self.assertFalse(dossier.has_active_tasks())
+    def test_has_active_tasks_false_when_states_tested_and_closed(self):
+        self.login(self.dossier_responsible)
+        self.set_workflow_state('task-state-tested-and-closed', *self.dossier_tasks)
+        self.assertFalse(self.dossier.has_active_tasks())
 
-    def test_it_has_no_active_task_if_tasks_and_subtasks_are_in_an_inactive_state(self):
-        dossier = create(Builder("dossier"))
-        task = create(Builder("task").within(dossier)
-                      .in_state('task-state-cancelled'))
-        subtask = create(Builder("task").within(task)
-                         .in_state('task-state-cancelled'))
-        create(Builder("task").within(subtask)
-               .in_state('task-state-tested-and-closed'))
+    def test_has_active_tasks_true_when_states_in_progress(self):
+        self.login(self.dossier_responsible)
+        self.set_workflow_state('task-state-in-progress', *self.dossier_tasks)
+        self.assertTrue(self.dossier.has_active_tasks())
 
-        self.assertFalse(dossier.has_active_tasks())
+    def test_has_active_tasks_true_when_states_open(self):
+        self.login(self.dossier_responsible)
+        self.set_workflow_state('task-state-open', *self.dossier_tasks)
+        self.assertTrue(self.dossier.has_active_tasks())
 
-    def test_it_has_active_tasks_if_a_task_is_in_an_active_state(self):
-        dossier = create(Builder("dossier"))
-        create(Builder("task").within(dossier)
-               .in_state('task-state-open'))
+    def test_has_active_tasks_true_when_states_rejected(self):
+        self.login(self.dossier_responsible)
+        self.set_workflow_state('task-state-rejected', *self.dossier_tasks)
+        self.assertTrue(self.dossier.has_active_tasks())
 
-        self.assertTrue(dossier.has_active_tasks())
+    def test_has_active_tasks_true_when_states_resolved(self):
+        self.login(self.dossier_responsible)
+        self.set_workflow_state('task-state-resolved', *self.dossier_tasks)
+        self.assertTrue(self.dossier.has_active_tasks())
 
-    def test_has_active_tasks_checks_recursive(self):
-        dossier = create(Builder("dossier"))
-        subdossier = create(Builder("dossier").within(dossier))
-        subsubdossier = create(Builder("dossier").within(subdossier))
-        create(Builder("task").within(subsubdossier).in_state('task-state-open'))
+    def test_has_active_tasks_checks_are_recursive(self):
+        self.login(self.dossier_responsible)
+        first, second = self.dossier_tasks
+        self.set_workflow_state('task-state-resolved', first)
+        self.set_workflow_state('task-state-tested-and-closed', second)
+        self.assertTrue(self.dossier.has_active_tasks())
 
-        self.assertTrue(dossier.has_active_tasks())
+        self.set_workflow_state('task-state-resolved', second)
+        self.set_workflow_state('task-state-tested-and-closed', first)
+        self.assertTrue(self.dossier.has_active_tasks())
 
-    def test_its_all_checked_in_when_no_document_exists(self):
-        dossier = create(Builder("dossier"))
-        self.assertTrue(dossier.is_all_checked_in())
+    def test_is_all_checked_in_is_true_when_no_document_exists(self):
+        self.login(self.dossier_responsible)
+        self.assertTrue(self.empty_dossier.is_all_checked_in())
 
-    def test_its_all_checked_in_when_no_document_is_checked_out(self):
-        dossier = create(Builder("dossier"))
-        create(Builder('document').within(dossier))
-        self.assertTrue(dossier.is_all_checked_in())
+    def test_is_all_checked_in_is_true_when_no_document_is_checked_out(self):
+        self.login(self.dossier_responsible)
+        self.assertTrue(self.dossier.is_all_checked_in())
 
-    def test_its_not_all_checked_in_when_a_document_inside_the_dossier_is_checked_out(self):
-        dossier = create(Builder("dossier"))
-        create(Builder('document')
-               .within(dossier)
-               .checked_out())
-        self.assertFalse(dossier.is_all_checked_in())
+    def test_is_all_checked_in_is_false_when_document_in_dossier_checked_out(self):
+        self.login(self.dossier_responsible)
+        self.assertTrue(self.dossier.is_all_checked_in())
+        self.checkout_document(self.document)
+        self.assertFalse(self.dossier.is_all_checked_in())
 
-    def test_its_not_all_checked_in_when_a_document_inside_the_subdossier_is_checked_out(self):
-        dossier = create(Builder("dossier"))
-        subdossier = create(Builder("dossier").within(dossier))
-        create(Builder('document')
-               .within(subdossier)
-               .checked_out())
-
-        self.assertFalse(dossier.is_all_checked_in())
+    def test_is_all_checked_in_is_false_when_document_in_subdossier_checked_out(self):
+        self.login(self.dossier_responsible)
+        self.assertTrue(self.dossier.is_all_checked_in())
+        self.checkout_document(self.document)
+        self.assertFalse(self.dossier.is_all_checked_in())
 
 
-class TestDateCalculations(FunctionalTestCase):
+class TestDateCalculations(IntegrationTestCase):
 
-    def test_start_date_defaults_to_today(self):
-        with freeze(datetime.now()):
-            dossier = create(Builder("dossier"))
-            self.assertEqual(IDossier(dossier).start, date.today())
+    @browsing
+    def test_start_date_defaults_to_today(self, browser):
+        self.login(self.regular_user, browser)
+        with freeze(datetime(2015, 12, 22)):
+            browser.open(self.leaf_repofolder)
+            factoriesmenu.add('Business Case Dossier')
+            self.assertEquals('22.12.2015', browser.find('Opening Date').value)
 
     def test_earliest_possible_is_none_for_empty_dossiers(self):
-        dossier = create(Builder("dossier")
-                         .having(start=None))
-        self.assertEquals(None, dossier.earliest_possible_end_date())
+        self.login(self.dossier_responsible)
+        IDossier(self.empty_dossier).start = None
+        IDossier(self.empty_dossier).end = None
+        self.empty_dossier.reindexObject(idxs=['end', 'start'])
+        self.assertIsNone(self.empty_dossier.earliest_possible_end_date())
 
     def test_earliest_possible_is_end_date_of_a_dossiers(self):
-        dossier = create(Builder("dossier")
-                         .having(start=date(2012, 01, 01),
-                                 end=date(2012, 02, 03)))
-        self.assertEquals(date(2012, 02, 03),
-                          dossier.earliest_possible_end_date())
+        self.login(self.dossier_responsible)
+        IDossier(self.empty_dossier).start = None
+        IDossier(self.empty_dossier).end = date(2029, 9, 18)
+        self.empty_dossier.reindexObject(idxs=['end', 'start'])
+        self.assertEquals(date(2029, 9, 18),
+                          self.empty_dossier.earliest_possible_end_date())
 
     def test_earliest_possible_is_latest_document_date(self):
-        dossier = create(Builder("dossier").having(start=date(2012, 01, 01)))
-        create(Builder("document").within(dossier)
-               .having(document_date=date(2012, 02, 03)))
-        create(Builder("document").within(dossier)
-               .having(document_date=date(2012, 01, 01)))
-
-        self.assertEquals(date(2012, 02, 03),
-                          dossier.earliest_possible_end_date())
+        self.login(self.dossier_responsible)
+        IDocumentMetadata(self.document).document_date = date(2021, 1, 22)
+        self.document.reindexObject(idxs=['document_date'])
+        self.assertEquals(date(2021, 1, 22),
+                          self.dossier.earliest_possible_end_date())
 
     def test_earliest_possible_is_latest_of_dossiers_end_dates_and_document_dates(self):
-        dossier = create(Builder("dossier")
-                         .having(start=date(2012, 01, 01),
-                                 end=date(2012, 02, 04)))
-        create(Builder("dossier").within(dossier)
-               .having(start=date(2012, 01, 01),
-                       end=date(2012, 02, 03)))
-        create(Builder("document").within(dossier)
-               .having(document_date=date(2012, 02, 05)))
+        self.login(self.dossier_responsible)
 
-        self.assertEquals(date(2012, 02, 05),
-                          dossier.earliest_possible_end_date())
+        IDocumentMetadata(self.document).document_date = date(2020, 1, 1)
+        self.document.reindexObject(idxs=['document_date'])
+        IDossier(self.subdossier).end = date(2020, 2, 2)
+        self.subdossier.reindexObject(idxs=['end'])
+        self.assertEquals(date(2020, 2, 2), self.dossier.earliest_possible_end_date())
+
+        IDocumentMetadata(self.document).document_date = date(2020, 3, 3)
+        self.document.reindexObject(idxs=['document_date'])
+        self.assertEquals(date(2020, 3, 3), self.dossier.earliest_possible_end_date())
 
     def test_calculation_ignore_inactive_subdossiers_for_calculation(self):
-        dossier = create(Builder("dossier")
-                         .having(start=date(2012, 01, 01),
-                                 end=date(2012, 02, 04)))
+        self.login(self.dossier_responsible)
 
-        create(Builder("dossier").within(dossier)
-               .having(start=date(2012, 01, 01), end=date(2012, 02, 05))
-               .in_state('dossier-state-inactive'))
+        IDossier(self.subdossier).end = date(2020, 1, 1)
+        self.subdossier.reindexObject(idxs=['end'])
+        IDossier(self.subdossier2).end = date(2020, 2, 2)
+        self.subdossier2.reindexObject(idxs=['end'])
+        self.assertEquals(date(2020, 2, 2), self.dossier.earliest_possible_end_date())
 
-        self.assertEquals(date(2012, 02, 04),
-                          dossier.earliest_possible_end_date())
+        self.set_workflow_state('dossier-state-inactive', self.subdossier2)
+        self.assertEquals(date(2020, 1, 1), self.dossier.earliest_possible_end_date())
 
     def test_none_is_not_a_valid_start_date(self):
-        dossier = create(Builder("dossier").having(start=None))
-
-        self.assertFalse(dossier.has_valid_startdate(),
-                         "None is not a valid dossier startdate")
+        self.login(self.dossier_responsible)
+        IDossier(self.empty_dossier).start = None
+        IDossier(self.empty_dossier).end = None
+        self.empty_dossier.reindexObject(idxs=['end', 'start'])
+        self.assertIsNone(self.empty_dossier.earliest_possible_end_date())
+        self.assertFalse(self.empty_dossier.has_valid_startdate())
 
     def test_every_date_is_a_valid_start_date(self):
-        dossier = create(Builder("dossier")
-                         .having(start=date(2012, 02, 24)))
-
-        self.assertTrue(
-            dossier.has_valid_startdate(),
-            "'%s' should be a valid startdate" % IDossier(dossier).start)
+        self.login(self.dossier_responsible)
+        self.assertEquals(date(2016, 1, 1),
+                          self.empty_dossier.earliest_possible_end_date())
+        self.assertTrue(self.empty_dossier.has_valid_startdate())
 
     def test_no_end_date_is_valid(self):
-        dossier = create(Builder("dossier"))
-        create(Builder("dossier").within(dossier)
-               .having(start=date(2012, 02, 24)))
-        self.assertTrue(dossier.has_valid_enddate())
+        self.login(self.dossier_responsible)
+        self.assertIsNone(IDossier(self.empty_dossier).end)
+        self.assertTrue(self.empty_dossier.has_valid_enddate())
 
-    def test_end_date_afterward_the_latest_document_date_is_valid(self):
-        dossier = create(Builder("dossier")
-                         .having(start=date(2012, 01, 01),
-                                 end=date(2012, 01, 02)))
-        create(Builder('document')
-               .within(dossier)
-               .having(document_date=date(2012, 01, 01)))
+    def test_dossier_end_can_be_later_than_document_date(self):
+        self.login(self.dossier_responsible)
+        IDossier(self.dossier).end = date(2020, 2, 2)
+        IDocumentMetadata(self.document).document_date = date(2020, 1, 1)
+        self.document.reindexObject(idxs=['document_date'])
+        self.assertTrue(self.dossier.has_valid_enddate())
 
-        self.assertTrue(dossier.has_valid_enddate())
+    def test_dossier_end_can_be_equal_to_document_date(self):
+        self.login(self.dossier_responsible)
+        IDossier(self.dossier).end = date(2020, 1, 1)
+        IDocumentMetadata(self.document).document_date = date(2020, 1, 1)
+        self.document.reindexObject(idxs=['document_date'])
+        self.assertTrue(self.dossier.has_valid_enddate())
 
-    def test_end_date_equal_the_latest_document_date_is_valid(self):
-        dossier = create(Builder("dossier")
-                         .having(start=date(2012, 01, 01),
-                                 end=date(2012, 01, 01)))
-        create(Builder('document')
-               .within(dossier)
-               .having(document_date=date(2012, 01, 01)))
-
-        self.assertTrue(dossier.has_valid_enddate())
-
-    def test_end_date_before_the_latest_document_date_is_invalid(self):
-        dossier = create(Builder("dossier")
-                         .having(start=date(2012, 01, 01),
-                                 end=date(2012, 01, 01)))
-
-        create(Builder('document')
-               .within(dossier)
-               .having(document_date=date(2012, 01, 02)))
-
-        self.assertFalse(dossier.has_valid_enddate())
+    def test_dossier_end_cannot_be_earlier_to_document_date(self):
+        self.login(self.dossier_responsible)
+        IDossier(self.dossier).end = date(2020, 1, 1)
+        IDocumentMetadata(self.document).document_date = date(2020, 2, 2)
+        self.document.reindexObject(idxs=['document_date'])
+        self.assertFalse(self.dossier.has_valid_enddate())
 
     def test_end_date_is_allways_valid_in_a_empty_dossier(self):
-        dossier = create(Builder("dossier").having(
-            start=date(2012, 01, 01),
-            end=date(2012, 01, 01)))
+        self.login(self.dossier_responsible)
+        IDossier(self.empty_dossier).end = date(2050, 1, 1)
+        self.assertTrue(self.empty_dossier.has_valid_enddate())
 
-        self.assertTrue(dossier.has_valid_enddate())
+        IDossier(self.empty_dossier).end = None
+        self.assertTrue(self.empty_dossier.has_valid_enddate())
 
     def test_get_former_state_returns_last_end_state_in_history(self):
-        self.grant('Manager', 'Editor', 'Publisher', 'Reviewer')
-
-        dossier = create(Builder("dossier"))
-
+        self.login(self.administrator)
+        dossier = self.empty_dossier
         api.content.transition(obj=dossier, transition='dossier-transition-deactivate')
+        self.assertEquals('dossier-state-inactive', dossier.get_former_state())
         api.content.transition(obj=dossier, transition='dossier-transition-activate')
+        self.assertEquals('dossier-state-inactive', dossier.get_former_state())
         api.content.transition(obj=dossier, transition='dossier-transition-resolve')
-        api.content.transition(obj=dossier, transition='dossier-transition-offer')
-        api.content.transition(obj=dossier, transition='dossier-transition-archive')
-
+        self.assertEquals('dossier-state-resolved', dossier.get_former_state())
+        api.content.transition(obj=dossier, transition='dossier-transition-reactivate')
         self.assertEquals('dossier-state-resolved', dossier.get_former_state())
 
     def test_get_former_state_returns_none_for_dossiers_was_never_in_an_end_state(self):
-        self.grant('Manager', 'Editor', 'Publisher', 'Reviewer')
+        self.login(self.dossier_responsible)
+        self.assertIsNone(self.dossier.get_former_state())
 
-        dossier = create(Builder("dossier"))
-        self.assertIsNone(dossier.get_former_state())
+    def test_earliest_possible_can_handle_datetime_objs(self):
+        self.login(self.dossier_responsible)
+
+        IDocumentMetadata(self.document).document_date = datetime(2020, 1, 1, 10, 10)
+        self.document.reindexObject(idxs=['document_date'])
+        IDossier(self.subdossier).end = date(2020, 2, 2)
+        self.subdossier.reindexObject(idxs=['end'])
+        self.assertEquals(date(2020, 2, 2), self.dossier.earliest_possible_end_date())

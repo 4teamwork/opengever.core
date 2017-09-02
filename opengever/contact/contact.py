@@ -1,11 +1,9 @@
 from collective import dexteritytextindexer
-from five import grok
 from opengever.contact import _
 from opengever.ogds.models import EMAIL_LENGTH
 from opengever.ogds.models import FIRSTNAME_LENGTH
 from opengever.ogds.models import LASTNAME_LENGTH
 from plone.dexterity.content import Item
-from plone.directives import dexterity
 from plone.directives import form
 from plone.indexer import indexer
 from plone.namedfile.field import NamedImage
@@ -144,6 +142,7 @@ class IContact(form.Schema):
     description = schema.Text(
         title=_(u'label_description', default=u'Description'),
         required=False,
+        missing_value=u'',
         )
 
     address1 = schema.TextLine(
@@ -196,28 +195,18 @@ class Contact(Item):
 @indexer(IContact)
 def contactid(obj):
     return obj.contactid
-grok.global_adapter(contactid, name='contactid')
 
 
 @indexer(IContact)
 def phone_office(obj):
     return obj.phone_office
-grok.global_adapter(phone_office, name='phone_office')
 
 
 @indexer(IContact)
 def firstname(obj):
     return obj.firstname
-grok.global_adapter(firstname, name='firstname')
 
 
 @indexer(IContact)
 def lastname(obj):
     return obj.lastname
-grok.global_adapter(lastname, name='lastname')
-
-
-class View(dexterity.DisplayForm):
-    grok.context(IContact)
-    grok.require('zope2.View')
-    grok.name('contact_view')

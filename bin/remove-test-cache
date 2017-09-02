@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+buildout_dir=$( cd "$(dirname "$BASH_SOURCE")/.." ; pwd -P )
+caches_dir=$buildout_dir/var/test-db-caches/
+
+cmd="rm -rf $caches_dir"
+read -p "> $cmd ? [yN] " -n 1 -r
+echo ""
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+    echo "removing caches.."
+    $cmd
+else
+    echo "aborting.."
+fi

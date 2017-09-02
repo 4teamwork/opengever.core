@@ -1,4 +1,3 @@
-from five import grok
 from ftw.table.interfaces import ITableSource, ITableSourceConfig
 from opengever.base.model import create_session
 from opengever.ogds.base.actor import Actor
@@ -10,6 +9,8 @@ from opengever.tabbedview.filters import Filter
 from opengever.tabbedview.filters import FilterList
 from opengever.tabbedview.helper import boolean_helper
 from opengever.tabbedview.helper import email_helper
+from zope.component import adapter
+from zope.interface import implementer
 from zope.interface import implements
 from zope.interface import Interface
 
@@ -41,12 +42,7 @@ class UsersListing(BaseListingTab):
     """Tab registered on contacts folder (see opengever.contact) listing all
     users.
     """
-
     implements(IUsersListingTableSourceConfig)
-
-    grok.name('tabbedview_view-users')
-    grok.context(Interface)
-    grok.require('zope2.View')
 
     sort_on = 'lastname'
     sort_order = ''
@@ -109,12 +105,11 @@ class UsersListing(BaseListingTab):
         return session.query(User)
 
 
+@implementer(ITableSource)
+@adapter(IUsersListingTableSourceConfig, Interface)
 class UsersListingTableSource(SqlTableSource):
     """Table source OGDS users.
     """
-
-    grok.implements(ITableSource)
-    grok.adapts(IUsersListingTableSourceConfig, Interface)
 
     searchable_columns = [User.lastname, User.firstname, User.userid,
                           User.email, User.phone_office, User.department,

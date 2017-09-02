@@ -2,9 +2,181 @@
 Changelog
 =========
 
-2017.3.0 (unreleased)
+2017.5.0 (unreleased)
 ---------------------
 
+- Add configuration option to hide the mail preview tab. [phgross]
+- Update ftw.keywordwidget to 1.3.6: Fix a bug while adding new keywords. [mathias.leimgruber]
+- Hide contact field in the manual journal entry form, when contact feature is disabled. [phgross]
+- Only show membership edit links for CommitteeResponsibles. [deiferni]
+- Fix Drag'n'Drop replacing for documents inside a resolved task. [phgross]
+- Bundle import: Fix tree portlet assignment to repo roots. [lgraf]
+- Fix an issue with conflicting css classes breaking a link. [deiferni]
+- Fix textfilter for sql table listings when using oracle backends. [phgross]
+- Word meeting: Show decision number in meeting view. [jone]
+- Add lawgiver workflows for committee and committee-container. [deiferni]
+- Add a file action button for extracting mail attachments. [Rotonen]
+- Add upgrade step which fixes potential missing titles on opengever.private.root objects. [mathias.leimgruber]
+- Point footer source-code link to 4teamwork/opengever.core, drop link to CI. [deiferni]
+- Filter results for disabled OrgUnits in all sources. [mathias.leimgruber]
+- Install ftw.tika if necessary. [mathias.leimgruber]
+- Ungrok opengever.latex. [elioschmutz]
+- Add a CI script to check incoming python files for pyflakes issues. [Rotonen]
+- Update ftw.zipexport to include empty folders. [elioschmutz]
+- Word meeting: update styling and placement of meeting view components. [jone]
+- Breadcrumb viewlet rework. Extend crumbs with icons and group the repository part. [phgross]
+- Add bin/test-cached helper script to execute a chached test-run. [deiferni]
+- Ungrok opengever.ogds.base [lgraf]
+- Add external_reference field and index [tarnap]
+- Show mimetype-icon of proposaltemplate in bumblebee-listing. [elioschmutz]
+- Add add bumblebee gallery view for sablontemplate. [elioschmutz]
+- SPV word: fix a unicode error when creating proposals from a template. [deiferni]
+- SPV word: merge multiple word files into one protocol. [deiferni]
+- Add add bumblebee gallery view for proposaltemplate. [elioschmutz]
+- Word meeting: Improve edit-document-button behavior in meeting view. [jone]
+- Fix typo in contact detail view. [elioschmutz]
+- Remove separate bumblebee fetch-views since they are no longer necessary because we no longer use grok. [elioschmutz]
+- Implement custom error page. [mathias.leimgruber]
+- Bundle import: Also log progress and RSS during post-processing. [lgraf]
+- Word meeting: List excerpts per agenda item in meeting view. [jone]
+- Word meeting: Replace excerpt generation with new word implementation. [jone]
+- Word meeting: Automatically checkin document when deciding an agenda item. [jone]
+- Word meeting: Update submitted proposal workflow: let group members checkout documents. [jone]
+- Fix error in earliest_possible_end_date if there are date and datetime objects to process. [elioschmutz]
+- Fix change workflow on remote tasks if the successor has no write-permission on the remote task does no longer fail with unauthorized. [elioschmutz]
+- Do no more send None as text while syncing tasks if there is no text. [elioschmutz]
+- Fix leaking reference in RestrictedVocabularyFactory. [lgraf]
+- Use get_download_view_name in oc_attach restapi view to download original_message file if available. [elioschmutz]
+- Use get_file-method in send_document method to use original_message file data if available. [elioschmutz]
+- Refactoring: Add new method get_download_view_name for mail and documents. [elioschmutz]
+- Refactoring: Use mail get_file method to receive either the original_message or the message field. [elioschmutz]
+- Reindex is_subdossier-index after moving the dossier. [elioschmutz]
+- Improve warning when opening an old version of a document. [tarnap]
+- Highlight search terms after fetching new search results per ajax. [elioschmutz]
+- Fix broken remove-condition-checker if backreferences were deleted. [elioschmutz]
+- Fix broken overview-listing if backreferences were deleted. [elioschmutz]
+- Fix encoding error when syncing proposals with SQL. [jone]
+- Remove "Properties"-action on personal overview. [elioschmutz]
+- Ungrok opengever.advancedsearch. [phgross]
+- Fix showroom overlay within an activated exposator. [elioschmutz]
+- Fix ArchiveForm when resolving a Dossier. [phgross]
+- Allow sort by member-name on memberhips-listing view. [elioschmutz]
+- Extend tabbedview with sqlsource: Implement sorting by sqlalchemy columns instead only by string. [elioschmutz]
+- Allow remove templatefolder content. [elioschmutz]
+- Handle unknown asynchronous tooltip response. [Kevin Bieri]
+- Move language selector into the user menu (dropdown) - Implemented in plonetheme.teamraum. [mathias.leimgruber]
+- Only the Manager can access the folder_contents on the plone root. [mathias.leimgruber]
+- Ensure we append the originating dossier's mail in address as BCC to OfficeConnector multiattach payloads. [Rotonen]
+- Add an attributes REST endpoint to dossiers. [Rotonen]
+- Update ftw.keyowordwidget to 1.3.3, to fix a problem while select/search new keywords. [mathias.leimgruber]
+- Sort meeting participants alphabetically in meeting-view. [elioschmutz]
+- Upgrade ftw.zopemaster which uses the new ftw.slacker for slack notifications. [elioschmutz]
+- Refactor the function: earliest_possible_end_date. [elioschmutz]
+- Remove unused projectdossier contenttype. [elioschmutz]
+- Upgrade plone.app.jquery from 1.7.2.1 to 1.11.2. [elioschmutz]
+- Word meeting: quick edit proposal file in meeting view. [jone]
+- Word meeting: show proposal files in meeting view. [jone]
+- Reworked contact syncer functionality, to improve speed with bulk insert and updates. [phgross]
+- Format line breaks in task descriptions. [tarnap]
+- SPV word: checkout proposal document after creating proposal. [jone]
+- Implement REST API endpoints for document checkout/checkin. [buchi]
+- Implement eCH-0147/eCH-0039 import and export [buchi]
+
+
+2017.4.1 (2017-08-14)
+---------------------
+
+- Bundle import: Reduce memory high-water-mark by periodically re-setting the
+  Plone site using setSite(), and garbage collecting the cPickleCache. [lgraf]
+- Bundle import: Also log progress and RSS during post-processing. [lgraf]
+- Fix leaking reference in RestrictedVocabularyFactory. [lgraf]
+- Fixed bug in search when sorting on relevance. [phgross]
+- Bundle import: Fix logging in case of disallowed subobject type. [lgraf]
+- Bundle import: Don't unnecessarily keep references to persistent objects
+  over the lifetime of the entire import. This lets the garbage collector
+  do its job, and reduces growth of memory usage during import. [lgraf]
+- Bundle import: Display current memory usage (RSS) in progress logger. [lgraf]
+
+
+2017.4.0 (2017-07-26)
+---------------------
+
+- Fixed OGDS group sync, when lookup_groups_base is not defined. [phgross]
+- Export msg in OGmail zip represenation if the original_message is available. [mathias.leimgruber]
+- Add original_message support to bundle import. [phgross]
+- Rename current orgunit cookie, to invalidate existing cookies. [phgross]
+- Move handlebar templates to template files. [jone]
+- Disable reference number column in the document listing of the inbox. [phgross]
+- Enable \*.msg download for all download copy links. [phgross]
+- Fix mail download: Convert LF to CRLF only for EML mails. [phgross]
+- Fix: remove ftw.showroom CSS on fresh installations too. [jone]
+- Define cookie path when setting the current orgunit id in the cookie. [phgross]
+- Make sure unicode is stored in proposal sql. [jone]
+- Fix unicode error in committee group vocabulary. [jone]
+- Add version of downloaded file to journal's entry. [tarnap]
+- Allow to copy-paste single documents. [tarnap]
+- Enable secure flag for cookies. [phgross]
+- Always download MSG file if avaiable. [mathias.leimgruber]
+- Move data for the history of a proposal from SQL to their corresponding plone-objects Proposal/SubmittedProposal. [deiferni]
+- Remove dossier inheritance of templatefolder [elioschmutz]
+- Move data for most text-fields of Proposal (SQL) to their corresponding plone-objects Proposal/SubmittedProposal. [deiferni]
+- Introduce versioning for Proposal/SubmittedProposal. [deiferni]
+- Cleanup rolemap, don't redefine plone roles. [deiferni]
+- Use OGMail original_message-file for bumblebee-conversion if available. [elioschmutz]
+- Amend the OfficeConnector javascript to refresh the page based on the lock status. [Rotonen]
+- Add the document lock status to the document status end point. [Rotonen]
+
+
+2017.3.2 (2017-07-21)
+---------------------
+
+- Add upgradestep to cleanup no longer existing interfaces from zc.relation catalog. [phgross]
+
+
+2017.3.1 (2017-07-18)
+---------------------
+
+- Expand current subdossier in subdossier tree. [Kevin Bieri]
+- Ignore LocalRolesModified events in repositoryfolder ModifiedEvent subscribers. [phgross]
+- Do not sync comments to a predecessor forwarding. [phgross]
+- Fixed translation for portal message type, when adding a DX object. [phgross]
+
+
+2017.3.0 (2017-07-12)
+---------------------
+
+- List only documents as related_documents in the documents overview. [phgross]
+- Disable the displaymenu-item in contentmenu for all types. [phgross]
+- Fix datetime converter when input is empty. [deiferni]
+- Fix UnicodeEncodeError in task listings. [phgross]
+- Make sure that remote task state changes are synced to globalindex. [phgross]
+- Expand just the selected item in the subdossier tree. [Kevin Bieri]
+- Added missing cancel button for the manual journal entry form. [phgross]
+- XSS: Escape html for manual journal entries' comment. [tarnap]
+- Fix filetree scroll position of current item. [Kevin Bieri]
+- Fix an issue where creating a dossier from template ended in an exception. [elioschmutz]
+- Allow move items in the documents tab within the templatefolder. [elioschmutz]
+- XSS: Escape html for Dossier title on task listing. [mathias.leimgruber]
+- XSS: Escape html for the breadcrumbs part for get_link on tasks. [mathias.leimgruber]
+- Fix meeting TOC, correctly limit TOC to committee. [deiferni]
+- Change Member fullname to `Lastname Firstname` instead of `Firstname Lastname` to be consistent with Actor/Contact et cetera. [deiferni]
+- Sort meeting participants alphabetically. [deiferni]
+- Use officeconnector to edit a newly created document from template. [tarnap]
+- Add bumblebee gallery view for related-documents tab on tasks. [elioschmutz]
+- List bidirectionally related documents in the document's overview. [tarnap]
+- Implement and enable redirector etag adapter. [phgross]
+- Add reference column to document listings. [tarnap]
+- Do not display templates without an assigned file in the CreateDocumentFromTemplate form. [tarnap]
+- Add dossier and subdossier link in task listings. [elioschmutz]
+- Fix PrivateFolders Title encoding. [phgross]
+- Show userid instead of E-Mail address on all sources (except EMailSource). [mathias.leimgruber]
+- Mark inactive repository folders in navigation tree. [Kevin Bieri]
+- Fix "leave GEVER" on logout overlay. [mathias.leimgruber]
+- Disbale swfobject.js - no longer load Flash Fallback for multiuploads. [mathias.leimgruber]
+- Fix schema migration EnlargeProfileidInMigrationTrackingTable for oracle backend. [phgross]
+- Add missing contacts only sources, used by customer special dossiers. [phgross]
+- Reset journal after copy a document. [mathias.leimgruber]
+- Switch back to the orginal plone.formwidget.autocomplete package from our fork. [phgross]
 - Fix task assign form: Only users and the inbox of the current user is selectable. [mathias.leimgruber]
 - Fix for OGIP 15: no longer make a deepcopy of the payload. [mathias.leimgruber]
 - Render subdossier tree collapsed initially. [Kevin Bieri]
@@ -14,6 +186,8 @@ Changelog
 - Improve visual search on customer request. [Kevin Bieri]
 - Merge Generic Setup profiles into a new opengever.core:default profile. [phgross]
 - Replace the AutocompleteField(Multi)Widget with the KeywordWidget. This makes the AutocompleteWidget obsolete. [mathias.leimgruber]
+- Respect lookup_groups_base during OGDS group sync. [phgross]
+- Use our own forks of Products.LDAPUserFolder and Products.LDAPMultiPlugins. [phgross]
 - Fix Subject link on dossier overview. [mathias.leimgruber]
 - Fix tasktemplate view by adding a missing </table> tag. [mathias.leimgruber]
 - Install ftw.copymovepatches for better move performance. [mathias.leimgruber]
@@ -27,7 +201,7 @@ Changelog
 - Fix checkout behavior of already checked out documents. [Kevin Bieri]
 - Make sure that pasting is allowed before pasting. [deiferni]
 - Remove an unused creator behaviour from the codebase. [Rotonen]
-- Keep *.msg file after conversion and store message source for mails. [deiferni]
+- Keep \*.msg file after conversion and store message source for mails. [deiferni]
 - Fix string type in bundle loader [buchi]
 - Fix translation for the Open as PDF action. [phgross]
 - OGGBundle: Do not initialize the mail title for mails with a title given. [phgross]
@@ -46,6 +220,19 @@ Changelog
   Sentry can log it as a local in case of failure. [lgraf]
 - Word meeting: replace proposal textfields with a document. [jone]
 - OGIP 15: Implement adding multiple task with the add form. [mathias.leimgruber]
+
+
+2017.2.5 (2017-07-04)
+---------------------
+
+- Add missing french translation. [phgross]
+- Include missing permission definitions from Products.CMFCore. [phgross]
+
+
+2017.2.4 (2017-06-14)
+---------------------
+
+- Added french translations [j-sposato, phgross]
 
 
 2017.2.3 (2017-05-26)

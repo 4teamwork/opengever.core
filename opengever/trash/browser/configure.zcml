@@ -1,0 +1,28 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="opengever.trash">
+
+  <browser:page
+      name="remove_confirmation"
+      for="*"
+      class=".remove_confirmation.RemoveConfirmation"
+      permission="opengever.base.RemoveGEVERContent"
+      template="templates/remove_confirmation.pt"
+      />
+
+  <browser:page
+      name="trashed"
+      for="opengever.trash.trash.ITrashableMarker"
+      class=".trash.TrashView"
+      permission="opengever.trash.TrashContent"
+      />
+
+  <browser:page
+      name="untrashed"
+      for="opengever.trash.trash.ITrashableMarker"
+      class=".trash.UntrashView"
+      permission="opengever.trash.UntrashContent"
+      />
+
+</configure>

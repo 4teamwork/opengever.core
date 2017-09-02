@@ -13,8 +13,10 @@ from opengever.bumblebee.interfaces import IVersionedContextMarker
 from opengever.document.browser.actionbuttons import ActionButtonRendererMixin
 from opengever.document.browser.versions_tab import translate_link
 from opengever.document.checkout.viewlets import CheckedOutViewlet
+from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.locking.info import GeverLockInfoViewlet
+from opengever.mail.mail import IOGMailMarker
 from opengever.ogds.base.actor import Actor
 from plone import api
 from plone.protect import createToken
@@ -23,22 +25,23 @@ from Products.CMFEditions.interfaces.IArchivist import ArchivistRetrieveError
 from Products.Five import BrowserView
 from urllib import quote
 from zExceptions import NotFound
+from zope.component import adapter
 from zope.component import getAdapter
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.component import queryMultiAdapter
 from zope.i18n import translate
 from zope.interface import alsoProvides
-from zope.interface import implements
+from zope.interface import implementer
+from zope.interface import Interface
 import os
 
 
+@implementer(IBumblebeeOverlay)
+@adapter(IDocumentSchema, Interface)
 class BumblebeeBaseDocumentOverlay(ActionButtonRendererMixin):
     """Bumblebee overlay for base documents.
     """
-
-    implements(IBumblebeeOverlay)
-
     version_id = None
 
     def __init__(self, context, request):
@@ -166,6 +169,7 @@ class BumblebeeBaseDocumentOverlay(ActionButtonRendererMixin):
             'open_pdf_in_a_new_window', interface=IGeverBumblebeeSettings)
 
 
+@adapter(IOGMailMarker, Interface)
 class BumblebeeMailOverlay(BumblebeeBaseDocumentOverlay):
     """Bumblebee overlay for base mails.
     """
@@ -197,6 +201,7 @@ class BumblebeeMailOverlay(BumblebeeBaseDocumentOverlay):
                       context=self.request))
 
 
+@adapter(IDocumentSchema, IVersionedContextMarker)
 class BumblebeeDocumentVersionOverlay(BumblebeeBaseDocumentOverlay):
     """Bumblebee overlay for versioned documents"""
 

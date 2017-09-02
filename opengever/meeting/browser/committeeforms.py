@@ -1,10 +1,8 @@
 from datetime import date
 from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
-from opengever.base.browser.modelforms import ModelAddForm
 from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
-from opengever.base.form import WizzardWrappedAddForm
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.meeting import _
@@ -15,16 +13,12 @@ from opengever.meeting.committeecontainer import ICommitteeContainer
 from opengever.meeting.form import ModelProxyAddForm
 from opengever.meeting.form import ModelProxyEditForm
 from opengever.meeting.model import Period
-from plone import api
 from plone.dexterity.browser.add import DefaultAddForm
-from plone.dexterity.i18n import MessageFactory as pd_mf
 from plone.directives import dexterity
 from plone.z3cform.layout import FormWrapper
 from z3c.form import field
 from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
-from z3c.form.form import Form
-from z3c.form.interfaces import HIDDEN_MODE
 from z3c.form.interfaces import IDataConverter
 from zope.component import getUtility
 
@@ -159,8 +153,8 @@ class AddInitialPeriodStepView(FormWrapper, grok.View):
     form = AddInitialPeriodStep
 
     def __init__(self, *args, **kwargs):
-         FormWrapper.__init__(self, *args, **kwargs)
-         grok.View.__init__(self, *args, **kwargs)
+        FormWrapper.__init__(self, *args, **kwargs)
+        grok.View.__init__(self, *args, **kwargs)
 
 
 class EditForm(ModelProxyEditForm, dexterity.EditForm):
@@ -168,9 +162,3 @@ class EditForm(ModelProxyEditForm, dexterity.EditForm):
     grok.context(ICommittee)
     fields = field.Fields(Committee.model_schema, ignoreContext=True)
     content_type = Committee
-
-    def updateWidgets(self):
-        if not self.context.is_group_editable():
-            self.fields['group_id'].mode = HIDDEN_MODE
-
-        super(EditForm, self).updateWidgets()

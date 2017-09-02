@@ -1,10 +1,8 @@
-from five import grok
 from ftw.table.interfaces import ITableSource
 from ftw.table.interfaces import ITableSourceConfig
 from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.participation import IParticipationAware
-from opengever.dossier.behaviors.participation import IParticipationAwareMarker
 from opengever.ogds.base.actor import Actor
 from opengever.tabbedview import BaseListingTab
 from opengever.tabbedview import GeverTableSource
@@ -12,10 +10,12 @@ from opengever.tabbedview.helper import readable_ogds_author
 from persistent.list import PersistentList
 from plone.memoize import ram
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
+from zope.component import adapter
 from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.i18nmessageid.message import Message
+from zope.interface import implementer
 from zope.interface import implements
 from zope.interface import Interface
 from zope.schema.vocabulary import getVocabularyRegistry
@@ -59,6 +59,7 @@ def role_list_helper(item, value):
     else:
         return value
 
+
 def linked_ogds_author_with_icon(item, author):
     return Actor.lookup(author).get_link(with_icon=True)
 
@@ -93,10 +94,6 @@ class Participants(BaseListingTab):
     """
 
     implements(IParticipationSourceConfig)
-
-    grok.require('zope2.View')
-    grok.name('tabbedview_view-participants')
-    grok.context(IParticipationAwareMarker)
 
     select_all_template = ViewPageTemplateFile(
         'templates/select_all_participants.pt')
@@ -149,12 +146,9 @@ class ParticipationResponsible(object):
         self.contact = contact
 
 
+@implementer(ITableSource)
+@adapter(IParticipationSourceConfig, Interface)
 class ParticipantsTableSource(GeverTableSource):
-    """
-    """
-
-    grok.implements(ITableSource)
-    grok.adapts(IParticipationSourceConfig, Interface)
 
     def validate_base_query(self, query):
         """hacky: get the actual elements here because we are not

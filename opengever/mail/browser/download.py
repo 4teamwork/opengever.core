@@ -1,5 +1,6 @@
 from opengever.document.browser.download import DocumentishDownload
 from plone.namedfile.interfaces import HAVE_BLOBS
+from opengever.mail.mail import IOGMail
 
 if HAVE_BLOBS:
     from plone.namedfile.interfaces import IBlobby
@@ -25,6 +26,9 @@ class MailDownload(DocumentishDownload):
         return ''.join(lines)
 
     def stream_data(self, named_file):
+        if self.fieldname == IOGMail['original_message'].getName():
+            return super(MailDownload, self).stream_data(named_file)
+
         if HAVE_BLOBS:
             if IBlobby.providedBy(named_file):
                 if named_file._blob._p_blob_uncommitted:

@@ -1,7 +1,5 @@
 from Acquisition import aq_inner
-from five import grok
 from ftw.mail import utils
-from ftw.mail.mail import IMail
 from ftw.mail.mail import View
 from opengever.base import _ as ogbmf
 from opengever.document import _ as ogdmf
@@ -16,6 +14,7 @@ from plone.memoize import instance
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.component import getUtility
+from zope.size import byteDisplay
 
 
 class MailAttachmentsMixin(object):
@@ -72,12 +71,17 @@ class PreviewTab(MailAttachmentsMixin, View):
 class OverviewTab(MailAttachmentsMixin, Overview):
     """Render an overview of the mailitem."""
 
-    grok.context(IMail)
-    grok.require('zope2.View')
-
     # override template lookup, its realive to this file
     file_template = ViewPageTemplateFile('templates/file.pt')
     attachments_template = ViewPageTemplateFile('templates/attachments.pt')
+
+    def __init__(self, *args, **kwargs):
+        super(OverviewTab, self).__init__(*args, **kwargs)
+        self.field = self.context.get_file()
+
+    @property
+    def file_size(self):
+        return byteDisplay(self.field.getSize())
 
     def get_metadata_config(self):
         rows = [

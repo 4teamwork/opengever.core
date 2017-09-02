@@ -25,7 +25,7 @@ def set_cookie(request, value):
 
 
 class MockProxyTabView(BaseTabProxy):
-    __view_name__ = 'tabbedview_view-mocktab-proxy'
+    __name__ = 'tabbedview_view-mocktab-proxy'
 
 
 class TestBaseTabProxyWithDeactivatedFeature(FunctionalTestCase):
@@ -123,7 +123,7 @@ class TestBumblebeeGalleryMixinGetFetchUrl(FunctionalTestCase):
             (dossier, self.request), name=viewname)
 
         self.assertEqual(
-            'http://nohost/plone/dossier-1/tabbedview_view-documents-gallery-fetch',
+            'http://nohost/plone/dossier-1/tabbedview_view-documents-gallery/fetch',
             view.get_fetch_url())
 
         viewname = "tabbedview_view-mydocuments-gallery"
@@ -131,7 +131,7 @@ class TestBumblebeeGalleryMixinGetFetchUrl(FunctionalTestCase):
             (dossier, self.request), name=viewname)
 
         self.assertEqual(
-            'http://nohost/plone/dossier-1/tabbedview_view-mydocuments-gallery-fetch',
+            'http://nohost/plone/dossier-1/tabbedview_view-mydocuments-gallery/fetch',
             view.get_fetch_url())
 
 
@@ -146,7 +146,7 @@ class TestBumblebeeGalleryMixinGetBrains(FunctionalTestCase):
             (dossier, self.request), name="tabbedview_view-documents-gallery")
 
         document = create(Builder('document').within(dossier))
-        other_document = create(Builder('document').within(other_dossier))
+        create(Builder('document').within(other_dossier))
 
         brains = view.get_brains()
 
@@ -324,7 +324,7 @@ class TestBumblebeeGalleryMixinPreviews(FunctionalTestCase):
 
         self.request.set('documentPointer', 1)
 
-        document0 = create(Builder('document').within(dossier))
+        create(Builder('document').within(dossier))
         document1 = create(Builder('document').within(dossier))
         document2 = create(Builder('document').within(dossier))
 
@@ -341,7 +341,7 @@ class TestBumblebeeGalleryMixinPreviews(FunctionalTestCase):
 
         document0 = create(Builder('document').within(dossier))
         document1 = create(Builder('document').within(dossier))
-        document2 = create(Builder('document').within(dossier))
+        create(Builder('document').within(dossier))
 
         self.assertEqual(
             [document0.UID(), document1.UID()],
@@ -435,7 +435,7 @@ class TestDocumentsGalleryFetch(FunctionalTestCase):
         create(Builder('document').within(dossier))
         create(Builder('document').within(dossier))
 
-        browser.login().visit(dossier, view="tabbedview_view-documents-gallery-fetch")
+        browser.login().visit(dossier, view="tabbedview_view-documents-gallery/fetch")
 
         self.assertEqual(
             3, len(browser.css('.imageContainer')))
@@ -451,7 +451,7 @@ class TestMyDocumentsGalleryFetch(FunctionalTestCase):
         create(Builder('document').within(dossier))
         create(Builder('document').within(dossier))
 
-        browser.login().visit(dossier, view="tabbedview_view-mydocuments-gallery-fetch")
+        browser.login().visit(dossier, view="tabbedview_view-mydocuments-gallery/fetch")
 
         self.assertEqual(
             3, len(browser.css('.imageContainer')))
@@ -476,6 +476,14 @@ class TestProxyViewsWithDeactivatedFeature(FunctionalTestCase):
         dossier = create(Builder('dossier'))
 
         browser.login().visit(dossier, view="tabbedview_view-trash-proxy")
+        self.assertIsNone(browser.cookies.get(BUMBLEBEE_VIEW_COOKIE_NAME))
+
+    @browsing
+    def test_do_not_set_cookie_on_related_documents_tab(self, browser):
+        dossier = create(Builder('dossier'))
+        task = create(Builder('task').within(dossier))
+
+        browser.login().visit(task, view="tabbedview_view-relateddocuments-proxy")
         self.assertIsNone(browser.cookies.get(BUMBLEBEE_VIEW_COOKIE_NAME))
 
 
@@ -555,6 +563,26 @@ class TestProxyViewsWithActivatedFeature(FunctionalTestCase):
         browser.login().visit(dossier, view="tabbedview_view-trash-gallery")
 
         browser.login().visit(dossier, view="tabbedview_view-trash-proxy")
+
+        self.assertEqual(
+            'Gallery',
+            browser.css('.ViewChooser .active').first.text)
+
+    @browsing
+    def test_relateddocuments_proxy_tab(self, browser):
+        dossier = create(Builder('dossier'))
+        task = create(Builder('task').within(dossier))
+
+        browser.login().visit(task, view="tabbedview_view-relateddocuments-proxy")
+
+        self.assertEqual(
+            'List',
+            browser.css('.ViewChooser .active').first.text)
+
+        # Set cookie for gallery-view
+        browser.login().visit(task, view="tabbedview_view-relateddocuments-gallery")
+
+        browser.login().visit(task, view="tabbedview_view-relateddocuments-proxy")
 
         self.assertEqual(
             'Gallery',

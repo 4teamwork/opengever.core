@@ -5,7 +5,7 @@ from ftw.testbrowser.pages import plone
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_NAME
 from plone.app.testing import TEST_USER_PASSWORD
-from zExceptions import Unauthorized
+import transaction
 import urllib
 
 
@@ -32,9 +32,15 @@ class TestRequireLoginScript(FunctionalTestCase):
 
     @browsing
     def test_require_login_displays_login_form_and_redirecs_upon_login(self, browser):
-        browser.open(
-            view='require_login?came_from={}'.format(
-                urllib.quote(self.document.absolute_url())))
+        # Disable the `cookie only over https flag, activated
+        # by `opengever.core.hooks.installed`.
+        self.portal.acl_users.session.secure = False
+        transaction.commit()
+
+        with browser.expect_unauthorized():
+            browser.open(
+                view='require_login?came_from={}'.format(
+                    urllib.quote(self.document.absolute_url())))
         self.assertTrue(
             browser.url.startswith('http://nohost/plone/require_login'),
             'Unexpected URL {}'.format(browser.url))
@@ -50,7 +56,8 @@ class TestRequireLoginScript(FunctionalTestCase):
 
     @browsing
     def test_unauthorized_visible_when_raised_in_publishing(self, browser):
-        browser.login().open(view='test-publishing-unauthorized')
+        with browser.expect_unauthorized():
+            browser.login().open(view='test-publishing-unauthorized')
         self.assertEquals('Insufficient Privileges', plone.first_heading())
 
     @browsing
@@ -59,5 +66,6 @@ class TestRequireLoginScript(FunctionalTestCase):
         # page to appear when logged in.
         url = ('{0}/acl_users/credentials_cookie_auth/require_login'
                '?came_from={0}/does/not/exist').format(self.portal.absolute_url())
-        browser.login().open(url)
+        with browser.expect_unauthorized():
+            browser.login().open(url)
         self.assertEquals('Insufficient Privileges', plone.first_heading())

@@ -240,7 +240,7 @@ class DexterityFieldDataCollector(grok.Adapter):
             repr = schemata(self.context)
             subdata = data[schemata.getName()]
             for name, field in schema.getFieldsInOrder(schemata):
-                value = subdata[name]
+                value = subdata.get(name, _marker)
                 value = self.unpack(name, field, value)
                 if value != _marker:
                     setattr(repr, name, value)

@@ -1,14 +1,11 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
-    xmlns:grok="http://namespaces.zope.org/grok"
+    xmlns:browser="http://namespaces.zope.org/browser"
     xmlns:i18n="http://namespaces.zope.org/i18n"
     i18n_domain="opengever.latex">
 
   <i18n:registerTranslations directory="locales" />
-
-  <!-- grok -->
-  <grok:grok package="." />
 
   <!-- generic setup -->
   <genericsetup:registerProfile
@@ -19,5 +16,111 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
   <include package=".upgrades" />
+  <include package=".layouts" />
 
+  <adapter factory=".listing.LaTexListing" />
+
+  <adapter
+      factory=".listing.DossiersLaTeXListing"
+      name="dossiers"
+      />
+
+  <adapter
+      factory=".listing.SubDossiersLaTeXListing"
+      name="subdossiers"
+      />
+
+  <adapter
+      factory=".listing.DocumentsLaTeXListing"
+      name="documents"
+      />
+
+  <adapter
+      factory=".listing.TasksLaTeXListing"
+      name="tasks"
+      />
+
+  <adapter
+      factory=".listing.JournalLaTeXListing"
+      name="journal"
+      />
+
+  <adapter
+      factory=".dossiercover.DossierCoverLaTeXView"
+      provides="ftw.pdfgenerator.interfaces.ILaTeXView"
+      />
+
+  <browser:page
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      name="dossier_cover_pdf"
+      class=".dossiercover.DossierCoverPDFView"
+      permission="zope2.View"
+      />
+
+  <adapter
+      factory=".dossierdetails.DossierDetailsLaTeXView"
+      provides="ftw.pdfgenerator.interfaces.ILaTeXView"
+      />
+
+  <browser:page
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      name="pdf-dossier-details"
+      class=".dossierdetails.DossierDetailsPDFView"
+      permission="zope2.View"
+      />
+
+  <adapter
+      factory=".dossierjournal.DossierJorunalLaTeXView"
+      provides="ftw.pdfgenerator.interfaces.ILaTeXView"
+      />
+
+  <browser:page
+      for="*"
+      name="pdf-dossier-journal"
+      class=".dossierjournal.DossierJournalPDFView"
+      permission="zope2.View"
+      />
+
+  <adapter
+      factory=".dossierlisting.DossierListingLaTeXView"
+      provides="ftw.pdfgenerator.interfaces.ILaTeXView"
+      />
+
+  <browser:page
+      for="*"
+      name="pdf-dossier-listing"
+      class=".dossierlisting.DossierListingPDFView"
+      permission="zope2.View"
+      />
+
+  <adapter
+      factory=".opentaskreport.OpenTaskReportLaTeXView"
+      provides="ftw.pdfgenerator.interfaces.ILaTeXView"
+      />
+
+  <browser:page
+      for="*"
+      name="pdf-open-task-report"
+      class=".opentaskreport.OpenTaskReportPDFView"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="*"
+      name="pdf-open-task-report-allowed"
+      class=".opentaskreport.OpenTaskReportPDFAllowed"
+      permission="zope2.View"
+      />
+
+  <adapter
+      factory=".tasklisting.TaskListingLaTeXView"
+      provides="ftw.pdfgenerator.interfaces.ILaTeXView"
+      />
+
+  <browser:page
+      for="*"
+      name="pdf-tasks-listing"
+      class=".tasklisting.TaskListingPDFView"
+      permission="zope2.View"
+      />
 </configure>

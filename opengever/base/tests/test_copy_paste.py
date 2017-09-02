@@ -29,6 +29,59 @@ class TestCopyItems(FunctionalTestCase):
         self.assertEqual(['Selected objects successfully copied.'], info_messages())
 
 
+class TestCopyItem(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestCopyItem, self).setUp()
+        self.repo, self.repo_folder = create(Builder('repository_tree'))
+        self.dossier = create(Builder('dossier')
+                              .within(self.repo_folder))
+        self.document = create(Builder('document')
+                               .within(self.dossier))
+        self.mail = create(Builder('mail')
+                           .within(self.dossier))
+
+    @browsing
+    def test_statusmessage_if_copy_document_success(self, browser):
+        browser.login().open(self.document, view='copy_item')
+
+        self.assertEqual(self.document.absolute_url(), browser.url)
+        self.assertEqual(['Selected objects successfully copied.'],
+                         info_messages())
+
+    @browsing
+    def test_statusmessage_if_paste_document_success(self, browser):
+        browser.login().open(self.document, view='copy_item')
+        dest_dossier = create(Builder('dossier'))
+
+        browser.open(dest_dossier, view='tabbed_view')
+        browser.css('#contentActionMenus a#paste').first.click()
+
+        self.assertEqual(dest_dossier.absolute_url(), browser.url)
+        self.assertEqual(['Objects from clipboard successfully pasted.'],
+                         info_messages())
+
+    @browsing
+    def test_statusmessage_if_copy_mail_success(self, browser):
+        browser.login().open(self.mail, view='copy_item')
+
+        self.assertEqual(self.mail.absolute_url(), browser.url)
+        self.assertEqual(['Selected objects successfully copied.'],
+                         info_messages())
+
+    @browsing
+    def test_statusmessage_if_paste_mail_success(self, browser):
+        browser.login().open(self.mail, view='copy_item')
+        dest_dossier = create(Builder('dossier'))
+
+        browser.open(dest_dossier, view='tabbed_view')
+        browser.css('#contentActionMenus a#paste').first.click()
+
+        self.assertEqual(dest_dossier.absolute_url(), browser.url)
+        self.assertEqual(['Objects from clipboard successfully pasted.'],
+                         info_messages())
+
+
 class TestCopyPaste(FunctionalTestCase):
 
     def setUp(self):

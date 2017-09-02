@@ -10,6 +10,23 @@ from opengever.meeting.model import Member
 from opengever.meeting.model import Membership
 from opengever.meeting.wrapper import MemberWrapper
 from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
+
+
+class TestPathBar(IntegrationTestCase):
+
+    features = ('meeting',)
+
+    @browsing
+    def test_committee_member_cant_see_membership_edit_links(self, browser):
+        self.login(self.meeting_user, browser)
+        browser.open(self.committee_participant)
+
+        table = browser.css('#membership_listing').first
+        self.assertEqual(
+            [[u'Rechnungspr\xfcfungskommission',
+              'Jan 01, 2010', 'Jan 01, 2014', '']],
+            table.lists())
 
 
 class TestMemberships(FunctionalTestCase):
@@ -22,6 +39,11 @@ class TestMemberships(FunctionalTestCase):
         self.committee = create(Builder('committee').within(self.container))
         self.member = create(Builder('member'))
         self.member_wrapper = MemberWrapper.wrap(self.container, self.member)
+
+        # CommitteeResponsible is assigned globally here for the sake of
+        # simplicity
+        self.grant('Contributor', 'Editor', 'Reader', 'MeetingUser',
+                   'CommitteeAdministrator', 'CommitteeResponsible')
 
     def test_get_url(self):
         membership = create(Builder('membership').having(
@@ -81,9 +103,9 @@ class TestMemberships(FunctionalTestCase):
                                     date_from=date(2003, 01, 01),
                                     date_to=date(2007, 12, 31)))
 
-        browser.login().open(membership.get_edit_url(self.member_wrapper))
+        browser.login().open(membership.get_edit_url())
         self.assertEquals(
-            u'Peter M\xfcller, Jan 01, 2003 - Dec 31, 2007 \u2014 Plone site',
+            u'M\xfcller Peter, Jan 01, 2003 - Dec 31, 2007 \u2014 Plone site',
             browser.css('title').first.text)
 
     @browsing
@@ -94,7 +116,7 @@ class TestMemberships(FunctionalTestCase):
                                     date_from=date(2003, 01, 01),
                                     date_to=date(2007, 12, 31)))
 
-        browser.login().open(membership.get_edit_url(self.member_wrapper))
+        browser.login().open(membership.get_edit_url())
         browser.fill({'Role': u'tempor\xe4re Leitung',
                       'Start date': '31.12.2003'}).submit()
 
@@ -116,7 +138,7 @@ class TestMemberships(FunctionalTestCase):
                                     date_from=date(2008, 01, 01),
                                     date_to=date(2014, 01, 01)))
 
-        browser.login().open(membership.get_edit_url(self.member_wrapper))
+        browser.login().open(membership.get_edit_url())
         browser.fill({'Start date': '31.12.2005'}).submit()
 
         self.assertEqual(['There were some errors.'], error_messages())

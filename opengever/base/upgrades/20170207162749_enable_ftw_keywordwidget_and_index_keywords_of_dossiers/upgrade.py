@@ -1,6 +1,4 @@
 from ftw.upgrade import UpgradeStep
-from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
-from opengever.dossier.behaviors.dossier import IDossierMarker
 
 
 class EnableFtwKeywordwidgetAndIndexKeywordsOfDossiers(UpgradeStep):

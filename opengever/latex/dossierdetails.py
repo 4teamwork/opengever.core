@@ -1,10 +1,8 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
-from five import grok
 from ftw.mail.mail import IMail
 from ftw.pdfgenerator.browser.views import ExportPDFView
 from ftw.pdfgenerator.interfaces import ILaTeXLayout
-from ftw.pdfgenerator.interfaces import ILaTeXView
 from ftw.pdfgenerator.utils import provide_request_layer
 from ftw.pdfgenerator.view import MakoLaTeXView
 from ftw.table import helper
@@ -24,6 +22,7 @@ from opengever.repository.interfaces import IRepositoryFolder
 from opengever.tabbedview.helper import readable_ogds_author
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
+from zope.component import adapter
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.i18n import translate
@@ -35,23 +34,19 @@ class IDossierDetailsLayer(Interface):
     """
 
 
-class DossierDetailsPDFView(grok.View, ExportPDFView):
-    grok.name('pdf-dossier-details')
-    grok.context(IDossierMarker)
-    grok.require('zope2.View')
+class DossierDetailsPDFView(ExportPDFView):
 
     request_layer = IDossierDetailsLayer
 
-    def render(self):
+    def __call__(self):
         # Enable IDossierDetailsLayer
         provide_request_layer(self.request, self.request_layer)
 
-        return ExportPDFView.__call__(self)
+        return super(DossierDetailsPDFView, self).__call__()
 
 
-class DossierDetailsLaTeXView(grok.MultiAdapter, MakoLaTeXView):
-    grok.provides(ILaTeXView)
-    grok.adapts(Interface, IDossierDetailsLayer, ILaTeXLayout)
+@adapter(Interface, IDossierDetailsLayer, ILaTeXLayout)
+class DossierDetailsLaTeXView(MakoLaTeXView):
 
     template_directories = ['templates']
     template_name = 'dossierdetails.tex'

@@ -1,7 +1,6 @@
 from collective import dexteritytextindexer
 from datetime import date
 from datetime import datetime
-from five import grok
 from ftw.mail import _ as ftw_mf
 from ftw.mail import utils
 from ftw.mail.mail import IMail
@@ -22,7 +21,6 @@ from opengever.mail.interfaces import IAttachmentsDeletedEvent
 from opengever.ogds.models.user import User
 from plone.app.dexterity.behaviors import metadata
 from plone.autoform.interfaces import IFormFieldProvider
-from plone.directives import dexterity
 from plone.directives import form
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.namedfile import field
@@ -42,8 +40,6 @@ from zope.interface import Interface
 from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent import Attributes
 from zope.lifecycleevent.interfaces import IObjectCopiedEvent
-from zope.lifecycleevent.interfaces import IObjectCreatedEvent
-from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
 import os
@@ -58,6 +54,7 @@ else:
 
 MESSAGE_SOURCE_DRAG_DROP_UPLOAD = 'upload'
 MESSAGE_SOURCE_MAILIN = 'mailin'
+NO_SUBJECT_FALLBACK_ID = 'no_subject'
 NO_SUBJECT_TITLE_FALLBACK = '[No Subject]'
 
 
@@ -116,7 +113,7 @@ class IOGMail(form.Schema):
     message_source = schema.Choice(
         title=_('label_message_source',
                 default='Message source'),
-        source=get_message_source_vocabulary(),
+        vocabulary=get_message_source_vocabulary(),
         required=False,
     )
 
@@ -152,6 +149,10 @@ class OGMail(Mail, BaseDocumentMixin):
         self._message = message
         self._update_attachment_infos()
         self._reset_header_cache()
+
+    @property
+    def is_mail(self):
+        return True
 
     def get_extraction_parent(self):
         """Return the parent that accepts extracted attachments."""
@@ -327,15 +328,29 @@ class OGMail(Mail, BaseDocumentMixin):
         self.message.filename = u'{}.eml'.format(normalized_subject)
 
     def get_file(self):
-        return self.message
+        """An opengever mail has two fields for storing the mail-data.
+
+        - The primary-field contains the .eml file which is either a converted
+          version of a .msg-file or a directly uploaded .eml-file.
+
+        - The original_message-field contains the original .msg-file, but only
+          if the user uploaded one. This file will be used to generate the .eml-file
+          for the primary-field.
+        """
+        return self.original_message or self.message
 
     def has_file(self):
         return self.message is not None
 
     def get_filename(self):
         if self.has_file():
-            return self.message.filename
+            return self.get_file().filename
         return None
+
+    def get_download_view_name(self):
+        if self.original_message:
+            return '@@download/original_message'
+        return 'download'
 
 
 class OGMailBase(metadata.MetadataBase):
@@ -358,11 +373,9 @@ class OGMailBase(metadata.MetadataBase):
         'message_source'])
 
 
-@grok.subscribe(IOGMailMarker, IObjectCreatedEvent)
-@grok.subscribe(IOGMailMarker, IObjectModifiedEvent)
 def initalize_title(mail, event):
-
-    if not IOGMail(mail).title:
+    title = IOGMail(mail).title
+    if not title or title == NO_SUBJECT_FALLBACK_ID:
         subject = utils.get_header(mail.msg, 'Subject')
         if subject:
             # long headers may contain line breaks with tabs.
@@ -371,7 +384,7 @@ def initalize_title(mail, event):
             value = subject.decode('utf8')
         else:
             value = translate(
-                ftw_mf(u'no_subject',
+                ftw_mf(NO_SUBJECT_FALLBACK_ID,
                        default=NO_SUBJECT_TITLE_FALLBACK.decode('utf-8')),
                 context=getSite().REQUEST)
 
@@ -412,7 +425,6 @@ def get_author_by_email(mail):
     return u'{0} {1}'.format(principal.lastname, principal.firstname)
 
 
-@grok.subscribe(IOGMailMarker, IObjectCreatedEvent)
 def initialize_metadata(mail, event):
     if not ogmetadata.IDocumentMetadata.providedBy(mail):
         return
@@ -426,14 +438,3 @@ def initialize_metadata(mail, event):
     mail_metadata.document_date = date_time.date()
     mail_metadata.receipt_date = date.today()
     mail_metadata.document_author = get_author_by_email(mail)
-
-
-class OGMailEditForm(dexterity.EditForm):
-    """Standard edit form, but shows the message field only in Display Mode"""
-
-    grok.context(IOGMailMarker)
-
-    def updateWidgets(self):
-        super(OGMailEditForm, self).updateWidgets()
-
-        self.groups[0].fields.get('message').mode = DISPLAY_MODE

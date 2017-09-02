@@ -25,7 +25,6 @@
       title="Primary field quota subject"
       description="Subject to quota by counting the primary field blob size."
       provides="opengever.quota.primary.IPrimaryBlobFieldQuota"
-      for="plone.dexterity.interfaces.IDexterityItem"
       />
 
   <subscriber

@@ -1,8 +1,6 @@
-from five import grok
 from ftw.table.interfaces import ITableSource
 from ftw.table.interfaces import ITableSourceConfig
 from opengever.contact import _
-from opengever.contact.interfaces import IContactFolder
 from opengever.contact.models import Contact
 from opengever.contact.models import Person
 from opengever.tabbedview import _ as tmf
@@ -13,6 +11,8 @@ from opengever.tabbedview.filters import FilterList
 from opengever.tabbedview.helper import boolean_helper
 from opengever.tabbedview.helper import linked_sql_object
 from sqlalchemy.orm import joinedload
+from zope.component import adapter
+from zope.interface import implementer
 from zope.interface import implements
 from zope.interface import Interface
 
@@ -70,9 +70,9 @@ class PersonListingTab(BaseListingTab):
         return Person.query.options(joinedload('organizations'))
 
 
+@implementer(ITableSource)
+@adapter(IPersonTableSourceConfig, Interface)
 class PersonTableSource(SqlTableSource):
-    grok.implements(ITableSource)
-    grok.adapts(PersonListingTab, Interface)
 
     searchable_columns = [
         Person.firstname, Person.lastname, Contact.former_contact_id]
@@ -84,9 +84,6 @@ class ActiveOnlyFilter(Filter):
 
 
 class Persons(PersonListingTab):
-    grok.name('tabbedview_view-persons')
-    grok.context(IContactFolder)
-
     sort_on = 'lastname'
 
     show_selects = False

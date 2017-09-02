@@ -18,6 +18,7 @@
 
   <!--migrated from opengever/mail/profiles/default/registry.xml-->
   <records interface="opengever.mail.interfaces.ISendDocumentConf" />
+  <records interface="opengever.mail.interfaces.IMailTabbedviewSettings" />
 
 
   <!--migrated from opengever/dossier/profiles/default/registry.xml-->
@@ -101,11 +102,13 @@
   <!--migrated from opengever/private/profiles/default/registry.xml-->
   <records interface="opengever.private.interfaces.IPrivateFolderQuotaSettings" />
 
+  <records interface="opengever.ech0147.interfaces.IECH0147Settings" />
 
   <!--migrated from opengever/policy/base/profiles/default/registry.xml-->
   <records interface="ftw.zipexport.interfaces.IZipExportSettings">
     <value key="enabled_dotted_names">
       <element>opengever.dossier.behaviors.dossier.IDossierMarker</element>
+      <element>opengever.dossier.templatefolder.interfaces.ITemplateFolder</element>
       <element>Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot</element>
       <element>opengever.task.task.ITask</element>
     </value>
@@ -131,6 +134,7 @@
       <element>tabbedview</element>
       <element>quotawarning</element>
       <element>ouselector</element>
+      <element>redirector</element>
     </value>
   </record>
 
@@ -139,6 +143,7 @@
       <element>tabbedview</element>
       <element>quotawarning</element>
       <element>ouselector</element>
+      <element>redirector</element>
     </value>
   </record>
 

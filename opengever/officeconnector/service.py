@@ -100,7 +100,7 @@ class OfficeConnectorPayload(Service):
                     'csrf-token': createToken(),
                     'document-url': document.absolute_url(),
                     'document': document,
-                    'download': 'download',
+                    'download': document.get_download_view_name(),
                     'filename': document.get_filename(),
                     }
                 )

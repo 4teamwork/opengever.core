@@ -17,6 +17,75 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="*"
+      name="tabbedview_view-dossiertemplates"
+      class=".tabs.TemplateFolderDossierTemplates"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.dossier.templatefolder.interfaces.ITemplateFolder"
+      name="tabbedview_view-documents"
+      class=".tabs.TemplateFolderDocuments"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.dossier.templatefolder.interfaces.ITemplateFolder"
+      name="tabbedview_view-sablontemplates-proxy"
+      class=".tabs.TemplateFolderSablonTemplatesProxy"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.dossier.templatefolder.interfaces.ITemplateFolder"
+      name="tabbedview_view-sablontemplates"
+      class=".tabs.TemplateFolderSablonTemplates"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.dossier.templatefolder.interfaces.ITemplateFolder"
+      name="tabbedview_view-sablontemplates-gallery"
+      class=".tabs.TemplateFolderSablonTemplatesGallery"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.dossier.templatefolder.interfaces.ITemplateFolder"
+      name="tabbedview_view-proposaltemplates-proxy"
+      class=".tabs.TemplateFolderProposalTemplatesProxy"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.dossier.templatefolder.interfaces.ITemplateFolder"
+      name="tabbedview_view-proposaltemplates"
+      class=".tabs.TemplateFolderProposalTemplates"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.dossier.templatefolder.interfaces.ITemplateFolder"
+      name="tabbedview_view-proposaltemplates-gallery"
+      class=".tabs.TemplateFolderProposalTemplatesGallery"
+      permission="zope2.View"
+      />
+
+  <adapter
+      name="opengever.dossier.templatefolder"
+      provides="zope.publisher.interfaces.browser.IBrowserPage"
+      factory=".templatefolder.AddView"
+      />
+
+  <browser:page
+      name="edit"
+      for="opengever.dossier.templatefolder.ITemplateFolder"
+      class=".templatefolder.EditForm"
+      permission="cmf.ModifyPortalContent"
+      />
+
   <subscriber
       for="opengever.dossier.templatefolder.ITemplateFolder
            zope.lifecycleevent.interfaces.IObjectAddedEvent"

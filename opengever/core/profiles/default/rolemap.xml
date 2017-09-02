@@ -1,34 +1,29 @@
 <rolemap>
   <roles>
-
-    <!--migrated from opengever/sharing/profiles/default/rolemap.xml-->
     <role name="Administrator" />
-    <role name="Anonymous" />
-    <role name="Authenticated" />
-    <role name="Contributor" />
-    <role name="Editor" />
-    <role name="Manager" />
-    <role name="Member" />
-    <role name="Owner" />
-    <role name="Reader" />
-    <role name="Reviewer" />
-    <role name="Publisher" />
-    <role name="Role Manager" />
-
-
-    <!--migrated from opengever/meeting/profiles/default/rolemap.xml-->
-    <role name="CommitteeGroupMember" />
-
-
-    <!--migrated from opengever/disposition/profiles/default/rolemap.xml-->
-    <role name="Records Manager" />
-    <role name="Archivist" />
-
-
-    <!--migrated from opengever/policy/base/profiles/default/rolemap.xml-->
     <role name="APIUser" />
+    <role name="Archivist" />
+    <role name="CommitteeAdministrator" />
+    <role name="CommitteeMember" />
+    <role name="CommitteeResponsible" />
+    <role name="MeetingUser" />
+    <role name="Publisher" />
+    <role name="Records Manager" />
+    <role name="Role Manager" />
   </roles>
   <permissions>
+
+    <permission name="Sharing page: Delegate Administrator role" acquire="True">
+      <role name="Administrator" />
+      <role name="Manager" />
+      <role name="Role Manager" />
+    </permission>
+
+    <permission name="Sharing page: Delegate Publisher role" acquire="True">
+      <role name="Administrator" />
+      <role name="Manager" />
+      <role name="Role Manager" />
+    </permission>
 
     <!--migrated from opengever/base/profiles/default/rolemap.xml-->
     <permission name="Remove GEVER content" acquire="True">
@@ -68,12 +63,6 @@
 
     <!--migrated from opengever/dossier/profiles/default/rolemap.xml-->
     <permission name="opengever.dossier: Add businesscasedossier" acquire="True">
-      <role name="Manager" />
-      <role name="Owner" />
-      <role name="Contributor" />
-      <role name="Administrator" />
-    </permission>
-    <permission name="opengever.dossier: Add projectdossier" acquire="True">
       <role name="Manager" />
       <role name="Owner" />
       <role name="Contributor" />
@@ -219,5 +208,10 @@
       <role name="Manager" />
       <role name="APIUser" />
     </permission>
+
+    <permission name="List folder contents" acquire="True">
+      <role name="Manager" />
+    </permission>
+
   </permissions>
 </rolemap>

@@ -66,6 +66,10 @@ class FileCopyDownloadedEvent(ObjectEvent):
 
     grok.implements(interfaces.IFileCopyDownloadedEvent)
 
+    def __init__(self, obj, version_id=None):
+        self.object = obj
+        self.version_id = version_id
+
 
 class FileAttachedToEmailEvent(ObjectEvent):
     """The file was attached to an email by OfficeConnector."""

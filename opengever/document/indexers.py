@@ -115,6 +115,14 @@ grok.global_adapter(document_date, name='document_date')
 
 
 @indexer(IDocumentSchema)
+def external_reference(obj):
+    """Return the foreign reference of a document."""
+    context = aq_inner(obj)
+    return IDocumentMetadata(context).foreign_reference
+grok.global_adapter(external_reference, name='external_reference')
+
+
+@indexer(IDocumentSchema)
 def receipt_date(obj):
     """receipt_date indexer, can handle None Value"""
     context = aq_inner(obj)

@@ -1,11 +1,10 @@
-from five import grok
-from ftw.mail.mail import IMail
 from ftw.table.interfaces import ITableGenerator
 from opengever.base.utils import disable_edit_bar
 from opengever.base.utils import escape_html
 from opengever.mail import _
 from plone import api
 from plone.i18n.normalizer.interfaces import IIDNormalizer
+from Products.Five.browser import BrowserView
 from zope.component import getUtility
 import os.path
 
@@ -68,15 +67,10 @@ def human_readable_filesize_helper(context):
     return _helper
 
 
-class ExtractAttachments(grok.View):
+class ExtractAttachments(BrowserView):
     """View for extracting attachments from a `ftw.mail` Mail object into
     `opengever.document` Documents in a `IMailInAddressMarker` container.
     """
-
-    grok.context(IMail)
-    grok.name('extract_attachments')
-    grok.require('zope2.View')
-    grok.template('extract_attachments')
 
     allowed_delete_actions = ('nothing', 'all', 'selected')
 

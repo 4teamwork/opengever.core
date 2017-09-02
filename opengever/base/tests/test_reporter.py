@@ -60,20 +60,22 @@ class TestReporter(MockTestCase):
         workbook = self.get_workbook(reporter())
         self.assertEquals(
             [u'Title', None, u'Start', u'Responsible', u'Review state'],
-            [cell.value for cell in workbook.active.rows[0]])
+            [cell.value for cell in list(workbook.active.rows)[0]])
 
     def test_value_rows(self):
         reporter = XLSReporter(self.request, self.test_attributes, self.brains)
         workbook = self.get_workbook(reporter())
+
+        rows = list(workbook.active.rows)
         self.assertEquals(
             [u'Objekt 0', None, datetime(2012, 2, 25),
              u'test_user_0 (test_user_0)', u'dossier-state-active'],
-            [cell.value for cell in workbook.active.rows[1]])
+            [cell.value for cell in rows[1]])
 
         self.assertEquals(
             [u'Objekt 1', None, datetime(2012, 2, 26),
              u'test_user_1 (test_user_1)', 'dossier-state-active'],
-            [cell.value for cell in workbook.active.rows[2]])
+            [cell.value for cell in rows[2]])
 
     def test_set_sheet_title_for_active_workbook_sheet(self):
         title = 'Aufgaben\xc3\xbcbersicht'.decode('utf-8')

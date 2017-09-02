@@ -3,6 +3,7 @@ from Acquisition import aq_parent
 from opengever.base.browser.helper import get_css_class
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
+from opengever.dossier.templatefolder.interfaces import ITemplateFolder
 from opengever.inbox.inbox import IInbox
 from opengever.meeting.proposal import IProposal
 from opengever.task.task import ITask
@@ -40,7 +41,8 @@ class BaseDocumentMixin(object):
         """
         parent = aq_parent(aq_inner(self))
         if (IDossierMarker.providedBy(parent)
-                or IDossierTemplateMarker.providedBy(parent)):
+                or IDossierTemplateMarker.providedBy(parent)
+                or ITemplateFolder.providedBy(parent)):
             return parent
         if ITask.providedBy(parent):
             return parent.get_containing_dossier()
@@ -60,6 +62,10 @@ class BaseDocumentMixin(object):
     @property
     def is_removed(self):
         return api.content.get_state(obj=self) == self.removed_state
+
+    @property
+    def is_mail(self):
+        return False
 
     def related_items(self):
         raise NotImplementedError

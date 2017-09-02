@@ -3,10 +3,7 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:plone="http://namespaces.plone.org/plone"
-    xmlns:grok="http://namespaces.zope.org/grok"
     i18n_domain="opengever.bumblebee">
-
-  <grok:grok package="." />
 
   <!-- Register locales translations -->
   <i18n:registerTranslations directory="locales" />
@@ -21,15 +18,9 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
-  <adapter
-      for="opengever.base.interfaces.IOpengeverBaseLayer"
-      factory=".service.GeverBumblebeeService"
-      />
-
-  <adapter
-      for="opengever.document.document.IDocumentSchema"
-      factory=".document.DocumentBumblebeeDocument"
-      />
+  <adapter factory=".service.GeverBumblebeeService" />
+  <adapter factory=".document.DocumentBumblebeeDocument" />
+  <adapter factory=".document.OGMailBumblebeeDocument" />
 
   <include package=".upgrades" />
 

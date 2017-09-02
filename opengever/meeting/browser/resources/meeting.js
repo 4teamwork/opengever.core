@@ -152,12 +152,19 @@
     this.showEditbox = function(target) {
       var row = target.parents("tr");
       row.removeClass("expanded");
-      var source;
-      if($(".title > span > a", row).length) {
-        source = $(".title > span > a", row);
-      } else {
-        source = $(".title > span", row);
-      }
+      var source_selectors = [
+            /* Word: */
+            ".title > span.proposal_title > a",
+            ".title > span.proposal_title",
+            /* Non-word: */
+            ".title > span > a",
+            ".title > span"
+      ];
+      var source_selector = source_selectors.filter(function(selector) {
+        return $(selector, row).length > 0;
+      })[0];
+      var source = $(source_selector, row);
+
       new EditboxController({
         editbox: $(".edit-box", row),
         source: source,
@@ -207,7 +214,25 @@
       return $.post(target.attr("href"));
     };
 
+    this.editDocument = function(target) {
+      return $.get(target.attr("href")).done(function(response) {
+        if(response.proceed === true) {
+          window.location = response.officeConnectorURL;
+          $(target).parents('tr').find('.proposal_document').addClass('checked-out');
+        }
+      });
+    };
+
+    this.generateExcerpt = function(target) {
+      return $.get(target.attr("href"));
+    };
+
     this.events = [
+      {
+        method: "click",
+        target: ".edit-document",
+        callback: this.editDocument
+      },
       {
         method: "click",
         target: ".delete-agenda-item",
@@ -239,6 +264,15 @@
         method: "click",
         target: ".revise-agenda-item",
         callback: this.revise,
+        options: {
+          update: true,
+          loading: true
+        }
+      },
+      {
+        method: "click",
+        target: ".generate-excerpt",
+        callback: this.generateExcerpt,
         options: {
           update: true,
           loading: true

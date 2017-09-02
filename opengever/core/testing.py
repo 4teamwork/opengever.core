@@ -4,7 +4,9 @@ from ftw.builder import session
 from ftw.builder.testing import BUILDER_LAYER
 from ftw.builder.testing import set_builder_session_factory
 from ftw.bumblebee.tests.helpers import BumblebeeTestTaskQueue
+from ftw.testbrowser import TRAVERSAL_BROWSER_FIXTURE
 from ftw.testing import ComponentRegistryLayer
+from ftw.testing import TransactionInterceptor
 from ftw.testing.layer import COMPONENT_REGISTRY_ISOLATION
 from ftw.testing.quickinstaller import snapshots
 from opengever.activity.interfaces import IActivitySettings
@@ -13,6 +15,10 @@ from opengever.base.model import create_session
 from opengever.base.pdfconverter import pdfconverter_available_lock
 from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
 from opengever.core import sqlite_testing
+from opengever.core.cached_testing import CACHE_GEVER_FIXTURE
+from opengever.core.cached_testing import CACHE_GEVER_INSTALLATION
+from opengever.core.cached_testing import CACHED_COMPONENT_REGISTRY_ISOLATION
+from opengever.core.cached_testing import DB_CACHE_MANAGER
 from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings # noqa
 from opengever.meeting.interfaces import IMeetingSettings
 from opengever.officeatwork.interfaces import IOfficeatworkSettings
@@ -20,16 +26,26 @@ from opengever.private import enable_opengever_private
 from plone import api
 from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
+from plone.app.testing import IntegrationTesting
+from plone.app.testing import logout
 from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.browserlayer.utils import unregister_layer
 from plone.dexterity.schema import SCHEMA_CACHE
+from plone.protect.auto import safeWrite
 from plone.testing import z2
+from plone.transformchain.interfaces import ITransform
 from Products.CMFCore.utils import getToolByName
 from Testing.ZopeTestCase.utils import setupCoreSessions
+from zope.component import getGlobalSiteManager
+from zope.component import getMultiAdapter
 from zope.component import getSiteManager
 from zope.configuration import xmlconfig
+from zope.globalrequest import setRequest
+from zope.sqlalchemy import datamanager
+from zope.sqlalchemy.datamanager import mark_changed
+from ZPublisher.interfaces import IPubAfterTraversal
 import logging
 import os
 import sys
@@ -380,3 +396,161 @@ class OfficeatworkLayer(PloneSandboxLayer):
 
 
 OPENGEVER_FUNCTIONAL_OFFICEATWORK_LAYER = OfficeatworkLayer()
+
+
+class ContentFixtureLayer(OpengeverFixture):
+    """The content fixture layer extends the regular OpengeverFixture with a
+    content fixture.
+    The content fixture is a set of objects which are constructed on layer setup
+    time and can be used by all tests, saving us the per-test creation time.
+
+    SQL:
+    This fixture does only work with sqlite at the moment. It cannot base on the
+    SQLITE_MEMORY_FIXTURE because this will break savepoint support because the
+    engine would be created before the ZCML is loaded, registering engine
+    creation event handlers.
+
+    Builder session:
+    ftw.builder provides testing layers and functions for using builders within
+    tests.
+    It does not provide infrastructure for setting up builders in layer setup.
+    Therefore we cannot reuse ftw.builder's testing layers but configure the
+    builder manually in a non-committing integration testing mode.
+
+    Warning:
+    Do not create another fixture layer based on this fixture layer.
+    It won't work without fixing transactionality issues.
+    The current setup works because the fixture state is committed to the database.
+    Committed state cannot be rolled back.
+    Uncommitted state will get lost when IntegrationTesting.testSetUp begins
+    a new transaction.
+    """
+
+
+    defaultBases = (CACHED_COMPONENT_REGISTRY_ISOLATION, )
+
+    def __init__(self):
+        # By super-super-calling the __init__ we remove the SQL bases,
+        # since we are implementing SQL setup in this layer directly.
+        PloneSandboxLayer.__init__(self)
+
+    def setUpZope(self, app, configurationContext):
+        super(ContentFixtureLayer, self).setUpZope(app, configurationContext)
+        # Setting up the database, which creates a new engine, must happen after
+        # opengever's ZCML is loaded in order to have engine creation event
+        # handlers already registered, which enable support for rolling back
+        # to savepoints.
+        sqlite_testing.setup_memory_database()
+        if 'sqlite' in datamanager.NO_SAVEPOINT_SUPPORT:
+            datamanager.NO_SAVEPOINT_SUPPORT.remove('sqlite')
+
+    def setUpPloneSite(self, portal):
+        session.current_session = session.BuilderSession()
+        session.current_session.session = create_session()
+        super(ContentFixtureLayer, self).setUpPloneSite(portal)
+
+        portal.portal_languages.use_combined_language_codes = True
+        portal.portal_languages.addSupportedLanguage('de-ch')
+
+        if not DB_CACHE_MANAGER.is_loaded_from_cache(CACHE_GEVER_FIXTURE):
+            sqlite_testing.create_tables()
+            # Avoid circular imports:
+            from opengever.testing.fixtures import OpengeverContentFixture
+            setRequest(portal.REQUEST)
+            self['fixture_lookup_table'] = OpengeverContentFixture()()
+            setRequest(None)
+            DB_CACHE_MANAGER.data['fixture_lookup_table'] = (
+                self['fixture_lookup_table'])
+            DB_CACHE_MANAGER.dump_to_cache(self['zodbDB'], CACHE_GEVER_FIXTURE)
+        else:
+            DB_CACHE_MANAGER.apply_cache_fixes(CACHE_GEVER_FIXTURE)
+            self['fixture_lookup_table'] = (
+                DB_CACHE_MANAGER.data['fixture_lookup_table'])
+
+    def installOpengeverProfiles(self, portal):
+        if not DB_CACHE_MANAGER.is_loaded_from_cache(CACHE_GEVER_INSTALLATION):
+            super(ContentFixtureLayer, self).installOpengeverProfiles(portal)
+            DB_CACHE_MANAGER.dump_to_cache(self['zodbDB'], CACHE_GEVER_INSTALLATION)
+        else:
+            DB_CACHE_MANAGER.apply_cache_fixes(CACHE_GEVER_INSTALLATION)
+
+    def tearDown(self):
+        sqlite_testing.model.Session.close_all()
+        sqlite_testing.truncate_tables()
+        super(ContentFixtureLayer, self).tearDown()
+        session.current_session = None
+
+    def allowAllTypes(self, portal):
+        """In the fixture layer, the fixture objects should be used and
+        we want them to be at the correct place hierarchically.
+        When additional objects need to be created anyway, they can be placed
+        in the correct spot easily by using the fixture objects as parents.
+        Therefore we do not allow to create objects at the portal.
+        """
+        pass
+
+
+class GEVERIntegrationTesting(IntegrationTesting):
+    """Custom integration testing extension:
+    1. Make savepoint at test begin and rollback after the test.
+    2. Prevent all interaction with transactions, primarily in order to avoid
+       having data committed which can then not be rolled back anymore.
+    """
+
+    def setUp(self):
+        super(GEVERIntegrationTesting, self).setUp()
+        transaction.commit()
+        self.interceptor = TransactionInterceptor().install()
+        getGlobalSiteManager().registerHandler(
+            self.handlePubAfterTraversal, [IPubAfterTraversal])
+
+    def tearDown(self):
+        self.interceptor.uninstall()
+        super(GEVERIntegrationTesting, self).tearDown()
+
+    def testSetUp(self):
+        super(GEVERIntegrationTesting, self).testSetUp()
+        # In order to let the SQL transaction manager make a savepoint of no
+        # changes we need to mark the session as changed first.
+        mark_changed(create_session())
+        self.savepoint = transaction.savepoint()
+        self.interceptor.intercept(self.interceptor.BEGIN
+                                   | self.interceptor.COMMIT
+                                   | self.interceptor.ABORT)
+        self.interceptor.begin_savepoint_simulation()
+        self.interceptor.begin()
+        logout()
+
+    def testTearDown(self):
+        self.interceptor.stop_savepoint_simulation()
+        self.savepoint.rollback()
+        self.savepoint = None
+        self.interceptor.clear().intercept(self.interceptor.COMMIT)
+        super(GEVERIntegrationTesting, self).testTearDown()
+
+    def handlePubAfterTraversal(self, event):
+        """Support plone.protect's auto CSRF protection as good as possible.
+
+        The problem is that we use the same connection and transaction for
+        preparation as for performing a request with ftw.testbrowser.
+
+        This means that we may already have changed objects on the connection
+        but the change is not from within the request.
+
+        We fix that by marking all objects which are already marked as changed
+        on the current as safe for CSRF.
+        This also means that the auto protection does no longer trigger within
+        the test for the followed requests.
+        """
+        transform = getMultiAdapter((self['portal'], event.request),
+                                    ITransform,
+                                    name='plone.protect.autocsrf')
+        for obj in transform._registered_objects():
+            safeWrite(obj, event.request)
+
+
+OPENGEVER_INTEGRATION_TESTING = GEVERIntegrationTesting(
+    # Warning: do not try to base other layers on ContentFixtureLayer.
+    # See docstring of ContentFixtureLayer.
+    bases=(ContentFixtureLayer(), TRAVERSAL_BROWSER_FIXTURE),
+    name="opengever.core:integration")

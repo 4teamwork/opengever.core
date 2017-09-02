@@ -1,0 +1,35 @@
+[Committee container workflow]
+Role mapping:
+  manager => Manager
+  committee admin => CommitteeAdministrator
+  meeting user => MeetingUser
+
+Visible roles:
+  committee admin
+  meeting user
+
+Committee admin role description:
+  The committee admin is responsible for creating and managing committees
+  and manging the roles of the committees.
+
+Meeting user role description:
+  Anyone who works with the meeting module is a meeting user.
+  Meeting users have read access to the meeting area.
+  Additional roles on committe level are required for accessing the committees.
+
+
+General:
+  A manager can always add.
+  A manager can always view.
+  A manager can always edit.
+  A manager can always manage security.
+  A manager can always use the developer tools.
+  A manager can always use the REST API.
+
+
+Initial Status: Active
+Status Active:
+  A meeting user can view.
+  A committee admin can view.
+  A committee admin can add.
+  A committee admin can edit.

@@ -9,7 +9,11 @@ class TestTaskListing(FunctionalTestCase):
     def setUp(self):
         super(TestTaskListing, self).setUp()
 
-        self.dossier = create(Builder('dossier'))
+        self.dossier = create(Builder('dossier')
+                              .titled(u'<b>B\xf6ld title</b>'))
+        self.subdossier = create(Builder('dossier')
+                                 .within(self.dossier)
+                                 .titled(u'S\xfcb'))
         self.task1 = create(Builder('task')
                             .within(self.dossier)
                             .in_state('task-state-open')
@@ -19,7 +23,7 @@ class TestTaskListing(FunctionalTestCase):
                             .in_state('task-state-tested-and-closed')
                             .titled('Task 2'))
         self.task3 = create(Builder('task')
-                            .within(self.dossier)
+                            .within(self.subdossier)
                             .in_state('task-state-in-progress')
                             .titled('Task 3'))
 
@@ -32,7 +36,6 @@ class TestTaskListing(FunctionalTestCase):
         self.assertEquals(['Task 1', 'Task 3'],
                           [row.get('Title') for row in table.dicts()])
 
-
     @browsing
     def test_list_every_dossiers_with_the_all_filter(self, browser):
         browser.login().open(
@@ -42,3 +45,14 @@ class TestTaskListing(FunctionalTestCase):
         table = browser.css('.listing').first
         self.assertEquals(['Task 1', 'Task 2', 'Task 3'],
                           [row.get('Title') for row in table.dicts()])
+
+    @browsing
+    def test_escape_dossier_title_to_prevent_xss(self, browser):
+        browser.login().open(
+            self.dossier, view='tabbedview_view-tasks')
+        table = browser.css('.listing').first
+        second_row_dossier_cell = table.rows[1].css('td:nth-child(10) .maindossierLink').first
+
+        self.assertEquals(
+            u'&lt;b&gt;B\xf6ld title&lt;/b&gt;',
+            second_row_dossier_cell.innerHTML.strip().strip('\n'))

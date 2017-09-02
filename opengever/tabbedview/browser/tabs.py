@@ -1,13 +1,10 @@
 from datetime import date
-from five import grok
-from ftw.tabbedview.interfaces import ITabbedView
 from ftw.table import helper
 from opengever.bumblebee import get_preferred_listing_view
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.bumblebee import set_preferred_listing_view
 from opengever.dossier.base import DOSSIER_STATES_CLOSED
 from opengever.dossier.base import DOSSIER_STATES_OPEN
-from opengever.dossier.interfaces import IDossierMarker
 from opengever.globalindex.model.task import Task
 from opengever.meeting.model.proposal import Proposal
 from opengever.meeting.tabs.proposallisting import ProposalListingTab
@@ -23,17 +20,18 @@ from opengever.tabbedview.helper import escape_html_transform
 from opengever.tabbedview.helper import external_edit_link
 from opengever.tabbedview.helper import linked
 from opengever.tabbedview.helper import linked_document
-from opengever.tabbedview.helper import linked_document_subdossier
+from opengever.tabbedview.helper import linked_containing_subdossier
 from opengever.tabbedview.helper import readable_ogds_author
 from opengever.tabbedview.helper import readable_ogds_user
 from opengever.tabbedview.helper import workflow_state
 from opengever.tabbedview.interfaces import ITabbedViewProxy
 from plone import api
-from plone.dexterity.interfaces import IDexterityContainer
+from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import BoundPageTemplate
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
+from zope.interface import implements
 
 
 PROXY_VIEW_POSTFIX = "-proxy"
@@ -52,9 +50,7 @@ class BaseTabProxy(BaseCatalogListingTab):
     and reopens this view.
     """
 
-    grok.context(ITabbedView)
-    grok.implements(ITabbedViewProxy)
-    grok.require('zope2.View')
+    implements(ITabbedViewProxy)
 
     def render(self):
         return
@@ -115,14 +111,10 @@ class DocumentsProxy(BaseTabProxy):
     view (list or gallery) and reopens this view.
     """
 
-    grok.name('tabbedview_view-documents-proxy')
-
 
 class Documents(BaseCatalogListingTab):
     """List all documents recursively. Working copies are not listed.
     """
-
-    grok.name('tabbedview_view-documents')
 
     types = ['opengever.document.document', 'ftw.mail.mail']
 
@@ -168,11 +160,15 @@ class Documents(BaseCatalogListingTab):
 
         {'column': 'containing_subdossier',
          'column_title': _('label_subdossier', default="Subdossier"),
-         'transform': linked_document_subdossier},
+         'transform': linked_containing_subdossier},
 
         {'column': 'public_trial',
          'column_title': _('label_public_trial', default="Public Trial"),
          'transform': translate_public_trial_options},
+
+        {'column': 'reference',
+         'column_title': _(u'label_document_reference',
+                           default=u'Reference Number')},
         )
 
     major_actions = [
@@ -219,8 +215,6 @@ class Documents(BaseCatalogListingTab):
 
 class Dossiers(BaseCatalogListingTab):
     """List all dossiers recursively."""
-
-    grok.name('tabbedview_view-dossiers')
 
     template = ViewPageTemplateFile("generic_with_filters.pt")
 
@@ -269,6 +263,7 @@ class Dossiers(BaseCatalogListingTab):
                        'move_items',
                        'copy_items',
                        'create_disposition',
+                       'ech0147_export',
                        ]
 
     major_actions = ['change_state', ]
@@ -301,8 +296,6 @@ class SubDossiers(Dossiers):
     configuration (without a statefilter).
     """
 
-    grok.name('tabbedview_view-subdossiers')
-
     search_options = {'is_subdossier': True}
 
     @property
@@ -313,12 +306,11 @@ class SubDossiers(Dossiers):
 class Tasks(GlobalTaskListingTab):
     """Recursively list tasks."""
 
-    grok.name('tabbedview_view-tasks')
-    grok.context(IDossierMarker)
-
     columns = GlobalTaskListingTab.columns + (
         {'column': 'containing_subdossier',
-         'column_title': _('label_subdossier', default="Subdossier"), },
+         'column_title': _('label_subdossier', default="Subdossier"),
+         'transform': linked_containing_subdossier},
+
     )
 
     enabled_actions = [
@@ -346,12 +338,9 @@ class ActiveProposalFilter(Filter):
 class Proposals(ProposalListingTab):
     """Recursively list proposals."""
 
-    grok.name('tabbedview_view-proposals')
-    grok.context(IDossierMarker)
-
     enabled_actions = []
     major_actions = []
-    sort_on = 'title'
+    sort_on = ''
     show_selects = False
 
     template = ViewPageTemplateFile("generic_with_filters.pt")
@@ -379,13 +368,9 @@ class TrashProxy(BaseTabProxy):
     view (list or gallery) and reopens this view.
     """
 
-    grok.name('tabbedview_view-trash-proxy')
-
 
 class Trash(Documents):
     """List trash contents."""
-
-    grok.name('tabbedview_view-trash')
 
     types = ['opengever.dossier.dossier',
              'opengever.document.document',
@@ -424,17 +409,13 @@ class Trash(Documents):
         return columns
 
 
-class DocumentRedirector(grok.View):
+class DocumentRedirector(BrowserView):
     """Redirector View is called after a Document is created,
     make it easier to implement type specifics immediate_views
     like implemented for opengever.task.
     """
 
-    grok.name('document-redirector')
-    grok.context(IDexterityContainer)
-    grok.require('cmf.AddPortalContent')
-
-    def render(self):
+    def __call__(self):
         referer = self.context.REQUEST.environ.get('HTTP_REFERER')
         if referer.endswith('++add++opengever.document.document'):
             return self.context.REQUEST.RESPONSE.redirect(

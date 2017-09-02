@@ -37,6 +37,16 @@ class TestOpengeverSearch(FunctionalTestCase):
         self.assertEqual(25, len(browser.css('dl.searchResults dt')))
 
     @browsing
+    def test_sorting_on_relevance_is_handled_correctly(self, browser):
+        create(Builder('dossier').titled(u'Test A'))
+        create(Builder('dossier').titled(u'Test B'))
+
+        browser.login().open(self.portal, view='@@search?sort_on=relevance')
+
+        self.assertEqual(['Test A', 'Test B'],
+                         browser.css('.searchItem dt').text)
+
+    @browsing
     def test_no_bubmlebee_preview_rendered_when_feature_not_enabled(self, browser):
         browser.login().open(self.portal, view='search')
         self.assertEqual(0, len(browser.css('.searchImage')))

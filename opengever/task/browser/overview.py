@@ -62,6 +62,12 @@ class Overview(grok.View, GeverTabMixin):
                 return ''
             return api.portal.get().toLocalizedTime(date)
 
+        def _format_description(description):
+            if not description:
+                return ''
+            return api.portal.get_tool(name='portal_transforms').convertTo(
+                'text/html', description, mimetype='text/x-web-intelligent')
+
         items = [
             {
                 'label': _('label_task_title', u'Task title'),
@@ -73,7 +79,8 @@ class Overview(grok.View, GeverTabMixin):
             },
             {
                 'label': _(u"label_text", default=u"Text"),
-                'value': task.text,
+                'value': _format_description(task.text),
+                'is_html': True,
             },
             {
                 'label': _(u'label_task_type', default=u'Task Type'),

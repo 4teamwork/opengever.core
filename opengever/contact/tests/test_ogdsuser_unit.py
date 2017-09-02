@@ -1,6 +1,5 @@
 from ftw.builder import Builder
 from ftw.builder import create
-from opengever.contact.models import Contact
 from opengever.contact.ogdsuser import AddressAdapter
 from opengever.contact.ogdsuser import MailAddressAdapter
 from opengever.contact.ogdsuser import PhoneNumberAdapter

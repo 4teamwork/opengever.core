@@ -1,5 +1,4 @@
 from datetime import datetime
-from five import grok
 from opengever.base.protect import unprotected_write
 from opengever.base.request import dispatch_request
 from opengever.base.request import tracebackify
@@ -13,6 +12,7 @@ from urllib2 import URLError
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
 from zope.globalrequest import setRequest
+from zope.interface import implementer
 import logging
 
 
@@ -23,8 +23,8 @@ REQUEST_SYNC_KEY = 'last_ldap_synchronisation'
 
 
 def update_sync_stamp(context):
-    """update the SYNC key with the actual timestamp in the dictstorage"""
-
+    """Update the sync stamp with the current timestamp in the dictstorage.
+    """
     timestamp = datetime.now().isoformat()
     dictstorage.set(DICTSTORAGE_SYNC_KEY, timestamp)
     logger.info("Updated sync_stamp in dictstorage"
@@ -33,8 +33,8 @@ def update_sync_stamp(context):
 
 
 def set_remote_import_stamp(context):
-    """update the sync stap on every enabled client."""
-
+    """Update the sync stamp on every enabled admin unit.
+    """
     timestamp = update_sync_stamp(context)
 
     # fake the request, because dispatch_request expects it
@@ -52,31 +52,31 @@ def set_remote_import_stamp(context):
                         "for %s: %s" % (admin_unit.id(), e))
 
 
-class SyncStampUtility(grok.GlobalUtility):
-    """Named Adapter which handles the persistent storing
-    of the LDAP SYNC timestamp"""
-
-    grok.provides(ISyncStamp)
+@implementer(ISyncStamp)
+class SyncStampUtility(object):
+    """Global utility that handles persistent storage of the LDAP sync stamp.
+    """
 
     SYNC_STAMP_KEY = 'sync_stamp'
 
     def get_context(self, context):
-        """helper for get the context, even no context is given."""
-
+        """Helper to get the context, even if no context is given.
+        """
         if not context or not IPloneSiteRoot.providedBy(context):
             context = api.portal.get()
 
         return context
 
     def get_sync_stamp(self, context=None):
-        """return the time stamp from the last Synchronisation."""
+        """Return the sync stamp (time stamp of last LDAP synchronisation).
+        """
         context = self.get_context(context)
         self.annotations = IAnnotations(context)
         return self.annotations.get('sync_stamp')
 
     def set_sync_stamp(self, stamp, context=None):
-        """update the stamp with the given value"""
-
+        """Update sync stamp with the given value.
+        """
         context = self.get_context(context)
         self.annotations = unprotected_write(IAnnotations(context))
         self.annotations['sync_stamp'] = stamp
@@ -85,14 +85,17 @@ class SyncStampUtility(grok.GlobalUtility):
 
 @tracebackify
 class UpdateSyncStamp(BrowserView):
-    """View wich is called from the ogds, after the LDAP Synchronisation"""
+    """View to update local sync stamp (used in cache keys).
+
+    This view is called from OGDS (possibly from a remote admin unit), after
+    performing LDAP Synchronisation.
+    """
 
     INTERN_SYNC_KEY = 'ldap_sync_key'
 
     def __call__(self):
-        """read the actual timestamp(isoformat) and save it into a annotation.
+        """Read timestamp (isoformat) from request and set as local sync stamp.
         """
-
         timestamp = self.request.form.get(REQUEST_SYNC_KEY, None)
 
         if timestamp:

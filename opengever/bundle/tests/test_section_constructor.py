@@ -56,8 +56,10 @@ class TestConstructor(FunctionalTestCase):
         list(section)
 
         portal = api.portal.get()
+        obj = portal.restrictedTraverse(item['_path'])
+
         self.assertEqual('reporoot', item['_path'])
-        self.assertEqual(portal.get('reporoot'), item['_object'])
+        self.assertEqual(portal.get('reporoot'), obj)
 
     def test_creates_itranslated_title_content(self):
         item = {
@@ -83,7 +85,9 @@ class TestConstructor(FunctionalTestCase):
         section = self.setup_section(previous=[item])
         list(section)
 
-        content = item['_object']
+        portal = api.portal.get()
+        content = portal.restrictedTraverse(item['_path'])
+
         self.assertEqual(u'Dossier', content.title)
         self.assertFalse(hasattr(content, 'title_de'))
         self.assertFalse(hasattr(content, 'title_Fr'))
@@ -98,7 +102,9 @@ class TestConstructor(FunctionalTestCase):
         section = self.setup_section(previous=[item])
         list(section)
 
-        content = item['_object']
+        portal = api.portal.get()
+        content = portal.restrictedTraverse(item['_path'])
+
         self.assertEqual(guid, IAnnotations(content)[BUNDLE_GUID_KEY])
 
     def test_catalog(self):
@@ -110,7 +116,9 @@ class TestConstructor(FunctionalTestCase):
         section = self.setup_section(previous=[item])
         list(section)
 
-        obj_path = '/'.join(item['_object'].getPhysicalPath())
+        portal = api.portal.get()
+        obj_path = '/'.join(portal.getPhysicalPath() + (item['_path'],))
+
         query = {'path': {'query': obj_path,
                           'depth': 0}}
 
@@ -133,7 +141,9 @@ class TestConstructor(FunctionalTestCase):
         section = self.setup_section(previous=[item])
         list(section)
 
-        content = item['_object']
+        portal = api.portal.get()
+        content = portal.restrictedTraverse(item['_path'])
+
         self.assertEqual(u'My Mail', content.title)
         self.assertFalse(hasattr(content, 'title_de'))
         self.assertFalse(hasattr(content, 'title_Fr'))

@@ -23,7 +23,6 @@ from plone.autoform.directives import write_permission
 from plone.dexterity.content import Container
 from plone.directives import form
 from plone.formwidget.contenttree import ObjPathSourceBinder
-from z3c.form import validator
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
 from zExceptions import Unauthorized
@@ -249,7 +248,11 @@ class Disposition(Container):
                 obj=relation.to_object, transition='dossier-transition-archive')
 
     def destroy_dossiers(self):
+        if not self.dossiers:
+            return
+
         alsoProvides(getRequest(), IDuringDossierDestruction)
+
         dossiers = [relation.to_object for relation in self.dossiers]
         self.set_destroyed_dossiers(dossiers)
         self.check_destroy_permission(dossiers)

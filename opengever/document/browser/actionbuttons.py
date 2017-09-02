@@ -62,11 +62,16 @@ class ActionButtonRendererMixin(object):
         return not self.is_checked_out_by_another_user()
 
     def get_download_copy_tag(self):
+        """Returns the DownloadConfirmationHelper tag containing
+        the donwload link. For mails, containing an original_message, the tag
+        links to the orginal message download view.
+        """
         dc_helper = DownloadConfirmationHelper(self.context)
         return dc_helper.get_html_tag(
             additional_classes=['function-download-copy'],
+            viewname=self.context.get_download_view_name(),
             include_token=True,
-            )
+        )
 
     def is_attach_to_email_available(self):
         if not is_officeconnector_attach_feature_enabled():

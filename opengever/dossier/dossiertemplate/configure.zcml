@@ -11,4 +11,34 @@
       allowed_attributes="is_available"
       />
 
+  <browser:page
+      for="opengever.dossier.dossiertemplate.behaviors.IDossierTemplateMarker"
+      name="tabbedview_view-subdossiers"
+      class=".tabs.DossierTemplateSubDossiers"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.dossier.dossiertemplate.behaviors.IDossierTemplateMarker"
+      name="tabbedview_view-documents-proxy"
+      class=".tabs.DossierTemplateDocumentsProxy"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.dossier.dossiertemplate.behaviors.IDossierTemplateMarker"
+      name="tabbedview_view-documents"
+      class=".tabs.DossierTemplateDocuments"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.dossier.dossiertemplate.behaviors.IDossierTemplateMarker"
+      name="tabbedview_view-documents-gallery"
+      class=".tabs.DossierTemplateDocumentsGallery"
+      permission="zope2.View"
+      />
+
+  <adapter factory=".menu.DossierTemplatePostFactoryMenu" />
+
 </configure>

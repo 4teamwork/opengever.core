@@ -1,4 +1,3 @@
-from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -64,6 +63,23 @@ class TestMeeting(FunctionalTestCase):
         self.assertEqual(u'C\xf6mmunity meeting', link.text)
 
     @browsing
+    def test_regression_add_meeting_without_end_date_does_not_fail(self, browser):
+        # create meeting
+        browser.login().open(self.committee, view='add-meeting')
+        browser.fill({
+            'Start': '01.01.2010 10:00',
+            'End': '',
+            'Location': u'B\xe4rn',
+        }).submit()
+        # create dossier
+        browser.find('Save').click()
+
+        committee_model = self.committee.load_model()
+        self.assertEqual(1, len(committee_model.meetings))
+        meeting = committee_model.meetings[0]
+        self.assertIsNone(meeting.end)
+
+    @browsing
     def test_add_meeting_and_dossier(self, browser):
         # create meeting
         browser.login().open(self.committee, view='add-meeting')
@@ -112,6 +128,11 @@ class TestMeeting(FunctionalTestCase):
         create(Builder('agenda_item').having(meeting=meeting,
                                              title='Oebbis in revision',
                                              workflow_state='revision'))
+
+        # CommitteeResponsible is assigned globally here for the sake of
+        # simplicity
+        self.grant('Contributor', 'Editor', 'Reader', 'MeetingUser',
+                   'CommitteeResponsible')
 
         browser.login().open(meeting.get_url())
         browser.find(close_meeting_button_name).click()
@@ -183,7 +204,7 @@ class TestCommitteeMemberVocabulary(FunctionalTestCase):
             MeetingWrapper(self.committee, self.meeting))
 
         self.assertEqual(
-            u'Hans M\xfcller',
+            u'M\xfcller Hans',
             vocabulary._terms[0].title)
 
     def test_return_fullname_with_email_as_value(self):
@@ -200,5 +221,5 @@ class TestCommitteeMemberVocabulary(FunctionalTestCase):
             MeetingWrapper(self.committee, self.meeting))
 
         self.assertEqual(
-            u'Hans M\xfcller (mueller@example.com)',
+            u'M\xfcller Hans (mueller@example.com)',
             vocabulary._terms[0].title)

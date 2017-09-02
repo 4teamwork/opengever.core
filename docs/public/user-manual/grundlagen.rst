@@ -1,229 +1,90 @@
 Grundlagen
 ==========
 
-Tabellen
---------
+Login
+-----
+Beim ersten Login gelangen Sie auf die untenstehende Login-Maske. Dort können
+Sie sich mit Ihrem Login anmelden. Damit Sie diesen Ablauf nur beim ersten Mal
+durchführen müssen, wählen Sie die Checkbox "Eingeloggt bleiben" an. Bestätigen
+Sie die Aktion mit "Anmelden".
 
-Tabellen enthalten Reiter, Spalten und Zeilen, die je nach Anwendung
-(Dossier, Aufgaben, etc.) unterschiedliche Inhalte aufnehmen.
+Wenn Sie Ihr Passwort vergessen haben, können Sie es sich ganz eifach über
+"Passwort vergessen?" neu setzten lassen. Es wird dann eine automatische E-Mail
+an Sie gesendet, mittels welchem Sie sich ein neues Passwort definieren können.
 
-|img-grundlagen-1|
+|img-grundlagen-18|
 
-Zeilen auswählen
-~~~~~~~~~~~~~~~~
+Portal
+------
+Nach erfolgreichem Login gelangen Sie auf die Übersicht unten. Dort sind diverse
+Informationen zu entnehmen und Aktionen zu betätigen:
 
-Alle Tabellenzeilen können über die Menüpunkte *Auswählen Alle* bzw.
-*Auswählen Keine* an- bzw. abgewählt werden.
+|img-grundlagen-19|
 
-Einzelne Tabellenzeilen können über das Kästchen links an- und abwählt
-werden. Markierte Zeilen erhalten einen gelben Hintergrund und das
-Markierungszeichen ☑ in der entsprechenden Zeile.
+1. Anmeldeverlauf: Dort sehen Sie Ihre letzten Aktivitäten mitsamt Browser- und IP-Informationen.
 
-|img-grundlagen-2|
+2. Zwei-Faktor-Authentifizierung: Dort können Sie entnehmen, ob Ihre Installation doppelt geschützt ist. Bei mehr Informationen dazu, können Sie gerne Kontakt mit uns aufnehmen.
 
-.. note::
-   - Klicken Sie in die Auswahl, um eine Zeile zu markieren.
-   - Halten Sie :kbd:`Ctrl` gedrückt und klicken Sie, um eine
-     weitere bzw. mehrere nicht zusammenhängende Zeilen zu markieren.
-   - Halten Sie :kbd:`Ctrl Shift` gedrückt und klicken Sie, um einen
-     zusammenhängenden Bereich zu selektieren.
+3. Mandanten: Dort finden Sie alle Mandanten Ihrer Organisation aufgelistet. Um die Arbeit in OneGov GEVER aufzunehmen, wählen Sie den gwünschten Mandanten an.
 
-Spalten
-~~~~~~~
+4. Aufgaben: Hier finden Sie eine mandantenübergreifende Übersicht über alle Ihre Aufgaben.
 
-Spaltenbreite beeinflussen
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+Übersicht
+---------
+Nachdem Sie im Portal den gwünschten Mandanten ausgewählt haben, gelangen Sie
+auf die Übersicht unten. Von da haben Sie verschiedene Möglichkeiten, sich
+weiter in OneGov GEVER zu bewegen.
 
-Führen Sie den Cursor in der Spaltenüberschrift an die rechte
-Spaltenbegrenzung, bis das entsprechende Zeichen erscheint und bestimmen
-Sie die Breite der Spalte mit gedrückter Maustaste.
+1. `Servicenavigation <https://docs.onegovgever.ch/user-manual/grundlagen/#servicenavigation>`_
 
-|img-grundlagen-3|
+2. `Hauptnavigation <https://docs.onegovgever.ch/user-manual/grundlagen/#hauptnavigation>`_
 
-.. _label-spalten-sortieren:
+|img-grundlagen-15|
 
-Spalten sortieren
-~~~~~~~~~~~~~~~~~
+Servicenavigation
+-----------------
+Die Servicenavigation besteht aus dem Benachrichtigungsmelder,
+der Mandantenauswahl, der Schnellsuche sowie den Profileinstellungen.
 
-- Variante 1)
+|img-grundlagen-16|
 
-  Führen Sie den Cursor in die Spaltenüberschrift und drücken Sie die
-  linke Maustaste. Die Zeilen werden aufsteigend sortiert. Klicken Sie
-  nochmals in die Spaltenüberschrift, werden die Zeilen absteigend
-  sortiert.
+1. Der Benachrichtigungsmelder zeigt mittels roter Blase an, wenn eine Benachrichtung an den Benutzer gemacht wurde. Bei Klick darauf kann diese angeschaut werden.
 
-- Variante 2)
+2. Bei der Mandantenauswahl kann, falls Ihre Organisation mehrere Mandanten besitzt, zwischen diesen gewählt werden.
 
-  Führen Sie den Cursor in der Spaltenüberschrift an die rechte Begrenzung,
-  bis das Auswahlzeichen angezeigt wird und wählen Sie die
-  gewünschte Sortierung:
+3. Bei der Schnellsuche kann nach einem Dossier, Dokument etc. gesucht werden. Mehr zur `Suche <https://docs.onegovgever.ch/user-manual/suchen/>`_ finden Sie in diesem Beitrag.
 
-  |img-grundlagen-4|
+4. Bei den Profileinstellungen kann sich der Benutzer entweder abmelden oder auf sein persönliches Portal wechseln.
 
-Spalten ein- und ausblenden
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Hauptnavigation
+---------------
+Durch Klick auf einen Navigationspunkt in der Hauptnavigation gelangen Sie
+direkt auf die Hauptfunktionen von OneGov GEVER.
 
-Spalten können nach Bedarf ein- bzw. ausgeblendet werden. Die
-Einstellung kann in jedem Spaltenfeld mit Hilfe des Auswahlzeigers
-vorgenommen werden.
+Der Navigationspunkt Eingangskorb ist bei einigen Installationen ausgeblendet,
+da dieser nicht für alle relevant ist. Der Navigationspunkt Sitzungen ist ein
+Zusatzmodul und daher auch nicht für alle ersichtlich.
 
-|img-grundlagen-5|
+|img-grundlagen-17|
 
-Spalten verschieben
-~~~~~~~~~~~~~~~~~~~
+1. Übersicht: Dies ist die Default-Ansicht beim Login und zeigt alle persönlichen Dossiers, Dokumente, Aufgaben etc. des Benutzers.
 
-Die Reihenfolge der Spalten können Sie beeinflussen, indem Sie mit
-gedrückter linker Maustaste die Spalte an ihren neuen Ort verschieben.
+2. Unter dem Reiter `Meine Ablage <https://docs.onegovgever.ch/user-manual/meine_ablage/>`_ wird jedem Benutzer eine Möglichkeit geboten, wichtige persönliche Dokumente in einem privaten Bereich in OneGov GEVER ablegen und verwalten zu können.
 
-Beispiel: Die Spalte *Federführung* soll rechts neben der Spalte
-*Titel* angezeigt werden.
+3. Ordnungssystembaum: Via Ordnungssystembaum kann auf eine Rubrik navigiert werden, wo dann Dossiers erstellt und Dokumente abgelegt werden können.
 
-- Linke Maustaste in Spalte *Federführung* drücken
+4. Im Reiter `Eingangskorb <https://docs.onegovgever.ch/user-manual/posteingang/>`_ können Posteingänge erfasst und weitergeleitet werden.
 
-- Linke Maustaste nach Spalte *Titel* loslassen.
+5. Im `Vorlagen-Reiter <https://docs.onegovgever.ch/user-manual/dokumente/verwalten/>`_  finden Sie alle hinterlegten Vorlagen und können neue hinzufügen.
 
-|img-grundlagen-6|
+6. Der Reiter `Kontakte <https://docs.onegovgever.ch/user-manual/kontakte/>`_ enthält verwaltungsexterne Personen (Subreiter Lokal) und das zentrale Adressverzeichnis aller Mitarbeitenden der Verwaltung (Subreiter Benutzer).
 
-Nach Spalte gruppiert darstellen
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+7. Im Reiter `Sitzungen <https://docs.onegovgever.ch/user-manual/sitzungs-und-protokollverwaltung/>`_ finden Sie die Sitzungs- und Protokollverwaltung (SPV)
 
-Zur besseren Übersichtlichkeit kann der Inhalt für jede Spalte gruppiert
-dargestellt werden.
-
-Das nachfolgende Beispiel zeigt das Vorgehen für eine gruppierte
-Darstellung der Spalte *Federführend*. Klicken Sie auf das Auswahlfeld
-im rechten Rand der Spaltenüberschrift und klicken Sie entweder auf
-*Nach dieser Spalte gruppieren* oder *Gruppiert darstellen*.
-
-|img-grundlagen-7|
-
-Mit Klick auf das Minuszeichen im Gruppentitel können Sie den Inhalt
-ausblenden bzw. falls das Pluszeichen angezeigt wird, wieder einblenden.
-
-Die Gruppierung können Sie abschalten, indem Sie entweder die Spalte neu
-gruppieren oder im Auswahlfeld einer Spaltenüberschrift die Gruppierung
-ausschalten (Klick auf markiertes Feld *Gruppiert
-darstellen*.
-
-Einstellungen zurücksetzen
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Wählen Sie *Weitere Aktionen → Tabellenkonfiguration
-zurückstellen*. Dies kann hilfreich sein, falls eine Tabelle nicht mehr
-oder falsch angezeigt wird. Über diesen Menüpunkt werden die
-Standardeinstellungen für diese Tabelle geladen.
-
-|img-grundlagen-8|
-
-Anzeige / Ausdruck von Einträgen über mehrere Seiten
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Pro Seite werden standardmässig 50 Einträge angezeigt. Soll mehr
-angezeigt werden (z.B. für die Ausgabe in ein PDF), kann die gewünschte
-Anzahl Treffer manuell eingetragen werden; maximal können 500 Treffer
-pro Seite dargestellt werden.
-
-|img-grundlagen-9|
-
-Visuelle Suche
---------------
-
-Die Erweiterung „Visuelle Suche“ unterstützt die intuitive Suche der Benutzer
-dank Galerieansicht der Dokumente und verbesserter Dokumentvorschau als
-Overlay-Fenster. Die folgenden Abschnitte beschreiben das Modul im Detail.
-
-Standard-Ansicht
-~~~~~~~~~~~~~~~~
-
-Standardmässig ist bei Dokumentauflistungen nach wie vor die bestehende
-Tabellenansicht dargestellt. Für den Wechsel zur Galerieansicht stehen
-dem Benutzer entsprechende Bedienelemente zur Verfügung. Wird die Ansicht
-gewechselt, so speichert OneGov GEVER die neue Einstellung im Profil des
-Benutzers und verwendet diese für künftige Auflistungen.
-
-|img-grundlagen-10|
-
-Bei Mouse-Over erscheint eine erste kleine Dokument-Vorschau sowie die
-Möglichkeit, die Metadaten des Dokumentes zu bearbeiten, dieses auszuchecken
-sowie eine Kopie davon zu machen.
-
-|img-grundlagen-11|
-
-Galerie-Ansicht
-~~~~~~~~~~~~~~~
-
-Alle Dokumentauflistungen werden beim Modul visuelle Suche in einer
-Galerieansicht dargestellt. Sie stellt für jedes Dokument ein Vorschaubild
-der jeweils ersten Seite dar. Zusätzlich sind Titel und Dateityp (als Icon)
-ersichtlich.
-
-|img-grundlagen-12|
-
-Detail-Ansicht
-~~~~~~~~~~~~~~~
-
-In der Detail-Ansicht kann folgendes ausgeführt werden:
-
-1. Mittels den Pfeilen kann zwischen den verschiedenen Dokumenten geswitcht
-   werden.
-
-2. Auschecken / bearbeiten
-
-3. Metadaten bearbeiten
-
-4. Kopie herunterladen
-
-5. Dokument als PDF öfnnen
-
-6. Dokumentvorschau öffnen
-
-|img-grundlagen-13|
-
-Tipps & Tricks
---------------
-
-Nachfolgend einige generelle Inputs zum Handling:
-
-- Keine Doppelklicks: In OneGov GEVER müssen die Aktionen jeweils nur mit einem
-  Mausklick bestätigt werden.
-
-- Mehrere Reiter verwenden: Wir empfehlen, für jedes Dossier einen eigenen
-  Reiter im Browser zu verwenden, um das parallele Arbeiten in mehreren Dossiers
-  zu erleichtern. Dies sind die Shortcuts dazu:
-
-  - Mac: :kbd:`cmd` + Klick
-
-  - Windows: :kbd:`ctrl` + Klick
-
-- Lesezeichen im Browser (Favoriten) verwenden: Es empfiehlt sich, im Browser
-  für häufig benutzte Dossiers und Ordnungspositionen ein Lesezeichen zu setzen,
-  damit diese jeweils mit einem Klick wieder geöffnet werden können.
-
-- Schriftgrösse anpassen: Bei Bedarf kann mit folgenden Tastaturkürzeln
-  die Schriftgrösse im Webbrowser individuell angepasst werden:
-
-  - Grössere Schrift: :kbd:`ctrl +` (Windows) bzw. :kbd:`cmd +` (Mac)
-
-  - Kleinere Schrift: :kbd:`cmd -` (Windows) bzw. :kbd:`cmd -` (Mac)
-
-- Nachstehend noch eine Übersicht aller in OneGov GEVER verwendeten Icons
-  als Übersicht:
-
-|img-grundlagen-14|
-
-.. |img-grundlagen-1| image:: img/media/img-grundlagen-1.png
-.. |img-grundlagen-2| image:: img/media/img-grundlagen-2.png
-.. |img-grundlagen-3| image:: img/media/img-grundlagen-3.png
-.. |img-grundlagen-4| image:: img/media/img-grundlagen-4.png
-.. |img-grundlagen-5| image:: img/media/img-grundlagen-5.png
-.. |img-grundlagen-6| image:: img/media/img-grundlagen-6.png
-.. |img-grundlagen-7| image:: img/media/img-grundlagen-7.png
-.. |img-grundlagen-8| image:: img/media/img-grundlagen-8.png
-.. |img-grundlagen-9| image:: img/media/img-grundlagen-9.png
-.. |img-grundlagen-10| image:: img/media/img-grundlagen-10.png
-.. |img-grundlagen-11| image:: img/media/img-grundlagen-11.png
-.. |img-grundlagen-12| image:: img/media/img-grundlagen-12.png
-.. |img-grundlagen-13| image:: img/media/img-grundlagen-13.png
-.. |img-grundlagen-14| image:: img/media/img-grundlagen-14.png
+.. |img-grundlagen-15| image:: img/media/img-grundlagen-15.png
+.. |img-grundlagen-16| image:: img/media/img-grundlagen-16.png
+.. |img-grundlagen-17| image:: img/media/img-grundlagen-17.png
+.. |img-grundlagen-18| image:: img/media/img-grundlagen-18.png
+.. |img-grundlagen-19| image:: img/media/img-grundlagen-19.png
 
 .. disqus::

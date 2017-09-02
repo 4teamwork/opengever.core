@@ -18,7 +18,7 @@ msgstr ""
 
 #: ./opengever/globalindex/browser/report.py:94
 msgid "Could not generate the report."
-msgstr "Aufgaben Export konnte nicht erstellt werden."
+msgstr "Aufgaben-Export konnte nicht erstellt werden."
 
 #: ./opengever/globalindex/upgrades/profiles/2601/actions.xml
 msgid "Export selection"
@@ -82,4 +82,3 @@ msgstr "Tasks"
 #: ./opengever/globalindex/browser/report.py:61
 msgid "review_state"
 msgstr "Status"
-

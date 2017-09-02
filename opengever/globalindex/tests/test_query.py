@@ -42,7 +42,7 @@ class TestTaskQueries(TestCase):
     def test_in_pending_state_returns_only_pending_tasks(self):
         task1 = self.task(1, 'xx', review_state='task-state-open')
         task2 = self.task(2, 'yy', review_state='task-state-resolved')
-        task3 = self.task(3, 'zz', review_state='task-state-cancelled')
+        self.task(3, 'zz', review_state='task-state-cancelled')
 
         self.assertItemsEqual(
             [task1, task2], Task.query.in_pending_state().all())
@@ -177,7 +177,7 @@ class TestFunctionalTaskQueries(FunctionalTestCase):
 
         dossier_11 = create(Builder('dossier').titled(u'Dossier 11'))
         dossier_11 = api.content.rename(obj=dossier_11, new_id='dossier-11')
-        task2 = create(Builder('task').within(dossier_11))
+        create(Builder('task').within(dossier_11))
 
         self.assertItemsEqual(
             [task1.get_sql_object()],

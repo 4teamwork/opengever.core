@@ -21,7 +21,7 @@ class PrivateFolder(Container):
     """
 
     def Title(self):
-        return Actor.lookup(self.id).get_label(self)
+        return Actor.lookup(self.id).get_label(self).encode('utf-8')
 
     def notifyMemberAreaCreated(self):
         """Add additional local_roles to the members folder.

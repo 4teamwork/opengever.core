@@ -81,3 +81,25 @@ class TestCssClassHelpers(MockTestCase):
         self.replay()
 
         self.assertEquals(get_css_class(obj), 'icon-dokument_word')
+
+    def test_proposaltemplate_brain_with_icon(self):
+        brain = self.stub()
+        self.expect(brain.portal_type).result(
+            'opengever.meeting.proposaltemplate')
+        self.expect(getattr(brain, '_v__is_relation', False)).result(False)
+        self.expect(brain.getIcon).result('icon_dokument_pdf.gif')
+
+        self.replay()
+
+        self.assertEquals(get_css_class(brain), 'icon-dokument_pdf')
+
+    def test_proposaltemplate_obj_with_icon(self):
+        obj = self.stub()
+        self.expect(obj.portal_type).result(
+            'opengever.meeting.proposaltemplate')
+        self.expect(getattr(obj, '_v__is_relation', False)).result(False)
+        self.expect(obj.getIcon()).result('icon_dokument_word.gif')
+
+        self.replay()
+
+        self.assertEquals(get_css_class(obj), 'icon-dokument_word')

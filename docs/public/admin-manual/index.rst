@@ -17,6 +17,5 @@ Power-User und Administratoren von OneGov GEVER.
    rollenmanager.rst
    docproperties/index.rst
    meeting/index.rst
-   officeconnector/index.rst
 
 * :ref:`genindex`

@@ -1,39 +1,31 @@
+from AccessControl import getSecurityManager
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages import editbar
 from ftw.testbrowser.pages import factoriesmenu
-from ftw.testbrowser.pages import plone
 from ftw.testbrowser.pages import statusmessages
-from ftw.testbrowser.pages.statusmessages import assert_message
-from ftw.testbrowser.pages.statusmessages import error_messages
-from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.base.oguid import Oguid
-from opengever.core.testing import activate_meeting_word_implementation
-from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.locking.lock import MEETING_SUBMITTED_LOCK
+from opengever.meeting.model import Committee
 from opengever.meeting.model import Proposal
 from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.proposal import IProposal
-from opengever.testing import FunctionalTestCase
 from opengever.testing import index_data_for
+from opengever.testing import IntegrationTestCase
 from plone import api
-from plone.app.testing import TEST_USER_ID
 from plone.locking.interfaces import ILockable
 from zExceptions import Unauthorized
-import transaction
 
 
-class TestProposalViewsDisabled(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestProposalViewsDisabled, self).setUp()
-        self.repo, self.repo_folder = create(Builder('repository_tree'))
-        self.dossier = create(Builder('dossier').within(self.repo_folder))
+class TestProposalViewsDisabled(IntegrationTestCase):
 
     @browsing
     def test_add_form_is_disabled(self, browser):
-        browser.login()
-        # XXX This causes an infinite redirection loop between ++add++ and
+        self.login(self.manager, browser)
+        # This causes an infinite redirection loop between ++add++ and
         # reqiure_login. By enabling exception_bubbling we can catch the
         # Unauthorized exception and end the infinite loop.
         browser.exception_bubbling = True
@@ -44,58 +36,34 @@ class TestProposalViewsDisabled(FunctionalTestCase):
 
     @browsing
     def test_edit_form_is_disabled(self, browser):
-        proposal = create(Builder('proposal').within(self.dossier))
-
-        # XXX This causes an infinite redirection loop between edit and
+        self.login(self.manager, browser)
+        # This causes an infinite redirection loop between edit and
         # reqiure_login. By enabling exception_bubbling we can catch the
         # Unauthorized exception and end the infinite loop.
         browser.exception_bubbling = True
         with self.assertRaises(Unauthorized):
-            browser.login().visit(proposal, view='edit')
+            browser.visit(self.draft_proposal, view='edit')
 
 
-class TestProposal(FunctionalTestCase):
+class TestProposal(IntegrationTestCase):
 
-    layer = OPENGEVER_FUNCTIONAL_MEETING_LAYER
-
-    def setUp(self):
-        super(TestProposal, self).setUp()
-        self.repo = create(Builder('repository_root'))
-        self.repo_folder = create(Builder('repository')
-                                  .within(self.repo)
-                                  .titled(u'Stuff'))
-        self.dossier = create(Builder('dossier')
-                              .within(self.repo_folder)
-                              .titled(u'D\xf6ssier'))
-
-    def test_proposal_can_be_added(self):
-        proposal = create(Builder('proposal').within(self.dossier))
-        self.assertEqual('proposal-1', proposal.getId())
-
-        model = proposal.load_model()
-        self.assertIsNotNone(model)
-        self.assertEqual(Oguid.for_object(proposal), model.oguid)
+    features = ('meeting',)
 
     @browsing
     def test_dossier_title_is_default_value_for_proposal_title(self, browser):
-        browser.login()
+        self.login(self.dossier_responsible, browser)
         browser.open(self.dossier, view='++add++opengever.meeting.proposal')
-
-        self.assertEqual(u'D\xf6ssier', browser.find('Title').value)
+        self.assertEqual(u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
+                         browser.find('Title').value)
 
     @browsing
     def test_proposal_can_be_created_in_browser_and_strips_whitespace(self, browser):
-        committee = create(Builder('committee_model'))
-        document = create(Builder('document')
-                          .within(self.dossier)
-                          .titled('A Document'))
-
-        browser.login()
-        browser.open(self.dossier, view='++add++opengever.meeting.proposal')
-
+        self.login(self.dossier_responsible, browser)
+        browser.open(self.dossier)
+        factoriesmenu.add('Proposal')
         browser.fill({
             'Title': u'A pr\xf6posal',
-            'Committee': str(committee.committee_id),
+            'Committee': str(self.committee_id),
             'Legal basis': u'<div>possible</div>',
             'Initial position': u'<div>My pr\xf6posal</div>',
             'Proposed action': u'<div>Lorem ips\xfcm</div>',
@@ -103,70 +71,84 @@ class TestProposal(FunctionalTestCase):
             'Publish in': u'<div>B\xe4rner Zeitung</div>',
             'Disclose to': u'<div>Hansj\xf6rg</div>',
             'Copy for attention': u'<div>   &nbsp; \n  &nbsp;</div>',
-            'Attachments': [document],
-        })
-        browser.css('#form-buttons-save').first.click()
-        self.assertIn('Item created',
-                      browser.css('.portalMessage.info dd').text)
+            'Attachments': [self.document],
+        }).save()
+        statusmessages.assert_no_error_messages()
+        statusmessages.assert_message('Item created')
 
         proposal = browser.context
-        self.assertEqual('proposal-1', proposal.getId())
         self.assertEqual(1, len(proposal.relatedItems))
-        self.assertEqual(document, proposal.relatedItems[0].to_object)
+        self.assertEqual(self.document, proposal.relatedItems[0].to_object)
+        self.assertEqual(u'A pr\xf6posal', proposal.title)
+        self.assertEqual(u'<div>possible</div>', proposal.legal_basis)
+        self.assertEqual(u'<div>Lorem ips\xfcm</div>', proposal.proposed_action)
+        self.assertEqual(u'<div>My pr\xf6posal</div>', proposal.initial_position)
+        self.assertEqual(u'<div>Project allowed.</div>', proposal.decision_draft)
+        self.assertEqual(u'<div>B\xe4rner Zeitung</div>', proposal.publish_in)
+        self.assertEqual(u'<div>Hansj\xf6rg</div>', proposal.disclose_to)
+        self.assertEqual(u'<div></div>', proposal.copy_for_attention)
 
         model = proposal.load_model()
         self.assertIsNotNone(model)
         self.assertEqual(Oguid.for_object(proposal), model.oguid)
-        self.assertEqual(TEST_USER_ID, model.creator)
-        self.assertEqual(u'A pr\xf6posal', model.title)
-        self.assertEqual(u'<div>possible</div>', model.legal_basis)
-        self.assertEqual(u'<div>Lorem ips\xfcm</div>', model.proposed_action)
-        self.assertEqual(u'<div>My pr\xf6posal</div>', model.initial_position)
-        self.assertEqual(u'<div>Project allowed.</div>', model.decision_draft)
-        self.assertEqual(u'<div>B\xe4rner Zeitung</div>', model.publish_in)
-        self.assertEqual(u'<div>Hansj\xf6rg</div>', model.disclose_to)
-        self.assertEqual(u'<div></div>', model.copy_for_attention)
-        self.assertEqual(u'Stuff', model.repository_folder_title)
+        self.assertEqual('robert.ziegler', model.creator)
+        self.assertEqual(u'Vertr\xe4ge und Vereinbarungen',
+                         model.repository_folder_title)
         self.assertEqual(u'en', model.language)
 
         self.assertTrue(set(['a', 'proposal', 'my', 'proposal']).issubset(set(
                             index_data_for(proposal)['SearchableText'])))
 
+        self.assertEqual(u'Client1 1.1 / 1', model.dossier_reference_number)
+
+    @browsing
+    def test_create_proposal_in_subdossier(self, browser):
+        self.login(self.dossier_responsible, browser)
+        browser.open(self.subdossier)
+        factoriesmenu.add('Proposal')
+        browser.fill({
+            'Title': u'A pr\xf6posal',
+            'Legal basis': u'possible',
+            'Initial position': u'My pr\xf6posal',
+            'Proposed action': u'Lorem ips\xfcm',
+            'Committee': str(self.committee_id)}).save()
+        statusmessages.assert_no_error_messages()
+        statusmessages.assert_message('Item created')
+
+        proposal = browser.context
+        model = proposal.load_model()
+
+        self.assertEqual(u'Client1 1.1 / 1', model.dossier_reference_number,
+                         'Even when a proposal is created in a subdossier,'
+                         ' its dossier_reference_number should be the'
+                         ' reference number of the main dossier.')
+
     @browsing
     def test_proposal_can_be_edited_in_browser_and_strips_whitespace(self, browser):
-        committee = create(Builder('committee_model'))
-        document = create(Builder('document')
-                          .within(self.dossier)
-                          .titled(u'A Document'))
-        proposal = create(Builder('proposal')
-                          .within(self.dossier)
-                          .titled(u'My Proposal'))
-
-        browser.login().visit(proposal, view='edit')
-        form = browser.css('#content-core form').first
-        self.assertEqual(u'My Proposal', form.find_field('Title').value)
+        self.login(self.dossier_responsible, browser)
+        browser.visit(self.draft_proposal)
+        editbar.contentview('Edit').click()
+        self.assertEqual(u'Antrag f\xfcr Kreiselbau',
+                         browser.find('Title').value)
 
         browser.fill({
             'Title': u'A pr\xf6posal',
             'Legal basis': u'<div>not possible</div>',
             'Initial position': u'<div>My pr\xf6posal</div>',
             'Proposed action': u'<div>&nbsp; do it  \r </div>',
-            'Committee': str(committee.committee_id),
+            'Committee': str(self.committee_id),
             'Publish in': u'<div>B\xe4rner Zeitung</div>',
             'Disclose to': u'<div>Hansj\xf6rg</div>',
             'Copy for attention': u'<div>P\xe4tra</div>',
-            'Attachments': [document],
-            })
-
-        browser.css('#form-buttons-save').first.click()
-        self.assertIn('Changes saved',
-                      browser.css('.portalMessage.info dd').text)
+            'Attachments': [self.document]}).save()
+        statusmessages.assert_no_error_messages()
+        statusmessages.assert_message('Changes saved')
 
         proposal = browser.context
         browser.open(proposal, view='tabbedview_view-overview')
         self.assertEquals(
             [['Title', u'A pr\xf6posal'],
-             ['Committee', ''],
+             ['Committee', u'Rechnungspr\xfcfungskommission'],
              ['Meeting', ''],
              ['Legal basis', 'not possible'],
              ['Initial position', u'My pr\xf6posal'],
@@ -178,215 +160,149 @@ class TestProposal(FunctionalTestCase):
              ['Copy for attention', u'P\xe4tra'],
              ['State', 'Pending'],
              ['Decision number', ''],
-             ['Attachments', 'A Document']],
+             ['Attachments', u'Vertr\xe4gsentwurf']],
             browser.css('table.listing').first.lists())
 
         self.assertEqual(1, len(proposal.relatedItems))
-        self.assertEqual(document, proposal.relatedItems[0].to_object)
+        self.assertEqual(self.document, proposal.relatedItems[0].to_object)
+        self.assertEqual(u'A pr\xf6posal', proposal.title)
+        self.assertEqual(u'<div>not possible</div>', proposal.legal_basis)
+        self.assertEqual(u'<div>My pr\xf6posal</div>', proposal.initial_position)
+        self.assertEqual(u'<div>do it</div>', proposal.proposed_action)
 
         model = proposal.load_model()
         self.assertIsNotNone(model)
         self.assertEqual(Oguid.for_object(proposal), model.oguid)
-        self.assertEqual(u'A pr\xf6posal', model.title)
-        self.assertEqual(u'<div>not possible</div>', model.legal_basis)
-        self.assertEqual(u'<div>My pr\xf6posal</div>', model.initial_position)
-        self.assertEqual(u'<div>do it</div>', model.proposed_action)
 
     @browsing
     def test_proposal_language_field_with_multiple_languages(self, browser):
-        """Create and update proposal with multiple languages.
-
-        Test that form displays language selection widget and updates/sets
-        repository_folder_title for the chosen language.
-
+        """Test that changing the proposal language changes the indexed
+        repository folder title.
         """
-        committee = create(Builder('committee_model'))
-        self.repo_folder.title_fr = u'Stoffe'
+        self.login(self.dossier_responsible, browser)
+        self.enable_languages()
 
-        lang_tool = api.portal.get_tool('portal_languages')
-        lang_tool.use_combined_language_codes = True
-        lang_tool.addSupportedLanguage('de-ch')
-        lang_tool.addSupportedLanguage('fr-ch')
-        lang_tool.addSupportedLanguage('en')
-        transaction.commit()
+        proposal = self.draft_proposal.load_model()
+        self.assertEquals('de', proposal.language)
+        self.assertEqual(u'Vertr\xe4ge und Vereinbarungen',
+                         proposal.repository_folder_title)
 
-        browser.login()
-        browser.open(self.dossier, view='++add++opengever.meeting.proposal')
-        browser.fill({
-            'Title': u'A pr\xf6posal',
-            'Committee': str(committee.committee_id),
-            'Language': 'fr'
-            })
-        browser.css('#form-buttons-save').first.click()
-
-        proposal = browser.context.load_model()
-        self.assertIn('Item created',
-                      browser.css('.portalMessage.info dd').text)
-        self.assertEqual(u'fr', proposal.language)
-        self.assertEqual(u'Stoffe', proposal.repository_folder_title)
-
-        browser.visit(browser.context, view='edit')
-        browser.fill({
-            'Language': 'de'
-            })
-        browser.css('#form-buttons-save').first.click()
-
-        proposal = browser.context.load_model()
-        self.assertIn('Changes saved',
-                      browser.css('.portalMessage.info dd').text)
-        self.assertEqual(u'de', proposal.language)
-        self.assertEqual(u'Stuff', proposal.repository_folder_title)
+        browser.open(self.draft_proposal, view='edit')
+        browser.fill({'Language': 'fr'}).save()
+        statusmessages.assert_no_error_messages()
+        self.assertEquals('fr', proposal.language)
+        self.assertEqual(u'Contrats et accords',
+                         proposal.repository_folder_title)
 
     @browsing
     def test_dossier_link_rendering_for_proposal(self, browser):
-        committee = create(Builder('committee'))
-        proposal = create(Builder('proposal')
-                          .within(self.dossier)
-                          .titled(u'My Proposal')
-                          .having(committee=committee.load_model())
-                          .as_submitted())
-        submitted_proposal = proposal.load_model().submitted_oguid.resolve_object()
-
-        browser.login().open(submitted_proposal,
-                             view='tabbedview_view-overview')
-
-        self.assertIsNotNone(browser.find(u'D\xf6ssier'))
-        self.assertEqual(self.dossier.absolute_url(),
-                         browser.find(u'D\xf6ssier').get('href'))
+        self.login(self.committee_responsible, browser)
+        browser.open(self.submitted_proposal, view='tabbedview_view-overview')
+        self.assertEqual(
+            self.dossier.absolute_url(),
+            browser.find(u'Vertr\xe4ge mit der kantonalen Finanzverwaltung')
+            .get('href'))
 
     @browsing
-    def test_edit_view_availability_for_proposal(self, browser):
-        committee = create(Builder('committee'))
-        proposal = create(Builder('proposal')
-                          .within(self.dossier)
-                          .titled(u'My Proposal')
-                          .having(committee=committee.load_model()))
-
-        # can edit pending proposal
-        browser.login().open(proposal)
-        self.assertEqual(['Edit'], browser.css('#content-views li').text)
-
-        browser.open(proposal, view='tabbedview_view-overview')
-        browser.css('#pending-submitted').first.click()
-
-        # cannot edit submitted proposal
-        browser.open(proposal)
-        self.assertEqual([], browser.css('#content-views li').text)
-        # XXX This causes an infinite redirection loop between ++add++ and
-        # reqiure_login. By enabling exception_bubbling we can catch the
-        # Unauthorized exception and end the infinite loop.
-        browser.exception_bubbling = True
-        with self.assertRaises(Unauthorized):
-        # with browser.expect_unauthorized():
-            browser.open(proposal, view='edit')
+    def test_proposal_edit_allowed_when_unsubmitted(self, browser):
+        self.login(self.administrator, browser)
+        self.assert_workflow_state('proposal-state-active', self.draft_proposal)
+        browser.open(self.draft_proposal)
+        self.assertIn('Edit', editbar.contentviews())
+        browser.open(self.draft_proposal, view='edit')
 
     @browsing
-    def test_edit_view_availability_for_submitted_proposal(self, browser):
-        self.grant("Administrator")
-        committee = create(Builder('committee'))
-        proposal = create(Builder('proposal')
-                          .within(self.dossier)
-                          .titled(u'My Proposal')
-                          .having(committee=committee.load_model())
-                          .as_submitted())
+    def test_proposal_edit_not_allowed_when_submitted(self, browser):
+        self.login(self.administrator, browser)
+        self.assert_workflow_state('proposal-state-submitted', self.proposal)
+        browser.open(self.proposal)
+        self.assertNotIn('Edit', editbar.contentviews())
+        with browser.expect_unauthorized():
+            browser.open(self.proposal, view='edit')
 
-        # can edit submitted SubmittedProposal
-        submitted_proposal = api.portal.get().restrictedTraverse(
-            proposal.load_model().submitted_physical_path.encode('utf-8'))
-        browser.login().open(submitted_proposal)
-        self.assertEqual(['Edit'],
-                         browser.css('#content-views li').text)
+    @browsing
+    def test_submitted_proposal_edit_allowed_when_submitted(self, browser):
+        self.login(self.administrator, browser)
+        proposal_model = self.submitted_proposal.load_model()
+        self.assertEquals('submitted', proposal_model.workflow_state)
+        browser.open(self.submitted_proposal)
+        self.assertIn('Edit', editbar.contentviews())
+        browser.open(self.submitted_proposal, view='edit')
 
-        proposal_model = submitted_proposal.load_model()
+    @browsing
+    def test_submitted_proposal_edit_not_allowed_when_decided(self, browser):
+        self.login(self.administrator, browser)
+        proposal_model = self.submitted_proposal.load_model()
         proposal_model.workflow_state = 'decided'
-        transaction.commit()
-
-        # cannot edit decided SubmittedProposal
-        browser.open(submitted_proposal)
-        self.assertEqual([],
-                         browser.css('#content-views li').text)
-        # XXX This causes an infinite redirection loop between ++add++ and
-        # reqiure_login. By enabling exception_bubbling we can catch the
-        # Unauthorized exception and end the infinite loop.
-        browser.exception_bubbling = True
-        with self.assertRaises(Unauthorized):
-        # with browser.expect_unauthorized():
-            browser.open(submitted_proposal, view='edit')
+        browser.open(self.submitted_proposal)
+        self.assertNotIn('Edit', editbar.contentviews())
+        with browser.expect_unauthorized():
+            browser.open(self.submitted_proposal, view='edit')
 
     @browsing
     def test_regression_proposal_submission_with_mails(self, browser):
-        committee = create(Builder('committee').titled('My committee'))
-        mail = create(Builder('mail')
-                      .within(self.dossier)
-                      .with_dummy_message())
-        proposal = create(Builder('proposal')
-                          .within(self.dossier)
-                          .titled(u'My Proposal')
-                          .having(committee=committee.load_model())
-                          .relate_to(mail))
+        self.login(self.dossier_responsible, browser)
+        self.set_related_items(self.draft_proposal, [self.mail])
+        browser.open(self.draft_proposal, view='tabbedview_view-overview')
+        browser.click_on('Submit')
 
-        browser.login().open(proposal)
-        browser.open(proposal, view='tabbedview_view-overview')
-        browser.find('Submit').click()
-
+        self.login(self.committee_responsible)
         # submitted proposal created
-        self.assertEqual(1, len(committee.listFolderContents()))
-        submitted_proposal = committee.listFolderContents()[0]
+        model = self.draft_proposal.load_model()
+        submitted_path = model.submitted_physical_path.encode('utf-8')
+        submitted_proposal = self.portal.restrictedTraverse(submitted_path)
 
         submitted_mail = submitted_proposal.get_documents()[0]
-        self.assertSubmittedDocumentCreated(proposal, mail, submitted_mail)
+        self.assertSubmittedDocumentCreated(self.draft_proposal,
+                                            self.mail,
+                                            submitted_mail)
 
     def test_proposal_paths_remain_in_sync_when_dossier_is_moved(self):
-        committee = create(Builder('committee').titled('My committee'))
-        mail = create(Builder('mail')
-                      .within(self.dossier)
-                      .with_dummy_message())
-        proposal = create(Builder('proposal')
-                          .within(self.dossier)
-                          .titled(u'My Proposal')
-                          .having(committee=committee.load_model())
-                          .relate_to(mail))
-        new_repo_folder = create(Builder('repository')
-                                 .within(self.repo)
-                                 .titled(u'New'))
+        self.login(self.dossier_responsible)
+        model = self.draft_proposal.load_model()
+        self.assertEqual(u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen'
+                         u'/dossier-1/proposal-2', model.physical_path)
+        self.assertEqual(u'Vertr\xe4ge und Vereinbarungen',
+                         model.repository_folder_title)
+        self.assertEqual(u'Client1 1.1 / 1',
+                         model.dossier_reference_number)
 
-        moved_dossier = api.content.move(
-            source=self.dossier, target=new_repo_folder)
-        moved_proposal = moved_dossier['proposal-1']
-        model = moved_proposal.load_model()
-        self.assertEqual(
-            'ordnungssystem/new/dossier-1/proposal-1',
-            model.physical_path)
-        self.assertEqual(u'New', model.repository_folder_title)
-        self.assertEqual(u'Client1 2', model.dossier_reference_number)
+        api.content.move(source=self.dossier,
+                         target=self.empty_repofolder)
+        self.assertEqual(u'ordnungssystem/rechnungsprufungskommission'
+                         u'/dossier-1/proposal-2', model.physical_path)
+        self.assertEqual(u'Rechnungspr\xfcfungskommission',
+                         model.repository_folder_title)
+        # XXX is this correct??
+        self.assertEqual(u'Client1 2',
+                         model.dossier_reference_number)
 
     @browsing
     def test_proposal_submission_works_correctly(self, browser):
-        committee = create(Builder('committee').titled('My committee'))
-        document = create(Builder('document')
-                          .within(self.dossier)
-                          .titled(u'A Document')
-                          .with_dummy_content())
-        proposal = create(Builder('proposal')
-                          .within(self.dossier)
-                          .titled(u'My Proposal')
-                          .having(committee=committee.load_model())
-                          .relate_to(document))
+        self.login(self.dossier_responsible, browser)
+        self.add_related_item(self.draft_proposal, self.document)
+        proposal_model = self.draft_proposal.load_model()
+        self.assertIsNone(proposal_model.submitted_physical_path)
+        self.assertEqual(Proposal.STATE_PENDING, self.draft_proposal.get_state())
+        self.assert_workflow_state('proposal-state-active', self.draft_proposal)
 
-        self.assertSequenceEqual([], committee.listFolderContents())
+        browser.open(self.draft_proposal, view='tabbedview_view-overview')
+        browser.click_on('Submit')
+        statusmessages.assert_no_error_messages()
+        statusmessages.assert_message('Proposal successfully submitted.')
 
-        browser.login().open(proposal)
-
-        browser.open(proposal, view='tabbedview_view-overview')
-        browser.css('#pending-submitted').first.click()
-
-        self.assertEqual(['Proposal successfully submitted.'], info_messages())
-
-        proposal_model = proposal.load_model()
+        self.assertEqual(Proposal.STATE_SUBMITTED, self.draft_proposal.get_state())
+        self.assert_workflow_state('proposal-state-submitted', self.draft_proposal)
 
         # submitted proposal created
-        self.assertEqual(1, len(committee.listFolderContents()))
-        submitted_proposal = committee.listFolderContents()[0]
+        self.login(self.committee_responsible, browser)
+        self.assertEqual(u'opengever-meeting-committeecontainer'
+                         u'/committee-2/submitted-proposal-2',
+                         proposal_model.submitted_physical_path)
+        submitted_proposal = self.portal.restrictedTraverse(
+            proposal_model.submitted_physical_path.encode('utf-8'))
+        self.assertEqual(self.empty_committee,
+                         aq_parent(aq_inner(submitted_proposal)))
 
         # model synced
         self.assertEqual(proposal_model, submitted_proposal.load_model())
@@ -397,313 +313,177 @@ class TestProposal(FunctionalTestCase):
         # document copied
         self.assertEqual(1, len(submitted_proposal.get_documents()))
         submitted_document = submitted_proposal.get_documents()[0]
-        self.assertEqual(document.Title(), submitted_document.Title())
-        self.assertEqual(document.file.filename,
+        self.assertEqual(self.document.Title(), submitted_document.Title())
+        self.assertEqual(self.document.file.filename,
                          submitted_document.file.filename)
 
-        self.assertSubmittedDocumentCreated(proposal, document, submitted_document)
+        self.assertSubmittedDocumentCreated(
+            self.draft_proposal, self.document, submitted_document)
 
         # document should have custom lock message
         browser.open(submitted_document)
+        statusmessages.assert_message(
+            u'This document has been submitted as a copy of Vertr\xe4gsentwurf and '
+            u'cannot be edited directly.')
         self.assertEqual(
-            ['This document has been submitted as a copy of A Document and '
-             'cannot be edited directly.'],
-            info_messages())
-        self.assertEqual(
-            document.absolute_url(),
+            self.document.absolute_url(),
             browser.css('.portalMessage.info a').first.get('href'))
 
     @browsing
-    def test_dossier_reference_number_is_set_on_creation(self, browser):
-        committee = create(Builder('committee_model'))
-        document = create(Builder('document')
-                          .within(self.dossier)
-                          .titled('A Document'))
-
-        browser.login()
-        browser.open(self.dossier, view='++add++opengever.meeting.proposal')
-        browser.fill({
-            'Title': u'A pr\xf6posal',
-            'Legal basis': u'possible',
-            'Initial position': u'My pr\xf6posal',
-            'Proposed action': u'Lorem ips\xfcm',
-            'Committee': str(committee.committee_id),
-            'Attachments': [document],
-        })
-        browser.find('Save').click()
-
-        self.assertEqual(
-            u'Client1 1 / 1',
-            browser.context.load_model().dossier_reference_number)
-
-    @browsing
-    def test_proposal_stores_reference_number_of_main_dossier(self, browser):
-        committee = create(Builder('committee_model'))
-        subdossier = create(Builder('dossier').within(self.dossier))
-        document = create(Builder('document')
-                          .within(subdossier)
-                          .titled('A Document'))
-
-        browser.login()
-        browser.open(subdossier, view='++add++opengever.meeting.proposal')
-        browser.fill({
-            'Title': u'A pr\xf6posal',
-            'Legal basis': u'possible',
-            'Initial position': u'My pr\xf6posal',
-            'Proposed action': u'Lorem ips\xfcm',
-            'Committee': str(committee.committee_id),
-            'Attachments': [document],
-        })
-        browser.find('Save').click()
-
-        self.assertEqual(
-            u'Client1 1 / 1',
-            browser.context.load_model().dossier_reference_number)
-
-    @browsing
-    def test_proposal_can_be_submitted(self, browser):
-        committee = create(Builder('committee'))
-        proposal = create(Builder('proposal')
-                          .within(self.dossier)
-                          .having(title='Mach doch',
-                                  committee=committee.load_model()))
-
-        self.assertEqual(Proposal.STATE_PENDING, proposal.get_state())
-        self.assertEqual('proposal-state-active',
-                         api.content.get_state(proposal))
-
-        browser.login().open(proposal, view='tabbedview_view-overview')
-        browser.css('#pending-submitted').first.click()
-
-        self.assertEqual(Proposal.STATE_SUBMITTED, proposal.get_state())
-        self.assertEqual('proposal-state-submitted',
-                         api.content.get_state(proposal))
-
-    @browsing
     def test_proposal_can_be_cancelled(self, browser):
-        committee = create(Builder('committee'))
-        proposal = create(Builder('proposal')
-                          .within(self.dossier)
-                          .having(title='Mach doch',
-                                  committee=committee.load_model()))
+        self.login(self.dossier_responsible, browser)
+        self.assertEqual(Proposal.STATE_PENDING, self.draft_proposal.get_state())
+        self.assert_workflow_state('proposal-state-active', self.draft_proposal)
 
-        browser.login().open(proposal, view='tabbedview_view-overview')
-        browser.css('#pending-cancelled').first.click()
+        browser.open(self.draft_proposal, view='tabbedview_view-overview')
+        browser.click_on('Cancel')
+        statusmessages.assert_no_error_messages()
+        statusmessages.assert_message('Proposal cancelled successfully.')
 
-        self.assertEqual(Proposal.STATE_CANCELLED, proposal.get_state())
+        self.assertEqual(Proposal.STATE_CANCELLED, self.draft_proposal.get_state())
+        self.assert_workflow_state('proposal-state-active', self.draft_proposal)
 
     @browsing
     def test_proposal_can_be_reactivated(self, browser):
-        committee = create(Builder('committee'))
-        proposal = create(Builder('proposal')
-                          .within(self.dossier)
-                          .having(title='Mach doch',
-                                  committee=committee.load_model())
-                          .as_cancelled())
+        self.login(self.dossier_responsible, browser)
+        self.draft_proposal.execute_transition('pending-cancelled')
+        self.assertEqual(Proposal.STATE_CANCELLED, self.draft_proposal.get_state())
 
-        browser.login().open(proposal, view='tabbedview_view-overview')
-        browser.css('#cancelled-pending').first.click()
-
-        self.assertEqual(Proposal.STATE_PENDING, proposal.get_state())
+        browser.open(self.draft_proposal, view='tabbedview_view-overview')
+        browser.click_on('Reactivate')
+        self.assertEqual(Proposal.STATE_PENDING, self.draft_proposal.get_state())
 
     @browsing
     def test_proposal_can_not_be_submitted_when_committee_is_inactive(self, browser):
-        committee = create(Builder('committee'))
-        proposal = create(Builder('proposal')
-                          .within(self.dossier)
-                          .having(title='Mach doch',
-                                  committee=committee.load_model()))
+        self.login(self.committee_responsible)
+        self.empty_committee.load_model().deactivate()
+        self.assertEqual(Committee.STATE_INACTIVE,
+                         self.empty_committee.load_model().get_state())
 
-        committee.load_model().deactivate()
-        transaction.commit()
+        self.login(self.dossier_responsible, browser)
+        browser.open(self.draft_proposal, view='tabbedview_view-overview')
+        browser.click_on('Submit')
 
-        browser.login().open(proposal, view='tabbedview_view-overview')
-        browser.css('#pending-submitted').first.click()
-
-        self.assertEqual(
-            [u'The selected committeee has been deactivated, the proposal '
-             'could not been submitted.'], error_messages())
-        self.assertEqual(proposal.absolute_url(), browser.url)
-        self.assertEqual(Proposal.STATE_PENDING, proposal.load_model().get_state())
+        statusmessages.assert_message(
+            u'The selected committeee has been deactivated, the proposal '
+            u'could not been submitted.')
+        self.assertEqual(self.draft_proposal.absolute_url(), browser.url)
+        self.assertEqual(Proposal.STATE_PENDING, self.draft_proposal.get_state())
 
     @browsing
     def test_proposal_can_be_submitted_without_permission_on_commitee(self, browser):
-        document = create(Builder('document').within(self.dossier))
-        committee = create(Builder('committee'))
-        proposal = create(Builder('proposal')
-                          .within(self.dossier)
-                          .having(title='Mach doch',
-                                  committee=committee.load_model(),
-                                  relatedItems=[document]))
-
-
-        self.login_as_user_without_committee_permission(browser, committee)
-
-        browser.visit(proposal, view='tabbedview_view-overview')
-        browser.css('#pending-submitted').first.click()
-
-        self.assertEqual(Proposal.STATE_SUBMITTED, proposal.get_state())
+        self.login(self.dossier_responsible, browser)
+        # https://github.com/4teamwork/opengever.ftw/issues/41
+        self.assertFalse(getSecurityManager().checkPermission(
+            'View', self.draft_proposal.get_committee()))
+        self.assertEqual(Proposal.STATE_PENDING, self.draft_proposal.get_state())
+        browser.visit(self.draft_proposal, view='tabbedview_view-overview')
+        browser.click_on('Submit')
+        self.assertEqual(Proposal.STATE_SUBMITTED, self.draft_proposal.get_state())
 
     @browsing
     def test_submitted_proposal_can_be_rejected(self, browser):
-        self.grant('CommitteeGroupMember', 'Contributor', 'Editor')
-        document = create(Builder('document')
-                          .within(self.dossier)
-                          .titled('A Document'))
+        self.login(self.committee_responsible, browser)
+        model = self.proposal.load_model()
+        self.assertEqual(
+            'opengever-meeting-committeecontainer/committee-1/submitted-proposal-1',
+            model.submitted_physical_path)
+        self.assertEqual(Proposal.STATE_SUBMITTED, self.proposal.get_state())
+        self.assert_workflow_state('proposal-state-submitted', self.proposal)
 
-        committee = create(Builder('committee'))
-        proposal = create(Builder('proposal')
-                          .within(self.dossier)
-                          .having(title='Mach doch',
-                                  committee=committee.load_model())
-                          .relate_to(document))
-
-        browser.login().open(proposal, view='tabbedview_view-overview')
-        browser.css('#pending-submitted').first.click()
-
-        submitted_path = proposal.load_model().submitted_physical_path.encode('utf-8')
-        self.assertIsNotNone(self.portal.unrestrictedTraverse(submitted_path))
-
-        self.assertEqual('proposal-state-submitted', api.content.get_state(proposal))
-        submitted_proposal = proposal.load_model().resolve_submitted_proposal()
-        browser.open(submitted_proposal, view='tabbedview_view-overview')
-        browser.find('Reject').click()
+        browser.visit(self.submitted_proposal, view='tabbedview_view-overview')
+        browser.click_on('Reject')
         browser.fill({'Comment': u'Bitte \xfcberarbeiten'}).submit()
-        self.assertEqual('proposal-state-active', api.content.get_state(proposal))
+        statusmessages.assert_no_error_messages()
+        statusmessages.assert_message(u'The proposal has been rejected successfully')
 
+        self.assertIsNone(model.submitted_physical_path)
+        self.assertIsNone(model.submitted_int_id)
+        self.assertIsNone(model.submitted_admin_unit_id)
+        self.assertEqual(Proposal.STATE_PENDING, self.proposal.get_state())
+        self.assert_workflow_state('proposal-state-active', self.proposal)
         with self.assertRaises(KeyError):
-            self.portal.unrestrictedTraverse(submitted_path)
-        self.assertEqual([u"The proposal has been rejected successfully"],
-                         info_messages())
-        self.assertEqual(Proposal.STATE_PENDING, proposal.get_state())
-
-        proposal_model = proposal.load_model()
-        self.assertIsNone(proposal_model.submitted_physical_path)
-        self.assertIsNone(proposal_model.submitted_int_id)
-        self.assertIsNone(proposal_model.submitted_admin_unit_id)
-
-        for record in proposal_model.history_records:
-            self.assertIsNone(
-                record.submitted_document,
-                "reference to submitted document on {} should be removed".format(
-                    record))
+            self.submitted_proposal
 
     def test_copying_proposals_is_prevented(self):
-        committee = create(Builder('committee').titled('My committee'))
-        proposal = create(Builder('proposal')
-                          .within(self.dossier)
-                          .titled(u'My Proposal')
-                          .having(committee=committee.load_model()))
+        self.login(self.administrator)
+        create(Builder('proposal')
+               .within(self.empty_dossier)
+               .titled(u'My Proposal')
+               .having(committee=self.committee.load_model()))
 
         copied_dossier = api.content.copy(
-            source=self.dossier, target=self.repo_folder)
+            source=self.empty_dossier, target=self.empty_repofolder)
         self.assertItemsEqual([], copied_dossier.getFolderContents())
 
     def test_is_submission_allowed(self):
-        committee = create(Builder('committee').titled('My committee'))
-        proposal = create(Builder('proposal')
-                          .within(self.dossier)
-                          .titled(u'My Proposal')
-                          .having(committee=committee.load_model()))
+        self.login(self.administrator)
+        self.assertFalse(self.draft_proposal.is_submit_additional_documents_allowed())
 
-        self.assertFalse(proposal.is_submit_additional_documents_allowed())
-        proposal.execute_transition('pending-submitted')
-        self.assertTrue(proposal.is_submit_additional_documents_allowed())
+        self.assertTrue(self.proposal.is_submit_additional_documents_allowed())
 
         # these transitions are not exposed on the proposal side
-        proposal_model = proposal.load_model()
+        proposal_model = self.proposal.load_model()
         proposal_model.execute_transition('submitted-scheduled')
-        self.assertTrue(proposal.is_submit_additional_documents_allowed())
+        self.assertTrue(self.proposal.is_submit_additional_documents_allowed())
 
         proposal_model.execute_transition('scheduled-decided')
-        self.assertFalse(proposal.is_submit_additional_documents_allowed())
+        self.assertFalse(self.proposal.is_submit_additional_documents_allowed())
 
-    def test_submit_additional_document_creates_new_locked_document(self):
-        committee = create(Builder('committee').titled('My committee'))
-        document = create(Builder('document')
-                          .within(self.dossier)
-                          .titled(u'A Document')
-                          .with_dummy_content())
-        proposal = create(Builder('proposal')
-                          .within(self.dossier)
-                          .titled(u'My Proposal')
-                          .as_submitted()
-                          .having(committee=committee.load_model()))
+    def test_submit_additional_document(self):
+        self.login(self.administrator)
+        ori_document = self.subdocument
+        with self.observe_children(self.submitted_proposal) as children:
+            with self.login(self.dossier_responsible):
+                self.proposal.submit_additional_document(ori_document)
 
-        proposal.submit_additional_document(document)
-        submitted_proposal = api.portal.get().restrictedTraverse(
-            proposal.load_model().submitted_physical_path.encode('utf-8'))
-        docs = submitted_proposal.listFolderContents()
-        self.assertEqual(1, len(docs))
-        submitted_document = docs.pop()
+        self.assertEquals(1, len(children['added']))
+        submitted_document, = children['added']
+        self.assertEqual(ori_document.Title(), submitted_document.Title())
+        self.assertEqual(ori_document.file.filename, submitted_document.file.filename)
 
-        self.assertEqual(document.Title(), submitted_document.Title())
-        self.assertEqual(document.file.filename,
-                         submitted_document.file.filename)
+        self.assertSubmittedDocumentCreated(
+            self.proposal, ori_document, submitted_document)
 
         # submitted document should be locked by custom lock
         lockable = ILockable(submitted_document)
         self.assertTrue(lockable.locked())
-        self.assertTrue(lockable.can_safely_unlock(MEETING_SUBMITTED_LOCK))
-
-        self.assertSubmittedDocumentCreated(proposal, document, submitted_document)
+        self.assertFalse(lockable.can_safely_unlock(MEETING_SUBMITTED_LOCK))
 
     def test_submit_new_document_version_updates_submitted_document(self):
-        committee = create(Builder('committee').titled('My committee'))
-        document = create(Builder('document')
-                          .within(self.dossier)
-                          .titled(u'A Document')
-                          .with_dummy_content())
-        proposal = create(Builder('proposal')
-                          .within(self.dossier)
-                          .titled(u'My Proposal')
-                          .having(committee=committee.load_model())
-                          .relate_to(document)
-                          .as_submitted())
+        self.login(self.administrator)
+        ori_document = self.subdocument
+        with self.observe_children(self.submitted_proposal) as children:
+            with self.login(self.dossier_responsible):
+                self.proposal.submit_additional_document(ori_document)
 
-        submitted_proposal = api.portal.get().restrictedTraverse(
-            proposal.load_model().submitted_physical_path.encode('utf-8'))
-        docs = submitted_proposal.get_documents()
-        submitted_document = docs.pop()
+        self.assertEquals(1, len(children['added']))
+        submitted_document, = children['added']
+
         self.assertEqual(0, submitted_document.get_current_version())
 
         # create some new document versions
-        repository = api.portal.get_tool('portal_repository')
-        repository.save(document)
-        repository.save(document)
-        proposal.submit_additional_document(document)
+        with self.login(self.dossier_responsible):
+            repository = api.portal.get_tool('portal_repository')
+            repository.save(ori_document)
+            repository.save(ori_document)
+            self.proposal.submit_additional_document(ori_document)
 
         self.assertEqual(1, submitted_document.get_current_version())
 
     def test_submit_document_updates_proposal_attachements(self):
-        committee = create(Builder('committee').titled('My committee'))
-        document = create(Builder('document')
-                          .within(self.dossier)
-                          .titled(u'A Document')
-                          .with_dummy_content())
-        proposal = create(Builder('proposal')
-                          .within(self.dossier)
-                          .titled(u'My Proposal')
-                          .as_submitted()
-                          .having(committee=committee.load_model()))
+        self.login(self.administrator)
+        self.draft_proposal.execute_transition('pending-submitted')
+        self.assertEqual(0, len(IProposal(self.draft_proposal).relatedItems))
 
-        self.assertEqual(0, len(IProposal(proposal).relatedItems))
-
-        proposal.submit_additional_document(document)
-
+        self.draft_proposal.submit_additional_document(self.document)
         self.assertEqual(
-            [document],
-            [item.to_object for item in IProposal(proposal).relatedItems])
+            [self.document],
+            [item.to_object for item in IProposal(self.draft_proposal).relatedItems])
 
     def test_attributes_sort_order_for_proposal(self):
-        committee = create(Builder('committee').titled('My committee'))
-        proposal = create(Builder('proposal')
-                          .within(self.dossier)
-                          .titled(u'My Proposal')
-                          .having(committee=committee.load_model())
-                          .as_submitted())
-
-        attributes = proposal.get_overview_attributes()
+        self.login(self.dossier_responsible)
+        attributes = self.proposal.get_overview_attributes()
         self.assertEqual(
             [u'label_title',
              u'label_committee',
@@ -718,21 +498,11 @@ class TestProposal(FunctionalTestCase):
              u'label_copy_for_attention',
              u'label_workflow_state',
              u'label_decision_number'],
-            [attribute.get('label') for attribute in attributes],
-            )
+            [attribute.get('label') for attribute in attributes])
 
     def test_attributes_sort_order_for_submitted_proposal(self):
-        committee = create(Builder('committee').titled('My committee'))
-        proposal = create(Builder('proposal')
-                          .within(self.dossier)
-                          .titled(u'My Proposal')
-                          .having(committee=committee.load_model())
-                          .as_submitted())
-
-        submitted_proposal = api.portal.get().restrictedTraverse(
-            proposal.load_model().submitted_physical_path.encode('utf-8'))
-
-        attributes = submitted_proposal.get_overview_attributes()
+        self.login(self.committee_responsible)
+        attributes = self.submitted_proposal.get_overview_attributes()
         self.assertEqual(
             [u'label_title',
              u'label_committee',
@@ -754,150 +524,64 @@ class TestProposal(FunctionalTestCase):
             )
 
     def test_get_meeting_link_returns_empty_string_if_not_scheduled(self):
-        proposal = create(Builder('proposal_model'))
-
-        self.assertEqual('', proposal.get_meeting_link())
+        self.login(self.administrator)
+        model = self.draft_proposal.load_model()
+        self.assertEqual('', model.get_meeting_link())
 
     def test_get_meeting_link_returns_link_if_scheduled(self):
-        admin_unit = create(Builder('admin_unit'))
-        proposal = create(Builder('proposal_model'))
-        committee = create(Builder('committee_model')
-                           .having(admin_unit_id=admin_unit.unit_id))
-        meeting = create(Builder('meeting').having(committee=committee))
-        create(Builder('agenda_item').having(meeting=meeting, proposal=proposal))
-
+        self.login(self.committee_responsible)
+        proposal_model = self.proposal.load_model()
+        create(Builder('agenda_item').having(
+            meeting=self.meeting.model,
+            proposal=proposal_model))
         self.assertEqual(
-            proposal.get_meeting_link(),
-            meeting.get_link(),
+            proposal_model.get_meeting_link(),
+            self.meeting.model.get_link(),
             "The method should return the meeting link.")
 
     def test_get_containing_dossier_for_submitted_proposal_if_on_same_admin_unit(self):
-        committee = create(Builder('committee').titled('My committee'))
-        proposal = create(Builder('proposal')
-                          .within(self.dossier)
-                          .titled(u'My Proposal')
-                          .having(committee=committee.load_model())
-                          .as_submitted())
-
-        submitted_proposal = proposal.load_model().resolve_submitted_proposal()
-
-        self.assertEqual(
-            self.dossier, submitted_proposal.get_containing_dossier())
+        self.login(self.committee_responsible)
+        self.assertEqual(self.dossier,
+                         self.submitted_proposal.get_containing_dossier())
 
     def test_get_none_for_containing_dossier_if_submitted_proposal_is_not_on_same_admin_unit(self):
-        committee = create(Builder('committee').titled('My committee'))
-        proposal = create(Builder('proposal')
-                          .within(self.dossier)
-                          .titled(u'My Proposal')
-                          .having(committee=committee.load_model())
-                          .as_submitted())
-
-        model = proposal.load_model()
-        submitted_proposal = model.resolve_submitted_proposal()
-
-        model.admin_unit_id = u'client2'
-
-        self.assertIsNone(submitted_proposal.get_containing_dossier())
+        self.login(self.committee_responsible)
+        self.proposal.load_model().admin_unit_id = u'another-client'
+        self.assertIsNone(self.submitted_proposal.get_containing_dossier())
 
     @browsing
     def test_get_link_to_dossier_for_submitted_proposal(self, browser):
-        committee = create(Builder('committee').titled('My committee'))
-        proposal = create(Builder('proposal')
-                          .within(self.dossier)
-                          .titled(u'My Proposal')
-                          .having(committee=committee.load_model())
-                          .as_submitted())
-
-        submitted_proposal = proposal.load_model().resolve_submitted_proposal()
-
-        browser.open_html(submitted_proposal.get_dossier_link())
-
+        self.login(self.committee_responsible, browser)
+        browser.open_html(self.submitted_proposal.get_dossier_link())
         self.assertEqual(
             self.dossier.title,
             browser.css('a').first.get('title'))
-
         self.assertEqual(
             self.dossier.absolute_url(),
             browser.css('a').first.get('href'))
 
     def test_get_link_returns_fallback_message_if_proposal_is_not_on_same_admin_unit(self):
-        committee = create(Builder('committee').titled('My committee'))
-        proposal = create(Builder('proposal')
-                          .within(self.dossier)
-                          .titled(u'My Proposal')
-                          .having(committee=committee.load_model())
-                          .as_submitted())
-
-        model = proposal.load_model()
-
-        submitted_proposal = proposal.load_model().resolve_submitted_proposal()
-
-        model.admin_unit_id = u'client2'
-
+        self.login(self.committee_responsible)
+        self.proposal.load_model().admin_unit_id = u'another-client'
         self.assertEqual(
-            u'label_dossier_not_available', submitted_proposal.get_dossier_link())
+            u'label_dossier_not_available',
+            self.submitted_proposal.get_dossier_link())
 
     @browsing
     def test_proposal_title_is_displayed_xss_safe(self, browser):
-        committee = create(Builder('committee').titled('My committee'))
-        proposal = create(Builder('proposal')
-                          .within(self.dossier)
-                          .titled(u'<p>qux</p>')
-                          .having(committee=committee.load_model()))
-
-        browser.login().open(proposal, view='tabbedview_view-overview')
-
+        self.login(self.dossier_responsible, browser)
+        self.proposal.title = u'<p>qux</p>'
+        browser.open(self.proposal, view='tabbedview_view-overview')
         self.assertEqual('&lt;p&gt;qux&lt;/p&gt;',
                          browser.css('.listing td').first.innerHTML)
 
     @browsing
-    def test_proposal_cannot_change_state_when_documents_checked_out(self, browser):
-        committee = create(Builder('committee').titled('My committee'))
-        proposal = create(Builder('proposal')
-                          .within(self.dossier)
-                          .titled(u'<p>qux</p>')
-                          .having(committee=committee.load_model()))
-        create(Builder('document').within(proposal).checked_out())
-
-        browser.login().open(proposal, view='tabbedview_view-overview')
-        browser.click_on('Submit')
-        assert_message('Cannot change the state because the proposal'
-                       ' contains checked out documents.')
-
-    def assertSubmittedDocumentCreated(self, proposal, document, submitted_document):
-        submitted_document_model = SubmittedDocument.query.get_by_source(
-            proposal, document)
-        self.assertIsNotNone(submitted_document_model)
-        self.assertEqual(Oguid.for_object(submitted_document),
-                         submitted_document_model.submitted_oguid)
-        self.assertEqual(0, submitted_document_model.submitted_version)
-        self.assertEqual(proposal.load_model(),
-                         submitted_document_model.proposal)
-
-    def login_as_user_without_committee_permission(self, browser, committee):
-        create(Builder('user').named('Hugo', 'Boss'))
-        api.user.grant_roles(username=u'hugo.boss',
-                             obj=self.dossier,
-                             roles=['Contributor', 'Editor', 'Reader'])
-        transaction.commit()
-        browser.login(username='hugo.boss')
-        with browser.expect_unauthorized():
-            browser.open(committee)
-
-    @browsing
-    def test_nonword_fields_visible_in_addform(self, browser):
+    def test_nonword_fields_visible_in_proposal_addform(self, browser):
         """When the "word implementation" feature is not enabled,
         the "old" trix fields should be visible.
         """
-        create(Builder('committee_model').having(title=u'Baukomission'))
-        create(Builder('proposaltemplate').titled(u'Baugesuch')
-               .within(create(Builder('templatefolder').titled(u'Vorlagen'))))
-        dossier = create(
-            Builder('dossier').titled(u'D\xf6ssier')
-            .within(create(Builder('repository').titled(u'Stuff')
-                           .within(create(Builder('repository_root'))))))
-
-        browser.login().open(dossier)
+        self.login(self.dossier_responsible, browser)
+        browser.open(self.dossier)
         factoriesmenu.add('Proposal')
         expected = ('Legal basis',
                     'Initial position',
@@ -910,172 +594,12 @@ class TestProposal(FunctionalTestCase):
         self.assertEquals((), missing)
         self.assertNotIn('File', browser.forms['form'].field_labels)
 
-
-class TestProposalWithWord(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestProposalWithWord, self).setUp()
-        activate_meeting_word_implementation()
-
-    @browsing
-    def test_creating_proposal_from_proposal_template(self, browser):
-        create(Builder('committee_model').having(title=u'Baukomission'))
-        create(Builder('proposaltemplate').titled(u'Baugesuch')
-               .attach_file_containing('Word Content', u'file.docx')
-               .within(create(Builder('templatefolder').titled(u'Vorlagen'))))
-        dossier = create(
-            Builder('dossier').titled(u'D\xf6ssier')
-            .within(create(Builder('repository').titled(u'Stuff')
-                           .within(create(Builder('repository_root'))))))
-
-        browser.login().open(dossier)
-        factoriesmenu.add('Proposal')
-        browser.fill({'Title': u'Baugesuch Kreuzachkreisel',
-                      'Committee': u'Baukomission',
-                      'Proposal template': 'Baugesuch'}).save()
-        statusmessages.assert_no_error_messages()
-
-        proposal = browser.context
-        browser.open(proposal, view='tabbedview_view-overview')
-        self.assertEquals(
-            [['Title', u'Baugesuch Kreuzachkreisel'],
-             ['Committee', ''],
-             ['Meeting', ''],
-             ['Proposal document',
-              'Proposal document Baugesuch Kreuzachkreisel'],
-             ['State', 'Pending'],
-             ['Decision number', '']],
-            browser.css('table.listing').first.lists())
-
-        browser.click_on('Proposal document Baugesuch Kreuzachkreisel')
-        browser.open(browser.context, view='tabbedview_view-overview')
-        self.assertDictContainsSubset(
-            {'Title': u'Proposal document Baugesuch Kreuzachkreisel'},
-            dict(browser.css('table.listing').first.lists()))
-
-        self.assertEquals(
-            'Word Content',
-            proposal.get_proposal_document().file.open().read())
-
-    @browsing
-    def test_proposal_document_is_visible_on_submitted_proposal(self, browser):
-        committee = create(Builder('committee').titled('My committee'))
-        repo, repo_folder = create(Builder('repository_tree'))
-        dossier = create(Builder('dossier').within(repo_folder)
-                         .titled(u'An important dossier'))
-        proposal = create(Builder('proposal')
-                          .titled(u'An important proposal')
-                          .within(dossier)
-                          .having(committee=committee.load_model()))
-        submitted_proposal = create(Builder('submitted_proposal')
-                                    .submitting(proposal))
-        transaction.commit()
-
-        browser.login().open(submitted_proposal, view='tabbedview_view-overview')
-        self.assertEquals(
-            [['Title', u'An important proposal'],
-             ['Committee', 'My committee'],
-             ['Dossier', 'An important dossier'],
-             ['Meeting', ''],
-             ['Proposal document',
-              'Proposal document An important proposal'],
-             ['State', 'Submitted'],
-             ['Decision number', '']],
-            browser.css('table.listing').first.lists())
-
-    @browsing
-    def test_visible_fields_in_addform(self, browser):
-        """When the "word implementation" feature is enabled,
-        the "old" trix fields should disappear.
-        """
-        create(Builder('committee_model').having(title=u'Baukomission'))
-        create(Builder('proposaltemplate').titled(u'Baugesuch')
-               .within(create(Builder('templatefolder').titled(u'Vorlagen'))))
-        dossier = create(
-            Builder('dossier').titled(u'D\xf6ssier')
-            .within(create(Builder('repository').titled(u'Stuff')
-                           .within(create(Builder('repository_root'))))))
-
-        browser.login().open(dossier)
-        factoriesmenu.add('Proposal')
-        hidden = ('Legal basis',
-                  'Initial position',
-                  'Proposed action',
-                  'Decision draft',
-                  'Publish in',
-                  'Disclose to',
-                  'Copy for attention')
-        missing = tuple(set(hidden) - set(browser.forms['form'].field_labels))
-        self.assertItemsEqual(hidden, missing)
-
-    @browsing
-    def test_word_proposal_can_be_submitted(self, browser):
-        repo, repo_folder = create(Builder('repository_tree'))
-        dossier = create(Builder('dossier').within(repo_folder))
-        committee = create(Builder('committee'))
-        proposal = create(Builder('proposal')
-                          .within(dossier)
-                          .with_proposal_file('Fake proposal file body')
-                          .having(title='Mach doch',
-                                  committee=committee.load_model()))
-
-        self.assertEqual(Proposal.STATE_PENDING, proposal.get_state())
-        self.assertEqual('proposal-state-active',
-                         api.content.get_state(proposal))
-
-        browser.login().open(proposal, view='tabbedview_view-overview')
-        browser.css('#pending-submitted').first.click()
-        self.assertEqual(['Proposal successfully submitted.'], info_messages())
-        self.assertEqual(Proposal.STATE_SUBMITTED, proposal.get_state())
-        self.assertEqual('proposal-state-submitted',
-                         api.content.get_state(proposal))
-
-        submitted_proposal = proposal.load_model().resolve_submitted_proposal()
-        self.assertEquals(
-            'Fake proposal file body',
-            submitted_proposal.get_proposal_document().file.open().read())
-
-    @browsing
-    def test_document_of_submitted_proposal_cannot_be_edited(self, browser):
-        repo, repo_folder = create(Builder('repository_tree'))
-        dossier = create(Builder('dossier').within(repo_folder))
-        committee = create(Builder('committee'))
-        proposal = create(Builder('proposal')
-                          .within(dossier)
-                          .with_proposal_file('Fake proposal file body')
-                          .having(title='Mach doch',
-                                  committee=committee.load_model()))
-
-        browser.login().open(proposal.get_proposal_document(), view='edit')
-        self.assertEquals('Edit Document', plone.first_heading(),
-                          'Document should be editable.')
-
-        browser.login().open(proposal, view='tabbedview_view-overview')
-        browser.css('#pending-submitted').first.click()
-        self.assertEqual(['Proposal successfully submitted.'], info_messages())
-
-        with browser.expect_unauthorized():
-            browser.open(proposal.get_proposal_document(), view='edit')
-
-        submitted_proposal = proposal.load_model().resolve_submitted_proposal()
-        browser.open(submitted_proposal, view='tabbedview_view-overview')
-        browser.find('Reject').click()
-        browser.fill({'Comment': u'Bitte \xfcberarbeiten'}).submit()
-
-        browser.login().open(proposal.get_proposal_document(), view='edit')
-        self.assertEquals('Edit Document', plone.first_heading(),
-                          'Document should be editable again.')
-
-    @browsing
-    def test_prevent_trashing_proposal_document(self, browser):
-        repo, repo_folder = create(Builder('repository_tree'))
-        dossier = create(Builder('dossier').within(repo_folder))
-        committee = create(Builder('committee'))
-        proposal = create(Builder('proposal')
-                          .within(dossier)
-                          .having(title='Mach doch',
-                                  committee=committee.load_model()))
-        self.assertFalse(
-            api.user.has_permission('opengever.trash: Trash content',
-                                    obj=proposal.get_proposal_document()),
-            'The proposal document should not be trashable.')
+    def assertSubmittedDocumentCreated(self, proposal, document, submitted_document):
+        submitted_document_model = SubmittedDocument.query.get_by_source(
+            proposal, document)
+        self.assertIsNotNone(submitted_document_model)
+        self.assertEqual(Oguid.for_object(submitted_document),
+                         submitted_document_model.submitted_oguid)
+        self.assertEqual(0, submitted_document_model.submitted_version)
+        self.assertEqual(proposal.load_model(),
+                         submitted_document_model.proposal)

@@ -1,195 +1,162 @@
-from ftw.builder import Builder
-from ftw.builder import create
+from copy import deepcopy
 from ftw.testbrowser import browsing
-from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 
 
-class ProposalListingTests(FunctionalTestCase):
+ALL_PROPOSALS = [
+    {'Reference Number': '1',
+     'Meeting': '',
+     'State': 'Submitted',
+     'Comittee': u'Rechnungspr\xfcfungskommission',
+     'Title': u'Vertragsentwurf f\xfcr weitere Bearbeitung bewilligen'},
+    {'Reference Number': '2',
+     'Meeting': '',
+     'State': 'Pending',
+     'Comittee': u'Kommission f\xfcr Verkehr',
+     'Title': u'Antrag f\xfcr Kreiselbau'},
+    {'Reference Number': '3',
+     'Meeting': '',
+     'State': 'Submitted',
+     'Comittee': u'Rechnungspr\xfcfungskommission',
+     'Title': u'\xc4nderungen am Personalreglement'},
+    {'State': 'Pending',
+     'Reference Number': '4',
+     'Comittee': u'Kommission f\xfcr Verkehr',
+     'Title': u'\xdcberarbeitung der GAV',
+     'Meeting': ''},
+]
 
-    def setUp(self):
-        super(ProposalListingTests, self).setUp()
-        self.repository_root, self.repository_folder = create(
-            Builder('repository_tree'))
-        self.dossier = create(Builder('dossier')
-                              .within(self.repository_folder)
-                              .titled(u'Dossier A'))
-        self.committee_container = create(Builder('committee_container'))
-        self.committee = create(Builder('committee')
-                                .within(self.committee_container)
-                                .titled('My committee'))
-
-        self.proposal = create(Builder('proposal')
-                               .within(self.dossier)
-                               .titled(u'My Proposal')
-                               .having(committee=self.committee.load_model(),
-                                       initial_position=u'My p\xf6sition is',
-                                       proposed_action=u'My proposed acti\xf6n'))
+SUBMITTED_PROPOSALS = [
+    {'Reference Number': '1',
+     'Meeting': '',
+     'State': 'Submitted',
+     'Comittee': u'Rechnungspr\xfcfungskommission',
+     'Title': u'Vertragsentwurf f\xfcr weitere Bearbeitung bewilligen'},
+    {'Reference Number': '3',
+     'Meeting': '',
+     'State': 'Submitted',
+     'Comittee': u'Rechnungspr\xfcfungskommission',
+     'Title': u'\xc4nderungen am Personalreglement'},
+]
 
 
-class TestDossierProposalListing(ProposalListingTests):
+def proposals_table(browser):
+    return browser.css('table.listing').first
+
+
+def proposal_dicts(browser):
+    return proposals_table(browser).dicts()
+
+
+class TestDossierProposalListing(IntegrationTestCase):
+
+    maxDiff = None
 
     @browsing
     def test_listing(self, browser):
-        browser.login().open(self.dossier, view='tabbedview_view-proposals')
-        table = browser.css('table.listing').first
-
-        # TODO: state should be translated
-        self.assertEquals(
-            [{'State': 'Pending',
-              'Reference Number': '1',
-              'Comittee': 'My committee',
-              'Title': 'My Proposal',
-              'Meeting': ''}],
-            table.dicts())
+        self.login(self.dossier_responsible, browser)
+        browser.open(self.dossier, view='tabbedview_view-proposals')
+        self.assertEquals(ALL_PROPOSALS, proposal_dicts(browser))
 
     @browsing
     def test_proposals_are_linked_correctly(self, browser):
-        browser.login().open(self.dossier, view='tabbedview_view-proposals')
+        self.login(self.dossier_responsible, browser)
+        browser.open(self.dossier, view='tabbedview_view-proposals')
 
-        table = browser.css('table.listing').first
-        link = table.rows[1].css('a').first
-
-        self.assertEquals('My Proposal', link.text)
+        first_link = proposals_table(browser).rows[1].css('a').first
 
         self.assertEquals(
-            'http://example.com/ordnungssystem/'
-            'opengever-repository-repositoryfolder/dossier-1/proposal-1',
-            link.get('href'))
+            u'Vertragsentwurf f\xfcr weitere Bearbeitung bewilligen',
+            first_link.text)
+        self.assertEquals(
+            'http://nohost/plone/ordnungssystem/fuhrung/'
+            'vertrage-und-vereinbarungen/dossier-1/proposal-1',
+            first_link.get('href'))
 
     @browsing
     def test_proposals_are_linked_to_meeting_if_scheduled(self, browser):
-        meeting_dossier = create(
-            Builder('meeting_dossier').within(self.repository_folder))
+        with self.login(self.committee_responsible):
+            self.schedule_proposal(self.meeting, self.submitted_proposal)
 
-        create(Builder('submitted_proposal').submitting(self.proposal))
-        create(Builder('meeting')
-               .having(committee=self.committee)
-               .link_with(meeting_dossier)
-               .scheduled_proposals([self.proposal, ]))
+        self.login(self.dossier_responsible, browser)
+        browser.open(self.dossier, view='tabbedview_view-proposals')
 
-        browser.login().open(self.dossier, view='tabbedview_view-proposals')
-        table = browser.css('table.listing').first
-
-        self.assertEquals(
-            [{'State': 'Scheduled',
-              'Reference Number': '1',
-              'Comittee': 'My committee',
-              'Title': 'My Proposal',
-              'Meeting': u'C\xf6mmunity meeting'}],
-            table.dicts())
+        expected = deepcopy(ALL_PROPOSALS)
+        expected[0]['Meeting'] = u'9. Sitzung der Rechnungspr\xfcfungskommission'
+        expected[0]['State'] = u'Scheduled'
+        self.assertEquals(expected, proposal_dicts(browser))
 
     @browsing
     def test_only_shows_active_proposals_by_default(self, browser):
-        cancelled_proposal = create(
-            Builder('proposal')
-            .within(self.dossier)
-            .titled(u'Cancelled Proposal')
-            .having(committee=self.committee.load_model())
-            .as_cancelled())
+        self.login(self.dossier_responsible, browser)
+        browser.open(self.draft_proposal, view='tabbedview_view-overview')
+        browser.find('Cancel').click()
 
-        browser.login().open(self.dossier,
-                             view='tabbedview_view-proposals')
-        table = browser.css('.listing').first
-        self.assertEquals([u'My Proposal'],
-                          [row.get('Title') for row in table.dicts()])
+        browser.open(self.dossier, view='tabbedview_view-proposals')
+        self.assertEquals(
+            ALL_PROPOSALS[:1] + ALL_PROPOSALS[2:],
+            proposal_dicts(browser))
 
     @browsing
     def test_all_filter_shows_all_proposals(self, browser):
-        cancelled_proposal = create(
-            Builder('proposal')
-            .within(self.dossier)
-            .titled(u'Cancelled Proposal')
-            .having(committee=self.committee.load_model())
-            .as_cancelled())
+        self.login(self.dossier_responsible, browser)
 
-        browser.login().open(self.dossier,
-                             view='tabbedview_view-proposals',
-                             data={'proposal_state_filter': 'filter_all'})
-        table = browser.css('.listing').first
-        self.assertEquals([u'Cancelled Proposal', u'My Proposal'],
-                          [row.get('Title') for row in table.dicts()])
+        browser.open(self.draft_proposal, view='tabbedview_view-overview')
+        browser.find('Cancel').click()
+        browser.open(self.dossier,
+                     view='tabbedview_view-proposals',
+                     data={'proposal_state_filter': 'filter_all'})
+
+        expected = deepcopy(ALL_PROPOSALS)
+        expected[1]['State'] = 'Cancelled'
+        self.assertEquals(expected, proposal_dicts(browser))
 
 
-class TestMyProposals(ProposalListingTests):
+class TestMyProposals(IntegrationTestCase):
 
     @browsing
     def test_lists_only_proposals_created_by_current_user(self, browser):
-        create(Builder('user').named('Hugo', 'Boss'))
-        self.login('hugo.boss')
-        self.proposal = create(Builder('proposal')
-                               .within(self.dossier)
-                               .titled(u'Proposal from Hugo')
-                               .having(committee=self.committee.load_model(),
-                                       initial_position=u'My p\xf6sition is',
-                                       proposed_action=u'My proposed acti\xf6n'))
+        with self.login(self.dossier_responsible):
+            userid = self.regular_user.getId()
+            self.draft_proposal.load_model().creator = userid
 
-        browser.login().open(view='tabbedview_view-myproposals')
-        table = browser.css('table.listing').first
-        self.assertEquals([u'My Proposal'],
-                          [row.get('Title') for row in table.dicts()])
-
-        browser.login(username='hugo.boss', password='secret')
+        self.login(self.regular_user, browser)
         browser.open(view='tabbedview_view-myproposals')
-        table = browser.css('table.listing').first
-        self.assertEquals([u'Proposal from Hugo'],
-                          [row.get('Title') for row in table.dicts()])
+        self.assertEquals(ALL_PROPOSALS[1:2], proposal_dicts(browser))
 
 
-class TestSubmittedProposals(ProposalListingTests):
-
-    def setUp(self):
-        super(TestSubmittedProposals, self).setUp()
-
-        self.submitted_proposal = create(Builder('submitted_proposal')
-                                         .submitting(self.proposal))
+class TestSubmittedProposals(IntegrationTestCase):
 
     @browsing
     def test_listing(self, browser):
-        browser.login().open(self.committee,
-                             view='tabbedview_view-submittedproposals')
-        table = browser.css('table.listing').first
+        self.login(self.committee_responsible, browser)
+        browser.open(self.committee, view='tabbedview_view-submittedproposals')
 
-        # TODO: state should be translated
-        self.assertEquals(
-            [{'State': 'Submitted',
-              'Reference Number': '1',
-              'Comittee': 'My committee',
-              'Title': 'My Proposal',
-              'Meeting': ''}],
-            table.dicts())
+        self.assertEquals(SUBMITTED_PROPOSALS, proposal_dicts(browser)),
 
     @browsing
     def test_proposals_are_linked_correctly_to_the_submitted_proposal(self, browser):
-        browser.login().open(self.committee,
-                             view='tabbedview_view-submittedproposals')
+        self.login(self.committee_responsible, browser)
+        browser.open(self.committee, view='tabbedview_view-submittedproposals')
 
-        table = browser.css('table.listing').first
-        link = table.rows[1].css('a').first
+        first_link = proposals_table(browser).rows[1].css('a').first
 
-        self.assertEquals('My Proposal', link.text)
         self.assertEquals(
-            'http://example.com/opengever-meeting-committeecontainer/'
+            u'Vertragsentwurf f\xfcr weitere Bearbeitung bewilligen',
+            first_link.text)
+        self.assertEquals(
+            'http://nohost/plone/opengever-meeting-committeecontainer/'
             'committee-1/submitted-proposal-1',
-            link.get('href'))
+            first_link.get('href'))
 
     @browsing
     def test_submitted_proposals_are_linked_to_meeting_if_scheduled(self, browser):
-        meeting_dossier = create(
-            Builder('meeting_dossier').within(self.repository_folder))
+        self.login(self.committee_responsible, browser)
+        self.schedule_proposal(self.meeting, self.submitted_proposal)
 
-        create(Builder('meeting')
-               .having(committee=self.committee)
-               .link_with(meeting_dossier)
-               .scheduled_proposals([self.submitted_proposal, ]))
+        browser.open(self.committee, view='tabbedview_view-submittedproposals')
 
-        browser.login().open(self.committee,
-                             view='tabbedview_view-submittedproposals')
-        table = browser.css('table.listing').first
-
-        self.assertEquals(
-            [{'State': 'Scheduled',
-              'Reference Number': '1',
-              'Comittee': 'My committee',
-              'Title': 'My Proposal',
-              'Meeting': u'C\xf6mmunity meeting'}],
-            table.dicts())
+        expected = deepcopy(SUBMITTED_PROPOSALS)
+        expected[0]['Meeting'] = u'9. Sitzung der Rechnungspr\xfcfungskommission'
+        expected[0]['State'] = u'Scheduled'
+        self.assertEquals(expected, proposal_dicts(browser))

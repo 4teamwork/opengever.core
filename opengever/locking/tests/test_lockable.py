@@ -87,16 +87,16 @@ class TestSQLLockable(FunctionalTestCase):
         self.assertFalse(lockable.locked())
 
     def test_locked_is_true_if_a_valid_lock_exists(self):
-        lock = create(Builder('lock')
-                      .of_obj(self.wrapper)
-                      .having(time=utcnow_tz_aware() - timedelta(seconds=100)))
+        create(Builder('lock')
+               .of_obj(self.wrapper)
+               .having(time=utcnow_tz_aware() - timedelta(seconds=100)))
         lockable = ILockable(self.wrapper)
         self.assertTrue(lockable.locked())
 
     def test_locked_is_false_if_lock_is_invalid(self):
-        lock = create(Builder('lock')
-                      .of_obj(self.wrapper)
-                      .having(time=utcnow_tz_aware() - timedelta(seconds=800)))
+        create(Builder('lock')
+               .of_obj(self.wrapper)
+               .having(time=utcnow_tz_aware() - timedelta(seconds=800)))
 
         lockable = ILockable(self.wrapper)
         self.assertFalse(lockable.locked())
@@ -110,16 +110,16 @@ class TestSQLLockable(FunctionalTestCase):
         self.assertTrue(lockable.can_safely_unlock())
 
     def test_can_safely_unlock_is_true_if_a_lock_of_the_current_user_exists(self):
-        lock = create(Builder('lock')
-                      .of_obj(self.wrapper)
-                      .having(lock_type=u'plone.locking.stealable'))
+        create(Builder('lock')
+               .of_obj(self.wrapper)
+               .having(lock_type=u'plone.locking.stealable'))
 
         self.assertTrue(ILockable(self.wrapper).can_safely_unlock())
 
     def test_can_safely_unlock_is_false_if_item_is_locked_by_an_other_user(self):
-        lock = create(Builder('lock')
-                      .of_obj(self.wrapper)
-                      .having(creator=u'hugo.boss'))
+        create(Builder('lock')
+               .of_obj(self.wrapper)
+               .having(creator=u'hugo.boss'))
 
         self.assertFalse(ILockable(self.wrapper).can_safely_unlock())
 

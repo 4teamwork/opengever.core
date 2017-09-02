@@ -7,13 +7,17 @@ from collective import dexteritytextindexer
 from five import grok
 from ftw.mail.interfaces import IEmailAddress
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
+from opengever.base.interfaces import IRedirector
 from opengever.document import _
 from opengever.document.base import BaseDocumentMixin
+from opengever.document.behaviors import IBaseDocument
 from opengever.document.behaviors.related_docs import IRelatedDocuments
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.meeting.proposal import IProposal
 from opengever.meeting.proposal import ISubmittedProposal
+from opengever.officeconnector.helpers import create_oc_url
+from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
 from opengever.task.task import ITask
 from plone import api
 from plone.autoform import directives as form_directives
@@ -22,13 +26,16 @@ from plone.directives import form
 from plone.namedfile import field
 from plone.namedfile.file import NamedBlobFile
 from z3c.form import validator
+from zc.relation.interfaces import ICatalog
 from zope import schema
 from zope.component import getMultiAdapter
+from zope.component import getUtility
 from zope.component import queryMultiAdapter
 from zope.globalrequest import getRequest
 from zope.interface import implements
 from zope.interface import Invalid
 from zope.interface import invariant
+from zope.intid.interfaces import IIntIds
 import logging
 import os.path
 
@@ -140,11 +147,28 @@ class Document(Item, BaseDocumentMixin):
         """
         return False
 
-    def related_items(self):
+    def related_items(self, bidirectional=False, documents_only=False):
+        _related_items = []
+
         relations = IRelatedDocuments(self).relatedItems
+
         if relations:
-            return [rel.to_object for rel in relations]
-        return []
+            _related_items += [rel.to_object for rel in relations]
+
+        if bidirectional:
+            catalog = getUtility(ICatalog)
+            doc_id = getUtility(IIntIds).getId(aq_inner(self))
+            relations = catalog.findRelations(
+                {'to_id': doc_id, 'from_attribute': 'relatedItems'})
+
+            if documents_only:
+                relations = filter(
+                    lambda rel: IBaseDocument.providedBy(rel.from_object),
+                    relations)
+
+            _related_items += [rel.from_object for rel in relations]
+
+        return _related_items
 
     def getIcon(self, relative_to_portal=1):
         return self.get_mimetype_icon(relative_to_portal)
@@ -242,6 +266,9 @@ class Document(Item, BaseDocumentMixin):
             return self.file.filename
         return None
 
+    def get_download_view_name(self):
+        return 'download'
+
     security.declareProtected(webdav_unlock_items, 'UNLOCK')
 
     def UNLOCK(self, REQUEST, RESPONSE):
@@ -258,3 +285,33 @@ class Document(Item, BaseDocumentMixin):
                 self, transition='document-transition-initialize')
 
         return response
+
+    def checkout_and_get_office_connector_url(self):
+        """Checkout the document and return an office connector url.
+        With the officeconnector checkout feature enabled, the checkout
+        happens when the link is used.
+        """
+        if is_officeconnector_checkout_feature_enabled():
+            return create_oc_url(self.REQUEST, self, {'action': 'checkout'})
+
+        else:
+            checkout_manager = getMultiAdapter((self, self.REQUEST),
+                                               ICheckinCheckoutManager)
+            if not checkout_manager.is_checked_out_by_current_user():
+                checkout_manager.checkout()
+
+            return '{}/external_edit'.format(self.absolute_url())
+
+    def setup_external_edit_redirect(self, request):
+        redirector = IRedirector(request)
+        if is_officeconnector_checkout_feature_enabled():
+            redirector.redirect(create_oc_url(
+                request,
+                self,
+                dict(action='checkout'),
+            ))
+        else:
+            redirector.redirect(
+                '%s/external_edit' % self.absolute_url(),
+                target='_self',
+                timeout=1000)

@@ -25,7 +25,7 @@ class TestCookieStorage(FunctionalTestCase):
 
         self.assertEquals({'foo': 'bar'}, self.request.cookies)
         self.assertDictContainsSubset(
-            {'quoted': True, 'value': 'bar'},
+            {'quoted': True, 'value': 'bar', 'path': '/'},
             self.request.RESPONSE.cookies['foo'])
 
     def test_sets_cookie_expiration_date(self):

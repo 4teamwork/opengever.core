@@ -34,4 +34,35 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      name="redirect_to_main_dossier"
+      for="opengever.task.task.ITask"
+      class=".redirector.RedirectToContainingMainDossier"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="redirect_to_parent_dossier"
+      for="opengever.task.task.ITask"
+      class=".redirector.RedirectToContainingDossier"
+      permission="zope2.View"
+      />
+
+  <!-- related documents tab -->
+  <adapter factory=".related_documents.RelatedDocumentsCatalogTableSource" />
+
+  <browser:page
+      for="opengever.task.task.ITask"
+      name="tabbedview_view-relateddocuments-proxy"
+      class=".related_documents.RelatedDocumentsProxy"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.task.task.ITask"
+      name="tabbedview_view-relateddocuments"
+      class=".related_documents.RelatedDocuments"
+      permission="zope2.View"
+      />
+
 </configure>

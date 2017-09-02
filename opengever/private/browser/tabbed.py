@@ -1,8 +1,5 @@
-from five import grok
 from opengever.dossier.browser.tabbed import DossierTabbedView
 from opengever.private import _
-from opengever.private.dossier import IPrivateDossier
-from opengever.private.folder import IPrivateFolder
 from opengever.tabbedview import GeverTabbedView
 from opengever.tabbedview.browser.tabs import Documents
 from opengever.tabbedview.browser.tabs import Dossiers
@@ -20,7 +17,6 @@ class PrivateFolderTabbedView(GeverTabbedView):
 
 
 class PrivateFolderDossiers(Dossiers):
-    grok.context(IPrivateFolder)
 
     enabled_actions = ['pdf_dossierlisting', 'export_dossiers']
 
@@ -39,7 +35,6 @@ class PrivateDossierTabbedView(DossierTabbedView):
 
 
 class PrivateDossierDocuments(Documents):
-    grok.context(IPrivateDossier)
 
     @property
     def columns(self):

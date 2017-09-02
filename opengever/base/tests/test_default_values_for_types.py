@@ -104,6 +104,7 @@ DOSSIER_MISSING_VALUES = {
     'date_of_cassation': None,
     'date_of_submission': None,
     'end': None,
+    'external_reference': None,
     'filing_prefix': None,
     'former_reference_number': None,
     'number_of_containers': None,
@@ -378,7 +379,6 @@ class TestRepositoryFolderDefaults(TestDefaultsBase):
 
         # XXX: Don't know why this happens
         expected['public_trial_statement'] = None
-        expected['description'] = None
 
         self.assertDictEqual(expected, persisted_values)
 
@@ -554,7 +554,6 @@ class TestDocumentDefaults(TestDefaultsBase):
 
         # XXX: Don't know why this happens
         expected['public_trial_statement'] = None
-        expected['description'] = None
 
         self.assertDictEqual(expected, persisted_values)
 
@@ -659,7 +658,6 @@ class TestMailDefaults(TestDefaultsBase):
 
         # XXX: Don't know why this happens
         expected['public_trial_statement'] = None
-        expected['description'] = None
 
         self.assertDictEqual(expected, persisted_values)
 
@@ -788,8 +786,5 @@ class TestContactDefaults(TestDefaultsBase):
 
         persisted_values = get_persisted_values_for_obj(contact)
         expected = self.get_z3c_form_defaults()
-
-        # XXX: Don't know why this happens
-        expected['description'] = None
 
         self.assertDictEqual(expected, persisted_values)

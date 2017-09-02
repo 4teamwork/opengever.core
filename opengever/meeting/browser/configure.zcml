@@ -12,6 +12,13 @@
       />
 
   <browser:page
+      for="opengever.meeting.interfaces.IMeetingDossier"
+      name="merge_docx_protocol"
+      class=".protocol.MergeDocxProtocol"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <browser:page
       for="opengever.meeting.committee.ICommittee"
       name="add-membership"
       class=".memberships.AddMembership"
@@ -100,19 +107,10 @@
       />
 
   <browser:page
-      name="deactivate"
       for="opengever.meeting.committee.ICommittee"
+      name="committee_transition_controller"
+      class=".committeetransitioncontroller.CommitteeTransitionController"
       permission="cmf.ModifyPortalContent"
-      class=".committee.DeactivateCommittee"
-      allowed_attributes="available"
-      />
-
-  <browser:page
-      name="reactivate"
-      for="opengever.meeting.committee.ICommittee"
-      permission="cmf.ModifyPortalContent"
-      class=".committee.ReactivateCommittee"
-      allowed_attributes="available"
       />
 
   <browser:page
@@ -152,4 +150,54 @@
       permission="cmf.ModifyPortalContent"
       />
 
+  <browser:page
+      for="opengever.meeting.proposal.IProposal"
+      name="receive-proposal-history"
+      class=".receiveproposalhistory.ReceiveProposalHistory"
+      permission="zope2.View"
+      layer="opengever.ogds.base.interfaces.IInternalOpengeverRequestLayer"
+      />
+
+  <!-- committee tabs -->
+  <browser:page
+      name="tabbedview_view-meetings"
+      for="opengever.meeting.committee.ICommittee"
+      class=".committeetabs.Meetings"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="tabbedview_view-submittedproposals"
+      for="opengever.meeting.committee.ICommittee"
+      class=".committeetabs.SubmittedProposals"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="tabbedview_view-memberships"
+      for="opengever.meeting.committee.ICommittee"
+      class=".committeetabs.Memberships"
+      permission="zope2.View"
+      />
+
+  <!-- committee container tabs -->
+  <browser:page
+      name="tabbedview_view-members"
+      for="opengever.meeting.committeecontainer.ICommitteeContainer"
+      class=".committeecontainertabs.Members"
+      permission="zope2.View"
+      />
+
+  <adapter
+      name="opengever.meeting.committeecontainer"
+      provides="zope.publisher.interfaces.browser.IBrowserPage"
+      factory=".committeecontainer_forms.AddView"
+      />
+
+  <browser:page
+      name="edit"
+      for="opengever.meeting.committeecontainer.ICommitteeContainer"
+      class=".committeecontainer_forms.EditForm"
+      permission="cmf.ModifyPortalContent"
+      />
 </configure>

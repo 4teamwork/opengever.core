@@ -14,7 +14,6 @@ from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import GeneratedProtocol
 from opengever.meeting.model import Meeting
 from opengever.meeting.model import Member
-from opengever.meeting.model import Proposal
 from opengever.testing import FunctionalTestCase
 from plone.locking.interfaces import ILockable
 from plone.locking.interfaces import STEALABLE_LOCK
@@ -27,6 +26,12 @@ class TestProtocol(FunctionalTestCase):
 
     def setUp(self):
         super(TestProtocol, self).setUp()
+
+        # CommitteeResponsible is assigned globally here for the sake of
+        # simplicity
+        self.grant('Contributor', 'Editor', 'Reader', 'MeetingUser',
+                   'CommitteeAdministrator', 'CommitteeResponsible')
+
         self.admin_unit.public_url = 'http://nohost/plone'
 
         self.repository_root, self.repository_folder = create(
@@ -49,11 +54,12 @@ class TestProtocol(FunctionalTestCase):
             Builder('committee')
             .within(container)
             .having(repository_folder=self.repository_folder))
-        self.proposal = create(Builder('proposal')
-                               .within(self.dossier)
-                               .having(title='Mach doch',
-                                       committee=self.committee.load_model())
-                               .as_submitted())
+        self.proposal, self.submitted_proposal = create(
+            Builder('proposal')
+            .within(self.dossier)
+            .having(title='Mach doch',
+                    committee=self.committee.load_model())
+            .with_submitted())
 
         self.committee_model = self.committee.load_model()
         self.meeting = create(Builder('meeting')
@@ -92,7 +98,6 @@ class TestProtocol(FunctionalTestCase):
 
     @browsing
     def test_protocol_template_can_be_configured_per_commitee(self, browser):
-        self.grant("Administrator")
         custom_template = create(
             Builder('sablontemplate')
             .within(self.templates)
@@ -158,13 +163,12 @@ class TestProtocol(FunctionalTestCase):
     def test_protocol_is_generated_when_closing_meetings(self, browser):
         self.setup_protocol(browser)
 
-        self.assertFalse(browser.context.model.has_protocol_document())
+        self.assertFalse(self.meeting.has_protocol_document())
 
         browser.find('Close meeting').click()
 
-        browser.open(self.meeting.get_url())
-
-        self.assertTrue(browser.context.model.has_protocol_document())
+        meeting = Meeting.query.get(self.meeting.meeting_id)
+        self.assertTrue(meeting.has_protocol_document())
 
     @browsing
     def test_protocol_shows_validation_errors(self, browser):
@@ -229,8 +233,8 @@ class TestProtocol(FunctionalTestCase):
             '<div onload="alert(\'qux\');">Hans<script>alert("qux");</script></div>'
         }).submit()
 
-        proposal = Proposal.query.get(self.proposal_model.proposal_id)
-        self.assertEqual('<div>Hans</div>', proposal.legal_basis)
+        self.assertEqual('<div>Hans</div>',
+                         self.submitted_proposal.legal_basis)
 
     @browsing
     def test_protocol_can_be_edited_and_strips_whitespace(self, browser):
@@ -260,14 +264,20 @@ class TestProtocol(FunctionalTestCase):
         self.assertGreater(meeting.modified, prev_modified)
         self.assertEqual('The Meeting', meeting.title)
 
-        proposal = Proposal.query.get(self.proposal_model.proposal_id)
-        self.assertEqual('<div>Yes we can</div>', proposal.legal_basis)
-        self.assertEqual('<div>Still the same</div>', proposal.initial_position)
-        self.assertEqual('<div>It is important</div>', proposal.considerations)
-        self.assertEqual('<div>Accept it</div>', proposal.proposed_action)
-        self.assertEqual('<div>there</div>', proposal.publish_in)
-        self.assertEqual('<div></div>', proposal.disclose_to)
-        self.assertEqual('<div>Hanspeter</div>', proposal.copy_for_attention)
+        self.assertEqual('<div>Yes we can</div>',
+                         self.submitted_proposal.legal_basis)
+        self.assertEqual('<div>Still the same</div>',
+                         self.submitted_proposal.initial_position)
+        self.assertEqual('<div>It is important</div>',
+                         self.submitted_proposal.considerations)
+        self.assertEqual('<div>Accept it</div>',
+                         self.submitted_proposal.proposed_action)
+        self.assertEqual('<div>there</div>',
+                         self.submitted_proposal.publish_in)
+        self.assertEqual('<div></div>',
+                         self.submitted_proposal.disclose_to)
+        self.assertEqual('<div>Hanspeter</div>',
+                         self.submitted_proposal.copy_for_attention)
 
         agenda_item = AgendaItem.get(self.agenda_item.agenda_item_id)
         self.assertEqual('<div>We should accept it</div>', agenda_item.discussion)
@@ -479,7 +489,7 @@ class TestFormatParticipant(FunctionalTestCase):
         member = create(Builder('member').having(
             firstname=u'Hans', lastname=u'M\xfcller'))
 
-        self.assertEqual(u'Hans M\xfcller', member.get_title())
+        self.assertEqual(u'M\xfcller Hans', member.get_title())
 
     def test_return_fullname_with_email(self):
         member = create(Builder('member').having(
@@ -488,7 +498,7 @@ class TestFormatParticipant(FunctionalTestCase):
             email=u'hans.mueller@example.com'))
 
         self.assertEqual(
-            u'Hans M\xfcller (<a href="mailto:hans.mueller@example.com">hans.mueller@example.com</a>)',
+            u'M\xfcller Hans (<a href="mailto:hans.mueller@example.com">hans.mueller@example.com</a>)',
             member.get_title())
 
     def test_return_fullname_without_linked_email(self):
@@ -498,14 +508,14 @@ class TestFormatParticipant(FunctionalTestCase):
             email=u'hans.mueller@example.com'))
 
         self.assertEqual(
-            u'Hans M\xfcller (hans.mueller@example.com)',
+            u'M\xfcller Hans (hans.mueller@example.com)',
             member.get_title(show_email_as_link=False))
 
     def test_result_is_html_escaped(self):
         member = create(Builder('member').having(
-            firstname=u'<script></script>Hans',
-            lastname=u'M\xfcller'))
+            firstname=u'Hans',
+            lastname=u'<script></script>M\xfcller'))
 
         self.assertEqual(
-            u'&lt;script&gt;&lt;/script&gt;Hans M\xfcller',
+            u'&lt;script&gt;&lt;/script&gt;M\xfcller Hans',
             member.get_title())

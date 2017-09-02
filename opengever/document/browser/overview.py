@@ -1,5 +1,4 @@
 from AccessControl import getSecurityManager
-from five import grok
 from ftw import bumblebee
 from opengever.base import _ as ogbmf
 from opengever.base.browser import edit_public_trial
@@ -9,8 +8,6 @@ from opengever.document import _
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.browser import archival_file_form
 from opengever.document.browser.actionbuttons import ActionButtonRendererMixin
-from opengever.document.browser.download import DownloadConfirmationHelper
-from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.dossier.base import DOSSIER_STATES_CLOSED
 from opengever.meeting import is_meeting_feature_enabled
@@ -18,7 +15,7 @@ from opengever.meeting.model import SubmittedDocument
 from opengever.ogds.base.actor import Actor
 from opengever.tabbedview import GeverTabMixin
 from plone import api
-from plone.directives.dexterity import DisplayForm
+from plone.dexterity.browser.view import DefaultView
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from Products.CMFCore.utils import getToolByName
 from Products.MimetypesRegistry.common import MimeTypeException
@@ -29,7 +26,8 @@ from zope.component import queryMultiAdapter
 
 
 class BaseRow(object):
-    """Base class for metadata row configurations."""
+    """Base class for metadata row configurations.
+    """
 
     def __init__(self):
         self._view = None
@@ -45,7 +43,8 @@ class BaseRow(object):
 
 
 class FieldRow(BaseRow):
-    """A metadata row type that gets its information from schema fields."""
+    """A metadata row type that gets its information from schema fields.
+    """
 
     def __init__(self, field, label=None):
         super(FieldRow, self).__init__()
@@ -119,20 +118,18 @@ class TemplateRow(CustomRow):
         return self.renderer(self.view)
 
 
-class Overview(DisplayForm, GeverTabMixin, ActionButtonRendererMixin):
-    """File details overview."""
+class Overview(DefaultView, GeverTabMixin, ActionButtonRendererMixin):
+    """File details overview.
+    """
 
     is_on_detail_view = True
     is_overview_tab = True
 
-    grok.context(IDocumentSchema)
-    grok.name('tabbedview_view-overview')
-    grok.template('overview')
-    grok.require('zope2.View')
-
     show_searchform = False
 
     file_template = ViewPageTemplateFile('templates/file.pt')
+    related_documents_template = ViewPageTemplateFile(
+        'templates/related_documents.pt')
     archival_file_template = ViewPageTemplateFile('templates/archiv_file.pt')
     public_trial_template = ViewPageTemplateFile('templates/public_trial.pt')
     submitted_with_template = ViewPageTemplateFile('templates/submitted_with.pt')  # noqa
@@ -155,7 +152,8 @@ class Overview(DisplayForm, GeverTabMixin, ActionButtonRendererMixin):
             FieldRow('IDocumentMetadata.preserved_as_paper'),
             FieldRow('IDocumentMetadata.receipt_date'),
             FieldRow('IDocumentMetadata.delivery_date'),
-            FieldRow('IRelatedDocuments.relatedItems'),
+            TemplateRow(self.related_documents_template, label=_(
+                u'label_related_documents', default=u'Related Documents')),
             FieldRow('IClassification.classification'),
             FieldRow('IClassification.privacy_layer'),
             TemplateRow(self.public_trial_template,
@@ -193,6 +191,19 @@ class Overview(DisplayForm, GeverTabMixin, ActionButtonRendererMixin):
                     submitted_document.document_id
                     )
 
+    def linked_documents(self):
+        """Returns a list documents related to the context document.
+        """
+
+        return [{
+            'class': self.get_css_class(obj),
+            'title': obj.Title(),
+            'url': obj.absolute_url(),
+        } for obj in sorted(
+            self.context.related_items(bidirectional=True, documents_only=True),
+            key=lambda obj: obj.Title()
+        )]
+
     def is_outdated(self, submitted_document):
         return not submitted_document.is_up_to_date(self.context)
 
@@ -220,8 +231,8 @@ class Overview(DisplayForm, GeverTabMixin, ActionButtonRendererMixin):
             return Actor.user(manager.get_checked_out_by()).get_link()
         return ''
 
-    def get_css_class(self):
-        return get_css_class(self.context)
+    def get_css_class(self, context=None):
+        return get_css_class(context or self.context)
 
     def show_modfiy_public_trial_link(self):
         try:
@@ -234,13 +245,6 @@ class Overview(DisplayForm, GeverTabMixin, ActionButtonRendererMixin):
         state = api.content.get_state(
             self.context.get_parent_dossier(), default=None)
         return can_edit and state in DOSSIER_STATES_CLOSED
-
-    def get_download_copy_tag(self):
-        dc_helper = DownloadConfirmationHelper(self.context)
-        return dc_helper.get_html_tag(
-            additional_classes=['function-download-copy'],
-            include_token=True
-            )
 
     def show_preview(self):
         return is_bumblebee_feature_enabled()

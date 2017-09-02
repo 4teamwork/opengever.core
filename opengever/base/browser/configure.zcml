@@ -108,4 +108,32 @@
       class=".breadcrumb_by_uid.ResolveUIDToBreadcrumb"
       />
 
+  <browser:page
+      name="copy_item"
+      for="plone.dexterity.interfaces.IDexterityContent"
+      class=".copy_items.CopyItemView"
+      permission="zope2.CopyOrMove"
+      />
+
+  <browser:page
+      name="resolve_oguid"
+      for="*"
+      class=".resolveoguid.ResolveOGUIDView"
+      permission="zope2.View"
+      />
+
+  <adapter
+      factory=".errors.ErrorHandlingView"
+      name="index.html"
+      provides="zope.interface.Interface"
+      />
+
+  <browser:page
+      name="folder_delete_confirmation"
+      for="*"
+      permission="zope2.DeleteObjects"
+      class=".folder_delete_confirmation.FolderDeleteConfirmation"
+      template="templates/folder_delete_confirmation.pt"
+      />
+
 </configure>

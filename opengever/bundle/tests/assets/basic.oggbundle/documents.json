@@ -35,6 +35,7 @@
     "guid": "0970e3800a78407ea2558d718739961d",
     "parent_guid": "659645aec58d48a9b9663399ea2ec069",
     "filepath": "files/sample.eml",
+    "original_message_path": "files/sample.msg",
     "review_state": "document-state-draft",
     "title": ""
   },  {

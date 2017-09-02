@@ -1,4 +1,8 @@
+from docx import Document
+from docxmerge.builder import DocumentBuilder
+from opengever.base import advancedjson
 from opengever.base.command import CreateDocumentCommand
+from opengever.base.interfaces import IDataCollector
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.base.request import dispatch_json_request
@@ -9,22 +13,27 @@ from opengever.locking.lock import SYS_LOCK
 from opengever.meeting import _
 from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.exceptions import ProtocolAlreadyGenerated
+from opengever.meeting.interfaces import IHistory
 from opengever.meeting.model.generateddocument import GeneratedExcerpt
 from opengever.meeting.model.generateddocument import GeneratedProtocol
-from opengever.meeting.model.proposalhistory import Submitted, DocumentUpdated, DocumentSubmitted
 from opengever.meeting.model.submitteddocument import SubmittedDocument
 from opengever.meeting.protocol import AgendaItemListProtocolData
 from opengever.meeting.protocol import ExcerptProtocolData
 from opengever.meeting.protocol import ProtocolData
 from opengever.meeting.sablon import Sablon
+from opengever.ogds.base.utils import decode_for_json
+from os.path import join
 from plone import api
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.locking.interfaces import ILockable
+from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 import base64
 import json
+import shutil
+import tempfile
 
 
 MIME_DOCX = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
@@ -111,13 +120,17 @@ class ExcerptOperations(object):
                  mapping=dict(title=meeting.get_title()))
 
     def get_title(self, meeting):
-        return u"{} - {}".format(self.proposal.title, meeting.get_title())
+        return u"{} - {}".format(
+            self.proposal.resolve_submitted_proposal().title,
+            meeting.get_title())
 
     def get_filename(self, meeting):
         normalizer = getUtility(IIDNormalizer)
         return u"{}-{}.docx".format(
-            normalizer.normalize(self.proposal.title),
-            normalizer.normalize(meeting.get_title()))
+            normalizer.normalize(
+                self.proposal.resolve_submitted_proposal().title),
+            normalizer.normalize(
+                meeting.get_title()))
 
 
 class ManualExcerptOperations(object):
@@ -237,6 +250,94 @@ class CreateGeneratedDocumentCommand(CreateDocumentCommand):
             portal.REQUEST)
 
 
+class MergeDocxProtocolCommand(CreateGeneratedDocumentCommand):
+    """Create or update a merged protocol word file.
+
+    Create a master file based on a sablon template (the master contains
+    the first page with participants and agenda item list.)
+
+    Then append all partial protocols for each agenda item in sequential order.
+    """
+
+    def __init__(self, context, meeting, document_operations,
+                 lock_document_after_creation=False):
+        super(MergeDocxProtocolCommand, self).__init__(
+            context, meeting, document_operations,
+            lock_document_after_creation=lock_document_after_creation)
+
+        self.has_protocol = meeting.protocol_document is not None
+
+    def execute(self):
+        if self.has_protocol:
+            return self.update_protocol_document()
+
+        return super(MergeDocxProtocolCommand, self).execute()
+
+    def show_message(self):
+        if self.has_protocol:
+            portal = api.portal.get()
+            api.portal.show_message(
+                self.document_operations.get_updated_message(self.meeting),
+                portal.REQUEST)
+            return
+
+        return super(MergeDocxProtocolCommand, self).show_message()
+
+    def update_protocol_document(self):
+        document = self.meeting.protocol_document.resolve_document()
+        document.file.data = self.generate_file_data()
+
+        repository = api.portal.get_tool('portal_repository')
+        comment = translate(
+            _(u'Updated with a newer generated version from meeting ${title}.',
+              mapping=dict(title=self.meeting.get_title())),
+            context=getRequest())
+        repository.save(obj=document, comment=comment)
+
+        new_version = document.get_current_version()
+        self.meeting.protocol_document.generated_version = new_version
+
+        return document
+
+    def generate_file_data(self):
+        template = self.document_operations.get_sablon_template(self.meeting)
+        sablon = Sablon(template)
+        sablon.process(self.document_operations.get_meeting_data(
+            self.meeting).as_json())
+
+        tmpdir_path = tempfile.mkdtemp(prefix='opengever.core.doxcmerge_')
+        master_path = join(tmpdir_path, 'master.docx')
+        output_path = join(tmpdir_path, 'protocol.docx')
+
+        try:
+            # XXX: this is a bit dumb since sablon would already have generated
+            # a temporary file
+            with open(master_path, 'wb') as master_file:
+                master_file.write(sablon.file_data)
+            builder = DocumentBuilder(Document(master_path))
+
+            for index, item in enumerate(self.meeting.agenda_items):
+                if not item.has_proposal:
+                    continue
+
+                proposal = item.proposal.submitted_oguid.resolve_object()
+                proposal_document = proposal.get_proposal_document()
+                proposal_path = join(
+                    tmpdir_path, 'proposal{}.docx'.format(index))
+
+                with open(proposal_path, 'wb') as proposal_file:
+                    proposal_file.write(proposal_document.file.data)
+                builder.append(Document(proposal_path))
+
+            builder.save(output_path)
+            with open(output_path, 'rb') as merged_file:
+                data = merged_file.read()
+        finally:
+            shutil.rmtree(tmpdir_path)
+
+        return data
+
+
 class UpdateGeneratedDocumentCommand(object):
 
     def __init__(self, generated_document, meeting, document_operations):
@@ -309,6 +410,11 @@ class CreateSubmittedProposalCommand(object):
         jsondata = {'committee_oguid': model.committee.oguid.id,
                     'proposal_oguid': model.oguid.id}
 
+        # XXX use Transporter or API?
+        collector = getMultiAdapter((self.proposal,), IDataCollector,
+                                    name='field-data')
+        jsondata['field-data'] = collector.extract()
+
         if is_word_meeting_implementation_enabled():
             blob = self.proposal.get_proposal_document().file
             jsondata['file'] = {
@@ -316,12 +422,16 @@ class CreateSubmittedProposalCommand(object):
                 'contentType': blob.contentType,
                 'data': base64.encodestring(blob.data)}
 
-        request_data = {REQUEST_KEY: json.dumps(jsondata)}
+        record = IHistory(self.proposal).append_record(u'submitted')
+        history_data = advancedjson.dumps({'uuid': record.uuid})
+
+        request_data = {
+            REQUEST_KEY: json.dumps(decode_for_json(jsondata)),
+            'history_data': history_data}
         response = dispatch_json_request(
             self.admin_unit_id, '@@create_submitted_proposal', data=request_data)
 
         self.submitted_proposal_path = response['path']
-        create_session().add(Submitted(proposal=model))
 
 
 class RejectProposalCommand(object):
@@ -368,25 +478,28 @@ class UpdateSubmittedDocumentCommand(object):
         self.submitted_document = submitted_document
 
     def execute(self):
+        submitted_version = self.document.get_current_version()
+
+        record = IHistory(self.proposal).append_record(
+            u'document_updated',
+            document_title=self.document.title,
+            submitted_version=submitted_version,
+        )
+        history_data = advancedjson.dumps({
+            'submitted_version': submitted_version,
+            'uuid': record.uuid,
+            })
+
         Transporter().transport_to(
             self.document,
             self.submitted_document.submitted_admin_unit_id,
             self.submitted_document.submitted_physical_path,
-            view='update-submitted-document')
+            view='update-submitted-document',
+            history_data=history_data)
 
-        session = create_session()
-        proposal_model = self.proposal.load_model()
-
-        submitted_version = self.document.get_current_version()
         submitted_document = SubmittedDocument.query.get_by_source(
             self.proposal, self.document)
         submitted_document.submitted_version = submitted_version
-
-        session.add(DocumentUpdated(
-            proposal=proposal_model,
-            submitted_document=submitted_document,
-            submitted_version=submitted_version,
-            document_title=self.document.title))
 
     def show_message(self):
         portal = api.portal.get()
@@ -443,27 +556,37 @@ class CopyProposalDocumentCommand(object):
                                 submitted_version=submitted_version)
         session.add(doc)
 
-        session.add(DocumentSubmitted(
-            proposal=proposal_model,
-            submitted_document=doc,
-            submitted_version=submitted_version,
-            document_title=self.document.title))
-
     def copy_document(self, target_path, target_admin_unit_id):
+        submitted_version = self.document.get_current_version()
+
+        record = IHistory(self.proposal).append_record(
+            u'document_submitted',
+            document_title=self.document.title,
+            submitted_version=submitted_version,
+        )
+
+        history_data = advancedjson.dumps({
+            'submitted_version': submitted_version,
+            'uuid': record.uuid,
+            })
+
         return SubmitDocumentCommand(
-            self.document, target_admin_unit_id, target_path).execute()
+            self.document, target_admin_unit_id, target_path,
+            history_data=history_data).execute()
 
 
 class OgCopyCommand(object):
 
-    def __init__(self, source, target_admin_unit_id, target_path):
+    def __init__(self, source, target_admin_unit_id, target_path, **kwargs):
         self.source = source
         self.target_path = target_path
         self.target_admin_unit_id = target_admin_unit_id
+        self.kwargs = kwargs
 
     def execute(self):
         return Transporter().transport_to(
-            self.source, self.target_admin_unit_id, self.target_path)
+            self.source, self.target_admin_unit_id, self.target_path,
+            **self.kwargs)
 
 
 class SubmitDocumentCommand(OgCopyCommand):
@@ -471,7 +594,7 @@ class SubmitDocumentCommand(OgCopyCommand):
     def execute(self):
         return Transporter().transport_to(
             self.source, self.target_admin_unit_id, self.target_path,
-            view='recieve-submitted-document')
+            view='recieve-submitted-document', **self.kwargs)
 
 
 class CreateExcerptCommand(OgCopyCommand):
@@ -479,4 +602,4 @@ class CreateExcerptCommand(OgCopyCommand):
     def execute(self):
         return Transporter().transport_to(
             self.source, self.target_admin_unit_id, self.target_path,
-            view='recieve-excerpt-document')
+            view='recieve-excerpt-document', **self.kwargs)

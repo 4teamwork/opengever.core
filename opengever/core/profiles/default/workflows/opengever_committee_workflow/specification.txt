@@ -1,0 +1,61 @@
+[Committee workflow]
+Role mapping:
+  manager => Manager
+  committee admin => CommitteeAdministrator
+  committee responsible => CommitteeResponsible
+  committee member => CommitteeMember
+
+Visible roles:
+  committee member
+
+Committee responsible role description:
+  The committe responsible is in charge of a committee.
+  This involves creating, planing and hold meetings
+  as well as configuring and deactivating the committee.
+  The committee responsible role is assigned automatically
+  to the group that can be configured per committee.
+
+Committee member role description:
+  A committe member is part of a committee and can view the committee data,
+  such as meetings and proposals.
+
+
+Transitions:
+  deactivate (Active => Inactive)
+  reactivate (Inactive => Active)
+
+
+transition-url = %%(content_url)s/@@committee_transition_controller?transition=%(transition)s
+
+
+General:
+  A committee admin can always perform the same actions as a committee responsible.
+  A committee admin can always manage security.
+
+  A manager can always view.
+  A manager can always edit.
+  A manager can always manage security.
+  A manager can always use the developer tools.
+  A manager can always use the REST API.
+
+
+Initial Status: Active
+Status Active:
+  A committee member can view.
+
+  A committee responsible can view.
+  A committee responsible can add.
+  A committee responsible can edit.
+  A committee responsible can deactivate.
+
+  A manager can perform the same actions as a committee responsible.
+
+
+Status Inactive:
+  A committee member can view.
+
+  A committee responsible can view.
+  A committee responsible can edit.
+  A committee responsible can reactivate.
+
+  A manager can perform the same actions as a committee responsible.

@@ -86,6 +86,9 @@ msgstr "Metadaten bearbeiten"
 msgid "Give Filing Number"
 msgstr "Ablagenummer vergeben"
 
+msgid "Info success"
+msgstr "Info"
+
 msgid "Meeting"
 msgstr "Sitzung"
 

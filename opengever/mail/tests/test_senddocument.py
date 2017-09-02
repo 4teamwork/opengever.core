@@ -162,6 +162,18 @@ f\xc3\xbcr Ernst Franz\r\n\r\nBesten Dank im Voraus"""
         self.assertEquals(event.intids, map(intids.getId, documents))
 
     @browsing
+    def test_send_msg_if_there_is_a_original_message(self, browser):
+        dossier = create(Builder("dossier"))
+        mail = create(Builder("mail").within(dossier)
+                      .with_dummy_message()
+                      .with_dummy_original_message())
+
+        mail = self.send_documents(dossier, [mail])
+
+        self.assert_attachment(mail, 'dummy.msg', 'application/vnd.ms-outlook')
+
+
+    @browsing
     def test_sent_mail_gets_filed_in_dossier(self, browser):
         dossier = create(Builder("dossier"))
         document = create(Builder("document")
@@ -219,30 +231,13 @@ f\xc3\xbcr Ernst Franz\r\n\r\nBesten Dank im Voraus"""
 
     @browsing
     def test_file_copy_field_not_shown_for_closed_dossier(self, browser):
-        fieldname = 'file_copy_in_dossier'
-
         dossier = create(Builder("dossier").in_state('dossier-state-resolved'))
 
         browser.login().open(dossier, view="send_documents")
 
         field = browser.find('File a copy of the sent mail in dossier')
-        self.assertIsNone(field, "The field should not be visible")
-
-        fields = browser.css('input[id="form-widgets-{}-0"]'.format(fieldname))
-        self.assertEqual(
-            1, len(fields),
-            "The field should be available but not be visible. "
-            "The browser wasn't able to find the field. "
-            "Available fields are: {}".format(
-                browser.css('input[name^="form.widgets"]'))
-            )
-
-        field = fields.first
-        self.assertEqual(
-            'disabled', field.get('disabled', None),
-            "The field {} is not disabled. "
-            "See the field: {}".format(
-                fieldname, field))
+        self.assertEquals('disabled', field.get('disabled'))
+        self.assertIsNone(field.get('checked'))
 
     @browsing
     def test_file_copy_field_not_shown_if_not_on_dossier(self, browser):
@@ -251,7 +246,8 @@ f\xc3\xbcr Ernst Franz\r\n\r\nBesten Dank im Voraus"""
         browser.login().open(inbox, view="send_documents")
 
         field = browser.find('File a copy of the sent mail in dossier')
-        self.assertIsNone(field, "The field should not be visible")
+        self.assertEquals('disabled', field.get('disabled'))
+        self.assertIsNone(field.get('checked'))
 
     def send_documents(self, container, documents, browser=default_browser, **kwargs):
         documents = ['/'.join(doc.getPhysicalPath()) for doc in documents]

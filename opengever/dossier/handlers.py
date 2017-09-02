@@ -11,6 +11,7 @@ from opengever.dossier.resolve import get_resolver
 from opengever.globalindex.handlers.task import sync_task
 from opengever.globalindex.handlers.task import TaskSqlSyncer
 from plone import api
+from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
 from Products.CMFCore.interfaces import IActionSucceededEvent
 from zope.component import getAdapter
 from zope.lifecycleevent import IObjectRemovedEvent
@@ -94,6 +95,9 @@ def reindex_contained_objects(dossier, event):
     show an outdated title in the ``subdossier`` column
     """
 
+    if ILocalrolesModifiedEvent.providedBy(event):
+        return
+
     catalog = api.portal.get_tool('portal_catalog')
     parent = aq_parent(aq_inner(dossier))
     is_subdossier = IDossierMarker.providedBy(parent)
@@ -110,6 +114,10 @@ def reindex_contained_objects(dossier, event):
 def reindex_containing_dossier(dossier, event):
     """Reindex the containging_dossier index for all the contained obects,
     when the title has changed."""
+
+    if ILocalrolesModifiedEvent.providedBy(event):
+        return
+
     if not IDossierMarker.providedBy(aq_parent(aq_inner(dossier))):
         for descr in event.descriptions:
             for attr in descr.attributes:
@@ -123,6 +131,13 @@ def reindex_containing_dossier(dossier, event):
                         if brain.portal_type in ['opengever.task.task',
                             'opengever.inbox.forwarding']:
                             sync_task(brain.getObject(), event)
+
+
+@grok.subscribe(IDossierMarker, IObjectMovedEvent)
+def reindex_is_subdossier(dossier, event):
+    """Reindex the is_subdossier index after the dossier have been moved.
+    """
+    dossier.reindexObject(idxs=['is_subdossier'])
 
 
 @grok.subscribe(IDossierMarker, IObjectCopiedEvent)

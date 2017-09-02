@@ -8,7 +8,6 @@ from zope.intid.interfaces import IIntIds
 
 
 class Remover(object):
-
     def __init__(self, documents):
         self.documents = documents
 
@@ -80,12 +79,9 @@ class RemoveConditionsChecker(object):
     def get_backreferences(self):
         catalog = getUtility(ICatalog)
         intids = getUtility(IIntIds)
-        objs = []
 
         relations = catalog.findRelations(
             {'to_id': intids.getId(self.document),
              'from_attribute': 'relatedItems'})
-        for relation in relations:
-            objs.append(intids.queryObject(relation.from_id))
 
-        return objs
+        return [rel.from_object for rel in relations if rel.from_object]

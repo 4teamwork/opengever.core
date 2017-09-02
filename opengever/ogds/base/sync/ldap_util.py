@@ -1,11 +1,12 @@
 from __future__ import absolute_import
-from five import grok
 from ldap.controls import SimplePagedResultsControl
 from opengever.ogds.base.interfaces import ILDAPSearch
 from Products.LDAPMultiPlugins import ActiveDirectoryMultiPlugin
 from Products.LDAPUserFolder.interfaces import ILDAPUserFolder
 from Products.LDAPUserFolder.LDAPDelegate import filter_format
 from Products.LDAPUserFolder.utils import GROUP_MEMBER_MAP
+from zope.component import adapter
+from zope.interface import implementer
 import ldap
 import logging
 import re
@@ -30,13 +31,13 @@ SUBSCHEMA_ATTRS = ['attributeTypes', 'dITContentRules', 'dITStructureRules',
                    'objectClasses']
 
 
-class LDAPSearch(grok.Adapter):
+@implementer(ILDAPSearch)
+@adapter(ILDAPUserFolder)
+class LDAPSearch(object):
     """Adapter to search LDAP for users and groups.
 
     Uses connection settings defined in the adapted LDAPUserFolder.
     """
-    grok.provides(ILDAPSearch)
-    grok.context(ILDAPUserFolder)
 
     def __init__(self, context):
         self.is_ad = False
@@ -111,7 +112,6 @@ class LDAPSearch(grok.Adapter):
         """Return the LDAP schema of the server we're currently connected to
         as an instance of ldap.schema.subentry.SubSchema.
         """
-
         if not hasattr(self, '_schema'):
             # Cache information about which attributes are multivalued.
             # This is schema dependent, so we initialize this cache the first
@@ -212,12 +212,11 @@ class LDAPSearch(grok.Adapter):
     def search(self, base_dn=None, scope=ldap.SCOPE_SUBTREE,
                filter='(objectClass=*)', attrs=[]):
         """Search LDAP for entries matching the given criteria, using result
-        pagination if apprpriate, and return the results immediately.
+        pagination if appropriate, and return the results immediately.
 
         `base_dn`, `scope`, `filter` and `attrs` have the same meaning as the
         corresponding arguments on the ldap.search* methods.
         """
-
         if base_dn is None:
             base_dn = self.base_dn
 
@@ -263,9 +262,9 @@ class LDAPSearch(grok.Adapter):
 
         return mapped_results
 
-    def get_groups(self):
+    def get_groups(self, use_lookup_base=False):
         """Return all LDAP groups below the adapted LDAPUserFolder's
-        groups_base.
+        `groups_base` (or the `lookup_groups_base` if `use_lookup_base` is True).
 
         If defined, the `group_filter` property on the adapted LDAPUserFolder
         is used to further filter the results.
@@ -285,8 +284,14 @@ class LDAPSearch(grok.Adapter):
         custom_filter = self.get_group_filter()
         search_filter = self._combine_filters(custom_filter, search_filter)
 
-        results = self.search(base_dn=self.context.groups_base,
-                              filter=search_filter)
+        if use_lookup_base:
+            base_dn = getattr(
+                self.context, 'lookup_groups_base', self.context.groups_base)
+        else:
+            base_dn = self.context.groups_base
+
+        results = self.search(base_dn=base_dn, filter=search_filter)
+
         mapped_results = []
         for result in results:
             dn, entry = result
@@ -303,7 +308,7 @@ class LDAPSearch(grok.Adapter):
         children = []
 
         if self._cached_groups is None:
-            self._cached_groups = self.get_groups()
+            self._cached_groups = self.get_groups(use_lookup_base=True)
 
         all_groups = self._cached_groups
 
@@ -333,7 +338,7 @@ class LDAPSearch(grok.Adapter):
             group_info['dn'] = group_dn
 
             if self._cached_groups is None:
-                self._cached_groups = self.get_groups()
+                self._cached_groups = self.get_groups(use_lookup_base=True)
 
             child_groups = self.get_children(group_dn)
             child_groups.append(group_dn)

@@ -1,5 +1,4 @@
 from AccessControl import Unauthorized
-from five import grok
 from ftw.tabbedview.browser.tabbed import TabbedView
 from opengever.activity import is_activity_feature_enabled
 from opengever.globalindex.model.task import Task
@@ -21,7 +20,6 @@ from plone.memoize.view import memoize_contextless
 from Products.CMFPlone.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from sqlalchemy.exc import OperationalError
-from zope.interface import Interface
 import AccessControl
 
 
@@ -160,10 +158,6 @@ class PersonalOverview(TabbedView):
 
 
 class MyDossiers(Dossiers):
-    grok.name('tabbedview_view-mydossiers')
-    grok.require('zope2.View')
-    grok.context(Interface)
-
     search_options = {'responsible': authenticated_member,
                       'is_subdossier': False}
 
@@ -180,18 +174,11 @@ class MyDossiers(Dossiers):
 
 
 class MyDocumentsProxy(DocumentsProxy):
-    grok.name('tabbedview_view-mydocuments-proxy')
-    grok.context(Interface)
-
     listview = "tabbedview_view-mydocuments"
     galleryview = "tabbedview_view-mydocuments-gallery"
 
 
 class MyDocuments(Documents):
-    grok.name('tabbedview_view-mydocuments')
-    grok.require('zope2.View')
-    grok.context(Interface)
-
     search_options = {'Creator': authenticated_member,
                       'trashed': False}
 
@@ -232,10 +219,6 @@ class MyTasks(GlobalTaskListingTab):
     the basic features of tabbedview such as searching and batching.
     """
 
-    grok.name('tabbedview_view-mytasks')
-    grok.require('zope2.View')
-    grok.context(Interface)
-
     enabled_actions = [
         'pdf_taskslisting',
         'export_tasks',
@@ -258,10 +241,6 @@ class IssuedTasks(GlobalTaskListingTab):
     Queries all admin units.
     """
 
-    grok.name('tabbedview_view-myissuedtasks')
-    grok.require('zope2.View')
-    grok.context(Interface)
-
     enabled_actions = [
         'pdf_taskslisting',
         'export_tasks',
@@ -278,8 +257,6 @@ class IssuedTasks(GlobalTaskListingTab):
 
 
 class MyProposals(Proposals):
-    grok.name('tabbedview_view-myproposals')
-    grok.context(Interface)
 
     def get_base_query(self):
         return Proposal.query.by_creator(api.user.get_current().getId())
@@ -289,11 +266,6 @@ class AllTasks(GlobalTaskListingTab):
     """Lists all tasks assigned to this clients.
     Bases on MyTasks
     """
-
-    grok.name('tabbedview_view-alltasks')
-    grok.require('zope2.View')
-    grok.context(Interface)
-
     enabled_actions = [
         'pdf_taskslisting',
         'export_tasks',
@@ -308,10 +280,6 @@ class AllTasks(GlobalTaskListingTab):
 class AllIssuedTasks(GlobalTaskListingTab):
     """List all tasks which are stored physically on this client.
     """
-
-    grok.name('tabbedview_view-allissuedtasks')
-    grok.require('zope2.View')
-    grok.context(Interface)
 
     enabled_actions = [
         'pdf_taskslisting',

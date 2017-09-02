@@ -56,7 +56,7 @@ class TestDossierReporterWithFilingNumberSupport(FunctionalTestCase):
              u'Client1-Leitung-2012-1',
              u'active',
              u'Client1 / 1'],
-            [cell.value for cell in workbook.active.rows[1]])
+            [cell.value for cell in list(workbook.active.rows)[1]])
 
 
 class TestDossierReporter(FunctionalTestCase):
@@ -93,6 +93,8 @@ class TestDossierReporter(FunctionalTestCase):
             tmpfile.flush()
             workbook = load_workbook(tmpfile.name)
 
+        rows = list(workbook.active.rows)
+
         self.assertSequenceEqual(
             [u'Export1 Dossier',
              datetime(2012, 1, 1),
@@ -100,7 +102,7 @@ class TestDossierReporter(FunctionalTestCase):
              u'Test User (test_user_1_)',
              u'active',
              u'Client1 / 1'],
-            [cell.value for cell in workbook.active.rows[1]])
+            [cell.value for cell in rows[1]])
         self.assertSequenceEqual(
             [u'Foo Dossier',
              datetime(2012, 1, 1),
@@ -108,7 +110,7 @@ class TestDossierReporter(FunctionalTestCase):
              u'Test User (test_user_1_)',
              u'active',
              u'Client1 / 2'],
-            [cell.value for cell in workbook.active.rows[2]])
+            [cell.value for cell in rows[2]])
 
     def test_filing_no_year(self):
         self.assertEquals(

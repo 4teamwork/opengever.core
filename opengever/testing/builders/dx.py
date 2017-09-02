@@ -8,12 +8,15 @@ from opengever.document.document import Document
 from opengever.globalindex.handlers.task import sync_task
 from opengever.mail.mail import OGMail
 from opengever.meeting import is_word_meeting_implementation_enabled
+from opengever.meeting.committee import ICommittee
 from opengever.meeting.model import Period
 from opengever.meeting.proposal import Proposal
+from opengever.meeting.proposal import SubmittedProposal
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.testing import assets
 from opengever.testing.builders.base import TEST_USER_ID
 from opengever.testing.builders.translated import TranslatedTitleBuilderMixin
+from opengever.testing.model import TransparentModelLoader
 from opengever.trash.trash import ITrashable
 from plone import api
 from plone.namedfile.file import NamedBlobFile
@@ -304,8 +307,9 @@ class InboxContainerBuilder(TranslatedTitleBuilderMixin, DexterityBuilder):
 builder_registry.register('inbox_container', InboxContainerBuilder)
 
 
-class ProposalBuilder(DexterityBuilder):
+class ProposalBuilder(TransparentModelLoader, DexterityBuilder):
     portal_type = 'opengever.meeting.proposal'
+    auto_loaded_models = ('committee', )
 
     def __init__(self, session):
         super(ProposalBuilder, self).__init__(session)
@@ -314,29 +318,48 @@ class ProposalBuilder(DexterityBuilder):
         self.model_arguments = None
         self._transition = None
         self._proposal_file_data = 'file body'
+        self._also_return_submitted_proposal = False
 
     def with_proposal_file(self, data):
         self._proposal_file_data = data
         return self
 
     def before_create(self):
+        if ICommittee.providedBy(self.container):
+            if 'committee' not in self.arguments:
+                self.argumets['committee'] = self.container
+
+        super(ProposalBuilder, self).before_create()
+
         self.arguments, self.model_arguments = Proposal.partition_data(
             self.arguments)
 
     def after_create(self, obj):
         obj.create_model(self.model_arguments, self.container)
 
-        if self._transition:
-            obj.execute_transition(self._transition)
-
         if is_word_meeting_implementation_enabled():
             obj.create_proposal_document(
-                filename='proposal_document.docx',
+                filename=u'proposal_document.docx',
                 data=self._proposal_file_data,
                 content_type='application/vnd.openxmlformats'
                 '-officedocument.wordprocessingml.document')
 
+        if self._transition:
+            obj.execute_transition(self._transition)
+
         super(ProposalBuilder, self).after_create(obj)
+
+    def create(self):
+        proposal = super(ProposalBuilder, self).create()
+
+        if not self._also_return_submitted_proposal:
+            return proposal
+
+        proposal_model = proposal.load_model()
+        path = proposal_model.submitted_physical_path.encode('utf-8')
+        submitted_proposal = api.portal.get().restrictedTraverse(path)
+
+        return proposal, submitted_proposal
 
     def relate_to(self, *documents):
         return self.having(relatedItems=documents)
@@ -349,26 +372,45 @@ class ProposalBuilder(DexterityBuilder):
         self._transition = 'pending-cancelled'
         return self
 
+    def with_submitted(self):
+        """Will return proposal and submitted proposal after creating."""
+
+        self.as_submitted()
+        self._also_return_submitted_proposal = True
+        return self
+
 builder_registry.register('proposal', ProposalBuilder)
 
 
-class SubmittedProposalBuilder(object):
+class SubmittedProposalBuilder(TransparentModelLoader, DexterityBuilder):
+
+    portal_type = 'opengever.meeting.submittedproposal'
+    auto_loaded_models = ('committee',)
 
     def __init__(self, session):
-        self.session = session
-        self.proposal = None
+        super(SubmittedProposalBuilder, self).__init__(session)
+        self.arguments = {'title': 'Fooo',
+                          'language': TranslatedTitle.FALLBACK_LANGUAGE,
+                          'physical_path': 'i-am-a-fake',
+                          'workflow_state': 'invalid',
+                          'dossier_reference_number': '123',
+                          'repository_folder_title': 'repo',
+                          'creator': TEST_USER_ID}
+        self.model_arguments = None
 
-    def submitting(self, proposal):
-        self.proposal = proposal
-        return self
+    def before_create(self):
 
-    def create(self):
-        assert self.proposal, 'source proposal must be specified'
+        super(SubmittedProposalBuilder, self).before_create()
 
-        self.proposal.execute_transition('pending-submitted')
-        proposal_model = self.proposal.load_model()
-        path = proposal_model.submitted_physical_path.encode('utf-8')
-        return api.portal.get().restrictedTraverse(path)
+        # hackishly create the proposal model when creating the submitted
+        # proposal. This is only for testing and not done so in production.
+        self.arguments, self.model_arguments = SubmittedProposal.partition_data(
+            self.arguments)
+
+    def after_create(self, obj):
+        model = obj.create_model(self.model_arguments, self.container)
+        obj.sync_model(proposal_model=model)
+        super(SubmittedProposalBuilder, self).after_create(obj)
 
 builder_registry.register('submitted_proposal', SubmittedProposalBuilder)
 

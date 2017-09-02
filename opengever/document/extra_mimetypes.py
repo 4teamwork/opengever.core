@@ -73,6 +73,8 @@ ADDITIONAL_TYPES = [
     # MS Excel Spreadsheet (Binary, Macro Enabled)
     ('application/vnd.ms-excel.sheet.binary.macroEnabled.12', '.xlsb'),
 
+    # MS Outlook
+    ('application/vnd.ms-outlook', '.msg'),
 
     # MS Word
     ('application/msword', '.doc'),

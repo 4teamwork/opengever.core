@@ -77,7 +77,7 @@ class XLSReporter(object):
         workbook = Workbook()
         sheet = workbook.active
         sheet.title = self.sheet_title
-        sheet.header_footer.center_footer.text = self.footer
+        sheet.oddFooter.center.text = self.footer
 
         self.insert_label_row(sheet)
         self.insert_value_rows(sheet)

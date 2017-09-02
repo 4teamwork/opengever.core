@@ -1,8 +1,14 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from opengever.base.interfaces import IRedirector
 from opengever.base.redirector import REDIRECTOR_COOKIE_NAME
 from opengever.base.redirector import RedirectorCookie
 from opengever.base.redirector import RedirectorViewlet
 from opengever.testing import FunctionalTestCase
+from plone.app.caching.interfaces import IETagValue
+from zope.component import getMultiAdapter
+import hashlib
+import json
 
 
 class TestRedirectorCookie(FunctionalTestCase):
@@ -98,3 +104,35 @@ class TestRedirectorViewlet(FunctionalTestCase):
         self.assertIn("http://www.google.ch", viewlet.render().strip())
 
         self.assertEquals("", viewlet.render())
+
+    def test_etag_value_is_md5_hash_of_cookie_content(self):
+        document = create(Builder('document'))
+        url = 'http://nohost/plone/document-1/externaledit'
+        target = 'named-window'
+
+        self.assertIsNone(self.get_etag_value_for(document))
+
+        # register redirect
+        redirector = IRedirector(self.request)
+        redirector.redirect(url, target=target)
+
+        data = json.dumps([{'url': url, 'target': target, 'timeout': 0}])
+        m = hashlib.md5()
+        m.update(data.encode('utf-8'))
+        expected_hash = m.hexdigest()
+
+        self.assertEquals(expected_hash,
+                          self.get_etag_value_for(document))
+
+        # Read and delete redirect
+        viewlet = RedirectorViewlet(self.portal, self.request, {}, {})
+        viewlet.render()
+
+        self.assertIsNone(self.get_etag_value_for(document))
+
+    def get_etag_value_for(self, document):
+        view = document.unrestrictedTraverse('@@tabbed_view')
+        adapter = getMultiAdapter((view, self.request),
+                                  IETagValue,
+                                  name='redirector')
+        return adapter()

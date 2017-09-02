@@ -2,13 +2,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2017-06-07 12:34+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2017-09-02 08:00+0000\n"
+"Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
+"gever/opengever-trash/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 2.13.1\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
@@ -16,15 +19,15 @@ msgstr ""
 
 #: ./opengever/trash/trash.py:119
 msgid "Trashing ${title} is forbidden"
-msgstr ""
+msgstr "L'objet ${title} ne doit pas être transféré dans la corbeille."
 
 #: ./opengever/trash/trash.py:158
 msgid "Untrashing ${title} is forbidden"
-msgstr ""
+msgstr "L'objet ${title} ne doit pas être restauré depuis la corbeille."
 
 #: ./opengever/trash/trash.py:134
 msgid "You have not selected any items."
-msgstr ""
+msgstr "Vous n'avez choisi aucun objet"
 
 #: ./opengever/trash/trash.py:100
 msgid "could not trash the object ${obj}, it is already trashed"
@@ -101,4 +104,3 @@ msgstr "Effacer"
 #: ./opengever/trash/trash.py:128
 msgid "the object ${obj} trashed"
 msgstr "L'objet ${obj} a été déplacé dans la corbeille."
-

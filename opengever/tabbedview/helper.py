@@ -10,7 +10,9 @@ from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize import ram
 from plone.uuid.interfaces import IUUID
 from Products.CMFCore.interfaces._tools import IMemberData
+from Products.CMFPlone.utils import safe_unicode
 from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
+from Products.ZCatalog.interfaces import ICatalogBrain
 from zope.component import getUtility
 from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
@@ -96,16 +98,33 @@ def linked_ogds_author(item, author):
     return Actor.lookup(author).get_link()
 
 
-def linked_document_subdossier(item, value):
+def linked_containing_subdossier(item, value):
     subdossier_title = item.containing_subdossier
     if not subdossier_title:
         return ''
 
-    url = "{}/redirect_to_parent_dossier".format(item.getURL())
-    title = escape_html(subdossier_title)
+    title = safe_unicode(escape_html(subdossier_title))
 
-    link = '<a href="{}" title="{}" class="subdossierLink">{}</a>'.format(
-        url, title, title)
+    url = get_url(item)
+    if not url:
+        return title
+
+    redirect_url = u"{}/redirect_to_parent_dossier".format(safe_unicode(url))
+    link = u'<a href="{}" title="{}" class="subdossierLink">{}</a>'.format(
+        redirect_url, title, title)
+    return link
+
+
+def linked_containing_maindossier(item, value):
+    title = safe_unicode(escape_html(item.containing_dossier))
+
+    url = get_url(item)
+    if not url:
+        return title
+
+    redirect_url = u"{}/redirect_to_main_dossier".format(safe_unicode(get_url(item)))
+    link = u'<a href="{}" title="{}" class="maindossierLink">{}</a>'.format(
+        redirect_url, title, title)
     return link
 
 
@@ -117,13 +136,11 @@ def linked(item, value):
     if isinstance(value, unicode):
         value = value.encode('utf-8')
 
-    # Determine URL method and UID
-    url_method = lambda: '#'
-    if hasattr(item, 'getURL'):
-        url_method = item.getURL
+    # Determine URL and UID
+    url = get_url(item)
+    if ICatalogBrain.providedBy(item):
         uid = item.UID
-    elif hasattr(item, 'absolute_url'):
-        url_method = item.absolute_url
+    else:
         uid = IUUID(item)
 
     # Construct CSS class
@@ -133,7 +150,7 @@ def linked(item, value):
     value = escape_html(value)
 
     link = '<a class="rollover-breadcrumb %s" href="%s" data-uid="%s">%s</a>' % (
-        css_class, url_method(), uid, value)
+        css_class, url, uid, value)
 
     wrapper = '<span class="linkWrapper">%s</span>' % link
     return wrapper
@@ -246,11 +263,9 @@ def external_edit_link(item, value):
     with the external_edit mode selected """
     if item.portal_type != 'opengever.document.document':
         return ''
-    if hasattr(item, 'getURL'):
-        url = item.getURL()
-    elif hasattr(item, 'absolute_url'):
-        url = item.absolute_url()
-    else:
+
+    url = get_url(item)
+    if not url:
         return ''
 
     url = '%s/editing_document' % url
@@ -269,6 +284,15 @@ def translated_string(domain='plone'):
         return translate(
             value, context=getRequest(), domain=domain)
     return _translate
+
+
+def get_url(item):
+    if hasattr(item, 'getURL'):
+        return item.getURL()
+    elif hasattr(item, 'absolute_url'):
+        return item.absolute_url()
+    else:
+        return ''
 
 
 def escape_html_transform(item, value):

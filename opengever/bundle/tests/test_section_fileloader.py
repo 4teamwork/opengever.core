@@ -7,6 +7,7 @@ from opengever.bundle.sections.bundlesource import BUNDLE_KEY
 from opengever.bundle.sections.bundlesource import BUNDLE_PATH_KEY
 from opengever.bundle.sections.fileloader import FileLoaderSection
 from opengever.bundle.tests import MockTransmogrifier
+from opengever.mail.mail import IOGMail
 from opengever.testing import FunctionalTestCase
 from pkg_resources import resource_filename
 from plone import api
@@ -47,7 +48,6 @@ class TestFileLoader(FunctionalTestCase):
             u"_type": u"opengever.document.document",
             u"_path": relative_path,
             u"filepath": u"files/beschluss.pdf",
-            u"_object": doc,
         }
         section = self.setup_section(previous=[item])
         list(section)
@@ -65,7 +65,6 @@ class TestFileLoader(FunctionalTestCase):
             u"_type": u"opengever.document.document",
             u"_path": relative_path,
             u"filepath": u"files/beschluss.pdf",
-            u"_object": doc,
         }
         section = self.setup_section(previous=[item])
         list(section)
@@ -74,10 +73,11 @@ class TestFileLoader(FunctionalTestCase):
         self.assertEqual('beschluss', doc.title)
 
     def test_tracks_missing_files_in_errors(self):
+        mail = create(Builder('mail'))
         item = {
             u"guid": u"12345",
             u"_type": u"opengever.document.document",
-            u"_path": '/relative/path/to/doc',
+            u"_path": '/'.join(mail.getPhysicalPath()[2:]),
             u"filepath": u"files/missing.file",
         }
         section = self.setup_section(previous=[item])
@@ -85,14 +85,15 @@ class TestFileLoader(FunctionalTestCase):
 
         abs_filepath = '/'.join((self.bundle_path, 'files/missing.file'))
         self.assertEqual(
-            [(u'12345', abs_filepath, '/relative/path/to/doc')],
+            [(u'12345', abs_filepath, 'document-1')],
             self.bundle.errors['files_not_found'])
 
     def test_tracks_unmapped_unc_files_in_errors(self):
+        mail = create(Builder('mail'))
         item = {
             u"guid": u"12345",
             u"_type": u"opengever.document.document",
-            u"_path": '/relative/path/to/doc',
+            u"_path": '/'.join(mail.getPhysicalPath()[2:]),
             u"filepath": u'\\\\host\\unmapped\\foo.docx',
         }
         section = self.setup_section(previous=[item])
@@ -103,23 +104,8 @@ class TestFileLoader(FunctionalTestCase):
             self.bundle.errors['unmapped_unc_mounts'])
 
         self.assertEqual(
-            [(u'12345', item['filepath'], '/relative/path/to/doc')],
+            [(u'12345', item['filepath'], 'document-1')],
             self.bundle.errors['files_unresolvable_path'])
-
-    def test_tracks_skipped_msg_files_in_errors(self):
-        item = {
-            u"guid": u"12345",
-            u"_type": u"opengever.document.document",
-            u"_path": '/relative/path/to/doc',
-            u"filepath": u"files/outlook.msg",
-        }
-        section = self.setup_section(previous=[item])
-        list(section)
-
-        abs_filepath = '/'.join((self.bundle_path, 'files/outlook.msg'))
-        self.assertEqual(
-            [(u'12345', abs_filepath, '/relative/path/to/doc')],
-            self.bundle.errors['files_invalid_types'])
 
     def test_handles_eml_mails(self):
         mail = create(Builder('mail'))
@@ -130,7 +116,6 @@ class TestFileLoader(FunctionalTestCase):
             u"_type": u"ftw.mail.mail",
             u"_path": relative_path,
             u"filepath": u"files/sample.eml",
-            u"_object": mail,
         }
         section = self.setup_section(previous=[item])
         list(section)
@@ -141,6 +126,25 @@ class TestFileLoader(FunctionalTestCase):
         self.assertEqual('lorem-ipsum.eml', mail.message.filename)
         self.assertEqual(True, mail.digitally_available)
 
+    def test_handles_msg_mails(self):
+        mail = create(Builder('mail'))
+        self.assertIsNone(mail.message)
+        relative_path = '/'.join(mail.getPhysicalPath()[2:])
+        item = {
+            u"guid": u"12345",
+            u"_type": u"ftw.mail.mail",
+            u"_path": relative_path,
+            u"filepath": u"files/sample.eml",
+            u"original_message_path": u"files/sample.msg",
+        }
+        section = self.setup_section(previous=[item])
+        list(section)
+
+        self.assertEqual(
+            u'sample.msg', IOGMail(mail).original_message.filename)
+        self.assertEqual(13824, len(IOGMail(mail).original_message.data))
+        self.assertEqual(u'Lorem Ipsum', mail.title)
+
     def test_uses_subject_as_title_only_when_no_title_is_given(self):
         mail2 = create(Builder('mail').titled(u'Test Mail'))
         item = {
@@ -148,7 +152,6 @@ class TestFileLoader(FunctionalTestCase):
             u"_type": u"ftw.mail.mail",
             u"_path": '/'.join(mail2.getPhysicalPath()[2:]),
             u"filepath": u"files/sample.eml",
-            u"_object": mail2,
             u"title": 'Test Mail',
         }
         section = self.setup_section(previous=[item])

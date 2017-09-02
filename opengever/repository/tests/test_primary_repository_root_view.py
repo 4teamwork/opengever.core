@@ -1,6 +1,6 @@
 from ftw.testing import MockTestCase
 from mocker import KWARGS
-from opengever.repository.repositoryroot import PrimaryRepositoryRoot
+from opengever.repository.browser.primary_repository_root import PrimaryRepositoryRoot
 from zope.publisher.interfaces import NotFound
 
 
@@ -62,4 +62,4 @@ class TestPrimaryRepositoryRoot(MockTestCase):
         self.expect(request.RESPONSE.redirect('http://nohost/site/root2'))
 
         self.replay()
-        PrimaryRepositoryRoot(context, request).render()
+        PrimaryRepositoryRoot(context, request)()

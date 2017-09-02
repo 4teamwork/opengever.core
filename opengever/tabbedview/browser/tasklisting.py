@@ -1,5 +1,3 @@
-from five import grok
-from ftw.journal.interfaces import IJournalizable
 from ftw.table import helper
 from ftw.table.interfaces import ITableSource, ITableSourceConfig
 from opengever.globalindex.model.task import Task
@@ -12,6 +10,7 @@ from opengever.tabbedview.filters import Filter
 from opengever.tabbedview.filters import FilterList
 from opengever.tabbedview.filters import PendingTasksFilter
 from opengever.tabbedview.helper import display_org_unit_title_condition
+from opengever.tabbedview.helper import linked_containing_maindossier
 from opengever.tabbedview.helper import org_unit_title_helper
 from opengever.tabbedview.helper import readable_date_set_invisibles
 from opengever.tabbedview.helper import readable_ogds_author
@@ -20,6 +19,8 @@ from opengever.tabbedview.helper import workflow_state
 from opengever.task.helper import task_type_helper
 from sqlalchemy import and_, or_
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
+from zope.component import adapter
+from zope.interface import implementer
 from zope.interface import implements
 from zope.interface import Interface
 
@@ -38,9 +39,6 @@ class GlobalTaskListingTab(BaseListingTab):
     """
 
     implements(IGlobalTaskTableSourceConfig)
-
-    grok.context(IJournalizable)
-    grok.require('zope2.View')
 
     template = ViewPageTemplateFile("generic_with_filters.pt")
 
@@ -105,7 +103,8 @@ class GlobalTaskListingTab(BaseListingTab):
          'transform': helper.readable_date},
 
         {'column': 'containing_dossier',
-         'column_title': _('containing_dossier', 'Dossier'), },
+         'column_title': _('containing_dossier', 'Dossier'),
+         'transform': linked_containing_maindossier},
 
         {'column': 'issuing_org_unit',
          'column_title': _('column_issuing_org_unit',
@@ -120,12 +119,11 @@ class GlobalTaskListingTab(BaseListingTab):
         )
 
 
+@implementer(ITableSource)
+@adapter(IGlobalTaskTableSourceConfig, Interface)
 class GlobalTaskTableSource(SqlTableSource):
     """Source adapter for Tasks we got from SQL
     """
-
-    grok.implements(ITableSource)
-    grok.adapts(IGlobalTaskTableSourceConfig, Interface)
 
     searchable_columns = [Task.title, Task.text,
                           Task.sequence_number, Task.responsible]

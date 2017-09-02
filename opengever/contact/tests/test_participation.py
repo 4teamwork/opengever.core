@@ -64,22 +64,17 @@ class TestDossierParticipation(FunctionalTestCase):
                            .id('peter')
                            .having(firstname=u'Hans', lastname=u'Peter')
                            .as_contact_adapter())
-        ogds_participation = create(
-            Builder('ogds_user_participation')
-            .for_dossier(dossier)
-            .for_ogds_user(ogds_user))
-        peters_participation = create(
-            Builder('contact_participation').having(
-                contact=peter,
-                dossier_oguid=Oguid.for_object(dossier)))
-        organization_participation = create(
-            Builder('contact_participation').having(
-                contact=organization,
-                dossier_oguid=Oguid.for_object(dossier)))
-        org_role_participation = create(
-            Builder('org_role_participation').having(
-                org_role=org_role,
-                dossier_oguid=Oguid.for_object(dossier)))
+        create(Builder('ogds_user_participation')
+               .for_dossier(dossier)
+               .for_ogds_user(ogds_user))
+        create(Builder('contact_participation')
+               .having(contact=peter, dossier_oguid=Oguid.for_object(dossier)))
+        create(Builder('contact_participation')
+               .having(contact=organization,
+                       dossier_oguid=Oguid.for_object(dossier)))
+        create(Builder('org_role_participation')
+               .having(org_role=org_role,
+                       dossier_oguid=Oguid.for_object(dossier)))
 
         original_participations = Participation.query.by_dossier(dossier).all()
 
@@ -95,7 +90,8 @@ class TestParticipationWrapper(FunctionalTestCase):
 
     def setUp(self):
         super(TestParticipationWrapper, self).setUp()
-        self.dossier = create(Builder('dossier'))
+        self.dossier = create(Builder('dossier')
+                              .titled(u'Dossier'))
         self.hans = create(Builder('person')
                            .having(firstname=u'Hans', lastname=u'M\xfcller'))
         self.participation = create(Builder('contact_participation')
@@ -111,8 +107,8 @@ class TestParticipationWrapper(FunctionalTestCase):
             [u'Edit Participation of M\xfcller Hans'],
             browser.css('h1').text)
         self.assertEqual(
-            [u'You are here: Client1 / dossier-1 / Participation of M\xfcller Hans'],
-            browser.css('#portal-breadcrumbs').text)
+            ['Client1', u'Dossier', u'Participation of M\xfcller Hans'],
+            browser.css('#portal-breadcrumbs li').text)
 
     @browsing
     def test_cross_injection_raises_unauthorized(self, browser):
@@ -469,9 +465,9 @@ class TestEditForm(FunctionalTestCase):
                            .id('peter')
                            .having(firstname=u'Hans', lastname=u'Peter')
                            .as_contact_adapter())
-        participation = create(Builder('ogds_user_participation')
-                               .for_dossier(self.dossier)
-                               .for_ogds_user(ogds_user))
+        create(Builder('ogds_user_participation')
+               .for_dossier(self.dossier)
+               .for_ogds_user(ogds_user))
 
         browser.login().open(self.dossier,
                              view=u'tabbedview_view-participations')

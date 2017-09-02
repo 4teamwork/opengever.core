@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-06-07 12:34+0000\n"
+"POT-Creation-Date: 2017-07-03 12:27+0000\n"
 "PO-Revision-Date: 2014-11-19 12:25+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -177,9 +177,24 @@ msgid "label_dossier_zipped"
 msgstr "Dossier in ZIP-Export aufgenommen: ${title}"
 
 #. Default: "Download copy"
-#: ./opengever/journal/handlers.py:507
+#: ./opengever/journal/handlers.py:520
 msgid "label_file_copy_downloaded"
 msgstr "Download Kopie"
+
+#. Default: "current version (${version_id})"
+#: ./opengever/journal/handlers.py:513
+msgid "label_file_copy_downloaded_actual_version"
+msgstr "aktuelle Version (${version_id})"
+
+#. Default: "version ${version_id}"
+#: ./opengever/journal/handlers.py:516
+msgid "label_file_copy_downloaded_version"
+msgstr "Version ${version_id}"
+
+#. Default: "${title} ${version_string}"
+#: ./opengever/journal/handlers.py:525
+msgid "label_file_copy_downloaded_with_version"
+msgstr "${title} ${version_string}"
 
 #. Default: "Local roles aquistion activated."
 #: ./opengever/journal/handlers.py:296

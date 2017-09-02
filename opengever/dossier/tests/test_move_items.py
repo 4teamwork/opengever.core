@@ -3,7 +3,6 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import assert_no_error_messages
 from ftw.testbrowser.pages.statusmessages import error_messages
-from opengever.base.interfaces import IReferenceNumber
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
@@ -280,6 +279,19 @@ class TestMoveItemsWithTestbrowser(FunctionalTestCase):
             task=task, target=self.target_dossier)
 
         self.assertIn(task, self.target_dossier.objectValues())
+
+    @browsing
+    def test_move_items_within_templatefolder_is_possible(self, browser):
+        templatefolder = create(Builder('templatefolder'))
+        subtemplatefolder = create(Builder('templatefolder').within(templatefolder))
+
+        document = create(Builder('document').within(templatefolder))
+
+        self.move_items(
+            browser, src=templatefolder,
+            obj=document, target=subtemplatefolder)
+
+        self.assertIn(document, subtemplatefolder.objectValues())
 
     @browsing
     def test_paste_action_not_visible_for_closed_dossiers(self, browser):

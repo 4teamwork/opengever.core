@@ -7,20 +7,25 @@ from opengever.meeting.committeeroles import CommitteeRoles
 from opengever.meeting.container import ModelContainer
 from opengever.meeting.model import Committee as CommitteeModel
 from opengever.meeting.model import Meeting
+from opengever.meeting.model import Membership
 from opengever.meeting.model import Period
 from opengever.meeting.service import meeting_service
 from opengever.meeting.sources import repository_folder_source
 from opengever.meeting.sources import sablon_template_source
 from opengever.meeting.wrapper import MeetingWrapper
+from opengever.meeting.wrapper import MembershipWrapper
 from opengever.meeting.wrapper import PeriodWrapper
 from opengever.ogds.base.utils import ogds_service
 from plone import api
 from plone.directives import form
+from plone.i18n.normalizer.interfaces import IIDNormalizer
 from z3c.form.validator import WidgetValidatorDiscriminators
 from z3c.relationfield.schema import RelationChoice
 from zope import schema
+from zope.component import getUtility
 from zope.interface import Interface
 from zope.schema.interfaces import IContextSourceBinder
+from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
 
 
@@ -28,6 +33,7 @@ from zope.schema.vocabulary import SimpleVocabulary
 def get_group_vocabulary(context):
     service = ogds_service()
     userid = api.user.get_current().getId()
+    normalize = getUtility(IIDNormalizer).normalize
     terms = []
 
     if api.user.has_permission('cmf.ManagePortal', obj=context):
@@ -36,8 +42,10 @@ def get_group_vocabulary(context):
         groups = service.assigned_groups(userid)
 
     for group in groups:
-        terms.append(SimpleVocabulary.createTerm(
-            group.groupid, group.groupid, group.title))
+        terms.append(SimpleTerm(
+            group.groupid,
+            token=normalize(group.groupid),
+            title=group.title or group.groupid))
     return SimpleVocabulary(terms)
 
 
@@ -83,6 +91,7 @@ class ICommittee(form.Schema):
 
 class RepositoryfolderValidator(BaseRepositoryfolderValidator):
     pass
+
 
 WidgetValidatorDiscriminators(
     RepositoryfolderValidator,
@@ -141,6 +150,12 @@ class Committee(ModelContainer):
             if period:
                 return PeriodWrapper.wrap(self, period)
 
+        elif id_.startswith('membership'):
+            membership_id = int(id_.split('-')[-1])
+            membership = Membership.query.get(membership_id)
+            if membership:
+                return MembershipWrapper.wrap(self, membership)
+
         if default is _marker:
             raise KeyError(id_)
         return default
@@ -188,10 +203,6 @@ class Committee(ModelContainer):
         """A committee is always editable."""
 
         return True
-
-    def is_group_editable(self):
-        return api.user.has_permission(
-            'Modify portal content', obj=self.get_committee_container())
 
     def get_upcoming_meetings(self):
         committee_model = self.load_model()

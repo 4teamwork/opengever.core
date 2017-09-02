@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-06-07 12:34+0000\n"
+"POT-Creation-Date: 2017-06-23 06:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,4 +42,5 @@ msgstr "Dokument zurücksetzen"
 #. Default: "You are looking at a versioned file."
 #: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt:40
 msgid "warning_on_versioned_context"
-msgstr "Sie sehen sich ein versioniertes Dokument an."
+msgstr "Sie sehen sich eine alte Version an."
+

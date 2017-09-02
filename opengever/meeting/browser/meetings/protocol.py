@@ -12,7 +12,6 @@ from opengever.meeting.sablon import Sablon
 from opengever.meeting.vocabulary import get_committee_member_vocabulary
 from opengever.ogds.base.actor import Actor
 from plone import api
-from plone.autoform.form import AutoExtensibleForm
 from plone.directives import form
 from plone.locking.interfaces import ILockable
 from Products.Five.browser import BrowserView
@@ -115,7 +114,6 @@ class DownloadProtocolJson(DownloadGeneratedProtocol):
 
 class EditProtocol(ModelEditForm):
 
-    has_model_breadcrumbs = True
     ignoreContext = True
     schema = IMeetingMetadata
     content_type = Meeting

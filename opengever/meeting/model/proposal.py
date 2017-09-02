@@ -1,11 +1,12 @@
 from opengever.base.model import Base
-from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.base.utils import escape_html
+from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
+from opengever.meeting import is_word_meeting_implementation_enabled
+from opengever.meeting.interfaces import IHistory
 from opengever.meeting.model import AgendaItem
-from opengever.meeting.model import proposalhistory
 from opengever.meeting.model.generateddocument import GeneratedExcerpt
 from opengever.meeting.workflow import State
 from opengever.meeting.workflow import Transition
@@ -24,6 +25,7 @@ from sqlalchemy.orm import backref
 from sqlalchemy.orm import composite
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
+from zope.component import getMultiAdapter
 from zope.globalrequest import getRequest
 
 
@@ -78,7 +80,6 @@ class Reactivate(Transition):
         api.portal.show_message(msg, request=getRequest(), type='info')
 
 
-
 class Proposal(Base):
     """Sql representation of a proposal."""
 
@@ -115,17 +116,7 @@ class Proposal(Base):
         backref=backref('submitted_proposal', uselist=False),
         primaryjoin="GeneratedExcerpt.document_id==Proposal.submitted_excerpt_document_id")
 
-    title = Column(String(256), nullable=False)
     workflow_state = Column(String(WORKFLOW_STATE_LENGTH), nullable=False)
-    legal_basis = Column(UnicodeCoercingText)
-    initial_position = Column(UnicodeCoercingText)
-    proposed_action = Column(UnicodeCoercingText)
-
-    considerations = Column(UnicodeCoercingText)
-    decision_draft = Column(UnicodeCoercingText)
-    publish_in = Column(UnicodeCoercingText)
-    disclose_to = Column(UnicodeCoercingText)
-    copy_for_attention = Column(UnicodeCoercingText)
 
     committee_id = Column(Integer, ForeignKey('committees.id'))
     committee = relationship('Committee', backref='proposals')
@@ -133,8 +124,9 @@ class Proposal(Base):
     repository_folder_title = Column(UnicodeCoercingText, nullable=False)
     language = Column(String(8), nullable=False)
 
-    history_records = relationship('ProposalHistory',
-                                   order_by="desc(ProposalHistory.created)")
+    __mapper_args__ = {
+        "order_by": proposal_id
+    }
 
     # workflow definition
     STATE_PENDING = State('pending', is_default=True,
@@ -193,10 +185,6 @@ class Proposal(Base):
     def css_class(self):
         return 'contenttype-opengever-meeting-proposal'
 
-    def get_searchable_text(self):
-        searchable = filter(None, [self.title, self.initial_position])
-        return ' '.join([term.encode('utf-8') for term in searchable])
-
     def get_decision(self):
         if self.agenda_item:
             return self.agenda_item.decision
@@ -220,14 +208,17 @@ class Proposal(Base):
         return '/'.join((admin_unit.public_url, physical_path))
 
     def get_link(self, include_icon=True):
-        return self._get_link(self.get_url(), include_icon=include_icon)
+        return self._get_link(self.get_url(),
+                              self.resolve_proposal().title,
+                              include_icon=include_icon)
 
     def get_submitted_link(self, include_icon=True):
         return self._get_link(self.get_submitted_url(),
+                              self.resolve_submitted_proposal().title,
                               include_icon=include_icon)
 
-    def _get_link(self, url, include_icon=True):
-        title = escape_html(self.title)
+    def _get_link(self, url, title, include_icon=True):
+        title = escape_html(title)
         if include_icon:
             link = u'<a href="{0}" title="{1}" class="{2}">{1}</a>'.format(
                 url, title, self.css_class)
@@ -278,9 +269,10 @@ class Proposal(Base):
         assert self.can_be_scheduled()
 
         self.execute_transition('submitted-scheduled')
-        session = create_session()
         meeting.agenda_items.append(AgendaItem(proposal=self))
-        session.add(proposalhistory.Scheduled(proposal=self, meeting=meeting))
+
+        IHistory(self.resolve_submitted_proposal()).append_record(
+            u'scheduled', meeting_id=meeting.meeting_id)
 
     def reject(self, text):
         assert self.workflow.can_execute_transition(self, 'submitted-pending')
@@ -289,24 +281,15 @@ class Proposal(Base):
         self.submitted_admin_unit_id = None
         self.submitted_int_id = None
 
-        # kill references to submitted documents (i.e. copies), they will be
-        # deleted.
-        query = proposalhistory.ProposalHistory.query.filter_by(
-            proposal=self)
-        for record in query.all():
-            record.submitted_document = None
-
         # set workflow state directly for once, the transition is used to
         # redirect to a form.
         self.workflow_state = self.STATE_PENDING.name
-        session = create_session()
-        session.add(proposalhistory.Rejected(proposal=self, text=text))
+        IHistory(self.resolve_proposal()).append_record(u'rejected', text=text)
 
     def remove_scheduled(self, meeting):
         self.execute_transition('scheduled-submitted')
-        session = create_session()
-        session.add(
-            proposalhistory.RemoveScheduled(proposal=self, meeting=meeting))
+        IHistory(self.resolve_submitted_proposal()).append_record(
+            u'remove_scheduled', meeting_id=meeting.meeting_id)
 
     def resolve_proposal(self):
         return self.oguid.resolve_object()
@@ -323,17 +306,17 @@ class Proposal(Base):
     def revise(self, agenda_item):
         assert self.get_state() == self.STATE_DECIDED
         self.update_excerpt(agenda_item)
-        self.session.add(proposalhistory.ProposalRevised(proposal=self))
+        IHistory(self.resolve_submitted_proposal()).append_record(u'revised')
 
     def reopen(self, agenda_item):
         assert self.get_state() == self.STATE_DECIDED
-        self.session.add(proposalhistory.ProposalReopened(proposal=self))
+        IHistory(self.resolve_submitted_proposal()).append_record(u'reopened')
 
     def cancel(self):
-        self.session.add(proposalhistory.Cancelled(proposal=self))
+        IHistory(self.resolve_proposal()).append_record(u'cancelled')
 
     def reactivate(self):
-        self.session.add(proposalhistory.Reactivated(proposal=self))
+        IHistory(self.resolve_proposal()).append_record(u'reactivated')
 
     def update_excerpt(self, agenda_item):
         from opengever.meeting.command import ExcerptOperations
@@ -348,10 +331,19 @@ class Proposal(Base):
         UpdateExcerptInDossierCommand(self).execute()
 
     def decide(self, agenda_item):
-        self.generate_excerpt(agenda_item)
-        document_intid = self.copy_excerpt_to_proposal_dossier()
-        self.register_excerpt(document_intid)
-        self.session.add(proposalhistory.ProposalDecided(proposal=self))
+        if is_word_meeting_implementation_enabled():
+            document = self.resolve_submitted_proposal().get_proposal_document()
+            checkout_manager = getMultiAdapter((document, document.REQUEST),
+                                               ICheckinCheckoutManager)
+            if checkout_manager.get_checked_out_by() is not None:
+                raise ValueError(
+                    'Cannot decide proposal when proposal document is checked out.')
+        else:
+            self.generate_excerpt(agenda_item)
+            document_intid = self.copy_excerpt_to_proposal_dossier()
+            self.register_excerpt(document_intid)
+
+        IHistory(self.resolve_submitted_proposal()).append_record(u'decided')
         self.execute_transition('scheduled-decided')
 
     def register_excerpt(self, document_intid):

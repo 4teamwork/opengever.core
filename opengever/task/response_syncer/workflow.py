@@ -1,6 +1,7 @@
+from opengever.base.security import elevated_privileges
 from opengever.task import _
-from opengever.task.response_syncer import BaseResponseSyncerSender
 from opengever.task.response_syncer import BaseResponseSyncerReceiver
+from opengever.task.response_syncer import BaseResponseSyncerSender
 from opengever.task.response_syncer import ResponseSyncerSenderException
 from opengever.task.task import ITask
 from Products.CMFCore.utils import getToolByName
@@ -58,7 +59,8 @@ class WorkflowResponseSyncerReceiver(BaseResponseSyncerReceiver):
         before = wftool.getInfoFor(self.context, 'review_state')
         before = wftool.getTitleForStateOnType(before, self.context.Type())
 
-        wftool.doActionFor(self.context, transition)
+        with elevated_privileges():
+            wftool.doActionFor(self.context, transition)
 
         after = wftool.getInfoFor(self.context, 'review_state')
         after = wftool.getTitleForStateOnType(after, self.context.Type())
@@ -74,7 +76,5 @@ class WorkflowResponseSyncerReceiver(BaseResponseSyncerReceiver):
             ITask(self.context).responsible_client = responsible_client
             ITask(self.context).responsible = responsible
 
-            notify(ObjectModifiedEvent(self.context))
-
-        response.add_change('review_state', _(u'Issue state'),
-                            before, after)
+        notify(ObjectModifiedEvent(self.context))
+        response.add_change('review_state', _(u'Issue state'), before, after)

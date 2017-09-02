@@ -1,19 +1,14 @@
 from AccessControl import Unauthorized
-from five import grok
 from opengever.trash import _
 from opengever.trash.remover import RemoveConditionsChecker
 from opengever.trash.remover import Remover
+from Products.Five import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
-from zope.interface import Interface
 
 
-class RemoveConfirmation(grok.View):
+class RemoveConfirmation(BrowserView):
     """Remove Confirmation View, allways displayed in a overlay.
     """
-    grok.context(Interface)
-    grok.name('remove_confirmation')
-    grok.require('opengever.base.RemoveGEVERContent')
-    grok.template('remove_confirmation')
 
     def __call__(self):
         if self.request.get('form.buttons.remove'):

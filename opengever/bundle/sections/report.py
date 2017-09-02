@@ -1,6 +1,7 @@
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from datetime import datetime
+from opengever.base import advancedjson
 from opengever.base.pathfinder import PathFinder
 from opengever.bundle.report import ASCIISummaryBuilder
 from opengever.bundle.report import DataCollector
@@ -10,7 +11,6 @@ from opengever.bundle.sections.bundlesource import BUNDLE_KEY
 from zope.annotation import IAnnotations
 from zope.interface import classProvides
 from zope.interface import implements
-import json
 import logging
 import os
 import tempfile
@@ -77,8 +77,8 @@ class ReportSection(object):
         """
         json_path = os.path.join(self.report_dir, filename)
         with open(json_path, 'w') as json_file:
-            json.dump(data, json_file, cls=AdvancedJSONEncoder,
-                      sort_keys=True, indent=4, separators=(',', ': '))
+            advancedjson.dump(data, json_file, sort_keys=True,
+                              indent=4, separators=(',', ': '))
         log.info('Stored %s' % json_path)
 
     def build_ascii_summary(self, bundle):
@@ -96,20 +96,3 @@ class ReportSection(object):
 
         builder = XLSXValidationReportBuilder(bundle)
         builder.build_and_save(report_path)
-
-
-class AdvancedJSONEncoder(json.JSONEncoder):
-    """A custom JSONEncoder that can serialize some additional types:
-
-    - datetime -> ISO-format string
-    - set      -> list
-    """
-
-    def default(self, obj):
-        if isinstance(obj, datetime):
-            return obj.isoformat()
-        elif isinstance(obj, set):
-            return list(obj)
-        else:
-            # Delegate to the base class
-            return json.JSONEncoder.default(self, obj)

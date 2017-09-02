@@ -11,7 +11,9 @@ from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.document.behaviors import IBaseDocument
 from opengever.document.document import IDocumentSchema
 from opengever.document.document import UploadValidator
+from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.interfaces import IDocumentSettings
+from opengever.officeconnector.interfaces import IOfficeConnectorSettings
 from opengever.testing import create_ogds_user
 from opengever.testing import FunctionalTestCase
 from opengever.testing import index_data_for
@@ -27,6 +29,7 @@ from plone.namedfile.file import NamedBlobFile
 from Products.CMFCore.utils import getToolByName
 from z3c.form import interfaces
 from zope.component import createObject
+from zope.component import getMultiAdapter
 from zope.component import queryMultiAdapter, getAdapter
 from zope.component import queryUtility, getUtility
 from zope.interface import Invalid
@@ -69,6 +72,10 @@ class TestDocument(FunctionalTestCase):
         file = NamedBlobFile('bla bla', filename=u'test.txt')
         field.set(document, file)
         self.assertTrue(field.get(document).data == 'bla bla')
+
+    def test_is_not_a_mail(self):
+        document = create(Builder('document'))
+        self.assertFalse(document.is_mail)
 
     def test_filename_getter_returns_filename_if_file_is_available(self):
         document = create(Builder('document')
@@ -216,14 +223,14 @@ class TestDocument(FunctionalTestCase):
         dossier = create(Builder('dossier').within(repo_folder))
         document = create(Builder('document').within(dossier))
         committee = create(Builder('committee'))
-        proposal = create(Builder('proposal')
-                          .within(dossier)
-                          .having(title='Mach doch',
-                                  committee=committee.load_model())
-                          .relate_to(document))
+        self.grant('CommitteeResponsible', on=committee)
+        proposal, submitted_proposal = create(
+            Builder('proposal').within(dossier)
+                               .having(title='Mach doch',
+                                       committee=committee.load_model())
+                               .relate_to(document)
+                               .with_submitted())
 
-        submitted_proposal = create(
-            Builder('submitted_proposal').submitting(proposal))
         submitted_document = submitted_proposal.get_documents()[0]
         self.assertFalse(submitted_document.is_movable())
 
@@ -283,6 +290,41 @@ class TestDocument(FunctionalTestCase):
         keywords = browser.find_field_by_text(u'Keywords')
         self.assertTupleEqual(('New Item 2', 'NewItem1', 'N=C3=B6i 3'),
                               tuple(keywords.value))
+
+    def test_checkout_and_get_office_connector_url(self):
+        """The checkout_and_get_office_connector_url method should check out
+        the document and return an url which will open the office connector.
+        """
+        self.grant('Reader', 'Contributor', 'Editor')
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document').within(dossier))
+        checkout_manager = getMultiAdapter((document, self.request),
+                                           ICheckinCheckoutManager)
+        self.assertIsNone(checkout_manager.get_checked_out_by())
+        self.assertEquals(
+            'http://nohost/plone/dossier-1/document-1/external_edit',
+            document.checkout_and_get_office_connector_url())
+        self.assertEquals(TEST_USER_ID, checkout_manager.get_checked_out_by())
+
+    def test_checkout_and_get_office_connector_url_with_checkout_feature(self):
+        """When the office connector checkout feature is enabled, the
+        checkout_and_get_office_connector_url method should simply return an
+        office connector URL which includes the checkout command.
+        """
+        api.portal.set_registry_record(
+            'direct_checkout_and_edit_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+        self.grant('Reader', 'Contributor', 'Editor')
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document').within(dossier)
+                          .with_dummy_content())
+        checkout_manager = getMultiAdapter((document, self.request),
+                                           ICheckinCheckoutManager)
+        self.assertIsNone(checkout_manager.get_checked_out_by())
+        url = document.checkout_and_get_office_connector_url()
+        self.assertTrue(url.startswith('oc:'), url)
+        self.assertIsNone(checkout_manager.get_checked_out_by())
 
 
 class TestDocumentDefaultValues(FunctionalTestCase):

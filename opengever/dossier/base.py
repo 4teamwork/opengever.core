@@ -13,11 +13,9 @@ from opengever.document.behaviors import IBaseDocument
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.participation import IParticipationAwareMarker
-from opengever.dossier.dossiertemplate import is_dossier_template_feature_enabled
 from opengever.dossier.interfaces import IConstrainTypeDecider
 from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.meeting import is_meeting_feature_enabled
-from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.model import Proposal
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -250,9 +248,12 @@ class DossierContainer(Container):
         return True
 
     def earliest_possible_end_date(self):
-
+        """The earliest possible end-date must be lather than all document dates and
+        all dossier start and end dates.
+        """
+        dates = []
         catalog = getToolByName(self, 'portal_catalog')
-        subdossiers = catalog({
+        dossier_brains = catalog({
             'path': '/'.join(self.getPhysicalPath()),
             'object_provides': [
                 'opengever.dossier.behaviors.dossier.IDossierMarker', ],
@@ -261,39 +262,23 @@ class DossierContainer(Container):
                 'dossier-state-resolved', ],
         })
 
-        end_dates = []
-        # main dossier
-        if IDossier(self).start:
-            end_dates.append(IDossier(self).start)
+        for dossier_brain in dossier_brains:
+            dates.append(dossier_brain.end)
+            dates.append(dossier_brain.start)
 
-        for subdossier in subdossiers:
-            if IDossier(subdossier.getObject()).end:
-                temp_date = IDossier(subdossier.getObject()).end
-                if not temp_date:
-                    temp_date = IDossier(subdossier.getObject()).start
+        document_brains = catalog({
+            'path': '/'.join(self.getPhysicalPath()),
+            'object_provides': [
+                'opengever.document.behaviors.IBaseDocument'],
+        })
 
-                if isinstance(temp_date, datetime):
-                    end_dates.append(temp_date.date())
-                else:
-                    end_dates.append(temp_date)
+        for document_brain in document_brains:
+            dates.append(document_brain.document_date)
 
-            docs = subdossier.getObject().getFolderContents(
-                {'object_provides': [
-                    'opengever.document.behaviors.IBaseDocument', ],
-                 })
+        dates = filter(None, dates)
+        dates = map(self._convert_to_date, dates)
 
-            for doc in docs:
-                # document or mails
-                if doc.document_date:
-                    if isinstance(doc.document_date, datetime):
-                        end_dates.append(doc.document_date.date())
-                    else:
-                        end_dates.append(doc.document_date)
-
-        if end_dates:
-            end_dates.sort()
-            return max(end_dates)
-        return None
+        return max(dates) if dates else None
 
     def get_responsible_actor(self):
         return Actor.user(IDossier(self).responsible)
@@ -365,6 +350,13 @@ class DossierContainer(Container):
 
         return None
 
+    def _convert_to_date(self, datetime_obj):
+        if isinstance(datetime_obj, datetime):
+            return datetime_obj.date()
+
+        # It is already a date-object
+        return datetime_obj
+
 
 class DefaultConstrainTypeDecider(grok.MultiAdapter):
     grok.provides(IConstrainTypeDecider)
@@ -397,15 +389,8 @@ class DefaultConstrainTypeDecider(grok.MultiAdapter):
             if const_ctype == container_type and const_ftype == factory_type:
                 return depth < const_depth or const_depth == 0
 
-        if factory_type in [u'opengever.meeting.proposal',
-                            u'opengever.meeting.sablontemplate']:
+        if factory_type in [u'opengever.meeting.proposal']:
             return is_meeting_feature_enabled()
-
-        if factory_type in [u'opengever.meeting.proposaltemplate']:
-            return is_word_meeting_implementation_enabled()
-
-        if factory_type in [u'opengever.dossier.dossiertemplate']:
-            return is_dossier_template_feature_enabled()
 
         return True
 

@@ -1,14 +1,12 @@
 from Acquisition import aq_inner
 from plone import api
 from plone.memoize.instance import memoize
-from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import utils
 from zope.browsermenu.interfaces import IBrowserMenu
 from zope.browsermenu.interfaces import IBrowserSubMenuItem
 from zope.browsermenu.menu import BrowserMenu
 from zope.browsermenu.menu import BrowserSubMenuItem
 from zope.component import getMultiAdapter
-from zope.component.hooks import getSite
 from zope.interface import implements
 
 

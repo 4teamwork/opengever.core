@@ -7,7 +7,6 @@ from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
 from StringIO import StringIO
 from ZPublisher.Iterators import filestream_iterator
-import cgi
 import os
 import pytz
 
@@ -72,7 +71,6 @@ class MeetingZipExport(BrowserView):
         return (filename, StringIO(command.generate_file_data()))
 
     def add_agenda_items_attachments(self, generator):
-
         for agenda_item in self.model.agenda_items:
             if not agenda_item.has_submitted_documents():
                 continue
@@ -81,7 +79,7 @@ class MeetingZipExport(BrowserView):
                 extension = os.path.splitext(document.file.filename)[1]
                 path = u'{} {}/{}'.format(
                     agenda_item.number,
-                    agenda_item.proposal.title,
+                    agenda_item.submitted_proposal.title,
                     safe_unicode(document.Title()) + extension
                 )
                 generator.add_file(path, document.file.open())

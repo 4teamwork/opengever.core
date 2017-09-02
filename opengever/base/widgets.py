@@ -3,7 +3,6 @@ from ftw.table.interfaces import ITableGenerator
 from opengever.base import _
 from opengever.base.transforms import trix2sablon
 from opengever.base.utils import escape_html
-from opengever.base.utils import escape_html
 from plone.app.z3cform.templates import RenderWidget
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
 from z3c.form import util

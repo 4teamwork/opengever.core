@@ -2,7 +2,6 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.task.tests.test_transition_actions import BaseTransitionActionTest
-from opengever.testing import FunctionalTestCase
 
 
 class TestAcceptAction(BaseTransitionActionTest):
