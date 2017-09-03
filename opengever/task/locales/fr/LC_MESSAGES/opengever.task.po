@@ -2,19 +2,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2017-06-07 12:34+0000\n"
-"PO-Revision-Date: 2017-06-04 17:04+0000\n"
+"PO-Revision-Date: 2017-09-03 09:19+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
-"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-task/fr/>\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
+"gever/opengever-task/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 2.13.1\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
-"Language: fr\n"
-"X-Generator: Weblate 2.13.1\n"
 
 #: ./opengever/task/browser/close.py:256
 msgid "${num} documents were copied."
@@ -317,7 +318,7 @@ msgstr "Durée effective en h"
 #. Default: "Select the responsible user from the client chosen above, or the corresponding inbox."
 #: ./opengever/task/task.py:126
 msgid "help_responsible"
-msgstr "Choix de la personne responsable, membre du client mentionné ci-dessus."
+msgstr "Sélectionnez la personne responsable."
 
 #: ./opengever/task/task.py:118
 msgid "help_responsible_client"
@@ -325,7 +326,7 @@ msgstr "Sélectionner d'abord le client du mandataire et ensuite le mandataire."
 
 #: ./opengever/task/task.py:220
 msgid "help_responsible_multiple"
-msgstr ""
+msgstr "Sélectionnez les personnes responsables."
 
 #: ./opengever/task/browser/assign.py:39
 #: ./opengever/task/form.py:130
@@ -897,4 +898,3 @@ msgstr "Document copié de la tâche (tâche finie)"
 #: ./opengever/task/browser/complete.py:292
 msgid "version_message_resolved_task"
 msgstr "Document copié de la tâche (tâche achevée)"
-
