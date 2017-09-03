@@ -5,19 +5,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2017-08-22 10:17+0000\n"
-"PO-Revision-Date: 2017-06-22 09:02+0000\n"
+"PO-Revision-Date: 2017-09-03 07:09+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
-"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
+"gever/opengever-meeting/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 2.13.1\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
-"Language: fr\n"
-"X-Generator: Weblate 2.13.1\n"
 
 #: ./opengever/meeting/command.py:507
 msgid "A new submitted version of document ${title} has been created."
@@ -870,7 +871,7 @@ msgstr "Editer le titre"
 #. Default: "Edit after creation"
 #: ./opengever/meeting/browser/proposalforms.py:129
 msgid "label_edit_after_creation"
-msgstr "Modifier après avoir créé"
+msgstr "Modifier après la création"
 
 #. Default: "Cancel"
 #: ./opengever/meeting/browser/meetings/meeting.py:315
@@ -1570,4 +1571,3 @@ msgstr ""
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:131
 msgid "view_label_secretary"
 msgstr ""
-
