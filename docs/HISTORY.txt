@@ -5,6 +5,7 @@ Changelog
 2017.5.0 (unreleased)
 ---------------------
 
+- Add ftw.structlog as a dependency to opengever.core. [lgraf]
 - Add configuration option to hide the mail preview tab. [phgross]
 - Update ftw.keywordwidget to 1.3.6: Fix a bug while adding new keywords. [mathias.leimgruber]
 - Hide contact field in the manual journal entry form, when contact feature is disabled. [phgross]
