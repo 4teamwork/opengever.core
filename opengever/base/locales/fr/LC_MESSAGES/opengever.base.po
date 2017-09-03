@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2017-08-17 12:42+0000\n"
-"PO-Revision-Date: 2017-09-02 08:54+0000\n"
-"Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
+"PO-Revision-Date: 2017-09-03 05:40+0000\n"
+"Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
 "gever/opengever-base/fr/>\n"
 "Language: fr\n"
@@ -26,7 +26,7 @@ msgstr "(INACTIF)"
 
 #: ./opengever/base/browser/templates/folder_delete_confirmation.pt:35
 msgid "Are you sure you want to deleted this items?"
-msgstr ""
+msgstr "Êtes-vous sûr de vouloir supprimer ces contenus?"
 
 #: ./opengever/base/browser/templates/gever-macros.pt:38
 msgid "No content"
@@ -38,7 +38,7 @@ msgstr "Pas de fichier pour cette version"
 
 #: ./opengever/base/browser/templates/folder_delete_confirmation.pt:43
 msgid "No items to delete"
-msgstr ""
+msgstr "Aucun contenu à supprimer."
 
 #. Default: "Save"
 #: ./opengever/base/browser/modelforms.py:41
@@ -47,11 +47,13 @@ msgstr "Sauvegarder"
 
 #: ./opengever/base/browser/templates/folder_delete_confirmation.pt:19
 msgid "Some items won't be deleted!"
-msgstr ""
+msgstr "Certains contenus ne seront pas supprimés!"
 
 #: ./opengever/base/browser/templates/folder_delete_confirmation.pt:21
 msgid "The following items are referenced by another item and will not be deleted"
 msgstr ""
+"Les contenus ci-après sont référencés par d'autres, c'est pourquoi ils ne "
+"seront pas supprimés."
 
 #: ./opengever/base/browser/list_groupmembers.pt:14
 msgid "There are no members in this group."
@@ -94,6 +96,8 @@ msgstr "Veuillez confirmer que vous souhaitez effectuer cette action."
 #: ./opengever/base/browser/templates/error.pt:101
 msgid "description_include_error_in_admin_message"
 msgstr ""
+"Si vous voulez signaler cette erreur au responsable de l'application, "
+"veuillez ajouter le numéro d'erreur,  s'il vous plaît."
 
 #. Default: "We apologize for the inconvenience, but the page you were trying to access is not at this address."
 #: ./opengever/base/browser/templates/error.pt:62
@@ -104,6 +108,8 @@ msgstr "Nous nous excusons pour la gêne occasionnée, mais la page à laquelle 
 #: ./opengever/base/browser/templates/error.pt:66
 msgid "description_site_error_site_admin"
 msgstr ""
+"Si ce problème subsiste, veuillez contacter le responsable de l'application, "
+"s'il vous plaît."
 
 #. Default: "You have not selected any Items."
 #: ./opengever/base/browser/copy_items.py:23
@@ -330,7 +336,7 @@ msgstr "Il n'est pas permis d'insérer des objets de ce type."
 #. Default: "Can't paste items, it's not allowed to add objects of this type."
 #: ./opengever/base/browser/paste.py:32
 msgid "msg_pasting_type_not_allowed"
-msgstr ""
+msgstr "Il n'est pas permis d'ajouter des objets de ce type."
 
 #. Default: "Selected objects successfully copied."
 #: ./opengever/base/browser/copy_items.py:37
@@ -394,7 +400,7 @@ msgstr "Tout afficher"
 #. Default: "Back to the portal"
 #: ./opengever/base/browser/templates/error.pt:69
 msgid "text_back_to_portal"
-msgstr ""
+msgstr "Retourner au portail"
 
 #. Default: "Confirming User Action."
 #: ./opengever/base/browser/confirm.pt:14
@@ -404,7 +410,7 @@ msgstr "Confirmation de l'action"
 #. Default: "You are not allowed to see this reference"
 #: ./opengever/base/browser/folder_delete_confirmation.py:132
 msgid "unauthorized_backreference"
-msgstr ""
+msgstr "Vous n'êtes pas autorisé(e) à voir cette référence."
 
 #. Default ""
 #: opengever/repository/classification.py
