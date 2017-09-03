@@ -2,13 +2,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2017-06-07 12:34+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2017-09-03 09:24+0000\n"
+"Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
+"gever/opengever-trash/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 2.13.1\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
@@ -67,17 +70,17 @@ msgstr "Avertissement"
 #. Default: "Do you really want to delete the selected documents?"
 #: ./opengever/trash/browser/remove_confirmation_templates/remove_confirmation.pt:25
 msgid "msg_delete_confirmation"
-msgstr "Voulez-vous vraiment effacer les documents seléctionnés?"
+msgstr "Voulez-vous vraiment effacer les documents selectionnés?"
 
 #. Default: "The selected documents can't be removed, see error messages below."
 #: ./opengever/trash/browser/remove_confirmation_templates/remove_confirmation.pt:32
 msgid "msg_delete_not_possible"
-msgstr "Les documents seléctionnés ne peuvent pas être effacés."
+msgstr "Les documents selectionnés ne peuvent pas être effacés."
 
 #. Default: "The document is referred by the document(s) ${links}."
 #: ./opengever/trash/remover.py:70
 msgid "msg_document_has_backreferences"
-msgstr "Il existe encore une référence de document ${links} sur le document."
+msgstr "Le document ${links} fait encore référence à ce document."
 
 #. Default: "The document contains relations."
 #: ./opengever/trash/remover.py:60
@@ -92,7 +95,7 @@ msgstr "Le document est encore en checkout."
 #. Default: "The document is not trashed."
 #: ./opengever/trash/remover.py:77
 msgid "msg_is_not_trashed"
-msgstr "Le documents n'est pas encore dans la corbeille."
+msgstr "Le document n'est pas encore dans la corbeille."
 
 #: ./opengever/trash/upgrades/profiles/4100/actions.xml
 msgid "remove"
@@ -101,4 +104,3 @@ msgstr "Effacer"
 #: ./opengever/trash/trash.py:128
 msgid "the object ${obj} trashed"
 msgstr "L'objet ${obj} a été déplacé dans la corbeille."
-
