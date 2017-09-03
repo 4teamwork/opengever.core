@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2017-08-17 12:42+0000\n"
-"PO-Revision-Date: 2017-09-03 05:40+0000\n"
+"PO-Revision-Date: 2017-09-03 05:57+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
 "gever/opengever-base/fr/>\n"
@@ -38,7 +38,7 @@ msgstr "Pas de fichier pour cette version"
 
 #: ./opengever/base/browser/templates/folder_delete_confirmation.pt:43
 msgid "No items to delete"
-msgstr "Aucun contenu à supprimer."
+msgstr "Aucun contenu à supprimer"
 
 #. Default: "Save"
 #: ./opengever/base/browser/modelforms.py:41
@@ -57,7 +57,7 @@ msgstr ""
 
 #: ./opengever/base/browser/list_groupmembers.pt:14
 msgid "There are no members in this group."
-msgstr "Ce groupe n'a aucun utilisateur."
+msgstr "Pas d'utilisateur dans ce groupe."
 
 #: ./opengever/base/browser/list_groupmembers.pt:3
 msgid "Users of group:"
@@ -65,7 +65,10 @@ msgstr "Utilisateurs du groupe"
 
 #: ./opengever/base/validators.py:15
 msgid "You cannot add dossiers in the selected repository folder. Either you do not have the privileges or the repository folder contains another repository folder."
-msgstr "Vous ne pouvez créer aucun dossier dans ce numéro de classement. Ce dernier en contient d'autres ou alors vous n'avez pas les droits suffisants pour effectuer cette tâche."
+msgstr ""
+"Vous ne pouvez créer aucun dossier dans ce numéro de classement. Ou bien ce "
+"dernier contient d'autres numéros de classement, ou bien vous n'avez pas les "
+"droits suffisants pour effectuer cette tâche."
 
 #. Default ""
 #: opengever/repository/classification.py
@@ -159,7 +162,9 @@ msgstr "Mention, si les documents sont accessibles ou non selon la loi sur la pr
 
 #: ./opengever/base/behaviors/classification.py:96
 msgid "help_public_trial_statement"
-msgstr "Date de la requête, requérant, date de la décision, Référence vers le dossier de la requête GEVER"
+msgstr ""
+"Date de la requête, requérant, date de la décision, référence vers le "
+"dossier de la requête GEVER"
 
 #: ./opengever/base/behaviors/lifecycle.py:45
 msgid "help_retention_period"
@@ -253,6 +258,7 @@ msgstr "Statut public"
 
 #. Default: "Public trial statement"
 #: ./opengever/base/behaviors/classification.py:94
+#, fuzzy
 msgid "label_public_trial_statement"
 msgstr "Justification pour le retrait du statut public"
 
@@ -346,7 +352,7 @@ msgstr "Les objets sélectionnés ont été copiés."
 #. Default: "Objects from clipboard successfully pasted."
 #: ./opengever/base/browser/paste.py:49
 msgid "msg_successfuly_pasted"
-msgstr "Les objets du presse-papiers ont été ajoutés."
+msgstr "Les objets du presse-papier ont été ajoutés."
 
 #. Default: "Careful, it's possible someone is executing an exploit against you. Verify you just performed an action on this site and that you were not referred here by a different website or email."
 #: ./opengever/base/browser/confirm.pt:27
