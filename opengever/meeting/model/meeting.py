@@ -129,14 +129,17 @@ class Meeting(Base, SQLFormSupport):
         primaryjoin="GeneratedProtocol.document_id==Meeting.protocol_document_id")
     protocol_start_page_number = Column(Integer)
 
+    agendaitem_list_document_id = Column(Integer, ForeignKey('generateddocuments.id'))
+    agendaitem_list_document = relationship(
+        'GeneratedAgendaItemList', uselist=False,
+        backref=backref('meeting', uselist=False),
+        primaryjoin="GeneratedAgendaItemList.document_id==Meeting.agendaitem_list_document_id")
+
     # define relationship here using a secondary table to keep
     # GeneratedDocument as simple as possible and avoid that it actively
     # knows about all its relationships
     excerpt_documents = relationship('GeneratedExcerpt',
                                      secondary=meeting_excerpts,)
-
-    def __init__(self, *args, **kwargs):
-        super(Meeting, self).__init__(*args, **kwargs)
 
     def initialize_participants(self):
         """Set all active members of our committee as participants of
@@ -210,15 +213,13 @@ class Meeting(Base, SQLFormSupport):
         self.workflow_state = 'held'
 
     def close(self):
-        """ Closes a meeting means set the meeting in the closed state and ...
+        """Closes a meeting means set the meeting in the closed state.
 
-         - generate and set the meeting number
-         - generate decision numbers for each agenda_item
-         - close each agenda item (generates proposal excerpt
-           and change workflow state)
-         - update and unlock the protocol document
+        - generate and set the meeting number
+        - generate decision numbers for each agenda_item
+        - close each agenda item (generates proposal excerpt and change workflow state)
+        - update and unlock the protocol document
         """
-
         self.hold()
         for agenda_item in self.agenda_items:
             agenda_item.close()
@@ -239,6 +240,9 @@ class Meeting(Base, SQLFormSupport):
 
     def has_protocol_document(self):
         return self.protocol_document is not None
+
+    def has_agendaitem_list_document(self):
+        return self.agendaitem_list_document is not None
 
     @property
     def wrapper_id(self):

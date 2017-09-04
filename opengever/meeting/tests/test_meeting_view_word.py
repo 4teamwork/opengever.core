@@ -22,7 +22,7 @@ class TestWordMeetingView(IntegrationTestCase):
              ['Participants:', u'Wendler Jens (jens-wendler@gmail.com)'
               u' W\xf6lfl Gerda (g.woelfl@hotmail.com)'],
              ['Meeting dossier:', 'Sitzungsdossier 9/2017', ''],
-             ['Agenda item list:', 'Download agenda item list', ''],
+             ['Agenda item list:', 'No agenda item list has been generated yet.', ''],
              ['Protocol:', 'No protocol has been generated yet.', '']],
             meeting_view.metadata())
 
@@ -36,8 +36,11 @@ class TestWordMeetingView(IntegrationTestCase):
     @browsing
     def test_agenda_item_url(self, browser):
         self.login(self.committee_responsible, browser)
+
         browser.open(self.meeting)
-        link = browser.find('Download agenda item list')
+        browser.css('.generate-agendaitem-list').first.click()
+        link = browser.css('.download-agendaitem-list-btn').first
+
         self.assertEquals(
-            self.meeting.model.get_url(view='agenda_item_list'),
+            self.meeting.model.agendaitem_list_document.get_download_url(),
             link.attrib['href'])

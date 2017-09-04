@@ -12,8 +12,11 @@ from opengever.base.transport import Transporter
 from opengever.locking.lock import SYS_LOCK
 from opengever.meeting import _
 from opengever.meeting import is_word_meeting_implementation_enabled
+from opengever.meeting.exceptions import AgendaItemListAlreadyGenerated
+from opengever.meeting.exceptions import AgendaItemListMissingTemplate
 from opengever.meeting.exceptions import ProtocolAlreadyGenerated
 from opengever.meeting.interfaces import IHistory
+from opengever.meeting.model.generateddocument import GeneratedAgendaItemList
 from opengever.meeting.model.generateddocument import GeneratedExcerpt
 from opengever.meeting.model.generateddocument import GeneratedProtocol
 from opengever.meeting.model.submitteddocument import SubmittedDocument
@@ -40,6 +43,7 @@ MIME_DOCX = 'application/vnd.openxmlformats-officedocument.wordprocessingml.docu
 
 
 class ProtocolOperations(object):
+    """Protocol generation workflow."""
 
     def get_sablon_template(self, meeting):
         return meeting.get_protocol_template()
@@ -74,9 +78,15 @@ class ProtocolOperations(object):
 
 
 class AgendaItemListOperations(object):
+    """Agenda item list generation workflow."""
 
     def get_sablon_template(self, meeting):
-        return meeting.get_agendaitem_list_template()
+        template = meeting.get_agendaitem_list_template()
+
+        if template:
+            return template
+
+        raise AgendaItemListMissingTemplate
 
     def get_meeting_data(self, meeting):
         return AgendaItemListProtocolData(meeting)
@@ -87,8 +97,30 @@ class AgendaItemListOperations(object):
     def get_filename(self, meeting):
         return meeting.get_agendaitem_list_filename()
 
+    def create_database_entry(self, meeting, document):
+        if meeting.agendaitem_list_document is not None:
+            raise AgendaItemListAlreadyGenerated()
+
+        agendaitem_list_document = GeneratedAgendaItemList(
+            oguid=Oguid.for_object(document),
+            generated_version=document.get_current_version(),
+            )
+
+        meeting.agendaitem_list_document = agendaitem_list_document
+
+        return agendaitem_list_document
+
+    def get_generated_message(self, meeting):
+        return _(u'Agenda item list for meeting ${title} has been generated successfully.', mapping=dict(title=meeting.get_title()))
+
+    def get_updated_message(self, meeting):
+        return _(u'Protocol for meeting ${title} has been updated '
+                 'successfully.',
+                 mapping=dict(title=meeting.get_title()))
+
 
 class ExcerptOperations(object):
+    """Protocol exceprt generation workflow."""
 
     def __init__(self, agenda_item):
         self.agenda_item = agenda_item
@@ -134,6 +166,7 @@ class ExcerptOperations(object):
 
 
 class ManualExcerptOperations(object):
+    """Manual protocol excerpt redaction workflow."""
 
     def __init__(self, agenda_items, title,
                  include_initial_position=True, include_legal_basis=True,
@@ -196,6 +229,7 @@ class ManualExcerptOperations(object):
 
 
 class CreateGeneratedDocumentCommand(CreateDocumentCommand):
+    """Document generation workflow."""
 
     def __init__(self, context, meeting, document_operations,
                  lock_document_after_creation=False):
@@ -379,8 +413,8 @@ class UpdateGeneratedDocumentCommand(object):
 class UpdateExcerptInDossierCommand(object):
     """Update an excerpt that has already been stored in a dossier from an
     excerpt that is stored in a submitted proposal.
-
     """
+
     def __init__(self, proposal):
         self.proposal = proposal
         self.excerpt = proposal.excerpt_document
@@ -511,8 +545,8 @@ class UpdateSubmittedDocumentCommand(object):
 class CopyProposalDocumentCommand(object):
     """Copy documents attached to a proposal to the proposal's associated
     committee once a proposal is submitted.
-
     """
+
     def __init__(self, proposal, document, parent_action=None,
                  target_path=None, target_admin_unit_id=None):
         self.proposal = proposal

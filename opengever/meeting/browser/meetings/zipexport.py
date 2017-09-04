@@ -12,6 +12,7 @@ import pytz
 
 
 class MeetingZipExport(BrowserView):
+    """Iterate over meeting contents and return results in a .zip archive."""
 
     def __init__(self, context, request):
         super(MeetingZipExport, self).__init__(context, request)
@@ -32,7 +33,7 @@ class MeetingZipExport(BrowserView):
             self.add_agenda_items_attachments(generator)
 
             # Agenda items list
-            self.add_agenda_item_list(generator)
+            generator.add_file(*self.get_agendaitem_list())
 
             # Return zip
             zip_file = generator.generate()
@@ -84,11 +85,24 @@ class MeetingZipExport(BrowserView):
                 )
                 generator.add_file(path, document.file.open())
 
-    def add_agenda_item_list(self, generator):
-        has_template = AgendaItemListOperations().get_sablon_template(
-            self.model)
+    def get_agendaitem_list(self):
+        if self.model.has_agendaitem_list_document():
+            agendaitem_list = self.model.agendaitem_list_document.resolve_document()
+            agendaitem_list_modified = agendaitem_list.modified().asdatetime().astimezone(
+                pytz.utc)
 
-        if self.model.agenda_items and has_template:
-            view = self.context.restrictedTraverse('@@agenda_item_list')
-            generator.add_file(view.get_document_filename(),
-                               StringIO(view.create_agenda_item_list()))
+            if self.model.modified < agendaitem_list_modified:
+                # Return current protocol
+                return (u'{}.docx'.format(safe_unicode(agendaitem_list.Title())),
+                        agendaitem_list.file.open())
+
+        # Create new protocol
+        operations = AgendaItemListOperations()
+        command = CreateGeneratedDocumentCommand(
+            self.context,
+            self.model,
+            operations,
+            )
+
+        filename = u'{}.docx'.format(operations.get_title(self.model))
+        return (filename, StringIO(command.generate_file_data()))

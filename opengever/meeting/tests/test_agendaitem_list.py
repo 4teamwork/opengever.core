@@ -59,7 +59,7 @@ class TestAgendaItemList(FunctionalTestCase):
                          self.committee.get_agendaitem_list_template())
 
     @browsing
-    def test_shows_statusmessage_when_no_template_is_configured(self, browser):
+    def test_agendaitem_list_shows_statusmessage_when_no_template_is_configured(self, browser):
         self.container.agendaitem_list_template = None
         transaction.commit()
 
@@ -68,7 +68,7 @@ class TestAgendaItemList(FunctionalTestCase):
                          .link_with(self.meeting_dossier))
 
         browser.login().open(meeting.get_url())
-        browser.css('.download-agendaitem-list-btn').first.click()
+        browser.css('.generate-agendaitem-list').first.click()
 
         self.assertEqual(browser.url, meeting.get_url())
         self.assertEqual(
@@ -83,16 +83,65 @@ class TestAgendaItemList(FunctionalTestCase):
                          .link_with(self.meeting_dossier))
 
         browser.login().open(meeting.get_url())
+        browser.css('.generate-agendaitem-list').first.click()
         browser.css('.download-agendaitem-list-btn').first.click()
 
         self.assertDictContainsSubset(
             {'status': '200 Ok',
-             'content-disposition': 'attachment; filename="Agendaitem list-'
-             'community-meeting.docx"',
+             'content-disposition': 'attachment; filename="agendaitem-list-community-meeting.docx"',
              'x-frame-options': 'SAMEORIGIN',
-             'content-type': MIME_DOCX,
-             'x-theme-disabled': 'True'},
+             'content-type': MIME_DOCX},
             browser.headers)
+
+    @browsing
+    def test_agendaitem_list_cannot_be_regenerated(self, browser):
+        meeting = create(Builder('meeting')
+                         .having(committee=self.committee_model)
+                         .link_with(self.meeting_dossier))
+
+        browser.login().open(meeting.get_url())
+
+        generate_url = browser.css('.generate-agendaitem-list').first.get('href')
+        browser.open(generate_url)
+        self.assertIn('has been generated successfully', browser.css('.portalMessage.info')[-1].text)
+
+        generated_document = meeting.agendaitem_list_document.resolve_document()
+        browser.open(generate_url)
+        self.assertIn('has already been generated', browser.css('.portalMessage.error').first.text)
+        self.assertTrue(meeting.agendaitem_list_document.resolve_document() == generated_document,
+                        'Unexpectedly generated a new document.')
+        self.assertEqual(0, generated_document.version_id)
+
+    @browsing
+    def test_updated_agendaitem_list_can_be_downloaded(self, browser):
+        meeting = create(Builder('meeting')
+                         .having(committee=self.committee_model)
+                         .link_with(self.meeting_dossier))
+
+        browser.login().open(meeting.get_url())
+        browser.css('.generate-agendaitem-list').first.click()
+        generated_document = meeting.agendaitem_list_document.resolve_document()
+        self.assertEqual(0, generated_document.version_id,
+                         'Did not generate a new fresh document.')
+
+        browser.css('.refresh-agendaitem-list').first.click()
+        refreshed_document = meeting.agendaitem_list_document.resolve_document()
+        self.assertTrue(generated_document == refreshed_document,
+                        'Unexpectedly generated a new document instead of a document version when refreshing an agenda item.')
+        self.assertNotEqual(0, refreshed_document.version_id,
+                            'Unexpectedly generated a new fresh document.')
+
+        browser.css('.download-agendaitem-list-btn').first.click()
+
+        self.assertDictContainsSubset(
+            {
+                'status': '200 Ok',
+                'content-disposition': 'attachment; filename="agendaitem-list-community-meeting.docx"',
+                'x-frame-options': 'SAMEORIGIN',
+                'content-type': MIME_DOCX,
+                },
+            browser.headers,
+            )
 
     @browsing
     def test_json_data(self, browser):

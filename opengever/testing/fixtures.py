@@ -150,9 +150,13 @@ class OpengeverContentFixture(object):
         self.committee_container = self.register('committee_container', create(
             Builder('committee_container')
             .titled(u'Sitzungen')
-            .having(protocol_template=self.sablon_template,
-                    excerpt_template=self.sablon_template,
-                    ad_hoc_template=self.proposal_template)))
+            .having(
+                ad_hoc_template=self.proposal_template,
+                agendaitem_list_template=self.sablon_template,
+                excerpt_template=self.sablon_template,
+                protocol_template=self.sablon_template,
+                )
+            ))
         self.committee_container.manage_setLocalRoles(
             self.committee_responsible.getId(), ('MeetingUser',))
         self.committee_container.manage_setLocalRoles(

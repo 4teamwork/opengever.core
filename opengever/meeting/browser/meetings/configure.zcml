@@ -62,9 +62,23 @@
       />
 
   <browser:page
+      for="opengever.meeting.interfaces.IMeetingDossier"
+      name="generate_agendaitem_list"
+      class=".agendaitem_list.GenerateAgendaItemList"
+      permission="cmf.AddPortalContent"
+      />
+
+  <browser:page
+      for="opengever.document.document.IDocumentSchema"
+      name="update_agendaitem_list"
+      class=".agendaitem_list.UpdateAgendaItemList"
+      permission="cmf.AddPortalContent"
+      />
+
+  <browser:page
       for="opengever.meeting.interfaces.IMeetingWrapper"
       name="agenda_item_list"
-      class=".agendaitem_list.DownloadAgendaItemList"
+      class=".agendaitem_list.DownloadGeneratedAgendaItemList"
       permission="zope2.View"
       allowed_attributes="as_json"
       />

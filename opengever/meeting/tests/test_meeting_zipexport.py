@@ -284,7 +284,7 @@ class TestMeetingZipExportView(FunctionalTestCase):
 
         browser.login().open(meeting.get_url(view='zipexport'))
         zip_file = ZipFile(StringIO(browser.contents), 'r')
-        self.assertIn('Agendaitem list-community-meeting.docx',
+        self.assertIn('Agendaitem list-Community meeting.docx',
                       zip_file.namelist())
 
     @browsing
