@@ -29,7 +29,6 @@ class TestContentStatsIntegration(IntegrationTestCase):
         self.assertFalse(flt.keep('opengever.inbox.inbox'))
         self.assertFalse(flt.keep('opengever.inbox.yearfolder'))
         self.assertFalse(flt.keep('opengever.inbox.container'))
-        self.assertFalse(flt.keep('opengever.tasktemplates.tasktemplatefolder'))
         self.assertFalse(flt.keep('opengever.contact.contactfolder'))
         self.assertFalse(flt.keep('opengever.meeting.committeecontainer'))
 
@@ -103,6 +102,8 @@ class TestContentStatsIntegration(IntegrationTestCase):
             'task-state-resolved',
             'task-state-tested-and-closed',
             'tasktemplate-state-active',
+            'tasktemplatefolder-state-activ',
+            'tasktemplatefolder-state-inactiv',
         ]
 
         states_to_ignore = [
@@ -120,8 +121,6 @@ class TestContentStatsIntegration(IntegrationTestCase):
             'inbox-state-default',
             'opengever_committeecontainer_workflow--STATUS--active',
             'repositoryroot-state-active',
-            'tasktemplatefolder-state-activ',
-            'tasktemplatefolder-state-inactiv',
             'templatefolder-state-active',
         ]
 
