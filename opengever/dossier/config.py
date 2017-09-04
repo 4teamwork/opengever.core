@@ -1,5 +1,5 @@
 INDEXES = (
-    ('is_subdossier', 'FieldIndex'),
+    ('is_subdossier', 'BooleanIndex'),
     ('containing_subdossier', 'FieldIndex'),
     ('containing_dossier', 'FieldIndex'),
     ('retention_expiration', 'DateIndex'),
