@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2017-08-17 12:42+0000\n"
-"PO-Revision-Date: 2017-09-03 05:57+0000\n"
-"Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
+"PO-Revision-Date: 2017-09-04 06:11+0000\n"
+"Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
 "gever/opengever-base/fr/>\n"
 "Language: fr\n"
@@ -258,7 +258,6 @@ msgstr "Statut public"
 
 #. Default: "Public trial statement"
 #: ./opengever/base/behaviors/classification.py:94
-#, fuzzy
 msgid "label_public_trial_statement"
 msgstr "Justification pour le retrait du statut public"
 
