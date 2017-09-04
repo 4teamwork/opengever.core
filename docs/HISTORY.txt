@@ -5,6 +5,7 @@ Changelog
 2017.5.0 (unreleased)
 ---------------------
 
+- Replace is_subdossier FieldIndex with an BooleanIndex. [phgross]
 - Add content stats provider for file mimetypes. [lgraf]
 - Implement "checked in vs. checked out docs" content stats provider. [lgraf]
 - Include and integrate ftw.contentstats in GEVER. [lgraf]
