@@ -171,6 +171,31 @@ class TestContentStatsIntegration(IntegrationTestCase):
         self.assertEqual({'checked_out': 1, 'checked_in': 11},
                          stats_provider.get_raw_stats())
 
+    def test_file_mimetypes_provider(self):
+        self.login(self.regular_user)
+        stats_provider = getMultiAdapter(
+            (self.portal, self.portal.REQUEST),
+            IStatsProvider, name='file_mimetypes')
+
+        self.assertEqual({
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 1,
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 7,
+            'message/rfc822': 2},
+            stats_provider.get_raw_stats())
+
+    @browsing
+    def test_file_mimetypes_provider_in_view(self, browser):
+        self.login(self.manager, browser)
+
+        browser.open(self.portal, view='@@content-stats')
+        table = browser.css('#content-stats-file_mimetypes').first
+
+        self.assertEquals([
+            ['', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', '1'],
+            ['', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', '7'],
+            ['', 'message/rfc822', '2']],
+            table.lists())
+
     @browsing
     def test_checked_out_docs_stats_provider_in_view(self, browser):
         self.login(self.manager, browser)
