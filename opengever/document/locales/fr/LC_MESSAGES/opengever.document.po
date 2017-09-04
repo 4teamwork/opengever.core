@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2017-06-07 15:10+0000\n"
-"PO-Revision-Date: 2017-06-27 06:35+0000\n"
+"PO-Revision-Date: 2017-09-03 08:50+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
 "gever/opengever-document/fr/>\n"
@@ -244,7 +244,9 @@ msgstr "Référence sur le dossier correspondant de l'expéditeur"
 
 #: ./opengever/document/behaviors/metadata.py:73
 msgid "help_keywords"
-msgstr "Mots-clés pour la description du dossier. Ne pas confondre avec le numéro de la position"
+msgstr ""
+"Mots-clés pour la description du dossier. Ne pas confondre avec le numéro de "
+"classement."
 
 #: ./opengever/document/behaviors/metadata.py:139
 msgid "help_preserved_as_paper"
