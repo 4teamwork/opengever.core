@@ -26,6 +26,7 @@ ALLOWED_ENDPOINTS = set([
     'POST_application_json_@login-renew',
     'customlogo',
     'customlogo_right',
+    'dump-content-stats',
     'favicon',
     'list-open-dossiers-json',
     'logged_out',

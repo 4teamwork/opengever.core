@@ -1,0 +1,20 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    i18n_domain="opengever.contentstats">
+
+  <adapter
+      factory=".filters.PortalTypesFilter"
+      name="portal_types"
+      />
+
+  <adapter
+      factory=".filters.ReviewStatesFilter"
+      name="review_states"
+      />
+
+  <adapter
+      factory=".providers.CheckedOutDocsProvider"
+      name="checked_out_docs"
+      />
+
+</configure>
