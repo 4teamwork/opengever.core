@@ -162,7 +162,7 @@ class AgendaItemsView(BrowserView):
         return {
             'document_checked_out': bool(
                 checkout_manager.get_checked_out_by()),
-            'edit_proposal_document_button': button}
+            'edit_document_button': button}
 
     def _get_agenda_items(self):
         meeting = self.context.model
@@ -413,13 +413,13 @@ class AgendaItemsView(BrowserView):
                         _('missing_ad_hoc_template',
                           default=u"No ad-hoc agenda-item template has been "
                                   u"configured.")
-                    ).proceed().dump()
+                    ).remain().dump()
             except MissingMeetingDossierPermissions:
                 return JSONResponse(self.request).error(
                         _('error_no_permission_to_add_document',
                           default=u'Insufficient privileges to add a'
                                   u' document to the meeting dossier.')
-                       ).proceed().dump()
+                       ).remain().dump()
 
         else:
             self.meeting.schedule_text(title)

@@ -370,12 +370,12 @@ class Meeting(Base, SQLFormSupport):
             data=ad_hoc_template.file.data,
             content_type=ad_hoc_template.file.contentType,
             title=translate(document_title, context=getRequest())).execute()
+        agenda_item = AgendaItem(
+            title=title, document=ad_hoc_document, is_paragraph=False)
 
-        self.agenda_items.append(
-            AgendaItem(title=title,
-                       document=ad_hoc_document,
-                       is_paragraph=False))
+        self.agenda_items.append(agenda_item)
         self.reorder_agenda_items()
+        return agenda_item
 
     def _set_agenda_item_order(self, new_order):
         agenda_items_by_id = OrderedDict((item.agenda_item_id, item)

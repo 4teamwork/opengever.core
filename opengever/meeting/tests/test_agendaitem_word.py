@@ -2,7 +2,6 @@ from contextlib import nested
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
 from plone import api
-from plone.protect import createToken
 
 
 class TestWordAgendaItem(IntegrationTestCase):
@@ -51,7 +50,7 @@ class TestWordAgendaItem(IntegrationTestCase):
         item_data = browser.json['items'][0]
         self.assertDictContainsSubset(
             {'document_checked_out': False,
-             'edit_proposal_document_button': {
+             'edit_document_button': {
                  'visible': True,
                  'active': True,
                  'url': self.agenda_item_url(agenda_item, 'edit_document')}},
@@ -69,7 +68,7 @@ class TestWordAgendaItem(IntegrationTestCase):
         item_data = browser.json['items'][0]
         self.assertDictContainsSubset(
             {'document_checked_out': True,
-             'edit_proposal_document_button': {
+             'edit_document_button': {
                  'visible': True,
                  'active': True,
                  'url': self.agenda_item_url(agenda_item, 'edit_document')}},
@@ -93,7 +92,7 @@ class TestWordAgendaItem(IntegrationTestCase):
         item_data = browser.json['items'][0]
         self.assertDictContainsSubset(
             {'document_checked_out': True,
-             'edit_proposal_document_button': {
+             'edit_document_button': {
                  'visible': True,
                  'active': False,
                  'url': self.agenda_item_url(agenda_item, 'edit_document')}},
@@ -112,7 +111,7 @@ class TestWordAgendaItem(IntegrationTestCase):
         item_data = browser.json['items'][0]
         self.assertDictContainsSubset(
             {'document_checked_out': False,
-             'edit_proposal_document_button': {
+             'edit_document_button': {
                  'visible': True,
                  'active': True,
                  'url': self.agenda_item_url(agenda_item, 'edit_document')}},
@@ -340,30 +339,3 @@ class TestWordAgendaItem(IntegrationTestCase):
             {'title': u'\xc4nderungen am Personalreglement',
              'decision_number': 1},
             browser.json['items'][0])
-
-    @browsing
-    def test_decision_number_for_adhoc_agenda_item(self, browser):
-        self.login(self.committee_responsible, browser)
-        browser.open(self.meeting, view='agenda_items/schedule_text',
-                     data={'title': u'Tisch Traktandum',
-                           '_authenticator': createToken()})
-        self.assertDictContainsSubset({'proceed': True}, browser.json)
-
-        browser.open(self.meeting, view='agenda_items/list')
-        self.assertDictContainsSubset(
-            {'title': u'Tisch Traktandum',
-             'decision_number': None},
-            browser.json['items'][0])
-
-        browser.open(browser.json['items'][0]['decide_link'])
-        browser.open(self.meeting, view='agenda_items/list')
-        self.assertDictContainsSubset(
-            {'title': u'Tisch Traktandum',
-             'decision_number': 1},
-            browser.json['items'][0])
-
-    def agenda_item_url(self, agenda_item, endpoint):
-        return '{}/agenda_items/{}/{}'.format(
-            agenda_item.meeting.get_url(view=None),
-            agenda_item.agenda_item_id,
-            endpoint)

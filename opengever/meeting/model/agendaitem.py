@@ -293,6 +293,16 @@ class AgendaItem(Base):
                                            ICheckinCheckoutManager)
         checkout_manager.checkin()
 
+    @require_word_meeting_feature
+    def checkin_document(self):
+        document = self.resolve_document()
+        if not document:
+            return
+
+        checkout_manager = getMultiAdapter((document, document.REQUEST),
+                                           ICheckinCheckoutManager)
+        checkout_manager.checkin()
+
     @property
     def legal_basis(self):
         return self.submitted_proposal.legal_basis if self.has_proposal else None

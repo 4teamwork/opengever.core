@@ -305,7 +305,16 @@ class Proposal(Base):
 
     def revise(self, agenda_item):
         assert self.get_state() == self.STATE_DECIDED
-        self.update_excerpt(agenda_item)
+        if is_word_meeting_implementation_enabled():
+            document = self.resolve_submitted_proposal().get_proposal_document()
+            checkout_manager = getMultiAdapter((document, document.REQUEST),
+                                               ICheckinCheckoutManager)
+            if checkout_manager.get_checked_out_by() is not None:
+                raise ValueError(
+                    'Cannot revise proposal when proposal document is checked out.')
+        else:
+            self.update_excerpt(agenda_item)
+
         IHistory(self.resolve_submitted_proposal()).append_record(u'revised')
 
     def reopen(self, agenda_item):
