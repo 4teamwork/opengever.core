@@ -17,4 +17,9 @@
       name="checked_out_docs"
       />
 
+  <adapter
+      factory=".providers.FileMimetypesProvider"
+      name="file_mimetypes"
+      />
+
 </configure>
