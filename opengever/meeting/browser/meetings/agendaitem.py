@@ -10,8 +10,10 @@ from opengever.meeting.service import meeting_service
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListing
 from plone.app.contentlisting.interfaces import IContentListingObject
+from plone.uuid.interfaces import IUUID
 from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
+from zExceptions import BadRequest
 from zExceptions import Forbidden
 from zExceptions import NotFound
 from zExceptions import Unauthorized
@@ -80,6 +82,10 @@ class IAgendaItemActions(Interface):
         """Create a new excerpt from a agenda item.
         """
 
+    def return_excerpt():
+        """Return an excerpt to the proposals dossier.
+        """
+
 
 class AgendaItemsView(BrowserView):
 
@@ -134,13 +140,26 @@ class AgendaItemsView(BrowserView):
             return IContentListingObject(excerpt).render_link()
 
     @require_word_meeting_feature
-    def _serialize_excerpts(self, item):
+    def _serialize_excerpts(self, meeting, item):
         if not item.has_proposal:
             return []
 
+        excerpts = []
         submitted_proposal = item.proposal.resolve_submitted_proposal()
         docs = IContentListing(submitted_proposal.get_excerpts())
-        return [doc.render_link() for doc in docs]
+        excerpt = item.proposal.resolve_submitted_excerpt_document()
+
+        for doc in docs:
+            data = {'link': doc.render_link()}
+            if not excerpt:
+                data['return_link'] = meeting.get_url(
+                    view='agenda_items/{}/return_excerpt?document={}'.format(
+                        item.agenda_item_id, doc.uuid()))
+            elif doc == excerpt:
+                data['is_excerpt'] = True
+            excerpts.append(data)
+
+        return excerpts
 
     @require_word_meeting_feature
     def _get_edit_document_options(self, document, agenda_item, meeting):
@@ -196,7 +215,7 @@ class AgendaItemsView(BrowserView):
                         document, item, meeting))
 
                 if item.has_proposal:
-                    data['excerpts'] = self._serialize_excerpts(item)
+                    data['excerpts'] = self._serialize_excerpts(meeting, item)
                     if self.can_generate_excerpt(item):
                         data['generate_excerpt_link'] = meeting.get_url(
                             view='agenda_items/{}/generate_excerpt'.format(
@@ -206,11 +225,7 @@ class AgendaItemsView(BrowserView):
         return agenda_items
 
     def has_documents(self, item):
-        if not item.has_proposal:
-            return False
-
-        return bool(item.proposal.submitted_documents or
-                item.proposal.submitted_excerpt_document)
+        return item.has_submitted_documents()
 
     def list(self):
         """Returns json list of all agendaitems for the current
@@ -458,6 +473,34 @@ class AgendaItemsView(BrowserView):
                         default=u'Excerpt was created successfully.'))
                 .proceed()
                 .dump())
+
+    def return_excerpt(self):
+        """Return an excerpt for a proposal to the dossier the proposal
+        originated from.
+        """
+        doc_uuid = self.request.get('document')
+        if not doc_uuid:
+            raise BadRequest("No excerpt document provided.")
+
+        document = self._get_excerpt_doc_by_uuid(doc_uuid)
+        if not document:
+            raise NotFound(
+                "Could not find excerpt document {}".format(doc_uuid))
+
+        self.agenda_item.return_excerpt(document)
+        return (JSONResponse(self.request)
+                .info(_('excerpt_returned',
+                        default=u'Excerpt was returned to proposer.'))
+                .proceed()
+                .dump())
+
+    def _get_excerpt_doc_by_uuid(self, doc_uuid):
+        excerpts = self.agenda_item.proposal.resolve_submitted_proposal().get_excerpts()
+
+        for doc in excerpts:
+            if IUUID(doc) == doc_uuid:
+                return doc
+        return None
 
     def can_generate_excerpt(self, agenda_item):
         """Returns True when agenda item and proposal are in a state which

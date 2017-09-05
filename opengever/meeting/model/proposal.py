@@ -5,6 +5,7 @@ from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
 from opengever.meeting import is_word_meeting_implementation_enabled
+from opengever.meeting import require_word_meeting_feature
 from opengever.meeting.interfaces import IHistory
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model.generateddocument import GeneratedExcerpt
@@ -238,7 +239,11 @@ class Proposal(Base):
         return [doc.resolve_submitted() for doc in self.submitted_documents]
 
     def has_submitted_documents(self):
-        return self.submitted_documents or self.submitted_excerpt_document
+        if is_word_meeting_implementation_enabled():
+            return bool(self.submitted_documents)
+
+        return bool(
+            self.submitted_documents or self.submitted_excerpt_document)
 
     def resolve_excerpt_document(self):
         document = self.excerpt_document
@@ -365,6 +370,25 @@ class Proposal(Base):
                                    generated_version=version)
         self.session.add(excerpt)
         self.excerpt_document = excerpt
+
+    @require_word_meeting_feature
+    def return_excerpt(self, document):
+        """Return the selected excerpt to the proposals originating dossier.
+
+        The document is registered as official excerpt for this proposal and
+        copied to the dossier. Future edits in the excerpt document will
+        be synced to the proposals dossier.
+
+        """
+        assert document in self.resolve_submitted_proposal().get_excerpts()
+
+        excerpt = GeneratedExcerpt(
+            oguid=Oguid.for_object(document),
+            generated_version=document.get_current_version())
+        self.submitted_excerpt_document = excerpt
+
+        document_intid = self.copy_excerpt_to_proposal_dossier()
+        self.register_excerpt(document_intid)
 
     def copy_excerpt_to_proposal_dossier(self):
         """Copies the submitted excerpt to the source dossier and returns

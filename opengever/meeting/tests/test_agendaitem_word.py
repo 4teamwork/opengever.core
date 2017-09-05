@@ -2,6 +2,8 @@ from contextlib import nested
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
 from plone import api
+from plone.protect.utils import addTokenToUrl
+from plone.uuid.interfaces import IUUID
 
 
 class TestWordAgendaItem(IntegrationTestCase):
@@ -318,8 +320,11 @@ class TestWordAgendaItem(IntegrationTestCase):
         browser.open(self.meeting, view='agenda_items/list')
         item_data = browser.json['items'][0]
         excerpt_links = item_data.get('excerpts', None)
+
         self.assertEquals(1, len(excerpt_links))
-        self.assertIn('href="{}"'.format(excerpt.absolute_url()), excerpt_links[0])
+        self.assertIn(
+            'href="{}"'.format(excerpt.absolute_url()),
+            excerpt_links[0]['link'])
 
     @browsing
     def test_decision_number_in_meeting_item_data(self, browser):
@@ -339,3 +344,30 @@ class TestWordAgendaItem(IntegrationTestCase):
             {'title': u'\xc4nderungen am Personalreglement',
              'decision_number': 1},
             browser.json['items'][0])
+
+    @browsing
+    def test_can_return_excerpts_to_proposer(self, browser):
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_proposal(self.meeting,
+                                             self.submitted_word_proposal)
+        agenda_item.decide()
+        excerpt = self.submitted_word_proposal.generate_excerpt(
+            self.meeting_dossier)
+
+        self.assertIsNone(agenda_item.proposal.excerpt_document)
+        self.assertIsNone(agenda_item.proposal.submitted_excerpt_document)
+
+        return_excerpt_url = addTokenToUrl(self.meeting.model.get_url(
+            view='agenda_items/{}/return_excerpt?document={}'.format(
+                agenda_item.agenda_item_id, IUUID(excerpt))))
+
+        browser.open(return_excerpt_url)
+        self.assertEqual(
+            u'Excerpt was returned to proposer.',
+            browser.json['messages'][0]['message'])
+
+        self.assertIsNotNone(agenda_item.proposal.excerpt_document)
+        self.assertIsNotNone(agenda_item.proposal.submitted_excerpt_document)
+        self.assertEqual(
+            excerpt,
+            agenda_item.proposal.submitted_excerpt_document.resolve_document())

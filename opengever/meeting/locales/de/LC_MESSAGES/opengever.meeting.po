@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-09-05 15:45+0000\n"
+"POT-Creation-Date: 2017-09-07 09:54+0000\n"
 "PO-Revision-Date: 2017-08-22 12:18+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,7 +22,7 @@ msgid "A new submitted version of document ${title} has been created."
 msgstr "Eine neu eingereichte Version des Dokuments ${title} wurde erstellt."
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt:318
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:276
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:293
 msgid "Actions"
 msgstr "Aktionen"
 
@@ -75,7 +75,7 @@ msgid "Agendaitem list"
 msgstr "Traktandenliste"
 
 #. Default: "An unexpected error has occurred"
-#: ./opengever/meeting/browser/meetings/meeting.py:399
+#: ./opengever/meeting/browser/meetings/meeting.py:402
 msgid "An unexpected error has occurred"
 msgstr "Ein unerwarteter Fehler ist aufgetreten"
 
@@ -83,6 +83,10 @@ msgstr "Ein unerwarteter Fehler ist aufgetreten"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:69
 msgid "Are you sure you want to close this meeting?"
 msgstr "Wollen Sie diese Sitzung wirklich abschliessen?"
+
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:102
+msgid "Are you sure you want to return this excerpt to the proposer?"
+msgstr "Wollen Sie diesen Protokollauszug wirklich an den Antragsteller zurücksenden?"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt:83
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:85
@@ -137,12 +141,12 @@ msgid "Documents"
 msgstr "Dokumente"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt:181
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:180
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:197
 msgid "Download agenda item list"
 msgstr "Traktandenliste herunterladen"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt:98
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:237
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:254
 msgid "Edit"
 msgstr "Bearbeiten"
 
@@ -376,57 +380,57 @@ msgid "active"
 msgstr "Aktiv"
 
 #. Default: "Cannot decide agenda item: someone else has checked out the document."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:328
+#: ./opengever/meeting/browser/meetings/agendaitem.py:342
 msgid "agenda_item_cannot_decide_document_checked_out"
 msgstr "Traktandum kann nicht beschlossen werden: das Beschlussdokument ist noch von einer anderen Person ausgecheckt."
 
 #. Default: "Agenda Item decided."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:298
+#: ./opengever/meeting/browser/meetings/agendaitem.py:312
 msgid "agenda_item_decided"
 msgstr "Traktandum wurde beschlossen."
 
 #. Default: "Agenda Item Successfully deleted"
-#: ./opengever/meeting/browser/meetings/agendaitem.py:274
+#: ./opengever/meeting/browser/meetings/agendaitem.py:288
 msgid "agenda_item_deleted"
 msgstr "Traktandum wurde erfolgreich entfernt."
 
 #. Default: "Agendaitem has been decided and the meeting has been held."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:303
+#: ./opengever/meeting/browser/meetings/agendaitem.py:317
 msgid "agenda_item_meeting_held"
 msgstr "Das Traktandum wurde beschlossen und die Sitzung wurde durchgeführt."
 
 #. Default: "Agenda Item order updated."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:233
+#: ./opengever/meeting/browser/meetings/agendaitem.py:247
 msgid "agenda_item_order_updated"
 msgstr "Die Reihenfolge der Traktanden wurde aktualisiert."
 
 #. Default: "Agenda Item decided and excerpt generated."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:295
+#: ./opengever/meeting/browser/meetings/agendaitem.py:309
 msgid "agenda_item_proposal_decided"
 msgstr "Traktandum wurde beschlossen, der Protokollauszug generiert und zurückgespielt."
 
 #. Default: "Agenda Item successfully reopened."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:344
+#: ./opengever/meeting/browser/meetings/agendaitem.py:358
 msgid "agenda_item_reopened"
 msgstr "Das Traktandum wurde wieder eröffnet."
 
 #. Default: "Agenda Item revised successfully."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:357
+#: ./opengever/meeting/browser/meetings/agendaitem.py:371
 msgid "agenda_item_revised"
 msgstr "Das Traktandum wurde erfolgreich überarbeitet."
 
 #. Default: "Agenda Item title must not be empty."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:246
+#: ./opengever/meeting/browser/meetings/agendaitem.py:260
 msgid "agenda_item_update_empty_string"
 msgstr "Der Titel eines Traktandums darf nicht leer sein."
 
 #. Default: "Agenda Item title is too long."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:253
+#: ./opengever/meeting/browser/meetings/agendaitem.py:267
 msgid "agenda_item_update_too_long_title"
 msgstr "Der Traktandums-Titel ist zu lang."
 
 #. Default: "Agenda Item updated."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:259
+#: ./opengever/meeting/browser/meetings/agendaitem.py:273
 msgid "agenda_item_updated"
 msgstr "Traktandum erfolgreich aktualisiert."
 
@@ -455,12 +459,12 @@ msgid "button_submit_attachments"
 msgstr "Anhänge einreichen"
 
 #. Default: "Cancel"
-#: ./opengever/meeting/model/proposal.py:160
+#: ./opengever/meeting/model/proposal.py:161
 msgid "cancel"
 msgstr "Stornieren"
 
 #. Default: "Cancelled"
-#: ./opengever/meeting/model/proposal.py:140
+#: ./opengever/meeting/model/proposal.py:141
 msgid "cancelled"
 msgstr "Storniert"
 
@@ -562,7 +566,7 @@ msgstr "Bis"
 
 #. Default: "Decide"
 #: ./opengever/meeting/model/agendaitem.py:43
-#: ./opengever/meeting/model/proposal.py:158
+#: ./opengever/meeting/model/proposal.py:159
 msgid "decide"
 msgstr "Beschliessen"
 
@@ -574,7 +578,7 @@ msgstr "Traktandum beschliessen"
 
 #. Default: "Decided"
 #: ./opengever/meeting/model/agendaitem.py:37
-#: ./opengever/meeting/model/proposal.py:138
+#: ./opengever/meeting/model/proposal.py:139
 msgid "decided"
 msgstr "Beschlossen"
 
@@ -584,7 +588,7 @@ msgid "description_group"
 msgstr "Für diese Gruppe werden automatisch Berechtigungen auf dem Gremium vergeben."
 
 #. Default: "You are not allowed to checkout the document."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:373
+#: ./opengever/meeting/browser/meetings/agendaitem.py:387
 msgid "document_checkout_not_allowed"
 msgstr "Sie dürfen das Dokument nicht auschecken."
 
@@ -594,17 +598,17 @@ msgid "dossier"
 msgstr "Dossier"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt:213
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:214
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:231
 msgid "download protocol"
 msgstr "Protokoll herunterladen"
 
 #. Default: "Paragraph must not be empty."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:390
+#: ./opengever/meeting/browser/meetings/agendaitem.py:404
 msgid "empty_paragraph"
 msgstr "Der Abschnitt darf nicht leer sein."
 
 #. Default: "Proposal must not be empty."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:405
+#: ./opengever/meeting/browser/meetings/agendaitem.py:419
 msgid "empty_proposal"
 msgstr "Der Freitext darf nicht leer sein."
 
@@ -614,7 +618,7 @@ msgid "error_must_checkin_documents_for_transition"
 msgstr "Der Status kann nicht geändert werden solange der Antrag ausgecheckte Dokumente enthält."
 
 #. Default: "Insufficient privileges to add a document to the meeting dossier."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:419
+#: ./opengever/meeting/browser/meetings/agendaitem.py:433
 msgid "error_no_permission_to_add_document"
 msgstr "Ungenügende Berechtigungen zum Hinzufügen eines Dokumentes im Sitzungsdossier."
 
@@ -629,9 +633,14 @@ msgid "excerpt_document_title"
 msgstr "Protokollauszug ${title}"
 
 #. Default: "Excerpt was created successfully."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:457
+#: ./opengever/meeting/browser/meetings/agendaitem.py:471
 msgid "excerpt_generated"
 msgstr "Protokollauszug erfolgreich generiert."
+
+#. Default: "Excerpt was returned to proposer."
+#: ./opengever/meeting/browser/meetings/agendaitem.py:491
+msgid "excerpt_returned"
+msgstr "Der Protokollauszug wurde an den Antragsteller zurückgesendet."
 
 #. Default: "Alphabetical Toc ${period} ${committee}"
 #: ./opengever/meeting/browser/toc.py:60
@@ -644,7 +653,7 @@ msgid "filename_repository_toc"
 msgstr "Inhaltsverzeichnis ${period} ${committee} nach Ordnungsposition"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt:175
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:174
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:191
 msgid "generate new agenda item list as word document"
 msgstr "Traktandenliste als Worddokument generieren"
 
@@ -653,12 +662,12 @@ msgid "generate new excerpt"
 msgstr "Neuer Protokollauszug generieren"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt:207
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:208
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:225
 msgid "generate new protocol as word document"
 msgstr "Protokoll als Worddokument generieren"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt:187
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:186
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:203
 msgid "generate new version as word document"
 msgstr "Neue Version als Worddokument generieren"
 
@@ -699,7 +708,7 @@ msgid "label_ad_hoc_template"
 msgstr "Ad Hoc Vorlage"
 
 #. Default: "Agenda item number"
-#: ./opengever/meeting/browser/meetings/meeting.py:359
+#: ./opengever/meeting/browser/meetings/meeting.py:360
 msgid "label_agenda_item_number"
 msgstr "Nummer des Traktandums in dieser Sitzung"
 
@@ -825,7 +834,7 @@ msgid "label_decision_draft"
 msgstr "Beschlussentwurf"
 
 #. Default: "Decision number"
-#: ./opengever/meeting/browser/meetings/meeting.py:360
+#: ./opengever/meeting/browser/meetings/meeting.py:361
 #: ./opengever/meeting/proposal.py:248
 msgid "label_decision_number"
 msgstr "Beschlussnummer"
@@ -944,7 +953,7 @@ msgstr "Datei"
 
 #. Default: "Filter"
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt:299
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:302
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:319
 msgid "label_filter_proposal"
 msgstr "Filtern"
 
@@ -972,7 +981,7 @@ msgstr "Ausgangslage"
 
 #. Default: "Insert"
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt:290
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:334
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:351
 msgid "label_insert"
 msgstr "Einfügen"
 
@@ -1036,7 +1045,7 @@ msgstr "Nächste Sitzung:"
 
 #. Default: "No agenda item list has been generated yet."
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt:196
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:164
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:181
 msgid "label_no_agendaitem_list"
 msgstr "Es wurde noch keine Traktandenliste generiert."
 
@@ -1051,13 +1060,13 @@ msgid "label_no_memberships"
 msgstr "Dieser Benutzer hat keine Mitgliedschaften."
 
 #. Default: "No proposals submitted"
-#: ./opengever/meeting/browser/meetings/meeting.py:369
+#: ./opengever/meeting/browser/meetings/meeting.py:372
 msgid "label_no_proposals"
 msgstr "Keine Anträge eingereicht"
 
 #. Default: "No protocol has been generated yet."
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt:227
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:198
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:215
 msgid "label_no_protocol"
 msgstr "Es wurde noch kein Protokoll generiert."
 
@@ -1123,6 +1132,21 @@ msgstr "Löschen"
 msgid "label_reopen_action"
 msgstr "Traktandum wieder eröffnen"
 
+#. Default: "Return excerpt to proposer"
+#: ./opengever/meeting/browser/meetings/meeting.py:358
+msgid "label_return_action"
+msgstr "Protokollauszug an Antragsteller zurücksenden"
+
+#. Default: "Return Excerpt"
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:106
+msgid "label_return_excerpt"
+msgstr "Protokollauszug zurücksenden"
+
+#. Default: "This excerpt was returned to the dossier"
+#: ./opengever/meeting/browser/meetings/meeting.py:362
+msgid "label_returned_excerpt"
+msgstr "Dieser Protokollauszug wurde an den Antragsteller zurückgesendet."
+
 #. Default: "Revise this agenda item"
 #: ./opengever/meeting/browser/meetings/meeting.py:338
 msgid "label_revise_action"
@@ -1140,9 +1164,9 @@ msgid "label_sablon_template_file"
 msgstr "Vorlage-Datei"
 
 #. Default: "Schedule"
-#: ./opengever/meeting/browser/meetings/meeting.py:368
+#: ./opengever/meeting/browser/meetings/meeting.py:371
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt:279
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:319
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:336
 msgid "label_schedule"
 msgstr "Traktandieren"
 
@@ -1176,7 +1200,7 @@ msgid "label_toc_template"
 msgstr "Vorlage Inhaltsverzeichnis"
 
 #. Default: "Toggle attachments"
-#: ./opengever/meeting/browser/meetings/meeting.py:358
+#: ./opengever/meeting/browser/meetings/meeting.py:359
 msgid "label_toggle_attachments"
 msgstr "Anhänge anzeigen / ausblenden"
 
@@ -1212,7 +1236,7 @@ msgid "label_workflow_state"
 msgstr "Status"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt:238
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:254
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:271
 msgid "label_zip_download"
 msgstr "Zip-Datei herunterladen"
 
@@ -1255,9 +1279,14 @@ msgid "message_write_conflict"
 msgstr "Die Änderungen konnten nicht gespeichert werden, das Protokoll wurde in der Zwischenzeit modifiziert."
 
 #. Default: "No ad-hoc agenda-item template has been configured."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:413
+#: ./opengever/meeting/browser/meetings/agendaitem.py:427
 msgid "missing_ad_hoc_template"
 msgstr "Es konnte keine Vorlage für ein Ad Hoc Traktandum gefunden werden."
+
+#. Default: "When returning an excerpt to the proposer the selected document will be sent back to the proposals originating dossier. No other excerpts can be returned."
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:98
+msgid "msg_confirm_return_excerpt_dialog"
+msgstr "Der Protokollauszug wird an den Antragsteller bzw. ins Ursprungsdossier des Antrags zurückgesendet. Es können keine weiteren Protokollauszuge zurückgesendet werden."
 
 #. Default: "The agenda item list for meeting ${title} has already been generated."
 #: ./opengever/meeting/browser/meetings/agendaitem_list.py:47
@@ -1281,7 +1310,7 @@ msgid "msg_hold_meeting_dialog"
 msgstr "Beim Abschluss dieses Traktandums wird die Sitzung in den Status `Durchgeführt`  versetzt. Anschliessend kann die Traktandenliste nicht mehr bearbeitet werden."
 
 #. Default: "The selected committeee has been deactivated, the proposal could not been submitted."
-#: ./opengever/meeting/model/proposal.py:39
+#: ./opengever/meeting/model/proposal.py:40
 msgid "msg_inactive_committee_selected"
 msgstr "Das ausgewählte Gremium wurde deaktiviert, der Antrag konnte nicht eingereicht werden."
 
@@ -1306,17 +1335,17 @@ msgid "msg_pending_meetings"
 msgstr "Nicht alle Sitzungen sind abgeschlossen."
 
 #. Default: "Proposal cancelled successfully."
-#: ./opengever/meeting/model/proposal.py:67
+#: ./opengever/meeting/model/proposal.py:68
 msgid "msg_proposal_cancelled"
 msgstr "Der Antrag wurde storniert."
 
 #. Default: "Proposal reactivated successfully."
-#: ./opengever/meeting/model/proposal.py:78
+#: ./opengever/meeting/model/proposal.py:79
 msgid "msg_proposal_reactivated"
 msgstr "Der Antrag wurde wieder eröffnet."
 
 #. Default: "Proposal successfully submitted."
-#: ./opengever/meeting/model/proposal.py:49
+#: ./opengever/meeting/model/proposal.py:50
 msgid "msg_proposal_submitted"
 msgstr "Antrag erfolgreich eingereicht."
 
@@ -1341,7 +1370,7 @@ msgid "overview"
 msgstr "Übersicht"
 
 #. Default: "Paragraph successfully added."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:394
+#: ./opengever/meeting/browser/meetings/agendaitem.py:408
 msgid "paragraph_added"
 msgstr "Paragraph erfolgreich hinzugefügt."
 
@@ -1352,7 +1381,7 @@ msgstr "Teilnehmende"
 #. Default: "Pending"
 #: ./opengever/meeting/model/agendaitem.py:36
 #: ./opengever/meeting/model/meeting.py:74
-#: ./opengever/meeting/model/proposal.py:133
+#: ./opengever/meeting/model/proposal.py:134
 msgid "pending"
 msgstr "In Bearbeitung"
 
@@ -1446,13 +1475,13 @@ msgid "protocol_excerpt"
 msgstr "Protokollauszug"
 
 #. Default: "Reactivate"
-#: ./opengever/meeting/model/proposal.py:162
+#: ./opengever/meeting/model/proposal.py:163
 msgid "reactivate"
 msgstr "Wieder eröffnen"
 
 #. Default: "Reject"
 #: ./opengever/meeting/browser/proposaltransitions.py:70
-#: ./opengever/meeting/model/proposal.py:152
+#: ./opengever/meeting/model/proposal.py:153
 msgid "reject"
 msgstr "Zurückweisen"
 
@@ -1460,6 +1489,11 @@ msgstr "Zurückweisen"
 #: ./opengever/meeting/model/agendaitem.py:45
 msgid "reopen"
 msgstr "Wieder eröffnen"
+
+#. Default: "Return Excerpt"
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:97
+msgid "return_excerpt"
+msgstr "Protokollauszug zurücksenden"
 
 #. Default: "Revise"
 #: ./opengever/meeting/model/agendaitem.py:47
@@ -1472,12 +1506,12 @@ msgid "revision"
 msgstr "Überarbeitung"
 
 #. Default: "Schedule"
-#: ./opengever/meeting/model/proposal.py:154
+#: ./opengever/meeting/model/proposal.py:155
 msgid "schedule"
 msgstr "traktandieren"
 
 #. Default: "Scheduled"
-#: ./opengever/meeting/model/proposal.py:137
+#: ./opengever/meeting/model/proposal.py:138
 msgid "scheduled"
 msgstr "Traktandiert"
 
@@ -1486,17 +1520,17 @@ msgid "secretary"
 msgstr "Protokollführer"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt:104
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:243
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:260
 msgid "status"
 msgstr "Status"
 
 #. Default: "Submit"
-#: ./opengever/meeting/model/proposal.py:150
+#: ./opengever/meeting/model/proposal.py:151
 msgid "submit"
 msgstr "einreichen"
 
 #. Default: "Submitted"
-#: ./opengever/meeting/model/proposal.py:135
+#: ./opengever/meeting/model/proposal.py:136
 msgid "submitted"
 msgstr "Eingereicht"
 
@@ -1511,7 +1545,7 @@ msgid "tab_matches"
 msgstr "${amount} Treffer"
 
 #. Default: "Text successfully added."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:428
+#: ./opengever/meeting/browser/meetings/agendaitem.py:442
 msgid "text_added"
 msgstr "Freitext erfolgreich hinzugefügt"
 
@@ -1525,81 +1559,82 @@ msgid "title_ad_hoc_document"
 msgstr "Ad Hoc Traktandum ${title}"
 
 #. Default: "Remove from schedule"
-#: ./opengever/meeting/model/proposal.py:156
+#: ./opengever/meeting/model/proposal.py:157
 msgid "un-schedule"
 msgstr "Traktandum entfernen"
 
 #. Default: "Add"
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:291
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:308
 msgid "view_label_add"
 msgstr "Hinzufügen"
 
 #. Default: "Add section header:"
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:328
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:345
 msgid "view_label_add_section_header"
 msgstr "Zwischentitel einfügen:"
 
 #. Default: "Agenda items"
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:271
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:288
 msgid "view_label_agenda_items"
 msgstr "Traktanden"
 
 #. Default: "Agenda item list:"
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:162
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:179
 msgid "view_label_agendaitem_list"
 msgstr "Traktandenliste:"
 
 #. Default: "Meeting dossier:"
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:152
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:169
 msgid "view_label_dossier"
 msgstr "Sitzungsdossier:"
 
 #. Default: "Meeting end:"
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:106
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:123
 msgid "view_label_meeting_end"
 msgstr "Sitzungsende:"
 
 #. Default: "Location:"
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:111
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:128
 msgid "view_label_meeting_location"
 msgstr "Ort:"
 
 #. Default: "Meeting number:"
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:116
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:133
 msgid "view_label_meeting_number"
 msgstr "Sitzungsnummer:"
 
 #. Default: "Meeting start:"
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:100
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:117
 msgid "view_label_meeting_start"
 msgstr "Beginn:"
 
 #. Default: "Participants:"
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:138
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:155
 msgid "view_label_participants"
 msgstr "Teilnehmer:"
 
 #. Default: "Presidency:"
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:124
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:141
 msgid "view_label_presidency"
 msgstr "Vorsitz:"
 
 #. Default: "Protocol:"
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:196
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:213
 msgid "view_label_protocol"
 msgstr "Protokoll:"
 
 #. Default: "Schedule ad hoc agenda item:"
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:313
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:330
 msgid "view_label_schedule_ad_hoc"
 msgstr "Ad Hoc Traktandum einfügen:"
 
 #. Default: "Schedule proposal:"
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:298
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:315
 msgid "view_label_schedule_proposal"
 msgstr "Antrag traktandieren:"
 
 #. Default: "Secretary:"
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:131
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:148
 msgid "view_label_secretary"
 msgstr "Protokollführung:"
+

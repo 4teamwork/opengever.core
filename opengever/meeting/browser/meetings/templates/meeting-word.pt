@@ -93,6 +93,23 @@
           </div>
         </div>
 
+        <div class="overlay" id="confirm_return_excerpt">
+          <h2 i18n:translate="return_excerpt">Return Excerpt</h2>
+          <p i18n:translate="msg_confirm_return_excerpt_dialog">
+            When returning an excerpt to the proposer the selected document will be sent
+            back to the proposals originating dossier. No other excerpts can be returned.
+          </p>
+          <p i18n:translate="">
+            Are you sure you want to return this excerpt to the proposer?
+          </p>
+          <div class="button-group">
+            <button class="button confirm"
+                    i18n:translate="label_return_excerpt">Return Excerpt</button>
+            <button class="button decline"
+                    i18n:translate="label_cancel">Cancel</button>
+          </div>
+        </div>
+
         <div class="meeting-metadata">
           <table class="meeting-metadata">
 

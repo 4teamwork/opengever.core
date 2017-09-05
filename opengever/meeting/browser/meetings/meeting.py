@@ -355,9 +355,12 @@ class MeetingView(BrowserView):
                 _('label_revise_action', default='Revise this agenda item'),
                 _('label_attachments', default='Attachments'),
                 _('label_excerpts', default='Excerpts'),
+                _('label_return_action', default='Return excerpt to proposer'),
                 _('label_toggle_attachments', default='Toggle attachments'),
                 _('label_agenda_item_number', default='Agenda item number'),
                 _('label_decision_number', default=u'Decision number'),
+                _('label_returned_excerpt',
+                  default='This excerpt was returned to the dossier'),
             ),
             max_proposal_title_length=ISubmittedProposal['title'].max_length)
 
