@@ -218,7 +218,7 @@
       return $.get(target.attr("href")).done(function(response) {
         if(response.proceed === true) {
           window.location = response.officeConnectorURL;
-          $(target).parents('tr').find('.proposal_document').addClass('checked-out');
+          $(target).parents("tr").find(".proposal_document").addClass("checked-out");
         }
       });
     };
