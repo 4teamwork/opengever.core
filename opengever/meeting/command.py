@@ -317,17 +317,16 @@ class MergeDocxProtocolCommand(CreateGeneratedDocumentCommand):
             builder = DocumentBuilder(Document(master_path))
 
             for index, item in enumerate(self.meeting.agenda_items):
-                if not item.has_proposal:
+                if not item.has_document:
                     continue
 
-                proposal = item.proposal.submitted_oguid.resolve_object()
-                proposal_document = proposal.get_proposal_document()
-                proposal_path = join(
-                    tmpdir_path, 'proposal{}.docx'.format(index))
+                document = item.resolve_document()
+                agenda_item_path = join(
+                    tmpdir_path, 'agenda_item_{}.docx'.format(index))
 
-                with open(proposal_path, 'wb') as proposal_file:
-                    proposal_file.write(proposal_document.file.data)
-                builder.append(Document(proposal_path))
+                with open(agenda_item_path, 'wb') as agenda_item_file:
+                    agenda_item_file.write(document.file.data)
+                builder.append(Document(agenda_item_path))
 
             builder.save(output_path)
             with open(output_path, 'rb') as merged_file:
@@ -389,7 +388,7 @@ class UpdateExcerptInDossierCommand(object):
         self.document = self.submitted_excerpt.resolve_document()
 
     def execute(self):
-        #XXX handle errors when executing across admin units.
+        # XXX handle errors when executing across admin units.
         Transporter().transport_to(
             self.document,
             self.excerpt.admin_unit_id,

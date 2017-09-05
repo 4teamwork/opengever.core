@@ -5,6 +5,7 @@ from plone import api
 
 
 class TestWordAgendaItem(IntegrationTestCase):
+
     features = ('meeting', 'word-meeting')
 
     def test_deciding_meeting_item_does_not_create_an_excerpt(self):
@@ -33,7 +34,7 @@ class TestWordAgendaItem(IntegrationTestCase):
         browser.open(self.meeting, view='agenda_items/list')
         item_data = browser.json['items'][0]
 
-        document_link_html = item_data.get('proposal_document_link')
+        document_link_html = item_data.get('document_link')
         self.assertIn(
             u'Proposal document \xc4nderungen am Personalreglement',
             document_link_html)
@@ -48,8 +49,8 @@ class TestWordAgendaItem(IntegrationTestCase):
         browser.open(self.meeting, view='agenda_items/list')
         item_data = browser.json['items'][0]
         self.assertDictContainsSubset(
-            {'proposal_document_checked_out': False,
-             'edit_proposal_document_button': {
+            {'document_checked_out': False,
+             'edit_document_button': {
                  'visible': True,
                  'active': True,
                  'url': self.agenda_item_url(agenda_item, 'edit_document')}},
@@ -66,8 +67,8 @@ class TestWordAgendaItem(IntegrationTestCase):
         browser.open(self.meeting, view='agenda_items/list')
         item_data = browser.json['items'][0]
         self.assertDictContainsSubset(
-            {'proposal_document_checked_out': True,
-             'edit_proposal_document_button': {
+            {'document_checked_out': True,
+             'edit_document_button': {
                  'visible': True,
                  'active': True,
                  'url': self.agenda_item_url(agenda_item, 'edit_document')}},
@@ -90,8 +91,8 @@ class TestWordAgendaItem(IntegrationTestCase):
         browser.open(self.meeting, view='agenda_items/list')
         item_data = browser.json['items'][0]
         self.assertDictContainsSubset(
-            {'proposal_document_checked_out': True,
-             'edit_proposal_document_button': {
+            {'document_checked_out': True,
+             'edit_document_button': {
                  'visible': True,
                  'active': False,
                  'url': self.agenda_item_url(agenda_item, 'edit_document')}},
@@ -109,8 +110,8 @@ class TestWordAgendaItem(IntegrationTestCase):
         browser.open(self.meeting, view='agenda_items/list')
         item_data = browser.json['items'][0]
         self.assertDictContainsSubset(
-            {'proposal_document_checked_out': False,
-             'edit_proposal_document_button': {
+            {'document_checked_out': False,
+             'edit_document_button': {
                  'visible': True,
                  'active': True,
                  'url': self.agenda_item_url(agenda_item, 'edit_document')}},
@@ -338,29 +339,3 @@ class TestWordAgendaItem(IntegrationTestCase):
             {'title': u'\xc4nderungen am Personalreglement',
              'decision_number': 1},
             browser.json['items'][0])
-
-    @browsing
-    def test_decision_number_for_adhoc_agenda_item(self, browser):
-        self.login(self.committee_responsible, browser)
-        browser.open(self.meeting, view='agenda_items/schedule_text',
-                     data={'title': u'Tisch Traktandum'})
-        self.assertDictContainsSubset({'proceed': True}, browser.json)
-
-        browser.open(self.meeting, view='agenda_items/list')
-        self.assertDictContainsSubset(
-            {'title': u'Tisch Traktandum',
-             'decision_number': None},
-            browser.json['items'][0])
-
-        browser.open(browser.json['items'][0]['decide_link'])
-        browser.open(self.meeting, view='agenda_items/list')
-        self.assertDictContainsSubset(
-            {'title': u'Tisch Traktandum',
-             'decision_number': 1},
-            browser.json['items'][0])
-
-    def agenda_item_url(self, agenda_item, endpoint):
-        return '{}/agenda_items/{}/{}'.format(
-            agenda_item.meeting.get_url(view=None),
-            agenda_item.agenda_item_id,
-            endpoint)

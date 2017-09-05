@@ -11,6 +11,7 @@ Changelog
 - Implement "checked in vs. checked out docs" content stats provider. [lgraf]
 - Include and integrate ftw.contentstats in GEVER. [lgraf]
 - Add ftw.structlog as a dependency to opengever.core. [lgraf]
+- SPV word: add support for ad-hoc agenda items, add configurable ad-hoc agenda item. [deiferni]
 - Add configuration option to hide the mail preview tab. [phgross]
 - Update ftw.keywordwidget to 1.3.6: Fix a bug while adding new keywords. [mathias.leimgruber]
 - Hide contact field in the manual journal entry form, when contact feature is disabled. [phgross]

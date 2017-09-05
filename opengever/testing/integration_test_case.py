@@ -389,6 +389,14 @@ class IntegrationTestCase(TestCase):
         agenda_item = AgendaItem.query.order_by(desc('id')).first()
         return agenda_item
 
+    def schedule_ad_hoc(self, meeting, title):
+        if isinstance(meeting, MeetingWrapper):
+            meeting = meeting.model
+
+        meeting.schedule_ad_hoc(title)
+        agenda_item = AgendaItem.query.order_by(desc('id')).first()
+        return agenda_item
+
     def as_relation_value(self, obj):
         return RelationValue(getUtility(IIntIds).getId(obj))
 
@@ -403,3 +411,9 @@ class IntegrationTestCase(TestCase):
         old_file = IMail(self.mail).message
         IMail(self.mail).message = NamedBlobFile(
             data=data, filename=old_file.filename)
+
+    def agenda_item_url(self, agenda_item, endpoint):
+        return '{}/agenda_items/{}/{}'.format(
+            agenda_item.meeting.get_url(view=None),
+            agenda_item.agenda_item_id,
+            endpoint)

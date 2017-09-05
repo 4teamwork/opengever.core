@@ -1,8 +1,12 @@
 from five import grok
+from opengever.dossier.templatefolder import get_template_folder
 from opengever.meeting.model import Committee
 from opengever.meeting.model import Member
 from opengever.meeting.model import Membership
 from plone import api
+from plone.uuid.interfaces import IUUID
+from Products.CMFPlone.utils import safe_unicode
+from zope.interface import provider
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleTerm
@@ -60,6 +64,30 @@ def get_committee_member_vocabulary(meetingwrapper):
                 member.get_title(show_email_as_link=False)))
 
     return SimpleVocabulary(members)
+
+
+@provider(IContextSourceBinder)
+def get_proposal_template_vocabulary(context):
+    template_folder = get_template_folder()
+    if template_folder is None:
+        # this may happen when the user does not have permissions to
+        # view templates and/or during ++widget++ traversal
+        return SimpleVocabulary([])
+
+    templates = api.content.find(
+        context=template_folder,
+        depth=-1,
+        portal_type="opengever.meeting.proposaltemplate",
+        sort_on='sortable_title', sort_order='ascending')
+
+    terms = []
+    for brain in templates:
+        template = brain.getObject()
+        terms.append(SimpleVocabulary.createTerm(
+            template,
+            IUUID(template),
+            safe_unicode(brain.Title)))
+    return SimpleVocabulary(terms)
 
 
 class LanguagesVocabulary(grok.GlobalUtility):
