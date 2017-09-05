@@ -27,8 +27,9 @@ import pytz
 
 
 class OpengeverContentFixture(object):
+    """Provide a basic content fixture for integration tests."""
 
-    def __call__(self):
+    def __init__(self):
         start = time()
         self._lookup_table = {
             'manager': ('user', SITE_OWNER_NAME)}
@@ -62,6 +63,7 @@ class OpengeverContentFixture(object):
         end = time()
         print '(fixture setup in {}s) '.format(round(end - start, 3)),
 
+    def __call__(self):
         return self._lookup_table
 
     def create_units(self):
