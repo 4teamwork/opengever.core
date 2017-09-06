@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Fixed bumblebee-overlay pdf link generation, when filename contains umlaut. [phgross]
+- Generate agenda item lists as documents. [Rotonen]
 - Replace is_subdossier FieldIndex with an BooleanIndex. [phgross]
 - Add content stats provider for file mimetypes. [lgraf]
 - Implement "checked in vs. checked out docs" content stats provider. [lgraf]

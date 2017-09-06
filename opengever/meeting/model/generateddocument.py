@@ -17,6 +17,7 @@ class GeneratedDocument(Base):
     Keeps a reference to the created document by storing it's oguid.
 
     """
+
     __tablename__ = 'generateddocuments'
     __table_args__ = (
         UniqueConstraint('admin_unit_id', 'int_id',
@@ -53,6 +54,12 @@ class GeneratedDocument(Base):
 
     def get_download_url(self):
         return '{}/download'.format(self.resolve_document().absolute_url())
+
+
+class GeneratedAgendaItemList(GeneratedDocument):
+
+    __mapper_args__ = {'polymorphic_identity': 'generated_agendaitem_list'}
+
 
 class GeneratedProtocol(GeneratedDocument):
 

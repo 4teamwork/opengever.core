@@ -158,15 +158,38 @@
               <td></td>
             </tr>
 
-            <tr>
+            <tr tal:define="agendaitem_list_document view/get_agendaitem_list_document">
               <th i18n:translate="view_label_agendaitem_list">Agenda item list:</th>
-              <td>
-                <a tal:attributes="href view/url_agendaitem_list"
-                   i18n:translate="view_label_download_agendaitem_list">
-                  Download agenda item list
-                </a>
+              <td class="agendaitem-list">
+                <div tal:condition="not:agendaitem_list_document"
+                     i18n:translate="label_no_agendaitem_list">No agenda item list has been generated yet.</div>
+
+                <div tal:condition="agendaitem_list_document"
+                     class="agendaitem_list-file">
+                  <a tal:replace="structure agendaitem_list_document/render_link" />
+                </div>
               </td>
-              <td></td>
+              <td class="item agendaitem-list-buttons">
+                <span>
+                  <a class="generate-agendaitem-list"
+                     tal:condition="python: meeting.is_editable() and not view.has_agendaitem_list_document()"
+                     tal:attributes="href view/url_generate_agendaitem_list;"
+                     i18n:attributes="title"
+                     title="generate new agenda item list as word document" />
+
+                  <a class="download-agendaitem-list-btn"
+                     tal:condition="python: meeting.is_editable() and agendaitem_list_document"
+                     tal:attributes="href view/url_download_agendaitem_list"
+                     i18n:attributes="title"
+                     title="Download agenda item list" />
+
+                  <a class="refresh-agendaitem-list"
+                     tal:condition="python: meeting.is_editable() and view.has_agendaitem_list_document()"
+                     tal:attributes="href view/url_generate_agendaitem_list;"
+                     i18n:attributes="title"
+                     title="generate new version as word document" />
+                </span>
+              </td>
             </tr>
 
             <tr tal:define="protocol_document view/get_protocol_document">

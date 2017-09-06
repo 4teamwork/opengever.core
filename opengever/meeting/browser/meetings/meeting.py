@@ -10,6 +10,8 @@ from opengever.base.oguid import Oguid
 from opengever.base.schema import UTCDatetime
 from opengever.meeting import _
 from opengever.meeting import is_word_meeting_implementation_enabled
+from opengever.meeting.browser.meetings.agendaitem_list import GenerateAgendaItemList
+from opengever.meeting.browser.meetings.agendaitem_list import UpdateAgendaItemList
 from opengever.meeting.browser.meetings.transitions import MeetingTransitionController
 from opengever.meeting.browser.protocol import GenerateProtocol
 from opengever.meeting.browser.protocol import MergeDocxProtocol
@@ -82,7 +84,6 @@ TEMPLATES_DIR = Path(__file__).joinpath('..', 'templates').abspath()
 
 def get_dm_key(committee_oguid=None):
     """Return the key used to store meeting-data in the wizard-storage."""
-
     committee_oguid = committee_oguid or get_committee_oguid()
     return 'create_meeting:{}'.format(committee_oguid)
 
@@ -242,7 +243,7 @@ class MeetingView(BrowserView):
             return self.noword_template()
 
     def get_css_class(self, document):
-        """used for display icons in the view"""
+        """Provide CSS classes for icons."""
         return get_css_class(document)
 
     def transition_url(self, transition):
@@ -256,6 +257,11 @@ class MeetingView(BrowserView):
         if self.model.protocol_document:
             return IContentListingObject(
                 self.model.protocol_document.resolve_document())
+
+    def get_agendaitem_list_document(self):
+        if self.model.agendaitem_list_document:
+            return IContentListingObject(
+                self.model.agendaitem_list_document.resolve_document())
 
     def url_protocol(self):
         return self.model.get_url(view='protocol')
@@ -272,12 +278,25 @@ class MeetingView(BrowserView):
     def url_merge_docx_protocol(self):
         return MergeDocxProtocol.url_for(self.model)
 
+    def has_agendaitem_list_document(self):
+        return self.model.has_agendaitem_list_document()
+
     def has_protocol_document(self):
         return self.model.has_protocol_document()
 
     def url_download_protocol(self):
         if self.has_protocol_document:
             return self.model.protocol_document.get_download_url()
+
+    def url_download_agendaitem_list(self):
+        if self.has_agendaitem_list_document:
+            return self.model.agendaitem_list_document.get_download_url()
+
+    def url_generate_agendaitem_list(self):
+        if not self.model.has_agendaitem_list_document():
+            return GenerateAgendaItemList.url_for(self.model)
+        else:
+            return UpdateAgendaItemList.url_for(self.model)
 
     def url_agendaitem_list(self):
         return self.model.get_url(view='agenda_item_list')

@@ -164,16 +164,41 @@
                 </dd>
               </dl>
             </div>
-            <div class="list-group-item documents"
-                 tal:define="protocol_document view/get_protocol_document">
 
-              <div class="item agendaitem_list">
-                <span class="title" i18n:translate="label_agendaitem_list">Agendaitem list</span>
-                <a href="#" class="download-agendaitem-list-btn"
-                   tal:attributes="href view/url_agendaitem_list"
-                   title="label_download_agendaitem_list"
-                   i18n:attributes="title">
-                </a>
+            <div class="list-group-item documents"
+                 tal:define="protocol_document view/get_protocol_document;
+                 agendaitem_list_document view/get_agendaitem_list_document">
+
+              <div class="item agendaitem-list">
+                <div>
+                  <span class="title" i18n:translate="">Agendaitem list</span>
+                  <a tal:condition="python: meeting.is_editable() and not view.has_agendaitem_list_document()"
+                     tal:attributes="href view/url_generate_agendaitem_list;"
+                     i18n:attributes="title"
+                     title="generate new agenda item list as word document"
+                     class="generate-agendaitem-list"></a>
+
+                  <a class="download-agendaitem-list-btn"
+                     tal:condition="python: meeting.is_editable() and agendaitem_list_document"
+                     tal:attributes="href view/url_download_agendaitem_list"
+                     i18n:attributes="title"
+                     title="Download agenda item list"></a>
+
+                  <a tal:condition="python: meeting.is_editable() and view.has_agendaitem_list_document()"
+                     tal:attributes="href view/url_generate_agendaitem_list;"
+                     i18n:attributes="title"
+                     title="generate new version as word document"
+                     class="refresh-agendaitem-list"></a>
+                </div>
+              </div>
+
+              <div class="fileinfo">
+                <span tal:condition="not:agendaitem_list_document"
+                      i18n:translate="label_no_agendaitem_list">No agenda item list has been generated yet.</span>
+
+                <span tal:condition="agendaitem_list_document">
+                  <a tal:replace="structure agendaitem_list_document/render_link" />
+                </span>
               </div>
 
               <div class="item protocol">

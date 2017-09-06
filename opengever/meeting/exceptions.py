@@ -1,3 +1,11 @@
+class AgendaItemListAlreadyGenerated(Exception):
+    """An agenda item list could not be generated as there already is one."""
+
+
+class AgendaItemListMissingTemplate(Exception):
+    """An agenda item list could not be generated as is no template defined."""
+
+
 class NoSubmittedDocument(Exception):
     """A document could not be updates remotely since it is not a submitted
     document.
