@@ -506,8 +506,25 @@ class SubmittedProposal(ProposalBase):
     def append_excerpt(self, excerpt_document):
         """Add a relation to a new excerpt document.
         """
+        excerpts = getattr(self, 'excerpts', None)
+        if not excerpts:
+            # The missing_value attribute of a z3c-form field is used
+            # as soon as an object has no default_value i.e. after creating
+            # an object trough the command-line.
+            #
+            # Because the excerpts field needs a list as a missing_value,
+            # we will fall into the "mutable keyword argument"-python gotcha.
+            # The excerpts will be shared between the object-instances.
+            #
+            # Unfortunately the z3c-form field does not provide a
+            # missing_value-factory (like the defaultFactory) which would be
+            # necessary to fix this issue properly.
+            #
+            # As a workaround we reassign the field with a new list if the
+            # excerpts-attribute has never been assigned before.
+            excerpts = []
+
         intid = getUtility(IIntIds).getId(excerpt_document)
-        excerpts = getattr(self, 'excerpts', [])
         excerpts.append(RelationValue(intid))
         self.excerpts = excerpts
 
