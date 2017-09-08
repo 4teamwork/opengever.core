@@ -95,7 +95,8 @@ class OpengeverContentFixture(object):
         self.meeting_user = self.create_user(
             'meeting_user', u'Herbert', u'J\xe4ger')
         self.secretariat_user = self.create_user(
-            'secretariat_user', u'J\xfcrgen', u'K\xf6nig')
+            'secretariat_user', u'J\xfcrgen', u'K\xf6nig',
+            group=self.org_unit.inbox_group)
         self.committee_responsible = self.create_user(
             'committee_responsible', u'Fr\xe4nzi', u'M\xfcller')
 
@@ -542,7 +543,7 @@ class OpengeverContentFixture(object):
         """
         self._lookup_table[attrname] = ('raw', value)
 
-    def create_user(self, attrname, firstname, lastname, globalroles=()):
+    def create_user(self, attrname, firstname, lastname, globalroles=(), group=None):
         """Create an OGDS user and a Plone user.
         The user is member of the current org unit user group.
         The ``attrname`` is the attribute name used to access this user
@@ -562,7 +563,8 @@ class OpengeverContentFixture(object):
         create(Builder('ogds_user')
                .id(plone_user.getId())
                .having(firstname=firstname, lastname=lastname, email=email)
-               .assign_to_org_units([self.org_unit]))
+               .assign_to_org_units([self.org_unit])
+               .in_group(group))
 
         self._lookup_table[attrname] = ('user', plone_user.getId())
         return plone_user
