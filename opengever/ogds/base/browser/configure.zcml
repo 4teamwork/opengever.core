@@ -54,4 +54,12 @@
       template="templates/userdetails.pt"
       />
 
+  <browser:page
+      for="*"
+      name="team-details"
+      class=".teamdetails.TeamDetails"
+      permission="zope2.View"
+      template="templates/teamdetails.pt"
+      />
+
 </configure>
