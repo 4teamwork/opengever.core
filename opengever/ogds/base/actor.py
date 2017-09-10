@@ -26,6 +26,8 @@ from opengever.ogds.base import _
 from opengever.ogds.base.browser.userdetails import UserDetails
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.team import Team
+from plone import api
 from Products.CMFCore.interfaces._tools import IMemberData
 from Products.CMFCore.utils import getToolByName
 from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
@@ -62,6 +64,14 @@ class Actor(object):
             return lookup.create_null_actor()
 
         return lookup.create_contact_actor(contact=contact)
+
+    @classmethod
+    def team(cls, identifier, team=None):
+        lookup = ActorLookup(identifier)
+        if not identifier:
+            return lookup.create_null_actor()
+
+        return lookup.create_team_actor(team=team)
 
     def get_profile_url(self):
         raise NotImplementedError()
@@ -151,6 +161,30 @@ class InboxActor(Actor):
 
     def representatives(self):
         return self.org_unit.inbox().assigned_users()
+
+
+class TeamActor(Actor):
+
+    def __init__(self, identifier, team=None):
+        super(TeamActor, self).__init__(identifier)
+        self.team = team
+
+    def get_profile_url(self):
+        return '/'.join((api.portal.get().absolute_url(),
+                         '@@team-details', str(self.team.team_id)))
+
+    def corresponds_to(self, user):
+        return user in self.team.group.users
+
+    def get_label(self, with_principal=None):
+        return self.team.label()
+
+    @property
+    def permission_identifier(self):
+        return self.team.group.groupid
+
+    def representatives(self):
+        return self.team.group.users
 
 
 class ContactActor(Actor):
@@ -247,6 +281,15 @@ class ActorLookup(object):
 
         return InboxActor(self.identifier, org_unit=org_unit)
 
+    def is_team(self):
+        return self.identifier.startswith('team:')
+
+    def create_team_actor(self, team=None):
+        if not team:
+            team = Team.query.get_by_actor_id(self.identifier)
+
+        return TeamActor(self.identifier, team=team)
+
     def is_contact(self):
         return self.identifier.startswith('contact:')
 
@@ -302,5 +345,8 @@ class ActorLookup(object):
 
         elif self.is_contact():
             return self.create_contact_actor()
+
+        elif self.is_team():
+            return self.create_team_actor()
 
         return self.create_user_actor()

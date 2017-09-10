@@ -31,6 +31,15 @@ class TestActorLookup(IntegrationTestCase):
         self.assertIn(actor.get_label(), link)
         self.assertIn(actor.get_profile_url(), link)
 
+    def test_team_actor_lookup(self):
+        self.login(self.regular_user)
+        actor = Actor.lookup('team:1')
+
+        self.assertEqual(u'Projekt \xdcberbaung Dorfmatte (Finanzamt)',
+                         actor.get_label())
+        self.assertEqual('http://nohost/plone/@@team-details/1',
+                         actor.get_profile_url())
+
     def test_user_actor_ogds_user(self):
         actor = Actor.lookup('jurgen.konig')
 
@@ -81,6 +90,16 @@ class TestActorCorresponding(IntegrationTestCase):
         self.assertFalse(
             actor.corresponds_to(self.get_ogds_user(self.regular_user)))
 
+    def test_team_corresponds_to_all_team_group_members(self):
+        actor = Actor.lookup('team:1')
+
+        self.assertTrue(
+            actor.corresponds_to(self.get_ogds_user(self.regular_user)))
+        self.assertTrue(
+            actor.corresponds_to(self.get_ogds_user(self.dossier_responsible)))
+        self.assertFalse(
+            actor.corresponds_to(self.get_ogds_user(self.secretariat_user)))
+
 
 class TestActorRepresentatives(IntegrationTestCase):
 
@@ -102,3 +121,18 @@ class TestActorRepresentatives(IntegrationTestCase):
     def test_contact_has_no_representatives(self):
         actor = Actor.lookup('contact:meier-franz')
         self.assertItemsEqual([], actor.representatives())
+
+    def test_all_group_members_are_team_representatives(self):
+        actor = Actor.lookup('team:1')
+        self.assertItemsEqual(
+            [self.get_ogds_user(self.regular_user),
+             self.get_ogds_user(self.dossier_responsible)],
+            actor.representatives())
+
+
+class TestActorPermissionIdentifier(IntegrationTestCase):
+
+    def test_groupid_is_team_actors_permission_identifier(self):
+        actor = Actor.lookup('team:1')
+
+        self.assertEquals('projekt_a', actor.permission_identifier)
