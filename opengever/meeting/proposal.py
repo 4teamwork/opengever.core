@@ -24,6 +24,7 @@ from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.model.proposal import Proposal as ProposalModel
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
+from persistent.list import PersistentList
 from plone import api
 from plone.app.uuid.utils import uuidToObject
 from plone.directives import form
@@ -507,7 +508,7 @@ class SubmittedProposal(ProposalBase):
         """Add a relation to a new excerpt document.
         """
         intid = getUtility(IIntIds).getId(excerpt_document)
-        excerpts = getattr(self, 'excerpts', [])
+        excerpts = getattr(self, 'excerpts', PersistentList())
         excerpts.append(RelationValue(intid))
         self.excerpts = excerpts
 
