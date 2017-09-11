@@ -13,10 +13,10 @@ class TestResponseViewlet(FunctionalTestCase):
         self.task = create(Builder('task')
                            .having(task_type='comment'))
 
-    def add_sample_answer(self, browser):
+    def add_sample_answer(self, browser, response=u'Sample response'):
         browser.login().open(self.task, view='tabbedview_view-overview')
         browser.css('#task-transition-open-in-progress').first.click()
-        browser.fill({'Response': u'Sample response'})
+        browser.fill({'Response': response})
         browser.css('#form-buttons-save').first.click()
         browser.open(self.task, view='tabbedview_view-overview')
 
@@ -49,6 +49,20 @@ class TestResponseViewlet(FunctionalTestCase):
                          answer.css('h3').first.text)
         self.assertEqual('http://nohost/plone/@@user-details/test_user_1_',
                          answer.css('h3 a').first.get('href'))
+
+    @browsing
+    def test_response_description_is_web_intelligent_transformed(self, browser):
+        self.add_sample_answer(
+            browser, response=u'Anfrage:\r\n\r\n\r\nhttp://www.example.org/')
+        answer = browser.css('div.answers .answer').first
+
+        self.assertEqual(
+            'Anfrage:\n\n\nhttp://www.example.org/',
+            browser.css('.answers .text').first.text)
+
+        link = browser.css('.answers .text a').first
+        self.assertEqual('http://www.example.org/', link.text)
+        self.assertEqual('http://www.example.org/', link.get('href'))
 
     @browsing
     def test_answer_contains_response_text(self, browser):
