@@ -169,9 +169,11 @@
   <browser:page
       name="tabbedview_view-submittedproposals"
       for="opengever.meeting.committee.ICommittee"
-      class=".committeetabs.SubmittedProposals"
+      class=".committeetabs.SubmittedProposalListingTab"
       permission="zope2.View"
       />
+
+  <adapter factory=".committeetabs.SubmittedProposalTableSource" />
 
   <browser:page
       name="tabbedview_view-memberships"
