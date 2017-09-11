@@ -167,7 +167,7 @@ class BaseListingTab(GeverTabMixin, ListingView):
     model = None
 
 
-class BaseCatalogListingTab(CatalogListingView, GeverTabMixin):
+class BaseCatalogListingTab(GeverTabMixin, CatalogListingView):
     """Base view for catalog listing tabs.
     """
 
