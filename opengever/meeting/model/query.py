@@ -38,19 +38,27 @@ class ProposalQuery(BaseQuery):
         return self.filter(Proposal.admin_unit_id == admin_unit.id())
 
     def visible_for_committee(self, committee):
-        states = ['submitted', 'scheduled']
-        query = self.filter(Proposal.workflow_state.in_(states))
-        return query.filter(Proposal.committee == committee)
+        query = self.by_states(
+            Proposal.STATE_SUBMITTED,
+            Proposal.STATE_SCHEDULED,
+            Proposal.STATE_DECIDED)
+        return query.for_committee(committee)
 
     def for_committee(self, committee):
         return self.filter(Proposal.committee == committee)
 
     def active(self):
-        return self.filter(Proposal.workflow_state.in_([
-            Proposal.STATE_PENDING.name,
-            Proposal.STATE_SUBMITTED.name,
-            Proposal.STATE_SCHEDULED.name,
-            ]))
+        return self.by_states(
+            Proposal.STATE_PENDING,
+            Proposal.STATE_SUBMITTED,
+            Proposal.STATE_SCHEDULED)
+
+    def decided(self):
+        return self.by_states(Proposal.STATE_DECIDED)
+
+    def by_states(self, *states):
+        return self.filter(Proposal.workflow_state.in_(
+            [state.name for state in states]))
 
     def by_creator(self, creator_id):
         return self.filter(Proposal.creator == creator_id)
