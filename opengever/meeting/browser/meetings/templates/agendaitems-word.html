@@ -32,13 +32,22 @@
       <div class="proposal_document {{#if document_checked_out}}checked-out{{/if}}">{{{document_link}}}</div>
 
       {{#if excerpts}}
+
       <div>
         <div class="documents_label">%(label_excerpts)s:</div>
         <ul class="documents-list">
           {{#each excerpts}}
-          <li>
-            {{{link}}}
-          </li>
+            <li>
+              {{{link}}}
+              <span class="excerpt_buttons">
+              {{#if return_link}}
+                <a href="{{return_link}}" title="%(label_return_action)s" class="return-excerpt-btn"></a>
+              {{/if}}
+              {{#if is_excerpt}}
+                <span title="%(label_returned_excerpt)s" class="returned-excerpt-icon"></span>
+              {{/if}}
+              </span>
+            </li>
           {{/each}}
         </ul>
       </div>

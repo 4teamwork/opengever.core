@@ -403,3 +403,6 @@ class AgendaItem(Base):
         if not self.is_paragraph:
             return self.get_state() == self.STATE_REVISION
         return False
+
+    def return_excerpt(self, document):
+        self.proposal.return_excerpt(document)

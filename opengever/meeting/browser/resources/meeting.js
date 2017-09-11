@@ -92,6 +92,14 @@
       closeOnEsc: false
     }).data("overlay");
 
+    var returnExcerptDialog = $("#confirm_return_excerpt").overlay({
+      speed: 0,
+      closeSpeed: 0,
+      mask: { loadSpeed: 0 },
+      closeOnClick: false,
+      closeOnEsc: false
+    }).data("overlay");
+
     var sortableHelper = function(e, row) {
       var helper = row.clone();
       $.each(row.children(), function(idx, cell) {
@@ -131,6 +139,11 @@
       }
     };
 
+    this.confirmReturnExcerpt = function(target) {
+      this.currentItem = target;
+      returnExcerptDialog.load();
+    };
+
     this.unschedule = function() {
       this.closeModal();
       return $.post(this.currentItem.attr("href"));
@@ -139,6 +152,7 @@
     this.closeModal = function() {
       unscheduleDialog.close();
       deleteDialog.close();
+      returnExcerptDialog.close();
     };
 
     this.updateSortOrder = function() {
@@ -218,13 +232,20 @@
       return $.get(target.attr("href")).done(function(response) {
         if(response.proceed === true) {
           window.location = response.officeConnectorURL;
-          $(target).parents('tr').find('.proposal_document').addClass('checked-out');
+          $(target).parents("tr").find(".proposal_document").addClass("checked-out");
         }
       });
     };
 
     this.generateExcerpt = function(target) {
       return $.get(target.attr("href"));
+    };
+
+    this.returnExcerpt = function() {
+      self = this;
+      return $.get(this.currentItem.attr("href")).always(function() {
+        self.closeModal();
+      });
     };
 
     this.events = [
@@ -279,6 +300,24 @@
         }
       },
       {
+        method: "click",
+        target: ".return-excerpt-btn",
+        callback: this.confirmReturnExcerpt,
+        options: {
+          prevent: true
+        }
+      },
+      {
+        method: "click",
+        target: "#confirm_return_excerpt .confirm",
+        callback: this.returnExcerpt,
+        options: {
+          prevent: false,
+          loading: true,
+          update: true
+        }
+      },
+      {
         method: "sortupdate",
         target: "#agenda_items tbody",
         callback: this.updateSortOrder,
@@ -303,7 +342,7 @@
       },
       {
         method: "click",
-        target: "#confirm_unschedule .decline, #confirm_delete .decline",
+        target: "#confirm_unschedule .decline, #confirm_delete .decline, #confirm_return_excerpt .decline",
         callback: this.closeModal
       },
       {
