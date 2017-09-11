@@ -1,43 +1,41 @@
-from copy import deepcopy
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
 
 
-ALL_PROPOSALS = [
-    {'Reference Number': '1',
-     'Meeting': '',
-     'State': 'Submitted',
-     'Comittee': u'Rechnungspr\xfcfungskommission',
-     'Title': u'Vertragsentwurf f\xfcr weitere Bearbeitung bewilligen'},
-    {'Reference Number': '2',
+SUBMITTED_PROPOSAL = {
+    'Reference Number': '1',
+    'Meeting': '',
+    'State': 'Submitted',
+    'Comittee': u'Rechnungspr\xfcfungskommission',
+    'Title': u'Vertragsentwurf f\xfcr weitere Bearbeitung bewilligen'}
+
+DRAFT_PROPOSAL = {
+     'Reference Number': '2',
      'Meeting': '',
      'State': 'Pending',
      'Comittee': u'Kommission f\xfcr Verkehr',
-     'Title': u'Antrag f\xfcr Kreiselbau'},
-    {'Reference Number': '3',
-     'Meeting': '',
-     'State': 'Submitted',
-     'Comittee': u'Rechnungspr\xfcfungskommission',
-     'Title': u'\xc4nderungen am Personalreglement'},
-    {'State': 'Pending',
-     'Reference Number': '4',
-     'Comittee': u'Kommission f\xfcr Verkehr',
-     'Title': u'\xdcberarbeitung der GAV',
-     'Meeting': ''},
-]
+     'Title': u'Antrag f\xfcr Kreiselbau'}
 
-SUBMITTED_PROPOSALS = [
-    {'Reference Number': '1',
-     'Meeting': '',
-     'State': 'Submitted',
-     'Comittee': u'Rechnungspr\xfcfungskommission',
-     'Title': u'Vertragsentwurf f\xfcr weitere Bearbeitung bewilligen'},
-    {'Reference Number': '3',
-     'Meeting': '',
-     'State': 'Submitted',
-     'Comittee': u'Rechnungspr\xfcfungskommission',
-     'Title': u'\xc4nderungen am Personalreglement'},
-]
+DECIDED_PROPOSAL = {
+    'Reference Number': '3',
+    'Meeting': u'8. Sitzung der Rechnungspr\xfcfungskommission',
+    'State': 'Decided',
+    'Comittee': u'Rechnungspr\xfcfungskommission',
+    'Title': u'Initialvertrag f\xfcr Bearbeitung'}
+
+SUBMITTED_WORD_PROPOSAL = {
+    'Reference Number': '4',
+    'Meeting': '',
+    'State': 'Submitted',
+    'Comittee': u'Rechnungspr\xfcfungskommission',
+    'Title': u'\xc4nderungen am Personalreglement'}
+
+DRAFT_WORD_PROPOSAL = {
+    'State': 'Pending',
+    'Reference Number': '5',
+    'Comittee': u'Kommission f\xfcr Verkehr',
+    'Title': u'\xdcberarbeitung der GAV',
+    'Meeting': ''}
 
 
 def proposals_table(browser):
@@ -56,7 +54,10 @@ class TestDossierProposalListing(IntegrationTestCase):
     def test_listing(self, browser):
         self.login(self.dossier_responsible, browser)
         browser.open(self.dossier, view='tabbedview_view-proposals')
-        self.assertEquals(ALL_PROPOSALS, proposal_dicts(browser))
+        self.assertEquals(
+            [SUBMITTED_PROPOSAL, DRAFT_PROPOSAL,
+             SUBMITTED_WORD_PROPOSAL, DRAFT_WORD_PROPOSAL],
+            proposal_dicts(browser))
 
     @browsing
     def test_proposals_are_linked_correctly(self, browser):
@@ -81,20 +82,22 @@ class TestDossierProposalListing(IntegrationTestCase):
         self.login(self.dossier_responsible, browser)
         browser.open(self.dossier, view='tabbedview_view-proposals')
 
-        expected = deepcopy(ALL_PROPOSALS)
-        expected[0]['Meeting'] = u'9. Sitzung der Rechnungspr\xfcfungskommission'
-        expected[0]['State'] = u'Scheduled'
-        self.assertEquals(expected, proposal_dicts(browser))
+        elem = proposals_table(browser).rows[1].css(
+            'a.contenttype-opengever-meeting-meeting').first
+        self.assertEquals(
+            'http://nohost/plone/opengever-meeting-committeecontainer/'
+            'committee-1/meeting-1/view',
+            elem.node.get('href'))
 
     @browsing
-    def test_only_shows_active_proposals_by_default(self, browser):
+    def test_default_filter_hides_cancelled_proposals(self, browser):
         self.login(self.dossier_responsible, browser)
         browser.open(self.draft_proposal, view='tabbedview_view-overview')
         browser.find('Cancel').click()
 
         browser.open(self.dossier, view='tabbedview_view-proposals')
         self.assertEquals(
-            ALL_PROPOSALS[:1] + ALL_PROPOSALS[2:],
+            [SUBMITTED_PROPOSAL, SUBMITTED_WORD_PROPOSAL, DRAFT_WORD_PROPOSAL],
             proposal_dicts(browser))
 
     @browsing
@@ -105,11 +108,14 @@ class TestDossierProposalListing(IntegrationTestCase):
         browser.find('Cancel').click()
         browser.open(self.dossier,
                      view='tabbedview_view-proposals',
-                     data={'proposal_state_filter': 'filter_all'})
+                     data={'proposal_state_filter': 'filter_proposals_all'})
 
-        expected = deepcopy(ALL_PROPOSALS)
-        expected[1]['State'] = 'Cancelled'
-        self.assertEquals(expected, proposal_dicts(browser))
+        cancelled_proposal = DRAFT_PROPOSAL.copy()
+        cancelled_proposal['State'] = 'Cancelled'
+        self.assertEquals(
+            [SUBMITTED_PROPOSAL, cancelled_proposal, DECIDED_PROPOSAL,
+             SUBMITTED_WORD_PROPOSAL, DRAFT_WORD_PROPOSAL],
+            proposal_dicts(browser))
 
 
 class TestMyProposals(IntegrationTestCase):
@@ -122,7 +128,7 @@ class TestMyProposals(IntegrationTestCase):
 
         self.login(self.regular_user, browser)
         browser.open(view='tabbedview_view-myproposals')
-        self.assertEquals(ALL_PROPOSALS[1:2], proposal_dicts(browser))
+        self.assertEquals([DRAFT_PROPOSAL], proposal_dicts(browser))
 
 
 class TestSubmittedProposals(IntegrationTestCase):
@@ -132,7 +138,9 @@ class TestSubmittedProposals(IntegrationTestCase):
         self.login(self.committee_responsible, browser)
         browser.open(self.committee, view='tabbedview_view-submittedproposals')
 
-        self.assertEquals(SUBMITTED_PROPOSALS, proposal_dicts(browser))
+        self.assertEquals(
+            [SUBMITTED_PROPOSAL, SUBMITTED_WORD_PROPOSAL],
+            proposal_dicts(browser))
 
     @browsing
     def test_proposals_are_linked_correctly_to_the_submitted_proposal(self, browser):
@@ -156,7 +164,9 @@ class TestSubmittedProposals(IntegrationTestCase):
 
         browser.open(self.committee, view='tabbedview_view-submittedproposals')
 
-        expected = deepcopy(SUBMITTED_PROPOSALS)
-        expected[0]['Meeting'] = u'9. Sitzung der Rechnungspr\xfcfungskommission'
-        expected[0]['State'] = u'Scheduled'
-        self.assertEquals(expected, proposal_dicts(browser))
+        elem = proposals_table(browser).rows[1].css(
+            'a.contenttype-opengever-meeting-meeting').first
+        self.assertEquals(
+            'http://nohost/plone/opengever-meeting-committeecontainer/'
+            'committee-1/meeting-1/view',
+            elem.node.get('href'))
