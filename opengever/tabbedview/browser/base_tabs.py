@@ -157,7 +157,7 @@ class BaseListingTab(GeverTabMixin, ListingView):
 
     sort_on = 'modified'
     sort_reverse = False
-    #lazy must be false otherwise there will be no correct batching
+    # lazy must be false otherwise there will be no correct batching
     lazy = False
 
     # the model attributes is used for a dynamic textfiltering functionality
