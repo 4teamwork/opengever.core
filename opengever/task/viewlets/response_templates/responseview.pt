@@ -29,7 +29,7 @@
               Response Header
             </h3>
 
-            <div class="text" tal:content="response/text"></div>
+            <div class="text" tal:content="structure response_info/text"></div>
 
           </div>
         </div>

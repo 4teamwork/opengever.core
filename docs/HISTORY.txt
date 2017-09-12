@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Fixed custom sort for catalog listings. [phgross]
+- Format line breaks and links in task responses. [phgross]
 - Bump ftw.recipe.deployment to 1.3.0 in order to get log rotation for ftw.structlog logfiles. [lgraf]
 - SPV word: Add functionality to return an excerpt to the proposer. [deiferni]
 - Fixed bumblebee-overlay pdf link generation, when filename contains umlaut. [phgross]

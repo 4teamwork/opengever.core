@@ -9,6 +9,7 @@ from opengever.task.adapters import IResponseContainer
 from opengever.task.response import Base
 from opengever.task.task import ITask
 from opengever.task.viewlets.manager import BeneathTask
+from plone import api
 from Products.CMFCore.utils import getToolByName
 from zope.component import getMultiAdapter
 import datetime
@@ -29,10 +30,14 @@ class ResponseView(grok.Viewlet, Base):
         container = IResponseContainer(self.context)
         responses = []
 
+        transforms = api.portal.get_tool(name='portal_transforms')
         for id, response in enumerate(container):
             info = dict(
                 id=id,
                 response=response,
+                text=transforms.convertTo(
+                    'text/html', response.text,
+                    mimetype='text/x-web-intelligent'),
                 edit_link=self.edit_link(id),
                 delete_link=self.delete_link(id))
 
