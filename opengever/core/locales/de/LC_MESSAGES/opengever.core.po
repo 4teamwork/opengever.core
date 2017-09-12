@@ -200,7 +200,7 @@ msgstr "Zusätzliche Anhänge einreichen"
 
 #: ./opengever/core/profiles/default/types/opengever.meeting.submittedproposal.xml
 msgid "Submitted Proposal"
-msgstr "Eingereichten Antrag"
+msgstr "Eingereichter Antrag"
 
 #: ./opengever/core/profiles/default/types/opengever.task.task.xml
 msgid "Task"
