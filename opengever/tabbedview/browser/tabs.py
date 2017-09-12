@@ -6,8 +6,6 @@ from opengever.bumblebee import set_preferred_listing_view
 from opengever.dossier.base import DOSSIER_STATES_CLOSED
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.globalindex.model.task import Task
-from opengever.meeting.model.proposal import Proposal
-from opengever.meeting.tabs.proposallisting import ProposalListingTab
 from opengever.officeconnector.helpers import is_officeconnector_attach_feature_enabled  # noqa
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.tabbedview import _
@@ -19,8 +17,8 @@ from opengever.tabbedview.filters import FilterList
 from opengever.tabbedview.helper import escape_html_transform
 from opengever.tabbedview.helper import external_edit_link
 from opengever.tabbedview.helper import linked
-from opengever.tabbedview.helper import linked_document
 from opengever.tabbedview.helper import linked_containing_subdossier
+from opengever.tabbedview.helper import linked_document
 from opengever.tabbedview.helper import readable_ogds_author
 from opengever.tabbedview.helper import readable_ogds_user
 from opengever.tabbedview.helper import workflow_state
@@ -326,41 +324,6 @@ class Tasks(GlobalTaskListingTab):
 
     def get_base_query(self):
         return Task.query.by_container(self.context, get_current_admin_unit())
-
-
-class ActiveProposalFilter(Filter):
-    """Filter out inactive proposals."""
-
-    def update_query(self, query):
-        return query.active()
-
-
-class Proposals(ProposalListingTab):
-    """Recursively list proposals."""
-
-    enabled_actions = []
-    major_actions = []
-    sort_on = ''
-    show_selects = False
-
-    template = ViewPageTemplateFile("generic_with_filters.pt")
-
-    model = Proposal
-
-    filterlist_name = 'proposal_state_filter'
-    filterlist_available = True
-
-    filterlist = FilterList(
-        Filter('filter_all', _('label_tabbedview_filter_all')),
-        ActiveProposalFilter(
-            'filter_active',
-            _('Active'),
-            default=True)
-    )
-
-    def get_base_query(self):
-        return Proposal.query.by_container(
-            self.context, get_current_admin_unit())
 
 
 class TrashProxy(BaseTabProxy):

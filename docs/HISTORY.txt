@@ -20,6 +20,7 @@ Changelog
 - SPV word: add support for ad-hoc agenda items, add configurable ad-hoc agenda item. [deiferni]
 - Add configuration option to hide the mail preview tab. [phgross]
 - Update ftw.keywordwidget to 1.3.6: Fix a bug while adding new keywords. [mathias.leimgruber]
+- Add proposal filter to committee. [deiferni]
 - Hide contact field in the manual journal entry form, when contact feature is disabled. [phgross]
 - Only show membership edit links for CommitteeResponsibles. [deiferni]
 - Fix Drag'n'Drop replacing for documents inside a resolved task. [phgross]

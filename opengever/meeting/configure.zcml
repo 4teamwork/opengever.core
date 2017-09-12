@@ -60,8 +60,6 @@
   <adapter factory=".tabs.meetinglisting.MeetingTableSource" />
   <adapter factory=".tabs.memberlisting.MemberTableSource" />
   <adapter factory=".tabs.membershiplisting.MembershipTableSource" />
-  <adapter factory=".tabs.proposallisting.ProposalTableSource" />
-  <adapter factory=".tabs.submittedproposallisting.SubmittedProposalTableSource" />
 
   <adapter factory=".menu.CommitteePostFactoryMenu" />
 </configure>

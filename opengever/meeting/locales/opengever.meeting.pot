@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-09-07 09:54+0000\n"
+"POT-Creation-Date: 2017-09-11 14:17+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -373,64 +373,70 @@ msgid "Updated with a newer generated version from meeting ${title}."
 msgstr ""
 
 #. Default: "Active"
+#: ./opengever/meeting/browser/documents/proposalstab.py:64
 #: ./opengever/meeting/model/committee.py:29
 #: ./opengever/meeting/model/period.py:21
 msgid "active"
 msgstr ""
 
 #. Default: "Cannot decide agenda item: someone else has checked out the document."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:342
+#: ./opengever/meeting/browser/meetings/agendaitem.py:343
 msgid "agenda_item_cannot_decide_document_checked_out"
 msgstr ""
 
 #. Default: "Agenda Item decided."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:312
+#: ./opengever/meeting/browser/meetings/agendaitem.py:313
 msgid "agenda_item_decided"
 msgstr ""
 
 #. Default: "Agenda Item Successfully deleted"
-#: ./opengever/meeting/browser/meetings/agendaitem.py:288
+#: ./opengever/meeting/browser/meetings/agendaitem.py:289
 msgid "agenda_item_deleted"
 msgstr ""
 
 #. Default: "Agendaitem has been decided and the meeting has been held."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:317
+#: ./opengever/meeting/browser/meetings/agendaitem.py:318
 msgid "agenda_item_meeting_held"
 msgstr ""
 
 #. Default: "Agenda Item order updated."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:247
+#: ./opengever/meeting/browser/meetings/agendaitem.py:248
 msgid "agenda_item_order_updated"
 msgstr ""
 
 #. Default: "Agenda Item decided and excerpt generated."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:309
+#: ./opengever/meeting/browser/meetings/agendaitem.py:310
 msgid "agenda_item_proposal_decided"
 msgstr ""
 
 #. Default: "Agenda Item successfully reopened."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:358
+#: ./opengever/meeting/browser/meetings/agendaitem.py:359
 msgid "agenda_item_reopened"
 msgstr ""
 
 #. Default: "Agenda Item revised successfully."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:371
+#: ./opengever/meeting/browser/meetings/agendaitem.py:372
 msgid "agenda_item_revised"
 msgstr ""
 
 #. Default: "Agenda Item title must not be empty."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:260
+#: ./opengever/meeting/browser/meetings/agendaitem.py:261
 msgid "agenda_item_update_empty_string"
 msgstr ""
 
 #. Default: "Agenda Item title is too long."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:267
+#: ./opengever/meeting/browser/meetings/agendaitem.py:268
 msgid "agenda_item_update_too_long_title"
 msgstr ""
 
 #. Default: "Agenda Item updated."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:273
+#: ./opengever/meeting/browser/meetings/agendaitem.py:274
 msgid "agenda_item_updated"
+msgstr ""
+
+#. Default: "All"
+#: ./opengever/meeting/browser/documents/proposalstab.py:61
+msgid "all"
 msgstr ""
 
 #. Default: "Cancel"
@@ -486,7 +492,7 @@ msgid "closed"
 msgstr ""
 
 #. Default: "Comittee"
-#: ./opengever/meeting/tabs/proposallisting.py:51
+#: ./opengever/meeting/browser/documents/proposalstab.py:89
 msgid "column_comittee"
 msgstr ""
 
@@ -531,7 +537,7 @@ msgid "column_location"
 msgstr ""
 
 #. Default: "Meeting"
-#: ./opengever/meeting/tabs/proposallisting.py:55
+#: ./opengever/meeting/browser/documents/proposalstab.py:93
 msgid "column_meeting"
 msgstr ""
 
@@ -546,15 +552,15 @@ msgid "column_role"
 msgstr ""
 
 #. Default: "State"
+#: ./opengever/meeting/browser/documents/proposalstab.py:85
 #: ./opengever/meeting/tabs/meetinglisting.py:51
-#: ./opengever/meeting/tabs/proposallisting.py:47
 msgid "column_state"
 msgstr ""
 
 #. Default: "Title"
+#: ./opengever/meeting/browser/documents/proposalstab.py:81
 #: ./opengever/meeting/tabs/committeelisting.py:24
 #: ./opengever/meeting/tabs/meetinglisting.py:47
-#: ./opengever/meeting/tabs/proposallisting.py:43
 msgid "column_title"
 msgstr ""
 
@@ -576,6 +582,7 @@ msgid "decide_agendaitem"
 msgstr ""
 
 #. Default: "Decided"
+#: ./opengever/meeting/browser/documents/proposalstab.py:68
 #: ./opengever/meeting/model/agendaitem.py:37
 #: ./opengever/meeting/model/proposal.py:139
 msgid "decided"
@@ -587,7 +594,7 @@ msgid "description_group"
 msgstr ""
 
 #. Default: "You are not allowed to checkout the document."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:387
+#: ./opengever/meeting/browser/meetings/agendaitem.py:388
 msgid "document_checkout_not_allowed"
 msgstr ""
 
@@ -602,12 +609,12 @@ msgid "download protocol"
 msgstr ""
 
 #. Default: "Paragraph must not be empty."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:404
+#: ./opengever/meeting/browser/meetings/agendaitem.py:405
 msgid "empty_paragraph"
 msgstr ""
 
 #. Default: "Proposal must not be empty."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:419
+#: ./opengever/meeting/browser/meetings/agendaitem.py:420
 msgid "empty_proposal"
 msgstr ""
 
@@ -617,7 +624,7 @@ msgid "error_must_checkin_documents_for_transition"
 msgstr ""
 
 #. Default: "Insufficient privileges to add a document to the meeting dossier."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:433
+#: ./opengever/meeting/browser/meetings/agendaitem.py:434
 msgid "error_no_permission_to_add_document"
 msgstr ""
 
@@ -632,12 +639,12 @@ msgid "excerpt_document_title"
 msgstr ""
 
 #. Default: "Excerpt was created successfully."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:471
+#: ./opengever/meeting/browser/meetings/agendaitem.py:472
 msgid "excerpt_generated"
 msgstr ""
 
 #. Default: "Excerpt was returned to proposer."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:491
+#: ./opengever/meeting/browser/meetings/agendaitem.py:492
 msgid "excerpt_returned"
 msgstr ""
 
@@ -1085,7 +1092,7 @@ msgid "label_presidency"
 msgstr ""
 
 #. Default: "Reference Number"
-#: ./opengever/meeting/tabs/proposallisting.py:40
+#: ./opengever/meeting/browser/documents/proposalstab.py:78
 msgid "label_proposal_id"
 msgstr ""
 
@@ -1278,7 +1285,7 @@ msgid "message_write_conflict"
 msgstr ""
 
 #. Default: "No ad-hoc agenda-item template has been configured."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:427
+#: ./opengever/meeting/browser/meetings/agendaitem.py:428
 msgid "missing_ad_hoc_template"
 msgstr ""
 
@@ -1369,7 +1376,7 @@ msgid "overview"
 msgstr ""
 
 #. Default: "Paragraph successfully added."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:408
+#: ./opengever/meeting/browser/meetings/agendaitem.py:409
 msgid "paragraph_added"
 msgstr ""
 
@@ -1544,7 +1551,7 @@ msgid "tab_matches"
 msgstr ""
 
 #. Default: "Text successfully added."
-#: ./opengever/meeting/browser/meetings/agendaitem.py:442
+#: ./opengever/meeting/browser/meetings/agendaitem.py:443
 msgid "text_added"
 msgstr ""
 

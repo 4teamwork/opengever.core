@@ -167,6 +167,20 @@ class BaseListingTab(GeverTabMixin, ListingView):
     model = None
 
 
+class FilteredListingTab(BaseListingTab):
+    """Base class for filtered listings.
+
+    - filterlist must be assigned a custom `FilterList`
+    - filterlist_name must be assigned a unique name for the filter
+    """
+
+    filterlist_available = True
+    template = ViewPageTemplateFile("generic_with_filters.pt")
+
+    filterlist_name = None
+    filterlist = None
+
+
 class BaseCatalogListingTab(GeverTabMixin, CatalogListingView):
     """Base view for catalog listing tabs.
     """

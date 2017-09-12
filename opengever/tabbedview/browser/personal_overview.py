@@ -4,6 +4,7 @@ from opengever.activity import is_activity_feature_enabled
 from opengever.globalindex.model.task import Task
 from opengever.latex.opentaskreport import is_open_task_report_allowed
 from opengever.meeting import is_meeting_feature_enabled
+from opengever.meeting.browser.documents.proposalstab import ProposalListingTab
 from opengever.meeting.model.proposal import Proposal
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
@@ -13,7 +14,6 @@ from opengever.tabbedview import LOG
 from opengever.tabbedview.browser.tabs import Documents
 from opengever.tabbedview.browser.tabs import DocumentsProxy
 from opengever.tabbedview.browser.tabs import Dossiers
-from opengever.tabbedview.browser.tabs import Proposals
 from opengever.tabbedview.browser.tasklisting import GlobalTaskListingTab
 from plone import api
 from plone.memoize.view import memoize_contextless
@@ -256,7 +256,7 @@ class IssuedTasks(GlobalTaskListingTab):
         return Task.query.users_issued_tasks(userid)
 
 
-class MyProposals(Proposals):
+class MyProposals(ProposalListingTab):
 
     def get_base_query(self):
         return Proposal.query.by_creator(api.user.get_current().getId())

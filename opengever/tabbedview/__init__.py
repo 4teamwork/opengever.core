@@ -1,6 +1,7 @@
 from opengever.tabbedview.basesource import GeverTableSource  # noqa
 from opengever.tabbedview.browser.base_tabs import BaseCatalogListingTab  # noqa
 from opengever.tabbedview.browser.base_tabs import BaseListingTab  # noqa
+from opengever.tabbedview.browser.base_tabs import FilteredListingTab  # noqa
 from opengever.tabbedview.browser.base_tabs import GeverTabMixin  # noqa
 from opengever.tabbedview.browser.tabbed import GeverTabbedView  # noqa
 from opengever.tabbedview.browser.tabbed import ModelProxyTabbedView  # noqa

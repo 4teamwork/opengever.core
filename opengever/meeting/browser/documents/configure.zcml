@@ -10,4 +10,13 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="opengever.dossier.interfaces.IDossierMarker"
+      name="tabbedview_view-proposals"
+      class=".proposalstab.ProposalListingTab"
+      permission="zope2.View"
+      />
+
+  <adapter factory=".proposalstab.ProposalTableSource" />
+
 </configure>

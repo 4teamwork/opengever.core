@@ -161,14 +161,14 @@ class TestContentStatsIntegration(IntegrationTestCase):
             (self.portal, self.portal.REQUEST),
             IStatsProvider, name='checked_out_docs')
 
-        self.assertEqual({'checked_out': 0, 'checked_in': 12},
+        self.assertEqual({'checked_out': 0, 'checked_in': 15},
                          stats_provider.get_raw_stats())
 
         # Check out a document
         getMultiAdapter((self.document, self.document.REQUEST),
                         ICheckinCheckoutManager).checkout()
 
-        self.assertEqual({'checked_out': 1, 'checked_in': 11},
+        self.assertEqual({'checked_out': 1, 'checked_in': 14},
                          stats_provider.get_raw_stats())
 
     def test_file_mimetypes_provider(self):
@@ -179,7 +179,7 @@ class TestContentStatsIntegration(IntegrationTestCase):
 
         self.assertEqual({
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 1,
-            'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 7,
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 10,
             'message/rfc822': 2},
             stats_provider.get_raw_stats())
 
@@ -192,7 +192,7 @@ class TestContentStatsIntegration(IntegrationTestCase):
 
         self.assertEquals([
             ['', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', '1'],
-            ['', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', '7'],
+            ['', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', '10'],
             ['', 'message/rfc822', '2']],
             table.lists())
 
@@ -204,7 +204,7 @@ class TestContentStatsIntegration(IntegrationTestCase):
         table = browser.css('#content-stats-checked_out_docs').first
 
         self.assertEquals(
-            [['', 'checked_in', '12'], ['', 'checked_out', '0']],
+            [['', 'checked_in', '15'], ['', 'checked_out', '0']],
             table.lists())
 
         # Check out a document
@@ -215,5 +215,5 @@ class TestContentStatsIntegration(IntegrationTestCase):
         table = browser.css('#content-stats-checked_out_docs').first
 
         self.assertEquals(
-            [['', 'checked_in', '11'], ['', 'checked_out', '1']],
+            [['', 'checked_in', '14'], ['', 'checked_out', '1']],
             table.lists())

@@ -86,13 +86,6 @@
       permission="zope2.View"
       />
 
-  <browser:page
-      for="opengever.dossier.interfaces.IDossierMarker"
-      name="tabbedview_view-proposals"
-      class=".tabs.Proposals"
-      permission="zope2.View"
-      />
-
   <!-- contactfolder tabs -->
   <browser:page
       for="*"
