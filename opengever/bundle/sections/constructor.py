@@ -74,7 +74,14 @@ class ConstructorSection(object):
         else:
             title_keys = (u'title',)
 
-        title_args = dict((key, item.get(key)) for key in title_keys)
+        title_args = {}
+        for key in title_keys:
+            value = item.get(key)
+            if value and not isinstance(value, unicode):
+                value = value.decode('utf-8')
+
+            title_args[key] = value
+
         return title_args
 
     def _set_guid(self, obj, item):
