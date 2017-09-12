@@ -75,7 +75,13 @@ class ProposalListingTab(FilteredListingTab):
     def columns(self):
         return (
             {'column': 'proposal_id',
-             'column_title': _(u'label_proposal_id', default=u'Reference Number')},
+             'column_title': _(u'label_proposal_id',
+                               default=u'Reference Number')},
+
+            {'column': 'decision_number',
+             'column_title': _(u'label_decision_number',
+                               default=u'Decision number'),
+             'transform': lambda item, value: item.get_decision_number()},
 
             {'column': 'title',
              'column_title': _(u'column_title', default=u'Title'),

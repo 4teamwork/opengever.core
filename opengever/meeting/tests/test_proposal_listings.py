@@ -4,6 +4,7 @@ from opengever.testing import IntegrationTestCase
 
 SUBMITTED_PROPOSAL = {
     'Reference Number': '1',
+    'Decision number': '',
     'Meeting': '',
     'State': 'Submitted',
     'Comittee': u'Rechnungspr\xfcfungskommission',
@@ -11,6 +12,7 @@ SUBMITTED_PROPOSAL = {
 
 DRAFT_PROPOSAL = {
      'Reference Number': '2',
+     'Decision number': '',
      'Meeting': '',
      'State': 'Pending',
      'Comittee': u'Kommission f\xfcr Verkehr',
@@ -18,6 +20,7 @@ DRAFT_PROPOSAL = {
 
 DECIDED_PROPOSAL = {
     'Reference Number': '3',
+    'Decision number': '1',
     'Meeting': u'8. Sitzung der Rechnungspr\xfcfungskommission',
     'State': 'Decided',
     'Comittee': u'Rechnungspr\xfcfungskommission',
@@ -25,17 +28,19 @@ DECIDED_PROPOSAL = {
 
 SUBMITTED_WORD_PROPOSAL = {
     'Reference Number': '4',
+    'Decision number': '',
     'Meeting': '',
     'State': 'Submitted',
     'Comittee': u'Rechnungspr\xfcfungskommission',
     'Title': u'\xc4nderungen am Personalreglement'}
 
 DRAFT_WORD_PROPOSAL = {
-    'State': 'Pending',
     'Reference Number': '5',
+    'Decision number': '',
+    'Meeting': '',
+    'State': 'Pending',
     'Comittee': u'Kommission f\xfcr Verkehr',
-    'Title': u'\xdcberarbeitung der GAV',
-    'Meeting': ''}
+    'Title': u'\xdcberarbeitung der GAV'}
 
 
 def proposals_table(browser):
