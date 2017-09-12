@@ -61,6 +61,20 @@ class TestResponseViewlet(IntegrationTestCase):
         self.assertEqual('http://www.example.org/', link.get('href'))
 
     @browsing
+    def test_response_description_is_xss_safe(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+        browser.open(self.subtask, view='tabbedview_view-overview')
+
+        self.add_sample_answer(
+            browser,
+            response='<img src="http://not.found/" '
+            'onerror="script:alert(\'XSS\');" />')
+
+        self.assertEqual(
+            u'&lt;img src="http://not.found/" onerror="script:alert(\'XSS\');" /&gt;',
+            browser.css('.answers .text').first.innerHTML)
+
+    @browsing
     def test_answer_contains_response_text(self, browser):
         self.login(self.dossier_responsible, browser=browser)
         browser.open(self.subtask, view='tabbedview_view-overview')
