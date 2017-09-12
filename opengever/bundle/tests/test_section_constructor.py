@@ -92,6 +92,22 @@ class TestConstructor(FunctionalTestCase):
         self.assertFalse(hasattr(content, 'title_de'))
         self.assertFalse(hasattr(content, 'title_Fr'))
 
+    def test_title_is_unicode(self):
+        item = {
+            u"guid": "12345xy",
+            u"_type": u"opengever.document.document",
+            u"title": u'Bewerbung Hanspeter M\xfcller'.encode('utf-8'),
+        }
+
+        section = self.setup_section(previous=[item])
+        list(section)
+
+        portal = api.portal.get()
+        content = portal.restrictedTraverse(item['_path'])
+
+        self.assertTrue(isinstance(content.title, unicode))
+        self.assertEquals(u'Bewerbung Hanspeter M\xfcller', content.title)
+
     def test_sets_bundle_guid_on_obj(self):
         guid = "12345xy"
         item = {
