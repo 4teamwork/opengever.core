@@ -398,6 +398,7 @@ class OpengeverContentFixture(object):
             Builder('meeting_dossier').within(self.repofolder00)
             .titled(u'Sitzungsdossier 9/2017')
             .having(start=date(2016, 9, 12),
+                    relatedDossier=[self.dossier],
                     responsible=self.committee_responsible.getId())))
         self.meeting = create(
             Builder('meeting')
