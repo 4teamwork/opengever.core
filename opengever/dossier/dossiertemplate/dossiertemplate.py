@@ -4,8 +4,10 @@ from five import grok
 from opengever.base.vocabulary import voc_term_title
 from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.dossiertemplate.behaviors import IDossierTemplate
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateSchema
+from opengever.dossier.utils import truncate_ellipsis
 from opengever.ogds.base.actor import Actor
 from plone import api
 from plone.dexterity.content import Container
@@ -13,6 +15,7 @@ from plone.dexterity.utils import getAdditionalSchemata
 from plone.directives import dexterity
 from plone.z3cform.fieldsets.utils import remove
 from zope.schema import getFieldsInOrder
+
 
 TEMPLATABLE_FIELDS = [
     'IOpenGeverBase.title',
@@ -125,3 +128,14 @@ class DossierTemplate(Container):
     @property
     def responsible_label(self):
         return self.get_responsible_actor().get_label()
+
+    def get_formatted_comments(self, threshold=400):
+        """Returns the dossier's comment truncated to characters defined
+        in `threshold` and transformed as web intelligent text.
+        """
+        comments = IDossier(self).comments
+        if comments:
+            if threshold:
+                comments = truncate_ellipsis(comments, threshold)
+            return api.portal.get_tool(name='portal_transforms').convertTo(
+                'text/html', comments, mimetype='text/x-web-intelligent').getData()

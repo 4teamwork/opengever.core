@@ -134,9 +134,9 @@ class TestOverview(IntegrationTestCase):
 
         browser.open(self.empty_dossier, view='tabbedview_view-overview')
         self.assertSequenceEqual(
-            ['Document 11', 'Document 9', 'Document 8', 'Document 7',
-             'Document 6', 'Document 5', 'Document 4', 'Document 3',
-             'Document 2', 'Document 1'],
+            ['Document 11', 'Document 10', 'Document 9', 'Document 8',
+             'Document 7', 'Document 6', 'Document 5', 'Document 4',
+             'Document 3', 'Document 2'],
             browser.css('#newest_documentsBox li:not(.moreLink) a.document_link').text)
 
     @browsing
@@ -171,6 +171,30 @@ class TestOverview(IntegrationTestCase):
         browser.open(self.dossier, view='tabbedview_view-overview')
         references = browser.css('#referencesBox a')
         self.assertEquals([], references.text)
+
+    @browsing
+    def test_shows_comments_web_intelligent_formatted(self, browser):
+        self.login(self.regular_user, browser=browser)
+        IDossier(self.dossier).comments = u'Anfrage:\r\n\r\n\r\nhttp://www.example.org/'
+
+        browser.open(self.dossier, view='tabbedview_view-overview')
+
+        self.assertEquals('Anfrage:\n\n\nhttp://www.example.org/',
+                          browser.css('#commentsBox span').first.text)
+        self.assertEquals('http://www.example.org/',
+                          browser.css('#commentsBox span a').first.get('href'))
+
+    @browsing
+    def test_comments_box_is_xss_safe(self, browser):
+        self.login(self.regular_user, browser=browser)
+        comment = '<img src="http://not.found/" onerror="script:alert(\'XSS\');" />'
+        IDossier(self.dossier).comments = comment
+
+        browser.open(self.dossier, view='tabbedview_view-overview')
+
+        self.assertEquals(
+            u'&lt;img src="http://not.found/" onerror="script:alert(\'XSS\');" /&gt;',
+            browser.css('#commentsBox span').first.innerHTML)
 
     @browsing
     def test_dossier_show_comments_editlink_without_modify_rights(self, browser):
@@ -235,7 +259,8 @@ class TestOverview(IntegrationTestCase):
                      data={'data': payload, '_authenticator': createToken()})
 
         self.assertEquals(
-            {u'comment': u'New comment http://example.org'},
+            {u'comment': u'New comment <a href="http://example.org" '
+             'rel="nofollow">http://example.org</a>'},
             browser.json)
 
         self.assertEquals("New comment http://example.org",

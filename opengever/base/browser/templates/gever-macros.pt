@@ -32,7 +32,8 @@
 
             <tal:box tal:condition="python: not hasattr(box.get('content'), '__iter__')">
               <tal:item  tal:condition="box/content">
-                <span tal:content="box/content" />
+                <span tal:condition="python: box.get('is_html')" tal:content="structure box/content" />
+                <span tal:condition="python: not box.get('is_html')" tal:content="box/content" />
               </tal:item>
               <tal:item tal:condition="not: box/content">
                 <span tal:condition="python: box.get('has_empty_marker', True)"
