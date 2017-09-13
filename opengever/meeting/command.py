@@ -1,5 +1,5 @@
 from docx import Document
-from docxmerge.builder import DocumentBuilder
+from docxcompose.composer import Composer
 from opengever.base import advancedjson
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.interfaces import IDataCollector
@@ -348,7 +348,7 @@ class MergeDocxProtocolCommand(CreateGeneratedDocumentCommand):
             # a temporary file
             with open(master_path, 'wb') as master_file:
                 master_file.write(sablon.file_data)
-            builder = DocumentBuilder(Document(master_path))
+            composer = Composer(Document(master_path))
 
             for index, item in enumerate(self.meeting.agenda_items):
                 if not item.has_document:
@@ -360,9 +360,9 @@ class MergeDocxProtocolCommand(CreateGeneratedDocumentCommand):
 
                 with open(agenda_item_path, 'wb') as agenda_item_file:
                     agenda_item_file.write(document.file.data)
-                builder.append(Document(agenda_item_path))
+                composer.append(Document(agenda_item_path))
 
-            builder.save(output_path)
+            composer.save(output_path)
             with open(output_path, 'rb') as merged_file:
                 data = merged_file.read()
         finally:
