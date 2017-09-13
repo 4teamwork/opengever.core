@@ -97,7 +97,7 @@ class DossierOverview(BoxesViewMixin, grok.View, GeverTabMixin):
 
     def make_description_box(self):
         return dict(id='description', content=self.description,
-                    label=_("Description"))
+                    is_html=True, label=_("Description"))
 
     def is_subdossier_navigation_available(self):
         main_dossier = self.context.get_main_dossier()
@@ -170,7 +170,9 @@ class DossierOverview(BoxesViewMixin, grok.View, GeverTabMixin):
         return users
 
     def description(self):
-        return self.context.description
+        return api.portal.get_tool(name='portal_transforms').convertTo(
+            'text/html', self.context.description,
+            mimetype='text/x-web-intelligent').getData()
 
     def linked_dossiers(self):
         """Returns a list of dicts representing incoming and outgoing

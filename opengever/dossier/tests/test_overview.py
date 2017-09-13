@@ -18,12 +18,22 @@ import json
 class TestOverview(IntegrationTestCase):
 
     @browsing
-    def test_description_box_is_displayed(self, browser):
+    def test_description_box_is_web_intelligent_formatted_and_xss_safe(self, browser):
         self.login(self.regular_user, browser)
 
+        description = u'Anfrage:\r\n\r\n\r\nhttp://www.example.org/'
+        IOpenGeverBase(self.dossier).description = description
+
         browser.open(self.dossier, view='tabbedview_view-overview')
-        self.assertEqual(IOpenGeverBase(self.dossier).description,
+        self.assertEqual('Anfrage:\n\n\nhttp://www.example.org/',
                          browser.css('#descriptionBox span').first.text)
+
+        description = u'<img src="http://not.found/" onerror="script:alert(\'XSS\');" />'
+        IOpenGeverBase(self.dossier).description = description
+        browser.open(self.dossier, view='tabbedview_view-overview')
+        self.assertEqual(
+            u'&lt;img src="http://not.found/" onerror="script:alert(\'XSS\');" /&gt;',
+            browser.css('#descriptionBox span').first.innerHTML)
 
     @browsing
     def test_task_box_items_are_limited_to_five_and_sorted_by_modified(self, browser):

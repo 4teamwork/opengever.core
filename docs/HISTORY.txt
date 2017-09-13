@@ -5,7 +5,7 @@ Changelog
 2017.5.0 (unreleased)
 ---------------------
 
-- Format line breaks and links in the dossier overview comment box. [phgross]
+- Format line breaks and links in the dossier overview comment and description box. [phgross]
 - OGGBundle: Fix title encoding in constructor section. [phgross]
 - Display decision number in proposal listings. [deiferni]
 - Fixed custom sort for catalog listings. [phgross]
