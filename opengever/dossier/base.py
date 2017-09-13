@@ -81,6 +81,7 @@ class DossierContainer(Container):
             DossierContainer, self).allowedContentTypes(*args, **kwargs)
 
         depth = self._get_dossier_depth()
+
         def filter_type(fti):
             # first we try the more specific one ...
             decider = queryMultiAdapter((self.REQUEST, self, fti),
