@@ -8,6 +8,7 @@ from opengever.meeting.model.member import Member  # noqa
 from opengever.meeting.model.membership import Membership  # noqa
 from opengever.meeting.model.proposal import Proposal  # noqa
 from opengever.meeting.model.submitteddocument import SubmittedDocument  # noqa
+from opengever.meeting.model.excerpt import Excerpt  # noqa
 import opengever.meeting.model.query  # noqa
 
 
@@ -23,4 +24,5 @@ tables = [
     'periods',
     'proposals',
     'submitteddocuments',
+    'excerpts',
 ]
