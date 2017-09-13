@@ -149,6 +149,13 @@ class OpengeverContentFixture(object):
             .having(firstname=u'Franz', lastname=u'Meier',
                     email=u'meier.f@example.com')))
 
+        self.josef_buehler = create(
+            Builder('person')
+            .having(firstname=u'Josef', lastname=u'B\xfchler'))
+
+        self.meier_ag = create(Builder('organization').named(u'Meier AG'))
+        create_session().flush()
+
     @staticuid()
     def create_templates(self):
         templates = self.register('templates', create(
@@ -252,6 +259,16 @@ class OpengeverContentFixture(object):
                     keywords=(u'Finanzverwaltung', u'Vertr\xe4ge'),
                     start=date(2016, 1, 1),
                     responsible='hugo.boss')))
+
+        create(Builder('contact_participation')
+               .for_contact(self.meier_ag)
+               .for_dossier(self.dossier)
+               .with_roles(['final-drawing']))
+
+        create(Builder('contact_participation')
+               .for_contact(self.josef_buehler)
+               .for_dossier(self.dossier)
+               .with_roles(['final-drawing', 'participation']))
 
         document = self.register('document', create(
             Builder('document').within(self.dossier)
