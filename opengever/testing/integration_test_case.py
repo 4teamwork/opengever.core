@@ -298,6 +298,9 @@ class IntegrationTestCase(TestCase):
             workflow.updateRoleMappingsFor(obj)
             obj.reindexObject(idxs=['review_state'])
 
+            if ITask.providedBy(obj):
+                obj.get_sql_object().review_state = new_workflow_state_id
+
         # reindexObjectSecurity is recursive. We should avoid updating the same
         # object twice when the parent is changed too.
         security_reindexed = []
