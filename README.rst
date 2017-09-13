@@ -493,6 +493,9 @@ Objects
     - self.committee_president
     - self.committee_secretary
     - self.empty_committee
+  - self.contactfolder
+    - self.franz_meier
+    - self.hanspeter_duerr
   - self.repository_root
     - self.branch_repofolder
       - self.leaf_repofolder

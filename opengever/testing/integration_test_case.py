@@ -8,6 +8,7 @@ from opengever.core.testing import OPENGEVER_INTEGRATION_TESTING
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.meeting.model.agendaitem import AgendaItem
 from opengever.meeting.wrapper import MeetingWrapper
+from opengever.ogds.base.utils import ogds_service
 from opengever.task.task import ITask
 from operator import methodcaller
 from plone import api
@@ -417,3 +418,6 @@ class IntegrationTestCase(TestCase):
             agenda_item.meeting.get_url(view=None),
             agenda_item.agenda_item_id,
             endpoint)
+
+    def get_ogds_user(self, user):
+        return ogds_service().fetch_user(user.getId())

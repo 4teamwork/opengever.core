@@ -38,6 +38,7 @@ class OpengeverContentFixture(object):
 
         with self.freeze_at_hour(7):
             self.create_users()
+            self.create_contacts()
 
         with self.freeze_at_hour(8):
             with self.login(self.administrator):
@@ -122,6 +123,31 @@ class OpengeverContentFixture(object):
             Builder('repository').within(self.root)
             .having(title_de=u'Rechnungspr\xfcfungskommission',
                     title_fr=u'Commission de v\xe9rification')))
+
+    @staticuid()
+    def create_contacts(self):
+        self.contactfolder = self.register('contactfolder', create(
+            Builder('contactfolder')
+            .titled(u'Kontakte')
+            .having(id='kontakte')))
+
+        self.contactfolder.manage_setLocalRoles(
+            self.org_unit.users_group_id, ('Reader',))
+        self.contactfolder.manage_setLocalRoles(
+            self.org_unit.users_group_id, ('Reader', 'Contributor', 'Editor'))
+        self.contactfolder.reindexObjectSecurity()
+
+        self.hanspeter_duerr = self.register('hanspeter_duerr', create(
+            Builder('contact')
+            .within(self.contactfolder)
+            .having(firstname=u'Hanspeter',
+                    lastname='D\xc3\xbcrr'.decode('utf-8'))))
+
+        self.franz_meier = self.register('franz_meier', create(
+            Builder('contact')
+            .within(self.contactfolder)
+            .having(firstname=u'Franz', lastname=u'Meier',
+                    email=u'meier.f@example.com')))
 
     @staticuid()
     def create_templates(self):
