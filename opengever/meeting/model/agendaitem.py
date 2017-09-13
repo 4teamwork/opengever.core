@@ -7,11 +7,13 @@ from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
 from opengever.meeting import require_word_meeting_feature
+from opengever.meeting.exceptions import MissingMeetingDossierPermissions
 from opengever.meeting.workflow import State
 from opengever.meeting.workflow import Transition
 from opengever.meeting.workflow import Workflow
 from opengever.ogds.models import UNIT_ID_LENGTH
 from opengever.ogds.models.types import UnicodeCoercingText
+from plone import api
 from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
@@ -396,3 +398,22 @@ class AgendaItem(Base):
 
     def return_excerpt(self, document):
         self.proposal.return_excerpt(document)
+
+    def generate_excerpt(self):
+        """Generate an excerpt from the submitted proposal's document."""
+
+        meeting_dossier = self.meeting.get_dossier()
+        if not api.user.get_current().checkPermission(
+                'opengever.document: Add document', meeting_dossier):
+            raise MissingMeetingDossierPermissions
+
+        proposal = self.proposal.resolve_submitted_proposal()
+        proposal.generate_excerpt(meeting_dossier)
+
+    def can_generate_excerpt(self):
+        """Return wheter excerpts can be generated."""
+
+        if not self.meeting.is_editable():
+            return False
+
+        return self.get_state() == self.STATE_DECIDED
