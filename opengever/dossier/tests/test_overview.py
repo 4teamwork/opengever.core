@@ -4,299 +4,262 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from lxml.etree import tostring
-from opengever.base.security import elevated_privileges
+from opengever.base.behaviors.base import IOpenGeverBase
 from opengever.contact.interfaces import IContactSettings
 from opengever.core.testing import toggle_feature
 from opengever.dossier.behaviors.dossier import IDossier
-from opengever.testing import FunctionalTestCase
+from opengever.dossier.behaviors.participation import IParticipationAware
+from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.protect import createToken
 import json
-import transaction
 
 
-class TestOverview(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestOverview, self).setUp()
-
-        self.hugo = create(Builder('fixture').with_hugo_boss())
-        self._setup_dossier()
-
-    def _setup_dossier(self):
-        self.dossier = create(Builder('dossier')
-                              .titled(u'Testdossier')
-                              .having(description=u'Hie hesch e beschribig',
-                                      responsible='hugo.boss'))
+class TestOverview(IntegrationTestCase):
 
     @browsing
     def test_description_box_is_displayed(self, browser):
-        browser.login().open(self.dossier, view='tabbedview_view-overview')
-        self.assertEqual(u'Hie hesch e beschribig',
+        self.login(self.regular_user, browser)
+
+        browser.open(self.dossier, view='tabbedview_view-overview')
+        self.assertEqual(IOpenGeverBase(self.dossier).description,
                          browser.css('#descriptionBox span').first.text)
 
     @browsing
     def test_task_box_items_are_limited_to_five_and_sorted_by_modified(self, browser):
-        for i in range(1, 6):
-            create(Builder('task')
-                   .within(self.dossier)
-                    .with_modification_date(DateTime(2010, 1, 1) + i)
-                   .titled(u'Task %s' % i))
-        create(Builder('task')
-               .within(self.dossier)
-                .with_modification_date(DateTime(2009, 12, 1))
-               .titled(u'Task 6'))
+        self.login(self.regular_user, browser=browser)
 
-        browser.login().open(self.dossier, view='tabbedview_view-overview')
+        for i in range(1, 7):
+            create(Builder('task')
+                   .within(self.empty_dossier)
+                   .titled(u'Task {}'.format(i))
+                   .with_modification_date(DateTime(2010, 1, 1) + i)
+                   .having(responsible_client='fa',
+                           responsible=self.regular_user.getId(),
+                           issuer=self.dossier_responsible.getId(),
+                           task_type='correction',
+                           deadline=date(2016, 11, 1))
+                   .in_state('task-state-in-progress'))
+
+        browser.open(self.empty_dossier, view='tabbedview_view-overview')
         self.assertSequenceEqual(
-            browser.css('#newest_tasksBox li:not(.moreLink) a').text,
-            ['Task 5', 'Task 4', 'Task 3', 'Task 2', 'Task 1'])
+            ['Task 6', 'Task 5', 'Task 4', 'Task 3', 'Task 2'],
+            browser.css('#newest_tasksBox li:not(.moreLink) a').text)
 
     @browsing
     def test_task_box_items_are_filtered_by_admin_unit(self, browser):
-        create(Builder('globalindex_task').having(
-            int_id=12345, admin_unit_id='foo', issuing_org_unit='foo',
-            sequence_number=4, assigned_org_unit='bar',
-            modified=date(2011, 1, 1)))
-        create(Builder('task')
-               .within(self.dossier)
-               .with_modification_date(DateTime(2009, 12, 1))
-               .titled(u'Task x'))
+        # create task with same int_id tha
+        self.login(self.regular_user, browser=browser)
 
-        browser.login().open(self.dossier, view='tabbedview_view-overview')
+        create(Builder('globalindex_task').having(
+            title=u'Task X', int_id=12345, admin_unit_id='foo',
+            issuing_org_unit='foo', sequence_number=4, assigned_org_unit='bar',
+            physical_path=self.task.get_sql_object().physical_path,
+            modified=date(2011, 1, 1)))
+
+        browser.open(self.dossier, view='tabbedview_view-overview')
         self.assertSequenceEqual(
-            browser.css('#newest_tasksBox li:not(.moreLink) a').text,
-            ['Task x'])
+            [u'Vertragsentwurf \xdcberpr\xfcfen',
+             u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen'],
+            browser.css('#newest_tasksBox li:not(.moreLink) a').text)
 
     @browsing
     def test_task_box_items_are_filtered_by_pending_state(self, browser):
-        create(Builder('task')
-               .within(self.dossier)
-               .in_state('task-state-open')
-               .titled(u'Task open'))
-        create(Builder('task')
-               .within(self.dossier)
-               .in_state('task-state-tested-and-closed')
-               .titled(u'Task closed'))
+        self.login(self.regular_user, browser=browser)
+        self.set_workflow_state('task-state-tested-and-closed', self.subtask)
 
-        browser.login().open(self.dossier, view='tabbedview_view-overview')
+        browser.open(self.dossier, view='tabbedview_view-overview')
         self.assertSequenceEqual(
-            browser.css('#newest_tasksBox li:not(.moreLink) a').text,
-            ['Task open'])
+            [u'Vertragsentwurf \xdcberpr\xfcfen'],
+            browser.css('#newest_tasksBox li:not(.moreLink) a').text)
 
     @browsing
     def test_participant_labels_are_displayed(self, browser):
-        browser.login().open(self.dossier, view='tabbedview_view-overview')
+        self.login(self.regular_user, browser=browser)
+
+        handler = IParticipationAware(self.dossier)
+        participation = handler.create_participation(
+            contact='robert.ziegler', roles=['regard'])
+        handler.append_participiation(participation)
+
+        browser.open(self.dossier, view='tabbedview_view-overview')
         self.assertEqual(
-            [self.hugo.label()],
+            ['Ziegler Robert (robert.ziegler)'],
             browser.css('#participantsBox li:not(.moreLink) a').text)
 
     @browsing
     def test_contact_participations_are_listed_when_contact_feature_is_enabled(self, browser):
-        create(Builder('contactfolder'))
         toggle_feature(IContactSettings, enabled=True)
 
-        hans = create(Builder('person')
-                      .having(firstname=u'Hans', lastname=u'M\xfcller'))
-        peter_ag = create(Builder('organization').having(name=u'Peter AG'))
-        create(Builder('contact_participation')
-               .for_contact(hans)
-               .for_dossier(self.dossier)
-               .with_roles(['participation']))
-        create(Builder('contact_participation')
-               .for_contact(peter_ag)
-               .for_dossier(self.dossier)
-               .with_roles(['final-drawing']))
-
-        browser.login().open(self.dossier, view='tabbedview_view-overview')
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.dossier, view='tabbedview_view-overview')
         self.assertEqual(
-            [u'M\xfcller Hans', 'Peter AG'],
+            [u'B\xfchler Josef', 'Meier AG'],
             browser.css('#participationsBox li:not(.moreLink) a').text)
 
     @browsing
-    def test_document_box_items_are_limited_to_ten_and_sorted_by_modified(self, browser):
-        for i in range(1, 11):
-            create(Builder('document')
-                   .within(self.dossier)
-                   .with_modification_date(DateTime(2010, 1, 1) + i)
-                   .titled(u'Document %s' % i))
-        create(Builder('document')
-               .within(self.dossier)
-               .with_modification_date(DateTime(2009, 12, 8))
-               .titled(u'Document 11'))
-
-        browser.login().open(self.dossier, view='tabbedview_view-overview')
-        self.assertSequenceEqual(
-            browser.css('#newest_documentsBox li:not(.moreLink) a.document_link').text,
-            ['Document 10', 'Document 9', 'Document 8', 'Document 7',
-             'Document 6', 'Document 5', 'Document 4', 'Document 3',
-             'Document 2', 'Document 1'])
-
-    @browsing
-    def test_documents_in_overview_are_linked(self, browser):
-        document = create(Builder('document')
-                          .within(self.dossier)
-                          .titled(u'Document 1'))
-
-        browser.login().open(self.dossier, view='tabbedview_view-overview')
-
-        items = browser.css('#newest_documentsBox li:not(.moreLink) a.document_link')
-
-        self.assertEqual(1, len(items))
-        self.assertEqual(document.absolute_url(), items.first.get('href'))
-
-    @browsing
     def test_task_link_is_safe_html_transformed(self, browser):
-        create(Builder('task')
-               .within(self.dossier)
-               .titled("Foo <script>alert('foo')</script>"))
+        self.login(self.regular_user, browser=browser)
 
-        browser.login().open(self.dossier, view='tabbedview_view-overview')
+        self.task.get_sql_object().title = u"Foo <script>alert('foo')</script>"
+        browser.open(self.dossier, view='tabbedview_view-overview')
 
         self.assertEquals(
             [],
             browser.css('span.contenttype-opengever-task-task script'))
-
         node = browser.css('span.contenttype-opengever-task-task').first
         self.assertEquals(
             '<span class="contenttype-opengever-task-task">Foo &lt;script&gt;alert(\'foo\')&lt;/script&gt;</span>',
             tostring(node.node))
 
     @browsing
-    def test_references_box_lists_regular_references(self, browser):
-        browser.login().open(
-            self.portal, view='++add++opengever.dossier.businesscasedossier')
-        browser.fill({'Title': 'Dossier B', 'Related Dossier': [self.dossier]})
-        browser.find('Save').click()
+    def test_documents_in_overview_are_linked(self, browser):
+        self.login(self.regular_user, browser=browser)
 
-        browser.open(browser.context, view='tabbedview_view-overview')
+        browser.open(self.dossier, view='tabbedview_view-overview')
+
+        link = browser.css('#newest_documentsBox li:not(.moreLink) a.document_link')[-1]
+        self.assertEquals(self.document.title, link.text)
+        self.assertEqual(self.document.absolute_url(), link.get('href'))
+
+    @browsing
+    def test_document_box_items_are_limited_to_ten_and_sorted_by_modified(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        for i in range(1, 12):
+            create(Builder('document')
+                   .within(self.empty_dossier)
+                   .with_modification_date(DateTime(2010, 1, 1) + i)
+                   .titled(u'Document %s' % i))
+
+        browser.open(self.empty_dossier, view='tabbedview_view-overview')
+        self.assertSequenceEqual(
+            ['Document 11', 'Document 9', 'Document 8', 'Document 7',
+             'Document 6', 'Document 5', 'Document 4', 'Document 3',
+             'Document 2', 'Document 1'],
+            browser.css('#newest_documentsBox li:not(.moreLink) a.document_link').text)
+
+    @browsing
+    def test_references_box_lists_regular_references(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(self.meeting_dossier, view='tabbedview_view-overview')
+
         references = browser.css('#referencesBox a')
-        self.assertEquals(['Testdossier'], references.text)
+        self.assertEquals([self.dossier.title], references.text)
         self.assertEquals([self.dossier.absolute_url()],
                           [link.get('href') for link in references])
 
     @browsing
     def test_references_box_lists_back_references(self, browser):
-        browser.login().open(
-            self.portal, view='++add++opengever.dossier.businesscasedossier')
-        browser.fill({'Title': 'Dossier B', 'Related Dossier': [self.dossier]})
-        browser.find('Save').click()
-        dossier_b = browser.context
+        self.login(self.regular_user, browser=browser)
 
         browser.open(self.dossier, view='tabbedview_view-overview')
         references = browser.css('#referencesBox a')
-        self.assertEquals(['Dossier B'], references.text)
-        self.assertEquals([dossier_b.absolute_url()],
+        self.assertEquals(['Sitzungsdossier 9/2017'], references.text)
+        self.assertEquals([self.meeting_dossier.absolute_url()],
                           [link.get('href') for link in references])
 
     @browsing
     def test_removed_back_refs_are_no_longer_listed(self, browser):
-        dossier_b = create(Builder('dossier')
-                           .having(relatedDossier=[self.dossier],
-                                   title=u"Dossier B"))
-        dossier_c = create(Builder('dossier')
-                           .having(relatedDossier=[self.dossier],
-                                   title=u"Dossier C"))
+        self.login(self.manager, browser=browser)
 
-        with elevated_privileges():
-            api.content.delete(obj=dossier_b)
+        api.content.delete(obj=self.meeting_dossier)
 
-        transaction.commit()
+        self.login(self.regular_user, browser=browser)
 
-        browser.login().open(self.dossier, view='tabbedview_view-overview')
+        browser.open(self.dossier, view='tabbedview_view-overview')
         references = browser.css('#referencesBox a')
-        self.assertEquals(['Dossier C'], references.text)
-        self.assertEquals([dossier_c.absolute_url()],
-                          [link.get('href') for link in references])
+        self.assertEquals([], references.text)
+
+    @browsing
+    def test_dossier_show_comments_editlink_without_modify_rights(self, browser):
+        self.login(self.regular_user, browser=browser)
+        self.set_workflow_state('dossier-state-resolved', self.dossier)
+
+        browser.open(self.dossier)
+
+        self.assertEqual('Show Note', browser.css('.editNoteLink').first.text)
 
     @browsing
     def test_dossier_editlink_for_comments(self, browser):
-        browser.login().visit(self.dossier)
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(self.dossier)
+
         # There are both labels (show/hide by css/js)
         self.assertEquals(['Edit Note', 'Add Note'],
                           browser.css('.editNoteLink .linkLabel').text)
 
     @browsing
-    def test_dossier_show_comments_editlink_on_maindossier_only(
-            self, browser):
-        browser.login().visit(self.dossier)
+    def test_dossier_show_comments_editlink_on_maindossier_only(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(self.dossier)
         comment = browser.css('.editNoteLink')
         self.assertTrue(comment,
                         'Expect the edit comment link in dossier byline')
 
-        subdossier = create(Builder('dossier').within(self.dossier))
-        browser.visit(subdossier)
+        browser.open(self.subdossier)
         comment = browser.css('.editNoteLink')
         self.assertFalse(comment,
                          'Expect NO edit comment link on subdossier')
 
     @browsing
-    def test_dossier_show_comments_editlink_without_modify_rights(
-            self, browser):
-        self.dossier.manage_permission('Modify portal content',
-                                       roles=[],
-                                       acquire=False)
-        transaction.commit()
-        browser.login().visit(self.dossier)
-        comment = browser.css('.editNoteLink')
-        self.assertEqual('Show Note', comment.first.text)
-
-    @browsing
     def test_dossier_comments_editlink_data(self, browser):
-        browser.login().visit(self.dossier)
-        link = browser.css('.editNoteWrapper').first
-        dossier_data = IDossier(self.dossier)
-
-        # No comments
-        self.assertEquals(type(json.loads(link.attrib['data-i18n'])),
-                          dict)
-        self.assertEquals('',
-                          link.attrib['data-notecache'])
-        self.assertEquals('Add Note', link.css('.add .linkLabel').first.text)
-
-        # With comments
-        dossier_data.comments = u'This is a comment'
-        transaction.commit()
+        self.login(self.regular_user, browser=browser)
 
         browser.open(self.dossier)
         link = browser.css('.editNoteWrapper').first
-        self.assertEquals(str(dossier_data.comments),
-                          link.attrib['data-notecache'])
+
+        # No comments
+        self.assertEquals(dict, type(json.loads(link.attrib['data-i18n'])))
+        self.assertEquals('', link.attrib['data-notecache'])
+        self.assertEquals('Add Note', link.css('.add .linkLabel').first.text)
+
+        # With comments
+        IDossier(self.dossier).comments = u'This is a comment'
+
+        browser.open(self.dossier)
+        link = browser.css('.editNoteWrapper').first
+        self.assertEquals(
+            str(u'This is a comment'), link.attrib['data-notecache'])
         self.assertEquals('Edit Note', link.css('.edit .linkLabel').first.text)
 
     @browsing
     def test_dossier_save_comments_endpoint(self, browser):
-        payload = '{"comments": "New comment"}'
-        browser.login().visit(self.dossier)
+        self.login(self.regular_user, browser=browser)
 
-        browser.visit(self.dossier,
-                      view='save_comments',
-                      data={'data': payload,
-                            '_authenticator': createToken()})
+        payload = '{"comments": "New comment http://example.org"}'
+        browser.open(self.dossier, view='save_comments',
+                     data={'data': payload, '_authenticator': createToken()})
 
-        dossier_data = IDossier(self.dossier)
-        self.assertEquals("New comment", dossier_data.comments)
+        self.assertEquals(
+            {u'comment': u'New comment http://example.org'},
+            browser.json)
+
+        self.assertEquals("New comment http://example.org",
+                          IDossier(self.dossier).comments)
+
+        result = self.portal.portal_catalog({'SearchableText': 'New comment'})
+        self.assertEquals(self.dossier, result[0].getObject())
+
+    @browsing
+    def test_dossier_save_comments_endpoint_with_invalid_key_raises_KeyError(self, browser):
+        self.login(self.regular_user, browser=browser)
 
         browser.exception_bubbling = True
         with self.assertRaises(KeyError):
             payload = '{"invalidkey": "New comment"}'
-            browser.login().visit(self.dossier,
-                                  view='save_comments',
+            browser.login().visit(self.dossier, view='save_comments',
                                   data={'data': payload})
-
-        query = {'SearchableText': 'New comment'}
-        result = self.portal.portal_catalog(**query)
-        self.assertEquals(1, len(result), 'Expect one result')
-        self.assertEquals(self.dossier, result[0].getObject())
 
     @browsing
     def test_keywords_are_listed_on_overview(self, browser):
-        dossier = create(Builder('dossier')
-                         .titled(u'Testdossier')
-                         .having(description=u'Hie hesch e beschribig',
-                                 responsible='hugo.boss',
-                                 keywords=(u'secret', u'special')))
+        self.login(self.regular_user, browser=browser)
 
-        browser.login().visit(dossier, view='tabbedview_view-overview')
+        IDossier(self.dossier).keywords = u'secret', u'special'
+
+        browser.open(self.dossier, view='tabbedview_view-overview')
         self.assertEquals([u'secret', u'special'],
                           browser.css('#keywordsBox li span').text)

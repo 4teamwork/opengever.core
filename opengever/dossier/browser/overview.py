@@ -31,6 +31,7 @@ class DossierOverview(BoxesViewMixin, grok.View, GeverTabMixin):
 
     show_searchform = False
     comments_max_length = 400
+    document_limit = 10
 
     grok.context(IDossierMarker)
     grok.name('tabbedview_view-overview')
@@ -123,8 +124,10 @@ class DossierOverview(BoxesViewMixin, grok.View, GeverTabMixin):
                          .order_by(desc('modified')).limit(5).all()
 
     def documents(self):
-        return IContentListing(self.catalog(
-            ['opengever.document.document', 'ftw.mail.mail', ])[:10])
+        return IContentListing(
+            self.catalog(
+                ['opengever.document.document',
+                 'ftw.mail.mail', ])[:self.document_limit])
 
     def sql_participations(self):
         participations = []
@@ -255,4 +258,4 @@ class DossierTemplateOverview(DossierOverview):
     def documents(self):
         return IContentListing(self.catalog(
             ['opengever.document.document', 'ftw.mail.mail', ],
-            sort_on='sortable_title', sort_order='asc')[:10])
+            sort_on='sortable_title', sort_order='asc')[:self.document_limit])
