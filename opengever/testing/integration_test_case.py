@@ -8,6 +8,7 @@ from opengever.core.testing import OPENGEVER_INTEGRATION_TESTING
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.meeting.model.agendaitem import AgendaItem
 from opengever.meeting.wrapper import MeetingWrapper
+from opengever.ogds.base.utils import ogds_service
 from opengever.task.task import ITask
 from operator import methodcaller
 from plone import api
@@ -297,6 +298,9 @@ class IntegrationTestCase(TestCase):
             workflow.updateRoleMappingsFor(obj)
             obj.reindexObject(idxs=['review_state'])
 
+            if ITask.providedBy(obj):
+                obj.get_sql_object().review_state = new_workflow_state_id
+
         # reindexObjectSecurity is recursive. We should avoid updating the same
         # object twice when the parent is changed too.
         security_reindexed = []
@@ -417,3 +421,6 @@ class IntegrationTestCase(TestCase):
             agenda_item.meeting.get_url(view=None),
             agenda_item.agenda_item_id,
             endpoint)
+
+    def get_ogds_user(self, user):
+        return ogds_service().fetch_user(user.getId())

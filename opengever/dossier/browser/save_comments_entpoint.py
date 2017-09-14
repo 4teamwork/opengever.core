@@ -1,5 +1,4 @@
 from opengever.dossier.behaviors.dossier import IDossier
-from opengever.dossier.utils import truncate_ellipsis
 from Products.Five.browser import BrowserView
 import json
 
@@ -14,5 +13,4 @@ class SaveCommentsEndpoint(BrowserView):
         dossier = IDossier(self.context)
         dossier.comments = data['comments']
         self.context.reindexObject(idxs=['SearchableText'])
-        return json.dumps({'comment': truncate_ellipsis(dossier.comments,
-                                                        400)})
+        return json.dumps({'comment': self.context.get_formatted_comments()})

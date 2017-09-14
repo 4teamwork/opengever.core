@@ -11,7 +11,6 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
-from opengever.dossier.utils import truncate_ellipsis
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -30,7 +29,7 @@ from zope.security import checkPermission
 class DossierOverview(BoxesViewMixin, grok.View, GeverTabMixin):
 
     show_searchform = False
-    comments_max_length = 400
+    document_limit = 10
 
     grok.context(IDossierMarker)
     grok.name('tabbedview_view-overview')
@@ -60,13 +59,12 @@ class DossierOverview(BoxesViewMixin, grok.View, GeverTabMixin):
                  self.make_keyword_box()]]
 
     def get_comments(self):
-        return truncate_ellipsis(
-            IDossier(self.context).comments, self.comments_max_length)
+        return self.context.get_formatted_comments()
 
     def make_comment_box(self, has_empty_marker=True):
         return dict(id='comments', content=self.get_comments(),
                     label=_(u"label_comments", default="Comments"),
-                    has_empty_marker=has_empty_marker)
+                    has_empty_marker=has_empty_marker, is_html=True)
 
     def make_participation_box(self):
         if is_contact_feature_enabled():
@@ -99,7 +97,7 @@ class DossierOverview(BoxesViewMixin, grok.View, GeverTabMixin):
 
     def make_description_box(self):
         return dict(id='description', content=self.description,
-                    label=_("Description"))
+                    is_html=True, label=_("Description"))
 
     def is_subdossier_navigation_available(self):
         main_dossier = self.context.get_main_dossier()
@@ -123,8 +121,10 @@ class DossierOverview(BoxesViewMixin, grok.View, GeverTabMixin):
                          .order_by(desc('modified')).limit(5).all()
 
     def documents(self):
-        return IContentListing(self.catalog(
-            ['opengever.document.document', 'ftw.mail.mail', ])[:10])
+        return IContentListing(
+            self.catalog(
+                ['opengever.document.document',
+                 'ftw.mail.mail', ])[:self.document_limit])
 
     def sql_participations(self):
         participations = []
@@ -170,7 +170,9 @@ class DossierOverview(BoxesViewMixin, grok.View, GeverTabMixin):
         return users
 
     def description(self):
-        return self.context.description
+        return api.portal.get_tool(name='portal_transforms').convertTo(
+            'text/html', self.context.description,
+            mimetype='text/x-web-intelligent').getData()
 
     def linked_dossiers(self):
         """Returns a list of dicts representing incoming and outgoing
@@ -255,4 +257,4 @@ class DossierTemplateOverview(DossierOverview):
     def documents(self):
         return IContentListing(self.catalog(
             ['opengever.document.document', 'ftw.mail.mail', ],
-            sort_on='sortable_title', sort_order='asc')[:10])
+            sort_on='sortable_title', sort_order='asc')[:self.document_limit])

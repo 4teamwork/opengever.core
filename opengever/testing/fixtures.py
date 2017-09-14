@@ -38,6 +38,7 @@ class OpengeverContentFixture(object):
 
         with self.freeze_at_hour(7):
             self.create_users()
+            self.create_contacts()
 
         with self.freeze_at_hour(8):
             with self.login(self.administrator):
@@ -122,6 +123,38 @@ class OpengeverContentFixture(object):
             Builder('repository').within(self.root)
             .having(title_de=u'Rechnungspr\xfcfungskommission',
                     title_fr=u'Commission de v\xe9rification')))
+
+    @staticuid()
+    def create_contacts(self):
+        self.contactfolder = self.register('contactfolder', create(
+            Builder('contactfolder')
+            .titled(u'Kontakte')
+            .having(id='kontakte')))
+
+        self.contactfolder.manage_setLocalRoles(
+            self.org_unit.users_group_id, ('Reader',))
+        self.contactfolder.manage_setLocalRoles(
+            self.org_unit.users_group_id, ('Reader', 'Contributor', 'Editor'))
+        self.contactfolder.reindexObjectSecurity()
+
+        self.hanspeter_duerr = self.register('hanspeter_duerr', create(
+            Builder('contact')
+            .within(self.contactfolder)
+            .having(firstname=u'Hanspeter',
+                    lastname='D\xc3\xbcrr'.decode('utf-8'))))
+
+        self.franz_meier = self.register('franz_meier', create(
+            Builder('contact')
+            .within(self.contactfolder)
+            .having(firstname=u'Franz', lastname=u'Meier',
+                    email=u'meier.f@example.com')))
+
+        self.josef_buehler = create(
+            Builder('person')
+            .having(firstname=u'Josef', lastname=u'B\xfchler'))
+
+        self.meier_ag = create(Builder('organization').named(u'Meier AG'))
+        create_session().flush()
 
     @staticuid()
     def create_templates(self):
@@ -226,6 +259,16 @@ class OpengeverContentFixture(object):
                     keywords=(u'Finanzverwaltung', u'Vertr\xe4ge'),
                     start=date(2016, 1, 1),
                     responsible='hugo.boss')))
+
+        create(Builder('contact_participation')
+               .for_contact(self.meier_ag)
+               .for_dossier(self.dossier)
+               .with_roles(['final-drawing']))
+
+        create(Builder('contact_participation')
+               .for_contact(self.josef_buehler)
+               .for_dossier(self.dossier)
+               .with_roles(['final-drawing', 'participation']))
 
         document = self.register('document', create(
             Builder('document').within(self.dossier)
@@ -355,6 +398,7 @@ class OpengeverContentFixture(object):
             Builder('meeting_dossier').within(self.repofolder00)
             .titled(u'Sitzungsdossier 9/2017')
             .having(start=date(2016, 9, 12),
+                    relatedDossier=[self.dossier],
                     responsible=self.committee_responsible.getId())))
         self.meeting = create(
             Builder('meeting')
