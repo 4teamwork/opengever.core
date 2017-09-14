@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2017.5.0 (unreleased)
+2017.5.0 (2017-09-14)
 ---------------------
 
 - Format line breaks and links in the dossier overview comment and description box. [phgross]
