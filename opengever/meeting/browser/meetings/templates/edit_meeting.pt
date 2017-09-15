@@ -1,0 +1,25 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      i18n:domain="opengever.meeting"
+      metal:use-macro="context/main_template/macros/master">
+
+  <metal:block fill-slot="main">
+
+    <h1 class="documentFirstHeading" tal:content="view/label | nothing" />
+    <div id="content-core">
+
+      <metal:titlelessform use-macro="context/@@ploneform-macros/titlelessform">
+        <metal:formbottom fill-slot="formbottom">
+          <!-- for write conflict detection (optimistic locking) -->
+          <input type="hidden" name="modified"
+                 tal:attributes="value view/server_timestamp" />
+        </metal:formbottom>
+      </metal:titlelessform>
+
+    </div>
+
+  </metal:block>
+
+</html>

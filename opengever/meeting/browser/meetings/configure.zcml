@@ -31,6 +31,13 @@
       permission="cmf.ModifyPortalContent"
       />
 
+  <browser:page
+      for="opengever.meeting.interfaces.IMeetingWrapper"
+      name="edit-meeting"
+      class=".edit_meeting.EditMeetingView"
+      permission="cmf.ModifyPortalContent"
+      />
+
   <!-- registered for admin use only, not available in the UI -->
   <browser:page
       for="opengever.meeting.interfaces.IMeetingWrapper"

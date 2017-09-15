@@ -381,6 +381,18 @@
       </property>
     </object>
 
+    <object name="edit-meeting" meta_type="CMF Action" i18n:domain="plone">
+      <property name="title" i18n:translate="">Edit</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:${object/absolute_url}/edit-meeting</property>
+      <property name="icon_expr" />
+      <property name="available_expr">object/edit-meeting/action_visible|nothing</property>
+      <property name="permissions">
+        <element value="Modify portal content" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
   </object>
 
 
