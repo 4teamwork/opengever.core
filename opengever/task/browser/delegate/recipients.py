@@ -1,7 +1,7 @@
 from five import grok
 from ftw.keywordwidget.widget import KeywordFieldWidget
 from ftw.keywordwidget.widget import KeywordWidget
-from opengever.ogds.base.sources import AllUsersAndInboxesSourceBinder
+from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSourceBinder
 from opengever.task import _
 from opengever.task.browser.delegate import vocabulary
 from opengever.task.browser.delegate.main import DelegateWizardFormMixin
@@ -30,7 +30,7 @@ class ISelectRecipientsSchema(Schema):
             u'responsible a subtask will be created and assigned.'),
         required=True,
         value_type=schema.Choice(
-            source=AllUsersAndInboxesSourceBinder()))
+            source=AllUsersInboxesAndTeamsSourceBinder()))
 
     documents = schema.List(
         title=_(u'delegate_label_documents', default=u'Attach documents'),

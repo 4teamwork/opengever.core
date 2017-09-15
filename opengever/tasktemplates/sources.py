@@ -1,5 +1,5 @@
 from opengever.ogds.base.sources import UsersContactsInboxesSource
-from opengever.ogds.base.sources import AllUsersAndInboxesSource
+from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSource
 from opengever.tasktemplates import _
 from z3c.formwidget.query.interfaces import IQuerySource
 from zope.globalrequest import getRequest
@@ -56,7 +56,7 @@ class TaskTemplateIssuerSourceBinder(object):
 
 
 @implementer(IQuerySource)
-class TaskResponsibleSource(AllUsersAndInboxesSource):
+class TaskResponsibleSource(AllUsersInboxesAndTeamsSource):
     """Source with the default users and clients extended with the
     interactive users.
     """

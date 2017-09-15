@@ -15,7 +15,7 @@ from opengever.base.source import DossierPathSourceBinder
 from opengever.dossier.utils import get_containing_dossier
 from opengever.globalindex.model.task import Task as TaskModel
 from opengever.ogds.base.actor import Actor
-from opengever.ogds.base.sources import AllUsersAndInboxesSourceBinder
+from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSourceBinder
 from opengever.ogds.base.sources import UsersContactsInboxesSourceBinder
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
@@ -124,7 +124,7 @@ class ITask(form.Schema):
     responsible = schema.Choice(
         title=_(u"label_responsible", default=u"Responsible"),
         description=_(u"help_responsible", default=""),
-        source=AllUsersAndInboxesSourceBinder(),
+        source=AllUsersInboxesAndTeamsSourceBinder(include_teams=True),
         required=True,
         )
 
@@ -219,7 +219,7 @@ class IAddTaskSchema(ITask):
         title=_(u"label_responsible", default=u"Responsible"),
         description=_(u"help_responsible_multiple", default=""),
         value_type=schema.Choice(
-            source=AllUsersAndInboxesSourceBinder()),
+            source=AllUsersInboxesAndTeamsSourceBinder(include_teams=True)),
         required=True,
         missing_value=[],
         default=[]

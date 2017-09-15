@@ -29,7 +29,7 @@ class TestTaskTemplateIssuerSource(base.TestUsersContactsInboxesSource):
         self.assertEquals('Current user', result[0].title)
 
 
-class TestTaskResponsibleSource(base.TestAllUsersAndInboxesSource):
+class TestTaskResponsibleSource(base.TestAllUsersInboxesAndTeamsSource):
 
     def setUp(self):
         super(TestTaskResponsibleSource, self).setUp()
