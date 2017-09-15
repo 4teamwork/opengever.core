@@ -20,12 +20,12 @@ class TestPathBar(IntegrationTestCase):
     @browsing
     def test_committee_member_cant_see_membership_edit_links(self, browser):
         self.login(self.meeting_user, browser)
-        browser.open(self.committee_participant)
+        browser.open(self.committee_participant_1)
 
         table = browser.css('#membership_listing').first
         self.assertEqual(
             [[u'Rechnungspr\xfcfungskommission',
-              'Jan 01, 2010', 'Jan 01, 2014', '']],
+              'Jan 01, 2014', 'Dec 31, 2016', '']],
             table.lists())
 
 

@@ -216,28 +216,36 @@ class OpengeverContentFixture(object):
             'committee_president',
             firstname=u'Heidrun',
             lastname=u'Sch\xf6ller',
-            email='h.schoeller@web.de')
+            email='h.schoeller@web.de',
+            date_from=datetime(2014, 1, 1),
+            date_to=datetime(2016, 12, 31))
 
         self.committee_secretary = self.create_committee_membership(
             self.committee,
             'committee_secretary',
             firstname=u'Henning',
             lastname=u'M\xfcller',
-            email='h.mueller@gmx.ch')
+            email='h.mueller@gmx.ch',
+            date_from=datetime(2016, 1, 1),
+            date_to=datetime(2016, 12, 31))
 
         self.committee_participant_1 = self.create_committee_membership(
             self.committee,
-            'committee_participant',
+            'committee_participant_1',
             firstname=u'Gerda',
             lastname=u'W\xf6lfl',
-            email='g.woelfl@hotmail.com')
+            email='g.woelfl@hotmail.com',
+            date_from=datetime(2014, 1, 1),
+            date_to=datetime(2016, 12, 31))
 
         self.committee_participant_2 = self.create_committee_membership(
             self.committee,
-            'committee_participant',
+            'committee_participant_2',
             firstname=u'Jens',
             lastname=u'Wendler',
-            email='jens-wendler@gmail.com')
+            email='jens-wendler@gmail.com',
+            date_from=datetime(2014, 1, 1),
+            date_to=datetime(2016, 12, 31))
 
         self.empty_committee = self.register(
             'empty_committee', self.create_committee(
@@ -563,13 +571,18 @@ class OpengeverContentFixture(object):
                                     member_id_register_name,
                                     firstname,
                                     lastname,
-                                    email):
+                                    email,
+                                    date_from,
+                                    date_to):
         member = create(
             Builder('member')
             .having(firstname=firstname, lastname=lastname, email=email))
 
         create(Builder('membership')
-               .having(committee=committee, member=member))
+               .having(committee=committee,
+                       member=member,
+                       date_from=date_from,
+                       date_to=date_to))
         create_session().flush()  # trigger id generation, part of path
 
         self.register_url(
