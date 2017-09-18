@@ -78,7 +78,7 @@ msgid "Dossier state changed to dossier-state-resolved"
 msgstr "Etat du dossier modifié: Fermé"
 
 msgid "Dossier with template"
-msgstr ""
+msgstr "Dossier à partir du modèle"
 
 msgid "Edit metadata"
 msgstr "Modifier les méta-données"
@@ -125,7 +125,7 @@ msgid "Submit additional documents"
 msgstr ""
 
 msgid "Usage"
-msgstr ""
+msgstr "Usage"
 
 #: plone.app.search/plone/app/search/browser.py:121
 msgid "alphabetically"
@@ -362,4 +362,3 @@ msgstr "Activer"
 
 msgid "transition-add-document"
 msgstr ""
-
