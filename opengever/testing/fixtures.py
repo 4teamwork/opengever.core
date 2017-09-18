@@ -23,13 +23,16 @@ from plone.app.testing import login
 from plone.app.testing import SITE_OWNER_NAME
 from time import time
 from zope.component.hooks import getSite
+import logging
 import pytz
 
 
 class OpengeverContentFixture(object):
+    """Provide a basic content fixture for integration tests."""
 
-    def __call__(self):
+    def __init__(self):
         start = time()
+        self._logger = logger = logging.getLogger('opengever.testing')
         self._lookup_table = {
             'manager': ('user', SITE_OWNER_NAME)}
 
@@ -60,9 +63,9 @@ class OpengeverContentFixture(object):
             with self.login(self.committee_responsible):
                 self.create_meetings()
 
-        end = time()
-        print '(fixture setup in {}s) '.format(round(end - start, 3)),
+        logger.info('(fixture setup in %ds) ', round(time() - start, 3))
 
+    def __call__(self):
         return self._lookup_table
 
     def create_units(self):
