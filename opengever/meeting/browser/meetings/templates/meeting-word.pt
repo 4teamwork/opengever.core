@@ -260,19 +260,6 @@
                 <dd tal:content="python: meeting.get_state().title"></dd>
               </dl>
             </div>
-            <div class="list-group-item documents"
-                 tal:define="protocol_document view/get_protocol_document">
-
-              <div class="item zip-download">
-                <span class="title" i18n:translate="" i18n:domain="ftw.zipexport">Export as Zip</span>
-                <a href="#" class="download-zipexport-btn"
-                   tal:attributes="href view/url_zipexport"
-                   title="label_zip_download"
-                   i18n:attributes="title">
-                </a>
-              </div>
-
-            </div>
           </div>
 
         </div>
