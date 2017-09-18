@@ -29,6 +29,7 @@ tests_require = [
     'Products.CMFPlone',
     'PyJWT',
     'pyquery',
+    'requests_toolbelt',
     'xlrd',
     'z3c.blobfile',
     'z3c.form',

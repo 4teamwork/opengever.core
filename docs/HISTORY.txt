@@ -53,6 +53,7 @@ Changelog
 - SPV word: Add new meeting edit form and move edit action to editbar. [jone]
 - SPV word: Add excerpts for ad-hoc agenda items. [deiferni]
 - Update plone.restapi to 1.0a21 which provides support for locking [buchi]
+- Add @scan-in REST API endpoint for uploading scanned documents. [buchi]
 
 
 2017.5.1 (2017-09-19)

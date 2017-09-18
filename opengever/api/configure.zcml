@@ -36,4 +36,12 @@
       permission="opengever.document.Cancel"
       />
 
+  <plone:service
+      method="POST"
+      name="@scan-in"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".scanin.ScanIn"
+      permission="zope2.View"
+      />
+
 </configure>
