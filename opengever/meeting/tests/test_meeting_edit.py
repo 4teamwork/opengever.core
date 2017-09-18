@@ -35,7 +35,8 @@ class TestEditMeeting(IntegrationTestCase):
         self.assertEquals(u'9. Sitzung der Rechnungspr\xfcfungskommission',
                           plone.first_heading())
         self.assertEquals(
-            [['Meeting start:', 'Sep 12, 2016 05:30 PM'],
+            [['Status:', 'Pending'],
+             ['Meeting start:', 'Sep 12, 2016 05:30 PM'],
              ['Meeting end:', 'Sep 12, 2016 07:00 PM'],
              ['Location:', u'B\xfcren an der Aare'],
              ['Meeting number:', ''],
@@ -63,7 +64,8 @@ class TestEditMeeting(IntegrationTestCase):
 
         self.assertEquals('New Meeting Title', plone.first_heading())
         self.assertEquals(
-            [['Meeting start:', 'Oct 13, 2016 08:00 AM'],
+            [['Status:', 'Pending'],
+             ['Meeting start:', 'Oct 13, 2016 08:00 AM'],
              ['Meeting end:', 'Oct 13, 2016 10:00 AM'],
              ['Location:', 'Sitzungszimmer 3'],
              ['Meeting number:', ''],

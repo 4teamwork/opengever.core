@@ -5,6 +5,7 @@ Changelog
 2017.5.2 (unreleased)
 ---------------------
 
+- SPV word: Move meeting status in meeting view. [jone]
 - SPV word: Move ZIP-export action to actions menu. [jone]
 - SPV word: Add new meeting edit form and move edit action to editbar. [jone]
 

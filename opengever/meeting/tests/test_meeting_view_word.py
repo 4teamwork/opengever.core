@@ -13,7 +13,8 @@ class TestWordMeetingView(IntegrationTestCase):
 
         self.maxDiff = None
         self.assertEquals(
-            [['Meeting start:', 'Sep 12, 2016 05:30 PM'],
+            [['Status:', 'Pending'],
+             ['Meeting start:', 'Sep 12, 2016 05:30 PM'],
              ['Meeting end:', 'Sep 12, 2016 07:00 PM'],
              ['Location:', u'B\xfcren an der Aare'],
              ['Meeting number:', ''],
