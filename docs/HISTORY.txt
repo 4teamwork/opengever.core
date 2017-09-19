@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2017.5.1 (unreleased)
+2017.5.1 (2017-09-19)
 ---------------------
 
 - Fix is_subdossier replacement upgradestep, reindex all objects. [phgross]
