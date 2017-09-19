@@ -80,6 +80,13 @@ def isSubdossierIndexer(obj):
 grok.global_adapter(isSubdossierIndexer, name="is_subdossier")
 
 
+@indexer(IDossierTemplateMarker)
+def is_subdossier_dossiertemplate(obj):
+    return obj.is_subdossier()
+
+grok.global_adapter(is_subdossier_dossiertemplate, name="is_subdossier")
+
+
 @indexer(IDossierMarker)
 def external_reference(obj):
     """Return the external reference of a dossier."""

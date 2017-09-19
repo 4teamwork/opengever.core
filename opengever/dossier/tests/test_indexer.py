@@ -56,10 +56,14 @@ class TestIndexers(FunctionalTestCase):
         transaction.commit()
 
     def test_is_subdossier_index(self):
-        self.assertEquals(index_data_for(self.dossier).get('is_subdossier'),
-                          False)
-        self.assertEquals(index_data_for(self.subdossier).get('is_subdossier'),
-                          True)
+        self.assertFalse(index_data_for(self.dossier).get('is_subdossier'))
+        self.assertTrue(index_data_for(self.subdossier).get('is_subdossier'))
+
+        dossiertemplate = create(Builder('dossiertemplate'))
+        sub_dossiertemplate = create(Builder('dossiertemplate')
+                                     .within(dossiertemplate))
+        self.assertFalse(index_data_for(dossiertemplate).get('is_subdossier'))
+        self.assertTrue(index_data_for(sub_dossiertemplate).get('is_subdossier'))
 
     def test_containing_subdossier(self):
         self.assertEquals(obj2brain(self.subdossier).containing_subdossier, '')
