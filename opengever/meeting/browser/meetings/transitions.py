@@ -25,7 +25,7 @@ class MeetingTransitionController(BrowserView):
                 default='Transition ${transition} executed',
                 mapping={'transition': self.model.workflow.transitions.get(transition).title})
 
-        return JSONResponse(self.request).redirect(self.model.get_url()).info(msg).dump();
+        return JSONResponse(self.request).redirect(self.model.get_url()).info(msg).dump()
 
     @classmethod
     def url_for(cls, context, meeting, transition):
