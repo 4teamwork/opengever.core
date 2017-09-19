@@ -5,6 +5,7 @@ Changelog
 2017.5.1 (unreleased)
 ---------------------
 
+- Fix is_subdossier replacement upgradestep, reindex all objects. [phgross]
 - Register an is_subdossier indexer for dossiertemplates. [phgross]
 - Add missing french translations. [phgross]
 
