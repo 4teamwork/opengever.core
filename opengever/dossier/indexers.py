@@ -22,6 +22,8 @@ from zope.component import getUtility
 def DossierSubjectIndexer(obj):
     aobj = IDossier(obj)
     return aobj.keywords
+
+
 grok.global_adapter(DossierSubjectIndexer, name="Subject")
 
 
@@ -29,6 +31,8 @@ grok.global_adapter(DossierSubjectIndexer, name="Subject")
 def DossierTemplateSubjectIndexer(obj):
     aobj = IDossier(obj)
     return aobj.keywords
+
+
 grok.global_adapter(DossierTemplateSubjectIndexer, name="Subject")
 
 
@@ -38,6 +42,8 @@ def startIndexer(obj):
     if aobj.start is None:
         return None
     return aobj.start
+
+
 grok.global_adapter(startIndexer, name="start")
 
 
@@ -47,6 +53,8 @@ def endIndexer(obj):
     if aobj.end is None:
         return None
     return aobj.end
+
+
 grok.global_adapter(endIndexer, name="end")
 
 
@@ -57,6 +65,8 @@ def retention_expiration(obj):
         # don't have a retention period, or expiration thereof
         return None
     return obj.get_retention_expiration_date()
+
+
 grok.global_adapter(retention_expiration, name="retention_expiration")
 
 
@@ -66,6 +76,8 @@ def responsibleIndexer(obj):
     if aobj.responsible is None:
         return None
     return aobj.responsible
+
+
 grok.global_adapter(responsibleIndexer, name="responsible")
 
 
@@ -77,7 +89,17 @@ def isSubdossierIndexer(obj):
     if IDossierMarker.providedBy(parent):
         return True
     return False
+
+
 grok.global_adapter(isSubdossierIndexer, name="is_subdossier")
+
+
+@indexer(IDossierTemplateMarker)
+def is_subdossier_dossiertemplate(obj):
+    return obj.is_subdossier()
+
+
+grok.global_adapter(is_subdossier_dossiertemplate, name="is_subdossier")
 
 
 @indexer(IDossierMarker)
@@ -85,6 +107,8 @@ def external_reference(obj):
     """Return the external reference of a dossier."""
     context = aq_inner(obj)
     return IDossier(context).external_reference
+
+
 grok.global_adapter(external_reference, name="external_reference")
 
 
@@ -112,6 +136,8 @@ def main_dossier_title(obj):
         else:
             raise
     return title
+
+
 grok.global_adapter(main_dossier_title, name="containing_dossier")
 
 
@@ -123,7 +149,7 @@ def containing_subdossier(obj):
     """
     context = aq_inner(obj)
     # Only compute for types that actually can be contained in a dossier
-    if not context.portal_type in ['opengever.document.document',
+    if context.portal_type not in ['opengever.document.document',
                                    'opengever.task.task',
                                    'ftw.mail.mail']:
         return ''
@@ -144,6 +170,8 @@ def containing_subdossier(obj):
         # parent dossier is a subdossier
         return parent_dossier.Title()
     return ''
+
+
 grok.global_adapter(containing_subdossier, name='containing_subdossier')
 
 
