@@ -10,6 +10,7 @@ from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
 from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting import require_word_meeting_feature
+from opengever.meeting.browser.meetings.transitions import MeetingTransitionController
 from opengever.meeting.exceptions import MissingAdHocTemplate
 from opengever.meeting.exceptions import MissingMeetingDossierPermissions
 from opengever.meeting.model import AgendaItem
@@ -84,7 +85,9 @@ class Meeting(Base, SQLFormSupport):
                     title=_('hold', default='Hold meeting'), visible=False),
          CloseTransition(
              'held', 'closed',
-             title=_('close_meeting', default='Close meeting'))]
+             title=_('close_meeting', default='Close meeting'))],
+        show_in_actions_menu=True,
+        transition_controller=MeetingTransitionController,
     )
 
     __tablename__ = 'meetings'

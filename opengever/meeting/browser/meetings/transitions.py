@@ -1,6 +1,5 @@
 from opengever.base.response import JSONResponse
 from opengever.meeting import _
-from opengever.meeting.model.meeting import Meeting
 from plone.protect.utils import addTokenToUrl
 from Products.Five.browser import BrowserView
 from zExceptions import NotFound
@@ -24,7 +23,7 @@ class MeetingTransitionController(BrowserView):
         self.execute_transition(transition)
         msg = _('label_transition_executed',
                 default='Transition ${transition} executed',
-                mapping={ 'transition': Meeting.workflow.transitions.get(transition).title})
+                mapping={'transition': self.model.workflow.transitions.get(transition).title})
 
         return JSONResponse(self.request).redirect(self.model.get_url()).info(msg).dump();
 

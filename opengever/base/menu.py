@@ -102,8 +102,45 @@ class OGCombinedActionsWorkflowMenu(CombinedActionsWorkflowMenu):
 
         result = (super(OGCombinedActionsWorkflowMenu, self)
                   .getWorkflowMenuItems(context, request))
-        return filter(lambda item: (item.get('extra', {})
-                                    .get('id', None) != 'advanced'), result)
+        result = filter(lambda item: (item.get('extra', {})
+                                      .get('id', None) != 'advanced'), result)
+        result = result + self.getSQLWorkflowMenuItems(context)
+        return result
+
+    def getSQLWorkflowMenuItems(self, context):
+        """Return workflow menu items of SQL based workflows.
+
+        Some SQL-based object types have custom workflows.
+        If enabled, workflow actions should appear in the actions menu
+        like normal Plone workflow actions.
+        """
+        model = getattr(context, 'model', None)
+        workflow = getattr(model, 'workflow', None)
+        if not getattr(workflow, 'show_in_actions_menu', False):
+            return []
+
+        transition_controller = workflow.transition_controller
+        result = []
+        for transition in workflow.get_transitions(model.get_state()):
+            if not transition.visible or \
+               not workflow.can_execute_transition(model, transition.name):
+                continue
+
+            result.append({
+                'title': transition.title,
+                'description': '',
+                'action': transition_controller.url_for(
+                    context, model, transition.name),
+                'selected': False,
+                'icon': None,
+                'extra': {
+                    # JS event handlers register with an ID selector.
+                    'id': transition.name,
+                },
+                'submenu': None,
+            })
+
+        return result
 
 
 class OGDisplaySubMenuItem(DisplaySubMenuItem):

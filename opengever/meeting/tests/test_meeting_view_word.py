@@ -1,4 +1,5 @@
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages import editbar
 from opengever.meeting.tests.pages import meeting_view
 from opengever.testing import IntegrationTestCase
 
@@ -45,3 +46,11 @@ class TestWordMeetingView(IntegrationTestCase):
         self.assertEquals(
             self.meeting.model.agendaitem_list_document.get_download_url(),
             link.attrib['href'])
+
+    @browsing
+    def test_close_transition_closes_meeting(self, browser):
+        self.login(self.committee_responsible, browser)
+        self.assertEquals('pending', self.meeting.model.get_state().name)
+        browser.open(self.meeting)
+        editbar.menu_option('Actions', 'Close meeting').click()
+        self.assertEquals('closed', self.meeting.model.get_state().name)
