@@ -5,6 +5,7 @@ Changelog
 2017.5.2 (unreleased)
 ---------------------
 
+- Tabbedview: let the catalog sort date indexes. [jone]
 - SPV word: Add new meeting edit form and move edit action to editbar. [jone]
 
 
