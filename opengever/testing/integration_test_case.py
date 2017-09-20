@@ -161,6 +161,16 @@ class IntegrationTestCase(TestCase):
         else:
             raise ValueError('Invalid {!r}'.format(feature))
 
+    def deactivate_feature(self, feature):
+        """Deactivate a feature flag.
+        """
+        if feature in FEATURE_FLAGS:
+            api.portal.set_registry_record(FEATURE_FLAGS[feature], False)
+        elif feature in FEATURE_PROFILES:
+            raise NotImplementedError('Feel free to implement.')
+        else:
+            raise ValueError('Invalid {!r}'.format(feature))
+
     def __getattr__(self, name):
         """Make it possible to access objects from the content lookup table
         directly with attribute access on the test case.

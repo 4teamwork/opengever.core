@@ -5,7 +5,7 @@ Changelog
 2017.5.2 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- SPV word: Add new meeting edit form and move edit action to editbar. [jone]
 
 
 2017.5.1 (2017-09-19)
@@ -14,7 +14,6 @@ Changelog
 - Fix is_subdossier replacement upgradestep, reindex all objects. [phgross]
 - Register an is_subdossier indexer for dossiertemplates. [phgross]
 - Add missing french translations. [phgross]
-
 
 2017.5.0 (2017-09-14)
 ---------------------

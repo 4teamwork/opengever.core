@@ -489,7 +489,8 @@ Objects
       - self.meeting
       - self.submitted_proposal
       - self.submitted_word_proposal
-    - self.committee_participant
+    - self.committee_participant_1
+    - self.committee_participant_2
     - self.committee_president
     - self.committee_secretary
     - self.empty_committee
