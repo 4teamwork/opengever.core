@@ -7,8 +7,10 @@ from opengever.base.widgets import trix_strip_whitespace
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
+from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting import require_word_meeting_feature
 from opengever.meeting.exceptions import MissingMeetingDossierPermissions
+from opengever.meeting.model import Period
 from opengever.meeting.model.excerpt import Excerpt
 from opengever.meeting.workflow import State
 from opengever.meeting.workflow import Transition
@@ -215,6 +217,17 @@ class AgendaItem(Base):
     def get_decision_draft(self):
         if self.has_proposal:
             return self.submitted_proposal.decision_draft
+
+    def get_decision_number(self):
+        if not is_word_meeting_implementation_enabled():
+            return self.decision_number
+
+        if not self.decision_number:
+            return self.decision_number
+
+        period = Period.query.get_current_for_update(self.meeting.committee)
+        year = period.date_from.year
+        return '{} / {}'.format(year, self.decision_number)
 
     def get_dossier_reference_number(self):
         if self.has_proposal:

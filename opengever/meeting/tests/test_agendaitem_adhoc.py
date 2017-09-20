@@ -127,7 +127,7 @@ class TestWordAgendaItem(IntegrationTestCase):
         browser.open(self.meeting, view='agenda_items/list')
         self.assertDictContainsSubset(
             {'title': u'Tisch Traktandum',
-             'decision_number': 2},
+             'decision_number': u'2016 / 2'},
             browser.json['items'][0])
 
     @browsing
