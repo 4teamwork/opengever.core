@@ -9,6 +9,7 @@ Changelog
 - SPV word: Move meeting status in meeting view. [jone]
 - SPV word: Move ZIP-export action to actions menu. [jone]
 - SPV word: Add new meeting edit form and move edit action to editbar. [jone]
+- SPV word: Add excerpts for ad-hoc agenda items. [deiferni]
 
 
 2017.5.1 (2017-09-19)
