@@ -23,3 +23,5 @@ class CatalogListingView(ftw.tabbedview.browser.listing.CatalogListingView):
     implements(IGeverCatalogTableSourceConfig)
 
     batching = ViewPageTemplateFile("batching.pt")
+
+    custom_sort_indexes = {}
