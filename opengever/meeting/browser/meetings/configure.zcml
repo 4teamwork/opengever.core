@@ -99,7 +99,7 @@
 
   <browser:page
       for="opengever.meeting.interfaces.IMeetingWrapper"
-      name="zipexport"
+      name="export-meeting-zip"
       class=".zipexport.MeetingZipExport"
       permission="zope2.View"
       />

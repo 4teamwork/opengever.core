@@ -1,8 +1,10 @@
 from ftw.zipexport.generation import ZipGenerator
 from ftw.zipexport.utils import normalize_path
+from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.command import AgendaItemListOperations
 from opengever.meeting.command import CreateGeneratedDocumentCommand
 from opengever.meeting.command import ProtocolOperations
+from opengever.meeting.interfaces import IMeetingWrapper
 from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
 from StringIO import StringIO
@@ -21,6 +23,16 @@ class MeetingZipExport(BrowserView):
     def __call__(self):
         # Download zip file
         return self.generate_zip()
+
+    def visible_in_actions_menu(self):
+        """Returns ``True`` when the zip export action should be displayed
+        in the actions menu.
+
+        The action should only appear when we are on a meeting view and the
+        word-meeting feature is enabled.
+        """
+        return IMeetingWrapper.providedBy(self.context) and \
+            is_word_meeting_implementation_enabled()
 
     def generate_zip(self):
         response = self.request.response

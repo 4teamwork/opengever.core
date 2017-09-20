@@ -114,6 +114,14 @@
           <table class="meeting-metadata">
 
             <tr>
+              <th i18n:translate="view_label_meeting_status">Status:</th>
+              <td>
+                <span tal:attributes="class python: 'wf-meeting-state-' + meeting.workflow_state"
+                      tal:content="python: meeting.get_state().title" />
+              </td>
+            </tr>
+
+            <tr>
               <th i18n:translate="view_label_meeting_start">Meeting start:</th>
               <td tal:content="meeting/get_start" />
             </tr>
@@ -247,35 +255,6 @@
         </div>
 
 
-        <div class="sidebar">
-          <div tal:attributes="class python: 'list-group metadata' if meeting.is_editable() else 'full-width list-group metadata'">
-            <div class="list-group-item">
-              <metal:use use-macro="context/@@meeting-macros/workflow_actions" />
-            </div>
-            <div class="list-group-item">
-              <dl>
-                <dt tal:attributes="class python: 'workflow_state ' + meeting. workflow_state"
-                    i18n:attributes="title"
-                    title="status"></dt>
-                <dd tal:content="python: meeting.get_state().title"></dd>
-              </dl>
-            </div>
-            <div class="list-group-item documents"
-                 tal:define="protocol_document view/get_protocol_document">
-
-              <div class="item zip-download">
-                <span class="title" i18n:translate="" i18n:domain="ftw.zipexport">Export as Zip</span>
-                <a href="#" class="download-zipexport-btn"
-                   tal:attributes="href view/url_zipexport"
-                   title="label_zip_download"
-                   i18n:attributes="title">
-                </a>
-              </div>
-
-            </div>
-          </div>
-
-        </div>
         <div class="content">
 
 

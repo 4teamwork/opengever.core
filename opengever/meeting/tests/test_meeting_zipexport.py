@@ -77,7 +77,7 @@ class TestMeetingZipExportView(FunctionalTestCase):
                     secretary=self.sile)
             .link_with(self.meeting_dossier))
 
-        browser.login().open(meeting.get_url(view='zipexport'))
+        browser.login().open(meeting.get_url(view='export-meeting-zip'))
         zip_file = ZipFile(StringIO(browser.contents), 'r')
         meeting = Meeting.query.get(meeting.meeting_id)
 
@@ -103,7 +103,7 @@ class TestMeetingZipExportView(FunctionalTestCase):
         # Add new protocol
         browser.login().visit(meeting.get_url())
         browser.css('a[href*="@@generate_protocol"]').first.click()
-        browser.open(meeting.get_url(view='zipexport'))
+        browser.open(meeting.get_url(view='export-meeting-zip'))
 
         zip_file = ZipFile(StringIO(browser.contents), 'r')
         meeting = Meeting.query.get(meeting.meeting_id)
@@ -146,7 +146,7 @@ class TestMeetingZipExportView(FunctionalTestCase):
         browser.login().open(meeting.get_url(view='protocol'))
         browser.fill({'Title': u'This is the modified different title than '
                                u'before'}).submit()
-        browser.open(meeting.get_url(view='zipexport'))
+        browser.open(meeting.get_url(view='export-meeting-zip'))
 
         zip_file = ZipFile(StringIO(browser.contents), 'r')
 
@@ -213,7 +213,7 @@ class TestMeetingZipExportView(FunctionalTestCase):
             .link_with(self.meeting_dossier))
 
         browser.login().visit(meeting.get_url())
-        browser.open(meeting.get_url(view='zipexport'))
+        browser.open(meeting.get_url(view='export-meeting-zip'))
 
         zip_file = ZipFile(StringIO(browser.contents), 'r')
         meeting = Meeting.query.get(meeting.meeting_id)
@@ -254,7 +254,7 @@ class TestMeetingZipExportView(FunctionalTestCase):
                     excerpt_documents=[generated_excerpt], )
             .link_with(self.meeting_dossier))
 
-        browser.login().open(meeting.get_url(view='zipexport'))
+        browser.login().open(meeting.get_url(view='export-meeting-zip'))
         zip_file = ZipFile(StringIO(browser.contents), 'r')
         self.assertNotIn('excerpt.docx', zip_file.namelist())
 
@@ -282,7 +282,7 @@ class TestMeetingZipExportView(FunctionalTestCase):
             .scheduled_proposals([self.proposal_a, ])
             .link_with(self.meeting_dossier))
 
-        browser.login().open(meeting.get_url(view='zipexport'))
+        browser.login().open(meeting.get_url(view='export-meeting-zip'))
         zip_file = ZipFile(StringIO(browser.contents), 'r')
         self.assertIn('Agendaitem list-Community meeting.docx',
                       zip_file.namelist())

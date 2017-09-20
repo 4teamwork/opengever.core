@@ -1,5 +1,9 @@
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages import editbar
 from opengever.testing import IntegrationTestCase
+
+
+ZIP_EXPORT_ACTION_LABEL = 'Export as Zip'
 
 
 class TestWordMeeting(IntegrationTestCase):
@@ -14,3 +18,32 @@ class TestWordMeeting(IntegrationTestCase):
         self.login(self.committee_responsible, browser)
         browser.open(self.meeting)
         self.assertFalse(browser.css('.sidebar .excerpts'))
+
+    @browsing
+    def test_zipexport_action_in_action_menu(self, browser):
+        """When the word-meeting feature is enabled, the zipexport action is
+        available in Plone's actions menu.
+        """
+        self.login(self.committee_responsible, browser)
+        browser.open(self.meeting)
+        self.assertIn(ZIP_EXPORT_ACTION_LABEL, editbar.menu_options('Actions'))
+
+    @browsing
+    def test_zipexport_action_not_in_action_menu_without_word_feature(self, browser):
+        """The zipexport action should not be available in the actions menu
+        when the word-meeting feature is not enabled.
+        In this case the action is available in the sidebar.
+        """
+        self.deactivate_feature('word-meeting')
+        self.login(self.manager, browser)
+        browser.open(self.meeting)
+        self.assertNotIn(ZIP_EXPORT_ACTION_LABEL, editbar.menu_options('Actions'))
+
+    @browsing
+    def test_zipexport_action_not_available_on_non_meeting_content(self, browser):
+        """The zipexport action should not be available on non-meeting content.
+        If it does appear, it might by another action with the same name.
+        """
+        self.login(self.manager, browser)
+        browser.open(self.committee)
+        self.assertNotIn(ZIP_EXPORT_ACTION_LABEL, editbar.menu_options('Actions'))

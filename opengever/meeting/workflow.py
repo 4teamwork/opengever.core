@@ -59,7 +59,8 @@ class Transition(object):
 
 class Workflow(object):
 
-    def __init__(self, states, transitions):
+    def __init__(self, states, transitions,
+                 show_in_actions_menu=False, transition_controller=None):
         self.default_state = None
         self.states = {}
         for state in states:
@@ -78,6 +79,12 @@ class Workflow(object):
 
             self.transitions[transition.name] = transition
             state_from.register_transition(transition)
+
+        self.show_in_actions_menu = show_in_actions_menu
+        self.transition_controller = transition_controller
+        if self.show_in_actions_menu and not transition_controller:
+            raise ValueError('transition_controller is required when'
+                             ' show_in_actions_menu is enabled.')
 
     def get_state(self, name):
         return self.states[name]
