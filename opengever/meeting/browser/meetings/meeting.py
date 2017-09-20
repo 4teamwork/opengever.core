@@ -302,7 +302,7 @@ class MeetingView(BrowserView):
         return self.model.get_url(view='agenda_item_list')
 
     def url_zipexport(self):
-        return self.model.get_url(view='zipexport')
+        return self.model.get_url(view='export-meeting-zip')
 
     def url_manually_generate_excerpt(self):
         return self.model.get_url(view='generate_excerpt')
