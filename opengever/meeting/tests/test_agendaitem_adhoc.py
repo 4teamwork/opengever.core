@@ -58,7 +58,7 @@ class TestWordAgendaItem(IntegrationTestCase):
     def test_edit_ad_hoc_document_possible_when_scheduled(self, browser):
         self.login(self.committee_responsible, browser)
 
-        agenda_item = self.meeting.model.schedule_ad_hoc(u'ad-hoc')
+        agenda_item = self.schedule_ad_hoc(self.meeting, u'ad-hoc')
 
         browser.open(self.meeting, view='agenda_items/list')
         item_data = browser.json['items'][0]
@@ -73,7 +73,7 @@ class TestWordAgendaItem(IntegrationTestCase):
     @browsing
     def test_edit_ad_hoc_document_possible_when_i_have_checked_it_out(self, browser):
         self.login(self.committee_responsible, browser)
-        agenda_item = self.meeting.model.schedule_ad_hoc(u'ad-hoc')
+        agenda_item = self.schedule_ad_hoc(self.meeting, u'ad-hoc')
 
         document = agenda_item.resolve_document()
         self.checkout_document(document)
@@ -94,7 +94,7 @@ class TestWordAgendaItem(IntegrationTestCase):
     @browsing
     def test_edit_ad_hoc_document_not_possible_when_sb_else_checked_it_out(self, browser):
         self.login(self.committee_responsible, browser)
-        agenda_item = self.meeting.model.schedule_ad_hoc(u'ad-hoc')
+        agenda_item = self.schedule_ad_hoc(self.meeting, u'ad-hoc')
 
         with self.login(self.administrator):
             self.checkout_document(agenda_item.resolve_document())
@@ -129,3 +129,105 @@ class TestWordAgendaItem(IntegrationTestCase):
             {'title': u'Tisch Traktandum',
              'decision_number': 2},
             browser.json['items'][0])
+
+    @browsing
+    def test_create_ad_hoc_agenda_item_excerpt(self, browser):
+        """When creating an excerpt of an agenda item, it should copy the
+        proposal document into the meeting dossier for further editing.
+        """
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_ad_hoc(self.meeting, u'ad-hoc')
+        agenda_item.decide()
+
+        browser.open(self.meeting, view='agenda_items/list')
+        item_data = browser.json['items'][-1]
+
+        # The generate excerpt link is available on decided agenda items.
+        self.assertDictContainsSubset(
+            {'generate_excerpt_link':
+             self.agenda_item_url(agenda_item, 'generate_excerpt')},
+            item_data)
+
+        # Create an excerpt.
+        with self.observe_children(self.meeting_dossier) as children:
+            browser.open(item_data['generate_excerpt_link'], send_authenticator=True)
+
+        # Generating the excerpt is confirmed with a status message.
+        self.assertEquals(
+            {u'proceed': True,
+             u'messages': [
+                 {u'messageTitle': u'Information',
+                  u'message': u'Excerpt was created successfully.',
+                  u'messageClass': u'info'}]},
+            browser.json)
+
+        # The excerpt was created in the meeting dossier
+        self.assertEquals(1, len(children['added']))
+        excerpt_document, = children['added']
+        self.assertEquals(u'Excerpt ad-hoc', excerpt_document.Title())
+
+    @browsing
+    def test_cannot_create_ad_hoc_excerpt_when_meeting_closed(self, browser):
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_ad_hoc(self.meeting, u'ad-hoc')
+        agenda_item.decide()
+        self.meeting.model.execute_transition('held-closed')
+        self.assertEquals(self.meeting.model.STATE_CLOSED,
+                          self.meeting.model.get_state())
+
+        with browser.expect_unauthorized():
+            browser.open(self.agenda_item_url(agenda_item, 'generate_excerpt'))
+
+    @browsing
+    def test_cannot_create_excerpt_when_item_not_decided(self, browser):
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_ad_hoc(self.meeting, u'ad-hoc')
+
+        with browser.expect_http_error(reason='Forbidden'):
+            browser.open(self.agenda_item_url(agenda_item, 'generate_excerpt'))
+
+    @browsing
+    def test_error_when_no_access_to_meeting_dossier(self, browser):
+        with self.login(self.administrator):
+            self.committee_container.manage_setLocalRoles(
+                self.regular_user.getId(), ('Reader',))
+            self.committee.manage_setLocalRoles(
+                self.regular_user.getId(), ('CommitteeResponsible', 'Editor'))
+            self.committee_container.reindexObjectSecurity()
+            # Let regular_user have no access to meeting_dossier
+            self.meeting_dossier.__ac_local_roles_block__ = True
+
+            agenda_item = self.schedule_ad_hoc(self.meeting, u'ad-hoc')
+            agenda_item.decide()
+
+        self.login(self.regular_user, browser)
+        browser.open(self.agenda_item_url(agenda_item, 'generate_excerpt'))
+        self.assertEquals(
+            {u'messages': [
+                {u'messageTitle': u'Error',
+                 u'message': u'Insufficient privileges to add a document'
+                 u' to the meeting dossier.',
+                 u'messageClass': u'error'}],
+             u'proceed': False},
+            browser.json)
+
+    @browsing
+    def test_excerpts_listed_in_meeting_ad_hoc_item_data(self, browser):
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_ad_hoc(self.meeting, u'ad-hoc')
+        agenda_item.decide()
+
+        browser.open(self.meeting, view='agenda_items/list')
+        item_data = browser.json['items'][0]
+        self.assertFalse(item_data.get('excerpts'))
+
+        excerpt = agenda_item.generate_excerpt()
+
+        browser.open(self.meeting, view='agenda_items/list')
+        item_data = browser.json['items'][0]
+        excerpt_links = item_data.get('excerpts', None)
+
+        self.assertEquals(1, len(excerpt_links))
+        self.assertIn(
+            'href="{}"'.format(excerpt.absolute_url()),
+            excerpt_links[0]['link'])

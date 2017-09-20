@@ -141,25 +141,21 @@ class AgendaItemsView(BrowserView):
 
     @require_word_meeting_feature
     def _serialize_excerpts(self, meeting, item):
-        if not item.has_proposal:
-            return []
-
-        excerpts = []
-        submitted_proposal = item.proposal.resolve_submitted_proposal()
-        docs = IContentListing(submitted_proposal.get_excerpts())
-        excerpt = item.proposal.resolve_submitted_excerpt_document()
+        excerpt_data = []
+        docs = IContentListing(item.get_excerpt_documents())
+        source_dossier_excerpt = item.get_source_dossier_excerpt()
 
         for doc in docs:
             data = {'link': doc.render_link()}
-            if not excerpt:
+            if not source_dossier_excerpt and item.has_proposal:
                 data['return_link'] = meeting.get_url(
                     view='agenda_items/{}/return_excerpt?document={}'.format(
                         item.agenda_item_id, doc.uuid()))
-            elif doc == excerpt:
-                data['is_excerpt'] = True
-            excerpts.append(data)
+            elif source_dossier_excerpt and doc == source_dossier_excerpt:
+                data['is_excerpt_in_source_dossier'] = True
+            excerpt_data.append(data)
 
-        return excerpts
+        return excerpt_data
 
     @require_word_meeting_feature
     def _get_edit_document_options(self, document, agenda_item, meeting):
@@ -214,12 +210,11 @@ class AgendaItemsView(BrowserView):
                     data.update(self._get_edit_document_options(
                         document, item, meeting))
 
-                if item.has_proposal:
-                    data['excerpts'] = self._serialize_excerpts(meeting, item)
-                    if item.can_generate_excerpt():
-                        data['generate_excerpt_link'] = meeting.get_url(
-                            view='agenda_items/{}/generate_excerpt'.format(
-                                item.agenda_item_id))
+                data['excerpts'] = self._serialize_excerpts(meeting, item)
+                if item.can_generate_excerpt():
+                    data['generate_excerpt_link'] = meeting.get_url(
+                        view='agenda_items/{}/generate_excerpt'.format(
+                            item.agenda_item_id))
 
             agenda_items.append(data)
         return agenda_items
@@ -231,7 +226,6 @@ class AgendaItemsView(BrowserView):
         """Returns json list of all agendaitems for the current
         context (meeting).
         """
-
         return JSONResponse(self.request).data(items=self._get_agenda_items()).dump()
 
     def update_order(self):

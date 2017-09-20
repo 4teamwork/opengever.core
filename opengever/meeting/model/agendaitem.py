@@ -1,3 +1,4 @@
+from opengever.base.command import CreateDocumentCommand
 from opengever.base.model import Base
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
@@ -8,12 +9,14 @@ from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
 from opengever.meeting import require_word_meeting_feature
 from opengever.meeting.exceptions import MissingMeetingDossierPermissions
+from opengever.meeting.model.excerpt import Excerpt
 from opengever.meeting.workflow import State
 from opengever.meeting.workflow import Transition
 from opengever.meeting.workflow import Workflow
 from opengever.ogds.models import UNIT_ID_LENGTH
 from opengever.ogds.models.types import UnicodeCoercingText
 from plone import api
+from Products.CMFPlone.utils import safe_unicode
 from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
@@ -24,6 +27,7 @@ from sqlalchemy.orm import composite
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
 from zope.component import getMultiAdapter
+from zope.i18n import translate
 
 
 class AgendaItem(Base):
@@ -399,21 +403,71 @@ class AgendaItem(Base):
     def return_excerpt(self, document):
         self.proposal.return_excerpt(document)
 
+    @require_word_meeting_feature
     def generate_excerpt(self):
-        """Generate an excerpt from the submitted proposal's document."""
+        """Generate an excerpt from the agenda items document.
 
+        Can either be an excerpt from the proposals document or an excerpt
+        from the ad-hoc agenda items document.
+        In both cases the excerpt is stored in the meeting dossier.
+        """
+        assert self.can_generate_excerpt()
         meeting_dossier = self.meeting.get_dossier()
+        source_document = self.resolve_document()
+
+        if not source_document:
+            raise ValueError('The agenda item has no document.')
+
         if not api.user.get_current().checkPermission(
                 'opengever.document: Add document', meeting_dossier):
             raise MissingMeetingDossierPermissions
 
-        proposal = self.proposal.resolve_submitted_proposal()
-        proposal.generate_excerpt(meeting_dossier)
+        title = _(u'excerpt_document_title',
+                  default=u'Excerpt ${title}',
+                  mapping={'title': safe_unicode(self.get_title())})
+        title = translate(title, context=meeting_dossier.REQUEST).strip()
+
+        excerpt_document = CreateDocumentCommand(
+            context=meeting_dossier,
+            filename=source_document.file.filename,
+            data=source_document.file.data,
+            content_type=source_document.file.contentType,
+            title=title).execute()
+
+        if self.has_proposal:
+            submitted_proposal = self.proposal.resolve_submitted_proposal()
+            submitted_proposal.append_excerpt(excerpt_document)
+        else:
+            self.excerpts.append(Excerpt(
+                excerpt_oguid=Oguid.for_object(excerpt_document)))
+
+        return excerpt_document
 
     def can_generate_excerpt(self):
-        """Return wheter excerpts can be generated."""
+        """Return whether excerpts can be generated."""
 
         if not self.meeting.is_editable():
             return False
 
         return self.get_state() == self.STATE_DECIDED
+
+    @require_word_meeting_feature
+    def get_excerpt_documents(self):
+        """Return a list of excerpt documents.
+
+        If the agenda items has a proposal return the proposals excerpt
+        documents. Otherwise return the excerpts stored in the meeting
+        dossier.
+        """
+        if self.has_proposal:
+            return self.submitted_proposal.get_excerpts()
+
+        excerpts = [excerpt.resolve_document() for excerpt in self.excerpts]
+        return [each for each in excerpts if each is not None]
+
+    @require_word_meeting_feature
+    def get_source_dossier_excerpt(self):
+        if not self.has_proposal:
+            return None
+
+        return self.proposal.resolve_submitted_excerpt_document()

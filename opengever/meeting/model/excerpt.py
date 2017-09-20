@@ -26,3 +26,6 @@ class Excerpt(Base):
     excerpt_int_id = Column(Integer, nullable=False)
     excerpt_oguid = composite(
         Oguid, excerpt_admin_unit_id, excerpt_int_id)
+
+    def resolve_document(self):
+        return self.excerpt_oguid.resolve_object()
