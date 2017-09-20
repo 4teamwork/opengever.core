@@ -465,30 +465,6 @@ class SubmittedProposal(ProposalBase):
             dossier.title)
 
     @require_word_meeting_feature
-    def generate_excerpt(self, target_dossier):
-        """Create a new excerpt from this agenda item by copying it's
-        proposal document into the target dossier.
-        """
-        source_document = self.get_proposal_document()
-        if not source_document:
-            raise ValueError('The proposal has no proposal document.')
-
-        title = _(u'excerpt_document_title',
-                  default=u'Excerpt ${title}',
-                  mapping={'title': safe_unicode(self.Title())})
-        title = translate(title, context=target_dossier.REQUEST).strip()
-
-        excerpt_document = CreateDocumentCommand(
-            context=target_dossier,
-            filename=source_document.file.filename,
-            data=source_document.file.data,
-            content_type=source_document.file.contentType,
-            title=title).execute()
-
-        self.append_excerpt(excerpt_document)
-        return excerpt_document
-
-    @require_word_meeting_feature
     def get_excerpts(self):
         """Return a restricted list of document objects which are excerpts
         of the current proposal.

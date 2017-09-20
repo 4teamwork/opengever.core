@@ -46,8 +46,8 @@ class TestProposalWithWord(IntegrationTestCase):
             dict(browser.css('table.listing').first.lists()))
 
         self.assertEquals(
-            'Word Content',
-            proposal.get_proposal_document().file.open().read())
+            self.proposal_template.file.data,
+            proposal.get_proposal_document().file.data)
 
         self.assertFalse(
             is_officeconnector_checkout_feature_enabled(),
@@ -200,15 +200,19 @@ class TestProposalWithWord(IntegrationTestCase):
             [],
             ISubmittedProposal(self.submitted_word_proposal).excerpts)
 
+        agenda_item = self.schedule_proposal(self.meeting,
+                              self.submitted_word_proposal)
+        agenda_item.decide()
+
         with self.observe_children(self.meeting_dossier) as children:
-            self.submitted_word_proposal.generate_excerpt(self.meeting_dossier)
+            agenda_item.generate_excerpt()
 
         self.assertEquals(1, len(children['added']),
                           'An excerpt document should have been added to the'
                           ' meeting dossier.')
 
         # The document should contain a copy of the proposal document file.
-        excerpt_document ,= children['added']
+        excerpt_document, = children['added']
         self.assertEquals('Excerpt \xc3\x84nderungen am Personalreglement',
                           excerpt_document.Title())
         self.assertEquals(u'excerpt-anderungen-am-personalreglement.docx',

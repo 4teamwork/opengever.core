@@ -178,7 +178,7 @@ class OpengeverContentFixture(object):
             self.proposal_template = self.register('proposal_template', create(
                 Builder('proposaltemplate')
                 .titled(u'Geb\xfchren')
-                .attach_file_containing('Word Content', u'file.docx')
+                .with_asset_file(u'vertragsentwurf.docx')
                 .within(templates)))
 
     @staticuid()

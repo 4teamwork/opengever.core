@@ -141,25 +141,21 @@ class AgendaItemsView(BrowserView):
 
     @require_word_meeting_feature
     def _serialize_excerpts(self, meeting, item):
-        if not item.has_proposal:
-            return []
-
-        excerpts = []
-        submitted_proposal = item.proposal.resolve_submitted_proposal()
-        docs = IContentListing(submitted_proposal.get_excerpts())
-        excerpt = item.proposal.resolve_submitted_excerpt_document()
+        excerpt_data = []
+        docs = IContentListing(item.get_excerpt_documents())
+        source_dossier_excerpt = item.get_source_dossier_excerpt()
 
         for doc in docs:
             data = {'link': doc.render_link()}
-            if not excerpt:
+            if not source_dossier_excerpt and item.has_proposal:
                 data['return_link'] = meeting.get_url(
                     view='agenda_items/{}/return_excerpt?document={}'.format(
                         item.agenda_item_id, doc.uuid()))
-            elif doc == excerpt:
-                data['is_excerpt'] = True
-            excerpts.append(data)
+            elif source_dossier_excerpt and doc == source_dossier_excerpt:
+                data['is_excerpt_in_source_dossier'] = True
+            excerpt_data.append(data)
 
-        return excerpts
+        return excerpt_data
 
     @require_word_meeting_feature
     def _get_edit_document_options(self, document, agenda_item, meeting):
@@ -214,12 +210,11 @@ class AgendaItemsView(BrowserView):
                     data.update(self._get_edit_document_options(
                         document, item, meeting))
 
-                if item.has_proposal:
-                    data['excerpts'] = self._serialize_excerpts(meeting, item)
-                    if self.can_generate_excerpt(item):
-                        data['generate_excerpt_link'] = meeting.get_url(
-                            view='agenda_items/{}/generate_excerpt'.format(
-                                item.agenda_item_id))
+                data['excerpts'] = self._serialize_excerpts(meeting, item)
+                if item.can_generate_excerpt():
+                    data['generate_excerpt_link'] = meeting.get_url(
+                        view='agenda_items/{}/generate_excerpt'.format(
+                            item.agenda_item_id))
 
             agenda_items.append(data)
         return agenda_items
@@ -231,7 +226,6 @@ class AgendaItemsView(BrowserView):
         """Returns json list of all agendaitems for the current
         context (meeting).
         """
-
         return JSONResponse(self.request).data(items=self._get_agenda_items()).dump()
 
     def update_order(self):
@@ -453,12 +447,12 @@ class AgendaItemsView(BrowserView):
         if not self.context.model.is_editable():
             raise Unauthorized("Editing is not allowed")
 
-        if not self.can_generate_excerpt(self.agenda_item):
+        if not self.agenda_item.can_generate_excerpt():
             raise Forbidden('Generating excerpt is not allowed in this state.')
 
-        meeting_dossier = self.meeting.get_dossier()
-        if not api.user.get_current().checkPermission(
-                'opengever.document: Add document', meeting_dossier):
+        try:
+            self.agenda_item.generate_excerpt()
+        except MissingMeetingDossierPermissions:
             return (JSONResponse(self.request)
                     .error(_('error_no_permission_to_add_document',
                              default=u'Insufficient privileges to add a'
@@ -466,8 +460,6 @@ class AgendaItemsView(BrowserView):
                     .remain()
                     .dump())
 
-        proposal = self.agenda_item.proposal.resolve_submitted_proposal()
-        proposal.generate_excerpt(meeting_dossier)
         return (JSONResponse(self.request)
                 .info(_('excerpt_generated',
                         default=u'Excerpt was created successfully.'))
@@ -501,12 +493,3 @@ class AgendaItemsView(BrowserView):
             if IUUID(doc) == doc_uuid:
                 return doc
         return None
-
-    def can_generate_excerpt(self, agenda_item):
-        """Returns True when agenda item and proposal are in a state which
-        allows to generate excerpts.
-        """
-        if not self.context.model.is_editable():
-            return False
-
-        return agenda_item.get_state() == agenda_item.STATE_DECIDED

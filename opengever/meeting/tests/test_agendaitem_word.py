@@ -314,9 +314,7 @@ class TestWordAgendaItem(IntegrationTestCase):
         item_data = browser.json['items'][0]
         self.assertFalse(item_data.get('excerpts'))
 
-        excerpt = self.submitted_word_proposal.generate_excerpt(
-            self.meeting_dossier)
-
+        excerpt = agenda_item.generate_excerpt()
         browser.open(self.meeting, view='agenda_items/list')
         item_data = browser.json['items'][0]
         excerpt_links = item_data.get('excerpts', None)
@@ -351,8 +349,7 @@ class TestWordAgendaItem(IntegrationTestCase):
         agenda_item = self.schedule_proposal(self.meeting,
                                              self.submitted_word_proposal)
         agenda_item.decide()
-        excerpt = self.submitted_word_proposal.generate_excerpt(
-            self.meeting_dossier)
+        excerpt = agenda_item.generate_excerpt()
 
         self.assertIsNone(agenda_item.proposal.excerpt_document)
         self.assertIsNone(agenda_item.proposal.submitted_excerpt_document)
