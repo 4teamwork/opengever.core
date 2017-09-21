@@ -186,11 +186,17 @@ class Meeting(Base, SQLFormSupport):
         from opengever.meeting.command import ProtocolOperations
         from opengever.meeting.command import UpdateGeneratedDocumentCommand
 
+        if self.has_protocol_document() and not self.protocol_document.is_locked():
+            # The protocol should never be changed when it is no longer locked:
+            # the user probably has made changes manually.
+            return
+
         operations = ProtocolOperations()
 
         if is_word_meeting_implementation_enabled():
             command = MergeDocxProtocolCommand(
-                self.get_dossier(), self, operations)
+                self.get_dossier(), self, operations,
+                lock_document_after_creation=True)
         else:
             if self.has_protocol_document():
                 command = UpdateGeneratedDocumentCommand(

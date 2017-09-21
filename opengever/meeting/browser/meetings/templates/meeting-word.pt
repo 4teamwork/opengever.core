@@ -65,7 +65,10 @@
           <ul>
             <li i18n:translate="">Close all proposals.</li>
             <li i18n:translate="">Generate excerpts for all proposals.</li>
-            <li i18n:translate="">Update or create the protocol.</li>
+            <li i18n:translate=""
+                tal:condition="view/will_closing_regenerate_protocol">
+              Update or create the protocol.
+            </li>
           </ul>
           <p i18n:translate="">
             Are you sure you want to close this meeting?
