@@ -62,15 +62,16 @@ class TestMeetingZipExportView(IntegrationTestCase):
     def test_excerpt_is_not_exported(self, browser):
         self.activate_feature('word-meeting')
         self.login(self.committee_responsible, browser)
-        self.schedule_proposal(self.meeting, self.submitted_proposal)
-        self.submitted_word_proposal.generate_excerpt(
-            self.meeting_dossier)
+        agenda_item = self.schedule_proposal(self.meeting,
+                                             self.submitted_word_proposal)
+        agenda_item.decide()
+        agenda_item.generate_excerpt()
 
         browser.open(self.meeting, view='export-meeting-zip')
         zip_file = ZipFile(StringIO(browser.contents), 'r')
         self.assertEquals(
             ['Protocol-9. Sitzung der Rechnungsprufungskommission.docx',
-             '1. Vertragsentwurf fur weitere Bearbeitung bewilligen/Vertragsentwurf.docx',
+             '1. Anderungen am Personalreglement/Vertragsentwurf.docx',
              'Agendaitem list-9. Sitzung der Rechnungsprufungskommission.docx'],
             zip_file.namelist())
 
