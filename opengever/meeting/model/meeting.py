@@ -85,7 +85,8 @@ class Meeting(Base, SQLFormSupport):
                     title=_('hold', default='Hold meeting'), visible=False),
          CloseTransition(
              'held', 'closed',
-             title=_('close_meeting', default='Close meeting'))],
+             title=_('close_meeting', default='Close meeting')),
+         Transition('closed', 'held', title=_('reopen', default='Reopen'))],
         show_in_actions_menu=True,
         transition_controller=MeetingTransitionController,
     )

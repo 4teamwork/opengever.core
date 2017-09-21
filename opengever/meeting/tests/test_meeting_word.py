@@ -47,3 +47,11 @@ class TestWordMeeting(IntegrationTestCase):
         self.login(self.manager, browser)
         browser.open(self.committee)
         self.assertNotIn(ZIP_EXPORT_ACTION_LABEL, editbar.menu_options('Actions'))
+
+    @browsing
+    def test_reopen_closed_meeting(self, browser):
+        self.login(self.committee_responsible, browser)
+        self.assertEquals(u'closed', self.decided_meeting.model.workflow_state)
+        browser.open(self.decided_meeting)
+        editbar.menu_option('Actions', 'Reopen').click()
+        self.assertEquals(u'held', self.decided_meeting.model.workflow_state)
