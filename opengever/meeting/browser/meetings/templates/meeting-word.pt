@@ -59,7 +59,8 @@
           </div>
           <h2 i18n:translate="close_meeting">Close meeting</h2>
           <p i18n:translate="">
-            Once closed the meeting and its protocol cannot be edited any longer. The following tasks will be perfomed:
+            After closing the meeting it can no longer be edited.
+            The following tasks will be performed:
           </p>
           <ul>
             <li i18n:translate="">Close all proposals.</li>
