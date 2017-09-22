@@ -1,7 +1,9 @@
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.tabbedview.interfaces import ITabbedView
 from ftw.testbrowser import browsing
+from ftw.testing import freeze
 from opengever.bumblebee import BUMBLEBEE_VIEW_COOKIE_NAME
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 from opengever.tabbedview.browser.bumblebee_gallery import BumblebeeGalleryMixin
@@ -145,12 +147,18 @@ class TestBumblebeeGalleryMixinGetBrains(FunctionalTestCase):
         view = getMultiAdapter(
             (dossier, self.request), name="tabbedview_view-documents-gallery")
 
-        document = create(Builder('document').within(dossier))
-        create(Builder('document').within(other_dossier))
+        with freeze(datetime(2010, 1, 1)) as clock:
+            old_document = create(Builder('document').within(dossier))
+            clock.forward(days=1)
 
-        brains = view.get_brains()
+            new_document = create(Builder('document').within(dossier))
+            clock.forward(days=1)
 
-        self.assertEqual([document, ], [brain.getObject() for brain in brains])
+            create(Builder('document').within(other_dossier))
+
+            brains = view.get_brains()
+            self.assertEqual([new_document, old_document],
+                             [brain.getObject() for brain in brains])
 
     def test_brain_listing_is_cached_per_request(self):
         dossier = create(Builder('dossier'))
@@ -595,8 +603,7 @@ class TestProxyViewsWithActivatedFeature(FunctionalTestCase):
         document_a = create(Builder('document').within(dossier))
         create(Builder('document'))
 
-
-        data = {'view_name':'documents-proxy',
+        data = {'view_name': 'documents-proxy',
                 'initialize': 0,
                 'selected_count': 0}
         browser.login().open(dossier, data, view='tabbed_view/select_all')

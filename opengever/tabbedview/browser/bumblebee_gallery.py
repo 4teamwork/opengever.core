@@ -65,6 +65,12 @@ class BumblebeeGalleryMixin(object):
             'searchable_text', '')
 
         query = self.table_source.build_query()
+
+        # When https://github.com/4teamwork/opengever.core/pull/3399 is fixed,
+        # set the default ordering on the table source config instead.
+        if isinstance(query, dict) and 'sort_on' not in query:
+            query['sort_on'] = 'modified'
+            query['sort_order'] = 'descending'
         return self.table_source.search_results(query)
 
     def fetch(self):
