@@ -30,6 +30,33 @@ class TestTeamTasks(IntegrationTestCase):
         self.assertEquals(u'fa', task.responsible_client)
 
     @browsing
+    def test_only_team_members_count_as_responsible(self, browser):
+        self.login(self.regular_user, browser)
+
+        ITask(self.task).responsible = u'team:2'
+        self.task.get_sql_object().responsible = u'team:2'
+        self.set_workflow_state('task-state-open', self.task)
+
+        browser.open(self.task, view='tabbedview_view-overview')
+        self.assertEquals(
+            ['task-transition-reassign', 'label_add_comment'],
+            browser.css('.actionButtons li').text,
+            'Expect none responsible actions, because the regular_user is not '
+            'a team member and therefore not a responsible.')
+
+        self.login(self.meeting_user, browser)
+        browser.open(self.task, view='tabbedview_view-overview')
+        self.assertEquals(
+            ['task-transition-open-in-progress',
+             'task-transition-open-rejected',
+             'task-transition-open-resolved',
+             'task-transition-reassign',
+             'label_add_comment'],
+            browser.css('.actionButtons li').text,
+            'Expect responsible actions, because the meeting_user is a team '
+            'member and therefore not a responsible.')
+
+    @browsing
     def test_all_team_members_are_notified_for_a_new_team_task(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.dossier)
