@@ -38,6 +38,7 @@ FEATURE_FLAGS = {
     'ech0147-import': 'opengever.ech0147.interfaces.IECH0147Settings.ech0147_import_enabled',
     'extjs': 'ftw.tabbedview.interfaces.ITabbedView.extjs_enabled',
     'bumblebee': 'opengever.bumblebee.interfaces.IGeverBumblebeeSettings.is_feature_enabled',
+    'activity': 'opengever.activity.interfaces.IActivitySettings.is_feature_enabled'
 }
 
 FEATURE_PROFILES = {

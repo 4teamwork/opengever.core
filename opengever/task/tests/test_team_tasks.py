@@ -1,9 +1,16 @@
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
+from opengever.activity import notification_center
+from opengever.activity.model import Activity
+from opengever.base.model import create_session
+from opengever.task.task import ITask
 from opengever.testing import IntegrationTestCase
 
 
+
 class TestTeamTasks(IntegrationTestCase):
+
+    features = ('activity', )
 
     @browsing
     def test_select_a_team_as_responsible_is_possible(self, browser):
@@ -22,3 +29,29 @@ class TestTeamTasks(IntegrationTestCase):
         self.assertEquals('Team Task', task.title)
         self.assertEquals('team:1', task.responsible)
         self.assertEquals(u'fa', task.responsible_client)
+
+    @browsing
+    def test_all_team_members_are_notified_for_a_new_team_task(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.dossier)
+        factoriesmenu.add('Task')
+
+        browser.fill({'Title': u'Team Task', 'Task Type': 'To comment'})
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill('team:2')
+        browser.find('Save').click()
+        create_session().flush()
+
+        task = self.dossier.get('task-3')
+
+        center = notification_center()
+        self.assertEquals(
+            [u'team:2', u'kathi.barfuss'],
+            [watcher.actorid for watcher in center.get_watchers(task)]
+        )
+
+        activity = Activity.query.one()
+
+        self.assertEquals(
+            [u'franzi.muller', u'herbert.jager'],
+            [note.userid for note in activity.notifications])
