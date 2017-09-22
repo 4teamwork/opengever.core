@@ -28,6 +28,7 @@ class DossierMigrator(object):
 
         self.strict = strict
         self.catalog = api.portal.get_tool('portal_catalog')
+        self.dossiers_to_reindex = set()
 
     def _get_dossiers(self):
         dossier_brains = self.catalog.unrestrictedSearchResults(
@@ -47,7 +48,6 @@ class DossierMigrator(object):
 
     def _migrate_responsible(self, dossier):
         moved = []
-        modified_idxs = []
         path = '/'.join(dossier.getPhysicalPath())
 
         old_userid = IDossier(dossier).responsible
@@ -58,20 +58,19 @@ class DossierMigrator(object):
                 path, old_userid, new_userid))
             self._verify_user(new_userid)
             IDossier(dossier).responsible = new_userid
+            self.dossiers_to_reindex.add(dossier)
 
             moved.append((path, old_userid, new_userid))
-            modified_idxs = ['responsible']
 
-        return modified_idxs, moved
+        return moved
 
     def _migrate_participations(self, dossier):
         moved = []
-        modified_idxs = []
         path = '/'.join(dossier.getPhysicalPath())
 
         if not IParticipationAwareMarker.providedBy(dossier):
             # No participation support - probably a template folder
-            return modified_idxs, moved
+            return moved
 
         phandler = IParticipationAware(dossier)
         participations = phandler.get_participations()
@@ -85,7 +84,7 @@ class DossierMigrator(object):
                 participation.contact = new_userid
                 moved.append((path, old_userid, new_userid))
 
-        return modified_idxs, moved
+        return moved
 
     def migrate(self):
         responsibles_moved = []
@@ -94,19 +93,19 @@ class DossierMigrator(object):
         dossiers = self._get_dossiers()
 
         for dossier in dossiers:
-            modified_idxs = []
-
             # Migrate responsible
-            idxs, moved = self._migrate_responsible(dossier)
-            modified_idxs.extend(idxs)
+            moved = self._migrate_responsible(dossier)
             responsibles_moved.extend(moved)
 
             # Migrate participations
-            idxs, moved = self._migrate_participations(dossier)
-            modified_idxs.extend(idxs)
+            moved = self._migrate_participations(dossier)
             participations_moved.extend(moved)
 
-            dossier.reindexObject(idxs=modified_idxs)
+        # Dossiers with updated responsible need reindexing
+        # (participations don't affect indexes however)
+        for obj in self.dossiers_to_reindex:
+            logger.info("Reindexing dossier: %r" % obj)
+            obj.reindexObject(idxs=['responsible'])
 
         results = {
             'responsibles': {
