@@ -7,7 +7,6 @@ from opengever.task.task import ITask
 from opengever.testing import IntegrationTestCase
 
 
-
 class TestTeamTasks(IntegrationTestCase):
 
     features = ('activity', )
@@ -55,3 +54,22 @@ class TestTeamTasks(IntegrationTestCase):
         self.assertEquals(
             [u'franzi.muller', u'herbert.jager'],
             [note.userid for note in activity.notifications])
+
+    @browsing
+    def test_set_current_user_as_responsible_when_accepting_a_team_task(self, browser):
+        self.login(self.regular_user, browser)
+
+        ITask(self.task).responsible = u'team:1'
+        self.task.get_sql_object().responsible = u'team:1'
+        self.set_workflow_state('task-state-open', self.task)
+
+        browser.open(self.task, view='tabbedview_view-overview')
+
+        browser.click_on('task-transition-open-in-progress')
+        browser.fill({'Response': u'Das \xfcbernehme ich!'})
+        browser.click_on('Save')
+
+        self.assertEquals(self.regular_user.getId(),
+                          ITask(self.task).responsible)
+        self.assertEquals(self.regular_user.getId(),
+                          self.task.get_sql_object().responsible)

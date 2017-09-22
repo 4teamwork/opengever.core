@@ -15,6 +15,7 @@ from opengever.base.source import DossierPathSourceBinder
 from opengever.dossier.utils import get_containing_dossier
 from opengever.globalindex.model.task import Task as TaskModel
 from opengever.ogds.base.actor import Actor
+from opengever.ogds.base.actor import ActorLookup
 from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSourceBinder
 from opengever.ogds.base.sources import UsersContactsInboxesSourceBinder
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -260,6 +261,11 @@ class Task(Container):
     def is_editable(self):
         current_state = api.content.get_state(self)
         return current_state in ['task-state-open', 'task-state-in-progress']
+
+    @property
+    def is_team_task(self):
+        """Is true if the task responsible is a team."""
+        return ActorLookup(self.responsible).is_team()
 
     def get_issuer_label(self):
         return self.get_sql_object().get_issuer_label()

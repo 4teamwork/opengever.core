@@ -5,6 +5,7 @@ from opengever.document.behaviors import IBaseDocument
 from opengever.globalindex.handlers.task import TaskSqlSyncer
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
+from plone import api
 from plone.dexterity.interfaces import IDexterityContent
 from Products.CMFCore.interfaces import IActionSucceededEvent
 from zope.lifecycleevent.interfaces import IObjectAddedEvent
@@ -59,3 +60,12 @@ def set_dates(task, event):
         task.date_of_completion = date.today()
     if event.action == 'task-transition-resolved-in-progress':
         task.date_of_completion = None
+
+
+@grok.subscribe(ITask, IActionSucceededEvent)
+def reassign_team_tasks(task, event):
+    if event.action != 'task-transition-open-in-progress':
+        return
+
+    if task.is_team_task:
+        ITask(task).responsible = api.user.get_current().getId()
