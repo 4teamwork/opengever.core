@@ -59,6 +59,17 @@ class TestMeetingZipExportView(IntegrationTestCase):
             zip_file.namelist())
 
     @browsing
+    def test_export_proposal_word_documents(self, browser):
+        self.activate_feature('word-meeting')
+        self.login(self.committee_responsible, browser)
+        self.schedule_proposal(self.meeting, self.submitted_word_proposal)
+        browser.open(self.meeting, view='export-meeting-zip')
+        zip_file = ZipFile(StringIO(browser.contents), 'r')
+        self.assertIn(
+            '1. Anderungen am Personalreglement/Proposal document Anderungen am Personalreglement.docx',
+            zip_file.namelist())
+
+    @browsing
     def test_excerpt_is_not_exported(self, browser):
         self.activate_feature('word-meeting')
         self.login(self.committee_responsible, browser)
@@ -72,6 +83,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
         self.assertEquals(
             ['Protocol-9. Sitzung der Rechnungsprufungskommission.docx',
              '1. Anderungen am Personalreglement/Vertragsentwurf.docx',
+             '1. Anderungen am Personalreglement/Proposal document Anderungen am Personalreglement.docx',
              'Agendaitem list-9. Sitzung der Rechnungsprufungskommission.docx'],
             zip_file.namelist())
 

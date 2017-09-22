@@ -1,6 +1,7 @@
 from ftw.zipexport.generation import ZipGenerator
 from ftw.zipexport.utils import normalize_path
 from opengever.meeting import is_word_meeting_implementation_enabled
+from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.command import AgendaItemListOperations
 from opengever.meeting.command import CreateGeneratedDocumentCommand
 from opengever.meeting.command import ProtocolOperations
@@ -43,6 +44,8 @@ class MeetingZipExport(BrowserView):
 
             # Agenda items
             self.add_agenda_items_attachments(generator)
+            if is_word_meeting_implementation_enabled():
+                self.add_agenda_item_proposal_documents(generator)
 
             # Agenda items list
             generator.add_file(*self.get_agendaitem_list())
@@ -82,6 +85,23 @@ class MeetingZipExport(BrowserView):
 
         filename = u'{}.docx'.format(operations.get_title(self.model))
         return (filename, StringIO(command.generate_file_data()))
+
+    def add_agenda_item_proposal_documents(self, generator):
+        for agenda_item in self.model.agenda_items:
+            if not agenda_item.has_proposal:
+                continue
+
+            document = agenda_item.resolve_document()
+            if not document:
+                continue
+
+            extension = os.path.splitext(document.file.filename)[1]
+            path = u'{} {}/{}'.format(
+                agenda_item.number,
+                agenda_item.submitted_proposal.title,
+                safe_unicode(document.Title()) + extension
+            )
+            generator.add_file(path, document.file.open())
 
     def add_agenda_items_attachments(self, generator):
         for agenda_item in self.model.agenda_items:
