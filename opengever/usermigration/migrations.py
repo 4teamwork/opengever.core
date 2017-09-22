@@ -11,6 +11,7 @@ from opengever.usermigration.dictstorage import DictstorageMigrator
 from opengever.usermigration.dossier import DossierMigrator
 from opengever.usermigration.ogds import OGDSMigrator
 from opengever.usermigration.ogds_references import OGDSUserReferencesMigrator
+from opengever.usermigration.plone_tasks import PloneTasksMigrator
 
 
 class OGDSMigration(object):
@@ -74,5 +75,18 @@ class OGDSUserReferencesMigration(object):
     def execute(self, principal_mapping, mode):
         migrator = OGDSUserReferencesMigrator(self.portal, principal_mapping,
                                               mode=mode, strict=True)
+        results = migrator.migrate()
+        return results
+
+
+class PloneTasksMigration(object):
+
+    def __init__(self, portal, request):
+        self.portal = portal
+        self.request = request
+
+    def execute(self, principal_mapping, mode):
+        migrator = PloneTasksMigrator(self.portal, principal_mapping,
+                                      mode=mode, strict=True)
         results = migrator.migrate()
         return results

@@ -43,4 +43,12 @@
       name="GEVER: OGDS User References (activities, tasks)"
       />
 
+  <adapter
+      factory=".migrations.PloneTasksMigration"
+      provides="ftw.usermigration.interfaces.IPreMigrationHook"
+      for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      name="GEVER: Plone Tasks (issuers, responsibles, responses)"
+      />
+
 </configure>
