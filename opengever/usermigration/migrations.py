@@ -12,6 +12,7 @@ from opengever.usermigration.dossier import DossierMigrator
 from opengever.usermigration.ogds import OGDSMigrator
 from opengever.usermigration.ogds_references import OGDSUserReferencesMigrator
 from opengever.usermigration.plone_tasks import PloneTasksMigrator
+from opengever.usermigration.private_folders import PrivateFoldersMigrator
 
 
 class OGDSMigration(object):
@@ -88,5 +89,18 @@ class PloneTasksMigration(object):
     def execute(self, principal_mapping, mode):
         migrator = PloneTasksMigrator(self.portal, principal_mapping,
                                       mode=mode, strict=True)
+        results = migrator.migrate()
+        return results
+
+
+class PrivateFoldersMigration(object):
+
+    def __init__(self, portal, request):
+        self.portal = portal
+        self.request = request
+
+    def execute(self, principal_mapping, mode):
+        migrator = PrivateFoldersMigrator(self.portal, principal_mapping,
+                                          mode=mode, strict=True)
         results = migrator.migrate()
         return results

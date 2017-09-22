@@ -51,4 +51,12 @@
       name="GEVER: Plone Tasks (issuers, responsibles, responses)"
       />
 
+  <adapter
+      factory=".migrations.PrivateFoldersMigration"
+      provides="ftw.usermigration.interfaces.IPreMigrationHook"
+      for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      name="GEVER: Private Folders"
+      />
+
 </configure>
