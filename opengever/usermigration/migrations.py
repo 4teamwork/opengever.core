@@ -6,6 +6,7 @@ For now we leave this as-is though in order to maintain backwards
 compatibility and ease backporting.
 """
 
+from opengever.usermigration.checked_out_docs import CheckedOutDocsMigrator
 from opengever.usermigration.creator import CreatorMigrator
 from opengever.usermigration.dictstorage import DictstorageMigrator
 from opengever.usermigration.dossier import DossierMigrator
@@ -101,6 +102,19 @@ class PrivateFoldersMigration(object):
 
     def execute(self, principal_mapping, mode):
         migrator = PrivateFoldersMigrator(self.portal, principal_mapping,
+                                          mode=mode, strict=True)
+        results = migrator.migrate()
+        return results
+
+
+class CheckedOutDocsMigration(object):
+
+    def __init__(self, portal, request):
+        self.portal = portal
+        self.request = request
+
+    def execute(self, principal_mapping, mode):
+        migrator = CheckedOutDocsMigrator(self.portal, principal_mapping,
                                           mode=mode, strict=True)
         results = migrator.migrate()
         return results
