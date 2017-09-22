@@ -35,4 +35,12 @@
       name="GEVER: Dictstorage (SQL)"
       />
 
+  <adapter
+      factory=".migrations.OGDSUserReferencesMigration"
+      provides="ftw.usermigration.interfaces.IPreMigrationHook"
+      for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      name="GEVER: OGDS User References (activities, tasks)"
+      />
+
 </configure>

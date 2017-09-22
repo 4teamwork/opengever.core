@@ -10,6 +10,7 @@ from opengever.usermigration.creator import CreatorMigrator
 from opengever.usermigration.dictstorage import DictstorageMigrator
 from opengever.usermigration.dossier import DossierMigrator
 from opengever.usermigration.ogds import OGDSMigrator
+from opengever.usermigration.ogds_references import OGDSUserReferencesMigrator
 
 
 class OGDSMigration(object):
@@ -60,5 +61,18 @@ class DictstorageMigration(object):
     def execute(self, principal_mapping, mode):
         migrator = DictstorageMigrator(self.portal, principal_mapping,
                                        mode=mode, strict=True)
+        results = migrator.migrate()
+        return results
+
+
+class OGDSUserReferencesMigration(object):
+
+    def __init__(self, portal, request):
+        self.portal = portal
+        self.request = request
+
+    def execute(self, principal_mapping, mode):
+        migrator = OGDSUserReferencesMigrator(self.portal, principal_mapping,
+                                              mode=mode, strict=True)
         results = migrator.migrate()
         return results
