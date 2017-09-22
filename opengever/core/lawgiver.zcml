@@ -158,6 +158,13 @@
                    "
       />
 
+  <!--  "ftw.usermigration: Migrate users" is never managed via workflows -->
+  <lawgiver:ignore
+      permissions="
+                   ftw.usermigration: Migrate users,
+                   "
+      />
+
 
   <!-- Ignore default Plone permissions. This means we are not managing in the
        workflows. This does not mean that the permissions are disabled: disabling
