@@ -5,7 +5,15 @@ Changelog
 4.15.7 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Include ftw.usermigration and implement additional user migrations:
+
+  - OGDS User references
+  - Plone Tasks
+  - Private Folders
+  - Checked out documents
+  - Repository favorites
+
+  [lgraf]
 
 
 4.15.6 (2017-05-09)
