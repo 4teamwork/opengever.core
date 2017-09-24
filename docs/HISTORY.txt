@@ -5,6 +5,16 @@ Changelog
 2017.5.2 (unreleased)
 ---------------------
 
+- Include ftw.usermigration and implement additional user migrations:
+
+  - OGDS User references
+  - Plone Tasks
+  - Private Folders
+  - Checked out documents
+  - Repository favorites
+
+  [lgraf]
+
 - Lawgiver: Ignore ftw.usermigration permission. [lgraf]
 - SPV word: Add proposal documents to meeting ZIP export. [jone]
 - SPV word: Move workflow transitions to actions menu in meeting view. [jone]
