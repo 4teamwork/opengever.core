@@ -2,7 +2,7 @@
 Changelog
 =========
 
-4.15.7 (unreleased)
+4.15.7 (2017-09-25)
 -------------------
 
 - OGDS update: Truncate purely descriptive user fields. [lgraf]
