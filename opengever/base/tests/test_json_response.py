@@ -98,3 +98,21 @@ class TestUnitJSONResponse(FunctionalTestCase):
              'name': 'peter',
              'proceed': True}
         ))
+
+    def test_dump_disables_caching_by_default(self):
+        # By default we disable chaing of all responses.
+        # This is especially important for IE 11 support.
+        self.response.remain().dump()
+        self.assertEquals(
+            {'content-type': 'application/json',
+             'cache-control': 'no-store',
+             'pragma': 'no-cache',
+             'expires': '0'},
+            self.request.response.headers)
+
+    def test_dump_without_disabling_caches(self):
+        # Dump can optionally be told to not send no-caching headers.
+        self.response.remain().dump(no_cache=False)
+        self.assertEquals(
+            {'content-type': 'application/json'},
+            self.request.response.headers)

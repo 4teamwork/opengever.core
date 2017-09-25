@@ -76,6 +76,19 @@ class JSONResponse(object):
         self.response['proceed'] = False
         return self
 
-    def dump(self):
+    def dump(self, no_cache=True):
+        """Return a JSON string for use as response, set response headers.
+
+        The dump method sets the response headers.
+        It expects that excatly this payload is returned in the response.
+        By default, no-caching headers are set on the response.
+        This can be disabled by setting ``no_cache`` to ``False``.
+        """
+
+        if no_cache:
+            self.request.response.setHeader("Cache-Control", "no-store")
+            self.request.response.setHeader("Pragma", "no-cache")
+            self.request.response.setHeader("Expires", "0")
+
         self.request.response.setHeader("Content-type", "application/json")
         return json.dumps(self.response)
