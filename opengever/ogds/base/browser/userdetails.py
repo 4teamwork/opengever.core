@@ -26,8 +26,11 @@ class UserDetails(BrowserView):
         except RecordNotFound:
             raise NotFound
 
-        return {'user': user,
-                'groups': user.groups}
+        teams = []
+        for group in user.groups:
+            teams += group.teams
+
+        return {'user': user, 'groups': user.groups, 'teams': teams}
 
     def publishTraverse(self, request, name):  # noqa
         """The name is the userid of the user who should be displayed.

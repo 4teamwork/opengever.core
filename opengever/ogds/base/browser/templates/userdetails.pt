@@ -11,7 +11,8 @@
       <tal:main-macro metal:define-macro="main"
                       tal:define="data view/get_userdata;
                                   user data/user;
-                                  groups data/groups">
+                                  groups data/groups;
+                                  teams data/teams">
 
         <div tal:replace="structure provider:plone.abovecontenttitle" />
         <h1 class="documentFirstHeading" tal:content="user/label"/>
@@ -122,6 +123,20 @@
                   </ul>
               </td>
           </tr>
+
+          <tr tal:condition="python:len(teams) > 0">
+              <th i18n:translate="label_teams">Teams</th>
+              <td>
+                  <ul class="teams">
+                      <li tal:repeat="team teams">
+                        <a class="team"
+                           tal:attributes="href string:${portal_url}/@@team-details/${team/team_id}"
+                           tal:content="team/title"></a>
+                      </li>
+                  </ul>
+              </td>
+          </tr>
+
         </table>
 
         <div tal:replace="structure provider:plone.belowcontentbody" />
