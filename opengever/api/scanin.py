@@ -55,7 +55,9 @@ class ScanIn(Service):
                 inboxes = inbox_container[0].listFolderContents(
                     contentFilter={'portal_type': 'opengever.inbox.inbox'})
                 for inbox in inboxes:
-                    if inbox.get_responsible_org_unit().unit_id == org_unit:
+                    inbox_ou = inbox.get_responsible_org_unit()
+                    if (inbox_ou.unit_id == org_unit or
+                            inbox_ou.title == org_unit):
                         return inbox
             else:
                 inboxes = portal.listFolderContents(

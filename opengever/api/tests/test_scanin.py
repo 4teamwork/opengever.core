@@ -81,6 +81,21 @@ class TestScanIn(IntegrationTestCase):
         self.assertEqual('mydocument', doc.Title())
 
     @browsing
+    def test_scanin_to_org_unit_inbox_by_title(self, browser):
+        self.login(self.administrator, browser)
+        inbox = self.create_org_unit_inbox()
+
+        body, headers = self.prepare_request(org_unit='Finanzamt')
+        browser.open(self.portal.absolute_url() + '/@scan-in',
+                     method='POST',
+                     headers=headers,
+                     data=body)
+
+        self.assertEqual(201, browser.status_code)
+        doc = inbox.objectValues()[0]
+        self.assertEqual('mydocument', doc.Title())
+
+    @browsing
     def test_scanin_to_new_private_dossier(self, browser):
         self.login(self.manager, browser)
         private_folder = self.create_private_folder()
