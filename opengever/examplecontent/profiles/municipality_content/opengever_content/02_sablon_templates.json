@@ -19,5 +19,10 @@
         "_type": "opengever.meeting.sablontemplate",
         "title": "Inhaltsverzeichnis",
         "file:file": "templates/inhaltsverzeichnis.docx"
+    }, {
+        "_path": "/vorlagen/sablon-template-5",
+        "_type": "opengever.meeting.sablontemplate",
+        "title": "Zwischentitel",
+        "file:file": "templates/zwischentitel.docx"
     }
 ]

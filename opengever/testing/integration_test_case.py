@@ -411,6 +411,14 @@ class IntegrationTestCase(TestCase):
         agenda_item = AgendaItem.query.order_by(desc('id')).first()
         return agenda_item
 
+    def schedule_paragraph(self, meeting, title):
+        if isinstance(meeting, MeetingWrapper):
+            meeting = meeting.model
+
+        meeting.schedule_text(title, is_paragraph=True)
+        agenda_item = AgendaItem.query.order_by(desc('id')).first()
+        return agenda_item
+
     def as_relation_value(self, obj):
         return RelationValue(getUtility(IIntIds).getId(obj))
 

@@ -32,3 +32,8 @@ class MissingMeetingDossierPermissions(Exception):
 class MissingAdHocTemplate(Exception):
     """No ad-hoc template could be found for the committee or its container.
     """
+
+
+class MissingParagraphTemplate(Exception):
+    """No paragraph template could be found for the committee or its container.
+    """

@@ -97,6 +97,13 @@ class ICommittee(form.Schema):
         required=False,
     )
 
+    paragraph_template = RelationChoice(
+        title=_('label_paragraph_template',
+                default=u'Paragraph template'),
+        source=sablon_template_source,
+        required=False,
+    )
+
 
 class RepositoryfolderValidator(BaseRepositoryfolderValidator):
     pass
@@ -250,6 +257,13 @@ class Committee(ModelContainer):
             return self.ad_hoc_template.to_object
 
         return self.get_committee_container().get_ad_hoc_template()
+
+    @require_word_meeting_feature
+    def get_paragraph_template(self):
+        if self.paragraph_template:
+            return self.paragraph_template.to_object
+
+        return self.get_committee_container().get_paragraph_template()
 
     def get_repository_folder(self):
         return self.repository_folder.to_object

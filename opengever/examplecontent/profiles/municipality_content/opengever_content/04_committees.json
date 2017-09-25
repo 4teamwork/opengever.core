@@ -8,6 +8,7 @@
         "excerpt_template": "resolvePath::/vorlagen/sablon-template-2",
         "agendaitem_list_template": "resolvePath::/vorlagen/sablon-template-3",
         "toc_template": "resolvePath::/vorlagen/sablon-template-4",
+        "paragraph_template": "resolvePath::/vorlagen/sablon-template-5",
 
         "_children": [
             {
