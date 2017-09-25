@@ -230,12 +230,16 @@ class TestWordAgendaItem(IntegrationTestCase):
 
         # The generate excerpt link is available on decided agenda items.
         self.assertDictContainsSubset(
-            {'generate_excerpt_link': self.agenda_item_url(agenda_item, 'generate_excerpt')},
+            {'generate_excerpt_link': self.agenda_item_url(agenda_item, 'generate_excerpt'),
+             'generate_excerpt_default_title': u'Excerpt \xc4nderungen am Personalreglement'},
             item_data)
 
         # Create an excerpt.
         with self.observe_children(self.meeting_dossier) as children:
-            browser.open(item_data['generate_excerpt_link'], send_authenticator=True)
+            browser.open(
+                item_data['generate_excerpt_link'],
+                data={'excerpt_title': 'Excerption \xc3\x84nderungen'},
+                send_authenticator=True)
 
         # Generating the excerpt is confirmed with a status message.
         self.assertEquals(
@@ -250,7 +254,7 @@ class TestWordAgendaItem(IntegrationTestCase):
         # original document.
         self.assertEquals(1, len(children['added']))
         excerpt_document, = children['added']
-        self.assertEquals('Excerpt \xc3\x84nderungen am Personalreglement',
+        self.assertEquals('Excerption \xc3\x84nderungen',
                           excerpt_document.Title())
         self.assertEquals(
             self.submitted_word_proposal.get_proposal_document().file.data,

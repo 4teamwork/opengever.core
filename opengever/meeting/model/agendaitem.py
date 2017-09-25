@@ -417,7 +417,7 @@ class AgendaItem(Base):
         self.proposal.return_excerpt(document)
 
     @require_word_meeting_feature
-    def generate_excerpt(self):
+    def generate_excerpt(self, title):
         """Generate an excerpt from the agenda items document.
 
         Can either be an excerpt from the proposals document or an excerpt
@@ -434,11 +434,6 @@ class AgendaItem(Base):
         if not api.user.get_current().checkPermission(
                 'opengever.document: Add document', meeting_dossier):
             raise MissingMeetingDossierPermissions
-
-        title = _(u'excerpt_document_title',
-                  default=u'Excerpt ${title}',
-                  mapping={'title': safe_unicode(self.get_title())})
-        title = translate(title, context=meeting_dossier.REQUEST).strip()
 
         excerpt_document = CreateDocumentCommand(
             context=meeting_dossier,
