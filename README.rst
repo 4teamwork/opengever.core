@@ -544,5 +544,3 @@ Example configuration:
           }
       }
   ]
-
-.. disqus::
