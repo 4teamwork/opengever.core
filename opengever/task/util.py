@@ -70,9 +70,9 @@ def getTaskTypeVocabulary(context):
         reg_key = 'opengever.task.interfaces.ITaskSettings.%s' % (
             category)
 
+        key = 'opengever.task.%s' % (category)
         for term in wrap_vocabulary(
-            'opengever.task.%s' % (category),
-            visible_terms_from_registry=reg_key)(context):
+                key, visible_terms_from_registry=reg_key)(context):
 
             terms.append(term)
 

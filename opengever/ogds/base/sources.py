@@ -55,7 +55,7 @@ class AllUsersInboxesAndTeamsSource(object):
         query = create_session().query(*models) \
                                 .join(OrgUnit.users_group) \
                                 .join(Group.users)
-        query = query.filter(OrgUnit.enabled == True)
+        query = query.filter(OrgUnit.enabled == True)  # noqa
 
         if self.only_current_orgunit:
             query = query.filter(OrgUnit.unit_id == self.client_id)
@@ -177,7 +177,7 @@ class AllUsersInboxesAndTeamsSource(object):
                               text_filters)
 
         query = OrgUnit.query
-        query = query.filter(OrgUnit.enabled == True)
+        query = query.filter(OrgUnit.enabled == True)  # noqa
 
         if self.only_current_inbox:
             query = query.filter(OrgUnit.unit_id == self.client_id)
@@ -191,7 +191,7 @@ class AllUsersInboxesAndTeamsSource(object):
             self.terms.insert(0, self.getTerm(orgunit.inbox().id()))
 
     def _extend_terms_with_teams(self, text_filters):
-        query = Team.query.filter(Team.active == True)
+        query = Team.query.filter(Team.active == True)  # noqa
         query = extend_query_with_textfilter(query, [Team.title], text_filters)
 
         for team in query:
@@ -408,7 +408,7 @@ class AssignedUsersSource(AllUsersSource):
             .filter(User.userid == groups_users.columns.userid) \
             .filter(groups_users.columns.groupid == OrgUnit.users_group_id) \
             .filter(OrgUnit.admin_unit_id == admin_unit.unit_id) \
-            .filter(OrgUnit.enabled == True)
+            .filter(OrgUnit.enabled == True)  # noqa
 
 
 @implementer(IContextSourceBinder)
