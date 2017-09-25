@@ -47,3 +47,57 @@ class TestWordMeeting(IntegrationTestCase):
         self.login(self.manager, browser)
         browser.open(self.committee)
         self.assertNotIn(ZIP_EXPORT_ACTION_LABEL, editbar.menu_options('Actions'))
+
+    @browsing
+    def test_reopen_closed_meeting(self, browser):
+        self.login(self.committee_responsible, browser)
+        self.assertEquals(u'closed', self.decided_meeting.model.workflow_state)
+        browser.open(self.decided_meeting)
+        editbar.menu_option('Actions', 'Reopen').click()
+        self.assertEquals(u'held', self.decided_meeting.model.workflow_state)
+
+    @browsing
+    def test_closing_meeting_the_first_time_regenerates_the_protocol(self, browser):
+        self.login(self.committee_responsible, browser)
+        model = self.meeting.model
+        # Make sure there is already a protocol generated:
+        model.update_protocol_document()
+        self.assertEquals(0, model.protocol_document.generated_version)
+
+        # When closing the meeting, we should end up with a new version
+        browser.open(self.meeting)
+        self.assertEquals(
+            [
+                'Close all proposals.',
+                'Generate excerpts for all proposals.',
+                'Update or create the protocol.',
+            ],
+            browser.css('#confirm_close_meeting > ul > li').text)
+        model.close()
+        self.assertEquals(1, model.protocol_document.generated_version)
+
+    @browsing
+    def test_re_closing_meeting_regenerates_the_protocol(self, browser):
+        self.login(self.committee_responsible, browser)
+        model = self.meeting.model
+        # Closing the meeting generates and unlocks the protocol:
+        model.close()
+        self.assertEquals(0, model.protocol_document.generated_version)
+
+        # The user may have made changes to the protocol now.
+        # Reopen the protocol:
+        model.execute_transition('closed-held')
+        self.assertEquals(0, model.protocol_document.generated_version)
+
+        # Re-closing the meeting must not regenerate the protocol because
+        # it would potentially overwrite user-changes.
+        browser.open(self.meeting)
+        self.assertEquals(
+            [
+                'Close all proposals.',
+                'Generate excerpts for all proposals.',
+                # 'Update or create the protocol.',
+            ],
+            browser.css('#confirm_close_meeting > ul > li').text)
+        model.close()
+        self.assertEquals(0, model.protocol_document.generated_version)

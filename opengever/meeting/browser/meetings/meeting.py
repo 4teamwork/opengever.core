@@ -288,6 +288,20 @@ class MeetingView(BrowserView):
         if self.has_protocol_document:
             return self.model.protocol_document.get_download_url()
 
+    def will_closing_regenerate_protocol(self):
+        """This method can tell whether we will regenerate the protocol when
+        closing the meething.
+
+        The protocol will be generated while it is locked or not yet existing.
+        When the user reopens the meeting the document will be left unlocked
+        because the user may have made changes at this point.
+        The protocol is no longer regenerated automatically when it
+        may have been changed.
+        """
+        if not self.has_protocol_document():
+            return True
+        return self.model.protocol_document.is_locked()
+
     def url_download_agendaitem_list(self):
         if self.has_agendaitem_list_document:
             return self.model.agendaitem_list_document.get_download_url()

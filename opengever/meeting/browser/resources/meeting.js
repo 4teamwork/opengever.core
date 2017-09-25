@@ -20,11 +20,20 @@
     };
 
     this.closeMeeting = function() {
-      return $.post(self.currentItem.attr("href"))
-              .done(function() { location.reload(); });
+      return $.post(self.currentItem.attr("href")).done(function() {
+        location.reload();
+      });
     };
 
     this.closeModal = function() { dialog.close(); };
+
+    this.reopenMeeting = function(target) {
+      return $.post(target.attr("href")).done(function(data) {
+        if (data.redirectUrl){
+          window.location = data.redirectUrl;
+        }
+      });
+    };
 
     this.events = [
       {
@@ -39,6 +48,14 @@
         method: "click",
         target: "#held-closed",
         callback: this.openModal,
+        options: {
+          update: true
+        }
+      },
+      {
+        method: "click",
+        target: "#closed-held",
+        callback: this.reopenMeeting,
         options: {
           update: true
         }
