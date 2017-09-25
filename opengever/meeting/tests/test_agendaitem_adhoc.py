@@ -1,5 +1,6 @@
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
+from opengever.trash.trash import ITrashed
 from plone import api
 from plone.protect import createToken
 
@@ -33,6 +34,19 @@ class TestWordAgendaItem(IntegrationTestCase):
         self.assertIn(
             ad_hoc_document.absolute_url() + '/tooltip',
             document_link_html)
+
+    @browsing
+    def test_document_is_trashed_when_ad_hoc_agenda_item_is_deleted(self, browser):
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_ad_hoc(self.meeting, u'ad-hoc')
+        document = agenda_item.resolve_document()
+
+        browser.open(
+            self.meeting,
+            view='agenda_items/{}/delete'.format(agenda_item.agenda_item_id),
+            send_authenticator=True)
+
+        self.assertTrue(ITrashed.providedBy(document))
 
     @browsing
     def test_cant_create_adhoc_when_no_access_to_meeting_dossier(self, browser):

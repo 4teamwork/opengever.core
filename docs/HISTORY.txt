@@ -7,6 +7,7 @@ Changelog
 
 - Fix private folder creation for userids containing dashes. [phgross]
 - SPV word: Set "remove" and "delete" translations correctly. [tarnap]
+- SPV word: trash documents of removed ad hoc agenda items. [tarnap]
 - SPV word: Represent paragraphs in the generated protocol. [jone]
 - SPV word: Allow to set custom excerpt titles. [tarnap]
 - OGDS update: Truncate purely descriptive user fields. [lgraf]
