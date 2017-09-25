@@ -12,6 +12,7 @@ from opengever.ogds.models.group import Group
 from opengever.ogds.models.user import User
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from Products.LDAPMultiPlugins.interfaces import ILDAPMultiPlugin
+from sqlalchemy import String
 from sqlalchemy.orm.exc import MultipleResultsFound
 from sqlalchemy.orm.exc import NoResultFound
 import logging
@@ -201,6 +202,14 @@ class OGDSUpdater(grok.Adapter):
 
                     if isinstance(value, str):
                         value = value.decode('utf-8')
+
+                    # Truncate purely descriptive user fields if necessary
+                    if isinstance(col.type, String):
+                        if value and len(value) > col.type.length:
+                            logger.warn(
+                                u"Truncating value %r for column %r "
+                                u"(user: %r)" % (value, col.name, userid))
+                            value = value[:col.type.length]
 
                     setattr(user, col.name, value)
 

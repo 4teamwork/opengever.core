@@ -5,6 +5,7 @@ Changelog
 4.15.7 (unreleased)
 -------------------
 
+- OGDS update: Truncate purely descriptive user fields. [lgraf]
 - Include ftw.usermigration and implement additional user migrations:
 
   - OGDS User references
