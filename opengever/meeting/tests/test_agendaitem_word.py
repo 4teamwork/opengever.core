@@ -340,7 +340,7 @@ class TestWordAgendaItem(IntegrationTestCase):
         browser.reload()
         self.assertDictContainsSubset(
             {'title': u'\xc4nderungen am Personalreglement',
-             'decision_number': 2},
+             'decision_number': '2016 / 2'},
             browser.json['items'][0])
 
     @browsing

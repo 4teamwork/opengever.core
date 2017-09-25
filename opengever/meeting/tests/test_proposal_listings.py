@@ -1,3 +1,4 @@
+from copy import deepcopy
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
 
@@ -52,6 +53,7 @@ def proposal_dicts(browser):
 
 
 class TestDossierProposalListing(IntegrationTestCase):
+    features = ('meeting',)
 
     maxDiff = None
 
@@ -130,6 +132,21 @@ class TestDossierProposalListing(IntegrationTestCase):
                      data={'proposal_state_filter': 'filter_proposals_decided'})
 
         self.assertEquals([DECIDED_PROPOSAL], proposal_dicts(browser))
+
+    @browsing
+    def test_decision_number_is_prefixed_when_word_feature_enabled(self, browser):
+        """When the word feature is enabled, the decision number is prefixed
+        with the year of the meeting.
+        """
+        self.activate_feature('word-meeting')
+        self.login(self.dossier_responsible, browser)
+        browser.open(self.dossier,
+                     view='tabbedview_view-proposals',
+                     data={'proposal_state_filter': 'filter_proposals_decided'})
+
+        proposal = deepcopy(DECIDED_PROPOSAL)
+        proposal['Decision number'] = '2016 / 1'
+        self.assertEquals([proposal], proposal_dicts(browser))
 
 
 class TestMyProposals(IntegrationTestCase):

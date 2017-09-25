@@ -191,7 +191,7 @@ class AgendaItemsView(BrowserView):
                 view='agenda_items/{}/delete'.format(item.agenda_item_id))
             data['edit_link'] = meeting.get_url(
                 view='agenda_items/{}/edit'.format(item.agenda_item_id))
-            data['decision_number'] = item.decision_number
+            data['decision_number'] = item.get_decision_number()
             if item.is_decide_possible():
                 data['decide_link'] = meeting.get_url(
                     view='agenda_items/{}/decide'.format(item.agenda_item_id))
