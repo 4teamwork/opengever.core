@@ -12,6 +12,7 @@ Inhalt:
    development/index.rst
    releasemanagement/index.rst
    operations/index.rst
+   notizen.rst
    meta.rst
    oggbundle/index.rst
 
