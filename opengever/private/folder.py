@@ -21,7 +21,8 @@ class PrivateFolder(Container):
     """
 
     def Title(self):
-        return Actor.lookup(self.id).get_label(self).encode('utf-8')
+        return Actor.lookup(
+            self.getOwner().getId()).get_label(self).encode('utf-8')
 
     def notifyMemberAreaCreated(self):
         """Add additional local_roles to the members folder.
@@ -29,5 +30,5 @@ class PrivateFolder(Container):
         This method is called by the MembershipTool after MembersFolder
         creation.
         """
-        api.user.grant_roles(username=self.id, obj=self,
+        api.user.grant_roles(username=self.getOwner().getId(), obj=self,
                              roles=PRIVATE_FOLDER_DEFAULT_ROLES)

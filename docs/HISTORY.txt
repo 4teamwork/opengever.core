@@ -5,6 +5,7 @@ Changelog
 2017.5.2 (unreleased)
 ---------------------
 
+- Fix private folder creation for userids containing dashes. [phgross]
 - SPV word: Represent paragraphs in the generated protocol. [jone]
 - OGDS update: Truncate purely descriptive user fields. [lgraf]
 - Include ftw.usermigration and implement additional user migrations:
