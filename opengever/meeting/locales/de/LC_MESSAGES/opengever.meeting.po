@@ -348,12 +348,12 @@ msgstr "Titel"
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt:47
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:49
 msgid "Unschedule"
-msgstr "Detranktandieren"
+msgstr "Entfernen"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt:44
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:46
 msgid "Unschedule proposal"
-msgstr "Traktandum detraktandieren"
+msgstr "Traktandum entfernen"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt:66
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:68
@@ -1231,7 +1231,7 @@ msgstr "Sie haben nicht gespeicherte lokale Änderungen."
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt:45
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:47
 msgid "label_unschedule_agenda_item_confirm_text"
-msgstr "Wollen Sie dieses Traktandum wirklich detraktandieren?"
+msgstr "Wollen Sie dieses Traktandum wirklich von der Traktandenliste entfernen?"
 
 #. Default: "Unscheduled proposals"
 #: ./opengever/meeting/browser/committee.py:30
