@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-09-26 11:49+0000\n"
+"POT-Creation-Date: 2017-09-26 11:54+0000\n"
 "PO-Revision-Date: 2016-07-22 16:54+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-ogds-base/de/>\n"
@@ -36,12 +36,12 @@ msgstr "Ja"
 msgid "inbox_label"
 msgstr "Eingangskorb: ${client}"
 
-#. Default: "Active:"
+#. Default: "Active"
 #: ./opengever/ogds/base/browser/templates/userdetails.pt:34
 msgid "label_active"
 msgstr "Aktiv"
 
-#. Default: "Address:"
+#. Default: "Address"
 #: ./opengever/ogds/base/browser/templates/userdetails.pt:104
 msgid "label_address"
 msgstr "Adresse"
@@ -51,32 +51,32 @@ msgstr "Adresse"
 msgid "label_assigned_orgunit"
 msgstr "Zugehörige Organisationseinheit"
 
-#. Default: "Department:"
+#. Default: "Department"
 #: ./opengever/ogds/base/browser/templates/userdetails.pt:60
 msgid "label_department"
 msgstr "Amt"
 
-#. Default: "Description:"
+#. Default: "Description"
 #: ./opengever/ogds/base/browser/templates/userdetails.pt:45
 msgid "label_description"
 msgstr "Beschreibung"
 
-#. Default: "Directorate:"
+#. Default: "Directorate"
 #: ./opengever/ogds/base/browser/templates/userdetails.pt:50
 msgid "label_directorate"
 msgstr "Direktion"
 
-#. Default: "Email:"
+#. Default: "Email"
 #: ./opengever/ogds/base/browser/templates/userdetails.pt:70
 msgid "label_email"
 msgstr "E-Mail Adresse"
 
-#. Default: "Email 2:"
+#. Default: "Email 2"
 #: ./opengever/ogds/base/browser/templates/userdetails.pt:76
 msgid "label_email2"
 msgstr "Alternative E-Mail Adresse"
 
-#. Default: "Name:"
+#. Default: "Name"
 #: ./opengever/ogds/base/browser/templates/userdetails.pt:29
 msgid "label_fullname"
 msgstr "Name"
@@ -86,7 +86,7 @@ msgstr "Name"
 msgid "label_group"
 msgstr "Gruppe"
 
-#. Default: "Groups:"
+#. Default: "Groups"
 #: ./opengever/ogds/base/browser/templates/userdetails.pt:117
 msgid "label_groups"
 msgstr "Gruppen"
@@ -96,22 +96,22 @@ msgstr "Gruppen"
 msgid "label_members"
 msgstr "Mitglieder"
 
-#. Default: "Fax:"
+#. Default: "Fax"
 #: ./opengever/ogds/base/browser/templates/userdetails.pt:94
 msgid "label_phone_fax"
 msgstr "Fax"
 
-#. Default: "Mobile phone:"
+#. Default: "Mobile phone"
 #: ./opengever/ogds/base/browser/templates/userdetails.pt:99
 msgid "label_phone_mobile"
 msgstr "Mobiltelefon"
 
-#. Default: "Office phone:"
+#. Default: "Office phone"
 #: ./opengever/ogds/base/browser/templates/userdetails.pt:89
 msgid "label_phone_office"
 msgstr "Telefon Büro"
 
-#. Default: "Salutation:"
+#. Default: "Salutation"
 #: ./opengever/ogds/base/browser/templates/userdetails.pt:40
 msgid "label_salutation"
 msgstr "Anrede"
@@ -121,7 +121,7 @@ msgstr "Anrede"
 msgid "label_teams"
 msgstr "Teams"
 
-#. Default: "URL:"
+#. Default: "URL"
 #: ./opengever/ogds/base/browser/templates/userdetails.pt:82
 msgid "label_url"
 msgstr "Homepage"
