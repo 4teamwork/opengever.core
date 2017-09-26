@@ -47,6 +47,13 @@ class ICommitteeContainer(form.Schema):
         required=False,
     )
 
+    paragraph_template = RelationChoice(
+        title=_('label_paragraph_template',
+                default=u'Paragraph template'),
+        source=sablon_template_source,
+        required=False,
+    )
+
 
 _marker = object()
 
@@ -97,5 +104,12 @@ class CommitteeContainer(Container, TranslatedTitleMixin):
     def get_ad_hoc_template(self):
         if self.ad_hoc_template:
             return self.ad_hoc_template.to_object
+
+        return None
+
+    @require_word_meeting_feature
+    def get_paragraph_template(self):
+        if self.paragraph_template:
+            return self.paragraph_template.to_object
 
         return None

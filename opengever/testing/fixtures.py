@@ -191,6 +191,7 @@ class OpengeverContentFixture(object):
                 agendaitem_list_template=self.sablon_template,
                 excerpt_template=self.sablon_template,
                 protocol_template=self.sablon_template,
+                paragraph_template=self.sablon_template,
                 )
             ))
         self.committee_container.manage_setLocalRoles(

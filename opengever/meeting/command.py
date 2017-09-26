@@ -14,6 +14,7 @@ from opengever.meeting import _
 from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.exceptions import AgendaItemListAlreadyGenerated
 from opengever.meeting.exceptions import AgendaItemListMissingTemplate
+from opengever.meeting.exceptions import MissingParagraphTemplate
 from opengever.meeting.exceptions import ProtocolAlreadyGenerated
 from opengever.meeting.interfaces import IHistory
 from opengever.meeting.model.generateddocument import GeneratedAgendaItemList
@@ -350,17 +351,15 @@ class MergeDocxProtocolCommand(CreateGeneratedDocumentCommand):
                 master_file.write(sablon.file_data)
             composer = Composer(Document(master_path))
 
-            for index, item in enumerate(self.meeting.agenda_items):
-                if not item.has_document:
-                    continue
+            for index, agenda_item in enumerate(self.meeting.agenda_items):
+                target_path = join(tmpdir_path, 'agenda_item_{}.docx'.format(index))
+                if agenda_item.is_paragraph:
+                    self._export_paragraph_as_document(agenda_item, target_path)
+                    composer.append(Document(target_path))
 
-                document = item.resolve_document()
-                agenda_item_path = join(
-                    tmpdir_path, 'agenda_item_{}.docx'.format(index))
-
-                with open(agenda_item_path, 'wb') as agenda_item_file:
-                    agenda_item_file.write(document.file.data)
-                composer.append(Document(agenda_item_path))
+                elif agenda_item.has_document:
+                    self._export_regular_agenda_item_document(agenda_item, target_path)
+                    composer.append(Document(target_path))
 
             composer.save(output_path)
             with open(output_path, 'rb') as merged_file:
@@ -369,6 +368,27 @@ class MergeDocxProtocolCommand(CreateGeneratedDocumentCommand):
             shutil.rmtree(tmpdir_path)
 
         return data
+
+    def _export_regular_agenda_item_document(self, agenda_item, target_path):
+        document = agenda_item.resolve_document()
+        with open(target_path, 'wb') as fio:
+            fio.write(document.file.data)
+
+    def _export_paragraph_as_document(self, agenda_item, target_path):
+        sablon = Sablon(self._get_paragraph_template())
+        sablon.process(ProtocolData(self.meeting, [agenda_item]).as_json())
+        with open(target_path, 'wb') as fio:
+            fio.write(sablon.file_data)
+
+    def _get_paragraph_template(self):
+        if hasattr(self, '_paragraph_template'):
+            return self._paragraph_template
+
+        committee = self.meeting.committee.resolve_committee()
+        self._paragraph_template = committee.get_paragraph_template()
+        if self._paragraph_template is None:
+            raise MissingParagraphTemplate()
+        return self._paragraph_template
 
 
 class UpdateGeneratedDocumentCommand(object):

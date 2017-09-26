@@ -10,6 +10,7 @@ class TestProtocolWithWord(IntegrationTestCase):
     @browsing
     def test_word_protocols_can_be_created_and_updated(self, browser):
         self.login(self.committee_responsible, browser)
+        self.schedule_paragraph(self.meeting, u'A-Gesch\xe4fte')
         self.schedule_proposal(self.meeting, self.submitted_word_proposal)
         meeting = self.meeting.model
 
