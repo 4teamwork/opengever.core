@@ -62,4 +62,11 @@
       template="templates/teamdetails.pt"
       />
 
+  <browser:page
+      for="opengever.contact.contactfolder.IContactFolder"
+      name="add-team"
+      class=".team_forms.TeamAddForm"
+      permission="cmf.ManagePortal"
+      />
+
 </configure>
