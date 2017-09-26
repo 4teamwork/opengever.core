@@ -157,7 +157,7 @@ class AllUsersInboxesAndTeamsSource(object):
         query = query.order_by(asc(func.lower(User.lastname)),
                                asc(func.lower(User.firstname)))
 
-        for user, orgunit in query.all():
+        for user, orgunit in query:
             self.terms.append(
                 self.getTerm(u'{}:{}'.format(orgunit.id(), user.userid)))
 
@@ -187,7 +187,7 @@ class AllUsersInboxesAndTeamsSource(object):
             [OrgUnit.title, OrgUnit.unit_id],
             text_filters)
 
-        for orgunit in query.all():
+        for orgunit in query:
             self.terms.insert(0, self.getTerm(orgunit.inbox().id()))
 
     def _extend_terms_with_teams(self, text_filters):
@@ -304,7 +304,7 @@ class UsersContactsInboxesSource(AllUsersInboxesAndTeamsSource):
         query = query.order_by(asc(func.lower(User.lastname)),
                                asc(func.lower(User.firstname)))
 
-        for user in query.all():
+        for user in query:
             self.terms.append(
                 self.getTerm(u'{}'.format(user.userid)))
 
@@ -379,7 +379,7 @@ class AllUsersSource(AllUsersInboxesAndTeamsSource):
         query = query.order_by(asc(func.lower(User.lastname)),
                                asc(func.lower(User.firstname)))
 
-        for user in query.all():
+        for user in query:
             self.terms.append(
                 self.getTerm(u'{}'.format(user.userid)))
         return self.terms
@@ -486,7 +486,7 @@ class AllEmailContactsAndUsersSource(UsersContactsInboxesSource):
         query = query.order_by(asc(func.lower(User.lastname)),
                                asc(func.lower(User.firstname)))
 
-        for user in query.all():
+        for user in query:
             if user.email:
                 self.terms.append(
                     self.getTerm(u'{}:{}'.format(user.email, user.userid)))
