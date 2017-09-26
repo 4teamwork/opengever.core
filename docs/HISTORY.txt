@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - SPV word: Represent paragraphs in the generated protocol. [jone]
+- SPV word: Allow to set custom excerpt titles. [tarnap]
 - OGDS update: Truncate purely descriptive user fields. [lgraf]
 - Include ftw.usermigration and implement additional user migrations:
 

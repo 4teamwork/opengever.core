@@ -269,12 +269,12 @@
       });
     };
 
-    this.generateExcerpt = function(target, event) {
+    this.openGenerateExcerptDialog = function(target) {
       this.currentItem = target;
       createExcerptDialog.load();
     };
 
-    this.createExcerpt = function(target, event) {
+    this.generateExcerpt = function(target, event) {
       var link = self.currentItem[0].href;
       self = this;
       return $.post(link, $('#confirm_create_excerpt form').serialize())
@@ -335,7 +335,7 @@
       {
         method: "click",
         target: ".generate-excerpt",
-        callback: this.generateExcerpt,
+        callback: this.openGenerateExcerptDialog,
         options: {
           prevent: true
         }
@@ -361,7 +361,7 @@
       {
         method: "click",
         target: "#confirm_create_excerpt .confirm",
-        callback: this.createExcerpt,
+        callback: this.generateExcerpt,
         options: {
           prevent: true,
           loading: true,
@@ -393,7 +393,7 @@
       },
       {
         method: "click",
-        target: "#confirm_unschedule .decline, #confirm_delete .decline, #confirm_return_excerpt .decline",
+        target: "#confirm_unschedule .decline, #confirm_delete .decline, #confirm_return_excerpt .decline, #confirm_create_excerpt .decline",
         callback: this.closeModal
       },
       {

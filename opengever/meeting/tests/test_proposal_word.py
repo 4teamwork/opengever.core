@@ -205,7 +205,7 @@ class TestProposalWithWord(IntegrationTestCase):
         agenda_item.decide()
 
         with self.observe_children(self.meeting_dossier) as children:
-            agenda_item.generate_excerpt()
+            agenda_item.generate_excerpt(title='Excerpt \xc3\x84nderungen')
 
         self.assertEquals(1, len(children['added']),
                           'An excerpt document should have been added to the'
@@ -213,9 +213,9 @@ class TestProposalWithWord(IntegrationTestCase):
 
         # The document should contain a copy of the proposal document file.
         excerpt_document, = children['added']
-        self.assertEquals('Excerpt \xc3\x84nderungen am Personalreglement',
+        self.assertEquals('Excerpt \xc3\x84nderungen',
                           excerpt_document.Title())
-        self.assertEquals(u'excerpt-anderungen-am-personalreglement.docx',
+        self.assertEquals(u'excerpt-anderungen.docx',
                           excerpt_document.file.filename)
         self.assertEquals(MIME_DOCX, excerpt_document.file.contentType)
         self.assertEquals(

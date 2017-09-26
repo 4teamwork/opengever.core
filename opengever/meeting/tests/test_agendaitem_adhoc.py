@@ -150,7 +150,10 @@ class TestWordAgendaItem(IntegrationTestCase):
 
         # Create an excerpt.
         with self.observe_children(self.meeting_dossier) as children:
-            browser.open(item_data['generate_excerpt_link'], send_authenticator=True)
+            browser.open(
+                item_data['generate_excerpt_link'],
+                data={'excerpt_title': u'Excerpt ad-hoc'},
+                send_authenticator=True)
 
         # Generating the excerpt is confirmed with a status message.
         self.assertEquals(
@@ -201,7 +204,9 @@ class TestWordAgendaItem(IntegrationTestCase):
             agenda_item.decide()
 
         self.login(self.regular_user, browser)
-        browser.open(self.agenda_item_url(agenda_item, 'generate_excerpt'))
+        browser.open(
+            self.agenda_item_url(agenda_item, 'generate_excerpt'),
+            data={'excerpt_title': 'Excerption \xc3\x84nderungen'})
         self.assertEquals(
             {u'messages': [
                 {u'messageTitle': u'Error',
@@ -221,7 +226,7 @@ class TestWordAgendaItem(IntegrationTestCase):
         item_data = browser.json['items'][0]
         self.assertFalse(item_data.get('excerpts'))
 
-        excerpt = agenda_item.generate_excerpt()
+        excerpt = agenda_item.generate_excerpt(title=u'Excerpt ad-hoc')
 
         browser.open(self.meeting, view='agenda_items/list')
         item_data = browser.json['items'][0]
