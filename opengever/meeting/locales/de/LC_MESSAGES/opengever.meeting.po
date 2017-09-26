@@ -348,12 +348,12 @@ msgstr "Titel"
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt:47
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:49
 msgid "Unschedule"
-msgstr "Detranktandieren"
+msgstr "Entfernen"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt:44
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:46
 msgid "Unschedule proposal"
-msgstr "Traktandum detraktandieren"
+msgstr "Traktandum entfernen"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt:66
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:68
@@ -713,6 +713,11 @@ msgstr "Inaktiv"
 msgid "label_ad_hoc_template"
 msgstr "Ad Hoc Vorlage"
 
+#. Default: "delete this agenda item"
+#: ./opengever/meeting/browser/meetings/meeting.py:350
+msgid "label_ad_hoc_delete_action"
+msgstr "Traktandum löschen"
+
 #. Default: "Agenda item number"
 #: ./opengever/meeting/browser/meetings/meeting.py:374
 msgid "label_agenda_item_number"
@@ -846,10 +851,10 @@ msgstr "Beschlussentwurf"
 msgid "label_decision_number"
 msgstr "Beschlussnummer"
 
-#. Default: "delete this agenda item"
+#. Default: "remove this agenda item"
 #: ./opengever/meeting/browser/meetings/meeting.py:349
 msgid "label_delete_action"
-msgstr "Traktandum löschen"
+msgstr "Traktandum entfernen"
 
 #. Default: "Are you sure you want to delete this agendaitem?"
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt:32
@@ -1231,7 +1236,7 @@ msgstr "Sie haben nicht gespeicherte lokale Änderungen."
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt:45
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:47
 msgid "label_unschedule_agenda_item_confirm_text"
-msgstr "Wollen Sie dieses Traktandum wirklich detraktandieren?"
+msgstr "Wollen Sie dieses Traktandum wirklich aus der Traktandenliste entfernen?"
 
 #. Default: "Unscheduled proposals"
 #: ./opengever/meeting/browser/committee.py:30

@@ -715,6 +715,11 @@ msgstr "Inactif"
 msgid "label_ad_hoc_template"
 msgstr ""
 
+#. Default: "delete this agenda item"
+#: ./opengever/meeting/browser/meetings/meeting.py:350
+msgid "label_ad_hoc_delete_action"
+msgstr ""
+
 #. Default: "Agenda item number"
 #: ./opengever/meeting/browser/meetings/meeting.py:374
 msgid "label_agenda_item_number"
@@ -848,7 +853,7 @@ msgstr "Brouillon de la décision"
 msgid "label_decision_number"
 msgstr "Numéro de décision"
 
-#. Default: "delete this agenda item"
+#. Default: "remove this agenda item"
 #: ./opengever/meeting/browser/meetings/meeting.py:349
 msgid "label_delete_action"
 msgstr "Enlever ce point de l'ordre du jour"
