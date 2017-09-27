@@ -1437,11 +1437,6 @@ msgstr ""
 msgid "proposal_document"
 msgstr ""
 
-#. Default: "Proposal document ${title}"
-#: ./opengever/meeting/proposal.py:310
-msgid "proposal_document_title"
-msgstr ""
-
 #. Default: "Proposal cancelled by ${user}"
 #: ./opengever/meeting/proposalhistory.py:196
 msgid "proposal_history_label_cancelled"

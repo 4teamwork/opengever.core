@@ -34,15 +34,15 @@ class TestProposalWithWord(IntegrationTestCase):
              ['Committee', u'Rechnungspr\xfcfungskommission'],
              ['Meeting', ''],
              ['Proposal document',
-              'Proposal document Baugesuch Kreuzachkreisel'],
+              'Baugesuch Kreuzachkreisel'],
              ['State', 'Pending'],
              ['Decision number', '']],
             browser.css('table.listing').first.lists())
 
-        browser.click_on('Proposal document Baugesuch Kreuzachkreisel')
+        browser.click_on('Baugesuch Kreuzachkreisel')
         browser.open(browser.context, view='tabbedview_view-overview')
         self.assertDictContainsSubset(
-            {'Title': u'Proposal document Baugesuch Kreuzachkreisel'},
+            {'Title': u'Baugesuch Kreuzachkreisel'},
             dict(browser.css('table.listing').first.lists()))
 
         self.assertEquals(
@@ -70,7 +70,7 @@ class TestProposalWithWord(IntegrationTestCase):
              ['Dossier', u'Vertr\xe4ge mit der kantonalen Finanzverwaltung'],
              ['Meeting', ''],
              ['Proposal document',
-              u'Proposal document \xc4nderungen am Personalreglement'],
+              u'\xc4nderungen am Personalreglement'],
              ['State', 'Submitted'],
              ['Decision number', ''],
              ['Attachments', u'Vertr\xe4gsentwurf']],

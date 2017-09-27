@@ -66,7 +66,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
         browser.open(self.meeting, view='export-meeting-zip')
         zip_file = ZipFile(StringIO(browser.contents), 'r')
         self.assertIn(
-            '1. Anderungen am Personalreglement/Proposal document Anderungen am Personalreglement.docx',
+            '1. Anderungen am Personalreglement/Anderungen am Personalreglement.docx',
             zip_file.namelist())
 
     @browsing
@@ -83,7 +83,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
         self.assertEquals(
             ['Protocol-9. Sitzung der Rechnungsprufungskommission.docx',
              '1. Anderungen am Personalreglement/Vertragsentwurf.docx',
-             '1. Anderungen am Personalreglement/Proposal document Anderungen am Personalreglement.docx',
+             '1. Anderungen am Personalreglement/Anderungen am Personalreglement.docx',
              'Agendaitem list-9. Sitzung der Rechnungsprufungskommission.docx'],
             zip_file.namelist())
 

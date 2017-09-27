@@ -307,11 +307,7 @@ class ProposalBase(ModelContainer):
         kwargs['context'] = self
         kwargs.setdefault('preserved_as_paper', False)
 
-        title = _(u'proposal_document_title',
-                  default=u'Proposal document ${title}',
-                  mapping={'title': safe_unicode(self.Title())})
-        title = translate(title, context=self.REQUEST).strip()
-        kwargs.setdefault('title', title)
+        kwargs.setdefault('title', safe_unicode(self.Title()))
 
         with elevated_privileges():
             obj = CreateDocumentCommand(**kwargs).execute()
