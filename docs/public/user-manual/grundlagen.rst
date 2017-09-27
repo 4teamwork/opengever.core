@@ -81,10 +81,22 @@ Zusatzmodul und daher auch nicht für alle ersichtlich.
 
 7. Im Reiter `Sitzungen <https://docs.onegovgever.ch/user-manual/sitzungs-und-protokollverwaltung/>`_ finden Sie die Sitzungs- und Protokollverwaltung (SPV)
 
+Klickpfad
+---------
+Dank der klickbaren Breadcrumb (Klickpfad) kann ganz einfach zwischen
+Navigationsposition, Dossier und Dokument navigiert werden. Bei der
+Navigationsposition kann wie auf dem zweiten Bild ersichtlich zusätzlich auf die
+verschieden darüber liegenden Navigationsstufen navigiert werden.
+
+|img-grundlagen-20|
+|img-grundlagen-21|
+
 .. |img-grundlagen-15| image:: img/media/img-grundlagen-15.png
 .. |img-grundlagen-16| image:: img/media/img-grundlagen-16.png
 .. |img-grundlagen-17| image:: img/media/img-grundlagen-17.png
 .. |img-grundlagen-18| image:: img/media/img-grundlagen-18.png
 .. |img-grundlagen-19| image:: img/media/img-grundlagen-19.png
+.. |img-grundlagen-20| image:: img/media/img-grundlagen-20.png
+.. |img-grundlagen-21| image:: img/media/img-grundlagen-21.png
 
 .. disqus::
