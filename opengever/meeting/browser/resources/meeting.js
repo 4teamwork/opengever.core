@@ -117,6 +117,20 @@
       closeOnEsc: false
     }).data("overlay");
 
+    var createExcerptDialog = $('#confirm_create_excerpt').overlay({
+      speed: 0,
+      closeSpeed: 0,
+      mask: { loadSpeed: 0 },
+      closeOnClick: false,
+      closeOnEsc: false,
+      onBeforeLoad: function() {
+        $('#excerpt_title').val(self.currentItem.data().defaultTitle);
+      },
+      onLoad: function() {
+        $('#excerpt_title').focus().select();
+      }
+    }).data("overlay");
+
     var sortableHelper = function(e, row) {
       var helper = row.clone();
       $.each(row.children(), function(idx, cell) {
@@ -170,6 +184,7 @@
       unscheduleDialog.close();
       deleteDialog.close();
       returnExcerptDialog.close();
+      createExcerptDialog.close();
     };
 
     this.updateSortOrder = function() {
@@ -254,9 +269,19 @@
       });
     };
 
-    this.generateExcerpt = function(target) {
-      return $.get(target.attr("href"));
+    this.openGenerateExcerptDialog = function(target) {
+      this.currentItem = target;
+      createExcerptDialog.load();
     };
+
+    this.generateExcerpt = function(target, event) {
+      var link = self.currentItem[0].href;
+      self = this;
+      return $.post(link, $('#confirm_create_excerpt form').serialize())
+              .always(function() {
+                self.closeModal();
+              });
+    }
 
     this.returnExcerpt = function() {
       self = this;
@@ -310,10 +335,9 @@
       {
         method: "click",
         target: ".generate-excerpt",
-        callback: this.generateExcerpt,
+        callback: this.openGenerateExcerptDialog,
         options: {
-          update: true,
-          loading: true
+          prevent: true
         }
       },
       {
@@ -330,6 +354,16 @@
         callback: this.returnExcerpt,
         options: {
           prevent: false,
+          loading: true,
+          update: true
+        }
+      },
+      {
+        method: "click",
+        target: "#confirm_create_excerpt .confirm",
+        callback: this.generateExcerpt,
+        options: {
+          prevent: true,
           loading: true,
           update: true
         }
@@ -359,7 +393,7 @@
       },
       {
         method: "click",
-        target: "#confirm_unschedule .decline, #confirm_delete .decline, #confirm_return_excerpt .decline",
+        target: "#confirm_unschedule .decline, #confirm_delete .decline, #confirm_return_excerpt .decline, #confirm_create_excerpt .decline",
         callback: this.closeModal
       },
       {

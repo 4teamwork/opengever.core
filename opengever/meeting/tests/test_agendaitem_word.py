@@ -230,12 +230,16 @@ class TestWordAgendaItem(IntegrationTestCase):
 
         # The generate excerpt link is available on decided agenda items.
         self.assertDictContainsSubset(
-            {'generate_excerpt_link': self.agenda_item_url(agenda_item, 'generate_excerpt')},
+            {'generate_excerpt_link': self.agenda_item_url(agenda_item, 'generate_excerpt'),
+             'generate_excerpt_default_title': u'Excerpt \xc4nderungen am Personalreglement'},
             item_data)
 
         # Create an excerpt.
         with self.observe_children(self.meeting_dossier) as children:
-            browser.open(item_data['generate_excerpt_link'], send_authenticator=True)
+            browser.open(
+                item_data['generate_excerpt_link'],
+                data={'excerpt_title': 'Excerption \xc3\x84nderungen'},
+                send_authenticator=True)
 
         # Generating the excerpt is confirmed with a status message.
         self.assertEquals(
@@ -250,7 +254,7 @@ class TestWordAgendaItem(IntegrationTestCase):
         # original document.
         self.assertEquals(1, len(children['added']))
         excerpt_document, = children['added']
-        self.assertEquals('Excerpt \xc3\x84nderungen am Personalreglement',
+        self.assertEquals('Excerption \xc3\x84nderungen',
                           excerpt_document.Title())
         self.assertEquals(
             self.submitted_word_proposal.get_proposal_document().file.data,
@@ -293,7 +297,9 @@ class TestWordAgendaItem(IntegrationTestCase):
             agenda_item.decide()
 
         self.login(self.regular_user, browser)
-        browser.open(self.agenda_item_url(agenda_item, 'generate_excerpt'))
+        browser.open(
+            self.agenda_item_url(agenda_item, 'generate_excerpt'),
+            data={'excerpt_title': 'Excerption \xc3\x84nderungen'})
         self.assertEquals(
             {u'messages': [
                 {u'messageTitle': u'Error',
@@ -314,7 +320,7 @@ class TestWordAgendaItem(IntegrationTestCase):
         item_data = browser.json['items'][0]
         self.assertFalse(item_data.get('excerpts'))
 
-        excerpt = agenda_item.generate_excerpt()
+        excerpt = agenda_item.generate_excerpt(title='Excerpt \xc3\x84nderungen')
         browser.open(self.meeting, view='agenda_items/list')
         item_data = browser.json['items'][0]
         excerpt_links = item_data.get('excerpts', None)
@@ -349,7 +355,7 @@ class TestWordAgendaItem(IntegrationTestCase):
         agenda_item = self.schedule_proposal(self.meeting,
                                              self.submitted_word_proposal)
         agenda_item.decide()
-        excerpt = agenda_item.generate_excerpt()
+        excerpt = agenda_item.generate_excerpt(title='Excerpt \xc3\x84nderungen')
 
         self.assertIsNone(agenda_item.proposal.excerpt_document)
         self.assertIsNone(agenda_item.proposal.submitted_excerpt_document)

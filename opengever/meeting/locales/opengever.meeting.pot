@@ -568,6 +568,11 @@ msgstr ""
 msgid "column_to"
 msgstr ""
 
+#. Default: "Create Excerpt"
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:115
+msgid "create_excerpt"
+msgstr ""
+
 #. Default: "Decide"
 #: ./opengever/meeting/model/agendaitem.py:51
 #: ./opengever/meeting/model/proposal.py:159
@@ -633,8 +638,8 @@ msgid "error_prosal_template_not_docx"
 msgstr ""
 
 #. Default: "Excerpt ${title}"
-#: ./opengever/meeting/model/agendaitem.py:438
-msgid "excerpt_document_title"
+#: ./opengever/meeting/browser/meetings/agendaitem.py:217
+msgid "excerpt_document_default_title"
 msgstr ""
 
 #. Default: "Excerpt was created successfully."
@@ -785,6 +790,11 @@ msgstr ""
 #: ./opengever/meeting/browser/meetings/protocol.py:148
 #: ./opengever/meeting/proposal.py:118
 msgid "label_copy_for_attention"
+msgstr ""
+
+#. Default: "Create Excerpt"
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:127
+msgid "label_create_excerpt"
 msgstr ""
 
 #. Default: "Creator"
@@ -1210,6 +1220,11 @@ msgstr ""
 msgid "label_title"
 msgstr ""
 
+#. Default: "Excerpt title"
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:122
+msgid "label_title_excerpt"
+msgstr ""
+
 #. Default: "Table of contents template"
 #: ./opengever/meeting/committee.py:78
 #: ./opengever/meeting/committeecontainer.py:37
@@ -1299,6 +1314,11 @@ msgstr ""
 #. Default: "No ad-hoc agenda-item template has been configured."
 #: ./opengever/meeting/browser/meetings/agendaitem.py:422
 msgid "missing_ad_hoc_template"
+msgstr ""
+
+#. Default: "Chose a meaningful title to distinguish the created excerpts better."
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:116
+msgid "msg_confirm_create_excerpt_dialog"
 msgstr ""
 
 #. Default: "When returning an excerpt to the proposer the selected document will be sent back to the proposals originating dossier. No other excerpts can be returned."

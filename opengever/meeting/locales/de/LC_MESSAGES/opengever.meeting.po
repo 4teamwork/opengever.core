@@ -569,6 +569,11 @@ msgstr "Titel"
 msgid "column_to"
 msgstr "Bis"
 
+#. Default: "Create Excerpt"
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:115
+msgid "create_excerpt"
+msgstr "Protokollauszug generieren"
+
 #. Default: "Decide"
 #: ./opengever/meeting/model/agendaitem.py:51
 #: ./opengever/meeting/model/proposal.py:159
@@ -634,8 +639,8 @@ msgid "error_prosal_template_not_docx"
 msgstr "Nur Word-Dateien (.docx) sind erlaubt."
 
 #. Default: "Excerpt ${title}"
-#: ./opengever/meeting/model/agendaitem.py:438
-msgid "excerpt_document_title"
+#: ./opengever/meeting/browser/meetings/agendaitem.py:217
+msgid "excerpt_document_default_title"
 msgstr "Protokollauszug ${title}"
 
 #. Default: "Excerpt was created successfully."
@@ -787,6 +792,11 @@ msgstr "Erwägungen"
 #: ./opengever/meeting/proposal.py:118
 msgid "label_copy_for_attention"
 msgstr "Kopie z.K."
+
+#. Default: "Create Excerpt"
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:127
+msgid "label_create_excerpt"
+msgstr "Protokollauszug generieren"
 
 #. Default: "Creator"
 #: ./opengever/meeting/browser/proposalforms.py:92
@@ -1211,6 +1221,11 @@ msgstr "Start"
 msgid "label_title"
 msgstr "Titel"
 
+#. Default: "Excerpt title"
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:122
+msgid "label_title_excerpt"
+msgstr "Titel"
+
 #. Default: "Table of contents template"
 #: ./opengever/meeting/committee.py:78
 #: ./opengever/meeting/committeecontainer.py:37
@@ -1301,6 +1316,11 @@ msgstr "Die Änderungen konnten nicht gespeichert werden, das Protokoll wurde in
 #: ./opengever/meeting/browser/meetings/agendaitem.py:422
 msgid "missing_ad_hoc_template"
 msgstr "Es konnte keine Vorlage für ein Ad Hoc Traktandum gefunden werden."
+
+#. Default: "Choose a meaningful title to distinguish the created excerpts better."
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:116
+msgid "msg_confirm_create_excerpt_dialog"
+msgstr "Wählen Sie einen aussagekräftigen Titel um die Protokollauszüge besser unterscheiden zu können."
 
 #. Default: "When returning an excerpt to the proposer the selected document will be sent back to the proposals originating dossier. No other excerpts can be returned."
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:102

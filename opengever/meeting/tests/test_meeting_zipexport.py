@@ -76,7 +76,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
         agenda_item = self.schedule_proposal(self.meeting,
                                              self.submitted_word_proposal)
         agenda_item.decide()
-        agenda_item.generate_excerpt()
+        agenda_item.generate_excerpt(title='Ahoi McEnroe!')
 
         browser.open(self.meeting, view='export-meeting-zip')
         zip_file = ZipFile(StringIO(browser.contents), 'r')

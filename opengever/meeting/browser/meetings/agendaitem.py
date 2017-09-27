@@ -18,6 +18,7 @@ from zExceptions import Forbidden
 from zExceptions import NotFound
 from zExceptions import Unauthorized
 from zope.component import getMultiAdapter
+from zope.i18n import translate
 from zope.interface import implements
 from zope.interface import Interface
 from zope.publisher.interfaces import IPublishTraverse
@@ -212,6 +213,12 @@ class AgendaItemsView(BrowserView):
 
                 data['excerpts'] = self._serialize_excerpts(meeting, item)
                 if item.can_generate_excerpt():
+                    data['generate_excerpt_default_title'] = translate(
+                        _(u'excerpt_document_default_title',
+                          default=u'Excerpt ${title}',
+                          mapping={'title': safe_unicode(item.get_title())}),
+                        context=self.request,
+                    ).strip()
                     data['generate_excerpt_link'] = meeting.get_url(
                         view='agenda_items/{}/generate_excerpt'.format(
                             item.agenda_item_id))
@@ -451,7 +458,7 @@ class AgendaItemsView(BrowserView):
             raise Forbidden('Generating excerpt is not allowed in this state.')
 
         try:
-            self.agenda_item.generate_excerpt()
+            self.agenda_item.generate_excerpt(title=self.request.form['excerpt_title'])
         except MissingMeetingDossierPermissions:
             return (JSONResponse(self.request)
                     .error(_('error_no_permission_to_add_document',

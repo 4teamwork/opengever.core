@@ -39,6 +39,7 @@
                     i18n:translate="label_cancel">Cancel</button>
           </div>
         </div>
+
         <div class="overlay" id="confirm_unschedule">
           <div class="close">
             <a href="#" class="hiddenStructure" title="Close this box">Close this box.</a>
@@ -112,6 +113,28 @@
             <button class="button decline"
                     i18n:translate="label_cancel">Cancel</button>
           </div>
+        </div>
+
+        <div class="overlay" id="confirm_create_excerpt">
+          <h2 i18n:translate="create_excerpt">Create Excerpt</h2>
+          <p i18n:translate="msg_confirm_create_excerpt_dialog">
+            Choose a meaningful title to distinguish the created excerpts better.
+          </p>
+          <form>
+              <div class="input-group">
+                <label for="excerpt_title"
+                       i18n:translate="label_title_excerpt">Excerpt title</label>
+                <input type="text"
+                       name="excerpt_title"
+                       id="excerpt_title" />
+              </div>
+              <div class="button-group">
+                <button class="button confirm"
+                        i18n:translate="label_create_excerpt">Create Excerpt</button>
+                <button class="button decline"
+                        i18n:translate="label_cancel">Cancel</button>
+              </div>
+          </form>
         </div>
 
         <div class="meeting-metadata">
