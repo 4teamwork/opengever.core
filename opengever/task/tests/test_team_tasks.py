@@ -71,9 +71,13 @@ class TestTeamTasks(IntegrationTestCase):
         task = self.dossier.get('task-3')
 
         center = notification_center()
+        # Assign watchers to a local variable in order to avoid having
+        # a "stale association proxy" when the GC collects within the
+        # list comprehension.
+        watchers = center.get_watchers(task)
         self.assertEquals(
             [u'team:2', u'kathi.barfuss'],
-            [watcher.actorid for watcher in center.get_watchers(task)]
+            [watcher.actorid for watcher in watchers]
         )
 
         activity = Activity.query.one()
