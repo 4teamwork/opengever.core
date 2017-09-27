@@ -1440,11 +1440,6 @@ msgstr "Présidence"
 msgid "proposal_document"
 msgstr "Document de proposition"
 
-#. Default: "Proposal document ${title}"
-#: ./opengever/meeting/proposal.py:310
-msgid "proposal_document_title"
-msgstr "Document de proposition ${title}"
-
 #. Default: "Proposal cancelled by ${user}"
 #: ./opengever/meeting/proposalhistory.py:196
 msgid "proposal_history_label_cancelled"

@@ -52,7 +52,7 @@ class TestWordAgendaItem(IntegrationTestCase):
 
         document_link_html = item_data.get('document_link')
         self.assertIn(
-            u'Proposal document \xc4nderungen am Personalreglement',
+            u'\xc4nderungen am Personalreglement',
             document_link_html)
         document = self.submitted_word_proposal.get_proposal_document()
         self.assertIn(document.absolute_url() + '/tooltip', document_link_html)
