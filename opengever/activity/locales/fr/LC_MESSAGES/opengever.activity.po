@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-04-27 11:20+0000\n"
+"POT-Creation-Date: 2017-10-02 12:51+0000\n"
 "PO-Revision-Date: 2016-08-10 04:42+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-activity/fr/>\n"
@@ -20,47 +20,47 @@ msgstr ""
 "X-Generator: Weblate 2.7-dev\n"
 
 #. Default: "Actor"
-#: ./opengever/activity/browser/listing.py:52
+#: ./opengever/activity/browser/listing.py
 msgid "column_Actor"
 msgstr "Acteur"
 
 #. Default: "Kind"
-#: ./opengever/activity/browser/listing.py:42
+#: ./opengever/activity/browser/listing.py
 msgid "column_kind"
 msgstr "Type"
 
 #. Default: "Title"
-#: ./opengever/activity/browser/listing.py:47
+#: ./opengever/activity/browser/listing.py
 msgid "column_title"
 msgstr "Titre"
 
 #. Default: "Created"
-#: ./opengever/activity/browser/listing.py:57
+#: ./opengever/activity/browser/listing.py
 msgid "created"
 msgstr "Créé"
 
 #. Default: "Notifications"
-#: ./opengever/activity/viewlets/notification.pt:3
+#: ./opengever/activity/viewlets/notification.pt
 msgid "heading_notifications"
 msgstr "Notifications"
 
 #. Default: "Details:"
-#: ./opengever/activity/templates/notification.pt:42
+#: ./opengever/activity/templates/notification.pt
 msgid "label_details"
 msgstr "Détails:"
 
 #. Default: "All Notifications"
-#: ./opengever/activity/viewlets/notification.pt:41
+#: ./opengever/activity/viewlets/notification.pt
 msgid "label_notifications_overview"
 msgstr "Toutes les notifications"
 
 #. Default: "A problem has occurred during the notification creation. Notification could not or only partially produced."
-#: ./opengever/activity/center.py:228
+#: ./opengever/activity/center.py
 msgid "msg_error_not_notified"
 msgstr "Un problème a apparu pendant la création de la notification. La notification n’a pas pu être produite ou seulement partiellement."
 
 #. Default: "GEVER Task"
-#: ./opengever/activity/mail.py:112
+#: ./opengever/activity/mail.py
 msgid "subject_prefix"
 msgstr "Tâche GEVER"
 

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-06-07 12:34+0000\n"
+"POT-Creation-Date: 2017-10-02 12:51+0000\n"
 "PO-Revision-Date: 2017-06-04 12:57+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-globalindex/fr/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Language: fr\n"
 "X-Generator: Weblate 2.13.1\n"
 
-#: ./opengever/globalindex/browser/report.py:94
+#: ./opengever/globalindex/browser/report.py
 msgid "Could not generate the report."
 msgstr "Impossible de générer l'export de tâches."
 
@@ -25,61 +25,61 @@ msgid "Export selection"
 msgstr "Exporter le choix"
 
 #. Default: "You have not selected any items."
-#: ./opengever/globalindex/browser/report.py:49
+#: ./opengever/globalindex/browser/report.py
 msgid "error_no_items"
 msgstr "Vous n'avez sélectionné aucun élément."
 
 #. Default: "Forwarding"
-#: ./opengever/globalindex/browser/report.py:23
+#: ./opengever/globalindex/browser/report.py
 msgid "forwarding_task_type"
 msgstr "Transmission"
 
-#: ./opengever/globalindex/browser/report.py:77
+#: ./opengever/globalindex/browser/report.py
 msgid "label_admin_unit_id"
 msgstr "Unité administrative"
 
-#: ./opengever/globalindex/browser/report.py:66
+#: ./opengever/globalindex/browser/report.py
 msgid "label_completed"
 msgstr "Accompli le"
 
-#: ./opengever/globalindex/browser/report.py:64
+#: ./opengever/globalindex/browser/report.py
 msgid "label_deadline"
 msgstr "Délai"
 
-#: ./opengever/globalindex/browser/report.py:68
+#: ./opengever/globalindex/browser/report.py
 msgid "label_dossier_title"
 msgstr "Titre du dossier"
 
-#: ./opengever/globalindex/browser/report.py:69
+#: ./opengever/globalindex/browser/report.py
 msgid "label_issuer"
 msgstr "Mandataire"
 
-#: ./opengever/globalindex/browser/report.py:72
+#: ./opengever/globalindex/browser/report.py
 msgid "label_issuing_org_unit"
 msgstr "Donneur d'ordre / mandant"
 
-#: ./opengever/globalindex/browser/report.py:73
+#: ./opengever/globalindex/browser/report.py
 msgid "label_responsible"
 msgstr "Mandataire"
 
-#: ./opengever/globalindex/browser/report.py:78
+#: ./opengever/globalindex/browser/report.py
 msgid "label_sequence_number"
 msgstr "Numéro courant"
 
-#: ./opengever/globalindex/browser/report.py:60
+#: ./opengever/globalindex/browser/report.py
 msgid "label_task_title"
 msgstr "Titre de tâche"
 
-#: ./opengever/globalindex/browser/report.py:75
+#: ./opengever/globalindex/browser/report.py
 msgid "label_task_type"
 msgstr "Type de mandat"
 
 #. Default: "Tasks"
-#: ./opengever/globalindex/browser/report.py:86
+#: ./opengever/globalindex/browser/report.py
 msgid "label_tasks"
 msgstr "Mandats"
 
-#: ./opengever/globalindex/browser/report.py:61
+#: ./opengever/globalindex/browser/report.py
 msgid "review_state"
 msgstr "Etat"
 

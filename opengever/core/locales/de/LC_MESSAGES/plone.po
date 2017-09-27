@@ -55,8 +55,9 @@ msgstr "Manager"
 msgid "opengever_committee_workflow--ROLE-DESCRIPTION--CommitteeMember"
 msgstr "Ein Gremien-Mitglied ist Teil eines Gremiums und kann Inhalte wie Sitzungen und Anträge des Gremiums ansehen."
 
-#. Default: "The committe responsible is in charge of a committee. This involves creating, planing and hold meetings as well as configuring and deactivating the committee."
+#. Default: "The committe responsible is in charge of a committee. This involves creating, planing and hold meetings as well as configuring and deactivating the committee. The committee responsible role is assigned automatically to the group that can be configured per committee."
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
+#, fuzzy
 msgid "opengever_committee_workflow--ROLE-DESCRIPTION--CommitteeResponsible"
 msgstr "Die Gremien-Verantwortliche Person ist zuständig für ein Kommitee. Sie erstellt, traktandiert und protokolliert Sitzungen und kann das Gremium konfigurieren und deaktivieren. Diese Rolle wird vom System automatisch vergeben."
 

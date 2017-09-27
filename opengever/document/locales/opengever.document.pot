@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-06-07 15:10+0000\n"
+"POT-Creation-Date: 2017-10-02 12:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,63 +22,63 @@ msgstr ""
 msgid "Attach selection"
 msgstr ""
 
-#: ./opengever/document/browser/edit.py:104
+#: ./opengever/document/browser/edit.py
 msgid "Can't edit the document at moment, beacuse it's locked."
 msgstr ""
 
-#: ./opengever/document/checkout/cancel.py:89
+#: ./opengever/document/checkout/cancel.py
 msgid "Cancel checkout: ${title}"
 msgstr ""
 
-#: ./opengever/document/checkout/checkin.py:63
+#: ./opengever/document/checkout/checkin.py
 msgid "Checked in: ${title}"
 msgstr ""
 
-#: ./opengever/document/browser/edit.py:133
-#: ./opengever/document/checkout/checkout.py:111
+#: ./opengever/document/browser/edit.py
+#: ./opengever/document/checkout/checkout.py
 msgid "Checked out: ${title}"
 msgstr ""
 
-#: ./opengever/document/browser/templates/macros.pt:66
+#: ./opengever/document/browser/templates/macros.pt
 #: ./opengever/document/upgrades/profiles/4000/actions.xml
 msgid "Checkin with comment"
 msgstr ""
 
-#: ./opengever/document/browser/templates/macros.pt:63
+#: ./opengever/document/browser/templates/macros.pt
 #: ./opengever/document/upgrades/profiles/4000/actions.xml
 msgid "Checkin without comment"
 msgstr ""
 
-#: ./opengever/document/checkout/cancel.py:81
+#: ./opengever/document/checkout/cancel.py
 msgid "Could not cancel checkout on document ${title}."
 msgstr ""
 
-#: ./opengever/document/checkout/checkin.py:73
+#: ./opengever/document/checkout/checkin.py
 msgid "Could not check in ${title}, it is not a document."
 msgstr ""
 
-#: ./opengever/document/checkout/checkin.py:55
+#: ./opengever/document/checkout/checkin.py
 msgid "Could not check in document ${title}"
 msgstr ""
 
-#: ./opengever/document/browser/edit.py:121
-#: ./opengever/document/checkout/checkout.py:102
+#: ./opengever/document/browser/edit.py
+#: ./opengever/document/checkout/checkout.py
 msgid "Could not check out document ${title}."
 msgstr ""
 
-#: ./opengever/document/checkout/checkout.py:60
+#: ./opengever/document/checkout/checkout.py
 msgid "Could not check out object: ${title}, it is not a document."
 msgstr ""
 
-#: ./opengever/document/browser/report.py:81
+#: ./opengever/document/browser/report.py
 msgid "Could not generate the report."
 msgstr ""
 
-#: ./opengever/document/browser/overview.py:209
+#: ./opengever/document/browser/overview.py
 msgid "Current version: ${version}"
 msgstr ""
 
-#: ./opengever/document/browser/templates/downloadconfirmation.pt:22
+#: ./opengever/document/browser/templates/downloadconfirmation.pt
 msgid "Don't show this message again."
 msgstr ""
 
@@ -86,12 +86,12 @@ msgstr ""
 msgid "Export selection"
 msgstr ""
 
-#: ./opengever/document/browser/templates/logout_overlay.pt:19
+#: ./opengever/document/browser/templates/logout_overlay.pt
 msgid "Logout"
 msgstr ""
 
-#: ./opengever/document/checkout/manager.py:288
-#: ./opengever/document/checkout/revert.py:26
+#: ./opengever/document/checkout/manager.py
+#: ./opengever/document/checkout/revert.py
 msgid "Reverted file to version ${version_id}."
 msgstr ""
 
@@ -99,443 +99,444 @@ msgstr ""
 msgid "Submit additional documents"
 msgstr ""
 
-#: ./opengever/document/browser/overview.py:205
+#: ./opengever/document/browser/overview.py
 msgid "Submitted version: ${version}"
 msgstr ""
 
-#: ./opengever/document/browser/overview.py:174
+#: ./opengever/document/browser/overview.py
 msgid "Submitted with"
 msgstr ""
 
-#: ./opengever/document/browser/download.py:40
-#: ./opengever/document/browser/edit.py:81
+#: ./opengever/document/browser/download.py
+#: ./opengever/document/browser/edit.py
 msgid "The Document ${title} has no File."
 msgstr ""
 
-#: ./opengever/document/browser/edit.py:113
+#: ./opengever/document/browser/edit.py
 msgid "The Document is already checked out by: ${userid}"
 msgstr ""
 
-#: ./opengever/document/browser/templates/submitted_with.pt:18
+#: ./opengever/document/browser/templates/submitted_with.pt
 msgid "Update document in proposal"
 msgstr ""
 
-#: ./opengever/document/browser/edit.py:59
+#: ./opengever/document/browser/edit.py
 msgid "You are not authorized to edit the document ${title}."
 msgstr ""
 
-#: ./opengever/document/checkout/cancel.py:28
-#: ./opengever/document/checkout/checkin.py:197
-#: ./opengever/document/checkout/checkout.py:34
+#: ./opengever/document/checkout/cancel.py
+#: ./opengever/document/checkout/checkin.py
+#: ./opengever/document/checkout/checkout.py
 msgid "You have not selected any documents."
 msgstr ""
 
 #. Default: "You have not checked in documents. Do you realy want to logout?"
-#: ./opengever/document/browser/templates/logout_overlay.pt:3
+#: ./opengever/document/browser/templates/logout_overlay.pt
 msgid "alert_not_checked_in_documents"
 msgstr ""
 
 #. Default: "Cancel"
-#: ./opengever/document/checkout/checkin.py:112
+#: ./opengever/document/checkout/checkin.py
 msgid "button_cancel"
 msgstr ""
 
 #. Default: "Checkin"
-#: ./opengever/document/checkout/checkin.py:103
+#: ./opengever/document/checkout/checkin.py
 msgid "button_checkin"
 msgstr ""
 
 #. Default: "PDF"
-#: ./opengever/document/browser/versions_tab.py:143
+#: ./opengever/document/browser/versions_tab.py
 msgid "button_pdf"
 msgstr ""
 
 #. Default: "copy of"
-#: ./opengever/document/subscribers.py:93
+#: ./opengever/document/subscribers.py
 msgid "copy_of"
 msgstr ""
 
 #. Default: "You're downloading a copy of the document ${filename}"
-#: ./opengever/document/browser/templates/downloadconfirmation.pt:12
+#: ./opengever/document/browser/templates/downloadconfirmation.pt
 msgid "description_download_confirmation"
 msgstr ""
 
 #. Default: "You don't select a file and document is also not preserved in paper_form, please correct it."
-#: ./opengever/document/behaviors/metadata.py:198
+#: ./opengever/document/behaviors/metadata.py
 msgid "error_file_and_preserved_as_paper"
 msgstr ""
 
 #. Default: "It's not possible to add E-mails here, please '                    'send it to ${mailaddress} or drag it to the dossier '                    ' (Dragn'n'Drop)."
-#: ./opengever/document/document.py:98
+#: ./opengever/document/document.py
 msgid "error_mail_upload"
 msgstr ""
 
 #. Default: "You have not selected any Items"
-#: ./opengever/document/browser/report.py:65
+#: ./opengever/document/browser/report.py
 msgid "error_no_items"
 msgstr ""
 
 #. Default: "Either the title or the file is required."
-#: ./opengever/document/document.py:75
+#: ./opengever/document/document.py
 msgid "error_title_or_file_required"
 msgstr ""
 
 #. Default: "Archive file"
-#: ./opengever/document/behaviors/metadata.py:60
+#: ./opengever/document/behaviors/metadata.py
 msgid "fieldset_archive_file"
 msgstr ""
 
 #. Default: "Common"
-#: ./opengever/document/behaviors/metadata.py:41
-#: ./opengever/document/behaviors/related_docs.py:39
-#: ./opengever/document/document.py:51
+#: ./opengever/document/behaviors/metadata.py
+#: ./opengever/document/behaviors/related_docs.py
+#: ./opengever/document/document.py
 msgid "fieldset_common"
 msgstr ""
 
 #. Default: "Keep existing file"
-#: ./opengever/document/widgets/no_download_input.pt:45
+#: ./opengever/document/widgets/no_download_input.pt
 msgid "file_keep"
 msgstr ""
 
 #. Default: "Remove existing file"
-#: ./opengever/document/widgets/no_download_input.pt:58
+#: ./opengever/document/widgets/no_download_input.pt
 msgid "file_remove"
 msgstr ""
 
 #. Default: "Replace with new file"
-#: ./opengever/document/widgets/no_download_input.pt:70
+#: ./opengever/document/widgets/no_download_input.pt
 msgid "file_replace"
 msgstr ""
 
 #. Default: "Checkin Documents"
-#: ./opengever/document/checkout/checkin.py:97
+#: ./opengever/document/checkout/checkin.py
 msgid "heading_checkin_comment_form"
 msgstr ""
 
-#: ./opengever/document/behaviors/metadata.py:148
+#: ./opengever/document/behaviors/metadata.py
 msgid "help_archival_file"
 msgstr ""
 
 #. Default: "Surname firstname or a userid(would be automatically resolved to fullname)"
-#: ./opengever/document/behaviors/metadata.py:124
+#: ./opengever/document/behaviors/metadata.py
 msgid "help_author"
 msgstr ""
 
 #. Default: "Describe, why you checkin the selected documents"
-#: ./opengever/document/checkout/checkin.py:86
+#: ./opengever/document/checkout/checkin.py
 msgid "help_checkin_journal_comment"
 msgstr ""
 
-#: ./opengever/document/behaviors/metadata.py:109
+#: ./opengever/document/behaviors/metadata.py
 msgid "help_delivery_date"
 msgstr ""
 
-#: ./opengever/document/behaviors/metadata.py:92
+#: ./opengever/document/behaviors/metadata.py
 msgid "help_document_date"
 msgstr ""
 
-#: ./opengever/document/document.py:68
+#: ./opengever/document/document.py
 msgid "help_file"
 msgstr ""
 
-#: ./opengever/document/behaviors/metadata.py:84
+#: ./opengever/document/behaviors/metadata.py
 msgid "help_foreign_reference"
 msgstr ""
 
-#: ./opengever/document/behaviors/metadata.py:73
+#: ./opengever/document/behaviors/metadata.py
 msgid "help_keywords"
 msgstr ""
 
-#: ./opengever/document/behaviors/metadata.py:139
+#: ./opengever/document/behaviors/metadata.py
 msgid "help_preserved_as_paper"
 msgstr ""
 
-#: ./opengever/document/behaviors/metadata.py:167
+#: ./opengever/document/behaviors/metadata.py
 msgid "help_preview"
 msgstr ""
 
-#: ./opengever/document/behaviors/metadata.py:101
+#: ./opengever/document/behaviors/metadata.py
 msgid "help_receipt_date"
 msgstr ""
 
 #. Default: "Initial version"
-#: ./opengever/document/checkout/handlers.py:58
+#: ./opengever/document/checkout/handlers.py
 msgid "initial_document_version_change_note"
 msgstr ""
 
 #. Default: "Changed by"
-#: ./opengever/document/browser/versions_tab.py:281
+#: ./opengever/document/browser/versions_tab.py
 msgid "label_actor"
 msgstr ""
 
 #. Default: "Archival File"
-#: ./opengever/document/behaviors/metadata.py:147
-#: ./opengever/document/browser/overview.py:169
+#: ./opengever/document/behaviors/metadata.py
+#: ./opengever/document/browser/overview.py
 msgid "label_archival_file"
 msgstr ""
 
 #. Default: "Archival file state"
-#: ./opengever/document/behaviors/metadata.py:154
+#: ./opengever/document/behaviors/metadata.py
 msgid "label_archival_file_state"
 msgstr ""
 
 #. Default: "Attach to email"
-#: ./opengever/document/browser/templates/macros.pt:85
+#: ./opengever/document/browser/templates/macros.pt
 msgid "label_attach_to_email"
 msgstr ""
 
 #. Default: "Author"
-#: ./opengever/document/behaviors/metadata.py:123
-#: ./opengever/document/browser/report.py:32
+#: ./opengever/document/behaviors/metadata.py
+#: ./opengever/document/browser/report.py
 msgid "label_author"
 msgstr ""
 
 #. Default: "by"
-#: ./opengever/document/viewlets/byline.py:17
+#: ./opengever/document/viewlets/byline.py
 msgid "label_by_author"
 msgstr ""
 
-#: ./opengever/document/browser/templates/downloadconfirmation.pt:26
+#: ./opengever/document/browser/templates/downloadconfirmation.pt
 msgid "label_cancel"
 msgstr ""
 
 #. Default: "Change archival file"
-#: ./opengever/document/browser/archival_file_form.py:49
-#: ./opengever/document/browser/templates/archiv_file.pt:24
+#: ./opengever/document/browser/archival_file_form.py
+#: ./opengever/document/browser/templates/archiv_file.pt
 msgid "label_change_archival_file"
 msgstr ""
 
 #. Default: "Checked out"
-#: ./opengever/document/browser/overview.py:151
-#: ./opengever/document/checkout/viewlets_templates/checkedoutviewlet.pt:5
+#: ./opengever/document/browser/overview.py
+#: ./opengever/document/checkout/viewlets_templates/checkedoutviewlet.pt
 msgid "label_checked_out"
 msgstr ""
 
 #. Default: "Journal Comment"
-#: ./opengever/document/checkout/checkin.py:84
+#: ./opengever/document/checkout/checkin.py
 msgid "label_checkin_journal_comment"
 msgstr ""
 
 #. Default: "Checkout and edit"
-#: ./opengever/document/browser/templates/macros.pt:35
+#: ./opengever/document/browser/templates/macros.pt
 msgid "label_checkout_and_edit"
 msgstr ""
 
 #. Default: "Comment"
-#: ./opengever/document/browser/versions_tab.py:289
+#: ./opengever/document/browser/versions_tab.py
 msgid "label_comment"
 msgstr ""
 
 #. Default: "creator"
-#: ./opengever/document/browser/overview.py:147
+#: ./opengever/document/browser/overview.py
 msgid "label_creator"
 msgstr ""
 
 #. Default: "Date"
-#: ./opengever/document/browser/versions_tab.py:285
+#: ./opengever/document/browser/versions_tab.py
 msgid "label_date"
 msgstr ""
 
 #. Default: "Date of delivery"
-#: ./opengever/document/behaviors/metadata.py:108
+#: ./opengever/document/behaviors/metadata.py
 msgid "label_delivery_date"
 msgstr ""
 
 #. Default: "Description"
-#: ./opengever/document/behaviors/metadata.py:66
+#: ./opengever/document/behaviors/metadata.py
 msgid "label_description"
 msgstr ""
 
 #. Default: "Digital Available"
-#: ./opengever/document/behaviors/metadata.py:132
+#: ./opengever/document/behaviors/metadata.py
 msgid "label_digitally_available"
 msgstr ""
 
-#: ./opengever/document/browser/report.py:44
+#: ./opengever/document/browser/report.py
 msgid "label_document_checked_out_by"
 msgstr ""
 
 #. Default: "Document Date"
-#: ./opengever/document/behaviors/metadata.py:91
-#: ./opengever/document/browser/report.py:35
+#: ./opengever/document/behaviors/metadata.py
+#: ./opengever/document/browser/report.py
 msgid "label_document_date"
 msgstr ""
 
-#: ./opengever/document/browser/report.py:41
+#: ./opengever/document/browser/report.py
 msgid "label_document_delivery_date"
 msgstr ""
 
-#: ./opengever/document/browser/report.py:38
+#: ./opengever/document/browser/report.py
 msgid "label_document_receipt_date"
 msgstr ""
 
-#: ./opengever/document/browser/report.py:26
+#: ./opengever/document/browser/report.py
 msgid "label_document_reference_number"
 msgstr ""
 
-#: ./opengever/document/browser/report.py:28
+#: ./opengever/document/browser/report.py
 msgid "label_document_sequence_number"
 msgstr ""
 
 #. Default: "Document Type"
-#: ./opengever/document/behaviors/metadata.py:114
+#: ./opengever/document/behaviors/metadata.py
 msgid "label_document_type"
 msgstr ""
 
-#: ./opengever/document/browser/report.py:51
+#: ./opengever/document/browser/report.py
 msgid "label_dossier_title"
 msgstr ""
 
-#: ./opengever/document/browser/templates/downloadconfirmation.pt:25
+#: ./opengever/document/browser/templates/downloadconfirmation.pt
 msgid "label_download"
 msgstr ""
 
 #. Default: "Download copy"
-#: ./opengever/document/browser/download.py:140
-#: ./opengever/document/browser/templates/downloadconfirmation.pt:4
-#: ./opengever/document/browser/templates/macros.pt:76
+#: ./opengever/document/browser/download.py
+#: ./opengever/document/browser/templates/downloadconfirmation.pt
+#: ./opengever/document/browser/templates/macros.pt
 msgid "label_download_copy"
 msgstr ""
 
 #. Default: "File"
-#: ./opengever/document/browser/overview.py:153
-#: ./opengever/document/document.py:67
+#: ./opengever/document/browser/overview.py
+#: ./opengever/document/document.py
 msgid "label_file"
 msgstr ""
 
 #. Default: "Foreign Reference"
-#: ./opengever/document/behaviors/metadata.py:83
+#: ./opengever/document/behaviors/metadata.py
 msgid "label_foreign_reference"
 msgstr ""
 
 #. Default: "Initial version (document copied)"
-#: ./opengever/document/subscribers.py:28
+#: ./opengever/document/subscribers.py
 msgid "label_initial_version_copied"
 msgstr ""
 
 #. Default: "Keywords"
-#: ./opengever/document/behaviors/metadata.py:72
+#: ./opengever/document/behaviors/metadata.py
 msgid "label_keywords"
 msgstr ""
 
 #. Default: "no"
-#: ./opengever/document/browser/overview.py:83
+#: ./opengever/document/browser/overview.py
 msgid "label_no"
 msgstr ""
 
-#: ./opengever/document/browser/templates/downloadconfirmation.pt:40
+#: ./opengever/document/browser/templates/downloadconfirmation.pt
 msgid "label_ok"
 msgstr ""
 
 #. Default: "Open detail view"
-#: ./opengever/document/browser/templates/macros.pt:129
+#: ./opengever/document/browser/templates/macros.pt
 msgid "label_open_detail_view"
 msgstr ""
 
 #. Default: "Open as PDF"
-#: ./opengever/document/browser/templates/macros.pt:114
+#: ./opengever/document/browser/templates/macros.pt
 msgid "label_open_document_as_pdf"
 msgstr ""
 
 #. Default: "Open document preview"
-#: ./opengever/document/widgets/tooltip.pt:15
+#: ./opengever/document/widgets/tooltip.pt
 msgid "label_open_document_preview"
 msgstr ""
 
 #. Default: "PDF Preview"
-#: ./opengever/document/browser/templates/macros.pt:103
+#: ./opengever/document/browser/templates/macros.pt
 msgid "label_pdf_preview"
 msgstr ""
 
 #. Default: "Preserved as paper"
-#: ./opengever/document/behaviors/metadata.py:138
+#: ./opengever/document/behaviors/metadata.py
 msgid "label_preserved_as_paper"
 msgstr ""
 
 #. Default: "Preview"
-#: ./opengever/document/behaviors/metadata.py:166
-#: ./opengever/document/browser/versions_tab.py:307
+#: ./opengever/document/behaviors/metadata.py
+#: ./opengever/document/browser/versions_tab.py
 msgid "label_preview"
 msgstr ""
 
-#: ./opengever/document/browser/report.py:47
+#: ./opengever/document/browser/report.py
 msgid "label_public_trial"
 msgstr ""
 
 #. Default: "Date of receipt"
-#: ./opengever/document/behaviors/metadata.py:100
+#: ./opengever/document/behaviors/metadata.py
 msgid "label_receipt_date"
 msgstr ""
 
 #. Default: "Reference Number"
-#: ./opengever/document/viewlets/byline.py:35
+#: ./opengever/document/viewlets/byline.py
 msgid "label_reference_number"
 msgstr ""
 
 #. Default: "Related Documents"
-#: ./opengever/document/behaviors/related_docs.py:17
+#: ./opengever/document/behaviors/related_docs.py
+#: ./opengever/document/browser/overview.py
 msgid "label_related_documents"
 msgstr ""
 
 #. Default: "Revert"
-#: ./opengever/document/browser/versions_tab.py:158
+#: ./opengever/document/browser/versions_tab.py
 msgid "label_revert"
 msgstr ""
 
 #. Default: "Sequence Number"
-#: ./opengever/document/viewlets/byline.py:29
+#: ./opengever/document/viewlets/byline.py
 msgid "label_sequence_number"
 msgstr ""
 
 #. Default: "from"
-#: ./opengever/document/viewlets/byline.py:23
+#: ./opengever/document/viewlets/byline.py
 msgid "label_start_byline"
 msgstr ""
 
 #. Default: "Thumbnail"
-#: ./opengever/document/behaviors/metadata.py:160
+#: ./opengever/document/behaviors/metadata.py
 msgid "label_thumbnail"
 msgstr ""
 
 #. Default: "Title"
-#: ./opengever/document/browser/report.py:30
-#: ./opengever/document/document.py:61
+#: ./opengever/document/browser/report.py
+#: ./opengever/document/document.py
 msgid "label_title"
 msgstr ""
 
 #. Default: "Version"
-#: ./opengever/document/browser/versions_tab.py:277
+#: ./opengever/document/browser/versions_tab.py
 msgid "label_version"
 msgstr ""
 
 #. Default: "yes"
-#: ./opengever/document/browser/overview.py:82
+#: ./opengever/document/browser/overview.py
 msgid "label_yes"
 msgstr ""
 
 #. Default: "This item is being checked out by ${creator}."
-#: ./opengever/document/checkout/viewlets_templates/checkedoutviewlet.pt:9
+#: ./opengever/document/checkout/viewlets_templates/checkedoutviewlet.pt
 msgid "message_checkout_info"
 msgstr ""
 
 #. Default: "Could not cancel checkout on document ${title}, mails does not support the checkin checkout process."
-#: ./opengever/document/checkout/cancel.py:67
+#: ./opengever/document/checkout/cancel.py
 msgid "msg_cancel_checkout_on_mail_not_possible"
 msgstr ""
 
 #. Default: "No file"
-#: ./opengever/document/browser/templates/archiv_file.pt:18
-#: ./opengever/document/browser/templates/macros.pt:138
+#: ./opengever/document/browser/templates/archiv_file.pt
+#: ./opengever/document/browser/templates/macros.pt
 msgid "no_file"
 msgstr ""
 
 #. Default: "Following documents are checked out:"
-#: ./opengever/document/browser/templates/logout_overlay.pt:8
+#: ./opengever/document/browser/templates/logout_overlay.pt
 msgid "overview_not_checked_in_documents"
 msgstr ""
 
 #. Default: "Please note that in this case changes on the document wouldn't be saved in to GEVER."
-#: ./opengever/document/browser/templates/downloadconfirmation.pt:17
+#: ./opengever/document/browser/templates/downloadconfirmation.pt
 msgid "warning_download_confirmation"
 msgstr ""
 

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-06-07 12:34+0000\n"
+"POT-Creation-Date: 2017-10-02 12:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,16 +17,16 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.private\n"
 
-#: ./opengever/private/viewlets/quotawarning.py:31
+#: ./opengever/private/viewlets/quotawarning.py
 msgid "The quota of your private folder has exceeded, you can not add any new files or mails."
 msgstr ""
 
-#: ./opengever/private/viewlets/quotawarning.py:37
+#: ./opengever/private/viewlets/quotawarning.py
 msgid "The quota of your private folder will exceed soon."
 msgstr ""
 
 #. Default: "Dossiers"
-#: ./opengever/private/browser/tabbed.py:15
+#: ./opengever/private/browser/tabbed.py
 msgid "label_dossiers"
 msgstr ""
 

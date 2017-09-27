@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-04-27 11:21+0000\n"
+"POT-Creation-Date: 2017-10-02 12:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,15 +17,15 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.officeatwork\n"
 
-#: ./opengever/officeatwork/browser/documentfromofficeatwork.py:29
+#: ./opengever/officeatwork/browser/documentfromofficeatwork.py
 msgid "Add document from officeatwork"
 msgstr ""
 
-#: ./opengever/officeatwork/browser/documentfromofficeatwork.py:41
+#: ./opengever/officeatwork/browser/documentfromofficeatwork.py
 msgid "Create with officeatwork"
 msgstr ""
 
-#: ./opengever/officeatwork/browser/documentfromofficeatwork.py:54
+#: ./opengever/officeatwork/browser/documentfromofficeatwork.py
 msgid "Creation with officeatwork initiated successfully"
 msgstr ""
 

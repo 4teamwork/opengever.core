@@ -1,49 +1,47 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-04-27 11:21+0000\n"
+"POT-Creation-Date: 2017-10-02 12:52+0000\n"
 "PO-Revision-Date: 2017-06-04 16:13+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
-"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
-"gever/opengever-quota/fr/>\n"
-"Language: fr\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-quota/fr/>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2.13.1\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
+"Language: fr\n"
+"X-Generator: Weblate 2.13.1\n"
 
-#: ./opengever/quota/browser/templates/usage.pt:35
+#: ./opengever/quota/browser/templates/usage.pt
 msgid "Back"
 msgstr "Retour"
 
-#: ./opengever/quota/sizequota.py:87
+#: ./opengever/quota/sizequota.py
 msgid "Can not add this item because it exhausts the quota."
-msgstr ""
-"Ce contenu ne peut pas être ajouté, parce que cela mènerait à un dépassement "
-"de l'espace de mémoire à votre disposition."
+msgstr "Ce contenu ne peut pas être ajouté, parce que cela mènerait à un dépassement de l'espace de mémoire à votre disposition."
 
-#: ./opengever/quota/browser/templates/usage.pt:27
+#: ./opengever/quota/browser/templates/usage.pt
 msgid "Hard limit"
 msgstr "limite stricte"
 
-#: ./opengever/quota/browser/templates/usage.pt:23
+#: ./opengever/quota/browser/templates/usage.pt
 msgid "Soft limit"
 msgstr "limite non stricte"
 
-#: ./opengever/quota/browser/templates/usage.pt:19
+#: ./opengever/quota/browser/templates/usage.pt
 msgid "Usage"
 msgstr "Usage"
 
-#: ./opengever/quota/browser/usage.py:18
+#: ./opengever/quota/browser/usage.py
 msgid "unlimited"
 msgstr "illimité"
 
 #. Default: "Usage of «${title}»"
-#: ./opengever/quota/browser/templates/usage.pt:12
+#: ./opengever/quota/browser/templates/usage.pt
 msgid "usage_title"
 msgstr "Usage en «${title}»"
+

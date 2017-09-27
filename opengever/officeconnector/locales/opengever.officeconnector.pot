@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-05-01 15:07+0000\n"
+"POT-Creation-Date: 2017-10-02 12:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Domain: opengever.officeconnector\n"
 
 #. Default: "Unfortunately it's not currently possible to attach this many documents. Please try again with fewer documents selected."
-#: ./opengever/officeconnector/service.py:31
+#: ./opengever/officeconnector/service.py
 msgid "error_oc_url_too_long"
 msgstr ""
 
