@@ -711,7 +711,7 @@ msgstr "Inaktiv"
 #: ./opengever/meeting/committee.py:94
 #: ./opengever/meeting/committeecontainer.py:44
 msgid "label_ad_hoc_template"
-msgstr "Ad Hoc Vorlage"
+msgstr "Vorlage"
 
 #. Default: "Agenda item number"
 #: ./opengever/meeting/browser/meetings/meeting.py:374
@@ -1295,7 +1295,7 @@ msgstr "Die Änderungen konnten nicht gespeichert werden, das Protokoll wurde in
 #. Default: "No ad-hoc agenda-item template has been configured."
 #: ./opengever/meeting/browser/meetings/agendaitem.py:422
 msgid "missing_ad_hoc_template"
-msgstr "Es konnte keine Vorlage für ein Ad Hoc Traktandum gefunden werden."
+msgstr "Es konnte keine Vorlage für ein Traktandum gefunden werden."
 
 #. Default: "When returning an excerpt to the proposer the selected document will be sent back to the proposals originating dossier. No other excerpts can be returned."
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:102
@@ -1570,7 +1570,7 @@ msgstr "Zeit"
 #. Default: "Ad hoc agenda item ${title}"
 #: ./opengever/meeting/model/meeting.py:377
 msgid "title_ad_hoc_document"
-msgstr "Ad Hoc Traktandum ${title}"
+msgstr "Traktandum ${title}"
 
 #. Default: "Remove from schedule"
 #: ./opengever/meeting/model/proposal.py:157
@@ -1645,7 +1645,7 @@ msgstr "Protokoll:"
 #. Default: "Schedule ad hoc agenda item:"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:310
 msgid "view_label_schedule_ad_hoc"
-msgstr "Ad Hoc Traktandum einfügen:"
+msgstr "Traktandum einfügen:"
 
 #. Default: "Schedule proposal:"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:295

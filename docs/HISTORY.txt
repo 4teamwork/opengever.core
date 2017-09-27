@@ -5,6 +5,7 @@ Changelog
 2017.5.2 (unreleased)
 ---------------------
 
+- SPV word: Remove "Ad-hoc" from the GUI. [tarnap]
 - Fix private folder creation for userids containing dashes. [phgross]
 - SPV word: Represent paragraphs in the generated protocol. [jone]
 - OGDS update: Truncate purely descriptive user fields. [lgraf]
