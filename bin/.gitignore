@@ -9,6 +9,7 @@
 !git-changed-sh
 !git-changed-xml
 !git-fork-point
+!i18n-build
 !mtest
 !pinchecker
 !qa

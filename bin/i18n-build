@@ -9,7 +9,7 @@
 # This script builds translation files for opengever.core.
 #
 # It does so by finding all the 'locales' directories, rebuilds
-# pkg.name.pot, merging pkg.name-manual.pot files if necessary, and 
+# pkg.name.pot, merging pkg.name-manual.pot files if necessary, and
 # then syncs translations to the .respective po files for all languages
 # defined in $LANGUAGES.
 
