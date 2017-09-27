@@ -45,6 +45,20 @@ class TestPrivateFolder(FunctionalTestCase):
              'Contributor', 'Reviewer'],
             api.user.get_roles(username=TEST_USER_ID, obj=self.folder))
 
+    def test_handles_dashes_in_userids(self):
+        create(Builder('user').with_userid('peter-mustermann'))
+        create(Builder('ogds_user')
+               .having(userid='peter-mustermann',
+                       firstname='Peter',
+                       lastname='Mustermann'))
+
+        mtool = api.portal.get_tool('portal_membership')
+        mtool.createMemberArea(member_id='peter-mustermann')
+
+        folder = mtool.getHomeFolder(id='peter-mustermann')
+        self.assertEquals(
+            'Mustermann Peter (peter-mustermann)', folder.Title())
+
 
 class TestPrivateFolderTabbedView(FunctionalTestCase):
 
