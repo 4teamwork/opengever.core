@@ -136,6 +136,8 @@ class OGCombinedActionsWorkflowMenu(CombinedActionsWorkflowMenu):
                 'extra': {
                     # JS event handlers register with an ID selector.
                     'id': transition.name,
+                    'separator': None,
+                    'class': '',
                 },
                 'submenu': None,
             })
