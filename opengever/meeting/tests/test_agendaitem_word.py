@@ -4,11 +4,25 @@ from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.protect.utils import addTokenToUrl
 from plone.uuid.interfaces import IUUID
+from opengever.trash.trash import ITrashed
 
 
 class TestWordAgendaItem(IntegrationTestCase):
 
     features = ('meeting', 'word-meeting')
+
+    @browsing
+    def test_delete_agenda_item_does_not_trash_proposal(self, browser):
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_proposal(self.meeting,
+                                             self.submitted_word_proposal)
+        document = agenda_item.resolve_document()
+
+        browser.open(
+            self.meeting,
+            view='agenda_items/{}/delete'.format(agenda_item.agenda_item_id))
+
+        self.assertFalse(ITrashed.providedBy(document))
 
     def test_deciding_meeting_item_does_not_create_an_excerpt(self):
         """When the word meeting feature is enabled, deciding a meeting item
