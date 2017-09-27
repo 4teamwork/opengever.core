@@ -432,17 +432,25 @@
 
     this.addParagraph = function() {
       var input = $("#schedule-paragraph");
-      return $.post($(".schedule-paragraph").data().url, { title: input.val() }).done(function() {
+      var button = $(".schedule-paragraph");
+      button.addClass("loading");
+      return $.post(button.data().url, { title: input.val() }).done(function() {
         input.val("");
         self.updateConnected();
+      }).always(function() {
+        button.removeClass("loading");
       });
     };
 
     this.addText = function() {
       var input = $("#schedule-text");
-      return $.post($(".schedule-text").first().data().url, { title: input.val() }).done(function() {
+      var button = $(".schedule-text");
+      button.addClass("loading");
+      return $.post(button.first().data().url, { title: input.val() }).done(function() {
         input.val("");
         self.updateConnected();
+      }).always(function() {
+        button.removeClass("loading");
       });
     };
 
