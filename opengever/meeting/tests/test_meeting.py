@@ -151,6 +151,18 @@ class TestMeeting(FunctionalTestCase):
             info_messages())
         self.assertIsNone(browser.find(close_meeting_button_name))
 
+    def test_reopen_transition_not_available(self):
+        """Meetings can only be reopened when the word-feature is enabled.
+        """
+        meeting = create(Builder('meeting')
+                         .having(committee=self.committee_model,
+                                 workflow_state='closed'))
+        self.assertEquals(
+            [],
+            [transition.name for transition
+             in meeting.workflow.get_transitions(meeting.get_state())
+             if meeting.workflow.can_execute_transition(meeting, transition.name)])
+
 
 class TestCommitteeMemberVocabulary(FunctionalTestCase):
 

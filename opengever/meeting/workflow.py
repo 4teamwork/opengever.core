@@ -33,21 +33,29 @@ class State(object):
 
 class Transition(object):
 
-    def __init__(self, state_from, state_to, title=None, visible=True):
+    def __init__(self, state_from, state_to, title=None, visible=True,
+                 condition=None):
         self.state_from = state_from
         self.state_to = state_to
         self.title = title or self.name
-        self.visible = visible
+        self._visible = visible
+        self.condition = condition or (lambda: True)
 
     @property
     def name(self):
         return '-'.join((self.state_from, self.state_to))
+
+    @property
+    def visible(self):
+        return self._visible and self.condition()
 
     def execute(self, obj, model):
         assert self.can_execute(model)
         model.workflow_state = self.state_to
 
     def can_execute(self, model):
+        if not self.condition():
+            return False
         return model.workflow_state == self.state_from
 
     def __repr__(self):
