@@ -1,6 +1,7 @@
 from collective.elephantvocabulary import wrap_vocabulary
 from five import grok
 from opengever.ogds.base.actor import ActorLookup
+from opengever.ogds.models.team import Team
 from opengever.task import _
 from opengever.task.activities import TaskTransitionActivity
 from persistent.list import PersistentList
@@ -69,9 +70,9 @@ def getTaskTypeVocabulary(context):
         reg_key = 'opengever.task.interfaces.ITaskSettings.%s' % (
             category)
 
+        key = 'opengever.task.%s' % (category)
         for term in wrap_vocabulary(
-            'opengever.task.%s' % (category),
-            visible_terms_from_registry=reg_key)(context):
+                key, visible_terms_from_registry=reg_key)(context):
 
             terms.append(term)
 
@@ -218,6 +219,11 @@ def update_reponsible_field_data(data):
     if ActorLookup(data['responsible']).is_inbox():
         client = data['responsible'].split(':', 1)[1]
         data['responsible_client'] = client
+        data['responsible'] = data['responsible']
+
+    elif ActorLookup(data['responsible']).is_team():
+        team = Team.query.get_by_actor_id(data['responsible'])
+        data['responsible_client'] = team.org_unit.unit_id
         data['responsible'] = data['responsible']
 
     else:

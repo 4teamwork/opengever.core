@@ -2,7 +2,7 @@ from five import grok
 from ftw.keywordwidget.widget import KeywordWidget
 from opengever.inbox import _
 from opengever.inbox.forwarding import IForwarding
-from opengever.ogds.base.sources import AllUsersAndInboxesSourceBinder
+from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSourceBinder
 from opengever.task import _ as task_mf
 from opengever.task.browser.assign import AssignTaskForm
 from opengever.task.browser.assign import IAssignSchema
@@ -20,7 +20,7 @@ class IForwardingAssignSchema(IAssignSchema):
     responsible = schema.Choice(
         title=task_mf(u"label_responsible", default=u"Responsible"),
         description=task_mf(u"help_responsible", default=""),
-        source=AllUsersAndInboxesSourceBinder(),
+        source=AllUsersInboxesAndTeamsSourceBinder(),
         required=True,
         )
 

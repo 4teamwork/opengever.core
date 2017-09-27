@@ -1,0 +1,49 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="opengever.ogds.base">
+
+  <body>
+    <metal:main fill-slot="main">
+      <tal:main-macro metal:define-macro="main"
+                      tal:define="team view/get_team">
+
+        <div tal:replace="structure provider:plone.abovecontenttitle" />
+        <h1 class="documentFirstHeading" tal:content="team/title"/>
+        <div tal:replace="structure provider:plone.belowcontenttitle" />
+
+        <div tal:replace="structure provider:plone.abovecontentbody" />
+
+        <table class="vertical listing">
+          <tr>
+            <th i18n:translate="label_assigned_orgunit">Assigned org unit</th>
+            <td tal:content="team/org_unit/title" />
+          </tr>
+
+          <tr>
+            <th i18n:translate="label_group">Group</th>
+            <td class="group" tal:content="team/group/title" />
+          </tr>
+
+          <tr>
+            <th i18n:translate="label_members">Members</th>
+            <td>
+              <ul class="members">
+                <li tal:repeat="member view/get_team_members ">
+                  <a tal:replace="structure member/get_link" />
+                </li>
+              </ul>
+            </td>
+          </tr>
+
+        </table>
+
+        <div tal:replace="structure provider:plone.belowcontentbody" />
+      </tal:main-macro>
+    </metal:main>
+
+  </body>
+</html>

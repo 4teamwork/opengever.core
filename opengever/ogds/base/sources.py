@@ -8,6 +8,7 @@ from opengever.ogds.models.group import Group
 from opengever.ogds.models.group import groups_users
 from opengever.ogds.models.org_unit import OrgUnit
 from opengever.ogds.models.query import extend_query_with_textfilter
+from opengever.ogds.models.team import Team
 from opengever.ogds.models.user import User
 from plone import api
 from sqlalchemy import func
@@ -22,7 +23,7 @@ from zope.schema.vocabulary import SimpleTerm
 
 
 @implementer(IQuerySource)
-class AllUsersAndInboxesSource(object):
+class AllUsersInboxesAndTeamsSource(object):
     """This example of a IQuerySource is taken from the
     plone.formwidget.autocomplete
     """
@@ -34,6 +35,7 @@ class AllUsersAndInboxesSource(object):
 
         self.only_current_orgunit = kwargs.get('only_current_orgunit', False)
         self.only_current_inbox = kwargs.get('only_current_inbox', False)
+        self.include_teams = kwargs.get('include_teams', False)
 
     @property
     def only_users(self):
@@ -53,7 +55,7 @@ class AllUsersAndInboxesSource(object):
         query = create_session().query(*models) \
                                 .join(OrgUnit.users_group) \
                                 .join(Group.users)
-        query = query.filter(OrgUnit.enabled == True)
+        query = query.filter(OrgUnit.enabled == True)  # noqa
 
         if self.only_current_orgunit:
             query = query.filter(OrgUnit.unit_id == self.client_id)
@@ -105,6 +107,13 @@ class AllUsersAndInboxesSource(object):
 
             return SimpleTerm(value, token, title)
 
+        if ActorLookup(value).is_team():
+            if not self.include_teams:
+                raise LookupError
+
+            team = Team.query.get_by_actor_id(value)
+            return SimpleTerm(team.actor_id(), team.actor_id(), team.label())
+
         user, orgunit = self.base_query.filter(OrgUnit.unit_id == orgunit_id) \
                                        .filter(User.userid == userid).one()
 
@@ -148,11 +157,14 @@ class AllUsersAndInboxesSource(object):
         query = query.order_by(asc(func.lower(User.lastname)),
                                asc(func.lower(User.firstname)))
 
-        for user, orgunit in query.all():
+        for user, orgunit in query:
             self.terms.append(
                 self.getTerm(u'{}:{}'.format(orgunit.id(), user.userid)))
 
         self._extend_terms_with_inboxes(text_filters)
+        if self.include_teams:
+            self._extend_terms_with_teams(text_filters)
+
         return self.terms
 
     def _extend_terms_with_inboxes(self, text_filters):
@@ -165,7 +177,7 @@ class AllUsersAndInboxesSource(object):
                               text_filters)
 
         query = OrgUnit.query
-        query = query.filter(OrgUnit.enabled == True)
+        query = query.filter(OrgUnit.enabled == True)  # noqa
 
         if self.only_current_inbox:
             query = query.filter(OrgUnit.unit_id == self.client_id)
@@ -175,8 +187,15 @@ class AllUsersAndInboxesSource(object):
             [OrgUnit.title, OrgUnit.unit_id],
             text_filters)
 
-        for orgunit in query.all():
+        for orgunit in query:
             self.terms.insert(0, self.getTerm(orgunit.inbox().id()))
+
+    def _extend_terms_with_teams(self, text_filters):
+        query = Team.query.filter(Team.active == True)  # noqa
+        query = extend_query_with_textfilter(query, [Team.title], text_filters)
+
+        for team in query:
+            self.terms.insert(0, self.getTerm(team.actor_id()))
 
     def get_client_id(self):
         """Tries to get the client from the request. If no client is found None
@@ -199,24 +218,27 @@ class AllUsersAndInboxesSource(object):
 
 
 @implementer(IContextSourceBinder)
-class AllUsersAndInboxesSourceBinder(object):
+class AllUsersInboxesAndTeamsSourceBinder(object):
 
     def __init__(self,
                  only_current_orgunit=False,
-                 only_current_inbox=False):
+                 only_current_inbox=False,
+                 include_teams=False):
 
         self.only_current_orgunit = only_current_orgunit
         self.only_current_inbox = only_current_inbox
+        self.include_teams = include_teams
 
     def __call__(self, context):
-        return AllUsersAndInboxesSource(
+        return AllUsersInboxesAndTeamsSource(
             context,
             only_current_orgunit=self.only_current_orgunit,
-            only_current_inbox=self.only_current_inbox)
+            only_current_inbox=self.only_current_inbox,
+            include_teams=self.include_teams)
 
 
 @implementer(IQuerySource)
-class UsersContactsInboxesSource(AllUsersAndInboxesSource):
+class UsersContactsInboxesSource(AllUsersInboxesAndTeamsSource):
 
     @property
     def only_users(self):
@@ -282,7 +304,7 @@ class UsersContactsInboxesSource(AllUsersAndInboxesSource):
         query = query.order_by(asc(func.lower(User.lastname)),
                                asc(func.lower(User.firstname)))
 
-        for user in query.all():
+        for user in query:
             self.terms.append(
                 self.getTerm(u'{}'.format(user.userid)))
 
@@ -311,7 +333,7 @@ class UsersContactsInboxesSourceBinder(object):
 
 
 @implementer(IQuerySource)
-class AllUsersSource(AllUsersAndInboxesSource):
+class AllUsersSource(AllUsersInboxesAndTeamsSource):
     """Vocabulary of all users assigned to the current admin unit.
     """
 
@@ -357,7 +379,7 @@ class AllUsersSource(AllUsersAndInboxesSource):
         query = query.order_by(asc(func.lower(User.lastname)),
                                asc(func.lower(User.firstname)))
 
-        for user in query.all():
+        for user in query:
             self.terms.append(
                 self.getTerm(u'{}'.format(user.userid)))
         return self.terms
@@ -386,7 +408,7 @@ class AssignedUsersSource(AllUsersSource):
             .filter(User.userid == groups_users.columns.userid) \
             .filter(groups_users.columns.groupid == OrgUnit.users_group_id) \
             .filter(OrgUnit.admin_unit_id == admin_unit.unit_id) \
-            .filter(OrgUnit.enabled == True)
+            .filter(OrgUnit.enabled == True)  # noqa
 
 
 @implementer(IContextSourceBinder)
@@ -464,7 +486,7 @@ class AllEmailContactsAndUsersSource(UsersContactsInboxesSource):
         query = query.order_by(asc(func.lower(User.lastname)),
                                asc(func.lower(User.firstname)))
 
-        for user in query.all():
+        for user in query:
             if user.email:
                 self.terms.append(
                     self.getTerm(u'{}:{}'.format(user.email, user.userid)))

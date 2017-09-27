@@ -1,6 +1,6 @@
 from five import grok
 from ftw.keywordwidget.widget import KeywordWidget
-from opengever.ogds.base.sources import AllUsersAndInboxesSourceBinder
+from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSourceBinder
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task import _
 from opengever.task.activities import TaskReassignActivity
@@ -37,7 +37,7 @@ class IAssignSchema(form.Schema):
     responsible = schema.Choice(
         title=_(u"label_responsible", default=u"Responsible"),
         description=_(u"help_responsible_single_client_setup", default=""),
-        source=AllUsersAndInboxesSourceBinder(
+        source=AllUsersInboxesAndTeamsSourceBinder(
             only_current_inbox=True,
             only_current_orgunit=True),
         required=True,

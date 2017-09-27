@@ -11,7 +11,8 @@
       <tal:main-macro metal:define-macro="main"
                       tal:define="data view/get_userdata;
                                   user data/user;
-                                  groups data/groups">
+                                  groups data/groups;
+                                  teams data/teams">
 
         <div tal:replace="structure provider:plone.abovecontenttitle" />
         <h1 class="documentFirstHeading" tal:content="user/label"/>
@@ -25,28 +26,28 @@
 
         <table class="vertical listing">
           <tr>
-            <th i18n:translate="label_fullname">Name:</th>
+            <th i18n:translate="label_fullname">Name</th>
             <td tal:content="user/label"></td>
           </tr>
 
           <tr>
-            <th i18n:translate="label_active">Active:</th>
+            <th i18n:translate="label_active">Active</th>
             <td i18n:translate="active_yes" tal:condition="user/active">Yes</td>
             <td i18n:translate="active_no" tal:condition="not:user/active">No</td>
           </tr>
 
           <tr tal:condition="user/salutation">
-            <th i18n:translate="label_salutation">Salutation:</th>
+            <th i18n:translate="label_salutation">Salutation</th>
             <td tal:content="user/salutation"></td>
           </tr>
 
           <tr tal:condition="user/description">
-            <th i18n:translate="label_description">Description:</th>
+            <th i18n:translate="label_description">Description</th>
             <td tal:content="user/description"></td>
           </tr>
 
           <tr tal:condition="user/directorate">
-            <th i18n:translate="label_directorate">Directorate:</th>
+            <th i18n:translate="label_directorate">Directorate</th>
             <td>
               <tal:title tal:replace="user/directorate" />
               <span class="discreet">
@@ -56,7 +57,7 @@
           </tr>
 
           <tr tal:condition="user/department">
-            <th i18n:translate="label_department">Department:</th>
+            <th i18n:translate="label_department">Department</th>
             <td>
               <tal:title tal:replace="user/department" />
               <span class="discreet">
@@ -66,41 +67,41 @@
           </tr>
 
           <tr tal:condition="user/email">
-            <th i18n:translate="label_email">Email:</th>
+            <th i18n:translate="label_email">Email</th>
             <td><a tal:content="user/email"
                    tal:attributes="href string:mailto:${user/email}" /></td>
           </tr>
 
           <tr tal:condition="user/email2">
-            <th i18n:translate="label_email2">Email 2:</th>
+            <th i18n:translate="label_email2">Email 2</th>
             <td><a tal:content="user/email2"
                    tal:attributes="href string:mailto:${user/email2}" /></td>
           </tr>
 
           <tr tal:condition="user/url">
-            <th i18n:translate="label_url">URL:</th>
+            <th i18n:translate="label_url">URL</th>
             <td><a tal:content="user/url"
                    tal:attributes="href user/url"
                    target="_blank" /></td>
           </tr>
 
           <tr tal:condition="user/phone_office">
-            <th i18n:translate="label_phone_office">Office phone:</th>
+            <th i18n:translate="label_phone_office">Office phone</th>
             <td tal:content="user/phone_office"></td>
           </tr>
 
           <tr tal:condition="user/phone_fax">
-            <th i18n:translate="label_phone_fax">Fax:</th>
+            <th i18n:translate="label_phone_fax">Fax</th>
             <td tal:content="user/phone_fax"></td>
           </tr>
 
           <tr tal:condition="user/phone_mobile">
-            <th i18n:translate="label_phone_mobile">Mobile phone:</th>
+            <th i18n:translate="label_phone_mobile">Mobile phone</th>
             <td tal:content="user/phone_mobile"></td>
           </tr>
 
           <tr tal:condition="python:user.address1 or user.address2 or user.zip_code or user.city or user.country">
-            <th i18n:translate="label_address">Address:</th>
+            <th i18n:translate="label_address">Address</th>
             <td>
               <div tal:content="user/address1" tal:condition="user/address1" />
               <div tal:content="user/address2" tal:condition="user/address2" />
@@ -113,7 +114,7 @@
           </tr>
 
           <tr tal:condition="python:len(groups) > 0">
-              <th i18n:translate="label_groups">Groups:</th>
+              <th i18n:translate="label_groups">Groups</th>
               <td>
                   <ul class="groups">
                       <li tal:repeat="group groups">
@@ -122,6 +123,20 @@
                   </ul>
               </td>
           </tr>
+
+          <tr tal:condition="python:len(teams) > 0">
+              <th i18n:translate="label_teams">Teams</th>
+              <td>
+                  <ul class="teams">
+                      <li tal:repeat="team teams">
+                        <a class="team"
+                           tal:attributes="href string:${portal_url}/@@team-details/${team/team_id}"
+                           tal:content="team/title"></a>
+                      </li>
+                  </ul>
+              </td>
+          </tr>
+
         </table>
 
         <div tal:replace="structure provider:plone.belowcontentbody" />

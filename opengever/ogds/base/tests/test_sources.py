@@ -1,7 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.ogds.base.sources import AllEmailContactsAndUsersSource
-from opengever.ogds.base.sources import AllUsersAndInboxesSource
+from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSource
 from opengever.ogds.base.sources import AllUsersSource
 from opengever.ogds.base.sources import AssignedUsersSource
 from opengever.ogds.base.sources import ContactsSource
@@ -11,12 +11,12 @@ from plone.app.testing import TEST_USER_ID
 from zope.schema.vocabulary import SimpleTerm
 
 
-class TestAllUsersAndInboxesSource(FunctionalTestCase):
+class TestAllUsersInboxesAndTeamsSource(FunctionalTestCase):
 
     use_default_fixture = False
 
     def setUp(self):
-        super(TestAllUsersAndInboxesSource, self).setUp()
+        super(TestAllUsersInboxesAndTeamsSource, self).setUp()
 
         self.admin_unit = create(Builder('admin_unit'))
         self.org_unit1 = create(Builder('org_unit')
@@ -61,7 +61,7 @@ class TestAllUsersAndInboxesSource(FunctionalTestCase):
                             .having(firstname=u'Simon', lastname=u'Says')
                             .assign_to_org_units([self.disabled_unit]))
 
-        self.source = AllUsersAndInboxesSource(self.portal)
+        self.source = AllUsersInboxesAndTeamsSource(self.portal)
 
     def test_get_term_by_token(self):
         term = self.source.getTermByToken(u'unit1:hans')
@@ -164,7 +164,7 @@ class TestAllUsersAndInboxesSource(FunctionalTestCase):
 
     def test_getTerm_can_handle_values_containing_only_a_userid(self):
         self.portal.REQUEST.set('form.widgets.responsible_client', 'unit2')
-        source = AllUsersAndInboxesSource(self.portal)
+        source = AllUsersInboxesAndTeamsSource(self.portal)
         self.assertEquals(source.getTerm('hans').token,
                           source.getTerm('unit2:hans').token)
 
@@ -221,7 +221,7 @@ class TestAllUsersAndInboxesSource(FunctionalTestCase):
 
     def test_only_users_of_the_current_orgunit_and_inboxes_are_valid(self):
         self.portal.REQUEST.set('form.widgets.responsible_client', 'unit1')
-        source = self.source = AllUsersAndInboxesSource(
+        source = self.source = AllUsersInboxesAndTeamsSource(
             self.portal,
             only_current_orgunit=True)
 
@@ -237,7 +237,7 @@ class TestAllUsersAndInboxesSource(FunctionalTestCase):
 
     def test_only_the_current_inbox_is_valid(self):
         self.portal.REQUEST.set('form.widgets.responsible_client', 'unit1')
-        source = self.source = AllUsersAndInboxesSource(
+        source = self.source = AllUsersInboxesAndTeamsSource(
             self.portal,
             only_current_inbox=True)
 
@@ -246,6 +246,40 @@ class TestAllUsersAndInboxesSource(FunctionalTestCase):
 
         self.assertTermKeys([u'inbox:unit1'],
                             source.search('Inb'))
+
+    def test_teams_are_only_in_source_when_flag_is_true(self):
+        create(Builder('ogds_team')
+               .having(title=u'Projekt \xdcberbaung Dorfmatte',
+                       group=self.org_unit1.users_group,
+                       org_unit=self.org_unit1))
+        create(Builder('ogds_team')
+               .having(title=u'Projekt IT-Restrukturierung',
+                       group=self.org_unit1.users_group,
+                       org_unit=self.org_unit1))
+        create(Builder('ogds_team')
+               .having(title=u'Abteilung Kommunikation',
+                       group=self.org_unit1.users_group,
+                       org_unit=self.org_unit1))
+
+        source = AllUsersInboxesAndTeamsSource(self.portal)
+
+        self.assertEquals([], source.search('Projekt'))
+
+        source = AllUsersInboxesAndTeamsSource(self.portal, include_teams=True)
+        self.assertTermKeys(['team:1', 'team:2'], source.search('Projekt'))
+
+    def test_teams_are_only_valid_when_flag_is_true(self):
+        create(Builder('ogds_team')
+               .having(title=u'Projekt \xdcberbaung Dorfmatte',
+                       group=self.org_unit1.users_group,
+                       org_unit=self.org_unit1))
+
+        source = AllUsersInboxesAndTeamsSource(self.portal)
+        self.assertNotIn('team:1', source)
+
+        source = AllUsersInboxesAndTeamsSource(self.portal, include_teams=True)
+        self.assertIn('team:1', source)
+        self.assertNotIn('team:2', source)
 
 
 class TestUsersContactsInboxesSource(FunctionalTestCase):

@@ -1,6 +1,7 @@
 from opengever.base.model import Base
+from opengever.ogds.base.actor import Actor
+from opengever.ogds.base.actor import ActorLookup
 from opengever.ogds.models import USER_ID_LENGTH
-from opengever.ogds.models.service import OGDSService
 from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import String
@@ -28,12 +29,9 @@ class Watcher(Base):
         Means for a single user, a list with the user_id and for a inbox watcher,
         a list of the userids of all inbox_group users.
         """
-        # XXX Use opengever.ogds.models.actor instead of own actor differentiation.
-        ogds_service = OGDSService(self.session)
-        if self.actorid.startswith('inbox:'):
-            org_unit_id = self.actorid.split(':', 1)[1]
-            org_unit = ogds_service.fetch_org_unit(org_unit_id)
-            return [user.userid for user in org_unit.inbox_group.users]
+        actor_lookup = ActorLookup(self.actorid)
+        if actor_lookup.is_inbox() or actor_lookup.is_team():
+            return [user.userid for user in
+                    Actor.lookup(self.actorid).representatives()]
 
-        else:
-            return [self.actorid]
+        return [self.actorid]

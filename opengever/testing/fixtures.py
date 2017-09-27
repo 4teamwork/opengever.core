@@ -41,6 +41,7 @@ class OpengeverContentFixture(object):
 
         with self.freeze_at_hour(7):
             self.create_users()
+            self.create_teams()
             self.create_contacts()
 
         with self.freeze_at_hour(8):
@@ -95,9 +96,31 @@ class OpengeverContentFixture(object):
         self.meeting_user = self.create_user(
             'meeting_user', u'Herbert', u'J\xe4ger')
         self.secretariat_user = self.create_user(
-            'secretariat_user', u'J\xfcrgen', u'K\xf6nig')
+            'secretariat_user', u'J\xfcrgen', u'K\xf6nig',
+            group=self.org_unit.inbox_group)
         self.committee_responsible = self.create_user(
             'committee_responsible', u'Fr\xe4nzi', u'M\xfcller')
+
+    def create_teams(self):
+        users = [ogds_service().find_user(user.getId())
+                 for user in [self.regular_user, self.dossier_responsible]]
+        group_a = create(Builder('ogds_group')
+                         .having(groupid='projekt_a',
+                                 title=u'Projekt A', users=users))
+        self.projekt_a = create(
+            Builder('ogds_team')
+            .having(title=u'Projekt \xdcberbaung Dorfmatte',
+                    group=group_a, org_unit=self.org_unit))
+
+        users = [ogds_service().find_user(user.getId())
+                 for user in [self.committee_responsible, self.meeting_user]]
+        group_b = create(Builder('ogds_group')
+                         .having(groupid='projekt_b',
+                                 title=u'Projekt B', users=users))
+        self.projekt_b = create(
+            Builder('ogds_team')
+            .having(title=u'Sekretariat Abteilung XY',
+                    group=group_b, org_unit=self.org_unit))
 
     @staticuid()
     def create_repository_tree(self):
@@ -542,7 +565,7 @@ class OpengeverContentFixture(object):
         """
         self._lookup_table[attrname] = ('raw', value)
 
-    def create_user(self, attrname, firstname, lastname, globalroles=()):
+    def create_user(self, attrname, firstname, lastname, globalroles=(), group=None):
         """Create an OGDS user and a Plone user.
         The user is member of the current org unit user group.
         The ``attrname`` is the attribute name used to access this user
@@ -562,7 +585,8 @@ class OpengeverContentFixture(object):
         create(Builder('ogds_user')
                .id(plone_user.getId())
                .having(firstname=firstname, lastname=lastname, email=email)
-               .assign_to_org_units([self.org_unit]))
+               .assign_to_org_units([self.org_unit])
+               .in_group(group))
 
         self._lookup_table[attrname] = ('user', plone_user.getId())
         return plone_user
