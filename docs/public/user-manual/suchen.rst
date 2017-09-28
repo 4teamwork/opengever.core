@@ -36,7 +36,10 @@ Regeln und Operatoren für alle drei Suchtypen
    die Treffer, die alle Suchbegriffe enthalten.
 
 -  ``*`` (*Stern*) steht als Platzhalter für kein oder mehrere beliebige
-   Zeichen.
+   Zeichen. Dieser kann aber nur nach Wortanfängen und nicht am Anfang eines
+   Suchbegriffes stehen.
+   Beispiel Suchbegriff Dokumentvorlage: ``Dokument*`` schlägt den Suchbegriff vor,
+   hingegen wird ``*vorlage`` den Suchbegriff nicht finden.
 
 -  ``?`` (*Fragezeichen*) steht als Platzhalter für exakt ein beliebiges
    Zeichen.
@@ -46,7 +49,7 @@ Regeln und Operatoren für alle drei Suchtypen
    restlichen Suchbegriffe vorkommen, nicht aber der negierte Begriff.
 
 -  ``"`` (*Anführungszeichen*): Durch das Setzen von Anführungszeichen
-   (Bsp.: ``*Polizeiverordnung*`` wird nach dem exakten Begriff gesucht.
+   (Bsp.: ``"Polizeiverordnung"`` wird nach dem exakten Begriff gesucht.
    Innerhalb der Anführungszeichen dürfen keine anderen Operatoren
    vorkommen.
 
