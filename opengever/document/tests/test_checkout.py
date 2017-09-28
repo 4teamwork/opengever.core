@@ -257,6 +257,24 @@ class TestCheckinCheckoutManager(FunctionalTestCase):
                           self.get_manager(self.doc1).get_checked_out_by())
 
     @browsing
+    def test_checkout_creates_initial_version_if_not_exists(self, browser):
+        repo_tool = api.portal.get_tool('portal_repository')
+
+        # document without initial version
+        self.assertEquals(0, len(repo_tool.getHistoryMetadata(self.doc1)))
+        browser.login().open(self.doc1, view='checkout_documents',
+                             data={'_authenticator': createToken()})
+        self.assertEquals(1, len(repo_tool.getHistoryMetadata(self.doc1)))
+
+        # document with initial version
+        create_initial_version(self.doc2)
+        self.assertEquals(1, len(repo_tool.getHistoryMetadata(self.doc2)))
+        browser.login().open(self.doc2, view='checkout_documents',
+                             data={'_authenticator': createToken()})
+        self.assertEquals(1, len(repo_tool.getHistoryMetadata(self.doc2)))
+
+
+    @browsing
     def test_checkout_with_officeconnector_enabled(self, browser):
         api.portal.set_registry_record(
             'direct_checkout_and_edit_enabled',

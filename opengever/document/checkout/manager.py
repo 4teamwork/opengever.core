@@ -16,10 +16,15 @@ from plone import api
 from plone.locking.interfaces import IRefreshableLockable
 from plone.namedfile.file import NamedBlobFile
 from Products.CMFCore.utils import getToolByName
+from Products.CMFEditions.interfaces.IModifier import ModifierException
+from Products.CMFEditions.Permissions import SaveNewVersion
 from zope.annotation.interfaces import IAnnotations
 from zope.event import notify
+from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.publisher.interfaces.browser import IBrowserRequest
+import time
+import transaction
 
 
 CHECKIN_CHECKOUT_ANNOTATIONS_KEY = 'opengever.document.checked_out_by'
@@ -84,6 +89,9 @@ class CheckinCheckoutManager(grok.MultiAdapter):
         if not self.is_checkout_allowed():
             raise Unauthorized
 
+        if not self.has_initial_version():
+            self.create_initial_version()
+
         # now remember who checked out the document
         user_id = getSecurityManager().getUser().getId()
         self.annotations[CHECKIN_CHECKOUT_ANNOTATIONS_KEY] = user_id
@@ -93,6 +101,39 @@ class CheckinCheckoutManager(grok.MultiAdapter):
 
         # fire the event
         notify(ObjectCheckedOutEvent(self.context, ''))
+
+    def has_initial_version(self):
+        return self.repository.getHistoryMetadata(self.context) != []
+
+    def create_initial_version(self):
+        """Creates an initial version for the document.
+
+        Equates to `Products.CMFEditions.CopyModifyMergeRepositoryTool.save`
+        only the timestamp is changed to the creation timestamp.
+        """
+        self.repository._assertAuthorized(self.context, SaveNewVersion, 'save')
+        sp = transaction.savepoint(optimistic=True)
+
+        comment = _(u'initial_document_version_change_note',
+                    default=u'Initial version')
+        comment = translate(comment, context=getRequest())
+        sys_metadata = self.repository._prepareSysMetadata(comment)
+
+        # Set creation datetime as initial version timestamp,
+        # cmfeditions stores unix timestamps without any timezone information
+        # therefore we have to do the same.
+        created = self.context.created().asdatetime().replace(tzinfo=None)
+        sys_metadata['timestamp'] = time.mktime(created.timetuple())
+        metadata = {}
+
+        try:
+            self.repository._recursiveSave(
+                self.context, metadata, sys_metadata,
+                autoapply=self.repository.autoapply)
+        except ModifierException:
+            # modifiers can abort save operations under certain conditions
+            sp.rollback()
+            raise
 
     def is_checkin_allowed(self):
         """Checks whether checkin is allowed for the current user on the
