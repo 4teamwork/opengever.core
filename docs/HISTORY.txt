@@ -7,6 +7,7 @@ Changelog
 
 - SPV word: Improve visual feedback when scheduling text or paragraph. [jone]
 - SPV word: Remove proposal document's title prefix. [tarnap]
+- SPV word: Hide excerpt template from form when word feature enabled. [tarnap]
 - SPV word: Remove "Ad-hoc" from the GUI. [tarnap]
 - Fix private folder creation for userids containing dashes. [phgross]
 - SPV word: Set "remove" and "delete" translations correctly. [tarnap]

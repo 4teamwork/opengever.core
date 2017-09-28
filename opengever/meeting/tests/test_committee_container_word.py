@@ -17,8 +17,7 @@ class TestCommitteeContainer(IntegrationTestCase):
         self.assertIsNone(self.committee_container.get_ad_hoc_template())
 
         browser.open(self.committee_container, view='edit')
-        browser.fill({'Ad hoc agenda item template': self.proposal_template})
-        browser.find('Save').click()
+        browser.fill({'Ad hoc agenda item template': self.proposal_template}).save()
 
         statusmessages.assert_message('Changes saved')
 
@@ -33,9 +32,8 @@ class TestCommitteeContainer(IntegrationTestCase):
         factoriesmenu.add('Committee Container')
         browser.fill({'Title': u'Sitzungen',
                       'Protocol template': self.sablon_template,
-                      'Excerpt template': self.sablon_template,
-                      'Ad hoc agenda item template': self.proposal_template})
-        browser.find('Save').click()
+                      'Ad hoc agenda item template': self.proposal_template}).save()
+        statusmessages.assert_no_error_messages()
 
         self.assertEqual(self.proposal_template,
                          browser.context.get_ad_hoc_template())
@@ -64,9 +62,8 @@ class TestCommitteeContainer(IntegrationTestCase):
         factoriesmenu.add('Committee Container')
         browser.fill({'Title': u'Sitzungen',
                       'Protocol template': self.sablon_template,
-                      'Excerpt template': self.sablon_template,
-                      'Paragraph template': self.sablon_template})
-        browser.find('Save').click()
+                      'Paragraph template': self.sablon_template}).save()
+        statusmessages.assert_no_error_messages()
 
         self.assertEqual(self.sablon_template,
                          browser.context.get_paragraph_template())

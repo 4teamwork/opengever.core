@@ -1,5 +1,6 @@
 from opengever.base.behaviors.translated_title import TranslatedTitleMixin
 from opengever.meeting import _
+from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting import require_word_meeting_feature
 from opengever.meeting.model import Member
 from opengever.meeting.sources import proposal_template_source
@@ -8,6 +9,16 @@ from opengever.meeting.wrapper import MemberWrapper
 from plone.dexterity.content import Container
 from plone.directives import form
 from z3c.relationfield.schema import RelationChoice
+from zope.interface import Invalid
+
+
+def excerpt_template_constraint(value):
+    if is_word_meeting_implementation_enabled():
+        # The excerpt template is not used when word-meeting feature is enabled
+        return True
+    if not value:
+        raise Invalid()
+    return True
 
 
 class ICommitteeContainer(form.Schema):
@@ -23,7 +34,8 @@ class ICommitteeContainer(form.Schema):
     excerpt_template = RelationChoice(
         title=_('Excerpt template'),
         source=sablon_template_source,
-        required=True,
+        required=False,
+        constraint=excerpt_template_constraint,
     )
 
     agendaitem_list_template = RelationChoice(

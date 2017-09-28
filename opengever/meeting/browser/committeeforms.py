@@ -57,6 +57,8 @@ class AddForm(BaseWizardStepForm, dexterity.AddForm):
         if not is_word_meeting_implementation_enabled():
             self.widgets['ad_hoc_template'].mode = HIDDEN_MODE
             self.widgets['paragraph_template'].mode = HIDDEN_MODE
+        else:
+            self.widgets['excerpt_template'].mode = HIDDEN_MODE
 
     @buttonAndHandler(_(u'button_continue', default=u'Continue'), name='save')
     def handle_continue(self, action):
@@ -178,3 +180,5 @@ class EditForm(ModelProxyEditForm, dexterity.EditForm):
         if not is_word_meeting_implementation_enabled():
             self.widgets['ad_hoc_template'].mode = HIDDEN_MODE
             self.widgets['paragraph_template'].mode = HIDDEN_MODE
+        else:
+            self.widgets['excerpt_template'].mode = HIDDEN_MODE
