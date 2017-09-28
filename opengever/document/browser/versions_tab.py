@@ -186,7 +186,10 @@ class LazyHistoryMetadataProxy(object):
 
     def __init__(self, history, url, context, is_revert_allowed=False):
         self._history = history
-        self._length = history.getLength(countPurged=False)
+        if self._history:
+            self._length = history.getLength(countPurged=False)
+        else:
+            self._length = 0
 
         self._url = url
         self._is_revert_allowed = is_revert_allowed
