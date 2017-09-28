@@ -7,6 +7,7 @@ from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 from opengever.core.testing import PDFConverterAvailability
 from opengever.testing import FunctionalTestCase
 from opengever.testing.helpers import create_document_version
+from opengever.testing.helpers import create_initial_version
 from plone import api
 from urlparse import parse_qs
 from urlparse import urlparse
@@ -41,6 +42,8 @@ class TestVersionsTab(FunctionalTestCase):
                      .within(self.dossier)
                      .attach_file_containing(u"INITIAL VERSION DATA",
                                              u"somefile.txt"))
+
+        create_initial_version(doc)
         return doc
 
 
@@ -129,6 +132,13 @@ class TestVersionsTabWithoutPDFConverter(TestVersionsTab):
             self.assertEquals(
                 '/plone/dossier-1/document-1/file_download_confirmation',
                 url.path)
+
+    @browsing
+    def test_shows_message_when_inital_version_is_not_created_yet(self, browser):
+        document = create(Builder('document'))
+        browser.login().open(document, view='tabbedview_view-versions')
+
+        self.assertEquals(['Keine Inhalte'], browser.css('body').text)
 
 
 class TestVersionsTabWithPDFConverter(TestVersionsTab):
