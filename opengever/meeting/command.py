@@ -338,20 +338,27 @@ class MergeDocxProtocolCommand(CreateGeneratedDocumentCommand):
         return document
 
     def generate_file_data(self):
-        template = self.document_operations.get_sablon_template(self.meeting)
-        sablon = Sablon(template)
-        sablon.process(self.document_operations.get_meeting_data(
+        header_sablon = Sablon(self.meeting.get_protocol_header_template())
+        header_sablon.process(self.document_operations.get_meeting_data(
             self.meeting).as_json())
+
+        suffix = self.meeting.get_protocol_suffix_template()
+        if suffix is not None:
+            suffix_sablon = Sablon(self.meeting.get_protocol_suffix_template())
+            suffix_sablon.process(self.document_operations.get_meeting_data(
+                self.meeting).as_json())
 
         tmpdir_path = tempfile.mkdtemp(prefix='opengever.core.doxcmerge_')
         master_path = join(tmpdir_path, 'master.docx')
+        suffix_path = join(tmpdir_path, 'suffix.docx')
         output_path = join(tmpdir_path, 'protocol.docx')
 
         try:
             # XXX: this is a bit dumb since sablon would already have generated
             # a temporary file
             with open(master_path, 'wb') as master_file:
-                master_file.write(sablon.file_data)
+                master_file.write(header_sablon.file_data)
+
             composer = Composer(Document(master_path))
 
             for index, agenda_item in enumerate(self.meeting.agenda_items):
@@ -364,7 +371,13 @@ class MergeDocxProtocolCommand(CreateGeneratedDocumentCommand):
                     self._export_regular_agenda_item_document(agenda_item, target_path)
                     composer.append(Document(target_path))
 
+            if suffix is not None:
+                with open(suffix_path, 'wb') as suffix_file:
+                    suffix_file.write(suffix_sablon.file_data)
+                composer.append(suffix_file)
+
             composer.save(output_path)
+
             with open(output_path, 'rb') as merged_file:
                 data = merged_file.read()
         finally:
