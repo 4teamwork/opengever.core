@@ -19,7 +19,7 @@ from opengever.core.cached_testing import CACHE_GEVER_FIXTURE
 from opengever.core.cached_testing import CACHE_GEVER_INSTALLATION
 from opengever.core.cached_testing import CACHED_COMPONENT_REGISTRY_ISOLATION
 from opengever.core.cached_testing import DB_CACHE_MANAGER
-from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings # noqa
+from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings  # noqa
 from opengever.meeting.interfaces import IMeetingSettings
 from opengever.officeatwork.interfaces import IOfficeatworkSettings
 from opengever.private import enable_opengever_private
@@ -38,6 +38,7 @@ from plone.testing import z2
 from plone.transformchain.interfaces import ITransform
 from Products.CMFCore.utils import getToolByName
 from Testing.ZopeTestCase.utils import setupCoreSessions
+from unittest import TestCase
 from zope.component import getGlobalSiteManager
 from zope.component import getMultiAdapter
 from zope.component import getSiteManager
@@ -62,6 +63,7 @@ for name, level in {'plone.protect': logging.INFO,
 
 
 snapshots.disable()
+TestCase.longMessage = True
 
 
 def clear_transmogrifier_registry():
@@ -426,7 +428,6 @@ class ContentFixtureLayer(OpengeverFixture):
     a new transaction.
     """
 
-
     defaultBases = (CACHED_COMPONENT_REGISTRY_ISOLATION, )
 
     def __init__(self):
@@ -514,9 +515,9 @@ class GEVERIntegrationTesting(IntegrationTesting):
         # changes we need to mark the session as changed first.
         mark_changed(create_session())
         self.savepoint = transaction.savepoint()
-        self.interceptor.intercept(self.interceptor.BEGIN
-                                   | self.interceptor.COMMIT
-                                   | self.interceptor.ABORT)
+        self.interceptor.intercept(self.interceptor.BEGIN |
+                                   self.interceptor.COMMIT |
+                                   self.interceptor.ABORT)
         self.interceptor.begin_savepoint_simulation()
         self.interceptor.begin()
         logout()
