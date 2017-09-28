@@ -3,7 +3,7 @@ from opengever.meeting.proposalhistory import BaseHistoryRecord
 from opengever.meeting.proposalhistory import ProposalHistory
 from opengever.testing import IntegrationTestCase
 from persistent.mapping import PersistentMapping
-from unittest2 import TestCase
+from unittest import TestCase
 
 
 class TestUnitPorposalHistory(TestCase):

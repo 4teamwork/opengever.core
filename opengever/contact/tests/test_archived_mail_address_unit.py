@@ -1,10 +1,10 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.testing import MEMORY_DB_LAYER
-import unittest2
+import unittest
 
 
-class TestArchivedMailAddress(unittest2.TestCase):
+class TestArchivedMailAddress(unittest.TestCase):
 
     layer = MEMORY_DB_LAYER
 

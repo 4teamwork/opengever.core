@@ -1,5 +1,5 @@
 from opengever.tabbedview import GeverTabbedView
-from unittest2 import TestCase
+from unittest import TestCase
 
 
 class SimpleTabDefs(GeverTabbedView):

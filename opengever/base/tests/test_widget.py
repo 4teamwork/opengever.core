@@ -2,7 +2,7 @@ from ftw.testbrowser import browsing
 from opengever.base.widgets import trix_strip_whitespace
 from opengever.testing import FunctionalTestCase
 from plone.app.z3cform.interfaces import IPloneFormLayer
-from unittest2 import TestCase
+from unittest import TestCase
 from z3c.form.browser.text import TextWidget
 from zope.component import getMultiAdapter
 from zope.interface import alsoProvides

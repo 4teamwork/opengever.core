@@ -2,10 +2,10 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.contact.models import ArchivedContact
 from opengever.testing import MEMORY_DB_LAYER
-import unittest2
+import unittest
 
 
-class TestPerson(unittest2.TestCase):
+class TestPerson(unittest.TestCase):
 
     layer = MEMORY_DB_LAYER
 

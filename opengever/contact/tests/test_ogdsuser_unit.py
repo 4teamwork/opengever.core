@@ -7,10 +7,10 @@ from opengever.contact.ogdsuser import URLAdapter
 from opengever.dossier.tests import OGDS_USER_ATTRIBUTES
 from opengever.testing import MEMORY_DB_LAYER
 from opengever.testing.builders.base import TEST_USER_ID
-import unittest2
+import unittest
 
 
-class TestOgdsUserToContactAdapter(unittest2.TestCase):
+class TestOgdsUserToContactAdapter(unittest.TestCase):
 
     layer = MEMORY_DB_LAYER
 

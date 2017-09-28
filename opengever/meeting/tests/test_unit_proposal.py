@@ -4,7 +4,7 @@ from opengever.base.oguid import Oguid
 from opengever.meeting.model.proposal import Proposal
 from opengever.ogds.models.admin_unit import AdminUnit
 from opengever.testing import MEMORY_DB_LAYER
-from unittest2 import TestCase
+from unittest import TestCase
 
 
 class TestUnitProposal(TestCase):

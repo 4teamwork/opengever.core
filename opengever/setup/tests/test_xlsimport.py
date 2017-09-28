@@ -1,6 +1,6 @@
 from opengever.setup.sections.xlssource import XlsSource
 from pkg_resources import resource_filename
-from unittest2 import TestCase
+from unittest import TestCase
 
 
 class TextXLSImport(TestCase):

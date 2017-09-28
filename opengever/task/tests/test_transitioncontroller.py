@@ -1,5 +1,5 @@
 from opengever.task.browser.transitioncontroller import TaskTransitionController
-import unittest2
+import unittest
 
 
 class Bunch(object):
@@ -42,7 +42,7 @@ class FakeTask(object):
         return self._category
 
 
-class BaseTransitionGuardTests(unittest2.TestCase):
+class BaseTransitionGuardTests(unittest.TestCase):
     task_type_category = 'bidirectional_by_value'
 
     @property

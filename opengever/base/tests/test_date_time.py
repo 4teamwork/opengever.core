@@ -1,6 +1,6 @@
 from datetime import datetime
 from opengever.base.date_time import as_utc
-from unittest2 import TestCase
+from unittest import TestCase
 import pytz
 
 

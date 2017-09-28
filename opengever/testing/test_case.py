@@ -28,14 +28,14 @@ from zope.i18n import translate
 from zope.interface import alsoProvides
 import json
 import transaction
-import unittest2
+import unittest
 
 # Squelch pyflakes about unused exports
 widget
 builders
 
 
-class TestCase(unittest2.TestCase):
+class TestCase(unittest.TestCase):
     pass
 
 

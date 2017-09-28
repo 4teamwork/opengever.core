@@ -3,10 +3,10 @@ from opengever.ogds.base.ou_selector import NullOrgUnit
 from opengever.ogds.base.ou_selector import OrgUnitSelector
 from opengever.ogds.models.org_unit import OrgUnit
 import inspect
-import unittest2
+import unittest
 
 
-class TestOrgUnitSelector(unittest2.TestCase):
+class TestOrgUnitSelector(unittest.TestCase):
 
     def setUp(self):
         self.unit_a = OrgUnit('clienta', title="Client A")

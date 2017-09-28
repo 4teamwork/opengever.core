@@ -27,7 +27,7 @@ from zope.i18n import translate
 from zope.lifecycleevent import ObjectAddedEvent
 from zope.lifecycleevent import ObjectModifiedEvent
 from zope.lifecycleevent import ObjectMovedEvent
-import unittest2 as unittest
+import unittest as unittest
 
 
 class TestOpengeverJournalGeneral(unittest.TestCase):

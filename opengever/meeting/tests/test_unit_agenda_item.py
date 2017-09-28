@@ -3,7 +3,7 @@ from ftw.builder import create
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.testing import FunctionalTestCase
 from opengever.testing import MEMORY_DB_LAYER
-from unittest2 import TestCase
+from unittest import TestCase
 
 
 class TestProposalAgendaItem(FunctionalTestCase):

@@ -1,9 +1,9 @@
 from email.header import decode_header
 from opengever.mail.utils import make_addr_header
-import unittest2
+import unittest
 
 
-class TestMakeAddrHeader(unittest2.TestCase):
+class TestMakeAddrHeader(unittest.TestCase):
 
     def test_encodes_addr_name(self):
         fullname = u'Fr\xe4nzi M\xfcller'

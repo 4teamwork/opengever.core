@@ -4,7 +4,7 @@ from opengever.contact.models import tables as contact_tables
 from opengever.globalindex.model import tables as globalindex_tables
 from opengever.locking.model import tables as lock_tables
 from opengever.meeting.model import tables as meeting_tables
-from unittest2 import TestCase
+from unittest import TestCase
 
 
 class TestDatabaseTableDeclarations(TestCase):

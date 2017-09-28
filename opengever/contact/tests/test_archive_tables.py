@@ -13,7 +13,7 @@ from opengever.contact.models import Person
 from opengever.contact.models import PhoneNumber
 from opengever.contact.models import URL
 from sqlalchemy import inspect
-from unittest2 import TestCase
+from unittest import TestCase
 
 
 class TestArchiveTables(TestCase):

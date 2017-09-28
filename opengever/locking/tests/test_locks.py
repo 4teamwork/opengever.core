@@ -4,7 +4,7 @@ from opengever.core.testing import MEMORY_DB_LAYER
 from opengever.locking.model import Lock
 from plone.app.testing import TEST_USER_ID
 from sqlalchemy.exc import IntegrityError
-from unittest2 import TestCase
+from unittest import TestCase
 import transaction
 
 

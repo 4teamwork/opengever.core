@@ -1,7 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.testing import MEMORY_DB_LAYER
-from unittest2 import TestCase
+from unittest import TestCase
 
 
 class TestUnitCommittee(TestCase):

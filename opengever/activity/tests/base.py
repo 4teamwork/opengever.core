@@ -1,8 +1,8 @@
 from opengever.testing import MEMORY_DB_LAYER
-import unittest2
+import unittest
 
 
-class ActivityTestCase(unittest2.TestCase):
+class ActivityTestCase(unittest.TestCase):
 
     layer = MEMORY_DB_LAYER
 
