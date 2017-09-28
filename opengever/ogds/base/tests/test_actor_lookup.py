@@ -37,7 +37,7 @@ class TestActorLookup(IntegrationTestCase):
 
         self.assertEqual(u'Projekt \xdcberbaung Dorfmatte (Finanzamt)',
                          actor.get_label())
-        self.assertEqual('http://nohost/plone/@@team-details/1',
+        self.assertEqual('http://nohost/plone/kontakte/team-1/view',
                          actor.get_profile_url())
 
     def test_user_actor_ogds_user(self):

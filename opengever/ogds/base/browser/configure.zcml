@@ -55,8 +55,8 @@
       />
 
   <browser:page
-      for="*"
-      name="team-details"
+      for="opengever.ogds.base.interfaces.ITeam"
+      name="view"
       class=".teamdetails.TeamDetails"
       permission="zope2.View"
       template="templates/teamdetails.pt"

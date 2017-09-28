@@ -1,3 +1,4 @@
+from opengever.contact.utils import get_contactfolder_url
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models.exceptions import RecordNotFound
 from Products.Five import BrowserView
@@ -37,3 +38,6 @@ class UserDetails(BrowserView):
         """
         self.userid = name
         return self
+
+    def contactfolder_url(team_id):
+        return get_contactfolder_url()

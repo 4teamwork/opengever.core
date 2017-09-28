@@ -130,7 +130,7 @@
                   <ul class="teams">
                       <li tal:repeat="team teams">
                         <a class="team"
-                           tal:attributes="href string:${portal_url}/@@team-details/${team/team_id}"
+                           tal:attributes="href string:${view/contactfolder_url}/team-${team/team_id}/view"
                            tal:content="team/title"></a>
                       </li>
                   </ul>
