@@ -38,6 +38,7 @@ from plone.testing import z2
 from plone.transformchain.interfaces import ITransform
 from Products.CMFCore.utils import getToolByName
 from Testing.ZopeTestCase.utils import setupCoreSessions
+from unittest import TestCase
 from zope.component import getGlobalSiteManager
 from zope.component import getMultiAdapter
 from zope.component import getSiteManager
@@ -62,6 +63,7 @@ for name, level in {'plone.protect': logging.INFO,
 
 
 snapshots.disable()
+TestCase.longMessage = True
 
 
 def clear_transmogrifier_registry():
