@@ -336,11 +336,11 @@
                 </label>
                 <input id="schedule-text" type="text" />
                 <div class="button-group">
-                  <input type="submit"
-                         value="Schedule"
-                         i18n:attributes="value label_schedule"
-                         tal:attributes="data-url view/url_schedule_text"
-                         class="schedule-text allowMultiSubmit" />
+                  <button class="schedule-text button"
+                          tal:attributes="data-url view/url_schedule_text"
+                          i18n:translate="label_schedule">
+                    Schedule
+                  </button>
                 </div>
               </div>
 
@@ -351,11 +351,11 @@
                 </label>
                 <input id="schedule-paragraph" type="text" />
                 <div class="button-group">
-                  <input type="submit"
-                         value="Insert"
-                         i18n:attributes="value label_insert"
-                         tal:attributes="data-url view/url_schedule_paragraph"
-                         class="schedule-paragraph allowMultiSubmit" />
+                  <button class="schedule-paragraph button"
+                          tal:attributes="data-url view/url_schedule_paragraph"
+                          i18n:translate="label_insert">
+                    Insert
+                  </button>
                 </div>
               </div>
 
