@@ -12,7 +12,7 @@ from opengever.mail.tests.utils import get_header_date
 from opengever.testing import FunctionalTestCase
 from opengever.testing.sql import create_ogds_user
 from plone.registry.interfaces import IRegistry
-from unittest2 import TestCase
+from unittest import TestCase
 from zope.component import getUtility
 
 

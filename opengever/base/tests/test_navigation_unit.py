@@ -1,5 +1,5 @@
 from opengever.base.browser.navigation import make_tree_by_url
-from unittest2 import TestCase
+from unittest import TestCase
 import json
 
 

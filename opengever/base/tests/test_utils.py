@@ -8,7 +8,7 @@ from opengever.base.utils import file_checksum
 from opengever.dossier.utils import find_parent_dossier
 from opengever.testing import FunctionalTestCase
 from plone.namedfile.file import NamedFile
-from unittest2 import TestCase
+from unittest import TestCase
 from urllib import quote
 import os.path
 

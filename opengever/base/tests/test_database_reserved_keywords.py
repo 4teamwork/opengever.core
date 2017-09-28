@@ -1,6 +1,6 @@
 from opengever.base.model import Base
 from opengever.ogds.models import BASE as ogds_models_base
-from unittest2 import TestCase
+from unittest import TestCase
 
 
 class TestDatabaseNoReservedKeywordUsed(TestCase):

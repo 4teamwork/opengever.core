@@ -5,7 +5,7 @@ from ftw.testing import freeze
 from opengever.meeting.model import Meeting
 from opengever.testing import localized_datetime
 from opengever.testing import MEMORY_DB_LAYER
-from unittest2 import TestCase
+from unittest import TestCase
 
 
 class TestMeetingQuery(TestCase):

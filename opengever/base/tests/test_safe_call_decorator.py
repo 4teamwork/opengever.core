@@ -1,6 +1,6 @@
 from opengever.base.request import tracebackify
 from Products.Five.browser import BrowserView
-from unittest2 import TestCase
+from unittest import TestCase
 from ZODB.POSException import ConflictError
 from zope.publisher.browser import TestRequest
 

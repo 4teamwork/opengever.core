@@ -6,10 +6,10 @@ from itertools import chain
 from opengever.base.protect import get_buckets_for_btree
 from opengever.testing import FunctionalTestCase
 import transaction
-import unittest2
+import unittest
 
 
-class TestBucketsForBTree(unittest2.TestCase):
+class TestBucketsForBTree(unittest.TestCase):
 
     def test_get_buckets_for_btree_yield_all_contained_buckets(self):
         tree = OOBTree()

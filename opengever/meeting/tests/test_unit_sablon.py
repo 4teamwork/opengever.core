@@ -1,6 +1,6 @@
 from opengever.meeting.sablon import Sablon
 from pkg_resources import resource_filename
-from unittest2 import TestCase
+from unittest import TestCase
 import json
 
 

@@ -1,4 +1,4 @@
-from unittest2 import TestCase
+from unittest import TestCase
 from opengever.meeting.workflow import State
 from opengever.meeting.workflow import Transition
 from opengever.meeting.workflow import Workflow

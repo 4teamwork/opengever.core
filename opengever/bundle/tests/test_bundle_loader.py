@@ -5,7 +5,7 @@ from opengever.bundle.loader import unicode2bytes
 from opengever.bundle.tests.helpers import get_portal_type
 from opengever.bundle.tests.helpers import get_title
 from pkg_resources import resource_filename as rf
-from unittest2 import TestCase
+from unittest import TestCase
 import collections
 import jsonschema
 import tempfile

@@ -21,7 +21,7 @@ from plone.portlets.constants import CONTEXT_CATEGORY
 from plone.portlets.interfaces import ILocalPortletAssignmentManager
 from plone.portlets.interfaces import IPortletManager
 from sqlalchemy.sql.expression import desc
-from unittest2 import TestCase
+from unittest import TestCase
 from z3c.relationfield.relation import RelationValue
 from zope.component import getMultiAdapter
 from zope.component import getUtility

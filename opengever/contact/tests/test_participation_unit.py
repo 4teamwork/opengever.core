@@ -2,10 +2,10 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.base.oguid import Oguid
 from opengever.testing import MEMORY_DB_LAYER
-import unittest2
+import unittest
 
 
-class TestContactParticipation(unittest2.TestCase):
+class TestContactParticipation(unittest.TestCase):
 
     layer = MEMORY_DB_LAYER
 
@@ -80,7 +80,7 @@ class TestContactParticipation(unittest2.TestCase):
                           [role.role for role in participation.roles])
 
 
-class TestOgdsUserParticipation(unittest2.TestCase):
+class TestOgdsUserParticipation(unittest.TestCase):
 
     layer = MEMORY_DB_LAYER
 
@@ -103,7 +103,7 @@ class TestOgdsUserParticipation(unittest2.TestCase):
         self.assertEqual(0, len(copied_participation.roles))
 
 
-class TestOrgRoleParticipation(unittest2.TestCase):
+class TestOrgRoleParticipation(unittest.TestCase):
 
     layer = MEMORY_DB_LAYER
 

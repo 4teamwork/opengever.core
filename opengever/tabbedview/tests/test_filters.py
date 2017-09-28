@@ -1,7 +1,7 @@
 from opengever.tabbedview.filters import CatalogQueryFilter
 from opengever.tabbedview.filters import Filter
 from opengever.tabbedview.filters import FilterList
-from unittest2 import TestCase
+from unittest import TestCase
 
 
 class TestFilterList(TestCase):

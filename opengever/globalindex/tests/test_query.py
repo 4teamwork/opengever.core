@@ -5,7 +5,7 @@ from opengever.testing import FunctionalTestCase
 from opengever.testing import MEMORY_DB_LAYER
 from opengever.testing import obj2brain
 from plone import api
-from unittest2 import TestCase
+from unittest import TestCase
 
 
 class TestTaskQueries(TestCase):

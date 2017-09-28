@@ -6,7 +6,7 @@ from opengever.ogds.base.actor import InboxActor
 from opengever.testing import FunctionalTestCase
 from opengever.testing import MEMORY_DB_LAYER
 from sqlalchemy.exc import IntegrityError
-from unittest2 import TestCase
+from unittest import TestCase
 from zope.globalrequest import getRequest
 from zope.i18n.locales import locales
 import transaction
