@@ -15,13 +15,19 @@ from opengever.meeting.vocabulary import get_proposal_template_vocabulary
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
 from opengever.tabbedview.helper import document_with_icon
 from plone import api
+from plone.dexterity.browser.add import DefaultAddForm
+from plone.dexterity.browser.add import DefaultAddView
+from plone.dexterity.interfaces import IDexterityFTI
 from plone.directives import dexterity
 from plone.directives.form import widget
 from plone.z3cform.fieldsets.utils import move
+from Products.CMFCore.interfaces import IFolderish
 from z3c.form import field
 from z3c.form.browser.checkbox import SingleCheckBoxFieldWidget
 from z3c.form.interfaces import HIDDEN_MODE
+from zope.component import adapter
 from zope.component import getMultiAdapter
+from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from zope.schema import Bool
 
 
@@ -102,13 +108,12 @@ class IAddProposal(IProposal):
         required=False)
 
 
-class AddForm(FieldConfigurationMixin, ModelProxyAddForm, dexterity.AddForm):
-    grok.name('opengever.meeting.proposal')
+class ProposalAddForm(FieldConfigurationMixin, ModelProxyAddForm, DefaultAddForm):
     content_type = Proposal
     fields = field.Fields(Proposal.model_schema)
 
     def __init__(self, *args, **kwargs):
-        super(AddForm, self).__init__(*args, **kwargs)
+        super(ProposalAddForm, self).__init__(*args, **kwargs)
         if is_word_meeting_implementation_enabled():
             self.instance_schema = IAddProposal
         else:
@@ -124,25 +129,25 @@ class AddForm(FieldConfigurationMixin, ModelProxyAddForm, dexterity.AddForm):
 
     def updateFields(self):
         try:
-            return super(AddForm, self).updateFields()
+            return super(ProposalAddForm, self).updateFields()
         finally:
             if self.schema is IAddProposal:
                 move(self, 'proposal_template', after='committee')
 
     def updateWidgets(self):
-        super(AddForm, self).updateWidgets()
+        super(ProposalAddForm, self).updateWidgets()
         ltool = api.portal.get_tool('portal_languages')
         if len(ltool.getSupportedLanguages()) <= 1:
             self.widgets['language'].mode = HIDDEN_MODE
 
     def createAndAdd(self, data):
         if not is_word_meeting_implementation_enabled():
-            return super(AddForm, self).createAndAdd(data)
+            return super(ProposalAddForm, self).createAndAdd(data)
 
         proposal_template = data.pop('proposal_template')
         edit_after_creation = data.pop('edit_after_creation')
         self.instance_schema = IProposal
-        noaq_proposal = super(AddForm, self).createAndAdd(data)
+        noaq_proposal = super(ProposalAddForm, self).createAndAdd(data)
         proposal = self.context.get(noaq_proposal.getId())
         proposal_doc = proposal.create_proposal_document(proposal_template.file)
         if edit_after_creation:
@@ -162,3 +167,8 @@ class AddForm(FieldConfigurationMixin, ModelProxyAddForm, dexterity.AddForm):
                             ICheckinCheckoutManager).checkout()
 
         document.setup_external_edit_redirect(self.request)
+
+
+@adapter(IFolderish, IDefaultBrowserLayer, IDexterityFTI)
+class ProposalAddView(DefaultAddView):
+    form = ProposalAddForm
