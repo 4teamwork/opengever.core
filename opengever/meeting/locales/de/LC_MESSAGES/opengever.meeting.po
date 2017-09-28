@@ -489,7 +489,7 @@ msgstr "Periode abschliessen"
 #: ./opengever/meeting/model/meeting.py:77
 #: ./opengever/meeting/model/period.py:22
 msgid "closed"
-msgstr "geschlossen"
+msgstr "Abgeschlossen"
 
 #. Default: "Comittee"
 #: ./opengever/meeting/browser/documents/proposalstab.py:95
@@ -1676,4 +1676,3 @@ msgstr "Antrag traktandieren:"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:160
 msgid "view_label_secretary"
 msgstr "Protokollführung:"
-
