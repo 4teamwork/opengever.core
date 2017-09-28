@@ -84,9 +84,9 @@ Zusatzmodul und daher auch nicht für alle ersichtlich.
 Klickpfad
 ---------
 Dank der klickbaren Breadcrumb (Klickpfad) kann ganz einfach zwischen
-Navigationsposition, Dossier und Dokument navigiert werden. Bei der
-Navigationsposition kann wie auf dem zweiten Bild ersichtlich zusätzlich auf die
-verschieden darüber liegenden Navigationsstufen navigiert werden.
+Navigationsposition, Dossier und Dokument navigiert werden. Die einzelnen
+Elemente des Ordnungssystems werden gruppiert dargestellt, können aber wie im
+zweiten Bild ersichtlich, aufgeklappt werden.
 
 |img-grundlagen-20|
 |img-grundlagen-21|
