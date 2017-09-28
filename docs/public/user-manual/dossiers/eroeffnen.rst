@@ -79,7 +79,10 @@ Reiter.
 6. **Kommentar:** Das Feld Kommentar kann für Erläuterungen zum Dossier
    oder zum Dossierverlauf verwendet werden.
 
-7. **Federführend:** Federführend ist diejenige Person, die für die
+7. **Externe Referenz:** Das Feld Externe Referenz kann verwendet werden, um
+   Fremdschlüssel und Verknüpfungen auf Daten in Drittsystemen zu speichern.
+
+8. **Federführend:** Federführend ist diejenige Person, die für die
    Führung des Dossiers verantwortlich ist. Federführend ist immer eine
    Person aus dem eigenen Mandanten. Standardmässig schlägt OneGov GEVER
    im Feld Federführend die angemeldete Person vor. Änderung der
@@ -94,7 +97,7 @@ Reiter.
    ersten zehn Treffer an. Falls Sie die gewünschte Person in der Liste
    nicht finden, müssen Sie weitere Buchstaben des Namens eingeben.
 
-8. **Verwandte Dossiers:** Mit diesem Feld kann auf verwandte Dossiers
+9. **Verwandte Dossiers:** Mit diesem Feld kann auf verwandte Dossiers
    verwiesen werden.
 
    a) Kennt man den Dossiertitel oder Bestandteile davon, wird der Text
