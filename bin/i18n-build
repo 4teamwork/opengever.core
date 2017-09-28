@@ -2,14 +2,15 @@
 #
 # USAGE:
 # bin/i18n-build [pkgname]
+# bin/i18n-build --all
 #
 # If a [pkgname] is supplied, only translation files for that package will be
-# built. Otherwise they will be built for all packages.
+# built. Otherwise use --all for all packages.
 #
 # This script builds translation files for opengever.core.
 #
 # It does so by finding all the 'locales' directories, rebuilds
-# pkg.name.pot, merging pkg.name-manual.pot files if necessary, and 
+# pkg.name.pot, merging pkg.name-manual.pot files if necessary, and
 # then syncs translations to the .respective po files for all languages
 # defined in $LANGUAGES.
 
@@ -18,6 +19,13 @@ LANGUAGES="de fr"
 pkg_dir=`bin/package-directory`
 core_dir=`dirname $pkg_dir`
 locales_dirs=`find $pkg_dir -name 'locales'`
+
+if [ $# -eq 0 ] || [ "$1" == "--help" ]; then
+    echo "ERROR: Either provide a package name or use --all for all packages."
+    echo "Example: ./bin/i18n-build --all"
+    echo "Example: ./bin/i18n-build opengever.task"
+    exit 1
+fi
 
 for locale_dir in $locales_dirs
 do
@@ -30,7 +38,7 @@ do
     pkgname=${pkg_relpath//\//.}            # opengever.dossier
 
     # checks if a specific package is selected
-    if [ $# -eq 1 ] && [ "$1" != "$pkgname" ]; then
+    if [ "$1" != "--all" ] && [ "$1" != "$pkgname" ]; then
       continue
     fi
 
