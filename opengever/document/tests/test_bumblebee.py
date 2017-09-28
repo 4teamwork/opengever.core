@@ -12,6 +12,7 @@ from opengever.testing import assets
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
 from opengever.testing.helpers import create_document_version
+from opengever.testing.helpers import create_initial_version
 from plone import api
 from plone.namedfile.file import NamedBlobFile
 from plone.rfc822.interfaces import IPrimaryFieldInfo
@@ -142,6 +143,9 @@ class TestBumblebeeIntegrationWithEnabledFeature(FunctionalTestCase):
                           .within(dossier)
                           .attach_file_containing(
                               'foo', u'example.docx'))
+
+        create_initial_version(document)
+
         create_document_version(document, 1,
                                 data=bumblebee_asset('example.docx').bytes())
         create_document_version(document, 2)

@@ -5,6 +5,7 @@ from ftw.builder.dexterity import DexterityBuilder
 from opengever.base.behaviors.translated_title import TranslatedTitle
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.document.document import Document
+from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.globalindex.handlers.task import sync_task
 from opengever.mail.mail import OGMail
 from opengever.meeting import is_word_meeting_implementation_enabled
@@ -22,7 +23,9 @@ from plone import api
 from plone.namedfile.file import NamedBlobFile
 from Products.CMFCore.utils import getToolByName
 from zope.annotation.interfaces import IAnnotations
+from zope.component import getMultiAdapter
 from zope.event import notify
+from zope.globalrequest import getRequest
 from zope.lifecycleevent import ObjectCreatedEvent
 
 
@@ -114,6 +117,12 @@ class DocumentBuilder(DexterityBuilder):
     def after_create(self, obj):
         if self._checked_out:
             IAnnotations(obj)[CHECKIN_CHECKOUT_ANNOTATIONS_KEY] = self._checked_out
+            manager = getMultiAdapter((obj, getRequest()),
+                                      ICheckinCheckoutManager)
+
+            if not manager.has_initial_version():
+                manager.create_initial_version()
+
             obj.reindexObject(idxs=['checked_out'])
 
         if self._trashed:

@@ -7,6 +7,7 @@ from opengever.document.browser.download import DownloadConfirmationHelper
 from opengever.journal.browser import JournalHistory
 from opengever.testing import FunctionalTestCase
 from opengever.testing.helpers import create_document_version
+from opengever.testing.helpers import create_initial_version
 from plone.app.testing import login
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
@@ -23,6 +24,7 @@ class TestDocumentDownloadConfirmation(FunctionalTestCase):
         super(TestDocumentDownloadConfirmation, self).setUp()
         login(self.portal, TEST_USER_NAME)
         self.document = create(Builder("document").titled(u'A letter for you'))
+        create_initial_version(self.document)
 
         file_ = NamedBlobFile('bla bla', filename=u'test.txt')
         self.document.file = file_

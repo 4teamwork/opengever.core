@@ -15,6 +15,7 @@ from opengever.officeconnector.interfaces import IOfficeConnectorSettings
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
 from opengever.testing.helpers import create_document_version
+from opengever.testing.helpers import create_initial_version
 from opengever.trash.trash import Trasher
 from plone import api
 from plone.app.testing import login
@@ -28,7 +29,6 @@ from plone.protect import createToken
 from Products.CMFCore.utils import getToolByName
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getMultiAdapter
-
 import jwt
 import transaction
 
@@ -93,12 +93,14 @@ class TestReverting(FunctionalTestCase):
                                .attach_file_containing(
                                    u"INITIAL VERSION DATA", u"somefile.txt"))
 
-        create_document_version(self.document, 1)
-        create_document_version(self.document, 2)
-        transaction.commit()
 
         self.manager = getMultiAdapter(
             (self.document, self.portal.REQUEST), ICheckinCheckoutManager)
+
+        self.manager.create_initial_version()
+        create_document_version(self.document, 1)
+        create_document_version(self.document, 2)
+        transaction.commit()
 
     def test_creates_new_version_with_same_data(self):
         self.manager.revert_to_version(2)

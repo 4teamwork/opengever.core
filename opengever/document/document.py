@@ -244,9 +244,16 @@ class Document(Item, BaseDocumentMixin):
         assert repository.isVersionable(self), \
             'Document is not versionable'
         history = repository.getHistoryMetadata(self)
-        current_version = history.getLength(countPurged=False) - 1
-        assert history.retrieve(current_version), \
-            'missing history entry for verion {}'.format(current_version)
+
+        if history:
+            current_version = history.getLength(countPurged=False) - 1
+            assert history.retrieve(current_version), \
+                'missing history entry for verion {}'.format(current_version)
+        else:
+            # there is no version created, so the current version id is 0
+            # (the initial version)
+            current_version = 0
+
         return current_version
 
     def update_file(self, filename, content_type, data):

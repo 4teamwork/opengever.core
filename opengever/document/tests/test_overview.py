@@ -6,6 +6,7 @@ from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY  # noqa
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import FunctionalTestCase
+from opengever.testing.helpers import create_initial_version
 from plone import api
 from plone.app.testing import login
 from plone.app.testing import logout
@@ -394,6 +395,8 @@ class TestOverviewMeetingFeatures(FunctionalTestCase):
 
     @browsing
     def test_outdated_document_can_be_updated(self, browser):
+        create_initial_version(self.document)
+
         # create a new document version
         repository = api.portal.get_tool('portal_repository')
         repository.save(self.document)

@@ -2,9 +2,12 @@ from datetime import datetime
 from lxml.cssselect import LxmlTranslator
 from opengever.base.date_time import as_utc
 from opengever.contact.sources import ContactsSource
+from opengever.document.interfaces import ICheckinCheckoutManager
 from plone import api
 from Products.CMFCore.utils import getToolByName
 from Products.PloneLanguageTool.LanguageTool import LanguageBinding
+from zope.component import getMultiAdapter
+from zope.globalrequest import getRequest
 import pytz
 import transaction
 
@@ -65,6 +68,12 @@ def add_languages(codes, support_combined=True):
         lang_tool.addSupportedLanguage(code)
 
     transaction.commit()
+
+
+def create_initial_version(doc):
+    manager = getMultiAdapter((doc, getRequest()), ICheckinCheckoutManager)
+    manager.create_initial_version()
+
 
 def create_document_version(doc, version_id, data=None):
     repo_tool = api.portal.get_tool('portal_repository')

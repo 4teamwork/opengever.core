@@ -5,6 +5,7 @@ Changelog
 2017.5.2 (unreleased)
 ---------------------
 
+- Change initial version creation, create version only when checking out a document. [phgross]
 - SPV word: Improve visual feedback when scheduling text or paragraph. [jone]
 - SPV word: Remove proposal document's title prefix. [tarnap]
 - SPV word: Remove "Ad-hoc" from the GUI. [tarnap]
