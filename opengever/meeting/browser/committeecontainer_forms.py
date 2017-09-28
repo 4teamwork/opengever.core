@@ -18,8 +18,11 @@ class AddForm(TranslatedTitleAddForm):
         if not is_word_meeting_implementation_enabled():
             self.widgets['ad_hoc_template'].mode = HIDDEN_MODE
             self.widgets['paragraph_template'].mode = HIDDEN_MODE
+            self.widgets['protocol_header_template'].mode = HIDDEN_MODE
+            self.widgets['protocol_suffix_template'].mode = HIDDEN_MODE
         else:
             self.widgets['excerpt_template'].mode = HIDDEN_MODE
+            self.widgets['protocol_template'].mode = HIDDEN_MODE
 
 
 @adapter(IFolderish, IDefaultBrowserLayer, IDexterityFTI)
@@ -36,5 +39,8 @@ class EditForm(TranslatedTitleEditForm):
         if not is_word_meeting_implementation_enabled():
             self.widgets['ad_hoc_template'].mode = HIDDEN_MODE
             self.widgets['paragraph_template'].mode = HIDDEN_MODE
+            self.widgets['protocol_header_template'].mode = HIDDEN_MODE
+            self.widgets['protocol_suffix_template'].mode = HIDDEN_MODE
         else:
             self.widgets['excerpt_template'].mode = HIDDEN_MODE
+            self.widgets['protocol_template'].mode = HIDDEN_MODE

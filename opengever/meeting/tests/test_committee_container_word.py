@@ -31,7 +31,8 @@ class TestCommitteeContainer(IntegrationTestCase):
         browser.open()
         factoriesmenu.add('Committee Container')
         browser.fill({'Title': u'Sitzungen',
-                      'Protocol template': self.sablon_template,
+                      'Protocol header template': self.sablon_template,
+                      'Protocol suffix template': self.sablon_template,
                       'Ad hoc agenda item template': self.proposal_template}).save()
         statusmessages.assert_no_error_messages()
 
@@ -61,7 +62,8 @@ class TestCommitteeContainer(IntegrationTestCase):
         browser.open()
         factoriesmenu.add('Committee Container')
         browser.fill({'Title': u'Sitzungen',
-                      'Protocol template': self.sablon_template,
+                      'Protocol header template': self.sablon_template,
+                      'Protocol suffix template': self.sablon_template,
                       'Paragraph template': self.sablon_template}).save()
         statusmessages.assert_no_error_messages()
 

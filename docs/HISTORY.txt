@@ -23,6 +23,7 @@ Changelog
 - SPV word: Display other participants in meeting view. [tarnap]
 - SPV word: Introduce successor proposals. [jone]
 - Ungrok proposal add form. [jone]
+- SPV word: Add protocol header and suffix templates. [tarnap]
 - SPV word: Improve visual feedback when scheduling text or paragraph. [jone]
 - SPV word: Remove proposal document's title prefix. [tarnap]
 - SPV word: Hide excerpt template from form when word feature enabled. [tarnap]

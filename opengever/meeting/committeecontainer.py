@@ -12,9 +12,19 @@ from z3c.relationfield.schema import RelationChoice
 from zope.interface import Invalid
 
 
-def excerpt_template_constraint(value):
+def required_with_word_feature(value):
     if is_word_meeting_implementation_enabled():
         # The excerpt template is not used when word-meeting feature is enabled
+        return True
+    if not value:
+        raise Invalid()
+    return True
+
+
+def required_without_word_feature(value):
+    if not is_word_meeting_implementation_enabled():
+        # protocol header template and protocol suffix template are only used
+        # when the word-meeting feature is enabled
         return True
     if not value:
         raise Invalid()
@@ -28,14 +38,30 @@ class ICommitteeContainer(form.Schema):
     protocol_template = RelationChoice(
         title=_('Protocol template'),
         source=sablon_template_source,
-        required=True,
+        required=False,
+        constraint=required_without_word_feature,
+    )
+
+    protocol_header_template = RelationChoice(
+        title=_('label_protocol_header_template',
+                default='Protocol header template'),
+        source=sablon_template_source,
+        required=False,
+        constraint=required_with_word_feature,
+    )
+
+    protocol_suffix_template = RelationChoice(
+        title=_('label_protocol_suffix_template',
+                default='Protocol suffix template'),
+        source=sablon_template_source,
+        required=False,
     )
 
     excerpt_template = RelationChoice(
         title=_('Excerpt template'),
         source=sablon_template_source,
         required=False,
-        constraint=excerpt_template_constraint,
+        constraint=required_without_word_feature,
     )
 
     agendaitem_list_template = RelationChoice(
@@ -96,6 +122,12 @@ class CommitteeContainer(Container, TranslatedTitleMixin):
 
     def get_protocol_template(self):
         return self.protocol_template.to_object
+
+    def get_protocol_header_template(self):
+        return self.protocol_header_template.to_object
+
+    def get_protocol_suffix_template(self):
+        return getattr(self.protocol_suffix_template, 'to_object', None)
 
     def get_excerpt_template(self):
         return self.excerpt_template.to_object

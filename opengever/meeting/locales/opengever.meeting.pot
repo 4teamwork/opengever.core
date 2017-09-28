@@ -1147,9 +1147,19 @@ msgstr ""
 msgid "label_proposed_action"
 msgstr ""
 
+#. Default: "Protocol header template"
+#: ./opengever/meeting/committee.py:65
+msgid "label_protocol_header_template"
+msgstr ""
+
 #. Default: "Protocol start-page"
 #: ./opengever/meeting/browser/meetings/protocol.py
 msgid "label_protocol_start_page_number"
+msgstr ""
+
+#. Default: "Protocol suffix template"
+#: ./opengever/meeting/committee.py:72
+msgid "label_protocol_suffix_template"
 msgstr ""
 
 #. Default: "Publish in"
