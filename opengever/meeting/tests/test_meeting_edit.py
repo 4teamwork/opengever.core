@@ -72,6 +72,7 @@ class TestEditMeeting(IntegrationTestCase):
              ['Presidency:', u'W\xf6lfl Gerda (g.woelfl@hotmail.com)'],
              ['Secretary:', 'Wendler Jens (jens-wendler@gmail.com)'],
              ['Participants:', u'Sch\xf6ller Heidrun (h.schoeller@web.de)'],
+             ['', 'Staatsanwalt'],
              ['Meeting dossier:', 'Sitzungsdossier 9/2017', ''],
              ['Agenda item list:', 'No agenda item list has been generated yet.', ''],
              ['Protocol:', 'No protocol has been generated yet.', '']],
