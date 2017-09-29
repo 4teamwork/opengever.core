@@ -131,12 +131,12 @@ class TestWatcherHandling(ActivityTestCase):
         self.assertEquals(123, resource_1.int_id)
         self.assertEquals(456, resource_2.int_id)
 
-        self.assertEquals([hugo, fritz], self.center.get_watchers(Oguid('fd', '123')))
-        self.assertEquals([peter],
+        self.assertEquals((hugo, fritz), self.center.get_watchers(Oguid('fd', '123')))
+        self.assertEquals((peter,),
                           self.center.get_watchers(Oguid('fd', '456')))
 
     def test_get_watchers_returns_empty_list_when_resource_not_exists(self):
-        self.assertEquals([], self.center.get_watchers(Oguid('fd', '123')))
+        self.assertEquals((), self.center.get_watchers(Oguid('fd', '123')))
 
     def test_remove_watcher_from_resource_will_be_ignored_when_watcher_not_exists(self):
         create(Builder('resource').oguid('fd:123'))
