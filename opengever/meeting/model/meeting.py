@@ -147,6 +147,13 @@ class Meeting(Base, SQLFormSupport):
     excerpt_documents = relationship('GeneratedExcerpt',
                                      secondary=meeting_excerpts,)
 
+    def get_other_participants_list(self):
+        if self.other_participants is not None:
+            return filter(len, map(lambda value: value.strip(),
+                                   self.other_participants.split('\n')))
+        else:
+            return []
+
     def initialize_participants(self):
         """Set all active members of our committee as participants of
         this meeting.
