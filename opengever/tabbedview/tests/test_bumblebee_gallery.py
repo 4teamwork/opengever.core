@@ -1,6 +1,7 @@
 from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.builder import ticking_creator
 from ftw.tabbedview.interfaces import ITabbedView
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
@@ -325,35 +326,37 @@ class TestBumblebeeGalleryMixinPreviews(FunctionalTestCase):
             list(view.previews()))
 
     def test_return_stream_from_the_given_document_pointer(self):
-        dossier = create(Builder('dossier'))
+        with freeze() as clock:
+            create = ticking_creator(clock, days=1)
+            dossier = create(Builder('dossier'))
 
-        view = getMultiAdapter(
-            (dossier, self.request), name="tabbedview_view-documents-gallery")
+            create(Builder('document').within(dossier).titled(u'Very Old'))
+            create(Builder('document').within(dossier).titled(u'Old'))
+            create(Builder('document').within(dossier).titled(u'New'))
 
-        self.request.set('documentPointer', 1)
-
-        create(Builder('document').within(dossier))
-        document1 = create(Builder('document').within(dossier))
-        document2 = create(Builder('document').within(dossier))
-
-        self.assertEqual(
-            [document1.UID(), document2.UID()],
-            [item.get('uid') for item in view.previews()])
+            # Assume we see "New", lets fetch more content.
+            self.request.form['documentPointer'] = 1
+            view = getMultiAdapter(
+                (dossier, self.request), name="tabbedview_view-documents-gallery")
+            self.assertEqual(
+                ['Old', 'Very Old'],
+                [item.get('title') for item in view.previews()])
 
     def test_stream_length_is_configurable_through_tabbedview_pagesize(self):
-        dossier = create(Builder('dossier'))
-        api.portal.set_registry_record('batch_size', 2, interface=ITabbedView)
+        with freeze() as clock:
+            create = ticking_creator(clock, days=1)
+            dossier = create(Builder('dossier'))
 
-        view = getMultiAdapter(
-            (dossier, self.request), name="tabbedview_view-documents-gallery")
+            create(Builder('document').within(dossier).titled(u'Very Old'))
+            create(Builder('document').within(dossier).titled(u'Old'))
+            create(Builder('document').within(dossier).titled(u'New'))
 
-        document0 = create(Builder('document').within(dossier))
-        document1 = create(Builder('document').within(dossier))
-        create(Builder('document').within(dossier))
-
-        self.assertEqual(
-            [document0.UID(), document1.UID()],
-            [item.get('uid') for item in view.previews()])
+            api.portal.set_registry_record('batch_size', 2, interface=ITabbedView)
+            view = getMultiAdapter(
+                (dossier, self.request), name="tabbedview_view-documents-gallery")
+            self.assertEqual(
+                ['New', 'Old'],
+                [item.get('title') for item in view.previews()])
 
     def test_returns_empty_list_if_pointer_does_not_point_to_any_object(self):
         dossier = create(Builder('dossier'))
