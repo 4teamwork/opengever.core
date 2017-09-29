@@ -80,11 +80,16 @@ class NotificationCenter(object):
                 self.session.delete(subscription)
 
     def get_watchers(self, oguid):
+        """Returns a read-only tuple of watchers for a given oguid.
+        """
         resource = Resource.query.get_by_oguid(oguid)
         if not resource:
-            return []
+            return ()
 
-        return resource.watchers
+        # resources.watchers is an association_proxy. When not consumed properly
+        # the GC will remove things, resulting in a "stale association proxy"
+        # error. In order to avoid that we consume it by making a tuple.
+        return tuple(resource.watchers)
 
     def add_activity(self, oguid, kind, title, label, summary, actor_id, description):
         if description is None:
