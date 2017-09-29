@@ -1650,7 +1650,7 @@ msgstr "Status:"
 #. Default: "Other participants:"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:200
 msgid "view_label_other_participants"
-msgstr ""
+msgstr "Weitere Teilnehmende"
 
 #. Default: "Participants:"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
