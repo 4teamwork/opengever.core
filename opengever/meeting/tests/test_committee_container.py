@@ -3,6 +3,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import editbar
+from ftw.testbrowser.pages import statusmessages
 from ftw.testbrowser.pages import factoriesmenu
 from opengever.base.date_time import utcnow_tz_aware
 from opengever.testing import add_languages
@@ -23,8 +24,8 @@ class TestCommitteeContainer(IntegrationTestCase):
                       'Title (French)': u's\xe9ance',
                       'Protocol template': self.sablon_template,
                       'Excerpt template': self.sablon_template,
-                      'Table of contents template': self.sablon_template})
-        browser.find('Save').click()
+                      'Table of contents template': self.sablon_template}).save()
+        statusmessages.assert_no_error_messages()
 
         browser.find(u'Fran\xe7ais').click()
         self.assertEquals(u's\xe9ance', browser.css('h1').first.text)

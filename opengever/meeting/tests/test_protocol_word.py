@@ -46,6 +46,7 @@ class TestProtocolWithWord(IntegrationTestCase):
 
         browser.open(meeting.get_url())
         browser.find('Close meeting').click()
+        statusmessages.assert_no_error_messages()
 
         self.assertIsNotNone(meeting.protocol_document)
         self.assertEqual(0, meeting.protocol_document.generated_version)
