@@ -58,7 +58,7 @@ class DocumentFromOfficeatwork(WizzardWrappedAddForm):
                 redirector.redirect(target_url)
 
                 return self.request.RESPONSE.redirect(
-                    '{}#documents'.format(self.context.absolute_url()))
+                    '{}?oaw_init=1'.format(aq_wrapped_doc.absolute_url()))
 
             def create(self, data):
                 document = super(WrappedForm, self).create(data)
