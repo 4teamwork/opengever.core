@@ -183,8 +183,12 @@
     this.closeModal = function() {
       unscheduleDialog.close();
       deleteDialog.close();
-      returnExcerptDialog.close();
-      createExcerptDialog.close();
+      if (typeof(returnExcerptDialog) !== 'undefined') {
+        returnExcerptDialog.close();
+      }
+      if (typeof(createExcerptDialog) !== 'undefined') {
+        createExcerptDialog.close();
+      }
     };
 
     this.updateSortOrder = function() {
