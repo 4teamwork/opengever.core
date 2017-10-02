@@ -34,6 +34,7 @@ from Products.CMFPlone.utils import safe_unicode
 from z3c.relationfield.relation import RelationValue
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
+from zc.relation.interfaces import ICatalog
 from zope import schema
 from zope.component import getUtility
 from zope.interface import implements
@@ -258,6 +259,28 @@ class ProposalBase(ModelContainer):
              'value': model.get_decision_number(),
              'is_html': True},
         ])
+
+        if is_word_meeting_implementation_enabled():
+            if self.predecessor_proposal and self.predecessor_proposal.to_object:
+                predecessor_model = self.predecessor_proposal.to_object.load_model()
+                attributes.append({
+                    'label': _('label_predecessor', default=u'Predecessor'),
+                    'value': predecessor_model.get_link(),
+                    'is_html': True})
+
+            catalog = getUtility(ICatalog)
+            doc_id = getUtility(IIntIds).getId(aq_inner(self))
+            successor_html_items = []
+            for relation in catalog.findRelations({
+                    'to_id': doc_id,
+                    'from_attribute': 'predecessor_proposal'}):
+                successor_html_items.append(u'<li>{}</li>'.format(
+                    relation.from_object.load_model().get_link()))
+            if successor_html_items:
+                attributes.append({
+                    'label': _('label_successors', default=u'Successors'),
+                    'value': u'<ul>{}</ul>'.format(''.join(successor_html_items)),
+                    'is_html': True})
 
         return attributes
 

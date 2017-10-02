@@ -271,6 +271,7 @@ class TestProposalWithWord(IntegrationTestCase):
             ' as proposal template.')
 
         browser.fill({
+            'Title': u'\xc4nderungen am Personalreglement zur Nachpr\xfcfung',
             'Proposal template': self.word_proposal.get_proposal_document().Title(),
         }).save()
         statusmessages.assert_no_error_messages()
@@ -278,16 +279,29 @@ class TestProposalWithWord(IntegrationTestCase):
         proposal = browser.context
         browser.open(proposal, view='tabbedview_view-overview')
         self.assertEquals(
-            [['Title', u'\xc4nderungen am Personalreglement'],
+            [['Title', u'\xc4nderungen am Personalreglement zur Nachpr\xfcfung'],
              ['Committee', u'Rechnungspr\xfcfungskommission'],
              ['Meeting', ''],
-             ['Proposal document', u'\xc4nderungen am Personalreglement'],
+             ['Proposal document',
+              u'\xc4nderungen am Personalreglement zur Nachpr\xfcfung'],
              ['State', 'Pending'],
              ['Decision number', ''],
+             ['Predecessor', u'\xc4nderungen am Personalreglement'],
              ['Attachments', u'Vertr\xe4gsentwurf']],
             browser.css('table.listing').first.lists())
 
         browser.open(self.word_proposal, view='tabbedview_view-overview')
-        self.assertIn(u'Successor proposal \xc4nderungen am Personalreglement '
+        self.assertIn(u'Successor proposal '
+                      u'\xc4nderungen am Personalreglement zur Nachpr\xfcfung '
                       u'created by Ziegler Robert (robert.ziegler)',
                       browser.css('.answers .answerBody h3').text)
+        self.assertEquals(
+            [['Title', u'\xc4nderungen am Personalreglement'],
+             ['Committee', u'Rechnungspr\xfcfungskommission'],
+             ['Meeting', u'9. Sitzung der Rechnungspr\xfcfungskommission'],
+             ['Proposal document', u'\xc4nderungen am Personalreglement'],
+             ['State', 'Decided'],
+             ['Decision number', '2016 / 2'],
+             ['Successors', u'\xc4nderungen am Personalreglement zur Nachpr\xfcfung'],
+             ['Attachments', u'Vertr\xe4gsentwurf']],
+            browser.css('table.listing').first.lists())

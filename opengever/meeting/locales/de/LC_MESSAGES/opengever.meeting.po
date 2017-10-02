@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-04 14:04+0000\n"
-"PO-Revision-Date: 2017-10-04 16:05+0200\n"
+"POT-Creation-Date: 2017-10-04 14:05+0000\n"
+"PO-Revision-Date: 2017-10-02 16:56+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1113,6 +1113,11 @@ msgstr "Vorlage für Zwischentitel"
 msgid "label_participants"
 msgstr "Teilnehmende"
 
+#. Default: "Predecessor"
+#: ./opengever/meeting/proposal.py
+msgid "label_predecessor"
+msgstr "Vorgänger"
+
 #. Default: "Presidency"
 #: ./opengever/meeting/browser/meetings/protocol.py
 msgid "label_presidency"
@@ -1218,6 +1223,11 @@ msgstr "Zieldossier"
 #: ./opengever/meeting/browser/meetings/protocol.py
 msgid "label_start"
 msgstr "Start"
+
+#. Default: "Successors"
+#: ./opengever/meeting/proposal.py
+msgid "label_successors"
+msgstr "Folgeanträge"
 
 #. Default: "Title"
 #: ./opengever/meeting/browser/meetings/excerpt.py

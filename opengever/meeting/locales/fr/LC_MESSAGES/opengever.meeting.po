@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-04 14:04+0000\n"
+"POT-Creation-Date: 2017-10-04 14:05+0000\n"
 "PO-Revision-Date: 2017-06-22 09:02+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -1115,6 +1115,11 @@ msgstr ""
 msgid "label_participants"
 msgstr "Participants"
 
+#. Default: "Predecessor"
+#: ./opengever/meeting/proposal.py
+msgid "label_predecessor"
+msgstr ""
+
 #. Default: "Presidency"
 #: ./opengever/meeting/browser/meetings/protocol.py
 msgid "label_presidency"
@@ -1220,6 +1225,11 @@ msgstr "Fichier-cible"
 #: ./opengever/meeting/browser/meetings/protocol.py
 msgid "label_start"
 msgstr "Début"
+
+#. Default: "Successors"
+#: ./opengever/meeting/proposal.py
+msgid "label_successors"
+msgstr ""
 
 #. Default: "Title"
 #: ./opengever/meeting/browser/meetings/excerpt.py
