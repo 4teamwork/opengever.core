@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-04 13:45+0000\n"
-"PO-Revision-Date: 2017-09-25 13:37+0200\n"
+"POT-Creation-Date: 2017-10-04 13:51+0000\n"
+"PO-Revision-Date: 2017-10-02 15:13+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -456,6 +456,11 @@ msgstr "Periode abschliessen"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "button_continue"
 msgstr "Weiter"
+
+#. Default: "Create successor proposal"
+#: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt
+msgid "button_create_successor_proposal"
+msgstr "Folgeantrag erstellen"
 
 #. Default: "Submit Attachments"
 #: ./opengever/meeting/browser/documents/submit.py
@@ -1676,4 +1681,3 @@ msgstr "Antrag traktandieren:"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "view_label_secretary"
 msgstr "Protokollführung:"
-

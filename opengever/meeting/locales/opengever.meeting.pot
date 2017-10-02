@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-04 13:45+0000\n"
+"POT-Creation-Date: 2017-10-04 13:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -454,6 +454,11 @@ msgstr ""
 #: ./opengever/meeting/browser/committeeforms.py
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "button_continue"
+msgstr ""
+
+#. Default: "Create successor proposal"
+#: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt
+msgid "button_create_successor_proposal"
 msgstr ""
 
 #. Default: "Submit Attachments"
@@ -1675,4 +1680,3 @@ msgstr ""
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "view_label_secretary"
 msgstr ""
-

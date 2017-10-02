@@ -26,7 +26,9 @@ from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from plone import api
 from plone.app.uuid.utils import uuidToObject
+from plone.autoform.directives import mode
 from plone.directives import form
+from plone.formwidget.contenttree import ObjPathSourceBinder
 from plone.uuid.interfaces import IUUID
 from Products.CMFPlone.utils import safe_unicode
 from z3c.relationfield.relation import RelationValue
@@ -137,6 +139,14 @@ class IProposal(form.Schema):
             ),
         required=False,
         )
+
+    mode(predecessor_proposal='hidden')
+    predecessor_proposal = RelationChoice(
+        title=u'Predecessor proposal',
+        default=None,
+        missing_value=None,
+        required=False,
+        source=ObjPathSourceBinder(portal_type='opengever.meeting.proposal'))
 
 
 class ISubmittedProposal(IProposal):

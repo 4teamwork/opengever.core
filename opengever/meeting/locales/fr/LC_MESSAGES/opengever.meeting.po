@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-04 13:45+0000\n"
+"POT-Creation-Date: 2017-10-04 13:51+0000\n"
 "PO-Revision-Date: 2017-06-22 09:02+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -458,6 +458,11 @@ msgstr "Clôturer une période"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "button_continue"
 msgstr "Continuer"
+
+#. Default: "Create successor proposal"
+#: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt
+msgid "button_create_successor_proposal"
+msgstr ""
 
 #. Default: "Submit Attachments"
 #: ./opengever/meeting/browser/documents/submit.py
@@ -1678,4 +1683,3 @@ msgstr ""
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "view_label_secretary"
 msgstr ""
-

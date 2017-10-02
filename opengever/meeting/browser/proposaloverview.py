@@ -66,6 +66,16 @@ class OverviewBase(object):
         return '{}/@@bumblebee-overlay-document'.format(
             self.context.get_proposal_document().absolute_url())
 
+    def is_create_successor_proposal_button_visible(self):
+        """Returns True when the "Create successor proposal" should be
+        displayed.
+        """
+        if ISubmittedProposal.providedBy(self.context):
+            return False
+
+        model = self.context.load_model()
+        return model.get_state() == model.STATE_DECIDED
+
 
 class ProposalOverview(OverviewBase, DisplayForm, GeverTabMixin):
     grok.context(IProposal)
