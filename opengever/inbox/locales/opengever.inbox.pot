@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-06-07 12:34+0000\n"
+"POT-Creation-Date: 2017-10-02 12:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.inbox\n"
 
-#: ./opengever/inbox/browser/overview.py:41
+#: ./opengever/inbox/browser/overview.py
 msgid "Documents"
 msgstr ""
 
@@ -30,90 +30,90 @@ msgid "Inbox Container"
 msgstr ""
 
 #. Default: "Close"
-#: ./opengever/inbox/browser/close.py:37
+#: ./opengever/inbox/browser/close.py
 msgid "close"
 msgstr ""
 
 #. Default: "Your not allowed to access the inbox of ${current_org_unit}."
-#: ./opengever/inbox/browser/view.py:15
+#: ./opengever/inbox/browser/view.py
 msgid "current_inbox_not_available"
 msgstr ""
 
 #. Default: "Error: Please select at least one document to forward."
-#: ./opengever/inbox/forwarding.py:118
+#: ./opengever/inbox/forwarding.py
 msgid "error_no_document_selected"
 msgstr ""
 
 #. Default: "Common"
-#: ./opengever/inbox/inbox.py:20
+#: ./opengever/inbox/inbox.py
 msgid "fieldset_common"
 msgstr ""
 
 #. Default: "Forwarding"
-#: ./opengever/inbox/forwarding.py:89
+#: ./opengever/inbox/forwarding.py
 msgid "forwarding_task_type"
 msgstr ""
 
-#: ./opengever/inbox/inbox.py:26
+#: ./opengever/inbox/inbox.py
 msgid "help_inbox_group"
 msgstr ""
 
-#: ./opengever/inbox/forwarding.py:59
+#: ./opengever/inbox/forwarding.py
 msgid "help_responsible"
 msgstr ""
 
 #. Default: "Assigned tasks"
-#: ./opengever/inbox/browser/overview.py:31
+#: ./opengever/inbox/browser/overview.py
 msgid "label_assigned_inbox_tasks"
 msgstr ""
 
 #. Default: "Forwarding added"
-#: ./opengever/inbox/activities.py:27
+#: ./opengever/inbox/activities.py
 msgid "label_forwarding_added"
 msgstr ""
 
 #. Default: "Inbox Group"
-#: ./opengever/inbox/inbox.py:25
+#: ./opengever/inbox/inbox.py
 msgid "label_inbox_group"
 msgstr ""
 
 #. Default: "Issued tasks"
-#: ./opengever/inbox/browser/overview.py:36
+#: ./opengever/inbox/browser/overview.py
 msgid "label_issued_inbox_tasks"
 msgstr ""
 
 #. Default: "Refuse"
-#: ./opengever/inbox/browser/refuse.py:39
+#: ./opengever/inbox/browser/refuse.py
 msgid "label_refuse"
 msgstr ""
 
 #. Default: "Refuse Forwarding"
-#: ./opengever/inbox/browser/refuse.py:36
+#: ./opengever/inbox/browser/refuse.py
 msgid "label_refuse_forwarding"
 msgstr ""
 
 #. Default: "Responsible"
-#: ./opengever/inbox/forwarding.py:58
+#: ./opengever/inbox/forwarding.py
 msgid "label_responsible"
 msgstr ""
 
 #. Default: "New forwarding added by ${user}"
-#: ./opengever/inbox/activities.py:20
+#: ./opengever/inbox/activities.py
 msgid "msg_forwarding_added"
 msgstr ""
 
 #. Default: "Assign Forwarding"
-#: ./opengever/inbox/browser/assign.py:39
+#: ./opengever/inbox/browser/assign.py
 msgid "title_assign_forwarding"
 msgstr ""
 
 #. Default: "Close orwarding"
-#: ./opengever/inbox/browser/close.py:35
+#: ./opengever/inbox/browser/close.py
 msgid "title_close_forwarding"
 msgstr ""
 
 #. Default: "Closed ${year}"
-#: ./opengever/inbox/yearfolder.py:39
+#: ./opengever/inbox/yearfolder.py
 msgid "yearfolder_title"
 msgstr ""
 

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-04-27 11:21+0000\n"
+"POT-Creation-Date: 2017-10-02 12:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,49 +14,39 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ./opengever/sharing/browser/sharing.py:35
+#: ./opengever/sharing/browser/sharing.py
 msgid "sharing_contributor"
 msgstr "Hinzufügen"
 
-#: ./opengever/sharing/browser/sharing.py:27
+#: ./opengever/sharing/browser/sharing.py
 msgid "sharing_dossier_contributor"
 msgstr "Dossiers hinzufügen"
 
-#: ./opengever/sharing/browser/sharing.py:28
+#: ./opengever/sharing/browser/sharing.py
 msgid "sharing_dossier_editor"
 msgstr "Dossiers bearbeiten"
 
-#: ./opengever/sharing/browser/sharing.py:30
+#: ./opengever/sharing/browser/sharing.py
 msgid "sharing_dossier_publisher"
 msgstr "Dossiers reaktivieren"
 
-#: ./opengever/sharing/browser/sharing.py:26
+#: ./opengever/sharing/browser/sharing.py
 msgid "sharing_dossier_reader"
 msgstr "Lesen"
 
-#: ./opengever/sharing/browser/sharing.py:29
+#: ./opengever/sharing/browser/sharing.py
 msgid "sharing_dossier_reviewer"
 msgstr "Dossiers abschliessen"
 
-#: ./opengever/sharing/browser/sharing.py:36
+#: ./opengever/sharing/browser/sharing.py
 msgid "sharing_editor"
 msgstr "Bearbeiten"
 
-#: ./opengever/sharing/browser/sharing.py:34
+#: ./opengever/sharing/browser/sharing.py
 msgid "sharing_reader"
 msgstr "Lesen"
 
-#: ./opengever/sharing/browser/sharing.py:37
+#: ./opengever/sharing/browser/sharing.py
 msgid "sharing_role_manager"
 msgstr "Rollen verwalten"
-
-#. Default: "Can administrate"
-#: ./opengever/sharing/utilities.py:12
-msgid "title_can_administrate"
-msgstr "Administrieren"
-
-#. Default: "Can publish"
-#: ./opengever/sharing/utilities.py:20
-msgid "title_can_publish"
-msgstr "Publizieren"
 

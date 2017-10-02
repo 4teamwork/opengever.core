@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: opengever.trash 1.0\n"
-"POT-Creation-Date: 2017-06-07 12:34+0000\n"
+"POT-Creation-Date: 2017-10-02 12:52+0000\n"
 "PO-Revision-Date: 2017-05-03 09:38+0200\n"
 "Last-Translator: Julian Infanger <julian.infangner.@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -15,83 +15,83 @@ msgstr ""
 "Domain: DOMAIN\n"
 "X-Is-Fallback-For: de-at de-li de-lu de-ch de-de\n"
 
-#: ./opengever/trash/trash.py:119
+#: ./opengever/trash/browser/trash.py
 msgid "Trashing ${title} is forbidden"
 msgstr "Das Objekt ${title} darf nicht in den Papierkorb verschoben werden."
 
-#: ./opengever/trash/trash.py:158
+#: ./opengever/trash/browser/trash.py
 msgid "Untrashing ${title} is forbidden"
 msgstr "Das Objekt ${title} darf nicht aus dem Papierkorb reaktiviert werden."
 
-#: ./opengever/trash/trash.py:134
+#: ./opengever/trash/browser/trash.py
 msgid "You have not selected any items."
 msgstr "Sie haben keine Objekte ausgewählt"
 
-#: ./opengever/trash/trash.py:100
+#: ./opengever/trash/browser/trash.py
 msgid "could not trash the object ${obj}, it is already trashed"
 msgstr "Das Objekt ${obj} wurde bereits in den Papierkorb verschoben"
 
-#: ./opengever/trash/trash.py:109
+#: ./opengever/trash/browser/trash.py
 msgid "could not trash the object ${obj}, it is checked out."
 msgstr "Das Objekt ${obj} konnte nicht in den Papierkorb verschoben werden, es ist ausgecheckt."
 
 #. Default: "You have not selected any items."
-#: ./opengever/trash/browser/remove_confirmation.py:35
+#: ./opengever/trash/browser/remove_confirmation.py
 msgid "error_no_documents_selected"
 msgstr "Sie haben keine Objekte ausgewählt."
 
 #. Default: "Delete"
-#: ./opengever/trash/browser/remove_confirmation_templates/remove_confirmation.pt:55
+#: ./opengever/trash/browser/templates/remove_confirmation.pt
 msgid "label_delete"
 msgstr "Löschen"
 
 #. Default: "Delete documents"
-#: ./opengever/trash/browser/remove_confirmation_templates/remove_confirmation.pt:19
+#: ./opengever/trash/browser/templates/remove_confirmation.pt
 msgid "label_delete_documents"
 msgstr "Dokumente löschen"
 
 #. Default: "Error"
-#: ./opengever/trash/browser/remove_confirmation_templates/remove_confirmation.pt:31
+#: ./opengever/trash/browser/templates/remove_confirmation.pt
 msgid "label_errror"
 msgstr "Fehler"
 
 #. Default: "The documents have been successfully deleted"
-#: ./opengever/trash/browser/remove_confirmation.py:26
+#: ./opengever/trash/browser/remove_confirmation.py
 msgid "label_successfully_deleted"
 msgstr "Die Dokumente wurden efolgreich gelöscht"
 
 #. Default: "Warning"
-#: ./opengever/trash/browser/remove_confirmation_templates/remove_confirmation.pt:24
+#: ./opengever/trash/browser/templates/remove_confirmation.pt
 msgid "label_warning"
 msgstr "Warnung"
 
 #. Default: "Do you really want to delete the selected documents?"
-#: ./opengever/trash/browser/remove_confirmation_templates/remove_confirmation.pt:25
+#: ./opengever/trash/browser/templates/remove_confirmation.pt
 msgid "msg_delete_confirmation"
 msgstr "Möchten Sie die selektierten Dokumente wirklich löschen?"
 
 #. Default: "The selected documents can't be removed, see error messages below."
-#: ./opengever/trash/browser/remove_confirmation_templates/remove_confirmation.pt:32
+#: ./opengever/trash/browser/templates/remove_confirmation.pt
 msgid "msg_delete_not_possible"
 msgstr "Die selektierten Dokumente können nicht gelöscht werden."
 
 #. Default: "The document is referred by the document(s) ${links}."
-#: ./opengever/trash/remover.py:70
+#: ./opengever/trash/remover.py
 msgid "msg_document_has_backreferences"
 msgstr "Auf das Dokument existiert noch eine Referenz von Dokument ${links}."
 
 #. Default: "The document contains relations."
-#: ./opengever/trash/remover.py:60
+#: ./opengever/trash/remover.py
 msgid "msg_document_has_relations"
 msgstr "Das Dokument referenziert andere Dokumente."
 
 #. Default: "The document is still checked out."
-#: ./opengever/trash/remover.py:52
+#: ./opengever/trash/remover.py
 msgid "msg_document_is_checked_out"
 msgstr "Das Dokument ist noch ausgecheckt."
 
 #. Default: "The document is not trashed."
-#: ./opengever/trash/remover.py:77
+#: ./opengever/trash/remover.py
 msgid "msg_is_not_trashed"
 msgstr "Das Dokument ist noch nicht im Papierkorb."
 
@@ -99,7 +99,7 @@ msgstr "Das Dokument ist noch nicht im Papierkorb."
 msgid "remove"
 msgstr "Löschen"
 
-#: ./opengever/trash/trash.py:128
+#: ./opengever/trash/browser/trash.py
 msgid "the object ${obj} trashed"
 msgstr "Das Objekt ${obj} wurde in den Papierkorb verschoben."
 

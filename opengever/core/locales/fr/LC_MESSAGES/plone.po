@@ -55,7 +55,7 @@ msgstr ""
 msgid "opengever_committee_workflow--ROLE-DESCRIPTION--CommitteeMember"
 msgstr ""
 
-#. Default: "The committe responsible is in charge of a committee. This involves creating, planing and hold meetings as well as configuring and deactivating the committee."
+#. Default: "The committe responsible is in charge of a committee. This involves creating, planing and hold meetings as well as configuring and deactivating the committee. The committee responsible role is assigned automatically to the group that can be configured per committee."
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 msgid "opengever_committee_workflow--ROLE-DESCRIPTION--CommitteeResponsible"
 msgstr ""

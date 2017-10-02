@@ -1,31 +1,30 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-04-27 11:21+0000\n"
+"POT-Creation-Date: 2017-10-02 12:52+0000\n"
 "PO-Revision-Date: 2017-06-06 08:42+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
-"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
-"gever/opengever-officeatwork/fr/>\n"
-"Language: fr\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-officeatwork/fr/>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2.13.1\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
+"Language: fr\n"
+"X-Generator: Weblate 2.13.1\n"
 
-#: ./opengever/officeatwork/browser/documentfromofficeatwork.py:29
+#: ./opengever/officeatwork/browser/documentfromofficeatwork.py
 msgid "Add document from officeatwork"
 msgstr "Ajouter le document avec officeatwork"
 
-#: ./opengever/officeatwork/browser/documentfromofficeatwork.py:41
+#: ./opengever/officeatwork/browser/documentfromofficeatwork.py
 msgid "Create with officeatwork"
 msgstr "Créer avec officeatwork"
 
-#: ./opengever/officeatwork/browser/documentfromofficeatwork.py:54
+#: ./opengever/officeatwork/browser/documentfromofficeatwork.py
 msgid "Creation with officeatwork initiated successfully"
-msgstr ""
-"Création du contenu a été démarrée avec succès par le biais d'officeatwork"
+msgstr "Création du contenu a été démarrée avec succès par le biais d'officeatwork"
+

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-09-26 11:54+0000\n"
+"POT-Creation-Date: 2017-10-02 12:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,113 +22,113 @@ msgid "Toggle orgunit selector"
 msgstr ""
 
 #. Default: "No"
-#: ./opengever/ogds/base/browser/templates/userdetails.pt:36
+#: ./opengever/ogds/base/browser/templates/userdetails.pt
 msgid "active_no"
 msgstr ""
 
 #. Default: "Yes"
-#: ./opengever/ogds/base/browser/templates/userdetails.pt:35
+#: ./opengever/ogds/base/browser/templates/userdetails.pt
 msgid "active_yes"
 msgstr ""
 
 #. Default: "Inbox: ${client}"
-#: ./opengever/ogds/base/actor.py:152
-#: ./opengever/ogds/base/sources.py:103
+#: ./opengever/ogds/base/actor.py
+#: ./opengever/ogds/base/sources.py
 msgid "inbox_label"
 msgstr ""
 
 #. Default: "Active"
-#: ./opengever/ogds/base/browser/templates/userdetails.pt:34
+#: ./opengever/ogds/base/browser/templates/userdetails.pt
 msgid "label_active"
 msgstr ""
 
 #. Default: "Address"
-#: ./opengever/ogds/base/browser/templates/userdetails.pt:104
+#: ./opengever/ogds/base/browser/templates/userdetails.pt
 msgid "label_address"
 msgstr ""
 
 #. Default: "Assigned org unit"
-#: ./opengever/ogds/base/browser/templates/teamdetails.pt:22
+#: ./opengever/ogds/base/browser/templates/teamdetails.pt
 msgid "label_assigned_orgunit"
 msgstr ""
 
 #. Default: "Department"
-#: ./opengever/ogds/base/browser/templates/userdetails.pt:60
+#: ./opengever/ogds/base/browser/templates/userdetails.pt
 msgid "label_department"
 msgstr ""
 
 #. Default: "Description"
-#: ./opengever/ogds/base/browser/templates/userdetails.pt:45
+#: ./opengever/ogds/base/browser/templates/userdetails.pt
 msgid "label_description"
 msgstr ""
 
 #. Default: "Directorate"
-#: ./opengever/ogds/base/browser/templates/userdetails.pt:50
+#: ./opengever/ogds/base/browser/templates/userdetails.pt
 msgid "label_directorate"
 msgstr ""
 
 #. Default: "Email"
-#: ./opengever/ogds/base/browser/templates/userdetails.pt:70
+#: ./opengever/ogds/base/browser/templates/userdetails.pt
 msgid "label_email"
 msgstr ""
 
 #. Default: "Email 2"
-#: ./opengever/ogds/base/browser/templates/userdetails.pt:76
+#: ./opengever/ogds/base/browser/templates/userdetails.pt
 msgid "label_email2"
 msgstr ""
 
 #. Default: "Name"
-#: ./opengever/ogds/base/browser/templates/userdetails.pt:29
+#: ./opengever/ogds/base/browser/templates/userdetails.pt
 msgid "label_fullname"
 msgstr ""
 
 #. Default: "Group"
-#: ./opengever/ogds/base/browser/templates/teamdetails.pt:27
+#: ./opengever/ogds/base/browser/templates/teamdetails.pt
 msgid "label_group"
 msgstr ""
 
 #. Default: "Groups"
-#: ./opengever/ogds/base/browser/templates/userdetails.pt:117
+#: ./opengever/ogds/base/browser/templates/userdetails.pt
 msgid "label_groups"
 msgstr ""
 
 #. Default: "Members"
-#: ./opengever/ogds/base/browser/templates/teamdetails.pt:32
+#: ./opengever/ogds/base/browser/templates/teamdetails.pt
 msgid "label_members"
 msgstr ""
 
 #. Default: "Fax"
-#: ./opengever/ogds/base/browser/templates/userdetails.pt:94
+#: ./opengever/ogds/base/browser/templates/userdetails.pt
 msgid "label_phone_fax"
 msgstr ""
 
 #. Default: "Mobile phone"
-#: ./opengever/ogds/base/browser/templates/userdetails.pt:99
+#: ./opengever/ogds/base/browser/templates/userdetails.pt
 msgid "label_phone_mobile"
 msgstr ""
 
 #. Default: "Office phone"
-#: ./opengever/ogds/base/browser/templates/userdetails.pt:89
+#: ./opengever/ogds/base/browser/templates/userdetails.pt
 msgid "label_phone_office"
 msgstr ""
 
 #. Default: "Salutation"
-#: ./opengever/ogds/base/browser/templates/userdetails.pt:40
+#: ./opengever/ogds/base/browser/templates/userdetails.pt
 msgid "label_salutation"
 msgstr ""
 
 #. Default: "Teams"
-#: ./opengever/ogds/base/browser/templates/userdetails.pt:128
+#: ./opengever/ogds/base/browser/templates/userdetails.pt
 msgid "label_teams"
 msgstr ""
 
 #. Default: "URL"
-#: ./opengever/ogds/base/browser/templates/userdetails.pt:82
+#: ./opengever/ogds/base/browser/templates/userdetails.pt
 msgid "label_url"
 msgstr ""
 
 #. Default: "Show all users"
-#: ./opengever/ogds/base/browser/templates/userdetails.pt:23
+#: ./opengever/ogds/base/browser/templates/userdetails.pt
 msgid "link_all_users"
 msgstr ""
 

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-04-27 11:21+0000\n"
+"POT-Creation-Date: 2017-10-02 12:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,32 +14,32 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ./opengever/quota/browser/templates/usage.pt:35
+#: ./opengever/quota/browser/templates/usage.pt
 msgid "Back"
 msgstr "Zurück"
 
-#: ./opengever/quota/sizequota.py:87
+#: ./opengever/quota/sizequota.py
 msgid "Can not add this item because it exhausts the quota."
 msgstr "Dieser Inhalt kann nicht hinzugefügt werden, weil damit der Ihnen zur Verfügung stehende Speicherplatz überschritten würde."
 
-#: ./opengever/quota/browser/templates/usage.pt:27
+#: ./opengever/quota/browser/templates/usage.pt
 msgid "Hard limit"
 msgstr "Hard-Limit"
 
-#: ./opengever/quota/browser/templates/usage.pt:23
+#: ./opengever/quota/browser/templates/usage.pt
 msgid "Soft limit"
 msgstr "Soft-Limit"
 
-#: ./opengever/quota/browser/templates/usage.pt:19
+#: ./opengever/quota/browser/templates/usage.pt
 msgid "Usage"
 msgstr "Nutzung"
 
-#: ./opengever/quota/browser/usage.py:18
+#: ./opengever/quota/browser/usage.py
 msgid "unlimited"
 msgstr "unlimitiert"
 
 #. Default: "Usage of «${title}»"
-#: ./opengever/quota/browser/templates/usage.pt:12
+#: ./opengever/quota/browser/templates/usage.pt
 msgid "usage_title"
 msgstr "Nutzung in «${title}»"
 

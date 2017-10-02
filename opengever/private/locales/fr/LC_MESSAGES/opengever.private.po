@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-06-07 12:34+0000\n"
+"POT-Creation-Date: 2017-10-02 12:52+0000\n"
 "PO-Revision-Date: 2017-06-04 16:00+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-private/fr/>\n"
@@ -16,16 +16,16 @@ msgstr ""
 "Language: fr\n"
 "X-Generator: Weblate 2.13.1\n"
 
-#: ./opengever/private/viewlets/quotawarning.py:31
+#: ./opengever/private/viewlets/quotawarning.py
 msgid "The quota of your private folder has exceeded, you can not add any new files or mails."
 msgstr "Vous avez dépassé l'espace de mémoire disponible pour le stockage de vos documents personnels: il n'est pas possible d'ajouter d'autres données ou e-mails."
 
-#: ./opengever/private/viewlets/quotawarning.py:37
+#: ./opengever/private/viewlets/quotawarning.py
 msgid "The quota of your private folder will exceed soon."
 msgstr "L'espace de mémoire disponible pour le stockage de vos documents personnels est bientôt saturé. Créez plus d'espace libre en supprimant des fichiers."
 
 #. Default: "Dossiers"
-#: ./opengever/private/browser/tabbed.py:15
+#: ./opengever/private/browser/tabbed.py
 msgid "label_dossiers"
 msgstr "Dossiers"
 

@@ -1,99 +1,98 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-06-07 12:34+0000\n"
+"POT-Creation-Date: 2017-10-02 12:52+0000\n"
 "PO-Revision-Date: 2017-09-03 09:24+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
-"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
-"gever/opengever-trash/fr/>\n"
-"Language: fr\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-trash/fr/>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2.13.1\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
+"Language: fr\n"
+"X-Generator: Weblate 2.13.1\n"
 
-#: ./opengever/trash/trash.py:119
+#: ./opengever/trash/browser/trash.py
 msgid "Trashing ${title} is forbidden"
 msgstr ""
 
-#: ./opengever/trash/trash.py:158
+#: ./opengever/trash/browser/trash.py
 msgid "Untrashing ${title} is forbidden"
 msgstr ""
 
-#: ./opengever/trash/trash.py:134
+#: ./opengever/trash/browser/trash.py
 msgid "You have not selected any items."
 msgstr ""
 
-#: ./opengever/trash/trash.py:100
+#: ./opengever/trash/browser/trash.py
 msgid "could not trash the object ${obj}, it is already trashed"
 msgstr "L'objet a été déplacé vers la corbeille"
 
-#: ./opengever/trash/trash.py:109
+#: ./opengever/trash/browser/trash.py
 msgid "could not trash the object ${obj}, it is checked out."
 msgstr "L'objet ${obj} a un checkout. Vous ne pouvez pas le supprimer."
 
 #. Default: "You have not selected any items."
-#: ./opengever/trash/browser/remove_confirmation.py:35
+#: ./opengever/trash/browser/remove_confirmation.py
 msgid "error_no_documents_selected"
 msgstr "Vous n'avez sélectionné aucun élément."
 
 #. Default: "Delete"
-#: ./opengever/trash/browser/remove_confirmation_templates/remove_confirmation.pt:55
+#: ./opengever/trash/browser/templates/remove_confirmation.pt
 msgid "label_delete"
 msgstr "Effacer"
 
 #. Default: "Delete documents"
-#: ./opengever/trash/browser/remove_confirmation_templates/remove_confirmation.pt:19
+#: ./opengever/trash/browser/templates/remove_confirmation.pt
 msgid "label_delete_documents"
 msgstr "Effacer les documents"
 
 #. Default: "Error"
-#: ./opengever/trash/browser/remove_confirmation_templates/remove_confirmation.pt:31
+#: ./opengever/trash/browser/templates/remove_confirmation.pt
 msgid "label_errror"
 msgstr "Erreur"
 
 #. Default: "The documents have been successfully deleted"
-#: ./opengever/trash/browser/remove_confirmation.py:26
+#: ./opengever/trash/browser/remove_confirmation.py
 msgid "label_successfully_deleted"
 msgstr "Les documents ont été effacés avec succès"
 
 #. Default: "Warning"
-#: ./opengever/trash/browser/remove_confirmation_templates/remove_confirmation.pt:24
+#: ./opengever/trash/browser/templates/remove_confirmation.pt
 msgid "label_warning"
 msgstr "Avertissement"
 
 #. Default: "Do you really want to delete the selected documents?"
-#: ./opengever/trash/browser/remove_confirmation_templates/remove_confirmation.pt:25
+#: ./opengever/trash/browser/templates/remove_confirmation.pt
 msgid "msg_delete_confirmation"
 msgstr "Voulez-vous vraiment effacer les documents selectionnés?"
 
 #. Default: "The selected documents can't be removed, see error messages below."
-#: ./opengever/trash/browser/remove_confirmation_templates/remove_confirmation.pt:32
+#: ./opengever/trash/browser/templates/remove_confirmation.pt
 msgid "msg_delete_not_possible"
 msgstr "Les documents selectionnés ne peuvent pas être effacés."
 
 #. Default: "The document is referred by the document(s) ${links}."
-#: ./opengever/trash/remover.py:70
+#: ./opengever/trash/remover.py
 msgid "msg_document_has_backreferences"
 msgstr "Le document ${links} fait encore référence à ce document."
 
 #. Default: "The document contains relations."
-#: ./opengever/trash/remover.py:60
+#: ./opengever/trash/remover.py
 msgid "msg_document_has_relations"
 msgstr "Le document fait réference à d'autres documents."
 
 #. Default: "The document is still checked out."
-#: ./opengever/trash/remover.py:52
+#: ./opengever/trash/remover.py
 msgid "msg_document_is_checked_out"
 msgstr "Le document est encore en checkout."
 
 #. Default: "The document is not trashed."
-#: ./opengever/trash/remover.py:77
+#: ./opengever/trash/remover.py
 msgid "msg_is_not_trashed"
 msgstr "Le document n'est pas encore dans la corbeille."
 
@@ -101,6 +100,7 @@ msgstr "Le document n'est pas encore dans la corbeille."
 msgid "remove"
 msgstr "Effacer"
 
-#: ./opengever/trash/trash.py:128
+#: ./opengever/trash/browser/trash.py
 msgid "the object ${obj} trashed"
 msgstr "L'objet ${obj} a été déplacé dans la corbeille."
+

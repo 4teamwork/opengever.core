@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-06-07 12:34+0000\n"
+"POT-Creation-Date: 2017-10-02 12:52+0000\n"
 "PO-Revision-Date: 2017-06-04 17:05+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-repository/fr/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Language: fr\n"
 "X-Generator: Weblate 2.13.1\n"
 
-#: ./opengever/repository/browser/templates/referenceprefixmanager.pt:40
+#: ./opengever/repository/browser/templates/referenceprefixmanager.pt
 msgid "In use"
 msgstr "Est utilisé"
 
@@ -29,171 +29,171 @@ msgid "Unlock unused repository prefixes."
 msgstr "Déblocage de préfixes de référence inutilisés."
 
 #. Default: "Allow add businesscase dossier"
-#: ./opengever/repository/repositoryfolder.py:84
+#: ./opengever/repository/repositoryfolder.py
 msgid "allow_add_businesscase_dossier"
 msgstr "Permettre l'ajout de dossiers commerciaux"
 
 #. Default: "Choose if the user is allowed to add businesscase dossiers or only dossiers from a  dossiertemplate."
-#: ./opengever/repository/repositoryfolder.py:86
+#: ./opengever/repository/repositoryfolder.py
 msgid "description_allow_add_businesscase_dossier"
 msgstr "Déterminez s'il est permis d'ajouter des dossiers commerciaux à ce niveau. Si cette option est désactivée, l'utilisateur ne peut créer que des dossiers spéciaux ou bien des dossiers à partir d'un modèle."
 
 #. Default: "No nested repositorys available."
-#: ./opengever/repository/browser/templates/referenceprefixmanager.pt:29
+#: ./opengever/repository/browser/templates/referenceprefixmanager.pt
 msgid "empty_repository"
 msgstr "Pas de numéros de classement disponible dans cette subdivison."
 
 #. Default: "A Sibling with the same reference number is existing."
-#: ./opengever/repository/behaviors/referenceprefix.py:69
+#: ./opengever/repository/behaviors/referenceprefix.py
 msgid "error_sibling_reference_number_existing"
 msgstr "A ce niveau du classement ce numéro de référence existe déjà."
 
 #. Default: "Common"
-#: ./opengever/repository/behaviors/referenceprefix.py:32
-#: ./opengever/repository/behaviors/responsibleorg.py:12
-#: ./opengever/repository/repositoryfolder.py:26
+#: ./opengever/repository/behaviors/referenceprefix.py
+#: ./opengever/repository/behaviors/responsibleorg.py
+#: ./opengever/repository/repositoryfolder.py
 msgid "fieldset_common"
 msgstr "En général"
 
 #. Default: "Select all additional dossier types which should be addable in this repository folder."
-#: ./opengever/repository/repositoryfolder.py:76
+#: ./opengever/repository/repositoryfolder.py
 msgid "help_addable_dossier_types"
 msgstr "Sélectionnez les types de dossiers à ajouter pour cette position du classeur."
 
 #. Default: "A short summary of the content."
-#: ./opengever/repository/repositoryfolder.py:39
+#: ./opengever/repository/repositoryfolder.py
 msgid "help_description"
 msgstr "Brève description du contenu."
 
 #. Default: "Addable dossier types"
-#: ./opengever/repository/repositoryfolder.py:74
+#: ./opengever/repository/repositoryfolder.py
 msgid "label_addable_dossier_types"
 msgstr "Types de dossiers à ajouter"
 
 #. Default: "Delete"
-#: ./opengever/repository/browser/deletion_templates/deletion.pt:32
+#: ./opengever/repository/browser/templates/deletion.pt
 msgid "label_delete"
 msgstr "Effacer"
 
 #. Default: "Delete repository"
-#: ./opengever/repository/browser/deletion_templates/deletion.pt:20
+#: ./opengever/repository/browser/templates/deletion.pt
 msgid "label_delete_repository"
 msgstr "Effacer le numéro de la position"
 
 #. Default: "Description"
-#: ./opengever/repository/repositoryfolder.py:38
+#: ./opengever/repository/repositoryfolder.py
 msgid "label_description"
 msgstr "Description"
 
 #. Default: "Former reference"
-#: ./opengever/repository/repositoryfolder.py:68
+#: ./opengever/repository/repositoryfolder.py
 msgid "label_former_reference"
 msgstr "Ancien numéro de référence"
 
 #. Default: "Location"
-#: ./opengever/repository/repositoryfolder.py:56
+#: ./opengever/repository/repositoryfolder.py
 msgid "label_location"
 msgstr "Site"
 
 #. Default: "Reference Prefix"
-#: ./opengever/repository/behaviors/referenceprefix.py:39
+#: ./opengever/repository/behaviors/referenceprefix.py
 msgid "label_reference_number_prefix"
 msgstr "Préfixe référence"
 
 #. Default: "Referenced activity"
-#: ./opengever/repository/repositoryfolder.py:61
+#: ./opengever/repository/repositoryfolder.py
 msgid "label_referenced_activity"
 msgstr "Performance"
 
 #. Default: "The repository have been successfully deleted."
-#: ./opengever/repository/browser/deletion.py:38
+#: ./opengever/repository/browser/deletion.py
 msgid "label_successfully_deleted"
 msgstr "Le numéro de la position a été effacé avec succès."
 
 #. Default: "Valid from"
-#: ./opengever/repository/repositoryfolder.py:46
-#: ./opengever/repository/repositoryroot.py:22
+#: ./opengever/repository/repositoryfolder.py
+#: ./opengever/repository/repositoryroot.py
 msgid "label_valid_from"
 msgstr "Valable de :"
 
 #. Default: "Valid until"
-#: ./opengever/repository/repositoryfolder.py:51
-#: ./opengever/repository/repositoryroot.py:27
+#: ./opengever/repository/repositoryfolder.py
+#: ./opengever/repository/repositoryroot.py
 msgid "label_valid_until"
 msgstr "Valable jusqu'à :"
 
 #. Default: "Version"
-#: ./opengever/repository/repositoryroot.py:32
+#: ./opengever/repository/repositoryroot.py
 msgid "label_version"
 msgstr "Version"
 
 #. Default: "Warning"
-#: ./opengever/repository/browser/deletion_templates/deletion.pt:25
+#: ./opengever/repository/browser/templates/deletion.pt
 msgid "label_warning"
 msgstr "Avertissement"
 
 #. Default: "State"
-#: ./opengever/repository/viewlets/byline.py:29
+#: ./opengever/repository/viewlets/byline.py
 msgid "label_workflow_state"
 msgstr "Etat"
 
 #. Default: "Do you really want to delete the current repository?"
-#: ./opengever/repository/browser/deletion_templates/deletion.pt:26
+#: ./opengever/repository/browser/templates/deletion.pt
 msgid "msg_delete_confirmation"
 msgstr "Voulez-vous vraiment effacer le numéro de la position actuel?"
 
 #. Default: "You are adding a repositoryfolder to a leafnode which already contains dossiers. This is only temporarily allowed and all dossiers must be moved into a new leafnode afterwards."
-#: ./opengever/repository/repositoryfolder.py:142
+#: ./opengever/repository/browser/repositoryfolder_forms.py
 msgid "msg_leafnode_warning"
 msgstr "Vous ajoutez un dossier du référentiel à un nœud feuille contenant déjà des dossiers. Ceci n'est permis que temporairement et les dossiers s'y trouvant doivent ensuite être déplacés dans un nœud feuille."
 
 #. Default: "Name"
-#: ./opengever/repository/browser/templates/referenceprefixmanager.pt:24
+#: ./opengever/repository/browser/templates/referenceprefixmanager.pt
 msgid "name"
 msgstr "Nom"
 
 #. Default: "Position"
-#: ./opengever/repository/browser/templates/referenceprefixmanager.pt:23
+#: ./opengever/repository/browser/templates/referenceprefixmanager.pt
 msgid "position"
 msgstr "Position"
 
 #. Default: "Reference Prefix Manager"
-#: ./opengever/repository/browser/templates/referenceprefixmanager.pt:15
+#: ./opengever/repository/browser/templates/referenceprefixmanager.pt
 msgid "prefman_title"
 msgstr "Gestionnaire de préfixes de référence"
 
 #. Default: "Responsible organisation unit"
-#: ./opengever/repository/behaviors/responsibleorg.py:17
+#: ./opengever/repository/behaviors/responsibleorg.py
 msgid "responsible_org_unit"
 msgstr "Service responsable"
 
 #. Default: "The reference you try to unlock is still in use."
-#: ./opengever/repository/browser/referenceprefix_manager.py:23
+#: ./opengever/repository/browser/referenceprefix_manager.py
 msgid "statmsg_prefix_unlock_failure"
 msgstr "La référence que vous essayez de déverrouiller est toujours utilisée."
 
 #. Default: "Reference prefix has been unlocked."
-#: ./opengever/repository/browser/referenceprefix_manager.py:32
+#: ./opengever/repository/browser/referenceprefix_manager.py
 msgid "statmsg_prefix_unlocked"
 msgstr "Le préfixe de référence à été débloqué."
 
 #. Default: "Documents:"
-#: ./opengever/repository/browser/overview_templates/repositoryrootoverview.pt:16
+#: ./opengever/repository/browser/templates/repositoryrootoverview.pt
 msgid "th_documents"
 msgstr "Documents"
 
 #. Default: "Dossiers:"
-#: ./opengever/repository/browser/overview_templates/repositoryrootoverview.pt:6
+#: ./opengever/repository/browser/templates/repositoryrootoverview.pt
 msgid "th_dossiers"
 msgstr "Dossiers"
 
 #. Default: "Tasks:"
-#: ./opengever/repository/browser/overview_templates/repositoryrootoverview.pt:11
+#: ./opengever/repository/browser/templates/repositoryrootoverview.pt
 msgid "th_task"
 msgstr "Tâches"
 
 #. Default: "Unlock"
-#: ./opengever/repository/browser/templates/referenceprefixmanager.pt:25
+#: ./opengever/repository/browser/templates/referenceprefixmanager.pt
 msgid "unlock"
 msgstr "Libérer"
 
