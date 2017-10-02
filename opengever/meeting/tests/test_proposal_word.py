@@ -286,3 +286,8 @@ class TestProposalWithWord(IntegrationTestCase):
              ['Decision number', ''],
              ['Attachments', u'Vertr\xe4gsentwurf']],
             browser.css('table.listing').first.lists())
+
+        browser.open(self.word_proposal, view='tabbedview_view-overview')
+        self.assertIn(u'Successor proposal \xc4nderungen am Personalreglement '
+                      u'created by Ziegler Robert (robert.ziegler)',
+                      browser.css('.answers .answerBody h3').text)

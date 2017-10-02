@@ -36,7 +36,6 @@ from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
 from zope import schema
 from zope.component import getUtility
-from zope.i18n import translate
 from zope.interface import implements
 from zope.interface import Interface
 from zope.interface import provider
@@ -526,6 +525,12 @@ class Proposal(ProposalBase):
 
     def _after_model_created(self, model_instance):
         IHistory(self).append_record(u'created')
+
+        if self.predecessor_proposal is not None:
+            predecessor = self.predecessor_proposal.to_object
+            IHistory(predecessor).append_record(
+                u'successor_created',
+                successor_oguid=Oguid.for_object(self).id)
 
     def is_editable(self):
         """A proposal in a dossier is only editable while not submitted.

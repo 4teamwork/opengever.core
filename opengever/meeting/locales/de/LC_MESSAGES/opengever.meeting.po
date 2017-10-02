@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-04 13:51+0000\n"
-"PO-Revision-Date: 2017-10-02 15:13+0200\n"
+"POT-Creation-Date: 2017-10-04 14:04+0000\n"
+"PO-Revision-Date: 2017-10-04 16:05+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1502,6 +1502,11 @@ msgstr "Geplant für die Sitzung ${meeting} durch ${user}"
 #: ./opengever/meeting/proposalhistory.py
 msgid "proposal_history_label_submitted"
 msgstr "Eingereicht durch ${user}"
+
+#. Default: "Successor proposal ${successor_link} created by ${user}"
+#: ./opengever/meeting/proposalhistory.py
+msgid "proposal_history_label_successor_created"
+msgstr "Folgeantrag «${successor_link}» erstellt durch ${user}"
 
 #. Default: "Protocol"
 #: ./opengever/meeting/protocol.py
