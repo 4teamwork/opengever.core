@@ -52,7 +52,7 @@ do
         merge_cmd="--merge $manual_pot"
     fi
 
-    build_cmd="bin/i18ndude rebuild-pot --pot $potfile --create $pkgname $merge_cmd ./${pkg_relpath}"
+    build_cmd="bin/i18ndude rebuild-pot --exclude '*.zcml' --pot $potfile --create $pkgname $merge_cmd ./${pkg_relpath}"
     echo $build_cmd
     eval $build_cmd
     sed -i.bak 's/\(#: .*\):.*/\1/' $potfile && rm $potfile.bak
