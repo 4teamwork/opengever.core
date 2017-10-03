@@ -315,3 +315,15 @@ class Document(Item, BaseDocumentMixin):
                 '%s/external_edit' % self.absolute_url(),
                 target='_self',
                 timeout=1000)
+
+    def get_proposal(self):
+        """Return the proposal to which this document belongs.
+
+        This may return a "proposal" or a "submitted proposal".
+        """
+
+        parent = aq_parent(aq_inner(self))
+        if IProposal.providedBy(parent):
+            return parent
+
+        return None

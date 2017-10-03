@@ -320,9 +320,10 @@ class DefaultDocProperties(grok.MultiAdapter):
         repo = self.get_repo(dossier)
         site = self.get_site(dossier)
         member = self.get_member(self.request)
+        proposal = document.get_proposal()
 
         properties = {}
-        for obj in [document, dossier, repofolder, repo, site, member]:
+        for obj in [document, dossier, repofolder, repo, site, member, proposal]:
             property_provider = queryAdapter(obj, IDocPropertyProvider)
             obj_properties = {}
             if property_provider is not None:
