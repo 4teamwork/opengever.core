@@ -1,7 +1,6 @@
 from ftw.zipexport.generation import ZipGenerator
 from ftw.zipexport.utils import normalize_path
 from opengever.meeting import is_word_meeting_implementation_enabled
-from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.command import AgendaItemListOperations
 from opengever.meeting.command import CreateGeneratedDocumentCommand
 from opengever.meeting.command import ProtocolOperations
