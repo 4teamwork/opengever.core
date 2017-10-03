@@ -1,4 +1,4 @@
-from persistent.mapping import PersistentMapping
+from copy import copy
 from plone import api
 import logging
 import transaction
@@ -7,8 +7,10 @@ import transaction
 log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 
+originally_enabled_plugins = None
 
-original_plugins = None
+LDAP_PLUGIN_META_TYPES = ('Plone LDAP plugin',
+                          'Plone Active Directory plugin')
 
 
 class DisabledLDAP(object):
@@ -34,34 +36,43 @@ class DisabledLDAP(object):
 
 
 def disable_ldap(portal):
-    global original_plugins
+    global originally_enabled_plugins
 
-    if original_plugins is not None:
+    if originally_enabled_plugins is not None:
         # Nested use of these functions or the context manager isn't supported
         raise Exception("Must re-enable LDAP before disabling it again!")
 
-    ldap_plugins = []
+    originally_enabled_plugins = {}
+
     uf = api.portal.get_tool('acl_users')
     plugin_registry = uf._getOb('plugins')
-    for plugin in uf.objectValues():
-        if plugin.meta_type in ['Plone LDAP plugin',
-                                'Plone Active Directory plugin']:
-            ldap_plugins.append(plugin.getId())
 
-    original_plugins = plugin_registry._plugins
-    plugins_without_ldap = PersistentMapping()
-    for interface, plugins in original_plugins.items():
-        actives = tuple([p for p in plugins if p not in ldap_plugins])
-        plugins_without_ldap[interface] = actives
+    # Save state of enabled plugins in a mapping of the form
+    # plugin_type_name -> tuple(plugin_ids)
+    for iface, plugin_ids in plugin_registry._plugins.items():
+        plugin_type_name = plugin_registry._plugin_type_info[iface]['id']
+        originally_enabled_plugins[plugin_type_name] = copy(plugin_ids)
 
-    plugin_registry._plugins = plugins_without_ldap
-    log.info('Disabled LDAP plugin.')
+        # Disable LDAP Plugins
+        for plugin_id in plugin_ids:
+            plugin = uf[plugin_id]
+            if plugin.meta_type in LDAP_PLUGIN_META_TYPES:
+                plugin_registry.deactivatePlugin(iface, plugin_id)
+
+    log.info('Disabled LDAP plugin(s).')
 
 
 def enable_ldap(portal):
-    global original_plugins
+    global originally_enabled_plugins
     uf = api.portal.get_tool('acl_users')
     plugin_registry = uf._getOb('plugins')
-    plugin_registry._plugins = original_plugins
-    original_plugins = None
-    log.info('Enabled LDAP plugin.')
+
+    # Re-enable plugins that got disabled before
+    for plugin_type_name, plugin_ids in originally_enabled_plugins.items():
+        iface = plugin_registry._getInterfaceFromName(plugin_type_name)
+        for plugin_id in plugin_ids:
+            if plugin_id not in plugin_registry.listPluginIds(iface):
+                plugin_registry.activatePlugin(iface, plugin_id)
+
+    originally_enabled_plugins = None
+    log.info('Enabled LDAP plugin(s).')
