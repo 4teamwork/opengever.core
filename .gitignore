@@ -4,7 +4,6 @@
 .installed.cfg
 .mr.developer.cfg
 build/
-buildout.cfg
 coverage/
 develop-eggs/
 dist/
