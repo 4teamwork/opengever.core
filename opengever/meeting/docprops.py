@@ -12,13 +12,15 @@ class ProposalDocPropertyProvider(object):
         self.context = context
 
     def get_meeting_properties(self):
+        proposal = self.context
+
         properties = {
             'decision_number': '',
             'agenda_item_number': '',
+            'proposal_title': proposal.Title(),
         }
 
-        proposal_model = self.context.load_model()
-        agenda_item = proposal_model.agenda_item
+        agenda_item = proposal.load_model().agenda_item
         if agenda_item:
             properties['decision_number'] = agenda_item.get_decision_number()
             properties['agenda_item_number'] = agenda_item.number
