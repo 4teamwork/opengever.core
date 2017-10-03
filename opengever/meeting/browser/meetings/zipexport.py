@@ -3,6 +3,7 @@ from ftw.zipexport.utils import normalize_path
 from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.command import AgendaItemListOperations
 from opengever.meeting.command import CreateGeneratedDocumentCommand
+from opengever.meeting.command import MergeDocxProtocolCommand
 from opengever.meeting.command import ProtocolOperations
 from opengever.meeting.interfaces import IMeetingWrapper
 from Products.CMFPlone.utils import safe_unicode
@@ -76,7 +77,11 @@ class MeetingZipExport(BrowserView):
 
         # Create new protocol
         operations = ProtocolOperations()
-        command = CreateGeneratedDocumentCommand(
+        if is_word_meeting_implementation_enabled():
+            command_class = MergeDocxProtocolCommand
+        else:
+            command_class = CreateGeneratedDocumentCommand
+        command = command_class(
             self.context,
             self.model,
             operations,

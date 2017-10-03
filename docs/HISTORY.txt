@@ -5,6 +5,7 @@ Changelog
 2017.5.2 (unreleased)
 ---------------------
 
+- SPV word: Fix protocol zip export. [tarnap]
 - Bundle import: Fix deactivation of LDAP plugin during import. [lgraf]
 - Update Plone version to 4.3.15. [lgraf]
 - SPV: Fix proposal history. [tarnap]
