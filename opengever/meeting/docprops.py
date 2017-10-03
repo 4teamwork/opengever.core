@@ -1,6 +1,7 @@
 from opengever.dossier.interfaces import IDocPropertyProvider
 from opengever.meeting.proposal import IProposal
 from zope.component import adapter
+from zope.i18n import translate
 from zope.interface import implementer
 
 
@@ -18,6 +19,8 @@ class ProposalDocPropertyProvider(object):
             'decision_number': '',
             'agenda_item_number': '',
             'proposal_title': proposal.Title(),
+            'proposal_state': translate(proposal.get_state().title,
+                                        context=self.context.REQUEST),
         }
 
         agenda_item = proposal.load_model().agenda_item
