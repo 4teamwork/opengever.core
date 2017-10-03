@@ -32,7 +32,7 @@ def elevated_privileges():
         # tracebacks in the error_log,
         # so it is an important thing to store.
         tmp_user = UnrestrictedUser(
-            api.user.get_current().getId(), '', ('manage', ), ''
+            api.user.get_current().getId(), '', ('manage', 'Manager'), ''
             )
 
         # Wrap the user in the acquisition context of the portal
