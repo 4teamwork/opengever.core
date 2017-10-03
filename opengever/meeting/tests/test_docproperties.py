@@ -24,20 +24,23 @@ class TestMeetingDocxProperties(IntegrationTestCase):
         self.login(self.dossier_responsible)
         self.assertEquals('pending', self.draft_word_proposal.get_state().title)
         self.assertEquals(
-            {'ogg.meeting.decision_number': ''},
+            {'ogg.meeting.decision_number': '',
+             'ogg.meeting.agenda_item_number': ''},
             get_doc_properties(self.word_proposal.get_proposal_document()))
 
     def test_submitted_proposal_document(self):
         with self.login(self.dossier_responsible):
             self.assertEquals('submitted', self.word_proposal.get_state().title)
             self.assertEquals(
-                {'ogg.meeting.decision_number': ''},
+                {'ogg.meeting.decision_number': '',
+                 'ogg.meeting.agenda_item_number': ''},
                 get_doc_properties(self.word_proposal.get_proposal_document()))
 
         with self.login(self.committee_responsible):
             self.assertEquals('submitted', self.submitted_word_proposal.get_state().title)
             self.assertEquals(
-                {'ogg.meeting.decision_number': ''},
+                {'ogg.meeting.decision_number': '',
+                 'ogg.meeting.agenda_item_number': ''},
                 get_doc_properties(self.submitted_word_proposal.get_proposal_document()))
 
     def test_scheduled_proposal_document(self):
@@ -47,13 +50,15 @@ class TestMeetingDocxProperties(IntegrationTestCase):
         with self.login(self.dossier_responsible):
             self.assertEquals('scheduled', self.word_proposal.get_state().title)
             self.assertEquals(
-                {'ogg.meeting.decision_number': ''},
+                {'ogg.meeting.decision_number': '',
+                 'ogg.meeting.agenda_item_number': '1.'},
                 get_doc_properties(self.word_proposal.get_proposal_document()))
 
         with self.login(self.committee_responsible):
             self.assertEquals('scheduled', self.submitted_word_proposal.get_state().title)
             self.assertEquals(
-                {'ogg.meeting.decision_number': ''},
+                {'ogg.meeting.decision_number': '',
+                 'ogg.meeting.agenda_item_number': '1.'},
                 get_doc_properties(self.submitted_word_proposal.get_proposal_document()))
 
     def test_decided_proposal_document(self):
@@ -63,11 +68,13 @@ class TestMeetingDocxProperties(IntegrationTestCase):
         with self.login(self.dossier_responsible):
             self.assertEquals('decided', self.word_proposal.get_state().title)
             self.assertEquals(
-                {'ogg.meeting.decision_number': '2016 / 2'},
+                {'ogg.meeting.decision_number': '2016 / 2',
+                 'ogg.meeting.agenda_item_number': '1.'},
                 get_doc_properties(self.word_proposal.get_proposal_document()))
 
         with self.login(self.committee_responsible):
             self.assertEquals('decided', self.submitted_word_proposal.get_state().title)
             self.assertEquals(
-                {'ogg.meeting.decision_number': '2016 / 2'},
+                {'ogg.meeting.decision_number': '2016 / 2',
+                 'ogg.meeting.agenda_item_number': '1.'},
                 get_doc_properties(self.submitted_word_proposal.get_proposal_document()))
