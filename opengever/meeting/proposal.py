@@ -26,15 +26,17 @@ from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from plone import api
 from plone.app.uuid.utils import uuidToObject
+from plone.autoform.directives import mode
 from plone.directives import form
+from plone.formwidget.contenttree import ObjPathSourceBinder
 from plone.uuid.interfaces import IUUID
 from Products.CMFPlone.utils import safe_unicode
 from z3c.relationfield.relation import RelationValue
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
+from zc.relation.interfaces import ICatalog
 from zope import schema
 from zope.component import getUtility
-from zope.i18n import translate
 from zope.interface import implements
 from zope.interface import Interface
 from zope.interface import provider
@@ -137,6 +139,14 @@ class IProposal(form.Schema):
             ),
         required=False,
         )
+
+    mode(predecessor_proposal='hidden')
+    predecessor_proposal = RelationChoice(
+        title=u'Predecessor proposal',
+        default=None,
+        missing_value=None,
+        required=False,
+        source=ObjPathSourceBinder(portal_type='opengever.meeting.proposal'))
 
 
 class ISubmittedProposal(IProposal):
@@ -249,6 +259,28 @@ class ProposalBase(ModelContainer):
              'value': model.get_decision_number(),
              'is_html': True},
         ])
+
+        if is_word_meeting_implementation_enabled():
+            if self.predecessor_proposal and self.predecessor_proposal.to_object:
+                predecessor_model = self.predecessor_proposal.to_object.load_model()
+                attributes.append({
+                    'label': _('label_predecessor', default=u'Predecessor'),
+                    'value': predecessor_model.get_link(),
+                    'is_html': True})
+
+            catalog = getUtility(ICatalog)
+            doc_id = getUtility(IIntIds).getId(aq_inner(self))
+            successor_html_items = []
+            for relation in catalog.findRelations({
+                    'to_id': doc_id,
+                    'from_attribute': 'predecessor_proposal'}):
+                successor_html_items.append(u'<li>{}</li>'.format(
+                    relation.from_object.load_model().get_link()))
+            if successor_html_items:
+                attributes.append({
+                    'label': _('label_successors', default=u'Successors'),
+                    'value': u'<ul>{}</ul>'.format(''.join(successor_html_items)),
+                    'is_html': True})
 
         return attributes
 
@@ -516,6 +548,12 @@ class Proposal(ProposalBase):
 
     def _after_model_created(self, model_instance):
         IHistory(self).append_record(u'created')
+
+        if self.predecessor_proposal is not None:
+            predecessor = self.predecessor_proposal.to_object
+            IHistory(predecessor).append_record(
+                u'successor_created',
+                successor_oguid=Oguid.for_object(self).id)
 
     def is_editable(self):
         """A proposal in a dossier is only editable while not submitted.

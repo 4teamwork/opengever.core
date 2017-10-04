@@ -62,6 +62,24 @@
           </table>
           <metal:use use-macro="context/@@meeting-macros/workflow_actions" />
 
+          <div class="actionButtons">
+            <ul class="regular_buttons">
+
+              <li tal:condition="view/is_create_successor_proposal_button_visible">
+                <form method="POST"
+                      tal:attributes="action string:${context/aq_parent/absolute_url}/++add++opengever.meeting.proposal">
+                  <input type="hidden" name="predecessor"
+                         tal:attributes="value here/UID" />
+                  <input type="submit"
+                         class="create-successor-proposal-button button"
+                         value="Create successor proposal"
+                         i18n:attributes="value button_create_successor_proposal" />
+                </form>
+              </li>
+
+            </ul>
+          </div>
+
       </div>
       <div tal:condition="view/show_preview" class="documentPreview">
         <img class="showroom-item"

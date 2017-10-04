@@ -74,19 +74,28 @@ def get_proposal_template_vocabulary(context):
         # view templates and/or during ++widget++ traversal
         return SimpleVocabulary([])
 
-    templates = api.content.find(
+    templates = [brain.getObject() for brain in api.content.find(
         context=template_folder,
         depth=-1,
         portal_type="opengever.meeting.proposaltemplate",
-        sort_on='sortable_title', sort_order='ascending')
+        sort_on='sortable_title', sort_order='ascending')]
+
+    predecessor_path = context.REQUEST.form.get(
+        'form.widgets.predecessor_proposal', None)
+    if predecessor_path and predecessor_path != u'--NOVALUE--':
+        # The ++add++opengever.meeting.proposal was opened with a predecessor.
+        # We should also offer to use the predecessor proposal document as
+        # "template".
+        predecessor_path = safe_unicode(predecessor_path).encode('utf-8')
+        predecessor = api.content.get(path=predecessor_path)
+        templates.insert(0, predecessor.get_proposal_document())
 
     terms = []
-    for brain in templates:
-        template = brain.getObject()
+    for template in templates:
         terms.append(SimpleVocabulary.createTerm(
             template,
             IUUID(template),
-            safe_unicode(brain.Title)))
+            safe_unicode(template.Title())))
     return SimpleVocabulary(terms)
 
 

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-04 13:45+0000\n"
+"POT-Creation-Date: 2017-10-04 14:05+0000\n"
 "PO-Revision-Date: 2017-06-22 09:02+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -458,6 +458,11 @@ msgstr "Clôturer une période"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "button_continue"
 msgstr "Continuer"
+
+#. Default: "Create successor proposal"
+#: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt
+msgid "button_create_successor_proposal"
+msgstr ""
 
 #. Default: "Submit Attachments"
 #: ./opengever/meeting/browser/documents/submit.py
@@ -1110,6 +1115,11 @@ msgstr ""
 msgid "label_participants"
 msgstr "Participants"
 
+#. Default: "Predecessor"
+#: ./opengever/meeting/proposal.py
+msgid "label_predecessor"
+msgstr ""
+
 #. Default: "Presidency"
 #: ./opengever/meeting/browser/meetings/protocol.py
 msgid "label_presidency"
@@ -1215,6 +1225,11 @@ msgstr "Fichier-cible"
 #: ./opengever/meeting/browser/meetings/protocol.py
 msgid "label_start"
 msgstr "Début"
+
+#. Default: "Successors"
+#: ./opengever/meeting/proposal.py
+msgid "label_successors"
+msgstr ""
 
 #. Default: "Title"
 #: ./opengever/meeting/browser/meetings/excerpt.py
@@ -1500,6 +1515,11 @@ msgstr "Prévu pour la séance ${meeting} par ${user}"
 msgid "proposal_history_label_submitted"
 msgstr "Soumis par ${user}"
 
+#. Default: "Successor proposal ${successor_link} created by ${user}"
+#: ./opengever/meeting/proposalhistory.py
+msgid "proposal_history_label_successor_created"
+msgstr ""
+
 #. Default: "Protocol"
 #: ./opengever/meeting/protocol.py
 msgid "protocol"
@@ -1678,4 +1698,3 @@ msgstr ""
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "view_label_secretary"
 msgstr ""
-

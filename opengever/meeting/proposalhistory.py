@@ -2,6 +2,7 @@ from BTrees.OOBTree import OOBTree
 from datetime import datetime
 from opengever.base import advancedjson
 from opengever.base.date_time import utcnow_tz_aware
+from opengever.base.oguid import Oguid
 from opengever.base.protect import unprotected_write
 from opengever.base.request import dispatch_request
 from opengever.meeting import _
@@ -9,6 +10,7 @@ from opengever.meeting.model import Meeting
 from opengever.ogds.base.actor import Actor
 from persistent.mapping import PersistentMapping
 from plone import api
+from plone.app.contentlisting.interfaces import IContentListingObject
 from uuid import UUID
 from uuid import uuid4
 from zope.annotation.interfaces import IAnnotations
@@ -352,3 +354,31 @@ class DocumentUpdated(DocumentSubmitted):
                  mapping={'user': self.get_actor_link(),
                           'title': self.document_title or '',
                           'version': self.submitted_version})
+
+
+@ProposalHistory.register
+class SuccessorCreated(BaseHistoryRecord):
+    """A successor was created.
+
+    This history entry is created on a predecessor when a successor is created.
+    """
+
+    history_type = u'successor_created'
+    css_class = 'created'
+
+    def __init__(self, context, successor_oguid, timestamp=None, uuid=None):
+        super(SuccessorCreated, self).__init__(
+            context, timestamp=timestamp, uuid=uuid)
+        self.data['successor_oguid'] = successor_oguid
+
+    def message(self):
+        return _(u'proposal_history_label_successor_created',
+                 u'Successor proposal ${successor_link} created by ${user}',
+                 mapping={'successor_link': self.get_successor_link(),
+                          'user': self.get_actor_link()})
+
+    def get_successor(self):
+        return Oguid.parse(self.data['successor_oguid']).resolve_object()
+
+    def get_successor_link(self):
+        return self.get_successor().load_model().get_link(include_icon=False)

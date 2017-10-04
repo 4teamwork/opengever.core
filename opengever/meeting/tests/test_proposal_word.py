@@ -227,3 +227,81 @@ class TestProposalWithWord(IntegrationTestCase):
         self.assertEquals(1, len(excerpts))
         relation, = excerpts
         self.assertEquals(excerpt_document, relation.to_object)
+
+    @browsing
+    def test_create_successor_proposal(self, browser):
+        self.login(self.dossier_responsible, browser)
+        browser.open(self.word_proposal, view='tabbedview_view-overview')
+        button_label = 'Create successor proposal'
+
+        self.assertEquals('submitted', self.word_proposal.get_state().title)
+        self.assertFalse(browser.find(button_label))
+
+        with self.login(self.committee_responsible):
+            agenda_item = self.schedule_proposal(self.meeting, self.submitted_word_proposal)
+            self.assertEquals('scheduled', self.submitted_word_proposal.get_state().title)
+
+        self.assertEquals('scheduled', self.word_proposal.get_state().title)
+        self.assertFalse(browser.reload().find(button_label))
+
+        with self.login(self.committee_responsible):
+            agenda_item.decide()
+            self.assertEquals('decided', self.submitted_word_proposal.get_state().title)
+
+        self.assertEquals('decided', self.word_proposal.get_state().title)
+        self.assertTrue(browser.reload().find(button_label))
+
+        browser.click_on(button_label)
+
+        self.assertEquals(
+            self.word_proposal.Title().decode('utf-8'),
+            browser.find('Title').value)
+        self.assertEquals(
+            str(self.word_proposal.get_committee().load_model().committee_id),
+            browser.find('Committee').value)
+        self.assertEquals(
+            [rel.to_path for rel in self.word_proposal.relatedItems],
+            [node.value for node
+             in browser.find('Attachments').css('input[type=checkbox]')])
+
+        self.assertIn(
+            self.word_proposal.get_proposal_document().UID(),
+            browser.find('Proposal template').options,
+            'The proposal document of the predecessor should be selectable'
+            ' as proposal template.')
+
+        browser.fill({
+            'Title': u'\xc4nderungen am Personalreglement zur Nachpr\xfcfung',
+            'Proposal template': self.word_proposal.get_proposal_document().Title(),
+        }).save()
+        statusmessages.assert_no_error_messages()
+
+        proposal = browser.context
+        browser.open(proposal, view='tabbedview_view-overview')
+        self.assertEquals(
+            [['Title', u'\xc4nderungen am Personalreglement zur Nachpr\xfcfung'],
+             ['Committee', u'Rechnungspr\xfcfungskommission'],
+             ['Meeting', ''],
+             ['Proposal document',
+              u'\xc4nderungen am Personalreglement zur Nachpr\xfcfung'],
+             ['State', 'Pending'],
+             ['Decision number', ''],
+             ['Predecessor', u'\xc4nderungen am Personalreglement'],
+             ['Attachments', u'Vertr\xe4gsentwurf']],
+            browser.css('table.listing').first.lists())
+
+        browser.open(self.word_proposal, view='tabbedview_view-overview')
+        self.assertIn(u'Successor proposal '
+                      u'\xc4nderungen am Personalreglement zur Nachpr\xfcfung '
+                      u'created by Ziegler Robert (robert.ziegler)',
+                      browser.css('.answers .answerBody h3').text)
+        self.assertEquals(
+            [['Title', u'\xc4nderungen am Personalreglement'],
+             ['Committee', u'Rechnungspr\xfcfungskommission'],
+             ['Meeting', u'9. Sitzung der Rechnungspr\xfcfungskommission'],
+             ['Proposal document', u'\xc4nderungen am Personalreglement'],
+             ['State', 'Decided'],
+             ['Decision number', '2016 / 2'],
+             ['Successors', u'\xc4nderungen am Personalreglement zur Nachpr\xfcfung'],
+             ['Attachments', u'Vertr\xe4gsentwurf']],
+            browser.css('table.listing').first.lists())

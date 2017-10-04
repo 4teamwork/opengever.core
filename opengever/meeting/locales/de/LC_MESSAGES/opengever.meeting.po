@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-04 13:45+0000\n"
-"PO-Revision-Date: 2017-09-25 13:37+0200\n"
+"POT-Creation-Date: 2017-10-04 14:05+0000\n"
+"PO-Revision-Date: 2017-10-02 16:56+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -456,6 +456,11 @@ msgstr "Periode abschliessen"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "button_continue"
 msgstr "Weiter"
+
+#. Default: "Create successor proposal"
+#: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt
+msgid "button_create_successor_proposal"
+msgstr "Folgeantrag erstellen"
 
 #. Default: "Submit Attachments"
 #: ./opengever/meeting/browser/documents/submit.py
@@ -1108,6 +1113,11 @@ msgstr "Vorlage für Zwischentitel"
 msgid "label_participants"
 msgstr "Teilnehmende"
 
+#. Default: "Predecessor"
+#: ./opengever/meeting/proposal.py
+msgid "label_predecessor"
+msgstr "Vorgänger"
+
 #. Default: "Presidency"
 #: ./opengever/meeting/browser/meetings/protocol.py
 msgid "label_presidency"
@@ -1213,6 +1223,11 @@ msgstr "Zieldossier"
 #: ./opengever/meeting/browser/meetings/protocol.py
 msgid "label_start"
 msgstr "Start"
+
+#. Default: "Successors"
+#: ./opengever/meeting/proposal.py
+msgid "label_successors"
+msgstr "Folgeanträge"
 
 #. Default: "Title"
 #: ./opengever/meeting/browser/meetings/excerpt.py
@@ -1498,6 +1513,11 @@ msgstr "Geplant für die Sitzung ${meeting} durch ${user}"
 msgid "proposal_history_label_submitted"
 msgstr "Eingereicht durch ${user}"
 
+#. Default: "Successor proposal ${successor_link} created by ${user}"
+#: ./opengever/meeting/proposalhistory.py
+msgid "proposal_history_label_successor_created"
+msgstr "Folgeantrag «${successor_link}» erstellt durch ${user}"
+
 #. Default: "Protocol"
 #: ./opengever/meeting/protocol.py
 msgid "protocol"
@@ -1676,4 +1696,3 @@ msgstr "Antrag traktandieren:"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "view_label_secretary"
 msgstr "Protokollführung:"
-
