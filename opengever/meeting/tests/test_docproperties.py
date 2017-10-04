@@ -84,3 +84,34 @@ class TestMeetingDocxProperties(IntegrationTestCase):
                  'ogg.meeting.proposal_title': '\xc3\x84nderungen am Personalreglement',
                  'ogg.meeting.proposal_state': 'Decided'},
                 get_doc_properties(self.submitted_word_proposal.get_proposal_document()))
+
+    def test_excerpt_document(self):
+        with self.login(self.committee_responsible):
+            agenda_item = self.schedule_proposal(self.meeting,
+                                                 self.submitted_word_proposal)
+            agenda_item.decide()
+            with self.observe_children(self.meeting_dossier) as children:
+                agenda_item.generate_excerpt(title='Excerpt')
+
+            meeting_dossier_excerpt, = children['added']
+
+            self.assertEquals(
+                {'ogg.meeting.decision_number': '2016 / 2',
+                 'ogg.meeting.agenda_item_number': '1.',
+                 'ogg.meeting.proposal_title': '\xc3\x84nderungen am Personalreglement',
+                 'ogg.meeting.proposal_state': 'Decided'},
+                get_doc_properties(meeting_dossier_excerpt))
+
+            with self.observe_children(self.dossier) as children:
+                self.submitted_word_proposal.load_model().return_excerpt(
+                    meeting_dossier_excerpt)
+
+            case_dossier_excerpt, = children['added']
+
+        with self.login(self.dossier_responsible):
+            self.assertEquals(
+                {'ogg.meeting.decision_number': '2016 / 2',
+                 'ogg.meeting.agenda_item_number': '1.',
+                 'ogg.meeting.proposal_title': '\xc3\x84nderungen am Personalreglement',
+                 'ogg.meeting.proposal_state': 'Decided'},
+                get_doc_properties(case_dossier_excerpt))

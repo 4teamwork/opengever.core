@@ -14,6 +14,7 @@ from opengever.document.behaviors import IBaseDocument
 from opengever.document.behaviors.related_docs import IRelatedDocuments
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.meeting.model.generateddocument import GeneratedExcerpt
 from opengever.meeting.proposal import IProposal
 from opengever.meeting.proposal import ISubmittedProposal
 from opengever.officeconnector.helpers import create_oc_url
@@ -27,8 +28,10 @@ from plone.namedfile import field
 from plone.namedfile.file import NamedBlobFile
 from z3c.form import validator
 from zc.relation.interfaces import ICatalog
+from zc.relation.interfaces import ICatalog
 from zope import schema
 from zope.component import getMultiAdapter
+from zope.component import getUtility
 from zope.component import getUtility
 from zope.component import queryMultiAdapter
 from zope.globalrequest import getRequest
@@ -325,5 +328,23 @@ class Document(Item, BaseDocumentMixin):
         parent = aq_parent(aq_inner(self))
         if IProposal.providedBy(parent):
             return parent
+
+        # Find submitted proposal when self is an excerpt document in the
+        # meeting dossier.
+        for relation in getUtility(ICatalog).findRelations({
+                'to_id': getUtility(IIntIds).getId(aq_inner(self)),
+                'from_attribute': 'excerpts'}):
+            # We expect that there are 0 or 1 relation, because this document
+            # cannot be the excerpt of multiple proposals.
+            submitted_proposal = relation.from_object
+            if api.user.has_permission('View', obj=submitted_proposal):
+                return submitted_proposal
+
+        # Find proposal when self is an excerpt in the case dossier.
+        generated_excerpts = GeneratedExcerpt.query.by_document(self).all()
+        if generated_excerpts:
+            proposal = generated_excerpts[0].proposal.resolve_proposal()
+            if api.user.has_permission('View', obj=proposal):
+                return proposal
 
         return None
