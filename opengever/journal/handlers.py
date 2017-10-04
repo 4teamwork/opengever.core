@@ -484,9 +484,10 @@ def file_copy_downloaded(context, event):
                                default=u'version ${version_id}',
                                mapping={'version_id': version_id})
         else:
-            version_string = _(u'label_file_copy_downloaded_actual_version',
-                               default=u'current version (${version_id})',
-                               mapping={'version_id': context.version_id})
+            version_string = _(
+                u'label_file_copy_downloaded_actual_version',
+                default=u'current version (${version_id})',
+                mapping={'version_id': getattr(context, 'version_id', 0)})
 
         title = _(u'label_file_copy_downloaded_with_version',
                   default=u'${title} ${version_string}',
