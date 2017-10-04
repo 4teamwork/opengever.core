@@ -3,6 +3,7 @@ from ftw.testbrowser import browsing
 from opengever.document.versioner import Versioner
 from opengever.testing import IntegrationTestCase
 from plone.namedfile.file import NamedBlobFile
+from zope.filerepresentation.interfaces import IRawWriteFile
 
 
 class TestInitialVersionCreation(IntegrationTestCase):
@@ -35,3 +36,17 @@ class TestInitialVersionCreation(IntegrationTestCase):
         self.assertEquals(
             creation_date,
             datetime.fromtimestamp(version.sys_metadata.get('timestamp')))
+
+    @browsing
+    def test_updating_a_document_via_webdav_creates_initial_version_too(self, browser):
+        self.login(self.regular_user)
+
+        versioner = Versioner(self.document)
+        self.assertFalse(versioner.has_initial_version())
+
+        writer = IRawWriteFile(self.document, None)
+        writer.write('New Data')
+        writer.close()
+
+        self.assertTrue(versioner.has_initial_version())
+        self.assertEquals(1, versioner._get_history().getLength(countPurged=False))
