@@ -30,6 +30,7 @@ from os.path import join
 from plone import api
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.locking.interfaces import ILockable
+from plone.namedfile.file import NamedBlobFile
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.globalrequest import getRequest
@@ -320,7 +321,9 @@ class MergeDocxProtocolCommand(CreateGeneratedDocumentCommand):
 
     def update_protocol_document(self):
         document = self.meeting.protocol_document.resolve_document()
-        document.file.data = self.generate_file_data()
+        document.file = NamedBlobFile(self.generate_file_data(),
+                                      contentType=document.file.contentType,
+                                      filename=document.file.filename)
 
         repository = api.portal.get_tool('portal_repository')
         comment = translate(
@@ -410,6 +413,10 @@ class UpdateGeneratedDocumentCommand(object):
     def execute(self):
         document = Oguid.resolve_object(self.generated_document.oguid)
         document.file.data = self.generate_file_data()
+        document.file = NamedBlobFile(self.generate_file_data(),
+                                      contentType=document.file.contentType,
+                                      filename=document.file.filename)
+
 
         repository = api.portal.get_tool('portal_repository')
         comment = translate(
