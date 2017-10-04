@@ -2,28 +2,12 @@ from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.utils import defaultMatcher
 from opengever.document.checkout.handlers import create_initial_version
-from opengever.document.checkout.handlers import NoAutomaticInitialVersion
 from zope.interface import classProvides
 from zope.interface import implements
 
 
 SUPPORTED_TYPES = ['opengever.document.document',
                    'opengever.meeting.sablontemplate']
-
-
-class DisabledInitialVersion(object):
-    """Disable automatical creation of initial versions for documents."""
-
-    classProvides(ISectionBlueprint)
-    implements(ISection)
-
-    def __init__(self, transmogrifier, name, options, previous):
-        self.previous = previous
-
-    def __iter__(self):
-        with NoAutomaticInitialVersion():
-            for item in self.previous:
-                yield item
 
 
 class ManualInitialVersion(object):
