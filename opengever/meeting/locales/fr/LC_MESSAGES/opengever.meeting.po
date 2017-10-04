@@ -1649,6 +1649,11 @@ msgstr ""
 msgid "view_label_meeting_status"
 msgstr ""
 
+#. Default: "Other participants:"
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:200
+msgid "view_label_other_participants"
+msgstr ""
+
 #. Default: "Participants:"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "view_label_participants"

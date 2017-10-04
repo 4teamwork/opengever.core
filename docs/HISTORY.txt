@@ -9,6 +9,7 @@ Changelog
 - Update Plone version to 4.3.15. [lgraf]
 - SPV: Fix proposal history. [tarnap]
 - SPV: Fix deleting ad-hoc agenda items. [tarnap]
+- SPV word: Display other participants in meeting view. [tarnap]
 - SPV word: Improve visual feedback when scheduling text or paragraph. [jone]
 - SPV word: Remove proposal document's title prefix. [tarnap]
 - SPV word: Hide excerpt template from form when word feature enabled. [tarnap]
