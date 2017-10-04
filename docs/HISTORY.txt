@@ -9,6 +9,7 @@ Changelog
 - SPV word: Update proposal workflow translations to be consistent capitalized. [jone]
 - SPV word: Fix protocol zip export. [tarnap]
 - Create missing SQL sequences. [jone]
+- Ungrok opengever.inbox. [elioschmutz]
 - Bundle import: Fix deactivation of LDAP plugin during import. [lgraf]
 - Update Plone version to 4.3.15. [lgraf]
 - SPV: Fix proposal history. [tarnap]

@@ -1,8 +1,6 @@
-from five import grok
 from opengever.inbox import _
 from opengever.task import _ as task_mf
 from opengever.task.interfaces import IYearfolderStorer
-from opengever.task.task import ITask
 from opengever.task.util import change_task_workflow_state
 from plone.directives import form
 from plone.z3cform import layout
@@ -55,15 +53,6 @@ class ForwardingCloseForm(Form):
         return self.request.RESPONSE.redirect('.')
 
 
-class ForwardingCloseFormView(layout.FormWrapper, grok.View):
-    grok.context(ITask)
-    grok.name('close-forwarding')
-    grok.require('zope2.View')
+class ForwardingCloseFormView(layout.FormWrapper):
 
     form = ForwardingCloseForm
-
-    def __init__(self, *args, **kwargs):
-        layout.FormWrapper.__init__(self, *args, **kwargs)
-        grok.View.__init__(self, *args, **kwargs)
-
-    __call__ = layout.FormWrapper.__call__

@@ -1,6 +1,5 @@
 from Acquisition import aq_inner, aq_parent
 from datetime import datetime
-from five import grok
 from ftw.keywordwidget.widget import KeywordFieldWidget
 from opengever.inbox import _
 from opengever.inbox.activities import ForwardingAddedActivity
@@ -10,16 +9,14 @@ from opengever.ogds.base.utils import get_ou_selector
 from opengever.task import _ as task_mf
 from opengever.task.task import ITask, Task
 from opengever.task.util import update_reponsible_field_data
+from plone.dexterity.browser import add
 from plone.dexterity.browser.edit import DefaultEditForm
 from plone.directives import form
-from plone.directives.dexterity import AddForm
-from Products.CMFCore.interfaces import IActionSucceededEvent
 from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form.interfaces import HIDDEN_MODE
 from zope import schema
 from zope.i18n import translate
 from zope.interface import implements
-from zope.lifecycleevent.interfaces import IObjectAddedEvent
 
 
 class IForwarding(ITask):
@@ -95,13 +92,13 @@ class Forwarding(Task):
         return label
 
 
-class ForwardingAddForm(AddForm):
+class ForwardingAddForm(add.DefaultAddForm):
     """Provide a custom add-form which adds the selected documents
     (tabbed_view) to the hidden relatedItems field and sets some defaults.
     The documents are later moved by move_documents_into_forwarding (see
     below).
     """
-    grok.name('opengever.inbox.forwarding')
+    portal_type = 'opengever.inbox.forwarding'
 
     def update(self):
         """put default value for relatedItems into request - the added
@@ -147,10 +144,14 @@ class ForwardingAddForm(AddForm):
 
     def createAndAdd(self, data):
         update_reponsible_field_data(data)
-        forwarding = super(AddForm, self).createAndAdd(data=data)
+        forwarding = super(ForwardingAddForm, self).createAndAdd(data=data)
         ForwardingAddedActivity(
             forwarding, self.request, self.context).record()
         return forwarding
+
+
+class ForwardingAddView(add.DefaultAddView):
+    form = ForwardingAddForm
 
 
 class ForwardingEditForm(DefaultEditForm):
@@ -184,7 +185,6 @@ def _drop_empty_additional_fieldset(groups):
     groups.pop(1)
 
 
-@grok.subscribe(IForwarding, IObjectAddedEvent)
 def move_documents_into_forwarding(context, event):
     """When selecting documents in the tabbed view and creating a
     forwarding with this documents, they'll be added to the hidden field
@@ -200,7 +200,6 @@ def move_documents_into_forwarding(context, event):
     context.relatedItems = []
 
 
-@grok.subscribe(IForwarding, IActionSucceededEvent)
 def set_dates(context, event):
     """Eventhandler wich set automaticly the enddate
     when a forwarding would be closed"""

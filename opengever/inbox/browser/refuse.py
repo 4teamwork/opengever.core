@@ -1,11 +1,9 @@
-from five import grok
 from opengever.base.request import dispatch_json_request
 from opengever.base.transport import ORIGINAL_INTID_ANNOTATION_KEY
 from opengever.base.transport import REQUEST_KEY
 from opengever.base.transport import Transporter
 from opengever.inbox import _
 from opengever.inbox.browser.schema import ISimpleResponseForm
-from opengever.inbox.forwarding import IForwarding
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.task import _ as task_mf
@@ -15,7 +13,7 @@ from opengever.task.util import add_simple_response
 from opengever.task.util import get_documents_of_task
 from plone.z3cform import layout
 from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
+from Products.Five import BrowserView
 from z3c.form import button
 from z3c.form.field import Fields
 from z3c.form.form import Form
@@ -105,32 +103,19 @@ class ForwardingRefuseForm(Form):
         return '%s/%s' % (refusing_admin_unit.public_url, remote_task)
 
 
-class RefuseForwardingView(layout.FormWrapper, grok.View):
+class RefuseForwardingView(layout.FormWrapper):
     """A view which reassign the forwarding to the inbox of the client
     which raised the forwarding, so that it can be reassigned
     afterwards to another client / person."""
 
-    grok.context(IForwarding)
-    grok.name('refuse-task')
-    grok.require('zope2.View')
-
     form = ForwardingRefuseForm
 
-    def __init__(self, *args, **kwargs):
-        layout.FormWrapper.__init__(self, *args, **kwargs)
-        grok.View.__init__(self, *args, **kwargs)
 
-    __call__ = layout.FormWrapper.__call__
-
-
-class StoreRefusedForwardingView(grok.View):
-    grok.context(IPloneSiteRoot)
-    grok.name('store_refused_forwarding')
-    grok.require('zope2.View')
+class StoreRefusedForwardingView(BrowserView):
 
     yearfolder = None
 
-    def render(self):
+    def __call__(self):
         self.request.response.setHeader("Content-type", "text/plain")
 
         response = {}

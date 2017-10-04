@@ -1,7 +1,5 @@
-from five import grok
 from ftw.keywordwidget.widget import KeywordWidget
 from opengever.inbox import _
-from opengever.inbox.forwarding import IForwarding
 from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSourceBinder
 from opengever.task import _ as task_mf
 from opengever.task.browser.assign import AssignTaskForm
@@ -51,15 +49,6 @@ class AssignForwardingForm(AssignTaskForm):
         super(AssignForwardingForm, self).update_task(**kwargs)
 
 
-class AssignForwardingView(layout.FormWrapper, grok.View):
-    grok.context(IForwarding)
-    grok.name('assign-forwarding')
-    grok.require('zope2.View')
+class AssignForwardingView(layout.FormWrapper):
 
     form = AssignForwardingForm
-
-    def __init__(self, *args, **kwargs):
-        layout.FormWrapper.__init__(self, *args, **kwargs)
-        grok.View.__init__(self, *args, **kwargs)
-
-    __call__ = layout.FormWrapper.__call__

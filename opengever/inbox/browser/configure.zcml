@@ -18,7 +18,43 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      name="refuse-task"
+      for="opengever.inbox.forwarding.IForwarding"
+      class=".refuse.RefuseForwardingView"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="store_refused_forwarding"
+      for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot"
+      class=".refuse.StoreRefusedForwardingView"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="assign-forwarding"
+      for="opengever.inbox.forwarding.IForwarding"
+      class=".assign.AssignForwardingView"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="close-forwarding"
+      for="opengever.task.task.ITask"
+      class=".close.ForwardingCloseFormView"
+      permission="zope2.View"
+      />
+
   <!-- tabs -->
+  <browser:page
+      name="tabbedview_view-overview"
+      for="opengever.inbox.inbox.IInbox"
+      template="templates/overview.pt"
+      class=".overview.InboxOverview"
+      permission="zope2.View"
+      />
+
   <browser:page
       name="tabbedview_view-assigned_inbox_tasks"
       for="opengever.inbox.inbox.IInbox"
