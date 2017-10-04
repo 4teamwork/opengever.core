@@ -12,6 +12,7 @@ Changelog
 - SPV word: Fix protocol zip export. [tarnap]
 - Create missing SQL sequences. [jone]
 - Ungrok opengever.inbox. [elioschmutz]
+- SPV word: Provide meeting doc properties in proposal documents and excerpts. [jone]
 - Bundle import: Fix deactivation of LDAP plugin during import. [lgraf]
 - SPV word: Register excerpt relations properly in the relation catalog. [jone]
 - Update Plone version to 4.3.15. [lgraf]
