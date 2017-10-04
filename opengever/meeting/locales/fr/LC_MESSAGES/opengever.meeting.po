@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-02 12:52+0000\n"
+"POT-Creation-Date: 2017-10-04 13:45+0000\n"
 "PO-Revision-Date: 2017-06-22 09:02+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -1647,11 +1647,6 @@ msgstr ""
 #. Default: "Status:"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "view_label_meeting_status"
-msgstr ""
-
-#. Default: "Other participants:"
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:200
-msgid "view_label_other_participants"
 msgstr ""
 
 #. Default: "Participants:"

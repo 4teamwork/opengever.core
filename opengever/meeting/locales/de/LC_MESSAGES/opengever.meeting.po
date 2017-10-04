@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-02 12:52+0000\n"
+"POT-Creation-Date: 2017-10-04 13:45+0000\n"
 "PO-Revision-Date: 2017-09-25 13:37+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1646,11 +1646,6 @@ msgstr "Beginn:"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "view_label_meeting_status"
 msgstr "Status:"
-
-#. Default: "Other participants:"
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt:200
-msgid "view_label_other_participants"
-msgstr "Weitere Teilnehmende"
 
 #. Default: "Participants:"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
