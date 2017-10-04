@@ -160,9 +160,7 @@ class TestDocument(FunctionalTestCase):
         new_doc = self.portal['copy_of_document-1']
 
         new_history = self.portal.portal_repository.getHistory(new_doc)
-        # The new history should have an initial version,
-        # but existing versions shouldn't be copied
-        self.assertEquals(len(new_history), 1)
+        self.assertEquals(len(new_history), 0)
 
     def test_accessors(self):
         document = create(Builder("document")
