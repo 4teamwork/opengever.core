@@ -29,3 +29,4 @@ class AddTeamModel(SchemaMigration):
                    ForeignKey('groups.groupid'), nullable=False),
             Column('org_unit_id', String(UNIT_ID_LENGTH),
                    ForeignKey('org_units.unit_id'), nullable=False))
+        self.ensure_sequence_exists('teams_id_seq')
