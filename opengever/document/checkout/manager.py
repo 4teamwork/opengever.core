@@ -11,6 +11,7 @@ from opengever.document.events import ObjectCheckedOutEvent
 from opengever.document.events import ObjectCheckoutCanceledEvent
 from opengever.document.events import ObjectRevertedToVersion
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.document.versioner import Versioner
 from opengever.trash.trash import ITrashed
 from plone import api
 from plone.locking.interfaces import IRefreshableLockable
@@ -184,10 +185,11 @@ class CheckinCheckoutManager(grok.MultiAdapter):
         if not self.is_cancel_allowed():
             raise Unauthorized
 
-        # revert to prior version (baseline)
-        baseline = self.repository.getHistory(self.context)[0]
-        self.revert_to_version(baseline.version_id,
-                               create_version=False, force=True)
+        # revert to prior version (baseline) if a version exists.
+        if Versioner(self.context).has_initial_version():
+            baseline = self.repository.getHistory(self.context)[0]
+            self.revert_to_version(baseline.version_id,
+                                   create_version=False, force=True)
 
         # remember that we canceled in
         self.annotations[CHECKIN_CHECKOUT_ANNOTATIONS_KEY] = None
