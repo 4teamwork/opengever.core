@@ -31,6 +31,7 @@ from plone.directives import form
 from plone.formwidget.contenttree import ObjPathSourceBinder
 from plone.uuid.interfaces import IUUID
 from Products.CMFPlone.utils import safe_unicode
+from z3c.relationfield.event import addRelations
 from z3c.relationfield.relation import RelationValue
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
@@ -531,6 +532,7 @@ class SubmittedProposal(ProposalBase):
         intid = getUtility(IIntIds).getId(excerpt_document)
         excerpts.append(RelationValue(intid))
         self.excerpts = excerpts
+        addRelations(self, None)
 
 
 class Proposal(ProposalBase):
