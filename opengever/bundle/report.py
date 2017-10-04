@@ -285,7 +285,7 @@ class XLSXMainReportBuilder(XLSXReportBuilderBase):
 
         stats = self.bundle.stats
         timings = stats['timings']
-        duration = timings['done_post_processing'] - timings['start_loading']
+        duration = timings['migration_finished'] - timings['start_loading']
         bundle_name = basename(self.bundle.bundle_path.rstrip('/'))
 
         summary_stats = OrderedDict([

@@ -64,11 +64,6 @@
       />
 
   <utility
-      component=".sections.post_processing.PostProcessingSection"
-      name="opengever.bundle.post_processing"
-      />
-
-  <utility
       component=".sections.post_import_validation.PostImportValidationSection"
       name="opengever.bundle.post_import_validation"
       />

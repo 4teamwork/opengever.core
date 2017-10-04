@@ -14,6 +14,7 @@ from zope.interface import implements
 import logging
 import os
 import tempfile
+import transaction
 
 
 log = logging.getLogger('opengever.bundle.report')
@@ -36,6 +37,9 @@ class ReportSection(object):
     def __iter__(self):
         for item in self.previous:
             yield item
+
+        transaction.commit()
+        self.bundle.stats['timings']['migration_finished'] = datetime.now()
 
         log.info("Creating import reports...")
         self.report_dir = self.create_report_dir()
