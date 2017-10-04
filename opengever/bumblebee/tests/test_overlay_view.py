@@ -8,6 +8,7 @@ from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 from opengever.testing import FunctionalTestCase
 from opengever.testing.helpers import create_document_version
 from plone import api
+from plone.namedfile.file import NamedBlobFile
 from zExceptions import NotFound
 import transaction
 
@@ -155,6 +156,7 @@ class TestBumblebeeOverlayListing(FunctionalTestCase):
                               bumblebee_asset('example.docx').bytes(),
                               u'example.docx'))
 
+        document.file = NamedBlobFile(data='new', filename=u'example.docx')
         create_document_version(document, version_id=1)
         transaction.commit()
 
@@ -286,6 +288,7 @@ class TestBumblebeeOverlayDocument(FunctionalTestCase):
                               bumblebee_asset('example.docx').bytes(),
                               u'example.docx'))
 
+        document.file = NamedBlobFile(data='new', filename=u'example.docx')
         create_document_version(document, version_id=1)
         transaction.commit()
 

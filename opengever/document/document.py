@@ -13,6 +13,7 @@ from opengever.document.base import BaseDocumentMixin
 from opengever.document.behaviors import IBaseDocument
 from opengever.document.behaviors.related_docs import IRelatedDocuments
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.document.versioner import Versioner
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.meeting.model.generateddocument import GeneratedExcerpt
 from opengever.meeting.proposal import IProposal
@@ -150,6 +151,31 @@ class Document(Item, BaseDocumentMixin):
         """
         return False
 
+    @property
+    def file(self):
+        return self.__dict__.get('file')
+
+    @file.setter
+    def file(self, value):
+        if self.__dict__.get('file'):
+            # Self is not aquisition wrapped, but we need an aquisition
+            # wrapped object for checking/creating an initial version.
+            document = api.content.get(UID=self.UID())
+
+            # When retrieving a version, for example in the
+            # opengever.bumblebee.download view, the document file attribute
+            # is set by the CopyModifyMergeRepositoryTool._recursiveRetrieve.
+            # Therefore we only create the initial version, if the document can
+            # be aquisition wrapped
+            if document:
+                # Create an initial version if not exists before updating
+                # the document.
+                versioner = Versioner(document)
+                if not versioner.has_initial_version():
+                    versioner.create_initial_version()
+
+        self.__dict__['file'] = value
+
     def related_items(self, bidirectional=False, documents_only=False):
         _related_items = []
 
@@ -243,14 +269,7 @@ class Document(Item, BaseDocumentMixin):
 
     def get_current_version(self):
         """Return the current document history version."""
-        repository = api.portal.get_tool("portal_repository")
-        assert repository.isVersionable(self), \
-            'Document is not versionable'
-        history = repository.getHistoryMetadata(self)
-        current_version = history.getLength(countPurged=False) - 1
-        assert history.retrieve(current_version), \
-            'missing history entry for verion {}'.format(current_version)
-        return current_version
+        return Versioner(self).get_current_version_id()
 
     def update_file(self, filename, content_type, data):
         self.file = NamedBlobFile(

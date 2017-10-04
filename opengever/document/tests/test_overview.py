@@ -13,6 +13,7 @@ from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
 from plone.locking.interfaces import IRefreshableLockable
+from plone.namedfile.file import NamedBlobFile
 from zope.annotation.interfaces import IAnnotations
 from zope.component import queryMultiAdapter
 import transaction
@@ -351,7 +352,9 @@ class TestOverviewMeetingFeatures(FunctionalTestCase):
 
         self.dossier = create(
             Builder('dossier').within(self.repo_folder))
-        self.document = create(Builder('document').within(self.dossier))
+        self.document = create(Builder('document')
+                               .with_dummy_content()
+                               .within(self.dossier))
 
         container = create(Builder('committee_container'))
         self.grant('MeetingUser', on=container)
@@ -395,10 +398,12 @@ class TestOverviewMeetingFeatures(FunctionalTestCase):
     @browsing
     def test_outdated_document_can_be_updated(self, browser):
         # create a new document version
+        self.document.file = NamedBlobFile(data='New', filename=u'test.txt')
         repository = api.portal.get_tool('portal_repository')
         repository.save(self.document)
         transaction.commit()
 
+        browser.raise_http_erros=False
         browser.login().open(self.document, view='tabbedview_view-overview')
         browser.find('Update document in proposal').click()
         browser.find('Submit Attachments').click()

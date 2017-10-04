@@ -28,6 +28,7 @@ class TestSyncExcerpt(IntegrationTestCase):
 
         self.document_in_proposal = create(
             Builder('document')
+            .with_dummy_content()
             .within(self.submitted_proposal))
         self.excerpt_in_proposal = create(
             Builder('generated_excerpt')

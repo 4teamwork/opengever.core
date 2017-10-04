@@ -5,9 +5,9 @@ from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 from opengever.core.testing import PDFConverterAvailability
+from opengever.document.versioner import Versioner
 from opengever.testing import FunctionalTestCase
 from opengever.testing.helpers import create_document_version
-from opengever.testing.helpers import create_initial_version
 from plone import api
 from urlparse import parse_qs
 from urlparse import urlparse
@@ -43,7 +43,8 @@ class TestVersionsTab(FunctionalTestCase):
                      .attach_file_containing(u"INITIAL VERSION DATA",
                                              u"somefile.txt"))
 
-        create_initial_version(doc)
+        Versioner(doc).create_initial_version()
+
         return doc
 
 

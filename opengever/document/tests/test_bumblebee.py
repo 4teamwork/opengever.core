@@ -140,8 +140,10 @@ class TestBumblebeeIntegrationWithEnabledFeature(FunctionalTestCase):
         dossier = create(Builder('dossier'))
         document = create(Builder('document')
                           .within(dossier)
-                          .attach_file_containing(
-                              'foo', u'example.docx'))
+                          .attach_file_containing('bar', u'example.docx'))
+
+        document.file = NamedBlobFile(data='foo', filename=u'example.docx')
+
         create_document_version(document, 1,
                                 data=bumblebee_asset('example.docx').bytes())
         create_document_version(document, 2)

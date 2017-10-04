@@ -235,7 +235,10 @@ class TestDocument(FunctionalTestCase):
         self.assertFalse(submitted_document.is_movable())
 
     def test_current_document_version_is_increased(self):
-        document = create(Builder("document"))
+        document = create(Builder("document").with_dummy_content())
+        self.assertEqual(0, document.get_current_version())
+
+        document.file = NamedBlobFile(data='New', filename=u'test.txt')
         self.assertEqual(0, document.get_current_version())
 
         repository = api.portal.get_tool('portal_repository')

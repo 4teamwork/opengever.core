@@ -6,6 +6,7 @@ from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.interfaces import IHistory
 from opengever.testing import FunctionalTestCase
 from plone import api
+from plone.namedfile.file import NamedBlobFile
 from plone.protect import createToken
 import transaction
 
@@ -39,6 +40,7 @@ class TestProposalHistory(FunctionalTestCase):
         self.repo, self.repo_folder = create(Builder('repository_tree'))
         self.dossier = create(Builder('dossier').within(self.repo_folder))
         self.document = create(Builder('document')
+                               .with_dummy_content()
                                .within(self.dossier)
                                .titled('A Document'))
         self.proposal = create(Builder('proposal')
@@ -186,6 +188,8 @@ class TestProposalHistory(FunctionalTestCase):
     @browsing
     def test_updating_existing_document_creates_history_entry(self, browser):
         self.submit_proposal()
+
+        self.document.file = NamedBlobFile('New', filename=u'test.txt')
         repository = api.portal.get_tool('portal_repository')
         repository.save(self.document)
         transaction.commit()

@@ -41,6 +41,7 @@ class TestCheckin(FunctionalTestCase):
         self.dossier = create(Builder('dossier'))
 
         self.document = create(Builder('document')
+                               .with_dummy_content()
                                .having(document_date=date(2014, 1, 1))
                                .within(self.dossier)
                                .checked_out())
@@ -62,6 +63,9 @@ class TestCheckin(FunctionalTestCase):
             None, annotations.get(CHECKIN_CHECKOUT_ANNOTATIONS_KEY))
 
     def test_new_version_is_created(self):
+        self.document.file = NamedBlobFile(
+            data='New conent', filename=u'test.txt')
+
         self.manager.checkin()
 
         repo_tool = api.portal.get_tool('portal_repository')
@@ -92,6 +96,10 @@ class TestReverting(FunctionalTestCase):
                                .within(self.dossier)
                                .attach_file_containing(
                                    u"INITIAL VERSION DATA", u"somefile.txt"))
+
+        # trigger initial version creation
+        self.document.file = NamedBlobFile(
+            data='New conent', filename=u'test.txt')
 
         create_document_version(self.document, 1)
         create_document_version(self.document, 2)
