@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-04 14:05+0000\n"
-"PO-Revision-Date: 2017-10-02 16:56+0200\n"
+"POT-Creation-Date: 2017-10-05 06:38+0000\n"
+"PO-Revision-Date: 2017-10-04 17:58+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1563,7 +1563,7 @@ msgstr "Überarbeitung"
 #. Default: "Schedule"
 #: ./opengever/meeting/model/proposal.py
 msgid "schedule"
-msgstr "traktandieren"
+msgstr "Traktandieren"
 
 #. Default: "Scheduled"
 #: ./opengever/meeting/model/proposal.py
@@ -1581,7 +1581,7 @@ msgstr "Status"
 #. Default: "Submit"
 #: ./opengever/meeting/model/proposal.py
 msgid "submit"
-msgstr "einreichen"
+msgstr "Einreichen"
 
 #. Default: "Submitted"
 #: ./opengever/meeting/model/proposal.py
