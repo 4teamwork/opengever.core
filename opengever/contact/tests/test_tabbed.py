@@ -18,7 +18,7 @@ class TestContactFolderTabbedView(FunctionalTestCase):
         browser.login().open(self.contactfolder, view='tabbed_view')
 
         self.assertEquals(
-            ['Local', 'Users'],
+            ['Local', 'Users', 'Teams'],
             browser.css('.formTab').text)
 
     @browsing
@@ -27,5 +27,5 @@ class TestContactFolderTabbedView(FunctionalTestCase):
         browser.login().open(self.contactfolder, view='tabbed_view')
 
         self.assertEquals(
-            ['Persons', 'Organizations', 'Users'],
+            ['Persons', 'Organizations', 'Users', 'Teams'],
             browser.css('.formTab').text)

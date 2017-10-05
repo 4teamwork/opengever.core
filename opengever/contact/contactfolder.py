@@ -40,7 +40,6 @@ class ContactFolder(Container, TranslatedTitleMixin):
             if team:
                 return TeamWrapper.wrap(self, team)
 
-
         if default is _marker:
             raise KeyError(id_)
         return default
