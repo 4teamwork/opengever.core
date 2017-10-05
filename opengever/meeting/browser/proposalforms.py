@@ -52,6 +52,7 @@ class FieldConfigurationMixin(object):
         map(self.use_trix, textfields)
         if is_word_meeting_implementation_enabled():
             map(self.omit_field, textfields)
+            move(self, 'title', before='*')
 
     def omit_field(self, fieldname):
         self.fields = self.fields.omit(fieldname)
