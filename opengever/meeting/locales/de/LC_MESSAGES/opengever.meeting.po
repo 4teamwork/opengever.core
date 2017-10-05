@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-05 06:38+0000\n"
-"PO-Revision-Date: 2017-10-04 17:58+0200\n"
+"POT-Creation-Date: 2017-10-05 16:15+0000\n"
+"PO-Revision-Date: 2017-10-05 17:49+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -763,6 +763,11 @@ msgstr "Abbrechen"
 #: ./opengever/meeting/browser/meetings/protocol.py
 msgid "label_close"
 msgstr "Schliessen"
+
+#. Default: "The meeting cannot be closed because it has undecided agenda items."
+#: ./opengever/meeting/model/meeting.py
+msgid "label_close_error_has_undecided_agenda_items"
+msgstr "Die Sitzung kann nicht abgeschlossen werden solange noch nicht alle Traktanden abgeschlossen sind."
 
 #. Default: "Committee deactivated successfully"
 #: ./opengever/meeting/browser/committeetransitioncontroller.py

@@ -101,3 +101,24 @@ class TestWordMeeting(IntegrationTestCase):
             browser.css('#confirm_close_meeting > ul > li').text)
         model.close()
         self.assertEquals(0, model.protocol_document.generated_version)
+
+    @browsing
+    def test_closing_meeting_with_undecided_items_is_not_allowed(self, browser):
+        """The user must decide all agenda items before the meeting can be closed.
+        """
+        self.login(self.committee_responsible, browser)
+        self.schedule_proposal(self.meeting, self.submitted_word_proposal)
+        self.assertEquals(u'pending', self.meeting.model.workflow_state)
+
+        browser.open(self.meeting)
+        editbar.menu_option('Actions', 'Close meeting').click()
+        self.assertEquals(
+            {u'messages': [
+                {u'messageTitle': u'Error',
+                 u'message': u'The meeting cannot be closed because it'
+                 u' has undecided agenda items.',
+                 u'messageClass': u'error'}],
+             u'proceed': False},
+            browser.json)
+
+        self.assertEquals(u'pending', self.meeting.model.workflow_state)

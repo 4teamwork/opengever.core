@@ -53,8 +53,17 @@ class Transition(object):
         assert self.can_execute(model)
         model.workflow_state = self.state_to
 
+    def get_validation_errors(self, model):
+        """Run custom validation and return a list or tuple of errors.
+
+        If the return value is an empty list or tuple, the validation passed.
+        Otherwise it must be a list or tuple of message strings containing
+        errors which prevent this transition from beeing executed.
+        """
+        return ()
+
     def can_execute(self, model):
-        if not self.condition():
+        if not self.condition() and not self.get_validation_errors(model):
             return False
         return model.workflow_state == self.state_from
 
@@ -108,6 +117,9 @@ class Workflow(object):
 
     def get_transitions(self, state):
         return self.get_state(state.name).get_transitions()
+
+    def get_transition(self, transition_name, **kwargs):
+        return self.transitions.get(transition_name, **kwargs)
 
     def with_visible_transitions(self, transitions):
         copied_states = [each.copy() for each in self.states.values()]
