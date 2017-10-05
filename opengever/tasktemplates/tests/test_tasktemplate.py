@@ -1,107 +1,17 @@
-from ftw.builder import Builder
-from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import info_messages
-from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
-from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
-from plone.dexterity.interfaces import IDexterityFTI
-from Products.CMFCore.utils import getToolByName
-from zope.component import createObject
-from zope.component import queryUtility
+from plone import api
 
 
-class TestTaskTemplates(FunctionalTestCase):
-
-    def test_adding(self):
-        tasktemplate = create(Builder('tasktemplate')
-                              .titled(u'TaskTemplate 1'))
-        self.failUnless(ITaskTemplate.providedBy(tasktemplate))
-
-    def test_fti(self):
-        fti = queryUtility(
-            IDexterityFTI,
-            name='opengever.tasktemplates.tasktemplate')
-
-        self.assertNotEquals(None, fti)
-
-    def test_schema(self):
-        fti = queryUtility(
-            IDexterityFTI,
-            name='opengever.tasktemplates.tasktemplate')
-        schema = fti.lookupSchema()
-
-        self.assertEquals(ITaskTemplate, schema)
-
-    def test_factory(self):
-        fti = queryUtility(
-            IDexterityFTI,
-            name='opengever.tasktemplates.tasktemplate')
-        factory = fti.factory
-        new_object = createObject(factory)
-
-        self.failUnless(ITaskTemplate.providedBy(new_object))
-
-    def test_workflow_installed(self):
-        portal = self.layer['portal']
-        workflow = getToolByName(portal, 'portal_workflow')
-
-        self.assertTrue('opengever_tasktemplate_workflow' in workflow)
-
-    def test_workflows_mapped(self):
-        portal = self.layer['portal']
-        workflow = getToolByName(portal, 'portal_workflow')
-
-        self.assertTrue(
-            'opengever_tasktemplate_workflow' in workflow.getWorkflowsFor(
-                'opengever.tasktemplates.tasktemplate')[0].getId())
-
-    @browsing
-    def test_view(self, browser):
-        self.grant('Manager')
-
-        # Folders and templates
-        template_folder = create(Builder('tasktemplatefolder')
-                                 .titled(u'TaskTemplateFolder 1'))
-
-        template = create(Builder('tasktemplate')
-                          .within(template_folder)
-                          .titled(u'TaskTemplate 1')
-                          .having(text=u'Test Text',
-                                  preselected=True,
-                                  task_type='unidirectional_by_value',
-                                  issuer='responsible',
-                                  responsible_client='interactive_users',
-                                  deadline=7,
-                                  responsible='current_user'))
-
-        browser.login().open(template)
-        self.assertEquals(['TaskTemplate 1'],
-                          browser.css('.documentFirstHeading').text)
-
-    @browsing
-    def test_tasktemplatefolder_can_be_edited_when_activated(self, browser):
-        templatefolder = create(Builder('tasktemplatefolder')
-                                .titled(u'Task templates')
-                                .in_state('tasktemplatefolder-state-activ'))
-
-        browser.login().visit(templatefolder, view='@@edit')
-        browser.find_button_by_label('Save').click()
-        self.assertEquals(templatefolder.absolute_url(), browser.url)
-
-
-class TestTaskTemplatesIntegration(IntegrationTestCase):
+class TestTaskTemplates(IntegrationTestCase):
 
     @browsing
     def test_adding_a_tasktemplate(self, browser):
         self.login(self.administrator, browser=browser)
 
-        templatefolder = create(Builder('tasktemplatefolder')
-                                .within(self.templates)
-                                .titled(u'Verfahren Neuanstellung'))
-
-        browser.open(templatefolder)
+        browser.open(self.tasktemplatefolder)
         factoriesmenu.add('TaskTemplate')
         browser.fill(
             {'Title': 'Arbeitsplatz einrichten.',
@@ -115,9 +25,35 @@ class TestTaskTemplatesIntegration(IntegrationTestCase):
         browser.click_on('Save')
         self.assertEquals(['Item created'], info_messages())
 
-        tasktemplate = templatefolder.listFolderContents()[0]
+        tasktemplate = self.tasktemplatefolder.listFolderContents()[0]
         self.assertEquals(u'Arbeitsplatz einrichten.', tasktemplate.title)
         self.assertEquals(u'robert.ziegler', tasktemplate.responsible)
         self.assertEquals('fa', tasktemplate.responsible_client)
         self.assertEquals(u'responsible', tasktemplate.issuer)
         self.assertEquals(10, tasktemplate.deadline)
+
+    def test_tasktemplate_is_in_active_state_per_default(self):
+        self.login(self.administrator)
+
+        self.assertEquals('tasktemplate-state-active',
+                          api.content.get_state(self.tasktemplate))
+
+    @browsing
+    def test_view(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        browser.open(self.tasktemplate)
+        self.assertEquals(['Arbeitsplatz einrichten.'],
+                          browser.css('.documentFirstHeading').text)
+
+    @browsing
+    def test_tasktemplatefolder_can_be_edited_when_activated(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        browser.open(self.tasktemplatefolder, view='@@edit')
+        browser.fill({'Title': 'Arbeitsplatz inkl. PC einrichten'})
+        browser.find_button_by_label('Save').click()
+
+        self.assertEquals(self.tasktemplatefolder.absolute_url(), browser.url)
+        self.assertEquals(u'Arbeitsplatz inkl. PC einrichten',
+                          self.tasktemplatefolder.title)

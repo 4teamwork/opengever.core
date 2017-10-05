@@ -528,6 +528,8 @@ Objects
   - self.templates
     - self.proposal_template
     - self.sablon_template
+    - self.tasktemplatefolder
+      - self.tasktemplate
 
 .. </fixture:objects>
 
