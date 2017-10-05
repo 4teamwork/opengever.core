@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-02 12:52+0000\n"
+"POT-Creation-Date: 2017-10-05 18:17+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,8 +38,14 @@ msgid "inbox_label"
 msgstr ""
 
 #. Default: "Active"
+#: ./opengever/ogds/base/browser/team_forms.py
 #: ./opengever/ogds/base/browser/templates/userdetails.pt
 msgid "label_active"
+msgstr ""
+
+#. Default: "Add team"
+#: ./opengever/ogds/base/browser/team_forms.py
+msgid "label_add_team"
 msgstr ""
 
 #. Default: "Address"
@@ -67,6 +73,11 @@ msgstr ""
 msgid "label_directorate"
 msgstr ""
 
+#. Default: "Edit team"
+#: ./opengever/ogds/base/browser/team_forms.py
+msgid "label_edit_team"
+msgstr ""
+
 #. Default: "Email"
 #: ./opengever/ogds/base/browser/templates/userdetails.pt
 msgid "label_email"
@@ -83,6 +94,7 @@ msgid "label_fullname"
 msgstr ""
 
 #. Default: "Group"
+#: ./opengever/ogds/base/browser/team_forms.py
 #: ./opengever/ogds/base/browser/templates/teamdetails.pt
 msgid "label_group"
 msgstr ""
@@ -95,6 +107,11 @@ msgstr ""
 #. Default: "Members"
 #: ./opengever/ogds/base/browser/templates/teamdetails.pt
 msgid "label_members"
+msgstr ""
+
+#. Default: "Org Unit"
+#: ./opengever/ogds/base/browser/team_forms.py
+msgid "label_org_unit"
 msgstr ""
 
 #. Default: "Fax"
@@ -120,6 +137,11 @@ msgstr ""
 #. Default: "Teams"
 #: ./opengever/ogds/base/browser/templates/userdetails.pt
 msgid "label_teams"
+msgstr ""
+
+#. Default: "Title"
+#: ./opengever/ogds/base/browser/team_forms.py
+msgid "label_title"
 msgstr ""
 
 #. Default: "URL"

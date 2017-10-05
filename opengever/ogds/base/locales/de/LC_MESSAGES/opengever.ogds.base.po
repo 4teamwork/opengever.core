@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-10-02 12:52+0000\n"
+"POT-Creation-Date: 2017-10-05 18:17+0000\n"
 "PO-Revision-Date: 2016-07-22 16:54+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-ogds-base/de/>\n"
@@ -37,9 +37,15 @@ msgid "inbox_label"
 msgstr "Eingangskorb: ${client}"
 
 #. Default: "Active"
+#: ./opengever/ogds/base/browser/team_forms.py
 #: ./opengever/ogds/base/browser/templates/userdetails.pt
 msgid "label_active"
 msgstr "Aktiv"
+
+#. Default: "Add team"
+#: ./opengever/ogds/base/browser/team_forms.py
+msgid "label_add_team"
+msgstr "Team hinzufügen"
 
 #. Default: "Address"
 #: ./opengever/ogds/base/browser/templates/userdetails.pt
@@ -66,6 +72,11 @@ msgstr "Beschreibung"
 msgid "label_directorate"
 msgstr "Direktion"
 
+#. Default: "Edit team"
+#: ./opengever/ogds/base/browser/team_forms.py
+msgid "label_edit_team"
+msgstr "Team bearbeiten"
+
 #. Default: "Email"
 #: ./opengever/ogds/base/browser/templates/userdetails.pt
 msgid "label_email"
@@ -82,6 +93,7 @@ msgid "label_fullname"
 msgstr "Name"
 
 #. Default: "Group"
+#: ./opengever/ogds/base/browser/team_forms.py
 #: ./opengever/ogds/base/browser/templates/teamdetails.pt
 msgid "label_group"
 msgstr "Gruppe"
@@ -95,6 +107,11 @@ msgstr "Gruppen"
 #: ./opengever/ogds/base/browser/templates/teamdetails.pt
 msgid "label_members"
 msgstr "Mitglieder"
+
+#. Default: "Org Unit"
+#: ./opengever/ogds/base/browser/team_forms.py
+msgid "label_org_unit"
+msgstr "Organisationseinheit"
 
 #. Default: "Fax"
 #: ./opengever/ogds/base/browser/templates/userdetails.pt
@@ -121,6 +138,11 @@ msgstr "Anrede"
 msgid "label_teams"
 msgstr "Teams"
 
+#. Default: "Title"
+#: ./opengever/ogds/base/browser/team_forms.py
+msgid "label_title"
+msgstr "Titel"
+
 #. Default: "URL"
 #: ./opengever/ogds/base/browser/templates/userdetails.pt
 msgid "label_url"
@@ -130,4 +152,3 @@ msgstr "Homepage"
 #: ./opengever/ogds/base/browser/templates/userdetails.pt
 msgid "link_all_users"
 msgstr "Alle Benutzer anzeigen"
-
