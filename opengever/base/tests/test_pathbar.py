@@ -1,3 +1,5 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
 
@@ -5,13 +7,18 @@ from opengever.testing import IntegrationTestCase
 class TestPathBar(IntegrationTestCase):
 
     @browsing
-    def test_first_part_is_org_unit_title(self, browser):
+    def test_first_part_is_admin_unit_title_if_multiple_admin_units(self, browser):
         self.login(self.regular_user, browser)
-        browser.open(self.dossier)
+        create(Builder('admin_unit')
+               .having(title=u'Nebenmandant',
+                       unit_id=u'plonez',
+                       public_url='http://nohost/plonez'))
 
+        browser.open(self.dossier)
         first_part = browser.css('#portal-breadcrumbs li a')[0]
         self.assertEquals('Hauptmandant', first_part.text)
         self.assertEquals(self.portal.absolute_url(), first_part.get('href'))
+
 
     @browsing
     def test_contains_contenttype_icon_class(self, browser):
@@ -19,8 +26,7 @@ class TestPathBar(IntegrationTestCase):
         browser.open(self.document)
 
         self.assertEquals(
-            ['contenttype-plone-site',
-             'contenttype-opengever-repository-repositoryfolder',
+            ['contenttype-opengever-repository-repositoryfolder',
              'contenttype-opengever-repository-repositoryfolder',
              'contenttype-opengever-repository-repositoryroot',
              'contenttype-opengever-dossier-businesscasedossier',
@@ -34,8 +40,7 @@ class TestPathBar(IntegrationTestCase):
         browser.open(self.dossier)
 
         self.assertEquals(
-            [u'Hauptmandant',
-             u'1.1. Vertr\xe4ge und Vereinbarungen',
+            [u'1.1. Vertr\xe4ge und Vereinbarungen',
              u'1. F\xfchrung',
              u'Ordnungssystem',
              u'Vertr\xe4ge mit der kantonalen Finanzverwaltung'],
