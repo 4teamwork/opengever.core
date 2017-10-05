@@ -3,6 +3,11 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="opengever.tasktemplates">
 
+  <adapter
+      factory=".tasktemplate.default_responsible_client"
+      name="default"
+      />
+
   <browser:page
       for=".tasktemplate.ITaskTemplate"
       name="edit"

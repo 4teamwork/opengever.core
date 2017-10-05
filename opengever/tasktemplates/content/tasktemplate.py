@@ -10,6 +10,7 @@ from plone.dexterity.browser.add import DefaultAddView
 from plone.dexterity.browser.edit import DefaultEditForm
 from plone.dexterity.content import Item
 from plone.directives import form
+from z3c.form import widget
 from z3c.form.browser import checkbox
 from zope import schema
 from zope.interface import implements
@@ -99,12 +100,13 @@ class TaskTemplate(Item):
     implements(ITaskTemplate)
 
 
-@form.default_value(field=ITaskTemplate['responsible_client'])
-def responsible_client_default_value(data):
-    return get_current_org_unit().id()
+default_responsible_client = widget.ComputedWidgetAttribute(
+    lambda adapter: get_current_org_unit().id(),
+    field=ITaskTemplate['responsible_client'])
 
 
 class TaskTemplateAddForm(DefaultAddForm):
+
     def createAndAdd(self, data):
         update_reponsible_field_data(data)
         return super(TaskTemplateAddForm, self).createAndAdd(data)
