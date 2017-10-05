@@ -69,4 +69,11 @@
       permission="cmf.ManagePortal"
       />
 
+  <browser:page
+      name="edit"
+      for="opengever.ogds.base.interfaces.ITeam"
+      class=".team_forms.TeamEditForm"
+      permission="cmf.ManagePortal"
+      />
+
 </configure>
