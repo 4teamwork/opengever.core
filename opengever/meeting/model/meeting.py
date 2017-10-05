@@ -256,8 +256,9 @@ class Meeting(Base, SQLFormSupport):
             assert not self.get_undecided_agenda_items(), \
                 'All agenda items must be decided before a meeting is closed.'
 
-        for agenda_item in self.agenda_items:
-            agenda_item.close()
+        else:
+            for agenda_item in self.agenda_items:
+                agenda_item.close()
 
         self.update_protocol_document()
         self.unlock_protocol_document()

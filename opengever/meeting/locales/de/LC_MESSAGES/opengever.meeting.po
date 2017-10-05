@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2017-10-05 16:15+0000\n"
-"PO-Revision-Date: 2017-10-05 17:49+0200\n"
+"PO-Revision-Date: 2017-10-10 09:01+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -63,7 +63,6 @@ msgid "Additional document ${title} has been submitted successfully."
 msgstr "Das zusätzliche Dokument ${title} wurde erfolgreich eingereicht."
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "After closing the meeting it can no longer be edited. The following tasks will be performed:"
 msgstr "Nach Abschluss kann die Sitzung nicht mehr bearbeitet werden. Die folgenden Aktionen werden beim Abschliessen ausgeführt:"
 
@@ -111,7 +110,6 @@ msgid "Choose Agenda Items"
 msgstr "Traktanden auswählen"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "Close all proposals."
 msgstr "Alle Anträge werden abgeschlossen."
 
@@ -122,6 +120,14 @@ msgstr "Aktuelle Periode abschliessen"
 #: ./opengever/meeting/browser/periods.py
 msgid "Close period"
 msgstr "Periode abschliessen"
+
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "Closing the meeting the first time will automatically (re-)create the protocol."
+msgstr "Das Protokoll wird automatisch neu generiert, da die Sitzung das erste Mal abgeschlossen wird."
+
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "Closing the meeting will not update the protocol automatically. <br /> Make sure to transfer your changes or recreate the protocol."
+msgstr "Das Protokoll wird beim erneuten Sitzungsabschluss nicht automatisch aktualisiert. <br /> Bitte übertragen Sie allfällige Änderungen manuell oder generieren Sie das Protokoll neu."
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
@@ -184,7 +190,6 @@ msgid "Export settings"
 msgstr "Export-Einstellungen"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "Generate excerpts for all proposals."
 msgstr "Für alle Anträge wird ein Protokollauszug generiert und ins Antragsdossier zurückgespielt."
 
@@ -356,7 +361,6 @@ msgid "Unschedule proposal"
 msgstr "Traktandum entfernen"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "Update or create the protocol."
 msgstr "Das Protokoll wird erstellt oder aktualisiert."
 

@@ -59,18 +59,15 @@
             <a href="#" class="hiddenStructure" title="Close this box">Close this box.</a>
           </div>
           <h2 i18n:translate="close_meeting">Close meeting</h2>
-          <p i18n:translate="">
-            After closing the meeting it can no longer be edited.
-            The following tasks will be performed:
+          <p tal:condition="view/will_closing_regenerate_protocol"
+             i18n:translate="">
+            Closing the meeting the first time will automatically (re-)create the protocol.
           </p>
-          <ul>
-            <li i18n:translate="">Close all proposals.</li>
-            <li i18n:translate="">Generate excerpts for all proposals.</li>
-            <li i18n:translate=""
-                tal:condition="view/will_closing_regenerate_protocol">
-              Update or create the protocol.
-            </li>
-          </ul>
+          <p tal:condition="not:view/will_closing_regenerate_protocol"
+             i18n:translate="">
+            Closing the meeting will not update the protocol automatically. <br />
+            Make sure to transfer your changes or recreate the protocol.
+          </p>
           <p i18n:translate="">
             Are you sure you want to close this meeting?
           </p>

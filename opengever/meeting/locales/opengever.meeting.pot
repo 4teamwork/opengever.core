@@ -62,7 +62,6 @@ msgid "Additional document ${title} has been submitted successfully."
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "After closing the meeting it can no longer be edited. The following tasks will be performed:"
 msgstr ""
 
@@ -110,7 +109,6 @@ msgid "Choose Agenda Items"
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "Close all proposals."
 msgstr ""
 
@@ -120,6 +118,14 @@ msgstr ""
 
 #: ./opengever/meeting/browser/periods.py
 msgid "Close period"
+msgstr ""
+
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "Closing the meeting the first time will automatically (re-)create the protocol."
+msgstr ""
+
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "Closing the meeting will not update the protocol automatically. <br /> Make sure to transfer your changes or recreate the protocol."
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
@@ -183,7 +189,6 @@ msgid "Export settings"
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "Generate excerpts for all proposals."
 msgstr ""
 
@@ -355,7 +360,6 @@ msgid "Unschedule proposal"
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "Update or create the protocol."
 msgstr ""
 

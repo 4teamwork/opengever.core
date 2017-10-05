@@ -7,6 +7,7 @@ Changelog
 
 - Fix default_documents_as_links default value for opengever.mail. [elioschmutz]
 - Fix responsible_client default value for tasktemplates. [phgross]
+- SPV word: Do not automatically decide agenda items when closing meetings. [jone]
 - SPV word: Prevent meetings with undecided agenda items from closing. [jone]
 - SPV word: In proposal forms, move the title to the top. [jone]
 - SPV word: Update proposal workflow translations to be consistent capitalized. [jone]

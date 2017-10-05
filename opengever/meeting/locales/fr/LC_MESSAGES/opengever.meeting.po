@@ -65,7 +65,6 @@ msgid "Additional document ${title} has been submitted successfully."
 msgstr "Le document supplémentaire ${title} a été soumis avec succès."
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "After closing the meeting it can no longer be edited. The following tasks will be performed:"
 msgstr ""
 
@@ -113,7 +112,6 @@ msgid "Choose Agenda Items"
 msgstr "Choisir les points du l'ordre du jour"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "Close all proposals."
 msgstr "Toutes les propositions sont clôturées."
 
@@ -124,6 +122,14 @@ msgstr "Clôturer la période actuellement active"
 #: ./opengever/meeting/browser/periods.py
 msgid "Close period"
 msgstr "Clôturer la période"
+
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "Closing the meeting the first time will automatically (re-)create the protocol."
+msgstr ""
+
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "Closing the meeting will not update the protocol automatically. <br /> Make sure to transfer your changes or recreate the protocol."
+msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
@@ -186,7 +192,6 @@ msgid "Export settings"
 msgstr "Paramètres de l'export"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "Generate excerpts for all proposals."
 msgstr "Pour toutes les propositions un extrait de protocole sera généré et renvoyé au dossier de proposition."
 
@@ -358,7 +363,6 @@ msgid "Unschedule proposal"
 msgstr "Enlever un point de l'ordre du jour"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "Update or create the protocol."
 msgstr "Le protocole est créé ou mis à jour."
 

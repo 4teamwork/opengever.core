@@ -67,12 +67,10 @@ class TestWordMeeting(IntegrationTestCase):
         # When closing the meeting, we should end up with a new version
         browser.open(self.meeting)
         self.assertEquals(
-            [
-                'Close all proposals.',
-                'Generate excerpts for all proposals.',
-                'Update or create the protocol.',
-            ],
-            browser.css('#confirm_close_meeting > ul > li').text)
+            ['Closing the meeting the first time will automatically'
+             ' (re-)create the protocol.',
+             'Are you sure you want to close this meeting?'],
+            browser.css('#confirm_close_meeting p').text)
         model.close()
         self.assertEquals(1, model.protocol_document.generated_version)
 
@@ -93,12 +91,10 @@ class TestWordMeeting(IntegrationTestCase):
         # it would potentially overwrite user-changes.
         browser.open(self.meeting)
         self.assertEquals(
-            [
-                'Close all proposals.',
-                'Generate excerpts for all proposals.',
-                # 'Update or create the protocol.',
-            ],
-            browser.css('#confirm_close_meeting > ul > li').text)
+            ['Closing the meeting will not update the protocol automatically.'
+             '\nMake sure to transfer your changes or recreate the protocol.',
+             'Are you sure you want to close this meeting?'],
+            browser.css('#confirm_close_meeting p').text)
         model.close()
         self.assertEquals(0, model.protocol_document.generated_version)
 
