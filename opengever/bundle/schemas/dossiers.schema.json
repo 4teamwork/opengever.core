@@ -77,9 +77,9 @@
                     "_zope_schema_type": "Choice",
                     "enum": [
                         null,
+                        "box",
                         "dossier",
-                        "folder",
-                        "box"
+                        "folder"
                     ]
                 },
                 "filing_prefix": {
@@ -92,11 +92,11 @@
                     "_zope_schema_type": "Choice",
                     "enum": [
                         null,
+                        "administration",
                         "department",
                         "directorate",
-                        "administration",
-                        "personal",
-                        "government"
+                        "government",
+                        "personal"
                     ]
                 },
                 "keywords": {

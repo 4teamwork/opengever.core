@@ -50,9 +50,9 @@
             "description": "Art des Beh\u00e4lters, in dem ein Dossier in Papierform abgelegt ist",
             "_zope_schema_type": "Choice",
             "enum": [
+                "box",
                 "dossier",
-                "folder",
-                "box"
+                "folder"
             ]
         },
         "filing_prefix": {
@@ -61,11 +61,11 @@
             "description": "",
             "_zope_schema_type": "Choice",
             "enum": [
+                "administration",
                 "department",
                 "directorate",
-                "administration",
-                "personal",
-                "government"
+                "government",
+                "personal"
             ]
         },
         "keywords": {
