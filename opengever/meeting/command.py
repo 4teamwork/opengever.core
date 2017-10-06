@@ -56,9 +56,9 @@ class ProtocolOperations(object):
     def create_database_entry(self, meeting, document):
         if meeting.protocol_document is not None:
             raise ProtocolAlreadyGenerated()
+        version = document.get_current_version(missing_as_zero=True)
         protocol_document = GeneratedProtocol(
-            oguid=Oguid.for_object(document),
-            generated_version=document.get_current_version())
+            oguid=Oguid.for_object(document), generated_version=version)
         meeting.protocol_document = protocol_document
         return protocol_document
 
@@ -103,10 +103,9 @@ class AgendaItemListOperations(object):
         if meeting.agendaitem_list_document is not None:
             raise AgendaItemListAlreadyGenerated()
 
+        version = document.get_current_version(missing_as_zero=True)
         agendaitem_list_document = GeneratedAgendaItemList(
-            oguid=Oguid.for_object(document),
-            generated_version=document.get_current_version(),
-            )
+            oguid=Oguid.for_object(document), generated_version=version)
 
         meeting.agendaitem_list_document = agendaitem_list_document
 
@@ -135,9 +134,9 @@ class ExcerptOperations(object):
         return ExcerptProtocolData(meeting, [self.agenda_item])
 
     def create_database_entry(self, meeting, document):
+        version = document.get_current_version(missing_as_zero=True)
         excerpt = GeneratedExcerpt(
-            oguid=Oguid.for_object(document),
-            generated_version=document.get_current_version())
+            oguid=Oguid.for_object(document), generated_version=version)
 
         self.proposal.submitted_excerpt_document = excerpt
 
@@ -205,9 +204,9 @@ class ManualExcerptOperations(object):
             include_copy_for_attention=self.include_copy_for_attention)
 
     def create_database_entry(self, meeting, document):
+        version = document.get_current_version(missing_as_zero=True)
         excerpt = GeneratedExcerpt(
-            oguid=Oguid.for_object(document),
-            generated_version=document.get_current_version())
+            oguid=Oguid.for_object(document), generated_version=version)
 
         meeting.excerpt_documents.append(excerpt)
         return excerpt
@@ -606,7 +605,8 @@ class CopyProposalDocumentCommand(object):
         session = create_session()
         proposal_model = self.proposal.load_model()
         oguid = Oguid.for_object(self.document)
-        submitted_version = self.document.get_current_version()
+        submitted_version = self.document.get_current_version(
+            missing_as_zero=True)
 
         doc = SubmittedDocument(oguid=oguid,
                                 proposal=proposal_model,
@@ -617,7 +617,8 @@ class CopyProposalDocumentCommand(object):
         session.add(doc)
 
     def copy_document(self, target_path, target_admin_unit_id):
-        submitted_version = self.document.get_current_version()
+        submitted_version = self.document.get_current_version(
+            missing_as_zero=True)
 
         record = IHistory(self.proposal).append_record(
             u'document_submitted',

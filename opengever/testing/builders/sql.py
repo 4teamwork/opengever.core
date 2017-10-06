@@ -193,7 +193,8 @@ class ProposalModelBuilder(SqlObjectBuilder):
             submitted.append(SubmittedDocument(
                     oguid=oguid,
                     submitted_oguid=oguid,
-                    submitted_version=document.get_current_version(),
+                    submitted_version=document.get_current_version(
+                        missing_as_zero=True),
                 ))
         self.arguments['submitted_documents'] = submitted
         return self
@@ -301,7 +302,8 @@ class GeneratedProtocolBuilder(SqlObjectBuilder):
 
     def for_document(self, document):
         self.arguments['oguid'] = Oguid.for_object(document)
-        self.arguments['generated_version'] = document.get_current_version()
+        self.arguments['generated_version'] = document.get_current_version(
+            missing_as_zero=True)
         return self
 
 builder_registry.register('generated_protocol', GeneratedProtocolBuilder)

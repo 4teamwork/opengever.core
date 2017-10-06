@@ -36,8 +36,8 @@ class TestSyncExcerpt(IntegrationTestCase):
         self.submitted_proposal.load_model().submitted_excerpt_document = self.excerpt_in_proposal
 
     def test_updates_excerpt_in_dossier_after_checkin(self):
-        self.assertEqual(0, self.document_in_proposal.get_current_version())
-        self.assertEqual(0, self.document_in_dossier.get_current_version())
+        self.assertEqual(None, self.document_in_proposal.get_current_version())
+        self.assertEqual(None, self.document_in_dossier.get_current_version())
         manager = getMultiAdapter((self.document_in_proposal,
                                    self.portal.REQUEST),
                                   ICheckinCheckoutManager)
@@ -52,8 +52,8 @@ class TestSyncExcerpt(IntegrationTestCase):
         self.assertEqual(1, self.document_in_dossier.get_current_version())
 
     def test_updates_excerpt_in_dossier_after_revert(self):
-        self.assertEqual(0, self.document_in_proposal.get_current_version())
-        self.assertEqual(0, self.document_in_dossier.get_current_version())
+        self.assertEqual(None, self.document_in_proposal.get_current_version())
+        self.assertEqual(None, self.document_in_dossier.get_current_version())
         manager = getMultiAdapter((self.document_in_proposal,
                                    self.portal.REQUEST),
                                   ICheckinCheckoutManager)
@@ -69,7 +69,7 @@ class TestSyncExcerpt(IntegrationTestCase):
         self.assertEqual(2, self.document_in_dossier.get_current_version())
 
     def test_updates_excerpt_in_dossier_after_modification(self):
-        self.assertEqual(0, self.document_in_dossier.get_current_version())
+        self.assertEqual(None, self.document_in_dossier.get_current_version())
         self.document_in_proposal.update_file(
             filename=u'example.docx',
             content_type='text/plain',

@@ -28,13 +28,16 @@ class Versioner(object):
     def has_initial_version(self):
         return self._get_history() != []
 
-    def get_current_version_id(self):
+    def get_current_version_id(self, missing_as_zero=False):
         repository = api.portal.get_tool("portal_repository")
 
         if not self.has_initial_version():
             # initial version has not been created yet, but will be created
             # before the file is changed
-            return 0
+            if missing_as_zero:
+                return 0
+            else:
+                return None
 
         history = repository.getHistoryMetadata(self.document)
         current_version = history.getLength(countPurged=False) - 1

@@ -267,9 +267,9 @@ class Document(Item, BaseDocumentMixin):
         parent = aq_parent(aq_inner(self))
         return IDossierMarker.providedBy(parent)
 
-    def get_current_version(self):
+    def get_current_version(self, missing_as_zero=False):
         """Return the current document history version."""
-        return Versioner(self).get_current_version_id()
+        return Versioner(self).get_current_version_id(missing_as_zero)
 
     def update_file(self, filename, content_type, data):
         self.file = NamedBlobFile(

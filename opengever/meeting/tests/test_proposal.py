@@ -460,7 +460,7 @@ class TestProposal(IntegrationTestCase):
         self.assertEquals(1, len(children['added']))
         submitted_document, = children['added']
 
-        self.assertEqual(0, submitted_document.get_current_version())
+        self.assertEqual(None, submitted_document.get_current_version())
 
         # create some new document versions
         with self.login(self.dossier_responsible):

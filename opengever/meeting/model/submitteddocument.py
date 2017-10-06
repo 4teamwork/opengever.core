@@ -48,7 +48,8 @@ class SubmittedDocument(Base):
     def is_up_to_date(self, document):
         assert Oguid.for_object(document) == self.oguid, 'invalid document'
 
-        return self.submitted_version == document.get_current_version()
+        return self.submitted_version == document.get_current_version(
+            missing_as_zero=True)
 
     def resolve_submitted(self):
         return self.submitted_oguid.resolve_object()

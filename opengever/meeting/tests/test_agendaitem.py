@@ -517,8 +517,8 @@ class TestAgendaItemRevise(TestAgendaItem):
             workflow_state='revision',
             proposal=proposal.load_model()))
 
-        self.assertEqual(0, excerpt_document.get_current_version())
-        self.assertEqual(0, submitted_excerpt_document.get_current_version())
+        self.assertEqual(None, excerpt_document.get_current_version())
+        self.assertEqual(None, submitted_excerpt_document.get_current_version())
 
         browser.login().open(
             self.meeting_wrapper,

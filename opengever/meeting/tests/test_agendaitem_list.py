@@ -110,7 +110,7 @@ class TestAgendaItemList(FunctionalTestCase):
         self.assertIn('has already been generated', browser.css('.portalMessage.error').first.text)
         self.assertTrue(meeting.agendaitem_list_document.resolve_document() == generated_document,
                         'Unexpectedly generated a new document.')
-        self.assertEqual(0, generated_document.get_current_version())
+        self.assertEqual(None, generated_document.get_current_version())
 
     @browsing
     def test_updated_agendaitem_list_can_be_downloaded(self, browser):
@@ -121,7 +121,7 @@ class TestAgendaItemList(FunctionalTestCase):
         browser.login().open(meeting.get_url())
         browser.css('.generate-agendaitem-list').first.click()
         generated_document = meeting.agendaitem_list_document.resolve_document()
-        self.assertEqual(0, generated_document.get_current_version(),
+        self.assertEqual(None, generated_document.get_current_version(),
                          'Did not generate a new fresh document.')
 
         browser.css('.refresh-agendaitem-list').first.click()

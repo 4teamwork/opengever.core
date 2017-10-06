@@ -234,7 +234,8 @@ class TestDocument(FunctionalTestCase):
 
     def test_current_document_version_is_increased(self):
         document = create(Builder("document").with_dummy_content())
-        self.assertEqual(0, document.get_current_version())
+        self.assertEqual(None, document.get_current_version())
+        self.assertEqual(0, document.get_current_version(missing_as_zero=True))
 
         document.file = NamedBlobFile(data='New', filename=u'test.txt')
         self.assertEqual(0, document.get_current_version())
