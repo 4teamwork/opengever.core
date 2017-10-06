@@ -74,4 +74,19 @@
       permission="zope2.View"
       />
 
+  <!-- Dossier add form  -->
+  <adapter
+      for="Products.CMFCore.interfaces.IFolderish
+           zope.publisher.interfaces.browser.IDefaultBrowserLayer
+           plone.dexterity.interfaces.IDexterityFTI"
+      provides="zope.publisher.interfaces.browser.IBrowserPage"
+      factory=".forms.DossierAddView"
+      name="opengever.dossier.businesscasedossier"
+      />
+  <class class=".forms.DossierAddView">
+    <require
+        permission="cmf.AddPortalContent"
+        interface="zope.publisher.interfaces.browser.IBrowserPage"
+        />
+  </class>
 </configure>

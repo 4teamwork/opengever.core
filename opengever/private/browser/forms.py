@@ -1,6 +1,6 @@
-from five import grok
-from opengever.dossier.behaviors.dossier import AddForm
+from opengever.dossier.browser.forms import DossierAddView
 
 
-class PrivateDossierAddForm(AddForm):
-    grok.name('opengever.private.dossier')
+class PrivateDossierAddView(DossierAddView):
+    """Add view for opengever.private.dossier
+    """

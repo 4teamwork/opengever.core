@@ -1,4 +1,3 @@
-from AccessControl import getSecurityManager
 from Acquisition import aq_inner, aq_parent
 from collective.elephantvocabulary import wrap_vocabulary
 from datetime import date
@@ -14,12 +13,9 @@ from opengever.dossier.widget import referenceNumberWidgetFactory
 from opengever.ogds.base.sources import AssignedUsersSourceBinder
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.dexterity.i18n import MessageFactory as pd_mf  # noqa
-from plone.dexterity.interfaces import IDexterityFTI
 from plone.directives import form, dexterity
 from z3c.relationfield.schema import RelationChoice, RelationList
-from zExceptions import Unauthorized
 from zope import schema
-from zope.component import getUtility
 from zope.interface import Interface, alsoProvides
 from zope.interface import invariant, Invalid
 import logging
@@ -202,47 +198,8 @@ class IDossier(form.Schema):
                 raise StartBeforeEnd(
                     _(u"The start date must be before the end date."))
 
+
 alsoProvides(IDossier, IFormFieldProvider)
-
-
-# TODO: temporary default value (autocompletewidget)
-class AddForm(dexterity.AddForm):
-    grok.name('opengever.dossier.businesscasedossier')
-
-    def render(self):
-        fti = getUtility(IDexterityFTI, name=self.portal_type)
-        if fti not in self.context.allowedContentTypes():
-            raise Unauthorized
-
-        return super(AddForm, self).render()
-
-    def update(self):
-        """Adds a default value for `responsible` to the request so the
-        field is prefilled with the current user, or the parent dossier's
-        responsible in the case of a subdossier.
-        """
-        responsible = getSecurityManager().getUser().getId()
-
-        if not self.request.get('form.widgets.IDossier.responsible', None):
-            self.request.set('form.widgets.IDossier.responsible',
-                             [responsible])
-        super(AddForm, self).update()
-
-    def updateFields(self):
-        super(AddForm, self).updateFields()
-        hide_fields_from_behavior(self,
-                                  ['IClassification.public_trial',
-                                   'IClassification.public_trial_statement'])
-
-    @property
-    def label(self):
-        if IDossierMarker.providedBy(self.context):
-            return _(u'Add Subdossier')
-        else:
-            portal_type = self.portal_type
-            fti = getUtility(IDexterityFTI, name=portal_type)
-            type_name = fti.Title()
-            return pd_mf(u"Add ${name}", mapping={'name': type_name})
 
 
 class EditForm(dexterity.EditForm):
