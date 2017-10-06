@@ -3,9 +3,9 @@ from opengever.base.oguid import Oguid
 from opengever.base.security import elevated_privileges
 from opengever.base.transport import PrivilegedReceiveObject
 from opengever.base.transport import Transporter
+from opengever.document.versioner import Versioner
 from opengever.locking.lock import MEETING_EXCERPT_LOCK
 from opengever.meeting import _
-from plone import api
 from plone.locking.interfaces import ILockable
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from zExceptions import NotFound
@@ -39,11 +39,10 @@ class UpdateDossierExcerpt(grok.View):
             transporter = Transporter()
             transporter.update(document, self.request)
 
-            repository = api.portal.get_tool('portal_repository')
             comment = translate(
                 _(u"Updated with a newer excerpt version."),
                 context=self.request)
-            repository.save(obj=document, comment=comment)
+            Versioner(document).create_version(comment)
         return json.dumps({})
 
 

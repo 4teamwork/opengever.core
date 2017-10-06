@@ -21,7 +21,8 @@ class TestInitialVersionCreation(IntegrationTestCase):
         self.assertFalse(versioner.has_initial_version())
         self.document.file = NamedBlobFile(data='New', filename=u'test.txt')
         self.assertTrue(versioner.has_initial_version())
-        self.assertEquals(1, versioner._get_history().getLength(countPurged=False))
+        self.assertEquals(
+            1, versioner.get_history_metadata().getLength(countPurged=False))
 
     @browsing
     def test_initial_version_date_is_documents_creation_date(self, browser):
@@ -49,4 +50,5 @@ class TestInitialVersionCreation(IntegrationTestCase):
         writer.close()
 
         self.assertTrue(versioner.has_initial_version())
-        self.assertEquals(1, versioner._get_history().getLength(countPurged=False))
+        self.assertEquals(
+            1, versioner.get_history_metadata().getLength(countPurged=False))

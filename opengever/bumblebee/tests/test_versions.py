@@ -6,6 +6,7 @@ from ftw.bumblebee.tests.helpers import DOCX_CHECKSUM
 from ftw.testbrowser import browsing
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.document.versioner import Versioner
 from opengever.testing import FunctionalTestCase
 from plone import api
 from zope.component import getMultiAdapter
@@ -55,15 +56,15 @@ class TestBumblebeeChecksumForVersions(FunctionalTestCase):
         self.assertEqual(TXT_CHECKSUM,
                          IBumblebeeDocument(document).get_checksum())
 
-        repository = api.portal.get_tool("portal_repository")
-        history = repository.getHistoryMetadata(document)
+        versioner = Versioner(document)
+        history = versioner.get_history_metadata()
         self.assertEqual(2, history.getLength(countPurged=False))
 
-        version_0 = repository.retrieve(document, 0)
+        version_0 = versioner.retrieve(0)
         self.assertEqual(DOCX_CHECKSUM,
-                         IBumblebeeDocument(version_0.object).get_checksum())
+                         IBumblebeeDocument(version_0).get_checksum())
 
         # document checksum should be updated before storing the version
-        version_1 = repository.retrieve(document, 1)
+        version_1 = versioner.retrieve(1)
         self.assertEqual(TXT_CHECKSUM,
-                         IBumblebeeDocument(version_1.object).get_checksum())
+                         IBumblebeeDocument(version_1).get_checksum())

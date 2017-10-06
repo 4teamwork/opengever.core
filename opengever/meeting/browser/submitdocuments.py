@@ -210,12 +210,11 @@ class UpdateSubmittedDocumentView(grok.View):
 
             portal_path = '/'.join(api.portal.get().getPhysicalPath())
             intids = getUtility(IIntIds)
-            repository = api.portal.get_tool('portal_repository')
+
             comment = translate(
                 _(u"Updated with a newer docment version from proposal's "
-                    "dossier."),
-                context=self.request)
-            repository.save(obj=self.context, comment=comment)
+                  "dossier."), context=self.request)
+            Versioner(self.context).create_version(comment)
 
             data = {
                 'path': '/'.join(self.context.getPhysicalPath())[

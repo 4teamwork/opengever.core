@@ -9,6 +9,7 @@ from opengever.base.request import dispatch_json_request
 from opengever.base.request import dispatch_request
 from opengever.base.transport import REQUEST_KEY
 from opengever.base.transport import Transporter
+from opengever.document.versioner import Versioner
 from opengever.locking.lock import SYS_LOCK
 from opengever.meeting import _
 from opengever.meeting import is_word_meeting_implementation_enabled
@@ -324,12 +325,12 @@ class MergeDocxProtocolCommand(CreateGeneratedDocumentCommand):
                                       contentType=document.file.contentType,
                                       filename=document.file.filename)
 
-        repository = api.portal.get_tool('portal_repository')
         comment = translate(
             _(u'Updated with a newer generated version from meeting ${title}.',
               mapping=dict(title=self.meeting.get_title())),
             context=getRequest())
-        repository.save(obj=document, comment=comment)
+
+        Versioner(document).create_version(comment)
 
         new_version = document.get_current_version_id()
         self.meeting.protocol_document.generated_version = new_version
@@ -417,12 +418,12 @@ class UpdateGeneratedDocumentCommand(object):
                                       filename=document.file.filename)
 
 
-        repository = api.portal.get_tool('portal_repository')
         comment = translate(
             _(u'Updated with a newer generated version from meeting ${title}.',
               mapping=dict(title=self.meeting.get_title())),
             context=getRequest())
-        repository.save(obj=document, comment=comment)
+
+        Versioner(document).create_version(comment)
 
         new_version = document.get_current_version_id()
         self.generated_document.generated_version = new_version

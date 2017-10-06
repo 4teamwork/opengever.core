@@ -16,7 +16,6 @@ from opengever.trash.trash import ITrashed
 from plone import api
 from plone.locking.interfaces import IRefreshableLockable
 from plone.namedfile.file import NamedBlobFile
-from Products.CMFCore.utils import getToolByName
 from zope.annotation.interfaces import IAnnotations
 from zope.event import notify
 from zope.i18n import translate
@@ -62,7 +61,7 @@ class CheckinCheckoutManager(grok.MultiAdapter):
             return False
 
         # is it versionable?
-        if not self.repository.isVersionable(self.context):
+        if not self.versioner.is_versionable():
             return False
 
         # does the user have the necessary permission?
@@ -104,7 +103,7 @@ class CheckinCheckoutManager(grok.MultiAdapter):
             return False
 
         # is it versionable?
-        if not self.repository.isVersionable(self.context):
+        if not self.versioner.is_versionable():
             return False
 
         # Admins with Force Checkin permission may always check in
@@ -148,7 +147,7 @@ class CheckinCheckoutManager(grok.MultiAdapter):
         self.clear_locks()
 
         # create new version in CMFEditions
-        self.repository.save(obj=self.context, comment=comment)
+        self.versioner.create_version(comment)
 
         # finally, reindex the object
         self.context.reindexObject()
@@ -163,7 +162,7 @@ class CheckinCheckoutManager(grok.MultiAdapter):
             return False
 
         # is it versionable?
-        if not self.repository.isVersionable(self.context):
+        if not self.versioner.is_versionable():
             return False
 
         # is the user allowed to cancel?
@@ -186,9 +185,9 @@ class CheckinCheckoutManager(grok.MultiAdapter):
             raise Unauthorized
 
         # revert to prior version (baseline) if a version exists.
-        if Versioner(self.context).has_initial_version():
-            baseline = self.repository.getHistory(self.context)[0]
-            self.revert_to_version(baseline.version_id,
+        versioner = Versioner(self.context)
+        if versioner.has_initial_version():
+            self.revert_to_version(versioner.get_current_version_id(),
                                    create_version=False, force=True)
 
         # remember that we canceled in
@@ -214,15 +213,13 @@ class CheckinCheckoutManager(grok.MultiAdapter):
         return self._annotations
 
     @property
-    def repository(self):
-        """The portal_repository tool
-        """
+    def versioner(self):
         try:
-            self._portal_repository
+            self._versioner
         except AttributeError:
-            self._portal_repository = getToolByName(self.context,
-                                                    'portal_repository')
-        return self._portal_repository
+            self._versioner = Versioner(self.context)
+
+        return self._versioner
 
     def check_permission(self, permission):
         """Checks, whether the user has the `permission` on the adapted
@@ -244,7 +241,7 @@ class CheckinCheckoutManager(grok.MultiAdapter):
             return False
 
         # is it versionable?
-        if not self.repository.isVersionable(self.context):
+        if not self.versioner.is_versionable():
             return False
 
         if not self.check_permission('Modify portal content'):
@@ -266,9 +263,8 @@ class CheckinCheckoutManager(grok.MultiAdapter):
         if not force and not self.is_revert_allowed():
             raise Unauthorized()
 
-        version = self.repository.retrieve(self.context, version_id)
+        version = self.versioner.retrieve_version(version_id)
         old_obj = version.object
-
         if old_obj.file:
             # Create a new NamedBlobFile instance instead of using
             # a reference in order to avoid the version being reverted
@@ -290,7 +286,7 @@ class CheckinCheckoutManager(grok.MultiAdapter):
             msg = _(u'Reverted file to version ${version_id}.',
                     mapping=dict(version_id=version_id))
             comment = translate(msg, context=self.request)
-            self.repository.save(obj=self.context, comment=comment)
+            self.versioner.create_version(comment)
 
         # event
         notify(ObjectRevertedToVersion(self.context, version_id,

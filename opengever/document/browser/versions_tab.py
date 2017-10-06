@@ -9,6 +9,7 @@ from opengever.bumblebee import is_bumblebeeable
 from opengever.document import _
 from opengever.document.browser.download import DownloadConfirmationHelper
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.document.versioner import Versioner
 from opengever.ogds.base.actor import Actor
 from opengever.tabbedview import BaseListingTab
 from opengever.tabbedview import GeverTableSource
@@ -243,8 +244,8 @@ class VersionsTableSource(GeverTableSource):
         # CMFEditions causes writes to the parent when retrieving versions
         unprotected_write(aq_parent(obj))
 
-        repo_tool = api.portal.get_tool('portal_repository')
-        shadow_history = repo_tool.getHistoryMetadata(obj)
+
+        shadow_history = Versioner(obj).get_history_metadata()
         manager = getMultiAdapter((obj, self.request), ICheckinCheckoutManager)
 
         return LazyHistoryMetadataProxy(

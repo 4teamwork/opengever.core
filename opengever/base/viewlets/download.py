@@ -1,7 +1,7 @@
 from opengever.base import _
 from opengever.base.behaviors.utils import set_attachment_content_disposition
+from opengever.document.versioner import Versioner
 from plone.dexterity.primary import PrimaryFieldInfo
-from Products.CMFCore.utils import getToolByName
 from Products.Five import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
 
@@ -11,8 +11,8 @@ class DownloadFileVersion(BrowserView):
 
     def _init_version_file(self):
         version_id = self.request.get('version_id')
-        pr = getToolByName(self.context, 'portal_repository')
-        old_obj = pr.retrieve(self.context, version_id).object
+
+        old_obj = Versioner(self.context).retrieve(version_id)
         primary_field_info = PrimaryFieldInfo(old_obj)
         self.version_file = primary_field_info.value
 

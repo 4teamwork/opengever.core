@@ -17,7 +17,10 @@ class Versioner(object):
         self.document = document
         self.repository = api.portal.get_tool('portal_repository')
 
-    def _get_history(self):
+    def is_versionable(self):
+        return self.repository.isVersionable(self.document)
+
+    def get_history_metadata(self):
         return self.repository.getHistoryMetadata(self.document)
 
     def create_version(self, comment):
@@ -26,7 +29,7 @@ class Versioner(object):
         self.repository.save(obj=self.document, comment=comment)
 
     def has_initial_version(self):
-        return self._get_history() != []
+        return self.get_history_metadata() != []
 
     def get_current_version_id(self, missing_as_zero=False):
         repository = api.portal.get_tool("portal_repository")
@@ -73,3 +76,13 @@ class Versioner(object):
             # modifiers can abort save operations under certain conditions
             sp.rollback()
             raise
+
+    def retrieve(self, version_id):
+        """Returns the versioned object of the given version id.
+        """
+        return self.retrieve_version(version_id).object
+
+    def retrieve_version(self, version_id):
+        """Returns the VersionData of the given version id.
+        """
+        return self.repository.retrieve(self.document, version_id)
