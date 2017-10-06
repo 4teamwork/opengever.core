@@ -3,14 +3,11 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     xmlns:five="http://namespaces.zope.org/five"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
-    xmlns:grok="http://namespaces.zope.org/grok"
     xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:profilehook="http://namespaces.zope.org/profilehook"
     i18n_domain="opengever.inbox">
 
   <include package="ftw.profilehook" />
-
-  <grok:grok package="." />
 
   <i18n:registerTranslations directory="locales" />
 
@@ -36,6 +33,22 @@
       permission="cmf.ModifyPortalContent"
       />
 
+  <!-- Forwarding add form  -->
+  <adapter
+      for="Products.CMFCore.interfaces.IFolderish
+           zope.publisher.interfaces.browser.IDefaultBrowserLayer
+           plone.dexterity.interfaces.IDexterityFTI"
+      provides="zope.publisher.interfaces.browser.IBrowserPage"
+      factory=".forwarding.ForwardingAddView"
+      name="opengever.inbox.forwarding"
+      />
+  <class class=".forwarding.ForwardingAddView">
+    <require
+        permission="cmf.AddPortalContent"
+        interface="zope.publisher.interfaces.browser.IBrowserPage"
+        />
+  </class>
+
   <subscriber
       for="opengever.inbox.container.IInboxContainer            zope.lifecycleevent.interfaces.IObjectAddedEvent"
       handler=".subscribers.configure_inboxcontainer_portlets"
@@ -44,6 +57,18 @@
   <subscriber
       for="opengever.inbox.inbox.IInbox            zope.lifecycleevent.interfaces.IObjectAddedEvent"
       handler=".subscribers.configure_inbox_portlets"
+      />
+
+  <subscriber
+      for="opengever.inbox.forwarding.IForwarding
+           zope.lifecycleevent.interfaces.IObjectAddedEvent"
+      handler=".forwarding.move_documents_into_forwarding"
+      />
+
+  <subscriber
+      for="opengever.inbox.forwarding.IForwarding
+           Products.CMFCore.interfaces.IActionSucceededEvent"
+      handler=".forwarding.set_dates"
       />
 
 </configure>
