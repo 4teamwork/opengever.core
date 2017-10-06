@@ -10,14 +10,14 @@
             "description": "",
             "_zope_schema_type": "Choice",
             "enum": [
-                "question",
-                "request",
-                "report",
+                "contract",
+                "directive",
                 "offer",
                 "protocol",
+                "question",
                 "regulations",
-                "contract",
-                "directive"
+                "report",
+                "request"
             ]
         },
         "receipt_date": {

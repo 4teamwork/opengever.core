@@ -164,14 +164,14 @@
                     "_zope_schema_type": "Choice",
                     "enum": [
                         null,
-                        "question",
-                        "request",
-                        "report",
+                        "contract",
+                        "directive",
                         "offer",
                         "protocol",
+                        "question",
                         "regulations",
-                        "contract",
-                        "directive"
+                        "report",
+                        "request"
                     ]
                 },
                 "preserved_as_paper": {
