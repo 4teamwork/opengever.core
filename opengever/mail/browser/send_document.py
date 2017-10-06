@@ -20,7 +20,6 @@ from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.tabbedview.utils import get_containing_document_tab_url
 from plone.autoform.widgets import ParameterizedWidget
-from plone.directives.form import default_value
 from plone.registry.interfaces import IRegistry
 from plone.z3cform import layout
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
@@ -45,6 +44,13 @@ from zope.interface import invariant
 
 
 CHARSET = 'utf-8'
+
+
+def default_documents_as_links():
+    """Set the client specific default (configured in the registry)."""
+    registry = getUtility(IRegistry)
+    proxy = registry.forInterface(ISendDocumentConf)
+    return proxy.documents_as_links_default
 
 
 class NoMail(Invalid):
@@ -113,6 +119,7 @@ class ISendDocumentSchema(Interface):
         title=_(u'label_documents_as_link',
                 default=u'Send documents only als links'),
         required=True,
+        defaultFactory=default_documents_as_links,
         )
 
     file_copy_in_dossier = schema.Bool(
@@ -128,15 +135,6 @@ class ISendDocumentSchema(Interface):
         if len(self.intern_receiver) == 0 and not self.extern_receiver:
             raise NoMail(_(u'You have to select a intern \
                             or enter a extern mail-addres'))
-
-
-@default_value(field=ISendDocumentSchema['documents_as_links'])
-def default_documents_as_links(data):
-    """Set the client specific default (configured in the registry)."""
-    registry = getUtility(IRegistry)
-    proxy = registry.forInterface(ISendDocumentConf)
-    return proxy.documents_as_links_default
-
 
 # put the validators
 validator.WidgetValidatorDiscriminators(
