@@ -189,7 +189,9 @@ class OpengeverContentFixture(object):
             .titled(u'Vorlagen')
             .having(id='vorlagen')))
         templates.manage_setLocalRoles(self.org_unit.users_group_id,
-                                       ('Reader',))
+                                       ('Reader', ))
+        templates.manage_setLocalRoles(self.administrator.getId(),
+                                       ('Reader', 'Contributor', 'Editor'))
         templates.reindexObjectSecurity()
 
         self.sablon_template = self.register('sablon_template', create(
@@ -203,6 +205,20 @@ class OpengeverContentFixture(object):
                 .titled(u'Geb\xfchren')
                 .with_asset_file(u'vertragsentwurf.docx')
                 .within(templates)))
+
+        self.tasktemplatefolder = self.register('tasktemplatefolder', create(
+            Builder('tasktemplatefolder')
+            .titled(u'Verfahren Neuanstellung')
+            .within(templates)))
+
+        self.tasktemplate = self.register('tasktemplate', create(
+            Builder('tasktemplate')
+            .titled(u'Arbeitsplatz einrichten.')
+            .having(**{'issuer': 'responsible',
+                       'responsible_client': 'fa',
+                       'responsible': 'robert.ziegler',
+                       'deadline': 10})
+            .within(self.tasktemplatefolder)))
 
     @staticuid()
     def create_committees(self):
