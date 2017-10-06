@@ -267,7 +267,7 @@ class Document(Item, BaseDocumentMixin):
         parent = aq_parent(aq_inner(self))
         return IDossierMarker.providedBy(parent)
 
-    def get_current_version(self, missing_as_zero=False):
+    def get_current_version_id(self, missing_as_zero=False):
         """Return the current document history version."""
         return Versioner(self).get_current_version_id(missing_as_zero)
 

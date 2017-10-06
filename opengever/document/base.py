@@ -73,7 +73,7 @@ class BaseDocumentMixin(object):
     def checked_out_by(self):
         raise NotImplementedError
 
-    def get_current_version(self):
+    def get_current_version_id(self):
         raise NotImplementedError
 
     def get_filename(self):

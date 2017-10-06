@@ -460,7 +460,7 @@ class TestProposal(IntegrationTestCase):
         self.assertEquals(1, len(children['added']))
         submitted_document, = children['added']
 
-        self.assertEqual(None, submitted_document.get_current_version())
+        self.assertEqual(None, submitted_document.get_current_version_id())
 
         # create some new document versions
         with self.login(self.dossier_responsible):
@@ -469,7 +469,7 @@ class TestProposal(IntegrationTestCase):
             repository.save(ori_document)
             self.proposal.submit_additional_document(ori_document)
 
-        self.assertEqual(1, submitted_document.get_current_version())
+        self.assertEqual(1, submitted_document.get_current_version_id())
 
     def test_submit_document_updates_proposal_attachements(self):
         self.login(self.administrator)

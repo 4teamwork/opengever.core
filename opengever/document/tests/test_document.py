@@ -234,16 +234,16 @@ class TestDocument(FunctionalTestCase):
 
     def test_current_document_version_is_increased(self):
         document = create(Builder("document").with_dummy_content())
-        self.assertEqual(None, document.get_current_version())
-        self.assertEqual(0, document.get_current_version(missing_as_zero=True))
+        self.assertEqual(None, document.get_current_version_id())
+        self.assertEqual(0, document.get_current_version_id(missing_as_zero=True))
 
         document.file = NamedBlobFile(data='New', filename=u'test.txt')
-        self.assertEqual(0, document.get_current_version())
+        self.assertEqual(0, document.get_current_version_id())
 
         repository = api.portal.get_tool('portal_repository')
         repository.save(document)
 
-        self.assertEqual(1, document.get_current_version())
+        self.assertEqual(1, document.get_current_version_id())
 
     def test_get_parent_dossier_returns_direct_parent_for_dossiers(self):
         dossier = create(Builder('dossier'))

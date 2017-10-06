@@ -382,7 +382,7 @@ class Proposal(Base):
         """
         assert document in self.resolve_submitted_proposal().get_excerpts()
 
-        version = document.get_current_version(missing_as_zero=True)
+        version = document.get_current_version_id(missing_as_zero=True)
         excerpt = GeneratedExcerpt(
             oguid=Oguid.for_object(document), generated_version=version)
         self.submitted_excerpt_document = excerpt
