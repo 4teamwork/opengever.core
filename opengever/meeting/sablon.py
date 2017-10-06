@@ -37,5 +37,7 @@ class Sablon(object):
         finally:
             shutil.rmtree(tmpdir_path)
 
+        return self
+
     def is_processed_successfully(self):
         return self.returncode == 0
