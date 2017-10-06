@@ -3,11 +3,13 @@ from alembic.operations import Operations
 from decorator import decorator
 from ftw.upgrade import UpgradeStep
 from opengever.base.model import create_session
-from sqlalchemy import Column
 from sqlalchemy import BigInteger
+from sqlalchemy import Column
 from sqlalchemy import MetaData
 from sqlalchemy import select
 from sqlalchemy import String
+from sqlalchemy.schema import CreateSequence
+from sqlalchemy.schema import Sequence
 from zope.sqlalchemy.datamanager import mark_changed
 import logging
 
@@ -313,6 +315,14 @@ class SchemaMigration(SQLUpgradeStep):
     @property
     def supports_sequences(self):
         return self.op.impl.dialect.supports_sequences
+
+    def ensure_sequence_exists(self, sequence_name):
+        if not self.supports_sequences:
+            return None
+        if self.op.impl.dialect.has_sequence(self.connection, sequence_name):
+            return False
+        self.op.execute(CreateSequence(Sequence(sequence_name)))
+        return True
 
     @property
     def is_oracle(self):

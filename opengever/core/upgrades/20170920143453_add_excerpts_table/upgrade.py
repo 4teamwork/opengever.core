@@ -24,3 +24,4 @@ class AddExcerptsTable(SchemaMigration):
                    String(UNIT_ID_LENGTH), nullable=False),
             Column('excerpt_int_id', Integer, nullable=False)
         )
+        self.ensure_sequence_exists('excerpts_id_seq')
