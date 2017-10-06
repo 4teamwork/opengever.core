@@ -216,4 +216,19 @@
         />
   </class>
 
+  <!-- MeetingDossier add form  -->
+  <adapter
+      for="Products.CMFCore.interfaces.IFolderish
+           zope.publisher.interfaces.browser.IDefaultBrowserLayer
+           plone.dexterity.interfaces.IDexterityFTI"
+      provides="zope.publisher.interfaces.browser.IBrowserPage"
+      factory=".meetingdossier_forms.MeetingDossierAddView"
+      name="opengever.meeting.meetingdossier"
+      />
+  <class class=".meetingdossier_forms.MeetingDossierAddView">
+    <require
+        permission="cmf.AddPortalContent"
+        interface="zope.publisher.interfaces.browser.IBrowserPage"
+        />
+  </class>
 </configure>

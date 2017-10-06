@@ -33,4 +33,20 @@
       permission="zope2.View"
       />
 
+  <!-- PrivateDossier add form  -->
+  <adapter
+      for="Products.CMFCore.interfaces.IFolderish
+           zope.publisher.interfaces.browser.IDefaultBrowserLayer
+           plone.dexterity.interfaces.IDexterityFTI"
+      provides="zope.publisher.interfaces.browser.IBrowserPage"
+      factory=".forms.PrivateDossierAddView"
+      name="opengever.private.dossier"
+      />
+  <class class=".forms.PrivateDossierAddView">
+    <require
+        permission="cmf.AddPortalContent"
+        interface="zope.publisher.interfaces.browser.IBrowserPage"
+        />
+  </class>
+
 </configure>
