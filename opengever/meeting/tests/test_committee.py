@@ -4,10 +4,12 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import dexterity
 from ftw.testbrowser.pages import editbar
+from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages import statusmessages
 from opengever.base.oguid import Oguid
 from opengever.meeting.model import Committee
 from opengever.testing import IntegrationTestCase
+from operator import methodcaller
 
 
 class TestCommittee(IntegrationTestCase):
@@ -231,3 +233,31 @@ class TestCommitteeWorkflow(IntegrationTestCase):
 
         editbar.menu_option('Actions', 'deactivate').click()
         self.assertEqual([u'Actions'], editbar.menus())
+
+    @browsing
+    def test_visible_fields_in_forms(self, browser):
+        """Some fields should only be displayed when the word feature is
+        disabled.
+        Therefore we test the appearance of all fields.
+        """
+        fields = ['Title',
+                  'Group',
+                  'Protocol template',
+                  'Excerpt template',
+                  'Agendaitem list template',
+                  'Table of contents template',
+                  'Linked repository folder']
+        with self.login(self.administrator, browser):
+            browser.open(self.committee_container)
+            factoriesmenu.add('Committee')
+            self.assertEquals(
+                fields,
+                map(methodcaller('normalized_text', recursive=False),
+                    browser.css('form#form > div.field > label')))
+
+        with self.login(self.committee_responsible, browser):
+            browser.open(self.committee, view='edit')
+            self.assertEquals(
+                fields,
+                map(methodcaller('normalized_text', recursive=False),
+                    browser.css('form#form > div.field > label')))

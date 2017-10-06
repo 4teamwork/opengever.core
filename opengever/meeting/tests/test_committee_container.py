@@ -234,3 +234,23 @@ class TestCommitteesTab(IntegrationTestCase):
         self.assertEquals(self.meeting.model.get_url(),
                           last_meeting.get('href'))
         self.assertEquals(meeting.get_url(), next_meeting.get('href'))
+
+    @browsing
+    def test_visible_fields_in_forms(self, browser):
+        """Some fields should only be displayed when the word feature is
+        disabled.
+        Therefore we test the appearance of all fields.
+        """
+        fields = [u'Title',
+                  u'Protocol template',
+                  u'Excerpt template',
+                  u'Agendaitem list template',
+                  u'Table of contents template']
+        self.login(self.manager, browser)
+
+        browser.open()
+        factoriesmenu.add('Committee Container')
+        self.assertEquals(fields, browser.css('form#form > div.field > label').text)
+
+        browser.open(self.committee_container, view='edit')
+        self.assertEquals(fields, browser.css('form#form > div.field > label').text)
