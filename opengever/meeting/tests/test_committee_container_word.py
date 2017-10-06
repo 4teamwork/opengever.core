@@ -71,7 +71,7 @@ class TestCommitteeContainer(IntegrationTestCase):
                          browser.context.get_paragraph_template())
 
     @browsing
-    def test_hide_paragraph_template_for_nonword_in_add_form(self, browser):
+    def test_paragraph_template_for_nonword_in_add_form_is_hidden(self, browser):
         """The "Paragraph template" field only makes sense when
         the word-meeting feature is enabled.
         Make sure that it does not appear in the forms when disabling
@@ -88,7 +88,7 @@ class TestCommitteeContainer(IntegrationTestCase):
         self.assertFalse(browser.find(field_label))
 
     @browsing
-    def test_hide_paragraph_template_for_nonword_in_edit_form(self, browser):
+    def test_paragraph_template_for_nonword_in_edit_form_is_hidden(self, browser):
         """The "Paragraph template" field only makes sense when
         the word-meeting feature is enabled.
         Make sure that it does not appear in the forms when disabling
