@@ -8,6 +8,8 @@ from opengever.meeting.proposal import ISubmittedProposal
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
 from opengever.testing import IntegrationTestCase
 from plone import api
+from zc.relation.interfaces import ICatalog
+from zope.component import getUtility
 
 
 class TestProposalWithWord(IntegrationTestCase):
@@ -227,6 +229,11 @@ class TestProposalWithWord(IntegrationTestCase):
         self.assertEquals(1, len(excerpts))
         relation, = excerpts
         self.assertEquals(excerpt_document, relation.to_object)
+
+        # The relation catalog should have catalogued the new relation.
+        self.assertIn(relation,
+                      tuple(getUtility(ICatalog).findRelations(
+                          {'to_id': relation.to_id})))
 
     @browsing
     def test_create_successor_proposal(self, browser):

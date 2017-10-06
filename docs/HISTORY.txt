@@ -12,6 +12,7 @@ Changelog
 - Create missing SQL sequences. [jone]
 - Ungrok opengever.inbox. [elioschmutz]
 - Bundle import: Fix deactivation of LDAP plugin during import. [lgraf]
+- SPV word: Register excerpt relations properly in the relation catalog. [jone]
 - Update Plone version to 4.3.15. [lgraf]
 - SPV: Fix proposal history. [tarnap]
 - SPV: Fix deleting ad-hoc agenda items. [tarnap]
