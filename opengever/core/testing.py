@@ -502,8 +502,6 @@ class GEVERIntegrationTesting(IntegrationTesting):
         super(GEVERIntegrationTesting, self).setUp()
         transaction.commit()
         self.interceptor = TransactionInterceptor().install()
-        getGlobalSiteManager().registerHandler(
-            self.handlePubAfterTraversal, [IPubAfterTraversal])
 
     def tearDown(self):
         self.interceptor.uninstall()
@@ -528,26 +526,6 @@ class GEVERIntegrationTesting(IntegrationTesting):
         self.savepoint = None
         self.interceptor.clear().intercept(self.interceptor.COMMIT)
         super(GEVERIntegrationTesting, self).testTearDown()
-
-    def handlePubAfterTraversal(self, event):
-        """Support plone.protect's auto CSRF protection as good as possible.
-
-        The problem is that we use the same connection and transaction for
-        preparation as for performing a request with ftw.testbrowser.
-
-        This means that we may already have changed objects on the connection
-        but the change is not from within the request.
-
-        We fix that by marking all objects which are already marked as changed
-        on the current as safe for CSRF.
-        This also means that the auto protection does no longer trigger within
-        the test for the followed requests.
-        """
-        transform = getMultiAdapter((self['portal'], event.request),
-                                    ITransform,
-                                    name='plone.protect.autocsrf')
-        for obj in transform._registered_objects():
-            safeWrite(obj, event.request)
 
 
 OPENGEVER_INTEGRATION_TESTING = GEVERIntegrationTesting(
