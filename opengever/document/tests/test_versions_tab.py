@@ -1,4 +1,5 @@
 from datetime import datetime
+from DateTime import DateTime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -134,13 +135,6 @@ class TestVersionsTabWithoutPDFConverter(TestVersionsTab):
                 '/plone/dossier-1/document-1/file_download_confirmation',
                 url.path)
 
-    @browsing
-    def test_shows_message_when_inital_version_is_not_created_yet(self, browser):
-        document = create(Builder('document'))
-        browser.login().open(document, view='tabbedview_view-versions')
-
-        self.assertEquals(['Keine Inhalte'], browser.css('body').text)
-
 
 class TestVersionsTabWithPDFConverter(TestVersionsTab):
 
@@ -192,3 +186,29 @@ class TestVersionsTabWithBubmelbeeActivated(TestVersionsTab):
         self.assertIn(
             '/plone/dossier-1/document-1/@@bumblebee-overlay-listing?version_id=3',
             preview_link.attrib['href'])
+
+
+class TestVersionsTabForDocumentWithoutInitialVersion(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestVersionsTabForDocumentWithoutInitialVersion, self).setUp()
+
+        self.dossier = create(Builder('dossier').titled(u'Testdossier'))
+        self.document = create(Builder('document')
+                               .with_creation_date(DateTime(2016, 11, 6))
+                               .with_dummy_content())
+
+    @browsing
+    def test_list_initial_version_even_if_it_does_not_exists(self, browser):
+        browser.login().open(self.document, view='tabbedview_view-versions')
+
+        listing = browser.css('.listing').first
+        self.assertEquals(
+            [{'Comment': 'Initial version',
+              '': '',
+              'Download copy': 'Download copy',
+              'Revert': '',
+              'Version': '0',
+              'Date': 'Nov 06, 2016 12:00 AM',
+              'Changed by': 'Test User (test_user_1_)'}],
+            listing.dicts())
