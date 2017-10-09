@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-10-02 12:51+0000\n"
+"POT-Creation-Date: 2017-10-09 13:21+0000\n"
 "PO-Revision-Date: 2013-03-27 10:44+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -261,7 +261,8 @@ msgid "help_receipt_date"
 msgstr "Datum, an dem das Dokument über den Korrespondenzweg angekommen ist"
 
 #. Default: "Initial version"
-#: ./opengever/document/checkout/handlers.py
+#: ./opengever/document/browser/versions_tab.py
+#: ./opengever/document/versioner.py
 msgid "initial_document_version_change_note"
 msgstr "Dokument erstellt (Initialversion)"
 
@@ -409,11 +410,6 @@ msgstr "Datei"
 #: ./opengever/document/behaviors/metadata.py
 msgid "label_foreign_reference"
 msgstr "Fremdzeichen"
-
-#. Default: "Initial version (document copied)"
-#: ./opengever/document/subscribers.py
-msgid "label_initial_version_copied"
-msgstr "Dokument kopiert (Initialversion)"
 
 #. Default: "Keywords"
 #: ./opengever/document/behaviors/metadata.py

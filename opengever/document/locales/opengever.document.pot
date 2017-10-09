@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-02 12:51+0000\n"
+"POT-Creation-Date: 2017-10-09 13:21+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -259,7 +259,8 @@ msgid "help_receipt_date"
 msgstr ""
 
 #. Default: "Initial version"
-#: ./opengever/document/checkout/handlers.py
+#: ./opengever/document/browser/versions_tab.py
+#: ./opengever/document/versioner.py
 msgid "initial_document_version_change_note"
 msgstr ""
 
@@ -406,11 +407,6 @@ msgstr ""
 #. Default: "Foreign Reference"
 #: ./opengever/document/behaviors/metadata.py
 msgid "label_foreign_reference"
-msgstr ""
-
-#. Default: "Initial version (document copied)"
-#: ./opengever/document/subscribers.py
-msgid "label_initial_version_copied"
 msgstr ""
 
 #. Default: "Keywords"
