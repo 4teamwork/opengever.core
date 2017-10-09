@@ -39,4 +39,8 @@ class FixSubjectIndex_useUnicodeConsistently(UpgradeStep):
         query = {'object_provides': [IDocumentMetadata.__identifier__,
                                      IDossierTemplateMarker.__identifier__,
                                      IDossierMarker.__identifier__, ]}
-        self.catalog_reindex_objects(query, idxs=['Subject', ])
+
+        # Also reindex object_provides from
+        # 20160601180404@opengever.document:default
+        self.catalog_reindex_objects(query, idxs=['Subject',
+                                                  'object_provides'])
