@@ -417,7 +417,6 @@ class UpdateGeneratedDocumentCommand(object):
                                       contentType=document.file.contentType,
                                       filename=document.file.filename)
 
-
         comment = translate(
             _(u'Updated with a newer generated version from meeting ${title}.',
               mapping=dict(title=self.meeting.get_title())),

@@ -161,8 +161,7 @@ class IChooseDossierSchema(Schema):
                     ],
                 'review_state': [
                     'repositoryroot-state-active',
-                    'repositoryfolder-state-active'
-                    ] + DOSSIER_STATES_OPEN,
+                    'repositoryfolder-state-active'] + DOSSIER_STATES_OPEN,
                 }))
 
 

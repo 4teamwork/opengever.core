@@ -514,7 +514,7 @@ def document_sent(context, event):
     def make_document_event_list(context, items):
         urlstring = ''
         url_template = u'<span><a href="{}">{}{}</a></span>'
-        lastindex = len(items)-1
+        lastindex = len(items) - 1
         for i, item in enumerate(items):
             comma = '' if lastindex == i else ', '
             urlstring += url_template.format(item['url'], item['title'], comma)

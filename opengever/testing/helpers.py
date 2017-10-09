@@ -67,6 +67,7 @@ def add_languages(codes, support_combined=True):
 
     transaction.commit()
 
+
 def create_document_version(doc, version_id, data=None):
     vdata = data or 'VERSION {} DATA'.format(version_id)
     doc.file.data = vdata

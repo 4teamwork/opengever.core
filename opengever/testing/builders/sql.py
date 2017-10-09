@@ -74,6 +74,7 @@ class PloneAdminUnitBuilder(AdminUnitBuilder):
             proxy.current_unit_id = self.arguments.get(self.id_argument_name)
         return obj
 
+
 builder_registry.register('admin_unit', PloneAdminUnitBuilder, force=True)
 
 
@@ -107,6 +108,7 @@ class PloneOrgUnitBuilder(OrgUnitBuilder):
                .with_members(api.user.get(TEST_USER_ID)))
         super(PloneOrgUnitBuilder, self)._create_inbox_group(users_inbox_id)
 
+
 builder_registry.register('org_unit', PloneOrgUnitBuilder, force=True)
 
 
@@ -138,6 +140,7 @@ class PloneOGDSUserBuilder(UserBuilder):
 
         self.db_session.add(obj)
 
+
 builder_registry.register('ogds_user', PloneOGDSUserBuilder, force=True)
 
 
@@ -154,6 +157,7 @@ class TaskBuilder(SqlObjectBuilder):
         self.arguments['assigned_org_unit'] = 'bar'
         self.arguments['int_id'] = 12345
         self.arguments['review_state'] = 'task-state-open'
+
 
 builder_registry.register('globalindex_task', TaskBuilder)
 
@@ -199,6 +203,7 @@ class ProposalModelBuilder(SqlObjectBuilder):
         self.arguments['submitted_documents'] = submitted
         return self
 
+
 builder_registry.register('proposal_model', ProposalModelBuilder)
 
 
@@ -215,6 +220,7 @@ class CommitteeBuilder(SqlObjectBuilder):
         self.arguments['physical_path'] = '/foo'
         self.arguments['group_id'] = 'client1_users'
 
+
 builder_registry.register('committee_model', CommitteeBuilder)
 
 
@@ -227,6 +233,7 @@ class MemberBuilder(SqlObjectBuilder):
         super(MemberBuilder, self).__init__(session)
         self.arguments['firstname'] = u'Peter'
         self.arguments['lastname'] = u'M\xfcller'
+
 
 builder_registry.register('member', MemberBuilder)
 
@@ -250,6 +257,7 @@ class MemberShipBuilder(TransparentModelLoader, SqlObjectBuilder):
         self.arguments['date_from'] = past_date
         self.arguments['date_to'] = future_date
         return self
+
 
 builder_registry.register('membership', MemberShipBuilder)
 
@@ -293,6 +301,7 @@ class MeetingBuilder(TransparentModelLoader, SqlObjectBuilder):
 
         return obj
 
+
 builder_registry.register('meeting', MeetingBuilder)
 
 
@@ -306,12 +315,14 @@ class GeneratedProtocolBuilder(SqlObjectBuilder):
             missing_as_zero=True)
         return self
 
+
 builder_registry.register('generated_protocol', GeneratedProtocolBuilder)
 
 
 class GeneratedExcerptBuilder(GeneratedProtocolBuilder):
 
     mapped_class = GeneratedExcerpt
+
 
 builder_registry.register('generated_excerpt', GeneratedExcerptBuilder)
 
@@ -325,6 +336,7 @@ class AgendaItemBuilder(TransparentModelLoader, SqlObjectBuilder):
         return obj
 
     mapped_class = AgendaItem
+
 
 builder_registry.register('agenda_item', AgendaItemBuilder)
 
@@ -344,6 +356,7 @@ class LockBuilder(SqlObjectBuilder):
         self.arguments['object_id'] = lockable.object_id
         return self
 
+
 builder_registry.register('lock', LockBuilder)
 
 
@@ -355,6 +368,7 @@ class PeriodBuilder(SqlObjectBuilder):
     def __init__(self, session):
         super(PeriodBuilder, self).__init__(session)
         self.arguments['title'] = unicode(date.today().year)
+
 
 builder_registry.register('period', PeriodBuilder)
 
@@ -384,6 +398,7 @@ class PersonBuilder(SqlObjectBuilder):
 
         return obj
 
+
 builder_registry.register('person', PersonBuilder)
 
 
@@ -395,6 +410,7 @@ class ArchivedPersonBuilder(SqlObjectBuilder):
     def __init__(self, session):
         super(ArchivedPersonBuilder, self).__init__(session)
         self.arguments['actor_id'] = TEST_USER_ID
+
 
 builder_registry.register('archived_person', ArchivedPersonBuilder)
 
@@ -426,6 +442,7 @@ class AddressBuilder(ContactAttributesBuilder):
     mapped_class = Address
     id_argument_name = 'address_id'
 
+
 builder_registry.register('address', AddressBuilder)
 
 
@@ -433,6 +450,7 @@ class ArchivedAddressBuilder(ArchivedContactAttributesBuilder):
 
     mapped_class = ArchivedAddress
     id_argument_name = 'archived_address_id'
+
 
 builder_registry.register('archived_address', ArchivedAddressBuilder)
 
@@ -442,6 +460,7 @@ class PhoneNumberBuilder(ContactAttributesBuilder):
     mapped_class = PhoneNumber
     id_argument_name = 'phone_number_id'
 
+
 builder_registry.register('phonenumber', PhoneNumberBuilder)
 
 
@@ -449,6 +468,7 @@ class ArchivedPhoneNumberBuilder(ArchivedContactAttributesBuilder):
 
     mapped_class = ArchivedPhoneNumber
     id_argument_name = 'archived_phonenumber_id'
+
 
 builder_registry.register('archived_phonenumber', ArchivedPhoneNumberBuilder)
 
@@ -458,6 +478,7 @@ class MailAddressBuilder(ContactAttributesBuilder):
     mapped_class = MailAddress
     id_argument_name = 'mailaddress_id'
 
+
 builder_registry.register('mailaddress', MailAddressBuilder)
 
 
@@ -465,6 +486,7 @@ class ArchivedMailAddressBuilder(ArchivedContactAttributesBuilder):
 
     mapped_class = ArchivedMailAddress
     id_argument_name = 'archived_mail_address_id'
+
 
 builder_registry.register('archived_mail_addresses', ArchivedMailAddressBuilder)
 
@@ -474,6 +496,7 @@ class URLBuilder(ContactAttributesBuilder):
     mapped_class = URL
     id_argument_name = 'url_id'
 
+
 builder_registry.register('url', URLBuilder)
 
 
@@ -481,6 +504,7 @@ class ArchivedURLBuilder(ArchivedContactAttributesBuilder):
 
     mapped_class = ArchivedURL
     id_argument_name = 'archived_url_id'
+
 
 builder_registry.register('archived_url', ArchivedURLBuilder)
 
@@ -494,6 +518,7 @@ class OrganizationBuilder(SqlObjectBuilder):
         self.arguments['name'] = name
         return self
 
+
 builder_registry.register('organization', OrganizationBuilder)
 
 
@@ -506,6 +531,7 @@ class ArchivedOrganizationBuilder(SqlObjectBuilder):
         super(ArchivedOrganizationBuilder, self).__init__(session)
         self.arguments['actor_id'] = TEST_USER_ID
 
+
 builder_registry.register('archived_organization', ArchivedOrganizationBuilder)
 
 
@@ -513,6 +539,7 @@ class OrgRoleBuilder(SqlObjectBuilder):
 
     mapped_class = OrgRole
     id_argument_name = 'org_role_id'
+
 
 builder_registry.register('org_role', OrgRoleBuilder)
 
@@ -544,6 +571,7 @@ class ContactParticipationBuilder(BaseParticipationBuilder):
         self.arguments['contact'] = contact
         return self
 
+
 builder_registry.register('contact_participation', ContactParticipationBuilder)
 
 
@@ -554,6 +582,7 @@ class OrgRoleParticipationBuilder(BaseParticipationBuilder):
     def for_org_role(self, org_role):
         self.arguments['org_role'] = org_role
         return self
+
 
 builder_registry.register('org_role_participation', OrgRoleParticipationBuilder)
 
@@ -566,6 +595,7 @@ class OgdsUserParticipationBuilder(BaseParticipationBuilder):
         self.arguments['ogds_user'] = adapted_ogds_user
         return self
 
+
 builder_registry.register('ogds_user_participation', OgdsUserParticipationBuilder)
 
 
@@ -573,5 +603,6 @@ class ParticipationRoleBuilder(SqlObjectBuilder):
 
     mapped_class = ParticipationRole
     id_argument_name = 'participation_role_id'
+
 
 builder_registry.register('participation_role', ParticipationRoleBuilder)

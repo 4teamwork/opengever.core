@@ -40,9 +40,9 @@ class BaseDocumentMixin(object):
 
         """
         parent = aq_parent(aq_inner(self))
-        if (IDossierMarker.providedBy(parent)
-                or IDossierTemplateMarker.providedBy(parent)
-                or ITemplateFolder.providedBy(parent)):
+        if IDossierMarker.providedBy(parent) or \
+           IDossierTemplateMarker.providedBy(parent) or \
+           ITemplateFolder.providedBy(parent):
             return parent
         if ITask.providedBy(parent):
             return parent.get_containing_dossier()
