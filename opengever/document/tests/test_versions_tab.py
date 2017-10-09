@@ -212,3 +212,16 @@ class TestVersionsTabForDocumentWithoutInitialVersion(FunctionalTestCase):
               'Date': 'Nov 06, 2016 12:00 AM',
               'Changed by': 'Test User (test_user_1_)'}],
             listing.dicts())
+
+    @browsing
+    def test_shows_custom_initial_comment_when_set(self, browser):
+        Versioner(self.document).set_custom_initial_version_comment(
+            u'Document copied from task (task closed)')
+        transaction.commit()
+
+        browser.login().open(self.document, view='tabbedview_view-versions')
+
+        listing = browser.css('.listing').first
+        self.assertEquals(
+            u'Document copied from task (task closed)',
+            listing.dicts()[0].get('Comment'))

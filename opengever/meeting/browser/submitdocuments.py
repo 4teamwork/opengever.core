@@ -8,6 +8,7 @@ from opengever.base.transport import PrivilegedReceiveObject
 from opengever.base.transport import Transporter
 from opengever.base.utils import disable_edit_bar
 from opengever.document.document import IDocumentSchema
+from opengever.document.versioner import Versioner
 from opengever.locking.lock import MEETING_SUBMITTED_LOCK
 from opengever.meeting import _
 from opengever.meeting import is_meeting_feature_enabled

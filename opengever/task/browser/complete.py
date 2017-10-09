@@ -3,6 +3,7 @@ the successor also completes the predecesser and the user can choose documents
 related to the successor task to deliver to issuer by attaching them to the
 predecessor task.
 """
+
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
@@ -11,13 +12,13 @@ from opengever.base.request import dispatch_request
 from opengever.base.request import tracebackify
 from opengever.base.transport import Transporter
 from opengever.base.utils import ok_response
+from opengever.document.versioner import Versioner
 from opengever.globalindex.model.task import Task
 from opengever.tabbedview.helper import linked
 from opengever.task import _
 from opengever.task import util
 from opengever.task.adapters import IResponseContainer
 from opengever.task.interfaces import ISuccessorTaskController
-from opengever.task.util import CustomInitialVersionMessage
 from opengever.task.validators import NoCheckedoutDocsValidator
 from persistent.list import PersistentList
 from plone.supermodel.model import Schema
@@ -292,19 +293,19 @@ class CompleteSuccessorTaskReceiveDelivery(BrowserView):
                 u'version_message_closed_task',
                 default=u'Document copied from task (task closed)')
 
-        with CustomInitialVersionMessage(message, self.context.REQUEST):
-            for item in data['documents']:
-                doc = transporter.create(item, self.context)
+        for item in data['documents']:
+            doc = transporter.create(item, self.context)
+            Versioner(doc).set_custom_initial_version_comment(message)
 
-                # append `RE:` prefix to the document title
-                doc.title = '%s: %s' % (
-                    translate(
-                        _(u'answer_prefix', default=u'RE'),
-                        context=self.context.REQUEST),
-                    doc.title)
+            # append `RE:` prefix to the document title
+            doc.title = '%s: %s' % (
+                translate(
+                    _(u'answer_prefix', default=u'RE'),
+                    context=self.context.REQUEST),
+                doc.title)
 
-                documents.append(doc)
-                notify(ObjectAddedEvent(doc))
+            documents.append(doc)
+            notify(ObjectAddedEvent(doc))
 
         # Change workflow state of predecessor task:
         util.change_task_workflow_state(

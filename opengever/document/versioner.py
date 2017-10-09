@@ -2,10 +2,14 @@ from opengever.document import _
 from plone import api
 from Products.CMFEditions.interfaces.IModifier import ModifierException
 from Products.CMFEditions.Permissions import SaveNewVersion
+from zope.annotation import IAnnotations
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 import time
 import transaction
+
+
+CUSTOM_INITIAL_VERSION_COMMENT = 'custom_initial_version_comment'
 
 
 class Versioner(object):
@@ -53,9 +57,13 @@ class Versioner(object):
         Copied from `Products.CMFEditions.CopyModifyMergeRepositoryTool.save`
         only the timestamp is changed to the creation timestamp.
         """
-        comment = _(u'initial_document_version_change_note',
-                    default=u'Initial version')
-        comment = translate(comment, context=getRequest())
+
+        if self.get_custom_initial_version_comment():
+            comment = self.get_custom_initial_version_comment()
+        else:
+            comment = _(u'initial_document_version_change_note',
+                        default=u'Initial version')
+            comment = translate(comment, context=getRequest())
 
         self.repository._assertAuthorized(self.document, SaveNewVersion, 'save')
         sp = transaction.savepoint(optimistic=True)
@@ -77,6 +85,8 @@ class Versioner(object):
             sp.rollback()
             raise
 
+        self.remove_custom_initial_version_comment()
+
     def retrieve(self, version_id):
         """Returns the versioned object of the given version id.
         """
@@ -86,3 +96,19 @@ class Versioner(object):
         """Returns the VersionData of the given version id.
         """
         return self.repository.retrieve(self.document, version_id)
+
+    def set_custom_initial_version_comment(self, comment):
+        """It stores the given comment, which will be used when creating
+        the initial version, temporarily in the annotations of the object.
+        """
+        annotations = IAnnotations(self.document)
+        annotations[CUSTOM_INITIAL_VERSION_COMMENT] = comment
+
+    def get_custom_initial_version_comment(self):
+        return IAnnotations(self.document).get(CUSTOM_INITIAL_VERSION_COMMENT)
+
+    def remove_custom_initial_version_comment(self):
+        annotations = IAnnotations(self.document)
+
+        if CUSTOM_INITIAL_VERSION_COMMENT in annotations:
+            annotations.pop(CUSTOM_INITIAL_VERSION_COMMENT)

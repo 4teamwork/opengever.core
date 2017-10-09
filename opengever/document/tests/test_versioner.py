@@ -52,3 +52,18 @@ class TestInitialVersionCreation(IntegrationTestCase):
         self.assertTrue(versioner.has_initial_version())
         self.assertEquals(
             1, versioner.get_history_metadata().getLength(countPurged=False))
+
+    @browsing
+    def test_custom_comment_is_used_when_creating_initial_version(self, browser):
+        self.login(self.regular_user)
+
+        versioner = Versioner(self.document)
+        versioner.set_custom_initial_version_comment(u'custom initial version')
+
+        self.document.file = NamedBlobFile(data='New', filename=u'test.txt')
+
+        version = versioner.retrieve_version(0)
+        self.assertEquals(
+            u'custom initial version', version.sys_metadata['comment'])
+
+        self.assertIsNone(versioner.get_custom_initial_version_comment())
