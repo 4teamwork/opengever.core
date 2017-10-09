@@ -344,6 +344,33 @@ class IntegrationTestCase(TestCase):
             expected, got,
             'Object {!r} has an incorrect workflow state.'.format(obj))
 
+    def assert_has_permissions(self, permissions, obj, msg=None):
+        """Assert that the current user has all given permissions on the context.
+        """
+        missing_permissions = [
+            permission for permission in permissions
+            if not api.user.has_permission(permission, obj=obj)]
+        self.assertEquals(
+            [], missing_permissions,
+            'Missing permissions for user {!r} on {!r}. {}'.format(
+                api.user.get_current(),
+                obj,
+                msg or ''))
+
+    def assert_has_not_permissions(self, permissions, obj, msg=None):
+        """Assert that the current user has none of the given permissions
+        on the context.
+        """
+        present_permissions = [
+            permission for permission in permissions
+            if api.user.has_permission(permission, obj=obj)]
+        self.assertEquals(
+            [], present_permissions,
+            'Too many permissions for user {!r} on {!r}. {}'.format(
+                api.user.get_current(),
+                obj,
+                msg or ''))
+
     def brain_to_object(self, brain):
         """Return the object of a brain.
         """

@@ -312,3 +312,35 @@ class TestProposalWithWord(IntegrationTestCase):
              ['Successors', u'\xc4nderungen am Personalreglement zur Nachpr\xfcfung'],
              ['Attachments', u'Vertr\xe4gsentwurf']],
             browser.css('table.listing').first.lists())
+
+    @browsing
+    def test_committee_member_can_view_proposal_document(self, browser):
+        """The meeting_user is a CommitteeMember, who can access the proposal and
+        its document read-only.
+        """
+        self.login(self.meeting_user, browser)
+        browser.open(self.submitted_word_proposal, view='tabbedview_view-overview')
+        self.assertTrue(browser.find(u'\xc4nderungen am Personalreglement'))
+
+        browser.open(self.submitted_word_proposal.get_proposal_document(),
+                     view='tabbedview_view-overview')
+        self.assertDictContainsSubset(
+            {'Title': u'\xc4nderungen am Personalreglement'},
+            dict(browser.css('.documentMetadata table').first.lists()))
+
+    def test_committee_member_permissions_on_proposal_document(self):
+        self.login(self.meeting_user)
+        self.assert_has_permissions(
+            (
+                'Access contents information',
+                'CMFEditions: Access previous versions',
+                'View',
+            ),
+            self.submitted_word_proposal.get_proposal_document())
+
+        self.assert_has_not_permissions(
+            (
+                'Modify portal content',
+                'opengever.document: Checkout',
+            ),
+            self.submitted_word_proposal.get_proposal_document())
