@@ -5,6 +5,11 @@ Changelog
 
 Im Folgenden sind (substantielle) Änderungen an der Dokumentation aufgeführt.
 
+2017-10-09
+----------
+
+- Kapitel "Scan-In" hinzugefügt
+
 2016-08-08
 ----------
 

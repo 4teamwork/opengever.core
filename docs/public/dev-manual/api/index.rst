@@ -14,6 +14,7 @@ Inhalt:
    batching.rst
    searching.rst
    workflow.rst
+   scanin.rst
    content_types.rst
    metadata.rst
    examples/index.rst
