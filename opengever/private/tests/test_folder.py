@@ -80,7 +80,7 @@ class TestPrivateFolderTabbedView(FunctionalTestCase):
     def test_private_root_is_hidden_from_breadcrumbs(self, browser):
         browser.login().open(self.folder)
         self.assertEqual(
-            ['Client1', 'Test User (test_user_1_)'],
+            ['Test User (test_user_1_)'],
             browser.css('#portal-breadcrumbs li').text)
 
     @browsing

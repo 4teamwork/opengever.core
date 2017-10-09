@@ -2,10 +2,11 @@
      i18n:domain="plone"
      tal:define="breadcrumbs view/obj_chain;
                  repository_chain view/repository_chain;
-                 leaf_node view/leaf_node">
+                 leaf_node view/leaf_node;
+                 multiple_admin_units view/has_multiple_admin_units">
 
   <ul class="breadcrumb">
-    <li>
+    <li tal:condition="multiple_admin_units">
       <a href=""
          tal:attributes="href context/@@plone_portal_state/portal_url">
         <i class="contenttype-plone-site" />

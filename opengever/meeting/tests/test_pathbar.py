@@ -26,7 +26,7 @@ class TestPathBar(FunctionalTestCase):
 
         breadcrumb_links = browser.css('#portal-breadcrumbs a')
         self.assertEquals(
-            ['Client1', '1. Testposition', 'Repository', 'Dossier 1'],
+            ['1. Testposition', 'Repository', 'Dossier 1'],
             breadcrumb_links.text)
 
     @browsing

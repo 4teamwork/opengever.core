@@ -107,7 +107,7 @@ class TestParticipationWrapper(FunctionalTestCase):
             [u'Edit Participation of M\xfcller Hans'],
             browser.css('h1').text)
         self.assertEqual(
-            ['Client1', u'Dossier', u'Participation of M\xfcller Hans'],
+            [u'Dossier', u'Participation of M\xfcller Hans'],
             browser.css('#portal-breadcrumbs li').text)
 
     @browsing
