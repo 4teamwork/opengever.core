@@ -24,6 +24,7 @@ class AddCommitteRolesToDocumentAndMailWorkflows(UpgradeStep):
     def __call__(self):
         self.install_upgrade_profile()
         self.update_documents_and_mails_in_commitee_containers()
+        self.update_committee_roles()
 
     def update_documents_and_mails_in_commitee_containers(self):
         for obj in self.get_documents_and_mails_in_committee_containers():
@@ -40,3 +41,19 @@ class AddCommitteRolesToDocumentAndMailWorkflows(UpgradeStep):
         }
         message = 'Update document- and mail-workflow in committee containers.'
         return self.objects(query, message)
+
+    def update_committee_roles(self):
+        """The roles which "CommitteeRoles" sets on the committees for the
+        primary group have been changed.
+
+        Before: CommitteeResponsible, Editor, Reader
+        After: CommitteeResponsible
+        """
+        query = {'portal_type': 'opengever.meeting.committee'}
+        msg = 'Update local roles of committees.'
+        for committee in self.objects(query, msg):
+            group_id = committee.load_model().group_id
+            current_roles = dict(committee.get_local_roles()).get(group_id, ())
+            new_roles = list(set(current_roles) - {'Editor', 'Reader'})
+            committee.manage_setLocalRoles(group_id, new_roles)
+            committee.reindexObjectSecurity()

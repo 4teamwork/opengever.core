@@ -18,7 +18,7 @@ class TestCommitteeTabs(FunctionalTestCase):
 
     def test_committee_roles_initialized(self):
         self.assertEqual(
-            ('CommitteeResponsible', 'Editor', 'Reader'),
+            ('CommitteeResponsible', ),
             dict(self.committee.get_local_roles())['client1_users'])
 
     def test_update_roles_removes_old_role(self):
@@ -27,7 +27,7 @@ class TestCommitteeTabs(FunctionalTestCase):
 
         local_roles = dict(self.committee.get_local_roles())
         self.assertNotIn('client1_users', local_roles)
-        self.assertEqual(('CommitteeResponsible', 'Editor', 'Reader'),
+        self.assertEqual(('CommitteeResponsible',),
                          local_roles['foo'])
 
     def test_update_roles_preserves_unmanaged_roles(self):
@@ -40,8 +40,7 @@ class TestCommitteeTabs(FunctionalTestCase):
             'foo', previous_principal='client1_users')
         local_roles = dict(self.committee.get_local_roles())
         self.assertItemsEqual(
-            ['Administrator', 'CommitteeResponsible', 'Contributor',
-             'Editor', 'Reader'],
+            ['Administrator', 'CommitteeResponsible', 'Contributor'],
             local_roles['foo'])
         self.assertItemsEqual(
             ['Contributor'],
