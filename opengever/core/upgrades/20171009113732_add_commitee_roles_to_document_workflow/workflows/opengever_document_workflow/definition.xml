@@ -59,36 +59,48 @@
         acquired="False">
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
+      <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
     </permission-map>
     <permission-map
         name="CMFEditions: Checkout to location"
         acquired="False">
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
+      <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
     </permission-map>
     <permission-map
         name="CMFEditions: Manage versioning policies"
         acquired="False">
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
+      <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
     </permission-map>
     <permission-map
         name="CMFEditions: Purge version"
         acquired="False">
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
+      <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
     </permission-map>
     <permission-map
         name="CMFEditions: Revert to previous versions"
         acquired="False">
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
+      <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
     </permission-map>
     <permission-map
         name="Change portal events"
         acquired="False">
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
+      <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
     </permission-map>
     <permission-map
         name="Content rules: Manage rules"
@@ -136,6 +148,8 @@
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
     </permission-map>
     <permission-map
         name="WebDAV Unlock items"
@@ -143,6 +157,8 @@
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
     </permission-map>
     <permission-map
         name="WebDAV access"
@@ -150,6 +166,8 @@
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
     </permission-map>
     <permission-map
         name="opengever.document: Cancel"

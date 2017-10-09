@@ -344,3 +344,49 @@ class TestProposalWithWord(IntegrationTestCase):
                 'opengever.document: Checkout',
             ),
             self.submitted_word_proposal.get_proposal_document())
+
+    def test_committee_responsible_can_edit_proposal_document(self):
+        self.login(self.committee_responsible)
+        self.assert_has_permissions(
+            (
+                'Access contents information',
+                'CMFEditions: Access previous versions',
+                'CMFEditions: Apply version control',
+                'CMFEditions: Checkout to location',
+                'CMFEditions: Manage versioning policies',
+                'CMFEditions: Purge version',
+                'CMFEditions: Revert to previous versions',
+                'Change portal events',
+                'Modify portal content',
+                'View',
+                'WebDAV Lock items',
+                'WebDAV Unlock items',
+                'WebDAV access',
+                'opengever.document: Cancel',
+                'opengever.document: Checkin',
+                'opengever.document: Checkout',
+            ),
+            self.submitted_word_proposal.get_proposal_document())
+
+    def test_committee_administrator_can_edit_proposal_document(self):
+        self.login(self.administrator)
+        self.assert_has_permissions(
+            (
+                'Access contents information',
+                'CMFEditions: Access previous versions',
+                'CMFEditions: Apply version control',
+                'CMFEditions: Checkout to location',
+                'CMFEditions: Manage versioning policies',
+                'CMFEditions: Purge version',
+                'CMFEditions: Revert to previous versions',
+                'Change portal events',
+                'Modify portal content',
+                'View',
+                'WebDAV Lock items',
+                'WebDAV Unlock items',
+                'WebDAV access',
+                'opengever.document: Cancel',
+                'opengever.document: Checkin',
+                'opengever.document: Checkout',
+            ),
+            self.submitted_word_proposal.get_proposal_document())
