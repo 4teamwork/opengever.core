@@ -8,5 +8,7 @@ class AddNewDestroyDossierPermission(UpgradeStep):
     def __call__(self):
         self.install_upgrade_profile()
 
-        self.update_workflow_security(
-            ['opengever_dossier_workflow'], reindex_security=False)
+        # Moved to 20170328131435@opengever.dossier:default
+
+        # self.update_workflow_security(
+        #     ['opengever_dossier_workflow'], reindex_security=False)
