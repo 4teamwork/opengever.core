@@ -41,6 +41,7 @@ class FixSubjectIndex_useUnicodeConsistently(UpgradeStep):
                                      IDossierMarker.__identifier__, ]}
 
         # Also reindex object_provides from
-        # 20160601180404@opengever.document:default
+        # - 20160601180404@opengever.document:default
+        # - 20160606081024@opengever.mail:default
         self.catalog_reindex_objects(query, idxs=['Subject',
                                                   'object_provides'])
