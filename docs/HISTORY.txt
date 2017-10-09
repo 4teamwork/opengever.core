@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - SPV: Fix ad hoc agenda item template label translation. [tarnap]
+- SPV: Meeting end date is not set when start date is selected. [tarnap]
 - Fix default_documents_as_links default value for opengever.mail. [elioschmutz]
 - Fix responsible_client default value for tasktemplates. [phgross]
 - SPV word: Do not automatically decide agenda items when closing meetings. [jone]
