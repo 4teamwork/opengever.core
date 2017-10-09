@@ -1,7 +1,6 @@
 from datetime import date
 from DateTime import DateTime
 from datetime import datetime
-from five import grok
 from opengever.base.request import dispatch_json_request
 from opengever.base.request import dispatch_request
 from opengever.base.request import tracebackify
@@ -20,7 +19,9 @@ from Products.Five.browser import BrowserView
 from z3c.relationfield import RelationValue
 from zope.annotation.interfaces import IAnnotations
 from zope.app.intid.interfaces import IIntIds
+from zope.component import adapter
 from zope.component import getUtility
+from zope.interface import implementer
 from zope.interface import Interface
 from zope.interface.interface import Attribute
 from zope.lifecycleevent import modified
@@ -31,14 +32,15 @@ class IResponseTransporter(Interface):
     pass
 
 
-class ResponseTransporter(grok.Adapter):
+@implementer(IResponseTransporter)
+@adapter(ITask)
+class ResponseTransporter(object):
     """Adadpter for sending responses of the adapted task to
     a remote task on a remote admin unit.
     """
 
-    grok.context(ITask)
-    grok.implements(IResponseTransporter)
-    grok.require('zope2.View')
+    def __init__(self, context):
+        self.context = context
 
     def send_responses(self, target_admin_unit_id, remote_task_url,
                        intids_mapping=None):
@@ -243,8 +245,8 @@ class ExtractResponses(BrowserView):
         return transporter.extract_responses(intids_mapping)
 
 
-class TaskDocumentsTransporter(grok.GlobalUtility):
-    grok.implements(ITaskDocumentsTransporter)
+@implementer(ITaskDocumentsTransporter)
+class TaskDocumentsTransporter(object):
 
     def copy_documents_from_remote_task(self, task, target, documents=None):
         transporter = Transporter()
@@ -267,12 +269,9 @@ class TaskDocumentsTransporter(grok.GlobalUtility):
         return intids_mapping
 
 
-class ExtractDocuments(grok.View):
-    grok.context(ITask)
-    grok.name('task-documents-extract')
-    grok.require('zope2.View')
+class ExtractDocuments(BrowserView):
 
-    def render(self):
+    def __call__(self):
         transporter = Transporter()
         data = []
 

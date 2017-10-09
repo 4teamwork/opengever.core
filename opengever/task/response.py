@@ -1,5 +1,4 @@
 from Acquisition import aq_inner
-from five import grok
 from opengever.base.source import DossierPathSourceBinder
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
@@ -12,7 +11,6 @@ from opengever.task.adapters import Response
 from opengever.task.interfaces import ICommentResponseHandler
 from opengever.task.permissions import DEFAULT_ISSUE_MIME_TYPE
 from opengever.task.response_syncer import sync_task_response
-from opengever.task.task import ITask
 from plone.autoform.form import AutoExtensibleForm
 from plone.memoize.view import memoize
 from plone.z3cform import layout
@@ -336,16 +334,9 @@ class TaskTransitionResponseAddForm(form.AddForm, AutoExtensibleForm):
         TaskTransitionActivity(self.context, self.context.REQUEST, response).record()
 
 
-class TaskTransitionResponseAddFormView(layout.FormWrapper, grok.View):
-    grok.context(ITask)
-    grok.name("addresponse")
-    grok.require('cmf.AddPortalContent')
+class TaskTransitionResponseAddFormView(layout.FormWrapper):
 
     form = TaskTransitionResponseAddForm
-
-    def __init__(self, context, request):
-        layout.FormWrapper.__init__(self, context, request)
-        grok.View.__init__(self, context, request)
 
 
 class Edit(Base):

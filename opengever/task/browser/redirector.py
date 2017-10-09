@@ -1,20 +1,15 @@
 from Acquisition import aq_inner, aq_parent
-from five import grok
 from opengever.dossier.utils import get_main_dossier
 from opengever.task.task import ITask
 from Products.Five import BrowserView
 
 
-class TaskRedirector(grok.View):
+class TaskRedirector(BrowserView):
     """Redirector view which is called when creating a task.
     For maintasks it redirects to the dossier's task-tab,
     For subtasks it redirects to maintask-overview."""
 
-    grok.context(ITask)
-    grok.name('task_redirector')
-    grok.require('zope2.View')
-
-    def render(self):
+    def __call__(self):
         parent = aq_inner(aq_parent(self.context))
         if ITask.providedBy(parent):
             redirect_to = '%s#overview' % parent.absolute_url()

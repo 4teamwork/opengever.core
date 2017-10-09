@@ -2,10 +2,11 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from collective import dexteritytextindexer
 from datetime import datetime
-from five import grok
 from opengever.task.task import ITask
 from plone import api
 from plone.indexer import indexer
+from zope.component import adapter
+from zope.interface import implementer
 
 
 @indexer(ITask)
@@ -14,7 +15,6 @@ def date_of_completion(obj):
     if obj.date_of_completion is None:
         return datetime(1970, 1, 1)
     return obj.date_of_completion
-grok.global_adapter(date_of_completion, name='date_of_completion')
 
 
 @indexer(ITask)
@@ -28,14 +28,12 @@ def assigned_client(obj):
         return ''
     else:
         return obj.responsible_client
-grok.global_adapter(assigned_client, name='assigned_client')
 
 
 @indexer(ITask)
 def sequence_number(obj):
     """ Indexer for the sequence_number """
     return obj._sequence_number
-grok.global_adapter(sequence_number, name='sequence_number')
 
 
 @indexer(ITask)
@@ -44,17 +42,14 @@ def is_subtask(obj):
     """
     parent = aq_parent(aq_inner(obj))
     return ITask.providedBy(parent)
-grok.global_adapter(is_subtask, name='is_subtask')
 
 
-class SearchableTextExtender(grok.Adapter):
+@implementer(dexteritytextindexer.IDynamicTextIndexExtender)
+@adapter(ITask)
+class SearchableTextExtender(object):
     """ Task specific SearchableText Extender:
     Adds sequence number and responsible label to the default
     searchabletext."""
-
-    grok.context(ITask)
-    grok.name('ITask')
-    grok.implements(dexteritytextindexer.IDynamicTextIndexExtender)
 
     def __init__(self, context):
         self.context = context

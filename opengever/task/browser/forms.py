@@ -1,4 +1,3 @@
-from five import grok
 from opengever.ogds.base.utils import ogds_service
 from opengever.task import _
 from opengever.task.activities import TaskAddedActivity
@@ -7,8 +6,10 @@ from opengever.task.task import IAddTaskSchema
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
 from opengever.task.util import update_reponsible_field_data
+from plone.dexterity.browser.add import DefaultAddForm
+from plone.dexterity.browser.add import DefaultAddView
+from plone.dexterity.browser.edit import DefaultEditForm
 from plone.dexterity.interfaces import IDexterityFTI
-from plone.directives import dexterity
 from z3c.form.interfaces import HIDDEN_MODE
 from zope.component import getMultiAdapter
 from zope.component import getUtility
@@ -25,8 +26,7 @@ REASSIGN_TRANSITION = 'task-transition-reassign'
 # thus we use an add form hack by injecting the values into the request.
 
 
-class TaskAddForm(dexterity.AddForm):
-    grok.name('opengever.task.task')
+class TaskAddForm(DefaultAddForm):
 
     def __init__(self, *args, **kwargs):
         super(TaskAddForm, self).__init__(*args, **kwargs)
@@ -109,7 +109,11 @@ class TaskAddForm(dexterity.AddForm):
             self.immediate_view = redirect_to
 
 
-class TaskEditForm(dexterity.EditForm):
+class TaskAddView(DefaultAddView):
+    form = TaskAddForm
+
+
+class TaskEditForm(DefaultEditForm):
     """The standard dexterity EditForm with the following customizations:
 
      - Require the Edit Task permission
@@ -117,9 +121,6 @@ class TaskEditForm(dexterity.EditForm):
        description for single orgunit deployments
      - Records reassign activity when the responsible has changed.
     """
-
-    grok.context(ITask)
-    grok.require('opengever.task.EditTask')
 
     def update(self):
         super(TaskEditForm, self).update()

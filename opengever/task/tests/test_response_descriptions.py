@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -45,7 +45,7 @@ class TestResponseDescriptions(FunctionalTestCase):
                            .titled(u'Aufgabe f\xfcr Hans')
                            .having(text=u'Text f\xfcr Aufgabe',
                                    task_type='comment',
-                                   deadline=datetime(2010, 1, 1),
+                                   deadline=date(2010, 1, 1),
                                    issuer=TEST_USER_ID,
                                    responsible=TEST_USER_ID,
                                    responsible_client='client1'))

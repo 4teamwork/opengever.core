@@ -1,6 +1,5 @@
 from AccessControl import getSecurityManager
 from DateTime import DateTime
-from five import grok
 from opengever.base.protect import unprotected_write
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.actor import Actor
@@ -9,11 +8,13 @@ from opengever.task.task import ITask
 from persistent import Persistent
 from persistent.list import PersistentList
 from zope.annotation.interfaces import IAnnotations
+from zope.component import adapter
 from zope.container.contained import ObjectAddedEvent
 from zope.container.contained import ObjectRemovedEvent
 from zope.container.interfaces import UnaddableError
 from zope.event import notify
 from zope.interface import Attribute
+from zope.interface import implementer
 from zope.interface import implements
 from zope.interface import Interface
 
@@ -41,9 +42,9 @@ class IResponse(Interface):
         """
 
 
-class ResponseContainer(grok.Adapter):
-    grok.implements(IResponseContainer)
-    grok.context(ITask)
+@implementer(IResponseContainer)
+@adapter(ITask)
+class ResponseContainer(object):
     ANNO_KEY = 'poi.responses'
 
     def __init__(self, context):

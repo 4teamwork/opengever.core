@@ -1,4 +1,3 @@
-from five import grok
 from ftw.keywordwidget.widget import KeywordWidget
 from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSourceBinder
 from opengever.ogds.base.utils import get_current_org_unit
@@ -10,8 +9,9 @@ from opengever.task.util import add_simple_response
 from opengever.task.util import getTransitionVocab
 from opengever.task.util import update_reponsible_field_data
 from plone.autoform.widgets import ParameterizedWidget
-from plone.directives import form
-from plone.z3cform import layout
+from plone.supermodel.model import Schema
+from plone.z3cform.layout import FormWrapper
+from Products.Five import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
@@ -23,7 +23,7 @@ from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
 
 
-class IAssignSchema(form.Schema):
+class IAssignSchema(Schema):
     """ Form schema interface for assign wizard which makes it possible to
     a task to another person.
     """
@@ -127,30 +127,17 @@ class AssignTaskForm(Form):
         self.widgets['transition'].mode = HIDDEN_MODE
 
 
-class AssignTaskView(layout.FormWrapper, grok.View):
-    grok.context(ITask)
-    grok.name('assign-task')
-    grok.require('zope2.View')
+class AssignTaskView(FormWrapper):
 
     form = AssignTaskForm
 
-    def __init__(self, *args, **kwargs):
-        layout.FormWrapper.__init__(self, *args, **kwargs)
-        grok.View.__init__(self, *args, **kwargs)
 
-    __call__ = layout.FormWrapper.__call__
-
-
-class RefuseForwardingView(grok.View):
+class RefuseForwardingView(BrowserView):
     """A view which reassign the forwarding to the inbox of the client
     which raised the forwarding, so that it can be reassigned
     afterwards to another client / person."""
 
-    grok.context(ITask)
-    grok.name('refuse-task')
-    grok.require('zope2.View')
-
-    def render(self):
+    def __call__(self):
         # set responsible
         org_unit = get_current_org_unit()
         self.context.responsible_client = org_unit.id()

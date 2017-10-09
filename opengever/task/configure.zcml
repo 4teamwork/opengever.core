@@ -1,7 +1,6 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:five="http://namespaces.zope.org/five"
-    xmlns:grok="http://namespaces.zope.org/grok"
     xmlns:browser="http://namespaces.zope.org/browser"
     xmlns:plone="http://namespaces.plone.org/plone"
     xmlns:i18n="http://namespaces.zope.org/i18n"
@@ -9,16 +8,15 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     i18n_domain="opengever.task">
 
+  <include file="permissions.zcml" />
+
   <include package=".browser" />
   <include package=".viewlets" />
 
   <include file="profiles.zcml" />
-  <include file="permissions.zcml" />
   <include file="behaviors.zcml" />
   <include package=".upgrades" />
   <include package=".response_syncer" />
-
-  <grok:grok package="." />
 
   <vdex:vocabulary directory="vdexvocabs" />
 
@@ -61,6 +59,13 @@
       />
 
   <browser:page
+      name="task-documents-extract"
+      for="opengever.task.task.ITask"
+      permission="zope2.View"
+      class=".transporter.ExtractDocuments"
+      />
+
+  <browser:page
       name="plone_layout"
       for="opengever.task.task.ITask"
       permission="zope.Public"
@@ -81,5 +86,93 @@
       permission="opengever.task.AddTaskComment"
       />
 
+  <browser:page
+      name="addresponse"
+      class=".response.TaskTransitionResponseAddFormView"
+      for="opengever.task.task.ITask"
+      permission="cmf.AddPortalContent"
+      />
+
   <adapter factory=".menu.TaskPostFactoryMenu" />
+  <adapter factory=".adapters.ResponseContainer" />
+  <adapter factory=".deadline_modifier.DeadlineModifier" />
+  <adapter factory=".successor.SuccessorTaskController" />
+
+  <subscriber
+      for="plone.dexterity.interfaces.IDexterityContent
+           zope.lifecycleevent.interfaces.IObjectAddedEvent"
+      handler=".handlers.create_subtask_response"
+      />
+
+  <subscriber
+      for="opengever.task.task.ITask
+           Products.CMFCore.interfaces.IActionSucceededEvent"
+      handler=".handlers.set_dates"
+      />
+
+  <subscriber
+      for="opengever.task.task.ITask
+           Products.CMFCore.interfaces.IActionSucceededEvent"
+      handler=".handlers.reassign_team_tasks"
+      />
+
+  <adapter
+      factory=".indexers.date_of_completion"
+      name="date_of_completion"
+      />
+
+  <adapter
+      factory=".indexers.assigned_client"
+      name="assigned_client"
+      />
+
+  <adapter
+      factory=".indexers.sequence_number"
+      name="sequence_number"
+      />
+
+  <adapter
+      factory=".indexers.is_subtask"
+      name="is_subtask"
+      />
+
+  <adapter
+      factory=".indexers.SearchableTextExtender"
+      name="ITask"
+      />
+
+  <subscriber
+      for="opengever.task.task.ITask
+           zope.lifecycleevent.interfaces.IObjectAddedEvent"
+      handler=".localroles.set_roles_after_adding"
+      />
+
+  <subscriber
+      for="opengever.task.task.ITask
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".localroles.set_roles_after_modifying"
+      />
+
+  <adapter
+      for="opengever.task.task.ITask"
+      factory=".yearfolderstorer.YearfolderStorer"
+      provides="opengever.task.interfaces.IYearfolderStorer"
+      />
+
+  <browser:page
+      name="document-redirector"
+      for="opengever.task.task.ITask"
+      permission="zope2.View"
+      class=".task.DocumentRedirector"
+      />
+
+  <adapter factory=".transporter.ResponseTransporter" />
+
+  <utility factory=".transporter.TaskDocumentsTransporter" />
+
+  <adapter
+      factory=".task.default_responsible_client"
+      name="default"
+      />
+
 </configure>

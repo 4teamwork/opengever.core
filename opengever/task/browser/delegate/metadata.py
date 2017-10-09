@@ -1,21 +1,36 @@
-from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
 from ftw.keywordwidget.widget import KeywordWidget
 from opengever.ogds.base.sources import UsersContactsInboxesSourceBinder
 from opengever.task import _
 from opengever.task.browser.delegate.main import DelegateWizardFormMixin
 from opengever.task.browser.delegate.utils import create_subtasks
-from opengever.task.task import ITask
 from plone.autoform.widgets import ParameterizedWidget
-from plone.directives import form
-from plone.directives.form import Form
-from plone.directives.form import Schema
+from plone.supermodel.model import Schema
 from plone.z3cform.layout import FormWrapper
 from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
+from z3c.form.form import Form
 from zope import schema
 from zope.component import getMultiAdapter
+from zope.interface import provider
+from zope.schema.interfaces import IContextAwareDefaultFactory
+
+
+@provider(IContextAwareDefaultFactory)
+def title_default(context):
+    # Use the title of the task (context) as default.
+    return context.title
+
+
+@provider(IContextAwareDefaultFactory)
+def deadline_default(context):
+    return context.deadline
+
+
+@provider(IContextAwareDefaultFactory)
+def text_default(context):
+    return context.text
 
 
 class IUpdateMetadata(Schema):
@@ -23,6 +38,7 @@ class IUpdateMetadata(Schema):
     title = schema.TextLine(
         title=_(u'label_title', default=u'Title'),
         description=_('help_title', default=u''),
+        defaultFactory=title_default,
         required=True)
 
     issuer = schema.Choice(
@@ -33,33 +49,17 @@ class IUpdateMetadata(Schema):
     deadline = schema.Date(
         title=_(u"label_deadline", default=u"Deadline"),
         description=_(u"help_deadline", default=u""),
+        defaultFactory=deadline_default,
         required=True)
 
     text = schema.Text(
         title=_(u"label_text", default=u"Text"),
         description=_(u"help_text", default=u""),
+        defaultFactory=text_default,
         required=False)
 
 
-@form.default_value(field=IUpdateMetadata['title'])
-def title_default(data):
-    # Use the title of the task (context) as default.
-    return data.context.title
-
-
-@form.default_value(field=IUpdateMetadata['deadline'])
-def deadline_default(data):
-    return data.context.deadline
-
-
-@form.default_value(field=IUpdateMetadata['text'])
-def text_default(data):
-    return data.context.text
-
-
 class UpdateMetadataForm(DelegateWizardFormMixin, Form):
-    grok.context(ITask)
-
     fields = Fields(IUpdateMetadata)
     fields['issuer'].widgetFactory = ParameterizedWidget(
         KeywordWidget,
@@ -104,13 +104,6 @@ class UpdateMetadataForm(DelegateWizardFormMixin, Form):
         super(UpdateMetadataForm, self).update()
 
 
-class UpdateMetadataStepView(FormWrapper, grok.View):
-    grok.context(ITask)
-    grok.name('delegate_metadata')
-    grok.require('opengever.task.AddTask')
+class UpdateMetadataStepView(FormWrapper):
 
     form = UpdateMetadataForm
-
-    def __init__(self, *args, **kwargs):
-        FormWrapper.__init__(self, *args, **kwargs)
-        grok.View.__init__(self, *args, **kwargs)

@@ -1,5 +1,4 @@
 from collective.elephantvocabulary import wrap_vocabulary
-from five import grok
 from opengever.ogds.base.actor import ActorLookup
 from opengever.ogds.models.team import Team
 from opengever.task import _
@@ -10,6 +9,7 @@ from Products.CMFPlone import PloneMessageFactory as PMF
 from z3c.relationfield import RelationValue
 from zope.component import getUtility
 from zope.event import notify
+from zope.interface import provider
 from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent import ObjectModifiedEvent
 from zope.schema.interfaces import IContextSourceBinder
@@ -33,7 +33,7 @@ class UsersVocabulary(SimpleVocabulary):
         return [v for v in self if query_string.lower() in v.value.lower()]
 
 
-@grok.provider(IContextSourceBinder)
+@provider(IContextSourceBinder)
 def getTransitionVocab(context):
 
     if AccessControl.getSecurityManager(
@@ -63,7 +63,7 @@ def getTransitionVocab(context):
         return SimpleVocabulary(transitions)
 
 
-@grok.provider(IContextSourceBinder)
+@provider(IContextSourceBinder)
 def getTaskTypeVocabulary(context):
     terms = []
     for category in TASK_TYPE_CATEGORIES:

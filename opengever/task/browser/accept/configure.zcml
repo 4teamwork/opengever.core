@@ -9,5 +9,59 @@
       permission="cmf.AddPortalContent"
       />
 
+  <browser:page
+      name="accept_store_in_inbox"
+      for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot"
+      class=".inbox.CreateSuccesorForwardingView"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="accept_choose_dossier"
+      for="*"
+      class=".existingdossier.ChooseDossierStepView"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="accept_choose_dossier"
+      for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot"
+      class=".existingdossier.ChooseDosserStepRedirecter"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="accept_choose_method"
+      for="opengever.task.task.ITask"
+      class=".main.ChooseMethodStepView"
+      permission="cmf.AddPortalContent"
+      />
+
+  <browser:page
+      name="accept_select_repositoryfolder"
+      for="*"
+      class=".newdossier.SelectRepositoryfolderStepView"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="accept_select_repositoryfolder"
+      for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot"
+      class=".newdossier.SelectRepositoryfolderStepRedirector"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="accept_select_dossier_type"
+      for="opengever.repository.interfaces.IRepositoryFolder"
+      class=".newdossier.SelectDossierTypeStepView"
+      permission="zope2.View"
+      />
+
+  <adapter factory=".existingdossier.DossierValidator" />
+
+  <adapter factory=".main.MethodValidator" />
+
+  <adapter factory=".newdossier.RepositoryfolderValidator" />
 
 </configure>

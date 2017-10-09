@@ -1,12 +1,12 @@
-from five import grok
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
+from zope.interface import provider
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
 import AccessControl
 
 
-@grok.provider(IContextSourceBinder)
+@provider(IContextSourceBinder)
 def attachable_documents_vocabulary(context):
     terms = []
 

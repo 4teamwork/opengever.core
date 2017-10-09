@@ -4,6 +4,7 @@
     i18n_domain="opengever.task">
 
   <include package=".accept" />
+  <include package=".delegate" />
 
   <browser:page
       name="task_transition_controller"
@@ -63,6 +64,102 @@
       name="tabbedview_view-relateddocuments"
       class=".related_documents.RelatedDocuments"
       permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.task.task.ITask"
+      name="assign-task"
+      class=".assign.AssignTaskView"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.task.task.ITask"
+      name="refuse-task"
+      class=".assign.RefuseForwardingView"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.task.task.ITask"
+      name="assign_choose_method"
+      class=".assign_dossier.ChooseMethodStepView"
+      permission="cmf.AddPortalContent"
+      />
+
+  <browser:page
+      for="opengever.task.task.ITask"
+      name="close-task-wizard_select-documents"
+      class=".close.SelectDocumentsStepView"
+      permission="cmf.AddPortalContent"
+      />
+
+  <adapter factory=".close.DossierValidator" />
+
+  <browser:page
+      for="*"
+      name="close-task-wizard_choose-dossier"
+      class=".close.ChooseDossierStepView"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot"
+      name="close-task-wizard_choose-dossier"
+      class=".close.ChooseDosserStepRedirecter"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.task.task.ITask"
+      name="complete_successor_task"
+      class=".complete.CompleteSuccessorTask"
+      permission="cmf.AddPortalContent"
+      />
+
+  <browser:page
+      for="opengever.task.task.ITask"
+      name="modify_deadline"
+      class=".modify_deadline.ModifyDeadlineFormView"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.task.task.ITask"
+      name="tabbedview_view-overview"
+      class=".overview.Overview"
+      permission="zope2.View"
+      template="templates/overview.pt"
+      />
+
+  <browser:page
+      for="opengever.task.task.ITask"
+      name="task_redirector"
+      class=".redirector.TaskRedirector"
+      permission="zope2.View"
+      />
+
+  <adapter
+      for="Products.CMFCore.interfaces.IFolderish
+           zope.publisher.interfaces.browser.IDefaultBrowserLayer
+           plone.dexterity.interfaces.IDexterityFTI"
+      name="opengever.task.task"
+      provides="zope.publisher.interfaces.browser.IBrowserPage"
+      factory=".forms.TaskAddView"
+      />
+
+  <class class=".forms.TaskAddView">
+    <require
+        permission="cmf.AddPortalContent"
+        interface="zope.publisher.interfaces.browser.IBrowserPage"
+        />
+  </class>
+
+  <browser:page
+      for="opengever.task.task.ITask"
+      name="edit"
+      class=".forms.TaskEditForm"
+      permission="opengever.task.EditTask"
       />
 
 </configure>

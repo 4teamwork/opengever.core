@@ -1,10 +1,8 @@
-from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.task import _
 from opengever.task.interfaces import IDeadlineModifier
-from opengever.task.task import ITask
 from opengever.task.util import getTransitionVocab
-from plone.directives import form
+from plone.supermodel.model import Schema
 from plone.z3cform import layout
 from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form.button import buttonAndHandler
@@ -16,7 +14,7 @@ from zope import schema
 from zope.interface import Invalid
 
 
-class IModifyDeadlineSchema(form.Schema):
+class IModifyDeadlineSchema(Schema):
 
     # hidden
     transition = schema.Choice(
@@ -81,10 +79,7 @@ class ModifyDeadlineForm(Form):
         self.widgets['transition'].mode = HIDDEN_MODE
 
 
-class ModifyDeadlineFormView(layout.FormWrapper, grok.View):
-    grok.context(ITask)
-    grok.name('modify_deadline')
-    grok.require('zope2.View')
+class ModifyDeadlineFormView(layout.FormWrapper):
 
     form = ModifyDeadlineForm
 
@@ -92,9 +87,3 @@ class ModifyDeadlineFormView(layout.FormWrapper, grok.View):
     def url_for(cls, context, transition):
         return '{}/@@modify_deadline?form.widgets.transition={}'.format(
             context.absolute_url(), transition)
-
-    def __init__(self, *args, **kwargs):
-        layout.FormWrapper.__init__(self, *args, **kwargs)
-        grok.View.__init__(self, *args, **kwargs)
-
-    __call__ = layout.FormWrapper.__call__

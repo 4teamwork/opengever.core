@@ -5,7 +5,6 @@ predecessor task.
 """
 from Acquisition import aq_inner
 from Acquisition import aq_parent
-from five import grok
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.request import dispatch_request
@@ -18,11 +17,10 @@ from opengever.task import _
 from opengever.task import util
 from opengever.task.adapters import IResponseContainer
 from opengever.task.interfaces import ISuccessorTaskController
-from opengever.task.task import ITask
 from opengever.task.util import CustomInitialVersionMessage
 from opengever.task.validators import NoCheckedoutDocsValidator
 from persistent.list import PersistentList
-from plone.directives.form import Schema
+from plone.supermodel.model import Schema
 from plone.z3cform.layout import FormWrapper
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import BrowserView
@@ -41,6 +39,7 @@ from zope.component import getUtility, getAdapter
 from zope.component import provideAdapter
 from zope.event import notify
 from zope.i18n import translate
+from zope.interface import provider
 from zope.lifecycleevent import ObjectAddedEvent
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
@@ -48,7 +47,7 @@ import AccessControl
 import json
 
 
-@grok.provider(IContextSourceBinder)
+@provider(IContextSourceBinder)
 def deliverable_documents_vocabulary(context):
     """All documents and mails in the current dossier are deliverable.
     """
@@ -243,16 +242,9 @@ class CompleteSuccessorTaskForm(Form):
                             'on remote client %s.' % predecessor.admin_unit_id)
 
 
-class CompleteSuccessorTask(FormWrapper, grok.View):
-    grok.context(ITask)
-    grok.name('complete_successor_task')
-    grok.require('cmf.AddPortalContent')
+class CompleteSuccessorTask(FormWrapper):
 
     form = CompleteSuccessorTaskForm
-
-    def __init__(self, *args, **kwargs):
-        FormWrapper.__init__(self, *args, **kwargs)
-        grok.View.__init__(self, *args, **kwargs)
 
 
 @tracebackify

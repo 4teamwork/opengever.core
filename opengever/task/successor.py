@@ -1,18 +1,18 @@
-from five import grok
 from opengever.base.oguid import Oguid
 from opengever.globalindex.model.task import Task
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
+from zope.component import adapter
+from zope.interface import implementer
 from zope.lifecycleevent import modified
 
 
-class SuccessorTaskController(grok.Adapter):
+@implementer(ISuccessorTaskController)
+@adapter(ITask)
+class SuccessorTaskController(object):
     """The successor task controller manages predecessor and successor
     references between tasks.
     """
-
-    grok.provides(ISuccessorTaskController)
-    grok.context(ITask)
 
     def __init__(self, task):
         self.task = task
