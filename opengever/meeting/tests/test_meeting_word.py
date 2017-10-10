@@ -118,3 +118,28 @@ class TestWordMeeting(IntegrationTestCase):
             browser.json)
 
         self.assertEquals(u'pending', self.meeting.model.workflow_state)
+
+    def test_is_editable_for_pending_meeting(self):
+        with self.login(self.administrator):
+            meeting = self.meeting.model
+            self.assertEquals('pending', meeting.get_state().title)
+            self.assertTrue(meeting.is_editable())
+
+        with self.login(self.committee_responsible):
+            self.assertTrue(meeting.is_editable())
+
+        with self.login(self.meeting_user):
+            self.assertFalse(meeting.is_editable())
+
+    def test_is_editable_for_decided_meeting(self):
+        with self.login(self.administrator):
+            meeting = self.decided_meeting.model
+            self.assertEquals('closed', meeting.get_state().title)
+            self.assertFalse(meeting.is_editable())
+
+        with self.login(self.committee_responsible):
+            self.assertFalse(meeting.is_editable())
+
+        with self.login(self.meeting_user):
+            self.assertFalse(
+                meeting.is_editable())

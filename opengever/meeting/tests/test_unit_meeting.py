@@ -26,24 +26,6 @@ class TestUnitMeeting(TestCase):
         self.assertEqual(
             '<Meeting at "2010-01-01 10:30:00+00:00">', repr(self.meeting))
 
-    def test_is_editable(self):
-        self.assertTrue(self.meeting.is_editable())
-
-        self.meeting.workflow_state = 'held'
-        self.assertTrue(self.meeting.is_editable())
-
-        self.meeting.workflow_state = 'closed'
-        self.assertFalse(self.meeting.is_editable())
-
-    def test_is_agendalist_editable(self):
-        self.assertTrue(self.meeting.is_agendalist_editable())
-
-        self.meeting.workflow_state = 'held'
-        self.assertFalse(self.meeting.is_agendalist_editable())
-
-        self.meeting.workflow_state = 'closed'
-        self.assertFalse(self.meeting.is_agendalist_editable())
-
     def test_has_protocol_document(self):
         self.assertFalse(self.meeting.has_protocol_document())
         self.meeting.protocol_document = GeneratedProtocol(
