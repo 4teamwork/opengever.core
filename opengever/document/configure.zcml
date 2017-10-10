@@ -138,4 +138,46 @@
       handler=".handlers.set_archival_file_state"
       />
 
+  <subscriber
+      for="opengever.document.document.IDocumentSchema
+           zope.lifecycleevent.interfaces.IObjectAddedEvent"
+      handler=".subscribers.resolve_document_author"
+      />
+
+  <subscriber
+      for="opengever.document.document.IDocumentSchema
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".subscribers.resolve_document_author"
+      />
+
+  <subscriber
+      for="opengever.document.document.IDocumentSchema
+           zope.lifecycleevent.interfaces.IObjectCreatedEvent"
+      handler=".subscribers.set_digitally_available"
+      />
+
+  <subscriber
+      for="opengever.document.document.IDocumentSchema
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".subscribers.set_digitally_available"
+      />
+
+  <subscriber
+      for="opengever.document.document.IDocumentSchema
+           zope.lifecycleevent.interfaces.IObjectCreatedEvent"
+      handler=".subscribers.sync_title_and_filename_handler"
+      />
+
+  <subscriber
+      for="opengever.document.document.IDocumentSchema
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".subscribers.sync_title_and_filename_handler"
+      />
+
+  <subscriber
+      for="opengever.document.behaviors.IBaseDocument
+           zope.lifecycleevent.interfaces.IObjectCopiedEvent"
+      handler=".subscribers.set_copyname"
+      />
+
 </configure>
