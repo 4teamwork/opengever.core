@@ -1,8 +1,6 @@
-from five import grok
 from opengever.base.behaviors.utils import hide_fields_from_behavior
 from opengever.base.form import WizzardWrappedAddForm
 from opengever.base.interfaces import IRedirector
-from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.officeatwork import _
 from plone import api
 from plone.dexterity.i18n import MessageFactory as pd_mf
@@ -16,9 +14,6 @@ class DocumentFromOfficeatwork(WizzardWrappedAddForm):
     Then redirects to a view that initiates creation with officeatwork.
 
     """
-    grok.context(IDossierMarker)
-    grok.name('document_from_officeatwork')
-
     typename = 'opengever.document.document'
 
     def _create_form_class(self, parent_form_class, steptitle):

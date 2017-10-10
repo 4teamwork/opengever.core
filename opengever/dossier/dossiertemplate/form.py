@@ -17,7 +17,6 @@ from opengever.dossier.dossiertemplate.behaviors import IRestrictAddableDossierT
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateSchema
 from opengever.dossier.dossiertemplate.dossiertemplate import BEHAVIOR_INTERFACE_MAPPING
 from opengever.dossier.dossiertemplate.dossiertemplate import TEMPLATABLE_FIELDS
-from opengever.repository.interfaces import IRepositoryFolder
 from plone import api
 from plone.autoform.form import AutoExtensibleForm
 from plone.dexterity.i18n import MessageFactory as pd_mf
@@ -167,8 +166,6 @@ class SelectDossierTemplateWizardStep(
 class AddDossierFromTemplateWizardStep(WizzardWrappedAddForm):
     """Second wizard step - add the dossier from previeously selected template.
     """
-    grok.context(IRepositoryFolder)
-    grok.name('add-dossier-from-template')
 
     typename = 'opengever.dossier.businesscasedossier'
 

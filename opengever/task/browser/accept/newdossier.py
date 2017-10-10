@@ -3,7 +3,6 @@ the parts of the wizard where the user is able to instantly create a new
 dossier where the task is then filed.
 """
 
-from five import grok
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.form import WizzardWrappedAddForm
 from opengever.base.source import RepositoryPathSourceBinder
@@ -237,8 +236,6 @@ class SelectDossierTypeStepView(FormWrapper):
 
 # ------------------- DOSSIER ADD FORM --------------------------
 class DossierAddFormView(WizzardWrappedAddForm):
-    grok.context(IRepositoryFolder)
-    grok.name('accept_dossier_add_form')
 
     @property
     def typename(self):

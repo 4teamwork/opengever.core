@@ -19,7 +19,6 @@ from opengever.meeting.browser.protocol import UpdateProtocol
 from opengever.meeting.committee import ICommittee
 from opengever.meeting.model import Meeting
 from opengever.meeting.proposal import ISubmittedProposal
-from opengever.repository.interfaces import IRepositoryFolder
 from path import Path
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListing
@@ -145,8 +144,6 @@ class AddMeetingWizardStepView(FormWrapper, grok.View):
 
 
 class AddMeetingDossierView(WizzardWrappedAddForm):
-    grok.context(IRepositoryFolder)
-    grok.name('add-meeting-dossier')
 
     typename = 'opengever.meeting.meetingdossier'
 

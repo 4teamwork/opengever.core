@@ -58,6 +58,13 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="opengever.repository.interfaces.IRepositoryFolder"
+      name="accept_dossier_add_form"
+      class=".newdossier.DossierAddFormView"
+      permission="cmf.AddPortalContent"
+      />
+
   <adapter factory=".existingdossier.DossierValidator" />
 
   <adapter factory=".main.MethodValidator" />

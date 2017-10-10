@@ -104,4 +104,11 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="opengever.repository.interfaces.IRepositoryFolder"
+      name="add-meeting-dossier"
+      class=".meeting.AddMeetingDossierView"
+      permission="cmf.AddPortalContent"
+      />
+
 </configure>
