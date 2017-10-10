@@ -40,8 +40,10 @@ class FixSubjectIndex_useUnicodeConsistently(UpgradeStep):
                                      IDossierTemplateMarker.__identifier__,
                                      IDossierMarker.__identifier__, ]}
 
-        # Also reindex object_provides from
+        # Also reindex object_provides and retention_expiration from
         # - 20160601180404@opengever.document:default
         # - 20160606081024@opengever.mail:default
+        # - 20170201140251@opengever.dossier:default
         self.catalog_reindex_objects(query, idxs=['Subject',
-                                                  'object_provides'])
+                                                  'object_provides',
+                                                  'retention_expiration'])
