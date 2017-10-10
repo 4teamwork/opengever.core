@@ -26,4 +26,11 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="*"
+      name="cancel_document_checkouts"
+      class=".cancel.CancelDocuments"
+      permission="zope2.View"
+      />
+
 </configure>
