@@ -63,6 +63,62 @@ class TestCommittee(IntegrationTestCase):
         self.assertEqual(
             self.sablon_template, self.committee.get_excerpt_template())
 
+    def test_get_protocol_template_returns_committee_template_if_available(self):
+        self.login(self.administrator)
+        self.committee.protocol_template = self.as_relation_value(
+            self.sablon_template)
+
+        self.assertEqual(
+            self.sablon_template, self.committee.get_protocol_template())
+
+    def test_get_protocol_template_falls_back_to_container(self):
+        self.login(self.administrator)
+
+        self.assertIsNone(self.committee.protocol_template)
+        self.assertIsNotNone(self.committee_container.protocol_template)
+
+        self.assertEqual(
+            self.sablon_template, self.committee.get_protocol_template())
+
+    def test_get_protocol_header_template_returns_committee_template_if_available(self):
+        self.login(self.administrator)
+        self.activate_feature('word-meeting')
+        self.committee.protocol_header_template = self.as_relation_value(
+            self.sablon_template)
+
+        self.assertEqual(
+            self.sablon_template, self.committee.get_protocol_header_template())
+
+    def test_get_protocol_header_template_falls_back_to_container(self):
+        self.login(self.administrator)
+        self.activate_feature('word-meeting')
+        self.assertIsNone(self.committee.protocol_header_template)
+        self.assertIsNotNone(self.committee_container.protocol_header_template)
+
+        self.assertEqual(
+            self.sablon_template, self.committee.get_protocol_header_template())
+
+    def test_get_protocol_suffix_template_returns_committee_template_if_available(self):
+        self.login(self.administrator)
+        self.activate_feature('word-meeting')
+        self.committee.protocol_suffix_template = self.as_relation_value(
+            self.sablon_template)
+
+        self.assertEqual(
+            self.sablon_template, self.committee.get_protocol_suffix_template())
+
+    def test_get_protocol_suffix_template_falls_back_to_container_if_available(self):
+        self.login(self.administrator)
+        self.activate_feature('word-meeting')
+        self.committee_container.protocol_suffix_template = self.as_relation_value(
+            self.sablon_template)
+
+        self.assertIsNone(self.committee.protocol_suffix_template)
+        self.assertIsNotNone(self.committee_container.protocol_suffix_template)
+
+        self.assertEqual(
+            self.sablon_template, self.committee.get_protocol_suffix_template())
+
     @browsing
     def test_committee_repository_is_validated(self, browser):
         self.login(self.administrator, browser)
