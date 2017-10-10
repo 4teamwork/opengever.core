@@ -1,7 +1,6 @@
 from collective import dexteritytextindexer
 from collective.elephantvocabulary import wrap_vocabulary
 from datetime import date
-from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
 from ftw.keywordwidget.field import ChoicePlus
 from ftw.keywordwidget.widget import KeywordFieldWidget
@@ -218,5 +217,3 @@ validator.WidgetValidatorDiscriminators(
     FileOrPaperValidator,
     field=IDocumentMetadata['preserved_as_paper'],
     )
-
-grok.global_adapter(FileOrPaperValidator)
