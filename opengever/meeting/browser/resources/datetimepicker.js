@@ -5,7 +5,6 @@
   var Rangetimepicker = function(options) {
 
     options = $.extend({
-      minRange: 1,  // in hours
       precision: 5, // in minutes
       target: {
         start: ".datetimepicker-start",
@@ -18,7 +17,8 @@
     this.start = options.target.start;
     this.end = options.target.end;
 
-    if (!this.start.length || !this.start.length) {
+    if (!this.start.length || !this.end.length) {
+      // Rangetimepicker is only used in some views, namely when there's a start _and_ an end field.
       return;
     }
 
@@ -29,38 +29,39 @@
       return new Date(date.setMinutes(Math.ceil(date.getMinutes() / options.precision) * options.precision));
     };
 
-    var updateSelectableDates = $.proxy(function(){
-      self.end.datetimepicker({minDate: self.startwidget.getCurrentTime(),
-                               minTime: self.startwidget.getCurrentTime()})
-    });
-
-    var adjustEndtime = $.proxy(function(start) {
-      var end = new Date(start.setHours(start.getHours() + options.minRange));
-      this.endwidget.setCurrentTime(end);
-      this.end.val(this.endwidget.str(end));
-    }, this);
-
-    var updateDate = $.proxy(function(date) {
-      if(options.minRange && (this.endwidget.getCurrentTime() - date) < (options.minRange * 60 * 60 * 1000)) {
-        adjustEndtime(date);
-      } else if (!this.end.val()) {
-        adjustEndtime(date);
-      }
-    }, this);
-
     if (!this.start.val()) {
       var roundedStartDateTime = roundMinutes(this.startwidget.getCurrentTime());
       this.start.val(this.startwidget.str(roundedStartDateTime));
     }
-    updateSelectableDates();
 
-    this.start.on('change', function(event) {
-        // Bug in dateptimeicker - the internal state is not updated after clearing the field.
-        var date = self.startwidget.strToDateTime($(this).val());
-        self.startwidget.setCurrentTime(date);
-        updateDate(date);
-        updateSelectableDates();
-      });
+    self.getMinTime = function () {
+      var start = self.startwidget.getCurrentTime();
+      var end = self.endwidget.getCurrentTime();
+      if (end.getDayOfYear() <= start.getDayOfYear()) {
+        return start.format2();
+      } else {
+        return false;
+      }
+    }
+
+    // make sure no date is selected before the start of the range by looking
+    // up the earliest valid time in the startwidget
+    self.end.datetimepicker({
+      onShow: function (current_time, input) {
+                this.setOptions({
+                  minDate: self.startwidget.getCurrentTime(),
+                  minTime: self.getMinTime()
+                });
+              },
+      onSelectDate: function(current_time, input) {
+                      this.setOptions({
+                        minTime: self.getMinTime()
+                      });
+                    }
+    });
+
+    // avoid ftw.datetimepicker destroying our end datetime picker 
+    $(document).off('change', '.datetimepicker-widget');
   };
 
   $(function() {
@@ -78,6 +79,5 @@
     var range = new Rangetimepicker(options);
 
   });
-
 
 }(window, window.jQuery));
