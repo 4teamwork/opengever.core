@@ -12,6 +12,7 @@ Changelog
 - SPV: Meeting end date is not set when start date is selected. [tarnap]
 - SPV word: Protect proposal transitions to require modify permission. [jone]
 - SPV word: Update document- and mail-workflow to support committee roles. [jone]
+- SPV: Update and fix proposal tabs. [jone]
 - Fix default_documents_as_links default value for opengever.mail. [elioschmutz]
 - Fix responsible_client default value for tasktemplates. [phgross]
 - SPV word: Do not automatically decide agenda items when closing meetings. [jone]

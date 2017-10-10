@@ -74,30 +74,37 @@ class ProposalListingTab(FilteredListingTab):
     @property
     def columns(self):
         return (
-            {'column': 'proposal_id',
-             'column_title': _(u'label_proposal_id',
-                               default=u'Reference Number')},
-
             {'column': 'decision_number',
              'column_title': _(u'label_decision_number',
                                default=u'Decision number'),
-             'transform': lambda item, value: item.get_decision_number()},
+             'transform': lambda item, value: item.get_decision_number(),
+             'sortable': False,
+             'groupable': False,
+             'width': 80},
 
             {'column': 'title',
              'column_title': _(u'column_title', default=u'Title'),
-             'transform': proposal_link},
+             'transform': proposal_link,
+             'sortable': False,
+             'groupable': False,
+             'width': 350},
 
             {'column': 'workflow_state',
              'column_title': _(u'column_state', default=u'State'),
-             'transform': translated_state},
+             'transform': translated_state,
+             'width': 120},
 
             {'column': 'committee_id',
              'column_title': _(u'column_comittee', default=u'Comittee'),
-             'transform': lambda item, value: item.committee.get_link()},
+             'transform': lambda item, value: item.committee.get_link(),
+             'width': 180},
 
             {'column': 'generated_meeting_link',
              'column_title': _(u'column_meeting', default=u'Meeting'),
-             'transform': lambda item, value: item.get_meeting_link()},
+             'transform': lambda item, value: item.get_meeting_link(),
+             'sortable': False,
+             'groupable': False,
+             'width': 180},
 
         )
 
