@@ -34,15 +34,30 @@
       this.start.val(this.startwidget.str(roundedStartDateTime));
     }
 
+    self.getMinTime = function () {
+      var start = self.startwidget.getCurrentTime();
+      var end = self.endwidget.getCurrentTime();
+      if (end.getDayOfYear() <= start.getDayOfYear()) {
+        return start.format2();
+      } else {
+        return false;
+      }
+    }
+
     // make sure no date is selected before the start of the range by looking
     // up the earliest valid time in the startwidget
     self.end.datetimepicker({
       onShow: function (current_time, input) {
                 this.setOptions({
                   minDate: self.startwidget.getCurrentTime(),
-                  minTime: self.startwidget.getCurrentTime()
+                  minTime: self.getMinTime()
                 });
-              }
+              },
+      onSelectDate: function(current_time, input) {
+                      this.setOptions({
+                        minTime: self.getMinTime()
+                      });
+                    }
     });
 
     // avoid ftw.datetimepicker destroying our end datetime picker 
