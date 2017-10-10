@@ -409,3 +409,12 @@ class TestProposalWithWord(IntegrationTestCase):
         with self.login(self.meeting_user):
             self.assert_has_permissions(VIEW_PERMISSIONS, mail,
                                         '(CommitteeMember)')
+
+    @browsing
+    def test_committee_member_should_not_be_able_to_reject_a_proposal(self, browser):
+        """Regression test: committee members did see the "Reject" button,
+        although it did not work.
+        """
+        self.login(self.meeting_user, browser)
+        browser.open(self.submitted_word_proposal, view='tabbedview_view-overview')
+        self.assertFalse(browser.find('Reject'))
