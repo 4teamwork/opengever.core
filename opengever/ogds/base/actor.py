@@ -22,12 +22,12 @@ For known actor types use:
 """
 
 from opengever.base.utils import escape_html
+from opengever.contact.utils import get_contactfolder_url
 from opengever.ogds.base import _
 from opengever.ogds.base.browser.userdetails import UserDetails
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models.team import Team
-from plone import api
 from Products.CMFCore.interfaces._tools import IMemberData
 from Products.CMFCore.utils import getToolByName
 from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
@@ -170,8 +170,8 @@ class TeamActor(Actor):
         self.team = team
 
     def get_profile_url(self):
-        return '/'.join((api.portal.get().absolute_url(),
-                         '@@team-details', str(self.team.team_id)))
+        return '{}/team-{}/view'.format(
+            get_contactfolder_url(), self.team.team_id)
 
     def corresponds_to(self, user):
         return user in self.team.group.users

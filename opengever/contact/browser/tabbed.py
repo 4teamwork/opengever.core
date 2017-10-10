@@ -33,6 +33,12 @@ class ContactFolderTabbedView(TabbedView):
              'title': _(u'label_users', default=u'Users'),
              'icon': None,
              'url': '#',
+             'class': None},
+
+            {'id': 'teams',
+             'title': _(u'label_teams', default=u'Teams'),
+             'icon': None,
+             'url': '#',
              'class': None}]
 
         return tabs

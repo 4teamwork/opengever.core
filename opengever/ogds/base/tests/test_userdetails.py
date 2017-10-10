@@ -32,5 +32,5 @@ class TestUserDetails(IntegrationTestCase):
 
         self.assertEquals(
             [u'Projekt \xdcberbaung Dorfmatte'], browser.css('.teams li').text)
-        self.assertEquals('http://nohost/plone/@@team-details/1',
+        self.assertEquals('http://nohost/plone/kontakte/team-1/view',
                           browser.css('.teams a').first.get('href'))

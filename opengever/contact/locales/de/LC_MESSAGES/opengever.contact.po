@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-10-02 12:51+0000\n"
+"POT-Creation-Date: 2017-10-05 17:31+0000\n"
 "PO-Revision-Date: 2011-01-05 15:15+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -13,6 +13,10 @@ msgstr ""
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
+
+#: ./opengever/contact/browser/tabs.py
+msgid "Active"
+msgstr "Aktiv"
 
 #. Default: "Add Person"
 #: ./opengever/contact/browser/person.py
@@ -153,6 +157,7 @@ msgstr "Titel"
 
 #. Default: "Active"
 #: ./opengever/contact/browser/byline.py
+#: ./opengever/contact/browser/tabs.py
 #: ./opengever/contact/browser/templates/organization.pt
 msgid "label_active"
 msgstr "Aktiv"
@@ -281,6 +286,11 @@ msgstr "Vorname"
 msgid "label_former_contact_id"
 msgstr "Frühere Kontakt ID"
 
+#. Default: "Group"
+#: ./opengever/contact/browser/tabs.py
+msgid "label_group"
+msgstr "Gruppe"
+
 #. Default: "Inactive"
 #: ./opengever/contact/browser/templates/organization.pt
 msgid "label_inactive"
@@ -329,6 +339,11 @@ msgstr "Keine Beteiligungen"
 #: ./opengever/contact/ogdsuser.py
 msgid "label_office"
 msgstr "Büro"
+
+#. Default: "Org Unit"
+#: ./opengever/contact/browser/tabs.py
+msgid "label_org_unit"
+msgstr "Organisationseinheit"
 
 #. Default: "Organizations"
 #: ./opengever/contact/browser/tabbed.py
@@ -411,6 +426,20 @@ msgstr "Laufnummer"
 msgid "label_show_all"
 msgstr "Alle ${total} Beteiligungen anzeigen"
 
+#: ./opengever/contact/browser/tabs.py
+msgid "label_tabbedview_filter_all"
+msgstr "Alle"
+
+#. Default: "Teams"
+#: ./opengever/contact/browser/tabbed.py
+msgid "label_teams"
+msgstr "Teams"
+
+#. Default: "Title"
+#: ./opengever/contact/browser/tabs.py
+msgid "label_title"
+msgstr "Titel"
+
 #. Default: "Url"
 #: ./opengever/contact/contact.py
 msgid "label_url"
@@ -461,4 +490,3 @@ msgstr "${amount} Treffer"
 #: ./opengever/contact/contact.py
 msgid "telefon"
 msgstr "Telefon"
-

@@ -1,12 +1,16 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.ogds.base.sources import AllEmailContactsAndUsersSource
+from opengever.ogds.base.sources import AllGroupsSource
+from opengever.ogds.base.sources import AllOrgUnitsSource
 from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSource
 from opengever.ogds.base.sources import AllUsersSource
 from opengever.ogds.base.sources import AssignedUsersSource
 from opengever.ogds.base.sources import ContactsSource
 from opengever.ogds.base.sources import UsersContactsInboxesSource
+from opengever.ogds.models.group import Group
 from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from plone.app.testing import TEST_USER_ID
 from zope.schema.vocabulary import SimpleTerm
 
@@ -731,3 +735,79 @@ class TestContactsSource(FunctionalTestCase):
 
     def test_search_ogds_users_is_empty(self):
         self.assertEquals([], self.source.search('Hugo'))
+
+
+class TestAllOrgUnitsSource(IntegrationTestCase):
+
+    def setUp(self):
+        super(TestAllOrgUnitsSource, self).setUp()
+        self.source = AllOrgUnitsSource(self.portal)
+        create(Builder('org_unit')
+               .id('afi')
+               .having(title=u'Amt f\xfcr Informatik',
+                       admin_unit_id='plone',
+                       enabled=False))
+
+    def test_all_org_unit_ids_are_valid(self):
+        self.assertIn('fa', self.source)
+        self.assertIn('afi', self.source)
+
+    def test_not_existing_org_unit_ids(self):
+        self.assertNotIn('not', self.source)
+
+    def test_search_finds_only_enabled_org_units(self):
+        result = self.source.search('Finanz')
+
+        self.assertEqual(1, len(result), 'Expect one result. only Finanzamt')
+        self.assertEquals('fa', result[0].token)
+        self.assertEquals('fa', result[0].value)
+        self.assertEquals(u'Finanzamt', result[0].title)
+
+        result = self.source.search('Informatik')
+        self.assertEqual(0, len(result),
+                         'Expect zero results. The afi orgunit is disabled.')
+
+    def test_invalid_token_raises_lookup_error(self):
+        with self.assertRaises(LookupError):
+            self.source.getTermByToken('invalid-id')
+
+
+class TestAllGroupsSource(IntegrationTestCase):
+
+    def setUp(self):
+        super(TestAllGroupsSource, self).setUp()
+        self.source = AllGroupsSource(self.portal)
+
+    def test_all_group_ids_are_valid(self):
+        self.assertIn('fa_users', self.source)
+        self.assertIn('fa_inbox_users', self.source)
+
+        group = Group.query.get('projekt_a')
+        group.active = False
+
+        self.assertIn('projekt_a', self.source)
+
+    def test_not_existing_org_unit_ids(self):
+        self.assertNotIn('not', self.source)
+
+    def test_search_finds_only_enabled_org_units(self):
+        result = self.source.search('projek')
+
+        self.assertEqual(2, len(result), 'Expect two result. Projey A and Projekt B')
+        self.assertEquals(['projekt_a', 'projekt_b'],
+                          [item.value for item in result])
+        self.assertEquals(['Projekt A', 'Projekt B'],
+                          [item.title for item in result])
+
+        group = Group.query.get('projekt_b')
+        group.active = False
+
+        result = self.source.search('projek')
+
+        self.assertEqual(
+            1, len(result),
+            'Expect one result, Projekt A - Projekt B is disabled')
+
+    def test_invalid_token_raises_lookup_error(self):
+        with self.assertRaises(LookupError):
+            self.source.getTermByToken('invalid-id')

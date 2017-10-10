@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-02 12:51+0000\n"
+"POT-Creation-Date: 2017-10-05 17:31+0000\n"
 "PO-Revision-Date: 2017-06-02 16:00+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-contact/fr/>\n"
@@ -15,6 +15,10 @@ msgstr ""
 "Domain: DOMAIN\n"
 "Language: fr\n"
 "X-Generator: Weblate 2.13.1\n"
+
+#: ./opengever/contact/browser/tabs.py
+msgid "Active"
+msgstr ""
 
 #. Default: "Add Person"
 #: ./opengever/contact/browser/person.py
@@ -155,6 +159,7 @@ msgstr "Titre"
 
 #. Default: "Active"
 #: ./opengever/contact/browser/byline.py
+#: ./opengever/contact/browser/tabs.py
 #: ./opengever/contact/browser/templates/organization.pt
 msgid "label_active"
 msgstr "Actif"
@@ -283,6 +288,11 @@ msgstr "Prénom"
 msgid "label_former_contact_id"
 msgstr "Contact ID antérieur"
 
+#. Default: "Group"
+#: ./opengever/contact/browser/tabs.py
+msgid "label_group"
+msgstr ""
+
 #. Default: "Inactive"
 #: ./opengever/contact/browser/templates/organization.pt
 msgid "label_inactive"
@@ -331,6 +341,11 @@ msgstr "Pas de participations"
 #: ./opengever/contact/ogdsuser.py
 msgid "label_office"
 msgstr "Bureau"
+
+#. Default: "Org Unit"
+#: ./opengever/contact/browser/tabs.py
+msgid "label_org_unit"
+msgstr ""
 
 #. Default: "Organizations"
 #: ./opengever/contact/browser/tabbed.py
@@ -412,6 +427,20 @@ msgstr "Numéro courant"
 #: ./opengever/contact/browser/participations.py
 msgid "label_show_all"
 msgstr "Indiquer toutes les participations ${total}"
+
+#: ./opengever/contact/browser/tabs.py
+msgid "label_tabbedview_filter_all"
+msgstr ""
+
+#. Default: "Teams"
+#: ./opengever/contact/browser/tabbed.py
+msgid "label_teams"
+msgstr ""
+
+#. Default: "Title"
+#: ./opengever/contact/browser/tabs.py
+msgid "label_title"
+msgstr ""
 
 #. Default: "Url"
 #: ./opengever/contact/contact.py

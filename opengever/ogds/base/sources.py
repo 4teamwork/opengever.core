@@ -565,3 +565,95 @@ class ContactsSourceBinder(object):
 
     def __call__(self, context):
         return ContactsSource(context)
+
+
+@implementer(IQuerySource)
+class BaseSQLModelSource(object):
+
+    model_class = None
+
+    def __init__(self, context, **kwargs):
+        self.context = context
+        self.terms = []
+
+    @property
+    def base_query(self):
+        """"""
+        raise NotImplemented
+
+    def __contains__(self, value):
+        token = value
+        try:
+            self.getTermByToken(token)
+        except LookupError:
+            return False
+
+        return True
+
+    def __iter__(self):
+        return self.terms.__iter__()
+
+    def __len__(self):
+        return len(self.terms)
+
+    def getTerm(self, value):
+        obj = self.model_class.get(value)
+        if not obj:
+            raise LookupError
+        return SimpleTerm(obj.id(), obj.id(), obj.label())
+
+    def getTermByToken(self, token):
+        """ Should raise LookupError if term could not be found.
+        Check zope.schema.interfaces.IVocabularyTokenized
+        """
+        if not token:
+            raise LookupError('A token is required.')
+
+        try:
+            value = token
+            return self.getTerm(value)
+        except orm.exc.NoResultFound:
+            raise LookupError
+
+    def search(self, query_string):
+        self.terms = []
+        query = self.base_query.by_searchable_text(query_string.split(' '))
+
+        for result in query:
+            self.terms.append(self.getTerm(result.id()))
+
+        return self.terms
+
+
+@implementer(IQuerySource)
+class AllOrgUnitsSource(BaseSQLModelSource):
+
+    model_class = OrgUnit
+
+    @property
+    def base_query(self):
+        return OrgUnit.query.filter(OrgUnit.enabled == True)  # noqa
+
+
+@implementer(IContextSourceBinder)
+class AllOrgUnitsSourceBinder(object):
+
+    def __call__(self, context):
+        return AllOrgUnitsSource(context)
+
+
+@implementer(IQuerySource)
+class AllGroupsSource(BaseSQLModelSource):
+
+    model_class = Group
+
+    @property
+    def base_query(self):
+        return Group.query.filter(Group.active == True)  # noqa
+
+
+@implementer(IContextSourceBinder)
+class AllGroupsSourceBinder(object):
+
+    def __call__(self, context):
+        return AllGroupsSource(context)

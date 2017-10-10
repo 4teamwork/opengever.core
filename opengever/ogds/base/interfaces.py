@@ -121,3 +121,7 @@ class IInternalOpengeverRequestLayer(Interface):
     """This request layer is activated on interal requests which are
     authenticated with the OGDS PAS plugin.
     """
+
+
+class ITeam(Interface):
+    """Marker interface for team object wrappers."""

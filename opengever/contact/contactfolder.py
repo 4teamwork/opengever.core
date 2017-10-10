@@ -1,6 +1,8 @@
 from opengever.base.behaviors.translated_title import TranslatedTitleMixin
 from opengever.contact.interfaces import IContactFolder
 from opengever.contact.models import Contact
+from opengever.ogds.base.wrapper import TeamWrapper
+from opengever.ogds.models.team import Team
 from plone.dexterity.content import Container
 from zope.interface import implements
 
@@ -31,6 +33,12 @@ class ContactFolder(Container, TranslatedTitleMixin):
             contact = Contact.query.get(contact_id)
             if contact:
                 return contact.get_wrapper(self)
+
+        if id_.startswith('team-'):
+            team_id = int(id_.split('-')[-1])
+            team = Team.query.get(team_id)
+            if team:
+                return TeamWrapper.wrap(self, team)
 
         if default is _marker:
             raise KeyError(id_)

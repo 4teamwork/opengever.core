@@ -172,4 +172,14 @@
       class=".contactfolder_forms.EditForm"
       permission="cmf.ModifyPortalContent"
       />
+
+  <browser:page
+      name="tabbedview_view-teams"
+      for="plone.dexterity.interfaces.IDexterityContainer"
+      class=".tabs.TeamsListing"
+      permission="zope2.View"
+      />
+
+  <adapter factory=".tabs.TeamsListingTableSource" />
+
 </configure>

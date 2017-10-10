@@ -9,7 +9,7 @@
   <body>
     <metal:main fill-slot="main">
       <tal:main-macro metal:define-macro="main"
-                      tal:define="team view/get_team">
+                      tal:define="team view/model">
 
         <div tal:replace="structure provider:plone.abovecontenttitle" />
         <h1 class="documentFirstHeading" tal:content="team/title"/>

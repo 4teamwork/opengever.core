@@ -29,6 +29,8 @@ Changelog
 - SPV word: trash documents of removed ad hoc agenda items. [tarnap]
 - SPV word: Represent paragraphs in the generated protocol. [jone]
 - SPV word: Allow to set custom excerpt titles. [tarnap]
+- Add new tab teams to contactfolder. [phgross]
+- Add add and edit forms for teams. [phgross]
 - OGDS update: Truncate purely descriptive user fields. [lgraf]
 - Include ftw.usermigration and implement additional user migrations:
 

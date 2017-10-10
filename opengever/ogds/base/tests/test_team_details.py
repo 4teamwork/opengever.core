@@ -7,7 +7,7 @@ class TestTeamDetails(IntegrationTestCase):
     @browsing
     def test_title(self, browser):
         self.login(self.administrator, browser=browser)
-        browser.open(self.portal, view='team-details/1')
+        browser.open(self.contactfolder, view='team-1/view')
 
         self.assertEquals(
             [u'Projekt \xdcberbaung Dorfmatte'], browser.css('h1').text)
@@ -17,12 +17,13 @@ class TestTeamDetails(IntegrationTestCase):
         self.login(self.administrator, browser=browser)
 
         with browser.expect_http_error(code=404):
-            browser.open(self.portal, view='team-details/123')
+            browser.open(self.contactfolder, view='team-123/view')
 
     @browsing
     def test_metadata_table(self, browser):
         self.login(self.administrator, browser=browser)
-        browser.open(self.portal, view='team-details/1')
+        browser.raise_http_errors = False
+        browser.open(self.contactfolder, view='team-1/view')
 
         items = browser.css('.listing').first.lists()
         self.assertEquals(
@@ -33,7 +34,7 @@ class TestTeamDetails(IntegrationTestCase):
     @browsing
     def test_list_and_link_team_members(self, browser):
         self.login(self.administrator, browser=browser)
-        browser.open(self.portal, view='team-details/1')
+        browser.open(self.contactfolder, view='team-1/view')
 
         links = browser.css('.members a')
         self.assertEquals(

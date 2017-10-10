@@ -55,11 +55,25 @@
       />
 
   <browser:page
-      for="*"
-      name="team-details"
+      for="opengever.ogds.base.interfaces.ITeam"
+      name="view"
       class=".teamdetails.TeamDetails"
       permission="zope2.View"
       template="templates/teamdetails.pt"
+      />
+
+  <browser:page
+      for="opengever.contact.contactfolder.IContactFolder"
+      name="add-team"
+      class=".team_forms.TeamAddForm"
+      permission="cmf.ManagePortal"
+      />
+
+  <browser:page
+      name="edit"
+      for="opengever.ogds.base.interfaces.ITeam"
+      class=".team_forms.TeamEditForm"
+      permission="cmf.ManagePortal"
       />
 
 </configure>
