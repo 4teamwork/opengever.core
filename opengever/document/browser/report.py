@@ -1,4 +1,3 @@
-from five import grok
 from opengever.base.behaviors.utils import set_attachment_content_disposition
 from opengever.base.reporter import readable_author
 from opengever.base.reporter import readable_date
@@ -6,19 +5,15 @@ from opengever.base.reporter import StringTranslater
 from opengever.base.reporter import XLSReporter
 from opengever.document import _
 from Products.CMFCore.utils import getToolByName
+from Products.Five import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
-from zope.interface import Interface
 
 
-class DocumentReporter(grok.View):
+class DocumentReporter(BrowserView):
     """View that generates an excel spreadsheet with the XLSReporter,
     listing the selected documents (paths in request)
     and their important attributes.
     """
-
-    grok.context(Interface)
-    grok.name('document_report')
-    grok.require('zope2.View')
 
     def get_document_attributes(self):
         return [
@@ -60,7 +55,7 @@ class DocumentReporter(grok.View):
                 )
         return documents
 
-    def render(self):
+    def __call__(self):
         if not self.request.get('paths'):
             msg = _(
                 u'error_no_items', default=u'You have not selected any Items')
