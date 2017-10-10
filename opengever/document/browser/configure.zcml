@@ -105,4 +105,12 @@
       class=".edit.EditingDocument"
       permission="zope2.View"
       />
+
+  <browser:page
+      for="*"
+      name="logout_overlay"
+      class=".logout_overlay.LogoutOverlay"
+      permission="zope2.View"
+      />
+
 </configure>
