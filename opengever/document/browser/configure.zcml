@@ -85,4 +85,11 @@
       template="templates/overview.pt"
       />
 
+  <browser:page
+      for="opengever.document.behaviors.IBaseDocument"
+      name="edit_archival_file"
+      class=".archival_file_form.EditArchivalFileForm"
+      permission="zope2.View"
+      />
+
 </configure>
