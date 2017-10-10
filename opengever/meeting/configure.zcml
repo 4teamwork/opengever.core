@@ -62,4 +62,7 @@
   <adapter factory=".tabs.membershiplisting.MembershipTableSource" />
 
   <adapter factory=".menu.CommitteePostFactoryMenu" />
+
+  <adapter factory=".docprops.ProposalDocPropertyProvider" />
+
 </configure>
