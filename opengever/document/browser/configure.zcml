@@ -92,4 +92,17 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="opengever.document.behaviors.IBaseDocument"
+      name="edit_checker"
+      class=".edit.EditCheckerView"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="*"
+      name="editing_document"
+      class=".edit.EditingDocument"
+      permission="zope2.View"
+      />
 </configure>

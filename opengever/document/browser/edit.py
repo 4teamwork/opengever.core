@@ -1,16 +1,14 @@
-from five import grok
 from opengever.base.interfaces import IRedirector
 from opengever.document import _
-from opengever.document.behaviors import IBaseDocument
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.ogds.base.actor import Actor
 from opengever.task.task import ITask
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces import IPloneSiteRoot
+from Products.Five import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
 from zope.component import getMultiAdapter
-from zope.interface import Interface
 
 
 def get_redirect_url(context):
@@ -40,16 +38,12 @@ def get_redirect_url(context):
             return  '%s#overview' % context.absolute_url()
 
 
-class EditCheckerView(grok.View):
+class EditCheckerView(BrowserView):
     """Short view wich only checks if the user has the required permissions.
     If not it returns with a statusmessages to the referer.
     Used in the documents extended tooltip."""
 
-    grok.context(IBaseDocument)
-    grok.name('edit_checker')
-    grok.require('zope2.View')
-
-    def render(self):
+    def __call__(self):
         mtool = getToolByName(self.context, 'portal_membership')
         if mtool.checkPermission(
             'Modify portal content', self.context):
@@ -65,16 +59,12 @@ class EditCheckerView(grok.View):
                 get_redirect_url(self.context))
 
 
-class EditingDocument(grok.View):
+class EditingDocument(BrowserView):
     """ The view for direct editing document. When they view is called,
     it checkouts the document if it's possible and necessary and
     redirect to the external_edit link"""
 
-    grok.context(Interface)
-    grok.require('zope2.View')
-    grok.name('editing_document')
-
-    def render(self):
+    def __call__(self):
 
         # have the document a file
         if not self.context.file:
