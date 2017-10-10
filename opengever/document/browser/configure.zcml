@@ -113,4 +113,10 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="*"
+      name="redirect_to_parent_dossier"
+      class=".redirect_to_parent_dossier.RedirectToParentDossier"
+      permission="zope2.View"
+      />
 </configure>
