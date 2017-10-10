@@ -13,6 +13,9 @@ class TaskQuery(BaseQuery):
         """
         return self.filter(Task.responsible == userid)
 
+    def by_responsibles(self, responsibles):
+        return self.filter(Task.responsible.in_(responsibles))
+
     def users_issued_tasks(self, userid):
         """Returns query which list all tasks where the given user
         is the issuer. It queries all admin units.

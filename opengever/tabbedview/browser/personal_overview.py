@@ -9,6 +9,9 @@ from opengever.meeting.model.proposal import Proposal
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.group import Group
+from opengever.ogds.models.group import groups_users
+from opengever.ogds.models.team import Team
 from opengever.tabbedview import _
 from opengever.tabbedview import LOG
 from opengever.tabbedview.browser.tabs import Documents
@@ -229,11 +232,13 @@ class MyTasks(GlobalTaskListingTab):
         ]
 
     def get_base_query(self):
-        portal_state = self.context.unrestrictedTraverse(
-            '@@plone_portal_state')
-        userid = portal_state.member().getId()
+        userid = api.user.get_current().getId()
+        responsibles = [
+            team.actor_id() for team in
+            Team.query.join(Group).join(groups_users).filter_by(userid=userid)]
+        responsibles.append(userid)
 
-        return Task.query.users_tasks(userid)
+        return Task.query.by_responsibles(responsibles)
 
 
 class IssuedTasks(GlobalTaskListingTab):

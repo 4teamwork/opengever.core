@@ -1,3 +1,4 @@
+from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -130,6 +131,34 @@ class TestGlobalTaskListings(IntegrationTestCase):
         browser.open(view='tabbedview_view-mytasks')
         self.assertEquals(
             [u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen'],
+            [row.get('Title') for row in browser.css('.listing').first.dicts()]
+        )
+
+    @browsing
+    def test_my_tasks_list_also_tasks_assigned_to_my_teams(self, browser):
+        self.login(self.meeting_user, browser=browser)
+
+        create(Builder('task')
+               .within(self.dossier)
+               .titled(u'Anfrage 1')
+               .having(responsible_client='fa',
+                       responsible='team:1',
+                       issuer=self.dossier_responsible.getId(),
+                       task_type='correction',
+                       deadline=date(2016, 11, 1)))
+
+        create(Builder('task')
+               .within(self.dossier)
+               .titled(u'Anfrage 2')
+               .having(responsible_client='fa',
+                       responsible='team:2',
+                       issuer=self.dossier_responsible.getId(),
+                       task_type='correction',
+                       deadline=date(2016, 11, 1)))
+
+        browser.open(view='tabbedview_view-mytasks')
+        self.assertEquals(
+            [u'Anfrage 2'],
             [row.get('Title') for row in browser.css('.listing').first.dicts()]
         )
 
