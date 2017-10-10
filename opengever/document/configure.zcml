@@ -107,4 +107,11 @@
 
   <adapter factory=".reference.DocumentReferenceNumber" />
 
+  <browser:page
+      for="*"
+      name="external_editing_allowed"
+      class=".externaledit.ExternalEditingAllowed"
+      permission="zope2.View"
+      />
+
 </configure>
