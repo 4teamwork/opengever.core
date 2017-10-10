@@ -47,4 +47,11 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="*"
+      name="checkout_documents"
+      class=".checkout.CheckoutDocuments"
+      permission="zope2.View"
+      />
+
 </configure>

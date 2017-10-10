@@ -316,7 +316,7 @@ class TestCheckinCheckoutManager(FunctionalTestCase):
             obj2brain(self.doc2).getPath(),
         ]
         view = self.portal.restrictedTraverse(
-            '@@checkout_documents').render()
+            '@@checkout_documents')()
         self.assertEquals('http://nohost/plone#documents', view)
 
         self.assertEquals(
