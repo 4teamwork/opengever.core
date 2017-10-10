@@ -20,8 +20,12 @@
     };
 
     this.closeMeeting = function() {
-      return $.post(self.currentItem.attr("href")).done(function() {
-        location.reload();
+      return $.post(self.currentItem.attr("href")).always(function(){
+        dialog.close();
+      }).done(function(data) {
+        if (data.redirectUrl){
+          window.location = data.redirectUrl;
+        }
       });
     };
 

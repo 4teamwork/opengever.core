@@ -67,12 +67,10 @@ class TestWordMeeting(IntegrationTestCase):
         # When closing the meeting, we should end up with a new version
         browser.open(self.meeting)
         self.assertEquals(
-            [
-                'Close all proposals.',
-                'Generate excerpts for all proposals.',
-                'Update or create the protocol.',
-            ],
-            browser.css('#confirm_close_meeting > ul > li').text)
+            ['Closing the meeting the first time will automatically'
+             ' (re-)create the protocol.',
+             'Are you sure you want to close this meeting?'],
+            browser.css('#confirm_close_meeting p').text)
         model.close()
         self.assertEquals(1, model.protocol_document.generated_version)
 
@@ -93,11 +91,30 @@ class TestWordMeeting(IntegrationTestCase):
         # it would potentially overwrite user-changes.
         browser.open(self.meeting)
         self.assertEquals(
-            [
-                'Close all proposals.',
-                'Generate excerpts for all proposals.',
-                # 'Update or create the protocol.',
-            ],
-            browser.css('#confirm_close_meeting > ul > li').text)
+            ['Closing the meeting will not update the protocol automatically.'
+             '\nMake sure to transfer your changes or recreate the protocol.',
+             'Are you sure you want to close this meeting?'],
+            browser.css('#confirm_close_meeting p').text)
         model.close()
         self.assertEquals(0, model.protocol_document.generated_version)
+
+    @browsing
+    def test_closing_meeting_with_undecided_items_is_not_allowed(self, browser):
+        """The user must decide all agenda items before the meeting can be closed.
+        """
+        self.login(self.committee_responsible, browser)
+        self.schedule_proposal(self.meeting, self.submitted_word_proposal)
+        self.assertEquals(u'pending', self.meeting.model.workflow_state)
+
+        browser.open(self.meeting)
+        editbar.menu_option('Actions', 'Close meeting').click()
+        self.assertEquals(
+            {u'messages': [
+                {u'messageTitle': u'Error',
+                 u'message': u'The meeting cannot be closed because it'
+                 u' has undecided agenda items.',
+                 u'messageClass': u'error'}],
+             u'proceed': False},
+            browser.json)
+
+        self.assertEquals(u'pending', self.meeting.model.workflow_state)

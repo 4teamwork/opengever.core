@@ -55,6 +55,17 @@ class CloseTransition(Transition):
     """Used by pending-closed and held-closed transitions.
     """
 
+    def get_validation_errors(self, model):
+        if not is_word_meeting_implementation_enabled():
+            return ()
+
+        if model.get_undecided_agenda_items():
+            return [_(u'label_close_error_has_undecided_agenda_items',
+                      u'The meeting cannot be closed because it has undecided'
+                      u' agenda items.')]
+
+        return ()
+
     def execute(self, obj, model):
         assert self.can_execute(model)
 
@@ -240,8 +251,14 @@ class Meeting(Base, SQLFormSupport):
         - update and unlock the protocol document
         """
         self.hold()
-        for agenda_item in self.agenda_items:
-            agenda_item.close()
+
+        if is_word_meeting_implementation_enabled():
+            assert not self.get_undecided_agenda_items(), \
+                'All agenda items must be decided before a meeting is closed.'
+
+        else:
+            for agenda_item in self.agenda_items:
+                agenda_item.close()
 
         self.update_protocol_document()
         self.unlock_protocol_document()
@@ -353,6 +370,14 @@ class Meeting(Base, SQLFormSupport):
             return ''
 
         return self._get_localized_time(self.end)
+
+    def get_undecided_agenda_items(self):
+        """Return a filtered list of this meetings agenda items,
+        containing only the items which are not in a "decided" workflow state.
+        """
+        def is_not_decided(agenda_item):
+            return agenda_item.workflow_state != 'decided'
+        return filter(is_not_decided, self.agenda_items)
 
     def _get_localized_time(self, date):
         if not date:

@@ -39,7 +39,7 @@ class TestProtocolWithWord(IntegrationTestCase):
     @browsing
     def test_protocol_is_generated_when_closing_meetings(self, browser):
         self.login(self.committee_responsible, browser)
-        self.schedule_proposal(self.meeting, self.submitted_word_proposal)
+        self.schedule_proposal(self.meeting, self.submitted_word_proposal).decide()
         meeting = self.meeting.model
 
         self.assertIsNone(meeting.protocol_document)
