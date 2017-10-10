@@ -114,4 +114,28 @@
       permission="zope2.View"
       />
 
+  <subscriber
+      for="opengever.document.document.IDocumentSchema
+           opengever.document.interfaces.IObjectCheckedOutEvent"
+      handler=".handlers.checked_out"
+      />
+
+  <subscriber
+      for="opengever.document.document.IDocumentSchema
+           opengever.document.interfaces.IObjectBeforeCheckInEvent"
+      handler=".handlers.update_docproperties"
+      />
+
+  <subscriber
+      for="opengever.document.document.IDocumentSchema
+           zope.lifecycleevent.IObjectMovedEvent"
+      handler=".handlers.update_moved_doc_properties"
+      />
+
+  <subscriber
+      for="opengever.document.document.IDocumentSchema
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".handlers.set_archival_file_state"
+      />
+
 </configure>

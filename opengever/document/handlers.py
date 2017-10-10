@@ -1,28 +1,19 @@
-from five import grok
 from opengever.document.archival_file import ArchivalFileConverter
-from opengever.document.document import IDocumentSchema
-from opengever.document.interfaces import IObjectBeforeCheckInEvent
-from opengever.document.interfaces import IObjectCheckedOutEvent
 from opengever.dossier.docprops import DocPropertyWriter
-from zope.lifecycleevent import IObjectMovedEvent
 from zope.lifecycleevent import IObjectRemovedEvent
-from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
 
 DISABLE_DOCPROPERTY_UPDATE_FLAG = 'disable_docproperty_update'
 
 
-@grok.subscribe(IDocumentSchema, IObjectCheckedOutEvent)
 def checked_out(context, event):
     _update_docproperties(context)
 
 
-@grok.subscribe(IDocumentSchema, IObjectBeforeCheckInEvent)
 def update_docproperties(context, event):
     _update_docproperties(context)
 
 
-@grok.subscribe(IDocumentSchema, IObjectMovedEvent)
 def update_moved_doc_properties(context, event):
     if IObjectRemovedEvent.providedBy(event):
         return
@@ -37,7 +28,6 @@ def _update_docproperties(document):
     DocPropertyWriter(document).update()
 
 
-@grok.subscribe(IDocumentSchema, IObjectModifiedEvent)
 def set_archival_file_state(context, event):
     # Because every filewidget is always marked as changed, in the event
     # descriptions, even when no file has changed, we have to check the request
