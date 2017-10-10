@@ -1,4 +1,3 @@
-from five import grok
 from opengever.document import _
 from opengever.document.document import IDocumentSchema
 from opengever.document.exceptions import NoItemsSelected
@@ -162,33 +161,19 @@ class CheckinPathsCommentForm(CheckinContextCommentForm):
         self.widgets['paths'].value = ';;'.join(self.get_document_paths())
 
 
-class CheckinDocument(layout.FormWrapper, grok.View):
+class CheckinDocument(layout.FormWrapper):
     """Checkin one document (context) with comment."""
 
-    grok.context(IDocumentSchema)
-    grok.require('zope2.View')
-    grok.name('checkin_document')
     form = CheckinContextCommentForm
 
-    def __init__(self, context, request):
-        layout.FormWrapper.__init__(self, context, request)
-        grok.View.__init__(self, context, request)
 
-
-class CheckinDocuments(layout.FormWrapper, grok.View):
+class CheckinDocuments(layout.FormWrapper):
     """Checkin multiple documents with comment.
 
     This view is called from a tabbed_view.
 
     """
-    grok.context(Interface)
-    grok.require('zope2.View')
-    grok.name('checkin_documents')
     form = CheckinPathsCommentForm
-
-    def __init__(self, context, request):
-        layout.FormWrapper.__init__(self, context, request)
-        grok.View.__init__(self, context, request)
 
     def __call__(self, *args, **kwargs):
         try:
