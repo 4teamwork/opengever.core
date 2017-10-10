@@ -210,9 +210,13 @@
             <tr>
               <th i18n:translate="view_label_dossier">Meeting dossier:</th>
               <td tal:define="dossier meeting/get_dossier">
-                <a tal:attributes="href dossier/absolute_url;
+                <a tal:condition="view/has_dossier_view_permission"
+                   tal:attributes="href dossier/absolute_url;
                                    class python: view.get_css_class(dossier)"
                    tal:content="dossier/title" />
+                <span tal:condition="not: view/has_dossier_view_permission"
+                      tal:attributes="class python: view.get_css_class(dossier)"
+                      tal:content="dossier/title" />
               </td>
               <td></td>
             </tr>
