@@ -730,7 +730,7 @@ msgstr "Traktandum löschen"
 #: ./opengever/meeting/committee.py
 #: ./opengever/meeting/committeecontainer.py
 msgid "label_ad_hoc_template"
-msgstr "Vorlage"
+msgstr "Vorlage für Traktanden ohne Antrag"
 
 #. Default: "Agenda item number"
 #: ./opengever/meeting/browser/meetings/meeting.py

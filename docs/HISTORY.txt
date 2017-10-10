@@ -5,6 +5,7 @@ Changelog
 2017.5.2 (unreleased)
 ---------------------
 
+- SPV: Fix ad hoc agenda item template label translation. [tarnap]
 - Fix default_documents_as_links default value for opengever.mail. [elioschmutz]
 - Fix responsible_client default value for tasktemplates. [phgross]
 - SPV word: Do not automatically decide agenda items when closing meetings. [jone]
