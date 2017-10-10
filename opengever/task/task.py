@@ -389,6 +389,7 @@ class Task(Container):
             term = vocabulary.getTerm(self.task_type)
             return term.title
 
+
 def related_document(context):
     intids = getUtility(IIntIds)
     return intids.getId(context)

@@ -97,7 +97,7 @@ class Base(BrowserView):
         context = aq_inner(self.context)
         trans = context.portal_transforms
         items = []
-        #linkDetection = context.linkDetection
+        # linkDetection = context.linkDetection
         for id, response in enumerate(self.folder):
             # Use the already rendered response when available
             if response.rendered_text is None:
@@ -111,7 +111,7 @@ class Base(BrowserView):
                                            mimetype=response.mimetype)
                     html = html.getData()
                 # Detect links like #1 and r1234
-                #html = linkDetection(html)
+                # html = linkDetection(html)
                 response.rendered_text = html
             html = response.rendered_text
             info = dict(id=id,
@@ -226,7 +226,7 @@ class TaskTransitionResponseAddForm(form.AddForm, AutoExtensibleForm):
 
         else:
             new_response = Response(data.get('text'))
-            #define responseTyp
+            # define responseTyp
             responseCreator = new_response.creator
             task = aq_inner(self.context)
             transition = data['transition']
@@ -238,19 +238,18 @@ class TaskTransitionResponseAddForm(form.AddForm, AutoExtensibleForm):
 
             new_response.transition = self.transition
 
-            #if util.getManagersVocab.getTerm(responseCreator):
+            # if util.getManagersVocab.getTerm(responseCreator):
             #   new_response.type =  'reply'
-            #check transition
-            if transition in (
-                'task-transition-open-resolved',
-                'task-transition-in-progress-resolved'):
+            # check transition
+            if transition in ('task-transition-open-resolved',
+                              'task-transition-in-progress-resolved'):
 
                 completion_date = datetime.date.today()
 
             else:
                 completion_date = None
 
-            #check other fields
+            # check other fields
             options = [
                 # (task.deadline, data.get('deadline'), 'deadline',
                 #  _('deadline')),

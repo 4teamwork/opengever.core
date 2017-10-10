@@ -122,6 +122,7 @@ class MethodValidator(SimpleFieldValidator):
                         mapping={'client': org_unit.id()})
                 raise Invalid(msg)
 
+
 WidgetValidatorDiscriminators(MethodValidator,
                               field=IChooseMethodSchema['method'])
 

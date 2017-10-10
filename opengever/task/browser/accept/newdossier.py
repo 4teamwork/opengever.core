@@ -83,18 +83,19 @@ class ISelectRepositoryfolderSchema(Schema):
 
         source=RepositoryPathSourceBinder(
             object_provides='opengever.repository.repositoryfolder.'
-                'IRepositoryFolderSchema',
+                            'IRepositoryFolderSchema',
             navigation_tree_query={
                 'object_provides': [
                     'opengever.repository.repositoryroot.IRepositoryRoot',
                     'opengever.repository.repositoryfolder.'
-                        'IRepositoryFolderSchema',
+                    'IRepositoryFolderSchema',
                     ]
                 }))
 
 
 class RepositoryfolderValidator(BaseRepositoryfolderValidator):
     pass
+
 
 WidgetValidatorDiscriminators(
     RepositoryfolderValidator,

@@ -48,9 +48,10 @@ class IChooseDossierSchema(Schema):
                     'IRepositoryFolderSchema',
                     'opengever.dossier.behaviors.dossier.IDossierMarker',
                     ],
-                'review_state': ['repositoryroot-state-active',
-                                 'repositoryfolder-state-active'] +
-                                 DOSSIER_STATES_OPEN,
+                'review_state': [
+                    'repositoryroot-state-active',
+                    'repositoryfolder-state-active'
+                    ] + DOSSIER_STATES_OPEN,
                 }))
 
 
@@ -69,6 +70,7 @@ class DossierValidator(SimpleFieldValidator):
                     u'the dossier is closed or you do not have the '
                     u'privileges.')
             raise Invalid(msg)
+
 
 WidgetValidatorDiscriminators(DossierValidator,
                               field=IChooseDossierSchema['dossier'])

@@ -106,6 +106,7 @@ class ICompleteSuccessorTaskSchema(Schema):
         source=util.getTransitionVocab,
         required=True)
 
+
 validator.WidgetValidatorDiscriminators(
     NoCheckedoutDocsValidator, field=ICompleteSuccessorTaskSchema['documents'])
 provideAdapter(NoCheckedoutDocsValidator)

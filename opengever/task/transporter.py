@@ -81,7 +81,7 @@ class ResponseTransporter(object):
         try:
             data = json.loads(response.read())
         except ValueError:
-            #is a internal request
+            # is a internal request
             data = response.read()
 
         self.create_responses(data)
