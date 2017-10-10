@@ -35,8 +35,8 @@ def remove_subdossier_column(columns):
     """
 
     def _filterer(item):
-        if isinstance(
-            item, dict) and item['column'] == 'containing_subdossier':
+        if isinstance(item, dict) and \
+           item['column'] == 'containing_subdossier':
             return False
         return True
 
@@ -111,7 +111,8 @@ class PersonalOverview(TabbedView):
         if is_activity_feature_enabled():
             tabs.append(
                 {'id': 'mynotifications',
-                 'title': _('label_my_notifications', default=u'My notifications'),
+                 'title': _('label_my_notifications',
+                            default=u'My notifications'),
                  'icon': None, 'url': '#', 'class': None})
 
         return tabs
