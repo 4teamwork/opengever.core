@@ -54,4 +54,10 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="opengever.document.document.IDocumentSchema"
+      name="revert-file-to-version"
+      class=".revert.RevertFileToVersion"
+      permission="cmf.ModifyPortalContent"
+      />
 </configure>

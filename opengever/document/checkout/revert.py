@@ -1,20 +1,14 @@
-from Products.statusmessages.interfaces import IStatusMessage
-from five import grok
-from opengever.document.document import IDocumentSchema
 from opengever.document.document import _
 from opengever.document.interfaces import ICheckinCheckoutManager
+from Products.Five import BrowserView
+from Products.statusmessages.interfaces import IStatusMessage
 from zope.component import getMultiAdapter
 
 
-class RevertFileToVersion(grok.View):
+class RevertFileToVersion(BrowserView):
     """Reverts the file of a document to a specific version.
     """
-
-    grok.context(IDocumentSchema)
-    grok.name('revert-file-to-version')
-    grok.require('cmf.ModifyPortalContent')
-
-    def render(self):
+    def __call__(self):
         version_id = self.request.get('version_id')
 
         # revert the file
