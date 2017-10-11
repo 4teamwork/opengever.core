@@ -4,7 +4,6 @@ from AccessControl.Permissions import webdav_unlock_items
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from collective import dexteritytextindexer
-from five import grok
 from ftw.mail.interfaces import IEmailAddress
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.base.interfaces import IRedirector
@@ -121,8 +120,6 @@ validator.WidgetValidatorDiscriminators(
     UploadValidator,
     field=IDocumentSchema['file'],
     )
-
-grok.global_adapter(UploadValidator)
 
 
 class Document(Item, BaseDocumentMixin):
