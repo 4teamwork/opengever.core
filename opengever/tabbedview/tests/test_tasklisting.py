@@ -1,58 +1,48 @@
-from ftw.builder import Builder
-from ftw.builder import create
 from ftw.testbrowser import browsing
-from opengever.testing import FunctionalTestCase
+from opengever.globalindex.handlers.task import TaskSqlSyncer
+from opengever.testing import IntegrationTestCase
 
 
-class TestTaskListing(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestTaskListing, self).setUp()
-
-        self.dossier = create(Builder('dossier')
-                              .titled(u'<b>B\xf6ld title</b>'))
-        self.subdossier = create(Builder('dossier')
-                                 .within(self.dossier)
-                                 .titled(u'S\xfcb'))
-        self.task1 = create(Builder('task')
-                            .within(self.dossier)
-                            .in_state('task-state-open')
-                            .titled('Task 1'))
-        self.task2 = create(Builder('task')
-                            .within(self.dossier)
-                            .in_state('task-state-tested-and-closed')
-                            .titled('Task 2'))
-        self.task3 = create(Builder('task')
-                            .within(self.subdossier)
-                            .in_state('task-state-in-progress')
-                            .titled('Task 3'))
+class TestTaskListing(IntegrationTestCase):
 
     @browsing
     def test_shows_only_pending_tasks_by_default(self, browser):
-        browser.login().open(
-            self.dossier, view='tabbedview_view-tasks')
+        self.login(self.regular_user, browser=browser)
+        self.set_workflow_state('task-state-tested-and-closed', self.subtask)
+
+        browser.open(self.dossier, view='tabbedview_view-tasks')
 
         table = browser.css('.listing').first
-        self.assertEquals(['Task 1', 'Task 3'],
+        self.assertEquals([u'Vertragsentwurf \xdcberpr\xfcfen'],
                           [row.get('Title') for row in table.dicts()])
 
     @browsing
     def test_list_every_dossiers_with_the_all_filter(self, browser):
-        browser.login().open(
-            self.dossier, view='tabbedview_view-tasks',
-            data={'task_state_filter': 'filter_all'})
+        self.login(self.regular_user, browser=browser)
+        self.set_workflow_state('task-state-tested-and-closed', self.subtask)
+
+        browser.open(self.dossier, view='tabbedview_view-tasks',
+                     data={'task_state_filter': 'filter_all'})
 
         table = browser.css('.listing').first
-        self.assertEquals(['Task 1', 'Task 2', 'Task 3'],
-                          [row.get('Title') for row in table.dicts()])
+        self.assertEquals(
+            [u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
+             u'Vertragsentwurf \xdcberpr\xfcfen'],
+            [row.get('Title') for row in table.dicts()])
 
     @browsing
     def test_escape_dossier_title_to_prevent_xss(self, browser):
-        browser.login().open(
-            self.dossier, view='tabbedview_view-tasks')
-        table = browser.css('.listing').first
-        second_row_dossier_cell = table.rows[1].css('td:nth-child(10) .maindossierLink').first
+        self.login(self.regular_user, browser=browser)
 
+        self.dossier.title = u'<b>B\xf6ld title</b>'
+        TaskSqlSyncer(self.subtask, None).sync()
+        TaskSqlSyncer(self.task, None).sync()
+
+        browser.open(self.dossier, view='tabbedview_view-tasks')
+
+        table = browser.css('.listing').first
+        second_row_dossier_cell = table.rows[1].css(
+            'td:nth-child(10) .maindossierLink').first
         self.assertEquals(
             u'&lt;b&gt;B\xf6ld title&lt;/b&gt;',
             second_row_dossier_cell.innerHTML.strip().strip('\n'))
