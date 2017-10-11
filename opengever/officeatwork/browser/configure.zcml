@@ -24,4 +24,11 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      name="document_from_officeatwork"
+      class=".documentfromofficeatwork.DocumentFromOfficeatwork"
+      permission="cmf.AddPortalContent"
+      />
+
 </configure>

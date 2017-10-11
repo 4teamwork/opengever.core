@@ -2,7 +2,6 @@
 related documents to his own client with this wizard.
 
 """
-from five import grok
 from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.interfaces import IReferenceNumber
@@ -16,15 +15,13 @@ from opengever.task import _
 from opengever.task.adapters import IResponseContainer
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.interfaces import ITaskDocumentsTransporter
-from opengever.task.task import ITask
 from opengever.task.util import change_task_workflow_state
 from opengever.task.util import CustomInitialVersionMessage
 from opengever.task.util import get_documents_of_task
 from plone import api
-from plone.directives.form import Schema
+from plone.supermodel.model import Schema
 from plone.z3cform.layout import FormWrapper
 from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from Products.Five.browser import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
@@ -37,8 +34,8 @@ from z3c.relationfield.schema import RelationChoice
 from zope import schema
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
-from zope.interface import Interface
 from zope.interface import Invalid
+from zope.interface import provider
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
 
@@ -57,7 +54,7 @@ class CloseTaskWizardStepFormMixin(BaseWizardStepForm):
     passed_data = ['oguid']
 
 
-@grok.provider(IContextSourceBinder)
+@provider(IContextSourceBinder)
 def related_documents_vocabulary(task):
     intids = getUtility(IIntIds)
 
@@ -137,16 +134,9 @@ class SelectDocumentsStepForm(CloseTaskWizardStepFormMixin, Form):
             self.context, 'task-transition-open-tested-and-closed', text=text)
 
 
-class SelectDocumentsStepView(FormWrapper, grok.View):
-    grok.context(ITask)
-    grok.name('close-task-wizard_select-documents')
-    grok.require('cmf.AddPortalContent')
+class SelectDocumentsStepView(FormWrapper):
 
     form = SelectDocumentsStepForm
-
-    def __init__(self, *args, **kwargs):
-        FormWrapper.__init__(self, *args, **kwargs)
-        grok.View.__init__(self, *args, **kwargs)
 
 
 class IChooseDossierSchema(Schema):
@@ -170,9 +160,10 @@ class IChooseDossierSchema(Schema):
                     'IRepositoryFolderSchema',
                     'opengever.dossier.behaviors.dossier.IDossierMarker',
                     ],
-                'review_state': ['repositoryroot-state-active',
-                                 'repositoryfolder-state-active'] +
-                                 DOSSIER_STATES_OPEN,
+                'review_state': [
+                    'repositoryroot-state-active',
+                    'repositoryfolder-state-active'
+                    ] + DOSSIER_STATES_OPEN,
                 }))
 
 
@@ -193,9 +184,9 @@ class DossierValidator(SimpleFieldValidator):
                     u'privileges.')
             raise Invalid(msg)
 
+
 WidgetValidatorDiscriminators(DossierValidator,
                               field=IChooseDossierSchema['dossier'])
-grok.global_adapter(DossierValidator)
 
 
 class ChooseDossierStepForm(CloseTaskWizardStepFormMixin, Form):
@@ -257,19 +248,12 @@ class ChooseDossierStepForm(CloseTaskWizardStepFormMixin, Form):
               mapping={'num': len(intids_mapping)}), 'info')
 
 
-class ChooseDossierStepView(FormWrapper, grok.View):
-    grok.context(Interface)
-    grok.name('close-task-wizard_choose-dossier')
-    grok.require('zope2.View')
+class ChooseDossierStepView(FormWrapper):
 
     form = ChooseDossierStepForm
 
-    def __init__(self, *args, **kwargs):
-        FormWrapper.__init__(self, *args, **kwargs)
-        grok.View.__init__(self, *args, **kwargs)
 
-
-class ChooseDosserStepRedirecter(grok.View):
+class ChooseDosserStepRedirecter(BrowserView):
     """Remote clients redirect usually to the site root, but this step needs
     to be called on the repository root.
 
@@ -278,11 +262,7 @@ class ChooseDosserStepRedirecter(grok.View):
     root, passing the parameters on.
     """
 
-    grok.context(IPloneSiteRoot)
-    grok.name('close-task-wizard_choose-dossier')
-    grok.require('zope2.View')
-
-    def render(self):
+    def __call__(self):
         root = self.context.restrictedTraverse(
             '@@primary_repository_root').get_primary_repository_root()
 

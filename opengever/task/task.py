@@ -4,7 +4,6 @@ from Acquisition import aq_parent
 from collective import dexteritytextindexer
 from datetime import datetime
 from datetime import timedelta
-from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
 from ftw.keywordwidget.widget import KeywordFieldWidget
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
@@ -26,14 +25,17 @@ from opengever.task import util
 from opengever.task.interfaces import ITaskSettings
 from opengever.task.validators import NoCheckedoutDocsValidator
 from plone import api
+from plone.autoform import directives as form
 from plone.dexterity.content import Container
-from plone.directives import form
 from plone.indexer.interfaces import IIndexer
+from plone.supermodel import model
 from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import _mergedLocalRoles
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import safe_unicode
+from Products.Five.browser import BrowserView
 from z3c.form import validator
+from z3c.form import widget
 from z3c.form.interfaces import HIDDEN_MODE
 from z3c.form.interfaces import IAddForm
 from z3c.relationfield.schema import RelationChoice
@@ -46,7 +48,6 @@ from zope.component import provideAdapter
 from zope.interface import implements
 from zope.schema.vocabulary import getVocabularyRegistry
 
-
 _marker = object()
 
 
@@ -56,9 +57,9 @@ def deadline_default():
     return (datetime.today() + timedelta(days=offset)).date()
 
 
-class ITask(form.Schema):
+class ITask(model.Schema):
 
-    form.fieldset(
+    model.fieldset(
         u'common',
         label=_(u'fieldset_common', default=u'Common'),
         fields=[
@@ -73,7 +74,7 @@ class ITask(form.Schema):
             ],
         )
 
-    form.fieldset(
+    model.fieldset(
         u'additional',
         label=_(u'fieldset_additional', u'Additional'),
         fields=[
@@ -146,7 +147,7 @@ class ITask(form.Schema):
         )
 
     dexteritytextindexer.searchable('text')
-    form.primary('text')
+    model.primary('text')
     text = schema.Text(
         title=_(u"label_text", default=u"Text"),
         description=_(u"help_text", default=u""),
@@ -211,6 +212,11 @@ class ITask(form.Schema):
 validator.WidgetValidatorDiscriminators(
     NoCheckedoutDocsValidator, field=ITask['relatedItems'])
 provideAdapter(NoCheckedoutDocsValidator)
+
+
+default_responsible_client = widget.ComputedWidgetAttribute(
+    lambda adapter: get_current_org_unit().id(),
+    field=ITask['responsible_client'])
 
 
 class IAddTaskSchema(ITask):
@@ -384,27 +390,18 @@ class Task(Container):
             return term.title
 
 
-@form.default_value(field=ITask['responsible_client'])
-def responsible_client_default_value(data):
-    return get_current_org_unit().id()
-
-
 def related_document(context):
     intids = getUtility(IIntIds)
     return intids.getId(context)
 
 
-class DocumentRedirector(grok.View):
+class DocumentRedirector(BrowserView):
     """Redirector View specific for documents created on a task
     redirect directly to the relateddocuments tab
     instead of the default documents tab
     """
 
-    grok.name('document-redirector')
-    grok.context(ITask)
-    grok.require('zope2.View')
-
-    def render(self):
+    def __call__(self):
         referer = self.context.REQUEST.environ.get('HTTP_REFERER')
         if referer.endswith('++add++opengever.document.document'):
             return self.context.REQUEST.RESPONSE.redirect(

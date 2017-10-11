@@ -4,9 +4,8 @@ the task needs to be copied to this dossier (successor task).
 """
 
 from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
+from Products.Five.browser import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
-from five import grok
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.dossier.base import DOSSIER_STATES_OPEN
@@ -16,7 +15,7 @@ from opengever.task.browser.accept.utils import accept_task_with_successor
 from opengever.task.browser.accept.utils import \
     accept_forwarding_with_successor
 from opengever.task.browser.accept.utils import assign_forwarding_to_dossier
-from plone.directives.form import Schema
+from plone.supermodel.model import Schema
 from plone.z3cform.layout import FormWrapper
 from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
@@ -25,7 +24,6 @@ from z3c.form.validator import SimpleFieldValidator
 from z3c.form.validator import WidgetValidatorDiscriminators
 from z3c.relationfield.schema import RelationChoice
 from zope.component import getUtility
-from zope.interface import Interface
 from zope.interface import Invalid
 
 
@@ -50,9 +48,10 @@ class IChooseDossierSchema(Schema):
                     'IRepositoryFolderSchema',
                     'opengever.dossier.behaviors.dossier.IDossierMarker',
                     ],
-                'review_state': ['repositoryroot-state-active',
-                                 'repositoryfolder-state-active'] +
-                                 DOSSIER_STATES_OPEN,
+                'review_state': [
+                    'repositoryroot-state-active',
+                    'repositoryfolder-state-active'
+                    ] + DOSSIER_STATES_OPEN,
                 }))
 
 
@@ -60,7 +59,6 @@ class DossierValidator(SimpleFieldValidator):
 
     def validate(self, value):
         super(DossierValidator, self).validate(value)
-
         task_addable = False
         for fti in value.allowedContentTypes():
             if fti.id == 'opengever.task.task':
@@ -73,9 +71,9 @@ class DossierValidator(SimpleFieldValidator):
                     u'privileges.')
             raise Invalid(msg)
 
+
 WidgetValidatorDiscriminators(DossierValidator,
                               field=IChooseDossierSchema['dossier'])
-grok.global_adapter(DossierValidator)
 
 
 class ChooseDossierStepForm(AcceptWizardFormMixin, Form):
@@ -139,19 +137,12 @@ class ChooseDossierStepForm(AcceptWizardFormMixin, Form):
         return self.request.RESPONSE.redirect(url)
 
 
-class ChooseDossierStepView(FormWrapper, grok.View):
-    grok.context(Interface)
-    grok.name('accept_choose_dossier')
-    grok.require('zope2.View')
+class ChooseDossierStepView(FormWrapper):
 
     form = ChooseDossierStepForm
 
-    def __init__(self, *args, **kwargs):
-        FormWrapper.__init__(self, *args, **kwargs)
-        grok.View.__init__(self, *args, **kwargs)
 
-
-class ChooseDosserStepRedirecter(grok.View):
+class ChooseDosserStepRedirecter(BrowserView):
     """Remote admin units redirects usually to the site root,
     but this step needs to be called on the repository root.
 
@@ -160,11 +151,7 @@ class ChooseDosserStepRedirecter(grok.View):
     root, passing the parameters on.
     """
 
-    grok.context(IPloneSiteRoot)
-    grok.name('accept_choose_dossier')
-    grok.require('zope2.View')
-
-    def render(self):
+    def __call__(self):
         root = self.context.restrictedTraverse(
             '@@primary_repository_root').get_primary_repository_root()
 

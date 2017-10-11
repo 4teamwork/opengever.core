@@ -11,7 +11,7 @@ class TestDelegateTaskForm(FunctionalTestCase):
     @browsing
     def test_delegate(self, browser):
         task = create(Builder('task')
-                      .titled('A Task')
+                      .titled(u'A Task')
                       .having(issuer=TEST_USER_ID,
                               deadline=datetime.date(2013, 1, 1))
                       .in_state('task-state-in-progress'))

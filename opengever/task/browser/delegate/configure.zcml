@@ -1,0 +1,19 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser">
+
+  <browser:page
+      name="delegate_metadata"
+      for="opengever.task.task.ITask"
+      class=".metadata.UpdateMetadataStepView"
+      permission="opengever.task.AddTask"
+      />
+
+  <browser:page
+      name="delegate_recipients"
+      for="opengever.task.task.ITask"
+      class=".recipients.SelectRecipientsStepView"
+      permission="opengever.task.AddTask"
+      />
+
+</configure>

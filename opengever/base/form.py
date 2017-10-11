@@ -1,13 +1,10 @@
-from five import grok
 from plone import api
 from plone.dexterity.i18n import MessageFactory as pd_mf
 from plone.z3cform.layout import FormWrapper
 from zope.component import queryMultiAdapter
 
 
-class WizzardWrappedAddForm(FormWrapper, grok.View):
-    grok.baseclass()
-    grok.require('cmf.AddPortalContent')
+class WizzardWrappedAddForm(FormWrapper):
 
     typename = None
 
@@ -19,7 +16,6 @@ class WizzardWrappedAddForm(FormWrapper, grok.View):
         self.fti = ttool.getTypeInfo(self.typename)
 
         FormWrapper.__init__(self, context, request)
-        grok.View.__init__(self, context, request)
 
         # Set portal_type name on newly created form instance
         if self.form_instance is not None and \
@@ -95,6 +91,3 @@ class WizzardWrappedAddForm(FormWrapper, grok.View):
 
         """
         raise NotImplementedError()
-
-    def __call__(self):
-        return FormWrapper.__call__(self)

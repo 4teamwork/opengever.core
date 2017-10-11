@@ -1,6 +1,5 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
-from five import grok
 from opengever.base.browser.helper import get_css_class
 from opengever.tabbedview import GeverTabMixin
 from opengever.task import _
@@ -10,11 +9,7 @@ from plone.app.contentlisting.interfaces import IContentListing
 from Products.CMFCore.utils import getToolByName
 
 
-class Overview(grok.View, GeverTabMixin):
-    grok.context(ITask)
-    grok.name('tabbedview_view-overview')
-    grok.template('overview')
-    grok.require('zope2.View')
+class Overview(GeverTabMixin):
 
     def documents(self):
         """ Return containing documents and related documents

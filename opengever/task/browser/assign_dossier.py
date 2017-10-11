@@ -2,13 +2,11 @@
 to a dossier wizard. It especially contains the view initializing
 the assign orwarding to a dossier process"""
 
-from five import grok
 from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.task import _
 from opengever.task.interfaces import ISuccessorTaskController
-from opengever.task.task import ITask
-from plone.directives.form import Schema
+from plone.supermodel.model import Schema
 from plone.z3cform.layout import FormWrapper
 from z3c.form.browser.radio import RadioFieldWidget
 from z3c.form.button import buttonAndHandler
@@ -17,6 +15,7 @@ from z3c.form.form import Form
 from z3c.form.interfaces import INPUT_MODE
 from zope import schema
 from zope.component import getUtility
+from zope.interface import provider
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 
@@ -36,7 +35,7 @@ class AssignToDossierWizardFormMixin(BaseWizardStepForm):
     passed_data = ['oguid']
 
 
-@grok.provider(IContextSourceBinder)
+@provider(IContextSourceBinder)
 def method_vocabulary_factory(context):
 
     return SimpleVocabulary([
@@ -124,13 +123,6 @@ class ChooseMethodStepForm(AssignToDossierWizardFormMixin, Form):
         super(ChooseMethodStepForm, self).updateWidgets()
 
 
-class ChooseMethodStepView(FormWrapper, grok.View):
-    grok.context(ITask)
-    grok.name('assign_choose_method')
-    grok.require('cmf.AddPortalContent')
+class ChooseMethodStepView(FormWrapper):
 
     form = ChooseMethodStepForm
-
-    def __init__(self, *args, **kwargs):
-        FormWrapper.__init__(self, *args, **kwargs)
-        grok.View.__init__(self, *args, **kwargs)

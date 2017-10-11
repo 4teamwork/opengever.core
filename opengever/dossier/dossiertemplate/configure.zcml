@@ -39,6 +39,13 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="opengever.repository.interfaces.IRepositoryFolder"
+      name="add-dossier-from-template"
+      class=".form.AddDossierFromTemplateWizardStep"
+      permission="cmf.AddPortalContent"
+      />
+
   <adapter factory=".menu.DossierTemplatePostFactoryMenu" />
 
 </configure>

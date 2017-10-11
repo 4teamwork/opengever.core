@@ -1,5 +1,4 @@
 from Acquisition import aq_inner
-from five import grok
 from opengever.base.browser.helper import get_css_class
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.actor import Actor
@@ -7,23 +6,17 @@ from opengever.ogds.base.utils import ogds_service
 from opengever.task import _
 from opengever.task.adapters import IResponseContainer
 from opengever.task.response import Base
-from opengever.task.task import ITask
-from opengever.task.viewlets.manager import BeneathTask
 from plone import api
+from plone.app.layout.viewlets.common import ViewletBase
 from Products.CMFCore.utils import getToolByName
 from zope.component import getMultiAdapter
 import datetime
 
 
-class ResponseView(grok.Viewlet, Base):
-    grok.name("opengever.task.response.view")
-    grok.context(ITask)
-    grok.require('zope2.View')
-    grok.viewletmanager(BeneathTask)
-    grok.order(2)
+class ResponseView(ViewletBase, Base):
 
     def __init__(self, context, request, view, manager):
-        grok.Viewlet.__init__(self, context, request, view, manager)
+        ViewletBase.__init__(self, context, request, view, manager)
         Base.__init__(self, context, request)
 
     def responses(self):

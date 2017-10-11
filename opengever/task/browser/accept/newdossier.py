@@ -3,7 +3,6 @@ the parts of the wizard where the user is able to instantly create a new
 dossier where the task is then filed.
 """
 
-from five import grok
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.form import WizzardWrappedAddForm
 from opengever.base.source import RepositoryPathSourceBinder
@@ -16,10 +15,10 @@ from opengever.task.browser.accept.utils import accept_forwarding_with_successor
 from opengever.task.browser.accept.utils import accept_task_with_successor
 from opengever.task.browser.accept.utils import assign_forwarding_to_dossier
 from plone.dexterity.i18n import MessageFactory as dexterityMF
-from plone.directives.form import Schema
+from plone.supermodel.model import Schema
 from plone.z3cform.layout import FormWrapper
 from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
+from Products.Five.browser import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
@@ -29,7 +28,7 @@ from z3c.relationfield.schema import RelationChoice
 from zope import schema
 from zope.component import getUtility
 from zope.i18nmessageid import MessageFactory
-from zope.interface import Interface
+from zope.interface import provider
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
@@ -84,12 +83,12 @@ class ISelectRepositoryfolderSchema(Schema):
 
         source=RepositoryPathSourceBinder(
             object_provides='opengever.repository.repositoryfolder.'
-                'IRepositoryFolderSchema',
+                            'IRepositoryFolderSchema',
             navigation_tree_query={
                 'object_provides': [
                     'opengever.repository.repositoryroot.IRepositoryRoot',
                     'opengever.repository.repositoryfolder.'
-                        'IRepositoryFolderSchema',
+                    'IRepositoryFolderSchema',
                     ]
                 }))
 
@@ -97,10 +96,10 @@ class ISelectRepositoryfolderSchema(Schema):
 class RepositoryfolderValidator(BaseRepositoryfolderValidator):
     pass
 
+
 WidgetValidatorDiscriminators(
     RepositoryfolderValidator,
     field=ISelectRepositoryfolderSchema['repositoryfolder'])
-grok.global_adapter(RepositoryfolderValidator)
 
 
 class SelectRepositoryfolderStepForm(AcceptWizardNewDossierFormMixin, Form):
@@ -143,19 +142,12 @@ class SelectRepositoryfolderStepForm(AcceptWizardNewDossierFormMixin, Form):
         super(SelectRepositoryfolderStepForm, self).updateWidgets()
 
 
-class SelectRepositoryfolderStepView(FormWrapper, grok.View):
-    grok.context(Interface)
-    grok.name('accept_select_repositoryfolder')
-    grok.require('zope2.View')
+class SelectRepositoryfolderStepView(FormWrapper):
 
     form = SelectRepositoryfolderStepForm
 
-    def __init__(self, *args, **kwargs):
-        FormWrapper.__init__(self, *args, **kwargs)
-        grok.View.__init__(self, *args, **kwargs)
 
-
-class SelectRepositoryfolderStepRedirector(grok.View):
+class SelectRepositoryfolderStepRedirector(BrowserView):
     """Remote orgunit redirects usually to the site root,
     but this step needs to be called on the repository root.
 
@@ -164,11 +156,7 @@ class SelectRepositoryfolderStepRedirector(grok.View):
     root, passing the parameters on.
     """
 
-    grok.context(IPloneSiteRoot)
-    grok.name('accept_select_repositoryfolder')
-    grok.require('zope2.View')
-
-    def render(self):
+    def __call__(self):
         root = self.context.restrictedTraverse(
             '@@primary_repository_root').get_primary_repository_root()
 
@@ -181,7 +169,7 @@ class SelectRepositoryfolderStepRedirector(grok.View):
 # ------------------- SELECT DOSSIER TYPE --------------------------
 
 
-@grok.provider(IContextSourceBinder)
+@provider(IContextSourceBinder)
 def allowed_dossier_types_vocabulary(context):
     """Return the dossier types that are visible in the task accept form."""
 
@@ -242,22 +230,13 @@ class SelectDossierTypeStepForm(AcceptWizardNewDossierFormMixin, Form):
         return self.request.RESPONSE.redirect(url)
 
 
-class SelectDossierTypeStepView(FormWrapper, grok.View):
-    grok.context(IRepositoryFolder)
-    grok.name('accept_select_dossier_type')
-    grok.require('zope2.View')
+class SelectDossierTypeStepView(FormWrapper):
 
     form = SelectDossierTypeStepForm
-
-    def __init__(self, *args, **kwargs):
-        FormWrapper.__init__(self, *args, **kwargs)
-        grok.View.__init__(self, *args, **kwargs)
 
 
 # ------------------- DOSSIER ADD FORM --------------------------
 class DossierAddFormView(WizzardWrappedAddForm):
-    grok.context(IRepositoryFolder)
-    grok.name('accept_dossier_add_form')
 
     @property
     def typename(self):

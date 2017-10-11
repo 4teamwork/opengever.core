@@ -1,5 +1,4 @@
 from Acquisition import aq_inner
-from five import grok
 from opengever.base.source import DossierPathSourceBinder
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
@@ -12,7 +11,6 @@ from opengever.task.adapters import Response
 from opengever.task.interfaces import ICommentResponseHandler
 from opengever.task.permissions import DEFAULT_ISSUE_MIME_TYPE
 from opengever.task.response_syncer import sync_task_response
-from opengever.task.task import ITask
 from plone.autoform.form import AutoExtensibleForm
 from plone.memoize.view import memoize
 from plone.z3cform import layout
@@ -99,7 +97,7 @@ class Base(BrowserView):
         context = aq_inner(self.context)
         trans = context.portal_transforms
         items = []
-        #linkDetection = context.linkDetection
+        # linkDetection = context.linkDetection
         for id, response in enumerate(self.folder):
             # Use the already rendered response when available
             if response.rendered_text is None:
@@ -113,7 +111,7 @@ class Base(BrowserView):
                                            mimetype=response.mimetype)
                     html = html.getData()
                 # Detect links like #1 and r1234
-                #html = linkDetection(html)
+                # html = linkDetection(html)
                 response.rendered_text = html
             html = response.rendered_text
             info = dict(id=id,
@@ -228,7 +226,7 @@ class TaskTransitionResponseAddForm(form.AddForm, AutoExtensibleForm):
 
         else:
             new_response = Response(data.get('text'))
-            #define responseTyp
+            # define responseTyp
             responseCreator = new_response.creator
             task = aq_inner(self.context)
             transition = data['transition']
@@ -240,19 +238,18 @@ class TaskTransitionResponseAddForm(form.AddForm, AutoExtensibleForm):
 
             new_response.transition = self.transition
 
-            #if util.getManagersVocab.getTerm(responseCreator):
+            # if util.getManagersVocab.getTerm(responseCreator):
             #   new_response.type =  'reply'
-            #check transition
-            if transition in (
-                'task-transition-open-resolved',
-                'task-transition-in-progress-resolved'):
+            # check transition
+            if transition in ('task-transition-open-resolved',
+                              'task-transition-in-progress-resolved'):
 
                 completion_date = datetime.date.today()
 
             else:
                 completion_date = None
 
-            #check other fields
+            # check other fields
             options = [
                 # (task.deadline, data.get('deadline'), 'deadline',
                 #  _('deadline')),
@@ -336,16 +333,9 @@ class TaskTransitionResponseAddForm(form.AddForm, AutoExtensibleForm):
         TaskTransitionActivity(self.context, self.context.REQUEST, response).record()
 
 
-class TaskTransitionResponseAddFormView(layout.FormWrapper, grok.View):
-    grok.context(ITask)
-    grok.name("addresponse")
-    grok.require('cmf.AddPortalContent')
+class TaskTransitionResponseAddFormView(layout.FormWrapper):
 
     form = TaskTransitionResponseAddForm
-
-    def __init__(self, context, request):
-        layout.FormWrapper.__init__(self, context, request)
-        grok.View.__init__(self, context, request)
 
 
 class Edit(Base):

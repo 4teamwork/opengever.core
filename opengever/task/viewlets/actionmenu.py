@@ -1,23 +1,19 @@
-from five import grok
 from opengever.task.interfaces import ICommentResponseHandler
 from opengever.task.response_description import ResponseDescription
-from opengever.task.task import ITask
-from opengever.task.viewlets.manager import BeneathTask
 from plone import api
+from plone.app.layout.viewlets.common import ViewletBase
 from zope.component import getMultiAdapter
 
 
-class ActionMenuViewlet(grok.Viewlet):
+class ActionMenuViewlet(ViewletBase):
     """Display the message subject
     """
-    grok.name('opengever.task.ActionMenuViewlet')
-    grok.context(ITask)
-    grok.require('zope2.View')
-    grok.viewletmanager(BeneathTask)
-    grok.order(1)
 
     regular_items = None
     agency_items = None
+
+    def available(self):
+        return True
 
     def get_menu_items(self):
         regular_items = []

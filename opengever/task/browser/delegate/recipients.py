@@ -1,4 +1,3 @@
-from five import grok
 from ftw.keywordwidget.widget import KeywordFieldWidget
 from ftw.keywordwidget.widget import KeywordWidget
 from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSourceBinder
@@ -6,11 +5,10 @@ from opengever.task import _
 from opengever.task.browser.delegate import vocabulary
 from opengever.task.browser.delegate.main import DelegateWizardFormMixin
 from opengever.task.browser.delegate.utils import encode_data
-from opengever.task.task import ITask
 from plone.autoform.widgets import ParameterizedWidget
-from plone.directives import form
-from plone.directives.form import Form
-from plone.directives.form import Schema
+from plone.autoform import directives as form
+from z3c.form.form import Form
+from plone.supermodel.model import Schema
 from plone.z3cform.layout import FormWrapper
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from z3c.form.button import buttonAndHandler
@@ -42,7 +40,6 @@ class ISelectRecipientsSchema(Schema):
 
 
 class SelectRecipientsForm(DelegateWizardFormMixin, Form):
-    grok.context(ITask)
 
     fields = Fields(ISelectRecipientsSchema)
     fields['responsibles'].widgetFactory = ParameterizedWidget(
@@ -82,13 +79,6 @@ class SelectRecipientsForm(DelegateWizardFormMixin, Form):
             self.widgets['documents'].mode = HIDDEN_MODE
 
 
-class SelectRecipientsStepView(FormWrapper, grok.View):
-    grok.context(ITask)
-    grok.name('delegate_recipients')
-    grok.require('opengever.task.AddTask')
+class SelectRecipientsStepView(FormWrapper):
 
     form = SelectRecipientsForm
-
-    def __init__(self, *args, **kwargs):
-        FormWrapper.__init__(self, *args, **kwargs)
-        grok.View.__init__(self, *args, **kwargs)

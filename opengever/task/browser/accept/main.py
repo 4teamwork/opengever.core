@@ -4,15 +4,13 @@ deciding whether to use the wizard and it also contains the first wizard
 step, where the user has to choose the method of participation.
 """
 
-from five import grok
 from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.ogds.base.utils import ogds_service
 from opengever.task import _
 from opengever.task.browser.accept.utils import accept_task_with_response
 from opengever.task.interfaces import ISuccessorTaskController
-from opengever.task.task import ITask
-from plone.directives.form import Schema
+from plone.supermodel.model import Schema
 from plone.z3cform.layout import FormWrapper
 from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form.browser.radio import RadioFieldWidget
@@ -25,6 +23,7 @@ from z3c.form.validator import WidgetValidatorDiscriminators
 from zope import schema
 from zope.component import getUtility
 from zope.interface import Invalid
+from zope.interface import provider
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 
@@ -44,7 +43,7 @@ class AcceptWizardFormMixin(BaseWizardStepForm):
     passed_data = ['oguid']
 
 
-@grok.provider(IContextSourceBinder)
+@provider(IContextSourceBinder)
 def method_vocabulary_factory(context):
     org_unit = context.get_responsible_org_unit()
 
@@ -123,9 +122,9 @@ class MethodValidator(SimpleFieldValidator):
                         mapping={'client': org_unit.id()})
                 raise Invalid(msg)
 
+
 WidgetValidatorDiscriminators(MethodValidator,
                               field=IChooseMethodSchema['method'])
-grok.global_adapter(MethodValidator)
 
 
 class ChooseMethodStepForm(AcceptWizardFormMixin, Form):
@@ -229,13 +228,6 @@ class ChooseMethodStepForm(AcceptWizardFormMixin, Form):
                 default="Accept forwarding and ...")
 
 
-class ChooseMethodStepView(FormWrapper, grok.View):
-    grok.context(ITask)
-    grok.name('accept_choose_method')
-    grok.require('cmf.AddPortalContent')
+class ChooseMethodStepView(FormWrapper):
 
     form = ChooseMethodStepForm
-
-    def __init__(self, *args, **kwargs):
-        FormWrapper.__init__(self, *args, **kwargs)
-        grok.View.__init__(self, *args, **kwargs)

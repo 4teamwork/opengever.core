@@ -3,7 +3,7 @@
   <h3 i18n:translate="progress">Progress:</h3>
 
   <div class="answers">
-    <tal:repeat tal:repeat="response_info viewlet/responses">
+    <tal:repeat tal:repeat="response_info view/responses">
 
       <tal:define tal:define="id response_info/id;
                               response nocall:response_info/response">
@@ -15,11 +15,11 @@
             <div class="date" tal:content="python:here.toLocalizedTime(response.date, long_format=True)" />
 
             <div class="manageActions">
-              <a tal:condition="viewlet/can_edit" href="#" class="edit"
+              <a tal:condition="view/can_edit" href="#" class="edit"
                  tal:attributes="href response_info/edit_link" i18n:translate="">
                 Edit
               </a>
-              <a tal:condition="viewlet/can_delete" href="#" class="delete"
+              <a tal:condition="view/can_delete" href="#" class="delete"
                  tal:attributes="href response_info/delete_link" i18n:translate="">
                 Delete
               </a>
@@ -40,8 +40,8 @@
     <div class="answer created">
       <div class="answerType">&nbsp;</div>
       <div class="answerBody">
-        <div class="date" tal:content="viewlet/get_created_date" />
-        <h3 i18n:translate="" tal:content="structure viewlet/get_created_header" />
+        <div class="date" tal:content="view/get_created_date" />
+        <h3 i18n:translate="" tal:content="structure view/get_created_header" />
       </div>
     </div>
 

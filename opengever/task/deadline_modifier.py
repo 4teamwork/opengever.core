@@ -1,4 +1,3 @@
-from five import grok
 from opengever.task.browser.transitioncontroller import get_checker
 from opengever.task.interfaces import IDeadlineModifier
 from opengever.task.response_syncer import sync_task_response
@@ -6,12 +5,17 @@ from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
 from zExceptions import Unauthorized
 from zope.event import notify
+from zope.component import adapter
+from zope.interface import implementer
 from zope.lifecycleevent import ObjectModifiedEvent
 
 
-class DeadlineModifier(grok.Adapter):
-    grok.context(ITask)
-    grok.implements(IDeadlineModifier)
+@implementer(IDeadlineModifier)
+@adapter(ITask)
+class DeadlineModifier(object):
+
+    def __init__(self, context):
+        self.context = context
 
     def is_modify_allowed(self, include_agency=True):
         """Check if the current user is allowed to modify the deadline:

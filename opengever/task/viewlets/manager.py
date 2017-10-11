@@ -1,7 +1,6 @@
-from five import grok
-from opengever.task.task import ITask
+from zope.viewlet.interfaces import IViewletManager
 
 
-class BeneathTask(grok.ViewletManager):
-    grok.context(ITask)
-    grok.name('opengever.task.beneathTask')
+class IBeneathTask(IViewletManager):
+    """
+    """

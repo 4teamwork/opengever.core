@@ -1,7 +1,7 @@
 <div class="actionButtons clearfix" id="action-menu"
-     tal:define="agency_items viewlet/get_agency_items" i18n:domain="plone" >
+     tal:define="agency_items view/get_agency_items" i18n:domain="plone" >
   <ul class="regular_buttons">
-      <tal:block repeat="subMenuItem viewlet/get_regular_items">
+      <tal:block repeat="subMenuItem view/get_regular_items">
         <li tal:define="css_class subMenuItem/response_description/css_class | nothing">
           <a tal:condition="subMenuItem/url"
              tal:attributes="href subMenuItem/url;

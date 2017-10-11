@@ -1,24 +1,19 @@
-from five import grok
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.task import _
 from opengever.task.browser.accept.utils import accept_forwarding_with_successor
 from plone.protect.interfaces import IDisableCSRFProtection
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
+from Products.Five.browser import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
 from zope.component import getUtility
 from zope.interface import alsoProvides
 
 
-class CreateSuccesorForwardingView(grok.View):
+class CreateSuccesorForwardingView(BrowserView):
     """View wich create a succesor forwarding in the current inbox,
     and store the remote forwarding in the yearfolder.
     """
 
-    grok.context(IPloneSiteRoot)
-    grok.name('accept_store_in_inbox')
-    grok.require('zope2.View')
-
-    def render(self):
+    def __call__(self):
         alsoProvides(self.request, IDisableCSRFProtection)
         oguid = self.request.get('oguid')
         key = 'accept:%s' % oguid
