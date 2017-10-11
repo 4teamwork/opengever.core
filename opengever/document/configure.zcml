@@ -196,4 +196,56 @@
 
   <adapter factory=".sequence.BaseDocumentSequenceNumberGenerator" />
 
+  <adapter factory=".indexers.DefaultDocumentIndexer" />
+
+  <adapter
+      factory=".indexers.SearchableTextExtender"
+      name="IDocumentSchema"
+      />
+
+  <adapter
+      factory=".indexers.document_author"
+      name="document_author"
+      />
+
+  <adapter
+      factory=".indexers.document_date"
+      name="document_date"
+      />
+
+  <adapter
+      factory=".indexers.external_reference"
+      name="external_reference"
+      />
+
+  <adapter
+      factory=".indexers.receipt_date"
+      name="receipt_date"
+      />
+
+  <adapter
+      factory=".indexers.delivery_date"
+      name="delivery_date"
+      />
+
+  <adapter
+      factory=".indexers.checked_out"
+      name="checked_out"
+      />
+
+  <adapter
+      factory=".indexers.sortable_author"
+      name="sortable_author"
+      />
+
+  <adapter
+      factory=".indexers.DocumentSubjectIndexer"
+      name="Subject"
+      />
+
+  <adapter
+      factory=".indexers.public_trial"
+      name="public_trial"
+      />
+
 </configure>
