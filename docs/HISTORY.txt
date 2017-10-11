@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Refactor JSON schema generation and dumping, add tests. [lgraf]
+- Ungrok opengever.document. [elioschmutz]
 - Ungrok opengever.task. [elioschmutz]
 - Ungrok opengever.officeatwork. [elioschmutz]
 - SPV: Let CommitteeMember only have read-access on meeting view. [jone]
