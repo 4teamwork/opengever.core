@@ -8,7 +8,7 @@ class CommitteeRoles(object):
     in the add/edit forms.
 
     """
-    managed_roles = ('CommitteeResponsible', 'Editor', 'Reader')
+    managed_roles = ('CommitteeResponsible',)
 
     def __init__(self, committee):
         self.context = committee

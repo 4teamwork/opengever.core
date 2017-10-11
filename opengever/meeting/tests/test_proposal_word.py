@@ -1,3 +1,5 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages import plone
@@ -10,6 +12,13 @@ from opengever.testing import IntegrationTestCase
 from plone import api
 from zc.relation.interfaces import ICatalog
 from zope.component import getUtility
+
+
+VIEW_PERMISSIONS = (
+    'Access contents information',
+    'CMFEditions: Access previous versions',
+    'View',
+)
 
 
 class TestProposalWithWord(IntegrationTestCase):
@@ -312,3 +321,91 @@ class TestProposalWithWord(IntegrationTestCase):
              ['Successors', u'\xc4nderungen am Personalreglement zur Nachpr\xfcfung'],
              ['Attachments', u'Vertr\xe4gsentwurf']],
             browser.css('table.listing').first.lists())
+
+    @browsing
+    def test_committee_member_can_view_proposal_document(self, browser):
+        """The meeting_user is a CommitteeMember, who can access the proposal and
+        its document read-only.
+        """
+        self.login(self.meeting_user, browser)
+        browser.open(self.submitted_word_proposal, view='tabbedview_view-overview')
+        self.assertTrue(browser.find(u'\xc4nderungen am Personalreglement'))
+
+        browser.open(self.submitted_word_proposal.get_proposal_document(),
+                     view='tabbedview_view-overview')
+        self.assertDictContainsSubset(
+            {'Title': u'\xc4nderungen am Personalreglement'},
+            dict(browser.css('.documentMetadata table').first.lists()))
+
+    def test_committee_member_permissions_on_proposal_document(self):
+        self.login(self.meeting_user)
+        self.assert_has_permissions(
+            VIEW_PERMISSIONS,
+            self.submitted_word_proposal.get_proposal_document())
+
+        self.assert_has_not_permissions(
+            (
+                'Modify portal content',
+                'opengever.document: Checkout',
+            ),
+            self.submitted_word_proposal.get_proposal_document())
+
+    def test_committee_responsible_can_edit_proposal_document(self):
+        self.login(self.committee_responsible)
+        self.assert_has_permissions(
+            (
+                'Access contents information',
+                'CMFEditions: Access previous versions',
+                'CMFEditions: Apply version control',
+                'CMFEditions: Checkout to location',
+                'CMFEditions: Manage versioning policies',
+                'CMFEditions: Purge version',
+                'CMFEditions: Revert to previous versions',
+                'Change portal events',
+                'Modify portal content',
+                'View',
+                'WebDAV Lock items',
+                'WebDAV Unlock items',
+                'WebDAV access',
+                'opengever.document: Cancel',
+                'opengever.document: Checkin',
+                'opengever.document: Checkout',
+            ),
+            self.submitted_word_proposal.get_proposal_document())
+
+    def test_committee_administrator_can_edit_proposal_document(self):
+        self.login(self.administrator)
+        self.assert_has_permissions(
+            (
+                'Access contents information',
+                'CMFEditions: Access previous versions',
+                'CMFEditions: Apply version control',
+                'CMFEditions: Checkout to location',
+                'CMFEditions: Manage versioning policies',
+                'CMFEditions: Purge version',
+                'CMFEditions: Revert to previous versions',
+                'Change portal events',
+                'Modify portal content',
+                'View',
+                'WebDAV Lock items',
+                'WebDAV Unlock items',
+                'WebDAV access',
+                'opengever.document: Cancel',
+                'opengever.document: Checkin',
+                'opengever.document: Checkout',
+            ),
+            self.submitted_word_proposal.get_proposal_document())
+
+    def test_access_to_mail_attached_to_proposal(self):
+        with self.login(self.administrator):
+            mail = create(Builder('mail').within(self.submitted_word_proposal))
+            self.assert_has_permissions(VIEW_PERMISSIONS, mail,
+                                        '(CommitteeAdministrator)')
+
+        with self.login(self.committee_responsible):
+            self.assert_has_permissions(VIEW_PERMISSIONS, mail,
+                                        '(CommitteeResponsible)')
+
+        with self.login(self.meeting_user):
+            self.assert_has_permissions(VIEW_PERMISSIONS, mail,
+                                        '(CommitteeMember)')
