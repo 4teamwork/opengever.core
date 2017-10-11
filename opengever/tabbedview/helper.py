@@ -60,7 +60,8 @@ def author_cache_key(m, i, author):
         userid = author.getId()
     else:
         userid = author
-    return (userid, hostname)
+
+    return '{}.{}:{}.{}'.format(m.__module__, m.__name__, userid, hostname)
 
 
 @ram.cache(author_cache_key)
