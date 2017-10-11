@@ -46,3 +46,33 @@ class TestTaskListing(IntegrationTestCase):
         self.assertEquals(
             u'&lt;b&gt;B\xf6ld title&lt;/b&gt;',
             second_row_dossier_cell.innerHTML.strip().strip('\n'))
+
+    @browsing
+    def test_responsible_is_linked_and_prefixed_with_icon(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.dossier, view='tabbedview_view-tasks')
+
+        self.assertEquals(
+            u'B\xe4rfuss K\xe4thi (kathi.barfuss)',
+            browser.css('.listing').first.dicts()[0].get('Responsible'))
+
+        link = browser.find(u'B\xe4rfuss K\xe4thi (kathi.barfuss)')
+        self.assertEquals(
+            'http://nohost/plone/@@user-details/kathi.barfuss',
+            link.get('href'))
+        self.assertEquals('actor-label actor-user', link.get('class'))
+
+    @browsing
+    def test_issuer_is_linked_and_prefixed_with_icon(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.dossier, view='tabbedview_view-tasks')
+
+        self.assertEquals(
+            u'Ziegler Robert (robert.ziegler)',
+            browser.css('.listing').first.dicts()[0].get('Issuer'))
+
+        link = browser.find(u'Ziegler Robert (robert.ziegler)')
+        self.assertEquals(
+            'http://nohost/plone/@@user-details/robert.ziegler',
+            link.get('href'))
+        self.assertEquals('actor-label actor-user', link.get('class'))

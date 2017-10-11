@@ -15,6 +15,7 @@ Changelog
 - SPV word: Protect proposal transitions to require modify permission. [jone]
 - SPV word: Update document- and mail-workflow to support committee roles. [jone]
 - SPV: Update and fix proposal tabs. [jone]
+- Link and prefix task responsibles and issuers with an icon in tasklistings. [phgross]
 - List also team-tasks in team member's MyTask tab of the personal overview. [phgross]
 - Fix default_documents_as_links default value for opengever.mail. [elioschmutz]
 - Fix responsible_client default value for tasktemplates. [phgross]
