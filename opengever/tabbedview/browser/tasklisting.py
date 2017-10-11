@@ -53,7 +53,7 @@ class GlobalTaskListingTab(BaseListingTab):
 
     sort_on = 'modified'
     sort_reverse = False
-    #lazy must be false otherwise there will be no correct batching
+    # lazy must be false otherwise there will be no correct batching
     lazy = False
 
     # the model attribute is used for a dynamic textfiltering functionality
@@ -154,6 +154,6 @@ class GlobalTaskTableSource(SqlTableSource):
         """
         query = query.filter(
             or_(
-                and_(Task.predecessor == None, Task.successors == None),
+                and_(Task.predecessor == None, Task.successors == None),  # noqa
                 Task.admin_unit_id == get_current_admin_unit().id()))
         return query
