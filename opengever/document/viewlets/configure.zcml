@@ -10,4 +10,12 @@
       permission="zope2.View"
       />
 
+  <browser:viewlet
+      name="opengever.document.ForwardViewlet"
+      for="opengever.document.document.IDocumentSchema"
+      manager="plone.app.layout.viewlets.interfaces.IBelowContentTitle"
+      class=".forward.ForwardViewlet"
+      permission="zope2.View"
+      />
+
 </configure>

@@ -1,15 +1,9 @@
-from five import grok
-from opengever.document.document import IDocumentSchema
-from plone.app.layout.viewlets.interfaces import IBelowContentTitle
+from plone.app.layout.viewlets.common import ViewletBase
 
 
-class ForwardViewlet(grok.Viewlet):
+class ForwardViewlet(ViewletBase):
     """Display the message subject
     """
-    grok.name('opengever.document.ForwardViewlet')
-    grok.context(IDocumentSchema)
-    grok.require('zope2.View')
-    grok.viewletmanager(IBelowContentTitle)
 
     def render(self):
         if self.request.get("externaledit", None):
