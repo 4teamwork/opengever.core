@@ -1,21 +1,19 @@
-from five import grok
-from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.ogds.base.actor import Actor
-from plone.app.layout.globals.interfaces import IViewView
-from plone.app.layout.viewlets.interfaces import IAboveContent
+from plone.app.layout.viewlets.common import ViewletBase
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.component import queryMultiAdapter
 
 
-class CheckedOutViewlet(grok.Viewlet):
+class CheckedOutViewlet(ViewletBase):
     """A viewlet which shows a statusmessage like message:
     `This item is being checked out by User XY` when a document
     is checked out."""
 
-    grok.viewletmanager(IAboveContent)
-    grok.context(IDocumentSchema)
-    grok.view(IViewView)
-    grok.require('zope2.View')
+    index = ViewPageTemplateFile('templates/checkedoutviewlet.pt')
+
+    def available(self):
+        return True
 
     def update(self):
         manager = queryMultiAdapter((self.context, self.request),

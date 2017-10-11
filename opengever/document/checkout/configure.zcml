@@ -63,4 +63,12 @@
 
   <adapter factory=".manager.CheckinCheckoutManager" />
 
+  <browser:viewlet
+      name="checkedoutviewlet"
+      for="opengever.document.document.IDocumentSchema"
+      manager="plone.app.layout.viewlets.interfaces.IAboveContent"
+      class=".viewlets.CheckedOutViewlet"
+      permission="zope2.View"
+      />
+
 </configure>
