@@ -3,9 +3,9 @@ from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.interfaces import NO_DOWNLOAD_DISPLAY_MODE
 from opengever.document.interfaces import NO_DOWNLOAD_INPUT_MODE
+from plone.autoform import directives as form
 from plone.dexterity.browser.edit import DefaultEditForm
 from plone.dexterity.events import EditFinishedEvent
-from plone.directives import form
 from plone.z3cform import layout
 from z3c.form import button
 from zope.component import queryMultiAdapter

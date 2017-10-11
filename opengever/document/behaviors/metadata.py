@@ -8,8 +8,10 @@ from ftw.mail.mail import IMail
 from opengever.document import _
 from opengever.document.interfaces import IDocumentSettings
 from plone import api
-from plone.directives import form
+from plone.autoform import directives as form
+from plone.autoform.interfaces import IFormFieldProvider
 from plone.namedfile.field import NamedBlobFile
+from plone.supermodel import model
 from z3c.form import validator
 from z3c.form.browser import checkbox
 from zope import schema
@@ -30,11 +32,11 @@ def preserved_as_paper_default():
         'preserved_as_paper_default', interface=IDocumentSettings)
 
 
-class IDocumentMetadata(form.Schema):
+class IDocumentMetadata(model.Schema):
     """Schema behavior for common GEVER document metadata
     """
 
-    form.fieldset(
+    model.fieldset(
         u'common',
         label=_(u'fieldset_common', u'Common'),
         fields=[
@@ -53,7 +55,7 @@ class IDocumentMetadata(form.Schema):
             ],
         )
 
-    form.fieldset(
+    model.fieldset(
         u'archive_file',
         label=_(u'fieldset_archive_file', u'Archive file'),
         fields=[u'archival_file']
@@ -168,7 +170,7 @@ class IDocumentMetadata(form.Schema):
         )
 
 
-alsoProvides(IDocumentMetadata, form.IFormFieldProvider)
+alsoProvides(IDocumentMetadata, IFormFieldProvider)
 
 
 class FileOrPaperValidator(validator.SimpleFieldValidator):

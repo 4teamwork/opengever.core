@@ -22,12 +22,12 @@ from opengever.officeconnector.helpers import is_officeconnector_checkout_featur
 from opengever.task.task import ITask
 from plone import api
 from plone.app.versioningbehavior.behaviors import IVersionable
-from plone.autoform import directives as form_directives
+from plone.autoform import directives as form
 from plone.autoform.interfaces import OMITTED_KEY
 from plone.dexterity.content import Item
-from plone.directives import form
 from plone.namedfile import field
 from plone.namedfile.file import NamedBlobFile
+from plone.supermodel import model
 from plone.supermodel.interfaces import FIELDSETS_KEY
 from plone.supermodel.model import Fieldset
 from z3c.form import validator
@@ -67,10 +67,10 @@ IVersionable.setTaggedValue(OMITTED_KEY, [
     (IAddForm, 'changeNote', 'true'),])
 
 
-class IDocumentSchema(form.Schema):
+class IDocumentSchema(model.Schema):
     """Document Schema Interface."""
 
-    form.fieldset(
+    model.fieldset(
         u'common',
         label=_(u'fieldset_common', u'Common'),
         fields=[
@@ -80,13 +80,13 @@ class IDocumentSchema(form.Schema):
         )
 
     dexteritytextindexer.searchable('title')
-    form_directives.order_before(title='IDocumentMetadata.description')
+    form.order_before(title='IDocumentMetadata.description')
     title = schema.TextLine(
         title=_(u'label_title', default=u'Title'),
         required=False)
 
-    form.primary('file')
-    form_directives.order_after(file='IDocumentMetadata.document_author')
+    model.primary('file')
+    form.order_after(file='IDocumentMetadata.document_author')
     file = field.NamedBlobFile(
         title=_(u'label_file', default='File'),
         description=_(u'help_file', default=''),
