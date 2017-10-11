@@ -38,6 +38,8 @@ from zope.i18n import translate
 
 class Actor(object):
 
+    css_class = 'actor-user'
+
     def __init__(self, identifier):
         self.identifier = identifier
 
@@ -89,10 +91,15 @@ class Actor(object):
         label = escape_html(self.get_label())
 
         if not url:
+            if with_icon:
+                return u'<span class="actor-label {}">{}</span>'.format(
+                    self.css_class, label)
+
             return label
 
         if with_icon:
-            link = u'<a href="{}" class="contenttype-opengever-actor">{}</a>'.format(url, label)
+            link = u'<a href="{}" class="actor-label {}">{}</a>'.format(
+                url, self.css_class, label)
         else:
             link = u'<a href="{}">{}</a>'.format(url, label)
 
@@ -135,6 +142,8 @@ class NullActor(object):
 
 class InboxActor(Actor):
 
+    css_class = 'actor-inbox'
+
     def __init__(self, identifier, org_unit=None):
         super(InboxActor, self).__init__(identifier)
         self.org_unit = org_unit
@@ -165,6 +174,8 @@ class InboxActor(Actor):
 
 class TeamActor(Actor):
 
+    css_class = 'actor-team'
+
     def __init__(self, identifier, team=None):
         super(TeamActor, self).__init__(identifier)
         self.team = team
@@ -188,6 +199,8 @@ class TeamActor(Actor):
 
 
 class ContactActor(Actor):
+
+    css_class = 'actor-contact'
 
     def __init__(self, identifier, contact=None):
         super(ContactActor, self).__init__(identifier)
