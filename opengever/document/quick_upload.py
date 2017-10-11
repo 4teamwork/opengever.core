@@ -1,19 +1,19 @@
 from Acquisition import aq_inner
 from collective.quickupload.interfaces import IQuickUploadFileFactory
-from five import grok
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from zExceptions import Unauthorized
+from zope.component import adapter
 from zope.component import getMultiAdapter
+from zope.interface import implementer
 import os
 
 
-class QuickUploadFileUpdater(grok.Adapter):
+@implementer(IQuickUploadFileFactory)
+@adapter(IDocumentSchema)
+class QuickUploadFileUpdater(object):
     """Specific quick_upload adapter for documents, which only replace the file
     with the uploaded one."""
-
-    grok.context(IDocumentSchema)
-    grok.implements(IQuickUploadFileFactory)
 
     def __init__(self, context):
         self.context = aq_inner(context)

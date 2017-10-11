@@ -192,4 +192,6 @@
       provides="zope.filerepresentation.interfaces.IRawWriteFile"
       />
 
+  <adapter factory=".quick_upload.QuickUploadFileUpdater" />
+
 </configure>
