@@ -1,6 +1,7 @@
 from five import grok
 from itertools import izip_longest
 from opengever.base.interfaces import IReferenceNumberFormatter
+from opengever.ogds.base.utils import get_current_admin_unit
 from zope.interface import Interface
 import re
 
@@ -87,6 +88,35 @@ class DottedReferenceFormatter(grok.Adapter):
             parts.append(part)
         return parts
 
+    def get_portal_part(self):
+        """Returns the reference number part of the portal, the adminunit's
+        abbreviation.
+        """
+        return get_current_admin_unit().abbreviation
+
+    def list_to_string(self, reference_list):
+        """Converts a list with the different objects parts in to a string:
+
+        [[1, 4, 5], [452, 4], [135]] would return `1.4.5 / 452.4 / 135`.
+
+        The list format is used by the OGGBundle format.
+        """
+
+        numbers = {
+            'site': [self.get_portal_part()],
+        }
+
+        if len(reference_list):
+            numbers['repository'] = map(str, reference_list[0])
+
+        if len(reference_list) > 1:
+            numbers['dossier'] = map(str, reference_list[1])
+
+        if len(reference_list) > 2:
+            numbers['document'] = map(str, reference_list[2])
+
+        return self.complete_number(numbers)
+
 
 class GroupedByThreeReferenceFormatter(DottedReferenceFormatter):
     """Referencenumber formatter, which groups three parts together
@@ -106,7 +136,6 @@ class GroupedByThreeReferenceFormatter(DottedReferenceFormatter):
     repository_title_seperator = u''
 
     def repository_number(self, numbers):
-
         parts = numbers.get('repository', [])
 
         return '.'.join(
@@ -159,6 +188,12 @@ class GroupedByThreeReferenceFormatter(DottedReferenceFormatter):
 
 class NoClientIdDottedReferenceFormatter(DottedReferenceFormatter):
     grok.name('no_client_id_dotted')
+
+    def get_portal_part(self):
+        """Returns the reference number part of the portal, the adminunit's
+        abbreviation.
+        """
+        return
 
     def complete_number(self, numbers):
             """DottedReferenceFormatter which omits client id.
@@ -244,3 +279,9 @@ class NoClientIdGroupedByThreeFormatter(GroupedByThreeReferenceFormatter):
             dossier_part = remainder
             subdossier_parts = [int(d) for d in dossier_part.split('.')]
             return (refnums_part, tuple(subdossier_parts))
+
+    def get_portal_part(self):
+        """Returns the reference number part of the portal, the adminunit's
+        abbreviation.
+        """
+        return

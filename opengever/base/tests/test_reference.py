@@ -145,6 +145,19 @@ class TestDottedFormatter(FunctionalTestCase):
             'Client1 5.7.3.2 / 4.6.2',
             self.formatter.complete_number(numbers))
 
+    def test_list_to_string(self):
+        self.assertEquals(
+            'Client1 1.4.5',
+            self.formatter.list_to_string([[1, 4, 5]]))
+
+        self.assertEquals(
+            'Client1 1.4.5 / 452.4',
+            self.formatter.list_to_string([[1, 4, 5], [452, 4]]))
+
+        self.assertEquals(
+            'Client1 1.4.5 / 452.4 / 135',
+            self.formatter.list_to_string([[1, 4, 5], [452, 4], [135]]))
+
 
 class TestGroupedbyThreeFormatter(FunctionalTestCase):
 
@@ -190,6 +203,19 @@ class TestGroupedbyThreeFormatter(FunctionalTestCase):
         self.assertEquals(
             'OG 573.2-4.6.2-27', self.formatter.complete_number(numbers))
 
+    def test_list_to_string(self):
+        self.assertEquals(
+            'Client1 145.72',
+            self.formatter.list_to_string([[1, 4, 5, 7, 2]]))
+
+        self.assertEquals(
+            'Client1 145.72-452.4',
+            self.formatter.list_to_string([[1, 4, 5, 7, 2], [452, 4]]))
+
+        self.assertEquals(
+            'Client1 145.72-452.4-135',
+            self.formatter.list_to_string([[1, 4, 5, 7, 2], [452, 4], [135]]))
+
 
 class TestNoClientIDGroupedbyThreeFormatter(FunctionalTestCase):
 
@@ -233,6 +259,20 @@ class TestNoClientIDGroupedbyThreeFormatter(FunctionalTestCase):
 
         self.assertEquals(
             '573.2-4.6.2-27', self.formatter.complete_number(numbers))
+
+    def test_list_to_string(self):
+        self.assertEquals(
+            '145.72',
+            self.formatter.list_to_string([[1, 4, 5, 7, 2]]))
+
+        self.assertEquals(
+            '145.72-452.4',
+            self.formatter.list_to_string([[1, 4, 5, 7, 2], [452, 4]]))
+
+        self.assertEquals(
+            '145.72-452.4-135',
+            self.formatter.list_to_string([[1, 4, 5, 7, 2], [452, 4], [135]]))
+
 
 
 class TestDottedFormatSorter(TestDottedFormatter):
