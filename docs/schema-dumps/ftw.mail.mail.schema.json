@@ -4,45 +4,11 @@
     "title": "E-Mail",
     "additionalProperties": false,
     "properties": {
-        "message_source": {
+        "message": {
             "type": "string",
-            "title": "Quelle Originalnachricht",
+            "title": "Orginalnachricht",
             "description": "",
-            "_zope_schema_type": "Choice",
-            "enum": [
-                "mailin",
-                "upload"
-            ]
-        },
-        "document_type": {
-            "type": "string",
-            "title": "Dokumenttyp",
-            "description": "",
-            "_zope_schema_type": "Choice",
-            "enum": [
-                "contract",
-                "directive",
-                "offer",
-                "protocol",
-                "question",
-                "regulations",
-                "report",
-                "request"
-            ]
-        },
-        "receipt_date": {
-            "type": "string",
-            "title": "Eingangsdatum",
-            "format": "date",
-            "description": "Datum, an dem das Dokument \u00fcber den Korrespondenzweg angekommen ist",
-            "_zope_schema_type": "Date"
-        },
-        "description": {
-            "type": "string",
-            "title": "Beschreibung",
-            "description": "",
-            "_zope_schema_type": "Text",
-            "default": null
+            "_zope_schema_type": "NamedBlobFile"
         },
         "classification": {
             "type": "string",
@@ -67,37 +33,6 @@
                 "privacy_layer_yes"
             ]
         },
-        "document_author": {
-            "type": "string",
-            "title": "Autor",
-            "description": "Nachname Vorname oder ein Benutzerk\u00fcrzel (wird automatisch nach Nachname Vorname aufgel\u00f6st)",
-            "_zope_schema_type": "TextLine"
-        },
-        "archival_file_state": {
-            "type": "integer",
-            "title": "Status Archivdatei",
-            "description": "",
-            "_zope_schema_type": "Int"
-        },
-        "original_message": {
-            "type": "string",
-            "title": "Quelldatei im *.msg Format vor der Konvertierung",
-            "description": "",
-            "_zope_schema_type": "NamedBlobFile"
-        },
-        "archival_file": {
-            "type": "string",
-            "title": "Archivdatei",
-            "description": "Archivtaugliche Version der Originaldatei",
-            "_zope_schema_type": "NamedBlobFile"
-        },
-        "delivery_date": {
-            "type": "string",
-            "title": "Ausgangsdatum",
-            "format": "date",
-            "description": "Datum, an dem das Dokument \u00fcber den Korrespondenzweg versandt worden ist",
-            "_zope_schema_type": "Date"
-        },
         "public_trial": {
             "type": "string",
             "title": "\u00d6ffentlichkeitsstatus",
@@ -111,23 +46,31 @@
                 "private"
             ]
         },
+        "public_trial_statement": {
+            "type": "string",
+            "title": "Bearbeitungsinformation",
+            "description": "Datum Gesuch, Gesuchsteller, Datum Entscheid, Verweis auf GEVER-Gesuchdossier",
+            "_zope_schema_type": "Text",
+            "default": ""
+        },
+        "description": {
+            "type": "string",
+            "title": "Beschreibung",
+            "description": "",
+            "_zope_schema_type": "Text",
+            "default": null
+        },
         "keywords": {
             "type": "array",
             "title": "Schlagworte",
             "description": "Schlagw\u00f6rter zur Umschreibung eines Dossiers. Nicht zu verwechseln mit der Ordnungsposition",
             "_zope_schema_type": "Tuple"
         },
-        "title": {
+        "foreign_reference": {
             "type": "string",
-            "title": "Titel",
-            "description": "",
+            "title": "Fremdzeichen",
+            "description": "Referenz auf das entsprechende Dossier des Absenders",
             "_zope_schema_type": "TextLine"
-        },
-        "message": {
-            "type": "string",
-            "title": "Orginalnachricht",
-            "description": "",
-            "_zope_schema_type": "NamedBlobFile"
         },
         "document_date": {
             "type": "string",
@@ -137,6 +80,42 @@
             "_zope_schema_type": "Date",
             "default": "<Aktuelles Datum>"
         },
+        "receipt_date": {
+            "type": "string",
+            "title": "Eingangsdatum",
+            "format": "date",
+            "description": "Datum, an dem das Dokument \u00fcber den Korrespondenzweg angekommen ist",
+            "_zope_schema_type": "Date"
+        },
+        "delivery_date": {
+            "type": "string",
+            "title": "Ausgangsdatum",
+            "format": "date",
+            "description": "Datum, an dem das Dokument \u00fcber den Korrespondenzweg versandt worden ist",
+            "_zope_schema_type": "Date"
+        },
+        "document_type": {
+            "type": "string",
+            "title": "Dokumenttyp",
+            "description": "",
+            "_zope_schema_type": "Choice",
+            "enum": [
+                "contract",
+                "directive",
+                "offer",
+                "protocol",
+                "question",
+                "regulations",
+                "report",
+                "request"
+            ]
+        },
+        "document_author": {
+            "type": "string",
+            "title": "Autor",
+            "description": "Nachname Vorname oder ein Benutzerk\u00fcrzel (wird automatisch nach Nachname Vorname aufgel\u00f6st)",
+            "_zope_schema_type": "TextLine"
+        },
         "preserved_as_paper": {
             "type": "boolean",
             "title": "In Papierform aufbewahrt",
@@ -144,18 +123,39 @@
             "_zope_schema_type": "Bool",
             "default": true
         },
-        "public_trial_statement": {
+        "archival_file": {
             "type": "string",
-            "title": "Bearbeitungsinformation",
-            "description": "Datum Gesuch, Gesuchsteller, Datum Entscheid, Verweis auf GEVER-Gesuchdossier",
-            "_zope_schema_type": "Text",
-            "default": ""
+            "title": "Archivdatei",
+            "description": "Archivtaugliche Version der Originaldatei",
+            "_zope_schema_type": "NamedBlobFile"
         },
-        "foreign_reference": {
+        "archival_file_state": {
+            "type": "integer",
+            "title": "Status Archivdatei",
+            "description": "",
+            "_zope_schema_type": "Int"
+        },
+        "title": {
             "type": "string",
-            "title": "Fremdzeichen",
-            "description": "Referenz auf das entsprechende Dossier des Absenders",
+            "title": "Titel",
+            "description": "",
             "_zope_schema_type": "TextLine"
+        },
+        "original_message": {
+            "type": "string",
+            "title": "Quelldatei im *.msg Format vor der Konvertierung",
+            "description": "",
+            "_zope_schema_type": "NamedBlobFile"
+        },
+        "message_source": {
+            "type": "string",
+            "title": "Quelle Originalnachricht",
+            "description": "",
+            "_zope_schema_type": "Choice",
+            "enum": [
+                "mailin",
+                "upload"
+            ]
         }
     },
     "field_order": [

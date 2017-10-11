@@ -4,6 +4,13 @@
     "title": "OrgRole",
     "additionalProperties": false,
     "properties": {
+        "id": {
+            "type": "integer",
+            "title": "id",
+            "description": "",
+            "_zope_schema_type": "Int",
+            "default": "Sequence(org_roles_id_seq)"
+        },
         "function": {
             "type": "string",
             "title": "function",
@@ -17,13 +24,6 @@
             "maxLength": 255,
             "description": "",
             "_zope_schema_type": "Text"
-        },
-        "id": {
-            "type": "integer",
-            "title": "id",
-            "description": "",
-            "_zope_schema_type": "Int",
-            "default": "Sequence(org_roles_id_seq)"
         },
         "description": {
             "type": "string",

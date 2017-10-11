@@ -4,19 +4,6 @@
     "title": "Ordnungssystem",
     "additionalProperties": false,
     "properties": {
-        "valid_until": {
-            "type": "string",
-            "title": "G\u00fcltig bis",
-            "format": "date",
-            "description": "",
-            "_zope_schema_type": "Date"
-        },
-        "title_de": {
-            "type": "string",
-            "title": "Titel (deutsch)",
-            "description": "",
-            "_zope_schema_type": "TextLine"
-        },
         "valid_from": {
             "type": "string",
             "title": "G\u00fcltig ab",
@@ -24,9 +11,22 @@
             "description": "",
             "_zope_schema_type": "Date"
         },
+        "valid_until": {
+            "type": "string",
+            "title": "G\u00fcltig bis",
+            "format": "date",
+            "description": "",
+            "_zope_schema_type": "Date"
+        },
         "version": {
             "type": "string",
             "title": "Version",
+            "description": "",
+            "_zope_schema_type": "TextLine"
+        },
+        "title_de": {
+            "type": "string",
+            "title": "Titel (deutsch)",
             "description": "",
             "_zope_schema_type": "TextLine"
         },

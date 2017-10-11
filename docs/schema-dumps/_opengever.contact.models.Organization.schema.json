@@ -4,11 +4,19 @@
     "title": "Organization",
     "additionalProperties": false,
     "properties": {
-        "description": {
+        "name": {
             "type": "string",
-            "title": "description",
+            "title": "name",
+            "maxLength": 255,
             "description": "",
             "_zope_schema_type": "Text"
+        },
+        "id": {
+            "type": "integer",
+            "title": "id",
+            "description": "",
+            "_zope_schema_type": "Int",
+            "default": "Sequence(contacts_id_seq)"
         },
         "contact_type": {
             "type": "string",
@@ -24,25 +32,17 @@
             "_zope_schema_type": "Bool",
             "default": true
         },
+        "description": {
+            "type": "string",
+            "title": "description",
+            "description": "",
+            "_zope_schema_type": "Text"
+        },
         "former_contact_id": {
             "type": "integer",
             "title": "former_contact_id",
             "description": "",
             "_zope_schema_type": "Int"
-        },
-        "id": {
-            "type": "integer",
-            "title": "id",
-            "description": "",
-            "_zope_schema_type": "Int",
-            "default": "Sequence(contacts_id_seq)"
-        },
-        "name": {
-            "type": "string",
-            "title": "name",
-            "maxLength": 255,
-            "description": "",
-            "_zope_schema_type": "Text"
         }
     },
     "required": [

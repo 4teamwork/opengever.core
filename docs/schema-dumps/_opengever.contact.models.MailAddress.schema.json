@@ -4,13 +4,6 @@
     "title": "MailAddress",
     "additionalProperties": false,
     "properties": {
-        "address": {
-            "type": "string",
-            "title": "address",
-            "maxLength": 255,
-            "description": "",
-            "_zope_schema_type": "Text"
-        },
         "id": {
             "type": "integer",
             "title": "id",
@@ -21,6 +14,13 @@
         "label": {
             "type": "string",
             "title": "label",
+            "maxLength": 255,
+            "description": "",
+            "_zope_schema_type": "Text"
+        },
+        "address": {
+            "type": "string",
+            "title": "address",
             "maxLength": 255,
             "description": "",
             "_zope_schema_type": "Text"

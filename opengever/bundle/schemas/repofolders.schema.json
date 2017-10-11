@@ -10,24 +10,80 @@
             "title": "Ordnungsposition",
             "additionalProperties": false,
             "properties": {
-                "title_de": {
+                "description": {
                     "type": [
                         "null",
                         "string"
                     ],
-                    "title": "Titel (deutsch)",
-                    "description": "",
-                    "_zope_schema_type": "TextLine"
+                    "title": "Beschreibung",
+                    "description": "Eine kurze Beschreibung des Inhalts.",
+                    "_zope_schema_type": "Text",
+                    "default": null
                 },
-                "date_of_submission": {
+                "valid_from": {
                     "type": [
                         "null",
                         "string"
                     ],
-                    "title": "Anbietezeitpunkt",
+                    "title": "G\u00fcltig ab",
                     "format": "date",
                     "description": "",
                     "_zope_schema_type": "Date"
+                },
+                "valid_until": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "G\u00fcltig bis",
+                    "format": "date",
+                    "description": "",
+                    "_zope_schema_type": "Date"
+                },
+                "location": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "Standort",
+                    "description": "",
+                    "_zope_schema_type": "TextLine"
+                },
+                "referenced_activity": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "Leistung",
+                    "description": "",
+                    "_zope_schema_type": "TextLine"
+                },
+                "former_reference": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "Fr\u00fcheres Zeichen",
+                    "description": "",
+                    "_zope_schema_type": "TextLine"
+                },
+                "addable_dossier_types": {
+                    "type": [
+                        "null",
+                        "array"
+                    ],
+                    "title": "Erlaubte Spezialdossiers",
+                    "description": "W\u00e4hlen Sie die Spezialdossiers aus, die in dieser Ordnungsposition erlaubt sind.",
+                    "_zope_schema_type": "List"
+                },
+                "allow_add_businesscase_dossier": {
+                    "type": [
+                        "null",
+                        "boolean"
+                    ],
+                    "title": "Hinzuf\u00fcgen von Gesch\u00e4ftsdossiers erlauben",
+                    "description": "W\u00e4hlen Sie, ob es in dieser Ordnungsposition erlaubt ist, Gesch\u00e4ftsdossiers hinzuzuf\u00fcgen. Ist diese Option deaktiviert, kann der Benutzer nur Dossiers aus einer Vorlage oder Spezialdossiers erstellen.",
+                    "_zope_schema_type": "Bool"
                 },
                 "classification": {
                     "type": [
@@ -45,8 +101,65 @@
                         "classified"
                     ]
                 },
-                "parent_guid": {
-                    "type": "string"
+                "privacy_layer": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "Datenschutzstufe",
+                    "description": "Markierung, die angibt, ob die Unterlagen besonders sch\u00fctzenswerte Personendaten oder Pers\u00f6nlichkeitsprofile gem\u00e4ss Datenschutzrecht enthalten.",
+                    "_zope_schema_type": "Choice",
+                    "default": "privacy_layer_no",
+                    "enum": [
+                        null,
+                        "privacy_layer_no",
+                        "privacy_layer_yes"
+                    ]
+                },
+                "public_trial": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "\u00d6ffentlichkeitsstatus",
+                    "description": "Angabe, ob die Unterlagen gem\u00e4ss \u00d6ffentlichkeitsgesetz zug\u00e4nglich sind oder nicht.",
+                    "_zope_schema_type": "Choice",
+                    "default": "unchecked",
+                    "enum": [
+                        null,
+                        "unchecked",
+                        "public",
+                        "limited-public",
+                        "private"
+                    ]
+                },
+                "public_trial_statement": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "Bearbeitungsinformation",
+                    "description": "Datum Gesuch, Gesuchsteller, Datum Entscheid, Verweis auf GEVER-Gesuchdossier",
+                    "_zope_schema_type": "Text",
+                    "default": ""
+                },
+                "title_de": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "Titel (deutsch)",
+                    "description": "",
+                    "_zope_schema_type": "TextLine"
+                },
+                "title_fr": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "Titel (franz\u00f6sisch)",
+                    "description": "",
+                    "_zope_schema_type": "TextLine"
                 },
                 "retention_period": {
                     "type": [
@@ -66,28 +179,6 @@
                         25
                     ]
                 },
-                "date_of_cassation": {
-                    "type": [
-                        "null",
-                        "string"
-                    ],
-                    "title": "Kassationsdatum",
-                    "format": "date",
-                    "description": "",
-                    "_zope_schema_type": "Date"
-                },
-                "guid": {
-                    "type": "string"
-                },
-                "title_fr": {
-                    "type": [
-                        "null",
-                        "string"
-                    ],
-                    "title": "Titel (franz\u00f6sisch)",
-                    "description": "",
-                    "_zope_schema_type": "TextLine"
-                },
                 "retention_period_annotation": {
                     "type": [
                         "null",
@@ -96,48 +187,6 @@
                     "title": "Kommentar zur Aufbewahrungsdauer",
                     "description": "",
                     "_zope_schema_type": "Text"
-                },
-                "valid_from": {
-                    "type": [
-                        "null",
-                        "string"
-                    ],
-                    "title": "G\u00fcltig ab",
-                    "format": "date",
-                    "description": "",
-                    "_zope_schema_type": "Date"
-                },
-                "privacy_layer": {
-                    "type": [
-                        "null",
-                        "string"
-                    ],
-                    "title": "Datenschutzstufe",
-                    "description": "Markierung, die angibt, ob die Unterlagen besonders sch\u00fctzenswerte Personendaten oder Pers\u00f6nlichkeitsprofile gem\u00e4ss Datenschutzrecht enthalten.",
-                    "_zope_schema_type": "Choice",
-                    "default": "privacy_layer_no",
-                    "enum": [
-                        null,
-                        "privacy_layer_no",
-                        "privacy_layer_yes"
-                    ]
-                },
-                "custody_period": {
-                    "type": [
-                        "null",
-                        "integer"
-                    ],
-                    "title": "Archivische Schutzfrist (Jahre)",
-                    "description": "Dauer, w\u00e4hrend der nach der Archivierung die Dokumente vor \u00f6ffentlicher Einsichtnahme gesch\u00fctzt sind.",
-                    "_zope_schema_type": "Choice",
-                    "default": 30,
-                    "enum": [
-                        null,
-                        0,
-                        30,
-                        100,
-                        150
-                    ]
                 },
                 "archival_value": {
                     "type": [
@@ -157,79 +206,6 @@
                         "archival worthy with sampling"
                     ]
                 },
-                "location": {
-                    "type": [
-                        "null",
-                        "string"
-                    ],
-                    "title": "Standort",
-                    "description": "",
-                    "_zope_schema_type": "TextLine"
-                },
-                "public_trial": {
-                    "type": [
-                        "null",
-                        "string"
-                    ],
-                    "title": "\u00d6ffentlichkeitsstatus",
-                    "description": "Angabe, ob die Unterlagen gem\u00e4ss \u00d6ffentlichkeitsgesetz zug\u00e4nglich sind oder nicht.",
-                    "_zope_schema_type": "Choice",
-                    "default": "unchecked",
-                    "enum": [
-                        null,
-                        "unchecked",
-                        "public",
-                        "limited-public",
-                        "private"
-                    ]
-                },
-                "review_state": {
-                    "enum": [
-                        "repositoryfolder-state-active"
-                    ],
-                    "type": "string"
-                },
-                "_permissions": {
-                    "$ref": "#/definitions/permission"
-                },
-                "valid_until": {
-                    "type": [
-                        "null",
-                        "string"
-                    ],
-                    "title": "G\u00fcltig bis",
-                    "format": "date",
-                    "description": "",
-                    "_zope_schema_type": "Date"
-                },
-                "description": {
-                    "type": [
-                        "null",
-                        "string"
-                    ],
-                    "title": "Beschreibung",
-                    "description": "Eine kurze Beschreibung des Inhalts.",
-                    "_zope_schema_type": "Text",
-                    "default": null
-                },
-                "referenced_activity": {
-                    "type": [
-                        "null",
-                        "string"
-                    ],
-                    "title": "Leistung",
-                    "description": "",
-                    "_zope_schema_type": "TextLine"
-                },
-                "allow_add_businesscase_dossier": {
-                    "type": [
-                        "null",
-                        "boolean"
-                    ],
-                    "title": "Hinzuf\u00fcgen von Gesch\u00e4ftsdossiers erlauben",
-                    "description": "W\u00e4hlen Sie, ob es in dieser Ordnungsposition erlaubt ist, Gesch\u00e4ftsdossiers hinzuzuf\u00fcgen. Ist diese Option deaktiviert, kann der Benutzer nur Dossiers aus einer Vorlage oder Spezialdossiers erstellen.",
-                    "_zope_schema_type": "Bool"
-                },
                 "archival_value_annotation": {
                     "type": [
                         "null",
@@ -239,24 +215,52 @@
                     "description": "",
                     "_zope_schema_type": "Text"
                 },
-                "public_trial_statement": {
+                "custody_period": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ],
+                    "title": "Archivische Schutzfrist (Jahre)",
+                    "description": "Dauer, w\u00e4hrend der nach der Archivierung die Dokumente vor \u00f6ffentlicher Einsichtnahme gesch\u00fctzt sind.",
+                    "_zope_schema_type": "Choice",
+                    "default": 30,
+                    "enum": [
+                        null,
+                        0,
+                        30,
+                        100,
+                        150
+                    ]
+                },
+                "date_of_cassation": {
                     "type": [
                         "null",
                         "string"
                     ],
-                    "title": "Bearbeitungsinformation",
-                    "description": "Datum Gesuch, Gesuchsteller, Datum Entscheid, Verweis auf GEVER-Gesuchdossier",
-                    "_zope_schema_type": "Text",
-                    "default": ""
+                    "title": "Kassationsdatum",
+                    "format": "date",
+                    "description": "",
+                    "_zope_schema_type": "Date"
                 },
-                "addable_dossier_types": {
+                "date_of_submission": {
                     "type": [
                         "null",
-                        "array"
+                        "string"
                     ],
-                    "title": "Erlaubte Spezialdossiers",
-                    "description": "W\u00e4hlen Sie die Spezialdossiers aus, die in dieser Ordnungsposition erlaubt sind.",
-                    "_zope_schema_type": "List"
+                    "title": "Anbietezeitpunkt",
+                    "format": "date",
+                    "description": "",
+                    "_zope_schema_type": "Date"
+                },
+                "reference_number_prefix": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "Pr\u00e4fix des Aktenzeichens",
+                    "description": "",
+                    "_zope_schema_type": "TextLine",
+                    "default": "<H\u00f6chste auf dieser Ebene vergebene Nummer + 1>"
                 },
                 "addable_dossier_templates": {
                     "type": [
@@ -268,24 +272,20 @@
                     "_zope_schema_type": "RelationList",
                     "default": []
                 },
-                "former_reference": {
-                    "type": [
-                        "null",
-                        "string"
-                    ],
-                    "title": "Fr\u00fcheres Zeichen",
-                    "description": "",
-                    "_zope_schema_type": "TextLine"
+                "review_state": {
+                    "type": "string",
+                    "enum": [
+                        "repositoryfolder-state-active"
+                    ]
                 },
-                "reference_number_prefix": {
-                    "type": [
-                        "null",
-                        "string"
-                    ],
-                    "title": "Pr\u00e4fix des Aktenzeichens",
-                    "description": "",
-                    "_zope_schema_type": "TextLine",
-                    "default": "<H\u00f6chste auf dieser Ebene vergebene Nummer + 1>"
+                "guid": {
+                    "type": "string"
+                },
+                "parent_guid": {
+                    "type": "string"
+                },
+                "_permissions": {
+                    "$ref": "#/definitions/permission"
                 }
             },
             "anyOf": [
@@ -332,41 +332,41 @@
             ]
         },
         "permission": {
-            "additionalProperties": false,
             "type": "object",
+            "additionalProperties": false,
             "properties": {
-                "reactivate": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": "array"
-                },
-                "read": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": "array"
-                },
-                "edit": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": "array"
-                },
-                "add": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": "array"
-                },
-                "close": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": "array"
-                },
                 "block_inheritance": {
                     "type": "boolean"
+                },
+                "read": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "add": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "edit": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "close": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "reactivate": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             }
         }

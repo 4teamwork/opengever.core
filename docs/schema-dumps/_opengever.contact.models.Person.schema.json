@@ -4,16 +4,17 @@
     "title": "Person",
     "additionalProperties": false,
     "properties": {
-        "academic_title": {
+        "salutation": {
             "type": "string",
-            "title": "academic_title",
+            "title": "salutation",
             "maxLength": 255,
             "description": "",
             "_zope_schema_type": "Text"
         },
-        "description": {
+        "academic_title": {
             "type": "string",
-            "title": "description",
+            "title": "academic_title",
+            "maxLength": 255,
             "description": "",
             "_zope_schema_type": "Text"
         },
@@ -24,36 +25,9 @@
             "description": "",
             "_zope_schema_type": "Text"
         },
-        "contact_type": {
-            "type": "string",
-            "title": "contact_type",
-            "maxLength": 20,
-            "description": "",
-            "_zope_schema_type": "Text"
-        },
         "lastname": {
             "type": "string",
             "title": "lastname",
-            "maxLength": 255,
-            "description": "",
-            "_zope_schema_type": "Text"
-        },
-        "is_active": {
-            "type": "boolean",
-            "title": "is_active",
-            "description": "",
-            "_zope_schema_type": "Bool",
-            "default": true
-        },
-        "former_contact_id": {
-            "type": "integer",
-            "title": "former_contact_id",
-            "description": "",
-            "_zope_schema_type": "Int"
-        },
-        "salutation": {
-            "type": "string",
-            "title": "salutation",
             "maxLength": 255,
             "description": "",
             "_zope_schema_type": "Text"
@@ -64,6 +38,32 @@
             "description": "",
             "_zope_schema_type": "Int",
             "default": "Sequence(contacts_id_seq)"
+        },
+        "contact_type": {
+            "type": "string",
+            "title": "contact_type",
+            "maxLength": 20,
+            "description": "",
+            "_zope_schema_type": "Text"
+        },
+        "is_active": {
+            "type": "boolean",
+            "title": "is_active",
+            "description": "",
+            "_zope_schema_type": "Bool",
+            "default": true
+        },
+        "description": {
+            "type": "string",
+            "title": "description",
+            "description": "",
+            "_zope_schema_type": "Text"
+        },
+        "former_contact_id": {
+            "type": "integer",
+            "title": "former_contact_id",
+            "description": "",
+            "_zope_schema_type": "Int"
         }
     },
     "required": [
