@@ -57,6 +57,8 @@ class Versioner(object):
         Copied from `Products.CMFEditions.CopyModifyMergeRepositoryTool.save`
         only the timestamp is changed to the creation timestamp.
         """
+        if self.has_initial_version():
+            return
 
         if self.get_custom_initial_version_comment():
             comment = self.get_custom_initial_version_comment()

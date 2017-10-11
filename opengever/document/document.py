@@ -168,11 +168,8 @@ class Document(Item, BaseDocumentMixin):
             # Therefore we only create the initial version, if the document can
             # be aquisition wrapped
             if document:
-                # Create an initial version if not exists before updating
-                # the document.
-                versioner = Versioner(document)
-                if not versioner.has_initial_version():
-                    versioner.create_initial_version()
+                # Create an initial version before updating the document.
+                Versioner(document).create_initial_version()
 
         self.__dict__['file'] = value
 
