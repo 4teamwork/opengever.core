@@ -22,12 +22,13 @@ class TestDocumentDownloadConfirmation(FunctionalTestCase):
     def setUp(self):
         super(TestDocumentDownloadConfirmation, self).setUp()
         login(self.portal, TEST_USER_NAME)
-        self.document = create(Builder("document").titled(u'A letter for you'))
-
-        file_ = NamedBlobFile('bla bla', filename=u'test.txt')
-        self.document.file = file_
+        self.document = create(Builder("document")
+                               .with_dummy_content()
+                               .titled(u'A letter for you'))
 
         # create version
+        file_ = NamedBlobFile('bla bla', filename=u'test.txt')
+        self.document.file = file_
         repo_tool = getToolByName(self.portal, 'portal_repository')
         repo_tool._recursiveSave(self.document, {},
                                  repo_tool._prepareSysMetadata('mock'),

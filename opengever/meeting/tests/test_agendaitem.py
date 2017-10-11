@@ -517,8 +517,8 @@ class TestAgendaItemRevise(TestAgendaItem):
             workflow_state='revision',
             proposal=proposal.load_model()))
 
-        self.assertEqual(0, excerpt_document.get_current_version())
-        self.assertEqual(0, submitted_excerpt_document.get_current_version())
+        self.assertEqual(None, excerpt_document.get_current_version_id())
+        self.assertEqual(None, submitted_excerpt_document.get_current_version_id())
 
         browser.login().open(
             self.meeting_wrapper,
@@ -533,9 +533,9 @@ class TestAgendaItemRevise(TestAgendaItem):
                             u'messageClass': u'info',
                             u'messageTitle': u'Information'}],
                           browser.json.get('messages'))
-        self.assertEqual(1, excerpt_document.get_current_version(),
+        self.assertEqual(1, excerpt_document.get_current_version_id(),
                          "Excerpt document should be updated with a new version.")
-        self.assertEqual(1, submitted_excerpt_document.get_current_version(),
+        self.assertEqual(1, submitted_excerpt_document.get_current_version_id(),
                          "Submitted excerpt document should be updated with a new version.")
 
     @browsing

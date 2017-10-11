@@ -8,6 +8,7 @@ from opengever.base.transport import PrivilegedReceiveObject
 from opengever.base.transport import Transporter
 from opengever.base.utils import disable_edit_bar
 from opengever.document.document import IDocumentSchema
+from opengever.document.versioner import Versioner
 from opengever.locking.lock import MEETING_SUBMITTED_LOCK
 from opengever.meeting import _
 from opengever.meeting import is_meeting_feature_enabled
@@ -210,12 +211,11 @@ class UpdateSubmittedDocumentView(grok.View):
 
             portal_path = '/'.join(api.portal.get().getPhysicalPath())
             intids = getUtility(IIntIds)
-            repository = api.portal.get_tool('portal_repository')
+
             comment = translate(
                 _(u"Updated with a newer docment version from proposal's "
-                    "dossier."),
-                context=self.request)
-            repository.save(obj=self.context, comment=comment)
+                  "dossier."), context=self.request)
+            Versioner(self.context).create_version(comment)
 
             data = {
                 'path': '/'.join(self.context.getPhysicalPath())[

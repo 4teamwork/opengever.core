@@ -9,6 +9,7 @@ from opengever.base.request import dispatch_json_request
 from opengever.base.request import dispatch_request
 from opengever.base.transport import REQUEST_KEY
 from opengever.base.transport import Transporter
+from opengever.document.versioner import Versioner
 from opengever.locking.lock import SYS_LOCK
 from opengever.meeting import _
 from opengever.meeting import is_word_meeting_implementation_enabled
@@ -30,6 +31,7 @@ from os.path import join
 from plone import api
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.locking.interfaces import ILockable
+from plone.namedfile.file import NamedBlobFile
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.globalrequest import getRequest
@@ -55,9 +57,9 @@ class ProtocolOperations(object):
     def create_database_entry(self, meeting, document):
         if meeting.protocol_document is not None:
             raise ProtocolAlreadyGenerated()
+        version = document.get_current_version_id(missing_as_zero=True)
         protocol_document = GeneratedProtocol(
-            oguid=Oguid.for_object(document),
-            generated_version=document.get_current_version())
+            oguid=Oguid.for_object(document), generated_version=version)
         meeting.protocol_document = protocol_document
         return protocol_document
 
@@ -102,10 +104,9 @@ class AgendaItemListOperations(object):
         if meeting.agendaitem_list_document is not None:
             raise AgendaItemListAlreadyGenerated()
 
+        version = document.get_current_version_id(missing_as_zero=True)
         agendaitem_list_document = GeneratedAgendaItemList(
-            oguid=Oguid.for_object(document),
-            generated_version=document.get_current_version(),
-            )
+            oguid=Oguid.for_object(document), generated_version=version)
 
         meeting.agendaitem_list_document = agendaitem_list_document
 
@@ -134,9 +135,9 @@ class ExcerptOperations(object):
         return ExcerptProtocolData(meeting, [self.agenda_item])
 
     def create_database_entry(self, meeting, document):
+        version = document.get_current_version_id(missing_as_zero=True)
         excerpt = GeneratedExcerpt(
-            oguid=Oguid.for_object(document),
-            generated_version=document.get_current_version())
+            oguid=Oguid.for_object(document), generated_version=version)
 
         self.proposal.submitted_excerpt_document = excerpt
 
@@ -204,9 +205,9 @@ class ManualExcerptOperations(object):
             include_copy_for_attention=self.include_copy_for_attention)
 
     def create_database_entry(self, meeting, document):
+        version = document.get_current_version_id(missing_as_zero=True)
         excerpt = GeneratedExcerpt(
-            oguid=Oguid.for_object(document),
-            generated_version=document.get_current_version())
+            oguid=Oguid.for_object(document), generated_version=version)
 
         meeting.excerpt_documents.append(excerpt)
         return excerpt
@@ -320,16 +321,18 @@ class MergeDocxProtocolCommand(CreateGeneratedDocumentCommand):
 
     def update_protocol_document(self):
         document = self.meeting.protocol_document.resolve_document()
-        document.file.data = self.generate_file_data()
+        document.file = NamedBlobFile(self.generate_file_data(),
+                                      contentType=document.file.contentType,
+                                      filename=document.file.filename)
 
-        repository = api.portal.get_tool('portal_repository')
         comment = translate(
             _(u'Updated with a newer generated version from meeting ${title}.',
               mapping=dict(title=self.meeting.get_title())),
             context=getRequest())
-        repository.save(obj=document, comment=comment)
 
-        new_version = document.get_current_version()
+        Versioner(document).create_version(comment)
+
+        new_version = document.get_current_version_id()
         self.meeting.protocol_document.generated_version = new_version
 
         return document
@@ -410,15 +413,18 @@ class UpdateGeneratedDocumentCommand(object):
     def execute(self):
         document = Oguid.resolve_object(self.generated_document.oguid)
         document.file.data = self.generate_file_data()
+        document.file = NamedBlobFile(self.generate_file_data(),
+                                      contentType=document.file.contentType,
+                                      filename=document.file.filename)
 
-        repository = api.portal.get_tool('portal_repository')
         comment = translate(
             _(u'Updated with a newer generated version from meeting ${title}.',
               mapping=dict(title=self.meeting.get_title())),
             context=getRequest())
-        repository.save(obj=document, comment=comment)
 
-        new_version = document.get_current_version()
+        Versioner(document).create_version(comment)
+
+        new_version = document.get_current_version_id()
         self.generated_document.generated_version = new_version
 
         return document
@@ -531,7 +537,7 @@ class UpdateSubmittedDocumentCommand(object):
         self.submitted_document = submitted_document
 
     def execute(self):
-        submitted_version = self.document.get_current_version()
+        submitted_version = self.document.get_current_version_id()
 
         record = IHistory(self.proposal).append_record(
             u'document_updated',
@@ -599,7 +605,8 @@ class CopyProposalDocumentCommand(object):
         session = create_session()
         proposal_model = self.proposal.load_model()
         oguid = Oguid.for_object(self.document)
-        submitted_version = self.document.get_current_version()
+        submitted_version = self.document.get_current_version_id(
+            missing_as_zero=True)
 
         doc = SubmittedDocument(oguid=oguid,
                                 proposal=proposal_model,
@@ -610,7 +617,8 @@ class CopyProposalDocumentCommand(object):
         session.add(doc)
 
     def copy_document(self, target_path, target_admin_unit_id):
-        submitted_version = self.document.get_current_version()
+        submitted_version = self.document.get_current_version_id(
+            missing_as_zero=True)
 
         record = IHistory(self.proposal).append_record(
             u'document_submitted',

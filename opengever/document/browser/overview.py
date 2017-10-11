@@ -217,8 +217,8 @@ class Overview(DefaultView, GeverTabMixin, ActionButtonRendererMixin):
                  mapping={'version': submitted_document.submitted_version})
 
     def render_current_document_version(self):
-        return _(u"Current version: ${version}",
-                 mapping={'version': self.context.get_current_version()})
+        version = self.context.get_current_version_id(missing_as_zero=True)
+        return _(u"Current version: ${version}", mapping={'version': version})
 
     def render_creator_link(self):
         return Actor.user(self.context.Creator()).get_link()

@@ -197,21 +197,6 @@ def get_documents_of_task(task, include_mails=False):
     return documents
 
 
-class CustomInitialVersionMessage(object):
-    """Context Manager for Cutom inital version message of a document.
-    see handle_document_added in opengever.document"""
-
-    def __init__(self, message, request):
-        self.message = message
-        self.request = request
-
-    def __enter__(self):
-        self.request.set(CUSTOM_INITIAL_VERSION_MESSAGE, self.message)
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.request[CUSTOM_INITIAL_VERSION_MESSAGE] = None
-
-
 def update_reponsible_field_data(data):
     """The responsible field always contains the orgunit id and the userid
     separated by a colon.

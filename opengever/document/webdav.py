@@ -1,9 +1,9 @@
 """
 Webdav support for Document
 """
-
 from five import grok
 from opengever.document.document import IDocumentSchema
+from opengever.document.versioner import Versioner
 from plone.dexterity import filerepresentation
 from plone.memoize.instance import memoize
 from StringIO import StringIO
@@ -102,4 +102,8 @@ class DocumentWriteFile(filerepresentation.DefaultWriteFile, grok.Adapter):
 
     def close(self):
         self.stream.seek(0)
+        versioner = Versioner(self.context)
+        if not versioner.has_initial_version():
+            versioner.create_initial_version()
+
         self.filefield.data = self.stream.read()

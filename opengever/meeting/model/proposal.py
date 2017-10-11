@@ -382,9 +382,9 @@ class Proposal(Base):
         """
         assert document in self.resolve_submitted_proposal().get_excerpts()
 
+        version = document.get_current_version_id(missing_as_zero=True)
         excerpt = GeneratedExcerpt(
-            oguid=Oguid.for_object(document),
-            generated_version=document.get_current_version())
+            oguid=Oguid.for_object(document), generated_version=version)
         self.submitted_excerpt_document = excerpt
 
         document_intid = self.copy_excerpt_to_proposal_dossier()

@@ -9,6 +9,7 @@ from opengever.meeting.model import SubmittedDocument
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.testing import FunctionalTestCase
 from plone import api
+from plone.namedfile.file import NamedBlobFile
 import transaction
 
 
@@ -140,6 +141,7 @@ class TestSubmitAdditionalDocuments(FunctionalTestCase):
 
         # create some new document versions
         repository = api.portal.get_tool('portal_repository')
+        self.document.file = NamedBlobFile(data='New', filename=u'test.txt')
         repository.save(self.document)
         repository.save(self.document)
         transaction.commit()
@@ -178,6 +180,7 @@ class TestSubmitAdditionalDocuments(FunctionalTestCase):
         proposal = self.setup_proposal(attach_document=True)
 
         repository = api.portal.get_tool('portal_repository')
+        self.document.file = NamedBlobFile(data='New', filename=u'test.txt')
         repository.save(self.document)
         transaction.commit()
 
@@ -211,6 +214,7 @@ class TestSubmitAdditionalDocuments(FunctionalTestCase):
             .with_submitted())
 
         repository = api.portal.get_tool('portal_repository')
+        self.document.file = NamedBlobFile(data='New', filename=u'test.txt')
         repository.save(self.document)
         transaction.commit()
 
@@ -255,6 +259,7 @@ class TestSubmitAdditionalDocuments(FunctionalTestCase):
     def test_update_existing_document_without_permission_on_committee_is_possible(self, browser):
         proposal = self.setup_proposal(attach_document=True)
         repository = api.portal.get_tool('portal_repository')
+        self.document.file = NamedBlobFile(data='New', filename=u'test.txt')
         repository.save(self.document)
         transaction.commit()
 

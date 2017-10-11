@@ -484,9 +484,10 @@ def file_copy_downloaded(context, event):
                                default=u'version ${version_id}',
                                mapping={'version_id': version_id})
         else:
-            version_string = _(u'label_file_copy_downloaded_actual_version',
-                               default=u'current version (${version_id})',
-                               mapping={'version_id': context.version_id})
+            version_string = _(
+                u'label_file_copy_downloaded_actual_version',
+                default=u'current version (${version_id})',
+                mapping={'version_id': getattr(context, 'version_id', 0)})
 
         title = _(u'label_file_copy_downloaded_with_version',
                   default=u'${title} ${version_string}',
@@ -513,7 +514,7 @@ def document_sent(context, event):
     def make_document_event_list(context, items):
         urlstring = ''
         url_template = u'<span><a href="{}">{}{}</a></span>'
-        lastindex = len(items)-1
+        lastindex = len(items) - 1
         for i, item in enumerate(items):
             comma = '' if lastindex == i else ', '
             urlstring += url_template.format(item['url'], item['title'], comma)

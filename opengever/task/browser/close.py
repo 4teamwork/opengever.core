@@ -16,7 +16,6 @@ from opengever.task.adapters import IResponseContainer
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.interfaces import ITaskDocumentsTransporter
 from opengever.task.util import change_task_workflow_state
-from opengever.task.util import CustomInitialVersionMessage
 from opengever.task.util import get_documents_of_task
 from plone import api
 from plone.supermodel.model import Schema
@@ -162,8 +161,7 @@ class IChooseDossierSchema(Schema):
                     ],
                 'review_state': [
                     'repositoryroot-state-active',
-                    'repositoryfolder-state-active'
-                    ] + DOSSIER_STATES_OPEN,
+                    'repositoryfolder-state-active'] + DOSSIER_STATES_OPEN,
                 }))
 
 
@@ -236,12 +234,10 @@ class ChooseDossierStepForm(CloseTaskWizardStepFormMixin, Form):
     def copy_documents(self, task, dossier, documents):
         doc_transporter = getUtility(ITaskDocumentsTransporter)
 
-        with CustomInitialVersionMessage(
-            _(u'version_message_closed_task',
-              default=u'Document copied from task (task closed)'),
-            dossier.REQUEST):
-            intids_mapping = doc_transporter.copy_documents_from_remote_task(
-                task, dossier, documents=documents)
+        comment = _(u'version_message_closed_task',
+                    default=u'Document copied from task (task closed)')
+        intids_mapping = doc_transporter.copy_documents_from_remote_task(
+            task, dossier, documents=documents, comment=comment)
 
         IStatusMessage(self.request).addStatusMessage(
             _(u'${num} documents were copied.',

@@ -9,6 +9,7 @@ from opengever.bumblebee import is_bumblebeeable
 from opengever.document import _
 from opengever.document.browser.download import DownloadConfirmationHelper
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.document.versioner import Versioner
 from opengever.ogds.base.actor import Actor
 from opengever.tabbedview import BaseListingTab
 from opengever.tabbedview import GeverTableSource
@@ -186,7 +187,10 @@ class LazyHistoryMetadataProxy(object):
 
     def __init__(self, history, url, context, is_revert_allowed=False):
         self._history = history
-        self._length = history.getLength(countPurged=False)
+        if self._history:
+            self._length = history.getLength(countPurged=False)
+        else:
+            self._length = 0
 
         self._url = url
         self._is_revert_allowed = is_revert_allowed
@@ -220,6 +224,91 @@ class LazyHistoryMetadataProxy(object):
             vdata, self._url, self._context, self._is_revert_allowed)
 
 
+class NoVersionHistoryMetadataProxy():
+    """Proxy object for documents without any versions yet.
+
+    But we display the the initial version for the user, even wehen it
+    does not exists.
+    """
+
+    def __init__(self, obj):
+        self.obj = obj
+
+    def __len__(self):
+        """Returns 1, because we display only one version.
+        """
+        return 1
+
+    def __getitem__(self, index):
+        return InitialVersionDataProxy(self.obj)
+
+
+class InitialVersionDataProxy(object):
+    """A proxy object for the currently not existing initial version.
+    """
+
+    def __init__(self, obj):
+        self.obj = obj
+
+    @property
+    def sys_metadata(self):
+        return self._version_data['metadata']['sys_metadata']
+
+    @property
+    def is_revert_allowed(self):
+        return False
+
+    @property
+    def url(self):
+        """Absolute URL of the object that this version belongs to.
+        """
+        return self.obj.absolute_url()
+
+    @property
+    def version(self):
+        """The ID ("number") of this version.
+        """
+        return 0
+
+    @property
+    def actor(self):
+        """Returns the creator of the document, which we'll be also the
+        creator of the initial version.
+        """
+        return Actor.user(self.obj.Creator()).get_link()
+
+    @property
+    def timestamp(self):
+        """Returns the creation date of the document.
+        """
+        return api.portal.get_localized_time(
+            datetime=self.obj.created(), long_format=True)
+
+    @property
+    def comment(self):
+        """Comment for this version.
+        """
+        versioner = Versioner(self.obj)
+        if versioner.get_custom_initial_version_comment():
+            return versioner.get_custom_initial_version_comment()
+
+        return translate(
+            _(u'initial_document_version_change_note',
+              default=u'Initial version'),
+            context=getRequest())
+
+    @property
+    def download_link(self):
+        """Returns a formatted link that allows to download a copy of this
+        version (opens in an overlay).
+        """
+        dc_helper = DownloadConfirmationHelper(self.obj)
+        link = dc_helper.get_html_tag(
+            additional_classes=['standalone', 'function-download-copy'],
+            viewname='download', include_token=True)
+        return link
+
+
 class IVersionsSourceConfig(ITableSourceConfig):
     """
     """
@@ -240,9 +329,11 @@ class VersionsTableSource(GeverTableSource):
         # CMFEditions causes writes to the parent when retrieving versions
         unprotected_write(aq_parent(obj))
 
-        repo_tool = api.portal.get_tool('portal_repository')
-        shadow_history = repo_tool.getHistoryMetadata(obj)
+        shadow_history = Versioner(obj).get_history_metadata()
         manager = getMultiAdapter((obj, self.request), ICheckinCheckoutManager)
+
+        if not shadow_history:
+            return NoVersionHistoryMetadataProxy(obj)
 
         return LazyHistoryMetadataProxy(
             shadow_history, obj.absolute_url(),

@@ -117,6 +117,7 @@ class IOGMail(form.Schema):
         required=False,
     )
 
+
 alsoProvides(IOGMail, IFormFieldProvider)
 
 
@@ -315,7 +316,7 @@ class OGMail(Mail, BaseDocumentMixin):
         """
         return False
 
-    def get_current_version(self):
+    def get_current_version_id(self, missing_as_zero=False):
         """Mails cannot be edited, they are read-only."""
         return 0
 

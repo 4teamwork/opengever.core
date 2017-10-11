@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-02 12:51+0000\n"
+"POT-Creation-Date: 2017-10-09 13:21+0000\n"
 "PO-Revision-Date: 2017-09-03 08:50+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-document/fr/>\n"
@@ -258,7 +258,8 @@ msgid "help_receipt_date"
 msgstr "Date de réception du document écrit"
 
 #. Default: "Initial version"
-#: ./opengever/document/checkout/handlers.py
+#: ./opengever/document/browser/versions_tab.py
+#: ./opengever/document/versioner.py
 msgid "initial_document_version_change_note"
 msgstr "Document créé (version initiale)"
 
@@ -406,11 +407,6 @@ msgstr "Fichier"
 #: ./opengever/document/behaviors/metadata.py
 msgid "label_foreign_reference"
 msgstr "Code externe"
-
-#. Default: "Initial version (document copied)"
-#: ./opengever/document/subscribers.py
-msgid "label_initial_version_copied"
-msgstr "Version initiale (documents copiés)"
 
 #. Default: "Keywords"
 #: ./opengever/document/behaviors/metadata.py

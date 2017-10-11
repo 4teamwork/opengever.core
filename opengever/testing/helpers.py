@@ -2,6 +2,7 @@ from datetime import datetime
 from lxml.cssselect import LxmlTranslator
 from opengever.base.date_time import as_utc
 from opengever.contact.sources import ContactsSource
+from opengever.document.versioner import Versioner
 from plone import api
 from Products.CMFCore.utils import getToolByName
 from Products.PloneLanguageTool.LanguageTool import LanguageBinding
@@ -66,11 +67,12 @@ def add_languages(codes, support_combined=True):
 
     transaction.commit()
 
+
 def create_document_version(doc, version_id, data=None):
-    repo_tool = api.portal.get_tool('portal_repository')
     vdata = data or 'VERSION {} DATA'.format(version_id)
     doc.file.data = vdata
-    repo_tool.save(obj=doc, comment="This is Version %s" % version_id)
+
+    Versioner(doc).create_version("This is Version %s" % version_id)
 
 
 def css_to_xpath(css):

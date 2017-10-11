@@ -7,6 +7,7 @@ from opengever.base.request import tracebackify
 from opengever.base.transport import ORIGINAL_INTID_ANNOTATION_KEY
 from opengever.base.transport import Transporter
 from opengever.base.utils import ok_response
+from opengever.document.versioner import Versioner
 from opengever.task.adapters import IResponse as IPersistentResponse
 from opengever.task.adapters import IResponseContainer
 from opengever.task.interfaces import ITaskDocumentsTransporter
@@ -248,7 +249,9 @@ class ExtractResponses(BrowserView):
 @implementer(ITaskDocumentsTransporter)
 class TaskDocumentsTransporter(object):
 
-    def copy_documents_from_remote_task(self, task, target, documents=None):
+    def copy_documents_from_remote_task(self, task, target,
+                                        documents=None, comment=None):
+
         transporter = Transporter()
         data = dispatch_json_request(
             task.admin_unit_id,
@@ -261,6 +264,10 @@ class TaskDocumentsTransporter(object):
 
         for item in data:
             obj = transporter.create(item, target)
+
+            # Set custom initial version comment
+            if comment:
+                Versioner(obj).set_custom_initial_version_comment(comment)
 
             oldintid = IAnnotations(obj)[ORIGINAL_INTID_ANNOTATION_KEY]
             newintid = intids.getId(obj)

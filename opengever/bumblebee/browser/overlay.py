@@ -15,6 +15,7 @@ from opengever.document.browser.versions_tab import translate_link
 from opengever.document.checkout.viewlets import CheckedOutViewlet
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.document.versioner import Versioner
 from opengever.locking.info import GeverLockInfoViewlet
 from opengever.mail.mail import IOGMailMarker
 from opengever.ogds.base.actor import Actor
@@ -266,12 +267,10 @@ class BumblebeeOverlayBaseView(BrowserView, ActionButtonRendererMixin):
         return int(version_id)
 
     def _retrieve_version(self, context, version_id):
-        prtool = api.portal.get_tool('portal_repository')
-
         try:
             # CMFEditions causes writes to the parent when retrieving versions
             unprotected_write(aq_parent(context))
-            return prtool.retrieve(context, version_id).object
+            return Versioner(context).retrieve(version_id)
 
         except ArchivistRetrieveError:
             # Version does not exists.

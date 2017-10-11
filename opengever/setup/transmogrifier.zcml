@@ -51,16 +51,6 @@
       />
 
   <utility
-      component=".sections.versioning.DisabledInitialVersion"
-      name="opengever.setup.disabledinitialversion"
-      />
-
-  <utility
-      component=".sections.versioning.ManualInitialVersion"
-      name="opengever.setup.manualinitialversion"
-      />
-
-  <utility
       component=".sections.repositoryfirst.RepositoryFirst"
       name="opengever.setup.repositoryfirst"
       />

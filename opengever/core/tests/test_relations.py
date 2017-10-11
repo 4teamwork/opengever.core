@@ -1,5 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.document.versioner import Versioner
 from opengever.testing import FunctionalTestCase
 from plone import api
 from plone.dexterity.utils import iterSchemataForType
@@ -191,6 +192,8 @@ class TestRelationCatalogInterfaces(FunctionalTestCase):
                .having(addable_dossier_templates=[dossiertemplate]))
 
         document_a = create(Builder('document').within(dossier_a))
+        Versioner(document_a).create_initial_version()
+
         create(Builder('document').within(dossier_a).relate_to(document_a))
         create(Builder('proposaltemplate').relate_to(document_a))
 

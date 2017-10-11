@@ -176,6 +176,7 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         # Add-Event
         document = create(Builder('document')
                           .within(dossier)
+                          .with_dummy_content()
                           .titled(u'Doc\xfcment'))
 
         self.check_object_added(
@@ -517,11 +518,9 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
             )
 
     def check_document_copy_downloaded(self, obj):
-        title = u'Download copy current version ({version_id})'.format(
-            version_id=obj.version_id)
+        title = u'Download copy current version (0)'
         self.check_annotation(
             obj,
             action_type='File copy downloaded',
             action_title=title,
-            actor=TEST_USER_ID,
-            )
+            actor=TEST_USER_ID)

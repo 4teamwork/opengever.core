@@ -18,7 +18,6 @@ from opengever.task.interfaces import IYearfolderStorer
 from opengever.task.task import ITask
 from opengever.task.transporter import IResponseTransporter
 from opengever.task.util import change_task_workflow_state
-from opengever.task.util import CustomInitialVersionMessage
 from plone.dexterity.utils import createContentInContainer
 from Products.Five.browser import BrowserView
 from zope.app.intid.interfaces import IIntIds
@@ -90,12 +89,12 @@ def accept_forwarding_with_successor(
 
     # copy documents and map the intids
     doc_transporter = getUtility(ITaskDocumentsTransporter)
-    with CustomInitialVersionMessage(
-        _(u'version_message_accept_forwarding',
-          default=u'Document copied from forwarding (forwarding accepted)'),
-        context.REQUEST):
-        intids_mapping = doc_transporter.copy_documents_from_remote_task(
-            predecessor, successor_forwarding)
+
+    comment = _(
+        u'version_message_accept_forwarding',
+        default=u'Document copied from forwarding (forwarding accepted)')
+    intids_mapping = doc_transporter.copy_documents_from_remote_task(
+        predecessor, successor_forwarding, comment=comment)
 
     # copy the responses
     response_transporter = IResponseTransporter(successor_forwarding)
@@ -255,12 +254,11 @@ def accept_task_with_successor(dossier, predecessor_oguid, response_text):
 
     # copy documents and map the intids
     doc_transporter = getUtility(ITaskDocumentsTransporter)
-    with CustomInitialVersionMessage(
-        _(u'version_message_accept_task',
-          default=u'Document copied from task (task accepted)'),
-        dossier.REQUEST):
-        intids_mapping = doc_transporter.copy_documents_from_remote_task(
-            predecessor, successor)
+
+    comment = _(u'version_message_accept_task',
+               default=u'Document copied from task (task accepted)')
+    intids_mapping = doc_transporter.copy_documents_from_remote_task(
+        predecessor, successor, comment=comment)
 
     # copy the responses
     response_transporter = IResponseTransporter(successor)

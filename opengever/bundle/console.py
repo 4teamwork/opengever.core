@@ -41,8 +41,10 @@ def import_oggbundle(app, args):
 
     bundle = IAnnotations(transmogrifier)[BUNDLE_KEY]
     timings = bundle.stats['timings']
-    duration = timings['done_post_processing'] - timings['start_loading']
-    log.info("Duration: %.2fs" % duration.total_seconds())
+
+    if 'migration_finished' in timings:
+        duration = timings['migration_finished'] - timings['start_loading']
+        log.info("Duration: %.2fs" % duration.total_seconds())
 
     log.info("Committing transaction...")
     transaction.get().note("Finished import of OGGBundle %r" % bundle_path)

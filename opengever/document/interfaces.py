@@ -115,12 +115,3 @@ class IDocumentIndexer(Interface):
     def extract_text():
         """Extract plain text from the adapted document.
         """
-
-
-class INoAutomaticInitialVersion(Interface):
-    """Request layer to disable automatic creation of initial versions
-    via event handler.
-
-    This is sometimes necessary when a transmogrifier pipeline is involved,
-    i.e. during setup or migration.
-    """

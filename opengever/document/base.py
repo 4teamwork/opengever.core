@@ -40,9 +40,9 @@ class BaseDocumentMixin(object):
 
         """
         parent = aq_parent(aq_inner(self))
-        if (IDossierMarker.providedBy(parent)
-                or IDossierTemplateMarker.providedBy(parent)
-                or ITemplateFolder.providedBy(parent)):
+        if IDossierMarker.providedBy(parent) or \
+           IDossierTemplateMarker.providedBy(parent) or \
+           ITemplateFolder.providedBy(parent):
             return parent
         if ITask.providedBy(parent):
             return parent.get_containing_dossier()
@@ -73,7 +73,7 @@ class BaseDocumentMixin(object):
     def checked_out_by(self):
         raise NotImplementedError
 
-    def get_current_version(self):
+    def get_current_version_id(self):
         raise NotImplementedError
 
     def get_filename(self):

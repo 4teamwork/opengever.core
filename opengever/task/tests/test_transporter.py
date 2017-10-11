@@ -1,5 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.document.versioner import Versioner
 from opengever.task.interfaces import ITaskDocumentsTransporter
 from opengever.task.task import ITask
 from opengever.testing import FunctionalTestCase
@@ -126,3 +127,15 @@ class TestTransporter(FunctionalTestCase):
             intids.getObject(pair2[0]).Title(),
             intids.getObject(pair2[1]).Title()
             )
+
+    def test_documents_with_custom_sort(self):
+        task = self._create_task(self.portal, with_docs=True)
+        target = self._create_task(self.portal)
+
+        doc_transporter = getUtility(ITaskDocumentsTransporter)
+        doc_transporter.copy_documents_from_remote_task(
+            task.get_sql_object(), target, comment=u'Custom initial version')
+
+        doc = target.getFolderContents()[0].getObject()
+        self.assertEquals(u'Custom initial version',
+                          Versioner(doc).get_custom_initial_version_comment())

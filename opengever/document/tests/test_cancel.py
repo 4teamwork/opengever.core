@@ -5,6 +5,7 @@ from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import FunctionalTestCase
+from plone.namedfile.file import NamedBlobFile
 from plone.protect import createToken
 from zope.component import getMultiAdapter
 
@@ -31,11 +32,25 @@ class TestCancelDocuments(FunctionalTestCase):
                           error_messages())
 
     @browsing
-    def test_cancel_checkout_for_document_when_view_is_called_on_a_document(self, browser):
+    def test_cancel_checkout_for_document_without_initial_version_is_ignored(self, browser):
         doc = create(Builder('document').within(self.dossier).checked_out())
         browser.login().open(doc, {'_authenticator': createToken()},
                              view='cancel_document_checkouts', )
 
+        self.assertEquals(None, self.get_manager(doc).get_checked_out_by())
+
+    @browsing
+    def test_cancel_reset_changes_on_working_copy(self, browser):
+        doc = create(Builder('document').within(self.dossier)
+                     .with_dummy_content()
+                     .checked_out())
+
+        doc.file = NamedBlobFile(data='New', filename=u'test.txt')
+
+        browser.login().open(doc, {'_authenticator': createToken()},
+                             view='cancel_document_checkouts', )
+
+        self.assertEquals('Test data', doc.file.data)
         self.assertEquals(None, self.get_manager(doc).get_checked_out_by())
 
     @browsing

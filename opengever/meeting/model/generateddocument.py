@@ -41,7 +41,8 @@ class GeneratedDocument(Base):
     def is_up_to_date(self, document):
         assert Oguid.for_object(document) == self.oguid, 'invalid document'
 
-        return self.generated_version == document.get_current_version()
+        return self.generated_version == document.get_current_version_id(
+            missing_as_zero=True)
 
     def resolve_document(self):
         return self.oguid.resolve_object()

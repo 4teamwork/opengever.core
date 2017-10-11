@@ -105,7 +105,8 @@ class ProposalOverview(OverviewBase, DisplayForm, GeverTabMixin):
     def render_current_document_version(self, document):
         return document_mf(
             u"Current version: ${version}",
-            mapping={'version': document.getObject().get_current_version()})
+            mapping={'version': document.getObject().get_current_version_id(
+                missing_as_zero=True)})
 
 
 class SubmittedProposalOverview(OverviewBase, DisplayForm, GeverTabMixin):

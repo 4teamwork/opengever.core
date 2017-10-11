@@ -28,6 +28,7 @@ class TestSyncExcerpt(IntegrationTestCase):
 
         self.document_in_proposal = create(
             Builder('document')
+            .with_dummy_content()
             .within(self.submitted_proposal))
         self.excerpt_in_proposal = create(
             Builder('generated_excerpt')
@@ -35,8 +36,8 @@ class TestSyncExcerpt(IntegrationTestCase):
         self.submitted_proposal.load_model().submitted_excerpt_document = self.excerpt_in_proposal
 
     def test_updates_excerpt_in_dossier_after_checkin(self):
-        self.assertEqual(0, self.document_in_proposal.get_current_version())
-        self.assertEqual(0, self.document_in_dossier.get_current_version())
+        self.assertEqual(None, self.document_in_proposal.get_current_version_id())
+        self.assertEqual(None, self.document_in_dossier.get_current_version_id())
         manager = getMultiAdapter((self.document_in_proposal,
                                    self.portal.REQUEST),
                                   ICheckinCheckoutManager)
@@ -47,12 +48,12 @@ class TestSyncExcerpt(IntegrationTestCase):
             data='foo bar')
         manager.checkin()
 
-        self.assertEqual(1, self.document_in_proposal.get_current_version())
-        self.assertEqual(1, self.document_in_dossier.get_current_version())
+        self.assertEqual(1, self.document_in_proposal.get_current_version_id())
+        self.assertEqual(1, self.document_in_dossier.get_current_version_id())
 
     def test_updates_excerpt_in_dossier_after_revert(self):
-        self.assertEqual(0, self.document_in_proposal.get_current_version())
-        self.assertEqual(0, self.document_in_dossier.get_current_version())
+        self.assertEqual(None, self.document_in_proposal.get_current_version_id())
+        self.assertEqual(None, self.document_in_dossier.get_current_version_id())
         manager = getMultiAdapter((self.document_in_proposal,
                                    self.portal.REQUEST),
                                   ICheckinCheckoutManager)
@@ -64,18 +65,18 @@ class TestSyncExcerpt(IntegrationTestCase):
         manager.checkin()
 
         manager.revert_to_version(0)
-        self.assertEqual(2, self.document_in_proposal.get_current_version())
-        self.assertEqual(2, self.document_in_dossier.get_current_version())
+        self.assertEqual(2, self.document_in_proposal.get_current_version_id())
+        self.assertEqual(2, self.document_in_dossier.get_current_version_id())
 
     def test_updates_excerpt_in_dossier_after_modification(self):
-        self.assertEqual(0, self.document_in_dossier.get_current_version())
+        self.assertEqual(None, self.document_in_dossier.get_current_version_id())
         self.document_in_proposal.update_file(
             filename=u'example.docx',
             content_type='text/plain',
             data='foo bar')
         notify(ObjectModifiedEvent(self.document_in_proposal))
 
-        self.assertEqual(1, self.document_in_dossier.get_current_version())
+        self.assertEqual(1, self.document_in_dossier.get_current_version_id())
 
 
 class TestExcerpt(IntegrationTestCase):
