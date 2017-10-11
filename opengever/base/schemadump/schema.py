@@ -1,5 +1,4 @@
 from collections import OrderedDict
-from jsonschema import Draft4Validator
 from opengever.base.behaviors.translated_title import TRANSLATED_TITLE_NAMES
 from opengever.base.schemadump.config import ALLOWED_REVIEW_STATES
 from opengever.base.schemadump.config import GEVER_SQL_TYPES
@@ -8,11 +7,13 @@ from opengever.base.schemadump.config import GEVER_TYPES_TO_OGGBUNDLE_TYPES
 from opengever.base.schemadump.config import IGNORED_FIELDS
 from opengever.base.schemadump.config import IGNORED_OGGBUNDLE_FIELDS
 from opengever.base.schemadump.config import JSON_SCHEMA_FIELD_TYPES
+from opengever.base.schemadump.config import SEQUENCE_NUMBER_LABELS
 from opengever.base.schemadump.field import FieldDumper
 from opengever.base.schemadump.field import SQLFieldDumper
 from opengever.base.schemadump.helpers import DirectoryHelperMixin
 from opengever.base.schemadump.helpers import mkdir_p
 from opengever.base.schemadump.helpers import translate_de
+from opengever.base.schemadump.json_schema_helper import JSONSchema
 from opengever.base.utils import pretty_json
 from os.path import join as pjoin
 from pkg_resources import resource_filename
@@ -171,218 +172,226 @@ class SQLTypeDumper(object):
 
 
 class JSONSchemaBuilder(object):
-    """Builds a JSON Schema representation of a single GEVER type (as a
-    Python data structure).
+    """Builds a JSON Schema representation of a single GEVER type.
     """
 
-    def build_schema(self, portal_type):
-        schema = OrderedDict([
-            (u'$schema', u'http://json-schema.org/draft-04/schema#'),
-            (u'type', u'object'),
-            (u'title', None),
-            ('additionalProperties', False),
-            (u'properties', OrderedDict()),
-        ])
+    def __init__(self, portal_type):
+        self.portal_type = portal_type
+        self.schema = None
 
         if portal_type in GEVER_TYPES:
-            type_dumper = TypeDumper()
+            self.type_dumper = TypeDumper()
         elif portal_type in GEVER_SQL_TYPES:
-            type_dumper = SQLTypeDumper()
+            self.type_dumper = SQLTypeDumper()
         else:
             raise Exception("Unmapped type: %r" % portal_type)
 
-        type_dump = type_dumper.dump(portal_type)
-        type_schema = self._js_type_from_type_dump(type_dump)
-        schema.update(type_schema)
+    def build_schema(self):
+        type_dump = self.type_dumper.dump(self.portal_type)
 
-        Draft4Validator.check_schema(schema)
-        return schema
-
-    def _js_type_from_type_dump(self, type_dump):
-        json_schema_type = OrderedDict([
-            ('type', 'object'),
-            ('properties', OrderedDict()),
-            ('title', type_dump['title']),
-        ])
-
-        constraints = OrderedDict([('required', []), ('anyOf', [])])
-
+        self.schema = JSONSchema(
+            title=type_dump['title'],
+            additional_properties=False,
+        )
         field_order = []
         # Collect field info from all schemas (base schema + behaviors)
-        for schema in type_dump['schemas']:
+        for _schema in type_dump['schemas']:
             # Note: This is not the final / "correct" field order as displayed
             # in the user interface (which should eventually honor fieldsets
             # and plone.autoform directives).
             # The intent here is rather to keep a *consistent* order for now.
-            field_order.extend([field['name'] for field in schema['fields']])
-            for field in schema['fields']:
-                name = field['name']
-                json_schema_field = self._js_property_from_field_dump(field)
+            field_order.extend([field['name'] for field in _schema['fields']])
 
-                if 'default' in field:
-                    json_schema_field['default'] = field['default']
+            translated_title_fields = []
+            for field in _schema['fields']:
+                prop_def = self._property_definition_from_field(field)
+                self.schema.add_property(field['name'], prop_def)
 
-                if field.get('vocabulary'):
-                    vocab = field['vocabulary']
-                    if isinstance(vocab, basestring) and vocab.startswith('<'):
-                        json_schema_field['_vocabulary'] = vocab
-                    else:
-                        json_schema_field['enum'] = vocab
+                if field['name'] in TRANSLATED_TITLE_NAMES:
+                    translated_title_fields.append(field['name'])
 
-                json_schema_type['properties'][name] = json_schema_field
+            if translated_title_fields:
+                self.schema.require_any_of(translated_title_fields)
 
-                if field.get('required', False):
-                    if name not in TRANSLATED_TITLE_NAMES:
-                        constraints['required'].append(name)
+        self.schema.set_field_order(field_order)
+        return self.schema
 
-                if name in TRANSLATED_TITLE_NAMES:
-                    constraints['anyOf'].append({'required': [name]})
-
-        for c_name, c_value in constraints.items():
-            if c_value:
-                json_schema_type[c_name] = c_value
-
-        json_schema_type['field_order'] = field_order
-        return json_schema_type
-
-    def _js_property_from_field_dump(self, field):
+    def _property_definition_from_field(self, field):
         """Create a JSON Schema property definition from a field info dump.
         """
-        js_property = OrderedDict(title=None, type=None)
+        prop_def = self._js_type_from_zope_type(field['type'])
 
-        try:
-            type_ = JSON_SCHEMA_FIELD_TYPES[field['type']].copy()
-            js_property.update(sorted(type_.items()))
-        except KeyError:
+        prop_def['title'] = field['title']
+        prop_def['description'] = field['description']
+        prop_def['_zope_schema_type'] = field['type']
+
+        self._process_choice(prop_def, field)
+        self._process_max_length(prop_def, field)
+        self._process_default(prop_def, field)
+        self._process_vocabulary(prop_def, field)
+        self._process_required(prop_def, field)
+
+        return prop_def
+
+    def _js_type_from_zope_type(self, zope_type):
+        """Map a zope.schema type to a JSON schema (JavaScript) type.
+
+        Returns a minimal property definition dict including at least a
+        'type', and possibly a 'format' as well.
+        """
+        if zope_type not in JSON_SCHEMA_FIELD_TYPES:
             raise Exception(
                 "Don't know what JS type to map %r to. Please map it in "
-                "JSON_SCHEMA_FIELD_TYPES first." % field['type'])
+                "JSON_SCHEMA_FIELD_TYPES first." % zope_type)
 
+        type_spec = JSON_SCHEMA_FIELD_TYPES[zope_type].copy()
+        return type_spec
+
+    def _process_choice(self, prop_def, field):
         if field['type'] == 'Choice':
-            js_property['type'] = field['value_type']
+            prop_def['type'] = field['value_type']
 
+    def _process_max_length(self, prop_def, field):
         if field.get('max_length') is not None:
-            js_property['maxLength'] = field['max_length']
+            prop_def['maxLength'] = field['max_length']
 
-        js_property['title'] = field['title']
-        js_property['description'] = field['description']
-        js_property['_zope_schema_type'] = field['type']
+    def _process_default(self, prop_def, field):
+        if 'default' in field:
+            prop_def['default'] = field['default']
 
-        return js_property
+    def _process_vocabulary(self, prop_def, field):
+        if field.get('vocabulary'):
+            vocab = field['vocabulary']
+            if isinstance(vocab, basestring) and vocab.startswith('<'):
+                # Placeholder vocabulary (like <Any valid user> )
+                prop_def['_vocabulary'] = vocab
+            else:
+                prop_def['enum'] = vocab
+
+    def _process_required(self, prop_def, field):
+        if field.get('required', False):
+            if field['name'] not in TRANSLATED_TITLE_NAMES:
+                self.schema.set_required(field['name'])
 
 
 class OGGBundleJSONSchemaBuilder(object):
-    """Builds a JSON Schema representation of a single OGGBundle type (as a
-    Python data structure).
+    """Builds a JSON Schema representation of a single OGGBundle type.
     """
 
-    def build_schema(self, portal_type):
-        short_name = GEVER_TYPES_TO_OGGBUNDLE_TYPES[portal_type]
-        schema = OrderedDict([
-            (u'$schema', u'http://json-schema.org/draft-04/schema#'),
-            (u'type', u'array'),
-            (u'items', {"$ref": "#/definitions/%s" % short_name}),
-            (u'definitions', OrderedDict()),
-        ])
+    def __init__(self, portal_type):
+        self.portal_type = portal_type
+        self.short_name = GEVER_TYPES_TO_OGGBUNDLE_TYPES[portal_type]
 
-        core_schema = JSONSchemaBuilder().build_schema(portal_type)
-        core_schema.pop('$schema')
-        schema['definitions'][short_name] = core_schema
-        if 'required' not in core_schema:
-            core_schema['required'] = []
+        # Bundle schema (array of items)
+        self.schema = None
+        # Content type schema (item, i.e. GEVER type)
+        self.ct_schema = None
 
+    def build_schema(self):
+        # The OGGBundle JSON schemas all are flat arrays of items, where the
+        # actual items' schemas are (more or less) the GEVER content types'
+        # schemas, stored in #/definitions/<short_name>
+        self.schema = JSONSchema(type_='array')
+        self.schema._schema['items'] = {
+            "$ref": "#/definitions/%s" % self.short_name}
+
+        # Build the standard content type schema
+        self.ct_schema = JSONSchemaBuilder(self.portal_type).build_schema()
+
+        # Tweak the content type schema for use in OGGBundles
+        self._add_review_state_property()
+        self._add_guid_properties()
+        self._add_permissions_property()
+        self._add_file_properties()
+        self._add_sequence_number_property()
+        self._add_mail_properties()
+
+        self._filter_fields()
+        self.ct_schema.make_optional_properties_nullable()
+
+        # Finally add the CT schema under #/definitions/<short_name>
+        self.schema.add_definition(self.short_name, self.ct_schema)
+        return self.schema
+
+    def _add_review_state_property(self):
         # XXX: Eventually, these states should be dynamically generated by
         # interrogating the FTI / workflow tool. Hardcoded for now.
-        core_schema['properties']['review_state'] = OrderedDict([
-            ('type', 'string'),
-            ('enum', ALLOWED_REVIEW_STATES[portal_type]),
-        ])
-        core_schema['required'].append('review_state')
+        self.ct_schema.add_property(
+            'review_state',
+            {'type': 'string',
+             'enum': ALLOWED_REVIEW_STATES[self.portal_type]},
+            required=True,
+        )
 
-        core_schema['properties']['guid'] = {'type': 'string'}
-        core_schema['required'].append('guid')
+    def _add_guid_properties(self):
+        self.ct_schema.add_property('guid', {'type': 'string'}, required=True)
+        self.ct_schema.add_property(
+            'parent_guid', {'type': 'string'}, required=True)
 
-        core_schema['properties']['parent_guid'] = {'type': 'string'}
-        core_schema['required'].append('parent_guid')
-
-        if portal_type == 'opengever.repository.repositoryroot':
+        if self.portal_type == 'opengever.repository.repositoryroot':
             # Repository roots don't have a parent GUID
-            core_schema['required'].remove('parent_guid')
+            self.ct_schema.set_not_required('parent_guid')
 
-        if not portal_type == 'opengever.document.document':
-            # Permissions
-            core_schema['properties']['_permissions'] = {
+    def _add_permissions_property(self):
+        if not self.portal_type == 'opengever.document.document':
+            permissions_schema = self._build_permission_subschema()
+            self.ct_schema._schema['properties']['_permissions'] = {
                 "$ref": "#/definitions/permission"}
 
-            schema['definitions']['permission'] = OrderedDict([
-                ("type", "object"),
-                ("additionalProperties", False),
-                ("properties", OrderedDict()),
-            ])
-            string_array = OrderedDict([
-                ("type", "array"),
-                ("items", {
-                    "type": "string"
-                }),
-            ])
+            # XXX: This is just to preserve order in definitions for now
+            self.schema._schema['definitions'] = OrderedDict()
+            self.schema._schema['definitions'][self.short_name] = None
 
-            schema['definitions']['permission']['properties'] = OrderedDict([
-                ("block_inheritance", {"type": "boolean"}),
-                ("read", string_array),
-                ("add", string_array),
-                ("edit", string_array),
-                ("close", string_array),
-                ("reactivate", string_array),
-            ])
+            self.schema.add_definition('permission', permissions_schema)
 
-        if portal_type == 'opengever.document.document':
-            core_schema['properties']['filepath'] = {'type': 'string'}
-            core_schema['properties']['sequence_number'] = OrderedDict([
-                ('type', 'integer'),
-                ('title', 'Laufnummer'),
-                ('description', u'Fortlaufend gez\xe4hlte Nummer eines '
-                                u'Dokumentes.'),
-            ])
-            core_schema['required'].extend(['title', 'filepath'])
-            core_schema['properties']['original_message_path'] = {
-                'type': 'string'}
-            # XXX: Documents without files?
+    def _build_permission_subschema(self):
+        subschema = JSONSchema(additional_properties=False)
+        string_array = {
+            "type": "array",
+            "items": {"type": "string"},
+        }
 
-        if portal_type == 'opengever.dossier.businesscasedossier':
-            core_schema['properties']['sequence_number'] = OrderedDict([
-                ('type', 'integer'),
-                ('title', 'Laufnummer'),
-                ('description', u'Fortlaufend gez\xe4hlte Nummer eines '
-                                u'Dossiers.'),
-            ])
+        subschema.add_property('block_inheritance', {"type": "boolean"})
+        subschema.add_property('read', string_array)
+        subschema.add_property('add', string_array)
+        subschema.add_property('edit', string_array)
+        subschema.add_property('close', string_array)
+        subschema.add_property('reactivate', string_array)
+        return subschema
 
-        self._filter_fields(short_name, core_schema)
-        self._make_optional_fields_nullable(core_schema)
+    def _add_file_properties(self):
+        if self.portal_type == 'opengever.document.document':
+            self.ct_schema.add_property('filepath', {'type': 'string'})
 
-        return schema
+            # In OGGBundles we always require a title for documents
+            self.ct_schema.set_required('title')
 
-    def _filter_fields(self, short_name, core_schema):
-        filtered_fields = IGNORED_OGGBUNDLE_FIELDS.get(short_name, [])
+            # XXX: Documents without files? For now we always require filepath
+            self.ct_schema.set_required('filepath')
+
+    def _add_sequence_number_property(self):
+        if self.portal_type not in SEQUENCE_NUMBER_LABELS:
+            return
+
+        desc = SEQUENCE_NUMBER_LABELS[self.portal_type]
+        self.ct_schema.add_property('sequence_number', {
+            'type': 'integer',
+            'title': u'Laufnummer',
+            'description': desc,
+        })
+
+    def _add_mail_properties(self):
+        # Mails in OGGBundles are expecter in documents.json, and for large
+        # parts treated like documents. Only later (bundle loader) will their
+        # *actual* portal_type (ftw.mail.mail) be determined and set.
+        if self.portal_type == 'opengever.document.document':
+            self.ct_schema.add_property('original_message_path',
+                                        {'type': 'string'})
+
+    def _filter_fields(self):
+        filtered_fields = IGNORED_OGGBUNDLE_FIELDS.get(self.short_name, [])
         for field_name in filtered_fields:
-            core_schema['properties'].pop(field_name, None)
-            if field_name in core_schema['required']:
-                core_schema['required'].remove(field_name)
-
-    def _make_optional_fields_nullable(self, core_schema):
-        for field_name, field in core_schema['properties'].items():
-            if field_name not in core_schema['required']:
-                existing_type = field.get('type')
-                if not existing_type:
-                    continue
-
-                # Add null/None as one of the allowed data types
-                assert isinstance(existing_type, basestring)
-                field['type'] = ['null'] + [existing_type]
-
-                # If the field has a vocabulary, null/None also needs to be
-                # part of that vocabulary in order for the schema to validate
-                if 'enum' in field:
-                    field['enum'].insert(0, None)
+            self.ct_schema.drop_property(field_name)
 
 
 class JSONSchemaDumpWriter(DirectoryHelperMixin):
@@ -391,15 +400,14 @@ class JSONSchemaDumpWriter(DirectoryHelperMixin):
     """
 
     def dump(self):
-        builder = JSONSchemaBuilder()
-
         for portal_type in GEVER_TYPES + GEVER_SQL_TYPES:
-            schema = builder.build_schema(portal_type)
+            builder = JSONSchemaBuilder(portal_type)
+            schema = builder.build_schema()
             filename = '%s.schema.json' % portal_type
             dump_path = pjoin(self.schema_dumps_dir, filename)
 
             with open(dump_path, 'w') as dump_file:
-                json_dump = pretty_json(schema)
+                json_dump = pretty_json(schema.serialize())
                 dump_file.write(json_dump)
 
             log.info('Dumped: %s\n' % dump_path)
@@ -411,18 +419,17 @@ class OGGBundleJSONSchemaDumpWriter(DirectoryHelperMixin):
     """
 
     def dump(self):
-        builder = OGGBundleJSONSchemaBuilder()
-
         dump_dir = pjoin(resource_filename('opengever.bundle', 'schemas/'))
         mkdir_p(dump_dir)
 
         for portal_type, short_name in GEVER_TYPES_TO_OGGBUNDLE_TYPES.items():
-            schema = builder.build_schema(portal_type)
+            builder = OGGBundleJSONSchemaBuilder(portal_type)
+            schema = builder.build_schema()
             filename = '%ss.schema.json' % short_name
             dump_path = pjoin(dump_dir, filename)
 
             with open(dump_path, 'w') as dump_file:
-                json_dump = pretty_json(schema)
+                json_dump = pretty_json(schema.serialize())
                 dump_file.write(json_dump)
 
             log.info('Dumped: %s\n' % dump_path)

@@ -29,10 +29,9 @@ class TestCheckedInSchemaDumpsAreUpToDate(IntegrationTestCase):
         return pjoin(resource_filename('opengever.bundle', 'schemas/'))
 
     def test_schema_dumps_for_api(self):
-        builder = JSONSchemaBuilder()
-
         for portal_type in GEVER_TYPES + GEVER_SQL_TYPES:
-            current_schema = builder.build_schema(portal_type)
+            builder = JSONSchemaBuilder(portal_type)
+            current_schema = builder.build_schema().serialize()
             filename = '%s.schema.json' % portal_type
             dump_path = pjoin(self.schema_dumps_dir, filename)
 
@@ -48,10 +47,9 @@ class TestCheckedInSchemaDumpsAreUpToDate(IntegrationTestCase):
                 'your changes.' % dump_path)
 
     def test_schema_dumps_for_oggbundles(self):
-        builder = OGGBundleJSONSchemaBuilder()
-
         for portal_type, short_name in GEVER_TYPES_TO_OGGBUNDLE_TYPES.items():
-            current_schema = builder.build_schema(portal_type)
+            builder = OGGBundleJSONSchemaBuilder(portal_type)
+            current_schema = builder.build_schema().serialize()
             filename = '%ss.schema.json' % short_name
             dump_path = pjoin(self.oggbundle_schema_dumps_dir, filename)
 
