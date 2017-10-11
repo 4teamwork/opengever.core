@@ -60,4 +60,7 @@
       class=".revert.RevertFileToVersion"
       permission="cmf.ModifyPortalContent"
       />
+
+  <adapter factory=".manager.CheckinCheckoutManager" />
+
 </configure>
