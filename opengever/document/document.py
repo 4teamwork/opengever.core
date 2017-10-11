@@ -21,36 +21,50 @@ from opengever.officeconnector.helpers import create_oc_url
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
 from opengever.task.task import ITask
 from plone import api
+from plone.app.versioningbehavior.behaviors import IVersionable
 from plone.autoform import directives as form_directives
+from plone.autoform.interfaces import OMITTED_KEY
 from plone.dexterity.content import Item
 from plone.directives import form
 from plone.namedfile import field
 from plone.namedfile.file import NamedBlobFile
+from plone.supermodel.interfaces import FIELDSETS_KEY
+from plone.supermodel.model import Fieldset
 from z3c.form import validator
-from zc.relation.interfaces import ICatalog
+from z3c.form.interfaces import IAddForm
+from z3c.form.interfaces import IEditForm
 from zc.relation.interfaces import ICatalog
 from zope import schema
 from zope.component import getMultiAdapter
 from zope.component import getUtility
-from zope.component import getUtility
 from zope.component import queryMultiAdapter
 from zope.globalrequest import getRequest
 from zope.interface import implements
+from zope.interface import Interface
 from zope.interface import Invalid
 from zope.interface import invariant
 from zope.intid.interfaces import IIntIds
 import logging
 import os.path
 
-
-# Note: the changeNote field from the IVersionable behavior is being dropped
-# and moved in change_note.py - we do this in a separate module to avoid
-# setting the tagged values too early (document.py gets imported in many
-# places, to get the IDocumentSchema for example)
-
-
 LOG = logging.getLogger('opengever.document')
 MAIL_EXTENSIONS = ['.eml', '.msg']
+
+
+# move the changeNote to the 'common' fieldset
+IVersionable.setTaggedValue(FIELDSETS_KEY, [
+        Fieldset('common', fields=[
+                'changeNote',
+                ])
+        ])
+
+
+# omit the changeNote from all forms because it's not possible to create a new
+# version when editing document metadata
+IVersionable.setTaggedValue(OMITTED_KEY, [
+    (Interface, 'changeNote', 'true'),
+    (IEditForm, 'changeNote', 'true'),
+    (IAddForm, 'changeNote', 'true'),])
 
 
 class IDocumentSchema(form.Schema):
