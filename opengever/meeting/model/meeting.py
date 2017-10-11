@@ -269,9 +269,14 @@ class Meeting(Base, SQLFormSupport):
         return 'contenttype-opengever-meeting-meeting'
 
     def is_editable(self):
+        committee = self.committee.resolve_committee()
+        if not api.user.has_permission('Modify portal content', obj=committee):
+            return False
         return self.get_state() in [self.STATE_PENDING, self.STATE_HELD]
 
     def is_agendalist_editable(self):
+        if not self.is_editable():
+            return False
         return self.get_state() == self.STATE_PENDING
 
     def has_protocol_document(self):
