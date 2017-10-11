@@ -1,7 +1,6 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
-    xmlns:grok="http://namespaces.zope.org/grok"
     xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:vdex="http://namespaces.zope.org/vdex"
     xmlns:plone="http://namespaces.plone.org/plone"
@@ -9,9 +8,6 @@
     i18n_domain="opengever.document">
 
   <include package="collective.vdexvocabulary" file="meta.zcml" />
-
-  <!-- Grok the package to initialise schema interfaces and content classes -->
-  <grok:grok package="." />
 
   <include package=".behaviors" />
   <include package=".checkout" />
