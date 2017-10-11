@@ -36,7 +36,26 @@ def get_dm_key(context):
     return 'create_committee:{}'.format(container_oguid)
 
 
-class AddForm(BaseWizardStepForm, dexterity.AddForm):
+class CommitteeFieldConfigurationMixin(object):
+    """Form mixin, configuring the avialable fields of committe
+    forms according to the feature flag configuration.
+    """
+
+    def updateFields(self):
+        super(CommitteeFieldConfigurationMixin, self).updateFields()
+        if is_word_meeting_implementation_enabled():
+            self.fields = self.fields.omit('excerpt_template',
+                                           'protocol_template')
+        else:
+            self.fields = self.fields.omit('ad_hoc_template',
+                                           'paragraph_template',
+                                           'protocol_header_template',
+                                           'protocol_suffix_template')
+
+
+class AddForm(CommitteeFieldConfigurationMixin,
+              BaseWizardStepForm,
+              dexterity.AddForm):
     """Form to create a committee.
 
     Is registered as default add form for committees. Does not create the
@@ -50,18 +69,6 @@ class AddForm(BaseWizardStepForm, dexterity.AddForm):
 
     step_name = 'add-meeting-dossier'
     steps = ADD_COMMITTEE_STEPS
-
-    def updateWidgets(self):
-        super(AddForm, self).updateWidgets()
-
-        if not is_word_meeting_implementation_enabled():
-            self.widgets['ad_hoc_template'].mode = HIDDEN_MODE
-            self.widgets['paragraph_template'].mode = HIDDEN_MODE
-            self.widgets['protocol_header_template'].mode = HIDDEN_MODE
-            self.widgets['protocol_suffix_template'].mode = HIDDEN_MODE
-        else:
-            self.widgets['excerpt_template'].mode = HIDDEN_MODE
-            self.widgets['protocol_template'].mode = HIDDEN_MODE
 
     @buttonAndHandler(_(u'button_continue', default=u'Continue'), name='save')
     def handle_continue(self, action):
@@ -171,20 +178,10 @@ class AddInitialPeriodStepView(FormWrapper, grok.View):
         grok.View.__init__(self, *args, **kwargs)
 
 
-class EditForm(ModelProxyEditForm, dexterity.EditForm):
+class EditForm(CommitteeFieldConfigurationMixin,
+               ModelProxyEditForm,
+               dexterity.EditForm):
 
     grok.context(ICommittee)
     fields = field.Fields(Committee.model_schema, ignoreContext=True)
     content_type = Committee
-
-    def updateWidgets(self):
-        super(EditForm, self).updateWidgets()
-
-        if not is_word_meeting_implementation_enabled():
-            self.widgets['ad_hoc_template'].mode = HIDDEN_MODE
-            self.widgets['paragraph_template'].mode = HIDDEN_MODE
-            self.widgets['protocol_header_template'].mode = HIDDEN_MODE
-            self.widgets['protocol_suffix_template'].mode = HIDDEN_MODE
-        else:
-            self.widgets['excerpt_template'].mode = HIDDEN_MODE
-            self.widgets['protocol_template'].mode = HIDDEN_MODE
