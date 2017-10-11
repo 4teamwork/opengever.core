@@ -71,4 +71,6 @@
 
   <adapter factory=".reference.TemplateFolderReferenceNumber" />
 
+  <adapter factory=".sequence.DossierSequenceNumberGenerator" />
+
 </configure>

@@ -10,8 +10,10 @@ from Products.CMFCore.interfaces import ISiteRoot
 from ZODB.DemoStorage import DemoStorage
 from ZODB.POSException import ConflictError
 from zope.annotation.interfaces import IAnnotations
+from zope.component import adapter
 from zope.component import getUtility, getAdapter
 from zope.globalrequest import getRequest
+from zope.interface import implementer
 import logging
 import transaction
 
@@ -40,13 +42,15 @@ class SequenceNumber(grok.GlobalUtility):
             del ann[SEQUENCE_NUMBER_ANNOTATION_KEY]
 
 
-class DefaultSequenceNumberGenerator(grok.Adapter):
+@implementer(ISequenceNumberGenerator)
+@adapter(IDexterityContent)
+class DefaultSequenceNumberGenerator(object):
     """ Provides a default sequence number generator.
     The portal_type of the object is used as *unique-key*
     """
 
-    grok.provides(ISequenceNumberGenerator)
-    grok.context(IDexterityContent)
+    def __init__(self, context):
+        self.context = context
 
     def generate(self):
         return self.get_next(self.key)
