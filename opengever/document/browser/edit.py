@@ -22,7 +22,7 @@ def get_redirect_url(context):
             try:
                 obj = context.restrictedTraverse(obj_path)
             except KeyError:
-                return  '%s#overview' % context.absolute_url()
+                return '%s#overview' % context.absolute_url()
 
             # redirect to right tabbedview-tab
             if ITask.providedBy(obj):
@@ -35,7 +35,7 @@ def get_redirect_url(context):
                 return obj.absolute_url()
 
         else:
-            return  '%s#overview' % context.absolute_url()
+            return '%s#overview' % context.absolute_url()
 
 
 class EditCheckerView(BrowserView):

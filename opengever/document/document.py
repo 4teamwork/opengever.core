@@ -53,10 +53,10 @@ MAIL_EXTENSIONS = ['.eml', '.msg']
 
 # move the changeNote to the 'common' fieldset
 IVersionable.setTaggedValue(FIELDSETS_KEY, [
-        Fieldset('common', fields=[
-                'changeNote',
-                ])
-        ])
+    Fieldset('common', fields=[
+             'changeNote',
+             ])
+    ])
 
 
 # omit the changeNote from all forms because it's not possible to create a new
@@ -64,7 +64,7 @@ IVersionable.setTaggedValue(FIELDSETS_KEY, [
 IVersionable.setTaggedValue(OMITTED_KEY, [
     (Interface, 'changeNote', 'true'),
     (IEditForm, 'changeNote', 'true'),
-    (IAddForm, 'changeNote', 'true'),])
+    (IAddForm, 'changeNote', 'true')])
 
 
 class IDocumentSchema(model.Schema):
