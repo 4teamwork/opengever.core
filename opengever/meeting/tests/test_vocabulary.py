@@ -1,37 +1,29 @@
-from ftw.builder import Builder
-from ftw.builder import create
-from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from zope.component import getUtility
 from zope.schema.interfaces import IVocabularyFactory
-import transaction
 
 
-class TestCommitteeVocabularies(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestCommitteeVocabularies, self).setUp()
-        container = create(Builder('committee_container'))
-        self.committee_a = create(Builder('committee')
-                             .within(container)
-                             .titled(u'Gemeinderat'))
-        self.committee_b = create(Builder('committee')
-                             .within(container)
-                             .titled(u'Wasserkommission'))
-
-        self.committee_b.load_model().deactivate()
-        transaction.commit()
+class TestCommitteeVocabularies(IntegrationTestCase):
 
     def test_committeee_vocabulary_list_all_committees(self):
+        self.login(self.committee_responsible)
         factory = getUtility(IVocabularyFactory,
                              name='opengever.meeting.CommitteeVocabulary')
-        vocabulary = factory(context=None)
-        self.assertTermKeys(
-            [self.committee_a.load_model(), self.committee_b.load_model()],
-            vocabulary)
+        self.assertItemsEqual(
+            [self.empty_committee.load_model(),
+             self.committee.load_model()],
+            [term.value for term in factory(context=None)])
 
     def test_active_committeee_vocabulary_list_only_active_committees(self):
+        self.login(self.committee_responsible)
         factory = getUtility(IVocabularyFactory,
                              name='opengever.meeting.ActiveCommitteeVocabulary')
-        vocabulary = factory(context=None)
-        self.assertTermKeys(
-            [self.committee_a.load_model()], vocabulary)
+        self.assertItemsEqual(
+            [self.empty_committee.load_model(),
+             self.committee.load_model()],
+            [term.value for term in factory(context=None)])
+
+        self.empty_committee.load_model().deactivate()
+        self.assertItemsEqual(
+            [self.committee.load_model()],
+            [term.value for term in factory(context=None)])
