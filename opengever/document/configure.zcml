@@ -180,4 +180,16 @@
       handler=".subscribers.set_copyname"
       />
 
+  <adapter
+      for="opengever.document.document.IDocumentSchema"
+      factory=".webdav.DocumentReadFile"
+      provides="zope.filerepresentation.interfaces.IRawReadFile"
+      />
+
+  <adapter
+      for="opengever.document.document.IDocumentSchema"
+      factory=".webdav.DocumentWriteFile"
+      provides="zope.filerepresentation.interfaces.IRawWriteFile"
+      />
+
 </configure>

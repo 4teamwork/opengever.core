@@ -1,20 +1,15 @@
 """
 Webdav support for Document
 """
-from five import grok
 from opengever.document.document import IDocumentSchema
 from opengever.document.versioner import Versioner
 from plone.dexterity import filerepresentation
 from plone.memoize.instance import memoize
 from StringIO import StringIO
-from zope.filerepresentation.interfaces import IRawReadFile, IRawWriteFile
 import tempfile
 
 
-class DocumentReadFile(filerepresentation.DefaultReadFile, grok.Adapter):
-    grok.implements(IRawReadFile)
-    grok.provides(IRawReadFile)
-    grok.context(IDocumentSchema)
+class DocumentReadFile(filerepresentation.DefaultReadFile):
 
     @property
     def filefield(self):
@@ -63,9 +58,7 @@ class DocumentReadFile(filerepresentation.DefaultReadFile, grok.Adapter):
         return self.filefield.getSize()
 
 
-class DocumentWriteFile(filerepresentation.DefaultWriteFile, grok.Adapter):
-    grok.implements(IRawWriteFile)
-    grok.context(IDocumentSchema)
+class DocumentWriteFile(filerepresentation.DefaultWriteFile):
 
     @property
     def filefield(self):
