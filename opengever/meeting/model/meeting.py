@@ -322,6 +322,12 @@ class Meeting(Base, SQLFormSupport):
     def get_protocol_template(self):
         return self.committee.get_protocol_template()
 
+    def get_protocol_header_template(self):
+        return self.committee.get_protocol_header_template()
+
+    def get_protocol_suffix_template(self):
+        return self.committee.get_protocol_suffix_template()
+
     def get_excerpt_template(self):
         return self.committee.get_excerpt_template()
 

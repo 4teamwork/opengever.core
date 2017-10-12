@@ -9,17 +9,25 @@ from zope.component import adapter
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 
 
-class AddForm(TranslatedTitleAddForm):
-    """Add form for opengever.meeting.committeecontainer."""
+class CommitteContainerFieldConfigurationMixin(object):
+    """Form mixin, configuring the avialable fields of committe container
+    forms according to the feature flag configuration.
+    """
 
-    def updateWidgets(self):
-        super(AddForm, self).updateWidgets()
-
-        if not is_word_meeting_implementation_enabled():
-            self.widgets['ad_hoc_template'].mode = HIDDEN_MODE
-            self.widgets['paragraph_template'].mode = HIDDEN_MODE
+    def updateFields(self):
+        super(CommitteContainerFieldConfigurationMixin, self).updateFields()
+        if is_word_meeting_implementation_enabled():
+            self.fields = self.fields.omit('excerpt_template',
+                                           'protocol_template')
         else:
-            self.widgets['excerpt_template'].mode = HIDDEN_MODE
+            self.fields = self.fields.omit('ad_hoc_template',
+                                           'paragraph_template',
+                                           'protocol_header_template',
+                                           'protocol_suffix_template')
+
+
+class AddForm(CommitteContainerFieldConfigurationMixin, TranslatedTitleAddForm):
+    """Add form for opengever.meeting.committeecontainer."""
 
 
 @adapter(IFolderish, IDefaultBrowserLayer, IDexterityFTI)
@@ -27,14 +35,5 @@ class AddView(DefaultAddView):
     form = AddForm
 
 
-class EditForm(TranslatedTitleEditForm):
+class EditForm(CommitteContainerFieldConfigurationMixin, TranslatedTitleEditForm):
     """Edit form for opengever.meeting.committeecontainer."""
-
-    def updateWidgets(self):
-        super(EditForm, self).updateWidgets()
-
-        if not is_word_meeting_implementation_enabled():
-            self.widgets['ad_hoc_template'].mode = HIDDEN_MODE
-            self.widgets['paragraph_template'].mode = HIDDEN_MODE
-        else:
-            self.widgets['excerpt_template'].mode = HIDDEN_MODE

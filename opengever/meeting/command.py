@@ -1,5 +1,3 @@
-from docx import Document
-from docxcompose.composer import Composer
 from opengever.base import advancedjson
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.interfaces import IDataCollector
@@ -18,6 +16,7 @@ from opengever.meeting.exceptions import AgendaItemListMissingTemplate
 from opengever.meeting.exceptions import MissingParagraphTemplate
 from opengever.meeting.exceptions import ProtocolAlreadyGenerated
 from opengever.meeting.interfaces import IHistory
+from opengever.meeting.mergetool import DocxMergeTool
 from opengever.meeting.model.generateddocument import GeneratedAgendaItemList
 from opengever.meeting.model.generateddocument import GeneratedExcerpt
 from opengever.meeting.model.generateddocument import GeneratedProtocol
@@ -27,10 +26,10 @@ from opengever.meeting.protocol import ExcerptProtocolData
 from opengever.meeting.protocol import ProtocolData
 from opengever.meeting.sablon import Sablon
 from opengever.ogds.base.utils import decode_for_json
-from os.path import join
 from plone import api
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.locking.interfaces import ILockable
+from plone.memoize import instance
 from plone.namedfile.file import NamedBlobFile
 from zope.component import getMultiAdapter
 from zope.component import getUtility
@@ -38,8 +37,6 @@ from zope.globalrequest import getRequest
 from zope.i18n import translate
 import base64
 import json
-import shutil
-import tempfile
 
 
 MIME_DOCX = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
@@ -338,60 +335,40 @@ class MergeDocxProtocolCommand(CreateGeneratedDocumentCommand):
         return document
 
     def generate_file_data(self):
-        template = self.document_operations.get_sablon_template(self.meeting)
-        sablon = Sablon(template)
-        sablon.process(self.document_operations.get_meeting_data(
-            self.meeting).as_json())
+        with DocxMergeTool() as merge_tool:
+            merge_tool.add_sablon(self.get_header_sablon())
 
-        tmpdir_path = tempfile.mkdtemp(prefix='opengever.core.doxcmerge_')
-        master_path = join(tmpdir_path, 'master.docx')
-        output_path = join(tmpdir_path, 'protocol.docx')
-
-        try:
-            # XXX: this is a bit dumb since sablon would already have generated
-            # a temporary file
-            with open(master_path, 'wb') as master_file:
-                master_file.write(sablon.file_data)
-            composer = Composer(Document(master_path))
-
-            for index, agenda_item in enumerate(self.meeting.agenda_items):
-                target_path = join(tmpdir_path, 'agenda_item_{}.docx'.format(index))
+            for agenda_item in self.meeting.agenda_items:
                 if agenda_item.is_paragraph:
-                    self._export_paragraph_as_document(agenda_item, target_path)
-                    composer.append(Document(target_path))
+                    merge_tool.add_sablon(self.get_sablon_for_paragraph(agenda_item))
 
                 elif agenda_item.has_document:
-                    self._export_regular_agenda_item_document(agenda_item, target_path)
-                    composer.append(Document(target_path))
+                    merge_tool.add_document(agenda_item.resolve_document())
 
-            composer.save(output_path)
-            with open(output_path, 'rb') as merged_file:
-                data = merged_file.read()
-        finally:
-            shutil.rmtree(tmpdir_path)
+            if self.meeting.get_protocol_suffix_template():
+                merge_tool.add_sablon(self.get_suffix_sablon())
 
-        return data
+            return merge_tool()
 
-    def _export_regular_agenda_item_document(self, agenda_item, target_path):
-        document = agenda_item.resolve_document()
-        with open(target_path, 'wb') as fio:
-            fio.write(document.file.data)
+    def get_header_sablon(self):
+        return Sablon(self.meeting.get_protocol_header_template()).process(
+            self.document_operations.get_meeting_data(self.meeting).as_json())
 
-    def _export_paragraph_as_document(self, agenda_item, target_path):
-        sablon = Sablon(self._get_paragraph_template())
-        sablon.process(ProtocolData(self.meeting, [agenda_item]).as_json())
-        with open(target_path, 'wb') as fio:
-            fio.write(sablon.file_data)
+    def get_suffix_sablon(self):
+        return Sablon(self.meeting.get_protocol_suffix_template()).process(
+            self.document_operations.get_meeting_data(self.meeting).as_json())
 
+    def get_sablon_for_paragraph(self, agenda_item):
+        return Sablon(self._get_paragraph_template()).process(
+            ProtocolData(self.meeting, [agenda_item]).as_json())
+
+    @instance.memoize
     def _get_paragraph_template(self):
-        if hasattr(self, '_paragraph_template'):
-            return self._paragraph_template
-
         committee = self.meeting.committee.resolve_committee()
-        self._paragraph_template = committee.get_paragraph_template()
-        if self._paragraph_template is None:
+        template = committee.get_paragraph_template()
+        if template is None:
             raise MissingParagraphTemplate()
-        return self._paragraph_template
+        return template
 
 
 class UpdateGeneratedDocumentCommand(object):

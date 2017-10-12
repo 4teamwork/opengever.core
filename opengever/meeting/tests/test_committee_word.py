@@ -2,6 +2,7 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages import statusmessages
 from opengever.testing import IntegrationTestCase
+from operator import methodcaller
 
 
 class TestCommitteeWord(IntegrationTestCase):
@@ -69,34 +70,31 @@ class TestCommitteeWord(IntegrationTestCase):
         self.assertEqual(self.sablon_template, self.committee.get_paragraph_template())
 
     @browsing
-    def test_hide_paragraph_template_for_nonword_in_add_form(self, browser):
-        """The "Paragraph template" field only makes sense when
-        the word-meeting feature is enabled.
-        Make sure that it does not appear in the forms when disabling
-        the word-meeting feature.
+    def test_visible_fields_in_forms(self, browser):
+        """Some fields should only be displayed when the word feature is
+        enabled.
+        Therefore we test the appearance of all fields.
         """
-        self.login(self.manager, browser)
-        browser.open(self.committee_container)
-        factoriesmenu.add('Committee')
-        field_label = 'Paragraph template'
-        self.assertTrue(browser.find(field_label))
+        fields = ['Title',
+                  'Group',
+                  'Protocol header template',
+                  'Protocol suffix template',
+                  'Agendaitem list template',
+                  'Table of contents template',
+                  'Linked repository folder',
+                  'Ad hoc agenda item template',
+                  'Paragraph template']
+        with self.login(self.administrator, browser):
+            browser.open(self.committee_container)
+            factoriesmenu.add('Committee')
+            self.assertEquals(
+                fields,
+                map(methodcaller('normalized_text', recursive=False),
+                    browser.css('form#form > div.field > label')))
 
-        self.deactivate_feature('word-meeting')
-        browser.reload()
-        self.assertFalse(browser.find(field_label))
-
-    @browsing
-    def test_hide_paragraph_template_for_nonword_in_edit_form(self, browser):
-        """The "Paragraph template" field only makes sense when
-        the word-meeting feature is enabled.
-        Make sure that it does not appear in the forms when disabling
-        the word-meeting feature.
-        """
-        self.login(self.manager, browser)
-        browser.open(self.committee, view='edit')
-        field_label = 'Paragraph template'
-        self.assertTrue(browser.find(field_label))
-
-        self.deactivate_feature('word-meeting')
-        browser.reload()
-        self.assertFalse(browser.find(field_label))
+        with self.login(self.committee_responsible, browser):
+            browser.open(self.committee, view='edit')
+            self.assertEquals(
+                fields,
+                map(methodcaller('normalized_text', recursive=False),
+                    browser.css('form#form > div.field > label')))

@@ -31,6 +31,7 @@ Changelog
 - SPV word: Introduce successor proposals. [jone]
 - Ungrok proposal add form. [jone]
 - Reworked initial version creation: do not create a initial version until the file will be changed. [phgross]
+- SPV word: Add protocol header and suffix templates. [tarnap]
 - SPV word: Improve visual feedback when scheduling text or paragraph. [jone]
 - SPV word: Remove proposal document's title prefix. [tarnap]
 - SPV word: Hide excerpt template from form when word feature enabled. [tarnap]
