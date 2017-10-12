@@ -14,7 +14,6 @@ from opengever.base.schemadump.helpers import DirectoryHelperMixin
 from opengever.base.schemadump.helpers import mkdir_p
 from opengever.base.schemadump.helpers import translate_de
 from opengever.base.schemadump.json_schema_helper import JSONSchema
-from opengever.base.utils import pretty_json
 from os.path import join as pjoin
 from pkg_resources import resource_filename
 from plone import api
@@ -405,12 +404,7 @@ class JSONSchemaDumpWriter(DirectoryHelperMixin):
             schema = builder.build_schema()
             filename = '%s.schema.json' % portal_type
             dump_path = pjoin(self.schema_dumps_dir, filename)
-
-            with open(dump_path, 'w') as dump_file:
-                json_dump = pretty_json(schema.serialize())
-                dump_file.write(json_dump)
-
-            log.info('Dumped: %s\n' % dump_path)
+            schema.dump(dump_path)
 
 
 class OGGBundleJSONSchemaDumpWriter(DirectoryHelperMixin):
@@ -427,12 +421,7 @@ class OGGBundleJSONSchemaDumpWriter(DirectoryHelperMixin):
             schema = builder.build_schema()
             filename = '%ss.schema.json' % short_name
             dump_path = pjoin(dump_dir, filename)
-
-            with open(dump_path, 'w') as dump_file:
-                json_dump = pretty_json(schema.serialize())
-                dump_file.write(json_dump)
-
-            log.info('Dumped: %s\n' % dump_path)
+            schema.dump(dump_path)
 
 
 def dump_schemas():

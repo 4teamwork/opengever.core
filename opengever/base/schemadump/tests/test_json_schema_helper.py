@@ -1,10 +1,20 @@
 from collections import OrderedDict
 from opengever.base.schemadump.json_schema_helper import JSONSchema
 from opengever.base.schemadump.json_schema_helper import order_dict
+from os.path import join
+from tempfile import mkdtemp
+from textwrap import dedent
+import shutil
 import unittest
 
 
 class TestJSONSchema(unittest.TestCase):
+
+    def setUp(self):
+        self.tempdir = mkdtemp()
+
+    def tearDown(self):
+        shutil.rmtree(self.tempdir)
 
     def test_constructs_minimal_schema(self):
         schema = JSONSchema()
@@ -314,6 +324,32 @@ class TestJSONSchema(unittest.TestCase):
         serialized = schema.serialize()
 
         self.assertEqual(expected, serialized)
+
+    def test_dumping_schema(self):
+        schema = JSONSchema()
+        schema.add_property('foo', {'type': 'string'}, required=True)
+        expected = dedent("""
+        {
+            "$schema": "http://json-schema.org/draft-04/schema#",
+            "type": "object",
+            "properties": {
+                "foo": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "foo"
+            ]
+        }
+        """).strip()
+
+        dump_path = join(self.tempdir, 'test.schema.json')
+        schema.dump(dump_path)
+
+        with open(dump_path) as f:
+            actual = f.read()
+
+        self.assertEqual(expected, actual)
 
 
 class TestOrderDictHelper(unittest.TestCase):

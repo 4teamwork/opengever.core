@@ -10,6 +10,7 @@ def dump_schemas_zopectl_handler(app, args):
     """
     setup_logging('opengever.base.schemadump.schema')
     setup_logging('opengever.base.schemadump.field')
+    setup_logging('opengever.base.schemadump.json_schema_helper')
 
     setup_plone(get_first_plone_site(app))
     dump_schemas()

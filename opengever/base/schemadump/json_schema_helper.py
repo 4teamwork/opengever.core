@@ -1,6 +1,8 @@
 from collections import OrderedDict
 from copy import deepcopy
 from jsonschema import Draft4Validator
+from opengever.base.utils import pretty_json
+import logging
 
 
 SCHEMA_KEYS_ORDER = [
@@ -26,6 +28,9 @@ PROPERTY_KEYS_ORDER = (
     'default',
     'enum',
 )
+
+
+log = logging.getLogger(__name__)
 
 
 class JSONSchema(object):
@@ -159,6 +164,15 @@ class JSONSchema(object):
         del self._schema
 
         return schema
+
+    def dump(self, dump_path):
+        """Dump serialized schema to a file.
+        """
+        with open(dump_path, 'w') as dump_file:
+            json_dump = pretty_json(self.serialize())
+            dump_file.write(json_dump)
+
+        log.info('Dumped: %s\n' % dump_path)
 
 
 def order_dict(dct, key_order=None):
