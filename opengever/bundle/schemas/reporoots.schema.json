@@ -10,25 +10,6 @@
             "title": "Ordnungssystem",
             "additionalProperties": false,
             "properties": {
-                "valid_until": {
-                    "type": [
-                        "null",
-                        "string"
-                    ],
-                    "title": "G\u00fcltig bis",
-                    "format": "date",
-                    "description": "",
-                    "_zope_schema_type": "Date"
-                },
-                "title_de": {
-                    "type": [
-                        "null",
-                        "string"
-                    ],
-                    "title": "Titel (deutsch)",
-                    "description": "",
-                    "_zope_schema_type": "TextLine"
-                },
                 "valid_from": {
                     "type": [
                         "null",
@@ -39,11 +20,15 @@
                     "description": "",
                     "_zope_schema_type": "Date"
                 },
-                "parent_guid": {
+                "valid_until": {
                     "type": [
                         "null",
                         "string"
-                    ]
+                    ],
+                    "title": "G\u00fcltig bis",
+                    "format": "date",
+                    "description": "",
+                    "_zope_schema_type": "Date"
                 },
                 "version": {
                     "type": [
@@ -54,17 +39,14 @@
                     "description": "",
                     "_zope_schema_type": "TextLine"
                 },
-                "_permissions": {
-                    "$ref": "#/definitions/permission"
-                },
-                "review_state": {
-                    "enum": [
-                        "repositoryroot-state-active"
+                "title_de": {
+                    "type": [
+                        "null",
+                        "string"
                     ],
-                    "type": "string"
-                },
-                "guid": {
-                    "type": "string"
+                    "title": "Titel (deutsch)",
+                    "description": "",
+                    "_zope_schema_type": "TextLine"
                 },
                 "title_fr": {
                     "type": [
@@ -74,17 +56,37 @@
                     "title": "Titel (franz\u00f6sisch)",
                     "description": "",
                     "_zope_schema_type": "TextLine"
-                }
-            },
-            "anyOf": [
-                {
-                    "required": [
-                        "title_de"
+                },
+                "review_state": {
+                    "type": "string",
+                    "enum": [
+                        "repositoryroot-state-active"
                     ]
                 },
+                "guid": {
+                    "type": "string"
+                },
+                "_permissions": {
+                    "$ref": "#/definitions/permission"
+                }
+            },
+            "required": [
+                "review_state",
+                "guid"
+            ],
+            "allOf": [
                 {
-                    "required": [
-                        "title_fr"
+                    "anyOf": [
+                        {
+                            "required": [
+                                "title_de"
+                            ]
+                        },
+                        {
+                            "required": [
+                                "title_fr"
+                            ]
+                        }
                     ]
                 }
             ],
@@ -94,48 +96,44 @@
                 "version",
                 "title_de",
                 "title_fr"
-            ],
-            "required": [
-                "review_state",
-                "guid"
             ]
         },
         "permission": {
-            "additionalProperties": false,
             "type": "object",
+            "additionalProperties": false,
             "properties": {
-                "reactivate": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": "array"
-                },
-                "read": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": "array"
-                },
-                "edit": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": "array"
-                },
-                "add": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": "array"
-                },
-                "close": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": "array"
-                },
                 "block_inheritance": {
                     "type": "boolean"
+                },
+                "read": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "add": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "edit": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "close": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "reactivate": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             }
         }

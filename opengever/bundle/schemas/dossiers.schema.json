@@ -10,15 +10,153 @@
             "title": "Gesch\u00e4ftsdossier",
             "additionalProperties": false,
             "properties": {
-                "date_of_submission": {
+                "title": {
+                    "type": "string",
+                    "title": "Titel",
+                    "description": "",
+                    "_zope_schema_type": "TextLine"
+                },
+                "description": {
                     "type": [
                         "null",
                         "string"
                     ],
-                    "title": "Anbietezeitpunkt",
+                    "title": "Beschreibung",
+                    "description": "",
+                    "_zope_schema_type": "Text"
+                },
+                "keywords": {
+                    "type": [
+                        "null",
+                        "array"
+                    ],
+                    "title": "Schlagworte",
+                    "description": "Schlagw\u00f6rter zur Umschreibung eines Dossiers. Nicht zu verwechseln mit der Ordnungsposition",
+                    "_zope_schema_type": "Tuple"
+                },
+                "start": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "Beginn",
+                    "format": "date",
+                    "description": "",
+                    "_zope_schema_type": "Date",
+                    "default": "<Aktuelles Datum>"
+                },
+                "end": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "Ende",
                     "format": "date",
                     "description": "",
                     "_zope_schema_type": "Date"
+                },
+                "comments": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "Kommentar",
+                    "description": "",
+                    "_zope_schema_type": "Text"
+                },
+                "responsible": {
+                    "type": "string",
+                    "title": "Federf\u00fchrend",
+                    "description": "",
+                    "_zope_schema_type": "Choice",
+                    "_vocabulary": "<G\u00fcltige User-ID>"
+                },
+                "external_reference": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "Externe Referenz",
+                    "description": "",
+                    "_zope_schema_type": "TextLine"
+                },
+                "filing_prefix": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "Ablage Pr\u00e4fix",
+                    "description": "",
+                    "_zope_schema_type": "Choice",
+                    "enum": [
+                        null,
+                        "administration",
+                        "department",
+                        "directorate",
+                        "government",
+                        "personal"
+                    ]
+                },
+                "container_type": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "Beh\u00e4ltnis-Art",
+                    "description": "Art des Beh\u00e4lters, in dem ein Dossier in Papierform abgelegt ist",
+                    "_zope_schema_type": "Choice",
+                    "enum": [
+                        null,
+                        "box",
+                        "dossier",
+                        "folder"
+                    ]
+                },
+                "number_of_containers": {
+                    "type": [
+                        "null",
+                        "integer"
+                    ],
+                    "title": "Anzahl Beh\u00e4ltnisse",
+                    "description": "Anzahl Beh\u00e4lter, die ein (grosses) Dossier in Papierform enthalten",
+                    "_zope_schema_type": "Int"
+                },
+                "container_location": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "Beh\u00e4ltnis-Standort",
+                    "description": "Standortangabe des Beh\u00e4lters, in dem ein Dossier in Papierform abgelegt ist",
+                    "_zope_schema_type": "TextLine"
+                },
+                "relatedDossier": {
+                    "type": [
+                        "null",
+                        "array"
+                    ],
+                    "title": "Verwandte Dossiers",
+                    "description": "",
+                    "_zope_schema_type": "RelationList",
+                    "default": []
+                },
+                "former_reference_number": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "Fr\u00fcheres Aktenzeichen",
+                    "description": "",
+                    "_zope_schema_type": "TextLine"
+                },
+                "reference_number": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "Aktenzeichen",
+                    "description": "",
+                    "_zope_schema_type": "TextLine"
                 },
                 "classification": {
                     "type": [
@@ -36,18 +174,47 @@
                         "classified"
                     ]
                 },
-                "parent_guid": {
-                    "type": "string"
-                },
-                "relatedDossier": {
+                "privacy_layer": {
                     "type": [
                         "null",
-                        "array"
+                        "string"
                     ],
-                    "title": "Verwandte Dossiers",
-                    "description": "",
-                    "_zope_schema_type": "RelationList",
-                    "default": []
+                    "title": "Datenschutzstufe",
+                    "description": "Markierung, die angibt, ob die Unterlagen besonders sch\u00fctzenswerte Personendaten oder Pers\u00f6nlichkeitsprofile gem\u00e4ss Datenschutzrecht enthalten.",
+                    "_zope_schema_type": "Choice",
+                    "default": "privacy_layer_no",
+                    "enum": [
+                        null,
+                        "privacy_layer_no",
+                        "privacy_layer_yes"
+                    ]
+                },
+                "public_trial": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "\u00d6ffentlichkeitsstatus",
+                    "description": "Angabe, ob die Unterlagen gem\u00e4ss \u00d6ffentlichkeitsgesetz zug\u00e4nglich sind oder nicht.",
+                    "_zope_schema_type": "Choice",
+                    "default": "unchecked",
+                    "enum": [
+                        null,
+                        "unchecked",
+                        "public",
+                        "limited-public",
+                        "private"
+                    ]
+                },
+                "public_trial_statement": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "Bearbeitungsinformation",
+                    "description": "Datum Gesuch, Gesuchsteller, Datum Entscheid, Verweis auf GEVER-Gesuchdossier",
+                    "_zope_schema_type": "Text",
+                    "default": ""
                 },
                 "retention_period": {
                     "type": [
@@ -67,60 +234,6 @@
                         25
                     ]
                 },
-                "container_type": {
-                    "type": [
-                        "null",
-                        "string"
-                    ],
-                    "title": "Beh\u00e4ltnis-Art",
-                    "description": "Art des Beh\u00e4lters, in dem ein Dossier in Papierform abgelegt ist",
-                    "_zope_schema_type": "Choice",
-                    "enum": [
-                        null,
-                        "dossier",
-                        "folder",
-                        "box"
-                    ]
-                },
-                "filing_prefix": {
-                    "type": [
-                        "null",
-                        "string"
-                    ],
-                    "title": "Ablage Pr\u00e4fix",
-                    "description": "",
-                    "_zope_schema_type": "Choice",
-                    "enum": [
-                        null,
-                        "department",
-                        "directorate",
-                        "administration",
-                        "personal",
-                        "government"
-                    ]
-                },
-                "keywords": {
-                    "type": [
-                        "null",
-                        "array"
-                    ],
-                    "title": "Schlagworte",
-                    "description": "Schlagw\u00f6rter zur Umschreibung eines Dossiers. Nicht zu verwechseln mit der Ordnungsposition",
-                    "_zope_schema_type": "Tuple"
-                },
-                "date_of_cassation": {
-                    "type": [
-                        "null",
-                        "string"
-                    ],
-                    "title": "Kassationsdatum",
-                    "format": "date",
-                    "description": "",
-                    "_zope_schema_type": "Date"
-                },
-                "guid": {
-                    "type": "string"
-                },
                 "retention_period_annotation": {
                     "type": [
                         "null",
@@ -129,39 +242,6 @@
                     "title": "Kommentar zur Aufbewahrungsdauer",
                     "description": "",
                     "_zope_schema_type": "Text"
-                },
-                "end": {
-                    "type": [
-                        "null",
-                        "string"
-                    ],
-                    "title": "Ende",
-                    "format": "date",
-                    "description": "",
-                    "_zope_schema_type": "Date"
-                },
-                "title": {
-                    "type": "string",
-                    "title": "Titel",
-                    "description": "",
-                    "_zope_schema_type": "TextLine"
-                },
-                "custody_period": {
-                    "type": [
-                        "null",
-                        "integer"
-                    ],
-                    "title": "Archivische Schutzfrist (Jahre)",
-                    "description": "Dauer, w\u00e4hrend der nach der Archivierung die Dokumente vor \u00f6ffentlicher Einsichtnahme gesch\u00fctzt sind.",
-                    "_zope_schema_type": "Choice",
-                    "default": 30,
-                    "enum": [
-                        null,
-                        0,
-                        30,
-                        100,
-                        150
-                    ]
                 },
                 "archival_value": {
                     "type": [
@@ -181,84 +261,6 @@
                         "archival worthy with sampling"
                     ]
                 },
-                "responsible": {
-                    "type": "string",
-                    "title": "Federf\u00fchrend",
-                    "description": "",
-                    "_zope_schema_type": "Choice",
-                    "_vocabulary": "<G\u00fcltige User-ID>"
-                },
-                "comments": {
-                    "type": [
-                        "null",
-                        "string"
-                    ],
-                    "title": "Kommentar",
-                    "description": "",
-                    "_zope_schema_type": "Text"
-                },
-                "start": {
-                    "type": [
-                        "null",
-                        "string"
-                    ],
-                    "title": "Beginn",
-                    "format": "date",
-                    "description": "",
-                    "_zope_schema_type": "Date",
-                    "default": "<Aktuelles Datum>"
-                },
-                "number_of_containers": {
-                    "type": [
-                        "null",
-                        "integer"
-                    ],
-                    "title": "Anzahl Beh\u00e4ltnisse",
-                    "description": "Anzahl Beh\u00e4lter, die ein (grosses) Dossier in Papierform enthalten",
-                    "_zope_schema_type": "Int"
-                },
-                "public_trial": {
-                    "type": [
-                        "null",
-                        "string"
-                    ],
-                    "title": "\u00d6ffentlichkeitsstatus",
-                    "description": "Angabe, ob die Unterlagen gem\u00e4ss \u00d6ffentlichkeitsgesetz zug\u00e4nglich sind oder nicht.",
-                    "_zope_schema_type": "Choice",
-                    "default": "unchecked",
-                    "enum": [
-                        null,
-                        "unchecked",
-                        "public",
-                        "limited-public",
-                        "private"
-                    ]
-                },
-                "container_location": {
-                    "type": [
-                        "null",
-                        "string"
-                    ],
-                    "title": "Beh\u00e4ltnis-Standort",
-                    "description": "Standortangabe des Beh\u00e4lters, in dem ein Dossier in Papierform abgelegt ist",
-                    "_zope_schema_type": "TextLine"
-                },
-                "review_state": {
-                    "enum": [
-                        "dossier-state-active",
-                        "dossier-state-resolved"
-                    ],
-                    "type": "string"
-                },
-                "description": {
-                    "type": [
-                        "null",
-                        "string"
-                    ],
-                    "title": "Beschreibung",
-                    "description": "",
-                    "_zope_schema_type": "Text"
-                },
                 "archival_value_annotation": {
                     "type": [
                         "null",
@@ -268,57 +270,58 @@
                     "description": "",
                     "_zope_schema_type": "Text"
                 },
-                "public_trial_statement": {
+                "custody_period": {
                     "type": [
                         "null",
-                        "string"
+                        "integer"
                     ],
-                    "title": "Bearbeitungsinformation",
-                    "description": "Datum Gesuch, Gesuchsteller, Datum Entscheid, Verweis auf GEVER-Gesuchdossier",
-                    "_zope_schema_type": "Text",
-                    "default": ""
-                },
-                "reference_number": {
-                    "type": [
-                        "null",
-                        "string"
-                    ],
-                    "title": "Aktenzeichen",
-                    "description": "",
-                    "_zope_schema_type": "TextLine"
-                },
-                "external_reference": {
-                    "type": [
-                        "null",
-                        "string"
-                    ],
-                    "title": "Externe Referenz",
-                    "description": "",
-                    "_zope_schema_type": "TextLine"
-                },
-                "privacy_layer": {
-                    "type": [
-                        "null",
-                        "string"
-                    ],
-                    "title": "Datenschutzstufe",
-                    "description": "Markierung, die angibt, ob die Unterlagen besonders sch\u00fctzenswerte Personendaten oder Pers\u00f6nlichkeitsprofile gem\u00e4ss Datenschutzrecht enthalten.",
+                    "title": "Archivische Schutzfrist (Jahre)",
+                    "description": "Dauer, w\u00e4hrend der nach der Archivierung die Dokumente vor \u00f6ffentlicher Einsichtnahme gesch\u00fctzt sind.",
                     "_zope_schema_type": "Choice",
-                    "default": "privacy_layer_no",
+                    "default": 30,
                     "enum": [
                         null,
-                        "privacy_layer_no",
-                        "privacy_layer_yes"
+                        0,
+                        30,
+                        100,
+                        150
                     ]
                 },
-                "former_reference_number": {
+                "date_of_cassation": {
                     "type": [
                         "null",
                         "string"
                     ],
-                    "title": "Fr\u00fcheres Aktenzeichen",
+                    "title": "Kassationsdatum",
+                    "format": "date",
                     "description": "",
-                    "_zope_schema_type": "TextLine"
+                    "_zope_schema_type": "Date"
+                },
+                "date_of_submission": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "Anbietezeitpunkt",
+                    "format": "date",
+                    "description": "",
+                    "_zope_schema_type": "Date"
+                },
+                "review_state": {
+                    "type": "string",
+                    "enum": [
+                        "dossier-state-active",
+                        "dossier-state-resolved"
+                    ]
+                },
+                "guid": {
+                    "type": "string"
+                },
+                "parent_guid": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 },
                 "_permissions": {
                     "$ref": "#/definitions/permission"
@@ -328,16 +331,26 @@
                         "null",
                         "integer"
                     ],
-                    "description": "Fortlaufend gez\u00e4hlte Nummer eines Dossiers.",
-                    "title": "Laufnummer"
+                    "title": "Laufnummer",
+                    "description": "Fortlaufend gez\u00e4hlte Nummer eines Dossiers."
                 }
             },
             "required": [
                 "title",
                 "responsible",
                 "review_state",
-                "guid",
-                "parent_guid"
+                "guid"
+            ],
+            "allOf": [
+                {
+                    "anyOf": [
+                        {
+                            "required": [
+                                "parent_guid"
+                            ]
+                        }
+                    ]
+                }
             ],
             "field_order": [
                 "title",
@@ -369,41 +382,41 @@
             ]
         },
         "permission": {
-            "additionalProperties": false,
             "type": "object",
+            "additionalProperties": false,
             "properties": {
-                "reactivate": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": "array"
-                },
-                "read": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": "array"
-                },
-                "edit": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": "array"
-                },
-                "add": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": "array"
-                },
-                "close": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": "array"
-                },
                 "block_inheritance": {
                     "type": "boolean"
+                },
+                "read": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "add": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "edit": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "close": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "reactivate": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             }
         }

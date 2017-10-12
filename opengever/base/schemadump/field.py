@@ -1,4 +1,6 @@
 from collections import OrderedDict
+from collective.elephantvocabulary.interfaces import IElephantVocabulary
+from collective.vdexvocabulary.vocabulary import VdexVocabulary
 from opengever.base.schemadump.config import DEFAULT_OVERRIDES
 from opengever.base.schemadump.config import PYTHON_TO_JS_TYPES
 from opengever.base.schemadump.config import VOCAB_OVERRIDES
@@ -12,6 +14,7 @@ from z3c.form.interfaces import IValue
 from zope.component import ComponentLookupError
 from zope.component import getUtility
 from zope.component import queryMultiAdapter
+from zope.component import queryUtility
 from zope.schema import Choice
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.interfaces import IVocabularyFactory
@@ -112,6 +115,8 @@ class FieldDumper(object):
 
         Loosely based on z3c.form.widget.Widget.update().
         """
+        # XXX: Refactor this method
+
         field_vocab = None
         vf = None
         if isinstance(field, Choice):
@@ -138,8 +143,28 @@ class FieldDumper(object):
 
                 vocabulary = vf(None)
 
+            # Determine whether term order is significant or not
+            order_significant = True
+            wrapped_vocab = vocabulary
+            if IElephantVocabulary.providedBy(vocabulary):
+                # VDEX vocaby might be potentially wrapped by Elephant vocabs.
+                # In that case, we need to inspect the wrapped vocab to
+                # determine whether order is significant or not
+                wrapped_vocab = queryUtility(
+                    IVocabularyFactory, name=field.vocabulary.vocab)
+
+            if isinstance(wrapped_vocab, VdexVocabulary):
+                order_significant = wrapped_vocab.vdex.isOrderSignificant()
+
+            # Build list of terms
             if vocabulary is not None:
                 terms = [t.value for t in vocabulary._terms]
+
+                if not order_significant:
+                    # For VDEX vocabularies with orderSignificant="false" we
+                    # explicitly sort terms to get a stable sort order
+                    terms = sorted(terms)
+
                 field_vocab = terms
         return field_vocab
 

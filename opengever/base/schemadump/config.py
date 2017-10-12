@@ -1,3 +1,4 @@
+# noqa
 SCHEMA_DUMPS_DIR = 'docs/schema-dumps'
 SCHEMA_DOCS_DIR = 'docs/public/dev-manual/api/schemas'
 
@@ -61,6 +62,11 @@ GEVER_SQL_TYPES = [
     '_opengever.ogds.models.group.Group',
 ]
 
+SEQUENCE_NUMBER_LABELS = {
+    'opengever.document.document': u'Fortlaufend gez\xe4hlte Nummer eines Dokumentes.',  # noqa
+    'opengever.dossier.businesscasedossier': u'Fortlaufend gez\xe4hlte Nummer eines Dossiers.',  # noqa
+}
+
 VOCAB_OVERRIDES = {
     'opengever.dossier.behaviors.dossier.IDossier': {
         'responsible': u'<G\xfcltige User-ID>',
@@ -102,20 +108,35 @@ IGNORED_OGGBUNDLE_FIELDS = {
     'document': ['file', 'archival_file', 'archival_file_state'],
 }
 
+
 JSON_SCHEMA_FIELD_TYPES = {
-    'TextLine':      {'type': 'string'},                     # noqa
-    'Text':          {'type': 'string'},                     # noqa
-    'Tuple':         {'type': 'array'},                      # noqa
-    'Date':          {'type': 'string', 'format': 'date'},   # noqa
-    'Float':         {'type': 'number'},                     # noqa
-    'Int':           {'type': 'integer'},                    # noqa
-    'RelationList':  {'type': 'array'},                      # noqa
-    'Bool':          {'type': 'boolean'},                    # noqa
-    'NamedBlobFile': {'type': 'string'},                     # noqa
-    'Choice':        {'type': 'string'},                     # noqa
-    'NamedImage':    {'type': 'string'},                     # noqa
-    'List':          {'type': 'array'},                      # noqa
-    'URI':           {'type': 'string', 'format': 'uri'},    # noqa
+    # Ugly, but need to wrap this because pycodestyle ignores noqa for E241
+    'TextLine': {
+        'type': 'string'},
+    'Text': {
+        'type': 'string'},
+    'Tuple': {
+        'type': 'array'},
+    'Date': {
+        'type': 'string', 'format': 'date'},
+    'Float': {
+        'type': 'number'},
+    'Int': {
+        'type': 'integer'},
+    'RelationList': {
+        'type': 'array'},
+    'Bool': {
+        'type': 'boolean'},
+    'NamedBlobFile': {
+        'type': 'string'},
+    'Choice': {
+        'type': 'string'},
+    'NamedImage': {
+        'type': 'string'},
+    'List': {
+        'type': 'array'},
+    'URI': {
+        'type': 'string', 'format': 'uri'},
 }
 
 PYTHON_TO_JS_TYPES = {

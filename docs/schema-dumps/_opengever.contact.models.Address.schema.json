@@ -4,19 +4,12 @@
     "title": "Address",
     "additionalProperties": false,
     "properties": {
-        "city": {
-            "type": "string",
-            "title": "city",
-            "maxLength": 255,
+        "id": {
+            "type": "integer",
+            "title": "id",
             "description": "",
-            "_zope_schema_type": "Text"
-        },
-        "country": {
-            "type": "string",
-            "title": "country",
-            "maxLength": 255,
-            "description": "",
-            "_zope_schema_type": "Text"
+            "_zope_schema_type": "Int",
+            "default": "Sequence(adresses_id_seq)"
         },
         "label": {
             "type": "string",
@@ -32,17 +25,24 @@
             "description": "",
             "_zope_schema_type": "Text"
         },
-        "id": {
-            "type": "integer",
-            "title": "id",
-            "description": "",
-            "_zope_schema_type": "Int",
-            "default": "Sequence(adresses_id_seq)"
-        },
         "zip_code": {
             "type": "string",
             "title": "zip_code",
             "maxLength": 16,
+            "description": "",
+            "_zope_schema_type": "Text"
+        },
+        "city": {
+            "type": "string",
+            "title": "city",
+            "maxLength": 255,
+            "description": "",
+            "_zope_schema_type": "Text"
+        },
+        "country": {
+            "type": "string",
+            "title": "country",
+            "maxLength": 255,
             "description": "",
             "_zope_schema_type": "Text"
         }

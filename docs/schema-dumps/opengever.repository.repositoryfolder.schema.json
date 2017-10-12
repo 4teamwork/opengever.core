@@ -4,18 +4,56 @@
     "title": "Ordnungsposition",
     "additionalProperties": false,
     "properties": {
-        "title_de": {
+        "description": {
             "type": "string",
-            "title": "Titel (deutsch)",
-            "description": "",
-            "_zope_schema_type": "TextLine"
+            "title": "Beschreibung",
+            "description": "Eine kurze Beschreibung des Inhalts.",
+            "_zope_schema_type": "Text",
+            "default": null
         },
-        "date_of_submission": {
+        "valid_from": {
             "type": "string",
-            "title": "Anbietezeitpunkt",
+            "title": "G\u00fcltig ab",
             "format": "date",
             "description": "",
             "_zope_schema_type": "Date"
+        },
+        "valid_until": {
+            "type": "string",
+            "title": "G\u00fcltig bis",
+            "format": "date",
+            "description": "",
+            "_zope_schema_type": "Date"
+        },
+        "location": {
+            "type": "string",
+            "title": "Standort",
+            "description": "",
+            "_zope_schema_type": "TextLine"
+        },
+        "referenced_activity": {
+            "type": "string",
+            "title": "Leistung",
+            "description": "",
+            "_zope_schema_type": "TextLine"
+        },
+        "former_reference": {
+            "type": "string",
+            "title": "Fr\u00fcheres Zeichen",
+            "description": "",
+            "_zope_schema_type": "TextLine"
+        },
+        "addable_dossier_types": {
+            "type": "array",
+            "title": "Erlaubte Spezialdossiers",
+            "description": "W\u00e4hlen Sie die Spezialdossiers aus, die in dieser Ordnungsposition erlaubt sind.",
+            "_zope_schema_type": "List"
+        },
+        "allow_add_businesscase_dossier": {
+            "type": "boolean",
+            "title": "Hinzuf\u00fcgen von Gesch\u00e4ftsdossiers erlauben",
+            "description": "W\u00e4hlen Sie, ob es in dieser Ordnungsposition erlaubt ist, Gesch\u00e4ftsdossiers hinzuzuf\u00fcgen. Ist diese Option deaktiviert, kann der Benutzer nur Dossiers aus einer Vorlage oder Spezialdossiers erstellen.",
+            "_zope_schema_type": "Bool"
         },
         "classification": {
             "type": "string",
@@ -28,6 +66,49 @@
                 "confidential",
                 "classified"
             ]
+        },
+        "privacy_layer": {
+            "type": "string",
+            "title": "Datenschutzstufe",
+            "description": "Markierung, die angibt, ob die Unterlagen besonders sch\u00fctzenswerte Personendaten oder Pers\u00f6nlichkeitsprofile gem\u00e4ss Datenschutzrecht enthalten.",
+            "_zope_schema_type": "Choice",
+            "default": "privacy_layer_no",
+            "enum": [
+                "privacy_layer_no",
+                "privacy_layer_yes"
+            ]
+        },
+        "public_trial": {
+            "type": "string",
+            "title": "\u00d6ffentlichkeitsstatus",
+            "description": "Angabe, ob die Unterlagen gem\u00e4ss \u00d6ffentlichkeitsgesetz zug\u00e4nglich sind oder nicht.",
+            "_zope_schema_type": "Choice",
+            "default": "unchecked",
+            "enum": [
+                "unchecked",
+                "public",
+                "limited-public",
+                "private"
+            ]
+        },
+        "public_trial_statement": {
+            "type": "string",
+            "title": "Bearbeitungsinformation",
+            "description": "Datum Gesuch, Gesuchsteller, Datum Entscheid, Verweis auf GEVER-Gesuchdossier",
+            "_zope_schema_type": "Text",
+            "default": ""
+        },
+        "title_de": {
+            "type": "string",
+            "title": "Titel (deutsch)",
+            "description": "",
+            "_zope_schema_type": "TextLine"
+        },
+        "title_fr": {
+            "type": "string",
+            "title": "Titel (franz\u00f6sisch)",
+            "description": "",
+            "_zope_schema_type": "TextLine"
         },
         "retention_period": {
             "type": "integer",
@@ -43,55 +124,11 @@
                 25
             ]
         },
-        "date_of_cassation": {
-            "type": "string",
-            "title": "Kassationsdatum",
-            "format": "date",
-            "description": "",
-            "_zope_schema_type": "Date"
-        },
-        "title_fr": {
-            "type": "string",
-            "title": "Titel (franz\u00f6sisch)",
-            "description": "",
-            "_zope_schema_type": "TextLine"
-        },
         "retention_period_annotation": {
             "type": "string",
             "title": "Kommentar zur Aufbewahrungsdauer",
             "description": "",
             "_zope_schema_type": "Text"
-        },
-        "valid_from": {
-            "type": "string",
-            "title": "G\u00fcltig ab",
-            "format": "date",
-            "description": "",
-            "_zope_schema_type": "Date"
-        },
-        "privacy_layer": {
-            "type": "string",
-            "title": "Datenschutzstufe",
-            "description": "Markierung, die angibt, ob die Unterlagen besonders sch\u00fctzenswerte Personendaten oder Pers\u00f6nlichkeitsprofile gem\u00e4ss Datenschutzrecht enthalten.",
-            "_zope_schema_type": "Choice",
-            "default": "privacy_layer_no",
-            "enum": [
-                "privacy_layer_no",
-                "privacy_layer_yes"
-            ]
-        },
-        "custody_period": {
-            "type": "integer",
-            "title": "Archivische Schutzfrist (Jahre)",
-            "description": "Dauer, w\u00e4hrend der nach der Archivierung die Dokumente vor \u00f6ffentlicher Einsichtnahme gesch\u00fctzt sind.",
-            "_zope_schema_type": "Choice",
-            "default": 30,
-            "enum": [
-                0,
-                30,
-                100,
-                150
-            ]
         },
         "archival_value": {
             "type": "string",
@@ -107,82 +144,38 @@
                 "archival worthy with sampling"
             ]
         },
-        "location": {
-            "type": "string",
-            "title": "Standort",
-            "description": "",
-            "_zope_schema_type": "TextLine"
-        },
-        "public_trial": {
-            "type": "string",
-            "title": "\u00d6ffentlichkeitsstatus",
-            "description": "Angabe, ob die Unterlagen gem\u00e4ss \u00d6ffentlichkeitsgesetz zug\u00e4nglich sind oder nicht.",
-            "_zope_schema_type": "Choice",
-            "default": "unchecked",
-            "enum": [
-                "unchecked",
-                "public",
-                "limited-public",
-                "private"
-            ]
-        },
-        "valid_until": {
-            "type": "string",
-            "title": "G\u00fcltig bis",
-            "format": "date",
-            "description": "",
-            "_zope_schema_type": "Date"
-        },
-        "description": {
-            "type": "string",
-            "title": "Beschreibung",
-            "description": "Eine kurze Beschreibung des Inhalts.",
-            "_zope_schema_type": "Text",
-            "default": null
-        },
-        "referenced_activity": {
-            "type": "string",
-            "title": "Leistung",
-            "description": "",
-            "_zope_schema_type": "TextLine"
-        },
-        "allow_add_businesscase_dossier": {
-            "type": "boolean",
-            "title": "Hinzuf\u00fcgen von Gesch\u00e4ftsdossiers erlauben",
-            "description": "W\u00e4hlen Sie, ob es in dieser Ordnungsposition erlaubt ist, Gesch\u00e4ftsdossiers hinzuzuf\u00fcgen. Ist diese Option deaktiviert, kann der Benutzer nur Dossiers aus einer Vorlage oder Spezialdossiers erstellen.",
-            "_zope_schema_type": "Bool"
-        },
         "archival_value_annotation": {
             "type": "string",
             "title": "Kommentar zur Archivw\u00fcrdigkeit",
             "description": "",
             "_zope_schema_type": "Text"
         },
-        "public_trial_statement": {
+        "custody_period": {
+            "type": "integer",
+            "title": "Archivische Schutzfrist (Jahre)",
+            "description": "Dauer, w\u00e4hrend der nach der Archivierung die Dokumente vor \u00f6ffentlicher Einsichtnahme gesch\u00fctzt sind.",
+            "_zope_schema_type": "Choice",
+            "default": 30,
+            "enum": [
+                0,
+                30,
+                100,
+                150
+            ]
+        },
+        "date_of_cassation": {
             "type": "string",
-            "title": "Bearbeitungsinformation",
-            "description": "Datum Gesuch, Gesuchsteller, Datum Entscheid, Verweis auf GEVER-Gesuchdossier",
-            "_zope_schema_type": "Text",
-            "default": ""
-        },
-        "addable_dossier_types": {
-            "type": "array",
-            "title": "Erlaubte Spezialdossiers",
-            "description": "W\u00e4hlen Sie die Spezialdossiers aus, die in dieser Ordnungsposition erlaubt sind.",
-            "_zope_schema_type": "List"
-        },
-        "addable_dossier_templates": {
-            "type": "array",
-            "title": "Erlaubte Dossiervorlagen",
+            "title": "Kassationsdatum",
+            "format": "date",
             "description": "",
-            "_zope_schema_type": "RelationList",
-            "default": []
+            "_zope_schema_type": "Date"
         },
-        "former_reference": {
+        "date_of_submission": {
             "type": "string",
-            "title": "Fr\u00fcheres Zeichen",
+            "title": "Anbietezeitpunkt",
+            "format": "date",
             "description": "",
-            "_zope_schema_type": "TextLine"
+            "_zope_schema_type": "Date"
         },
         "reference_number_prefix": {
             "type": "string",
@@ -190,17 +183,28 @@
             "description": "",
             "_zope_schema_type": "TextLine",
             "default": "<H\u00f6chste auf dieser Ebene vergebene Nummer + 1>"
+        },
+        "addable_dossier_templates": {
+            "type": "array",
+            "title": "Erlaubte Dossiervorlagen",
+            "description": "",
+            "_zope_schema_type": "RelationList",
+            "default": []
         }
     },
-    "anyOf": [
+    "allOf": [
         {
-            "required": [
-                "title_de"
-            ]
-        },
-        {
-            "required": [
-                "title_fr"
+            "anyOf": [
+                {
+                    "required": [
+                        "title_de"
+                    ]
+                },
+                {
+                    "required": [
+                        "title_fr"
+                    ]
+                }
             ]
         }
     ],

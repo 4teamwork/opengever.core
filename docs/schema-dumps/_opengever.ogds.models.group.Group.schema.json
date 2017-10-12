@@ -4,19 +4,19 @@
     "title": "Group",
     "additionalProperties": false,
     "properties": {
-        "active": {
-            "type": "boolean",
-            "title": "active",
-            "description": "",
-            "_zope_schema_type": "Bool",
-            "default": true
-        },
         "groupid": {
             "type": "string",
             "title": "groupid",
             "maxLength": 255,
             "description": "",
             "_zope_schema_type": "Text"
+        },
+        "active": {
+            "type": "boolean",
+            "title": "active",
+            "description": "",
+            "_zope_schema_type": "Bool",
+            "default": true
         },
         "title": {
             "type": "string",
