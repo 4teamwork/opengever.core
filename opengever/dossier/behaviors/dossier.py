@@ -1,25 +1,22 @@
-from Acquisition import aq_inner, aq_parent
 from collective.elephantvocabulary import wrap_vocabulary
 from datetime import date
-from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
 from ftw.keywordwidget.field import ChoicePlus
 from ftw.keywordwidget.widget import KeywordFieldWidget
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
-from opengever.base.behaviors.utils import hide_fields_from_behavior
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.dossier import _
 from opengever.dossier.widget import referenceNumberWidgetFactory
 from opengever.ogds.base.sources import AssignedUsersSourceBinder
+from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.dexterity.i18n import MessageFactory as pd_mf  # noqa
-from plone.directives import form, dexterity
+from plone.supermodel import model
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zope import schema
 from zope.interface import Interface, alsoProvides
 from zope.interface import invariant, Invalid
 import logging
-
 
 LOG = logging.getLogger('opengever.dossier')
 
@@ -33,12 +30,12 @@ def start_date_default():
     return date.today()
 
 
-class IDossier(form.Schema):
+class IDossier(model.Schema):
     """Behaviour interface for dossier types providing
     common properties/fields.
     """
 
-    form.fieldset(
+    model.fieldset(
         u'common',
         label=_(u'fieldset_common', u'Common'),
         fields=[
@@ -96,7 +93,7 @@ class IDossier(form.Schema):
         required=False,
     )
 
-    form.fieldset(
+    model.fieldset(
         u'filing',
         label=_(u'fieldset_filing', default=u'Filing'),
         fields=[
@@ -200,26 +197,6 @@ class IDossier(form.Schema):
 
 
 alsoProvides(IDossier, IFormFieldProvider)
-
-
-class EditForm(dexterity.EditForm):
-    """Standard Editform, provide just a special label for subdossiers"""
-
-    grok.context(IDossierMarker)
-
-    def updateFields(self):
-        super(EditForm, self).updateFields()
-        hide_fields_from_behavior(self,
-                                  ['IClassification.public_trial',
-                                   'IClassification.public_trial_statement'])
-
-    @property
-    def label(self):
-        if IDossierMarker.providedBy(aq_parent(aq_inner(self.context))):
-            return _(u'Edit Subdossier')
-        else:
-            type_name = self.fti.Title()
-            return pd_mf(u"Edit ${name}", mapping={'name': type_name})
 
 
 class StartBeforeEnd(Invalid):

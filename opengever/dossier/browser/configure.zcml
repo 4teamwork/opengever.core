@@ -91,6 +91,13 @@
   </class>
 
   <browser:page
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      name="edit"
+      class=".forms.DossierEditForm"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <browser:page
       for="opengever.dossier.behaviors.participation.IParticipationAwareMarker"
       name="add-plone-participation"
       class=".forms.ParticipationAddFormView"

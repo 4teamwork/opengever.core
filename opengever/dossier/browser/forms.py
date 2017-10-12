@@ -1,4 +1,5 @@
 from AccessControl import getSecurityManager
+from Acquisition import aq_inner, aq_parent
 from ftw.keywordwidget.widget import KeywordWidget
 from opengever.base.behaviors.utils import hide_fields_from_behavior
 from opengever.dossier import _
@@ -7,6 +8,7 @@ from opengever.dossier.behaviors.participation import IParticipation
 from opengever.dossier.behaviors.participation import IParticipationAware
 from plone.autoform.widgets import ParameterizedWidget
 from plone.dexterity.browser import add
+from plone.dexterity.browser import edit
 from plone.dexterity.i18n import MessageFactory as pd_mf  # noqa
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.z3cform import layout
@@ -64,6 +66,24 @@ class DossierAddView(add.DefaultAddView):
     form = DossierAddForm
 
 #  -------- add form -------
+
+
+class DossierEditForm(edit.DefaultEditForm):
+    """Standard Editform, provide just a special label for subdossiers"""
+
+    def updateFields(self):
+        super(DossierEditForm, self).updateFields()
+        hide_fields_from_behavior(self,
+                                  ['IClassification.public_trial',
+                                   'IClassification.public_trial_statement'])
+
+    @property
+    def label(self):
+        if IDossierMarker.providedBy(aq_parent(aq_inner(self.context))):
+            return _(u'Edit Subdossier')
+        else:
+            type_name = self.fti.Title()
+            return pd_mf(u"Edit ${name}", mapping={'name': type_name})
 
 
 class ParticipationAddForm(Form):
