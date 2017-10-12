@@ -89,4 +89,19 @@
         interface="zope.publisher.interfaces.browser.IBrowserPage"
         />
   </class>
+
+  <browser:page
+      for="opengever.dossier.behaviors.participation.IParticipationAwareMarker"
+      name="add-plone-participation"
+      class=".forms.ParticipationAddFormView"
+      permission="cmf.AddPortalContent"
+      />
+
+  <browser:page
+      for="opengever.dossier.behaviors.participation.IParticipationAwareMarker"
+      name="delete_participants"
+      class=".forms.DeleteParticipants"
+      permission="cmf.ModifyPortalContent"
+      />
+
 </configure>

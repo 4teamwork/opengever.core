@@ -1,22 +1,14 @@
 from collective.elephantvocabulary import wrap_vocabulary
-from five import grok
-from ftw.keywordwidget.widget import KeywordWidget
 from opengever.dossier import _
 from opengever.dossier import events
 from opengever.ogds.base.sources import UsersContactsInboxesSourceBinder
 from persistent import Persistent
 from persistent.list import PersistentList
-from plone.autoform.widgets import ParameterizedWidget
 from plone.directives import form
-from plone.z3cform import layout
-from Products.statusmessages.interfaces import IStatusMessage
-from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from zope import schema
 from zope.annotation.interfaces import IAnnotations
 from zope.event import notify
 from zope.interface import Interface, implements
-import base64
-import z3c.form
 
 
 _marker = object()
@@ -140,82 +132,3 @@ class Participation(Persistent):
 
     def has_key(self, key):
         return hasattr(self, key)
-
-
-#  -------- add form -------
-
-class ParticipationAddForm(z3c.form.form.Form):
-    fields = z3c.form.field.Fields(IParticipation)
-    label = _(u'label_participation', default=u'Participation')
-    ignoreContext = True
-    fields['contact'].widgetFactory = ParameterizedWidget(
-        KeywordWidget,
-        async=True
-    )
-
-    fields['roles'].widgetFactory = CheckBoxFieldWidget
-
-    @z3c.form.button.buttonAndHandler(_(u'button_add', default=u'Add'))
-    def handle_add(self, action):
-        data, errors = self.extractData()
-        if not errors:
-            phandler = IParticipationAware(self.context)
-            part = phandler.create_participation(**data)
-            phandler.append_participiation(part)
-            status = IStatusMessage(self.request)
-            msg = _(u'info_participation_create',
-                    u'Participation created.')
-            status.addStatusMessage(msg, type='info')
-            return self._redirect_to_participants_tab()
-
-    @z3c.form.button.buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
-    def handle_cancel(self, action):
-        return self._redirect_to_participants_tab()
-
-    def _redirect_to_participants_tab(self):
-        url = self.context.absolute_url() + '/#participants'
-        return self.request.RESPONSE.redirect(url)
-
-
-class ParticipationAddFormView(layout.FormWrapper, grok.View):
-    grok.context(IParticipationAwareMarker)
-    grok.name('add-plone-participation')
-    grok.require('cmf.AddPortalContent')
-    form = ParticipationAddForm
-
-    def __init__(self, *args, **kwargs):
-        layout.FormWrapper.__init__(self, *args, **kwargs)
-        grok.View.__init__(self, *args, **kwargs)
-
-
-# ------- delete view -------
-
-class DeleteParticipants(grok.View):
-    grok.context(IParticipationAwareMarker)
-    grok.require('cmf.ModifyPortalContent')
-    grok.name('delete_participants')
-
-    def render(self):
-        oids = self.request.get('oids')
-        if not oids:
-            msg = _(u'warning_no_participants_selected',
-                    default=u'You didn\'t select any participants.')
-            IStatusMessage(self.request).addStatusMessage(msg, type='error')
-            return self.request.RESPONSE.redirect(self.redirect_url)
-        phandler = IParticipationAware(self.context)
-        for a in oids:
-            oid = base64.decodestring(a)
-            obj = self.context._p_jar[oid]
-            phandler.remove_participation(obj)
-        status = IStatusMessage(self.request)
-        msg = _(u'info_removed_participations',
-                'Removed participations.')
-        status.addStatusMessage(msg, type='info')
-        return self.request.RESPONSE.redirect(self.redirect_url)
-
-    @property
-    def redirect_url(self):
-        value = self.request.get('orig_template')
-        if not value:
-            value = './#participants'
-        return value
