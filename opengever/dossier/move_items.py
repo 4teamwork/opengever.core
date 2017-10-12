@@ -1,7 +1,6 @@
 from Acquisition import aq_chain
 from Acquisition import aq_inner
 from Acquisition import aq_parent
-from five import grok
 from OFS.CopySupport import CopyError, ResourceLockedError
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.document.document import IDocumentSchema
@@ -11,7 +10,6 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.dossier.templatefolder.interfaces import ITemplateFolder
 from opengever.globalindex.model.task import Task
-from plone.dexterity.interfaces import IDexterityContainer
 from plone.formwidget.contenttree import ObjPathSourceBinder
 from plone.z3cform import layout
 from Products.CMFCore.utils import getToolByName
@@ -190,21 +188,17 @@ class MoveTemplateItemsForm(MoveItemsForm):
     fields = field.Fields(IMoveTemplateItemsSchema)
 
 
-class MoveItemsFormView(layout.FormWrapper, grok.View):
+class MoveItemsFormView(layout.FormWrapper):
     """ View to move selected items into another location
     """
 
-    grok.context(IDexterityContainer)
-    grok.name('move_items')
-    grok.require('zope2.View')
     form = MoveItemsForm
 
     def __init__(self, context, request):
         if self.within_template_folder(context):
             self.form = MoveTemplateItemsForm
 
-        layout.FormWrapper.__init__(self, context, request)
-        grok.View.__init__(self, context, request)
+        super(MoveItemsFormView, self).__init__(context, request)
 
     def assert_valid_container_state(self):
         container = self.context
