@@ -87,4 +87,28 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      name="transition-resolve"
+      class=".resolve.DossierResolveView"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      name="transition-reactivate"
+      class=".resolve.DossierReactivateView"
+      permission="zope2.View"
+      />
+
+  <adapter
+      factory=".resolve.StrictDossierResolver"
+      name="strict"
+      />
+
+  <adapter
+      factory=".resolve.LenientDossierResolver"
+      name="lenient"
+      />
+
 </configure>

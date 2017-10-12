@@ -1,5 +1,4 @@
 from datetime import datetime
-from five import grok
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.security import elevated_privileges
 from opengever.document.archival_file import ArchivalFileConverter
@@ -13,9 +12,12 @@ from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.dossier.interfaces import IDossierResolver
 from plone import api
 from Products.CMFCore.utils import getToolByName
+from Products.Five.browser import BrowserView
+from zope.component import adapter
 from zope.component import getAdapter
 from zope.component import getSiteManager
 from zope.i18n import translate
+from zope.interface import implementer
 from zope.interface import implements
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleVocabulary
@@ -50,13 +52,9 @@ class ValidResolverNamesVocabularyFactory(object):
         return SimpleVocabulary.fromValues(resolver_adapter_names)
 
 
-class DossierResolveView(grok.View):
+class DossierResolveView(BrowserView):
 
-    grok.context(IDossierMarker)
-    grok.name('transition-resolve')
-    grok.require('zope2.View')
-
-    def render(self):
+    def __call__(self):
         resolver = get_resolver(self.context)
 
         # check preconditions
@@ -97,12 +95,9 @@ class DossierResolveView(grok.View):
             self.request.RESPONSE.redirect(self.context.absolute_url())
 
 
-class DossierReactivateView(grok.View):
-    grok.context(IDossierMarker)
-    grok.name('transition-reactivate')
-    grok.require('zope2.View')
+class DossierReactivateView(BrowserView):
 
-    def render(self):
+    def __call__(self):
         ptool = getToolByName(self, 'plone_utils')
 
         resolver = get_resolver(self.context)
@@ -120,17 +115,18 @@ class DossierReactivateView(grok.View):
             self.request.RESPONSE.redirect(self.context.absolute_url())
 
 
-class StrictDossierResolver(grok.Adapter):
+@implementer(IDossierResolver)
+@adapter(IDossierMarker)
+class StrictDossierResolver(object):
     """The strict dossier resolver enforces that documents and tasks
     are filed in subdossiers if the dossier contains at least one subdossier.
     """
-    grok.implements(IDossierResolver)
-    grok.context(IDossierMarker)
-    grok.name('strict')
-
     preconditions_fulfilled = False
     enddates_valid = False
     strict = True
+
+    def __init__(self, context):
+        self.context = context
 
     def get_property(self, name):
         return api.portal.get_registry_record(
@@ -256,10 +252,6 @@ class LenientDossierResolver(StrictDossierResolver):
     """The lenient dossier resolver does not enforce that documents and tasks
     are filed in subdossiers if the main dossier has subdossiers.
     """
-    grok.implements(IDossierResolver)
-    grok.context(IDossierMarker)
-    grok.name('lenient')
-
     strict = False
 
 
