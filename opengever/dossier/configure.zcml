@@ -116,4 +116,6 @@
       name="parent-dossier-finder"
       />
 
+  <adapter factory=".base.DefaultConstrainTypeDecider" />
+
 </configure>
