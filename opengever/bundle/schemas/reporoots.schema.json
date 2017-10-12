@@ -66,12 +66,6 @@
                 "guid": {
                     "type": "string"
                 },
-                "parent_guid": {
-                    "type": [
-                        "null",
-                        "string"
-                    ]
-                },
                 "_permissions": {
                     "$ref": "#/definitions/permission"
                 }
@@ -80,15 +74,19 @@
                 "review_state",
                 "guid"
             ],
-            "anyOf": [
+            "allOf": [
                 {
-                    "required": [
-                        "title_de"
-                    ]
-                },
-                {
-                    "required": [
-                        "title_fr"
+                    "anyOf": [
+                        {
+                            "required": [
+                                "title_de"
+                            ]
+                        },
+                        {
+                            "required": [
+                                "title_fr"
+                            ]
+                        }
                     ]
                 }
             ],

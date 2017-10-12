@@ -37,15 +37,19 @@
             "_zope_schema_type": "TextLine"
         }
     },
-    "anyOf": [
+    "allOf": [
         {
-            "required": [
-                "title_de"
-            ]
-        },
-        {
-            "required": [
-                "title_fr"
+            "anyOf": [
+                {
+                    "required": [
+                        "title_de"
+                    ]
+                },
+                {
+                    "required": [
+                        "title_fr"
+                    ]
+                }
             ]
         }
     ],

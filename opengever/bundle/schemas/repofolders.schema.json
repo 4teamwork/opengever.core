@@ -282,7 +282,10 @@
                     "type": "string"
                 },
                 "parent_guid": {
-                    "type": "string"
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 },
                 "_permissions": {
                     "$ref": "#/definitions/permission"
@@ -290,18 +293,30 @@
             },
             "required": [
                 "review_state",
-                "guid",
-                "parent_guid"
+                "guid"
             ],
-            "anyOf": [
+            "allOf": [
                 {
-                    "required": [
-                        "title_de"
+                    "anyOf": [
+                        {
+                            "required": [
+                                "title_de"
+                            ]
+                        },
+                        {
+                            "required": [
+                                "title_fr"
+                            ]
+                        }
                     ]
                 },
                 {
-                    "required": [
-                        "title_fr"
+                    "anyOf": [
+                        {
+                            "required": [
+                                "parent_guid"
+                            ]
+                        }
                     ]
                 }
             ],

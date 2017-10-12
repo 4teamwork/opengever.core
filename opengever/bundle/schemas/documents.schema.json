@@ -192,7 +192,10 @@
                     "type": "string"
                 },
                 "parent_guid": {
-                    "type": "string"
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 },
                 "filepath": {
                     "type": "string"
@@ -215,9 +218,19 @@
             "required": [
                 "review_state",
                 "guid",
-                "parent_guid",
                 "title",
                 "filepath"
+            ],
+            "allOf": [
+                {
+                    "anyOf": [
+                        {
+                            "required": [
+                                "parent_guid"
+                            ]
+                        }
+                    ]
+                }
             ],
             "field_order": [
                 "title",

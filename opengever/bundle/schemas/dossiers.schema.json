@@ -318,7 +318,10 @@
                     "type": "string"
                 },
                 "parent_guid": {
-                    "type": "string"
+                    "type": [
+                        "null",
+                        "string"
+                    ]
                 },
                 "_permissions": {
                     "$ref": "#/definitions/permission"
@@ -336,8 +339,18 @@
                 "title",
                 "responsible",
                 "review_state",
-                "guid",
-                "parent_guid"
+                "guid"
+            ],
+            "allOf": [
+                {
+                    "anyOf": [
+                        {
+                            "required": [
+                                "parent_guid"
+                            ]
+                        }
+                    ]
+                }
             ],
             "field_order": [
                 "title",

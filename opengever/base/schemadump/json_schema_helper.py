@@ -92,14 +92,15 @@ class JSONSchema(object):
                 self._schema.pop('required')
 
     def require_any_of(self, prop_names):
-        """Set the anyOf constraint to require any of the properties listed
-        in `prop_names`.
-        """
-        if 'anyOf' not in self._schema:
-            self._schema['anyOf'] = []
+        """Add an 'anyOf' constraint requiring either of the properties.
 
-        for prop_name in prop_names:
-            self._schema['anyOf'].append({'required': [prop_name]})
+        The anyOf constraint will be added to a global 'allOf' constraint.
+        """
+        if 'allOf' not in self._schema:
+            self._schema['allOf'] = []
+
+        constraint = {'anyOf': [{'required': [p]} for p in prop_names]}
+        self._schema['allOf'].append(constraint)
 
     def set_field_order(self, field_order):
         """Populate the `field_order` key.

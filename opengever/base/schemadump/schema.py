@@ -324,12 +324,11 @@ class OGGBundleJSONSchemaBuilder(object):
 
     def _add_guid_properties(self):
         self.ct_schema.add_property('guid', {'type': 'string'}, required=True)
-        self.ct_schema.add_property(
-            'parent_guid', {'type': 'string'}, required=True)
 
-        if self.portal_type == 'opengever.repository.repositoryroot':
-            # Repository roots don't have a parent GUID
-            self.ct_schema.set_not_required('parent_guid')
+        if self.portal_type != 'opengever.repository.repositoryroot':
+            # Everything except repository roots needs a parent GUID
+            self.ct_schema.add_property('parent_guid', {'type': 'string'})
+            self.ct_schema.require_any_of(['parent_guid'])
 
     def _add_permissions_property(self):
         if not self.portal_type == 'opengever.document.document':

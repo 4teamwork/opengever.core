@@ -236,10 +236,15 @@ class TestJSONSchema(unittest.TestCase):
                 'foo': {'type': 'string'},
                 'bar': {'type': 'string'},
             },
-            'anyOf': [
-                {'required': ['foo']},
-                {'required': ['bar']}
+            'allOf': [
+                {
+                    'anyOf': [
+                        {'required': ['foo']},
+                        {'required': ['bar']}
+                    ],
+                },
             ],
+
         }
         serialized = schema.serialize()
 
