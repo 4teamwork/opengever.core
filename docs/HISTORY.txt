@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Add a HTTP DELETE endpoint for shadow documents. [Rotonen]
+- Add modal dialogs in JS for handling officeatwork failure states. [Rotonen]
 - Prevent editing agenda item list when meeting has been held. [deiferni]
 
 
