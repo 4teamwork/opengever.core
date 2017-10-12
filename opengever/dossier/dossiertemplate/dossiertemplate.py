@@ -1,10 +1,8 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
-from five import grok
 from opengever.base.vocabulary import voc_term_title
 from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossier
-from opengever.dossier.dossiertemplate.behaviors import IDossierTemplate
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateSchema
 from opengever.dossier.utils import truncate_ellipsis
@@ -12,9 +10,10 @@ from opengever.ogds.base.actor import Actor
 from plone import api
 from plone.dexterity.content import Container
 from plone.dexterity.utils import getAdditionalSchemata
-from plone.directives import dexterity
 from plone.z3cform.fieldsets.utils import remove
 from zope.schema import getFieldsInOrder
+from plone.dexterity.browser import add
+from plone.dexterity.browser import edit
 
 
 TEMPLATABLE_FIELDS = [
@@ -43,8 +42,7 @@ def whitelist_form_fields(form, whitlisted_fields):
             remove(form, fieldname, behavior_interface_name)
 
 
-class DossierTemplateAddForm(dexterity.AddForm):
-    grok.name('opengever.dossier.dossiertemplate')
+class DossierTemplateAddForm(add.DefaultAddForm):
 
     @property
     def label(self):
@@ -57,8 +55,11 @@ class DossierTemplateAddForm(dexterity.AddForm):
         whitelist_form_fields(self, TEMPLATABLE_FIELDS)
 
 
-class DossierTemplateEditForm(dexterity.EditForm):
-    grok.context(IDossierTemplateSchema)
+class DossierTemplateAddView(add.DefaultAddView):
+    form = DossierTemplateAddForm
+
+
+class DossierTemplateEditForm(edit.DefaultEditForm):
 
     def updateFields(self):
         super(DossierTemplateEditForm, self).updateFields()
