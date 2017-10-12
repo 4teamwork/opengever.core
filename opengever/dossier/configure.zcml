@@ -240,4 +240,12 @@
       permission="zope2.View"
       />
 
+  <adapter factory=".docprops.DefaultDocumentDocPropertyProvider" />
+
+  <adapter factory=".docprops.DefaultDossierDocPropertyProvider" />
+
+  <adapter factory=".docprops.DefaultMemberDocPropertyProvider" />
+
+  <adapter factory=".docprops.DefaultDocProperties" />
+
 </configure>

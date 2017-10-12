@@ -1,7 +1,6 @@
 from Acquisition import aq_parent
 from datetime import datetime
 from datetime import time
-from five import grok
 from ooxml_docprops import is_supported_mimetype
 from ooxml_docprops.properties import OOXMLDocument
 from opengever import journal
@@ -19,10 +18,12 @@ from plone.registry.interfaces import IRegistry
 from Products.CMFCore.interfaces import IMemberData
 from Products.CMFCore.utils import getToolByName
 from tempfile import NamedTemporaryFile
+from zope.component import adapter
 from zope.component import getAdapter
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.component import queryAdapter
+from zope.interface import implementer
 from zope.publisher.interfaces.browser import IBrowserRequest
 import os
 
@@ -111,7 +112,8 @@ class DocPropertyWriter(object):
         return is_supported_mimetype(self.document.file.contentType)
 
 
-class DocPropertyProvider(grok.Adapter):
+@implementer(IDocPropertyProvider)
+class DocPropertyProvider(object):
     """Baseclass for DocPropertyProviders.
 
     Contains utility methods to create a dict of doc-properties. Set the NS
@@ -119,10 +121,10 @@ class DocPropertyProvider(grok.Adapter):
     with _add_property will be prefixed with that namespace.
     """
 
-    grok.baseclass()
-    grok.provides(IDocPropertyProvider)
-
     NS = tuple()
+
+    def __init__(self, context):
+        self.context = context
 
     def _add_property(self, properties, name, value):
         """Add single property to collection of properties.
@@ -148,10 +150,11 @@ class DocPropertyProvider(grok.Adapter):
         return str(getUtility(ISequenceNumber).get_number(self.context))
 
 
+@adapter(IDocumentSchema)
 class DefaultDocumentDocPropertyProvider(DocPropertyProvider):
     """
     """
-    grok.context(IDocumentSchema)
+
     NS = ('ogg', 'document')
 
     def _as_datetime(self, date):
@@ -204,10 +207,10 @@ class DefaultDocumentDocPropertyProvider(DocPropertyProvider):
         return properties
 
 
+@adapter(IDossierMarker)
 class DefaultDossierDocPropertyProvider(DocPropertyProvider):
     """Return the default dossier properties"""
 
-    grok.context(IDossierMarker)
     NS = ('ogg', 'dossier')
 
     def get_properties(self):
@@ -230,10 +233,10 @@ class DefaultDossierDocPropertyProvider(DocPropertyProvider):
         return properties
 
 
+@adapter(IMemberData)
 class DefaultMemberDocPropertyProvider(DocPropertyProvider):
     """Return the default user properties from LDAP/ogds."""
 
-    grok.context(IMemberData)
     NS = ('ogg', 'user')
 
     ogds_user_attributes = (
@@ -290,9 +293,9 @@ class DefaultMemberDocPropertyProvider(DocPropertyProvider):
         return properties
 
 
-class DefaultDocProperties(grok.MultiAdapter):
-    grok.adapts(IDocumentSchema, IBrowserRequest)
-    grok.implements(IDocProperties)
+@implementer(IDocProperties)
+@adapter(IDocumentSchema, IBrowserRequest)
+class DefaultDocProperties(object):
 
     def __init__(self, context, request):
         # Context is the newly created document
