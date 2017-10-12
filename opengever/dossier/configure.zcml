@@ -73,4 +73,11 @@
 
   <adapter factory=".sequence.DossierSequenceNumberGenerator" />
 
+  <browser:page
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      name="transition-activate"
+      class=".activate.DossierActivateView"
+      permission="zope2.View"
+      />
+
 </configure>
