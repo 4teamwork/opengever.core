@@ -143,3 +143,16 @@ class TestWordMeeting(IntegrationTestCase):
         with self.login(self.meeting_user):
             self.assertFalse(
                 meeting.is_editable())
+
+    def test_get_undecided_agenda_items(self):
+        self.login(self.committee_responsible)
+        meeting = self.meeting.model
+        self.schedule_paragraph(meeting, u'A-Gesch\xe4fte')
+        item1 = self.schedule_proposal(meeting, self.submitted_word_proposal)
+        item2 = self.schedule_ad_hoc(meeting, u'Ad-Hoc Agenda Item')
+
+        self.assertEquals([item1, item2], meeting.get_undecided_agenda_items())
+        item1.decide()
+        self.assertEquals([item2], meeting.get_undecided_agenda_items())
+        item2.decide()
+        self.assertEquals([], meeting.get_undecided_agenda_items())
