@@ -4,7 +4,7 @@ from opengever.dossier import events
 from opengever.ogds.base.sources import UsersContactsInboxesSourceBinder
 from persistent import Persistent
 from persistent.list import PersistentList
-from plone.directives import form
+from plone.supermodel import model
 from zope import schema
 from zope.annotation.interfaces import IAnnotations
 from zope.event import notify
@@ -76,7 +76,7 @@ class ParticipationHandler(object):
 
 # -------- model --------
 
-class IParticipation(form.Schema):
+class IParticipation(model.Schema):
     """ Participation Form schema
     """
 

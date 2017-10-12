@@ -4,9 +4,10 @@ from opengever.dossier import _
 from opengever.dossier.behaviors import dossiernamefromtitle
 from opengever.dossier.behaviors.dossier import IDossier
 from plone.app.content.interfaces import INameFromTitle
+from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
-from plone.directives import form
 from plone.formwidget.contenttree import ObjPathSourceBinder
+from plone.supermodel import model
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zope import schema
 from zope.interface import alsoProvides
@@ -14,13 +15,13 @@ from zope.interface import implements
 from zope.interface import Interface
 
 
-class IDossierTemplateSchema(form.Schema):
+class IDossierTemplateSchema(model.Schema):
     """Schema interface for dossier template types.
 
     Use this type of dossier to create a reusable template structures.
     """
 
-    form.fieldset(
+    model.fieldset(
         u'common',
         label=base_mf(u'fieldset_common', default=u'Common'),
         fields=[
@@ -101,7 +102,7 @@ class DossierTemplateNameFromTitle(dossiernamefromtitle.DossierNameFromTitle):
     format = u'dossiertemplate-%i'
 
 
-class IRestrictAddableDossierTemplates(form.Schema):
+class IRestrictAddableDossierTemplates(model.Schema):
 
     addable_dossier_templates = RelationList(
         title=_(u'label_addable_dossier_templates',

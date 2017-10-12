@@ -13,8 +13,9 @@ from opengever.dossier.command import CreateDocumentFromTemplateCommand
 from opengever.dossier.templatefolder import get_template_folder
 from opengever.tabbedview.helper import document_with_icon
 from plone import api
+from plone.autoform import directives as form
 from plone.autoform.form import AutoExtensibleForm
-from plone.directives import form
+from plone.supermodel import model
 from plone.z3cform.layout import FormWrapper
 from sqlalchemy import inspect
 from sqlalchemy.exc import NoInspectionAvailable
@@ -56,7 +57,7 @@ def get_templates(context):
     return SimpleVocabulary(terms)
 
 
-class ICreateDocumentFromTemplate(form.Schema):
+class ICreateDocumentFromTemplate(model.Schema):
 
     template = TableChoice(
         title=_(u"label_template", default=u"Template"),
@@ -259,7 +260,7 @@ def make_url_vocabulary(context):
         for url in recipient.urls])
 
 
-class ISelectRecipientAddress(form.Schema):
+class ISelectRecipientAddress(model.Schema):
 
     address = TableChoice(
         title=_(u"label_address", default=u"Address"),
