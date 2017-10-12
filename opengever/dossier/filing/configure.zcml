@@ -45,4 +45,12 @@
       layer="opengever.dossier.filing.interfaces.IFilingNumberActivatedLayer"
       />
 
+  <browser:page
+      for="*"
+      name="advanced_search"
+      class=".advanced_search.FilingAdvancedSearchForm"
+      permission="zope2.View"
+      layer="opengever.dossier.filing.interfaces.IFilingNumberActivatedLayer"
+      />
+
 </configure>

@@ -9,12 +9,13 @@ from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.task.util import getTaskTypeVocabulary
 from plone.autoform.widgets import ParameterizedWidget
-from plone.directives import form as directives_form
+from plone.supermodel import model
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import PloneMessageFactory as PMF
 from z3c.form import button
 from z3c.form.browser import radio, checkbox
 from z3c.form.field import Fields
+from z3c.form.form import Form
 from z3c.form.interfaces import INPUT_MODE
 from zope import schema
 from zope.interface import provider
@@ -107,7 +108,7 @@ def strip_parantheses(value):
     return value
 
 
-class IAdvancedSearch(directives_form.Schema):
+class IAdvancedSearch(model.Schema):
 
     searchableText = schema.TextLine(
         title=_('label_searchable_text', default='Text'),
@@ -256,7 +257,7 @@ class IAdvancedSearch(directives_form.Schema):
     )
 
 
-class AdvancedSearchForm(directives_form.Form):
+class AdvancedSearchForm(Form):
 
     label = _('advanced_search', default='advanced search')
 
