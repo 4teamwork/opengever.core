@@ -171,19 +171,19 @@ class Committee(ModelContainer):
         if id_.startswith('meeting'):
             meeting_id = int(id_.split('-')[-1])
             meeting = Meeting.query.get(meeting_id)
-            if meeting:
+            if meeting and meeting.committee == self.load_model():
                 return MeetingWrapper.wrap(self, meeting)
 
         elif id_.startswith('period'):
             period_id = int(id_.split('-')[-1])
             period = Period.query.get(period_id)
-            if period:
+            if period and period.committee == self.load_model():
                 return PeriodWrapper.wrap(self, period)
 
         elif id_.startswith('membership'):
             membership_id = int(id_.split('-')[-1])
             membership = Membership.query.get(membership_id)
-            if membership:
+            if membership and membership.committee == self.load_model():
                 return MembershipWrapper.wrap(self, membership)
 
         if default is _marker:
