@@ -1,10 +1,6 @@
 from opengever.base.schemadump.config import SCHEMA_DUMPS_DIR
-from opengever.base.schemadump.schema import GEVER_SQL_TYPES
-from opengever.base.schemadump.schema import GEVER_TYPES
-from opengever.base.schemadump.schema import GEVER_TYPES_TO_OGGBUNDLE_TYPES
-from opengever.base.schemadump.schema import JSONSchemaBuilder
-from opengever.base.schemadump.schema import OGGBundleJSONSchemaBuilder
-from opengever.base.utils import pretty_json
+from opengever.base.schemadump.schema import build_all_bundle_schemas
+from opengever.base.schemadump.schema import build_all_gever_schemas
 from opengever.testing import IntegrationTestCase
 from os.path import join as pjoin
 from os.path import normpath
@@ -29,10 +25,7 @@ class TestCheckedInSchemaDumpsAreUpToDate(IntegrationTestCase):
         return pjoin(resource_filename('opengever.bundle', 'schemas/'))
 
     def test_schema_dumps_for_api(self):
-        for portal_type in GEVER_TYPES + GEVER_SQL_TYPES:
-            builder = JSONSchemaBuilder(portal_type)
-            current_schema = builder.build_schema().serialize()
-            filename = '%s.schema.json' % portal_type
+        for filename, current_schema in build_all_gever_schemas():
             dump_path = pjoin(self.schema_dumps_dir, filename)
 
             with open(dump_path) as dump_file:
@@ -40,17 +33,14 @@ class TestCheckedInSchemaDumpsAreUpToDate(IntegrationTestCase):
 
             self.assertDictEqual(
                 existing_schema,
-                json.loads(pretty_json(current_schema)),
+                current_schema.serialize(),
                 '\n\nError: JSON schema dumps for %s have changed '
                 '(see diff  above), please run bin/instance dump_schemas and '
                 'commit the modified schema files together with '
                 'your changes.' % dump_path)
 
     def test_schema_dumps_for_oggbundles(self):
-        for portal_type, short_name in GEVER_TYPES_TO_OGGBUNDLE_TYPES.items():
-            builder = OGGBundleJSONSchemaBuilder(portal_type)
-            current_schema = builder.build_schema().serialize()
-            filename = '%ss.schema.json' % short_name
+        for filename, current_schema in build_all_bundle_schemas():
             dump_path = pjoin(self.oggbundle_schema_dumps_dir, filename)
 
             with open(dump_path) as dump_file:
@@ -58,7 +48,7 @@ class TestCheckedInSchemaDumpsAreUpToDate(IntegrationTestCase):
 
             self.assertDictEqual(
                 existing_schema,
-                json.loads(pretty_json(current_schema)),
+                current_schema.serialize(),
                 '\n\nError: JSON schema dumps for %s have changed '
                 '(see diff  above), please run bin/instance dump_schemas and '
                 'commit the modified schema files together with '

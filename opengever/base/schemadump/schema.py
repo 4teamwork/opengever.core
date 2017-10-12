@@ -399,10 +399,7 @@ class JSONSchemaDumpWriter(DirectoryHelperMixin):
     """
 
     def dump(self):
-        for portal_type in GEVER_TYPES + GEVER_SQL_TYPES:
-            builder = JSONSchemaBuilder(portal_type)
-            schema = builder.build_schema()
-            filename = '%s.schema.json' % portal_type
+        for filename, schema in build_all_gever_schemas():
             dump_path = pjoin(self.schema_dumps_dir, filename)
             schema.dump(dump_path)
 
@@ -416,12 +413,29 @@ class OGGBundleJSONSchemaDumpWriter(DirectoryHelperMixin):
         dump_dir = pjoin(resource_filename('opengever.bundle', 'schemas/'))
         mkdir_p(dump_dir)
 
-        for portal_type, short_name in GEVER_TYPES_TO_OGGBUNDLE_TYPES.items():
-            builder = OGGBundleJSONSchemaBuilder(portal_type)
-            schema = builder.build_schema()
-            filename = '%ss.schema.json' % short_name
+        for filename, schema in build_all_bundle_schemas():
             dump_path = pjoin(dump_dir, filename)
             schema.dump(dump_path)
+
+
+def build_all_gever_schemas():
+    """Collects JSON Schema representations of common GEVER types.
+    """
+    for portal_type in GEVER_TYPES + GEVER_SQL_TYPES:
+        builder = JSONSchemaBuilder(portal_type)
+        schema = builder.build_schema()
+        filename = '%s.schema.json' % portal_type
+        yield filename, schema
+
+
+def build_all_bundle_schemas():
+    """Collects JSON Schema representations of OGGBundle types.
+    """
+    for portal_type, short_name in GEVER_TYPES_TO_OGGBUNDLE_TYPES.items():
+        builder = OGGBundleJSONSchemaBuilder(portal_type)
+        schema = builder.build_schema()
+        filename = '%ss.schema.json' % short_name
+        yield filename, schema
 
 
 def dump_schemas():
