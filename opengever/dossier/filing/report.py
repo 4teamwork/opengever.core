@@ -1,8 +1,5 @@
-from five import grok
 from opengever.dossier import _
 from opengever.dossier.browser.report import DossierReporter
-from opengever.dossier.filing.interfaces import IFilingNumberActivatedLayer
-from zope.interface import Interface
 
 
 def _get_filing_part(filing_number, part):
@@ -41,11 +38,6 @@ def filing_no_number(filing_number):
 class DossierFilingNumberReporter(DossierReporter):
     """DossierReporter addition, which add filing columns to the xls-export.
     """
-
-    grok.context(Interface)
-    grok.name('dossier_report')
-    grok.require('zope2.View')
-    grok.layer(IFilingNumberActivatedLayer)
 
     def get_dossier_attributes(self):
         filing_columns = [
