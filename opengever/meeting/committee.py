@@ -21,6 +21,7 @@ from opengever.ogds.base.utils import ogds_service
 from plone import api
 from plone.directives import form
 from plone.i18n.normalizer.interfaces import IIDNormalizer
+from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from z3c.form.validator import WidgetValidatorDiscriminators
 from z3c.relationfield.schema import RelationChoice
 from zope import schema
@@ -117,6 +118,20 @@ class ICommittee(form.Schema):
         source=sablon_template_source,
         required=False,
     )
+
+    form.widget('allowed_proposal_templates', CheckBoxFieldWidget)
+    allowed_proposal_templates = schema.List(
+        title=_(u'label_allowed_proposal_templates',
+                default=u'Allowed proposal templates'),
+        description=_(u'help_allowed_proposal_templates',
+                      default=u'Select the proposal templates allowed for'
+                      u' this commitee, or select no templates for allowing'
+                      u' all templates.'),
+        value_type=schema.Choice(
+            source='opengever.meeting.ProposalTemplatesVocabulary'),
+        required=False,
+        default=None,
+        missing_value=None)
 
 
 class RepositoryfolderValidator(BaseRepositoryfolderValidator):

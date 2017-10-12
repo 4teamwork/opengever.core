@@ -3,9 +3,12 @@ from opengever.dossier.templatefolder import get_template_folder
 from opengever.meeting.model import Committee
 from opengever.meeting.model import Member
 from opengever.meeting.model import Membership
+from opengever.meeting.proposaltemplate import IProposalTemplate
+from operator import attrgetter
 from plone import api
 from plone.uuid.interfaces import IUUID
 from Products.CMFPlone.utils import safe_unicode
+from zope.interface import implementer
 from zope.interface import provider
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.interfaces import IVocabularyFactory
@@ -110,3 +113,17 @@ class LanguagesVocabulary(grok.GlobalUtility):
 
         return SimpleVocabulary(
             [SimpleTerm(language) for language in languages])
+
+
+@implementer(IVocabularyFactory)
+class ProposalTemplatesVocabulary(object):
+
+    def __call__(self, context):
+        terms = []
+        for brain in api.content.find(object_provides=IProposalTemplate):
+            terms.append(SimpleTerm(value=brain.UID,
+                                    token=brain.UID,
+                                    title=brain.Title))
+
+        terms.sort(key=attrgetter('title'))
+        return SimpleVocabulary(terms)

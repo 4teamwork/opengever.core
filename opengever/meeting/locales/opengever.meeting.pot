@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-05 16:15+0000\n"
+"POT-Creation-Date: 2017-10-12 10:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -700,6 +700,11 @@ msgstr ""
 msgid "held"
 msgstr ""
 
+#. Default: "Select the proposal templates allowed for this commitee, or select no templates for allowing all templates."
+#: ./opengever/meeting/committee.py
+msgid "help_allowed_proposal_templates"
+msgstr ""
+
 #. Default: "Describe, why the proposal is rejected"
 #: ./opengever/meeting/browser/proposaltransitions.py
 msgid "help_reject_proposal_text"
@@ -746,6 +751,11 @@ msgstr ""
 #: ./opengever/meeting/committee.py
 #: ./opengever/meeting/committeecontainer.py
 msgid "label_agendaitem_list_template"
+msgstr ""
+
+#. Default: "Allowed proposal templates"
+#: ./opengever/meeting/committee.py
+msgid "label_allowed_proposal_templates"
 msgstr ""
 
 #. Default: "Attachments"
@@ -1148,7 +1158,8 @@ msgid "label_proposed_action"
 msgstr ""
 
 #. Default: "Protocol header template"
-#: ./opengever/meeting/committee.py:65
+#: ./opengever/meeting/committee.py
+#: ./opengever/meeting/committeecontainer.py
 msgid "label_protocol_header_template"
 msgstr ""
 
@@ -1158,7 +1169,8 @@ msgid "label_protocol_start_page_number"
 msgstr ""
 
 #. Default: "Protocol suffix template"
-#: ./opengever/meeting/committee.py:72
+#: ./opengever/meeting/committee.py
+#: ./opengever/meeting/committeecontainer.py
 msgid "label_protocol_suffix_template"
 msgstr ""
 

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-05 16:15+0000\n"
+"POT-Creation-Date: 2017-10-12 10:36+0000\n"
 "PO-Revision-Date: 2017-06-22 09:02+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -703,6 +703,11 @@ msgstr "Rejeter la proposition"
 msgid "held"
 msgstr "Tenue"
 
+#. Default: "Select the proposal templates allowed for this commitee, or select no templates for allowing all templates."
+#: ./opengever/meeting/committee.py
+msgid "help_allowed_proposal_templates"
+msgstr ""
+
 #. Default: "Describe, why the proposal is rejected"
 #: ./opengever/meeting/browser/proposaltransitions.py
 msgid "help_reject_proposal_text"
@@ -750,6 +755,11 @@ msgstr "Liste des points du jour"
 #: ./opengever/meeting/committeecontainer.py
 msgid "label_agendaitem_list_template"
 msgstr "Modèle de la liste des points du jour"
+
+#. Default: "Allowed proposal templates"
+#: ./opengever/meeting/committee.py
+msgid "label_allowed_proposal_templates"
+msgstr ""
 
 #. Default: "Attachments"
 #: ./opengever/meeting/browser/meetings/meeting.py
@@ -1151,7 +1161,8 @@ msgid "label_proposed_action"
 msgstr "Proposition"
 
 #. Default: "Protocol header template"
-#: ./opengever/meeting/committee.py:65
+#: ./opengever/meeting/committee.py
+#: ./opengever/meeting/committeecontainer.py
 msgid "label_protocol_header_template"
 msgstr ""
 
@@ -1161,7 +1172,8 @@ msgid "label_protocol_start_page_number"
 msgstr "Début de la numérotation des pages du protocole"
 
 #. Default: "Protocol suffix template"
-#: ./opengever/meeting/committee.py:72
+#: ./opengever/meeting/committee.py
+#: ./opengever/meeting/committeecontainer.py
 msgid "label_protocol_suffix_template"
 msgstr ""
 

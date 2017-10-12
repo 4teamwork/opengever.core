@@ -1,4 +1,5 @@
 from opengever.testing import IntegrationTestCase
+from plone.uuid.interfaces import IUUID
 from zope.component import getUtility
 from zope.schema.interfaces import IVocabularyFactory
 
@@ -26,4 +27,19 @@ class TestCommitteeVocabularies(IntegrationTestCase):
         self.empty_committee.load_model().deactivate()
         self.assertItemsEqual(
             [self.committee.load_model()],
+            [term.value for term in factory(context=None)])
+
+
+class TestProposalTemplatesVocabulary(IntegrationTestCase):
+
+    def test_contains_proposal_templates(self):
+        self.login(self.regular_user)
+        factory = getUtility(IVocabularyFactory,
+                             name='opengever.meeting.ProposalTemplatesVocabulary')
+        self.assertItemsEqual(
+            [self.proposal_template.Title()],
+            [term.title for term in factory(context=None)])
+
+        self.assertItemsEqual(
+            [IUUID(self.proposal_template)],
             [term.value for term in factory(context=None)])
