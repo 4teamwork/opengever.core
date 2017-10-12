@@ -118,4 +118,69 @@
 
   <adapter factory=".base.DefaultConstrainTypeDecider" />
 
+  <adapter
+      factory=".indexers.DossierSubjectIndexer"
+      name="Subject"
+      />
+
+  <adapter
+      factory=".indexers.DossierTemplateSubjectIndexer"
+      name="Subject"
+      />
+
+  <adapter
+      factory=".indexers.startIndexer"
+      name="start"
+      />
+
+  <adapter
+      factory=".indexers.endIndexer"
+      name="end"
+      />
+
+  <adapter
+      factory=".indexers.retention_expiration"
+      name="retention_expiration"
+      />
+
+  <adapter
+      factory=".indexers.responsibleIndexer"
+      name="responsible"
+      />
+
+  <adapter
+      factory=".indexers.isSubdossierIndexer"
+      name="is_subdossier"
+      />
+
+  <adapter
+      factory=".indexers.is_subdossier_dossiertemplate"
+      name="is_subdossier"
+      />
+
+  <adapter
+      factory=".indexers.external_reference"
+      name="external_reference"
+      />
+
+  <adapter
+      factory=".indexers.main_dossier_title"
+      name="containing_dossier"
+      />
+
+  <adapter
+      factory=".indexers.containing_subdossier"
+      name="containing_subdossier"
+      />
+
+  <adapter
+      factory=".indexers.SearchableTextExtender"
+      name="IDossier"
+      />
+
+  <adapter
+      factory=".indexers.DossierTemplateSearchableTextExtender"
+      name="IDossierTemplate"
+      />
+
 </configure>
