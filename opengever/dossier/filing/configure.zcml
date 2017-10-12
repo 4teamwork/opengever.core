@@ -1,5 +1,5 @@
 <configure
-    xmlns:zope="http://namespaces.zope.org/zope"
+    xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser">
 
   <browser:viewlet
@@ -17,6 +17,16 @@
       class=".report.DossierFilingNumberReporter"
       permission="zope2.View"
       layer="opengever.dossier.filing.interfaces.IFilingNumberActivatedLayer"
+      />
+
+  <adapter
+      factory=".indexers.filing_no"
+      name="filing_no"
+      />
+
+  <adapter
+      factory=".indexers.searchable_filing_no"
+      name="searchable_filing_no"
       />
 
 </configure>
