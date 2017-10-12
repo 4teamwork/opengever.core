@@ -182,3 +182,23 @@ class TestConstructor(IntegrationTestCase):
         self.assertEqual(u'My Mail', content.title)
         self.assertFalse(hasattr(aq_base(content), 'title_de'))
         self.assertFalse(hasattr(aq_base(content), 'title_Fr'))
+
+    def test_use_parent_ref_number_for_container_path(self):
+        item = {
+            u"guid": "12345xy",
+            u"_type": u"ftw.mail.mail",
+            u"parent_ref_number": "Client 1.1 / 1",
+            u"title": u"My Mail",
+            u"_path": u"/foo/bar"
+        }
+
+        section = self.setup_section(previous=[item])
+        path = '/'.join(self.dossier.getPhysicalPath()[2:])
+        section.bundle.path_by_reference_number["Client 1.1 / 1"] = path
+        list(section)
+
+        portal = api.portal.get()
+        content = portal.restrictedTraverse(item['_path'])
+
+        self.assertEqual(u'My Mail', content.title)
+        self.assertEqual('ftw.mail.mail', content.portal_type)

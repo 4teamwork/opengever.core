@@ -123,6 +123,17 @@ class ConstructorSection(object):
             if parent_guid:
                 path = self.bundle.item_by_guid[parent_guid][u'_path']
                 context = traverse(self.site, path, None)
+            elif item.get(u'parent_ref_number'):
+                path = self.bundle.path_by_reference_number.get(
+                    item[u'parent_ref_number'])
+                if not path:
+                    logger.warning(
+                        u'Could not create object with guid `{}`, parent with '
+                        'reference number `{}` not found.'.format(
+                            item['guid'], item[u'parent_ref_number']))
+                    continue
+
+                context = traverse(self.site, path, None)
             else:
                 context = self.site
 
