@@ -5,7 +5,6 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import statusmessages
 from ftw.testing import MockTestCase
-from grokcore.component.testing import grok
 from opengever.core.testing import ANNOTATION_LAYER
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.dossier.archive import Archiver
@@ -110,7 +109,6 @@ class TestArchiving(MockTestCase):
 
     def setUp(self):
         super(TestArchiving, self).setUp()
-        grok('opengever.dossier.archive')
 
     def stub_dossier(self):
         return self.providing_stub([IDossier,

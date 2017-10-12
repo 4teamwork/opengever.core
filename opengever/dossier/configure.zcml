@@ -231,4 +231,13 @@
       handler=".handlers.run_cleanup_jobs"
       />
 
+  <adapter factory=".archive.Archiver" />
+
+  <browser:page
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      name="transition-archive"
+      class=".archive.ArchiveForm"
+      permission="zope2.View"
+      />
+
 </configure>

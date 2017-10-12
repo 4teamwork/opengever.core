@@ -1,5 +1,4 @@
 from collective.elephantvocabulary import wrap_vocabulary
-from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossier
@@ -9,18 +8,21 @@ from opengever.dossier.interfaces import IDossierArchiver
 from opengever.dossier.resolve import get_resolver
 from opengever.ogds.base.utils import get_current_admin_unit
 from persistent.dict import PersistentDict
-from plone.directives import form as directives_form
+from plone.supermodel import model
 from Products.CMFCore.interfaces import ISiteRoot
 from Products.CMFCore.utils import getToolByName
 from Products.Transience.Transience import Increaser
 from z3c.form import button, field
 from z3c.form import validator
 from z3c.form.browser import radio
+from z3c.form.form import Form
 from z3c.form.interfaces import INPUT_MODE
 from ZODB.POSException import ConflictError
 from zope import schema
 from zope.annotation.interfaces import IAnnotations
+from zope.component import adapter
 from zope.component import getUtility, provideAdapter
+from zope.interface import implementer
 from zope.interface import Invalid
 from zope.interface import invariant
 from zope.interface import provider
@@ -91,7 +93,7 @@ def valid_filing_year(value):
     raise Invalid(_(u'The given value is not a valid Year.'))
 
 
-@grok.provider(IContextSourceBinder)
+@provider(IContextSourceBinder)
 def get_filing_actions(context):
     """Create a vocabulary with different actions,
     depending on the actual review_state."""
@@ -173,7 +175,7 @@ def dossier_enddate_default(context):
     return context.earliest_possible_end_date()
 
 
-class IArchiveFormSchema(directives_form.Schema):
+class IArchiveFormSchema(model.Schema):
 
     filing_prefix = schema.Choice(
         title=_(u'filing_prefix', default="filing prefix"),
@@ -216,10 +218,7 @@ class IArchiveFormSchema(directives_form.Schema):
                         all fields are required."))
 
 
-class ArchiveForm(directives_form.Form):
-    grok.context(IDossierMarker)
-    grok.name('transition-archive')
-    grok.require('zope2.View')
+class ArchiveForm(Form):
 
     label = _(u'heading_archive_form', u'Archive Dossier')
     fields = field.Fields(IArchiveFormSchema)
@@ -300,10 +299,12 @@ validator.WidgetValidatorDiscriminators(
 provideAdapter(EnddateValidator)
 
 
-class Archiver(grok.Adapter):
+@implementer(IDossierArchiver)
+@adapter(IDossierMarker)
+class Archiver(object):
 
-    grok.context(IDossierMarker)
-    grok.implements(IDossierArchiver)
+    def __init__(self, context):
+        self.context = context
 
     def update_prefix(self, prefix):
         """Update the filing prefix on the dossier and
