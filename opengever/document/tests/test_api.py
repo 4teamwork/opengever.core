@@ -231,7 +231,7 @@ class TestDocumentAPI(IntegrationTestCase):
         uploaded_file = NamedBlobFile('bla bla', filename=u'test.txt')
         field.set(self.shadow_document, uploaded_file)
 
-        self.assertEquals(0, self.shadow_document.version_id)
+        self.assertEquals(None, self.shadow_document.get_current_version_id())
 
         deletion_url = '/'.join((
             self.shadow_document.absolute_url(),
@@ -261,7 +261,7 @@ class TestDocumentAPI(IntegrationTestCase):
 
         getMultiAdapter((self.shadow_document, self.shadow_document.REQUEST), ICheckinCheckoutManager).checkin()
 
-        self.assertNotEquals(0, self.shadow_document.version_id)
+        self.assertEquals(0, self.shadow_document.get_current_version_id())
 
         deletion_url = '/'.join((
             self.shadow_document.absolute_url(),

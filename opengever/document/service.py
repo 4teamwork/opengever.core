@@ -123,7 +123,7 @@ class DeleteShadowDocument(Service):
                 # The document does not yet have a file
                 if not self.context.file:
                     # The document does not yet have versions
-                    if self.context.version_id == 0:
+                    if self.context.get_current_version_id(missing_as_zero=True) == 0:
                         parent_dossier = self.context.get_parent_dossier()
                         parent_dossier_url = parent_dossier.absolute_url() if parent_dossier else None
 
