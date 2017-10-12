@@ -69,37 +69,87 @@ def get_committee_member_vocabulary(meetingwrapper):
     return SimpleVocabulary(members)
 
 
-@provider(IContextSourceBinder)
-def get_proposal_template_vocabulary(context):
-    template_folder = get_template_folder()
-    if template_folder is None:
-        # this may happen when the user does not have permissions to
-        # view templates and/or during ++widget++ traversal
-        return SimpleVocabulary([])
+@implementer(IVocabularyFactory)
+class ProposalTemplatesForCommitteeVocabulary(object):
+    """The ProposalTemplatesForCommitteeVocabulary is used in the
+    proposal add form for selecting a proposal template.
 
-    templates = [brain.getObject() for brain in api.content.find(
-        context=template_folder,
-        depth=-1,
-        portal_type="opengever.meeting.proposaltemplate",
-        sort_on='sortable_title', sort_order='ascending')]
+    The proposal template field is configured so that the list of templates
+    is re-rendered whenever the user changes the committee.
+    This allows this vocubulary to ask the selected committee whether the
+    list of templates is limited. If so, the templates are reduced to the
+    allowed templates.
 
-    predecessor_path = context.REQUEST.form.get(
-        'form.widgets.predecessor_proposal', None)
-    if predecessor_path and predecessor_path != u'--NOVALUE--':
-        # The ++add++opengever.meeting.proposal was opened with a predecessor.
-        # We should also offer to use the predecessor proposal document as
-        # "template".
-        predecessor_path = safe_unicode(predecessor_path).encode('utf-8')
-        predecessor = api.content.get(path=predecessor_path)
-        templates.insert(0, predecessor.get_proposal_document())
+    Additional, when a successor proposal is created, the vocabulary allows
+    the user to select the proposal document of the predecess as template
+    for the new proposal.
+    """
 
-    terms = []
-    for template in templates:
-        terms.append(SimpleVocabulary.createTerm(
-            template,
-            IUUID(template),
-            safe_unicode(template.Title())))
-    return SimpleVocabulary(terms)
+    def __call__(self, context):
+        template_folder = get_template_folder()
+        if template_folder is None:
+            # this may happen when the user does not have permissions to
+            # view templates and/or during ++widget++ traversal
+            return SimpleVocabulary([])
+
+        allowed_uids = self.get_allowed_proposal_templates_UIDS(context)
+        objects = self.get_predecessor_proposal_documents(context.REQUEST)
+        objects.extend(self.get_proposal_templates(template_folder, allowed_uids))
+        return self.make_vocabulary_from_objects(objects)
+
+    def get_predecessor_proposal_documents(self, request):
+        """Return a list of documents from the predecessor proposal.
+        The returned documents can additionally be selected as proposal template.
+        """
+        predecessor_path = request.form.get('form.widgets.predecessor_proposal', None)
+        if predecessor_path and predecessor_path != u'--NOVALUE--':
+            # The ++add++opengever.meeting.proposal was opened with a predecessor.
+            # We should also offer to use the predecessor proposal document as
+            # "template".
+            predecessor_path = safe_unicode(predecessor_path).encode('utf-8')
+            predecessor = api.content.get(path=predecessor_path)
+            return [predecessor.get_proposal_document()]
+        return []
+
+    def get_proposal_templates(self, template_folder, allowed_uids):
+        """Return a list of regular proposal templates.
+        This list includes all visible proposal templates.
+        When a list of "allowed_uids" is passed in, it is used as filter
+        so that documents without a listed UID are removed.
+        """
+        query = {'context': template_folder,
+                 'depth': -1,
+                 'portal_type': "opengever.meeting.proposaltemplate",
+                 'sort_on': 'sortable_title',
+                 'sort_order': 'ascending'}
+
+        if allowed_uids:
+            query['UID'] = allowed_uids
+
+        return [brain.getObject() for brain in api.content.find(**query)]
+
+    def get_allowed_proposal_templates_UIDS(self, context):
+        committee = self.get_committee(context)
+        if not committee:
+            return None
+
+        return committee.resolve_committee().allowed_proposal_templates
+
+    def get_committee(self, context):
+        committees = context.REQUEST.form.get('form.widgets.committee', None)
+        if committees:
+            return Committee.query.filter_by(committee_id=int(committees[0])).one()
+
+        return None
+
+    def make_vocabulary_from_objects(self, objects):
+        terms = []
+        for template in objects:
+            terms.append(SimpleVocabulary.createTerm(
+                template,
+                IUUID(template),
+                safe_unicode(template.Title())))
+        return SimpleVocabulary(terms)
 
 
 class LanguagesVocabulary(grok.GlobalUtility):
