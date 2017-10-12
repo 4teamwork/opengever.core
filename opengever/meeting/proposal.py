@@ -286,12 +286,18 @@ class ProposalBase(ModelContainer):
         return attributes
 
     def can_execute_transition(self, name):
+        if not api.user.has_permission('Modify portal content', obj=self):
+            return False
+
         return self.workflow.can_execute_transition(self.load_model(), name)
 
     def execute_transition(self, name):
         self.workflow.execute_transition(self, self.load_model(), name)
 
     def get_transitions(self):
+        if not api.user.has_permission('Modify portal content', obj=self):
+            return []
+
         return self.workflow.get_transitions(self.get_state())
 
     def get_state(self):
