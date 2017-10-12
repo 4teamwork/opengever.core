@@ -80,4 +80,11 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      name="transition-deactivate"
+      class=".deactivate.DossierDeactivateView"
+      permission="zope2.View"
+      />
+
 </configure>
