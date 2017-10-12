@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-13 12:25+0000\n"
+"POT-Creation-Date: 2017-10-12 13:53+0000\n"
 "PO-Revision-Date: 2017-09-03 08:50+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-document/fr/>\n"
@@ -264,6 +264,7 @@ msgstr "Date de réception du document écrit"
 #. Default: "Initial version"
 #: ./opengever/document/browser/versions_tab.py
 #: ./opengever/document/versioner.py
+#: ./opengever/document/checkout/handlers.py
 msgid "initial_document_version_change_note"
 msgstr "Document créé (version initiale)"
 
@@ -422,6 +423,11 @@ msgstr "Mots-clés"
 msgid "label_no"
 msgstr "Non"
 
+#. Default: "Initializing officeatwork"
+#: ./opengever/document/service.py
+msgid "label_officeatwork_init_title"
+msgstr ""
+
 #: ./opengever/document/browser/templates/downloadconfirmation.pt
 msgid "label_ok"
 msgstr "OK"
@@ -522,6 +528,11 @@ msgstr "Ce document a été verrouillé par ${creator}."
 #: ./opengever/document/checkout/cancel.py
 msgid "msg_cancel_checkout_on_mail_not_possible"
 msgstr "Le document `${title}` n'a pas pu être verrouillé, car les e-mails ne sont pas supportés par le processus de check-in / check-out."
+
+#. Default: "Please wait."
+#: ./opengever/document/service.py
+msgid "msg_officeatwork_init"
+msgstr ""
 
 #. Default: "No file"
 #: ./opengever/document/browser/templates/archiv_file.pt

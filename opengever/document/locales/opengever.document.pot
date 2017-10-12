@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-13 12:25+0000\n"
+"POT-Creation-Date: 2017-10-12 13:53+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -265,6 +265,7 @@ msgstr ""
 #. Default: "Initial version"
 #: ./opengever/document/browser/versions_tab.py
 #: ./opengever/document/versioner.py
+#: ./opengever/document/checkout/handlers.py
 msgid "initial_document_version_change_note"
 msgstr ""
 
@@ -423,6 +424,11 @@ msgstr ""
 msgid "label_no"
 msgstr ""
 
+#. Default: "Initializing officeatwork"
+#: ./opengever/document/service.py
+msgid "label_officeatwork_init_title"
+msgstr ""
+
 #: ./opengever/document/browser/templates/downloadconfirmation.pt
 msgid "label_ok"
 msgstr ""
@@ -522,6 +528,11 @@ msgstr ""
 #. Default: "Could not cancel checkout on document ${title}, mails does not support the checkin checkout process."
 #: ./opengever/document/checkout/cancel.py
 msgid "msg_cancel_checkout_on_mail_not_possible"
+msgstr ""
+
+#. Default: "Please wait."
+#: ./opengever/document/service.py
+msgid "msg_officeatwork_init"
 msgstr ""
 
 #. Default: "No file"

@@ -246,4 +246,14 @@
 
   <adapter factory=".document.UploadValidator" />
 
+  <!-- plone.rest services -->
+  <plone:service
+      method="GET"
+      for="opengever.document.document.IDocumentSchema"
+      accept="application/json"
+      factory=".service.OfficeatworkInitializationLabels"
+      name="oaw_init_labels"
+      permission="cmf.ModifyPortalContent"
+      />
+
 </configure>

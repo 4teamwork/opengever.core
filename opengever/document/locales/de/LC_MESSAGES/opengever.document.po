@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-10-13 12:25+0000\n"
-"PO-Revision-Date: 2017-10-13 14:27+0200\n"
+"POT-Creation-Date: 2017-10-12 13:53+0000\n"
+"PO-Revision-Date: 2013-03-27 10:44+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
@@ -267,6 +267,7 @@ msgstr "Datum, an dem das Dokument über den Korrespondenzweg angekommen ist"
 #. Default: "Initial version"
 #: ./opengever/document/browser/versions_tab.py
 #: ./opengever/document/versioner.py
+#: ./opengever/document/checkout/handlers.py
 msgid "initial_document_version_change_note"
 msgstr "Dokument erstellt (Initialversion)"
 
@@ -425,6 +426,11 @@ msgstr "Schlagworte"
 msgid "label_no"
 msgstr "Nein"
 
+#. Default: "Initializing officeatwork"
+#: ./opengever/document/service.py
+msgid "label_officeatwork_init_title"
+msgstr "Officeatwork wird initialisiert"
+
 #: ./opengever/document/browser/templates/downloadconfirmation.pt
 msgid "label_ok"
 msgstr "OK"
@@ -525,6 +531,11 @@ msgstr "Dieses Dokument wurde von ${creator} ausgecheckt."
 #: ./opengever/document/checkout/cancel.py
 msgid "msg_cancel_checkout_on_mail_not_possible"
 msgstr "Das Dokument `${title}` konnte nicht ausgecheckt werden, da Mails den Check-in-/Check-out-Prozess nicht unterstützen."
+
+#. Default: "Please wait."
+#: ./opengever/document/service.py
+msgid "msg_officeatwork_init"
+msgstr "Bitte warten."
 
 #. Default: "No file"
 #: ./opengever/document/browser/templates/archiv_file.pt
