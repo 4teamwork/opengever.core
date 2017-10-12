@@ -104,4 +104,11 @@
       permission="cmf.ModifyPortalContent"
       />
 
+  <browser:page
+      for="*"
+      name="redirect_to_main_dossier"
+      class=".redirect_to_maindossier.RedirectToMainDossier"
+      permission="zope2.View"
+      />
+
 </configure>

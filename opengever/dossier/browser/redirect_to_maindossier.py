@@ -1,16 +1,12 @@
-from five import grok
 from opengever.dossier import _
 from opengever.dossier.utils import get_main_dossier
 from plone import api
-from zope.interface import Interface
+from Products.Five.browser import BrowserView
 
 
-class RedirectToMainDossier(grok.View):
-    grok.context(Interface)
-    grok.name('redirect_to_main_dossier')
-    grok.require('zope2.View')
+class RedirectToMainDossier(BrowserView):
 
-    def render(self):
+    def __call__(self):
         main_dossier = get_main_dossier(self.context)
         if not main_dossier:
             msg = _(u'msg_main_dossier_not_found',
