@@ -1,4 +1,3 @@
-from five import grok
 from ftw.keywordwidget.widget import KeywordFieldWidget
 from ftw.table import helper
 from opengever.base.browser.wizard import BaseWizardStepForm
@@ -25,11 +24,12 @@ from z3c.form.form import Form
 from zope import schema
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
+from zope.interface import provider
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
 
 
-@grok.provider(IContextSourceBinder)
+@provider(IContextSourceBinder)
 def get_templates(context):
     template_folder = get_template_folder()
 
@@ -215,7 +215,7 @@ def get_recipient(context):
     return recipient
 
 
-@grok.provider(IContextSourceBinder)
+@provider(IContextSourceBinder)
 def make_address_vocabulary(context):
     recipient = get_recipient(context)
 
@@ -229,7 +229,7 @@ def address_lines(item, value):
     return u"<br />".join(item.get_lines())
 
 
-@grok.provider(IContextSourceBinder)
+@provider(IContextSourceBinder)
 def make_mail_address_vocabulary(context):
     recipient = get_recipient(context)
 
@@ -239,7 +239,7 @@ def make_mail_address_vocabulary(context):
         for mail_address in recipient.mail_addresses])
 
 
-@grok.provider(IContextSourceBinder)
+@provider(IContextSourceBinder)
 def make_phonenumber_vocabulary(context):
     recipient = get_recipient(context)
 
@@ -249,7 +249,7 @@ def make_phonenumber_vocabulary(context):
         for phone_number in recipient.phonenumbers])
 
 
-@grok.provider(IContextSourceBinder)
+@provider(IContextSourceBinder)
 def make_url_vocabulary(context):
     recipient = get_recipient(context)
 
