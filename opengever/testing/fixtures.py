@@ -417,6 +417,12 @@ class OpengeverContentFixture(object):
                     responsible='hugo.boss')
             .in_state('dossier-state-resolved')))
 
+        self.register('shadow_document', create(
+            Builder('document').within(self.dossier)
+            .titled(u'Schade')
+            .as_shadow_document()
+            ))
+
     @staticuid()
     def create_empty_dossier(self):
         self.register('empty_dossier', create(

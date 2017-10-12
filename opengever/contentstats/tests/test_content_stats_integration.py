@@ -161,14 +161,14 @@ class TestContentStatsIntegration(IntegrationTestCase):
             (self.portal, self.portal.REQUEST),
             IStatsProvider, name='checked_out_docs')
 
-        self.assertEqual({'checked_out': 0, 'checked_in': 15},
+        self.assertEqual({'checked_out': 0, 'checked_in': 16},
                          stats_provider.get_raw_stats())
 
         # Check out a document
         getMultiAdapter((self.document, self.document.REQUEST),
                         ICheckinCheckoutManager).checkout()
 
-        self.assertEqual({'checked_out': 1, 'checked_in': 14},
+        self.assertEqual({'checked_out': 1, 'checked_in': 15},
                          stats_provider.get_raw_stats())
 
     def test_file_mimetypes_provider(self):
@@ -177,11 +177,32 @@ class TestContentStatsIntegration(IntegrationTestCase):
             (self.portal, self.portal.REQUEST),
             IStatsProvider, name='file_mimetypes')
 
-        self.assertEqual({
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 1,
-            'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 10,
-            'message/rfc822': 2},
-            stats_provider.get_raw_stats())
+        raw_mimetype_stats = stats_provider.get_raw_stats()
+
+        # Shadow documents
+        self.assertIn(
+            '',
+            raw_mimetype_stats,
+        )
+        self.assertEquals(1, raw_mimetype_stats.get('', None))
+
+        self.assertIn(
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            raw_mimetype_stats,
+        )
+        self.assertEquals(1, raw_mimetype_stats.get('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', None))
+
+        self.assertIn(
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            raw_mimetype_stats,
+        )
+        self.assertEquals(10, raw_mimetype_stats.get('application/vnd.openxmlformats-officedocument.wordprocessingml.document', None))
+
+        self.assertIn(
+            'message/rfc822',
+            raw_mimetype_stats,
+        )
+        self.assertEquals(2, raw_mimetype_stats.get('message/rfc822', None))
 
     @browsing
     def test_file_mimetypes_provider_in_view(self, browser):
@@ -190,11 +211,26 @@ class TestContentStatsIntegration(IntegrationTestCase):
         browser.open(self.portal, view='@@content-stats')
         table = browser.css('#content-stats-file_mimetypes').first
 
-        self.assertEquals([
+        # Shadow documents
+        self.assertIn(
+            ['', '', '1'],
+            table.lists(),
+            )
+
+        self.assertIn(
             ['', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', '1'],
+            table.lists(),
+            )
+
+        self.assertIn(
             ['', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', '10'],
-            ['', 'message/rfc822', '2']],
-            table.lists())
+            table.lists(),
+            )
+
+        self.assertIn(
+            ['', 'message/rfc822', '2'],
+            table.lists(),
+            )
 
     @browsing
     def test_checked_out_docs_stats_provider_in_view(self, browser):
@@ -204,7 +240,7 @@ class TestContentStatsIntegration(IntegrationTestCase):
         table = browser.css('#content-stats-checked_out_docs').first
 
         self.assertEquals(
-            [['', 'checked_in', '15'], ['', 'checked_out', '0']],
+            [['', 'checked_in', '16'], ['', 'checked_out', '0']],
             table.lists())
 
         # Check out a document
@@ -215,5 +251,5 @@ class TestContentStatsIntegration(IntegrationTestCase):
         table = browser.css('#content-stats-checked_out_docs').first
 
         self.assertEquals(
-            [['', 'checked_in', '14'], ['', 'checked_out', '1']],
+            [['', 'checked_in', '15'], ['', 'checked_out', '1']],
             table.lists())
