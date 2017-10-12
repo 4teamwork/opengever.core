@@ -1,14 +1,13 @@
-from Products.CMFCore.interfaces import ISiteRoot
-from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
-from Products.Five.browser import BrowserView
-from Products.Transience.Transience import Increaser
 from collective.z3cform.datagridfield import DataGridFieldFactory, DictRow
-from five import grok
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from persistent.dict import PersistentDict
-from plone.directives import form
+from plone.supermodel import model
+from Products.CMFCore.interfaces import ISiteRoot
+from Products.CMFCore.utils import getToolByName
+from Products.Five.browser import BrowserView
+from Products.Transience.Transience import Increaser
 from z3c.form import button, field
+from z3c.form.form import Form
 from zope import schema
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
@@ -82,7 +81,7 @@ class IFilingNumberRowSchema(Interface):
     counter = schema.Int(title=u"Increaser Value")
 
 
-class IFilingNumberCountersFormSchema(Interface):
+class IFilingNumberCountersFormSchema(model.Schema):
     counters = schema.List(
         title=u"counters",
         value_type=DictRow(title=u"counter", schema=IFilingNumberRowSchema),
@@ -90,10 +89,7 @@ class IFilingNumberCountersFormSchema(Interface):
         )
 
 
-class FilingNumberCountersForm(form.Form):
-    grok.context(IPloneSiteRoot)
-    grok.name('filingnumber-adjustment')
-    grok.require('zope2.View')
+class FilingNumberCountersForm(Form):
 
     fields = field.Fields(IFilingNumberCountersFormSchema)
     fields['counters'].widgetFactory = DataGridFieldFactory
