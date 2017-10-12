@@ -65,8 +65,6 @@ class DossierAddForm(add.DefaultAddForm):
 class DossierAddView(add.DefaultAddView):
     form = DossierAddForm
 
-#  -------- add form -------
-
 
 class DossierEditForm(edit.DefaultEditForm):
     """Standard Editform, provide just a special label for subdossiers"""
@@ -123,8 +121,6 @@ class ParticipationAddFormView(layout.FormWrapper):
 
     form = ParticipationAddForm
 
-
-# ------- delete view -------
 
 class DeleteParticipants(BrowserView):
 

@@ -48,7 +48,7 @@ class IMoveItemsSchema(Interface):
             ),
         required=True,
         )
-    #We Use TextLine here because Tuple and List have no hidden_mode.
+    # We Use TextLine here because Tuple and List have no hidden_mode.
     request_paths = schema.TextLine(title=u"request_paths")
 
 
@@ -261,7 +261,7 @@ class DestinationValidator(validator.SimpleFieldValidator):
 
         # Look for invalid contenttype
         for src_brain in src_brains:
-            if not src_brain.portal_type in allowed_types:
+            if src_brain.portal_type not in allowed_types:
                 failed_objects.append(src_brain.Title.decode('utf8'))
 
         # If we found one or more invalid contenttypes, we raise an error
@@ -272,6 +272,9 @@ class DestinationValidator(validator.SimpleFieldValidator):
                           "${failed_objects}", mapping=dict(
                               failed_objects=', '.join(failed_objects))))
 
+
 validator.WidgetValidatorDiscriminators(
     DestinationValidator, field=IMoveItemsSchema['destination_folder'])
+
+
 provideAdapter(DestinationValidator)

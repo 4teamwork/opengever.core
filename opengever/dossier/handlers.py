@@ -70,9 +70,9 @@ def save_reference_number_prefix(obj, event):
     # all containing tasks manually
     catalog = api.portal.get_tool('portal_catalog')
     tasks = catalog({
-        'path':'/'.join(obj.getPhysicalPath()),
+        'path': '/'.join(obj.getPhysicalPath()),
         'object_provides': 'opengever.task.task.ITask',
-        'depth':-1})
+        'depth': -1})
     for task in tasks:
         TaskSqlSyncer(task.getObject(), None).sync()
 

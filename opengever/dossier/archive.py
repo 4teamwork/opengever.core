@@ -182,7 +182,7 @@ class IArchiveFormSchema(model.Schema):
         source=wrap_vocabulary(
             'opengever.dossier.type_prefixes',
             visible_terms_from_registry="opengever.dossier"
-                '.interfaces.IDossierContainerTypes.type_prefixes'),
+            '.interfaces.IDossierContainerTypes.type_prefixes'),
         required=False,
         defaultFactory=filing_prefix_default,
     )
@@ -291,10 +291,12 @@ class ArchiveForm(Form):
     def cancel(self, action):
         return self.request.RESPONSE.redirect(self.context.absolute_url())
 
+
 validator.WidgetValidatorDiscriminators(
     EnddateValidator,
     field=IArchiveFormSchema['dossier_enddate'],
 )
+
 
 provideAdapter(EnddateValidator)
 

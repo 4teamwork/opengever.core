@@ -84,6 +84,7 @@ class IDossierTemplate(IDossier):
     not its marker interfaces.
     """
 
+
 alsoProvides(IDossierTemplate, IFormFieldProvider)
 
 

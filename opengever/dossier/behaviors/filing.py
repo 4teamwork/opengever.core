@@ -1,4 +1,4 @@
-from opengever.dossier import  _
+from opengever.dossier import _
 from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.supermodel import model
