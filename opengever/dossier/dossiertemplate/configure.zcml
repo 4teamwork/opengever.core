@@ -48,7 +48,7 @@
 
   <adapter factory=".menu.DossierTemplatePostFactoryMenu" />
 
-<!-- DossierTemplate add form  -->
+  <!-- DossierTemplate add form  -->
   <adapter
       for="Products.CMFCore.interfaces.IFolderish
            zope.publisher.interfaces.browser.IDefaultBrowserLayer
