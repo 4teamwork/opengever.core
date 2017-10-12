@@ -1,5 +1,3 @@
-from five import grok
-from opengever.dossier.filing.interfaces import IFilingNumberActivatedLayer
 from opengever.dossier import _
 from opengever.tabbedview.browser.tabs import Dossiers
 from opengever.tabbedview.browser.tabs import SubDossiers
@@ -11,7 +9,6 @@ FILING_NO_COLUMN = {
 
 
 class DossiersFilingNumberIncluded(Dossiers):
-    grok.layer(IFilingNumberActivatedLayer)
 
     @property
     def columns(self):
@@ -23,7 +20,6 @@ class DossiersFilingNumberIncluded(Dossiers):
 
 
 class SubDossiersFilingNumberIncluded(SubDossiers):
-    grok.layer(IFilingNumberActivatedLayer)
 
     @property
     def columns(self):

@@ -29,4 +29,20 @@
       name="searchable_filing_no"
       />
 
+  <browser:page
+      for="*"
+      name="tabbedview_view-dossiers"
+      class=".tabs.DossiersFilingNumberIncluded"
+      permission="zope2.View"
+      layer="opengever.dossier.filing.interfaces.IFilingNumberActivatedLayer"
+      />
+
+  <browser:page
+      for="*"
+      name="tabbedview_view-subdossiers"
+      class=".tabs.SubDossiersFilingNumberIncluded"
+      permission="zope2.View"
+      layer="opengever.dossier.filing.interfaces.IFilingNumberActivatedLayer"
+      />
+
 </configure>
