@@ -74,13 +74,24 @@
 
   <javascript
       cacheable="True"
+      compression="safe"
+      cookable="True"
+      enabled="True"
+      expression=""
+      id="++resource++opengever.base/TableRadioWidget.js"
+      inline="False"
+      insert-after="++resource++opengever.base/Synchronizer.js"
+      />
+
+  <javascript
+      cacheable="True"
       compression="none"
       cookable="True"
       enabled="on"
       expression=""
       id="++resource++opengever.base/handlebars.js"
       inline="False"
-      insert-after="++resource++opengever.base/Synchronizer.js"
+      insert-after="++resource++opengever.base/TableRadioWidget.js"
       />
 
   <javascript

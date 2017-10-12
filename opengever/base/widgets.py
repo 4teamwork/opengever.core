@@ -27,6 +27,7 @@ from zope.schema.interfaces import IField
 from zope.schema.interfaces import ISequence
 from zope.schema.interfaces import ITextLine
 from zope.schema.interfaces import ITitledTokenizedTerm
+import json
 import re
 
 
@@ -109,6 +110,16 @@ class TableRadioWidget(widget.HTMLInputWidget, SequenceWidget):
             [term.value for term in self.terms],
             radio_column + (self.field.columns or default_title_colum))
 
+    def ajax_render(self):
+        """Render and return the widget HTML so that it can be replaced
+        in an existing browser page with an AJAX call.
+        """
+        self.form.update()
+        self.update()
+        self.terms = None
+        self.updateTerms()
+        return self()
+
     def render_token_radiobutton(self, item, value):
         """Render the radio-button input element for an item."""
 
@@ -137,6 +148,11 @@ class TableRadioWidget(widget.HTMLInputWidget, SequenceWidget):
         else:
             label = util.toUnicode(term.value)
         return label
+
+    def get_vocabulary_depends_on(self):
+        if not self.field.vocabulary_depends_on:
+            return None
+        return json.dumps(self.field.vocabulary_depends_on)
 
     def update(self):
         """See z3c.form.interfaces.IWidget."""
