@@ -288,6 +288,11 @@
                     "$ref": "#/definitions/permission"
                 }
             },
+            "required": [
+                "review_state",
+                "guid",
+                "parent_guid"
+            ],
             "anyOf": [
                 {
                     "required": [
@@ -324,11 +329,6 @@
                 "date_of_submission",
                 "reference_number_prefix",
                 "addable_dossier_templates"
-            ],
-            "required": [
-                "review_state",
-                "guid",
-                "parent_guid"
             ]
         },
         "permission": {

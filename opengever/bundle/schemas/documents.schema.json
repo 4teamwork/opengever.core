@@ -212,6 +212,13 @@
                     ]
                 }
             },
+            "required": [
+                "review_state",
+                "guid",
+                "parent_guid",
+                "title",
+                "filepath"
+            ],
             "field_order": [
                 "title",
                 "file",
@@ -231,13 +238,6 @@
                 "preserved_as_paper",
                 "archival_file",
                 "archival_file_state"
-            ],
-            "required": [
-                "review_state",
-                "guid",
-                "parent_guid",
-                "title",
-                "filepath"
             ]
         }
     }

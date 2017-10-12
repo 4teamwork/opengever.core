@@ -76,6 +76,10 @@
                     "$ref": "#/definitions/permission"
                 }
             },
+            "required": [
+                "review_state",
+                "guid"
+            ],
             "anyOf": [
                 {
                     "required": [
@@ -94,10 +98,6 @@
                 "version",
                 "title_de",
                 "title_fr"
-            ],
-            "required": [
-                "review_state",
-                "guid"
             ]
         },
         "permission": {
