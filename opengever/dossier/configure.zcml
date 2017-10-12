@@ -183,4 +183,52 @@
       name="IDossierTemplate"
       />
 
+  <subscriber
+      for="opengever.dossier.behaviors.dossier.IDossierMarker
+           OFS.interfaces.IObjectWillBeMovedEvent"
+      handler=".handlers.set_former_reference_before_moving"
+      />
+
+  <subscriber
+      for="opengever.dossier.behaviors.dossier.IDossierMarker
+           zope.lifecycleevent.interfaces.IObjectMovedEvent"
+      handler=".handlers.set_former_reference_after_moving"
+      />
+
+  <subscriber
+      for="opengever.dossier.behaviors.dossier.IDossierMarker
+           zope.lifecycleevent.interfaces.IObjectMovedEvent"
+      handler=".handlers.save_reference_number_prefix"
+      />
+
+  <subscriber
+      for="opengever.dossier.behaviors.dossier.IDossierMarker
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".handlers.reindex_contained_objects"
+      />
+
+  <subscriber
+      for="opengever.dossier.behaviors.dossier.IDossierMarker
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".handlers.reindex_containing_dossier"
+      />
+
+  <subscriber
+      for="opengever.dossier.behaviors.dossier.IDossierMarker
+           zope.lifecycleevent.interfaces.IObjectMovedEvent"
+      handler=".handlers.reindex_is_subdossier"
+      />
+
+  <subscriber
+      for="opengever.dossier.behaviors.dossier.IDossierMarker
+           zope.lifecycleevent.interfaces.IObjectCopiedEvent"
+      handler=".handlers.purge_reference_number_mappings"
+      />
+
+  <subscriber
+      for="opengever.dossier.behaviors.dossier.IDossierMarker
+           Products.CMFCore.interfaces.IActionSucceededEvent"
+      handler=".handlers.run_cleanup_jobs"
+      />
+
 </configure>
