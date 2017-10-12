@@ -1,4 +1,3 @@
-from five import grok
 from opengever.base.behaviors.utils import set_attachment_content_disposition
 from opengever.base.reporter import DATE_NUMBER_FORMAT
 from opengever.base.reporter import readable_author
@@ -6,19 +5,15 @@ from opengever.base.reporter import StringTranslater, XLSReporter
 from opengever.base.reporter import value
 from opengever.dossier import _
 from Products.CMFCore.utils import getToolByName
+from Products.Five.browser import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
-from zope.interface import Interface
 
 
-class DossierReporter(grok.View):
+class DossierReporter(BrowserView):
     """View that generate an excel spreadsheet with the XLSReporter,
     which list the selected dossier (paths in request)
     and their important attributes.
     """
-
-    grok.context(Interface)
-    grok.name('dossier_report')
-    grok.require('zope2.View')
 
     def get_dossier_attributes(self):
         return [
@@ -53,7 +48,7 @@ class DossierReporter(grok.View):
                 )
         return dossiers
 
-    def render(self):
+    def __call__(self):
 
         if not self.request.get('paths'):
             msg = _(

@@ -111,4 +111,11 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="*"
+      name="dossier_report"
+      class=".report.DossierReporter"
+      permission="zope2.View"
+      />
+
 </configure>
