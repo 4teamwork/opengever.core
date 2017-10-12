@@ -44,3 +44,44 @@ class TestDocumentAPI(IntegrationTestCase):
                     'Accept': 'application/json',
                 },
             )
+
+    @browsing
+    def test_get_oaw_retry_abort_labels_on_shadow_document(self, browser):
+        self.login(self.dossier_responsible, browser)
+
+        label_url = '/'.join((
+            self.shadow_document.absolute_url(),
+            'oaw_retry_abort_labels',
+            ))
+
+        browser.open(
+            label_url,
+            headers={
+                'Accept': 'application/json',
+            },
+        )
+
+        labels = browser.json
+
+        self.assertIn(u'abort', labels)
+        self.assertTrue(labels.get(u'abort', None))
+
+        self.assertIn(u'retry', labels)
+        self.assertTrue(labels.get(u'retry', None))
+
+    @browsing
+    def test_get_oaw_retry_abort_labels_on_normal_document(self, browser):
+        self.login(self.dossier_responsible, browser)
+
+        label_url = '/'.join((
+            self.document.absolute_url(),
+            'oaw_retry_abort_labels',
+            ))
+
+        with browser.expect_http_error(code=403, reason='Forbidden'):
+            browser.open(
+                label_url,
+                headers={
+                    'Accept': 'application/json',
+                },
+            )

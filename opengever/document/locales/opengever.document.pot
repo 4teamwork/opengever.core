@@ -269,6 +269,11 @@ msgstr ""
 msgid "initial_document_version_change_note"
 msgstr ""
 
+#. Default: "Abort"
+#: ./opengever/document/service.py
+msgid "label_abort"
+msgstr ""
+
 #. Default: "Changed by"
 #: ./opengever/document/browser/versions_tab.py
 msgid "label_actor"
@@ -482,6 +487,11 @@ msgstr ""
 #: ./opengever/document/behaviors/related_docs.py
 #: ./opengever/document/browser/overview.py
 msgid "label_related_documents"
+msgstr ""
+
+#. Default: "Retry"
+#: ./opengever/document/service.py
+msgid "label_retry"
 msgstr ""
 
 #. Default: "Revert"

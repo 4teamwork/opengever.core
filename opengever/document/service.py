@@ -31,3 +31,30 @@ class OfficeatworkInitializationLabels(Service):
         # Fail per default
         raise Forbidden
 
+
+class OfficeatworkRetryAbortLabels(Service):
+    """Provide an HTTP GET endpoint for officeatwork retry/abort logic related labels for shadow documents."""
+
+    def render(self):
+        """Provide i18n labels for officeatwork retry/abort logic for shadow documents."""
+        if self.context.is_shadow_document():
+            retry = translate(
+                _(u'label_retry', default=u'Retry'),
+                context=self.request,
+            )
+
+            abort = translate(
+                _(u'label_abort', default=u'Abort'),
+                context=self.request,
+            )
+
+            payload = dict(
+                retry=retry,
+                abort=abort,
+            )
+
+            return json.dumps(payload)
+
+        # Fail per default
+        raise Forbidden
+

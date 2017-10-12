@@ -256,4 +256,13 @@
       permission="cmf.ModifyPortalContent"
       />
 
+  <plone:service
+      method="GET"
+      for="opengever.document.document.IDocumentSchema"
+      accept="application/json"
+      factory=".service.OfficeatworkRetryAbortLabels"
+      name="oaw_retry_abort_labels"
+      permission="cmf.ModifyPortalContent"
+      />
+
 </configure>

@@ -268,6 +268,11 @@ msgstr "Date de réception du document écrit"
 msgid "initial_document_version_change_note"
 msgstr "Document créé (version initiale)"
 
+#. Default: "Abort"
+#: ./opengever/document/service.py
+msgid "label_abort"
+msgstr ""
+
 #. Default: "Changed by"
 #: ./opengever/document/browser/versions_tab.py
 msgid "label_actor"
@@ -482,6 +487,11 @@ msgstr "Numéro de référence"
 #: ./opengever/document/browser/overview.py
 msgid "label_related_documents"
 msgstr "Documents liés"
+
+#. Default: "Retry"
+#: ./opengever/document/service.py
+msgid "label_retry"
+msgstr ""
 
 #. Default: "Revert"
 #: ./opengever/document/browser/versions_tab.py
