@@ -111,4 +111,9 @@
       name="lenient"
       />
 
+  <adapter
+      factory=".adapters.ParentDossierFinder"
+      name="parent-dossier-finder"
+      />
+
 </configure>
