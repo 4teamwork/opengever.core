@@ -33,9 +33,8 @@ class TestMailIndexers(IntegrationTestCase):
     def test_checked_out(self):
         self.assertEqual(checked_out(None)(), '')
 
-    def test_reference_number(self):
+    def test_mail_reference_number(self):
         self.login(self.regular_user)
-        extender = getAdapter(
-            self.mail_eml, IDynamicTextIndexExtender, u'IOGMail')
+        extender = getAdapter(self.mail_eml, IDynamicTextIndexExtender, u'IOGMail')
 
-        self.assertEquals('Client1 1.1 / 1 / 12 12', extender())
+        self.assertEquals('Client1 1.1 / 1 / 13 13', extender())
