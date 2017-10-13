@@ -19,6 +19,9 @@ import json
 class OfficeConnectorURL(Service):
     """Create oc:<JWT> URLs for javascript to fetch and pass to the OS."""
 
+    def render(self):
+        pass
+
     def create_officeconnector_url_json(self, payload):
         self.request.response.setHeader('Content-Type', 'application/json')
 
