@@ -265,4 +265,13 @@
       permission="cmf.ModifyPortalContent"
       />
 
+  <plone:service
+      method="GET"
+      for="opengever.document.document.IDocumentSchema"
+      accept="application/json"
+      factory=".service.ShadowDocumentDeleteConfirmMessage"
+      name="delete_confirm"
+      permission="cmf.ModifyPortalContent"
+      />
+
 </configure>

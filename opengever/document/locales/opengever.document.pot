@@ -426,6 +426,7 @@ msgstr ""
 
 #. Default: "no"
 #: ./opengever/document/browser/overview.py
+#: ./opengever/document/service.py
 msgid "label_no"
 msgstr ""
 
@@ -504,6 +505,11 @@ msgstr ""
 msgid "label_sequence_number"
 msgstr ""
 
+#. Default: "Delete document"
+#: ./opengever/document/service.py
+msgid "label_shadow_document_delete_confirm_title"
+msgstr ""
+
 #. Default: "from"
 #: ./opengever/document/viewlets/byline.py
 msgid "label_start_byline"
@@ -527,6 +533,7 @@ msgstr ""
 
 #. Default: "yes"
 #: ./opengever/document/browser/overview.py
+#: ./opengever/document/service.py
 msgid "label_yes"
 msgstr ""
 
@@ -543,6 +550,11 @@ msgstr ""
 #. Default: "Please wait."
 #: ./opengever/document/service.py
 msgid "msg_officeatwork_init"
+msgstr ""
+
+#. Default: "Do you really want to delete this document?"
+#: ./opengever/document/service.py
+msgid "msg_shadow_document_delete_confirm_message"
 msgstr ""
 
 #. Default: "No file"

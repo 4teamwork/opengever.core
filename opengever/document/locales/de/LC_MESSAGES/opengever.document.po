@@ -428,6 +428,7 @@ msgstr "Schlagworte"
 
 #. Default: "no"
 #: ./opengever/document/browser/overview.py
+#: ./opengever/document/service.py
 msgid "label_no"
 msgstr "Nein"
 
@@ -506,6 +507,11 @@ msgstr "Zurücksetzen"
 msgid "label_sequence_number"
 msgstr "Laufnummer"
 
+#. Default: "Delete document"
+#: ./opengever/document/service.py
+msgid "label_shadow_document_delete_confirm_title"
+msgstr "Dokument löschen"
+
 #. Default: "from"
 #: ./opengever/document/viewlets/byline.py
 msgid "label_start_byline"
@@ -529,6 +535,7 @@ msgstr "Version"
 
 #. Default: "yes"
 #: ./opengever/document/browser/overview.py
+#: ./opengever/document/service.py
 msgid "label_yes"
 msgstr "Ja"
 
@@ -546,6 +553,11 @@ msgstr "Das Dokument `${title}` konnte nicht ausgecheckt werden, da Mails den Ch
 #: ./opengever/document/service.py
 msgid "msg_officeatwork_init"
 msgstr "Bitte warten."
+
+#. Default: "Do you really want to delete this document?"
+#: ./opengever/document/service.py
+msgid "msg_shadow_document_delete_confirm_message"
+msgstr "Möchten Sie das Dokument wirklich löschen?"
 
 #. Default: "No file"
 #: ./opengever/document/browser/templates/archiv_file.pt

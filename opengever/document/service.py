@@ -58,3 +58,42 @@ class OfficeatworkRetryAbortLabels(Service):
         # Fail per default
         raise Forbidden
 
+
+class ShadowDocumentDeleteConfirmMessage(Service):
+    """Provide an HTTP GET endpoint for shadow document deletion information."""
+
+    def render(self):
+        """Provide i18ns label for a user facing alert box for confirming shadow document deletion."""
+        if self.context.is_shadow_document():
+            message = translate(
+                _(u'msg_shadow_document_delete_confirm_message', default=u'Do you really want to delete this document?'),
+                context=self.request,
+                )
+
+            title = translate(
+                _(u'label_shadow_document_delete_confirm_title', default=u'Delete document'),
+                context=self.request,
+                )
+
+            label_yes = translate(
+                _(u'label_yes', default=u'yes'),
+                context=self.request,
+                )
+
+            label_no = translate(
+                _(u'label_no', default=u'no'),
+                context=self.request,
+                )
+
+            payload = dict(
+                message=message,
+                title=title,
+                label_yes=label_yes,
+                label_no=label_no,
+                )
+
+            return json.dumps(payload)
+
+        # Fail per default
+        raise Forbidden
+
