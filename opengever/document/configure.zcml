@@ -274,4 +274,13 @@
       permission="cmf.ModifyPortalContent"
       />
 
+  <plone:service
+      method="DELETE"
+      for="opengever.document.document.IDocumentSchema"
+      accept="application/json"
+      factory=".service.DeleteShadowDocument"
+      name="delete_shadow_document"
+      permission="cmf.ModifyPortalContent"
+      />
+
 </configure>

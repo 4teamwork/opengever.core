@@ -410,6 +410,11 @@ msgstr "Herunterladen"
 msgid "label_download_copy"
 msgstr "Kopie herunterladen"
 
+#. Default: "Failed to delete the shadow document."
+#: ./opengever/document/service.py
+msgid "label_failed_shadow_document_deletion"
+msgstr "Das temporäre Schatten-Dokument konnte nicht gelöscht werden."
+
 #. Default: "File"
 #: ./opengever/document/browser/overview.py
 #: ./opengever/document/document.py
@@ -516,6 +521,11 @@ msgstr "Dokument löschen"
 #: ./opengever/document/viewlets/byline.py
 msgid "label_start_byline"
 msgstr "Dokumentdatum"
+
+#. Default: "Succesfully deleted the shadow document."
+#: ./opengever/document/service.py
+msgid "label_succesful_shadow_document_deletion"
+msgstr "Das Schatten-Dokument wurde erfolgreich entfernt."
 
 #. Default: "Thumbnail"
 #: ./opengever/document/behaviors/metadata.py

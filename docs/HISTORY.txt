@@ -5,6 +5,7 @@ Changelog
 2017.6.1 (unreleased)
 ---------------------
 
+- Add a HTTP DELETE endpoint for shadow documents. [Rotonen]
 - Prevent editing agenda item list when meeting has been held. [deiferni]
 
 
