@@ -500,7 +500,7 @@ class SubmittedProposal(ProposalBase):
             dossier.title)
 
     @require_word_meeting_feature
-    def get_excerpts(self):
+    def get_excerpts(self, unrestricted=False):
         """Return a restricted list of document objects which are excerpts
         of the current proposal.
         """
@@ -508,7 +508,7 @@ class SubmittedProposal(ProposalBase):
         checkPermission = getSecurityManager().checkPermission
         for relation_value in getattr(self, 'excerpts', ()):
             obj = relation_value.to_object
-            if checkPermission('View', obj):
+            if unrestricted or checkPermission('View', obj):
                 excerpts.append(obj)
 
         return excerpts

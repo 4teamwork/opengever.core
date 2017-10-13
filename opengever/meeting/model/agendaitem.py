@@ -1,3 +1,4 @@
+from AccessControl import getSecurityManager
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.model import Base
 from opengever.base.model import create_session
@@ -18,7 +19,6 @@ from opengever.meeting.workflow import Workflow
 from opengever.ogds.models import UNIT_ID_LENGTH
 from opengever.ogds.models.types import UnicodeCoercingText
 from plone import api
-from Products.CMFPlone.utils import safe_unicode
 from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
@@ -29,7 +29,6 @@ from sqlalchemy.orm import composite
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
 from zope.component import getMultiAdapter
-from zope.i18n import translate
 
 
 class AgendaItem(Base):
@@ -460,7 +459,7 @@ class AgendaItem(Base):
         return self.get_state() == self.STATE_DECIDED
 
     @require_word_meeting_feature
-    def get_excerpt_documents(self):
+    def get_excerpt_documents(self, unrestricted=False):
         """Return a list of excerpt documents.
 
         If the agenda items has a proposal return the proposals excerpt
@@ -468,10 +467,15 @@ class AgendaItem(Base):
         dossier.
         """
         if self.has_proposal:
-            return self.submitted_proposal.get_excerpts()
+            return self.submitted_proposal.get_excerpts(unrestricted=unrestricted)
 
-        excerpts = [excerpt.resolve_document() for excerpt in self.excerpts]
-        return [each for each in excerpts if each is not None]
+        checkPermission = getSecurityManager().checkPermission
+        documents = [excerpt.resolve_document() for excerpt in self.excerpts]
+        documents = filter(None, documents)
+        if not unrestricted:
+            documents = filter(lambda obj: checkPermission('View', obj), documents)
+
+        return documents
 
     @require_word_meeting_feature
     def get_source_dossier_excerpt(self):
