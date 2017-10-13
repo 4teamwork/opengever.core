@@ -28,3 +28,6 @@ class DocumentLinkWidget(object):
 
     def render(self):
         return self.template(self, self.request)
+
+    def is_view_allowed(self):
+        return api.user.has_permission('View', obj=self.context.getObject())

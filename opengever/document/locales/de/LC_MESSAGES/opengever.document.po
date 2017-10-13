@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-10-09 13:21+0000\n"
-"PO-Revision-Date: 2013-03-27 10:44+0100\n"
+"POT-Creation-Date: 2017-10-13 12:25+0000\n"
+"PO-Revision-Date: 2017-10-13 14:27+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
@@ -116,6 +116,10 @@ msgstr "Das Dokument ist bereits von ${userid} ausgecheckt."
 #: ./opengever/document/browser/templates/submitted_with.pt
 msgid "Update document in proposal"
 msgstr "Eingereichte Version aktualisieren"
+
+#: ./opengever/document/widgets/document_link.pt
+msgid "You are not allowed to view this document."
+msgstr "Sie haben nicht die nötigen Rechte, um dieses Dokument anzusehen."
 
 #: ./opengever/document/browser/edit.py
 msgid "You are not authorized to edit the document ${title}."
@@ -310,7 +314,7 @@ msgstr "Archivdatei ändern"
 
 #. Default: "Checked out"
 #: ./opengever/document/browser/overview.py
-#: ./opengever/document/checkout/viewlets_templates/checkedoutviewlet.pt
+#: ./opengever/document/checkout/templates/checkedoutviewlet.pt
 msgid "label_checked_out"
 msgstr "Ausgecheckt"
 
@@ -513,7 +517,7 @@ msgid "label_yes"
 msgstr "Ja"
 
 #. Default: "This item is being checked out by ${creator}."
-#: ./opengever/document/checkout/viewlets_templates/checkedoutviewlet.pt
+#: ./opengever/document/checkout/templates/checkedoutviewlet.pt
 msgid "message_checkout_info"
 msgstr "Dieses Dokument wurde von ${creator} ausgecheckt."
 
@@ -545,4 +549,3 @@ msgstr "Mit Kommentar"
 #: ./opengever/document/upgrades/profiles/4000/actions.xml
 msgid "without comment"
 msgstr "Ohne Kommentar"
-

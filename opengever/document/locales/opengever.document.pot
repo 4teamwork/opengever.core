@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-09 13:21+0000\n"
+"POT-Creation-Date: 2017-10-13 12:25+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -118,6 +118,10 @@ msgstr ""
 
 #: ./opengever/document/browser/templates/submitted_with.pt
 msgid "Update document in proposal"
+msgstr ""
+
+#: ./opengever/document/widgets/document_link.pt
+msgid "You are not allowed to view this document."
 msgstr ""
 
 #: ./opengever/document/browser/edit.py
@@ -308,7 +312,7 @@ msgstr ""
 
 #. Default: "Checked out"
 #: ./opengever/document/browser/overview.py
-#: ./opengever/document/checkout/viewlets_templates/checkedoutviewlet.pt
+#: ./opengever/document/checkout/templates/checkedoutviewlet.pt
 msgid "label_checked_out"
 msgstr ""
 
@@ -511,7 +515,7 @@ msgid "label_yes"
 msgstr ""
 
 #. Default: "This item is being checked out by ${creator}."
-#: ./opengever/document/checkout/viewlets_templates/checkedoutviewlet.pt
+#: ./opengever/document/checkout/templates/checkedoutviewlet.pt
 msgid "message_checkout_info"
 msgstr ""
 
@@ -543,4 +547,3 @@ msgstr ""
 #: ./opengever/document/upgrades/profiles/4000/actions.xml
 msgid "without comment"
 msgstr ""
-

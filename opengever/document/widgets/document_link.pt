@@ -1,15 +1,44 @@
-<div i18n:domain="opengever.document" class="linkWrapper tooltip-trigger"
-     tal:attributes="data-tooltip-url string:${view/get_url}/tooltip">
+<html xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      tal:omit-tag="python: True"
+      i18n:domain="opengever.document"
+      tal:define="view_allowed view/is_view_allowed">
 
-  <span tal:condition="context/is_removed" class='removed_document' />
+  <tal:HAS_VIEW_PERMISSION tal:condition="view_allowed">
+    <div class="linkWrapper tooltip-trigger"
+         tal:attributes="data-tooltip-url string:${view/get_url}/tooltip">
 
-  <a tal:content="view/get_title"
-     tal:attributes="class view/get_css_class; href view/get_url;" />
+      <span tal:condition="context/is_removed"
+            class="removed_document" />
 
-</div>
+      <a tal:content="view/get_title"
+         tal:attributes="class view/get_css_class;
+                         href view/get_url;" />
 
-<a href="#" class="hidden-link showroom-item"
-   tal:condition="context/is_bumblebeeable"
-   tal:attributes="data-showroom-target context/get_overlay_url;
-                   data-showroom-title context/get_overlay_title;
-                   data-showroom-id string:showroom-id-${context/uuid}" />
+    </div>
+
+    <a href="#" class="hidden-link showroom-item"
+       tal:condition="context/is_bumblebeeable"
+       tal:attributes="data-showroom-target context/get_overlay_url;
+                       data-showroom-title context/get_overlay_title;
+                       data-showroom-id string:showroom-id-${context/uuid}" />
+  </tal:HAS_VIEW_PERMISSION>
+
+
+  <tal:NO_VIEW_PERMISSION tal:condition="not:view_allowed">
+    <div class="linkWrapper">
+
+      <span tal:condition="context/is_removed"
+            class="removed_document" />
+
+      <span tal:content="view/get_title"
+            tal:attributes="class string:${view/get_css_class} no-access"
+            title="You are not allowed to view this document."
+            i18n:attributes="title" />
+
+    </div>
+  </tal:NO_VIEW_PERMISSION>
+
+
+</html>
