@@ -386,9 +386,13 @@ class Meeting(Base, SQLFormSupport):
         """Return a filtered list of this meetings agenda items,
         containing only the items which are not in a "decided" workflow state.
         """
+        def is_not_paragraph(agenda_item):
+            return not agenda_item.is_paragraph
+
         def is_not_decided(agenda_item):
             return agenda_item.workflow_state != 'decided'
-        return filter(is_not_decided, self.agenda_items)
+
+        return filter(is_not_decided, filter(is_not_paragraph, self.agenda_items))
 
     def _get_localized_time(self, date):
         if not date:
