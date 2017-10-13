@@ -4,7 +4,6 @@ from opengever.testing import IntegrationTestCase
 
 
 SUBMITTED_PROPOSAL = {
-    'Reference Number': '1',
     'Decision number': '',
     'Meeting': '',
     'State': 'Submitted',
@@ -12,7 +11,6 @@ SUBMITTED_PROPOSAL = {
     'Title': u'Vertragsentwurf f\xfcr weitere Bearbeitung bewilligen'}
 
 DRAFT_PROPOSAL = {
-     'Reference Number': '2',
      'Decision number': '',
      'Meeting': '',
      'State': 'Pending',
@@ -20,7 +18,6 @@ DRAFT_PROPOSAL = {
      'Title': u'Antrag f\xfcr Kreiselbau'}
 
 DECIDED_PROPOSAL = {
-    'Reference Number': '3',
     'Decision number': '1',
     'Meeting': u'8. Sitzung der Rechnungspr\xfcfungskommission',
     'State': 'Decided',
@@ -28,7 +25,6 @@ DECIDED_PROPOSAL = {
     'Title': u'Initialvertrag f\xfcr Bearbeitung'}
 
 SUBMITTED_WORD_PROPOSAL = {
-    'Reference Number': '4',
     'Decision number': '',
     'Meeting': '',
     'State': 'Submitted',
@@ -36,7 +32,6 @@ SUBMITTED_WORD_PROPOSAL = {
     'Title': u'\xc4nderungen am Personalreglement'}
 
 DRAFT_WORD_PROPOSAL = {
-    'Reference Number': '5',
     'Decision number': '',
     'Meeting': '',
     'State': 'Pending',
