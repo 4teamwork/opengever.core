@@ -1,21 +1,12 @@
-from five import grok
 from opengever.document import _
-from opengever.document.behaviors import IBaseDocument
-from opengever.document.document import IDocumentSchema
 from opengever.ogds.base.utils import ogds_service
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.i18n import translate
-from zope.lifecycleevent.interfaces import IObjectAddedEvent
-from zope.lifecycleevent.interfaces import IObjectCopiedEvent
-from zope.lifecycleevent.interfaces import IObjectCreatedEvent
-from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 import os.path
 
 
-@grok.subscribe(IDocumentSchema, IObjectAddedEvent)
-@grok.subscribe(IDocumentSchema, IObjectModifiedEvent)
 def resolve_document_author(document, event):
     if getattr(document, 'document_author', None):
         user = ogds_service().fetch_user(document.document_author)
@@ -24,8 +15,6 @@ def resolve_document_author(document, event):
             document.reindexObject(idxs=['sortable_author'])
 
 
-@grok.subscribe(IDocumentSchema, IObjectCreatedEvent)
-@grok.subscribe(IDocumentSchema, IObjectModifiedEvent)
 def set_digitally_available(doc, event):
     """Set the digitally_available field, if a file exist the document is
     digitally available.
@@ -36,8 +25,6 @@ def set_digitally_available(doc, event):
         doc.digitally_available = False
 
 
-@grok.subscribe(IDocumentSchema, IObjectCreatedEvent)
-@grok.subscribe(IDocumentSchema, IObjectModifiedEvent)
 def sync_title_and_filename_handler(doc, event):
     """Syncs the document and the filename (#586):
 
@@ -62,7 +49,6 @@ def sync_title_and_filename_handler(doc, event):
             [normalizer.normalize(doc.title), ext])
 
 
-@grok.subscribe(IBaseDocument, IObjectCopiedEvent)
 def set_copyname(doc, event):
     """Documents wich are copied, should be renamed to copy of filename."""
     key = 'prevent-copyname-on-document-copy'

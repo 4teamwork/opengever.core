@@ -1,6 +1,5 @@
 from Acquisition import aq_inner
 from collective import dexteritytextindexer
-from five import grok
 from opengever.base.behaviors.classification import IClassification
 from opengever.base.behaviors.classification import IClassificationMarker
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
@@ -13,22 +12,22 @@ from plone.indexer import indexer
 from Products.CMFCore.utils import getToolByName
 from Products.CMFDiffTool.utils import safe_utf8
 from ZODB.POSException import ConflictError
+from zope.component import adapter
 from zope.component import getUtility, queryMultiAdapter, getAdapter
+from zope.interface import implementer
 from zope.interface import Interface
-
 import logging
 
 
 logger = logging.getLogger('opengever.document')
 
 
-class DefaultDocumentIndexer(grok.Adapter):
+@implementer(IDocumentIndexer)
+@adapter(Interface)
+class DefaultDocumentIndexer(object):
     """Extracts plain text directly from files contained in
     opengever.document.document objects using portal transforms.
     """
-
-    grok.context(Interface)
-    grok.implements(IDocumentIndexer)
 
     def __init__(self, context):
         self.context = context
@@ -56,12 +55,10 @@ class DefaultDocumentIndexer(grok.Adapter):
         return ''
 
 
-class SearchableTextExtender(grok.Adapter):
+@implementer(dexteritytextindexer.IDynamicTextIndexExtender)
+@adapter(IDocumentSchema)
+class SearchableTextExtender(object):
     """Specifix SearchableText Extender for document"""
-
-    grok.context(IDocumentSchema)
-    grok.name('IDocumentSchema')
-    grok.implements(dexteritytextindexer.IDynamicTextIndexExtender)
 
     def __init__(self, context):
         self.context = context
@@ -100,7 +97,6 @@ def document_author(obj):
         return context.document_author.encode('utf-8')
     else:
         return context.document_author
-grok.global_adapter(document_author, name='document_author')
 
 
 @indexer(IDocumentSchema)
@@ -111,7 +107,6 @@ def document_date(obj):
     if not context.document_date:
         return None
     return context.document_date
-grok.global_adapter(document_date, name='document_date')
 
 
 @indexer(IDocumentSchema)
@@ -119,7 +114,6 @@ def external_reference(obj):
     """Return the foreign reference of a document."""
     context = aq_inner(obj)
     return IDocumentMetadata(context).foreign_reference
-grok.global_adapter(external_reference, name='external_reference')
 
 
 @indexer(IDocumentSchema)
@@ -129,7 +123,6 @@ def receipt_date(obj):
     if not context.receipt_date:
         return None
     return context.receipt_date
-grok.global_adapter(receipt_date, name='receipt_date')
 
 
 @indexer(IDocumentSchema)
@@ -139,7 +132,6 @@ def delivery_date(obj):
     if not context.delivery_date:
         return None
     return context.delivery_date
-grok.global_adapter(delivery_date, name='delivery_date')
 
 
 @indexer(IDocumentSchema)
@@ -156,7 +148,6 @@ def checked_out(obj):
 
     else:
         return ''
-grok.global_adapter(checked_out, name='checked_out')
 
 
 @indexer(IDocumentMetadata)
@@ -166,13 +157,11 @@ def sortable_author(obj):
     if author:
         return Actor.user(author).get_label()
     return ''
-grok.global_adapter(sortable_author, name='sortable_author')
 
 
 @indexer(IDocumentMetadata)
 def DocumentSubjectIndexer(obj):
     return IDocumentMetadata(obj).keywords
-grok.global_adapter(DocumentSubjectIndexer, name="Subject")
 
 
 @indexer(IClassificationMarker)
@@ -182,4 +171,3 @@ def public_trial(obj):
         return public_trial
 
     return ''
-grok.global_adapter(public_trial, name='public_trial')

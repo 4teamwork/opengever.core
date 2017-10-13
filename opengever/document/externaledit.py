@@ -1,24 +1,19 @@
 from AccessControl import getSecurityManager
 from Acquisition import aq_inner, aq_parent
-from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.utils import webdav_enabled
-from five import grok
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
+from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.utils import webdav_enabled
+from Products.Five import BrowserView
 from zope.component import queryMultiAdapter
-from zope.interface import Interface
 
 
-class ExternalEditingAllowed(grok.View):
+class ExternalEditingAllowed(BrowserView):
     """View for deciding whether the user is allowed to edit the current object
     with external editor or not.
     """
 
-    grok.context(Interface)
-    grok.name('external_editing_allowed')
-    grok.require('zope2.View')
-
-    def render(self):
+    def __call__(self):
         parent = aq_parent(aq_inner(self.context))
 
         # not allowed for anonymous users

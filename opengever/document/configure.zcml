@@ -1,7 +1,6 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
-    xmlns:grok="http://namespaces.zope.org/grok"
     xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:vdex="http://namespaces.zope.org/vdex"
     xmlns:plone="http://namespaces.plone.org/plone"
@@ -10,9 +9,7 @@
 
   <include package="collective.vdexvocabulary" file="meta.zcml" />
 
-  <!-- Grok the package to initialise schema interfaces and content classes -->
-  <grok:grok package="." />
-
+  <include package=".behaviors" />
   <include package=".checkout" />
   <include package=".widgets" />
 
@@ -105,5 +102,148 @@
       />
 
   <adapter factory=".reference.DocumentReferenceNumber" />
+
+  <browser:page
+      for="*"
+      name="external_editing_allowed"
+      class=".externaledit.ExternalEditingAllowed"
+      permission="zope2.View"
+      />
+
+  <subscriber
+      for="opengever.document.document.IDocumentSchema
+           opengever.document.interfaces.IObjectCheckedOutEvent"
+      handler=".handlers.checked_out"
+      />
+
+  <subscriber
+      for="opengever.document.document.IDocumentSchema
+           opengever.document.interfaces.IObjectBeforeCheckInEvent"
+      handler=".handlers.update_docproperties"
+      />
+
+  <subscriber
+      for="opengever.document.document.IDocumentSchema
+           zope.lifecycleevent.IObjectMovedEvent"
+      handler=".handlers.update_moved_doc_properties"
+      />
+
+  <subscriber
+      for="opengever.document.document.IDocumentSchema
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".handlers.set_archival_file_state"
+      />
+
+  <subscriber
+      for="opengever.document.document.IDocumentSchema
+           zope.lifecycleevent.interfaces.IObjectAddedEvent"
+      handler=".subscribers.resolve_document_author"
+      />
+
+  <subscriber
+      for="opengever.document.document.IDocumentSchema
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".subscribers.resolve_document_author"
+      />
+
+  <subscriber
+      for="opengever.document.document.IDocumentSchema
+           zope.lifecycleevent.interfaces.IObjectCreatedEvent"
+      handler=".subscribers.set_digitally_available"
+      />
+
+  <subscriber
+      for="opengever.document.document.IDocumentSchema
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".subscribers.set_digitally_available"
+      />
+
+  <subscriber
+      for="opengever.document.document.IDocumentSchema
+           zope.lifecycleevent.interfaces.IObjectCreatedEvent"
+      handler=".subscribers.sync_title_and_filename_handler"
+      />
+
+  <subscriber
+      for="opengever.document.document.IDocumentSchema
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".subscribers.sync_title_and_filename_handler"
+      />
+
+  <subscriber
+      for="opengever.document.behaviors.IBaseDocument
+           zope.lifecycleevent.interfaces.IObjectCopiedEvent"
+      handler=".subscribers.set_copyname"
+      />
+
+  <adapter
+      for="opengever.document.document.IDocumentSchema"
+      factory=".webdav.DocumentReadFile"
+      provides="zope.filerepresentation.interfaces.IRawReadFile"
+      />
+
+  <adapter
+      for="opengever.document.document.IDocumentSchema"
+      factory=".webdav.DocumentWriteFile"
+      provides="zope.filerepresentation.interfaces.IRawWriteFile"
+      />
+
+  <adapter factory=".quick_upload.QuickUploadFileUpdater" />
+
+  <adapter factory=".sequence.BaseDocumentSequenceNumberGenerator" />
+
+  <adapter factory=".indexers.DefaultDocumentIndexer" />
+
+  <adapter
+      factory=".indexers.SearchableTextExtender"
+      name="IDocumentSchema"
+      />
+
+  <adapter
+      factory=".indexers.document_author"
+      name="document_author"
+      />
+
+  <adapter
+      factory=".indexers.document_date"
+      name="document_date"
+      />
+
+  <adapter
+      factory=".indexers.external_reference"
+      name="external_reference"
+      />
+
+  <adapter
+      factory=".indexers.receipt_date"
+      name="receipt_date"
+      />
+
+  <adapter
+      factory=".indexers.delivery_date"
+      name="delivery_date"
+      />
+
+  <adapter
+      factory=".indexers.checked_out"
+      name="checked_out"
+      />
+
+  <adapter
+      factory=".indexers.sortable_author"
+      name="sortable_author"
+      />
+
+  <adapter
+      factory=".indexers.DocumentSubjectIndexer"
+      name="Subject"
+      />
+
+  <adapter
+      factory=".indexers.public_trial"
+      name="public_trial"
+      />
+
+  <adapter factory=".document.UploadValidator" />
 
 </configure>

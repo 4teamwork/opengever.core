@@ -1,14 +1,13 @@
-from five import grok
 from opengever.document import _
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from Products.CMFCore.utils import getToolByName
+from Products.Five import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
 from zope.component import getMultiAdapter
-from zope.interface import Interface
 
 
-class CheckoutDocuments(grok.View):
+class CheckoutDocuments(BrowserView):
     """View for checking out one or more document. This view is either
     called from a tabbed_view / folder_contents action (using the request
     parameter "paths") or directly on the document itself (without any
@@ -17,12 +16,7 @@ class CheckoutDocuments(grok.View):
     mode=external in the request, the external editor will automatically
     be called.
     """
-
-    grok.context(Interface)
-    grok.require('zope2.View')
-    grok.name('checkout_documents')
-
-    def render(self):
+    def __call__(self):
         # check whether we have paths or not
         paths = self.request.get('paths')
 

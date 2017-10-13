@@ -132,4 +132,6 @@
       factory=".namedfile.FileUploadStorable"
       />
 
+  <adapter factory=".sequence.DefaultSequenceNumberGenerator" />
+
 </configure>

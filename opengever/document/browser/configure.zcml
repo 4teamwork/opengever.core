@@ -85,4 +85,45 @@
       template="templates/overview.pt"
       />
 
+  <browser:page
+      for="opengever.document.behaviors.IBaseDocument"
+      name="edit_archival_file"
+      class=".archival_file_form.EditArchivalFileForm"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.document.behaviors.IBaseDocument"
+      name="edit_checker"
+      class=".edit.EditCheckerView"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="*"
+      name="editing_document"
+      class=".edit.EditingDocument"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="*"
+      name="logout_overlay"
+      class=".logout_overlay.LogoutOverlay"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="*"
+      name="redirect_to_parent_dossier"
+      class=".redirect_to_parent_dossier.RedirectToParentDossier"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="*"
+      name="document_report"
+      class=".report.DocumentReporter"
+      permission="zope2.View"
+      />
 </configure>

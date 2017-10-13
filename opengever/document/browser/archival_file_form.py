@@ -1,12 +1,11 @@
-from five import grok
 from opengever.document import _
-from opengever.dossier.utils import find_parent_dossier
 from opengever.document.behaviors import IBaseDocument
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.templatefolder.interfaces import ITemplateFolder
+from opengever.dossier.utils import find_parent_dossier
 from plone import api
-from plone.directives import dexterity
+from plone.dexterity.browser.edit import DefaultEditForm
 from z3c.form.field import Fields
 from zExceptions import Unauthorized
 
@@ -39,11 +38,7 @@ def can_access_archival_file_form(user, content):
     return False
 
 
-class EditArchivalFileForm(dexterity.EditForm):
-    grok.context(IBaseDocument)
-    grok.require('zope2.View')
-    grok.name('edit_archival_file')
-
+class EditArchivalFileForm(DefaultEditForm):
     schema = None
     fields = Fields(IDocumentMetadata).select('archival_file')
     label = _(u'label_change_archival_file', default=u'Change archival file')

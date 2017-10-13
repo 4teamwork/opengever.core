@@ -1,18 +1,19 @@
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.document import _
-from plone.autoform import directives as form_directives
-from plone.directives import form
+from plone.autoform import directives as form
+from plone.autoform.interfaces import IFormFieldProvider
+from plone.supermodel import model
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zope.interface import alsoProvides
 
 
-class IRelatedDocuments(form.Schema):
+class IRelatedDocuments(model.Schema):
     """The 'Related documents' behvavior is an opengever.document
     specific 'Related items' behavior. Only allows references to
     opengever.documents.
     """
 
-    form_directives.order_after(relatedItems='IDocumentMetadata.preserved_as_paper')
+    form.order_after(relatedItems='IDocumentMetadata.preserved_as_paper')
     relatedItems = RelationList(
         title=_(u'label_related_documents', default=u'Related Documents'),
         default=[],
@@ -34,7 +35,7 @@ class IRelatedDocuments(form.Schema):
         required=False,
         )
 
-    form.fieldset(
+    model.fieldset(
         u'common',
         label=_(u'fieldset_common', default=u'Common'),
         fields=[
@@ -43,4 +44,4 @@ class IRelatedDocuments(form.Schema):
         )
 
 
-alsoProvides(IRelatedDocuments, form.IFormFieldProvider)
+alsoProvides(IRelatedDocuments, IFormFieldProvider)

@@ -26,4 +26,49 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="*"
+      name="cancel_document_checkouts"
+      class=".cancel.CancelDocuments"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.document.document.IDocumentSchema"
+      name="checkin_document"
+      class=".checkin.CheckinDocument"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="*"
+      name="checkin_documents"
+      class=".checkin.CheckinDocuments"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="*"
+      name="checkout_documents"
+      class=".checkout.CheckoutDocuments"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.document.document.IDocumentSchema"
+      name="revert-file-to-version"
+      class=".revert.RevertFileToVersion"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <adapter factory=".manager.CheckinCheckoutManager" />
+
+  <browser:viewlet
+      name="checkedoutviewlet"
+      for="opengever.document.document.IDocumentSchema"
+      manager="plone.app.layout.viewlets.interfaces.IAboveContent"
+      class=".viewlets.CheckedOutViewlet"
+      permission="zope2.View"
+      />
+
 </configure>

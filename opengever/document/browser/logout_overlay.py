@@ -1,18 +1,14 @@
 from AccessControl import getSecurityManager
-from five import grok
 from opengever.base.casauth import get_cas_server_url
 from opengever.base.casauth import is_cas_auth_enabled
 from Products.CMFCore.utils import getToolByName
+from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from zope.interface import Interface
 
 
-class LogoutOverlay(grok.View):
+class LogoutOverlay(BrowserView):
     """This view shows all documents checked out by the logged in user
     """
-    grok.context(Interface)
-    grok.name('logout_overlay')
-    grok.require('zope2.View')
     items = []
 
     @property
@@ -35,7 +31,8 @@ class LogoutOverlay(grok.View):
     def update(self):
         self.items = self.get_checkedout_documents()
 
-    def render(self):
+    def __call__(self):
+        self.update()
         if not self.items:
             return "empty:%s" % self.redirect_url
 

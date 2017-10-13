@@ -1,25 +1,20 @@
-from five import grok
 from ftw.mail.mail import IMail
 from opengever.document import _
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from plone import api
+from Products.Five import BrowserView
 from zope.component import getMultiAdapter
-from zope.interface import Interface
 
 
-class CancelDocuments(grok.View):
+class CancelDocuments(BrowserView):
     """Cancel the checkout of one or more documents. This view is either
     called from a tabbed_view or folder_contents action (using the request
     parameter "paths") or directly on the document itself (without any
     request parameters).
     """
 
-    grok.context(Interface)
-    grok.require('zope2.View')
-    grok.name('cancel_document_checkouts')
-
-    def render(self):
+    def __call__(self):
         # check whether we have paths or not
         paths = self.request.get('paths')
 

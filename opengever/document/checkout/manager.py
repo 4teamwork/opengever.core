@@ -2,7 +2,6 @@ from AccessControl import getSecurityManager
 from AccessControl import Unauthorized
 from datetime import date
 from datetime import datetime
-from five import grok
 from opengever.document import _
 from opengever.document.document import IDocumentSchema
 from opengever.document.events import ObjectBeforeCheckInEvent
@@ -17,19 +16,20 @@ from plone import api
 from plone.locking.interfaces import IRefreshableLockable
 from plone.namedfile.file import NamedBlobFile
 from zope.annotation.interfaces import IAnnotations
+from zope.component import adapter
 from zope.event import notify
 from zope.i18n import translate
+from zope.interface import implementer
 from zope.publisher.interfaces.browser import IBrowserRequest
 
 
 CHECKIN_CHECKOUT_ANNOTATIONS_KEY = 'opengever.document.checked_out_by'
 
 
-class CheckinCheckoutManager(grok.MultiAdapter):
+@implementer(ICheckinCheckoutManager)
+@adapter(IDocumentSchema, IBrowserRequest)
+class CheckinCheckoutManager(object):
     """Document checkout flow management."""
-
-    grok.provides(ICheckinCheckoutManager)
-    grok.adapts(IDocumentSchema, IBrowserRequest)
 
     def __init__(self, context, request):
         self.context = context
