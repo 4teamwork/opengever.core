@@ -10,7 +10,7 @@ from opengever.bundle.sections.bundlesource import BUNDLE_KEY
 from opengever.bundle.sections.bundlesource import BUNDLE_PATH_KEY
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.repository.behaviors.referenceprefix import IReferenceNumberPrefix  # noqa
-from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from pkg_resources import resource_filename
 from plone import api
 from plone.portlets.interfaces import IPortletAssignmentMapping
@@ -23,7 +23,7 @@ from zope.component import getUtility
 FROZEN_NOW = datetime(2016, 12, 20, 9, 40)
 
 
-class TestOggBundlePipeline(FunctionalTestCase):
+class TestOggBundlePipeline(IntegrationTestCase):
 
     def test_oggbundle_transmogrifier(self):
         # this is a bit hackish, but since builders currently don't work in
@@ -31,10 +31,9 @@ class TestOggBundlePipeline(FunctionalTestCase):
         # on a per test level we abuse just one test to setup the pipeline and
         # test its data.
 
-        # load pipeline
-        # XXX move this to a layer
-        self.grant("Manager")
+        self.login(self.manager)
 
+        # load pipeline
         transmogrifier = Transmogrifier(api.portal.get())
         annotations = IAnnotations(transmogrifier)
         annotations[BUNDLE_PATH_KEY] = resource_filename(
@@ -62,11 +61,10 @@ class TestOggBundlePipeline(FunctionalTestCase):
         self.assert_report_data_collected(bundle)
 
     def assert_repo_root_created(self):
-        root = self.portal.get('ordnungssystem')
+        root = self.portal.get('ordnungssystem-1')
         self.assertEqual('Ordnungssystem', root.Title())
         self.assertEqual(u'Ordnungssystem', root.title_de)
         self.assertEqual(u'', root.title_fr)
-        self.assertEqual('ordnungssystem', root.getId())
         self.assertEqual(date(2000, 1, 1), root.valid_from)
         self.assertEqual(date(2099, 12, 31), root.valid_until)
         self.assertIsNone(getattr(root, 'guid', None))
@@ -256,38 +254,38 @@ class TestOggBundlePipeline(FunctionalTestCase):
         return folder_staff
 
     def assert_dossiers_created(self, parent):
+        self.assert_dossier_peter_schneider_created(parent)
         self.assert_dossier_vreni_created(parent)
-        return self.assert_dossier_peter_created(parent)
+        return self.assert_dossier_hanspeter_created(parent)
 
-    def assert_dossier_vreni_created(self, parent):
-        dossier_vreni = parent.get('dossier-1')
+    def assert_dossier_peter_schneider_created(self, parent):
+        dossier_peter = parent.get('dossier-8')
         self.assertEqual(
             u'Vreni Meier ist ein Tausendsassa',
-            IDossier(dossier_vreni).comments)
-        self.assertEqual(
-            tuple(),
-            IDossier(dossier_vreni).keywords)
-        self.assertEqual(
-            '1',
-            IDossier(dossier_vreni).reference_number)
-        self.assertEqual(
-            [],
-            IDossier(dossier_vreni).relatedDossier)
-        self.assertEqual(
-            u'lukas.graf',
-            IDossier(dossier_vreni).responsible)
-        self.assertEqual(
-            'dossier-state-active',
-            api.content.get_state(dossier_vreni))
-        self.assertEqual(
-            date(2010, 11, 11),
-            IDossier(dossier_vreni).start)
-        self.assertEqual(
-            u'Dossier Vreni Meier',
-            dossier_vreni.title)
+            IDossier(dossier_peter).comments)
+        self.assertEqual(tuple(), IDossier(dossier_peter).keywords)
+        self.assertEqual('1', IDossier(dossier_peter).reference_number)
+        self.assertEqual([], IDossier(dossier_peter).relatedDossier)
+        self.assertEqual(u'lukas.graf', IDossier(dossier_peter).responsible)
+        self.assertEqual('dossier-state-active',
+                         api.content.get_state(dossier_peter))
+        self.assertEqual(date(2010, 11, 11), IDossier(dossier_peter).start)
+        self.assertEqual(u'Dossier Peter Schneider', dossier_peter.title)
 
-    def assert_dossier_peter_created(self, parent):
-        dossier_peter = parent.get('dossier-2')
+    def assert_dossier_vreni_created(self, parent):
+        dossier_vreni = self.leaf_repofolder.get('dossier-10')
+        self.assertEqual(u'Vreni Meier ist ein Tausendsassa',
+                         IDossier(dossier_vreni).comments)
+        self.assertEqual(tuple(), IDossier(dossier_vreni).keywords)
+        self.assertEqual([], IDossier(dossier_vreni).relatedDossier)
+        self.assertEqual(u'lukas.graf', IDossier(dossier_vreni).responsible)
+        self.assertEqual('dossier-state-active',
+                         api.content.get_state(dossier_vreni))
+        self.assertEqual(date(2010, 11, 11), IDossier(dossier_vreni).start)
+        self.assertEqual(u'Dossier Vreni Meier', dossier_vreni.title)
+
+    def assert_dossier_hanspeter_created(self, parent):
+        dossier_peter = parent.get('dossier-9')
         self.assertEqual(
             u'archival worthy',
             ILifeCycle(dossier_peter).archival_value)
@@ -352,9 +350,11 @@ class TestOggBundlePipeline(FunctionalTestCase):
         self.assert_mail_1_created(parent)
         self.assert_mail_2_created(parent)
         self.assert_document_5_created(parent)
+        self.assert_document_6_created()
+        self.assert_mail_3_created()
 
     def assert_document_1_created(self, parent):
-        document_1 = parent.get('document-1')
+        document_1 = parent.objectValues()[0]
 
         self.assertTrue(document_1.digitally_available)
         self.assertIsNotNone(document_1.file)
@@ -382,7 +382,7 @@ class TestOggBundlePipeline(FunctionalTestCase):
             document_1.title)
 
     def assert_document_2_created(self, parent):
-        document_2 = parent.get('document-2')
+        document_2 = parent.objectValues()[1]
 
         self.assertTrue(document_2.digitally_available)
         self.assertIsNotNone(document_2.file)
@@ -422,7 +422,7 @@ class TestOggBundlePipeline(FunctionalTestCase):
             document_2.title)
 
     def assert_document_5_created(self, parent):
-        document_5 = parent.get('document-5')
+        document_5 = parent.objectValues()[4]
 
         self.assertTrue(document_5.digitally_available)
         self.assertIsNotNone(document_5.file)
@@ -435,8 +435,18 @@ class TestOggBundlePipeline(FunctionalTestCase):
             u'Document referenced via UNC-Path',
             document_5.title)
 
+    def assert_document_6_created(self):
+        document_6 = self.dossier.objectValues()[-2]
+
+        self.assertTrue(document_6.digitally_available)
+        self.assertIsNotNone(document_6.file)
+        self.assertEqual(22198, len(document_6.file.data))
+        self.assertEqual(
+            'document-state-draft', api.content.get_state(document_6))
+        self.assertEqual(u'Bewerbung Peter Meier', document_6.title)
+
     def assert_mail_1_created(self, parent):
-        mail = parent.get('document-3')
+        mail = parent.objectValues()[2]
 
         self.assertTrue(mail.digitally_available)
         self.assertIsNotNone(mail.message)
@@ -474,11 +484,18 @@ class TestOggBundlePipeline(FunctionalTestCase):
             mail.title)
 
     def assert_mail_2_created(self, parent):
-        mail = parent.get('document-4')
+        mail = parent.objectValues()[3]
 
         self.assertIsNotNone(mail.message)
         self.assertEqual(920, len(mail.message.data))
         self.assertEqual(u'Lorem Ipsum', mail.title)
+
+    def assert_mail_3_created(self):
+        mail = self.dossier.objectValues()[-1]
+
+        self.assertIsNotNone(mail.message)
+        self.assertEqual(920, len(mail.message.data))
+        self.assertEqual(u'Mail an Herrn Schneider', mail.title)
 
     def assert_report_data_collected(self, bundle):
         report_data = bundle.report_data
@@ -512,4 +529,4 @@ class TestOggBundlePipeline(FunctionalTestCase):
             (root, manager,), IPortletAssignmentMapping)
         tree_portlet_assignment = mapping.get(
             'opengever-portlets-tree-TreePortlet')
-        self.assertEqual('ordnungssystem', tree_portlet_assignment.root_path)
+        self.assertEqual('ordnungssystem-1', tree_portlet_assignment.root_path)

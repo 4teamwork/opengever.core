@@ -47,8 +47,8 @@
   },  {
     "guid": "d65317ece1cb4dc797de1fc1e21bb4eb",
     "parent_ref_tuple": [
-      [9, 0, 1, 1],
-      [2]
+      [1, 1],
+      [1]
     ],
     "document_author": "david.erni",
     "document_date": "2007-01-01",
@@ -57,16 +57,16 @@
     "preserved_as_paper": true,
     "relatedItems": [],
     "review_state": "document-state-draft",
-    "title": "Bewerbung Hanspeter Müller"
+    "title": "Bewerbung Peter Meier"
   },  {
     "guid": "0970e3800a78407ea2558d718739961f",
     "parent_ref_tuple": [
-      [0, 10, 0],
-      [1, 1]
+      [1, 1],
+      [1]
     ],
     "filepath": "files/sample.eml",
     "original_message_path": "files/sample.msg",
     "review_state": "document-state-draft",
-    "title": ""
+    "title": "Mail an Herrn Schneider"
   }
 ]
