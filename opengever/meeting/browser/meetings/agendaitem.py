@@ -151,9 +151,10 @@ class AgendaItemsView(BrowserView):
         for doc in docs:
             data = {'link': doc.render_link()}
             if not source_dossier_excerpt and item.has_proposal:
-                data['return_link'] = meeting.get_url(
-                    view='agenda_items/{}/return_excerpt?document={}'.format(
-                        item.agenda_item_id, doc.uuid()))
+                if self.meeting.is_editable():
+                    data['return_link'] = meeting.get_url(
+                        view='agenda_items/{}/return_excerpt?document={}'.format(
+                            item.agenda_item_id, doc.uuid()))
             elif source_dossier_excerpt and doc == source_dossier_excerpt:
                 data['is_excerpt_in_source_dossier'] = True
             excerpt_data.append(data)

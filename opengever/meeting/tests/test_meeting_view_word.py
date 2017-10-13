@@ -54,3 +54,17 @@ class TestWordMeetingView(IntegrationTestCase):
         browser.open(self.meeting)
         editbar.menu_option('Actions', 'Close meeting').click()
         self.assertEquals('closed', self.meeting.model.get_state().name)
+
+    @browsing
+    def test_meeting_member_cannot_return_excerpt(self, browser):
+        with self.login(self.committee_responsible, browser):
+            agenda_item = self.schedule_proposal(self.meeting,
+                                                 self.submitted_word_proposal)
+            agenda_item.decide()
+            agenda_item.generate_excerpt(title='The Excerpt')
+            browser.open(self.meeting, view='agenda_items/list')
+            self.assertIn('return_link', browser.json['items'][0]['excerpts'][0])
+
+        self.login(self.meeting_user, browser)
+        browser.open(self.meeting, view='agenda_items/list')
+        self.assertNotIn('return_link', browser.json['items'][0]['excerpts'][0])
