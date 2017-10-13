@@ -29,17 +29,19 @@ class OfficeConnectorURL(Service):
 
         if url:
             return json.dumps(dict(url=url))
-        else:
-            self.request.response.setStatus(500)
-            message = _(u'error_oc_url_too_long',
-                        default=u"Unfortunately it's not currently possible "
-                        "to attach this many documents. Please try again with "
-                        "fewer documents selected.")
-            return json.dumps(dict(
-                error=dict(
-                    message=translate(message)
-                    )
-                ))
+
+        # Fail per default
+        self.request.response.setStatus(500)
+        message = _(
+            u'error_oc_url_too_long',
+            default=u"Unfortunately it's not currently possible to attach this many documents. Please try again with fewer documents selected.",
+            )
+
+        return json.dumps(dict(
+            error=dict(
+                message=translate(message)
+                )
+            ))
 
 
 class OfficeConnectorAttachURL(OfficeConnectorURL):
@@ -50,11 +52,12 @@ class OfficeConnectorAttachURL(OfficeConnectorURL):
     """
 
     def render(self):
-        # Feature disabled or used wrong
-        if not is_officeconnector_attach_feature_enabled():
-            raise NotFound
-        payload = {'action': 'attach'}
-        return self.create_officeconnector_url_json(payload)
+        if is_officeconnector_attach_feature_enabled():
+            payload = {'action': 'attach'}
+            return self.create_officeconnector_url_json(payload)
+
+        # Fail per default
+        raise NotFound
 
 
 class OfficeConnectorCheckoutURL(OfficeConnectorURL):
@@ -65,13 +68,12 @@ class OfficeConnectorCheckoutURL(OfficeConnectorURL):
     """
 
     def render(self):
-        # Feature disabled or used wrong
-        if not is_officeconnector_checkout_feature_enabled():
-            raise NotFound
+        if is_officeconnector_checkout_feature_enabled():
+            payload = {'action': 'checkout'}
+            return self.create_officeconnector_url_json(payload)
 
-        payload = {'action': 'checkout'}
-
-        return self.create_officeconnector_url_json(payload)
+        # Fail per default
+        raise NotFound
 
 
 class OfficeConnectorPayload(Service):
@@ -83,32 +85,34 @@ class OfficeConnectorPayload(Service):
 
     def get_base_payloads(self):
         # Require an authenticated user
-        if api.user.is_anonymous():
+        if not api.user.is_anonymous():
+            documents = []
+            for uuid in self.uuids:
+                document = api.content.get(UID=uuid)
+                if document and document.has_file():
+                    documents.append(document)
+
+        else:
+            # Fail per default
             raise Forbidden
 
-        documents = []
-        for uuid in self.uuids:
-            document = api.content.get(UID=uuid)
-            if document and document.has_file():
-                documents.append(document)
+        if documents:
+            payloads = []
+            for document in documents:
+                payloads.append(
+                    {
+                        'content-type': document.get_file().contentType,
+                        'csrf-token': createToken(),
+                        'document-url': document.absolute_url(),
+                        'document': document,
+                        'download': document.get_download_view_name(),
+                        'filename': document.get_filename(),
+                        }
+                    )
+            return payloads
 
-        if not documents:
-            raise NotFound
-
-        payloads = []
-        for document in documents:
-            payloads.append(
-                {
-                    'content-type': document.get_file().contentType,
-                    'csrf-token': createToken(),
-                    'document-url': document.absolute_url(),
-                    'document': document,
-                    'download': document.get_download_view_name(),
-                    'filename': document.get_filename(),
-                    }
-                )
-
-        return payloads
+        # Fail per default
+        raise NotFound
 
     def render(self):
         self.request.response.setHeader('Content-type', 'application/json')
@@ -133,7 +137,6 @@ class OfficeConnectorAttachPayload(OfficeConnectorPayload):
             parent_dossier = document.get_parent_dossier()
 
             if parent_dossier:
-                # XXX - this should be unnecessary with dossier journaling
                 if parent_dossier.is_open():
                     payload['bcc'] = IEmailAddress(
                         self.request).get_email_for_object(parent_dossier)
@@ -170,19 +173,18 @@ class OfficeConnectorCheckoutPayload(OfficeConnectorPayload):
         # the plone.api endpoint gets made - for now we've made a custom upload
         # form.
         for payload in payloads:
-            payload['checkin-with-comment'] = '@@checkin_document'
-            payload['checkin-without-comment'] = 'checkin_without_comment'
-            payload['checkout'] = '@@checkout_documents'
-            payload['upload-form'] = 'file_upload'
-            payload['upload-api'] = None
-
             # A permission check to verify the user is also able to upload
-            if not api.user.has_permission('Modify portal content',
-                                           obj=payload['document']):
+            if api.user.has_permission('Modify portal content', obj=payload['document']):
+                del payload['document']
+                payload['checkin-with-comment'] = '@@checkin_document'
+                payload['checkin-without-comment'] = 'checkin_without_comment'
+                payload['checkout'] = '@@checkout_documents'
+                payload['upload-form'] = 'file_upload'
+                payload['upload-api'] = None
+
+            else:
+                # Fail per default
                 raise Forbidden
 
-            del payload['document']
-
         self.request.response.setHeader('Content-type', 'application/json')
-
         return json.dumps(payloads)
