@@ -7,6 +7,7 @@ Changelog
 
 - Refactor JSON schema generation and dumping, add tests. [lgraf]
 - Ungrok opengever.document. [elioschmutz]
+- SPV word: Selectable proposal templates can be configured per committee. [jone]
 - Ungrok opengever.task. [elioschmutz]
 - Ungrok opengever.officeatwork. [elioschmutz]
 - SPV: Let CommitteeMember only have read-access on meeting view. [jone]

@@ -3,6 +3,7 @@
       tal:omit-tag="">
 
 <div tal:content="structure view/render_table" tal:condition="view/has_items"
+     tal:attributes="data-vocabulary-depends-on view/get_vocabulary_depends_on"
      class="tableradio-widget-wrapper" />
 <div class="empty_message" tal:content="view/empty_message" tal:condition="not: view/has_items" />
 

@@ -45,6 +45,7 @@
 
       this.sync = $.proxy(function() {
         target.val(this.selected);
+        target.trigger("change");
         this.element.val($(":selected", target).text());
         this.element.blur();
       }, this);

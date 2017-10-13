@@ -20,7 +20,6 @@ from plone.z3cform.layout import FormWrapper
 from z3c.form import field
 from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
-from z3c.form.interfaces import HIDDEN_MODE
 from z3c.form.interfaces import IDataConverter
 from zope.component import getUtility
 
@@ -50,7 +49,8 @@ class CommitteeFieldConfigurationMixin(object):
             self.fields = self.fields.omit('ad_hoc_template',
                                            'paragraph_template',
                                            'protocol_header_template',
-                                           'protocol_suffix_template')
+                                           'protocol_suffix_template',
+                                           'allowed_proposal_templates')
 
 
 class AddForm(CommitteeFieldConfigurationMixin,

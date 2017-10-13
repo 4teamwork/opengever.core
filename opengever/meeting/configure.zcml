@@ -65,4 +65,14 @@
 
   <adapter factory=".docprops.ProposalDocPropertyProvider" />
 
+  <utility
+      factory=".vocabulary.ProposalTemplatesForCommitteeVocabulary"
+      name="opengever.meeting.ProposalTemplatesForCommitteeVocabulary"
+      />
+
+  <utility
+      factory=".vocabulary.ProposalTemplatesVocabulary"
+      name="opengever.meeting.ProposalTemplatesVocabulary"
+      />
+
 </configure>

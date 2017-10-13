@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-05 16:15+0000\n"
-"PO-Revision-Date: 2017-10-10 09:01+0200\n"
+"POT-Creation-Date: 2017-10-12 10:36+0000\n"
+"PO-Revision-Date: 2017-10-11 09:21+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -701,6 +701,11 @@ msgstr "Antrag zurückweisen"
 msgid "held"
 msgstr "Durchgeführt"
 
+#. Default: "Select the proposal templates allowed for this commitee, or select no templates for allowing all templates."
+#: ./opengever/meeting/committee.py
+msgid "help_allowed_proposal_templates"
+msgstr "Wählen Sie alle Antragsvorlagen aus, die in diesem Gremium erlaubt sind. Wählen Sie keine Antragsvorlagen aus, um alle Vorlagen zu erlauben."
+
 #. Default: "Describe, why the proposal is rejected"
 #: ./opengever/meeting/browser/proposaltransitions.py
 msgid "help_reject_proposal_text"
@@ -748,6 +753,11 @@ msgstr "Traktandenliste"
 #: ./opengever/meeting/committeecontainer.py
 msgid "label_agendaitem_list_template"
 msgstr "Vorlage Traktandenliste"
+
+#. Default: "Allowed proposal templates"
+#: ./opengever/meeting/committee.py
+msgid "label_allowed_proposal_templates"
+msgstr "Erlaubte Antragsvorlagen"
 
 #. Default: "Attachments"
 #: ./opengever/meeting/browser/meetings/meeting.py
@@ -1149,7 +1159,8 @@ msgid "label_proposed_action"
 msgstr "Antrag"
 
 #. Default: "Protocol header template"
-#: ./opengever/meeting/committee.py:65
+#: ./opengever/meeting/committee.py
+#: ./opengever/meeting/committeecontainer.py
 msgid "label_protocol_header_template"
 msgstr "Vorlage Protokollkopf"
 
@@ -1159,7 +1170,8 @@ msgid "label_protocol_start_page_number"
 msgstr "Beginn Seitennummerierung Protokoll"
 
 #. Default: "Protocol suffix template"
-#: ./opengever/meeting/committee.py:72
+#: ./opengever/meeting/committee.py
+#: ./opengever/meeting/committeecontainer.py
 msgid "label_protocol_suffix_template"
 msgstr "Vorlage Schlussteil des Protokolls"
 

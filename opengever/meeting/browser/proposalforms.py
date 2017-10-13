@@ -12,7 +12,6 @@ from opengever.meeting.proposal import IProposal
 from opengever.meeting.proposal import ISubmittedProposal
 from opengever.meeting.proposal import Proposal
 from opengever.meeting.proposal import SubmittedProposal
-from opengever.meeting.vocabulary import get_proposal_template_vocabulary
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
 from opengever.tabbedview.helper import document_with_icon
 from plone import api
@@ -91,8 +90,9 @@ class IAddProposal(IProposal):
 
     proposal_template = TableChoice(
         title=_('label_proposal_template', default=u'Proposal template'),
-        source=get_proposal_template_vocabulary,
+        vocabulary='opengever.meeting.ProposalTemplatesForCommitteeVocabulary',
         required=True,
+        vocabulary_depends_on=['form.widgets.committee'],
         columns=(
             {'column': 'title',
              'column_title': _(u'label_title', default=u'Title'),

@@ -45,9 +45,14 @@ class TableChoice(schema.Choice):
     The column configuration must be in the format that is required by
     ftw.table's ITableGenerator.
 
+    The optional configuration argument "vocabulary_depends_on" accepts
+    a list of field names which influence the result of the table.
+    This allows the widget to be reloaded automatically when the here
+    listed fields change its values.
     """
     implements(ITableChoice)
 
-    def __init__(self, columns=tuple(), **kwargs):
+    def __init__(self, columns=tuple(), vocabulary_depends_on=(), **kwargs):
         self.columns = columns
+        self.vocabulary_depends_on = vocabulary_depends_on
         super(TableChoice, self).__init__(**kwargs)

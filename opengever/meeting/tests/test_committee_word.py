@@ -1,8 +1,11 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages import statusmessages
 from opengever.testing import IntegrationTestCase
 from operator import methodcaller
+from plone.uuid.interfaces import IUUID
 
 
 class TestCommitteeWord(IntegrationTestCase):
@@ -83,7 +86,8 @@ class TestCommitteeWord(IntegrationTestCase):
                   'Table of contents template',
                   'Linked repository folder',
                   'Ad hoc agenda item template',
-                  'Paragraph template']
+                  'Paragraph template',
+                  'Allowed proposal templates']
         with self.login(self.administrator, browser):
             browser.open(self.committee_container)
             factoriesmenu.add('Committee')
@@ -98,3 +102,22 @@ class TestCommitteeWord(IntegrationTestCase):
                 fields,
                 map(methodcaller('normalized_text', recursive=False),
                     browser.css('form#form > div.field > label')))
+
+    @browsing
+    def test_configure_allowed_proposal_templates(self, browser):
+        with self.login(self.administrator):
+            create(Builder('proposaltemplate')
+                   .titled(u'Baubewilligung')
+                   .within(self.templates))
+
+        self.login(self.committee_responsible, browser)
+        self.assertFalse(self.committee.allowed_proposal_templates)
+
+        browser.open(self.committee, view='edit')
+        self.assertItemsEqual(
+            ['Baubewilligung', u'Geb\xfchren'],
+            browser.find('Allowed proposal templates').options)
+        browser.fill({'Allowed proposal templates': u'Geb\xfchren'}).save()
+        self.assertItemsEqual(
+            [IUUID(self.proposal_template)],
+            self.committee.allowed_proposal_templates)
