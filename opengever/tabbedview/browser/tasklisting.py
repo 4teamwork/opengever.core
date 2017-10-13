@@ -2,6 +2,7 @@ from ftw.table import helper
 from ftw.table.interfaces import ITableSource, ITableSourceConfig
 from opengever.globalindex.model.task import Task
 from opengever.globalindex.utils import indexed_task_link_helper
+from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.tabbedview import _
 from opengever.tabbedview import BaseListingTab
@@ -9,20 +10,28 @@ from opengever.tabbedview import SqlTableSource
 from opengever.tabbedview.filters import Filter
 from opengever.tabbedview.filters import FilterList
 from opengever.tabbedview.filters import PendingTasksFilter
+from opengever.tabbedview.helper import author_cache_key
 from opengever.tabbedview.helper import display_org_unit_title_condition
 from opengever.tabbedview.helper import linked_containing_maindossier
 from opengever.tabbedview.helper import org_unit_title_helper
 from opengever.tabbedview.helper import readable_date_set_invisibles
-from opengever.tabbedview.helper import readable_ogds_author
 from opengever.tabbedview.helper import task_id_checkbox_helper
 from opengever.tabbedview.helper import workflow_state
 from opengever.task.helper import task_type_helper
+from plone.memoize import ram
+from Products.CMFPlone.utils import safe_unicode
 from sqlalchemy import and_, or_
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import adapter
 from zope.interface import implementer
 from zope.interface import implements
 from zope.interface import Interface
+
+
+@ram.cache(author_cache_key)
+def linked_task_actor(item, actor):
+    actor = safe_unicode(actor) or u''
+    return Actor.lookup(actor).get_link(with_icon=True)
 
 
 class IGlobalTaskTableSourceConfig(ITableSourceConfig):
@@ -44,7 +53,7 @@ class GlobalTaskListingTab(BaseListingTab):
 
     sort_on = 'modified'
     sort_reverse = False
-    #lazy must be false otherwise there will be no correct batching
+    # lazy must be false otherwise there will be no correct batching
     lazy = False
 
     # the model attribute is used for a dynamic textfiltering functionality
@@ -92,11 +101,11 @@ class GlobalTaskListingTab(BaseListingTab):
 
         {'column': 'responsible',
          'column_title': _(u'label_responsible_task', default=u'Responsible'),
-         'transform': readable_ogds_author},
+         'transform': linked_task_actor},
 
         {'column': 'issuer',
          'column_title': _(u'label_issuer', default=u'Issuer'),
-         'transform': readable_ogds_author},
+         'transform': linked_task_actor},
 
         {'column': 'created',
          'column_title': _(u'column_issued_at', default=u'Issued at'),
@@ -145,6 +154,6 @@ class GlobalTaskTableSource(SqlTableSource):
         """
         query = query.filter(
             or_(
-                and_(Task.predecessor == None, Task.successors == None),
+                and_(Task.predecessor == None, Task.successors == None),  # noqa
                 Task.admin_unit_id == get_current_admin_unit().id()))
         return query

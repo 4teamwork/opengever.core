@@ -1,64 +1,38 @@
+from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
-from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
-from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
-from opengever.testing import create_plone_user
-from opengever.testing import FunctionalTestCase
-from plone.app.testing import setRoles
-from plone.app.testing import TEST_USER_ID
-import transaction
+from opengever.testing import IntegrationTestCase
 
 
-class TestPersonalOverview(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestPersonalOverview, self).setUp()
-
-        create_plone_user(self.portal, 'hugo.boss')
-        self.hugo = create(Builder('ogds_user')
-                           .having(userid='hugo.boss',
-                                   firstname='Hugo',
-                                   lastname='Boss')
-                           .assign_to_org_units([self.org_unit]))
-        transaction.commit()
+class TestPersonalOverview(IntegrationTestCase):
 
     @browsing
     def test_redirects_to_repository_root_on_a_foreign_admin_unit(self, browser):
-        create_plone_user(self.portal, 'peter')
-        setRoles(self.portal, 'hugo.boss', ['Reader'])
-        transaction.commit()
+        foreign_user = create(Builder('user')
+                              .named('Peter', 'Schneider')
+                              .with_roles('Reader'))
+        create(Builder('ogds_user')
+               .id(foreign_user.getId())
+               .having(firstname='Peter', lastname='Schneider'))
 
-        admin_unit = create(Builder('admin_unit')
-                            .id('additional'))
-        additional = create(Builder('org_unit')
-                            .id('additional')
-                            .having(admin_unit=admin_unit)
-                            .with_default_groups())
-
-        self.hugo = create(Builder('ogds_user')
-                           .having(userid='peter')
-                           .assign_to_org_units([additional]))
-
-        repo_root = create(Builder('repository_root'))
-
-        browser.login(username='peter', password='demo09').open(
-            view='personal_overview')
-        self.assertEqual(repo_root.absolute_url(), browser.url)
+        self.login(foreign_user, browser=browser)
+        browser.open(self.portal, view='personal_overview')
+        self.assertEqual(self.repository_root.absolute_url(), browser.url)
 
     @browsing
     def test_personal_overview_displays_username_in_title(self, browser):
-        browser.login().open(view='personal_overview')
-        self.assertEquals(u'Personal Overview: Test User',
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(view='personal_overview')
+        self.assertEquals(u'Personal Overview: B\xe4rfuss K\xe4thi',
                           browser.css('h1.documentFirstHeading').first.text)
 
     @browsing
     def test_additional_tabs_are_shown_for_admins(self, browser):
-        setRoles(self.portal, 'hugo.boss', ['Administrator'])
-        transaction.commit()
+        self.login(self.administrator, browser=browser)
+        browser.open(view='personal_overview')
 
-        browser.login(username='hugo.boss', password='demo09').open(
-            view='personal_overview')
         self.assertEqual(
             ['mydossiers', 'mydocuments-proxy', 'mytasks', 'myissuedtasks',
              'alltasks', 'allissuedtasks'],
@@ -66,7 +40,9 @@ class TestPersonalOverview(FunctionalTestCase):
 
     @browsing
     def test_additional_tabs_are_shown_for_inbox_users(self, browser):
-        browser.login().open(view='personal_overview')
+        self.login(self.secretariat_user, browser=browser)
+        browser.open(view='personal_overview')
+
         self.assertEqual(
             ['mydossiers', 'mydocuments-proxy', 'mytasks', 'myissuedtasks',
              'alltasks', 'allissuedtasks'],
@@ -74,40 +50,32 @@ class TestPersonalOverview(FunctionalTestCase):
 
     @browsing
     def test_additional_tabs_are_hidden_for_regular_users(self, browser):
-        browser.login(username='hugo.boss', password='demo09').open(
-            view='personal_overview')
+        self.login(self.regular_user, browser=browser)
+        browser.open(view='personal_overview')
+
         self.assertEqual(
             ['mydossiers', 'mydocuments-proxy', 'mytasks', 'myissuedtasks'],
             browser.css('li.formTab a').text)
 
     @browsing
     def test_notification_tab_is_hidden_when_activity_feature_is_disabled(self, browser):
-        browser.login(username='hugo.boss', password='demo09').open(
-            view='personal_overview')
+        self.login(self.regular_user, browser=browser)
+        browser.open(view='personal_overview')
+
         self.assertEqual(
             ['mydossiers', 'mydocuments-proxy', 'mytasks', 'myissuedtasks'],
             browser.css('li.formTab a').text)
 
 
-class TestPersonalOverviewActivitySupport(FunctionalTestCase):
+class TestPersonalOverviewActivitySupport(IntegrationTestCase):
 
-    layer = OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
-
-
-    def setUp(self):
-        super(TestPersonalOverviewActivitySupport, self).setUp()
-
-        create_plone_user(self.portal, 'hugo.boss')
-        self.hugo = create(Builder('ogds_user')
-                           .having(userid='hugo.boss',
-                                   firstname='Hugo',
-                                   lastname='Boss')
-                           .assign_to_org_units([self.org_unit]))
-        transaction.commit()
+    features = ('activity', )
 
     @browsing
     def test_notification_tab_is_displayed_when_activity_feature_is_enabled(self, browser):
-        browser.login().open(view='personal_overview')
+        self.login(self.secretariat_user, browser=browser)
+        browser.open(view='personal_overview')
+
         self.assertEqual(
             ['mydossiers', 'mydocuments-proxy',
              'mytasks',
@@ -117,21 +85,24 @@ class TestPersonalOverviewActivitySupport(FunctionalTestCase):
              'allissuedtasks'],
             browser.css('li.formTab a').text)
 
-        browser.login(username='hugo.boss', password='demo09').open(
-            view='personal_overview')
+        self.login(self.regular_user, browser=browser)
+        browser.open(view='personal_overview')
+
         self.assertEqual(
             ['mydossiers', 'mydocuments-proxy', 'mytasks',
              'myissuedtasks', 'My notifications'],
             browser.css('li.formTab a').text)
 
 
-class TestPersonalOverviewMeetingSupport(FunctionalTestCase):
+class TestPersonalOverviewMeetingSupport(IntegrationTestCase):
 
-    layer = OPENGEVER_FUNCTIONAL_MEETING_LAYER
+    features = ('meeting', )
 
     @browsing
     def test_myproposal_tab_is_displayed_when_meeting_feature_is_enabled(self, browser):
-        browser.login().open(view='personal_overview')
+        self.login(self.secretariat_user, browser=browser)
+        browser.open(view='personal_overview')
+
         self.assertEqual(
             ['mydossiers', 'mydocuments-proxy',
              'mytasks',
@@ -142,69 +113,113 @@ class TestPersonalOverviewMeetingSupport(FunctionalTestCase):
             browser.css('li.formTab a').text)
 
 
-class TestGlobalTaskListings(FunctionalTestCase):
+class TestGlobalTaskListings(IntegrationTestCase):
 
-    use_default_fixture = False
+    @browsing
+    def test_my_tasks_list_task_assigned_to_current_user(self, browser):
+        self.login(self.regular_user, browser=browser)
 
-    def setUp(self):
-        super(TestGlobalTaskListings, self).setUp()
+        browser.open(view='tabbedview_view-mytasks')
+        self.assertEquals(
+            [u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
+             u'Vertragsentwurf \xdcberpr\xfcfen'],
+            [row.get('Title') for row in browser.css('.listing').first.dicts()]
+        )
 
-        self.user, self.org_unit, self.admin_unit = create(
-            Builder('fixture').with_all_unit_setup())
+        self.task.get_sql_object().responsible = 'robert.ziegler'
 
-        self.hugo = create(Builder('ogds_user')
-                           .having(userid='hugo.boss',
-                                   firstname='Hugo',
-                                   lastname='Boss')
-                           .assign_to_org_units([self.org_unit]))
+        browser.open(view='tabbedview_view-mytasks')
+        self.assertEquals(
+            [u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen'],
+            [row.get('Title') for row in browser.css('.listing').first.dicts()]
+        )
 
-        self.task1 = create(Builder('task')
-                            .having(responsible_client='client1',
-                                    responsible=TEST_USER_ID,
-                                    issuer=TEST_USER_ID))
-        self.task2 = create(Builder('task')
-                            .having(responsible_client='client2',
-                                    responsible='hugo.boss',
-                                    issuer=TEST_USER_ID))
-        self.task3 = create(Builder('task')
-                            .having(responsible_client='client1',
-                                    responsible=TEST_USER_ID,
-                                    issuer='hugo.boss'))
+    @browsing
+    def test_my_tasks_list_also_tasks_assigned_to_my_teams(self, browser):
+        self.login(self.meeting_user, browser=browser)
 
-    def test_my_tasks(self):
-        view = self.portal.unrestrictedTraverse(
-            'tabbedview_view-mytasks')
-        view.update()
+        create(Builder('task')
+               .within(self.dossier)
+               .titled(u'Anfrage 1')
+               .having(responsible_client='fa',
+                       responsible='team:1',
+                       issuer=self.dossier_responsible.getId(),
+                       task_type='correction',
+                       deadline=date(2016, 11, 1)))
+
+        create(Builder('task')
+               .within(self.dossier)
+               .titled(u'Anfrage 2')
+               .having(responsible_client='fa',
+                       responsible='team:2',
+                       issuer=self.dossier_responsible.getId(),
+                       task_type='correction',
+                       deadline=date(2016, 11, 1)))
+
+        browser.open(view='tabbedview_view-mytasks')
+        self.assertEquals(
+            [u'Anfrage 2'],
+            [row.get('Title') for row in browser.css('.listing').first.dicts()]
+        )
+
+    @browsing
+    def test_my_tasks_list_task_issued_by_the_current_user(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+        browser.open(view='tabbedview_view-myissuedtasks')
 
         self.assertEquals(
-            [self.task1.get_sql_object(), self.task3.get_sql_object()],
-            view.contents)
+            [u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
+             u'Vertragsentwurf \xdcberpr\xfcfen'],
+            [row.get('Title') for row in browser.css('.listing').first.dicts()]
+        )
 
-    def test_my_issued_tasks(self):
-        view = self.portal.unrestrictedTraverse(
-            'tabbedview_view-myissuedtasks')
-        view.update()
+        self.task.get_sql_object().issuer = 'kathi.barfuss'
+
+        browser.open(view='tabbedview_view-myissuedtasks')
+        self.assertEquals(
+            [u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen'],
+            [row.get('Title') for row in browser.css('.listing').first.dicts()]
+        )
+
+    @browsing
+    def test_all_task_list_all_task_assigned_to_current_org_unit(self, browser):
+        self.login(self.secretariat_user, browser=browser)
+        browser.open(view='tabbedview_view-alltasks')
 
         self.assertEquals(
-            [self.task1.get_sql_object(), self.task2.get_sql_object()],
-            view.contents)
+            [u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
+             u'Vertragsentwurf \xdcberpr\xfcfen'],
+            [row.get('Title') for row in browser.css('.listing').first.dicts()]
+        )
 
-    def test_all_tasks(self):
-        view = self.portal.unrestrictedTraverse(
-            'tabbedview_view-alltasks')
-        view.update()
+        self.task.get_sql_object().assigned_org_unit = 'additional'
 
-        expected = [self.task1, self.task3]
+        browser.open(view='tabbedview_view-alltasks')
         self.assertEquals(
-            [task.get_sql_object() for task in expected],
-            view.contents)
+            [u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen'],
+            [row.get('Title') for row in browser.css('.listing').first.dicts()]
+        )
 
-    def test_all_issued_tasks(self):
-        view = self.portal.unrestrictedTraverse(
-            'tabbedview_view-allissuedtasks')
-        view.update()
+    @browsing
+    def test_all_issued_tasks_list_all_task_issued_by_the_current_org_unit(self, browser):
+        self.login(self.secretariat_user, browser=browser)
+        browser.open(view='tabbedview_view-allissuedtasks')
 
-        expected = [self.task1, self.task2, self.task3]
         self.assertEquals(
-            [task.get_sql_object() for task in expected],
-            view.contents)
+            [u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
+             u'Vertragsentwurf \xdcberpr\xfcfen'],
+            [row.get('Title') for row in browser.css('.listing').first.dicts()]
+        )
+
+        create(Builder('org_unit')
+               .id('stv')
+               .having(title=u'Steuerverwaltung',
+                       admin_unit_id='plone'))
+
+        self.task.get_sql_object().issuing_org_unit = 'stv'
+
+        browser.open(view='tabbedview_view-allissuedtasks')
+        self.assertEquals(
+            [u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen'],
+            [row.get('Title') for row in browser.css('.listing').first.dicts()]
+        )

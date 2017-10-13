@@ -13,6 +13,9 @@ class TaskQuery(BaseQuery):
         """
         return self.filter(Task.responsible == userid)
 
+    def by_responsibles(self, responsibles):
+        return self.filter(Task.responsible.in_(responsibles))
+
     def users_issued_tasks(self, userid):
         """Returns query which list all tasks where the given user
         is the issuer. It queries all admin units.
@@ -72,7 +75,7 @@ class TaskQuery(BaseQuery):
     def by_brain(self, brain):
         relative_content_path = '/'.join(brain.getPath().split('/')[2:])
         return self.by_admin_unit(get_current_admin_unit())\
-                   .filter(Task.physical_path==relative_content_path).one()
+                   .filter(Task.physical_path == relative_content_path).one()
 
     def subtasks_by_task(self, task):
         """Queries all subtask of the given task sql object."""
@@ -84,5 +87,6 @@ class TaskQuery(BaseQuery):
 
     def in_pending_state(self):
         return self.filter(Task.review_state.in_(Task.PENDING_STATES))
+
 
 Task.query_cls = TaskQuery

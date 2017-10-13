@@ -17,6 +17,9 @@ class TestActorLookup(IntegrationTestCase):
         self.assertIsNone(actor.get_profile_url())
         self.assertEqual('Inbox: Finanzamt', actor.get_link())
         self.assertEqual(u'fa_inbox_users', actor.permission_identifier)
+        self.assertEqual(
+            u'<span class="actor-label actor-inbox">Inbox: Finanzamt</span>',
+            actor.get_link(with_icon=True))
 
     def test_contact_actor_lookup(self):
         self.login(self.regular_user)
@@ -27,9 +30,10 @@ class TestActorLookup(IntegrationTestCase):
         self.assertEqual(self.franz_meier.absolute_url(),
                          actor.get_profile_url())
 
-        link = actor.get_link()
+        link = actor.get_link(with_icon=True)
         self.assertIn(actor.get_label(), link)
         self.assertIn(actor.get_profile_url(), link)
+        self.assertIn('class="actor-label actor-contact"', link)
 
     def test_team_actor_lookup(self):
         self.login(self.regular_user)
@@ -39,6 +43,17 @@ class TestActorLookup(IntegrationTestCase):
                          actor.get_label())
         self.assertEqual('http://nohost/plone/kontakte/team-1/view',
                          actor.get_profile_url())
+
+        self.assertEqual(
+            u'<a href="http://nohost/plone/kontakte/team-1/view" '
+            u'class="actor-label actor-team">Projekt \xdcberbaung Dorfmatte '
+            u'(Finanzamt)</a>',
+            actor.get_link(with_icon=True))
+
+        self.assertEqual(
+            u'<a href="http://nohost/plone/kontakte/team-1/view">'
+            u'Projekt \xdcberbaung Dorfmatte (Finanzamt)</a>',
+            actor.get_link())
 
     def test_user_actor_ogds_user(self):
         actor = Actor.lookup('jurgen.konig')
@@ -56,7 +71,7 @@ class TestActorLookup(IntegrationTestCase):
 
         self.assertEqual(
             u'<a href="http://nohost/plone/@@user-details/jurgen.konig" '
-            u'class="contenttype-opengever-actor">K\xf6nig J\xfcrgen '
+            u'class="actor-label actor-user">K\xf6nig J\xfcrgen '
             u'(jurgen.konig)</a>',
             actor.get_link(with_icon=True))
 
