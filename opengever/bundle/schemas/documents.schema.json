@@ -197,6 +197,12 @@
                         "string"
                     ]
                 },
+                "parent_ref_tuple": {
+                    "type": [
+                        "null",
+                        "array"
+                    ]
+                },
                 "filepath": {
                     "type": "string"
                 },
@@ -227,6 +233,11 @@
                         {
                             "required": [
                                 "parent_guid"
+                            ]
+                        },
+                        {
+                            "required": [
+                                "parent_ref_tuple"
                             ]
                         }
                     ]

@@ -328,7 +328,15 @@ class OGGBundleJSONSchemaBuilder(object):
         if self.portal_type != 'opengever.repository.repositoryroot':
             # Everything except repository roots needs a parent GUID
             self.ct_schema.add_property('parent_guid', {'type': 'string'})
-            self.ct_schema.require_any_of(['parent_guid'])
+
+            array_of_ints = {
+                "type": "array",
+                "items": {"type": "integer"},
+            }
+            self.ct_schema.add_property(
+                'parent_ref_tuple', {'type': 'array', 'items': array_of_ints})
+
+            self.ct_schema.require_any_of(['parent_guid', 'parent_ref_tuple'])
 
     def _add_permissions_property(self):
         if not self.portal_type == 'opengever.document.document':

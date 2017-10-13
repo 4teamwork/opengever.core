@@ -323,6 +323,12 @@
                         "string"
                     ]
                 },
+                "parent_ref_tuple": {
+                    "type": [
+                        "null",
+                        "array"
+                    ]
+                },
                 "_permissions": {
                     "$ref": "#/definitions/permission"
                 },
@@ -347,6 +353,11 @@
                         {
                             "required": [
                                 "parent_guid"
+                            ]
+                        },
+                        {
+                            "required": [
+                                "parent_ref_tuple"
                             ]
                         }
                     ]
