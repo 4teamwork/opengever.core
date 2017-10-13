@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-09 13:21+0000\n"
+"POT-Creation-Date: 2017-10-13 12:25+0000\n"
 "PO-Revision-Date: 2017-09-03 08:50+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-document/fr/>\n"
@@ -118,6 +118,10 @@ msgstr "Le document a déjà un checkout par ${userid}."
 #: ./opengever/document/browser/templates/submitted_with.pt
 msgid "Update document in proposal"
 msgstr "Actualiser la version soumise"
+
+#: ./opengever/document/widgets/document_link.pt
+msgid "You are not allowed to view this document."
+msgstr ""
 
 #: ./opengever/document/browser/edit.py
 msgid "You are not authorized to edit the document ${title}."
@@ -307,7 +311,7 @@ msgstr "Modifier le fichier d'archivage"
 
 #. Default: "Checked out"
 #: ./opengever/document/browser/overview.py
-#: ./opengever/document/checkout/viewlets_templates/checkedoutviewlet.pt
+#: ./opengever/document/checkout/templates/checkedoutviewlet.pt
 msgid "label_checked_out"
 msgstr "Avec check-out"
 
@@ -510,7 +514,7 @@ msgid "label_yes"
 msgstr "Oui"
 
 #. Default: "This item is being checked out by ${creator}."
-#: ./opengever/document/checkout/viewlets_templates/checkedoutviewlet.pt
+#: ./opengever/document/checkout/templates/checkedoutviewlet.pt
 msgid "message_checkout_info"
 msgstr "Ce document a été verrouillé par ${creator}."
 
@@ -542,4 +546,3 @@ msgstr "Avec commentaire"
 #: ./opengever/document/upgrades/profiles/4000/actions.xml
 msgid "without comment"
 msgstr "Sans commentaire"
-

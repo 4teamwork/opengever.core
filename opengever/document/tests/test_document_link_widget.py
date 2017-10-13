@@ -49,6 +49,21 @@ class TestDocumentLinkWidget(FunctionalTestCase):
         browser.open_html(DocumentLinkWidget(document_b).render())
         self.assertEquals(1, len(browser.css('.removed_document')))
 
+    @browsing
+    def test_omits_link_when_user_has_no_View_permission(self, browser):
+        document = create(Builder('document')
+                          .titled('Anfrage Meier')
+                          .with_dummy_content())
+        document.manage_permission('View', roles=[], acquire=False)
+
+        browser.open_html(DocumentLinkWidget(document).render())
+
+        self.assertFalse(browser.css('a'))
+        link = browser.css('span.document_link').first
+        self.assertEquals('Anfrage Meier', link.text)
+        self.assertEquals('You are not allowed to view this document.',
+                          link.get('title'))
+
 
 class TestDocumentLinkWidgetWithActivatedBumblebee(FunctionalTestCase):
 
