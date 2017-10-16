@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-10-02 12:52+0000\n"
+"POT-Creation-Date: 2017-10-16 15:57+0000\n"
 "PO-Revision-Date: 2012-11-22 14:19+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -153,11 +153,6 @@ msgstr "Laufnummer"
 msgid "documents"
 msgstr "Dokumente"
 
-#. Default: "Show more"
-#: ./opengever/tabbedview/browser/bumblebee_gallery.pt
-msgid "documentsShowMore"
-msgstr "Mehr anzeigen"
-
 #. Default: "Gallery"
 #: ./opengever/tabbedview/browser/bumblebee_gallery.pt
 #: ./opengever/tabbedview/browser/generic_with_bumblebee_viewchooser.pt
@@ -262,11 +257,6 @@ msgstr "Meine Benachrichtigungen"
 #: ./opengever/tabbedview/browser/personal_overview.py
 msgid "label_my_proposals"
 msgstr "Meine Anträge"
-
-#. Default: "No contents"
-#: ./opengever/tabbedview/browser/bumblebee_gallery.pt
-msgid "label_no_contents"
-msgstr "Keine Inhalte"
 
 #. Default: "Pending"
 #: ./opengever/tabbedview/browser/tasklisting.py
@@ -448,4 +438,3 @@ msgstr "Titel"
 
 msgid "trash"
 msgstr "Papierkorb"
-

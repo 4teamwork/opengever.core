@@ -1,7 +1,6 @@
-from ftw import bumblebee
-from opengever.base.browser.helper import get_css_class
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.bumblebee import set_preferred_listing_view
+from opengever.bumblebee.browser.preview_listing import PreviewListing
 from opengever.tabbedview.browser.personal_overview import MyDocuments
 from opengever.tabbedview.browser.tabs import Documents
 from opengever.tabbedview.browser.tabs import Trash
@@ -18,7 +17,6 @@ class BumblebeeGalleryMixin(object):
     """
 
     template = ViewPageTemplateFile('bumblebee_gallery.pt')
-    previews_template = ViewPageTemplateFile('bumblebee_previews.pt')
 
     object_provides = 'ftw.bumblebee.interfaces.IBumblebeeable'
 
@@ -37,27 +35,14 @@ class BumblebeeGalleryMixin(object):
     def get_fetch_url(self):
         return '{}/{}/fetch'.format(self.context.absolute_url(), self.__name__)
 
-    def available(self):
-        return self.number_of_documents() > 0
-
-    def number_of_documents(self):
-        return len(self.get_brains())
-
-    def previews(self, **kwargs):
-        brains = self.get_brains()
-
-        from_batch_id = int(self.request.get('documentPointer', 0))
-        to_batch_id = from_batch_id + self.pagesize
-
-        for brain in brains[from_batch_id:to_batch_id]:
-            yield {
-                'title': brain.Title,
-                'overlay_url': '{}/@@bumblebee-overlay-listing'.format(brain.getURL()),
-                'preview_image_url': bumblebee.get_service_v3().get_representation_url(
-                    brain, 'thumbnail'),
-                'uid': brain.UID,
-                'mime_type_css_class': get_css_class(brain),
-            }
+    @property
+    def previews(self):
+        """The previews listing is traversable for fetching content.
+        """
+        return (PreviewListing(self)
+                .for_brains(self.get_brains())
+                .with_batchsize(self.pagesize)
+                .with_fetch_url(self.get_fetch_url()))
 
     @memoize
     def get_brains(self):
@@ -74,20 +59,9 @@ class BumblebeeGalleryMixin(object):
         return self.table_source.search_results(query)
 
     def fetch(self):
-        """Action for retrieving more events (based on `next_event_id` in
-        the request) with AJAX.
+        """Endpoint for retrieving more events with AJAX.
         """
-        self.request.response.setHeader('X-Theme-Disabled', 'True')
-        # The HTML stripped in order to have empty response content when
-        # there are no tags at all, so that diazo does not try to
-        # parse it.
-        if int(self.request.get('documentPointer', 0)) >= self.number_of_documents():
-            # We have to return an empty string if we have no more documents
-            # to render. Otherwise plone.protect will log a error-warning:
-            # WARNING plone.protect error parsing dom, failure to add csrf
-            # token to response
-            return ''
-        return self.previews_template().strip()
+        return self.previews.fetch()
 
     def _extract_base_view_name(self, view_name):
         """Extracts the base-view-name without tabbedview_view- and -gallery.
