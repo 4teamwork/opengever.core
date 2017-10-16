@@ -136,4 +136,24 @@
 
   <adapter factory=".adapters.ReferenceNumberPrefixAdpater" />
 
+  <adapter
+      factory=".reference_formatter.DottedReferenceFormatter"
+      name="dotted"
+      />
+
+  <adapter
+      factory=".reference_formatter.GroupedByThreeReferenceFormatter"
+      name="grouped_by_three"
+      />
+
+  <adapter
+      factory=".reference_formatter.NoClientIdDottedReferenceFormatter"
+      name="no_client_id_dotted"
+      />
+
+  <adapter
+      factory=".reference_formatter.NoClientIdGroupedByThreeFormatter"
+      name="no_client_id_grouped_by_three"
+      />
+
 </configure>
