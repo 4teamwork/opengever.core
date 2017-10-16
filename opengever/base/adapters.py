@@ -1,5 +1,4 @@
 from Acquisition import aq_base
-from five import grok
 from opengever.base import _
 from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.base.behaviors.utils import split_string_by_numbers
@@ -12,7 +11,9 @@ from plone.registry.interfaces import IRegistry
 from Products.CMFCore.interfaces._content import IFolderish
 from zope.annotation.interfaces import IAnnotations
 from zope.app.intid.interfaces import IIntIds
+from zope.component import adapter
 from zope.component import getUtility
+from zope.interface import implementer
 import re
 
 
@@ -23,11 +24,10 @@ CHILD_REF_KEY = 'reference_numbers'
 PREFIX_REF_KEY = 'reference_prefix'
 
 
-class ReferenceNumberPrefixAdpater(grok.Adapter):
+@implementer(IReferenceNumberPrefix)
+@adapter(IFolderish)
+class ReferenceNumberPrefixAdpater(object):
     """This Adapter handles the whole Reference number prefix assignment"""
-
-    grok.provides(IReferenceNumberPrefix)
-    grok.context(IFolderish)
 
     def __init__(self, context):
         self.context = context

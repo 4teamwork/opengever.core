@@ -134,4 +134,6 @@
 
   <adapter factory=".sequence.DefaultSequenceNumberGenerator" />
 
+  <adapter factory=".adapters.ReferenceNumberPrefixAdpater" />
+
 </configure>
