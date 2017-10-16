@@ -43,6 +43,14 @@ pre, tt, code {
     font-size: 100%;
 }
 
+a.download {
+    text-decoration: underline;
+}
+
+a.download code {
+    color: #004B6B !important;
+}
+
 /* -- sidebar ----------------------------------------------------------- */
 
 div.sphinxsidebar {
