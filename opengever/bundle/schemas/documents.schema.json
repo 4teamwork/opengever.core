@@ -197,11 +197,17 @@
                         "string"
                     ]
                 },
-                "parent_ref_tuple": {
+                "parent_reference": {
                     "type": [
                         "null",
                         "array"
-                    ]
+                    ],
+                    "items": {
+                        "items": {
+                            "type": "integer"
+                        },
+                        "type": "array"
+                    }
                 },
                 "filepath": {
                     "type": "string"
@@ -237,7 +243,7 @@
                         },
                         {
                             "required": [
-                                "parent_ref_tuple"
+                                "parent_reference"
                             ]
                         }
                     ]

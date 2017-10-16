@@ -87,9 +87,9 @@ class TestResolveGUID(IntegrationTestCase):
 
         items = [
             {'guid': 'a1',
-             'parent_ref_tuple': [[1, 1], [1]]},
+             'parent_reference': [[1, 1], [1]]},
             {'guid': 'b1',
-             'parent_ref_tuple': [[1, 1]]}
+             'parent_reference': [[1, 1]]}
         ]
         section = self.setup_section(previous=items)
         list(section)
@@ -104,18 +104,18 @@ class TestResolveGUID(IntegrationTestCase):
 
         items = [
             {'guid': 'a1',
-             'parent_ref_tuple': [[1, 1], [1]]},
+             'parent_reference': [[1, 1], [1]]},
             {'guid': 'b1',
-             'parent_ref_tuple': [[1, 1]]}
+             'parent_reference': [[1, 1]]}
         ]
         section = self.setup_section(previous=items)
         items = list(section)
 
         self.assertEquals(
-            [{'guid': 'a1', 'parent_ref_number': u'Client1 1.1 / 1',
-              'parent_ref_tuple': [[1, 1], [1]], '_nesting_depth': 1},
-             {'guid': 'b1', 'parent_ref_number': u'Client1 1.1',
-              'parent_ref_tuple': [[1, 1]], '_nesting_depth': 1}],
+            [{'guid': 'a1', 'formatted_refnum': u'Client1 1.1 / 1',
+              'parent_reference': [[1, 1], [1]], '_nesting_depth': 1},
+             {'guid': 'b1', 'formatted_refnum': u'Client1 1.1',
+              'parent_reference': [[1, 1]], '_nesting_depth': 1}],
             items)
 
     def test_items_reference_by_ref_tuple_are_has_nesting_depth_1(self):
@@ -123,16 +123,16 @@ class TestResolveGUID(IntegrationTestCase):
 
         items = [
             {'guid': 'a1',
-             'parent_ref_tuple': [[1, 1], [1]]},
+             'parent_reference': [[1, 1], [1]]},
             {'guid': 'b1',
-             'parent_ref_tuple': [[1, 1]]}
+             'parent_reference': [[1, 1]]}
         ]
         section = self.setup_section(previous=items)
         items = list(section)
 
         self.assertEquals(
-            [{'guid': 'a1', 'parent_ref_number': u'Client1 1.1 / 1',
-              'parent_ref_tuple': [[1, 1], [1]], '_nesting_depth': 1},
-             {'guid': 'b1', 'parent_ref_number': u'Client1 1.1',
-              'parent_ref_tuple': [[1, 1]], '_nesting_depth': 1}],
+            [{'guid': 'a1', 'formatted_refnum': u'Client1 1.1 / 1',
+              'parent_reference': [[1, 1], [1]], '_nesting_depth': 1},
+             {'guid': 'b1', 'formatted_refnum': u'Client1 1.1',
+              'parent_reference': [[1, 1]], '_nesting_depth': 1}],
             items)

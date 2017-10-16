@@ -95,10 +95,10 @@ class ResolveGUIDSection(object):
 
             self.bundle.item_by_guid[guid] = item
 
-            if 'parent_ref_tuple' in item:
+            if 'parent_reference' in item:
                 reference_number = self.get_formatter().list_to_string(
-                    item['parent_ref_tuple'])
-                item['parent_ref_number'] = reference_number
+                    item['parent_reference'])
+                item['formatted_refnum'] = reference_number
                 used_ref_numbers.append(reference_number)
 
         log.info('Start building reference mapping')

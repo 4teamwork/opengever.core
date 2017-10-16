@@ -46,7 +46,7 @@
     "title": "Document referenced via UNC-Path"
   },  {
     "guid": "d65317ece1cb4dc797de1fc1e21bb4eb",
-    "parent_ref_tuple": [
+    "parent_reference": [
       [1, 1],
       [1]
     ],
@@ -60,7 +60,7 @@
     "title": "Bewerbung Peter Meier"
   },  {
     "guid": "0970e3800a78407ea2558d718739961f",
-    "parent_ref_tuple": [
+    "parent_reference": [
       [1, 1],
       [1]
     ],

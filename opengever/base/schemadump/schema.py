@@ -334,9 +334,9 @@ class OGGBundleJSONSchemaBuilder(object):
                 "items": {"type": "integer"},
             }
             self.ct_schema.add_property(
-                'parent_ref_tuple', {'type': 'array', 'items': array_of_ints})
+                'parent_reference', {'type': 'array', 'items': array_of_ints})
 
-            self.ct_schema.require_any_of(['parent_guid', 'parent_ref_tuple'])
+            self.ct_schema.require_any_of(['parent_guid', 'parent_reference'])
 
     def _add_permissions_property(self):
         if not self.portal_type == 'opengever.document.document':

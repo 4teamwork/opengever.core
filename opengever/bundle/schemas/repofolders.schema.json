@@ -287,11 +287,17 @@
                         "string"
                     ]
                 },
-                "parent_ref_tuple": {
+                "parent_reference": {
                     "type": [
                         "null",
                         "array"
-                    ]
+                    ],
+                    "items": {
+                        "items": {
+                            "type": "integer"
+                        },
+                        "type": "array"
+                    }
                 },
                 "_permissions": {
                     "$ref": "#/definitions/permission"
@@ -325,7 +331,7 @@
                         },
                         {
                             "required": [
-                                "parent_ref_tuple"
+                                "parent_reference"
                             ]
                         }
                     ]

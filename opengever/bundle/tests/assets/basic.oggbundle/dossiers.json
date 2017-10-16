@@ -12,7 +12,7 @@
     "title": "Dossier Peter Schneider"
   },  {
     "guid": "4ed93561c4004c668feb8124b55897fc",
-    "parent_ref_tuple": [
+    "parent_reference": [
       [1, 1]
     ],
     "comments": "Vreni Meier ist ein Tausendsassa",
