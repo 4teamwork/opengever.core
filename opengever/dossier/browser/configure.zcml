@@ -89,4 +89,63 @@
         interface="zope.publisher.interfaces.browser.IBrowserPage"
         />
   </class>
+
+  <browser:page
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      name="edit"
+      class=".forms.DossierEditForm"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <browser:page
+      for="opengever.dossier.behaviors.participation.IParticipationAwareMarker"
+      name="add-plone-participation"
+      class=".forms.ParticipationAddFormView"
+      permission="cmf.AddPortalContent"
+      />
+
+  <browser:page
+      for="opengever.dossier.behaviors.participation.IParticipationAwareMarker"
+      name="delete_participants"
+      class=".forms.DeleteParticipants"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <browser:page
+      for="*"
+      name="redirect_to_main_dossier"
+      class=".redirect_to_maindossier.RedirectToMainDossier"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="*"
+      name="dossier_report"
+      class=".report.DossierReporter"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot"
+      name="filingnumber-adjustment"
+      class=".filing_maintenance.FilingNumberCountersForm"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      name="tabbedview_view-overview"
+      class=".overview.DossierOverview"
+      permission="zope2.View"
+      template="templates/overview.pt"
+      />
+
+  <browser:page
+      for="opengever.dossier.dossiertemplate.behaviors.IDossierTemplateMarker"
+      name="tabbedview_view-overview"
+      class=".overview.DossierTemplateOverview"
+      permission="zope2.View"
+      template="templates/overview.pt"
+      />
+
 </configure>

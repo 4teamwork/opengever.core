@@ -48,4 +48,27 @@
 
   <adapter factory=".menu.DossierTemplatePostFactoryMenu" />
 
+  <!-- DossierTemplate add form  -->
+  <adapter
+      for="Products.CMFCore.interfaces.IFolderish
+           zope.publisher.interfaces.browser.IDefaultBrowserLayer
+           plone.dexterity.interfaces.IDexterityFTI"
+      provides="zope.publisher.interfaces.browser.IBrowserPage"
+      factory=".dossiertemplate.DossierTemplateAddView"
+      name="opengever.dossier.dossiertemplate"
+      />
+  <class class=".dossiertemplate.DossierTemplateAddView">
+    <require
+        permission="cmf.AddPortalContent"
+        interface="zope.publisher.interfaces.browser.IBrowserPage"
+        />
+  </class>
+
+  <browser:page
+      for="opengever.dossier.dossiertemplate.behaviors.IDossierTemplateSchema"
+      name="edit"
+      class=".dossiertemplate.DossierTemplateEditForm"
+      permission="cmf.ModifyPortalContent"
+      />
+
 </configure>

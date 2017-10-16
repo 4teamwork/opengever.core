@@ -1,15 +1,12 @@
-from five import grok
 from opengever.dossier import _
 from opengever.advancedsearch.advanced_search import AdvancedSearchForm
 from opengever.advancedsearch.advanced_search import IAdvancedSearch
-from opengever.dossier.filing.interfaces import IFilingNumberActivatedLayer
-from plone.directives import form as directives_form
+from plone.supermodel import model
 from plone.z3cform.fieldsets.utils import move
 from zope import schema
-from zope.interface import Interface
 
 
-class IFilingnumberSearchAddition(directives_form.Schema):
+class IFilingnumberSearchAddition(model.Schema):
 
     searchable_filing_no = schema.TextLine(
         title=_('label_filing_number', default='Filing number'),
@@ -19,10 +16,6 @@ class IFilingnumberSearchAddition(directives_form.Schema):
 
 
 class FilingAdvancedSearchForm(AdvancedSearchForm):
-    grok.context(Interface)
-    grok.name('advanced_search')
-    grok.require('zope2.View')
-    grok.layer(IFilingNumberActivatedLayer)
 
     schemas = (IAdvancedSearch, IFilingnumberSearchAddition)
 

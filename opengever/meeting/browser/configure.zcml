@@ -5,6 +5,7 @@
 
   <include package=".documents" />
   <include package=".meetings" />
+  <include package=".dossier" />
 
   <browser:resourceDirectory
       name="opengever.meeting"

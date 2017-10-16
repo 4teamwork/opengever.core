@@ -1,21 +1,16 @@
-from five import grok
+from datetime import date
 from opengever.dossier import _
-from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.dossier import IDossier
 from plone import api
-from datetime import date
+from Products.Five.browser import BrowserView
 
 
-class DossierDeactivateView(grok.View):
+class DossierDeactivateView(BrowserView):
     """ Recursively deactivate the dossier and his subdossiers.
     If some subdossiers are already resolved we return a status err msg.
     If some subdossiers are already deactivated we ignore them."""
 
-    grok.context(IDossierMarker)
-    grok.name('transition-deactivate')
-    grok.require('zope2.View')
-
-    def render(self):
+    def __call__(self):
         if not self.check_preconditions():
             return self.redirect()
 

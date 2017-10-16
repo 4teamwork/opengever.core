@@ -3,13 +3,10 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     xmlns:five="http://namespaces.zope.org/five"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
-    xmlns:grok="http://namespaces.zope.org/grok"
     xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:plone="http://namespaces.plone.org/plone"
     xmlns:vdex="http://namespaces.zope.org/vdex"
     i18n_domain="opengever.dossier">
-
-  <grok:grok package="." />
 
   <vdex:vocabulary directory="vdexvocabs" />
 
@@ -72,5 +69,187 @@
   <adapter factory=".reference.TemplateFolderReferenceNumber" />
 
   <adapter factory=".sequence.DossierSequenceNumberGenerator" />
+
+  <browser:page
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      name="transition-activate"
+      class=".activate.DossierActivateView"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      name="transition-deactivate"
+      class=".deactivate.DossierDeactivateView"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      name="transition-resolve"
+      class=".resolve.DossierResolveView"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      name="transition-reactivate"
+      class=".resolve.DossierReactivateView"
+      permission="zope2.View"
+      />
+
+  <adapter
+      factory=".resolve.StrictDossierResolver"
+      name="strict"
+      />
+
+  <adapter
+      factory=".resolve.LenientDossierResolver"
+      name="lenient"
+      />
+
+  <adapter
+      factory=".adapters.ParentDossierFinder"
+      name="parent-dossier-finder"
+      />
+
+  <adapter factory=".base.DefaultConstrainTypeDecider" />
+
+  <adapter
+      factory=".indexers.DossierSubjectIndexer"
+      name="Subject"
+      />
+
+  <adapter
+      factory=".indexers.DossierTemplateSubjectIndexer"
+      name="Subject"
+      />
+
+  <adapter
+      factory=".indexers.startIndexer"
+      name="start"
+      />
+
+  <adapter
+      factory=".indexers.endIndexer"
+      name="end"
+      />
+
+  <adapter
+      factory=".indexers.retention_expiration"
+      name="retention_expiration"
+      />
+
+  <adapter
+      factory=".indexers.responsibleIndexer"
+      name="responsible"
+      />
+
+  <adapter
+      factory=".indexers.isSubdossierIndexer"
+      name="is_subdossier"
+      />
+
+  <adapter
+      factory=".indexers.is_subdossier_dossiertemplate"
+      name="is_subdossier"
+      />
+
+  <adapter
+      factory=".indexers.external_reference"
+      name="external_reference"
+      />
+
+  <adapter
+      factory=".indexers.main_dossier_title"
+      name="containing_dossier"
+      />
+
+  <adapter
+      factory=".indexers.containing_subdossier"
+      name="containing_subdossier"
+      />
+
+  <adapter
+      factory=".indexers.SearchableTextExtender"
+      name="IDossier"
+      />
+
+  <adapter
+      factory=".indexers.DossierTemplateSearchableTextExtender"
+      name="IDossierTemplate"
+      />
+
+  <subscriber
+      for="opengever.dossier.behaviors.dossier.IDossierMarker
+           OFS.interfaces.IObjectWillBeMovedEvent"
+      handler=".handlers.set_former_reference_before_moving"
+      />
+
+  <subscriber
+      for="opengever.dossier.behaviors.dossier.IDossierMarker
+           zope.lifecycleevent.interfaces.IObjectMovedEvent"
+      handler=".handlers.set_former_reference_after_moving"
+      />
+
+  <subscriber
+      for="opengever.dossier.behaviors.dossier.IDossierMarker
+           zope.lifecycleevent.interfaces.IObjectMovedEvent"
+      handler=".handlers.save_reference_number_prefix"
+      />
+
+  <subscriber
+      for="opengever.dossier.behaviors.dossier.IDossierMarker
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".handlers.reindex_contained_objects"
+      />
+
+  <subscriber
+      for="opengever.dossier.behaviors.dossier.IDossierMarker
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".handlers.reindex_containing_dossier"
+      />
+
+  <subscriber
+      for="opengever.dossier.behaviors.dossier.IDossierMarker
+           zope.lifecycleevent.interfaces.IObjectMovedEvent"
+      handler=".handlers.reindex_is_subdossier"
+      />
+
+  <subscriber
+      for="opengever.dossier.behaviors.dossier.IDossierMarker
+           zope.lifecycleevent.interfaces.IObjectCopiedEvent"
+      handler=".handlers.purge_reference_number_mappings"
+      />
+
+  <subscriber
+      for="opengever.dossier.behaviors.dossier.IDossierMarker
+           Products.CMFCore.interfaces.IActionSucceededEvent"
+      handler=".handlers.run_cleanup_jobs"
+      />
+
+  <adapter factory=".archive.Archiver" />
+
+  <browser:page
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      name="transition-archive"
+      class=".archive.ArchiveForm"
+      permission="zope2.View"
+      />
+
+  <adapter factory=".docprops.DefaultDocumentDocPropertyProvider" />
+
+  <adapter factory=".docprops.DefaultDossierDocPropertyProvider" />
+
+  <adapter factory=".docprops.DefaultMemberDocPropertyProvider" />
+
+  <adapter factory=".docprops.DefaultDocProperties" />
+
+  <browser:page
+      for="plone.dexterity.interfaces.IDexterityContainer"
+      name="move_items"
+      class=".move_items.MoveItemsFormView"
+      permission="zope2.View"
+      />
 
 </configure>

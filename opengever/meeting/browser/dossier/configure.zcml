@@ -1,0 +1,16 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="opengever.meeting">
+
+  <configure package="opengever.dossier">
+    <browser:page
+        for="opengever.meeting.interfaces.IMeetingDossier"
+        name="tabbedview_view-overview"
+        class="opengever.meeting.browser.dossier.overview.MeetingDossierOverview"
+        permission="zope2.View"
+        template="browser/templates/overview.pt"
+        />
+  </configure>
+
+</configure>

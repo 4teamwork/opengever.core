@@ -1,5 +1,4 @@
 from AccessControl import getSecurityManager
-from five import grok
 from ftw.table import helper
 from opengever.base.behaviors.base import IOpenGeverBase
 from opengever.base.browser.wizard import BaseWizardStepForm
@@ -13,8 +12,8 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.command import CreateDocumentFromTemplateCommand
 from opengever.dossier.command import CreateDossierFromTemplateCommand
 from opengever.dossier.dossiertemplate import is_dossier_template_feature_enabled
-from opengever.dossier.dossiertemplate.behaviors import IRestrictAddableDossierTemplates
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateSchema
+from opengever.dossier.dossiertemplate.behaviors import IRestrictAddableDossierTemplates
 from opengever.dossier.dossiertemplate.dossiertemplate import BEHAVIOR_INTERFACE_MAPPING
 from opengever.dossier.dossiertemplate.dossiertemplate import TEMPLATABLE_FIELDS
 from plone import api
@@ -22,7 +21,7 @@ from plone.autoform.form import AutoExtensibleForm
 from plone.dexterity.i18n import MessageFactory as pd_mf
 from plone.dexterity.i18n import MessageFactory as PDMF
 from plone.dexterity.interfaces import IDexterityContainer
-from plone.directives import form
+from plone.supermodel import model
 from plone.z3cform.layout import FormWrapper
 from z3c.form import button
 from z3c.form.button import buttonAndHandler
@@ -31,12 +30,13 @@ from z3c.form.interfaces import IDataConverter
 from zExceptions import Unauthorized
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
+from zope.interface import provider
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
 import json
 
 
-@grok.provider(IContextSourceBinder)
+@provider(IContextSourceBinder)
 def get_dossier_templates(context):
     """Returns the selected templates when the addable templates are restricted
     by the addable_dossier_templates field, otherwise it returns all templates.
@@ -94,7 +94,7 @@ def get_saved_template_obj(context):
     return api.portal.get().restrictedTraverse(template_path, default=None)
 
 
-class ICreateDossierFromTemplate(form.Schema):
+class ICreateDossierFromTemplate(model.Schema):
     """Schema for first wizard step to select the dossiertemplate
     """
     template = TableChoice(

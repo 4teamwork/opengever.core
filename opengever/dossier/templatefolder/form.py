@@ -1,4 +1,3 @@
-from five import grok
 from ftw.keywordwidget.widget import KeywordFieldWidget
 from ftw.table import helper
 from opengever.base.browser.wizard import BaseWizardStepForm
@@ -14,8 +13,9 @@ from opengever.dossier.command import CreateDocumentFromTemplateCommand
 from opengever.dossier.templatefolder import get_template_folder
 from opengever.tabbedview.helper import document_with_icon
 from plone import api
+from plone.autoform import directives as form
 from plone.autoform.form import AutoExtensibleForm
-from plone.directives import form
+from plone.supermodel import model
 from plone.z3cform.layout import FormWrapper
 from sqlalchemy import inspect
 from sqlalchemy.exc import NoInspectionAvailable
@@ -25,11 +25,12 @@ from z3c.form.form import Form
 from zope import schema
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
+from zope.interface import provider
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
 
 
-@grok.provider(IContextSourceBinder)
+@provider(IContextSourceBinder)
 def get_templates(context):
     template_folder = get_template_folder()
 
@@ -56,7 +57,7 @@ def get_templates(context):
     return SimpleVocabulary(terms)
 
 
-class ICreateDocumentFromTemplate(form.Schema):
+class ICreateDocumentFromTemplate(model.Schema):
 
     template = TableChoice(
         title=_(u"label_template", default=u"Template"),
@@ -215,7 +216,7 @@ def get_recipient(context):
     return recipient
 
 
-@grok.provider(IContextSourceBinder)
+@provider(IContextSourceBinder)
 def make_address_vocabulary(context):
     recipient = get_recipient(context)
 
@@ -229,7 +230,7 @@ def address_lines(item, value):
     return u"<br />".join(item.get_lines())
 
 
-@grok.provider(IContextSourceBinder)
+@provider(IContextSourceBinder)
 def make_mail_address_vocabulary(context):
     recipient = get_recipient(context)
 
@@ -239,7 +240,7 @@ def make_mail_address_vocabulary(context):
         for mail_address in recipient.mail_addresses])
 
 
-@grok.provider(IContextSourceBinder)
+@provider(IContextSourceBinder)
 def make_phonenumber_vocabulary(context):
     recipient = get_recipient(context)
 
@@ -249,7 +250,7 @@ def make_phonenumber_vocabulary(context):
         for phone_number in recipient.phonenumbers])
 
 
-@grok.provider(IContextSourceBinder)
+@provider(IContextSourceBinder)
 def make_url_vocabulary(context):
     recipient = get_recipient(context)
 
@@ -259,7 +260,7 @@ def make_url_vocabulary(context):
         for url in recipient.urls])
 
 
-class ISelectRecipientAddress(form.Schema):
+class ISelectRecipientAddress(model.Schema):
 
     address = TableChoice(
         title=_(u"label_address", default=u"Address"),

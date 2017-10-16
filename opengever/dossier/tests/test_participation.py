@@ -1,4 +1,3 @@
-from grokcore.component.testing import grok
 from mocker import ANY
 from opengever.dossier.behaviors.participation import ParticipationHandler
 from opengever.dossier.interfaces import IParticipationCreated
@@ -12,7 +11,6 @@ class TestParticipationHanlder(MockTestCase):
 
     def setUp(self):
         super(TestParticipationHanlder, self).setUp()
-        grok('opengever.dossier.behaviors.participation')
         self.context = self.mocker.mock()
 
         #annotation mock

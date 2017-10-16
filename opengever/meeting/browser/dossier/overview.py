@@ -1,12 +1,8 @@
-from five import grok
 from opengever.dossier.browser.overview import DossierOverview
 from opengever.meeting import _
-from opengever.meeting.interfaces import IMeetingDossier
 
 
 class MeetingDossierOverview(DossierOverview):
-
-    grok.context(IMeetingDossier)
 
     def boxes(self):
         """Insert meeting box first in overview's **middle** column."""

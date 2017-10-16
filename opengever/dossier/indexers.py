@@ -1,7 +1,6 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from collective import dexteritytextindexer
-from five import grok
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
@@ -14,8 +13,10 @@ from opengever.private.dossier import IPrivateDossier
 from plone.dexterity.interfaces import IDexterityContent
 from plone.indexer import indexer
 from Products.CMFCore.interfaces import ISiteRoot
+from zope.component import adapter
 from zope.component import getAdapter
 from zope.component import getUtility
+from zope.interface import implementer
 
 
 @indexer(IDossierMarker)
@@ -24,16 +25,10 @@ def DossierSubjectIndexer(obj):
     return aobj.keywords
 
 
-grok.global_adapter(DossierSubjectIndexer, name="Subject")
-
-
 @indexer(IDossierTemplateMarker)
 def DossierTemplateSubjectIndexer(obj):
     aobj = IDossier(obj)
     return aobj.keywords
-
-
-grok.global_adapter(DossierTemplateSubjectIndexer, name="Subject")
 
 
 @indexer(IDossierMarker)
@@ -44,18 +39,12 @@ def startIndexer(obj):
     return aobj.start
 
 
-grok.global_adapter(startIndexer, name="start")
-
-
 @indexer(IDossierMarker)
 def endIndexer(obj):
     aobj = IDossier(obj)
     if aobj.end is None:
         return None
     return aobj.end
-
-
-grok.global_adapter(endIndexer, name="end")
 
 
 @indexer(IDossierMarker)
@@ -67,18 +56,12 @@ def retention_expiration(obj):
     return obj.get_retention_expiration_date()
 
 
-grok.global_adapter(retention_expiration, name="retention_expiration")
-
-
 @indexer(IDossierMarker)
 def responsibleIndexer(obj):
     aobj = IDossier(obj)
     if aobj.responsible is None:
         return None
     return aobj.responsible
-
-
-grok.global_adapter(responsibleIndexer, name="responsible")
 
 
 @indexer(IDossierMarker)
@@ -91,15 +74,9 @@ def isSubdossierIndexer(obj):
     return False
 
 
-grok.global_adapter(isSubdossierIndexer, name="is_subdossier")
-
-
 @indexer(IDossierTemplateMarker)
 def is_subdossier_dossiertemplate(obj):
     return obj.is_subdossier()
-
-
-grok.global_adapter(is_subdossier_dossiertemplate, name="is_subdossier")
 
 
 @indexer(IDossierMarker)
@@ -107,9 +84,6 @@ def external_reference(obj):
     """Return the external reference of a dossier."""
     context = aq_inner(obj)
     return IDossier(context).external_reference
-
-
-grok.global_adapter(external_reference, name="external_reference")
 
 
 @indexer(IDexterityContent)
@@ -136,9 +110,6 @@ def main_dossier_title(obj):
         else:
             raise
     return title
-
-
-grok.global_adapter(main_dossier_title, name="containing_dossier")
 
 
 @indexer(IDexterityContent)
@@ -172,13 +143,9 @@ def containing_subdossier(obj):
     return ''
 
 
-grok.global_adapter(containing_subdossier, name='containing_subdossier')
-
-
-class SearchableTextExtender(grok.Adapter):
-    grok.context(IDossierMarker)
-    grok.name('IDossier')
-    grok.implements(dexteritytextindexer.IDynamicTextIndexExtender)
+@implementer(dexteritytextindexer.IDynamicTextIndexExtender)
+@adapter(IDossierMarker)
+class SearchableTextExtender(object):
 
     def __init__(self, context):
         self.context = context
@@ -223,7 +190,7 @@ class SearchableTextExtender(grok.Adapter):
         return ' '.join(searchable)
 
 
+@adapter(IDossierTemplateMarker)
 class DossierTemplateSearchableTextExtender(SearchableTextExtender):
-    grok.context(IDossierTemplateMarker)
-    grok.name('IDossierTemplate')
-    grok.implements(dexteritytextindexer.IDynamicTextIndexExtender)
+    """
+    """

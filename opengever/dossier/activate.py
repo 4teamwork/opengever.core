@@ -1,18 +1,13 @@
-from five import grok
 from opengever.dossier import _
-from opengever.dossier.behaviors.dossier import IDossierMarker
 from plone import api
+from Products.Five.browser import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
 
 
-class DossierActivateView(grok.View):
+class DossierActivateView(BrowserView):
     """View which activates the dossier including its subdossiers."""
 
-    grok.context(IDossierMarker)
-    grok.name('transition-activate')
-    grok.require('zope2.View')
-
-    def render(self):
+    def __call__(self):
         if self.check_preconditions():
             self.activate()
 

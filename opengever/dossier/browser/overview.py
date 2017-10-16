@@ -1,5 +1,4 @@
 from Acquisition import aq_inner
-from five import grok
 from opengever.base.browser.boxes_view import BoxesViewMixin
 from opengever.base.browser.helper import get_css_class
 from opengever.contact import is_contact_feature_enabled
@@ -8,9 +7,7 @@ from opengever.dossier import _
 from opengever.dossier import _ as _dossier
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossier
-from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.participation import IParticipationAware
-from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -18,6 +15,7 @@ from opengever.tabbedview import GeverTabMixin
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListing
 from Products.CMFPlone.utils import safe_unicode
+from Products.Five.browser import BrowserView
 from sqlalchemy import desc
 from urllib import quote_plus
 from zc.relation.interfaces import ICatalog
@@ -26,15 +24,10 @@ from zope.intid.interfaces import IIntIds
 from zope.security import checkPermission
 
 
-class DossierOverview(BoxesViewMixin, grok.View, GeverTabMixin):
+class DossierOverview(BoxesViewMixin, BrowserView, GeverTabMixin):
 
     show_searchform = False
     document_limit = 10
-
-    grok.context(IDossierMarker)
-    grok.name('tabbedview_view-overview')
-    grok.require('zope2.View')
-    grok.template('overview')
 
     def catalog(self, types, showTrashed=False,
                 depth=2, sort_on='modified', sort_order='reverse'):
@@ -230,7 +223,6 @@ class DossierOverview(BoxesViewMixin, grok.View, GeverTabMixin):
 
 
 class DossierTemplateOverview(DossierOverview):
-    grok.context(IDossierTemplateMarker)
 
     def boxes(self):
         # Column 1 is hardcoded and used by the structure-tree.

@@ -2,7 +2,6 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from datetime import date
 from datetime import datetime
-from five import grok
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
@@ -29,9 +28,11 @@ from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from zExceptions import Unauthorized
+from zope.component import adapter
 from zope.component import getUtility
 from zope.component import queryMultiAdapter
 from zope.component import queryUtility
+from zope.interface import implementer
 from zope.interface import Interface
 
 
@@ -372,10 +373,9 @@ class DossierContainer(Container):
         return datetime_obj
 
 
-class DefaultConstrainTypeDecider(grok.MultiAdapter):
-    grok.provides(IConstrainTypeDecider)
-    grok.adapts(Interface, IDossierMarker, IDexterityFTI)
-    grok.name('')
+@implementer(IConstrainTypeDecider)
+@adapter(Interface, IDossierMarker, IDexterityFTI)
+class DefaultConstrainTypeDecider(object):
 
     def __init__(self, request, context, fti):
         self.context = context

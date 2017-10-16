@@ -1,7 +1,8 @@
 from Acquisition import aq_inner, aq_parent
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
-from five import grok
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
+from zope.component import adapter
+from zope.interface import implementer
 from zope.interface import Interface
 
 
@@ -14,10 +15,12 @@ class IParentDossierFinder(Interface):
         """
 
 
-class ParentDossierFinder(grok.Adapter):
-    grok.context(Interface)
-    grok.provides(IParentDossierFinder)
-    grok.name('parent-dossier-finder')
+@implementer(IParentDossierFinder)
+@adapter(Interface)
+class ParentDossierFinder(object):
+
+    def __init__(self, context):
+        self.context = context
 
     def find_dossier(self):
         obj = self.context

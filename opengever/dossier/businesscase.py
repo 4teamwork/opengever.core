@@ -1,6 +1,6 @@
-from plone.directives import form
+from plone.supermodel import model
 
 
-class IBusinessCaseDossier(form.Schema):
+class IBusinessCaseDossier(model.Schema):
     """ A business case dossier
     """
