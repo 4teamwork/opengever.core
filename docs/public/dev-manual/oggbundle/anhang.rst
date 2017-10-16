@@ -17,29 +17,29 @@ Die JSON-Schemas, welche die Struktur der JSON-Dateien für die Metadaten defini
 
 .. _documents_schema_json:
 
-:download:`Documents <data/documents.schema.json>`
+:download:`Documents <../../../../opengever/bundle/schemas/documents.schema.json>`
 
-.. literalinclude:: data/documents.schema.json/
+.. literalinclude:: ../../../../opengever/bundle/schemas/documents.schema.json
    :language: json
 
 .. _dossiers_schema_json:
 
-:download:`Dossiers <data/dossiers.schema.json>`
+:download:`Dossiers <../../../../opengever/bundle/schemas/dossiers.schema.json>`
 
-.. literalinclude:: data/dossiers.schema.json/
+.. literalinclude:: ../../../../opengever/bundle/schemas/dossiers.schema.json/
    :language: json
 
 .. _repofolders_schema_json:
 
-:download:`Repofolders <data/repofolders.schema.json>`
+:download:`Repofolders <../../../../opengever/bundle/schemas/repofolders.schema.json>`
 
-.. literalinclude:: data/repofolders.schema.json/
+.. literalinclude:: ../../../../opengever/bundle/schemas/repofolders.schema.json/
    :language: json
 
 .. _reporoots_schema_json:
 
-:download:`Reporoots <data/reporoots.schema.json>`
+:download:`Reporoots <../../../../opengever/bundle/schemas/reporoots.schema.json>`
 
 
-.. literalinclude:: data/reporoots.schema.json/
+.. literalinclude:: ../../../../opengever/bundle/schemas/reporoots.schema.json/
    :language: json
