@@ -3,25 +3,7 @@
         <li class="active"><span class="documentsGallery" title="Gallery" i18n:attributes="title documents_pill_documents" i18n:translate="documents_pill_documents">Gallery</span></li>
         <li><a tal:attributes="id view/list_view_name" class="documentsList" title="List" i18n:attributes="title documents_pill_list" href="#" i18n:translate="documents_pill_list">List</a></li>
     </ul>
-    <div tal:define="available view/available"
-         class="preview-listing"
-         tal:attributes="data-number-of-documents view/number_of_documents;
-                         data-fetch-url view/get_fetch_url">
-      <tal:available tal:condition="available">
 
-          <tal:PREVIEWS tal:replace="structure view/previews_template"></tal:PREVIEWS>
+    <tal:PREVIEW_LISTING replace="structure view/previews/render" />
 
-          <div class="visualClear"></div>
-
-          <button class="bumblebeeGalleryShowMore button">
-            <span i18n:translate="documentsShowMore">Show more</span>
-          </button>
-
-      </tal:available>
-
-      <div tal:condition="not: available">
-          <p class="no_content" i18n:translate="label_no_contents">No contents</p>
-      </div>
-
-    </div>
 </tal:DOMAIN>
