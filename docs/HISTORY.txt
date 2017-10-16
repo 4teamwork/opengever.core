@@ -5,6 +5,7 @@ Changelog
 2017.5.2 (unreleased)
 ---------------------
 
+- Extract bumblebee preview generation into standalone component. [jone]
 - Do not render document link without View permission. [jone]
 - Refactor JSON schema generation and dumping, add tests. [lgraf]
 - Ungrok opengever.dossier. [elioschmutz]
