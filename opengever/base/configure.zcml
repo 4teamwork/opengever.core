@@ -162,4 +162,41 @@
       />
 
   <adapter factory=".unique_number.UniqueNumberUtilityGenerator" />
+
+  <browser:page
+      for="*"
+      class=".transport.ReceiveObject"
+      name="transporter-receive-object"
+      permission="cmf.AddPortalContent"
+      />
+
+  <browser:page
+      for="*"
+      class=".transport.PrivilegedReceiveObject"
+      name="transporter-privileged-receive-object"
+      permission="cmf.AddPortalContent"
+      />
+
+  <browser:page
+      for="*"
+      class=".transport.ExtractObject"
+      name="transporter-extract-object-json"
+      permission="cmf.AddPortalContent"
+      />
+
+  <adapter
+      factory=".transport.DexterityFieldDataCollector"
+      name="field-data"
+      />
+
+  <adapter
+      factory=".transport.OriginalIntidDataCollector"
+      name="intid-data"
+      />
+
+  <adapter
+      factory=".transport.DublinCoreMetaDataCollector"
+      name="dublin-core"
+      />
+
 </configure>

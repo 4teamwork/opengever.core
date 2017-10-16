@@ -1,4 +1,3 @@
-from five import grok
 from opengever.base.exceptions import TransportationError
 from opengever.base.interfaces import IDataCollector
 from opengever.base.request import dispatch_json_request
@@ -10,16 +9,18 @@ from plone.dexterity.utils import addContentToContainer
 from plone.dexterity.utils import createContent
 from plone.dexterity.utils import iterSchemata
 from plone.namedfile.interfaces import INamedFileField
+from Products.Five.browser import BrowserView
 from z3c.relationfield.interfaces import IRelation
 from z3c.relationfield.interfaces import IRelationChoice
 from z3c.relationfield.interfaces import IRelationList
 from zope import schema
 from zope.annotation.interfaces import IAnnotations
 from zope.app.intid.interfaces import IIntIds
+from zope.component import adapter
 from zope.component import getAdapters
 from zope.component import getUtility
 from zope.event import notify
-from zope.interface import Interface
+from zope.interface import implementer
 from zope.lifecycleevent import ObjectCreatedEvent
 from zope.lifecycleevent import ObjectModifiedEvent
 import base64
@@ -87,18 +88,14 @@ class Transporter(object):
         return DexterityObjectUpdater(self._extract_data(request)).update(obj)
 
 
-class ReceiveObject(grok.View):
+class ReceiveObject(BrowserView):
     """Receives a JSON serialized object and creates or updates an instance
     within its context.
 
     It returns JSON containing the created object's path and intid.
     """
 
-    grok.name('transporter-receive-object')
-    grok.require('cmf.AddPortalContent')
-    grok.context(Interface)
-
-    def render(self):
+    def __call__(self):
         obj = self.receive()
         portal = self.context.portal_url.getPortalObject()
         portal_path = '/'.join(portal.getPhysicalPath())
@@ -126,10 +123,6 @@ class PrivilegedReceiveObject(ReceiveObject):
     with elevated privileges.
     """
 
-    grok.name('transporter-privileged-receive-object')
-    grok.require('cmf.AddPortalContent')
-    grok.context(Interface)
-
     def receive(self):
         transporter = Transporter()
         container = self.context
@@ -137,15 +130,11 @@ class PrivilegedReceiveObject(ReceiveObject):
             return transporter.receive(container, self.request)
 
 
-class ExtractObject(grok.View):
+class ExtractObject(BrowserView):
     """Extract data from its context and returns a JSON serialized object.
     """
 
-    grok.name('transporter-extract-object-json')
-    grok.require('cmf.AddPortalContent')
-    grok.context(Interface)
-
-    def render(self):
+    def __call__(self):
         # Set correct content type for JSON response
         self.request.response.setHeader("Content-type", "application/json")
 
@@ -204,14 +193,16 @@ class DexterityObjectDataExtractor(object):
         return decode_for_json(data)
 
 
-class DexterityFieldDataCollector(grok.Adapter):
+@implementer(IDataCollector)
+@adapter(IDexterityContent)
+class DexterityFieldDataCollector(object):
     """The `DexterityFieldDataCollector` is used for extracting field data from
     a dexterity object and for setting it later on the target.
     This adapter is used by the transporter utility.
     """
-    grok.context(IDexterityContent)
-    grok.provides(IDataCollector)
-    grok.name('field-data')
+
+    def __init__(self, context):
+        self.context = context
 
     def extract(self):
         """Extracts the field data and returns a dict of all data.
@@ -309,15 +300,16 @@ class DexterityFieldDataCollector(grok.Adapter):
         return False
 
 
-class OriginalIntidDataCollector(grok.Adapter):
+@implementer(IDataCollector)
+@adapter(IDexterityContent)
+class OriginalIntidDataCollector(object):
     """This data collector stores the intid of the originally extracted
     object in the annotations of the copy. This is very important for being
     able to map the intids and fix relations.
     """
 
-    grok.context(IDexterityContent)
-    grok.provides(IDataCollector)
-    grok.name('intid-data')
+    def __init__(self, context):
+        self.context = context
 
     def extract(self):
         intids = getUtility(IIntIds)
@@ -327,14 +319,15 @@ class OriginalIntidDataCollector(grok.Adapter):
         IAnnotations(self.context)[ORIGINAL_INTID_ANNOTATION_KEY] = data
 
 
-class DublinCoreMetaDataCollector(grok.Adapter):
+@implementer(IDataCollector)
+@adapter(IDexterityContent)
+class DublinCoreMetaDataCollector(object):
     """This data collector stores the standard dublin core data of
     plone objects, like the creation date or the creator.
     """
 
-    grok.context(IDexterityContent)
-    grok.provides(IDataCollector)
-    grok.name('dublin-core')
+    def __init__(self, context):
+        self.context = context
 
     def extract(self):
         return {

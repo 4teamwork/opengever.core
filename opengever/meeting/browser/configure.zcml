@@ -232,4 +232,19 @@
         interface="zope.publisher.interfaces.browser.IBrowserPage"
         />
   </class>
+
+  <browser:page
+      for="*"
+      class=".excerpt.RecieveExcerptDocumentView"
+      name="recieve-excerpt-document"
+      permission="cmf.AddPortalContent"
+      />
+
+  <browser:page
+      for="opengever.meeting.proposal.ISubmittedProposal"
+      class=".submitdocuments.RecieveSubmittedDocumentView"
+      name="recieve-submitted-document"
+      permission="cmf.AddPortalContent"
+      />
+
 </configure>
