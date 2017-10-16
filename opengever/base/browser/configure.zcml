@@ -136,4 +136,11 @@
       template="templates/folder_delete_confirmation.pt"
       />
 
+  <browser:page
+      name="is_pasting_allowed"
+      for="*"
+      permission="zope2.View"
+      class=".pasting_allowed.IsPastingAllowedView"
+      />
+
 </configure>
