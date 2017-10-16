@@ -273,16 +273,17 @@ class TestOggBundlePipeline(IntegrationTestCase):
         self.assertEqual(u'Dossier Peter Schneider', dossier_peter.title)
 
     def assert_dossier_vreni_created(self, parent):
-        dossier_vreni = self.leaf_repofolder.get('dossier-10')
+        dossier = self.leaf_repofolder.get('dossier-10')
         self.assertEqual(u'Vreni Meier ist ein Tausendsassa',
-                         IDossier(dossier_vreni).comments)
-        self.assertEqual(tuple(), IDossier(dossier_vreni).keywords)
-        self.assertEqual([], IDossier(dossier_vreni).relatedDossier)
-        self.assertEqual(u'lukas.graf', IDossier(dossier_vreni).responsible)
+                         IDossier(dossier).comments)
+        self.assertEqual(tuple(), IDossier(dossier).keywords)
+        self.assertEqual([], IDossier(dossier).relatedDossier)
+        self.assertEqual(u'lukas.graf', IDossier(dossier).responsible)
         self.assertEqual('dossier-state-active',
-                         api.content.get_state(dossier_vreni))
-        self.assertEqual(date(2010, 11, 11), IDossier(dossier_vreni).start)
-        self.assertEqual(u'Dossier Vreni Meier', dossier_vreni.title)
+                         api.content.get_state(dossier))
+        self.assertEqual(date(2010, 11, 11), IDossier(dossier).start)
+        self.assertEqual(
+            u'Dossier in bestehendem Examplecontent Repository', dossier.title)
 
     def assert_dossier_hanspeter_created(self, parent):
         dossier_peter = parent.get('dossier-9')
@@ -443,7 +444,8 @@ class TestOggBundlePipeline(IntegrationTestCase):
         self.assertEqual(22198, len(document_6.file.data))
         self.assertEqual(
             'document-state-draft', api.content.get_state(document_6))
-        self.assertEqual(u'Bewerbung Peter Meier', document_6.title)
+        self.assertEqual(u'Dokument in bestehendem Examplecontent Dossier',
+                         document_6.title)
 
     def assert_mail_1_created(self, parent):
         mail = parent.objectValues()[2]
@@ -495,7 +497,8 @@ class TestOggBundlePipeline(IntegrationTestCase):
 
         self.assertIsNotNone(mail.message)
         self.assertEqual(920, len(mail.message.data))
-        self.assertEqual(u'Mail an Herrn Schneider', mail.title)
+        self.assertEqual(
+            u'Mail in bestehendem Examplecontent Dossier', mail.title)
 
     def assert_report_data_collected(self, bundle):
         report_data = bundle.report_data
