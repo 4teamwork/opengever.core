@@ -153,15 +153,15 @@ Berechtigungen werden in OneGov GEVER standardmässig auf die Children vererbt. 
 
 Die Berechtigungen können granular für die folgenden Rollen vergeben werden:
 
--  ``read      `` Lesen
+-  ``read`` (Lesen)
 
--  ``add       `` Dossiers hinzufügen
+-  ``add`` (Dossiers hinzufügen)
 
--  ``edit      `` Dossiers bearbeiten
+-  ``edit`` (Dossiers bearbeiten)
 
--  ``close     `` Dossiers abschliessen
+-  ``close`` (Dossiers abschliessen)
 
--  ``reactivate`` Dossiers reaktivieren
+-  ``reactivate`` (Dossiers reaktivieren)
 
 Zusätzlich kann mit einem **block\_inheritance** Flag spezifiziert werden, ob die Vererbung der Berechtigungen auf dieser Stufe unterbrochen werden soll. Dies führt dazu, dass ab dieser Stufe nur die explizit definierten Zugriffsberechtigungen gültig sind, und keine Berechtigungen mehr via Vererbung vom Parent übernommen werden.
 
@@ -273,13 +273,13 @@ Die folgenden Geschäftsregeln gelten in OneGov GEVER:
 
 -  Bei den folgenden Feldern ist die Auswahlmöglichkeit durch den Parent eingeschränkt:
 
-   -  ``custody_period  `` (Archivische Schutzfrist)
+   -  ``custody_period`` (Archivische Schutzfrist)
 
-   -  ``archival_value  `` (Archivwürdigkeit)
+   -  ``archival_value`` (Archivwürdigkeit)
 
-   -  ``classification  `` (Klassifikation)
+   -  ``classification`` (Klassifikation)
 
-   -  ``privacy_layer   `` (Datenschutzstufe)
+   -  ``privacy_layer`` (Datenschutzstufe)
 
    -  ``retention_period`` (Aufbewahrungsdauer) - *Je nach Konfiguration ist diese Regel auch nicht aktiv*
 
