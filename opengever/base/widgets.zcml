@@ -46,4 +46,6 @@
       template="templates/tableradio_input.pt"
       />
 
+  <adapter factory=".widgets.SequenceTextLinesFieldWidget" />
+
 </configure>
