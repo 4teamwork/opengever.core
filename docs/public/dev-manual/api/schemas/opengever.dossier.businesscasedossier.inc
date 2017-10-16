@@ -91,7 +91,7 @@
        
        
        
-       :Wertebereich: ["department", "directorate", "administration", "personal", "government"]
+       :Wertebereich: ["administration", "department", "directorate", "government", "personal"]
 
 
    .. py:attribute:: container_type
@@ -101,7 +101,7 @@
        
        
        :Beschreibung: Art des Behälters, in dem ein Dossier in Papierform abgelegt ist
-       :Wertebereich: ["dossier", "folder", "box"]
+       :Wertebereich: ["box", "dossier", "folder"]
 
 
    .. py:attribute:: number_of_containers

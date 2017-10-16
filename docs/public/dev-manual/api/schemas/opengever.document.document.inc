@@ -141,7 +141,7 @@
        
        
        
-       :Wertebereich: ["question", "request", "report", "offer", "protocol", "regulations", "contract", "directive"]
+       :Wertebereich: ["contract", "directive", "offer", "protocol", "question", "regulations", "report", "request"]
 
 
    .. py:attribute:: document_author
