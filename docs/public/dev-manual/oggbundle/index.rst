@@ -8,17 +8,19 @@ Diese Dokument beschreibt die Spezifikation der Datenschnittstelle zur Migration
 
 Changelog:
 
-+---------------+--------------+-------------+-----------------------------------------+
-| **Version**   | **Datum**    | **Autor**   | **Kommentar**                           |
-+===============+==============+=============+=========================================+
-| 0.1.3         | 10.02.2017   | LG          | Ergänzt: Setzen des Workflow-Status     |
-+---------------+--------------+-------------+-----------------------------------------+
-| 0.1.2         | 16.01.2017   | LG          | JSON-Schemas referenziert               |
-+---------------+--------------+-------------+-----------------------------------------+
-| 0.1.1         | 12.01.2017   | LG          | Nicht erlaubte Dateiformate definiert   |
-+---------------+--------------+-------------+-----------------------------------------+
-| 0.1           | 26.11.2016   | LG, DE      | Initialer Entwurf                       |
-+---------------+--------------+-------------+-----------------------------------------+
++---------------+--------------+-------------+--------------------------------------------------------+
+| **Version**   | **Datum**    | **Autor**   | **Kommentar**                                          |
++===============+==============+=============+========================================================+
+| 1.0           | 16.10.2017   | LG, PG      | Referenzierung von bestehendem Inhalt via Aktenzeichen |
++---------------+--------------+-------------+--------------------------------------------------------+
+| 0.1.3         | 10.02.2017   | LG          | Ergänzt: Setzen des Workflow-Status                    |
++---------------+--------------+-------------+--------------------------------------------------------+
+| 0.1.2         | 16.01.2017   | LG          | JSON-Schemas referenziert                              |
++---------------+--------------+-------------+--------------------------------------------------------+
+| 0.1.1         | 12.01.2017   | LG          | Nicht erlaubte Dateiformate definiert                  |
++---------------+--------------+-------------+--------------------------------------------------------+
+| 0.1           | 26.11.2016   | LG, DE      | Initialer Entwurf                                      |
++---------------+--------------+-------------+--------------------------------------------------------+
 
 Status: In Arbeit
 
@@ -142,7 +144,32 @@ Pfade / Dateinamen dürfen nur alphanumerische Zeichen, Unterstrich und Bindestr
 Abbildung von Verschachtelung (containment)
 -------------------------------------------
 
-Da die Daten in den JSON-Dateien nicht verschachtelt abgelegt werden, ist es nötig diese Verschachtelung während dem Import aufzulösen. Diese Verschachtelung wird mittels global eindeutiger ID (GUID) und einem Pointer von Children auf das enthaltende Parent abgebildet. Dazu hat muss jedes Objekt über eine GUID verfügen. Diese muss im Attribut **guid** gespeichert werden. Die Verschachtelung wird mittels einer Referenz auf das Parent hergestellt, dazu muss jedes Objekt, das ein Parent besitzt, das Attribut **parent\_guid** definieren, und damit auf das Parent referenzieren.
+Da die Daten in den JSON-Dateien nicht verschachtelt abgelegt werden, ist es nötig diese Verschachtelung während dem Import aufzulösen. Diese Verschachtelung wird mittels global eindeutiger ID (GUID) und einem Pointer von Children auf das enthaltende Parent abgebildet. Dazu muss jedes Objekt über eine GUID verfügen. Diese muss im Attribut **guid** gespeichert werden. Die Verschachtelung wird mittels einer Referenz auf das Parent hergestellt, dazu muss jedes Objekt, das ein Parent besitzt, das Attribut **parent\_guid** definieren, und damit auf das Parent referenzieren:
+
+code::
+
+  {
+  "guid": "7777-0000-0000-0000",
+  ...
+  },
+  {
+  "guid": "9999-0000-0000-0000",
+  "parent_guid": "7777-0000-0000-0000",
+  ...
+  }
+
+Alternativ zur (im Bundle selbst definierten) GUID kann auch das Akzenzeichen eines Objekts als eindeutige Referenz auf das Parent verwendet werden. Die Verwendung des Aktenzeichens als Parent-Pointer erlaubt es, bereits existierende Objekte (die also nicht im referenzierenden Bundle mitgeliefert werden) zu referenzieren, und ermöglicht so partielle Importe. So ist z.B. das importieren von Dokumenten in ein bestehendes Dossier möglich, indem dieses Dossier über sein Aktenzeichen referenziert wird.
+
+Wird zur Referenzierung das Aktenzeichen verwendet, muss dazu das Attribut **parent\_reference** (statt **parent\_guid**) gesetzt werden. Das Aktenzeichen in diesem Attribut wird als verschachtelte Arrays von Integern erwartet, welche die einzelnen Komponenten des Aktenzeichens (ohne Formatierung) abbilden. Beispiel: `[[1, 3, 5], [472, 9]` entspricht dem Aktenzeichen `1.3.5 / 472.9` (Position 1.3.5, Dossier 472, Subdossier 9):
+
+code::
+
+  {
+  "guid": "9999-0000-0000-0000",
+  "parent_reference": [[1, 3, 5], [472, 9],
+  ...
+  }
+
 
 Siehe auch Abschnitt :ref:`Geschäftsregeln <geschaeftsregeln>` für Angaben, welche Inhaltstypen wie verschachtelt werden dürfen.
 
