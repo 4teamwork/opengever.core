@@ -512,6 +512,7 @@ Objects
         - self.decided_meeting_dossier
         - self.dossier
           - self.document
+          - self.document_without_file
           - self.draft_proposal
           - self.draft_word_proposal
           - self.mail_eml
