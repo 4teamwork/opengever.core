@@ -1,24 +1,24 @@
-from zope.annotation.interfaces import IAnnotations
-from five import grok
-from opengever.base.interfaces import IUniqueNumberUtility
 from opengever.base.interfaces import IUniqueNumberGenerator
-from zope.component import getAdapter
-from Products.CMFPlone.interfaces import IPloneSiteRoot
+from opengever.base.interfaces import IUniqueNumberUtility
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.interfaces import IPloneSiteRoot
+from zope.annotation.interfaces import IAnnotations
+from zope.component import adapter
+from zope.component import getAdapter
+from zope.interface import implementer
 
 COUNTER_START = 1
 COUNTER_ADDITION_VALUE = 1
 
 
-class UniqueNumberUtility(grok.GlobalUtility):
+@implementer(IUniqueNumberUtility)
+class UniqueNumberUtility(object):
     """The unique number utility provides the a dynamic counter functionality,
     for the given object and keyword-arguments.
     It generates a unique key for every keywoards and values combination,
     including the portal_type except the keyword 'portal_type' is given.
     For every key he provide the get_number and remove_number functioniality.
     """
-
-    grok.provides(IUniqueNumberUtility)
 
     def get_number(self, obj, **keys):
         """Return the stored value for the combinated key, if no entry exists,
@@ -55,14 +55,13 @@ class UniqueNumberUtility(grok.GlobalUtility):
             del ann[key]
 
 
-class UniqueNumberUtilityGenerator(grok.Adapter):
+@implementer(IUniqueNumberGenerator)
+@adapter(IPloneSiteRoot)
+class UniqueNumberUtilityGenerator(object):
     """The unique nuber generator adapter, handle for every key a counter with
     the highest assigned value. So he provides the generate functionality,
     which return the next number, for every counter.
     """
-
-    grok.provides(IUniqueNumberGenerator)
-    grok.context(IPloneSiteRoot)
 
     def __init__(self, context):
         self.context = context

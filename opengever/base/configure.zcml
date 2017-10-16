@@ -156,4 +156,10 @@
       name="no_client_id_grouped_by_three"
       />
 
+  <utility
+      factory=".unique_number.UniqueNumberUtility"
+      provides="opengever.base.interfaces.IUniqueNumberUtility"
+      />
+
+  <adapter factory=".unique_number.UniqueNumberUtilityGenerator" />
 </configure>
