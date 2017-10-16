@@ -1,0 +1,23 @@
+<html xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      i18n:domain="opengever.bumblebee"
+      tal:omit-tag="python: True">
+
+  <tal:LOOP repeat="preview options/previews">
+    <div class="imageContainer showroom-item"
+         tal:attributes="data-showroom-target preview/overlay_url;
+                         data-showroom-title preview/title;
+                         id preview/uid">
+      <span tal:attributes="class string:file-mimetype ${preview/mime_type_css_class}"></span>
+
+      <img tal:attributes="src preview/preview_image_url; alt preview/title"
+           class="file-preview bumblebee-thumbnail" />
+
+      <div class="bumblebeeTitle">
+        <span tal:content="preview/title" />
+      </div>
+    </div>
+  </tal:LOOP>
+
+</html>

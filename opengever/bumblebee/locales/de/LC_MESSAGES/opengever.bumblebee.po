@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-02 12:51+0000\n"
+"POT-Creation-Date: 2017-10-16 14:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,6 +34,16 @@ msgstr "Dossier:"
 msgid "Reference number:"
 msgstr "Aktenzeichen:"
 
+#. Default: "Show more"
+#: ./opengever/bumblebee/browser/templates/preview_listing.pt
+msgid "documentsShowMore"
+msgstr "Mehr anzeigen"
+
+#. Default: "No contents"
+#: ./opengever/bumblebee/browser/templates/preview_listing.pt
+msgid "label_no_contents"
+msgstr "Keine Inhalte"
+
 #. Default: "Revert document"
 #: ./opengever/bumblebee/browser/overlay.py
 msgid "label_revert"
@@ -43,4 +53,3 @@ msgstr "Dokument zurücksetzen"
 #: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt
 msgid "warning_on_versioned_context"
 msgstr "Sie sehen sich eine alte Version an."
-
