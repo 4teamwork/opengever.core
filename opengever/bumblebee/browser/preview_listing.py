@@ -36,13 +36,15 @@ class PreviewListing(object):
     def for_objects(self, objects):
         """Setup the preview listing with a list of Plone content objects.
         """
-        self.items = PreviewListingObjects(objects)
-        return self
+        return self.with_item_provider(PreviewListingObjects(objects))
 
     def for_brains(self, brains):
         """Setup the preview listing with a list of catalog brains.
         """
-        self.items = PreviewListingBrains(brains)
+        return self.with_item_provider(PreviewListingBrains(brains))
+
+    def with_item_provider(self, provider):
+        self.items = provider
         return self
 
     def with_fetch_url(self, fetch_url):
@@ -109,8 +111,9 @@ class PreviewListingItems(object):
     performance friendly.
     """
 
-    def __init__(self, items):
-        self.items = items
+    def __init__(self, items=None):
+        self.items = items or []
+        self.labels = {}
 
     def get_batch(self, first, max_amount):
         """Slices the current items for rendering a specific batch of items.
@@ -138,6 +141,19 @@ class PreviewListingItems(object):
         """
         raise NotImplementedError()
 
+    def set_label(self, item, label, css_classes=None):
+        """Set a label for an item.
+        """
+        self.labels[item] = {'label': label, 'css_classes': css_classes}
+
+    def append(self, item, label=None, css_classes=None):
+        """Append an additional item.
+        This may not be possible depending on the list type.
+        """
+        self.items.append(item)
+        if label:
+            self.set_label(item, label, css_classes)
+
 
 class PreviewListingObjects(PreviewListingItems):
 
@@ -148,7 +164,8 @@ class PreviewListingObjects(PreviewListingItems):
             'uid': IUUID(obj),
             'mime_type_css_class': get_css_class(obj),
             'preview_image_url': bumblebee.get_service_v3().get_representation_url(
-                obj, 'thumbnail')}
+                obj, 'thumbnail'),
+            'label': self.labels.get(obj, None)}
 
 
 class PreviewListingBrains(PreviewListingItems):
@@ -160,4 +177,5 @@ class PreviewListingBrains(PreviewListingItems):
             'uid': brain.UID,
             'mime_type_css_class': get_css_class(brain),
             'preview_image_url': bumblebee.get_service_v3().get_representation_url(
-                brain, 'thumbnail')}
+                brain, 'thumbnail'),
+            'label': self.labels.get(brain, None)}

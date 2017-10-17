@@ -14,6 +14,9 @@
       <img tal:attributes="src preview/preview_image_url; alt preview/title"
            class="file-preview bumblebee-thumbnail" />
 
+      <div tal:condition="preview/label"
+           tal:attributes="class string:file-preview-label ${preview/label/css_classes}"
+           tal:content="preview/label/label" />
       <div class="bumblebeeTitle">
         <span tal:content="preview/title" />
       </div>

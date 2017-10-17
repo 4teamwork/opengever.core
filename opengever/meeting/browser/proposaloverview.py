@@ -2,7 +2,10 @@ from five import grok
 from ftw import bumblebee
 from opengever.base.browser.helper import get_css_class
 from opengever.bumblebee import is_bumblebee_feature_enabled
+from opengever.bumblebee.browser.preview_listing import PreviewListing
+from opengever.bumblebee.browser.preview_listing import PreviewListingObjects
 from opengever.document import _ as document_mf
+from opengever.meeting import _
 from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.browser.proposaltransitions import ProposalTransitionController
 from opengever.meeting.interfaces import IHistory
@@ -75,6 +78,39 @@ class OverviewBase(object):
 
         model = self.context.load_model()
         return model.get_state() == model.STATE_DECIDED
+
+    def show_document_previews(self):
+        return is_bumblebee_feature_enabled() and \
+            is_word_meeting_implementation_enabled()
+
+    def previews(self):
+        items = PreviewListingObjects()
+
+        proposal_document = self.context.get_proposal_document()
+        if proposal_document:
+            items.append(proposal_document,
+                         label=_(u'proposal_document', u'Proposal document'),
+                         css_classes='label-blue')
+
+        excerpt = self.context.get_excerpt()
+        if excerpt:
+            items.append(excerpt,
+                         label=_(u'label_excerpt', u'Excerpt'),
+                         css_classes='label-green')
+
+        for attachment in self.context.get_documents():
+            items.append(attachment, label=_(u'label_attachment', u'Attachment'))
+
+        return (PreviewListing(self)
+                .with_item_provider(items)
+                .with_batchsize(2)
+                .with_fetch_url('/'.join((self.context.absolute_url(),
+                                          self.__name__,
+                                          'fetch_previews'))))
+
+    def fetch_previews(self):
+        return self.previews().fetch()
+
 
 
 class ProposalOverview(OverviewBase, DisplayForm, GeverTabMixin):

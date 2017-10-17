@@ -80,6 +80,8 @@
             </ul>
           </div>
 
+          <tal:DOCUMENT_PREVIEWS tal:replace="structure python: view.previews().render()" />
+
       </div>
       <div tal:condition="view/show_preview" class="documentPreview">
         <img class="showroom-item"
