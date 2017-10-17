@@ -2,7 +2,6 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
-    xmlns:grok="http://namespaces.zope.org/grok"
     xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:meta="http://namespaces.zope.org/meta"
     xmlns:monkey="http://namespaces.plone.org/monkey"
@@ -28,8 +27,6 @@
   <include file="permissions.zcml" />
   <include file="schema.zcml" />
   <include file="widgets.zcml" />
-
-  <grok:grok package="." />
 
   <i18n:registerTranslations directory="locales" />
 
