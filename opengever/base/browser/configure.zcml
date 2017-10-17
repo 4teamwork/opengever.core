@@ -164,4 +164,11 @@
       class=".edit_public_trial.EditPublicTrialForm"
       />
 
+  <browser:viewlet
+      name="exposator"
+      manager="plone.app.layout.viewlets.interfaces.IPortalHeader"
+      class=".exposator.ExposatorViewlet"
+      permission="zope2.View"
+      />
+
 </configure>
