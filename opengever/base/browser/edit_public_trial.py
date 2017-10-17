@@ -1,11 +1,10 @@
-from five import grok
 from opengever.base import _
 from opengever.base.behaviors.classification import IClassification
-from opengever.dossier.utils import find_parent_dossier
 from opengever.document.behaviors import IBaseDocument
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.templatefolder.interfaces import ITemplateFolder
-from plone.directives import dexterity
+from opengever.dossier.utils import find_parent_dossier
+from plone.dexterity.browser.edit import DefaultEditForm
 from Products.CMFCore.utils import getToolByName
 from z3c.form.field import Fields
 from zExceptions import Unauthorized
@@ -49,10 +48,7 @@ def can_access_public_trial_edit_form(user, content):
     return has_role
 
 
-class EditPublicTrialForm(dexterity.EditForm):
-    grok.context(IBaseDocument)
-    grok.require('zope2.View')
-    grok.name('edit_public_trial')
+class EditPublicTrialForm(DefaultEditForm):
 
     schema = None
 

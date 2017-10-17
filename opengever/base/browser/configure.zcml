@@ -157,4 +157,11 @@
       class=".copy_items.CopyItemsFormView"
       />
 
+  <browser:page
+      name="edit_public_trial"
+      for="opengever.document.behaviors.IBaseDocument"
+      permission="zope2.View"
+      class=".edit_public_trial.EditPublicTrialForm"
+      />
+
 </configure>
