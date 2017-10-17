@@ -27,6 +27,7 @@ class IDummyWithMarkerSchema(model.Schema):
         default=111,
     )
 
+
 alsoProvides(IDummyWithMarkerSchema, IFormFieldProvider)
 
 
@@ -38,6 +39,7 @@ class IDummyAttributeStorageBehavior(model.Schema):
         default=222,
     )
 
+
 alsoProvides(IDummyAttributeStorageBehavior, IFormFieldProvider)
 
 
@@ -48,6 +50,7 @@ class IDummyAnnotationStorageBehavior(model.Schema):
         required=False,
         default=333,
     )
+
 
 alsoProvides(IDummyAnnotationStorageBehavior, IFormFieldProvider)
 
