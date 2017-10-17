@@ -150,4 +150,11 @@
       class=".gever_macros.View"
       />
 
+  <browser:page
+      name="copy_items"
+      for="plone.dexterity.interfaces.IDexterityContainer"
+      permission="zope2.View"
+      class=".copy_items.CopyItemsFormView"
+      />
+
 </configure>

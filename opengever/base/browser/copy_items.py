@@ -1,20 +1,11 @@
-from five import grok
 from opengever.base import _
 from opengever.base.clipboard import Clipboard
 from plone import api
-from plone.dexterity.interfaces import IDexterityContainer
 from plone.z3cform import layout
 from Products.Five.browser import BrowserView
 
 
-class CopyItemsFormView(layout.FormWrapper, grok.View):
-    grok.context(IDexterityContainer)
-    grok.name('copy_items')
-    grok.require('zope2.View')
-
-    def __init__(self, context, request):
-        layout.FormWrapper.__init__(self, context, request)
-        grok.View.__init__(self, context, request)
+class CopyItemsFormView(layout.FormWrapper):
 
     def __call__(self):
         objs = self.extract_selected_objects()
