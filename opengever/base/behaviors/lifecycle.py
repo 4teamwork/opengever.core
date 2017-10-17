@@ -37,7 +37,7 @@ class ILifeCycle(model.Schema):
             u'date_of_submission', ],
     )
 
-    #dexterity.write_permission(retention_period='cmf.ManagePortal')
+    # dexterity.write_permission(retention_period='cmf.ManagePortal')
     retention_period = schema.Choice(
         title=_(u'label_retention_period', u'Retention period (years)'),
         description=_(u'help_retention_period', default=u''),
@@ -45,14 +45,14 @@ class ILifeCycle(model.Schema):
         required=True,
     )
 
-    #dexterity.write_permission(retention_period_annotation='cmf.ManagePortal')
+    # dexterity.write_permission(retention_period_annotation='cmf.ManagePortal')
     retention_period_annotation = schema.Text(
         title=_(u'label_retention_period_annotation',
                 default=u'retentionPeriodAnnotation'),
         required=False
     )
 
-    #dexterity.write_permission(archival_value='cmf.ManagePortal')
+    # dexterity.write_permission(archival_value='cmf.ManagePortal')
     archival_value = schema.Choice(
         title=_(u'label_archival_value', default=u'Archival value'),
         description=_(u'help_archival_value', default=u'Archival value code'),
@@ -60,14 +60,14 @@ class ILifeCycle(model.Schema):
         required=True,
     )
 
-    #dexterity.write_permission(archival_value_annotation='cmf.ManagePortal')
+    # dexterity.write_permission(archival_value_annotation='cmf.ManagePortal')
     archival_value_annotation = schema.Text(
         title=_(u'label_archival_value_annotation',
                 default=u'archivalValueAnnotation'),
         required=False
     )
 
-    #dexterity.write_permission(custody_period='cmf.ManagePortal')
+    # dexterity.write_permission(custody_period='cmf.ManagePortal')
     custody_period = schema.Choice(
         title=_(u'label_custody_period', default=u'Custody period (years)'),
         description=_(u'help_custody_period', default=u''),
@@ -142,6 +142,7 @@ def retention_period_default(context):
         default=5)
     return default_factory(context)
 
+
 ILifeCycle['retention_period'].defaultFactory = retention_period_default
 
 
@@ -175,6 +176,7 @@ def custody_period_default(context):
         default=30)
     return default_factory(context)
 
+
 ILifeCycle['custody_period'].defaultFactory = custody_period_default
 
 
@@ -206,5 +208,6 @@ def archival_value_default(context):
         field=ILifeCycle['archival_value'],
         default=ARCHIVAL_VALUE_UNCHECKED)
     return default_factory(context)
+
 
 ILifeCycle['archival_value'].defaultFactory = archival_value_default

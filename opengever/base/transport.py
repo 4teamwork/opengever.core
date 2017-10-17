@@ -150,7 +150,7 @@ class DexterityObjectCreator(object):
         if not isinstance(self.title, unicode):
             self.title = self.title.decode('utf-8')
 
-    #XXX use plone.api
+    # XXX use plone.api
     def create_in(self, container):
         obj = createContent(self.portal_type, title=self.title)
         notify(ObjectCreatedEvent(obj))

@@ -128,6 +128,7 @@ def propagate_vocab_restrictions_to_children(container, event):
     propagate_vocab_restrictions(
         container, event, restricted_fields, IClassificationMarker)
 
+
 # CLASSIFICATION: Vocabulary and default value
 CLASSIFICATION_UNPROTECTED = u'unprotected'
 CLASSIFICATION_CONFIDENTIAL = u'confidential'
@@ -155,6 +156,7 @@ def classification_default(context):
         default=CLASSIFICATION_UNPROTECTED)
     return default_factory(context)
 
+
 IClassification['classification'].defaultFactory = classification_default
 
 
@@ -180,6 +182,7 @@ def privacy_layer_default(context):
         field=IClassification['privacy_layer'],
         default=PRIVACY_LAYER_NO)
     return default_factory(context)
+
 
 IClassification['privacy_layer'].defaultFactory = privacy_layer_default
 

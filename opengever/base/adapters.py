@@ -46,7 +46,7 @@ class ReferenceNumberPrefixAdpater(object):
         type_key = self.get_type_key(obj)
         annotations = unprotected_write(IAnnotations(self.context))
 
-        if not type_key in annotations:
+        if type_key not in annotations:
             annotations[type_key] = PersistentDict()
         return annotations[type_key]
 
