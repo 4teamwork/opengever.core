@@ -1,8 +1,9 @@
-from five import grok
 from opengever.base.interfaces import IRedirector
 from plone.app.caching.interfaces import IETagValue
-from plone.app.layout.viewlets.interfaces import IAboveContentTitle
+from plone.app.layout.viewlets.common import ViewletBase
+from zope.component import adapter
 from zope.component import adapts
+from zope.interface import implementer
 from zope.interface import implements
 from zope.interface import Interface
 from zope.publisher.interfaces.browser import IBrowserRequest
@@ -62,14 +63,13 @@ class RedirectorCookie(object):
                                                path='/')
 
 
-class Redirector(grok.Adapter):
+@implementer(IRedirector)
+@adapter(IBrowserRequest)
+class Redirector(object):
     """An adapter for the BrowserRequest to redirect a user after loading the
     next page to a specific URL which is opened in another window / tab with
     the name "target".
     """
-
-    grok.provides(IRedirector)
-    grok.context(IBrowserRequest)
 
     def __init__(self, request):
         self.request = request
@@ -88,13 +88,8 @@ class Redirector(grok.Adapter):
         return RedirectorCookie(self.request).read(remove=remove)
 
 
-class RedirectorViewlet(grok.Viewlet):
+class RedirectorViewlet(ViewletBase):
     """Viewlet which adds the redirects for the IRedirector."""
-
-    grok.name('redirector')
-    grok.context(Interface)
-    grok.viewletmanager(IAboveContentTitle)
-    grok.require('zope2.View')
 
     JS_TEMPLATE = '''
 <script type="text/javascript" class="redirector">

@@ -252,4 +252,13 @@
       name="opengever.base.ReferenceFormatterVocabulary"
       />
 
+  <adapter factory=".redirector.Redirector" />
+
+  <browser:viewlet
+      name="redirector"
+      manager="plone.app.layout.viewlets.interfaces.IAboveContentTitle"
+      class=".redirector.RedirectorViewlet"
+      permission="zope2.View"
+      />
+
 </configure>
