@@ -96,4 +96,15 @@
       handler=".lifecycle.propagate_vocab_restrictions_to_children"
       />
 
+  <subscriber
+      for="opengever.base.behaviors.sequence.ISequenceNumberBehavior
+           zope.lifecycleevent.interfaces.IObjectCopiedEvent"
+      handler=".sequence.new_sequence_number"
+      />
+
+  <adapter
+      factory=".sequence.sequence_number"
+      name="sequence_number"
+      />
+
 </configure>
