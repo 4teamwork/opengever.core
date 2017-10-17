@@ -180,15 +180,15 @@ Berechtigungen werden in OneGov GEVER standardmässig auf die Children vererbt. 
 
 Die Berechtigungen können granular für die folgenden Rollen vergeben werden:
 
--  ``read      `` Lesen
+-  ``read`` (Lesen)
 
--  ``add       `` Dossiers hinzufügen
+-  ``add`` (Dossiers hinzufügen)
 
--  ``edit      `` Dossiers bearbeiten
+-  ``edit`` (Dossiers bearbeiten)
 
--  ``close     `` Dossiers abschliessen
+-  ``close`` (Dossiers abschliessen)
 
--  ``reactivate`` Dossiers reaktivieren
+-  ``reactivate`` (Dossiers reaktivieren)
 
 Zusätzlich kann mit einem **block\_inheritance** Flag spezifiziert werden, ob die Vererbung der Berechtigungen auf dieser Stufe unterbrochen werden soll. Dies führt dazu, dass ab dieser Stufe nur die explizit definierten Zugriffsberechtigungen gültig sind, und keine Berechtigungen mehr via Vererbung vom Parent übernommen werden.
 
@@ -300,13 +300,13 @@ Die folgenden Geschäftsregeln gelten in OneGov GEVER:
 
 -  Bei den folgenden Feldern ist die Auswahlmöglichkeit durch den Parent eingeschränkt:
 
-   -  ``custody_period  `` (Archivische Schutzfrist)
+   -  ``custody_period`` (Archivische Schutzfrist)
 
-   -  ``archival_value  `` (Archivwürdigkeit)
+   -  ``archival_value`` (Archivwürdigkeit)
 
-   -  ``classification  `` (Klassifikation)
+   -  ``classification`` (Klassifikation)
 
-   -  ``privacy_layer   `` (Datenschutzstufe)
+   -  ``privacy_layer`` (Datenschutzstufe)
 
    -  ``retention_period`` (Aufbewahrungsdauer) - *Je nach Konfiguration ist diese Regel auch nicht aktiv*
 
@@ -350,3 +350,88 @@ Abgrenzungen
 -  Es kann nicht überprüft werden, ob die Rechte “sinnvoll” gesetzt sind (optimale Nutzung des Vererbungsmechanismus, keine Redundanzen). Eine allfällige Vereinfachung der Berechtigungen muss vor einem Import der Daten nach OneGov GEVER durchgeführt werden.
 
 .. |img-image-1| image:: img/image1.png
+
+.. _kapitel-oggbundle-anhang:
+
+Anhang
+------
+
+Schemas
+~~~~~~~
+
+
+Die JSON-Schemas, welche die Struktur der JSON-Dateien für die Metadaten definieren, sind hier abgelegt:
+
+.. _configuration_schema_json:
+
+:download:`configuration.schema.json <data/configuration.schema.json>`
+
+.. container:: collapsible
+
+    .. container:: header
+
+       Schema anzeigen
+
+    .. literalinclude:: data/configuration.schema.json
+       :language: json
+
+----------
+
+.. _documents_schema_json:
+
+:download:`documents.schema.json <../../../../opengever/bundle/schemas/documents.schema.json>`
+
+.. container:: collapsible
+
+    .. container:: header
+
+       Schema anzeigen
+
+    .. literalinclude:: ../../../../opengever/bundle/schemas/documents.schema.json
+       :language: json
+
+----------
+
+.. _dossiers_schema_json:
+
+:download:`dossiers.schema.json <../../../../opengever/bundle/schemas/dossiers.schema.json>`
+
+.. container:: collapsible
+
+    .. container:: header
+
+       Schema anzeigen
+
+    .. literalinclude:: ../../../../opengever/bundle/schemas/dossiers.schema.json
+       :language: json
+
+----------
+
+.. _repofolders_schema_json:
+
+:download:`repofolders.schema.json <../../../../opengever/bundle/schemas/repofolders.schema.json>`
+
+.. container:: collapsible
+
+    .. container:: header
+
+       Schema anzeigen
+
+    .. literalinclude:: ../../../../opengever/bundle/schemas/repofolders.schema.json
+       :language: json
+
+----------
+
+.. _reporoots_schema_json:
+
+:download:`reporoots.schema.json <../../../../opengever/bundle/schemas/reporoots.schema.json>`
+
+
+.. container:: collapsible
+
+    .. container:: header
+
+       Schema anzeigen
+
+    .. literalinclude:: ../../../../opengever/bundle/schemas/reporoots.schema.json
+       :language: json
