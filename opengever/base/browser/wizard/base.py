@@ -6,12 +6,13 @@ class BaseWizardStepForm(object):
 
     Example usage:
 
-    >>> from five import grok
     >>> from opengever.base.browser.wizard import BaseWizardStepForm
     >>> from plone.z3cform.layout import FormWrapper
     >>> from z3c.form.field import Fields
     >>> from z3c.form.form import Form
+    >>> from zope.component import provideAdapter
     >>> from zope.interface import Interface
+    >>> from zope.publisher.interfaces.browser import IBrowserView
 
     >>> class FirstWizardStep(BaseWizardStepForm, Form):
     ...     step_name = 'first-step'  # must match steps config
@@ -25,16 +26,15 @@ class BaseWizardStepForm(object):
     ...     passed_data = ['key']  # list of request-keys which are passed on
     ...     fields = Fields(IFirstStepSchema)  # your zope schema
 
-    >>> class FirstWizardStepView(FormWrapper, grok.View):
-    ...     grok.context(Interface)
-    ...     grok.name('first-step')
-    ...     grok.require('zope2.View')
-    ...
+    >>> class FirstWizardStepView(FormWrapper):
     ...     form = FirstWizardStep
-    ...
-    ...     def __init__(self, *args, **kwargs):
-    ...          FormWrapper.__init__(self, *args, **kwargs)
-    ...          grok.View.__init__(self, *args, **kwargs)
+
+    >>> provideAdapter(
+    ...    factory=FirstWizardStepView,
+    ...    adapts=(None, None),
+    ...    provides=IBrowserView,
+    ...    name='first-step')
+
     """
 
     ignoreContext = True
