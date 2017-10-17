@@ -247,4 +247,9 @@
 
   <adapter factory=".quickupload.OGQuickUploadCapableFileFactory" />
 
+  <utility
+      factory=".interfaces.ReferenceFormatterVocabulary"
+      name="opengever.base.ReferenceFormatterVocabulary"
+      />
+
 </configure>

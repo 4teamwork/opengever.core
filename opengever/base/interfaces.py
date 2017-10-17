@@ -1,7 +1,7 @@
 from Products.ZCatalog.interfaces import ICatalogBrain
-from five import grok
 from zope import schema
 from zope.component import getAdapters
+from zope.interface import implementer
 from zope.interface import Interface
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
@@ -130,12 +130,10 @@ class IReferenceNumberFormatter(Interface):
         """
 
 
-class ReferenceFormatterVocabulary(grok.GlobalUtility):
+@implementer(IVocabularyFactory)
+class ReferenceFormatterVocabulary(object):
     """ Vocabulary of all users with a valid login.
     """
-
-    grok.provides(IVocabularyFactory)
-    grok.name('opengever.base.ReferenceFormatterVocabulary')
 
     def __call__(self, context):
         terms = []
