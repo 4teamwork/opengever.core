@@ -30,7 +30,7 @@ class TestBundleLoader(TestCase):
 
     def test_loads_correct_number_of_items(self):
         bundle = self.load_bundle()
-        self.assertEqual(11, len(list(bundle)))
+        self.assertEqual(14, len(list(bundle)))
 
     def test_loads_items_in_correct_order(self):
         bundle = self.load_bundle()
@@ -39,13 +39,17 @@ class TestBundleLoader(TestCase):
              ('repositoryfolder', 'Personal'),
              ('repositoryfolder', 'Organigramm, Prozesse'),
              ('repositoryfolder', 'Organisation'),
-             ('businesscasedossier', 'Dossier Vreni Meier'),
+             ('businesscasedossier', 'Dossier Peter Schneider'),
+             ('businesscasedossier',
+              'Dossier in bestehendem Examplecontent Repository'),
              ('businesscasedossier', 'Hanspeter M\xc3\xbcller'),
              ('document', 'Bewerbung Hanspeter M\xc3\xbcller'),
              ('document', 'Entlassung Hanspeter M\xc3\xbcller'),
              ('mail', 'Ein Mail'),
              ('mail', ''),
-             ('document', 'Document referenced via UNC-Path')],
+             ('document', 'Document referenced via UNC-Path'),
+             ('document', 'Dokument in bestehendem Examplecontent Dossier'),
+             ('mail', 'Mail in bestehendem Examplecontent Dossier')],
             [(get_portal_type(i), get_title(i)) for i in list(bundle)])
 
     def test_loaded_items_contain_bytestrings(self):
@@ -65,13 +69,17 @@ class TestBundleLoader(TestCase):
     def test_inserts_portal_type(self):
         bundle = self.load_bundle()
         self.assertEqual([
-            ('businesscasedossier', 'Dossier Vreni Meier'),
+            ('businesscasedossier', 'Dossier Peter Schneider'),
+            ('businesscasedossier',
+             'Dossier in bestehendem Examplecontent Repository'),
             ('businesscasedossier', 'Hanspeter M\xc3\xbcller'),
             ('document', 'Bewerbung Hanspeter M\xc3\xbcller'),
             ('document', 'Document referenced via UNC-Path'),
+            ('document', 'Dokument in bestehendem Examplecontent Dossier'),
             ('document', 'Entlassung Hanspeter M\xc3\xbcller'),
             ('mail', ''),
             ('mail', 'Ein Mail'),
+            ('mail', 'Mail in bestehendem Examplecontent Dossier'),
             ('repositoryfolder', 'Organigramm, Prozesse'),
             ('repositoryfolder', 'Organisation'),
             ('repositoryfolder', 'Personal'),

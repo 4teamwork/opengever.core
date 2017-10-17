@@ -1,12 +1,21 @@
 from collections import OrderedDict
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
+from opengever.base.interfaces import IReferenceNumberFormatter
+from opengever.base.interfaces import IReferenceNumberSettings
 from opengever.bundle.sections.bundlesource import BUNDLE_KEY
+from plone import api
 from zope.annotation import IAnnotations
+from zope.component import queryAdapter
 from zope.interface import classProvides
 from zope.interface import implements
 import logging
 
+
+TYPES_WITHOUT_REFERENCE_NUMBER = [
+    'opengever.task.task',
+    'opengever.meeting.proposal',
+    'opengever.meeting.submittedproposal']
 
 log = logging.getLogger('opengever.bundle.resolveguid')
 log.setLevel(logging.INFO)
@@ -51,16 +60,30 @@ class ResolveGUIDSection(object):
         self.bundle = IAnnotations(transmogrifier)[BUNDLE_KEY]
 
         self.bundle.item_by_guid = OrderedDict()
+        self.bundle.path_by_reference_number = OrderedDict()
+        self.formatter = None
 
     def __iter__(self):
-        self.register_items()
+        self.register_items_by_guid()
         roots = self.build_tree()
         for node in self.visit_in_pre_order(
                 roots, level=1, previous_type='Portal'):
             yield node
 
-    def register_items(self):
+    def get_formatter(self):
+        if not self.formatter:
+            active_formatter = api.portal.get_registry_record(
+                name='formatter', interface=IReferenceNumberSettings)
+            self.formatter = queryAdapter(
+                api.portal.get(), IReferenceNumberFormatter,
+                name=active_formatter)
+
+        return self.formatter
+
+    def register_items_by_guid(self):
         """Register all items by their guid."""
+
+        used_ref_numbers = []
 
         for item in self.previous:
             if 'guid' not in item:
@@ -71,6 +94,29 @@ class ResolveGUIDSection(object):
                 raise DuplicateGuid(guid)
 
             self.bundle.item_by_guid[guid] = item
+
+            if 'parent_reference' in item:
+                reference_number = self.get_formatter().list_to_string(
+                    item['parent_reference'])
+                item['formatted_refnum'] = reference_number
+                used_ref_numbers.append(reference_number)
+
+        log.info('Start building reference mapping')
+        self.bundle.path_by_reference_number = self.build_reference_mapping(
+            used_ref_numbers)
+        log.info('Reference mapping built.')
+
+    def get_relative_path(self, brain):
+        """Returns the path relative to the plone site for the given brain.
+        """
+        return '/'.join(brain.getPath().split('/')[2:])
+
+    def build_reference_mapping(self, reference_numbers):
+        catalog = api.portal.get_tool('portal_catalog')
+        brains = catalog.unrestrictedSearchResults(reference=reference_numbers)
+        return {
+            brain.reference: self.get_relative_path(brain) for brain in brains
+            if brain.portal_type not in TYPES_WITHOUT_REFERENCE_NUMBER}
 
     def build_tree(self):
         """Build a tree from the flat list of items.

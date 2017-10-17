@@ -9,7 +9,19 @@
     "responsible": "lukas.graf",
     "review_state": "dossier-state-active",
     "start": "2010-11-11",
-    "title": "Dossier Vreni Meier"
+    "title": "Dossier Peter Schneider"
+  },  {
+    "guid": "4ed93561c4004c668feb8124b55897fc",
+    "parent_reference": [
+      [1, 1]
+    ],
+    "comments": "Vreni Meier ist ein Tausendsassa",
+    "keywords": [],
+    "relatedDossier": [],
+    "responsible": "lukas.graf",
+    "review_state": "dossier-state-active",
+    "start": "2010-11-11",
+    "title": "Dossier in bestehendem Examplecontent Repository"
   },  {
     "guid": "659645aec58d48a9b9663399ea2ec069",
     "parent_guid": "aed9f3db7b3b4713b61a7d7295362ea4",
@@ -48,5 +60,4 @@
       ]
     }
   }
-
 ]

@@ -1,3 +1,4 @@
+from Acquisition import aq_base
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from opengever.bundle.sections.bundlesource import BUNDLE_KEY
@@ -6,22 +7,23 @@ from opengever.bundle.sections.constructor import ConstructorSection
 from opengever.bundle.sections.constructor import InvalidType
 from opengever.bundle.tests import MockBundle
 from opengever.bundle.tests import MockTransmogrifier
-from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from plone import api
 from zope.annotation import IAnnotations
 from zope.interface.verify import verifyClass
 from zope.interface.verify import verifyObject
 
 
-class TestConstructor(FunctionalTestCase):
+class TestConstructor(IntegrationTestCase):
 
     def setUp(self):
         super(TestConstructor, self).setUp()
 
         lang_tool = api.portal.get_tool('portal_languages')
         lang_tool.setDefaultLanguage('de-ch')
-        # Required to create mails, but not dossiers - no idea why
-        self.grant('Manager')
+
+        # All bundle migration are always run with the system user
+        self.login(self.manager)
 
     def setup_section(self, previous=None):
         previous = previous or []
@@ -79,27 +81,36 @@ class TestConstructor(FunctionalTestCase):
     def test_creates_simple_title_content(self):
         item = {
             u"guid": "12345xy",
+            u"parent_guid": "123_parent",
             u"_type": u"opengever.dossier.businesscasedossier",
             u"title": u"Dossier",
         }
+
         section = self.setup_section(previous=[item])
+        section.bundle.item_by_guid['123_parent'] = {
+            '_path': '/'.join(self.leaf_repofolder.getPhysicalPath()[2:])
+        }
         list(section)
 
         portal = api.portal.get()
         content = portal.restrictedTraverse(item['_path'])
 
         self.assertEqual(u'Dossier', content.title)
-        self.assertFalse(hasattr(content, 'title_de'))
-        self.assertFalse(hasattr(content, 'title_Fr'))
+        self.assertFalse(hasattr(aq_base(content), 'title_de'))
+        self.assertFalse(hasattr(aq_base(content), 'title_Fr'))
 
     def test_title_is_unicode(self):
         item = {
             u"guid": "12345xy",
+            u"parent_guid": "123_parent",
             u"_type": u"opengever.document.document",
             u"title": u'Bewerbung Hanspeter M\xfcller'.encode('utf-8'),
         }
 
         section = self.setup_section(previous=[item])
+        section.bundle.item_by_guid['123_parent'] = {
+            '_path': '/'.join(self.dossier.getPhysicalPath()[2:])
+        }
         list(section)
 
         portal = api.portal.get()
@@ -112,10 +123,14 @@ class TestConstructor(FunctionalTestCase):
         guid = "12345xy"
         item = {
             u"guid": guid,
+            u"parent_guid": "123_parent",
             u"_type": u"opengever.dossier.businesscasedossier",
             u"title": u"My Dossier",
         }
         section = self.setup_section(previous=[item])
+        section.bundle.item_by_guid['123_parent'] = {
+            '_path': '/'.join(self.leaf_repofolder.getPhysicalPath()[2:])
+        }
         list(section)
 
         portal = api.portal.get()
@@ -151,15 +166,39 @@ class TestConstructor(FunctionalTestCase):
         item = {
             u"guid": "12345xy",
             u"_type": u"ftw.mail.mail",
+            u"parent_guid": "123_parent",
             u"title": u"My Mail",
             u"_path": u"/foo/bar"
         }
         section = self.setup_section(previous=[item])
+        section.bundle.item_by_guid['123_parent'] = {
+            '_path': '/'.join(self.dossier.getPhysicalPath()[2:])
+        }
         list(section)
 
         portal = api.portal.get()
         content = portal.restrictedTraverse(item['_path'])
 
         self.assertEqual(u'My Mail', content.title)
-        self.assertFalse(hasattr(content, 'title_de'))
-        self.assertFalse(hasattr(content, 'title_Fr'))
+        self.assertFalse(hasattr(aq_base(content), 'title_de'))
+        self.assertFalse(hasattr(aq_base(content), 'title_Fr'))
+
+    def test_use_formatted_refnum_for_container_path(self):
+        item = {
+            u"guid": "12345xy",
+            u"_type": u"ftw.mail.mail",
+            u"formatted_refnum": "Client 1.1 / 1",
+            u"title": u"My Mail",
+            u"_path": u"/foo/bar"
+        }
+
+        section = self.setup_section(previous=[item])
+        path = '/'.join(self.dossier.getPhysicalPath()[2:])
+        section.bundle.path_by_reference_number["Client 1.1 / 1"] = path
+        list(section)
+
+        portal = api.portal.get()
+        content = portal.restrictedTraverse(item['_path'])
+
+        self.assertEqual(u'My Mail', content.title)
+        self.assertEqual('ftw.mail.mail', content.portal_type)

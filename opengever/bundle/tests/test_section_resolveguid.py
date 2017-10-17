@@ -7,13 +7,13 @@ from opengever.bundle.sections.resolveguid import MissingParent
 from opengever.bundle.sections.resolveguid import ResolveGUIDSection
 from opengever.bundle.tests import MockBundle
 from opengever.bundle.tests import MockTransmogrifier
-from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from zope.annotation import IAnnotations
 from zope.interface.verify import verifyClass
 from zope.interface.verify import verifyObject
 
 
-class TestResolveGUID(FunctionalTestCase):
+class TestResolveGUID(IntegrationTestCase):
 
     def setup_section(self, previous=None):
         previous = previous or []
@@ -81,3 +81,58 @@ class TestResolveGUID(FunctionalTestCase):
 
         list(section)
         self.assertEqual(item, self.bundle.item_by_guid['marvin'])
+
+    def test_defines_path_by_reference_number_mapping(self):
+        self.login(self.regular_user)
+
+        items = [
+            {'guid': 'a1',
+             'parent_reference': [[1, 1], [1]]},
+            {'guid': 'b1',
+             'parent_reference': [[1, 1]]}
+        ]
+        section = self.setup_section(previous=items)
+        list(section)
+
+        self.assertEqual(
+            {'Client1 1.1': 'ordnungssystem/fuhrung/vertrage-und-vereinbarungen',
+             'Client1 1.1 / 1': 'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1'},
+            self.bundle.path_by_reference_number)
+
+    def test_parent_reference_number_is_added_to_the_items(self):
+        self.login(self.regular_user)
+
+        items = [
+            {'guid': 'a1',
+             'parent_reference': [[1, 1], [1]]},
+            {'guid': 'b1',
+             'parent_reference': [[1, 1]]}
+        ]
+        section = self.setup_section(previous=items)
+        items = list(section)
+
+        self.assertEquals(
+            [{'guid': 'a1', 'formatted_refnum': u'Client1 1.1 / 1',
+              'parent_reference': [[1, 1], [1]], '_nesting_depth': 1},
+             {'guid': 'b1', 'formatted_refnum': u'Client1 1.1',
+              'parent_reference': [[1, 1]], '_nesting_depth': 1}],
+            items)
+
+    def test_items_reference_by_ref_tuple_are_has_nesting_depth_1(self):
+        self.login(self.regular_user)
+
+        items = [
+            {'guid': 'a1',
+             'parent_reference': [[1, 1], [1]]},
+            {'guid': 'b1',
+             'parent_reference': [[1, 1]]}
+        ]
+        section = self.setup_section(previous=items)
+        items = list(section)
+
+        self.assertEquals(
+            [{'guid': 'a1', 'formatted_refnum': u'Client1 1.1 / 1',
+              'parent_reference': [[1, 1], [1]], '_nesting_depth': 1},
+             {'guid': 'b1', 'formatted_refnum': u'Client1 1.1',
+              'parent_reference': [[1, 1]], '_nesting_depth': 1}],
+            items)

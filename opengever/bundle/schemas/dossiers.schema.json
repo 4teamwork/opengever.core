@@ -323,6 +323,18 @@
                         "string"
                     ]
                 },
+                "parent_reference": {
+                    "type": [
+                        "null",
+                        "array"
+                    ],
+                    "items": {
+                        "items": {
+                            "type": "integer"
+                        },
+                        "type": "array"
+                    }
+                },
                 "_permissions": {
                     "$ref": "#/definitions/permission"
                 },
@@ -347,6 +359,11 @@
                         {
                             "required": [
                                 "parent_guid"
+                            ]
+                        },
+                        {
+                            "required": [
+                                "parent_reference"
                             ]
                         }
                     ]

@@ -100,5 +100,10 @@
         "file:file": "files/subdossier.docx"
       }
     ]
+  },
+  {
+    "_path": "/ordnungssystem/bevoelkerung-und-sicherheit/einbuergerungen/dossier-8",
+    "_type": "opengever.dossier.businesscasedossier",
+    "title": "OGGBundle Import"
   }
 ]
