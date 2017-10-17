@@ -2,7 +2,6 @@ from AccessControl import getSecurityManager
 from BTrees.OOBTree import OOBTree
 from datetime import datetime
 from datetime import timedelta
-from five import grok
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.request import dispatch_request
 from opengever.base.request import tracebackify
@@ -12,6 +11,7 @@ from Products.Five.browser import BrowserView
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
 from zope.component.hooks import getSite
+from zope.interface import implementer
 import json
 
 
@@ -19,8 +19,8 @@ ANNOTATIONS_KEY = 'wizard-data-storage'
 STORAGE_TIMEOUT = 60 * 60 * 24 * 2
 
 
-class WizardDataStorage(grok.GlobalUtility):
-    grok.implements(IWizardDataStorage)
+@implementer(IWizardDataStorage)
+class WizardDataStorage(object):
 
     def _get_user_storage(self):
         userid = getSecurityManager().getUser().getId()

@@ -1,4 +1,3 @@
-from five import grok
 from ftw.table.interfaces import ITableGenerator
 from opengever.base import _
 from opengever.base.transforms import trix2sablon
@@ -169,8 +168,8 @@ def TableRadioFieldWidget(field, request):
     return FieldWidget(field, TableRadioWidget(request))
 
 
-@grok.implementer(IFieldWidget)
-@grok.adapter(ISequence, ITextLine, IDefaultBrowserLayer)
+@implementer(IFieldWidget)
+@adapter(ISequence, ITextLine, IDefaultBrowserLayer)
 def SequenceTextLinesFieldWidget(field, value_type, request):
     """ There is no default sequence widget for TextLine types
     """

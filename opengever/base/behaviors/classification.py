@@ -1,4 +1,3 @@
-from five import grok
 from opengever.base import _
 from opengever.base.acquisition import acquired_default_factory
 from opengever.base.restricted_vocab import propagate_vocab_restrictions
@@ -8,13 +7,12 @@ from plone import api
 from plone.app.dexterity.behaviors import metadata
 from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
 from plone.autoform.interfaces import IFormFieldProvider
-from plone.directives import form
 from plone.memoize import ram
+from plone.supermodel import model
 from zope import schema
 from zope.i18n import translate
 from zope.interface import alsoProvides, Interface
 from zope.interface import provider
-from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 from zope.schema.interfaces import IContextAwareDefaultFactory
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
@@ -55,9 +53,9 @@ def public_trial_default():
         'public_trial_default_value', interface=IClassificationSettings)
 
 
-class IClassification(form.Schema):
+class IClassification(model.Schema):
 
-    form.fieldset(
+    model.fieldset(
         u'classification',
         label=_(u'fieldset_classification', default=u'Classification'),
         fields=[
@@ -119,7 +117,6 @@ class IClassificationSettings(Interface):
     )
 
 
-@grok.subscribe(IClassificationMarker, IObjectModifiedEvent)
 def propagate_vocab_restrictions_to_children(container, event):
     if ILocalrolesModifiedEvent.providedBy(event):
         return
@@ -130,6 +127,7 @@ def propagate_vocab_restrictions_to_children(container, event):
 
     propagate_vocab_restrictions(
         container, event, restricted_fields, IClassificationMarker)
+
 
 # CLASSIFICATION: Vocabulary and default value
 CLASSIFICATION_UNPROTECTED = u'unprotected'
@@ -158,6 +156,7 @@ def classification_default(context):
         default=CLASSIFICATION_UNPROTECTED)
     return default_factory(context)
 
+
 IClassification['classification'].defaultFactory = classification_default
 
 
@@ -183,6 +182,7 @@ def privacy_layer_default(context):
         field=IClassification['privacy_layer'],
         default=PRIVACY_LAYER_NO)
     return default_factory(context)
+
 
 IClassification['privacy_layer'].defaultFactory = privacy_layer_default
 

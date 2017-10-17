@@ -11,7 +11,6 @@ from Products.CMFPlone.interfaces import IPloneSiteRoot
 from zExceptions import NotFound
 from zExceptions import Unauthorized
 from zope.i18n import translate
-from zope.interface import Interface
 import json
 
 
@@ -48,10 +47,6 @@ class UpdateDossierExcerpt(grok.View):
 
 class RecieveExcerptDocumentView(PrivilegedReceiveObject):
     """Lock excerpt documents after recieving them."""
-
-    grok.name('recieve-excerpt-document')
-    grok.require('cmf.AddPortalContent')
-    grok.context(Interface)
 
     def receive(self):
         document = super(RecieveExcerptDocumentView, self).receive()

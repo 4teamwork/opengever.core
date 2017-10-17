@@ -1,4 +1,3 @@
-from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.base import _
 from opengever.base.acquisition import acquired_default_factory
@@ -7,16 +6,15 @@ from opengever.base.interfaces import IRetentionPeriodRegister
 from opengever.base.restricted_vocab import propagate_vocab_restrictions
 from opengever.base.restricted_vocab import RestrictedVocabularyFactory
 from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
-from plone.autoform.directives import write_permission
+from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
-from plone.directives import form
 from plone.registry.interfaces import IRegistry
+from plone.supermodel import model
 from zope import schema
 from zope.component import getUtility
 from zope.interface import alsoProvides
 from zope.interface import Interface
 from zope.interface import provider
-from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 from zope.schema.interfaces import IContextAwareDefaultFactory
 
 
@@ -24,9 +22,9 @@ class ILifeCycleMarker(Interface):
     pass
 
 
-class ILifeCycle(form.Schema):
+class ILifeCycle(model.Schema):
 
-    form.fieldset(
+    model.fieldset(
         u'lifecycle',
         label=_(u'fieldset_lifecycle', default=u'Life Cycle'),
         fields=[
@@ -39,7 +37,7 @@ class ILifeCycle(form.Schema):
             u'date_of_submission', ],
     )
 
-    #dexterity.write_permission(retention_period='cmf.ManagePortal')
+    # dexterity.write_permission(retention_period='cmf.ManagePortal')
     retention_period = schema.Choice(
         title=_(u'label_retention_period', u'Retention period (years)'),
         description=_(u'help_retention_period', default=u''),
@@ -47,14 +45,14 @@ class ILifeCycle(form.Schema):
         required=True,
     )
 
-    #dexterity.write_permission(retention_period_annotation='cmf.ManagePortal')
+    # dexterity.write_permission(retention_period_annotation='cmf.ManagePortal')
     retention_period_annotation = schema.Text(
         title=_(u'label_retention_period_annotation',
                 default=u'retentionPeriodAnnotation'),
         required=False
     )
 
-    #dexterity.write_permission(archival_value='cmf.ManagePortal')
+    # dexterity.write_permission(archival_value='cmf.ManagePortal')
     archival_value = schema.Choice(
         title=_(u'label_archival_value', default=u'Archival value'),
         description=_(u'help_archival_value', default=u'Archival value code'),
@@ -62,14 +60,14 @@ class ILifeCycle(form.Schema):
         required=True,
     )
 
-    #dexterity.write_permission(archival_value_annotation='cmf.ManagePortal')
+    # dexterity.write_permission(archival_value_annotation='cmf.ManagePortal')
     archival_value_annotation = schema.Text(
         title=_(u'label_archival_value_annotation',
                 default=u'archivalValueAnnotation'),
         required=False
     )
 
-    #dexterity.write_permission(custody_period='cmf.ManagePortal')
+    # dexterity.write_permission(custody_period='cmf.ManagePortal')
     custody_period = schema.Choice(
         title=_(u'label_custody_period', default=u'Custody period (years)'),
         description=_(u'help_custody_period', default=u''),
@@ -77,14 +75,14 @@ class ILifeCycle(form.Schema):
         required=True,
     )
 
-    write_permission(date_of_cassation='opengever.base.EditDateOfCassation')
+    form.write_permission(date_of_cassation='opengever.base.EditDateOfCassation')
     form.widget(date_of_cassation=DatePickerFieldWidget)
     date_of_cassation = schema.Date(
         title=_(u'label_dateofcassation', default=u'Date of cassation'),
         required=False,
     )
 
-    write_permission(date_of_submission='opengever.base.EditDateOfSubmission')
+    form.write_permission(date_of_submission='opengever.base.EditDateOfSubmission')
     form.widget(date_of_submission=DatePickerFieldWidget)
     date_of_submission = schema.Date(
         title=_(u'label_dateofsubmission', default=u'Date of submission'),
@@ -95,7 +93,6 @@ class ILifeCycle(form.Schema):
 alsoProvides(ILifeCycle, IFormFieldProvider)
 
 
-@grok.subscribe(ILifeCycleMarker, IObjectModifiedEvent)
 def propagate_vocab_restrictions_to_children(container, event):
     if ILocalrolesModifiedEvent.providedBy(event):
         return
@@ -145,6 +142,7 @@ def retention_period_default(context):
         default=5)
     return default_factory(context)
 
+
 ILifeCycle['retention_period'].defaultFactory = retention_period_default
 
 
@@ -178,6 +176,7 @@ def custody_period_default(context):
         default=30)
     return default_factory(context)
 
+
 ILifeCycle['custody_period'].defaultFactory = custody_period_default
 
 
@@ -209,5 +208,6 @@ def archival_value_default(context):
         field=ILifeCycle['archival_value'],
         default=ARCHIVAL_VALUE_UNCHECKED)
     return default_factory(context)
+
 
 ILifeCycle['archival_value'].defaultFactory = archival_value_default

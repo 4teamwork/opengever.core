@@ -1,13 +1,10 @@
-from five import grok
-from zope.interface import Interface
+from Products.Five.browser import BrowserView
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 
 
-class View(grok.View):
-    grok.context(Interface)
-    grok.require('zope2.View')
-    grok.name('gever-macros')
+class View(BrowserView):
 
-    template = grok.PageTemplateFile('templates/gever-macros.pt')
+    template = ViewPageTemplateFile('templates/gever-macros.pt')
 
     def __getitem__(self, key):
-        return self.template._template.macros[key]
+        return self.template.macros[key]

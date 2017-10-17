@@ -1,23 +1,14 @@
 from AccessControl import getSecurityManager
 from AccessControl import Unauthorized
 from AccessControl.users import nobody
-from five import grok
 from OFS.interfaces import IItem
-from plone.app.lockingbehavior.behaviors import ILocking
 from plone.app.relationfield.event import extract_relations
-from plone.dexterity.interfaces import IDexterityContent
-from plone.dexterity.interfaces import IEditBegunEvent
 from plone.protect.interfaces import IDisableCSRFProtection
 from Products.CMFCore.interfaces import ISiteRoot
-from Products.PluggableAuthService.interfaces.events import IUserLoggedOutEvent
 from z3c.relationfield.event import _setRelation
 from zope.annotation import IAnnotations
 from zope.interface import alsoProvides
-from zope.interface import Interface
-from zope.lifecycleevent.interfaces import IObjectAddedEvent
-from zope.lifecycleevent.interfaces import IObjectCreatedEvent
 from zope.publisher.interfaces.browser import IBrowserView
-from ZPublisher.interfaces import IPubAfterTraversal
 
 
 ALLOWED_ENDPOINTS = set([
@@ -51,7 +42,6 @@ ALLOWED_ENDPOINTS = set([
 ])
 
 
-@grok.subscribe(ILocking, IEditBegunEvent)
 def disable_plone_protect(obj, event):
     """Disables plone.protect for requests beginning an edit.
     Those requests cause the lockingbehavior to lock the content,
@@ -62,7 +52,6 @@ def disable_plone_protect(obj, event):
     alsoProvides(obj.REQUEST, IDisableCSRFProtection)
 
 
-@grok.subscribe(Interface, IUserLoggedOutEvent)
 def disable_plone_protect_when_logging_out(user, event):
     """When logging out, the session is manipulated.
     This results in a lot of changes in the database, so we disable CSRF protection.
@@ -70,7 +59,6 @@ def disable_plone_protect_when_logging_out(user, event):
     alsoProvides(user.REQUEST, IDisableCSRFProtection)
 
 
-@grok.subscribe(IDexterityContent, IObjectCreatedEvent)
 def initialize_annotations(obj, event):
     """We have to initalize the annotations on every object.
     To avoid CSRF protection messages on first access of newly created objects,
@@ -91,7 +79,6 @@ def initialize_annotations(obj, event):
     del annotations['initialized']
 
 
-@grok.subscribe(IDexterityContent, IObjectAddedEvent)
 def add_behavior_relations(obj, event):
     """Register relations in behaviors.
 
@@ -103,7 +90,6 @@ def add_behavior_relations(obj, event):
         _setRelation(obj, name, relation)
 
 
-@grok.subscribe(IPubAfterTraversal)
 def disallow_anonymous_views_on_site_root(event):
     """Do not allow access for anonymous to views on the portal root except
        those explicitly allowed here. We do it this way because we cannot

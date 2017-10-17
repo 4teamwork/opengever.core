@@ -15,7 +15,6 @@ from opengever.meeting import is_meeting_feature_enabled
 from opengever.meeting.browser.documents.submit import ISubmitAdditionalDocument
 from opengever.meeting.exceptions import NoSubmittedDocument
 from opengever.meeting.interfaces import IHistory
-from opengever.meeting.proposal import ISubmittedProposal
 from opengever.tabbedview.utils import get_containing_document_tab_url
 from plone import api
 from plone.autoform.form import AutoExtensibleForm
@@ -230,10 +229,6 @@ class UpdateSubmittedDocumentView(grok.View):
 
 class RecieveSubmittedDocumentView(PrivilegedReceiveObject):
     """Lock submitted documents after recieving them."""
-
-    grok.name('recieve-submitted-document')
-    grok.require('cmf.AddPortalContent')
-    grok.context(ISubmittedProposal)
 
     def receive(self):
         document = super(RecieveSubmittedDocumentView, self).receive()

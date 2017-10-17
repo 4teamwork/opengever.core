@@ -1,22 +1,17 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
-from five import grok
 from opengever.base.clipboard import Clipboard
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.private.interfaces import IPrivateContainer
+from Products.Five import BrowserView
 from ZODB.POSException import ConflictError
-from zope.interface import Interface
 
 
-class IsPastingAllowedView(grok.View):
+class IsPastingAllowedView(BrowserView):
     """A view to determine if pasting objects is supposed to be allowed on a
     particular context.
     Used in the available expression of the object_buttons 'paste' action.
     """
-
-    grok.name('is_pasting_allowed')
-    grok.context(Interface)
-    grok.require('zope2.View')
 
     disabled_types = ('opengever.dossier.templatefolder',
                       'opengever.contact.contactfolder',
@@ -75,7 +70,7 @@ class IsPastingAllowedView(grok.View):
 
         return True
 
-    def render(self):
+    def __call__(self):
         allowed = False
         # This view is called on *every request*. It's therefore critical
         # that it doesn't raise any exceptions.

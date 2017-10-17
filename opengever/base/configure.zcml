@@ -2,7 +2,6 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
-    xmlns:grok="http://namespaces.zope.org/grok"
     xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:meta="http://namespaces.zope.org/meta"
     xmlns:monkey="http://namespaces.plone.org/monkey"
@@ -17,8 +16,6 @@
 
   <include package="plone.app.workflow" />
   <include package="plone.behavior" file="meta.zcml" />
-  <include package="plone.directives.form" />
-  <include package="plone.directives.form" file="meta.zcml" />
   <include package="plone.formwidget.namedfile" />
   <include package="plone.rest" file="meta.zcml" />
   <include package="ftw.profilehook" />
@@ -30,8 +27,6 @@
   <include file="permissions.zcml" />
   <include file="schema.zcml" />
   <include file="widgets.zcml" />
-
-  <grok:grok package="." />
 
   <i18n:registerTranslations directory="locales" />
 
@@ -133,5 +128,132 @@
       />
 
   <adapter factory=".sequence.DefaultSequenceNumberGenerator" />
+
+  <adapter factory=".adapters.ReferenceNumberPrefixAdpater" />
+
+  <adapter
+      factory=".reference_formatter.DottedReferenceFormatter"
+      name="dotted"
+      />
+
+  <adapter
+      factory=".reference_formatter.GroupedByThreeReferenceFormatter"
+      name="grouped_by_three"
+      />
+
+  <adapter
+      factory=".reference_formatter.NoClientIdDottedReferenceFormatter"
+      name="no_client_id_dotted"
+      />
+
+  <adapter
+      factory=".reference_formatter.NoClientIdGroupedByThreeFormatter"
+      name="no_client_id_grouped_by_three"
+      />
+
+  <utility
+      factory=".unique_number.UniqueNumberUtility"
+      provides="opengever.base.interfaces.IUniqueNumberUtility"
+      />
+
+  <adapter factory=".unique_number.UniqueNumberUtilityGenerator" />
+
+  <browser:page
+      for="*"
+      class=".transport.ReceiveObject"
+      name="transporter-receive-object"
+      permission="cmf.AddPortalContent"
+      />
+
+  <browser:page
+      for="*"
+      class=".transport.PrivilegedReceiveObject"
+      name="transporter-privileged-receive-object"
+      permission="cmf.AddPortalContent"
+      />
+
+  <browser:page
+      for="*"
+      class=".transport.ExtractObject"
+      name="transporter-extract-object-json"
+      permission="cmf.AddPortalContent"
+      />
+
+  <adapter
+      factory=".transport.DexterityFieldDataCollector"
+      name="field-data"
+      />
+
+  <adapter
+      factory=".transport.OriginalIntidDataCollector"
+      name="intid-data"
+      />
+
+  <adapter
+      factory=".transport.DublinCoreMetaDataCollector"
+      name="dublin-core"
+      />
+
+  <subscriber
+      for="plone.app.lockingbehavior.behaviors.ILocking
+           plone.dexterity.interfaces.IEditBegunEvent"
+      handler=".subscribers.disable_plone_protect"
+      />
+
+  <subscriber
+      for="*
+           Products.PluggableAuthService.interfaces.events.IUserLoggedOutEvent"
+      handler=".subscribers.disable_plone_protect_when_logging_out"
+      />
+
+  <subscriber
+      for="plone.dexterity.interfaces.IDexterityContent
+           zope.lifecycleevent.interfaces.IObjectCreatedEvent"
+      handler=".subscribers.initialize_annotations"
+      />
+
+  <subscriber
+      for="plone.dexterity.interfaces.IDexterityContent
+           zope.lifecycleevent.interfaces.IObjectAddedEvent"
+      handler=".subscribers.add_behavior_relations"
+      />
+
+  <subscriber
+      for="ZPublisher.interfaces.IPubAfterTraversal"
+      handler=".subscribers.disallow_anonymous_views_on_site_root"
+      />
+
+  <adapter
+      factory=".indexes.referenceIndexer"
+      name="reference"
+      />
+
+  <adapter
+      factory=".indexes.title_de_indexer"
+      name="title_de"
+      />
+
+  <adapter
+      factory=".indexes.title_fr_indexer"
+      name="title_fr"
+      />
+
+  <utility factory=".sequence.SequenceNumber" />
+
+  <adapter factory=".quickupload.OGQuickUploadCapableFileFactory" />
+
+  <utility
+      factory=".interfaces.ReferenceFormatterVocabulary"
+      name="opengever.base.ReferenceFormatterVocabulary"
+      />
+
+  <adapter factory=".redirector.Redirector" />
+
+  <browser:viewlet
+      name="redirector"
+      manager="plone.app.layout.viewlets.interfaces.IAboveContentTitle"
+      class=".redirector.RedirectorViewlet"
+      permission="zope2.View"
+      />
 
 </configure>

@@ -1,22 +1,24 @@
-from five import grok
 from itertools import izip_longest
 from opengever.base.interfaces import IReferenceNumberFormatter
 from opengever.ogds.base.utils import get_current_admin_unit
+from zope.component import adapter
+from zope.interface import implementer
 from zope.interface import Interface
 import re
 
 
-class DottedReferenceFormatter(grok.Adapter):
-
-    grok.provides(IReferenceNumberFormatter)
-    grok.context(Interface)
-    grok.name('dotted')
+@implementer(IReferenceNumberFormatter)
+@adapter(Interface)
+class DottedReferenceFormatter(object):
 
     is_grouped_by_three = False
 
     repository_dossier_seperator = u' / '
     dossier_document_seperator = u' / '
     repository_title_seperator = u'.'
+
+    def __init__(self, context):
+        self.context = context
 
     def complete_number(self, numbers):
         """Generate the complete reference number, for the given numbers dict.
@@ -125,10 +127,6 @@ class GroupedByThreeReferenceFormatter(DottedReferenceFormatter):
     134.3-2.1
     """
 
-    grok.provides(IReferenceNumberFormatter)
-    grok.context(Interface)
-    grok.name('grouped_by_three')
-
     is_grouped_by_three = True
 
     repository_dossier_seperator = u'-'
@@ -187,7 +185,6 @@ class GroupedByThreeReferenceFormatter(DottedReferenceFormatter):
 
 
 class NoClientIdDottedReferenceFormatter(DottedReferenceFormatter):
-    grok.name('no_client_id_dotted')
 
     def get_portal_part(self):
         """Returns the reference number part of the portal, the adminunit's
@@ -221,7 +218,6 @@ class NoClientIdDottedReferenceFormatter(DottedReferenceFormatter):
 
 # XXX Refactor me and avoid copy-paste of complete_number.
 class NoClientIdGroupedByThreeFormatter(GroupedByThreeReferenceFormatter):
-    grok.name('no_client_id_grouped_by_three')
 
     def complete_number(self, numbers):
         """GroupedByThreeFormatter which omits client id.

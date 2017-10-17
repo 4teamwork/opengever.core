@@ -1,18 +1,11 @@
+from plone.app.layout.viewlets.common import ViewletBase
 from Products.CMFCore.utils import getToolByName
-from five import grok
-from plone.app.layout.viewlets.interfaces import IPortalHeader
-from zope.interface import Interface
 
 
-class ExposatorViewlet(grok.Viewlet):
+class ExposatorViewlet(ViewletBase):
     """ Viewlet which check the current clientm, if it's a remote client
     the navi and header area is blanked out.
     """
-
-    grok.name('exposator')
-    grok.context(Interface)
-    grok.viewletmanager(IPortalHeader)
-    grok.require('zope2.View')
 
     REMOTE_CLIENT_JS = '''
 <script type="text/javascript">
