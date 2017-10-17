@@ -228,4 +228,19 @@
       handler=".subscribers.disallow_anonymous_views_on_site_root"
       />
 
+  <adapter
+      factory=".indexes.referenceIndexer"
+      name="reference"
+      />
+
+  <adapter
+      factory=".indexes.title_de_indexer"
+      name="title_de"
+      />
+
+  <adapter
+      factory=".indexes.title_fr_indexer"
+      name="title_fr"
+      />
+
 </configure>
