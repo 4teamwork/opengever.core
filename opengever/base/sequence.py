@@ -1,4 +1,3 @@
-from five import grok
 from opengever.base.interfaces import INoSeparateConnectionForSequenceNumbers
 from opengever.base.interfaces import ISequenceNumber
 from opengever.base.interfaces import ISequenceNumberGenerator
@@ -22,11 +21,11 @@ SEQUENCE_NUMBER_ANNOTATION_KEY = 'ISequenceNumber.sequence_number'
 LOG = logging.getLogger('opengever.base.sequence')
 
 
-class SequenceNumber(grok.GlobalUtility):
+@implementer(ISequenceNumber)
+class SequenceNumber(object):
     """ The sequence number utility provides a getNumber(obj) method
     which returns a unique number for each object.
     """
-    grok.provides(ISequenceNumber)
 
     def get_number(self, obj):
         ann = unprotected_write(IAnnotations(obj))

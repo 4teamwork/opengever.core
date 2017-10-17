@@ -243,4 +243,6 @@
       name="title_fr"
       />
 
+  <utility factory=".sequence.SequenceNumber" />
+
 </configure>
