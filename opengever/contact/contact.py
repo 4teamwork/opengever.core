@@ -4,16 +4,16 @@ from opengever.ogds.models import EMAIL_LENGTH
 from opengever.ogds.models import FIRSTNAME_LENGTH
 from opengever.ogds.models import LASTNAME_LENGTH
 from plone.dexterity.content import Item
-from plone.directives import form
 from plone.indexer import indexer
 from plone.namedfile.field import NamedImage
+from plone.supermodel import model
 from zope import schema
 
 
-class IContact(form.Schema):
+class IContact(model.Schema):
     """ A contact
     """
-    form.fieldset(
+    model.fieldset(
         u'personal',
         label = _(u'personal', default=u'Personal Stuff'),
         fields = [
@@ -28,7 +28,7 @@ class IContact(form.Schema):
             u'function',
         ])
 
-    form.fieldset(
+    model.fieldset(
         u'internet',
         label = _(u'internet', default=u'Internet'),
         fields= [
@@ -37,7 +37,7 @@ class IContact(form.Schema):
             u'url',
         ])
 
-    form.fieldset(
+    model.fieldset(
         u'telefon',
         label= _(u'telefon', default=u"Telefon"),
         fields= [
@@ -47,7 +47,7 @@ class IContact(form.Schema):
             u'phone_home',
         ])
 
-    form.fieldset(
+    model.fieldset(
         u'address',
         label= _(u'address', default=u'Address'),
         fields= [

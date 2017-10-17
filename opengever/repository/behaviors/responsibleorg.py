@@ -1,13 +1,14 @@
 from opengever.ogds.models import UNIT_ID_LENGTH
 from opengever.repository import _
-from plone.directives import form
+from plone.autoform.interfaces import IFormFieldProvider
+from plone.supermodel import model
 from zope import schema
 from zope.interface import alsoProvides
 
 
-class IResponsibleOrgUnit(form.Schema):
+class IResponsibleOrgUnit(model.Schema):
 
-    form.fieldset(
+    model.fieldset(
         u'common',
         label=_(u'fieldset_common', default=u'Common'),
         fields=['responsible_org_unit'],
@@ -23,4 +24,4 @@ class IResponsibleOrgUnit(form.Schema):
         )
 
 
-alsoProvides(IResponsibleOrgUnit, form.IFormFieldProvider)
+alsoProvides(IResponsibleOrgUnit, IFormFieldProvider)

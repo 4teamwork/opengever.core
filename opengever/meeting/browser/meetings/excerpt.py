@@ -3,7 +3,7 @@ from opengever.meeting.command import CreateGeneratedDocumentCommand
 from opengever.meeting.command import ManualExcerptOperations
 from opengever.meeting.sources import all_open_dossiers_source
 from plone.autoform.form import AutoExtensibleForm
-from plone.directives import form
+from plone.supermodel import model
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from z3c.form import button
 from z3c.form.form import EditForm
@@ -14,7 +14,7 @@ from zope.interface import Invalid
 from zope.interface import invariant
 
 
-class IGenerateExcerpt(form.Schema):
+class IGenerateExcerpt(model.Schema):
     """Schema interface with configuration options for excerpt generation.
     """
 

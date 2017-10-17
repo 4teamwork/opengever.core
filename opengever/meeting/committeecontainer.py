@@ -6,11 +6,11 @@ from opengever.meeting.sources import proposal_template_source
 from opengever.meeting.sources import sablon_template_source
 from opengever.meeting.wrapper import MemberWrapper
 from plone.dexterity.content import Container
-from plone.directives import form
+from plone.supermodel import model
 from z3c.relationfield.schema import RelationChoice
 
 
-class ICommitteeContainer(form.Schema):
+class ICommitteeContainer(model.Schema):
     """Base schema for a the committee container.
     """
 

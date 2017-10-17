@@ -15,7 +15,7 @@ from opengever.tasktemplates.interfaces import IFromTasktemplateGenerated
 from plone import api
 from plone.dexterity.utils import addContentToContainer
 from plone.dexterity.utils import createContent
-from plone.directives import form
+from plone.supermodel import model
 from plone.z3cform.layout import FormWrapper
 from z3c.form.browser import checkbox
 from z3c.form.browser import radio
@@ -59,7 +59,7 @@ def get_wizard_data(context, key):
     return dm.get(get_datamanger_key(context), key)
 
 
-class ISelectTaskTemplateFolder(form.Schema):
+class ISelectTaskTemplateFolder(model.Schema):
 
     tasktemplatefolder = schema.Choice(
         title=_('label_tasktemplatefolder', default=u'Tasktemplatefolder'),
@@ -149,7 +149,7 @@ def get_preselected_tasktemplates(context):
             if template.getObject().preselected]
 
 
-class ISelectTaskTemplates(form.Schema):
+class ISelectTaskTemplates(model.Schema):
 
     tasktemplates = schema.List(
         title=_('label_tasktemplates', default=u'Tasktemplates'),

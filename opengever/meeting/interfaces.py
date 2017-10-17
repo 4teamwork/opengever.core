@@ -1,5 +1,5 @@
 from opengever.base.interfaces import ISQLObjectWrapper
-from plone.directives import form
+from plone.supermodel import model
 from zope import schema
 from zope.interface import Interface
 
@@ -33,7 +33,7 @@ class IPeriodWrapper(ISQLObjectWrapper):
     """Marker interface for period object wrappers."""
 
 
-class IMeetingDossier(form.Schema):
+class IMeetingDossier(model.Schema):
     """Marker interface for MeetingDossier"""
 
 

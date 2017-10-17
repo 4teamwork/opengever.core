@@ -1,9 +1,9 @@
 from opengever.task import _ as task_mf
-from plone.directives import form
+from plone.supermodel import model
 from zope import schema
 
 
-class ISimpleResponseForm(form.Schema):
+class ISimpleResponseForm(model.Schema):
     """Special addresponse form for the forwarding close transition.
     Looks the same, but do something different.
     """

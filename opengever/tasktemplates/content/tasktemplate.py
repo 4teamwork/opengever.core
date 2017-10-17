@@ -5,20 +5,21 @@ from opengever.task.util import update_reponsible_field_data
 from opengever.tasktemplates import _
 from opengever.tasktemplates.sources import TaskResponsibleSourceBinder
 from opengever.tasktemplates.sources import TaskTemplateIssuerSourceBinder
+from plone.autoform import directives as form
 from plone.dexterity.browser.add import DefaultAddForm
 from plone.dexterity.browser.add import DefaultAddView
 from plone.dexterity.browser.edit import DefaultEditForm
 from plone.dexterity.content import Item
-from plone.directives import form
+from plone.supermodel import model
 from z3c.form import widget
 from z3c.form.browser import checkbox
 from zope import schema
 from zope.interface import implements
 
 
-class ITaskTemplate(form.Schema):
+class ITaskTemplate(model.Schema):
 
-    form.fieldset(
+    model.fieldset(
         u'common',
         label=_(u'fieldset_common', default=u'Common'),
         fields=[
@@ -81,7 +82,7 @@ class ITaskTemplate(form.Schema):
         required=True,
     )
 
-    form.primary('text')
+    model.primary('text')
     text = schema.Text(
         title=_(u"label_text", default=u"Text"),
         description=_(u"help_text", default=u""),

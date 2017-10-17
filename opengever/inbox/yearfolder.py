@@ -3,11 +3,11 @@ from opengever.base.security import elevated_privileges
 from opengever.inbox import _
 from opengever.inbox.utils import get_current_inbox
 from plone.dexterity.utils import createContentInContainer
-from plone.directives import form
+from plone.supermodel import model
 from zope.i18n import translate
 
 
-class IYearFolder(form.Schema):
+class IYearFolder(model.Schema):
     """Base schema for a year folder.
     """
 

@@ -20,11 +20,12 @@ from opengever.mail.events import AttachmentsDeleted
 from opengever.mail.interfaces import IAttachmentsDeletedEvent
 from opengever.ogds.models.user import User
 from plone.app.dexterity.behaviors import metadata
+from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
-from plone.directives import form
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.namedfile import field
 from plone.namedfile.interfaces import HAVE_BLOBS
+from plone.supermodel import model
 from plone.supermodel.interfaces import FIELDSETS_KEY
 from plone.supermodel.model import Fieldset
 from sqlalchemy import func
@@ -81,12 +82,12 @@ def get_message_source_vocabulary():
     return SimpleVocabulary(terms)
 
 
-class IOGMail(form.Schema):
+class IOGMail(model.Schema):
     """Opengever specific behavior,
     which add a title Field to the form.
     """
 
-    form.fieldset(
+    model.fieldset(
         u'common',
         label=base_mf(u'fieldset_common', u'Common'),
         fields=[u'title', 'original_message', 'message_source'])

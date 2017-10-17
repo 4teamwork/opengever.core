@@ -7,13 +7,14 @@ from opengever.meeting import _
 from opengever.meeting.browser.members import MemberView
 from opengever.meeting.browser.views import RemoveModelView
 from opengever.meeting.model import Membership
-from plone.directives import form
+from plone.autoform import directives as form
+from plone.supermodel import model
 from z3c.form.interfaces import ActionExecutionError
 from zope import schema
 from zope.interface import Invalid
 
 
-class IMembershipModel(form.Schema):
+class IMembershipModel(model.Schema):
     """Membership model schema interface."""
 
     form.widget(date_from=DatePickerFieldWidget)

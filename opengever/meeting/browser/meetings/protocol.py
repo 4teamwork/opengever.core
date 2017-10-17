@@ -12,8 +12,9 @@ from opengever.meeting.sablon import Sablon
 from opengever.meeting.vocabulary import get_committee_member_vocabulary
 from opengever.ogds.base.actor import Actor
 from plone import api
-from plone.directives import form
+from plone.autoform import directives as form
 from plone.locking.interfaces import ILockable
+from plone.supermodel import model
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from z3c.form import button
@@ -22,7 +23,7 @@ from zExceptions import Redirect
 from zope import schema
 
 
-class IMeetingMetadata(form.Schema):
+class IMeetingMetadata(model.Schema):
     """Schema interface for meeting metadata."""
 
     title = schema.TextLine(

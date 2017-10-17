@@ -21,8 +21,8 @@ from persistent.list import PersistentList
 from plone import api
 from plone.autoform.directives import write_permission
 from plone.dexterity.content import Container
-from plone.directives import form
 from plone.formwidget.contenttree import ObjPathSourceBinder
+from plone.supermodel import model
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
 from zExceptions import Unauthorized
@@ -124,9 +124,9 @@ def title_default():
         api.portal.get_localized_time(date.today(), long_format=False))
 
 
-class IDispositionSchema(form.Schema):
+class IDispositionSchema(model.Schema):
 
-    form.fieldset(
+    model.fieldset(
         u'common',
         label=_(u'fieldset_common', default=u'Common'),
         fields=[u'title', u'dossiers', u'transfer_number'],

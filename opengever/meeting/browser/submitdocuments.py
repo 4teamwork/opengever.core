@@ -18,8 +18,8 @@ from opengever.meeting.interfaces import IHistory
 from opengever.tabbedview.utils import get_containing_document_tab_url
 from plone import api
 from plone.autoform.form import AutoExtensibleForm
-from plone.directives import form
 from plone.locking.interfaces import ILockable
+from plone.supermodel import model
 from z3c.form.button import buttonAndHandler
 from z3c.form.form import Form
 from z3c.form.interfaces import HIDDEN_MODE
@@ -33,7 +33,7 @@ from zope.schema import TextLine
 import json
 
 
-class ISubmitAdditionalDocuments(form.Schema):
+class ISubmitAdditionalDocuments(model.Schema):
     """Meeting model schema interface."""
 
     additionalDocuments = RelationList(

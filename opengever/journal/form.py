@@ -6,7 +6,7 @@ from opengever.journal import _
 from opengever.journal.entry import ManualJournalEntry
 from plone.autoform.widgets import ParameterizedWidget
 from plone.dexterity.i18n import MessageFactory as pd_mf
-from plone.directives import form
+from plone.supermodel import model
 from z3c.form import button
 from z3c.form.field import Fields
 from z3c.form.form import AddForm
@@ -17,7 +17,7 @@ from z3c.relationfield.schema import RelationList
 from zope import schema
 
 
-class IManualJournalEntry(form.Schema):
+class IManualJournalEntry(model.Schema):
     """Provide a z3c.form.Schema to enter a manual journal entry."""
 
     category = schema.Choice(
