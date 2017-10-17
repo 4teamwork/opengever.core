@@ -1,4 +1,3 @@
-from five import grok
 from opengever.base import _
 from opengever.base.acquisition import acquired_default_factory
 from opengever.base.restricted_vocab import propagate_vocab_restrictions
@@ -14,7 +13,6 @@ from zope import schema
 from zope.i18n import translate
 from zope.interface import alsoProvides, Interface
 from zope.interface import provider
-from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 from zope.schema.interfaces import IContextAwareDefaultFactory
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
@@ -119,7 +117,6 @@ class IClassificationSettings(Interface):
     )
 
 
-@grok.subscribe(IClassificationMarker, IObjectModifiedEvent)
 def propagate_vocab_restrictions_to_children(container, event):
     if ILocalrolesModifiedEvent.providedBy(event):
         return

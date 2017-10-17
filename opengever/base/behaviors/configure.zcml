@@ -84,4 +84,10 @@
       for="plone.dexterity.interfaces.IDexterityContent"
       />
 
+  <subscriber
+      for="opengever.base.behaviors.classification.IClassificationMarker
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".classification.propagate_vocab_restrictions_to_children"
+      />
+
 </configure>
