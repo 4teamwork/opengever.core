@@ -144,7 +144,8 @@ class AgendaItemsView(BrowserView):
     @require_word_meeting_feature
     def _serialize_excerpts(self, meeting, item):
         excerpt_data = []
-        docs = IContentListing(item.get_excerpt_documents())
+
+        docs = IContentListing(item.get_excerpt_documents(unrestricted=True))
         source_dossier_excerpt = item.get_source_dossier_excerpt()
 
         for doc in docs:
