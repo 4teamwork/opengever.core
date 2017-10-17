@@ -127,6 +127,8 @@ class DocumentBuilder(DexterityBuilder):
 
         if self._is_shadow:
             obj.as_shadow_document()
+            # Normally a form takes care of this for us, but we need to do this in our builders
+            obj.reindexObjectSecurity()
 
         super(DocumentBuilder, self).after_create(obj)
 
