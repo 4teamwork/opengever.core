@@ -1,0 +1,14 @@
+[
+  {
+    "guid": "77773561c4004c668feb8124b5583333",
+    "parent_reference": [[1, 3]],
+    "comments": "Dossierkommentar",
+    "keywords": [],
+    "reference_number": "1",
+    "relatedDossier": [],
+    "responsible": "lukas.graf",
+    "review_state": "dossier-state-active",
+    "start": "2017-11-11",
+    "title": "Ein neues Dossier"
+  }
+]

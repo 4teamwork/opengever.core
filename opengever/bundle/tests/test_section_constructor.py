@@ -183,11 +183,11 @@ class TestConstructor(IntegrationTestCase):
         self.assertFalse(hasattr(aq_base(content), 'title_de'))
         self.assertFalse(hasattr(aq_base(content), 'title_Fr'))
 
-    def test_use_formatted_refnum_for_container_path(self):
+    def test_use_formatted_parent_refnum_for_container_path(self):
         item = {
             u"guid": "12345xy",
             u"_type": u"ftw.mail.mail",
-            u"formatted_refnum": "Client 1.1 / 1",
+            u"formatted_parent_refnum": "Client 1.1 / 1",
             u"title": u"My Mail",
             u"_path": u"/foo/bar"
         }

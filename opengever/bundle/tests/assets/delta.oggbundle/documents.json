@@ -1,0 +1,18 @@
+[
+  {
+    "guid": "9999ce18d999999994ace260a8779999",
+    "parent_guid": "77773561c4004c668feb8124b5583333",
+    "document_author": "david.erni",
+    "document_date": "2011-01-01",
+    "document_type": "directive",
+    "filepath": "files/mueller.docx",
+    "keywords": [],
+    "preserved_as_paper": true,
+    "public_trial": "private",
+    "public_trial_statement": "Enthält private Daten",
+    "receipt_date": "2011-01-01",
+    "relatedItems": [],
+    "review_state": "document-state-draft",
+    "title": "Ein neues Dokument"
+  }
+]

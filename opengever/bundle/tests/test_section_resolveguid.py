@@ -112,9 +112,9 @@ class TestResolveGUID(IntegrationTestCase):
         items = list(section)
 
         self.assertEquals(
-            [{'guid': 'a1', 'formatted_refnum': u'Client1 1.1 / 1',
+            [{'guid': 'a1', 'formatted_parent_refnum': u'Client1 1.1 / 1',
               'parent_reference': [[1, 1], [1]], '_nesting_depth': 1},
-             {'guid': 'b1', 'formatted_refnum': u'Client1 1.1',
+             {'guid': 'b1', 'formatted_parent_refnum': u'Client1 1.1',
               'parent_reference': [[1, 1]], '_nesting_depth': 1}],
             items)
 
@@ -131,8 +131,8 @@ class TestResolveGUID(IntegrationTestCase):
         items = list(section)
 
         self.assertEquals(
-            [{'guid': 'a1', 'formatted_refnum': u'Client1 1.1 / 1',
+            [{'guid': 'a1', 'formatted_parent_refnum': u'Client1 1.1 / 1',
               'parent_reference': [[1, 1], [1]], '_nesting_depth': 1},
-             {'guid': 'b1', 'formatted_refnum': u'Client1 1.1',
+             {'guid': 'b1', 'formatted_parent_refnum': u'Client1 1.1',
               'parent_reference': [[1, 1]], '_nesting_depth': 1}],
             items)
