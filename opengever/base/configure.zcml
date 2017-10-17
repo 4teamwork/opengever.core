@@ -245,4 +245,6 @@
 
   <utility factory=".sequence.SequenceNumber" />
 
+  <adapter factory=".quickupload.OGQuickUploadCapableFileFactory" />
+
 </configure>

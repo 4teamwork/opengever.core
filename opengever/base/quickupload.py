@@ -4,7 +4,6 @@ from collective.quickupload.browser.quick_upload import QuickUploadFile
 from collective.quickupload.browser.quick_upload import QuickUploadInit
 from collective.quickupload.browser.quick_upload import QuickUploadView
 from collective.quickupload.interfaces import IQuickUploadFileFactory
-from five import grok
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.command import CreateEmailCommand
@@ -12,8 +11,10 @@ from opengever.mail.mail import MESSAGE_SOURCE_DRAG_DROP_UPLOAD
 from opengever.quota.exceptions import ForbiddenByQuota
 from plone.protect import createToken
 from plone.protect.interfaces import IDisableCSRFProtection
+from zope.component import adapter
 from zope.i18n import translate
 from zope.interface import alsoProvides
+from zope.interface import implementer
 import mimetypes
 import os
 import transaction
@@ -64,11 +65,10 @@ class OGQuickUploadFile(QuickUploadFile):
         return result
 
 
-class OGQuickUploadCapableFileFactory(grok.Adapter):
+@implementer(IQuickUploadFileFactory)
+@adapter(ITabbedviewUploadable)
+class OGQuickUploadCapableFileFactory(object):
     """OG specific Quick upload Adatper"""
-
-    grok.context(ITabbedviewUploadable)
-    grok.implements(IQuickUploadFileFactory)
 
     def __init__(self, context):
         self.context = aq_inner(context)
