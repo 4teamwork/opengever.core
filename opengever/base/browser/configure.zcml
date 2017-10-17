@@ -143,4 +143,11 @@
       class=".pasting_allowed.IsPastingAllowedView"
       />
 
+  <browser:page
+      name="gever-macros"
+      for="*"
+      permission="zope2.View"
+      class=".gever_macros.View"
+      />
+
 </configure>
