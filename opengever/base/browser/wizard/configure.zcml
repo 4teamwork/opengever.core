@@ -9,4 +9,6 @@
       permission="zope2.View"
       />
 
+  <utility factory=".storage.WizardDataStorage" />
+
 </configure>
