@@ -1,5 +1,5 @@
-from plone.directives import form
+from plone.supermodel import model
 
 
-class IEmptySchema(form.Schema):
+class IEmptySchema(model.Schema):
     """an empty schema used or tests"""

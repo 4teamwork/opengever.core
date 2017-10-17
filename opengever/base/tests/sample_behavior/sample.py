@@ -1,9 +1,10 @@
-from plone.directives import form
+from plone.autoform.interfaces import IFormFieldProvider
+from plone.supermodel import model
 from zope import schema
 from zope.interface import alsoProvides
 
 
-class ISampleSchema(form.Schema):
+class ISampleSchema(model.Schema):
     """Sample behavior to be used in tests.
     """
 
@@ -13,4 +14,4 @@ class ISampleSchema(form.Schema):
         default=42
     )
 
-alsoProvides(ISampleSchema, form.IFormFieldProvider)
+alsoProvides(ISampleSchema, IFormFieldProvider)

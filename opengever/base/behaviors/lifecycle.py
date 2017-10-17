@@ -6,10 +6,10 @@ from opengever.base.interfaces import IRetentionPeriodRegister
 from opengever.base.restricted_vocab import propagate_vocab_restrictions
 from opengever.base.restricted_vocab import RestrictedVocabularyFactory
 from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
-from plone.autoform.directives import write_permission
+from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
-from plone.directives import form
 from plone.registry.interfaces import IRegistry
+from plone.supermodel import model
 from zope import schema
 from zope.component import getUtility
 from zope.interface import alsoProvides
@@ -22,9 +22,9 @@ class ILifeCycleMarker(Interface):
     pass
 
 
-class ILifeCycle(form.Schema):
+class ILifeCycle(model.Schema):
 
-    form.fieldset(
+    model.fieldset(
         u'lifecycle',
         label=_(u'fieldset_lifecycle', default=u'Life Cycle'),
         fields=[
@@ -75,14 +75,14 @@ class ILifeCycle(form.Schema):
         required=True,
     )
 
-    write_permission(date_of_cassation='opengever.base.EditDateOfCassation')
+    form.write_permission(date_of_cassation='opengever.base.EditDateOfCassation')
     form.widget(date_of_cassation=DatePickerFieldWidget)
     date_of_cassation = schema.Date(
         title=_(u'label_dateofcassation', default=u'Date of cassation'),
         required=False,
     )
 
-    write_permission(date_of_submission='opengever.base.EditDateOfSubmission')
+    form.write_permission(date_of_submission='opengever.base.EditDateOfSubmission')
     form.widget(date_of_submission=DatePickerFieldWidget)
     date_of_submission = schema.Date(
         title=_(u'label_dateofsubmission', default=u'Date of submission'),

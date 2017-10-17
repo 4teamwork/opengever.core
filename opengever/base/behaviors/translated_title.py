@@ -1,9 +1,9 @@
 from collective.dexteritytextindexer import searchable
 from opengever.base import _
 from opengever.base.utils import get_preferred_language_code
-from plone.autoform import directives
+from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
-from plone.directives.form import Schema
+from plone.supermodel import model
 from zope.interface import alsoProvides
 from zope.interface import Interface
 from zope.schema import TextLine
@@ -28,18 +28,18 @@ class TranslatedTitleMixin(object):
         return title or ''
 
 
-class ITranslatedTitle(Schema):
+class ITranslatedTitle(model.Schema):
     """Behavior schema adding translated title fields to dexterity
     content.
     """
 
-    directives.order_before(title_de='*')
+    form.order_before(title_de='*')
     searchable('title_de')
     title_de = TextLine(
         title=_(u'label_title_de', default=u'Title (German)'),
         required=True)
 
-    directives.order_before(title_fr='*')
+    form.order_before(title_fr='*')
     searchable('title_fr')
     title_fr = TextLine(
         title=_(u'label_title_fr', default=u'Title (French)'),

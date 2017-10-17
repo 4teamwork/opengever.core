@@ -1,10 +1,10 @@
-from zope.component import getUtility
-from plone.indexer import indexer
-from plone.directives import form
 from opengever.base.interfaces import ISequenceNumber
+from plone.indexer import indexer
+from plone.supermodel import model
+from zope.component import getUtility
 
 
-class ISequenceNumberBehavior(form.Schema):
+class ISequenceNumberBehavior(model.Schema):
     """the SequenceNumber Behavior is only used
     for the sequence number indexer """
     pass

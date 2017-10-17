@@ -1,16 +1,17 @@
 from collective import dexteritytextindexer
 from opengever.base import _
 from plone.app.dexterity.behaviors import metadata
-from plone.directives import form
+from plone.autoform.interfaces import IFormFieldProvider
+from plone.supermodel import model
 from zope import schema
 from zope.interface import Interface, alsoProvides
 
 
-class IOpenGeverBase(form.Schema):
+class IOpenGeverBase(model.Schema):
     """ IOpengeverBase contains title and description fields
     This is a schema interface, not a marker interface!
     """
-    form.fieldset(
+    model.fieldset(
         u'common',
         label=_(u'fieldset_common', default=u'Common'),
         fields=[
@@ -34,7 +35,7 @@ class IOpenGeverBase(form.Schema):
         )
 
 
-alsoProvides(IOpenGeverBase, form.IFormFieldProvider)
+alsoProvides(IOpenGeverBase, IFormFieldProvider)
 
 
 class IOpenGeverBaseMarker(Interface):

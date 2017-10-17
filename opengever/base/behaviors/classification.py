@@ -7,8 +7,8 @@ from plone import api
 from plone.app.dexterity.behaviors import metadata
 from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
 from plone.autoform.interfaces import IFormFieldProvider
-from plone.directives import form
 from plone.memoize import ram
+from plone.supermodel import model
 from zope import schema
 from zope.i18n import translate
 from zope.interface import alsoProvides, Interface
@@ -53,9 +53,9 @@ def public_trial_default():
         'public_trial_default_value', interface=IClassificationSettings)
 
 
-class IClassification(form.Schema):
+class IClassification(model.Schema):
 
-    form.fieldset(
+    model.fieldset(
         u'classification',
         label=_(u'fieldset_classification', default=u'Classification'),
         fields=[
