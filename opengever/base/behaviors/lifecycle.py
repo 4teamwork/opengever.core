@@ -1,4 +1,3 @@
-from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.base import _
 from opengever.base.acquisition import acquired_default_factory
@@ -16,7 +15,6 @@ from zope.component import getUtility
 from zope.interface import alsoProvides
 from zope.interface import Interface
 from zope.interface import provider
-from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 from zope.schema.interfaces import IContextAwareDefaultFactory
 
 
@@ -95,7 +93,6 @@ class ILifeCycle(form.Schema):
 alsoProvides(ILifeCycle, IFormFieldProvider)
 
 
-@grok.subscribe(ILifeCycleMarker, IObjectModifiedEvent)
 def propagate_vocab_restrictions_to_children(container, event):
     if ILocalrolesModifiedEvent.providedBy(event):
         return
