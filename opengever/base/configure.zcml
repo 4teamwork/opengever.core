@@ -105,6 +105,16 @@
       permission="zope2.View"
       />
 
+  <!-- JSON endpoint for send as attachment action -->
+  <plone:service
+      method="GET"
+      for="*"
+      accept="application/json"
+      factory=".service.DefaultEmailAttributes"
+      name="attributes"
+      permission="zope2.View"
+      />
+
   <adapter
       for="*
            opengever.base.interfaces.IOpengeverBaseLayer"
