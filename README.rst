@@ -526,6 +526,8 @@ Objects
         - self.meeting_dossier
     - self.empty_repofolder
   - self.templates
+    - self.dossiertemplate
+      - self.subdossiertemplate
     - self.proposal_template
     - self.sablon_template
     - self.tasktemplatefolder
