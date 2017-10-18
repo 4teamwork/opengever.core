@@ -284,6 +284,7 @@ class Document(Item, BaseDocumentMixin):
             data=data,
             filename=filename,
             contentType=content_type)
+        self.reindexObject()
 
     def has_file(self):
         return self.file is not None

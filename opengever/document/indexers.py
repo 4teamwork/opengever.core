@@ -2,7 +2,8 @@ from Acquisition import aq_inner
 from collective import dexteritytextindexer
 from opengever.base.behaviors.classification import IClassification
 from opengever.base.behaviors.classification import IClassificationMarker
-from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
+from opengever.base.interfaces import IReferenceNumber
+from opengever.base.interfaces import ISequenceNumber
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
@@ -13,7 +14,9 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFDiffTool.utils import safe_utf8
 from ZODB.POSException import ConflictError
 from zope.component import adapter
-from zope.component import getUtility, queryMultiAdapter, getAdapter
+from zope.component import getAdapter
+from zope.component import getUtility
+from zope.component import queryMultiAdapter
 from zope.interface import implementer
 from zope.interface import Interface
 import logging

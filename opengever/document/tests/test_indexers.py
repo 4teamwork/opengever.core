@@ -22,7 +22,7 @@ class TestDocumentIndexers(FunctionalTestCase):
         doc1 = createContentInContainer(
             self.portal, 'opengever.document.document',
             title=u"Doc One", document_author=u'Hugo Boss',
-            document_date=datetime.date(2011,1,1))
+            document_date=datetime.date(2011, 1, 1))
 
         self.assertEquals(obj2brain(doc1).document_author, 'Hugo Boss')
         self.assertEquals(
@@ -50,7 +50,7 @@ class TestDocumentIndexers(FunctionalTestCase):
     def test_date_indexers(self):
         doc1 = create(Builder('document').having(
             title=u"Doc One",
-            document_date=datetime.date(2011,1,1),
+            document_date=datetime.date(2011, 1, 1),
             receipt_date=datetime.date(2011, 2, 1)))
 
         # document_date
@@ -69,7 +69,7 @@ class TestDocumentIndexers(FunctionalTestCase):
         doc1 = createContentInContainer(
             self.portal, 'opengever.document.document',
             title=u"Doc One",
-            document_date=datetime.date(2011,1,1),
+            document_date=datetime.date(2011, 1, 1),
             receipt_date=datetime.date(2011, 2, 1))
 
         self.annotations = IAnnotations(doc1)
@@ -86,7 +86,7 @@ class TestDocumentIndexers(FunctionalTestCase):
             title=u"Doc One",
             document_author=u'Hugo Boss',
             keywords=('foo', 'bar'),
-            document_date=datetime.date(2011,1,1),
+            document_date=datetime.date(2011, 1, 1),
             receipt_date=datetime.date(2011, 2, 1))
 
         self.assertItemsEqual(
@@ -215,7 +215,7 @@ class TestDefaultDocumentIndexer(MockTestCase):
         default_doc_indexer = DefaultDocumentIndexer(doc1)
         try:
             fulltext = default_doc_indexer.extract_text()
-        except:
+        except:  # noqa - this bare except is the whole point of the test
             self.fail("extract_text() didn't catch exception raised "
                       "by transform!")
         self.assertEquals('', fulltext)
