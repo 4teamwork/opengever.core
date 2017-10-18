@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-02 12:52+0000\n"
+"POT-Creation-Date: 2017-10-16 15:57+0000\n"
 "PO-Revision-Date: 2017-06-04 17:01+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-tabbedview/fr/>\n"
@@ -150,11 +150,6 @@ msgstr "Numéro courant"
 msgid "documents"
 msgstr "Documents "
 
-#. Default: "Show more"
-#: ./opengever/tabbedview/browser/bumblebee_gallery.pt
-msgid "documentsShowMore"
-msgstr "Montre plus"
-
 #. Default: "Gallery"
 #: ./opengever/tabbedview/browser/bumblebee_gallery.pt
 #: ./opengever/tabbedview/browser/generic_with_bumblebee_viewchooser.pt
@@ -256,11 +251,6 @@ msgstr "Mes notifications"
 #: ./opengever/tabbedview/browser/personal_overview.py
 msgid "label_my_proposals"
 msgstr "Mes requêtes"
-
-#. Default: "No contents"
-#: ./opengever/tabbedview/browser/bumblebee_gallery.pt
-msgid "label_no_contents"
-msgstr "Aucun contenu"
 
 #. Default: "Pending"
 #: ./opengever/tabbedview/browser/tasklisting.py
@@ -430,4 +420,3 @@ msgstr "Titre"
 
 msgid "trash"
 msgstr "Corbeille"
-

@@ -1,0 +1,27 @@
+<html xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      i18n:domain="opengever.bumblebee"
+      tal:omit-tag="python: True">
+
+  <div class="preview-listing"
+       tal:attributes="data-number-of-documents options/number_of_documents;
+                       data-fetch-url options/fetch_url">
+
+    <tal:AVAILABLE tal:condition="options/available">
+      <tal:PREVIEWS tal:replace="structure options/previews_html" />
+
+      <div class="visualClear"></div>
+      <button class="bumblebeeGalleryShowMore button">
+        <span i18n:translate="documentsShowMore">Show more</span>
+      </button>
+    </tal:AVAILABLE>
+
+    <tal:NOT_AVAILABLE tal:condition="not:options/available">
+      <div>
+        <p class="no_content" i18n:translate="label_no_contents">No contents</p>
+      </div>
+    </tal:NOT_AVAILABLE>
+  </div>
+
+</html>

@@ -376,6 +376,16 @@ class IntegrationTestCase(TestCase):
         """
         return brain.getObject()
 
+    def object_to_brain(self, obj):
+        """Return the brain of an object.
+        Make sure that the current user is allowed to view the object.
+        """
+        catalog = api.portal.get_tool('portal_catalog')
+        brains = catalog(path={'query': '/'.join(obj.getPhysicalPath()),
+                               'depth': 0})
+        self.assertEquals(1, len(brains))
+        return brains[0]
+
     def enable_languages(self):
         """Enable a multi-language configuration with German and French.
         """
