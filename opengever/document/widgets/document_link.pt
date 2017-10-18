@@ -9,9 +9,6 @@
     <div class="linkWrapper tooltip-trigger"
          tal:attributes="data-tooltip-url string:${view/get_url}/tooltip">
 
-      <span tal:condition="context/is_removed"
-            class="removed_document" />
-
       <a tal:content="view/get_title"
          tal:attributes="class view/get_css_class;
                          href view/get_url;" />
@@ -29,11 +26,8 @@
   <tal:NO_VIEW_PERMISSION tal:condition="not:view_allowed">
     <div class="linkWrapper">
 
-      <span tal:condition="context/is_removed"
-            class="removed_document" />
-
       <span tal:content="view/get_title"
-            tal:attributes="class string:${view/get_css_class} no-access"
+            tal:attributes="class string:${view/get_css_class} no_access"
             title="You are not allowed to view this document."
             i18n:attributes="title" />
 
