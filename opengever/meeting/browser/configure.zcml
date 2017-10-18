@@ -255,4 +255,12 @@
       template="templates/overview.pt"
       />
 
+  <browser:page
+      for="opengever.meeting.committeecontainer.ICommitteeContainer"
+      class=".committeecontainertabs.Committees"
+      name="tabbedview_view-committees"
+      permission="zope2.View"
+      template="templates/committee.pt"
+      />
+
 </configure>
