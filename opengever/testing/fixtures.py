@@ -300,6 +300,7 @@ class OpengeverContentFixture(object):
                           self.empty_committee.load_model().committee_id)
         self.empty_committee.manage_setLocalRoles(
             self.meeting_user.getId(), ('CommitteeMember',))
+        self.empty_committee.reindexObjectSecurity()
 
     @staticuid()
     def create_inbox(self):
