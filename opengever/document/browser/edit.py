@@ -47,7 +47,7 @@ class EditCheckerView(BrowserView):
         mtool = getToolByName(self.context, 'portal_membership')
         if mtool.checkPermission(
             'Modify portal content', self.context):
-            return self.response.redirect(
+            return self.request.RESPONSE.redirect(
                 '%s/edit' % (self.context.absolute_url()))
         else:
             msg = _(

@@ -5,6 +5,7 @@ Changelog
 2017.5.2 (unreleased)
 ---------------------
 
+- Fix missing response-variable due to ungrok opengever.document. [elioschmutz]
 - Ungrok opengever.base. [elioschmutz]
 - SPV word: prevent reader user from returning excerpts. [jone]
 - SPV word: always show excerpts in meeting view. [jone]
