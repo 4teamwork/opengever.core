@@ -333,4 +333,30 @@
       permission="zope2.View"
       />
 
+  <adapter
+      factory=".committeeforms.AddView"
+      provides="zope.publisher.interfaces.browser.IBrowserPage"
+      name="opengever.meeting.committee"
+      />
+  <class class=".committeeforms.AddView">
+    <require
+        permission="cmf.AddPortalContent"
+        interface="zope.publisher.interfaces.browser.IBrowserPage"
+        />
+  </class>
+
+  <browser:page
+      for="opengever.meeting.committeecontainer.ICommitteeContainer"
+      class=".committeeforms.AddInitialPeriodStepView"
+      name="add-initial-period"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <browser:page
+      for="opengever.meeting.committee.ICommittee"
+      class=".committeeforms.EditForm"
+      name="edit"
+      permission="cmf.ModifyPortalContent"
+      />
+
 </configure>
