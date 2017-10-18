@@ -4,13 +4,6 @@
     i18n_domain="opengever.meeting">
 
   <browser:page
-      for="opengever.meeting.committee.ICommittee"
-      name="add-meeting"
-      class=".meeting.AddMeetingWizardStepView"
-      permission="cmf.ModifyPortalContent"
-      />
-
-  <browser:page
       for="opengever.meeting.interfaces.IMeetingWrapper"
       name="view"
       class=".meeting.MeetingView"
@@ -109,6 +102,13 @@
       name="add-meeting-dossier"
       class=".meeting.AddMeetingDossierView"
       permission="cmf.AddPortalContent"
+      />
+
+  <browser:page
+      for="opengever.meeting.committee.ICommittee"
+      name="add-meeting"
+      class=".meeting.AddMeetingWizardStepView"
+      permission="cmf.ModifyPortalContent"
       />
 
 </configure>
