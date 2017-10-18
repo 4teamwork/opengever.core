@@ -132,4 +132,6 @@
       handler=".handlers.sync_moved_proposal"
       />
 
+  <adapter factory=".committee.RepositoryfolderValidator" />
+
 </configure>
