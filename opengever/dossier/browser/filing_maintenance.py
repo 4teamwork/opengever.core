@@ -73,7 +73,7 @@ def counters_default():
         return entries
 
     else:
-        return {}
+        return []
 
 
 class IFilingNumberRowSchema(Interface):
