@@ -1,4 +1,3 @@
-from five import grok
 from ftw.table import helper
 from opengever.base.schema import TableChoice
 from opengever.base.widgets import TrixFieldWidget
@@ -9,7 +8,6 @@ from opengever.meeting import require_word_meeting_feature
 from opengever.meeting.form import ModelProxyAddForm
 from opengever.meeting.form import ModelProxyEditForm
 from opengever.meeting.proposal import IProposal
-from opengever.meeting.proposal import ISubmittedProposal
 from opengever.meeting.proposal import Proposal
 from opengever.meeting.proposal import SubmittedProposal
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
@@ -17,10 +15,10 @@ from opengever.tabbedview.helper import document_with_icon
 from plone import api
 from plone.app.uuid.utils import uuidToObject
 from plone.autoform import directives as form
+from plone.dexterity.browser import edit
 from plone.dexterity.browser.add import DefaultAddForm
 from plone.dexterity.browser.add import DefaultAddView
 from plone.dexterity.interfaces import IDexterityFTI
-from plone.directives import dexterity
 from plone.z3cform.fieldsets.utils import move
 from Products.CMFCore.interfaces import IFolderish
 from Products.CMFPlone.utils import safe_unicode
@@ -62,8 +60,8 @@ class FieldConfigurationMixin(object):
 
 class ProposalEditForm(FieldConfigurationMixin,
                        ModelProxyEditForm,
-                       dexterity.EditForm):
-    grok.context(IProposal)
+                       edit.DefaultEditForm):
+
     fields = field.Fields(Proposal.model_schema, ignoreContext=True)
     content_type = Proposal
 
@@ -76,8 +74,8 @@ class ProposalEditForm(FieldConfigurationMixin,
 
 class SubmittedProposalEditForm(FieldConfigurationMixin,
                                 ModelProxyEditForm,
-                                dexterity.EditForm):
-    grok.context(ISubmittedProposal)
+                                edit.DefaultEditForm):
+
     fields = field.Fields(SubmittedProposal.model_schema, ignoreContext=True)
     content_type = SubmittedProposal
 

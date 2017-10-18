@@ -389,4 +389,18 @@
       template="templates/proposaloverview.pt"
       />
 
+  <browser:page
+      for="opengever.meeting.proposal.ISubmittedProposal"
+      class=".proposalforms.SubmittedProposalEditForm"
+      name="edit"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <browser:page
+      for="opengever.meeting.proposal.IProposal"
+      class=".proposalforms.ProposalEditForm"
+      name="edit"
+      permission="cmf.ModifyPortalContent"
+      />
+
 </configure>
