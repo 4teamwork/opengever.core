@@ -96,4 +96,40 @@
       name="opengever.meeting.LanguagesVocabulary"
       />
 
+  <subscriber
+      for="opengever.document.document.IDocumentSchema
+           OFS.interfaces.IObjectWillBeRemovedEvent"
+      handler=".handlers.document_deleted"
+      />
+
+  <subscriber
+      for="opengever.document.document.IDocumentSchema
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".handlers.on_document_modified"
+      />
+
+  <subscriber
+      for="opengever.document.document.IDocumentSchema
+           opengever.document.interfaces.IObjectCheckedInEvent"
+      handler=".handlers.on_documed_checked_in"
+      />
+
+  <subscriber
+      for="opengever.document.document.IDocumentSchema
+           opengever.document.interfaces.IObjectRevertedToVersion"
+      handler=".handlers.on_document_reverted_to_version"
+      />
+
+  <subscriber
+      for="opengever.meeting.proposal.IProposal
+           zope.lifecycleevent.interfaces.IObjectCopiedEvent"
+      handler=".handlers.delete_copied_proposal"
+      />
+
+  <subscriber
+      for="opengever.meeting.proposal.IProposal
+           zope.lifecycleevent.interfaces.IObjectMovedEvent"
+      handler=".handlers.sync_moved_proposal"
+      />
+
 </configure>
