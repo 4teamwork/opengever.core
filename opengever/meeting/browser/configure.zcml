@@ -298,4 +298,18 @@
       permission="cmf.ModifyPortalContent"
       />
 
+  <browser:page
+      for="opengever.meeting.interfaces.IMeetingDossier"
+      class=".protocol.GenerateProtocol"
+      name="generate_protocol"
+      permission="cmf.AddPortalContent"
+      />
+
+  <browser:page
+      for="opengever.document.document.IDocumentSchema"
+      class=".protocol.UpdateProtocol"
+      name="update_protocol"
+      permission="cmf.ModifyPortalContent"
+      />
+
 </configure>
