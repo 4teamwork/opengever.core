@@ -373,4 +373,20 @@
       permission="cmf.AddPortalContent"
       />
 
+  <browser:page
+      for="opengever.meeting.proposal.IProposal"
+      class=".proposaloverview.ProposalOverview"
+      name="tabbedview_view-overview"
+      permission="zope2.View"
+      template="templates/proposaloverview.pt"
+      />
+
+  <browser:page
+      for="opengever.meeting.proposal.ISubmittedProposal"
+      class=".proposaloverview.SubmittedProposalOverview"
+      name="tabbedview_view-overview"
+      permission="zope2.View"
+      template="templates/proposaloverview.pt"
+      />
+
 </configure>

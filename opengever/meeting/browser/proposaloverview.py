@@ -1,4 +1,3 @@
-from five import grok
 from ftw import bumblebee
 from opengever.base.browser.helper import get_css_class
 from opengever.bumblebee import is_bumblebee_feature_enabled
@@ -7,11 +6,11 @@ from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.browser.proposaltransitions import ProposalTransitionController
 from opengever.meeting.interfaces import IHistory
 from opengever.meeting.model import SubmittedDocument
-from opengever.meeting.proposal import IProposal
 from opengever.meeting.proposal import ISubmittedProposal
 from opengever.tabbedview import GeverTabMixin
 from plone.app.contentlisting.interfaces import IContentListing
-from plone.directives.dexterity import DisplayForm
+from plone.dexterity.browser import view
+from Products.Five.browser import BrowserView
 
 
 class OverviewBase(object):
@@ -77,11 +76,7 @@ class OverviewBase(object):
         return model.get_state() == model.STATE_DECIDED
 
 
-class ProposalOverview(OverviewBase, DisplayForm, GeverTabMixin):
-    grok.context(IProposal)
-    grok.name('tabbedview_view-overview')
-    grok.template('proposaloverview')
-    grok.require('zope2.View')
+class ProposalOverview(OverviewBase, view.DefaultView, GeverTabMixin):
 
     def get_submitted_document(self, document):
         return SubmittedDocument.query.get_by_source(
@@ -109,8 +104,6 @@ class ProposalOverview(OverviewBase, DisplayForm, GeverTabMixin):
                 missing_as_zero=True)})
 
 
-class SubmittedProposalOverview(OverviewBase, DisplayForm, GeverTabMixin):
-    grok.context(ISubmittedProposal)
-    grok.name('tabbedview_view-overview')
-    grok.template('proposaloverview')
-    grok.require('zope2.View')
+class SubmittedProposalOverview(OverviewBase, view.DefaultView, GeverTabMixin):
+    """
+    """
