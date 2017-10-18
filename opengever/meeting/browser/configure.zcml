@@ -270,4 +270,11 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      class=".excerpt.UpdateDossierExcerpt"
+      name="update-dossier-excerpt"
+      permission="zope2.View"
+      />
+
 </configure>
