@@ -1,7 +1,6 @@
-from five import grok
 from opengever.meeting.command import MIME_DOCX
 from opengever.meeting.sablon import Sablon
-from opengever.meeting.sablontemplate import ISablonTemplate
+from Products.Five.browser import BrowserView
 import json
 
 
@@ -81,14 +80,10 @@ SAMPLE_MEETING_DATA = {
     'protocol': {'type': u'Protocol'}}
 
 
-class FillMeetingTemplate(grok.View):
+class FillMeetingTemplate(BrowserView):
     """View to fill a template with sample data for a meeting."""
 
-    grok.name('fill_meeting_template')
-    grok.context(ISablonTemplate)
-    grok.require('cmf.ManagePortal')
-
-    def render(self):
+    def __call__(self):
         sablon = Sablon(self.context)
         sablon.process(json.dumps(SAMPLE_MEETING_DATA))
         assert sablon.is_processed_successfully(), sablon.stderr

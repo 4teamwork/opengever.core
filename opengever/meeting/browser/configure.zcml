@@ -312,4 +312,11 @@
       permission="cmf.ModifyPortalContent"
       />
 
+  <browser:page
+      for="opengever.meeting.sablontemplate.ISablonTemplate"
+      class=".sablontemplate.FillMeetingTemplate"
+      name="fill_meeting_template"
+      permission="cmf.ManagePortal"
+      />
+
 </configure>
