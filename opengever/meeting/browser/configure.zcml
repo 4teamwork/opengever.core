@@ -326,4 +326,11 @@
       permission="cmf.AddPortalContent"
       />
 
+  <browser:page
+      for="*"
+      class=".macros.View"
+      name="meeting-macros"
+      permission="zope2.View"
+      />
+
 </configure>
