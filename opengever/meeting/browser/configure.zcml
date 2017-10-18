@@ -247,4 +247,12 @@
       permission="cmf.AddPortalContent"
       />
 
+  <browser:page
+      for="opengever.meeting.committee.ICommittee"
+      class=".committee.CommitteeOverview"
+      name="tabbedview_view-overview"
+      permission="zope2.View"
+      template="templates/overview.pt"
+      />
+
 </configure>
