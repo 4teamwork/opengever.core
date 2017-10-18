@@ -1,4 +1,3 @@
-from five import grok
 from opengever.dossier.templatefolder import get_template_folder
 from opengever.meeting.model import Committee
 from opengever.meeting.model import Member
@@ -16,9 +15,8 @@ from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
 
 
-class CommitteeVocabulary(grok.GlobalUtility):
-    grok.provides(IVocabularyFactory)
-    grok.name('opengever.meeting.CommitteeVocabulary')
+@implementer(IVocabularyFactory)
+class CommitteeVocabulary(object):
 
     def __call__(self, context):
         terms = []
@@ -34,15 +32,13 @@ class CommitteeVocabulary(grok.GlobalUtility):
 
 
 class ActiveCommitteeVocabulary(CommitteeVocabulary):
-    grok.name('opengever.meeting.ActiveCommitteeVocabulary')
 
     def get_committees(self):
         return Committee.query.active().all()
 
 
-class MemberVocabulary(grok.GlobalUtility):
-    grok.provides(IVocabularyFactory)
-    grok.name('opengever.meeting.MemberVocabulary')
+@implementer(IVocabularyFactory)
+class MemberVocabulary(object):
 
     def __call__(self, context):
         terms = []
@@ -54,7 +50,7 @@ class MemberVocabulary(grok.GlobalUtility):
         return SimpleVocabulary(terms)
 
 
-@grok.provider(IContextSourceBinder)
+@provider(IContextSourceBinder)
 def get_committee_member_vocabulary(meetingwrapper):
     meeting = meetingwrapper.model
     members = []
@@ -152,9 +148,8 @@ class ProposalTemplatesForCommitteeVocabulary(object):
         return SimpleVocabulary(terms)
 
 
-class LanguagesVocabulary(grok.GlobalUtility):
-    grok.provides(IVocabularyFactory)
-    grok.name('opengever.meeting.LanguagesVocabulary')
+@implementer(IVocabularyFactory)
+class LanguagesVocabulary(object):
 
     def __call__(self, context):
         ltool = api.portal.get_tool('portal_languages')

@@ -75,4 +75,24 @@
       name="opengever.meeting.ProposalTemplatesVocabulary"
       />
 
+  <utility
+      factory=".vocabulary.CommitteeVocabulary"
+      name="opengever.meeting.CommitteeVocabulary"
+      />
+
+  <utility
+      factory=".vocabulary.ActiveCommitteeVocabulary"
+      name="opengever.meeting.ActiveCommitteeVocabulary"
+      />
+
+  <utility
+      factory=".vocabulary.MemberVocabulary"
+      name="opengever.meeting.MemberVocabulary"
+      />
+
+  <utility
+      factory=".vocabulary.LanguagesVocabulary"
+      name="opengever.meeting.LanguagesVocabulary"
+      />
+
 </configure>
