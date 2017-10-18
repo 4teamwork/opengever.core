@@ -277,4 +277,11 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="*"
+      class=".meetingfeatureenabled.MeetingFeatureEnabledView"
+      name="is_meeting_feature_enabled"
+      permission="zope2.View"
+      />
+
 </configure>
