@@ -263,4 +263,11 @@
       template="templates/committee.pt"
       />
 
+  <browser:page
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      class=".createsubmittedproposal.CreateSubmittedProposal"
+      name="create_submitted_proposal"
+      permission="zope2.View"
+      />
+
 </configure>
