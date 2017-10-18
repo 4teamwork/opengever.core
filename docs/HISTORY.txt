@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Ungrok opengever.base. [elioschmutz]
+- SPV word: prevent reader user from returing excerpts. [jone]
 - SPV word: always show excerpts in meeting view. [jone]
 - Do not render document link without View permission. [jone]
 - Refactor JSON schema generation and dumping, add tests. [lgraf]
