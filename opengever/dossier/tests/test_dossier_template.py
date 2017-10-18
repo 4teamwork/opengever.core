@@ -3,13 +3,13 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import info_messages
-from opengever.core.testing import activate_bumblebee_feature
 from opengever.core.testing import toggle_feature
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.dossiertemplate import is_dossier_template_feature_enabled
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateSchema
 from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings
+from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.testing import IntegrationTestCase
 from plone import api
 from zExceptions import Unauthorized
@@ -516,6 +516,42 @@ class TestDossierTemplateAddWizard(IntegrationTestCase):
         self.assertEqual(
             "This is a help text",
             browser.css('#formfield-form-widgets-IOpenGeverBase-title .formHelp').first.text)
+
+
+class TestSubDossierTemplateHandling(IntegrationTestCase):
+
+    @browsing
+    def test_max_dossier_depth_is_not_respected_by_default(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        browser.open(self.subdossiertemplate)
+        factoriesmenu.add('Subdossier')
+        browser.fill({'Title': u'Sub Sub Template'}).submit()
+
+        self.assertEquals(['Item created'], info_messages())
+        self.assertEqual(u'Sub Sub Template', browser.context.title)
+
+    @browsing
+    def test_max_dossier_depth_is_respected_when_flag_is_activated(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        api.portal.set_registry_record(
+            'respect_max_depth', True, interface=IDossierTemplateSettings)
+
+        browser.open(self.dossiertemplate)
+        self.assertEqual(
+            ['Document', 'Subdossier'], factoriesmenu.addable_types())
+
+        browser.open(self.subdossiertemplate)
+        self.assertEqual(['Document'], factoriesmenu.addable_types())
+
+        # raise dossier depth
+        api.portal.set_registry_record(
+            'maximum_dossier_depth', 2, interface=IDossierContainerTypes)
+
+        browser.open(self.subdossiertemplate)
+        self.assertEqual(
+            ['Document', 'Subdossier'], factoriesmenu.addable_types())
 
 
 OVERVIEW_TAB = 'tabbedview_view-overview'
