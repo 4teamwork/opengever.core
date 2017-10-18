@@ -7,6 +7,7 @@ Changelog
 
 - Ungrok opengever.base. [elioschmutz]
 - SPV word: prevent reader user from returning excerpts. [jone]
+- Fix send as attachment action by providing a default service. [tarnap]
 - SPV word: always show excerpts in meeting view. [jone]
 - Extract bumblebee preview generation into standalone component. [jone]
 - Do not render document link without View permission. [jone]
