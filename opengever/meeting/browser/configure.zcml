@@ -284,4 +284,18 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="opengever.meeting.proposal.IProposal"
+      class=".proposaltransitions.ProposalTransitionController"
+      name="proposaltransitioncontroller"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.meeting.proposal.IProposal"
+      class=".proposaltransitions.RejectProposalView"
+      name="reject_proposal"
+      permission="cmf.ModifyPortalContent"
+      />
+
 </configure>
