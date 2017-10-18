@@ -319,4 +319,11 @@
       permission="cmf.ManagePortal"
       />
 
+  <browser:page
+      for="opengever.document.document.IDocumentSchema"
+      class=".submitdocuments.UpdateSubmittedDocumentView"
+      name="update-submitted-document"
+      permission="cmf.AddPortalContent"
+      />
+
 </configure>
