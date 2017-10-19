@@ -48,6 +48,15 @@
       />
 
   <plone:service
+      method="GET"
+      for="opengever.document.document.IDocumentSchema"
+      accept="application/json"
+      factory=".service.OfficeConnectorOfficeatworkCreateURL"
+      name="oaw_create_url"
+      permission="zope2.View"
+      />
+
+  <plone:service
       method="POST"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       accept="application/json"

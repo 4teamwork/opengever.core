@@ -1,10 +1,11 @@
 from ftw.mail.interfaces import IEmailAddress
 from opengever.document.events import FileAttachedToEmailEvent
 from opengever.dossier.events import DossierAttachedToEmailEvent
+from opengever.officeatwork import is_officeatwork_feature_enabled
 from opengever.officeconnector import _
 from opengever.officeconnector.helpers import create_oc_url
-from opengever.officeconnector.helpers import is_officeconnector_attach_feature_enabled  # noqa
-from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
+from opengever.officeconnector.helpers import is_officeconnector_attach_feature_enabled
+from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled
 from plone import api
 from plone.protect import createToken
 from plone.rest import Service
@@ -12,7 +13,6 @@ from zExceptions import Forbidden
 from zExceptions import NotFound
 from zope.event import notify
 from zope.i18n import translate
-
 import json
 
 
@@ -70,6 +70,21 @@ class OfficeConnectorCheckoutURL(OfficeConnectorURL):
     def render(self):
         if is_officeconnector_checkout_feature_enabled():
             payload = {'action': 'checkout'}
+            return self.create_officeconnector_url_json(payload)
+
+        # Fail per default
+        raise NotFound
+
+
+class OfficeConnectorOfficeatworkCreateURL(OfficeConnectorURL):
+    """Create oc:<JWT> URLs for javascript to fetch and pass to the OS.
+
+    Instruct where to fetch an OfficeConnector / officeatwork 'oaw_create' action payload for a shadow document.
+    """
+
+    def render(self):
+        if is_officeatwork_feature_enabled():
+            payload = {'action': 'oaw_create'}
             return self.create_officeconnector_url_json(payload)
 
         # Fail per default

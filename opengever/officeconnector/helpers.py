@@ -19,11 +19,13 @@ def is_officeconnector_checkout_feature_enabled():
     return api.portal.get_registry_record('direct_checkout_and_edit_enabled',
                                           interface=IOfficeConnectorSettings)
 
+
 def parse_bcc(request):
     body = request.get('BODY', None)
     if body and 'bcc' in body:
         return json.loads(body).get('bcc', None)
     return None
+
 
 def parse_documents(request, context):
     documents = []
@@ -55,7 +57,7 @@ def parse_documents(request, context):
 def get_auth_plugin(context):
     plugin = None
     acl_users = getToolByName(context, "acl_users")
-    plugins = acl_users._getOb('plugins')
+    plugins = acl_users.plugins
     authenticators = plugins.listPlugins(IAuthenticationPlugin)
 
     # Assumes there is only one JWT auth plugin present in the acl_users
@@ -64,7 +66,7 @@ def get_auth_plugin(context):
     # This will work as long as the plugin this finds uses the same secret
     # as whatever it ends up authenticating against - this is in all
     # likelihood the Plone site keyring.
-    for id_, authenticator in authenticators:
+    for _, authenticator in authenticators:
         if authenticator.meta_type == "JWT Authentication Plugin":
             plugin = authenticator
             break
@@ -132,5 +134,6 @@ def create_oc_url(request, context, payload):
 
     if len(url) <= limit:
         return url
-    else:
-        return None
+
+    # Fail per default
+    return None
