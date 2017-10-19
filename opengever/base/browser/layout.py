@@ -1,6 +1,9 @@
+from opengever.base.interfaces import ISQLObjectWrapper
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.meeting import is_word_meeting_implementation_enabled
 from plone.app.layout.globals.layout import LayoutPolicy
+from plone.i18n.normalizer.interfaces import IIDNormalizer
+from zope.component import getUtility
 
 
 class GeverLayoutPolicy(LayoutPolicy):
@@ -11,12 +14,17 @@ class GeverLayoutPolicy(LayoutPolicy):
         """Extends the default body class with the `feature-bumblebee` class, if
         the bumblebeefeature is enabled.
         """
-        body_class = super(GeverLayoutPolicy, self).bodyClass(template, view)
+        classes = [super(GeverLayoutPolicy, self).bodyClass(template, view)]
 
         if is_bumblebee_feature_enabled():
-            body_class = ' '.join((body_class, 'feature-bumblebee'))
+            classes.append('feature-bumblebee')
 
         if is_word_meeting_implementation_enabled():
-            body_class = ' '.join((body_class, 'feature-word-meeting'))
+            classes.append('feature-word-meeting')
 
-        return body_class
+        if ISQLObjectWrapper.providedBy(self.context):
+            normalize = getUtility(IIDNormalizer).normalize
+            classes.append('model-{}'.format(
+                normalize(type(self.context.model).__name__)))
+
+        return ' '.join(classes)
