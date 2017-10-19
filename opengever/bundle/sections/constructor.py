@@ -24,6 +24,12 @@ logger.setLevel(logging.INFO)
 
 BUNDLE_GUID_KEY = 'bundle_guid'
 
+TYPES_WITHOUT_REFERENCE_NUMBER = (
+    'opengever.task.task',
+    'opengever.meeting.proposal',
+    'opengever.meeting.submittedproposal',
+)
+
 
 class InvalidType(Exception):
     pass
@@ -55,6 +61,9 @@ class ConstructorSection(object):
 
         self.site = api.portal.get()
         self.ttool = api.portal.get_tool(u'portal_types')
+        self.catalog = api.portal.get_tool('portal_catalog')
+
+        self.bundle.path_by_refnum_cache = {}
 
     def _has_translated_title(self, fti):
         return ITranslatedTitle.__identifier__ in fti.behaviors
@@ -115,6 +124,46 @@ class ConstructorSection(object):
         self._set_guid(obj, item)
         return obj
 
+    def path_from_refnum(self, formatted_refnum):
+        if formatted_refnum not in self.bundle.path_by_refnum_cache:
+
+            results = self.catalog.unrestrictedSearchResults(
+                reference=formatted_refnum,
+                portal_type={'not': TYPES_WITHOUT_REFERENCE_NUMBER})
+
+            if len(results) == 0:
+                # This should never happen, since we pre-validated refnums
+                # in the ResolveGUIDSection
+                logger.warning(
+                    u"Couldn't find reference number %s in "
+                    u"catalog" % formatted_refnum)
+                return
+
+            if len(results) > 1:
+                # With the 'not' constraint above, reference numbers should
+                # unambiguously point to a single object - except for the
+                # case where we're dealing with multiple repository roots.
+                #
+                # For that case, we would need to either specify the root
+                # that should be considered, or fix reference numbers to be
+                # unique across repository roots (which currently don't
+                # contribute their own component to the reference number).
+                logger.warning(
+                    u"Found more than one matches in catalog for reference "
+                    u"number %s" % formatted_refnum)
+                return
+
+            brain = results[0]
+            path = self.get_relative_path(brain)
+            self.bundle.path_by_refnum_cache[formatted_refnum] = path
+
+        return self.bundle.path_by_refnum_cache[formatted_refnum]
+
+    def get_relative_path(self, brain):
+        """Returns the path relative to the plone site for the given brain.
+        """
+        return '/'.join(brain.getPath().split('/')[2:])
+
     def __iter__(self):
         for item in self.previous:
             portal_type = item[u'_type']
@@ -124,8 +173,7 @@ class ConstructorSection(object):
                 path = self.bundle.item_by_guid[parent_guid][u'_path']
                 context = traverse(self.site, path, None)
             elif item.get('_formatted_parent_refnum'):
-                path = self.bundle.path_by_reference_number.get(
-                    item['_formatted_parent_refnum'])
+                path = self.path_from_refnum(item['_formatted_parent_refnum'])
                 if not path:
                     logger.warning(
                         u'Could not create object with guid `{}`, parent with '

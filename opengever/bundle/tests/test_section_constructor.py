@@ -43,8 +43,13 @@ class TestConstructor(IntegrationTestCase):
     def test_raises_for_invalid_types(self):
         section = self.setup_section(previous=[{
             "guid": "12345xy",
+            "parent_guid": "123_parent",
             "_type": "foo.bar.qux",
         }])
+        section.bundle.item_by_guid['123_parent'] = {
+            '_path': '/'.join(self.leaf_repofolder.getPhysicalPath()[2:])
+        }
+
         with self.assertRaises(InvalidType):
             list(section)
 
@@ -118,6 +123,26 @@ class TestConstructor(IntegrationTestCase):
 
         self.assertTrue(isinstance(content.title, unicode))
         self.assertEquals(u'Bewerbung Hanspeter M\xfcller', content.title)
+
+    def test_populates_path_by_refnum_cache(self):
+        items = [
+            {'guid': 'a1',
+             '_type': 'opengever.dossier.businesscasedossier',
+             '_formatted_parent_refnum': 'Client1 1.1 / 1',
+             'parent_reference': [[1, 1], [1]]},
+
+            {'guid': 'b1',
+             '_type': 'opengever.dossier.businesscasedossier',
+             '_formatted_parent_refnum': 'Client1 1.1',
+             'parent_reference': [[1, 1]]}
+        ]
+        section = self.setup_section(previous=items)
+        list(section)
+
+        self.assertEqual(
+            {'Client1 1.1': 'ordnungssystem/fuhrung/vertrage-und-vereinbarungen',
+             'Client1 1.1 / 1': 'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1'},
+            section.bundle.path_by_refnum_cache)
 
     def test_sets_bundle_guid_on_obj(self):
         guid = "12345xy"
@@ -194,7 +219,7 @@ class TestConstructor(IntegrationTestCase):
 
         section = self.setup_section(previous=[item])
         path = '/'.join(self.dossier.getPhysicalPath()[2:])
-        section.bundle.path_by_reference_number["Client 1.1 / 1"] = path
+        section.bundle.path_by_refnum_cache["Client 1.1 / 1"] = path
         list(section)
 
         portal = api.portal.get()

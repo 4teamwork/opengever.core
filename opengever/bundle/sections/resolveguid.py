@@ -12,11 +12,6 @@ from zope.interface import implements
 import logging
 
 
-TYPES_WITHOUT_REFERENCE_NUMBER = [
-    'opengever.task.task',
-    'opengever.meeting.proposal',
-    'opengever.meeting.submittedproposal']
-
 log = logging.getLogger('opengever.bundle.resolveguid')
 log.setLevel(logging.INFO)
 
@@ -64,7 +59,6 @@ class ResolveGUIDSection(object):
         self.bundle = IAnnotations(transmogrifier)[BUNDLE_KEY]
 
         self.bundle.item_by_guid = OrderedDict()
-        self.bundle.path_by_reference_number = OrderedDict()
 
         # Table of formatted refnums that exist in Plone
         self.bundle.existing_refnums = ()
@@ -121,11 +115,6 @@ class ResolveGUIDSection(object):
                 item['_formatted_parent_refnum'] = formatted_parent_refnum
                 parent_refnums.append(formatted_parent_refnum)
 
-        log.info('Start building reference mapping')
-        self.bundle.path_by_reference_number = self.build_reference_mapping(
-            parent_refnums)
-        log.info('Reference mapping built.')
-
         # Verify that all parent containers referenced by refnum exist in Plone
         for formatted_refnum in parent_refnums:
             if formatted_refnum not in self.bundle.existing_refnums:
@@ -134,18 +123,6 @@ class ResolveGUIDSection(object):
                     "Couldn't find container with reference number %s "
                     "(referenced as parent by item by GUID %s )" % (
                         formatted_refnum, guid))
-
-    def get_relative_path(self, brain):
-        """Returns the path relative to the plone site for the given brain.
-        """
-        return '/'.join(brain.getPath().split('/')[2:])
-
-    def build_reference_mapping(self, reference_numbers):
-        catalog = api.portal.get_tool('portal_catalog')
-        brains = catalog.unrestrictedSearchResults(reference=reference_numbers)
-        return {
-            brain.reference: self.get_relative_path(brain) for brain in brains
-            if brain.portal_type not in TYPES_WITHOUT_REFERENCE_NUMBER}
 
     def build_tree(self):
         """Build a tree from the flat list of items.
