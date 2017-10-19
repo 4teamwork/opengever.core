@@ -100,7 +100,7 @@ class ResolveGUIDSection(object):
         self.bundle.existing_refnums = self.get_existing_refnums()
 
         # Keep track of all reference numbers referred to in bundle items
-        used_ref_numbers = []
+        parent_refnums = []
 
         for item in self.previous:
             if 'guid' not in item:
@@ -116,15 +116,15 @@ class ResolveGUIDSection(object):
                 parent_refnum = self.get_formatter().list_to_string(
                     item['parent_reference'])
                 item['_formatted_parent_refnum'] = parent_refnum
-                used_ref_numbers.append(parent_refnum)
+                parent_refnums.append(parent_refnum)
 
         log.info('Start building reference mapping')
         self.bundle.path_by_reference_number = self.build_reference_mapping(
-            used_ref_numbers)
+            parent_refnums)
         log.info('Reference mapping built.')
 
         # Verify that all parent containers referenced by refnum exist in Plone
-        for formatted_refnum in used_ref_numbers:
+        for formatted_refnum in parent_refnums:
             if formatted_refnum not in self.bundle.existing_refnums:
                 # Reference number of referenced parent not found in catalog
                 raise ReferenceNumberNotFound(
