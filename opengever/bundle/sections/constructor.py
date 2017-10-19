@@ -124,6 +124,9 @@ class ConstructorSection(object):
         self._set_guid(obj, item)
         return obj
 
+    def path_from_guid(self, guid):
+        return self.bundle.item_by_guid[guid]['_path']
+
     def path_from_refnum(self, formatted_refnum):
         if formatted_refnum not in self.bundle.path_by_refnum_cache:
 
@@ -166,30 +169,41 @@ class ConstructorSection(object):
 
     def __iter__(self):
         for item in self.previous:
-            portal_type = item[u'_type']
+            portal_type = item['_type']
 
-            parent_guid = item.get(u'parent_guid')
-            if parent_guid:
-                path = self.bundle.item_by_guid[parent_guid][u'_path']
-                context = traverse(self.site, path, None)
-            elif item.get('_formatted_parent_refnum'):
-                path = self.path_from_refnum(item['_formatted_parent_refnum'])
-                if not path:
-                    logger.warning(
-                        u'Could not create object with guid `{}`, parent with '
-                        'reference number `{}` not found.'.format(
-                            item['guid'], item['_formatted_parent_refnum']))
-                    continue
+            parent_guid = item.get('parent_guid')
+            formatted_parent_refnum = item.get('_formatted_parent_refnum')
 
-                context = traverse(self.site, path, None)
+            if parent_guid is not None:
+                parent_path = self.path_from_guid(parent_guid)
+
+            elif formatted_parent_refnum is not None:
+                parent_path = self.path_from_refnum(formatted_parent_refnum)
+
+            elif portal_type == 'opengever.repository.repositoryroot':
+                # Repo roots are the only type that don't require a parent
+                # pointer, and get constructed directly in the Plone site
+                container = self.site
+                parent_path = '/'
+
             else:
-                context = self.site
+                # Should never happen - schema requires a parent pointer
+                logger.warning(
+                    u'Item with GUID %s is missing a parent pointer, '
+                    u'skipping.' % item['guid'])
+                continue
 
-            parent_path = '/'.join(context.getPhysicalPath())
+            if not parent_path:
+                logger.warning(
+                    u'Could not determine parent container for item with '
+                    u'GUID %s, skipping.' % item['guid'])
+                continue
+
+            container = traverse(self.site, parent_path, None)
 
             try:
-                obj = self._construct_object(context, portal_type, item)
-                logger.info("Constructed %r" % obj)
+                obj = self._construct_object(container, portal_type, item)
+                logger.info(u'Constructed %r' % obj)
             except ValueError as e:
                 logger.warning(
                     u'Could not create object at {} with guid {}. {}'.format(
@@ -197,6 +211,6 @@ class ConstructorSection(object):
                 continue
 
             # build path relative to plone site
-            item[u'_path'] = '/'.join(obj.getPhysicalPath()[2:])
+            item['_path'] = '/'.join(obj.getPhysicalPath()[2:])
 
             yield item

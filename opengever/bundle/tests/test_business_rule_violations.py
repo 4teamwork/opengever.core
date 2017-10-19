@@ -122,9 +122,10 @@ class TestBusinessRuleViolations(FunctionalTestCase):
         subobject_types = [o.portal_type for o in folder.objectValues()]
 
         self.assertNotIn('opengever.document.document', subobject_types)
+
         self.assertIn(
             'Could not create object at '
-            '/plone/ordnungssystem-a/ordnungsposition-1 with guid '
+            'ordnungssystem-a/ordnungsposition-1 with guid '
             'GUID-document-A-1-disallowed-subobject-type. '
             'Disallowed subobject type: opengever.document.document',
             self.log.getvalue())
