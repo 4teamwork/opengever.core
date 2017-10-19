@@ -5,6 +5,7 @@ Changelog
 2017.5.2 (unreleased)
 ---------------------
 
+- Fix wrong default value in filingnumber-adjustment view. [elioschmutz]
 - Ungrok opengever.base. [elioschmutz]
 - SPV word: prevent reader user from returning excerpts. [jone]
 - SPV word: remove double excerpt entry when word feature activated. [tarnap]
