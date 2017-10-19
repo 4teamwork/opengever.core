@@ -65,7 +65,7 @@ class ICommitteeContainer(form.Schema):
         title=_('label_paragraph_template',
                 default=u'Paragraph template'),
         source=sablon_template_source,
-        required=False,
+        required=True,
     )
 
 
@@ -100,7 +100,9 @@ class CommitteeContainer(Container, TranslatedTitleMixin):
         return self.protocol_template.to_object
 
     def get_protocol_header_template(self):
-        return self.protocol_header_template.to_object
+        if self.protocol_header_template:
+            return self.protocol_header_template.to_object
+        return None
 
     def get_protocol_suffix_template(self):
         return getattr(self.protocol_suffix_template, 'to_object', None)
