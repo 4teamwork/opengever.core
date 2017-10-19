@@ -96,10 +96,10 @@ class ResolveGUIDSection(object):
             self.bundle.item_by_guid[guid] = item
 
             if 'parent_reference' in item:
-                reference_number = self.get_formatter().list_to_string(
+                parent_refnum = self.get_formatter().list_to_string(
                     item['parent_reference'])
-                item['formatted_refnum'] = reference_number
-                used_ref_numbers.append(reference_number)
+                item['_formatted_parent_refnum'] = parent_refnum
+                used_ref_numbers.append(parent_refnum)
 
         log.info('Start building reference mapping')
         self.bundle.path_by_reference_number = self.build_reference_mapping(
