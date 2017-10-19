@@ -33,6 +33,7 @@ class TestCommitteeContainer(IntegrationTestCase):
         browser.fill({'Title': u'Sitzungen',
                       'Protocol header template': self.sablon_template,
                       'Protocol suffix template': self.sablon_template,
+                      'Paragraph template': self.sablon_template,
                       'Ad hoc agenda item template': self.proposal_template}).save()
         statusmessages.assert_no_error_messages()
 

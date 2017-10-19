@@ -14,6 +14,7 @@ from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.exceptions import AgendaItemListAlreadyGenerated
 from opengever.meeting.exceptions import AgendaItemListMissingTemplate
 from opengever.meeting.exceptions import MissingParagraphTemplate
+from opengever.meeting.exceptions import MissingProtocolHeaderTemplate
 from opengever.meeting.exceptions import ProtocolAlreadyGenerated
 from opengever.meeting.interfaces import IHistory
 from opengever.meeting.mergetool import DocxMergeTool
@@ -351,7 +352,10 @@ class MergeDocxProtocolCommand(CreateGeneratedDocumentCommand):
             return merge_tool()
 
     def get_header_sablon(self):
-        return Sablon(self.meeting.get_protocol_header_template()).process(
+        template = self.meeting.get_protocol_header_template()
+        if template is None:
+            raise MissingProtocolHeaderTemplate()
+        return Sablon(template).process(
             self.document_operations.get_meeting_data(self.meeting).as_json())
 
     def get_suffix_sablon(self):
