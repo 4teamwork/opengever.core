@@ -1,0 +1,11 @@
+[
+  {
+    "guid": "GUID-dossier-A-7.7.7-1",
+    "parent_reference": [[7, 7, 7]],
+    "reference_number": "1",
+    "responsible": "lukas.graf",
+    "review_state": "dossier-state-active",
+    "start": "2010-11-11",
+    "title": "Dossier 7.7.7-1 (invalid parent_reference)"
+  }
+]

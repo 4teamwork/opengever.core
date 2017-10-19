@@ -5,6 +5,7 @@ Changelog
 2017.5.2 (unreleased)
 ---------------------
 
+- OGGBundle: Validate parent_reference early for existence. [lgraf]
 - Add indexer for bundle GUIDs and create index upon bundle import. [lgraf]
 - Fix missing response-variable due to ungrok opengever.document. [elioschmutz]
 - Ungrok opengever.base. [elioschmutz]

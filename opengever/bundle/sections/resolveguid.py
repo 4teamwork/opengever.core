@@ -33,6 +33,10 @@ class MissingParent(Exception):
     pass
 
 
+class ReferenceNumberNotFound(Exception):
+    pass
+
+
 class ResolveGUIDSection(object):
     """Resolve and validate GUIDs.
 
@@ -61,7 +65,13 @@ class ResolveGUIDSection(object):
 
         self.bundle.item_by_guid = OrderedDict()
         self.bundle.path_by_reference_number = OrderedDict()
+
+        # Table of formatted refnums that exist in Plone
+        self.bundle.existing_refnums = ()
+
         self.formatter = None
+
+        self.catalog = api.portal.get_tool('portal_catalog')
 
     def __iter__(self):
         self.register_items_by_guid()
@@ -80,9 +90,16 @@ class ResolveGUIDSection(object):
 
         return self.formatter
 
+    def get_existing_refnums(self):
+        index = self.catalog._catalog.indexes['reference']
+        return tuple(index.uniqueValues())
+
     def register_items_by_guid(self):
         """Register all items by their guid."""
+        # Collect existing reference numbers from catalog index
+        self.bundle.existing_refnums = self.get_existing_refnums()
 
+        # Keep track of all reference numbers referred to in bundle items
         used_ref_numbers = []
 
         for item in self.previous:
@@ -105,6 +122,15 @@ class ResolveGUIDSection(object):
         self.bundle.path_by_reference_number = self.build_reference_mapping(
             used_ref_numbers)
         log.info('Reference mapping built.')
+
+        # Verify that all parent containers referenced by refnum exist in Plone
+        for formatted_refnum in used_ref_numbers:
+            if formatted_refnum not in self.bundle.existing_refnums:
+                # Reference number of referenced parent not found in catalog
+                raise ReferenceNumberNotFound(
+                    "Couldn't find container with reference number %s "
+                    "(referenced as parent by item by GUID %s )" % (
+                        formatted_refnum, guid))
 
     def get_relative_path(self, brain):
         """Returns the path relative to the plone site for the given brain.
