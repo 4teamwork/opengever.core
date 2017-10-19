@@ -6,6 +6,8 @@ from opengever.meeting import _
 from opengever.meeting.model import Meeting
 from opengever.tabbedview import BaseListingTab
 from opengever.tabbedview import SqlTableSource
+from plone import api
+from Products.CMFPlone.utils import safe_unicode
 from zope.component import adapter
 from zope.globalrequest import getRequest
 from zope.i18n import translate
@@ -26,14 +28,22 @@ def translated_state(item, value):
         translate(state.title, context=getRequest()))
 
 
-def dossier_link(item, value):
+def dossier_link_or_title(item, value):
     dossier = item.get_dossier()
     if not dossier:
         return
 
+    if not api.user.has_permission('View', obj=dossier):
+        span = u'<span title="{0}" class="{1}">{0}</span>'.format(
+            escape_html(safe_unicode(dossier.Title())),
+            get_css_class(dossier))
+        return span
+
     url = dossier.absolute_url()
     link = u'<a href="{0}" title="{1}" class="{2}">{1}</a>'.format(
-        url, escape_html(dossier.title), get_css_class(dossier))
+        url,
+        escape_html(safe_unicode(dossier.Title())),
+        get_css_class(dossier))
     return link
 
 
@@ -70,7 +80,7 @@ class MeetingListingTab(BaseListingTab):
 
         {'column': 'dossier',
          'column_title': _(u'dossier', default=u'Dossier'),
-         'transform': dossier_link,
+         'transform': dossier_link_or_title,
          'sortable': False},
     )
 

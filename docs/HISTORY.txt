@@ -19,6 +19,7 @@ Changelog
 - Ungrok opengever.task. [elioschmutz]
 - Ungrok opengever.officeatwork. [elioschmutz]
 - SPV: Let CommitteeMember only have read-access on meeting view. [jone]
+- SPV: Remove link to dossier in listings when user has no view permission on the dossier. [tarnap]
 - SPV: Fix ad hoc agenda item template label translation. [tarnap]
 - SPV: Meeting end date is not set when start date is selected. [tarnap]
 - SPV word: Protect proposal transitions to require modify permission. [jone]
