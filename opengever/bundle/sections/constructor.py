@@ -99,7 +99,8 @@ class ConstructorSection(object):
         """
         IAnnotations(obj)[BUNDLE_GUID_KEY] = item['guid']
 
-    def _construct_object(self, container, portal_type, item):
+    def _construct_object(self, container, item):
+        portal_type = item['_type']
         fti = self._get_fti(portal_type)
         title_args = self._get_title_args(fti, item)
 
@@ -167,42 +168,50 @@ class ConstructorSection(object):
         """
         return '/'.join(brain.getPath().split('/')[2:])
 
+    def resolve_parent_pointer(self, item):
+        """Resolves an item's parent pointer to a container obj and its path.
+        """
+        parent_guid = item.get('parent_guid')
+        formatted_parent_refnum = item.get('_formatted_parent_refnum')
+
+        if parent_guid is not None:
+            parent_path = self.path_from_guid(parent_guid)
+
+        elif formatted_parent_refnum is not None:
+            parent_path = self.path_from_refnum(formatted_parent_refnum)
+
+        elif item['_type'] == 'opengever.repository.repositoryroot':
+            # Repo roots are the only type that don't require a parent
+            # pointer, and get constructed directly in the Plone site
+            container = self.site
+            parent_path = '/'
+
+        else:
+            # Should never happen - schema requires a parent pointer
+            logger.warning(
+                u'Item with GUID %s is missing a parent pointer, '
+                u'skipping.' % item['guid'])
+            return
+
+        if not parent_path:
+            logger.warning(
+                u'Could not determine parent container for item with '
+                u'GUID %s, skipping.' % item['guid'])
+            return
+
+        container = traverse(self.site, parent_path, None)
+        return container, parent_path
+
     def __iter__(self):
         for item in self.previous:
-            portal_type = item['_type']
-
-            parent_guid = item.get('parent_guid')
-            formatted_parent_refnum = item.get('_formatted_parent_refnum')
-
-            if parent_guid is not None:
-                parent_path = self.path_from_guid(parent_guid)
-
-            elif formatted_parent_refnum is not None:
-                parent_path = self.path_from_refnum(formatted_parent_refnum)
-
-            elif portal_type == 'opengever.repository.repositoryroot':
-                # Repo roots are the only type that don't require a parent
-                # pointer, and get constructed directly in the Plone site
-                container = self.site
-                parent_path = '/'
-
-            else:
-                # Should never happen - schema requires a parent pointer
-                logger.warning(
-                    u'Item with GUID %s is missing a parent pointer, '
-                    u'skipping.' % item['guid'])
+            parent = self.resolve_parent_pointer(item)
+            if parent is None:
+                # Failed to resolve parent, warnings have been logged
                 continue
 
-            if not parent_path:
-                logger.warning(
-                    u'Could not determine parent container for item with '
-                    u'GUID %s, skipping.' % item['guid'])
-                continue
-
-            container = traverse(self.site, parent_path, None)
-
+            container, parent_path = parent
             try:
-                obj = self._construct_object(container, portal_type, item)
+                obj = self._construct_object(container, item)
                 logger.info(u'Constructed %r' % obj)
             except ValueError as e:
                 logger.warning(
