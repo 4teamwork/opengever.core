@@ -69,6 +69,7 @@ class ResolveGUIDSection(object):
         # Table of formatted refnums that exist in Plone
         self.bundle.existing_refnums = ()
 
+        # Current reference number formatter
         self.formatter = None
 
         self.catalog = api.portal.get_tool('portal_catalog')
@@ -112,11 +113,13 @@ class ResolveGUIDSection(object):
 
             self.bundle.item_by_guid[guid] = item
 
-            if 'parent_reference' in item:
-                parent_refnum = self.get_formatter().list_to_string(
-                    item['parent_reference'])
-                item['_formatted_parent_refnum'] = parent_refnum
-                parent_refnums.append(parent_refnum)
+            parent_reference = item.get('parent_reference')
+            if parent_reference is not None:
+                # Item has a parent pointer via reference number
+                fmt = self.get_formatter()
+                formatted_parent_refnum = fmt.list_to_string(parent_reference)
+                item['_formatted_parent_refnum'] = formatted_parent_refnum
+                parent_refnums.append(formatted_parent_refnum)
 
         log.info('Start building reference mapping')
         self.bundle.path_by_reference_number = self.build_reference_mapping(
