@@ -5,11 +5,15 @@ from ftw.testing import freeze
 from opengever.base.behaviors.classification import IClassification
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.base.security import elevated_privileges
+from opengever.bundle.console import add_guid_index
+from opengever.bundle.loader import GUID_INDEX_NAME
 from opengever.bundle.sections.bundlesource import BUNDLE_INGESTION_SETTINGS_KEY  # noqa
 from opengever.bundle.sections.bundlesource import BUNDLE_KEY
 from opengever.bundle.sections.bundlesource import BUNDLE_PATH_KEY
+from opengever.bundle.sections.constructor import BUNDLE_GUID_KEY
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.repository.behaviors.referenceprefix import IReferenceNumberPrefix  # noqa
+from opengever.testing import index_data_for
 from opengever.testing import IntegrationTestCase
 from pkg_resources import resource_filename
 from plone import api
@@ -32,6 +36,10 @@ class TestOggBundlePipeline(IntegrationTestCase):
         # test its data.
 
         self.login(self.manager)
+
+        # Create the 'bundle_guid' index. In production, this will be done
+        # by the "bin/instance import" command in opengever.bundle.console
+        add_guid_index()
 
         # load pipeline
         transmogrifier = Transmogrifier(api.portal.get())
@@ -69,6 +77,9 @@ class TestOggBundlePipeline(IntegrationTestCase):
         self.assertEqual(date(2099, 12, 31), root.valid_until)
         self.assertIsNone(getattr(root, 'guid', None))
         self.assert_navigation_portlet_assigned(root)
+        self.assertEqual(
+            IAnnotations(root)[BUNDLE_GUID_KEY],
+            index_data_for(root)[GUID_INDEX_NAME])
         return root
 
     def assert_repo_folders_created(self, root):
@@ -141,6 +152,9 @@ class TestOggBundlePipeline(IntegrationTestCase):
             api.content.get_state(folder_organisation))
         self.assertIsNone(getattr(folder_organisation, 'guid', None))
         self.assertIsNone(getattr(folder_organisation, 'parent_guid', None))
+        self.assertEqual(
+            IAnnotations(folder_organisation)[BUNDLE_GUID_KEY],
+            index_data_for(folder_organisation)[GUID_INDEX_NAME])
         return folder_organisation
 
     def assert_processes_folder_created(self, parent):
@@ -187,6 +201,9 @@ class TestOggBundlePipeline(IntegrationTestCase):
             api.content.get_state(folder_process))
         self.assertIsNone(getattr(folder_process, 'guid', None))
         self.assertIsNone(getattr(folder_process, 'parent_guid', None))
+        self.assertEqual(
+            IAnnotations(folder_process)[BUNDLE_GUID_KEY],
+            index_data_for(folder_process)[GUID_INDEX_NAME])
         return folder_process
 
     def assert_staff_folder_created(self, parent):
@@ -242,6 +259,9 @@ class TestOggBundlePipeline(IntegrationTestCase):
             api.content.get_state(folder_staff))
         self.assertIsNone(getattr(folder_staff, 'guid', None))
         self.assertIsNone(getattr(folder_staff, 'parent_guid', None))
+        self.assertEqual(
+            IAnnotations(folder_staff)[BUNDLE_GUID_KEY],
+            index_data_for(folder_staff)[GUID_INDEX_NAME])
 
         self.assertDictContainsSubset(
             {'privileged_users':
@@ -271,6 +291,9 @@ class TestOggBundlePipeline(IntegrationTestCase):
                          api.content.get_state(dossier_peter))
         self.assertEqual(date(2010, 11, 11), IDossier(dossier_peter).start)
         self.assertEqual(u'Dossier Peter Schneider', dossier_peter.title)
+        self.assertEqual(
+            IAnnotations(dossier_peter)[BUNDLE_GUID_KEY],
+            index_data_for(dossier_peter)[GUID_INDEX_NAME])
 
     def assert_dossier_vreni_created(self, parent):
         dossier = self.leaf_repofolder.get('dossier-10')
@@ -284,6 +307,9 @@ class TestOggBundlePipeline(IntegrationTestCase):
         self.assertEqual(date(2010, 11, 11), IDossier(dossier).start)
         self.assertEqual(
             u'Dossier in bestehendem Examplecontent Repository', dossier.title)
+        self.assertEqual(
+            IAnnotations(dossier)[BUNDLE_GUID_KEY],
+            index_data_for(dossier)[GUID_INDEX_NAME])
 
     def assert_dossier_hanspeter_created(self, parent):
         dossier_peter = parent.get('dossier-9')
@@ -343,6 +369,10 @@ class TestOggBundlePipeline(IntegrationTestCase):
             dossier_peter.__ac_local_roles__)
         self.assertTrue(dossier_peter.__ac_local_roles_block__)
 
+        self.assertEqual(
+            IAnnotations(dossier_peter)[BUNDLE_GUID_KEY],
+            index_data_for(dossier_peter)[GUID_INDEX_NAME])
+
         return dossier_peter
 
     def assert_documents_created(self, parent):
@@ -381,6 +411,9 @@ class TestOggBundlePipeline(IntegrationTestCase):
         self.assertEqual(
             u'Bewerbung Hanspeter M\xfcller',
             document_1.title)
+        self.assertEqual(
+            IAnnotations(document_1)[BUNDLE_GUID_KEY],
+            index_data_for(document_1)[GUID_INDEX_NAME])
 
     def assert_document_2_created(self, parent):
         document_2 = parent.objectValues()[1]
@@ -421,6 +454,9 @@ class TestOggBundlePipeline(IntegrationTestCase):
         self.assertEqual(
             u'Entlassung Hanspeter M\xfcller',
             document_2.title)
+        self.assertEqual(
+            IAnnotations(document_2)[BUNDLE_GUID_KEY],
+            index_data_for(document_2)[GUID_INDEX_NAME])
 
     def assert_document_5_created(self, parent):
         document_5 = parent.objectValues()[4]
@@ -435,6 +471,9 @@ class TestOggBundlePipeline(IntegrationTestCase):
         self.assertEqual(
             u'Document referenced via UNC-Path',
             document_5.title)
+        self.assertEqual(
+            IAnnotations(document_5)[BUNDLE_GUID_KEY],
+            index_data_for(document_5)[GUID_INDEX_NAME])
 
     def assert_document_6_created(self):
         document_6 = self.dossier.objectValues()[-2]
@@ -446,6 +485,9 @@ class TestOggBundlePipeline(IntegrationTestCase):
             'document-state-draft', api.content.get_state(document_6))
         self.assertEqual(u'Dokument in bestehendem Examplecontent Dossier',
                          document_6.title)
+        self.assertEqual(
+            IAnnotations(document_6)[BUNDLE_GUID_KEY],
+            index_data_for(document_6)[GUID_INDEX_NAME])
 
     def assert_mail_1_created(self, parent):
         mail = parent.objectValues()[2]
@@ -484,6 +526,9 @@ class TestOggBundlePipeline(IntegrationTestCase):
         self.assertEqual(
             u'Ein Mail',
             mail.title)
+        self.assertEqual(
+            IAnnotations(mail)[BUNDLE_GUID_KEY],
+            index_data_for(mail)[GUID_INDEX_NAME])
 
     def assert_mail_2_created(self, parent):
         mail = parent.objectValues()[3]
@@ -491,6 +536,9 @@ class TestOggBundlePipeline(IntegrationTestCase):
         self.assertIsNotNone(mail.message)
         self.assertEqual(920, len(mail.message.data))
         self.assertEqual(u'Lorem Ipsum', mail.title)
+        self.assertEqual(
+            IAnnotations(mail)[BUNDLE_GUID_KEY],
+            index_data_for(mail)[GUID_INDEX_NAME])
 
     def assert_mail_3_created(self):
         mail = self.dossier.objectValues()[-1]
@@ -499,6 +547,9 @@ class TestOggBundlePipeline(IntegrationTestCase):
         self.assertEqual(920, len(mail.message.data))
         self.assertEqual(
             u'Mail in bestehendem Examplecontent Dossier', mail.title)
+        self.assertEqual(
+            IAnnotations(mail)[BUNDLE_GUID_KEY],
+            index_data_for(mail)[GUID_INDEX_NAME])
 
     def assert_report_data_collected(self, bundle):
         report_data = bundle.report_data

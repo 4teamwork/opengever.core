@@ -238,6 +238,11 @@
       name="title_fr"
       />
 
+  <adapter
+      factory=".indexes.bundle_guid_indexer"
+      name="bundle_guid"
+      />
+
   <utility factory=".sequence.SequenceNumber" />
 
   <adapter factory=".quickupload.OGQuickUploadCapableFileFactory" />

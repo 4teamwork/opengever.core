@@ -22,6 +22,8 @@ BUNDLE_JSON_TYPES = OrderedDict([
     ('documents.json', 'opengever.document.document'),   # document or mail
 ])
 
+GUID_INDEX_NAME = 'bundle_guid'
+
 
 class Bundle(object):
     """An iterable OGGBundle.
