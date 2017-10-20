@@ -1,10 +1,12 @@
 from ftw.testbrowser import browser
-from operator import methodcaller
+from opengever.testing.pages import byline
 
 
 def metadata(**kwargs):
-    """Return the meeting metadata as lists of labels and values.
+    """Return the meeting metadata as a dict of labels and values.
     """
-    return reduce(list.__add__,
-                  map(methodcaller('lists', **kwargs),
-                      browser.css('table.meeting-metadata')))
+    data = byline.text_dict()
+    for table in browser.css('table.meeting-metadata'):
+        for row in table.lists():
+            data[row[0]] = row[1]
+    return data

@@ -252,6 +252,12 @@ class MeetingView(BrowserView):
             return IContentListingObject(
                 self.model.agendaitem_list_document.resolve_document())
 
+    def get_agendaitem_list_document_link(self):
+        document = self.get_agendaitem_list_document()
+        return document.render_link(title=_(u'document_label_agenda_item_list',
+                                            default=u'Agenda item list'),
+                                    show_icon=False)
+
     def url_protocol(self):
         return self.model.get_url(view='protocol')
 

@@ -34,8 +34,8 @@ class DocumentContentListingObject(RealContentListingObject):
     def is_bumblebeeable(self):
         return is_bumblebee_feature_enabled()
 
-    def render_link(self):
-        return DocumentLinkWidget(self).render()
+    def render_link(self, **kwargs):
+        return DocumentLinkWidget(self).render(**kwargs)
 
     def get_breadcrumbs(self):
         breadcrumbs_view = getMultiAdapter((self._realobject, getRequest()),

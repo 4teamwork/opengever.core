@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2017-10-24 12:47+0000\n"
-"PO-Revision-Date: 2017-10-11 09:21+0200\n"
+"PO-Revision-Date: 2017-10-20 16:49+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -152,7 +152,6 @@ msgid "Documents"
 msgstr "Dokumente"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "Download agenda item list"
 msgstr "Traktandenliste herunterladen"
 
@@ -379,6 +378,14 @@ msgstr "Mit einer neuen Version der Sitzung ${title} aktualisiert."
 #: ./opengever/meeting/browser/meetings/byline.py
 msgid "You are not allowed to view the meeting dossier."
 msgstr "Sie haben nicht die nötigen Rechte, um das Sitzungsdossier anzusehen."
+
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "action_download_document"
+msgstr "Dokument herunterladen"
+
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "action_generate_document"
+msgstr "Dokument neu generieren"
 
 #. Default: "Active"
 #: ./opengever/meeting/browser/documents/proposalstab.py
@@ -616,6 +623,22 @@ msgstr "Für diese Gruppe werden automatisch Berechtigungen auf dem Gremium verg
 msgid "document_checkout_not_allowed"
 msgstr "Sie dürfen das Dokument nicht auschecken."
 
+#. Default: "Created at ${date}"
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "document_created_at"
+msgstr "Erstellt am ${date} Uhr"
+
+#. Default: "Agenda item list"
+#: ./opengever/meeting/browser/meetings/meeting.py
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "document_label_agenda_item_list"
+msgstr "Traktandenliste"
+
+#. Default: "Not yet generated."
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "document_not_yet_generated"
+msgstr "Noch nicht generiert."
+
 #. Default: "Dossier"
 #: ./opengever/meeting/tabs/meetinglisting.py
 msgid "dossier"
@@ -677,7 +700,6 @@ msgid "filename_repository_toc"
 msgstr "Inhaltsverzeichnis ${period} ${committee} nach Ordnungsposition"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "generate new agenda item list as word document"
 msgstr "Traktandenliste als Worddokument generieren"
 
@@ -1095,7 +1117,6 @@ msgstr "Nächste Sitzung:"
 
 #. Default: "No agenda item list has been generated yet."
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "label_no_agendaitem_list"
 msgstr "Es wurde noch keine Traktandenliste generiert."
 
@@ -1663,6 +1684,11 @@ msgstr "Anträge"
 msgid "tab_matches"
 msgstr "${amount} Treffer"
 
+#. Default: "Overview"
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "tab_overview"
+msgstr "Übersicht"
+
 #. Default: "Text successfully added."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "text_added"
@@ -1696,11 +1722,6 @@ msgstr "Zwischentitel einfügen:"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "view_label_agenda_items"
 msgstr "Traktanden"
-
-#. Default: "Agenda item list:"
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
-msgid "view_label_agendaitem_list"
-msgstr "Traktandenliste:"
 
 #. Default: "Meeting number:"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt

@@ -16,7 +16,8 @@
   <metal:content-core fill-slot="content-core">
     <metal:content-core define-macro="content-core"
                         tal:define="meeting view/model;
-                                    unscheduled_proposals view/unscheduled_proposals">
+                                    unscheduled_proposals view/unscheduled_proposals;
+                                    toLocalizedTime nocall:context/@@plone/toLocalizedTime">
 
       <div id="opengever_meeting_meeting"
            class="word-feature"
@@ -169,40 +170,6 @@
 
           <table class="meeting-metadata">
 
-            <tr tal:define="agendaitem_list_document view/get_agendaitem_list_document">
-              <th i18n:translate="view_label_agendaitem_list">Agenda item list:</th>
-              <td class="agendaitem-list">
-                <div tal:condition="not:agendaitem_list_document"
-                     i18n:translate="label_no_agendaitem_list">No agenda item list has been generated yet.</div>
-
-                <div tal:condition="agendaitem_list_document"
-                     class="agendaitem_list-file">
-                  <a tal:replace="structure agendaitem_list_document/render_link" />
-                </div>
-              </td>
-              <td class="item agendaitem-list-buttons">
-                <span>
-                  <a class="generate-agendaitem-list"
-                     tal:condition="python: meeting.is_editable() and not view.has_agendaitem_list_document()"
-                     tal:attributes="href view/url_generate_agendaitem_list;"
-                     i18n:attributes="title"
-                     title="generate new agenda item list as word document" />
-
-                  <a class="download-agendaitem-list-btn"
-                     tal:condition="python: meeting.is_editable() and agendaitem_list_document"
-                     tal:attributes="href view/url_download_agendaitem_list"
-                     i18n:attributes="title"
-                     title="Download agenda item list" />
-
-                  <a class="refresh-agendaitem-list"
-                     tal:condition="python: meeting.is_editable() and view.has_agendaitem_list_document()"
-                     tal:attributes="href view/url_generate_agendaitem_list;"
-                     i18n:attributes="title"
-                     title="generate new version as word document" />
-                </span>
-              </td>
-            </tr>
-
             <tr tal:define="protocol_document view/get_protocol_document">
               <th i18n:translate="view_label_protocol">Protocol:</th>
               <td class="protocol">
@@ -238,6 +205,71 @@
             </tr>
 
           </table>
+        </div>
+
+
+
+
+        <div class="sidebar">
+          <ul class="formTabs">
+            <li class="formTab">
+              <a href="#tab-overview" i18n:translate="tab_overview">Overview</a>
+            </li>
+          </ul>
+
+          <div class="panes">
+            <div id="tab-overview">
+              <div class="meeting-process">
+
+                <div class="agenda-item-list-doc meeting-document"
+                     tal:define="agendaitem_list_document view/get_agendaitem_list_document">
+
+                  <div class="document-actions">
+                    <a class="action generate"
+                       tal:condition="meeting/is_editable"
+                       tal:attributes="href view/url_generate_agendaitem_list"
+                       i18n:translate="action_generate_document"
+                       i18n:attributes="title action_generate_document"
+                       title=""></a>
+
+                    <a class="action download"
+                       tal:condition="agendaitem_list_document"
+                       tal:attributes="href view/url_download_agendaitem_list"
+                       i18n:translate="action_download_document"
+                       i18n:attributes="title action_download_document"
+                       title=""></a>
+                  </div>
+
+                  <tal:NOT_GENERATED tal:condition="not:agendaitem_list_document">
+                    <div class="document-label"
+                         i18n:translate="document_label_agenda_item_list">
+                      Agenda item list
+                    </div>
+                    <div class="document-created"
+                         i18n:translate="document_not_yet_generated">
+                      Not yet generated.
+                    </div>
+                  </tal:NOT_GENERATED>
+
+                  <tal:GENERATED tal:condition="agendaitem_list_document">
+                    <div class="document-label">
+                      <a tal:replace="structure view/get_agendaitem_list_document_link" />
+                    </div>
+                    <div class="document-created"
+                         i18n:translate="document_created_at">
+                      Created at
+                      <tal:date
+                          replace="python:toLocalizedTime(agendaitem_list_document.getObject().ModificationDate(), long_format=1)"
+                          i18n:name="date" />
+                    </div>
+                  </tal:GENERATED>
+
+                </div>
+              </div>
+
+
+            </div>
+          </div>
         </div>
 
 

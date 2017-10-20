@@ -154,7 +154,6 @@ msgid "Documents"
 msgstr "Documents"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "Download agenda item list"
 msgstr ""
 
@@ -380,6 +379,14 @@ msgstr "Actualisé par une nouvelle version de la réunion ${title}."
 
 #: ./opengever/meeting/browser/meetings/byline.py
 msgid "You are not allowed to view the meeting dossier."
+msgstr ""
+
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "action_download_document"
+msgstr ""
+
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "action_generate_document"
 msgstr ""
 
 #. Default: "Active"
@@ -618,6 +625,22 @@ msgstr "Pour ce groupe, les autorisations sont attribuées automatiquement au co
 msgid "document_checkout_not_allowed"
 msgstr ""
 
+#. Default: "Created at ${date}"
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "document_created_at"
+msgstr ""
+
+#. Default: "Agenda item list"
+#: ./opengever/meeting/browser/meetings/meeting.py
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "document_label_agenda_item_list"
+msgstr ""
+
+#. Default: "Not yet generated."
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "document_not_yet_generated"
+msgstr ""
+
 #. Default: "Dossier"
 #: ./opengever/meeting/tabs/meetinglisting.py
 msgid "dossier"
@@ -679,7 +702,6 @@ msgid "filename_repository_toc"
 msgstr "Table de matière ${period} ${committee} selon l'ordre des points"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "generate new agenda item list as word document"
 msgstr ""
 
@@ -1097,7 +1119,6 @@ msgstr "Prochaine réunion:"
 
 #. Default: "No agenda item list has been generated yet."
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "label_no_agendaitem_list"
 msgstr ""
 
@@ -1665,6 +1686,11 @@ msgstr "Propositions"
 msgid "tab_matches"
 msgstr "${amount} résultats"
 
+#. Default: "Overview"
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "tab_overview"
+msgstr ""
+
 #. Default: "Text successfully added."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "text_added"
@@ -1697,11 +1723,6 @@ msgstr ""
 #. Default: "Agenda items"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "view_label_agenda_items"
-msgstr ""
-
-#. Default: "Agenda item list:"
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
-msgid "view_label_agendaitem_list"
 msgstr ""
 
 #. Default: "Meeting number:"

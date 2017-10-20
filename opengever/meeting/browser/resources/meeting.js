@@ -579,6 +579,9 @@
       window.addEventListener("pageshow", function() {
         agendaItemController.update();
       });
+
+      $('#opengever_meeting_meeting .sidebar > ul.formTabs').tabs(
+            '.sidebar .panes > div', {current: 'selected'});
     }
 
     if ($(".template-add-meeting").length) {

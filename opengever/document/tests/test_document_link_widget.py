@@ -64,6 +64,24 @@ class TestDocumentLinkWidget(FunctionalTestCase):
         self.assertEquals('You are not allowed to view this document.',
                           link.get('title'))
 
+    @browsing
+    def test_title_can_be_overriden(self, browser):
+        document = create(Builder('document')
+                          .titled('Protocol of the 37th meeting in 2016'))
+        browser.open_html(DocumentLinkWidget(document).render(title='Protocol'))
+
+        link = browser.css('a.document_link').first
+        self.assertEquals('Protocol', link.text)
+
+    @browsing
+    def test_title_can_disable_icon(self, browser):
+        document = create(Builder('document').titled('Important'))
+        browser.open_html(DocumentLinkWidget(document).render())
+        icon_css_class = 'contenttype-opengever-document-document'
+        self.assertIn(icon_css_class, browser.css('a.document_link').first.classes)
+        browser.open_html(DocumentLinkWidget(document).render(show_icon=False))
+        self.assertNotIn(icon_css_class, browser.css('a.document_link').first.classes)
+
 
 class TestDocumentLinkWidgetWithActivatedBumblebee(FunctionalTestCase):
 
