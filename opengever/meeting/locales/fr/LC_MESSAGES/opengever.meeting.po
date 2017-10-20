@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-12 10:36+0000\n"
+"POT-Creation-Date: 2017-10-20 06:51+0000\n"
 "PO-Revision-Date: 2017-06-22 09:02+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -1143,11 +1143,6 @@ msgstr ""
 #: ./opengever/meeting/browser/meetings/protocol.py
 msgid "label_presidency"
 msgstr "Présidence"
-
-#. Default: "Reference Number"
-#: ./opengever/meeting/browser/documents/proposalstab.py
-msgid "label_proposal_id"
-msgstr "Numéro de référence"
 
 #. Default: "Proposal template"
 #: ./opengever/meeting/browser/proposalforms.py

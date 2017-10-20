@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-12 10:36+0000\n"
+"POT-Creation-Date: 2017-10-20 06:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1139,11 +1139,6 @@ msgstr ""
 #. Default: "Presidency"
 #: ./opengever/meeting/browser/meetings/protocol.py
 msgid "label_presidency"
-msgstr ""
-
-#. Default: "Reference Number"
-#: ./opengever/meeting/browser/documents/proposalstab.py
-msgid "label_proposal_id"
 msgstr ""
 
 #. Default: "Proposal template"
