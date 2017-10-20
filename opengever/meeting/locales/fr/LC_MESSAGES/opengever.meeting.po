@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-24 12:47+0000\n"
+"POT-Creation-Date: 2017-10-24 12:48+0000\n"
 "PO-Revision-Date: 2017-06-22 09:02+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -636,6 +636,16 @@ msgstr ""
 msgid "document_label_agenda_item_list"
 msgstr ""
 
+#. Default: "Pre-protocol"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "document_label_pre_protocol"
+msgstr ""
+
+#. Default: "Protocol"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "document_label_protocol"
+msgstr ""
+
 #. Default: "Not yet generated."
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "document_not_yet_generated"
@@ -647,7 +657,6 @@ msgid "dossier"
 msgstr "Dossier"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "download protocol"
 msgstr "Télécharger le protocole"
 
@@ -710,12 +719,10 @@ msgid "generate new excerpt"
 msgstr "Générer un nouvel extrait de protocole"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "generate new protocol as word document"
 msgstr "Générer le protocole comme document Word"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "generate new version as word document"
 msgstr "Générer une nouvelle version comme document Word"
 
@@ -1139,7 +1146,6 @@ msgstr "Aucune proposition n'a été soumise."
 
 #. Default: "No protocol has been generated yet."
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "label_no_protocol"
 msgstr "Aucun protocole n'a été généré encore."
 
@@ -1733,11 +1739,6 @@ msgstr ""
 #. Default: "Participants:"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "view_label_participants"
-msgstr ""
-
-#. Default: "Protocol:"
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
-msgid "view_label_protocol"
 msgstr ""
 
 #. Default: "Schedule ad hoc agenda item:"

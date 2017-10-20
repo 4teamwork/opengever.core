@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-24 12:47+0000\n"
+"POT-Creation-Date: 2017-10-24 12:48+0000\n"
 "PO-Revision-Date: 2017-10-20 16:49+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -634,6 +634,16 @@ msgstr "Erstellt am ${date} Uhr"
 msgid "document_label_agenda_item_list"
 msgstr "Traktandenliste"
 
+#. Default: "Pre-protocol"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "document_label_pre_protocol"
+msgstr "Vorprotokoll"
+
+#. Default: "Protocol"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "document_label_protocol"
+msgstr "Protokoll"
+
 #. Default: "Not yet generated."
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "document_not_yet_generated"
@@ -645,7 +655,6 @@ msgid "dossier"
 msgstr "Dossier"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "download protocol"
 msgstr "Protokoll herunterladen"
 
@@ -708,12 +717,10 @@ msgid "generate new excerpt"
 msgstr "Neuer Protokollauszug generieren"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "generate new protocol as word document"
 msgstr "Protokoll als Worddokument generieren"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "generate new version as word document"
 msgstr "Neue Version als Worddokument generieren"
 
@@ -1137,7 +1144,6 @@ msgstr "Keine Anträge eingereicht"
 
 #. Default: "No protocol has been generated yet."
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "label_no_protocol"
 msgstr "Es wurde noch kein Protokoll generiert."
 
@@ -1732,11 +1738,6 @@ msgstr "Sitzungsnummer:"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "view_label_participants"
 msgstr "Teilnehmer:"
-
-#. Default: "Protocol:"
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
-msgid "view_label_protocol"
-msgstr "Protokoll:"
 
 #. Default: "Schedule ad hoc agenda item:"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt

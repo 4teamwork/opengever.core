@@ -330,9 +330,10 @@ class MergeDocxProtocolCommand(CreateGeneratedDocumentCommand):
             context=getRequest())
 
         Versioner(document).create_version(comment)
-
         new_version = document.get_current_version_id()
         self.meeting.protocol_document.generated_version = new_version
+        document.setModificationDate(DateTime())
+        document.reindexObject(idxs=['modified'])
 
         return document
 

@@ -44,8 +44,7 @@ class TestEditMeeting(IntegrationTestCase):
              'Meeting dossier:': 'Sitzungsdossier 9/2017',
              'Meeting number:': '',
              'Participants:': u'Wendler Jens (jens-wendler@gmail.com)'
-             u' W\xf6lfl Gerda (g.woelfl@hotmail.com)',
-             'Protocol:': 'No protocol has been generated yet.'},
+             u' W\xf6lfl Gerda (g.woelfl@hotmail.com)'},
             meeting_view.metadata())
 
         editbar.contentview('Edit').click()
@@ -72,8 +71,7 @@ class TestEditMeeting(IntegrationTestCase):
              'Meeting dossier:': 'Sitzungsdossier 9/2017',
              'Meeting number:': '',
              'Participants:': u'Sch\xf6ller Heidrun (h.schoeller@web.de)',
-             '': 'Staatsanwalt',
-             'Protocol:': 'No protocol has been generated yet.'},
+             '': 'Staatsanwalt'},
             meeting_view.metadata())
 
     @browsing

@@ -242,10 +242,21 @@ class MeetingView(BrowserView):
     def unscheduled_proposals(self):
         return self.context.get_unscheduled_proposals()
 
+    def get_protocol_document_label(self):
+        if self.model.get_state() == self.model.STATE_PENDING:
+            return _(u'document_label_pre_protocol', u'Pre-protocol')
+        else:
+            return _(u'document_label_protocol', u'Protocol')
+
     def get_protocol_document(self):
         if self.model.protocol_document:
             return IContentListingObject(
                 self.model.protocol_document.resolve_document())
+
+    def get_protocol_document_link(self):
+        document = self.get_protocol_document()
+        return document.render_link(title=self.get_protocol_document_label(),
+                                    show_icon=False)
 
     def get_agendaitem_list_document(self):
         if self.model.agendaitem_list_document:

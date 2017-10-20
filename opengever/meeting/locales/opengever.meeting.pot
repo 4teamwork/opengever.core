@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-24 12:47+0000\n"
+"POT-Creation-Date: 2017-10-24 12:48+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -633,6 +633,16 @@ msgstr ""
 msgid "document_label_agenda_item_list"
 msgstr ""
 
+#. Default: "Pre-protocol"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "document_label_pre_protocol"
+msgstr ""
+
+#. Default: "Protocol"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "document_label_protocol"
+msgstr ""
+
 #. Default: "Not yet generated."
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "document_not_yet_generated"
@@ -644,7 +654,6 @@ msgid "dossier"
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "download protocol"
 msgstr ""
 
@@ -707,12 +716,10 @@ msgid "generate new excerpt"
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "generate new protocol as word document"
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "generate new version as word document"
 msgstr ""
 
@@ -1136,7 +1143,6 @@ msgstr ""
 
 #. Default: "No protocol has been generated yet."
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "label_no_protocol"
 msgstr ""
 
@@ -1730,11 +1736,6 @@ msgstr ""
 #. Default: "Participants:"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "view_label_participants"
-msgstr ""
-
-#. Default: "Protocol:"
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
-msgid "view_label_protocol"
 msgstr ""
 
 #. Default: "Schedule ad hoc agenda item:"

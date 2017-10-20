@@ -167,44 +167,6 @@
             </tr>
 
           </table>
-
-          <table class="meeting-metadata">
-
-            <tr tal:define="protocol_document view/get_protocol_document">
-              <th i18n:translate="view_label_protocol">Protocol:</th>
-              <td class="protocol">
-                <div tal:condition="not:protocol_document"
-                     i18n:translate="label_no_protocol">No protocol has been generated yet.</div>
-
-                <div tal:condition="protocol_document"
-                     class="protocol-file">
-                  <a tal:replace="structure protocol_document/render_link" />
-                </div>
-              </td>
-              <td class="protocol-buttons">
-                <span>
-                  <a class="generate-protocol"
-                     tal:condition="python: meeting.is_editable() and not view.has_protocol_document()"
-                     tal:attributes="href view/url_generate_protocol;"
-                     i18n:attributes="title"
-                     title="generate new protocol as word document" />
-
-                  <a class="download-protocol-btn"
-                     tal:condition="python: meeting.is_editable() and protocol_document"
-                     tal:attributes="href view/url_download_protocol"
-                     i18n:attributes="title"
-                     title="download protocol" />
-
-                  <a class="refresh-protocol"
-                     tal:condition="python: meeting.is_editable() and view.has_protocol_document()"
-                     tal:attributes="href view/url_generate_protocol;"
-                     i18n:attributes="title"
-                     title="generate new version as word document" />
-                </span>
-              </td>
-            </tr>
-
-          </table>
         </div>
 
 
@@ -260,6 +222,49 @@
                       Created at
                       <tal:date
                           replace="python:toLocalizedTime(agendaitem_list_document.getObject().ModificationDate(), long_format=1)"
+                          i18n:name="date" />
+                    </div>
+                  </tal:GENERATED>
+
+                </div>
+
+                <div class="protocol-doc meeting-document"
+                     tal:define="protocol_document view/get_protocol_document">
+
+                  <div class="document-actions">
+                    <a class="action generate"
+                       tal:condition="meeting/is_editable"
+                       tal:attributes="href view/url_generate_protocol"
+                       i18n:translate="action_generate_document"
+                       i18n:attributes="title action_generate_document"
+                       title=""></a>
+
+                    <a class="action download"
+                       tal:condition="protocol_document"
+                       tal:attributes="href view/url_download_protocol"
+                       i18n:translate="action_download_document"
+                       i18n:attributes="title action_download_document"
+                       title=""></a>
+                  </div>
+
+                  <tal:NOT_GENERATED tal:condition="not:protocol_document">
+                    <div class="document-label"
+                         tal:content="view/get_protocol_document_label" />
+                    <div class="document-created"
+                         i18n:translate="document_not_yet_generated">
+                      Not yet generated.
+                    </div>
+                  </tal:NOT_GENERATED>
+
+                  <tal:GENERATED tal:condition="protocol_document">
+                    <div class="document-label">
+                      <a tal:replace="structure view/get_protocol_document_link" />
+                    </div>
+                    <div class="document-created"
+                         i18n:translate="document_created_at">
+                      Created at
+                      <tal:date
+                          replace="python:toLocalizedTime(protocol_document.getObject().ModificationDate(), long_format=1)"
                           i18n:name="date" />
                     </div>
                   </tal:GENERATED>

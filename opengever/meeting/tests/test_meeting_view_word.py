@@ -63,6 +63,40 @@ class TestWordMeetingView(IntegrationTestCase):
             self.assertEquals('Created at Sep 02, 2016 12:15 PM', docnode.css('.document-created').first.text)
 
     @browsing
+    def test_protocol_document(self, browser):
+        self.login(self.committee_responsible, browser)
+
+        browser.open(self.meeting)
+        docnode = browser.css('.meeting-document.protocol-doc').first
+        self.assertFalse(docnode.css('div.document-label a'))
+        self.assertEquals('Pre-protocol', docnode.css('.document-label').first.text)
+        self.assertEquals('Not yet generated.', docnode.css('.document-created').first.text)
+        self.assertTrue(docnode.css('.action.generate'))
+        self.assertFalse(docnode.css('.action.download'))
+
+        with freeze(datetime(2016, 9, 2, 10, 15, 1, tzinfo=pytz.UTC)) as clock:
+            docnode.css('.action.generate').first.click()
+            docnode = browser.css('.meeting-document.protocol-doc').first
+            self.assertTrue(docnode.css('div.document-label a'))
+            self.assertEquals('Pre-protocol', docnode.css('.document-label').first.text)
+            self.assertEquals('Created at Sep 02, 2016 11:15 AM', docnode.css('.document-created').first.text)
+            self.assertTrue(docnode.css('.action.generate'))
+            self.assertTrue(docnode.css('.action.download'))
+
+            self.assertEquals(self.meeting.model.protocol_document.get_download_url(),
+                              docnode.css('.action.download').first.attrib['href'])
+
+            clock.forward(hours=1)
+            docnode.css('.action.generate').first.click()
+            docnode = browser.css('.meeting-document.protocol-doc').first
+            self.assertEquals('Created at Sep 02, 2016 12:15 PM', docnode.css('.document-created').first.text)
+
+            self.meeting.model.workflow_state = self.meeting.model.STATE_HELD.name
+            browser.reload()
+            docnode = browser.css('.meeting-document.protocol-doc').first
+            self.assertEquals('Protocol', docnode.css('.document-label').first.text)
+
+    @browsing
     def test_close_transition_closes_meeting(self, browser):
         self.login(self.committee_responsible, browser)
         self.assertEquals('pending', self.meeting.model.get_state().name)
