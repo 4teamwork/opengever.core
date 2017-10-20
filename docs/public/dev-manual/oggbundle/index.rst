@@ -144,6 +144,12 @@ Pfade / Dateinamen dürfen nur alphanumerische Zeichen, Unterstrich und Bindestr
 Abbildung von Verschachtelung (containment)
 -------------------------------------------
 
+Die hierarchische Beziehung zwischen Objekten wird mittels Parent-Pointers abgebildet.
+
+
+parent_guid
+~~~~~~~~~~~
+
 Da die Daten in den JSON-Dateien nicht verschachtelt abgelegt werden, ist es nötig diese Verschachtelung während dem Import aufzulösen. Diese Verschachtelung wird mittels global eindeutiger ID (GUID) und einem Pointer von Children auf das enthaltende Parent abgebildet. Dazu muss jedes Objekt über eine GUID verfügen. Diese muss im Attribut **guid** gespeichert werden. Die Verschachtelung wird mittels einer Referenz auf das Parent hergestellt, dazu muss jedes Objekt, das ein Parent besitzt, das Attribut **parent\_guid** definieren, und damit auf das Parent referenzieren:
 
 code::
@@ -158,7 +164,17 @@ code::
   ...
   }
 
-Alternativ zur (im Bundle selbst definierten) GUID kann auch das Akzenzeichen eines Objekts als eindeutige Referenz auf das Parent verwendet werden. Die Verwendung des Aktenzeichens als Parent-Pointer erlaubt es, bereits existierende Objekte (die also nicht im referenzierenden Bundle mitgeliefert werden) zu referenzieren, und ermöglicht so partielle Importe. So ist z.B. das importieren von Dokumenten in ein bestehendes Dossier möglich, indem dieses Dossier über sein Aktenzeichen referenziert wird.
+Es ist auch möglich, über die ``parent_guid`` ein Objekt als Parent zu referenzieren, das sich aufgrund eines früheren Imports bereits im System befindet. Dieses Parent-Item muss dann im Bundle nicht mehr mitgeliefert werden (darf aber, solang die GUID gleich bleibt).
+
+Wenn sowohl im Bundle ein Item mit einer bestimmten GUID geliefert wird, und sich auch im System bereits ein Objekt mit identischer GUID befindet, wird das Item aus dem Bundle ignoriert und übersprungen (es werden also auch keine Metadaten des bereits existierenden Objekts aktualisiert).
+
+Dies bedeutet, wenn nacheinander zwei Bundles importiert werden, von denen das zweite *zusätzliche* Daten enthält, wird nur die Differenz importiert (Objekte mit GUIDs welche im ersten Bundle noch nicht existiert haben). Dies setzt aber zwingend voraus, dass für Objekte die als "gleich" / "schon vorhanden" erkannt werden sollen, sich die GUID nicht ändert (ansonsten werden die Objekte erneut importiert werden, und dementsprechend doppelt vorhanden sein).
+
+
+parent_reference
+~~~~~~~~~~~~~~~~
+
+Alternativ zur GUID kann auch das Akzenzeichen eines Objekts als eindeutige Referenz auf das Parent verwendet werden. Die Verwendung des Aktenzeichens als Parent-Pointer erlaubt es, bereits existierende Objekte über deren eindeutiges Aktenzeichen zu referenzieren, und ermöglicht so partielle Importe. So ist z.B. das importieren von Dokumenten in ein bestehendes Dossier möglich, indem dieses Dossier über sein Aktenzeichen referenziert wird.
 
 Wird zur Referenzierung das Aktenzeichen verwendet, muss dazu das Attribut **parent\_reference** (statt **parent\_guid**) gesetzt werden. Das Aktenzeichen in diesem Attribut wird als verschachtelte Arrays von Integern erwartet, welche die einzelnen Komponenten des Aktenzeichens (ohne Formatierung) abbilden. Beispiel: `[[1, 3, 5], [472, 9]` entspricht dem Aktenzeichen `1.3.5 / 472.9` (Position 1.3.5, Dossier 472, Subdossier 9):
 

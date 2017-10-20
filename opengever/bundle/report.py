@@ -38,27 +38,19 @@ class DataCollector(object):
         portal_types = BUNDLE_JSON_TYPES.values()
         portal_types.append('ftw.mail.mail')
 
-        # Determine paths of repository roots that were part of the current
-        # import to limit catalog search accordingly
-        portal = api.portal.get()
-        root_paths = [
-            '/'.join(portal.getPhysicalPath() + (r['_path'], ))
-            for r in self.bundle.get_repository_roots()]
-
         for portal_type in portal_types:
             data['metadata'][portal_type] = []
             data['permissions'][portal_type] = []
             log.info("Collecting %s" % portal_type)
 
             brains = catalog.unrestrictedSearchResults(
-                portal_type=portal_type, path=root_paths)
+                portal_type=portal_type,
+                bundle_guid=tuple(self.bundle.constructed_guids))
 
             for brain in brains:
                 obj = brain.getObject()
                 guid = IAnnotations(obj).get(BUNDLE_GUID_KEY)
-                if guid not in self.bundle.item_by_guid:
-                    # Skip object, not part of current import
-                    continue
+
                 item_info = self.get_item_metadata(obj, guid)
                 data['metadata'][portal_type].append(item_info)
 
@@ -303,6 +295,10 @@ class XLSXMainReportBuilder(XLSXReportBuilderBase):
         for json_name, portal_type in BUNDLE_JSON_TYPES.items():
             short_name = json_name.replace('.json', '')
             sheet = self.add_sheet(short_name)
+
+            # Skip portal_types with no info
+            if not self.metadata[portal_type]:
+                continue
 
             # Label Row
             self.write_row(

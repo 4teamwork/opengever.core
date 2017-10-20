@@ -63,7 +63,9 @@ class ConstructorSection(object):
         self.ttool = api.portal.get_tool(u'portal_types')
         self.catalog = api.portal.get_tool('portal_catalog')
 
+        self.bundle.path_by_guid_cache = {}
         self.bundle.path_by_refnum_cache = {}
+        self.bundle.constructed_guids = set()
 
     def _has_translated_title(self, fti):
         return ITranslatedTitle.__identifier__ in fti.behaviors
@@ -125,7 +127,37 @@ class ConstructorSection(object):
         self._set_guid(obj, item)
         return obj
 
+    def path_from_existing_guid(self, guid):
+        if guid not in self.bundle.path_by_guid_cache:
+
+            results = self.catalog.unrestrictedSearchResults(bundle_guid=guid)
+            if len(results) == 0:
+                # This should never happen, since we pre-validated GUIDs
+                # in the ResolveGUIDSection
+                logger.warning(
+                    u"Couldn't find object with GUID %s in "
+                    u"catalog" % guid)
+                return
+
+            if len(results) > 1:
+                # Ambiguous GUID - this should never happen
+                logger.warning(
+                    u"Ambiguous GUID! Found more than one result in catalog "
+                    u"for GUID %s " % guid)
+                return
+
+            brain = results[0]
+            path = self.get_relative_path(brain)
+            self.bundle.path_by_guid_cache[guid] = path
+
+        return self.bundle.path_by_guid_cache[guid]
+
     def path_from_guid(self, guid):
+        if guid in self.bundle.existing_guids:
+            # Object with referenced GUID already exists in Plone
+            return self.path_from_existing_guid(guid)
+
+        # Othwerise determine parent path from pipeline item
         return self.bundle.item_by_guid[guid]['_path']
 
     def path_from_refnum(self, formatted_refnum):
@@ -212,6 +244,7 @@ class ConstructorSection(object):
             container, parent_path = parent
             try:
                 obj = self._construct_object(container, item)
+                self.bundle.constructed_guids.add(item['guid'])
                 logger.info(u'Constructed %r' % obj)
             except ValueError as e:
                 logger.warning(
