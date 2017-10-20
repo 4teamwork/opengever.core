@@ -32,6 +32,10 @@ class ReferenceNumberNotFound(Exception):
     pass
 
 
+class MissingParentPointer(Exception):
+    pass
+
+
 class ResolveGUIDSection(object):
     """Resolve and validate GUIDs.
 
@@ -62,6 +66,8 @@ class ResolveGUIDSection(object):
 
         # Table of formatted refnums that exist in Plone
         self.bundle.existing_refnums = ()
+        # Table of bundle GUIDs that exist in Plone
+        self.bundle.existing_guids = ()
 
         # Current reference number formatter
         self.formatter = None
@@ -91,17 +97,20 @@ class ResolveGUIDSection(object):
 
     def register_items_by_guid(self):
         """Register all items by their guid."""
-        # Collect existing reference numbers from catalog index
+        # Collect existing GUIDs and reference numbers from catalog index
+        self.bundle.existing_guids = self.get_all_existing_guids()
         self.bundle.existing_refnums = self.get_existing_refnums()
-
-        # Keep track of all reference numbers referred to in bundle items
-        parent_refnums = []
 
         for item in self.previous:
             if 'guid' not in item:
                 raise MissingGuid(item)
 
             guid = item['guid']
+
+            if guid in self.bundle.existing_guids:
+                log.info('Skipping existing GUID %s when building tree' % guid)
+                continue
+
             if guid in self.bundle.item_by_guid:
                 raise DuplicateGuid(guid)
 
@@ -113,16 +122,32 @@ class ResolveGUIDSection(object):
                 fmt = self.get_formatter()
                 formatted_parent_refnum = fmt.list_to_string(parent_reference)
                 item['_formatted_parent_refnum'] = formatted_parent_refnum
-                parent_refnums.append(formatted_parent_refnum)
 
-        # Verify that all parent containers referenced by refnum exist in Plone
-        for formatted_refnum in parent_refnums:
-            if formatted_refnum not in self.bundle.existing_refnums:
-                # Reference number of referenced parent not found in catalog
-                raise ReferenceNumberNotFound(
-                    "Couldn't find container with reference number %s "
-                    "(referenced as parent by item by GUID %s )" % (
-                        formatted_refnum, guid))
+        # Verify parent pointers - all referenced items/containers must exist
+        for guid, item in self.bundle.item_by_guid.items():
+            parent_guid = item.get('parent_guid')
+            parent_reference = item.get('parent_reference')
+
+            if parent_guid is not None:
+                if not (parent_guid in self.bundle.item_by_guid or
+                        parent_guid in self.bundle.existing_guids):
+                    raise MissingParent(
+                        "Couldn't find item/container with GUID %s "
+                        "(referenced as parent by item by GUID %s ) in either "
+                        "Plone or the bundle itself" % (parent_guid, guid))
+
+            elif parent_reference is not None:
+                formatted_refnum = item['_formatted_parent_refnum']
+                if formatted_refnum not in self.bundle.existing_refnums:
+                    raise ReferenceNumberNotFound(
+                        "Couldn't find container with reference number %s "
+                        "(referenced as parent by item by GUID %s )" % (
+                            formatted_refnum, guid))
+
+    def get_all_existing_guids(self):
+        index = self.catalog._catalog.indexes['bundle_guid']
+        guids = tuple(index.uniqueValues())
+        return guids
 
     def build_tree(self):
         """Build a tree from the flat list of items.
@@ -131,17 +156,33 @@ class ResolveGUIDSection(object):
         """
         roots = []
         for item in self.bundle.item_by_guid.values():
-            parent_guid = item.get('parent_guid', None)
-            if parent_guid:
-                parent = self.bundle.item_by_guid.get(parent_guid)
-                if not parent:
+            parent_guid = item.get('parent_guid')
+            parent_reference = item.get('parent_reference')
+
+            existing_parent_guid = parent_guid in self.bundle.existing_guids
+
+            if parent_guid and not existing_parent_guid:
+                parent_item = self.bundle.item_by_guid.get(parent_guid)
+                if not parent_item:
                     msg = "%r (referenced by GUID %r)" % (
                         parent_guid, item['guid'])
                     raise MissingParent(msg)
-                children = parent.setdefault('_children', [])
+                children = parent_item.setdefault('_children', [])
                 children.append(item)
-            else:
+
+            # Not really "roots" as such, rather an item with a parent
+            # that's outside the bundle tree (i.e. Plone)
+            elif parent_guid and existing_parent_guid:
                 roots.append(item)
+            elif parent_reference is not None:
+                roots.append(item)
+
+            elif item['_type'] == 'opengever.repository.repositoryroot':
+                # Repo roots are the only type without a parent pointer
+                roots.append(item)
+            else:
+                raise MissingParentPointer(
+                    "No parent pointer for item with GUID %s" % item['guid'])
         return roots
 
     def visit_in_pre_order(self, items, level, previous_type):

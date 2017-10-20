@@ -1,14 +1,21 @@
 from collective.transmogrifier.transmogrifier import Transmogrifier
 from opengever.bundle.console import add_guid_index
 from opengever.bundle.sections.bundlesource import BUNDLE_PATH_KEY
-from opengever.bundle.sections.resolveguid import ReferenceNumberNotFound
 from opengever.testing import FunctionalTestCase
 from pkg_resources import resource_filename
 from plone import api
 from zope.annotation import IAnnotations
 
 
-class TestInvalidParentReference(FunctionalTestCase):
+class TestDeltaBundleImport(FunctionalTestCase):
+
+    def import_bundle(self, bundle_name):
+        bundle_path = resource_filename(
+            'opengever.bundle.tests',
+            'assets/%s' % bundle_name)
+        transmogrifier = Transmogrifier(api.portal.get())
+        IAnnotations(transmogrifier)[BUNDLE_PATH_KEY] = bundle_path
+        transmogrifier(u'opengever.bundle.oggbundle')
 
     def test_oggbundle_transmogrifier(self):
         # this is a bit hackish, but since builders currently don't work in
@@ -24,15 +31,15 @@ class TestInvalidParentReference(FunctionalTestCase):
         # by the "bin/instance import" command in opengever.bundle.console
         add_guid_index()
 
-        transmogrifier = Transmogrifier(api.portal.get())
-        IAnnotations(transmogrifier)[BUNDLE_PATH_KEY] = resource_filename(
-            'opengever.bundle.tests',
-            'assets/invalid_parent_reference.oggbundle')
+        self.import_bundle('delta_base.oggbundle')
+        self.import_bundle('delta.oggbundle')
 
-        with self.assertRaises(ReferenceNumberNotFound) as cm:
-            transmogrifier(u'opengever.bundle.oggbundle')
+        repofolder_from_base = self.portal.restrictedTraverse(
+            'ordnungssystem-a/ordnungsposition-1/ordnungsposition-1.1')
 
+        self.assertEquals(['dossier-1'], repofolder_from_base.objectIds())
+
+        dossier = repofolder_from_base.restrictedTraverse('dossier-1')
         self.assertEqual(
-            "Couldn't find container with reference number Client1 7.7.7 "
-            "(referenced as parent by item by GUID GUID-dossier-A-7.7.7-1 )",
-            cm.exception.message)
+            u'Dossier 1.1-1 (delta import into existing repofolder)',
+            dossier.title)

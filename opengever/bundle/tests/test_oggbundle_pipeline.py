@@ -572,9 +572,9 @@ class TestOggBundlePipeline(IntegrationTestCase):
 
         self.assertEqual(1, len(reporoots))
         self.assertEqual(3, len(repofolders))
-        self.assertEqual(2, len(dossiers))
-        self.assertEqual(3, len(documents))
-        self.assertEqual(2, len(mails))
+        self.assertEqual(3, len(dossiers))
+        self.assertEqual(4, len(documents))
+        self.assertEqual(3, len(mails))
 
     def assert_navigation_portlet_assigned(self, root):
         manager = getUtility(

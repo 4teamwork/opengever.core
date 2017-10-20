@@ -2,6 +2,7 @@ from collective.transmogrifier.transmogrifier import Transmogrifier
 from datetime import datetime
 from ftw.testing import freeze
 from opengever.base.security import elevated_privileges
+from opengever.bundle.console import add_guid_index
 from opengever.bundle.sections.bundlesource import BUNDLE_PATH_KEY
 from opengever.testing import FunctionalTestCase
 from pkg_resources import resource_filename
@@ -36,6 +37,10 @@ class TestBusinessRuleViolations(FunctionalTestCase):
         # layer setup/teardown and isolation of database content is ensured
         # on a per test level we abuse just one test to setup the pipeline and
         # test its data.
+
+        # Create the 'bundle_guid' index. In production, this will be done
+        # by the "bin/instance import" command in opengever.bundle.console
+        add_guid_index()
 
         # load pipeline
         # XXX move this to a layer
