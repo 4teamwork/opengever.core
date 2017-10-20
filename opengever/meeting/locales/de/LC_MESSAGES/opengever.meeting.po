@@ -241,6 +241,7 @@ msgid "Meeting Dossier"
 msgstr "Sitzungsdossier"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "Meeting number"
 msgstr "Sitzungsnummer"
 
@@ -1728,11 +1729,6 @@ msgstr "Zwischentitel einfügen:"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "view_label_agenda_items"
 msgstr "Traktanden"
-
-#. Default: "Meeting number:"
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
-msgid "view_label_meeting_number"
-msgstr "Sitzungsnummer:"
 
 #. Default: "Participants:"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt

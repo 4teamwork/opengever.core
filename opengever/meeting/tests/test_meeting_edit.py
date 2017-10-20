@@ -42,7 +42,6 @@ class TestEditMeeting(IntegrationTestCase):
              'Secretary:': u'M\xfcller Henning',
              'Location:': u'B\xfcren an der Aare',
              'Meeting dossier:': 'Sitzungsdossier 9/2017',
-             'Meeting number:': '',
              'Participants:': u'Wendler Jens (jens-wendler@gmail.com)'
              u' W\xf6lfl Gerda (g.woelfl@hotmail.com)'},
             meeting_view.metadata())
@@ -69,7 +68,6 @@ class TestEditMeeting(IntegrationTestCase):
              'Secretary:': u'Wendler Jens',
              'Location:': u'Sitzungszimmer 3',
              'Meeting dossier:': 'Sitzungsdossier 9/2017',
-             'Meeting number:': '',
              'Participants:': u'Sch\xf6ller Heidrun (h.schoeller@web.de)',
              '': 'Staatsanwalt'},
             meeting_view.metadata())

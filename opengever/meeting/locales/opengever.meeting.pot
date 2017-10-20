@@ -240,6 +240,7 @@ msgid "Meeting Dossier"
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "Meeting number"
 msgstr ""
 
@@ -1726,11 +1727,6 @@ msgstr ""
 #. Default: "Agenda items"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "view_label_agenda_items"
-msgstr ""
-
-#. Default: "Meeting number:"
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
-msgid "view_label_meeting_number"
 msgstr ""
 
 #. Default: "Participants:"

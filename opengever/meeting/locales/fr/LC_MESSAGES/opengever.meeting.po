@@ -243,6 +243,7 @@ msgid "Meeting Dossier"
 msgstr "Dossier de réunion"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "Meeting number"
 msgstr "Numéro de la réunion"
 
@@ -1729,11 +1730,6 @@ msgstr ""
 #. Default: "Agenda items"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "view_label_agenda_items"
-msgstr ""
-
-#. Default: "Meeting number:"
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
-msgid "view_label_meeting_number"
 msgstr ""
 
 #. Default: "Participants:"
