@@ -24,6 +24,12 @@ logger.setLevel(logging.INFO)
 
 BUNDLE_GUID_KEY = 'bundle_guid'
 
+TYPES_WITHOUT_REFERENCE_NUMBER = (
+    'opengever.task.task',
+    'opengever.meeting.proposal',
+    'opengever.meeting.submittedproposal',
+)
+
 
 class InvalidType(Exception):
     pass
@@ -55,6 +61,9 @@ class ConstructorSection(object):
 
         self.site = api.portal.get()
         self.ttool = api.portal.get_tool(u'portal_types')
+        self.catalog = api.portal.get_tool('portal_catalog')
+
+        self.bundle.path_by_refnum_cache = {}
 
     def _has_translated_title(self, fti):
         return ITranslatedTitle.__identifier__ in fti.behaviors
@@ -90,7 +99,8 @@ class ConstructorSection(object):
         """
         IAnnotations(obj)[BUNDLE_GUID_KEY] = item['guid']
 
-    def _construct_object(self, container, portal_type, item):
+    def _construct_object(self, container, item):
+        portal_type = item['_type']
         fti = self._get_fti(portal_type)
         title_args = self._get_title_args(fti, item)
 
@@ -115,33 +125,94 @@ class ConstructorSection(object):
         self._set_guid(obj, item)
         return obj
 
+    def path_from_guid(self, guid):
+        return self.bundle.item_by_guid[guid]['_path']
+
+    def path_from_refnum(self, formatted_refnum):
+        if formatted_refnum not in self.bundle.path_by_refnum_cache:
+
+            results = self.catalog.unrestrictedSearchResults(
+                reference=formatted_refnum,
+                portal_type={'not': TYPES_WITHOUT_REFERENCE_NUMBER})
+
+            if len(results) == 0:
+                # This should never happen, since we pre-validated refnums
+                # in the ResolveGUIDSection
+                logger.warning(
+                    u"Couldn't find reference number %s in "
+                    u"catalog" % formatted_refnum)
+                return
+
+            if len(results) > 1:
+                # With the 'not' constraint above, reference numbers should
+                # unambiguously point to a single object - except for the
+                # case where we're dealing with multiple repository roots.
+                #
+                # For that case, we would need to either specify the root
+                # that should be considered, or fix reference numbers to be
+                # unique across repository roots (which currently don't
+                # contribute their own component to the reference number).
+                logger.warning(
+                    u"Found more than one matches in catalog for reference "
+                    u"number %s" % formatted_refnum)
+                return
+
+            brain = results[0]
+            path = self.get_relative_path(brain)
+            self.bundle.path_by_refnum_cache[formatted_refnum] = path
+
+        return self.bundle.path_by_refnum_cache[formatted_refnum]
+
+    def get_relative_path(self, brain):
+        """Returns the path relative to the plone site for the given brain.
+        """
+        return '/'.join(brain.getPath().split('/')[2:])
+
+    def resolve_parent_pointer(self, item):
+        """Resolves an item's parent pointer to a container obj and its path.
+        """
+        parent_guid = item.get('parent_guid')
+        formatted_parent_refnum = item.get('_formatted_parent_refnum')
+
+        if parent_guid is not None:
+            parent_path = self.path_from_guid(parent_guid)
+
+        elif formatted_parent_refnum is not None:
+            parent_path = self.path_from_refnum(formatted_parent_refnum)
+
+        elif item['_type'] == 'opengever.repository.repositoryroot':
+            # Repo roots are the only type that don't require a parent
+            # pointer, and get constructed directly in the Plone site
+            container = self.site
+            parent_path = '/'
+
+        else:
+            # Should never happen - schema requires a parent pointer
+            logger.warning(
+                u'Item with GUID %s is missing a parent pointer, '
+                u'skipping.' % item['guid'])
+            return
+
+        if not parent_path:
+            logger.warning(
+                u'Could not determine parent container for item with '
+                u'GUID %s, skipping.' % item['guid'])
+            return
+
+        container = traverse(self.site, parent_path, None)
+        return container, parent_path
+
     def __iter__(self):
         for item in self.previous:
-            portal_type = item[u'_type']
+            parent = self.resolve_parent_pointer(item)
+            if parent is None:
+                # Failed to resolve parent, warnings have been logged
+                continue
 
-            parent_guid = item.get(u'parent_guid')
-            if parent_guid:
-                path = self.bundle.item_by_guid[parent_guid][u'_path']
-                context = traverse(self.site, path, None)
-            elif item.get(u'formatted_refnum'):
-                path = self.bundle.path_by_reference_number.get(
-                    item[u'formatted_refnum'])
-                if not path:
-                    logger.warning(
-                        u'Could not create object with guid `{}`, parent with '
-                        'reference number `{}` not found.'.format(
-                            item['guid'], item[u'formatted_refnum']))
-                    continue
-
-                context = traverse(self.site, path, None)
-            else:
-                context = self.site
-
-            parent_path = '/'.join(context.getPhysicalPath())
-
+            container, parent_path = parent
             try:
-                obj = self._construct_object(context, portal_type, item)
-                logger.info("Constructed %r" % obj)
+                obj = self._construct_object(container, item)
+                logger.info(u'Constructed %r' % obj)
             except ValueError as e:
                 logger.warning(
                     u'Could not create object at {} with guid {}. {}'.format(
@@ -149,6 +220,6 @@ class ConstructorSection(object):
                 continue
 
             # build path relative to plone site
-            item[u'_path'] = '/'.join(obj.getPhysicalPath()[2:])
+            item['_path'] = '/'.join(obj.getPhysicalPath()[2:])
 
             yield item

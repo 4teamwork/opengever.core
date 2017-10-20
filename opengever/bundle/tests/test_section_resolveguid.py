@@ -4,13 +4,16 @@ from opengever.bundle.sections.bundlesource import BUNDLE_KEY
 from opengever.bundle.sections.resolveguid import DuplicateGuid
 from opengever.bundle.sections.resolveguid import MissingGuid
 from opengever.bundle.sections.resolveguid import MissingParent
+from opengever.bundle.sections.resolveguid import ReferenceNumberNotFound
 from opengever.bundle.sections.resolveguid import ResolveGUIDSection
 from opengever.bundle.tests import MockBundle
 from opengever.bundle.tests import MockTransmogrifier
 from opengever.testing import IntegrationTestCase
+from plone import api
 from zope.annotation import IAnnotations
 from zope.interface.verify import verifyClass
 from zope.interface.verify import verifyObject
+import Missing
 
 
 class TestResolveGUID(IntegrationTestCase):
@@ -82,22 +85,31 @@ class TestResolveGUID(IntegrationTestCase):
         list(section)
         self.assertEqual(item, self.bundle.item_by_guid['marvin'])
 
-    def test_defines_path_by_reference_number_mapping(self):
+    def test_catches_invalid_parent_reference_early(self):
         self.login(self.regular_user)
 
         items = [
             {'guid': 'a1',
-             'parent_reference': [[1, 1], [1]]},
-            {'guid': 'b1',
-             'parent_reference': [[1, 1]]}
+             'parent_reference': [[7, 7], [7]]}
         ]
         section = self.setup_section(previous=items)
+        with self.assertRaises(ReferenceNumberNotFound):
+            list(section)
+
+    def test_builds_list_of_all_existing_refnums(self):
+        self.login(self.regular_user)
+
+        section = self.setup_section(previous=[])
         list(section)
 
+        catalog = api.portal.get_tool('portal_catalog')
+        all_reference_numbers_in_catalog = [
+            b.reference for b in catalog.unrestrictedSearchResults()
+            if not b.reference == Missing.Value]
+
         self.assertEqual(
-            {'Client1 1.1': 'ordnungssystem/fuhrung/vertrage-und-vereinbarungen',
-             'Client1 1.1 / 1': 'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1'},
-            self.bundle.path_by_reference_number)
+            set(all_reference_numbers_in_catalog),
+            set(self.bundle.existing_refnums))
 
     def test_parent_reference_number_is_added_to_the_items(self):
         self.login(self.regular_user)
@@ -112,9 +124,9 @@ class TestResolveGUID(IntegrationTestCase):
         items = list(section)
 
         self.assertEquals(
-            [{'guid': 'a1', 'formatted_refnum': u'Client1 1.1 / 1',
+            [{'guid': 'a1', '_formatted_parent_refnum': u'Client1 1.1 / 1',
               'parent_reference': [[1, 1], [1]], '_nesting_depth': 1},
-             {'guid': 'b1', 'formatted_refnum': u'Client1 1.1',
+             {'guid': 'b1', '_formatted_parent_refnum': u'Client1 1.1',
               'parent_reference': [[1, 1]], '_nesting_depth': 1}],
             items)
 
@@ -131,8 +143,8 @@ class TestResolveGUID(IntegrationTestCase):
         items = list(section)
 
         self.assertEquals(
-            [{'guid': 'a1', 'formatted_refnum': u'Client1 1.1 / 1',
+            [{'guid': 'a1', '_formatted_parent_refnum': u'Client1 1.1 / 1',
               'parent_reference': [[1, 1], [1]], '_nesting_depth': 1},
-             {'guid': 'b1', 'formatted_refnum': u'Client1 1.1',
+             {'guid': 'b1', '_formatted_parent_refnum': u'Client1 1.1',
               'parent_reference': [[1, 1]], '_nesting_depth': 1}],
             items)

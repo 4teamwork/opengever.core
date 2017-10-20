@@ -12,11 +12,6 @@ from zope.interface import implements
 import logging
 
 
-TYPES_WITHOUT_REFERENCE_NUMBER = [
-    'opengever.task.task',
-    'opengever.meeting.proposal',
-    'opengever.meeting.submittedproposal']
-
 log = logging.getLogger('opengever.bundle.resolveguid')
 log.setLevel(logging.INFO)
 
@@ -30,6 +25,10 @@ class DuplicateGuid(Exception):
 
 
 class MissingParent(Exception):
+    pass
+
+
+class ReferenceNumberNotFound(Exception):
     pass
 
 
@@ -60,8 +59,14 @@ class ResolveGUIDSection(object):
         self.bundle = IAnnotations(transmogrifier)[BUNDLE_KEY]
 
         self.bundle.item_by_guid = OrderedDict()
-        self.bundle.path_by_reference_number = OrderedDict()
+
+        # Table of formatted refnums that exist in Plone
+        self.bundle.existing_refnums = ()
+
+        # Current reference number formatter
         self.formatter = None
+
+        self.catalog = api.portal.get_tool('portal_catalog')
 
     def __iter__(self):
         self.register_items_by_guid()
@@ -80,10 +85,17 @@ class ResolveGUIDSection(object):
 
         return self.formatter
 
+    def get_existing_refnums(self):
+        index = self.catalog._catalog.indexes['reference']
+        return tuple(index.uniqueValues())
+
     def register_items_by_guid(self):
         """Register all items by their guid."""
+        # Collect existing reference numbers from catalog index
+        self.bundle.existing_refnums = self.get_existing_refnums()
 
-        used_ref_numbers = []
+        # Keep track of all reference numbers referred to in bundle items
+        parent_refnums = []
 
         for item in self.previous:
             if 'guid' not in item:
@@ -95,28 +107,22 @@ class ResolveGUIDSection(object):
 
             self.bundle.item_by_guid[guid] = item
 
-            if 'parent_reference' in item:
-                reference_number = self.get_formatter().list_to_string(
-                    item['parent_reference'])
-                item['formatted_refnum'] = reference_number
-                used_ref_numbers.append(reference_number)
+            parent_reference = item.get('parent_reference')
+            if parent_reference is not None:
+                # Item has a parent pointer via reference number
+                fmt = self.get_formatter()
+                formatted_parent_refnum = fmt.list_to_string(parent_reference)
+                item['_formatted_parent_refnum'] = formatted_parent_refnum
+                parent_refnums.append(formatted_parent_refnum)
 
-        log.info('Start building reference mapping')
-        self.bundle.path_by_reference_number = self.build_reference_mapping(
-            used_ref_numbers)
-        log.info('Reference mapping built.')
-
-    def get_relative_path(self, brain):
-        """Returns the path relative to the plone site for the given brain.
-        """
-        return '/'.join(brain.getPath().split('/')[2:])
-
-    def build_reference_mapping(self, reference_numbers):
-        catalog = api.portal.get_tool('portal_catalog')
-        brains = catalog.unrestrictedSearchResults(reference=reference_numbers)
-        return {
-            brain.reference: self.get_relative_path(brain) for brain in brains
-            if brain.portal_type not in TYPES_WITHOUT_REFERENCE_NUMBER}
+        # Verify that all parent containers referenced by refnum exist in Plone
+        for formatted_refnum in parent_refnums:
+            if formatted_refnum not in self.bundle.existing_refnums:
+                # Reference number of referenced parent not found in catalog
+                raise ReferenceNumberNotFound(
+                    "Couldn't find container with reference number %s "
+                    "(referenced as parent by item by GUID %s )" % (
+                        formatted_refnum, guid))
 
     def build_tree(self):
         """Build a tree from the flat list of items.
