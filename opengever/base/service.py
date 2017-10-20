@@ -30,3 +30,10 @@ class DocumentStatus(Service):
             payload['locked_by'] = None
 
         return json.dumps(payload)
+
+
+class DefaultEmailAttributes(Service):
+    """Prevent action send as attachment to fail."""
+
+    def render(self):
+        return json.dumps({})

@@ -503,6 +503,7 @@ Objects
   - self.contactfolder
     - self.franz_meier
     - self.hanspeter_duerr
+  - self.inbox
   - self.repository_root
     - self.branch_repofolder
       - self.leaf_repofolder

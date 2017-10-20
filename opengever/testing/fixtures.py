@@ -50,6 +50,7 @@ class OpengeverContentFixture(object):
                 self.create_templates()
                 with self.features('meeting'):
                     self.create_committees()
+                self.create_inbox()
 
         with self.freeze_at_hour(14):
             with self.login(self.dossier_responsible):
@@ -299,6 +300,19 @@ class OpengeverContentFixture(object):
                           self.empty_committee.load_model().committee_id)
         self.empty_committee.manage_setLocalRoles(
             self.meeting_user.getId(), ('CommitteeMember',))
+        self.empty_committee.reindexObjectSecurity()
+
+    @staticuid()
+    def create_inbox(self):
+        self.inbox = self.register('inbox', create(
+            Builder('inbox')
+            .titled(u'Eingangsk\xf6rbli')
+            .having(id='eingangskorb',
+                    responsible_org_unit='fa',
+                    inbox_group=self.org_unit.inbox_group)))
+        self.inbox.manage_setLocalRoles(
+            self.secretariat_user.getId(), ('Contributor', 'Editor', 'Reader'))
+        self.inbox.reindexObjectSecurity()
 
     @staticuid()
     def create_treaty_dossiers(self):
