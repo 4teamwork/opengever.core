@@ -22,6 +22,16 @@ BUNDLE_JSON_TYPES = OrderedDict([
     ('documents.json', 'opengever.document.document'),   # document or mail
 ])
 
+# This (almost) inverted dict is used in rare cases where we've already lost
+# the information which file an item came from, but still need it
+PORTAL_TYPES_TO_JSON_NAME = OrderedDict([
+    ('opengever.repository.repositoryroot', 'reporoots.json'),
+    ('opengever.repository.repositoryfolder', 'repofolders.json'),
+    ('opengever.dossier.businesscasedossier', 'dossiers.json'),
+    ('opengever.document.document', 'documents.json'),
+    ('ftw.mail.mail', 'documents.json'),
+])
+
 GUID_INDEX_NAME = 'bundle_guid'
 
 
@@ -82,7 +92,7 @@ class BundleLoader(object):
     def __init__(self, bundle_path):
         self.bundle_path = bundle_path
         self.json_schemas = self._load_schemas()
-        self._stats = {'bundle_counts': {}, 'timings': {}}
+        self._stats = {'bundle_counts_raw': {}, 'timings': {}}
 
     def load(self, ingestion_settings=None):
         """Load the bundle from disk and return an iterable Bundle.
@@ -98,10 +108,11 @@ class BundleLoader(object):
 
     def _display_stats(self, bundle):
         log.info('')
-        log.info('Stats for %r' % bundle)
+        log.info('Raw items in bundle %r' % bundle)
         log.info('=' * 80)
-        for json_name, count in bundle.stats['bundle_counts'].items():
+        for json_name, count in bundle.stats['bundle_counts_raw'].items():
             log.info("%-20s %s" % (json_name, count))
+        log.info('')
 
     def _load_json(self, json_name):
         json_path = os.path.join(self.bundle_path, json_name)
@@ -125,7 +136,7 @@ class BundleLoader(object):
             if items is None:
                 continue
 
-            self._stats['bundle_counts'][json_name] = len(items)
+            self._stats['bundle_counts_raw'][json_name] = len(items)
             self._validate_schema(items, json_name)
             for item in items:
                 # Apply required preprocessing to items (in-place)

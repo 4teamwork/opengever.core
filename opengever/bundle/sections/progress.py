@@ -36,10 +36,11 @@ class ProgressSection(object):
         self.bundle = IAnnotations(transmogrifier)[BUNDLE_KEY]
         self.interval = int(options.get('interval', 100))
         self.count = 0
-        self.total = sum(self.bundle.stats['bundle_counts'].values())
+        self.total = sum(self.bundle.stats['bundle_counts_raw'].values())
 
     def __iter__(self):
-        logger.info("Migrating %s items total." % self.total)
+        logger.info(
+            "Starting migration (%s raw items total in bundle)" % self.total)
 
         for item in self.previous:
             self.count += 1
