@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-24 12:44+0000\n"
+"POT-Creation-Date: 2017-10-24 12:47+0000\n"
 "PO-Revision-Date: 2017-10-11 09:21+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -375,6 +375,10 @@ msgstr "Das Dokument wurde durch eine neuere Version des Protokollauszugs übers
 #: ./opengever/meeting/command.py
 msgid "Updated with a newer generated version from meeting ${title}."
 msgstr "Mit einer neuen Version der Sitzung ${title} aktualisiert."
+
+#: ./opengever/meeting/browser/meetings/byline.py
+msgid "You are not allowed to view the meeting dossier."
+msgstr "Sie haben nicht die nötigen Rechte, um das Sitzungsdossier anzusehen."
 
 #. Default: "Active"
 #: ./opengever/meeting/browser/documents/proposalstab.py
@@ -1322,6 +1326,41 @@ msgstr "Sprache"
 msgid "location"
 msgstr "Ort"
 
+#. Default: "End"
+#: ./opengever/meeting/browser/meetings/byline.py
+msgid "meeting_byline_end"
+msgstr "Ende"
+
+#. Default: "Location"
+#: ./opengever/meeting/browser/meetings/byline.py
+msgid "meeting_byline_location"
+msgstr "Ort"
+
+#. Default: "Meeting dossier"
+#: ./opengever/meeting/browser/meetings/byline.py
+msgid "meeting_byline_meetin_dossier"
+msgstr "Sitzungsdossier"
+
+#. Default: "Presidency"
+#: ./opengever/meeting/browser/meetings/byline.py
+msgid "meeting_byline_presidency"
+msgstr "Vorsitz"
+
+#. Default: "Secretary"
+#: ./opengever/meeting/browser/meetings/byline.py
+msgid "meeting_byline_secretary"
+msgstr "Protokollführung"
+
+#. Default: "Start"
+#: ./opengever/meeting/browser/meetings/byline.py
+msgid "meeting_byline_start"
+msgstr "Beginn"
+
+#. Default: "State"
+#: ./opengever/meeting/browser/meetings/byline.py
+msgid "meeting_byline_workflow_state"
+msgstr "Status"
+
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
 msgid "meetingdossier"
 msgstr "Sitzungsdossier"
@@ -1663,45 +1702,15 @@ msgstr "Traktanden"
 msgid "view_label_agendaitem_list"
 msgstr "Traktandenliste:"
 
-#. Default: "Meeting dossier:"
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
-msgid "view_label_dossier"
-msgstr "Sitzungsdossier:"
-
-#. Default: "Meeting end:"
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
-msgid "view_label_meeting_end"
-msgstr "Sitzungsende:"
-
-#. Default: "Location:"
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
-msgid "view_label_meeting_location"
-msgstr "Ort:"
-
 #. Default: "Meeting number:"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "view_label_meeting_number"
 msgstr "Sitzungsnummer:"
 
-#. Default: "Meeting start:"
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
-msgid "view_label_meeting_start"
-msgstr "Beginn:"
-
-#. Default: "Status:"
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
-msgid "view_label_meeting_status"
-msgstr "Status:"
-
 #. Default: "Participants:"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "view_label_participants"
 msgstr "Teilnehmer:"
-
-#. Default: "Presidency:"
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
-msgid "view_label_presidency"
-msgstr "Vorsitz:"
 
 #. Default: "Protocol:"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
@@ -1717,8 +1726,3 @@ msgstr "Traktandum einfügen:"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "view_label_schedule_proposal"
 msgstr "Antrag traktandieren:"
-
-#. Default: "Secretary:"
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
-msgid "view_label_secretary"
-msgstr "Protokollführung:"

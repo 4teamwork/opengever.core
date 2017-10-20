@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-24 12:44+0000\n"
+"POT-Creation-Date: 2017-10-24 12:47+0000\n"
 "PO-Revision-Date: 2017-06-22 09:02+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -377,6 +377,10 @@ msgstr "Le document a été écrasé par une version plus récente de l'extrait 
 #: ./opengever/meeting/command.py
 msgid "Updated with a newer generated version from meeting ${title}."
 msgstr "Actualisé par une nouvelle version de la réunion ${title}."
+
+#: ./opengever/meeting/browser/meetings/byline.py
+msgid "You are not allowed to view the meeting dossier."
+msgstr ""
 
 #. Default: "Active"
 #: ./opengever/meeting/browser/documents/proposalstab.py
@@ -1324,6 +1328,41 @@ msgstr "Langue"
 msgid "location"
 msgstr "Lieu"
 
+#. Default: "End"
+#: ./opengever/meeting/browser/meetings/byline.py
+msgid "meeting_byline_end"
+msgstr ""
+
+#. Default: "Location"
+#: ./opengever/meeting/browser/meetings/byline.py
+msgid "meeting_byline_location"
+msgstr ""
+
+#. Default: "Meeting dossier"
+#: ./opengever/meeting/browser/meetings/byline.py
+msgid "meeting_byline_meetin_dossier"
+msgstr ""
+
+#. Default: "Presidency"
+#: ./opengever/meeting/browser/meetings/byline.py
+msgid "meeting_byline_presidency"
+msgstr ""
+
+#. Default: "Secretary"
+#: ./opengever/meeting/browser/meetings/byline.py
+msgid "meeting_byline_secretary"
+msgstr ""
+
+#. Default: "Start"
+#: ./opengever/meeting/browser/meetings/byline.py
+msgid "meeting_byline_start"
+msgstr ""
+
+#. Default: "State"
+#: ./opengever/meeting/browser/meetings/byline.py
+msgid "meeting_byline_workflow_state"
+msgstr ""
+
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
 msgid "meetingdossier"
 msgstr "Dossier de la réunion"
@@ -1665,44 +1704,14 @@ msgstr ""
 msgid "view_label_agendaitem_list"
 msgstr ""
 
-#. Default: "Meeting dossier:"
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
-msgid "view_label_dossier"
-msgstr ""
-
-#. Default: "Meeting end:"
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
-msgid "view_label_meeting_end"
-msgstr ""
-
-#. Default: "Location:"
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
-msgid "view_label_meeting_location"
-msgstr ""
-
 #. Default: "Meeting number:"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "view_label_meeting_number"
 msgstr ""
 
-#. Default: "Meeting start:"
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
-msgid "view_label_meeting_start"
-msgstr ""
-
-#. Default: "Status:"
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
-msgid "view_label_meeting_status"
-msgstr ""
-
 #. Default: "Participants:"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "view_label_participants"
-msgstr ""
-
-#. Default: "Presidency:"
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
-msgid "view_label_presidency"
 msgstr ""
 
 #. Default: "Protocol:"
@@ -1718,9 +1727,4 @@ msgstr ""
 #. Default: "Schedule proposal:"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "view_label_schedule_proposal"
-msgstr ""
-
-#. Default: "Secretary:"
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
-msgid "view_label_secretary"
 msgstr ""

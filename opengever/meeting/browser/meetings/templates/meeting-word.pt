@@ -138,50 +138,12 @@
           <table class="meeting-metadata">
 
             <tr>
-              <th i18n:translate="view_label_meeting_status">Status:</th>
-              <td>
-                <span tal:attributes="class python: 'wf-meeting-state-' + meeting.workflow_state"
-                      tal:content="python: meeting.get_state().title" />
-              </td>
-            </tr>
-
-            <tr>
-              <th i18n:translate="view_label_meeting_start">Meeting start:</th>
-              <td tal:content="meeting/get_start" />
-            </tr>
-
-            <tr tal:define="end meeting/get_end"
-                tal:condition="end">
-              <th i18n:translate="view_label_meeting_end">Meeting end:</th>
-              <td tal:content="end" />
-            </tr>
-
-            <tr>
-              <th i18n:translate="view_label_meeting_location">Location:</th>
-              <td tal:content="meeting/location" />
-            </tr>
-
-            <tr>
               <th i18n:translate="view_label_meeting_number">Meeting number:</th>
               <td tal:content="meeting/meeting_number" />
             </tr>
 
           </table>
           <table class="meeting-metadata">
-
-            <tr tal:define="presidency meeting/presidency">
-              <th i18n:translate="view_label_presidency">Presidency:</th>
-              <td tal:condition="presidency"
-                  tal:content="structure meeting/presidency/get_title" />
-              <td tal:condition="not:presidency">-</td>
-            </tr>
-
-            <tr tal:define="secretary meeting/secretary">
-              <th i18n:translate="view_label_secretary">Secretary:</th>
-              <td tal:condition="secretary"
-                  tal:content="structure meeting/secretary/get_title" />
-              <td tal:condition="not:secretary">-</td>
-            </tr>
 
             <tr>
               <th i18n:translate="view_label_participants">Participants:</th>
@@ -206,16 +168,6 @@
           </table>
 
           <table class="meeting-metadata">
-
-            <tr>
-              <th i18n:translate="view_label_dossier">Meeting dossier:</th>
-              <td tal:define="dossier meeting/get_dossier">
-                <a tal:attributes="href dossier/absolute_url;
-                                   class python: view.get_css_class(dossier)"
-                   tal:content="dossier/title" />
-              </td>
-              <td></td>
-            </tr>
 
             <tr tal:define="agendaitem_list_document view/get_agendaitem_list_document">
               <th i18n:translate="view_label_agendaitem_list">Agenda item list:</th>
