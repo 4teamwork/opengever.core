@@ -5,6 +5,7 @@ Changelog
 2017.5.2 (unreleased)
 ---------------------
 
+- OGGBundle: Fix tracking of item counts (actual vs. raw). [lgraf]
 - OGGBundle: Support delta imports using GUID. [lgraf]
 - OGGBundle: Validate parent_reference early for existence. [lgraf]
 - Add indexer for bundle GUIDs and create index upon bundle import. [lgraf]

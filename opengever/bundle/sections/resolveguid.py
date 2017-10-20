@@ -3,6 +3,7 @@ from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from opengever.base.interfaces import IReferenceNumberFormatter
 from opengever.base.interfaces import IReferenceNumberSettings
+from opengever.bundle.loader import PORTAL_TYPES_TO_JSON_NAME
 from opengever.bundle.sections.bundlesource import BUNDLE_KEY
 from plone import api
 from zope.annotation import IAnnotations
@@ -73,6 +74,10 @@ class ResolveGUIDSection(object):
         self.formatter = None
 
         self.catalog = api.portal.get_tool('portal_catalog')
+
+        # Track stats about actual item counts (minus skipped ones)
+        if 'bundle_counts_actual' not in self.bundle.stats:
+            self.bundle.stats['bundle_counts_actual'] = {}
 
     def __iter__(self):
         self.register_items_by_guid()
@@ -149,6 +154,27 @@ class ResolveGUIDSection(object):
         guids = tuple(index.uniqueValues())
         return guids
 
+    def track_actual_item_stats(self, item):
+        portal_type = item['_type']
+        bundle_counts_actual = self.bundle.stats['bundle_counts_actual']
+        json_name = PORTAL_TYPES_TO_JSON_NAME[portal_type]
+        if json_name not in bundle_counts_actual:
+            bundle_counts_actual[json_name] = 0
+        bundle_counts_actual[json_name] += 1
+
+    def display_actual_stats(self):
+        log.info('')
+        log.info('Actual items about to be migrated')
+        log.info('=' * 80)
+        bundle_counts_actual = self.bundle.stats['bundle_counts_actual']
+        for json_name, count in bundle_counts_actual.items():
+            log.info("%-20s %s" % (json_name, count))
+
+        log.info('')
+        total = sum(self.bundle.stats['bundle_counts_actual'].values())
+        log.info('About to migrate %s actual items total.' % total)
+        log.info('')
+
     def build_tree(self):
         """Build a tree from the flat list of items.
 
@@ -156,6 +182,8 @@ class ResolveGUIDSection(object):
         """
         roots = []
         for item in self.bundle.item_by_guid.values():
+            self.track_actual_item_stats(item)
+
             parent_guid = item.get('parent_guid')
             parent_reference = item.get('parent_reference')
 
@@ -183,6 +211,8 @@ class ResolveGUIDSection(object):
             else:
                 raise MissingParentPointer(
                     "No parent pointer for item with GUID %s" % item['guid'])
+
+        self.display_actual_stats()
         return roots
 
     def visit_in_pre_order(self, items, level, previous_type):
