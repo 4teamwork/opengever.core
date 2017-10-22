@@ -402,6 +402,7 @@
       this.currentDecideTarget = target;
       if(viewlet.data().agendalist_editable) {
         holdDialog.load();
+        return null;
       }
       else {
         return this.confirmDecide(target);
@@ -448,11 +449,10 @@
     this.generateExcerpt = function(target, event) {
       var link = self.currentItem[0].href;
       self = this;
-      return $.post(link, $('#confirm_create_excerpt form').serialize())
-              .always(function() {
-                self.closeModal();
-              });
-    }
+      return $.post(link, $('#confirm_create_excerpt form').serialize()).always(function() {
+        self.closeModal();
+      });
+    };
 
     this.returnExcerpt = function() {
       self = this;
@@ -705,6 +705,7 @@
         return false;
       }
       title.val(initialTitle + ", " + formatDate(date));
+      return true;
     }
 
     this.trackDate = function(target, event) { applyDate(applyTimezone(event.date)); };
