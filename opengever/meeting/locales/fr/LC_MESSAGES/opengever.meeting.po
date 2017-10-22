@@ -111,6 +111,10 @@ msgstr "Impossible de changer l'adhésion, parce qu'elle se chevauche avec une a
 msgid "Choose Agenda Items"
 msgstr "Choisir les points du l'ordre du jour"
 
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "Clear filter"
+msgstr ""
+
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
 msgid "Close all proposals."
 msgstr "Toutes les propositions sont clôturées."
@@ -189,6 +193,14 @@ msgstr "Extraits de protocole"
 #: ./opengever/meeting/browser/meetings/templates/excerpt.pt
 msgid "Export settings"
 msgstr "Paramètres de l'export"
+
+#: ./opengever/meeting/browser/meetings/participants.py
+msgid "Failed to save."
+msgstr ""
+
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "Filter participants"
+msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
 msgid "Generate excerpts for all proposals."
@@ -377,6 +389,10 @@ msgstr "Le document a été écrasé par une version plus récente de l'extrait 
 #: ./opengever/meeting/command.py
 msgid "Updated with a newer generated version from meeting ${title}."
 msgstr "Actualisé par une nouvelle version de la réunion ${title}."
+
+#: ./opengever/meeting/browser/meetings/participants.py
+msgid "You are not allowed to change the meeting details."
+msgstr ""
 
 #: ./opengever/meeting/browser/meetings/byline.py
 msgid "You are not allowed to view the meeting dossier."
@@ -699,6 +715,11 @@ msgstr ""
 #. Default: "Excerpt was returned to proposer."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "excerpt_returned"
+msgstr ""
+
+#. Default: "Excused"
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "excused"
 msgstr ""
 
 #. Default: "Alphabetical Toc ${period} ${committee}"
@@ -1152,6 +1173,7 @@ msgstr "Aucun protocole n'a été généré encore."
 
 #. Default: "Other Participants"
 #: ./opengever/meeting/browser/meetings/protocol.py
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "label_other_participants"
 msgstr "Autres participants"
 
@@ -1389,6 +1411,18 @@ msgstr ""
 #. Default: "State"
 #: ./opengever/meeting/browser/meetings/byline.py
 msgid "meeting_byline_workflow_state"
+msgstr ""
+
+#. Default: "Presidency"
+#: ./opengever/meeting/browser/meetings/meeting.py
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "meeting_role_presidency"
+msgstr ""
+
+#. Default: "Secretary"
+#: ./opengever/meeting/browser/meetings/meeting.py
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "meeting_role_secretary"
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
@@ -1669,6 +1703,10 @@ msgstr "Mis à l'ordre du jour"
 msgid "secretary"
 msgstr "Secrétaire"
 
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "send email"
+msgstr ""
+
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
 msgid "status"
 msgstr "État"
@@ -1696,6 +1734,11 @@ msgstr "${amount} résultats"
 #. Default: "Overview"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "tab_overview"
+msgstr ""
+
+#. Default: "${count} Participants"
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "tab_participants"
 msgstr ""
 
 #. Default: "Text successfully added."
@@ -1730,11 +1773,6 @@ msgstr ""
 #. Default: "Agenda items"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "view_label_agenda_items"
-msgstr ""
-
-#. Default: "Participants:"
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
-msgid "view_label_participants"
 msgstr ""
 
 #. Default: "Schedule ad hoc agenda item:"

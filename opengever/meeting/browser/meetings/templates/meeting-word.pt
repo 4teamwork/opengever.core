@@ -147,39 +147,21 @@
           </form>
         </div>
 
-        <div class="meeting-metadata">
-          <table class="meeting-metadata">
-
-            <tr>
-              <th i18n:translate="view_label_participants">Participants:</th>
-              <td>
-                <ul>
-                  <li tal:repeat="participant meeting/participants"
-                      tal:content="structure participant/get_title"></li>
-                </ul>
-              </td>
-            </tr>
-
-            <tr tal:condition="meeting/get_other_participants_list">
-              <th></th>
-              <td>
-                <ul>
-                  <li tal:repeat="participant meeting/get_other_participants_list"
-                      tal:content="structure participant"></li>
-                </ul>
-              </td>
-            </tr>
-
-          </table>
-        </div>
 
 
-
-
-        <div class="sidebar">
+        <div class="sidebar"
+             tal:define="participants view/get_participants">
           <ul class="formTabs">
             <li class="formTab">
               <a href="#tab-overview" i18n:translate="tab_overview">Overview</a>
+            </li>
+            <li class="formTab">
+              <a href="#tab-participants" i18n:translate="tab_participants">
+                <span class="participants_count"
+                      i18n:name="count"
+                      tal:content="python:len(participants)" />
+                Participants
+              </a>
             </li>
           </ul>
 
@@ -275,7 +257,68 @@
 
                 </div>
               </div>
+            </div>
 
+
+            <div id="tab-participants">
+              <a id="clear-participants-filter"
+                 title="Clear filter"
+                 i18n:attributes="title" />
+              <input id="participants-filter"
+                     placeholder="Filter participants"
+                     i18n:attributes="placeholder" />
+
+              <ul class="participant-list">
+                <li tal:repeat="participant participants"
+                    tal:define="cls python:meeting.is_editable() and 'editable' or '';
+                                cls string:participant folded ${cls}"
+                    tal:attributes="data-member-id participant/member_id;
+                                    class cls">
+                  <div tal:attributes="class participant/presence_cssclass" />
+                  <div class="fullname" tal:content="participant/fullname" />
+                  <a class="email" tal:condition="participant/email"
+                     tal:attributes="href string:mailto:${participant/email}"
+                     i18n:attributes="title"
+                     title="send email" />
+                  <div class="role"
+                       tal:content="participant/role/label"
+                       tal:attributes="data-rolename participant/role/name"/>
+
+                  <div class="select-role-wrapper" tal:condition="meeting/is_editable">
+                    <select class="role"
+                            tal:attributes="data-url string:${context/absolute_url}/participants/change_role;
+                                            data-member_id participant/member_id">
+                      <option value=""></option>
+                      <option value="presidency" i18n:translate="meeting_role_presidency">Presidency</option>
+                      <option value="secretary" i18n:translate="meeting_role_secretary">Secretary</option>
+                    </select>
+                  </div>
+
+                  <div class="change_presence" tal:condition="meeting/is_editable">
+                    <input type="checkbox"
+                           tal:attributes="id string:presence-${participant/member_id};
+                                           data-url string:${context/absolute_url}/participants/change_presence;
+                                           data-member_id participant/member_id"
+                           class="excused" />
+                    <label i18n:translate="excused"
+                           tal:attributes="for string:presence-${participant/member_id}">Excused</label>
+                  </div>
+
+                </li>
+              </ul>
+
+              <div class="other_participants"
+                   tal:define="other_participants meeting/get_other_participants_list"
+                   tal:condition="other_participants">
+                <div class="other_participants_label"
+                     i18n:translate="label_other_participants">Other Participants</div>
+                <ul class="participant-list">
+                  <li class="participant"
+                      tal:repeat="participant other_participants">
+                    <div class="fullname" tal:content="participant" />
+                  </li>
+                </ul>
+              </div>
 
             </div>
           </div>

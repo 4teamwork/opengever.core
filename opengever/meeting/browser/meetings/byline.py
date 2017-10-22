@@ -24,13 +24,14 @@ class MeetingByline(BylineBase):
             yield {'label': _('meeting_byline_end', default='End'),
                    'content': meeting.get_end()}
 
-        if meeting.presidency:
-            yield {'label': _('meeting_byline_presidency', default='Presidency'),
-                   'content': meeting.presidency.fullname}
-
-        if meeting.secretary:
-            yield {'label': _('meeting_byline_secretary', default='Secretary'),
-                   'content':  meeting.secretary.fullname}
+        yield self.get_role_item(
+            'byline-presidency',
+            _('meeting_byline_presidency', default='Presidency'),
+            meeting.presidency)
+        yield self.get_role_item(
+            'byline-secretary',
+            _('meeting_byline_secretary', default='Secretary'),
+            meeting.secretary)
 
         if meeting.location:
             yield {'label': _('meeting_byline_location', default='Location'),
@@ -54,6 +55,16 @@ class MeetingByline(BylineBase):
         yield {'label': _('meeting_byline_meetin_dossier', default='Meeting dossier'),
                'content': dossier_html,
                'replace': True}
+
+    def get_role_item(self, classname, label, member):
+        if member:
+            return {'class': classname,
+                    'label': label,
+                    'content': member.fullname}
+        else:
+            return {'class': classname + ' hidden',
+                    'label': label,
+                    'content': ' '}
 
     def get_items(self):
         if not is_word_meeting_implementation_enabled():

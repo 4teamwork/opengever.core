@@ -2,6 +2,7 @@ from datetime import datetime
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import editbar
 from ftw.testing import freeze
+from opengever.meeting.tests.pages import meeting_view
 from opengever.testing import IntegrationTestCase
 from opengever.testing.pages import byline
 import pytz
@@ -117,3 +118,26 @@ class TestWordMeetingView(IntegrationTestCase):
         self.login(self.meeting_user, browser)
         browser.open(self.meeting, view='agenda_items/list')
         self.assertNotIn('return_link', browser.json['items'][0]['excerpts'][0])
+
+    @browsing
+    def test_participants(self, browser):
+        self.login(self.committee_responsible, browser)
+        browser.open(self.meeting)
+        self.assertEquals(
+            [{'fullname': u'M\xfcller Henning',
+              'email': '',
+              'present': False,
+              'role': 'Secretary'},
+             {'fullname': u'Sch\xf6ller Heidrun',
+              'email': '',
+              'present': False,
+              'role': 'Presidency'},
+             {'fullname': 'Wendler Jens',
+              'email': '',
+              'present': True,
+              'role': ''},
+             {'fullname': u'W\xf6lfl Gerda',
+              'email': '',
+              'present': True,
+              'role': ''}],
+            meeting_view.participants())

@@ -108,6 +108,10 @@ msgstr ""
 msgid "Choose Agenda Items"
 msgstr ""
 
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "Clear filter"
+msgstr ""
+
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
 msgid "Close all proposals."
 msgstr ""
@@ -185,6 +189,14 @@ msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/excerpt.pt
 msgid "Export settings"
+msgstr ""
+
+#: ./opengever/meeting/browser/meetings/participants.py
+msgid "Failed to save."
+msgstr ""
+
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "Filter participants"
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
@@ -373,6 +385,10 @@ msgstr ""
 
 #: ./opengever/meeting/command.py
 msgid "Updated with a newer generated version from meeting ${title}."
+msgstr ""
+
+#: ./opengever/meeting/browser/meetings/participants.py
+msgid "You are not allowed to change the meeting details."
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/byline.py
@@ -696,6 +712,11 @@ msgstr ""
 #. Default: "Excerpt was returned to proposer."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "excerpt_returned"
+msgstr ""
+
+#. Default: "Excused"
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "excused"
 msgstr ""
 
 #. Default: "Alphabetical Toc ${period} ${committee}"
@@ -1149,6 +1170,7 @@ msgstr ""
 
 #. Default: "Other Participants"
 #: ./opengever/meeting/browser/meetings/protocol.py
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "label_other_participants"
 msgstr ""
 
@@ -1386,6 +1408,18 @@ msgstr ""
 #. Default: "State"
 #: ./opengever/meeting/browser/meetings/byline.py
 msgid "meeting_byline_workflow_state"
+msgstr ""
+
+#. Default: "Presidency"
+#: ./opengever/meeting/browser/meetings/meeting.py
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "meeting_role_presidency"
+msgstr ""
+
+#. Default: "Secretary"
+#: ./opengever/meeting/browser/meetings/meeting.py
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "meeting_role_secretary"
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
@@ -1666,6 +1700,10 @@ msgstr ""
 msgid "secretary"
 msgstr ""
 
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "send email"
+msgstr ""
+
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
 msgid "status"
 msgstr ""
@@ -1693,6 +1731,11 @@ msgstr ""
 #. Default: "Overview"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "tab_overview"
+msgstr ""
+
+#. Default: "${count} Participants"
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "tab_participants"
 msgstr ""
 
 #. Default: "Text successfully added."
@@ -1727,11 +1770,6 @@ msgstr ""
 #. Default: "Agenda items"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "view_label_agenda_items"
-msgstr ""
-
-#. Default: "Participants:"
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
-msgid "view_label_participants"
 msgstr ""
 
 #. Default: "Schedule ad hoc agenda item:"

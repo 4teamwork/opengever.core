@@ -9,6 +9,7 @@ from opengever.base.oguid import Oguid
 from opengever.base.schema import UTCDatetime
 from opengever.meeting import _
 from opengever.meeting import is_word_meeting_implementation_enabled
+from opengever.meeting import require_word_meeting_feature
 from opengever.meeting.browser.meetings.agendaitem_list import GenerateAgendaItemList
 from opengever.meeting.browser.meetings.agendaitem_list import UpdateAgendaItemList
 from opengever.meeting.browser.meetings.transitions import MeetingTransitionController
@@ -16,7 +17,9 @@ from opengever.meeting.browser.protocol import GenerateProtocol
 from opengever.meeting.browser.protocol import MergeDocxProtocol
 from opengever.meeting.browser.protocol import UpdateProtocol
 from opengever.meeting.model import Meeting
+from opengever.meeting.model.membership import Membership
 from opengever.meeting.proposal import ISubmittedProposal
+from operator import itemgetter
 from path import Path
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListing
@@ -423,3 +426,36 @@ class MeetingView(BrowserView):
         return translate(_('An unexpected error has occurred',
                            default='An unexpected error has occurred'),
                          context=self.request)
+
+    @require_word_meeting_feature
+    def get_participants(self):
+        result = []
+        participants = self.model.participants
+        presidency = self.model.presidency
+        secretary = self.model.secretary
+
+        for membership in Membership.query.for_meeting(self.model):
+            item = {'fullname': membership.member.fullname,
+                    'email': membership.member.email,
+                    'member_id': membership.member.member_id}
+
+            if membership.member in participants:
+                item['presence_cssclass'] = 'presence present'
+            else:
+                item['presence_cssclass'] = 'presence not-present'
+
+            if membership.member == presidency:
+                item['role'] = {'name': 'presidency',
+                                'label': _(u'meeting_role_presidency',
+                                           default=u'Presidency')}
+            elif membership.member == secretary:
+                item['role'] = {'name': 'secretary',
+                                'label': _(u'meeting_role_secretary',
+                                           default=u'Secretary')}
+            else:
+                item['role'] = {'name': '', 'label': ''}
+
+            result.append(item)
+
+        result.sort(key=itemgetter('fullname'))
+        return result

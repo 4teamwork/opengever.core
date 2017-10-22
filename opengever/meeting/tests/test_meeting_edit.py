@@ -5,8 +5,8 @@ from ftw.testbrowser.pages import statusmessages
 from ftw.testing import freeze
 from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.model import create_session
-from opengever.meeting.tests.pages import meeting_view
 from opengever.testing import IntegrationTestCase
+from opengever.testing.pages import byline
 
 
 class TestEditMeeting(IntegrationTestCase):
@@ -41,17 +41,11 @@ class TestEditMeeting(IntegrationTestCase):
              'Presidency:': u'Sch\xf6ller Heidrun',
              'Secretary:': u'M\xfcller Henning',
              'Location:': u'B\xfcren an der Aare',
-             'Meeting dossier:': 'Sitzungsdossier 9/2017',
-             'Participants:': u'Wendler Jens (jens-wendler@gmail.com)'
-             u' W\xf6lfl Gerda (g.woelfl@hotmail.com)'},
-            meeting_view.metadata())
+             'Meeting dossier:': 'Sitzungsdossier 9/2017'},
+            byline.text_dict())
 
         editbar.contentview('Edit').click()
         browser.fill({'Title': u'New Meeting Title',
-                      'Presidency': u'W\xf6lfl Gerda (g.woelfl@hotmail.com)',
-                      'Secretary': u'Wendler Jens (jens-wendler@gmail.com)',
-                      'Participants': [
-                          u'Sch\xf6ller Heidrun (h.schoeller@web.de)'],
                       'Other Participants': 'Staatsanwalt',
                       'Protocol start-page': '27',
                       'Location': 'Sitzungszimmer 3',
@@ -64,13 +58,11 @@ class TestEditMeeting(IntegrationTestCase):
             {'State:': 'Pending',
              'Start:': 'Oct 13, 2016 08:00 AM',
              'End:': 'Oct 13, 2016 10:00 AM',
-             'Presidency:': u'W\xf6lfl Gerda',
-             'Secretary:': u'Wendler Jens',
+             'Presidency:': u'Sch\xf6ller Heidrun',
+             'Secretary:': u'M\xfcller Henning',
              'Location:': u'Sitzungszimmer 3',
-             'Meeting dossier:': 'Sitzungsdossier 9/2017',
-             'Participants:': u'Sch\xf6ller Heidrun (h.schoeller@web.de)',
-             '': 'Staatsanwalt'},
-            meeting_view.metadata())
+             'Meeting dossier:': 'Sitzungsdossier 9/2017'},
+            byline.text_dict())
 
     @browsing
     def test_edit_meeting_locks_the_content(self, browser1):

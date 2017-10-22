@@ -1,12 +1,9 @@
 from ftw.testbrowser import browser
-from opengever.testing.pages import byline
 
 
-def metadata(**kwargs):
-    """Return the meeting metadata as a dict of labels and values.
-    """
-    data = byline.text_dict()
-    for table in browser.css('table.meeting-metadata'):
-        for row in table.lists():
-            data[row[0]] = row[1]
-    return data
+def participants():
+    return [{'fullname': participant.css('.fullname').first.text,
+             'email': participant.css('.email').first.text,
+             'present': 'present' in participant.css('.presence').first.classes,
+             'role': participant.css('div.role').first.text}
+            for participant in browser.css('.participant-list .participant')]

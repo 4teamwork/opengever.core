@@ -39,6 +39,138 @@
       });
     };
 
+    this.filterParticipants = function(target) {
+      var filter_text = target.val().toLowerCase();
+      $('.participant-list .participant').each(function() {
+        if($(this).find('.fullname').text().toLowerCase().indexOf(filter_text) > -1) {
+          $(this).show();
+        } else {
+          $(this).hide();
+        }
+      });
+    };
+
+    this.clearParticipantsFilter = function(target) {
+      $('input#participants-filter').val('').keyup().focus();
+    };
+
+    this.toggleParticipant = function(target, event) {
+      if($(event.target).is('select, option, input, label')) {
+        return;
+      }
+
+      if(!target.hasClass('editable')) {
+        return;
+      }
+
+      if(!target.hasClass('folded')) {
+        target.addClass('folded');
+        return;
+      }
+
+      $('.participant-list .participant').addClass('folded');
+      target.removeClass('folded');
+
+      var current_role = target.find('div.role').data('rolename');
+      target.find('select.role').val(current_role);
+
+      var present = target.find('div.presence').hasClass('present');
+      target.find('input.excused').selected(!present);
+
+      target.find('.saving').removeClass('saving');
+      target.find('.saved').removeClass('saved');
+      target.find('.saving-failed').removeClass('saving-failed');
+    };
+
+    this.changeParticipantRole = function(target) {
+      var wrapper = target.parents('.select-role-wrapper:first');
+      this.showSavingChangeIcon(wrapper);
+      var data = {member_id: target.data().member_id, role: target.val()};
+      return $.post(target.data().url, data).done(function(response) {
+        if(response.proceed !== true) {
+          self.showSavingFailedIcon(wrapper);
+          return;
+        }
+        self.showChangeSavedIcon(wrapper);
+        if (target.val()) {
+          $('.participant div.role').each(function() {
+            if($(this).data().rolename == target.val()) {
+              $(this).text('').data('rolename', '');
+            }
+          });
+        }
+        wrapper.prevAll('div.role').
+              text(target.find('option:selected').text()).
+              data('rolename', target.val());
+        self.updateParticipantRolesInByline();
+      });
+    };
+
+    this.updateParticipantRolesInByline = function() {
+      var presidency = null;
+      var secretary = null;
+      $('.participant').each(function() {
+        if($(this).find('div.role').length === 0) {
+          return;
+        }
+        var role = $(this).find('div.role').data().rolename;
+        if(role == 'presidency') {
+          presidency = $(this).find('div.fullname').text();
+        } else if(role == 'secretary') {
+          secretary = $(this).find('div.fullname').text();
+        }
+      });
+      if(presidency) {
+        $('.byline-presidency').removeClass('hidden').find('span.value').text(presidency);
+      } else {
+        $('.byline-presidency').addClass('hidden');
+      }
+      if(secretary) {
+        $('.byline-secretary').removeClass('hidden').find('span.value').text(secretary);
+      } else {
+        $('.byline-secretary').addClass('hidden');
+      }
+    };
+
+    this.changeParticipantPresence = function(target) {
+      var wrapper = target.parents('.change_presence:first');
+      var present = !target.is(':checked');
+      this.showChangeSavedIcon(wrapper);
+      var data = {member_id: target.data().member_id, present: present};
+      return $.post(target.data().url, data).done(function(response) {
+        if(response.proceed !== true) {
+          self.showSavingFailedIcon(wrapper);
+          return;
+        }
+        if(present) {
+          wrapper.prevAll('div.presence').
+                removeClass('not-present').
+                addClass('present');
+        } else {
+          wrapper.prevAll('div.presence').
+                removeClass('present').
+                addClass('not-present');
+        }
+        self.showChangeSavedIcon(wrapper);
+      });
+    };
+
+    this.showSavingChangeIcon = function(target) {
+      target.addClass('saving');
+    };
+
+    this.showChangeSavedIcon = function(target) {
+      target.removeClass('saving');
+      target.addClass('saved');
+      window.setTimeout(function() { target.removeClass('saved'); }, 10000);
+    };
+
+    this.showSavingFailedIcon = function(target) {
+      target.removeClass('saving');
+      target.addClass('saving-failed');
+      window.setTimeout(function() { target.removeClass('saving-failed'); }, 10000);
+    };
+
     this.events = [
       {
         method: "click",
@@ -81,6 +213,37 @@
         options: {
           update: true
         }
+      },
+      {
+        method: "keyup",
+        target: "input#participants-filter",
+        callback: this.filterParticipants
+      },
+      {
+        method: "click",
+        target: "a#clear-participants-filter",
+        callback: this.clearParticipantsFilter,
+        options: {
+          prevent: true
+        }
+      },
+      {
+        method: "click",
+        target: ".participant-list .participant",
+        callback: this.toggleParticipant,
+        options: {
+          prevent: false
+        }
+      },
+      {
+        method: "change",
+        target: ".participant-list .participant select.role",
+        callback: this.changeParticipantRole
+      },
+      {
+        method: "change",
+        target: ".participant-list .participant .change_presence input.excused",
+        callback: this.changeParticipantPresence
       }
     ];
 
