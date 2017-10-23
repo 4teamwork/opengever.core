@@ -310,6 +310,10 @@ class OpengeverContentFixture(object):
             .having(id='eingangskorb',
                     responsible_org_unit='fa',
                     inbox_group=self.org_unit.inbox_group)))
+        self.register('inbox_document', create(
+            Builder('document').within(self.inbox)
+            .titled(u'Dokument im Eingangsk\xf6rbli')
+            .with_asset_file('text.txt')))
         self.inbox.manage_setLocalRoles(
             self.secretariat_user.getId(), ('Contributor', 'Editor', 'Reader'))
         self.inbox.reindexObjectSecurity()
