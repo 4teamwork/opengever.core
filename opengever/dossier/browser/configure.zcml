@@ -126,13 +126,6 @@
       />
 
   <browser:page
-      for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot"
-      name="filingnumber-adjustment"
-      class=".filing_maintenance.FilingNumberCountersForm"
-      permission="zope2.View"
-      />
-
-  <browser:page
       for="opengever.dossier.behaviors.dossier.IDossierMarker"
       name="tabbedview_view-overview"
       class=".overview.DossierOverview"
