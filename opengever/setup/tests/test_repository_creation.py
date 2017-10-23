@@ -15,3 +15,7 @@ class TestRepositoryCreation(FunctionalTestCase):
 
         self.assertEqual(u'Old Repository', old_repo.Title())
         self.assertEqual(u'New Repository', new_repo.Title())
+
+    def test_avoids_id_conflicts(self):
+        self.assertEqual(
+            ['fuehrung', 'fuehrung-1'], self.portal['repo'].objectIds())

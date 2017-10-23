@@ -2,6 +2,7 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
+from collective.transmogrifier.utils import traverse
 from opengever.base.interfaces import IReferenceNumberFormatter
 from opengever.base.interfaces import IReferenceNumberPrefix as PrefixAdapter
 from opengever.base.interfaces import IReferenceNumberSettings
@@ -12,6 +13,7 @@ from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 from zope.component import queryAdapter
 from zope.component import queryUtility
+from zope.container.interfaces import INameChooser
 from zope.interface import classProvides, implements
 import logging
 
@@ -42,6 +44,7 @@ class PathFromReferenceNumberSection(object):
         self.previous = previous
         self.logger = logging.getLogger(options['blueprint'])
         self.refnum_mapping = {}
+        self.context = transmogrifier.context
         self.normalizer = queryUtility(IURLNormalizer, name="de")
         self.id_normalizer = queryUtility(IIDNormalizer)
 
@@ -74,8 +77,10 @@ class PathFromReferenceNumberSection(object):
 
             if len(refnum.split('.')) == 1:
                 # Top level repository folder
-                path = "/%s/%s" % (repo_root_id,
-                                   self.normalize(item, max_length=MAX_LENGTH))
+                path = "/%s/%s" % (
+                    repo_root_id,
+                    self.normalize(
+                        item, max_length=MAX_LENGTH, parent_path=repo_root_id))
                 self.refnum_mapping[repo_root_id][refnum] = path
             else:
                 parent_refnum = refnum[:refnum.rfind('.')]
@@ -86,7 +91,8 @@ class PathFromReferenceNumberSection(object):
 
                 parent_path = self.refnum_mapping[repo_root_id][parent_refnum]
                 path = "%s/%s" % (
-                    parent_path, self.normalize(item, max_length=MAX_LENGTH))
+                    parent_path,
+                    self.normalize(item, max_length=MAX_LENGTH, parent_path=parent_path))
                 self.refnum_mapping[repo_root_id][refnum] = path
 
             item['_path'] = path
@@ -104,7 +110,7 @@ class PathFromReferenceNumberSection(object):
             return '.'.join(cl_refnum)
         return refnum
 
-    def normalize(self, item, max_length):
+    def normalize(self, item, max_length, parent_path):
         title = item['effective_title']
 
         if not isinstance(title, unicode):
@@ -115,6 +121,16 @@ class PathFromReferenceNumberSection(object):
         normalized_id = self.normalizer.normalize(title, max_length=max_length)
         normalized_id = self.id_normalizer.normalize(
             normalized_id, max_length=max_length)
+
+        # Avoid id conflicts
+        parent = traverse(self.context, parent_path)
+        chooser = INameChooser(parent)
+        if not chooser.checkName(title.encode('utf-8'), parent):
+            # namechooser expect the object itself as second paremter, but it's
+            # only used for getting the request, therefore we use the parent.
+            normalized_id = INameChooser(parent).chooseName(
+                normalized_id, parent)
+
         return normalized_id
 
 
