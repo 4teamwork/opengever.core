@@ -1366,7 +1366,7 @@ msgstr "Wählen Sie einen aussagekräftigen Titel um die Protokollauszüge besse
 #. Default: "When returning an excerpt to the proposer the selected document will be sent back to the proposals originating dossier. No other excerpts can be returned."
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "msg_confirm_return_excerpt_dialog"
-msgstr "Der Protokollauszug wird an den Antragsteller bzw. ins Ursprungsdossier des Antrags zurückgesendet. Es können keine weiteren Protokollauszuge zurückgesendet werden."
+msgstr "Der Protokollauszug wird an den Antragsteller bzw. ins Ursprungsdossier des Antrags zurückgesendet. Es können keine weiteren Protokollauszüge zurückgesendet werden."
 
 #. Default: "The agenda item list for meeting ${title} has already been generated."
 #: ./opengever/meeting/browser/meetings/agendaitem_list.py
