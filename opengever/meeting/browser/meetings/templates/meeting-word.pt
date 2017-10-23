@@ -167,6 +167,10 @@
 
           <div class="panes">
             <div id="tab-overview">
+              <nav class="meeting-navigation">
+                <tal:block tal:replace="structure view/render_handlebars_navigation_template"></tal:block>
+              </nav>
+
               <div class="meeting-process">
 
                 <div class="agenda-item-list-doc meeting-document"

@@ -348,6 +348,10 @@ class MeetingView(BrowserView):
         else:
             return self.render_handlebars_agendaitems_template_noword()
 
+    def render_handlebars_navigation_template(self):
+        return prepare_handlebars_template(
+            TEMPLATES_DIR.joinpath('navigation-word.html'))
+
     def render_handlebars_agendaitems_template_noword(self):
         return prepare_handlebars_template(
             TEMPLATES_DIR.joinpath('agendaitems-noword.html'),

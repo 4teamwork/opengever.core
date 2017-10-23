@@ -226,6 +226,9 @@ class AgendaItemsView(BrowserView):
                         view='agenda_items/{}/generate_excerpt'.format(
                             item.agenda_item_id))
 
+                if item.is_decided():
+                    data['css_class'] += ' decided'
+
             agenda_items.append(data)
         return agenda_items
 

@@ -1,4 +1,4 @@
-(function(global, $, Controller, EditboxController, Pin) {
+(function(global, $, Controller, EditboxController, Pin, HBS) {
 
   "use strict";
 
@@ -317,15 +317,21 @@
     };
 
     Controller.call(this, $("#agendaitemsTemplate").html(), $("#agenda_items tbody"), options);
+    this.navigationTemplate = HBS.compile($("#navigationTemplate").html());
 
     this.fetch = function() { return $.get(viewlet.data().listAgendaItemsUrl); };
 
     this.render = function(data) {
+      self.renderNavigation(data);
       return self.template({
         agendaitems: data.items,
         editable: viewlet.data().editable,
         agendalist_editable: viewlet.data().agendalist_editable
       });
+    };
+
+    this.renderNavigation = function(data) {
+      $('.meeting-navigation').html(this.navigationTemplate({agendaitems: data.items}));
     };
 
     this.openModal = function(target) {
@@ -461,6 +467,12 @@
       });
     };
 
+    this.navigationClick = function(target) {
+      $('html, body').animate({
+        scrollTop: $(target.attr('href')).offset().top
+      }, 150);
+    };
+
     this.events = [
       {
         method: "click",
@@ -580,6 +592,14 @@
         method: "click",
         target: "#confirm_hold_meeting .decline",
         callback: this.declineDecide
+      },
+      {
+        method: "click",
+        target: ".meeting-navigation a",
+        callback: this.navigationClick,
+        options: {
+          prevent: false
+        }
       }
     ];
 
@@ -759,4 +779,4 @@
     });
   });
 
-}(window, window.jQuery, window.Controller, window.EditboxController, window.Pin));
+}(window, window.jQuery, window.Controller, window.EditboxController, window.Pin, window.Handlebars));
