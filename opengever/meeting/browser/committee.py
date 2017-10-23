@@ -1,17 +1,12 @@
-from five import grok
 from opengever.meeting import _
-from opengever.meeting.committee import ICommittee
 from opengever.meeting.model import Period
 from opengever.tabbedview import GeverTabMixin
+from Products.Five.browser import BrowserView
 
 
-class CommitteeOverview(grok.View, GeverTabMixin):
+class CommitteeOverview(BrowserView, GeverTabMixin):
     """The overview tab for the committee tabbeview.
     """
-    grok.context(ICommittee)
-    grok.name('tabbedview_view-overview')
-    grok.require('zope2.View')
-    grok.template('overview')
 
     show_searchform = False
 

@@ -1,12 +1,9 @@
-from five import grok
-from opengever.document.document import IDocumentSchema
 from opengever.meeting import _
 from opengever.meeting.command import CreateGeneratedDocumentCommand
 from opengever.meeting.command import MergeDocxProtocolCommand
 from opengever.meeting.command import ProtocolOperations
 from opengever.meeting.command import UpdateGeneratedDocumentCommand
 from opengever.meeting.exceptions import ProtocolAlreadyGenerated
-from opengever.meeting.interfaces import IMeetingDossier
 from opengever.meeting.model import GeneratedProtocol
 from opengever.meeting.model import Meeting
 from plone import api
@@ -39,10 +36,7 @@ class MergeDocxProtocol(BrowserView):
         return self.request.RESPONSE.redirect(meeting.get_url())
 
 
-class GenerateProtocol(grok.View):
-    grok.context(IMeetingDossier)
-    grok.name('generate_protocol')
-    grok.require('cmf.AddPortalContent')
+class GenerateProtocol(BrowserView):
 
     operations = ProtocolOperations()
 
@@ -64,7 +58,7 @@ class GenerateProtocol(grok.View):
 
         return meeting
 
-    def render(self):
+    def __call__(self):
         meeting = self.get_meeting()
         command = CreateGeneratedDocumentCommand(
             self.context, meeting, self.operations,
@@ -82,10 +76,7 @@ class GenerateProtocol(grok.View):
         return self.request.RESPONSE.redirect(meeting.get_url())
 
 
-class UpdateProtocol(grok.View):
-    grok.context(IDocumentSchema)
-    grok.name('update_protocol')
-    grok.require('cmf.ModifyPortalContent')
+class UpdateProtocol(BrowserView):
 
     operations = ProtocolOperations()
 
@@ -120,7 +111,7 @@ class UpdateProtocol(grok.View):
 
         return meeting
 
-    def render(self):
+    def __call__(self):
         meeting = self.get_meeting()
         generated_doc = self.get_generated_document()
 

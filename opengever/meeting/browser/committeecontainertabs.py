@@ -1,14 +1,13 @@
-from five import grok
-from opengever.meeting.committeecontainer import ICommitteeContainer
 from opengever.meeting.model import Committee
 from opengever.meeting.model import Meeting
 from opengever.meeting.service import meeting_service
 from opengever.meeting.tabs.memberlisting import MemberListingTab
+from opengever.tabbedview import _ as tmf
 from opengever.tabbedview import GeverTabMixin
 from opengever.tabbedview.filters import Filter
 from opengever.tabbedview.filters import FilterList
-from opengever.tabbedview import _ as tmf
 from plone import api
+from Products.Five.browser import BrowserView
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 
 
@@ -17,11 +16,7 @@ class ActiveOnlyFilter(Filter):
         return query.active()
 
 
-class Committees(grok.View, GeverTabMixin):
-    grok.name('tabbedview_view-committees')
-    grok.context(ICommitteeContainer)
-    grok.require('zope2.View')
-    grok.template('committee')
+class Committees(BrowserView, GeverTabMixin):
 
     filterlist_name = 'committee_state_filter'
     filterlist_available = True

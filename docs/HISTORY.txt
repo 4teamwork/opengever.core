@@ -10,6 +10,7 @@ Changelog
 - OGGBundle: Validate parent_reference early for existence. [lgraf]
 - Add indexer for bundle GUIDs and create index upon bundle import. [lgraf]
 - Fix missing response-variable due to ungrok opengever.document. [elioschmutz]
+- Ungrok opengever.meeting. [elioschmutz]
 - Removes groked plone.directives. [elioschmutz]
 - Remove bcc from email attributes in send as attachment action if the dossier is resolved. [tarnap]
 - Ungrok opengever.base. [elioschmutz]

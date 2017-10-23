@@ -1,13 +1,11 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
-from five import grok
 from opengever.base import advancedjson
 from opengever.base.security import elevated_privileges
 from opengever.base.source import DossierPathSourceBinder
 from opengever.base.transport import PrivilegedReceiveObject
 from opengever.base.transport import Transporter
 from opengever.base.utils import disable_edit_bar
-from opengever.document.document import IDocumentSchema
 from opengever.document.versioner import Versioner
 from opengever.locking.lock import MEETING_SUBMITTED_LOCK
 from opengever.meeting import _
@@ -20,6 +18,7 @@ from plone import api
 from plone.autoform.form import AutoExtensibleForm
 from plone.locking.interfaces import ILockable
 from plone.supermodel import model
+from Products.Five.browser import BrowserView
 from z3c.form.button import buttonAndHandler
 from z3c.form.form import Form
 from z3c.form.interfaces import HIDDEN_MODE
@@ -176,18 +175,15 @@ class SubmitDocumentsByPaths(AutoExtensibleForm, Form):
         return get_containing_document_tab_url(self.context)
 
 
-class UpdateSubmittedDocumentView(grok.View):
+class UpdateSubmittedDocumentView(BrowserView):
     """Receives a JSON serialized object and creates or updates an instance
     within its context.
 
     Returns JSON containing the created object's path and intid.
 
     """
-    grok.name('update-submitted-document')
-    grok.require('cmf.AddPortalContent')
-    grok.context(IDocumentSchema)
 
-    def render(self):
+    def __call__(self):
         if not self.context.is_submitted_document():
             raise NoSubmittedDocument()
 

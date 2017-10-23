@@ -1,6 +1,5 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
-from five import grok
 from opengever.base.validators import BaseRepositoryfolderValidator
 from opengever.meeting import _
 from opengever.meeting import require_word_meeting_feature
@@ -28,12 +27,13 @@ from z3c.relationfield.schema import RelationChoice
 from zope import schema
 from zope.component import getUtility
 from zope.interface import Interface
+from zope.interface import provider
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
 
 
-@grok.provider(IContextSourceBinder)
+@provider(IContextSourceBinder)
 def get_group_vocabulary(context):
     service = ogds_service()
     userid = api.user.get_current().getId()
@@ -142,7 +142,6 @@ class RepositoryfolderValidator(BaseRepositoryfolderValidator):
 WidgetValidatorDiscriminators(
     RepositoryfolderValidator,
     field=ICommittee['repository_folder'])
-grok.global_adapter(RepositoryfolderValidator)
 
 
 class ICommitteeModel(Interface):

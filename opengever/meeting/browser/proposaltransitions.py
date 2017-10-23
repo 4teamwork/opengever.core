@@ -1,11 +1,10 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
-from five import grok
 from opengever.meeting import _
-from opengever.meeting.proposal import IProposal
 from plone import api
 from plone.protect.utils import addTokenToUrl
 from plone.z3cform import layout
+from Products.Five.browser import BrowserView
 from z3c.form.field import Fields
 from z3c.form.form import button
 from z3c.form.form import Form
@@ -14,17 +13,14 @@ from zope import schema
 from zope.interface import Interface
 
 
-class ProposalTransitionController(grok.View):
-    grok.context(IProposal)
-    grok.name('proposaltransitioncontroller')
-    grok.require('zope2.View')
+class ProposalTransitionController(BrowserView):
 
     @classmethod
     def url_for(cls, context, transition):
-        return addTokenToUrl("{}/@@{}?transition={}".format(
-            context.absolute_url(), cls.__view_name__, transition))
+        return addTokenToUrl("{}/@@proposaltransitioncontroller?transition={}".format(
+            context.absolute_url(), transition))
 
-    def render(self):
+    def __call__(self):
         if self.context.contains_checked_out_documents():
             msg = _(u'error_must_checkin_documents_for_transition',
                     default=u'Cannot change the state because the proposal contains checked'
@@ -95,12 +91,6 @@ class RejectProposalForm(Form):
         return self.request.RESPONSE.redirect(content.absolute_url())
 
 
-class RejectProposalView(layout.FormWrapper, grok.View):
-    grok.context(IProposal)
-    grok.name('reject_proposal')
-    grok.require('cmf.ModifyPortalContent')
-    form = RejectProposalForm
+class RejectProposalView(layout.FormWrapper):
 
-    def __init__(self, context, request):
-        layout.FormWrapper.__init__(self, context, request)
-        grok.View.__init__(self, context, request)
+    form = RejectProposalForm

@@ -1,7 +1,6 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from datetime import date
-from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.base.browser.modelforms import ModelAddForm
 from opengever.base.browser.modelforms import ModelEditForm
@@ -9,7 +8,6 @@ from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.meeting import _
 from opengever.meeting import is_meeting_feature_enabled
-from opengever.meeting.committee import ICommittee
 from opengever.meeting.model import Period
 from opengever.tabbedview import GeverTabMixin
 from plone import api
@@ -111,17 +109,10 @@ class CloseCurrentPeriodStep(BaseWizardStepForm, ModelEditForm):
         return self._created_object.get_url()
 
 
-class CloseCurrentPeriodStepView(FormWrapper, grok.View):
+class CloseCurrentPeriodStepView(FormWrapper):
     """View to render the form to close a period."""
 
-    grok.context(ICommittee)
-    grok.name('close-period')
-    grok.require('cmf.ModifyPortalContent')
     form = CloseCurrentPeriodStep
-
-    def __init__(self, *args, **kwargs):
-        FormWrapper.__init__(self, *args, **kwargs)
-        grok.View.__init__(self, *args, **kwargs)
 
     def available(self):
         return is_meeting_feature_enabled()
@@ -184,17 +175,10 @@ class AddNewPeriodStep(BaseWizardStepForm, ModelAddForm):
         dm.drop_data(get_dm_key(self.committee))
 
 
-class AddNewPeriodStepView(FormWrapper, grok.View):
+class AddNewPeriodStepView(FormWrapper):
     """View to render the form to create a new period."""
 
-    grok.context(ICommittee)
-    grok.name('add-period')
-    grok.require('cmf.AddPortalContent')
     form = AddNewPeriodStep
-
-    def __init__(self, *args, **kwargs):
-        FormWrapper.__init__(self, *args, **kwargs)
-        grok.View.__init__(self, *args, **kwargs)
 
     def available(self):
         return is_meeting_feature_enabled()

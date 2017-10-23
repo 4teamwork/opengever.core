@@ -2,16 +2,13 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
-    xmlns:grok="http://namespaces.zope.org/grok"
     xmlns:i18n="http://namespaces.zope.org/i18n"
     i18n_domain="opengever.meeting">
 
   <include file="permissions.zcml" />
   <include package=".behaviors" />
   <include package=".browser" />
-
-  <!-- Grok the package to initialise schema interfaces and content classes -->
-  <grok:grok package="." />
+  <include package=".tabs" />
 
   <!-- Register locales translations -->
   <i18n:registerTranslations directory="locales" />
@@ -74,5 +71,63 @@
       factory=".vocabulary.ProposalTemplatesVocabulary"
       name="opengever.meeting.ProposalTemplatesVocabulary"
       />
+
+  <utility
+      factory=".vocabulary.CommitteeVocabulary"
+      name="opengever.meeting.CommitteeVocabulary"
+      />
+
+  <utility
+      factory=".vocabulary.ActiveCommitteeVocabulary"
+      name="opengever.meeting.ActiveCommitteeVocabulary"
+      />
+
+  <utility
+      factory=".vocabulary.MemberVocabulary"
+      name="opengever.meeting.MemberVocabulary"
+      />
+
+  <utility
+      factory=".vocabulary.LanguagesVocabulary"
+      name="opengever.meeting.LanguagesVocabulary"
+      />
+
+  <subscriber
+      for="opengever.document.document.IDocumentSchema
+           OFS.interfaces.IObjectWillBeRemovedEvent"
+      handler=".handlers.document_deleted"
+      />
+
+  <subscriber
+      for="opengever.document.document.IDocumentSchema
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".handlers.on_document_modified"
+      />
+
+  <subscriber
+      for="opengever.document.document.IDocumentSchema
+           opengever.document.interfaces.IObjectCheckedInEvent"
+      handler=".handlers.on_documed_checked_in"
+      />
+
+  <subscriber
+      for="opengever.document.document.IDocumentSchema
+           opengever.document.interfaces.IObjectRevertedToVersion"
+      handler=".handlers.on_document_reverted_to_version"
+      />
+
+  <subscriber
+      for="opengever.meeting.proposal.IProposal
+           zope.lifecycleevent.interfaces.IObjectCopiedEvent"
+      handler=".handlers.delete_copied_proposal"
+      />
+
+  <subscriber
+      for="opengever.meeting.proposal.IProposal
+           zope.lifecycleevent.interfaces.IObjectMovedEvent"
+      handler=".handlers.sync_moved_proposal"
+      />
+
+  <adapter factory=".committee.RepositoryfolderValidator" />
 
 </configure>

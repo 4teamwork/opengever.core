@@ -247,4 +247,160 @@
       permission="cmf.AddPortalContent"
       />
 
+  <browser:page
+      for="opengever.meeting.committee.ICommittee"
+      class=".committee.CommitteeOverview"
+      name="tabbedview_view-overview"
+      permission="zope2.View"
+      template="templates/overview.pt"
+      />
+
+  <browser:page
+      for="opengever.meeting.committeecontainer.ICommitteeContainer"
+      class=".committeecontainertabs.Committees"
+      name="tabbedview_view-committees"
+      permission="zope2.View"
+      template="templates/committee.pt"
+      />
+
+  <browser:page
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      class=".createsubmittedproposal.CreateSubmittedProposal"
+      name="create_submitted_proposal"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      class=".excerpt.UpdateDossierExcerpt"
+      name="update-dossier-excerpt"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="*"
+      class=".meetingfeatureenabled.MeetingFeatureEnabledView"
+      name="is_meeting_feature_enabled"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.meeting.proposal.IProposal"
+      class=".proposaltransitions.ProposalTransitionController"
+      name="proposaltransitioncontroller"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.meeting.proposal.IProposal"
+      class=".proposaltransitions.RejectProposalView"
+      name="reject_proposal"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <browser:page
+      for="opengever.meeting.interfaces.IMeetingDossier"
+      class=".protocol.GenerateProtocol"
+      name="generate_protocol"
+      permission="cmf.AddPortalContent"
+      />
+
+  <browser:page
+      for="opengever.document.document.IDocumentSchema"
+      class=".protocol.UpdateProtocol"
+      name="update_protocol"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <browser:page
+      for="opengever.meeting.sablontemplate.ISablonTemplate"
+      class=".sablontemplate.FillMeetingTemplate"
+      name="fill_meeting_template"
+      permission="cmf.ManagePortal"
+      />
+
+  <browser:page
+      for="opengever.document.document.IDocumentSchema"
+      class=".submitdocuments.UpdateSubmittedDocumentView"
+      name="update-submitted-document"
+      permission="cmf.AddPortalContent"
+      />
+
+  <browser:page
+      for="*"
+      class=".macros.View"
+      name="meeting-macros"
+      permission="zope2.View"
+      />
+
+  <adapter
+      factory=".committeeforms.AddView"
+      provides="zope.publisher.interfaces.browser.IBrowserPage"
+      name="opengever.meeting.committee"
+      />
+  <class class=".committeeforms.AddView">
+    <require
+        permission="cmf.AddPortalContent"
+        interface="zope.publisher.interfaces.browser.IBrowserPage"
+        />
+  </class>
+
+  <browser:page
+      for="opengever.meeting.committeecontainer.ICommitteeContainer"
+      class=".committeeforms.AddInitialPeriodStepView"
+      name="add-initial-period"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <browser:page
+      for="opengever.meeting.committee.ICommittee"
+      class=".committeeforms.EditForm"
+      name="edit"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <browser:page
+      for="opengever.meeting.committee.ICommittee"
+      class=".periods.CloseCurrentPeriodStepView"
+      name="close-period"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <browser:page
+      for="opengever.meeting.committee.ICommittee"
+      class=".periods.AddNewPeriodStepView"
+      name="add-period"
+      permission="cmf.AddPortalContent"
+      />
+
+  <browser:page
+      for="opengever.meeting.proposal.IProposal"
+      class=".proposaloverview.ProposalOverview"
+      name="tabbedview_view-overview"
+      permission="zope2.View"
+      template="templates/proposaloverview.pt"
+      />
+
+  <browser:page
+      for="opengever.meeting.proposal.ISubmittedProposal"
+      class=".proposaloverview.SubmittedProposalOverview"
+      name="tabbedview_view-overview"
+      permission="zope2.View"
+      template="templates/proposaloverview.pt"
+      />
+
+  <browser:page
+      for="opengever.meeting.proposal.ISubmittedProposal"
+      class=".proposalforms.SubmittedProposalEditForm"
+      name="edit"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <browser:page
+      for="opengever.meeting.proposal.IProposal"
+      class=".proposalforms.ProposalEditForm"
+      name="edit"
+      permission="cmf.ModifyPortalContent"
+      />
+
 </configure>

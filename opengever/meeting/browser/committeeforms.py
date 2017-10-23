@@ -1,5 +1,4 @@
 from datetime import date
-from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
@@ -9,19 +8,21 @@ from opengever.meeting import _
 from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.browser.periods import IPeriodModel
 from opengever.meeting.committee import Committee
-from opengever.meeting.committee import ICommittee
-from opengever.meeting.committeecontainer import ICommitteeContainer
 from opengever.meeting.form import ModelProxyAddForm
 from opengever.meeting.form import ModelProxyEditForm
 from opengever.meeting.model import Period
-from plone.dexterity.browser.add import DefaultAddForm
-from plone.directives import dexterity
+from plone.dexterity.browser import add
+from plone.dexterity.browser import edit
+from plone.dexterity.interfaces import IDexterityFTI
 from plone.z3cform.layout import FormWrapper
+from Products.CMFCore.interfaces import IFolderish
 from z3c.form import field
 from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
 from z3c.form.interfaces import IDataConverter
+from zope.component import adapter
 from zope.component import getUtility
+from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 
 
 ADD_COMMITTEE_STEPS = (
@@ -55,7 +56,7 @@ class CommitteeFieldConfigurationMixin(object):
 
 class AddForm(CommitteeFieldConfigurationMixin,
               BaseWizardStepForm,
-              dexterity.AddForm):
+              add.DefaultAddForm):
     """Form to create a committee.
 
     Is registered as default add form for committees. Does not create the
@@ -63,7 +64,6 @@ class AddForm(CommitteeFieldConfigurationMixin,
     redirects to the second step to add an initial period.
 
     """
-    grok.name('opengever.meeting.committee')
     fields = field.Fields(Committee.model_schema)
     label = _('Add committee')
 
@@ -87,7 +87,12 @@ class AddForm(CommitteeFieldConfigurationMixin,
         return self.request.RESPONSE.redirect(self.context.absolute_url())
 
 
-class AddInitialPeriodStep(BaseWizardStepForm, ModelProxyAddForm, DefaultAddForm):
+@adapter(IFolderish, IDefaultBrowserLayer, IDexterityFTI)
+class AddView(add.DefaultAddView):
+    form = AddForm
+
+
+class AddInitialPeriodStep(BaseWizardStepForm, ModelProxyAddForm, add.DefaultAddForm):
     """Form to add an initial period during committee creation.
 
     Second part of a two-step wizard. Loads data from IIWizardStorage to
@@ -165,23 +170,15 @@ class AddInitialPeriodStep(BaseWizardStepForm, ModelProxyAddForm, DefaultAddForm
         session.flush()  # required to immediately create an autoincremented id
 
 
-class AddInitialPeriodStepView(FormWrapper, grok.View):
+class AddInitialPeriodStepView(FormWrapper):
     """View to render the form to close a period."""
 
-    grok.context(ICommitteeContainer)
-    grok.name('add-initial-period')
-    grok.require('cmf.ModifyPortalContent')
     form = AddInitialPeriodStep
-
-    def __init__(self, *args, **kwargs):
-        FormWrapper.__init__(self, *args, **kwargs)
-        grok.View.__init__(self, *args, **kwargs)
 
 
 class EditForm(CommitteeFieldConfigurationMixin,
                ModelProxyEditForm,
-               dexterity.EditForm):
+               edit.DefaultEditForm):
 
-    grok.context(ICommittee)
     fields = field.Fields(Committee.model_schema, ignoreContext=True)
     content_type = Committee

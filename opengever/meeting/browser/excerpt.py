@@ -1,4 +1,3 @@
-from five import grok
 from opengever.base.oguid import Oguid
 from opengever.base.security import elevated_privileges
 from opengever.base.transport import PrivilegedReceiveObject
@@ -7,23 +6,20 @@ from opengever.document.versioner import Versioner
 from opengever.locking.lock import MEETING_EXCERPT_LOCK
 from opengever.meeting import _
 from plone.locking.interfaces import ILockable
-from Products.CMFPlone.interfaces import IPloneSiteRoot
+from Products.Five.browser import BrowserView
 from zExceptions import NotFound
 from zExceptions import Unauthorized
 from zope.i18n import translate
 import json
 
 
-class UpdateDossierExcerpt(grok.View):
+class UpdateDossierExcerpt(BrowserView):
     """Receives a JSON serialized excerpt and updates the excerpt referenced
     by the oguid parameter.
 
     """
-    grok.name('update-dossier-excerpt')
-    grok.require('zope2.View')
-    grok.context(IPloneSiteRoot)
 
-    def render(self):
+    def __call__(self):
         oguid_str = self.request.get('oguid')
         if not oguid_str:
             raise NotFound()

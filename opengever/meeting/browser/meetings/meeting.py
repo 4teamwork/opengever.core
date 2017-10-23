@@ -1,4 +1,3 @@
-from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.base.browser.helper import get_css_class
 from opengever.base.browser.wizard import BaseWizardStepForm
@@ -16,7 +15,6 @@ from opengever.meeting.browser.meetings.transitions import MeetingTransitionCont
 from opengever.meeting.browser.protocol import GenerateProtocol
 from opengever.meeting.browser.protocol import MergeDocxProtocol
 from opengever.meeting.browser.protocol import UpdateProtocol
-from opengever.meeting.committee import ICommittee
 from opengever.meeting.model import Meeting
 from opengever.meeting.proposal import ISubmittedProposal
 from path import Path
@@ -132,15 +130,9 @@ class AddMeetingWizardStep(BaseWizardStepForm, Form):
         return self._created_object.get_url()
 
 
-class AddMeetingWizardStepView(FormWrapper, grok.View):
-    grok.context(ICommittee)
-    grok.name('add-meeting')
-    grok.require('zope2.View')
-    form = AddMeetingWizardStep
+class AddMeetingWizardStepView(FormWrapper):
 
-    def __init__(self, *args, **kwargs):
-        FormWrapper.__init__(self, *args, **kwargs)
-        grok.View.__init__(self, *args, **kwargs)
+    form = AddMeetingWizardStep
 
 
 class AddMeetingDossierView(WizzardWrappedAddForm):

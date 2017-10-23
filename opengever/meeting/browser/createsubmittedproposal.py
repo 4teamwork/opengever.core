@@ -1,4 +1,3 @@
-from five import grok
 from opengever.base import advancedjson
 from opengever.base.interfaces import IDataCollector
 from opengever.base.oguid import Oguid
@@ -9,18 +8,15 @@ from opengever.meeting.interfaces import IHistory
 from opengever.meeting.proposal import SubmittedProposal
 from opengever.meeting.service import meeting_service
 from opengever.ogds.base.utils import encode_after_json
-from Products.CMFPlone.interfaces import IPloneSiteRoot
+from Products.Five.browser import BrowserView
 from zope.component import getMultiAdapter
 import base64
 import json
 
 
-class CreateSubmittedProposal(grok.View):
-    grok.context(IPloneSiteRoot)
-    grok.name('create_submitted_proposal')
-    grok.require('zope2.Public')
+class CreateSubmittedProposal(BrowserView):
 
-    def render(self):
+    def __call__(self):
         jsondata = self.request.get(REQUEST_KEY)
         data = encode_after_json(json.loads(jsondata))
         committee = Oguid.parse(data['committee_oguid']).resolve_object()
