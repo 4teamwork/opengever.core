@@ -332,6 +332,7 @@
 
     this.renderNavigation = function(data) {
       $('.meeting-navigation').html(this.navigationTemplate({agendaitems: data.items}));
+      this.updateNavigationScrollArea();
     };
 
     this.openModal = function(target) {
@@ -471,6 +472,26 @@
       $('html, body').animate({
         scrollTop: $(target.attr('href')).offset().top
       }, 150);
+    };
+
+    this.updateNavigationScrollArea = function() {
+      /** When necessary, make the navigation scrollable, so that the
+          meeting process area also has enough space. **/
+      $('.meeting-navigation').css('max-height', '');
+      /** Let the navigation have the screen size minues the size of the
+          meeting process div. **/
+      var navigation_max_height = $(window).height() - $('.meeting-process').outerHeight();
+      if($('.meeting-navigation').height() > navigation_max_height) {
+        $('.meeting-navigation').addClass('scroll');
+      } else {
+        $('.meeting-navigation').removeClass('scroll');
+      }
+      $('.meeting-navigation').css('max-height', navigation_max_height);
+
+      /** Set the container height so that stickyness works. */
+      $('.panes').height(null);
+      $('.panes').height(Math.max($('.panes').height(),
+                                  $('#content-core').height()));
     };
 
     this.events = [
