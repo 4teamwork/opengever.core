@@ -463,3 +463,34 @@ class MeetingView(BrowserView):
 
         result.sort(key=itemgetter('fullname'))
         return result
+
+    @require_word_meeting_feature
+    def get_closing_infos(self):
+        transition_controller = self.model.workflow.transition_controller
+        infos = {'is_closed': False,
+                 'close_url': None,
+                 'reopen_url': None}
+
+        can_change = api.user.has_permission(
+            'Modify portal content',
+            obj=self.model.committee.resolve_committee())
+
+        if self.model.get_state() == self.model.STATE_CLOSED:
+            infos['is_closed'] = True
+            infos['reopen_url'] = can_change and transition_controller.url_for(
+                self.context, self.model, 'closed-held')
+        else:
+            close_transition = self.get_close_transition()
+            if close_transition:
+                infos['close_url'] = can_change and transition_controller.url_for(
+                    self.context, self.model, close_transition.name)
+
+        return infos
+
+    @require_word_meeting_feature
+    def get_close_transition(self):
+        for transition in self.model.workflow.get_transitions(self.model.get_state()):
+            if transition.state_to == 'closed' and transition.visible:
+                return transition
+
+        return None

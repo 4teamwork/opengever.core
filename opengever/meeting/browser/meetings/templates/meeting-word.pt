@@ -171,7 +171,8 @@
                 <tal:block tal:replace="structure view/render_handlebars_navigation_template"></tal:block>
               </nav>
 
-              <div class="meeting-process">
+              <div class="meeting-process"
+                   tal:define="closing_infos view/get_closing_infos">
 
                 <div class="agenda-item-list-doc meeting-document"
                      tal:define="agendaitem_list_document view/get_agendaitem_list_document">
@@ -218,6 +219,16 @@
 
                 </div>
 
+                <div class="meeting-workflow">
+                  <div class="meeting-closed"
+                       tal:condition="closing_infos/is_closed"
+                       i18n:translate="label_meeting_closed">Meeting closed</div>
+                  <a class="reopen-meeting"
+                     tal:condition="closing_infos/reopen_url"
+                     tal:attributes="href closing_infos/reopen_url"
+                     i18n:translate="action_reopen_meeting">Reopen meeting</a>
+                </div>
+
                 <div class="protocol-doc meeting-document"
                      tal:define="protocol_document view/get_protocol_document">
 
@@ -259,6 +270,17 @@
                     </div>
                   </tal:GENERATED>
 
+                </div>
+
+                <div class="meeting-workflow" tal:condition="meeting/is_editable">
+                  <div class="close-meeting" tal:condition="closing_infos/close_url">
+                    <a tal:attributes="href closing_infos/close_url"
+                       i18n:translate="action_close_meeting">Close meeting</a>
+                    <div class="close-meeting-helptext"
+                         i18n:translate="msg_require_all_agenda_items_decided_for_closing">
+                      The meeting can only be closed when all agenda items are decided.
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

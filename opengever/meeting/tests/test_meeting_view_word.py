@@ -141,3 +141,42 @@ class TestWordMeetingView(IntegrationTestCase):
               'present': True,
               'role': ''}],
             meeting_view.participants())
+
+    def test_get_closing_infos(self):
+        """The get_close_meeting_render_infos provides infos for rendering.
+
+        Components:
+        - Disabled close-meeting transition action (when not yet ready).
+        - Enabled close-meeting transition action.
+        - Repoen-meeting transition action.
+        """
+
+        self.maxDiff = None
+        self.login(self.committee_responsible)
+        view = self.meeting.restrictedTraverse('view')
+
+        self.assertEquals(
+            {'is_closed': False,
+             'close_url': self.get_meeting_transition_url('pending-closed'),
+             'reopen_url': None},
+            view.get_closing_infos())
+
+        self.meeting.model.workflow_state = self.meeting.model.STATE_HELD.name
+        self.assertEquals(
+            {'is_closed': False,
+             'close_url': self.get_meeting_transition_url('held-closed'),
+             'reopen_url': None},
+            view.get_closing_infos())
+
+        self.meeting.model.workflow_state = self.meeting.model.STATE_CLOSED.name
+        self.assertEquals(
+            {'is_closed': True,
+             'close_url': None,
+             'reopen_url': self.get_meeting_transition_url('closed-held')},
+            view.get_closing_infos())
+
+    def get_meeting_transition_url(self, transition_name):
+        transition_controller = self.meeting.model.workflow.transition_controller
+        return transition_controller.url_for(self.meeting,
+                                             self.meeting.model,
+                                             transition_name)

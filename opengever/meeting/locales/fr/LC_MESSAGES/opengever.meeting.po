@@ -398,12 +398,22 @@ msgstr ""
 msgid "You are not allowed to view the meeting dossier."
 msgstr ""
 
+#. Default: "Close meeting"
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "action_close_meeting"
+msgstr ""
+
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "action_download_document"
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "action_generate_document"
+msgstr ""
+
+#. Default: "Reopen meeting"
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "action_reopen_meeting"
 msgstr ""
 
 #. Default: "Active"
@@ -1131,6 +1141,11 @@ msgstr "Propriétés"
 msgid "label_meeting"
 msgstr "Séance"
 
+#. Default: "Meeting closed"
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "label_meeting_closed"
+msgstr ""
+
 #. Default: "Member"
 #: ./opengever/meeting/browser/memberships.py
 msgid "label_member"
@@ -1531,6 +1546,11 @@ msgstr "La proposition a été réactivée."
 #: ./opengever/meeting/model/proposal.py
 msgid "msg_proposal_submitted"
 msgstr "Proposition soumise avec succès."
+
+#. Default: "The meeting can only be closed when all agenda items are decided."
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "msg_require_all_agenda_items_decided_for_closing"
+msgstr ""
 
 #. Default: "The object was deleted successfully."
 #: ./opengever/meeting/browser/views.py

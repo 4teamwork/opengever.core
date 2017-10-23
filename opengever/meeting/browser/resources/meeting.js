@@ -174,7 +174,7 @@
     this.events = [
       {
         method: "click",
-        target: "#pending-closed",
+        target: "#pending-closed, #held-closed, .close-meeting a",
         callback: this.openModal,
         options: {
           update: true
@@ -182,15 +182,7 @@
       },
       {
         method: "click",
-        target: "#held-closed",
-        callback: this.openModal,
-        options: {
-          update: true
-        }
-      },
-      {
-        method: "click",
-        target: "#closed-held",
+        target: "#closed-held, .reopen-meeting",
         callback: this.reopenMeeting,
         options: {
           update: true
@@ -399,6 +391,7 @@
     this.onRender = function() {
       this.outlet.sortable(sortableSettings);
       $(document).trigger("agendaItemsReady");
+      this.updateCloseTransitionActionState();
     };
 
     this.onUpdateFail = function(data) { self.messageFactory.shout(data.messages); };
@@ -426,17 +419,22 @@
         if (data.redirectUrl){
           window.location = data.redirectUrl;
         }
+        self.updateCloseTransitionActionState();
       });
     };
 
     this.declineDecide = function() { holdDialog.close(); };
 
     this.reopen = function(target){
-      return $.post(target.attr("href"));
+      return $.post(target.attr("href")).done(function() {
+        self.updateCloseTransitionActionState();
+      });
     };
 
     this.revise = function(target){
-      return $.post(target.attr("href"));
+      return $.post(target.attr("href")).done(function() {
+        self.updateCloseTransitionActionState();
+      });
     };
 
     this.editDocument = function(target) {
@@ -492,6 +490,15 @@
       $('.panes').height(null);
       $('.panes').height(Math.max($('.panes').height(),
                                   $('#content-core').height()));
+    };
+
+    this.updateCloseTransitionActionState = function() {
+      if($('.decide-agenda-item, .revise-agenda-item').length > 0) {
+        $('.close-meeting').addClass('disabled');
+      } else {
+        $('.close-meeting').removeClass('disabled');
+      }
+      this.updateNavigationScrollArea();
     };
 
     this.events = [
