@@ -11,6 +11,7 @@ Changelog
   dependency collective.z3cform.datagridfield. [elioschmutz]
 - Reenable action "move items" for inbox. [tarnap]
 - Fix batch-handling in the showroom overlay for the search-view. [elioschmutz]
+- SPV word: update meeting view with new design. [jone]
 - OGGBundle: Fix tracking of item counts (actual vs. raw). [lgraf]
 - OGGBundle: Support delta imports using GUID. [lgraf]
 - OGGBundle: Validate parent_reference early for existence. [lgraf]
