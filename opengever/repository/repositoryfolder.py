@@ -4,8 +4,9 @@ from opengever.base.interfaces import IReferenceNumber
 from opengever.repository import _
 from opengever.repository.interfaces import IRepositoryFolder
 from plone.app.content.interfaces import INameFromTitle
+from plone.autoform import directives as form
 from plone.dexterity import content
-from plone.directives import form
+from plone.supermodel import model
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from zope import schema
 from zope.component import adapter
@@ -15,11 +16,11 @@ from zope.interface import implements
 REPOSITORY_FOLDER_STATE_INACTIVE = 'repositoryfolder-state-inactive'
 
 
-class IRepositoryFolderSchema(form.Schema):
+class IRepositoryFolderSchema(model.Schema):
     """ A Repository Folder
     """
 
-    form.fieldset(
+    model.fieldset(
         u'common',
         label=_(u'fieldset_common', default=u'Common'),
         fields=[

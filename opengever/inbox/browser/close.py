@@ -2,7 +2,7 @@ from opengever.inbox import _
 from opengever.task import _ as task_mf
 from opengever.task.interfaces import IYearfolderStorer
 from opengever.task.util import change_task_workflow_state
-from plone.directives import form
+from plone.supermodel import model
 from plone.z3cform import layout
 from z3c.form import button
 from z3c.form.field import Fields
@@ -11,7 +11,7 @@ from zope import schema
 
 
 # TODO: Use ISimpleResponseForm instead of define a same one.
-class IForwardingCloseForm(form.Schema):
+class IForwardingCloseForm(model.Schema):
     """Special addresponse form for the forwarding close transition.
     Looks the same, but do something different.
     """

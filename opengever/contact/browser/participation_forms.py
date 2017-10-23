@@ -7,7 +7,7 @@ from opengever.contact import _
 from opengever.contact.sources import ContactsSourceBinder
 from plone import api
 from plone.autoform.widgets import ParameterizedWidget
-from plone.directives import form
+from plone.supermodel import model
 from z3c.form import button
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from z3c.form.interfaces import ActionExecutionError
@@ -17,7 +17,7 @@ from zope.interface import Invalid
 import z3c.form
 
 
-class IParticipation(form.Schema):
+class IParticipation(model.Schema):
     """ Participation Form schema
     """
 

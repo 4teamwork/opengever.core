@@ -1,11 +1,12 @@
+from plone.autoform.interfaces import IFormFieldProvider
 from plone.dexterity.content import Container
-from plone.directives import form
+from plone.supermodel import model
 from zope import schema
 from zope.interface import alsoProvides
 from zope.interface import Interface
 
 
-class IDummySchema(form.Schema):
+class IDummySchema(model.Schema):
     """Dummy schema used for testing.
     """
 
@@ -16,7 +17,7 @@ class IDummySchema(form.Schema):
     )
 
 
-class IDummyWithMarkerSchema(form.Schema):
+class IDummyWithMarkerSchema(model.Schema):
     """Dummy schema used for testing.
     """
 
@@ -26,10 +27,11 @@ class IDummyWithMarkerSchema(form.Schema):
         default=111,
     )
 
-alsoProvides(IDummyWithMarkerSchema, form.IFormFieldProvider)
+
+alsoProvides(IDummyWithMarkerSchema, IFormFieldProvider)
 
 
-class IDummyAttributeStorageBehavior(form.Schema):
+class IDummyAttributeStorageBehavior(model.Schema):
 
     attr_behavior_int_field = schema.Int(
         title=u'Behavior (AttributeStorage) Int Field',
@@ -37,10 +39,11 @@ class IDummyAttributeStorageBehavior(form.Schema):
         default=222,
     )
 
-alsoProvides(IDummyAttributeStorageBehavior, form.IFormFieldProvider)
+
+alsoProvides(IDummyAttributeStorageBehavior, IFormFieldProvider)
 
 
-class IDummyAnnotationStorageBehavior(form.Schema):
+class IDummyAnnotationStorageBehavior(model.Schema):
 
     ann_behavior_int_field = schema.Int(
         title=u'Behavior (AnnotationStorage) Int Field',
@@ -48,7 +51,8 @@ class IDummyAnnotationStorageBehavior(form.Schema):
         default=333,
     )
 
-alsoProvides(IDummyAnnotationStorageBehavior, form.IFormFieldProvider)
+
+alsoProvides(IDummyAnnotationStorageBehavior, IFormFieldProvider)
 
 
 class Dummy(Container):

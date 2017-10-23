@@ -19,8 +19,9 @@ from opengever.meeting.wrapper import MembershipWrapper
 from opengever.meeting.wrapper import PeriodWrapper
 from opengever.ogds.base.utils import ogds_service
 from plone import api
-from plone.directives import form
+from plone.autoform import directives as form
 from plone.i18n.normalizer.interfaces import IIDNormalizer
+from plone.supermodel import model
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from z3c.form.validator import WidgetValidatorDiscriminators
 from z3c.relationfield.schema import RelationChoice
@@ -52,7 +53,7 @@ def get_group_vocabulary(context):
     return SimpleVocabulary(terms)
 
 
-class ICommittee(form.Schema):
+class ICommittee(model.Schema):
     """Base schema for the committee.
     """
 

@@ -1,7 +1,8 @@
 from Acquisition import aq_parent, aq_inner
 from opengever.base.interfaces import IReferenceNumberPrefix as PrefixAdapter
 from opengever.repository import _
-from plone.directives import form
+from plone.autoform.interfaces import IFormFieldProvider
+from plone.supermodel import model
 from z3c.form import validator, error
 from z3c.form.interfaces import IAddForm
 from zope import schema
@@ -22,9 +23,9 @@ def reference_number_prefix_default(context):
     return PrefixAdapter(context).get_next_number()
 
 
-class IReferenceNumberPrefix(form.Schema):
+class IReferenceNumberPrefix(model.Schema):
 
-    form.fieldset(
+    model.fieldset(
         u'common',
         label=_(u'fieldset_common', default=u'Common'),
         fields=[
@@ -40,7 +41,8 @@ class IReferenceNumberPrefix(form.Schema):
         defaultFactory=reference_number_prefix_default,
         )
 
-alsoProvides(IReferenceNumberPrefix, form.IFormFieldProvider)
+
+alsoProvides(IReferenceNumberPrefix, IFormFieldProvider)
 
 
 class ReferenceNumberPrefixValidator(validator.SimpleFieldValidator):

@@ -10,7 +10,7 @@ from opengever.ogds.base.actor import Actor
 from opengever.ogds.models import FIRSTNAME_LENGTH
 from opengever.ogds.models import LASTNAME_LENGTH
 from path import Path
-from plone.directives import form
+from plone.supermodel import model
 from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from z3c.form import field
@@ -62,7 +62,7 @@ class PersonView(BrowserView):
         return self.latest_participations()
 
 
-class IPersonModel(form.Schema):
+class IPersonModel(model.Schema):
     """Person model schema interface."""
 
     salutation = schema.TextLine(

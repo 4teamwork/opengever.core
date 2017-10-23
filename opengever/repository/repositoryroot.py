@@ -3,13 +3,13 @@ from opengever.base.behaviors.translated_title import TranslatedTitleMixin
 from opengever.repository import _
 from plone.app.content.interfaces import INameFromTitle
 from plone.dexterity.content import Container
-from plone.directives import form
+from plone.supermodel import model
 from zope import schema
 from zope.component import adapter
 from zope.interface import implementer
 
 
-class IRepositoryRoot(form.Schema):
+class IRepositoryRoot(model.Schema):
     """ Repository root marker / schema interface
     """
 

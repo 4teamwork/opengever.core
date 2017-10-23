@@ -9,9 +9,9 @@ from opengever.ogds.base.utils import get_ou_selector
 from opengever.task import _ as task_mf
 from opengever.task.task import ITask, Task
 from opengever.task.util import update_reponsible_field_data
+from plone.autoform import directives as form
 from plone.dexterity.browser import add
 from plone.dexterity.browser.edit import DefaultEditForm
-from plone.directives import form
 from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form.interfaces import HIDDEN_MODE
 from zope import schema

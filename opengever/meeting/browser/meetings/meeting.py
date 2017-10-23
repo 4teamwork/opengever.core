@@ -24,7 +24,7 @@ from plone import api
 from plone.app.contentlisting.interfaces import IContentListing
 from plone.app.contentlisting.interfaces import IContentListingObject
 from plone.dexterity.i18n import MessageFactory as pd_mf
-from plone.directives import form
+from plone.supermodel import model
 from plone.z3cform.layout import FormWrapper
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
@@ -46,7 +46,7 @@ def default_title(context):
     return context.Title().decode('utf-8')
 
 
-class IMeetingModel(form.Schema):
+class IMeetingModel(model.Schema):
     """Meeting model schema interface."""
 
     title = schema.TextLine(

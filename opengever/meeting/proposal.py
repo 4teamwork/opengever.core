@@ -27,8 +27,8 @@ from opengever.ogds.base.utils import ogds_service
 from plone import api
 from plone.app.uuid.utils import uuidToObject
 from plone.autoform.directives import mode
-from plone.directives import form
 from plone.formwidget.contenttree import ObjPathSourceBinder
+from plone.supermodel import model
 from plone.uuid.interfaces import IUUID
 from Products.CMFPlone.utils import safe_unicode
 from z3c.relationfield.event import addRelations
@@ -69,7 +69,7 @@ class ISubmittedProposalModel(Interface):
     """Submitted proposal model schema interface."""
 
 
-class IProposal(form.Schema):
+class IProposal(model.Schema):
     """Proposal Proxy Object Schema Interface"""
 
     dexteritytextindexer.searchable('title')

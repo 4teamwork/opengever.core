@@ -7,7 +7,7 @@ from opengever.meeting.model import Member
 from opengever.ogds.models import EMAIL_LENGTH
 from opengever.ogds.models import FIRSTNAME_LENGTH
 from opengever.ogds.models import LASTNAME_LENGTH
-from plone.directives import form
+from plone.supermodel import model
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from z3c.form import field
@@ -17,7 +17,7 @@ from zope.publisher.interfaces import IPublishTraverse
 from zope.publisher.interfaces.browser import IBrowserView
 
 
-class IMemberModel(form.Schema):
+class IMemberModel(model.Schema):
     """Member model schema interface."""
 
     firstname = schema.TextLine(

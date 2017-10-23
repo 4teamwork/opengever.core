@@ -2,7 +2,7 @@ from opengever.document.document import Document
 from opengever.document.document import IDocumentSchema
 from opengever.meeting import _
 from plone.autoform.interfaces import IFormFieldProvider
-from plone.directives.form import primary
+from plone.supermodel import model
 from plone.namedfile.field import NamedBlobFile
 from z3c.form.validator import SimpleFieldValidator
 from z3c.form.validator import WidgetValidatorDiscriminators
@@ -14,7 +14,7 @@ import os.path
 @provider(IFormFieldProvider)
 class IProposalTemplate(IDocumentSchema):
 
-    primary('file')
+    model.primary('file')
     file = NamedBlobFile(
         title=_(u'label_file', default='File'),
         required=True)

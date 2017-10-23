@@ -4,15 +4,15 @@ from opengever.inbox import _
 from opengever.ogds.base.utils import ogds_service
 from opengever.repository.behaviors.responsibleorg import IResponsibleOrgUnit
 from plone.dexterity.content import Container
-from plone.directives import form
+from plone.supermodel import model
 from zope import schema
 
 
-class IInbox(form.Schema, ITabbedviewUploadable):
+class IInbox(model.Schema, ITabbedviewUploadable):
     """ Inbox for OpenGever
     """
 
-    form.fieldset(
+    model.fieldset(
         u'common',
         label=_(u'fieldset_common', default=u'Common'),
         fields=[u'inbox_group', ],

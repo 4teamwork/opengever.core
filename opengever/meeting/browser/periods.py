@@ -13,7 +13,8 @@ from opengever.meeting.committee import ICommittee
 from opengever.meeting.model import Period
 from opengever.tabbedview import GeverTabMixin
 from plone import api
-from plone.directives import form
+from plone.autoform import directives as form
+from plone.supermodel import model
 from plone.z3cform.layout import FormWrapper
 from Products.Five.browser import BrowserView
 from sqlalchemy import desc
@@ -25,7 +26,7 @@ from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import getUtility
 
 
-class IPeriodModel(form.Schema):
+class IPeriodModel(model.Schema):
 
     title = schema.TextLine(
         title=_(u"label_title", default=u"Title"),

@@ -16,11 +16,11 @@ from opengever.officeconnector.helpers import is_officeconnector_checkout_featur
 from opengever.tabbedview.helper import document_with_icon
 from plone import api
 from plone.app.uuid.utils import uuidToObject
+from plone.autoform import directives as form
 from plone.dexterity.browser.add import DefaultAddForm
 from plone.dexterity.browser.add import DefaultAddView
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.directives import dexterity
-from plone.directives.form import widget
 from plone.z3cform.fieldsets.utils import move
 from Products.CMFCore.interfaces import IFolderish
 from Products.CMFPlone.utils import safe_unicode
@@ -105,7 +105,7 @@ class IAddProposal(IProposal):
              'column_title': _(u'label_modified', default=u'Modified'),
              'transform': helper.readable_date}))
 
-    widget(edit_after_creation=SingleCheckBoxFieldWidget)
+    form.widget(edit_after_creation=SingleCheckBoxFieldWidget)
     edit_after_creation = Bool(
         title=_(u'label_edit_after_creation', default=u'Edit after creation'),
         default=True,

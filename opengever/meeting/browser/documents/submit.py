@@ -5,8 +5,8 @@ from opengever.meeting import is_meeting_feature_enabled
 from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.proposal import IProposal
 from plone.autoform.form import AutoExtensibleForm
-from plone.directives import form
 from plone.formwidget.contenttree.source import CustomFilter
+from plone.supermodel import model
 from z3c.form.button import buttonAndHandler
 from z3c.form.form import Form
 from z3c.relationfield.schema import RelationChoice
@@ -26,7 +26,7 @@ class SubmittableProposalFilter(CustomFilter):
             brain, index_data)
 
 
-class ISubmitAdditionalDocument(form.Schema):
+class ISubmitAdditionalDocument(model.Schema):
 
     proposal = RelationChoice(
         title=_(u'Proposal', default=u'Proposal'),

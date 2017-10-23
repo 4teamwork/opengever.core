@@ -8,13 +8,14 @@ from opengever.ogds.base.sources import AllGroupsSourceBinder
 from opengever.ogds.base.sources import AllOrgUnitsSourceBinder
 from opengever.ogds.models import UNIT_TITLE_LENGTH
 from opengever.ogds.models.team import Team
+from plone.autoform import directives as form
 from plone.autoform.widgets import ParameterizedWidget
-from plone.directives import form
+from plone.supermodel import model
 from z3c.form import field
 from zope import schema
 
 
-class ITeam(form.Schema):
+class ITeam(model.Schema):
 
     title = schema.TextLine(
         title=_(u"label_title", default=u"Title"),
