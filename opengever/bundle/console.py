@@ -5,6 +5,7 @@ from opengever.bundle.ldap import DisabledLDAP
 from opengever.bundle.loader import GUID_INDEX_NAME
 from opengever.bundle.sections.bundlesource import BUNDLE_KEY
 from opengever.bundle.sections.bundlesource import BUNDLE_PATH_KEY
+from opengever.bundle.sections.commit import INTERMEDIATE_COMMITS_KEY
 from opengever.core.debughelpers import get_first_plone_site
 from opengever.core.debughelpers import setup_plone
 from plone import api
@@ -24,6 +25,9 @@ def parse_args(argv):
     parser = argparse.ArgumentParser(description='Import an OGGBundle')
     parser.add_argument('bundle_path',
                         help='Path to the .oggbundle directory')
+    parser.add_argument('--no-intermediate-commits', action='store_true',
+                        help="Don't to intermediate commits")
+
     args = parser.parse_args(argv)
     return args
 
@@ -56,6 +60,7 @@ def import_oggbundle(app, args):
 
     ann = IAnnotations(transmogrifier)
     ann[BUNDLE_PATH_KEY] = args.bundle_path
+    ann[INTERMEDIATE_COMMITS_KEY] = not args.no_intermediate_commits
 
     with DisabledLDAP(plone):
         transmogrifier(u'opengever.bundle.oggbundle')
