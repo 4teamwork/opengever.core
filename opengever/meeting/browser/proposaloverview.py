@@ -2,6 +2,7 @@ from ftw import bumblebee
 from opengever.base.browser.helper import get_css_class
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.document import _ as document_mf
+from opengever.document.widgets.document_link import DocumentLinkWidget
 from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.browser.proposaltransitions import ProposalTransitionController
 from opengever.meeting.interfaces import IHistory
@@ -31,8 +32,7 @@ class OverviewBase(object):
     def get_css_class(self, item):
         """Return the sprite-css-class for the given object.
         """
-        css = get_css_class(item)
-        return '{} {}'.format("rollover-breadcrumb", css)
+        return ' '.join(['rollover-breadcrumb', get_css_class(item)])
 
     def documents(self):
         return IContentListing(self.context.get_documents())
@@ -74,6 +74,9 @@ class OverviewBase(object):
 
         model = self.context.load_model()
         return model.get_state() == model.STATE_DECIDED
+
+    def render_protocol_excerpt_document_link(self):
+        return DocumentLinkWidget(self.context.get_excerpt()).render()
 
 
 class ProposalOverview(OverviewBase, view.DefaultView, GeverTabMixin):

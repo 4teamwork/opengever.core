@@ -95,10 +95,7 @@
         <h2 i18n:translate="label_excerpt">Excerpt</h2>
         <ul>
           <li>
-            <a href="" tal:attributes="href excerpt/absolute_url;
-                                       class python:view.get_css_class(excerpt)">
-              <span class="document" tal:content="excerpt/Title" />
-            </a>
+            <span tal:replace="structure view/render_protocol_excerpt_document_link" />
           </li>
         </ul>
       </tal:condition>
