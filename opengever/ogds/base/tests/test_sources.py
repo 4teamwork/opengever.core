@@ -157,10 +157,10 @@ class TestAllUsersInboxesAndTeamsSource(FunctionalTestCase):
         self.assertIn(u'unit1:hans', self.source)
         self.assertIn(u'unit2:hans', self.source)
         self.assertIn(u'unit2:reto', self.source)
+        self.assertIn(u'unit2:john', self.source)
 
         self.assertNotIn(u'dummy:dummy', self.source)
         self.assertNotIn(u'malformed', self.source)
-        self.assertNotIn(u'unit2:john', self.source)
         self.assertNotIn(u'', self.source)
 
     def test_users_from_inactive_orgunits_are_not_valid(self):
@@ -232,9 +232,10 @@ class TestAllUsersInboxesAndTeamsSource(FunctionalTestCase):
         self.assertIn(u'unit1:john', source)
         self.assertIn(u'unit1:hugo', source)
         self.assertIn(u'unit1:hans', source)
-        self.assertNotIn(u'unit2:hans', source)
-        self.assertNotIn(u'unit2:reto', source)
 
+        # Not assigned users are still valid but not returned by search
+        self.assertIn(u'unit2:hans', source)
+        self.assertIn(u'unit2:reto', source)
         self.assertTermKeys([u'inbox:unit1', u'inbox:unit2', u'unit1:john',
                              u'unit1:hugo', u'unit1:hans'],
                             source.search('unit'))
@@ -338,8 +339,9 @@ class TestUsersContactsInboxesSource(FunctionalTestCase):
         self.assertIn('hugo.boss', self.source)
         self.assertIn('robin.hood', self.source)
 
-    def test_users_from_inactive_orgunits_are_not_valid(self):
-        self.assertNotIn('simon.says', self.source)
+    def test_users_from_inactive_orgunits_are_valid_but_not_found_by_search(self):
+        self.assertIn('simon.says', self.source)
+        self.assertEquals([], self.source.search('simon'))
 
     def test_return_no_search_result_for_inactive_orgunits(self):
         result = self.source.search('Steueramt')
@@ -464,8 +466,9 @@ class TestAssignedUsersSource(FunctionalTestCase):
         self.assertIn('jamie.lannister', self.source)
         self.assertIn(TEST_USER_ID, self.source)
 
-    def test_users_from_inactive_orgunits_are_not_valid(self):
-        self.assertNotIn('simon.says', self.source)
+    def test_users_from_inactive_orgunits_are_not_valid_but_not_found_by_search(self):
+        self.assertIn('simon.says', self.source)
+        self.assertEquals([], self.source.search('simon'))
 
     def test_getTerm_handles_inactive_users(self):
         create(Builder('ogds_user')
@@ -560,12 +563,12 @@ class TestAllUsersSource(FunctionalTestCase):
         self.assertIn('peter.meier', self.source)
         self.assertIn('john.doe', self.source)
 
-    def test_users_from_inactive_orgunits_are_not_valid(self):
-        self.assertNotIn('simon.says', self.source)
+    def test_users_from_inactive_orgunits_are_valid_but_not_foudn_by_the_search(self):
+        self.assertIn('simon.says', self.source)
+        self.assertEquals([], self.source.search('simon'))
 
     def test_return_no_search_result_for_inactive_orgunits(self):
         result = self.source.search('Simon')
-
         self.assertFalse(result,
                          'Expect no result, since the Steueramt is disabled')
 
