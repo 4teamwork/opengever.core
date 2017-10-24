@@ -252,6 +252,9 @@ class MeetingView(BrowserView):
             return IContentListingObject(
                 self.model.agendaitem_list_document.resolve_document())
 
+    def has_dossier_view_permission(self):
+        return api.user.has_permission('View', obj=self.context.model.get_dossier())
+
     def url_protocol(self):
         return self.model.get_url(view='protocol')
 

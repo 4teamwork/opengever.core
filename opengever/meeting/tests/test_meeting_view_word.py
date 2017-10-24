@@ -1,4 +1,5 @@
 from ftw.testbrowser import browsing
+from ftw.testbrowser.exceptions import NoElementFound
 from ftw.testbrowser.pages import editbar
 from opengever.meeting.tests.pages import meeting_view
 from opengever.testing import IntegrationTestCase
@@ -34,6 +35,17 @@ class TestWordMeetingView(IntegrationTestCase):
         browser.open(self.meeting)
         browser.click_on('Sitzungsdossier 9/2017')
         self.assertEquals(self.meeting_dossier.absolute_url(), browser.url)
+
+    @browsing
+    def test_no_meeting_dossier_link_if_no_permission(self, browser):
+        self.login(self.dossier_responsible, browser)
+        self.meeting_dossier.__ac_local_roles_block__ = True
+        self.meeting_dossier.reindexObjectSecurity()
+
+        self.login(self.meeting_user, browser)
+        browser.open(self.meeting)
+        with self.assertRaises(NoElementFound):
+            browser.click_on('Sitzungsdossier 9/2017')
 
     @browsing
     def test_agenda_item_url(self, browser):

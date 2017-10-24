@@ -252,6 +252,7 @@ class OpengeverContentFixture(object):
         self.register_raw('committee_id', self.committee.load_model().committee_id)
         self.committee.manage_setLocalRoles(
             self.meeting_user.getId(), ('CommitteeMember',))
+        self.committee.reindexObjectSecurity()
 
         self.committee_president = self.create_committee_membership(
             self.committee,
