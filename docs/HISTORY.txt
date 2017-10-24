@@ -6,11 +6,14 @@ Changelog
 ---------------------
 
 - Avoid id conflicts when setting up a repository. [phgross]
+- Remove the broken and unused fillingnumber-adjustment view to get rid of the grokked
+  dependency collective.z3cform.datagridfield. [elioschmutz]
 - OGGBundle: Fix tracking of item counts (actual vs. raw). [lgraf]
 - OGGBundle: Support delta imports using GUID. [lgraf]
 - OGGBundle: Validate parent_reference early for existence. [lgraf]
 - Add indexer for bundle GUIDs and create index upon bundle import. [lgraf]
 - Fix missing response-variable due to ungrok opengever.document. [elioschmutz]
+- Ungrok opengever.core. [elioschmutz]
 - Ungrok opengever.meeting. [elioschmutz]
 - Removes groked plone.directives. [elioschmutz]
 - Remove bcc from email attributes in send as attachment action if the dossier is resolved. [tarnap]
