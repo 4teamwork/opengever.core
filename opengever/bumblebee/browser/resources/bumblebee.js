@@ -4,6 +4,35 @@
   var showroom;
   var numberOfDocuments;
 
+  var searchViewNavigationBatch = {
+    batchSize: 0,
+    batchStartNext: 0,
+    batchStartPrevious: 0,
+    batchURLNext: "",
+    batchURLPrevious: "",
+    initBatchPosition: function(batchSize, offset, nextURL, previousURL) {
+      this.batchSize = batchSize;
+      this.batchStartNext = offset + batchSize;
+      this.batchStartPrevious = offset - batchSize;
+      this.batchURLNext = nextURL;
+      this.batchURLPrevious = previousURL;
+    },
+    getNextBatchURL: function() {
+      var url = this.generateURL(this.batchURLNext, this.batchStartNext);
+      this.batchStartNext += this.batchSize;
+      return url;
+    },
+    getPrevBatchURL: function() {
+      if (this.batchStartPrevious < 0) { return; }
+      var url = this.generateURL(this.batchURLPrevious, this.batchStartPrevious);
+      this.batchStartPrevious -= this.batchSize;
+      return url;
+    },
+    generateURL: function(url, b_start) {
+      if (!url) { return; }
+      return url.replace(/(b_start:int=)\d+(&)/, "$1" + b_start + "$2");
+    }
+  };
   var template = (' \
     <div class="{{showroom.options.cssClass}} {{#if showroom.options.isMenuOpen}}menu-open{{/if}}"> \
       <header class="ftw-showroom-header"> \
@@ -110,7 +139,7 @@
   }
 
   function loadNextSearchItems() {
-    var url = $("#search-results .pagination .next").attr("href");
+    var url = searchViewNavigationBatch.getNextBatchURL();
     if (!url) { return; }
 
     fetchSearchViewItems(url).done(function(data) {
@@ -119,7 +148,7 @@
   }
 
   function loadPreviousSearchItems() {
-    var url = $("#search-results .pagination .previous").attr("href");
+    var url = searchViewNavigationBatch.getPrevBatchURL();
     if (!url) { return; }
 
     fetchSearchViewItems(url).done(function(data) {
@@ -281,6 +310,16 @@
     showroom.reset(items, getOffset());
     showroom.setTotal(numberOfDocuments);
     showroom.options.multiple = numberOfDocuments > 1
+
+    if (isOnSearchView()) {
+      searchViewNavigationBatch.initBatchPosition(
+        $("#search-results").data("batch-size"),
+        getOffset(),
+        $("#search-results .pagination .next").attr("href"),
+        $("#search-results .pagination .previous").attr("href")
+        );
+    }
+
   }
 
   function toggleMenu() {
