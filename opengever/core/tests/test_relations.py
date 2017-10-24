@@ -58,7 +58,6 @@ EXPECTED_INTERFACES = [
     'ftw.journal.interfaces.IJournalizable',
     'ftw.tabbedview.interfaces.ITabbedView',
     'ftw.tabbedview.interfaces.ITabbedviewUploadable',
-    'grokcore.component.interfaces.IContext',
     'opengever.base.behaviors.base.IOpenGeverBaseMarker',
     'opengever.base.behaviors.classification.IClassificationMarker',
     'opengever.base.behaviors.lifecycle.ILifeCycleMarker',
