@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-20 06:51+0000\n"
+"POT-Creation-Date: 2017-10-24 12:44+0000\n"
 "PO-Revision-Date: 2017-06-22 09:02+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -195,7 +195,7 @@ msgstr "Paramètres de l'export"
 msgid "Generate excerpts for all proposals."
 msgstr "Pour toutes les propositions un extrait de protocole sera généré et renvoyé au dossier de proposition."
 
-#: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt
+#: ./opengever/meeting/browser/templates/proposaloverview.pt
 msgid "History"
 msgstr "Historique"
 
@@ -332,7 +332,7 @@ msgstr "Sauvegarder"
 msgid "Scheduled Successfully"
 msgstr "Joint à l'ordre du jour avec succès"
 
-#: ./opengever/meeting/browser/committee_templates/overview.pt
+#: ./opengever/meeting/browser/templates/overview.pt
 msgid "Show more"
 msgstr "Afficher plus"
 
@@ -464,7 +464,7 @@ msgid "button_continue"
 msgstr "Continuer"
 
 #. Default: "Create successor proposal"
-#: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt
+#: ./opengever/meeting/browser/templates/proposaloverview.pt
 msgid "button_create_successor_proposal"
 msgstr ""
 
@@ -763,8 +763,8 @@ msgstr ""
 
 #. Default: "Attachments"
 #: ./opengever/meeting/browser/meetings/meeting.py
-#: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt
 #: ./opengever/meeting/browser/submitdocuments.py
+#: ./opengever/meeting/browser/templates/proposaloverview.pt
 msgid "label_attachments"
 msgstr "Appendices"
 
@@ -984,7 +984,7 @@ msgid "label_end"
 msgstr "Fin"
 
 #. Default: "Excerpt"
-#: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt
+#: ./opengever/meeting/browser/templates/proposaloverview.pt
 msgid "label_excerpt"
 msgstr "Extrait du protocole"
 
@@ -1034,7 +1034,7 @@ msgid "label_insert"
 msgstr "Insérer"
 
 #. Default: "Last Meeting:"
-#: ./opengever/meeting/browser/committeecontainertabs_templates/committee.pt
+#: ./opengever/meeting/browser/templates/committee.pt
 msgid "label_last_meeting"
 msgstr "Dernière séance:"
 
@@ -1067,7 +1067,7 @@ msgid "label_location"
 msgstr "Site"
 
 #. Default: "Main Atrributes"
-#: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt
+#: ./opengever/meeting/browser/templates/proposaloverview.pt
 msgid "label_main_attributes"
 msgstr "Propriétés"
 
@@ -1087,7 +1087,7 @@ msgid "label_modified"
 msgstr "Dernière modification"
 
 #. Default: "Next Meeting:"
-#: ./opengever/meeting/browser/committeecontainertabs_templates/committee.pt
+#: ./opengever/meeting/browser/templates/committee.pt
 msgid "label_next_meeting"
 msgstr "Prochaine réunion:"
 
@@ -1442,7 +1442,7 @@ msgid "msg_unscheduled_proposals"
 msgstr "Des propositions qui ne figurent pas à l'ordre du jour ont été attribuées à ce comité."
 
 #. Default: "New unscheduled proposals:"
-#: ./opengever/meeting/browser/committeecontainertabs_templates/committee.pt
+#: ./opengever/meeting/browser/templates/committee.pt
 msgid "new_unscheduled_proposals"
 msgstr "Nouvelles propositions soumises"
 

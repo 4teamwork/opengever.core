@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-20 06:51+0000\n"
+"POT-Creation-Date: 2017-10-24 12:44+0000\n"
 "PO-Revision-Date: 2017-10-11 09:21+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -193,7 +193,7 @@ msgstr "Export-Einstellungen"
 msgid "Generate excerpts for all proposals."
 msgstr "Für alle Anträge wird ein Protokollauszug generiert und ins Antragsdossier zurückgespielt."
 
-#: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt
+#: ./opengever/meeting/browser/templates/proposaloverview.pt
 msgid "History"
 msgstr "Verlauf"
 
@@ -330,7 +330,7 @@ msgstr "Speichern"
 msgid "Scheduled Successfully"
 msgstr "Erfolgreich traktandiert"
 
-#: ./opengever/meeting/browser/committee_templates/overview.pt
+#: ./opengever/meeting/browser/templates/overview.pt
 msgid "Show more"
 msgstr "Mehr anzeigen"
 
@@ -462,7 +462,7 @@ msgid "button_continue"
 msgstr "Weiter"
 
 #. Default: "Create successor proposal"
-#: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt
+#: ./opengever/meeting/browser/templates/proposaloverview.pt
 msgid "button_create_successor_proposal"
 msgstr "Folgeantrag erstellen"
 
@@ -761,8 +761,8 @@ msgstr "Erlaubte Antragsvorlagen"
 
 #. Default: "Attachments"
 #: ./opengever/meeting/browser/meetings/meeting.py
-#: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt
 #: ./opengever/meeting/browser/submitdocuments.py
+#: ./opengever/meeting/browser/templates/proposaloverview.pt
 msgid "label_attachments"
 msgstr "Anhänge"
 
@@ -982,7 +982,7 @@ msgid "label_end"
 msgstr "Ende"
 
 #. Default: "Excerpt"
-#: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt
+#: ./opengever/meeting/browser/templates/proposaloverview.pt
 msgid "label_excerpt"
 msgstr "Protokollauszug"
 
@@ -1032,7 +1032,7 @@ msgid "label_insert"
 msgstr "Einfügen"
 
 #. Default: "Last Meeting:"
-#: ./opengever/meeting/browser/committeecontainertabs_templates/committee.pt
+#: ./opengever/meeting/browser/templates/committee.pt
 msgid "label_last_meeting"
 msgstr "Letzte Sitzung:"
 
@@ -1065,7 +1065,7 @@ msgid "label_location"
 msgstr "Sitzungsort"
 
 #. Default: "Main Atrributes"
-#: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt
+#: ./opengever/meeting/browser/templates/proposaloverview.pt
 msgid "label_main_attributes"
 msgstr "Eigenschaften"
 
@@ -1085,7 +1085,7 @@ msgid "label_modified"
 msgstr "Zuletzt bearbeitet"
 
 #. Default: "Next Meeting:"
-#: ./opengever/meeting/browser/committeecontainertabs_templates/committee.pt
+#: ./opengever/meeting/browser/templates/committee.pt
 msgid "label_next_meeting"
 msgstr "Nächste Sitzung:"
 
@@ -1440,7 +1440,7 @@ msgid "msg_unscheduled_proposals"
 msgstr "Es gibt nicht traktandierte Anträge, die diesem Gremium zugewiesen sind."
 
 #. Default: "New unscheduled proposals:"
-#: ./opengever/meeting/browser/committeecontainertabs_templates/committee.pt
+#: ./opengever/meeting/browser/templates/committee.pt
 msgid "new_unscheduled_proposals"
 msgstr "Neu eingereichte Anträge"
 

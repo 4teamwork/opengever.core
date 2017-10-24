@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-20 06:51+0000\n"
+"POT-Creation-Date: 2017-10-24 12:44+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -192,7 +192,7 @@ msgstr ""
 msgid "Generate excerpts for all proposals."
 msgstr ""
 
-#: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt
+#: ./opengever/meeting/browser/templates/proposaloverview.pt
 msgid "History"
 msgstr ""
 
@@ -329,7 +329,7 @@ msgstr ""
 msgid "Scheduled Successfully"
 msgstr ""
 
-#: ./opengever/meeting/browser/committee_templates/overview.pt
+#: ./opengever/meeting/browser/templates/overview.pt
 msgid "Show more"
 msgstr ""
 
@@ -461,7 +461,7 @@ msgid "button_continue"
 msgstr ""
 
 #. Default: "Create successor proposal"
-#: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt
+#: ./opengever/meeting/browser/templates/proposaloverview.pt
 msgid "button_create_successor_proposal"
 msgstr ""
 
@@ -760,8 +760,8 @@ msgstr ""
 
 #. Default: "Attachments"
 #: ./opengever/meeting/browser/meetings/meeting.py
-#: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt
 #: ./opengever/meeting/browser/submitdocuments.py
+#: ./opengever/meeting/browser/templates/proposaloverview.pt
 msgid "label_attachments"
 msgstr ""
 
@@ -981,7 +981,7 @@ msgid "label_end"
 msgstr ""
 
 #. Default: "Excerpt"
-#: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt
+#: ./opengever/meeting/browser/templates/proposaloverview.pt
 msgid "label_excerpt"
 msgstr ""
 
@@ -1031,7 +1031,7 @@ msgid "label_insert"
 msgstr ""
 
 #. Default: "Last Meeting:"
-#: ./opengever/meeting/browser/committeecontainertabs_templates/committee.pt
+#: ./opengever/meeting/browser/templates/committee.pt
 msgid "label_last_meeting"
 msgstr ""
 
@@ -1064,7 +1064,7 @@ msgid "label_location"
 msgstr ""
 
 #. Default: "Main Atrributes"
-#: ./opengever/meeting/browser/proposaloverview_templates/proposaloverview.pt
+#: ./opengever/meeting/browser/templates/proposaloverview.pt
 msgid "label_main_attributes"
 msgstr ""
 
@@ -1084,7 +1084,7 @@ msgid "label_modified"
 msgstr ""
 
 #. Default: "Next Meeting:"
-#: ./opengever/meeting/browser/committeecontainertabs_templates/committee.pt
+#: ./opengever/meeting/browser/templates/committee.pt
 msgid "label_next_meeting"
 msgstr ""
 
@@ -1439,7 +1439,7 @@ msgid "msg_unscheduled_proposals"
 msgstr ""
 
 #. Default: "New unscheduled proposals:"
-#: ./opengever/meeting/browser/committeecontainertabs_templates/committee.pt
+#: ./opengever/meeting/browser/templates/committee.pt
 msgid "new_unscheduled_proposals"
 msgstr ""
 
