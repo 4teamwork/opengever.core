@@ -5,6 +5,7 @@ Changelog
 2017.5.2 (unreleased)
 ---------------------
 
+- Avoid id conflicts when setting up a repository. [phgross]
 - OGGBundle: Fix tracking of item counts (actual vs. raw). [lgraf]
 - OGGBundle: Support delta imports using GUID. [lgraf]
 - OGGBundle: Validate parent_reference early for existence. [lgraf]
