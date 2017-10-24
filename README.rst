@@ -504,6 +504,7 @@ Objects
     - self.franz_meier
     - self.hanspeter_duerr
   - self.inbox
+    - self.inbox_document
   - self.repository_root
     - self.branch_repofolder
       - self.leaf_repofolder

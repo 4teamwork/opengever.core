@@ -78,7 +78,6 @@ class InboxDocuments(Documents):
     depth = 1
 
     disabled_actions = ['create_task',
-                        'move_items',
                         'submit_additional_documents']
 
     @property

@@ -8,6 +8,7 @@ Changelog
 - Avoid id conflicts when setting up a repository. [phgross]
 - Remove the broken and unused fillingnumber-adjustment view to get rid of the grokked
   dependency collective.z3cform.datagridfield. [elioschmutz]
+- Reenable action "move items" for inbox. [tarnap]
 - OGGBundle: Fix tracking of item counts (actual vs. raw). [lgraf]
 - OGGBundle: Support delta imports using GUID. [lgraf]
 - OGGBundle: Validate parent_reference early for existence. [lgraf]
