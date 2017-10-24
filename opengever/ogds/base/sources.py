@@ -43,13 +43,21 @@ class AllUsersInboxesAndTeamsSource(object):
 
     @property
     def base_query(self):
-        """A base query which joins the user and orgunits together and also
+        """A base query which joins the user and orgunits together if the
+        `only_users` flag is enabled.
+        """
+        models = (User, ) if self.only_users else (User, OrgUnit)
+        return create_session().query(*models)
+
+    @property
+    def search_query(self):
+        """A search query which joins the user and orgunits together and also
         filters the query based on some options:
             - only_users: Decide if only the user model will be returned
             - only_current_orgunit: Decide if only the current Orgunit will
               be queried.
 
-        The base_query also filtes results from disabled orgunits by default.
+        The search_query also filters results from disabled orgunits by default.
         """
         models = (User, ) if self.only_users else (User, OrgUnit)
         query = create_session().query(*models) \
@@ -64,6 +72,7 @@ class AllUsersInboxesAndTeamsSource(object):
 
     def __contains__(self, value):
         token = value
+
         try:
             self.getTermByToken(token)
         except LookupError:
@@ -148,7 +157,7 @@ class AllUsersInboxesAndTeamsSource(object):
 
         text_filters = query_string.split(' ')
         query = extend_query_with_textfilter(
-            self.base_query,
+            self.search_query,
             [OrgUnit.title, OrgUnit.unit_id,
              User.userid, User.firstname, User.lastname, User.email],
             text_filters)
@@ -296,7 +305,7 @@ class UsersContactsInboxesSource(AllUsersInboxesAndTeamsSource):
 
         text_filters = query_string.split(' ')
         query = extend_query_with_textfilter(
-            self.base_query,
+            self.search_query,
             [User.userid, User.firstname, User.lastname, User.email],
             text_filters)
 
@@ -369,7 +378,7 @@ class AllUsersSource(AllUsersInboxesAndTeamsSource):
 
         text_filters = query_string.split(' ')
         query = extend_query_with_textfilter(
-            self.base_query,
+            self.search_query,
             [User.userid, User.firstname, User.lastname, User.email],
             text_filters)
 
@@ -402,7 +411,7 @@ class AssignedUsersSource(AllUsersSource):
         return True
 
     @property
-    def base_query(self):
+    def search_query(self):
         admin_unit = get_current_admin_unit()
         return create_session().query(User) \
             .filter(User.userid == groups_users.columns.userid) \
@@ -478,7 +487,7 @@ class AllEmailContactsAndUsersSource(UsersContactsInboxesSource):
 
         text_filters = query_string.split(' ')
         query = extend_query_with_textfilter(
-            self.base_query,
+            self.search_query,
             [User.userid, User.firstname, User.lastname, User.email],
             text_filters)
 
@@ -617,7 +626,7 @@ class BaseSQLModelSource(object):
 
     def search(self, query_string):
         self.terms = []
-        query = self.base_query.by_searchable_text(query_string.split(' '))
+        query = self.search_query.by_searchable_text(query_string.split(' '))
 
         for result in query:
             self.terms.append(self.getTerm(result.id()))
@@ -633,6 +642,10 @@ class AllOrgUnitsSource(BaseSQLModelSource):
     @property
     def base_query(self):
         return OrgUnit.query.filter(OrgUnit.enabled == True)  # noqa
+
+    @property
+    def search_query(self):
+        return self.base_query
 
 
 @implementer(IContextSourceBinder)
@@ -650,6 +663,10 @@ class AllGroupsSource(BaseSQLModelSource):
     @property
     def base_query(self):
         return Group.query.filter(Group.active == True)  # noqa
+
+    @property
+    def search_query(self):
+        return self.base_query
 
 
 @implementer(IContextSourceBinder)
