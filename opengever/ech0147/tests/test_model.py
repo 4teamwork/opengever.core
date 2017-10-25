@@ -70,6 +70,8 @@ class TestMessageModel(IntegrationTestCase):
         self.assertEqual(
             [u'files/dossier-1/dossier-2/ubersicht-der-vertrage-von-2016.xlsx',
              u'files/dossier-1/vertragsentwurf.docx',
+             u'files/dossier-1/die-burgschaft.eml',
+             u'files/dossier-1/testm\xe4il.msg',
              u'files/dossier-1/initialvertrag-fur-bearbeitung-8-sitzung-der.docx',  # noqa
              u'files/vertragsentwurf.docx'],
             zipfile.arcnames)
@@ -105,12 +107,19 @@ class TestDossierModel(IntegrationTestCase):
         self.assertEqual(
             base_path + '/' + self.dossier.getId(), dossier.path)
 
-    def test_dossier_contains_documents(self):
+    def test_dossier_contains_documents_and_mails(self):
+        documentish_types = ['opengever.document.document', 'ftw.mail.mail']
         dossier = Dossier(self.dossier, u'files')
         self.assertItemsEqual(
             [d for d in self.dossier.objectValues()
-                if d.portal_type == 'opengever.document.document'],
+             if d.portal_type in documentish_types],
             [d.obj for d in dossier.documents])
+
+    def test_documents_without_a_file_are_skipped(self):
+        self.document.file = None
+        dossier = Dossier(self.dossier, u'files')
+
+        self.assertNotIn(self.document, [d.obj for d in dossier.documents])
 
     def test_dossier_contains_subdossiers(self):
         dossier = Dossier(self.dossier, u'files')
