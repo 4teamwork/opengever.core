@@ -1,0 +1,12 @@
+<script id="navigationTemplate" type="text/x-handlebars-template">
+  <ul>
+    {{#each agendaitems}}
+    <li>
+      <a href="#ai{{id}}" class="{{css_class}}">
+        <span class="number">{{number}}</span>
+        <span class="title">{{title}}</span>
+      </a>
+    </li>
+    {{/each}}
+  </ul>
+</script>

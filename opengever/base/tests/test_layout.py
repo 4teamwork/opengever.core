@@ -1,45 +1,47 @@
 from ftw.testbrowser import browsing
-from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
-from opengever.testing import FunctionalTestCase
-from plone import api
-import transaction
+from opengever.testing import IntegrationTestCase
 
 
-class TestGeverLayoutPolicy(FunctionalTestCase):
+class TestGeverLayoutPolicy(IntegrationTestCase):
+
     @browsing
-    def test_bumblebee_feature_body_class_is_not_present_if_feature_is_disabled(self, browser):
-        browser.login().visit()
-        self.assertNotIn(
-            'feature-bumblebee',
-            browser.css('body').first.get('class').split(' '))
+    def test_bumblebee_feature(self, browser):
+        self.login(self.regular_user, browser)
+        feature_class = 'feature-bumblebee'
+
+        self.deactivate_feature('bumblebee')
+        browser.open()
+        self.assertNotIn(feature_class, browser.css('body').first.classes)
+
+        self.activate_feature('bumblebee')
+        browser.open()
+        self.assertIn(feature_class, browser.css('body').first.classes)
 
     @browsing
     def test_word_meeting_feature_presence(self, browser):
-        browser.login()
-        prefix = 'opengever.meeting.interfaces.IMeetingSettings'
-        meeting_feature = prefix + '.is_feature_enabled'
-        api.portal.set_registry_record(meeting_feature, True)
+        self.login(self.regular_user, browser)
+        self.activate_feature('meeting')
+        feature_class = 'feature-word-meeting'
 
-        word_feature = prefix + '.is_word_implementation_enabled'
+        self.deactivate_feature('word-meeting')
+        browser.open()
+        self.assertNotIn(feature_class, browser.css('body').first.classes)
 
-        api.portal.set_registry_record(word_feature, False)
-        transaction.commit()
-        self.assertNotIn('feature-word-meeting',
-                         browser.open().css('body').first.classes)
-
-        api.portal.set_registry_record(word_feature, True)
-        transaction.commit()
-        self.assertIn('feature-word-meeting',
-                      browser.open().css('body').first.classes)
-
-
-class TestGeverLayoutPolicyBumblebeeFeature(FunctionalTestCase):
-
-    layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
+        self.activate_feature('word-meeting')
+        browser.open()
+        self.assertIn(feature_class, browser.css('body').first.classes)
 
     @browsing
-    def test_bumblebee_feature_body_class_is_present_if_feature_is_enabled(self, browser):
-        browser.login().visit()
-        self.assertIn(
-            'feature-bumblebee',
-            browser.css('body').first.get('class').split(' '))
+    def test_no_model_class_on_regular_content(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.dossier)
+        self.assertEquals([],
+                          filter(lambda classname: classname.startswith('model-'),
+                                 browser.css('body').first.classes))
+
+    @browsing
+    def test_model_class_on_sql_wrapper(self, browser):
+        self.login(self.committee_responsible, browser)
+        map(self.activate_feature, ('meeting', 'word-meeting'))
+        browser.open(self.meeting)
+        self.assertIn('model-meeting', browser.css('body').first.classes)

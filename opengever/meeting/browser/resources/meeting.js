@@ -1,4 +1,4 @@
-(function(global, $, Controller, EditboxController, Pin) {
+(function(global, $, Controller, EditboxController, Pin, HBS) {
 
   "use strict";
 
@@ -39,10 +39,142 @@
       });
     };
 
+    this.filterParticipants = function(target) {
+      var filter_text = target.val().toLowerCase();
+      $('.participant-list .participant').each(function() {
+        if($(this).find('.fullname').text().toLowerCase().indexOf(filter_text) > -1) {
+          $(this).show();
+        } else {
+          $(this).hide();
+        }
+      });
+    };
+
+    this.clearParticipantsFilter = function(target) {
+      $('input#participants-filter').val('').keyup().focus();
+    };
+
+    this.toggleParticipant = function(target, event) {
+      if($(event.target).is('select, option, input, label')) {
+        return;
+      }
+
+      if(!target.hasClass('editable')) {
+        return;
+      }
+
+      if(!target.hasClass('folded')) {
+        target.addClass('folded');
+        return;
+      }
+
+      $('.participant-list .participant').addClass('folded');
+      target.removeClass('folded');
+
+      var current_role = target.find('div.role').data('rolename');
+      target.find('select.role').val(current_role);
+
+      var present = target.find('div.presence').hasClass('present');
+      target.find('input.excused').selected(!present);
+
+      target.find('.saving').removeClass('saving');
+      target.find('.saved').removeClass('saved');
+      target.find('.saving-failed').removeClass('saving-failed');
+    };
+
+    this.changeParticipantRole = function(target) {
+      var wrapper = target.parents('.select-role-wrapper:first');
+      this.showSavingChangeIcon(wrapper);
+      var data = {member_id: target.data().member_id, role: target.val()};
+      return $.post(target.data().url, data).done(function(response) {
+        if(response.proceed !== true) {
+          self.showSavingFailedIcon(wrapper);
+          return;
+        }
+        self.showChangeSavedIcon(wrapper);
+        if (target.val()) {
+          $('.participant div.role').each(function() {
+            if($(this).data().rolename == target.val()) {
+              $(this).text('').data('rolename', '');
+            }
+          });
+        }
+        wrapper.prevAll('div.role').
+              text(target.find('option:selected').text()).
+              data('rolename', target.val());
+        self.updateParticipantRolesInByline();
+      });
+    };
+
+    this.updateParticipantRolesInByline = function() {
+      var presidency = null;
+      var secretary = null;
+      $('.participant').each(function() {
+        if($(this).find('div.role').length === 0) {
+          return;
+        }
+        var role = $(this).find('div.role').data().rolename;
+        if(role == 'presidency') {
+          presidency = $(this).find('div.fullname').text();
+        } else if(role == 'secretary') {
+          secretary = $(this).find('div.fullname').text();
+        }
+      });
+      if(presidency) {
+        $('.byline-presidency').removeClass('hidden').find('span.value').text(presidency);
+      } else {
+        $('.byline-presidency').addClass('hidden');
+      }
+      if(secretary) {
+        $('.byline-secretary').removeClass('hidden').find('span.value').text(secretary);
+      } else {
+        $('.byline-secretary').addClass('hidden');
+      }
+    };
+
+    this.changeParticipantPresence = function(target) {
+      var wrapper = target.parents('.change_presence:first');
+      var present = !target.is(':checked');
+      this.showChangeSavedIcon(wrapper);
+      var data = {member_id: target.data().member_id, present: present};
+      return $.post(target.data().url, data).done(function(response) {
+        if(response.proceed !== true) {
+          self.showSavingFailedIcon(wrapper);
+          return;
+        }
+        if(present) {
+          wrapper.prevAll('div.presence').
+                removeClass('not-present').
+                addClass('present');
+        } else {
+          wrapper.prevAll('div.presence').
+                removeClass('present').
+                addClass('not-present');
+        }
+        self.showChangeSavedIcon(wrapper);
+      });
+    };
+
+    this.showSavingChangeIcon = function(target) {
+      target.addClass('saving');
+    };
+
+    this.showChangeSavedIcon = function(target) {
+      target.removeClass('saving');
+      target.addClass('saved');
+      window.setTimeout(function() { target.removeClass('saved'); }, 10000);
+    };
+
+    this.showSavingFailedIcon = function(target) {
+      target.removeClass('saving');
+      target.addClass('saving-failed');
+      window.setTimeout(function() { target.removeClass('saving-failed'); }, 10000);
+    };
+
     this.events = [
       {
         method: "click",
-        target: "#pending-closed",
+        target: "#pending-closed, #held-closed, .close-meeting a",
         callback: this.openModal,
         options: {
           update: true
@@ -50,15 +182,7 @@
       },
       {
         method: "click",
-        target: "#held-closed",
-        callback: this.openModal,
-        options: {
-          update: true
-        }
-      },
-      {
-        method: "click",
-        target: "#closed-held",
+        target: "#closed-held, .reopen-meeting",
         callback: this.reopenMeeting,
         options: {
           update: true
@@ -81,6 +205,37 @@
         options: {
           update: true
         }
+      },
+      {
+        method: "keyup",
+        target: "input#participants-filter",
+        callback: this.filterParticipants
+      },
+      {
+        method: "click",
+        target: "a#clear-participants-filter",
+        callback: this.clearParticipantsFilter,
+        options: {
+          prevent: true
+        }
+      },
+      {
+        method: "click",
+        target: ".participant-list .participant",
+        callback: this.toggleParticipant,
+        options: {
+          prevent: false
+        }
+      },
+      {
+        method: "change",
+        target: ".participant-list .participant select.role",
+        callback: this.changeParticipantRole
+      },
+      {
+        method: "change",
+        target: ".participant-list .participant .change_presence input.excused",
+        callback: this.changeParticipantPresence
       }
     ];
 
@@ -154,15 +309,22 @@
     };
 
     Controller.call(this, $("#agendaitemsTemplate").html(), $("#agenda_items tbody"), options);
+    this.navigationTemplate = HBS.compile($("#navigationTemplate").html());
 
     this.fetch = function() { return $.get(viewlet.data().listAgendaItemsUrl); };
 
     this.render = function(data) {
+      self.renderNavigation(data);
       return self.template({
         agendaitems: data.items,
         editable: viewlet.data().editable,
         agendalist_editable: viewlet.data().agendalist_editable
       });
+    };
+
+    this.renderNavigation = function(data) {
+      $('.meeting-navigation').html(this.navigationTemplate({agendaitems: data.items}));
+      this.updateNavigationScrollArea();
     };
 
     this.openModal = function(target) {
@@ -229,6 +391,7 @@
     this.onRender = function() {
       this.outlet.sortable(sortableSettings);
       $(document).trigger("agendaItemsReady");
+      this.updateCloseTransitionActionState();
     };
 
     this.onUpdateFail = function(data) { self.messageFactory.shout(data.messages); };
@@ -239,6 +402,7 @@
       this.currentDecideTarget = target;
       if(viewlet.data().agendalist_editable) {
         holdDialog.load();
+        return null;
       }
       else {
         return this.confirmDecide(target);
@@ -255,17 +419,22 @@
         if (data.redirectUrl){
           window.location = data.redirectUrl;
         }
+        self.updateCloseTransitionActionState();
       });
     };
 
     this.declineDecide = function() { holdDialog.close(); };
 
     this.reopen = function(target){
-      return $.post(target.attr("href"));
+      return $.post(target.attr("href")).done(function() {
+        self.updateCloseTransitionActionState();
+      });
     };
 
     this.revise = function(target){
-      return $.post(target.attr("href"));
+      return $.post(target.attr("href")).done(function() {
+        self.updateCloseTransitionActionState();
+      });
     };
 
     this.editDocument = function(target) {
@@ -285,17 +454,51 @@
     this.generateExcerpt = function(target, event) {
       var link = self.currentItem[0].href;
       self = this;
-      return $.post(link, $('#confirm_create_excerpt form').serialize())
-              .always(function() {
-                self.closeModal();
-              });
-    }
+      return $.post(link, $('#confirm_create_excerpt form').serialize()).always(function() {
+        self.closeModal();
+      });
+    };
 
     this.returnExcerpt = function() {
       self = this;
       return $.get(this.currentItem.attr("href")).always(function() {
         self.closeModal();
       });
+    };
+
+    this.navigationClick = function(target) {
+      $('html, body').animate({
+        scrollTop: $(target.attr('href')).offset().top
+      }, 150);
+    };
+
+    this.updateNavigationScrollArea = function() {
+      /** When necessary, make the navigation scrollable, so that the
+          meeting process area also has enough space. **/
+      $('.meeting-navigation').css('max-height', '');
+      /** Let the navigation have the screen size minues the size of the
+          meeting process div. **/
+      var navigation_max_height = $(window).height() - $('.meeting-process').outerHeight();
+      if($('.meeting-navigation').height() > navigation_max_height) {
+        $('.meeting-navigation').addClass('scroll');
+      } else {
+        $('.meeting-navigation').removeClass('scroll');
+      }
+      $('.meeting-navigation').css('max-height', navigation_max_height);
+
+      /** Set the container height so that stickyness works. */
+      $('.panes').height(null);
+      $('.panes').height(Math.max($('.panes').height(),
+                                  $('#content-core').height()));
+    };
+
+    this.updateCloseTransitionActionState = function() {
+      if($('.decide-agenda-item, .revise-agenda-item').length > 0) {
+        $('.close-meeting').addClass('disabled');
+      } else {
+        $('.close-meeting').removeClass('disabled');
+      }
+      this.updateNavigationScrollArea();
     };
 
     this.events = [
@@ -417,6 +620,14 @@
         method: "click",
         target: "#confirm_hold_meeting .decline",
         callback: this.declineDecide
+      },
+      {
+        method: "click",
+        target: ".meeting-navigation a",
+        callback: this.navigationClick,
+        options: {
+          prevent: false
+        }
       }
     ];
 
@@ -542,6 +753,7 @@
         return false;
       }
       title.val(initialTitle + ", " + formatDate(date));
+      return true;
     }
 
     this.trackDate = function(target, event) { applyDate(applyTimezone(event.date)); };
@@ -579,6 +791,9 @@
       window.addEventListener("pageshow", function() {
         agendaItemController.update();
       });
+
+      $('#opengever_meeting_meeting .sidebar > ul.formTabs').tabs(
+            '.sidebar .panes > div', {current: 'selected'});
     }
 
     if ($(".template-add-meeting").length) {
@@ -592,4 +807,4 @@
     });
   });
 
-}(window, window.jQuery, window.Controller, window.EditboxController, window.Pin));
+}(window, window.jQuery, window.Controller, window.EditboxController, window.Pin, window.Handlebars));

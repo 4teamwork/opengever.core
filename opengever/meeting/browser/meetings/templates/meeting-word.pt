@@ -9,14 +9,27 @@
   <metal:title metal:fill-slot="content-title">
     <metal:use use-macro="context/@@gever-macros/js_default_error_messages" />
     <div id="tabbedview-header">
-      <h1 class="memberHeading meeting-view-heading documentFirstHeading" tal:content="view/model/get_title" />
+      <h1 class="memberHeading meeting-view-heading documentFirstHeading">
+        <span tal:content="view/model/get_title" />
+        <span class="meeting-number"
+              tal:define="meeting view/model"
+              tal:condition="meeting/meeting_number"
+              i18n:attributes="title"
+              title="Meeting number">
+          #
+          <tal:YEAR replace="meeting/start/year" />
+          /
+          <tal:MEETING_NUMBER replace="meeting/meeting_number" />
+        </span>
+      </h1>
     </div>
   </metal:title>
 
   <metal:content-core fill-slot="content-core">
     <metal:content-core define-macro="content-core"
                         tal:define="meeting view/model;
-                                    unscheduled_proposals view/unscheduled_proposals">
+                                    unscheduled_proposals view/unscheduled_proposals;
+                                    toLocalizedTime nocall:context/@@plone/toLocalizedTime">
 
       <div id="opengever_meeting_meeting"
            class="word-feature"
@@ -134,158 +147,207 @@
           </form>
         </div>
 
-        <div class="meeting-metadata">
-          <table class="meeting-metadata">
 
-            <tr>
-              <th i18n:translate="view_label_meeting_status">Status:</th>
-              <td>
-                <span tal:attributes="class python: 'wf-meeting-state-' + meeting.workflow_state"
-                      tal:content="python: meeting.get_state().title" />
-              </td>
-            </tr>
 
-            <tr>
-              <th i18n:translate="view_label_meeting_start">Meeting start:</th>
-              <td tal:content="meeting/get_start" />
-            </tr>
+        <div class="sidebar"
+             tal:define="participants view/get_participants">
+          <ul class="formTabs">
+            <li class="formTab">
+              <a href="#tab-overview" i18n:translate="tab_overview">Overview</a>
+            </li>
+            <li class="formTab">
+              <a href="#tab-participants" i18n:translate="tab_participants">
+                <span class="participants_count"
+                      i18n:name="count"
+                      tal:content="python:len(participants)" />
+                Participants
+              </a>
+            </li>
+          </ul>
 
-            <tr tal:define="end meeting/get_end"
-                tal:condition="end">
-              <th i18n:translate="view_label_meeting_end">Meeting end:</th>
-              <td tal:content="end" />
-            </tr>
+          <div class="panes">
+            <div id="tab-overview">
+              <nav class="meeting-navigation">
+                <tal:block tal:replace="structure view/render_handlebars_navigation_template"></tal:block>
+              </nav>
 
-            <tr>
-              <th i18n:translate="view_label_meeting_location">Location:</th>
-              <td tal:content="meeting/location" />
-            </tr>
+              <div class="meeting-process"
+                   tal:define="closing_infos view/get_closing_infos">
 
-            <tr>
-              <th i18n:translate="view_label_meeting_number">Meeting number:</th>
-              <td tal:content="meeting/meeting_number" />
-            </tr>
+                <div class="agenda-item-list-doc meeting-document"
+                     tal:define="agendaitem_list_document view/get_agendaitem_list_document">
 
-          </table>
-          <table class="meeting-metadata">
+                  <div class="document-actions">
+                    <a class="action generate"
+                       tal:condition="meeting/is_editable"
+                       tal:attributes="href view/url_generate_agendaitem_list"
+                       i18n:translate="action_generate_document"
+                       i18n:attributes="title action_generate_document"
+                       title=""></a>
 
-            <tr tal:define="presidency meeting/presidency">
-              <th i18n:translate="view_label_presidency">Presidency:</th>
-              <td tal:condition="presidency"
-                  tal:content="structure meeting/presidency/get_title" />
-              <td tal:condition="not:presidency">-</td>
-            </tr>
+                    <a class="action download"
+                       tal:condition="agendaitem_list_document"
+                       tal:attributes="href view/url_download_agendaitem_list"
+                       i18n:translate="action_download_document"
+                       i18n:attributes="title action_download_document"
+                       title=""></a>
+                  </div>
 
-            <tr tal:define="secretary meeting/secretary">
-              <th i18n:translate="view_label_secretary">Secretary:</th>
-              <td tal:condition="secretary"
-                  tal:content="structure meeting/secretary/get_title" />
-              <td tal:condition="not:secretary">-</td>
-            </tr>
+                  <tal:NOT_GENERATED tal:condition="not:agendaitem_list_document">
+                    <div class="document-label"
+                         i18n:translate="document_label_agenda_item_list">
+                      Agenda item list
+                    </div>
+                    <div class="document-created"
+                         i18n:translate="document_not_yet_generated">
+                      Not yet generated.
+                    </div>
+                  </tal:NOT_GENERATED>
 
-            <tr>
-              <th i18n:translate="view_label_participants">Participants:</th>
-              <td>
-                <ul>
-                  <li tal:repeat="participant meeting/participants"
-                      tal:content="structure participant/get_title"></li>
-                </ul>
-              </td>
-            </tr>
+                  <tal:GENERATED tal:condition="agendaitem_list_document">
+                    <div class="document-label">
+                      <a tal:replace="structure view/get_agendaitem_list_document_link" />
+                    </div>
+                    <div class="document-created"
+                         i18n:translate="document_created_at">
+                      Created at
+                      <tal:date
+                          replace="python:toLocalizedTime(agendaitem_list_document.getObject().ModificationDate(), long_format=1)"
+                          i18n:name="date" />
+                    </div>
+                  </tal:GENERATED>
 
-            <tr tal:condition="meeting/get_other_participants_list">
-              <th></th>
-              <td>
-                <ul>
-                  <li tal:repeat="participant meeting/get_other_participants_list"
-                      tal:content="structure participant"></li>
-                </ul>
-              </td>
-            </tr>
-
-          </table>
-
-          <table class="meeting-metadata">
-
-            <tr>
-              <th i18n:translate="view_label_dossier">Meeting dossier:</th>
-              <td tal:define="dossier meeting/get_dossier">
-                <a tal:attributes="href dossier/absolute_url;
-                                   class python: view.get_css_class(dossier)"
-                   tal:content="dossier/title" />
-              </td>
-              <td></td>
-            </tr>
-
-            <tr tal:define="agendaitem_list_document view/get_agendaitem_list_document">
-              <th i18n:translate="view_label_agendaitem_list">Agenda item list:</th>
-              <td class="agendaitem-list">
-                <div tal:condition="not:agendaitem_list_document"
-                     i18n:translate="label_no_agendaitem_list">No agenda item list has been generated yet.</div>
-
-                <div tal:condition="agendaitem_list_document"
-                     class="agendaitem_list-file">
-                  <a tal:replace="structure agendaitem_list_document/render_link" />
                 </div>
-              </td>
-              <td class="item agendaitem-list-buttons">
-                <span>
-                  <a class="generate-agendaitem-list"
-                     tal:condition="python: meeting.is_editable() and not view.has_agendaitem_list_document()"
-                     tal:attributes="href view/url_generate_agendaitem_list;"
-                     i18n:attributes="title"
-                     title="generate new agenda item list as word document" />
 
-                  <a class="download-agendaitem-list-btn"
-                     tal:condition="python: meeting.is_editable() and agendaitem_list_document"
-                     tal:attributes="href view/url_download_agendaitem_list"
-                     i18n:attributes="title"
-                     title="Download agenda item list" />
-
-                  <a class="refresh-agendaitem-list"
-                     tal:condition="python: meeting.is_editable() and view.has_agendaitem_list_document()"
-                     tal:attributes="href view/url_generate_agendaitem_list;"
-                     i18n:attributes="title"
-                     title="generate new version as word document" />
-                </span>
-              </td>
-            </tr>
-
-            <tr tal:define="protocol_document view/get_protocol_document">
-              <th i18n:translate="view_label_protocol">Protocol:</th>
-              <td class="protocol">
-                <div tal:condition="not:protocol_document"
-                     i18n:translate="label_no_protocol">No protocol has been generated yet.</div>
-
-                <div tal:condition="protocol_document"
-                     class="protocol-file">
-                  <a tal:replace="structure protocol_document/render_link" />
+                <div class="meeting-workflow">
+                  <div class="meeting-closed"
+                       tal:condition="closing_infos/is_closed"
+                       i18n:translate="label_meeting_closed">Meeting closed</div>
+                  <a class="reopen-meeting"
+                     tal:condition="closing_infos/reopen_url"
+                     tal:attributes="href closing_infos/reopen_url"
+                     i18n:translate="action_reopen_meeting">Reopen meeting</a>
                 </div>
-              </td>
-              <td class="protocol-buttons">
-                <span>
-                  <a class="generate-protocol"
-                     tal:condition="python: meeting.is_editable() and not view.has_protocol_document()"
-                     tal:attributes="href view/url_generate_protocol;"
-                     i18n:attributes="title"
-                     title="generate new protocol as word document" />
 
-                  <a class="download-protocol-btn"
-                     tal:condition="python: meeting.is_editable() and protocol_document"
-                     tal:attributes="href view/url_download_protocol"
-                     i18n:attributes="title"
-                     title="download protocol" />
+                <div class="protocol-doc meeting-document"
+                     tal:define="protocol_document view/get_protocol_document">
 
-                  <a class="refresh-protocol"
-                     tal:condition="python: meeting.is_editable() and view.has_protocol_document()"
-                     tal:attributes="href view/url_generate_protocol;"
-                     i18n:attributes="title"
-                     title="generate new version as word document" />
-                </span>
-              </td>
-            </tr>
+                  <div class="document-actions">
+                    <a class="action generate"
+                       tal:condition="meeting/is_editable"
+                       tal:attributes="href view/url_generate_protocol"
+                       i18n:translate="action_generate_document"
+                       i18n:attributes="title action_generate_document"
+                       title=""></a>
 
-          </table>
+                    <a class="action download"
+                       tal:condition="protocol_document"
+                       tal:attributes="href view/url_download_protocol"
+                       i18n:translate="action_download_document"
+                       i18n:attributes="title action_download_document"
+                       title=""></a>
+                  </div>
+
+                  <tal:NOT_GENERATED tal:condition="not:protocol_document">
+                    <div class="document-label"
+                         tal:content="view/get_protocol_document_label" />
+                    <div class="document-created"
+                         i18n:translate="document_not_yet_generated">
+                      Not yet generated.
+                    </div>
+                  </tal:NOT_GENERATED>
+
+                  <tal:GENERATED tal:condition="protocol_document">
+                    <div class="document-label">
+                      <a tal:replace="structure view/get_protocol_document_link" />
+                    </div>
+                    <div class="document-created"
+                         i18n:translate="document_created_at">
+                      Created at
+                      <tal:date
+                          replace="python:toLocalizedTime(protocol_document.getObject().ModificationDate(), long_format=1)"
+                          i18n:name="date" />
+                    </div>
+                  </tal:GENERATED>
+
+                </div>
+
+                <div class="meeting-workflow" tal:condition="meeting/is_editable">
+                  <div class="close-meeting" tal:condition="closing_infos/close_url">
+                    <a tal:attributes="href closing_infos/close_url"
+                       i18n:translate="action_close_meeting">Close meeting</a>
+                    <div class="close-meeting-helptext"
+                         i18n:translate="msg_require_all_agenda_items_decided_for_closing">
+                      The meeting can only be closed when all agenda items are decided.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <div id="tab-participants">
+              <a id="clear-participants-filter"
+                 title="Clear filter"
+                 i18n:attributes="title" />
+              <input id="participants-filter"
+                     placeholder="Filter participants"
+                     i18n:attributes="placeholder" />
+
+              <ul class="participant-list">
+                <li tal:repeat="participant participants"
+                    tal:define="cls python:meeting.is_editable() and 'editable' or '';
+                                cls string:participant folded ${cls}"
+                    tal:attributes="data-member-id participant/member_id;
+                                    class cls">
+                  <div tal:attributes="class participant/presence_cssclass" />
+                  <div class="fullname" tal:content="participant/fullname" />
+                  <a class="email" tal:condition="participant/email"
+                     tal:attributes="href string:mailto:${participant/email}"
+                     i18n:attributes="title"
+                     title="send email" />
+                  <div class="role"
+                       tal:content="participant/role/label"
+                       tal:attributes="data-rolename participant/role/name"/>
+
+                  <div class="select-role-wrapper" tal:condition="meeting/is_editable">
+                    <select class="role"
+                            tal:attributes="data-url string:${context/absolute_url}/participants/change_role;
+                                            data-member_id participant/member_id">
+                      <option value=""></option>
+                      <option value="presidency" i18n:translate="meeting_role_presidency">Presidency</option>
+                      <option value="secretary" i18n:translate="meeting_role_secretary">Secretary</option>
+                    </select>
+                  </div>
+
+                  <div class="change_presence" tal:condition="meeting/is_editable">
+                    <input type="checkbox"
+                           tal:attributes="id string:presence-${participant/member_id};
+                                           data-url string:${context/absolute_url}/participants/change_presence;
+                                           data-member_id participant/member_id"
+                           class="excused" />
+                    <label i18n:translate="excused"
+                           tal:attributes="for string:presence-${participant/member_id}">Excused</label>
+                  </div>
+
+                </li>
+              </ul>
+
+              <div class="other_participants"
+                   tal:define="other_participants meeting/get_other_participants_list"
+                   tal:condition="other_participants">
+                <div class="other_participants_label"
+                     i18n:translate="label_other_participants">Other Participants</div>
+                <ul class="participant-list">
+                  <li class="participant"
+                      tal:repeat="participant other_participants">
+                    <div class="fullname" tal:content="participant" />
+                  </li>
+                </ul>
+              </div>
+
+            </div>
+          </div>
         </div>
 
 

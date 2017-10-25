@@ -1,10 +1,9 @@
 from ftw.testbrowser import browser
-from operator import methodcaller
 
 
-def metadata(**kwargs):
-    """Return the meeting metadata as lists of labels and values.
-    """
-    return reduce(list.__add__,
-                  map(methodcaller('lists', **kwargs),
-                      browser.css('table.meeting-metadata')))
+def participants():
+    return [{'fullname': participant.css('.fullname').first.text,
+             'email': participant.css('.email').first.text,
+             'present': 'present' in participant.css('.presence').first.classes,
+             'role': participant.css('div.role').first.text}
+            for participant in browser.css('.participant-list .participant')]

@@ -9,6 +9,7 @@ from opengever.base.oguid import Oguid
 from opengever.base.schema import UTCDatetime
 from opengever.meeting import _
 from opengever.meeting import is_word_meeting_implementation_enabled
+from opengever.meeting import require_word_meeting_feature
 from opengever.meeting.browser.meetings.agendaitem_list import GenerateAgendaItemList
 from opengever.meeting.browser.meetings.agendaitem_list import UpdateAgendaItemList
 from opengever.meeting.browser.meetings.transitions import MeetingTransitionController
@@ -16,7 +17,9 @@ from opengever.meeting.browser.protocol import GenerateProtocol
 from opengever.meeting.browser.protocol import MergeDocxProtocol
 from opengever.meeting.browser.protocol import UpdateProtocol
 from opengever.meeting.model import Meeting
+from opengever.meeting.model.membership import Membership
 from opengever.meeting.proposal import ISubmittedProposal
+from operator import itemgetter
 from path import Path
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListing
@@ -242,15 +245,32 @@ class MeetingView(BrowserView):
     def unscheduled_proposals(self):
         return self.context.get_unscheduled_proposals()
 
+    def get_protocol_document_label(self):
+        if self.model.is_pending():
+            return _(u'document_label_pre_protocol', u'Pre-protocol')
+        else:
+            return _(u'document_label_protocol', u'Protocol')
+
     def get_protocol_document(self):
         if self.model.protocol_document:
             return IContentListingObject(
                 self.model.protocol_document.resolve_document())
 
+    def get_protocol_document_link(self):
+        document = self.get_protocol_document()
+        return document.render_link(title=self.get_protocol_document_label(),
+                                    show_icon=False)
+
     def get_agendaitem_list_document(self):
         if self.model.agendaitem_list_document:
             return IContentListingObject(
                 self.model.agendaitem_list_document.resolve_document())
+
+    def get_agendaitem_list_document_link(self):
+        document = self.get_agendaitem_list_document()
+        return document.render_link(title=_(u'document_label_agenda_item_list',
+                                            default=u'Agenda item list'),
+                                    show_icon=False)
 
     def url_protocol(self):
         return self.model.get_url(view='protocol')
@@ -327,6 +347,10 @@ class MeetingView(BrowserView):
             return self.render_handlebars_agendaitems_template_word()
         else:
             return self.render_handlebars_agendaitems_template_noword()
+
+    def render_handlebars_navigation_template(self):
+        return prepare_handlebars_template(
+            TEMPLATES_DIR.joinpath('navigation-word.html'))
 
     def render_handlebars_agendaitems_template_noword(self):
         return prepare_handlebars_template(
@@ -406,3 +430,67 @@ class MeetingView(BrowserView):
         return translate(_('An unexpected error has occurred',
                            default='An unexpected error has occurred'),
                          context=self.request)
+
+    @require_word_meeting_feature
+    def get_participants(self):
+        result = []
+        participants = self.model.participants
+        presidency = self.model.presidency
+        secretary = self.model.secretary
+
+        for membership in Membership.query.for_meeting(self.model):
+            item = {'fullname': membership.member.fullname,
+                    'email': membership.member.email,
+                    'member_id': membership.member.member_id}
+
+            if membership.member in participants:
+                item['presence_cssclass'] = 'presence present'
+            else:
+                item['presence_cssclass'] = 'presence not-present'
+
+            if membership.member == presidency:
+                item['role'] = {'name': 'presidency',
+                                'label': _(u'meeting_role_presidency',
+                                           default=u'Presidency')}
+            elif membership.member == secretary:
+                item['role'] = {'name': 'secretary',
+                                'label': _(u'meeting_role_secretary',
+                                           default=u'Secretary')}
+            else:
+                item['role'] = {'name': '', 'label': ''}
+
+            result.append(item)
+
+        result.sort(key=itemgetter('fullname'))
+        return result
+
+    @require_word_meeting_feature
+    def get_closing_infos(self):
+        transition_controller = self.model.workflow.transition_controller
+        infos = {'is_closed': False,
+                 'close_url': None,
+                 'reopen_url': None}
+
+        can_change = api.user.has_permission(
+            'Modify portal content',
+            obj=self.model.committee.resolve_committee())
+
+        if self.model.is_closed():
+            infos['is_closed'] = True
+            infos['reopen_url'] = can_change and transition_controller.url_for(
+                self.context, self.model, 'closed-held')
+        else:
+            close_transition = self.get_close_transition()
+            if close_transition:
+                infos['close_url'] = can_change and transition_controller.url_for(
+                    self.context, self.model, close_transition.name)
+
+        return infos
+
+    @require_word_meeting_feature
+    def get_close_transition(self):
+        for transition in self.model.workflow.get_transitions(self.model.get_state()):
+            if transition.state_to == 'closed' and transition.visible:
+                return transition
+
+        return None

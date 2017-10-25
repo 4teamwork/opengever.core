@@ -5,8 +5,8 @@ from ftw.testbrowser.pages import statusmessages
 from ftw.testing import freeze
 from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.model import create_session
-from opengever.meeting.tests.pages import meeting_view
 from opengever.testing import IntegrationTestCase
+from opengever.testing.pages import byline
 
 
 class TestEditMeeting(IntegrationTestCase):
@@ -35,26 +35,17 @@ class TestEditMeeting(IntegrationTestCase):
         self.assertEquals(u'9. Sitzung der Rechnungspr\xfcfungskommission',
                           plone.first_heading())
         self.assertEquals(
-            [['Status:', 'Pending'],
-             ['Meeting start:', 'Sep 12, 2016 05:30 PM'],
-             ['Meeting end:', 'Sep 12, 2016 07:00 PM'],
-             ['Location:', u'B\xfcren an der Aare'],
-             ['Meeting number:', ''],
-             ['Presidency:', u'Sch\xf6ller Heidrun (h.schoeller@web.de)'],
-             ['Secretary:', u'M\xfcller Henning (h.mueller@gmx.ch)'],
-             ['Participants:', u'Wendler Jens (jens-wendler@gmail.com)'
-              u' W\xf6lfl Gerda (g.woelfl@hotmail.com)'],
-             ['Meeting dossier:', 'Sitzungsdossier 9/2017', ''],
-             ['Agenda item list:', 'No agenda item list has been generated yet.', ''],
-             ['Protocol:', 'No protocol has been generated yet.', '']],
-            meeting_view.metadata())
+            {'State:': 'Pending',
+             'Start:': 'Sep 12, 2016 05:30 PM',
+             'End:': 'Sep 12, 2016 07:00 PM',
+             'Presidency:': u'Sch\xf6ller Heidrun',
+             'Secretary:': u'M\xfcller Henning',
+             'Location:': u'B\xfcren an der Aare',
+             'Meeting dossier:': 'Sitzungsdossier 9/2017'},
+            byline.text_dict())
 
         editbar.contentview('Edit').click()
         browser.fill({'Title': u'New Meeting Title',
-                      'Presidency': u'W\xf6lfl Gerda (g.woelfl@hotmail.com)',
-                      'Secretary': u'Wendler Jens (jens-wendler@gmail.com)',
-                      'Participants': [
-                          u'Sch\xf6ller Heidrun (h.schoeller@web.de)'],
                       'Other Participants': 'Staatsanwalt',
                       'Protocol start-page': '27',
                       'Location': 'Sitzungszimmer 3',
@@ -64,19 +55,14 @@ class TestEditMeeting(IntegrationTestCase):
 
         self.assertEquals('New Meeting Title', plone.first_heading())
         self.assertEquals(
-            [['Status:', 'Pending'],
-             ['Meeting start:', 'Oct 13, 2016 08:00 AM'],
-             ['Meeting end:', 'Oct 13, 2016 10:00 AM'],
-             ['Location:', 'Sitzungszimmer 3'],
-             ['Meeting number:', ''],
-             ['Presidency:', u'W\xf6lfl Gerda (g.woelfl@hotmail.com)'],
-             ['Secretary:', 'Wendler Jens (jens-wendler@gmail.com)'],
-             ['Participants:', u'Sch\xf6ller Heidrun (h.schoeller@web.de)'],
-             ['', 'Staatsanwalt'],
-             ['Meeting dossier:', 'Sitzungsdossier 9/2017', ''],
-             ['Agenda item list:', 'No agenda item list has been generated yet.', ''],
-             ['Protocol:', 'No protocol has been generated yet.', '']],
-            meeting_view.metadata())
+            {'State:': 'Pending',
+             'Start:': 'Oct 13, 2016 08:00 AM',
+             'End:': 'Oct 13, 2016 10:00 AM',
+             'Presidency:': u'Sch\xf6ller Heidrun',
+             'Secretary:': u'M\xfcller Henning',
+             'Location:': u'Sitzungszimmer 3',
+             'Meeting dossier:': 'Sitzungsdossier 9/2017'},
+            byline.text_dict())
 
     @browsing
     def test_edit_meeting_locks_the_content(self, browser1):

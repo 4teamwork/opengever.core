@@ -1,7 +1,11 @@
+from datetime import datetime
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import editbar
+from ftw.testing import freeze
 from opengever.meeting.tests.pages import meeting_view
 from opengever.testing import IntegrationTestCase
+from opengever.testing.pages import byline
+import pytz
 
 
 class TestWordMeetingView(IntegrationTestCase):
@@ -14,19 +18,14 @@ class TestWordMeetingView(IntegrationTestCase):
 
         self.maxDiff = None
         self.assertEquals(
-            [['Status:', 'Pending'],
-             ['Meeting start:', 'Sep 12, 2016 05:30 PM'],
-             ['Meeting end:', 'Sep 12, 2016 07:00 PM'],
-             ['Location:', u'B\xfcren an der Aare'],
-             ['Meeting number:', ''],
-             ['Presidency:', u'Sch\xf6ller Heidrun (h.schoeller@web.de)'],
-             ['Secretary:', u'M\xfcller Henning (h.mueller@gmx.ch)'],
-             ['Participants:', u'Wendler Jens (jens-wendler@gmail.com)'
-              u' W\xf6lfl Gerda (g.woelfl@hotmail.com)'],
-             ['Meeting dossier:', 'Sitzungsdossier 9/2017', ''],
-             ['Agenda item list:', 'No agenda item list has been generated yet.', ''],
-             ['Protocol:', 'No protocol has been generated yet.', '']],
-            meeting_view.metadata())
+            [('State:', 'Pending'),
+             ('Start:', 'Sep 12, 2016 05:30 PM'),
+             ('End:', 'Sep 12, 2016 07:00 PM'),
+             ('Presidency:', u'Sch\xf6ller Heidrun'),
+             ('Secretary:', u'M\xfcller Henning'),
+             ('Location:', u'B\xfcren an der Aare'),
+             ('Meeting dossier:', 'Sitzungsdossier 9/2017')],
+            byline.text_items())
 
     @browsing
     def test_meeting_dossier_link(self, browser):
@@ -36,16 +35,67 @@ class TestWordMeetingView(IntegrationTestCase):
         self.assertEquals(self.meeting_dossier.absolute_url(), browser.url)
 
     @browsing
-    def test_agenda_item_url(self, browser):
+    def test_agenda_items_list_document(self, browser):
         self.login(self.committee_responsible, browser)
 
         browser.open(self.meeting)
-        browser.css('.generate-agendaitem-list').first.click()
-        link = browser.css('.download-agendaitem-list-btn').first
+        docnode = browser.css('.meeting-document.agenda-item-list-doc').first
+        self.assertFalse(docnode.css('div.document-label a'))
+        self.assertEquals('Agenda item list', docnode.css('.document-label').first.text)
+        self.assertEquals('Not yet generated.', docnode.css('.document-created').first.text)
+        self.assertTrue(docnode.css('.action.generate'))
+        self.assertFalse(docnode.css('.action.download'))
 
-        self.assertEquals(
-            self.meeting.model.agendaitem_list_document.get_download_url(),
-            link.attrib['href'])
+        with freeze(datetime(2016, 9, 2, 10, 15, 1, tzinfo=pytz.UTC)) as clock:
+            docnode.css('.action.generate').first.click()
+            docnode = browser.css('.meeting-document.agenda-item-list-doc').first
+            self.assertTrue(docnode.css('div.document-label a'))
+            self.assertEquals('Agenda item list', docnode.css('.document-label').first.text)
+            self.assertEquals('Created at Sep 02, 2016 11:15 AM', docnode.css('.document-created').first.text)
+            self.assertTrue(docnode.css('.action.generate'))
+            self.assertTrue(docnode.css('.action.download'))
+
+            self.assertEquals(self.meeting.model.agendaitem_list_document.get_download_url(),
+                              docnode.css('.action.download').first.attrib['href'])
+
+            clock.forward(hours=1)
+            docnode.css('.action.generate').first.click()
+            docnode = browser.css('.meeting-document.agenda-item-list-doc').first
+            self.assertEquals('Created at Sep 02, 2016 12:15 PM', docnode.css('.document-created').first.text)
+
+    @browsing
+    def test_protocol_document(self, browser):
+        self.login(self.committee_responsible, browser)
+
+        browser.open(self.meeting)
+        docnode = browser.css('.meeting-document.protocol-doc').first
+        self.assertFalse(docnode.css('div.document-label a'))
+        self.assertEquals('Pre-protocol', docnode.css('.document-label').first.text)
+        self.assertEquals('Not yet generated.', docnode.css('.document-created').first.text)
+        self.assertTrue(docnode.css('.action.generate'))
+        self.assertFalse(docnode.css('.action.download'))
+
+        with freeze(datetime(2016, 9, 2, 10, 15, 1, tzinfo=pytz.UTC)) as clock:
+            docnode.css('.action.generate').first.click()
+            docnode = browser.css('.meeting-document.protocol-doc').first
+            self.assertTrue(docnode.css('div.document-label a'))
+            self.assertEquals('Pre-protocol', docnode.css('.document-label').first.text)
+            self.assertEquals('Created at Sep 02, 2016 11:15 AM', docnode.css('.document-created').first.text)
+            self.assertTrue(docnode.css('.action.generate'))
+            self.assertTrue(docnode.css('.action.download'))
+
+            self.assertEquals(self.meeting.model.protocol_document.get_download_url(),
+                              docnode.css('.action.download').first.attrib['href'])
+
+            clock.forward(hours=1)
+            docnode.css('.action.generate').first.click()
+            docnode = browser.css('.meeting-document.protocol-doc').first
+            self.assertEquals('Created at Sep 02, 2016 12:15 PM', docnode.css('.document-created').first.text)
+
+            self.meeting.model.workflow_state = self.meeting.model.STATE_HELD.name
+            browser.reload()
+            docnode = browser.css('.meeting-document.protocol-doc').first
+            self.assertEquals('Protocol', docnode.css('.document-label').first.text)
 
     @browsing
     def test_close_transition_closes_meeting(self, browser):
@@ -68,3 +118,65 @@ class TestWordMeetingView(IntegrationTestCase):
         self.login(self.meeting_user, browser)
         browser.open(self.meeting, view='agenda_items/list')
         self.assertNotIn('return_link', browser.json['items'][0]['excerpts'][0])
+
+    @browsing
+    def test_participants(self, browser):
+        self.login(self.committee_responsible, browser)
+        browser.open(self.meeting)
+        self.assertEquals(
+            [{'fullname': u'M\xfcller Henning',
+              'email': '',
+              'present': False,
+              'role': 'Secretary'},
+             {'fullname': u'Sch\xf6ller Heidrun',
+              'email': '',
+              'present': False,
+              'role': 'Presidency'},
+             {'fullname': 'Wendler Jens',
+              'email': '',
+              'present': True,
+              'role': ''},
+             {'fullname': u'W\xf6lfl Gerda',
+              'email': '',
+              'present': True,
+              'role': ''}],
+            meeting_view.participants())
+
+    def test_get_closing_infos(self):
+        """The get_close_meeting_render_infos provides infos for rendering.
+
+        Components:
+        - Disabled close-meeting transition action (when not yet ready).
+        - Enabled close-meeting transition action.
+        - Repoen-meeting transition action.
+        """
+
+        self.maxDiff = None
+        self.login(self.committee_responsible)
+        view = self.meeting.restrictedTraverse('view')
+
+        self.assertEquals(
+            {'is_closed': False,
+             'close_url': self.get_meeting_transition_url('pending-closed'),
+             'reopen_url': None},
+            view.get_closing_infos())
+
+        self.meeting.model.workflow_state = self.meeting.model.STATE_HELD.name
+        self.assertEquals(
+            {'is_closed': False,
+             'close_url': self.get_meeting_transition_url('held-closed'),
+             'reopen_url': None},
+            view.get_closing_infos())
+
+        self.meeting.model.workflow_state = self.meeting.model.STATE_CLOSED.name
+        self.assertEquals(
+            {'is_closed': True,
+             'close_url': None,
+             'reopen_url': self.get_meeting_transition_url('closed-held')},
+            view.get_closing_infos())
+
+    def get_meeting_transition_url(self, transition_name):
+        transition_controller = self.meeting.model.workflow.transition_controller
+        return transition_controller.url_for(self.meeting,
+                                             self.meeting.model,
+                                             transition_name)

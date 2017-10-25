@@ -11,7 +11,7 @@
     <tal:repeat tal:repeat="item view/get_items">
       <li tal:attributes="class item/class" tal:condition="item/content">
          <span class="label"><span tal:content="item/label"></span>:</span>
-         <span tal:condition="not: item/replace" tal:content="item/content"></span>
+         <span tal:condition="not: item/replace" tal:content="item/content" class="value"></span>
          <span tal:condition="item/replace" tal:replace="structure item/content"></span>
       </li>
     </tal:repeat>

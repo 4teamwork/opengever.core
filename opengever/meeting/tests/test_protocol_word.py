@@ -18,7 +18,7 @@ class TestProtocolWithWord(IntegrationTestCase):
 
         browser.open(meeting.get_url())
         # generate first protocol
-        browser.css('.generate-protocol').first.click()
+        browser.css('.meeting-document.protocol-doc .action.generate').first.click()
 
         statusmessages.assert_message(
             u'Protocol for meeting 9. Sitzung der '
@@ -28,7 +28,7 @@ class TestProtocolWithWord(IntegrationTestCase):
         self.assertEqual(0, meeting.protocol_document.generated_version)
 
         # update already generated protocol
-        browser.css('.refresh-protocol').first.click()
+        browser.css('.meeting-document.protocol-doc .action.generate').first.click()
 
         statusmessages.assert_message(
             u'Protocol for meeting 9. Sitzung der '
@@ -48,7 +48,7 @@ class TestProtocolWithWord(IntegrationTestCase):
 
         browser.open(meeting.get_url())
         # generate first protocol
-        browser.css('.generate-protocol').first.click()
+        browser.css('.meeting-document.protocol-doc .action.generate').first.click()
 
         statusmessages.assert_message(
             u'Protocol for meeting 9. Sitzung der '
@@ -58,7 +58,7 @@ class TestProtocolWithWord(IntegrationTestCase):
         self.assertEqual(0, meeting.protocol_document.generated_version)
 
         # update already generated protocol
-        browser.css('.refresh-protocol').first.click()
+        browser.css('.meeting-document.protocol-doc .action.generate').first.click()
 
         statusmessages.assert_message(
             u'Protocol for meeting 9. Sitzung der '

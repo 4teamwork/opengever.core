@@ -277,7 +277,13 @@ class Meeting(Base, SQLFormSupport):
     def is_agendalist_editable(self):
         if not self.is_editable():
             return False
+        return self.is_pending()
+
+    def is_pending(self):
         return self.get_state() == self.STATE_PENDING
+
+    def is_closed(self):
+        return self.get_state() == self.STATE_CLOSED
 
     def has_protocol_document(self):
         return self.protocol_document is not None

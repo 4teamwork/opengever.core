@@ -21,5 +21,10 @@ def items(browser=default_browser):
     return items
 
 
+def by_label(browser=default_browser):
+    return {label_node.text: text_node
+            for label_node, text_node in items(browser=browser)}
+
+
 def div(browser=default_browser):
     return browser.css('.documentByLine').first

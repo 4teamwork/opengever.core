@@ -1,3 +1,4 @@
+from DateTime import DateTime
 from opengever.base import advancedjson
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.interfaces import IDataCollector
@@ -329,9 +330,10 @@ class MergeDocxProtocolCommand(CreateGeneratedDocumentCommand):
             context=getRequest())
 
         Versioner(document).create_version(comment)
-
         new_version = document.get_current_version_id()
         self.meeting.protocol_document.generated_version = new_version
+        document.setModificationDate(DateTime())
+        document.reindexObject(idxs=['modified'])
 
         return document
 
@@ -404,9 +406,10 @@ class UpdateGeneratedDocumentCommand(object):
             context=getRequest())
 
         Versioner(document).create_version(comment)
-
         new_version = document.get_current_version_id()
         self.generated_document.generated_version = new_version
+        document.setModificationDate(DateTime())
+        document.reindexObject(idxs=['modified'])
 
         return document
 

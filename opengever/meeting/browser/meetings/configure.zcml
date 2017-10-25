@@ -111,4 +111,20 @@
       permission="cmf.ModifyPortalContent"
       />
 
+  <browser:page
+      for="opengever.meeting.interfaces.IMeetingWrapper"
+      name="participants"
+      class=".participants.ParticipantsView"
+      permission="zope2.View"
+      allowed_interface=".participants.IParticipantsActions"
+      />
+
+  <browser:viewlet
+      name="plone.belowcontenttitle.documentbyline"
+      for="opengever.meeting.interfaces.IMeetingWrapper"
+      manager="plone.app.layout.viewlets.interfaces.IBelowContentTitle"
+      class=".byline.MeetingByline"
+      permission="zope2.View"
+      />
+
 </configure>
