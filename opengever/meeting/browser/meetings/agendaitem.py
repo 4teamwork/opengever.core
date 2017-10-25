@@ -116,6 +116,13 @@ def return_jsonified_exceptions(func):
                   default=u'Insufficient privileges to add a '
                           u'document to the meeting dossier.')).dump()
 
+        except MissingAdHocTemplate:
+            return JSONResponse(getRequest()).error(
+                    _('missing_ad_hoc_template',
+                      default=u"No ad-hoc agenda-item template has been "
+                              u"configured.")
+                ).remain().dump()
+
     return wrapper
 
 
@@ -469,15 +476,7 @@ class AgendaItemsView(BrowserView):
                 ).proceed().dump()
 
         if is_word_meeting_implementation_enabled():
-            try:
-                self.meeting.schedule_ad_hoc(title)
-            except MissingAdHocTemplate:
-                return JSONResponse(self.request).error(
-                        _('missing_ad_hoc_template',
-                          default=u"No ad-hoc agenda-item template has been "
-                                  u"configured.")
-                    ).remain().dump()
-
+            self.meeting.schedule_ad_hoc(title)
         else:
             self.meeting.schedule_text(title)
 
