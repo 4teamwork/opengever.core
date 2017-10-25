@@ -30,6 +30,7 @@ from sqlalchemy.orm import composite
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
 from zope.component import getMultiAdapter
+from opengever.trash.trash import ITrashable
 
 
 class AgendaItem(Base):
@@ -261,6 +262,12 @@ class AgendaItem(Base):
 
     def remove(self):
         assert self.meeting.is_editable()
+
+        # the agenda_item is ad hoc if it has a document but no proposal
+        if self.has_document and not self.has_proposal:
+            document = self.resolve_document()
+            trasher = ITrashable(document)
+            trasher.trash()
 
         session = create_session()
         if self.proposal:

@@ -10,7 +10,6 @@ from opengever.meeting.exceptions import MissingMeetingDossierPermissions
 from opengever.meeting.exceptions import WrongAgendaItemState
 from opengever.meeting.proposal import ISubmittedProposal
 from opengever.meeting.service import meeting_service
-from opengever.trash.trash import ITrashable
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListing
 from plone.app.contentlisting.interfaces import IContentListingObject
@@ -326,12 +325,6 @@ class AgendaItemsView(BrowserView):
         the proposal is unscheduled.
         """
         self.require_agendalist_editable()
-
-        # the agenda_item is ad hoc if it has a document but no proposal
-        if self.agenda_item.has_document and not self.agenda_item.has_proposal:
-            document = self.agenda_item.resolve_document()
-            trasher = ITrashable(document)
-            trasher.trash()
 
         self.agenda_item.remove()
 
