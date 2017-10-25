@@ -11,6 +11,7 @@ from opengever.meeting import _
 from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting import require_word_meeting_feature
 from opengever.meeting.exceptions import MissingMeetingDossierPermissions
+from opengever.meeting.exceptions import WrongAgendaItemState
 from opengever.meeting.model import Period
 from opengever.meeting.model.excerpt import Excerpt
 from opengever.meeting.workflow import State
@@ -401,7 +402,8 @@ class AgendaItem(Base):
         return False
 
     def revise(self):
-        assert self.is_revise_possible()
+        if not self.is_revise_possible():
+            raise WrongAgendaItemState()
 
         if self.has_proposal:
             self.proposal.revise(self)

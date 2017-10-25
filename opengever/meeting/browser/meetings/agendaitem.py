@@ -5,6 +5,7 @@ from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting import require_word_meeting_feature
 from opengever.meeting.exceptions import MissingAdHocTemplate
 from opengever.meeting.exceptions import MissingMeetingDossierPermissions
+from opengever.meeting.exceptions import WrongAgendaItemState
 from opengever.meeting.proposal import ISubmittedProposal
 from opengever.meeting.service import meeting_service
 from opengever.trash.trash import ITrashable
@@ -375,7 +376,13 @@ class AgendaItemsView(BrowserView):
         if not self.context.model.is_editable():
             raise Unauthorized("Editing is not allowed")
 
-        self.agenda_item.revise()
+        try:
+            self.agenda_item.revise()
+        except WrongAgendaItemState:
+            return JSONResponse(self.request).error(
+                _(u'invalid_agenda_item_state',
+                  default=u'The agenda item is in an invalid state for '
+                           'this action.')).dump()
 
         return JSONResponse(self.request).info(
             _(u'agenda_item_revised',
