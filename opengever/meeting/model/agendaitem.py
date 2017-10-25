@@ -425,7 +425,9 @@ class AgendaItem(Base):
         from the ad-hoc agenda items document.
         In both cases the excerpt is stored in the meeting dossier.
         """
-        assert self.can_generate_excerpt()
+        if not self.can_generate_excerpt():
+            raise WrongAgendaItemState()
+
         meeting_dossier = self.meeting.get_dossier()
         source_document = self.resolve_document()
 

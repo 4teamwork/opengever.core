@@ -17,7 +17,6 @@ from plone.uuid.interfaces import IUUID
 from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
 from zExceptions import BadRequest
-from zExceptions import Forbidden
 from zExceptions import NotFound
 from zExceptions import Unauthorized
 from zope.component import getMultiAdapter
@@ -499,18 +498,8 @@ class AgendaItemsView(BrowserView):
         if not self.meeting.is_editable():
             raise Unauthorized("Editing is not allowed")
 
-        if not self.agenda_item.can_generate_excerpt():
-            raise Forbidden('Generating excerpt is not allowed in this state.')
-
-        try:
-            self.agenda_item.generate_excerpt(title=self.request.form['excerpt_title'])
-        except MissingMeetingDossierPermissions:
-            return (JSONResponse(self.request)
-                    .error(_('error_no_permission_to_add_document',
-                             default=u'Insufficient privileges to add a'
-                             u' document to the meeting dossier.'))
-                    .remain()
-                    .dump())
+        self.agenda_item.generate_excerpt(
+            title=self.request.form['excerpt_title'])
 
         return (JSONResponse(self.request)
                 .info(_('excerpt_generated',
