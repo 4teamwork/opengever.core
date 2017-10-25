@@ -185,7 +185,7 @@ class AgendaItemsView(BrowserView):
             'edit_document_button': button}
 
     def _get_agenda_items(self):
-        meeting = self.context.model
+        meeting = self.meeting
         agenda_items = []
         for item in meeting.agenda_items:
             data = item.serialize()
@@ -248,7 +248,7 @@ class AgendaItemsView(BrowserView):
         """
         self.require_agendalist_editable()
 
-        self.context.model.reorder_agenda_items(
+        self.meeting.reorder_agenda_items(
             json.loads(self.request.get('sortOrder')))
 
         return JSONResponse(self.request).info(
@@ -305,7 +305,7 @@ class AgendaItemsView(BrowserView):
         """
         meeting_state = self.meeting.get_state()
 
-        if not self.context.model.is_editable():
+        if not self.meeting.is_editable():
             raise Unauthorized("Editing is not allowed")
 
         error_response = self._checkin_proposal_document_before_deciding()
@@ -360,7 +360,7 @@ class AgendaItemsView(BrowserView):
         """Reopen the current agendaitem. Set the workflow state to revision
         to indicate that editing is possible again.
         """
-        if not self.context.model.is_editable():
+        if not self.meeting.is_editable():
             raise Unauthorized("Editing is not allowed")
 
         self.agenda_item.reopen()
@@ -373,7 +373,7 @@ class AgendaItemsView(BrowserView):
         """Revise the current agendaitem. Set the workflow state to decided
         to indicate that editing is no longer possible.
         """
-        if not self.context.model.is_editable():
+        if not self.meeting.is_editable():
             raise Unauthorized("Editing is not allowed")
 
         try:
@@ -471,7 +471,7 @@ class AgendaItemsView(BrowserView):
         """Generate an excerpt of an agenda item and store it in
         the meeting dossier.
         """
-        if not self.context.model.is_editable():
+        if not self.meeting.is_editable():
             raise Unauthorized("Editing is not allowed")
 
         if not self.agenda_item.can_generate_excerpt():
