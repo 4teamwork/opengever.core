@@ -48,3 +48,7 @@ class WrongAgendaItemState(Exception):
     """The agenda item is not in the correct state to perform the desired
     action.
     """
+
+
+class CannotExecuteTransition(Exception):
+    """The workflow transition cannot be executed."""

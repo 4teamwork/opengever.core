@@ -4,6 +4,7 @@ from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.meeting import _
 from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting import require_word_meeting_feature
+from opengever.meeting.exceptions import CannotExecuteTransition
 from opengever.meeting.exceptions import MissingAdHocTemplate
 from opengever.meeting.exceptions import MissingMeetingDossierPermissions
 from opengever.meeting.exceptions import WrongAgendaItemState
@@ -99,7 +100,7 @@ def return_jsonified_exceptions(func):
         try:
             return func(*args, **kwargs)
 
-        except WrongAgendaItemState:
+        except (WrongAgendaItemState, CannotExecuteTransition):
             return JSONResponse(getRequest()).error(
                 _(u'invalid_agenda_item_state',
                   default=u'The agenda item is in an invalid state for '
