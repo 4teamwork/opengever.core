@@ -246,7 +246,7 @@ class MeetingView(BrowserView):
         return self.context.get_unscheduled_proposals()
 
     def get_protocol_document_label(self):
-        if self.model.get_state() == self.model.STATE_PENDING:
+        if self.model.is_pending():
             return _(u'document_label_pre_protocol', u'Pre-protocol')
         else:
             return _(u'document_label_protocol', u'Protocol')
@@ -475,7 +475,7 @@ class MeetingView(BrowserView):
             'Modify portal content',
             obj=self.model.committee.resolve_committee())
 
-        if self.model.get_state() == self.model.STATE_CLOSED:
+        if self.model.is_closed():
             infos['is_closed'] = True
             infos['reopen_url'] = can_change and transition_controller.url_for(
                 self.context, self.model, 'closed-held')
