@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-25 12:53+0000\n"
+"POT-Creation-Date: 2017-10-25 15:34+0000\n"
 "PO-Revision-Date: 2017-06-22 09:02+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -686,6 +686,11 @@ msgstr "Dossier"
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
 msgid "download protocol"
 msgstr "Télécharger le protocole"
+
+#. Default: "Editing is not allowed."
+#: ./opengever/meeting/browser/meetings/agendaitem.py
+msgid "editing_not_allowed"
+msgstr ""
 
 #. Default: "Paragraph must not be empty."
 #: ./opengever/meeting/browser/meetings/agendaitem.py

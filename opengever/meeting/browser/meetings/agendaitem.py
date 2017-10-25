@@ -1,3 +1,4 @@
+from functools import wraps
 from opengever.base.response import JSONResponse
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.meeting import _
@@ -20,6 +21,7 @@ from zExceptions import Forbidden
 from zExceptions import NotFound
 from zExceptions import Unauthorized
 from zope.component import getMultiAdapter
+from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.interface import implements
 from zope.interface import Interface
@@ -88,6 +90,26 @@ class IAgendaItemActions(Interface):
     def return_excerpt():
         """Return an excerpt to the proposals dossier.
         """
+
+
+def return_jsonified_exceptions(func):
+    """Decorator for converting common exceptions to JSONResponses.
+    """
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except WrongAgendaItemState:
+            return JSONResponse(getRequest()).error(
+                _(u'invalid_agenda_item_state',
+                  default=u'The agenda item is in an invalid state for '
+                           'this action.')).dump()
+        except Unauthorized:
+            return JSONResponse(getRequest()).error(
+                _(u'editing_not_allowed',
+                  default=u'Editing is not allowed.')).dump()
+
+    return wrapper
 
 
 class AgendaItemsView(BrowserView):
@@ -242,6 +264,7 @@ class AgendaItemsView(BrowserView):
         """
         return JSONResponse(self.request).data(items=self._get_agenda_items()).dump()
 
+    @return_jsonified_exceptions
     def update_order(self):
         """Updates the order of the agendaitems. The new sortOrder is expected
         in the request parameter `sortOrder`.
@@ -255,6 +278,7 @@ class AgendaItemsView(BrowserView):
             _('agenda_item_order_updated',
               default=u"Agenda Item order updated.")).dump()
 
+    @return_jsonified_exceptions
     def edit(self):
         """Updates the title of the agendaitem, with the one given by the
         request parameter `title`.
@@ -280,6 +304,7 @@ class AgendaItemsView(BrowserView):
             _('agenda_item_updated',
               default=u"Agenda Item updated.")).proceed().dump()
 
+    @return_jsonified_exceptions
     def delete(self):
         """Unschedule the current agenda_item. If the agenda_item has no
         proposal, the agenda_item gets deleted. If there is a proposal related,
@@ -299,6 +324,7 @@ class AgendaItemsView(BrowserView):
             _(u'agenda_item_deleted',
               default=u'Agenda Item Successfully deleted')).dump()
 
+    @return_jsonified_exceptions
     def decide(self):
         """Decide the current agendaitem and move the meeting in the
         held state.
@@ -356,6 +382,7 @@ class AgendaItemsView(BrowserView):
 
         checkout_manager.checkin()
 
+    @return_jsonified_exceptions
     def reopen(self):
         """Reopen the current agendaitem. Set the workflow state to revision
         to indicate that editing is possible again.
@@ -369,6 +396,7 @@ class AgendaItemsView(BrowserView):
             _(u'agenda_item_reopened',
               default=u'Agenda Item successfully reopened.')).dump()
 
+    @return_jsonified_exceptions
     def revise(self):
         """Revise the current agendaitem. Set the workflow state to decided
         to indicate that editing is no longer possible.
@@ -376,18 +404,12 @@ class AgendaItemsView(BrowserView):
         if not self.meeting.is_editable():
             raise Unauthorized("Editing is not allowed")
 
-        try:
-            self.agenda_item.revise()
-        except WrongAgendaItemState:
-            return JSONResponse(self.request).error(
-                _(u'invalid_agenda_item_state',
-                  default=u'The agenda item is in an invalid state for '
-                           'this action.')).dump()
-
+        self.agenda_item.revise()
         return JSONResponse(self.request).info(
             _(u'agenda_item_revised',
               default=u'Agenda Item revised successfully.')).dump()
 
+    @return_jsonified_exceptions
     def edit_document(self):
         """Checkout and open the document with office connector.
         """
@@ -409,6 +431,7 @@ class AgendaItemsView(BrowserView):
 
         return response.dump()
 
+    @return_jsonified_exceptions
     def schedule_paragraph(self):
         """Schedule the given Paragraph (request parameter `title`) for the current
         meeting.
@@ -425,6 +448,7 @@ class AgendaItemsView(BrowserView):
             _('paragraph_added', default=u"Paragraph successfully added.")
         ).proceed().dump()
 
+    @return_jsonified_exceptions
     def schedule_text(self):
         """Schedule the given Text (request parameter `title`) for the current
         meeting.
@@ -467,6 +491,7 @@ class AgendaItemsView(BrowserView):
         if not self.meeting.is_agendalist_editable():
             raise Unauthorized("Editing is not allowed")
 
+    @return_jsonified_exceptions
     def generate_excerpt(self):
         """Generate an excerpt of an agenda item and store it in
         the meeting dossier.
@@ -493,6 +518,7 @@ class AgendaItemsView(BrowserView):
                 .proceed()
                 .dump())
 
+    @return_jsonified_exceptions
     def return_excerpt(self):
         """Return an excerpt for a proposal to the dossier the proposal
         originated from.

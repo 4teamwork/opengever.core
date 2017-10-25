@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-25 12:53+0000\n"
+"POT-Creation-Date: 2017-10-25 15:34+0000\n"
 "PO-Revision-Date: 2017-10-23 18:40+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -684,6 +684,11 @@ msgstr "Dossier"
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
 msgid "download protocol"
 msgstr "Protokoll herunterladen"
+
+#. Default: "Editing is not allowed."
+#: ./opengever/meeting/browser/meetings/agendaitem.py
+msgid "editing_not_allowed"
+msgstr "Bearbeiten ist nicht erlaubt."
 
 #. Default: "Paragraph must not be empty."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
