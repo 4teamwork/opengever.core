@@ -19,3 +19,13 @@ class TestRepositoryCreation(FunctionalTestCase):
     def test_avoids_id_conflicts(self):
         self.assertEqual(
             ['fuehrung', 'fuehrung-1'], self.portal['repo'].objectIds())
+
+    def test_set_local_roles_correctly(self):
+        self.assertEqual(
+            (('admin', ('Owner',)),
+             (u'administratoren', ('Publisher',)),
+             (u'gever eingangskorb',
+              ('Contributor', 'Editor', 'Reviewer', 'Publisher')),
+             (u'gever_users',
+              ('Reader', 'Contributor', 'Editor', 'Reviewer', 'Publisher'))),
+            self.portal['repo'].get_local_roles())

@@ -94,8 +94,7 @@ class InsertLocalRolesSection(object):
             yield item
 
     def _get_groups(self, item, field):
-        """ Look for groups in the given row (field)
+        """Look for groups in the given row (field), split by comma and strip
+        leading and trailing spaces.
         """
-        # Get the string of groups commaseparated. Remove whitespaces
-        # and split it to get a list
-        return item.get(field, '').replace(' ', '').split(',')
+        return [group.strip() for group in item.get(field, '').split(',')]
