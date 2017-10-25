@@ -75,7 +75,7 @@ class MessageT1(object):
     def add_object(self, obj):
         if IDossierMarker.providedBy(obj):
             self.dossiers.append(Dossier(obj, u'files'))
-        elif IBaseDocument.providedBy(obj):
+        elif IBaseDocument.providedBy(obj) and obj.get_file():
             self.documents.append(Document(obj, u'files'))
 
     def binding(self):
@@ -166,7 +166,7 @@ class Dossier(object):
         for obj in objs:
             if IDossierMarker.providedBy(obj):
                 self.dossiers.append(Dossier(obj, self.path))
-            elif IBaseDocument.providedBy(obj):
+            elif IBaseDocument.providedBy(obj) and obj.get_file():
                 self.documents.append(Document(obj, self.path))
 
     def binding(self):

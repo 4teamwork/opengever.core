@@ -115,6 +115,12 @@ class TestDossierModel(IntegrationTestCase):
              if d.portal_type in documentish_types],
             [d.obj for d in dossier.documents])
 
+    def test_documents_without_a_file_are_skipped(self):
+        self.document.file = None
+        dossier = Dossier(self.dossier, u'files')
+
+        self.assertNotIn(self.document, [d.obj for d in dossier.documents])
+
     def test_dossier_contains_subdossiers(self):
         dossier = Dossier(self.dossier, u'files')
         self.assertItemsEqual(
