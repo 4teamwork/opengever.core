@@ -1,10 +1,10 @@
 """eCH-0147T1 model"""
-from Products.CMFCore.utils import getToolByName
 from datetime import datetime
 from opengever.base.behaviors.classification import IClassification
 from opengever.base.interfaces import IReferenceNumber
+from opengever.base.utils import file_checksum
+from opengever.document.behaviors import IBaseDocument
 from opengever.document.behaviors.metadata import IDocumentMetadata
-from opengever.document.document import IDocumentSchema
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.ech0147.bindings import ech0039
@@ -15,11 +15,10 @@ from opengever.ech0147.mappings import CLASSIFICATION_MAPPING
 from opengever.ech0147.mappings import DOSSIER_STATUS_MAPPING
 from opengever.ech0147.mappings import PRIVACY_LAYER_MAPPING
 from opengever.ech0147.mappings import PUBLIC_TRIAL_MAPPING
-from opengever.base.utils import file_checksum
 from plone import api
+from Products.CMFCore.utils import getToolByName
 from pyxb.utils.domutils import BindingDOMSupport
 from uuid import uuid4
-
 import os.path
 import pkg_resources
 
@@ -76,7 +75,7 @@ class MessageT1(object):
     def add_object(self, obj):
         if IDossierMarker.providedBy(obj):
             self.dossiers.append(Dossier(obj, u'files'))
-        elif IDocumentSchema.providedBy(obj):
+        elif IBaseDocument.providedBy(obj):
             self.documents.append(Document(obj, u'files'))
 
     def binding(self):
@@ -167,7 +166,7 @@ class Dossier(object):
         for obj in objs:
             if IDossierMarker.providedBy(obj):
                 self.dossiers.append(Dossier(obj, self.path))
-            elif IDocumentSchema.providedBy(obj):
+            elif IBaseDocument.providedBy(obj):
                 self.documents.append(Document(obj, self.path))
 
     def binding(self):
@@ -228,8 +227,8 @@ class Document(object):
 
     def __init__(self, obj, base_path):
         self.obj = obj
-        self.path = os.path.join(base_path, self.obj.file.filename)
-        self.blobpath = self.obj.file._blob.committed()
+        self.path = os.path.join(base_path, self.obj.get_file().filename)
+        self.blobpath = self.obj.get_file()._blob.committed()
 
     def binding(self):
         d = ech0147t0.documentType()
@@ -242,7 +241,7 @@ class Document(object):
         d.files = ech0147t0.filesType()
         f = ech0147t0.fileType()
         f.pathFileName = self.path
-        f.mimeType = self.obj.file.contentType
+        f.mimeType = self.obj.get_file().contentType
         f.hashCodeAlgorithm, f.hashCode = file_checksum(self.blobpath)
         d.files.append(f)
 
