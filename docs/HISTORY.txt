@@ -5,6 +5,7 @@ Changelog
 2017.5.2 (unreleased)
 ---------------------
 
+- OGGBundle: Do intermediate commits every 1000 items by default. [lgraf]
 - Avoid id conflicts when setting up a repository. [phgross]
 - Remove the broken and unused fillingnumber-adjustment view to get rid of the grokked
   dependency collective.z3cform.datagridfield. [elioschmutz]

@@ -5,11 +5,13 @@ from opengever.bundle.ldap import DisabledLDAP
 from opengever.bundle.loader import GUID_INDEX_NAME
 from opengever.bundle.sections.bundlesource import BUNDLE_KEY
 from opengever.bundle.sections.bundlesource import BUNDLE_PATH_KEY
+from opengever.bundle.sections.commit import INTERMEDIATE_COMMITS_KEY
 from opengever.core.debughelpers import get_first_plone_site
 from opengever.core.debughelpers import setup_plone
 from plone import api
 from zope.annotation import IAnnotations
 from zope.interface import alsoProvides
+import argparse
 import logging
 import sys
 import transaction
@@ -19,12 +21,28 @@ log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 
 
+def parse_args(argv):
+    parser = argparse.ArgumentParser(description='Import an OGGBundle')
+    parser.add_argument('bundle_path',
+                        help='Path to the .oggbundle directory')
+    parser.add_argument('--no-intermediate-commits', action='store_true',
+                        help="Don't to intermediate commits")
+
+    args = parser.parse_args(argv)
+    return args
+
+
 def import_oggbundle(app, args):
     """Handler for the 'bin/instance import' zopectl command.
     """
     setup_logging()
-    bundle_path = sys.argv[3]
-    log.info("Importing OGGBundle %s" % bundle_path)
+
+    # Discard the first three arguments, because they're not "actual" arguments
+    # but cruft that we get because of the way bin/instance [zopectl_cmd]
+    # scripts work.
+    args = parse_args(sys.argv[3:])
+
+    log.info("Importing OGGBundle %s" % args.bundle_path)
 
     plone = setup_plone(get_first_plone_site(app))
 
@@ -39,7 +57,10 @@ def import_oggbundle(app, args):
     add_guid_index()
 
     transmogrifier = Transmogrifier(plone)
-    IAnnotations(transmogrifier)[BUNDLE_PATH_KEY] = bundle_path
+
+    ann = IAnnotations(transmogrifier)
+    ann[BUNDLE_PATH_KEY] = args.bundle_path
+    ann[INTERMEDIATE_COMMITS_KEY] = not args.no_intermediate_commits
 
     with DisabledLDAP(plone):
         transmogrifier(u'opengever.bundle.oggbundle')
@@ -52,7 +73,8 @@ def import_oggbundle(app, args):
         log.info("Duration: %.2fs" % duration.total_seconds())
 
     log.info("Committing transaction...")
-    transaction.get().note("Finished import of OGGBundle %r" % bundle_path)
+    transaction.get().note(
+        "Finished import of OGGBundle %r" % args.bundle_path)
     transaction.commit()
     log.info("Done.")
 
