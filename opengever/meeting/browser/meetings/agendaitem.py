@@ -343,11 +343,9 @@ class AgendaItemsView(BrowserView):
         """Decide the current agendaitem and move the meeting in the
         held state.
         """
+        self.require_editable()
+
         meeting_state = self.meeting.get_state()
-
-        if not self.meeting.is_editable():
-            raise Unauthorized("Editing is not allowed")
-
         error_response = self._checkin_proposal_document_before_deciding()
         if error_response:
             return error_response
@@ -401,8 +399,7 @@ class AgendaItemsView(BrowserView):
         """Reopen the current agendaitem. Set the workflow state to revision
         to indicate that editing is possible again.
         """
-        if not self.meeting.is_editable():
-            raise Unauthorized("Editing is not allowed")
+        self.require_editable()
 
         self.agenda_item.reopen()
 
@@ -415,8 +412,7 @@ class AgendaItemsView(BrowserView):
         """Revise the current agendaitem. Set the workflow state to decided
         to indicate that editing is no longer possible.
         """
-        if not self.meeting.is_editable():
-            raise Unauthorized("Editing is not allowed")
+        self.require_editable()
 
         self.agenda_item.revise()
         return JSONResponse(self.request).info(
@@ -496,8 +492,7 @@ class AgendaItemsView(BrowserView):
         """Generate an excerpt of an agenda item and store it in
         the meeting dossier.
         """
-        if not self.meeting.is_editable():
-            raise Unauthorized("Editing is not allowed")
+        self.require_editable()
 
         self.agenda_item.generate_excerpt(
             title=self.request.form['excerpt_title'])
