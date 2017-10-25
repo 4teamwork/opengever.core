@@ -221,6 +221,20 @@ class OpengeverContentFixture(object):
                        'deadline': 10})
             .within(self.tasktemplatefolder)))
 
+        self.dossiertemplate = self.register('dossiertemplate', create(
+            Builder('dossiertemplate')
+            .titled(u'Bauvorhaben klein')
+            .having(**{'description': u'Lorem ipsum',
+                       'keywords': (u'secret', u'special'),
+                       'comments': 'this is very special',
+                       'filing_prefix': 'department'})
+            .within(templates)))
+
+        self.subdossiertemplate = self.register('subdossiertemplate', create(
+            Builder('dossiertemplate')
+            .titled(u'Anfragen')
+            .within(self.dossiertemplate)))
+
     @staticuid()
     def create_committees(self):
         self.committee_container = self.register('committee_container', create(

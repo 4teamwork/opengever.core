@@ -1,0 +1,3 @@
+<records interface="opengever.dossier.dossiertemplate.interfaces.IDossierTemplateSettings" purge="False">
+  <value key="respect_max_depth">False</value>
+</records>

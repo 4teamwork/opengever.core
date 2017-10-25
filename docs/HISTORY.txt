@@ -31,6 +31,7 @@ Changelog
 - Extract bumblebee preview generation into standalone component. [jone]
 - Do not render document link without View permission. [jone]
 - Optimise reindexing for document checkout/checkin cycles. [Rotonen]
+- Add dossiertemplates configuration flag `respect_dossier_depth`. [phgross]
 - Refactor JSON schema generation and dumping, add tests. [lgraf]
 - Ungrok opengever.dossier. [elioschmutz]
 - Ungrok opengever.document. [elioschmutz]

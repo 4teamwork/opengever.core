@@ -5,6 +5,8 @@ from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateSchema
+from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings
+from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.dossier.utils import truncate_ellipsis
 from opengever.ogds.base.actor import Actor
 from plone import api
@@ -74,6 +76,32 @@ class DossierTemplateEditForm(edit.DefaultEditForm):
 
 class DossierTemplate(Container):
     """Base class for template dossiers."""
+
+    def allowedContentTypes(self, *args, **kwargs):
+        types = super(
+            DossierTemplate, self).allowedContentTypes(*args, **kwargs)
+
+        if not self.is_subdossier_allowed():
+            types = filter(
+                lambda x: x.id != 'opengever.dossier.dossiertemplate', types)
+
+        return types
+
+    def is_subdossier_allowed(self):
+        if self.is_respect_max_dossier_depth:
+            max_dossier_depth = api.portal.get_registry_record(
+                'maximum_dossier_depth', interface=IDossierContainerTypes)
+
+            current_levels = len([item for item in self.aq_chain
+                                  if IDossierTemplateSchema.providedBy(item)])
+            return current_levels <= max_dossier_depth
+
+        return True
+
+    @property
+    def is_respect_max_dossier_depth(self):
+        return api.portal.get_registry_record(
+            'respect_max_depth', interface=IDossierTemplateSettings)
 
     def is_subdossier(self):
         parent = aq_parent(aq_inner(self))
