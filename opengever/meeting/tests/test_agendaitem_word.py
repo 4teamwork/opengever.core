@@ -317,10 +317,9 @@ class TestWordAgendaItem(IntegrationTestCase):
         self.assertEquals(
             {u'messages': [
                 {u'messageTitle': u'Error',
-                 u'message': u'Insufficient privileges to add a document'
-                 u' to the meeting dossier.',
-                 u'messageClass': u'error'}],
-             u'proceed': False},
+                 u'message': u'Insufficient privileges to add a document '
+                 u'to the meeting dossier.',
+                 u'messageClass': u'error'}]},
             browser.json)
 
     @browsing

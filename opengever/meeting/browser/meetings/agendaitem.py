@@ -98,15 +98,23 @@ def return_jsonified_exceptions(func):
     def wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)
+
         except WrongAgendaItemState:
             return JSONResponse(getRequest()).error(
                 _(u'invalid_agenda_item_state',
                   default=u'The agenda item is in an invalid state for '
                            'this action.')).dump()
+
         except Unauthorized:
             return JSONResponse(getRequest()).error(
                 _(u'editing_not_allowed',
                   default=u'Editing is not allowed.')).dump()
+
+        except MissingMeetingDossierPermissions:
+            return JSONResponse(getRequest()).error(
+                _('error_no_permission_to_add_document',
+                  default=u'Insufficient privileges to add a '
+                          u'document to the meeting dossier.')).dump()
 
     return wrapper
 
@@ -469,12 +477,6 @@ class AgendaItemsView(BrowserView):
                           default=u"No ad-hoc agenda-item template has been "
                                   u"configured.")
                     ).remain().dump()
-            except MissingMeetingDossierPermissions:
-                return JSONResponse(self.request).error(
-                        _('error_no_permission_to_add_document',
-                          default=u'Insufficient privileges to add a'
-                                  u' document to the meeting dossier.')
-                       ).remain().dump()
 
         else:
             self.meeting.schedule_text(title)
