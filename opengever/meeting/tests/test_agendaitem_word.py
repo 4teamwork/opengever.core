@@ -292,8 +292,10 @@ class TestWordAgendaItem(IntegrationTestCase):
         self.login(self.committee_responsible, browser)
         agenda_item = self.schedule_proposal(self.meeting,
                                              self.submitted_word_proposal)
-        with browser.expect_http_error(reason='Forbidden'):
-            browser.open(self.agenda_item_url(agenda_item, 'generate_excerpt'))
+        with browser.expect_http_error(reason='Unauthorized'):
+            browser.open(
+                self.agenda_item_url(agenda_item, 'generate_excerpt'),
+                data={'excerpt_title': u'foo'})
 
     @browsing
     def test_error_when_no_access_to_meeting_dossier(self, browser):
