@@ -103,12 +103,14 @@ def return_jsonified_exceptions(func):
             return JSONResponse(getRequest()).error(
                 _(u'invalid_agenda_item_state',
                   default=u'The agenda item is in an invalid state for '
-                           'this action.')).dump()
+                           'this action.'),
+                status=401).dump()
 
         except Unauthorized:
             return JSONResponse(getRequest()).error(
                 _(u'editing_not_allowed',
-                  default=u'Editing is not allowed.')).dump()
+                  default=u'Editing is not allowed.'),
+                status=401).dump()
 
         except MissingMeetingDossierPermissions:
             return JSONResponse(getRequest()).error(
