@@ -77,6 +77,7 @@ class TestOpengeverSharingIntegration(FunctionalTestCase):
             u'Contributor',
             u'Reviewer',
             u'Publisher',
+            u'DossierManager',
         ]
         self._check_roles(expect, self.tab_dossier.available_roles())
 

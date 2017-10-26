@@ -31,6 +31,7 @@
   <permission>Sharing page: Delegate CommitteeMember role</permission>
   <permission>Sharing page: Delegate CommitteeResponsible role</permission>
   <permission>Sharing page: Delegate Contributor role</permission>
+  <permission>Sharing page: Delegate DossierManager role</permission>
   <permission>Sharing page: Delegate Editor role</permission>
   <permission>Sharing page: Delegate MeetingUser role</permission>
   <permission>Sharing page: Delegate Publisher role</permission>
@@ -189,6 +190,7 @@
     <permission-map name="Sharing page: Delegate CommitteeMember role" acquired="False"/>
     <permission-map name="Sharing page: Delegate CommitteeResponsible role" acquired="False"/>
     <permission-map name="Sharing page: Delegate Contributor role" acquired="False"/>
+    <permission-map name="Sharing page: Delegate DossierManager role" acquired="False"/>
     <permission-map name="Sharing page: Delegate Editor role" acquired="False"/>
     <permission-map name="Sharing page: Delegate MeetingUser role" acquired="False">
       <permission-role>Manager</permission-role>

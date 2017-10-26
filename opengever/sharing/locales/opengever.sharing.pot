@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-02 12:52+0000\n"
+"POT-Creation-Date: 2017-10-26 16:11+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,6 +30,10 @@ msgid "sharing_dossier_editor"
 msgstr ""
 
 #: ./opengever/sharing/browser/sharing.py
+msgid "sharing_dossier_manager"
+msgstr ""
+
+#: ./opengever/sharing/browser/sharing.py
 msgid "sharing_dossier_publisher"
 msgstr ""
 
@@ -52,4 +56,3 @@ msgstr ""
 #: ./opengever/sharing/browser/sharing.py
 msgid "sharing_role_manager"
 msgstr ""
-

@@ -10,6 +10,7 @@
     <role name="Publisher" />
     <role name="Records Manager" />
     <role name="Role Manager" />
+    <role name="DossierManager" />
   </roles>
   <permissions>
 
@@ -20,6 +21,12 @@
     </permission>
 
     <permission name="Sharing page: Delegate Publisher role" acquire="True">
+      <role name="Administrator" />
+      <role name="Manager" />
+      <role name="Role Manager" />
+    </permission>
+
+    <permission name="Sharing page: Delegate DossierManager role" acquire="True">
       <role name="Administrator" />
       <role name="Manager" />
       <role name="Role Manager" />

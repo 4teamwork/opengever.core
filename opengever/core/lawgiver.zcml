@@ -11,6 +11,7 @@
   <lawgiver:role name="CommitteeMember" />
   <lawgiver:role name="MeetingUser" />
   <lawgiver:role name="Publisher" />
+  <lawgiver:role name="DossierManager" />
 
   <!--
       When inventing new action groups, please add a translation in
@@ -150,6 +151,11 @@
                    "
       />
 
+  <lawgiver:map_permissions
+      action_group="manage security"
+      permissions="Sharing page: Delegate DossierManager role,
+                   "
+      />
 
   <!-- Remove GEVER content is only managed globally in rolemap.xml. -->
   <lawgiver:ignore
