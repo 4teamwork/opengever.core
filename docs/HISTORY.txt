@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Also display exceptions on agenda item list to users. [deiferni]
+- Make sure response changes are persistent. [phgross]
 - Prevent editing agenda item list when meeting has been held. [deiferni]
 
 

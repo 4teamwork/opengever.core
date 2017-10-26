@@ -7,6 +7,7 @@ from opengever.task.response_description import ResponseDescription
 from opengever.task.task import ITask
 from persistent import Persistent
 from persistent.list import PersistentList
+from persistent.mapping import PersistentMapping
 from zope.annotation.interfaces import IAnnotations
 from zope.component import adapter
 from zope.container.contained import ObjectAddedEvent
@@ -142,7 +143,7 @@ class Response(Persistent):
     def add_change(self, id, name, before, after):
         """Add a new issue change.
         """
-        delta = dict(
+        delta = PersistentMapping(
             id=id,
             name=name,
             before=before,
