@@ -428,12 +428,16 @@
     this.reopen = function(target){
       return $.post(target.attr("href")).done(function() {
         self.updateCloseTransitionActionState();
+      }).fail(function () {
+        self.update();
       });
     };
 
     this.revise = function(target){
-      return $.post(target.attr("href")).done(function() {
+      return $.post(target.attr("href")).always(function() {
         self.updateCloseTransitionActionState();
+      }).fail(function () {
+        self.update();
       });
     };
 

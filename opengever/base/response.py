@@ -17,6 +17,7 @@ class JSONResponse(object):
     def __init__(self, request):
         self.request = request
         self.response = {}
+        self.status = None
 
     def info(self, message):
         """
@@ -32,10 +33,12 @@ class JSONResponse(object):
         self.response['messages'] = self.response.get('messages', []) + [message]
         return self
 
-    def error(self, message):
+    def error(self, message, status=None):
         """
         Append a standardized error message with given message.
         """
+        self.status = status
+
         message = {
             'messageClass': 'error',
             'messageTitle': translate(_('message_title_error',
@@ -84,6 +87,8 @@ class JSONResponse(object):
         By default, no-caching headers are set on the response.
         This can be disabled by setting ``no_cache`` to ``False``.
         """
+        if self.status:
+            self.request.response.setStatus(self.status)
 
         if no_cache:
             self.request.response.setHeader("Cache-Control", "no-store")
