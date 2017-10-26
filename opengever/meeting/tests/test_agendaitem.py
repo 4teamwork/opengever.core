@@ -254,6 +254,18 @@ class TestAgendaItemDelete(TestAgendaItem):
                 view='agenda_items/{}/delete'.format(other_item.agenda_item_id))
 
     @browsing
+    def test_update_agenda_item_raise_unauthorized_when_agenda_list_is_not_editable(self, browser):
+        item = create(Builder('agenda_item').having(
+            title=u'foo', meeting=self.meeting))
+
+        self.meeting.workflow_state = 'held'
+
+        with browser.expect_unauthorized():
+            browser.login().open(
+                self.meeting_wrapper,
+                view='agenda_items/{}/delete'.format(item.agenda_item_id))
+
+    @browsing
     def test_update_agenda_item_raise_unauthorized_when_meeting_is_not_editable(self, browser):
         item = create(Builder('agenda_item').having(
             title=u'foo', meeting=self.meeting))
@@ -587,6 +599,14 @@ class TestAgendaItemUpdateOrder(TestAgendaItem):
                           browser.json.get('messages'))
 
     @browsing
+    def test_raise_unauthorized_when_agenda_list_is_not_editable(self, browser):
+        self.meeting.workflow_state = 'closed'
+
+        with browser.expect_unauthorized():
+            browser.login().open(self.meeting_wrapper,
+                                 view='agenda_items/update_order')
+
+    @browsing
     def test_raise_unauthorized_when_meeting_is_not_editable(self, browser):
         self.meeting.workflow_state = 'closed'
 
@@ -608,6 +628,14 @@ class TestScheduleParagraph(TestAgendaItem):
         self.assertEquals(1, len(agenda_items))
         self.assertEqual(u'Abschnitt A', agenda_items[0].title)
         self.assertTrue(agenda_items[0].is_paragraph)
+
+    @browsing
+    def test_raise_unauthorized_when_agenda_list_is_not_editable(self, browser):
+        self.meeting.workflow_state = 'held'
+
+        with browser.expect_unauthorized():
+            browser.login().open(self.meeting_wrapper,
+                                 view='agenda_items/schedule_paragraph')
 
     @browsing
     def test_raise_unauthorized_when_meeting_is_not_editable(self, browser):
@@ -633,9 +661,19 @@ class TestScheduleText(TestAgendaItem):
         self.assertFalse(agenda_items[0].is_paragraph)
 
     @browsing
+    def test_raise_unauthorized_when_agenda_list_is_not_editable(self, browser):
+        self.meeting.workflow_state = 'held'
+
+        with browser.expect_unauthorized():
+            browser.login().open(self.meeting_wrapper,
+                                 view='agenda_items/schedule_text',
+                                 data={'title': u'Baugesuch Herr Maier'})
+
+    @browsing
     def test_raise_unauthorized_when_meeting_is_not_editable(self, browser):
         self.meeting.workflow_state = 'closed'
 
         with browser.expect_unauthorized():
             browser.login().open(self.meeting_wrapper,
-                                 view='agenda_items/schedule_paragraph')
+                                     view='agenda_items/schedule_text',
+                                     data={'title': u'Baugesuch Herr Maier'})
