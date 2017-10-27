@@ -5,6 +5,7 @@ from opengever.meeting.command import AgendaItemListOperations
 from opengever.meeting.command import CreateGeneratedDocumentCommand
 from opengever.meeting.command import MergeDocxProtocolCommand
 from opengever.meeting.command import ProtocolOperations
+from opengever.meeting.exceptions import AgendaItemListMissingTemplate
 from opengever.meeting.interfaces import IMeetingWrapper
 from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
@@ -48,7 +49,10 @@ class MeetingZipExport(BrowserView):
                 self.add_agenda_item_proposal_documents(generator)
 
             # Agenda items list
-            generator.add_file(*self.get_agendaitem_list())
+            try:
+                generator.add_file(*self.get_agendaitem_list())
+            except AgendaItemListMissingTemplate:
+                pass
 
             # Return zip
             zip_file = generator.generate()
