@@ -352,12 +352,12 @@ class ProposalBuilder(TransparentModelLoader, DexterityBuilder):
     def create(self):
         proposal = super(ProposalBuilder, self).create()
 
+        submitted_proposal = self._traverse_submitted_proposal(proposal)
+        if submitted_proposal:
+            submitted_proposal.sync_model()
+
         if not self._also_return_submitted_proposal:
             return proposal
-
-        proposal_model = proposal.load_model()
-        path = proposal_model.submitted_physical_path.encode('utf-8')
-        submitted_proposal = api.portal.get().restrictedTraverse(path)
 
         return proposal, submitted_proposal
 
@@ -378,6 +378,15 @@ class ProposalBuilder(TransparentModelLoader, DexterityBuilder):
         self.as_submitted()
         self._also_return_submitted_proposal = True
         return self
+
+    def _traverse_submitted_proposal(self, proposal):
+        proposal_model = proposal.load_model()
+        if not proposal_model.submitted_physical_path:
+            return None
+
+        path = proposal_model.submitted_physical_path.encode('utf-8')
+        return api.portal.get().restrictedTraverse(path, default=None)
+
 
 builder_registry.register('proposal', ProposalBuilder)
 

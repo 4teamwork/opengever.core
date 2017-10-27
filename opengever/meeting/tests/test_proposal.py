@@ -90,6 +90,8 @@ class TestProposal(IntegrationTestCase):
 
         model = proposal.load_model()
         self.assertIsNotNone(model)
+        self.assertEqual(u'A pr\xf6posal', model.title)
+        self.assertIsNone(model.submitted_title)
         self.assertEqual(Oguid.for_object(proposal), model.oguid)
         self.assertEqual('robert.ziegler', model.creator)
         self.assertEqual(u'Vertr\xe4ge und Vereinbarungen',
@@ -132,7 +134,7 @@ class TestProposal(IntegrationTestCase):
                          browser.find('Title').value)
 
         browser.fill({
-            'Title': u'A pr\xf6posal',
+            'Title': u'Another pr\xf6posal',
             'Legal basis': u'<div>not possible</div>',
             'Initial position': u'<div>My pr\xf6posal</div>',
             'Proposed action': u'<div>&nbsp; do it  \r </div>',
@@ -147,7 +149,7 @@ class TestProposal(IntegrationTestCase):
         proposal = browser.context
         browser.open(proposal, view='tabbedview_view-overview')
         self.assertEquals(
-            [['Title', u'A pr\xf6posal'],
+            [['Title', u'Another pr\xf6posal'],
              ['Committee', u'Rechnungspr\xfcfungskommission'],
              ['Meeting', ''],
              ['Legal basis', 'not possible'],
@@ -165,7 +167,7 @@ class TestProposal(IntegrationTestCase):
 
         self.assertEqual(1, len(proposal.relatedItems))
         self.assertEqual(self.document, proposal.relatedItems[0].to_object)
-        self.assertEqual(u'A pr\xf6posal', proposal.title)
+        self.assertEqual(u'Another pr\xf6posal', proposal.title)
         self.assertEqual(u'<div>not possible</div>', proposal.legal_basis)
         self.assertEqual(u'<div>My pr\xf6posal</div>', proposal.initial_position)
         self.assertEqual(u'<div>do it</div>', proposal.proposed_action)
@@ -173,6 +175,7 @@ class TestProposal(IntegrationTestCase):
         model = proposal.load_model()
         self.assertIsNotNone(model)
         self.assertEqual(Oguid.for_object(proposal), model.oguid)
+        self.assertEqual(u'Another pr\xf6posal', proposal.title)
 
     @browsing
     def test_proposal_language_field_with_multiple_languages(self, browser):
@@ -281,6 +284,8 @@ class TestProposal(IntegrationTestCase):
         self.assertEqual(Oguid.for_object(submitted_proposal),
                          proposal_model.submitted_oguid)
         self.assertEqual('submitted', proposal_model.workflow_state)
+        self.assertEqual(u'Antrag f\xfcr Kreiselbau',
+                         proposal_model.submitted_title)
 
         # document copied
         self.assertEqual(1, len(submitted_proposal.get_documents()))

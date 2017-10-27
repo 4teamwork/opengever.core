@@ -111,3 +111,17 @@ class TestSubmittedProposal(IntegrationTestCase):
         self.assertEqual(
             u'label_dossier_not_available',
             self.submitted_proposal.get_dossier_link())
+
+    @browsing
+    def test_submitted_proposal_can_be_edited_in_browser(self, browser):
+        self.login(self.committee_responsible, browser)
+        browser.visit(self.submitted_proposal, view='edit')
+
+        browser.fill({'Title': u'Submitted pr\xf6posal'}).save()
+        statusmessages.assert_no_error_messages()
+        statusmessages.assert_message('Changes saved')
+
+        proposal = browser.context
+
+        model = proposal.load_model()
+        self.assertEqual(u'Submitted pr\xf6posal', model.submitted_title)
