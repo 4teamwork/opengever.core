@@ -11,6 +11,7 @@ Changelog
 2017.6.0 (2017-10-27)
 ---------------------
 
+- Sort entries in committee vocabulary by committee title. [tarnap]
 - Skip documents without a file in eCH-0147 exports. [phgross]
 - Include mails in eCH-0147 exports. [phgross]
 - LDAP sync: skip referral's on each ldap search, also for the user import. [phgross]
