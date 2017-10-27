@@ -216,12 +216,12 @@ class Proposal(Base):
 
     def get_link(self, include_icon=True):
         return self._get_link(self.get_url(),
-                              self.resolve_proposal().title,
+                              self.title,
                               include_icon=include_icon)
 
     def get_submitted_link(self, include_icon=True):
         return self._get_link(self.get_submitted_url(),
-                              self.resolve_submitted_proposal().title,
+                              self.submitted_title,
                               include_icon=include_icon)
 
     def _get_link(self, url, title, include_icon=True):
