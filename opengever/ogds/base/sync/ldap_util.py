@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 from ldap.controls import SimplePagedResultsControl
 from opengever.ogds.base.interfaces import ILDAPSearch
+from operator import itemgetter
 from Products.LDAPMultiPlugins import ActiveDirectoryMultiPlugin
 from Products.LDAPUserFolder.interfaces import ILDAPUserFolder
 from Products.LDAPUserFolder.LDAPDelegate import filter_format
@@ -148,18 +149,18 @@ class LDAPSearch(object):
 
         return self._schema
 
-    def _unpaged_search(self, base_dn, scope, filter, attrs):
+    def _unpaged_search(self, base_dn, scope, search_filter, attrs):
         conn = self.connect()
         msgid = conn.search_ext(base_dn,
                                 scope,
-                                filter,
+                                search_filter,
                                 attrs,
                                 serverctrls=[])
         rtype, rdata, rmsgid, serverctrls = conn.result3(msgid)
         results = rdata
         return results
 
-    def _paged_search(self, base_dn, scope, filter, attrs):
+    def _paged_search(self, base_dn, scope, search_filter, attrs):
         conn = self.connect()
 
         # Get paged results to prevent exceeding server size limit
@@ -176,7 +177,7 @@ class LDAPSearch(object):
         while not is_last_page:
             msgid = conn.search_ext(base_dn,
                                     scope,
-                                    filter,
+                                    search_filter,
                                     attrs,
                                     serverctrls=[lc])
 
@@ -210,11 +211,11 @@ class LDAPSearch(object):
         return results
 
     def search(self, base_dn=None, scope=ldap.SCOPE_SUBTREE,
-               filter='(objectClass=*)', attrs=[]):
+               search_filter='(objectClass=*)', attrs=[]):
         """Search LDAP for entries matching the given criteria, using result
         pagination if appropriate, and return the results immediately.
 
-        `base_dn`, `scope`, `filter` and `attrs` have the same meaning as the
+        `base_dn`, `scope`, `search_filter` and `attrs` have the same meaning as the
         corresponding arguments on the ldap.search* methods.
         """
         if base_dn is None:
@@ -222,14 +223,18 @@ class LDAPSearch(object):
 
         if LDAP_CONTROL_PAGED_RESULTS in self.supported_controls:
             try:
-                results = self._paged_search(base_dn, scope, filter, attrs)
+                results = self._paged_search(base_dn, scope, search_filter, attrs)
 
             except ldap.UNAVAILABLE_CRITICAL_EXTENSION:
                 # Server does not support pagination controls - send search
                 # request again without pagination controls
-                results = self._unpaged_search(base_dn, scope, filter, attrs)
+                results = self._unpaged_search(base_dn, scope, search_filter, attrs)
         else:
-            results = self._unpaged_search(base_dn, scope, filter, attrs)
+            results = self._unpaged_search(base_dn, scope, search_filter, attrs)
+
+        # Skip result with None as first item, those are likely referral's,
+        # we don't support those.
+        results = filter(itemgetter(0), results)
 
         return results
 
@@ -256,7 +261,7 @@ class LDAPSearch(object):
 
         mapped_results = []
         results = self.search(base_dn=self.context.users_base,
-                              filter=search_filter)
+                              search_filter=search_filter)
         for result in results:
             mapped_results.append(self.apply_schema_map(result))
 
@@ -290,16 +295,10 @@ class LDAPSearch(object):
         else:
             base_dn = self.context.groups_base
 
-        results = self.search(base_dn=base_dn, filter=search_filter)
+        results = self.search(base_dn=base_dn, search_filter=search_filter)
 
         mapped_results = []
         for result in results:
-            dn, entry = result
-            if dn is None:
-                # This is likely a referral to be hunted down by
-                # client-chasing. We don't support those.
-                logger.info('Skipping referral: %r' % (result, ))
-                continue
             mapped_results.append(self.apply_schema_map(result))
 
         return mapped_results
