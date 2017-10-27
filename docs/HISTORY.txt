@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2017.5.2 (unreleased)
+2017.6.0 (2017-10-27)
 ---------------------
 
 - Skip documents without a file in eCH-0147 exports. [phgross]
