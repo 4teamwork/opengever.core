@@ -2,6 +2,7 @@ from __future__ import absolute_import
 from five import grok
 from ldap.controls import SimplePagedResultsControl
 from opengever.ogds.base.interfaces import ILDAPSearch
+from operator import itemgetter
 from Products.LDAPMultiPlugins import ActiveDirectoryMultiPlugin
 from Products.LDAPUserFolder.interfaces import ILDAPUserFolder
 from Products.LDAPUserFolder.LDAPDelegate import filter_format
@@ -148,18 +149,18 @@ class LDAPSearch(grok.Adapter):
 
         return self._schema
 
-    def _unpaged_search(self, base_dn, scope, filter, attrs):
+    def _unpaged_search(self, base_dn, scope, search_filter, attrs):
         conn = self.connect()
         msgid = conn.search_ext(base_dn,
                                 scope,
-                                filter,
+                                search_filter,
                                 attrs,
                                 serverctrls=[])
         rtype, rdata, rmsgid, serverctrls = conn.result3(msgid)
         results = rdata
         return results
 
-    def _paged_search(self, base_dn, scope, filter, attrs):
+    def _paged_search(self, base_dn, scope, search_filter, attrs):
         conn = self.connect()
 
         # Get paged results to prevent exceeding server size limit
@@ -176,7 +177,7 @@ class LDAPSearch(grok.Adapter):
         while not is_last_page:
             msgid = conn.search_ext(base_dn,
                                     scope,
-                                    filter,
+                                    search_filter,
                                     attrs,
                                     serverctrls=[lc])
 
@@ -210,11 +211,11 @@ class LDAPSearch(grok.Adapter):
         return results
 
     def search(self, base_dn=None, scope=ldap.SCOPE_SUBTREE,
-               filter='(objectClass=*)', attrs=[]):
+               search_filter='(objectClass=*)', attrs=[]):
         """Search LDAP for entries matching the given criteria, using result
         pagination if apprpriate, and return the results immediately.
 
-        `base_dn`, `scope`, `filter` and `attrs` have the same meaning as the
+        `base_dn`, `scope`, `search_filter` and `attrs` have the same meaning as the
         corresponding arguments on the ldap.search* methods.
         """
 
@@ -223,14 +224,18 @@ class LDAPSearch(grok.Adapter):
 
         if LDAP_CONTROL_PAGED_RESULTS in self.supported_controls:
             try:
-                results = self._paged_search(base_dn, scope, filter, attrs)
+                results = self._paged_search(base_dn, scope, search_filter, attrs)
 
             except ldap.UNAVAILABLE_CRITICAL_EXTENSION:
                 # Server does not support pagination controls - send search
                 # request again without pagination controls
-                results = self._unpaged_search(base_dn, scope, filter, attrs)
+                results = self._unpaged_search(base_dn, scope, search_filter, attrs)
         else:
-            results = self._unpaged_search(base_dn, scope, filter, attrs)
+            results = self._unpaged_search(base_dn, scope, search_filter, attrs)
+
+        # Skip result with None as first item, those are likely referral's,
+        # we don't support those.
+        results = filter(itemgetter(0), results)
 
         return results
 
@@ -257,7 +262,7 @@ class LDAPSearch(grok.Adapter):
 
         mapped_results = []
         results = self.search(base_dn=self.context.users_base,
-                              filter=search_filter)
+                              search_filter=search_filter)
         for result in results:
             mapped_results.append(self.apply_schema_map(result))
 
@@ -287,6 +292,7 @@ class LDAPSearch(grok.Adapter):
 
         results = self.search(base_dn=self.context.groups_base,
                               filter=search_filter)
+
         mapped_results = []
         for result in results:
             mapped_results.append(self.apply_schema_map(result))
@@ -387,7 +393,7 @@ class LDAPSearch(grok.Adapter):
             ldap_name = schema_map['ldap_name']
             public_name = schema_map['public_name']
 
-            if not ldap_name in attrs:
+            if ldap_name not in attrs:
                 # Attribute not set (different from "present with None value")
                 continue
 
@@ -404,7 +410,7 @@ class LDAPSearch(grok.Adapter):
 
         # Process remaining attributes
         for key in attrs:
-            if not key in mapped_attr_names:
+            if key not in mapped_attr_names:
                 if self._is_multivalued(attrs['objectClass'], key):
                     value = attrs[key]
                 else:
@@ -475,7 +481,7 @@ class LDAPSearch(grok.Adapter):
         First look in our internal cache, and in case of a miss, get the info
         from the schema and cache it.
         """
-        if not attr_name in self._multivaluedness:
+        if attr_name not in self._multivaluedness:
             self._multivaluedness[attr_name] = self._check_if_multivalued(
                 obj_classes, attr_name)
         return self._multivaluedness[attr_name]

@@ -5,7 +5,7 @@ Changelog
 4.15.8 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- LDAP sync: skip referral's on each ldap search, also for the user import. [phgross]
 
 
 4.15.7 (2017-09-25)
