@@ -19,16 +19,15 @@ from zope.schema.vocabulary import SimpleVocabulary
 class CommitteeVocabulary(object):
 
     def __call__(self, context):
-        terms = []
-
-        for committee in self.get_committees():
-            terms.append(SimpleTerm(value=committee,
-                                    token=committee.committee_id,
-                                    title=committee.title))
-        return SimpleVocabulary(terms)
+        return SimpleVocabulary([
+            SimpleTerm(value=committee,
+                       token=committee.committee_id,
+                       title=committee.title)
+            for committee in self.get_committees()
+        ])
 
     def get_committees(self):
-        return Committee.query.all()
+        return Committee.query.order_by('title').all()
 
 
 class ActiveCommitteeVocabulary(CommitteeVocabulary):

@@ -5,6 +5,7 @@ Changelog
 2017.5.2 (unreleased)
 ---------------------
 
+- Sort entries in committee vocabulary by committee title. [tarnap]
 - Skip documents without a file in eCH-0147 exports. [phgross]
 - Include mails in eCH-0147 exports. [phgross]
 - OGGBundle: Do intermediate commits every 1000 items by default. [lgraf]
