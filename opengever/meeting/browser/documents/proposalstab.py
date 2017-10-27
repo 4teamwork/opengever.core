@@ -85,7 +85,7 @@ class ProposalListingTab(FilteredListingTab):
             {'column': 'title',
              'column_title': _(u'column_title', default=u'Title'),
              'transform': proposal_link,
-             'sortable': False,
+             'sortable': True,
              'groupable': False,
              'width': 350},
 
