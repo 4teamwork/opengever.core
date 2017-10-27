@@ -398,7 +398,7 @@ class LDAPSearch(object):
             ldap_name = schema_map['ldap_name']
             public_name = schema_map['public_name']
 
-            if not ldap_name in attrs:
+            if ldap_name not in attrs:
                 # Attribute not set (different from "present with None value")
                 continue
 
@@ -415,7 +415,7 @@ class LDAPSearch(object):
 
         # Process remaining attributes
         for key in attrs:
-            if not key in mapped_attr_names:
+            if key not in mapped_attr_names:
                 if self._is_multivalued(attrs['objectClass'], key):
                     value = attrs[key]
                 else:
@@ -486,7 +486,7 @@ class LDAPSearch(object):
         First look in our internal cache, and in case of a miss, get the info
         from the schema and cache it.
         """
-        if not attr_name in self._multivaluedness:
+        if attr_name not in self._multivaluedness:
             self._multivaluedness[attr_name] = self._check_if_multivalued(
                 obj_classes, attr_name)
         return self._multivaluedness[attr_name]
