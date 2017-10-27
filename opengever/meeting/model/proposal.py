@@ -30,6 +30,9 @@ from zope.component import getMultiAdapter
 from zope.globalrequest import getRequest
 
 
+MAX_TITLE_LENGTH = 256
+
+
 class Submit(Transition):
 
     def execute(self, obj, model):
@@ -97,6 +100,9 @@ class Proposal(Base):
     oguid = composite(Oguid, admin_unit_id, int_id)
     physical_path = Column(String(256), nullable=False)
     creator = Column(String(USER_ID_LENGTH), nullable=False)
+
+    title = Column(String(MAX_TITLE_LENGTH), index=True)
+    submitted_title = Column(String(MAX_TITLE_LENGTH), index=True)
 
     submitted_admin_unit_id = Column(String(UNIT_ID_LENGTH))
     submitted_int_id = Column(Integer)
