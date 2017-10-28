@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-31 13:33+0000\n"
+"POT-Creation-Date: 2017-10-31 13:34+0000\n"
 "PO-Revision-Date: 2017-10-24 14:51+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -409,11 +409,6 @@ msgstr "Traktandum beschliessen"
 msgid "action_download_document"
 msgstr "Dokument herunterladen"
 
-#. Default: "Edit agenda item"
-#: ./opengever/meeting/browser/meetings/meeting.py
-msgid "action_edit_agenda_item"
-msgstr "Traktandum bearbeiten"
-
 #. Default: "Edit with word"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "action_edit_document"
@@ -432,6 +427,11 @@ msgstr "Protokollauszug generieren"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "action_remove_agenda_item"
 msgstr "Traktandum streichen"
+
+#. Default: "Rename agenda item"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_rename_agenda_item"
+msgstr "Traktandum umbenennen"
 
 #. Default: "Reopen agenda item"
 #: ./opengever/meeting/browser/meetings/meeting.py
@@ -1325,6 +1325,11 @@ msgstr "Rolle"
 msgid "label_sablon_template_file"
 msgstr "Vorlage-Datei"
 
+#. Default: "Save"
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "label_save"
+msgstr "Speichern"
+
 #. Default: "Schedule"
 #: ./opengever/meeting/browser/meetings/meeting.py
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
@@ -1801,6 +1806,11 @@ msgstr "Zeit"
 #: ./opengever/meeting/model/meeting.py
 msgid "title_ad_hoc_document"
 msgstr "Traktandum ${title}"
+
+#. Default: "Rename agenda item"
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "title_rename_agenda_item"
+msgstr "Traktandum umbenennen"
 
 #. Default: "Remove from schedule"
 #: ./opengever/meeting/model/proposal.py

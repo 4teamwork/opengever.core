@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-31 13:33+0000\n"
+"POT-Creation-Date: 2017-10-31 13:34+0000\n"
 "PO-Revision-Date: 2017-06-22 09:02+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -411,11 +411,6 @@ msgstr ""
 msgid "action_download_document"
 msgstr ""
 
-#. Default: "Edit agenda item"
-#: ./opengever/meeting/browser/meetings/meeting.py
-msgid "action_edit_agenda_item"
-msgstr ""
-
 #. Default: "Edit with word"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "action_edit_document"
@@ -433,6 +428,11 @@ msgstr ""
 #. Default: "Remove agenda item"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "action_remove_agenda_item"
+msgstr ""
+
+#. Default: "Rename agenda item"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_rename_agenda_item"
 msgstr ""
 
 #. Default: "Reopen agenda item"
@@ -1327,6 +1327,11 @@ msgstr "Rôle"
 msgid "label_sablon_template_file"
 msgstr "Fichier-modèle"
 
+#. Default: "Save"
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "label_save"
+msgstr ""
+
 #. Default: "Schedule"
 #: ./opengever/meeting/browser/meetings/meeting.py
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
@@ -1802,6 +1807,11 @@ msgstr "Temps"
 #. Default: "Ad hoc agenda item ${title}"
 #: ./opengever/meeting/model/meeting.py
 msgid "title_ad_hoc_document"
+msgstr ""
+
+#. Default: "Rename agenda item"
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "title_rename_agenda_item"
 msgstr ""
 
 #. Default: "Remove from schedule"

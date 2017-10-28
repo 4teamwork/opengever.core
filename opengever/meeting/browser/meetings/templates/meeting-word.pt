@@ -147,6 +147,25 @@
           </form>
         </div>
 
+        <div class="overlay" id="rename_agenda_item_dialog">
+          <h2 i18n:translate="title_rename_agenda_item">Rename agenda item</h2>
+          <form>
+            <div class="input-group">
+              <label for="title"
+                     i18n:translate="label_title">Title</label>
+              <input type="text"
+                     name="title"
+                     id="agenda_item_title_field" />
+            </div>
+            <div class="button-group">
+              <button class="button confirm"
+                      i18n:translate="label_save">Save</button>
+              <button class="button cancel"
+                      i18n:translate="label_cancel">Cancel</button>
+            </div>
+          </form>
+        </div>
+
 
 
         <div class="sidebar"

@@ -384,7 +384,7 @@ class MeetingView(BrowserView):
                 _('action_edit_document', default='Edit with word'),
                 _('action_decide', default='Decide'),
                 _('action_generate_excerpt', default='Generate excerpt'),
-                _('action_edit_agenda_item', default='Edit agenda item'),
+                _('action_rename_agenda_item', default='Rename agenda item'),
                 _('action_remove_agenda_item', default='Remove agenda item'),
                 _('action_reopen', default='Reopen agenda item'),
             ),

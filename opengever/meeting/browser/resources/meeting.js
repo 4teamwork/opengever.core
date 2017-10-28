@@ -294,6 +294,48 @@
       }
     }).data("overlay");
 
+    var renameAgendaItemDialog = new function() {
+      var self = this;
+      self.url = null;
+      self.row = null;
+      self.titlePane = null;
+      self.field = $('#agenda_item_title_field');
+      self.overlay = $('#rename_agenda_item_dialog').overlay({
+        speed: 0,
+        closeSpeed: 0,
+        mask: { loadSpeed: 0 },
+        closeOnClick: false,
+        closeOnEsc: true,
+        onLoad: function() {
+          self.field.focus();
+        },
+        onClose: function() {
+          self.row = null;
+          self.titlePane = null;
+          self.field.val('');
+        }
+      }).data("overlay");
+
+      self.open = function(target) {
+        self.url = target.attr('href');
+        self.row = target.parents('tr:first');
+        self.titlePane = $('.proposal_title>a, .proposal_title', self.row);
+        self.field.val(self.titlePane.text().trim());
+        self.overlay.load();
+      };
+
+      self.submit = function() {
+        var data = {title: self.field.val().trim()};
+        return $.post(self.url, data).always(function(response) {
+          self.overlay.close();
+        });
+      };
+
+      self.cancel = function() {
+        self.overlay.close();
+      };
+    };
+
     var sortableHelper = function(e, row) {
       var helper = row.clone();
       $.each(row.children(), function(idx, cell) {
@@ -359,6 +401,9 @@
       if (typeof(createExcerptDialog) !== 'undefined') {
         createExcerptDialog.close();
       }
+      if (typeof(renameAgendaItemDialog) !== 'undefined') {
+        renameAgendaItemDialog.cancel();
+      }
     };
 
     this.updateSortOrder = function() {
@@ -370,12 +415,10 @@
     };
 
     this.showEditbox = function(target) {
+      /** no-word version only */
       var row = target.parents("tr");
       row.removeClass("expanded");
       var source_selectors = [
-            /* Word: */
-            ".title > span.proposal_title > a",
-            ".title > span.proposal_title",
             /* Non-word: */
             ".title > span > a",
             ".title > span"
@@ -542,6 +585,26 @@
         method: "click",
         target: ".edit-agenda-item",
         callback: this.showEditbox
+      },
+      {
+        method: "click",
+        target: ".rename-agenda-item",
+        callback: renameAgendaItemDialog.open
+      },
+      {
+        method: "submit",
+        target: "#rename_agenda_item_dialog form",
+        callback: renameAgendaItemDialog.submit,
+        options: {
+          update: true,
+          loading: true,
+          prevent: true
+        }
+      },
+      {
+        method: "click",
+        target: "#rename_agenda_item_dialog .cancel",
+        callback: renameAgendaItemDialog.cancel
       },
       {
         method: "click",
