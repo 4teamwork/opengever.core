@@ -85,7 +85,7 @@
             Are you sure you want to close this meeting?
           </p>
           <div class="button-group">
-            <button class="button confirm"
+            <button class="button confirm context"
                     i18n:translate="close_meeting">Close meeting</button>
             <button class="button decline"
                     i18n:translate="label_cancel">Cancel</button>
@@ -101,7 +101,7 @@
             Are you sure, you want to decide this agendaitem?
           </p>
           <div class="button-group">
-            <button class="button confirm"
+            <button class="button confirm context"
                     i18n:translate="label_decide">Decide</button>
             <button class="button decline"
                     i18n:translate="label_cancel">Cancel</button>
@@ -118,7 +118,7 @@
             Are you sure you want to return this excerpt to the proposer?
           </p>
           <div class="button-group">
-            <button class="button confirm"
+            <button class="button confirm context"
                     i18n:translate="label_return_excerpt">Return Excerpt</button>
             <button class="button decline"
                     i18n:translate="label_cancel">Cancel</button>
@@ -139,7 +139,7 @@
                        id="excerpt_title" />
               </div>
               <div class="button-group">
-                <button class="button confirm"
+                <button class="button confirm context"
                         i18n:translate="label_create_excerpt">Create Excerpt</button>
                 <button class="button decline"
                         i18n:translate="label_cancel">Cancel</button>
@@ -158,7 +158,7 @@
                      id="agenda_item_title_field" />
             </div>
             <div class="button-group">
-              <button class="button confirm"
+              <button class="button confirm context"
                       i18n:translate="label_save">Save</button>
               <button class="button cancel"
                       i18n:translate="label_cancel">Cancel</button>
