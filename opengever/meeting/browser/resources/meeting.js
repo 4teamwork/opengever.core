@@ -2,6 +2,10 @@
 
   "use strict";
 
+  HBS.registerHelper({
+    or: function (v1, v2) {return v1 || v2;}
+  });
+
   function MeetingController() {
 
     Controller.call(this);
@@ -505,6 +509,24 @@
       this.updateNavigationScrollArea();
     };
 
+    this.editMenuFor = function(toggle) {
+      return $(toggle).parents('.agenda-item-actions:first').find('ul.editing-menu');
+    };
+
+    this.toggleEditMenu = function(target) {
+      this.editMenuFor(target).toggleClass('opened');
+    };
+
+    this.closeEditMenues = function(target, event) {
+      if($(event.target).is('a.editing-menu') &&
+         this.editMenuFor(event.target).is('.opened')) {
+        /* User is trying to close the currently opened menu by using the toggle.
+           Let's not interfere. */
+        return;
+      }
+      $('ul.editing-menu.opened').removeClass('opened');
+    };
+
     this.events = [
       {
         method: "click",
@@ -632,6 +654,16 @@
         options: {
           prevent: false
         }
+      },
+      {
+        method: "click",
+        target: "a.editing-menu",
+        callback: this.toggleEditMenu
+      },
+      {
+        method: "mouseup",
+        target: document,
+        callback: this.closeEditMenues
       }
     ];
 

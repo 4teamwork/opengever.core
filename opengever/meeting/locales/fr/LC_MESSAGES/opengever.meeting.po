@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-25 15:34+0000\n"
+"POT-Creation-Date: 2017-10-31 13:33+0000\n"
 "PO-Revision-Date: 2017-06-22 09:02+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -24,7 +24,6 @@ msgid "A new submitted version of document ${title} has been created."
 msgstr "Une nouvelle version soumise du document ${title} a été créée."
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "Actions"
 msgstr "Actions"
 
@@ -403,12 +402,42 @@ msgstr ""
 msgid "action_close_meeting"
 msgstr ""
 
+#. Default: "Decide"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_decide"
+msgstr ""
+
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "action_download_document"
 msgstr ""
 
+#. Default: "Edit agenda item"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_edit_agenda_item"
+msgstr ""
+
+#. Default: "Edit with word"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_edit_document"
+msgstr ""
+
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "action_generate_document"
+msgstr ""
+
+#. Default: "Generate excerpt"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_generate_excerpt"
+msgstr ""
+
+#. Default: "Remove agenda item"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_remove_agenda_item"
+msgstr ""
+
+#. Default: "Reopen agenda item"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_reopen"
 msgstr ""
 
 #. Default: "Reopen meeting"
@@ -803,15 +832,15 @@ msgstr "Inactif"
 msgid "invalid_agenda_item_state"
 msgstr ""
 
-#. Default: "delete this agenda item"
-#: ./opengever/meeting/browser/meetings/meeting.py
-msgid "label_ad_hoc_delete_action"
-msgstr ""
-
 #. Default: "Ad hoc agenda item template"
 #: ./opengever/meeting/committee.py
 #: ./opengever/meeting/committeecontainer.py
 msgid "label_ad_hoc_template"
+msgstr ""
+
+#. Default: "Decided"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "label_agenda_item_decided"
 msgstr ""
 
 #. Default: "Agenda item number"
@@ -1026,11 +1055,6 @@ msgstr "Modifier après la création"
 msgid "label_edit_cancel"
 msgstr "Annuler"
 
-#. Default: "Checkout and edit word document."
-#: ./opengever/meeting/browser/meetings/meeting.py
-msgid "label_edit_document_action"
-msgstr ""
-
 #. Default: "Edit Membership"
 #: ./opengever/meeting/browser/memberships.py
 msgid "label_edit_membership"
@@ -1085,11 +1109,6 @@ msgstr "Filtrage"
 #: ./opengever/meeting/browser/templates/member.pt
 msgid "label_firstname"
 msgstr "Prénom"
-
-#. Default: "Generate an excerpt."
-#: ./opengever/meeting/browser/meetings/meeting.py
-msgid "label_generate_excerpt"
-msgstr ""
 
 #. Default: "Group"
 #: ./opengever/meeting/committee.py

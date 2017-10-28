@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-25 15:34+0000\n"
-"PO-Revision-Date: 2017-10-23 18:40+0200\n"
+"POT-Creation-Date: 2017-10-31 13:33+0000\n"
+"PO-Revision-Date: 2017-10-24 14:51+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -22,7 +22,6 @@ msgid "A new submitted version of document ${title} has been created."
 msgstr "Eine neu eingereichte Version des Dokuments ${title} wurde erstellt."
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "Actions"
 msgstr "Aktionen"
 
@@ -401,13 +400,43 @@ msgstr "Sie haben nicht die nötigen Rechte, um das Sitzungsdossier anzusehen."
 msgid "action_close_meeting"
 msgstr "Sitzung abschliessen"
 
+#. Default: "Decide"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_decide"
+msgstr "Traktandum beschliessen"
+
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "action_download_document"
 msgstr "Dokument herunterladen"
 
+#. Default: "Edit agenda item"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_edit_agenda_item"
+msgstr "Traktandum bearbeiten"
+
+#. Default: "Edit with word"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_edit_document"
+msgstr "In Word bearbeiten"
+
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "action_generate_document"
 msgstr "Dokument neu generieren"
+
+#. Default: "Generate excerpt"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_generate_excerpt"
+msgstr "Protokollauszug generieren"
+
+#. Default: "Remove agenda item"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_remove_agenda_item"
+msgstr "Traktandum streichen"
+
+#. Default: "Reopen agenda item"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_reopen"
+msgstr "Wieder öffnen"
 
 #. Default: "Reopen meeting"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
@@ -801,16 +830,16 @@ msgstr "Inaktiv"
 msgid "invalid_agenda_item_state"
 msgstr "Diese Aktion kann im aktuellen Zustand des Traktandums nicht durchgeführt werden."
 
-#. Default: "delete this agenda item"
-#: ./opengever/meeting/browser/meetings/meeting.py
-msgid "label_ad_hoc_delete_action"
-msgstr "Traktandum löschen"
-
 #. Default: "Ad hoc agenda item template"
 #: ./opengever/meeting/committee.py
 #: ./opengever/meeting/committeecontainer.py
 msgid "label_ad_hoc_template"
 msgstr "Vorlage für Traktanden ohne Antrag"
+
+#. Default: "Decided"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "label_agenda_item_decided"
+msgstr "Beschlossen"
 
 #. Default: "Agenda item number"
 #: ./opengever/meeting/browser/meetings/meeting.py
@@ -1024,11 +1053,6 @@ msgstr "Nach dem Hinzufügen bearbeiten"
 msgid "label_edit_cancel"
 msgstr "Abbrechen"
 
-#. Default: "Checkout and edit word document."
-#: ./opengever/meeting/browser/meetings/meeting.py
-msgid "label_edit_document_action"
-msgstr "Word-Dokument auschecken und bearbeiten."
-
 #. Default: "Edit Membership"
 #: ./opengever/meeting/browser/memberships.py
 msgid "label_edit_membership"
@@ -1083,11 +1107,6 @@ msgstr "Filtern"
 #: ./opengever/meeting/browser/templates/member.pt
 msgid "label_firstname"
 msgstr "Vorname"
-
-#. Default: "Generate an excerpt."
-#: ./opengever/meeting/browser/meetings/meeting.py
-msgid "label_generate_excerpt"
-msgstr "Protokollauszug generieren."
 
 #. Default: "Group"
 #: ./opengever/meeting/committee.py

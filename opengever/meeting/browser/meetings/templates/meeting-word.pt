@@ -362,8 +362,6 @@
                     tal:attributes="colspan python: '2' if has_sort_column else '1'">
                   Agenda items
                 </th>
-                <th i18n:translate=""
-                    tal:condition="meeting/is_editable">Actions</th>
               </tr>
             </thead>
             <tbody>

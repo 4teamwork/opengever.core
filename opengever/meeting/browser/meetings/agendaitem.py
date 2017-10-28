@@ -210,8 +210,9 @@ class AgendaItemsView(BrowserView):
                                            ICheckinCheckoutManager)
 
         button = {}
-        button['visible'] = bool(checkout_manager.check_permission(
-            'Modify portal content'))
+        button['visible'] = bool(
+            checkout_manager.check_permission('Modify portal content') and
+            not agenda_item.is_decided())
         button['active'] = button['visible'] and (
             checkout_manager.is_checkout_allowed() or
             checkout_manager.is_checked_out_by_current_user())
@@ -236,6 +237,7 @@ class AgendaItemsView(BrowserView):
             data['edit_link'] = meeting.get_url(
                 view='agenda_items/{}/edit'.format(item.agenda_item_id))
             data['decision_number'] = item.get_decision_number()
+            data['is_decided'] = item.is_decided()
             if item.is_decide_possible():
                 data['decide_link'] = meeting.get_url(
                     view='agenda_items/{}/decide'.format(item.agenda_item_id))
