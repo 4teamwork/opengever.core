@@ -374,12 +374,9 @@ class MeetingView(BrowserView):
                 _('label_edit_save', default='Save'),
                 _('label_attachments', default='Attachments'),
                 _('label_excerpts', default='Excerpts'),
-                _('label_return_action', default='Return excerpt to proposer'),
                 _('label_toggle_attachments', default='Toggle attachments'),
                 _('label_agenda_item_number', default='Agenda item number'),
                 _('label_decision_number', default=u'Decision number'),
-                _('label_returned_excerpt',
-                  default='This excerpt was returned to the dossier'),
                 _('label_agenda_item_decided', default='Decided'),
                 _('action_edit_document', default='Edit with word'),
                 _('action_decide', default='Decide'),
@@ -387,6 +384,16 @@ class MeetingView(BrowserView):
                 _('action_rename_agenda_item', default='Rename agenda item'),
                 _('action_remove_agenda_item', default='Remove agenda item'),
                 _('action_reopen', default='Reopen agenda item'),
+                _('action_return_excerpt', default='Return to proposal'),
+                _('help_return_excerpt',
+                  default='Return this excerpt the as official answer to the proposal.'),
+                _('label_returned_excerpt', default='Returned'),
+                _('help_returned_excerpt',
+                  default='This excerpt was returned to the dossier'),
+                _('action_create_task', default='Create task'),
+                _('help_create_task',
+                  default='Create a new task the meeting dossier and attach'
+                  ' this excerpt.')
             ),
             max_proposal_title_length=ISubmittedProposal['title'].max_length)
 

@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-31 13:34+0000\n"
-"PO-Revision-Date: 2017-10-24 14:51+0200\n"
+"POT-Creation-Date: 2017-10-31 13:55+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -400,6 +400,11 @@ msgstr "Sie haben nicht die nötigen Rechte, um das Sitzungsdossier anzusehen."
 msgid "action_close_meeting"
 msgstr "Sitzung abschliessen"
 
+#. Default: "Create task"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_create_task"
+msgstr "Aufgabe erstellen"
+
 #. Default: "Decide"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "action_decide"
@@ -442,6 +447,11 @@ msgstr "Wieder öffnen"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "action_reopen_meeting"
 msgstr "Sitzung wieder öffnen"
+
+#. Default: "Return to proposal"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_return_excerpt"
+msgstr "Protokollauszug zurücksenden"
 
 #. Default: "Active"
 #: ./opengever/meeting/browser/documents/proposalstab.py
@@ -805,10 +815,25 @@ msgstr "Durchgeführt"
 msgid "help_allowed_proposal_templates"
 msgstr "Wählen Sie alle Antragsvorlagen aus, die in diesem Gremium erlaubt sind. Wählen Sie keine Antragsvorlagen aus, um alle Vorlagen zu erlauben."
 
+#. Default: "Create a new task the meeting dossier and attach this excerpt."
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "help_create_task"
+msgstr "Neue Aufgabe im Sitzungsdossier erstellen und diesen Protokollauszug beilegen."
+
 #. Default: "Describe, why the proposal is rejected"
 #: ./opengever/meeting/browser/proposaltransitions.py
 msgid "help_reject_proposal_text"
 msgstr "Beschreiben Sie, warum der Antrag zurückgewiesen wird"
+
+#. Default: "Return this excerpt the as official answer to the proposal."
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "help_return_excerpt"
+msgstr "Diesen Protokollauszug als definitive Antwort an den Antrag zurücksenden."
+
+#. Default: "This excerpt was returned to the dossier"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "help_returned_excerpt"
+msgstr "Dieser Protokollauszug wurde als Antwort an den Antrag zurückgesendet."
 
 #. Default: "Select the target dossier where the excerpts should be created."
 #: ./opengever/meeting/browser/meetings/excerpt.py
@@ -1294,20 +1319,15 @@ msgstr "Löschen"
 msgid "label_reopen_action"
 msgstr "Traktandum wieder eröffnen"
 
-#. Default: "Return excerpt to proposer"
-#: ./opengever/meeting/browser/meetings/meeting.py
-msgid "label_return_action"
-msgstr "Protokollauszug an Antragsteller zurücksenden"
-
 #. Default: "Return Excerpt"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "label_return_excerpt"
 msgstr "Protokollauszug zurücksenden"
 
-#. Default: "This excerpt was returned to the dossier"
+#. Default: "Returned"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "label_returned_excerpt"
-msgstr "Dieser Protokollauszug wurde an den Antragsteller zurückgesendet."
+msgstr "An Antrag zurückgesendet."
 
 #. Default: "Revise this agenda item"
 #: ./opengever/meeting/browser/meetings/meeting.py

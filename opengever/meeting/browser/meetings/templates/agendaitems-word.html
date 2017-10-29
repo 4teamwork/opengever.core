@@ -82,16 +82,23 @@
         <div class="documents_label">%(label_excerpts)s:</div>
         <ul class="documents-list">
           {{#each excerpts}}
-          <li>
-            {{{link}}}
-            <span class="excerpt_buttons">
+          <li class="excerpt">
+            {{!--
+            <div class="create-task">
+              <a href="#" title="%(help_create_task)s">%(action_create_task)s</a>
+            </div>
+            --}}
+            <div class="return-excerpt">
               {{#if return_link}}
-              <a href="{{return_link}}" title="%(label_return_action)s" class="return-excerpt-btn"></a>
+              <a href="{{return_link}}" class="return-excerpt-btn" title="%(help_return_excerpt)s">%(action_return_excerpt)s</a>
               {{/if}}
               {{#if is_excerpt_in_source_dossier}}
-              <span title="%(label_returned_excerpt)s" class="returned-excerpt-icon"></span>
+              <span class="returned" title="%(help_returned_excerpt)s">
+                %(label_returned_excerpt)s
+              </span>
               {{/if}}
-            </span>
+            </div>
+            <div class="excerpt-link">{{{link}}}</div>
           </li>
           {{/each}}
         </ul>

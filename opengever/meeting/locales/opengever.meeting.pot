@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-31 13:34+0000\n"
+"POT-Creation-Date: 2017-10-31 13:55+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -399,6 +399,11 @@ msgstr ""
 msgid "action_close_meeting"
 msgstr ""
 
+#. Default: "Create task"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_create_task"
+msgstr ""
+
 #. Default: "Decide"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "action_decide"
@@ -440,6 +445,11 @@ msgstr ""
 #. Default: "Reopen meeting"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "action_reopen_meeting"
+msgstr ""
+
+#. Default: "Return to proposal"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_return_excerpt"
 msgstr ""
 
 #. Default: "Active"
@@ -804,9 +814,24 @@ msgstr ""
 msgid "help_allowed_proposal_templates"
 msgstr ""
 
+#. Default: "Create a new task the meeting dossier and attach this excerpt."
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "help_create_task"
+msgstr ""
+
 #. Default: "Describe, why the proposal is rejected"
 #: ./opengever/meeting/browser/proposaltransitions.py
 msgid "help_reject_proposal_text"
+msgstr ""
+
+#. Default: "Return this excerpt the as official answer to the proposal."
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "help_return_excerpt"
+msgstr ""
+
+#. Default: "This excerpt was returned to the dossier"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "help_returned_excerpt"
 msgstr ""
 
 #. Default: "Select the target dossier where the excerpts should be created."
@@ -1293,17 +1318,12 @@ msgstr ""
 msgid "label_reopen_action"
 msgstr ""
 
-#. Default: "Return excerpt to proposer"
-#: ./opengever/meeting/browser/meetings/meeting.py
-msgid "label_return_action"
-msgstr ""
-
 #. Default: "Return Excerpt"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "label_return_excerpt"
 msgstr ""
 
-#. Default: "This excerpt was returned to the dossier"
+#. Default: "Returned"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "label_returned_excerpt"
 msgstr ""
