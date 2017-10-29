@@ -13,6 +13,8 @@ from opengever.meeting.service import meeting_service
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListing
 from plone.app.contentlisting.interfaces import IContentListingObject
+from plone.memoize import view
+from plone.protect.utils import addTokenToUrl
 from plone.uuid.interfaces import IUUID
 from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
@@ -187,6 +189,7 @@ class AgendaItemsView(BrowserView):
 
         docs = IContentListing(item.get_excerpt_documents(unrestricted=True))
         source_dossier_excerpt = item.get_source_dossier_excerpt()
+        meeting_dossier = self.meeting.get_dossier()
 
         for doc in docs:
             data = {'link': doc.render_link()}
@@ -195,11 +198,24 @@ class AgendaItemsView(BrowserView):
                     data['return_link'] = meeting.get_url(
                         view='agenda_items/{}/return_excerpt?document={}'.format(
                             item.agenda_item_id, doc.uuid()))
+
             elif source_dossier_excerpt and doc == source_dossier_excerpt:
                 data['is_excerpt_in_source_dossier'] = True
+
+            if self._can_add_task_to_meeting_dossier():
+                data['create_task_url'] = addTokenToUrl(
+                    '{}/++add++opengever.task.task?paths:list={}'.format(
+                        meeting_dossier.absolute_url(),
+                        doc.getPath()))
+
             excerpt_data.append(data)
 
         return excerpt_data
+
+    @view.memoize
+    @require_word_meeting_feature
+    def _can_add_task_to_meeting_dossier(self):
+        return self.meeting.get_dossier().is_addable('opengever.task.task')
 
     @require_word_meeting_feature
     def _get_edit_document_options(self, document, agenda_item, meeting):
