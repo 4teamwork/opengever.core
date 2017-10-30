@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-24 12:48+0000\n"
+"POT-Creation-Date: 2017-10-25 15:34+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -684,6 +684,11 @@ msgstr ""
 msgid "download protocol"
 msgstr ""
 
+#. Default: "Editing is not allowed."
+#: ./opengever/meeting/browser/meetings/agendaitem.py
+msgid "editing_not_allowed"
+msgstr ""
+
 #. Default: "Paragraph must not be empty."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "empty_paragraph"
@@ -788,6 +793,11 @@ msgstr ""
 #. Default: "Inactive"
 #: ./opengever/meeting/model/committee.py
 msgid "inactive"
+msgstr ""
+
+#. Default: "The agenda item is in an invalid state for this action."
+#: ./opengever/meeting/browser/meetings/agendaitem.py
+msgid "invalid_agenda_item_state"
 msgstr ""
 
 #. Default: "delete this agenda item"

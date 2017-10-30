@@ -284,7 +284,7 @@ class TestWordAgendaItem(IntegrationTestCase):
         self.assertEquals(self.meeting.model.STATE_CLOSED,
                           self.meeting.model.get_state())
 
-        with browser.expect_unauthorized():
+        with browser.expect_http_error(code=403):
             browser.open(self.agenda_item_url(agenda_item, 'generate_excerpt'))
 
     @browsing
@@ -292,8 +292,10 @@ class TestWordAgendaItem(IntegrationTestCase):
         self.login(self.committee_responsible, browser)
         agenda_item = self.schedule_proposal(self.meeting,
                                              self.submitted_word_proposal)
-        with browser.expect_http_error(reason='Forbidden'):
-            browser.open(self.agenda_item_url(agenda_item, 'generate_excerpt'))
+        with browser.expect_http_error(code=403):
+            browser.open(
+                self.agenda_item_url(agenda_item, 'generate_excerpt'),
+                data={'excerpt_title': u'foo'})
 
     @browsing
     def test_error_when_no_access_to_meeting_dossier(self, browser):
@@ -311,17 +313,17 @@ class TestWordAgendaItem(IntegrationTestCase):
             agenda_item.decide()
 
         self.login(self.regular_user, browser)
-        browser.open(
-            self.agenda_item_url(agenda_item, 'generate_excerpt'),
-            data={'excerpt_title': 'Excerption \xc3\x84nderungen'})
-        self.assertEquals(
-            {u'messages': [
-                {u'messageTitle': u'Error',
-                 u'message': u'Insufficient privileges to add a document'
-                 u' to the meeting dossier.',
-                 u'messageClass': u'error'}],
-             u'proceed': False},
-            browser.json)
+        with browser.expect_http_error(code=403):
+            browser.open(
+                self.agenda_item_url(agenda_item, 'generate_excerpt'),
+                data={'excerpt_title': 'Excerption \xc3\x84nderungen'})
+            self.assertEquals(
+                {u'messages': [
+                    {u'messageTitle': u'Error',
+                     u'message': u'Insufficient privileges to add a document '
+                     u'to the meeting dossier.',
+                     u'messageClass': u'error'}]},
+                browser.json)
 
     @browsing
     def test_excerpts_listed_in_meeting_item_data(self, browser):

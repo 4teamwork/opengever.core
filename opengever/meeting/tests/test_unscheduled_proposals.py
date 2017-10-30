@@ -86,7 +86,7 @@ class TestScheduleProposal(TestUnscheduledProposals):
             proposal.load_model().proposal_id)
         browser.login().open(self.meeting_wrapper, view=view)
 
-        agenda_items =  Meeting.get(self.meeting.meeting_id).agenda_items
+        agenda_items = Meeting.get(self.meeting.meeting_id).agenda_items
         self.assertEquals(1, len(agenda_items))
         self.assertTrue(agenda_items[0].has_proposal)
         self.assertEqual(proposal.load_model(), agenda_items[0].proposal)
@@ -103,15 +103,16 @@ class TestScheduleProposal(TestUnscheduledProposals):
             proposal.load_model().proposal_id)
         browser.login().open(self.meeting_wrapper, view=view)
 
-        agenda_items =  Meeting.get(self.meeting.meeting_id).agenda_items
-        self.assertEquals(u'<div>Project allowed.</div>',agenda_items[0].decision)
+        agenda_items = Meeting.get(self.meeting.meeting_id).agenda_items
+        self.assertEquals(u'<div>Project allowed.</div>',
+                          agenda_items[0].decision)
 
     @browsing
-    def test_raise_unauthorized_when_meeting_is_not_editable(self, browser):
+    def test_raise_forbidden_when_meeting_is_not_editable(self, browser):
         self.meeting.workflow_state = 'closed'
 
         view = 'unscheduled_proposals/1/schedule'
-        with browser.expect_unauthorized():
+        with browser.expect_http_error(code=403):
             browser.login().open(self.meeting_wrapper, view=view)
 
     @browsing

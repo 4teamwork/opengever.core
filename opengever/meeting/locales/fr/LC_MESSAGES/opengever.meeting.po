@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-24 12:48+0000\n"
+"POT-Creation-Date: 2017-10-25 15:34+0000\n"
 "PO-Revision-Date: 2017-06-22 09:02+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -687,6 +687,11 @@ msgstr "Dossier"
 msgid "download protocol"
 msgstr "Télécharger le protocole"
 
+#. Default: "Editing is not allowed."
+#: ./opengever/meeting/browser/meetings/agendaitem.py
+msgid "editing_not_allowed"
+msgstr ""
+
 #. Default: "Paragraph must not be empty."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "empty_paragraph"
@@ -792,6 +797,11 @@ msgstr "Tenir une réunion"
 #: ./opengever/meeting/model/committee.py
 msgid "inactive"
 msgstr "Inactif"
+
+#. Default: "The agenda item is in an invalid state for this action."
+#: ./opengever/meeting/browser/meetings/agendaitem.py
+msgid "invalid_agenda_item_state"
+msgstr ""
 
 #. Default: "delete this agenda item"
 #: ./opengever/meeting/browser/meetings/meeting.py

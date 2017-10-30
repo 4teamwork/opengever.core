@@ -1,13 +1,15 @@
+from functools import wraps
 from opengever.base.response import JSONResponse
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.meeting import _
 from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting import require_word_meeting_feature
+from opengever.meeting.exceptions import CannotExecuteTransition
 from opengever.meeting.exceptions import MissingAdHocTemplate
 from opengever.meeting.exceptions import MissingMeetingDossierPermissions
+from opengever.meeting.exceptions import WrongAgendaItemState
 from opengever.meeting.proposal import ISubmittedProposal
 from opengever.meeting.service import meeting_service
-from opengever.trash.trash import ITrashable
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListing
 from plone.app.contentlisting.interfaces import IContentListingObject
@@ -17,8 +19,8 @@ from Products.Five.browser import BrowserView
 from zExceptions import BadRequest
 from zExceptions import Forbidden
 from zExceptions import NotFound
-from zExceptions import Unauthorized
 from zope.component import getMultiAdapter
+from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.interface import implements
 from zope.interface import Interface
@@ -87,6 +89,44 @@ class IAgendaItemActions(Interface):
     def return_excerpt():
         """Return an excerpt to the proposals dossier.
         """
+
+
+def return_jsonified_exceptions(func):
+    """Decorator for converting common exceptions to JSONResponses.
+    """
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+
+        except (WrongAgendaItemState, CannotExecuteTransition):
+            return JSONResponse(getRequest()).error(
+                _(u'invalid_agenda_item_state',
+                  default=u'The agenda item is in an invalid state for '
+                           'this action.'),
+                status=403).dump()
+
+        except Forbidden:
+            return JSONResponse(getRequest()).error(
+                _(u'editing_not_allowed',
+                  default=u'Editing is not allowed.'),
+                status=403).dump()
+
+        except MissingMeetingDossierPermissions:
+            return JSONResponse(getRequest()).error(
+                _('error_no_permission_to_add_document',
+                  default=u'Insufficient privileges to add a '
+                          u'document to the meeting dossier.'),
+                status=403).dump()
+
+        except MissingAdHocTemplate:
+            return JSONResponse(getRequest()).error(
+                _('missing_ad_hoc_template',
+                  default=u"No ad-hoc agenda-item template has been "
+                          u"configured."),
+                status=501).dump()
+
+    return wrapper
 
 
 class AgendaItemsView(BrowserView):
@@ -184,7 +224,7 @@ class AgendaItemsView(BrowserView):
             'edit_document_button': button}
 
     def _get_agenda_items(self):
-        meeting = self.context.model
+        meeting = self.meeting
         agenda_items = []
         for item in meeting.agenda_items:
             data = item.serialize()
@@ -241,19 +281,21 @@ class AgendaItemsView(BrowserView):
         """
         return JSONResponse(self.request).data(items=self._get_agenda_items()).dump()
 
+    @return_jsonified_exceptions
     def update_order(self):
         """Updates the order of the agendaitems. The new sortOrder is expected
         in the request parameter `sortOrder`.
         """
         self.require_agendalist_editable()
 
-        self.context.model.reorder_agenda_items(
+        self.meeting.reorder_agenda_items(
             json.loads(self.request.get('sortOrder')))
 
         return JSONResponse(self.request).info(
             _('agenda_item_order_updated',
               default=u"Agenda Item order updated.")).dump()
 
+    @return_jsonified_exceptions
     def edit(self):
         """Updates the title of the agendaitem, with the one given by the
         request parameter `title`.
@@ -279,6 +321,7 @@ class AgendaItemsView(BrowserView):
             _('agenda_item_updated',
               default=u"Agenda Item updated.")).proceed().dump()
 
+    @return_jsonified_exceptions
     def delete(self):
         """Unschedule the current agenda_item. If the agenda_item has no
         proposal, the agenda_item gets deleted. If there is a proposal related,
@@ -286,27 +329,20 @@ class AgendaItemsView(BrowserView):
         """
         self.require_agendalist_editable()
 
-        # the agenda_item is ad hoc if it has a document but no proposal
-        if self.agenda_item.has_document and not self.agenda_item.has_proposal:
-            document = self.agenda_item.resolve_document()
-            trasher = ITrashable(document)
-            trasher.trash()
-
         self.agenda_item.remove()
 
         return JSONResponse(self.request).info(
             _(u'agenda_item_deleted',
               default=u'Agenda Item Successfully deleted')).dump()
 
+    @return_jsonified_exceptions
     def decide(self):
         """Decide the current agendaitem and move the meeting in the
         held state.
         """
+        self.require_editable()
+
         meeting_state = self.meeting.get_state()
-
-        if not self.context.model.is_editable():
-            raise Unauthorized("Editing is not allowed")
-
         error_response = self._checkin_proposal_document_before_deciding()
         if error_response:
             return error_response
@@ -355,12 +391,12 @@ class AgendaItemsView(BrowserView):
 
         checkout_manager.checkin()
 
+    @return_jsonified_exceptions
     def reopen(self):
         """Reopen the current agendaitem. Set the workflow state to revision
         to indicate that editing is possible again.
         """
-        if not self.context.model.is_editable():
-            raise Unauthorized("Editing is not allowed")
+        self.require_editable()
 
         self.agenda_item.reopen()
 
@@ -368,19 +404,19 @@ class AgendaItemsView(BrowserView):
             _(u'agenda_item_reopened',
               default=u'Agenda Item successfully reopened.')).dump()
 
+    @return_jsonified_exceptions
     def revise(self):
         """Revise the current agendaitem. Set the workflow state to decided
         to indicate that editing is no longer possible.
         """
-        if not self.context.model.is_editable():
-            raise Unauthorized("Editing is not allowed")
+        self.require_editable()
 
         self.agenda_item.revise()
-
         return JSONResponse(self.request).info(
             _(u'agenda_item_revised',
               default=u'Agenda Item revised successfully.')).dump()
 
+    @return_jsonified_exceptions
     def edit_document(self):
         """Checkout and open the document with office connector.
         """
@@ -402,6 +438,7 @@ class AgendaItemsView(BrowserView):
 
         return response.dump()
 
+    @return_jsonified_exceptions
     def schedule_paragraph(self):
         """Schedule the given Paragraph (request parameter `title`) for the current
         meeting.
@@ -418,6 +455,7 @@ class AgendaItemsView(BrowserView):
             _('paragraph_added', default=u"Paragraph successfully added.")
         ).proceed().dump()
 
+    @return_jsonified_exceptions
     def schedule_text(self):
         """Schedule the given Text (request parameter `title`) for the current
         meeting.
@@ -431,21 +469,7 @@ class AgendaItemsView(BrowserView):
                 ).proceed().dump()
 
         if is_word_meeting_implementation_enabled():
-            try:
-                self.meeting.schedule_ad_hoc(title)
-            except MissingAdHocTemplate:
-                return JSONResponse(self.request).error(
-                        _('missing_ad_hoc_template',
-                          default=u"No ad-hoc agenda-item template has been "
-                                  u"configured.")
-                    ).remain().dump()
-            except MissingMeetingDossierPermissions:
-                return JSONResponse(self.request).error(
-                        _('error_no_permission_to_add_document',
-                          default=u'Insufficient privileges to add a'
-                                  u' document to the meeting dossier.')
-                       ).remain().dump()
-
+            self.meeting.schedule_ad_hoc(title)
         else:
             self.meeting.schedule_text(title)
 
@@ -454,31 +478,21 @@ class AgendaItemsView(BrowserView):
 
     def require_editable(self):
         if not self.meeting.is_editable():
-            raise Unauthorized("Editing is not allowed")
+            raise Forbidden("Editing is not allowed")
 
     def require_agendalist_editable(self):
         if not self.meeting.is_agendalist_editable():
-            raise Unauthorized("Editing is not allowed")
+            raise Forbidden("Editing is not allowed")
 
+    @return_jsonified_exceptions
     def generate_excerpt(self):
         """Generate an excerpt of an agenda item and store it in
         the meeting dossier.
         """
-        if not self.context.model.is_editable():
-            raise Unauthorized("Editing is not allowed")
+        self.require_editable()
 
-        if not self.agenda_item.can_generate_excerpt():
-            raise Forbidden('Generating excerpt is not allowed in this state.')
-
-        try:
-            self.agenda_item.generate_excerpt(title=self.request.form['excerpt_title'])
-        except MissingMeetingDossierPermissions:
-            return (JSONResponse(self.request)
-                    .error(_('error_no_permission_to_add_document',
-                             default=u'Insufficient privileges to add a'
-                             u' document to the meeting dossier.'))
-                    .remain()
-                    .dump())
+        self.agenda_item.generate_excerpt(
+            title=self.request.form['excerpt_title'])
 
         return (JSONResponse(self.request)
                 .info(_('excerpt_generated',
@@ -486,6 +500,7 @@ class AgendaItemsView(BrowserView):
                 .proceed()
                 .dump())
 
+    @return_jsonified_exceptions
     def return_excerpt(self):
         """Return an excerpt for a proposal to the dossier the proposal
         originated from.

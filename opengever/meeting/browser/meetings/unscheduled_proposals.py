@@ -2,8 +2,8 @@ from opengever.base.response import JSONResponse
 from opengever.meeting import _
 from opengever.meeting.model import Proposal
 from Products.Five.browser import BrowserView
+from zExceptions import Forbidden
 from zExceptions import NotFound
-from zExceptions import Unauthorized
 from zope.interface import implements
 from zope.publisher.interfaces import IPublishTraverse
 from zope.publisher.interfaces.browser import IBrowserView
@@ -32,14 +32,14 @@ class UnscheduledProposalsView(BrowserView):
         return '{}/unscheduled_proposals/{}/schedule'.format(
             self.context.absolute_url(), proposal.proposal_id)
 
-    def check_editable(self):
-        if not self.meeting.is_editable():
-            raise Unauthorized("Editing is not allowed")
+    def require_editable(self):
+        if not self.meeting.is_agendalist_editable():
+            raise Forbidden("Editing is not allowed")
 
     def schedule_proposal(self):
         """Schedule the current proposal on the current meeting.
         """
-        self.check_editable()
+        self.require_editable()
 
         proposal = Proposal.get(self.proposal_id)
         if not proposal:

@@ -11,6 +11,7 @@ from opengever.meeting import _
 from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting import require_word_meeting_feature
 from opengever.meeting.exceptions import MissingMeetingDossierPermissions
+from opengever.meeting.exceptions import WrongAgendaItemState
 from opengever.meeting.model import Period
 from opengever.meeting.model.excerpt import Excerpt
 from opengever.meeting.workflow import State
@@ -29,6 +30,7 @@ from sqlalchemy.orm import composite
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
 from zope.component import getMultiAdapter
+from opengever.trash.trash import ITrashable
 
 
 class AgendaItem(Base):
@@ -261,6 +263,12 @@ class AgendaItem(Base):
     def remove(self):
         assert self.meeting.is_editable()
 
+        # the agenda_item is ad hoc if it has a document but no proposal
+        if self.has_document and not self.has_proposal:
+            document = self.resolve_document()
+            trasher = ITrashable(document)
+            trasher.trash()
+
         session = create_session()
         if self.proposal:
             self.proposal.remove_scheduled(self.meeting)
@@ -401,7 +409,8 @@ class AgendaItem(Base):
         return False
 
     def revise(self):
-        assert self.is_revise_possible()
+        if not self.is_revise_possible():
+            raise WrongAgendaItemState()
 
         if self.has_proposal:
             self.proposal.revise(self)
@@ -423,7 +432,9 @@ class AgendaItem(Base):
         from the ad-hoc agenda items document.
         In both cases the excerpt is stored in the meeting dossier.
         """
-        assert self.can_generate_excerpt()
+        if not self.can_generate_excerpt():
+            raise WrongAgendaItemState()
+
         meeting_dossier = self.meeting.get_dossier()
         source_document = self.resolve_document()
 

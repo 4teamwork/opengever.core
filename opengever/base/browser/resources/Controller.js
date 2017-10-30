@@ -303,7 +303,7 @@
         } else {
           request.resolve(data);
         }
-      }).fail(function() { request.reject(); });
+      }).fail(function(response) { request.reject(response.responseJSON); });
 
       request.done(function() {
         if(options.loading) { target.removeClass("loading"); }

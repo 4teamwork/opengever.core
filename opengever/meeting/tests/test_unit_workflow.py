@@ -1,7 +1,8 @@
-from unittest import TestCase
+from opengever.meeting.exceptions import CannotExecuteTransition
 from opengever.meeting.workflow import State
 from opengever.meeting.workflow import Transition
 from opengever.meeting.workflow import Workflow
+from unittest import TestCase
 
 
 class SomethingWithWorkflow(object):
@@ -94,7 +95,7 @@ class TestUnitWorkflow(TestCase):
 
     def test_does_not_perform_unavailable_transition(self):
         obj = SomethingWithWorkflow(initial_state=self.pending.name)
-        with self.assertRaises(AssertionError):
+        with self.assertRaises(CannotExecuteTransition):
             self.workflow.execute_transition(None, obj, self.submit.name)
 
     def test_does_not_perform_invalid_transition(self):

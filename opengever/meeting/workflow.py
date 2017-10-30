@@ -1,3 +1,6 @@
+from opengever.meeting.exceptions import CannotExecuteTransition
+
+
 class State(object):
 
     def __init__(self, name, is_default=False, title=None):
@@ -50,7 +53,10 @@ class Transition(object):
         return self._visible and self.condition()
 
     def execute(self, obj, model):
-        assert self.can_execute(model)
+        if not self.can_execute(model):
+            raise CannotExecuteTransition(
+                "Cannot execute transition {} from {} to {}".format(
+                    self.title, self.state_from, self.state_to))
         model.workflow_state = self.state_to
 
     def get_validation_errors(self, model):

@@ -200,13 +200,13 @@ class TestAgendaItemEdit(TestAgendaItem):
                                  view='agenda_items/12345/edit')
 
     @browsing
-    def test_update_agenda_item_raise_unauthorized_when_meeting_is_not_editable(self, browser):
+    def test_update_agenda_item_raise_forbidden_when_meeting_is_not_editable(self, browser):
         item = create(Builder('agenda_item').having(
             title=u'foo', meeting=self.meeting))
 
         self.meeting.workflow_state = 'closed'
 
-        with browser.expect_unauthorized():
+        with browser.expect_http_error(code=403):
             browser.login().open(
                 self.meeting_wrapper,
                 view='agenda_items/{}/edit'.format(item.agenda_item_id),
@@ -254,25 +254,25 @@ class TestAgendaItemDelete(TestAgendaItem):
                 view='agenda_items/{}/delete'.format(other_item.agenda_item_id))
 
     @browsing
-    def test_update_agenda_item_raise_unauthorized_when_agenda_list_is_not_editable(self, browser):
+    def test_update_agenda_item_raise_forbidden_when_agenda_list_is_not_editable(self, browser):
         item = create(Builder('agenda_item').having(
             title=u'foo', meeting=self.meeting))
 
         self.meeting.workflow_state = 'held'
 
-        with browser.expect_unauthorized():
+        with browser.expect_http_error(code=403):
             browser.login().open(
                 self.meeting_wrapper,
                 view='agenda_items/{}/delete'.format(item.agenda_item_id))
 
     @browsing
-    def test_update_agenda_item_raise_unauthorized_when_meeting_is_not_editable(self, browser):
+    def test_update_agenda_item_raise_forbidden_when_meeting_is_not_editable(self, browser):
         item = create(Builder('agenda_item').having(
             title=u'foo', meeting=self.meeting))
 
         self.meeting.workflow_state = 'closed'
 
-        with browser.expect_unauthorized():
+        with browser.expect_http_error(code=403):
             browser.login().open(
                 self.meeting_wrapper,
                 view='agenda_items/{}/delete'.format(item.agenda_item_id))
@@ -401,13 +401,13 @@ class TestAgendaItemDecide(TestAgendaItem):
                                  view='agenda_items/12345/decide')
 
     @browsing
-    def test_update_agenda_item_raise_unauthorized_when_meeting_is_not_editable(self, browser):
+    def test_update_agenda_item_raise_forbidden_when_meeting_is_not_editable(self, browser):
         item = create(Builder('agenda_item').having(
             title=u'foo', meeting=self.meeting))
 
         self.meeting.workflow_state = 'closed'
 
-        with browser.expect_unauthorized():
+        with browser.expect_http_error(code=403):
             browser.login().open(
                 self.meeting_wrapper,
                 view='agenda_items/{}/decide'.format(item.agenda_item_id))
@@ -482,14 +482,14 @@ class TestAgendaItemReopen(TestAgendaItem):
                                  view='agenda_items/12345/reopen')
 
     @browsing
-    def test_raise_unauthorized_when_meeting_is_not_editable(self, browser):
+    def test_raise_forbidden_when_meeting_is_not_editable(self, browser):
         item = create(Builder('agenda_item').having(
             title=u'foo', meeting=self.meeting))
         item.decide()
 
         self.meeting.workflow_state = 'closed'
 
-        with browser.expect_unauthorized():
+        with browser.expect_http_error(code=403):
             browser.login().open(
                 self.meeting_wrapper,
                 view='agenda_items/{}/reopen'.format(item.agenda_item_id))
@@ -557,14 +557,14 @@ class TestAgendaItemRevise(TestAgendaItem):
                                  view='agenda_items/12345/revise')
 
     @browsing
-    def test_raise_unauthorized_when_meeting_is_not_editable(self, browser):
+    def test_raise_forbidden_when_meeting_is_not_editable(self, browser):
         item = create(Builder('agenda_item').having(
             title=u'foo', meeting=self.meeting))
         item.decide()
 
         self.meeting.workflow_state = 'closed'
 
-        with browser.expect_unauthorized():
+        with browser.expect_http_error(code=403):
             browser.login().open(
                 self.meeting_wrapper,
                 view='agenda_items/{}/revise'.format(item.agenda_item_id))
@@ -599,18 +599,18 @@ class TestAgendaItemUpdateOrder(TestAgendaItem):
                           browser.json.get('messages'))
 
     @browsing
-    def test_raise_unauthorized_when_agenda_list_is_not_editable(self, browser):
+    def test_raise_forbidden_when_agenda_list_is_not_editable(self, browser):
         self.meeting.workflow_state = 'closed'
 
-        with browser.expect_unauthorized():
+        with browser.expect_http_error(code=403):
             browser.login().open(self.meeting_wrapper,
                                  view='agenda_items/update_order')
 
     @browsing
-    def test_raise_unauthorized_when_meeting_is_not_editable(self, browser):
+    def test_raise_forbidden_when_meeting_is_not_editable(self, browser):
         self.meeting.workflow_state = 'closed'
 
-        with browser.expect_unauthorized():
+        with browser.expect_http_error(code=403):
             browser.login().open(self.meeting_wrapper,
                                  view='agenda_items/update_order')
 
@@ -630,18 +630,18 @@ class TestScheduleParagraph(TestAgendaItem):
         self.assertTrue(agenda_items[0].is_paragraph)
 
     @browsing
-    def test_raise_unauthorized_when_agenda_list_is_not_editable(self, browser):
+    def test_raise_forbidden_when_agenda_list_is_not_editable(self, browser):
         self.meeting.workflow_state = 'held'
 
-        with browser.expect_unauthorized():
+        with browser.expect_http_error(code=403):
             browser.login().open(self.meeting_wrapper,
                                  view='agenda_items/schedule_paragraph')
 
     @browsing
-    def test_raise_unauthorized_when_meeting_is_not_editable(self, browser):
+    def test_raise_forbidden_when_meeting_is_not_editable(self, browser):
         self.meeting.workflow_state = 'closed'
 
-        with browser.expect_unauthorized():
+        with browser.expect_http_error(code=403):
             browser.login().open(self.meeting_wrapper,
                                  view='agenda_items/schedule_paragraph')
 
@@ -661,19 +661,19 @@ class TestScheduleText(TestAgendaItem):
         self.assertFalse(agenda_items[0].is_paragraph)
 
     @browsing
-    def test_raise_unauthorized_when_agenda_list_is_not_editable(self, browser):
+    def test_raise_forbidden_when_agenda_list_is_not_editable(self, browser):
         self.meeting.workflow_state = 'held'
 
-        with browser.expect_unauthorized():
+        with browser.expect_http_error(code=403):
             browser.login().open(self.meeting_wrapper,
                                  view='agenda_items/schedule_text',
                                  data={'title': u'Baugesuch Herr Maier'})
 
     @browsing
-    def test_raise_unauthorized_when_meeting_is_not_editable(self, browser):
+    def test_raise_forbidden_when_meeting_is_not_editable(self, browser):
         self.meeting.workflow_state = 'closed'
 
-        with browser.expect_unauthorized():
+        with browser.expect_http_error(code=403):
             browser.login().open(self.meeting_wrapper,
                                      view='agenda_items/schedule_text',
                                      data={'title': u'Baugesuch Herr Maier'})
