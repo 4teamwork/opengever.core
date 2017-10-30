@@ -121,10 +121,10 @@ def return_jsonified_exceptions(func):
 
         except MissingAdHocTemplate:
             return JSONResponse(getRequest()).error(
-                    _('missing_ad_hoc_template',
-                      default=u"No ad-hoc agenda-item template has been "
-                              u"configured.")
-                ).remain().dump()
+                _('missing_ad_hoc_template',
+                  default=u"No ad-hoc agenda-item template has been "
+                          u"configured."),
+                status=501).dump()
 
     return wrapper
 
