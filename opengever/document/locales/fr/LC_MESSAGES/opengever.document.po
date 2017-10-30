@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-13 12:25+0000\n"
+"POT-Creation-Date: 2017-10-12 13:53+0000\n"
 "PO-Revision-Date: 2017-09-03 08:50+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-document/fr/>\n"
@@ -264,8 +264,14 @@ msgstr "Date de réception du document écrit"
 #. Default: "Initial version"
 #: ./opengever/document/browser/versions_tab.py
 #: ./opengever/document/versioner.py
+#: ./opengever/document/checkout/handlers.py
 msgid "initial_document_version_change_note"
 msgstr "Document créé (version initiale)"
+
+#. Default: "Abort"
+#: ./opengever/document/service.py
+msgid "label_abort"
+msgstr ""
 
 #. Default: "Changed by"
 #: ./opengever/document/browser/versions_tab.py
@@ -401,6 +407,11 @@ msgstr "Télécharger"
 msgid "label_download_copy"
 msgstr "Télécharger une copie"
 
+#. Default: "Failed to delete the shadow document."
+#: ./opengever/document/service.py
+msgid "label_failed_shadow_document_deletion"
+msgstr ""
+
 #. Default: "File"
 #: ./opengever/document/browser/overview.py
 #: ./opengever/document/document.py
@@ -419,8 +430,14 @@ msgstr "Mots-clés"
 
 #. Default: "no"
 #: ./opengever/document/browser/overview.py
+#: ./opengever/document/service.py
 msgid "label_no"
 msgstr "Non"
+
+#. Default: "Initializing officeatwork"
+#: ./opengever/document/service.py
+msgid "label_officeatwork_init_title"
+msgstr ""
 
 #: ./opengever/document/browser/templates/downloadconfirmation.pt
 msgid "label_ok"
@@ -477,6 +494,11 @@ msgstr "Numéro de référence"
 msgid "label_related_documents"
 msgstr "Documents liés"
 
+#. Default: "Retry"
+#: ./opengever/document/service.py
+msgid "label_retry"
+msgstr ""
+
 #. Default: "Revert"
 #: ./opengever/document/browser/versions_tab.py
 msgid "label_revert"
@@ -487,10 +509,20 @@ msgstr "Reculer"
 msgid "label_sequence_number"
 msgstr "Numéro courant"
 
+#. Default: "Delete document"
+#: ./opengever/document/service.py
+msgid "label_shadow_document_delete_confirm_title"
+msgstr ""
+
 #. Default: "from"
 #: ./opengever/document/viewlets/byline.py
 msgid "label_start_byline"
 msgstr "Date du document"
+
+#. Default: "Succesfully deleted the shadow document."
+#: ./opengever/document/service.py
+msgid "label_succesful_shadow_document_deletion"
+msgstr ""
 
 #. Default: "Thumbnail"
 #: ./opengever/document/behaviors/metadata.py
@@ -510,6 +542,7 @@ msgstr "Version"
 
 #. Default: "yes"
 #: ./opengever/document/browser/overview.py
+#: ./opengever/document/service.py
 msgid "label_yes"
 msgstr "Oui"
 
@@ -522,6 +555,16 @@ msgstr "Ce document a été verrouillé par ${creator}."
 #: ./opengever/document/checkout/cancel.py
 msgid "msg_cancel_checkout_on_mail_not_possible"
 msgstr "Le document `${title}` n'a pas pu être verrouillé, car les e-mails ne sont pas supportés par le processus de check-in / check-out."
+
+#. Default: "Please wait."
+#: ./opengever/document/service.py
+msgid "msg_officeatwork_init"
+msgstr ""
+
+#. Default: "Do you really want to delete this document?"
+#: ./opengever/document/service.py
+msgid "msg_shadow_document_delete_confirm_message"
+msgstr ""
 
 #. Default: "No file"
 #: ./opengever/document/browser/templates/archiv_file.pt

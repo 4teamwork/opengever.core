@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-13 12:25+0000\n"
+"POT-Creation-Date: 2017-10-12 13:53+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -265,7 +265,13 @@ msgstr ""
 #. Default: "Initial version"
 #: ./opengever/document/browser/versions_tab.py
 #: ./opengever/document/versioner.py
+#: ./opengever/document/checkout/handlers.py
 msgid "initial_document_version_change_note"
+msgstr ""
+
+#. Default: "Abort"
+#: ./opengever/document/service.py
+msgid "label_abort"
 msgstr ""
 
 #. Default: "Changed by"
@@ -402,6 +408,11 @@ msgstr ""
 msgid "label_download_copy"
 msgstr ""
 
+#. Default: "Failed to delete the shadow document."
+#: ./opengever/document/service.py
+msgid "label_failed_shadow_document_deletion"
+msgstr ""
+
 #. Default: "File"
 #: ./opengever/document/browser/overview.py
 #: ./opengever/document/document.py
@@ -420,7 +431,13 @@ msgstr ""
 
 #. Default: "no"
 #: ./opengever/document/browser/overview.py
+#: ./opengever/document/service.py
 msgid "label_no"
+msgstr ""
+
+#. Default: "Initializing officeatwork"
+#: ./opengever/document/service.py
+msgid "label_officeatwork_init_title"
 msgstr ""
 
 #: ./opengever/document/browser/templates/downloadconfirmation.pt
@@ -478,6 +495,11 @@ msgstr ""
 msgid "label_related_documents"
 msgstr ""
 
+#. Default: "Retry"
+#: ./opengever/document/service.py
+msgid "label_retry"
+msgstr ""
+
 #. Default: "Revert"
 #: ./opengever/document/browser/versions_tab.py
 msgid "label_revert"
@@ -488,9 +510,19 @@ msgstr ""
 msgid "label_sequence_number"
 msgstr ""
 
+#. Default: "Delete document"
+#: ./opengever/document/service.py
+msgid "label_shadow_document_delete_confirm_title"
+msgstr ""
+
 #. Default: "from"
 #: ./opengever/document/viewlets/byline.py
 msgid "label_start_byline"
+msgstr ""
+
+#. Default: "Succesfully deleted the shadow document."
+#: ./opengever/document/service.py
+msgid "label_succesful_shadow_document_deletion"
 msgstr ""
 
 #. Default: "Thumbnail"
@@ -511,6 +543,7 @@ msgstr ""
 
 #. Default: "yes"
 #: ./opengever/document/browser/overview.py
+#: ./opengever/document/service.py
 msgid "label_yes"
 msgstr ""
 
@@ -522,6 +555,16 @@ msgstr ""
 #. Default: "Could not cancel checkout on document ${title}, mails does not support the checkin checkout process."
 #: ./opengever/document/checkout/cancel.py
 msgid "msg_cancel_checkout_on_mail_not_possible"
+msgstr ""
+
+#. Default: "Please wait."
+#: ./opengever/document/service.py
+msgid "msg_officeatwork_init"
+msgstr ""
+
+#. Default: "Do you really want to delete this document?"
+#: ./opengever/document/service.py
+msgid "msg_shadow_document_delete_confirm_message"
 msgstr ""
 
 #. Default: "No file"

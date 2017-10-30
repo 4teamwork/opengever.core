@@ -58,7 +58,7 @@ class DocumentFromOfficeatwork(WizzardWrappedAddForm):
                 redirector.redirect(target_url)
 
                 return self.request.RESPONSE.redirect(
-                    '{}#documents'.format(self.context.absolute_url()))
+                    '{}?oaw_init=1'.format(aq_wrapped_doc.absolute_url()))
 
             def create(self, data):
                 document = super(WrappedForm, self).create(data)
@@ -67,7 +67,6 @@ class DocumentFromOfficeatwork(WizzardWrappedAddForm):
 
             def initialize_in_shadow_state(self, document):
                 """Force the initial state to be document-state-shadow."""
-
                 document.as_shadow_document()
 
             @buttonAndHandler(pd_mf(u'Cancel'), name='cancel')

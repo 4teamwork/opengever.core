@@ -246,4 +246,41 @@
 
   <adapter factory=".document.UploadValidator" />
 
+  <!-- plone.rest services -->
+  <plone:service
+      method="GET"
+      for="opengever.document.document.IDocumentSchema"
+      accept="application/json"
+      factory=".service.OfficeatworkInitializationLabels"
+      name="oaw_init_labels"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <plone:service
+      method="GET"
+      for="opengever.document.document.IDocumentSchema"
+      accept="application/json"
+      factory=".service.OfficeatworkRetryAbortLabels"
+      name="oaw_retry_abort_labels"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <plone:service
+      method="GET"
+      for="opengever.document.document.IDocumentSchema"
+      accept="application/json"
+      factory=".service.ShadowDocumentDeleteConfirmMessage"
+      name="delete_confirm"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <plone:service
+      method="DELETE"
+      for="opengever.document.document.IDocumentSchema"
+      accept="application/json"
+      factory=".service.DeleteShadowDocument"
+      name="delete_shadow_document"
+      permission="cmf.ModifyPortalContent"
+      />
+
 </configure>
