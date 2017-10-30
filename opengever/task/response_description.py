@@ -138,7 +138,24 @@ class Accept(ResponseDescription):
 
     css_class = 'accept'
 
+    @property
+    def _msg_mapping(self):
+        mapping = super(Accept, self)._msg_mapping
+        change = self.response.get_change('responsible')
+        if change:
+            mapping['old_responsible'] = Actor.lookup(change.get('before')).get_link()
+            mapping['new_responsible'] = Actor.lookup(change.get('after')).get_link()
+
+        return mapping
+
     def msg(self):
+        # Accepting a team task changes the responsible.
+        if self.response.get_change('responsible'):
+            return _(u'transition_msg_accept_team_task',
+                     default=u'Accepted by ${user}, responsible changed from '
+                     '${old_responsible} to ${new_responsible}.',
+                     mapping=self._msg_mapping)
+
         return _('transition_msg_accept', u'Accepted by ${user}',
                  mapping=self._msg_mapping)
 
@@ -263,7 +280,6 @@ class AssignToDossier(ResponseDescription):
     css_class = 'assignDossier'
 
     def msg(self):
-
         successor = self.response.get_succesor()
         return _('transition_msg_assign_to_dossier',
                  u'Assigned to dossier by ${user} successor=${successor}',

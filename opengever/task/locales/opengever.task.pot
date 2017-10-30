@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-10-02 12:52+0000\n"
+"POT-Creation-Date: 2017-10-30 13:29+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -27,11 +27,11 @@ msgstr ""
 msgid "Changes saved to response id ${response_id}."
 msgstr ""
 
-#: ./opengever/task/viewlets/response_templates/responseview.pt
+#: ./opengever/task/viewlets/templates/responseview.pt
 msgid "Delete"
 msgstr ""
 
-#: ./opengever/task/viewlets/response_templates/responseview.pt
+#: ./opengever/task/viewlets/templates/responseview.pt
 msgid "Edit"
 msgstr ""
 
@@ -326,7 +326,7 @@ msgid "help_responsible_multiple"
 msgstr ""
 
 #: ./opengever/task/browser/assign.py
-#: ./opengever/task/form.py
+#: ./opengever/task/browser/forms.py
 msgid "help_responsible_single_client_setup"
 msgstr ""
 
@@ -373,7 +373,7 @@ msgid "label_accept_select_repositoryfolder"
 msgstr ""
 
 #. Default: "Agency"
-#: ./opengever/task/viewlets/actionmenu_templates/actionmenuviewlet.pt
+#: ./opengever/task/viewlets/templates/actionmenuviewlet.pt
 msgid "label_agency"
 msgstr ""
 
@@ -403,7 +403,7 @@ msgid "label_complete_documents"
 msgstr ""
 
 #. Default: "Containing tasks"
-#: ./opengever/task/browser/overview_templates/overview.pt
+#: ./opengever/task/browser/templates/overview.pt
 msgid "label_containing_task"
 msgstr ""
 
@@ -427,7 +427,7 @@ msgid "label_deadline"
 msgstr ""
 
 #. Default: "Documents"
-#: ./opengever/task/browser/overview_templates/overview.pt
+#: ./opengever/task/browser/templates/overview.pt
 msgid "label_documents"
 msgstr ""
 
@@ -484,7 +484,7 @@ msgid "label_last_modified"
 msgstr ""
 
 #. Default: "Main Atrributes"
-#: ./opengever/task/browser/overview_templates/overview.pt
+#: ./opengever/task/browser/templates/overview.pt
 msgid "label_main_attributes"
 msgstr ""
 
@@ -503,7 +503,7 @@ msgid "label_predecessor"
 msgstr ""
 
 #. Default: "Predecessor task"
-#: ./opengever/task/browser/overview_templates/overview.pt
+#: ./opengever/task/browser/templates/overview.pt
 msgid "label_predecessor_task"
 msgstr ""
 
@@ -529,7 +529,7 @@ msgstr ""
 #. Default: "Responsible"
 #: ./opengever/task/browser/assign.py
 #: ./opengever/task/browser/overview.py
-#: ./opengever/task/response_syncer/workflow.py
+#: ./opengever/task/handlers.py
 msgid "label_responsible"
 msgstr ""
 
@@ -544,12 +544,12 @@ msgid "label_sequence_number"
 msgstr ""
 
 #. Default: "Sub tasks"
-#: ./opengever/task/browser/overview_templates/overview.pt
+#: ./opengever/task/browser/templates/overview.pt
 msgid "label_sub_task"
 msgstr ""
 
 #. Default: "Successor task"
-#: ./opengever/task/browser/overview_templates/overview.pt
+#: ./opengever/task/browser/templates/overview.pt
 msgid "label_successor_task"
 msgstr ""
 
@@ -624,7 +624,7 @@ msgid "new_dossier"
 msgstr ""
 
 #. Default: "Progress:"
-#: ./opengever/task/viewlets/response_templates/responseview.pt
+#: ./opengever/task/viewlets/templates/responseview.pt
 msgid "progress"
 msgstr ""
 
@@ -813,6 +813,11 @@ msgstr ""
 msgid "transition_msg_accept"
 msgstr ""
 
+#. Default: "Accepted by ${user}, responsible changed from ${old_responsible} to ${new_responsible}."
+#: ./opengever/task/response_description.py
+msgid "transition_msg_accept_team_task"
+msgstr ""
+
 #. Default: "Assigned to dossier by ${user} successor=${successor}"
 #: ./opengever/task/response_description.py
 msgid "transition_msg_assign_to_dossier"
@@ -893,4 +898,3 @@ msgstr ""
 #: ./opengever/task/browser/complete.py
 msgid "version_message_resolved_task"
 msgstr ""
-

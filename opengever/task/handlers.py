@@ -2,6 +2,8 @@ from Acquisition import aq_inner, aq_parent
 from datetime import date
 from opengever.document.behaviors import IBaseDocument
 from opengever.globalindex.handlers.task import TaskSqlSyncer
+from opengever.task import _
+from opengever.task.adapters import IResponseContainer
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
 from plone import api
@@ -61,4 +63,9 @@ def reassign_team_tasks(task, event):
         return
 
     if task.is_team_task:
+        old_responsible = ITask(task).responsible
         ITask(task).responsible = api.user.get_current().getId()
+        IResponseContainer(task)[-1].add_change(
+            'responsible',
+            _(u"label_responsible", default=u"Responsible"),
+            old_responsible, ITask(task).responsible)

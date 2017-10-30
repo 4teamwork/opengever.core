@@ -13,6 +13,7 @@ Changelog
 - Make sure response changes are persistent. [phgross]
 - SPV word: redesign agenda items in meeting view. [jone]
 - Add new role DossierManager with the related permission "opengever.dossier: Protect dossier" [elioschmutz]
+- Make responsible change, when accepting a team task visible in the response. [phgross]
 - Prevent editing agenda item list when meeting has been held. [deiferni]
 - Allow proposal listings to be filtered by proposal title. [deiferni]
 - Allow proposal listings to be sorted by title. [deiferni]

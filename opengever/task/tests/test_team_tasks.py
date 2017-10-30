@@ -3,6 +3,7 @@ from ftw.testbrowser.pages import factoriesmenu
 from opengever.activity import notification_center
 from opengever.activity.model import Activity
 from opengever.base.model import create_session
+from opengever.task.adapters import IResponseContainer
 from opengever.task.task import ITask
 from opengever.testing import IntegrationTestCase
 
@@ -104,3 +105,36 @@ class TestTeamTasks(IntegrationTestCase):
                           ITask(self.task).responsible)
         self.assertEquals(self.regular_user.getId(),
                           self.task.get_sql_object().responsible)
+
+    @browsing
+    def test_responsible_change_is_visible_in_the_response(self, browser):
+        self.login(self.regular_user, browser)
+
+        ITask(self.task).responsible = u'team:1'
+        self.task.get_sql_object().responsible = u'team:1'
+        self.set_workflow_state('task-state-open', self.task)
+
+        browser.open(self.task, view='tabbedview_view-overview')
+        browser.click_on('task-transition-open-in-progress')
+        browser.fill({'Response': u'Das \xfcbernehme ich!'})
+        browser.click_on('Save')
+
+        response = IResponseContainer(self.task)[-1]
+        expected = [{'before': u'team:1',
+                     'after': 'kathi.barfuss',
+                     'id': 'responsible',
+                     'name': u'label_responsible'},
+                    {'before': 'task-state-open',
+                     'after': 'task-state-in-progress',
+                     'id': 'review_state',
+                     'name': u'Issue state'}]
+
+        self.assertEquals(
+            expected, [dict(change) for change in response.changes])
+
+        browser.open(self.task, view='tabbedview_view-overview')
+        self.assertEquals(
+            u'Accepted by B\xe4rfuss K\xe4thi (kathi.barfuss), responsible '
+            u'changed from Projekt \xdcberbaung Dorfmatte (Finanzamt) to '
+            u'B\xe4rfuss K\xe4thi (kathi.barfuss).',
+            browser.css('.answer h3').text[0])

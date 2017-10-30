@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-02 12:52+0000\n"
+"POT-Creation-Date: 2017-10-30 13:29+0000\n"
 "PO-Revision-Date: 2017-09-03 09:19+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-task/fr/>\n"
@@ -28,11 +28,11 @@ msgstr "${subtask_num} sous-tâche(s) a (ont) été créé(es)."
 msgid "Changes saved to response id ${response_id}."
 msgstr "Modifications de la réponse ${response_id} ont été sauvegardées"
 
-#: ./opengever/task/viewlets/response_templates/responseview.pt
+#: ./opengever/task/viewlets/templates/responseview.pt
 msgid "Delete"
 msgstr "Supprimer"
 
-#: ./opengever/task/viewlets/response_templates/responseview.pt
+#: ./opengever/task/viewlets/templates/responseview.pt
 msgid "Edit"
 msgstr "Modifier"
 
@@ -328,7 +328,7 @@ msgid "help_responsible_multiple"
 msgstr "Sélectionnez les personnes responsables."
 
 #: ./opengever/task/browser/assign.py
-#: ./opengever/task/form.py
+#: ./opengever/task/browser/forms.py
 msgid "help_responsible_single_client_setup"
 msgstr "Choix de la personne responsable"
 
@@ -375,7 +375,7 @@ msgid "label_accept_select_repositoryfolder"
 msgstr "Numéro de classement"
 
 #. Default: "Agency"
-#: ./opengever/task/viewlets/actionmenu_templates/actionmenuviewlet.pt
+#: ./opengever/task/viewlets/templates/actionmenuviewlet.pt
 msgid "label_agency"
 msgstr "Remplacement"
 
@@ -405,7 +405,7 @@ msgid "label_complete_documents"
 msgstr "Documents"
 
 #. Default: "Containing tasks"
-#: ./opengever/task/browser/overview_templates/overview.pt
+#: ./opengever/task/browser/templates/overview.pt
 msgid "label_containing_task"
 msgstr "Tâche principale"
 
@@ -429,7 +429,7 @@ msgid "label_deadline"
 msgstr "A réaliser jusqu'au"
 
 #. Default: "Documents"
-#: ./opengever/task/browser/overview_templates/overview.pt
+#: ./opengever/task/browser/templates/overview.pt
 msgid "label_documents"
 msgstr "Documents"
 
@@ -486,7 +486,7 @@ msgid "label_last_modified"
 msgstr "Dernière modification"
 
 #. Default: "Main Atrributes"
-#: ./opengever/task/browser/overview_templates/overview.pt
+#: ./opengever/task/browser/templates/overview.pt
 msgid "label_main_attributes"
 msgstr "Attributs"
 
@@ -506,7 +506,7 @@ msgid "label_predecessor"
 msgstr "Prédécesseur"
 
 #. Default: "Predecessor task"
-#: ./opengever/task/browser/overview_templates/overview.pt
+#: ./opengever/task/browser/templates/overview.pt
 msgid "label_predecessor_task"
 msgstr "Tâche initiale"
 
@@ -532,7 +532,7 @@ msgstr "Response"
 #. Default: "Responsible"
 #: ./opengever/task/browser/assign.py
 #: ./opengever/task/browser/overview.py
-#: ./opengever/task/response_syncer/workflow.py
+#: ./opengever/task/handlers.py
 msgid "label_responsible"
 msgstr "Mandataire"
 
@@ -547,12 +547,12 @@ msgid "label_sequence_number"
 msgstr "Numéro courant"
 
 #. Default: "Sub tasks"
-#: ./opengever/task/browser/overview_templates/overview.pt
+#: ./opengever/task/browser/templates/overview.pt
 msgid "label_sub_task"
 msgstr "Sous-tâche"
 
 #. Default: "Successor task"
-#: ./opengever/task/browser/overview_templates/overview.pt
+#: ./opengever/task/browser/templates/overview.pt
 msgid "label_successor_task"
 msgstr "Tâche copiée"
 
@@ -628,7 +628,7 @@ msgid "new_dossier"
 msgstr "Nouveau Dossier"
 
 #. Default: "Progress:"
-#: ./opengever/task/viewlets/response_templates/responseview.pt
+#: ./opengever/task/viewlets/templates/responseview.pt
 msgid "progress"
 msgstr "Progrès"
 
@@ -817,6 +817,11 @@ msgstr "Révision de la tâche demandée"
 msgid "transition_msg_accept"
 msgstr "Accepté par ${user}"
 
+#. Default: "Accepted by ${user}, responsible changed from ${old_responsible} to ${new_responsible}."
+#: ./opengever/task/response_description.py
+msgid "transition_msg_accept_team_task"
+msgstr ""
+
 #. Default: "Assigned to dossier by ${user} successor=${successor}"
 #: ./opengever/task/response_description.py
 msgid "transition_msg_assign_to_dossier"
@@ -897,4 +902,3 @@ msgstr "Document copié de la tâche (tâche finie)"
 #: ./opengever/task/browser/complete.py
 msgid "version_message_resolved_task"
 msgstr "Document copié de la tâche (tâche achevée)"
-

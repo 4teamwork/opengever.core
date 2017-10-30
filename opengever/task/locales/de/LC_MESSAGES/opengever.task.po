@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-10-02 12:52+0000\n"
+"POT-Creation-Date: 2017-10-30 13:29+0000\n"
 "PO-Revision-Date: 2015-02-17 18:41+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -26,11 +26,11 @@ msgstr "${subtask_num} Unteraufgaben wurden erstellt."
 msgid "Changes saved to response id ${response_id}."
 msgstr "Änderungen an der Antwort ${response_id} wurden gespeichert"
 
-#: ./opengever/task/viewlets/response_templates/responseview.pt
+#: ./opengever/task/viewlets/templates/responseview.pt
 msgid "Delete"
 msgstr "Löschen"
 
-#: ./opengever/task/viewlets/response_templates/responseview.pt
+#: ./opengever/task/viewlets/templates/responseview.pt
 msgid "Edit"
 msgstr "Bearbeiten"
 
@@ -326,7 +326,7 @@ msgid "help_responsible_multiple"
 msgstr "Wählen Sie die verantwortlichen Personen aus."
 
 #: ./opengever/task/browser/assign.py
-#: ./opengever/task/form.py
+#: ./opengever/task/browser/forms.py
 msgid "help_responsible_single_client_setup"
 msgstr "Wählen Sie die verantwortliche Person aus"
 
@@ -373,7 +373,7 @@ msgid "label_accept_select_repositoryfolder"
 msgstr "Ordnungsposition"
 
 #. Default: "Agency"
-#: ./opengever/task/viewlets/actionmenu_templates/actionmenuviewlet.pt
+#: ./opengever/task/viewlets/templates/actionmenuviewlet.pt
 msgid "label_agency"
 msgstr "Stellvertretung"
 
@@ -403,7 +403,7 @@ msgid "label_complete_documents"
 msgstr "Dokumente"
 
 #. Default: "Containing tasks"
-#: ./opengever/task/browser/overview_templates/overview.pt
+#: ./opengever/task/browser/templates/overview.pt
 msgid "label_containing_task"
 msgstr "Hauptaufgabe"
 
@@ -427,7 +427,7 @@ msgid "label_deadline"
 msgstr "Zu erledigen bis"
 
 #. Default: "Documents"
-#: ./opengever/task/browser/overview_templates/overview.pt
+#: ./opengever/task/browser/templates/overview.pt
 msgid "label_documents"
 msgstr "Dokumente"
 
@@ -484,7 +484,7 @@ msgid "label_last_modified"
 msgstr "zuletzt verändert"
 
 #. Default: "Main Atrributes"
-#: ./opengever/task/browser/overview_templates/overview.pt
+#: ./opengever/task/browser/templates/overview.pt
 msgid "label_main_attributes"
 msgstr "Eigenschaften"
 
@@ -504,7 +504,7 @@ msgid "label_predecessor"
 msgstr "Vorgänger"
 
 #. Default: "Predecessor task"
-#: ./opengever/task/browser/overview_templates/overview.pt
+#: ./opengever/task/browser/templates/overview.pt
 msgid "label_predecessor_task"
 msgstr "Ursprüngliche Aufgabe"
 
@@ -530,7 +530,7 @@ msgstr "Antworttext"
 #. Default: "Responsible"
 #: ./opengever/task/browser/assign.py
 #: ./opengever/task/browser/overview.py
-#: ./opengever/task/response_syncer/workflow.py
+#: ./opengever/task/handlers.py
 msgid "label_responsible"
 msgstr "Auftragnehmer"
 
@@ -545,12 +545,12 @@ msgid "label_sequence_number"
 msgstr "Laufnummer"
 
 #. Default: "Sub tasks"
-#: ./opengever/task/browser/overview_templates/overview.pt
+#: ./opengever/task/browser/templates/overview.pt
 msgid "label_sub_task"
 msgstr "Unteraufgaben"
 
 #. Default: "Successor task"
-#: ./opengever/task/browser/overview_templates/overview.pt
+#: ./opengever/task/browser/templates/overview.pt
 msgid "label_successor_task"
 msgstr "Kopierte Aufgabe"
 
@@ -626,7 +626,7 @@ msgid "new_dossier"
 msgstr "neues Dossier"
 
 #. Default: "Progress:"
-#: ./opengever/task/viewlets/response_templates/responseview.pt
+#: ./opengever/task/viewlets/templates/responseview.pt
 msgid "progress"
 msgstr "Verlauf"
 
@@ -815,6 +815,11 @@ msgstr "Überarbeitung der Aufgabe angefordert"
 msgid "transition_msg_accept"
 msgstr "Akzeptiert durch ${user}"
 
+#. Default: "Accepted by ${user}, responsible changed from ${old_responsible} to ${new_responsible}."
+#: ./opengever/task/response_description.py
+msgid "transition_msg_accept_team_task"
+msgstr "Akzeptiert durch ${user}, Auftragnehmer geändert von ${old_responsible} nach ${new_responsible}."
+
 #. Default: "Assigned to dossier by ${user} successor=${successor}"
 #: ./opengever/task/response_description.py
 msgid "transition_msg_assign_to_dossier"
@@ -895,4 +900,3 @@ msgstr "Dokument von Aufgabe kopiert (Aufgabe abgeschlossen)"
 #: ./opengever/task/browser/complete.py
 msgid "version_message_resolved_task"
 msgstr "Dokument von Aufgabe kopiert (Aufgabe erledigt)"
-
