@@ -6,6 +6,7 @@ from ftw.mail.mail import IMail
 from functools import wraps
 from opengever.core.testing import OPENGEVER_INTEGRATION_TESTING
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.journal.tests.utils import get_journal_entry
 from opengever.meeting.model.agendaitem import AgendaItem
 from opengever.meeting.wrapper import MeetingWrapper
 from opengever.ogds.base.utils import ogds_service
@@ -25,6 +26,7 @@ from unittest import TestCase
 from z3c.relationfield.relation import RelationValue
 from zope.component import getMultiAdapter
 from zope.component import getUtility
+from zope.i18n import translate
 from zope.intid.interfaces import IIntIds
 import timeit
 
@@ -371,6 +373,12 @@ class IntegrationTestCase(TestCase):
                 api.user.get_current(),
                 obj,
                 msg or ''))
+
+    def assert_journal_entry(self, obj, type, title, entry=-1):
+        entry = get_journal_entry(obj, entry)
+        action = entry.get('action')
+        self.assertEquals(type, action.get('type'))
+        self.assertEquals(title, translate(action.get('title')))
 
     def brain_to_object(self, brain):
         """Return the object of a brain.

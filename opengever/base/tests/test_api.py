@@ -84,13 +84,13 @@ class TestBaseDocumentApi(FunctionalTestCase):
 
         body = (
             '<?xml version="1.0" encoding="utf-8"?>\n'
-            '<D:lockinfo xmlns:D="DAV:">\n'
-            '  <D:lockscope><D:exclusive/></D:lockscope>\n'
-            '  <D:locktype><D:write/></D:locktype>\n'
-            '  <D:owner>\n'
-            '  <D:href>Office Connector</D:href>\n'
-            '  </D:owner>\n'
-            '</D:lockinfo>'
+            '<d:lockinfo xmlns:D="DAV:">\n'
+            '  <d:lockscope><D:exclusive/></D:lockscope>\n'
+            '  <d:locktype><D:write/></D:locktype>\n'
+            '  <d:owner>\n'
+            '  <d:href>Office Connector</D:href>\n'
+            '  </d:owner>\n'
+            '</d:lockinfo>'
         )
 
         self.api.headers.update({'Accept': 'text/html'})

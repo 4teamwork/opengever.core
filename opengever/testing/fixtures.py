@@ -461,6 +461,13 @@ class OpengeverContentFixture(object):
             .titled(u'L\xe4\xe4res Dokum\xe4nt')
             ))
 
+        with self.features('officeconnector-attach', ):
+            self.register('second_document', create(
+                Builder('document').within(self.dossier)
+                .titled(u'Add\xe9nd\xfcm')
+                .with_asset_file('addendum.docx')
+                ))
+
     @staticuid()
     def create_empty_dossier(self):
         self.register('empty_dossier', create(

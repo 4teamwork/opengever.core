@@ -44,7 +44,7 @@
       accept="application/json"
       factory=".service.OfficeConnectorCheckoutURL"
       name="officeconnector_checkout_url"
-      permission="zope2.View"
+      permission="cmf.ModifyPortalContent"
       />
 
   <plone:service

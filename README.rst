@@ -518,6 +518,8 @@ Objects
           - self.mail_eml
           - self.mail_msg
           - self.proposal
+          - self.second_document
+          - self.shadow_document
           - self.subdossier
             - self.subdocument
           - self.subdossier2
