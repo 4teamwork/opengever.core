@@ -157,6 +157,12 @@
                    "
       />
 
+  <lawgiver:map_permissions
+      action_group="manage dossiers"
+      permissions="opengever.dossier: Protect dossier,
+                   "
+      />
+
   <!-- Remove GEVER content is only managed globally in rolemap.xml. -->
   <lawgiver:ignore
       permissions="

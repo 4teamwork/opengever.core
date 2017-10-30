@@ -10,5 +10,6 @@ class AddNewDossierManagerRole(UpgradeStep):
         self.update_workflow_security(
             [
                 'opengever_dossier_workflow',
+                'opengever_repository_workflow',
             ],
             reindex_security=False)

@@ -61,6 +61,7 @@
   <permission>opengever.dossier: Add dossiertemplate</permission>
   <permission>opengever.dossier: Add templatefolder</permission>
   <permission>opengever.dossier: Destroy dossier</permission>
+  <permission>opengever.dossier: Protect dossier</permission>
   <permission>opengever.inbox: Add Forwarding</permission>
   <permission>opengever.inbox: Add Inbox</permission>
   <permission>opengever.inbox: Add Year Folder</permission>
@@ -320,6 +321,7 @@
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="opengever.dossier: Destroy dossier" acquired="False"/>
+    <permission-map name="opengever.dossier: Protect dossier" acquired="False"/>
     <permission-map name="opengever.inbox: Add Forwarding" acquired="False">
       <permission-role>CommitteeAdministrator</permission-role>
       <permission-role>CommitteeResponsible</permission-role>
@@ -609,6 +611,7 @@
     <permission-map name="opengever.dossier: Add dossiertemplate" acquired="False"/>
     <permission-map name="opengever.dossier: Add templatefolder" acquired="False"/>
     <permission-map name="opengever.dossier: Destroy dossier" acquired="False"/>
+    <permission-map name="opengever.dossier: Protect dossier" acquired="False"/>
     <permission-map name="opengever.inbox: Add Forwarding" acquired="False"/>
     <permission-map name="opengever.inbox: Add Inbox" acquired="False">
       <permission-role>Manager</permission-role>
