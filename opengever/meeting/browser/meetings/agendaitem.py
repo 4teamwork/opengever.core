@@ -245,8 +245,7 @@ class AgendaItemsView(BrowserView):
         """Updates the order of the agendaitems. The new sortOrder is expected
         in the request parameter `sortOrder`.
         """
-        if not self.context.model.is_editable():
-            raise Unauthorized("Editing is not allowed")
+        self.require_agendalist_editable()
 
         self.context.model.reorder_agenda_items(
             json.loads(self.request.get('sortOrder')))
@@ -259,8 +258,7 @@ class AgendaItemsView(BrowserView):
         """Updates the title of the agendaitem, with the one given by the
         request parameter `title`.
         """
-        if not self.context.model.is_editable():
-            raise Unauthorized("Editing is not allowed")
+        self.require_agendalist_editable()
 
         title = self.request.get('title')
         if not title:
@@ -286,9 +284,7 @@ class AgendaItemsView(BrowserView):
         proposal, the agenda_item gets deleted. If there is a proposal related,
         the proposal is unscheduled.
         """
-
-        if not self.context.model.is_editable():
-            raise Unauthorized("Editing is not allowed")
+        self.require_agendalist_editable()
 
         # the agenda_item is ad hoc if it has a document but no proposal
         if self.agenda_item.has_document and not self.agenda_item.has_proposal:
@@ -388,7 +384,7 @@ class AgendaItemsView(BrowserView):
     def edit_document(self):
         """Checkout and open the document with office connector.
         """
-        self.check_editable()
+        self.require_editable()
 
         document = self.agenda_item.resolve_document()
         checkout_manager = getMultiAdapter((document, self.request),
@@ -410,7 +406,7 @@ class AgendaItemsView(BrowserView):
         """Schedule the given Paragraph (request parameter `title`) for the current
         meeting.
         """
-        self.check_editable()
+        self.require_agendalist_editable()
 
         title = self.request.get('title')
         if not title:
@@ -426,7 +422,8 @@ class AgendaItemsView(BrowserView):
         """Schedule the given Text (request parameter `title`) for the current
         meeting.
         """
-        self.check_editable()
+        self.require_agendalist_editable()
+
         title = safe_unicode(self.request.get('title'))
         if not title:
             return JSONResponse(self.request).error(
@@ -455,8 +452,12 @@ class AgendaItemsView(BrowserView):
         return JSONResponse(self.request).info(
             _('text_added', default=u"Text successfully added.")).proceed().dump()
 
-    def check_editable(self):
+    def require_editable(self):
         if not self.meeting.is_editable():
+            raise Unauthorized("Editing is not allowed")
+
+    def require_agendalist_editable(self):
+        if not self.meeting.is_agendalist_editable():
             raise Unauthorized("Editing is not allowed")
 
     def generate_excerpt(self):

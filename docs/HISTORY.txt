@@ -5,7 +5,7 @@ Changelog
 2017.6.1 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Prevent editing agenda item list when meeting has been held. [deiferni]
 
 
 2017.6.0 (2017-10-27)
