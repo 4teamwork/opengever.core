@@ -108,11 +108,11 @@ class TestScheduleProposal(TestUnscheduledProposals):
                           agenda_items[0].decision)
 
     @browsing
-    def test_raise_unauthorized_when_meeting_is_not_editable(self, browser):
+    def test_raise_forbidden_when_meeting_is_not_editable(self, browser):
         self.meeting.workflow_state = 'closed'
 
         view = 'unscheduled_proposals/1/schedule'
-        with browser.expect_unauthorized():
+        with browser.expect_http_error(code=403):
             browser.login().open(self.meeting_wrapper, view=view)
 
     @browsing

@@ -17,8 +17,8 @@ from plone.uuid.interfaces import IUUID
 from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
 from zExceptions import BadRequest
+from zExceptions import Forbidden
 from zExceptions import NotFound
-from zExceptions import Unauthorized
 from zope.component import getMultiAdapter
 from zope.globalrequest import getRequest
 from zope.i18n import translate
@@ -104,19 +104,20 @@ def return_jsonified_exceptions(func):
                 _(u'invalid_agenda_item_state',
                   default=u'The agenda item is in an invalid state for '
                            'this action.'),
-                status=401).dump()
+                status=403).dump()
 
-        except Unauthorized:
+        except Forbidden:
             return JSONResponse(getRequest()).error(
                 _(u'editing_not_allowed',
                   default=u'Editing is not allowed.'),
-                status=401).dump()
+                status=403).dump()
 
         except MissingMeetingDossierPermissions:
             return JSONResponse(getRequest()).error(
                 _('error_no_permission_to_add_document',
                   default=u'Insufficient privileges to add a '
-                          u'document to the meeting dossier.')).dump()
+                          u'document to the meeting dossier.'),
+                status=403).dump()
 
         except MissingAdHocTemplate:
             return JSONResponse(getRequest()).error(
@@ -477,11 +478,11 @@ class AgendaItemsView(BrowserView):
 
     def require_editable(self):
         if not self.meeting.is_editable():
-            raise Unauthorized("Editing is not allowed")
+            raise Forbidden("Editing is not allowed")
 
     def require_agendalist_editable(self):
         if not self.meeting.is_agendalist_editable():
-            raise Unauthorized("Editing is not allowed")
+            raise Forbidden("Editing is not allowed")
 
     @return_jsonified_exceptions
     def generate_excerpt(self):
