@@ -67,6 +67,7 @@ class Reactivate(ResponseDescription):
     def label(self):
         return _('transition_label_reactivate', u'Task reactivated')
 
+
 ResponseDescription.add_description(Reactivate)
 
 
@@ -80,6 +81,7 @@ class Reject(ResponseDescription):
 
     def label(self):
         return _('transition_label_reject', u'Task rejected')
+
 
 ResponseDescription.add_description(Reject)
 
@@ -96,6 +98,7 @@ class Resolve(ResponseDescription):
 
     def label(self):
         return _('transition_label_resolve', u'Task resolved')
+
 
 ResponseDescription.add_description(Resolve)
 
@@ -115,6 +118,7 @@ class Close(ResponseDescription):
     def label(self):
         return _('transition_label_close', u'Task closed')
 
+
 ResponseDescription.add_description(Close)
 
 
@@ -128,6 +132,7 @@ class Cancel(ResponseDescription):
 
     def label(self):
         return _('transition_label_cancelled', u'Task cancelled')
+
 
 ResponseDescription.add_description(Cancel)
 
@@ -177,6 +182,7 @@ class Reopen(ResponseDescription):
     def label(self):
         return _('transition_label_reopen', u'Task reopened')
 
+
 ResponseDescription.add_description(Reopen)
 
 
@@ -191,6 +197,7 @@ class Revise(ResponseDescription):
 
     def label(self):
         return _('transition_label_revise', u'Task revised')
+
 
 ResponseDescription.add_description(Revise)
 
@@ -214,6 +221,7 @@ class Reassign(ResponseDescription):
 
     def label(self):
         return _('transition_label_reassign', u'Task reassigned')
+
 
 ResponseDescription.add_description(Reassign)
 
@@ -239,6 +247,7 @@ class ModifyDeadline(ResponseDescription):
 
     def label(self):
         return _('transition_label_modify_deadline', u'Task deadline modified')
+
 
 ResponseDescription.add_description(ModifyDeadline)
 
@@ -290,6 +299,7 @@ class AssignToDossier(ResponseDescription):
         return _('transition_label_assign_to_dossier',
                  u'Forwarding assigned to Dossier')
 
+
 ResponseDescription.add_description(AssignToDossier)
 
 
@@ -312,6 +322,7 @@ class SubTaskAdded(ResponseDescription):
     def label(self):
         return _('transition_label_add_subtask', u'Subtask added to task')
 
+
 ResponseDescription.add_description(SubTaskAdded)
 
 
@@ -333,6 +344,7 @@ class DocumentAdded(ResponseDescription):
         return _('transition_label_add_document',
                  u'Document added to Task')
 
+
 ResponseDescription.add_description(DocumentAdded)
 
 
@@ -347,6 +359,7 @@ class TaskCommented(ResponseDescription):
 
     def label(self):
         return _('label_task_commented', u'Task commented')
+
 
 ResponseDescription.add_description(TaskCommented)
 
