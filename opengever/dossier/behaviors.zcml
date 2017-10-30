@@ -78,5 +78,14 @@
       for="plone.dexterity.interfaces.IDexterityContent"
       />
 
+  <!-- protection support -->
+  <plone:behavior
+      title="Protect dossier behavior"
+      description="Adds dossier protection functionality for dossiers"
+      provides=".behaviors.protect_dossier.IProtectDossier"
+      factory="plone.behavior.AnnotationStorage"
+      marker=".behaviors.protect_dossier.IProtectDossierMarker"
+      for="plone.dexterity.interfaces.IDexterityContent"
+      />
 
 </configure>

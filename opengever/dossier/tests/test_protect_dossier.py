@@ -1,3 +1,5 @@
+from ftw.testbrowser import browsing
+from opengever.dossier.behaviors.protect_dossier import IProtectDossier
 from opengever.testing import IntegrationTestCase
 from plone import api
 
@@ -49,3 +51,44 @@ class TestProtectDossier(IntegrationTestCase):
         self.assertFalse(
             api.user.has_permission('opengever.dossier: Protect dossier',
                                     obj=self.dossier))
+
+
+class TestProtectDossierBehavior(IntegrationTestCase):
+
+    @browsing
+    def test_regular_user_cannot_see_protect_dossier_fields(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.open(self.dossier, view="@@edit")
+
+        self.assertEqual(
+            0, len(browser.css('select#form-widgets-IProtectDossier-reading')))
+
+        self.assertEqual(
+            0, len(browser.css('select#form-widgets-IProtectDossier-reading_and_writing')))
+
+    @browsing
+    def test_dossier_manager_can_see_protect_dossier_fields(self, browser):
+        self.login(self.dossier_manager, browser)
+
+        browser.open(self.dossier, view="@@edit")
+
+        self.assertEqual(
+            1, len(browser.css('select#form-widgets-IProtectDossier-reading')))
+
+        self.assertEqual(
+            1, len(browser.css('select#form-widgets-IProtectDossier-reading_and_writing')))
+
+    @browsing
+    def test_dossier_manager_can_set_protect_dossier_fields(self, browser):
+        self.login(self.dossier_manager, browser)
+
+        browser.open(self.dossier, view="@@edit")
+
+        form = browser.find_form_by_field('Reading')
+        form.find_widget('Reading').fill('projekt_a')
+        form.find_widget('Reading and writing').fill('projekt_b')
+        browser.click_on('Save')
+
+        self.assertEqual(['projekt_a'], IProtectDossier(self.dossier).reading)
+        self.assertEqual(['projekt_b'], IProtectDossier(self.dossier).reading_and_writing)

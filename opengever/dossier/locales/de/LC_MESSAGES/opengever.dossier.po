@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-10-02 12:51+0000\n"
+"POT-Creation-Date: 2017-10-30 19:14+0000\n"
 "PO-Revision-Date: 2017-05-23 04:53+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
@@ -24,7 +24,7 @@ msgstr "${copied_items} Elemente wurden erfolgreich verschoben"
 msgid "Add Business Case Dossier"
 msgstr "Geschäftsdossier hinzufügen"
 
-#: ./opengever/dossier/behaviors/dossier.py
+#: ./opengever/dossier/browser/forms.py
 #: ./opengever/dossier/dossiertemplate/dossiertemplate.py
 msgid "Add Subdossier"
 msgstr "Subdossier hinzufügen"
@@ -49,7 +49,7 @@ msgstr "Beschreibung"
 msgid "Document ${name} is not movable."
 msgstr "Das Dokument «${name}» ist nicht verschiebbar."
 
-#: ./opengever/dossier/browser/overview_templates/overview.pt
+#: ./opengever/dossier/browser/templates/overview.pt
 msgid "Dossier structure"
 msgstr "Dossier-Struktur"
 
@@ -61,7 +61,7 @@ msgstr "Dossiervorlage"
 msgid "Dossiers successfully reactivated."
 msgstr "Das Dossier wurde erfolgreich wieder eröffnet."
 
-#: ./opengever/dossier/behaviors/dossier.py
+#: ./opengever/dossier/browser/forms.py
 #: ./opengever/dossier/dossiertemplate/dossiertemplate.py
 msgid "Edit Subdossier"
 msgstr "Subdossier bearbeiten"
@@ -94,7 +94,7 @@ msgstr "Neuste Dokumente"
 msgid "Newest tasks"
 msgstr "Neuste Aufgaben"
 
-#: ./opengever/dossier/browser/overview_templates/overview.pt
+#: ./opengever/dossier/browser/templates/overview.pt
 msgid "No Subdossiers"
 msgstr "Keine Subdossiers"
 
@@ -219,7 +219,7 @@ msgid "additional_attributes"
 msgstr "Zusatzattribute"
 
 #. Default: "Add"
-#: ./opengever/dossier/behaviors/participation.py
+#: ./opengever/dossier/browser/forms.py
 msgid "button_add"
 msgstr "Erstellen"
 
@@ -230,7 +230,7 @@ msgstr "Speichern"
 
 #. Default: "Cancel"
 #: ./opengever/dossier/archive.py
-#: ./opengever/dossier/behaviors/participation.py
+#: ./opengever/dossier/browser/forms.py
 #: ./opengever/dossier/dossiertemplate/form.py
 msgid "button_cancel"
 msgstr "Abbrechen"
@@ -275,6 +275,16 @@ msgstr "Geschäftsdossier aus Vorlage erstellen"
 msgid "description_predefined_keywords"
 msgstr "Durch Aktivieren dieser Option werden bei der Erstellung des Dossiers ab Vorlage die angegebenen Schlagworte bereits vorausgefüllt."
 
+#. Default: "Choose users and groups which have only readable access to the dossier"
+#: ./opengever/dossier/behaviors/protect_dossier.py
+msgid "description_reading"
+msgstr "Wählen Sie Benutzer und Gruppen aus, welche im Dossier ausschliesslich lesend Zugriff erhalten sollen."
+
+#. Default: "Choose users and groups which have readable and writing access to the dossier"
+#: ./opengever/dossier/behaviors/protect_dossier.py
+msgid "description_reading_and_writing"
+msgstr "Wählen Sie Benutzer und Gruppen aus, welche im Dossier lesend und schreibend Zugriff erhalten sollen. Die Benutzer dieser Gruppe werden dazu berechtigt, das Dossier zu bearbeiten, Inhalte zu erstellen und zu bearbeiten."
+
 #. Default: "The user can choose only from the defined keywords in a new dossier from template. It also prevents the user for creating new keywords"
 #: ./opengever/dossier/dossiertemplate/behaviors.py
 msgid "description_restrict_keywords"
@@ -308,6 +318,11 @@ msgstr "Allgemein"
 #: ./opengever/dossier/behaviors/filing.py
 msgid "fieldset_filing"
 msgstr "Ablage"
+
+#. Default: "Protect"
+#: ./opengever/dossier/behaviors/protect_dossier.py
+msgid "fieldset_protect"
+msgstr "Schützen"
 
 #. Default: "Action"
 #: ./opengever/dossier/archive.py
@@ -417,12 +432,12 @@ msgid "help_title_help"
 msgstr "Empfehlung für Titel. Wird beim Erstellen eines Dossiers ab Vorlage als Hilfetext dargestellt."
 
 #. Default: "Participation created."
-#: ./opengever/dossier/behaviors/participation.py
+#: ./opengever/dossier/browser/forms.py
 msgid "info_participation_create"
 msgstr "Die Beteiligung wurde gespeichert."
 
 #. Default: "Removed participations."
-#: ./opengever/dossier/behaviors/participation.py
+#: ./opengever/dossier/browser/forms.py
 msgid "info_removed_participations"
 msgstr "Die Beteiligungen wurde entfernt."
 
@@ -617,7 +632,7 @@ msgid "label_participants"
 msgstr "Beteiligungen"
 
 #. Default: "Participation"
-#: ./opengever/dossier/behaviors/participation.py
+#: ./opengever/dossier/browser/forms.py
 msgid "label_participation"
 msgstr "Beteiligung"
 
@@ -645,6 +660,16 @@ msgstr "Antragsvorlagen"
 #: ./opengever/dossier/browser/tabbed.py
 msgid "label_proposals"
 msgstr "Anträge"
+
+#. Default: "Reading"
+#: ./opengever/dossier/behaviors/protect_dossier.py
+msgid "label_reading"
+msgstr "Lesend"
+
+#. Default: "Reading and writing"
+#: ./opengever/dossier/behaviors/protect_dossier.py
+msgid "label_reading_and_writing"
+msgstr "Lesend & schreibend"
 
 #. Default: "Recipient"
 #: ./opengever/dossier/templatefolder/form.py
@@ -851,7 +876,6 @@ msgid "title_dossier_journal"
 msgstr "Dossier Journal ${title}, ${timestamp}"
 
 #. Default: "You didn't select any participants."
-#: ./opengever/dossier/behaviors/participation.py
+#: ./opengever/dossier/browser/forms.py
 msgid "warning_no_participants_selected"
 msgstr "Sie haben keine Beteiligungen ausgewählt."
-
