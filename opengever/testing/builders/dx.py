@@ -43,11 +43,13 @@ class DossierBuilder(DexterityBuilder):
 
         return self
 
+
 builder_registry.register('dossier', DossierBuilder)
 
 
 class MeetingDossierBuilder(DossierBuilder):
     portal_type = 'opengever.meeting.meetingdossier'
+
 
 builder_registry.register('meeting_dossier', MeetingDossierBuilder)
 
@@ -55,17 +57,20 @@ builder_registry.register('meeting_dossier', MeetingDossierBuilder)
 class TemplateFolderBuilder(TranslatedTitleBuilderMixin, DexterityBuilder):
     portal_type = 'opengever.dossier.templatefolder'
 
+
 builder_registry.register('templatefolder', TemplateFolderBuilder)
 
 
 class DossierTemplateBuilder(DexterityBuilder):
     portal_type = 'opengever.dossier.dossiertemplate'
 
+
 builder_registry.register('dossiertemplate', DossierTemplateBuilder)
 
 
 class InboxBuilder(TranslatedTitleBuilderMixin, DexterityBuilder):
     portal_type = 'opengever.inbox.inbox'
+
 
 builder_registry.register('inbox', InboxBuilder)
 
@@ -145,12 +150,14 @@ class DocumentBuilder(DexterityBuilder):
         self.arguments['relatedItems'] = documents
         return self
 
+
 builder_registry.register('document', DocumentBuilder, force=True)
 
 
 class SablonTemplateBuilder(DocumentBuilder):
 
     portal_type = 'opengever.meeting.sablontemplate'
+
 
 builder_registry.register('sablontemplate', SablonTemplateBuilder)
 
@@ -205,12 +212,14 @@ class TaskBuilder(DexterityBuilder):
         super(TaskBuilder, self).set_modification_date(obj)
         sync_task(obj, None)
 
+
 builder_registry.register('task', TaskBuilder)
 
 
 class ForwardingBuilder(TaskBuilder):
 
     portal_type = 'opengever.inbox.forwarding'
+
 
 builder_registry.register('forwarding', ForwardingBuilder)
 
@@ -262,11 +271,13 @@ class MailBuilder(DexterityBuilder):
 
         notify(ObjectCreatedEvent(obj))
 
+
 builder_registry.register('mail', MailBuilder)
 
 
 class RepositoryBuilder(TranslatedTitleBuilderMixin, DexterityBuilder):
     portal_type = 'opengever.repository.repositoryfolder'
+
 
 builder_registry.register('repository', RepositoryBuilder)
 
@@ -274,11 +285,13 @@ builder_registry.register('repository', RepositoryBuilder)
 class ContactFolderBuilder(TranslatedTitleBuilderMixin, DexterityBuilder):
     portal_type = 'opengever.contact.contactfolder'
 
+
 builder_registry.register('contactfolder', ContactFolderBuilder)
 
 
 class ContactBuilder(DexterityBuilder):
     portal_type = 'opengever.contact.contact'
+
 
 builder_registry.register('contact', ContactBuilder)
 
@@ -292,17 +305,20 @@ class RepositoryRootBuilder(TranslatedTitleBuilderMixin, DexterityBuilder):
             'title_de': u'Ordnungssystem',
         }
 
+
 builder_registry.register('repository_root', RepositoryRootBuilder)
 
 
 class YearFolderbuilder(DexterityBuilder):
     portal_type = 'opengever.inbox.yearfolder'
 
+
 builder_registry.register('yearfolder', YearFolderbuilder)
 
 
 class InboxContainerBuilder(TranslatedTitleBuilderMixin, DexterityBuilder):
     portal_type = 'opengever.inbox.container'
+
 
 builder_registry.register('inbox_container', InboxContainerBuilder)
 
@@ -421,11 +437,13 @@ class SubmittedProposalBuilder(TransparentModelLoader, DexterityBuilder):
         obj.sync_model(proposal_model=model)
         super(SubmittedProposalBuilder, self).after_create(obj)
 
+
 builder_registry.register('submitted_proposal', SubmittedProposalBuilder)
 
 
 class CommitteeContainerBuilder(TranslatedTitleBuilderMixin, DexterityBuilder):
     portal_type = 'opengever.meeting.committeecontainer'
+
 
 builder_registry.register('committee_container', CommitteeContainerBuilder)
 
@@ -464,6 +482,7 @@ class CommitteeBuilder(DexterityBuilder):
 
         if self.session.auto_commit:
             db_session.flush()
+
 
 builder_registry.register('committee', CommitteeBuilder)
 
@@ -533,5 +552,6 @@ class ProposalTemplateBuilder(DocumentBuilder):
     def __init__(self, *args, **kwargs):
         super(ProposalTemplateBuilder, self).__init__(*args, **kwargs)
         self.with_dummy_content()
+
 
 builder_registry.register('proposaltemplate', ProposalTemplateBuilder)
