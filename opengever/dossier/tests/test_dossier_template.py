@@ -476,7 +476,7 @@ class TestDossierTemplateAddWizard(IntegrationTestCase):
 
         subdossier = browser.context.listFolderContents()[0]
 
-        self.assertEqual('hugo.boss', IDossier(subdossier).responsible)
+        self.assertEqual(self.dossier_responsible.getId(), IDossier(subdossier).responsible)
 
     @browsing
     def test_prefill_title_if_no_title_help_is_available(self, browser):
