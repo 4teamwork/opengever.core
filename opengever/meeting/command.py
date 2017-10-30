@@ -44,6 +44,52 @@ import json
 MIME_DOCX = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
 
 
+class MergeDocxExcerptCommand(CreateDocumentCommand):
+    """Create or update a merged excerpt word file.
+    """
+
+    def __init__(self, context, agenda_item, filename, title, lock_document_after_creation=False):
+        self.agenda_item = agenda_item
+        self.excerpt_protocol_data = ExcerptProtocolData(
+            self.agenda_item.meeting,
+            [self.agenda_item])
+        self.filename = filename
+        super(MergeDocxExcerptCommand, self).__init__(
+            context=context,
+            filename=filename,
+            data=None,
+            title=title)
+
+    def generate_file_data(self):
+        with DocxMergeTool() as merge_tool:
+            if self.agenda_item.get_excerpt_header_template() is not None:
+                merge_tool.add_sablon(self.get_header_sablon())
+
+            if self.agenda_item.has_document:
+                merge_tool.add_document(self.agenda_item.resolve_document())
+
+            if self.agenda_item.get_excerpt_suffix_template() is not None:
+                merge_tool.add_sablon(self.get_suffix_sablon())
+
+            return merge_tool()
+
+    def get_header_sablon(self):
+        return Sablon(self.agenda_item.get_excerpt_header_template()).process(
+            self.excerpt_protocol_data.as_json())
+
+    def get_suffix_sablon(self):
+        return Sablon(self.agenda_item.get_excerpt_suffix_template()).process(
+            self.excerpt_protocol_data.as_json())
+
+    def execute(self):
+        self.set_file(
+            self.filename,
+            self.generate_file_data(),
+            MIME_DOCX,
+        )
+        return super(MergeDocxExcerptCommand, self).execute()
+
+
 class ProtocolOperations(object):
     """Protocol generation workflow."""
 

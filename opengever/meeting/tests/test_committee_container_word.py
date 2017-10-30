@@ -18,6 +18,7 @@ class TestCommitteeContainer(IntegrationTestCase):
 
         browser.open(self.committee_container, view='edit')
         browser.fill({'Ad hoc agenda item template': self.proposal_template}).save()
+        statusmessages.assert_no_error_messages()
 
         statusmessages.assert_message('Changes saved')
 
@@ -33,6 +34,8 @@ class TestCommitteeContainer(IntegrationTestCase):
         browser.fill({'Title': u'Sitzungen',
                       'Protocol header template': self.sablon_template,
                       'Protocol suffix template': self.sablon_template,
+                      'Excerpt header template': self.sablon_template,
+                      'Excerpt suffix template': self.sablon_template,
                       'Paragraph template': self.sablon_template,
                       'Ad hoc agenda item template': self.proposal_template}).save()
         statusmessages.assert_no_error_messages()
@@ -50,6 +53,7 @@ class TestCommitteeContainer(IntegrationTestCase):
 
         browser.open(self.committee_container, view='edit')
         browser.fill({'Paragraph template': self.sablon_template}).save()
+        statusmessages.assert_no_error_messages()
 
         statusmessages.assert_message('Changes saved')
 
@@ -65,6 +69,8 @@ class TestCommitteeContainer(IntegrationTestCase):
         browser.fill({'Title': u'Sitzungen',
                       'Protocol header template': self.sablon_template,
                       'Protocol suffix template': self.sablon_template,
+                      'Excerpt header template': self.sablon_template,
+                      'Excerpt suffix template': self.sablon_template,
                       'Paragraph template': self.sablon_template}).save()
         statusmessages.assert_no_error_messages()
 
@@ -80,6 +86,8 @@ class TestCommitteeContainer(IntegrationTestCase):
         fields = [u'Title',
                   u'Protocol header template',
                   u'Protocol suffix template',
+                  u'Excerpt header template',
+                  u'Excerpt suffix template',
                   u'Agendaitem list template',
                   u'Table of contents template',
                   u'Ad hoc agenda item template',

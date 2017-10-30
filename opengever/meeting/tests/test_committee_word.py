@@ -59,6 +59,38 @@ class TestCommitteeWord(IntegrationTestCase):
         self.assertEqual(self.sablon_template,
                          self.committee.get_paragraph_template())
 
+    def test_get_excerpt_header_template_falls_back_to_container(self):
+        self.login(self.administrator)
+        self.assertIsNone(self.committee.excerpt_header_template)
+        self.assertIsNotNone(self.committee_container.excerpt_header_template)
+
+        self.assertEqual(
+            self.sablon_template, self.committee.get_excerpt_header_template())
+
+    def test_get_excerpt_header_template_returns_committee_template_if_available(self):
+        self.login(self.administrator)
+        self.committee.excerpt_header_template = self.as_relation_value(
+            self.sablon_template)
+
+        self.assertEqual(
+            self.sablon_template, self.committee.get_excerpt_header_template())
+
+    def test_get_excerpt_suffix_template_falls_back_to_container(self):
+        self.login(self.administrator)
+        self.assertIsNone(self.committee.excerpt_suffix_template)
+        self.assertIsNotNone(self.committee_container.excerpt_suffix_template)
+
+        self.assertEqual(
+            self.sablon_template, self.committee.get_excerpt_suffix_template())
+
+    def test_get_excerpt_suffix_template_returns_committee_template_if_available(self):
+        self.login(self.administrator)
+        self.committee.excerpt_suffix_template = self.as_relation_value(
+            self.sablon_template)
+
+        self.assertEqual(
+            self.sablon_template, self.committee.get_excerpt_suffix_template())
+
     def test_get_paragraph_template_returns_committee_template_if_available(self):
         self.login(self.committee_responsible)
         self.committee.paragraph_template = self.as_relation_value(self.sablon_template)
@@ -82,6 +114,8 @@ class TestCommitteeWord(IntegrationTestCase):
                   'Group',
                   'Protocol header template',
                   'Protocol suffix template',
+                  'Excerpt header template',
+                  'Excerpt suffix template',
                   'Agendaitem list template',
                   'Table of contents template',
                   'Linked repository folder',

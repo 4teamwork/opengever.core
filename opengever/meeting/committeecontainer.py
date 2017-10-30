@@ -34,6 +34,20 @@ class ICommitteeContainer(model.Schema):
         required=False,
     )
 
+    excerpt_header_template = RelationChoice(
+        title=_('label_excerpt_header_template',
+                default='Excerpt header template'),
+        source=sablon_template_source,
+        required=False,
+    )
+
+    excerpt_suffix_template = RelationChoice(
+        title=_('label_excerpt_suffix_template',
+                default='Excerpt suffix template'),
+        source=sablon_template_source,
+        required=False,
+    )
+
     excerpt_template = RelationChoice(
         title=_('Excerpt template'),
         source=sablon_template_source,
@@ -106,6 +120,16 @@ class CommitteeContainer(Container, TranslatedTitleMixin):
 
     def get_protocol_suffix_template(self):
         return getattr(self.protocol_suffix_template, 'to_object', None)
+
+    def get_excerpt_header_template(self):
+        if self.excerpt_header_template:
+            return self.excerpt_header_template.to_object
+        return None
+
+    def get_excerpt_suffix_template(self):
+        if self.excerpt_suffix_template:
+            return self.excerpt_header_template.to_object
+        return None
 
     def get_excerpt_template(self):
         return self.excerpt_template.to_object
