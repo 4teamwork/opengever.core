@@ -3,6 +3,7 @@ from dateutil.relativedelta import relativedelta
 from ftw.builder import builder_registry
 from ftw.builder.dexterity import DexterityBuilder
 from opengever.base.behaviors.translated_title import TranslatedTitle
+from opengever.base.oguid import Oguid
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.document.document import Document
 from opengever.globalindex.handlers.task import sync_task
@@ -424,7 +425,6 @@ class SubmittedProposalBuilder(TransparentModelLoader, DexterityBuilder):
         self.model_arguments = None
 
     def before_create(self):
-
         super(SubmittedProposalBuilder, self).before_create()
 
         # hackishly create the proposal model when creating the submitted
@@ -433,6 +433,7 @@ class SubmittedProposalBuilder(TransparentModelLoader, DexterityBuilder):
             self.arguments)
 
     def after_create(self, obj):
+        self.model_arguments['submitted_oguid'] = Oguid.for_object(obj)
         model = obj.create_model(self.model_arguments, self.container)
         obj.sync_model(proposal_model=model)
         super(SubmittedProposalBuilder, self).after_create(obj)
