@@ -355,8 +355,15 @@ class Meeting(Base, SQLFormSupport):
 
     def update_model(self, data):
         """Manually set the modified timestamp when updating meetings."""
+
         super(Meeting, self).update_model(data)
         self.modified = utcnow_tz_aware()
+
+        meeting_dossier = self.get_dossier()
+        title = data.get('title')
+        if meeting_dossier and title:
+            meeting_dossier.title = title
+            meeting_dossier.reindexObject()
 
     def get_title(self):
         return self.title
