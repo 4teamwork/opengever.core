@@ -1,9 +1,6 @@
-from ftw.builder import Builder
-from ftw.builder import create
 from opengever.base.behaviors.base import IOpenGeverBase
-from opengever.core.testing import activate_filing_number
-from opengever.core.testing import inactivate_filing_number
-from opengever.testing import FunctionalTestCase
+from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.behaviors.filing import IFilingNumber
 from opengever.testing import index_data_for
 from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2brain
@@ -215,53 +212,66 @@ class TestDossierIndexers(IntegrationTestCase):
         self.assert_index_value(u'qpr-900-9001-\xf7', 'external_reference', self.dossier)
 
 
-class TestFilingNumberIndexer(FunctionalTestCase):
+class TestDossierFilingNumberIndexer(IntegrationTestCase):
 
-    def setUp(self):
-        super(TestFilingNumberIndexer, self).setUp()
-        activate_filing_number(self.portal)
+    features = ('filing_number', )
 
-    def tearDown(self):
-        super(TestFilingNumberIndexer, self).tearDown()
-        inactivate_filing_number(self.portal)
+    filing_prefix = 'directorate'
+    filing_no = 'SKA ARCH-Administration-2016-11'
+    searchable_filing_no = [
+        'ska',
+        'arch',
+        'administration',
+        '2016',
+        '11',
+        ]
 
     def test_returns_empty_string_for_dossiers_without_filing_information(self):
+        self.login(self.regular_user)
 
-        dossier = create(Builder("dossier"))
+        self.dossier.reindexObject()
 
-        # no number, no prefix
-        self.assertEquals(None, index_data_for(dossier).get('filing_no'))
-        self.assertEquals('',
-                          index_data_for(dossier).get('searchable_filing_no'))
+        self.assertEquals(
+            None,
+            index_data_for(self.dossier).get('filing_no'),
+            )
+
+        self.assert_index_value(u'', 'searchable_filing_no', self.dossier)
 
     def test_returns_first_part_of_the_filing_number_for_dossiers_with_only_filing_prefix_information(self):
-        dossier = create(Builder("dossier").having(filing_prefix='directorate'))
+        self.login(self.regular_user)
 
-        self.assertEquals('Client1-Directorate-?',
-                          index_data_for(dossier).get('filing_no'))
+        IDossier(self.dossier).filing_prefix = self.filing_prefix
+        self.dossier.reindexObject()
 
-        self.assertEquals(['client1', 'directorate'],
-                          index_data_for(dossier).get('searchable_filing_no'))
+        self.assert_index_value(u'Hauptmandant-Directorate-?', 'filing_no', self.dossier)
+
+        self.assertItemsEqual(
+            (
+                'hauptmandant',
+                'directorate',
+                ),
+            index_data_for(self.dossier).get('searchable_filing_no'),
+            )
 
     def test_returns_filing_number_for_dossiers_with_only_filing_prefix_information(self):
-        dossier = create(Builder("dossier")
-                         .having(filing_prefix='directorate',
-                                 filing_no='SKA ARCH-Administration-2012-3'))
+        self.login(self.regular_user)
 
-        # with number and prefix
-        self.assertEquals('SKA ARCH-Administration-2012-3',
-                          index_data_for(dossier).get('filing_no'))
-        self.assertEquals(['ska', 'arch', 'administration', '2012', '3'],
-                          index_data_for(dossier).get('searchable_filing_no'))
+        IDossier(self.dossier).filing_prefix = self.filing_prefix
+        IFilingNumber(self.dossier).filing_no = self.filing_no
+        self.dossier.reindexObject()
+
+        self.assert_index_value(self.filing_no, 'filing_no', self.dossier)
+        self.assert_index_value(self.searchable_filing_no, 'searchable_filing_no', self.dossier)
 
     def test_filing_no_is_also_in_searchable_text(self):
-        dossier = create(Builder("dossier")
-                         .having(filing_prefix='directorate',
-                                 filing_no='SKA ARCH-Administration-2012-3'))
+        self.login(self.regular_user)
 
-        searchable_text_data = index_data_for(dossier).get('SearchableText')
-        self.assertIn('ska', searchable_text_data)
-        self.assertIn('arch', searchable_text_data)
-        self.assertIn('administration', searchable_text_data)
-        self.assertIn('2012', searchable_text_data)
-        self.assertIn('3', searchable_text_data)
+        IDossier(self.dossier).filing_prefix = self.filing_prefix
+        IFilingNumber(self.dossier).filing_no = self.filing_no
+        self.dossier.reindexObject()
+
+        searchable_text_data = index_data_for(self.dossier).get('SearchableText')
+
+        for segment in self.searchable_filing_no:
+            self.assertIn(segment, searchable_text_data)
