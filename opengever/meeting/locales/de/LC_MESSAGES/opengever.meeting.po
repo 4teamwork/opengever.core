@@ -140,7 +140,7 @@ msgstr "Löschen"
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "Delete proposal"
-msgstr "Traktandum löschen"
+msgstr "Traktandum streichen"
 
 #: ./opengever/meeting/browser/meetings/templates/protocol.pt
 msgid "Discard"
@@ -1023,7 +1023,7 @@ msgstr "Traktandum entfernen"
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "label_delete_agenda_item_confirm_text"
-msgstr "Wollen Sie dieses Traktandum wirklich löschen?"
+msgstr "Wollen Sie dieses Traktandum wirklich streichen?"
 
 #. Default: "Disclose to"
 #: ./opengever/meeting/browser/meetings/protocol.py
