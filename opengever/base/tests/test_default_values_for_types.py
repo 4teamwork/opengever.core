@@ -92,6 +92,8 @@ DOSSIER_DEFAULTS = {
     'relatedDossier': [],
     'retention_period': 5,
     'start': FROZEN_TODAY,
+    'reading': [],
+    'reading_and_writing': [],
 }
 DOSSIER_FORM_DEFAULTS = {
     'responsible': TEST_USER_ID,

@@ -1,7 +1,10 @@
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages import factoriesmenu
 from opengever.dossier.behaviors.protect_dossier import IProtectDossier
 from opengever.testing import IntegrationTestCase
 from plone import api
+from zope.event import notify
+from zope.lifecycleevent import ObjectModifiedEvent
 
 
 class TestProtectDossier(IntegrationTestCase):
@@ -67,6 +70,8 @@ class TestProtectDossierBehavior(IntegrationTestCase):
         self.assertEqual(
             0, len(browser.css('select#form-widgets-IProtectDossier-reading_and_writing')))
 
+        self.assertNotIn('Protect', browser.css('fieldset legend').text)
+
     @browsing
     def test_dossier_manager_can_see_protect_dossier_fields(self, browser):
         self.login(self.dossier_manager, browser)
@@ -79,6 +84,8 @@ class TestProtectDossierBehavior(IntegrationTestCase):
         self.assertEqual(
             1, len(browser.css('select#form-widgets-IProtectDossier-reading_and_writing')))
 
+        self.assertIn('Protect', browser.css('fieldset legend').text)
+
     @browsing
     def test_dossier_manager_can_set_protect_dossier_fields(self, browser):
         self.login(self.dossier_manager, browser)
@@ -88,7 +95,163 @@ class TestProtectDossierBehavior(IntegrationTestCase):
         form = browser.find_form_by_field('Reading')
         form.find_widget('Reading').fill('projekt_a')
         form.find_widget('Reading and writing').fill('projekt_b')
+
         browser.click_on('Save')
 
         self.assertEqual(['projekt_a'], IProtectDossier(self.dossier).reading)
         self.assertEqual(['projekt_b'], IProtectDossier(self.dossier).reading_and_writing)
+
+    @browsing
+    def test_add_dossier_will_enable_dossier_protection(self, browser):
+        self.login(self.dossier_manager, browser)
+
+        browser.open(self.leaf_repofolder)
+
+        factoriesmenu.add(u'Business Case Dossier')
+
+        browser.fill({'Title': 'My Dossier'})
+
+        form = browser.find_form_by_field('Reading')
+        form.find_widget('Reading').fill(self.regular_user.getId())
+
+        browser.click_on('Save')
+
+        self.assert_local_roles(
+            IProtectDossier(self.dossier).READING_ROLES,
+            self.regular_user.getId(), browser.context)
+
+    @browsing
+    def test_edit_dossier_will_enable_dossier_protection(self, browser):
+        self.login(self.dossier_manager, browser)
+
+        browser.open(self.dossier, view="@@edit")
+
+        form = browser.find_form_by_field('Reading')
+        form.find_widget('Reading').fill(self.regular_user.getId())
+
+        browser.click_on('Save')
+
+        self.assert_local_roles(
+            IProtectDossier(self.dossier).READING_ROLES,
+            self.regular_user.getId(), browser.context)
+
+    def test_protect_dossier_will_disable_role_inheritance(self):
+        self.login(self.dossier_manager)
+
+        self.assertFalse(getattr(self.dossier, '__ac_local_roles_block__', False))
+
+        IProtectDossier(self.dossier).reading = ['kathi.barfuss']
+
+        notify(ObjectModifiedEvent(self.dossier))
+
+        self.assertTrue(getattr(self.dossier, '__ac_local_roles_block__', False))
+
+        IProtectDossier(self.dossier).reading = []
+
+        notify(ObjectModifiedEvent(self.dossier))
+
+        self.assertFalse(getattr(self.dossier, '__ac_local_roles_block__', False))
+
+    def test_protect_dossier_will_add_selected_reading_users_to_localroles(self):
+        self.login(self.dossier_manager)
+
+        dossier_protector = IProtectDossier(self.dossier)
+
+        dossier_protector.reading = [self.regular_user.getId()]
+
+        notify(ObjectModifiedEvent(self.dossier))
+
+        self.assert_local_roles(
+            dossier_protector.READING_ROLES,
+            self.regular_user.getId(), self.dossier)
+
+    def test_protect_dossier_will_add_selected_reading_and_writing_users_to_localroles(self):
+        self.login(self.dossier_manager)
+
+        dossier_protector = IProtectDossier(self.dossier)
+
+        dossier_protector.reading_and_writing = [self.regular_user.getId()]
+
+        notify(ObjectModifiedEvent(self.dossier))
+
+        self.assert_local_roles(
+            dossier_protector.READING_AND_WRITING_ROLES,
+            self.regular_user.getId(), self.dossier)
+
+    def test_full_dossier_protection_check(self):
+        self.login(self.dossier_manager)
+
+        dossier_protector = IProtectDossier(self.dossier)
+
+        dossier_protector.reading = [self.regular_user.getId(),
+                                     'projekt_a']
+        dossier_protector.reading_and_writing = [self.secretariat_user.getId(),
+                                                 'projekt_b']
+
+        notify(ObjectModifiedEvent(self.dossier))
+
+        self.assert_local_roles(
+            dossier_protector.READING_ROLES,
+            self.regular_user.getId(), self.dossier)
+
+        self.assert_local_roles(
+            dossier_protector.READING_ROLES,
+            'projekt_a', self.dossier)
+
+        self.assert_local_roles(
+            dossier_protector.READING_AND_WRITING_ROLES,
+            self.secretariat_user.getId(), self.dossier)
+
+        self.assert_local_roles(
+            dossier_protector.READING_AND_WRITING_ROLES,
+            'projekt_b', self.dossier)
+
+        self.assert_local_roles(
+            dossier_protector.DOSSIER_MANAGER_ROLES,
+            self.dossier_manager.getId(), self.dossier)
+
+    def test_protect_dossier_wont_exclude_current_logged_in_user(self):
+        self.login(self.dossier_manager)
+
+        IProtectDossier(self.dossier).reading = [self.regular_user.getId()]
+
+        notify(ObjectModifiedEvent(self.dossier))
+
+        self.assert_local_roles(
+            IProtectDossier(self.dossier).DOSSIER_MANAGER_ROLES,
+            self.dossier_manager.getId(), self.dossier)
+
+    def test_reindex_object_security_on_dossier(self):
+        self.login(self.dossier_manager)
+
+        IProtectDossier(self.dossier).reading = []
+        IProtectDossier(self.dossier).reading_and_writing = []
+
+        notify(ObjectModifiedEvent(self.dossier))
+
+        self.assertItemsEqual(
+            ['Administrator', 'Contributor', 'Editor', 'Manager', 'Reader',
+             'user:fa_users'],
+            self.get_allowed_roles_and_users_for(self.dossier))
+
+        IProtectDossier(self.dossier).reading = [self.regular_user.getId()]
+        IProtectDossier(self.dossier).reading_and_writing = []
+
+        notify(ObjectModifiedEvent(self.dossier))
+
+        self.assertItemsEqual(
+            ['Administrator', 'Contributor', 'Editor', 'Manager', 'Reader',
+             'user:{}'.format(self.dossier_manager.getId()),
+             'user:{}'.format(self.regular_user.getId())],
+            self.get_allowed_roles_and_users_for(self.dossier))
+
+    def assert_local_roles(self, excpected_roles, username, context):
+        current_roles = []
+        for participant, roles in context.get_local_roles():
+            if participant == username:
+                current_roles = roles
+
+        self.assertItemsEqual(
+            excpected_roles, current_roles,
+            "The user '{}' should have the roles {} on context {}. "
+            "But he have {}".format(username, excpected_roles, context, current_roles))

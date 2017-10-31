@@ -83,7 +83,7 @@
       title="Protect dossier behavior"
       description="Adds dossier protection functionality for dossiers"
       provides=".behaviors.protect_dossier.IProtectDossier"
-      factory="plone.behavior.AnnotationStorage"
+      factory=".behaviors.protect_dossier.DossierProtectionFactory"
       marker=".behaviors.protect_dossier.IProtectDossierMarker"
       for="plone.dexterity.interfaces.IDexterityContent"
       />

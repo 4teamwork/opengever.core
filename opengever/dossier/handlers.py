@@ -5,6 +5,7 @@ from opengever.base.interfaces import IReferenceNumberPrefix
 from opengever.bundle.sections.constructor import IDontIssueDossierReferenceNumber
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.dossier.behaviors.protect_dossier import IProtectDossier
 from opengever.dossier.resolve import get_resolver
 from opengever.globalindex.handlers.task import sync_task
 from opengever.globalindex.handlers.task import TaskSqlSyncer
@@ -142,3 +143,7 @@ def run_cleanup_jobs(dossier, event):
         return
 
     get_resolver(dossier).after_resolve()
+
+
+def handle_dossier_protection(dossier, event):
+    IProtectDossier(dossier).protect()
