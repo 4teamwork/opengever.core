@@ -390,3 +390,24 @@ class TestWordAgendaItem(IntegrationTestCase):
         self.assertEqual(
             excerpt,
             agenda_item.proposal.submitted_excerpt_document.resolve_document())
+
+    @browsing
+    def test_agenda_item_create_task_url(self, browser):
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_proposal(self.meeting,
+                                             self.submitted_word_proposal)
+        agenda_item.decide()
+        excerpt_doc = agenda_item.generate_excerpt(title='Excerpt \xc3\x84nderungen')
+        browser.open(self.meeting, view='agenda_items/list')
+        agenda_item_data = browser.json['items'][0]
+        excerpt_data = agenda_item_data['excerpts'][0]
+
+        expected_url = (
+            self.meeting_dossier.absolute_url() +
+            '/++add++opengever.task.task?paths:list=' +
+            '/'.join(excerpt_doc.getPhysicalPath()) +
+            '&_authenticator=........')
+
+        self.assertEquals(
+            expected_url.split('&_authenticator')[0],
+            excerpt_data['create_task_url'].split('&_authenticator')[0])

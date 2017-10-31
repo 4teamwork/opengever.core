@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-25 15:34+0000\n"
+"POT-Creation-Date: 2017-10-31 13:55+0000\n"
 "PO-Revision-Date: 2017-06-22 09:02+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -24,7 +24,6 @@ msgid "A new submitted version of document ${title} has been created."
 msgstr "Une nouvelle version soumise du document ${title} a été créée."
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "Actions"
 msgstr "Actions"
 
@@ -403,17 +402,57 @@ msgstr ""
 msgid "action_close_meeting"
 msgstr ""
 
+#. Default: "Create task"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_create_task"
+msgstr ""
+
+#. Default: "Decide"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_decide"
+msgstr ""
+
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "action_download_document"
+msgstr ""
+
+#. Default: "Edit with word"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_edit_document"
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "action_generate_document"
 msgstr ""
 
+#. Default: "Generate excerpt"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_generate_excerpt"
+msgstr ""
+
+#. Default: "Remove agenda item"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_remove_agenda_item"
+msgstr ""
+
+#. Default: "Rename agenda item"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_rename_agenda_item"
+msgstr ""
+
+#. Default: "Reopen agenda item"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_reopen"
+msgstr ""
+
 #. Default: "Reopen meeting"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "action_reopen_meeting"
+msgstr ""
+
+#. Default: "Return to proposal"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_return_excerpt"
 msgstr ""
 
 #. Default: "Active"
@@ -778,10 +817,25 @@ msgstr "Tenue"
 msgid "help_allowed_proposal_templates"
 msgstr ""
 
+#. Default: "Create a new task the meeting dossier and attach this excerpt."
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "help_create_task"
+msgstr ""
+
 #. Default: "Describe, why the proposal is rejected"
 #: ./opengever/meeting/browser/proposaltransitions.py
 msgid "help_reject_proposal_text"
 msgstr "Décrivez la raison pour laquelle la proposition a été rejetée."
+
+#. Default: "Return this excerpt the as official answer to the proposal."
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "help_return_excerpt"
+msgstr ""
+
+#. Default: "This excerpt was returned to the dossier"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "help_returned_excerpt"
+msgstr ""
 
 #. Default: "Select the target dossier where the excerpts should be created."
 #: ./opengever/meeting/browser/meetings/excerpt.py
@@ -803,15 +857,15 @@ msgstr "Inactif"
 msgid "invalid_agenda_item_state"
 msgstr ""
 
-#. Default: "delete this agenda item"
-#: ./opengever/meeting/browser/meetings/meeting.py
-msgid "label_ad_hoc_delete_action"
-msgstr ""
-
 #. Default: "Ad hoc agenda item template"
 #: ./opengever/meeting/committee.py
 #: ./opengever/meeting/committeecontainer.py
 msgid "label_ad_hoc_template"
+msgstr ""
+
+#. Default: "Decided"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "label_agenda_item_decided"
 msgstr ""
 
 #. Default: "Agenda item number"
@@ -1026,11 +1080,6 @@ msgstr "Modifier après la création"
 msgid "label_edit_cancel"
 msgstr "Annuler"
 
-#. Default: "Checkout and edit word document."
-#: ./opengever/meeting/browser/meetings/meeting.py
-msgid "label_edit_document_action"
-msgstr ""
-
 #. Default: "Edit Membership"
 #: ./opengever/meeting/browser/memberships.py
 msgid "label_edit_membership"
@@ -1085,11 +1134,6 @@ msgstr "Filtrage"
 #: ./opengever/meeting/browser/templates/member.pt
 msgid "label_firstname"
 msgstr "Prénom"
-
-#. Default: "Generate an excerpt."
-#: ./opengever/meeting/browser/meetings/meeting.py
-msgid "label_generate_excerpt"
-msgstr ""
 
 #. Default: "Group"
 #: ./opengever/meeting/committee.py
@@ -1277,17 +1321,12 @@ msgstr "Supprimer"
 msgid "label_reopen_action"
 msgstr "Rouvrir ce point de l'ordre du jour"
 
-#. Default: "Return excerpt to proposer"
-#: ./opengever/meeting/browser/meetings/meeting.py
-msgid "label_return_action"
-msgstr ""
-
 #. Default: "Return Excerpt"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "label_return_excerpt"
 msgstr ""
 
-#. Default: "This excerpt was returned to the dossier"
+#. Default: "Returned"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "label_returned_excerpt"
 msgstr ""
@@ -1307,6 +1346,11 @@ msgstr "Rôle"
 #: ./opengever/meeting/sablontemplate.py
 msgid "label_sablon_template_file"
 msgstr "Fichier-modèle"
+
+#. Default: "Save"
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "label_save"
+msgstr ""
 
 #. Default: "Schedule"
 #: ./opengever/meeting/browser/meetings/meeting.py
@@ -1783,6 +1827,11 @@ msgstr "Temps"
 #. Default: "Ad hoc agenda item ${title}"
 #: ./opengever/meeting/model/meeting.py
 msgid "title_ad_hoc_document"
+msgstr ""
+
+#. Default: "Rename agenda item"
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "title_rename_agenda_item"
 msgstr ""
 
 #. Default: "Remove from schedule"

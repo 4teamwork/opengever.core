@@ -99,6 +99,12 @@ class DossierContainer(Container):
 
         return filter(filter_type, types)
 
+    def is_addable(self, portal_type):
+        for fti in self.allowedContentTypes():
+            if fti.id == portal_type:
+                return True
+        return False
+
     def _get_dossier_depth(self):
         # calculate depth
         depth = 0

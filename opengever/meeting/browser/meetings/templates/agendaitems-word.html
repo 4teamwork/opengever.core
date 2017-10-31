@@ -3,6 +3,51 @@
   <tr class="{{css_class}} word-feature agenda_item" data-uid="{{id}}" id="ai{{id}}">
     {{#if ../agendalist_editable}}<td class="sortable-handle"></td>{{/if}}
     <td class="title">
+
+      <div class="agenda-item-actions">
+        {{#if is_decided}}
+        <div class="agenda-item-decided">%(label_agenda_item_decided)s</div>
+        {{/if}}
+
+        <div class="action-buttons">
+          {{#if ../editable}}
+          {{#if edit_document_button.visible}}
+          <a href="{{edit_document_button.url}}" class="button edit-document" {{#unless edit_document_button.active}}disabled{{/unless}}>%(action_edit_document)s</a>
+          {{/if}}
+
+          {{#if decide_link}}
+          <a href="{{decide_link}}" class="button decide-agenda-item">%(action_decide)s</a>
+          {{/if}}
+
+          {{#if revise_link}}
+          <a href="{{revise_link}}" class="button revise-agenda-item">%(action_decide)s</a>
+          {{/if}}
+
+          {{#if generate_excerpt_link}}
+          <a href="{{generate_excerpt_link}}" class="button generate-excerpt" data-default-title="{{generate_excerpt_default_title}}">%(action_generate_excerpt)s</a>
+          {{/if}}
+
+          {{#if (or ../agendalist_editable reopen_link)}}
+          <a href="#" class="button editing-menu">&#133;</a>
+          {{/if}}
+          {{/if}}
+        </div>
+
+        {{#if (or ../agendalist_editable reopen_link)}}
+        <ul class="editing-menu">
+          {{#if ../agendalist_editable}}
+          <li><a href="{{edit_link}}" class="rename-agenda-item">%(action_rename_agenda_item)s</a></li>
+          <li><a href="{{delete_link}}" class="delete-agenda-item">%(action_remove_agenda_item)s</a></li>
+          {{/if}}
+          {{#if reopen_link}}
+          <li><a href="{{reopen_link}}" class="reopen-agenda-item">%(action_reopen)s</a></li>
+          {{/if}}
+        </ul>
+        {{/if}}
+
+      </div>
+
+
       {{#if decision_number}}
       <span class="decision_number" title="%(label_decision_number)s">
         # {{decision_number}}
@@ -37,17 +82,24 @@
         <div class="documents_label">%(label_excerpts)s:</div>
         <ul class="documents-list">
           {{#each excerpts}}
-            <li>
-              {{{link}}}
-              <span class="excerpt_buttons">
+          <li class="excerpt">
+            <div class="create-task">
+              {{#if create_task_url}}
+              <a href="{{create_task_url}}" title="%(help_create_task)s">%(action_create_task)s</a>
+              {{/if}}
+            </div>
+            <div class="return-excerpt">
               {{#if return_link}}
-                <a href="{{return_link}}" title="%(label_return_action)s" class="return-excerpt-btn"></a>
+              <a href="{{return_link}}" class="return-excerpt-btn" title="%(help_return_excerpt)s">%(action_return_excerpt)s</a>
               {{/if}}
               {{#if is_excerpt_in_source_dossier}}
-                <span title="%(label_returned_excerpt)s" class="returned-excerpt-icon"></span>
-              {{/if}}
+              <span class="returned" title="%(help_returned_excerpt)s">
+                %(label_returned_excerpt)s
               </span>
-            </li>
+              {{/if}}
+            </div>
+            <div class="excerpt-link">{{{link}}}</div>
+          </li>
           {{/each}}
         </ul>
       </div>
@@ -68,31 +120,6 @@
 
       {{/if}}
     </td>
-    {{#if ../editable}}
-    <td class="actions">
-      <div class="button-group">
-        {{#if edit_document_button.visible}}
-        <a href="{{edit_document_button.url}}" title="%(label_edit_document_action)s" class="button edit-document" {{#unless edit_document_button.active}}disabled{{/unless}}><span></span></a>
-        {{/if}}
-        {{#if ../agendalist_editable}}
-        <a href="{{edit_link}}" title="%(label_edit_action)s" class="button edit-agenda-item"></a>
-        <a href="{{delete_link}}" title="{{#if has_proposal}}%(label_delete_action)s{{else}}%(label_ad_hoc_delete_action)s{{/if}}" class="button delete-agenda-item"></a>
-        {{/if}}
-        {{#if decide_link}}
-        <a href="{{decide_link}}" title="%(label_decide_action)s" class="button decide-agenda-item"><span></span></a>
-        {{/if}}
-        {{#if reopen_link}}
-        <a href="{{reopen_link}}" title="%(label_reopen_action)s" class="button reopen-agenda-item"><span></span></a>
-        {{/if}}
-        {{#if revise_link}}
-        <a href="{{revise_link}}" title="%(label_revise_action)s" class="button revise-agenda-item"><span></span></a>
-        {{/if}}
-        {{#if generate_excerpt_link}}
-        <a href="{{generate_excerpt_link}}" title="%(label_generate_excerpt)s" class="button generate-excerpt" data-default-title="{{generate_excerpt_default_title}}"><span></span></a>
-        {{/if}}
-      </div>
-    </td>
-    {{/if}}
   </tr>
   {{/each}}
 </script>

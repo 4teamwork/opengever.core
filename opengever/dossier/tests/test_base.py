@@ -323,3 +323,8 @@ class TestDateCalculations(IntegrationTestCase):
         IDossier(self.subdossier).end = date(2020, 2, 2)
         self.subdossier.reindexObject(idxs=['end'])
         self.assertEquals(date(2020, 2, 2), self.dossier.earliest_possible_end_date())
+
+    def test_is_addable(self):
+        self.login(self.dossier_responsible)
+        self.assertTrue(self.dossier.is_addable('opengever.document.document'))
+        self.assertFalse(self.archive_dossier.is_addable('opengever.document.document'))

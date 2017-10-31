@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-25 15:34+0000\n"
-"PO-Revision-Date: 2017-10-23 18:40+0200\n"
+"POT-Creation-Date: 2017-10-31 13:55+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -22,7 +22,6 @@ msgid "A new submitted version of document ${title} has been created."
 msgstr "Eine neu eingereichte Version des Dokuments ${title} wurde erstellt."
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "Actions"
 msgstr "Aktionen"
 
@@ -141,7 +140,7 @@ msgstr "Löschen"
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "Delete proposal"
-msgstr "Traktandum löschen"
+msgstr "Traktandum streichen"
 
 #: ./opengever/meeting/browser/meetings/templates/protocol.pt
 msgid "Discard"
@@ -401,18 +400,58 @@ msgstr "Sie haben nicht die nötigen Rechte, um das Sitzungsdossier anzusehen."
 msgid "action_close_meeting"
 msgstr "Sitzung abschliessen"
 
+#. Default: "Create task"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_create_task"
+msgstr "Aufgabe erstellen"
+
+#. Default: "Decide"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_decide"
+msgstr "Traktandum beschliessen"
+
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "action_download_document"
 msgstr "Dokument herunterladen"
+
+#. Default: "Edit with word"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_edit_document"
+msgstr "In Word bearbeiten"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "action_generate_document"
 msgstr "Dokument neu generieren"
 
+#. Default: "Generate excerpt"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_generate_excerpt"
+msgstr "Protokollauszug generieren"
+
+#. Default: "Remove agenda item"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_remove_agenda_item"
+msgstr "Traktandum streichen"
+
+#. Default: "Rename agenda item"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_rename_agenda_item"
+msgstr "Traktandum umbenennen"
+
+#. Default: "Reopen agenda item"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_reopen"
+msgstr "Wieder öffnen"
+
 #. Default: "Reopen meeting"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "action_reopen_meeting"
 msgstr "Sitzung wieder öffnen"
+
+#. Default: "Return to proposal"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_return_excerpt"
+msgstr "Protokollauszug zurücksenden"
 
 #. Default: "Active"
 #: ./opengever/meeting/browser/documents/proposalstab.py
@@ -776,10 +815,25 @@ msgstr "Durchgeführt"
 msgid "help_allowed_proposal_templates"
 msgstr "Wählen Sie alle Antragsvorlagen aus, die in diesem Gremium erlaubt sind. Wählen Sie keine Antragsvorlagen aus, um alle Vorlagen zu erlauben."
 
+#. Default: "Create a new task the meeting dossier and attach this excerpt."
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "help_create_task"
+msgstr "Neue Aufgabe im Sitzungsdossier erstellen und diesen Protokollauszug beilegen."
+
 #. Default: "Describe, why the proposal is rejected"
 #: ./opengever/meeting/browser/proposaltransitions.py
 msgid "help_reject_proposal_text"
 msgstr "Beschreiben Sie, warum der Antrag zurückgewiesen wird"
+
+#. Default: "Return this excerpt the as official answer to the proposal."
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "help_return_excerpt"
+msgstr "Diesen Protokollauszug als definitive Antwort an den Antrag zurücksenden."
+
+#. Default: "This excerpt was returned to the dossier"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "help_returned_excerpt"
+msgstr "Dieser Protokollauszug wurde als Antwort an den Antrag zurückgesendet."
 
 #. Default: "Select the target dossier where the excerpts should be created."
 #: ./opengever/meeting/browser/meetings/excerpt.py
@@ -801,16 +855,16 @@ msgstr "Inaktiv"
 msgid "invalid_agenda_item_state"
 msgstr "Diese Aktion kann im aktuellen Zustand des Traktandums nicht durchgeführt werden."
 
-#. Default: "delete this agenda item"
-#: ./opengever/meeting/browser/meetings/meeting.py
-msgid "label_ad_hoc_delete_action"
-msgstr "Traktandum löschen"
-
 #. Default: "Ad hoc agenda item template"
 #: ./opengever/meeting/committee.py
 #: ./opengever/meeting/committeecontainer.py
 msgid "label_ad_hoc_template"
 msgstr "Vorlage für Traktanden ohne Antrag"
+
+#. Default: "Decided"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "label_agenda_item_decided"
+msgstr "Beschlossen"
 
 #. Default: "Agenda item number"
 #: ./opengever/meeting/browser/meetings/meeting.py
@@ -969,7 +1023,7 @@ msgstr "Traktandum entfernen"
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "label_delete_agenda_item_confirm_text"
-msgstr "Wollen Sie dieses Traktandum wirklich löschen?"
+msgstr "Wollen Sie dieses Traktandum wirklich streichen?"
 
 #. Default: "Disclose to"
 #: ./opengever/meeting/browser/meetings/protocol.py
@@ -1023,11 +1077,6 @@ msgstr "Nach dem Hinzufügen bearbeiten"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "label_edit_cancel"
 msgstr "Abbrechen"
-
-#. Default: "Checkout and edit word document."
-#: ./opengever/meeting/browser/meetings/meeting.py
-msgid "label_edit_document_action"
-msgstr "Word-Dokument auschecken und bearbeiten."
 
 #. Default: "Edit Membership"
 #: ./opengever/meeting/browser/memberships.py
@@ -1083,11 +1132,6 @@ msgstr "Filtern"
 #: ./opengever/meeting/browser/templates/member.pt
 msgid "label_firstname"
 msgstr "Vorname"
-
-#. Default: "Generate an excerpt."
-#: ./opengever/meeting/browser/meetings/meeting.py
-msgid "label_generate_excerpt"
-msgstr "Protokollauszug generieren."
 
 #. Default: "Group"
 #: ./opengever/meeting/committee.py
@@ -1275,20 +1319,15 @@ msgstr "Löschen"
 msgid "label_reopen_action"
 msgstr "Traktandum wieder eröffnen"
 
-#. Default: "Return excerpt to proposer"
-#: ./opengever/meeting/browser/meetings/meeting.py
-msgid "label_return_action"
-msgstr "Protokollauszug an Antragsteller zurücksenden"
-
 #. Default: "Return Excerpt"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "label_return_excerpt"
 msgstr "Protokollauszug zurücksenden"
 
-#. Default: "This excerpt was returned to the dossier"
+#. Default: "Returned"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "label_returned_excerpt"
-msgstr "Dieser Protokollauszug wurde an den Antragsteller zurückgesendet."
+msgstr "An Antrag zurückgesendet."
 
 #. Default: "Revise this agenda item"
 #: ./opengever/meeting/browser/meetings/meeting.py
@@ -1305,6 +1344,11 @@ msgstr "Rolle"
 #: ./opengever/meeting/sablontemplate.py
 msgid "label_sablon_template_file"
 msgstr "Vorlage-Datei"
+
+#. Default: "Save"
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "label_save"
+msgstr "Speichern"
 
 #. Default: "Schedule"
 #: ./opengever/meeting/browser/meetings/meeting.py
@@ -1782,6 +1826,11 @@ msgstr "Zeit"
 #: ./opengever/meeting/model/meeting.py
 msgid "title_ad_hoc_document"
 msgstr "Traktandum ${title}"
+
+#. Default: "Rename agenda item"
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "title_rename_agenda_item"
+msgstr "Traktandum umbenennen"
 
 #. Default: "Remove from schedule"
 #: ./opengever/meeting/model/proposal.py
