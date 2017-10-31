@@ -61,3 +61,28 @@ class TestMeetingDossier(TestDossier):
 
         browser.open(self.dossier, view='tabbed_view')
         self.assertEquals(expected_tabs, browser.css('li.formTab').text)
+
+    @browsing
+    def test_title_field_hidden_in_meeting_dossier_add_form(self, browser):
+        self.login(self.dossier_responsible, browser)
+
+        browser.open(self.leaf_repofolder,
+                     view='++add++{}'.format(self.portal_type))
+
+        self.assertIsNotNone(
+            browser.css('[name="form.widgets.IOpenGeverBase.title"]'),
+            'Hidden title field not found.')
+        self.assertIsNone(
+            browser.find('Title'), 'Title field is unexpectedly visible.')
+
+    @browsing
+    def test_title_field_hidden_in_meeting_dossier_edit_form(self, browser):
+        self.login(self.dossier_responsible, browser)
+
+        browser.open(self.meeting_dossier, view='@@edit')
+
+        self.assertIsNotNone(
+            browser.css('[name="form.widgets.IOpenGeverBase.title"]'),
+            'Hidden title field not found.')
+        self.assertIsNone(
+            browser.find('Title'), 'Title field is unexpectedly visible.')

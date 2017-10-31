@@ -90,8 +90,6 @@ class TestMeeting(FunctionalTestCase):
         }).submit()
 
         # create dossier
-        self.assertEqual(u'Meeting on Jan 01, 2010',
-                         browser.find('Title').value)
         browser.find('Save').click()
 
         # back to meeting page

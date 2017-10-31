@@ -233,6 +233,14 @@
         />
   </class>
 
+  <!-- MeetingDossier edit form  -->
+  <browser:page
+      for="opengever.meeting.interfaces.IMeetingDossier"
+      class=".meetingdossier_forms.MeetingDossierEditForm"
+      name="edit"
+      permission="cmf.ModifyPortalContent"
+      />
+
   <browser:page
       for="*"
       class=".excerpt.RecieveExcerptDocumentView"
