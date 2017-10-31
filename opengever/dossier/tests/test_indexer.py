@@ -5,163 +5,214 @@ from opengever.core.testing import activate_filing_number
 from opengever.core.testing import inactivate_filing_number
 from opengever.testing import FunctionalTestCase
 from opengever.testing import index_data_for
+from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2brain
+from plone import api
 from zope.event import notify
 from zope.interface import Interface
-from zope.lifecycleevent import ObjectModifiedEvent, Attributes
-import transaction
+from zope.lifecycleevent import Attributes
+from zope.lifecycleevent import ObjectModifiedEvent
 
 
-class TestIndexers(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestIndexers, self).setUp()
-
-        self.repo, self.repo_folder = create(Builder('repository_tree'))
-
-        self.dossier = create(
-            Builder("dossier")
-            .titled(u"Testd\xf6ssier XY")
-            .within(self.repo_folder))
-
-        self.subdossier = create(Builder("dossier")
-                                 .within(self.dossier)
-                                 .titled(u"Subd\xf6ssier XY"))
-
-        self.document = create(Builder("document").within(self.subdossier))
-
+class TestDossierIndexers(IntegrationTestCase):
     def test_containing_dossier(self):
+        self.login(self.regular_user)
+
+        self.subdossier.reindexObject()
+        self.subdocument.reindexObject()
+
         self.assertEquals(
+            'Vertr\xc3\xa4ge mit der kantonalen Finanzverwaltung',
             obj2brain(self.subdossier).containing_dossier,
-            'Testd\xc3\xb6ssier XY')
+            )
 
         self.assertEquals(
+            'Vertr\xc3\xa4ge mit der kantonalen Finanzverwaltung',
             obj2brain(self.document).containing_dossier,
-            'Testd\xc3\xb6ssier XY')
+            )
 
-        #check subscriber for catch editing maindossier titel
+        # Check if the subscribers catch editing the title of a dossier
         IOpenGeverBase(self.dossier).title = u"Testd\xf6ssier CHANGED"
+
         self.dossier.reindexObject()
-        notify(
-            ObjectModifiedEvent(self.dossier,
-                                Attributes(Interface, 'IOpenGeverBase.title')))
+        self.subdossier.reindexObject()
+        self.subdocument.reindexObject()
+
+        notify(ObjectModifiedEvent(
+            self.dossier,
+            Attributes(Interface, 'IOpenGeverBase.title'),
+            ))
 
         self.assertEquals(
+            'Testd\xc3\xb6ssier CHANGED',
             obj2brain(self.subdossier).containing_dossier,
-            'Testd\xc3\xb6ssier CHANGED')
-        self.assertEquals(
-            obj2brain(self.document).containing_dossier,
-            'Testd\xc3\xb6ssier CHANGED')
+            )
 
-        transaction.commit()
+        self.assertEquals(
+            'Testd\xc3\xb6ssier CHANGED',
+            obj2brain(self.document).containing_dossier,
+            )
 
     def test_is_subdossier_index(self):
-        self.assertFalse(index_data_for(self.dossier).get('is_subdossier'))
-        self.assertTrue(index_data_for(self.subdossier).get('is_subdossier'))
+        self.login(self.regular_user)
 
-        dossiertemplate = create(Builder('dossiertemplate'))
-        sub_dossiertemplate = create(Builder('dossiertemplate')
-                                     .within(dossiertemplate))
-        self.assertFalse(index_data_for(dossiertemplate).get('is_subdossier'))
-        self.assertTrue(index_data_for(sub_dossiertemplate).get('is_subdossier'))
+        self.dossier.reindexObject()
+        self.subdossier.reindexObject()
+        self.dossiertemplate.reindexObject()
+        self.subdossiertemplate.reindexObject()
+
+        index_name = 'is_subdossier'
+        self.assert_index_value(False, index_name, self.dossier)
+        self.assert_index_value(False, index_name, self.dossiertemplate)
+        self.assert_index_value(True, index_name, self.subdossier)
+        self.assert_index_value(True, index_name, self.subdossiertemplate)
 
     def test_containing_subdossier(self):
-        self.assertEquals(obj2brain(self.subdossier).containing_subdossier, '')
-        self.assertEquals(
-            obj2brain(self.document).containing_subdossier,
-            'Subd\xc3\xb6ssier XY')
+        self.login(self.regular_user)
 
-        #check subscriber for catch editing subdossier titel
-        IOpenGeverBase(self.subdossier).title = u'Subd\xf6ssier CHANGED'
         self.subdossier.reindexObject()
-        notify(
-            ObjectModifiedEvent(self.subdossier,
-                                Attributes(Interface, 'IOpenGeverBase.title')))
+        self.subdocument.reindexObject()
 
         self.assertEquals(
-            obj2brain(self.subdossier).containing_subdossier, u'')
+            '',
+            obj2brain(self.subdossier).containing_subdossier,
+            )
+
         self.assertEquals(
-            obj2brain(self.document).containing_subdossier,
-            'Subd\xc3\xb6ssier CHANGED')
+            '2016',
+            obj2brain(self.subdocument).containing_subdossier,
+            )
+
+        # Check if the subscribers catch editing the title of a subdossier
+        IOpenGeverBase(self.subdossier).title = u'Subd\xf6ssier CHANGED'
+
+        self.subdossier.reindexObject()
+        self.subdocument.reindexObject()
+
+        notify(ObjectModifiedEvent(
+            self.subdossier,
+            Attributes(Interface, 'IOpenGeverBase.title'),
+            ))
+
+        self.assertEquals(
+            u'',
+            obj2brain(self.subdossier).containing_subdossier,
+            )
+
+        self.assertEquals(
+            'Subd\xc3\xb6ssier CHANGED',
+            obj2brain(self.subdocument).containing_subdossier,
+            )
 
     def test_filing_no_is_not_indexed_for_default_dossiers(self):
-        dossier = create(Builder("dossier")
-                         .having(filing_prefix='directorate',
-                                 filing_no='SKA ARCH-Administration-2012-3'))
+        self.login(self.regular_user)
 
-        self.assertEquals(None, index_data_for(dossier).get('filing_no'))
-        self.assertEquals(None,
-                          index_data_for(dossier).get('searchable_filing_no'))
+        self.dossier.reindexObject()
+
+        self.assertEquals(None, index_data_for(self.dossier).get('filing_no'))
+        self.assertEquals(None, index_data_for(self.dossier).get('searchable_filing_no'))
 
     def test_keywords_field_is_indexed_in_Subject_index(self):
-        catalog = self.portal.portal_catalog
+        catalog = api.portal.get_tool(name="portal_catalog")
 
-        dossier_with_keywords = create(
-            Builder("dossier")
-            .titled(u"Dossier with keywords")
-            .having(keywords=(u'Keyword 1', u'Keyword with \xf6'))
-            .within(self.repo_folder))
+        self.login(self.regular_user)
 
-        self.assertTrue(len(catalog(Subject=u'Keyword 1')),
-                        'Expect one item with Keyword 1')
-        self.assertTrue(len(catalog(Subject=u'Keyword with \xf6')),
-                        u'Expect one item with Keyword with \xf6')
-
-        create(Builder("dossier")
-               .titled(u"Another Dossier with keywords")
-               .having(keywords=(u'Keyword 2', ))
-               .within(dossier_with_keywords))
-
-        self.assertTrue(len(catalog(Subject=u'Keyword 2')),
-                        'Expect one item with Keyword 2')
-
-        self.assertEquals((u'Keyword 1', u'Keyword 2', u'Keyword with \xf6'),
-                          catalog.uniqueValuesFor('Subject'))
-
-    def test_dossier_searchable_text_contains_keywords(self):
-        dossier_with_keywords = create(
-            Builder("dossier")
-            .titled(u"Dossier")
-            .having(keywords=(u'Pick me!', u'Keyw\xf6rd'))
-            .within(self.repo_folder))
-
-        self.assertItemsEqual(
-            [u'1', u'3', 'client1', 'dossier', 'keyword', 'me', 'pick'],
-            index_data_for(dossier_with_keywords).get('SearchableText'))
-
-    def test_dossier_searchable_text_contains_external_reference(self):
-        dossier = create(
-            Builder("dossier")
-            .titled(u"Dossier")
-            .having(external_reference=u'22900-2017')
-            .within(self.repo_folder))
-
-        self.assertItemsEqual(
-            [u'1', u'3', 'client1', 'dossier', '22900', '2017'],
-            index_data_for(dossier).get('SearchableText'))
-
-    def test_dossiertemplate_searchable_text_contains_keywords(self):
-        folder = create(Builder('templatefolder'))
-        template_with_keywords = create(
-            Builder("dossiertemplate")
-            .titled(u"Dossiertemplate")
-            .having(keywords=(u'Thingy', u'Keyw\xf6rd',))
-            .within(folder))
-
-        self.assertItemsEqual(
-            [u'1', 'client1', 'dossiertemplate', 'keyword', 'thingy'],
-            index_data_for(template_with_keywords).get('SearchableText'))
-
-    def test_external_reference(self):
-        dossier = create(
-            Builder("dossier")
-            .titled(u"Dossier")
-            .having(external_reference=u'qpr-900-9001-\xf7')
-            .within(self.repo_folder))
+        self.dossier.reindexObject()
 
         self.assertEquals(
-            u'qpr-900-9001-\xf7',
-            index_data_for(dossier).get('external_reference'))
+            2,
+            len(catalog(Subject=u'Finanzverwaltung')),
+            'Expected two items with Keyword "Finanzverwaltung"',
+            )
+
+        self.assertEquals(
+            3,
+            len(catalog(Subject=u'Vertr\xe4ge')),
+            u'Expected three items with Keyword "Vertr\xe4ge"',
+            )
+
+        self.subdossier.reindexObject()
+
+        self.assertEquals(
+            1,
+            len(catalog(Subject=u'Subkeyword')),
+            'Expected one item with Keyword "Subkeyword"',
+            )
+
+        self.assertEquals(
+            1,
+            len(catalog(Subject=u'Subkeyw\xf6rd')),
+            u'Expected one item with Keyword "Subkeyw\xf6rd"',
+            )
+
+        self.assertEquals(
+            (
+                u'Finanzverwaltung',
+                u'Subkeyword',
+                u'Subkeyw\xf6rd',
+                u'Vertr\xe4ge',
+                u'secret',
+                u'special',
+                ),
+            catalog.uniqueValuesFor('Subject'),
+            )
+
+    def test_dossier_searchable_text_contains_keywords(self):
+        self.login(self.regular_user)
+
+        self.dossier.reindexObject()
+
+        self.assertIn(
+            'finanzverwaltung',
+            index_data_for(self.dossier).get('SearchableText'),
+            )
+
+        self.assertIn(
+            'vertrage',
+            index_data_for(self.dossier).get('SearchableText'),
+            )
+
+    def test_dossier_searchable_text_contains_external_reference(self):
+        self.login(self.regular_user)
+
+        self.dossier.reindexObject()
+
+        self.assertIn(
+            'qpr',
+            index_data_for(self.dossier).get('SearchableText'),
+            )
+
+        self.assertIn(
+            u'900',
+            index_data_for(self.dossier).get('SearchableText'),
+            )
+
+        self.assertIn(
+            u'9001',
+            index_data_for(self.dossier).get('SearchableText'),
+            )
+
+    def test_dossiertemplate_searchable_text_contains_keywords(self):
+        self.login(self.regular_user)
+
+        self.dossiertemplate.reindexObject()
+
+        self.assertIn(
+            'secret',
+            index_data_for(self.dossiertemplate).get('SearchableText'),
+        )
+
+        self.assertIn(
+            'special',
+            index_data_for(self.dossiertemplate).get('SearchableText'),
+        )
+
+    def test_external_reference(self):
+        self.login(self.regular_user)
+
+        self.dossier.reindexObject()
+
+        self.assert_index_value(u'qpr-900-9001-\xf7', 'external_reference', self.dossier)
 
 
 class TestFilingNumberIndexer(FunctionalTestCase):
@@ -184,8 +235,7 @@ class TestFilingNumberIndexer(FunctionalTestCase):
                           index_data_for(dossier).get('searchable_filing_no'))
 
     def test_returns_first_part_of_the_filing_number_for_dossiers_with_only_filing_prefix_information(self):
-        dossier = create(Builder("dossier")
-                 .having(filing_prefix='directorate'))
+        dossier = create(Builder("dossier").having(filing_prefix='directorate'))
 
         self.assertEquals('Client1-Directorate-?',
                           index_data_for(dossier).get('filing_no'))
