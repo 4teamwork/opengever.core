@@ -43,6 +43,7 @@ import os
 class BumblebeeBaseDocumentOverlay(ActionButtonRendererMixin):
     """Bumblebee overlay for base documents.
     """
+
     version_id = None
 
     def __init__(self, context, request):
@@ -141,7 +142,7 @@ class BumblebeeBaseDocumentOverlay(ActionButtonRendererMixin):
             # Bumblebee will use a placeholder filename
             return None
 
-        filename, extenstion = os.path.splitext(self.get_file().filename)
+        filename = os.path.splitext(self.get_file().filename)[0]
         return u'{}.pdf'.format(filename)
 
     def _is_checkout_and_edit_available(self):
