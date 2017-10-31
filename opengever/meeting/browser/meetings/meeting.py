@@ -205,16 +205,14 @@ class AddMeetingDossierView(WizzardWrappedAddForm):
         return WrappedForm
 
     def __call__(self):
+        """Inject meeting title into meeting dossier add form."""
+
         title_key = 'form.widgets.IOpenGeverBase.title'
 
         if title_key not in self.request.form:
             dm = getUtility(IWizardDataStorage)
             data = dm.get_data(get_dm_key())
-
-            start_date = api.portal.get_localized_time(datetime=data['start'])
-            default_title = _(u'Meeting on ${date}',
-                              mapping={'date': start_date})
-            self.request.set(title_key, default_title)
+            self.request.set(title_key, data.get('title'))
 
         return super(AddMeetingDossierView, self).__call__()
 

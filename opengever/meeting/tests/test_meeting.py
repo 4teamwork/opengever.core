@@ -84,6 +84,7 @@ class TestMeeting(FunctionalTestCase):
         # create meeting
         browser.login().open(self.committee, view='add-meeting')
         browser.fill({
+            'Title': u'M\xe4\xe4hting',
             'Start': '01.01.2010 10:00',
             'End': '01.01.2010 11:00',
             'Location': 'Somewhere',
@@ -111,7 +112,7 @@ class TestMeeting(FunctionalTestCase):
                          meeting.participants)
         dossier = meeting.dossier_oguid.resolve_object()
         self.assertIsNotNone(dossier)
-        self.assertEquals(u'Meeting on Jan 01, 2010', dossier.title)
+        self.assertEquals(u'M\xe4\xe4hting', dossier.title)
         self.assertIsNotNone(meeting.modified)
 
     @browsing
