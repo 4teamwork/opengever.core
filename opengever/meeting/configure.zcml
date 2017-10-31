@@ -128,6 +128,12 @@
       handler=".handlers.sync_moved_proposal"
       />
 
+  <subscriber
+      for="opengever.meeting.proposal.IProposal
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".handlers.sync_proposal"
+      />
+
   <adapter factory=".committee.RepositoryfolderValidator" />
 
 </configure>

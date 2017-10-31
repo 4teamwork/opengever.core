@@ -45,7 +45,7 @@ class ISubmittedProposalTableSourceConfig(ITableSourceConfig):
 @adapter(ISubmittedProposalTableSourceConfig, Interface)
 class SubmittedProposalTableSource(SqlTableSource):
 
-    searchable_columns = []
+    searchable_columns = [Proposal.submitted_title]
 
 
 def proposal_title_link(item, value):

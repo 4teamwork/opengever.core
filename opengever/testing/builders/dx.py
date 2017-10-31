@@ -3,6 +3,7 @@ from dateutil.relativedelta import relativedelta
 from ftw.builder import builder_registry
 from ftw.builder.dexterity import DexterityBuilder
 from opengever.base.behaviors.translated_title import TranslatedTitle
+from opengever.base.oguid import Oguid
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.document.document import Document
 from opengever.globalindex.handlers.task import sync_task
@@ -43,11 +44,13 @@ class DossierBuilder(DexterityBuilder):
 
         return self
 
+
 builder_registry.register('dossier', DossierBuilder)
 
 
 class MeetingDossierBuilder(DossierBuilder):
     portal_type = 'opengever.meeting.meetingdossier'
+
 
 builder_registry.register('meeting_dossier', MeetingDossierBuilder)
 
@@ -55,17 +58,20 @@ builder_registry.register('meeting_dossier', MeetingDossierBuilder)
 class TemplateFolderBuilder(TranslatedTitleBuilderMixin, DexterityBuilder):
     portal_type = 'opengever.dossier.templatefolder'
 
+
 builder_registry.register('templatefolder', TemplateFolderBuilder)
 
 
 class DossierTemplateBuilder(DexterityBuilder):
     portal_type = 'opengever.dossier.dossiertemplate'
 
+
 builder_registry.register('dossiertemplate', DossierTemplateBuilder)
 
 
 class InboxBuilder(TranslatedTitleBuilderMixin, DexterityBuilder):
     portal_type = 'opengever.inbox.inbox'
+
 
 builder_registry.register('inbox', InboxBuilder)
 
@@ -145,12 +151,14 @@ class DocumentBuilder(DexterityBuilder):
         self.arguments['relatedItems'] = documents
         return self
 
+
 builder_registry.register('document', DocumentBuilder, force=True)
 
 
 class SablonTemplateBuilder(DocumentBuilder):
 
     portal_type = 'opengever.meeting.sablontemplate'
+
 
 builder_registry.register('sablontemplate', SablonTemplateBuilder)
 
@@ -205,12 +213,14 @@ class TaskBuilder(DexterityBuilder):
         super(TaskBuilder, self).set_modification_date(obj)
         sync_task(obj, None)
 
+
 builder_registry.register('task', TaskBuilder)
 
 
 class ForwardingBuilder(TaskBuilder):
 
     portal_type = 'opengever.inbox.forwarding'
+
 
 builder_registry.register('forwarding', ForwardingBuilder)
 
@@ -262,11 +272,13 @@ class MailBuilder(DexterityBuilder):
 
         notify(ObjectCreatedEvent(obj))
 
+
 builder_registry.register('mail', MailBuilder)
 
 
 class RepositoryBuilder(TranslatedTitleBuilderMixin, DexterityBuilder):
     portal_type = 'opengever.repository.repositoryfolder'
+
 
 builder_registry.register('repository', RepositoryBuilder)
 
@@ -274,11 +286,13 @@ builder_registry.register('repository', RepositoryBuilder)
 class ContactFolderBuilder(TranslatedTitleBuilderMixin, DexterityBuilder):
     portal_type = 'opengever.contact.contactfolder'
 
+
 builder_registry.register('contactfolder', ContactFolderBuilder)
 
 
 class ContactBuilder(DexterityBuilder):
     portal_type = 'opengever.contact.contact'
+
 
 builder_registry.register('contact', ContactBuilder)
 
@@ -292,17 +306,20 @@ class RepositoryRootBuilder(TranslatedTitleBuilderMixin, DexterityBuilder):
             'title_de': u'Ordnungssystem',
         }
 
+
 builder_registry.register('repository_root', RepositoryRootBuilder)
 
 
 class YearFolderbuilder(DexterityBuilder):
     portal_type = 'opengever.inbox.yearfolder'
 
+
 builder_registry.register('yearfolder', YearFolderbuilder)
 
 
 class InboxContainerBuilder(TranslatedTitleBuilderMixin, DexterityBuilder):
     portal_type = 'opengever.inbox.container'
+
 
 builder_registry.register('inbox_container', InboxContainerBuilder)
 
@@ -352,12 +369,12 @@ class ProposalBuilder(TransparentModelLoader, DexterityBuilder):
     def create(self):
         proposal = super(ProposalBuilder, self).create()
 
+        submitted_proposal = self._traverse_submitted_proposal(proposal)
+        if submitted_proposal:
+            submitted_proposal.sync_model()
+
         if not self._also_return_submitted_proposal:
             return proposal
-
-        proposal_model = proposal.load_model()
-        path = proposal_model.submitted_physical_path.encode('utf-8')
-        submitted_proposal = api.portal.get().restrictedTraverse(path)
 
         return proposal, submitted_proposal
 
@@ -379,6 +396,15 @@ class ProposalBuilder(TransparentModelLoader, DexterityBuilder):
         self._also_return_submitted_proposal = True
         return self
 
+    def _traverse_submitted_proposal(self, proposal):
+        proposal_model = proposal.load_model()
+        if not proposal_model.submitted_physical_path:
+            return None
+
+        path = proposal_model.submitted_physical_path.encode('utf-8')
+        return api.portal.get().restrictedTraverse(path, default=None)
+
+
 builder_registry.register('proposal', ProposalBuilder)
 
 
@@ -399,7 +425,6 @@ class SubmittedProposalBuilder(TransparentModelLoader, DexterityBuilder):
         self.model_arguments = None
 
     def before_create(self):
-
         super(SubmittedProposalBuilder, self).before_create()
 
         # hackishly create the proposal model when creating the submitted
@@ -408,15 +433,18 @@ class SubmittedProposalBuilder(TransparentModelLoader, DexterityBuilder):
             self.arguments)
 
     def after_create(self, obj):
+        self.model_arguments['submitted_oguid'] = Oguid.for_object(obj)
         model = obj.create_model(self.model_arguments, self.container)
         obj.sync_model(proposal_model=model)
         super(SubmittedProposalBuilder, self).after_create(obj)
+
 
 builder_registry.register('submitted_proposal', SubmittedProposalBuilder)
 
 
 class CommitteeContainerBuilder(TranslatedTitleBuilderMixin, DexterityBuilder):
     portal_type = 'opengever.meeting.committeecontainer'
+
 
 builder_registry.register('committee_container', CommitteeContainerBuilder)
 
@@ -455,6 +483,7 @@ class CommitteeBuilder(DexterityBuilder):
 
         if self.session.auto_commit:
             db_session.flush()
+
 
 builder_registry.register('committee', CommitteeBuilder)
 
@@ -524,5 +553,6 @@ class ProposalTemplateBuilder(DocumentBuilder):
     def __init__(self, *args, **kwargs):
         super(ProposalTemplateBuilder, self).__init__(*args, **kwargs)
         self.with_dummy_content()
+
 
 builder_registry.register('proposaltemplate', ProposalTemplateBuilder)

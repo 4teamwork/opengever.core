@@ -66,7 +66,6 @@ class SqlTableSource(GeverTableSource):
         """Extends the given `query` with text filters. This is only done when
         config's `filter_text` is set.
         """
-
         if len(text):
             if isinstance(text, str):
                 text = text.decode('utf-8')

@@ -3,6 +3,7 @@ from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.base.portlets import block_context_portlet_inheritance
 from opengever.base.security import elevated_privileges
+from opengever.base.sqlsyncer import SqlSyncer
 from opengever.meeting.command import UpdateExcerptInDossierCommand
 from opengever.meeting.model import GeneratedExcerpt
 from opengever.meeting.model import Proposal
@@ -63,6 +64,12 @@ def delete_copied_proposal(obj, event):
         api.content.delete(obj)
 
 
+class ProposalSqlSyncer(SqlSyncer):
+
+    def sync_with_sql(self):
+        self.obj.sync_model()
+
+
 def sync_moved_proposal(obj, event):
     # Skip automatically renamed objects during copy & paste process.
     if ICopyPasteRequestLayer.providedBy(getRequest()):
@@ -72,7 +79,11 @@ def sync_moved_proposal(obj, event):
     if not event.oldParent or not event.newParent:
         return
 
-    obj.sync_model()
+    ProposalSqlSyncer(obj, event).sync()
+
+
+def sync_proposal(obj, event):
+    ProposalSqlSyncer(obj, event).sync()
 
 
 def configure_committee_container_portlets(container, event):

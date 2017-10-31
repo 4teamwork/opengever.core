@@ -143,6 +143,16 @@ class TestDossierProposalListing(IntegrationTestCase):
         proposal['Decision number'] = '2016 / 1'
         self.assertEquals([proposal], proposal_dicts(browser))
 
+    @browsing
+    def test_filtering_dossier_proposal_listing_by_name(self, browser):
+        self.login(self.dossier_responsible, browser)
+        browser.open(self.dossier,
+                     view='tabbedview_view-proposals',
+                     data={'searchable_text': u'\xdcberarbeitung'})
+
+        self.assertEquals([DRAFT_WORD_PROPOSAL],
+                          proposal_dicts(browser))
+
 
 class TestMyProposals(IntegrationTestCase):
 
@@ -188,6 +198,15 @@ class TestMyProposals(IntegrationTestCase):
             [SUBMITTED_PROPOSAL, cancelled_proposal, DECIDED_PROPOSAL,
              SUBMITTED_WORD_PROPOSAL, DRAFT_WORD_PROPOSAL],
             proposal_dicts(browser))
+
+    @browsing
+    def test_filtering_my_proposal_listing_by_name(self, browser):
+        self.login(self.dossier_responsible, browser)
+        browser.open(view='tabbedview_view-myproposals',
+                     data={'searchable_text': u'\xc4nderungen'})
+
+        self.assertEquals([SUBMITTED_WORD_PROPOSAL],
+                          proposal_dicts(browser))
 
 
 class TestSubmittedProposals(IntegrationTestCase):
@@ -265,3 +284,12 @@ class TestSubmittedProposals(IntegrationTestCase):
         self.assertEquals(
             [SUBMITTED_PROPOSAL, DECIDED_PROPOSAL, SUBMITTED_WORD_PROPOSAL],
             proposal_dicts(browser))
+
+    @browsing
+    def test_filtering_submitted_proposal_listing_by_name(self, browser):
+        self.login(self.committee_responsible, browser)
+        browser.open(self.committee,
+                     view='tabbedview_view-submittedproposals',
+                     data={'searchable_text': 'Vertragsentwurf'})
+
+        self.assertEquals([SUBMITTED_PROPOSAL], proposal_dicts(browser))

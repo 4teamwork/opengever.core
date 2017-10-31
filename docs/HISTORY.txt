@@ -10,6 +10,8 @@ Changelog
 - Make sure response changes are persistent. [phgross]
 - SPV word: redesign agenda items in meeting view. [jone]
 - Prevent editing agenda item list when meeting has been held. [deiferni]
+- Allow proposal listings to be filtered by proposal title. [deiferni]
+- Allow proposal listings to be sorted by title. [deiferni]
 
 
 2017.6.0 (2017-10-27)

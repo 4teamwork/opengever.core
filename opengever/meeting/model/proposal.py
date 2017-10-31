@@ -30,6 +30,9 @@ from zope.component import getMultiAdapter
 from zope.globalrequest import getRequest
 
 
+MAX_TITLE_LENGTH = 256
+
+
 class Submit(Transition):
 
     def execute(self, obj, model):
@@ -97,6 +100,9 @@ class Proposal(Base):
     oguid = composite(Oguid, admin_unit_id, int_id)
     physical_path = Column(String(256), nullable=False)
     creator = Column(String(USER_ID_LENGTH), nullable=False)
+
+    title = Column(String(MAX_TITLE_LENGTH), index=True)
+    submitted_title = Column(String(MAX_TITLE_LENGTH), index=True)
 
     submitted_admin_unit_id = Column(String(UNIT_ID_LENGTH))
     submitted_int_id = Column(Integer)
@@ -210,12 +216,12 @@ class Proposal(Base):
 
     def get_link(self, include_icon=True):
         return self._get_link(self.get_url(),
-                              self.resolve_proposal().title,
+                              self.title,
                               include_icon=include_icon)
 
     def get_submitted_link(self, include_icon=True):
         return self._get_link(self.get_submitted_url(),
-                              self.resolve_submitted_proposal().title,
+                              self.submitted_title,
                               include_icon=include_icon)
 
     def _get_link(self, url, title, include_icon=True):
