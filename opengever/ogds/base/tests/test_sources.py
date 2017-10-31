@@ -3,6 +3,7 @@ from ftw.builder import create
 from opengever.ogds.base.sources import AllEmailContactsAndUsersSource
 from opengever.ogds.base.sources import AllGroupsSource
 from opengever.ogds.base.sources import AllOrgUnitsSource
+from opengever.ogds.base.sources import AllUsersAndGroupsSource
 from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSource
 from opengever.ogds.base.sources import AllUsersSource
 from opengever.ogds.base.sources import AssignedUsersSource
@@ -814,3 +815,18 @@ class TestAllGroupsSource(IntegrationTestCase):
     def test_invalid_token_raises_lookup_error(self):
         with self.assertRaises(LookupError):
             self.source.getTermByToken('invalid-id')
+
+
+class TestAllUsersAndGroupsSource(IntegrationTestCase):
+
+    def setUp(self):
+        super(TestAllUsersAndGroupsSource, self).setUp()
+        self.source = AllUsersAndGroupsSource(self.portal)
+
+    def test_find_users(self):
+        self.assertIn('kathi.barfuss', self.source)
+        self.assertIn('herbert.jager', self.source)
+
+    def test_find_groups(self):
+        self.assertIn('fa_users', self.source)
+        self.assertIn('fa_inbox_users', self.source)

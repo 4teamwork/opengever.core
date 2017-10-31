@@ -23,6 +23,94 @@ from zope.schema.vocabulary import SimpleTerm
 
 
 @implementer(IQuerySource)
+class BaseQuerySoure(object):
+
+    def __init__(self, context, **kwargs):
+        self.context = context
+        self.terms = []
+
+    def __contains__(self, value):
+        token = value
+
+        try:
+            self.getTermByToken(token)
+        except LookupError:
+            return False
+
+        return True
+
+    def __iter__(self):
+        return self.terms.__iter__()
+
+    def __len__(self):
+        return len(self.terms)
+
+    def search(self):
+        raise NotImplemented
+
+    def getTerm(self, value):
+        raise NotImplemented
+
+    def getTermByToken(self, token):
+        raise NotImplemented
+
+
+@implementer(IQuerySource)
+class BaseMultipleSourcesQuerySource(BaseQuerySoure):
+    """Use this querysource as a baseclass if you need
+    the results of different query-sources.
+    """
+    def __init__(self, context):
+        super(BaseMultipleSourcesQuerySource, self).__init__(context)
+        self.source_instances = [source_class(context) for source_class in self.source_classes]
+
+    @property
+    def source_classes(self):
+        """Defines multiple IQuerySource-classes which should be processed.
+
+        @return: List of classes implementing the IQuerySource interface.
+        """
+        raise NotImplemented
+
+    def getTerm(self, value):
+        for source in self.source_instances:
+            try:
+                term = source.getTerm(value)
+            except LookupError:
+                continue
+
+            if term:
+                break
+
+        if not term:
+            raise LookupError
+
+        return term
+
+    def getTermByToken(self, token):
+        for source in self.source_instances:
+            try:
+                term = source.getTerm(token)
+            except LookupError:
+                continue
+
+            if term:
+                break
+
+        if not term:
+            raise LookupError
+
+        return term
+
+    def search(self, query_string):
+        self.terms = []
+        for source in self.source_instances:
+            self.terms.extend(source.search(query_string))
+
+        return self.terms
+
+
+@implementer(IQuerySource)
 class AllUsersInboxesAndTeamsSource(object):
     """This example of a IQuerySource is taken from the
     plone.formwidget.autocomplete
@@ -674,3 +762,16 @@ class AllGroupsSourceBinder(object):
 
     def __call__(self, context):
         return AllGroupsSource(context)
+
+
+@implementer(IQuerySource)
+class AllUsersAndGroupsSource(BaseMultipleSourcesQuerySource):
+
+    source_classes = [AllGroupsSource, AllUsersSource]
+
+
+@implementer(IContextSourceBinder)
+class AllUsersAndGroupsSourceBinder(object):
+
+    def __call__(self, context):
+        return AllUsersAndGroupsSource(context)

@@ -1,6 +1,6 @@
 from ftw.keywordwidget.widget import KeywordFieldWidget
 from opengever.dossier import _
-from opengever.ogds.base.sources import AllGroupsSourceBinder
+from opengever.ogds.base.sources import AllUsersAndGroupsSourceBinder
 from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.supermodel import model
@@ -29,7 +29,7 @@ class IProtectDossier(model.Schema):
         description=_(
             u'description_reading',
             default=u'Choose users and groups which have only readable access to the dossier'),
-        value_type=schema.Choice(source=AllGroupsSourceBinder()),
+        value_type=schema.Choice(source=AllUsersAndGroupsSourceBinder()),
         required=False,
         missing_value=[],
         )
@@ -41,7 +41,7 @@ class IProtectDossier(model.Schema):
         description=_(
             u'description_reading_and_writing',
             default=u'Choose users and groups which have readable and writing access to the dossier'),
-        value_type=schema.Choice(source=AllGroupsSourceBinder()),
+        value_type=schema.Choice(source=AllUsersAndGroupsSourceBinder()),
         required=False,
         missing_value=[],
         )
