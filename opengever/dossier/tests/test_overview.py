@@ -89,12 +89,13 @@ class TestOverview(IntegrationTestCase):
 
         handler = IParticipationAware(self.dossier)
         participation = handler.create_participation(
-            contact='robert.ziegler', roles=['regard'])
+            contact='kathi.barfuss', roles=['regard'])
         handler.append_participiation(participation)
 
         browser.open(self.dossier, view='tabbedview_view-overview')
-        self.assertEqual(
-            ['Ziegler Robert (robert.ziegler)'],
+        self.assertListEqual(
+            [u'B\xe4rfuss K\xe4thi (kathi.barfuss)',
+             u'Ziegler Robert (robert.ziegler)'],
             browser.css('#participantsBox li:not(.moreLink) a').text)
 
     @browsing

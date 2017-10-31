@@ -342,7 +342,7 @@ class OpengeverContentFixture(object):
                     u' Vertr\xe4ge vor 2016 geh\xf6ren ins Archiv.',
                     keywords=(u'Finanzverwaltung', u'Vertr\xe4ge'),
                     start=date(2016, 1, 1),
-                    responsible='hugo.boss')))
+                    responsible=self.dossier_responsible.getId())))
 
         create(Builder('contact_participation')
                .for_contact(self.meier_ag)
@@ -446,7 +446,7 @@ class OpengeverContentFixture(object):
                     keywords=(u'Finanzverwaltung', u'Vertr\xe4ge'),
                     start=date(2000, 1, 1),
                     end=date(2015, 12, 31),
-                    responsible='hugo.boss')
+                    responsible=self.dossier_responsible.getId())
             .in_state('dossier-state-resolved')))
 
     @staticuid()
@@ -455,7 +455,7 @@ class OpengeverContentFixture(object):
             Builder('dossier').within(self.repofolder00)
             .titled(u'An empty dossier')
             .having(start=date(2016, 1, 1),
-                    responsible='hugo.boss')))
+                    responsible=self.dossier_responsible.getId())))
 
     @staticuid()
     def create_emails(self):
