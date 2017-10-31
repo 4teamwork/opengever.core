@@ -452,7 +452,7 @@ class OpengeverContentFixture(object):
             Builder('dossier').within(self.repofolder00)
             .titled(u'Archiv Vertr\xe4ge')
             .having(description=u'Archiv der Vertr\xe4ge vor 2016.',
-                    keywords=(u'Finanzverwaltung', u'Vertr\xe4ge'),
+                    keywords=(u'Vertr\xe4ge'),
                     start=date(2000, 1, 1),
                     end=date(2015, 12, 31),
                     responsible=self.dossier_responsible.getId())
@@ -492,6 +492,7 @@ class OpengeverContentFixture(object):
             .titled(u'Sitzungsdossier 9/2017')
             .having(start=date(2016, 9, 12),
                     relatedDossier=[self.dossier],
+                    keywords=(u'Finanzverwaltung', u'Vertr\xe4ge'),
                     responsible=self.committee_responsible.getId())))
         self.meeting = create(
             Builder('meeting')
