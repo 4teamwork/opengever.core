@@ -55,7 +55,6 @@ class BaseQuerySoure(object):
         raise NotImplemented
 
 
-@implementer(IQuerySource)
 class BaseMultipleSourcesQuerySource(BaseQuerySoure):
     """Use this querysource as a baseclass if you need
     the results of different query-sources.
@@ -110,15 +109,13 @@ class BaseMultipleSourcesQuerySource(BaseQuerySoure):
         return self.terms
 
 
-@implementer(IQuerySource)
-class AllUsersInboxesAndTeamsSource(object):
+class AllUsersInboxesAndTeamsSource(BaseQuerySoure):
     """This example of a IQuerySource is taken from the
     plone.formwidget.autocomplete
     """
 
     def __init__(self, context, **kwargs):
-        self.context = context
-        self.terms = []
+        super(AllUsersInboxesAndTeamsSource, self).__init__(context, **kwargs)
         self.client_id = self.get_client_id()
 
         self.only_current_orgunit = kwargs.get('only_current_orgunit', False)
@@ -157,22 +154,6 @@ class AllUsersInboxesAndTeamsSource(object):
             query = query.filter(OrgUnit.unit_id == self.client_id)
 
         return query
-
-    def __contains__(self, value):
-        token = value
-
-        try:
-            self.getTermByToken(token)
-        except LookupError:
-            return False
-
-        return True
-
-    def __iter__(self):
-        return self.terms.__iter__()
-
-    def __len__(self):
-        return len(self.terms)
 
     def getTerm(self, value):
 
@@ -334,7 +315,6 @@ class AllUsersInboxesAndTeamsSourceBinder(object):
             include_teams=self.include_teams)
 
 
-@implementer(IQuerySource)
 class UsersContactsInboxesSource(AllUsersInboxesAndTeamsSource):
 
     @property
@@ -429,7 +409,6 @@ class UsersContactsInboxesSourceBinder(object):
         return UsersContactsInboxesSource(context)
 
 
-@implementer(IQuerySource)
 class AllUsersSource(AllUsersInboxesAndTeamsSource):
     """Vocabulary of all users assigned to the current admin unit.
     """
@@ -489,7 +468,6 @@ class AllUsersSourceBinder(object):
         return AllUsersSource(context)
 
 
-@implementer(IQuerySource)
 class AssignedUsersSource(AllUsersSource):
     """Vocabulary of all users assigned to the current admin unit.
     """
@@ -515,7 +493,6 @@ class AssignedUsersSourceBinder(object):
         return AssignedUsersSource(context)
 
 
-@implementer(IQuerySource)
 class AllEmailContactsAndUsersSource(UsersContactsInboxesSource):
     """Source of all users and contacts with all email addresses.
 
@@ -622,7 +599,6 @@ class AllEmailContactsAndUsersSourceBinder(object):
         return AllEmailContactsAndUsersSource(context)
 
 
-@implementer(IQuerySource)
 class ContactsSource(UsersContactsInboxesSource):
 
     def getTerm(self, value, brain=None):
@@ -664,34 +640,14 @@ class ContactsSourceBinder(object):
         return ContactsSource(context)
 
 
-@implementer(IQuerySource)
-class BaseSQLModelSource(object):
+class BaseSQLModelSource(BaseQuerySoure):
 
     model_class = None
-
-    def __init__(self, context, **kwargs):
-        self.context = context
-        self.terms = []
 
     @property
     def base_query(self):
         """"""
         raise NotImplemented
-
-    def __contains__(self, value):
-        token = value
-        try:
-            self.getTermByToken(token)
-        except LookupError:
-            return False
-
-        return True
-
-    def __iter__(self):
-        return self.terms.__iter__()
-
-    def __len__(self):
-        return len(self.terms)
 
     def getTerm(self, value):
         obj = self.model_class.get(value)
@@ -722,7 +678,6 @@ class BaseSQLModelSource(object):
         return self.terms
 
 
-@implementer(IQuerySource)
 class AllOrgUnitsSource(BaseSQLModelSource):
 
     model_class = OrgUnit
@@ -743,7 +698,6 @@ class AllOrgUnitsSourceBinder(object):
         return AllOrgUnitsSource(context)
 
 
-@implementer(IQuerySource)
 class AllGroupsSource(BaseSQLModelSource):
 
     model_class = Group
@@ -764,7 +718,6 @@ class AllGroupsSourceBinder(object):
         return AllGroupsSource(context)
 
 
-@implementer(IQuerySource)
 class AllUsersAndGroupsSource(BaseMultipleSourcesQuerySource):
 
     source_classes = [AllGroupsSource, AllUsersSource]
