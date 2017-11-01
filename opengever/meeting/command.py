@@ -61,6 +61,12 @@ class MergeDocxExcerptCommand(CreateDocumentCommand):
             title=title)
 
     def generate_file_data(self):
+        header_template = self.agenda_item.get_excerpt_header_template()
+        suffix_template = self.agenda_item.get_excerpt_suffix_template()
+
+        if header_template is None and suffix_template is None:
+            return self.agenda_item.resolve_document().file.data
+
         with DocxMergeTool() as merge_tool:
             if self.agenda_item.get_excerpt_header_template() is not None:
                 merge_tool.add_sablon(self.get_header_sablon())
