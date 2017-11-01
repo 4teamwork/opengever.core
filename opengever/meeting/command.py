@@ -48,7 +48,7 @@ class MergeDocxExcerptCommand(CreateDocumentCommand):
     """Create or update a merged excerpt word file.
     """
 
-    def __init__(self, context, agenda_item, filename, title, lock_document_after_creation=False):
+    def __init__(self, context, agenda_item, filename, title):
         self.agenda_item = agenda_item
         self.excerpt_protocol_data = ExcerptProtocolData(
             self.agenda_item.meeting,
