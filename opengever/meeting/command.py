@@ -68,24 +68,20 @@ class MergeDocxExcerptCommand(CreateDocumentCommand):
             return self.agenda_item.resolve_document().file.data
 
         with DocxMergeTool() as merge_tool:
-            if self.agenda_item.get_excerpt_header_template() is not None:
-                merge_tool.add_sablon(self.get_header_sablon())
+
+            if header_template is not None:
+                merge_tool.add_sablon(self.get_sablon(template=header_template))
 
             if self.agenda_item.has_document:
                 merge_tool.add_document(self.agenda_item.resolve_document())
 
-            if self.agenda_item.get_excerpt_suffix_template() is not None:
-                merge_tool.add_sablon(self.get_suffix_sablon())
+            if suffix_template is not None:
+                merge_tool.add_sablon(self.get_sablon(template=suffix_template))
 
             return merge_tool()
 
-    def get_header_sablon(self):
-        return Sablon(self.agenda_item.get_excerpt_header_template()).process(
-            self.excerpt_protocol_data.as_json())
-
-    def get_suffix_sablon(self):
-        return Sablon(self.agenda_item.get_excerpt_suffix_template()).process(
-            self.excerpt_protocol_data.as_json())
+    def get_sablon(self, template):
+        return Sablon(template).process(self.excerpt_protocol_data.as_json())
 
     def execute(self):
         self.set_file(
