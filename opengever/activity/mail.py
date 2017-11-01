@@ -22,7 +22,6 @@ class PloneNotificationMailer(NotificationDispatcher):
     the corresponding watcher.
     """
 
-    enabled_key = 'mail_notification'
     roles_key = 'mail_notification_roles'
 
     def __init__(self):

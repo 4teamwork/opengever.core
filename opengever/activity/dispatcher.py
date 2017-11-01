@@ -16,12 +16,6 @@ class NotificationDispatcher(object):
     def get_setting(self, kind):
         return NotificationDefault.query.by_kind(kind=kind).first()
 
-    def is_dispatcher_enabled(self, kind):
-        setting = self.get_setting(kind)
-        if setting:
-            return getattr(setting, self.enabled_key)
-        return False
-
     def get_roles_to_dispatch(self, kind):
         setting = self.get_setting(kind)
         if not setting:
@@ -30,9 +24,6 @@ class NotificationDispatcher(object):
         return getattr(setting, self.roles_key)
 
     def dispatch_notifications(self, activity):
-        if not self.is_dispatcher_enabled(activity.kind):
-            return []
-
         not_dispatched = []
         roles = self.get_roles_to_dispatch(activity.kind)
         notifications = activity.get_notifications_for_watcher_roles(roles)

@@ -17,12 +17,11 @@ class NotificationDefault(Base):
                                      primary_key=True)
 
     kind = Column(String(50), nullable=False, unique=True)
-    mail_notification = Column(Boolean, nullable=False, default=False)
+
     _mail_notification_roles = Column('mail_notification_roles', Text)
 
-    def __init__(self, kind, mail_notification=False, mail_notification_roles=[]):
+    def __init__(self, kind, mail_notification_roles=[]):
         self.kind = kind
-        self.mail_notification = mail_notification
         self.set_mail_notification_roles(mail_notification_roles)
 
     @property
