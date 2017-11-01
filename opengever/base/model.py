@@ -48,6 +48,12 @@ def create_session():
     return Session()
 
 
+def is_oracle():
+    """Returns a new sql session bound to the defined named scope.
+    """
+    return 'oracle' in create_session().connection().dialect.name
+
+
 class UTCDateTime(types.TypeDecorator):
     """Sqlalchemy does not support timezone aware datetimes for Sqlite and
     MySQL backend. Therefore we have to ensure that timezone aware datetimes

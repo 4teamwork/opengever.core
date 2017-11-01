@@ -1,4 +1,5 @@
 from ftw.table.interfaces import ITableSource
+from opengever.base.model import is_oracle
 from opengever.tabbedview import GeverTableSource
 from opengever.tabbedview.interfaces import IGeverTableSourceConfig
 from sqlalchemy import or_
@@ -11,6 +12,16 @@ from sqlalchemy.sql.expression import desc
 from zope.component import adapter
 from zope.interface import implementer
 from zope.interface import Interface
+
+
+def cast_to_string(field):
+    field_type = field.type.python_type
+    if issubclass(field_type, basestring):
+        return field
+    if issubclass(field.type.python_type, int) and is_oracle():
+        return field
+
+    return cast(field, String)
 
 
 @implementer(ITableSource)
@@ -90,9 +101,7 @@ class SqlTableSource(GeverTableSource):
 
                 expressions = []
                 for field in self.searchable_columns:
-                    if not issubclass(field.type.python_type, basestring):
-                        field = cast(field, String)
-                    expressions.append(field.ilike(term))
+                    expressions.append(cast_to_string(field).ilike(term))
                 query = query.filter(or_(*expressions))
 
         return query
