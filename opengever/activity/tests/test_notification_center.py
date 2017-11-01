@@ -390,7 +390,6 @@ class TestNotificationHandling(ActivityTestCase):
 
 class FakeMailDispatcher(NotificationDispatcher):
 
-    enabled_key = 'mail_notification'
     roles_key = 'mail_notification_roles'
 
     def __init__(self):
@@ -420,23 +419,10 @@ class TestDispatchers(ActivityTestCase):
 
     def test_check_for_notification_default(self):
         setting = create(Builder('notification_default_setting')
-                         .having(kind='task-added',
-                                 mail_notification=False))
+                         .having(kind='task-added'))
         setting.set_mail_notification_roles(
             [WATCHER_ROLE, TASK_RESPONSIBLE_ROLE])
 
-        self.center.add_activity(
-            Oguid('fd', '123'),
-            'task-added',
-            {'en': 'Kennzahlen 2014 erfassen'},
-            {'en': 'Task added'},
-            {'en': 'Task bla accepted by Peter'},
-            'hugo.boss',
-            {'en': None})
-
-        self.assertEquals(0, len(self.dispatcher.notified))
-
-        setting.mail_notification = True
         self.center.add_activity(
             Oguid('fd', '123'),
             'task-added',
@@ -450,8 +436,7 @@ class TestDispatchers(ActivityTestCase):
 
     def test_only_watchers_with_configured_roles_are_dispatched(self):
         setting = create(Builder('notification_default_setting')
-                         .having(kind='task-added',
-                                 mail_notification=True))
+                         .having(kind='task-added'))
         setting.set_mail_notification_roles([WATCHER_ROLE])
 
         self.center.add_activity(
