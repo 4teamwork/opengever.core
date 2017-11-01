@@ -1,3 +1,4 @@
+from datetime import date
 from opengever.base import advancedjson
 from opengever.base.interfaces import IDataCollector
 from opengever.base.oguid import Oguid
@@ -32,6 +33,8 @@ class CreateSubmittedProposal(BrowserView):
             data['field-data']['ISubmittedProposal'] = data['field-data'].pop(
                 'IProposal')
             collector.insert(data['field-data'])
+            # XXX fix data types in transporter
+            submitted_proposal.date_of_submission = date.today()
 
             # sync data to proposal after inserting field data
             submitted_proposal.sync_model(proposal_model=proposal)

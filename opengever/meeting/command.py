@@ -541,7 +541,7 @@ class RejectProposalCommand(object):
         if response_body != 'OK':
             raise ValueError(
                 'Unexpected response {!r} when rejecting proposal.'.format(
-                    response))
+                    response_body))
 
 
 class NullUpdateSubmittedDocumentCommand(object):

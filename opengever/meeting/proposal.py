@@ -2,6 +2,7 @@ from AccessControl import getSecurityManager
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from collective import dexteritytextindexer
+from datetime import date
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.oguid import Oguid
@@ -27,6 +28,7 @@ from opengever.ogds.base.utils import ogds_service
 from plone import api
 from plone.app.uuid.utils import uuidToObject
 from plone.autoform.directives import mode
+from plone.autoform.directives import omitted
 from plone.formwidget.contenttree import ObjPathSourceBinder
 from plone.supermodel import model
 from plone.uuid.interfaces import IUUID
@@ -147,7 +149,17 @@ class IProposal(model.Schema):
         default=None,
         missing_value=None,
         required=False,
-        source=ObjPathSourceBinder(portal_type='opengever.meeting.proposal'))
+        source=ObjPathSourceBinder(portal_type='opengever.meeting.proposal')
+        )
+
+    omitted('date_of_submission')
+    date_of_submission = schema.Date(
+        description=_('label_date_of_submission',
+                      default='Date of submission'),
+        default=None,
+        missing_value=None,
+        required=False,
+        )
 
 
 class ISubmittedProposal(IProposal):
@@ -475,6 +487,8 @@ class SubmittedProposal(ProposalBase):
         return False
 
     def reject(self, text):
+        """Reject the submitted proposal."""
+
         RejectProposalCommand(self).execute()
         proposal = self.load_model()
         proposal.reject(text)
@@ -686,6 +700,8 @@ class Proposal(ProposalBase):
         return command
 
     def submit(self):
+        self.date_of_submission = date.today()
+
         documents = self.get_documents()
         create_command = CreateSubmittedProposalCommand(self)
         copy_commands = [
@@ -696,3 +712,14 @@ class Proposal(ProposalBase):
         create_command.execute()
         for copy_command in copy_commands:
             copy_command.execute()
+
+    def reject(self):
+        """Reject the proposal.
+
+        Called via remote-request after the proposal has been rejected on the
+        committee side.
+        """
+
+        api.content.transition(obj=self,
+                               transition='proposal-transition-reject')
+        self.date_of_submission = None
