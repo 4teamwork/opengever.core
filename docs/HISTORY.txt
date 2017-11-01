@@ -12,6 +12,7 @@ Changelog
 - Prevent editing agenda item list when meeting has been held. [deiferni]
 - Allow proposal listings to be filtered by proposal title. [deiferni]
 - Allow proposal listings to be sorted by title. [deiferni]
+- Prevent upgrade to committee container roles to run for all documents. [deiferni]
 
 
 2017.6.0 (2017-10-27)
