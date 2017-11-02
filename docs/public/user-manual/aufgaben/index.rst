@@ -14,6 +14,7 @@ Mit Aufgaben arbeiten
    erledigte_abschliessen
    auflisten_von_statusaenderungen
    sammelaufgaben
+   teamaufgaben
    mandantenuebergreifende_zusammenarbeit
    pendenzenkontrolle
    stellvertretung
