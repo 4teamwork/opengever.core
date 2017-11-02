@@ -33,6 +33,10 @@ class AddCommitteRolesToDocumentAndMailWorkflows(UpgradeStep):
     def get_documents_and_mails_in_committee_containers(self):
         committee_container_brains = self.catalog_unrestricted_search(
             {'object_provides': ICommitteeContainer.__identifier__})
+
+        if not committee_container_brains:
+            return []
+
         query = {
             'paths': map(methodcaller('getPath'), committee_container_brains),
             'portal_type': WorkflowSecurityUpdater().get_suspected_types(
