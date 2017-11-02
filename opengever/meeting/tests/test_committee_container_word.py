@@ -27,23 +27,6 @@ class TestCommitteeContainer(IntegrationTestCase):
                          self.committee_container.get_ad_hoc_template())
 
     @browsing
-    def test_can_add_with_ad_hoc_template(self, browser):
-        self.login(self.manager, browser)
-        browser.open()
-        factoriesmenu.add('Committee Container')
-        browser.fill({'Title': u'Sitzungen',
-                      'Protocol header template': self.sablon_template,
-                      'Protocol suffix template': self.sablon_template,
-                      'Excerpt header template': self.sablon_template,
-                      'Excerpt suffix template': self.sablon_template,
-                      'Paragraph template': self.sablon_template,
-                      'Ad hoc agenda item template': self.proposal_template}).save()
-        statusmessages.assert_no_error_messages()
-
-        self.assertEqual(self.proposal_template,
-                         browser.context.get_ad_hoc_template())
-
-    @browsing
     def test_can_configure_paragraph_template(self, browser):
         self.login(self.administrator, browser)
         self.committee_container.paragraph_template = None
@@ -62,7 +45,7 @@ class TestCommitteeContainer(IntegrationTestCase):
                          self.committee_container.get_paragraph_template())
 
     @browsing
-    def test_can_add_with_paragraph_template(self, browser):
+    def test_can_add_with_templates(self, browser):
         self.login(self.manager, browser)
         browser.open()
         factoriesmenu.add('Committee Container')
@@ -71,11 +54,19 @@ class TestCommitteeContainer(IntegrationTestCase):
                       'Protocol suffix template': self.sablon_template,
                       'Excerpt header template': self.sablon_template,
                       'Excerpt suffix template': self.sablon_template,
-                      'Paragraph template': self.sablon_template}).save()
+                      'Paragraph template': self.sablon_template,
+                      'Ad hoc agenda item template': self.proposal_template}).save()
         statusmessages.assert_no_error_messages()
 
+        self.assertEqual(self.proposal_template,
+                         browser.context.get_ad_hoc_template())
         self.assertEqual(self.sablon_template,
                          browser.context.get_paragraph_template())
+        self.assertEqual(self.sablon_template,
+                         browser.context.get_excerpt_header_template())
+        self.assertEqual(self.sablon_template,
+                         browser.context.get_excerpt_suffix_template())
+
 
     @browsing
     def test_visible_fields_in_forms(self, browser):
