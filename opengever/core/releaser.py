@@ -1,6 +1,7 @@
 import logging
 import os.path
 import sys
+import re
 
 
 logger = logging.getLogger("opengever.releaser")
@@ -59,3 +60,21 @@ def on_prerelease_middle(data):
     _write_versions_file(data, versions_file_with_pinning)
     logger.info("Pinned opengever.core to '{}' in '{}'".format(
         new_version, VERSIONS_FILE_NAME))
+
+
+def on_postrelease_middle(data):
+    """Remove pinned gever version after release."""
+
+    versions_file = _read_versions_file(data)
+
+    if "opengever.core" not in versions_file:
+        logger.critical("Could not find pinning for 'opengever.core' in "
+                        "file '{}'.".format(VERSIONS_FILE_NAME))
+        sys.exit(1)
+
+    versions_file_without_pinning = re.sub(
+        "^opengever.core = .*$\n*", "", versions_file, flags=re.MULTILINE)
+
+    _write_versions_file(data, versions_file_without_pinning)
+    logger.info("Removed pinning of opengever.core in '{}'".format(
+        VERSIONS_FILE_NAME))
