@@ -79,6 +79,11 @@ class SubmittedProposalEditForm(FieldConfigurationMixin,
     fields = field.Fields(SubmittedProposal.model_schema, ignoreContext=True)
     content_type = SubmittedProposal
 
+    def updateFields(self):
+        super(SubmittedProposalEditForm, self).updateFields()
+        if is_word_meeting_implementation_enabled():
+            self.fields = self.fields.omit('considerations', 'excerpts')
+
     def updateWidgets(self):
         super(SubmittedProposalEditForm, self).updateWidgets()
         self.widgets['relatedItems'].mode = HIDDEN_MODE
