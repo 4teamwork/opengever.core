@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2017.6.1 (unreleased)
+2017.6.2 (unreleased)
 ---------------------
 
 - Add proper responsible for fixture objects. [elioschmutz]
@@ -12,6 +12,11 @@ Changelog
 - Prevent editing agenda item list when meeting has been held. [deiferni]
 - Allow proposal listings to be filtered by proposal title. [deiferni]
 - Allow proposal listings to be sorted by title. [deiferni]
+
+
+2017.6.1 (2017-11-02)
+---------------------
+
 - Prevent upgrade to committee container roles to run for all documents. [deiferni]
 
 
