@@ -23,7 +23,9 @@ class CommitteContainerFieldConfigurationMixin(object):
             self.fields = self.fields.omit('ad_hoc_template',
                                            'paragraph_template',
                                            'protocol_header_template',
-                                           'protocol_suffix_template')
+                                           'protocol_suffix_template',
+                                           'excerpt_header_template',
+                                           'excerpt_suffix_template')
 
 
 class AddForm(CommitteContainerFieldConfigurationMixin, TranslatedTitleAddForm):

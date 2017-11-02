@@ -1112,6 +1112,18 @@ msgstr "Fin"
 msgid "label_excerpt"
 msgstr "Extrait du protocole"
 
+#. Default: "Excerpt header template"
+#: ./opengever/meeting/committee.py
+#: ./opengever/meeting/committeecontainer.py
+msgid "label_excerpt_header_template"
+msgstr ""
+
+#. Default: "Excerpt suffix template"
+#: ./opengever/meeting/committee.py
+#: ./opengever/meeting/committeecontainer.py
+msgid "label_excerpt_suffix_template"
+msgstr ""
+
 #. Default: "Excerpts"
 #: ./opengever/meeting/browser/meetings/meeting.py
 #: ./opengever/meeting/proposal.py

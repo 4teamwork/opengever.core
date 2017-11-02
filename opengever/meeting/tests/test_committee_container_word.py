@@ -18,27 +18,13 @@ class TestCommitteeContainer(IntegrationTestCase):
 
         browser.open(self.committee_container, view='edit')
         browser.fill({'Ad hoc agenda item template': self.proposal_template}).save()
+        statusmessages.assert_no_error_messages()
 
         statusmessages.assert_message('Changes saved')
 
         self.assertIsNotNone(self.committee_container.ad_hoc_template)
         self.assertEqual(self.proposal_template,
                          self.committee_container.get_ad_hoc_template())
-
-    @browsing
-    def test_can_add_with_ad_hoc_template(self, browser):
-        self.login(self.manager, browser)
-        browser.open()
-        factoriesmenu.add('Committee Container')
-        browser.fill({'Title': u'Sitzungen',
-                      'Protocol header template': self.sablon_template,
-                      'Protocol suffix template': self.sablon_template,
-                      'Paragraph template': self.sablon_template,
-                      'Ad hoc agenda item template': self.proposal_template}).save()
-        statusmessages.assert_no_error_messages()
-
-        self.assertEqual(self.proposal_template,
-                         browser.context.get_ad_hoc_template())
 
     @browsing
     def test_can_configure_paragraph_template(self, browser):
@@ -50,6 +36,7 @@ class TestCommitteeContainer(IntegrationTestCase):
 
         browser.open(self.committee_container, view='edit')
         browser.fill({'Paragraph template': self.sablon_template}).save()
+        statusmessages.assert_no_error_messages()
 
         statusmessages.assert_message('Changes saved')
 
@@ -58,18 +45,28 @@ class TestCommitteeContainer(IntegrationTestCase):
                          self.committee_container.get_paragraph_template())
 
     @browsing
-    def test_can_add_with_paragraph_template(self, browser):
+    def test_can_add_with_templates(self, browser):
         self.login(self.manager, browser)
         browser.open()
         factoriesmenu.add('Committee Container')
         browser.fill({'Title': u'Sitzungen',
                       'Protocol header template': self.sablon_template,
                       'Protocol suffix template': self.sablon_template,
-                      'Paragraph template': self.sablon_template}).save()
+                      'Excerpt header template': self.sablon_template,
+                      'Excerpt suffix template': self.sablon_template,
+                      'Paragraph template': self.sablon_template,
+                      'Ad hoc agenda item template': self.proposal_template}).save()
         statusmessages.assert_no_error_messages()
 
+        self.assertEqual(self.proposal_template,
+                         browser.context.get_ad_hoc_template())
         self.assertEqual(self.sablon_template,
                          browser.context.get_paragraph_template())
+        self.assertEqual(self.sablon_template,
+                         browser.context.get_excerpt_header_template())
+        self.assertEqual(self.sablon_template,
+                         browser.context.get_excerpt_suffix_template())
+
 
     @browsing
     def test_visible_fields_in_forms(self, browser):
@@ -80,6 +77,8 @@ class TestCommitteeContainer(IntegrationTestCase):
         fields = [u'Title',
                   u'Protocol header template',
                   u'Protocol suffix template',
+                  u'Excerpt header template',
+                  u'Excerpt suffix template',
                   u'Agendaitem list template',
                   u'Table of contents template',
                   u'Ad hoc agenda item template',

@@ -246,6 +246,8 @@ class OpengeverContentFixture(object):
                 excerpt_template=self.sablon_template,
                 protocol_template=self.sablon_template,
                 protocol_header_template=self.sablon_template,
+                excerpt_header_template=self.sablon_template,
+                excerpt_suffix_template=self.sablon_template,
                 paragraph_template=self.sablon_template,
                 )
             ))

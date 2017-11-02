@@ -77,6 +77,20 @@ class ICommittee(model.Schema):
         required=False,
     )
 
+    excerpt_header_template = RelationChoice(
+        title=_('label_excerpt_header_template',
+                default='Excerpt header template'),
+        source=sablon_template_source,
+        required=False,
+    )
+
+    excerpt_suffix_template = RelationChoice(
+        title=_('label_excerpt_suffix_template',
+                default='Excerpt suffix template'),
+        source=sablon_template_source,
+        required=False,
+    )
+
     excerpt_template = RelationChoice(
         title=_('Excerpt template'),
         source=sablon_template_source,
@@ -273,6 +287,18 @@ class Committee(ModelContainer):
             return self.protocol_suffix_template.to_object
 
         return self.get_committee_container().get_protocol_suffix_template()
+
+    def get_excerpt_header_template(self):
+        if self.excerpt_header_template:
+            return self.excerpt_header_template.to_object
+
+        return self.get_committee_container().get_excerpt_header_template()
+
+    def get_excerpt_suffix_template(self):
+        if self.excerpt_suffix_template:
+            return self.excerpt_suffix_template.to_object
+
+        return self.get_committee_container().get_excerpt_suffix_template()
 
     def get_excerpt_template(self):
         if self.excerpt_template:

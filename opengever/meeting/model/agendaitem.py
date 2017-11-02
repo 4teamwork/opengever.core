@@ -1,5 +1,4 @@
 from AccessControl import getSecurityManager
-from opengever.base.command import CreateDocumentCommand
 from opengever.base.model import Base
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
@@ -235,6 +234,12 @@ class AgendaItem(Base):
             return self.proposal.dossier_reference_number
         return None
 
+    def get_excerpt_header_template(self):
+        return self.meeting.committee.get_excerpt_header_template()
+
+    def get_excerpt_suffix_template(self):
+        return self.meeting.committee.get_excerpt_suffix_template()
+
     def get_repository_folder_title(self):
         if self.has_proposal:
             return self.proposal.repository_folder_title
@@ -432,6 +437,9 @@ class AgendaItem(Base):
         from the ad-hoc agenda items document.
         In both cases the excerpt is stored in the meeting dossier.
         """
+
+        from opengever.meeting.command import MergeDocxExcerptCommand
+
         if not self.can_generate_excerpt():
             raise WrongAgendaItemState()
 
@@ -445,12 +453,12 @@ class AgendaItem(Base):
                 'opengever.document: Add document', meeting_dossier):
             raise MissingMeetingDossierPermissions
 
-        excerpt_document = CreateDocumentCommand(
+        excerpt_document = MergeDocxExcerptCommand(
             context=meeting_dossier,
+            agenda_item=self,
             filename=source_document.file.filename,
-            data=source_document.file.data,
-            content_type=source_document.file.contentType,
-            title=title).execute()
+            title=title,
+        ).execute()
 
         if self.has_proposal:
             submitted_proposal = self.proposal.resolve_submitted_proposal()
