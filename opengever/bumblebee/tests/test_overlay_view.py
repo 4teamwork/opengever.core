@@ -1,7 +1,6 @@
 from ftw.testbrowser import browsing
 from opengever.bumblebee.browser.overlay import BumblebeeOverlayBaseView
 from opengever.document.interfaces import ICheckinCheckoutManager
-from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
 from opengever.testing.helpers import create_document_version
 from zExceptions import NotFound
@@ -264,7 +263,7 @@ class TestBumblebeeOverlayDocument(IntegrationTestCase):
             )
 
 
-class TestBumblebeeOverlayViewsWithoutBumblebeeFeature(FunctionalTestCase):
+class TestBumblebeeOverlayViewsWithoutBumblebeeFeature(IntegrationTestCase):
     """Test we can disable Bumblebee."""
 
     @browsing
