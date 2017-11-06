@@ -143,6 +143,28 @@ class TestBumblebeeOverlayListing(IntegrationTestCase):
             browser.css('.file-action-buttons a').text,
             )
 
+    @browsing
+    def test_warning_only_rendered_on_old_version(self, browser):
+        self.login(self.regular_user, browser)
+        create_document_version(self.document, version_id=0)
+
+        browser.open(self.document, view='bumblebee-overlay-document')
+        self.assertFalse(browser.css('.info-viewlets .portalMessage.warning'))
+
+        browser.open(self.document, view='bumblebee-overlay-document?version_id=0')
+        self.assertFalse(browser.css('.info-viewlets .portalMessage.warning'))
+
+        create_document_version(self.document, version_id=1)
+
+        browser.open(self.document, view='bumblebee-overlay-document')
+        self.assertFalse(browser.css('.info-viewlets .portalMessage.warning'))
+
+        browser.open(self.document, view='bumblebee-overlay-document?version_id=1')
+        self.assertFalse(browser.css('.info-viewlets .portalMessage.warning'))
+
+        browser.open(self.document, view='bumblebee-overlay-document?version_id=0')
+        self.assertTrue(browser.css('.info-viewlets .portalMessage.warning'))
+
 
 class TestBumblebeeOverlayDocument(IntegrationTestCase):
     """Test Bumblebee on document overlays."""

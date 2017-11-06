@@ -50,6 +50,10 @@ class BumblebeeBaseDocumentOverlay(ActionButtonRendererMixin):
         self.context = context
         self.request = request
 
+    def is_latest_version(self):
+        """A documentish without versions is always the latest version."""
+        return True
+
     def get_preview_pdf_url(self):
         return bumblebee.get_service_v3().get_representation_url(
             self.context, 'preview')
@@ -176,6 +180,10 @@ class BumblebeeMailOverlay(BumblebeeBaseDocumentOverlay):
     """Bumblebee overlay for base mails.
     """
 
+    def is_latest_version(self):
+        """Mails are not versionable."""
+        return True
+
     def get_open_as_pdf_url(self):
         return u'{}/bumblebee-open-pdf?filename={}'.format(
             self.context.absolute_url(),
@@ -207,6 +215,9 @@ class BumblebeeMailOverlay(BumblebeeBaseDocumentOverlay):
 @adapter(IDocumentSchema, IVersionedContextMarker)
 class BumblebeeDocumentVersionOverlay(BumblebeeBaseDocumentOverlay):
     """Bumblebee overlay for versioned documents"""
+
+    def is_latest_version(self):
+        return self.version_id == self.context.get_current_version_id()
 
     def get_checkout_url(self):
         return None
@@ -242,30 +253,29 @@ class BumblebeeOverlayBaseView(BrowserView, ActionButtonRendererMixin):
             raise NotFound
 
         overlay_context = self.context
-        version_id = self._get_version_id()
+        version_id = self._get_version_id(overlay_context)
 
         if version_id is not None:
-            overlay_context = self._retrieve_version(
-                overlay_context, version_id)
+            overlay_context = self._retrieve_version(overlay_context, version_id)
             alsoProvides(self.request, IVersionedContextMarker)
 
-        self.overlay = getMultiAdapter(
-            (overlay_context, self.request), IBumblebeeOverlay)
+        self.overlay = getMultiAdapter((overlay_context, self.request), IBumblebeeOverlay)
         self.overlay.version_id = version_id
 
         # we only render an html fragment, no reason to waste time on diazo
         self.request.response.setHeader('X-Theme-Disabled', 'True')
         return super(BumblebeeOverlayBaseView, self).__call__()
 
-    def _get_version_id(self):
+    def _get_version_id(self, context):
         version_id = self.request.get('version_id')
+
         if not version_id:
             return None
 
-        if not version_id.isdigit():
-            return NotFound
+        if version_id.isdigit():
+            return int(version_id)
 
-        return int(version_id)
+        return NotFound
 
     def _retrieve_version(self, context, version_id):
         try:

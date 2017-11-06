@@ -5,6 +5,7 @@ Changelog
 2017.6.2 (unreleased)
 ---------------------
 
+- Exclude the latest version in the bumblebee versioning warning logic. [Rotonen]
 - Add proper responsible for fixture objects. [elioschmutz]
 - Add optional header and suffix templates for protocol excerpts. [tarnap]
 - Also display exceptions on agenda item list to users. [deiferni]
