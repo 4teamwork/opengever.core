@@ -1,5 +1,4 @@
 from opengever.base.model import Base
-from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import String
@@ -18,11 +17,15 @@ class NotificationDefault(Base):
 
     kind = Column(String(50), nullable=False, unique=True)
 
+    _badge_notification_roles = Column('badge_notification_roles', Text)
+
     _mail_notification_roles = Column('mail_notification_roles', Text)
 
-    def __init__(self, kind, mail_notification_roles=[]):
+    def __init__(self, kind, mail_notification_roles=[],
+                 badge_notification_roles=[]):
         self.kind = kind
         self.set_mail_notification_roles(mail_notification_roles)
+        self.set_badge_notification_roles(badge_notification_roles)
 
     @property
     def mail_notification_roles(self):
@@ -30,3 +33,10 @@ class NotificationDefault(Base):
 
     def set_mail_notification_roles(self, roles):
         self._mail_notification_roles = json.dumps(roles)
+
+    @property
+    def badge_notification_roles(self):
+        return frozenset(json.loads(self._badge_notification_roles))
+
+    def set_badge_notification_roles(self, roles):
+        self._badge_notification_roles = json.dumps(roles)
