@@ -484,8 +484,13 @@ class Meeting(Base, SQLFormSupport):
 
     def get_link(self):
         url = self.get_url()
-        link = u'<a href="{0}" title="{1}" class="{2}">{1}</a>'.format(
-            url, escape_html(self.get_title()), self.css_class)
+        if api.user.has_permission('View',
+                                   obj=self.committee.resolve_committee()):
+            link = u'<a href="{0}" title="{1}" class="{2}">{1}</a>'.format(
+                url, escape_html(self.get_title()), self.css_class)
+        else:
+            link = u'<span title="{0}" class="{1}">{0}</a>'.format(
+                escape_html(self.get_title()), self.css_class)
         return link
 
     def get_url(self, context=None, view='view'):

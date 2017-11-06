@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-10-13 12:25+0000\n"
+"POT-Creation-Date: 2017-11-08 09:02+0000\n"
 "PO-Revision-Date: 2017-10-13 14:27+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -420,6 +420,11 @@ msgstr "Fremdzeichen"
 msgid "label_keywords"
 msgstr "Schlagworte"
 
+#. Default: "Meeting"
+#: ./opengever/document/browser/overview.py
+msgid "label_meeting"
+msgstr "Sitzung"
+
 #. Default: "no"
 #: ./opengever/document/browser/overview.py
 msgid "label_no"
@@ -459,6 +464,11 @@ msgstr "In Papierform aufbewahrt"
 #: ./opengever/document/browser/versions_tab.py
 msgid "label_preview"
 msgstr "Vorschau"
+
+#. Default: "Proposal"
+#: ./opengever/document/browser/overview.py
+msgid "label_proposal"
+msgstr "Antrag"
 
 #: ./opengever/document/browser/report.py
 msgid "label_public_trial"

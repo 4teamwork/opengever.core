@@ -215,22 +215,36 @@ class Proposal(Base):
         return '/'.join((admin_unit.public_url, physical_path))
 
     def get_link(self, include_icon=True):
+        proposal_ = self.resolve_proposal()
+        as_link = proposal_ is None or api.user.has_permission('View', obj=proposal_)
         return self._get_link(self.get_url(),
                               self.title,
-                              include_icon=include_icon)
+                              include_icon=include_icon,
+                              as_link=as_link)
 
     def get_submitted_link(self, include_icon=True):
+        proposal_ = self.resolve_submitted_proposal()
+        as_link = proposal_ is None or api.user.has_permission('View', obj=proposal_)
         return self._get_link(self.get_submitted_url(),
                               self.submitted_title,
-                              include_icon=include_icon)
+                              include_icon=include_icon,
+                              as_link=as_link)
 
-    def _get_link(self, url, title, include_icon=True):
+    def _get_link(self, url, title, include_icon=True, as_link=True):
         title = escape_html(title)
+        if as_link:
+            if include_icon:
+                link = u'<a href="{0}" title="{1}" class="{2}">{1}</a>'.format(
+                    url, title, self.css_class)
+            else:
+                link = u'<a href="{0}" title="{1}">{1}</a>'.format(url, title)
+            return link
+
         if include_icon:
-            link = u'<a href="{0}" title="{1}" class="{2}">{1}</a>'.format(
-                url, title, self.css_class)
+            link = u'<span title="{0}" class="{1}">{0}</span>'.format(
+                title, self.css_class)
         else:
-            link = u'<a href="{0}" title="{1}">{1}</a>'.format(url, title)
+            link = u'<span title="{0}">{0}</a>'.format(title)
         return link
 
     def getPath(self):

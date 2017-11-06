@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-13 12:25+0000\n"
+"POT-Creation-Date: 2017-11-08 09:02+0000\n"
 "PO-Revision-Date: 2017-09-03 08:50+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-document/fr/>\n"
@@ -417,6 +417,11 @@ msgstr "Code externe"
 msgid "label_keywords"
 msgstr "Mots-clés"
 
+#. Default: "Meeting"
+#: ./opengever/document/browser/overview.py
+msgid "label_meeting"
+msgstr "Séance"
+
 #. Default: "no"
 #: ./opengever/document/browser/overview.py
 msgid "label_no"
@@ -456,6 +461,11 @@ msgstr "Conservé sous forme papier"
 #: ./opengever/document/browser/versions_tab.py
 msgid "label_preview"
 msgstr "Aperçu"
+
+#. Default: "Proposal"
+#: ./opengever/document/browser/overview.py
+msgid "label_proposal"
+msgstr "Proposition"
 
 #: ./opengever/document/browser/report.py
 msgid "label_public_trial"

@@ -181,6 +181,33 @@ class Overview(DefaultView, GeverTabMixin, ActionButtonRendererMixin):
                         content=row.get_content())
             yield data
 
+    def get_meeting_links(self):
+
+        if not hasattr(self.context, 'get_proposal'):
+            return
+
+        proposal = self.context.get_proposal()
+        if proposal is None:
+            return
+
+        proposal_model = proposal.load_model()
+
+        proposal_link = proposal_model.get_link()
+        if proposal_link:
+            yield {
+                'label': _('label_proposal', default='Proposal'),
+                'content': proposal_link,
+            }
+        else:
+            return
+
+        meeting_link = proposal_model.get_meeting_link()
+        if meeting_link:
+            yield {
+                'label': _('label_meeting', default='Meeting'),
+                'content': meeting_link,
+            }
+
     def submitted_documents(self):
         return SubmittedDocument.query.by_source(self.context).all()
 
