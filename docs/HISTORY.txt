@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2017.6.3 (unreleased)
+2017.6.3 (2017-11-07)
 ---------------------
 
 - Pin plone.restapi to 1.0a23. [deiferni]
