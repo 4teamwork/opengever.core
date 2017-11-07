@@ -8,12 +8,14 @@ from opengever.ogds.models.query import BaseQuery
 
 
 class ActivityQuery(BaseQuery):
-    pass
+    """Provide accessors to activity."""
+
 
 Activity.query_cls = ActivityQuery
 
 
 class NotificationQuery(BaseQuery):
+    """Provide accessors to notifications."""
 
     def by_user(self, userid):
         return self.filter_by(userid=userid)
@@ -32,14 +34,17 @@ Notification.query_cls = NotificationQuery
 
 
 class ResourceQuery(BaseQuery):
+    """Provide accessors to resources."""
 
     def get_by_oguid(self, oguid):
         return self.filter_by(oguid=oguid).first()
+
 
 Resource.query_cls = ResourceQuery
 
 
 class NotificationDefaultQuery(BaseQuery):
+    """Provide a default accessors to activities."""
 
     def is_dispatch_needed(self, dispatch_setting, kind):
         setting = self.filter_by(kind=kind).first()
@@ -51,10 +56,12 @@ class NotificationDefaultQuery(BaseQuery):
     def by_kind(self, kind):
         return self.filter_by(kind=kind)
 
+
 NotificationDefault.query_cls = NotificationDefaultQuery
 
 
 class SubscriptionQuery(BaseQuery):
+    """Provide accessors to subscriptions."""
 
     def fetch(self, resource, watcher, role):
         return self.filter_by(
@@ -71,8 +78,10 @@ Subscription.query_cls = SubscriptionQuery
 
 
 class WatcherQuery(BaseQuery):
+    """Provide accessors to watchers."""
 
     def get_by_actorid(self, actorid):
         return self.filter_by(actorid=actorid).first()
+
 
 Watcher.query_cls = WatcherQuery
