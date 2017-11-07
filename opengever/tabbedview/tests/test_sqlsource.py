@@ -1,10 +1,19 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
-from opengever.testing import FunctionalTestCase
-from opengever.tabbedview.browser.base_tabs import BaseListingTab
-from opengever.tabbedview.sqlsource import SqlTableSource
+from opengever.base.model import create_session
+from opengever.globalindex.model.task import Task
 from opengever.meeting.model import Membership
+from opengever.tabbedview.browser.base_tabs import BaseListingTab
+from opengever.tabbedview.sqlsource import cast_to_string
+from opengever.tabbedview.sqlsource import SqlTableSource
+from opengever.testing import FunctionalTestCase
+from opengever.testing import MEMORY_DB_LAYER
+from sqlalchemy import Integer
+from sqlalchemy import String
+from sqlalchemy.orm.attributes import InstrumentedAttribute
+from sqlalchemy.sql.elements import Cast
+from unittest import TestCase
 
 
 class DummySQLTableSourceConfig(BaseListingTab):
@@ -21,6 +30,27 @@ class DummySQLTableSourceConfig(BaseListingTab):
 
     def get_base_query(self):
         return Membership.query
+
+
+class TestCastToString(TestCase):
+
+    layer = MEMORY_DB_LAYER
+
+    def test_does_not_cast_string_fields(self):
+        field = Task.title
+        self.assertEquals(field, cast_to_string(field))
+
+    def test_cast_integer_fields(self):
+        field = Task.sequence_number
+        self.assertIsInstance(cast_to_string(field), Cast)
+        self.assertIsInstance(cast_to_string(field).type, String)
+
+    def test_does_cast_integer_fields_on_oracle_backends(self):
+        create_session().connection().dialect.name = 'oracle'
+
+        field = Task.sequence_number
+        self.assertIsInstance(cast_to_string(field), InstrumentedAttribute)
+        self.assertIsInstance(cast_to_string(field).type, Integer)
 
 
 class TestSQLAlchemySortIndexes(FunctionalTestCase):
