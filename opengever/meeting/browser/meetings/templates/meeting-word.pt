@@ -200,16 +200,12 @@
                     <a class="action generate"
                        tal:condition="meeting/is_editable"
                        tal:attributes="href view/url_generate_agendaitem_list"
-                       i18n:translate="action_generate_document"
-                       i18n:attributes="title action_generate_document"
-                       title=""></a>
+                       i18n:attributes="title action_generate_document"></a>
 
                     <a class="action download"
                        tal:condition="agendaitem_list_document"
                        tal:attributes="href view/url_download_agendaitem_list"
-                       i18n:translate="action_download_document"
-                       i18n:attributes="title action_download_document"
-                       title=""></a>
+                       i18n:attributes="title action_download_document"></a>
                   </div>
 
                   <tal:NOT_GENERATED tal:condition="not:agendaitem_list_document">
@@ -255,16 +251,12 @@
                     <a class="action generate"
                        tal:condition="meeting/is_editable"
                        tal:attributes="href view/url_generate_protocol"
-                       i18n:translate="action_generate_document"
-                       i18n:attributes="title action_generate_document"
-                       title=""></a>
+                       i18n:attributes="title action_generate_document"></a>
 
                     <a class="action download"
                        tal:condition="protocol_document"
                        tal:attributes="href view/url_download_protocol"
-                       i18n:translate="action_download_document"
-                       i18n:attributes="title action_download_document"
-                       title=""></a>
+                       i18n:attributes="title action_download_document"></a>
                   </div>
 
                   <tal:NOT_GENERATED tal:condition="not:protocol_document">
