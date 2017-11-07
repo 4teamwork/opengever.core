@@ -16,6 +16,7 @@ Changelog
 - Allow proposal listings to be filtered by proposal title. [deiferni]
 - Allow proposal listings to be sorted by title. [deiferni]
 - Pin plone.restapi to 1.0a23. [deiferni]
+- Make sure `plone.rest` directives are loaded when used. [deiferni]
 
 
 2017.6.2 (2017-11-07)
