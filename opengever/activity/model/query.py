@@ -21,14 +21,14 @@ class NotificationQuery(BaseQuery):
         return self.filter_by(userid=userid)
 
     def by_subscription_roles(self, roles, activity):
-        subscriptions = Subscription.query.by_resource_and_role(
-            activity.resource, roles)
-        user_ids = []
-        for subscription in subscriptions:
-            user_ids += subscription.watcher.get_user_ids()
+        subscriptions = Subscription.query.by_resource_and_role(activity.resource, roles)
+        user_ids = [user_id for subscription in subscriptions for user_id in subscription.watcher.get_user_ids()]
 
-        return self.filter_by(activity_id=activity.id).filter(
-            Notification.userid.in_(user_ids))
+        if user_ids:
+            return self.filter_by(activity_id=activity.id).filter(Notification.userid.in_(user_ids))
+
+        return self.filter_by(activity_id=activity.id).filter(Notification.userid.is_(None))
+
 
 Notification.query_cls = NotificationQuery
 
@@ -71,8 +71,11 @@ class SubscriptionQuery(BaseQuery):
         return self.filter_by(resource=resource, watcher=watcher).first()
 
     def by_resource_and_role(self, resource, roles):
-        return self.filter_by(resource=resource).filter(
-            Subscription.role.in_(roles))
+        if roles:
+            return self.filter_by(resource=resource).filter(Subscription.role.in_(roles))
+
+        return self.filter_by(resource=resource).filter(Subscription.role.is_(None))
+
 
 Subscription.query_cls = SubscriptionQuery
 
