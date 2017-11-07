@@ -81,7 +81,7 @@ class TestDossierProposalListing(IntegrationTestCase):
         with self.login(self.committee_responsible):
             self.schedule_proposal(self.meeting, self.submitted_proposal)
 
-        self.login(self.dossier_responsible, browser)
+        self.login(self.committee_responsible, browser)
         browser.open(self.dossier, view='tabbedview_view-proposals')
 
         elem = proposals_table(browser).rows[1].css(
