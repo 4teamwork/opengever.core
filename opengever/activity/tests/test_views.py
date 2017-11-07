@@ -244,6 +244,31 @@ class TestListNotifications(FunctionalTestCase):
                           browser.json.get('notifications')[0].get('title'))
 
     @browsing
+    def test_lists_only_notification_with_badge_enabled(self, browser):
+        created = pytz.UTC.localize(datetime(2015, 5, 7, 12, 30))
+        task_added = create(Builder('activity')
+                            .having(resource=self.resource_a,
+                                    created=created,
+                                    actor_id='hugo.boss',
+                                    kind='task-added',
+                                    title=u'Kennzahlen 2015 erfassen',
+                                    label=u'Task added',
+                                    summary=u'Task bla added by Hugo'))
+
+        create(Builder('notification')
+               .having(activity=self.activity,
+                       userid=TEST_USER_ID, is_read=False, badge=False))
+
+        create(Builder('notification')
+               .having(activity=task_added,
+                       userid=TEST_USER_ID, is_read=False, badge=True))
+
+        browser.login().open(self.portal, view="notifications/list")
+        self.assertEquals(1, len(browser.json.get('notifications')))
+        self.assertEquals(u'Kennzahlen 2015 erfassen',
+                          browser.json.get('notifications')[0].get('title'))
+
+    @browsing
     def test_notifications_are_linked_to_resolve_notification_view(self, browser):
         create(Builder('notification')
                .having(activity=self.activity,

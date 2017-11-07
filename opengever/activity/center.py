@@ -155,7 +155,8 @@ class NotificationCenter(object):
         return Notification.get(notification_id)
 
     def list_notifications(self, userid=None, sort_on='created', filters=[],
-                                     sort_reverse=False, offset=0, limit=None):
+                           sort_reverse=False, offset=0, limit=None,
+                           badge_only=False):
 
         order = desc if sort_reverse else asc
         query = Notification.query
@@ -163,6 +164,8 @@ class NotificationCenter(object):
             query = query.by_user(userid)
 
         query = query.join(Notification.activity)
+        if badge_only:
+            query = query.filter(Notification.badge == True)  # noqa
         query = query.order_by(order(sort_on))
         query = query.offset(offset).limit(limit)
         return query.options(contains_eager(Notification.activity)).all()
