@@ -38,7 +38,7 @@ class AddCommitteRolesToDocumentAndMailWorkflows(UpgradeStep):
             return []
 
         query = {
-            'paths': map(methodcaller('getPath'), committee_container_brains),
+            'path': map(methodcaller('getPath'), committee_container_brains),
             'portal_type': WorkflowSecurityUpdater().get_suspected_types(
                 ['opengever_document_workflow',
                  'opengever_mail_workflow'])
