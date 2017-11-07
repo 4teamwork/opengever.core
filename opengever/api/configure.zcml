@@ -6,13 +6,10 @@
     i18n_domain="opengever.api">
 
   <include package="plone.rest" file="meta.zcml" />
-
-  <configure zcml:condition="installed plone.restapi">
-    <adapter factory=".summary.GeverJSONSummarySerializer" />
-    <adapter factory=".fields.ChoiceFieldDeserializer" />
-  </configure>
-
   <include package="opengever.document" file="permissions.zcml" />
+
+  <adapter factory=".summary.GeverJSONSummarySerializer" />
+  <adapter factory=".fields.ChoiceFieldDeserializer" />
 
   <plone:service
       method="POST"
