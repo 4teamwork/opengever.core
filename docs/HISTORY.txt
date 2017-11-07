@@ -5,6 +5,7 @@ Changelog
 2017.6.5 (unreleased)
 ---------------------
 
+- Fix textfilter in sqlsource table listings for oracle backends. [phgross]
 - Exclude the latest version in the bumblebee versioning warning logic. [Rotonen]
 
 
