@@ -5,7 +5,7 @@ Changelog
 2017.6.2 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Fix catalog index name in upgrade step. [deiferni]
 
 
 2017.6.1 (2017-11-02)
