@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Fix catalog index name in upgrade step. [deiferni]
+- Automatically update versions.cfg when releasing with zest.releaser. [deiferni]
 
 
 2017.6.1 (2017-11-02)
