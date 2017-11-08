@@ -101,6 +101,8 @@ class OpengeverContentFixture(object):
             group=self.org_unit.inbox_group)
         self.committee_responsible = self.create_user(
             'committee_responsible', u'Fr\xe4nzi', u'M\xfcller')
+        self.dossier_manager = self.create_user(
+            'dossier_manager', u'F\xe4ivel', u'Fr\xfchling')
 
     def create_teams(self):
         users = [ogds_service().find_user(user.getId())
@@ -140,6 +142,11 @@ class OpengeverContentFixture(object):
             .having(title_de=u'F\xfchrung',
                     title_fr=u'Direction',
                     description=u'Alles zum Thema F\xfchrung.')))
+
+        self.repofolder0.manage_setLocalRoles(self.dossier_manager.getId(),
+                                              ('DossierManager', ))
+
+        self.repofolder0.reindexObjectSecurity()
 
         self.repofolder00 = self.register('leaf_repofolder', create(
             Builder('repository').within(self.repofolder0)

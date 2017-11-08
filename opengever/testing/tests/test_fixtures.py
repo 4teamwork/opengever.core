@@ -3,6 +3,7 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import plone
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.testing import IntegrationTestCase
+from plone import api
 from plone.uuid.interfaces import IUUID
 
 
@@ -22,6 +23,26 @@ class TestTestingFixture(IntegrationTestCase):
         self.login(self.regular_user)
         self.assertEquals('createrepositorytree000000000001',
                           IUUID(self.repository_root))
+
+    def test_dossier_manager_user(self):
+        self.login(self.dossier_manager)
+        self.assertEquals('faivel.fruhling', self.dossier_manager.getId())
+        self.assertListEqual(['Member', 'Authenticated'],
+                             self.dossier_manager.getRoles())
+
+        self.assertIn('DossierManager',
+                      api.user.get_roles(user=self.dossier_manager,
+                                         obj=self.branch_repofolder))
+
+        # Role should be inherited by sub-objects
+        self.assertIn('DossierManager',
+                      api.user.get_roles(user=self.dossier_manager,
+                                         obj=self.dossier))
+
+        # User should not have the dossier-manager role on the empty repofolder
+        self.assertNotIn('DossierManager',
+                         api.user.get_roles(user=self.dossier_manager,
+                                            obj=self.empty_repofolder))
 
     @browsing
     def test_repository_root_view_renders(self, browser):

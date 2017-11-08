@@ -473,6 +473,7 @@ Users
 
 - ``self.administrator``: ``nicole.kohler``
 - ``self.committee_responsible``: ``franzi.muller``
+- ``self.dossier_manager``: ``faivel.fruhling``
 - ``self.dossier_responsible``: ``robert.ziegler``
 - ``self.manager``: ``admin``
 - ``self.meeting_user``: ``herbert.jager``

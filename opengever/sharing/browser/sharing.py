@@ -29,6 +29,7 @@ ROLE_MAPPING = (
             (u'Editor', _('sharing_dossier_editor')),
             (u'Reviewer', _('sharing_dossier_reviewer')),
             (u'Publisher', _('sharing_dossier_publisher')),
+            (u'DossierManager', _('sharing_dossier_manager')),
             )),
 
     (IStandard, (
