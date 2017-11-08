@@ -1,6 +1,8 @@
 from opengever.base.behaviors.base import IOpenGeverBase
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.filing import IFilingNumber
+from opengever.sharing.events import LocalRolesAcquisitionActivated
+from opengever.sharing.events import LocalRolesAcquisitionBlocked
 from opengever.testing import index_data_for
 from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2brain
@@ -210,6 +212,27 @@ class TestDossierIndexers(IntegrationTestCase):
         self.dossier.reindexObject()
 
         self.assert_index_value(u'qpr-900-9001-\xf7', 'external_reference', self.dossier)
+
+    def test_blocked_local_roles(self):
+        self.login(self.regular_user)
+        self.dossier.reindexObject()
+
+        self.assert_index_value(False, 'blocked_local_roles', self.dossier)
+
+        self.dossier.__ac_local_roles_block__ = True
+        self.dossier.reindexObject()
+
+        self.assert_index_value(True, 'blocked_local_roles', self.dossier)
+
+        self.dossier.__ac_local_roles_block__ = False
+        notify(LocalRolesAcquisitionActivated(self.dossier, ))
+
+        self.assert_index_value(False, 'blocked_local_roles', self.dossier)
+
+        self.dossier.__ac_local_roles_block__ = True
+        notify(LocalRolesAcquisitionBlocked(self.dossier, ))
+
+        self.assert_index_value(True, 'blocked_local_roles', self.dossier)
 
 
 class TestDossierFilingNumberIndexer(IntegrationTestCase):

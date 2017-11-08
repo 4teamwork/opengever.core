@@ -87,6 +87,12 @@ def external_reference(obj):
     return IDossier(context).external_reference
 
 
+@indexer(IDossierMarker)
+def blocked_local_roles(obj):
+    """Return whether acquisition is blocked or not."""
+    return bool(getattr(aq_inner(obj), '__ac_local_roles_block__', False))
+
+
 @indexer(IDexterityContent)
 def main_dossier_title(obj):
     """Return the title of the main dossier."""

@@ -11,6 +11,7 @@ import opengever.mail.hooks
 import opengever.ogds.base.hooks
 import opengever.private.hooks
 import opengever.quota.hooks
+import opengever.repository.hooks
 import opengever.tabbedview.hooks
 import opengever.task.hooks
 import opengever.trash.hooks
@@ -98,6 +99,8 @@ def trigger_subpackage_hooks(site):
     opengever.activity.hooks.insert_notification_defaults(site)
     opengever.private.hooks.configure_members_area(site)
     opengever.quota.hooks.policy_installed(site)
+    # Added after the profile merge
+    opengever.repository.hooks.installed(site)
 
 
 def enable_secure_flag_for_cookies(context):

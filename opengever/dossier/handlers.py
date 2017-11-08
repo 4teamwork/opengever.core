@@ -125,6 +125,11 @@ def reindex_is_subdossier(dossier, event):
     dossier.reindexObject(idxs=['is_subdossier'])
 
 
+def reindex_blocked_local_roles(dossier, event):
+    """Reindex blocked_local_roles upon the acquisition blockedness changing."""
+    dossier.reindexObject(idxs=['blocked_local_roles'])
+
+
 def purge_reference_number_mappings(copied_dossier, event):
     """Reset the reference number mapping when copying (or actually pasting)
     dossiers.

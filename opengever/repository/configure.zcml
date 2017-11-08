@@ -23,6 +23,11 @@
       name="title_fr"
       />
 
+  <adapter
+      factory=".indexers.blocked_local_roles"
+      name="blocked_local_roles"
+      />
+
   <adapter factory=".repositoryfolder.NameFromTitle" />
 
   <adapter factory=".repositoryroot.RepositoryRootNameFromTitle" />
@@ -38,6 +43,18 @@
       for="opengever.repository.interfaces.IRepositoryFolder
            zope.lifecycleevent.interfaces.IObjectModifiedEvent"
       handler=".subscribers.update_reference_prefixes"
+      />
+
+  <subscriber
+      for="opengever.repository.interfaces.IRepositoryFolder
+           opengever.sharing.interfaces.ILocalRolesAcquisitionBlocked"
+      handler=".handlers.reindex_blocked_local_roles"
+      />
+
+  <subscriber
+      for="opengever.repository.interfaces.IRepositoryFolder
+           opengever.sharing.interfaces.ILocalRolesAcquisitionActivated"
+      handler=".handlers.reindex_blocked_local_roles"
       />
 
   <!-- Register locales translations -->
