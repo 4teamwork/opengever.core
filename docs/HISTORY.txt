@@ -12,6 +12,7 @@ Changelog
 - Make notification badge a separate channel. [phgross]
 - Exclude the latest version in the bumblebee versioning warning logic. [Rotonen]
 - SPV word: Remove fields which are intended for no word version. [tarnap]
+- Add personal notification settings support. [phgross]
 - Add proper responsible for fixture objects. [elioschmutz]
 - Add optional header and suffix templates for protocol excerpts. [tarnap]
 - Fix textfilter in sqlsource table listings for oracle backends. [phgross]
