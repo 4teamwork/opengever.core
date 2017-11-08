@@ -1,19 +1,12 @@
 from ftw.contentmenu.menu import FactoriesMenu
 from ftw.testbrowser import browsing
-from opengever.dossier.tests.test_dossier import TestDossier
+from opengever.testing import IntegrationTestCase
 from plone import api
 
 
-class TestMeetingDossier(TestDossier):
+class TestMeetingDossier(IntegrationTestCase):
 
     features = ('meeting',)
-
-    builder_id = 'meeting_dossier'
-    portal_type = 'opengever.meeting.meetingdossier'
-
-    @property
-    def dossier_to_test(self):
-        return self.meeting_dossier
 
     @browsing
     def test_add_meeting_menu_not_visible(self, browser):
@@ -67,7 +60,7 @@ class TestMeetingDossier(TestDossier):
         self.login(self.dossier_responsible, browser)
 
         browser.open(self.leaf_repofolder,
-                     view='++add++{}'.format(self.portal_type))
+                     view='++add++opengever.meeting.meetingdossier')
 
         self.assertIsNotNone(
             browser.css('[name="form.widgets.IOpenGeverBase.title"]'),

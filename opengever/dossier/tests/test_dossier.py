@@ -12,28 +12,22 @@ from zExceptions import Unauthorized
 
 class TestDossier(IntegrationTestCase):
 
-    builder_id = 'dossier'
     portal_type = 'opengever.dossier.businesscasedossier'
-
-    @property
-    def dossier_to_test(self):
-        return self.dossier
 
     def test_get_main_dossier_returns_self_when_is_already_root(self):
         self.login(self.dossier_responsible)
 
-        self.assertEqual(self.dossier_to_test,
-                         self.dossier_to_test.get_main_dossier())
+        self.assertEqual(self.dossier,
+                         self.dossier.get_main_dossier())
 
     def test_get_main_dossier_returns_main_for_nested_dossiers(self):
         self.login(self.dossier_responsible)
 
-        sub1 = create(Builder(self.builder_id).within(self.dossier_to_test))
-        sub2 = create(Builder(self.builder_id).within(sub1))
+        sub2 = create(Builder('dossier').within(self.subdossier))
 
-        self.assertEqual(self.dossier_to_test,
-                         sub1.get_main_dossier())
-        self.assertEqual(self.dossier_to_test,
+        self.assertEqual(self.dossier,
+                         self.subdossier.get_main_dossier())
+        self.assertEqual(self.dossier,
                          sub2.get_main_dossier())
 
     def test_falsy_has_subdossiers(self):
@@ -49,16 +43,16 @@ class TestDossier(IntegrationTestCase):
     def test_truthy_has_subdossiers_closed_dossiers(self):
         self.login(self.dossier_responsible)
 
-        create(Builder(self.builder_id)
-               .within(self.dossier_to_test)
+        create(Builder('dossier')
+               .within(self.dossier)
                .in_state('dossier-state-resolved'))
-        self.assertTrue(self.dossier_to_test.has_subdossiers())
+        self.assertTrue(self.dossier.has_subdossiers())
 
     def test_is_marked_as_sendable_docs_container(self):
         self.login(self.dossier_responsible)
 
         self.assertTrue(
-            ISendableDocsContainer.providedBy(self.dossier_to_test),
+            ISendableDocsContainer.providedBy(self.dossier),
             'The dossier is not marked with the ISendableDocsContainer')
 
     @browsing
@@ -68,7 +62,7 @@ class TestDossier(IntegrationTestCase):
         expected_tabs = ['Overview', 'Subdossiers', 'Documents', 'Tasks',
                          'Participants', 'Trash', 'Journal', 'Info']
 
-        browser.open(self.dossier_to_test, view='tabbed_view')
+        browser.open(self.dossier, view='tabbed_view')
         self.assertEquals(expected_tabs, browser.css('li.formTab').text)
 
     def test_use_the_dossier_workflow(self):
@@ -76,14 +70,14 @@ class TestDossier(IntegrationTestCase):
 
         wf_tool = getToolByName(self.portal, 'portal_workflow')
         self.assertEquals('opengever_dossier_workflow',
-                          wf_tool.getWorkflowsFor(self.dossier_to_test)[0].id)
+                          wf_tool.getWorkflowsFor(self.dossier)[0].id)
 
     def test_mail_is_not_listed_in_factory_menu(self):
         self.login(self.dossier_responsible)
 
-        menu = FactoriesMenu(self.dossier_to_test)
+        menu = FactoriesMenu(self.dossier)
         menu_items = menu.getMenuItems(
-            self.dossier_to_test, self.dossier_to_test.REQUEST)
+            self.dossier, self.dossier.REQUEST)
 
         self.assertNotIn('ftw.mail.mail',
                          [item.get('id') for item in menu_items])
@@ -91,9 +85,9 @@ class TestDossier(IntegrationTestCase):
     def test_factory_menu_sorting(self):
         self.login(self.dossier_responsible)
 
-        menu = FactoriesMenu(self.dossier_to_test)
+        menu = FactoriesMenu(self.dossier)
         menu_items = menu.getMenuItems(
-            self.dossier_to_test, self.dossier_to_test.REQUEST)
+            self.dossier, self.dossier.REQUEST)
 
         self.assertEquals(
             [u'Document',
@@ -107,24 +101,25 @@ class TestDossier(IntegrationTestCase):
     def test_subdossier_add_form_is_called_add_subdossier(self):
         self.login(self.dossier_responsible)
 
-        add_form = self.dossier_to_test.unrestrictedTraverse(
-            '++add++{}'.format(self.portal_type))
+        add_form = self.dossier.unrestrictedTraverse(
+            '++add++opengever.dossier.businesscasedossier')
 
         self.assertEquals('Add Subdossier', add_form.label())
 
-    def test_subdossier_edit_form_is_called_edit_subdossier(self):
-        self.login(self.dossier_responsible)
+    @browsing
+    def test_subdossier_edit_form_is_called_edit_subdossier(self, browser):
+        self.login(self.dossier_responsible, browser)
 
-        sub = create(Builder(self.builder_id).within(self.dossier_to_test))
-        edit_form = sub.unrestrictedTraverse('@@edit')
-        self.assertEquals('Edit Subdossier', edit_form.label)
+        browser.open(self.subdossier, view='edit')
+
+        self.assertEqual('Edit Subdossier', browser.css('h1').first.text)
 
     def test_nested_subdossiers_is_not_possible_by_default(self):
         self.login(self.dossier_responsible)
 
-        sub = create(Builder('dossier').within(self.dossier_to_test))
+        sub = create(Builder('dossier').within(self.dossier))
 
-        self.assertNotIn(self.portal_type,
+        self.assertNotIn('opengever.dossier.businesscasedossier',
                          [fti.id for fti in sub.allowedContentTypes()])
 
     @browsing
@@ -139,31 +134,33 @@ class TestDossier(IntegrationTestCase):
             # with browser.expect_unauthorized():
             browser.open(
                 self.repository_root,
-                view='++add++{}'.format(self.portal_type))
+                view='++add++opengever.dossier.businesscasedossier')
 
     def get_factory_menu_items(self, obj):
         menu = FactoriesMenu(obj)
-        return menu.getMenuItems(self.dossier_to_test,
-                                 self.dossier_to_test.REQUEST)
+        return menu.getMenuItems(self.dossier,
+                                 self.dossier.REQUEST)
 
     def test_default_addable_types(self):
         self.login(self.dossier_responsible)
         self.assertItemsEqual(
-            ['opengever.document.document', 'ftw.mail.mail',
-             'opengever.dossier.businesscasedossier', 'opengever.task.task'],
-            [fti.id for fti in self.dossier_to_test.allowedContentTypes()])
+            ['opengever.document.document',
+             'ftw.mail.mail',
+             'opengever.dossier.businesscasedossier',
+             'opengever.task.task'],
+            [fti.id for fti in self.dossier.allowedContentTypes()])
 
     @browsing
     def test_regular_user_can_add_new_keywords_in_dossier(self, browser):
         self.login(self.dossier_responsible, browser)
-        browser.visit(self.dossier_to_test, view='@@edit')
+        browser.visit(self.dossier, view='@@edit')
 
         keywords = browser.find_field_by_text(u'Keywords')
         new = browser.css('#' + keywords.attrib['id'] + '_new').first
         new.text = u'New Item\nN\xf6i 3'
         browser.find_button_by_label('Save').click()
 
-        browser.visit(self.dossier_to_test, view='edit')
+        browser.visit(self.dossier, view='edit')
         keywords = browser.find_field_by_text(u'Keywords')
         self.assertTupleEqual(('Finanzverwaltung', 'New Item',
                                'N=C3=B6i 3', 'Vertr=C3=A4ge'),
@@ -173,7 +170,7 @@ class TestDossier(IntegrationTestCase):
     def test_keywords_are_linked_to_search_on_overview(self, browser):
         self.login(self.dossier_responsible, browser)
 
-        browser.visit(self.dossier_to_test, view='@@tabbedview_view-overview')
+        browser.visit(self.dossier, view='@@tabbedview_view-overview')
         browser.find_link_by_text(u'Finanzverwaltung').click()
         search_result = browser.css('.searchResults dt a')
 
@@ -181,7 +178,7 @@ class TestDossier(IntegrationTestCase):
         self.assertEquals(self.dossier.title, search_result.first.text)
         self.assertIn(self.meeting_dossier.title, search_result.text)
 
-        browser.visit(self.dossier_to_test, view='@@tabbedview_view-overview')
+        browser.visit(self.dossier, view='@@tabbedview_view-overview')
         browser.find_link_by_text(u'Vertr\xe4ge').click()
         search_result = browser.css('.searchResults dt a')
 
@@ -197,7 +194,7 @@ class TestMeetingFeatureTypes(FunctionalTestCase):
 
     def setUp(self):
         super(TestMeetingFeatureTypes, self).setUp()
-        self.dossier_to_test = create(Builder('dossier'))
+        self.dossier = create(Builder('dossier'))
 
     def test_meeting_feature_enabled_addable_types(self):
         self.grant('Contributor')
@@ -205,4 +202,4 @@ class TestMeetingFeatureTypes(FunctionalTestCase):
             ['opengever.document.document', 'ftw.mail.mail',
              'opengever.dossier.businesscasedossier', 'opengever.task.task',
              'opengever.meeting.proposal'],
-            [fti.id for fti in self.dossier_to_test.allowedContentTypes()])
+            [fti.id for fti in self.dossier.allowedContentTypes()])
