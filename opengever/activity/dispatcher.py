@@ -1,8 +1,10 @@
+from opengever.activity.model import NotificationDefault
+from opengever.activity.model import Subscription
+from opengever.activity.model.settings import NotificationSetting
+from ZODB.POSException import ConflictError
 import logging
 import sys
 import traceback
-from opengever.activity.model import NotificationDefault
-from ZODB.POSException import ConflictError
 
 
 logger = logging.getLogger('opengever.activity')
@@ -13,22 +15,39 @@ class NotificationDispatcher(object):
     enabled_key = None
     roles_key = None
 
-    def get_setting(self, kind):
+    def get_setting(self, kind, userid):
+        setting = NotificationSetting.query.filter_by(
+            kind=kind, userid=userid).first()
+        if setting:
+            return setting
+
         return NotificationDefault.query.by_kind(kind=kind).first()
 
-    def get_roles_to_dispatch(self, kind):
-        setting = self.get_setting(kind)
+    def dispatch_needed(self, notification):
+        userid = notification.userid
+        setting = self.get_setting(notification.activity.kind, userid)
         if not setting:
-            return []
+            return False
 
-        return getattr(setting, self.roles_key)
+        dispatched_roles = getattr(setting, self.roles_key)
+        subscriptions = Subscription.query.filter_by(
+            resource=notification.activity.resource)
+
+        for subscription in subscriptions:
+            if subscription.role in dispatched_roles:
+                if userid in subscription.watcher.get_user_ids():
+                    return True
+
+        return False
 
     def dispatch_notifications(self, activity):
         not_dispatched = []
-        roles = self.get_roles_to_dispatch(activity.kind)
-        notifications = activity.get_notifications_for_watcher_roles(roles)
+        notifications = activity.notifications
 
         for notification in notifications:
+            if not self.dispatch_needed(notification):
+                continue
+
             try:
                 self.dispatch_notification(notification)
             except ConflictError:

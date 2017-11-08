@@ -419,7 +419,31 @@ class TestDispatchers(ActivityTestCase):
                        watcher=peter,
                        role=TASK_RESPONSIBLE_ROLE))
 
-    def test_check_for_notification_default(self):
+    def test_uses_personal_setting_if_exists(self):
+        default_setting = create(Builder('notification_default_setting')
+                                 .having(kind='task-added'))
+        default_setting.set_mail_notification_roles(
+            [WATCHER_ROLE, TASK_RESPONSIBLE_ROLE])
+
+        personal_setting = create(Builder('notification_setting')
+                                  .having(kind='task-added', userid='hugo'))
+        personal_setting.set_mail_notification_roles([])
+
+        self.center.add_activity(
+            Oguid('fd', '123'),
+            'task-added',
+            {'en': 'Kennzahlen 2014 erfassen'},
+            {'en': 'Task added'},
+            {'en': 'Task bla accepted by Peter'},
+            'hugo.boss',
+            {'en': None})
+
+        self.assertEquals(1, len(self.dispatcher.notified))
+        self.assertEquals(
+            ['peter'],
+            [note.userid for note in self.dispatcher.notified])
+
+    def test_uses_notification_default_as_fallback(self):
         setting = create(Builder('notification_default_setting')
                          .having(kind='task-added'))
         setting.set_mail_notification_roles(
