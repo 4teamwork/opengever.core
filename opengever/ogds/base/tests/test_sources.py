@@ -827,6 +827,22 @@ class TestAllUsersAndGroupsSource(IntegrationTestCase):
         self.assertIn('kathi.barfuss', self.source)
         self.assertIn('herbert.jager', self.source)
 
-    def test_find_groups(self):
+    def test_find_groups_with_prefix(self):
+        self.assertIn('group:fa_users', self.source)
+        self.assertIn('group:fa_inbox_users', self.source)
+
+    def test_find_groups_without_prefix(self):
         self.assertIn('fa_users', self.source)
         self.assertIn('fa_inbox_users', self.source)
+
+    def test_term_token_always_includes_prefix(self):
+        self.assertEqual('group:fa_users',
+                         self.source.getTermByToken('fa_users').token)
+        self.assertEqual('group:fa_users',
+                         self.source.getTermByToken('group:fa_users').token)
+
+    def test_term_value_never_includes_prefix(self):
+        self.assertEqual('fa_users',
+                         self.source.getTermByToken('fa_users').value)
+        self.assertEqual('fa_users',
+                         self.source.getTermByToken('fa_users').value)
