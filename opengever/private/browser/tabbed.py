@@ -3,6 +3,7 @@ from opengever.private import _
 from opengever.tabbedview import GeverTabbedView
 from opengever.tabbedview.browser.tabs import Documents
 from opengever.tabbedview.browser.tabs import Dossiers
+from opengever.tabbedview.browser.tabs import SubDossiers
 
 
 class PrivateFolderTabbedView(GeverTabbedView):
@@ -18,7 +19,16 @@ class PrivateFolderTabbedView(GeverTabbedView):
 
 class PrivateFolderDossiers(Dossiers):
 
-    enabled_actions = ['pdf_dossierlisting', 'export_dossiers']
+    enabled_actions = ['pdf_dossierlisting', 'export_dossiers', 'folder_delete_confirmation']
+
+
+class PrivateFolderSubDossiers(SubDossiers):
+
+    @property
+    def enabled_actions(self):
+        return super(PrivateFolderSubDossiers, self).enabled_actions + [
+            'folder_delete_confirmation'
+        ]
 
 
 class PrivateDossierTabbedView(DossierTabbedView):
@@ -35,6 +45,12 @@ class PrivateDossierTabbedView(DossierTabbedView):
 
 
 class PrivateDossierDocuments(Documents):
+
+    @property
+    def enabled_actions(self):
+        return super(PrivateDossierDocuments, self).enabled_actions + [
+            'folder_delete_confirmation'
+        ]
 
     @property
     def columns(self):

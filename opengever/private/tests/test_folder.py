@@ -114,7 +114,7 @@ class TestPrivateFolderTabbedView(FunctionalTestCase):
         browser.login().open(self.folder, view='tabbedview_view-dossiers')
 
         self.assertEquals(
-            ['Export selection', 'Print selection (PDF)'],
+            ['Delete', 'Export selection', 'Print selection (PDF)'],
             browser.css('.actionMenuContent a').text)
 
 

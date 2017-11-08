@@ -20,6 +20,13 @@
 
   <browser:page
       for="opengever.private.dossier.IPrivateDossier"
+      name="tabbedview_view-subdossiers"
+      class=".tabbed.PrivateFolderSubDossiers"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.private.dossier.IPrivateDossier"
       name="tabbed_view"
       class=".tabbed.PrivateDossierTabbedView"
       permission="zope2.View"
