@@ -89,11 +89,9 @@ class TestProtectDossierBehavior(IntegrationTestCase):
         self.login(self.dossier_manager, browser)
 
         browser.open(self.dossier, view="@@edit")
-
         form = browser.find_form_by_field('Reading')
         form.find_widget('Reading').fill('projekt_a')
         form.find_widget('Reading and writing').fill('projekt_b')
-
         browser.click_on('Save')
 
         self.assertEqual(['projekt_a'], IProtectDossier(self.dossier).reading)
@@ -104,14 +102,10 @@ class TestProtectDossierBehavior(IntegrationTestCase):
         self.login(self.dossier_manager, browser)
 
         browser.open(self.leaf_repofolder)
-
         factoriesmenu.add(u'Business Case Dossier')
-
         browser.fill({'Title': 'My Dossier'})
-
         form = browser.find_form_by_field('Reading')
         form.find_widget('Reading').fill(self.regular_user.getId())
-
         browser.click_on('Save')
 
         self.assert_local_roles(
@@ -123,10 +117,8 @@ class TestProtectDossierBehavior(IntegrationTestCase):
         self.login(self.dossier_manager, browser)
 
         browser.open(self.dossier, view="@@edit")
-
         form = browser.find_form_by_field('Reading')
         form.find_widget('Reading').fill(self.regular_user.getId())
-
         browser.click_on('Save')
 
         self.assert_local_roles(
@@ -153,7 +145,6 @@ class TestProtectDossierBehavior(IntegrationTestCase):
         self.login(self.dossier_manager)
 
         dossier_protector = IProtectDossier(self.dossier)
-
         dossier_protector.reading = [self.regular_user.getId()]
         dossier_protector.protect()
 
@@ -165,7 +156,6 @@ class TestProtectDossierBehavior(IntegrationTestCase):
         self.login(self.dossier_manager)
 
         dossier_protector = IProtectDossier(self.dossier)
-
         dossier_protector.reading_and_writing = [self.regular_user.getId()]
         dossier_protector.protect()
 
@@ -177,12 +167,9 @@ class TestProtectDossierBehavior(IntegrationTestCase):
         self.login(self.dossier_manager)
 
         dossier_protector = IProtectDossier(self.dossier)
-
-        dossier_protector.reading = [self.regular_user.getId(),
-                                     'projekt_a']
+        dossier_protector.reading = [self.regular_user.getId(), 'projekt_a']
         dossier_protector.reading_and_writing = [self.secretariat_user.getId(),
                                                  'projekt_b']
-
         dossier_protector.protect()
 
         self.assert_local_roles(
