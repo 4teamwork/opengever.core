@@ -286,6 +286,9 @@ class TaskTransitionResponseAddForm(form.AddForm, AutoExtensibleForm):
                                         '',
                                         linked(item, item.Title()))
 
+            container = IResponseContainer(self.context)
+            container.add(new_response)
+
             # change workflow state of task
             wftool = getToolByName(self.context, 'portal_workflow')
             before = wftool.getInfoFor(self.context, 'review_state')
@@ -296,9 +299,6 @@ class TaskTransitionResponseAddForm(form.AddForm, AutoExtensibleForm):
                 after = wftool.getTitleForStateOnType(after, task.Type())
                 new_response.add_change('review_state', _(u'Issue state'),
                                         before, after)
-
-            container = IResponseContainer(self.context)
-            container.add(new_response)
 
             notify(ObjectModifiedEvent(self.context))
 

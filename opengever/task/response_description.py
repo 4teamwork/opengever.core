@@ -67,6 +67,7 @@ class Reactivate(ResponseDescription):
     def label(self):
         return _('transition_label_reactivate', u'Task reactivated')
 
+
 ResponseDescription.add_description(Reactivate)
 
 
@@ -80,6 +81,7 @@ class Reject(ResponseDescription):
 
     def label(self):
         return _('transition_label_reject', u'Task rejected')
+
 
 ResponseDescription.add_description(Reject)
 
@@ -96,6 +98,7 @@ class Resolve(ResponseDescription):
 
     def label(self):
         return _('transition_label_resolve', u'Task resolved')
+
 
 ResponseDescription.add_description(Resolve)
 
@@ -115,6 +118,7 @@ class Close(ResponseDescription):
     def label(self):
         return _('transition_label_close', u'Task closed')
 
+
 ResponseDescription.add_description(Close)
 
 
@@ -129,6 +133,7 @@ class Cancel(ResponseDescription):
     def label(self):
         return _('transition_label_cancelled', u'Task cancelled')
 
+
 ResponseDescription.add_description(Cancel)
 
 
@@ -138,7 +143,24 @@ class Accept(ResponseDescription):
 
     css_class = 'accept'
 
+    @property
+    def _msg_mapping(self):
+        mapping = super(Accept, self)._msg_mapping
+        change = self.response.get_change('responsible')
+        if change:
+            mapping['old_responsible'] = Actor.lookup(change.get('before')).get_link()
+            mapping['new_responsible'] = Actor.lookup(change.get('after')).get_link()
+
+        return mapping
+
     def msg(self):
+        # Accepting a team task changes the responsible.
+        if self.response.get_change('responsible'):
+            return _(u'transition_msg_accept_team_task',
+                     default=u'Accepted by ${user}, responsible changed from '
+                     '${old_responsible} to ${new_responsible}.',
+                     mapping=self._msg_mapping)
+
         return _('transition_msg_accept', u'Accepted by ${user}',
                  mapping=self._msg_mapping)
 
@@ -160,6 +182,7 @@ class Reopen(ResponseDescription):
     def label(self):
         return _('transition_label_reopen', u'Task reopened')
 
+
 ResponseDescription.add_description(Reopen)
 
 
@@ -174,6 +197,7 @@ class Revise(ResponseDescription):
 
     def label(self):
         return _('transition_label_revise', u'Task revised')
+
 
 ResponseDescription.add_description(Revise)
 
@@ -197,6 +221,7 @@ class Reassign(ResponseDescription):
 
     def label(self):
         return _('transition_label_reassign', u'Task reassigned')
+
 
 ResponseDescription.add_description(Reassign)
 
@@ -222,6 +247,7 @@ class ModifyDeadline(ResponseDescription):
 
     def label(self):
         return _('transition_label_modify_deadline', u'Task deadline modified')
+
 
 ResponseDescription.add_description(ModifyDeadline)
 
@@ -263,7 +289,6 @@ class AssignToDossier(ResponseDescription):
     css_class = 'assignDossier'
 
     def msg(self):
-
         successor = self.response.get_succesor()
         return _('transition_msg_assign_to_dossier',
                  u'Assigned to dossier by ${user} successor=${successor}',
@@ -273,6 +298,7 @@ class AssignToDossier(ResponseDescription):
     def label(self):
         return _('transition_label_assign_to_dossier',
                  u'Forwarding assigned to Dossier')
+
 
 ResponseDescription.add_description(AssignToDossier)
 
@@ -296,6 +322,7 @@ class SubTaskAdded(ResponseDescription):
     def label(self):
         return _('transition_label_add_subtask', u'Subtask added to task')
 
+
 ResponseDescription.add_description(SubTaskAdded)
 
 
@@ -317,6 +344,7 @@ class DocumentAdded(ResponseDescription):
         return _('transition_label_add_document',
                  u'Document added to Task')
 
+
 ResponseDescription.add_description(DocumentAdded)
 
 
@@ -331,6 +359,7 @@ class TaskCommented(ResponseDescription):
 
     def label(self):
         return _('label_task_commented', u'Task commented')
+
 
 ResponseDescription.add_description(TaskCommented)
 
