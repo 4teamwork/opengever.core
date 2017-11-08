@@ -12,10 +12,13 @@ from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.dexterity.i18n import MessageFactory as pd_mf  # noqa
 from plone.supermodel import model
-from z3c.relationfield.schema import RelationChoice, RelationList
+from z3c.relationfield.schema import RelationChoice
+from z3c.relationfield.schema import RelationList
 from zope import schema
-from zope.interface import Interface, alsoProvides
-from zope.interface import invariant, Invalid
+from zope.interface import alsoProvides
+from zope.interface import Interface
+from zope.interface import Invalid
+from zope.interface import invariant
 import logging
 
 LOG = logging.getLogger('opengever.dossier')

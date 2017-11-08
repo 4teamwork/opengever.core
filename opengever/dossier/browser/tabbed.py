@@ -4,9 +4,11 @@ from opengever.dossier.dossiertemplate import is_dossier_template_feature_enable
 from opengever.meeting import is_meeting_feature_enabled
 from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.tabbedview import GeverTabbedView
+from plone import api
 
 
 class DossierTabbedView(GeverTabbedView):
+    """Define the tabs available on a Dossier."""
 
     overview_tab = {
         'id': 'overview',
@@ -41,29 +43,34 @@ class DossierTabbedView(GeverTabbedView):
     @property
     def subdossiers_tab(self):
         if self.context.show_subdossier:
-            return {'id': 'subdossiers',
-                    'title': _(u'label_subdossiers', default=u'Subdossiers')}
-        else:
-            return None
+            return {
+                'id': 'subdossiers',
+                'title': _(u'label_subdossiers', default=u'Subdossiers'),
+                }
+
+        return None
 
     @property
     def proposals_tab(self):
         if is_meeting_feature_enabled():
-            return {'id': 'proposals',
-                    'title': _(u'label_proposals', default=u'Proposals')}
-        else:
-            return None
+            return {
+                'id': 'proposals',
+                'title': _(u'label_proposals', default=u'Proposals'),
+                }
+        return None
 
     @property
     def participations_tab(self):
         if is_contact_feature_enabled():
             return {
                 'id': 'participations',
-                'title': _(u'label_participations', default=u'Participations')}
-        else:
-            return {
-                'id': 'participants',
-                'title': _(u'label_participants', default=u'Participants')}
+                'title': _(u'label_participations', default=u'Participations'),
+                }
+
+        return {
+            'id': 'participants',
+            'title': _(u'label_participants', default=u'Participants'),
+            }
 
     def _get_tabs(self):
         return filter(None, [
@@ -80,6 +87,7 @@ class DossierTabbedView(GeverTabbedView):
 
 
 class TemplateFolderTabbedView(GeverTabbedView):
+    """Define the tabs available on a template folder."""
 
     template_tab = {
         'id': 'documents-proxy',
@@ -95,29 +103,32 @@ class TemplateFolderTabbedView(GeverTabbedView):
     @property
     def sablon_tab(self):
         if is_meeting_feature_enabled():
-            return {'id': 'sablontemplates-proxy',
-                    'title': _(u'label_sablon_templates',
-                               default=u'Sablon Templates')}
-        else:
-            return None
+            return {
+                'id': 'sablontemplates-proxy',
+                'title': _(u'label_sablon_templates', default=u'Sablon Templates'),
+                }
+
+        return None
 
     @property
     def proposal_templates_tab(self):
         if is_word_meeting_implementation_enabled():
-            return {'id': 'proposaltemplates-proxy',
-                    'title': _(u'label_proposal_templates',
-                               default=u'Proposal Templates')}
-        else:
-            return None
+            return {
+                'id': 'proposaltemplates-proxy',
+                'title': _(u'label_proposal_templates', default=u'Proposal Templates'),
+                }
+
+        return None
 
     @property
     def dossiertemplate_tab(self):
         if is_dossier_template_feature_enabled():
-            return {'id': 'dossiertemplates',
-                    'title': _(u'label_dossier_templates',
-                               default=u'Dossier templates')}
-        else:
-            return None
+            return {
+                'id': 'dossiertemplates',
+                'title': _(u'label_dossier_templates', default=u'Dossier templates'),
+                }
+
+        return None
 
     def _get_tabs(self):
         return filter(None, [
@@ -130,6 +141,7 @@ class TemplateFolderTabbedView(GeverTabbedView):
 
 
 class DossierTemplateTabbedView(DossierTabbedView):
+    """Define the tabs available on Dossier templates."""
 
     def _get_tabs(self):
         return filter(None, [

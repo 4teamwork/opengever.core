@@ -24,26 +24,27 @@ import re
 
 ROLE_MAPPING = (
     (IDossier, (
-            (u'Reader', _('sharing_dossier_reader')),
-            (u'Contributor', _('sharing_dossier_contributor')),
-            (u'Editor', _('sharing_dossier_editor')),
-            (u'Reviewer', _('sharing_dossier_reviewer')),
-            (u'Publisher', _('sharing_dossier_publisher')),
-            (u'DossierManager', _('sharing_dossier_manager')),
-            )),
+        (u'Reader', _('sharing_dossier_reader')),
+        (u'Contributor', _('sharing_dossier_contributor')),
+        (u'Editor', _('sharing_dossier_editor')),
+        (u'Reviewer', _('sharing_dossier_reviewer')),
+        (u'Publisher', _('sharing_dossier_publisher')),
+        (u'DossierManager', _('sharing_dossier_manager')),
+        )),
 
     (IStandard, (
-            (u'Reader', _('sharing_reader')),
-            (u'Contributor', _('sharing_contributor')),
-            (u'Editor', _('sharing_editor')),
-            (u'Role Manager', _('sharing_role_manager')),
-            )),
+        (u'Reader', _('sharing_reader')),
+        (u'Contributor', _('sharing_contributor')),
+        (u'Editor', _('sharing_editor')),
+        (u'Role Manager', _('sharing_role_manager')),
+        )),
     )
 
 
 class OpengeverSharingView(SharingView):
     """Special Opengever Sharing View, which display different roles
-    depending on the sharing behavior which is context"""
+    depending on the sharing behavior which is context
+    """
 
     index = ViewPageTemplateFile('sharing.pt')
 
@@ -80,10 +81,10 @@ class OpengeverSharingView(SharingView):
         for key, value in ROLE_MAPPING:
             if key.providedBy(self.context) or key is IStandard:
                 roles = [r.get('id') for r in self.roles()]
-                for id, title in value:
-                    if id in roles:
+                for role_id, title in value:
+                    if role_id in roles:
                         result.append(
-                            {'id': id,
+                            {'id': role_id,
                              'title': title, })
 
                 return result
@@ -91,8 +92,9 @@ class OpengeverSharingView(SharingView):
         return self.roles()
 
     def role_settings(self):
-        """ The standard role_settings method,
-        but pop the AuthenticatedUsers group for not managers. """
+        """The standard role_settings method,
+        but pop the AuthenticatedUsers group for not managers.
+        """
         results = super(OpengeverSharingView, self).role_settings()
 
         member = self.context.portal_membership.getAuthenticatedMember()
@@ -109,8 +111,8 @@ class OpengeverSharingView(SharingView):
     def update_inherit(self, status=True, reindex=True):
         """Method Wrapper for the super method, to allow notify a
         corresponding event. Needed for adding a Journalentry after a
-        change of the inheritance"""
-
+        change of the inheritance
+        """
         # Modifying local roles needs the "Sharing page: Delegate roles"
         # permission as well as "Modify portal content". However, we don't
         # want to give the "Role Manager" Role "Modify portal content",
@@ -147,7 +149,7 @@ class OpengeverSharingView(SharingView):
             if local_roles:
                 context.manage_setLocalRoles(user.getId(), local_roles)
 
-        context.__ac_local_roles_block__ = block and True or None
+        context.__ac_local_roles_block__ = True if block else None
 
         # Restore the old security manager
         setSecurityManager(old_sm)
@@ -162,20 +164,21 @@ class OpengeverSharingView(SharingView):
 
         return True
 
-    def update_role_settings(self, new_settings, reindex):
-        """"Method Wrapper for the super method, to allow notify a
+    def update_role_settings(self, new_settings, reindex=True):
+        """Method Wrapper for the super method, to allow notify a
         LocalRolesModified event. Needed for adding a Journalentry after a
-        role_settings change"""
-
+        role_settings change
+        """
         old_local_roles = dict(self.context.get_local_roles())
         changed = super(OpengeverSharingView, self).update_role_settings(
             new_settings, reindex)
 
         if changed:
             notify(LocalRolesModified(
-                    self.context,
-                    old_local_roles,
-                    self.context.get_local_roles()))
+                self.context,
+                old_local_roles,
+                self.context.get_local_roles(),
+                ))
 
         return changed
 
@@ -186,7 +189,8 @@ class OpengeverSharingView(SharingView):
                                   principal_type,
                                   id_key):
         """A mapper for the original method, to constraint the users
-        list to only the users which are assigned to the current client"""
+        list to only the users which are assigned to the current client
+        """
         all_principals = super(OpengeverSharingView, self)._principal_search_results(
             search_for_principal,
             get_principal_by_id,
@@ -194,7 +198,7 @@ class OpengeverSharingView(SharingView):
             principal_type,
             id_key)
 
-        if len(all_principals) == 0:
+        if not all_principals:
             return all_principals
 
         admin_unit = get_current_admin_unit()
@@ -221,7 +225,8 @@ class OpengeverSharingView(SharingView):
 
 class SharingTab(OpengeverSharingView):
     """The sharing tab view, which show the standard sharin view,
-    but wihtout the form."""
+    but wihtout the form.
+    """
 
     index = ViewPageTemplateFile('sharing_tab.pt')
 

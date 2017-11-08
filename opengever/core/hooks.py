@@ -1,3 +1,6 @@
+from zope.annotation.interfaces import IAnnotations
+from zope.component.hooks import getSite
+import logging
 import opengever.activity.hooks
 import opengever.base.hooks
 import opengever.contact.hooks
@@ -11,9 +14,6 @@ import opengever.quota.hooks
 import opengever.tabbedview.hooks
 import opengever.task.hooks
 import opengever.trash.hooks
-from zope.annotation.interfaces import IAnnotations
-from zope.component.hooks import getSite
-import logging
 import re
 
 
@@ -64,7 +64,7 @@ def avoid_profile_reinstallation(event):
         assert profile not in annotations[key], \
             'Profile {!r} should not be installed twice.'.format(profile)
     elif profile in annotations[key]:
-        LOG.warning('{!r} installed twice'.format(profile))
+        LOG.warning('%r installed twice', profile)
 
     annotations[key].append(profile)
 

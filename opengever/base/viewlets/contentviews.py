@@ -11,7 +11,6 @@ class ModelContentViewsViewlet(ContentViewsViewlet):
         """Prepare the object tabs by determining their order and working
         out which tab is selected. Used in global_contentviews.pt
         """
-
         if hasattr(self.view, 'prepare_model_tabs'):
             return self.view.prepare_model_tabs(self)
         else:
