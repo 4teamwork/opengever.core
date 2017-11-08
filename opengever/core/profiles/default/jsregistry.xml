@@ -462,4 +462,15 @@
       id="++resource++opengever.base/jquery-migrate.min.js"
       />
 
+  <javascript
+      cacheable="True"
+      compression="none"
+      cookable="True"
+      expression=""
+      enabled="True"
+      id="++resource++opengever.base/keywordwidget.js"
+      inline="False"
+      insert-before="++resource++ftw.keywordwidget/js/keywordwidget.js"
+      />
+
 </object>

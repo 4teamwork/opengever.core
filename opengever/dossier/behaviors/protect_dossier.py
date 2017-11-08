@@ -26,7 +26,9 @@ class IProtectDossier(model.Schema):
                 'reading_and_writing'],
         )
 
-    form.widget('reading', KeywordFieldWidget, async=True)
+    form.widget('reading', KeywordFieldWidget, async=True,
+                template_selection='usersAndGroups',
+                template_result="usersAndGroups")
     form.write_permission(reading='opengever.dossier.ProtectDossier')
     reading = schema.List(
         title=_(u'label_reading', default=u'Reading'),
@@ -38,7 +40,9 @@ class IProtectDossier(model.Schema):
         missing_value=[],
         )
 
-    form.widget('reading_and_writing', KeywordFieldWidget, async=True)
+    form.widget('reading_and_writing', KeywordFieldWidget, async=True,
+                template_selection='usersAndGroups',
+                template_result="usersAndGroups")
     form.write_permission(reading_and_writing='opengever.dossier.ProtectDossier')
     reading_and_writing = schema.List(
         title=_(u'label_reading_and_writing', default=u'Reading and writing'),
