@@ -131,7 +131,7 @@ class NotificationCenter(object):
     def get_users_notifications(self, userid, only_unread=False, limit=None):
         query = Notification.query.by_user(userid)
         if only_unread:
-            query = query.filter(Notification.is_read == False)
+            query = query.filter(Notification.is_read.is_(False))
 
         query = query.join(
             Notification.activity).order_by(desc(Activity.created))
@@ -139,7 +139,7 @@ class NotificationCenter(object):
 
     def count_users_unread_notifications(self, userid):
         query = Notification.query.by_user(userid)
-        return query.filter(Notification.is_read == False).count()
+        return query.filter(Notification.is_read.is_(False)).count()
 
     def mark_notification_as_read(self, notification_id):
         notification = self.get_notification(notification_id)
@@ -165,7 +165,7 @@ class NotificationCenter(object):
 
         query = query.join(Notification.activity)
         if badge_only:
-            query = query.filter(Notification.badge == True)  # noqa
+            query = query.filter(Notification.badge.is_(True))
         query = query.order_by(order(sort_on))
         query = query.offset(offset).limit(limit)
         return query.options(contains_eager(Notification.activity)).all()
