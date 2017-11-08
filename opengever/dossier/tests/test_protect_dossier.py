@@ -3,8 +3,6 @@ from ftw.testbrowser.pages import factoriesmenu
 from opengever.dossier.behaviors.protect_dossier import IProtectDossier
 from opengever.testing import IntegrationTestCase
 from plone import api
-from zope.event import notify
-from zope.lifecycleevent import ObjectModifiedEvent
 
 
 class TestProtectDossier(IntegrationTestCase):
@@ -140,15 +138,14 @@ class TestProtectDossierBehavior(IntegrationTestCase):
 
         self.assertFalse(getattr(self.dossier, '__ac_local_roles_block__', False))
 
-        IProtectDossier(self.dossier).reading = ['kathi.barfuss']
-
-        notify(ObjectModifiedEvent(self.dossier))
+        dossier_protector = IProtectDossier(self.dossier)
+        dossier_protector.reading = ['kathi.barfuss']
+        dossier_protector.protect()
 
         self.assertTrue(getattr(self.dossier, '__ac_local_roles_block__', False))
 
-        IProtectDossier(self.dossier).reading = []
-
-        notify(ObjectModifiedEvent(self.dossier))
+        dossier_protector.reading = []
+        dossier_protector.protect()
 
         self.assertFalse(getattr(self.dossier, '__ac_local_roles_block__', False))
 
@@ -158,8 +155,7 @@ class TestProtectDossierBehavior(IntegrationTestCase):
         dossier_protector = IProtectDossier(self.dossier)
 
         dossier_protector.reading = [self.regular_user.getId()]
-
-        notify(ObjectModifiedEvent(self.dossier))
+        dossier_protector.protect()
 
         self.assert_local_roles(
             dossier_protector.READING_ROLES,
@@ -171,8 +167,7 @@ class TestProtectDossierBehavior(IntegrationTestCase):
         dossier_protector = IProtectDossier(self.dossier)
 
         dossier_protector.reading_and_writing = [self.regular_user.getId()]
-
-        notify(ObjectModifiedEvent(self.dossier))
+        dossier_protector.protect()
 
         self.assert_local_roles(
             dossier_protector.READING_AND_WRITING_ROLES,
@@ -188,7 +183,7 @@ class TestProtectDossierBehavior(IntegrationTestCase):
         dossier_protector.reading_and_writing = [self.secretariat_user.getId(),
                                                  'projekt_b']
 
-        notify(ObjectModifiedEvent(self.dossier))
+        dossier_protector.protect()
 
         self.assert_local_roles(
             dossier_protector.READING_ROLES,
@@ -213,9 +208,9 @@ class TestProtectDossierBehavior(IntegrationTestCase):
     def test_protect_dossier_wont_exclude_current_logged_in_user(self):
         self.login(self.dossier_manager)
 
-        IProtectDossier(self.dossier).reading = [self.regular_user.getId()]
-
-        notify(ObjectModifiedEvent(self.dossier))
+        dossier_protector = IProtectDossier(self.dossier)
+        dossier_protector.reading = [self.regular_user.getId()]
+        dossier_protector.protect()
 
         self.assert_local_roles(
             IProtectDossier(self.dossier).DOSSIER_MANAGER_ROLES,
@@ -224,20 +219,19 @@ class TestProtectDossierBehavior(IntegrationTestCase):
     def test_reindex_object_security_on_dossier(self):
         self.login(self.dossier_manager)
 
-        IProtectDossier(self.dossier).reading = []
-        IProtectDossier(self.dossier).reading_and_writing = []
-
-        notify(ObjectModifiedEvent(self.dossier))
+        dossier_protector = IProtectDossier(self.dossier)
+        dossier_protector.reading = []
+        dossier_protector.reading_and_writing = []
+        dossier_protector.protect()
 
         self.assertItemsEqual(
             ['Administrator', 'Contributor', 'Editor', 'Manager', 'Reader',
              'user:fa_users'],
             self.get_allowed_roles_and_users_for(self.dossier))
 
-        IProtectDossier(self.dossier).reading = [self.regular_user.getId()]
-        IProtectDossier(self.dossier).reading_and_writing = []
-
-        notify(ObjectModifiedEvent(self.dossier))
+        dossier_protector.reading = [self.regular_user.getId()]
+        dossier_protector.reading_and_writing = []
+        dossier_protector.protect()
 
         self.assertItemsEqual(
             ['Administrator', 'Contributor', 'Editor', 'Manager', 'Reader',

@@ -252,16 +252,4 @@
       permission="zope2.View"
       />
 
-  <subscriber
-      for="opengever.dossier.behaviors.protect_dossier.IProtectDossierMarker
-           zope.lifecycleevent.interfaces.IObjectAddedEvent"
-      handler=".handlers.handle_dossier_protection"
-      />
-
-  <subscriber
-      for="opengever.dossier.behaviors.protect_dossier.IProtectDossierMarker
-           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
-      handler=".handlers.handle_dossier_protection"
-      />
-
 </configure>
