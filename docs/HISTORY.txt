@@ -5,6 +5,7 @@ Changelog
 2017.6.4 (unreleased)
 ---------------------
 
+- Fix agenda items rendering on non-word meeting. [deiferni]
 - Exclude the latest version in the bumblebee versioning warning logic. [Rotonen]
 - Add proper responsible for fixture objects. [elioschmutz]
 - Add optional header and suffix templates for protocol excerpts. [tarnap]
