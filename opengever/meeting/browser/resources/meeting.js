@@ -355,7 +355,10 @@
     };
 
     Controller.call(this, $("#agendaitemsTemplate").html(), $("#agenda_items tbody"), options);
-    this.navigationTemplate = HBS.compile($("#navigationTemplate").html());
+    if ($("#navigationTemplate").length > 0) {
+      this.navigationTemplate = HBS.compile($("#navigationTemplate").html());
+    }
+
 
     this.fetch = function() { return $.get(viewlet.data().listAgendaItemsUrl); };
 
@@ -369,6 +372,10 @@
     };
 
     this.renderNavigation = function(data) {
+      if (typeof this.navigationTemplate === 'undefined') {
+        return;
+      }
+
       $('.meeting-navigation').html(this.navigationTemplate({agendaitems: data.items}));
       this.updateNavigationScrollArea();
     };
