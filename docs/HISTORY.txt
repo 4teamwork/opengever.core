@@ -5,7 +5,7 @@ Changelog
 2017.6.4 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Fix agenda items rendering on non-word meeting. [deiferni]
 
 
 2017.6.3 (2017-11-07)
