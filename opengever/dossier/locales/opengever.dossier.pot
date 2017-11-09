@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-30 19:14+0000\n"
+"POT-Creation-Date: 2017-11-09 15:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -269,6 +269,11 @@ msgstr ""
 msgid "create_dossier_with_template"
 msgstr ""
 
+#. Default: "This user or group will get the dossier manager role after protecting the dossier."
+#: ./opengever/dossier/behaviors/protect_dossier.py
+msgid "description_dossier_manager"
+msgstr ""
+
 #. Default: "The defined keywords will be preselected for new dossies from template."
 #: ./opengever/dossier/dossiertemplate/behaviors.py
 msgid "description_predefined_keywords"
@@ -512,6 +517,11 @@ msgstr ""
 #: ./opengever/dossier/browser/overview.py
 #: ./opengever/dossier/browser/tabbed.py
 msgid "label_documents"
+msgstr ""
+
+#. Default: "Dossier manager"
+#: ./opengever/dossier/behaviors/protect_dossier.py
+msgid "label_dossier_manager"
 msgstr ""
 
 #. Default: "Create Dossier note"

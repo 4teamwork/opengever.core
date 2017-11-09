@@ -8,9 +8,33 @@ from plone.behavior.annotation import AnnotationsFactoryImpl
 from plone.behavior.annotation import AnnotationStorage
 from plone.behavior.interfaces import ISchemaAwareFactory
 from plone.supermodel import model
+from Products.CMFPlone.utils import safe_unicode
 from zope import schema
 from zope.interface import alsoProvides
 from zope.interface import Interface
+from zope.interface import provider
+from zope.schema.interfaces import IContextAwareDefaultFactory
+
+
+@provider(IContextAwareDefaultFactory)
+def current_user(context):
+    userid = api.user.get_current().getId()
+
+    if not userid:
+        return None
+
+    try:
+        AllUsersAndGroupsSourceBinder()(context).getTerm(userid)
+    except LookupError:
+        # The current logged in user does not exist in the
+        # field-source.
+        return None
+
+    if 'Manager' in api.user.get_roles():
+        # We don't want to prefill managers.
+        return None
+
+    return safe_unicode(userid)
 
 
 class IProtectDossierMarker(Interface):
@@ -23,7 +47,8 @@ class IProtectDossier(model.Schema):
         u'protect',
         label=_(u'fieldset_protect', default=u'Protect'),
         fields=['reading',
-                'reading_and_writing'],
+                'reading_and_writing',
+                'dossier_manager'],
         )
 
     form.widget('reading', KeywordFieldWidget, async=True,
@@ -52,6 +77,21 @@ class IProtectDossier(model.Schema):
         value_type=schema.Choice(source=AllUsersAndGroupsSourceBinder()),
         required=False,
         missing_value=[],
+        )
+
+    form.widget('dossier_manager', KeywordFieldWidget, async=True,
+                template_selection='usersAndGroups',
+                template_result="usersAndGroups")
+    form.write_permission(dossier_manager='opengever.dossier.ProtectDossier')
+    dossier_manager = schema.Choice(
+        title=_(u'label_dossier_manager', default=u'Dossier manager'),
+        description=_(
+            u'description_dossier_manager',
+            default=u'This user or group will get the dossier manager role after protecting the dossier.'),
+        source=AllUsersAndGroupsSourceBinder(),
+        defaultFactory=current_user,
+        required=False,
+        missing_value=None,
         )
 
 
@@ -100,14 +140,14 @@ class DossierProtection(AnnotationsFactoryImpl):
 
     def need_update(self, force_update=False):
         """Only update the permissions if the current user has the
-        protect dossier permission and is not a global manager.
+        protect dossier permission and a dossier manager is set.
         """
         if force_update:
             return True
 
         return api.user.has_permission(
-            'opengever.dossier: Protect dossier', obj=self.context) and not \
-            api.user.get_current().has_role('Manager')
+            'opengever.dossier: Protect dossier', obj=self.context) and \
+            self.dossier_manager
 
     def update_role_inheritance(self):
         old_value = self.is_role_inheritance_blocked(self.context)
@@ -143,7 +183,7 @@ class DossierProtection(AnnotationsFactoryImpl):
             role_settings, self.reading_and_writing, self.READING_AND_WRITING_ROLES)
 
         self.extend_role_settings_for_principals(
-            role_settings, [api.user.get_current().getId()], self.DOSSIER_MANAGER_ROLES)
+            role_settings, [self.dossier_manager], self.DOSSIER_MANAGER_ROLES)
 
         return role_settings
 

@@ -75,6 +75,9 @@ VOCAB_OVERRIDES = {
         'issuer': u'<G\xfcltige User-ID>',
         'responsible': u'<G\xfcltige User-ID>',
     },
+    'opengever.dossier.behaviors.protect_dossier.IProtectDossier': {
+        'dossier_manager': u'<G\xfcltige User-ID oder Gruppen-ID>',
+    }
 }
 
 DEFAULT_OVERRIDES = {

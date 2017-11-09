@@ -234,6 +234,13 @@
             "description": "W\u00e4hlen Sie Benutzer und Gruppen aus, welche im Dossier lesend und schreibend Zugriff erhalten sollen. Die Benutzer dieser Gruppe werden dazu berechtigt, das Dossier zu bearbeiten, Inhalte zu erstellen und zu bearbeiten.",
             "_zope_schema_type": "List",
             "default": null
+        },
+        "dossier_manager": {
+            "type": "string",
+            "title": "Dossier-Verwalter",
+            "description": "W\u00e4hlen Sie hier einen Benutzer oder eine Gruppe, welche nach dem Sch\u00fctzen des Dossiers den Schutz anpassen oder wieder aufheben kann. Dies sind normalerweise Sie selbst.",
+            "_zope_schema_type": "Choice",
+            "_vocabulary": "<G\u00fcltige User-ID oder Gruppen-ID>"
         }
     },
     "required": [
@@ -268,6 +275,7 @@
         "date_of_cassation",
         "date_of_submission",
         "reading",
-        "reading_and_writing"
+        "reading_and_writing",
+        "dossier_manager"
     ]
 }

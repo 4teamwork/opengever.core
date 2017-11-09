@@ -92,6 +92,7 @@ class TestProtectDossierBehavior(IntegrationTestCase):
         form = browser.find_form_by_field('Reading')
         form.find_widget('Reading').fill('projekt_a')
         form.find_widget('Reading and writing').fill('projekt_b')
+        form.find_widget('Dossier manager').fill(self.dossier_manager.getId())
         browser.click_on('Save')
 
         self.assertEqual(['projekt_a'], IProtectDossier(self.dossier).reading)
@@ -119,6 +120,7 @@ class TestProtectDossierBehavior(IntegrationTestCase):
         browser.open(self.dossier, view="@@edit")
         form = browser.find_form_by_field('Reading')
         form.find_widget('Reading').fill(self.regular_user.getId())
+        form.find_widget('Dossier manager').fill(self.dossier_manager.getId())
         browser.click_on('Save')
 
         self.assert_local_roles(
@@ -170,6 +172,7 @@ class TestProtectDossierBehavior(IntegrationTestCase):
         dossier_protector.reading = [self.regular_user.getId(), 'projekt_a']
         dossier_protector.reading_and_writing = [self.secretariat_user.getId(),
                                                  'projekt_b']
+        dossier_protector.dossier_manager = self.dossier_manager.getId()
         dossier_protector.protect()
 
         self.assert_local_roles(
@@ -197,6 +200,7 @@ class TestProtectDossierBehavior(IntegrationTestCase):
 
         dossier_protector = IProtectDossier(self.dossier)
         dossier_protector.reading = [self.regular_user.getId()]
+        dossier_protector.dossier_manager = self.dossier_manager.getId()
         dossier_protector.protect()
 
         self.assert_local_roles(
@@ -206,18 +210,15 @@ class TestProtectDossierBehavior(IntegrationTestCase):
     def test_reindex_object_security_on_dossier(self):
         self.login(self.dossier_manager)
 
-        dossier_protector = IProtectDossier(self.dossier)
-        dossier_protector.reading = []
-        dossier_protector.reading_and_writing = []
-        dossier_protector.protect()
-
         self.assertItemsEqual(
             ['Administrator', 'Contributor', 'Editor', 'Manager', 'Reader',
-             'user:fa_users'],
+             'user:fa_users', 'user:{}'.format(self.regular_user.getId())],
             self.get_allowed_roles_and_users_for(self.dossier))
 
+        dossier_protector = IProtectDossier(self.dossier)
         dossier_protector.reading = [self.regular_user.getId()]
         dossier_protector.reading_and_writing = []
+        dossier_protector.dossier_manager = self.dossier_manager.getId()
         dossier_protector.protect()
 
         self.assertItemsEqual(

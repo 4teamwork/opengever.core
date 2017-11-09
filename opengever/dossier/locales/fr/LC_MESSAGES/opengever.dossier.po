@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-30 19:14+0000\n"
+"POT-Creation-Date: 2017-11-09 15:26+0000\n"
 "PO-Revision-Date: 2017-09-03 09:00+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/fr/>\n"
@@ -268,6 +268,11 @@ msgstr "Créer un document à partir d'un modèle"
 msgid "create_dossier_with_template"
 msgstr "Créer un dossier d'affaire à partir du modèle"
 
+#. Default: "This user or group will get the dossier manager role after protecting the dossier."
+#: ./opengever/dossier/behaviors/protect_dossier.py
+msgid "description_dossier_manager"
+msgstr ""
+
 #. Default: "The defined keywords will be preselected for new dossies from template."
 #: ./opengever/dossier/dossiertemplate/behaviors.py
 msgid "description_predefined_keywords"
@@ -512,6 +517,11 @@ msgstr "Destination (position/dossier)"
 #: ./opengever/dossier/browser/tabbed.py
 msgid "label_documents"
 msgstr "Documents"
+
+#. Default: "Dossier manager"
+#: ./opengever/dossier/behaviors/protect_dossier.py
+msgid "label_dossier_manager"
+msgstr ""
 
 #. Default: "Create Dossier note"
 #: ./opengever/dossier/viewlets/templates/note.pt
