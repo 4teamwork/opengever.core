@@ -2,10 +2,9 @@
 Changelog
 =========
 
-2017.6.4 (unreleased)
+2017.6.5 (unreleased)
 ---------------------
 
-- Fix agenda items rendering on non-word meeting. [deiferni]
 - Exclude the latest version in the bumblebee versioning warning logic. [Rotonen]
 - Add proper responsible for fixture objects. [elioschmutz]
 - Add optional header and suffix templates for protocol excerpts. [tarnap]
@@ -18,6 +17,12 @@ Changelog
 - Prevent editing agenda item list when meeting has been held. [deiferni]
 - Allow proposal listings to be filtered by proposal title. [deiferni]
 - Allow proposal listings to be sorted by title. [deiferni]
+
+
+2017.6.4 (2017-11-09)
+---------------------
+
+- Fix agenda items rendering on non-word meeting. [deiferni]
 
 
 2017.6.3 (2017-11-07)
