@@ -61,8 +61,10 @@ class TestEditMeeting(IntegrationTestCase):
              'Presidency:': u'Sch\xf6ller Heidrun',
              'Secretary:': u'M\xfcller Henning',
              'Location:': u'Sitzungszimmer 3',
-             'Meeting dossier:': 'Sitzungsdossier 9/2017'},
+             'Meeting dossier:': 'New Meeting Title'},
             byline.text_dict())
+
+        self.assertEquals('New Meeting Title', self.meeting_dossier.title)
 
     @browsing
     def test_edit_meeting_locks_the_content(self, browser1):
