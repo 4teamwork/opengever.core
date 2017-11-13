@@ -10,6 +10,7 @@ Changelog
 - Add date of submission to proposals. [deiferni]
 - SPV: Make the considerations field a trix field. [tarnap]
 - Don't escape description in overview twice for dossier templates. [deiferni]
+- Handle inconsistent local roles on protected dossiers with a warning message. [elioschmutz]
 - Add new field dossier_manager to the IProtectDossier behavior to set the dossier-manager manually. [elisochmutz]
 - Fix agenda items rendering on non-word meeting. [deiferni]
 - Add special keywordwidget template for users and groups, showing an icon and links the groups. [elioschmutz]

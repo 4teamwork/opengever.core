@@ -1,5 +1,7 @@
+from copy import deepcopy
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
+from ftw.testbrowser.pages import statusmessages
 from opengever.dossier.behaviors.protect_dossier import IProtectDossier
 from opengever.testing import IntegrationTestCase
 from plone import api
@@ -52,6 +54,125 @@ class TestProtectDossier(IntegrationTestCase):
         self.assertFalse(
             api.user.has_permission('opengever.dossier: Protect dossier',
                                     obj=self.dossier))
+
+    @browsing
+    def test_show_inconsistency_message_if_role_removed(self, browser):
+        self.login(self.dossier_manager, browser)
+
+        dossier_protector = IProtectDossier(self.dossier)
+        dossier_protector.reading_and_writing = ['kathi.barfuss']
+        dossier_protector.dossier_manager = self.dossier_manager.getId()
+        dossier_protector.protect()
+
+        # Remove Roles
+        new_roles = deepcopy(dossier_protector.READING_AND_WRITING_ROLES)
+        new_roles.pop(0)
+        self.dossier.manage_setLocalRoles(self.regular_user.getId(), new_roles)
+
+        browser.open(self.dossier, view="@@edit")
+
+        self.assertEqual(1, len(statusmessages.warning_messages()))
+
+        browser.click_on('Save')
+        browser.open(self.dossier, view="@@edit")
+
+        statusmessages.assert_no_messages()
+
+    @browsing
+    def test_show_inconsistency_message_if_role_added(self, browser):
+        self.login(self.dossier_manager, browser)
+
+        dossier_protector = IProtectDossier(self.dossier)
+        dossier_protector.reading_and_writing = ['kathi.barfuss']
+        dossier_protector.dossier_manager = self.dossier_manager.getId()
+        dossier_protector.protect()
+
+        # Add Roles
+        new_roles = deepcopy(dossier_protector.READING_AND_WRITING_ROLES)
+        new_roles.append('Manager')
+        self.dossier.manage_setLocalRoles(self.regular_user.getId(), new_roles)
+
+        browser.open(self.dossier, view="@@edit")
+
+        self.assertEqual(1, len(statusmessages.warning_messages()))
+
+        browser.click_on('Save')
+        browser.open(self.dossier, view="@@edit")
+
+        statusmessages.assert_no_messages()
+
+    @browsing
+    def test_show_inconsistency_message_if_principal_added(self, browser):
+        self.login(self.dossier_manager, browser)
+
+        dossier_protector = IProtectDossier(self.dossier)
+        dossier_protector.reading_and_writing = ['kathi.barfuss']
+        dossier_protector.dossier_manager = self.dossier_manager.getId()
+        dossier_protector.protect()
+
+        # Add Principal
+        self.dossier.manage_setLocalRoles(self.meeting_user.getId(), ('Reader', ))
+
+        browser.open(self.dossier, view="@@edit")
+
+        self.assertEqual(1, len(statusmessages.warning_messages()))
+
+        browser.click_on('Save')
+        browser.open(self.dossier, view="@@edit")
+
+        statusmessages.assert_no_messages()
+
+    @browsing
+    def test_show_inconsistency_message_if_principal_removed(self, browser):
+        self.login(self.dossier_manager, browser)
+
+        dossier_protector = IProtectDossier(self.dossier)
+        dossier_protector.reading_and_writing = ['kathi.barfuss']
+        dossier_protector.dossier_manager = self.dossier_manager.getId()
+        dossier_protector.protect()
+
+        # Remove Principal
+        self.dossier.manage_delLocalRoles([self.regular_user.getId()])
+
+        browser.open(self.dossier, view="@@edit")
+
+        self.assertEqual(1, len(statusmessages.warning_messages()))
+
+        browser.click_on('Save')
+        browser.open(self.dossier, view="@@edit")
+
+        statusmessages.assert_no_messages()
+
+    @browsing
+    def test_do_not_show_inconsistency_message_if_the_dossier_is_not_protected(self, browser):
+        self.login(self.dossier_manager, browser)
+
+        browser.open(self.dossier, view="@@edit")
+
+        self.repository_root.manage_setLocalRoles(self.regular_user.getId(), ('DossierManager', ))
+
+        statusmessages.assert_no_messages()
+
+    @browsing
+    def test_do_not_show_inconsistency_message_if_there_is_no_inconsistency(self, browser):
+        self.login(self.dossier_manager, browser)
+
+        dossier_protector = IProtectDossier(self.dossier)
+        dossier_protector.reading = ['kathi.barfuss']
+        dossier_protector.dossier_manager = self.dossier_manager.getId()
+        dossier_protector.protect()
+
+        browser.open(self.dossier, view="@@edit")
+
+        statusmessages.assert_no_messages()
+
+    @browsing
+    def test_do_not_show_inconsistency_message_for_users_without_dossier_manager_role(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.open(self.dossier, view="@@edit")
+
+        statusmessages.assert_no_messages()
 
 
 class TestProtectDossierBehavior(IntegrationTestCase):

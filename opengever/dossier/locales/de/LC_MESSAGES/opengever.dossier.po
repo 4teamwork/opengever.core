@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-11-09 15:26+0000\n"
+"POT-Creation-Date: 2017-11-13 14:23+0000\n"
 "PO-Revision-Date: 2017-05-23 04:53+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
@@ -297,6 +297,11 @@ msgstr "Durch Aktivieren dieser Option stehen bei der Erstellung des Dossiers ab
 
 msgid "documents"
 msgstr "Dokumente"
+
+#. Default: "The local roles do not match with the current dossier protection settings. If you save this form, the local roles will be overridden."
+#: ./opengever/dossier/browser/forms.py
+msgid "dossier_protection_inconsistency_warning"
+msgstr "Die lokalen Berechtigungen stimmen nicht mit den Dossier-Schutz Einstellungen überein. Wenn Sie dieses Formular speichern, werden die aktuellen lokalen Berechtigungen mit den Dossier-Schutz Einstellungen überschrieben."
 
 #. Default: "It isn't allowed to add such items there: ${failed_objects}"
 #: ./opengever/dossier/move_items.py
