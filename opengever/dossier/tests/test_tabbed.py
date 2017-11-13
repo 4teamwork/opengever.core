@@ -11,8 +11,9 @@ class TestParticipationTab(IntegrationTestCase):
         browser.open(self.dossier, view='tabbed_view')
         browser.click_on('Participants')
 
-        self.assertEqual('http://nohost/plone/dossier-1/tabbed_view#participants',
-                         browser.url)
+        self.assertEqual(
+            'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/#participants',
+            browser.url)
 
 
 class TestContactParticipationTab(IntegrationTestCase):
@@ -27,5 +28,5 @@ class TestContactParticipationTab(IntegrationTestCase):
         browser.click_on('Participations')
 
         self.assertEqual(
-            'http://nohost/plone/dossier-1/tabbed_view#participations',
+            'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/#participations',
             browser.url)
