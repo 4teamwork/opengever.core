@@ -5,6 +5,7 @@ Changelog
 2017.6.5 (unreleased)
 ---------------------
 
+- SPV: Make the considerations field a trix field. [tarnap]
 - Exclude the latest version in the bumblebee versioning warning logic. [Rotonen]
 - SPV word: Remove fields which are intended for no word version. [tarnap]
 - Add proper responsible for fixture objects. [elioschmutz]

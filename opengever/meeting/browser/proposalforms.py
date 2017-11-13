@@ -81,6 +81,7 @@ class SubmittedProposalEditForm(FieldConfigurationMixin,
 
     def updateFields(self):
         super(SubmittedProposalEditForm, self).updateFields()
+        self.use_trix('considerations')
         if is_word_meeting_implementation_enabled():
             self.fields = self.fields.omit('considerations', 'excerpts')
 
