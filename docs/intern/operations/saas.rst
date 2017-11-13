@@ -1,6 +1,22 @@
 SaaS Deployments
 ================
 
+
+SaaS Policies für Release vorbereiten
+-------------------------------------
+
+Das package . _opengever-deployments: https://github.com/4teamwork/opengever-deployments/
+steht dabei zur Verfügung.
+
+- Meta-package auschecken: ``git clone https://github.com/4teamwork/opengever-deployments``
+- entweder: mit alle SaaS-policies nach `saas_dev_packages` auschecken: ``dev/checkout.py``
+- neue gever version in ``versions.cfg`` aller policies einsetzen, commit message: ``Bump policy to 20xx.y.z release.``
+- mit ``dev/for_all_saas_policies`` können commands für alle ausgecheckten policies ausgeführt werden
+
+
+Release einspielen
+------------------
+
 Im Moment sind alle SaaS Deployments auf ``theta.4teamwork.ch`` installiert.
 Skripte und Metadaten für die SaaS-Deployments/Policies werden im Moment im
 `opengever-deployments <https://github.com/4teamwork/opengever-deployments>`_
