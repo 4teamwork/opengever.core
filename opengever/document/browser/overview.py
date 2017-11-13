@@ -183,9 +183,6 @@ class Overview(DefaultView, GeverTabMixin, ActionButtonRendererMixin):
 
     def get_meeting_links(self):
 
-        if not hasattr(self.context, 'get_proposal'):
-            return
-
         proposal = self.context.get_proposal()
         if proposal is None:
             return
