@@ -92,6 +92,11 @@ class DossierOverview(BoxesViewMixin, BrowserView, GeverTabMixin):
         return dict(id='description', content=self.description,
                     is_html=True, label=_("Description"))
 
+    def description(self):
+        return api.portal.get_tool(name='portal_transforms').convertTo(
+            'text/html', self.context.description,
+            mimetype='text/x-web-intelligent').getData()
+
     def is_subdossier_navigation_available(self):
         main_dossier = self.context.get_main_dossier()
         return main_dossier.has_subdossiers()
@@ -161,11 +166,6 @@ class DossierOverview(BoxesViewMixin, BrowserView, GeverTabMixin):
                 'css_class': 'function-user',
             })
         return users
-
-    def description(self):
-        return api.portal.get_tool(name='portal_transforms').convertTo(
-            'text/html', self.context.description,
-            mimetype='text/x-web-intelligent').getData()
 
     def linked_dossiers(self):
         """Returns a list of dicts representing incoming and outgoing
@@ -241,10 +241,6 @@ class DossierTemplateOverview(DossierOverview):
     def make_filing_prefix_box(self):
         return dict(id='filing_prefix', content=self.context.get_filing_prefix_label(),
                     label=_(u'filing_prefix', default="filing prefix"))
-
-    def make_description_box(self):
-        return dict(id='description', content=self.description(),
-                    label=_(u'label_description', default=u'Description'))
 
     def documents(self):
         return IContentListing(self.catalog(

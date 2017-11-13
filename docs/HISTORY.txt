@@ -5,6 +5,7 @@ Changelog
 2017.6.5 (unreleased)
 ---------------------
 
+- Don't escape description in overview twice for dossier templates. [deiferni]
 - Fix textfilter in sqlsource table listings for oracle backends. [phgross]
 - Exclude the latest version in the bumblebee versioning warning logic. [Rotonen]
 
