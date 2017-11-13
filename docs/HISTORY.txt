@@ -130,17 +130,6 @@ Changelog
 - SPV word: Allow to set custom excerpt titles. [tarnap]
 - Add new tab teams to contactfolder. [phgross]
 - Add add and edit forms for teams. [phgross]
-- OGDS update: Truncate purely descriptive user fields. [lgraf]
-- Include ftw.usermigration and implement additional user migrations:
-
-  - OGDS User references
-  - Plone Tasks
-  - Private Folders
-  - Checked out documents
-  - Repository favorites
-
-  [lgraf]
-
 - Lawgiver: Ignore ftw.usermigration permission. [lgraf]
 - SPV word: Add proposal documents to meeting ZIP export. [jone]
 - SPV word: Prefix decision numbers with year. [jone]
@@ -668,6 +657,27 @@ Changelog
 - Add review state column and state filter to disposition listings. [phgross]
 - Fix holey bumblebee fallback svg icon. [Kevin Bieri]
 - Fix rendering of new agenda points in IE11. [Kevin Bieri]
+
+
+4.15.7 (2017-09-25)
+-------------------
+
+- OGDS update: Truncate purely descriptive user fields. [lgraf]
+- Include ftw.usermigration and implement additional user migrations:
+
+  - OGDS User references
+  - Plone Tasks
+  - Private Folders
+  - Checked out documents
+  - Repository favorites
+
+  [lgraf]
+
+
+4.15.6 (2017-05-09)
+-------------------
+
+- Allow upgrades-api access through command line tool. [jone]
 
 
 4.15.5 (2017-05-09)
