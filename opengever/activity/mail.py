@@ -2,71 +2,18 @@ from email.header import Header
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from opengever.activity.browser import resolve_notification_url
-from opengever.activity.model import NotificationDefault
+from opengever.activity.dispatcher import NotificationDispatcher
 from opengever.base.model import get_locale
 from opengever.mail.utils import make_addr_header
 from opengever.ogds.base.utils import ogds_service
 from plone import api
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from ZODB.POSException import ConflictError
 from zope.i18n import translate
 from zope.i18nmessageid import MessageFactory
-import logging
-import sys
-import traceback
 
 
 # because of circular imports, we can't import from opengever.activity
 _ = MessageFactory("opengever.activity")
-
-logger = logging.getLogger('opengever.activity')
-
-
-class NotificationDispatcher(object):
-
-    enabled_key = None
-    roles_key = None
-
-    def get_setting(self, kind):
-        return NotificationDefault.query.by_kind(kind=kind).first()
-
-    def is_dispatcher_enabled(self, kind):
-        setting = self.get_setting(kind)
-        if setting:
-            return getattr(setting, self.enabled_key)
-        return False
-
-    def get_roles_to_dispatch(self, kind):
-        setting = self.get_setting(kind)
-        if not setting:
-            return []
-
-        return getattr(setting, self.roles_key)
-
-    def dispatch_notifications(self, activity):
-        if not self.is_dispatcher_enabled(activity.kind):
-            return []
-
-        not_dispatched = []
-        roles = self.get_roles_to_dispatch(activity.kind)
-        notifications = activity.get_notifications_for_watcher_roles(roles)
-
-        for notification in notifications:
-            try:
-                self.dispatch_notification(notification)
-            except ConflictError:
-                raise
-
-            except Exception:
-                not_dispatched.append(notifications)
-                tcb = ''.join(traceback.format_exception(*sys.exc_info()))
-                logger.error('Exception while dispatch activity '
-                             '(MailDispatcher):\n{}'.format(tcb))
-
-        return not_dispatched
-
-    def dispatch_notification(self, notification):
-        raise NotImplementedError
 
 
 class PloneNotificationMailer(NotificationDispatcher):
@@ -75,7 +22,6 @@ class PloneNotificationMailer(NotificationDispatcher):
     the corresponding watcher.
     """
 
-    enabled_key = 'mail_notification'
     roles_key = 'mail_notification_roles'
 
     def __init__(self):

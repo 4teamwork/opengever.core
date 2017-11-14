@@ -39,7 +39,8 @@ class NotificationView(BrowserView):
             current_user_id,
             limit=batch_size,
             sort_reverse=True,
-            offset=offset)
+            offset=offset,
+            badge_only=True)
 
         next_url = self.get_next_batch_url(page, batch_size, total, offset)
         return self.json_response({

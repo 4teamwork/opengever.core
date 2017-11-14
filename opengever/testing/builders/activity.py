@@ -45,12 +45,14 @@ class WatcherBuilder(SqlObjectBuilder):
     mapped_class = Watcher
     id_argument_name = 'watcher_id'
 
+
 builder_registry.register('watcher', WatcherBuilder)
 
 
 class SubscriptionBuilder(SqlObjectBuilder):
 
     mapped_class = Subscription
+
 
 builder_registry.register('subscription', SubscriptionBuilder)
 
@@ -67,6 +69,7 @@ class ActivityBuilder(SqlObjectBuilder):
         self.arguments['summary'] = 'Task created by Test User'
         self.arguments['actor_id'] = TEST_USER_ID
 
+
 builder_registry.register('activity', ActivityBuilder)
 
 
@@ -74,6 +77,10 @@ class NotificationBuilder(SqlObjectBuilder):
 
     mapped_class = Notification
     id_argument_name = 'notification_id'
+
+    def __init__(self, session):
+        super(NotificationBuilder, self).__init__(session)
+        self.arguments['is_badge'] = True
 
     def watcher(self, watcher):
         self.arguments['userid'] = watcher.actorid
@@ -83,12 +90,14 @@ class NotificationBuilder(SqlObjectBuilder):
         self.arguments['is_read'] = True
         return self
 
+
 builder_registry.register('notification', NotificationBuilder)
 
 
 class NotificationDefaultBuilder(SqlObjectBuilder):
 
     mapped_class = NotificationDefault
+
 
 builder_registry.register('notification_default_setting',
                           NotificationDefaultBuilder)

@@ -1,5 +1,4 @@
 from opengever.base.model import Base
-from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import String
@@ -17,17 +16,31 @@ class NotificationDefault(Base):
                                      primary_key=True)
 
     kind = Column(String(50), nullable=False, unique=True)
-    mail_notification = Column(Boolean, nullable=False, default=False)
-    _mail_notification_roles = Column('mail_notification_roles', Text)
 
-    def __init__(self, kind, mail_notification=False, mail_notification_roles=[]):
-        self.kind = kind
-        self.mail_notification = mail_notification
-        self.set_mail_notification_roles(mail_notification_roles)
+    _badge_notification_roles = Column('badge_notification_roles', Text)
+
+    _mail_notification_roles = Column('mail_notification_roles', Text)
 
     @property
     def mail_notification_roles(self):
-        return frozenset(json.loads(self._mail_notification_roles))
+        roles = self._mail_notification_roles
+        if roles:
+            return frozenset(json.loads(self._mail_notification_roles))
 
-    def set_mail_notification_roles(self, roles):
+        return frozenset([])
+
+    @mail_notification_roles.setter
+    def mail_notification_roles(self, roles):
         self._mail_notification_roles = json.dumps(roles)
+
+    @property
+    def badge_notification_roles(self):
+        roles = self._badge_notification_roles
+        if roles:
+            return frozenset(json.loads(self._badge_notification_roles))
+
+        return frozenset([])
+
+    @badge_notification_roles.setter
+    def badge_notification_roles(self, roles):
+        self._badge_notification_roles = json.dumps(roles)

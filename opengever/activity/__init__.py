@@ -1,3 +1,4 @@
+from opengever.activity.badge import BadgeIconDispatcher
 from opengever.activity.center import DisabledNotificationCenter
 from opengever.activity.center import PloneNotificationCenter
 from opengever.activity.interfaces import IActivitySettings
@@ -24,4 +25,5 @@ def notification_center():
     if not is_activity_feature_enabled():
         return DisabledNotificationCenter()
 
-    return PloneNotificationCenter(dispatchers=[PloneNotificationMailer()])
+    return PloneNotificationCenter(
+        dispatchers=[PloneNotificationMailer(), BadgeIconDispatcher()])

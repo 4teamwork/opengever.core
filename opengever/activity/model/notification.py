@@ -21,6 +21,7 @@ class Notification(Base):
     activity = relationship("Activity", backref="notifications")
 
     is_read = Column(Boolean, default=False, nullable=False)
+    is_badge = Column(Boolean, default=False, nullable=False)
 
     def __repr__(self):
         return u'<Notification {} for {} on {} >'.format(
