@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-02 12:52+0000\n"
+"POT-Creation-Date: 2017-11-14 12:31+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -86,14 +86,39 @@ msgstr ""
 msgid "label_description"
 msgstr ""
 
+#. Default: "Dispositions"
+#: ./opengever/repository/browser/tabbed.py
+msgid "label_dispositions"
+msgstr ""
+
+#. Default: "Dossiers"
+#: ./opengever/repository/browser/tabbed.py
+msgid "label_dossiers"
+msgstr ""
+
 #. Default: "Former reference"
 #: ./opengever/repository/repositoryfolder.py
 msgid "label_former_reference"
 msgstr ""
 
+#. Default: "Info"
+#: ./opengever/repository/browser/tabbed.py
+msgid "label_info"
+msgstr ""
+
+#. Default: "Journal"
+#: ./opengever/repository/browser/tabbed.py
+msgid "label_journal"
+msgstr ""
+
 #. Default: "Location"
 #: ./opengever/repository/repositoryfolder.py
 msgid "label_location"
+msgstr ""
+
+#. Default: "Overview"
+#: ./opengever/repository/browser/tabbed.py
+msgid "label_overview"
 msgstr ""
 
 #. Default: "Reference Prefix"

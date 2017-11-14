@@ -1,0 +1,28 @@
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.repository.repositoryroot" meta_type="Dexterity FTI" i18n:domain="opengever.core">
+
+    <action
+        action_id="overview"
+        remove="true">
+    </action>
+
+    <action
+        action_id="overview"
+        remove="true">
+    </action>
+
+    <action
+        action_id="overview"
+        remove="true">
+    </action>
+
+    <action
+        action_id="overview"
+        remove="true">
+    </action>
+
+    <action
+        action_id="overview"
+        remove="true">
+    </action>
+
+</object>

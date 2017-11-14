@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-10-02 12:52+0000\n"
+"POT-Creation-Date: 2017-11-14 12:31+0000\n"
 "PO-Revision-Date: 2014-11-25 11:31+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -86,15 +86,40 @@ msgstr "Ordnungsposition löschen"
 msgid "label_description"
 msgstr "Beschreibung"
 
+#. Default: "Dispositions"
+#: ./opengever/repository/browser/tabbed.py
+msgid "label_dispositions"
+msgstr "Angebote"
+
+#. Default: "Dossiers"
+#: ./opengever/repository/browser/tabbed.py
+msgid "label_dossiers"
+msgstr "Dossiers"
+
 #. Default: "Former reference"
 #: ./opengever/repository/repositoryfolder.py
 msgid "label_former_reference"
 msgstr "Früheres Zeichen"
 
+#. Default: "Info"
+#: ./opengever/repository/browser/tabbed.py
+msgid "label_info"
+msgstr "Info"
+
+#. Default: "Journal"
+#: ./opengever/repository/browser/tabbed.py
+msgid "label_journal"
+msgstr "Journal"
+
 #. Default: "Location"
 #: ./opengever/repository/repositoryfolder.py
 msgid "label_location"
 msgstr "Standort"
+
+#. Default: "Overview"
+#: ./opengever/repository/browser/tabbed.py
+msgid "label_overview"
+msgstr "Übersicht"
 
 #. Default: "Reference Prefix"
 #: ./opengever/repository/behaviors/referenceprefix.py

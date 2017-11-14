@@ -19,7 +19,7 @@ class TestDispositionListing(FunctionalTestCase):
         browser.login().open(self.root)
 
         self.assertEquals(
-            ['overview', 'dossiers', 'dispositions', 'sharing'],
+            ['Overview', 'Dossiers', 'Dispositions', 'Info'],
             browser.css('.tabbedview-tabs li').text)
 
     @browsing
@@ -27,7 +27,7 @@ class TestDispositionListing(FunctionalTestCase):
         browser.login().open(self.root)
 
         self.assertEquals(
-            ['overview', 'dossiers', 'sharing'],
+            ['Overview', 'Dossiers', 'Info'],
             browser.css('.tabbedview-tabs li').text)
 
     @browsing

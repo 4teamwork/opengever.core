@@ -77,6 +77,14 @@
       />
 
   <browser:page
+      for="opengever.repository.repositoryroot.IRepositoryRoot"
+      name="tabbed_view"
+      class=".tabbed.RepositoryRootTabbedView"
+      permission="zope2.View"
+      allowed_interface="ftw.tabbedview.interfaces.ITabbedViewEndpoints"
+      />
+
+  <browser:page
       for="*"
       name="primary_repository_root"
       class=".primary_repository_root.PrimaryRepositoryRoot"
