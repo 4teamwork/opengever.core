@@ -46,7 +46,8 @@ class CommitteeOverview(BrowserView, GeverTabMixin):
     def current_members(self):
         memberships = self.context.get_active_memberships().all()
         members = [membership.member for membership in memberships]
-        return [member.get_link(self.context) for member in members]
+        committee_container = self.context.get_committee_container()
+        return [member.get_link(committee_container) for member in members]
 
     def period(self):
         period = Period.query.get_current(self.context.load_model())
