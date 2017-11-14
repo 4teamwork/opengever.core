@@ -21,22 +21,26 @@ class NotificationDefault(Base):
 
     _mail_notification_roles = Column('mail_notification_roles', Text)
 
-    def __init__(self, kind, mail_notification_roles=[],
-                 badge_notification_roles=[]):
-        self.kind = kind
-        self.set_mail_notification_roles(mail_notification_roles)
-        self.set_badge_notification_roles(badge_notification_roles)
-
     @property
     def mail_notification_roles(self):
-        return frozenset(json.loads(self._mail_notification_roles))
+        roles = self._mail_notification_roles
+        if roles:
+            return frozenset(json.loads(self._mail_notification_roles))
 
-    def set_mail_notification_roles(self, roles):
+        return frozenset([])
+
+    @mail_notification_roles.setter
+    def mail_notification_roles(self, roles):
         self._mail_notification_roles = json.dumps(roles)
 
     @property
     def badge_notification_roles(self):
-        return frozenset(json.loads(self._badge_notification_roles))
+        roles = self._badge_notification_roles
+        if roles:
+            return frozenset(json.loads(self._badge_notification_roles))
 
-    def set_badge_notification_roles(self, roles):
+        return frozenset([])
+
+    @badge_notification_roles.setter
+    def badge_notification_roles(self, roles):
         self._badge_notification_roles = json.dumps(roles)

@@ -69,5 +69,5 @@ def insert_notification_defaults(site):
             setting = NotificationDefault(kind=item.get('kind'))
             session.add(setting)
 
-        setting.set_mail_notification_roles(
-            item.get('mail_notification_roles', []))
+        setattr(setting, 'mail_notification_roles',
+                item.get('mail_notification_roles', []))

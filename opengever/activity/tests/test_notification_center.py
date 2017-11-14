@@ -421,9 +421,9 @@ class TestDispatchers(ActivityTestCase):
 
     def test_check_for_notification_default(self):
         setting = create(Builder('notification_default_setting')
-                         .having(kind='task-added'))
-        setting.set_mail_notification_roles(
-            [WATCHER_ROLE, TASK_RESPONSIBLE_ROLE])
+                         .having(kind='task-added',
+                                 mail_notification_roles=[
+                                     WATCHER_ROLE, TASK_RESPONSIBLE_ROLE]))
 
         self.center.add_activity(
             Oguid('fd', '123'),
@@ -438,8 +438,8 @@ class TestDispatchers(ActivityTestCase):
 
     def test_only_watchers_with_configured_roles_are_dispatched(self):
         setting = create(Builder('notification_default_setting')
-                         .having(kind='task-added'))
-        setting.set_mail_notification_roles([WATCHER_ROLE])
+                         .having(kind='task-added',
+                                 mail_notification_roles=[WATCHER_ROLE]))
 
         self.center.add_activity(
             Oguid('fd', '123'),
@@ -468,8 +468,8 @@ class TestDispatchers(ActivityTestCase):
 
     def test_badge_dispatcher_sets_badge_flag_depending_on_the_setting(self):
         setting = create(Builder('notification_default_setting')
-                         .having(kind='task-added'))
-        setting.set_badge_notification_roles([TASK_RESPONSIBLE_ROLE])
+                         .having(kind='task-added',
+                                 badge_notification_roles=[TASK_RESPONSIBLE_ROLE]))
 
         self.center.add_activity(
             Oguid('fd', '123'),
