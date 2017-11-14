@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-13 12:25+0000\n"
+"POT-Creation-Date: 2017-11-08 09:02+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -418,6 +418,11 @@ msgstr ""
 msgid "label_keywords"
 msgstr ""
 
+#. Default: "Meeting"
+#: ./opengever/document/browser/overview.py
+msgid "label_meeting"
+msgstr ""
+
 #. Default: "no"
 #: ./opengever/document/browser/overview.py
 msgid "label_no"
@@ -456,6 +461,11 @@ msgstr ""
 #: ./opengever/document/behaviors/metadata.py
 #: ./opengever/document/browser/versions_tab.py
 msgid "label_preview"
+msgstr ""
+
+#. Default: "Proposal"
+#: ./opengever/document/browser/overview.py
+msgid "label_proposal"
 msgstr ""
 
 #: ./opengever/document/browser/report.py
