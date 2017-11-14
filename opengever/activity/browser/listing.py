@@ -110,4 +110,4 @@ class NotificationTableSource(GeverTableSource):
     def search_results(self, query):
         """Executes the query and returns a tuple of `results`.
         """
-        return notification_center().list_notifications(**query)
+        return notification_center().list_notifications(badge_only=True, **query)

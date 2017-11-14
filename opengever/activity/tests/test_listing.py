@@ -3,6 +3,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.activity.badge import BadgeIconDispatcher
 from opengever.activity.center import NotificationCenter
+from opengever.activity.model.notification import Notification
 from opengever.activity.model.settings import NotificationDefault
 from opengever.activity.model.subscription import WATCHER_ROLE
 from opengever.base.oguid import Oguid
@@ -106,3 +107,16 @@ class TestMyNotifications(IntegrationTestCase):
         self.assertEquals(
             'http://nohost/plone/@@resolve_notification?notification_id=1',
             link.get('href'))
+
+    @browsing
+    def test_my_notification_lists_only_badge_notifications(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.portal, view='tabbedview_view-mynotifications')
+
+        self.assertEquals(4, len(browser.css('.listing').first.rows))
+
+        notifications = Notification.query.filter_by(userid=self.regular_user.getId())
+        notifications[0].is_badge = False
+
+        browser.open(self.portal, view='tabbedview_view-mynotifications')
+        self.assertEquals(3, len(browser.css('.listing').first.rows))
