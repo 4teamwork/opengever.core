@@ -33,6 +33,9 @@ class CreateSubmittedProposal(BrowserView):
                 'IProposal')
             collector.insert(data['field-data'])
 
+            # sync data to proposal after inserting field data
+            submitted_proposal.sync_model(proposal_model=proposal)
+
             if is_word_meeting_implementation_enabled():
                 submitted_proposal.create_proposal_document(
                     filename=data['file']['filename'],
