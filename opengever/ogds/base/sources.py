@@ -711,6 +711,22 @@ class AllGroupsSource(BaseSQLModelSource):
         return self.base_query
 
 
+class AllGroupsSourcePrefixed(AllGroupsSource):
+    """Prefixes the term-tokens with a string. This allows us to do
+    differentiate the group term from other terms if you use it in a
+    multi-query-source.
+    """
+    GROUP_PREFIX = 'group:'
+
+    def getTerm(self, value):
+        obj = self.model_class.get(value.split(self.GROUP_PREFIX)[-1])
+        if not obj:
+            raise LookupError
+        return SimpleTerm(obj.id(),
+                          '{}{}'.format(self.GROUP_PREFIX, obj.id()),
+                          obj.label())
+
+
 @implementer(IContextSourceBinder)
 class AllGroupsSourceBinder(object):
 
@@ -720,7 +736,7 @@ class AllGroupsSourceBinder(object):
 
 class AllUsersAndGroupsSource(BaseMultipleSourcesQuerySource):
 
-    source_classes = [AllGroupsSource, AllUsersSource]
+    source_classes = [AllGroupsSourcePrefixed, AllUsersSource]
 
 
 @implementer(IContextSourceBinder)
