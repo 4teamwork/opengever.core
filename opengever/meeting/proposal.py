@@ -457,6 +457,7 @@ class SubmittedProposal(ProposalBase):
         proposal_model.submitted_physical_path = self.get_physical_path()
         proposal_model.submitted_admin_unit_id = get_current_admin_unit().id()
         proposal_model.submitted_title = self.title
+        proposal_model.date_of_submission = self.date_of_submission
 
     def load_model(self):
         oguid = Oguid.for_object(self)
@@ -651,6 +652,7 @@ class Proposal(ProposalBase):
         proposal_model.dossier_reference_number = reference_number
         proposal_model.repository_folder_title = repository_folder_title
         proposal_model.title = self.title
+        proposal_model.date_of_submission = self.date_of_submission
 
     def is_submit_additional_documents_allowed(self):
         return self.load_model().is_submit_additional_documents_allowed()
@@ -720,6 +722,6 @@ class Proposal(ProposalBase):
         committee side.
         """
 
+        self.date_of_submission = None
         api.content.transition(obj=self,
                                transition='proposal-transition-reject')
-        self.date_of_submission = None

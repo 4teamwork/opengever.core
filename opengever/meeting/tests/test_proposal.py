@@ -291,6 +291,7 @@ class TestProposal(IntegrationTestCase):
         self.assertEqual('submitted', proposal_model.workflow_state)
         self.assertEqual(u'Antrag f\xfcr Kreiselbau',
                          proposal_model.submitted_title)
+        self.assertEqual(date.today(), proposal_model.date_of_submission)
 
         # document copied
         self.assertEqual(1, len(submitted_proposal.get_documents()))

@@ -18,6 +18,7 @@ from opengever.ogds.models import USER_ID_LENGTH
 from opengever.ogds.models.types import UnicodeCoercingText
 from plone import api
 from sqlalchemy import Column
+from sqlalchemy import Date
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
@@ -103,6 +104,8 @@ class Proposal(Base):
 
     title = Column(String(MAX_TITLE_LENGTH), index=True)
     submitted_title = Column(String(MAX_TITLE_LENGTH), index=True)
+
+    date_of_submission = Column(Date, index=True)
 
     submitted_admin_unit_id = Column(String(UNIT_ID_LENGTH))
     submitted_int_id = Column(Integer)
@@ -305,6 +308,7 @@ class Proposal(Base):
         self.submitted_physical_path = None
         self.submitted_admin_unit_id = None
         self.submitted_int_id = None
+        self.date_of_submission = None
 
         # set workflow state directly for once, the transition is used to
         # redirect to a form.
