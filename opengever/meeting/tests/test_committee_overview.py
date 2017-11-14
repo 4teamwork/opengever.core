@@ -57,7 +57,7 @@ class TestCommitteeOverview(FunctionalTestCase):
         browser.login().open(self.committee, view='tabbedview_view-overview')
 
         self.assertEquals(
-            'http://nohost/plone/committee-1/member-1',
+            'http://nohost/plone/member-1',
             browser.css('#current_membersBox li a').first.get('href'))
 
     @browsing

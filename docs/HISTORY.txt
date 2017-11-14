@@ -5,6 +5,7 @@ Changelog
 2017.6.5 (unreleased)
 ---------------------
 
+- SPV: Fix member links in committee overview. [tarnap]
 - SPV: Make the considerations field a trix field. [tarnap]
 - Don't escape description in overview twice for dossier templates. [deiferni]
 - Fix agenda items rendering on non-word meeting. [deiferni]
