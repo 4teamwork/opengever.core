@@ -6,11 +6,15 @@ from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.participation import IParticipation
 from opengever.dossier.behaviors.participation import IParticipationAware
+from opengever.dossier.behaviors.protect_dossier import IProtectDossier
+from opengever.dossier.behaviors.protect_dossier import IProtectDossierMarker
 from plone.autoform.widgets import ParameterizedWidget
 from plone.dexterity.browser import add
 from plone.dexterity.browser import edit
+from plone.dexterity.events import EditFinishedEvent
 from plone.dexterity.i18n import MessageFactory as pd_mf  # noqa
 from plone.dexterity.interfaces import IDexterityFTI
+from plone.dexterity.utils import addContentToContainer
 from plone.z3cform import layout
 from Products.Five.browser import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
@@ -20,6 +24,7 @@ from z3c.form.field import Fields
 from z3c.form.form import Form
 from zExceptions import Unauthorized
 from zope.component import getUtility
+from zope.event import notify
 import base64
 
 
@@ -61,6 +66,16 @@ class DossierAddForm(add.DefaultAddForm):
             type_name = fti.Title()
             return pd_mf(u"Add ${name}", mapping={'name': type_name})
 
+    def add(self, object):
+        super(DossierAddForm, self).add(object)
+
+        # CUSTOM: Handle dossier protection after successfully adding
+        # the dossier. To be able to set the localroles correctly, we need
+        # the acquisition wrapped object.
+        new_object = self.context.unrestrictedTraverse(object.getId())
+        if IProtectDossierMarker.providedBy(new_object):
+            IProtectDossier(new_object).protect()
+
 
 class DossierAddView(add.DefaultAddView):
     form = DossierAddForm
@@ -82,6 +97,16 @@ class DossierEditForm(edit.DefaultEditForm):
         else:
             type_name = self.fti.Title()
             return pd_mf(u"Edit ${name}", mapping={'name': type_name})
+
+    def applyChanges(self, data):
+        changes = super(DossierEditForm, self).applyChanges(data)
+
+        # CUSTOM: Handle dossier protection after successfully adding
+        # the dossier
+        if IProtectDossierMarker.providedBy(self.context):
+            IProtectDossier(self.context).protect()
+
+        return changes
 
 
 class ParticipationAddForm(Form):

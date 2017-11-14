@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-02 12:51+0000\n"
+"POT-Creation-Date: 2017-10-30 19:14+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,7 +24,7 @@ msgstr ""
 msgid "Add Business Case Dossier"
 msgstr ""
 
-#: ./opengever/dossier/behaviors/dossier.py
+#: ./opengever/dossier/browser/forms.py
 #: ./opengever/dossier/dossiertemplate/dossiertemplate.py
 msgid "Add Subdossier"
 msgstr ""
@@ -49,7 +49,7 @@ msgstr ""
 msgid "Document ${name} is not movable."
 msgstr ""
 
-#: ./opengever/dossier/browser/overview_templates/overview.pt
+#: ./opengever/dossier/browser/templates/overview.pt
 msgid "Dossier structure"
 msgstr ""
 
@@ -61,7 +61,7 @@ msgstr ""
 msgid "Dossiers successfully reactivated."
 msgstr ""
 
-#: ./opengever/dossier/behaviors/dossier.py
+#: ./opengever/dossier/browser/forms.py
 #: ./opengever/dossier/dossiertemplate/dossiertemplate.py
 msgid "Edit Subdossier"
 msgstr ""
@@ -94,7 +94,7 @@ msgstr ""
 msgid "Newest tasks"
 msgstr ""
 
-#: ./opengever/dossier/browser/overview_templates/overview.pt
+#: ./opengever/dossier/browser/templates/overview.pt
 msgid "No Subdossiers"
 msgstr ""
 
@@ -218,7 +218,7 @@ msgid "additional_attributes"
 msgstr ""
 
 #. Default: "Add"
-#: ./opengever/dossier/behaviors/participation.py
+#: ./opengever/dossier/browser/forms.py
 msgid "button_add"
 msgstr ""
 
@@ -229,7 +229,7 @@ msgstr ""
 
 #. Default: "Cancel"
 #: ./opengever/dossier/archive.py
-#: ./opengever/dossier/behaviors/participation.py
+#: ./opengever/dossier/browser/forms.py
 #: ./opengever/dossier/dossiertemplate/form.py
 msgid "button_cancel"
 msgstr ""
@@ -274,6 +274,16 @@ msgstr ""
 msgid "description_predefined_keywords"
 msgstr ""
 
+#. Default: "Choose users and groups which have only readable access to the dossier"
+#: ./opengever/dossier/behaviors/protect_dossier.py
+msgid "description_reading"
+msgstr ""
+
+#. Default: "Choose users and groups which have readable and writing access to the dossier"
+#: ./opengever/dossier/behaviors/protect_dossier.py
+msgid "description_reading_and_writing"
+msgstr ""
+
 #. Default: "The user can choose only from the defined keywords in a new dossier from template. It also prevents the user for creating new keywords"
 #: ./opengever/dossier/dossiertemplate/behaviors.py
 msgid "description_restrict_keywords"
@@ -306,6 +316,11 @@ msgstr ""
 #: ./opengever/dossier/behaviors/dossier.py
 #: ./opengever/dossier/behaviors/filing.py
 msgid "fieldset_filing"
+msgstr ""
+
+#. Default: "Protect"
+#: ./opengever/dossier/behaviors/protect_dossier.py
+msgid "fieldset_protect"
 msgstr ""
 
 #. Default: "Action"
@@ -416,12 +431,12 @@ msgid "help_title_help"
 msgstr ""
 
 #. Default: "Participation created."
-#: ./opengever/dossier/behaviors/participation.py
+#: ./opengever/dossier/browser/forms.py
 msgid "info_participation_create"
 msgstr ""
 
 #. Default: "Removed participations."
-#: ./opengever/dossier/behaviors/participation.py
+#: ./opengever/dossier/browser/forms.py
 msgid "info_removed_participations"
 msgstr ""
 
@@ -616,7 +631,7 @@ msgid "label_participants"
 msgstr ""
 
 #. Default: "Participation"
-#: ./opengever/dossier/behaviors/participation.py
+#: ./opengever/dossier/browser/forms.py
 msgid "label_participation"
 msgstr ""
 
@@ -643,6 +658,16 @@ msgstr ""
 #. Default: "Proposals"
 #: ./opengever/dossier/browser/tabbed.py
 msgid "label_proposals"
+msgstr ""
+
+#. Default: "Reading"
+#: ./opengever/dossier/behaviors/protect_dossier.py
+msgid "label_reading"
+msgstr ""
+
+#. Default: "Reading and writing"
+#: ./opengever/dossier/behaviors/protect_dossier.py
+msgid "label_reading_and_writing"
 msgstr ""
 
 #. Default: "Recipient"
@@ -850,7 +875,6 @@ msgid "title_dossier_journal"
 msgstr ""
 
 #. Default: "You didn't select any participants."
-#: ./opengever/dossier/behaviors/participation.py
+#: ./opengever/dossier/browser/forms.py
 msgid "warning_no_participants_selected"
 msgstr ""
-

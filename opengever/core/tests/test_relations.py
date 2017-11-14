@@ -70,6 +70,7 @@ EXPECTED_INTERFACES = [
     'opengever.document.document.IDocumentSchema',
     'opengever.dossier.behaviors.dossier.IDossierMarker',
     'opengever.dossier.behaviors.participation.IParticipationAwareMarker',
+    'opengever.dossier.behaviors.protect_dossier.IProtectDossierMarker',
     'opengever.dossier.businesscase.IBusinessCaseDossier',
     'opengever.dossier.dossiertemplate.behaviors.IRestrictAddableDossierTemplates',
     'opengever.inbox.forwarding.IForwarding',

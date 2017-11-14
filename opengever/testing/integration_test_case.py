@@ -482,3 +482,10 @@ class IntegrationTestCase(TestCase):
 
     def get_ogds_user(self, user):
         return ogds_service().fetch_user(user.getId())
+
+    def get_allowed_roles_and_users_for(self, obj):
+        """Returns the indexed value of 'allowedRolesAndUsers'
+        """
+        catalog = api.portal.get_tool('portal_catalog')
+        rid = catalog.getrid('/'.join(obj.getPhysicalPath()))
+        return catalog.getIndexDataForRID(rid).get('allowedRolesAndUsers')

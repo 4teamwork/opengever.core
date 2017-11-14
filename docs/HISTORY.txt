@@ -7,6 +7,8 @@ Changelog
 
 - SPV: Make the considerations field a trix field. [tarnap]
 - Don't escape description in overview twice for dossier templates. [deiferni]
+- Fix agenda items rendering on non-word meeting. [deiferni]
+- Add the "Protect dossier" functionality to a dossier. [elioschmutz]
 - Exclude the latest version in the bumblebee versioning warning logic. [Rotonen]
 - SPV word: Remove fields which are intended for no word version. [tarnap]
 - Add proper responsible for fixture objects. [elioschmutz]
