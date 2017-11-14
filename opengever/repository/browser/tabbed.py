@@ -49,3 +49,23 @@ class RepositoryRootTabbedView(GeverTabbedView):
             self.info_tab,
             self.journal_tab,
         ])
+
+
+class RepositoryFolderTabbedView(GeverTabbedView):
+    """Define the tabs available on a Repository Root."""
+
+    dossiers_tab = {
+        'id': 'dossiers',
+        'title': _(u'label_dossiers', default=u'Dossiers'),
+        }
+
+    info_tab = {
+        'id': 'sharing',
+        'title': _(u'label_info', default=u'Info'),
+        }
+
+    def _get_tabs(self):
+        return filter(None, [
+            self.dossiers_tab,
+            self.info_tab,
+        ])

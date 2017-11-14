@@ -85,6 +85,14 @@
       />
 
   <browser:page
+      for="opengever.repository.repositoryfolder.IRepositoryFolder"
+      name="tabbed_view"
+      class=".tabbed.RepositoryFolderTabbedView"
+      permission="zope2.View"
+      allowed_interface="ftw.tabbedview.interfaces.ITabbedViewEndpoints"
+      />
+
+  <browser:page
       for="*"
       name="primary_repository_root"
       class=".primary_repository_root.PrimaryRepositoryRoot"
