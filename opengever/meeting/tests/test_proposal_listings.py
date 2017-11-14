@@ -8,35 +8,40 @@ SUBMITTED_PROPOSAL = {
     'Meeting': '',
     'State': 'Submitted',
     'Comittee': u'Rechnungspr\xfcfungskommission',
-    'Title': u'Vertragsentwurf f\xfcr weitere Bearbeitung bewilligen'}
+    'Title': u'Vertragsentwurf f\xfcr weitere Bearbeitung bewilligen',
+    'Date of submission': '31.08.2016'}
 
 DRAFT_PROPOSAL = {
      'Decision number': '',
      'Meeting': '',
      'State': 'Pending',
      'Comittee': u'Kommission f\xfcr Verkehr',
-     'Title': u'Antrag f\xfcr Kreiselbau'}
+     'Title': u'Antrag f\xfcr Kreiselbau',
+     'Date of submission': ''}
 
 DECIDED_PROPOSAL = {
     'Decision number': '1',
     'Meeting': u'8. Sitzung der Rechnungspr\xfcfungskommission',
     'State': 'Decided',
     'Comittee': u'Rechnungspr\xfcfungskommission',
-    'Title': u'Initialvertrag f\xfcr Bearbeitung'}
+    'Title': u'Initialvertrag f\xfcr Bearbeitung',
+    'Date of submission': '31.08.2016'}
 
 SUBMITTED_WORD_PROPOSAL = {
     'Decision number': '',
     'Meeting': '',
     'State': 'Submitted',
     'Comittee': u'Rechnungspr\xfcfungskommission',
-    'Title': u'\xc4nderungen am Personalreglement'}
+    'Title': u'\xc4nderungen am Personalreglement',
+    'Date of submission': '31.08.2016'}
 
 DRAFT_WORD_PROPOSAL = {
     'Decision number': '',
     'Meeting': '',
     'State': 'Pending',
     'Comittee': u'Kommission f\xfcr Verkehr',
-    'Title': u'\xdcberarbeitung der GAV'}
+    'Title': u'\xdcberarbeitung der GAV',
+    'Date of submission': ''}
 
 
 def proposals_table(browser):

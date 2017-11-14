@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-11-13 15:23+0000\n"
+"POT-Creation-Date: 2017-11-14 12:39+0000\n"
 "PO-Revision-Date: 2017-06-22 09:02+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -589,6 +589,11 @@ msgstr "Date"
 #: ./opengever/meeting/tabs/membershiplisting.py
 msgid "column_date_from"
 msgstr "De"
+
+#. Default: "Date of submission"
+#: ./opengever/meeting/browser/documents/proposalstab.py
+msgid "column_date_of_submission"
+msgstr ""
 
 #. Default: "Date to"
 #: ./opengever/meeting/tabs/membershiplisting.py
