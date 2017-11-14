@@ -80,7 +80,7 @@ class NotificationBuilder(SqlObjectBuilder):
 
     def __init__(self, session):
         super(NotificationBuilder, self).__init__(session)
-        self.arguments['badge'] = True
+        self.arguments['is_badge'] = True
 
     def watcher(self, watcher):
         self.arguments['userid'] = watcher.actorid

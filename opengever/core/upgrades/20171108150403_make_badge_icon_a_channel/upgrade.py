@@ -40,12 +40,12 @@ class MakeBadgeIconAChannel(SchemaMigration):
     def add_badge_column(self):
         self.op.add_column(
             'notifications',
-            Column('badge', Boolean, default=False))
+            Column('is_badge', Boolean, default=False))
 
         notifications_table = table(
             "notifications",
             column("id"),
-            column("badge"),
+            column("is_badge"),
         )
 
-        self.execute(notifications_table.update().values(badge=True))
+        self.execute(notifications_table.update().values(is_badge=True))

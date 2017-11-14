@@ -6,4 +6,4 @@ class BadgeIconDispatcher(NotificationDispatcher):
     roles_key = 'badge_notification_roles'
 
     def dispatch_notification(self, notification):
-        notification.badge = True
+        notification.is_badge = True

@@ -483,5 +483,5 @@ class TestDispatchers(ActivityTestCase):
         peters_note = Notification.query.filter_by(userid='peter').one()
         hugos_note = Notification.query.filter_by(userid='hugo').one()
 
-        self.assertFalse(hugos_note.badge)
-        self.assertTrue(peters_note.badge)
+        self.assertFalse(hugos_note.is_badge)
+        self.assertTrue(peters_note.is_badge)

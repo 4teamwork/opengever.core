@@ -257,11 +257,11 @@ class TestListNotifications(FunctionalTestCase):
 
         create(Builder('notification')
                .having(activity=self.activity,
-                       userid=TEST_USER_ID, is_read=False, badge=False))
+                       userid=TEST_USER_ID, is_read=False, is_badge=False))
 
         create(Builder('notification')
                .having(activity=task_added,
-                       userid=TEST_USER_ID, is_read=False, badge=True))
+                       userid=TEST_USER_ID, is_read=False, is_badge=True))
 
         browser.login().open(self.portal, view="notifications/list")
         self.assertEquals(1, len(browser.json.get('notifications')))

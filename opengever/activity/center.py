@@ -165,7 +165,7 @@ class NotificationCenter(object):
 
         query = query.join(Notification.activity)
         if badge_only:
-            query = query.filter(Notification.badge.is_(True))
+            query = query.filter(Notification.is_badge.is_(True))
         query = query.order_by(order(sort_on))
         query = query.offset(offset).limit(limit)
         return query.options(contains_eager(Notification.activity)).all()
