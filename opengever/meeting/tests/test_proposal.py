@@ -307,6 +307,21 @@ class TestProposal(IntegrationTestCase):
             browser.css('.portalMessage.info a').first.get('href'))
 
     @browsing
+    def test_regression_submitted_proposal_title_synced_on_submission(self, browser):
+        """Test a regression for a proposal without attachments."""
+
+        self.login(self.dossier_responsible, browser)
+        proposal_model = self.draft_proposal.load_model()
+
+        browser.open(self.draft_proposal, view='tabbedview_view-overview')
+        browser.click_on('Submit')
+        statusmessages.assert_no_error_messages()
+        statusmessages.assert_message('Proposal successfully submitted.')
+
+        self.assertEqual(u'Antrag f\xfcr Kreiselbau',
+                         proposal_model.submitted_title)
+
+    @browsing
     def test_proposal_can_be_cancelled(self, browser):
         self.login(self.dossier_responsible, browser)
         self.assertEqual(Proposal.STATE_PENDING, self.draft_proposal.get_state())

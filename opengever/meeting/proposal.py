@@ -425,7 +425,6 @@ class SubmittedProposal(ProposalBase):
             id=cls.generate_submitted_proposal_id(proposal),
             container=container)
 
-        submitted_proposal.sync_model(proposal_model=proposal)
         return submitted_proposal
 
     @classmethod

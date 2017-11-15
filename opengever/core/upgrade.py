@@ -257,6 +257,9 @@ class SQLUpgradeStep(UpgradeStep):
         raise NotImplementedError()
 
     def execute(self, statement):
+        """Execute statement and make sure the datamanger sees the changes."""
+
+        mark_changed(self.session)
         return self.connection.execute(statement)
 
     def _setup_db_connection(self):

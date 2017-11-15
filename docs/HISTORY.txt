@@ -5,6 +5,7 @@ Changelog
 2017.6.5 (unreleased)
 ---------------------
 
+- Fix syncing the submitted proposal title to sql. [deiferni]
 - SPV: Fix member links in committee overview. [tarnap]
 - SPV: Make the considerations field a trix field. [tarnap]
 - Don't escape description in overview twice for dossier templates. [deiferni]
