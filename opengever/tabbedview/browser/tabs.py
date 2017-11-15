@@ -386,3 +386,17 @@ class DocumentRedirector(BrowserView):
 
         return self.context.REQUEST.RESPONSE.redirect(
             self.context.absolute_url())
+
+
+class SablonTemplateRedirector(BrowserView):
+    """Redirector View is called after a Sablon Template is created,
+    """
+
+    def __call__(self):
+        referer = self.context.REQUEST.environ.get('HTTP_REFERER')
+        if '++add++opengever.meeting.sablontemplate' in referer:
+            return self.context.REQUEST.RESPONSE.redirect(
+                '%s#sablontemplates-proxy' % self.context.absolute_url())
+
+        return self.context.REQUEST.RESPONSE.redirect(
+            self.context.absolute_url())

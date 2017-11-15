@@ -14,6 +14,13 @@
       />
 
   <browser:page
+      for="plone.dexterity.interfaces.IDexterityContainer"
+      name="sablon-template-redirector"
+      class=".tabs.SablonTemplateRedirector"
+      permission="cmf.AddPortalContent"
+      />
+
+  <browser:page
       for="*"
       name="personal_overview"
       class=".personal_overview.PersonalOverview"
