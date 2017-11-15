@@ -85,11 +85,11 @@ def create_test_run_params():
 
     # Manually ordered per metrification
     standalone_modules = (
-        'document',
-        'base',
-        'task',
-        'dossier',
-        'disposition',
+        'opengever.document',
+        'opengever.base',
+        'opengever.task',
+        'opengever.dossier',
+        'opengever.disposition',
         )
 
     # Manually ordered per metrification
