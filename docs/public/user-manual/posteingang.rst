@@ -1,5 +1,5 @@
-Posteingänge erfassen und weiterleiten
-======================================
+Nutzung Eingangskorb
+====================
 
 Funktion Eingangskorb
 ---------------------
