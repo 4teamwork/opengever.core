@@ -220,20 +220,6 @@
             "format": "date",
             "description": "",
             "_zope_schema_type": "Date"
-        },
-        "reading": {
-            "type": "array",
-            "title": "Lesend",
-            "description": "W\u00e4hlen Sie Benutzer und Gruppen aus, welche im Dossier ausschliesslich lesend Zugriff erhalten sollen.",
-            "_zope_schema_type": "List",
-            "default": null
-        },
-        "reading_and_writing": {
-            "type": "array",
-            "title": "Lesend & schreibend",
-            "description": "W\u00e4hlen Sie Benutzer und Gruppen aus, welche im Dossier lesend und schreibend Zugriff erhalten sollen. Die Benutzer dieser Gruppe werden dazu berechtigt, das Dossier zu bearbeiten, Inhalte zu erstellen und zu bearbeiten.",
-            "_zope_schema_type": "List",
-            "default": null
         }
     },
     "required": [
@@ -266,8 +252,6 @@
         "archival_value_annotation",
         "custody_period",
         "date_of_cassation",
-        "date_of_submission",
-        "reading",
-        "reading_and_writing"
+        "date_of_submission"
     ]
 }

@@ -72,6 +72,7 @@ class BaseMultipleSourcesQuerySource(BaseQuerySoure):
         raise NotImplemented
 
     def getTerm(self, value):
+        term = None
         for source in self.source_instances:
             try:
                 term = source.getTerm(value)
@@ -87,6 +88,7 @@ class BaseMultipleSourcesQuerySource(BaseQuerySoure):
         return term
 
     def getTermByToken(self, token):
+        term = None
         for source in self.source_instances:
             try:
                 term = source.getTerm(token)
@@ -426,14 +428,15 @@ class AllUsersSource(AllUsersInboxesAndTeamsSource):
         if not token:
             raise LookupError('A token "userid" is required.')
 
-        try:
-            value = token
-            return self.getTerm(value)
-        except orm.exc.NoResultFound:
-            raise LookupError
+        value = token
+        return self.getTerm(value)
 
     def getTerm(self, value):
-        user = self.base_query.filter(User.userid == value).one()
+        try:
+            user = self.base_query.filter(User.userid == value).one()
+        except orm.exc.NoResultFound:
+            raise LookupError(
+                'No row was user was found with userid: {}'.format(value))
 
         token = value
         title = u'{} ({})'.format(user.fullname(),

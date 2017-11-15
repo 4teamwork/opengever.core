@@ -101,6 +101,10 @@ IGNORED_FIELDS = [
     'opengever.document.behaviors.metadata.IDocumentMetadata.thumbnail',
     'opengever.dossier.behaviors.dossier.IDossier.temporary_former_reference_number',  # noqa
     'opengever.mail.mail.IMail.message_source',
+    'opengever.dossier.behaviors.protect_dossier.IProtectDossier.reading',
+    'opengever.dossier.behaviors.protect_dossier.IProtectDossier.reading_and_writing',
+    'opengever.dossier.behaviors.protect_dossier.IProtectDossier.dossier_manager',
+
 ]
 
 # Dropped from OGGBundle schema dumps

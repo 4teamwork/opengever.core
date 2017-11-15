@@ -94,6 +94,7 @@ DOSSIER_DEFAULTS = {
     'start': FROZEN_TODAY,
     'reading': [],
     'reading_and_writing': [],
+    'dossier_manager': None,
 }
 DOSSIER_FORM_DEFAULTS = {
     'responsible': TEST_USER_ID,
