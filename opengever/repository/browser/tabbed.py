@@ -75,8 +75,19 @@ class RepositoryFolderTabbedView(GeverTabbedView):
         'title': _(u'label_info', default=u'Info'),
         }
 
+    @property
+    def blocked_local_roles_tab(self):
+        if api.user.has_permission('opengever.sharing: List Protected Objects', obj=self.context):
+            return {
+                'id': 'blocked-local-roles',
+                'title': _(u'label_blocked_local_roles', default=u'Protected Objects'),
+                }
+
+        return None
+
     def _get_tabs(self):
         return filter(None, [
             self.dossiers_tab,
             self.info_tab,
+            self.blocked_local_roles_tab,
         ])
