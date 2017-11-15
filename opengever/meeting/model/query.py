@@ -190,6 +190,9 @@ class MeetingQuery(BaseQuery):
     def all_upcoming_meetings(self, committee):
         return self._upcoming_meetings(committee).all()
 
+    def all_closed_meetings(self, committee):
+        return self._past_meetings(committee).all()
+
     def get_next_meeting(self, committee):
         return self._upcoming_meetings(committee).first()
 

@@ -12,13 +12,13 @@ class CommitteeOverview(BrowserView, GeverTabMixin):
 
     def boxes(self):
         items = [
-            [{'id': 'period',
-              'label': _('label_current_period', default=u'Current Period'),
-              'content': [self.period()],
-              'href': ''},
-             {'id': 'upcoming_meetings',
+            [{'id': 'upcoming_meetings',
               'label': _('label_upcoming_meetings', default=u'Upcoming meetings'),
               'content': self.upcoming_meetings(),
+              'href': 'meetings'},
+             {'id': 'closed_meetings',
+              'label': _('label_closed_meetings', default=u'Closed meetings'),
+              'content': self.closed_meetings(),
               'href': 'meetings'}],
 
             [{'id': 'unscheduled_proposals',
@@ -27,16 +27,25 @@ class CommitteeOverview(BrowserView, GeverTabMixin):
               'content': self.unscheduled_proposals(),
               'href': 'submittedproposals'}],
 
-            [{'id': 'current_members',
+            [{'id': 'period',
+              'label': _('label_current_period', default=u'Current Period'),
+              'content': [self.period()],
+              'href': ''},
+             {'id': 'current_members',
               'label': _('label_current_members',
                          default=u'Current members'),
               'content': self.current_members(),
-              'href': 'memberships'}]]
+              'href': 'memberships'}],
+        ]
 
         return items
 
     def upcoming_meetings(self):
         meetings = self.context.get_upcoming_meetings()
+        return [meeting.get_link() for meeting in meetings[:10]]
+
+    def closed_meetings(self):
+        meetings = self.context.get_closed_meetings()
         return [meeting.get_link() for meeting in meetings[:10]]
 
     def unscheduled_proposals(self):
