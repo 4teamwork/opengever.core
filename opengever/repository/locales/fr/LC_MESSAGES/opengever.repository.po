@@ -115,6 +115,11 @@ msgstr "Historique"
 msgid "label_location"
 msgstr "Site"
 
+#. Default: "Protected Objects"
+#: ./opengever/repository/browser/tabbed.py
+msgid "label_blocked_local_roles"
+msgstr ""
+
 #. Default: "Overview"
 #: ./opengever/repository/browser/tabbed.py
 msgid "label_overview"
@@ -221,4 +226,3 @@ msgstr "Tâches"
 #: ./opengever/repository/browser/templates/referenceprefixmanager.pt
 msgid "unlock"
 msgstr "Libérer"
-

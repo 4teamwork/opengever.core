@@ -116,6 +116,11 @@ msgstr "Journal"
 msgid "label_location"
 msgstr "Standort"
 
+#. Default: "Protected Objects"
+#: ./opengever/repository/browser/tabbed.py
+msgid "label_blocked_local_roles"
+msgstr "Geschützte Objekte"
+
 #. Default: "Overview"
 #: ./opengever/repository/browser/tabbed.py
 msgid "label_overview"
@@ -222,4 +227,3 @@ msgstr "Aufgaben"
 #: ./opengever/repository/browser/templates/referenceprefixmanager.pt
 msgid "unlock"
 msgstr "Freigeben"
-

@@ -41,12 +41,23 @@ class RepositoryRootTabbedView(GeverTabbedView):
 
         return None
 
+    @property
+    def blocked_local_roles_tab(self):
+        if api.user.has_permission('opengever.sharing: List Protected Objects', obj=self.context):
+            return {
+                'id': 'blocked-local-roles',
+                'title': _(u'label_blocked_local_roles', default=u'Protected Objects'),
+                }
+
+        return None
+
     def _get_tabs(self):
         return filter(None, [
             self.overview_tab,
             self.dossiers_tab,
             self.dispositions_tab,
             self.info_tab,
+            self.blocked_local_roles_tab,
             self.journal_tab,
         ])
 
