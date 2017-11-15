@@ -90,21 +90,6 @@ class DossierEditForm(edit.DefaultEditForm):
                                   ['IClassification.public_trial',
                                    'IClassification.public_trial_statement'])
 
-    def render(self):
-        if IProtectDossierMarker.providedBy(self.context):
-            dossier_protection = IProtectDossier(self.context)
-            if dossier_protection.is_dossier_protected() and \
-                    dossier_protection.need_update() and \
-                    not dossier_protection.check_local_role_consistency():
-                IStatusMessage(self.request).addStatusMessage(
-                    _(u'dossier_protection_inconsistency_warning',
-                        default="The local roles do not match with the current "
-                                "dossier protection settings. If you save this "
-                                "form, the local roles will be overridden."),
-                    type="warning")
-
-        return super(DossierEditForm, self).render()
-
     @property
     def label(self):
         if IDossierMarker.providedBy(aq_parent(aq_inner(self.context))):
@@ -116,9 +101,10 @@ class DossierEditForm(edit.DefaultEditForm):
     def applyChanges(self, data):
         changes = super(DossierEditForm, self).applyChanges(data)
 
-        # CUSTOM: Handle dossier protection after successfully adding
-        # the dossier
-        if IProtectDossierMarker.providedBy(self.context):
+        # CUSTOM: Handle dossier protection after editiing the dossier.
+        # Only update localroles if the user changed one of the IProtectDossier
+        # fields
+        if changes.get(IProtectDossier):
             IProtectDossier(self.context).protect()
 
         return changes

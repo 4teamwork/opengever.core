@@ -56,126 +56,64 @@ class TestProtectDossier(IntegrationTestCase):
                                     obj=self.dossier))
 
     @browsing
-    def test_show_inconsistency_message_if_role_removed(self, browser):
+    def test_do_not_update_localroles_if_user_did_not_change_protection_fields(self, browser):
         self.login(self.dossier_manager, browser)
 
-        dossier_protector = IProtectDossier(self.dossier)
-        dossier_protector.reading_and_writing = ['kathi.barfuss']
-        dossier_protector.dossier_manager = self.dossier_manager.getId()
-        dossier_protector.protect()
-
-        # Remove Roles
-        new_roles = deepcopy(dossier_protector.READING_AND_WRITING_ROLES)
-        new_roles.pop(0)
-        self.dossier.manage_setLocalRoles(self.regular_user.getId(), new_roles)
-
-        browser.open(self.dossier, view="@@edit")
-
-        self.assertEqual(1, len(statusmessages.warning_messages()))
-
+        browser.open(self.leaf_repofolder)
+        factoriesmenu.add(u'Business Case Dossier')
+        browser.fill({'Title': 'My Dossier'})
+        form = browser.find_form_by_field('Reading')
+        form.find_widget('Reading and writing').fill([self.regular_user.getId()])
         browser.click_on('Save')
-        browser.open(self.dossier, view="@@edit")
+        new_dossier = browser.context
+        new_dossier.manage_setLocalRoles('projekt_a', ('Contributor', ))
 
-        statusmessages.assert_no_messages()
+        self.assert_local_roles(
+            IProtectDossier(new_dossier).READING_AND_WRITING_ROLES,
+            self.regular_user.getId(), new_dossier)
 
-    @browsing
-    def test_show_inconsistency_message_if_role_added(self, browser):
-        self.login(self.dossier_manager, browser)
+        self.assert_local_roles(['Contributor'], 'projekt_a', new_dossier)
 
-        dossier_protector = IProtectDossier(self.dossier)
-        dossier_protector.reading_and_writing = ['kathi.barfuss']
-        dossier_protector.dossier_manager = self.dossier_manager.getId()
-        dossier_protector.protect()
-
-        # Add Roles
-        new_roles = deepcopy(dossier_protector.READING_AND_WRITING_ROLES)
-        new_roles.append('Manager')
-        self.dossier.manage_setLocalRoles(self.regular_user.getId(), new_roles)
-
-        browser.open(self.dossier, view="@@edit")
-
-        self.assertEqual(1, len(statusmessages.warning_messages()))
-
+        browser.open(new_dossier, view="@@edit")
         browser.click_on('Save')
-        browser.open(self.dossier, view="@@edit")
 
-        statusmessages.assert_no_messages()
+        self.assert_local_roles(
+            IProtectDossier(new_dossier).READING_AND_WRITING_ROLES,
+            self.regular_user.getId(), new_dossier)
+
+        self.assert_local_roles(['Contributor'], 'projekt_a', new_dossier)
 
     @browsing
-    def test_show_inconsistency_message_if_principal_added(self, browser):
+    def test_update_localroles_if_user_has_changed_protection_fields(self, browser):
         self.login(self.dossier_manager, browser)
 
-        dossier_protector = IProtectDossier(self.dossier)
-        dossier_protector.reading_and_writing = ['kathi.barfuss']
-        dossier_protector.dossier_manager = self.dossier_manager.getId()
-        dossier_protector.protect()
-
-        # Add Principal
-        self.dossier.manage_setLocalRoles(self.meeting_user.getId(), ('Reader', ))
-
-        browser.open(self.dossier, view="@@edit")
-
-        self.assertEqual(1, len(statusmessages.warning_messages()))
-
+        browser.open(self.leaf_repofolder)
+        factoriesmenu.add(u'Business Case Dossier')
+        browser.fill({'Title': 'My Dossier'})
+        form = browser.find_form_by_field('Reading')
+        form.find_widget('Reading and writing').fill(self.regular_user.getId())
         browser.click_on('Save')
-        browser.open(self.dossier, view="@@edit")
+        new_dossier = browser.context
+        new_dossier.manage_setLocalRoles('projekt_a', ('Contributor', ))
 
-        statusmessages.assert_no_messages()
+        self.assert_local_roles(
+            IProtectDossier(new_dossier).READING_AND_WRITING_ROLES,
+            self.regular_user.getId(), new_dossier)
 
-    @browsing
-    def test_show_inconsistency_message_if_principal_removed(self, browser):
-        self.login(self.dossier_manager, browser)
+        self.assert_local_roles(['Contributor'], 'projekt_a', new_dossier)
 
-        dossier_protector = IProtectDossier(self.dossier)
-        dossier_protector.reading_and_writing = ['kathi.barfuss']
-        dossier_protector.dossier_manager = self.dossier_manager.getId()
-        dossier_protector.protect()
-
-        # Remove Principal
-        self.dossier.manage_delLocalRoles([self.regular_user.getId()])
-
-        browser.open(self.dossier, view="@@edit")
-
-        self.assertEqual(1, len(statusmessages.warning_messages()))
-
+        browser.open(new_dossier, view="@@edit")
+        browser.fill({'Title': 'My new Dossier'})
+        form = browser.find_form_by_field('Reading')
+        form.find_widget('Reading and writing').fill([])
+        form.find_widget('Reading').fill([self.regular_user.getId()])
         browser.click_on('Save')
-        browser.open(self.dossier, view="@@edit")
 
-        statusmessages.assert_no_messages()
+        self.assert_local_roles(
+            IProtectDossier(new_dossier).READING_ROLES,
+            self.regular_user.getId(), new_dossier)
 
-    @browsing
-    def test_do_not_show_inconsistency_message_if_the_dossier_is_not_protected(self, browser):
-        self.login(self.dossier_manager, browser)
-
-        browser.open(self.dossier, view="@@edit")
-
-        self.repository_root.manage_setLocalRoles(self.regular_user.getId(), ('DossierManager', ))
-
-        statusmessages.assert_no_messages()
-
-    @browsing
-    def test_do_not_show_inconsistency_message_if_there_is_no_inconsistency(self, browser):
-        self.login(self.dossier_manager, browser)
-
-        dossier_protector = IProtectDossier(self.dossier)
-        dossier_protector.reading = ['kathi.barfuss']
-        dossier_protector.dossier_manager = self.dossier_manager.getId()
-        dossier_protector.protect()
-
-        browser.open(self.dossier, view="@@edit")
-
-        statusmessages.assert_no_messages()
-
-    @browsing
-    def test_do_not_show_inconsistency_message_for_users_without_dossier_manager_role(self, browser):
-        self.login(self.regular_user, browser)
-
-        browser.open(self.dossier, view="@@edit")
-
-        statusmessages.assert_no_messages()
-
-
-class TestProtectDossierBehavior(IntegrationTestCase):
+        self.assert_local_roles([], 'projekt_a', new_dossier)
 
     @browsing
     def test_regular_user_cannot_see_protect_dossier_fields(self, browser):
