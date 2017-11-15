@@ -37,6 +37,7 @@ class TestSubmittedProposal(IntegrationTestCase):
             model.submitted_physical_path)
         self.assertEqual(Proposal.STATE_SUBMITTED, self.proposal.get_state())
         self.assert_workflow_state('proposal-state-submitted', self.proposal)
+        self.assertIsNotNone(self.proposal.date_of_submission)
 
         browser.visit(self.submitted_proposal, view='tabbedview_view-overview')
         browser.click_on('Reject')
@@ -47,7 +48,9 @@ class TestSubmittedProposal(IntegrationTestCase):
         self.assertIsNone(model.submitted_physical_path)
         self.assertIsNone(model.submitted_int_id)
         self.assertIsNone(model.submitted_admin_unit_id)
+        self.assertIsNone(model.date_of_submission)
         self.assertEqual(Proposal.STATE_PENDING, self.proposal.get_state())
+        self.assertIsNone(self.proposal.date_of_submission)
         self.assert_workflow_state('proposal-state-active', self.proposal)
         with self.assertRaises(KeyError):
             self.submitted_proposal

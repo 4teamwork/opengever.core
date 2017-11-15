@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-31 13:55+0000\n"
+"POT-Creation-Date: 2017-11-14 12:39+0000\n"
 "PO-Revision-Date: 2017-10-23 18:40+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -255,10 +255,6 @@ msgstr "Sitzungsdossier"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "Meeting number"
 msgstr "Sitzungsnummer"
-
-#: ./opengever/meeting/browser/meetings/meeting.py
-msgid "Meeting on ${date}"
-msgstr "Sitzung vom ${date}"
 
 #: ./opengever/meeting/browser/meetings/templates/protocol.pt
 msgid "Meetinginformation"
@@ -591,6 +587,11 @@ msgstr "Datum"
 #: ./opengever/meeting/tabs/membershiplisting.py
 msgid "column_date_from"
 msgstr "Von"
+
+#. Default: "Date of submission"
+#: ./opengever/meeting/browser/documents/proposalstab.py
+msgid "column_date_of_submission"
+msgstr "Eingereicht am"
 
 #. Default: "Date to"
 #: ./opengever/meeting/tabs/membershiplisting.py
@@ -972,6 +973,11 @@ msgstr "Aktuelle Periode"
 #: ./opengever/meeting/browser/templates/member.pt
 msgid "label_date_from"
 msgstr "Von"
+
+#. Default: "Date of submission"
+#: ./opengever/meeting/proposal.py
+msgid "label_date_of_submission"
+msgstr "Eingereicht am"
 
 #. Default: "End date"
 #: ./opengever/meeting/browser/memberships.py

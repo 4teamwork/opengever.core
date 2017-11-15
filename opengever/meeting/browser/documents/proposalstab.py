@@ -1,3 +1,4 @@
+from ftw.table import helper
 from ftw.table.interfaces import ITableSource
 from ftw.table.interfaces import ITableSourceConfig
 from opengever.meeting import _
@@ -105,6 +106,14 @@ class ProposalListingTab(FilteredListingTab):
              'sortable': False,
              'groupable': False,
              'width': 180},
+
+            {'column': 'date_of_submission',
+             'column_title': _(u'column_date_of_submission',
+                               default=u'Date of submission'),
+             'transform': helper.readable_date,
+             'sortable': True,
+             'groupable': True,
+             'width': 120},
 
         )
 

@@ -1,6 +1,7 @@
 from AccessControl import getSecurityManager
 from Acquisition import aq_inner
 from Acquisition import aq_parent
+from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -261,6 +262,8 @@ class TestProposal(IntegrationTestCase):
         self.assertEqual(Proposal.STATE_PENDING, self.draft_proposal.get_state())
         self.assert_workflow_state('proposal-state-active', self.draft_proposal)
 
+        self.assertIsNone(self.draft_proposal.date_of_submission)
+
         browser.open(self.draft_proposal, view='tabbedview_view-overview')
         browser.click_on('Submit')
         statusmessages.assert_no_error_messages()
@@ -268,6 +271,7 @@ class TestProposal(IntegrationTestCase):
 
         self.assertEqual(Proposal.STATE_SUBMITTED, self.draft_proposal.get_state())
         self.assert_workflow_state('proposal-state-submitted', self.draft_proposal)
+        self.assertEqual(date.today(), self.draft_proposal.date_of_submission)
 
         # submitted proposal created
         self.login(self.committee_responsible, browser)
@@ -278,6 +282,7 @@ class TestProposal(IntegrationTestCase):
             proposal_model.submitted_physical_path.encode('utf-8'))
         self.assertEqual(self.empty_committee,
                          aq_parent(aq_inner(submitted_proposal)))
+        self.assertEqual(date.today(), submitted_proposal.date_of_submission)
 
         # model synced
         self.assertEqual(proposal_model, submitted_proposal.load_model())
@@ -286,6 +291,7 @@ class TestProposal(IntegrationTestCase):
         self.assertEqual('submitted', proposal_model.workflow_state)
         self.assertEqual(u'Antrag f\xfcr Kreiselbau',
                          proposal_model.submitted_title)
+        self.assertEqual(date.today(), proposal_model.date_of_submission)
 
         # document copied
         self.assertEqual(1, len(submitted_proposal.get_documents()))

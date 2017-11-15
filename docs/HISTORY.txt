@@ -7,6 +7,7 @@ Changelog
 
 - Fix syncing the submitted proposal title to sql. [deiferni]
 - SPV: Fix member links in committee overview. [tarnap]
+- Add date of submission to proposals. [deiferni]
 - SPV: Make the considerations field a trix field. [tarnap]
 - Don't escape description in overview twice for dossier templates. [deiferni]
 - Add new field dossier_manager to the IProtectDossier behavior to set the dossier-manager manually. [elisochmutz]
