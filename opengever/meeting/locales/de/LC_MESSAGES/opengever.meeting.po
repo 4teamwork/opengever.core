@@ -591,7 +591,7 @@ msgstr "Von"
 #. Default: "Date of submission"
 #: ./opengever/meeting/browser/documents/proposalstab.py
 msgid "column_date_of_submission"
-msgstr "Einreichungsdatum"
+msgstr "Eingereicht am"
 
 #. Default: "Date to"
 #: ./opengever/meeting/tabs/membershiplisting.py
@@ -977,7 +977,7 @@ msgstr "Von"
 #. Default: "Date of submission"
 #: ./opengever/meeting/proposal.py
 msgid "label_date_of_submission"
-msgstr "Einreichungsdatum"
+msgstr "Eingereicht am"
 
 #. Default: "End date"
 #: ./opengever/meeting/browser/memberships.py
