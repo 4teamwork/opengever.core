@@ -157,7 +157,7 @@ class TestDefaultDocumentIndexer(MockTestCase):
 
         # Sample document containing our file
         doc1 = self.mocker.mock()
-        self.expect(doc1.file).result(sample_file).count(1, None)
+        self.expect(doc1.get_file()).result(sample_file).count(1, None)
 
         # datastream returned by transform
         expected_fulltext = 'FULLTEXT'
@@ -195,7 +195,7 @@ class TestDefaultDocumentIndexer(MockTestCase):
 
         # Sample document containing our file
         doc1 = self.mocker.mock()
-        self.expect(doc1.file).result(sample_file).count(1, None)
+        self.expect(doc1.get_file()).result(sample_file).count(1, None)
 
         def raise_transform_exception(*args, **kwargs):
             raise Exception("This transform failed!")

@@ -165,6 +165,7 @@ setup(name='opengever.core',
           'z3c.formwidget.query',
           'z3c.relationfield',
           'z3c.saconfig',
+          'z3c.unconfigure',
           'zc.relation',
           'zope.globalrequest',
           # -*- Extra requirements: -*-

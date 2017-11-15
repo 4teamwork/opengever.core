@@ -1,0 +1,16 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    i18n_domain="opengever.mail">
+
+  <include package="z3c.unconfigure" file="meta.zcml" />
+
+  <unconfigure>
+
+    <adapter
+        for="ftw.mail.mail.IMail"
+        factory="ftw.mail.mail.SearchableTextExtender"
+        />
+
+  </unconfigure>
+
+</configure>
