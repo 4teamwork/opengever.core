@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-02 12:51+0000\n"
+"POT-Creation-Date: 2017-11-15 15:57+0000\n"
 "PO-Revision-Date: 2014-09-04 01:03+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -312,6 +312,11 @@ msgstr "Fehler"
 msgid "message_title_info"
 msgstr "Information"
 
+#. Default: "Warning"
+#: ./opengever/base/response.py
+msgid "message_title_warning"
+msgstr "Warnung"
+
 #. Default: "Can't paste items; the clipboard is emtpy"
 #: ./opengever/base/browser/paste.py
 msgid "msg_empty_clipboard"
@@ -416,4 +421,3 @@ msgstr "Nicht geprüft"
 #: opengever/repository/classification.py
 msgid "unprotected"
 msgstr "Nicht klassifiziert"
-

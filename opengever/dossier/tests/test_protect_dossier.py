@@ -307,7 +307,7 @@ class TestProtectDossier(IntegrationTestCase):
              'user:{}'.format(self.regular_user.getId())],
             self.get_allowed_roles_and_users_for(self.dossier))
 
-    def test_check_protect_dossier_consistency_returns_success_if_no_inconsistency(self):
+    def test_check_protect_dossier_consistency_returns_no_messages_if_no_inconsistency(self):
         self.login(self.dossier_manager)
 
         dossier_protector = IProtectDossier(self.dossier)
@@ -316,7 +316,7 @@ class TestProtectDossier(IntegrationTestCase):
         view = getMultiAdapter((self.dossier, self.request),
                                name="check_protect_dossier_consistency")
 
-        self.assertTrue(json.loads(view()).get('success'))
+        self.assertIsNone(json.loads(view()).get('messages'))
 
     def test_check_protect_dossier_consistency_returns_error_msg_if_inconsistent(self):
         self.login(self.dossier_manager)
@@ -328,8 +328,7 @@ class TestProtectDossier(IntegrationTestCase):
         view = getMultiAdapter((self.dossier, self.request),
                                name="check_protect_dossier_consistency")
 
-        self.assertFalse(json.loads(view()).get('success'))
-        self.assertItemsEqual(['success', 'text'], json.loads(view()).keys())
+        self.assertEqual(1, len(json.loads(view()).get('messages')))
 
     def assert_local_roles(self, excpected_roles, username, context):
         current_roles = []

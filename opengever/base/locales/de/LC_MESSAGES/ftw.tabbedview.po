@@ -229,4 +229,3 @@ msgstr "OGDS"
 
 msgid "versions"
 msgstr "Versionen"
-

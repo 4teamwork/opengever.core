@@ -98,7 +98,7 @@ class DossierEditForm(edit.DefaultEditForm):
     def applyChanges(self, data):
         changes = super(DossierEditForm, self).applyChanges(data)
 
-        # CUSTOM: Handle dossier protection after editiing the dossier.
+        # CUSTOM: Handle dossier protection after editing the dossier.
         # Only update localroles if the user changed one of the IProtectDossier
         # fields
         if changes.get(IProtectDossier):

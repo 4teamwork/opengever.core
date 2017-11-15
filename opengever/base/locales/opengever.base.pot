@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-02 12:51+0000\n"
+"POT-Creation-Date: 2017-11-15 15:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -308,6 +308,11 @@ msgstr ""
 msgid "message_title_info"
 msgstr ""
 
+#. Default: "Warning"
+#: ./opengever/base/response.py
+msgid "message_title_warning"
+msgstr ""
+
 #. Default: "Can't paste items; the clipboard is emtpy"
 #: ./opengever/base/browser/paste.py
 msgid "msg_empty_clipboard"
@@ -411,4 +416,3 @@ msgstr ""
 #: opengever/repository/classification.py
 msgid "unprotected"
 msgstr ""
-

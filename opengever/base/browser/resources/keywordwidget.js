@@ -53,23 +53,21 @@
             }
         };
     }
-    function showConsistencyWarning(text) {
+    function showConsistencyWarning(message) {
         if ($(".protectDossierConsistencyMessage").length > 0) {
-            // Consistency waring already exists
+            // Consistency warning already exists
             return;
         }
 
-        var type = "warning";
+        var portalMessage = $("<dl />");
+        portalMessage.addClass("portalMessage");
+        portalMessage.addClass(message.messageClass);
+        portalMessage.addClass("protectDossierConsistencyMessage");
 
-        var message = $("<dl />");
-        message.addClass("portalMessage");
-        message.addClass(type);
-        message.addClass("protectDossierConsistencyMessage");
+        portalMessage.append($("<dt />").text(message.messageTitle));
+        portalMessage.append($("<dd />").text(message.message));
 
-        message.append($("<dt />").text(type));
-        message.append($("<dd />").text(text));
-
-        $("#content").before(message);
+        $("#content").before(portalMessage);
     }
 
     $(document).on("ftwKeywordWidgetInit", function() {
@@ -83,11 +81,11 @@
           widget.on("change", function(e) {
               var url = $("base").attr("href") + "@@check_protect_dossier_consistency";
               $.get(url, function(data) {
-                  if (data.success) {
+                  if (!data.messages) {
                       // No consistency error
                       return;
                   }
-                  showConsistencyWarning(data.text);
+                  showConsistencyWarning(data.messages[0]);
               });
           });
       }

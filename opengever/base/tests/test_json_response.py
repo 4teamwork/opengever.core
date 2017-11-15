@@ -10,6 +10,7 @@ class TestUnitJSONResponse(FunctionalTestCase):
         super(TestUnitJSONResponse, self).setUp()
         self.response = JSONResponse(self.request)
         self.info_message = _('infomessage')
+        self.warning_message = _('warningmessage')
         self.error_message = _('errormessage')
 
     def test_empty_jsonresponse(self):
@@ -21,6 +22,16 @@ class TestUnitJSONResponse(FunctionalTestCase):
                         {'messageClass': 'info',
                          'messageTitle': 'Information',
                          'message': 'infomessage',
+                        }
+                    ]}
+                ))
+
+    def test_warning_message(self):
+        self.assertEqual(self.response.warning(self.warning_message).dump(),
+         json.dumps({'messages': [
+                        {'messageClass': 'warning',
+                         'messageTitle': 'Warning',
+                         'message': 'warningmessage',
                         }
                     ]}
                 ))
