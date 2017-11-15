@@ -5,6 +5,7 @@ Changelog
 2017.6.5 (unreleased)
 ---------------------
 
+- SPV: Sort meetings by date. [tarnap]
 - Fix syncing the submitted proposal title to sql. [deiferni]
 - SPV: Fix member links in committee overview. [tarnap]
 - Add date of submission to proposals. [deiferni]
