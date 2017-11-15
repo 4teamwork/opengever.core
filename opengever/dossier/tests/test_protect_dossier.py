@@ -1,7 +1,5 @@
-from copy import deepcopy
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
-from ftw.testbrowser.pages import statusmessages
 from opengever.dossier.behaviors.protect_dossier import IProtectDossier
 from opengever.testing import IntegrationTestCase
 from plone import api
