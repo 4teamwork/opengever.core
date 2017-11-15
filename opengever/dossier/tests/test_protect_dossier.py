@@ -5,6 +5,8 @@ from ftw.testbrowser.pages import statusmessages
 from opengever.dossier.behaviors.protect_dossier import IProtectDossier
 from opengever.testing import IntegrationTestCase
 from plone import api
+from zope.component import getMultiAdapter
+import json
 
 
 class TestProtectDossier(IntegrationTestCase):
@@ -306,6 +308,30 @@ class TestProtectDossier(IntegrationTestCase):
              'user:{}'.format(self.dossier_manager.getId()),
              'user:{}'.format(self.regular_user.getId())],
             self.get_allowed_roles_and_users_for(self.dossier))
+
+    def test_check_protect_dossier_consistency_returns_success_if_no_inconsistency(self):
+        self.login(self.dossier_manager)
+
+        dossier_protector = IProtectDossier(self.dossier)
+        dossier_protector.reading = [self.regular_user.getId()]
+        dossier_protector.protect()
+        view = getMultiAdapter((self.dossier, self.request),
+                               name="check_protect_dossier_consistency")
+
+        self.assertTrue(json.loads(view()).get('success'))
+
+    def test_check_protect_dossier_consistency_returns_error_msg_if_inconsistent(self):
+        self.login(self.dossier_manager)
+
+        dossier_protector = IProtectDossier(self.dossier)
+        dossier_protector.reading = [self.regular_user.getId()]
+        dossier_protector.protect()
+        self.dossier.manage_setLocalRoles(self.regular_user.getId(), ('DossierManager', ))
+        view = getMultiAdapter((self.dossier, self.request),
+                               name="check_protect_dossier_consistency")
+
+        self.assertFalse(json.loads(view()).get('success'))
+        self.assertItemsEqual(['success', 'text'], json.loads(view()).keys())
 
     def assert_local_roles(self, excpected_roles, username, context):
         current_roles = []

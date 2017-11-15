@@ -53,8 +53,43 @@
             }
         };
     }
+    function showConsistencyWarning(text) {
+        if ($(".protectDossierConsistencyMessage").length > 0) {
+            // Consistency waring already exists
+            return;
+        }
+
+        var type = "warning";
+
+        var message = $("<dl />");
+        message.addClass("portalMessage");
+        message.addClass(type);
+        message.addClass("protectDossierConsistencyMessage");
+
+        message.append($("<dt />").text(type));
+        message.append($("<dd />").text(text));
+
+        $("#content").before(message);
+    }
 
     $(document).on("ftwKeywordWidgetInit", function() {
         window.ftwKeywordWidget.registerTemplate("usersAndGroups", usersAndGroupsTemplate);
+    });
+
+    $(document).on("ftwKeywordWidgetInitWidget", function (e, widget) {
+      if (["form-widgets-IProtectDossier-reading",
+           "form-widgets-IProtectDossier-reading_and_writing",
+           "form-widgets-IProtectDossier-dossier_manager"].indexOf(widget.attr("id")) >= 0) {
+          widget.on("change", function(e) {
+              var url = $("base").attr("href") + "@@check_protect_dossier_consistency";
+              $.get(url, function(data) {
+                  if (data.success) {
+                      // No consistency error
+                      return;
+                  }
+                  showConsistencyWarning(data.text);
+              });
+          });
+      }
     });
 })(jQuery);

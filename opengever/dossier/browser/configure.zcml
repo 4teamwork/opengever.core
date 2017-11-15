@@ -141,4 +141,11 @@
       template="templates/overview.pt"
       />
 
+  <browser:page
+      for="opengever.dossier.behaviors.protect_dossier.IProtectDossierMarker"
+      name="check_protect_dossier_consistency"
+      class=".protect_dossier.CheckProtectDossierConsistency"
+      permission="cmf.ModifyPortalContent"
+      />
+
 </configure>
