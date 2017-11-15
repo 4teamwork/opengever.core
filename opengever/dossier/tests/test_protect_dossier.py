@@ -99,6 +99,27 @@ class TestProtectDossierBehavior(IntegrationTestCase):
         self.assertEqual(['projekt_b'], IProtectDossier(self.dossier).reading_and_writing)
 
     @browsing
+    def test_current_user_is_default_dossier_manager(self, browser):
+        self.login(self.dossier_manager, browser)
+
+        browser.open(self.leaf_repofolder)
+        factoriesmenu.add(u'Business Case Dossier')
+        field = browser.find('Dossier manager')
+        selected_option = filter(lambda x: x.attrib.get('selected'),
+                                 field.css('option'))[0]
+
+        self.assertEqual(
+            u'Fr\xfchling F\xe4ivel (faivel.fruhling)',
+            selected_option.text)
+
+        browser.fill({'Title': 'My Dossier'})
+        browser.click_on('Save')
+
+        self.assertEqual(
+            self.dossier_manager.getId(),
+            IProtectDossier(browser.context).dossier_manager)
+
+    @browsing
     def test_add_dossier_will_enable_dossier_protection(self, browser):
         self.login(self.dossier_manager, browser)
 
