@@ -119,13 +119,13 @@
   <subscriber
       for="opengever.document.document.IDocumentSchema
            opengever.document.interfaces.IObjectBeforeCheckInEvent"
-      handler=".handlers.update_docproperties"
+      handler=".handlers.before_documend_checked_in"
       />
 
   <subscriber
       for="opengever.document.document.IDocumentSchema
            zope.lifecycleevent.IObjectMovedEvent"
-      handler=".handlers.update_moved_doc_properties"
+      handler=".handlers.document_moved_or_added"
       />
 
   <subscriber
