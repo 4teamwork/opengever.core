@@ -1,6 +1,9 @@
 from AccessControl import Unauthorized
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
+from opengever.testing.helpers import localized_datetime
 from opengever.meeting.tabs.meetinglisting import dossier_link_or_title
 
 
@@ -40,3 +43,22 @@ class TestMeetingListing(IntegrationTestCase):
             'class="contenttype-opengever-meeting-meetingdossier"'
             '>Sitzungsdossier 9/2017</a>',
             result)
+
+    @browsing
+    def test_entries_are_sorted_by_date(self, browser):
+        self.login(self.meeting_user, browser)
+        browser.open(self.committee, view='tabbedview_view-meetings')
+        self.assertEquals(
+            ['Jul 17, 2016', 'Sep 12, 2016'],
+            browser.css('#listing_container tbody tr td:nth-child(4)').text)
+
+        self.login(self.committee_responsible)
+        create(Builder('meeting')
+               .having(committee=self.committee,
+                       start=localized_datetime(2016, 8, 21)))
+
+        self.login(self.meeting_user, browser)
+        browser.open(self.committee, view='tabbedview_view-meetings')
+        self.assertEquals(
+            ['Jul 17, 2016', 'Aug 21, 2016', 'Sep 12, 2016'],
+            browser.css('#listing_container tbody tr td:nth-child(4)').text)

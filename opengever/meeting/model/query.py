@@ -198,7 +198,9 @@ class MeetingQuery(BaseQuery):
 
     def pending_meetings(self, committee):
         query = self._committee_meetings(committee)
-        return query.filter(Meeting.workflow_state != Meeting.STATE_CLOSED.name)
+        query = query.filter(Meeting.workflow_state != Meeting.STATE_CLOSED.name)
+        query = query.order_by(Meeting.start.desc())
+        return query
 
     def by_dossier(self, dossier):
         dossier_oguid = Oguid.for_object(dossier)
