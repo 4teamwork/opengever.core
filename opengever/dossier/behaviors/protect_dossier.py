@@ -167,14 +167,14 @@ class DossierProtection(AnnotationsFactoryImpl):
         return bool(self.reading or self.reading_and_writing)
 
     def update_role_settings(self):
-        for principal, roles in self.generate_role_settings():
+        for principal, roles in self.generate_role_settings().items():
             self.context.manage_setLocalRoles(principal, roles)
 
     def clear_local_roles(self):
         self.context.manage_delLocalRoles([principal for principal, roles in self.context.get_local_roles()])
 
     def generate_role_settings(self):
-        role_settings = []
+        role_settings = {}
 
         self.extend_role_settings_for_principals(
             role_settings, self.reading, self.READING_ROLES)
@@ -189,7 +189,35 @@ class DossierProtection(AnnotationsFactoryImpl):
 
     def extend_role_settings_for_principals(self, role_settings, principals, roles):
         for principal in principals:
-            role_settings.append((principal, roles))
+            role_settings[principal] = roles
+
+    def check_local_role_consistency(self):
+        """Returns false, if the localroles does not match the protection-settings.
+        This happens, if you change the localroles through the sharing tab on a
+        protected dossier.
+
+        A local-role inconsistency can also occure through system functionalities.
+        I.e. if you create a remote task in a dossier, the roles are reset by the system.
+        """
+        role_settings = self.generate_role_settings()
+
+        for principal, roles in self.context.get_local_roles():
+            role_setting = role_settings.get(principal)
+            if not role_setting:
+                # A new principal have been added to the localroles
+                return False
+
+            if set(roles).symmetric_difference(set(role_setting)):
+                # The roles of a principal changed
+                return False
+
+            role_settings.pop(principal)
+
+        if role_settings:
+            # A principal have been removed from the localroles
+            return False
+
+        return True
 
 
 class DossierProtectionFactory(AnnotationStorage):

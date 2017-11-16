@@ -11,10 +11,8 @@ from opengever.dossier.behaviors.protect_dossier import IProtectDossierMarker
 from plone.autoform.widgets import ParameterizedWidget
 from plone.dexterity.browser import add
 from plone.dexterity.browser import edit
-from plone.dexterity.events import EditFinishedEvent
 from plone.dexterity.i18n import MessageFactory as pd_mf  # noqa
 from plone.dexterity.interfaces import IDexterityFTI
-from plone.dexterity.utils import addContentToContainer
 from plone.z3cform import layout
 from Products.Five.browser import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
@@ -24,7 +22,6 @@ from z3c.form.field import Fields
 from z3c.form.form import Form
 from zExceptions import Unauthorized
 from zope.component import getUtility
-from zope.event import notify
 import base64
 
 
@@ -101,9 +98,10 @@ class DossierEditForm(edit.DefaultEditForm):
     def applyChanges(self, data):
         changes = super(DossierEditForm, self).applyChanges(data)
 
-        # CUSTOM: Handle dossier protection after successfully adding
-        # the dossier
-        if IProtectDossierMarker.providedBy(self.context):
+        # CUSTOM: Handle dossier protection after editing the dossier.
+        # Only update localroles if the user changed one of the IProtectDossier
+        # fields
+        if changes.get(IProtectDossier):
             IProtectDossier(self.context).protect()
 
         return changes

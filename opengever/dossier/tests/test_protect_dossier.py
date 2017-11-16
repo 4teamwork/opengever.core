@@ -3,6 +3,8 @@ from ftw.testbrowser.pages import factoriesmenu
 from opengever.dossier.behaviors.protect_dossier import IProtectDossier
 from opengever.testing import IntegrationTestCase
 from plone import api
+from zope.component import getMultiAdapter
+import json
 
 
 class TestProtectDossier(IntegrationTestCase):
@@ -53,8 +55,65 @@ class TestProtectDossier(IntegrationTestCase):
             api.user.has_permission('opengever.dossier: Protect dossier',
                                     obj=self.dossier))
 
+    @browsing
+    def test_do_not_update_localroles_if_user_did_not_change_protection_fields(self, browser):
+        self.login(self.dossier_manager, browser)
 
-class TestProtectDossierBehavior(IntegrationTestCase):
+        browser.open(self.leaf_repofolder)
+        factoriesmenu.add(u'Business Case Dossier')
+        browser.fill({'Title': 'My Dossier'})
+        form = browser.find_form_by_field('Reading')
+        form.find_widget('Reading and writing').fill([self.regular_user.getId()])
+        browser.click_on('Save')
+        new_dossier = browser.context
+        new_dossier.manage_setLocalRoles('projekt_a', ('Contributor', ))
+
+        self.assert_local_roles(
+            IProtectDossier(new_dossier).READING_AND_WRITING_ROLES,
+            self.regular_user.getId(), new_dossier)
+
+        self.assert_local_roles(['Contributor'], 'projekt_a', new_dossier)
+
+        browser.open(new_dossier, view="@@edit")
+        browser.click_on('Save')
+
+        self.assert_local_roles(
+            IProtectDossier(new_dossier).READING_AND_WRITING_ROLES,
+            self.regular_user.getId(), new_dossier)
+
+        self.assert_local_roles(['Contributor'], 'projekt_a', new_dossier)
+
+    @browsing
+    def test_update_localroles_if_user_has_changed_protection_fields(self, browser):
+        self.login(self.dossier_manager, browser)
+
+        browser.open(self.leaf_repofolder)
+        factoriesmenu.add(u'Business Case Dossier')
+        browser.fill({'Title': 'My Dossier'})
+        form = browser.find_form_by_field('Reading')
+        form.find_widget('Reading and writing').fill(self.regular_user.getId())
+        browser.click_on('Save')
+        new_dossier = browser.context
+        new_dossier.manage_setLocalRoles('projekt_a', ('Contributor', ))
+
+        self.assert_local_roles(
+            IProtectDossier(new_dossier).READING_AND_WRITING_ROLES,
+            self.regular_user.getId(), new_dossier)
+
+        self.assert_local_roles(['Contributor'], 'projekt_a', new_dossier)
+
+        browser.open(new_dossier, view="@@edit")
+        browser.fill({'Title': 'My new Dossier'})
+        form = browser.find_form_by_field('Reading')
+        form.find_widget('Reading and writing').fill([])
+        form.find_widget('Reading').fill([self.regular_user.getId()])
+        browser.click_on('Save')
+
+        self.assert_local_roles(
+            IProtectDossier(new_dossier).READING_ROLES,
+            self.regular_user.getId(), new_dossier)
+
+        self.assert_local_roles([], 'projekt_a', new_dossier)
 
     @browsing
     def test_regular_user_cannot_see_protect_dossier_fields(self, browser):
@@ -247,6 +306,29 @@ class TestProtectDossierBehavior(IntegrationTestCase):
              'user:{}'.format(self.dossier_manager.getId()),
              'user:{}'.format(self.regular_user.getId())],
             self.get_allowed_roles_and_users_for(self.dossier))
+
+    def test_check_protect_dossier_consistency_returns_no_messages_if_no_inconsistency(self):
+        self.login(self.dossier_manager)
+
+        dossier_protector = IProtectDossier(self.dossier)
+        dossier_protector.reading = [self.regular_user.getId()]
+        dossier_protector.protect()
+        view = getMultiAdapter((self.dossier, self.request),
+                               name="check_protect_dossier_consistency")
+
+        self.assertIsNone(json.loads(view()).get('messages'))
+
+    def test_check_protect_dossier_consistency_returns_error_msg_if_inconsistent(self):
+        self.login(self.dossier_manager)
+
+        dossier_protector = IProtectDossier(self.dossier)
+        dossier_protector.reading = [self.regular_user.getId()]
+        dossier_protector.protect()
+        self.dossier.manage_setLocalRoles(self.regular_user.getId(), ('DossierManager', ))
+        view = getMultiAdapter((self.dossier, self.request),
+                               name="check_protect_dossier_consistency")
+
+        self.assertEqual(1, len(json.loads(view()).get('messages')))
 
     def assert_local_roles(self, excpected_roles, username, context):
         current_roles = []

@@ -33,6 +33,20 @@ class JSONResponse(object):
         self.response['messages'] = self.response.get('messages', []) + [message]
         return self
 
+    def warning(self, message):
+        """
+        Append a standardized warning message with given message.
+        """
+        message = {
+            'messageClass': 'warning',
+            'messageTitle': translate(_('message_title_warning',
+                                        default=u"Warning"),
+                                      context=self.request),
+            'message': translate(message, context=self.request),
+        }
+        self.response['messages'] = self.response.get('messages', []) + [message]
+        return self
+
     def error(self, message, status=None):
         """
         Append a standardized error message with given message.

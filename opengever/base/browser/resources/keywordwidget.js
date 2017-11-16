@@ -53,8 +53,41 @@
             }
         };
     }
+    function showConsistencyWarning(message) {
+        if ($(".protectDossierConsistencyMessage").length > 0) {
+            // Consistency warning already exists
+            return;
+        }
+
+        var portalMessage = $("<dl />");
+        portalMessage.addClass("portalMessage");
+        portalMessage.addClass(message.messageClass);
+        portalMessage.addClass("protectDossierConsistencyMessage");
+
+        portalMessage.append($("<dt />").text(message.messageTitle));
+        portalMessage.append($("<dd />").text(message.message));
+
+        $("#content").before(portalMessage);
+    }
 
     $(document).on("ftwKeywordWidgetInit", function() {
         window.ftwKeywordWidget.registerTemplate("usersAndGroups", usersAndGroupsTemplate);
+    });
+
+    $(document).on("ftwKeywordWidgetInitWidget", function (e, widget) {
+      if (["form-widgets-IProtectDossier-reading",
+           "form-widgets-IProtectDossier-reading_and_writing",
+           "form-widgets-IProtectDossier-dossier_manager"].indexOf(widget.attr("id")) >= 0) {
+          widget.on("change", function(e) {
+              var url = $("base").attr("href") + "@@check_protect_dossier_consistency";
+              $.get(url, function(data) {
+                  if (!data.messages) {
+                      // No consistency error
+                      return;
+                  }
+                  showConsistencyWarning(data.messages[0]);
+              });
+          });
+      }
     });
 })(jQuery);
