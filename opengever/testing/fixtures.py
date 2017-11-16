@@ -65,6 +65,12 @@ class OpengeverContentFixture(object):
             with self.login(self.committee_responsible):
                 self.create_meetings()
 
+        with self.freeze_at_hour(17):
+            with self.login(self.administrator):
+                self.create_private_root()
+            with self.login(self.regular_user):
+                self.create_private_folder()
+
         logger.info('(fixture setup in %ds) ', round(time() - start, 3))
 
     def __call__(self):
@@ -103,6 +109,9 @@ class OpengeverContentFixture(object):
             'committee_responsible', u'Fr\xe4nzi', u'M\xfcller')
         self.dossier_manager = self.create_user(
             'dossier_manager', u'F\xe4ivel', u'Fr\xfchling')
+        self.records_manager = self.create_user(
+            'records_manager', u'Ramon', u'Flucht',
+            ['Records Manager'])
 
     def create_teams(self):
         users = [ogds_service().find_user(user.getId())
@@ -340,6 +349,40 @@ class OpengeverContentFixture(object):
         self.inbox.manage_setLocalRoles(
             self.secretariat_user.getId(), ('Contributor', 'Editor', 'Reader'))
         self.inbox.reindexObjectSecurity()
+
+    @staticuid()
+    def create_private_root(self):
+        self.private_root = self.register('private_root', create(
+            Builder('private_root')
+            .titled(u'Meine Ablage')))
+
+    @staticuid()
+    def create_private_folder(self):
+        self.private_folder = self.register('private_folder', create(
+            Builder('private_folder')
+            .having(id=self.regular_user.getId())
+            .within(self.private_root)))
+
+        self.private_dossier = self.register('private_dossier', create(
+            Builder('private_dossier')
+            .having(title=u'Mein Dossier 1')
+            .within(self.private_folder)
+        ))
+        create(
+            Builder('private_dossier')
+            .having(title=u'Mein Dossier 2')
+            .within(self.private_folder)
+        )
+
+        self.register('private_document', create(
+            Builder('document')
+            .within(self.private_dossier)
+            .with_asset_file('vertragsentwurf.docx')
+        ))
+
+        self.private_folder.manage_setLocalRoles(
+            self.regular_user.getId(), ('Publisher', 'Contributor', 'Reader', 'Owner', 'Reviewer', 'Editor'))
+        self.private_folder.reindexObjectSecurity()
 
     @staticuid()
     def create_treaty_dossiers(self):

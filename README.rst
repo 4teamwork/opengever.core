@@ -477,6 +477,7 @@ Users
 - ``self.dossier_responsible``: ``robert.ziegler``
 - ``self.manager``: ``admin``
 - ``self.meeting_user``: ``herbert.jager``
+- ``self.records_manager``: ``ramon.flucht``
 - ``self.regular_user``: ``kathi.barfuss``
 - ``self.secretariat_user``: ``jurgen.konig``
 
@@ -506,6 +507,10 @@ Objects
     - self.hanspeter_duerr
   - self.inbox
     - self.inbox_document
+  - self.private_root
+    - self.private_folder
+      - self.private_dossier
+        - self.private_document
   - self.repository_root
     - self.branch_repofolder
       - self.leaf_repofolder

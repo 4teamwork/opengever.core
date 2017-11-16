@@ -130,7 +130,7 @@ class TestPrivateDossierTabbedView(FunctionalTestCase):
         browser.login().open(dossier)
 
         self.assertEqual(
-            ['Export as Zip', 'Properties',
+            ['Delete', 'Export as Zip', 'Properties',
              'dossier-transition-deactivate', 'dossier-transition-resolve'],
             browser.css('#plone-contentmenu-actions '
                         '.actionMenuContent li').text)
