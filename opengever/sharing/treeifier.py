@@ -1,14 +1,13 @@
-from Products.CMFCore.utils import getToolByName
-import os
+from plone import api
+from os.path import dirname
 
 
 class Treeify(object):
-    """ Generates a tree structure out of a set of catalog brains incl. all
-        parents.
+    """Generates a tree structure out of a set of catalog brains incl. all parents.
 
-        Example: Give is the <mybrain instance4>
+    Example: Give is the <mybrain instance4>
 
-        >>> {'children': [
+    >>> {'children': [
         ...    {'group_roles': [],
         ...     'item': <mybrain instance1>,
         ...     'user_roles': '',
@@ -57,9 +56,8 @@ class Treeify(object):
 
         node = {'children': []}
 
-        site_root_path = '/'.join(
-            getToolByName(self.context,
-                          'portal_url').getPortalObject().getPhysicalPath())
+        site_root_path = '/'.join(api.portal.get().getPhysicalPath())
+
         if path == site_root_path:
             self._nodes_by_path[path] = node
         else:
@@ -69,12 +67,12 @@ class Treeify(object):
             self._nodes_by_path[path] = node
 
         if path != self._root_path:
-            parent_path = os.path.dirname(path)
+            parent_path = dirname(path)
             self._get_node(parent_path)['children'].append(node)
 
     def _get_brain(self, path):
         if path not in self._brains_by_path:
-            catalog = getToolByName(self.context, 'portal_catalog')
+            catalog = api.portal.get_tool(name='portal_catalog')
             self._brains_by_path[path] = catalog.unrestrictedSearchResults(
                 {'path': {'query': path, 'depth': 0}})[0]
         return self._brains_by_path[path]
