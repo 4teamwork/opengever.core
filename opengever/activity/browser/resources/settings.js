@@ -54,7 +54,9 @@
           activities[activity.kind] = new SettingRow(activity);
         });
       }
-      return this.template({ activities: Object.values(activities), translations: data.translations });
+
+      var values = Object.keys(activities).map(function(e) { return activities[e] })
+      return this.template({ activities: values, translations: data.translations });
     };
 
     this.save_setting = function(target, event) {
