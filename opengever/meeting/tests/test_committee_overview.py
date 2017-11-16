@@ -97,6 +97,20 @@ class TestCommitteeOverview(IntegrationTestCase):
         self.assertEquals(10, len(meetings))
 
     @browsing
+    def test_closed_meetings_are_limited_to_ten_entries(self, browser):
+        with freeze(localized_datetime(2016, 1, 10)):
+            self.login(self.administrator)
+            [create(Builder('meeting')
+                    .having(committee=self.committee,
+                            start=localized_datetime(2016, 1 ,10) - timedelta(days=i)))
+             for i in range(12)]
+            self.login(self.committee_responsible, browser)
+            browser.open(self.committee, view='tabbedview_view-overview')
+
+        meetings = browser.css('#closed_meetingsBox li:not(.moreLink) a')
+        self.assertEquals(10, len(meetings))
+
+    @browsing
     def test_proposal_box_only_lists_unscheduled_proposals(self, browser):
         with freeze(localized_datetime(2016, 1, 10)):
             self.login(self.committee_responsible, browser)
