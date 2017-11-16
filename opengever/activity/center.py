@@ -3,9 +3,9 @@ from opengever.activity.model import Notification
 from opengever.activity.model import Resource
 from opengever.activity.model import Subscription
 from opengever.activity.model import Watcher
-from opengever.activity.model.subscription import TASK_ISSUER_ROLE
-from opengever.activity.model.subscription import TASK_RESPONSIBLE_ROLE
-from opengever.activity.model.subscription import WATCHER_ROLE
+from opengever.activity.roles import TASK_ISSUER_ROLE
+from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
+from opengever.activity.roles import WATCHER_ROLE
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from plone import api

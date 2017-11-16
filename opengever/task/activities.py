@@ -1,5 +1,5 @@
 from opengever.activity.base import BaseActivity
-from opengever.activity.model.subscription import TASK_OLD_RESPONSIBLE_ROLE
+from opengever.activity.roles import TASK_OLD_RESPONSIBLE_ROLE
 from opengever.base.model import get_locale
 from opengever.ogds.base.actor import Actor
 from opengever.task import _

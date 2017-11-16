@@ -1,6 +1,6 @@
 from opengever.activity.model import NotificationDefault
-from opengever.activity.model.subscription import TASK_ISSUER_ROLE
-from opengever.activity.model.subscription import TASK_RESPONSIBLE_ROLE
+from opengever.activity.roles import TASK_ISSUER_ROLE
+from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.base.model import create_session
 from sqlalchemy.orm.exc import NoResultFound
 
