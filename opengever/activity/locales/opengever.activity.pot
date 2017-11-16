@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-02 12:51+0000\n"
+"POT-Creation-Date: 2017-11-19 14:59+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,26 @@ msgstr ""
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.activity\n"
+
+#. Default: "Archivist"
+#: ./opengever/activity/roles.py
+msgid "archivist"
+msgstr ""
+
+#. Default: "Cancel"
+#: ./opengever/activity/browser/settings.py
+msgid "btn_cancel"
+msgstr ""
+
+#. Default: "Reset"
+#: ./opengever/activity/browser/settings.py
+msgid "btn_reset"
+msgstr ""
+
+#. Default: "Save"
+#: ./opengever/activity/browser/settings.py
+msgid "btn_save"
+msgstr ""
 
 #. Default: "Actor"
 #: ./opengever/activity/browser/listing.py
@@ -37,14 +57,69 @@ msgstr ""
 msgid "created"
 msgstr ""
 
+#. Default: "Forwarding added"
+#: ./opengever/activity/__init__.py
+msgid "forwarding-added"
+msgstr ""
+
+#. Default: "Forwarding accepted"
+#: ./opengever/activity/__init__.py
+msgid "forwarding-transition-accept"
+msgstr ""
+
+#. Default: "Forwarding assigned to dossier"
+#: ./opengever/activity/__init__.py
+msgid "forwarding-transition-assign-to-dossier"
+msgstr ""
+
+#. Default: "Forwarding closed"
+#: ./opengever/activity/__init__.py
+msgid "forwarding-transition-close"
+msgstr ""
+
+#. Default: "Forwarding reassigned"
+#: ./opengever/activity/__init__.py
+msgid "forwarding-transition-reassign"
+msgstr ""
+
+#. Default: "Forwarding reassigned and refused"
+#: ./opengever/activity/__init__.py
+msgid "forwarding-transition-reassign-refused"
+msgstr ""
+
+#. Default: "Forwarding refused"
+#: ./opengever/activity/__init__.py
+msgid "forwarding-transition-refuse"
+msgstr ""
+
 #. Default: "Notifications"
 #: ./opengever/activity/viewlets/notification.pt
 msgid "heading_notifications"
 msgstr ""
 
+#. Default: "Activity"
+#: ./opengever/activity/browser/settings.py
+msgid "label_activity"
+msgstr ""
+
+#. Default: "Badge"
+#: ./opengever/activity/browser/settings.py
+msgid "label_badge"
+msgstr ""
+
 #. Default: "Details:"
 #: ./opengever/activity/templates/notification.pt
 msgid "label_details"
+msgstr ""
+
+#. Default: "Mail"
+#: ./opengever/activity/browser/settings.py
+msgid "label_mail"
+msgstr ""
+
+#. Default: "Notification settings"
+#: ./opengever/activity/browser/templates/settings.pt
+msgid "label_notification_settings"
 msgstr ""
 
 #. Default: "All Notifications"
@@ -57,8 +132,112 @@ msgstr ""
 msgid "msg_error_not_notified"
 msgstr ""
 
+#. Default: "Records Manager"
+#: ./opengever/activity/roles.py
+msgid "records_manager"
+msgstr ""
+
+#. Default: "Watcher"
+#: ./opengever/activity/roles.py
+msgid "regular_watcher"
+msgstr ""
+
 #. Default: "GEVER Task"
 #: ./opengever/activity/mail.py
 msgid "subject_prefix"
 msgstr ""
 
+#. Default: "Task added"
+#: ./opengever/activity/__init__.py
+msgid "task-added"
+msgstr ""
+
+#. Default: "Task commented"
+#: ./opengever/activity/__init__.py
+msgid "task-commented"
+msgstr ""
+
+#. Default: "Task reopend"
+#: ./opengever/activity/__init__.py
+msgid "task-transition-cancelled-open"
+msgstr ""
+
+#. Default: "Task delegated"
+#: ./opengever/activity/__init__.py
+msgid "task-transition-delegate"
+msgstr ""
+
+#. Default: "Task resolved"
+#: ./opengever/activity/__init__.py
+msgid "task-transition-in-progress-resolved"
+msgstr ""
+
+#. Default: "Task closed"
+#: ./opengever/activity/__init__.py
+msgid "task-transition-in-progress-tested-and-closed"
+msgstr ""
+
+#. Default: "Task deadline modified"
+#: ./opengever/activity/__init__.py
+msgid "task-transition-modify-deadline"
+msgstr ""
+
+#. Default: "Task cancelled"
+#: ./opengever/activity/__init__.py
+msgid "task-transition-open-cancelled"
+msgstr ""
+
+#. Default: "Task accepted"
+#: ./opengever/activity/__init__.py
+msgid "task-transition-open-in-progress"
+msgstr ""
+
+#. Default: "Task rejected"
+#: ./opengever/activity/__init__.py
+msgid "task-transition-open-rejected"
+msgstr ""
+
+#. Default: "Task resolved"
+#: ./opengever/activity/__init__.py
+msgid "task-transition-open-resolved"
+msgstr ""
+
+#. Default: "Task closed"
+#: ./opengever/activity/__init__.py
+msgid "task-transition-open-tested-and-closed"
+msgstr ""
+
+#. Default: "Task reassign"
+#: ./opengever/activity/__init__.py
+msgid "task-transition-reassign"
+msgstr ""
+
+#. Default: "Task reopened"
+#: ./opengever/activity/__init__.py
+msgid "task-transition-rejected-open"
+msgstr ""
+
+#. Default: "Task revision wanted"
+#: ./opengever/activity/__init__.py
+msgid "task-transition-resolved-in-progress"
+msgstr ""
+
+#. Default: "Task closed"
+#: ./opengever/activity/__init__.py
+msgid "task-transition-resolved-tested-and-closed"
+msgstr ""
+
+#. Default: "Task issuer"
+#: ./opengever/activity/roles.py
+msgid "task_issuer"
+msgstr ""
+
+#. Default: "Task former responsible"
+#: ./opengever/activity/roles.py
+msgid "task_old_responsible"
+msgstr ""
+
+#. Default: "Task responsible"
+#: ./opengever/activity/roles.py
+msgid "task_responsible"
+msgstr ""
