@@ -1,0 +1,47 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="opengever.activity">
+
+  <metal:title metal:fill-slot="content-title">
+    <metal:use use-macro="context/@@gever-macros/js_default_error_messages" />
+    <div id="tabbedview-header">
+      <h1 class="documentFirstHeading" i18n:translate="label_notification_settings">
+        Notification settings
+      </h1>
+    </div>
+  </metal:title>
+
+  <metal:content-core fill-slot="content-core">
+    <metal:content-core define-macro="content-core"
+                        tal:define="toLocalizedTime nocall:context/@@plone/toLocalizedTime">
+
+      <div class="notification-settings-description">
+        <p i18n:translate="help_notification_settings_form">
+          The form below shows the currently "" notification rules and provide the possibility to manage on which activity in which roles over which channel you want get informed.
+        </p>
+
+        <p i18n:translate="warning_own_activities_ignored">
+          Notifications about activities which has been created by your own are ignored and will not be delivered.
+        </p>
+      </div>
+
+      <div id="notification-settings-form"
+           tal:attributes="data-list-url view/list_url;
+                           data-save-url view/save_url;
+                           data-reset-url view/reset_url">
+
+        <tbody>
+          <tal:block tal:replace="structure view/render_form_template"></tal:block>
+        </tbody>
+
+        <div class="visualClear"><!----></div>
+      </div>
+
+    </metal:content-core>
+  </metal:content-core>
+
+</html>

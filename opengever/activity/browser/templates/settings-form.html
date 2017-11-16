@@ -1,0 +1,61 @@
+<script id="settingsForm" type="text/x-handlebars-template">
+
+  <table class="listing notifications-settings-form">
+    <thead>
+      <tr>
+        <th>%(label_activity)s</th>
+        <th><span class="badge-title">%(label_badge)s</span></th>
+        <th><span class="mail-title">%(label_mail)s</span></th>
+        <th class="actions-column"></th>
+      </tr>
+    </thead>
+
+    {{#each activities}}
+
+    <tr class="{{#if changed}}settings-changed{{/if}} {{setting_type}}" data-kind="{{kind}}">
+      <td class="notification-settings-kind">
+        <span class="{{css_class}}">{{kind_title}}</span>
+      </td>
+
+      <td>
+        <ul class="badge" >
+          {{#each badge}}
+          <li>
+            {{#if this}}
+              <input type="checkbox" class="settings-trigger" name="badge" id="{{../kind}}-badge-{{@key}}" value="{{@key}}" checked="checked"/>
+              {{else}}
+              <input type="checkbox" class="settings-trigger" name="badge" id="{{../kind}}-badge-{{@key}}" value="{{@key}}" />
+              {{/if}}
+              <label for="{{../kind}}-badge-{{@key}}">{{translate @key}}</label>
+            </li>
+          {{/each}}
+        </ul>
+      </td>
+
+      <td>
+        <ul class="mail" >
+          {{#each mail}}
+          <li>
+            {{#if this}}
+            <input type="checkbox" class="settings-trigger" name="mail" id="{{../kind}}-mail-{{@key}}" value="{{@key}}" checked="checked"/>
+            {{else}}
+            <input type="checkbox" class="settings-trigger" name="mail" id="{{../kind}}-mail-{{@key}}" value="{{@key}}" />
+            {{/if}}
+            <label for="{{../kind}}-mail-{{@key}}">{{translate @key}}</label>
+          </li>
+          {{/each}}
+        </ul>
+      </td>
+
+      <td>
+        <a href="" class="action save-setting">%(btn_save)s</a>
+        <a href="" class="action cancel-setting">%(btn_cancel)s</a>
+        {{#equals setting_type "personal"}}
+        <a href="" class="action reset-setting">%(btn_reset)s</a>
+        {{/equals}}
+
+      </td>
+    </tr>
+    {{/each}}
+  </table>
+</script>
