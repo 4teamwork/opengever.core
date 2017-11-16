@@ -7,18 +7,22 @@ class TestDocumentListing(IntegrationTestCase):
     @browsing
     def test_lists_documents(self, browser):
         self.login(self.dossier_responsible, browser)
+
         browser.open(self.dossier, view='tabbedview_view-documents')
         self.maxDiff = None
+
+        listings = browser.css('.listing').first.dicts()
+
         self.assertIn(
             {'': '',
              'Checked out by': '',
-             'Delivery Date': '',
-             'Document Author': '',
-             'Document Date': '31.08.2016',
+             'Delivery Date': '03.01.2010',
+             'Document Author': 'test_user_1_',
+             'Document Date': '03.01.2010',
              'Public Trial': 'unchecked',
-             'Receipt Date': '',
+             'Receipt Date': '03.01.2010',
              'Reference Number': 'Client1 1.1 / 1 / 4',
              'Sequence Number': '4',
              'Subdossier': '',
              'Title': u'Vertr\xe4gsentwurf'},
-            browser.css('.listing').first.dicts())
+            listings)
