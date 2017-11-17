@@ -12,6 +12,7 @@ from opengever.task.response_description import ResponseDescription
 from path import Path
 from plone import api
 from Products.Five import BrowserView
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.i18n import translate
 import json
 
@@ -174,6 +175,11 @@ class NotificationSettingsForm(BrowserView):
 
     Frontend functionality implemented in setting.js.
     """
+
+    template = ViewPageTemplateFile('templates/settings.pt')
+
+    def __call__(self):
+        return self.template()
 
     def render_form_template(self):
         return prepare_handlebars_template(

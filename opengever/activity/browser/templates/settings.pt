@@ -3,7 +3,7 @@
       xmlns:metal="http://xml.zope.org/namespaces/metal"
       xmlns:i18n="http://xml.zope.org/namespaces/i18n"
       lang="en"
-      metal:use-macro="here/main_template/macros/master"
+      metal:use-macro="context/main_template/macros/master"
       i18n:domain="opengever.activity">
 
   <metal:title metal:fill-slot="content-title">
@@ -15,19 +15,12 @@
     </div>
   </metal:title>
 
+  <metal:override fill-slot="top_slot"
+                  tal:define="disable_column_one python:request.set('disable_plone.leftcolumn',1);"/>
+
   <metal:content-core fill-slot="content-core">
     <metal:content-core define-macro="content-core"
                         tal:define="toLocalizedTime nocall:context/@@plone/toLocalizedTime">
-
-      <div class="notification-settings-description">
-        <p i18n:translate="help_notification_settings_form">
-          The form below shows the currently "" notification rules and provide the possibility to manage on which activity in which roles over which channel you want get informed.
-        </p>
-
-        <p i18n:translate="warning_own_activities_ignored">
-          Notifications about activities which has been created by your own are ignored and will not be delivered.
-        </p>
-      </div>
 
       <div id="notification-settings-form"
            tal:attributes="data-list-url view/list_url;

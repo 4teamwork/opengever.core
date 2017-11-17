@@ -32,15 +32,6 @@
 
   <browser:page
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-      name="notification-settings-form"
-      class=".settings.NotificationSettingsForm"
-      permission="zope2.View"
-      template="templates/settings.pt"
-      allowed_attributes="get_activities"
-      />
-
-  <browser:page
-      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       name="notification-settings"
       class=".settings.NotificationSettings"
       permission="zope2.View"

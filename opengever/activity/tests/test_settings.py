@@ -137,21 +137,3 @@ class TestResetSetting(IntegrationTestCase):
                      data={'kind': 'task-added'})
 
         self.assertEquals(0, query.count())
-
-
-class TestSettingsForm(IntegrationTestCase):
-
-    features = ('activity', )
-
-    @browsing
-    def test_endpoint_urls(self, browser):
-        self.login(self.regular_user, browser=browser)
-        browser.open(self.portal, view='notification-settings-form')
-
-        div = browser.css('#notification-settings-form').first
-        self.assertEquals('http://nohost/plone/notification-settings/list',
-                          div.get('data-list-url'))
-        self.assertEquals('http://nohost/plone/notification-settings/save',
-                          div.get('data-save-url'))
-        self.assertEquals('http://nohost/plone/notification-settings/reset',
-                          div.get('data-reset-url'))
