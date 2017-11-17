@@ -80,3 +80,27 @@ class TestImport(IntegrationTestCase):
             }).submit()
         dossier = self.leaf_repofolder.objectValues()[-1]
         self.assertEqual(dossier.Title(), 'Neubau Schwimmbad 50m')
+
+    @browsing
+    def test_import_toplevel_documents_in_dossier(self, browser):
+        self.activate_feature('ech0147-import')
+        self.login(self.regular_user, browser)
+        browser.open(self.dossier, view='ech0147_import')
+        with open(get_path('message_docs_only.zip')) as file_:
+            browser.forms['form'].fill({
+                'File': file_,
+            }).submit()
+        docs = self.dossier.objectValues()[-2:]
+        self.assertEqual(docs[0].Title(), 'Kaufvertrag')
+        self.assertEqual(docs[1].Title(), 'Grundrissplan')
+
+    @browsing
+    def test_import_toplevel_documents_in_repofolder_displays_error(self, browser):
+        self.activate_feature('ech0147-import')
+        self.login(self.regular_user, browser)
+        browser.open(self.leaf_repofolder, view='ech0147_import')
+        with open(get_path('message_docs_only.zip')) as file_:
+            browser.forms['form'].fill({
+                'File': file_,
+            }).submit()
+        self.assertIn('This message contains toplevel documents.', browser.contents)

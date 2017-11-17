@@ -2,6 +2,7 @@ from ftw.keywordwidget.widget import KeywordFieldWidget
 from opengever.ech0147 import _
 from opengever.ech0147.bindings import ech0147t1
 from opengever.ech0147.interfaces import IECH0147Settings
+from opengever.ech0147.utils import create_document
 from opengever.ech0147.utils import create_dossier
 from opengever.ogds.base.sources import AllUsersSourceBinder
 from opengever.ogds.base.utils import ogds_service
@@ -66,10 +67,19 @@ class ECH0147ImportForm(AutoExtensibleForm, form.Form):
             xml = zipfile.read(zipinfo)
 
             message = ech0147t1.CreateFromDocument(xml)
-            if message.content_.documents and message.content_.dossiers:
-                self.status = _(u'Messages containing toplevel dossiers and '
-                                'toplevel documents are not supported')
+
+            if (IRepositoryFolder.providedBy(self.context) and
+                    message.content_.documents):
+                self.status = _(u'This message contains toplevel documents. '
+                                'It can only be imported within a dossier.')
                 return
+
+            if message.content_.documents:
+                for document in message.content_.documents.document:
+                    try:
+                        create_document(self.context, document, zipfile)
+                    except BadRequest as exc:
+                        return self._import_error(exc)
 
             if message.content_.dossiers:
                 for dossier in message.content_.dossiers.dossier:
@@ -78,14 +88,7 @@ class ECH0147ImportForm(AutoExtensibleForm, form.Form):
                             self.context, dossier, zipfile,
                             data['responsible'])
                     except BadRequest as exc:
-                        transaction.abort()
-                        error_msg = ''
-                        for error in exc.message:
-                            error_msg += '%s: %s' % (
-                                error['field'], error['message'])
-                        self.status = _(u'Message import failed. ${details}',
-                                        mapping={'details': error_msg})
-                        return
+                        return self._import_error(exc)
 
         self.import_successful = True
 
@@ -134,3 +137,13 @@ class ECH0147ImportForm(AutoExtensibleForm, form.Form):
         registry = getUtility(IRegistry)
         ech0147_settings = registry.forInterface(IECH0147Settings, check=False)
         return ech0147_settings.ech0147_import_enabled
+
+    def _import_error(self, exc):
+        transaction.abort()
+        error_msg = ''
+        for error in exc.message:
+            error_msg += '%s: %s' % (
+                error['field'], error['message'])
+        self.status = _(u'Message import failed. ${details}',
+                        mapping={'details': error_msg})
+        return
