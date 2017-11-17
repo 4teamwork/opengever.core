@@ -15,6 +15,7 @@ Power-User und Administratoren von OneGov GEVER.
 
    aussonderung.rst
    rollenmanager.rst
+   berechtigungoe.rst
    docproperties/index.rst
    meeting/index.rst
 
