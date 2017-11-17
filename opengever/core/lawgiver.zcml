@@ -199,4 +199,11 @@
                    "
       />
 
+  <!-- List Protected Objects is only managed globally in rolemap.xml. -->
+  <lawgiver:ignore
+      permissions="
+                   opengever.sharing: List Protected Objects,
+                   "
+      />
+
 </configure>
