@@ -364,6 +364,25 @@ class TaskCommented(ResponseDescription):
 ResponseDescription.add_description(TaskCommented)
 
 
+class TaskAdded(ResponseDescription):
+
+    transition = 'task-added'
+    css_class = 'created'
+
+
+ResponseDescription.add_description(TaskAdded)
+
+
+class ForwardingAdded(ResponseDescription):
+
+    transition = 'forwarding-added'
+    css_class = 'created'
+
+
+ResponseDescription.add_description(ForwardingAdded)
+
+
+
 class NullResponseDescription(ResponseDescription):
     """Fallback description for responses without any transition information.
     """
