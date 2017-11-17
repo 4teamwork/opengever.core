@@ -16,7 +16,8 @@
   </metal:title>
 
   <metal:override fill-slot="top_slot"
-                  tal:define="disable_column_one python:request.set('disable_plone.leftcolumn',1);"/>
+                  tal:define="portlet python:request.set('disable_plone.leftcolumn',1);
+                              dummy python:request.set('disable_border',1)" />
 
   <metal:content-core fill-slot="content-core">
     <metal:content-core define-macro="content-core"
