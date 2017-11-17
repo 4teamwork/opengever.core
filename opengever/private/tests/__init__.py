@@ -1,6 +1,5 @@
 from AccessControl import getSecurityManager
 from plone import api
-from plone.app.testing import TEST_USER_ID
 import transaction
 
 

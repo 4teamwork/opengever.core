@@ -16,8 +16,8 @@ from zope.interface import implementer
 @implementer(IReferenceNumber)
 @adapter(IDexterityContent)
 class BasicReferenceNumber(object):
-    """ Basic reference number adapter
-    """
+    """Basic reference number adapter."""
+
     ref_type = 'basic'
 
     def __init__(self, context):
@@ -41,6 +41,7 @@ class BasicReferenceNumber(object):
     def append_local_number(self, numbers):
         if not numbers.get(self.ref_type):
             numbers[self.ref_type] = []
+
         numbers[self.ref_type].insert(0, self.get_local_number())
 
     def get_parent_numbers(self):
@@ -48,9 +49,11 @@ class BasicReferenceNumber(object):
         self.append_local_number(numbers)
 
         parent = self.context
+
         while parent and not ISiteRoot.providedBy(parent):
             parent = aq_parent(aq_inner(parent))
             parent_reference_adapter = queryAdapter(parent, IReferenceNumber)
+
             if parent_reference_adapter:
                 parent_reference_adapter.append_local_number(numbers)
 
@@ -59,9 +62,10 @@ class BasicReferenceNumber(object):
 
 @adapter(ISiteRoot)
 class PlatformReferenceNumber(BasicReferenceNumber):
-    """ Reference number generator for the plone site. The reference
+    """Reference number generator for the plone site. The reference
     number part of a PloneSite is the current_admin_unit's abbreviation.
     """
+
     ref_type = 'site'
 
     def get_local_number(self):
