@@ -388,7 +388,7 @@ msgstr "Saisir le numéro d'inventaire complet."
 
 #: ./opengever/dossier/behaviors/dossier.py
 msgid "help_keywords"
-msgstr "Mots-clés pour la description du dossier. Ne pas confondre avec le numéro de classement."
+msgstr "Mots-clés pour la description du dossier. Ne pas confondre avec le numéro de classement. <br>ATTENTION: Veuillez vous conformer aux directives de Protection des Données lors de l'utilisation de Mots-clés (par ex. pas de noms propres)."
 
 #: ./opengever/dossier/behaviors/dossier.py
 msgid "help_number_of_containers"
