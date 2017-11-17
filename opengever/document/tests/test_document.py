@@ -120,7 +120,7 @@ class TestDocument(FunctionalTestCase):
 
         self.assertEquals(
             ['Common', 'Classification', 'Archive file'],
-            browser.css('#content-core fieldset legend').text)
+            browser.css('.dossier-detail-listing-title').text)
 
     def test_copying_a_document_prefixes_title_with_copy_of(self):
         dossier_a = create(Builder('dossier').titled(u'Dossier A'))
