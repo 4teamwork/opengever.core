@@ -267,6 +267,10 @@ class Committee(ModelContainer):
         committee_model = self.load_model()
         return Meeting.query.all_upcoming_meetings(committee_model)
 
+    def get_closed_meetings(self):
+        committee_model = self.load_model()
+        return Meeting.query.all_closed_meetings(committee_model)
+
     def get_committee_container(self):
         return aq_parent(aq_inner(self))
 

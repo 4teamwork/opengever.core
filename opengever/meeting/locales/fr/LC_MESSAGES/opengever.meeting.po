@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-11-14 12:39+0000\n"
+"POT-Creation-Date: 2017-11-16 10:22+0000\n"
 "PO-Revision-Date: 2017-06-22 09:02+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -266,6 +266,10 @@ msgstr "Informations concernant la réunion"
 msgid "Memberships"
 msgstr "Adhésions"
 
+#: ./opengever/meeting/browser/templates/overview.pt
+msgid "No content"
+msgstr "Pas de contenu"
+
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
 msgid "Number"
 msgstr "Numéro"
@@ -339,10 +343,6 @@ msgstr "Sauvegarder"
 msgid "Scheduled Successfully"
 msgstr "Joint à l'ordre du jour avec succès"
 
-#: ./opengever/meeting/browser/templates/overview.pt
-msgid "Show more"
-msgstr "Afficher plus"
-
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
 msgid "Text:"
 msgstr "Texte libre:"
@@ -384,6 +384,10 @@ msgstr "Le document a été écrasé par une version plus récente de l'extrait 
 #: ./opengever/meeting/command.py
 msgid "Updated with a newer generated version from meeting ${title}."
 msgstr "Actualisé par une nouvelle version de la réunion ${title}."
+
+#: ./opengever/meeting/browser/templates/overview.pt
+msgid "View all"
+msgstr ""
 
 #: ./opengever/meeting/browser/meetings/participants.py
 msgid "You are not allowed to change the meeting details."
@@ -913,6 +917,11 @@ msgstr "Clôturer"
 #. Default: "The meeting cannot be closed because it has undecided agenda items."
 #: ./opengever/meeting/model/meeting.py
 msgid "label_close_error_has_undecided_agenda_items"
+msgstr ""
+
+#. Default: "Closed meetings"
+#: ./opengever/meeting/browser/committee.py
+msgid "label_closed_meetings"
 msgstr ""
 
 #. Default: "Committee deactivated successfully"

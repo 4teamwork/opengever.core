@@ -321,6 +321,15 @@ class OpengeverContentFixture(object):
             date_from=datetime(2014, 1, 1),
             date_to=datetime(2016, 12, 31))
 
+        self.inactive_committee_participant = self.create_committee_membership(
+            self.committee,
+            'inactive_committee_participant',
+            firstname=u'Pablo',
+            lastname=u'Neruda',
+            email='pablo-neruda@gmail.com',
+            date_from=datetime(2010, 1, 1),
+            date_to=datetime(2014, 12, 31))
+
         self.empty_committee = self.register(
             'empty_committee', self.create_committee(
                 title=u'Kommission f\xfcr Verkehr',
@@ -579,6 +588,26 @@ class OpengeverContentFixture(object):
         self.decided_meeting.schedule_proposal(
             self.decided_proposal.load_model())
         self.decided_meeting.close()
+
+        closed_meeting_dossier = self.register(
+            'closed_meeting_dossier', create(
+                Builder('meeting_dossier').within(self.repofolder00)
+                .titled(u'Sitzungsdossier 7/2017')
+                .having(start=date(2016, 7, 17),
+                        responsible=self.committee_responsible.getId())))
+        self.closed_meeting = create(
+            Builder('meeting')
+            .having(title=u'7. Sitzung der Rechnungspr\xfcfungskommission',
+                    committee=self.committee.load_model(),
+                    location=u'B\xfcren an der Aare',
+                    start=datetime(2015, 7, 17, 15, 30, tzinfo=pytz.UTC),
+                    end=datetime(2015, 7, 17, 16, 30, tzinfo=pytz.UTC),
+                    presidency=self.committee_president,
+                    secretary=self.committee_secretary,
+                    participants=[self.committee_participant_1,
+                                  self.committee_participant_2])
+            .link_with(closed_meeting_dossier))
+        create_session().flush()  # trigger id generation, part of path
 
     @contextmanager
     def freeze_at_hour(self, hour):

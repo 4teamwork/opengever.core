@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-11-14 12:39+0000\n"
+"POT-Creation-Date: 2017-11-16 10:22+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -263,6 +263,10 @@ msgstr ""
 msgid "Memberships"
 msgstr ""
 
+#: ./opengever/meeting/browser/templates/overview.pt
+msgid "No content"
+msgstr ""
+
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
 msgid "Number"
 msgstr ""
@@ -336,10 +340,6 @@ msgstr ""
 msgid "Scheduled Successfully"
 msgstr ""
 
-#: ./opengever/meeting/browser/templates/overview.pt
-msgid "Show more"
-msgstr ""
-
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
 msgid "Text:"
 msgstr ""
@@ -380,6 +380,10 @@ msgstr ""
 
 #: ./opengever/meeting/command.py
 msgid "Updated with a newer generated version from meeting ${title}."
+msgstr ""
+
+#: ./opengever/meeting/browser/templates/overview.pt
+msgid "View all"
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/participants.py
@@ -910,6 +914,11 @@ msgstr ""
 #. Default: "The meeting cannot be closed because it has undecided agenda items."
 #: ./opengever/meeting/model/meeting.py
 msgid "label_close_error_has_undecided_agenda_items"
+msgstr ""
+
+#. Default: "Closed meetings"
+#: ./opengever/meeting/browser/committee.py
+msgid "label_closed_meetings"
 msgstr ""
 
 #. Default: "Committee deactivated successfully"

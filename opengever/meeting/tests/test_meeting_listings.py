@@ -49,7 +49,7 @@ class TestMeetingListing(IntegrationTestCase):
         self.login(self.meeting_user, browser)
         browser.open(self.committee, view='tabbedview_view-meetings')
         self.assertEquals(
-            ['Jul 17, 2016', 'Sep 12, 2016'],
+            ['Jul 17, 2015', 'Jul 17, 2016', 'Sep 12, 2016'],
             browser.css('#listing_container tbody tr td:nth-child(4)').text)
 
         self.login(self.committee_responsible)
@@ -60,5 +60,5 @@ class TestMeetingListing(IntegrationTestCase):
         self.login(self.meeting_user, browser)
         browser.open(self.committee, view='tabbedview_view-meetings')
         self.assertEquals(
-            ['Jul 17, 2016', 'Aug 21, 2016', 'Sep 12, 2016'],
+            ['Jul 17, 2015', 'Jul 17, 2016', 'Aug 21, 2016', 'Sep 12, 2016'],
             browser.css('#listing_container tbody tr td:nth-child(4)').text)

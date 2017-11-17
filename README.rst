@@ -502,6 +502,7 @@ Objects
     - self.committee_president
     - self.committee_secretary
     - self.empty_committee
+    - self.inactive_committee_participant
   - self.contactfolder
     - self.franz_meier
     - self.hanspeter_duerr
@@ -515,6 +516,7 @@ Objects
     - self.branch_repofolder
       - self.leaf_repofolder
         - self.archive_dossier
+        - self.closed_meeting_dossier
         - self.decided_meeting_dossier
         - self.dossier
           - self.document

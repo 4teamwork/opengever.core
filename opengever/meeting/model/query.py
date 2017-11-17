@@ -184,11 +184,14 @@ class MeetingQuery(BaseQuery):
     def _past_meetings(self, committee):
         query = self._committee_meetings(committee)
         query = query.filter(Meeting.start < utcnow_tz_aware())
-        query = query.order_by(desc(Meeting.start))
+        query = query.order_by(Meeting.start.desc())
         return query
 
     def all_upcoming_meetings(self, committee):
         return self._upcoming_meetings(committee).all()
+
+    def all_closed_meetings(self, committee):
+        return self._past_meetings(committee).all()
 
     def get_next_meeting(self, committee):
         return self._upcoming_meetings(committee).first()

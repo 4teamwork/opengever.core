@@ -16,10 +16,13 @@
         </li>
 
         <li class="moreLink" tal:condition="box/href" >
-          <a tal:attributes="href box/href" i18n:translate="">Show more</a>
+          <a tal:attributes="href box/href" i18n:translate="">View all</a>
         </li>
 
       </ul>
+      <tal:block tal:condition="not: box/content">
+        <span i18n:translate="" >No content</span>
+      </tal:block>
 
     </div>
 
