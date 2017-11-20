@@ -5,6 +5,7 @@ Changelog
 2017.6.5 (unreleased)
 ---------------------
 
+- Show filterlist also on empty tabbedview listings. [phgross]
 - SPV: Sort meetings by date. [tarnap]
 - SPV: Add concluded meetings to committee overview and reorder the blocks in the columns. [tarnap]
 - Fix syncing the submitted proposal title to sql. [deiferni]

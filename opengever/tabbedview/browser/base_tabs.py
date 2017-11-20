@@ -186,6 +186,7 @@ class BaseCatalogListingTab(GeverTabMixin, CatalogListingView):
     """
 
     selection = ViewPageTemplateFile("selection_with_filters.pt")
+    template = ViewPageTemplateFile("generic_with_filters.pt")
 
     columns = ()
 
