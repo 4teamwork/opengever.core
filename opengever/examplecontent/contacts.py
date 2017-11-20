@@ -32,7 +32,7 @@ DEPARTMENTS = [
 ]
 
 
-class ExampleContactCreator(object):
+class ExampleContentCreator(object):
 
     def __init__(self):
         self.db_session = create_session()
