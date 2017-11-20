@@ -13,12 +13,22 @@ class TestUserDetails(IntegrationTestCase):
         self.assertEquals([u'B\xe4rfuss K\xe4thi (kathi.barfuss)'],
                           browser.css('h1.documentFirstHeading').text)
 
-        metadata = browser.css('.vertical').first.lists()
-
-        self.assertEquals(
-            ['Name', u'B\xe4rfuss K\xe4thi (kathi.barfuss)'], metadata[0])
-        self.assertEquals(['Active', 'Yes'], metadata[1])
-        self.assertEquals(['Email', 'kathi.barfuss@gever.local'], metadata[2])
+        metadata = dict(browser.css('.vertical').first.lists())
+        self.assertDictContainsSubset({
+            'Address': 'Kappelenweg 13 Postfach 1234 1234 Vorkappelen Schweiz',
+            'Department': 'Staatskanzlei (SK)',
+            'Description': 'nix',
+            'Directorate': 'Staatsarchiv (Arch)',
+            'Email': 'foo@example.com',
+            'Email 2': 'bar@example.com',
+            'Fax': '012 34 56 77',
+            'Mobile phone': '012 34 56 76',
+            'Name': u'B\xe4rfuss K\xe4thi (kathi.barfuss)',
+            'Office phone': '012 34 56 78',
+            'Salutation': 'Prof. Dr.',
+            'Teams': u'Projekt \xdcberbaung Dorfmatte',
+            'URL': 'http://www.example.com',
+             }, metadata)
 
     @browsing
     def test_user_details_return_not_found_for_not_exisiting_user(self, browser):

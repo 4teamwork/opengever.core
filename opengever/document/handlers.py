@@ -10,11 +10,11 @@ def checked_out(context, event):
     _update_docproperties(context)
 
 
-def update_docproperties(context, event):
+def before_documend_checked_in(context, event):
     _update_docproperties(context)
 
 
-def update_moved_doc_properties(context, event):
+def document_moved_or_added(context, event):
     if IObjectRemovedEvent.providedBy(event):
         return
 

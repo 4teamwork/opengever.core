@@ -3,12 +3,12 @@ from plone.app.testing import TEST_USER_ID
 
 
 EXPECTED_USER_DOC_PROPERTIES = {
-    'User.ID': TEST_USER_ID,
-    'User.FullName': u'M\xfcller Peter',
-    'ogg.user.userid': TEST_USER_ID,
-    'ogg.user.title': u'M\xfcller Peter',
-    'ogg.user.firstname': u'Peter',
-    'ogg.user.lastname': u'M\xfcller',
+    'User.ID': 'kathi.barfuss',
+    'User.FullName': u'B\xe4rfuss K\xe4thi',
+    'ogg.user.userid': 'kathi.barfuss',
+    'ogg.user.title': u'B\xe4rfuss K\xe4thi',
+    'ogg.user.firstname': u'K\xe4thi',
+    'ogg.user.lastname': u'B\xe4rfuss',
     'ogg.user.directorate': u'Staatsarchiv',
     'ogg.user.directorate_abbr': u'Arch',
     'ogg.user.department': u'Staatskanzlei',
@@ -51,20 +51,20 @@ OGDS_USER_ATTRIBUTES = {
 }
 
 EXPECTED_DOSSIER_PROPERTIES = {
-    'Dossier.ReferenceNumber': 'Client1 / 1',
-    'Dossier.Title': 'My dossier',
-    'ogg.dossier.title': 'My dossier',
-    'ogg.dossier.reference_number': 'Client1 / 1',
+    'Dossier.ReferenceNumber': 'Client1 1.1 / 1',
+    'Dossier.Title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
+    'ogg.dossier.title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
+    'ogg.dossier.reference_number': 'Client1 1.1 / 1',
     'ogg.dossier.sequence_number': '1',
 }
 
 EXPECTED_DOCUMENT_PROPERTIES = {
-    'Document.ReferenceNumber': 'Client1 / 1 / 1',
-    'Document.SequenceNumber': '1',
-    'ogg.document.title': "My Document",
-    'ogg.document.reference_number': 'Client1 / 1 / 1',
-    'ogg.document.sequence_number': '1',
-    'ogg.document.document_author': u'M\xfcller Peter',
+    'Document.ReferenceNumber': 'Client1 1.1 / 1 / 4',
+    'Document.SequenceNumber': '4',
+    'ogg.document.title': u'Vertr\xe4gsentwurf',
+    'ogg.document.reference_number': 'Client1 1.1 / 1 / 4',
+    'ogg.document.sequence_number': '4',
+    'ogg.document.document_author': TEST_USER_ID,
     'ogg.document.document_date': datetime(2010, 1, 3),
     'ogg.document.document_type': u'Contract',
     'ogg.document.reception_date': datetime(2010, 1, 3),

@@ -23,7 +23,9 @@ from zope.component import getAdapter
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.component import queryAdapter
+from zope.event import notify
 from zope.interface import implementer
+from zope.lifecycleevent import ObjectModifiedEvent
 from zope.publisher.interfaces.browser import IBrowserRequest
 import os
 
@@ -102,6 +104,8 @@ class DocPropertyWriter(object):
                 with open(tmpfile.path) as processed_tmpfile:
                     file_data = processed_tmpfile.read()
                 self.document.file.data = file_data
+
+                notify(ObjectModifiedEvent(self.document))
 
             return changed
 

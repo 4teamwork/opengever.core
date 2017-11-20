@@ -21,6 +21,7 @@ from operator import methodcaller
 from plone import api
 from plone.app.testing import login
 from plone.app.testing import SITE_OWNER_NAME
+from plone.app.testing import TEST_USER_ID
 from time import time
 from zope.component.hooks import getSite
 import logging
@@ -93,7 +94,24 @@ class OpengeverContentFixture(object):
         self.dossier_responsible = self.create_user(
             'dossier_responsible', u'Robert', u'Ziegler')
         self.regular_user = self.create_user(
-            'regular_user', u'K\xe4thi', u'B\xe4rfuss')
+            'regular_user', u'K\xe4thi', u'B\xe4rfuss',
+            address1='Kappelenweg 13',
+            address2='Postfach 1234',
+            city='Vorkappelen',
+            country='Schweiz',
+            department='Staatskanzlei',
+            department_abbr='SK',
+            description='nix',
+            directorate='Staatsarchiv',
+            directorate_abbr='Arch',
+            email2='bar@example.com',
+            email='foo@example.com',
+            phone_fax='012 34 56 77',
+            phone_mobile='012 34 56 76',
+            phone_office='012 34 56 78',
+            salutation='Prof. Dr.',
+            url='http://www.example.com',
+            zip_code='1234')
         self.meeting_user = self.create_user(
             'meeting_user', u'Herbert', u'J\xe4ger')
         self.secretariat_user = self.create_user(
@@ -354,9 +372,14 @@ class OpengeverContentFixture(object):
                .for_dossier(self.dossier)
                .with_roles(['final-drawing', 'participation']))
 
-        document = self.register('document', create(
+        self.document = self.register('document', create(
             Builder('document').within(self.dossier)
             .titled(u'Vertr\xe4gsentwurf')
+            .having(document_date=datetime(2010, 1, 3),
+                    document_author=TEST_USER_ID,
+                    document_type='contract',
+                    receipt_date=datetime(2010, 1, 3),
+                    delivery_date=datetime(2010, 1, 3))
             .with_asset_file('vertragsentwurf.docx')))
 
         task = self.register('task', create(
@@ -368,7 +391,7 @@ class OpengeverContentFixture(object):
                     task_type='correction',
                     deadline=date(2016, 11, 1))
             .in_state('task-state-in-progress')
-            .relate_to(document)))
+            .relate_to(self.document)))
 
         self.register('subtask', create(
             Builder('task').within(task)
@@ -379,7 +402,7 @@ class OpengeverContentFixture(object):
                     task_type='correction',
                     deadline=date(2016, 11, 1))
             .in_state('task-state-resolved')
-            .relate_to(document)))
+            .relate_to(self.document)))
 
         self.register('taskdocument', create(
             Builder('document').within(task)
@@ -391,7 +414,7 @@ class OpengeverContentFixture(object):
             Builder('proposal').within(self.dossier)
             .having(title=u'Vertragsentwurf f\xfcr weitere Bearbeitung bewilligen',
                     committee=self.committee.load_model())
-            .relate_to(document)
+            .relate_to(self.document)
             .as_submitted()))
         self.register_path(
             'submitted_proposal',
@@ -416,7 +439,7 @@ class OpengeverContentFixture(object):
                 Builder('proposal').within(self.dossier)
                 .having(title=u'\xc4nderungen am Personalreglement',
                         committee=self.committee.load_model())
-                .relate_to(document)
+                .relate_to(self.document)
                 .with_proposal_file(assets.load('vertragsentwurf.docx'))
                 .as_submitted()))
             self.register_path(
@@ -614,7 +637,8 @@ class OpengeverContentFixture(object):
         """
         self._lookup_table[attrname] = ('raw', value)
 
-    def create_user(self, attrname, firstname, lastname, globalroles=(), group=None):
+    def create_user(self, attrname, firstname, lastname,
+                    globalroles=(), group=None, **kwargs):
         """Create an OGDS user and a Plone user.
         The user is member of the current org unit user group.
         The ``attrname`` is the attribute name used to access this user
@@ -635,7 +659,8 @@ class OpengeverContentFixture(object):
                .id(plone_user.getId())
                .having(firstname=firstname, lastname=lastname, email=email)
                .assign_to_org_units([self.org_unit])
-               .in_group(group))
+               .in_group(group)
+               .having(**kwargs))
 
         self._lookup_table[attrname] = ('user', plone_user.getId())
         return plone_user

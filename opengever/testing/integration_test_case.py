@@ -39,7 +39,9 @@ FEATURE_FLAGS = {
     'extjs': 'ftw.tabbedview.interfaces.ITabbedView.extjs_enabled',
     'bumblebee': 'opengever.bumblebee.interfaces.IGeverBumblebeeSettings.is_feature_enabled',
     'bumblebee-open-pdf-new-tab': 'opengever.bumblebee.interfaces.IGeverBumblebeeSettings.open_pdf_in_a_new_window',
-    'activity': 'opengever.activity.interfaces.IActivitySettings.is_feature_enabled'
+    'activity': 'opengever.activity.interfaces.IActivitySettings.is_feature_enabled',
+    'contact': 'opengever.contact.interfaces.IContactSettings.is_feature_enabled',
+    'doc-properties': 'opengever.dossier.interfaces.ITemplateFolderProperties.create_doc_properties'
 }
 
 FEATURE_PROFILES = {
