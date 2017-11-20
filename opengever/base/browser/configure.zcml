@@ -164,6 +164,14 @@
       class=".edit_public_trial.EditPublicTrialForm"
       />
 
+  <browser:page
+      for="plone.app.layout.navigation.interfaces.INavigationRoot"
+      name="personal-preferences"
+      class=".personalpreferences.PersonalPreferences"
+      permission="cmf.SetOwnProperties"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
   <browser:viewlet
       name="exposator"
       manager="plone.app.layout.viewlets.interfaces.IPortalHeader"

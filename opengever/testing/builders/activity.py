@@ -6,7 +6,7 @@ from opengever.activity.model import NotificationSetting
 from opengever.activity.model import Resource
 from opengever.activity.model import Subscription
 from opengever.activity.model import Watcher
-from opengever.activity.model.subscription import WATCHER_ROLE
+from opengever.activity.roles import WATCHER_ROLE
 from opengever.base.oguid import Oguid
 from opengever.ogds.models.tests.builders import SqlObjectBuilder
 from opengever.testing.builders.base import TEST_USER_ID

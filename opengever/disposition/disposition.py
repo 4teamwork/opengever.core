@@ -3,8 +3,8 @@ from Acquisition import aq_parent
 from collective import dexteritytextindexer
 from datetime import date
 from opengever.activity import notification_center
-from opengever.activity.model.subscription import DISPOSITION_ARCHIVIST_ROLE
-from opengever.activity.model.subscription import DISPOSITION_RECORDS_MANAGER_ROLE
+from opengever.activity.roles import DISPOSITION_ARCHIVIST_ROLE
+from opengever.activity.roles import DISPOSITION_RECORDS_MANAGER_ROLE
 from opengever.base.behaviors.classification import IClassification
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.base.security import elevated_privileges

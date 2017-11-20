@@ -1,0 +1,41 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="opengever.activity">
+
+  <metal:title metal:fill-slot="content-title">
+    <metal:use use-macro="context/@@gever-macros/js_default_error_messages" />
+    <div id="tabbedview-header">
+      <h1 class="documentFirstHeading" i18n:translate="label_notification_settings">
+        Notification settings
+      </h1>
+    </div>
+  </metal:title>
+
+  <metal:override fill-slot="top_slot"
+                  tal:define="portlet python:request.set('disable_plone.leftcolumn',1);
+                              dummy python:request.set('disable_border',1)" />
+
+  <metal:content-core fill-slot="content-core">
+    <metal:content-core define-macro="content-core"
+                        tal:define="toLocalizedTime nocall:context/@@plone/toLocalizedTime">
+
+      <div id="notification-settings-form"
+           tal:attributes="data-list-url view/list_url;
+                           data-save-url view/save_url;
+                           data-reset-url view/reset_url">
+
+        <tbody>
+          <tal:block tal:replace="structure view/render_form_template"></tal:block>
+        </tbody>
+
+        <div class="visualClear"><!----></div>
+      </div>
+
+    </metal:content-core>
+  </metal:content-core>
+
+</html>

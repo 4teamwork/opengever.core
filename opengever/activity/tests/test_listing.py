@@ -5,7 +5,7 @@ from opengever.activity.badge import BadgeIconDispatcher
 from opengever.activity.center import NotificationCenter
 from opengever.activity.model.notification import Notification
 from opengever.activity.model.settings import NotificationDefault
-from opengever.activity.model.subscription import WATCHER_ROLE
+from opengever.activity.roles import WATCHER_ROLE
 from opengever.base.oguid import Oguid
 from opengever.testing import IntegrationTestCase
 from plone import api
