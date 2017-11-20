@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-02 12:51+0000\n"
+"POT-Creation-Date: 2017-11-20 14:11+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,6 +25,11 @@ msgstr "Aktiv"
 #: ./opengever/disposition/browser/listing.py
 msgid "all"
 msgstr "Alle"
+
+#. Default: "appraisal_list"
+#: ./opengever/disposition/browser/excel_export.py
+msgid "appraisal_list"
+msgstr "bewertungsliste"
 
 #. Default: "Sequence Number"
 #: ./opengever/disposition/browser/listing.py
@@ -256,4 +261,3 @@ msgstr "Neues Angebot hinzugefügt durch ${user} im Mandanten ${admin_unit}"
 #: ./opengever/disposition/browser/removal_protocol.py
 msgid "title_removal_protocol"
 msgstr "Löschprotokoll zu ${disposition}"
-
