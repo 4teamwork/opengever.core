@@ -6,6 +6,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.builder import session
 from opengever.base.model import create_session
+from opengever.testing import assets
 from opengever.testing import builders  # keep!
 from plone import api
 import pytz
@@ -65,7 +66,7 @@ PROPOSED_ACTION_4 = (
 )
 
 
-class ExampleContentCreator(object):
+class MeetingExampleContentCreator(object):
     """Setup SQL example content.
 
     Currently it is not possible to do this with ftw.inflator.
@@ -98,12 +99,29 @@ class ExampleContentCreator(object):
         self.repository_folder_meeting = self.site.restrictedTraverse(
             'ordnungssystem/fuehrung/gemeindeversammlung-gemeindeparlament-legislative/versammlungen-sitzungen')
 
+        self.dossier_baufrau = self.site.restrictedTraverse(
+            'ordnungssystem/ressourcen-und-support/personal/personalrekrutierung/dossier-5')
+        self.dossier_laws_1 = self.site.restrictedTraverse(
+            'ordnungssystem/bevoelkerung-und-sicherheit/einwohnerkontrolle/dossier-1')
+        self.dossier_laws_2 = self.site.restrictedTraverse(
+            'ordnungssystem/bevoelkerung-und-sicherheit/einwohnerkontrolle/dossier-2')
+        self.repository_folder_meeting_word = self.site.restrictedTraverse(
+            'ordnungssystem/fuehrung/gemeinderecht')
+
         self.document_baumann_1 = self.dossier_baumann['document-2']
         self.document_baumann_2 = self.dossier_baumann['document-3']
+
+        self.document_baufrau_1 = self.dossier_baufrau['document-2']
+        self.document_baufrau_2 = self.dossier_baufrau['document-3']
+        self.document_baufrau_3 = self.dossier_baufrau['document-4']
 
         self.document_taxes_1 = self.dossier_taxes_1['document-4']
         self.document_taxes_2 = self.dossier_taxes_1['document-5']
         self.document_taxes_3 = self.dossier_taxes_2['document-6']
+
+        self.document_laws_1 = self.dossier_laws_1['document-4']
+        self.document_laws_2 = self.dossier_laws_1['document-5']
+        self.document_laws_3 = self.dossier_laws_2['document-6']
 
         self.document_equipment_1 = self.dossier_equipment['document-7']
         self.document_equipment_2 = self.dossier_equipment['document-8']
@@ -115,8 +133,18 @@ class ExampleContentCreator(object):
     def create_content(self):
         self.create_periods()
         self.create_members_and_memberships()
+
+        api.portal.set_registry_record(
+            'opengever.meeting.interfaces.IMeetingSettings.is_word_implementation_enabled',
+            False)
         self.create_meetings()
         self.create_proposals()
+
+        api.portal.set_registry_record(
+            'opengever.meeting.interfaces.IMeetingSettings.is_word_implementation_enabled',
+            True)
+        self.create_meetings_word()
+        self.create_proposals_word()
 
     def create_periods(self):
         create(Builder('period').having(
@@ -159,6 +187,13 @@ class ExampleContentCreator(object):
         for delta in [30, 60, 90, 120]:
             self.create_meeting(delta=delta)
 
+    def create_meetings_word(self):
+        self.dossier_word, self.meeting_word = self.create_meeting_word(delta=1)
+
+        # create future meetings
+        for delta in [30, 60, 90, 120]:
+            self.create_meeting_word(delta=delta)
+
     def create_meeting(self, delta):
         start = self.tz.localize(
             datetime.combine(date.today() + timedelta(days=delta), time(10, 0)))
@@ -174,6 +209,27 @@ class ExampleContentCreator(object):
         meeting = create(Builder('meeting')
                          .having(title=title,
                                  committee=self.committee_assembly_model,
+                                 location=u'Bern',
+                                 start=start,
+                                 end=end,)
+                         .link_with(dossier))
+        return dossier, meeting
+
+    def create_meeting_word(self, delta):
+        start = self.tz.localize(
+            datetime.combine(date.today() + timedelta(days=delta), time(10, 0)))
+        end = self.tz.localize(
+            datetime.combine(date.today() + timedelta(days=delta), time(12, 0)))
+        title = u"Kommission f\xfcr Rechtsfragen, {}".format(
+            api.portal.get_localized_time(datetime=start))
+
+        dossier = create(Builder('meeting_dossier')
+                         .having(title=u'Meeting {}'.format(
+                             api.portal.get_localized_time(start)),)
+                         .within(self.repository_folder_meeting_word))
+        meeting = create(Builder('meeting')
+                         .having(title=title,
+                                 committee=self.committee_law_model,
                                  location=u'Bern',
                                  start=start,
                                  end=end,)
@@ -224,3 +280,35 @@ class ExampleContentCreator(object):
             .relate_to(self.document_equipment_1, self.document_equipment_2)
             .as_submitted())
         self.meeting.schedule_proposal(proposal4.load_model())
+
+    def create_proposals_word(self):
+        proposal1 = create(
+            Builder('proposal')
+            .within(self.dossier_baufrau)
+            .having(committee=self.committee_law_model,
+                    title=u'Genehmigung der Anstellung von Hannah Baufrau als '
+                          u'Sachbearbeiterin einem Besch\xe4ftigungsgrad von 90%',
+                    proposed_action=PROPOSED_ACTION_1)
+            .relate_to(self.document_baufrau_1,
+                       self.document_baufrau_2,
+                       self.document_baufrau_3)
+            .with_proposal_file(assets.load('vertragsentwurf.docx'))
+            .as_submitted())
+        self.meeting_word.schedule_proposal(proposal1.load_model())
+
+        self.meeting_word.schedule_ad_hoc(
+            u'Genehmigung der Bestellung von Hannah Baufrau als Sachbearbeterin '
+            u'einem Besch\xe4ftigungsgrad von 90%')
+
+        proposal2 = create(
+            Builder('proposal')
+            .within(self.dossier_laws_1)
+            .having(committee=self.committee_law_model,
+                    title=u'Revision der Rechtslage f\xfcr eine Liberalisierung',
+                    initial_position=INITIAL_POSITION_2,
+                    proposed_action=PROPOSED_ACTION_2)
+            .relate_to(self.document_laws_1, self.document_laws_2)
+            .with_proposal_file(assets.load('vertragsentwurf.docx')))
+
+        self.meeting_word.schedule_ad_hoc(
+            u'Revision der Linkslage f\xfcr eine Liberalisierung')

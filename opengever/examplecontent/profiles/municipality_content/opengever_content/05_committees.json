@@ -19,7 +19,7 @@
             {
                 "_id": "committee-1",
                 "_type": "opengever.meeting.committee",
-                "title": "Kommission für Rechtsfragen",
+                "title": "Kommission für Rechtsfragen [WORD]",
                 "repository_folder": "resolvePath::/ordnungssystem/fuehrung/kommissionen-mit-selbstaendigen-verwaltungsbefugnissen/kommission-fuer-rechtsfragen/sitzungen",
                 "group_id": "og_demo-ftw_users"
             },
@@ -33,7 +33,7 @@
             {
                 "_id": "committee-3",
                 "_type": "opengever.meeting.committee",
-                "title": "Gemeindeversammlung",
+                "title": "Gemeindeversammlung [NOWORD]",
                 "repository_folder": "resolvePath::/ordnungssystem/fuehrung/gemeindeversammlung-gemeindeparlament-legislative/versammlungen-sitzungen",
                 "group_id": "og_demo-ftw_users"
             }

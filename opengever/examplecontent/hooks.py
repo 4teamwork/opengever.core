@@ -1,5 +1,5 @@
-from opengever.examplecontent.contacts import ExampleContentCreator as ContactExampleContentCreator
-from opengever.examplecontent.meeting import ExampleContentCreator as MeetingExampleContentCreator
+from opengever.examplecontent.contacts import ContactExampleContentCreator
+from opengever.examplecontent.meeting import MeetingExampleContentCreator
 from opengever.private import enable_opengever_private
 
 

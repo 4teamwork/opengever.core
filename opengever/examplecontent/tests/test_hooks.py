@@ -28,6 +28,6 @@ class TestHooks(FunctionalTestCase):
         applyProfile(api.portal.get(), 'opengever.examplecontent:municipality_content')
         applyProfile(api.portal.get(), 'opengever.examplecontent:init')
 
-        self.assertEqual(4, Proposal.query.count())
-        self.assertEqual(4, AgendaItem.query.count())
-        self.assertEqual(5, Meeting.query.count())
+        self.assertEqual(11, Proposal.query.count())
+        self.assertEqual(8, AgendaItem.query.count())
+        self.assertEqual(13, Meeting.query.count())
