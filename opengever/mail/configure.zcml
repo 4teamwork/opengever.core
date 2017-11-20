@@ -37,11 +37,6 @@
       name="checked_out"
       />
 
-  <adapter
-      factory=".indexer.SearchableTextExtender"
-      name="IOGMail"
-      />
-
   <plone:behavior
       title="ISendableDocsContainer behavior"
       description="generates an email adress for a dossier"

@@ -9,8 +9,10 @@ from opengever.testing import index_data_for
 from opengever.testing import obj2brain
 from plone.dexterity.utils import createContentInContainer
 from plone.namedfile.file import NamedBlobFile
+from Products.CMFCore.interfaces import ISiteRoot
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getAdapter
+from zope.component.hooks import setSite
 import datetime
 
 
@@ -157,12 +159,17 @@ class TestDefaultDocumentIndexer(MockTestCase):
 
         # Sample document containing our file
         doc1 = self.mocker.mock()
-        self.expect(doc1.file).result(sample_file).count(1, None)
+        self.expect(doc1.get_file()).result(sample_file).count(1, None)
 
         # datastream returned by transform
         expected_fulltext = 'FULLTEXT'
         stream = self.mocker.mock()
         self.expect(stream.getData()).result(expected_fulltext)
+
+        # Mock portal object for getSite()
+        site = self.providing_stub(interfaces=[ISiteRoot])
+        self.expect(site.aq_chain).result([site])
+        setSite(site)
 
         # Mock the portal_transforms tool
         mock_portal_transforms = self.mocker.mock()
@@ -195,10 +202,15 @@ class TestDefaultDocumentIndexer(MockTestCase):
 
         # Sample document containing our file
         doc1 = self.mocker.mock()
-        self.expect(doc1.file).result(sample_file).count(1, None)
+        self.expect(doc1.get_file()).result(sample_file).count(1, None)
 
         def raise_transform_exception(*args, **kwargs):
             raise Exception("This transform failed!")
+
+        # Mock portal object for getSite()
+        site = self.providing_stub(interfaces=[ISiteRoot])
+        self.expect(site.aq_chain).result([site])
+        setSite(site)
 
         # Mock the portal_transforms tool to raise an exception
         mock_portal_transforms = self.mocker.mock()

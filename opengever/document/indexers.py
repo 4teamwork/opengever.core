@@ -4,13 +4,14 @@ from opengever.base.behaviors.classification import IClassification
 from opengever.base.behaviors.classification import IClassificationMarker
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
+from opengever.document.behaviors import IBaseDocument
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.interfaces import IDocumentIndexer
 from opengever.ogds.base.actor import Actor
+from plone import api
 from plone.indexer import indexer
-from Products.CMFCore.utils import getToolByName
 from Products.CMFDiffTool.utils import safe_utf8
 from ZODB.POSException import ConflictError
 from zope.component import adapter
@@ -36,16 +37,17 @@ class DefaultDocumentIndexer(object):
         self.context = context
 
     def extract_text(self):
-        if self.context.file:
-            filename = self.context.file.filename
-            transform_tool = getToolByName(self.context, 'portal_transforms')
+        file_ = self.context.get_file()
+        if file_:
+            filename = file_.filename
+            transform_tool = api.portal.get_tool('portal_transforms')
             try:
                 plain_text = transform_tool.convertTo(
                     'text/plain',
-                    self.context.file.data,
-                    mimetype=self.context.file.contentType,
+                    file_.data,
+                    mimetype=file_.contentType,
                     filename=filename,
-                    object=self.context.file._blob)
+                    object=file_._blob)
             except ConflictError:
                 raise
             except Exception, e:
@@ -59,7 +61,7 @@ class DefaultDocumentIndexer(object):
 
 
 @implementer(dexteritytextindexer.IDynamicTextIndexExtender)
-@adapter(IDocumentSchema)
+@adapter(IBaseDocument)
 class SearchableTextExtender(object):
     """Specifix SearchableText Extender for document"""
 
@@ -79,7 +81,8 @@ class SearchableTextExtender(object):
 
         fulltext_indexer = getAdapter(self.context, IDocumentIndexer)
         fulltext = fulltext_indexer.extract_text()
-        searchable.append(fulltext)
+        if fulltext:
+            searchable.append(fulltext)
 
         # keywords
         keywords = IDocumentMetadata(self.context).keywords
