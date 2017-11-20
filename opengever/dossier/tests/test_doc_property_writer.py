@@ -25,7 +25,7 @@ class TestDocPropertyWriter(IntegrationTestCase):
 
     maxDiff = None
 
-    features = ('update-doc-properties',)
+    features = ('doc-properties',)
 
     def test_export_is_enabled_when_feature_is_enabled(self):
         self.login(self.regular_user)

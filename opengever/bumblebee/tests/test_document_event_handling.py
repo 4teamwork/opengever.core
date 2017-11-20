@@ -8,7 +8,7 @@ class TestDocPropertywriterBumblebeeChecksum(IntegrationTestCase):
     a document with the doc property writer.
 
     """
-    features = ('update-doc-properties',)
+    features = ('doc-properties',)
 
     def test_bumblebee_checksum_updated_when_document_modified(self):
         self.login(self.dossier_responsible)
