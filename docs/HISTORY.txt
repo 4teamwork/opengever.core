@@ -11,6 +11,7 @@ Changelog
 - SPV: Sort meetings by date. [tarnap]
 - SPV: Add concluded meetings to committee overview and reorder the blocks in the columns. [tarnap]
 - Update bumblebee checksum when modifying document doc properties. [deiferni]
+- Fix OGMail searchable text extender. [elioschmutz]
 - Fix syncing the submitted proposal title to sql. [deiferni]
 - SPV: Fix member links in committee overview. [tarnap]
 - Add date of submission to proposals. [deiferni]

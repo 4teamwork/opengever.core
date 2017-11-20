@@ -36,6 +36,6 @@ class TestMailIndexers(IntegrationTestCase):
     def test_reference_number(self):
         self.login(self.regular_user)
         extender = getAdapter(
-            self.mail_eml, IDynamicTextIndexExtender, u'IOGMail')
+            self.mail_eml, IDynamicTextIndexExtender, u'IDocumentSchema')
 
         self.assertEquals('Client1 1.1 / 1 / 12 12', extender())
