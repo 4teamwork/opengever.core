@@ -233,17 +233,14 @@ function Tree(nodes, config) {
 }
 
 
-ExpandStore = function(cookie_name, identifier_key) {
+ExpandStore = function(store_name, identifier_key) {
   function get() {
-    var cookie = $.cookie(cookie_name);
-    if (!cookie) {
-      return [];
-    }
-    return cookie.split(';');
+    var expanded = localStorage.getItem(store_name);
+    return expanded ? JSON.parse(expanded) : [];
   }
 
   function set(uids) {
-    $.cookie(cookie_name, uids.join(';'), {path: '/'});
+    return localStorage.setItem(store_name, JSON.stringify(uids));
   }
 
   function identifier(node) {
