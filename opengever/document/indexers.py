@@ -10,8 +10,8 @@ from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.interfaces import IDocumentIndexer
 from opengever.ogds.base.actor import Actor
+from plone import api
 from plone.indexer import indexer
-from Products.CMFCore.utils import getToolByName
 from Products.CMFDiffTool.utils import safe_utf8
 from ZODB.POSException import ConflictError
 from zope.component import adapter
@@ -40,7 +40,7 @@ class DefaultDocumentIndexer(object):
         file_ = self.context.get_file()
         if file_:
             filename = file_.filename
-            transform_tool = getToolByName(self.context, 'portal_transforms')
+            transform_tool = api.portal.get_tool('portal_transforms')
             try:
                 plain_text = transform_tool.convertTo(
                     'text/plain',
