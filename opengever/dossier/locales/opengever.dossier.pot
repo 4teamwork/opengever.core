@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-11-13 14:23+0000\n"
+"POT-Creation-Date: 2017-11-16 20:06+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -463,6 +463,11 @@ msgstr ""
 #. Default: "Address"
 #: ./opengever/dossier/templatefolder/form.py
 msgid "label_address"
+msgstr ""
+
+#. Default: "Protected Objects"
+#: ./opengever/dossier/browser/tabbed.py
+msgid "label_blocked_local_roles"
 msgstr ""
 
 #. Default: "by ${author}"

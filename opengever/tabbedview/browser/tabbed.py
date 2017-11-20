@@ -19,14 +19,15 @@ class GeverTabbedView(TabbedView):
     They keys `icon`, `url` and `class` are also required by ftw.tabbedview,
     but usually left empty. Thus a default value will be filled in for your
     convenience.
-
     """
+
     def _make_tab_with_defaults(self):
+
         return {
-                'icon': None,
-                'url': '#',
-                'class': None
-        }
+            'icon': None,
+            'url': '#',
+            'class': None
+            }
 
     def _fill_with_defaults(self, tabs):
         finished_tabs = []
@@ -51,6 +52,7 @@ class ModelProxyTabbedView(GeverTabbedView):
     of a model proxy.
 
     """
+
     is_model_proxy_view = True
 
     def prepare_model_proxy_tabs(self, contentview_tabs):

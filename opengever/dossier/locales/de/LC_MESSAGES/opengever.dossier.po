@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-11-13 14:23+0000\n"
+"POT-Creation-Date: 2017-11-16 20:06+0000\n"
 "PO-Revision-Date: 2017-05-23 04:53+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
@@ -465,6 +465,11 @@ msgstr "Erlaubte Dossiervorlagen"
 #: ./opengever/dossier/templatefolder/form.py
 msgid "label_address"
 msgstr "Adresse"
+
+#. Default: "Protected Objects"
+#: ./opengever/dossier/browser/tabbed.py
+msgid "label_blocked_local_roles"
+msgstr "Geschützte Objekte"
 
 #. Default: "by ${author}"
 #: ./opengever/dossier/project_templates/byline.pt

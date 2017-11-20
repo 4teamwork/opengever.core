@@ -15,21 +15,20 @@ from zope.lifecycleevent import IObjectRemovedEvent
 
 
 def set_former_reference_before_moving(obj, event):
-    """ Temporarily store current reference number before
+    """Temporarily store current reference number before
     moving the dossier.
     """
-
     # make sure obj wasn't just created or deleted
     if not event.oldParent or not event.newParent:
         return
 
-    repr = IDossier(obj)
+    dossier_repr = IDossier(obj)
     ref_no = getAdapter(obj, IReferenceNumber).get_number()
-    IDossier['temporary_former_reference_number'].set(repr, ref_no)
+    IDossier['temporary_former_reference_number'].set(dossier_repr, ref_no)
 
 
 def set_former_reference_after_moving(obj, event):
-    """ Use the (hopefully) stored former reference number
+    """Use the (hopefully) stored former reference number
     as the real new former reference number. This has to
     be done after the dossier was moved.
 
@@ -38,11 +37,11 @@ def set_former_reference_after_moving(obj, event):
     if not event.oldParent or not event.newParent:
         return
 
-    repr = IDossier(obj)
-    former_ref_no = repr.temporary_former_reference_number
-    IDossier['former_reference_number'].set(repr, former_ref_no)
+    dossier_repr = IDossier(obj)
+    former_ref_no = dossier_repr.temporary_former_reference_number
+    IDossier['former_reference_number'].set(dossier_repr, former_ref_no)
     # reset temporary former reference number
-    IDossier['temporary_former_reference_number'].set(repr, '')
+    IDossier['temporary_former_reference_number'].set(dossier_repr, '')
 
     # setting the new number
     parent = aq_parent(aq_inner(obj))
@@ -84,7 +83,6 @@ def reindex_contained_objects(dossier, event):
     index of all contained objects (documents, mails and tasks) so they don't
     show an outdated title in the ``subdossier`` column
     """
-
     if ILocalrolesModifiedEvent.providedBy(event):
         return
 
@@ -102,24 +100,23 @@ def reindex_contained_objects(dossier, event):
 
 def reindex_containing_dossier(dossier, event):
     """Reindex the containging_dossier index for all the contained obects,
-    when the title has changed."""
-
+    when the title has changed.
+    """
     if ILocalrolesModifiedEvent.providedBy(event):
         return
 
     if not IDossierMarker.providedBy(aq_parent(aq_inner(dossier))):
-        for descr in event.descriptions:
-            for attr in descr.attributes:
-                if attr == 'IOpenGeverBase.title':
-                    for brain in dossier.portal_catalog(
-                        path='/'.join(dossier.getPhysicalPath())):
+        attrs = tuple(
+            attr
+            for descr in event.descriptions
+            for attr in descr.attributes
+            )
 
-                        brain.getObject().reindexObject(
-                            idxs=['containing_dossier'])
-
-                        if brain.portal_type in ['opengever.task.task',
-                            'opengever.inbox.forwarding']:
-                            sync_task(brain.getObject(), event)
+        if 'IOpenGeverBase.title' in attrs:
+            for brain in dossier.portal_catalog(path='/'.join(dossier.getPhysicalPath())):
+                brain.getObject().reindexObject(idxs=['containing_dossier'])
+                if brain.portal_type in ['opengever.task.task', 'opengever.inbox.forwarding']:
+                    sync_task(brain.getObject(), event)
 
 
 def reindex_is_subdossier(dossier, event):
@@ -128,11 +125,15 @@ def reindex_is_subdossier(dossier, event):
     dossier.reindexObject(idxs=['is_subdossier'])
 
 
+def reindex_blocked_local_roles(dossier, event):
+    """Reindex blocked_local_roles upon the acquisition blockedness changing."""
+    dossier.reindexObject(idxs=['blocked_local_roles'])
+
+
 def purge_reference_number_mappings(copied_dossier, event):
     """Reset the reference number mapping when copying (or actually pasting)
     dossiers.
     """
-
     prefix_adapter = IReferenceNumberPrefix(copied_dossier)
     prefix_adapter.purge_mappings()
 

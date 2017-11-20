@@ -1,7 +1,8 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from collective import dexteritytextindexer
-from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
+from opengever.base.interfaces import IReferenceNumber
+from opengever.base.interfaces import ISequenceNumber
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.filing import IFilingNumber
@@ -86,10 +87,15 @@ def external_reference(obj):
     return IDossier(context).external_reference
 
 
+@indexer(IDossierMarker)
+def blocked_local_roles(obj):
+    """Return whether acquisition is blocked or not."""
+    return bool(getattr(aq_inner(obj), '__ac_local_roles_block__', False))
+
+
 @indexer(IDexterityContent)
 def main_dossier_title(obj):
     """Return the title of the main dossier."""
-
     dossier = get_main_dossier(obj)
     if not dossier:
         return None
@@ -146,6 +152,7 @@ def containing_subdossier(obj):
 @implementer(dexteritytextindexer.IDynamicTextIndexExtender)
 @adapter(IDossierMarker)
 class SearchableTextExtender(object):
+    """Provide full text searching for dossiers."""
 
     def __init__(self, context):
         self.context = context
@@ -183,14 +190,13 @@ class SearchableTextExtender(object):
                 else keyword
                 for keyword in keywords)
 
-        external_reference = IDossier(self.context).external_reference
-        if external_reference:
-            searchable.append(external_reference.encode('utf-8'))
+        searchable_external_reference = IDossier(self.context).external_reference
+        if searchable_external_reference:
+            searchable.append(searchable_external_reference.encode('utf-8'))
 
         return ' '.join(searchable)
 
 
 @adapter(IDossierTemplateMarker)
 class DossierTemplateSearchableTextExtender(SearchableTextExtender):
-    """
-    """
+    """Make dossier templates full text searchable."""

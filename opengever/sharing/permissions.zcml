@@ -1,0 +1,7 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    i18n_domain="opengever.sharing">
+
+  <permission id="opengever.document.ListProtectedObjects" title="opengever.sharing: List Protected Objects" />
+
+</configure>

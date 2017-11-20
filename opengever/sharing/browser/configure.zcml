@@ -26,4 +26,11 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      name="tabbedview_view-blocked-local-roles"
+      for="*"
+      class=".admin_list.BlockedLocalRolesList"
+      permission="opengever.document.ListProtectedObjects"
+      />
+
 </configure>

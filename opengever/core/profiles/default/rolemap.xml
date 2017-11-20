@@ -32,6 +32,11 @@
       <role name="Role Manager" />
     </permission>
 
+    <permission name="opengever.sharing: List Protected Objects" acquire="False">
+      <role name="Administrator" />
+      <role name="Manager" />
+    </permission>
+
     <!--migrated from opengever/base/profiles/default/rolemap.xml-->
     <permission name="Remove GEVER content" acquire="True">
       <role name="Manager" />

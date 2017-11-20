@@ -417,12 +417,17 @@ class OpengeverContentFixture(object):
         self.dossier = self.register('dossier', create(
             Builder('dossier').within(self.repofolder00)
             .titled(u'Vertr\xe4ge mit der kantonalen Finanzverwaltung')
-            .having(description=u'Alle aktuellen Vertr\xe4ge mit der'
-                    u' kantonalen Finanzverwaltung sind hier abzulegen.'
-                    u' Vertr\xe4ge vor 2016 geh\xf6ren ins Archiv.',
-                    keywords=(u'Finanzverwaltung', u'Vertr\xe4ge'),
+            .having(description=u'Alle aktuellen Vertr\xe4ge mit der kantonalen Finanzverwaltung sind hier abzulegen. Vertr\xe4ge vor 2016 '
+                    u'geh\xf6ren ins Archiv.',
+                    keywords=(
+                        u'Finanzverwaltung',
+                        u'Vertr\xe4ge',
+                        ),
                     start=date(2016, 1, 1),
-                    responsible=self.dossier_responsible.getId())))
+                    responsible=self.dossier_responsible.getId(),
+                    external_reference=u'qpr-900-9001-\xf7',
+                    )
+            ))
 
         create(Builder('contact_participation')
                .for_contact(self.meier_ag)
@@ -514,7 +519,13 @@ class OpengeverContentFixture(object):
                         committee=self.empty_committee.load_model())))
 
         subdossier = self.register('subdossier', create(
-            Builder('dossier').within(self.dossier).titled(u'2016')))
+            Builder('dossier')
+            .within(self.dossier)
+            .titled(u'2016')
+            .having(
+                keywords=(u'Subkeyword', u'Subkeyw\xf6rd'),
+                )
+            ))
 
         self.register('subdossier2', create(
             Builder('dossier').within(self.dossier).titled(u'2015')))

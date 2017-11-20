@@ -4,4 +4,5 @@ INDEXES = (
     ('containing_dossier', 'FieldIndex'),
     ('retention_expiration', 'DateIndex'),
     ('external_reference', 'FieldIndex'),
+    ('blocked_local_roles', 'BooleanIndex'),
 )

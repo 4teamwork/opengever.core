@@ -1,3 +1,6 @@
+from zope.annotation.interfaces import IAnnotations
+from zope.component.hooks import getSite
+import logging
 import opengever.activity.hooks
 import opengever.base.hooks
 import opengever.contact.hooks
@@ -8,12 +11,10 @@ import opengever.mail.hooks
 import opengever.ogds.base.hooks
 import opengever.private.hooks
 import opengever.quota.hooks
+import opengever.repository.hooks
 import opengever.tabbedview.hooks
 import opengever.task.hooks
 import opengever.trash.hooks
-from zope.annotation.interfaces import IAnnotations
-from zope.component.hooks import getSite
-import logging
 import re
 
 
@@ -64,7 +65,7 @@ def avoid_profile_reinstallation(event):
         assert profile not in annotations[key], \
             'Profile {!r} should not be installed twice.'.format(profile)
     elif profile in annotations[key]:
-        LOG.warning('{!r} installed twice'.format(profile))
+        LOG.warning('%r installed twice', profile)
 
     annotations[key].append(profile)
 
@@ -98,6 +99,8 @@ def trigger_subpackage_hooks(site):
     opengever.activity.hooks.insert_notification_defaults(site)
     opengever.private.hooks.configure_members_area(site)
     opengever.quota.hooks.policy_installed(site)
+    # Added after the profile merge
+    opengever.repository.hooks.installed(site)
 
 
 def enable_secure_flag_for_cookies(context):

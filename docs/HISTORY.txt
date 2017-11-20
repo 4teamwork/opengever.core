@@ -5,6 +5,7 @@ Changelog
 2017.6.5 (unreleased)
 ---------------------
 
+- Add a tabbed view for Administrators and Managers to reporoot - repofolder - dossier for listing child dossiers with blocked local roles. [Rotonen]
 - Add missing default value for dossier protection fields. [elioschmutz]
 - Show filterlist also on empty tabbedview listings. [phgross]
 - Fix redirection when creating new sablon templates. [tarnap]

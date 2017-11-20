@@ -162,6 +162,11 @@
       />
 
   <adapter
+      factory=".indexers.blocked_local_roles"
+      name="blocked_local_roles"
+      />
+
+  <adapter
       factory=".indexers.main_dossier_title"
       name="containing_dossier"
       />
@@ -215,6 +220,18 @@
       for="opengever.dossier.behaviors.dossier.IDossierMarker
            zope.lifecycleevent.interfaces.IObjectMovedEvent"
       handler=".handlers.reindex_is_subdossier"
+      />
+
+  <subscriber
+      for="opengever.dossier.behaviors.dossier.IDossierMarker
+           opengever.sharing.interfaces.ILocalRolesAcquisitionBlocked"
+      handler=".handlers.reindex_blocked_local_roles"
+      />
+
+  <subscriber
+      for="opengever.dossier.behaviors.dossier.IDossierMarker
+           opengever.sharing.interfaces.ILocalRolesAcquisitionActivated"
+      handler=".handlers.reindex_blocked_local_roles"
       />
 
   <subscriber
