@@ -62,6 +62,7 @@ class IProtectDossier(model.Schema):
             default=u'Choose users and groups which have only readable access to the dossier'),
         value_type=schema.Choice(source=AllUsersAndGroupsSourceBinder()),
         required=False,
+        default=[],
         missing_value=[],
         )
 
@@ -76,6 +77,7 @@ class IProtectDossier(model.Schema):
             default=u'Choose users and groups which have readable and writing access to the dossier'),
         value_type=schema.Choice(source=AllUsersAndGroupsSourceBinder()),
         required=False,
+        default=[],
         missing_value=[],
         )
 

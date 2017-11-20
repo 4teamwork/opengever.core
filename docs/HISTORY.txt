@@ -5,6 +5,7 @@ Changelog
 2017.6.5 (unreleased)
 ---------------------
 
+- Add missing default value for dossier protection fields. [elioschmutz]
 - Show filterlist also on empty tabbedview listings. [phgross]
 - Fix redirection when creating new sablon templates. [tarnap]
 - SPV: Sort meetings by date. [tarnap]
