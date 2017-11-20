@@ -5,6 +5,7 @@ from ftw.testbrowser.pages import factoriesmenu
 from opengever.contact.interfaces import IContactFolder
 from opengever.testing import add_languages
 from opengever.testing import IntegrationTestCase
+from plone import api
 
 
 class TestContactFolder(IntegrationTestCase):
@@ -38,3 +39,18 @@ class TestContactFolder(IntegrationTestCase):
 
         self.assert_portlet_inheritance_blocked(
             'plone.leftcolumn', self.contactfolder)
+
+
+class TestLocalContactListing(IntegrationTestCase):
+
+    @browsing
+    def test_list_active_contacts(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(self.contactfolder, view='tabbedview_view-local')
+
+        self.assertEquals(
+            [u'Lastname Firstname email Phone office',
+             u'D\xfcrr Hanspeter',
+             u'Meier Franz meier.f@example.com'],
+            browser.css('.listing').first.rows.text)
