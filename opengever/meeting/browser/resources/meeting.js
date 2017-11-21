@@ -320,7 +320,7 @@
         self.url = target.attr('href');
         self.row = target.parents('tr:first');
         self.titlePane = $('.proposal_title>a, .proposal_title', self.row);
-        self.field.val(self.titlePane.text().trim());
+        self.field.val(self.titlePane.first().text().trim());
         self.overlay.load();
       };
 
