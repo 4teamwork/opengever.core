@@ -8,7 +8,9 @@ from opengever.base.reporter import XLSReporter
 from opengever.disposition import _
 from opengever.dossier import _ as dossier_mf
 from plone import api
+from plone.i18n.normalizer.interfaces import IIDNormalizer
 from Products.Five.browser import BrowserView
+from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 
@@ -81,9 +83,19 @@ class DispositionExcelExport(BrowserView):
             'Content-Type',
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
         set_attachment_content_disposition(
-            self.request, "disposition_report.xlsx")
+            self.request, self.get_file_name())
 
         return data
+
+    def get_file_name(self):
+        """Returns the filename for the excel spreadsheet.
+        """
+        normalizer = getUtility(IIDNormalizer)
+        name_basis = _(u'appraisal_list', default=u'appraisal_list')
+        file_name = "{0}_{1}.xlsx".format(
+            translate(name_basis, context=self.request),
+            normalizer.normalize(self.context.title_or_id()))
+        return file_name
 
     def get_sheet_title(self):
         """Returns current disposition title. Crop it to 30 characters

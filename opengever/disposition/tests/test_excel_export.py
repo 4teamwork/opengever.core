@@ -5,7 +5,9 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.testing import FunctionalTestCase
 from openpyxl import load_workbook
+from plone import api
 from tempfile import NamedTemporaryFile
+import transaction
 
 
 class TestDispositionExcelExport(FunctionalTestCase):
@@ -35,7 +37,8 @@ class TestDispositionExcelExport(FunctionalTestCase):
 
         self.grant('Records Manager')
         self.disposition = create(Builder('disposition')
-                                  .having(dossiers=[self.dossier1, self.dossier2]))
+                                  .having(dossiers=[self.dossier1, self.dossier2],
+                                          title="disposition example"))
 
     @browsing
     def test_label_row(self, browser):
@@ -78,3 +81,20 @@ class TestDispositionExcelExport(FunctionalTestCase):
                  u'not archival worthy', u'In Absprache mit ARCH.',
                  u'not archival worthy'],
                 [cell.value for cell in rows[2]])
+
+    @browsing
+    def test_file_name(self, browser):
+        # use the enable_languages method from
+        # IntegrationTestCase when refactoring these tests
+        # as integration tests
+        lang_tool = api.portal.get_tool('portal_languages')
+        lang_tool.use_combined_language_codes = True
+        lang_tool.addSupportedLanguage('de-ch')
+        transaction.commit()
+        browser.login().open()
+        browser.click_on("Deutsch")
+        browser.open(self.disposition, view='download_excel')
+        fname = eval(browser.headers.get(
+            "content-disposition").split(";")[1].split("=")[1])
+        expected = "bewertungsliste_disposition-example.xlsx"
+        self.assertEquals(expected, fname)

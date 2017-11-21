@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-02 12:51+0000\n"
+"POT-Creation-Date: 2017-11-20 14:11+0000\n"
 "PO-Revision-Date: 2017-06-04 17:02+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-disposition/fr/>\n"
@@ -27,6 +27,11 @@ msgstr "Actif"
 #: ./opengever/disposition/browser/listing.py
 msgid "all"
 msgstr ""
+
+#. Default: "appraisal_list"
+#: ./opengever/disposition/browser/excel_export.py
+msgid "appraisal_list"
+msgstr "liste_evaluation"
 
 #. Default: "Sequence Number"
 #: ./opengever/disposition/browser/listing.py
@@ -258,4 +263,3 @@ msgstr ""
 #: ./opengever/disposition/browser/removal_protocol.py
 msgid "title_removal_protocol"
 msgstr ""
-
