@@ -11,6 +11,7 @@ ROLE_MAPPING = {
     'edit_dossiers_access': 'Editor',
     'close_dossiers_access': 'Reviewer',
     'reactivate_dossiers_access': 'Publisher',
+    'manage_dossiers_access': 'DossierManager',
 }
 
 

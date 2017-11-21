@@ -9,6 +9,7 @@ Changelog
 - Correct field description for responsible person/entity when forwarding documents [njohner]
 - SPV-word: Fix renaming agenda items in meeting view. [tarnap]
 - Don't remove doc-properties for excerpts, use correct document as master. [deiferni]
+- Extend repository-import excel with new dossier-manager role. [elioschmutz]
 - Add a tabbed view for Administrators and Managers to reporoot - repofolder - dossier for listing child dossiers with blocked local roles. [Rotonen]
 - Add missing default value for dossier protection fields. [elioschmutz]
 - Show filterlist also on empty tabbedview listings. [phgross]
