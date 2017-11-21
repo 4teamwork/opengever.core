@@ -30,19 +30,20 @@ import timeit
 
 
 FEATURE_FLAGS = {
-    'meeting': 'opengever.meeting.interfaces.IMeetingSettings.is_feature_enabled',
-    'word-meeting': 'opengever.meeting.interfaces.IMeetingSettings.is_word_implementation_enabled',
-    'dossiertemplate': ('opengever.dossier.dossiertemplate'
-                        '.interfaces.IDossierTemplateSettings.is_feature_enabled'),
+    'activity': 'opengever.activity.interfaces.IActivitySettings.is_feature_enabled',
+    'bumblebee-open-pdf-new-tab': 'opengever.bumblebee.interfaces.IGeverBumblebeeSettings.open_pdf_in_a_new_window',
+    'bumblebee': 'opengever.bumblebee.interfaces.IGeverBumblebeeSettings.is_feature_enabled',
+    'contact': 'opengever.contact.interfaces.IContactSettings.is_feature_enabled',
+    'doc-properties': 'opengever.dossier.interfaces.ITemplateFolderProperties.create_doc_properties',
+    'dossiertemplate': 'opengever.dossier.dossiertemplate.interfaces.IDossierTemplateSettings.is_feature_enabled',
     'ech0147-export': 'opengever.ech0147.interfaces.IECH0147Settings.ech0147_export_enabled',
     'ech0147-import': 'opengever.ech0147.interfaces.IECH0147Settings.ech0147_import_enabled',
     'extjs': 'ftw.tabbedview.interfaces.ITabbedView.extjs_enabled',
-    'bumblebee': 'opengever.bumblebee.interfaces.IGeverBumblebeeSettings.is_feature_enabled',
-    'bumblebee-open-pdf-new-tab': 'opengever.bumblebee.interfaces.IGeverBumblebeeSettings.open_pdf_in_a_new_window',
-    'activity': 'opengever.activity.interfaces.IActivitySettings.is_feature_enabled',
-    'contact': 'opengever.contact.interfaces.IContactSettings.is_feature_enabled',
-    'doc-properties': 'opengever.dossier.interfaces.ITemplateFolderProperties.create_doc_properties'
-}
+    'meeting': 'opengever.meeting.interfaces.IMeetingSettings.is_feature_enabled',
+    'officeconnector-attach': 'opengever.officeconnector.interfaces.IOfficeConnectorSettings.attach_to_outlook_enabled',
+    'officeconnector-checkout': 'opengever.officeconnector.interfaces.IOfficeConnectorSettings.direct_checkout_and_edit_enabled',
+    'word-meeting': 'opengever.meeting.interfaces.IMeetingSettings.is_word_implementation_enabled',
+    }
 
 FEATURE_PROFILES = {
     'filing_number': 'opengever.dossier:filing',
