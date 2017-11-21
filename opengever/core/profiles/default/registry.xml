@@ -3,6 +3,7 @@
   <!--migrated from opengever/ogds/base/profiles/default/registry.xml-->
   <records interface="opengever.ogds.base.interfaces.IAdminUnitConfiguration" />
 
+  <records interface="opengever.ogds.base.interfaces.IOGDSSyncConfiguration" />
 
   <!--migrated from opengever/base/profiles/default/registry.xml-->
   <records interface="opengever.base.interfaces.IBaseCustodyPeriods" />

@@ -1,11 +1,13 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.ogds.base.interfaces import IOGDSSyncConfiguration
 from opengever.ogds.base.interfaces import IOGDSUpdater
 from opengever.ogds.base.tests.ldaphelpers import FakeLDAPPlugin
 from opengever.ogds.base.tests.ldaphelpers import FakeLDAPSearchUtility
 from opengever.ogds.base.tests.ldaphelpers import FakeLDAPUserFolder
 from opengever.ogds.base.utils import ogds_service
 from opengever.testing import FunctionalTestCase
+from plone import api
 
 
 FAKE_LDAP_USERFOLDER = FakeLDAPUserFolder()
@@ -57,6 +59,26 @@ class TestOGDSUpdater(FunctionalTestCase):
         updater.import_groups()
         self.assertIsNotNone(ogds_service().fetch_group('og_mandant1_users'))
 
+    def test_uses_title_attribute_for_group_title_when_set(self):
+        FAKE_LDAP_USERFOLDER.groups = [
+            create(Builder('ldapgroup')
+                   .having(description=u'OG Mandant1 users')
+                   .named('og_mandant1_users'))]
+
+        updater = IOGDSUpdater(self.portal)
+        updater.import_groups()
+        group = ogds_service().fetch_group('og_mandant1_users')
+        self.assertIsNone(group.title)
+
+        api.portal.set_registry_record(name='group_title_ldap_attribute',
+                                       value=u'description',
+                                       interface=IOGDSSyncConfiguration)
+        updater = IOGDSUpdater(self.portal)
+        updater.import_groups()
+
+        group = ogds_service().fetch_group('og_mandant1_users')
+        self.assertEquals(u'OG Mandant1 users', group.title)
+
     def test_imports_group_memberships(self):
         sk1m1 = create(Builder('ldapuser').named('sk1m1'))
         sk2m1 = create(Builder('ldapuser').named('sk2m1'))
@@ -94,9 +116,9 @@ class TestOGDSUpdater(FunctionalTestCase):
                        .named('klaus.r\xc3\xbcegg')
                        .having(firstname='Klaus',
                                lastname='R\xc3\xbcegg',
-                               l=['M\xc3\xbcnsingen'],
-                               o=['M\xc3\xbcller & Co'],
-                               ou=['M\xc3\xbcnster'],
+                               l=['M\xc3\xbcnsingen'],  # noqa
+                               o=['M\xc3\xbcller & Co'],  # noqa
+                               ou=['M\xc3\xbcnster'],  # noqa
                                street=['F\xc3\xa4hrstrasse 13']))
 
         group = create(Builder('ldapgroup')

@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Add a tabbed view for Administrators and Managers to reporoot - repofolder - dossier for listing child dossiers with blocked local roles. [Rotonen]
+- Add group title option to the OGDS Synchronisation. [phgross]
 - Add missing default value for dossier protection fields. [elioschmutz]
 - Show filterlist also on empty tabbedview listings. [phgross]
 - Fix redirection when creating new sablon templates. [tarnap]

@@ -113,6 +113,14 @@ class IAdminUnitConfiguration(Interface):
     )
 
 
+class IOGDSSyncConfiguration(Interface):
+
+    group_title_ldap_attribute = schema.TextLine(
+        title=u'LDAP attribute name for the group title.',
+        description=u'If attribute is not set, group title will not be synced.'
+    )
+
+
 class ISyncStamp(Interface):
     """Adapter Inteface for the Import Stamp"""
 
