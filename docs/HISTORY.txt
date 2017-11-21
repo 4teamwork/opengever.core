@@ -5,6 +5,7 @@ Changelog
 2017.7.0 (unreleased)
 ---------------------
 
+- Make cassation_date field accessible only to manager. [njohner]
 - Add mimetype for MS OneNote. [phgross]
 - Correct field description for responsible person/entity when forwarding documents [njohner]
 - SPV-word: Fix renaming agenda items in meeting view. [tarnap]
