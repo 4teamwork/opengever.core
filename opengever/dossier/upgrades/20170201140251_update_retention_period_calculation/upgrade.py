@@ -7,7 +7,9 @@ class UpdateRetentionPeriodCalculation(UpgradeStep):
     """
 
     def __call__(self):
-        self.reindex_resolved_dossiers()
+        pass
+        # Moved to 20170411113233@opengever.base:default
+        # self.reindex_resolved_dossiers()
 
     def reindex_resolved_dossiers(self):
         for obj in self.objects(
