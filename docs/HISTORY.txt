@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2017.6.5 (unreleased)
+2017.7.0 (unreleased)
 ---------------------
 
 - Correct field description for responsible person/entity when forwarding documents [njohner]
@@ -14,13 +14,10 @@ Changelog
 - Use localstorage for tracking expanded tree uids instead of cookie. [Kevin Bieri]
 - SPV: Sort meetings by date. [tarnap]
 - SPV: Add concluded meetings to committee overview and reorder the blocks in the columns. [tarnap]
-- Update bumblebee checksum when modifying document doc properties. [deiferni]
-- Fix OGMail searchable text extender. [elioschmutz]
 - Fix syncing the submitted proposal title to sql. [deiferni]
 - SPV: Fix member links in committee overview. [tarnap]
 - Add date of submission to proposals. [deiferni]
 - SPV: Make the considerations field a trix field. [tarnap]
-- Don't escape description in overview twice for dossier templates. [deiferni]
 - Handle inconsistent local roles on protected dossiers with a warning message. [elioschmutz]
 - Add new field dossier_manager to the IProtectDossier behavior to set the dossier-manager manually. [elisochmutz]
 - Fix agenda items rendering on non-word meeting. [deiferni]
@@ -29,13 +26,11 @@ Changelog
 - Make notification badge a separate channel. [phgross]
 - Allow administrator and owner to delete objects in private folders. [tarnap]
 - Set excel file name to dossier title when creating a disposition report. [njohner]
-- Exclude the latest version in the bumblebee versioning warning logic. [Rotonen]
 - SPV word: Remove fields which are intended for no word version. [tarnap]
 - Add personal notification settings support. [phgross]
 - SPV word: Add links to proposal and meeting in document overview. [tarnap]
 - Add proper responsible for fixture objects. [elioschmutz]
 - Add optional header and suffix templates for protocol excerpts. [tarnap]
-- Fix textfilter in sqlsource table listings for oracle backends. [phgross]
 - Also display exceptions on agenda item list to users. [deiferni]
 - Make sure response changes are persistent. [phgross]
 - SPV word: redesign agenda items in meeting view. [jone]
@@ -45,6 +40,16 @@ Changelog
 - Allow proposal listings to be filtered by proposal title. [deiferni]
 - Allow proposal listings to be sorted by title. [deiferni]
 - Keep meeting-dossier and meeting title in sync, only allow editing of meeting title. [deiferni]
+
+
+2017.6.5 (2017-11-22)
+---------------------
+
+- Fix OGMail searchable text extender. [elioschmutz]
+- Update bumblebee checksum when modifying document doc properties. [deiferni]
+- Don't escape description in overview twice for dossier templates. [deiferni]
+- Fix textfilter in sqlsource table listings for oracle backends. [phgross]
+- Exclude the latest version in the bumblebee versioning warning logic. [Rotonen]
 
 
 2017.6.4 (2017-11-09)
