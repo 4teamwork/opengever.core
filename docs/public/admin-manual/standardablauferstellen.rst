@@ -4,11 +4,10 @@ Einen Standardablauf erstellen
 Standardablauf generell
 -----------------------
 Wiederkehrende Aufgabenketten können unter Vorlagen hinterlegt werden. Diese
-vordefinierten Aufgabenfolgen werden Standardabläufe genannt. Diese können
-normalerweise nur durch Personen mit Administrator-Rolle definiert werden.
-Ausgelöst können diese aber durch alle Benutzer werden. Details zum Auslösen
-finden Sie daher in der `Benutzerdokumentation <https://docs.onegovgever.ch/user-manual/standardablaeufe/>`_.
-
+vordefinierten Aufgabenfolgen werden Standardabläufe genannt. Diese können nur
+durch Benutzer welche im Vorlagenbereich schreibberechtigt sind, erstellt oder
+bearbeitet werden. Sie können aber durch alle Benutzer in den jeweiligen
+Dossiers ausgelöst werden. Details zum Auslösen finden Sie daher in der `Benutzerdokumentation <https://docs.onegovgever.ch/user-manual/standardablaeufe/>`_.
 
 Standardablauf erstellen
 ------------------------
