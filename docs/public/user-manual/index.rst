@@ -15,6 +15,7 @@ Release 3.10
    overview
    grundlagen
    tippsundtricks
+   benachrichtigung
    dossiers/index
    dokumente/index
    kontakte
