@@ -57,7 +57,7 @@ msgstr "Diese Gruppe wird berechtigt, wenn dem Eingangskorb eine Aufgabe zugewie
 
 #: ./opengever/inbox/forwarding.py
 msgid "help_responsible"
-msgstr "Wählen Sie die verantwortliche Person bzw. den Eingangskorb des oben gewählten Mandanten aus."
+msgstr "Wählen Sie die verantwortliche Person bzw. den Eingangskorb des zuständigen Mandanten aus."
 
 #. Default: "Assigned tasks"
 #: ./opengever/inbox/browser/overview.py
