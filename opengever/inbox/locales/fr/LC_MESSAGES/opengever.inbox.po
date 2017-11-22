@@ -59,7 +59,7 @@ msgstr "Ce goupe est autorisé, dès qu'une tâche est attribuée à la boîte d
 
 #: ./opengever/inbox/forwarding.py
 msgid "help_responsible"
-msgstr "Choix de la personne responsable ou la boîte de réception du client mentionné ci-dessus."
+msgstr "Choix de la personne responsable ou de la boîte de réception du client compétent."
 
 #. Default: "Assigned tasks"
 #: ./opengever/inbox/browser/overview.py
