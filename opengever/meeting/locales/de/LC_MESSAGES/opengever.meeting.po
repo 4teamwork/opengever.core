@@ -408,7 +408,7 @@ msgstr "Aufgabe erstellen"
 #. Default: "Decide"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "action_decide"
-msgstr "Traktandum beschliessen"
+msgstr "Traktandum abschliessen"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "action_download_document"
@@ -675,7 +675,7 @@ msgstr "Beschliessen"
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "decide_agendaitem"
-msgstr "Traktandum beschliessen"
+msgstr "Traktandum abschliessen"
 
 #. Default: "Decided"
 #: ./opengever/meeting/browser/documents/proposalstab.py
@@ -1009,7 +1009,7 @@ msgstr "Beschliessen"
 #. Default: "Decide this agenda item"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "label_decide_action"
-msgstr "Dieses Traktandum beschliessen"
+msgstr "Dieses Traktandum abschliessen"
 
 #. Default: "Decision"
 #: ./opengever/meeting/browser/meetings/protocol.py
