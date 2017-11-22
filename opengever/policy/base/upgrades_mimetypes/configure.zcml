@@ -1,0 +1,11 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:upgrade-step="http://namespaces.zope.org/ftw.upgrade"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup">
+
+  <upgrade-step:directory
+      profile="opengever.policy.base:mimetype"
+      directory="."
+      />
+
+</configure>

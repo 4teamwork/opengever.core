@@ -39,6 +39,9 @@ ADDITIONAL_TYPES = [
     # MS Project
     ('application/vnd.ms-project', '.mpp'),
 
+    # MS OneNote
+    ('application/onenote', '.one'),
+
     # MS Project (generic)
     ('application/x-project', '.mpt'),
     ('application/x-project', '.mpv'),
