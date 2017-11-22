@@ -1,4 +1,5 @@
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages import factoriesmenu
 from opengever.testing import IntegrationTestCase
 
 
@@ -318,4 +319,54 @@ class TestBlockedLocalRolesListing(IntegrationTestCase):
         self.assertEquals(
             expected_url,
             browser.url,
+            )
+
+    @browsing
+    def test_protected_dossiers_are_listed_for_manager(self, browser):
+        self.login(self.dossier_manager, browser)
+
+        browser.open(self.leaf_repofolder)
+        factoriesmenu.add(u'Business Case Dossier')
+        browser.fill({'Title': 'My Dossier'})
+        form = browser.find_form_by_field('Reading')
+        form.find_widget('Reading and writing').fill(self.regular_user.getId())
+        browser.click_on('Save')
+        new_dossier = browser.context
+
+        browser.append_request_header('Accept-Language', 'de-ch')
+        self.login(self.manager, browser)
+
+        browser.open(
+            self.repository_root,
+            view="tabbedview_view-blocked-local-roles",
+            )
+
+        self.assertIn(
+            new_dossier.title,
+            browser.css('.level2').text[0],
+            )
+
+    @browsing
+    def test_protected_dossiers_are_listed_for_administrator(self, browser):
+        self.login(self.dossier_manager, browser)
+
+        browser.open(self.leaf_repofolder)
+        factoriesmenu.add(u'Business Case Dossier')
+        browser.fill({'Title': 'My Dossier'})
+        form = browser.find_form_by_field('Reading')
+        form.find_widget('Reading and writing').fill(self.regular_user.getId())
+        browser.click_on('Save')
+        new_dossier = browser.context
+
+        browser.append_request_header('Accept-Language', 'de-ch')
+        self.login(self.administrator, browser)
+
+        browser.open(
+            self.repository_root,
+            view="tabbedview_view-blocked-local-roles",
+            )
+
+        self.assertIn(
+            new_dossier.title,
+            browser.css('.level2').text[0],
             )

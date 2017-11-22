@@ -225,6 +225,7 @@ class DossierProtection(AnnotationsFactoryImpl):
             return
 
         setattr(self.context, '__ac_local_roles_block__', new_value)
+        self.context.reindexObject(idxs=['blocked_local_roles'])
 
     def need_block_role_inheritance(self):
         return self.is_dossier_protected()
