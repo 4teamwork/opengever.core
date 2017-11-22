@@ -67,16 +67,15 @@ class MergeDocxExcerptCommand(CreateDocumentCommand):
         if header_template is None and suffix_template is None:
             return self.agenda_item.resolve_document().file.data
 
-        with DocxMergeTool() as merge_tool:
-
+        master = self.agenda_item.resolve_document()
+        with DocxMergeTool(master.file.data, remove_property_fields=False) as merge_tool:
             if header_template is not None:
-                merge_tool.add_sablon(self.get_sablon(template=header_template))
-
-            if self.agenda_item.has_document:
-                merge_tool.add_document(self.agenda_item.resolve_document())
+                sablon = self.get_sablon(template=header_template)
+                merge_tool.insert(0, sablon.file_data)
 
             if suffix_template is not None:
-                merge_tool.add_sablon(self.get_sablon(template=suffix_template))
+                sablon = self.get_sablon(template=suffix_template)
+                merge_tool.add(sablon.file_data)
 
             return merge_tool()
 
@@ -386,18 +385,20 @@ class MergeDocxProtocolCommand(CreateGeneratedDocumentCommand):
         return document
 
     def generate_file_data(self):
-        with DocxMergeTool() as merge_tool:
-            merge_tool.add_sablon(self.get_header_sablon())
-
+        master = self.get_header_sablon()
+        with DocxMergeTool(master.file_data) as merge_tool:
             for agenda_item in self.meeting.agenda_items:
                 if agenda_item.is_paragraph:
-                    merge_tool.add_sablon(self.get_sablon_for_paragraph(agenda_item))
+                    sablon = self.get_sablon_for_paragraph(agenda_item)
+                    merge_tool.add(sablon.file_data)
 
                 elif agenda_item.has_document:
-                    merge_tool.add_document(agenda_item.resolve_document())
+                    document = agenda_item.resolve_document()
+                    merge_tool.add(document.file.data)
 
             if self.meeting.get_protocol_suffix_template():
-                merge_tool.add_sablon(self.get_suffix_sablon())
+                sablon = self.get_suffix_sablon()
+                merge_tool.add(sablon.file_data)
 
             return merge_tool()
 
