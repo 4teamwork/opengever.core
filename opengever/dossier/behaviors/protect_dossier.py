@@ -42,54 +42,108 @@ class IProtectDossierMarker(Interface):
 
 
 class IProtectDossier(model.Schema):
+    """Define a form for managing dossier protection."""
 
     model.fieldset(
         u'protect',
-        label=_(u'fieldset_protect', default=u'Protect'),
-        fields=['reading',
-                'reading_and_writing',
-                'dossier_manager'],
+        label=_(
+            u'fieldset_protect',
+            default=u'Protect',
+            ),
+        fields=[
+            'reading',
+            'reading_and_writing',
+            'dossier_manager',
+            ],
         )
 
-    form.widget('reading', KeywordFieldWidget, async=True,
-                template_selection='usersAndGroups',
-                template_result="usersAndGroups")
-    form.write_permission(reading='opengever.dossier.ProtectDossier')
+    form.widget(
+        'reading',
+        KeywordFieldWidget,
+        async=True,
+        template_result='usersAndGroups',
+        template_selection='usersAndGroups',
+        )
+
+    form.write_permission(
+        reading='opengever.dossier.ProtectDossier',
+        )
+
     reading = schema.List(
-        title=_(u'label_reading', default=u'Reading'),
+        title=_(
+            u'label_reading',
+            default=u'Reading',
+            ),
         description=_(
             u'description_reading',
-            default=u'Choose users and groups which have only readable access to the dossier'),
-        value_type=schema.Choice(source=AllUsersAndGroupsSourceBinder()),
+            default=(
+                u'Choose users and groups which have only readable access to '
+                u'the dossier'
+                ),
+            ),
+        value_type=schema.Choice(
+            source=AllUsersAndGroupsSourceBinder(),
+            ),
         required=False,
         default=[],
         missing_value=[],
         )
 
-    form.widget('reading_and_writing', KeywordFieldWidget, async=True,
-                template_selection='usersAndGroups',
-                template_result="usersAndGroups")
-    form.write_permission(reading_and_writing='opengever.dossier.ProtectDossier')
+    form.widget(
+        'reading_and_writing',
+        KeywordFieldWidget,
+        async=True,
+        template_selection='usersAndGroups',
+        template_result='usersAndGroups',
+        )
+    form.write_permission(
+        reading_and_writing='opengever.dossier.ProtectDossier',
+        )
+
     reading_and_writing = schema.List(
-        title=_(u'label_reading_and_writing', default=u'Reading and writing'),
+        title=_(
+            u'label_reading_and_writing',
+            default=u'Reading and writing',
+            ),
         description=_(
             u'description_reading_and_writing',
-            default=u'Choose users and groups which have readable and writing access to the dossier'),
-        value_type=schema.Choice(source=AllUsersAndGroupsSourceBinder()),
+            default=(
+                u'Choose users and groups which have readable and writing '
+                u'access to the dossier'
+                ),
+            ),
+        value_type=schema.Choice(
+            source=AllUsersAndGroupsSourceBinder(),
+            ),
         required=False,
         default=[],
         missing_value=[],
         )
 
-    form.widget('dossier_manager', KeywordFieldWidget, async=True,
-                template_selection='usersAndGroups',
-                template_result="usersAndGroups")
-    form.write_permission(dossier_manager='opengever.dossier.ProtectDossier')
+    form.widget(
+        'dossier_manager',
+        KeywordFieldWidget,
+        async=True,
+        template_selection='usersAndGroups',
+        template_result='usersAndGroups',
+        )
+
+    form.write_permission(
+        dossier_manager='opengever.dossier.ProtectDossier',
+        )
+
     dossier_manager = schema.Choice(
-        title=_(u'label_dossier_manager', default=u'Dossier manager'),
+        title=_(
+            u'label_dossier_manager',
+            default=u'Dossier manager',
+            ),
         description=_(
             u'description_dossier_manager',
-            default=u'This user or group will get the dossier manager role after protecting the dossier.'),
+            default=(
+                u'This user or group will get the dossier manager role after '
+                u'protecting the dossier.'
+                )
+            ),
         source=AllUsersAndGroupsSourceBinder(),
         defaultFactory=current_user,
         required=False,
@@ -101,20 +155,33 @@ alsoProvides(IProtectDossier, IFormFieldProvider)
 
 
 class DossierProtection(AnnotationsFactoryImpl):
+    """Implement protected dossiers."""
 
-    READING_ROLES = ['Reader']
-    READING_AND_WRITING_ROLES = READING_ROLES + ['Editor', 'Contributor', 'Reviewer', 'Publisher']
-    DOSSIER_MANAGER_ROLES = READING_AND_WRITING_ROLES + ['DossierManager']
+    READING_ROLES = [
+        'Reader',
+        ]
+
+    READING_AND_WRITING_ROLES = READING_ROLES + [
+        'Editor',
+        'Contributor',
+        'Reviewer',
+        'Publisher',
+        ]
+
+    DOSSIER_MANAGER_ROLES = READING_AND_WRITING_ROLES + [
+        'DossierManager',
+        ]
 
     def __init__(self, context, annotation_schema):
         super(DossierProtection, self).__init__(context, annotation_schema)
         self.context = context
 
     def protect(self, force_update=False):
-        """Updates the role-inheritance and the role-mapping of the current object.
+        """Update the role-inheritance and the role-mapping of a dossier.
 
-        The protection-proccess will be started as soon as the user is not a manager
-        and it has the required permission to protect dossiers.
+        The protection-proccess will be started so long as the current user
+        does not have the 'Manager' role and the user also has the required
+        permission to protect dossiers.
 
         First it checks, if the protection is activate or not. Depending on the
         protection-status, the roles will be inherited or not.
@@ -173,33 +240,50 @@ class DossierProtection(AnnotationsFactoryImpl):
             self.context.manage_setLocalRoles(principal, roles)
 
     def clear_local_roles(self):
-        self.context.manage_delLocalRoles([principal for principal, roles in self.context.get_local_roles()])
+        roles = tuple(
+            principal[0]
+            for principal in self.context.get_local_roles()
+            )
+        self.context.manage_delLocalRoles(roles)
 
     def generate_role_settings(self):
         role_settings = {}
 
         self.extend_role_settings_for_principals(
-            role_settings, self.reading, self.READING_ROLES)
+            role_settings,
+            self.reading,
+            self.READING_ROLES,
+            )
 
         self.extend_role_settings_for_principals(
-            role_settings, self.reading_and_writing, self.READING_AND_WRITING_ROLES)
+            role_settings,
+            self.reading_and_writing,
+            self.READING_AND_WRITING_ROLES,
+            )
 
         self.extend_role_settings_for_principals(
-            role_settings, [self.dossier_manager], self.DOSSIER_MANAGER_ROLES)
+            role_settings,
+            (self.dossier_manager, ),
+            self.DOSSIER_MANAGER_ROLES,
+            )
 
         return role_settings
 
-    def extend_role_settings_for_principals(self, role_settings, principals, roles):
+    def extend_role_settings_for_principals(self, role_settings, principals, roles):  # noqa
         for principal in principals:
             role_settings[principal] = roles
 
     def check_local_role_consistency(self):
-        """Returns false, if the localroles does not match the protection-settings.
+        """Return whether the local roles match the protection-settings.
+
         This happens, if you change the localroles through the sharing tab on a
         protected dossier.
 
-        A local-role inconsistency can also occure through system functionalities.
-        I.e. if you create a remote task in a dossier, the roles are reset by the system.
+        A local-role inconsistency can also occur through system
+        functionalities.
+
+        I.e. if you create a remote task in a dossier, the roles are reset by
+        the system.
         """
         role_settings = self.generate_role_settings()
 
@@ -223,6 +307,7 @@ class DossierProtection(AnnotationsFactoryImpl):
 
 
 class DossierProtectionFactory(AnnotationStorage):
+    """Provide an annotation storage wrapper for protected dossiers."""
 
     def __call__(self, context):
         return DossierProtection(context, self.schema)
