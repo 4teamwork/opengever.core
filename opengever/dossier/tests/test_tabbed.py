@@ -30,3 +30,16 @@ class TestContactParticipationTab(IntegrationTestCase):
         self.assertEqual(
             'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/#participations',
             browser.url)
+
+
+class TestDossierTabbedView(IntegrationTestCase):
+
+    @browsing
+    def test_subdossier_tab_only_shown_where_subdossiers_are_addable(self, browser):
+        self.login(self.dossier_responsible, browser)
+
+        browser.open(self.dossier, view='tabbed_view')
+        self.assertIn('Subdossiers', browser.css('.formTab').text)
+
+        browser.open(self.subdossier, view='tabbed_view')
+        self.assertNotIn('Subdossiers', browser.css('.formTab').text)
