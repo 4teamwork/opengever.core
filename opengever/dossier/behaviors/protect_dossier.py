@@ -106,8 +106,8 @@ class DossierProtection(AnnotationsFactoryImpl):
     READING_AND_WRITING_ROLES = READING_ROLES + ['Editor', 'Contributor', 'Reviewer', 'Publisher']
     DOSSIER_MANAGER_ROLES = READING_AND_WRITING_ROLES + ['DossierManager']
 
-    def __init__(self, context, schema):
-        super(DossierProtection, self).__init__(context, schema)
+    def __init__(self, context, annotation_schema):
+        super(DossierProtection, self).__init__(context, annotation_schema)
         self.context = context
 
     def protect(self, force_update=False):
