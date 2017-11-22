@@ -211,6 +211,7 @@ class AgendaItem(Base):
     def set_title(self, title):
         if self.has_proposal:
             self.submitted_proposal.title = title
+            self.submitted_proposal.sync_model()
         else:
             self.title = title
 

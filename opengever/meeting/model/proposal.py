@@ -229,7 +229,7 @@ class Proposal(Base):
         proposal_ = self.resolve_submitted_proposal()
         as_link = proposal_ is None or api.user.has_permission('View', obj=proposal_)
         return self._get_link(self.get_submitted_url(),
-                              self.submitted_title,
+                              proposal_.title,
                               include_icon=include_icon,
                               as_link=as_link)
 
