@@ -142,10 +142,6 @@ Unsortierte und ungruppierte Tabelle:
 
 |img-grundlagen-25|
 
-Unsortiert aber gruppierte Tabelle (Der Benutzer Hugo Boss erscheint mehrmals):
-
-|img-grundlagen-26|
-
 Sortiert und gruppiert (Der Benutzer Hugo Boss erscheint zusammengefasst):
 
 |img-grundlagen-27|
