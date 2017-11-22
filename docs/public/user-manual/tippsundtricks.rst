@@ -129,13 +129,23 @@ im rechten Rand der Spaltenüberschrift und klicken Sie entweder auf
 
 |img-grundlagen-7|
 
-Mit Klick auf das Minuszeichen im Gruppentitel können Sie den Inhalt
-ausblenden bzw. falls das Pluszeichen angezeigt wird, wieder einblenden.
-
 Die Gruppierung können Sie abschalten, indem Sie entweder die Spalte neu
 gruppieren oder im Auswahlfeld einer Spaltenüberschrift die Gruppierung
 ausschalten (Klick auf markiertes Feld *Gruppiert
 darstellen*.
+
+Wichtig dabei zu beachten ist, dass die Spalte, nach der gruppiert werden soll,
+zuerst sortiert wird. Ansonsten erscheint beispielsweise die federführende
+Person mehrmals:
+
+Unsortierte und ungruppierte Tabelle:
+
+|img-grundlagen-25|
+
+Sortiert und gruppiert (Der Benutzer Hugo Boss erscheint zusammengefasst):
+
+|img-grundlagen-27|
+
 
 Einstellungen zurücksetzen
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -167,5 +177,8 @@ pro Seite dargestellt werden.
 .. |img-grundlagen-8| image:: img/media/img-grundlagen-8.png
 .. |img-grundlagen-9| image:: img/media/img-grundlagen-9.png
 .. |img-grundlagen-14| image:: img/media/img-grundlagen-14.png
+.. |img-grundlagen-25| image:: img/media/img-grundlagen-25.png
+.. |img-grundlagen-26| image:: img/media/img-grundlagen-26.png
+.. |img-grundlagen-27| image:: img/media/img-grundlagen-27.png
 
 .. disqus::
