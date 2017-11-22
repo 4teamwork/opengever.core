@@ -42,7 +42,7 @@ class DossierTabbedView(GeverTabbedView):
 
     @property
     def subdossiers_tab(self):
-        if self.context.show_subdossier():
+        if self.context.is_subdossier_addable():
             return {
                 'id': 'subdossiers',
                 'title': _(u'label_subdossiers', default=u'Subdossiers'),

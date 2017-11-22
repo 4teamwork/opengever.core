@@ -24,14 +24,12 @@ from opengever.task.task import ITask
 from plone import api
 from plone.dexterity.content import Container
 from plone.dexterity.interfaces import IDexterityFTI
-from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from zExceptions import Unauthorized
 from zope.component import adapter
 from zope.component import getUtility
 from zope.component import queryMultiAdapter
-from zope.component import queryUtility
 from zope.interface import implementer
 from zope.interface import Interface
 
@@ -136,15 +134,15 @@ class DossierContainer(Container):
                 break
         return prev
 
-    def show_subdossier(self):
-        registry = queryUtility(IRegistry)
-        reg_proxy = registry.forInterface(IDossierContainerTypes)
-        depth = self._get_dossier_depth()
+    def is_subdossier_addable(self):
+        """Only checks if the maximum dossier depth allows another level
+        of subdossiers but not for permissions.
+        """
+        max_depth = api.portal.get_registry_record(
+            name='maximum_dossier_depth',
+            interface=IDossierContainerTypes, default=100)
 
-        if depth > getattr(reg_proxy, 'maximum_dossier_depth', 100):
-            return False
-        else:
-            return True
+        return self._get_dossier_depth() <= max_depth
 
     def has_subdossiers(self):
         return len(self.get_subdossiers()) > 0
