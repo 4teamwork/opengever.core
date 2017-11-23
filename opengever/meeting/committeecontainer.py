@@ -128,7 +128,7 @@ class CommitteeContainer(Container, TranslatedTitleMixin):
 
     def get_excerpt_suffix_template(self):
         if self.excerpt_suffix_template:
-            return self.excerpt_header_template.to_object
+            return self.excerpt_suffix_template.to_object
         return None
 
     def get_excerpt_template(self):
