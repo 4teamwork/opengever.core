@@ -1,4 +1,5 @@
 from ftw.keywordwidget.widget import KeywordFieldWidget
+from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.ech0147 import _
 from opengever.ech0147.bindings import ech0147t1
 from opengever.ech0147.interfaces import IECH0147Settings
@@ -163,6 +164,8 @@ class ECH0147ImportForm(AutoExtensibleForm, form.Form):
     def available(self):
         if not self.enabled():
             return False
+        if IDossierMarker.providedBy(self.context):
+            return True
         if not IRepositoryFolder.providedBy(self.context):
             return False
         if self.context.is_leaf_node():
