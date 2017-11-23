@@ -46,6 +46,7 @@ Changelog
 - Allow proposal listings to be filtered by proposal title. [deiferni]
 - Allow proposal listings to be sorted by title. [deiferni]
 - Keep meeting-dossier and meeting title in sync, only allow editing of meeting title. [deiferni]
+- Support importing toplevel documents from eCH-0147 message. [buchi]
 
 
 2017.6.5 (2017-11-22)
