@@ -75,7 +75,8 @@ class ILifeCycle(model.Schema):
         required=True,
     )
 
-    form.write_permission(date_of_cassation='opengever.base.EditDateOfCassation')
+    form.write_permission(date_of_cassation='cmf.ManagePortal')
+    form.read_permission(date_of_cassation='cmf.ManagePortal')
     form.widget(date_of_cassation=DatePickerFieldWidget)
     date_of_cassation = schema.Date(
         title=_(u'label_dateofcassation', default=u'Date of cassation'),
