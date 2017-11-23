@@ -104,3 +104,14 @@ class TestImport(IntegrationTestCase):
                 'File': file_,
             }).submit()
         self.assertIn('This message contains toplevel documents.', browser.contents)
+
+    @browsing
+    def test_import_invalid_message_displays_error(self, browser):
+        self.activate_feature('ech0147-import')
+        self.login(self.regular_user, browser)
+        browser.open(self.leaf_repofolder, view='ech0147_import')
+        with open(get_path('message_invalid.zip')) as file_:
+            browser.forms['form'].fill({
+                'File': file_,
+            }).submit()
+        self.assertIn('Invalid content.', browser.contents)
