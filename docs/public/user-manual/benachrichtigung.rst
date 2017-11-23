@@ -1,0 +1,39 @@
+Benachrichtigungs-Einstellungen
+===============================
+
+Bei der Benachrichtigungs-Einstellung können Sie individuell einstellen, wann
+und wie OneGov GEVER Sie über Ihre Aktivitäten benachrichtigen soll.
+Gehen Sie dazu oben rechts auf Ihren Profilnamen und dann auf " Meine
+Einstellungen":
+
+|img-benachrichtigungs-einstellungen-1|
+
+Danach gelangen Sie automatisch auf die untenstehende Übersicht, welche die
+aktuellen geltenden Regeln wie OneGov GEVER über Ihre Aktivitäten
+benachrichtigt, darstellt. Sie können nun pro Aktivität definieren, in welcher
+Rolle Sie über welchen Kanal benachrichtigt werden wollen. Zurzeit stehen die
+Kanäle "Badge" (Glocke im mittleren Headerbereich) oder Mail (Benachrichtigung
+direkt per Mail) zur Verfügung.
+
+|img-benachrichtigungs-einstellungen-2|
+
+Möchten Sie die Default-Einstellungen ändern, klicken Sie einfach auf die
+entsprechenden Checkbox um diese zu entfernen resp. wenn diese noch nicht
+angewählt ist um diese zu aktivieren. OneGov GEVER blendet sofort eine
+Meldung ein, damit Sie die Änderung entweder speichern oder abbrechen und
+somit rückgängig machen können.
+
+|img-benachrichtigungs-einstellungen-3|
+
+Individualisierte Einstellungen können mit der Aktion "Auf Standard
+zurücksetzen" gelöscht und somit auf den GEVER Standard zurück gesetzt werden.
+
+|img-benachrichtigungs-einstellungen-4|
+
+.. |img-benachrichtigungs-einstellungen-1| image:: img/media/img-benachrichtigungs-einstellungen-1.png
+.. |img-benachrichtigungs-einstellungen-2| image:: img/media/img-benachrichtigungs-einstellungen-2.png
+.. |img-benachrichtigungs-einstellungen-3| image:: img/media/img-benachrichtigungs-einstellungen-3.png
+.. |img-benachrichtigungs-einstellungen-4| image:: img/media/img-benachrichtigungs-einstellungen-4.png
+
+
+.. disqus::
