@@ -90,10 +90,10 @@ Zugelassene Dokumenttypen
 
 Der External Editor und der Office Connector unterstützen die gängigen
 Dateiformate zur Bearbeitung von Text und Tabellen (Microsoft Word, Microsoft
-Excel, Microsoft Powerpoint, OpenOffice (nur Mac), Adobe Acrobat) sowie
-zusätzlich einige viel verwendete Anwendungen (MindManager, Microsoft Project,
-Microsoft Visio). Bedingung dazu ist, dass die jeweilige Anwendung auf dem PC
-installiert ist.
+Excel, Microsoft Powerpoint, Microsoft OneNote, OpenOffice (nur Mac), Adobe
+Acrobat) sowie zusätzlich einige viel verwendete Anwendungen (MindManager,
+Microsoft Project, Microsoft Visio). Bedingung dazu ist, dass die jeweilige
+Anwendung auf dem PC installiert ist.
 
 Die Bearbeitung von Adobe Grafikdateien (Photoshop, Illustrator,
 InDesign) mit dem External Editor funktioniert zwar, wird aber nicht
