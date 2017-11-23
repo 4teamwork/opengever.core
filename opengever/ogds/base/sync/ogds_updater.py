@@ -3,12 +3,14 @@ from logging.handlers import TimedRotatingFileHandler
 from opengever.base.model import create_session
 from opengever.base.pathfinder import PathFinder
 from opengever.ogds.base.interfaces import ILDAPSearch
+from opengever.ogds.base.interfaces import IOGDSSyncConfiguration
 from opengever.ogds.base.interfaces import IOGDSUpdater
 from opengever.ogds.base.sync.import_stamp import set_remote_import_stamp
 from opengever.ogds.models import GROUP_ID_LENGTH
 from opengever.ogds.models import USER_ID_LENGTH
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.user import User
+from plone import api
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from Products.LDAPMultiPlugins.interfaces import ILDAPMultiPlugin
 from sqlalchemy import String
@@ -130,6 +132,11 @@ class OGDSUpdater(object):
             if uid_attr == schema_map['ldap_name']:
                 return schema_map['public_name']
         return uid_attr
+
+    def get_group_title_ldap_attribute(self):
+        return api.portal.get_registry_record(
+            name='group_title_ldap_attribute',
+            interface=IOGDSSyncConfiguration)
 
     def import_users(self):
         """Imports users from all the configured LDAP plugins into OGDS.
@@ -296,6 +303,11 @@ class OGDSUpdater(object):
                         value = value.decode('utf-8')
 
                     setattr(group, col.name, value)
+
+                # Sync group title
+                title_attribute = self.get_group_title_ldap_attribute()
+                if title_attribute and info.get(title_attribute):
+                    setattr(group, 'title', info.get(title_attribute))
 
                 contained_users = []
                 group_members = ldap_util.get_group_members(info)
