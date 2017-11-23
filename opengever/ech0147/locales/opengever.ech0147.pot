@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-02 12:51+0000\n"
+"POT-Creation-Date: 2017-11-23 09:53+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,7 +30,7 @@ msgid "Message import failed. ${details}"
 msgstr ""
 
 #: ./opengever/ech0147/browser/import.py
-msgid "Messages containing toplevel dossiers and toplevel documents are not supported"
+msgid "This message contains toplevel documents. It can only be imported within a dossier."
 msgstr ""
 
 #: ./opengever/ech0147/browser/export.py
@@ -137,6 +137,11 @@ msgstr ""
 msgid "label_subject"
 msgstr ""
 
+#. Default: "Invalid content. ${details}"
+#: ./opengever/ech0147/browser/import.py
+msgid "msg_ech0147_invalid_content"
+msgstr ""
+
 #. Default: "new"
 #: ./opengever/ech0147/browser/export.py
 msgid "term_action_1"
@@ -231,4 +236,3 @@ msgstr ""
 #: ./opengever/ech0147/browser/export.py
 msgid "term_priority_undefined"
 msgstr ""
-
