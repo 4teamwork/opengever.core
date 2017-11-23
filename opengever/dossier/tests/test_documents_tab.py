@@ -35,7 +35,7 @@ class TestDocumentsTab(FunctionalTestCase):
     def test_documents_in_listing_are_linked(self, browser):
         browser.login().visit(self.dossier, view='tabbedview_view-documents')
 
-        items = browser.css('table.listing a.contenttype-opengever-document-document')
+        items = browser.css('table.listing a.icon-document_empty')
         self.assertEqual(1, len(items))
         self.assertEqual(
             'http://nohost/plone/dossier-1/dossier-2/document-1',

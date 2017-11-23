@@ -15,7 +15,7 @@ class TestTrashTab(FunctionalTestCase):
 
         browser.login().visit(dossier, view='tabbedview_view-trash')
 
-        items = browser.css('table.listing a.contenttype-opengever-document-document')
+        items = browser.css('table.listing a.icon-document_empty')
         self.assertEqual(1, len(items))
         self.assertEqual(
             'http://nohost/plone/dossier-1/document-1',

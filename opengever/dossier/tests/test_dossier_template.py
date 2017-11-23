@@ -698,7 +698,7 @@ class TestDossierTemplateDocuments(IntegrationTestCase):
 
         self.assertEqual(
             ['Document 1', 'Document 2', 'Document 3'],
-            browser.css('table.listing a.contenttype-opengever-document-document').text)
+            browser.css('table.listing a.icon-document_empty').text)
 
     @browsing
     def test_show_documents_in_gallery_view_sorted_alphabetically(self, browser):

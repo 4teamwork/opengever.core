@@ -126,7 +126,7 @@ class TestTaskLinkGeneration(FunctionalTestCase):
         self.assertEqual([], link.xpath(css_to_xpath('a')))
         self.assertEqual('span', link.tag)
         self.assertEqual('Do it!', link.text)
-        self.assertEqual('icon-task-remote-task', link.get('class'))
+        self.assertEqual('contenttype-opengever-task-remote-task', link.get('class'))
 
     def test_target_blank_for_remote_tasks(self):
         link = self.add_task_and_get_link(admin_unit_id='additional')
@@ -134,7 +134,7 @@ class TestTaskLinkGeneration(FunctionalTestCase):
         span_tag = link.xpath(css_to_xpath('a span'))[0]
 
         self.assertEquals('_blank', link_tag.get('target'))
-        self.assertEquals('icon-task-remote-task', span_tag.get('class'))
+        self.assertEquals('contenttype-opengever-task-remote-task', span_tag.get('class'))
 
     def test_link_is_xss_safe(self):
         link = self.add_task_and_get_link(

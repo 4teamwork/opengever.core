@@ -258,15 +258,15 @@ class Task(Base):
 
         elif self.is_subtask and self.is_remote_task:
             if self.admin_unit_id == get_current_admin_unit().id():
-                css_class = 'icon-task-subtask'
+                css_class = 'contenttype-opengever-task-sub-task'
             else:
-                css_class = 'icon-task-remote-task'
+                css_class = 'contenttype-opengever-task-remote-task'
 
         elif self.is_subtask:
-            css_class = 'icon-task-subtask'
+            css_class = 'contenttype-opengever-task-sub-task'
 
         elif self.is_remote_task:
-            css_class = 'icon-task-remote-task'
+            css_class = 'contenttype-opengever-task-remote-task'
         else:
             css_class = 'contenttype-opengever-task-task'
 

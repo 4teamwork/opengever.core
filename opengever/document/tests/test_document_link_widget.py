@@ -77,7 +77,7 @@ class TestDocumentLinkWidget(FunctionalTestCase):
     def test_title_can_disable_icon(self, browser):
         document = create(Builder('document').titled('Important'))
         browser.open_html(DocumentLinkWidget(document).render())
-        icon_css_class = 'contenttype-opengever-document-document'
+        icon_css_class = 'icon-document_empty'
         self.assertIn(icon_css_class, browser.css('a.document_link').first.classes)
         browser.open_html(DocumentLinkWidget(document).render(show_icon=False))
         self.assertNotIn(icon_css_class, browser.css('a.document_link').first.classes)
