@@ -88,17 +88,17 @@ weiteren Bearbeitungsmöglichkeiten angezeigt.
 Zugelassene Dokumenttypen
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Der External Editor und der Office Connector unterstützen die gängigen Datei-
-formate zur Bearbeitung von Text und Tabellen (Microsoft Word, Microsoft Excel,
-Microsoft Powerpoint, OpenOffice (nur Mac), Adobe Acrobat) sowie zusätzlich
-einige viel verwendete Anwendungen (MindManager, Microsoft Project, Microsoft
-Visio). Bedingung dazu ist, dass die jeweilige Anwendung auf dem PC
-installiert ist.
+Der External Editor und der Office Connector unterstützen die gängigen
+Dateiformate zur Bearbeitung von Text und Tabellen (Microsoft Word, Microsoft
+Excel, Microsoft Powerpoint, Microsoft OneNote, OpenOffice (nur Mac), Adobe
+Acrobat) sowie zusätzlich einige viel verwendete Anwendungen (MindManager,
+Microsoft Project, Microsoft Visio). Bedingung dazu ist, dass die jeweilige
+Anwendung auf dem PC installiert ist.
 
 Die Bearbeitung von Adobe Grafikdateien (Photoshop, Illustrator,
 InDesign) mit dem External Editor funktioniert zwar, wird aber nicht
-empfohlen, da es zu unerwarteten Fehlern kommen kann. Für solche und
-ähnliche Dateien sollte untenstehender Hinweis befolgt werden.
+empfohlen, da es zu unerwarteten Fehlern kommen kann. Für solche und andere,
+nicht unterstützte Dateien sollte untenstehender Hinweis unter `"Dokumente ohne External Editor" <https://docs.onegovgever.ch/user-manual/dokumente/bearbeiten/#dokumente-ohne-external-editor-office-connector-bearbeitenbefolgt>`_ befolgt werden.
 
 Zusätzliche Funktionen des Office Connectors auf Windows
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
