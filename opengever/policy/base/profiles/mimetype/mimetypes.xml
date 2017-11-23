@@ -83,6 +83,16 @@
       mimetypes="application/vnd.ms-outlook"
       />
 
+  <!-- MS OneNoe -->
+  <mimetype
+      name="Microsoft OneNote"
+      binary="True"
+      extensions="one"
+      globs="*.one"
+      icon_path="icon_dokument_onenote.gif"
+      mimetypes="application/onenote"
+      />
+
   <!-- MS Excel -->
   <mimetype
       name="Microsoft Excel Spreadsheet"

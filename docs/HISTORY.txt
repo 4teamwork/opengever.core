@@ -5,6 +5,7 @@ Changelog
 2017.7.0 (unreleased)
 ---------------------
 
+- Add mimetype for MS OneNote. [phgross]
 - Correct field description for responsible person/entity when forwarding documents [njohner]
 - SPV-word: Fix renaming agenda items in meeting view. [tarnap]
 - Add a tabbed view for Administrators and Managers to reporoot - repofolder - dossier for listing child dossiers with blocked local roles. [Rotonen]
