@@ -4,7 +4,7 @@ OneGov GEVER Bundle Validator
 Zweck
 ------
 Mittels dem OneGov GEVER Bundle Validator kann ein im Excel vorbereitetes
-Ordnungssystem getestet werden, ob es den OneGov GEVER Vorgaben entspricht und
+Ordnungssystem überprüft werden, ob es den OneGov GEVER Vorgaben entspricht und
 somit verwendet werden kann.
 
 |img-oggbundle-1|
@@ -22,11 +22,11 @@ mittels „Absenden“ durchgeführt werden.
 
 Fehlermeldungen
 ----------------
-Wenn Ihr Ordnungssystem noch nicht OneGov GEVER konform ist, wird eine
-entsprechende Fehlermeldung angezeigt, die Ihnen Inputs liefert, wie Sie ihr
-Excel anpassen können, um die Validierung zu bestehen. Wenn es bereits den
-Richtlinien entspricht wird eine Success-Meldung angezeigt, dass die
-Validierung erfolgreich war.
+Wenn Ihr Ordnungssystem noch nicht den OneGov GEVER Vorgaben entspricht, werden
+die fehlerhaften Positionen markiert und entsprechende Fehlermeldungen
+angezeigt, die Ihnen Inputs liefert, wie Sie ihr Excel anpassen können, um die
+Validierung zu bestehen. Wenn es bereits den Richtlinien entspricht wird eine
+Success-Meldung angezeigt, dass die Validierung erfolgreich war.
 
 
 |img-oggbundle-3|
