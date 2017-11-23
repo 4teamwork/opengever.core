@@ -37,9 +37,9 @@ class TestBumblebeeChecksumForVersions(FunctionalTestCase):
                               u'example.docx')
                           .checked_out())
 
-        document.update_file(filename=u'foo.txt',
+        document.update_file('foo',
                              content_type='text/plain',
-                             data='foo')
+                             filename=u'foo.txt')
         notify(ObjectModifiedEvent(document))
         transaction.commit()
 

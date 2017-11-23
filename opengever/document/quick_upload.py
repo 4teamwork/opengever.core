@@ -22,8 +22,9 @@ class QuickUploadFileUpdater(object):
         if not self.is_upload_allowed():
             raise Unauthorized
 
-        self.context.update_file(
-            self.get_file_name(filename), content_type, data)
+        self.context.update_file(data,
+                                 content_type=content_type,
+                                 filename=self.get_file_name(filename))
 
         return {'success': self.context}
 
