@@ -156,12 +156,13 @@ def change_task_workflow_state(task, transition, **kwargs):
     before = wftool.getInfoFor(task, 'review_state')
     before = wftool.getTitleForStateOnType(before, task.Type())
 
+    response = add_simple_response(task, transition=transition, **kwargs)
+
     wftool.doActionFor(task, transition)
 
     after = wftool.getInfoFor(task, 'review_state')
     after = wftool.getTitleForStateOnType(after, task.Type())
 
-    response = add_simple_response(task, transition=transition, **kwargs)
     response.add_change('review_state', _(u'Issue state'),
                         before, after)
     response.transition = transition

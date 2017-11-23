@@ -4,6 +4,7 @@ from opengever.activity import notification_center
 from opengever.activity.model import Activity
 from opengever.base.model import create_session
 from opengever.task.adapters import IResponseContainer
+from opengever.task.browser.accept.utils import accept_task_with_successor
 from opengever.task.task import ITask
 from opengever.testing import IntegrationTestCase
 
@@ -138,3 +139,23 @@ class TestTeamTasks(IntegrationTestCase):
             u'changed from Projekt \xdcberbaung Dorfmatte (Finanzamt) to '
             u'B\xe4rfuss K\xe4thi (kathi.barfuss).',
             browser.css('.answer h3').text[0])
+
+    def test_multi_admin_unit_team_task(self):
+        self.login(self.regular_user)
+
+        ITask(self.task).responsible = u'team:1'
+        self.task.get_sql_object().responsible = u'team:1'
+        self.set_workflow_state('task-state-open', self.task)
+
+        successor = accept_task_with_successor(
+            self.dossier, self.task.oguid.id, 'Ok.')
+
+        self.assertEquals(self.regular_user.getId(), successor.responsible)
+        self.assertEquals(
+            self.regular_user.getId(), successor.get_sql_object().responsible)
+        self.assertEquals(
+            [{'after': 'kathi.barfuss', 'id': 'responsible',
+              'name': u'label_responsible', 'before': u'team:1'},
+             {'after': 'task-state-in-progress', 'id': 'review_state',
+              'name': u'Issue state', 'before': 'task-state-open'}],
+            IResponseContainer(self.task)[-1].changes)
