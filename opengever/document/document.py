@@ -14,7 +14,6 @@ from opengever.document.behaviors.related_docs import IRelatedDocuments
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.versioner import Versioner
 from opengever.dossier.behaviors.dossier import IDossierMarker
-from opengever.meeting.model.generateddocument import GeneratedExcerpt
 from opengever.meeting.proposal import IProposal
 from opengever.meeting.proposal import ISubmittedProposal
 from opengever.officeconnector.helpers import create_oc_url
@@ -46,6 +45,7 @@ from zope.interface import invariant
 from zope.intid.interfaces import IIntIds
 import logging
 import os.path
+
 
 LOG = logging.getLogger('opengever.document')
 MAIL_EXTENSIONS = ['.eml', '.msg']
