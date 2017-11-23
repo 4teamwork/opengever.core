@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-02 12:51+0000\n"
+"POT-Creation-Date: 2017-11-23 09:53+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,8 +27,8 @@ msgid "Message import failed. ${details}"
 msgstr "Import fehlgeschlagen. ${details}"
 
 #: ./opengever/ech0147/browser/import.py
-msgid "Messages containing toplevel dossiers and toplevel documents are not supported"
-msgstr "Nachrichten mit Dossiers und Dokumenten ausserhalb von Dossiers werden nicht unterstützt."
+msgid "This message contains toplevel documents. It can only be imported within a dossier."
+msgstr "Diese Nachricht enthält Dokumente auf oberster Stufe und kann daher nur in einem Dossier importiert werden."
 
 #: ./opengever/ech0147/browser/export.py
 msgid "help_action"
@@ -134,6 +134,11 @@ msgstr "Federführend"
 msgid "label_subject"
 msgstr "Betreff"
 
+#. Default: "Invalid content. ${details}"
+#: ./opengever/ech0147/browser/import.py
+msgid "msg_ech0147_invalid_content"
+msgstr "Nicht-valides XML. ${details}"
+
 #. Default: "new"
 #: ./opengever/ech0147/browser/export.py
 msgid "term_action_1"
@@ -228,4 +233,3 @@ msgstr "mittel"
 #: ./opengever/ech0147/browser/export.py
 msgid "term_priority_undefined"
 msgstr "nicht zugewiesen"
-
