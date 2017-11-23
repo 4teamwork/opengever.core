@@ -40,6 +40,7 @@ class TextXLSImport(TestCase):
              u'reactivate_dossiers_access',
              u'read_dossiers_access',
              u'close_dossiers_access',
+             u'manage_dossiers_access',
              u'addable_dossier_types',
              u'retention_period',
              u'edit_dossiers_access',
