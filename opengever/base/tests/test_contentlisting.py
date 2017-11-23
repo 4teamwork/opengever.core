@@ -31,7 +31,7 @@ class TestOpengeverContentListing(FunctionalTestCase):
             IContentListingObject(obj2brain(dossier)).ContentTypeClass())
 
         self.assertEquals(
-            'contenttype-opengever-document-document',
+            'icon-document_empty',
             IContentListingObject(obj2brain(document)).ContentTypeClass())
 
     def test_containing_dossier_of_a_dossier_returns_dossiers_title(self):

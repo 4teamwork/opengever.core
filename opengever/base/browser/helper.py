@@ -61,7 +61,7 @@ def get_css_class(item, type_icon_only=False):
                 css_class = 'icon-%s' % normalize(filetype)
             else:
                 # Fallback for unknown file type
-                css_class = "contenttype-%s" % normalize(item.portal_type)
+                css_class = "icon-document_empty"
 
     if css_class is None:
         css_class = "contenttype-%s" % normalize(item.portal_type)
