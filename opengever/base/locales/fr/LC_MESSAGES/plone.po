@@ -23,17 +23,11 @@ msgstr "Ajouter une tâche à partir du modèle"
 msgid "Attach remote document"
 msgstr "Copie d'un document de votre service"
 
-msgid "Cancel Checkout"
-msgstr "Annuler"
-
 msgid "Checkin"
 msgstr "Checkin"
 
 msgid "Checkout"
 msgstr "Checkout"
-
-msgid "Checkout and edit"
-msgstr "Checkout et modifier"
 
 msgid "Close current period"
 msgstr ""

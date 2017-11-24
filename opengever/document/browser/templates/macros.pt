@@ -27,7 +27,8 @@
             checkout_and_edit_available view/is_checkout_and_edit_available;
             copy_download_available view/is_download_copy_available;
             attach_to_email_available view/is_attach_to_email_available;
-            checked_out_by_current_user view/is_checked_out_by_current_user">
+            checked_out_by_current_user view/is_checked_out_by_current_user;
+            is_cancel_allowed view/is_checkout_cancel_available">
 
             <tal:checkout_and_edit_enabled tal:condition="checkout_and_edit_available">
 
@@ -69,6 +70,12 @@
                   Checkin with comment
               </a>
             </tal:checked_out>
+
+            <tal:check_out_cancel tal:condition="is_cancel_allowed">
+              <a tal:attributes="href view/get_checkout_cancel_url; class string:function-revert" i18n:translate="">
+                  Cancel checkout
+              </a>
+            </tal:check_out_cancel>
 
             <tal:download_copy_enabled tal:condition="copy_download_available">
                 <span tal:replace="structure view/get_download_copy_tag"></span>

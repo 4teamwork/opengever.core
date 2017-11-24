@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-11-08 09:02+0000\n"
+"POT-Creation-Date: 2017-11-27 13:45+0000\n"
 "PO-Revision-Date: 2017-10-13 14:27+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -22,6 +22,10 @@ msgstr "Mit Mailprogramm versenden"
 #: ./opengever/document/browser/edit.py
 msgid "Can't edit the document at moment, beacuse it's locked."
 msgstr "Das Dokument kann momentan nicht bearbeitet werden, es ist gesperrt."
+
+#: ./opengever/document/browser/templates/macros.pt
+msgid "Cancel checkout"
+msgstr "Checkout widerrufen"
 
 #: ./opengever/document/checkout/cancel.py
 msgid "Cancel checkout: ${title}"

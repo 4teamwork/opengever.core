@@ -23,17 +23,11 @@ msgstr "Standardablauf auslösen"
 msgid "Attach remote document"
 msgstr "Kopie Dokument aus eigenem Mandant"
 
-msgid "Cancel Checkout"
-msgstr "Widerrufen"
-
 msgid "Checkin"
 msgstr "Einchecken"
 
 msgid "Checkout"
 msgstr "Auschecken"
-
-msgid "Checkout and edit"
-msgstr "Auschecken / Bearbeiten"
 
 msgid "Close current period"
 msgstr "Aktuelle Periode abschliessen"
