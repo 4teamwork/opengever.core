@@ -5,6 +5,7 @@ Changelog
 2017.7.0 (unreleased)
 ---------------------
 
+- Fix bug when accepting a multiadmin unit team task. [phgross]
 - Make cassation_date field accessible only to manager. [njohner]
 - Use empty mimetype icon for empty document content types. [Kevin Bieri]
 - Add mimetype for MS OneNote. [phgross]
