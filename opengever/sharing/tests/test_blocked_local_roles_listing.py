@@ -205,6 +205,13 @@ class TestBlockedLocalRolesListing(IntegrationTestCase):
 
         self.assertFalse(browser.css('.level3 a').text)
 
+        nodes = browser.css('.blocked-local-roles-link')
+        repo = 'contenttype-opengever-repository-repositoryfolder'
+        dossier = 'contenttype-opengever-dossier-businesscasedossier'
+        self.assertIn(repo, nodes[0].classes)
+        self.assertIn(repo, nodes[1].classes)
+        self.assertIn(dossier, nodes[2].classes)
+
     @browsing
     def test_blocked_role_tab_tree_rendering_of_repofolder(self, browser):
         browser.append_request_header('Accept-Language', 'de-ch')
@@ -234,6 +241,11 @@ class TestBlockedLocalRolesListing(IntegrationTestCase):
             )
 
         self.assertFalse(browser.css('.level2 a').text)
+
+        nodes = browser.css('.blocked-local-roles-link')
+        repo = 'contenttype-opengever-repository-repositoryfolder'
+        self.assertIn(repo, nodes[0].classes)
+        self.assertIn(repo, nodes[1].classes)
 
     @browsing
     def test_blocked_role_tab_can_drill_down_to_dossier(self, browser):

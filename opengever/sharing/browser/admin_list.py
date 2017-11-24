@@ -1,3 +1,4 @@
+from opengever.base.browser.helper import get_css_class
 from opengever.base.utils import escape_html
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.repository.interfaces import IRepositoryFolder
@@ -26,6 +27,7 @@ class BlockedLocalRolesList(BrowserView):
     def node_updater(self, brain, node):
         node['title'] = brain.Title
         node['url'] = brain.getURL()
+        node['css_class'] = get_css_class(brain)
 
     def render_tree(self):
         context_path = '/'.join(self.context.getPhysicalPath())
@@ -95,20 +97,22 @@ class BlockedLocalRolesList(BrowserView):
 
             title = escape_html(node.get('title'))
             url = escape_html(node.get('url'))
-            children = node.get('children')
+            css_class = node.get("css_class")
+            sub_children = node.get('children')
 
             if title:
                 if url and title:
                     anchor = (
-                        u'#blocked-local-roles' if children
+                        u'#blocked-local-roles' if sub_children
                         else u'#sharing'
                         )
                     target_url = u''.join((url.decode('UTF-8'), anchor, ))
 
                     output = u''.join((
                         output,
-                        u'<a class="blocked-local-roles-link" href="{}">{}</a>'
+                        u'<a class="{} blocked-local-roles-link" href="{}">{}</a>'
                         .format(
+                            css_class,
                             target_url,
                             title.decode('UTF-8'),
                             ),
@@ -116,15 +120,19 @@ class BlockedLocalRolesList(BrowserView):
                 else:
                     output = u''.join((
                         output,
-                        title,
+                        u'<span class="{} blocked-local-roles-link">{}</span>'
+                        .format(
+                            css_class,
+                            title.decode('UTF-8'),
+                            ),
                         ))
 
-            if children:
+            if sub_children:
                 output = u''.join((
                     output,
                     u'<ul class="level{}">\n{}\n</ul>\n'.format(
                         str(level),
-                        self._build_html_tree(children, level + 1),
+                        self._build_html_tree(sub_children, level + 1),
                         ),
                     ))
 
