@@ -6,22 +6,22 @@
     </action>
 
     <action
-        action_id="overview"
+        action_id="dossiers"
         remove="true">
     </action>
 
     <action
-        action_id="overview"
+        action_id="dispositions"
         remove="true">
     </action>
 
     <action
-        action_id="overview"
+        action_id="sharing"
         remove="true">
     </action>
 
     <action
-        action_id="overview"
+        action_id="journal"
         remove="true">
     </action>
 
