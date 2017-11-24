@@ -8,6 +8,7 @@ Changelog
 - Fix bug when accepting a multiadmin unit team task. [phgross]
 - Make cassation_date field accessible only to manager. [njohner]
 - Use empty mimetype icon for empty document content types. [Kevin Bieri]
+- Pin ftw.keywordwidget to 1.4.2 to fix a term-lookup error. [elioschmutz]
 - Add mimetype for MS OneNote. [phgross]
 - Correct field description for responsible person/entity when forwarding documents [njohner]
 - SPV-word: Fix renaming agenda items in meeting view. [tarnap]
