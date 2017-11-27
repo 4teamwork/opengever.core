@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-11-16 10:22+0000\n"
+"POT-Creation-Date: 2017-11-27 14:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1579,7 +1579,7 @@ msgstr ""
 msgid "msg_error_protocol_already_generated"
 msgstr ""
 
-#. Default: "When deciding an agendaitem the meeting will sent to hold state. Once the meeting is held, the agenda list is no longer editable."
+#. Default: "When deciding an agendaitem the agenda list is no longer editable."
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "msg_hold_meeting_dialog"
