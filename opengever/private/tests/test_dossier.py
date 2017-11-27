@@ -131,7 +131,7 @@ class TestPrivateDossierTabbedView(FunctionalTestCase):
 
         self.assertEqual(
             ['Delete', 'Export as Zip', 'Properties',
-             'dossier-transition-deactivate', 'dossier-transition-resolve'],
+             'dossier-transition-resolve'],
             browser.css('#plone-contentmenu-actions '
                         '.actionMenuContent li').text)
 

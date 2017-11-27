@@ -21,6 +21,7 @@ Changelog
 - Show filterlist also on empty tabbedview listings. [phgross]
 - Fix redirection when creating new sablon templates. [tarnap]
 - Use localstorage for tracking expanded tree uids instead of cookie. [Kevin Bieri]
+- Remove deactivate action for private dossiers. [tarnap]
 - SPV: Sort meetings by date. [tarnap]
 - SPV: Add concluded meetings to committee overview and reorder the blocks in the columns. [tarnap]
 - Fix syncing the submitted proposal title to sql. [deiferni]
