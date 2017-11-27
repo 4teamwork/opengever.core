@@ -34,7 +34,11 @@ class OfficeConnectorURL(Service):
         self.request.response.setStatus(500)
         message = _(
             u'error_oc_url_too_long',
-            default=u"Unfortunately it's not currently possible to attach this many documents. Please try again with fewer documents selected.",
+            default=(
+                u"Unfortunately it's not currently possible to attach this "
+                u'many documents. Please try again with fewer documents '
+                u'selected.'
+                ),
             )
 
         return json.dumps(dict(
@@ -174,7 +178,11 @@ class OfficeConnectorCheckoutPayload(OfficeConnectorPayload):
         # form.
         for payload in payloads:
             # A permission check to verify the user is also able to upload
-            if api.user.has_permission('Modify portal content', obj=payload['document']):
+            authorized = api.user.has_permission(
+                'Modify portal content',
+                obj=payload['document'],
+                )
+            if authorized:
                 del payload['document']
                 payload['checkin-with-comment'] = '@@checkin_document'
                 payload['checkin-without-comment'] = 'checkin_without_comment'
