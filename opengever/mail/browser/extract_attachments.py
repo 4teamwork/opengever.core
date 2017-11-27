@@ -33,6 +33,8 @@ def content_type_helper(item, content_type):
         result = mtr.lookup(content_type)
         if result and isinstance(result, tuple):
             mimetype = result[0]
+        else:
+            mimetype = None
 
     if mimetype:
         # Strip '.gif' from end of icon name and remove leading 'icon_'
