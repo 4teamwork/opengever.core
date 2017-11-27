@@ -6,6 +6,7 @@ step, where the user has to choose the method of participation.
 
 from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
+from opengever.globalindex.handlers.task import sync_task
 from opengever.ogds.base.utils import ogds_service
 from opengever.task import _
 from opengever.task.browser.accept.utils import accept_task_with_response
@@ -164,6 +165,8 @@ class ChooseMethodStepForm(AcceptWizardFormMixin, Form):
 
             if method == 'participate':
                 accept_task_with_response(self.context, data['text'])
+                sync_task(self.context, None)
+
                 IStatusMessage(self.request).addStatusMessage(
                     _(u'The task has been accepted.'), 'info')
                 return self.request.response.redirect(
