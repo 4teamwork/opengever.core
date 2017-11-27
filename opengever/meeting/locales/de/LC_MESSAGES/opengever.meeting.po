@@ -463,12 +463,12 @@ msgstr "Aktiv"
 #. Default: "Cannot decide agenda item: someone else has checked out the document."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "agenda_item_cannot_decide_document_checked_out"
-msgstr "Traktandum kann nicht beschlossen werden: das Beschlussdokument ist noch von einer anderen Person ausgecheckt."
+msgstr "Traktandum kann nicht abgeschlossen werden: das Beschlussdokument ist noch von einer anderen Person ausgecheckt."
 
 #. Default: "Agenda Item decided."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "agenda_item_decided"
-msgstr "Traktandum wurde beschlossen."
+msgstr "Traktandum wurde abgeschlossen."
 
 #. Default: "Agenda Item Successfully deleted"
 #: ./opengever/meeting/browser/meetings/agendaitem.py
@@ -478,7 +478,7 @@ msgstr "Traktandum wurde erfolgreich entfernt."
 #. Default: "Agendaitem has been decided and the meeting has been held."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "agenda_item_meeting_held"
-msgstr "Das Traktandum wurde beschlossen und die Sitzung wurde durchgeführt."
+msgstr "Das Traktandum wurde abgeschlossen und die Sitzung wurde durchgeführt."
 
 #. Default: "Agenda Item order updated."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
@@ -488,7 +488,7 @@ msgstr "Die Reihenfolge der Traktanden wurde aktualisiert."
 #. Default: "Agenda Item decided and excerpt generated."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "agenda_item_proposal_decided"
-msgstr "Traktandum wurde beschlossen, der Protokollauszug generiert und zurückgespielt."
+msgstr "Traktandum wurde abgeschlossen, der Protokollauszug generiert und zurückgespielt."
 
 #. Default: "Agenda Item successfully reopened."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
@@ -869,7 +869,7 @@ msgstr "Vorlage für Traktanden ohne Antrag"
 #. Default: "Decided"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "label_agenda_item_decided"
-msgstr "Beschlossen"
+msgstr "Abgeschlossen"
 
 #. Default: "Agenda item number"
 #: ./opengever/meeting/browser/meetings/meeting.py
@@ -1629,7 +1629,7 @@ msgstr "Antrag erfolgreich eingereicht."
 #. Default: "The meeting can only be closed when all agenda items are decided."
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "msg_require_all_agenda_items_decided_for_closing"
-msgstr "Die Sitzung kann erst abgeschlossen werden wenn alle Traktanden beschlossen sind."
+msgstr "Die Sitzung kann erst abgeschlossen werden wenn alle Traktanden abgeschlossen sind."
 
 #. Default: "The object was deleted successfully."
 #: ./opengever/meeting/browser/views.py
