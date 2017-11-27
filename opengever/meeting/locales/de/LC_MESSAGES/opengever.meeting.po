@@ -197,7 +197,7 @@ msgstr "Speichern fehlgeschlagen."
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "Filter participants"
-msgstr "Teilnehmer filtern"
+msgstr "Teilnehmende filtern"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
 msgid "Generate excerpts for all proposals."
@@ -1838,7 +1838,7 @@ msgstr "Übersicht"
 #. Default: "${count} Participants"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "tab_participants"
-msgstr "${count} Teilnehmer"
+msgstr "${count} Teilnehmende"
 
 #. Default: "Text successfully added."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
