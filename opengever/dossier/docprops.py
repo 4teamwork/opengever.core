@@ -103,8 +103,8 @@ class DocPropertyWriter(object):
             if changed:
                 with open(tmpfile.path) as processed_tmpfile:
                     file_data = processed_tmpfile.read()
-                self.document.file.data = file_data
 
+                self.document.update_file(file_data)
                 notify(ObjectModifiedEvent(self.document))
 
             return changed

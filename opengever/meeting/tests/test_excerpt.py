@@ -43,9 +43,9 @@ class TestSyncExcerpt(IntegrationTestCase):
                                   ICheckinCheckoutManager)
         manager.checkout()
         self.document_in_proposal.update_file(
-            filename=u'example.docx',
+            'foo bar',
             content_type='text/plain',
-            data='foo bar')
+            filename=u'example.docx')
         manager.checkin()
 
         self.assertEqual(1, self.document_in_proposal.get_current_version_id())
@@ -59,9 +59,9 @@ class TestSyncExcerpt(IntegrationTestCase):
                                   ICheckinCheckoutManager)
         manager.checkout()
         self.document_in_proposal.update_file(
-            filename=u'example.docx',
+            'foo bar',
             content_type='text/plain',
-            data='foo bar')
+            filename=u'example.docx')
         manager.checkin()
 
         manager.revert_to_version(0)
@@ -71,9 +71,9 @@ class TestSyncExcerpt(IntegrationTestCase):
     def test_updates_excerpt_in_dossier_after_modification(self):
         self.assertEqual(None, self.document_in_dossier.get_current_version_id())
         self.document_in_proposal.update_file(
+            'foo bar',
             filename=u'example.docx',
-            content_type='text/plain',
-            data='foo bar')
+            content_type='text/plain')
         notify(ObjectModifiedEvent(self.document_in_proposal))
 
         self.assertEqual(1, self.document_in_dossier.get_current_version_id())

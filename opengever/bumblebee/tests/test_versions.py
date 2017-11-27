@@ -8,7 +8,6 @@ from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.versioner import Versioner
 from opengever.testing import FunctionalTestCase
-from plone import api
 from zope.component import getMultiAdapter
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
@@ -38,9 +37,9 @@ class TestBumblebeeChecksumForVersions(FunctionalTestCase):
                               u'example.docx')
                           .checked_out())
 
-        document.update_file(filename=u'foo.txt',
+        document.update_file('foo',
                              content_type='text/plain',
-                             data='foo')
+                             filename=u'foo.txt')
         notify(ObjectModifiedEvent(document))
         transaction.commit()
 

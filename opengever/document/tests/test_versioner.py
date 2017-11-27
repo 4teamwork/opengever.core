@@ -1,6 +1,7 @@
 from datetime import datetime
 from ftw.testbrowser import browsing
 from opengever.document.versioner import Versioner
+from opengever.dossier.docprops import DocPropertyWriter
 from opengever.testing import IntegrationTestCase
 from plone.namedfile.file import NamedBlobFile
 from zope.filerepresentation.interfaces import IRawWriteFile
@@ -20,6 +21,19 @@ class TestInitialVersionCreation(IntegrationTestCase):
 
         self.assertFalse(versioner.has_initial_version())
         self.document.file = NamedBlobFile(data='New', filename=u'test.txt')
+        self.assertTrue(versioner.has_initial_version())
+        self.assertEquals(
+            1, versioner.get_history_metadata().getLength(countPurged=False))
+
+    def test_doc_property_writer_creates_initial_version(self):
+        self.activate_feature('doc-properties')
+        self.login(self.dossier_responsible)
+
+        versioner = Versioner(self.document)
+        self.assertFalse(versioner.has_initial_version())
+
+        DocPropertyWriter(self.document).update_doc_properties(only_existing=False)
+
         self.assertTrue(versioner.has_initial_version())
         self.assertEquals(
             1, versioner.get_history_metadata().getLength(countPurged=False))
