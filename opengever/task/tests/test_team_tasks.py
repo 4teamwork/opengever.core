@@ -1,3 +1,5 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from opengever.activity import notification_center
@@ -159,3 +161,33 @@ class TestTeamTasks(IntegrationTestCase):
              {'after': 'task-state-in-progress', 'id': 'review_state',
               'name': u'Issue state', 'before': 'task-state-open'}],
             IResponseContainer(self.task)[-1].changes)
+
+    @browsing
+    def test_multi_admin_unit_team_task_edit_in_issuer_dossier(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        ra_admin_unit = create(Builder('admin_unit')
+                                 .having(title=u'Ratskanzlei',
+                                         unit_id=u'rk',
+                                         public_url='http://nohost/plone'))
+
+        create(Builder('org_unit')
+               .id('rk')
+               .having(title=u'Ratskanzlei', admin_unit=ra_admin_unit)
+               .with_default_groups())
+
+        ITask(self.task).responsible = u'team:1'
+        ITask(self.task).responsible_client = u'rk'
+        self.task.get_sql_object().responsible = u'team:1'
+        self.task.get_sql_object().assigned_org_unit = u'rk'
+
+        self.set_workflow_state('task-state-open', self.task)
+
+        browser.open(self.task)
+        browser.click_on('task-transition-open-in-progress')
+        browser.fill({'Accept the task and ...': 'participate'})
+        browser.click_on('Continue')
+
+        self.assertEquals(self.regular_user.getId(), self.task.responsible)
+        self.assertEquals(self.regular_user.getId(),
+                          self.task.get_sql_object().responsible)
