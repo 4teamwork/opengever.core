@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-11-16 10:22+0000\n"
+"POT-Creation-Date: 2017-11-27 14:08+0000\n"
 "PO-Revision-Date: 2017-06-22 09:02+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -1582,7 +1582,7 @@ msgstr ""
 msgid "msg_error_protocol_already_generated"
 msgstr "Le protocole pour la réunion ${title} a déjà été créé."
 
-#. Default: "When deciding an agendaitem the meeting will sent to hold state. Once the meeting is held, the agenda list is no longer editable."
+#. Default: "When deciding an agendaitem the agenda list is no longer editable."
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "msg_hold_meeting_dialog"

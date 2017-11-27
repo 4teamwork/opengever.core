@@ -95,7 +95,7 @@
         <div class="overlay" id="confirm_hold_meeting">
           <h2 i18n:translate="decide_agendaitem">Decide Agendaitem</h2>
           <p i18n:translate="msg_hold_meeting_dialog">
-            When deciding an agendaitem the meeting will sent to hold state. Once the meeting is held, the agenda list is no longer editable.
+            When deciding an agendaitem the agenda list is no longer editable.
           </p>
           <p i18n:translate="">
             Are you sure, you want to decide this agendaitem?

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-11-16 10:22+0000\n"
+"POT-Creation-Date: 2017-11-27 14:08+0000\n"
 "PO-Revision-Date: 2017-10-23 18:40+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1580,11 +1580,11 @@ msgstr "Es ist keine Vorlage für die Traktandenliste konfiguriert, die Traktand
 msgid "msg_error_protocol_already_generated"
 msgstr "Das Protokoll für die Sitzung ${title} wurde schon erstellt."
 
-#. Default: "When deciding an agendaitem the meeting will sent to hold state. Once the meeting is held, the agenda list is no longer editable."
+#. Default: "When deciding an agendaitem the agenda list is no longer editable."
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "msg_hold_meeting_dialog"
-msgstr "Beim Abschluss dieses Traktandums wird die Sitzung in den Status `Durchgeführt`  versetzt. Anschliessend kann die Traktandenliste nicht mehr bearbeitet werden."
+msgstr "Nach Abschluss eines Traktandums kann die Traktandenliste nicht mehr bearbeitet werden."
 
 #. Default: "The selected committeee has been deactivated, the proposal could not been submitted."
 #: ./opengever/meeting/model/proposal.py
