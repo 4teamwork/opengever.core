@@ -5,6 +5,7 @@ Changelog
 2017.7.0 (unreleased)
 ---------------------
 
+- Use latest ruby (2.4.2) and nokogiri (1.8.1) [siegy22]
 - Show icons in BlockedLocalRolesList. [njohner]
 - Fix bug when accepting a multiadmin unit team task. [phgross]
 - Ensure new versions are created when doc-properties change. [deiferni]
