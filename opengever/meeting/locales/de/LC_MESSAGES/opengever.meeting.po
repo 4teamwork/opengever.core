@@ -94,7 +94,7 @@ msgstr "Wollen Sie diesen Protokollauszug wirklich an den Antragsteller zurücks
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "Are you sure, you want to decide this agendaitem?"
-msgstr "Sind Sie sicher, dass Sie dieses Traktandum beschliessen möchten?"
+msgstr "Sind Sie sicher, dass Sie dieses Traktandum abschliessen möchten?"
 
 #: ./opengever/meeting/browser/memberships.py
 msgid "Can't add membership, it overlaps an existing membership from ${date_from} to ${date_to}."
@@ -1004,7 +1004,7 @@ msgstr "Gremium deaktivieren"
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "label_decide"
-msgstr "Beschliessen"
+msgstr "Abschliessen"
 
 #. Default: "Decide this agenda item"
 #: ./opengever/meeting/browser/meetings/meeting.py
