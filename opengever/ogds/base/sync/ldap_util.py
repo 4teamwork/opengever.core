@@ -291,7 +291,7 @@ class LDAPSearch(grok.Adapter):
         search_filter = self._combine_filters(custom_filter, search_filter)
 
         results = self.search(base_dn=self.context.groups_base,
-                              filter=search_filter)
+                              search_filter=search_filter)
 
         mapped_results = []
         for result in results:
