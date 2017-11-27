@@ -1,6 +1,7 @@
 from opengever.contact import is_contact_feature_enabled
 from opengever.dossier import _
 from opengever.dossier.dossiertemplate import is_dossier_template_feature_enabled
+from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings
 from opengever.meeting import is_meeting_feature_enabled
 from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.tabbedview import GeverTabbedView
@@ -40,9 +41,19 @@ class DossierTabbedView(GeverTabbedView):
         'title': _(u'label_info', default=u'Info'),
         }
 
+    def is_subdossier_visible(self):
+        """Depending on the `respect_max_depth' property we check if
+        subdossiers are addable or not.
+        """
+
+        if self.context.is_subdossier_addable():
+            return True
+
+        return self.context.has_subdossiers()
+
     @property
     def subdossiers_tab(self):
-        if self.context.is_subdossier_addable():
+        if self.is_subdossier_visible():
             return {
                 'id': 'subdossiers',
                 'title': _(u'label_subdossiers', default=u'Subdossiers'),
