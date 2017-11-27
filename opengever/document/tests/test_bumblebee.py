@@ -95,9 +95,9 @@ class TestBumblebeeIntegrationWithEnabledFeature(FunctionalTestCase):
             DOCX_CHECKSUM,
             IBumblebeeDocument(document).get_checksum())
 
-        document.update_file(filename=u'foo.txt',
+        document.update_file('foo',
                              content_type='text/plain',
-                             data='foo')
+                             filename=u'foo.txt')
         notify(ObjectModifiedEvent(document))
 
         self.assertEquals(
@@ -115,9 +115,9 @@ class TestBumblebeeIntegrationWithEnabledFeature(FunctionalTestCase):
         queue = get_queue()
         queue.reset()
 
-        document.update_file(filename=u'example.docx',
+        document.update_file(bumblebee_asset('example.docx').bytes(),
                              content_type='text/plain',
-                             data=bumblebee_asset('example.docx').bytes())
+                             filename=u'example.docx')
         manager = getMultiAdapter((document, self.portal.REQUEST),
                                   ICheckinCheckoutManager)
         manager.checkin()

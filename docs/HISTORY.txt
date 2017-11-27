@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Only show subdossier tab on dossiers where the max depth allows to add subdossiers.  [phgross]
+- Ensure new versions are created when doc-properties change. [deiferni]
 
 
 2017.6.5 (2017-11-22)

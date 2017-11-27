@@ -47,6 +47,7 @@ from zope.intid.interfaces import IIntIds
 import logging
 import os.path
 
+
 LOG = logging.getLogger('opengever.document')
 MAIL_EXTENSIONS = ['.eml', '.msg']
 
@@ -279,7 +280,10 @@ class Document(Item, BaseDocumentMixin):
         """Return the current document history version."""
         return Versioner(self).get_current_version_id(missing_as_zero)
 
-    def update_file(self, filename, content_type, data):
+    def update_file(self, data, content_type=None, filename=None):
+        content_type = content_type or self.file.contentType
+        filename = filename or self.file.filename
+
         self.file = NamedBlobFile(
             data=data,
             filename=filename,
