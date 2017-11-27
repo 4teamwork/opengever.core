@@ -43,7 +43,10 @@ class OfficeConnectorURL(Service):
 
         return json.dumps(dict(
             error=dict(
-                message=translate(message)
+                message=translate(
+                    message,
+                    context=self.request,
+                    )
                 )
             ))
 
