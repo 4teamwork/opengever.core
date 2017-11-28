@@ -5,6 +5,7 @@ Changelog
 2017.7.0 (unreleased)
 ---------------------
 
+- Increase group title length. [phgross]
 - Fix bux when accepting a multi admin unit team task with option participate. [phgross]
 - Fix an untranslated OC error message. [Rotonen]
 - Fix bug for unknown mimetypes [njohner]
