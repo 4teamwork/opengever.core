@@ -21,7 +21,7 @@
         "title": {
             "type": "string",
             "title": "title",
-            "maxLength": 50,
+            "maxLength": 255,
             "description": "",
             "_zope_schema_type": "Text"
         }
