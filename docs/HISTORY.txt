@@ -5,8 +5,7 @@ Changelog
 2017.7.1 (unreleased)
 ---------------------
 
-- Nothing changed yet.
-
+- Make sure PDF Preview link is only available for documents not for mails. [phgross]
 
 2017.7.0 (2017-11-28)
 ---------------------
