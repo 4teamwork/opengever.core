@@ -79,6 +79,26 @@ class TestOGDSUpdater(FunctionalTestCase):
         group = ogds_service().fetch_group('og_mandant1_users')
         self.assertEquals(u'OG Mandant1 users', group.title)
 
+    def test_handles_multivalues_group_titles(self):
+        FAKE_LDAP_USERFOLDER.groups = [
+            create(Builder('ldapgroup')
+                   .having(description=[u'OG Mandant1 users', u'\xc4ddition'])
+                   .named('og_mandant1_users'))]
+
+        updater = IOGDSUpdater(self.portal)
+        updater.import_groups()
+        group = ogds_service().fetch_group('og_mandant1_users')
+        self.assertIsNone(group.title)
+
+        api.portal.set_registry_record(name='group_title_ldap_attribute',
+                                       value=u'description',
+                                       interface=IOGDSSyncConfiguration)
+        updater = IOGDSUpdater(self.portal)
+        updater.import_groups()
+
+        group = ogds_service().fetch_group('og_mandant1_users')
+        self.assertEquals(u'OG Mandant1 users \xc4ddition', group.title)
+
     def test_imports_group_memberships(self):
         sk1m1 = create(Builder('ldapuser').named('sk1m1'))
         sk2m1 = create(Builder('ldapuser').named('sk2m1'))
