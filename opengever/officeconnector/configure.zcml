@@ -5,6 +5,8 @@
     xmlns:plone="http://namespaces.plone.org/plone"
     i18n_domain="opengever.officeconnector">
 
+  <i18n:registerTranslations directory="locales" />
+
   <include package=".browser" />
 
   <genericsetup:registerProfile
