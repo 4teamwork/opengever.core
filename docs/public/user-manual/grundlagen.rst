@@ -43,12 +43,12 @@ weiter in OneGov GEVER zu bewegen.
 
 Servicenavigation
 -----------------
-Die Servicenavigation besteht aus dem Benachrichtigungsmelder,
+Die Servicenavigation besteht aus der Benachrichtigungsanzeige,
 der Mandantenauswahl, der Schnellsuche sowie den Profileinstellungen.
 
 |img-grundlagen-16|
 
-1. Der Benachrichtigungsmelder zeigt mittels roter Blase an, wenn eine Benachrichtung an den Benutzer gemacht wurde. Bei Klick darauf kann diese angeschaut werden.
+1. Die Benachrichtigungsanzeige zeigt mittels roter Blase an, wenn eine Benachrichtung an den Benutzer gemacht wurde. Bei Klick darauf kann diese angeschaut werden.
 
 2. Bei der Mandantenauswahl kann, falls Ihre Organisation mehrere Mandanten besitzt, zwischen diesen gewählt werden.
 
