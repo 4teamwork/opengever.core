@@ -105,7 +105,7 @@ msgstr "Aktivität"
 #. Default: "Badge"
 #: ./opengever/activity/browser/settings.py
 msgid "label_badge"
-msgstr "Badge"
+msgstr "GEVER Benachrichtigung"
 
 #. Default: "Details:"
 #: ./opengever/activity/templates/notification.pt
