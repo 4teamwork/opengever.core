@@ -12,6 +12,7 @@ from opengever.ogds.models.group import Group
 from opengever.ogds.models.user import User
 from plone import api
 from Products.CMFPlone.interfaces import IPloneSiteRoot
+from Products.CMFPlone.utils import safe_unicode
 from Products.LDAPMultiPlugins.interfaces import ILDAPMultiPlugin
 from sqlalchemy import String
 from sqlalchemy.orm.exc import MultipleResultsFound
@@ -132,6 +133,19 @@ class OGDSUpdater(object):
             if uid_attr == schema_map['ldap_name']:
                 return schema_map['public_name']
         return uid_attr
+
+    def _convert_value(self, value):
+        """Joins multivalued (list or tuples) in to a single string and make
+        sure its an unicode string.
+        """
+
+        # We can't store sequences in SQL columns. So if we do get
+        # a multi-valued field to be stored directly in OGDS, we
+        # treat it as a multi-line string and join it.
+        if isinstance(value, list) or isinstance(value, tuple):
+            return u' '.join([safe_unicode(v) for v in value])
+
+        return safe_unicode(value)
 
     def get_group_title_ldap_attribute(self):
         return api.portal.get_registry_record(
@@ -291,23 +305,14 @@ class OGDSUpdater(object):
                 # Iterate over all SQL columns and update their values
                 columns = Group.__table__.columns
                 for col in columns:
-                    value = info.get(col.name)
-
-                    # We can't store sequences in SQL columns. So if we do get
-                    # a multi-valued field to be stored directly in OGDS, we
-                    # treat it as a multi-line string and join it.
-                    if isinstance(value, list) or isinstance(value, tuple):
-                        value = ' '.join([str(v) for v in value])
-
-                    if isinstance(value, str):
-                        value = value.decode('utf-8')
-
-                    setattr(group, col.name, value)
+                    setattr(group, col.name,
+                            self._convert_value(info.get(col.name)))
 
                 # Sync group title
                 title_attribute = self.get_group_title_ldap_attribute()
                 if title_attribute and info.get(title_attribute):
-                    setattr(group, 'title', info.get(title_attribute))
+                    setattr(group, 'title',
+                            self._convert_value(info.get(title_attribute)))
 
                 contained_users = []
                 group_members = ldap_util.get_group_members(info)
