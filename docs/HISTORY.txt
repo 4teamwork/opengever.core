@@ -16,6 +16,7 @@ Changelog
 - Use empty mimetype icon for empty document content types. [Kevin Bieri]
 - Pin ftw.keywordwidget to 1.4.2 to fix a term-lookup error. [elioschmutz]
 - Add mimetype for MS OneNote. [phgross]
+- Only show subdossier tab on dossiers where the max depth allows to add subdossiers.  [phgross]
 - Correct field description for responsible person/entity when forwarding documents [njohner]
 - SPV-word: Fix renaming agenda items in meeting view. [tarnap]
 - Don't remove doc-properties for excerpts, use correct document as master. [deiferni]
