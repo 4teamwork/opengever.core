@@ -118,7 +118,7 @@ class DossierTemplate(Container):
                 values[key] = getattr(field.interface(self), fieldname)
         return values
 
-    def show_subdossier(self):
+    def is_subdossier_addable(self):
         """We do not restrict dossier depth in a dossiertemplate.
         """
         return True

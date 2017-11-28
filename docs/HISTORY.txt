@@ -5,7 +5,7 @@ Changelog
 2017.6.6 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Only show subdossier tab on dossiers where the max depth allows to add subdossiers.  [phgross]
 
 
 2017.6.5 (2017-11-22)

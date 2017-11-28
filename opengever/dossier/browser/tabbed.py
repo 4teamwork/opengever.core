@@ -38,13 +38,25 @@ class DossierTabbedView(GeverTabbedView):
         'title': _(u'label_info', default=u'Info'),
         }
 
+    def is_subdossier_visible(self):
+        """Depending on the `respect_max_depth' property we check if
+        subdossiers are addable or not.
+        """
+
+        if self.context.is_subdossier_addable():
+            return True
+
+        return self.context.has_subdossiers()
+
     @property
     def subdossiers_tab(self):
-        if self.context.show_subdossier:
-            return {'id': 'subdossiers',
-                    'title': _(u'label_subdossiers', default=u'Subdossiers')}
-        else:
-            return None
+        if self.is_subdossier_visible():
+            return {
+                'id': 'subdossiers',
+                'title': _(u'label_subdossiers', default=u'Subdossiers'),
+                }
+
+        return None
 
     @property
     def proposals_tab(self):

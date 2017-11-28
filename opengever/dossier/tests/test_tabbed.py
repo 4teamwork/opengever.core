@@ -1,5 +1,9 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings
 from opengever.testing import IntegrationTestCase
+from plone import api
 
 
 class TestParticipationTab(IntegrationTestCase):
@@ -30,3 +34,38 @@ class TestContactParticipationTab(IntegrationTestCase):
         self.assertEqual(
             'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/#participations',
             browser.url)
+
+
+class TestDossierTabbedView(IntegrationTestCase):
+
+    @browsing
+    def test_subdossier_tab_only_shown_where_subdossiers_are_addable(self, browser):
+        """When respect_max_depth flag is enabled the subdossier tab should
+        only be visible on dossiers where the maximum depth allows subdossiers.
+        """
+
+        api.portal.set_registry_record(
+            name='respect_max_depth',
+            interface=IDossierTemplateSettings, value=True)
+
+        self.login(self.dossier_responsible, browser)
+
+        browser.open(self.dossier, view='tabbed_view')
+        self.assertIn('Subdossiers', browser.css('.formTab').text)
+
+        browser.open(self.subdossier, view='tabbed_view')
+        self.assertNotIn('Subdossiers', browser.css('.formTab').text)
+
+    @browsing
+    def test_subdossier_tab_always_shown_when_dossier_contains_subdossier(self, browser):
+        self.login(self.dossier_responsible, browser)
+
+        browser.open(self.subdossier, view='tabbed_view')
+        self.assertNotIn('Subdossiers', browser.css('.formTab').text)
+
+        create(Builder('dossier')
+               .within(self.subdossier)
+               .titled(u'Sub Sub Dossier'))
+
+        browser.open(self.subdossier, view='tabbed_view')
+        self.assertIn('Subdossiers', browser.css('.formTab').text)
