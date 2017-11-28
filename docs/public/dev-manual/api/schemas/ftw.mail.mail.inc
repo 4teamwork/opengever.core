@@ -70,7 +70,7 @@
        :Datentyp: ``Tuple``
        
        
-       :Beschreibung: Schlagwörter zur Umschreibung eines Dossiers. Nicht zu verwechseln mit der Ordnungsposition
+       :Beschreibung: Schlagwörter zur Umschreibung eines Dokuments. Nicht zu verwechseln mit der Ordnungsposition. <br>ACHTUNG: Beachten Sie bei der Verwendung von Schlagworten die Datenschutzvorgaben (z.B. keine Eigennamen).
        
 
 
