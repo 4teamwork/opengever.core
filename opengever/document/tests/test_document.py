@@ -7,7 +7,8 @@ from ftw.testbrowser.pages.dexterity import erroneous_fields
 from ftw.testbrowser.pages.statusmessages import assert_message
 from ftw.testbrowser.pages.statusmessages import assert_no_error_messages
 from ftw.testing import freeze
-from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
+from opengever.base.interfaces import IReferenceNumber
+from opengever.base.interfaces import ISequenceNumber
 from opengever.document.behaviors import IBaseDocument
 from opengever.document.document import IDocumentSchema
 from opengever.document.document import UploadValidator
@@ -29,9 +30,11 @@ from plone.namedfile.file import NamedBlobFile
 from Products.CMFCore.utils import getToolByName
 from z3c.form import interfaces
 from zope.component import createObject
+from zope.component import getAdapter
 from zope.component import getMultiAdapter
-from zope.component import queryMultiAdapter, getAdapter
-from zope.component import queryUtility, getUtility
+from zope.component import getUtility
+from zope.component import queryMultiAdapter
+from zope.component import queryUtility
 from zope.interface import Invalid
 from zope.schema import getFields
 import mimetypes
