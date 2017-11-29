@@ -1,38 +1,36 @@
-from ftw.builder import Builder
-from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import info_messages
-from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 
 
-class TestSharingOnRepositoryFolders(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestSharingOnRepositoryFolders, self).setUp()
-        self.grant('Administrator')
-        self.repo_folder = create(Builder('repository'))
+class TestSharingOnRepositoryFolders(IntegrationTestCase):
 
     @browsing
     def test_add_local_roles_to_user(self, browser):
-        # search for test user
-        browser.login().open(self.repo_folder, view='sharing')
-        browser.fill({'search_term': 'test'})
+        # because of how form fill works combined with the testbrowser
+        # boxes that were already checked for on user will get checked
+        # for all the others when submitting the form. We therefore block
+        # permission inheritance on branch_repofolder then test the local
+        # roleaddition in the leaf_repofolder, to be sure we have a clean
+        # sheet.
+        self.login(self.administrator, browser)
+        self.branch_repofolder.__ac_local_roles_block__ = True
+        browser.open(self.leaf_repofolder, view='sharing')
+        self.assert_local_roles(
+            tuple(), self.regular_user.getId(), self.leaf_repofolder)
+        browser.fill({'search_term': self.regular_user.getId()})
         browser.css('#sharing-save-button').first.click()
-
-        # change local roles and save
-        browser.fill({'entries.role_Reviewer:records': True})
+        browser.fill({'entries.role_Reader:records': True})
         browser.click_on('Save')
-
-        self.assertEquals(['Changes saved.'], info_messages())
-        self.assertEquals(
-            (('test_user_1_', ('Owner', u'Reviewer')),),
-            self.repo_folder.get_local_roles())
+        self.assert_local_roles(
+            (u'Reader',), self.regular_user.getId(), self.leaf_repofolder)
 
     @browsing
     def test_break_permission_inheritance(self, browser):
-        browser.login().open(self.repo_folder, view='sharing')
+        self.login(self.administrator, browser)
+        browser.open(self.branch_repofolder, view='sharing')
         browser.fill({'Inherit permissions from higher levels': False})
         browser.click_on('Save')
 
         self.assertEquals(['Changes saved.'], info_messages())
-        self.assertTrue(self.repo_folder.__ac_local_roles_block__)
+        self.assertTrue(self.branch_repofolder.__ac_local_roles_block__)

@@ -383,12 +383,16 @@ class IntegrationTestCase(TestCase):
         self.assertEquals(action_type, action.get('type'))
         self.assertEquals(title, translate(action.get('title')))
 
-    def assert_local_roles(self, expected_roles, username, context):
-        current_roles = dict(context.get_local_roles()).get(username) or []
+    def assert_local_roles(self, expected_roles, user, context):
+        if hasattr(user, 'getId'):
+            userid = user.getId()
+        else:
+            userid = user
+        current_roles = dict(context.get_local_roles()).get(userid, [])
         self.assertItemsEqual(
             expected_roles, current_roles,
-            "The user '{}' should have the roles {} on context {}. "
-            "But he has {}".format(username, expected_roles, context, current_roles))
+            "The user '{}' should have the roles {!r} on context {!r}. "
+            "But he has {}".format(userid, expected_roles, context, current_roles))
 
     def brain_to_object(self, brain):
         """Return the object of a brain.
