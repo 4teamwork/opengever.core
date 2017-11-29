@@ -110,7 +110,6 @@
     <value key="enabled_dotted_names">
       <element>opengever.dossier.behaviors.dossier.IDossierMarker</element>
       <element>opengever.dossier.templatefolder.interfaces.ITemplateFolder</element>
-      <element>Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot</element>
       <element>opengever.task.task.ITask</element>
     </value>
   </records>
