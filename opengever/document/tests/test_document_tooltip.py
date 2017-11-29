@@ -96,7 +96,7 @@ class TestDocumentTooltip(FunctionalTestCase):
     def test_preview_link_is_only_available_for_documents(self, browser):
         with PDFConverterAvailability(False):
             document = create(Builder('document').with_dummy_content())
-            mail = create(Builder('mail'))
+            mail = create(Builder('mail').with_dummy_message())
 
         with PDFConverterAvailability(True):
             browser.login().open(document, view='tooltip')

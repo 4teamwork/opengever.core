@@ -99,7 +99,7 @@
 
             </tal:attach_feature_enabled>
 
-            <tal:pdf_preview tal:condition="preview_supported">
+            <tal:pdf_preview tal:condition="view/is_download_pdfpreview_available">
                 <a class="function-download-pdf" href="#"
                     tal:attributes="href string:${context/absolute_url}/download_pdfpreview?_authenticator=${context/@@authenticator/token}"
                     i18n:translate="label_pdf_preview">
