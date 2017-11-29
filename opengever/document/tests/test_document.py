@@ -7,7 +7,8 @@ from ftw.testbrowser.pages.dexterity import erroneous_fields
 from ftw.testbrowser.pages.statusmessages import assert_message
 from ftw.testbrowser.pages.statusmessages import assert_no_error_messages
 from ftw.testing import freeze
-from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
+from opengever.base.interfaces import IReferenceNumber
+from opengever.base.interfaces import ISequenceNumber
 from opengever.document.behaviors import IBaseDocument
 from opengever.document.document import IDocumentSchema
 from opengever.document.document import UploadValidator
@@ -17,6 +18,7 @@ from opengever.officeconnector.interfaces import IOfficeConnectorSettings
 from opengever.testing import create_ogds_user
 from opengever.testing import FunctionalTestCase
 from opengever.testing import index_data_for
+from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2brain
 from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
 from plone import api
@@ -29,9 +31,11 @@ from plone.namedfile.file import NamedBlobFile
 from Products.CMFCore.utils import getToolByName
 from z3c.form import interfaces
 from zope.component import createObject
+from zope.component import getAdapter
 from zope.component import getMultiAdapter
-from zope.component import queryMultiAdapter, getAdapter
-from zope.component import queryUtility, getUtility
+from zope.component import getUtility
+from zope.component import queryMultiAdapter
+from zope.component import queryUtility
 from zope.interface import Invalid
 from zope.schema import getFields
 import mimetypes
@@ -420,6 +424,10 @@ class TestDocumentNumbering(FunctionalTestCase):
                            getAdapter(d2, IReferenceNumber).get_number()])
 
 
+class Mock(object):
+    pass
+
+
 class TestUploadValidator(FunctionalTestCase):
 
     def test_is_registered_on_file_field(self):
@@ -450,7 +458,10 @@ class TestUploadValidator(FunctionalTestCase):
         document = create(Builder("document").within(dossier))
         field = getFields(IDocumentSchema).get('file')
 
-        return (document, document.REQUEST, None, field, None)
+        view = Mock()
+        view.parentForm = Mock()
+
+        return (document, document.REQUEST, view, field, None)
 
 
 class TestDocumentMimetype(FunctionalTestCase):
@@ -530,17 +541,13 @@ class TestDocumentAuthorResolving(FunctionalTestCase):
         self.assertEquals('Muster Peter', document.document_author)
 
 
-class TestDocumentValidatorsInAddForm(FunctionalTestCase):
-
-    layer = OPENGEVER_FUNCTIONAL_TESTING
-
-    def setUp(self):
-        super(TestDocumentValidatorsInAddForm, self).setUp()
-        self.dossier = create(Builder('dossier'))
+class TestDocumentValidatorsInAddForm(IntegrationTestCase):
 
     @browsing
     def test_doc_without_either_file_or_paper_form_is_invalid(self, browser):
-        browser.login().open(self.dossier.absolute_url())
+        self.login(self.dossier_responsible, browser)
+        browser.open(self.dossier)
+
         factoriesmenu.add('Document')
         # No file, not preserved as paper
         browser.fill({'Title': 'My Document',
@@ -553,7 +560,9 @@ class TestDocumentValidatorsInAddForm(FunctionalTestCase):
 
     @browsing
     def test_doc_without_file_but_preserved_as_paper_is_valid(self, browser):
-        browser.login().open(self.dossier.absolute_url())
+        self.login(self.dossier_responsible, browser)
+        browser.open(self.dossier)
+
         factoriesmenu.add('Document')
         # No file, but preserved as paper
         browser.fill({'Title': 'My Document',
@@ -562,7 +571,9 @@ class TestDocumentValidatorsInAddForm(FunctionalTestCase):
 
     @browsing
     def test_doc_with_file_but_not_preserved_as_paper_is_valid(self, browser):
-        browser.login().open(self.dossier.absolute_url())
+        self.login(self.dossier_responsible, browser)
+        browser.open(self.dossier)
+
         factoriesmenu.add('Document')
         # File, but not preserved as paper
         browser.fill({'File': ('File data', 'file.txt', 'text/plain'),
@@ -571,12 +582,33 @@ class TestDocumentValidatorsInAddForm(FunctionalTestCase):
 
     @browsing
     def test_doc_with_both_file_and_preserved_as_paper_is_valid(self, browser):
-        browser.login().open(self.dossier.absolute_url())
+        self.login(self.dossier_responsible, browser)
+        browser.open(self.dossier)
+
         factoriesmenu.add('Document')
         # File AND preserved as paper
         browser.fill({'File': ('File data', 'file.txt', 'text/plain'),
                       'Preserved as paper': True}).save()
         assert_message('Item created')
+
+    @browsing
+    def test_mails_are_not_allowed(self, browser):
+        self.login(self.dossier_responsible, browser)
+        browser.open(self.dossier)
+
+        factoriesmenu.add('Document')
+        browser.fill({'File': ('hello', 'mail.eml', 'message/rfc822'),
+                      'Preserved as paper': False}).save()
+
+        selector = '#formfield-form-widgets-file.field.error'
+        error_field = browser.css(selector).first
+        self.assertIn(
+            "It's not possible to add E-mails here, please send it to",
+            error_field.normalized_text())
+
+        self.assertEqual(
+            1, len(browser.css('#formfield-form-widgets-file input')),
+            "Should not display radio buttons in case of add form.")
 
 
 class TestDocumentValidatorsInEditForm(FunctionalTestCase):
