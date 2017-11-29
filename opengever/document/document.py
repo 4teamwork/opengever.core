@@ -133,9 +133,9 @@ class UploadValidator(validator.SimpleFieldValidator):
 
         raise Invalid(_(
             u'error_mail_upload',
-            default=u"It's not possible to add E-mails here, please '\
-            'send it to ${mailaddress} or drag it to the dossier '\
-            ' (Dragn'n'Drop).",
+            default=u"It's not possible to add E-mails here, please "
+            "send it to ${mailaddress} or drag it to the dossier "
+            "(Dragn'n'Drop).",
             mapping={'mailaddress': mail_address}
             ))
 
