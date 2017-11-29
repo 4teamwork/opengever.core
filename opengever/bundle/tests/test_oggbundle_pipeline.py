@@ -365,7 +365,7 @@ class TestOggBundlePipeline(IntegrationTestCase):
 
         self.assertDictContainsSubset(
             {'admin_users':
-                ['Reader', 'Editor', 'Contributor', 'Publisher', 'Reviewer']},
+                ['Publisher', 'Reader', 'Editor', 'Contributor', 'Reviewer']},
             dossier_peter.__ac_local_roles__)
         self.assertTrue(dossier_peter.__ac_local_roles_block__)
 
