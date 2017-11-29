@@ -18,6 +18,7 @@ from opengever.officeconnector.interfaces import IOfficeConnectorSettings
 from opengever.testing import create_ogds_user
 from opengever.testing import FunctionalTestCase
 from opengever.testing import index_data_for
+from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2brain
 from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
 from plone import api
@@ -533,17 +534,13 @@ class TestDocumentAuthorResolving(FunctionalTestCase):
         self.assertEquals('Muster Peter', document.document_author)
 
 
-class TestDocumentValidatorsInAddForm(FunctionalTestCase):
-
-    layer = OPENGEVER_FUNCTIONAL_TESTING
-
-    def setUp(self):
-        super(TestDocumentValidatorsInAddForm, self).setUp()
-        self.dossier = create(Builder('dossier'))
+class TestDocumentValidatorsInAddForm(IntegrationTestCase):
 
     @browsing
     def test_doc_without_either_file_or_paper_form_is_invalid(self, browser):
-        browser.login().open(self.dossier.absolute_url())
+        self.login(self.dossier_responsible, browser)
+        browser.open(self.dossier)
+
         factoriesmenu.add('Document')
         # No file, not preserved as paper
         browser.fill({'Title': 'My Document',
@@ -556,7 +553,9 @@ class TestDocumentValidatorsInAddForm(FunctionalTestCase):
 
     @browsing
     def test_doc_without_file_but_preserved_as_paper_is_valid(self, browser):
-        browser.login().open(self.dossier.absolute_url())
+        self.login(self.dossier_responsible, browser)
+        browser.open(self.dossier)
+
         factoriesmenu.add('Document')
         # No file, but preserved as paper
         browser.fill({'Title': 'My Document',
@@ -565,7 +564,9 @@ class TestDocumentValidatorsInAddForm(FunctionalTestCase):
 
     @browsing
     def test_doc_with_file_but_not_preserved_as_paper_is_valid(self, browser):
-        browser.login().open(self.dossier.absolute_url())
+        self.login(self.dossier_responsible, browser)
+        browser.open(self.dossier)
+
         factoriesmenu.add('Document')
         # File, but not preserved as paper
         browser.fill({'File': ('File data', 'file.txt', 'text/plain'),
@@ -574,7 +575,9 @@ class TestDocumentValidatorsInAddForm(FunctionalTestCase):
 
     @browsing
     def test_doc_with_both_file_and_preserved_as_paper_is_valid(self, browser):
-        browser.login().open(self.dossier.absolute_url())
+        self.login(self.dossier_responsible, browser)
+        browser.open(self.dossier)
+
         factoriesmenu.add('Document')
         # File AND preserved as paper
         browser.fill({'File': ('File data', 'file.txt', 'text/plain'),
