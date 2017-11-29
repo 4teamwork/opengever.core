@@ -424,6 +424,10 @@ class TestDocumentNumbering(FunctionalTestCase):
                            getAdapter(d2, IReferenceNumber).get_number()])
 
 
+class Mock(object):
+    pass
+
+
 class TestUploadValidator(FunctionalTestCase):
 
     def test_is_registered_on_file_field(self):
@@ -454,7 +458,10 @@ class TestUploadValidator(FunctionalTestCase):
         document = create(Builder("document").within(dossier))
         field = getFields(IDocumentSchema).get('file')
 
-        return (document, document.REQUEST, None, field, None)
+        view = Mock()
+        view.parentForm = Mock()
+
+        return (document, document.REQUEST, view, field, None)
 
 
 class TestDocumentMimetype(FunctionalTestCase):
@@ -583,6 +590,25 @@ class TestDocumentValidatorsInAddForm(IntegrationTestCase):
         browser.fill({'File': ('File data', 'file.txt', 'text/plain'),
                       'Preserved as paper': True}).save()
         assert_message('Item created')
+
+    @browsing
+    def test_mails_are_not_allowed(self, browser):
+        self.login(self.dossier_responsible, browser)
+        browser.open(self.dossier)
+
+        factoriesmenu.add('Document')
+        browser.fill({'File': ('hello', 'mail.eml', 'message/rfc822'),
+                      'Preserved as paper': False}).save()
+
+        selector = '#formfield-form-widgets-file.field.error'
+        error_field = browser.css(selector).first
+        self.assertIn(
+            "It's not possible to add E-mails here, please send it to",
+            error_field.normalized_text())
+
+        self.assertEqual(
+            1, len(browser.css('#formfield-form-widgets-file input')),
+            "Should not display radio buttons in case of add form.")
 
 
 class TestDocumentValidatorsInEditForm(FunctionalTestCase):

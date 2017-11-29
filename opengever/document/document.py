@@ -131,6 +131,15 @@ class UploadValidator(validator.SimpleFieldValidator):
             mail_address = IEmailAddress(
                 self.request).get_email_for_object(parent)
 
+        # Remove widget value in order to disable that the widget renders
+        # radio-buttons (nochange/remove/replace) once a file has been
+        # uploaded.
+        # This is a special case since we are an additional validator
+        # for the file field that may block an otherwise valid file upload.
+        # The widget does not expect this to happen though.
+        if getattr(self.view.parentForm, '_nullify_file_on_error', False):
+            self.widget.value = None
+
         raise Invalid(_(
             u'error_mail_upload',
             default=u"It's not possible to add E-mails here, please "
