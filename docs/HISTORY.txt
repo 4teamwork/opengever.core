@@ -5,6 +5,7 @@ Changelog
 2017.7.3 (unreleased)
 ---------------------
 
+- Implement workspace module basics [raphael-s]
 - Allow to add proposal documents to tasks. [tarnap]
 - Improve Office Connector testing. [Rotonen]
 
