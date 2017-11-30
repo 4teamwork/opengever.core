@@ -105,6 +105,18 @@ class TestJournalTab(FunctionalTestCase):
         self.assertEquals([], browser.css('.add_journal_entry'))
 
     @browsing
+    def test_add_journal_entry_link_is_linked_to_current_context(self, browser):
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document').within(dossier))
+
+        browser.login().open(document, view=u'tabbedview_view-journal')
+
+        link = browser.css('.add_journal_entry').first
+        self.assertEquals(
+            '{}/add-journal-entry'.format(document.absolute_url()),
+            link.get('href'))
+
+    @browsing
     def test_add_journal_entry_is_xss_safe(self, browser):
         dossier = create(Builder('dossier'))
 
