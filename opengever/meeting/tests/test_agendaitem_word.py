@@ -299,9 +299,9 @@ class TestWordAgendaItem(IntegrationTestCase):
     def test_error_when_no_access_to_meeting_dossier(self, browser):
         with self.login(self.administrator):
             self.committee_container.manage_setLocalRoles(
-                self.regular_user.getId(), ('Reader',))
+                self.regular_user.getId(), ['Reader'])
             self.committee.manage_setLocalRoles(
-                self.regular_user.getId(), ('CommitteeResponsible', 'Editor'))
+                self.regular_user.getId(), ['CommitteeResponsible', 'Editor'])
             self.committee_container.reindexObjectSecurity()
             # Let regular_user have no access to meeting_dossier
             self.meeting_dossier.__ac_local_roles_block__ = True

@@ -121,7 +121,7 @@ class FunctionalTestCase(TestCase):
         if context is None:
             setRoles(self.portal, user_id, list(roles))
         else:
-            context.manage_setLocalRoles(user_id, tuple(roles))
+            context.manage_setLocalRoles(user_id, list(roles))
             context.reindexObjectSecurity()
 
         transaction.commit()

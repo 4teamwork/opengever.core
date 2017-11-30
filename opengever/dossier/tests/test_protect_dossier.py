@@ -26,7 +26,8 @@ class TestProtectDossier(IntegrationTestCase):
     def test_user_has_dossier_protect_permission_if_it_has_dossier_manager_on_repo_root(self):
         self.login(self.regular_user)
 
-        self.repository_root.manage_setLocalRoles(self.regular_user.getId(), ('DossierManager', ))
+        self.repository_root.manage_setLocalRoles(
+            self.regular_user.getId(), ['DossierManager'])
 
         self.assertTrue(
             api.user.has_permission('opengever.dossier: Protect dossier',
@@ -35,7 +36,8 @@ class TestProtectDossier(IntegrationTestCase):
     def test_user_has_permission_if_dossier_manager_on_repo(self):
         self.login(self.regular_user)
 
-        self.leaf_repofolder.manage_setLocalRoles(self.regular_user.getId(), ('DossierManager', ))
+        self.leaf_repofolder.manage_setLocalRoles(
+            self.regular_user.getId(), ['DossierManager'])
 
         self.assertTrue(
             api.user.has_permission('opengever.dossier: Protect dossier',
@@ -66,7 +68,7 @@ class TestProtectDossier(IntegrationTestCase):
         form.find_widget('Reading and writing').fill([self.regular_user.getId()])
         browser.click_on('Save')
         new_dossier = browser.context
-        new_dossier.manage_setLocalRoles('projekt_a', ('Contributor', ))
+        new_dossier.manage_setLocalRoles('projekt_a', ['Contributor'])
 
         self.assert_local_roles(
             IProtectDossier(new_dossier).READING_AND_WRITING_ROLES,
@@ -94,7 +96,7 @@ class TestProtectDossier(IntegrationTestCase):
         form.find_widget('Reading and writing').fill(self.regular_user.getId())
         browser.click_on('Save')
         new_dossier = browser.context
-        new_dossier.manage_setLocalRoles('projekt_a', ('Contributor', ))
+        new_dossier.manage_setLocalRoles('projekt_a', ['Contributor'])
 
         self.assert_local_roles(
             IProtectDossier(new_dossier).READING_AND_WRITING_ROLES,
@@ -324,7 +326,7 @@ class TestProtectDossier(IntegrationTestCase):
         dossier_protector = IProtectDossier(self.dossier)
         dossier_protector.reading = [self.regular_user.getId()]
         dossier_protector.protect()
-        self.dossier.manage_setLocalRoles(self.regular_user.getId(), ('DossierManager', ))
+        self.dossier.manage_setLocalRoles(self.regular_user.getId(), ['DossierManager'])
         view = getMultiAdapter((self.dossier, self.request),
                                name="check_protect_dossier_consistency")
 
