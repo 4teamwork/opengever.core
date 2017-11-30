@@ -85,6 +85,22 @@
       for="*"
       />
 
+  <!-- custom add form for documents -->
+  <adapter
+      for="Products.CMFCore.interfaces.IFolderish
+           zope.publisher.interfaces.browser.IDefaultBrowserLayer
+           plone.dexterity.interfaces.IDexterityFTI"
+      provides="zope.publisher.interfaces.browser.IBrowserPage"
+      factory=".forms.DocumentAddView"
+      name="opengever.document.document"
+      />
+  <class class=".forms.DocumentAddView">
+    <require
+        permission="cmf.AddPortalContent"
+        interface="zope.publisher.interfaces.browser.IBrowserPage"
+        />
+  </class>
+
   <!-- custom edit form for documents -->
   <browser:page
       for="opengever.document.document.IDocumentSchema"

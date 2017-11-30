@@ -109,26 +109,45 @@ class UploadValidator(validator.SimpleFieldValidator):
         """An mail upload as og.document should't be possible,
         it should be added as Mail object (see opengever.mail).
         """
-        if value and value.filename:
-            basename, extension = os.path.splitext(value.filename)
-            if extension.lower() in MAIL_EXTENSIONS:
-                if IDossierMarker.providedBy(self.context):
-                    mail_address = IEmailAddress(
-                        self.request).get_email_for_object(self.context)
-                else:
-                    parent = aq_parent(aq_inner(self.context))
-                    mail_address = IEmailAddress(
-                        self.request).get_email_for_object(parent)
-
-                raise Invalid(_(
-                    u'error_mail_upload',
-                    default=u"It's not possible to add E-mails here, please '\
-                    'send it to ${mailaddress} or drag it to the dossier '\
-                    ' (Dragn'n'Drop).",
-                    mapping={'mailaddress': mail_address}
-                    ))
-
+        if not value:
             return
+
+        if not value.filename:
+            return
+
+        if self.is_email_upload(value.filename):
+
+            self.raise_invalid()
+
+    def is_email_upload(self, filename):
+        basename, extension = os.path.splitext(filename)
+        return extension.lower() in MAIL_EXTENSIONS
+
+    def raise_invalid(self):
+        if IDossierMarker.providedBy(self.context):
+            mail_address = IEmailAddress(
+                self.request).get_email_for_object(self.context)
+        else:
+            parent = aq_parent(aq_inner(self.context))
+            mail_address = IEmailAddress(
+                self.request).get_email_for_object(parent)
+
+        # Remove widget value in order to disable that the widget renders
+        # radio-buttons (nochange/remove/replace) once a file has been
+        # uploaded.
+        # This is a special case since we are an additional validator
+        # for the file field that may block an otherwise valid file upload.
+        # The widget does not expect this to happen though.
+        if getattr(self.view.parentForm, '_nullify_file_on_error', False):
+            self.widget.value = None
+
+        raise Invalid(_(
+            u'error_mail_upload',
+            default=u"It's not possible to add E-mails here, please "
+            "send it to ${mailaddress} or drag it to the dossier "
+            "(Dragn'n'Drop).",
+            mapping={'mailaddress': mail_address}
+            ))
 
 
 validator.WidgetValidatorDiscriminators(
