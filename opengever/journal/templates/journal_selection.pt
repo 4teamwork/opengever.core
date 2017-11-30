@@ -1,5 +1,6 @@
 <div class="actions" tal:condition="view/manual_entry_allowed">
   <a class="add_journal_entry" href="add-journal-entry"
+     tal:attributes="href string:${context/absolute_url}/add-journal-entry"
      i18n:domain="opengever.journal" i18n:translate="label_add_journal_entry">
     Add journal entry
   </a>

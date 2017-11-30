@@ -7,6 +7,7 @@ Changelog
 
 - Fix an issue when delegating to inboxes. [deiferni]
 - Remove ZIP export action on plonesite. [phgross]
+- Fix manual journal entry link on documents journal. [phgross]
 - Make sure PDF Preview link is only available for documents not for mails. [phgross]
 - Only show subdossier tab on dossiers where the max depth allows to add subdossiers.  [phgross]
 - Ensure new versions are created when doc-properties change. [deiferni]
