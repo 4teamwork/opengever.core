@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Remove ZIP export action on plonesite. [phgross]
+- Fix manual journal entry link on documents journal. [phgross]
 - Make sure PDF Preview link is only available for documents not for mails. [phgross]
 - Don't display nochange/remove radio buttons for file in document add-form. [deiferni]
 
