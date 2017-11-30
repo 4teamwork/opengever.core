@@ -8,6 +8,8 @@ Changelog
 - Remove ZIP export action on plonesite. [phgross]
 - Make sure PDF Preview link is only available for documents not for mails. [phgross]
 - Don't display nochange/remove radio buttons for file in document add-form. [deiferni]
+- Fix an issue when delegating to inboxes. [deiferni]
+
 
 2017.7.0 (2017-11-28)
 ---------------------
