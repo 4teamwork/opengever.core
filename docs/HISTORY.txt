@@ -5,7 +5,7 @@ Changelog
 2017.7.2 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Add debug view to download docxcompose raw files.
 
 
 2017.7.1 (2017-11-30)
