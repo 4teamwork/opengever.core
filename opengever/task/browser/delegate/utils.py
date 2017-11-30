@@ -1,4 +1,5 @@
 from opengever.task.activities import TaskAddedActivity
+from opengever.task.util import update_reponsible_field_data
 from plone.dexterity.utils import addContentToContainer
 from plone.dexterity.utils import createContent
 from plone.dexterity.utils import iterSchemata
@@ -33,10 +34,9 @@ def create_subtasks(task, responsibles, documents, data):
     for responsible in responsibles:
         subtask_data = data.copy()
 
-        # responsible client & user
-        client, user = responsible.split(':', 1)
-        subtask_data['responsible_client'] = client
-        subtask_data['responsible'] = user
+        # correctly fill in responsible
+        subtask_data['responsible'] = responsible
+        update_reponsible_field_data(subtask_data)
 
         # remove predecessor
         subtask_data['predecessor'] = None
