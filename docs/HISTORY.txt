@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2017.6.6 (unreleased)
+2017.6.6 (2017-11-30)
 ---------------------
 
 - Fix an issue when delegating to inboxes. [deiferni]
