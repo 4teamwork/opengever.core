@@ -190,8 +190,9 @@ class OpengeverContentFixture(object):
     def create_contacts(self):
         self.contactfolder = self.register('contactfolder', create(
             Builder('contactfolder')
-            .titled(u'Kontakte')
-            .having(id='kontakte')))
+            .having(id='kontakte',
+                    title_de=u'Kontakte',
+                    title_en=u'Contacts')))
 
         self.contactfolder.manage_setLocalRoles(
             self.org_unit.users_group_id, ['Reader'])
