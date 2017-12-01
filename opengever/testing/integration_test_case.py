@@ -45,7 +45,7 @@ FEATURE_FLAGS = {
     'officeconnector-attach': 'opengever.officeconnector.interfaces.IOfficeConnectorSettings.attach_to_outlook_enabled',
     'officeconnector-checkout': 'opengever.officeconnector.interfaces.IOfficeConnectorSettings.direct_checkout_and_edit_enabled',
     'word-meeting': 'opengever.meeting.interfaces.IMeetingSettings.is_word_implementation_enabled',
-    }
+}
 
 FEATURE_PROFILES = {
     'filing_number': 'opengever.dossier:filing',
@@ -382,6 +382,13 @@ class IntegrationTestCase(TestCase):
         action = entry.get('action')
         self.assertEquals(action_type, action.get('type'))
         self.assertEquals(title, translate(action.get('title')))
+
+    def assert_local_roles(self, expected_roles, username, context):
+        current_roles = dict(context.get_local_roles()).get(username) or []
+        self.assertItemsEqual(
+            expected_roles, current_roles,
+            "The user '{}' should have the roles {} on context {}. "
+            "But he has {}".format(username, expected_roles, context, current_roles))
 
     def brain_to_object(self, brain):
         """Return the object of a brain.
