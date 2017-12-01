@@ -1,43 +1,34 @@
-from opengever.testing import FunctionalTestCase
-from plone.dexterity.fti import DexterityFTI
-import transaction
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
+from opengever.testing import IntegrationTestCase
 
 
-class TestBaseBehavior(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestBaseBehavior, self).setUp()
-
-        fti = DexterityFTI('OpenGeverBaseFTI')
-        fti.schema = 'opengever.base.tests.emptyschema.IEmptySchema'
-        fti.behaviors = ('opengever.base.behaviors.base.IOpenGeverBase',)
-        self.portal.portal_types._setObject('OpenGeverBaseFTI', fti)
-        fti.lookupSchema()
-        transaction.commit()
+class TestBaseBehavior(IntegrationTestCase):
+    """Test the base behavior with the help of businesscase dossier.
+    """
 
     @browsing
     def test_base_behavior(self, browser):
-        browser.login().open(self.portal)
+        self.login(self.regular_user, browser=browser)
 
-        factoriesmenu.add('OpenGeverBaseFTI')
+        browser.open(self.leaf_repofolder)
+        factoriesmenu.add(u'Business Case Dossier')
         browser.fill({'Title': 'Foo', 'Description': 'Bar'})
         browser.click_on('Save')
 
-        self.assertEquals(
-            'http://nohost/plone/opengeverbasefti/view', browser.url)
-
-        obj = self.portal.opengeverbasefti
-        self.assertEquals('Foo', obj.Title())
-        self.assertEquals('Bar', obj.Description())
+        dossier = browser.context
+        self.assertEquals('Foo', dossier.Title())
+        self.assertEquals('Bar', dossier.Description())
 
     @browsing
     def test_base_behavior_uses_common_fieldset(self, browser):
-        browser.login().open(self.portal)
+        self.login(self.regular_user, browser=browser)
 
-        factoriesmenu.add('OpenGeverBaseFTI')
-        browser.fill({'Title': 'Foo', 'Description': 'Bar'})
-        browser.click_on('Save')
+        browser.open(self.leaf_repofolder)
+        factoriesmenu.add(u'Business Case Dossier')
 
-        self.assertEquals(['Common'], browser.css('fieldset legend').text)
+        common_fieldset = browser.css('fieldset').first
+        self.assertEquals(['Common'], common_fieldset.css('legend').text)
+
+        self.assertIn('Title', common_fieldset.css('label').text)
+        self.assertIn('Description', common_fieldset.css('label').text)
