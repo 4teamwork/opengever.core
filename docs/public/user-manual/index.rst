@@ -24,6 +24,5 @@ Release 3.10
    aufgaben/index
    standardablaeufe
    meine_ablage
-   sitzungs-und-protokollverwaltung
 
 * :ref:`genindex`

@@ -1,0 +1,38 @@
+
+Sitzung abschliessen
+--------------------
+Sobald alle Traktanden in der gewünschten Form bearbeitet (protokolliert) sind,
+kann die Sitzung nachbearbeitet werden.
+
+|img-spvupdate-27|
+
+Sie können nun die Protokollauszüge erstellen. Es ist möglich, mehrere
+Protokollauszüge zu generieren. Zur Nachvollziehbarkeit des Geschäftsganges
+muss ein Protokollauszug zwingend an den Antragsteller bzw. das Geschäftsdossier
+zurückgesendet werden. Weitere Protokollauszüge können sinnvoll sein für externe
+Empfänger wie andere Gemeinden, Kantonsverwaltung etc.
+
+|img-spvupdate-28|
+
+Schliessen Sie die Sitzung korrekt ab, indem Sie den Button «Sitzung
+abschliessen» anwählen.
+
+|img-spvupdate-29|
+|img-spvupdate-30|
+
+Sie können nun das Protokoll fertigstellen (via Dokument herunterladen). Das
+Protokoll hat nach Abschluss der Sitzung den Platz des Vorprotokolls
+eingenommen.
+
+|img-spvupdate-31|
+
+Sobald die Traktanden abgeschlossen sind besteht die Möglichkeit, direkt aus der
+Sitzung Aufgaben analog GEVER zu erstellen und zu versenden.
+
+.. |img-spvupdate-27| image:: ../img/media/img-spvupdate-27.png
+.. |img-spvupdate-28| image:: ../img/media/img-spvupdate-28.png
+.. |img-spvupdate-29| image:: ../img/media/img-spvupdate-29.png
+.. |img-spvupdate-30| image:: ../img/media/img-spvupdate-30.png
+.. |img-spvupdate-31| image:: ../img/media/img-spvupdate-31.png
+
+.. disqus::
