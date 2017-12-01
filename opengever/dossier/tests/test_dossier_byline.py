@@ -13,10 +13,10 @@ from zope.intid.interfaces import IIntIds
 import transaction
 
 
-class TestDossierByline(TestBylineBase):
+class TestDossierBylineBase(TestBylineBase):
 
     def setUp(self):
-        super(TestDossierByline, self).setUp()
+        super(TestDossierBylineBase, self).setUp()
 
         self.intids = getUtility(IIntIds)
 
@@ -27,6 +27,8 @@ class TestDossierByline(TestBylineBase):
         mail_settings = registry.forInterface(IMailSettings)
         mail_settings.mail_domain = u'opengever.4teamwork.ch'
         transaction.commit()
+
+class TestDossierByline(TestDossierBylineBase):
 
     def create_dossier(self):
         return create(Builder('dossier')
@@ -95,7 +97,7 @@ class TestDossierByline(TestBylineBase):
                           self.get_byline_value_by_label('Filing Number:'))
 
 
-class TestBusinessCaseDossierByline(TestDossierByline):
+class TestBusinessCaseDossierByline(TestDossierBylineBase):
 
     def create_dossier(self):
         return create(Builder('dossier')
