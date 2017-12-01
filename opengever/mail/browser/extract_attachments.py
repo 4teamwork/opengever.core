@@ -152,3 +152,6 @@ class ExtractAttachments(BrowserView):
             self.context.delete_attachments(positions)
         elif delete_action == 'all':
             self.context.delete_all_attachments()
+
+    def get_number_of_attachments(self):
+        return len(self.context.get_attachments())

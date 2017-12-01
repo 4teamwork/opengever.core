@@ -1,7 +1,7 @@
 <div class="tabbedview_select" i18n:domain="ftw.tabbedview">
 
     <tal:condition tal:condition="view/show_selects">
-      <span i18n:translate="">Choose:</span>
+      <span i18n:translate="">Choose</span>
       <a href="javascript:tabbedview.select_all()" i18n:translate="">
           all (<span i18n:name="amount" tal:replace="python:len(view.contents)" />)</a>,
       <a href="javascript:tabbedview.select_none()" i18n:translate="">none</a>
