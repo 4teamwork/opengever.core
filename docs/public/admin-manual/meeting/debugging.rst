@@ -16,4 +16,9 @@ Verfügung:
   Protokoll einer Sitzung zu generieren und herunterzuladen, ohne dass das
   bestehende Protokoll (das im GEVER abgelegte Dokument) verändert wird.
 
+- Inhaltstyp Sitzung: ``debug_docxcompose`` ermöglicht es die ``docx`` Dateien,
+  die zum Protokoll zusammengesetzt werden, separat in einem ``zip``
+  herunterzuladen. Dies ermöglicht es Fehler im docxcompose einfacher zu
+  analysieren.
+
 .. disqus::
