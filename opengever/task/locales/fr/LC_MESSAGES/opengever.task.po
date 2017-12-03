@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2017-10-30 13:29+0000\n"
-"PO-Revision-Date: 2017-12-03 11:36+0000\n"
+"PO-Revision-Date: 2017-12-03 11:47+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
 "gever/opengever-task/fr/>\n"
@@ -525,7 +525,7 @@ msgstr "Renvois"
 #. Default: "Responsible Client"
 #: ./opengever/task/task.py
 msgid "label_resonsible_client"
-msgstr "Mandataire du client"
+msgstr "Client responsable"
 
 #. Default: "Response"
 #: ./opengever/task/browser/accept/main.py
