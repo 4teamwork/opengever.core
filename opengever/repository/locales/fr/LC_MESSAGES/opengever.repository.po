@@ -2,19 +2,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2017-11-14 12:31+0000\n"
-"PO-Revision-Date: 2017-06-04 17:05+0000\n"
+"PO-Revision-Date: 2017-12-03 11:31+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
-"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-repository/fr/>\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
+"gever/opengever-repository/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 2.13.1\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
-"Language: fr\n"
-"X-Generator: Weblate 2.13.1\n"
 
 #: ./opengever/repository/browser/templates/referenceprefixmanager.pt
 msgid "In use"
@@ -88,7 +89,7 @@ msgstr "Description"
 #. Default: "Dispositions"
 #: ./opengever/repository/browser/tabbed.py
 msgid "label_dispositions"
-msgstr ""
+msgstr "Offres"
 
 #. Default: "Dossiers"
 #: ./opengever/repository/browser/tabbed.py
@@ -118,7 +119,7 @@ msgstr "Site"
 #. Default: "Protected Objects"
 #: ./opengever/repository/browser/tabbed.py
 msgid "label_blocked_local_roles"
-msgstr ""
+msgstr "objets protégés"
 
 #. Default: "Overview"
 #: ./opengever/repository/browser/tabbed.py
